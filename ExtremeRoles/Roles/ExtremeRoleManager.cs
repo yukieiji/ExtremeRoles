@@ -67,14 +67,46 @@ namespace ExtremeRoles.Roles
                 role.GameInit();
             }
         }
-        public static void SetPlyerIdToRoleId(
+
+        public static void SetPlayerIdToMultiRoleId(
             byte roleId, byte playerId)
         {
-            foreach (RoleTypes vanilaRole in Enum.GetValues(typeof(RoleTypes)))
+
+            RoleTypes roleType = Modules.Helpers.GetPlayerControlById(playerId).Data.Role.Role;
+            bool hasVanilaRole = roleType != RoleTypes.Crewmate || roleType != RoleTypes.Impostor;
+
+            foreach (var combRole in CombRole)
+            {
+                foreach (var role in combRole.Roles)
+                {
+                    if (role.BytedRoleId == roleId)
+                    {
+                        SingleRoleAbs addRole = role.Clone();
+                        addRole.GameInit();
+
+                        GameRole.Add(
+                            playerId, addRole);
+
+                        if (hasVanilaRole)
+                        {
+                            ((MultiAssignRoleAbs)GameRole[
+                                playerId]).SetAnotherRole(
+                                    new Solo.VanillaRoleWrapper(roleType));
+                        }
+                        Modules.Helpers.DebugLog($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
+                    }
+                }
+            }
+        }
+        public static void SetPlyerIdToSingleRoleId(
+            byte roleId, byte playerId)
+        {
+            foreach (RoleTypes vanilaRole in Enum.GetValues(
+                typeof(RoleTypes)))
             {
                 if ((byte)vanilaRole == roleId)
                 {
-                    SetPlyerIdToRole(
+                    SetPlyerIdToSingleRole(
                         playerId, new Solo.VanillaRoleWrapper(vanilaRole));
                     return;
                 }
@@ -82,20 +114,14 @@ namespace ExtremeRoles.Roles
 
             foreach (var role in NormalRole)
             {
-                if (TrySetRole(roleId, playerId, role)) { return; }
-            }
-
-
-            foreach (var combRole in CombRole)
-            {
-                foreach (var role in combRole.Roles)
+                if (role.BytedRoleId == roleId)
                 {
-                    if (TrySetRole(roleId, playerId, role)) { return; }
+                    SetPlyerIdToSingleRole(playerId, role);
                 }
             }
         }
 
-        private static void SetPlyerIdToRole(
+        private static void SetPlyerIdToSingleRole(
             byte playerId, SingleRoleAbs role)
         {
             SingleRoleAbs addRole = role.Clone();
@@ -112,19 +138,6 @@ namespace ExtremeRoles.Roles
                     playerId]).SetAnotherRole(addRole);
             }
             Modules.Helpers.DebugLog($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
-        }
-
-        private static bool TrySetRole(
-            byte roleId, byte playerId,
-            SingleRoleAbs role)
-        {
-            if (role.BytedRoleId == roleId)
-            {
-                SetPlyerIdToRole(playerId, role);
-                return true;
-            }
-
-            return false;
         }
         
     }
