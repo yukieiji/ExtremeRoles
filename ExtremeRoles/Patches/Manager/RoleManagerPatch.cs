@@ -52,14 +52,14 @@ namespace ExtremeRoles.Patches.Manager
 
                 for (int i = 0; i < roleData.Count; ++i)
                 {
-                    var (roles, num, spawnRate) = roleData[i];
-
-                    if (spawnRate < UnityEngine.Random.RandomRange(0, 110)) { continue; }
-                    if (num <= 0) { continue; }
 
                     int playerIndex = tempList[UnityEngine.Random.Range(0, tempList.Count)];
                     tempList.Remove(playerIndex);
 
+                    var (roles, num, spawnRate) = roleData[i];
+
+                    if (spawnRate < UnityEngine.Random.RandomRange(0, 110)) { continue; }
+                    if (num <= 0) { continue; }
 
                     var tempRoles = new List<MultiAssignRoleAbs>(roles);
                     foreach (var extremeRole in roles)
