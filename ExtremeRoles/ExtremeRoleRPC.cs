@@ -45,9 +45,16 @@ namespace ExtremeRoles
                 }
             }
         }
-        public static void SetRole(byte roleId, byte payerId)
+        public static void SetRole(byte roleId, byte playerId, bool multiAssign)
         {
-            Roles.ExtremeRoleManager.SetPlyerIdToRoleId(roleId, payerId);
+            if (multiAssign)
+            {
+                Roles.ExtremeRoleManager.SetPlayerIdToMultiRoleId(roleId, playerId);
+            }
+            else
+            {
+                Roles.ExtremeRoleManager.SetPlyerIdToSingleRoleId(roleId, playerId);
+            }
         }
 
         public static void ShareOption(int numOptions, MessageReader reader)
