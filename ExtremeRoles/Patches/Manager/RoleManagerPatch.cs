@@ -76,7 +76,7 @@ namespace ExtremeRoles.Patches.Manager
                                 player, extremeRole.BytedRoleId);
                             
                             tempRoles.Remove(extremeRole);
-                            roleData[i] = (roles, num - 1, spawnRate);
+                            roleData[i] = (tempRoles, num - 1, spawnRate);
                             
                             if (!extremeRole.CanHasAnotherRole)
                             {
