@@ -316,12 +316,12 @@ namespace ExtremeRoles.Patches
                 }
             }
 
-            var isBlocked = false;
+            var isBlocked = AssassinMeeting.AssassinMeetingTrigger;
             var role = Roles.ExtremeRoleManager.GameRole[PlayerControl.LocalPlayer.PlayerId];
 
             if (role.Id == Roles.ExtremeRoleId.Assassin)
             {
-                isBlocked = ((Roles.Combination.Assassin)role).IsFirstMeeting;
+                isBlocked = ((Roles.Combination.Assassin)role).IsFirstMeeting || isBlocked;
             }
 
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
