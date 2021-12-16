@@ -7,11 +7,11 @@ using UnityEngine;
 
 namespace ExtremeRoles.Patches
 {
-    [HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.Select))]
-    class PlayerVoteAreaSelectPatch
-    {
-        static bool Prefix(PlayerVoteArea __instance)
-        {
+	[HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.Select))]
+	class PlayerVoteAreaSelectPatch
+	{
+		static bool Prefix(PlayerVoteArea __instance)
+		{
 
 			if (!AssassinMeeting.AssassinMeetingTrigger) { return true; }
 
@@ -19,12 +19,12 @@ namespace ExtremeRoles.Patches
 			{
 				return false;
 			}
-			
+
 			if (!__instance.Parent)
 			{
 				return false;
 			}
-			if (!__instance.voteComplete && 
+			if (!__instance.voteComplete &&
 				__instance.Parent.Select((int)__instance.TargetPlayerId))
 			{
 				__instance.Buttons.SetActive(true);
@@ -32,7 +32,7 @@ namespace ExtremeRoles.Patches
 				float startPos = __instance.AnimateButtonsFromLeft ? 0.2f : 1.95f;
 				__instance.StartCoroutine(
 					Effects.All(
-                        (Il2CppSystem.Collections.IEnumerator[])(
+						(Il2CppSystem.Collections.IEnumerator[])(
 							new IEnumerator[]
 								{
 									EffectsLerpWrap(0.25f, delegate(float t)
@@ -60,7 +60,7 @@ namespace ExtremeRoles.Patches
 			}
 
 			return false;
-        }
+		}
 		private static IEnumerator EffectsLerpWrap(
 			float duration, Action<float> action)
 		{
@@ -74,4 +74,26 @@ namespace ExtremeRoles.Patches
 		}
 	}
 
+	[HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.SetDead))]
+	class PlayerVoteAreaSetDeadPatch
+	{
+		static bool Prefix(
+			PlayerVoteArea __instance,
+			[HarmonyArgument(0)] bool didReport,
+			[HarmonyArgument(1)] bool isDead,
+			[HarmonyArgument(2)] bool isGuardian = false)
+		{
+			if (!AssassinMeeting.AssassinMeetingTrigger) { return true; }
+
+
+			__instance.AmDead = false;
+			__instance.DidReport = didReport;
+			__instance.Megaphone.enabled = didReport;
+			__instance.Overlay.gameObject.SetActive(false);
+			__instance.XMark.gameObject.SetActive(false);
+			__instance.GAIcon.gameObject.SetActive(isGuardian);
+
+			return false;
+		}
+	}
 }
