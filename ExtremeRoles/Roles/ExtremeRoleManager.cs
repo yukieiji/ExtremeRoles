@@ -8,9 +8,9 @@ namespace ExtremeRoles.Roles
     {
         Null = -100,
         VanillaRole = 50,
-        NormalCrew = 100,
         Assassin,
         Marlin,
+        NormalCrew = 100,
     }
     public static class ExtremeRoleManager
     {

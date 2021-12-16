@@ -80,8 +80,9 @@ namespace ExtremeRoles.Patches.Manager
                             SetRoleToPlayer(
                                 player, extremeRole.BytedRoleId, true);
 
+                            removeRole.Add(
+                                (MultiAssignRoleAbs)extremeRole.Clone());
                             tempRoles.Remove(extremeRole);
-                            removeRole.Add(extremeRole);
 
                             num = num - 1;
                             roleData[i] = (tempRoles, (num, spawnRate));
@@ -266,7 +267,7 @@ namespace ExtremeRoles.Patches.Manager
             int roleNum, int spawnData)
         {
             if (roleNum <= 0) { return false; }
-            if (spawnData < UnityEngine.Random.RandomRange(0, 110)) { return false; }
+            if (spawnData < UnityEngine.Random.RandomRange(0, 100)) { return false; }
 
             return true;
         }
