@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 using ExtremeRoles.Modules;
+using ExtremeRoles.Modules.Helpers;
 
 namespace ExtremeRoles.Roles
 {
@@ -134,19 +135,19 @@ namespace ExtremeRoles.Roles
             this.UseVent = useVent;
             this.UseSabotage = useSabotage;
 
-            this.CommonSettingSpawnKey = Helpers.ConcatString(
+            this.CommonSettingSpawnKey = Design.ConcatString(
                 this.Id.ToString(),
                 RoleCommonSetting.SpawnRate.ToString());
-            this.CommonSettingRoleNumKey = Helpers.ConcatString(
+            this.CommonSettingRoleNumKey = Design.ConcatString(
                 this.Id.ToString(),
                 RoleCommonSetting.RoleNum.ToString());
-            this.CommonSettingCanOtherVisonKey = Helpers.ConcatString(
+            this.CommonSettingCanOtherVisonKey = Design.ConcatString(
                 this.Id.ToString(),
                 RoleCommonSetting.HasOtherVison.ToString());
-            this.CommonSettingVisonKey = Helpers.ConcatString(
+            this.CommonSettingVisonKey = Design.ConcatString(
                 this.Id.ToString(),
                 RoleCommonSetting.Vison.ToString());
-            this.CommonSettingApplyEnvironmentVisionKey = Helpers.ConcatString(
+            this.CommonSettingApplyEnvironmentVisionKey = Design.ConcatString(
                 this.Id.ToString(),
                 RoleCommonSetting.ApplyEnvironmentVisionEffect.ToString());
 
@@ -204,13 +205,13 @@ namespace ExtremeRoles.Roles
         {
             var killSetting = CustomOption.Create(
                 this.OptionIdOffset + (int)KillerCommonSetting.HasOtherKillCool,
-                Helpers.ConcatString(
+                Design.ConcatString(
                     this.RoleName,
                     KillerCommonSetting.HasOtherKillCool.ToString()),
                 false, parentOps);
             CustomOption.Create(
                 this.OptionIdOffset + (int)KillerCommonSetting.KillCoolDown,
-                Helpers.ConcatString(
+                Design.ConcatString(
                     this.RoleName,
                     KillerCommonSetting.KillCoolDown.ToString()),
                 30f, 2.5f, 120f, 2.5f,
@@ -220,7 +221,7 @@ namespace ExtremeRoles.Roles
         {
             var roleSetOption = CustomOption.Create(
                 this.OptionIdOffset + (int)RoleCommonSetting.SpawnRate,
-                Helpers.Cs(
+                Design.Cs(
                     this.NameColor,
                     this.CommonSettingSpawnKey),
                 OptionsHolder.Rates, null, true);
@@ -288,13 +289,13 @@ namespace ExtremeRoles.Roles
         {
             this.SettingColor = settingColor;
             this.SetPlayerNum = setPlayerNum;
-            this.CommonSettingSpawnKey = Helpers.ConcatString(
+            this.CommonSettingSpawnKey = Design.ConcatString(
                 roleName,
                 RoleCommonSetting.SpawnRate.ToString());
-            this.CommonSettingRoleNumKey = Helpers.ConcatString(
+            this.CommonSettingRoleNumKey = Design.ConcatString(
                 roleName,
                 RoleCommonSetting.RoleNum.ToString());
-            this.CommonSettingIsMultiAssignKey = Helpers.ConcatString(
+            this.CommonSettingIsMultiAssignKey = Design.ConcatString(
                 roleName,
                 CombinationRoleCommonSetting.IsMultiAssign.ToString());
         }
@@ -304,7 +305,7 @@ namespace ExtremeRoles.Roles
             // ExtremeRolesPlugin.Instance.Log.LogInfo($"Color: {this.SettingColor}");
             var roleSetOption = CustomOption.Create(
                 this.OptionIdOffset + (int)RoleCommonSetting.SpawnRate,
-                Helpers.Cs(
+                Design.Cs(
                     this.SettingColor,
                     this.CommonSettingSpawnKey),
                 OptionsHolder.Rates, null, true);

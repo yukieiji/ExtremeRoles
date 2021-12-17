@@ -72,7 +72,7 @@ namespace ExtremeRoles.Roles
             byte roleId, byte playerId)
         {
 
-            RoleTypes roleType = Modules.Helpers.GetPlayerControlById(playerId).Data.Role.Role;
+            RoleTypes roleType = Modules.Helpers.Player.GetPlayerControlById(playerId).Data.Role.Role;
             bool hasVanilaRole = roleType != RoleTypes.Crewmate || roleType != RoleTypes.Impostor;
 
             foreach (var combRole in CombRole)
@@ -93,7 +93,7 @@ namespace ExtremeRoles.Roles
                                 playerId]).SetAnotherRole(
                                     new Solo.VanillaRoleWrapper(roleType));
                         }
-                        Modules.Helpers.DebugLog($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
+                        Modules.Helpers.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
                     }
                 }
             }
@@ -137,7 +137,7 @@ namespace ExtremeRoles.Roles
                 ((MultiAssignRoleAbs)GameRole[
                     playerId]).SetAnotherRole(addRole);
             }
-            Modules.Helpers.DebugLog($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
+            Modules.Helpers.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
         }
         
     }

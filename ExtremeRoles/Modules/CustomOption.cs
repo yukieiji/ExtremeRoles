@@ -73,7 +73,7 @@ namespace ExtremeRoles.Modules
                 CurSelection = Mathf.Clamp(Entry.Value, 0, selections.Length - 1);
             }
 
-            Helpers.DebugLog($"OptinId:{this.Id}    Name:{this.Name}");
+            Helpers.Logging.Debug($"OptinId:{this.Id}    Name:{this.Name}");
 
             OptionsHolder.AllOptions.Add(this.Id, this);
         }

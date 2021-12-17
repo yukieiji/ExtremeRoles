@@ -84,6 +84,24 @@ namespace ExtremeRoles.Patches.Option
             UpdateButtons();
         }
 
+        public static void UpdateButtons()
+        {
+            UpdateToggle(
+                ghostsSeeTasksButton,
+                $"{Modules.Translation.GetString("ghostsSeeTasksButton")}: ",
+                ExtremeRolesPlugin.GhostsSeeTasks.Value);
+            UpdateToggle(ghostsSeeRolesButton,
+                $"{Modules.Translation.GetString("ghostsSeeRolesButton")}: ",
+                ExtremeRolesPlugin.GhostsSeeRoles.Value);
+            UpdateToggle(
+                ghostsSeeVotesButton,
+                $"{Modules.Translation.GetString("ghostsSeeVotesButton")}: ",
+                ExtremeRolesPlugin.GhostsSeeVotes.Value);
+            UpdateToggle(showRoleSummaryButton,
+                $"{Modules.Translation.GetString("showRoleSummaryButton")}: ",
+                ExtremeRolesPlugin.ShowRoleSummary.Value);
+        }
+
         private static ToggleButtonBehaviour CreateCustomToggle(
             string text, bool on, Vector3 offset,
             UnityEngine.Events.UnityAction onClick, OptionsMenuBehaviour __instance)
@@ -102,25 +120,7 @@ namespace ExtremeRoles.Patches.Option
             return null;
         }
 
-        private static void UpdateButtons()
-        {
-            UpdateToggle(
-                ghostsSeeTasksButton,
-                $"{Modules.Translation.GetString("ghostsSeeTasksButton")}: ",
-                ExtremeRolesPlugin.GhostsSeeTasks.Value);
-            UpdateToggle(ghostsSeeRolesButton,
-                $"{Modules.Translation.GetString("ghostsSeeRolesButton")}: ",
-                ExtremeRolesPlugin.GhostsSeeRoles.Value);
-            UpdateToggle(
-                ghostsSeeVotesButton,
-                $"{Modules.Translation.GetString("ghostsSeeVotesButton")}: ",
-                ExtremeRolesPlugin.GhostsSeeVotes.Value);
-            UpdateToggle(showRoleSummaryButton,
-                $"{Modules.Translation.GetString("showRoleSummaryButton")}: ",
-                ExtremeRolesPlugin.ShowRoleSummary.Value);
-        }
-
-        private static void UpdateToggle(ToggleButtonBehaviour button, string text, bool on)
+        public static void UpdateToggle(ToggleButtonBehaviour button, string text, bool on)
         {
             if (button == null || button.gameObject == null) { return; }
 

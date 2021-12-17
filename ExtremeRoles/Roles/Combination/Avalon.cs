@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using UnityEngine;
 
 using ExtremeRoles.Modules;
+using ExtremeRoles.Modules.Helpers;
 
 namespace ExtremeRoles.Roles.Combination
 {
@@ -53,13 +53,13 @@ namespace ExtremeRoles.Roles.Combination
 
             var meetingOpt = CustomOption.Create(
                 this.OptionIdOffset + (int)AssassinOption.IsDeadForceMeeting,
-                Helpers.ConcatString(
+                Design.ConcatString(
                     this.RoleName,
                     AssassinOption.IsDeadForceMeeting.ToString()),
                 true, parentOps);
             CustomOption.Create(
                 this.OptionIdOffset + (int)AssassinOption.CanSeeRoleBeforeFirstMeeting,
-                Helpers.ConcatString(
+                Design.ConcatString(
                     this.RoleName,
                     AssassinOption.CanSeeRoleBeforeFirstMeeting.ToString()),
                 false, meetingOpt);
@@ -135,19 +135,19 @@ namespace ExtremeRoles.Roles.Combination
         {
             CustomOption.Create(
                 this.OptionIdOffset + (int)MarlinOption.HasTask,
-                Helpers.ConcatString(
+                Design.ConcatString(
                     this.RoleName,
                     MarlinOption.HasTask.ToString()),
                 false, parentOps);
             CustomOption.Create(
                 this.OptionIdOffset + (int)MarlinOption.CanSeeVote,
-                Helpers.ConcatString(
+                Design.ConcatString(
                     this.RoleName,
                     MarlinOption.CanSeeVote.ToString()),
                 false, parentOps);
             CustomOption.Create(
                 this.OptionIdOffset + (int)MarlinOption.CanSeeNeutral,
-                Helpers.ConcatString(
+                Design.ConcatString(
                     this.RoleName,
                     MarlinOption.CanSeeNeutral.ToString()),
                 false, parentOps);
@@ -185,7 +185,7 @@ namespace ExtremeRoles.Roles.Combination
                 var poolPlayer = item.Value;
                 if (playerId == PlayerControl.LocalPlayer.PlayerId) { continue; }
 
-                PlayerControl player = Helpers.GetPlayerControlById(playerId);
+                PlayerControl player = Player.GetPlayerControlById(playerId);
                 SingleRoleAbs role = ExtremeRoleManager.GameRole[playerId];
                 if (player.Data.IsDead ||
                     player.Data.Disconnected ||

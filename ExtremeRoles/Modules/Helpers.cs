@@ -17,7 +17,7 @@ namespace ExtremeRoles.Modules
         BlankKill
     }
 
-    public static class Helpers
+    public static class OldHelpers
     {
 
         public static bool ShowButtons
@@ -40,142 +40,6 @@ namespace ExtremeRoles.Modules
                     InnerNet.InnerNetClient.GameStates.Started
                 );
             }
-        }
-
-        public static void ClearAllTasks(ref PlayerControl player)
-        {
-            if (player == null) { return; }
-            for (int i = 0; i < player.myTasks.Count; i++)
-            {
-                PlayerTask playerTask = player.myTasks[i];
-                playerTask.OnRemove();
-                UnityEngine.Object.Destroy(playerTask.gameObject);
-            }
-            player.myTasks.Clear();
-
-            if (player.Data != null && player.Data.Tasks != null)
-            {
-                player.Data.Tasks.Clear();
-            }
-        }
-        public static string ConcatString(string baseString, string addString)
-        {
-            return string.Format(
-                "{0}{1}",
-                baseString,
-                addString);
-        }
-
-        public static string Cs(Color c, string s)
-        {
-            return string.Format(
-                "<color=#{0:X2}{1:X2}{2:X2}{3:X2}>{4}</color>",
-                ToByte(c.r),
-                ToByte(c.g),
-                ToByte(c.b),
-                ToByte(c.a), s);
-        }
-
-        public static void DebugLog(string msg)
-        {
-#if DEBUG
-            if (ExtremeRolesPlugin.DebugMode.Value)
-            {
-                ExtremeRolesPlugin.Logger.LogInfo(msg);
-            }
-#endif
-        }
-
-        public static PlayerControl GetPlayerControlById(byte id)
-        {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-            {
-                if (player.PlayerId == id) { return player; }
-            }
-            return null;
-        }
-
-        public static Tuple<int, int> GetTaskInfo(
-            GameData.PlayerInfo playerInfo)
-        {
-            int TotalTasks = 0;
-            int CompletedTasks = 0;
-            if (!(playerInfo.Disconnected) &&
-                 (playerInfo.Tasks != null) &&
-                 (playerInfo.Object) &&
-                 (playerInfo.Role) &&
-                 (playerInfo.Role.TasksCountTowardProgress) &&
-                 (PlayerControl.GameOptions.GhostsDoTasks || !playerInfo.IsDead) &&
-                  ExtremeRoleManager.GameRole[playerInfo.PlayerId].HasTask
-                )
-            {
-
-                for (int j = 0; j < playerInfo.Tasks.Count; ++j)
-                {
-                    ++TotalTasks;
-                    if (playerInfo.Tasks[j].Complete)
-                    {
-                        ++CompletedTasks;
-                    }
-                }
-            }
-            return Tuple.Create(CompletedTasks, TotalTasks);
-        }
-
-        public static byte GetRandomCommonTaskId()
-        {
-            if (ShipStatus.Instance == null) { return Byte.MaxValue; }
-
-            List<int> taskIndex = GetTaskIndex(
-                ShipStatus.Instance.CommonTasks);
-
-            int index = UnityEngine.Random.RandomRange(0, taskIndex.Count);
-
-            return (byte)taskIndex[index];
-        }
-
-        public static byte GetRandomLongTask()
-        {
-            if (ShipStatus.Instance == null) { return Byte.MaxValue; }
-
-            List<int> taskIndex = GetTaskIndex(
-                ShipStatus.Instance.LongTasks);
-
-            int index = UnityEngine.Random.RandomRange(0, taskIndex.Count);
-
-            return (byte)taskIndex[index];
-        }
-
-        public static byte GetRandomNormalTaskId()
-        {
-            if (ShipStatus.Instance == null) { return Byte.MaxValue; }
-
-            List<int> taskIndex = GetTaskIndex(
-                ShipStatus.Instance.NormalTasks);
-
-            int index = UnityEngine.Random.RandomRange(0, taskIndex.Count);
-
-            return (byte)taskIndex[index];
-        }
-
-        public static void SetTask(
-            GameData.PlayerInfo playerInfo,
-            byte bytedTaskIndex)
-        {
-            NormalPlayerTask task = ShipStatus.Instance.GetTaskById(bytedTaskIndex);
-
-            PlayerControl player = playerInfo.Object;
-
-            int index = playerInfo.Tasks.Count;
-            playerInfo.Tasks.Add(new GameData.TaskInfo(bytedTaskIndex, (uint)index));
-            playerInfo.Tasks[index].Id = (uint)index;
-
-            task.Id = bytedTaskIndex;
-            task.Owner = player;
-            task.Initialize();
-
-            player.myTasks.Add(task);
-            player.SetDirtyBit(1U << (int)player.PlayerId);
         }
 
         public static bool IsBlocked(PlayerTask task, PlayerControl pc)
@@ -300,33 +164,6 @@ namespace ExtremeRoles.Modules
                 iCall_LoadImage = IL2CPP.ResolveICall<d_LoadImage>("UnityEngine.ImageConversion::LoadImage");
             var il2cppArray = (Il2CppStructArray<byte>)data;
             return iCall_LoadImage.Invoke(tex.Pointer, il2cppArray.Pointer, markNonReadable);
-        }
-
-
-        public static Dictionary<byte, PlayerControl> allPlayersById()
-        {
-            Dictionary<byte, PlayerControl> res = new Dictionary<byte, PlayerControl>();
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-                res.Add(player.PlayerId, player);
-            return res;
-        }
-
-        private static List<int> GetTaskIndex(
-            NormalPlayerTask[] tasks)
-        {
-            List<int> index = new List<int>();
-            for (int i = 0; i < tasks.Length; ++i)
-            {
-                index.Add(tasks[i].Index);
-            }
-
-            return index;
-        }
-
-        private static byte ToByte(float f)
-        {
-            f = Mathf.Clamp01(f);
-            return (byte)(f * 255);
         }
     }
 }

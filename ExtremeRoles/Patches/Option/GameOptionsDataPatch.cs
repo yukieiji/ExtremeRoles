@@ -8,6 +8,7 @@ using HarmonyLib;
 using UnityEngine;
 
 using ExtremeRoles.Modules;
+using ExtremeRoles.Modules.Helpers;
 
 
 namespace ExtremeRoles.Patches.Option
@@ -42,7 +43,7 @@ namespace ExtremeRoles.Patches.Option
             entries.Add(
                 OptionToString(allSetting[(int)OptionsHolder.CommonOptionKey.PresetSelection]));
 
-            var optionName = Helpers.Cs(
+            var optionName = Design.Cs(
                 new Color(204f / 255f, 204f / 255f, 0, 1f),
                 Tl("crewmateRoles"));
             var min = allSetting[(int)OptionsHolder.CommonOptionKey.MinCremateRoles].GetSelection();
@@ -51,7 +52,7 @@ namespace ExtremeRoles.Patches.Option
             var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
             entry.AppendLine($"{optionName}: {optionValue}");
 
-            optionName = Helpers.Cs(
+            optionName = Design.Cs(
                 new Color(204f / 255f, 204f / 255f, 0, 1f),
                 Tl("neutralRoles"));
             min = allSetting[(int)OptionsHolder.CommonOptionKey.MinNeutralRoles].GetSelection();
@@ -60,7 +61,7 @@ namespace ExtremeRoles.Patches.Option
             optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
             entry.AppendLine($"{optionName}: {optionValue}");
 
-            optionName = Helpers.Cs(
+            optionName = Design.Cs(
                 new Color(204f / 255f, 204f / 255f, 0, 1f),
                 Tl("impostorRoles"));
             min = allSetting[(int)OptionsHolder.CommonOptionKey.MinImpostorRoles].GetSelection();

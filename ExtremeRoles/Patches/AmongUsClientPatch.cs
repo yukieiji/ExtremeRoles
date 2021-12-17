@@ -27,7 +27,7 @@ namespace ExtremeRoles.Patches
             {
 
                 var role = Roles.ExtremeRoleManager.GameRole[playerInfo.PlayerId];
-                var(completedTask, totalTask) = Helpers.GetTaskInfo(playerInfo);
+                var(completedTask, totalTask) = Modules.Helpers.Task.GetTaskInfo(playerInfo);
 
                 var finalStatus = PlayerDataContainer.PlayerStatus.Alive;
                 if (playerInfo.Disconnected) { finalStatus = PlayerDataContainer.PlayerStatus.Disconnected; }

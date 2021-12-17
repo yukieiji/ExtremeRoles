@@ -5,6 +5,7 @@ using System.Linq;
 using HarmonyLib;
 using Hazel;
 
+using ExtremeRoles.Modules.Helpers;
 using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Patches.Manager
@@ -35,7 +36,7 @@ namespace ExtremeRoles.Patches.Manager
             ref List<int> playerIndexList)
         {
 
-            Modules.Helpers.DebugLog($"NotAssignPlayerNum:{playerIndexList.Count}");
+            Logging.Debug($"NotAssignPlayerNum:{playerIndexList.Count}");
 
             if (extremeRolesData.CombinationRole.Count == 0) { return; }
 
@@ -214,7 +215,7 @@ namespace ExtremeRoles.Patches.Manager
                 var rng = new Random(
                     UnityEngine.SystemInfo.processorFrequency);
                 shuffledArange = shuffledArange.OrderBy(item => rng.Next()).ToList();
-                Modules.Helpers.DebugLog($"NotAssignPlayerNum:{shuffledArange.Count()}");
+                Logging.Debug($"NotAssignPlayerNum:{shuffledArange.Count()}");
                 assignedPlayers = 1;
 
                 List<int> tempList = new List<int>(shuffledArange);
@@ -264,7 +265,7 @@ namespace ExtremeRoles.Patches.Manager
                             roleData.Role][role.BytedRoleId];
                         result = IsRoleSpawn(roleNum, spawnRate);
 
-                        Modules.Helpers.DebugLog($"RoleResult:{result}");
+                        Logging.Debug($"RoleResult:{result}");
 
                         if (result)
                         {
@@ -285,7 +286,7 @@ namespace ExtremeRoles.Patches.Manager
                     
                 }
 
-                Modules.Helpers.DebugLog($"AssignedPlayerNum:{assignedPlayers}");
+                Logging.Debug($"AssignedPlayerNum:{assignedPlayers}");
 
                 if (shuffledArange.Count == assignedPlayers ||
                     (shuffleRolesForImpostor.Count == 0 && 
@@ -312,7 +313,7 @@ namespace ExtremeRoles.Patches.Manager
             PlayerControl player, byte roleId, bool combinationRole=false)
         {
 
-            Modules.Helpers.DebugLog($"Player:{player.name}  RoleId:{roleId}");
+            Logging.Debug($"Player:{player.name}  RoleId:{roleId}");
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                 PlayerControl.LocalPlayer.NetId,
@@ -359,7 +360,7 @@ namespace ExtremeRoles.Patches.Manager
                 int roleSet = allSetting[
                     role.GetRoleSettingId(RoleCommonSetting.RoleNum)].GetSelection() + 1;
 
-                Modules.Helpers.DebugLog($"SpawnRate:{spawnRate}   RoleSet:{roleSet}");
+                Logging.Debug($"SpawnRate:{spawnRate}   RoleSet:{roleSet}");
 
                 if (roleSet <= 0 || spawnRate <= 0.0)
                 {
@@ -379,9 +380,9 @@ namespace ExtremeRoles.Patches.Manager
                 int roleNum = allSetting[
                     role.GetRoleSettingId(RoleCommonSetting.RoleNum)].GetInt();
 
-                Modules.Helpers.DebugLog(
+                Logging.Debug(
                     $"SelectopmValue:{allSetting[role.GetRoleSettingId(RoleCommonSetting.RoleNum)].Selections[0]}");
-                Modules.Helpers.DebugLog(
+                Logging.Debug(
                     $"Role Name:{role.RoleName}  SpawnRate:{spawnRate}   RoleNum:{roleNum}");
 
                 if (roleNum <= 0 || spawnRate <= 0.0)

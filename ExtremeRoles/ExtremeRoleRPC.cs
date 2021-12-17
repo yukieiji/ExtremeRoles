@@ -66,8 +66,8 @@ namespace ExtremeRoles
             byte sourceId, byte targetId, byte useAnimation)
         {
 
-            PlayerControl source = Modules.Helpers.GetPlayerControlById(sourceId);
-            PlayerControl target = Modules.Helpers.GetPlayerControlById(targetId);
+            PlayerControl source = Modules.Helpers.Player.GetPlayerControlById(sourceId);
+            PlayerControl target = Modules.Helpers.Player.GetPlayerControlById(targetId);
 
             if (source != null && target != null)
             {

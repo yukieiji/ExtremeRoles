@@ -8,6 +8,8 @@ using HarmonyLib;
 
 using Hazel;
 
+using ExtremeRoles.Modules.Helpers;
+
 namespace ExtremeRoles.Patches
 {
 
@@ -25,7 +27,7 @@ namespace ExtremeRoles.Patches
             if (!ExtremeRolesPlugin.DebugMode.Value) { return; }
 
             // Spawn dummys
-            if ((Input.GetKeyDown(KeyCode.F)) && Modules.Helpers.IsGameLobby)
+            if ((Input.GetKeyDown(KeyCode.F)) && Modules.OldHelpers.IsGameLobby)
             {
                 var playerControl = UnityEngine.Object.Instantiate(AmongUsClient.Instance.PlayerPrefab);
                 playerControl.PlayerId = (byte)GameData.Instance.GetAvailableId();
@@ -53,7 +55,7 @@ namespace ExtremeRoles.Patches
             }
 
             // Terminate round
-            if (Input.GetKeyDown(KeyCode.L) && !Modules.Helpers.IsGameLobby)
+            if (Input.GetKeyDown(KeyCode.L) && !Modules.OldHelpers.IsGameLobby)
             {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                     PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ForceEnd, Hazel.SendOption.Reliable, -1);
@@ -67,7 +69,7 @@ namespace ExtremeRoles.Patches
 
                 foreach (KeyValuePair<byte, Roles.SingleRoleAbs> value in dict)
                 {
-                    Modules.Helpers.DebugLog(
+                    Logging.Debug(
                         $"PlayerId:{value.Key}    AssignedTo:{value.Value.RoleName}");
                 }
             }
@@ -85,8 +87,8 @@ namespace ExtremeRoles.Patches
                     {
                         continue;
                     }
-                    var (playerCompleted, playerTotal) = Modules.Helpers.GetTaskInfo(playerInfo);
-                    Modules.Helpers.DebugLog($"PlayerName:{playerInfo.PlayerName}  TotalTask:{playerTotal}   ComplatedTask:{playerCompleted}");
+                    var (playerCompleted, playerTotal) = Task.GetTaskInfo(playerInfo);
+                    Debug.Log($"PlayerName:{playerInfo.PlayerName}  TotalTask:{playerTotal}   ComplatedTask:{playerCompleted}");
                 }
             }
 
@@ -103,12 +105,12 @@ namespace ExtremeRoles.Patches
                     {
                         continue;
                     }
-                    var (_, totalTask) = Modules.Helpers.GetTaskInfo(playerInfo);
+                    var (_, totalTask) = Task.GetTaskInfo(playerInfo);
                     if (totalTask == 0)
                     {
-                        var taskId = Modules.Helpers.GetRandomCommonTaskId();
-                        Modules.Helpers.DebugLog($"PlayerName:{playerInfo.PlayerName}  AddTask:{taskId}");
-                        Modules.Helpers.SetTask(
+                        var taskId = Task.GetRandomCommonTaskId();
+                        Logging.Debug($"PlayerName:{playerInfo.PlayerName}  AddTask:{taskId}");
+                        Task.SetTask(
                             playerInfo, taskId);
                     }
 

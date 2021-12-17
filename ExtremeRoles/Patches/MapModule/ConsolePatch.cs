@@ -26,7 +26,7 @@ namespace ExtremeRoles.Patches.MapModule
     {
         public static bool Prefix(Console __instance)
         {
-            return !Modules.Helpers.IsBlocked(
+            return !Modules.OldHelpers.IsBlocked(
                 __instance, PlayerControl.LocalPlayer);
         }
     }

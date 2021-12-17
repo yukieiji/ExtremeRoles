@@ -7,6 +7,8 @@ using UnityEngine;
 
 using HarmonyLib;
 
+using ExtremeRoles.Modules;
+
 
 namespace ExtremeRoles.Patches
 {
@@ -74,11 +76,11 @@ namespace ExtremeRoles.Patches
                     poolablePlayer.NameText.transform.localPosition.y, -15f);
                 poolablePlayer.NameText.text = winningPlayerData2.PlayerName;
 
-                foreach (var data in Modules.PlayerDataContainer.EndGamePlayerInfo)
+                foreach (var data in PlayerDataContainer.EndGamePlayerInfo)
                 {
                     if (data.PlayerName != winningPlayerData2.PlayerName) continue;
                     poolablePlayer.NameText.text += 
-                        $"\n<size=80%>{string.Join("\n",Modules.Helpers.Cs(data.Roles.NameColor, data.Roles.RoleName))}</size>";
+                        $"\n<size=80%>{string.Join("\n", Modules.Helpers.Design.Cs(data.Roles.NameColor, data.Roles.RoleName))}</size>";
                 }
             }
 

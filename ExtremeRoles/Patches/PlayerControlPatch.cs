@@ -17,7 +17,7 @@ namespace ExtremeRoles.Patches
         {
             if (!Roles.ExtremeRoleManager.GameRole[__instance.PlayerId].HasTask)
             {
-                Modules.Helpers.ClearAllTasks(ref __instance);
+                Modules.Helpers.Task.ClearAllTasks(ref __instance);
             }
         }
 
@@ -290,7 +290,7 @@ namespace ExtremeRoles.Patches
             bool IsLocalPlayerAssassinFirstMeeting = false)
         {
 
-            var (tasksCompleted, tasksTotal) = Modules.Helpers.GetTaskInfo(targetPlayer.Data);
+            var (tasksCompleted, tasksTotal) = Modules.Helpers.Task.GetTaskInfo(targetPlayer.Data);
             string roleNames = Roles.ExtremeRoleManager.GameRole[targetPlayer.PlayerId].RoleName;
 
             var completedStr = commsActive ? "?" : tasksCompleted.ToString();
@@ -367,7 +367,7 @@ namespace ExtremeRoles.Patches
             var importantTextTask = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
             importantTextTask.transform.SetParent(player.transform, false);
 
-            importantTextTask.Text = Modules.Helpers.Cs(
+            importantTextTask.Text = Modules.Helpers.Design.Cs(
                 role.NameColor, $"{role.RoleName}: {string.Format("{0}{1}", role.Id, "shortDescription")}");
             player.myTasks.Insert(0, importantTextTask);
 
@@ -375,7 +375,7 @@ namespace ExtremeRoles.Patches
         private static void ButtonUpdate(PlayerControl player)
         {
 
-            if (!player.AmOwner || !Modules.Helpers.ShowButtons) { return; }
+            if (!player.AmOwner || !Modules.OldHelpers.ShowButtons) { return; }
             var role = Roles.ExtremeRoleManager.GameRole[player.PlayerId];
             if (role.UseVent)
             {

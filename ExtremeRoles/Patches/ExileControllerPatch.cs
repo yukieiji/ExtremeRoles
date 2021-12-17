@@ -38,7 +38,7 @@ namespace ExtremeRoles.Patches
                     var assasin = (Roles.Combination.Assassin)ExtremeRoleManager.GameRole[playerId];
 
                     assasin.ExiledAction(
-                        Modules.Helpers.GetPlayerControlById(playerId).Data);
+                        Modules.Helpers.Player.GetPlayerControlById(playerId).Data);
                     if (assasin.IsForceWin) { break; }
      
                 }
