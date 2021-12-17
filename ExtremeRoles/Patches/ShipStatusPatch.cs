@@ -1,6 +1,9 @@
 ﻿using HarmonyLib;
 using UnityEngine;
 
+using ExtremeRoles.Modules;
+using ExtremeRoles.Roles;
+
 namespace ExtremeRoles.Patches
 {
     [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.CalculateLightRadius))]
@@ -18,7 +21,7 @@ namespace ExtremeRoles.Patches
             SwitchSystem switchSystem = systemType.TryCast<SwitchSystem>();
             if (switchSystem == null) { return true; }
 
-            var allRole = Roles.ExtremeRoleManager.GameRole;
+            var allRole = ExtremeRoleManager.GameRole;
             if (allRole.Count == 0) { return true; }
 
             float num = (float)switchSystem.Value / 255f;
@@ -63,7 +66,7 @@ namespace ExtremeRoles.Patches
             if (HudManager.Instance.isIntroDisplayed) return false;
 
 
-            var statistics = new Modules.PlayerDataContainer.PlayerStatistics();
+            var statistics = new PlayerDataContainer.PlayerStatistics();
             if (IsSabotageWin(__instance)) { return false; }
             if (IsTaskWin(__instance)) { return false; };
             if (IsImpostorWin(__instance, statistics)) { return false; };
@@ -82,7 +85,7 @@ namespace ExtremeRoles.Patches
 
         private static bool IsForCrewmateWin(
             ShipStatus __instance,
-            Modules.PlayerDataContainer.PlayerStatistics statistics)
+            PlayerDataContainer.PlayerStatistics statistics)
         {
             if (statistics.TeamCrewmateAlive > 0 && statistics.TeamImpostorAlive == 0)
             {
@@ -96,7 +99,7 @@ namespace ExtremeRoles.Patches
 
         private static bool IsImpostorWin(
             ShipStatus __instance,
-            Modules.PlayerDataContainer.PlayerStatistics statistics)
+            PlayerDataContainer.PlayerStatistics statistics)
         {
             bool isGameEnd = false;
             GameOverReason endReason = GameOverReason.HumansDisconnect;

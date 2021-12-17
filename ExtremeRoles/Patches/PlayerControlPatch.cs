@@ -7,6 +7,10 @@ using Hazel;
 
 using UnityEngine;
 
+using ExtremeRoles.Modules;
+using ExtremeRoles.Modules.Helpers;
+using ExtremeRoles.Roles;
+
 namespace ExtremeRoles.Patches
 {
 
@@ -15,9 +19,9 @@ namespace ExtremeRoles.Patches
     {
         public static void Postfix(PlayerControl __instance)
         {
-            if (!Roles.ExtremeRoleManager.GameRole[__instance.PlayerId].HasTask)
+            if (!ExtremeRoleManager.GameRole[__instance.PlayerId].HasTask)
             {
-                Modules.Helpers.Task.ClearAllTasks(ref __instance);
+                Task.ClearAllTasks(ref __instance);
             }
         }
 
@@ -28,7 +32,7 @@ namespace ExtremeRoles.Patches
     {
         static void Postfix(PlayerControl __instance)
         {
-            if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return; }
+            if (ExtremeRoleManager.GameRole.Count == 0) { return; }
             if (PlayerControl.LocalPlayer != __instance) { return; }
 
             PlayerInfoUpdate();
@@ -39,15 +43,15 @@ namespace ExtremeRoles.Patches
         }
 
         private static Color GetColorFromRoleAbility(
-            Roles.SingleRoleAbs role,
+            SingleRoleAbs role,
             byte targetPlayerId)
         {
             Color defaultColor = Palette.ClearWhite;
-            var targetRole = Roles.ExtremeRoleManager.GameRole[targetPlayerId];
+            var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
 
             switch (role.Id)
             {
-                case Roles.ExtremeRoleId.Marlin:
+                case ExtremeRoleId.Marlin:
                     if (targetRole.IsImposter())
                     {
                         return Palette.ImpostorRed;
@@ -59,7 +63,7 @@ namespace ExtremeRoles.Patches
                     }
                     return defaultColor;
 
-                case Roles.ExtremeRoleId.VanillaRole:
+                case ExtremeRoleId.VanillaRole:
 
                     var vanilaRole = (Roles.Solo.VanillaRoleWrapper)role;
                     switch (vanilaRole.VanilaRoleId)
@@ -134,11 +138,11 @@ namespace ExtremeRoles.Patches
         private static void SetPlayerNameColor(PlayerControl player)
         {
             var localPlayerId = player.PlayerId;
-            var role = Roles.ExtremeRoleManager.GameRole[localPlayerId];
+            var role = ExtremeRoleManager.GameRole[localPlayerId];
 
             bool voteNamePaintBlock = false;
             bool playerNamePaintBlock = false;
-            if (role.Id == Roles.ExtremeRoleId.Assassin)
+            if (role.Id == ExtremeRoleId.Assassin)
             {
                 voteNamePaintBlock = true;
                 playerNamePaintBlock = ((Roles.Combination.Assassin)role).CanSeeRoleBeforeFirstMeeting;
@@ -167,7 +171,7 @@ namespace ExtremeRoles.Patches
                 }
                 else
                 {
-                    var targetPlayerRole = Roles.ExtremeRoleManager.GameRole[
+                    var targetPlayerRole = ExtremeRoleManager.GameRole[
                         targetPlayerId];
                     Color roleColor = targetPlayerRole.NameColor;
                     if (!playerNamePaintBlock)
@@ -233,9 +237,9 @@ namespace ExtremeRoles.Patches
             }
 
             var isBlocked = AssassinMeeting.AssassinMeetingTrigger;
-            var role = Roles.ExtremeRoleManager.GameRole[PlayerControl.LocalPlayer.PlayerId];
+            var role = ExtremeRoleManager.GameRole[PlayerControl.LocalPlayer.PlayerId];
 
-            if (role.Id == Roles.ExtremeRoleId.Assassin)
+            if (role.Id == ExtremeRoleId.Assassin)
             {
                 isBlocked = ((Roles.Combination.Assassin)role).IsFirstMeeting || isBlocked;
             }
@@ -290,8 +294,8 @@ namespace ExtremeRoles.Patches
             bool IsLocalPlayerAssassinFirstMeeting = false)
         {
 
-            var (tasksCompleted, tasksTotal) = Modules.Helpers.Task.GetTaskInfo(targetPlayer.Data);
-            string roleNames = Roles.ExtremeRoleManager.GameRole[targetPlayer.PlayerId].RoleName;
+            var (tasksCompleted, tasksTotal) = Task.GetTaskInfo(targetPlayer.Data);
+            string roleNames = ExtremeRoleManager.GameRole[targetPlayer.PlayerId].RoleName;
 
             var completedStr = commsActive ? "?" : tasksCompleted.ToString();
             string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({completedStr}/{tasksTotal})</color>" : "";
@@ -312,7 +316,7 @@ namespace ExtremeRoles.Patches
             }
             else if (IsLocalPlayerAssassinFirstMeeting)
             {
-                if (((Roles.Combination.Assassin)Roles.ExtremeRoleManager.GameRole[
+                if (((Roles.Combination.Assassin)ExtremeRoleManager.GameRole[
                     PlayerControl.LocalPlayer.PlayerId]).CanSeeRoleBeforeFirstMeeting && MapOption.GhostsSeeRoles)
                 {
                     playerInfoText = $"{roleNames}";
@@ -343,9 +347,9 @@ namespace ExtremeRoles.Patches
         {
             if (player == null) { return; };
 
-            var role = Roles.ExtremeRoleManager.GameRole[player.PlayerId];
+            var role = ExtremeRoleManager.GameRole[player.PlayerId];
 
-            if (role.Id == Roles.ExtremeRoleId.VanillaRole) { return; }
+            if (role.Id == ExtremeRoleId.VanillaRole) { return; }
 
             var removedTask = new List<PlayerTask>();
             foreach (PlayerTask task in player.myTasks)
@@ -367,7 +371,7 @@ namespace ExtremeRoles.Patches
             var importantTextTask = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
             importantTextTask.transform.SetParent(player.transform, false);
 
-            importantTextTask.Text = Modules.Helpers.Design.Cs(
+            importantTextTask.Text = Design.Cs(
                 role.NameColor, $"{role.RoleName}: {string.Format("{0}{1}", role.Id, "shortDescription")}");
             player.myTasks.Insert(0, importantTextTask);
 
@@ -375,11 +379,11 @@ namespace ExtremeRoles.Patches
         private static void ButtonUpdate(PlayerControl player)
         {
 
-            if (!player.AmOwner || !Modules.OldHelpers.ShowButtons) { return; }
-            var role = Roles.ExtremeRoleManager.GameRole[player.PlayerId];
+            if (!player.AmOwner || !OldHelpers.ShowButtons) { return; }
+            var role = ExtremeRoleManager.GameRole[player.PlayerId];
             if (role.UseVent)
             {
-                if (role.Id != Roles.ExtremeRoleId.VanillaRole)
+                if (role.Id != ExtremeRoleId.VanillaRole)
                 {
                     HudManager.Instance.ImpostorVentButton.Show();
                 }
@@ -485,11 +489,11 @@ namespace ExtremeRoles.Patches
         public static bool Prefix(
             PlayerControl __instance, [HarmonyArgument(0)] float time)
         {
-            var roles = Roles.ExtremeRoleManager.GameRole;
+            var roles = ExtremeRoleManager.GameRole;
             if (roles.Count == 0 || !roles.ContainsKey(__instance.PlayerId)) { return true; }
 
             var role = roles[__instance.PlayerId];
-            if (role.Id == Roles.ExtremeRoleId.VanillaRole) { return true; }
+            if (role.Id == ExtremeRoleId.VanillaRole) { return true; }
 
 
             var killCool = PlayerControl.GameOptions.KillCooldown;

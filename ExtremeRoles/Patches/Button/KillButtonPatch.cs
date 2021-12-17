@@ -2,8 +2,6 @@
 
 using HarmonyLib;
 
-using UnityEngine;
-
 using Hazel;
 
 namespace ExtremeRoles.Patches.Button
