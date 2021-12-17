@@ -3,7 +3,7 @@ using System.Linq;
 
 using HarmonyLib;
 
-using ExtremeRoles.Modules;
+using ExtremeRoles.Module;
 
 
 namespace ExtremeRoles.Patches.Option

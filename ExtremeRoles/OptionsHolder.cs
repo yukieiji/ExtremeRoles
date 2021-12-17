@@ -7,7 +7,7 @@ using UnityEngine;
 using Hazel;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Modules;
+using ExtremeRoles.Module;
 
 
 namespace ExtremeRoles

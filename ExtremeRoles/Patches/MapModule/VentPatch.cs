@@ -77,7 +77,7 @@ namespace ExtremeRoles.Patches.MapModule
 
             __instance.SetButtons(isEnter);
 
-            Modules.Helpers.Logging.Debug($"VentStatus:{canUse}   {couldUse}   {isEnter}");
+            Helper.Logging.Debug($"VentStatus:{canUse}   {couldUse}   {isEnter}");
 
             return false;
         }

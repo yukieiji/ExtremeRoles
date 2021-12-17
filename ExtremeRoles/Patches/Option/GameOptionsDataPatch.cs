@@ -7,8 +7,8 @@ using HarmonyLib;
 
 using UnityEngine;
 
-using ExtremeRoles.Modules;
-using ExtremeRoles.Modules.Helpers;
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
 
 
 namespace ExtremeRoles.Patches.Option

@@ -88,17 +88,17 @@ namespace ExtremeRoles.Patches.Option
         {
             UpdateToggle(
                 ghostsSeeTasksButton,
-                $"{Modules.Translation.GetString("ghostsSeeTasksButton")}: ",
+                $"{Helper.Translation.GetString("ghostsSeeTasksButton")}: ",
                 ExtremeRolesPlugin.GhostsSeeTasks.Value);
             UpdateToggle(ghostsSeeRolesButton,
-                $"{Modules.Translation.GetString("ghostsSeeRolesButton")}: ",
+                $"{Helper.Translation.GetString("ghostsSeeRolesButton")}: ",
                 ExtremeRolesPlugin.GhostsSeeRoles.Value);
             UpdateToggle(
                 ghostsSeeVotesButton,
-                $"{Modules.Translation.GetString("ghostsSeeVotesButton")}: ",
+                $"{Helper.Translation.GetString("ghostsSeeVotesButton")}: ",
                 ExtremeRolesPlugin.GhostsSeeVotes.Value);
             UpdateToggle(showRoleSummaryButton,
-                $"{Modules.Translation.GetString("showRoleSummaryButton")}: ",
+                $"{Helper.Translation.GetString("showRoleSummaryButton")}: ",
                 ExtremeRolesPlugin.ShowRoleSummary.Value);
         }
 
@@ -126,7 +126,7 @@ namespace ExtremeRoles.Patches.Option
 
             Color color = on ? new Color(0f, 1f, 0.16470589f, 1f) : Color.white;
             button.Background.color = color;
-            button.Text.text = $"{text}{(on ? Modules.Translation.GetString("optionOn") : Modules.Translation.GetString("optionOff"))}";
+            button.Text.text = $"{text}{(on ? Helper.Translation.GetString("optionOn") : Helper.Translation.GetString("optionOff"))}";
             if (button.Rollover) button.Rollover.ChangeOutColor(color);
         }
     }

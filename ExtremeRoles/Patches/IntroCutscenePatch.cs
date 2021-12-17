@@ -14,9 +14,9 @@ namespace ExtremeRoles.Patches
 
             if (role.IsNeutral())
             {
-                __instance.BackgroundBar.material.color = Modules.ColorPalette.NeutralColor;
+                __instance.BackgroundBar.material.color = Module.ColorPalette.NeutralColor;
                 __instance.TeamTitle.text = role.Teams.ToString();
-                __instance.TeamTitle.color = Modules.ColorPalette.NeutralColor;
+                __instance.TeamTitle.color = Module.ColorPalette.NeutralColor;
                 __instance.ImpostorText.text = "";
             }
         }
@@ -103,12 +103,12 @@ namespace ExtremeRoles.Patches
             // Generate and initialize player icons
             if (PlayerControl.LocalPlayer != null && HudManager.Instance != null)
             {
-                Modules.PlayerDataContainer.CreatIcons(__instance);
+                Module.PlayerDataContainer.CreatIcons(__instance);
                 var role = Roles.ExtremeRoleManager.GameRole[PlayerControl.LocalPlayer.PlayerId];
                 if (role.Id == Roles.ExtremeRoleId.Marlin)
                 {
                     ((Roles.Combination.Marlin)role).SetPlayerIcon(
-                        Modules.PlayerDataContainer.PlayerIcon);
+                        Module.PlayerDataContainer.PlayerIcon);
                 }
             }
 

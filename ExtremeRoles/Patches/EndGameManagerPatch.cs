@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 using UnityEngine;
 
 using HarmonyLib;
 
-using ExtremeRoles.Modules;
+using ExtremeRoles.Module;
 
 
 namespace ExtremeRoles.Patches
@@ -80,7 +78,7 @@ namespace ExtremeRoles.Patches
                 {
                     if (data.PlayerName != winningPlayerData2.PlayerName) continue;
                     poolablePlayer.NameText.text += 
-                        $"\n<size=80%>{string.Join("\n", Modules.Helpers.Design.Cs(data.Roles.NameColor, data.Roles.RoleName))}</size>";
+                        $"\n<size=80%>{string.Join("\n", Helper.Design.Cs(data.Roles.NameColor, data.Roles.RoleName))}</size>";
                 }
             }
 

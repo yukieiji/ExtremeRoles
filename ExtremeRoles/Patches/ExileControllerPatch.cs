@@ -29,7 +29,7 @@ namespace ExtremeRoles.Patches
 
         private static void WrapUpPostfix(GameData.PlayerInfo exiled)
         {
-            var deadedAssassin = Modules.PlayerDataContainer.DeadedAssassin;
+            var deadedAssassin = Module.PlayerDataContainer.DeadedAssassin;
 
             if (deadedAssassin.Count != 0)
             {
@@ -38,11 +38,11 @@ namespace ExtremeRoles.Patches
                     var assasin = (Roles.Combination.Assassin)ExtremeRoleManager.GameRole[playerId];
 
                     assasin.ExiledAction(
-                        Modules.Helpers.Player.GetPlayerControlById(playerId).Data);
+                        Helper.Player.GetPlayerControlById(playerId).Data);
                     if (assasin.IsForceWin) { break; }
      
                 }
-                Modules.PlayerDataContainer.DeadedAssassin.Clear();
+                Module.PlayerDataContainer.DeadedAssassin.Clear();
             }
 
             if (exiled == null) { return; };

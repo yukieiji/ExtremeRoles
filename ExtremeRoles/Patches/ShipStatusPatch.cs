@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using UnityEngine;
 
-using ExtremeRoles.Modules;
+using ExtremeRoles.Module;
 using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Patches

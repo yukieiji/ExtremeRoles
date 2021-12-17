@@ -8,7 +8,7 @@ using HarmonyLib;
 
 using Hazel;
 
-using ExtremeRoles.Modules.Helpers;
+using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Patches
 {

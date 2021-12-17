@@ -29,7 +29,7 @@ namespace ExtremeRoles
         {
             Roles.ExtremeRoleManager.GameInit();
             Module.PlayerDataContainer.GameInit();
-            Patch.AssassinMeeting.Reset();
+            Patches.AssassinMeeting.Reset();
         }
 
         public static void ForceEnd()
@@ -72,7 +72,7 @@ namespace ExtremeRoles
             {
                 if (useAnimation == 0)
                 {
-                    Patch.KillAnimationCoPerformKillPatch.hideNextAnimation = true;
+                    Patches.KillAnimationCoPerformKillPatch.hideNextAnimation = true;
                 };
                 source.MurderPlayer(target);
                 Roles.ExtremeRoleManager.GameRole[targetId].RolePlayerKilledAction(

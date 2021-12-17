@@ -2,7 +2,7 @@
 
 using HarmonyLib;
 
-using ExtremeRoles.Modules;
+using ExtremeRoles.Module;
 
 namespace ExtremeRoles.Patches
 {
@@ -27,7 +27,7 @@ namespace ExtremeRoles.Patches
             {
 
                 var role = Roles.ExtremeRoleManager.GameRole[playerInfo.PlayerId];
-                var(completedTask, totalTask) = Modules.Helpers.Task.GetTaskInfo(playerInfo);
+                var(completedTask, totalTask) = Helper.Task.GetTaskInfo(playerInfo);
 
                 var finalStatus = PlayerDataContainer.PlayerStatus.Alive;
                 if (playerInfo.Disconnected) { finalStatus = PlayerDataContainer.PlayerStatus.Disconnected; }

@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Modules;
+﻿using ExtremeRoles.Module;
 
 namespace ExtremeRoles.Roles.Solo
 {

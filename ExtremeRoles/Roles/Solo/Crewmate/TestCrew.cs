@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.Modules;
+﻿using ExtremeRoles.Module;
 using UnityEngine;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate

@@ -11,7 +11,7 @@ namespace ExtremeRoles.Patches.Button
             // Manually modifying the VentButton to use Vent.Use again in order to trigger the Vent.Use prefix patch
             if (__instance.currentTarget != null)
             {
-                Modules.Helpers.Logging.Debug($"VentButtonClicked");
+                Helper.Logging.Debug($"VentButtonClicked");
                 __instance.currentTarget.Use();
             }
             return false;

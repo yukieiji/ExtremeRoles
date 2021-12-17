@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Modules;
+using ExtremeRoles.Module;
 
 namespace ExtremeRoles.Roles
 {

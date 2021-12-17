@@ -5,7 +5,7 @@ using System.Linq;
 using HarmonyLib;
 using Hazel;
 
-using ExtremeRoles.Modules.Helpers;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Patches.Manager
