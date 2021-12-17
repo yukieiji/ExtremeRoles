@@ -58,16 +58,16 @@ namespace ExtremeRoles.Patches.Manager
                         player = PlayerControl.AllPlayerControls[playerIndex];
                         assign = IsAssignedToMultiRole(
                             role, player);
-                        if (assign)
+                        if (!assign) { continue; }
+                        
+                        if (!role.CanHasAnotherRole)
                         {
-                            if (!role.CanHasAnotherRole)
-                            {
-                                playerIndexList.Remove(playerIndex);
-                            }
-                            SetRoleToPlayer(
-                                player, role.BytedRoleId, true);
-                            break;
+                            playerIndexList.Remove(playerIndex);
                         }
+
+                        SetRoleToPlayer(
+                            player, role.BytedRoleId, true);
+                        break;
                     }
                 }
             }
