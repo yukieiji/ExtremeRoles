@@ -15,13 +15,6 @@ namespace ExtremeRoles.Patches.Option
     [HarmonyPatch]
     class GameOptionsDataPatch
     {
-        private static IEnumerable<MethodBase> TargetMethods()
-        {
-            return typeof(GameOptionsData).GetMethods().Where(
-                x => x.ReturnType == typeof(string) &&
-                x.GetParameters().Length == 1 &&
-                x.GetParameters()[0].ParameterType == typeof(int));
-        }
 
         private static void Postfix(ref string __result)
         {
@@ -138,10 +131,6 @@ namespace ExtremeRoles.Patches.Option
             __result = pages[counter].Trim('\r', '\n') + "\n\n" + Tl("pressTabForMore") + $" ({counter + 1}/{numPages})";
 
         }
-        private static string Tl(string key)
-        {
-            return Translation.GetString(key);
-        }
 
         private static string OptionToString(CustomOption option)
         {
@@ -163,6 +152,17 @@ namespace ExtremeRoles.Patches.Option
                 }
             }
             return string.Join("\n", options);
+        }
+        private static IEnumerable<MethodBase> TargetMethods()
+        {
+            return typeof(GameOptionsData).GetMethods().Where(
+                x => x.ReturnType == typeof(string) &&
+                x.GetParameters().Length == 1 &&
+                x.GetParameters()[0].ParameterType == typeof(int));
+        }
+        private static string Tl(string key)
+        {
+            return Translation.GetString(key);
         }
 
     }

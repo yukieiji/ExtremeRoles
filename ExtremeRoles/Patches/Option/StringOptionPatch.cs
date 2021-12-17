@@ -8,6 +8,33 @@ using ExtremeRoles.Modules;
 
 namespace ExtremeRoles.Patches.Option
 {
+
+    [HarmonyPatch(typeof(StringOption), nameof(StringOption.Decrease))]
+    public class StringOptionDecreasePatch
+    {
+        public static bool Prefix(StringOption __instance)
+        {
+            CustomOption option = OptionsHolder.AllOptions.Values.FirstOrDefault(
+                option => option.Behaviour == __instance);
+            if (option == null) return true;
+            option.UpdateSelection(option.CurSelection - 1);
+            return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(StringOption), nameof(StringOption.Increase))]
+    public class StringOptionIncreasePatch
+    {
+        public static bool Prefix(StringOption __instance)
+        {
+            CustomOption option = OptionsHolder.AllOptions.Values.FirstOrDefault(
+                option => option.Behaviour == __instance);
+            if (option == null) return true;
+            option.UpdateSelection(option.CurSelection + 1);
+            return false;
+        }
+    }
+
     [HarmonyPatch(typeof(StringOption), nameof(StringOption.OnEnable))]
     public class StringOptionOnEnablePatch
     {
@@ -26,29 +53,4 @@ namespace ExtremeRoles.Patches.Option
         }
     }
 
-    [HarmonyPatch(typeof(StringOption), nameof(StringOption.Increase))]
-    public class StringOptionIncreasePatch
-    {
-        public static bool Prefix(StringOption __instance)
-        {
-            CustomOption option = OptionsHolder.AllOptions.Values.FirstOrDefault(
-                option => option.Behaviour == __instance);
-            if (option == null) return true;
-            option.UpdateSelection(option.CurSelection + 1);
-            return false;
-        }
-    }
-
-    [HarmonyPatch(typeof(StringOption), nameof(StringOption.Decrease))]
-    public class StringOptionDecreasePatch
-    {
-        public static bool Prefix(StringOption __instance)
-        {
-            CustomOption option = OptionsHolder.AllOptions.Values.FirstOrDefault(
-                option => option.Behaviour == __instance);
-            if (option == null) return true;
-            option.UpdateSelection(option.CurSelection - 1);
-            return false;
-        }
-    }
 }

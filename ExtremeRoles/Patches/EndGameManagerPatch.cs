@@ -24,14 +24,16 @@ namespace ExtremeRoles.Patches
                 UnityEngine.Object.Destroy(pb.gameObject);
             }
             int num = Mathf.CeilToInt(7.5f);
-            List<WinningPlayerData> list = TempData.winners.ToArray().ToList().OrderBy(delegate (WinningPlayerData b)
-            {
-                if (!b.IsYou)
-                {
-                    return 0;
-                }
-                return -1;
-            }).ToList<WinningPlayerData>();
+            List<WinningPlayerData> list = TempData.winners.ToArray().ToList().OrderBy(
+                delegate (WinningPlayerData b)
+                    {
+                    if (!b.IsYou)
+                    {
+                        return 0;
+                    }
+                    return -1;
+                    }
+                ).ToList<WinningPlayerData>();
             for (int i = 0; i < list.Count; i++)
             {
                 WinningPlayerData winningPlayerData2 = list[i];
@@ -67,7 +69,9 @@ namespace ExtremeRoles.Patches
                 poolablePlayer.NameText.color = Color.white;
                 poolablePlayer.NameText.lineSpacing *= 0.7f;
                 poolablePlayer.NameText.transform.localScale = new Vector3(1f / vector.x, 1f / vector.y, 1f / vector.z);
-                poolablePlayer.NameText.transform.localPosition = new Vector3(poolablePlayer.NameText.transform.localPosition.x, poolablePlayer.NameText.transform.localPosition.y, -15f);
+                poolablePlayer.NameText.transform.localPosition = new Vector3(
+                    poolablePlayer.NameText.transform.localPosition.x,
+                    poolablePlayer.NameText.transform.localPosition.y, -15f);
                 poolablePlayer.NameText.text = winningPlayerData2.PlayerName;
 
                 foreach (var data in Modules.PlayerDataContainer.EndGamePlayerInfo)

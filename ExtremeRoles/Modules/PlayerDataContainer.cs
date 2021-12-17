@@ -8,10 +8,10 @@ namespace ExtremeRoles.Modules
     {
         public enum PlayerStatus
         {
-            Alive = 0, // 生存
-            Exiled, // 追放
-            Dead, // 死亡
-            Disconnected, //切断
+            Alive = 0,
+            Exiled,
+            Dead, 
+            Disconnected, 
         }
 
         public static List<GamePlayerInfo> EndGamePlayerInfo = new List<GamePlayerInfo>();

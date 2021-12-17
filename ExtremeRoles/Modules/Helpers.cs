@@ -110,12 +110,12 @@ namespace ExtremeRoles.Modules
                 )
             {
 
-                for (int j = 0; j < playerInfo.Tasks.Count; j++)
+                for (int j = 0; j < playerInfo.Tasks.Count; ++j)
                 {
-                    TotalTasks++;
+                    ++TotalTasks;
                     if (playerInfo.Tasks[j].Complete)
                     {
-                        CompletedTasks++;
+                        ++CompletedTasks;
                     }
                 }
             }
@@ -180,7 +180,10 @@ namespace ExtremeRoles.Modules
 
         public static bool IsBlocked(PlayerTask task, PlayerControl pc)
         {
-            if (task == null || pc == null || pc != PlayerControl.LocalPlayer) return false;
+            if (task == null || pc == null || pc != PlayerControl.LocalPlayer)
+            {
+                return false;
+            }
 
             bool isLights = task.TaskType == TaskTypes.FixLights;
             bool isComms = task.TaskType == TaskTypes.FixComms;
@@ -239,7 +242,10 @@ namespace ExtremeRoles.Modules
             try
             {
                 Texture2D texture = loadTextureFromResources(path);
-                return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), pixelsPerUnit);
+                return Sprite.Create(
+                    texture,
+                    new Rect(0, 0, texture.width, texture.height),
+                    new Vector2(0.5f, 0.5f), pixelsPerUnit);
             }
             catch
             {

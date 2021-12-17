@@ -11,6 +11,7 @@ using Hazel;
 namespace ExtremeRoles.Patches
 {
 
+#if DEBUG
     [HarmonyPatch(typeof(KeyboardJoystick), nameof(KeyboardJoystick.Update))]
     public static class DebugTool
     {
@@ -121,6 +122,7 @@ namespace ExtremeRoles.Patches
                 .Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
+#endif
 
     [HarmonyPatch(typeof(KeyboardJoystick), nameof(KeyboardJoystick.Update))]
     public static class GameOptionsNextPagePatch

@@ -140,33 +140,62 @@ namespace ExtremeRoles.Patches.Manager
             return assignRoles;
         }
 
-        private static Tuple<List<int>, List<int>> SeparatePlayerType(
-            List<int> playerIndexList)
+        private static bool IsAssignedToMultiRole(
+            MultiAssignRoleAbs role,
+            PlayerControl player)
         {
-            List<int> impostersList = new List<int>();
-            List<int> crewList = new List<int>();
 
-            foreach (int index in playerIndexList)
+            if (ExtremeRoleManager.GameRole.ContainsKey(player.PlayerId))
             {
-                RoleTypes role = PlayerControl.AllPlayerControls[index].Data.Role.Role;
-
-                switch (role)
+                if (ExtremeRoleManager.GameRole[player.PlayerId].Id == role.Id)
                 {
-                    case RoleTypes.Impostor:
-                    case RoleTypes.Shapeshifter:
-                        impostersList.Add(index);
-                        break;
-                    case RoleTypes.Crewmate:
-                    case RoleTypes.Engineer:
-                    case RoleTypes.Scientist:
-                        crewList.Add(index);
-                        break;
-                    default:
-                        throw new System.Exception("UnKnown Role Detect!!");
+                    return false;
                 }
-            };
+            }
 
-            return Tuple.Create(impostersList, crewList);
+            switch (player.Data.Role.Role)
+            {
+                case RoleTypes.Impostor:
+                    if (role.IsImposter())
+                    {
+                        return true;
+                    }
+                    break;
+                case RoleTypes.Crewmate:
+                    if ((role.IsCrewmate() || role.IsNeutral()) &&
+                         role.Teams != ExtremeRoleType.Null)
+                    {
+                        return true;
+                    }
+                    break;
+                case RoleTypes.Shapeshifter:
+                    if (role.IsImposter() && role.CanHasAnotherRole)
+                    {
+                        return true;
+                    }
+                    break;
+                case RoleTypes.Engineer:
+                case RoleTypes.Scientist:
+                    if ((role.IsCrewmate() || role.IsNeutral()) &&
+                        role.CanHasAnotherRole &&
+                        role.Teams != ExtremeRoleType.Null)
+                    {
+                        return true;
+                    }
+                    break;
+                default:
+                    return false;
+            }
+            return false;
+        }
+
+        private static bool IsRoleSpawn(
+            int roleNum, int spawnData)
+        {
+            if (roleNum <= 0) { return false; }
+            if (spawnData < UnityEngine.Random.RandomRange(0, 100)) { return false; }
+
+            return true;
         }
 
         private static void NormalExtremeRoleAssign(
@@ -297,63 +326,6 @@ namespace ExtremeRoles.Patches.Manager
                 roleId, player.PlayerId, combinationRole);
         }
 
-        private static bool IsRoleSpawn(
-            int roleNum, int spawnData)
-        {
-            if (roleNum <= 0) { return false; }
-            if (spawnData < UnityEngine.Random.RandomRange(0, 100)) { return false; }
-
-            return true;
-        }
-
-        private static bool IsAssignedToMultiRole(
-            MultiAssignRoleAbs role,
-            PlayerControl player)
-        {
-
-            if (ExtremeRoleManager.GameRole.ContainsKey(player.PlayerId))
-            {
-                if(ExtremeRoleManager.GameRole[player.PlayerId].Id == role.Id)
-                {
-                    return false;
-                }
-            }
-
-            switch (player.Data.Role.Role)
-            {
-                case RoleTypes.Impostor:
-                    if (role.IsImposter())
-                    {
-                       return true;
-                    }
-                    break;
-                case RoleTypes.Crewmate:
-                    if ((role.IsCrewmate() || role.IsNeutral()) &&
-                         role.Teams != ExtremeRoleType.Null)
-                    {
-                        return true;
-                    }
-                    break;
-                case RoleTypes.Shapeshifter:
-                    if (role.IsImposter() && role.CanHasAnotherRole)
-                    {
-                        return true;
-                    }
-                    break;
-                case RoleTypes.Engineer:
-                case RoleTypes.Scientist:
-                    if ((role.IsCrewmate() || role.IsNeutral()) && 
-                        role.CanHasAnotherRole &&
-                        role.Teams != ExtremeRoleType.Null)
-                    {
-                        return true;
-                    }
-                    break;
-                default:
-                    return false;
-            }
-            return false;
-        }
 
         private static RoleAssignmentData CreateRoleData()
         {
