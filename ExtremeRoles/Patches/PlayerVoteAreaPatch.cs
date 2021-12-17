@@ -6,6 +6,8 @@ using HarmonyLib;
 
 using UnityEngine;
 
+using BepInEx.IL2CPP.Utils.Collections;
+
 namespace ExtremeRoles.Patches
 {
 	[HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.Select))]
@@ -32,7 +34,7 @@ namespace ExtremeRoles.Patches
 				//  at ExtremeRoles.Patches.PlayerVoteAreaSelectPatch.Prefix (PlayerVoteArea __instance) [0x0012a] in <4cdd481f50f94d46b5c49231d84de06c>:0
 				float startPos = __instance.AnimateButtonsFromLeft ? 0.2f : 1.95f;
 				__instance.StartCoroutine(
-					(Il2CppSystem.Collections.IEnumerator)EffectsAllWrap(
+					EffectsAllWrap(
 						new IEnumerator[]
 							{
 								EffectsLerpWrap(0.25f, delegate(float t)
@@ -50,9 +52,9 @@ namespace ExtremeRoles.Patches
 										Effects.ExpOut(t));
 								})
 							}
-						)
+						).WrapToIl2Cpp()
 					);
-				//BepInEx.IL2CPP.Utils.Collections.ManagedIl2CppEnumerator
+			
 				Il2CppSystem.Collections.Generic.List<UiElement> selectableElements = new Il2CppSystem.Collections.Generic.List<UiElement>();
 				selectableElements.Add(__instance.CancelButton);
 				selectableElements.Add(__instance.ConfirmButton);
