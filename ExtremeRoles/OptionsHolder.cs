@@ -6,8 +6,8 @@ using UnityEngine;
 
 using Hazel;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Modules;
-using ExtremeRoles.Modules.Helpers;
 
 
 namespace ExtremeRoles

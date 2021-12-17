@@ -2,10 +2,17 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ExtremeRoles.Modules.Helpers
+namespace ExtremeRoles.Helper
 {
-    public class Map
+    public class Player
     {
+        public enum MurderAttemptResult
+        {
+            PerformKill,
+            SuppressKill,
+            BlankKill
+        }
+
         public static bool ShowButtons
         {
             get
@@ -17,15 +24,13 @@ namespace ExtremeRoles.Modules.Helpers
             }
         }
 
-        public static bool IsGameLobby
+        public static PlayerControl GetPlayerControlById(byte id)
         {
-            get
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
-                return (
-                    AmongUsClient.Instance.GameState !=
-                    InnerNet.InnerNetClient.GameStates.Started
-                );
+                if (player.PlayerId == id) { return player; }
             }
+            return null;
         }
 
         public static bool IsBlocked(PlayerTask task, PlayerControl pc)
@@ -84,5 +89,6 @@ namespace ExtremeRoles.Modules.Helpers
             }
             return false;
         }
+
     }
 }

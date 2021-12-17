@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using ExtremeRoles.Roles;
 
 
-namespace ExtremeRoles.Modules.Helpers
+namespace ExtremeRoles.Helper
 {
     public class Task
     {

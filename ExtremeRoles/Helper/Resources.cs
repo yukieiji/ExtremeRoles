@@ -5,7 +5,7 @@ using System.Reflection;
 using UnhollowerBaseLib;
 using UnityEngine;
 
-namespace ExtremeRoles.Modules.Helpers
+namespace ExtremeRoles.Helper
 {
     public class Resources
     {

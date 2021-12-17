@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Modules;
-using ExtremeRoles.Modules.Helpers;
 
 namespace ExtremeRoles.Roles
 {

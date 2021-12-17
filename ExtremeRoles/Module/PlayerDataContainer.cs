@@ -2,7 +2,7 @@
 
 using ExtremeRoles.Roles;
 
-namespace ExtremeRoles.Modules
+namespace ExtremeRoles.Module
 {
     public class PlayerDataContainer
     {

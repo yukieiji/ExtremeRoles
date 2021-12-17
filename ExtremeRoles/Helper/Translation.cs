@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 using Newtonsoft.Json.Linq;
 
-namespace ExtremeRoles.Modules
+namespace ExtremeRoles.Helper
 {
     public class Translation
     {

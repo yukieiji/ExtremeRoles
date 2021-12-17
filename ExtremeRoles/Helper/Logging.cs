@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ExtremeRoles.Modules.Helpers
+﻿
+namespace ExtremeRoles.Helper
 {
 
     public class Logging

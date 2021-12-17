@@ -1,5 +1,4 @@
-﻿using System;
-using Hazel;
+﻿using Hazel;
 
 namespace ExtremeRoles
 {
@@ -29,8 +28,8 @@ namespace ExtremeRoles
         public static void GameInit()
         {
             Roles.ExtremeRoleManager.GameInit();
-            Modules.PlayerDataContainer.GameInit();
-            Patches.AssassinMeeting.Reset();
+            Module.PlayerDataContainer.GameInit();
+            Patch.AssassinMeeting.Reset();
         }
 
         public static void ForceEnd()
@@ -66,14 +65,14 @@ namespace ExtremeRoles
             byte sourceId, byte targetId, byte useAnimation)
         {
 
-            PlayerControl source = Modules.Helpers.Player.GetPlayerControlById(sourceId);
-            PlayerControl target = Modules.Helpers.Player.GetPlayerControlById(targetId);
+            PlayerControl source = Helper.Player.GetPlayerControlById(sourceId);
+            PlayerControl target = Helper.Player.GetPlayerControlById(targetId);
 
             if (source != null && target != null)
             {
                 if (useAnimation == 0)
                 {
-                    Patches.KillAnimationCoPerformKillPatch.hideNextAnimation = true;
+                    Patch.KillAnimationCoPerformKillPatch.hideNextAnimation = true;
                 };
                 source.MurderPlayer(target);
                 Roles.ExtremeRoleManager.GameRole[targetId].RolePlayerKilledAction(

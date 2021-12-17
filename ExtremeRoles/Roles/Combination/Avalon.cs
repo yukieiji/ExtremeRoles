@@ -2,8 +2,8 @@
 
 using UnityEngine;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Modules;
-using ExtremeRoles.Modules.Helpers;
 
 namespace ExtremeRoles.Roles.Combination
 {
@@ -96,14 +96,14 @@ namespace ExtremeRoles.Roles.Combination
         public bool TryAssassinateMarin(
             GameData.PlayerInfo exileAssasin)
         {
-            Patches.AssassinMeeting.AssassinMeetingTrigger = true;
-            Patches.AssassinMeeting.ExiledAssassinId = exileAssasin.PlayerId;
+            Patch.AssassinMeeting.AssassinMeetingTrigger = true;
+            Patch.AssassinMeeting.ExiledAssassinId = exileAssasin.PlayerId;
 
             MeetingRoomManager.Instance.AssignSelf(exileAssasin.Object, null);
             DestroyableSingleton<HudManager>.Instance.OpenMeetingRoom(exileAssasin.Object);
             exileAssasin.Object.RpcStartMeeting(null);
 
-            return Patches.AssassinMeeting.AssassinateMarin;
+            return Patch.AssassinMeeting.AssassinateMarin;
         }
     }
 

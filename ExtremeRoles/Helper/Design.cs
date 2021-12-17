@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ExtremeRoles.Modules.Helpers
+namespace ExtremeRoles.Helper
 {
     public class Design
     {

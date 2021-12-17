@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ExtremeRoles.Modules
+namespace ExtremeRoles.Module
 {
     public class ColorPalette
     {

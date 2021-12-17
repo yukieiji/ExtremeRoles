@@ -5,8 +5,9 @@ using System.Linq;
 using UnityEngine;
 
 using BepInEx.Configuration;
+using ExtremeRoles.Helper;
 
-namespace ExtremeRoles.Modules
+namespace ExtremeRoles.Module
 {
 
     public class CustomOption
@@ -73,7 +74,7 @@ namespace ExtremeRoles.Modules
                 CurSelection = Mathf.Clamp(Entry.Value, 0, selections.Length - 1);
             }
 
-            Helpers.Logging.Debug($"OptinId:{this.Id}    Name:{this.Name}");
+            Helper.Logging.Debug($"OptinId:{this.Id}    Name:{this.Name}");
 
             OptionsHolder.AllOptions.Add(this.Id, this);
         }
