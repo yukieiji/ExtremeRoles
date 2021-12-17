@@ -45,9 +45,9 @@ namespace ExtremeRoles
                 }
             }
         }
-        public static void SetRole(byte roleId, byte playerId, bool multiAssign)
+        public static void SetRole(byte roleId, byte playerId, bool combinationRole)
         {
-            if (multiAssign)
+            if (combinationRole)
             {
                 Roles.ExtremeRoleManager.SetPlayerIdToMultiRoleId(roleId, playerId);
             }
