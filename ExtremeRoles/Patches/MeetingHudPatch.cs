@@ -127,37 +127,39 @@ namespace ExtremeRoles.Patches
         }
     }
 
-    [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Start))]
-    class MeetingHudStartPatch
+    [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.SetForegroundForDead))]
+    class MeetingHudSetForegroundForDeadPatch
     {
         public static bool Prefix(
             MeetingHud __instance)
         {
+
             if (!AssassinMeeting.AssassinMeetingTrigger) { return true; }
 
-            __instance.BlackBackground.sprite = ShipStatus.Instance.MeetingBackground;
-            foreach (SpriteRenderer playerMaterialColors in __instance.PlayerColoredParts)
-            {
-                PlayerControl.LocalPlayer.SetPlayerMaterialColors(
-                    playerMaterialColors);
+            if (ExtremeRoleManager.GameRole[
+                PlayerControl.LocalPlayer.PlayerId].Id != ExtremeRoleId.Assassin)
+            { 
+                return true; 
             }
-            DestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(true);
-            DestroyableSingleton<HudManager>.Instance.Chat.SetPosition(__instance);
-            DestroyableSingleton<HudManager>.Instance.StopOxyFlash();
-            DestroyableSingleton<HudManager>.Instance.StopReactorFlash();
-            Camera.main.GetComponent<FollowerCamera>().Locked = true;
-
-            //AmongUsClient.Instance.DisconnectHandlers.AddUnique(__instance);
-
-            foreach (PlayerVoteArea playerVoteArea in __instance.playerStates)
+            else
             {
-                __instance.ControllerSelectable.Add(playerVoteArea.PlayerButton);
+                return false;
             }
-            DestroyableSingleton<AchievementManager>.Instance.OnMeetingCalled();
-
-            return false;
         }
     }
+
+    [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Start))]
+    class MeetingHudStartPatch
+    {
+        public static void Postfix(
+            MeetingHud __instance)
+        {
+            if (!AssassinMeeting.AssassinMeetingTrigger) { return; }
+
+            DestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(true);
+        }
+    }
+
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Update))]
     class MeetingHudUpdatePatch
@@ -241,17 +243,18 @@ namespace ExtremeRoles.Patches
             [HarmonyArgument(1)] GameData.PlayerInfo exiled,
             [HarmonyArgument(2)] bool tie)
         {
+
             if (!AssassinMeeting.AssassinMeetingTrigger) { return true; }
 
             if (__instance.state == MeetingHud.VoteStates.Results)
             {
                 return false;
             }
-            AssassinMeeting.AssassinateMarin = Roles.ExtremeRoleManager.GameRole[
+            AssassinMeeting.AssassinateMarin = ExtremeRoleManager.GameRole[
                 exiled.PlayerId].Id == ExtremeRoleId.Marlin;
             __instance.state = MeetingHud.VoteStates.Results;
             __instance.resultsStartedAt = __instance.discussionTimer;
-            __instance.exiledPlayer = null;
+            __instance.exiledPlayer = exiled;
             __instance.wasTie = tie;
             __instance.SkipVoteButton.gameObject.SetActive(false);
             __instance.SkippedVoting.gameObject.SetActive(true);
