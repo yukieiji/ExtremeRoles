@@ -6,6 +6,13 @@ namespace ExtremeRoles.Modules.Helpers
 {
     public class Player
     {
+        public enum MurderAttemptResult
+        {
+            PerformKill,
+            SuppressKill,
+            BlankKill
+        }
+
         public static PlayerControl GetPlayerControlById(byte id)
         {
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)

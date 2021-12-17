@@ -43,7 +43,7 @@ namespace ExtremeRoles.Patches.Option
 
             var erTab = UnityEngine.Object.Instantiate(roleTab, roleTab.transform.parent);
             var tabHighlight = erTab.transform.FindChild("Hat Button").FindChild("Tab Background").GetComponent<SpriteRenderer>();
-            erTab.transform.FindChild("Hat Button").FindChild("Icon").GetComponent<SpriteRenderer>().sprite = OldHelpers.loadSpriteFromResources("TheOtherRoles.Resources.TabIcon.png", 100f);
+            erTab.transform.FindChild("Hat Button").FindChild("Icon").GetComponent<SpriteRenderer>().sprite = Modules.Helpers.Resources.loadSpriteFromResources("TheOtherRoles.Resources.TabIcon.png", 100f);
 
 
             gameTab.transform.position += Vector3.left * 0.5f;

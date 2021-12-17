@@ -27,7 +27,7 @@ namespace ExtremeRoles.Patches
             if (!ExtremeRolesPlugin.DebugMode.Value) { return; }
 
             // Spawn dummys
-            if ((Input.GetKeyDown(KeyCode.F)) && Modules.OldHelpers.IsGameLobby)
+            if ((Input.GetKeyDown(KeyCode.F)) && Modules.Helpers.Map.IsGameLobby)
             {
                 var playerControl = UnityEngine.Object.Instantiate(AmongUsClient.Instance.PlayerPrefab);
                 playerControl.PlayerId = (byte)GameData.Instance.GetAvailableId();
@@ -55,7 +55,7 @@ namespace ExtremeRoles.Patches
             }
 
             // Terminate round
-            if (Input.GetKeyDown(KeyCode.L) && !Modules.OldHelpers.IsGameLobby)
+            if (Input.GetKeyDown(KeyCode.L) && !Modules.Helpers.Map.IsGameLobby)
             {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                     PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ForceEnd, Hazel.SendOption.Reliable, -1);

@@ -379,7 +379,7 @@ namespace ExtremeRoles.Patches
         private static void ButtonUpdate(PlayerControl player)
         {
 
-            if (!player.AmOwner || !OldHelpers.ShowButtons) { return; }
+            if (!player.AmOwner || !Modules.Helpers.Map.ShowButtons) { return; }
             var role = ExtremeRoleManager.GameRole[player.PlayerId];
             if (role.UseVent)
             {
