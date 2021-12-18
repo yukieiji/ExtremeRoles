@@ -10,6 +10,7 @@ namespace ExtremeRoles.Roles
         VanillaRole = 50,
         Assassin,
         Marlin,
+        Alice,
         NormalCrew = 100,
     }
     public static class ExtremeRoleManager
