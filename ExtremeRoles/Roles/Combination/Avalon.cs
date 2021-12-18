@@ -121,7 +121,7 @@ namespace ExtremeRoles.Roles.Combination
                 ExtremeRoleId.Marlin,
                 ExtremeRoleType.Crewmate,
                 ExtremeRoleId.Marlin.ToString(),
-                new Color32(0, 40, 245, byte.MaxValue),
+                ColorPalette.MarineAquaBlue,
                 false, false, false, false)
         {}
         protected override void CreateSpecificOption(
