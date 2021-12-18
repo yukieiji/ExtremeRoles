@@ -403,7 +403,7 @@ namespace ExtremeRoles.Patches
             if (role.CanKill && role.Id != ExtremeRoleId.VanillaRole)
             {
                 player.SetKillTimer(player.killTimer - Time.fixedDeltaTime);
-                PlayerControl target = player.FindClosestTarget(false);
+                PlayerControl target = player.FindClosestTarget(!role.IsImposter());
 
                 Logging.Debug($"TargetAlive?:{target}");
 
