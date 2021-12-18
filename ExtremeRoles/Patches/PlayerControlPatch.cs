@@ -372,7 +372,7 @@ namespace ExtremeRoles.Patches
             importantTextTask.transform.SetParent(player.transform, false);
 
             importantTextTask.Text = Design.Cs(
-                role.NameColor, $"{role.RoleName}: {string.Format("{0}{1}", role.Id, "shortDescription")}");
+                role.NameColor, $"{role.RoleName}: {string.Format("{0}{1}", role.Id, "ShortDescription")}");
             player.myTasks.Insert(0, importantTextTask);
 
         }
