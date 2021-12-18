@@ -25,6 +25,8 @@ namespace ExtremeRoles.Roles
     }
     public enum KillerCommonSetting
     {
+        HasOtherKillRange = 11,
+        KillRange = 12,
         HasOtherKillCool = 13,
         KillCoolDown = 14,
     }
@@ -100,10 +102,12 @@ namespace ExtremeRoles.Roles
         public bool UseSabotage = false;
         public bool HasOtherVison = false;
         public bool HasOtherKillCool = false;
+        public bool HasOtherKillRange = false;
         public bool IsApplyEnvironmentVision = true;
 
         public float Vison = 0f;
         public float KillCoolTime = 0f;
+        public int KillRange = 1;
 
         public string RoleName;
 
@@ -203,7 +207,7 @@ namespace ExtremeRoles.Roles
         protected override void CreateKillerOption(
             CustomOption parentOps)
         {
-            var killSetting = CustomOption.Create(
+            var killCoolSetting = CustomOption.Create(
                 this.OptionIdOffset + (int)KillerCommonSetting.HasOtherKillCool,
                 Design.ConcatString(
                     this.RoleName,
@@ -215,7 +219,20 @@ namespace ExtremeRoles.Roles
                     this.RoleName,
                     KillerCommonSetting.KillCoolDown.ToString()),
                 30f, 2.5f, 120f, 2.5f,
-                killSetting, format: "unitSeconds");
+                killCoolSetting, format: "unitSeconds");
+            var killRangeSetting = CustomOption.Create(
+                this.OptionIdOffset + (int)KillerCommonSetting.HasOtherKillRange,
+                Design.ConcatString(
+                    this.RoleName,
+                    KillerCommonSetting.HasOtherKillRange.ToString()),
+                false, parentOps);
+            CustomOption.Create(
+                this.OptionIdOffset + (int)KillerCommonSetting.KillRange,
+                Design.ConcatString(
+                    this.RoleName,
+                    KillerCommonSetting.KillRange.ToString()),
+                OptionsHolder.KillRange,
+                killRangeSetting);
         }
         protected override CustomOption CreateSpawnOption()
         {
@@ -224,7 +241,7 @@ namespace ExtremeRoles.Roles
                 Design.Cs(
                     this.NameColor,
                     this.CommonSettingSpawnKey),
-                OptionsHolder.Rates, null, true);
+                OptionsHolder.SpawnRate, null, true);
 
             CustomOption.Create(
                 this.OptionIdOffset + (int)RoleCommonSetting.RoleNum,
@@ -269,6 +286,10 @@ namespace ExtremeRoles.Roles
                     GetRoleSettingId((int)KillerCommonSetting.HasOtherKillCool)].GetBool();
                 this.KillCoolTime = allOption[
                     GetRoleSettingId((int)KillerCommonSetting.KillCoolDown)].GetFloat();
+                this.HasOtherKillRange = allOption[
+                    GetRoleSettingId((int)KillerCommonSetting.HasOtherKillRange)].GetBool();
+                this.KillRange = allOption[
+                    GetRoleSettingId((int)KillerCommonSetting.KillRange)].GetSelection();
             }
         }
 
@@ -308,7 +329,7 @@ namespace ExtremeRoles.Roles
                 Design.Cs(
                     this.SettingColor,
                     this.CommonSettingSpawnKey),
-                OptionsHolder.Rates, null, true);
+                OptionsHolder.SpawnRate, null, true);
 
             int thisMaxRoleNum = (int)Math.Floor((decimal)OptionsHolder.VanillaMaxPlayerNum / this.SetPlayerNum);
 
