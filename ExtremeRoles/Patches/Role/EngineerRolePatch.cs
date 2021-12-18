@@ -2,7 +2,7 @@
 
 namespace ExtremeRoles.Patches.Role
 {
-    //
+    
     [HarmonyPatch(typeof(EngineerRole), nameof(EngineerRole.UseAbility))]
     public static class EngineerRoleUseAbilityPatch
     {
