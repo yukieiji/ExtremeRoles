@@ -20,7 +20,7 @@ namespace ExtremeRoles.Roles
         public static readonly List<
             SingleRoleAbs> NormalRole = new List<SingleRoleAbs>()
         { 
-            new Solo.Crewmate.TestCrew(),
+            new Solo.Neutral.Alice(),
         };
         
         public static readonly List<

@@ -1,9 +1,4 @@
 ﻿using ExtremeRoles.Module;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-using UnityEngine;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
