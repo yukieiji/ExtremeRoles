@@ -8,9 +8,8 @@ using HarmonyLib;
 using ExtremeRoles.Module;
 
 
-namespace ExtremeRoles.Patches
+namespace ExtremeRoles.Patches.Manager
 {
-
 
     [HarmonyPatch(typeof(EndGameManager), nameof(EndGameManager.SetEverythingUp))]
     public class EndGameManagerSetUpPatch
