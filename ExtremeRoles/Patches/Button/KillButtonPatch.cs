@@ -16,12 +16,14 @@ namespace ExtremeRoles.Patches.Button
         }
         public static bool Prefix(KillButton __instance)
         {
+            var localPlayer = PlayerControl.LocalPlayer;
+            var role = Roles.ExtremeRoleManager.GameRole[localPlayer.PlayerId];
             if (
-                __instance.isActiveAndEnabled && 
-                __instance.currentTarget && 
-                !__instance.isCoolingDown && 
-                !PlayerControl.LocalPlayer.Data.IsDead && 
-                PlayerControl.LocalPlayer.CanMove)
+                __instance.isActiveAndEnabled &&
+                __instance.currentTarget &&
+                !__instance.isCoolingDown &&
+                !localPlayer.Data.IsDead &&
+                localPlayer.CanMove && role.CanKill)
             {
 
                 PlayerControl killer = PlayerControl.LocalPlayer;

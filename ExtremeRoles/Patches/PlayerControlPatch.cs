@@ -378,7 +378,6 @@ namespace ExtremeRoles.Patches
         }
         private static void ButtonUpdate(PlayerControl player)
         {
-
             if (!player.AmOwner || !Player.ShowButtons) { return; }
             var role = ExtremeRoleManager.GameRole[player.PlayerId];
             if (role.UseVent)
@@ -401,12 +400,15 @@ namespace ExtremeRoles.Patches
                 HudManager.Instance.SabotageButton.Show();
                 HudManager.Instance.SabotageButton.gameObject.SetActive(true);
             }
-            if (role.CanKill)
+            if (role.CanKill && role.Id != ExtremeRoleId.VanillaRole)
             {
+                player.SetKillTimer(player.killTimer - Time.fixedDeltaTime);
+                PlayerControl target = player.FindClosestTarget(false);
+                
+                DestroyableSingleton<HudManager>.Instance.KillButton.SetTarget(target);
                 HudManager.Instance.KillButton.Show();
                 HudManager.Instance.KillButton.gameObject.SetActive(true);
             }
-
 
 
             // ToDo:インポスターのベントボタンをエンジニアが使えるようにする
@@ -485,7 +487,6 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetKillTimer))]
     class PlayerControlSetCoolDownPatch
     {
-
         public static bool Prefix(
             PlayerControl __instance, [HarmonyArgument(0)] float time)
         {

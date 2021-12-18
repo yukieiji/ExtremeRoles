@@ -13,7 +13,7 @@ namespace ExtremeRoles.Patches.Button
             // The sabotage button behaves just fine if it's a regular impostor
             if ((localPlayer.Data.Role.TeamType == RoleTeamTypes.Impostor) ||
                 role.IsImposter()) { return true; }
-            if (role.UseSabotage) { return true; }
+            if (!role.UseSabotage) { return true; }
 
             DestroyableSingleton<HudManager>.Instance.ShowMap(
                 (Il2CppSystem.Action<MapBehaviour>)((m) => { m.ShowSabotageMap(); }));
