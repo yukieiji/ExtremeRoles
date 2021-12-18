@@ -61,16 +61,18 @@ namespace ExtremeRoles.Patches
     {
         public static bool Prefix(ShipStatus __instance)
         {
-            if (!GameData.Instance) return false;
-            if (DestroyableSingleton<TutorialManager>.InstanceExists) return true; // InstanceExists | Don't check Custom Criteria when in Tutorial
-            if (HudManager.Instance.isIntroDisplayed) return false;
+            if (!GameData.Instance) { return false; };
+            if (DestroyableSingleton<TutorialManager>.InstanceExists) { return true; } // InstanceExists | Don't check Custom Criteria when in Tutorial
+            if (HudManager.Instance.isIntroDisplayed){ return false; }
 
+            if (AssassinMeeting.AssassinMeetingTrigger) { return false; }
 
             var statistics = new PlayerDataContainer.PlayerStatistics();
             if (IsSabotageWin(__instance)) { return false; }
             if (IsTaskWin(__instance)) { return false; };
             if (IsImpostorWin(__instance, statistics)) { return false; };
             if (IsForCrewmateWin(__instance, statistics)) { return false; };
+            
             return false;
         }
 

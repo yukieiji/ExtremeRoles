@@ -61,6 +61,40 @@ namespace ExtremeRoles.Patches
         }
     }
 
+    [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Confirm))]
+    class MeetingHudConfirmPatch
+    {
+        public static bool Prefix(
+            MeetingHud __instance,
+            [HarmonyArgument(0)] byte suspectStateIdx)
+        {
+            if (!AssassinMeeting.AssassinMeetingTrigger) { return true; }
+
+            if (PlayerControl.LocalPlayer.PlayerId != __instance.reporterId)
+            {
+                return false;
+            }
+            for (int i = 0; i < __instance.playerStates.Length; i++)
+            {
+                PlayerVoteArea playerVoteArea = __instance.playerStates[i];
+                playerVoteArea.ClearButtons();
+                playerVoteArea.voteComplete = true;
+            }
+            __instance.SkipVoteButton.ClearButtons();
+            __instance.SkipVoteButton.voteComplete = true;
+            __instance.SkipVoteButton.gameObject.SetActive(false);
+            MeetingHud.VoteStates voteStates = __instance.state;
+            if (voteStates != MeetingHud.VoteStates.NotVoted)
+            {
+                return false;
+            }
+            __instance.state = MeetingHud.VoteStates.Voted;
+            __instance.CmdCastVote(PlayerControl.LocalPlayer.PlayerId, suspectStateIdx);
+
+            return false;
+        }
+    }
+
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Select))]
     class MeetingHudSelectPatch
     {
@@ -156,7 +190,7 @@ namespace ExtremeRoles.Patches
         {
             if (!AssassinMeeting.AssassinMeetingTrigger) { return; }
 
-            DestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(true);
+            DestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
         }
     }
 
@@ -239,10 +273,12 @@ namespace ExtremeRoles.Patches
 
         static bool Prefix(
             MeetingHud __instance,
-            [HarmonyArgument(0)] MeetingHud.VoterState[] states,
+            [HarmonyArgument(0)] UnhollowerBaseLib.Il2CppStructArray<MeetingHud.VoterState> states,
             [HarmonyArgument(1)] GameData.PlayerInfo exiled,
             [HarmonyArgument(2)] bool tie)
         {
+
+            Helper.Logging.Debug($"PlayerId:{exiled.PlayerId}");
 
             if (!AssassinMeeting.AssassinMeetingTrigger) { return true; }
 
@@ -254,12 +290,12 @@ namespace ExtremeRoles.Patches
                 exiled.PlayerId].Id == ExtremeRoleId.Marlin;
             __instance.state = MeetingHud.VoteStates.Results;
             __instance.resultsStartedAt = __instance.discussionTimer;
-            __instance.exiledPlayer = exiled;
+            __instance.exiledPlayer = null;
             __instance.wasTie = tie;
             __instance.SkipVoteButton.gameObject.SetActive(false);
             __instance.SkippedVoting.gameObject.SetActive(true);
             
-            for (int i = 0; i < GameData.Instance.PlayerCount; i++)
+            for (int i = 0; i < GameData.Instance.PlayerCount; ++i)
             {
                 PlayerControl @object = GameData.Instance.AllPlayers[i].Object;
                 if (@object != null && @object.Data != null && @object.Data.Role)

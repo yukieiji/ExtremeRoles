@@ -18,7 +18,7 @@ namespace ExtremeRoles.Patches
 
 			if (!AssassinMeeting.AssassinMeetingTrigger) { return true; }
 
-			if (PlayerControl.LocalPlayer.PlayerId != AssassinMeeting.ExiledAssassinId)
+			if (PlayerControl.LocalPlayer.PlayerId != __instance.Parent.reporterId)
 			{
 				return false;
 			}
