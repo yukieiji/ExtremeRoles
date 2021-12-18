@@ -141,10 +141,11 @@ namespace ExtremeRoles.Patches
 
             bool voteNamePaintBlock = false;
             bool playerNamePaintBlock = false;
+            bool isBlocked = AssassinMeeting.AssassinMeetingTrigger;
             if (role.Id == ExtremeRoleId.Assassin)
             {
                 voteNamePaintBlock = true;
-                playerNamePaintBlock = ((Roles.Combination.Assassin)role).CanSeeRoleBeforeFirstMeeting;
+                playerNamePaintBlock = ((Roles.Combination.Assassin)role).CanSeeRoleBeforeFirstMeeting || isBlocked;
             }
 
             // Modules.Helpers.DebugLog($"Player Name:{role.NameColor}");
