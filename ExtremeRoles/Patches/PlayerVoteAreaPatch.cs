@@ -31,7 +31,6 @@ namespace ExtremeRoles.Patches
 				__instance.Parent.Select((int)__instance.TargetPlayerId))
 			{
 				__instance.Buttons.SetActive(true);
-				//  at ExtremeRoles.Patches.PlayerVoteAreaSelectPatch.Prefix (PlayerVoteArea __instance) [0x0012a] in <4cdd481f50f94d46b5c49231d84de06c>:0
 				float startPos = __instance.AnimateButtonsFromLeft ? 0.2f : 1.95f;
 				__instance.StartCoroutine(
 					EffectsAllWrap(

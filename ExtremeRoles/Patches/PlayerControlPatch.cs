@@ -117,7 +117,7 @@ namespace ExtremeRoles.Patches
             if (PlayerControl.LocalPlayer.Data.Role.IsImpostor)
             {
                 List<PlayerControl> impostors = PlayerControl.AllPlayerControls.ToArray().ToList();
-                impostors.RemoveAll(x => !x.Data.Role.IsImpostor);
+                impostors.RemoveAll(x => !(x.Data.Role.IsImpostor));
                 foreach (PlayerControl player in impostors)
                 {
                     player.nameText.color = Palette.ImpostorRed;
@@ -163,7 +163,7 @@ namespace ExtremeRoles.Patches
                 if (!MapOption.GhostsSeeRoles || !PlayerControl.LocalPlayer.Data.IsDead)
                 {
                     Color paintColor = GetColorFromRoleAbility(
-                    role, targetPlayerId);
+                        role, targetPlayerId);
                     if (paintColor == Palette.ClearWhite) { continue; }
 
                     targetPlayer.nameText.color = paintColor;
