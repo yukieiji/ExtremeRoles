@@ -17,8 +17,7 @@ namespace ExtremeRoles.Patches.Manager
         public static void Postfix(EndGameManager __instance)
         {
             // Delete and readd PoolablePlayers always showing the name and role of the player
-            foreach (
-                PoolablePlayer pb in __instance.transform.GetComponentsInChildren<PoolablePlayer>())
+            foreach (PoolablePlayer pb in __instance.transform.GetComponentsInChildren<PoolablePlayer>())
             {
                 UnityEngine.Object.Destroy(pb.gameObject);
             }
@@ -91,8 +90,6 @@ namespace ExtremeRoles.Patches.Manager
             bonusTextObject.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
             TMPro.TMP_Text textRenderer = bonusTextObject.GetComponent<TMPro.TMP_Text>();
             textRenderer.text = "";
-
-            ExtremeRoleRPC.GameInit();
         }
     }
 }
