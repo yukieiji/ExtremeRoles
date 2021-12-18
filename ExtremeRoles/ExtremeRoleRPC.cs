@@ -5,6 +5,9 @@ namespace ExtremeRoles
     public enum RoleGameOverReason
     {
         AssassinationMarin = 10,
+        AliceKilledByImposter,
+
+        UnKnown = 100,
     }
 
     enum CustomRPC

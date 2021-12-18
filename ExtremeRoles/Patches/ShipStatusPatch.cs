@@ -68,32 +68,31 @@ namespace ExtremeRoles.Patches
             if (AssassinMeeting.AssassinMeetingTrigger) { return false; }
 
             var statistics = new PlayerDataContainer.PlayerStatistics();
+            if (IsNeutralWin(__instance)) { return false; }
             if (IsSabotageWin(__instance)) { return false; }
             if (IsTaskWin(__instance)) { return false; };
             if (IsImpostorWin(__instance, statistics)) { return false; };
-            if (IsForCrewmateWin(__instance, statistics)) { return false; };
+            if (IsCrewmateWin(__instance, statistics)) { return false; };
             
             return false;
         }
 
-        private static void EndGameForSabotage(
-            ShipStatus __instance)
+        private static void GameIsEnd(
+            ref ShipStatus curShip,
+            GameOverReason reason,
+            bool trigger = false)
         {
-            __instance.enabled = false;
-            ShipStatus.RpcEndGame(
-                GameOverReason.ImpostorBySabotage, false);
-            return;
+            curShip.enabled = false;
+            ShipStatus.RpcEndGame(reason, trigger);
         }
 
-        private static bool IsForCrewmateWin(
+        private static bool IsCrewmateWin(
             ShipStatus __instance,
             PlayerDataContainer.PlayerStatistics statistics)
         {
             if (statistics.TeamCrewmateAlive > 0 && statistics.TeamImpostorAlive == 0)
             {
-                __instance.enabled = false;
-                ShipStatus.RpcEndGame(
-                    GameOverReason.HumansByVote, false);
+                GameIsEnd(ref __instance, GameOverReason.HumansByVote);
                 return true;
             }
             return false;
@@ -130,19 +129,49 @@ namespace ExtremeRoles.Patches
 
             if (isGameEnd)
             {
-                __instance.enabled = false;
-                ShipStatus.RpcEndGame(
-                    endReason, false);
+
+                GameIsEnd(ref __instance, endReason);
                 return true;
             }
 
             return false;
 
         }
+        private static bool IsNeutralWin(
+            ShipStatus __instance)
+        {
+            
+            foreach(var role in ExtremeRoleManager.GameRole.Values)
+            {
+                
+                if (!role.IsNeutral()) { continue; }
+                if (role.IsWin)
+                {
+
+                    GameOverReason endReason = (GameOverReason)RoleGameOverReason.UnKnown;
+
+                    switch (role.Id)
+                    {
+                        case ExtremeRoleId.Alice:
+                            endReason = (GameOverReason)RoleGameOverReason.AliceKilledByImposter;
+                            break;
+                        default :
+                            break;
+                    }
+                    GameIsEnd(ref __instance, endReason);
+                    return true;
+
+                }
+            }
+
+            return false;
+        }
+
+
         private static bool IsSabotageWin(
             ShipStatus __instance)
         {
-            if (__instance.Systems == null) return false;
+            if (__instance.Systems == null) { return false; };
             ISystemType systemType = __instance.Systems.ContainsKey(
                 SystemTypes.LifeSupp) ? __instance.Systems[SystemTypes.LifeSupp] : null;
             if (systemType != null)
@@ -150,7 +179,7 @@ namespace ExtremeRoles.Patches
                 LifeSuppSystemType lifeSuppSystemType = systemType.TryCast<LifeSuppSystemType>();
                 if (lifeSuppSystemType != null && lifeSuppSystemType.Countdown < 0f)
                 {
-                    EndGameForSabotage(__instance);
+                    GameIsEnd(ref __instance, GameOverReason.ImpostorBySabotage);
                     lifeSuppSystemType.Countdown = 10000f;
                     return true;
                 }
@@ -167,7 +196,7 @@ namespace ExtremeRoles.Patches
                 ICriticalSabotage criticalSystem = systemType2.TryCast<ICriticalSabotage>();
                 if (criticalSystem != null && criticalSystem.Countdown < 0f)
                 {
-                    EndGameForSabotage(__instance);
+                    GameIsEnd(ref __instance, GameOverReason.ImpostorBySabotage);
                     criticalSystem.ClearSabotage();
                     return true;
                 }
@@ -179,9 +208,7 @@ namespace ExtremeRoles.Patches
             if (GameData.Instance.TotalTasks > 0 && 
                 GameData.Instance.TotalTasks <= GameData.Instance.CompletedTasks)
             {
-                __instance.enabled = false;
-                ShipStatus.RpcEndGame(
-                    GameOverReason.HumansByTask, false);
+                GameIsEnd(ref __instance, GameOverReason.ImpostorBySabotage);
                 return true;
             }
             return false;

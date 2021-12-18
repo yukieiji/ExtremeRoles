@@ -104,6 +104,7 @@ namespace ExtremeRoles.Roles
         public bool HasOtherKillCool = false;
         public bool HasOtherKillRange = false;
         public bool IsApplyEnvironmentVision = true;
+        public bool IsWin = false;
 
         public float Vison = 0f;
         public float KillCoolTime = 0f;
@@ -178,7 +179,7 @@ namespace ExtremeRoles.Roles
 
         public bool IsNeutral() => this.Teams == ExtremeRoleType.Neutral;
 
-        public virtual bool IsTeamsWin() => false;
+        public virtual bool IsTeamsWin() => this.IsWin;
 
         public virtual void DaedAction(
             DeathReason reason,

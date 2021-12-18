@@ -126,7 +126,7 @@ namespace ExtremeRoles.Module
         public class GamePlayerInfo
         {
             public string PlayerName { get; set; }
-            public Roles.SingleRoleAbs Roles { get; set; }
+            public SingleRoleAbs Roles { get; set; }
             public int CompletedTasks { get; set; }
             public int TotalTasks { get; set; }
             public PlayerStatus StatusInfo { get; set; }

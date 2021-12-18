@@ -12,11 +12,22 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             true, false, true, true)
         {}
 
+        public override void RolePlayerKilledAction(
+            PlayerControl rolePlayer,
+            PlayerControl killerPlayer)
+        {
+           if (ExtremeRoleManager.GameRole[killerPlayer.PlayerId].IsImposter())
+           {
+                this.IsWin = true;
+           }
+        }
+
         protected override void CreateSpecificOption(
             CustomOption parentOps)
         {}
 
         protected override void RoleSpecificInit()
         {}
+
     }
 }
