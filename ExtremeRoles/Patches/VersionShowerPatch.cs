@@ -15,16 +15,16 @@ namespace ExtremeRoles.Patches
             if (amongUsLogo == null) return;
 
             var modTitle = UnityEngine.Object.Instantiate<TMPro.TextMeshPro>(__instance.text);
-            modTitle.transform.position = new Vector3(0, 4.0f, 0);
-            modTitle.SetText($"Extreme Roles v{Assembly.GetExecutingAssembly().GetName().Version}");
+            modTitle.transform.position = new Vector3(0, 0.3f, 0);
+            modTitle.SetText($"Version:{Assembly.GetExecutingAssembly().GetName().Version}");
             modTitle.alignment = TMPro.TextAlignmentOptions.Center;
-            modTitle.fontSize *= 2.0f;
+            modTitle.fontSize *= 1.5f;
 
             var credentials = UnityEngine.Object.Instantiate<TMPro.TextMeshPro>(modTitle);
             credentials.transform.position = new Vector3(0, -0.25f, 0);
-            credentials.SetText($"Developed by yukieiiji");
+            credentials.SetText($"Developed by yukieiji");
             credentials.alignment = TMPro.TextAlignmentOptions.Center;
-            credentials.fontSize *= 0.75f;
+            credentials.fontSize *= 0.85f;
 
             modTitle.transform.SetParent(amongUsLogo.transform);
             credentials.transform.SetParent(amongUsLogo.transform);

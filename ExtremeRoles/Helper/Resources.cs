@@ -9,11 +9,11 @@ namespace ExtremeRoles.Helper
 {
     public class Resources
     {
-        public static Sprite loadSpriteFromResources(string path, float pixelsPerUnit)
+        public static Sprite LoadSpriteFromResources(string path, float pixelsPerUnit)
         {
             try
             {
-                Texture2D texture = loadTextureFromResources(path);
+                Texture2D texture = LoadTextureFromResources(path);
                 return Sprite.Create(
                     texture,
                     new Rect(0, 0, texture.width, texture.height),
@@ -26,7 +26,7 @@ namespace ExtremeRoles.Helper
             return null;
         }
 
-        public static Texture2D loadTextureFromResources(string path)
+        public static Texture2D LoadTextureFromResources(string path)
         {
             try
             {
