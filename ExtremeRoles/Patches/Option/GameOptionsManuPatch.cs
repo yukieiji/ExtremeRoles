@@ -191,7 +191,7 @@ namespace ExtremeRoles.Patches.Option
                     }
                 }
             }
-            __instance.GetComponentInParent<Scroller>().YBounds.max = -4.0f + numItems * 0.5f;
+            __instance.GetComponentInParent<Scroller>().ContentYBounds.max = -4.0f + numItems * 0.5f;
         }
     }
 }
