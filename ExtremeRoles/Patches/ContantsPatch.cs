@@ -7,7 +7,7 @@ namespace ExtremeRoles.Patches
     {
         public static bool Prefix(ref bool __result)
         {
-            if (PlayerControl.GameOptions == null) return true;
+            if (PlayerControl.GameOptions == null) { return true; }
             __result = PlayerControl.GameOptions.MapId == 3;
             return false;
         }
