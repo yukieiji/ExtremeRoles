@@ -4,6 +4,8 @@ using System.Linq;
 using HarmonyLib;
 using UnityEngine;
 
+using UnhollowerBaseLib;
+
 using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Patches
@@ -94,6 +96,71 @@ namespace ExtremeRoles.Patches
             return false;
         }
     }
+
+    [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CheckForEndVoting))]
+    class MeetingHudCheckForEndVotingPatch
+    {
+        public static bool Prefix(
+            MeetingHud __instance)
+        {
+            if (!AssassinMeeting.AssassinMeetingTrigger) { return true; }
+
+            var (isVoteEnd, voteFor) = AssassinVoteState(__instance);
+
+            if (isVoteEnd)
+            {
+                //GameData.PlayerInfo exiled = Helper.Player.GetPlayerControlById(voteFor).Data;
+                Il2CppStructArray<MeetingHud.VoterState> array = 
+                    new Il2CppStructArray<MeetingHud.VoterState>(
+                        __instance.playerStates.Length);
+
+                AssassinMeeting.AssassinateMarin = ExtremeRoleManager.GameRole[
+                    voteFor].Id == ExtremeRoleId.Marlin;
+
+                for (int i = 0; i < __instance.playerStates.Length; i++)
+                {
+                    PlayerVoteArea playerVoteArea = __instance.playerStates[i];
+                    if (playerVoteArea.TargetPlayerId != __instance.reporterId)
+                    {
+                        playerVoteArea.VotedFor = 254;
+                        __instance.SetDirtyBit(1U);
+                    }
+
+                    array[i] = new MeetingHud.VoterState
+                    {
+                        VoterId = playerVoteArea.TargetPlayerId,
+                        VotedForId = playerVoteArea.VotedFor
+                    };
+
+                }
+                __instance.RpcVotingComplete(array, null, true);
+            }
+
+            return false;
+        }
+
+        private static Tuple<bool, byte> AssassinVoteState(MeetingHud __instance)
+        {
+            bool isVoteEnd = false;
+            byte voteFor = byte.MaxValue;
+
+            for (int i = 0; i < __instance.playerStates.Length; i++)
+            {
+                PlayerVoteArea playerVoteArea = __instance.playerStates[i];
+                if (playerVoteArea.TargetPlayerId == __instance.reporterId)
+                {
+                    isVoteEnd = playerVoteArea.DidVote;
+                    voteFor = playerVoteArea.VotedFor;
+                    break;
+                }
+            }
+
+            return Tuple.Create(isVoteEnd, voteFor);
+
+        }
+
+    }
+
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Select))]
     class MeetingHudSelectPatch
@@ -266,14 +333,14 @@ namespace ExtremeRoles.Patches
         
     }
 
-
+    /*
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.VotingComplete))]
     class MeetingHudVotingCompletePatch
     {
 
         static bool Prefix(
             MeetingHud __instance,
-            [HarmonyArgument(0)] UnhollowerBaseLib.Il2CppStructArray<MeetingHud.VoterState> states,
+            [HarmonyArgument(0)] Il2CppStructArray<MeetingHud.VoterState> states,
             [HarmonyArgument(1)] GameData.PlayerInfo exiled,
             [HarmonyArgument(2)] bool tie)
         {
@@ -320,6 +387,6 @@ namespace ExtremeRoles.Patches
 
             return false;
         }
-    }
+    }*/
 
 }
