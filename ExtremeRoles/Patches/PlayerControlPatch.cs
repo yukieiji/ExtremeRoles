@@ -156,7 +156,7 @@ namespace ExtremeRoles.Patches
 
             foreach (PlayerControl targetPlayer in PlayerControl.AllPlayerControls)
             {
-                if (targetPlayer == player) { continue; }
+                if (targetPlayer.PlayerId == player.PlayerId) { continue; }
 
                 byte targetPlayerId = targetPlayer.PlayerId;
 
