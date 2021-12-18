@@ -232,7 +232,7 @@ namespace ExtremeRoles.Patches.Manager
                     {
 
                         case RoleTypes.Impostor:
-                            shuffledRoles = shuffleRolesForCrewmate.OrderBy(
+                            shuffledRoles = shuffleRolesForImpostor.OrderBy(
                                 item => RoleRng.Next()).ToList();
                             break;
                         case RoleTypes.Crewmate:
@@ -257,6 +257,7 @@ namespace ExtremeRoles.Patches.Manager
                     bool result = false;
                     foreach (var role in shuffledRoles)
                     {
+                        Logging.Debug($"KeyFound?:{extremeRolesData.RoleSpawnSettings[roleData.Role].ContainsKey(role.BytedRoleId)}");
                         var(roleNum, spawnRate) = extremeRolesData.RoleSpawnSettings[
                             roleData.Role][role.BytedRoleId];
                         result = IsRoleSpawn(roleNum, spawnRate);
@@ -275,6 +276,9 @@ namespace ExtremeRoles.Patches.Manager
                         }
                         else
                         {
+                            extremeRolesData.RoleSpawnSettings[roleData.Role][role.BytedRoleId] = (
+                                roleNum,
+                                spawnRate);
                             assigned = true;
                         }
                     }
