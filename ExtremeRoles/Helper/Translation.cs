@@ -5,6 +5,8 @@ using System.Text.RegularExpressions;
 
 using Newtonsoft.Json.Linq;
 
+using ExtremeRoles.Patches.Option;
+
 namespace ExtremeRoles.Helper
 {
     public class Translation
@@ -87,5 +89,6 @@ namespace ExtremeRoles.Helper
 
             return key;
         }
+
     }
 }

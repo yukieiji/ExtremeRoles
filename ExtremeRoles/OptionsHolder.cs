@@ -119,6 +119,8 @@ namespace ExtremeRoles
             Roles.ExtremeRoleManager.CreateCombinationRoleOptions(
                 offset);
 
+            MapOption.Init();
+
         }
         public static void SwitchPreset(int newPreset)
         {
