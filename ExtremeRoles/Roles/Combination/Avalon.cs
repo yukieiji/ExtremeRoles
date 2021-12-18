@@ -35,7 +35,6 @@ namespace ExtremeRoles.Roles.Combination
         public bool IsFirstMeeting = false;
         public bool CanSeeRoleBeforeFirstMeeting = false;
         public bool IsDeadForceMeeting = true;
-        public bool IsForceWin = false;
 
         //private GameObject AssassinateUI;
 
@@ -68,7 +67,7 @@ namespace ExtremeRoles.Roles.Combination
         public override void ExiledAction(
             GameData.PlayerInfo rolePlayer)
         {
-            this.IsForceWin = TryAssassinateMarin(rolePlayer);
+            TryAssassinateMarin(rolePlayer);
             this.IsFirstMeeting = false;
         }
 
@@ -87,13 +86,10 @@ namespace ExtremeRoles.Roles.Combination
                 GetRoleSettingId((int)AssassinOption.IsDeadForceMeeting)].GetBool();
             this.CanSeeRoleBeforeFirstMeeting = OptionsHolder.AllOptions[
                 GetRoleSettingId((int)AssassinOption.CanSeeRoleBeforeFirstMeeting)].GetBool();
-            this.IsForceWin = false;
             this.IsFirstMeeting = true;
         }
 
-        public override bool IsTeamsWin() => this.IsForceWin;
-
-        public bool TryAssassinateMarin(
+        public void TryAssassinateMarin(
             GameData.PlayerInfo exileAssasin)
         {
             Patches.AssassinMeeting.AssassinMeetingTrigger = true;
@@ -102,8 +98,6 @@ namespace ExtremeRoles.Roles.Combination
             MeetingRoomManager.Instance.AssignSelf(exileAssasin.Object, null);
             DestroyableSingleton<HudManager>.Instance.OpenMeetingRoom(exileAssasin.Object);
             exileAssasin.Object.RpcStartMeeting(null);
-
-            return Patches.AssassinMeeting.AssassinateMarin;
         }
     }
 

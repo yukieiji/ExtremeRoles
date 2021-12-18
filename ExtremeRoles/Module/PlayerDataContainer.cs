@@ -106,13 +106,7 @@ namespace ExtremeRoles.Module
                     if (team == ExtremeRoleType.Impostor) { ++numImpostorsAlive; }
                     if (team == ExtremeRoleType.Neutral) { ++numNeutralAlive; }
 
-                    if (role.Id == ExtremeRoleId.Assassin)
-                    {
-                        if (((Roles.Combination.Assassin)role).IsForceWin)
-                        {
-                            isAssassinationMarin = true;
-                        }
-                    }
+                    isAssassinationMarin = Patches.AssassinMeeting.AssassinateMarin;
 
                 }
 

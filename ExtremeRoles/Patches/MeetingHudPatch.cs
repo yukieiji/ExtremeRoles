@@ -114,6 +114,9 @@ namespace ExtremeRoles.Patches
                     new Il2CppStructArray<MeetingHud.VoterState>(
                         __instance.playerStates.Length);
 
+
+                Helper.Logging.Debug($"IsSuccess?:{ExtremeRoleManager.GameRole[voteFor].Id == ExtremeRoleId.Marlin}");
+
                 AssassinMeeting.AssassinateMarin = ExtremeRoleManager.GameRole[
                     voteFor].Id == ExtremeRoleId.Marlin;
 
@@ -258,6 +261,7 @@ namespace ExtremeRoles.Patches
             if (!AssassinMeeting.AssassinMeetingTrigger) { return; }
 
             DestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
+            __instance.TimerText.text = "WhoIsMarine";
         }
     }
 
@@ -265,16 +269,7 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Update))]
     class MeetingHudUpdatePatch
     {
-        /*
-        static void PreFix(MeetingHud __instance)
-        {
-            var role = ExtremeRoleManager.GameRole[PlayerControl.LocalPlayer.PlayerId];
-            if(role is Roles.Combination.Marlin)
-            {
 
-            }
-        }
-        */
         static void Postfix(MeetingHud __instance)
         {
             if (__instance.state == MeetingHud.VoteStates.Animating) { return; }
@@ -332,61 +327,5 @@ namespace ExtremeRoles.Patches
         }
         
     }
-
-    /*
-    [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.VotingComplete))]
-    class MeetingHudVotingCompletePatch
-    {
-
-        static bool Prefix(
-            MeetingHud __instance,
-            [HarmonyArgument(0)] Il2CppStructArray<MeetingHud.VoterState> states,
-            [HarmonyArgument(1)] GameData.PlayerInfo exiled,
-            [HarmonyArgument(2)] bool tie)
-        {
-
-            Helper.Logging.Debug($"PlayerId:{exiled.PlayerId}");
-
-            if (!AssassinMeeting.AssassinMeetingTrigger) { return true; }
-
-            if (__instance.state == MeetingHud.VoteStates.Results)
-            {
-                return false;
-            }
-            AssassinMeeting.AssassinateMarin = ExtremeRoleManager.GameRole[
-                exiled.PlayerId].Id == ExtremeRoleId.Marlin;
-            __instance.state = MeetingHud.VoteStates.Results;
-            __instance.resultsStartedAt = __instance.discussionTimer;
-            __instance.exiledPlayer = null;
-            __instance.wasTie = tie;
-            __instance.SkipVoteButton.gameObject.SetActive(false);
-            __instance.SkippedVoting.gameObject.SetActive(true);
-            
-            for (int i = 0; i < GameData.Instance.PlayerCount; ++i)
-            {
-                PlayerControl @object = GameData.Instance.AllPlayers[i].Object;
-                if (@object != null && @object.Data != null && @object.Data.Role)
-                {
-                    @object.Data.Role.OnVotingComplete();
-                }
-            }
-            __instance.PopulateResults(states);
-            __instance.SetupProceedButton();
-            MeetingHud.VoterState voterState = states.FirstOrDefault(
-                (MeetingHud.VoterState s) => s.VoterId == PlayerControl.LocalPlayer.PlayerId);
-            GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(voterState.VotedForId);
-            DestroyableSingleton<AchievementManager>.Instance.OnMeetingVote(PlayerControl.LocalPlayer.Data, playerById);
-            
-            if (DestroyableSingleton<HudManager>.Instance.Chat.IsOpen)
-            {
-                DestroyableSingleton<HudManager>.Instance.Chat.ForceClosed();
-                ControllerManager.Instance.CloseOverlayMenu(DestroyableSingleton<HudManager>.Instance.Chat.name);
-            }
-            ControllerManager.Instance.CloseOverlayMenu(__instance.name);
-            ControllerManager.Instance.OpenOverlayMenu(__instance.name, null, __instance.ProceedButtonUi);
-
-            return false;
-        }
-    }*/
 
 }
