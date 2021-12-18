@@ -13,6 +13,10 @@ namespace ExtremeRoles.Patches.Manager
     [HarmonyPatch(typeof(RoleManager), nameof(RoleManager.SelectRoles))]
     class RoleManagerSelectRolesPatch
     {
+
+        private static Random RoleRng = new Random(
+            UnityEngine.SystemInfo.processorFrequency);
+
         public static void Postfix()
         {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
@@ -44,8 +48,6 @@ namespace ExtremeRoles.Patches.Manager
                 ref extremeRolesData);
 
             PlayerControl player = PlayerControl.LocalPlayer;
-            var rng = new Random(
-                UnityEngine.SystemInfo.processorFrequency);
 
             foreach (var roles in assignMultiAssignRole)
             {
@@ -53,7 +55,7 @@ namespace ExtremeRoles.Patches.Manager
                 {
                     bool assign = false;
                     List<int> tempList = new List<int>(
-                        playerIndexList.OrderBy(item => rng.Next()).ToList());
+                        playerIndexList.OrderBy(item => RoleRng.Next()).ToList());
                     foreach(int playerIndex in tempList)
                     {
                         player = PlayerControl.AllPlayerControls[playerIndex];
@@ -80,11 +82,9 @@ namespace ExtremeRoles.Patches.Manager
             ref RoleAssignmentData extremeRolesData)
         {
             List<List<MultiAssignRoleAbs>> assignRoles = new List<List<MultiAssignRoleAbs>>();
-            var roleShuffleGen = new Random(
-                UnityEngine.SystemInfo.processorFrequency);
 
             var roleDataLoop = extremeRolesData.CombinationRole.OrderBy(
-                item => roleShuffleGen.Next()).ToList();
+                item => RoleRng.Next()).ToList();
             List<(List<MultiAssignRoleAbs>, (int, int))> newRoleData = new List<(List<MultiAssignRoleAbs>, (int, int))> ();
 
             foreach (var oneRole in roleDataLoop)
@@ -212,9 +212,7 @@ namespace ExtremeRoles.Patches.Manager
 
             do
             {
-                var rng = new Random(
-                    UnityEngine.SystemInfo.processorFrequency);
-                shuffledArange = shuffledArange.OrderBy(item => rng.Next()).ToList();
+                shuffledArange = shuffledArange.OrderBy(item => RoleRng.Next()).ToList();
                 Logging.Debug($"NotAssignPlayerNum:{shuffledArange.Count()}");
                 assignedPlayers = 1;
 
@@ -222,8 +220,6 @@ namespace ExtremeRoles.Patches.Manager
 
                 foreach (int index in tempList)
                 {
-                    var roleShuffleGen = new Random(
-                        UnityEngine.SystemInfo.processorFrequency);
                     assigned = false;
 
                     List<SingleRoleAbs> shuffledRoles = new List<SingleRoleAbs>();
@@ -237,11 +233,11 @@ namespace ExtremeRoles.Patches.Manager
 
                         case RoleTypes.Impostor:
                             shuffledRoles = shuffleRolesForCrewmate.OrderBy(
-                                item => roleShuffleGen.Next()).ToList();
+                                item => RoleRng.Next()).ToList();
                             break;
                         case RoleTypes.Crewmate:
                             shuffledRoles = shuffleRolesForCrewmate.OrderBy(
-                                item => roleShuffleGen.Next()).ToList();
+                                item => RoleRng.Next()).ToList();
                             break;
                         default:
                             SetRoleToPlayer(
