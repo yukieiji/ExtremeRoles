@@ -14,8 +14,9 @@ namespace ExtremeRoles
 {
     public class OptionsHolder
     {
-        public static string[] Rates = new string[] { "0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%" };
-        public static string[] Presets = new string[] { "preset1", "preset2", "preset3", "preset4", "preset5" };
+        public static string[] SpawnRate = new string[] { "0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%" };
+        public static string[] OptionPreset = new string[] { "preset1", "preset2", "preset3", "preset4", "preset5" };
+        public static string[] KillRange = new string[] { "short", "middle", "long"};
 
         public static int SelectedPreset = 0;
         public static int VanillaMaxPlayerNum = 15;
@@ -49,7 +50,7 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.PresetSelection, Design.Cs(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.PresetSelection.ToString()),
-                Presets, null, true);
+                OptionPreset, null, true);
 
             CustomOption.Create(
                 (int)CommonOptionKey.MinCremateRoles, Design.Cs(

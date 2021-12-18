@@ -404,7 +404,9 @@ namespace ExtremeRoles.Patches
             {
                 player.SetKillTimer(player.killTimer - Time.fixedDeltaTime);
                 PlayerControl target = player.FindClosestTarget(false);
-                
+
+                Logging.Debug($"TargetAlive?:{target}");
+
                 DestroyableSingleton<HudManager>.Instance.KillButton.SetTarget(target);
                 HudManager.Instance.KillButton.Show();
                 HudManager.Instance.KillButton.gameObject.SetActive(true);
@@ -446,6 +448,67 @@ namespace ExtremeRoles.Patches
             */
         }
     }
+
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FindClosestTarget))]
+    class PlayerControlFindClosestTargetPatch
+    {
+        static bool Prefix(
+            PlayerControl __instance,
+            ref PlayerControl __result,
+            [HarmonyArgument(0)] bool protecting)
+        {
+            var gameRoles = ExtremeRoleManager.GameRole;
+
+            if (gameRoles.Count == 0) { return true; }
+
+            var role = ExtremeRoleManager.GameRole[__instance.PlayerId];
+            if (role.Id == ExtremeRoleId.VanillaRole) { return true; }
+
+            __result = null;
+
+            int killRange = PlayerControl.GameOptions.KillDistance;
+            if (role.HasOtherKillRange)
+            {
+                killRange = role.KillRange;
+            }
+
+            float num = GameOptionsData.KillDistances[Mathf.Clamp(killRange, 0, 2)];
+            
+            if (!ShipStatus.Instance)
+            {
+                return false;
+            }
+            Vector2 truePosition = __instance.GetTruePosition();
+            Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers;
+            for (int i = 0; i < allPlayers.Count; i++)
+            {
+                GameData.PlayerInfo playerInfo = allPlayers[i];
+                if (!playerInfo.Disconnected && 
+                    playerInfo.PlayerId != __instance.PlayerId && 
+                    !playerInfo.IsDead && 
+                    (playerInfo.Role.CanBeKilled || protecting) && 
+                    !playerInfo.Object.inVent)
+                {
+                    PlayerControl @object = playerInfo.Object;
+                    if (@object && @object.Collider.enabled)
+                    {
+                        Vector2 vector = @object.GetTruePosition() - truePosition;
+                        float magnitude = vector.magnitude;
+                        if (magnitude <= num && 
+                            !PhysicsHelpers.AnyNonTriggersBetween(
+                                truePosition, vector.normalized,
+                                magnitude, Constants.ShipAndObjectsMask))
+                        {
+                            __result = @object;
+                            num = magnitude;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+    }
+
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
     class PlayerControlHandleRpcPatch
