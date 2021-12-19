@@ -32,7 +32,8 @@ namespace ExtremeRoles.Roles
     }
     public enum CombinationRoleCommonSetting
     {
-        IsMultiAssign = 11,
+        CombinationRoleNum = 23,
+        IsMultiAssign = 24,
     }
 
     abstract public class RoleAbs
@@ -296,27 +297,80 @@ namespace ExtremeRoles.Roles
                     GetRoleSettingId(KillerCommonSetting.KillRange)].GetSelection();
             }
         }
+    }
+    public abstract class MultiAssignRoleAbs : SingleRoleAbs
+    {
+        public byte GameId = 0;
+        public SingleRoleAbs AnotherRole = null;
+        public bool CanHasAnotherRole = false;
 
+        public MultiAssignRoleAbs(
+            ExtremeRoleId id,
+            ExtremeRoleType team,
+            string roleName,
+            Color roleColor,
+            bool canKill,
+            bool hasTask,
+            bool useVent,
+            bool useSabotage,
+            bool isVanilaRole = false) : base(
+                id, team, roleName, roleColor,
+                canKill, hasTask, useVent,
+                useSabotage, isVanilaRole)
+        { }
+
+        public void SetAnotherRole(SingleRoleAbs role)
+        {
+            if (this.CanHasAnotherRole)
+            {
+                this.AnotherRole = role;
+                OverrideAnotherRoleSetting();
+            }
+        }
+        protected virtual void OverrideAnotherRoleSetting()
+        {
+            this.Teams = this.AnotherRole.Teams;
+            this.RoleName = string.Format("{0} + {1}",
+                this.RoleName, this.AnotherRole.RoleName);
+            this.NameColor = this.NameColor + this.AnotherRole.NameColor;
+            this.CanKill = this.AnotherRole.CanKill;
+            this.HasTask = this.AnotherRole.HasTask;
+            this.UseVent = this.AnotherRole.UseVent;
+            this.UseSabotage = this.AnotherRole.UseSabotage;
+        }
     }
 
-    public abstract class CombinationRoleManagerBase : RoleAbs
+    // 別々の役職でコンビの物を管理する
+    public abstract class CombinationRoleAbs : RoleAbs
     {
 
         public List<MultiAssignRoleAbs> Roles = new List<MultiAssignRoleAbs>();
 
-        private int SetPlayerNum = 0;
-        private Color SettingColor;
+        protected Color SettingColor;
 
-        private string RoleName = "";
+        protected string RoleName = "";
 
-        public CombinationRoleManagerBase(
+        public CombinationRoleAbs(
             string roleName,
-            Color settingColor,
-            int setPlayerNum)
+            Color settingColor)
         {
             this.SettingColor = settingColor;
-            this.SetPlayerNum = setPlayerNum;
             this.RoleName = roleName;
+        }
+
+    }
+    public abstract class FixedCombRoleManagerBase : CombinationRoleAbs
+    {
+
+        protected int SetPlayerNum = 0;
+
+        public FixedCombRoleManagerBase(
+            string roleName,
+            Color settingColor,
+            int setPlayerNum) : base(
+                roleName, settingColor)
+        {
+            this.SetPlayerNum = setPlayerNum;
         }
 
         protected override CustomOption CreateSpawnOption()
@@ -338,7 +392,7 @@ namespace ExtremeRoles.Roles
                 Design.ConcatString(
                     this.RoleName,
                     RoleCommonSetting.RoleNum.ToString()),
-                1, 1, thisMaxRoleNum, 1,
+                this.SetPlayerNum, this.SetPlayerNum, thisMaxRoleNum, this.SetPlayerNum,
                 roleSetOption);
             CustomOption.Create(
                 GetRoleSettingId(CombinationRoleCommonSetting.IsMultiAssign),
@@ -389,48 +443,129 @@ namespace ExtremeRoles.Roles
                 role.GameInit();
             }
         }
-
     }
 
-    public abstract class MultiAssignRoleAbs : SingleRoleAbs
+    // 同じ役職でコンビの物を管理する
+    public abstract class FlexibleCombRoleManagerBase : CombinationRoleAbs
     {
-        public byte GameId = 0;
-        public SingleRoleAbs AnotherRole = null;
-        public bool CanHasAnotherRole = false;
 
-        public MultiAssignRoleAbs(
-            ExtremeRoleId id,
-            ExtremeRoleType team,
+        protected int SetPlayerNum = 0;
+        protected MultiAssignRoleAbs BaseRole;
+
+        public FlexibleCombRoleManagerBase(
             string roleName,
-            Color roleColor,
-            bool canKill,
-            bool hasTask,
-            bool useVent,
-            bool useSabotage,
-            bool isVanilaRole = false) :base(
-                id, team, roleName, roleColor,
-                canKill, hasTask, useVent,
-                useSabotage, isVanilaRole)
-        { }
+            Color settingColor,
+            MultiAssignRoleAbs baseRole) : base(roleName, settingColor)
+        { 
+            this.BaseRole = baseRole;
+        }
 
-        public void SetAnotherRole(SingleRoleAbs role)
+        protected override CustomOption CreateSpawnOption()
         {
-            if (this.CanHasAnotherRole)
+            // ExtremeRolesPlugin.Instance.Log.LogInfo($"Color: {this.SettingColor}");
+            var roleSetOption = CustomOption.Create(
+                GetRoleSettingId(RoleCommonSetting.SpawnRate),
+                Design.Cs(
+                    this.SettingColor,
+                    Design.ConcatString(
+                        this.RoleName,
+                        RoleCommonSetting.SpawnRate.ToString())),
+                OptionsHolder.SpawnRate, null, true);
+
+            List<float> selections = new List<float>();
+            for (float s = 2; s <= OptionsHolder.VanillaMaxPlayerNum; ++s)
             {
-                this.AnotherRole = role;
-                OverrideAnotherRoleSetting();
+                selections.Add(s);
+            }
+
+            var roleCombNumOption = new ChainUpdateCustomOption(
+                GetRoleSettingId(CombinationRoleCommonSetting.CombinationRoleNum),
+                Design.ConcatString(
+                    this.RoleName,
+                    CombinationRoleCommonSetting.CombinationRoleNum.ToString()),
+                selections.Cast<object>().ToArray(), 1,
+                roleSetOption, false, false, "");
+
+            var roleSetNumOption = CustomOption.Create(
+                GetRoleSettingId(RoleCommonSetting.RoleNum),
+                Design.ConcatString(
+                    this.RoleName,
+                    RoleCommonSetting.RoleNum.ToString()),
+                2, 2, OptionsHolder.VanillaMaxPlayerNum, 2,
+                roleSetOption);
+
+            roleCombNumOption.ChainUpdateOption.Add(
+                roleSetNumOption);
+
+            CustomOption.Create(
+                GetRoleSettingId(CombinationRoleCommonSetting.IsMultiAssign),
+                Design.ConcatString(
+                    this.RoleName,
+                    CombinationRoleCommonSetting.IsMultiAssign.ToString()),
+                false, roleSetOption);
+
+            return roleSetOption;
+        }
+
+        protected override void CreateVisonOption(
+            CustomOption parentOps)
+        {
+            var visonOption = CustomOption.Create(
+                GetRoleSettingId(RoleCommonSetting.HasOtherVison),
+                Design.ConcatString(
+                    this.BaseRole.Id.ToString(),
+                    RoleCommonSetting.HasOtherVison.ToString()),
+                false, parentOps);
+
+            CustomOption.Create(
+                GetRoleSettingId(RoleCommonSetting.Vison),
+                Design.ConcatString(
+                    this.BaseRole.Id.ToString(),
+                    RoleCommonSetting.Vison.ToString()),
+                2f, 0.25f, 5f, 0.25f,
+                visonOption, format: "unitMultiplier");
+            CustomOption.Create(
+               GetRoleSettingId(RoleCommonSetting.ApplyEnvironmentVisionEffect),
+               Design.ConcatString(
+                   this.BaseRole.Id.ToString(),
+                   RoleCommonSetting.ApplyEnvironmentVisionEffect.ToString()),
+               true, visonOption);
+        }
+
+        protected override void CommonInit()
+        {
+
+            var allOption = OptionsHolder.AllOptions;
+            
+            Roles.Clear();
+            
+            if (Map.IsGameLobby) { return; }
+
+            int combinationNum = allOption[
+                GetRoleSettingId(CombinationRoleCommonSetting.CombinationRoleNum)].GetInt();
+
+            for (int i=0; i < combinationNum; ++i)
+            {
+                Roles.Add(
+                    (MultiAssignRoleAbs)BaseRole.Clone());
+            }
+
+            foreach (var role in Roles)
+            {
+                role.CanHasAnotherRole = allOption[
+                    GetRoleSettingId(CombinationRoleCommonSetting.IsMultiAssign)].GetBool();
+                role.GameId = 0;
+                role.GameInit();
+
+                role.HasOtherVison = allOption[
+                GetRoleSettingId(RoleCommonSetting.HasOtherVison)].GetBool();
+                role.Vison = allOption[
+                    GetRoleSettingId(RoleCommonSetting.Vison)].GetFloat();
+                role.IsApplyEnvironmentVision = allOption[
+                    GetRoleSettingId(RoleCommonSetting.ApplyEnvironmentVisionEffect)].GetBool();
+
             }
         }
-        protected virtual void OverrideAnotherRoleSetting()
-        {
-            this.Teams = this.AnotherRole.Teams;
-            this.RoleName = string.Format("{0} + {1}",
-                this.RoleName, this.AnotherRole.RoleName);
-            this.NameColor = this.NameColor + this.AnotherRole.NameColor;
-            this.CanKill = this.AnotherRole.CanKill;
-            this.HasTask = this.AnotherRole.HasTask;
-            this.UseVent = this.AnotherRole.UseVent;
-            this.UseSabotage = this.AnotherRole.UseSabotage;
-        }
     }
+
 }

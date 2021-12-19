@@ -7,12 +7,11 @@ using ExtremeRoles.Module;
 
 namespace ExtremeRoles.Roles.Combination
 {
-    public class Avalon : CombinationRoleManagerBase
+    public class Avalon : FixedCombRoleManagerBase
     {
-        public static string Name = "AvalonsRoles";
-        public static Color SettingColor = Palette.White;
         public Avalon() : base(
-            Name, new Color(255f, 255f, 255f), 2)
+            "AvalonsRoles",
+            new Color(255f, 255f, 255f), 2)
         {
             this.Roles.Add(new Assassin());
             this.Roles.Add(new Marlin());
