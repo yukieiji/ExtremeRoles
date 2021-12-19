@@ -42,13 +42,18 @@ namespace ExtremeRoles.Roles
 
         protected int OptionIdOffset = 0;
 
-        protected string CommonSettingSpawnKey = "";
-        protected string CommonSettingRoleNumKey = "";
-        protected string CommonSettingCanOtherVisonKey = "";
-        protected string CommonSettingVisonKey = "";
-        protected string CommonSettingApplyEnvironmentVisionKey = "";
-        public int GetRoleSettingId(RoleCommonSetting setting) => GetRoleSettingId((int)setting);
+        
+        public int GetRoleSettingId(
+            RoleCommonSetting setting) => GetRoleSettingId((int)setting);
+        
+        public int GetRoleSettingId(
+            KillerCommonSetting setting) => GetRoleSettingId((int)setting);
+
+        public int GetRoleSettingId(
+            CombinationRoleCommonSetting setting) => GetRoleSettingId((int)setting);
+
         public int GetRoleSettingId(int setting) => this.OptionIdOffset + setting;
+
         public void GameInit()
         {
             CommonInit();
@@ -140,22 +145,6 @@ namespace ExtremeRoles.Roles
             this.UseVent = useVent;
             this.UseSabotage = useSabotage;
 
-            this.CommonSettingSpawnKey = Design.ConcatString(
-                this.Id.ToString(),
-                RoleCommonSetting.SpawnRate.ToString());
-            this.CommonSettingRoleNumKey = Design.ConcatString(
-                this.Id.ToString(),
-                RoleCommonSetting.RoleNum.ToString());
-            this.CommonSettingCanOtherVisonKey = Design.ConcatString(
-                this.Id.ToString(),
-                RoleCommonSetting.HasOtherVison.ToString());
-            this.CommonSettingVisonKey = Design.ConcatString(
-                this.Id.ToString(),
-                RoleCommonSetting.Vison.ToString());
-            this.CommonSettingApplyEnvironmentVisionKey = Design.ConcatString(
-                this.Id.ToString(),
-                RoleCommonSetting.ApplyEnvironmentVisionEffect.ToString());
-
             this.IsVanilaRole = isVanilaRole;
         }
 
@@ -178,6 +167,9 @@ namespace ExtremeRoles.Roles
         public bool IsImposter() => this.Teams == ExtremeRoleType.Impostor;
 
         public bool IsNeutral() => this.Teams == ExtremeRoleType.Neutral;
+
+        public string GetColoredRoleName() => Design.Cs(
+            this.NameColor, this.RoleName);
 
         public virtual bool IsTeamsWin() => this.IsWin;
 
@@ -209,26 +201,27 @@ namespace ExtremeRoles.Roles
             CustomOption parentOps)
         {
             var killCoolSetting = CustomOption.Create(
-                this.OptionIdOffset + (int)KillerCommonSetting.HasOtherKillCool,
+                GetRoleSettingId(KillerCommonSetting.HasOtherKillCool),
                 Design.ConcatString(
                     this.RoleName,
                     KillerCommonSetting.HasOtherKillCool.ToString()),
                 false, parentOps);
             CustomOption.Create(
-                this.OptionIdOffset + (int)KillerCommonSetting.KillCoolDown,
+                GetRoleSettingId(KillerCommonSetting.KillCoolDown),
                 Design.ConcatString(
                     this.RoleName,
                     KillerCommonSetting.KillCoolDown.ToString()),
                 30f, 2.5f, 120f, 2.5f,
                 killCoolSetting, format: "unitSeconds");
+
             var killRangeSetting = CustomOption.Create(
-                this.OptionIdOffset + (int)KillerCommonSetting.HasOtherKillRange,
+                GetRoleSettingId(KillerCommonSetting.HasOtherKillRange),
                 Design.ConcatString(
                     this.RoleName,
                     KillerCommonSetting.HasOtherKillRange.ToString()),
                 false, parentOps);
             CustomOption.Create(
-                this.OptionIdOffset + (int)KillerCommonSetting.KillRange,
+                GetRoleSettingId(KillerCommonSetting.KillRange),
                 Design.ConcatString(
                     this.RoleName,
                     KillerCommonSetting.KillRange.ToString()),
@@ -238,15 +231,19 @@ namespace ExtremeRoles.Roles
         protected override CustomOption CreateSpawnOption()
         {
             var roleSetOption = CustomOption.Create(
-                this.OptionIdOffset + (int)RoleCommonSetting.SpawnRate,
+                GetRoleSettingId(RoleCommonSetting.SpawnRate),
                 Design.Cs(
                     this.NameColor,
-                    this.CommonSettingSpawnKey),
+                    Design.ConcatString(
+                        this.Id.ToString(),
+                        RoleCommonSetting.SpawnRate.ToString())),
                 OptionsHolder.SpawnRate, null, true);
 
             CustomOption.Create(
-                this.OptionIdOffset + (int)RoleCommonSetting.RoleNum,
-                this.CommonSettingRoleNumKey,
+                GetRoleSettingId(RoleCommonSetting.RoleNum),
+                Design.ConcatString(
+                    this.Id.ToString(),
+                    RoleCommonSetting.RoleNum.ToString()),
                 1, 1, OptionsHolder.VanillaMaxPlayerNum, 1, roleSetOption);
 
             return roleSetOption;
@@ -257,17 +254,23 @@ namespace ExtremeRoles.Roles
         {
             var visonOption = CustomOption.Create(
                 GetRoleSettingId(RoleCommonSetting.HasOtherVison),
-                this.CommonSettingCanOtherVisonKey,
+                Design.ConcatString(
+                    this.Id.ToString(),
+                    RoleCommonSetting.HasOtherVison.ToString()),
                 false, parentOps);
 
             CustomOption.Create(
                 GetRoleSettingId(RoleCommonSetting.Vison),
-                this.CommonSettingVisonKey,
+                Design.ConcatString(
+                    this.Id.ToString(),
+                    RoleCommonSetting.Vison.ToString()),
                 2f, 0.25f, 5f, 0.25f,
                 visonOption, format: "unitMultiplier");
             CustomOption.Create(
                GetRoleSettingId(RoleCommonSetting.ApplyEnvironmentVisionEffect),
-               this.CommonSettingApplyEnvironmentVisionKey,
+               Design.ConcatString(
+                   this.Id.ToString(),
+                   RoleCommonSetting.ApplyEnvironmentVisionEffect.ToString()),
                this.IsCrewmate(), visonOption);
         }
         protected override void CommonInit()
@@ -284,13 +287,13 @@ namespace ExtremeRoles.Roles
             if (this.CanKill)
             {
                 this.HasOtherKillCool = allOption[
-                    GetRoleSettingId((int)KillerCommonSetting.HasOtherKillCool)].GetBool();
+                    GetRoleSettingId(KillerCommonSetting.HasOtherKillCool)].GetBool();
                 this.KillCoolTime = allOption[
-                    GetRoleSettingId((int)KillerCommonSetting.KillCoolDown)].GetFloat();
+                    GetRoleSettingId(KillerCommonSetting.KillCoolDown)].GetFloat();
                 this.HasOtherKillRange = allOption[
-                    GetRoleSettingId((int)KillerCommonSetting.HasOtherKillRange)].GetBool();
+                    GetRoleSettingId(KillerCommonSetting.HasOtherKillRange)].GetBool();
                 this.KillRange = allOption[
-                    GetRoleSettingId((int)KillerCommonSetting.KillRange)].GetSelection();
+                    GetRoleSettingId(KillerCommonSetting.KillRange)].GetSelection();
             }
         }
 
@@ -298,11 +301,13 @@ namespace ExtremeRoles.Roles
 
     public abstract class CombinationRoleManagerBase : RoleAbs
     {
-        public string CommonSettingIsMultiAssignKey = "";
+
         public List<MultiAssignRoleAbs> Roles = new List<MultiAssignRoleAbs>();
 
         private int SetPlayerNum = 0;
         private Color SettingColor;
+
+        private string RoleName = "";
 
         public CombinationRoleManagerBase(
             string roleName,
@@ -311,37 +316,35 @@ namespace ExtremeRoles.Roles
         {
             this.SettingColor = settingColor;
             this.SetPlayerNum = setPlayerNum;
-            this.CommonSettingSpawnKey = Design.ConcatString(
-                roleName,
-                RoleCommonSetting.SpawnRate.ToString());
-            this.CommonSettingRoleNumKey = Design.ConcatString(
-                roleName,
-                RoleCommonSetting.RoleNum.ToString());
-            this.CommonSettingIsMultiAssignKey = Design.ConcatString(
-                roleName,
-                CombinationRoleCommonSetting.IsMultiAssign.ToString());
+            this.RoleName = roleName;
         }
 
         protected override CustomOption CreateSpawnOption()
         {
             // ExtremeRolesPlugin.Instance.Log.LogInfo($"Color: {this.SettingColor}");
             var roleSetOption = CustomOption.Create(
-                this.OptionIdOffset + (int)RoleCommonSetting.SpawnRate,
+                GetRoleSettingId(RoleCommonSetting.SpawnRate),
                 Design.Cs(
                     this.SettingColor,
-                    this.CommonSettingSpawnKey),
+                    Design.ConcatString(
+                        this.RoleName,
+                        RoleCommonSetting.SpawnRate.ToString())),
                 OptionsHolder.SpawnRate, null, true);
 
             int thisMaxRoleNum = (int)Math.Floor((decimal)OptionsHolder.VanillaMaxPlayerNum / this.SetPlayerNum);
 
             CustomOption.Create(
-                this.OptionIdOffset + (int)RoleCommonSetting.RoleNum,
-                this.CommonSettingRoleNumKey,
+                GetRoleSettingId(RoleCommonSetting.RoleNum),
+                Design.ConcatString(
+                    this.RoleName,
+                    RoleCommonSetting.RoleNum.ToString()),
                 1, 1, thisMaxRoleNum, 1,
                 roleSetOption);
             CustomOption.Create(
-                this.OptionIdOffset + (int)CombinationRoleCommonSetting.IsMultiAssign,
-                this.CommonSettingIsMultiAssignKey,
+                GetRoleSettingId(CombinationRoleCommonSetting.IsMultiAssign),
+                Design.ConcatString(
+                    this.RoleName,
+                    CombinationRoleCommonSetting.IsMultiAssign.ToString()),
                 false, roleSetOption);
 
             return roleSetOption;
@@ -381,7 +384,7 @@ namespace ExtremeRoles.Roles
             foreach (var role in Roles)
             {
                 role.CanHasAnotherRole = OptionsHolder.AllOptions[
-                    GetRoleSettingId((int)CombinationRoleCommonSetting.IsMultiAssign)].GetBool();
+                    GetRoleSettingId(CombinationRoleCommonSetting.IsMultiAssign)].GetBool();
                 role.GameInit();
             }
         }

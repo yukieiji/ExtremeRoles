@@ -108,7 +108,7 @@ namespace ExtremeRoles.Patches
                         }
                         else
                         {
-                            pva.NameText.color = Color.white;
+                            pva.NameText.color = Palette.White;
                         }
                     }
                 }
@@ -295,7 +295,7 @@ namespace ExtremeRoles.Patches
         {
 
             var (tasksCompleted, tasksTotal) = Task.GetTaskInfo(targetPlayer.Data);
-            string roleNames = ExtremeRoleManager.GameRole[targetPlayer.PlayerId].RoleName;
+            string roleNames = ExtremeRoleManager.GameRole[targetPlayer.PlayerId].GetColoredRoleName();
 
             var completedStr = commsActive ? "?" : tasksCompleted.ToString();
             string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({completedStr}/{tasksTotal})</color>" : "";
