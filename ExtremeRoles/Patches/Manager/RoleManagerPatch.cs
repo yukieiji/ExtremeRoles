@@ -262,6 +262,26 @@ namespace ExtremeRoles.Patches.Manager
                             roleData.Role][role.BytedRoleId];
                         result = IsRoleSpawn(roleNum, spawnRate);
 
+                        switch (role.Teams)
+                        {
+                            case ExtremeRoleType.Crewmate:
+                                result = result || 0 <= extremeRolesData.CrewmateRoles - 1;
+                                if (result) { extremeRolesData.CrewmateRoles = extremeRolesData.CrewmateRoles - 1; }
+                                break;
+                            case ExtremeRoleType.Neutral:
+                                result = result || 0 <= extremeRolesData.NeutralRoles - 1;
+                                if (result) { extremeRolesData.NeutralRoles = extremeRolesData.NeutralRoles - 1; }
+                                break;
+                            case ExtremeRoleType.Impostor:
+                                result = result || 0 <= extremeRolesData.ImpostorRoles - 1;
+                                if (result) { extremeRolesData.ImpostorRoles = extremeRolesData.ImpostorRoles - 1; }
+                                break;
+                            default:
+                                result = false;
+                                break;
+                        }
+
+
                         Logging.Debug($"RoleResult:{result}");
 
                         if (result)
