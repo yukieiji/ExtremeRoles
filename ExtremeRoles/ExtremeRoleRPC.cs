@@ -1,4 +1,5 @@
-﻿using Hazel;
+﻿using System;
+using Hazel;
 
 namespace ExtremeRoles
 {
@@ -47,11 +48,11 @@ namespace ExtremeRoles
                 }
             }
         }
-        public static void SetRole(byte roleId, byte playerId, bool combinationRole)
+        public static void SetRole(byte roleId, byte playerId, byte id)
         {
-            if (combinationRole)
+            if (id != Byte.MaxValue)
             {
-                Roles.ExtremeRoleManager.SetPlayerIdToMultiRoleId(roleId, playerId);
+                Roles.ExtremeRoleManager.SetPlayerIdToMultiRoleId(roleId, playerId, id);
             }
             else
             {

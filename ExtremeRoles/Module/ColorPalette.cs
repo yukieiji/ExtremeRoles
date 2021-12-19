@@ -4,9 +4,10 @@ namespace ExtremeRoles.Module
 {
     public class ColorPalette
     {
-        public static Color DefaultColor = Color.white;
-        public static Color MarineAquaBlue = new Color(0, 255, 255);
-        public static Color AliceGold = new Color(255, 215, 0);
-        public static Color NeutralColor = Color.gray;
+        public readonly static Color DefaultColor = Color.white;
+        public readonly static Color MarineBlue = new Color(0, 255, 255);
+        public readonly static Color LoverPink = new Color(255, 20, 147);
+        public readonly static Color AliceGold = new Color(255, 215, 0);
+        public readonly static Color NeutralColor = Color.gray;
     }
 }

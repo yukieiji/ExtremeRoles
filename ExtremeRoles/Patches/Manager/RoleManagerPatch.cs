@@ -44,12 +44,12 @@ namespace ExtremeRoles.Patches.Manager
 
             if (extremeRolesData.CombinationRole.Count == 0) { return; }
 
-            List<List<MultiAssignRoleAbs>> assignMultiAssignRole = GetMultiAssignedRoles(
+            List<(List<MultiAssignRoleAbs>, int)> assignMultiAssignRole = GetMultiAssignedRoles(
                 ref extremeRolesData);
 
             PlayerControl player = PlayerControl.LocalPlayer;
 
-            foreach (var roles in assignMultiAssignRole)
+            foreach (var(roles, id) in assignMultiAssignRole)
             {
                 foreach (var role in roles)
                 {
@@ -69,7 +69,7 @@ namespace ExtremeRoles.Patches.Manager
                         }
 
                         SetRoleToPlayer(
-                            player, role.BytedRoleId, true);
+                            player, role.BytedRoleId, (byte)id);
                         break;
                     }
                 }
@@ -78,10 +78,10 @@ namespace ExtremeRoles.Patches.Manager
 
         }
 
-        private static List<List<MultiAssignRoleAbs>> GetMultiAssignedRoles(
+        private static List<(List<MultiAssignRoleAbs>, int)> GetMultiAssignedRoles(
             ref RoleAssignmentData extremeRolesData)
         {
-            List<List<MultiAssignRoleAbs>> assignRoles = new List<List<MultiAssignRoleAbs>>();
+            List<(List<MultiAssignRoleAbs>, int)> assignRoles = new List<(List<MultiAssignRoleAbs>, int)>();
 
             var roleDataLoop = extremeRolesData.CombinationRole.OrderBy(
                 item => RoleRng.Next()).ToList();
@@ -134,7 +134,7 @@ namespace ExtremeRoles.Patches.Manager
                         spawnRoles.Add(
                             (MultiAssignRoleAbs)role.Clone());
                     }
-                    assignRoles.Add(spawnRoles);
+                    assignRoles.Add((spawnRoles, num));
                 }
             }
 
@@ -310,7 +310,7 @@ namespace ExtremeRoles.Patches.Manager
 
 
         private static void SetRoleToPlayer(
-            PlayerControl player, byte roleId, bool combinationRole=false)
+            PlayerControl player, byte roleId, byte id=Byte.MaxValue)
         {
 
             Logging.Debug($"Player:{player.name}  RoleId:{roleId}");
@@ -321,10 +321,10 @@ namespace ExtremeRoles.Patches.Manager
             
             writer.Write(roleId);
             writer.Write(player.PlayerId);
-            writer.Write(combinationRole);
+            writer.Write(id);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             ExtremeRoleRPC.SetRole(
-                roleId, player.PlayerId, combinationRole);
+                roleId, player.PlayerId, id);
         }
 
 

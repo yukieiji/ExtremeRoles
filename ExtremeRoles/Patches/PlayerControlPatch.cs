@@ -527,8 +527,8 @@ namespace ExtremeRoles.Patches
                 case (byte)CustomRPC.SetRole:
                     byte roleId = reader.ReadByte();
                     byte playerId = reader.ReadByte();
-                    bool combinationRole = reader.ReadBoolean();
-                    ExtremeRoleRPC.SetRole(roleId, playerId, combinationRole);
+                    byte gameId = reader.ReadByte();
+                    ExtremeRoleRPC.SetRole(roleId, playerId, gameId);
                     break;
                 case (byte)CustomRPC.ShareOption:
                     int numOptions = (int)reader.ReadPackedUInt32();

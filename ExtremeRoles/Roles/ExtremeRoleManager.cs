@@ -10,12 +10,14 @@ namespace ExtremeRoles.Roles
         VanillaRole = 50,
         Assassin,
         Marlin,
+        Lover,
+        
         Alice,
         NormalCrew = 100,
     }
     public static class ExtremeRoleManager
     {
-        private const int OptionOffsetPerRole = 20;
+        public const int OptionOffsetPerRole = 20;
 
         public static readonly List<
             SingleRoleAbs> NormalRole = new List<SingleRoleAbs>()
@@ -70,7 +72,7 @@ namespace ExtremeRoles.Roles
         }
 
         public static void SetPlayerIdToMultiRoleId(
-            byte roleId, byte playerId)
+            byte roleId, byte playerId, byte id)
         {
 
             RoleTypes roleType = Helper.Player.GetPlayerControlById(playerId).Data.Role.Role;
@@ -84,6 +86,7 @@ namespace ExtremeRoles.Roles
                     {
                         SingleRoleAbs addRole = role.Clone();
                         addRole.GameInit();
+                        ((MultiAssignRoleAbs)addRole).GameId = id;
 
                         GameRole.Add(
                             playerId, addRole);

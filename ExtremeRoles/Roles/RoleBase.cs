@@ -385,6 +385,7 @@ namespace ExtremeRoles.Roles
             {
                 role.CanHasAnotherRole = OptionsHolder.AllOptions[
                     GetRoleSettingId(CombinationRoleCommonSetting.IsMultiAssign)].GetBool();
+                role.GameId = 0;
                 role.GameInit();
             }
         }
@@ -393,6 +394,7 @@ namespace ExtremeRoles.Roles
 
     public abstract class MultiAssignRoleAbs : SingleRoleAbs
     {
+        public byte GameId = 0;
         public SingleRoleAbs AnotherRole = null;
         public bool CanHasAnotherRole = false;
 
