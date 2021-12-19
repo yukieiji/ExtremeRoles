@@ -16,7 +16,7 @@ namespace ExtremeRoles.Patches.Option
         {
             CustomOption option = OptionsHolder.AllOptions.Values.FirstOrDefault(
                 option => option.Behaviour == __instance);
-            if (option == null) return true;
+            if (option == null) { return true; };
             option.UpdateSelection(option.CurSelection - 1);
             return false;
         }
@@ -29,7 +29,7 @@ namespace ExtremeRoles.Patches.Option
         {
             CustomOption option = OptionsHolder.AllOptions.Values.FirstOrDefault(
                 option => option.Behaviour == __instance);
-            if (option == null) return true;
+            if (option == null) { return true; };
             option.UpdateSelection(option.CurSelection + 1);
             return false;
         }
@@ -42,7 +42,7 @@ namespace ExtremeRoles.Patches.Option
         {
             CustomOption option = OptionsHolder.AllOptions.Values.FirstOrDefault(
                 option => option.Behaviour == __instance);
-            if (option == null) return true;
+            if (option == null) { return true; };
 
             __instance.OnValueChanged = new Action<OptionBehaviour>((o) => { });
             __instance.TitleText.text = option.GetName();

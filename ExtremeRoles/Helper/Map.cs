@@ -1,8 +1,7 @@
-﻿namespace ExtremeRoles.Modules.Helpers
+﻿namespace ExtremeRoles.Helper
 {
     public class Map
     {
-
         public static bool IsGameLobby
         {
             get
