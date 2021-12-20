@@ -2,7 +2,7 @@
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public class Alice : SingleRoleAbs
+    public class Alice : SingleRoleAbs, IRoleAbility
     {
         public Alice(): base(
             ExtremeRoleId.Alice,
@@ -20,6 +20,22 @@ namespace ExtremeRoles.Roles.Solo.Neutral
            {
                 this.IsWin = true;
            }
+        }
+
+        public void CreateAbility()
+        {
+            RoleAbilityButton abilityButton = new RoleAbilityButton();
+            abilityButton.ButtonInit(
+                Resources.ResourcesPaths.TestButton,
+                Helper.Design.ConcatString(this.RoleName, "Ability"));
+            abilityButton.SetEnabled();
+            abilityButton.gameObject.SetActive(true);
+            abilityButton.SetCoolDown(0f, 1f);
+        }
+
+        public void UseAbility()
+        {
+            Helper.Logging.Debug("Ability Test");
         }
 
         protected override void CreateSpecificOption(

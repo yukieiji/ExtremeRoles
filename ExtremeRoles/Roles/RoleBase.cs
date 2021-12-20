@@ -36,6 +36,12 @@ namespace ExtremeRoles.Roles
         IsMultiAssign = 24,
     }
 
+    interface IRoleAbility
+    {
+        void CreateAbility();
+        void UseAbility();
+    }
+
     abstract public class RoleAbs
     {
 

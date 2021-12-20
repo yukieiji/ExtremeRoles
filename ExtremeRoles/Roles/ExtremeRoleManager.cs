@@ -11,6 +11,8 @@ namespace ExtremeRoles.Roles
         Assassin,
         Marlin,
         Lover,
+        Jackal,
+        SideKick,
         
         Alice,
         NormalCrew = 100,
@@ -101,6 +103,11 @@ namespace ExtremeRoles.Roles
                         GameRole.Add(
                             playerId, addRole);
 
+                        if (PlayerControl.LocalPlayer.PlayerId == playerId && addRole is IRoleAbility)
+                        {
+                            ((IRoleAbility)addRole).CreateAbility();
+                        }
+
                         if (hasVanilaRole)
                         {
                             ((MultiAssignRoleAbs)GameRole[
@@ -145,6 +152,11 @@ namespace ExtremeRoles.Roles
             {
                 GameRole.Add(
                     playerId, addRole);
+                if (PlayerControl.LocalPlayer.PlayerId == playerId && addRole is IRoleAbility)
+                {
+                    ((IRoleAbility)addRole).CreateAbility();
+                }
+
             }
             else
             {

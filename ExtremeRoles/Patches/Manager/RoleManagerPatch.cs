@@ -302,13 +302,21 @@ namespace ExtremeRoles.Patches.Manager
                             assigned = true;
                         }
                     }
-                    if (assigned) { ++assignedPlayers; }
+                    if (assigned)
+                    {
+                        ++assignedPlayers; 
+                    }
                     
                 }
 
                 Logging.Debug($"AssignedPlayerNum:{assignedPlayers}");
 
+                Logging.Debug($"Imposter Role Num:{shuffleRolesForImpostor.Count}");
+                Logging.Debug($"Crewmate Role Num:{shuffleRolesForCrewmate.Count}");
+
                 if (shuffledArange.Count == assignedPlayers ||
+                    shuffledArange.Count + shuffleRolesForImpostor.Count == assignedPlayers ||
+                    shuffledArange.Count + shuffleRolesForCrewmate.Count == assignedPlayers ||
                     (shuffleRolesForImpostor.Count == 0 && 
                      shuffleRolesForCrewmate.Count == 0))
                 {
