@@ -26,7 +26,6 @@ namespace ExtremeRoles.Module
         public List<CustomOption> Children;
         public bool IsHeader;
         public bool IsHidden;
-        public bool updateWithChildren;
 
         public virtual bool Enabled
         {
@@ -75,58 +74,9 @@ namespace ExtremeRoles.Module
                 CurSelection = Mathf.Clamp(Entry.Value, 0, selections.Length - 1);
             }
 
-            Logging.Debug($"OptinId:{this.Id}    Name:{this.Name}");
+            Helper.Logging.Debug($"OptinId:{this.Id}    Name:{this.Name}");
 
             OptionsHolder.AllOptions.Add(this.Id, this);
-        }
-
-        public virtual bool GetBool() => CurSelection > 0;
-
-        public virtual float GetFloat() => (float)GetRawValue();
-
-        public virtual int GetInt() => Convert.ToInt32(GetRawValue().ToString());
-
-        public virtual string GetName() => Translation.GetString(Name);
-
-        public virtual int GetPercentage() => (int)Decimal.Multiply(CurSelection, Selections.ToList().Count);
-
-        public virtual object GetRawValue() => Selections[CurSelection];
-
-        public virtual int GetSelection() => CurSelection;
-
-        public virtual string GetString()
-        {
-            string sel = Selections[CurSelection].ToString();
-            if (Format != "")
-            {
-                return string.Format(Translation.GetString(Format), sel);
-            }
-            return Translation.GetString(sel);
-        }
-
-        public virtual void UpdateSelection(int newSelection)
-        {
-            CurSelection = Mathf.Clamp((newSelection + Selections.Length) % Selections.Length, 0, Selections.Length - 1);
-            if (Behaviour != null && Behaviour is StringOption stringOption)
-            {
-                stringOption.oldValue = stringOption.Value = CurSelection;
-                stringOption.ValueText.text = Selections[CurSelection].ToString();
-
-                if (AmongUsClient.Instance?.AmHost == true && PlayerControl.LocalPlayer)
-                {
-                    if (Id == 0)
-                    {
-                        OptionsHolder.SwitchPreset(CurSelection); // Switch presets
-                    }
-                    else if (Entry != null)
-                    {
-                        Entry.Value = CurSelection;
-                    }// Save selection to config
-
-                    OptionsHolder.ShareOptionSelections();// Share all selections
-                }
-            }
-
         }
 
         public static CustomOption Create(
@@ -187,6 +137,49 @@ namespace ExtremeRoles.Module
                 defaultValue ? "optionOn" : "optionOff", parent,
                 isHeader, isHidden, format);
         }
+
+        public virtual bool GetBool() => CurSelection > 0;
+
+        public virtual float GetFloat() => (float)GetRawValue();
+
+        public virtual int GetInt() => Convert.ToInt32(GetRawValue().ToString());
+
+        public virtual string GetName() => Translation.GetString(Name);
+
+        public virtual int GetPercentage() => (int)Decimal.Multiply(CurSelection, Selections.ToList().Count);
+
+        public virtual object GetRawValue() => Selections[CurSelection];
+
+        public virtual int GetSelection() => CurSelection;
+
+        public virtual string GetString()
+        {
+            string sel = Selections[CurSelection].ToString();
+            if (Format != "")
+            {
+                return string.Format(Translation.GetString(Format), sel);
+            }
+            return Translation.GetString(sel);
+        }
+
+        public virtual void UpdateSelection(int newSelection)
+        {
+            CurSelection = Mathf.Clamp((newSelection + Selections.Length) % Selections.Length, 0, Selections.Length - 1);
+            if (Behaviour != null && Behaviour is StringOption stringOption)
+            {
+                stringOption.oldValue = stringOption.Value = CurSelection;
+                stringOption.ValueText.text = Selections[CurSelection].ToString();
+
+                if (AmongUsClient.Instance?.AmHost == true && PlayerControl.LocalPlayer)
+                {
+                    if (Id == 0) OptionsHolder.SwitchPreset(CurSelection); // Switch presets
+                    else if (Entry != null) Entry.Value = CurSelection; // Save selection to config
+
+                    OptionsHolder.ShareOptionSelections();// Share all selections
+                }
+            }
+
+        }
     }
 
     public class BlankOption : CustomOption
@@ -217,42 +210,7 @@ namespace ExtremeRoles.Module
         {
             return;
         }
+
     }
 
-    public class ChainUpdateCustomOption : CustomOption
-    {
-        public List<CustomOption> ChainUpdateOption = new List<CustomOption>();
-
-        public ChainUpdateCustomOption(
-            int id,
-            string name,
-            System.Object[] selections,
-            System.Object defaultValue,
-            CustomOption parent,
-            bool isHeader,
-            bool isHidden,
-            string format) : base(
-                id, name, selections,
-                defaultValue, parent,
-                isHeader, isHidden, format)
-        {}
-
-        public override void UpdateSelection(int newSelection)
-        {
-            base.UpdateSelection(newSelection);
-
-            foreach (CustomOption child in ChainUpdateOption)
-            {
-                List<float> newChildrenSelections = new List<float>();
-                for (float s = GetInt();
-                    s <= Convert.ToInt32(child.Selections[child.Selections.Length -1].ToString()); 
-                    s += GetInt())
-                {
-                    newChildrenSelections.Add(s);
-                }
-                child.Selections = newChildrenSelections.Cast<object>().ToArray();
-                child.UpdateSelection(child.CurSelection);
-            }
-        }
-    }
 }

@@ -19,7 +19,7 @@ namespace ExtremeRoles.Roles
     }
     public static class ExtremeRoleManager
     {
-        public const int OptionOffsetPerRole = 25;
+        public const int OptionOffsetPerRole = 20;
 
         public static readonly List<
             SingleRoleAbs> NormalRole = new List<SingleRoleAbs>()
@@ -28,10 +28,9 @@ namespace ExtremeRoles.Roles
         };
         
         public static readonly List<
-            CombinationRoleAbs> CombRole = new List<CombinationRoleAbs> ()
+            CombinationRoleManagerBase> CombRole = new List<CombinationRoleManagerBase>()
         {
             new Combination.Avalon(),
-            // new Combination.LoverManager(),
         };
 
         public static Dictionary<
@@ -40,29 +39,20 @@ namespace ExtremeRoles.Roles
         public static void CreateCombinationRoleOptions(
             int optionIdOffsetChord)
         {
-            IEnumerable<CombinationRoleAbs> roles = CombRole;
-
-            if (roles.Count() == 0) { return; };
-
-            int roleOptionOffset = 0;
-            int prevRoleCont = 1;
-
-            foreach (var item
-             in roles.Select((Value, Index) => new { Value, Index }))
-            {
-                roleOptionOffset = optionIdOffsetChord + (
-                    OptionOffsetPerRole * prevRoleCont * item.Index);
-                item.Value.CreateRoleAllOption(roleOptionOffset);
-                prevRoleCont = item.Value.Roles.Count + prevRoleCont;
-            }
+            CreateOptions(optionIdOffsetChord, CombRole);
         }
 
         public static void CreateNormalRoleOptions(
             int optionIdOffsetChord)
         {
-            IEnumerable<SingleRoleAbs> roles = NormalRole;
+            CreateOptions(optionIdOffsetChord, NormalRole);
+        }
 
-            if (roles.Count() == 0) { return; };
+        private static void CreateOptions(
+            int optionIdOffsetChord,
+            IEnumerable<RoleAbs> roles)
+        {
+            if (roles.Count() == 0) {  return; };
 
             int roleOptionOffset = 0;
 
