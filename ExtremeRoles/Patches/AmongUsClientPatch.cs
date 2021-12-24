@@ -69,15 +69,14 @@ namespace ExtremeRoles.Patches
             switch (EndReason)
             {
                 case (GameOverReason)RoleGameOverReason.AliceKilledByImposter:
+                case (GameOverReason)RoleGameOverReason.AliceKillAllOthers:
                     ResetWinner();
                     foreach(var player in noWinner)
                     {
                         var playerRole = roleData[player.PlayerId];
-                        if (playerRole.Id == ExtremeRoleId.Alice &&
-                            playerRole.IsWin)
+                        if (playerRole.Id == ExtremeRoleId.Alice)
                         {
                             AddWinner(player);
-                            break;
                         }
                     }
                     break;

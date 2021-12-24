@@ -405,7 +405,7 @@ namespace ExtremeRoles.Patches
                 player.SetKillTimer(player.killTimer - Time.fixedDeltaTime);
                 PlayerControl target = player.FindClosestTarget(!role.IsImposter());
 
-                Logging.Debug($"TargetAlive?:{target}");
+                //Logging.Debug($"TargetAlive?:{target}");
 
                 DestroyableSingleton<HudManager>.Instance.KillButton.SetTarget(target);
                 HudManager.Instance.KillButton.Show();

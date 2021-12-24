@@ -7,6 +7,7 @@ namespace ExtremeRoles
     {
         AssassinationMarin = 10,
         AliceKilledByImposter,
+        AliceKillAllOthers,
 
         UnKnown = 100,
     }
