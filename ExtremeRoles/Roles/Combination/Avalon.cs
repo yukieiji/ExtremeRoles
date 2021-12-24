@@ -36,7 +36,6 @@ namespace ExtremeRoles.Roles.Combination
         public bool CanSeeRoleBeforeFirstMeeting = false;
         public bool IsDeadForceMeeting = true;
 
-        //private GameObject AssassinateUI;
 
         public Assassin(
             ) : base(
@@ -77,6 +76,7 @@ namespace ExtremeRoles.Roles.Combination
         {
             if (!this.IsDeadForceMeeting) { return; }
 
+            AssassinMeetingTriggerOn(rolePlayer.PlayerId);
             killerPlayer.CmdReportDeadBody(rolePlayer.Data);
         }
 
@@ -89,16 +89,23 @@ namespace ExtremeRoles.Roles.Combination
             this.IsFirstMeeting = true;
         }
 
-        public void TryAssassinateMarin(
+        private void TryAssassinateMarin(
             GameData.PlayerInfo exileAssasin)
         {
-            Patches.AssassinMeeting.AssassinMeetingTrigger = true;
-            Patches.AssassinMeeting.ExiledAssassinId = exileAssasin.PlayerId;
+            AssassinMeetingTriggerOn(exileAssasin.PlayerId);
 
             MeetingRoomManager.Instance.AssignSelf(exileAssasin.Object, null);
             DestroyableSingleton<HudManager>.Instance.OpenMeetingRoom(exileAssasin.Object);
             exileAssasin.Object.RpcStartMeeting(null);
         }
+
+        private void AssassinMeetingTriggerOn(
+            byte playerId)
+        {
+            Patches.AssassinMeeting.AssassinMeetingTrigger = true;
+            Patches.AssassinMeeting.ExiledAssassinId = playerId;
+        }
+
     }
 
 
