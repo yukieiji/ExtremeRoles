@@ -69,7 +69,7 @@ namespace ExtremeRoles.Patches
 
             var statistics = new PlayerDataContainer.PlayerStatistics();
 
-            Helper.Logging.Debug($"Neutral Alive:{statistics.NeutralKillerPlayer.Count}");
+            // Helper.Logging.Debug($"Neutral Alive:{statistics.NeutralKillerPlayer.Count}");
 
             if (IsNeutralSpecialWin(__instance)) { return false; }
             if (IsNeutralAliveWin(__instance, statistics)) { return false; }
