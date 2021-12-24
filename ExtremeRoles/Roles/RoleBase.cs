@@ -37,15 +37,34 @@ namespace ExtremeRoles.Roles
 
     interface IRoleAbility
     {
-        void CreateAbility();
-        void UseAbility();
+        public AbilityButton Button
+        {
+            get => this.Button;
+            set
+            {
+                Button = value;
+            }
+        }
+        public void CreateAbilityButton()
+        {
+            AbilityButton ability = UnityEngine.Object.Instantiate(
+                HudManager.Instance.AbilityButton,
+                HudManager.Instance.AbilityButton.transform);
+
+            ability.graphic.SetCooldownNormalizedUvs();
+            ability.SetEnabled();
+            ability.gameObject.SetActive(true);
+
+            this.Button = ability;
+
+        }
+        public void UseAbility();
     }
 
     abstract public class RoleAbs
     {
 
         public bool CanKill = false;
-
         protected int OptionIdOffset = 0;
 
         
