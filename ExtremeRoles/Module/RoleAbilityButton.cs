@@ -15,11 +15,12 @@
 			}
 
 			var role = Roles.ExtremeRoleManager.GameRole[PlayerControl.LocalPlayer.PlayerId];
-
+			/*
 			if (role is Roles.IRoleAbility)
 			{
 				((Roles.IRoleAbility)role).UseAbility();
 			}
+			*/
 		}
 
 		public void ButtonInit(string imgPath, string text)

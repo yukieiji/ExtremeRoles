@@ -5,11 +5,10 @@ using ExtremeRoles.Module;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public class Jackal : SingleRoleAbs, IRoleAbility
+    public class Jackal : SingleRoleAbs
     {
         public List<byte> SideKickPlayerId = new List<byte>();
 
-        AbilityButton Button;
         public Jackal() : base(
             ExtremeRoleId.Jackal,
             ExtremeRoleType.Neutral,
