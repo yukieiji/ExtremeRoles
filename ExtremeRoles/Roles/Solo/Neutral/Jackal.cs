@@ -5,7 +5,7 @@ using ExtremeRoles.Module;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public class Jackal : SingleRoleAbs, IRoleAbility
+    public class Jackal : SingleRoleAbs
     {
         public List<byte> SideKickPlayerId = new List<byte>();
 
@@ -25,20 +25,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             ColorPalette.JackalBlue,
             true, false, true, false)
         { }
-
-        public void CreateAbility()
-        {
-            RoleAbilityButton abilityButton = new RoleAbilityButton();
-            abilityButton.ButtonInit("a", "a");
-            abilityButton.SetEnabled();
-            abilityButton.gameObject.SetActive(true);
-            abilityButton.SetCoolDown(0f, 1f);
-        }
-
-        public void UseAbility()
-        {
-            throw new NotImplementedException();
-        }
 
         protected override void CreateSpecificOption(
             CustomOption parentOps)
