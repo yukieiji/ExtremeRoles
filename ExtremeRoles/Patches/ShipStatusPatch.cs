@@ -68,11 +68,18 @@ namespace ExtremeRoles.Patches
             if (AssassinMeeting.AssassinMeetingTrigger) { return false; }
 
             var statistics = new PlayerDataContainer.PlayerStatistics();
-            if (IsNeutralWin(__instance)) { return false; }
+
+            Helper.Logging.Debug($"Neutral Alive:{statistics.NeutralKillerPlayer.Count}");
+
+            if (IsNeutralSpecialWin(__instance)) { return false; }
+            if (IsNeutralAliveWin(__instance, statistics)) { return false; }
             if (IsSabotageWin(__instance)) { return false; }
-            if (IsTaskWin(__instance)) { return false; };
-            if (IsImpostorWin(__instance, statistics)) { return false; };
-            if (IsCrewmateWin(__instance, statistics)) { return false; };
+            if (IsTaskWin(__instance)) { return false; }
+
+            if (statistics.NeutralKillerPlayer.Count > 0) { return false; }
+            
+            if (IsImpostorWin(__instance, statistics)) { return false; }
+            if (IsCrewmateWin(__instance, statistics)) { return false; }
             
             return false;
         }
@@ -90,7 +97,9 @@ namespace ExtremeRoles.Patches
             ShipStatus __instance,
             PlayerDataContainer.PlayerStatistics statistics)
         {
-            if (statistics.TeamCrewmateAlive > 0 && statistics.TeamImpostorAlive == 0)
+            if (statistics.TeamCrewmateAlive > 0 && 
+                statistics.TeamImpostorAlive == 0 && 
+                statistics.NeutralKillerPlayer.Count == 0)
             {
                 GameIsEnd(ref __instance, GameOverReason.HumansByVote);
                 return true;
@@ -137,7 +146,51 @@ namespace ExtremeRoles.Patches
             return false;
 
         }
-        private static bool IsNeutralWin(
+
+        private static bool IsNeutralAliveWin(
+            ShipStatus __instance,
+            PlayerDataContainer.PlayerStatistics statistics)
+        {
+
+            if (statistics.TeamImpostorAlive != 0) { return false; }
+
+            var allRole = ExtremeRoleManager.GameRole;
+            int killerAlive = statistics.NeutralKillerPlayer.Count;
+
+            ExtremeRoleId roleId = allRole[statistics.NeutralAlivePlayer[0]].Id;
+            for (int i = 1; i < killerAlive; ++i)
+            {
+                var checkRoleId = allRole[statistics.NeutralAlivePlayer[i]].Id;
+                if (roleId != checkRoleId)
+                {
+                    return false;
+                }
+                roleId = checkRoleId;
+            }
+
+            if (statistics.TeamCrewmateAlive <= killerAlive)
+            {
+
+                GameOverReason endReason = (GameOverReason)RoleGameOverReason.UnKnown;
+
+                switch (roleId)
+                {
+                    case ExtremeRoleId.Alice:
+                        endReason = (GameOverReason)RoleGameOverReason.AliceKillAllOthers;
+                        break;
+                    default:
+                        break;
+                }
+
+                GameIsEnd(ref __instance, endReason);
+                return true;
+
+            }
+
+            return false;
+        }
+
+        private static bool IsNeutralSpecialWin(
             ShipStatus __instance)
         {
             

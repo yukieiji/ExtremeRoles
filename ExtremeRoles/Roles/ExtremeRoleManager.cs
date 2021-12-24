@@ -93,11 +93,12 @@ namespace ExtremeRoles.Roles
                         GameRole.Add(
                             playerId, addRole);
 
+                        /*
                         if (PlayerControl.LocalPlayer.PlayerId == playerId && addRole is IRoleAbility)
                         {
                             ((IRoleAbility)addRole).CreateAbility();
                         }
-
+                        */
                         if (hasVanilaRole)
                         {
                             ((MultiAssignRoleAbs)GameRole[
@@ -142,11 +143,12 @@ namespace ExtremeRoles.Roles
             {
                 GameRole.Add(
                     playerId, addRole);
+                /*
                 if (PlayerControl.LocalPlayer.PlayerId == playerId && addRole is IRoleAbility)
                 {
                     ((IRoleAbility)addRole).CreateAbility();
                 }
-
+                */
             }
             else
             {

@@ -23,7 +23,8 @@ namespace ExtremeRoles.Patches.Button
                 __instance.currentTarget &&
                 !__instance.isCoolingDown &&
                 !localPlayer.Data.IsDead &&
-                localPlayer.CanMove && role.CanKill)
+                localPlayer.CanMove && 
+                role.CanKill)
             {
 
                 PlayerControl killer = PlayerControl.LocalPlayer;

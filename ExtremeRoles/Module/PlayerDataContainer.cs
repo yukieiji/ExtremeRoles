@@ -45,7 +45,7 @@ namespace ExtremeRoles.Module
         public static void EndGameAddStatus(
             GameData.PlayerInfo playerInfo,
             PlayerStatus finalStatus,
-            Roles.SingleRoleAbs role,
+            SingleRoleAbs role,
             int totalTask,
             int completedTask)
         {
@@ -66,7 +66,9 @@ namespace ExtremeRoles.Module
             public int TeamImpostorAlive { get; set; }
             public int TeamCrewmateAlive { get; set; }
             public int TotalAlive { get; set; }
-            public int NeutralAlive { get; set; }
+
+            public List<byte> NeutralKillerPlayer { get; set; }
+            public List<byte> NeutralAlivePlayer { get; set; }
             public bool IsAssassinationMarin { get; set; }
 
             public PlayerStatistics()
@@ -83,7 +85,8 @@ namespace ExtremeRoles.Module
 
                 int numImpostorsAlive = 0;
 
-                int numNeutralAlive = 0;
+                List<byte> neutralKillerPlayer = new List<byte>();
+                List<byte> neutralAlivePlayer = new List<byte> ();
 
                 bool isAssassinationMarin = false;
 
@@ -101,10 +104,25 @@ namespace ExtremeRoles.Module
 
                     ++numTotalAlive;
 
-                    // 生きてるクルー
-                    if (team == ExtremeRoleType.Crewmate) { ++numCrewAlive; }
-                    if (team == ExtremeRoleType.Impostor) { ++numImpostorsAlive; }
-                    if (team == ExtremeRoleType.Neutral) { ++numNeutralAlive; }
+                    // 生きてる
+                    switch(team)
+                    {
+                        case ExtremeRoleType.Crewmate:
+                            ++numCrewAlive;
+                            break;
+                        case ExtremeRoleType.Impostor:
+                            ++numImpostorsAlive;
+                            break;
+                        case ExtremeRoleType.Neutral:
+                            if (role.CanKill)
+                            {
+                                neutralKillerPlayer.Add(playerInfo.PlayerId);
+                            }
+                            neutralAlivePlayer.Add(playerInfo.PlayerId);
+                            break;
+                        default:
+                            break;
+                    }
 
                     isAssassinationMarin = Patches.AssassinMeeting.AssassinateMarin;
 
@@ -117,7 +135,8 @@ namespace ExtremeRoles.Module
                 TeamImpostorAlive = numImpostorsAlive;
                 TeamCrewmateAlive = numImpostorsAlive;
 
-                NeutralAlive = numNeutralAlive;
+                NeutralKillerPlayer = neutralKillerPlayer;
+                NeutralAlivePlayer = neutralAlivePlayer;
 
                 IsAssassinationMarin = isAssassinationMarin;
 
