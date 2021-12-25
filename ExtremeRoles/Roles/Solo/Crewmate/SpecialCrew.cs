@@ -1,19 +1,16 @@
-﻿using UnityEngine;
-
-using ExtremeRoles.Module;
+﻿using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class TestCrew : SingleRoleBase
+    public class SpecialCrew : SingleRoleBase
     {
-        public TestCrew(
-        ): base(
-            ExtremeRoleId.NormalCrew,
+        public SpecialCrew(): base(
+            ExtremeRoleId.SpecialCrew,
             ExtremeRoleType.Crewmate,
-            ExtremeRoleId.NormalCrew.ToString(),
-            new Color(200f / 255f, 200f / 255f, 0, 1f),
-            true, true, true, false)
+            ExtremeRoleId.SpecialCrew.ToString(),
+            Palette.White,
+            false, true, false, false)
         {}
 
         protected override void CreateSpecificOption(CustomOption parentOps)

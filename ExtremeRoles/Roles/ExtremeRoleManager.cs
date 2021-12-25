@@ -5,6 +5,11 @@ using System.Linq;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
+using ExtremeRoles.Roles.Solo.Crewmate;
+using ExtremeRoles.Roles.Solo.Neutral;
+using ExtremeRoles.Roles.Solo.Impostor;
+
+
 namespace ExtremeRoles.Roles
 {
     public enum ExtremeRoleId
@@ -17,8 +22,11 @@ namespace ExtremeRoles.Roles
         Jackal,
         SideKick,
         
+        SpecialCrew,
+
+        SpecialImpostor,
+
         Alice,
-        NormalCrew = 100,
     }
     public static class ExtremeRoleManager
     {
@@ -26,15 +34,20 @@ namespace ExtremeRoles.Roles
 
         public static readonly List<
             SingleRoleBase> NormalRole = new List<SingleRoleBase>()
-        { 
-            new Solo.Neutral.Alice(),
-        };
+            {
+
+                new SpecialCrew(),
+
+                new SpecialImpostor(),
+
+                new Alice(),
+            };
         
         public static readonly List<
             CombinationRoleManagerBase> CombRole = new List<CombinationRoleManagerBase>()
-        {
-            new Combination.Avalon(),
-        };
+            {
+                new Combination.Avalon(),
+            };
 
         public static Dictionary<
             byte, SingleRoleBase> GameRole = new Dictionary<byte, SingleRoleBase> ();
