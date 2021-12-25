@@ -35,8 +35,7 @@ namespace ExtremeRoles.Roles.API.Interface
             Action abilityCleanUp = null,
             KeyCode hotkey = KeyCode.F,
             bool mirror = false)
-        {
-
+        {   
             Vector3 offset = positionOffset ?? new Vector3(-1.8f, -0.06f, 0);
 
             return new RoleAbilityButton(
@@ -63,13 +62,27 @@ namespace ExtremeRoles.Roles.API.Interface
                 Design.ConcatString(
                     ((SingleRoleBase)self).RoleName,
                     RoleAbilityCommonSetting.AbilityCoolTime.ToString()),
-                false, parentOps);
+                30f, 2.5f, 120f, 2.5f,
+                parentOps, format: "unitSeconds");
             CustomOption.Create(
                 self.GetRoleSettingId(RoleAbilityCommonSetting.AbilityActiveTime),
                 Design.ConcatString(
                     ((SingleRoleBase)self).RoleName,
                     RoleAbilityCommonSetting.AbilityActiveTime.ToString()),
-                false, parentOps);
+                30f, 2.5f, 120f, 2.5f,
+                parentOps, format: "unitSeconds");
+        }
+
+        public static void RoleAbilityInit(this IRoleAbility self)
+        {
+
+            if (self.Button == null) { return; }
+
+            var allOps = OptionsHolder.AllOptions;
+            self.Button.SetAbilityCoolTime(
+                allOps[self.GetRoleSettingId(RoleAbilityCommonSetting.AbilityCoolTime)].GetFloat());
+            self.Button.SetAbilityActiveTime(
+                allOps[self.GetRoleSettingId(RoleAbilityCommonSetting.AbilityActiveTime)].GetFloat());
         }
 
         public static bool IsCommonUse(this IRoleAbility _)

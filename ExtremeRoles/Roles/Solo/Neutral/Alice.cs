@@ -8,12 +8,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
     {
 
         public RoleAbilityButton Button
-        { get => this.Button;
-          set
+        { 
+            get => this.aliceShipBroken;
+            set
             {
-                this.Button = value;
+                this.aliceShipBroken = value;
             }
         }
+
+        private RoleAbilityButton aliceShipBroken;
 
         public Alice(): base(
             ExtremeRoleId.Alice,
@@ -58,7 +61,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         protected override void RoleSpecificInit()
         {
+            this.RoleAbilityInit();
         }
-
     }
 }
