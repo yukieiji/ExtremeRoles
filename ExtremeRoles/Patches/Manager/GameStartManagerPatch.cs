@@ -31,7 +31,7 @@ namespace ExtremeRoles.Patches.Manager
             // ロビータイマー設定
             if (!AmongUsClient.Instance.AmHost || !GameData.Instance){ return; } // Not host or no instance
 
-            if (update) currentText = __instance.PlayerCounter.text;
+            if (update) { currentText = __instance.PlayerCounter.text; };
 
             timer = Mathf.Max(0f, timer -= Time.deltaTime);
             int minutes = (int)timer / 60;

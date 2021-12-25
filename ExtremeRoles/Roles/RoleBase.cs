@@ -61,7 +61,7 @@ namespace ExtremeRoles.Roles
             bool mirror = false)
         {
 
-            Vector3 offset = positionOffset ?? new Vector3(-1.8f, -0.06f, 0;
+            Vector3 offset = positionOffset ?? new Vector3(-1.8f, -0.06f, 0);
 
             RoleAbilityButton abilityButton = new RoleAbilityButton(
                 this.UseAbility,
@@ -208,7 +208,7 @@ namespace ExtremeRoles.Roles
 
         public bool IsNeutral() => this.Teams == ExtremeRoleType.Neutral;
 
-        public string GetColoredRoleName() => Design.Cs(
+        public string GetColoredRoleName() => Design.ColoedString(
             this.NameColor, this.RoleName);
 
         public virtual bool IsTeamsWin() => this.IsWin;
@@ -272,7 +272,7 @@ namespace ExtremeRoles.Roles
         {
             var roleSetOption = CustomOption.Create(
                 GetRoleSettingId(RoleCommonSetting.SpawnRate),
-                Design.Cs(
+                Design.ColoedString(
                     this.NameColor,
                     Design.ConcatString(
                         this.Id.ToString(),
@@ -364,14 +364,14 @@ namespace ExtremeRoles.Roles
             // ExtremeRolesPlugin.Instance.Log.LogInfo($"Color: {this.SettingColor}");
             var roleSetOption = CustomOption.Create(
                 GetRoleSettingId(RoleCommonSetting.SpawnRate),
-                Design.Cs(
+                Design.ColoedString(
                     this.settingColor,
                     Design.ConcatString(
                         this.roleName,
                         RoleCommonSetting.SpawnRate.ToString())),
                 OptionsHolder.SpawnRate, null, true);
 
-            int thisMaxRoleNum = (int)Math.Floor((decimal)OptionsHolder.VanillaMaxPlayerNum / this.SetPlayerNum);
+            int thisMaxRoleNum = (int)Math.Floor((decimal)OptionsHolder.VanillaMaxPlayerNum / this.setPlayerNum);
 
             CustomOption.Create(
                 GetRoleSettingId(RoleCommonSetting.RoleNum),

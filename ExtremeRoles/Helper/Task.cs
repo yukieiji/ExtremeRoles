@@ -56,7 +56,7 @@ namespace ExtremeRoles.Helper
         {
             if (ShipStatus.Instance == null) { return Byte.MaxValue; }
 
-            List<int> taskIndex = GetTaskIndex(
+            List<int> taskIndex = getTaskIndex(
                 ShipStatus.Instance.CommonTasks);
 
             int index = UnityEngine.Random.RandomRange(0, taskIndex.Count);
@@ -68,7 +68,7 @@ namespace ExtremeRoles.Helper
         {
             if (ShipStatus.Instance == null) { return Byte.MaxValue; }
 
-            List<int> taskIndex = GetTaskIndex(
+            List<int> taskIndex = getTaskIndex(
                 ShipStatus.Instance.LongTasks);
 
             int index = UnityEngine.Random.RandomRange(0, taskIndex.Count);
@@ -80,7 +80,7 @@ namespace ExtremeRoles.Helper
         {
             if (ShipStatus.Instance == null) { return Byte.MaxValue; }
 
-            List<int> taskIndex = GetTaskIndex(
+            List<int> taskIndex = getTaskIndex(
                 ShipStatus.Instance.NormalTasks);
 
             int index = UnityEngine.Random.RandomRange(0, taskIndex.Count);
@@ -108,7 +108,7 @@ namespace ExtremeRoles.Helper
             player.SetDirtyBit(1U << (int)player.PlayerId);
         }
 
-        private static List<int> GetTaskIndex(
+        private static List<int> getTaskIndex(
             NormalPlayerTask[] tasks)
         {
             List<int> index = new List<int>();

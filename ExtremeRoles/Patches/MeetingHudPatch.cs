@@ -105,7 +105,7 @@ namespace ExtremeRoles.Patches
         {
             if (!AssassinMeeting.AssassinMeetingTrigger) { return true; }
 
-            var (isVoteEnd, voteFor) = AssassinVoteState(__instance);
+            var (isVoteEnd, voteFor) = assassinVoteState(__instance);
 
             if (isVoteEnd)
             {
@@ -142,7 +142,7 @@ namespace ExtremeRoles.Patches
             return false;
         }
 
-        private static Tuple<bool, byte> AssassinVoteState(MeetingHud __instance)
+        private static Tuple<bool, byte> assassinVoteState(MeetingHud __instance)
         {
             bool isVoteEnd = false;
             byte voteFor = byte.MaxValue;
@@ -270,7 +270,7 @@ namespace ExtremeRoles.Patches
     class MeetingHudUpdatePatch
     {
 
-        static void Postfix(MeetingHud __instance)
+        public static void Postfix(MeetingHud __instance)
         {
             if (__instance.state == MeetingHud.VoteStates.Animating) { return; }
 
@@ -305,7 +305,7 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.UpdateButtons))]
     class MeetingHudUpdateButtonsPatch
     {
-        static bool PreFix(MeetingHud __instance)
+        public static bool PreFix(MeetingHud __instance)
         {
             if (!AssassinMeeting.AssassinMeetingTrigger) { return true; }
 

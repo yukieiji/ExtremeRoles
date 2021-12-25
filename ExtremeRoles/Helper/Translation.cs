@@ -11,8 +11,8 @@ namespace ExtremeRoles.Helper
 {
     public class Translation
     {
-        public static int defaultLanguage = (int)SupportedLangs.English;
-        public static Dictionary<string, Dictionary<int, string>> stringData = new Dictionary<string, Dictionary<int, string>>();
+        public static int DefaultLanguage = (int)SupportedLangs.English;
+        public static Dictionary<string, Dictionary<int, string>> StringData = new Dictionary<string, Dictionary<int, string>>();
 
         public Translation()
         {
@@ -27,7 +27,7 @@ namespace ExtremeRoles.Helper
             var read = stream.Read(byteArray, 0, (int)stream.Length);
             string json = System.Text.Encoding.UTF8.GetString(byteArray);
 
-            stringData.Clear();
+            StringData.Clear();
             JObject parsed = JObject.Parse(json);
 
             for (int i = 0; i < parsed.Count; i++)
@@ -53,7 +53,7 @@ namespace ExtremeRoles.Helper
                         }
                     }
 
-                    stringData[stringName] = strings;
+                    StringData[stringName] = strings;
                 }
             }
         }
@@ -61,7 +61,7 @@ namespace ExtremeRoles.Helper
         public static string GetString(string key)
         {
 
-            if (stringData.Count == 0)
+            if (StringData.Count == 0)
             {
                 return key;
             }
@@ -70,21 +70,21 @@ namespace ExtremeRoles.Helper
             keyClean = Regex.Replace(keyClean, "^-\\s*", "");
             keyClean = keyClean.Trim();
 
-            if (!stringData.ContainsKey(keyClean))
+            if (!StringData.ContainsKey(keyClean))
             {
                 return key;
             }
 
-            var data = stringData[keyClean];
+            var data = StringData[keyClean];
             int lang = (int)SaveManager.LastLanguage;
 
             if (data.ContainsKey(lang))
             {
                 return key.Replace(keyClean, data[lang]);
             }
-            else if (data.ContainsKey(defaultLanguage))
+            else if (data.ContainsKey(DefaultLanguage))
             {
-                return key.Replace(keyClean, data[defaultLanguage]);
+                return key.Replace(keyClean, data[DefaultLanguage]);
             }
 
             return key;

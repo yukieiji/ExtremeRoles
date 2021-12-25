@@ -16,18 +16,18 @@ namespace ExtremeRoles.Module
         public bool ShowButtonText = true;
         public string ButtonText = null;
 
-        private bool Mirror;
-        private Action UseAbility;
-        private Func<bool> CanUse;
-        private KeyCode Hotkey;
+        private bool mirror;
+        private Action useAbility;
+        private Func<bool> canUse;
+        private KeyCode hotkey;
 
-        private Action CleanUp = null;
+        private Action cleanUp = null;
 
-        private bool IsAbilityOn = false;
+        private bool isAbilityOn = false;
 
-        private float Timer = 10.0f;
-        private float CoolTime = float.MaxValue;
-        private float AbilityActiveTime = 0.0f;
+        private float timer = 10.0f;
+        private float coolTime = float.MaxValue;
+        private float abilityActiveTime = 0.0f;
 
         public RoleAbilityButton(
             Action ability,
@@ -38,13 +38,15 @@ namespace ExtremeRoles.Module
             KeyCode hotkey=KeyCode.F,
             bool mirror = false)
         {
-            this.UseAbility = ability;
-            this.CanUse = canUse;
+            
             this.PositionOffset = positionOffset;
-            this.CleanUp = abilityCleanUp;
             this.ButtonSprite = sprite;
-            this.Mirror = mirror;
-            this.Hotkey = hotkey;
+
+            this.useAbility = ability;
+            this.cleanUp = abilityCleanUp;
+            this.canUse = canUse;
+            this.mirror = mirror;
+            this.hotkey = hotkey;
             
             Button = UnityEngine.Object.Instantiate(
                 HudManager.Instance.KillButton,
@@ -62,26 +64,26 @@ namespace ExtremeRoles.Module
 
         public void OnClickEvent()
         {
-            if (this.Timer < 0f && CanUse())
+            if (this.timer < 0f && canUse())
             {
                 Button.graphic.color = new Color(1f, 1f, 1f, 0.3f);
-                this.UseAbility();
+                this.useAbility();
 
-                if (IsHasCleanUp() && !this.IsAbilityOn)
+                if (this.isHasCleanUp() && !this.isAbilityOn)
                 {
-                    this.Timer = this.AbilityActiveTime;
+                    this.timer = this.abilityActiveTime;
                     Button.cooldownTimerText.color = new Color(0F, 0.8F, 0F);
-                    this.IsAbilityOn = true;
+                    this.isAbilityOn = true;
                 }
             }
         }
         public void SetAbilityCoolTime(float time)
         {
-            this.CoolTime = time;
+            this.coolTime = time;
         }
         public void SetAbilityActiveTime(float time)
         {
-            this.AbilityActiveTime = time;
+            this.abilityActiveTime = time;
         }
 
         public void Update()
@@ -106,13 +108,13 @@ namespace ExtremeRoles.Module
             if (HudManager.Instance.UseButton != null)
             {
                 Vector3 pos = HudManager.Instance.UseButton.transform.localPosition;
-                if (this.Mirror)
+                if (this.mirror)
                 {
                     pos = new Vector3(-pos.x, pos.y, pos.z);
                 }
                 this.Button.transform.localPosition = pos + PositionOffset;
             }
-            if (this.CanUse())
+            if (this.canUse())
             {
                 this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.EnabledColor;
                 this.Button.graphic.material.SetFloat("_Desat", 0f);
@@ -123,28 +125,28 @@ namespace ExtremeRoles.Module
                 this.Button.graphic.material.SetFloat("_Desat", 1f);
             }
 
-            if (this.Timer >= 0)
+            if (this.timer >= 0)
             {
-                if ((this.IsHasCleanUp() && IsAbilityOn) || 
+                if ((this.isHasCleanUp() && isAbilityOn) || 
                     (!PlayerControl.LocalPlayer.inVent && PlayerControl.LocalPlayer.moveable))
                 {
-                    this.Timer -= Time.deltaTime;
+                    this.timer -= Time.deltaTime;
                 }
             }
 
-            if (this.Timer <= 0 && IsHasCleanUp() && IsAbilityOn)
+            if (this.timer <= 0 && this.isHasCleanUp() && isAbilityOn)
             {
-                IsAbilityOn = false;
+                isAbilityOn = false;
                 Button.cooldownTimerText.color = Palette.EnabledColor;
-                CleanUp();
+                cleanUp();
             }
 
             Button.SetCoolDown(
-                this.Timer,
-                (this.IsHasCleanUp() && this.IsAbilityOn) ? this.AbilityActiveTime : this.CoolTime);
+                this.timer,
+                (this.isHasCleanUp() && this.isAbilityOn) ? this.abilityActiveTime : this.coolTime);
 
             // Trigger OnClickEvent if the hotkey is being pressed down
-            if (Input.GetKeyDown(Hotkey))
+            if (Input.GetKeyDown(hotkey))
             {
                 OnClickEvent();
             }
@@ -164,7 +166,7 @@ namespace ExtremeRoles.Module
             }
         }
 
-        private bool IsHasCleanUp() => CleanUp != null;
+        private bool isHasCleanUp() => cleanUp != null;
 
     }
 }

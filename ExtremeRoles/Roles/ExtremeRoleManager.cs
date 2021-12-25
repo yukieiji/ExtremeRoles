@@ -39,29 +39,13 @@ namespace ExtremeRoles.Roles
         public static void CreateCombinationRoleOptions(
             int optionIdOffsetChord)
         {
-            CreateOptions(optionIdOffsetChord, CombRole);
+            createOptions(optionIdOffsetChord, CombRole);
         }
 
         public static void CreateNormalRoleOptions(
             int optionIdOffsetChord)
         {
-            CreateOptions(optionIdOffsetChord, NormalRole);
-        }
-
-        private static void CreateOptions(
-            int optionIdOffsetChord,
-            IEnumerable<RoleAbs> roles)
-        {
-            if (roles.Count() == 0) {  return; };
-
-            int roleOptionOffset = 0;
-
-            foreach (var item
-             in roles.Select((Value, Index) => new { Value, Index }))
-            {
-                roleOptionOffset = optionIdOffsetChord + (OptionOffsetPerRole * item.Index);
-                item.Value.CreateRoleAllOption(roleOptionOffset);
-            }
+            createOptions(optionIdOffsetChord, NormalRole);
         }
 
         public static void GameInit()
@@ -112,7 +96,7 @@ namespace ExtremeRoles.Roles
             {
                 if ((byte)vanilaRole == roleId)
                 {
-                    SetPlyerIdToSingleRole(
+                    setPlyerIdToSingleRole(
                         playerId, new Solo.VanillaRoleWrapper(vanilaRole));
                     return;
                 }
@@ -122,12 +106,28 @@ namespace ExtremeRoles.Roles
             {
                 if (role.BytedRoleId == roleId)
                 {
-                    SetPlyerIdToSingleRole(playerId, role);
+                    setPlyerIdToSingleRole(playerId, role);
                 }
             }
         }
 
-        private static void SetPlyerIdToSingleRole(
+        private static void createOptions(
+            int optionIdOffsetChord,
+            IEnumerable<RoleAbs> roles)
+        {
+            if (roles.Count() == 0) { return; };
+
+            int roleOptionOffset = 0;
+
+            foreach (var item
+             in roles.Select((Value, Index) => new { Value, Index }))
+            {
+                roleOptionOffset = optionIdOffsetChord + (OptionOffsetPerRole * item.Index);
+                item.Value.CreateRoleAllOption(roleOptionOffset);
+            }
+        }
+
+        private static void setPlyerIdToSingleRole(
             byte playerId, SingleRoleAbs role)
         {
             SingleRoleAbs addRole = role.Clone();

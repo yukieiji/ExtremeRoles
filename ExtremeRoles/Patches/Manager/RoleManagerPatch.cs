@@ -14,7 +14,7 @@ namespace ExtremeRoles.Patches.Manager
     class RoleManagerSelectRolesPatch
     {
 
-        private static Random RoleRng = new Random(
+        private static Random roleRng = new Random(
             UnityEngine.SystemInfo.processorFrequency);
 
         public static void Postfix()
@@ -55,7 +55,7 @@ namespace ExtremeRoles.Patches.Manager
                 {
                     bool assign = false;
                     List<int> tempList = new List<int>(
-                        playerIndexList.OrderBy(item => RoleRng.Next()).ToList());
+                        playerIndexList.OrderBy(item => roleRng.Next()).ToList());
                     foreach(int playerIndex in tempList)
                     {
                         player = PlayerControl.AllPlayerControls[playerIndex];
@@ -84,7 +84,7 @@ namespace ExtremeRoles.Patches.Manager
             List<(List<MultiAssignRoleAbs>, int)> assignRoles = new List<(List<MultiAssignRoleAbs>, int)>();
 
             var roleDataLoop = extremeRolesData.CombinationRole.OrderBy(
-                item => RoleRng.Next()).ToList();
+                item => roleRng.Next()).ToList();
             List<(List<MultiAssignRoleAbs>, (int, int))> newRoleData = new List<(List<MultiAssignRoleAbs>, (int, int))> ();
 
             foreach (var oneRole in roleDataLoop)
@@ -212,7 +212,7 @@ namespace ExtremeRoles.Patches.Manager
 
             do
             {
-                shuffledArange = shuffledArange.OrderBy(item => RoleRng.Next()).ToList();
+                shuffledArange = shuffledArange.OrderBy(item => roleRng.Next()).ToList();
                 Logging.Debug($"NotAssignPlayerNum:{shuffledArange.Count()}");
                 assignedPlayers = 1;
 
@@ -233,11 +233,11 @@ namespace ExtremeRoles.Patches.Manager
 
                         case RoleTypes.Impostor:
                             shuffledRoles = shuffleRolesForImpostor.OrderBy(
-                                item => RoleRng.Next()).ToList();
+                                item => roleRng.Next()).ToList();
                             break;
                         case RoleTypes.Crewmate:
                             shuffledRoles = shuffleRolesForCrewmate.OrderBy(
-                                item => RoleRng.Next()).ToList();
+                                item => roleRng.Next()).ToList();
                             break;
                         default:
                             SetRoleToPlayer(

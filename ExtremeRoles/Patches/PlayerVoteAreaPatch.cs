@@ -33,17 +33,17 @@ namespace ExtremeRoles.Patches
 				__instance.Buttons.SetActive(true);
 				float startPos = __instance.AnimateButtonsFromLeft ? 0.2f : 1.95f;
 				__instance.StartCoroutine(
-					EffectsAllWrap(
+					effectsAllWrap(
 						new IEnumerator[]
 							{
-								EffectsLerpWrap(0.25f, delegate(float t)
+								effectsLerpWrap(0.25f, delegate(float t)
 								{
 									__instance.CancelButton.transform.localPosition = Vector2.Lerp(
 										Vector2.right * startPos,
 										Vector2.right * 1.3f,
 										Effects.ExpOut(t));
 								}),
-								EffectsLerpWrap(0.35f, delegate(float t)
+								effectsLerpWrap(0.35f, delegate(float t)
 								{
 									__instance.ConfirmButton.transform.localPosition = Vector2.Lerp(
 										Vector2.right * startPos,
@@ -65,7 +65,7 @@ namespace ExtremeRoles.Patches
 
 			return false;
 		}
-		private static IEnumerator EffectsLerpWrap(
+		private static IEnumerator effectsLerpWrap(
 			float duration, Action<float> action)
 		{
 			for (float t = 0f; t < duration; t += Time.deltaTime)
@@ -76,7 +76,7 @@ namespace ExtremeRoles.Patches
 			action(1f);
 			yield break;
 		}
-		private static IEnumerator EffectsAllWrap(IEnumerator[] items)
+		private static IEnumerator effectsAllWrap(IEnumerator[] items)
 		{
 			Stack<IEnumerator>[] enums = new Stack<IEnumerator>[items.Length];
 			for (int i = 0; i < items.Length; i++)

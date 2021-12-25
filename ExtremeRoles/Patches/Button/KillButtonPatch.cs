@@ -34,7 +34,7 @@ namespace ExtremeRoles.Patches.Button
                 if (!canKilledTargetRole) { return false; }
 
                 // Use an unchecked kill command, to allow shorter kill cooldowns etc. without getting kicked
-                MurderKillResult res = CheckMuderKill(
+                MurderKillResult res = checkMuderKill(
                     killer, target);
 
                 switch (res)
@@ -63,7 +63,7 @@ namespace ExtremeRoles.Patches.Button
             return false;
         }
 
-        private static MurderKillResult CheckMuderKill(
+        private static MurderKillResult checkMuderKill(
             PlayerControl killer,
             PlayerControl target,
             bool blockRewind = false)

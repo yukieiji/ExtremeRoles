@@ -16,21 +16,16 @@ namespace ExtremeRoles.Patches.Option
     [HarmonyPatch]
     class GameOptionsDataPatch
     {
+        private static IEnumerable<MethodBase> TargetMethods()
+        {
+            return typeof(GameOptionsData).GetMethods().Where(
+                x => x.ReturnType == typeof(string) &&
+                x.GetParameters().Length == 1 &&
+                x.GetParameters()[0].ParameterType == typeof(int));
+        }
 
         private static void Postfix(ref string __result)
         {
-
-            void AddChildren(CustomOption option, ref StringBuilder entry, bool indent = true)
-            {
-                if (!option.Enabled) return;
-
-                foreach (var child in option.Children)
-                {
-                    if (!child.IsHidden)
-                        entry.AppendLine((indent ? "    " : "") + OptionToString(child));
-                    AddChildren(child, ref entry, indent);
-                }
-            }
 
             List<string> pages = new List<string>();
             pages.Add(__result);
@@ -41,29 +36,29 @@ namespace ExtremeRoles.Patches.Option
             var allSetting = OptionsHolder.AllOptions;
 
             entries.Add(
-                OptionToString(allSetting[(int)OptionsHolder.CommonOptionKey.PresetSelection]));
+                optionToString(allSetting[(int)OptionsHolder.CommonOptionKey.PresetSelection]));
 
-            var optionName = Design.Cs(
+            var optionName = Design.ColoedString(
                 new Color(204f / 255f, 204f / 255f, 0, 1f),
-                Tl("crewmateRoles"));
+                translate("crewmateRoles"));
             var min = allSetting[(int)OptionsHolder.CommonOptionKey.MinCremateRoles].GetSelection();
             var max = allSetting[(int)OptionsHolder.CommonOptionKey.MaxCremateRoles].GetSelection();
             if (min > max) min = max;
             var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
             entry.AppendLine($"{optionName}: {optionValue}");
 
-            optionName = Design.Cs(
+            optionName = Design.ColoedString(
                 new Color(204f / 255f, 204f / 255f, 0, 1f),
-                Tl("neutralRoles"));
+                translate("neutralRoles"));
             min = allSetting[(int)OptionsHolder.CommonOptionKey.MinNeutralRoles].GetSelection();
             max = allSetting[(int)OptionsHolder.CommonOptionKey.MaxNeutralRoles].GetSelection();
             if (min > max) min = max;
             optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
             entry.AppendLine($"{optionName}: {optionValue}");
 
-            optionName = Design.Cs(
+            optionName = Design.ColoedString(
                 new Color(204f / 255f, 204f / 255f, 0, 1f),
-                Tl("impostorRoles"));
+                translate("impostorRoles"));
             min = allSetting[(int)OptionsHolder.CommonOptionKey.MinImpostorRoles].GetSelection();
             max = allSetting[(int)OptionsHolder.CommonOptionKey.MaxImpostorRoles].GetSelection();
 
@@ -95,9 +90,9 @@ namespace ExtremeRoles.Patches.Option
 
                     entry = new StringBuilder();
                     if (!option.IsHidden)
-                        entry.AppendLine(OptionToString(option));
+                        entry.AppendLine(optionToString(option));
 
-                    AddChildren(option, ref entry, !option.IsHidden);
+                    addChildren(option, ref entry, !option.IsHidden);
                     entries.Add(entry.ToString().Trim('\r', '\n'));
                 }
             }
@@ -129,39 +124,44 @@ namespace ExtremeRoles.Patches.Option
             int numPages = pages.Count;
             int counter = ExtremeRolesPlugin.OptionsPage = ExtremeRolesPlugin.OptionsPage % numPages;
 
-            __result = pages[counter].Trim('\r', '\n') + "\n\n" + Tl("pressTabForMore") + $" ({counter + 1}/{numPages})";
+            __result = pages[counter].Trim('\r', '\n') + "\n\n" + translate("pressTabForMore") + $" ({counter + 1}/{numPages})";
 
         }
 
-        private static string OptionToString(CustomOption option)
+        private static void addChildren(CustomOption option, ref StringBuilder entry, bool indent = true)
         {
-            if (option == null) return "";
+            if (!option.Enabled) { return; }
+
+            foreach (var child in option.Children)
+            {
+                if (!child.IsHidden)
+                    entry.AppendLine((indent ? "    " : "") + optionToString(child));
+                addChildren(child, ref entry, indent);
+            }
+        }
+
+        private static string optionToString(CustomOption option)
+        {
+            if (option == null) { return ""; }
             return $"{option.GetName()}: {option.GetString()}";
         }
-        private static string OptionsToString(CustomOption option, bool skipFirst = false)
+        private static string optionsToString(CustomOption option, bool skipFirst = false)
         {
             if (option == null) return "";
 
             List<string> options = new List<string>();
-            if (!option.IsHidden && !skipFirst) options.Add(OptionToString(option));
+            if (!option.IsHidden && !skipFirst) options.Add(optionToString(option));
             if (option.Enabled)
             {
                 foreach (CustomOption op in option.Children)
                 {
-                    string str = OptionToString(op);
+                    string str = optionToString(op);
                     if (str != "") options.Add(str);
                 }
             }
             return string.Join("\n", options);
         }
-        private static IEnumerable<MethodBase> TargetMethods()
-        {
-            return typeof(GameOptionsData).GetMethods().Where(
-                x => x.ReturnType == typeof(string) &&
-                x.GetParameters().Length == 1 &&
-                x.GetParameters()[0].ParameterType == typeof(int));
-        }
-        private static string Tl(string key)
+        private static string translate(string key)
         {
             return Translation.GetString(key);
         }

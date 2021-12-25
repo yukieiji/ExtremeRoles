@@ -71,10 +71,10 @@ namespace ExtremeRoles.Module
 
             public PlayerStatistics()
             {
-                MakePlayerStatic();
+                makePlayerStatic();
             }
 
-            private void MakePlayerStatic()
+            private void makePlayerStatic()
             {
                 int numTotalAlive = 0;
 

@@ -29,19 +29,19 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
     class PlayerControlFixedUpdatePatch
     {
-        static void Postfix(PlayerControl __instance)
+        public static void Postfix(PlayerControl __instance)
         {
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
             if (PlayerControl.LocalPlayer != __instance) { return; }
 
-            PlayerInfoUpdate();
-            ResetNameTagsAndColors();
-            SetPlayerNameColor(__instance);
-            ButtonUpdate(__instance);
-            RefreshRoleDescription(__instance);
+            playerInfoUpdate();
+            resetNameTagsAndColors();
+            setPlayerNameColor(__instance);
+            buttonUpdate(__instance);
+            refreshRoleDescription(__instance);
         }
 
-        private static Color GetColorFromRoleAbility(
+        private static Color getColorFromRoleAbility(
             SingleRoleAbs role,
             byte targetPlayerId)
         {
@@ -82,7 +82,7 @@ namespace ExtremeRoles.Patches
                     return defaultColor;
             }
         }
-        private static void ResetNameTagsAndColors()
+        private static void resetNameTagsAndColors()
         {
 
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
@@ -134,7 +134,7 @@ namespace ExtremeRoles.Patches
 
         }
 
-        private static void SetPlayerNameColor(PlayerControl player)
+        private static void setPlayerNameColor(PlayerControl player)
         {
             var localPlayerId = player.PlayerId;
             var role = ExtremeRoleManager.GameRole[localPlayerId];
@@ -152,7 +152,7 @@ namespace ExtremeRoles.Patches
 
             // まずは自分のプレイヤー名の色を変える
             player.nameText.color = role.NameColor;
-            SetVoteAreaColor(localPlayerId, role.NameColor);
+            setVoteAreaColor(localPlayerId, role.NameColor);
 
             foreach (PlayerControl targetPlayer in PlayerControl.AllPlayerControls)
             {
@@ -162,12 +162,12 @@ namespace ExtremeRoles.Patches
 
                 if (!MapOption.GhostsSeeRoles || !PlayerControl.LocalPlayer.Data.IsDead)
                 {
-                    Color paintColor = GetColorFromRoleAbility(
+                    Color paintColor = getColorFromRoleAbility(
                         role, targetPlayerId);
                     if (paintColor == Palette.ClearWhite) { continue; }
 
                     targetPlayer.nameText.color = paintColor;
-                    SetVoteAreaColor(targetPlayerId, paintColor);
+                    setVoteAreaColor(targetPlayerId, paintColor);
                 }
                 else
                 {
@@ -178,7 +178,7 @@ namespace ExtremeRoles.Patches
                     {
                         targetPlayer.nameText.color = roleColor;
                     }
-                    SetGhostVoteAreaColor(
+                    setGhostVoteAreaColor(
                         targetPlayerId,
                         roleColor,
                         voteNamePaintBlock,
@@ -187,7 +187,7 @@ namespace ExtremeRoles.Patches
             }
 
         }
-        private static void SetVoteAreaColor(
+        private static void setVoteAreaColor(
             byte targetPlayerId,
             Color targetColor)
         {
@@ -203,7 +203,7 @@ namespace ExtremeRoles.Patches
             }
         }
 
-        private static void SetGhostVoteAreaColor(
+        private static void setGhostVoteAreaColor(
             byte targetPlayerId,
             Color targetColor,
             bool voteNamePaintBlock,
@@ -223,7 +223,7 @@ namespace ExtremeRoles.Patches
             }
         }
 
-        private static void PlayerInfoUpdate()
+        private static void playerInfoUpdate()
         {
 
             bool commsActive = false;
@@ -278,7 +278,7 @@ namespace ExtremeRoles.Patches
                     meetingInfo.gameObject.name = "Info";
                 }
 
-                var (playerInfoText, meetingInfoText) = GetRoleAndMeetingInfo(player, commsActive, isBlocked);
+                var (playerInfoText, meetingInfoText) = getRoleAndMeetingInfo(player, commsActive, isBlocked);
                 playerInfo.text = playerInfoText;
                 playerInfo.gameObject.SetActive(player.Visible);
 
@@ -289,7 +289,7 @@ namespace ExtremeRoles.Patches
             }
         }
 
-        private static Tuple<string, string> GetRoleAndMeetingInfo(
+        private static Tuple<string, string> getRoleAndMeetingInfo(
             PlayerControl targetPlayer, bool commsActive,
             bool IsLocalPlayerAssassinFirstMeeting = false)
         {
@@ -343,7 +343,7 @@ namespace ExtremeRoles.Patches
             return Tuple.Create(playerInfoText, meetingInfoText);
 
         }
-        private static void RefreshRoleDescription(PlayerControl player)
+        private static void refreshRoleDescription(PlayerControl player)
         {
             if (player == null) { return; };
 
@@ -371,12 +371,12 @@ namespace ExtremeRoles.Patches
             var importantTextTask = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
             importantTextTask.transform.SetParent(player.transform, false);
 
-            importantTextTask.Text = Design.Cs(
+            importantTextTask.Text = Design.ColoedString(
                 role.NameColor, $"{role.RoleName}: {string.Format("{0}{1}", role.Id, "ShortDescription")}");
             player.myTasks.Insert(0, importantTextTask);
 
         }
-        private static void ButtonUpdate(PlayerControl player)
+        private static void buttonUpdate(PlayerControl player)
         {
             if (!player.AmOwner || !Player.ShowButtons) { return; }
             var role = ExtremeRoleManager.GameRole[player.PlayerId];

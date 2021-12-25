@@ -47,40 +47,40 @@ namespace ExtremeRoles
             AllOptions.Clear();
 
             CustomOption.Create(
-                (int)CommonOptionKey.PresetSelection, Design.Cs(
+                (int)CommonOptionKey.PresetSelection, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.PresetSelection.ToString()),
                 OptionPreset, null, true);
 
             CustomOption.Create(
-                (int)CommonOptionKey.MinCremateRoles, Design.Cs(
+                (int)CommonOptionKey.MinCremateRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MinCremateRoles.ToString()),
                 0f, 0f, VanillaMaxPlayerNum, 1f, null, true);
             CustomOption.Create(
-                (int)CommonOptionKey.MaxCremateRoles, Design.Cs(
+                (int)CommonOptionKey.MaxCremateRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MaxCremateRoles.ToString()),
                 0f, 0f, VanillaMaxPlayerNum, 1f);
 
             CustomOption.Create(
-                (int)CommonOptionKey.MinNeutralRoles, Design.Cs(
+                (int)CommonOptionKey.MinNeutralRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MinNeutralRoles.ToString()),
                 0f, 0f, VanillaMaxPlayerNum, 1f);
             CustomOption.Create(
-                (int)CommonOptionKey.MaxNeutralRoles, Design.Cs(
+                (int)CommonOptionKey.MaxNeutralRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MaxNeutralRoles.ToString()),
                 0f, 0f, VanillaMaxPlayerNum, 1f);
 
             CustomOption.Create(
-                (int)CommonOptionKey.MinImpostorRoles, Design.Cs(
+                (int)CommonOptionKey.MinImpostorRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MinImpostorRoles.ToString()),
                 0f, 0f, 3f, 1f);
             CustomOption.Create(
-                (int)CommonOptionKey.MaxImpostorRoles, Design.Cs(
+                (int)CommonOptionKey.MaxImpostorRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MaxImpostorRoles.ToString()),
                 0f, 0f, 3f, 1f);
