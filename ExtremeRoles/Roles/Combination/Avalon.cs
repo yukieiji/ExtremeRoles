@@ -37,8 +37,6 @@ namespace ExtremeRoles.Roles.Combination
         public bool CanSeeRoleBeforeFirstMeeting = false;
         public bool IsDeadForceMeeting = true;
 
-        //private GameObject AssassinateUI;
-
         public Assassin(
             ) : base(
                 ExtremeRoleId.Assassin,
@@ -125,40 +123,6 @@ namespace ExtremeRoles.Roles.Combination
                 ColorPalette.MarineBlue,
                 false, false, false, false)
         {}
-        protected override void CreateSpecificOption(
-            CustomOption parentOps)
-        {
-            CustomOption.Create(
-                this.OptionIdOffset + (int)MarlinOption.HasTask,
-                Design.ConcatString(
-                    this.RoleName,
-                    MarlinOption.HasTask.ToString()),
-                false, parentOps);
-            CustomOption.Create(
-                this.OptionIdOffset + (int)MarlinOption.CanSeeVote,
-                Design.ConcatString(
-                    this.RoleName,
-                    MarlinOption.CanSeeVote.ToString()),
-                false, parentOps);
-            CustomOption.Create(
-                this.OptionIdOffset + (int)MarlinOption.CanSeeNeutral,
-                Design.ConcatString(
-                    this.RoleName,
-                    MarlinOption.CanSeeNeutral.ToString()),
-                false, parentOps);
-        }
-
-        protected override void RoleSpecificInit()
-        {
-            this.IsAssassinate = false;
-
-            this.HasTask = OptionsHolder.AllOptions[
-                GetRoleSettingId((int)MarlinOption.HasTask)].GetBool();
-            this.CanSeeVote = OptionsHolder.AllOptions[
-                GetRoleSettingId((int)MarlinOption.CanSeeVote)].GetBool();
-            this.CanSeeNeutral = OptionsHolder.AllOptions[
-                GetRoleSettingId((int)MarlinOption.CanSeeNeutral)].GetBool();
-        }
 
         public void SetPlayerIcon(
             Dictionary<byte, PoolablePlayer> playerIcons)
@@ -199,5 +163,40 @@ namespace ExtremeRoles.Roles.Combination
             }
         }
 
+
+        protected override void CreateSpecificOption(
+            CustomOption parentOps)
+        {
+            CustomOption.Create(
+                this.OptionIdOffset + (int)MarlinOption.HasTask,
+                Design.ConcatString(
+                    this.RoleName,
+                    MarlinOption.HasTask.ToString()),
+                false, parentOps);
+            CustomOption.Create(
+                this.OptionIdOffset + (int)MarlinOption.CanSeeVote,
+                Design.ConcatString(
+                    this.RoleName,
+                    MarlinOption.CanSeeVote.ToString()),
+                false, parentOps);
+            CustomOption.Create(
+                this.OptionIdOffset + (int)MarlinOption.CanSeeNeutral,
+                Design.ConcatString(
+                    this.RoleName,
+                    MarlinOption.CanSeeNeutral.ToString()),
+                false, parentOps);
+        }
+
+        protected override void RoleSpecificInit()
+        {
+            this.IsAssassinate = false;
+
+            this.HasTask = OptionsHolder.AllOptions[
+                GetRoleSettingId((int)MarlinOption.HasTask)].GetBool();
+            this.CanSeeVote = OptionsHolder.AllOptions[
+                GetRoleSettingId((int)MarlinOption.CanSeeVote)].GetBool();
+            this.CanSeeNeutral = OptionsHolder.AllOptions[
+                GetRoleSettingId((int)MarlinOption.CanSeeNeutral)].GetBool();
+        }
     }
 }
