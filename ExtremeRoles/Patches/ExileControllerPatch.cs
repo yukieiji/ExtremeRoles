@@ -2,6 +2,7 @@
 using HarmonyLib;
 
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Patches
 {
@@ -102,7 +103,12 @@ namespace ExtremeRoles.Patches
                 Module.PlayerDataContainer.DeadedAssassin.Clear();
             }
 
-           
+            var role = ExtremeRoleManager.GetLocalPlayerRole();
+
+            if (role is IRoleAbility)
+            {
+                ((IRoleAbility)role).Button.ResetCoolTimer();
+            }
 
             if (exiled == null) { return; };
 
