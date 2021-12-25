@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module
 {
@@ -45,7 +46,7 @@ namespace ExtremeRoles.Module
         public static void EndGameAddStatus(
             GameData.PlayerInfo playerInfo,
             PlayerStatus finalStatus,
-            Roles.SingleRoleAbs role,
+            SingleRoleBase role,
             int totalTask,
             int completedTask)
         {
@@ -90,7 +91,7 @@ namespace ExtremeRoles.Module
                 foreach (GameData.PlayerInfo playerInfo in GameData.Instance.AllPlayers)
                 {
                     if (playerInfo.Disconnected) { continue; }
-                    SingleRoleAbs role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
+                    SingleRoleBase role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
                     ExtremeRoleType team = role.Teams;
 
                     // クルーのカウントを数える
@@ -126,7 +127,7 @@ namespace ExtremeRoles.Module
         public class GamePlayerInfo
         {
             public string PlayerName { get; set; }
-            public SingleRoleAbs Roles { get; set; }
+            public SingleRoleBase Roles { get; set; }
             public int CompletedTasks { get; set; }
             public int TotalTasks { get; set; }
             public PlayerStatus StatusInfo { get; set; }

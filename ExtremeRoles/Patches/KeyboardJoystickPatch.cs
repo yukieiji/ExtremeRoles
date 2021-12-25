@@ -9,6 +9,7 @@ using HarmonyLib;
 using Hazel;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Patches
 {
@@ -64,10 +65,10 @@ namespace ExtremeRoles.Patches
             }
             if (Input.GetKeyDown(KeyCode.K))
             {
-                Dictionary<byte, Roles.SingleRoleAbs> dict = Roles.ExtremeRoleManager.GameRole;
+                Dictionary<byte, SingleRoleBase> dict = Roles.ExtremeRoleManager.GameRole;
                 if (dict.Count == 0) { return; }
 
-                foreach (KeyValuePair<byte, Roles.SingleRoleAbs> value in dict)
+                foreach (KeyValuePair<byte, SingleRoleBase> value in dict)
                 {
                     Logging.Debug(
                         $"PlayerId:{value.Key}    AssignedTo:{value.Value.RoleName}");
@@ -77,7 +78,7 @@ namespace ExtremeRoles.Patches
             // See All roles
             if (Input.GetKeyDown(KeyCode.P))
             {
-                Dictionary<byte, Roles.SingleRoleAbs> dict = Roles.ExtremeRoleManager.GameRole;
+                Dictionary<byte, SingleRoleBase> dict = Roles.ExtremeRoleManager.GameRole;
                 if (dict.Count == 0) { return; }
                 for (int i = 0; i < GameData.Instance.AllPlayers.Count; i++)
                 {
@@ -95,7 +96,7 @@ namespace ExtremeRoles.Patches
             // See Player TaskInfo
             if (Input.GetKeyDown(KeyCode.I))
             {
-                Dictionary<byte, Roles.SingleRoleAbs> dict = Roles.ExtremeRoleManager.GameRole;
+                Dictionary<byte, SingleRoleBase> dict = Roles.ExtremeRoleManager.GameRole;
                 if (dict.Count == 0) { return; }
                 for (int i = 0; i < GameData.Instance.AllPlayers.Count; i++)
                 {

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using ExtremeRoles.Roles.API;
+
 namespace ExtremeRoles.Roles
 {
     public enum ExtremeRoleId
@@ -22,7 +24,7 @@ namespace ExtremeRoles.Roles
         public const int OptionOffsetPerRole = 20;
 
         public static readonly List<
-            SingleRoleAbs> NormalRole = new List<SingleRoleAbs>()
+            SingleRoleBase> NormalRole = new List<SingleRoleBase>()
         { 
             new Solo.Neutral.Alice(),
         };
@@ -34,7 +36,7 @@ namespace ExtremeRoles.Roles
         };
 
         public static Dictionary<
-            byte, SingleRoleAbs> GameRole = new Dictionary<byte, SingleRoleAbs> ();
+            byte, SingleRoleBase> GameRole = new Dictionary<byte, SingleRoleBase> ();
 
         public static void CreateCombinationRoleOptions(
             int optionIdOffsetChord)
@@ -70,16 +72,16 @@ namespace ExtremeRoles.Roles
                 {
                     if (role.BytedRoleId == roleId)
                     {
-                        SingleRoleAbs addRole = role.Clone();
+                        SingleRoleBase addRole = role.Clone();
                         addRole.GameInit();
-                        ((MultiAssignRoleAbs)addRole).GameId = id;
+                        ((MultiAssignRoleBase)addRole).GameId = id;
 
                         GameRole.Add(
                             playerId, addRole);
 
                         if (hasVanilaRole)
                         {
-                            ((MultiAssignRoleAbs)GameRole[
+                            ((MultiAssignRoleBase)GameRole[
                                 playerId]).SetAnotherRole(
                                     new Solo.VanillaRoleWrapper(roleType));
                         }
@@ -113,7 +115,7 @@ namespace ExtremeRoles.Roles
 
         private static void createOptions(
             int optionIdOffsetChord,
-            IEnumerable<RoleAbs> roles)
+            IEnumerable<RoleSettingBase> roles)
         {
             if (roles.Count() == 0) { return; };
 
@@ -128,9 +130,9 @@ namespace ExtremeRoles.Roles
         }
 
         private static void setPlyerIdToSingleRole(
-            byte playerId, SingleRoleAbs role)
+            byte playerId, SingleRoleBase role)
         {
-            SingleRoleAbs addRole = role.Clone();
+            SingleRoleBase addRole = role.Clone();
             addRole.GameInit();
 
             if (!GameRole.ContainsKey(playerId))
@@ -141,7 +143,7 @@ namespace ExtremeRoles.Roles
             }
             else
             {
-                ((MultiAssignRoleAbs)GameRole[
+                ((MultiAssignRoleBase)GameRole[
                     playerId]).SetAnotherRole(addRole);
             }
             Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");

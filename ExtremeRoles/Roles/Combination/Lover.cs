@@ -1,8 +1,9 @@
 ﻿using ExtremeRoles.Module;
+using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Roles.Combination
 {
-    public class Lover : MultiAssignRoleAbs
+    public class Lover : MultiAssignRoleBase
     {
 
         public enum LoverSetting 

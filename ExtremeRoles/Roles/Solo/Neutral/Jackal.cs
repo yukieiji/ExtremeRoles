@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public class Jackal : SingleRoleAbs
+    public class Jackal : SingleRoleBase
     {
         public List<byte> SideKickPlayerId = new List<byte>();
 
@@ -38,7 +39,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         }
     }
 
-    public class SideKick : SingleRoleAbs
+    public class SideKick : SingleRoleBase
     {
         public SideKick() : base(
             ExtremeRoleId.SideKick,

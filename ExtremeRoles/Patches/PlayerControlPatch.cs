@@ -9,6 +9,7 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Patches
 {
@@ -42,7 +43,7 @@ namespace ExtremeRoles.Patches
         }
 
         private static Color getColorFromRoleAbility(
-            SingleRoleAbs role,
+            SingleRoleBase role,
             byte targetPlayerId)
         {
             Color defaultColor = Palette.ClearWhite;

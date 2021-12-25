@@ -1,8 +1,9 @@
 ﻿using ExtremeRoles.Module;
+using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public class Alice : SingleRoleAbs
+    public class Alice : SingleRoleBase
     {
         public Alice(): base(
             ExtremeRoleId.Alice,

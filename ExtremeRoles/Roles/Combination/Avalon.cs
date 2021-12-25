@@ -4,6 +4,7 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Roles.Combination
 {
@@ -24,7 +25,7 @@ namespace ExtremeRoles.Roles.Combination
 
     }
 
-    public class Assassin : MultiAssignRoleAbs
+    public class Assassin : MultiAssignRoleBase
     {
         public enum AssassinOption
         {
@@ -102,7 +103,7 @@ namespace ExtremeRoles.Roles.Combination
     }
 
 
-    public class Marlin : MultiAssignRoleAbs
+    public class Marlin : MultiAssignRoleBase
     {
         public enum MarlinOption
         {
@@ -180,7 +181,7 @@ namespace ExtremeRoles.Roles.Combination
                 if (playerId == PlayerControl.LocalPlayer.PlayerId) { continue; }
 
                 PlayerControl player = Player.GetPlayerControlById(playerId);
-                SingleRoleAbs role = ExtremeRoleManager.GameRole[playerId];
+                SingleRoleBase role = ExtremeRoleManager.GameRole[playerId];
                 if (player.Data.IsDead ||
                     player.Data.Disconnected ||
                     role.IsCrewmate() ||

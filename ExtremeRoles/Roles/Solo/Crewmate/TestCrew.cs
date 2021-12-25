@@ -1,9 +1,11 @@
-﻿using ExtremeRoles.Module;
-using UnityEngine;
+﻿using UnityEngine;
+
+using ExtremeRoles.Module;
+using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class TestCrew : SingleRoleAbs
+    public class TestCrew : SingleRoleBase
     {
         public TestCrew(
         ): base(
