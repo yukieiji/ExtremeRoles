@@ -89,6 +89,11 @@ namespace ExtremeRoles.Module
             this.timer = this.coolTime;
         }
 
+        public void UpdateAbility(Action newAbility)
+        {
+            this.useAbility = newAbility;
+        }
+
         public void Update()
         {
             if (PlayerControl.LocalPlayer.Data == null || 
