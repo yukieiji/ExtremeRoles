@@ -10,14 +10,9 @@ namespace ExtremeRoles.Module
     {
         public ActionButton Button;
         public Vector3 PositionOffset;
-        public bool HasEffect;
         public Sprite ButtonSprite;
 
-        public float Timer = 0f;
-        public float MaxTimer = float.MaxValue;
-        public float AbilityTime = 0.0f;
         public Vector3 LocalScale = Vector3.one;
-        public bool IsAbilityOn = false;
         public bool ShowButtonText = true;
         public string ButtonText = null;
 
@@ -25,14 +20,20 @@ namespace ExtremeRoles.Module
         private Action UseAbility;
         private Func<bool> CanUse;
         private KeyCode Hotkey;
+
         private Action CleanUp = null;
 
-        RoleAbilityButton(
+        private bool IsAbilityOn = false;
+
+        private float Timer = 10.0f;
+        private float CoolTime = float.MaxValue;
+        private float AbilityActiveTime = 0.0f;
+
+        public RoleAbilityButton(
             Action ability,
             Func<bool> canUse,
             Sprite sprite,
             Vector3 positionOffset,
-            float abilityTime=0.0f,
             Action abilityCleanUp=null,
             KeyCode hotkey=KeyCode.F,
             bool mirror = false)
@@ -40,13 +41,10 @@ namespace ExtremeRoles.Module
             this.UseAbility = ability;
             this.CanUse = canUse;
             this.PositionOffset = positionOffset;
-            this.AbilityTime = abilityTime;
             this.CleanUp = abilityCleanUp;
             this.ButtonSprite = sprite;
             this.Mirror = mirror;
             this.Hotkey = hotkey;
-
-            Timer = 10.0f;
             
             Button = UnityEngine.Object.Instantiate(
                 HudManager.Instance.KillButton,
@@ -71,11 +69,19 @@ namespace ExtremeRoles.Module
 
                 if (IsHasCleanUp() && !this.IsAbilityOn)
                 {
-                    this.Timer = this.AbilityTime;
+                    this.Timer = this.AbilityActiveTime;
                     Button.cooldownTimerText.color = new Color(0F, 0.8F, 0F);
                     this.IsAbilityOn = true;
                 }
             }
+        }
+        public void SetAbilityCoolTime(float time)
+        {
+            this.CoolTime = time;
+        }
+        public void SetAbilityActiveTime(float time)
+        {
+            this.AbilityActiveTime = time;
         }
 
         public void Update()
@@ -135,7 +141,7 @@ namespace ExtremeRoles.Module
 
             Button.SetCoolDown(
                 this.Timer,
-                (this.IsHasCleanUp() && this.IsAbilityOn) ? this.AbilityTime : this.MaxTimer);
+                (this.IsHasCleanUp() && this.IsAbilityOn) ? this.AbilityActiveTime : this.CoolTime);
 
             // Trigger OnClickEvent if the hotkey is being pressed down
             if (Input.GetKeyDown(Hotkey))

@@ -35,9 +35,10 @@ namespace ExtremeRoles.Roles
         IsMultiAssign = 11,
     }
 
+
     interface IRoleAbility
     {
-        public AbilityButton Button
+        public RoleAbilityButton Button
         {
             get => this.Button;
             set
@@ -45,20 +46,34 @@ namespace ExtremeRoles.Roles
                 Button = value;
             }
         }
-        public void CreateAbilityButton()
-        {
-            AbilityButton ability = UnityEngine.Object.Instantiate(
-                HudManager.Instance.AbilityButton,
-                HudManager.Instance.AbilityButton.transform);
 
-            ability.graphic.SetCooldownNormalizedUvs();
-            ability.SetEnabled();
-            ability.gameObject.SetActive(true);
+        public void CreateAbilityButton();
 
-            this.Button = ability;
-
-        }
         public void UseAbility();
+
+        public bool IsAbilityUse();
+
+        protected void AbilityButton(
+            Sprite sprite,
+            Vector3? positionOffset = null,
+            Action abilityCleanUp = null,
+            KeyCode hotkey = KeyCode.F,
+            bool mirror = false)
+        {
+
+            Vector3 offset = positionOffset ?? new Vector3(-1.8f, -0.06f, 0;
+
+            RoleAbilityButton abilityButton = new RoleAbilityButton(
+                this.UseAbility,
+                this.IsAbilityUse,
+                sprite,
+                offset,
+                abilityCleanUp,
+                hotkey,
+                mirror);
+
+            this.Button = abilityButton;
+        }
     }
 
     abstract public class RoleAbs
@@ -329,19 +344,19 @@ namespace ExtremeRoles.Roles
 
         public List<MultiAssignRoleAbs> Roles = new List<MultiAssignRoleAbs>();
 
-        private int SetPlayerNum = 0;
-        private Color SettingColor;
+        private int setPlayerNum = 0;
+        private Color settingColor;
 
-        private string RoleName = "";
+        private string roleName = "";
 
         public CombinationRoleManagerBase(
             string roleName,
             Color settingColor,
             int setPlayerNum)
         {
-            this.SettingColor = settingColor;
-            this.SetPlayerNum = setPlayerNum;
-            this.RoleName = roleName;
+            this.settingColor = settingColor;
+            this.setPlayerNum = setPlayerNum;
+            this.roleName = roleName;
         }
 
         protected override CustomOption CreateSpawnOption()
@@ -350,9 +365,9 @@ namespace ExtremeRoles.Roles
             var roleSetOption = CustomOption.Create(
                 GetRoleSettingId(RoleCommonSetting.SpawnRate),
                 Design.Cs(
-                    this.SettingColor,
+                    this.settingColor,
                     Design.ConcatString(
-                        this.RoleName,
+                        this.roleName,
                         RoleCommonSetting.SpawnRate.ToString())),
                 OptionsHolder.SpawnRate, null, true);
 
@@ -361,14 +376,14 @@ namespace ExtremeRoles.Roles
             CustomOption.Create(
                 GetRoleSettingId(RoleCommonSetting.RoleNum),
                 Design.ConcatString(
-                    this.RoleName,
+                    this.roleName,
                     RoleCommonSetting.RoleNum.ToString()),
                 1, 1, thisMaxRoleNum, 1,
                 roleSetOption);
             CustomOption.Create(
                 GetRoleSettingId(CombinationRoleCommonSetting.IsMultiAssign),
                 Design.ConcatString(
-                    this.RoleName,
+                    this.roleName,
                     CombinationRoleCommonSetting.IsMultiAssign.ToString()),
                 false, roleSetOption);
 
