@@ -41,8 +41,8 @@ namespace ExtremeRoles.Patches.Option
             var optionName = Design.ColoedString(
                 new Color(204f / 255f, 204f / 255f, 0, 1f),
                 translate("crewmateRoles"));
-            var min = allSetting[(int)OptionsHolder.CommonOptionKey.MinCremateRoles].GetSelection();
-            var max = allSetting[(int)OptionsHolder.CommonOptionKey.MaxCremateRoles].GetSelection();
+            var min = allSetting[(int)OptionsHolder.CommonOptionKey.MinCremateRoles].GetValue();
+            var max = allSetting[(int)OptionsHolder.CommonOptionKey.MaxCremateRoles].GetValue();
             if (min > max) min = max;
             var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
             entry.AppendLine($"{optionName}: {optionValue}");
@@ -50,8 +50,8 @@ namespace ExtremeRoles.Patches.Option
             optionName = Design.ColoedString(
                 new Color(204f / 255f, 204f / 255f, 0, 1f),
                 translate("neutralRoles"));
-            min = allSetting[(int)OptionsHolder.CommonOptionKey.MinNeutralRoles].GetSelection();
-            max = allSetting[(int)OptionsHolder.CommonOptionKey.MaxNeutralRoles].GetSelection();
+            min = allSetting[(int)OptionsHolder.CommonOptionKey.MinNeutralRoles].GetValue();
+            max = allSetting[(int)OptionsHolder.CommonOptionKey.MaxNeutralRoles].GetValue();
             if (min > max) min = max;
             optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
             entry.AppendLine($"{optionName}: {optionValue}");
@@ -59,8 +59,8 @@ namespace ExtremeRoles.Patches.Option
             optionName = Design.ColoedString(
                 new Color(204f / 255f, 204f / 255f, 0, 1f),
                 translate("impostorRoles"));
-            min = allSetting[(int)OptionsHolder.CommonOptionKey.MinImpostorRoles].GetSelection();
-            max = allSetting[(int)OptionsHolder.CommonOptionKey.MaxImpostorRoles].GetSelection();
+            min = allSetting[(int)OptionsHolder.CommonOptionKey.MinImpostorRoles].GetValue();
+            max = allSetting[(int)OptionsHolder.CommonOptionKey.MaxImpostorRoles].GetValue();
 
             if (min > max) min = max;
             optionValue = (min == max) ? $"{max}" : $"{min} - {max}";

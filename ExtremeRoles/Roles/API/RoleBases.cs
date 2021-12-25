@@ -203,7 +203,7 @@ namespace ExtremeRoles.Roles.API
                 this.HasOtherKillRange = allOption[
                     GetRoleSettingId(KillerCommonSetting.HasOtherKillRange)].GetValue();
                 this.KillRange = allOption[
-                    GetRoleSettingId(KillerCommonSetting.KillRange)].GetSelection();
+                    GetRoleSettingId(KillerCommonSetting.KillRange)].GetValue();
             }
         }
     }

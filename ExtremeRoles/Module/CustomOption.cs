@@ -84,10 +84,6 @@ namespace ExtremeRoles.Module
 
         public object GetRawValue() => Selections[CurSelection];
 
-        public int GetSelection() => CurSelection;
-
-        public int GetPercentage() => (int)Decimal.Multiply(CurSelection, Selections.ToList().Count);
-
         public string GetString()
         {
             string sel = Selections[CurSelection].ToString();
@@ -176,9 +172,9 @@ namespace ExtremeRoles.Module
         public override dynamic GetValue() => Convert.ToInt32(GetRawValue().ToString());
     }
 
-    public class StringCustomOption : CustomOptionBase
+    public class SelectionCustomOption : CustomOptionBase
     {
-        public StringCustomOption(
+        public SelectionCustomOption(
             int id,
             string name,
             System.Object[] selections,
@@ -192,7 +188,7 @@ namespace ExtremeRoles.Module
                 isHeader, isHidden,
                 format)
         { }
-        public override dynamic GetValue() => GetString();
+        public override dynamic GetValue() => CurSelection;
     }
 
 
@@ -203,7 +199,7 @@ namespace ExtremeRoles.Module
             CustomOptionBase parent = null, bool isHeader = false,
             bool isHidden = false, string format = "")
         {
-            return new StringCustomOption(
+            return new SelectionCustomOption(
                 id, name, selections, "",
                 parent, isHeader, isHidden, format);
         }
@@ -212,7 +208,7 @@ namespace ExtremeRoles.Module
             int defaultIndex, CustomOptionBase parent = null,
             bool isHeader = false, bool isHidden = false, string format = "")
         {
-            return new StringCustomOption(
+            return new SelectionCustomOption(
                 id, name, selections, defaultIndex,
                 parent, isHeader, isHidden, format);
         }
