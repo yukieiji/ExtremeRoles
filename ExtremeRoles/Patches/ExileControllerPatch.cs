@@ -102,7 +102,7 @@ namespace ExtremeRoles.Patches
                 Module.PlayerDataContainer.DeadedAssassin.Clear();
             }
 
-            AssassinMeeting.AssassinMeetingTrigger = false;
+           
 
             if (exiled == null) { return; };
 
