@@ -34,9 +34,6 @@ namespace ExtremeRoles.Module
             }
         }
 
-        public CustomOptionBase()
-        { }
-
         public CustomOptionBase(
             int id,
             string name,
@@ -73,7 +70,7 @@ namespace ExtremeRoles.Module
                 CurSelection = Mathf.Clamp(Entry.Value, 0, selections.Length - 1);
             }
 
-            Helper.Logging.Debug($"OptinId:{this.Id}    Name:{this.Name}");
+            Logging.Debug($"OptinId:{this.Id}    Name:{this.Name}");
 
             OptionsHolder.AllOptions.Add(this.Id, this);
         }
