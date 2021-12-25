@@ -21,7 +21,7 @@ namespace ExtremeRoles.Roles
     }
     public static class ExtremeRoleManager
     {
-        public const int OptionOffsetPerRole = 20;
+        public const int OptionOffsetPerRole = 30;
 
         public static readonly List<
             SingleRoleBase> NormalRole = new List<SingleRoleBase>()
