@@ -100,7 +100,7 @@ namespace ExtremeRoles.Patches.Option
 
             for (int i = 0; i < optionsList.Count(); ++i)
             {
-                CustomOption option = optionsList[i];
+                CustomOptionBase option = optionsList[i];
                 // ExtremeRolesPlugin.Instance.Log.LogInfo($"Option: {option.Behaviour == null}");
                 if (option.Behaviour == null)
                 {
@@ -149,7 +149,7 @@ namespace ExtremeRoles.Patches.Option
 
             float offset = 2.75f;
 
-            foreach (CustomOption option in OptionsHolder.AllOptions.Values)
+            foreach (CustomOptionBase option in OptionsHolder.AllOptions.Values)
             {
                 if (option?.Behaviour != null && option.Behaviour.gameObject != null)
                 {

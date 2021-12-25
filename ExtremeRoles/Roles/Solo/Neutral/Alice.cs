@@ -61,7 +61,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         }
 
         protected override void CreateSpecificOption(
-            CustomOption parentOps)
+            CustomOptionBase parentOps)
         {
             this.CreateRoleAbilityOption(parentOps);
         }

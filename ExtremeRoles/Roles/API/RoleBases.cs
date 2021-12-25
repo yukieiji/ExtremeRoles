@@ -108,7 +108,7 @@ namespace ExtremeRoles.Roles.API
             PlayerControl fromPlayer) => true;
 
         protected override void CreateKillerOption(
-            CustomOption parentOps)
+            CustomOptionBase parentOps)
         {
             var killCoolSetting = CustomOption.Create(
                 GetRoleSettingId(KillerCommonSetting.HasOtherKillCool),
@@ -138,7 +138,7 @@ namespace ExtremeRoles.Roles.API
                 OptionsHolder.KillRange,
                 killRangeSetting);
         }
-        protected override CustomOption CreateSpawnOption()
+        protected override CustomOptionBase CreateSpawnOption()
         {
             var roleSetOption = CustomOption.Create(
                 GetRoleSettingId(RoleCommonSetting.SpawnRate),
@@ -160,7 +160,7 @@ namespace ExtremeRoles.Roles.API
         }
 
         protected override void CreateVisonOption(
-            CustomOption parentOps)
+            CustomOptionBase parentOps)
         {
             var visonOption = CustomOption.Create(
                 GetRoleSettingId(RoleCommonSetting.HasOtherVison),
@@ -188,20 +188,20 @@ namespace ExtremeRoles.Roles.API
             var allOption = OptionsHolder.AllOptions;
 
             this.HasOtherVison = allOption[
-                GetRoleSettingId(RoleCommonSetting.HasOtherVison)].GetBool();
+                GetRoleSettingId(RoleCommonSetting.HasOtherVison)].GetValue();
             this.Vison = allOption[
-                GetRoleSettingId(RoleCommonSetting.Vison)].GetFloat();
+                GetRoleSettingId(RoleCommonSetting.Vison)].GetValue();
             this.IsApplyEnvironmentVision = allOption[
-                GetRoleSettingId(RoleCommonSetting.ApplyEnvironmentVisionEffect)].GetBool();
+                GetRoleSettingId(RoleCommonSetting.ApplyEnvironmentVisionEffect)].GetValue();
 
             if (this.CanKill)
             {
                 this.HasOtherKillCool = allOption[
-                    GetRoleSettingId(KillerCommonSetting.HasOtherKillCool)].GetBool();
+                    GetRoleSettingId(KillerCommonSetting.HasOtherKillCool)].GetValue();
                 this.KillCoolTime = allOption[
-                    GetRoleSettingId(KillerCommonSetting.KillCoolDown)].GetFloat();
+                    GetRoleSettingId(KillerCommonSetting.KillCoolDown)].GetValue();
                 this.HasOtherKillRange = allOption[
-                    GetRoleSettingId(KillerCommonSetting.HasOtherKillRange)].GetBool();
+                    GetRoleSettingId(KillerCommonSetting.HasOtherKillRange)].GetValue();
                 this.KillRange = allOption[
                     GetRoleSettingId(KillerCommonSetting.KillRange)].GetSelection();
             }

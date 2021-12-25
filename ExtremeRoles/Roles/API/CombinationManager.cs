@@ -28,7 +28,7 @@ namespace ExtremeRoles.Roles.API
             this.roleName = roleName;
         }
 
-        protected override CustomOption CreateSpawnOption()
+        protected override CustomOptionBase CreateSpawnOption()
         {
             // ExtremeRolesPlugin.Instance.Log.LogInfo($"Color: {this.SettingColor}");
             var roleSetOption = CustomOption.Create(
@@ -59,14 +59,14 @@ namespace ExtremeRoles.Roles.API
             return roleSetOption;
         }
         protected override void CreateKillerOption(
-            CustomOption parentOps)
+            CustomOptionBase parentOps)
         {
             // 複数ロールの中に殺戮者がいる可能性がため、管理ロールで殺戮者の設定はしない
             return;
         }
 
         protected override void CreateSpecificOption(
-            CustomOption parentOps)
+            CustomOptionBase parentOps)
         {
             IEnumerable<SingleRoleBase> collection = Roles;
 
@@ -82,7 +82,7 @@ namespace ExtremeRoles.Roles.API
         }
 
         protected override void CreateVisonOption(
-            CustomOption parentOps)
+            CustomOptionBase parentOps)
         {
             // 複数のロールがまとまっているため、管理ロールで視界の設定はしない
             return;
@@ -93,7 +93,7 @@ namespace ExtremeRoles.Roles.API
             foreach (var role in Roles)
             {
                 role.CanHasAnotherRole = OptionsHolder.AllOptions[
-                    GetRoleSettingId(CombinationRoleCommonSetting.IsMultiAssign)].GetBool();
+                    GetRoleSettingId(CombinationRoleCommonSetting.IsMultiAssign)].GetValue();
                 role.GameId = 0;
                 role.GameInit();
             }

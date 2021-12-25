@@ -24,7 +24,7 @@ namespace ExtremeRoles.Roles.Combination
             false)
         {}
 
-        protected override void CreateSpecificOption(CustomOption parentOps)
+        protected override void CreateSpecificOption(CustomOptionBase parentOps)
         {
             throw new System.NotImplementedException();
         }

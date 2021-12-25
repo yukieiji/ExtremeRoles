@@ -13,7 +13,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             true, false, true, true)
         {}
 
-        protected override void CreateSpecificOption(CustomOption parentOps)
+        protected override void CreateSpecificOption(CustomOptionBase parentOps)
         {
             return;
         }

@@ -54,7 +54,7 @@ namespace ExtremeRoles.Roles.API.Interface
 
         public static void CreateRoleAbilityOption(
             this IRoleAbility self,
-            CustomOption parentOps,
+            CustomOptionBase parentOps,
             bool hasActiveTime=false)
         {
 
@@ -84,14 +84,14 @@ namespace ExtremeRoles.Roles.API.Interface
 
             var allOps = OptionsHolder.AllOptions;
             self.Button.SetAbilityCoolTime(
-                allOps[self.GetRoleSettingId(RoleAbilityCommonSetting.AbilityCoolTime)].GetFloat());
+                allOps[self.GetRoleSettingId(RoleAbilityCommonSetting.AbilityCoolTime)].GetValue());
 
             int checkSettingId = self.GetRoleSettingId(RoleAbilityCommonSetting.AbilityActiveTime);
 
             if (allOps.ContainsKey(checkSettingId))
             {
                 self.Button.SetAbilityActiveTime(
-                    allOps[checkSettingId].GetFloat());
+                    allOps[checkSettingId].GetValue());
             }
             
             self.Button.ResetCoolTimer();

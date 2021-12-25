@@ -10,7 +10,7 @@ namespace ExtremeRoles.Patches.Role
         {
 
             bool engineerImpostorVent = OptionsHolder.AllOptions[
-                (int)OptionsHolder.CommonOptionKey.EngineerUseImpostorVent].GetBool();
+                (int)OptionsHolder.CommonOptionKey.EngineerUseImpostorVent].GetValue();
 
             if (!engineerImpostorVent) { return; }
 

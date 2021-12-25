@@ -24,6 +24,7 @@
         </PackageReference>
         <PackageReference Include="BepInEx.Il2Cpp.TlsAdapter" Version="1.0.1" />
         <PackageReference Include="HarmonyX" Version="2.7.0" />
+        <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
         <PackageReference Include="Reactor" Version="1.1.0" />
         <PackageReference Include="BepInEx.IL2CPP" Version="6.0.0-be.521" />
         <PackageReference Include="AmongUs.GameLibs.$(GamePlatform)" Version="$(GameVersion)" PrivateAssets="all" />

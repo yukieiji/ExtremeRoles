@@ -407,7 +407,7 @@ namespace ExtremeRoles.Patches.Manager
                 int spawnRate = allSetting[
                     role.GetRoleSettingId(RoleCommonSetting.SpawnRate)].GetPercentage();
                 int roleNum = allSetting[
-                    role.GetRoleSettingId(RoleCommonSetting.RoleNum)].GetInt();
+                    role.GetRoleSettingId(RoleCommonSetting.RoleNum)].GetValue();
 
                 Logging.Debug(
                     $"SelectopmValue:{allSetting[role.GetRoleSettingId(RoleCommonSetting.RoleNum)].Selections[0]}");

@@ -275,7 +275,7 @@ namespace ExtremeRoles.Patches
 
             // Deactivate skip Button if skipping on emergency meetings is disabled
             if (OptionsHolder.AllOptions[
-                (int)OptionsHolder.CommonOptionKey.DisableSkipInEmergencyMeeting].GetBool())
+                (int)OptionsHolder.CommonOptionKey.DisableSkipInEmergencyMeeting].GetValue())
             {
                 __instance.SkipVoteButton.gameObject.SetActive(false);
             }

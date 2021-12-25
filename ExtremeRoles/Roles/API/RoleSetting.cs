@@ -69,7 +69,7 @@ namespace ExtremeRoles.Roles.API
             CreateSpecificOption(parentOps);
         }
         public void CreatRoleSpecificOption(
-            CustomOption parentOps,
+            CustomOptionBase parentOps,
             int optionIdOffset)
         {
             this.OptionIdOffset = optionIdOffset;
@@ -83,13 +83,13 @@ namespace ExtremeRoles.Roles.API
             CreateSpecificOption(parentOps);
         }
         protected abstract void CreateKillerOption(
-            CustomOption parentOps);
-        protected abstract CustomOption CreateSpawnOption();
+            CustomOptionBase parentOps);
+        protected abstract CustomOptionBase CreateSpawnOption();
 
         protected abstract void CreateSpecificOption(
-            CustomOption parentOps);
+            CustomOptionBase parentOps);
         protected abstract void CreateVisonOption(
-            CustomOption parentOps);
+            CustomOptionBase parentOps);
 
         protected abstract void CommonInit();
 

@@ -46,7 +46,7 @@ namespace ExtremeRoles.Roles.Combination
                 true, false, true, true)
         {}
         protected override void CreateSpecificOption(
-            CustomOption parentOps)
+            CustomOptionBase parentOps)
         {
 
             var meetingOpt = CustomOption.Create(
@@ -83,9 +83,9 @@ namespace ExtremeRoles.Roles.Combination
         protected override void RoleSpecificInit()
         {
             this.IsDeadForceMeeting = OptionsHolder.AllOptions[
-                GetRoleSettingId((int)AssassinOption.IsDeadForceMeeting)].GetBool();
+                GetRoleSettingId((int)AssassinOption.IsDeadForceMeeting)].GetValue();
             this.CanSeeRoleBeforeFirstMeeting = OptionsHolder.AllOptions[
-                GetRoleSettingId((int)AssassinOption.CanSeeRoleBeforeFirstMeeting)].GetBool();
+                GetRoleSettingId((int)AssassinOption.CanSeeRoleBeforeFirstMeeting)].GetValue();
             this.IsFirstMeeting = true;
         }
 
@@ -173,7 +173,7 @@ namespace ExtremeRoles.Roles.Combination
 
 
         protected override void CreateSpecificOption(
-            CustomOption parentOps)
+            CustomOptionBase parentOps)
         {
             CustomOption.Create(
                 this.OptionIdOffset + (int)MarlinOption.HasTask,
@@ -200,11 +200,11 @@ namespace ExtremeRoles.Roles.Combination
             this.IsAssassinate = false;
 
             this.HasTask = OptionsHolder.AllOptions[
-                GetRoleSettingId((int)MarlinOption.HasTask)].GetBool();
+                GetRoleSettingId((int)MarlinOption.HasTask)].GetValue();
             this.CanSeeVote = OptionsHolder.AllOptions[
-                GetRoleSettingId((int)MarlinOption.CanSeeVote)].GetBool();
+                GetRoleSettingId((int)MarlinOption.CanSeeVote)].GetValue();
             this.CanSeeNeutral = OptionsHolder.AllOptions[
-                GetRoleSettingId((int)MarlinOption.CanSeeNeutral)].GetBool();
+                GetRoleSettingId((int)MarlinOption.CanSeeNeutral)].GetValue();
         }
     }
 }

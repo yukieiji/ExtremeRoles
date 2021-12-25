@@ -46,9 +46,9 @@ namespace ExtremeRoles
 
             MaxNumberOfMeetings = Mathf.RoundToInt(
                 allOption[(int)OptionsHolder.CommonOptionKey.NumMeatings].GetSelection());
-            BlockSkippingInEmergencyMeetings = allOption[(int)OptionsHolder.CommonOptionKey.DisableSkipInEmergencyMeeting].GetBool();
-            NoVoteIsSelfVote = allOption[(int)OptionsHolder.CommonOptionKey.NoVoteToSelf].GetBool();
-            HidePlayerNames = allOption[(int)OptionsHolder.CommonOptionKey.HidePlayerName].GetBool();
+            BlockSkippingInEmergencyMeetings = allOption[(int)OptionsHolder.CommonOptionKey.DisableSkipInEmergencyMeeting].GetValue();
+            NoVoteIsSelfVote = allOption[(int)OptionsHolder.CommonOptionKey.NoVoteToSelf].GetValue();
+            HidePlayerNames = allOption[(int)OptionsHolder.CommonOptionKey.HidePlayerName].GetValue();
 
             GhostsSeeRoles = ExtremeRolesPlugin.GhostsSeeRoles.Value;
             GhostsSeeTasks = ExtremeRolesPlugin.GhostsSeeTasks.Value;

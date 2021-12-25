@@ -9,8 +9,7 @@ using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Module
 {
-
-    public class CustomOption
+    public abstract class CustomOptionBase
     {
 
         public int Id;
@@ -22,8 +21,8 @@ namespace ExtremeRoles.Module
         public ConfigEntry<int> Entry;
         public int CurSelection;
         public OptionBehaviour Behaviour;
-        public CustomOption Parent;
-        public List<CustomOption> Children;
+        public CustomOptionBase Parent;
+        public List<CustomOptionBase> Children;
         public bool IsHeader;
         public bool IsHidden;
 
@@ -35,15 +34,15 @@ namespace ExtremeRoles.Module
             }
         }
 
-        public CustomOption()
-        {}
+        public CustomOptionBase()
+        { }
 
-        public CustomOption(
+        public CustomOptionBase(
             int id,
             string name,
             System.Object[] selections,
             System.Object defaultValue,
-            CustomOption parent,
+            CustomOptionBase parent,
             bool isHeader,
             bool isHidden,
             string format)
@@ -59,8 +58,8 @@ namespace ExtremeRoles.Module
             this.IsHeader = isHeader;
             this.IsHidden = isHidden;
 
-            this.Children = new List<CustomOption>();
-            
+            this.Children = new List<CustomOptionBase>();
+
             if (parent != null)
             {
                 parent.Children.Add(this);
@@ -79,80 +78,17 @@ namespace ExtremeRoles.Module
             OptionsHolder.AllOptions.Add(this.Id, this);
         }
 
-        public static CustomOption Create(
-            int id, string name, string[] selections,
-            CustomOption parent = null, bool isHeader = false,
-            bool isHidden = false, string format = "")
-        {
-            return new CustomOption(
-                id, name, selections, "",
-                parent, isHeader, isHidden, format);
-        }
-        public static CustomOption Create(
-            int id, string name, string[] selections,
-            int defaultIndex, CustomOption parent = null,
-            bool isHeader = false, bool isHidden = false, string format = "")
-        {
-            return new CustomOption(
-                id, name, selections, defaultIndex,
-                parent, isHeader, isHidden, format);
-        }
+        protected bool GetBool() => CurSelection > 0;
 
-        public static CustomOption Create
-            (int id, string name, int defaultValue,
-            int min, int max, int step, CustomOption parent = null,
-            bool isHeader = false, bool isHidden = false, string format = "")
-        {
-            List<int> selections = new List<int>();
-            for (int s = min; s <= max; s += step)
-            {
-                selections.Add(s);
-            }
-            return new CustomOption(
-                id, name, selections.Cast<object>().ToArray(),
-                defaultValue, parent, isHeader, isHidden, format);
-        }
-        public static CustomOption Create
-            (int id, string name, float defaultValue,
-            float min, float max, float step, CustomOption parent = null,
-            bool isHeader = false, bool isHidden = false, string format = "")
-        {
-            List<float> selections = new List<float>();
-            for (float s = min; s <= max; s += step)
-            {
-                selections.Add(s);
-            }
-            return new CustomOption(
-                id, name, selections.Cast<object>().ToArray(),
-                defaultValue, parent, isHeader, isHidden, format);
-        }
+        public string GetName() => Translation.GetString(Name);
 
-        public static CustomOption Create(
-            int id, string name, bool defaultValue,
-            CustomOption parent = null, bool isHeader = false,
-            bool isHidden = false, string format = "")
-        {
-            return new CustomOption(
-                id, name, new string[] { "optionOff", "optionOn" },
-                defaultValue ? "optionOn" : "optionOff", parent,
-                isHeader, isHidden, format);
-        }
+        public object GetRawValue() => Selections[CurSelection];
 
-        public virtual bool GetBool() => CurSelection > 0;
+        public int GetSelection() => CurSelection;
 
-        public virtual float GetFloat() => (float)GetRawValue();
+        public int GetPercentage() => (int)Decimal.Multiply(CurSelection, Selections.ToList().Count);
 
-        public virtual int GetInt() => Convert.ToInt32(GetRawValue().ToString());
-
-        public virtual string GetName() => Translation.GetString(Name);
-
-        public virtual int GetPercentage() => (int)Decimal.Multiply(CurSelection, Selections.ToList().Count);
-
-        public virtual object GetRawValue() => Selections[CurSelection];
-
-        public virtual int GetSelection() => CurSelection;
-
-        public virtual string GetString()
+        public string GetString()
         {
             string sel = Selections[CurSelection].ToString();
             if (Format != "")
@@ -162,7 +98,7 @@ namespace ExtremeRoles.Module
             return Translation.GetString(sel);
         }
 
-        public virtual void UpdateSelection(int newSelection)
+        public void UpdateSelection(int newSelection)
         {
             CurSelection = Mathf.Clamp((newSelection + Selections.Length) % Selections.Length, 0, Selections.Length - 1);
             if (Behaviour != null && Behaviour is StringOption stringOption)
@@ -178,39 +114,148 @@ namespace ExtremeRoles.Module
                     OptionsHolder.ShareOptionSelections();// Share all selections
                 }
             }
-
         }
+
+        public abstract dynamic GetValue();
     }
 
-    public class BlankOption : CustomOption
+    public class BoolCustomOption : CustomOptionBase
     {
-        public BlankOption(CustomOption parent)
+        public BoolCustomOption(
+            int id,
+            string name,
+            System.Object[] selections,
+            System.Object defaultValue,
+            CustomOptionBase parent,
+            bool isHeader,
+            bool isHidden,
+            string format) : base(
+                id, name, selections,
+                defaultValue, parent,
+                isHeader, isHidden,
+                format)
+        {}
+        public override dynamic GetValue() => GetBool();
+    }
+
+    public class FloatCustomOption : CustomOptionBase
+    {
+        public FloatCustomOption(
+            int id,
+            string name,
+            System.Object[] selections,
+            System.Object defaultValue,
+            CustomOptionBase parent,
+            bool isHeader,
+            bool isHidden,
+            string format) : base(
+                id, name, selections,
+                defaultValue, parent,
+                isHeader, isHidden,
+                format)
+        { }
+        public override dynamic GetValue() => (float)GetRawValue();
+    }
+
+    public class IntCustomOption : CustomOptionBase
+    {
+        public IntCustomOption(
+            int id,
+            string name,
+            System.Object[] selections,
+            System.Object defaultValue,
+            CustomOptionBase parent,
+            bool isHeader,
+            bool isHidden,
+            string format) : base(
+                id, name, selections,
+                defaultValue, parent,
+                isHeader, isHidden,
+                format)
+        { }
+        public override dynamic GetValue() => Convert.ToInt32(GetRawValue().ToString());
+    }
+
+    public class StringCustomOption : CustomOptionBase
+    {
+        public StringCustomOption(
+            int id,
+            string name,
+            System.Object[] selections,
+            System.Object defaultValue,
+            CustomOptionBase parent,
+            bool isHeader,
+            bool isHidden,
+            string format) : base(
+                id, name, selections,
+                defaultValue, parent,
+                isHeader, isHidden,
+                format)
+        { }
+        public override dynamic GetValue() => GetString();
+    }
+
+
+    public static class CustomOption
+    {
+        public static CustomOptionBase Create(
+            int id, string name, string[] selections,
+            CustomOptionBase parent = null, bool isHeader = false,
+            bool isHidden = false, string format = "")
         {
-            this.Parent = parent;
-            this.Id = -1;
-            this.Name = "";
-            this.IsHeader = false;
-            this.IsHidden = true;
-            this.Children = new List<CustomOption>();
-            this.Selections = new string[] { "" };
-            OptionsHolder.AllOptions.Add(this.Id, this);
+            return new StringCustomOption(
+                id, name, selections, "",
+                parent, isHeader, isHidden, format);
+        }
+        public static CustomOptionBase Create(
+            int id, string name, string[] selections,
+            int defaultIndex, CustomOptionBase parent = null,
+            bool isHeader = false, bool isHidden = false, string format = "")
+        {
+            return new StringCustomOption(
+                id, name, selections, defaultIndex,
+                parent, isHeader, isHidden, format);
         }
 
-        public override bool GetBool() => true;
-
-        public override float GetFloat() => 0f;
-
-        public override int GetPercentage() => 0;
-
-        public override int GetSelection() => 0;
-
-        public override string GetString() => "";
-
-        public override void UpdateSelection(int newSelection)
+        public static CustomOptionBase Create
+            (int id, string name, int defaultValue,
+            int min, int max, int step, CustomOptionBase parent = null,
+            bool isHeader = false, bool isHidden = false, string format = "")
         {
-            return;
+            List<int> selections = new List<int>();
+            for (int s = min; s <= max; s += step)
+            {
+                selections.Add(s);
+            }
+            return new IntCustomOption(
+                id, name, selections.Cast<object>().ToArray(),
+                defaultValue, parent, isHeader, isHidden, format);
+        }
+        public static CustomOptionBase Create
+            (int id, string name, float defaultValue,
+            float min, float max, float step, CustomOptionBase parent = null,
+            bool isHeader = false, bool isHidden = false, string format = "")
+        {
+            List<float> selections = new List<float>();
+            for (float s = min; s <= max; s += step)
+            {
+                selections.Add(s);
+            }
+            return new FloatCustomOption(
+                id, name, selections.Cast<object>().ToArray(),
+                defaultValue, parent, isHeader, isHidden, format);
         }
 
+        public static CustomOptionBase Create(
+            int id, string name, bool defaultValue,
+            CustomOptionBase parent = null, bool isHeader = false,
+            bool isHidden = false, string format = "")
+        {
+            return new BoolCustomOption(
+                id, name, new string[] { "optionOff", "optionOn" },
+                defaultValue ? "optionOn" : "optionOff", parent,
+                isHeader, isHidden, format);
+        }
     }
 
 }

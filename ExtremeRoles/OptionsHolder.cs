@@ -39,7 +39,7 @@ namespace ExtremeRoles
             EngineerUseImpostorVent
         }
 
-        public static Dictionary<int, CustomOption> AllOptions = new Dictionary<int, CustomOption>();
+        public static Dictionary<int, CustomOptionBase> AllOptions = new Dictionary<int, CustomOptionBase>();
 
         public static void Load()
         {
@@ -126,7 +126,7 @@ namespace ExtremeRoles
         public static void SwitchPreset(int newPreset)
         {
             SelectedPreset = newPreset;
-            foreach (CustomOption option in AllOptions.Values)
+            foreach (CustomOptionBase option in AllOptions.Values)
             {
                 if (option.Id == 0) continue;
 
@@ -157,7 +157,7 @@ namespace ExtremeRoles
                 (byte)CustomRPC.ShareOption, Hazel.SendOption.Reliable);
             messageWriter.WritePacked((uint)AllOptions.Count);
             
-            foreach (CustomOption option in AllOptions.Values)
+            foreach (CustomOptionBase option in AllOptions.Values)
             {
                 messageWriter.WritePacked((uint)option.Id);
                 messageWriter.WritePacked(Convert.ToUInt32(option.CurSelection));
@@ -173,7 +173,7 @@ namespace ExtremeRoles
                 {
                     uint optionId = reader.ReadPackedUInt32();
                     uint selection = reader.ReadPackedUInt32();
-                    CustomOption option = AllOptions.Values.FirstOrDefault(opt => opt.Id == (int)optionId);
+                    CustomOptionBase option = AllOptions.Values.FirstOrDefault(opt => opt.Id == (int)optionId);
 
                     //FirstOrDefault(option => option.id == (int)optionId);
                     option.UpdateSelection((int)selection);

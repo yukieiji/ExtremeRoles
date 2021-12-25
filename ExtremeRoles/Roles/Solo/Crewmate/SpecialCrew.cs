@@ -13,7 +13,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             false, true, false, false)
         {}
 
-        protected override void CreateSpecificOption(CustomOption parentOps)
+        protected override void CreateSpecificOption(CustomOptionBase parentOps)
         {
             return;
         }

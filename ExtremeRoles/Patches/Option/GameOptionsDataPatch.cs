@@ -68,7 +68,7 @@ namespace ExtremeRoles.Patches.Option
 
             entries.Add(entry.ToString().Trim('\r', '\n'));
 
-            foreach (CustomOption option in OptionsHolder.AllOptions.Values)
+            foreach (CustomOptionBase option in OptionsHolder.AllOptions.Values)
             {
                 if ((option == allSetting[(int)OptionsHolder.CommonOptionKey.PresetSelection]) ||
                     (option == allSetting[(int)OptionsHolder.CommonOptionKey.MinCremateRoles]) ||
@@ -128,7 +128,7 @@ namespace ExtremeRoles.Patches.Option
 
         }
 
-        private static void addChildren(CustomOption option, ref StringBuilder entry, bool indent = true)
+        private static void addChildren(CustomOptionBase option, ref StringBuilder entry, bool indent = true)
         {
             if (!option.Enabled) { return; }
 
@@ -140,12 +140,12 @@ namespace ExtremeRoles.Patches.Option
             }
         }
 
-        private static string optionToString(CustomOption option)
+        private static string optionToString(CustomOptionBase option)
         {
             if (option == null) { return ""; }
             return $"{option.GetName()}: {option.GetString()}";
         }
-        private static string optionsToString(CustomOption option, bool skipFirst = false)
+        private static string optionsToString(CustomOptionBase option, bool skipFirst = false)
         {
             if (option == null) return "";
 
@@ -153,7 +153,7 @@ namespace ExtremeRoles.Patches.Option
             if (!option.IsHidden && !skipFirst) options.Add(optionToString(option));
             if (option.Enabled)
             {
-                foreach (CustomOption op in option.Children)
+                foreach (CustomOptionBase op in option.Children)
                 {
                     string str = optionToString(op);
                     if (str != "") options.Add(str);
