@@ -85,8 +85,14 @@ namespace ExtremeRoles.Roles.API.Interface
             var allOps = OptionsHolder.AllOptions;
             self.Button.SetAbilityCoolTime(
                 allOps[self.GetRoleSettingId(RoleAbilityCommonSetting.AbilityCoolTime)].GetFloat());
-            self.Button.SetAbilityActiveTime(
-                allOps[self.GetRoleSettingId(RoleAbilityCommonSetting.AbilityActiveTime)].GetFloat());
+
+            int checkSettingId = self.GetRoleSettingId(RoleAbilityCommonSetting.AbilityActiveTime);
+
+            if (allOps.ContainsKey(checkSettingId))
+            {
+                self.Button.SetAbilityActiveTime(
+                    allOps[checkSettingId].GetFloat());
+            }
             
             self.Button.ResetCoolTimer();
         }
