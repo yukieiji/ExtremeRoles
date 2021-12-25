@@ -59,6 +59,11 @@ namespace ExtremeRoles.Roles
             }
         }
 
+        public static SingleRoleBase GetLocalPlayerRole()
+        {
+            return GameRole[PlayerControl.LocalPlayer.PlayerId];
+        }
+
         public static void SetPlayerIdToMultiRoleId(
             byte roleId, byte playerId, byte id)
         {
