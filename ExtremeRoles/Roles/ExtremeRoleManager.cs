@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles
 {
@@ -77,7 +78,17 @@ namespace ExtremeRoles.Roles
                 {
                     if (role.BytedRoleId == roleId)
                     {
+
                         SingleRoleBase addRole = role.Clone();
+
+                        IRoleAbility abilityRole = addRole as IRoleAbility;
+
+                        if (abilityRole != null && PlayerControl.LocalPlayer.PlayerId == playerId)
+                        {
+                            Helper.Logging.Debug("Try Create Ability NOW!!!");
+                            abilityRole.CreateAbility();
+                        }
+
                         addRole.GameInit();
                         ((MultiAssignRoleBase)addRole).GameId = id;
 
@@ -137,7 +148,18 @@ namespace ExtremeRoles.Roles
         private static void setPlyerIdToSingleRole(
             byte playerId, SingleRoleBase role)
         {
+
             SingleRoleBase addRole = role.Clone();
+
+
+            IRoleAbility abilityRole = addRole as IRoleAbility;
+
+            if (abilityRole != null && PlayerControl.LocalPlayer.PlayerId == playerId)
+            {
+                Helper.Logging.Debug("Try Create Ability NOW!!!");
+                abilityRole.CreateAbility();
+            }
+
             addRole.GameInit();
 
             if (!GameRole.ContainsKey(playerId))
