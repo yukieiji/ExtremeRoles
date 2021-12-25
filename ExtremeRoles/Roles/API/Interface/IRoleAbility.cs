@@ -54,7 +54,8 @@ namespace ExtremeRoles.Roles.API.Interface
 
         public static void CreateRoleAbilityOption(
             this IRoleAbility self,
-            CustomOption parentOps)
+            CustomOption parentOps,
+            bool hasActiveTime=false)
         {
 
             CustomOption.Create(
@@ -64,13 +65,16 @@ namespace ExtremeRoles.Roles.API.Interface
                     RoleAbilityCommonSetting.AbilityCoolTime.ToString()),
                 30f, 2.5f, 120f, 2.5f,
                 parentOps, format: "unitSeconds");
-            CustomOption.Create(
-                self.GetRoleSettingId(RoleAbilityCommonSetting.AbilityActiveTime),
-                Design.ConcatString(
-                    ((SingleRoleBase)self).RoleName,
-                    RoleAbilityCommonSetting.AbilityActiveTime.ToString()),
-                30f, 2.5f, 120f, 2.5f,
-                parentOps, format: "unitSeconds");
+            if (hasActiveTime)
+            {
+                CustomOption.Create(
+                    self.GetRoleSettingId(RoleAbilityCommonSetting.AbilityActiveTime),
+                    Design.ConcatString(
+                        ((SingleRoleBase)self).RoleName,
+                        RoleAbilityCommonSetting.AbilityActiveTime.ToString()),
+                    30f, 2.5f, 120f, 2.5f,
+                    parentOps, format: "unitSeconds");
+            }
         }
 
         public static void RoleAbilityInit(this IRoleAbility self)
@@ -83,6 +87,8 @@ namespace ExtremeRoles.Roles.API.Interface
                 allOps[self.GetRoleSettingId(RoleAbilityCommonSetting.AbilityCoolTime)].GetFloat());
             self.Button.SetAbilityActiveTime(
                 allOps[self.GetRoleSettingId(RoleAbilityCommonSetting.AbilityActiveTime)].GetFloat());
+            
+            self.Button.ResetCoolTimer();
         }
 
         public static bool IsCommonUse(this IRoleAbility _)
