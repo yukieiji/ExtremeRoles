@@ -27,6 +27,7 @@ namespace ExtremeRoles.Patches.Manager
                 if (abilityRole.Button == null)
                 {
                     abilityRole.CreateAbility();
+                    abilityRole.RoleAbilityInit();
                 }
             }
             
