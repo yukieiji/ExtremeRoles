@@ -1,4 +1,5 @@
 ﻿using ExtremeRoles.Module;
+using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.API
 {
@@ -30,12 +31,11 @@ namespace ExtremeRoles.Roles.API
         IsMultiAssign = 11,
     }
 
-    abstract public class RoleSettingBase
+    abstract public class RoleSettingBase : IRoleSetting
     {
 
         public bool CanKill = false;
         protected int OptionIdOffset = 0;
-
 
         public int GetRoleSettingId(
             RoleCommonSetting setting) => GetRoleSettingId((int)setting);
