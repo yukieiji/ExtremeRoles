@@ -7,6 +7,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
     public class Alice : SingleRoleBase, IRoleAbility
     {
 
+        public enum AliceOption
+        {
+            RevartCommonTaskNum,
+            RevartLongTaskNum,
+            RevartShotTaskNum,
+        }
+
         public RoleAbilityButton Button
         { 
             get => this.aliceShipBroken;
