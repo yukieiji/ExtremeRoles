@@ -407,19 +407,17 @@ namespace ExtremeRoles.Patches
                 player.SetKillTimer(player.killTimer - Time.fixedDeltaTime);
                 PlayerControl target = player.FindClosestTarget(!role.IsImposter());
 
-                Logging.Debug($"TargetAlive?:{target}");
+                // Logging.Debug($"TargetAlive?:{target}");
 
                 DestroyableSingleton<HudManager>.Instance.KillButton.SetTarget(target);
                 HudManager.Instance.KillButton.Show();
                 HudManager.Instance.KillButton.gameObject.SetActive(true);
             }
 
-            /*
             if (role is IRoleAbility)
             {
                 ((IRoleAbility)role).Button.Update();
-            }
-            */
+            }           
 
 
             // ToDo:インポスターのベントボタンをエンジニアが使えるようにする
