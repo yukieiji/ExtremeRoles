@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
 using UnityEngine;
 
 namespace ExtremeRoles.Module
@@ -48,7 +45,7 @@ namespace ExtremeRoles.Module
             this.mirror = mirror;
             this.hotkey = hotkey;
             
-            Button = UnityEngine.Object.Instantiate(
+            this.Button = UnityEngine.Object.Instantiate(
                 HudManager.Instance.KillButton,
                 HudManager.Instance.KillButton.transform.parent);
             PassiveButton button = Button.GetComponent<PassiveButton>();
@@ -84,6 +81,11 @@ namespace ExtremeRoles.Module
         public void SetAbilityActiveTime(float time)
         {
             this.abilityActiveTime = time;
+        }
+
+        public void ResetCoolTimer()
+        {
+            this.timer = this.coolTime;
         }
 
         public void Update()
@@ -167,6 +169,5 @@ namespace ExtremeRoles.Module
         }
 
         private bool isHasCleanUp() => cleanUp != null;
-
     }
 }
