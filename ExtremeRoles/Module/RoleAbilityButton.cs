@@ -65,6 +65,7 @@ namespace ExtremeRoles.Module
             {
                 Button.graphic.color = new Color(1f, 1f, 1f, 0.3f);
                 this.useAbility();
+                ResetCoolTimer();
 
                 if (this.isHasCleanUp() && !this.isAbilityOn)
                 {
