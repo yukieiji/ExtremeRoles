@@ -45,7 +45,7 @@ namespace ExtremeRoles
             var allOption = OptionsHolder.AllOptions;
 
             MaxNumberOfMeetings = Mathf.RoundToInt(
-                allOption[(int)OptionsHolder.CommonOptionKey.NumMeatings].GetSelection());
+                allOption[(int)OptionsHolder.CommonOptionKey.NumMeatings].GetValue());
             BlockSkippingInEmergencyMeetings = allOption[(int)OptionsHolder.CommonOptionKey.DisableSkipInEmergencyMeeting].GetValue();
             NoVoteIsSelfVote = allOption[(int)OptionsHolder.CommonOptionKey.NoVoteToSelf].GetValue();
             HidePlayerNames = allOption[(int)OptionsHolder.CommonOptionKey.HidePlayerName].GetValue();
