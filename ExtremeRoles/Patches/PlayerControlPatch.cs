@@ -10,6 +10,7 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Patches
 {
@@ -238,7 +239,7 @@ namespace ExtremeRoles.Patches
             }
 
             var isBlocked = AssassinMeeting.AssassinMeetingTrigger;
-            var role = ExtremeRoleManager.GameRole[PlayerControl.LocalPlayer.PlayerId];
+            var role = ExtremeRoleManager.GetLocalPlayerRole();
 
             if (role.Id == ExtremeRoleId.Assassin)
             {
@@ -317,8 +318,8 @@ namespace ExtremeRoles.Patches
             }
             else if (IsLocalPlayerAssassinFirstMeeting)
             {
-                if (((Roles.Combination.Assassin)ExtremeRoleManager.GameRole[
-                    PlayerControl.LocalPlayer.PlayerId]).CanSeeRoleBeforeFirstMeeting && MapOption.GhostsSeeRoles)
+                if (((Roles.Combination.Assassin)ExtremeRoleManager.GetLocalPlayerRole()
+                    ).CanSeeRoleBeforeFirstMeeting && MapOption.GhostsSeeRoles)
                 {
                     playerInfoText = $"{roleNames}";
                 }
@@ -412,6 +413,13 @@ namespace ExtremeRoles.Patches
                 HudManager.Instance.KillButton.Show();
                 HudManager.Instance.KillButton.gameObject.SetActive(true);
             }
+
+            /*
+            if (role is IRoleAbility)
+            {
+                ((IRoleAbility)role).Button.Update();
+            }
+            */
 
 
             // ToDo:インポスターのベントボタンをエンジニアが使えるようにする

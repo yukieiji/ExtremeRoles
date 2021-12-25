@@ -34,7 +34,7 @@ namespace ExtremeRoles.Patches
             SpriteRenderer spriteRenderer = UnityEngine.Object.Instantiate<SpriteRenderer>(
                 __instance.PlayerVotePrefab);
 
-            var role = ExtremeRoleManager.GameRole[PlayerControl.LocalPlayer.PlayerId];
+            var role = ExtremeRoleManager.GetLocalPlayerRole();
             bool canSeeVote = role.Id == ExtremeRoleId.Marlin;
 
             if (canSeeVote)
@@ -240,8 +240,7 @@ namespace ExtremeRoles.Patches
 
             if (!AssassinMeeting.AssassinMeetingTrigger) { return true; }
 
-            if (ExtremeRoleManager.GameRole[
-                PlayerControl.LocalPlayer.PlayerId].Id != ExtremeRoleId.Assassin)
+            if (ExtremeRoleManager.GetLocalPlayerRole().Id != ExtremeRoleId.Assassin)
             { 
                 return true; 
             }
