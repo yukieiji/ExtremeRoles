@@ -1,14 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Roles.API.Interface
 {
-    interface IRoleAbility
+    public enum RoleAbilityCommonSetting
+    {
+        AbilityCoolTime = 21,
+        AbilityActiveTime = 22,
+    }
+    public interface IRoleAbility
     {
         public RoleAbilityButton Button
         {
@@ -21,8 +24,12 @@ namespace ExtremeRoles.Roles.API.Interface
         public void UseAbility();
 
         public bool IsAbilityUse();
+    }
 
-        protected RoleAbilityButton CreateAbilityButton(
+    public static class IRoleAbilityMixin
+    {
+        public static RoleAbilityButton CreateAbilityButton(
+            this IRoleAbility self,
             Sprite sprite,
             Vector3? positionOffset = null,
             Action abilityCleanUp = null,
@@ -33,13 +40,42 @@ namespace ExtremeRoles.Roles.API.Interface
             Vector3 offset = positionOffset ?? new Vector3(-1.8f, -0.06f, 0);
 
             return new RoleAbilityButton(
-                this.UseAbility,
-                this.IsAbilityUse,
+                self.UseAbility,
+                self.IsAbilityUse,
                 sprite,
                 offset,
                 abilityCleanUp,
                 hotkey,
                 mirror);
         }
+
+        public static int GetRoleSettingId(
+            this IRoleAbility self,
+            RoleAbilityCommonSetting setting) => ((IRoleSetting)self).GetRoleSettingId((int)setting);
+
+        public static void CreateRoleAbilityOption(
+            this IRoleAbility self,
+            CustomOption parentOps)
+        {
+
+            CustomOption.Create(
+                self.GetRoleSettingId(RoleAbilityCommonSetting.AbilityCoolTime),
+                Design.ConcatString(
+                    ((SingleRoleBase)self).RoleName,
+                    RoleAbilityCommonSetting.AbilityCoolTime.ToString()),
+                false, parentOps);
+            CustomOption.Create(
+                self.GetRoleSettingId(RoleAbilityCommonSetting.AbilityActiveTime),
+                Design.ConcatString(
+                    ((SingleRoleBase)self).RoleName,
+                    RoleAbilityCommonSetting.AbilityActiveTime.ToString()),
+                false, parentOps);
+        }
+
+        public static bool IsCommonUse(this IRoleAbility _)
+        {
+            return PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer.CanMove;
+        }
     }
+
 }
