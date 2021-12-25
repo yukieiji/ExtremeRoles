@@ -2,6 +2,7 @@
 using HarmonyLib;
 
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Patches
 {
@@ -54,12 +55,12 @@ namespace ExtremeRoles.Patches
         {
             public static bool Prefix(ExileController __instance)
             {
-                ResetAssassinMeeting();
+                resetAssassinMeeting();
                 return true;
             }
             public static void Postfix(ExileController __instance)
             {
-                WrapUpPostfix(__instance.exiled);
+                wrapUpPostfix(__instance.exiled);
             }
         }
 
@@ -68,23 +69,23 @@ namespace ExtremeRoles.Patches
         {
             public static bool Prefix(AirshipExileController __instance)
             {
-                ResetAssassinMeeting();
+                resetAssassinMeeting();
                 return true;
             }
             public static void Postfix(AirshipExileController __instance)
             {
-                WrapUpPostfix(__instance.exiled);
+                wrapUpPostfix(__instance.exiled);
             }
         }
 
-        private static void ResetAssassinMeeting()
+        private static void resetAssassinMeeting()
         {
             if (AssassinMeeting.AssassinMeetingTrigger)
             {
                 AssassinMeeting.AssassinMeetingTrigger = false;
             }
         }
-        private static void WrapUpPostfix(GameData.PlayerInfo exiled)
+        private static void wrapUpPostfix(GameData.PlayerInfo exiled)
         {
             var deadedAssassin = Module.PlayerDataContainer.DeadedAssassin;
 
@@ -102,7 +103,12 @@ namespace ExtremeRoles.Patches
                 Module.PlayerDataContainer.DeadedAssassin.Clear();
             }
 
-            AssassinMeeting.AssassinMeetingTrigger = false;
+            var role = ExtremeRoleManager.GetLocalPlayerRole();
+
+            if (role is IRoleAbility)
+            {
+                ((IRoleAbility)role).Button.ResetCoolTimer();
+            }
 
             if (exiled == null) { return; };
 

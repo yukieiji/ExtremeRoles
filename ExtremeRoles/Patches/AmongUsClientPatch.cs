@@ -15,10 +15,10 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameEnd))]
     public class AmongUsClientOnGameEndPatch
     {
-        private static GameOverReason EndReason;
+        private static GameOverReason endReason;
         public static void Prefix(AmongUsClient __instance, [HarmonyArgument(0)] ref EndGameResult endGameResult)
         {
-            EndReason = endGameResult.GameOverReason;
+            endReason = endGameResult.GameOverReason;
             if ((int)endGameResult.GameOverReason >= 10)
             {
                 endGameResult.GameOverReason = GameOverReason.ImpostorByKill;
@@ -40,7 +40,7 @@ namespace ExtremeRoles.Patches
                 if (playerInfo.Disconnected) { finalStatus = PlayerDataContainer.PlayerStatus.Disconnected; }
                 else if (playerInfo.IsDead) { finalStatus = PlayerDataContainer.PlayerStatus.Dead; }
                 else if (
-                    (EndReason == GameOverReason.ImpostorBySabotage) &&
+                    (endReason == GameOverReason.ImpostorBySabotage) &&
                     (!playerInfo.Role.IsImpostor)) { finalStatus = PlayerDataContainer.PlayerStatus.Dead; }
 
                 PlayerDataContainer.EndGameAddStatus(
@@ -66,7 +66,7 @@ namespace ExtremeRoles.Patches
                 TempData.winners.Remove(winner);
             }
 
-            switch (EndReason)
+            switch (endReason)
             {
                 case (GameOverReason)RoleGameOverReason.AliceKilledByImposter:
                 case (GameOverReason)RoleGameOverReason.AliceKillAllOthers:

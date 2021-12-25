@@ -1,8 +1,9 @@
 ﻿using ExtremeRoles.Module;
+using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Roles.Solo
 {
-    public class VanillaRoleWrapper : SingleRoleAbs
+    public class VanillaRoleWrapper : SingleRoleBase
     {
         public RoleTypes VanilaRoleId;
         public VanillaRoleWrapper(

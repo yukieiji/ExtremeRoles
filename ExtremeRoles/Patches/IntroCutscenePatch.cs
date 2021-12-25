@@ -10,7 +10,7 @@ namespace ExtremeRoles.Patches
             IntroCutscene __instance,
             ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
         {
-            var role = Roles.ExtremeRoleManager.GameRole[PlayerControl.LocalPlayer.PlayerId];
+            var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
 
             if (role.IsNeutral())
             {
@@ -26,7 +26,7 @@ namespace ExtremeRoles.Patches
             ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
         {
 
-            var role = Roles.ExtremeRoleManager.GameRole[PlayerControl.LocalPlayer.PlayerId];
+            var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
 
             // Intro solo teams
             if (role.IsNeutral())
@@ -81,7 +81,7 @@ namespace ExtremeRoles.Patches
     {
         public static void Postfix(IntroCutscene __instance)
         {
-            var role = Roles.ExtremeRoleManager.GameRole[PlayerControl.LocalPlayer.PlayerId];
+            var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
 
             if (role.Id != Roles.ExtremeRoleId.VanillaRole)
             {
@@ -104,7 +104,7 @@ namespace ExtremeRoles.Patches
             if (PlayerControl.LocalPlayer != null && HudManager.Instance != null)
             {
                 Module.PlayerDataContainer.CreatIcons(__instance);
-                var role = Roles.ExtremeRoleManager.GameRole[PlayerControl.LocalPlayer.PlayerId];
+                var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
                 if (role.Id == Roles.ExtremeRoleId.Marlin)
                 {
                     ((Roles.Combination.Marlin)role).SetPlayerIcon(

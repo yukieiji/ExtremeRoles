@@ -4,6 +4,7 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Roles.Combination
 {
@@ -24,7 +25,7 @@ namespace ExtremeRoles.Roles.Combination
 
     }
 
-    public class Assassin : MultiAssignRoleAbs
+    public class Assassin : MultiAssignRoleBase
     {
         public enum AssassinOption
         {
@@ -35,7 +36,6 @@ namespace ExtremeRoles.Roles.Combination
         public bool IsFirstMeeting = false;
         public bool CanSeeRoleBeforeFirstMeeting = false;
         public bool IsDeadForceMeeting = true;
-
 
         public Assassin(
             ) : base(
@@ -109,7 +109,7 @@ namespace ExtremeRoles.Roles.Combination
     }
 
 
-    public class Marlin : MultiAssignRoleAbs
+    public class Marlin : MultiAssignRoleBase
     {
         public enum MarlinOption
         {
@@ -131,6 +131,47 @@ namespace ExtremeRoles.Roles.Combination
                 ColorPalette.MarineBlue,
                 false, false, false, false)
         {}
+
+        public void SetPlayerIcon(
+            Dictionary<byte, PoolablePlayer> playerIcons)
+        {
+            this.PlayerIcon = playerIcons;
+            UpdateIcon();
+        }
+        public void UpdateIcon()
+        {
+
+            int visibleCounter = 0;
+            Vector3 bottomLeft = HudManager.Instance.UseButton.transform.localPosition;
+            bottomLeft.x *= -1;
+            bottomLeft += new Vector3(-0.25f, -0.25f, 0);
+
+            foreach (KeyValuePair<byte, PoolablePlayer> item in this.PlayerIcon)
+            {
+                byte playerId = item.Key;
+                var poolPlayer = item.Value;
+                if (playerId == PlayerControl.LocalPlayer.PlayerId) { continue; }
+
+                PlayerControl player = Player.GetPlayerControlById(playerId);
+                SingleRoleBase role = ExtremeRoleManager.GameRole[playerId];
+                if (player.Data.IsDead ||
+                    player.Data.Disconnected ||
+                    role.IsCrewmate() ||
+                    (role.IsNeutral() && !this.CanSeeNeutral))
+                {
+                    poolPlayer.gameObject.SetActive(false);
+                }
+                else
+                {
+                    poolPlayer.gameObject.SetActive(true);
+                    poolPlayer.transform.localScale = Vector3.one * 0.25f;
+                    poolPlayer.transform.localPosition = bottomLeft + Vector3.right * visibleCounter * 0.45f;
+                    ++visibleCounter;
+                }
+            }
+        }
+
+
         protected override void CreateSpecificOption(
             CustomOption parentOps)
         {
@@ -165,45 +206,5 @@ namespace ExtremeRoles.Roles.Combination
             this.CanSeeNeutral = OptionsHolder.AllOptions[
                 GetRoleSettingId((int)MarlinOption.CanSeeNeutral)].GetBool();
         }
-
-        public void SetPlayerIcon(
-            Dictionary<byte, PoolablePlayer> playerIcons)
-        {
-            this.PlayerIcon = playerIcons;
-            UpdateIcon();
-        }
-        public void UpdateIcon()
-        {
-
-            int visibleCounter = 0;
-            Vector3 bottomLeft = HudManager.Instance.UseButton.transform.localPosition;
-            bottomLeft.x *= -1;
-            bottomLeft += new Vector3(-0.25f, -0.25f, 0);
-
-            foreach (KeyValuePair<byte, PoolablePlayer> item in this.PlayerIcon)
-            {
-                byte playerId = item.Key;
-                var poolPlayer = item.Value;
-                if (playerId == PlayerControl.LocalPlayer.PlayerId) { continue; }
-
-                PlayerControl player = Player.GetPlayerControlById(playerId);
-                SingleRoleAbs role = ExtremeRoleManager.GameRole[playerId];
-                if (player.Data.IsDead ||
-                    player.Data.Disconnected ||
-                    role.IsCrewmate() ||
-                    (role.IsNeutral() && !this.CanSeeNeutral))
-                {
-                    poolPlayer.gameObject.SetActive(false);
-                }
-                else
-                {
-                    poolPlayer.gameObject.SetActive(true);
-                    poolPlayer.transform.localScale = Vector3.one * 0.25f;
-                    poolPlayer.transform.localPosition = bottomLeft + Vector3.right * visibleCounter * 0.45f;
-                    ++visibleCounter;
-                }
-            }
-        }
-
     }
 }

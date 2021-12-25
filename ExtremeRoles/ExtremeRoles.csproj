@@ -14,6 +14,7 @@
         <GamePlatform Condition="'$(GamePlatform)' == ''">Steam</GamePlatform>
         <GameVersion Condition="'$(GamePlatform)' == 'Steam'">2021.12.14</GameVersion>
         <GameVersion Condition="'$(GamePlatform)' == 'Itch'">2021.12.14</GameVersion>
+        <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
     </PropertyGroup>
 
     <ItemGroup>
@@ -22,7 +23,7 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="BepInEx.Il2Cpp.TlsAdapter" Version="1.0.1" />
-        <PackageReference Include="HarmonyX" Version="2.6.1" />
+        <PackageReference Include="HarmonyX" Version="2.7.0" />
         <PackageReference Include="Reactor" Version="1.1.0" />
         <PackageReference Include="BepInEx.IL2CPP" Version="6.0.0-be.521" />
         <PackageReference Include="AmongUs.GameLibs.$(GamePlatform)" Version="$(GameVersion)" PrivateAssets="all" />
@@ -38,7 +39,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Update="AmongUs.GameLibs.Steam" Version="2021.12.14" />
+      <PackageReference Update="AmongUs.GameLibs.Steam" Version="2021.12.15" />
     </ItemGroup>
 
     <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">

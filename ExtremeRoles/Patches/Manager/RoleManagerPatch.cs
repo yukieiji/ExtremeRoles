@@ -7,6 +7,7 @@ using Hazel;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Patches.Manager
 {
@@ -14,7 +15,7 @@ namespace ExtremeRoles.Patches.Manager
     class RoleManagerSelectRolesPatch
     {
 
-        private static Random RoleRng = new Random(
+        private static Random roleRng = new Random(
             UnityEngine.SystemInfo.processorFrequency);
 
         public static void Postfix()
@@ -44,7 +45,7 @@ namespace ExtremeRoles.Patches.Manager
 
             if (extremeRolesData.CombinationRole.Count == 0) { return; }
 
-            List<(List<MultiAssignRoleAbs>, int)> assignMultiAssignRole = GetMultiAssignedRoles(
+            List<(List<MultiAssignRoleBase>, int)> assignMultiAssignRole = GetMultiAssignedRoles(
                 ref extremeRolesData);
 
             PlayerControl player = PlayerControl.LocalPlayer;
@@ -55,7 +56,7 @@ namespace ExtremeRoles.Patches.Manager
                 {
                     bool assign = false;
                     List<int> tempList = new List<int>(
-                        playerIndexList.OrderBy(item => RoleRng.Next()).ToList());
+                        playerIndexList.OrderBy(item => roleRng.Next()).ToList());
                     foreach(int playerIndex in tempList)
                     {
                         player = PlayerControl.AllPlayerControls[playerIndex];
@@ -78,14 +79,14 @@ namespace ExtremeRoles.Patches.Manager
 
         }
 
-        private static List<(List<MultiAssignRoleAbs>, int)> GetMultiAssignedRoles(
+        private static List<(List<MultiAssignRoleBase>, int)> GetMultiAssignedRoles(
             ref RoleAssignmentData extremeRolesData)
         {
-            List<(List<MultiAssignRoleAbs>, int)> assignRoles = new List<(List<MultiAssignRoleAbs>, int)>();
+            List<(List<MultiAssignRoleBase>, int)> assignRoles = new List<(List<MultiAssignRoleBase>, int)>();
 
             var roleDataLoop = extremeRolesData.CombinationRole.OrderBy(
-                item => RoleRng.Next()).ToList();
-            List<(List<MultiAssignRoleAbs>, (int, int))> newRoleData = new List<(List<MultiAssignRoleAbs>, (int, int))> ();
+                item => roleRng.Next()).ToList();
+            List<(List<MultiAssignRoleBase>, (int, int))> newRoleData = new List<(List<MultiAssignRoleBase>, (int, int))> ();
 
             foreach (var oneRole in roleDataLoop)
             {
@@ -128,11 +129,11 @@ namespace ExtremeRoles.Patches.Manager
                     extremeRolesData.NeutralRoles = extremeRolesData.NeutralRoles - reduceNeutralRole;
                     extremeRolesData.ImpostorRoles = extremeRolesData.ImpostorRoles - reduceImpostorRole;
 
-                    var spawnRoles = new List<MultiAssignRoleAbs>();
+                    var spawnRoles = new List<MultiAssignRoleBase>();
                     foreach (var role in roles)
                     {
                         spawnRoles.Add(
-                            (MultiAssignRoleAbs)role.Clone());
+                            (MultiAssignRoleBase)role.Clone());
                     }
                     assignRoles.Add((spawnRoles, num));
                 }
@@ -142,7 +143,7 @@ namespace ExtremeRoles.Patches.Manager
         }
 
         private static bool IsAssignedToMultiRole(
-            MultiAssignRoleAbs role,
+            MultiAssignRoleBase role,
             PlayerControl player)
         {
 
@@ -204,15 +205,15 @@ namespace ExtremeRoles.Patches.Manager
             List<int> shuffledArange)
         {
 
-            List<SingleRoleAbs> shuffleRolesForImpostor = extremeRolesData.RolesForVanillaImposter;
-            List<SingleRoleAbs> shuffleRolesForCrewmate = extremeRolesData.RolesForVanillaCrewmate;
+            List<SingleRoleBase> shuffleRolesForImpostor = extremeRolesData.RolesForVanillaImposter;
+            List<SingleRoleBase> shuffleRolesForCrewmate = extremeRolesData.RolesForVanillaCrewmate;
 
             bool assigned = false;
             int assignedPlayers = 1;
 
             do
             {
-                shuffledArange = shuffledArange.OrderBy(item => RoleRng.Next()).ToList();
+                shuffledArange = shuffledArange.OrderBy(item => roleRng.Next()).ToList();
                 Logging.Debug($"NotAssignPlayerNum:{shuffledArange.Count()}");
                 assignedPlayers = 1;
 
@@ -222,7 +223,7 @@ namespace ExtremeRoles.Patches.Manager
                 {
                     assigned = false;
 
-                    List<SingleRoleAbs> shuffledRoles = new List<SingleRoleAbs>();
+                    List<SingleRoleBase> shuffledRoles = new List<SingleRoleBase>();
                     PlayerControl player = PlayerControl.AllPlayerControls[index];
                     RoleBehaviour roleData = player.Data.Role;
 
@@ -233,11 +234,11 @@ namespace ExtremeRoles.Patches.Manager
 
                         case RoleTypes.Impostor:
                             shuffledRoles = shuffleRolesForImpostor.OrderBy(
-                                item => RoleRng.Next()).ToList();
+                                item => roleRng.Next()).ToList();
                             break;
                         case RoleTypes.Crewmate:
                             shuffledRoles = shuffleRolesForCrewmate.OrderBy(
-                                item => RoleRng.Next()).ToList();
+                                item => roleRng.Next()).ToList();
                             break;
                         default:
                             SetRoleToPlayer(
@@ -358,12 +359,12 @@ namespace ExtremeRoles.Patches.Manager
 
         private static RoleAssignmentData CreateRoleData()
         {
-            List<SingleRoleAbs> RolesForVanillaImposter = new List<SingleRoleAbs>();
-            List<SingleRoleAbs> RolesForVanillaCrewmate = new List<SingleRoleAbs>();
+            List<SingleRoleBase> RolesForVanillaImposter = new List<SingleRoleBase>();
+            List<SingleRoleBase> RolesForVanillaCrewmate = new List<SingleRoleBase>();
             
             // コンビネーションロールに含まれているロール、コンビネーション全体のスポーン数、スポーンレート
-            List<(List<MultiAssignRoleAbs>, (int, int))> combinationRole = new List<
-                (List<MultiAssignRoleAbs>, (int, int))>();
+            List<(List<MultiAssignRoleBase>, (int, int))> combinationRole = new List<
+                (List<MultiAssignRoleBase>, (int, int))>();
 
             Dictionary<byte, (int, int)> RoleSpawnSettingsForImposter = new Dictionary<byte, (int, int)>();
             Dictionary<byte, (int, int)> RoleSpawnSettingsForCrewmate = new Dictionary<byte, (int, int)>();
@@ -458,10 +459,10 @@ namespace ExtremeRoles.Patches.Manager
 
         private class RoleAssignmentData
         {
-            public List<SingleRoleAbs> RolesForVanillaImposter = new List<SingleRoleAbs>();
-            public List<SingleRoleAbs> RolesForVanillaCrewmate = new List<SingleRoleAbs>();
-            public List<(List<MultiAssignRoleAbs>, (int, int))> CombinationRole = new List<
-                (List<MultiAssignRoleAbs>, (int, int))>();
+            public List<SingleRoleBase> RolesForVanillaImposter = new List<SingleRoleBase>();
+            public List<SingleRoleBase> RolesForVanillaCrewmate = new List<SingleRoleBase>();
+            public List<(List<MultiAssignRoleBase>, (int, int))> CombinationRole = new List<
+                (List<MultiAssignRoleBase>, (int, int))>();
 
             public Dictionary<
                 RoleTypes, Dictionary<byte, (int, int)>> RoleSpawnSettings = 

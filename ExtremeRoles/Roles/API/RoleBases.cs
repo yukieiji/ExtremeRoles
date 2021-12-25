@@ -6,106 +6,10 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 
-namespace ExtremeRoles.Roles
+
+namespace ExtremeRoles.Roles.API
 {
-    public enum ExtremeRoleType
-    {
-        Null = -2,
-        Neutral = -1,
-        Crewmate = 0,
-        Impostor = 1
-    }
-    public enum RoleCommonSetting
-    {
-        RoleNum = 15,
-        SpawnRate = 16,
-        HasOtherVison = 17,
-        Vison = 18,
-        ApplyEnvironmentVisionEffect = 19,
-    }
-    public enum KillerCommonSetting
-    {
-        HasOtherKillRange = 11,
-        KillRange = 12,
-        HasOtherKillCool = 13,
-        KillCoolDown = 14,
-    }
-    public enum CombinationRoleCommonSetting
-    {
-        IsMultiAssign = 11,
-    }
-
-    interface IRoleAbility
-    {
-        void CreateAbility();
-        void UseAbility();
-    }
-
-    abstract public class RoleAbs
-    {
-
-        public bool CanKill = false;
-
-        protected int OptionIdOffset = 0;
-
-        
-        public int GetRoleSettingId(
-            RoleCommonSetting setting) => GetRoleSettingId((int)setting);
-        
-        public int GetRoleSettingId(
-            KillerCommonSetting setting) => GetRoleSettingId((int)setting);
-
-        public int GetRoleSettingId(
-            CombinationRoleCommonSetting setting) => GetRoleSettingId((int)setting);
-
-        public int GetRoleSettingId(int setting) => this.OptionIdOffset + setting;
-
-        public void GameInit()
-        {
-            CommonInit();
-            RoleSpecificInit();
-        }
-
-        public void CreateRoleAllOption(
-            int optionIdOffset)
-        {
-            this.OptionIdOffset = optionIdOffset;
-            var parentOps = CreateSpawnOption();
-            CreateVisonOption(parentOps);
-            CreateSpecificOption(parentOps);
-            if (this.CanKill)
-            {
-                CreateKillerOption(parentOps);
-            }
-        }
-        public void CreatRoleSpecificOption(
-            CustomOption parentOps,
-            int optionIdOffset)
-        {
-            this.OptionIdOffset = optionIdOffset;
-            CreateVisonOption(parentOps);
-            CreateSpecificOption(parentOps);
-            if (this.CanKill)
-            {
-                CreateKillerOption(parentOps);
-            }
-        }
-        protected abstract void CreateKillerOption(
-            CustomOption parentOps);
-        protected abstract CustomOption CreateSpawnOption();
-
-        protected abstract void CreateSpecificOption(
-            CustomOption parentOps);
-        protected abstract void CreateVisonOption(
-            CustomOption parentOps);
-
-        protected abstract void CommonInit();
-
-        protected abstract void RoleSpecificInit();
-
-    }
-
-    public abstract class SingleRoleAbs : RoleAbs
+    public abstract class SingleRoleBase : RoleSettingBase
     {
         public bool IsVanilaRole = false;
         public bool HasTask = true;
@@ -128,9 +32,9 @@ namespace ExtremeRoles.Roles
         public byte BytedRoleId;
         public ExtremeRoleType Teams;
 
-        public SingleRoleAbs()
+        public SingleRoleBase()
         { }
-        public SingleRoleAbs(
+        public SingleRoleBase(
             ExtremeRoleId id,
             ExtremeRoleType team,
             string roleName,
@@ -154,9 +58,9 @@ namespace ExtremeRoles.Roles
             this.IsVanilaRole = isVanilaRole;
         }
 
-        public virtual SingleRoleAbs Clone()
+        public virtual SingleRoleBase Clone()
         {
-            SingleRoleAbs copy = (SingleRoleAbs)this.MemberwiseClone();
+            SingleRoleBase copy = (SingleRoleBase)this.MemberwiseClone();
             Color baseColor = this.NameColor;
 
             copy.NameColor = new Color(
@@ -174,7 +78,7 @@ namespace ExtremeRoles.Roles
 
         public bool IsNeutral() => this.Teams == ExtremeRoleType.Neutral;
 
-        public string GetColoredRoleName() => Design.Cs(
+        public string GetColoredRoleName() => Design.ColoedString(
             this.NameColor, this.RoleName);
 
         public virtual bool IsTeamsWin() => this.IsWin;
@@ -238,7 +142,7 @@ namespace ExtremeRoles.Roles
         {
             var roleSetOption = CustomOption.Create(
                 GetRoleSettingId(RoleCommonSetting.SpawnRate),
-                Design.Cs(
+                Design.ColoedString(
                     this.NameColor,
                     Design.ConcatString(
                         this.Id.ToString(),
@@ -302,109 +206,14 @@ namespace ExtremeRoles.Roles
                     GetRoleSettingId(KillerCommonSetting.KillRange)].GetSelection();
             }
         }
-
     }
-
-    public abstract class CombinationRoleManagerBase : RoleAbs
-    {
-
-        public List<MultiAssignRoleAbs> Roles = new List<MultiAssignRoleAbs>();
-
-        private int SetPlayerNum = 0;
-        private Color SettingColor;
-
-        private string RoleName = "";
-
-        public CombinationRoleManagerBase(
-            string roleName,
-            Color settingColor,
-            int setPlayerNum)
-        {
-            this.SettingColor = settingColor;
-            this.SetPlayerNum = setPlayerNum;
-            this.RoleName = roleName;
-        }
-
-        protected override CustomOption CreateSpawnOption()
-        {
-            // ExtremeRolesPlugin.Instance.Log.LogInfo($"Color: {this.SettingColor}");
-            var roleSetOption = CustomOption.Create(
-                GetRoleSettingId(RoleCommonSetting.SpawnRate),
-                Design.Cs(
-                    this.SettingColor,
-                    Design.ConcatString(
-                        this.RoleName,
-                        RoleCommonSetting.SpawnRate.ToString())),
-                OptionsHolder.SpawnRate, null, true);
-
-            int thisMaxRoleNum = (int)Math.Floor((decimal)OptionsHolder.VanillaMaxPlayerNum / this.SetPlayerNum);
-
-            CustomOption.Create(
-                GetRoleSettingId(RoleCommonSetting.RoleNum),
-                Design.ConcatString(
-                    this.RoleName,
-                    RoleCommonSetting.RoleNum.ToString()),
-                1, 1, thisMaxRoleNum, 1,
-                roleSetOption);
-            CustomOption.Create(
-                GetRoleSettingId(CombinationRoleCommonSetting.IsMultiAssign),
-                Design.ConcatString(
-                    this.RoleName,
-                    CombinationRoleCommonSetting.IsMultiAssign.ToString()),
-                false, roleSetOption);
-
-            return roleSetOption;
-        }
-        protected override void CreateKillerOption(
-            CustomOption parentOps)
-        {
-            // 複数ロールの中に殺戮者がいる可能性がため、管理ロールで殺戮者の設定はしない
-            return;
-        }
-        
-        protected override void CreateSpecificOption(
-            CustomOption parentOps)
-        {
-            IEnumerable<SingleRoleAbs> collection = Roles;
-            
-            foreach (var item in collection.Select(
-                (Value, Index) => new { Value, Index }))
-            {
-                int optionOffset = this.OptionIdOffset + (
-                    ExtremeRoleManager.OptionOffsetPerRole * (item.Index + 1));
-                item.Value.CreatRoleSpecificOption(
-                    parentOps,
-                    optionOffset);
-            }
-        }
-
-        protected override void CreateVisonOption(
-            CustomOption parentOps)
-        {
-            // 複数のロールがまとまっているため、管理ロールで視界の設定はしない
-            return;
-        }
-
-        protected override void CommonInit()
-        {
-            foreach (var role in Roles)
-            {
-                role.CanHasAnotherRole = OptionsHolder.AllOptions[
-                    GetRoleSettingId(CombinationRoleCommonSetting.IsMultiAssign)].GetBool();
-                role.GameId = 0;
-                role.GameInit();
-            }
-        }
-
-    }
-
-    public abstract class MultiAssignRoleAbs : SingleRoleAbs
+    public abstract class MultiAssignRoleBase : SingleRoleBase
     {
         public byte GameId = 0;
-        public SingleRoleAbs AnotherRole = null;
+        public SingleRoleBase AnotherRole = null;
         public bool CanHasAnotherRole = false;
 
-        public MultiAssignRoleAbs(
+        public MultiAssignRoleBase(
             ExtremeRoleId id,
             ExtremeRoleType team,
             string roleName,
@@ -413,13 +222,13 @@ namespace ExtremeRoles.Roles
             bool hasTask,
             bool useVent,
             bool useSabotage,
-            bool isVanilaRole = false) :base(
+            bool isVanilaRole = false) : base(
                 id, team, roleName, roleColor,
                 canKill, hasTask, useVent,
                 useSabotage, isVanilaRole)
         { }
 
-        public void SetAnotherRole(SingleRoleAbs role)
+        public void SetAnotherRole(SingleRoleBase role)
         {
             if (this.CanHasAnotherRole)
             {

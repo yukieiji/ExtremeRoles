@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public class Jackal : SingleRoleAbs
+    public class Jackal : SingleRoleBase
     {
         public List<byte> SideKickPlayerId = new List<byte>();
 
@@ -25,20 +26,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             true, false, true, false)
         { }
 
-        public void CreateAbility()
-        {
-            RoleAbilityButton abilityButton = new RoleAbilityButton();
-            abilityButton.ButtonInit("a", "a");
-            abilityButton.SetEnabled();
-            abilityButton.gameObject.SetActive(true);
-            abilityButton.SetCoolDown(0f, 1f);
-        }
-
-        public void UseAbility()
-        {
-            throw new NotImplementedException();
-        }
-
         protected override void CreateSpecificOption(
             CustomOption parentOps)
         {
@@ -51,7 +38,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         }
     }
 
-    public class SideKick : SingleRoleAbs
+    public class SideKick : SingleRoleBase
     {
         public SideKick() : base(
             ExtremeRoleId.SideKick,

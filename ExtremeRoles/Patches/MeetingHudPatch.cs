@@ -34,7 +34,7 @@ namespace ExtremeRoles.Patches
             SpriteRenderer spriteRenderer = UnityEngine.Object.Instantiate<SpriteRenderer>(
                 __instance.PlayerVotePrefab);
 
-            var role = ExtremeRoleManager.GameRole[PlayerControl.LocalPlayer.PlayerId];
+            var role = ExtremeRoleManager.GetLocalPlayerRole();
             bool canSeeVote = role.Id == ExtremeRoleId.Marlin;
 
             if (canSeeVote)
@@ -105,7 +105,7 @@ namespace ExtremeRoles.Patches
         {
             if (!AssassinMeeting.AssassinMeetingTrigger) { return true; }
 
-            var (isVoteEnd, voteFor) = AssassinVoteState(__instance);
+            var (isVoteEnd, voteFor) = assassinVoteState(__instance);
 
             if (isVoteEnd)
             {
@@ -142,7 +142,7 @@ namespace ExtremeRoles.Patches
             return false;
         }
 
-        private static Tuple<bool, byte> AssassinVoteState(MeetingHud __instance)
+        private static Tuple<bool, byte> assassinVoteState(MeetingHud __instance)
         {
             bool isVoteEnd = false;
             byte voteFor = byte.MaxValue;
@@ -240,8 +240,7 @@ namespace ExtremeRoles.Patches
 
             if (!AssassinMeeting.AssassinMeetingTrigger) { return true; }
 
-            if (ExtremeRoleManager.GameRole[
-                PlayerControl.LocalPlayer.PlayerId].Id != ExtremeRoleId.Assassin)
+            if (ExtremeRoleManager.GetLocalPlayerRole().Id != ExtremeRoleId.Assassin)
             { 
                 return true; 
             }
@@ -270,7 +269,7 @@ namespace ExtremeRoles.Patches
     class MeetingHudUpdatePatch
     {
 
-        static void Postfix(MeetingHud __instance)
+        public static void Postfix(MeetingHud __instance)
         {
             if (__instance.state == MeetingHud.VoteStates.Animating) { return; }
 
@@ -305,7 +304,7 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.UpdateButtons))]
     class MeetingHudUpdateButtonsPatch
     {
-        static bool PreFix(MeetingHud __instance)
+        public static bool PreFix(MeetingHud __instance)
         {
             if (!AssassinMeeting.AssassinMeetingTrigger) { return true; }
 

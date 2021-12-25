@@ -26,8 +26,8 @@ namespace ExtremeRoles.Patches
 
             float num = (float)switchSystem.Value / 255f;
             float switchVisonMulti = Mathf.Lerp(
-                    __instance.MinLightRadius,
-                    __instance.MaxLightRadius, num);
+                __instance.MinLightRadius,
+                __instance.MaxLightRadius, num);
 
             float baseVison = __instance.MaxLightRadius;
 
@@ -68,23 +68,16 @@ namespace ExtremeRoles.Patches
             if (AssassinMeeting.AssassinMeetingTrigger) { return false; }
 
             var statistics = new PlayerDataContainer.PlayerStatistics();
-
-            // Helper.Logging.Debug($"Neutral Alive:{statistics.NeutralKillerPlayer.Count}");
-
-            if (IsNeutralSpecialWin(__instance)) { return false; }
-            if (IsNeutralAliveWin(__instance, statistics)) { return false; }
-            if (IsSabotageWin(__instance)) { return false; }
-            if (IsTaskWin(__instance)) { return false; }
-
-            if (statistics.NeutralKillerPlayer.Count > 0) { return false; }
-            
-            if (IsImpostorWin(__instance, statistics)) { return false; }
-            if (IsCrewmateWin(__instance, statistics)) { return false; }
+            if (isNeutralWin(__instance)) { return false; }
+            if (isSabotageWin(__instance)) { return false; }
+            if (isTaskWin(__instance)) { return false; };
+            if (isImpostorWin(__instance, statistics)) { return false; };
+            if (isCrewmateWin(__instance, statistics)) { return false; };
             
             return false;
         }
 
-        private static void GameIsEnd(
+        private static void gameIsEnd(
             ref ShipStatus curShip,
             GameOverReason reason,
             bool trigger = false)
@@ -93,7 +86,7 @@ namespace ExtremeRoles.Patches
             ShipStatus.RpcEndGame(reason, trigger);
         }
 
-        private static bool IsCrewmateWin(
+        private static bool isCrewmateWin(
             ShipStatus __instance,
             PlayerDataContainer.PlayerStatistics statistics)
         {
@@ -101,13 +94,13 @@ namespace ExtremeRoles.Patches
                 statistics.TeamImpostorAlive == 0 && 
                 statistics.NeutralKillerPlayer.Count == 0)
             {
-                GameIsEnd(ref __instance, GameOverReason.HumansByVote);
+                gameIsEnd(ref __instance, GameOverReason.HumansByVote);
                 return true;
             }
             return false;
         }
 
-        private static bool IsImpostorWin(
+        private static bool isImpostorWin(
             ShipStatus __instance,
             PlayerDataContainer.PlayerStatistics statistics)
         {
@@ -139,58 +132,14 @@ namespace ExtremeRoles.Patches
             if (isGameEnd)
             {
 
-                GameIsEnd(ref __instance, endReason);
+                gameIsEnd(ref __instance, endReason);
                 return true;
             }
 
             return false;
 
         }
-
-        private static bool IsNeutralAliveWin(
-            ShipStatus __instance,
-            PlayerDataContainer.PlayerStatistics statistics)
-        {
-
-            if (statistics.TeamImpostorAlive != 0) { return false; }
-
-            var allRole = ExtremeRoleManager.GameRole;
-            int killerAlive = statistics.NeutralKillerPlayer.Count;
-
-            ExtremeRoleId roleId = allRole[statistics.NeutralAlivePlayer[0]].Id;
-            for (int i = 1; i < killerAlive; ++i)
-            {
-                var checkRoleId = allRole[statistics.NeutralAlivePlayer[i]].Id;
-                if (roleId != checkRoleId)
-                {
-                    return false;
-                }
-                roleId = checkRoleId;
-            }
-
-            if (statistics.TeamCrewmateAlive <= killerAlive)
-            {
-
-                GameOverReason endReason = (GameOverReason)RoleGameOverReason.UnKnown;
-
-                switch (roleId)
-                {
-                    case ExtremeRoleId.Alice:
-                        endReason = (GameOverReason)RoleGameOverReason.AliceKillAllOthers;
-                        break;
-                    default:
-                        break;
-                }
-
-                GameIsEnd(ref __instance, endReason);
-                return true;
-
-            }
-
-            return false;
-        }
-
-        private static bool IsNeutralSpecialWin(
+        private static bool isNeutralWin(
             ShipStatus __instance)
         {
             
@@ -211,7 +160,7 @@ namespace ExtremeRoles.Patches
                         default :
                             break;
                     }
-                    GameIsEnd(ref __instance, endReason);
+                    gameIsEnd(ref __instance, endReason);
                     return true;
 
                 }
@@ -221,7 +170,7 @@ namespace ExtremeRoles.Patches
         }
 
 
-        private static bool IsSabotageWin(
+        private static bool isSabotageWin(
             ShipStatus __instance)
         {
             if (__instance.Systems == null) { return false; };
@@ -232,7 +181,7 @@ namespace ExtremeRoles.Patches
                 LifeSuppSystemType lifeSuppSystemType = systemType.TryCast<LifeSuppSystemType>();
                 if (lifeSuppSystemType != null && lifeSuppSystemType.Countdown < 0f)
                 {
-                    GameIsEnd(ref __instance, GameOverReason.ImpostorBySabotage);
+                    gameIsEnd(ref __instance, GameOverReason.ImpostorBySabotage);
                     lifeSuppSystemType.Countdown = 10000f;
                     return true;
                 }
@@ -249,19 +198,19 @@ namespace ExtremeRoles.Patches
                 ICriticalSabotage criticalSystem = systemType2.TryCast<ICriticalSabotage>();
                 if (criticalSystem != null && criticalSystem.Countdown < 0f)
                 {
-                    GameIsEnd(ref __instance, GameOverReason.ImpostorBySabotage);
+                    gameIsEnd(ref __instance, GameOverReason.ImpostorBySabotage);
                     criticalSystem.ClearSabotage();
                     return true;
                 }
             }
             return false;
         }
-        private static bool IsTaskWin(ShipStatus __instance)
+        private static bool isTaskWin(ShipStatus __instance)
         {
             if (GameData.Instance.TotalTasks > 0 && 
                 GameData.Instance.TotalTasks <= GameData.Instance.CompletedTasks)
             {
-                GameIsEnd(ref __instance, GameOverReason.ImpostorBySabotage);
+                gameIsEnd(ref __instance, GameOverReason.ImpostorBySabotage);
                 return true;
             }
             return false;

@@ -15,7 +15,7 @@ namespace ExtremeRoles.Patches.Option
     [HarmonyPatch]
     public static class ClientOptionsPatch
     {
-        private static SelectionBehaviour[] ModOption = {
+        private static SelectionBehaviour[] modOption = {
             new SelectionBehaviour(
                 "streamerModeButton",
                 () => ExtremeRolesPlugin.StreamerMode.Value = !ExtremeRolesPlugin.StreamerMode.Value,
@@ -36,15 +36,15 @@ namespace ExtremeRoles.Patches.Option
                 ExtremeRolesPlugin.ShowRoleSummary.Value),
         };
 
-        private static GameObject PopUp;
-        private static TextMeshPro TitleText;
+        private static GameObject popUp;
+        private static TextMeshPro titleText;
 
-        private static ToggleButtonBehaviour MoreOptions;
-        private static List<ToggleButtonBehaviour> ModButtons;
-        private static TextMeshPro TitleTextTitle;
+        private static ToggleButtonBehaviour moreOptions;
+        private static List<ToggleButtonBehaviour> modButtons;
+        private static TextMeshPro titleTextTitle;
 
-        private static ToggleButtonBehaviour ButtonPrefab;
-        private static Vector3? Origin;
+        private static ToggleButtonBehaviour buttonPrefab;
+        private static Vector3? origin;
 
         [HarmonyPostfix]
         [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
@@ -54,10 +54,10 @@ namespace ExtremeRoles.Patches.Option
             var tmp = __instance.Announcement.transform.Find("Title_Text").gameObject.GetComponent<TextMeshPro>();
             tmp.alignment = TextAlignmentOptions.Center;
             tmp.transform.localPosition += Vector3.left * 0.2f;
-            TitleText = Object.Instantiate(tmp);
-            Object.Destroy(TitleText.GetComponent<TextTranslatorTMP>());
-            TitleText.gameObject.SetActive(false);
-            Object.DontDestroyOnLoad(TitleText);
+            titleText = Object.Instantiate(tmp);
+            Object.Destroy(titleText.GetComponent<TextTranslatorTMP>());
+            titleText.gameObject.SetActive(false);
+            Object.DontDestroyOnLoad(titleText);
         }
 
         [HarmonyPostfix]
@@ -66,104 +66,123 @@ namespace ExtremeRoles.Patches.Option
         {
             if (!__instance.CensorChatButton) { return; }
 
-            if (!PopUp)
+            if (!popUp)
             {
-                CreateCustom(__instance);
+                createCustom(__instance);
             }
 
-            if (!ButtonPrefab)
+            if (!buttonPrefab)
             {
-                ButtonPrefab = Object.Instantiate(__instance.CensorChatButton);
-                Object.DontDestroyOnLoad(ButtonPrefab);
-                ButtonPrefab.name = "CensorChatPrefab";
-                ButtonPrefab.gameObject.SetActive(false);
+                buttonPrefab = Object.Instantiate(__instance.CensorChatButton);
+                Object.DontDestroyOnLoad(buttonPrefab);
+                buttonPrefab.name = "CensorChatPrefab";
+                buttonPrefab.gameObject.SetActive(false);
             }
 
-            SetUpOptions();
+            setUpOptions();
             InitializeMoreButton(__instance);
         }
 
-        private static void CreateCustom(OptionsMenuBehaviour prefab)
+        public static void UpdateMenuTranslation()
         {
-            PopUp = Object.Instantiate(prefab.gameObject);
-            Object.DontDestroyOnLoad(PopUp);
-            var transform = PopUp.transform;
+            if (titleTextTitle)
+            {
+                titleTextTitle.text = Helper.Translation.GetString("moreOptionsText");
+            }
+            if (moreOptions)
+            {
+                moreOptions.Text.text = Helper.Translation.GetString("modOptionsText");
+            }
+            for (int i = 0; i < modOption.Length; i++)
+            {
+                if (i >= modButtons.Count) { break; }
+                modButtons[i].Text.text = Helper.Translation.GetString(modOption[i].Title);
+            }
+        }
+
+        private static void createCustom(OptionsMenuBehaviour prefab)
+        {
+            popUp = Object.Instantiate(prefab.gameObject);
+            Object.DontDestroyOnLoad(popUp);
+            var transform = popUp.transform;
             var pos = transform.localPosition;
             pos.z = -810f;
             transform.localPosition = pos;
 
-            Object.Destroy(PopUp.GetComponent<OptionsMenuBehaviour>());
-            foreach (var gObj in PopUp.gameObject.GetAllChilds())
+            Object.Destroy(popUp.GetComponent<OptionsMenuBehaviour>());
+            foreach (var gObj in popUp.gameObject.getAllChilds())
             {
                 if (gObj.name != "Background" && gObj.name != "CloseButton")
                     Object.Destroy(gObj);
             }
 
-            PopUp.SetActive(false);
+            popUp.SetActive(false);
         }
 
         private static void InitializeMoreButton(OptionsMenuBehaviour __instance)
         {
-            MoreOptions = Object.Instantiate(ButtonPrefab, __instance.CensorChatButton.transform.parent);
+            moreOptions = Object.Instantiate(
+                buttonPrefab,
+                __instance.CensorChatButton.transform.parent);
             var transform = __instance.CensorChatButton.transform;
-            Origin ??= transform.localPosition;
+            origin ??= transform.localPosition;
 
-            transform.localPosition = Origin.Value + Vector3.left * 1.3f;
-            MoreOptions.transform.localPosition = Origin.Value + Vector3.right * 1.3f;
+            transform.localPosition = origin.Value + Vector3.left * 1.3f;
+            moreOptions.transform.localPosition = origin.Value + Vector3.right * 1.3f;
 
-            MoreOptions.gameObject.SetActive(true);
-            MoreOptions.Text.text = Helper.Translation.GetString("modOptionsText");
-            var moreOptionsButton = MoreOptions.GetComponent<PassiveButton>();
+            moreOptions.gameObject.SetActive(true);
+            moreOptions.Text.text = Helper.Translation.GetString("modOptionsText");
+            var moreOptionsButton = moreOptions.GetComponent<PassiveButton>();
             moreOptionsButton.OnClick = new ButtonClickedEvent();
             moreOptionsButton.OnClick.AddListener((Action)(() =>
             {
-                if (!PopUp) { return; }
+                if (!popUp) { return; }
 
                 if (__instance.transform.parent && __instance.transform.parent == HudManager.Instance.transform)
                 {
-                    PopUp.transform.SetParent(HudManager.Instance.transform);
-                    PopUp.transform.localPosition = new Vector3(0, 0, -800f);
+                    popUp.transform.SetParent(HudManager.Instance.transform);
+                    popUp.transform.localPosition = new Vector3(0, 0, -800f);
                 }
                 else
                 {
-                    PopUp.transform.SetParent(null);
-                    Object.DontDestroyOnLoad(PopUp);
+                    popUp.transform.SetParent(null);
+                    Object.DontDestroyOnLoad(popUp);
                 }
 
-                CheckSetTitle();
-                RefreshOpen();
+                checkSetTitle();
+                refreshOpen();
             }));
         }
 
-        private static void RefreshOpen()
+        private static void refreshOpen()
         {
-            PopUp.gameObject.SetActive(false);
-            PopUp.gameObject.SetActive(true);
-            SetUpOptions();
+            popUp.gameObject.SetActive(false);
+            popUp.gameObject.SetActive(true);
+            setUpOptions();
         }
 
-        private static void CheckSetTitle()
+        private static void checkSetTitle()
         {
-            if (!PopUp || PopUp.GetComponentInChildren<TextMeshPro>() || !TitleText) return;
+            if (!popUp || popUp.GetComponentInChildren<TextMeshPro>() || !titleText) return;
 
-            var title = TitleTextTitle = Object.Instantiate(TitleText, PopUp.transform);
+            var title = titleTextTitle = Object.Instantiate(titleText, popUp.transform);
             title.GetComponent<RectTransform>().localPosition = Vector3.up * 2.3f;
             title.gameObject.SetActive(true);
             title.text = Helper.Translation.GetString("moreOptionsText");
             title.name = "TitleText";
         }
 
-        private static void SetUpOptions()
+        private static void setUpOptions()
         {
-            if (PopUp.transform.GetComponentInChildren<ToggleButtonBehaviour>()) return;
+            if (popUp.transform.GetComponentInChildren<ToggleButtonBehaviour>()) return;
 
-            ModButtons = new List<ToggleButtonBehaviour>();
+            modButtons = new List<ToggleButtonBehaviour>();
 
-            for (var i = 0; i < ModOption.Length; i++)
+            for (var i = 0; i < modOption.Length; i++)
             {
-                var info = ModOption[i];
+                var info = modOption[i];
 
-                var button = Object.Instantiate(ButtonPrefab, PopUp.transform);
+                var button = Object.Instantiate(buttonPrefab, popUp.transform);
                 var pos = new Vector3(i % 2 == 0 ? -1.17f : 1.17f, 1.3f - i / 2 * 0.8f, -.5f);
 
                 var transform = button.transform;
@@ -174,7 +193,7 @@ namespace ExtremeRoles.Patches.Option
 
                 button.Text.text = Helper.Translation.GetString(info.Title);
                 button.Text.fontSizeMin = button.Text.fontSizeMax = 2.2f;
-                button.Text.font = Object.Instantiate(TitleText.font);
+                button.Text.font = Object.Instantiate(titleText.font);
                 button.Text.GetComponent<RectTransform>().sizeDelta = new Vector2(2, 2);
 
                 button.name = info.Title.Replace(" ", "") + "Toggle";
@@ -202,32 +221,15 @@ namespace ExtremeRoles.Patches.Option
                 {
                     spr.size = new Vector2(2.2f, .7f);
                 }
-                ModButtons.Add(button);
+                modButtons.Add(button);
             }
         }
 
-        private static IEnumerable<GameObject> GetAllChilds(this GameObject Go)
+        private static IEnumerable<GameObject> getAllChilds(this GameObject Go)
         {
             for (var i = 0; i < Go.transform.childCount; ++i)
             {
                 yield return Go.transform.GetChild(i).gameObject;
-            }
-        }
-
-        public static void UpdateMenuTranslation()
-        {
-            if (TitleTextTitle)
-            {
-                TitleTextTitle.text = Helper.Translation.GetString("moreOptionsText");
-            }
-            if (MoreOptions)
-            {
-                MoreOptions.Text.text = Helper.Translation.GetString("modOptionsText");
-            }
-            for (int i = 0; i < ModOption.Length; i++)
-            {
-                if (i >= ModButtons.Count) { break; }
-                ModButtons[i].Text.text = Helper.Translation.GetString(ModOption[i].Title);
             }
         }
 
