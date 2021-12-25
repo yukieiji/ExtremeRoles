@@ -12,20 +12,17 @@ namespace ExtremeRoles.Roles.API.Interface
     {
         public RoleAbilityButton Button
         {
-            get => this.Button;
-            set
-            {
-                Button = value;
-            }
+            get;
+            set;
         }
 
-        public void CreateAbilityButton();
+        public void CreateAbility();
 
         public void UseAbility();
 
         public bool IsAbilityUse();
 
-        protected void AbilityButton(
+        protected RoleAbilityButton CreateAbilityButton(
             Sprite sprite,
             Vector3? positionOffset = null,
             Action abilityCleanUp = null,
@@ -35,7 +32,7 @@ namespace ExtremeRoles.Roles.API.Interface
 
             Vector3 offset = positionOffset ?? new Vector3(-1.8f, -0.06f, 0);
 
-            RoleAbilityButton abilityButton = new RoleAbilityButton(
+            return new RoleAbilityButton(
                 this.UseAbility,
                 this.IsAbilityUse,
                 sprite,
@@ -43,8 +40,6 @@ namespace ExtremeRoles.Roles.API.Interface
                 abilityCleanUp,
                 hotkey,
                 mirror);
-
-            this.Button = abilityButton;
         }
     }
 }
