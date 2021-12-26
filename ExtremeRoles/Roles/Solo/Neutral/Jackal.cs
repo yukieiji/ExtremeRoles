@@ -106,7 +106,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public override bool IsSameTeams(SingleRoleBase role)
         {
-            return role.Id == this.Id || role.Id == ExtremeRoleId.Sidekick;
+            return ((role.Id == this.Id) || (role.Id == ExtremeRoleId.Sidekick));
         }
 
         public bool IsAbilityUse()
@@ -353,6 +353,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     }
                 }
             }
+
+            if (result)
+            {
+                if (this.IsSameTeams(ExtremeRoleManager.GameRole[result.PlayerId]))
+                {
+                    result = null;
+                }
+            }
+
             this.Target = result;
         }
 

@@ -515,6 +515,7 @@ namespace ExtremeRoles.Patches
             for (int i = 0; i < allPlayers.Count; i++)
             {
                 GameData.PlayerInfo playerInfo = allPlayers[i];
+                
                 if (!playerInfo.Disconnected && 
                     playerInfo.PlayerId != __instance.PlayerId && 
                     !playerInfo.IsDead && 
@@ -537,6 +538,14 @@ namespace ExtremeRoles.Patches
                     }
                 }
             }
+            if (__result)
+            {
+                if(role.IsSameTeams(gameRoles[__result.PlayerId]))
+                {
+                    __result = null;
+                }
+            }
+
             return false;
         }
     }
