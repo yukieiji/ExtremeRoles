@@ -48,6 +48,8 @@ namespace ExtremeRoles.Patches
             byte targetPlayerId)
         {
             Color defaultColor = Palette.ClearWhite;
+
+            var lookRole = ExtremeRoleManager.GetLocalPlayerRole();
             var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
 
             switch (role.Id)
@@ -79,6 +81,29 @@ namespace ExtremeRoles.Patches
                         default:
                             return defaultColor;
                     }
+                case ExtremeRoleId.Sidekick:
+
+                    var sidekick = (Roles.Solo.Neutral.Sidekick)role;
+
+                    if (lookRole.IsImposter() && sidekick.IsPrevRoleImpostor)
+                    {
+                        if (sidekick.CanSeeImpostorToSideKickImpostor)
+                        {
+                            return defaultColor;
+                        }
+                        else
+                        {
+                            return Palette.ImpostorRed;
+                        }
+                    }
+                    else if (
+                        (lookRole.Id == ExtremeRoleId.Jackal) ||
+                        (lookRole.Id == ExtremeRoleId.Sidekick))
+                    {
+                        return sidekick.NameColor;
+                    }
+
+                    return defaultColor;
 
                 default:
                     return defaultColor;
@@ -524,7 +549,6 @@ namespace ExtremeRoles.Patches
         {
             switch (callId)
             {
-                // Main Controls
                 case (byte)CustomRPC.ForceEnd:
                     ExtremeRoleRPC.ForceEnd();
                     break;
@@ -547,6 +571,13 @@ namespace ExtremeRoles.Patches
                     byte useAnimationreaderreader = reader.ReadByte();
                     ExtremeRoleRPC.UncheckedMurderPlayer(
                         sourceId, targetId, useAnimationreaderreader);
+                    break;
+                case (byte)CustomRPC.ReplaceRole:
+                    byte callerId = reader.ReadByte();
+                    byte replaceTarget = reader.ReadByte();
+                    byte ops = reader.ReadByte();
+                    ExtremeRoleRPC.ReplaceRole(
+                        callerId, replaceTarget, ops);
                     break;
                 default:
                     break;

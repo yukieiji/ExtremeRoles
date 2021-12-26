@@ -19,8 +19,9 @@ namespace ExtremeRoles.Roles
         Assassin,
         Marlin,
         Lover,
+
         Jackal,
-        SideKick,
+        Sidekick,
         
         SpecialCrew,
 
@@ -51,6 +52,12 @@ namespace ExtremeRoles.Roles
 
         public static Dictionary<
             byte, SingleRoleBase> GameRole = new Dictionary<byte, SingleRoleBase> ();
+
+        public enum ReplaceOperation
+        {
+            ForceReplaceToSidekick = 0,
+            SidekickToJackal
+        }
 
         public static void CreateCombinationRoleOptions(
             int optionIdOffsetChord)
@@ -139,6 +146,22 @@ namespace ExtremeRoles.Roles
                 {
                     setPlyerIdToSingleRole(playerId, role);
                 }
+            }
+        }
+
+        public static void RoleReplace(
+            byte caller, byte targetId, ReplaceOperation ops)
+        {
+            switch(ops)
+            {
+                case ReplaceOperation.ForceReplaceToSidekick:
+                    Jackal.TargetToSideKick(caller, targetId);
+                    break;
+                case ReplaceOperation.SidekickToJackal:
+                    Sidekick.BecomeToJackal(caller, targetId);
+                    break;
+                default:
+                    break;
             }
         }
 
