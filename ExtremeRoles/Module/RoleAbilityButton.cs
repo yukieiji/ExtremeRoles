@@ -98,7 +98,8 @@ namespace ExtremeRoles.Module
         {
             if (PlayerControl.LocalPlayer.Data == null || 
                 MeetingHud.Instance || 
-                ExileController.Instance)
+                ExileController.Instance ||
+                PlayerControl.LocalPlayer.Data.IsDead)
             {
                 SetActive(false);
                 return;

@@ -424,10 +424,10 @@ namespace ExtremeRoles.Patches
             if (!player.AmOwner) { return; }
 
             var role = ExtremeRoleManager.GameRole[player.PlayerId];
-            bool enable = Player.ShowButtons;
+            bool enable = Player.ShowButtons && !PlayerControl.LocalPlayer.Data.IsDead;
             
             ventButtonUpdate(role, enable);
-            sabotageButtonUpdate(role, enable);
+            sabotageButtonUpdate(role);
             killButtonUpdate(player, role, enable);
             roleAbilityButtonUpdate(role);
         }
@@ -451,8 +451,7 @@ namespace ExtremeRoles.Patches
                 }
                 else
                 {
-                    HudManager.Instance.KillButton.Hide();
-                    HudManager.Instance.KillButton.gameObject.SetActive(false);
+                    HudManager.Instance.KillButton.SetDisabled();
                 }
             }
         }
@@ -467,19 +466,28 @@ namespace ExtremeRoles.Patches
         }
 
         private static void sabotageButtonUpdate(
-            SingleRoleBase role, bool enable)
+            SingleRoleBase role)
         {
+
+            bool enable = Player.ShowButtons;
+
             if (role.UseSabotage)
             {
-                if (enable)
+                // インポスターは死んでもサボタージ使える
+                if (enable && role.IsImposter())
+                {
+                    HudManager.Instance.SabotageButton.Show();
+                    HudManager.Instance.SabotageButton.gameObject.SetActive(true);
+                }
+                // それ以外は死んでないときだけサボタージ使える
+                else if(enable && !PlayerControl.LocalPlayer.Data.IsDead)
                 {
                     HudManager.Instance.SabotageButton.Show();
                     HudManager.Instance.SabotageButton.gameObject.SetActive(true);
                 }
                 else
                 {
-                    HudManager.Instance.SabotageButton.Hide();
-                    HudManager.Instance.SabotageButton.gameObject.SetActive(false);
+                    HudManager.Instance.SabotageButton.SetDisabled();
                 }
             }
         }
@@ -492,14 +500,14 @@ namespace ExtremeRoles.Patches
                 if (role.Id != ExtremeRoleId.VanillaRole)
                 {
                     if (enable) { HudManager.Instance.ImpostorVentButton.Show(); }
-                    else { HudManager.Instance.ImpostorVentButton.Hide(); }
+                    else { HudManager.Instance.ImpostorVentButton.SetDisabled(); }
                 }
                 else
                 {
                     if (((Roles.Solo.VanillaRoleWrapper)role).VanilaRoleId == RoleTypes.Engineer)
                     {
                         if (enable) { HudManager.Instance.AbilityButton.Show(); }
-                        else { HudManager.Instance.AbilityButton.Show(); }
+                        else { HudManager.Instance.AbilityButton.SetDisabled(); }
                     }
                 }
             }
