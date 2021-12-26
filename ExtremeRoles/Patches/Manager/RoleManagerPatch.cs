@@ -373,29 +373,29 @@ namespace ExtremeRoles.Patches.Manager
             Dictionary<byte, (int, int)> RoleSpawnSettingsForImposter = new Dictionary<byte, (int, int)>();
             Dictionary<byte, (int, int)> RoleSpawnSettingsForCrewmate = new Dictionary<byte, (int, int)>();
 
-            var allSetting = OptionsHolder.AllOptions;
+            var allOption = OptionsHolder.AllOptions;
 
             Logging.Debug("Checkpoint:0");
 
             int crewmateRolesNum = UnityEngine.Random.RandomRange(
-                allSetting[(int)OptionsHolder.CommonOptionKey.MinCremateRoles].GetValue(),
-                allSetting[(int)OptionsHolder.CommonOptionKey.MaxCremateRoles].GetValue());
+                allOption[(int)OptionsHolder.CommonOptionKey.MinCremateRoles].GetValue(),
+                allOption[(int)OptionsHolder.CommonOptionKey.MaxCremateRoles].GetValue());
             int neutralRolesNum = UnityEngine.Random.RandomRange(
-                allSetting[(int)OptionsHolder.CommonOptionKey.MinNeutralRoles].GetValue(),
-                allSetting[(int)OptionsHolder.CommonOptionKey.MaxNeutralRoles].GetValue());
+                allOption[(int)OptionsHolder.CommonOptionKey.MinNeutralRoles].GetValue(),
+                allOption[(int)OptionsHolder.CommonOptionKey.MaxNeutralRoles].GetValue());
             int impostorRolesNum = UnityEngine.Random.RandomRange(
-                allSetting[(int)OptionsHolder.CommonOptionKey.MinImpostorRoles].GetValue(),
-                allSetting[(int)OptionsHolder.CommonOptionKey.MaxImpostorRoles].GetValue());
+                allOption[(int)OptionsHolder.CommonOptionKey.MinImpostorRoles].GetValue(),
+                allOption[(int)OptionsHolder.CommonOptionKey.MaxImpostorRoles].GetValue());
 
 
             foreach (var role in ExtremeRoleManager.CombRole)
             {
                 Logging.Debug("Checkpoint:1");
-                int spawnRate = ComputePercentage(allSetting[
-                    role.GetRoleSettingId(RoleCommonSetting.SpawnRate)]);
+                int spawnRate = ComputePercentage(allOption[
+                    role.GetRoleOptionId(RoleCommonOption.SpawnRate)]);
                 Logging.Debug("Checkpoint:2");
-                int roleSet = allSetting[
-                    role.GetRoleSettingId(RoleCommonSetting.RoleNum)].GetValue() + 1;
+                int roleSet = allOption[
+                    role.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue() + 1;
 
                 Logging.Debug($"SpawnRate:{spawnRate}   RoleSet:{roleSet}");
 
@@ -412,13 +412,13 @@ namespace ExtremeRoles.Patches.Manager
             {
 
                 byte roleId = role.BytedRoleId;
-                int spawnRate = ComputePercentage(allSetting[
-                    role.GetRoleSettingId(RoleCommonSetting.SpawnRate)]);
-                int roleNum = allSetting[
-                    role.GetRoleSettingId(RoleCommonSetting.RoleNum)].GetValue();
+                int spawnRate = ComputePercentage(allOption[
+                    role.GetRoleOptionId(RoleCommonOption.SpawnRate)]);
+                int roleNum = allOption[
+                    role.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue();
 
                 Logging.Debug(
-                    $"SelectopmValue:{allSetting[role.GetRoleSettingId(RoleCommonSetting.RoleNum)].Selections[0]}");
+                    $"SelectopmValue:{allOption[role.GetRoleOptionId(RoleCommonOption.RoleNum)].Selections[0]}");
                 Logging.Debug(
                     $"Role Name:{role.RoleName}  SpawnRate:{spawnRate}   RoleNum:{roleNum}");
 

@@ -11,7 +11,7 @@ namespace ExtremeRoles.Roles.API
         Crewmate = 0,
         Impostor = 1
     }
-    public enum RoleCommonSetting
+    public enum RoleCommonOption
     {
         RoleNum = 25,
         SpawnRate,
@@ -19,34 +19,34 @@ namespace ExtremeRoles.Roles.API
         Vison,
         ApplyEnvironmentVisionEffect,
     }
-    public enum KillerCommonSetting
+    public enum KillerCommonOption
     {
         HasOtherKillRange=20,
         KillRange,
         HasOtherKillCool,
         KillCoolDown,
     }
-    public enum CombinationRoleCommonSetting
+    public enum CombinationRoleCommonOption
     {
         IsMultiAssign = 15,
     }
 
-    abstract public class RoleSettingBase : IRoleSetting
+    abstract public class RoleOptionBase : IRoleOption
     {
 
         public bool CanKill = false;
         protected int OptionIdOffset = 0;
 
-        public int GetRoleSettingId(
-            RoleCommonSetting setting) => GetRoleSettingId((int)setting);
+        public int GetRoleOptionId(
+            RoleCommonOption option) => GetRoleOptionId((int)option);
 
-        public int GetRoleSettingId(
-            KillerCommonSetting setting) => GetRoleSettingId((int)setting);
+        public int GetRoleOptionId(
+            KillerCommonOption option) => GetRoleOptionId((int)option);
 
-        public int GetRoleSettingId(
-            CombinationRoleCommonSetting setting) => GetRoleSettingId((int)setting);
+        public int GetRoleOptionId(
+            CombinationRoleCommonOption option) => GetRoleOptionId((int)option);
 
-        public int GetRoleSettingId(int setting) => this.OptionIdOffset + setting;
+        public int GetRoleOptionId(int option) => this.OptionIdOffset + option;
 
         public void GameInit()
         {

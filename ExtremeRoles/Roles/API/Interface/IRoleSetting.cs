@@ -2,9 +2,9 @@
 
 namespace ExtremeRoles.Roles.API.Interface
 {
-    interface IRoleSetting
+    interface IRoleOption
     {
-        int GetRoleSettingId(int setting);
+        int GetRoleOptionId(int Option);
 
         void GameInit();
 

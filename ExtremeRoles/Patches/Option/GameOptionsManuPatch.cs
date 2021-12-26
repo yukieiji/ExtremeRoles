@@ -18,7 +18,7 @@ namespace ExtremeRoles.Patches.Option
     {
         public static void Postfix(GameOptionsMenu __instance)
         {
-            if (GameObject.Find("ExtremeRoleSettings") != null)
+            if (GameObject.Find("ExtremeRoleOptions") != null)
             { // Settings setup has already been performed, fixing the title of the tab and returning
                 GameObject.Find(
                     "ExtremeRoleSettings").transform.FindChild(

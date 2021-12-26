@@ -8,52 +8,52 @@ using ExtremeRoles.Module;
 
 namespace ExtremeRoles.Roles.API
 {
-    public abstract class CombinationRoleManagerBase : RoleSettingBase
+    public abstract class CombinationRoleManagerBase : RoleOptionBase
     {
 
         public List<MultiAssignRoleBase> Roles = new List<MultiAssignRoleBase>();
 
         private int setPlayerNum = 0;
-        private Color settingColor;
+        private Color optionColor;
 
         private string roleName = "";
 
         public CombinationRoleManagerBase(
             string roleName,
-            Color settingColor,
+            Color optionColor,
             int setPlayerNum)
         {
-            this.settingColor = settingColor;
+            this.optionColor = optionColor;
             this.setPlayerNum = setPlayerNum;
             this.roleName = roleName;
         }
 
         protected override CustomOptionBase CreateSpawnOption()
         {
-            // ExtremeRolesPlugin.Instance.Log.LogInfo($"Color: {this.SettingColor}");
+            // ExtremeRolesPlugin.Instance.Log.LogInfo($"Color: {this.optionColor}");
             var roleSetOption = CustomOption.Create(
-                GetRoleSettingId(RoleCommonSetting.SpawnRate),
+                GetRoleOptionId(RoleCommonOption.SpawnRate),
                 Design.ColoedString(
-                    this.settingColor,
+                    this.optionColor,
                     Design.ConcatString(
                         this.roleName,
-                        RoleCommonSetting.SpawnRate.ToString())),
+                        RoleCommonOption.SpawnRate.ToString())),
                 OptionsHolder.SpawnRate, null, true);
 
             int thisMaxRoleNum = (int)Math.Floor((decimal)OptionsHolder.VanillaMaxPlayerNum / this.setPlayerNum);
 
             CustomOption.Create(
-                GetRoleSettingId(RoleCommonSetting.RoleNum),
+                GetRoleOptionId(RoleCommonOption.RoleNum),
                 Design.ConcatString(
                     this.roleName,
-                    RoleCommonSetting.RoleNum.ToString()),
+                    RoleCommonOption.RoleNum.ToString()),
                 1, 1, thisMaxRoleNum, 1,
                 roleSetOption);
             CustomOption.Create(
-                GetRoleSettingId(CombinationRoleCommonSetting.IsMultiAssign),
+                GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign),
                 Design.ConcatString(
                     this.roleName,
-                    CombinationRoleCommonSetting.IsMultiAssign.ToString()),
+                    CombinationRoleCommonOption.IsMultiAssign.ToString()),
                 false, roleSetOption);
 
             return roleSetOption;
@@ -93,7 +93,7 @@ namespace ExtremeRoles.Roles.API
             foreach (var role in Roles)
             {
                 role.CanHasAnotherRole = OptionsHolder.AllOptions[
-                    GetRoleSettingId(CombinationRoleCommonSetting.IsMultiAssign)].GetValue();
+                    GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign)].GetValue();
                 role.GameId = 0;
                 role.GameInit();
             }

@@ -6,7 +6,7 @@ namespace ExtremeRoles.Roles.Combination
     public class Lover : MultiAssignRoleBase
     {
 
-        public enum LoverSetting 
+        public enum LoverOption 
         {
             LoverNum,
             IsAssignImposter,

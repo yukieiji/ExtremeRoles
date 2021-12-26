@@ -6,7 +6,7 @@ using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Roles.API.Interface
 {
-    public enum RoleAbilityCommonSetting
+    public enum RoleAbilityCommonOption
     {
         AbilityCoolTime = 30,
         AbilityActiveTime,
@@ -48,9 +48,9 @@ namespace ExtremeRoles.Roles.API.Interface
                 mirror);
         }
 
-        public static int GetRoleSettingId(
+        public static int GetRoleOptionId(
             this IRoleAbility self,
-            RoleAbilityCommonSetting setting) => ((IRoleSetting)self).GetRoleSettingId((int)setting);
+            RoleAbilityCommonOption option) => ((IRoleOption)self).GetRoleOptionId((int)option);
 
         public static void CreateRoleAbilityOption(
             this IRoleAbility self,
@@ -59,19 +59,19 @@ namespace ExtremeRoles.Roles.API.Interface
         {
 
             CustomOption.Create(
-                self.GetRoleSettingId(RoleAbilityCommonSetting.AbilityCoolTime),
+                self.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime),
                 Design.ConcatString(
                     ((SingleRoleBase)self).RoleName,
-                    RoleAbilityCommonSetting.AbilityCoolTime.ToString()),
+                    RoleAbilityCommonOption.AbilityCoolTime.ToString()),
                 30f, 2.5f, 120f, 2.5f,
                 parentOps, format: "unitSeconds");
             if (hasActiveTime)
             {
                 CustomOption.Create(
-                    self.GetRoleSettingId(RoleAbilityCommonSetting.AbilityActiveTime),
+                    self.GetRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime),
                     Design.ConcatString(
                         ((SingleRoleBase)self).RoleName,
-                        RoleAbilityCommonSetting.AbilityActiveTime.ToString()),
+                        RoleAbilityCommonOption.AbilityActiveTime.ToString()),
                     30f, 2.5f, 120f, 2.5f,
                     parentOps, format: "unitSeconds");
             }
@@ -84,14 +84,14 @@ namespace ExtremeRoles.Roles.API.Interface
 
             var allOps = OptionsHolder.AllOptions;
             self.Button.SetAbilityCoolTime(
-                allOps[self.GetRoleSettingId(RoleAbilityCommonSetting.AbilityCoolTime)].GetValue());
+                allOps[self.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)].GetValue());
 
-            int checkSettingId = self.GetRoleSettingId(RoleAbilityCommonSetting.AbilityActiveTime);
+            int checkOptionId = self.GetRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime);
 
-            if (allOps.ContainsKey(checkSettingId))
+            if (allOps.ContainsKey(checkOptionId))
             {
                 self.Button.SetAbilityActiveTime(
-                    allOps[checkSettingId].GetValue());
+                    allOps[checkOptionId].GetValue());
             }
             
             self.Button.ResetCoolTimer();

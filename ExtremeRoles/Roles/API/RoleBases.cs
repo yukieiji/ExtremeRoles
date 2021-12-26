@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -9,7 +6,7 @@ using ExtremeRoles.Module;
 
 namespace ExtremeRoles.Roles.API
 {
-    public abstract class SingleRoleBase : RoleSettingBase
+    public abstract class SingleRoleBase : RoleOptionBase
     {
         public bool IsVanilaRole = false;
         public bool HasTask = true;
@@ -113,50 +110,50 @@ namespace ExtremeRoles.Roles.API
         protected override void CreateKillerOption(
             CustomOptionBase parentOps)
         {
-            var killCoolSetting = CustomOption.Create(
-                GetRoleSettingId(KillerCommonSetting.HasOtherKillCool),
+            var killCoolOption = CustomOption.Create(
+                GetRoleOptionId(KillerCommonOption.HasOtherKillCool),
                 Design.ConcatString(
                     this.RoleName,
-                    KillerCommonSetting.HasOtherKillCool.ToString()),
+                    KillerCommonOption.HasOtherKillCool.ToString()),
                 false, parentOps);
             CustomOption.Create(
-                GetRoleSettingId(KillerCommonSetting.KillCoolDown),
+                GetRoleOptionId(KillerCommonOption.KillCoolDown),
                 Design.ConcatString(
                     this.RoleName,
-                    KillerCommonSetting.KillCoolDown.ToString()),
+                    KillerCommonOption.KillCoolDown.ToString()),
                 30f, 2.5f, 120f, 2.5f,
-                killCoolSetting, format: "unitSeconds");
+                killCoolOption, format: "unitSeconds");
 
-            var killRangeSetting = CustomOption.Create(
-                GetRoleSettingId(KillerCommonSetting.HasOtherKillRange),
+            var killRangeOption = CustomOption.Create(
+                GetRoleOptionId(KillerCommonOption.HasOtherKillRange),
                 Design.ConcatString(
                     this.RoleName,
-                    KillerCommonSetting.HasOtherKillRange.ToString()),
+                    KillerCommonOption.HasOtherKillRange.ToString()),
                 false, parentOps);
             CustomOption.Create(
-                GetRoleSettingId(KillerCommonSetting.KillRange),
+                GetRoleOptionId(KillerCommonOption.KillRange),
                 Design.ConcatString(
                     this.RoleName,
-                    KillerCommonSetting.KillRange.ToString()),
+                    KillerCommonOption.KillRange.ToString()),
                 OptionsHolder.KillRange,
-                killRangeSetting);
+                killRangeOption);
         }
         protected override CustomOptionBase CreateSpawnOption()
         {
             var roleSetOption = CustomOption.Create(
-                GetRoleSettingId(RoleCommonSetting.SpawnRate),
+                GetRoleOptionId(RoleCommonOption.SpawnRate),
                 Design.ColoedString(
                     this.NameColor,
                     Design.ConcatString(
                         this.RoleName,
-                        RoleCommonSetting.SpawnRate.ToString())),
+                        RoleCommonOption.SpawnRate.ToString())),
                 OptionsHolder.SpawnRate, null, true);
 
             CustomOption.Create(
-                GetRoleSettingId(RoleCommonSetting.RoleNum),
+                GetRoleOptionId(RoleCommonOption.RoleNum),
                 Design.ConcatString(
                     this.RoleName,
-                    RoleCommonSetting.RoleNum.ToString()),
+                    RoleCommonOption.RoleNum.ToString()),
                 1, 1, OptionsHolder.VanillaMaxPlayerNum - 1, 1, roleSetOption);
 
             return roleSetOption;
@@ -166,24 +163,24 @@ namespace ExtremeRoles.Roles.API
             CustomOptionBase parentOps)
         {
             var visonOption = CustomOption.Create(
-                GetRoleSettingId(RoleCommonSetting.HasOtherVison),
+                GetRoleOptionId(RoleCommonOption.HasOtherVison),
                 Design.ConcatString(
                     this.RoleName,
-                    RoleCommonSetting.HasOtherVison.ToString()),
+                    RoleCommonOption.HasOtherVison.ToString()),
                 false, parentOps);
 
             CustomOption.Create(
-                GetRoleSettingId(RoleCommonSetting.Vison),
+                GetRoleOptionId(RoleCommonOption.Vison),
                 Design.ConcatString(
                     this.RoleName,
-                    RoleCommonSetting.Vison.ToString()),
+                    RoleCommonOption.Vison.ToString()),
                 2f, 0.25f, 5f, 0.25f,
                 visonOption, format: "unitMultiplier");
             CustomOption.Create(
-               GetRoleSettingId(RoleCommonSetting.ApplyEnvironmentVisionEffect),
+               GetRoleOptionId(RoleCommonOption.ApplyEnvironmentVisionEffect),
                Design.ConcatString(
                    this.RoleName,
-                   RoleCommonSetting.ApplyEnvironmentVisionEffect.ToString()),
+                   RoleCommonOption.ApplyEnvironmentVisionEffect.ToString()),
                this.IsCrewmate(), visonOption);
         }
         protected override void CommonInit()
@@ -191,22 +188,22 @@ namespace ExtremeRoles.Roles.API
             var allOption = OptionsHolder.AllOptions;
 
             this.HasOtherVison = allOption[
-                GetRoleSettingId(RoleCommonSetting.HasOtherVison)].GetValue();
+                GetRoleOptionId(RoleCommonOption.HasOtherVison)].GetValue();
             this.Vison = allOption[
-                GetRoleSettingId(RoleCommonSetting.Vison)].GetValue();
+                GetRoleOptionId(RoleCommonOption.Vison)].GetValue();
             this.IsApplyEnvironmentVision = allOption[
-                GetRoleSettingId(RoleCommonSetting.ApplyEnvironmentVisionEffect)].GetValue();
+                GetRoleOptionId(RoleCommonOption.ApplyEnvironmentVisionEffect)].GetValue();
 
             if (this.CanKill)
             {
                 this.HasOtherKillCool = allOption[
-                    GetRoleSettingId(KillerCommonSetting.HasOtherKillCool)].GetValue();
+                    GetRoleOptionId(KillerCommonOption.HasOtherKillCool)].GetValue();
                 this.KillCoolTime = allOption[
-                    GetRoleSettingId(KillerCommonSetting.KillCoolDown)].GetValue();
+                    GetRoleOptionId(KillerCommonOption.KillCoolDown)].GetValue();
                 this.HasOtherKillRange = allOption[
-                    GetRoleSettingId(KillerCommonSetting.HasOtherKillRange)].GetValue();
+                    GetRoleOptionId(KillerCommonOption.HasOtherKillRange)].GetValue();
                 this.KillRange = allOption[
-                    GetRoleSettingId(KillerCommonSetting.KillRange)].GetValue();
+                    GetRoleOptionId(KillerCommonOption.KillRange)].GetValue();
             }
         }
     }

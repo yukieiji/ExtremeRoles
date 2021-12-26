@@ -168,7 +168,7 @@ namespace ExtremeRoles.Roles
 
         private static void createOptions(
             int optionIdOffsetChord,
-            IEnumerable<RoleSettingBase> roles)
+            IEnumerable<RoleOptionBase> roles)
         {
             if (roles.Count() == 0) { return; };
 
