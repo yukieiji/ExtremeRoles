@@ -29,6 +29,16 @@ namespace ExtremeRoles.Roles
 
         Alice,
     }
+    public enum RoleGameOverReason
+    {
+        AssassinationMarin = 10,
+        AliceKilledByImposter,
+        AliceKillAllOthers,
+
+        UnKnown = 100,
+    }
+
+
     public static class ExtremeRoleManager
     {
         public const int OptionOffsetPerRole = 50;

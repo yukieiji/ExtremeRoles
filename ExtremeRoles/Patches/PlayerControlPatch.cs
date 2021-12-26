@@ -627,34 +627,34 @@ namespace ExtremeRoles.Patches
         {
             switch (callId)
             {
-                case (byte)CustomRPC.ForceEnd:
-                    ExtremeRoleRPC.ForceEnd();
+                case (byte)RPCOperator.Command.ForceEnd:
+                    RPCOperator.ForceEnd();
                     break;
-                case (byte)CustomRPC.GameInit:
-                    ExtremeRoleRPC.GameInit();
+                case (byte)RPCOperator.Command.GameInit:
+                    RPCOperator.GameInit();
                     break;
-                case (byte)CustomRPC.SetRole:
+                case (byte)RPCOperator.Command.SetRole:
                     byte roleId = reader.ReadByte();
                     byte playerId = reader.ReadByte();
                     byte gameId = reader.ReadByte();
-                    ExtremeRoleRPC.SetRole(roleId, playerId, gameId);
+                    RPCOperator.SetRole(roleId, playerId, gameId);
                     break;
-                case (byte)CustomRPC.ShareOption:
+                case (byte)RPCOperator.Command.ShareOption:
                     int numOptions = (int)reader.ReadPackedUInt32();
-                    ExtremeRoleRPC.ShareOption(numOptions, reader);
+                    RPCOperator.ShareOption(numOptions, reader);
                     break;
-                case (byte)CustomRPC.UncheckedMurderPlayer:
+                case (byte)RPCOperator.Command.UncheckedMurderPlayer:
                     byte sourceId = reader.ReadByte();
                     byte targetId = reader.ReadByte();
                     byte useAnimationreaderreader = reader.ReadByte();
-                    ExtremeRoleRPC.UncheckedMurderPlayer(
+                    RPCOperator.UncheckedMurderPlayer(
                         sourceId, targetId, useAnimationreaderreader);
                     break;
-                case (byte)CustomRPC.ReplaceRole:
+                case (byte)RPCOperator.Command.ReplaceRole:
                     byte callerId = reader.ReadByte();
                     byte replaceTarget = reader.ReadByte();
                     byte ops = reader.ReadByte();
-                    ExtremeRoleRPC.ReplaceRole(
+                    RPCOperator.ReplaceRole(
                         callerId, replaceTarget, ops);
                     break;
                 default:

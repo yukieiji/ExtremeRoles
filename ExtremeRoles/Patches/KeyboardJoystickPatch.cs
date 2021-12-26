@@ -59,9 +59,11 @@ namespace ExtremeRoles.Patches
             if (Input.GetKeyDown(KeyCode.L) && !Map.IsGameLobby)
             {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                    PlayerControl.LocalPlayer.NetId, (byte)CustomRPC.ForceEnd, Hazel.SendOption.Reliable, -1);
+                    PlayerControl.LocalPlayer.NetId,
+                    (byte)RPCOperator.Command.ForceEnd,
+                    Hazel.SendOption.Reliable, -1);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
-                ExtremeRoleRPC.ForceEnd();
+                RPCOperator.ForceEnd();
             }
             if (Input.GetKeyDown(KeyCode.K))
             {

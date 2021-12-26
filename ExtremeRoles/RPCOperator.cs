@@ -3,35 +3,26 @@ using Hazel;
 
 namespace ExtremeRoles
 {
-    public enum RoleGameOverReason
+    public static class RPCOperator
     {
-        AssassinationMarin = 10,
-        AliceKilledByImposter,
-        AliceKillAllOthers,
 
-        UnKnown = 100,
-    }
+        public enum Command
+        {
+            // Main Controls
 
-    enum CustomRPC
-    {
-        // Main Controls
+            GameInit = 60,
+            ForceEnd,
+            SetRole,
+            ShareOption,
+            VersionHandshake,
+            UseUncheckedVent,
+            UncheckedMurderPlayer,
+            UncheckedCmdReportDeadBody,
+            UncheckedExilePlayer,
 
-        GameInit = 60,
-        ForceEnd,
-        SetRole,
-        ShareOption,
-        VersionHandshake,
-        UseUncheckedVent,
-        UncheckedMurderPlayer,
-        UncheckedCmdReportDeadBody,
-        UncheckedExilePlayer,
+            ReplaceRole,
+        }
 
-        ReplaceRole,
-
-    }
-
-    public class ExtremeRoleRPC
-    {
         public static void GameInit()
         {
             Roles.ExtremeRoleManager.GameInit();

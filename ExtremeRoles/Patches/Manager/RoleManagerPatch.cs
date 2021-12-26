@@ -22,9 +22,10 @@ namespace ExtremeRoles.Patches.Manager
         {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                 PlayerControl.LocalPlayer.NetId,
-                (byte)CustomRPC.GameInit, Hazel.SendOption.Reliable, -1);
+                (byte)RPCOperator.Command.GameInit,
+                Hazel.SendOption.Reliable, -1);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
-            ExtremeRoleRPC.GameInit();
+            RPCOperator.GameInit();
 
             PlayerControl[] playeres = PlayerControl.AllPlayerControls.ToArray();
             RoleAssignmentData extremeRolesData = CreateRoleData();
@@ -350,13 +351,14 @@ namespace ExtremeRoles.Patches.Manager
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                 PlayerControl.LocalPlayer.NetId,
-                (byte)CustomRPC.SetRole, Hazel.SendOption.Reliable, -1);
+                (byte)RPCOperator.Command.SetRole,
+                Hazel.SendOption.Reliable, -1);
             
             writer.Write(roleId);
             writer.Write(player.PlayerId);
             writer.Write(id);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
-            ExtremeRoleRPC.SetRole(
+            RPCOperator.SetRole(
                 roleId, player.PlayerId, id);
         }
 

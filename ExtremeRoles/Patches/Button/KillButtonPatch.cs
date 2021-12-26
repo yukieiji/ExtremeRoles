@@ -45,7 +45,7 @@ namespace ExtremeRoles.Patches.Button
                     case MurderKillResult.NormalKill:
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                             PlayerControl.LocalPlayer.NetId,
-                            (byte)CustomRPC.UncheckedMurderPlayer,
+                            (byte)RPCOperator.Command.UncheckedMurderPlayer,
                             Hazel.SendOption.Reliable, -1);
 
                         writer.Write(killer.PlayerId);
@@ -53,7 +53,7 @@ namespace ExtremeRoles.Patches.Button
                         writer.Write(Byte.MaxValue);
 
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        ExtremeRoleRPC.UncheckedMurderPlayer(
+                        RPCOperator.UncheckedMurderPlayer(
                             killer.PlayerId,
                             target.PlayerId,
                             Byte.MaxValue);

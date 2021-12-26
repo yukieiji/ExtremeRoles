@@ -123,7 +123,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.SideKickPlayerId.Add(targetPlayerId);
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                rolePlayer.NetId, (byte)CustomRPC.ReplaceRole, Hazel.SendOption.Reliable, -1);
+                rolePlayer.NetId,
+                (byte)RPCOperator.Command.ReplaceRole,
+                Hazel.SendOption.Reliable, -1);
 
             writer.Write(rolePlayer.PlayerId);
             writer.Write(this.Target.PlayerId);
@@ -148,7 +150,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     this.SideKickPlayerId.RemoveAt(useIndex);
 
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                        rolePlayer.NetId, (byte)CustomRPC.ReplaceRole, Hazel.SendOption.Reliable, -1);
+                        rolePlayer.NetId,
+                        (byte)RPCOperator.Command.ReplaceRole,
+                        Hazel.SendOption.Reliable, -1);
 
                     writer.Write(rolePlayer.PlayerId);
                     writer.Write(targetPlayerId);

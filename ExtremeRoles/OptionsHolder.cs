@@ -155,7 +155,7 @@ namespace ExtremeRoles
 
             MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(
                 PlayerControl.LocalPlayer.NetId,
-                (byte)CustomRPC.ShareOption, Hazel.SendOption.Reliable);
+                (byte)RPCOperator.Command.ShareOption, Hazel.SendOption.Reliable);
             messageWriter.WritePacked((uint)AllOptions.Count);
             
             foreach (CustomOptionBase option in AllOptions.Values)

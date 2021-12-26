@@ -84,7 +84,7 @@ namespace ExtremeRoles.Patches
                     break;
             }
 
-            ExtremeRoleRPC.GameInit();
+            RPCOperator.GameInit();
 
         }
 
