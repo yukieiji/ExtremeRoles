@@ -83,6 +83,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             
             var sourceJackal = (Jackal)ExtremeRoleManager.GameRole[callerId];
             var newSidekick = new Sidekick(
+                sourceJackal.GameControlId,
                 sourceJackal.CurRecursion,
                 targetRole.Teams == ExtremeRoleType.Impostor,
                 sourceJackal.SidekickUseSabotage,
@@ -379,6 +380,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private bool sidekickJackalCanMakeSidekick = false;
 
         public Sidekick(
+            int gameControleId,
             int curRecursion,
             bool isImpostor,
             bool useSabotage,
@@ -387,15 +389,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             bool sidekickJackalCanMakeSidekick,
             bool hasOtherVision,
             float vison,
-            bool applyEnvironmentVisionEffect
-            ) : base(
+            bool applyEnvironmentVisionEffect) : base(
                 ExtremeRoleId.Sidekick,
                 ExtremeRoleType.Neutral,
                 ExtremeRoleId.Sidekick.ToString(),
                 ColorPalette.JackalBlue,
                 false, false, useVent, useSabotage)
         {
-
+            this.GameControlId = gameControleId;
             this.HasOtherVison = hasOtherVision;
             this.Vison = vison;
             this.IsApplyEnvironmentVision = applyEnvironmentVisionEffect;
@@ -419,6 +420,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
             newJackal.CurRecursion = curSideKick.recursion + 1;
             newJackal.SideKickPlayerId = new List<byte> (curJackal.SideKickPlayerId);
+            newJackal.GameControlId = curSideKick.GameControlId;
 
             ExtremeRoleManager.GameRole[targetId] = newJackal;
 

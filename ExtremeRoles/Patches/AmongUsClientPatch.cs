@@ -70,15 +70,14 @@ namespace ExtremeRoles.Patches
             {
                 case (GameOverReason)RoleGameOverReason.AliceKilledByImposter:
                 case (GameOverReason)RoleGameOverReason.AliceKillAllOthers:
-                    ResetWinner();
-                    foreach(var player in noWinner)
-                    {
-                        var playerRole = roleData[player.PlayerId];
-                        if (playerRole.Id == ExtremeRoleId.Alice)
-                        {
-                            AddWinner(player);
-                        }
-                    }
+                    addSpecificRolePlayerToWinner(
+                        noWinner,
+                        new ExtremeRoleId[] { ExtremeRoleId.Alice });
+                    break;
+                case (GameOverReason)RoleGameOverReason.JackalKillAllOthers:
+                    addSpecificRolePlayerToWinner(
+                        noWinner,
+                        new ExtremeRoleId[] { ExtremeRoleId.Jackal, ExtremeRoleId.Sidekick });
                     break;
                 default:
                     break;
@@ -88,11 +87,26 @@ namespace ExtremeRoles.Patches
 
         }
 
-        private static void ResetWinner()
+        private static void resetWinner()
         {
             TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
         }
-        private static void AddWinner(PlayerControl player)
+        
+        private static void addSpecificRolePlayerToWinner(
+            List<PlayerControl> noWinner, ExtremeRoleId[] roles)
+        {
+            resetWinner();
+
+            foreach (var player in noWinner)
+            {
+                if (roles.Contains(ExtremeRoleManager.GameRole[player.PlayerId].Id))
+                {
+                    addWinner(player);
+                }
+            }
+        }
+
+        private static void addWinner(PlayerControl player)
         {
             WinningPlayerData wpd = new WinningPlayerData(player.Data);
             TempData.winners.Add(wpd);

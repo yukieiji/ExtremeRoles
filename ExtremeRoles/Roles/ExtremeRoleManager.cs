@@ -34,6 +34,7 @@ namespace ExtremeRoles.Roles
         AssassinationMarin = 10,
         AliceKilledByImposter,
         AliceKillAllOthers,
+        JackalKillAllOthers,
 
         UnKnown = 100,
     }
@@ -64,6 +65,8 @@ namespace ExtremeRoles.Roles
         public static Dictionary<
             byte, SingleRoleBase> GameRole = new Dictionary<byte, SingleRoleBase> ();
 
+        private static int roleControlId = 0;
+
         public enum ReplaceOperation
         {
             ForceReplaceToSidekick = 0,
@@ -84,6 +87,7 @@ namespace ExtremeRoles.Roles
 
         public static void GameInit()
         {
+            roleControlId = 0;
             GameRole.Clear();
             foreach (var role in CombRole)
             {
@@ -121,7 +125,8 @@ namespace ExtremeRoles.Roles
                         }
 
                         addRole.GameInit();
-                        ((MultiAssignRoleBase)addRole).GameId = id;
+                        addControlId(addRole);
+                        ((MultiAssignRoleBase)addRole).CombinationId = id;
 
                         GameRole.Add(
                             playerId, addRole);
@@ -208,6 +213,7 @@ namespace ExtremeRoles.Roles
             }
 
             addRole.GameInit();
+            addControlId(addRole);
 
             if (!GameRole.ContainsKey(playerId))
             {
@@ -223,5 +229,11 @@ namespace ExtremeRoles.Roles
             Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
         }
         
+        private static void addControlId(SingleRoleBase role)
+        {
+            role.GameControlId = roleControlId;
+            roleControlId = roleControlId + 1;
+        }
+
     }
 }
