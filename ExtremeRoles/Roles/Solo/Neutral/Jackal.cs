@@ -104,6 +104,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     Resources.ResourcesPaths.TestButton, 115f));
         }
 
+        public override bool IsSameTeams(SingleRoleBase role)
+        {
+            return role.Id == this.Id || role.Id == ExtremeRoleId.Sidekick;
+        }
+
         public bool IsAbilityUse()
         {
             this.setTarget();

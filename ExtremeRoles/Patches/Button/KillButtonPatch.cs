@@ -30,9 +30,11 @@ namespace ExtremeRoles.Patches.Button
                 PlayerControl killer = PlayerControl.LocalPlayer;
                 PlayerControl target = __instance.currentTarget;
 
-                bool canKilledTargetRole = Roles.ExtremeRoleManager.GameRole[target.PlayerId].TryRolePlayerKill(
+                var targetPlayerRole = Roles.ExtremeRoleManager.GameRole[target.PlayerId];
+
+                bool canKilledTargetRole = targetPlayerRole.TryRolePlayerKill(
                     target, killer);
-                if (!canKilledTargetRole) { return false; }
+                if (!canKilledTargetRole || role.IsSameTeams(targetPlayerRole)) { return false; }
 
                 // Use an unchecked kill command, to allow shorter kill cooldowns etc. without getting kicked
                 MurderKillResult res = checkMuderKill(
