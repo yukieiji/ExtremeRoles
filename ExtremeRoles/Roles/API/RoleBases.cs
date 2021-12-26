@@ -8,7 +8,6 @@ namespace ExtremeRoles.Roles.API
 {
     public abstract class SingleRoleBase : RoleOptionBase
     {
-        public bool IsVanilaRole = false;
         public bool HasTask = true;
         public bool UseVent = false;
         public bool UseSabotage = false;
@@ -39,8 +38,7 @@ namespace ExtremeRoles.Roles.API
             bool canKill,
             bool hasTask,
             bool useVent,
-            bool useSabotage,
-            bool isVanilaRole = false)
+            bool useSabotage)
         {
             this.Id = id;
             this.BytedRoleId = (byte)this.Id;
@@ -51,8 +49,6 @@ namespace ExtremeRoles.Roles.API
             this.HasTask = hasTask;
             this.UseVent = useVent;
             this.UseSabotage = useSabotage;
-
-            this.IsVanilaRole = isVanilaRole;
         }
 
         public virtual SingleRoleBase Clone()
@@ -68,6 +64,8 @@ namespace ExtremeRoles.Roles.API
 
             return copy;
         }
+
+        public bool IsVanillaRole() => this.Id == ExtremeRoleId.VanillaRole;
 
         public bool IsCrewmate() => this.Teams == ExtremeRoleType.Crewmate;
 
@@ -221,11 +219,10 @@ namespace ExtremeRoles.Roles.API
             bool canKill,
             bool hasTask,
             bool useVent,
-            bool useSabotage,
-            bool isVanilaRole = false) : base(
+            bool useSabotage) : base(
                 id, team, roleName, roleColor,
                 canKill, hasTask, useVent,
-                useSabotage, isVanilaRole)
+                useSabotage)
         { }
 
         public void SetAnotherRole(SingleRoleBase role)

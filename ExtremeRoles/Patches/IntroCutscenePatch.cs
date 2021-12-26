@@ -83,7 +83,7 @@ namespace ExtremeRoles.Patches
         {
             var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
 
-            if (role.Id != Roles.ExtremeRoleId.VanillaRole)
+            if (!role.IsVanillaRole())
             {
                 __instance.YouAreText.color = role.NameColor;
                 __instance.RoleText.text = role.RoleName;

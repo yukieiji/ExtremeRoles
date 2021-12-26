@@ -392,7 +392,7 @@ namespace ExtremeRoles.Patches
 
             var role = ExtremeRoleManager.GameRole[player.PlayerId];
 
-            if (role.Id == ExtremeRoleId.VanillaRole) { return; }
+            if (role.IsVanillaRole()) { return; }
 
             var removedTask = new List<PlayerTask>();
             foreach (PlayerTask task in player.myTasks)
@@ -436,7 +436,7 @@ namespace ExtremeRoles.Patches
             PlayerControl player,
             SingleRoleBase role, bool enable)
         {
-            if (role.CanKill && role.Id != ExtremeRoleId.VanillaRole)
+            if (role.CanKill && !role.IsVanillaRole())
             {
                 if (enable)
                 {
@@ -497,7 +497,7 @@ namespace ExtremeRoles.Patches
         {
             if (role.UseVent)
             {
-                if (role.Id != ExtremeRoleId.VanillaRole)
+                if (!role.IsVanillaRole())
                 {
                     if (enable) { HudManager.Instance.ImpostorVentButton.Show(); }
                     else { HudManager.Instance.ImpostorVentButton.SetDisabled(); }
@@ -562,7 +562,7 @@ namespace ExtremeRoles.Patches
             if (gameRoles.Count == 0) { return true; }
 
             var role = ExtremeRoleManager.GameRole[__instance.PlayerId];
-            if (role.Id == ExtremeRoleId.VanillaRole) { return true; }
+            if (role.IsVanillaRole()) { return true; }
 
             __result = null;
 
@@ -672,7 +672,7 @@ namespace ExtremeRoles.Patches
             if (roles.Count == 0 || !roles.ContainsKey(__instance.PlayerId)) { return true; }
 
             var role = roles[__instance.PlayerId];
-            if (role.Id == ExtremeRoleId.VanillaRole) { return true; }
+            if (role.IsVanillaRole()) { return true; }
 
 
             var killCool = PlayerControl.GameOptions.KillCooldown;
