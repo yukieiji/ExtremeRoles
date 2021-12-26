@@ -103,11 +103,11 @@ namespace ExtremeRoles.Patches
                 Module.PlayerDataContainer.DeadedAssassin.Clear();
             }
 
-            var role = ExtremeRoleManager.GetLocalPlayerRole();
+            var role = ExtremeRoleManager.GetLocalPlayerRole() as IRoleAbility;
 
-            if (role is IRoleAbility)
+            if (role != null)
             {
-                ((IRoleAbility)role).Button.ResetCoolTimer();
+                role.Button.ResetCoolTimer();
             }
 
             if (exiled == null) { return; };

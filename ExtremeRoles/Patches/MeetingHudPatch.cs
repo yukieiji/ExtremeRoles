@@ -258,7 +258,7 @@ namespace ExtremeRoles.Patches
         public static void Postfix(
             MeetingHud __instance)
         {
-            var abilityRole = ExtremeRoleManager.GameRole[PlayerControl.LocalPlayer.PlayerId] as IRoleAbility;
+            var abilityRole = ExtremeRoleManager.GetLocalPlayerRole() as IRoleAbility;
             if (abilityRole != null)
             {
                 abilityRole.Button.SetActive(false);
