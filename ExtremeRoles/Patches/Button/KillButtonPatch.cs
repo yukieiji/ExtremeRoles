@@ -47,6 +47,7 @@ namespace ExtremeRoles.Patches.Button
                             PlayerControl.LocalPlayer.NetId,
                             (byte)CustomRPC.UncheckedMurderPlayer,
                             Hazel.SendOption.Reliable, -1);
+
                         writer.Write(killer.PlayerId);
                         writer.Write(target.PlayerId);
                         writer.Write(Byte.MaxValue);

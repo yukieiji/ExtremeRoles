@@ -30,8 +30,6 @@ namespace ExtremeRoles.Patches.Manager
                     abilityRole.RoleAbilityInit();
                 }
             }
-            
-
         }
 
     }

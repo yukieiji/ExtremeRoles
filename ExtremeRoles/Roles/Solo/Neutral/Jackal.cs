@@ -369,7 +369,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
     public class Sidekick : SingleRoleBase
     {
-        public bool IsPrevRoleImpostor = false;
         public bool CanSeeImpostorToSideKickImpostor = false;
 
         private int recursion = 0;
@@ -397,8 +396,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.Vison = vison;
             this.IsApplyEnvironmentVision = applyEnvironmentVisionEffect;
 
-            this.IsPrevRoleImpostor = isImpostor;
-            this.CanSeeImpostorToSideKickImpostor = canSeeImpostorToSideKickImpostor;
+            this.CanSeeImpostorToSideKickImpostor = canSeeImpostorToSideKickImpostor && isImpostor;
 
             this.recursion = curRecursion;
             this.sidekickJackalCanMakeSidekick = sidekickJackalCanMakeSidekick;
@@ -406,9 +404,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public static void BecomeToJackal(byte callerId, byte targetId)
         {
-
-            var newJackal = new Jackal();
             var curJackal = (Jackal)ExtremeRoleManager.GameRole[callerId];
+            var newJackal = (Jackal)curJackal.Clone();
             var curSideKick = (Sidekick)ExtremeRoleManager.GameRole[targetId];
             
             newJackal.GameInit();

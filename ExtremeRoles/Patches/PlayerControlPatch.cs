@@ -44,15 +44,20 @@ namespace ExtremeRoles.Patches
         }
 
         private static Color getColorFromRoleAbility(
-            SingleRoleBase role,
+            SingleRoleBase subjectiveRole,
             byte targetPlayerId)
         {
             Color defaultColor = Palette.ClearWhite;
 
-            var lookRole = ExtremeRoleManager.GetLocalPlayerRole();
             var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
-
-            switch (role.Id)
+            
+            
+            bool isFakeImposter = false;
+            if (targetRole is Roles.Solo.Neutral.Sidekick)
+            {
+                isFakeImposter = ((Roles.Solo.Neutral.Sidekick)targetRole).CanSeeImpostorToSideKickImpostor;
+            }
+            switch (subjectiveRole.Id)
             {
                 case ExtremeRoleId.Marlin:
                     if (targetRole.IsImposter())
@@ -60,7 +65,7 @@ namespace ExtremeRoles.Patches
                         return Palette.ImpostorRed;
                     }
                     else if (targetRole.IsNeutral() &&
-                        ((Roles.Combination.Marlin)role).CanSeeNeutral)
+                        ((Roles.Combination.Marlin)subjectiveRole).CanSeeNeutral)
                     {
                         return Palette.DisabledGrey;
                     }
@@ -68,12 +73,13 @@ namespace ExtremeRoles.Patches
 
                 case ExtremeRoleId.VanillaRole:
 
-                    var vanilaRole = (Roles.Solo.VanillaRoleWrapper)role;
+                    var vanilaRole = (Roles.Solo.VanillaRoleWrapper)subjectiveRole;
                     switch (vanilaRole.VanilaRoleId)
                     {
                         case RoleTypes.Impostor:
                         case RoleTypes.Shapeshifter:
-                            if (targetRole.IsImposter())
+
+                            if (targetRole.IsImposter() || isFakeImposter)
                             {
                                 return Palette.ImpostorRed;
                             }
@@ -81,26 +87,36 @@ namespace ExtremeRoles.Patches
                         default:
                             return defaultColor;
                     }
-                case ExtremeRoleId.Sidekick:
+                case ExtremeRoleId.Jackal:
 
-                    var sidekick = (Roles.Solo.Neutral.Sidekick)role;
+                    var jackal = (Roles.Solo.Neutral.Jackal)subjectiveRole;
 
-                    if (lookRole.IsImposter() && sidekick.IsPrevRoleImpostor)
+                    if (targetRole.Id == ExtremeRoleId.Sidekick && 
+                        jackal.SideKickPlayerId.Contains(targetPlayerId))
                     {
-                        if (sidekick.CanSeeImpostorToSideKickImpostor)
+                        return subjectiveRole.NameColor;
+                    }
+                    return defaultColor;
+
+                case ExtremeRoleId.Sidekick:
+                    
+                    var jcakal = targetRole as Roles.Solo.Neutral.Jackal;
+                    if (jcakal != null)
+                    {
+                        if (jcakal.SideKickPlayerId.Contains(
+                                PlayerControl.LocalPlayer.PlayerId))
                         {
-                            return defaultColor;
-                        }
-                        else
-                        {
-                            return Palette.ImpostorRed;
+                            return subjectiveRole.NameColor;
                         }
                     }
-                    else if (
-                        (lookRole.Id == ExtremeRoleId.Jackal) ||
-                        (lookRole.Id == ExtremeRoleId.Sidekick))
+
+                    return defaultColor;
+
+                case ExtremeRoleId.Assassin:
+                    
+                    if (targetRole.IsImposter() || isFakeImposter)
                     {
-                        return sidekick.NameColor;
+                        return Palette.ImpostorRed;
                     }
 
                     return defaultColor;
@@ -164,7 +180,7 @@ namespace ExtremeRoles.Patches
         private static void setPlayerNameColor(PlayerControl player)
         {
             var localPlayerId = player.PlayerId;
-            var role = ExtremeRoleManager.GameRole[localPlayerId];
+            var role = ExtremeRoleManager.GetLocalPlayerRole();
 
             bool voteNamePaintBlock = false;
             bool playerNamePaintBlock = false;
@@ -405,45 +421,88 @@ namespace ExtremeRoles.Patches
         }
         private static void buttonUpdate(PlayerControl player)
         {
-            if (!player.AmOwner || !Player.ShowButtons) { return; }
+            if (!player.AmOwner) { return; }
+
             var role = ExtremeRoleManager.GameRole[player.PlayerId];
+            bool enable = Player.ShowButtons;
+            
+            ventButtonUpdate(role, enable);
+            sabotageButtonUpdate(role, enable);
+            killButtonUpdate(player, role, enable);
+            roleAbilityButtonUpdate(role);
+        }
+
+        private static void killButtonUpdate(
+            PlayerControl player,
+            SingleRoleBase role, bool enable)
+        {
+            if (role.CanKill && role.Id != ExtremeRoleId.VanillaRole)
+            {
+                if (enable)
+                {
+                    player.SetKillTimer(player.killTimer - Time.fixedDeltaTime);
+                    PlayerControl target = player.FindClosestTarget(!role.IsImposter());
+
+                    // Logging.Debug($"TargetAlive?:{target}");
+
+                    DestroyableSingleton<HudManager>.Instance.KillButton.SetTarget(target);
+                    HudManager.Instance.KillButton.Show();
+                    HudManager.Instance.KillButton.gameObject.SetActive(true);
+                }
+                else
+                {
+                    HudManager.Instance.KillButton.Hide();
+                    HudManager.Instance.KillButton.gameObject.SetActive(false);
+                }
+            }
+        }
+
+        private static void roleAbilityButtonUpdate(
+            SingleRoleBase role)
+        {
+            if (role is IRoleAbility)
+            {
+                ((IRoleAbility)role).Button.Update();
+            }
+        }
+
+        private static void sabotageButtonUpdate(
+            SingleRoleBase role, bool enable)
+        {
+            if (role.UseSabotage)
+            {
+                if (enable)
+                {
+                    HudManager.Instance.SabotageButton.Show();
+                    HudManager.Instance.SabotageButton.gameObject.SetActive(true);
+                }
+                else
+                {
+                    HudManager.Instance.SabotageButton.Hide();
+                    HudManager.Instance.SabotageButton.gameObject.SetActive(false);
+                }
+            }
+        }
+
+        private static void ventButtonUpdate(
+            SingleRoleBase role, bool enable)
+        {
             if (role.UseVent)
             {
                 if (role.Id != ExtremeRoleId.VanillaRole)
                 {
-                    HudManager.Instance.ImpostorVentButton.Show();
+                    if (enable) { HudManager.Instance.ImpostorVentButton.Show(); }
+                    else { HudManager.Instance.ImpostorVentButton.Hide(); }
                 }
                 else
                 {
                     if (((Roles.Solo.VanillaRoleWrapper)role).VanilaRoleId == RoleTypes.Engineer)
                     {
-                        HudManager.Instance.AbilityButton.Show();
+                        if (enable) { HudManager.Instance.AbilityButton.Show(); }
+                        else { HudManager.Instance.AbilityButton.Show(); }
                     }
                 }
             }
-
-            if (role.UseSabotage)
-            {
-                HudManager.Instance.SabotageButton.Show();
-                HudManager.Instance.SabotageButton.gameObject.SetActive(true);
-            }
-            if (role.CanKill && role.Id != ExtremeRoleId.VanillaRole)
-            {
-                player.SetKillTimer(player.killTimer - Time.fixedDeltaTime);
-                PlayerControl target = player.FindClosestTarget(!role.IsImposter());
-
-                // Logging.Debug($"TargetAlive?:{target}");
-
-                DestroyableSingleton<HudManager>.Instance.KillButton.SetTarget(target);
-                HudManager.Instance.KillButton.Show();
-                HudManager.Instance.KillButton.gameObject.SetActive(true);
-            }
-
-            if (role is IRoleAbility)
-            {
-                ((IRoleAbility)role).Button.Update();
-            }           
-
 
             // ToDo:インポスターのベントボタンをエンジニアが使えるようにする
             /*
@@ -478,6 +537,7 @@ namespace ExtremeRoles.Patches
                 HudManager.Instance.SabotageButton.gameObject.SetActive(true);
             }
             */
+
         }
     }
 
