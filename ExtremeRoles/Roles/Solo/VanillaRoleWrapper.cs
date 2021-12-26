@@ -20,6 +20,7 @@ namespace ExtremeRoles.Roles.Solo
                 case RoleTypes.Impostor:
                     this.Teams = ExtremeRoleType.Impostor;
                     this.NameColor = Palette.ImpostorRed;
+                    this.CanKill = true;
                     this.UseVent = true;
                     this.UseSabotage = true;
                     this.HasTask = false;
