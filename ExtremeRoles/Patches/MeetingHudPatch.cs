@@ -7,6 +7,7 @@ using UnityEngine;
 using UnhollowerBaseLib;
 
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Patches
 {
@@ -257,6 +258,12 @@ namespace ExtremeRoles.Patches
         public static void Postfix(
             MeetingHud __instance)
         {
+            var abilityRole = ExtremeRoleManager.GameRole[PlayerControl.LocalPlayer.PlayerId] as IRoleAbility;
+            if (abilityRole != null)
+            {
+                abilityRole.Button.SetActive(false);
+            }
+
             if (!AssassinMeeting.AssassinMeetingTrigger) { return; }
 
             DestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
