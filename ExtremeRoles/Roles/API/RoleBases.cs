@@ -145,16 +145,16 @@ namespace ExtremeRoles.Roles.API
                 Design.ColoedString(
                     this.NameColor,
                     Design.ConcatString(
-                        this.Id.ToString(),
+                        this.RoleName,
                         RoleCommonSetting.SpawnRate.ToString())),
                 OptionsHolder.SpawnRate, null, true);
 
             CustomOption.Create(
                 GetRoleSettingId(RoleCommonSetting.RoleNum),
                 Design.ConcatString(
-                    this.Id.ToString(),
+                    this.RoleName,
                     RoleCommonSetting.RoleNum.ToString()),
-                1, 1, OptionsHolder.VanillaMaxPlayerNum, 1, roleSetOption);
+                1, 1, OptionsHolder.VanillaMaxPlayerNum - 1, 1, roleSetOption);
 
             return roleSetOption;
         }
@@ -165,21 +165,21 @@ namespace ExtremeRoles.Roles.API
             var visonOption = CustomOption.Create(
                 GetRoleSettingId(RoleCommonSetting.HasOtherVison),
                 Design.ConcatString(
-                    this.Id.ToString(),
+                    this.RoleName,
                     RoleCommonSetting.HasOtherVison.ToString()),
                 false, parentOps);
 
             CustomOption.Create(
                 GetRoleSettingId(RoleCommonSetting.Vison),
                 Design.ConcatString(
-                    this.Id.ToString(),
+                    this.RoleName,
                     RoleCommonSetting.Vison.ToString()),
                 2f, 0.25f, 5f, 0.25f,
                 visonOption, format: "unitMultiplier");
             CustomOption.Create(
                GetRoleSettingId(RoleCommonSetting.ApplyEnvironmentVisionEffect),
                Design.ConcatString(
-                   this.Id.ToString(),
+                   this.RoleName,
                    RoleCommonSetting.ApplyEnvironmentVisionEffect.ToString()),
                this.IsCrewmate(), visonOption);
         }

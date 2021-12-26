@@ -31,7 +31,7 @@ namespace ExtremeRoles.Roles
     }
     public static class ExtremeRoleManager
     {
-        public const int OptionOffsetPerRole = 30;
+        public const int OptionOffsetPerRole = 50;
 
         public static readonly List<
             SingleRoleBase> NormalRole = new List<SingleRoleBase>()
@@ -42,6 +42,7 @@ namespace ExtremeRoles.Roles
                 new SpecialImpostor(),
 
                 new Alice(),
+                new Jackal(),
             };
         
         public static readonly List<

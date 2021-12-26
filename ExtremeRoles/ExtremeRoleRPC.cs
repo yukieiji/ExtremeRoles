@@ -39,28 +39,6 @@ namespace ExtremeRoles
             Patches.AssassinMeeting.Reset();
         }
 
-        public static void AllPlayerRPC(byte[] sendData)
-        {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-            {
-                if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId)
-                {
-                    continue;
-                }
-
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                    player.NetId, (byte)CustomRPC.ReplaceRole,
-                    Hazel.SendOption.Reliable, -1);
-
-                foreach(byte data in sendData)
-                {
-                    writer.Write(data);
-                }
-                
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-            }
-        }
-
         public static void ForceEnd()
         {
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)

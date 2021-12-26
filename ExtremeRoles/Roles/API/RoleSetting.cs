@@ -13,22 +13,22 @@ namespace ExtremeRoles.Roles.API
     }
     public enum RoleCommonSetting
     {
-        RoleNum = 15,
-        SpawnRate = 16,
-        HasOtherVison = 17,
-        Vison = 18,
-        ApplyEnvironmentVisionEffect = 19,
+        RoleNum = 25,
+        SpawnRate,
+        HasOtherVison,
+        Vison,
+        ApplyEnvironmentVisionEffect,
     }
     public enum KillerCommonSetting
     {
-        HasOtherKillRange = 11,
-        KillRange = 12,
-        HasOtherKillCool = 13,
-        KillCoolDown = 14,
+        HasOtherKillRange=20,
+        KillRange,
+        HasOtherKillCool,
+        KillCoolDown,
     }
     public enum CombinationRoleCommonSetting
     {
-        IsMultiAssign = 11,
+        IsMultiAssign = 15,
     }
 
     abstract public class RoleSettingBase : IRoleSetting
