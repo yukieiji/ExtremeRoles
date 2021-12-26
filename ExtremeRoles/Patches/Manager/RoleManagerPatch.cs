@@ -390,12 +390,10 @@ namespace ExtremeRoles.Patches.Manager
 
             foreach (var role in ExtremeRoleManager.CombRole)
             {
-                Logging.Debug("Checkpoint:1");
                 int spawnRate = ComputePercentage(allOption[
                     role.GetRoleOptionId(RoleCommonOption.SpawnRate)]);
-                Logging.Debug("Checkpoint:2");
                 int roleSet = allOption[
-                    role.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue() + 1;
+                    role.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue();
 
                 Logging.Debug($"SpawnRate:{spawnRate}   RoleSet:{roleSet}");
 
