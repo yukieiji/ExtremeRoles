@@ -425,10 +425,11 @@ namespace ExtremeRoles.Patches
 
             var role = ExtremeRoleManager.GameRole[player.PlayerId];
             bool enable = Player.ShowButtons && !PlayerControl.LocalPlayer.Data.IsDead;
-            
-            ventButtonUpdate(role, enable);
-            sabotageButtonUpdate(role);
+
             killButtonUpdate(player, role, enable);
+            ventButtonUpdate(role, enable);
+
+            sabotageButtonUpdate(role);
             roleAbilityButtonUpdate(role);
         }
 
@@ -436,7 +437,7 @@ namespace ExtremeRoles.Patches
             PlayerControl player,
             SingleRoleBase role, bool enable)
         {
-            if (role.CanKill && !role.IsVanillaRole())
+            if (role.CanKill)
             {
                 if (enable)
                 {
