@@ -26,6 +26,8 @@ namespace ExtremeRoles
         UncheckedCmdReportDeadBody,
         UncheckedExilePlayer,
 
+        ReplaceRole,
+
     }
 
     public class ExtremeRoleRPC
@@ -84,6 +86,13 @@ namespace ExtremeRoles
                     target, source);
             }
         }
+
+        public static void ReplaceRole(
+            byte callerId, byte targetId, byte operation)
+        {
+
+        }
+
     }
 
 }

@@ -8,8 +8,8 @@ namespace ExtremeRoles.Roles.API.Interface
 {
     public enum RoleAbilityCommonSetting
     {
-        AbilityCoolTime = 21,
-        AbilityActiveTime = 22,
+        AbilityCoolTime = 30,
+        AbilityActiveTime,
     }
     public interface IRoleAbility
     {
