@@ -5,17 +5,32 @@ namespace ExtremeRoles.Helper
 {
     public static class RandomGenerator
     {
+        public static Random CreateStrong()
+        {
+            return new Random(createStrongRandomSeed());
+        }
+
+        public static void SetUnityStrongRandomSeed()
+        {
+            UnityEngine.Random.InitState(createStrongRandomSeed());
+        }
+
         public static Random Create()
         {
-            return new Random(createRandomSeed());
+            return new Random(createNormalRandomSeed());
         }
 
         public static void SetUnityRandomSeed()
         {
-            UnityEngine.Random.InitState(createRandomSeed());
+            UnityEngine.Random.InitState(createNormalRandomSeed());
         }
 
-        private static int createRandomSeed()
+        private static int createNormalRandomSeed()
+        {
+            return ((int)DateTime.Now.Ticks & 0x0000FFFF) + UnityEngine.SystemInfo.processorFrequency;
+        }
+
+        private static int createStrongRandomSeed()
         {
             var bs = new byte[4];
             //Int32と同じサイズのバイト配列にランダムな値を設定する

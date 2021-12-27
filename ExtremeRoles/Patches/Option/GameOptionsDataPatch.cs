@@ -38,6 +38,9 @@ namespace ExtremeRoles.Patches.Option
             entries.Add(
                 optionToString(allOption[(int)OptionsHolder.CommonOptionKey.PresetSelection]));
 
+            entries.Add(
+                optionToString(allOption[(int)OptionsHolder.CommonOptionKey.UseStrongRandomGen]));
+
             var optionName = Design.ColoedString(
                 new Color(204f / 255f, 204f / 255f, 0, 1f),
                 translate("crewmateRoles"));
@@ -71,6 +74,7 @@ namespace ExtremeRoles.Patches.Option
             foreach (CustomOptionBase option in OptionsHolder.AllOptions.Values)
             {
                 if ((option == allOption[(int)OptionsHolder.CommonOptionKey.PresetSelection]) ||
+                    (option == allOption[(int)OptionsHolder.CommonOptionKey.UseStrongRandomGen]) ||
                     (option == allOption[(int)OptionsHolder.CommonOptionKey.MinCremateRoles]) ||
                     (option == allOption[(int)OptionsHolder.CommonOptionKey.MaxCremateRoles]) ||
                     (option == allOption[(int)OptionsHolder.CommonOptionKey.MinNeutralRoles]) ||

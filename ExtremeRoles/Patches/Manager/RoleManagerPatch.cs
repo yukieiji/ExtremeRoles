@@ -15,7 +15,7 @@ namespace ExtremeRoles.Patches.Manager
     class RoleManagerSelectRolesPatch
     {
 
-        private static Random roleRng = RandomGenerator.Create();
+        private static Random roleRng = null;
 
         public static void Postfix()
         {
@@ -27,8 +27,19 @@ namespace ExtremeRoles.Patches.Manager
             RPCOperator.GameInit();
 
             PlayerControl[] playeres = PlayerControl.AllPlayerControls.ToArray();
+            bool useStrongGen = OptionsHolder.AllOptions[
+                (int)OptionsHolder.CommonOptionKey.UseStrongRandomGen].GetValue();
+            if (useStrongGen)
+            {
+                roleRng = RandomGenerator.CreateStrong();
+                RandomGenerator.SetUnityStrongRandomSeed();
+            }
+            else
+            {
+                roleRng = RandomGenerator.Create();
+                RandomGenerator.SetUnityRandomSeed();
+            }
             
-            RandomGenerator.SetUnityRandomSeed();
             RoleAssignmentData extremeRolesData = CreateRoleData();
             var playerIndexList = Enumerable.Range(0, playeres.Count()).ToList();
 

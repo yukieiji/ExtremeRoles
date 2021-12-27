@@ -23,6 +23,9 @@ namespace ExtremeRoles
         public enum CommonOptionKey
         {
             PresetSelection = 0,
+
+            UseStrongRandomGen,
+
             MinCremateRoles,
             MaxCremateRoles,
             MinNeutralRoles,
@@ -51,6 +54,11 @@ namespace ExtremeRoles
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.PresetSelection.ToString()),
                 OptionPreset, null, true);
+
+            CustomOption.Create(
+                (int)CommonOptionKey.UseStrongRandomGen, Design.ColoedString(
+                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    CommonOptionKey.UseStrongRandomGen.ToString()), true);
 
             CustomOption.Create(
                 (int)CommonOptionKey.MinCremateRoles, Design.ColoedString(
@@ -92,7 +100,8 @@ namespace ExtremeRoles
 
             var blockMeating = CustomOption.Create(
                 (int)CommonOptionKey.DisableSkipInEmergencyMeeting,
-                CommonOptionKey.DisableSkipInEmergencyMeeting.ToString(), false);
+                CommonOptionKey.DisableSkipInEmergencyMeeting.ToString(),
+                false);
             CustomOption.Create(
                 (int)CommonOptionKey.NoVoteToSelf,
                 CommonOptionKey.NoVoteToSelf.ToString(),
