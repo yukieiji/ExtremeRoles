@@ -172,6 +172,11 @@ namespace ExtremeRoles.Patches.Option
                         parent = parent.Parent;
                     }
 
+                    if (option.EnableInvert)
+                    {
+                        enabled = !enabled;
+                    }
+
                     option.Behaviour.gameObject.SetActive(enabled);
                     if (enabled)
                     {

@@ -18,6 +18,7 @@ namespace ExtremeRoles.Module
 
         public bool IsHeader;
         public bool IsHidden;
+        public bool EnableInvert;
 
         public ConfigEntry<int> Entry;
         public CustomOptionBase Parent;
@@ -27,17 +28,12 @@ namespace ExtremeRoles.Module
 
         private string stringFormat;
         private List<CustomOptionBase> withUpdateOption = new List<CustomOptionBase>();
-        private bool enableInvert;
 
         public virtual bool Enabled
         {
             get
             {
-                if (this.enableInvert)
-                {
-                    return CurSelection == 0;
-                }
-                return CurSelection > 0;
+                return this.GetBool();
             }
         }
 
@@ -62,12 +58,13 @@ namespace ExtremeRoles.Module
             this.Parent = parent;
             this.IsHeader = isHeader;
             this.IsHidden = isHidden;
-            this.enableInvert = invert;
+            this.EnableInvert = false;
 
             this.Children = new List<CustomOptionBase>();
 
             if (parent != null)
             {
+                this.EnableInvert = invert;
                 parent.Children.Add(this);
             }
 
