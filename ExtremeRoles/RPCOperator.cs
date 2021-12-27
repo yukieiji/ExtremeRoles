@@ -8,17 +8,12 @@ namespace ExtremeRoles
 
         public enum Command
         {
-            // Main Controls
 
             GameInit = 60,
             ForceEnd,
             SetRole,
             ShareOption,
-            VersionHandshake,
-            UseUncheckedVent,
             UncheckedMurderPlayer,
-            UncheckedCmdReportDeadBody,
-            UncheckedExilePlayer,
 
             ReplaceRole,
         }

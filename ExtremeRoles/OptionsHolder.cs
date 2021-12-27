@@ -19,7 +19,8 @@ namespace ExtremeRoles
         public static string[] Range = new string[] { "short", "middle", "long"};
 
         public static int SelectedPreset = 0;
-        public static int VanillaMaxPlayerNum = 15;
+        public const int VanillaMaxPlayerNum = 15;
+        public const int MaxImposterNum = 3; 
         public enum CommonOptionKey
         {
             PresetSelection = 0,
@@ -75,28 +76,28 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.MinNeutralRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MinNeutralRoles.ToString()),
-                0, 0, VanillaMaxPlayerNum, 1);
+                0, 0, VanillaMaxPlayerNum - 1, 1);
             CustomOption.Create(
                 (int)CommonOptionKey.MaxNeutralRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MaxNeutralRoles.ToString()),
-                0, 0, VanillaMaxPlayerNum, 1);
+                0, 0, VanillaMaxPlayerNum - 1, 1);
 
             CustomOption.Create(
                 (int)CommonOptionKey.MinImpostorRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MinImpostorRoles.ToString()),
-                0, 0, 3, 1);
+                0, 0, MaxImposterNum, 1);
             CustomOption.Create(
                 (int)CommonOptionKey.MaxImpostorRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MaxImpostorRoles.ToString()),
-                0, 0, 3, 1);
+                0, 0, MaxImposterNum, 1);
 
             CustomOption.Create(
                 (int)CommonOptionKey.NumMeatings,
                 CommonOptionKey.NumMeatings.ToString(),
-                10, 0, VanillaMaxPlayerNum, 1, null, true);
+                10, 0, 100, 1, null, true);
 
             var blockMeating = CustomOption.Create(
                 (int)CommonOptionKey.DisableSkipInEmergencyMeeting,
