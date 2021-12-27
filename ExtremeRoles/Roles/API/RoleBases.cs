@@ -135,7 +135,7 @@ namespace ExtremeRoles.Roles.API
                 Design.ConcatString(
                     this.RoleName,
                     KillerCommonOption.KillRange.ToString()),
-                OptionsHolder.KillRange,
+                OptionsHolder.Range,
                 killRangeOption);
         }
         protected override CustomOptionBase CreateSpawnOption()

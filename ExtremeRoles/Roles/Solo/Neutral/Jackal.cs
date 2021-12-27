@@ -232,7 +232,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 Design.ConcatString(
                     this.RoleName,
                     JackalOption.RangeSidekickTarget.ToString()),
-                OptionsHolder.KillRange,
+                OptionsHolder.Range,
                 parentOps);
 
             CustomOption.Create(
