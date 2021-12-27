@@ -15,8 +15,7 @@ namespace ExtremeRoles.Patches.Manager
     class RoleManagerSelectRolesPatch
     {
 
-        private static Random roleRng = new Random(
-            UnityEngine.SystemInfo.processorFrequency);
+        private static Random roleRng = RandomGenerator.Create();
 
         public static void Postfix()
         {
@@ -28,6 +27,8 @@ namespace ExtremeRoles.Patches.Manager
             RPCOperator.GameInit();
 
             PlayerControl[] playeres = PlayerControl.AllPlayerControls.ToArray();
+            
+            RandomGenerator.SetUnityRandomSeed();
             RoleAssignmentData extremeRolesData = CreateRoleData();
             var playerIndexList = Enumerable.Range(0, playeres.Count()).ToList();
 
@@ -288,7 +289,7 @@ namespace ExtremeRoles.Patches.Manager
                         }
 
 
-                        Logging.Debug($"Role{role.Id}: AssignResult:{result}");
+                        Logging.Debug($"Role:{role.Id}: AssignResult:{result}");
 
                         if (result)
                         {
@@ -323,8 +324,7 @@ namespace ExtremeRoles.Patches.Manager
                 if (shuffledArange.Count == assignedPlayers ||
                     shuffledArange.Count + shuffleRolesForImpostor.Count == assignedPlayers ||
                     shuffledArange.Count + shuffleRolesForCrewmate.Count == assignedPlayers ||
-                    (shuffleRolesForImpostor.Count == 0 && 
-                     shuffleRolesForCrewmate.Count == 0))
+                    (shuffleRolesForImpostor.Count == 0 &&  shuffleRolesForCrewmate.Count == 0))
                 {
                     tempList = new List<int>(shuffledArange);
 
@@ -450,8 +450,10 @@ namespace ExtremeRoles.Patches.Manager
 
             return new RoleAssignmentData
             {
-                RolesForVanillaCrewmate = RolesForVanillaCrewmate,
-                RolesForVanillaImposter = RolesForVanillaImposter,
+                RolesForVanillaCrewmate = RolesForVanillaCrewmate.OrderBy(
+                    item => roleRng.Next()).ToList(),
+                RolesForVanillaImposter = RolesForVanillaImposter.OrderBy(
+                    item => roleRng.Next()).ToList(),
                 CombinationRole = combinationRole,
 
                 RoleSpawnSettings = new Dictionary<RoleTypes, Dictionary<byte, (int, int)>>()
