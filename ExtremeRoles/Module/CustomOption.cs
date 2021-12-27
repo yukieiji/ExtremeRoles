@@ -11,20 +11,21 @@ namespace ExtremeRoles.Module
 {
     public abstract class CustomOptionBase
     {
-
         public int Id;
-        public string Name;
-        public string Format;
-        public System.Object[] Selections;
-
-        public int DefaultSelection;
-        public ConfigEntry<int> Entry;
         public int CurSelection;
-        public OptionBehaviour Behaviour;
-        public CustomOptionBase Parent;
-        public List<CustomOptionBase> Children;
+        public int DefaultSelection;
+        public string Name;
+
         public bool IsHeader;
         public bool IsHidden;
+
+        public ConfigEntry<int> Entry;
+        public CustomOptionBase Parent;
+        public OptionBehaviour Behaviour;
+        public List<CustomOptionBase> Children;
+        public System.Object[] Selections;
+
+        private string stringFormat;
 
         public virtual bool Enabled
         {
@@ -48,7 +49,7 @@ namespace ExtremeRoles.Module
 
             this.Id = id;
             this.Name = name;
-            this.Format = format;
+            this.stringFormat = format;
             this.Selections = selections;
             this.DefaultSelection = index >= 0 ? index : 0;
             this.Parent = parent;
@@ -84,16 +85,20 @@ namespace ExtremeRoles.Module
         public string GetString()
         {
             string sel = Selections[CurSelection].ToString();
-            if (Format != "")
+            if (this.stringFormat != "")
             {
-                return string.Format(Translation.GetString(Format), sel);
+                return string.Format(
+                    Translation.GetString(this.stringFormat), sel);
             }
             return Translation.GetString(sel);
         }
 
         public void UpdateSelection(int newSelection)
         {
-            CurSelection = Mathf.Clamp((newSelection + Selections.Length) % Selections.Length, 0, Selections.Length - 1);
+            CurSelection = Mathf.Clamp(
+                (newSelection + Selections.Length) % Selections.Length,
+                0, Selections.Length - 1);
+            
             if (Behaviour != null && Behaviour is StringOption stringOption)
             {
                 stringOption.oldValue = stringOption.Value = CurSelection;
@@ -101,8 +106,14 @@ namespace ExtremeRoles.Module
 
                 if (AmongUsClient.Instance?.AmHost == true && PlayerControl.LocalPlayer)
                 {
-                    if (Id == 0) OptionsHolder.SwitchPreset(CurSelection); // Switch presets
-                    else if (Entry != null) Entry.Value = CurSelection; // Save selection to config
+                    if (Id == 0)
+                    {
+                        OptionsHolder.SwitchPreset(CurSelection); // Switch presets
+                    }
+                    else if (Entry != null)
+                    {
+                        Entry.Value = CurSelection; // Save selection to config
+                    }
 
                     OptionsHolder.ShareOptionSelections();// Share all selections
                 }
