@@ -13,7 +13,7 @@ namespace ExtremeRoles.Roles.API
     }
     public enum RoleCommonOption
     {
-        RoleNum = 25,
+        RoleNum = 20,
         SpawnRate,
         HasOtherVison,
         Vison,
@@ -21,14 +21,10 @@ namespace ExtremeRoles.Roles.API
     }
     public enum KillerCommonOption
     {
-        HasOtherKillRange=20,
+        HasOtherKillRange = 25,
         KillRange,
         HasOtherKillCool,
         KillCoolDown,
-    }
-    public enum CombinationRoleCommonOption
-    {
-        IsMultiAssign = 15,
     }
 
     abstract public class RoleOptionBase : IRoleOption

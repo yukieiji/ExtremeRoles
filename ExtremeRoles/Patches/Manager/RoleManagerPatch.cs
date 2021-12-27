@@ -40,20 +40,49 @@ namespace ExtremeRoles.Patches.Manager
                 RandomGenerator.SetUnityRandomSeed();
             }
             
-            RoleAssignmentData extremeRolesData = CreateRoleData();
+            RoleAssignmentData extremeRolesData = createRoleData();
             var playerIndexList = Enumerable.Range(0, playeres.Count()).ToList();
 
-            CombinationExtremeRoleAssign(
+            combinationExtremeRoleAssign(
                 ref extremeRolesData, ref playerIndexList);
-            NormalExtremeRoleAssign(
+            normalExtremeRoleAssign(
                 extremeRolesData, playerIndexList);
         }
 
-        private static int ComputePercentage(Module.CustomOptionBase self)
+        private static bool checkLimitRoleSpawnNum(
+            SingleRoleBase role,
+            ref RoleAssignmentData extremeRolesData)
+        {
+
+            bool result;
+
+            switch (role.Teams)
+            {
+                case ExtremeRoleType.Crewmate:
+                    result = ((extremeRolesData.CrewmateRoles - 1) >= 0);
+                    if (result) { extremeRolesData.CrewmateRoles = extremeRolesData.CrewmateRoles - 1; }
+                    break;
+                case ExtremeRoleType.Neutral:
+                    result = ((extremeRolesData.NeutralRoles - 1) >= 0);
+                    if (result) { extremeRolesData.NeutralRoles = extremeRolesData.NeutralRoles - 1; }
+                    break;
+                case ExtremeRoleType.Impostor:
+                    result = ((extremeRolesData.ImpostorRoles - 1) >= 0);
+                    if (result) { extremeRolesData.ImpostorRoles = extremeRolesData.ImpostorRoles - 1; }
+                    break;
+                default:
+                    result = false;
+                    break;
+            }
+
+            return result;
+        }
+
+        private static int computePercentage(Module.CustomOptionBase self)
             => (int)Decimal.Multiply(
                 self.GetValue(), self.Selections.ToList().Count);
 
-        private static void CombinationExtremeRoleAssign(
+        private static void combinationExtremeRoleAssign(
             ref RoleAssignmentData extremeRolesData,
             ref List<int> playerIndexList)
         {
@@ -62,7 +91,7 @@ namespace ExtremeRoles.Patches.Manager
 
             if (extremeRolesData.CombinationRole.Count == 0) { return; }
 
-            List<(List<MultiAssignRoleBase>, int)> assignMultiAssignRole = GetMultiAssignedRoles(
+            List<(List<MultiAssignRoleBase>, int)> assignMultiAssignRole = getMultiAssignedRoles(
                 ref extremeRolesData);
 
             PlayerControl player = PlayerControl.LocalPlayer;
@@ -77,7 +106,7 @@ namespace ExtremeRoles.Patches.Manager
                     foreach(int playerIndex in tempList)
                     {
                         player = PlayerControl.AllPlayerControls[playerIndex];
-                        assign = IsAssignedToMultiRole(
+                        assign = isAssignedToMultiRole(
                             role, player);
                         if (!assign) { continue; }
                         
@@ -86,7 +115,7 @@ namespace ExtremeRoles.Patches.Manager
                             playerIndexList.Remove(playerIndex);
                         }
 
-                        SetRoleToPlayer(
+                        setRoleToPlayer(
                             player, role.BytedRoleId, (byte)id);
                         break;
                     }
@@ -96,7 +125,7 @@ namespace ExtremeRoles.Patches.Manager
 
         }
 
-        private static List<(List<MultiAssignRoleBase>, int)> GetMultiAssignedRoles(
+        private static List<(List<MultiAssignRoleBase>, int)> getMultiAssignedRoles(
             ref RoleAssignmentData extremeRolesData)
         {
             List<(List<MultiAssignRoleBase>, int)> assignRoles = new List<(List<MultiAssignRoleBase>, int)>();
@@ -111,7 +140,7 @@ namespace ExtremeRoles.Patches.Manager
 
                 for (int i = 0; i < num; i++)
                 {
-                    bool isSpawn = IsRoleSpawn(num, spawnRate);
+                    bool isSpawn = isRoleSpawn(num, spawnRate);
                     int reduceCrewmateRole = 0;
                     int reduceImpostorRole = 0;
                     int reduceNeutralRole = 0;
@@ -159,7 +188,7 @@ namespace ExtremeRoles.Patches.Manager
             return assignRoles;
         }
 
-        private static bool IsAssignedToMultiRole(
+        private static bool isAssignedToMultiRole(
             MultiAssignRoleBase role,
             PlayerControl player)
         {
@@ -208,7 +237,7 @@ namespace ExtremeRoles.Patches.Manager
             return false;
         }
 
-        private static bool IsRoleSpawn(
+        private static bool isRoleSpawn(
             int roleNum, int spawnData)
         {
             if (roleNum <= 0) { return false; }
@@ -217,7 +246,7 @@ namespace ExtremeRoles.Patches.Manager
             return true;
         }
 
-        private static void NormalExtremeRoleAssign(
+        private static void normalExtremeRoleAssign(
             RoleAssignmentData extremeRolesData,
             List<int> shuffledArange)
         {
@@ -258,7 +287,7 @@ namespace ExtremeRoles.Patches.Manager
                                 item => roleRng.Next()).ToList();
                             break;
                         default:
-                            SetRoleToPlayer(
+                            setRoleToPlayer(
                                 player,
                                 (byte)roleData.Role);
                             shuffledArange.Remove(index);
@@ -278,33 +307,16 @@ namespace ExtremeRoles.Patches.Manager
                         // Logging.Debug($"KeyFound?:{extremeRolesData.RoleSpawnSettings[roleData.Role].ContainsKey(role.BytedRoleId)}");
                         var(roleNum, spawnRate) = extremeRolesData.RoleSpawnSettings[
                             roleData.Role][role.BytedRoleId];
-                        result = IsRoleSpawn(roleNum, spawnRate);
 
-                        switch (role.Teams)
-                        {
-                            case ExtremeRoleType.Crewmate:
-                                result = result && ((extremeRolesData.CrewmateRoles - 1) >= 0);
-                                if (result) { extremeRolesData.CrewmateRoles = extremeRolesData.CrewmateRoles - 1; }
-                                break;
-                            case ExtremeRoleType.Neutral:
-                                result = result && ((extremeRolesData.NeutralRoles - 1) >= 0);
-                                if (result) { extremeRolesData.NeutralRoles = extremeRolesData.NeutralRoles - 1; }
-                                break;
-                            case ExtremeRoleType.Impostor:
-                                result = result && ((extremeRolesData.ImpostorRoles - 1) >= 0);
-                                if (result) { extremeRolesData.ImpostorRoles = extremeRolesData.ImpostorRoles - 1; }
-                                break;
-                            default:
-                                result = false;
-                                break;
-                        }
+                        result = isRoleSpawn(roleNum, spawnRate);
+                        result = result && checkLimitRoleSpawnNum(role, ref extremeRolesData);
 
 
                         Logging.Debug($"Role:{role.Id}: AssignResult:{result}");
 
                         if (result)
                         {
-                            SetRoleToPlayer(player, role.BytedRoleId);
+                            setRoleToPlayer(player, role.BytedRoleId);
                             shuffledArange.Remove(index);
                             extremeRolesData.RoleSpawnSettings[roleData.Role][role.BytedRoleId] = (
                                 --roleNum,
@@ -342,7 +354,7 @@ namespace ExtremeRoles.Patches.Manager
                     foreach (int index in tempList)
                     {
                         PlayerControl player = PlayerControl.AllPlayerControls[index];
-                        SetRoleToPlayer(
+                        setRoleToPlayer(
                             player, (byte)(player.Data.Role.Role));
                         shuffledArange.Remove(index);
                     }
@@ -354,7 +366,7 @@ namespace ExtremeRoles.Patches.Manager
         }
 
 
-        private static void SetRoleToPlayer(
+        private static void setRoleToPlayer(
             PlayerControl player, byte roleId, byte id=Byte.MaxValue)
         {
 
@@ -374,7 +386,7 @@ namespace ExtremeRoles.Patches.Manager
         }
 
 
-        private static RoleAssignmentData CreateRoleData()
+        private static RoleAssignmentData createRoleData()
         {
             List<SingleRoleBase> RolesForVanillaImposter = new List<SingleRoleBase>();
             List<SingleRoleBase> RolesForVanillaCrewmate = new List<SingleRoleBase>();
@@ -403,7 +415,7 @@ namespace ExtremeRoles.Patches.Manager
 
             foreach (var role in ExtremeRoleManager.CombRole)
             {
-                int spawnRate = ComputePercentage(allOption[
+                int spawnRate = computePercentage(allOption[
                     role.GetRoleOptionId(RoleCommonOption.SpawnRate)]);
                 int roleSet = allOption[
                     role.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue();
@@ -423,7 +435,7 @@ namespace ExtremeRoles.Patches.Manager
             {
 
                 byte roleId = role.BytedRoleId;
-                int spawnRate = ComputePercentage(allOption[
+                int spawnRate = computePercentage(allOption[
                     role.GetRoleOptionId(RoleCommonOption.SpawnRate)]);
                 int roleNum = allOption[
                     role.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue();

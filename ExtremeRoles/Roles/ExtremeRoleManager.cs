@@ -5,6 +5,7 @@ using System.Linq;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
+using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Neutral;
 using ExtremeRoles.Roles.Solo.Impostor;
@@ -52,7 +53,6 @@ namespace ExtremeRoles.Roles
         public static readonly List<
             SingleRoleBase> NormalRole = new List<SingleRoleBase>()
             {
-
                 new SpecialCrew(),
 
                 new SpecialImpostor(),
@@ -60,11 +60,12 @@ namespace ExtremeRoles.Roles
                 new Alice(),
                 new Jackal(),
             };
-        
+
         public static readonly List<
             CombinationRoleManagerBase> CombRole = new List<CombinationRoleManagerBase>()
             {
-                new Combination.Avalon(),
+                new Avalon(),
+                new LoverManager(),
             };
 
         public static Dictionary<
@@ -81,13 +82,37 @@ namespace ExtremeRoles.Roles
         public static void CreateCombinationRoleOptions(
             int optionIdOffsetChord)
         {
-            createOptions(optionIdOffsetChord, CombRole);
+            IEnumerable<CombinationRoleManagerBase> roles = CombRole;
+
+            if (roles.Count() == 0) { return; };
+
+            int roleOptionOffset = 0;
+
+            foreach (var item
+             in roles.Select((Value, Index) => new { Value, Index }))
+            {
+                roleOptionOffset = optionIdOffsetChord + (
+                    OptionOffsetPerRole * (item.Index + item.Value.Roles.Count + 1));
+                item.Value.CreateRoleAllOption(roleOptionOffset);
+            }
         }
 
         public static void CreateNormalRoleOptions(
             int optionIdOffsetChord)
         {
-            createOptions(optionIdOffsetChord, NormalRole);
+
+            IEnumerable<SingleRoleBase> roles = NormalRole;
+
+            if (roles.Count() == 0) { return; };
+
+            int roleOptionOffset = 0;
+
+            foreach (var item
+             in roles.Select((Value, Index) => new { Value, Index }))
+            {
+                roleOptionOffset = optionIdOffsetChord + (OptionOffsetPerRole * item.Index);
+                item.Value.CreateRoleAllOption(roleOptionOffset);
+            }
         }
 
         public static void GameInit()
@@ -118,7 +143,6 @@ namespace ExtremeRoles.Roles
                 {
                     if (role.BytedRoleId == roleId)
                     {
-
                         SingleRoleBase addRole = role.Clone();
 
                         IRoleAbility abilityRole = addRole as IRoleAbility;

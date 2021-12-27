@@ -94,8 +94,9 @@ namespace ExtremeRoles.Patches.Option
 
                     entry = new StringBuilder();
                     if (!option.IsHidden)
+                    {
                         entry.AppendLine(optionToString(option));
-
+                    }
                     addChildren(option, ref entry, !option.IsHidden);
                     entries.Add(entry.ToString().Trim('\r', '\n'));
                 }
@@ -139,7 +140,9 @@ namespace ExtremeRoles.Patches.Option
             foreach (var child in option.Children)
             {
                 if (!child.IsHidden)
+                {
                     entry.AppendLine((indent ? "    " : "") + optionToString(child));
+                }
                 addChildren(child, ref entry, indent);
             }
         }

@@ -26,12 +26,18 @@ namespace ExtremeRoles.Module
         public System.Object[] Selections;
 
         private string stringFormat;
+        private List<CustomOptionBase> withUpdateOption = new List<CustomOptionBase>();
+        private bool enableInvert;
 
         public virtual bool Enabled
         {
             get
             {
-                return this.GetBool();
+                if (this.enableInvert)
+                {
+                    return CurSelection == 0;
+                }
+                return CurSelection > 0;
             }
         }
 
@@ -43,7 +49,8 @@ namespace ExtremeRoles.Module
             CustomOptionBase parent,
             bool isHeader,
             bool isHidden,
-            string format)
+            string format,
+            bool invert)
         {
             int index = Array.IndexOf(selections, defaultValue);
 
@@ -55,6 +62,7 @@ namespace ExtremeRoles.Module
             this.Parent = parent;
             this.IsHeader = isHeader;
             this.IsHidden = isHidden;
+            this.enableInvert = invert;
 
             this.Children = new List<CustomOptionBase>();
 
@@ -77,10 +85,16 @@ namespace ExtremeRoles.Module
         }
 
         protected bool GetBool() => CurSelection > 0;
+        
+        protected virtual void OptionUpdate(object newValue)
+        {
+            return;
+        }
 
         public string GetName() => Translation.GetString(Name);
 
         public object GetRawValue() => Selections[CurSelection];
+
 
         public string GetString()
         {
@@ -93,6 +107,11 @@ namespace ExtremeRoles.Module
             return Translation.GetString(sel);
         }
 
+        public void SetUpdateOption(CustomOptionBase option)
+        {
+            this.withUpdateOption.Add(option);
+        }
+
         public void UpdateSelection(int newSelection)
         {
             CurSelection = Mathf.Clamp(
@@ -103,6 +122,13 @@ namespace ExtremeRoles.Module
             {
                 stringOption.oldValue = stringOption.Value = CurSelection;
                 stringOption.ValueText.text = Selections[CurSelection].ToString();
+                if (this.withUpdateOption.Count != 0)
+                {
+                    foreach (CustomOptionBase option in this.withUpdateOption)
+                    {
+                        option.OptionUpdate(this.GetValue());
+                    }
+                }
 
                 if (AmongUsClient.Instance?.AmHost == true && PlayerControl.LocalPlayer)
                 {
@@ -133,11 +159,12 @@ namespace ExtremeRoles.Module
             CustomOptionBase parent,
             bool isHeader,
             bool isHidden,
-            string format) : base(
+            string format,
+            bool invert) : base(
                 id, name, selections,
                 defaultValue, parent,
                 isHeader, isHidden,
-                format)
+                format, invert)
         {}
         public override dynamic GetValue() => GetBool();
     }
@@ -152,17 +179,21 @@ namespace ExtremeRoles.Module
             CustomOptionBase parent,
             bool isHeader,
             bool isHidden,
-            string format) : base(
+            string format,
+            bool invert) : base(
                 id, name, selections,
                 defaultValue, parent,
                 isHeader, isHidden,
-                format)
+                format, invert)
         { }
         public override dynamic GetValue() => (float)GetRawValue();
     }
 
     public class IntCustomOption : CustomOptionBase
     {
+        private int maxValue;
+        private int minValue;
+
         public IntCustomOption(
             int id,
             string name,
@@ -171,14 +202,73 @@ namespace ExtremeRoles.Module
             CustomOptionBase parent,
             bool isHeader,
             bool isHidden,
-            string format) : base(
+            string format,
+            bool invert) : base(
                 id, name, selections,
                 defaultValue, parent,
                 isHeader, isHidden,
-                format)
+                format, invert)
+        { 
+            this.minValue = Convert.ToInt32(this.Selections[0].ToString());
+            this.maxValue = Convert.ToInt32(
+                this.Selections[this.Selections.Length - 1].ToString());
+        }
+        public override dynamic GetValue() => Convert.ToInt32(GetRawValue().ToString());
+
+        protected override void OptionUpdate(object newValue)
+        {
+            int newIntedValue = Convert.ToInt32(newValue.ToString());
+            int newMaxValue = this.maxValue / newIntedValue;
+
+            Logging.Debug($"newValue:{newMaxValue}");
+
+            List<int> newSelections = new List<int>();
+            for (int s = minValue; s <= newMaxValue; ++s)
+            {
+                newSelections.Add(s);
+            }
+
+            Logging.Debug($"newSelectionLength:{newSelections.Count}");
+
+            this.Selections = newSelections.Cast<object>().ToArray();
+            this.UpdateSelection(this.CurSelection);
+        }
+    }
+
+    public class IntDynamicCustomOption : CustomOptionBase
+    {
+        public IntDynamicCustomOption(
+            int id,
+            string name,
+            System.Object[] selections,
+            System.Object defaultValue,
+            CustomOptionBase parent,
+            bool isHeader,
+            bool isHidden,
+            string format,
+            bool invert) : base(
+                id, name, selections,
+                defaultValue, parent,
+                isHeader, isHidden,
+                format, invert)
         { }
         public override dynamic GetValue() => Convert.ToInt32(GetRawValue().ToString());
+
+        protected override void OptionUpdate(object newValue)
+        {
+            int maxValue = Convert.ToInt32(newValue.ToString());
+            int minValue = Convert.ToInt32(this.Selections[0].ToString());
+
+            List<int> newSelections = new List<int>();
+            for (int s = minValue; s < maxValue; s += 1)
+            {
+                newSelections.Add(s);
+            }
+            this.Selections = newSelections.Cast<object>().ToArray();
+            this.UpdateSelection(this.CurSelection);
+        }
     }
+
 
     public class SelectionCustomOption : CustomOptionBase
     {
@@ -190,11 +280,12 @@ namespace ExtremeRoles.Module
             CustomOptionBase parent,
             bool isHeader,
             bool isHidden,
-            string format) : base(
+            string format,
+            bool invert) : base(
                 id, name, selections,
                 defaultValue, parent,
                 isHeader, isHidden,
-                format)
+                format, invert)
         { }
         public override dynamic GetValue() => CurSelection;
     }
@@ -205,26 +296,29 @@ namespace ExtremeRoles.Module
         public static CustomOptionBase Create(
             int id, string name, string[] selections,
             CustomOptionBase parent = null, bool isHeader = false,
-            bool isHidden = false, string format = "")
+            bool isHidden = false, string format = "", bool invert=false)
         {
             return new SelectionCustomOption(
                 id, name, selections, "",
-                parent, isHeader, isHidden, format);
+                parent, isHeader, isHidden,
+                format, invert);
         }
         public static CustomOptionBase Create(
             int id, string name, string[] selections,
             int defaultIndex, CustomOptionBase parent = null,
-            bool isHeader = false, bool isHidden = false, string format = "")
+            bool isHeader = false, bool isHidden = false,
+            string format = "", bool invert = false)
         {
             return new SelectionCustomOption(
                 id, name, selections, defaultIndex,
-                parent, isHeader, isHidden, format);
+                parent, isHeader, isHidden, format, invert);
         }
 
         public static CustomOptionBase Create
             (int id, string name, int defaultValue,
             int min, int max, int step, CustomOptionBase parent = null,
-            bool isHeader = false, bool isHidden = false, string format = "")
+            bool isHeader = false, bool isHidden = false,
+            string format = "", bool invert = false)
         {
             List<int> selections = new List<int>();
             for (int s = min; s <= max; s += step)
@@ -233,12 +327,31 @@ namespace ExtremeRoles.Module
             }
             return new IntCustomOption(
                 id, name, selections.Cast<object>().ToArray(),
-                defaultValue, parent, isHeader, isHidden, format);
+                defaultValue, parent, isHeader, isHidden,
+                format, invert);
         }
+
+        public static CustomOptionBase Create
+            (int id, string name, int defaultValue,
+            int min, int step, CustomOptionBase parent = null,
+            bool isHeader = false, bool isHidden = false,
+            string format = "", bool invert = false)
+        {
+            List<int> selections = new List<int>();
+            for (int s = min; s <= min + 1; s += step)
+            {
+                selections.Add(s);
+            }
+            return new IntDynamicCustomOption(
+                id, name, selections.Cast<object>().ToArray(),
+                defaultValue, parent, isHeader, isHidden, format, invert);
+        }
+
         public static CustomOptionBase Create
             (int id, string name, float defaultValue,
             float min, float max, float step, CustomOptionBase parent = null,
-            bool isHeader = false, bool isHidden = false, string format = "")
+            bool isHeader = false, bool isHidden = false,
+            string format = "", bool invert = false)
         {
             List<float> selections = new List<float>();
             for (float s = min; s <= max; s += step)
@@ -247,18 +360,18 @@ namespace ExtremeRoles.Module
             }
             return new FloatCustomOption(
                 id, name, selections.Cast<object>().ToArray(),
-                defaultValue, parent, isHeader, isHidden, format);
+                defaultValue, parent, isHeader, isHidden, format, invert);
         }
 
         public static CustomOptionBase Create(
             int id, string name, bool defaultValue,
             CustomOptionBase parent = null, bool isHeader = false,
-            bool isHidden = false, string format = "")
+            bool isHidden = false, string format = "", bool invert = false)
         {
             return new BoolCustomOption(
                 id, name, new string[] { "optionOff", "optionOn" },
                 defaultValue ? "optionOn" : "optionOff", parent,
-                isHeader, isHidden, format);
+                isHeader, isHidden, format, invert);
         }
     }
 

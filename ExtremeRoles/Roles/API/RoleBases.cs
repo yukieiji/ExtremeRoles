@@ -75,20 +75,13 @@ namespace ExtremeRoles.Roles.API
 
         public bool IsNeutral() => this.Teams == ExtremeRoleType.Neutral;
 
-        public string GetColoredRoleName() => Design.ColoedString(
+        public virtual string GetColoredRoleName() => Design.ColoedString(
             this.NameColor, this.RoleName);
 
         public virtual bool IsSameTeams(SingleRoleBase role) => role.Teams == this.Teams;
 
         public virtual bool IsTeamsWin() => this.IsWin;
 
-
-        public virtual void DaedAction(
-            DeathReason reason,
-            ref PlayerControl rolePlayer)
-        {
-            return;
-        }
 
         public virtual void ExiledAction(
             GameData.PlayerInfo rolePlayer)
@@ -209,6 +202,7 @@ namespace ExtremeRoles.Roles.API
     }
     public abstract class MultiAssignRoleBase : SingleRoleBase
     {
+        public int ManagerOptionOffset = 0;
         public SingleRoleBase AnotherRole = null;
         public bool CanHasAnotherRole = false;
 
@@ -234,16 +228,48 @@ namespace ExtremeRoles.Roles.API
                 OverrideAnotherRoleSetting();
             }
         }
+        
+        public override string GetColoredRoleName()
+        {
+            if (this.AnotherRole == null)
+            {
+                return base.GetColoredRoleName();
+            }
+
+            string baseRole = Design.ColoedString(
+                this.NameColor, this.RoleName);
+
+            string anotherRole = Design.ColoedString(
+                this.AnotherRole.NameColor, this.AnotherRole.RoleName);
+
+            string concat = Design.ColoedString(
+                Palette.White, " + ");
+
+            return string.Format("{0}{2}{1}",
+                baseRole, concat, anotherRole);
+        }
+
         protected virtual void OverrideAnotherRoleSetting()
         {
             this.Teams = this.AnotherRole.Teams;
             this.RoleName = string.Format("{0} + {1}",
                 this.RoleName, this.AnotherRole.RoleName);
-            this.NameColor = this.NameColor + this.AnotherRole.NameColor;
+
             this.CanKill = this.AnotherRole.CanKill;
             this.HasTask = this.AnotherRole.HasTask;
             this.UseVent = this.AnotherRole.UseVent;
             this.UseSabotage = this.AnotherRole.UseSabotage;
         }
+
+        protected int GetManagerOptionId(
+            RoleCommonOption option) => GetManagerOptionId((int)option);
+
+        protected int GetManagerOptionId(
+            KillerCommonOption option) => GetManagerOptionId((int)option);
+
+        protected int GetManagerOptionId(
+            CombinationRoleCommonOption option) => GetManagerOptionId((int)option);
+
+        protected int GetManagerOptionId(int option) => this.ManagerOptionOffset + option;
     }
 }

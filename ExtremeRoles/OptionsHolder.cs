@@ -34,7 +34,7 @@ namespace ExtremeRoles
             MinImpostorRoles,
             MaxImpostorRoles,
 
-            NumMeatings = 50,
+            NumMeatings,
             DisableSkipInEmergencyMeeting,
             NoVoteToSelf,
             HidePlayerName,
@@ -123,11 +123,12 @@ namespace ExtremeRoles
                 CommonOptionKey.EngineerUseImpostorVent.ToString(),
                 false);
 
-            int offset = 100;
+            int offset = 50;
 
             Roles.ExtremeRoleManager.CreateNormalRoleOptions(
                 offset);
-            offset = 300;
+
+            offset = 1000;
             Roles.ExtremeRoleManager.CreateCombinationRoleOptions(
                 offset);
 

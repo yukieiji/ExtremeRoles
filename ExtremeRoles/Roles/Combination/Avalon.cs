@@ -8,7 +8,7 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Roles.Combination
 {
-    public class Avalon : CombinationRoleManagerBase
+    public class Avalon : ConstCombinationRoleManagerBase
     {
         public const string Name = "AvalonsRoles";
         public Color SettingColor = Palette.White;
@@ -17,10 +17,6 @@ namespace ExtremeRoles.Roles.Combination
         {
             this.Roles.Add(new Assassin());
             this.Roles.Add(new Marlin());
-        }
-        protected override void RoleSpecificInit()
-        {
-            return;
         }
 
     }
