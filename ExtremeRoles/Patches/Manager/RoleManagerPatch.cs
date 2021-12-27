@@ -263,7 +263,7 @@ namespace ExtremeRoles.Patches.Manager
                     bool result = false;
                     foreach (var role in shuffledRoles)
                     {
-                        Logging.Debug($"KeyFound?:{extremeRolesData.RoleSpawnSettings[roleData.Role].ContainsKey(role.BytedRoleId)}");
+                        // Logging.Debug($"KeyFound?:{extremeRolesData.RoleSpawnSettings[roleData.Role].ContainsKey(role.BytedRoleId)}");
                         var(roleNum, spawnRate) = extremeRolesData.RoleSpawnSettings[
                             roleData.Role][role.BytedRoleId];
                         result = IsRoleSpawn(roleNum, spawnRate);
@@ -271,15 +271,15 @@ namespace ExtremeRoles.Patches.Manager
                         switch (role.Teams)
                         {
                             case ExtremeRoleType.Crewmate:
-                                result = result || 0 <= extremeRolesData.CrewmateRoles - 1;
+                                result = result && ((extremeRolesData.CrewmateRoles - 1) >= 0);
                                 if (result) { extremeRolesData.CrewmateRoles = extremeRolesData.CrewmateRoles - 1; }
                                 break;
                             case ExtremeRoleType.Neutral:
-                                result = result || 0 <= extremeRolesData.NeutralRoles - 1;
+                                result = result && ((extremeRolesData.NeutralRoles - 1) >= 0);
                                 if (result) { extremeRolesData.NeutralRoles = extremeRolesData.NeutralRoles - 1; }
                                 break;
                             case ExtremeRoleType.Impostor:
-                                result = result || 0 <= extremeRolesData.ImpostorRoles - 1;
+                                result = result && ((extremeRolesData.ImpostorRoles - 1) >= 0);
                                 if (result) { extremeRolesData.ImpostorRoles = extremeRolesData.ImpostorRoles - 1; }
                                 break;
                             default:
@@ -288,7 +288,7 @@ namespace ExtremeRoles.Patches.Manager
                         }
 
 
-                        Logging.Debug($"RoleResult:{result}");
+                        Logging.Debug($"Role{role.Id}: AssignResult:{result}");
 
                         if (result)
                         {
