@@ -94,7 +94,6 @@ namespace ExtremeRoles.Roles.API
             {
                 role.CanHasAnotherRole = OptionsHolder.AllOptions[
                     GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign)].GetValue();
-                role.GameId = 0;
                 role.GameInit();
             }
         }

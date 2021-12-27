@@ -39,6 +39,11 @@ namespace ExtremeRoles.Roles
         UnKnown = 100,
     }
 
+    public enum NeutralSeparateTeam
+    {
+        Jackal,
+        Alice,
+    }
 
     public static class ExtremeRoleManager
     {
@@ -125,8 +130,8 @@ namespace ExtremeRoles.Roles
                         }
 
                         addRole.GameInit();
-                        addControlId(addRole);
-                        ((MultiAssignRoleBase)addRole).CombinationId = id;
+                        addRole.GameControlId = id;
+                        roleControlId = id + 1;
 
                         GameRole.Add(
                             playerId, addRole);
@@ -213,7 +218,8 @@ namespace ExtremeRoles.Roles
             }
 
             addRole.GameInit();
-            addControlId(addRole);
+            role.GameControlId = roleControlId;
+            roleControlId = roleControlId + 1;
 
             if (!GameRole.ContainsKey(playerId))
             {
@@ -227,12 +233,6 @@ namespace ExtremeRoles.Roles
                     playerId]).SetAnotherRole(addRole);
             }
             Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
-        }
-        
-        private static void addControlId(SingleRoleBase role)
-        {
-            role.GameControlId = roleControlId;
-            roleControlId = roleControlId + 1;
         }
 
     }

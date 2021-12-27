@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using System.Linq;
+
+using HarmonyLib;
 using UnityEngine;
 
 using ExtremeRoles.Module;
@@ -68,9 +70,14 @@ namespace ExtremeRoles.Patches
             if (AssassinMeeting.AssassinMeetingTrigger) { return false; }
 
             var statistics = new PlayerDataContainer.PlayerStatistics();
-            if (isNeutralWin(__instance)) { return false; }
             if (isSabotageWin(__instance)) { return false; }
             if (isTaskWin(__instance)) { return false; };
+
+            if (isNeutralSpecialWin(__instance)) { return false; };
+            if (isNeutralAliveWin(__instance, statistics)) { return false; };
+
+            if (statistics.SeparatedNeutralAlive.Count != 0) { return false; }
+
             if (isImpostorWin(__instance, statistics)) { return false; };
             if (isCrewmateWin(__instance, statistics)) { return false; };
             
@@ -92,7 +99,7 @@ namespace ExtremeRoles.Patches
         {
             if (statistics.TeamCrewmateAlive > 0 && 
                 statistics.TeamImpostorAlive == 0 && 
-                statistics.NeutralKillerPlayer.Count == 0)
+                statistics.SeparatedNeutralAlive.Count == 0)
             {
                 gameIsEnd(ref __instance, GameOverReason.HumansByVote);
                 return true;
@@ -113,7 +120,8 @@ namespace ExtremeRoles.Patches
                 endReason = (GameOverReason)RoleGameOverReason.AssassinationMarin;
             }
 
-            if (statistics.TeamImpostorAlive >= (statistics.TotalAlive - statistics.TeamImpostorAlive))
+            if (statistics.TeamImpostorAlive >= (statistics.TotalAlive - statistics.TeamImpostorAlive) &&
+                statistics.SeparatedNeutralAlive.Count == 0)
             {
                 isGameEnd = true;
                 switch (TempData.LastDeathReason)
@@ -139,7 +147,37 @@ namespace ExtremeRoles.Patches
             return false;
 
         }
-        private static bool isNeutralWin(
+
+        private static bool isNeutralAliveWin(
+            ShipStatus __instance,
+            PlayerDataContainer.PlayerStatistics statistics)
+        {
+            if (statistics.TeamImpostorAlive > 0) { return false; }
+            if (statistics.SeparatedNeutralAlive.Count > 1) { return false; }
+
+            var item = statistics.SeparatedNeutralAlive.ElementAt(0);
+
+            if (item.Value >= (statistics.TotalAlive - item.Value))
+            {
+                GameOverReason endReason = (GameOverReason)RoleGameOverReason.UnKnown;
+                switch (item.Key)
+                {
+                    case NeutralSeparateTeam.Alice:
+                        endReason = (GameOverReason)RoleGameOverReason.AliceKillAllOthers;
+                        break;
+                    case NeutralSeparateTeam.Jackal:
+                        endReason = (GameOverReason)RoleGameOverReason.JackalKillAllOthers;
+                        break;
+                    default:
+                        break;
+                }
+                gameIsEnd(ref __instance, endReason);
+                return true;
+            }
+            return false;
+        }
+
+        private static bool isNeutralSpecialWin(
             ShipStatus __instance)
         {
             
@@ -168,7 +206,6 @@ namespace ExtremeRoles.Patches
 
             return false;
         }
-
 
         private static bool isSabotageWin(
             ShipStatus __instance)

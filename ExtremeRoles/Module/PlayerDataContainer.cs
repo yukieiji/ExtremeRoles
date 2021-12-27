@@ -66,10 +66,10 @@ namespace ExtremeRoles.Module
             public int AllTeamCrewmate { get; set; }
             public int TeamImpostorAlive { get; set; }
             public int TeamCrewmateAlive { get; set; }
+            public int TeamNeutralAlive { get; set; }
             public int TotalAlive { get; set; }
 
-            public List<byte> NeutralKillerPlayer { get; set; }
-            public List<byte> NeutralAlivePlayer { get; set; }
+            public Dictionary<NeutralSeparateTeam, int> SeparatedNeutralAlive;
             public bool IsAssassinationMarin { get; set; }
 
             public PlayerStatistics()
@@ -84,10 +84,10 @@ namespace ExtremeRoles.Module
                 int numCrew = 0;
                 int numCrewAlive = 0;
 
-                int numImpostorsAlive = 0;
+                int numImpostorAlive = 0;
 
-                List<byte> neutralKillerPlayer = new List<byte>();
-                List<byte> neutralAlivePlayer = new List<byte> ();
+                int numNeutralAlive = 0;
+                Dictionary<NeutralSeparateTeam, int> neutralTeam = new Dictionary<NeutralSeparateTeam, int>();
 
                 bool isAssassinationMarin = false;
 
@@ -112,14 +112,28 @@ namespace ExtremeRoles.Module
                             ++numCrewAlive;
                             break;
                         case ExtremeRoleType.Impostor:
-                            ++numImpostorsAlive;
+                            ++numImpostorAlive;
                             break;
                         case ExtremeRoleType.Neutral:
-                            if (role.CanKill)
+                            
+                            ++numNeutralAlive;
+
+                            switch (role.Id)
                             {
-                                neutralKillerPlayer.Add(playerInfo.PlayerId);
+                                case ExtremeRoleId.Alice:
+                                    addNeutralTeams(
+                                        ref neutralTeam,
+                                        NeutralSeparateTeam.Alice);
+                                    break;
+                                case ExtremeRoleId.Jackal:
+                                case ExtremeRoleId.Sidekick:
+                                    addNeutralTeams(
+                                        ref neutralTeam,
+                                        NeutralSeparateTeam.Jackal);
+                                    break;
+                                default:
+                                    break;
                             }
-                            neutralAlivePlayer.Add(playerInfo.PlayerId);
                             break;
                         default:
                             break;
@@ -133,14 +147,28 @@ namespace ExtremeRoles.Module
 
                 AllTeamCrewmate = numCrew;
 
-                TeamImpostorAlive = numImpostorsAlive;
-                TeamCrewmateAlive = numImpostorsAlive;
+                TeamImpostorAlive = numImpostorAlive;
+                TeamCrewmateAlive = numCrewAlive;
+                TeamNeutralAlive = numNeutralAlive;
 
-                NeutralKillerPlayer = neutralKillerPlayer;
-                NeutralAlivePlayer = neutralAlivePlayer;
+                SeparatedNeutralAlive = neutralTeam;
 
                 IsAssassinationMarin = isAssassinationMarin;
 
+            }
+        }
+       
+        private static void addNeutralTeams(
+            ref Dictionary<NeutralSeparateTeam, int> neutralTeam,
+            NeutralSeparateTeam team)
+        {
+            if (neutralTeam.ContainsKey(team))
+            {
+                neutralTeam[team] = neutralTeam[team] + 1;
+            }
+            else
+            {
+                neutralTeam.Add(team, 1);
             }
         }
         public class GamePlayerInfo

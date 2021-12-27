@@ -209,7 +209,6 @@ namespace ExtremeRoles.Roles.API
     }
     public abstract class MultiAssignRoleBase : SingleRoleBase
     {
-        public byte CombinationId = 0;
         public SingleRoleBase AnotherRole = null;
         public bool CanHasAnotherRole = false;
 
