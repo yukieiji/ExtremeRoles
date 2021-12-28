@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 
+using Hazel;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
@@ -89,6 +90,13 @@ namespace ExtremeRoles.Roles.Combination
             {
                 return base.IsSameTeam(targetRole);
             }
+        }
+
+        public static void ForceReplaceToNeutral(byte callerId, byte targetId)
+        {
+            var newKiller = ExtremeRoleManager.GameRole[targetId];
+            newKiller.Team = ExtremeRoleType.Neutral;
+            newKiller.CanKill = true;
         }
 
         protected override void CreateSpecificOption(
@@ -197,9 +205,21 @@ namespace ExtremeRoles.Roles.Combination
 
         private void becomeAliveLoverToKiller(byte alivePlayerId)
         {
-            var newKiller = ExtremeRoleManager.GameRole[alivePlayerId];
-            newKiller.Team = ExtremeRoleType.Neutral;
-            newKiller.CanKill = true;
+
+            PlayerControl rolePlayer = PlayerControl.LocalPlayer;
+
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                rolePlayer.NetId,
+                (byte)RPCOperator.Command.ReplaceRole,
+                Hazel.SendOption.Reliable, -1);
+
+            writer.Write(rolePlayer.PlayerId);
+            writer.Write(alivePlayerId);
+            writer.Write(
+                (byte)ExtremeRoleManager.ReplaceOperation.ForceReplaceToSidekick);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+
+            ForceReplaceToNeutral(rolePlayer.PlayerId, alivePlayerId);
         }
 
         private List<byte> getAliveSameLover()

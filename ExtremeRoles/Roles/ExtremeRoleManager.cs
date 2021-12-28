@@ -76,7 +76,8 @@ namespace ExtremeRoles.Roles
         public enum ReplaceOperation
         {
             ForceReplaceToSidekick = 0,
-            SidekickToJackal
+            SidekickToJackal,
+            LoverBecomeToNeutral
         }
 
         public static void CreateCombinationRoleOptions(
@@ -210,6 +211,9 @@ namespace ExtremeRoles.Roles
                     break;
                 case ReplaceOperation.SidekickToJackal:
                     Sidekick.BecomeToJackal(caller, targetId);
+                    break;
+                case ReplaceOperation.LoverBecomeToNeutral:
+                    Lover.ForceReplaceToNeutral(caller, targetId);
                     break;
                 default:
                     break;
