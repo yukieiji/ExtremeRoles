@@ -127,6 +127,9 @@
         "0": "Press tab for more...",
         "11": "Tab\u30ad\u30fc\u3067\u6b21\u306e\u30da\u30fc\u30b8\u3078\u2026"
     },
+    "SpecialCrew": {
+        "11": "\u30b9\u30da\u30b7\u30e3\u30eb\u30af\u30eb\u30fc"
+    },
     "SpecialCrewSpawnRate": {
         "11": "\u30b9\u30da\u30b7\u30e3\u30eb\u30af\u30eb\u30fc"
     },
@@ -147,6 +150,9 @@
     },
     "SpecialCrewShortDescription": {
         "11": "\u30a8\u30af\u30b9\u30c8\u30ea\u30fc\u30e0\u306a\u30af\u30eb\u30fc"
+    },
+    "SpecialImpostor": {
+        "11": "\u30b9\u30da\u30b7\u30e3\u30eb\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc"
     },
     "SpecialImpostorSpawnRate": {
         "11": "\u30b9\u30da\u30b7\u30e3\u30eb\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc"
@@ -180,6 +186,9 @@
     },
     "SpecialImpostorShortDescription": {
         "11": "\u30a8\u30af\u30b9\u30c8\u30ea\u30fc\u30e0\u306a\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc"
+    },
+    "Alice": {
+        "11": "\u30a2\u30ea\u30b9"
     },
     "AliceSpawnRate": {
         "11": "\u30a2\u30ea\u30b9"
@@ -216,6 +225,12 @@
     },
     "AliceShortDescription": {
         "11": "\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc\u306b\u6bba\u3055\u308c\u308b\u304b\u3001\u5168\u3066\u3092\u7834\u58ca\u305b\u3088"
+    },
+    "Jackal": {
+        "11": "\u30b8\u30e3\u30c3\u30ab\u30eb"
+    },
+    "Sidekick ": {
+        "11": "\u30b5\u30a4\u30c9\u30ad\u30c3\u30af"
     },
     "JackalSpawnRate": {
         "11": "\u30b8\u30e3\u30c3\u30ab\u30eb"
@@ -292,6 +307,12 @@
     "SidekickShortDescription": {
         "11": "\u30b8\u30e3\u30c3\u30ab\u30eb\u306e\u30a2\u30b7\u30b9\u30c8\u3092\u884c\u3048"
     },
+    "Assassin": {
+        "11": "\u30a2\u30b5\u30b7\u30f3"
+    },
+    "Marlin": {
+        "11": "\u30de\u30fc\u30ea\u30f3"
+    },
     "AvalonsRolesSpawnRate": {
         "11": "\u30a2\u30b5\u30b7\u30f3\u3068\u30de\u30fc\u30ea\u30f3"
     },
@@ -358,6 +379,9 @@
     "AssassinShortDescription": {
         "11": "\u30de\u30fc\u30ea\u30f3\u3092\u63a2\u3057\u51fa\u3057\u3001\u6697\u6bba\u305b\u3088"
     },
+    "Lover": {
+        "11": "\u30e9\u30d0\u30fc\u30ba"
+    },
     "LoverSpawnRate": {
         "11": "\u30e9\u30d0\u30fc\u30ba"
     },
@@ -407,7 +431,7 @@
         "11": "\u30ad\u30eb\u30ec\u30f3\u30b8"
     },
     "LoverIntroDescription": {
-        "11": "\u604b\u4eba\u3068\u904b\u547d\u3092\u5171\u306b\u3059\u308b\u8239\u54e1"
+        "11": "\u604b\u306b\u904b\u547d\u3068\u8eab\u3092\u3086\u3060\u306d\u308b\u8239\u54e1"
     },
     "LoverShortDescription": {
         "11": "\u904b\u547d\u306e\u4eba\u3068\u751f\u304d\u6b8b\u308c"
