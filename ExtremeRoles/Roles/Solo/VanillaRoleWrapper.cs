@@ -18,7 +18,7 @@ namespace ExtremeRoles.Roles.Solo
             {
                 case RoleTypes.Shapeshifter:
                 case RoleTypes.Impostor:
-                    this.Teams = ExtremeRoleType.Impostor;
+                    this.Team = ExtremeRoleType.Impostor;
                     this.NameColor = Palette.ImpostorRed;
                     this.CanKill = true;
                     this.UseVent = true;
@@ -26,13 +26,13 @@ namespace ExtremeRoles.Roles.Solo
                     this.HasTask = false;
                     break;
                 case RoleTypes.Engineer:
-                    this.Teams = ExtremeRoleType.Crewmate;
+                    this.Team = ExtremeRoleType.Crewmate;
                     this.UseVent = true;
                     this.NameColor = Palette.White;
                     break;
                 case RoleTypes.Crewmate:
                 case RoleTypes.Scientist:
-                    this.Teams = ExtremeRoleType.Crewmate;
+                    this.Team = ExtremeRoleType.Crewmate;
                     this.NameColor = Palette.White;
                     break;
                 default:

@@ -95,7 +95,7 @@ namespace ExtremeRoles.Module
                 {
                     if (playerInfo.Disconnected) { continue; }
                     SingleRoleBase role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
-                    ExtremeRoleType team = role.Teams;
+                    ExtremeRoleType team = role.Team;
 
                     // クルーのカウントを数える
                     if (team == ExtremeRoleType.Crewmate) { ++numCrew; }

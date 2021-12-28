@@ -40,7 +40,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     Resources.ResourcesPaths.TestButton, 115f));
         }
 
-        public override bool IsSameTeams(SingleRoleBase role) => role.Id == this.Id;
+        public override bool IsSameTeam(SingleRoleBase targetRole) => targetRole.Id == this.Id;
 
         public bool IsAbilityUse()
         {

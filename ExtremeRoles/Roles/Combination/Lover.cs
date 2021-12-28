@@ -78,16 +78,16 @@ namespace ExtremeRoles.Roles.Combination
             return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
         }
 
-        public override bool IsSameTeams(SingleRoleBase role)
+        public override bool IsSameTeam(SingleRoleBase targetRole)
         {
-            if (role.Id == ExtremeRoleId.Lover &&
-                role.GameControlId == this.GameControlId)
+            if (targetRole.Id == ExtremeRoleId.Lover &&
+                targetRole.GameControlId == this.GameControlId)
             {
                 return true;
             }
             else
             {
-                return base.IsSameTeams(role);
+                return base.IsSameTeam(targetRole);
             }
         }
 
@@ -129,7 +129,7 @@ namespace ExtremeRoles.Roles.Combination
             if (OptionsHolder.AllOptions[
                     GetRoleOptionId((int)LoverOption.IsNeutral)].GetValue())
             {
-                this.Teams = ExtremeRoleType.Neutral;
+                this.Team = ExtremeRoleType.Neutral;
             }
 
             this.becomeKiller = OptionsHolder.AllOptions[
@@ -190,7 +190,7 @@ namespace ExtremeRoles.Roles.Combination
             {
                 if (item.Value.GameControlId == this.GameControlId)
                 {
-                    item.Value.Teams = ExtremeRoleType.Neutral;
+                    item.Value.Team = ExtremeRoleType.Neutral;
                 }
             }
         }
@@ -198,7 +198,7 @@ namespace ExtremeRoles.Roles.Combination
         private void becomeAliveLoverToKiller(byte alivePlayerId)
         {
             var newKiller = ExtremeRoleManager.GameRole[alivePlayerId];
-            newKiller.Teams = ExtremeRoleType.Neutral;
+            newKiller.Team = ExtremeRoleType.Neutral;
             newKiller.CanKill = true;
         }
 

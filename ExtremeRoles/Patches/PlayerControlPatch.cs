@@ -153,7 +153,7 @@ namespace ExtremeRoles.Patches
                         targetPlayerId,
                         roleColor,
                         voteNamePaintBlock,
-                        targetPlayerRole.Teams == playerRole.Teams);
+                        targetPlayerRole.Team == playerRole.Team);
                 }
             }
 
@@ -559,7 +559,7 @@ namespace ExtremeRoles.Patches
                 if (!playerInfo.Disconnected && 
                     (playerInfo.PlayerId != __instance.PlayerId) && 
                     !playerInfo.IsDead && 
-                    !role.IsSameTeams(gameRoles[playerInfo.PlayerId]) && 
+                    !role.IsSameTeam(gameRoles[playerInfo.PlayerId]) && 
                     !playerInfo.Object.inVent)
                 {
                     PlayerControl @object = playerInfo.Object;

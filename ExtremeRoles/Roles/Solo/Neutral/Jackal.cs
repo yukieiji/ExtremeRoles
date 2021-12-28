@@ -85,7 +85,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             var newSidekick = new Sidekick(
                 sourceJackal.GameControlId,
                 sourceJackal.CurRecursion,
-                targetRole.Teams == ExtremeRoleType.Impostor,
+                targetRole.Team == ExtremeRoleType.Impostor,
                 sourceJackal.SidekickUseSabotage,
                 sourceJackal.SidekickUseVent,
                 sourceJackal.CanSeeImpostorToSideKickImpostor,
@@ -117,9 +117,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             return Palette.White;
         }
 
-        public override bool IsSameTeams(SingleRoleBase role)
+        public override bool IsSameTeam(SingleRoleBase targetRole)
         {
-            return ((role.Id == this.Id) || (role.Id == ExtremeRoleId.Sidekick));
+            return ((targetRole.Id == this.Id) || (targetRole.Id == ExtremeRoleId.Sidekick));
         }
 
         public bool IsAbilityUse()
@@ -326,7 +326,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private bool isImpostorToTarget(
             GameData.PlayerInfo playerInfo)
         {
-            if (ExtremeRoleManager.GameRole[playerInfo.PlayerId].Teams == ExtremeRoleType.Impostor)
+            if (ExtremeRoleManager.GameRole[playerInfo.PlayerId].Team == ExtremeRoleType.Impostor)
             {
                 return this.CanSetImpostorToSideKick;
             }
@@ -375,7 +375,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             
             if (result)
             {
-                if (this.IsSameTeams(ExtremeRoleManager.GameRole[result.PlayerId]))
+                if (this.IsSameTeam(ExtremeRoleManager.GameRole[result.PlayerId]))
                 {
                     result = null;
                 }

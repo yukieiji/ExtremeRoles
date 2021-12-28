@@ -232,7 +232,7 @@ namespace ExtremeRoles.Roles.API
 
                 if (isEvil)
                 {
-                    role.Teams = ExtremeRoleType.Impostor;
+                    role.Team = ExtremeRoleType.Impostor;
                     role.NameColor = Palette.ImpostorRed;
                     role.CanKill = true;
                     role.UseVent = true;
@@ -241,7 +241,7 @@ namespace ExtremeRoles.Roles.API
                 }
                 else
                 {
-                    role.Teams = ExtremeRoleType.Crewmate;
+                    role.Team = ExtremeRoleType.Crewmate;
                     role.CanKill = false;
                     role.UseVent = false;
                     role.UseSabotage = false;

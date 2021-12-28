@@ -56,7 +56,7 @@ namespace ExtremeRoles.Patches.Manager
 
             bool result;
 
-            switch (role.Teams)
+            switch (role.Team)
             {
                 case ExtremeRoleType.Crewmate:
                     result = ((extremeRolesData.CrewmateRoles - 1) >= 0);
@@ -149,7 +149,7 @@ namespace ExtremeRoles.Patches.Manager
 
                     foreach (var role in roles)
                     {
-                        switch (role.Teams)
+                        switch (role.Team)
                         {
                             case ExtremeRoleType.Crewmate:
                                 ++reduceCrewmateRole;
@@ -214,7 +214,7 @@ namespace ExtremeRoles.Patches.Manager
                     break;
                 case RoleTypes.Crewmate:
                     if ((role.IsCrewmate() || role.IsNeutral()) &&
-                         role.Teams != ExtremeRoleType.Null)
+                         role.Team != ExtremeRoleType.Null)
                     {
                         return true;
                     }
@@ -229,7 +229,7 @@ namespace ExtremeRoles.Patches.Manager
                 case RoleTypes.Scientist:
                     if ((role.IsCrewmate() || role.IsNeutral()) &&
                         role.CanHasAnotherRole &&
-                        role.Teams != ExtremeRoleType.Null)
+                        role.Team != ExtremeRoleType.Null)
                     {
                         return true;
                     }
@@ -472,7 +472,7 @@ namespace ExtremeRoles.Patches.Manager
                     roleNum,
                     spawnRate);
 
-                switch (role.Teams)
+                switch (role.Team)
                 {
                     case ExtremeRoleType.Impostor:
                         RolesForVanillaImposter.Add(role);

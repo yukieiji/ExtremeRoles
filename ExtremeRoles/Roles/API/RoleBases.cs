@@ -28,7 +28,7 @@ namespace ExtremeRoles.Roles.API
         public Color NameColor;
         public ExtremeRoleId Id;
         public byte BytedRoleId;
-        public ExtremeRoleType Teams;
+        public ExtremeRoleType Team;
 
         public int GameControlId = 0;
 
@@ -46,7 +46,7 @@ namespace ExtremeRoles.Roles.API
         {
             this.Id = id;
             this.BytedRoleId = (byte)this.Id;
-            this.Teams = team;
+            this.Team = team;
             this.RoleName = roleName;
             this.NameColor = roleColor;
             this.CanKill = canKill;
@@ -71,24 +71,24 @@ namespace ExtremeRoles.Roles.API
 
         public bool IsVanillaRole() => this.Id == ExtremeRoleId.VanillaRole;
 
-        public bool IsCrewmate() => this.Teams == ExtremeRoleType.Crewmate;
+        public bool IsCrewmate() => this.Team == ExtremeRoleType.Crewmate;
 
-        public bool IsImposter() => this.Teams == ExtremeRoleType.Impostor;
+        public bool IsImposter() => this.Team == ExtremeRoleType.Impostor;
 
-        public bool IsNeutral() => this.Teams == ExtremeRoleType.Neutral;
+        public bool IsNeutral() => this.Team == ExtremeRoleType.Neutral;
 
         public virtual string GetColoredRoleName() => Design.ColoedString(
             this.NameColor, this.RoleName);
 
-        public virtual bool IsSameTeams(SingleRoleBase role)
+        public virtual bool IsSameTeam(SingleRoleBase targetRole)
         {
-            if (this.Teams == ExtremeRoleType.Crewmate)
+            if (this.Team == ExtremeRoleType.Crewmate)
             {
                 return true;
             }
             else
             {
-                return role.Teams == this.Teams;
+                return targetRole.Team == this.Team;
             }
         }
         public virtual bool IsTeamsWin() => this.IsWin;

@@ -75,7 +75,7 @@ namespace ExtremeRoles.Patches
                 foreach (KeyValuePair<byte, SingleRoleBase> value in dict)
                 {
                     Logging.Debug(
-                        $"PlayerId:{value.Key}    AssignedTo:{value.Value.RoleName}   Team:{value.Value.Teams}");
+                        $"PlayerId:{value.Key}    AssignedTo:{value.Value.RoleName}   Team:{value.Value.Team}");
                 }
             }
 
