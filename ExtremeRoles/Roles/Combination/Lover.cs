@@ -78,6 +78,19 @@ namespace ExtremeRoles.Roles.Combination
             return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
         }
 
+        public override bool IsSameTeams(SingleRoleBase role)
+        {
+            if (role.Id == ExtremeRoleId.Lover &&
+                role.GameControlId == this.GameControlId)
+            {
+                return true;
+            }
+            else
+            {
+                return base.IsSameTeams(role);
+            }
+        }
+
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
