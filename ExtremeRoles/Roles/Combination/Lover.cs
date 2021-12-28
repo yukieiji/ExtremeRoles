@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+using UnityEngine;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
@@ -48,6 +50,18 @@ namespace ExtremeRoles.Roles.Combination
             GameData.PlayerInfo rolePlayer)
         {
             exiledUpdate();
+        }
+        public override Color GetTargetRoleSeeColor(
+            SingleRoleBase targetRole,
+            byte targetPlayerId)
+        {
+            if (targetRole.Id == ExtremeRoleId.Lover &&
+                targetRole.GameControlId == this.GameControlId)
+            {
+                return this.NameColor;
+            }
+
+            return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
         }
 
         private void exiledUpdate()
