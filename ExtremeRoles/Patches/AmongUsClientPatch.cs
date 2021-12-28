@@ -15,10 +15,9 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameEnd))]
     public class AmongUsClientOnGameEndPatch
     {
-        private static GameOverReason endReason;
         public static void Prefix(AmongUsClient __instance, [HarmonyArgument(0)] ref EndGameResult endGameResult)
         {
-            endReason = endGameResult.GameOverReason;
+            GameDataContainer.EndReason = endGameResult.GameOverReason;
             if ((int)endGameResult.GameOverReason >= 10)
             {
                 endGameResult.GameOverReason = GameOverReason.ImpostorByKill;
@@ -36,14 +35,22 @@ namespace ExtremeRoles.Patches
                 var role = roleData[playerInfo.PlayerId];
                 var (completedTask, totalTask) = Helper.Task.GetTaskInfo(playerInfo);
 
-                var finalStatus = PlayerDataContainer.PlayerStatus.Alive;
-                if (playerInfo.Disconnected) { finalStatus = PlayerDataContainer.PlayerStatus.Disconnected; }
-                else if (playerInfo.IsDead) { finalStatus = PlayerDataContainer.PlayerStatus.Dead; }
+                var finalStatus = GameDataContainer.PlayerStatus.Alive;
+                if (playerInfo.Disconnected)
+                { 
+                    finalStatus = GameDataContainer.PlayerStatus.Disconnected; 
+                }
+                else if (playerInfo.IsDead)
+                { 
+                    finalStatus = GameDataContainer.PlayerStatus.Dead; }
                 else if (
-                    (endReason == GameOverReason.ImpostorBySabotage) &&
-                    (!playerInfo.Role.IsImpostor)) { finalStatus = PlayerDataContainer.PlayerStatus.Dead; }
+                    (GameDataContainer.EndReason == GameOverReason.ImpostorBySabotage) &&
+                    (!playerInfo.Role.IsImpostor))
+                { 
+                    finalStatus = GameDataContainer.PlayerStatus.Dead; 
+                }
 
-                PlayerDataContainer.EndGameAddStatus(
+                GameDataContainer.EndGameAddStatus(
                     playerInfo, finalStatus, role, totalTask, completedTask);
 
                 if (role.IsNeutral())
@@ -66,7 +73,7 @@ namespace ExtremeRoles.Patches
                 TempData.winners.Remove(winner);
             }
 
-            switch (endReason)
+            switch (GameDataContainer.EndReason)
             {
                 case (GameOverReason)RoleGameOverReason.AliceKilledByImposter:
                 case (GameOverReason)RoleGameOverReason.AliceKillAllOthers:

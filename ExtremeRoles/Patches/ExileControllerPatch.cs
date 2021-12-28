@@ -87,7 +87,7 @@ namespace ExtremeRoles.Patches
         }
         private static void wrapUpPostfix(GameData.PlayerInfo exiled)
         {
-            var deadedAssassin = Module.PlayerDataContainer.DeadedAssassin;
+            var deadedAssassin = Module.GameDataContainer.DeadedAssassin;
 
             if (deadedAssassin.Count != 0)
             {
@@ -100,7 +100,7 @@ namespace ExtremeRoles.Patches
                     if (AssassinMeeting.AssassinateMarin) { break; }
      
                 }
-                Module.PlayerDataContainer.DeadedAssassin.Clear();
+                Module.GameDataContainer.DeadedAssassin.Clear();
             }
 
             var role = ExtremeRoleManager.GetLocalPlayerRole() as IRoleAbility;

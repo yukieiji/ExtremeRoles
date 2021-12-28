@@ -5,7 +5,7 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module
 {
-    public class PlayerDataContainer
+    public class GameDataContainer
     {
         public enum PlayerStatus
         {
@@ -15,6 +15,7 @@ namespace ExtremeRoles.Module
             Disconnected, 
         }
 
+        public static GameOverReason EndReason;
         public static List<GamePlayerInfo> EndGamePlayerInfo = new List<GamePlayerInfo>();
         public static Dictionary<byte, PoolablePlayer> PlayerIcon = new Dictionary<byte, PoolablePlayer>();
         public static List<byte> DeadedAssassin = new List<byte>();

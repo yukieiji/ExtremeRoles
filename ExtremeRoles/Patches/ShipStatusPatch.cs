@@ -69,7 +69,7 @@ namespace ExtremeRoles.Patches
 
             if (AssassinMeeting.AssassinMeetingTrigger) { return false; }
 
-            var statistics = new PlayerDataContainer.PlayerStatistics();
+            var statistics = new GameDataContainer.PlayerStatistics();
 
             if (isSabotageWin(__instance)) { return false; }
             if (isTaskWin(__instance)) { return false; };
@@ -96,7 +96,7 @@ namespace ExtremeRoles.Patches
 
         private static bool isCrewmateWin(
             ShipStatus __instance,
-            PlayerDataContainer.PlayerStatistics statistics)
+            GameDataContainer.PlayerStatistics statistics)
         {
             if (statistics.TeamCrewmateAlive > 0 && 
                 statistics.TeamImpostorAlive == 0 && 
@@ -110,7 +110,7 @@ namespace ExtremeRoles.Patches
 
         private static bool isImpostorWin(
             ShipStatus __instance,
-            PlayerDataContainer.PlayerStatistics statistics)
+            GameDataContainer.PlayerStatistics statistics)
         {
             bool isGameEnd = false;
             GameOverReason endReason = GameOverReason.HumansDisconnect;
@@ -151,7 +151,7 @@ namespace ExtremeRoles.Patches
 
         private static bool isNeutralAliveWin(
             ShipStatus __instance,
-            PlayerDataContainer.PlayerStatistics statistics)
+            GameDataContainer.PlayerStatistics statistics)
         {
             if (statistics.TeamImpostorAlive > 0) { return false; }
             if (statistics.SeparatedNeutralAlive.Count != 1) { return false; }
