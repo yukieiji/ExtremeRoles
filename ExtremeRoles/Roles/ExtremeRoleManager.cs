@@ -248,7 +248,7 @@ namespace ExtremeRoles.Roles
             }
 
             addRole.GameInit();
-            role.GameControlId = roleControlId;
+            addRole.GameControlId = roleControlId;
             roleControlId = roleControlId + 1;
 
             if (!GameRole.ContainsKey(playerId))
