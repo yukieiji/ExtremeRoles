@@ -78,7 +78,9 @@ namespace ExtremeRoles
         public static void ReplaceRole(
             byte callerId, byte targetId, byte operation)
         {
-
+            Roles.ExtremeRoleManager.RoleReplace(
+                callerId, targetId,
+                (Roles.ExtremeRoleManager.ReplaceOperation)operation);
         }
 
     }
