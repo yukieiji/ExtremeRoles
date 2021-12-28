@@ -70,6 +70,7 @@ namespace ExtremeRoles.Patches
             if (AssassinMeeting.AssassinMeetingTrigger) { return false; }
 
             var statistics = new PlayerDataContainer.PlayerStatistics();
+
             if (isSabotageWin(__instance)) { return false; }
             if (isTaskWin(__instance)) { return false; };
 

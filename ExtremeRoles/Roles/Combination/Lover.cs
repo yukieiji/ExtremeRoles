@@ -135,7 +135,7 @@ namespace ExtremeRoles.Roles.Combination
             foreach(var item in ExtremeRoleManager.GameRole)
             {
                 if (item.Value.GameControlId == this.GameControlId &&
-                    !GameData.Instance.GetPlayerById(item.Key).IsDead)
+                    !(GameData.Instance.GetPlayerById(item.Key).IsDead))
                 {
                     alive.Add(item.Key);
                 }
