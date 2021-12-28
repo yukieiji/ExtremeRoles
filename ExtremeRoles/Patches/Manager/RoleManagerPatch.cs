@@ -134,6 +134,8 @@ namespace ExtremeRoles.Patches.Manager
                 item => roleRng.Next()).ToList();
             List<(List<MultiAssignRoleBase>, (int, int))> newRoleData = new List<(List<MultiAssignRoleBase>, (int, int))> ();
 
+            int gameControlId = 0;
+
             foreach (var oneRole in roleDataLoop)
             {
                 var (roles, (num, spawnRate)) = oneRole;
@@ -181,7 +183,8 @@ namespace ExtremeRoles.Patches.Manager
                         spawnRoles.Add(
                             (MultiAssignRoleBase)role.Clone());
                     }
-                    assignRoles.Add((spawnRoles, num));
+                    assignRoles.Add((spawnRoles, gameControlId));
+                    ++gameControlId;
                 }
             }
 
