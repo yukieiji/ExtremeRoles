@@ -51,6 +51,20 @@ namespace ExtremeRoles.Roles.Combination
         {
             exiledUpdate();
         }
+
+        public override string GetRolePlayerNameTag(
+            SingleRoleBase targetRole, byte targetPlayerId)
+        {
+            if (targetRole.Id == ExtremeRoleId.Lover &&
+                targetRole.GameControlId == this.GameControlId)
+            {
+                return Design.ColoedString(
+                    ColorPalette.LoverPink, " ♥");
+            }
+
+            return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
+        }
+
         public override Color GetTargetRoleSeeColor(
             SingleRoleBase targetRole,
             byte targetPlayerId)
@@ -58,10 +72,58 @@ namespace ExtremeRoles.Roles.Combination
             if (targetRole.Id == ExtremeRoleId.Lover &&
                 targetRole.GameControlId == this.GameControlId)
             {
-                return this.NameColor;
+                return ColorPalette.LoverPink;
             }
 
             return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
+        }
+
+        protected override void CreateSpecificOption(
+            CustomOptionBase parentOps)
+        {
+            var neutralSetting = CustomOption.Create(
+                GetRoleOptionId((int)LoverOption.IsNeutral),
+                Design.ConcatString(
+                    this.RoleName,
+                    LoverOption.IsNeutral.ToString()),
+                false, parentOps);
+
+            var killerSetting = CustomOption.Create(
+                GetRoleOptionId((int)LoverOption.BecomNeutral),
+                Design.ConcatString(
+                    this.RoleName,
+                    LoverOption.BecomNeutral.ToString()),
+                true, neutralSetting);
+
+            var deathSetting = CustomOption.Create(
+                GetRoleOptionId((int)LoverOption.DethWhenUnderAlive),
+                Design.ConcatString(
+                    this.RoleName,
+                    LoverOption.DethWhenUnderAlive.ToString()),
+                1, 1, 1, killerSetting, invert: true);
+
+            CreateKillerOption(killerSetting);
+
+            OptionsHolder.AllOptions[
+                GetManagerOptionId(
+                    CombinationRoleCommonOption.AssignsNum)].SetUpdateOption(deathSetting);
+
+        }
+
+        protected override void RoleSpecificInit()
+        {
+
+            if (OptionsHolder.AllOptions[
+                    GetRoleOptionId((int)LoverOption.IsNeutral)].GetValue())
+            {
+                this.Teams = ExtremeRoleType.Neutral;
+            }
+
+            this.becomeKiller = OptionsHolder.AllOptions[
+                GetRoleOptionId((int)LoverOption.BecomNeutral)].GetValue();
+            this.limit = OptionsHolder.AllOptions[
+                GetRoleOptionId((int)LoverOption.DethWhenUnderAlive)].GetValue();
+
         }
 
         private void exiledUpdate()
@@ -142,54 +204,6 @@ namespace ExtremeRoles.Roles.Combination
             }
 
             return alive;
-
-        }
-
-        protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
-        {
-            var neutralSetting = CustomOption.Create(
-                GetRoleOptionId((int)LoverOption.IsNeutral),
-                Design.ConcatString(
-                    this.RoleName,
-                    LoverOption.IsNeutral.ToString()),
-                false, parentOps);
-
-            var killerSetting = CustomOption.Create(
-                GetRoleOptionId((int)LoverOption.BecomNeutral),
-                Design.ConcatString(
-                    this.RoleName,
-                    LoverOption.BecomNeutral.ToString()),
-                true, neutralSetting);
-
-            var deathSetting = CustomOption.Create(
-                GetRoleOptionId((int)LoverOption.DethWhenUnderAlive),
-                Design.ConcatString(
-                    this.RoleName,
-                    LoverOption.DethWhenUnderAlive.ToString()),
-                1, 1, 1, killerSetting, invert:true);
-
-            CreateKillerOption(killerSetting);
-
-            OptionsHolder.AllOptions[
-                GetManagerOptionId(
-                    CombinationRoleCommonOption.AssignsNum)].SetUpdateOption(deathSetting);
-
-        }
-
-        protected override void RoleSpecificInit()
-        {
-
-            if (OptionsHolder.AllOptions[
-                    GetRoleOptionId((int)LoverOption.IsNeutral)].GetValue())
-            {
-                this.Teams = ExtremeRoleType.Neutral;
-            }
-
-            this.becomeKiller = OptionsHolder.AllOptions[
-                GetRoleOptionId((int)LoverOption.BecomNeutral)].GetValue();
-            this.limit = OptionsHolder.AllOptions[
-                GetRoleOptionId((int)LoverOption.DethWhenUnderAlive)].GetValue();
 
         }
     }

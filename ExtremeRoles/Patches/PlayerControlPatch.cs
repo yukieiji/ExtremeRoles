@@ -37,10 +37,14 @@ namespace ExtremeRoles.Patches
             if (PlayerControl.LocalPlayer != __instance) { return; }
 
             resetNameTagsAndColors();
-            playerInfoUpdate();
-            setPlayerNameColor(__instance);
-            buttonUpdate(__instance);
-            refreshRoleDescription(__instance);
+
+            var role = ExtremeRoleManager.GetLocalPlayerRole();
+
+            playerInfoUpdate(role);
+            setPlayerNameColor(__instance, role);
+            setPlayerNameTag(role);
+            buttonUpdate(__instance, role);
+            refreshRoleDescription(__instance, role);
         }
 
         private static void resetNameTagsAndColors()
@@ -99,25 +103,26 @@ namespace ExtremeRoles.Patches
 
         }
 
-        private static void setPlayerNameColor(PlayerControl player)
+        private static void setPlayerNameColor(
+            PlayerControl player,
+            SingleRoleBase playerRole)
         {
             var localPlayerId = player.PlayerId;
-            var role = ExtremeRoleManager.GetLocalPlayerRole();
 
             bool voteNamePaintBlock = false;
             bool playerNamePaintBlock = false;
             bool isBlocked = AssassinMeeting.AssassinMeetingTrigger;
-            if (role.Id == ExtremeRoleId.Assassin)
+            if (playerRole.Id == ExtremeRoleId.Assassin)
             {
                 voteNamePaintBlock = true;
-                playerNamePaintBlock = ((Roles.Combination.Assassin)role).CanSeeRoleBeforeFirstMeeting || isBlocked;
+                playerNamePaintBlock = ((Roles.Combination.Assassin)playerRole).CanSeeRoleBeforeFirstMeeting || isBlocked;
             }
 
             // Modules.Helpers.DebugLog($"Player Name:{role.NameColor}");
 
             // まずは自分のプレイヤー名の色を変える
-            player.nameText.color = role.NameColor;
-            setVoteAreaColor(localPlayerId, role.NameColor);
+            player.nameText.color = playerRole.NameColor;
+            setVoteAreaColor(localPlayerId, playerRole.NameColor);
 
             foreach (PlayerControl targetPlayer in PlayerControl.AllPlayerControls)
             {
@@ -128,7 +133,7 @@ namespace ExtremeRoles.Patches
                 if (!MapOption.GhostsSeeRoles || !PlayerControl.LocalPlayer.Data.IsDead)
                 {
                     var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
-                    Color paintColor = role.GetTargetRoleSeeColor(
+                    Color paintColor = playerRole.GetTargetRoleSeeColor(
                         targetRole, targetPlayerId);
                     if (paintColor == Palette.ClearWhite) { continue; }
 
@@ -148,11 +153,36 @@ namespace ExtremeRoles.Patches
                         targetPlayerId,
                         roleColor,
                         voteNamePaintBlock,
-                        targetPlayerRole.Teams == role.Teams);
+                        targetPlayerRole.Teams == playerRole.Teams);
                 }
             }
 
         }
+
+        private static void setPlayerNameTag(
+            SingleRoleBase playerRole)
+        {
+
+            foreach (PlayerControl targetPlayer in PlayerControl.AllPlayerControls)
+            {
+                byte playerId = targetPlayer.PlayerId;
+                string tag = playerRole.GetRolePlayerNameTag(
+                    ExtremeRoleManager.GameRole[playerId], playerId);
+                if (tag == string.Empty) { continue; }
+
+                targetPlayer.nameText.text += tag;
+
+                if (MeetingHud.Instance != null)
+                {
+                    foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)
+                    {
+                        if (targetPlayer.PlayerId != pva.TargetPlayerId) { continue; }
+                        pva.NameText.text += tag;
+                    }
+                }
+            }
+        }
+
         private static void setVoteAreaColor(
             byte targetPlayerId,
             Color targetColor)
@@ -189,7 +219,8 @@ namespace ExtremeRoles.Patches
             }
         }
 
-        private static void playerInfoUpdate()
+        private static void playerInfoUpdate(
+            SingleRoleBase playerRole)
         {
 
             bool commsActive = false;
@@ -203,11 +234,10 @@ namespace ExtremeRoles.Patches
             }
 
             var isBlocked = AssassinMeeting.AssassinMeetingTrigger;
-            var role = ExtremeRoleManager.GetLocalPlayerRole();
 
-            if (role.Id == ExtremeRoleId.Assassin)
+            if (playerRole.Id == ExtremeRoleId.Assassin)
             {
-                isBlocked = ((Roles.Combination.Assassin)role).IsFirstMeeting || isBlocked;
+                isBlocked = ((Roles.Combination.Assassin)playerRole).IsFirstMeeting || isBlocked;
             }
 
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
@@ -309,13 +339,11 @@ namespace ExtremeRoles.Patches
             return Tuple.Create(playerInfoText, meetingInfoText);
 
         }
-        private static void refreshRoleDescription(PlayerControl player)
+        private static void refreshRoleDescription(
+            PlayerControl player,
+            SingleRoleBase playerRole)
         {
-            if (player == null) { return; };
-
-            var role = ExtremeRoleManager.GameRole[player.PlayerId];
-
-            if (role.IsVanillaRole()) { return; }
+            if (playerRole.IsVanillaRole()) { return; }
 
             var removedTask = new List<PlayerTask>();
             foreach (PlayerTask task in player.myTasks)
@@ -338,22 +366,24 @@ namespace ExtremeRoles.Patches
             importantTextTask.transform.SetParent(player.transform, false);
 
             importantTextTask.Text = Design.ColoedString(
-                role.NameColor, $"{role.RoleName}: {string.Format("{0}{1}", role.Id, "ShortDescription")}");
+                playerRole.NameColor,
+                $"{playerRole.RoleName}: {string.Format("{0}{1}", playerRole.Id, "ShortDescription")}");
             player.myTasks.Insert(0, importantTextTask);
 
         }
-        private static void buttonUpdate(PlayerControl player)
+        private static void buttonUpdate(
+            PlayerControl player,
+            SingleRoleBase playerRole)
         {
             if (!player.AmOwner) { return; }
 
-            var role = ExtremeRoleManager.GameRole[player.PlayerId];
             bool enable = Player.ShowButtons && !PlayerControl.LocalPlayer.Data.IsDead;
 
-            killButtonUpdate(player, role, enable);
-            ventButtonUpdate(role, enable);
+            killButtonUpdate(player, playerRole, enable);
+            ventButtonUpdate(playerRole, enable);
 
-            sabotageButtonUpdate(role);
-            roleAbilityButtonUpdate(role);
+            sabotageButtonUpdate(playerRole);
+            roleAbilityButtonUpdate(playerRole);
         }
 
         private static void killButtonUpdate(

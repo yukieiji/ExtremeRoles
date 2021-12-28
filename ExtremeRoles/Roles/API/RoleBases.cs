@@ -93,6 +93,11 @@ namespace ExtremeRoles.Roles.API
         }
         public virtual bool IsTeamsWin() => this.IsWin;
 
+
+        public virtual string GetRolePlayerNameTag(
+            SingleRoleBase targetRole,
+            byte targetPlayerId) => string.Empty;
+
         public virtual Color GetTargetRoleSeeColor(
             SingleRoleBase targetRole,
             byte targetPlayerId)
