@@ -131,47 +131,48 @@ namespace ExtremeRoles.Roles
         }
 
         public static void SetPlayerIdToMultiRoleId(
-            byte roleId, byte playerId, byte id)
+            byte roleId, byte playerId, byte roleIndex, byte id)
         {
 
             RoleTypes roleType = Helper.Player.GetPlayerControlById(playerId).Data.Role.Role;
             bool hasVanilaRole = roleType != RoleTypes.Crewmate || roleType != RoleTypes.Impostor;
 
-
             foreach (var combRole in CombRole)
             {
 
-                foreach (var role in combRole.Roles)
+                if (roleIndex >= combRole.Roles.Count) { continue; }
+
+                var role = combRole.Roles[roleIndex];
+
+                if (roleId == role.BytedRoleId)
                 {
 
-                    if (role.BytedRoleId == roleId)
+                    SingleRoleBase addRole = role.Clone();
+
+                    IRoleAbility abilityRole = addRole as IRoleAbility;
+
+                    if (abilityRole != null && PlayerControl.LocalPlayer.PlayerId == playerId)
                     {
-                        SingleRoleBase addRole = role.Clone();
-
-                        IRoleAbility abilityRole = addRole as IRoleAbility;
-
-                        if (abilityRole != null && PlayerControl.LocalPlayer.PlayerId == playerId)
-                        {
-                            Helper.Logging.Debug("Try Create Ability NOW!!!");
-                            abilityRole.CreateAbility();
-                        }
-
-                        addRole.GameInit();
-                        addRole.GameControlId = id;
-                        roleControlId = id + 1;
-
-                        GameRole.Add(
-                            playerId, addRole);
-
-                        if (hasVanilaRole)
-                        {
-                            ((MultiAssignRoleBase)GameRole[
-                                playerId]).SetAnotherRole(
-                                    new Solo.VanillaRoleWrapper(roleType));
-                        }
-                        Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
-                        return;
+                        Helper.Logging.Debug("Try Create Ability NOW!!!");
+                        abilityRole.CreateAbility();
                     }
+
+                    addRole.GameInit();
+                    addRole.GameControlId = id;
+                    roleControlId = id + 1;
+
+                    GameRole.Add(
+                        playerId, addRole);
+
+                    if (hasVanilaRole)
+                    {
+                        ((MultiAssignRoleBase)GameRole[
+                            playerId]).SetAnotherRole(
+                                new Solo.VanillaRoleWrapper(roleType));
+                    }
+                    Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
+                    return;
+
                 }
             }
         }

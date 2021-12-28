@@ -11,7 +11,8 @@ namespace ExtremeRoles
 
             GameInit = 60,
             ForceEnd,
-            SetRole,
+            SetNormalRole,
+            SetCombinationRole,
             ShareOption,
             UncheckedMurderPlayer,
 
@@ -37,16 +38,17 @@ namespace ExtremeRoles
                 }
             }
         }
-        public static void SetRole(byte roleId, byte playerId, byte id)
+
+        public static void SetCombinationRole(
+            byte roleId, byte playerId, byte roleIndex, byte id)
         {
-            if (id != Byte.MaxValue)
-            {
-                Roles.ExtremeRoleManager.SetPlayerIdToMultiRoleId(roleId, playerId, id);
-            }
-            else
-            {
-                Roles.ExtremeRoleManager.SetPlyerIdToSingleRoleId(roleId, playerId);
-            }
+            Roles.ExtremeRoleManager.SetPlayerIdToMultiRoleId(
+                roleId, playerId, roleIndex, id);
+        }
+
+        public static void SetNormalRole(byte roleId, byte playerId)
+        {
+            Roles.ExtremeRoleManager.SetPlyerIdToSingleRoleId(roleId, playerId);
         }
 
         public static void ShareOption(int numOptions, MessageReader reader)

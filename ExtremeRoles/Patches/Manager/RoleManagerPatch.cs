@@ -98,7 +98,7 @@ namespace ExtremeRoles.Patches.Manager
 
             foreach (var(roles, id) in assignMultiAssignRole)
             {
-                foreach (var role in roles)
+                foreach (var (role, index) in roles.Select((role, index) => (role, index)))
                 {
                     bool assign = false;
                     List<int> tempList = new List<int>(
@@ -115,8 +115,8 @@ namespace ExtremeRoles.Patches.Manager
                             playerIndexList.Remove(playerIndex);
                         }
 
-                        setRoleToPlayer(
-                            player, role.BytedRoleId, (byte)id);
+                        setCombinationRoleToPlayer(
+                            player, role.BytedRoleId, (byte)index, (byte)id);
                         break;
                     }
                 }
@@ -287,7 +287,7 @@ namespace ExtremeRoles.Patches.Manager
                                 item => roleRng.Next()).ToList();
                             break;
                         default:
-                            setRoleToPlayer(
+                            setNormalRoleToPlayer(
                                 player,
                                 (byte)roleData.Role);
                             shuffledArange.Remove(index);
@@ -316,7 +316,7 @@ namespace ExtremeRoles.Patches.Manager
 
                         if (result)
                         {
-                            setRoleToPlayer(player, role.BytedRoleId);
+                            setNormalRoleToPlayer(player, role.BytedRoleId);
                             shuffledArange.Remove(index);
                             extremeRolesData.RoleSpawnSettings[roleData.Role][role.BytedRoleId] = (
                                 --roleNum,
@@ -354,7 +354,7 @@ namespace ExtremeRoles.Patches.Manager
                     foreach (int index in tempList)
                     {
                         PlayerControl player = PlayerControl.AllPlayerControls[index];
-                        setRoleToPlayer(
+                        setNormalRoleToPlayer(
                             player, (byte)(player.Data.Role.Role));
                         shuffledArange.Remove(index);
                     }
@@ -366,23 +366,42 @@ namespace ExtremeRoles.Patches.Manager
         }
 
 
-        private static void setRoleToPlayer(
-            PlayerControl player, byte roleId, byte id=Byte.MaxValue)
+        private static void setNormalRoleToPlayer(
+            PlayerControl player, byte roleId)
         {
 
             Logging.Debug($"Player:{player.name}  RoleId:{roleId}");
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                 PlayerControl.LocalPlayer.NetId,
-                (byte)RPCOperator.Command.SetRole,
+                (byte)RPCOperator.Command.SetNormalRole,
                 Hazel.SendOption.Reliable, -1);
             
             writer.Write(roleId);
             writer.Write(player.PlayerId);
-            writer.Write(id);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
-            RPCOperator.SetRole(
-                roleId, player.PlayerId, id);
+            RPCOperator.SetNormalRole(
+                roleId, player.PlayerId);
+        }
+
+        private static void setCombinationRoleToPlayer(
+            PlayerControl player, byte roleId, byte combinationRoleIndex, byte gameId)
+        {
+
+            Logging.Debug($"Player:{player.name}  RoleId:{roleId}");
+
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                PlayerControl.LocalPlayer.NetId,
+                (byte)RPCOperator.Command.SetCombinationRole,
+                Hazel.SendOption.Reliable, -1);
+
+            writer.Write(roleId);
+            writer.Write(player.PlayerId);
+            writer.Write(combinationRoleIndex);
+            writer.Write(gameId);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            RPCOperator.SetCombinationRole(
+                roleId, player.PlayerId, combinationRoleIndex, gameId);
         }
 
 

@@ -625,6 +625,10 @@ namespace ExtremeRoles.Patches
     {
         static void Postfix([HarmonyArgument(0)] byte callId, [HarmonyArgument(1)] MessageReader reader)
         {
+
+            byte roleId;
+            byte playerId;
+
             switch (callId)
             {
                 case (byte)RPCOperator.Command.ForceEnd:
@@ -633,11 +637,18 @@ namespace ExtremeRoles.Patches
                 case (byte)RPCOperator.Command.GameInit:
                     RPCOperator.GameInit();
                     break;
-                case (byte)RPCOperator.Command.SetRole:
-                    byte roleId = reader.ReadByte();
-                    byte playerId = reader.ReadByte();
-                    byte gameId = reader.ReadByte();
-                    RPCOperator.SetRole(roleId, playerId, gameId);
+                case (byte)RPCOperator.Command.SetNormalRole:
+                    roleId = reader.ReadByte();
+                    playerId = reader.ReadByte();
+                    RPCOperator.SetNormalRole(roleId, playerId);
+                    break;
+                case (byte)RPCOperator.Command.SetCombinationRole:
+                    roleId = reader.ReadByte();
+                    playerId = reader.ReadByte();
+                    byte combinationRoleId = reader.ReadByte();
+                    byte gameControlId = reader.ReadByte();
+                    RPCOperator.SetCombinationRole(
+                        roleId, playerId, combinationRoleId, gameControlId);
                     break;
                 case (byte)RPCOperator.Command.ShareOption:
                     int numOptions = (int)reader.ReadPackedUInt32();
