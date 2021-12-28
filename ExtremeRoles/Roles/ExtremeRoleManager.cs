@@ -137,10 +137,13 @@ namespace ExtremeRoles.Roles
             RoleTypes roleType = Helper.Player.GetPlayerControlById(playerId).Data.Role.Role;
             bool hasVanilaRole = roleType != RoleTypes.Crewmate || roleType != RoleTypes.Impostor;
 
+
             foreach (var combRole in CombRole)
             {
+
                 foreach (var role in combRole.Roles)
                 {
+
                     if (role.BytedRoleId == roleId)
                     {
                         SingleRoleBase addRole = role.Clone();
@@ -167,6 +170,7 @@ namespace ExtremeRoles.Roles
                                     new Solo.VanillaRoleWrapper(roleType));
                         }
                         Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
+                        return;
                     }
                 }
             }
@@ -190,6 +194,7 @@ namespace ExtremeRoles.Roles
                 if (role.BytedRoleId == roleId)
                 {
                     setPlyerIdToSingleRole(playerId, role);
+                    return;
                 }
             }
         }

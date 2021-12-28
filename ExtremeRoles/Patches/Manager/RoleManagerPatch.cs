@@ -400,8 +400,6 @@ namespace ExtremeRoles.Patches.Manager
 
             var allOption = OptionsHolder.AllOptions;
 
-            Logging.Debug("Checkpoint:0");
-
             int crewmateRolesNum = UnityEngine.Random.RandomRange(
                 allOption[(int)OptionsHolder.CommonOptionKey.MinCremateRoles].GetValue(),
                 allOption[(int)OptionsHolder.CommonOptionKey.MaxCremateRoles].GetValue());
@@ -420,7 +418,7 @@ namespace ExtremeRoles.Patches.Manager
                 int roleSet = allOption[
                     role.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue();
 
-                Logging.Debug($"SpawnRate:{spawnRate}   RoleSet:{roleSet}");
+                Logging.Debug($"Role:{role}    SpawnRate:{spawnRate}   RoleSet:{roleSet}");
 
                 if (roleSet <= 0 || spawnRate <= 0.0)
                 {
@@ -440,8 +438,6 @@ namespace ExtremeRoles.Patches.Manager
                 int roleNum = allOption[
                     role.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue();
 
-                Logging.Debug(
-                    $"SelectopmValue:{allOption[role.GetRoleOptionId(RoleCommonOption.RoleNum)].Selections[0]}");
                 Logging.Debug(
                     $"Role Name:{role.RoleName}  SpawnRate:{spawnRate}   RoleNum:{roleNum}");
 
