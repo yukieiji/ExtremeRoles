@@ -135,7 +135,7 @@ namespace ExtremeRoles.Roles.Combination
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            CustomOption.Create(
+            var neutralSetting = CustomOption.Create(
                 GetRoleOptionId((int)LoverOption.IsNeutral),
                 Design.ConcatString(
                     this.RoleName,
@@ -147,7 +147,7 @@ namespace ExtremeRoles.Roles.Combination
                 Design.ConcatString(
                     this.RoleName,
                     LoverOption.BecomNeutral.ToString()),
-                true, parentOps);
+                true, neutralSetting);
 
             var deathSetting = CustomOption.Create(
                 GetRoleOptionId((int)LoverOption.DethWhenUnderAlive),

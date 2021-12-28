@@ -217,15 +217,11 @@ namespace ExtremeRoles.Module
             int newIntedValue = Convert.ToInt32(newValue.ToString());
             int newMaxValue = this.maxValue / newIntedValue;
 
-            Logging.Debug($"newValue:{newMaxValue}");
-
             List<int> newSelections = new List<int>();
             for (int s = minValue; s <= newMaxValue; ++s)
             {
                 newSelections.Add(s);
             }
-
-            Logging.Debug($"newSelectionLength:{newSelections.Count}");
 
             this.Selections = newSelections.Cast<object>().ToArray();
             this.UpdateSelection(this.CurSelection);
