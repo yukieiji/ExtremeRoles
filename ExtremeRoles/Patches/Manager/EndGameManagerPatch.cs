@@ -74,9 +74,9 @@ namespace ExtremeRoles.Patches.Manager
 
                 foreach (var data in PlayerDataContainer.EndGamePlayerInfo)
                 {
-                    if (data.PlayerName != winningPlayerData2.PlayerName) continue;
+                    if (data.PlayerName != winningPlayerData2.PlayerName) { continue; }
                     poolablePlayer.NameText.text += 
-                        $"\n<size=80%>{string.Join("\n", Helper.Design.ColoedString(data.Roles.NameColor, data.Roles.RoleName))}</size>";
+                        $"\n<size=80%>{string.Join("\n", data.Roles.GetColoredRoleName())}</size>";
                 }
             }
 

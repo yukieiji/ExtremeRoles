@@ -86,7 +86,7 @@ namespace ExtremeRoles.Patches
             if (!role.IsVanillaRole())
             {
                 __instance.YouAreText.color = role.NameColor;
-                __instance.RoleText.text = role.RoleName;
+                __instance.RoleText.text = role.GetColoredRoleName();
                 __instance.RoleText.color = role.NameColor;
                 __instance.RoleBlurbText.text = string.Format(
                     "{0}{1}", role.Id, "IntroDescription");

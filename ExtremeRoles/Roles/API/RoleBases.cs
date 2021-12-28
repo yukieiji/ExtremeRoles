@@ -206,6 +206,8 @@ namespace ExtremeRoles.Roles.API
         public SingleRoleBase AnotherRole = null;
         public bool CanHasAnotherRole = false;
 
+        private string prevRoleName = "";
+
         public MultiAssignRoleBase(
             ExtremeRoleId id,
             ExtremeRoleType team,
@@ -222,7 +224,7 @@ namespace ExtremeRoles.Roles.API
 
         public void SetAnotherRole(SingleRoleBase role)
         {
-            if (this.CanHasAnotherRole)
+            if (this.CanHasAnotherRole && this.AnotherRole == null)
             {
                 this.AnotherRole = role;
                 OverrideAnotherRoleSetting();
@@ -237,7 +239,7 @@ namespace ExtremeRoles.Roles.API
             }
 
             string baseRole = Design.ColoedString(
-                this.NameColor, this.RoleName);
+                this.NameColor, this.prevRoleName);
 
             string anotherRole = Design.ColoedString(
                 this.AnotherRole.NameColor, this.AnotherRole.RoleName);
@@ -245,15 +247,19 @@ namespace ExtremeRoles.Roles.API
             string concat = Design.ColoedString(
                 Palette.White, " + ");
 
-            return string.Format("{0}{2}{1}",
+            return string.Format("{0}{1}{2}",
                 baseRole, concat, anotherRole);
         }
 
         protected virtual void OverrideAnotherRoleSetting()
         {
             this.Teams = this.AnotherRole.Teams;
+
+            this.prevRoleName = string.Copy(this.RoleName);
+
             this.RoleName = string.Format("{0} + {1}",
-                this.RoleName, this.AnotherRole.RoleName);
+                string.Copy(this.prevRoleName),
+                string.Copy(this.AnotherRole.RoleName));
 
             this.CanKill = this.AnotherRole.CanKill;
             this.HasTask = this.AnotherRole.HasTask;
