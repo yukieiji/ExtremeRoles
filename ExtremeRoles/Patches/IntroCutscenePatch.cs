@@ -88,9 +88,14 @@ namespace ExtremeRoles.Patches
                 __instance.YouAreText.color = role.NameColor;
                 __instance.RoleText.text = role.GetColoredRoleName();
                 __instance.RoleText.color = role.NameColor;
-                __instance.RoleBlurbText.text = string.Format(
-                    "{0}{1}", role.Id, "IntroDescription");
+                __instance.RoleBlurbText.text = role.GetIntroDescription();
                 __instance.RoleBlurbText.color = role.NameColor;
+
+                if (role.Team == Roles.API.ExtremeRoleType.Impostor)
+                {
+                    __instance.RoleBlurbText.text += string.Format("\n{0}","impostorText");
+                }
+
             }
         }
     }

@@ -77,8 +77,34 @@ namespace ExtremeRoles.Roles.API
 
         public bool IsNeutral() => this.Team == ExtremeRoleType.Neutral;
 
+        public virtual void ExiledAction(
+            GameData.PlayerInfo rolePlayer)
+        {
+            return;
+        }
+
+        public virtual string GetIntroDescription() => string.Format(
+            "{0}{1}", this.Id, "IntroDescription");
+
         public virtual string GetColoredRoleName() => Design.ColoedString(
             this.NameColor, this.RoleName);
+
+
+        public virtual string GetRolePlayerNameTag(
+            SingleRoleBase targetRole,
+            byte targetPlayerId) => string.Empty;
+
+        public virtual Color GetTargetRoleSeeColor(
+            SingleRoleBase targetRole,
+            byte targetPlayerId)
+        {
+            if ((targetRole.IsImposter() || targetRole.FakeImposter) &&
+                this.IsImposter())
+            {
+                return Palette.ImpostorRed;
+            }
+            return Palette.White;
+        }
 
         public virtual bool IsSameTeam(SingleRoleBase targetRole)
         {
@@ -91,30 +117,9 @@ namespace ExtremeRoles.Roles.API
                 return targetRole.Team == this.Team;
             }
         }
+
         public virtual bool IsTeamsWin() => this.IsWin;
 
-
-        public virtual string GetRolePlayerNameTag(
-            SingleRoleBase targetRole,
-            byte targetPlayerId) => string.Empty;
-
-        public virtual Color GetTargetRoleSeeColor(
-            SingleRoleBase targetRole,
-            byte targetPlayerId)
-        {
-            if ((targetRole.IsImposter() || targetRole.FakeImposter) && 
-                this.IsImposter())
-            {
-                return Palette.ImpostorRed;
-            }
-            return Palette.White;
-        }
-
-        public virtual void ExiledAction(
-            GameData.PlayerInfo rolePlayer)
-        {
-            return;
-        }
 
         public virtual void RolePlayerKilledAction(
             PlayerControl rolePlayer,
@@ -257,7 +262,27 @@ namespace ExtremeRoles.Roles.API
                 OverrideAnotherRoleSetting();
             }
         }
-        
+
+        public override string GetIntroDescription()
+        {
+            if (this.AnotherRole == null)
+            {
+                return base.GetIntroDescription();
+            }
+
+            string baseIntro = string.Format(
+            "{0}{1}", this.Id, "IntroDescription");
+
+            string anotherIntro = string.Format(
+            "{0}{1}", this.AnotherRole.Id, "IntroDescription");
+
+            string concat = Design.ColoedString(
+                Palette.White, " + ");
+
+            return string.Format("{0}{1}{2}",
+                baseIntro, concat, concat);
+
+        }
         public override string GetColoredRoleName()
         {
             if (this.AnotherRole == null)
