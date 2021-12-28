@@ -43,88 +43,6 @@ namespace ExtremeRoles.Patches
             refreshRoleDescription(__instance);
         }
 
-        private static Color getColorFromRoleAbility(
-            SingleRoleBase subjectiveRole,
-            byte targetPlayerId)
-        {
-            Color defaultColor = Palette.ClearWhite;
-
-            var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
-            
-            
-            bool isFakeImposter = false;
-            if (targetRole is Roles.Solo.Neutral.Sidekick)
-            {
-                isFakeImposter = ((Roles.Solo.Neutral.Sidekick)targetRole).CanSeeImpostorToSideKickImpostor;
-            }
-            switch (subjectiveRole.Id)
-            {
-                case ExtremeRoleId.Marlin:
-                    if (targetRole.IsImposter())
-                    {
-                        return Palette.ImpostorRed;
-                    }
-                    else if (targetRole.IsNeutral() &&
-                        ((Roles.Combination.Marlin)subjectiveRole).CanSeeNeutral)
-                    {
-                        return Palette.DisabledGrey;
-                    }
-                    return defaultColor;
-
-                case ExtremeRoleId.VanillaRole:
-
-                    var vanilaRole = (Roles.Solo.VanillaRoleWrapper)subjectiveRole;
-                    switch (vanilaRole.VanilaRoleId)
-                    {
-                        case RoleTypes.Impostor:
-                        case RoleTypes.Shapeshifter:
-
-                            if (targetRole.IsImposter() || isFakeImposter)
-                            {
-                                return Palette.ImpostorRed;
-                            }
-                            return defaultColor;
-                        default:
-                            return defaultColor;
-                    }
-                case ExtremeRoleId.Jackal:
-
-                    var jackal = (Roles.Solo.Neutral.Jackal)subjectiveRole;
-
-                    if (targetRole.Id == ExtremeRoleId.Sidekick && 
-                        jackal.SideKickPlayerId.Contains(targetPlayerId))
-                    {
-                        return subjectiveRole.NameColor;
-                    }
-                    return defaultColor;
-
-                case ExtremeRoleId.Sidekick:
-                    
-                    var jcakal = targetRole as Roles.Solo.Neutral.Jackal;
-                    if (jcakal != null)
-                    {
-                        if (jcakal.SideKickPlayerId.Contains(
-                                PlayerControl.LocalPlayer.PlayerId))
-                        {
-                            return subjectiveRole.NameColor;
-                        }
-                    }
-
-                    return defaultColor;
-
-                case ExtremeRoleId.Assassin:
-                    
-                    if (targetRole.IsImposter() || isFakeImposter)
-                    {
-                        return Palette.ImpostorRed;
-                    }
-
-                    return defaultColor;
-
-                default:
-                    return defaultColor;
-            }
-        }
         private static void resetNameTagsAndColors()
         {
 
@@ -205,7 +123,10 @@ namespace ExtremeRoles.Patches
 
                 if (!MapOption.GhostsSeeRoles || !PlayerControl.LocalPlayer.Data.IsDead)
                 {
-                    Color paintColor = getColorFromRoleAbility(
+                    var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
+                    Color paintColor = role.GetTargetRoleSeeColor(
+                        targetRole, targetPlayerId);
+                    getColorFromRoleAbility(
                         role, targetPlayerId);
                     if (paintColor == Palette.ClearWhite) { continue; }
 

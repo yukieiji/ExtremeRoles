@@ -105,6 +105,18 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     Resources.ResourcesPaths.TestButton, 115f));
         }
 
+        public override Color GetTargetRoleSeeColor(
+            SingleRoleBase targetRole,
+            byte targetPlayerId)
+        {
+            if (targetRole.Id == ExtremeRoleId.Sidekick &&
+                this.SideKickPlayerId.Contains(targetPlayerId))
+            {
+                return this.NameColor;
+            }
+            return Palette.White;
+        }
+
         public override bool IsSameTeams(SingleRoleBase role)
         {
             return ((role.Id == this.Id) || (role.Id == ExtremeRoleId.Sidekick));
@@ -374,7 +386,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
     public class Sidekick : SingleRoleBase
     {
-        public bool CanSeeImpostorToSideKickImpostor = false;
 
         private int recursion = 0;
         private bool sidekickJackalCanMakeSidekick = false;
@@ -401,10 +412,26 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.Vison = vison;
             this.IsApplyEnvironmentVision = applyEnvironmentVisionEffect;
 
-            this.CanSeeImpostorToSideKickImpostor = canSeeImpostorToSideKickImpostor && isImpostor;
+            this.FakeImposter = canSeeImpostorToSideKickImpostor && isImpostor;
 
             this.recursion = curRecursion;
             this.sidekickJackalCanMakeSidekick = sidekickJackalCanMakeSidekick;
+        }
+
+        public override Color GetTargetRoleSeeColor(
+            SingleRoleBase targetRole,
+            byte targetPlayerId)
+        {
+            var jcakal = targetRole as Jackal;
+            if (jcakal != null)
+            {
+                if (jcakal.SideKickPlayerId.Contains(
+                    PlayerControl.LocalPlayer.PlayerId))
+                {
+                    return this.NameColor;
+                }
+            }
+            return Palette.White;
         }
 
         public static void BecomeToJackal(byte callerId, byte targetId)

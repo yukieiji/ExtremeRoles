@@ -17,6 +17,8 @@ namespace ExtremeRoles.Roles.API
         public bool IsApplyEnvironmentVision = true;
         public bool IsWin = false;
 
+        public bool FakeImposter = false;
+
         public float Vison = 0f;
         public float KillCoolTime = 0f;
         public int KillRange = 1;
@@ -82,6 +84,17 @@ namespace ExtremeRoles.Roles.API
 
         public virtual bool IsTeamsWin() => this.IsWin;
 
+        public virtual Color GetTargetRoleSeeColor(
+            SingleRoleBase targetRole,
+            byte targetPlayerId)
+        {
+            if ((targetRole.IsImposter() || targetRole.FakeImposter) && 
+                this.IsImposter())
+            {
+                return Palette.ImpostorRed;
+            }
+            return Palette.White;
+        }
 
         public virtual void ExiledAction(
             GameData.PlayerInfo rolePlayer)
@@ -253,18 +266,16 @@ namespace ExtremeRoles.Roles.API
 
         protected virtual void OverrideAnotherRoleSetting()
         {
-            this.Teams = this.AnotherRole.Teams;
-
             this.prevRoleName = string.Copy(this.RoleName);
 
             this.RoleName = string.Format("{0} + {1}",
                 string.Copy(this.prevRoleName),
                 string.Copy(this.AnotherRole.RoleName));
 
-            this.CanKill = this.AnotherRole.CanKill;
-            this.HasTask = this.AnotherRole.HasTask;
-            this.UseVent = this.AnotherRole.UseVent;
-            this.UseSabotage = this.AnotherRole.UseSabotage;
+            this.CanKill = this.CanKill || this.AnotherRole.CanKill;
+            this.HasTask = this.HasTask || this.AnotherRole.HasTask;
+            this.UseVent = this.UseVent || this.AnotherRole.UseVent;
+            this.UseSabotage = this.UseSabotage || this.AnotherRole.UseSabotage;
         }
 
         protected int GetManagerOptionId(

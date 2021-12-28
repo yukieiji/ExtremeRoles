@@ -5,6 +5,7 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Combination
 {
@@ -105,7 +106,7 @@ namespace ExtremeRoles.Roles.Combination
     }
 
 
-    public class Marlin : MultiAssignRoleBase
+    public class Marlin : MultiAssignRoleBase, IRoleUpdate
     {
         public enum MarlinOption
         {
@@ -132,11 +133,25 @@ namespace ExtremeRoles.Roles.Combination
             Dictionary<byte, PoolablePlayer> playerIcons)
         {
             this.PlayerIcon = playerIcons;
-            UpdateIcon();
         }
-        public void UpdateIcon()
-        {
 
+        public override Color GetTargetRoleSeeColor(
+            SingleRoleBase targetRole,
+            byte targetPlayerId)
+        {
+            if (targetRole.IsImposter())
+            {
+                return Palette.ImpostorRed;
+            }
+            else if (targetRole.IsNeutral() && this.CanSeeNeutral)
+            {
+                return Palette.DisabledGrey;
+            }
+            return Palette.White;
+        }
+
+        public void Update(PlayerControl rolePlayer)
+        {
             int visibleCounter = 0;
             Vector3 bottomLeft = HudManager.Instance.UseButton.transform.localPosition;
             bottomLeft.x *= -1;
@@ -166,7 +181,6 @@ namespace ExtremeRoles.Roles.Combination
                 }
             }
         }
-
 
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
