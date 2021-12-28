@@ -22,7 +22,7 @@ namespace ExtremeRoles.Helper
         public static void Load()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
-            Stream stream = assembly.GetManifestResourceStream("ExtremeRoles.Resources.stringData.json");
+            Stream stream = assembly.GetManifestResourceStream("ExtremeRoles.Resources.LangData.stringData.json");
             var byteArray = new byte[stream.Length];
             var read = stream.Read(byteArray, 0, (int)stream.Length);
             string json = System.Text.Encoding.UTF8.GetString(byteArray);

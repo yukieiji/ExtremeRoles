@@ -48,7 +48,7 @@ namespace ExtremeRoles
         public override void Load()
         {
 
-            /// Translation.Load();
+            Helper.Translation.Load();
 
             Logger = Log;
 

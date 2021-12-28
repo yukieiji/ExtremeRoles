@@ -29,31 +29,31 @@
     },
     "MinCremateRoles": {
         "0": "Minimum Crewmate Roles",
-        "11": "\u30af\u30eb\u30fc\u30ed\u30fc\u30eb\u3000\u6700\u5c11"
+        "11": "\u30af\u30eb\u30fc\u306e\u30ed\u30fc\u30eb\u6570\u3000\u6700\u5c11"
     },
     "MaxCremateRoles": {
         "0": "Maximum Crewmate Roles",
-        "11": "\u30af\u30eb\u30fc\u30ed\u30fc\u30eb\u3000\u6700\u5927"
+        "11": "\u30af\u30eb\u30fc\u306e\u30ed\u30fc\u30eb\u6570\u3000\u6700\u5927"
     },
     "MinNeutralRoles": {
         "0": "Minimum Neutral Roles",
-        "11": "\u305d\u306e\u4ed6\u9663\u55b6\u30ed\u30fc\u30eb\u3000\u6700\u5c11"
+        "11": "\u7b2c\u4e09\u9663\u55b6\u306e\u30ed\u30fc\u30eb\u6570\u3000\u6700\u5c11"
     },
     "MaxNeutralRoles": {
         "0": "Maximum Neutral Roles",
-        "11": "\u305d\u306e\u4ed6\u9663\u55b6\u30ed\u30fc\u30eb\u3000\u6700\u5927"
+        "11": "\u7b2c\u4e09\u9663\u55b6\u306e\u30ed\u30fc\u30eb\u6570\u3000\u6700\u5927"
     },
     "MinImpostorRoles": {
         "0": "Minimum Impostor Roles",
-        "11": "\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc\u30ed\u30fc\u30eb\u3000\u6700\u5c11"
+        "11": "\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc\u306e\u30ed\u30fc\u30eb\u6570\u3000\u6700\u5c11"
     },
     "MaxImpostorRoles": {
         "0": "Maximum Impostor Roles",
-        "11": "\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc\u30ed\u30fc\u30eb\u3000\u6700\u5927"
+        "11": "\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc\u306e\u30ed\u30fc\u30eb\u6570\u3000\u6700\u5927"
     },
     "NumMeatings": {
         "0": "Total Meetings",
-        "11": "\u5408\u8a08\u7dca\u6025\u4f1a\u8b70\u56de\u6570\uff08\u30e1\u30a4\u30e4\u30fc\u5bfe\u8c61\u5916\uff09"
+        "11": "\u5408\u8a08\u7dca\u6025\u4f1a\u8b70\u56de\u6570"
     },
     "BlockMeating": {
         "0": "Block Skipping in Meetings",
@@ -73,7 +73,7 @@
     },
     "RandomMap": {
         "0": "Play On A Random Map",
-        "11": "\u6bce\u56de\u30de\u30c3\u30d7\u304c\u30e9\u30f3\u30c0\u30e0\u306b"
+        "11": "\u6bce\u56de\u30de\u30c3\u30d7\u304c\u30e9\u30f3\u30c0\u30e0\u306b\u5909\u308f\u308b\u304b"
     },
     "ghostsSeeTasksButton": {
         "0": "Ghosts See Remaining Tasks",
@@ -99,20 +99,317 @@
         "0": "Off",
         "11": "\u30aa\u30d5"
     },
+    "short": {
+        "0": "Short",
+        "11": "\u30b7\u30e7\u30fc\u30c8"
+    },
+    "middle": {
+        "0": "Middle",
+        "11": "\u30df\u30c9\u30eb"
+    },
+    "long": {
+        "0": "Long",
+        "11": "\u30ed\u30f3\u30b0"
+    },
     "crewmateRoles": {
         "0": "Crewmate Roles",
-        "11": "\u30af\u30eb\u30fc\u30ed\u30fc\u30eb"
+        "11": "\u30af\u30eb\u30fc\u306e\u30ed\u30fc\u30eb"
     },
     "neutralRoles": {
         "0": "Neutral Roles",
-        "11": "\u305d\u306e\u4ed6\u9663\u55b6\u30ed\u30fc\u30eb"
+        "11": "\u7b2c\u4e09\u9663\u55b6\u306e\u30ed\u30fc\u30eb"
     },
     "impostorRoles": {
         "0": "Impostor Roles",
-        "11": "\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc\u30ed\u30fc\u30eb"
+        "11": "\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc\u306e\u30ed\u30fc\u30eb"
     },
     "pressTabForMore": {
         "0": "Press tab for more...",
         "11": "Tab\u30ad\u30fc\u3067\u6b21\u306e\u30da\u30fc\u30b8\u3078\u2026"
+    },
+    "SpecialCrewSpawnRate": {
+        "11": "\u30b9\u30da\u30b7\u30e3\u30eb\u30af\u30eb\u30fc"
+    },
+    "SpecialCrewRoleNum": {
+        "11": "\u30b9\u30dd\u30fc\u30f3\u6570"
+    },
+    "SpecialCrewHasOtherVison": {
+        "11": "\u5225\u8996\u754c\u3092\u6301\u3064\u304b"
+    },
+    "SpecialCrewVison": {
+        "11": "\u8996\u754c"
+    },
+    "SpecialCrewApplyEnvironmentVisionEffect": {
+        "11": "\u8996\u754c\u52b9\u679c\u3092\u53d7\u3051\u308b\u304b"
+    },
+    "SpecialCrewIntroDescription": {
+        "11": "\u666e\u901a\u306e\u30af\u30eb\u30fc\u3068\u306f\u5c11\u3057\u9055\u3046\u8a2d\u5b9a\u3092\u6301\u3064"
+    },
+    "SpecialCrewShortDescription": {
+        "11": "\u30a8\u30af\u30b9\u30c8\u30ea\u30fc\u30e0\u306a\u30af\u30eb\u30fc"
+    },
+    "SpecialImpostorSpawnRate": {
+        "11": "\u30b9\u30da\u30b7\u30e3\u30eb\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc"
+    },
+    "SpecialImpostorRoleNum": {
+        "11": "\u30b9\u30dd\u30fc\u30f3\u6570"
+    },
+    "SpecialImpostorHasOtherVison": {
+        "11": "\u5225\u8996\u754c\u3092\u6301\u3064\u304b"
+    },
+    "SpecialImpostorVison": {
+        "11": "\u8996\u754c"
+    },
+    "SpecialImpostorApplyEnvironmentVisionEffect": {
+        "11": "\u8996\u754c\u52b9\u679c\u3092\u53d7\u3051\u308b\u304b"
+    },
+    "SpecialImpostorHasOtherKillCool": {
+        "11": "\u5225\u306e\u30ad\u30eb\u30af\u30fc\u30eb\u30bf\u30a4\u30e0\u3092\u6301\u3064\u304b"
+    },
+    "SpecialImpostorKillCoolDown": {
+        "11": "\u30ad\u30eb\u30af\u30fc\u30eb\u30bf\u30a4\u30e0"
+    },
+    "SpecialImpostorHasOtherKillRange": {
+        "11": "\u5225\u306e\u30ad\u30eb\u30ec\u30f3\u30b8\u3092\u6301\u3064\u304b"
+    },
+    "SpecialImpostorKillRange": {
+        "11": "\u30ad\u30eb\u30ec\u30f3\u30b8"
+    },
+    "SpecialImpostorIntroDescription": {
+        "11": "\u666e\u901a\u306e\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc\u3068\u306f\u5c11\u3057\u9055\u3046\u8a2d\u5b9a\u3092\u6301\u3064"
+    },
+    "SpecialImpostorShortDescription": {
+        "11": "\u30a8\u30af\u30b9\u30c8\u30ea\u30fc\u30e0\u306a\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc"
+    },
+    "AliceSpawnRate": {
+        "11": "\u30a2\u30ea\u30b9"
+    },
+    "AliceRoleNum": {
+        "11": "\u30b9\u30dd\u30fc\u30f3\u6570"
+    },
+    "AliceHasOtherVison": {
+        "11": "\u5225\u8996\u754c\u3092\u6301\u3064\u304b"
+    },
+    "AliceVison": {
+        "11": "\u8996\u754c"
+    },
+    "AliceApplyEnvironmentVisionEffect": {
+        "11": "\u8996\u754c\u52b9\u679c\u3092\u53d7\u3051\u308b\u304b"
+    },
+    "AliceHasOtherKillCool": {
+        "11": "\u5225\u306e\u30ad\u30eb\u30af\u30fc\u30eb\u30bf\u30a4\u30e0\u3092\u6301\u3064\u304b"
+    },
+    "AliceKillCoolDown": {
+        "11": "\u30ad\u30eb\u30af\u30fc\u30eb\u30bf\u30a4\u30e0"
+    },
+    "AliceHasOtherKillRange": {
+        "11": "\u5225\u306e\u30ad\u30eb\u30ec\u30f3\u30b8\u3092\u6301\u3064\u304b"
+    },
+    "AliceKillRange": {
+        "11": "\u30ad\u30eb\u30ec\u30f3\u30b8"
+    },
+    "AliceAbilityCoolTime": {
+        "11": "\u7834\u58ca\u5de5\u4f5c\u306e\u30af\u30fc\u30eb\u30bf\u30a4\u30e0"
+    },
+    "AliceIntroDescription": {
+        "11": "\u5168\u3066\u3092\u30e1\u30c1\u30e3\u30af\u30c1\u30e3\u306b\u3059\u308b\u3001\u308f\u304c\u307e\u307e\u306e\u6a29\u5316"
+    },
+    "AliceShortDescription": {
+        "11": "\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc\u306b\u6bba\u3055\u308c\u308b\u304b\u3001\u5168\u3066\u3092\u7834\u58ca\u305b\u3088"
+    },
+    "JackalSpawnRate": {
+        "11": "\u30b8\u30e3\u30c3\u30ab\u30eb"
+    },
+    "JackalRoleNum": {
+        "11": "\u30b9\u30dd\u30fc\u30f3\u6570"
+    },
+    "JackalHasOtherVison": {
+        "11": "\u30b8\u30e3\u30c3\u30ab\u30eb\u304c\u5225\u8996\u754c\u3092\u6301\u3064\u304b"
+    },
+    "JackalVison": {
+        "11": "\u30b8\u30e3\u30c3\u30ab\u30eb\u306e\u8996\u754c"
+    },
+    "JackalApplyEnvironmentVisionEffect": {
+        "11": "\u30b8\u30e3\u30c3\u30ab\u30eb\u304c\u8996\u754c\u52b9\u679c\u3092\u53d7\u3051\u308b\u304b"
+    },
+    "JackalHasOtherKillCool": {
+        "11": "\u5225\u306e\u30ad\u30eb\u30af\u30fc\u30eb\u30bf\u30a4\u30e0\u3092\u6301\u3064\u304b"
+    },
+    "JackalKillCoolDown": {
+        "11": "\u30ad\u30eb\u30af\u30fc\u30eb\u30bf\u30a4\u30e0"
+    },
+    "JackalHasOtherKillRange": {
+        "11": "\u5225\u306e\u30ad\u30eb\u30ec\u30f3\u30b8\u3092\u6301\u3064\u304b"
+    },
+    "JackalKillRange": {
+        "11": "\u30ad\u30eb\u30ec\u30f3\u30b8"
+    },
+    "JackalSidekickNum": {
+        "11": "\u30b5\u30a4\u30c9\u30ad\u30c3\u30af\u4f5c\u6210\u6570"
+    },
+    "JackalRangeSidekickTarget": {
+        "11": "\u30b5\u30a4\u30c9\u30ad\u30c3\u30af\u4f5c\u6210\u80fd\u529b\u306e\u7bc4\u56f2"
+    },
+    "JackalUpgradeSidekickNum": {
+        "11": "\u30b8\u30e3\u30c3\u30ab\u30eb\u6b7b\u4ea1\u6642\u3001\u6607\u683c\u3059\u308b\u30b5\u30a4\u30c9\u30ad\u30c3\u30af\u6570"
+    },
+    "JackalSidekickJackalCanMakeSidekick": {
+        "11": "\u6607\u683c\u3057\u305f\u30b8\u30e3\u30c3\u30ab\u30eb\u304c\u30b5\u30a4\u30c9\u30ad\u30c3\u30af\u3092\u4f5c\u6210\u3067\u304d\u308b\u304b"
+    },
+    "JackalSidekickLimitNum": {
+        "11": "\u6607\u683c\u3057\u305f\u30b8\u30e3\u30c3\u30ab\u30eb\u304c\u30b5\u30a4\u30c9\u30ad\u30c3\u30af\u3092\u4f5c\u6210\u3067\u304d\u308b\u518d\u5e30\u4e0a\u9650\u6570"
+    },
+    "JackalAbilityCoolTime": {
+        "11": "\u30b5\u30a4\u30c9\u30ad\u30c3\u30af\u4f5c\u6210\u80fd\u529b\u306e\u30af\u30fc\u30eb\u30bf\u30a4\u30e0"
+    },
+    "JackalCanSetImpostorToSideKick": {
+        "11": "\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc\u3092\u30b5\u30a4\u30c9\u30ad\u30c3\u30af\u306b\u3067\u304d\u308b\u304b"
+    },
+    "JackalCanSeeImpostorToSideKickImpostor": {
+        "11": "\u30b5\u30a4\u30c9\u30ad\u30c3\u30af\u3055\u308c\u305f\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc\u306e\u8868\u793a\u3092\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc\u306b\u3059\u308b\u304b"
+    },
+    "ackalSidekickUseSabotage": {
+        "11": "\u30b5\u30a4\u30c9\u30ad\u30c3\u30af\u304c\u30b5\u30dc\u30bf\u30fc\u30b8\u3092\u4f7f\u3048\u308b\u304b"
+    },
+    "JackalSidekickUseVent": {
+        "11": "\u30b5\u30a4\u30c9\u30ad\u30c3\u30af\u304c\u30d9\u30f3\u30c8\u3092\u4f7f\u3048\u308b\u304b"
+    },
+    "JackalSidekickHasOtherVison": {
+        "11": "\u30b5\u30a4\u30c9\u30ad\u30c3\u30af\u304c\u5225\u8996\u754c\u3092\u6301\u3064\u304b"
+    },
+    "JackalSidekickVison": {
+        "11": "\u30b5\u30a4\u30c9\u30ad\u30c3\u30af\u306e\u8996\u754c"
+    },
+    "JackalSidekickApplyEnvironmentVisionEffect": {
+        "11": "\u30b5\u30a4\u30c9\u30ad\u30c3\u30af\u304c\u8996\u754c\u52b9\u679c\u3092\u53d7\u3051\u308b\u304b"
+    },
+    "JackalIntroDescription": {
+        "11": "\u30b5\u30a4\u30c9\u30ad\u30c3\u30af\u3092\u4f5c\u308a\u3001\u3053\u306e\u8239\u3092\u4e57\u3063\u53d6\u308c"
+    },
+    "JackalShortDescription": {
+        "11": "\u30b5\u30a4\u30c9\u30ad\u30c3\u30af\u3068\u3082\u306b\u3001\u7686\u6bba\u3057\u3060"
+    },
+    "SidekickShortDescription": {
+        "11": "\u30b8\u30e3\u30c3\u30ab\u30eb\u306e\u30a2\u30b7\u30b9\u30c8\u3092\u884c\u3048"
+    },
+    "AvalonsRolesSpawnRate": {
+        "11": "\u30a2\u30b5\u30b7\u30f3\u3068\u30de\u30fc\u30ea\u30f3"
+    },
+    "AvalonsRolesRoleNum": {
+        "11": "\u30b9\u30dd\u30fc\u30f3\u30bb\u30c3\u30c8\u6570"
+    },
+    "AvalonsRolesIsMultiAssign": {
+        "11": "\u5225\u5f79\u8077\u306e\u80fd\u529b\u3092\u6301\u3064\u304b"
+    },
+    "AssassinHasOtherVison": {
+        "11": "\u30a2\u30b5\u30b7\u30f3\u304c\u5225\u8996\u754c\u3092\u6301\u3064\u304b"
+    },
+    "AssassinVison": {
+        "11": "\u30a2\u30b5\u30b7\u30f3\u306e\u8996\u754c"
+    },
+    "AssassinApplyEnvironmentVisionEffect": {
+        "11": "\u30a2\u30b5\u30b7\u30f3\u304c\u8996\u754c\u52b9\u679c\u3092\u53d7\u3051\u308b\u304b"
+    },
+    "AssassinHasOtherKillCool": {
+        "11": "\u30a2\u30b5\u30b7\u30f3\u304c\u5225\u306e\u30ad\u30eb\u30af\u30fc\u30eb\u30bf\u30a4\u30e0\u3092\u6301\u3064\u304b"
+    },
+    "AssassinKillCoolDown": {
+        "11": "\u30a2\u30b5\u30b7\u30f3\u306e\u30ad\u30eb\u30af\u30fc\u30eb\u30bf\u30a4\u30e0"
+    },
+    "AssassinHasOtherKillRange": {
+        "11": "\u30a2\u30b5\u30b7\u30f3\u304c\u5225\u306e\u30ad\u30eb\u30ec\u30f3\u30b8\u3092\u6301\u3064\u304b"
+    },
+    "AssassinKillRange": {
+        "11": "\u30a2\u30b5\u30b7\u30f3\u306e\u30ad\u30eb\u30ec\u30f3\u30b8"
+    },
+    "AssassinIsDeadForceMeeting": {
+        "11": "\u30a2\u30b5\u30b7\u30f3\u6b7b\u4ea1\u6642\u3001\u5f37\u5236\u7684\u306b\u4f1a\u8b70\u3092\u884c\u3046\u304b"
+    },
+    "AssassinCanSeeRoleBeforeFirstMeeting": {
+        "11": "\u30a2\u30b5\u30b7\u30f3\u6b7b\u4ea1\u5f8c\u306e\u6700\u521d\u306e\u4f1a\u8b70\u524d\u306b\u30ed\u30fc\u30eb\u3092\u898b\u308b\u3053\u3068\u304c\u3067\u304d\u308b\u304b"
+    },
+    "MarlinHasOtherVison": {
+        "11": "\u30de\u30fc\u30ea\u30f3\u304c\u5225\u8996\u754c\u3092\u6301\u3064\u304b"
+    },
+    "MarlinVison": {
+        "11": "\u30de\u30fc\u30ea\u30f3\u306e\u8996\u754c"
+    },
+    "MarlinApplyEnvironmentVisionEffect": {
+        "11": "\u30de\u30fc\u30ea\u30f3\u304c\u8996\u754c\u52b9\u679c\u3092\u53d7\u3051\u308b\u304b"
+    },
+    "MarlinHasTask": {
+        "11": "\u30de\u30fc\u30ea\u30f3\u304c\u30bf\u30b9\u30af\u3092\u6301\u3064\u304b"
+    },
+    "MarlinCanSeeVote": {
+        "11": "\u30de\u30fc\u30ea\u30f3\u304c\u6295\u7968\u3092\u898b\u308b\u3053\u3068\u304c\u3067\u304d\u308b\u304b"
+    },
+    "MarlinCanSeeNeutral": {
+        "11": "\u30de\u30fc\u30ea\u30f3\u304c\u7b2c\u4e09\u9663\u55b6\u3092\u898b\u308b\u3053\u3068\u304c\u3067\u304d\u308b\u304b"
+    },
+    "MarlinIntroDescription": {
+        "11": "\u5168\u3066\u3092\u77e5\u308a\u3001\u898b\u901a\u3057\u3001\u6697\u6bba\u3055\u308c\u305a\u3001\u30af\u30eb\u30fc\u3092\u52dd\u5229\u306b\u5c0e\u3051"
+    },
+    "MarlinShortDescription": {
+        "11": "\u30af\u30eb\u30fc\u3092\u52dd\u5229\u306b\u5c0e\u3051\u3002\u305f\u3060\u3057\u3001\u6697\u6bba\u8005\u306b\u3070\u308c\u308b\u306a"
+    },
+    "AssassinIntroDescription": {
+        "11": "\u5168\u3066\u3092\u77e5\u308a\u3057\u8005\u3092\u63a2\u3057\u51fa\u3057\u3001\u59cb\u672b\u3059\u308b\u306e\u3060"
+    },
+    "AssassinShortDescription": {
+        "11": "\u30de\u30fc\u30ea\u30f3\u3092\u63a2\u3057\u51fa\u3057\u3001\u6697\u6bba\u305b\u3088"
+    },
+    "LoverSpawnRate": {
+        "11": "\u30e9\u30d0\u30fc\u30ba"
+    },
+    "LoverAssignsNum": {
+        "11": "1\u7d44\u3042\u305f\u308a\u306e\u30a2\u30b5\u30a4\u30f3\u6570"
+    },
+    "LoverRoleNum": {
+        "11": "\u30b9\u30dd\u30fc\u30f3\u30bb\u30c3\u30c8\u6570"
+    },
+    "LoverIsAssignImposter": {
+        "11": "\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc\u304c\u30a2\u30b5\u30a4\u30f3\u3055\u308c\u308b\u304b"
+    },
+    "LoverImposterSelectedRate": {
+        "11": "\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc\u306e\u30a2\u30b5\u30a4\u30f3\u30ec\u30fc\u30c8"
+    },
+    "LoverIsMultiAssign": {
+        "11": "\u5225\u5f79\u8077\u306e\u80fd\u529b\u3092\u6301\u3064\u304b"
+    },
+    "LoverHasOtherVison": {
+        "11": "\u5225\u8996\u754c\u3092\u6301\u3064\u304b"
+    },
+    "LoverVison": {
+        "11": "\u8996\u754c"
+    },
+    "LoverApplyEnvironmentVisionEffect": {
+        "11": "\u8996\u754c\u52b9\u679c\u3092\u53d7\u3051\u308b\u304b"
+    },
+    "LoverIsNeutral": {
+        "11": "\u7b2c\u4e09\u9663\u55b6\u304b\u3069\u3046\u304b"
+    },
+    "LoverBecomNeutral": {
+        "11": "\u7b2c\u4e09\u9663\u55b6\u306b\u5909\u308f\u308b\u304b\u3069\u3046\u304b"
+    },
+    "LoverDethWhenUnderAlive": {
+        "11": "\u81ea\u6bba\u304c\u884c\u308f\u308c\u308b1\u7d44\u8fba\u308a\u4eba\u6570"
+    },
+    "LoverHasOtherKillCool": {
+        "11": "\u5225\u306e\u30ad\u30eb\u30af\u30fc\u30eb\u30bf\u30a4\u30e0\u3092\u6301\u3064\u304b"
+    },
+    "LoverKillCoolDown": {
+        "11": "\u30ad\u30eb\u30af\u30fc\u30eb\u30bf\u30a4\u30e0"
+    },
+    "LoverHasOtherKillRange": {
+        "11": "\u5225\u306e\u30ad\u30eb\u30ec\u30f3\u30b8\u3092\u6301\u3064\u304b"
+    },
+    "LoverKillRange": {
+        "11": "\u30ad\u30eb\u30ec\u30f3\u30b8"
+    },
+    "LoverIntroDescription": {
+        "11": "\u604b\u4eba\u3068\u904b\u547d\u3092\u5171\u306b\u3059\u308b\u8239\u54e1"
+    },
+    "LoverShortDescription": {
+        "11": "\u904b\u547d\u306e\u4eba\u3068\u751f\u304d\u6b8b\u308c"
     }
 }
