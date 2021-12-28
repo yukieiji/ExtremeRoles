@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 
-
+using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Patches
 {
@@ -10,7 +10,7 @@ namespace ExtremeRoles.Patches
             IntroCutscene __instance,
             ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
         {
-            var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
+            var role = ExtremeRoleManager.GetLocalPlayerRole();
 
             if (role.IsNeutral())
             {
@@ -26,7 +26,7 @@ namespace ExtremeRoles.Patches
             ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
         {
 
-            var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
+            var role = ExtremeRoleManager.GetLocalPlayerRole();
 
             // Intro solo teams
             if (role.IsNeutral())
@@ -81,7 +81,7 @@ namespace ExtremeRoles.Patches
     {
         public static void Postfix(IntroCutscene __instance)
         {
-            var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
+            var role = ExtremeRoleManager.GetLocalPlayerRole();
 
             if (!role.IsVanillaRole())
             {
@@ -90,10 +90,22 @@ namespace ExtremeRoles.Patches
                 __instance.RoleText.color = role.NameColor;
                 __instance.RoleBlurbText.text = role.GetIntroDescription();
                 __instance.RoleBlurbText.color = role.NameColor;
+                
+                if (role is Roles.API.MultiAssignRoleBase)
+                {
+                    if (((Roles.API.MultiAssignRoleBase)role).AnotherRole != null)
+                    {
+                        __instance.RoleBlurbText.fontSize *= 0.50f;
+                    }
+                }
 
                 if (role.Team == Roles.API.ExtremeRoleType.Impostor)
                 {
                     __instance.RoleBlurbText.text += string.Format("\n{0}","impostorText");
+                }
+                else if(role.Team == Roles.API.ExtremeRoleType.Impostor)
+                {
+                    __instance.RoleBlurbText.text += string.Format("\n{0}", "crewmateText");
                 }
 
             }
@@ -108,12 +120,12 @@ namespace ExtremeRoles.Patches
             // Generate and initialize player icons
             if (PlayerControl.LocalPlayer != null && HudManager.Instance != null)
             {
-                Module.PlayerDataContainer.CreatIcons(__instance);
-                var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
-                if (role.Id == Roles.ExtremeRoleId.Marlin)
+                Module.GameDataContainer.CreatIcons(__instance);
+                var role = ExtremeRoleManager.GetLocalPlayerRole();
+                if (role.Id == ExtremeRoleId.Marlin)
                 {
                     ((Roles.Combination.Marlin)role).SetPlayerIcon(
-                        Module.PlayerDataContainer.PlayerIcon);
+                        Module.GameDataContainer.PlayerIcon);
                 }
             }
 

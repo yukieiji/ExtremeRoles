@@ -273,11 +273,22 @@ namespace ExtremeRoles.Roles.API
             string baseIntro = string.Format(
             "{0}{1}", this.Id, "IntroDescription");
 
-            string anotherIntro = string.Format(
-            "{0}{1}", this.AnotherRole.Id, "IntroDescription");
+            string anotherIntro;
+
+            if (this.AnotherRole.IsVanillaRole())
+            {
+                RoleBehaviour role = PlayerControl.LocalPlayer.Data.Role;
+                anotherIntro = role.Blurb;
+            }
+            else
+            {
+                anotherIntro = string.Format(
+               "{0}{1}", this.AnotherRole.Id, "IntroDescription");
+
+            }
 
             string concat = Design.ColoedString(
-                Palette.White, " + ");
+                Palette.White, "\n and");
 
             return string.Format("{0}{1}{2}",
                 baseIntro, concat, anotherIntro);
