@@ -22,7 +22,7 @@ namespace ExtremeRoles
         public static void GameInit()
         {
             Roles.ExtremeRoleManager.GameInit();
-            Module.PlayerDataContainer.GameInit();
+            Module.GameDataContainer.GameInit();
             Patches.AssassinMeeting.Reset();
         }
 

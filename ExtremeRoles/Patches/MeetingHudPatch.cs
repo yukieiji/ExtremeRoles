@@ -218,7 +218,7 @@ namespace ExtremeRoles.Patches
                 byte id = deadBody.ParentId;
                 if (ExtremeRoleManager.GameRole[id].Id == ExtremeRoleId.Assassin)
                 {
-                    Module.PlayerDataContainer.DeadedAssassin.Add(id);
+                    Module.GameDataContainer.DeadedAssassin.Add(id);
                 }
             }
             if (AssassinMeeting.AssassinMeetingTrigger)
