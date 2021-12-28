@@ -137,22 +137,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             SingleRoleBase targetRole,
             byte targetPlayerId)
         {
+
             if (targetRole.Id == ExtremeRoleId.Sidekick &&
                 this.SideKickPlayerId.Contains(targetPlayerId))
             {
                 return ColorPalette.JackalBlue;
             }
-            else if(targetRole is MultiAssignRoleBase)
-            {
-                var multiAssignRole = (MultiAssignRoleBase)targetRole;
-                if (multiAssignRole.AnotherRole != null)
-                {
-                    this.GetTargetRoleSeeColor(
-                        multiAssignRole.AnotherRole,
-                        targetPlayerId);
-                }
-            }
-            return Palette.White;
+            
+            return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
         }
 
         public override bool IsSameTeam(SingleRoleBase targetRole)
@@ -491,7 +483,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     return this.NameColor;
                 }
             }
-            return Palette.White;
+            return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
         }
 
         public static void BecomeToJackal(byte callerId, byte targetId)

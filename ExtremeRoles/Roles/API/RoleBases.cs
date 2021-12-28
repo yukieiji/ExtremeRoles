@@ -92,13 +92,34 @@ namespace ExtremeRoles.Roles.API
 
         public virtual string GetRolePlayerNameTag(
             SingleRoleBase targetRole,
-            byte targetPlayerId) => string.Empty;
+            byte targetPlayerId)
+        {
+            var multiAssignRole = targetRole as MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    return this.GetRolePlayerNameTag(
+                        multiAssignRole.AnotherRole, targetPlayerId);
+                }
+            }
 
+            return string.Empty;
+        }
         public virtual Color GetTargetRoleSeeColor(
             SingleRoleBase targetRole,
             byte targetPlayerId)
         {
-            if ((targetRole.IsImposter() || targetRole.FakeImposter) &&
+            var multiAssignRole = targetRole as MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    return this.GetTargetRoleSeeColor(
+                        multiAssignRole.AnotherRole, targetPlayerId);
+                }
+            }
+            else if ((targetRole.IsImposter() || targetRole.FakeImposter) &&
                 this.IsImposter())
             {
                 return Palette.ImpostorRed;
