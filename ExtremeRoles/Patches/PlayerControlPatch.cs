@@ -460,10 +460,27 @@ namespace ExtremeRoles.Patches
         private static void roleAbilityButtonUpdate(
             SingleRoleBase role)
         {
-            if (role is IRoleAbility)
+            void buttonUpdate(SingleRoleBase role)
             {
-                ((IRoleAbility)role).Button.Update();
+                var abilityRole = role as IRoleAbility;
+
+                if (abilityRole != null)
+                {
+                    abilityRole.Button.Update();
+                }
             }
+
+            buttonUpdate(role);
+
+            var multiAssignRole = role as MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    buttonUpdate(multiAssignRole.AnotherRole);
+                }
+            }
+
         }
 
         private static void sabotageButtonUpdate(

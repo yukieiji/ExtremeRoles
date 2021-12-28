@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Patches.Manager
@@ -20,15 +21,38 @@ namespace ExtremeRoles.Patches.Manager
 
             
             var role = ExtremeRoleManager.GetLocalPlayerRole();
-            if (role is IRoleAbility)
-            {
-                var abilityRole = (IRoleAbility)role;
 
-                if (abilityRole.Button == null)
+            buttonCreate(role);
+            roleUpdate(role);
+
+            var multiAssignRole = role as MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
                 {
-                    abilityRole.CreateAbility();
-                    abilityRole.RoleAbilityInit();
+                    buttonCreate(multiAssignRole.AnotherRole);
+                    roleUpdate(multiAssignRole.AnotherRole);
                 }
+            }
+
+        }
+        private static void buttonCreate(SingleRoleBase checkRole)
+        {
+            var abilityRole = checkRole as IRoleAbility;
+
+            if (abilityRole.Button == null)
+            {
+                abilityRole.CreateAbility();
+                abilityRole.RoleAbilityInit();
+            }
+        }
+
+        private static void roleUpdate(SingleRoleBase checkRole)
+        {
+            var updatableRole = checkRole as IRoleUpdate;
+            if (updatableRole != null)
+            {
+                updatableRole.Update(PlayerControl.LocalPlayer);
             }
         }
 

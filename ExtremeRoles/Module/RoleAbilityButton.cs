@@ -94,6 +94,11 @@ namespace ExtremeRoles.Module
             this.useAbility = newAbility;
         }
 
+        public void ReplaceHotKey(KeyCode newKey)
+        {
+            this.hotkey = newKey;
+        }
+
         public void Update()
         {
             if (PlayerControl.LocalPlayer.Data == null || 
