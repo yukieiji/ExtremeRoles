@@ -80,8 +80,17 @@ namespace ExtremeRoles.Roles.API
         public virtual string GetColoredRoleName() => Design.ColoedString(
             this.NameColor, this.RoleName);
 
-        public virtual bool IsSameTeams(SingleRoleBase role) => role.Teams == this.Teams;
-
+        public virtual bool IsSameTeams(SingleRoleBase role)
+        {
+            if (this.Teams == ExtremeRoleType.Crewmate)
+            {
+                return true;
+            }
+            else
+            {
+                return role.Teams == this.Teams;
+            }
+        }
         public virtual bool IsTeamsWin() => this.IsWin;
 
         public virtual Color GetTargetRoleSeeColor(

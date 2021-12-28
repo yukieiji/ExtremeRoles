@@ -357,12 +357,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     !playerInfo.Object.inVent)
                 {
                     PlayerControl @object = playerInfo.Object;
-                    if (@object && @object.Collider.enabled)
+                    if (@object)
                     {
                         Vector2 vector = @object.GetTruePosition() - truePosition;
                         float magnitude = vector.magnitude;
-                        if (magnitude <= num && !PhysicsHelpers.AnyNonTriggersBetween(
-                            truePosition, vector.normalized, magnitude, Constants.ShipAndObjectsMask))
+                        if (magnitude <= num && 
+                            !PhysicsHelpers.AnyNonTriggersBetween(
+                                truePosition, vector.normalized,
+                                magnitude, Constants.ShipAndObjectsMask))
                         {
                             result = @object;
                             num = magnitude;
@@ -370,7 +372,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     }
                 }
             }
-
+            
             if (result)
             {
                 if (this.IsSameTeams(ExtremeRoleManager.GameRole[result.PlayerId]))
@@ -378,8 +380,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     result = null;
                 }
             }
-
+            
             this.Target = result;
+            Player.SetPlayerOutLine(this.Target, this.NameColor);
         }
 
     }

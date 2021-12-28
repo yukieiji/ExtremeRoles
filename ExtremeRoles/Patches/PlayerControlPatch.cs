@@ -366,6 +366,7 @@ namespace ExtremeRoles.Patches
                     // Logging.Debug($"TargetAlive?:{target}");
 
                     DestroyableSingleton<HudManager>.Instance.KillButton.SetTarget(target);
+                    Player.SetPlayerOutLine(target, role.NameColor);
                     HudManager.Instance.KillButton.Show();
                     HudManager.Instance.KillButton.gameObject.SetActive(true);
                 }
@@ -498,7 +499,7 @@ namespace ExtremeRoles.Patches
 
             if (gameRoles.Count == 0) { return true; }
 
-            var role = ExtremeRoleManager.GameRole[__instance.PlayerId];
+            var role = gameRoles[__instance.PlayerId];
             if (role.IsVanillaRole()) { return true; }
 
             __result = null;
@@ -522,9 +523,9 @@ namespace ExtremeRoles.Patches
                 GameData.PlayerInfo playerInfo = allPlayers[i];
                 
                 if (!playerInfo.Disconnected && 
-                    playerInfo.PlayerId != __instance.PlayerId && 
+                    (playerInfo.PlayerId != __instance.PlayerId) && 
                     !playerInfo.IsDead && 
-                    (playerInfo.Role.CanBeKilled || protecting) && 
+                    !role.IsSameTeams(gameRoles[playerInfo.PlayerId]) && 
                     !playerInfo.Object.inVent)
                 {
                     PlayerControl @object = playerInfo.Object;
@@ -543,14 +544,6 @@ namespace ExtremeRoles.Patches
                     }
                 }
             }
-            if (__result)
-            {
-                if(role.IsSameTeams(gameRoles[__result.PlayerId]))
-                {
-                    __result = null;
-                }
-            }
-
             return false;
         }
     }

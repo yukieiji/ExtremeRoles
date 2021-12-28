@@ -1,4 +1,6 @@
-﻿namespace ExtremeRoles.Helper
+﻿using UnityEngine;
+
+namespace ExtremeRoles.Helper
 {
     public class Player
     {
@@ -86,5 +88,12 @@
             return false;
         }
 
+        public static void SetPlayerOutLine(PlayerControl target, Color color)
+        {
+            if (target == null || target.myRend == null) { return; }
+
+            target.myRend.material.SetFloat("_Outline", 1f);
+            target.myRend.material.SetColor("_OutlineColor", color);
+        }
     }
 }
