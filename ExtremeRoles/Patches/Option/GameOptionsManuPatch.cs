@@ -139,10 +139,10 @@ namespace ExtremeRoles.Patches.Option
         private static float timer = 1f;
         public static void Postfix(GameOptionsMenu __instance)
         {
-            if (__instance.transform.parent.parent.name.CompareTo("ExtremeRoleSettings") != 0) return;
+            if (__instance.transform.parent.parent.name.CompareTo("ExtremeRoleSettings") != 0) { return; }
 
             timer += Time.deltaTime;
-            if (timer < 0.1f) return;
+            if (timer < 0.1f) { return; }
             timer = 0f;
 
             float numItems = __instance.Children.Length;

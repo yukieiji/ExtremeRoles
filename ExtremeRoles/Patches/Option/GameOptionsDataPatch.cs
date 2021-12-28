@@ -154,7 +154,7 @@ namespace ExtremeRoles.Patches.Option
         }
         private static string optionsToString(CustomOptionBase option, bool skipFirst = false)
         {
-            if (option == null) return "";
+            if (option == null) { return ""; }
 
             List<string> options = new List<string>();
             if (!option.IsHidden && !skipFirst) options.Add(optionToString(option));

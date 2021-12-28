@@ -49,11 +49,11 @@ namespace ExtremeRoles.Helper
 
                         if (text != null && text.Length > 0)
                         {
-                            strings[j] = text;
+                            strings.Add(j,text);
                         }
                     }
 
-                    StringData[stringName] = strings;
+                    StringData.Add(stringName, strings);
                 }
             }
         }
