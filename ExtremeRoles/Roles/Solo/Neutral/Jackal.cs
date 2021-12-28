@@ -79,8 +79,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public static void TargetToSideKick(byte callerId, byte targetId)
         {
-            PlayerControl player = Player.GetPlayerControlById(targetId);
-            DestroyableSingleton<RoleManager>.Instance.SetRole(player, RoleTypes.Crewmate);
 
             var targetRole = ExtremeRoleManager.GameRole[targetId];
             
@@ -96,6 +94,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 sourceJackal.SidekickHasOtherVison,
                 sourceJackal.SidekickVision,
                 sourceJackal.SidekickApplyEnvironmentVisionEffect);
+
+            DestroyableSingleton<RoleManager>.Instance.SetRole(
+                Player.GetPlayerControlById(targetId), RoleTypes.Crewmate);
 
             ExtremeRoleManager.GameRole[targetId] = newSidekick;
 
