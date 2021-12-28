@@ -83,11 +83,11 @@ namespace ExtremeRoles.Roles.API
             return;
         }
 
-        public virtual string GetIntroDescription() => string.Format(
-            "{0}{1}", this.Id, "IntroDescription");
+        public virtual string GetIntroDescription() => Translation.GetString(
+            string.Format("{0}{1}", this.Id, "IntroDescription"));
 
         public virtual string GetColoredRoleName() => Design.ColoedString(
-            this.NameColor, this.RoleName);
+            this.NameColor, Translation.GetString(this.RoleName));
 
 
         public virtual string GetRolePlayerNameTag(
@@ -291,8 +291,8 @@ namespace ExtremeRoles.Roles.API
                 return base.GetIntroDescription();
             }
 
-            string baseIntro = string.Format(
-            "{0}{1}", this.Id, "IntroDescription");
+            string baseIntro = Translation.GetString(string.Format(
+            "{0}{1}", this.Id, "IntroDescription"));
 
             string anotherIntro;
 
@@ -303,8 +303,8 @@ namespace ExtremeRoles.Roles.API
             }
             else
             {
-                anotherIntro = string.Format(
-               "{0}{1}", this.AnotherRole.Id, "IntroDescription");
+                anotherIntro = Translation.GetString(string.Format(
+               "{0}{1}", this.AnotherRole.Id, "IntroDescription"));
 
             }
 
@@ -323,10 +323,12 @@ namespace ExtremeRoles.Roles.API
             }
 
             string baseRole = Design.ColoedString(
-                this.NameColor, this.prevRoleName);
+                this.NameColor,
+                Translation.GetString(this.prevRoleName));
 
             string anotherRole = Design.ColoedString(
-                this.AnotherRole.NameColor, this.AnotherRole.RoleName);
+                this.AnotherRole.NameColor,
+                Translation.GetString(this.AnotherRole.RoleName));
 
             string concat = Design.ColoedString(
                 Palette.White, " + ");
