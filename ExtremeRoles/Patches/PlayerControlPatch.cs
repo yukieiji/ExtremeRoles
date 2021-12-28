@@ -126,8 +126,6 @@ namespace ExtremeRoles.Patches
                     var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
                     Color paintColor = role.GetTargetRoleSeeColor(
                         targetRole, targetPlayerId);
-                    getColorFromRoleAbility(
-                        role, targetPlayerId);
                     if (paintColor == Palette.ClearWhite) { continue; }
 
                     targetPlayer.nameText.color = paintColor;
