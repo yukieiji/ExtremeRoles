@@ -36,8 +36,8 @@ namespace ExtremeRoles.Patches
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
             if (PlayerControl.LocalPlayer != __instance) { return; }
 
-            playerInfoUpdate();
             resetNameTagsAndColors();
+            playerInfoUpdate();
             setPlayerNameColor(__instance);
             buttonUpdate(__instance);
             refreshRoleDescription(__instance);
@@ -61,7 +61,10 @@ namespace ExtremeRoles.Patches
                 {
                     foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)
                     {
+                        if (pva.TargetPlayerId != player.PlayerId) { continue; }
+                        
                         pva.NameText.text = player.Data.PlayerName;
+                       
                         if (PlayerControl.LocalPlayer.Data.Role.IsImpostor &&
                             player.Data.Role.IsImpostor)
                         {
@@ -71,6 +74,7 @@ namespace ExtremeRoles.Patches
                         {
                             pva.NameText.color = Palette.White;
                         }
+                        break;
                     }
                 }
             }
