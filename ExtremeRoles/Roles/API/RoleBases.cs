@@ -280,7 +280,7 @@ namespace ExtremeRoles.Roles.API
                 Palette.White, " + ");
 
             return string.Format("{0}{1}{2}",
-                baseIntro, concat, concat);
+                baseIntro, concat, anotherIntro);
 
         }
         public override string GetColoredRoleName()
