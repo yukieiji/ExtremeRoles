@@ -18,6 +18,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             SidekickNum,
             SidekickLimitNum,
             RangeSidekickTarget,
+            ForceReplaceLover,
 
             UpgradeSidekickNum,
 
@@ -48,6 +49,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public int CurRecursion = 0;
         public int SidekickRecursionLimit = 0;
 
+        public bool ForceReplaceLover = false;
         public bool CanSetImpostorToSideKick = false;
         public bool CanSeeImpostorToSideKickImpostor = false;
         public bool SidekickCanKill = false;
@@ -81,7 +83,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public static void TargetToSideKick(byte callerId, byte targetId)
         {
-
+            var targetPlayer = Player.GetPlayerControlById(targetId);
             var targetRole = ExtremeRoleManager.GameRole[targetId];
             
             var sourceJackal = (Jackal)ExtremeRoleManager.GameRole[callerId];
@@ -101,7 +103,24 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             DestroyableSingleton<RoleManager>.Instance.SetRole(
                 Player.GetPlayerControlById(targetId), RoleTypes.Crewmate);
 
-            ExtremeRoleManager.GameRole[targetId] = newSidekick;
+            if (targetRole.Id != ExtremeRoleId.Lover)
+            {
+                ExtremeRoleManager.GameRole[targetId] = newSidekick;
+            }
+            else
+            {
+                if (sourceJackal.ForceReplaceLover)
+                {
+                    ExtremeRoleManager.GameRole[targetId] = newSidekick;
+                    targetRole.RolePlayerKilledAction(targetPlayer, targetPlayer);
+                }
+                else
+                {
+                    var lover = (Combination.Lover)targetRole;
+                    lover.CanHasAnotherRole = true;
+                    lover.SetAnotherRole(newSidekick);
+                }
+            }
 
         }
 
@@ -121,7 +140,17 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (targetRole.Id == ExtremeRoleId.Sidekick &&
                 this.SideKickPlayerId.Contains(targetPlayerId))
             {
-                return this.NameColor;
+                return ColorPalette.JackalBlue;
+            }
+            else if(targetRole is MultiAssignRoleBase)
+            {
+                var multiAssignRole = (MultiAssignRoleBase)targetRole;
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    this.GetTargetRoleSeeColor(
+                        multiAssignRole.AnotherRole,
+                        targetPlayerId);
+                }
             }
             return Palette.White;
         }
@@ -209,6 +238,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.SidekickRecursionLimit = allOption[
                 GetRoleOptionId(JackalOption.SidekickLimitNum)].GetValue();
 
+            this.ForceReplaceLover = allOption[
+                GetRoleOptionId(JackalOption.ForceReplaceLover)].GetValue();
+
             this.CanSetImpostorToSideKick = allOption[
                 GetRoleOptionId(JackalOption.CanSetImpostorToSideKick)].GetValue();
             this.CanSeeImpostorToSideKickImpostor = allOption[
@@ -257,6 +289,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     JackalOption.RangeSidekickTarget.ToString()),
                 OptionsHolder.Range,
                 parentOps);
+
+            CustomOption.Create(
+                GetRoleOptionId(JackalOption.ForceReplaceLover),
+                Design.ConcatString(
+                    this.RoleName,
+                    JackalOption.ForceReplaceLover.ToString()),
+                true, parentOps);
 
             CustomOption.Create(
                 GetRoleOptionId(JackalOption.UpgradeSidekickNum),
@@ -459,7 +498,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             var curJackal = (Jackal)ExtremeRoleManager.GameRole[callerId];
             var newJackal = (Jackal)curJackal.Clone();
-            var curSideKick = (Sidekick)ExtremeRoleManager.GameRole[targetId];
+
+            bool multiAssignTrigger = false;
+            var curRole = ExtremeRoleManager.GameRole[targetId];
+            var curSideKick = curRole as Sidekick;
+            if (curJackal == null)
+            {
+                curSideKick = (Sidekick)((MultiAssignRoleBase)curRole).AnotherRole;
+                multiAssignTrigger = true;
+            }
             
             newJackal.GameInit();
             if (!curSideKick.sidekickJackalCanMakeSidekick || curSideKick.recursion >= newJackal.SidekickRecursionLimit)
@@ -469,9 +516,18 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             newJackal.CurRecursion = curSideKick.recursion + 1;
             newJackal.SideKickPlayerId = new List<byte> (curJackal.SideKickPlayerId);
             newJackal.GameControlId = curSideKick.GameControlId;
-
-            ExtremeRoleManager.GameRole[targetId] = newJackal;
-
+            
+            if (multiAssignTrigger)
+            {
+                var multiAssignRole = (MultiAssignRoleBase)curRole;
+                multiAssignRole.AnotherRole = null;
+                multiAssignRole.SetAnotherRole(newJackal);
+                ExtremeRoleManager.GameRole[targetId] = multiAssignRole;
+            }
+            else
+            {
+                ExtremeRoleManager.GameRole[targetId] = newJackal;
+            }
         }
 
         protected override void CreateSpecificOption(
