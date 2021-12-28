@@ -65,6 +65,8 @@ namespace ExtremeRoles.Patches
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCOperator.ForceEnd();
             }
+
+            // See All roles
             if (Input.GetKeyDown(KeyCode.K))
             {
                 Dictionary<byte, SingleRoleBase> dict = Roles.ExtremeRoleManager.GameRole;
@@ -73,11 +75,11 @@ namespace ExtremeRoles.Patches
                 foreach (KeyValuePair<byte, SingleRoleBase> value in dict)
                 {
                     Logging.Debug(
-                        $"PlayerId:{value.Key}    AssignedTo:{value.Value.RoleName}");
+                        $"PlayerId:{value.Key}    AssignedTo:{value.Value.RoleName}   Team:{value.Value.Teams}");
                 }
             }
 
-            // See All roles
+            // See All task
             if (Input.GetKeyDown(KeyCode.P))
             {
                 Dictionary<byte, SingleRoleBase> dict = Roles.ExtremeRoleManager.GameRole;
