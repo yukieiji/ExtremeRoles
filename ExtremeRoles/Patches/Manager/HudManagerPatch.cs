@@ -25,6 +25,7 @@ namespace ExtremeRoles.Patches.Manager
             buttonCreate(role);
             roleUpdate(role);
 
+            
             var multiAssignRole = role as MultiAssignRoleBase;
             if (multiAssignRole != null)
             {
@@ -34,16 +35,20 @@ namespace ExtremeRoles.Patches.Manager
                     roleUpdate(multiAssignRole.AnotherRole);
                 }
             }
+            
 
         }
         private static void buttonCreate(SingleRoleBase checkRole)
         {
             var abilityRole = checkRole as IRoleAbility;
 
-            if (abilityRole.Button == null)
+            if (abilityRole != null)
             {
-                abilityRole.CreateAbility();
-                abilityRole.RoleAbilityInit();
+                if (abilityRole.Button == null)
+                {
+                    abilityRole.CreateAbility();
+                    abilityRole.RoleAbilityInit();
+                }
             }
         }
 
