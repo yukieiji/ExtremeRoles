@@ -118,7 +118,7 @@ namespace ExtremeRoles.Module
             if (Behaviour != null && Behaviour is StringOption stringOption)
             {
                 stringOption.oldValue = stringOption.Value = CurSelection;
-                stringOption.ValueText.text = Selections[CurSelection].ToString();
+                stringOption.ValueText.text = this.GetString();
                 if (this.withUpdateOption.Count != 0)
                 {
                     foreach (CustomOptionBase option in this.withUpdateOption)
