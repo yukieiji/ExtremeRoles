@@ -153,7 +153,7 @@ namespace ExtremeRoles.Patches
             PlayerDataContainer.PlayerStatistics statistics)
         {
             if (statistics.TeamImpostorAlive > 0) { return false; }
-            if (statistics.SeparatedNeutralAlive.Count > 1) { return false; }
+            if (statistics.SeparatedNeutralAlive.Count != 1) { return false; }
 
             var item = statistics.SeparatedNeutralAlive.ElementAt(0);
 
