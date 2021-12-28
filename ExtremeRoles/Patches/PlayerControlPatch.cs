@@ -334,8 +334,6 @@ namespace ExtremeRoles.Patches
                 meetingInfoText = playerInfoText;
             }
 
-            meetingInfoText = meetingInfoText.Replace("ラバーズ", "♥");
-
             return Tuple.Create(playerInfoText, meetingInfoText);
 
         }
@@ -367,7 +365,10 @@ namespace ExtremeRoles.Patches
 
             importantTextTask.Text = Design.ColoedString(
                 playerRole.NameColor,
-                $"{playerRole.RoleName}: {string.Format("{0}{1}", playerRole.Id, "ShortDescription")}");
+                string.Format("{0}: {1}",
+                    playerRole.GetColoredRoleName(),
+                    Translation.GetString(
+                        string.Format("{0}{1}", playerRole.Id, "ShortDescription"))));
             player.myTasks.Insert(0, importantTextTask);
 
         }
