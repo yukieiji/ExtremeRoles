@@ -247,7 +247,7 @@ namespace ExtremeRoles.Patches
             if (GameData.Instance.TotalTasks > 0 && 
                 GameData.Instance.TotalTasks <= GameData.Instance.CompletedTasks)
             {
-                gameIsEnd(ref __instance, GameOverReason.ImpostorBySabotage);
+                gameIsEnd(ref __instance, GameOverReason.HumansByTask);
                 return true;
             }
             return false;
