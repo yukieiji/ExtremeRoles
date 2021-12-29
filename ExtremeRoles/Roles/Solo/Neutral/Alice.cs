@@ -40,7 +40,26 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     Resources.ResourcesPaths.TestButton, 115f));
         }
 
-        public override bool IsSameTeam(SingleRoleBase targetRole) => targetRole.Id == this.Id;
+        public override bool IsSameTeam(SingleRoleBase targetRole)
+        {
+            var multiAssignRole = targetRole as MultiAssignRoleBase;
+
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    return this.IsSameTeam(multiAssignRole.AnotherRole);
+                }
+            }
+            if (OptionsHolder.Map.IsSameNeutralSameWin)
+            {
+                return this.Id == targetRole.Id;
+            }
+            else
+            {
+                return (this.Id == targetRole.Id) && this.IsSameControlId(targetRole);
+            }
+        }
 
         public bool IsAbilityUse()
         {

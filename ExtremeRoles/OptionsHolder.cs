@@ -42,6 +42,7 @@ namespace ExtremeRoles
             ParallelMedBayScans,
             RandomMap,
             EngineerUseImpostorVent,
+            IsSameNeutralSameWin,
         }
 
         public static Dictionary<int, CustomOptionBase> AllOption = new Dictionary<int, CustomOptionBase>();
@@ -127,6 +128,10 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.EngineerUseImpostorVent,
                 CommonOptionKey.EngineerUseImpostorVent.ToString(),
                 false, ventOption);
+            CustomOption.Create(
+                (int)CommonOptionKey.IsSameNeutralSameWin,
+                CommonOptionKey.IsSameNeutralSameWin.ToString(),
+                true, ventOption);
 
             int offset = 50;
 
@@ -179,6 +184,8 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.EngineerUseImpostorVent].GetValue();
             Map.NoVoteIsSelfVote = AllOption[
                 (int)CommonOptionKey.NoVoteToSelf].GetValue();
+            Map.IsSameNeutralSameWin = AllOption[
+                (int)CommonOptionKey.IsSameNeutralSameWin].GetValue();
 
             Client.GhostsSeeRole = ConfigParser.GhostsSeeRoles.Value;
             Client.GhostsSeeTask = ConfigParser.GhostsSeeTasks.Value;
@@ -280,6 +287,7 @@ namespace ExtremeRoles
             public static bool DisableVent = false;
             public static bool EngineerUseImpostorVent = false;
             public static bool NoVoteIsSelfVote = false;
+            public static bool IsSameNeutralSameWin = true;
         }
     }
 }

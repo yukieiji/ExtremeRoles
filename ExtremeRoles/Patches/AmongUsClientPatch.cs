@@ -106,9 +106,20 @@ namespace ExtremeRoles.Patches
 
             foreach (var player in noWinner)
             {
-                if (roles.Contains(ExtremeRoleManager.GameRole[player.PlayerId].Id))
+
+                var role = ExtremeRoleManager.GameRole[player.PlayerId];
+
+                if (roles.Contains(role.Id))
                 {
-                    addWinner(player);
+                    if (OptionsHolder.Map.IsSameNeutralSameWin)
+                    {
+                        addWinner(player);
+                    }
+                    else if ((GameDataContainer.WinGameControlId != int.MaxValue) &&
+                        (GameDataContainer.WinGameControlId == role.GameControlId))
+                    {
+                        addWinner(player);
+                    }
                 }
             }
         }

@@ -20,12 +20,14 @@ namespace ExtremeRoles.Module
         public static Dictionary<byte, PoolablePlayer> PlayerIcon = new Dictionary<byte, PoolablePlayer>();
         public static List<byte> DeadedAssassin = new List<byte>();
         public static int MeetingsCount = 0;
+        public static int WinGameControlId = int.MaxValue;
 
         public static void GameInit()
         {
             PlayerIcon.Clear();
             DeadedAssassin.Clear();
             MeetingsCount = 0;
+            WinGameControlId = int.MaxValue;
         }
 
         public static void CreatIcons(IntroCutscene __instance)
@@ -72,7 +74,7 @@ namespace ExtremeRoles.Module
             public int TeamNeutralAlive { get; set; }
             public int TotalAlive { get; set; }
 
-            public Dictionary<NeutralSeparateTeam, int> SeparatedNeutralAlive;
+            public Dictionary<(NeutralSeparateTeam, int), int> SeparatedNeutralAlive;
             public bool IsAssassinationMarin { get; set; }
 
             public PlayerStatistics()
@@ -90,7 +92,8 @@ namespace ExtremeRoles.Module
                 int numImpostorAlive = 0;
 
                 int numNeutralAlive = 0;
-                Dictionary<NeutralSeparateTeam, int> neutralTeam = new Dictionary<NeutralSeparateTeam, int>();
+                Dictionary<(NeutralSeparateTeam, int), int> neutralTeam = new Dictionary<
+                    (NeutralSeparateTeam, int), int>();
 
                 bool isAssassinationMarin = false;
 
@@ -105,6 +108,12 @@ namespace ExtremeRoles.Module
 
                     // 死んでたら次のプレイヤーへ
                     if (playerInfo.IsDead) { continue; };
+
+                    int gameControlId = role.GameControlId;
+                    if (OptionsHolder.Map.IsSameNeutralSameWin)
+                    {
+                        gameControlId = int.MaxValue;
+                    }
 
                     ++numTotalAlive;
 
@@ -126,12 +135,14 @@ namespace ExtremeRoles.Module
                                 case ExtremeRoleId.Alice:
                                     addNeutralTeams(
                                         ref neutralTeam,
+                                        gameControlId,
                                         NeutralSeparateTeam.Alice);
                                     break;
                                 case ExtremeRoleId.Jackal:
                                 case ExtremeRoleId.Sidekick:
                                     addNeutralTeams(
                                         ref neutralTeam,
+                                        gameControlId,
                                         NeutralSeparateTeam.Jackal);
                                     break;
                                 default:
@@ -162,16 +173,19 @@ namespace ExtremeRoles.Module
         }
        
         private static void addNeutralTeams(
-            ref Dictionary<NeutralSeparateTeam, int> neutralTeam,
+            ref Dictionary<(NeutralSeparateTeam, int), int> neutralTeam,
+            int gameControlId,
             NeutralSeparateTeam team)
         {
-            if (neutralTeam.ContainsKey(team))
+            var key = (team, gameControlId);
+
+            if (neutralTeam.ContainsKey(key))
             {
-                neutralTeam[team] = neutralTeam[team] + 1;
+                neutralTeam[key] = neutralTeam[key] + 1;
             }
             else
             {
-                neutralTeam.Add(team, 1);
+                neutralTeam.Add(key, 1);
             }
         }
         public class GamePlayerInfo

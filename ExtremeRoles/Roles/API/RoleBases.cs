@@ -132,6 +132,16 @@ namespace ExtremeRoles.Roles.API
 
         public virtual bool IsSameTeam(SingleRoleBase targetRole)
         {
+            var multiAssignRole = targetRole as MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    return this.IsSameTeam(
+                        multiAssignRole.AnotherRole);
+                }
+            }
+
             if (this.Team == ExtremeRoleType.Crewmate)
             {
                 return true;
@@ -255,6 +265,12 @@ namespace ExtremeRoles.Roles.API
                     GetRoleOptionId(KillerCommonOption.KillRange)].GetValue();
             }
         }
+
+        protected bool IsSameControlId(SingleRoleBase tarrgetRole)
+        {
+            return this.GameControlId == tarrgetRole.GameControlId;
+        }
+
     }
     public abstract class MultiAssignRoleBase : SingleRoleBase
     {

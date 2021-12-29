@@ -57,7 +57,7 @@ namespace ExtremeRoles.Roles.Combination
             SingleRoleBase targetRole, byte targetPlayerId)
         {
             if (targetRole.Id == ExtremeRoleId.Lover &&
-                targetRole.GameControlId == this.GameControlId)
+                this.IsSameControlId(targetRole))
             {
                 return Design.ColoedString(
                     ColorPalette.LoverPink, " ♥");
@@ -71,7 +71,7 @@ namespace ExtremeRoles.Roles.Combination
             byte targetPlayerId)
         {
             if (targetRole.Id == ExtremeRoleId.Lover &&
-                targetRole.GameControlId == this.GameControlId)
+                this.IsSameControlId(targetRole))
             {
                 return ColorPalette.LoverPink;
             }
@@ -82,7 +82,7 @@ namespace ExtremeRoles.Roles.Combination
         public override bool IsSameTeam(SingleRoleBase targetRole)
         {
             if (targetRole.Id == ExtremeRoleId.Lover &&
-                targetRole.GameControlId == this.GameControlId)
+                this.IsSameControlId(targetRole))
             {
                 return true;
             }
@@ -196,7 +196,7 @@ namespace ExtremeRoles.Roles.Combination
         {
             foreach (var item in ExtremeRoleManager.GameRole)
             {
-                if (item.Value.GameControlId == this.GameControlId)
+                if (this.IsSameControlId(item.Value))
                 {
                     item.Value.Team = ExtremeRoleType.Neutral;
                 }
@@ -229,7 +229,7 @@ namespace ExtremeRoles.Roles.Combination
 
             foreach(var item in ExtremeRoleManager.GameRole)
             {
-                if (item.Value.GameControlId == this.GameControlId &&
+                if (this.IsSameControlId(item.Value) &&
                     !(GameData.Instance.GetPlayerById(item.Key).IsDead))
                 {
                     alive.Add(item.Key);

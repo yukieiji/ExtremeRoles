@@ -149,7 +149,23 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public override bool IsSameTeam(SingleRoleBase targetRole)
         {
-            return ((targetRole.Id == this.Id) || (targetRole.Id == ExtremeRoleId.Sidekick));
+            var multiAssignRole = targetRole as MultiAssignRoleBase;
+            
+            if (multiAssignRole != null)
+            {
+                if(multiAssignRole.AnotherRole != null)
+                {
+                    return this.IsSameTeam(multiAssignRole.AnotherRole);
+                }
+            }
+            if (OptionsHolder.Map.IsSameNeutralSameWin)
+            {
+                return this.isSameJackalTeam(targetRole);
+            }
+            else
+            {
+                return this.isSameJackalTeam(targetRole) && this.IsSameControlId(targetRole);
+            }
         }
 
         public bool IsAbilityUse()
@@ -379,6 +395,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 return this.CanSetImpostorToSideKick;
             }
             return true;
+        }
+
+        private bool isSameJackalTeam(SingleRoleBase targetRole)
+        {
+            return ((targetRole.Id == this.Id) || (targetRole.Id == ExtremeRoleId.Sidekick));
         }
 
         private void setTarget()

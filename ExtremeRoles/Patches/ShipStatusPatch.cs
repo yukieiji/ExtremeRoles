@@ -156,12 +156,14 @@ namespace ExtremeRoles.Patches
             if (statistics.TeamImpostorAlive > 0) { return false; }
             if (statistics.SeparatedNeutralAlive.Count != 1) { return false; }
 
-            var item = statistics.SeparatedNeutralAlive.ElementAt(0);
+            var ((team, id), num) = statistics.SeparatedNeutralAlive.ElementAt(0);
 
-            if (item.Value >= (statistics.TotalAlive - item.Value))
+            if (num >= (statistics.TotalAlive - num))
             {
+                GameDataContainer.WinGameControlId = id;
+
                 GameOverReason endReason = (GameOverReason)RoleGameOverReason.UnKnown;
-                switch (item.Key)
+                switch (team)
                 {
                     case NeutralSeparateTeam.Alice:
                         endReason = (GameOverReason)RoleGameOverReason.AliceKillAllOthers;
