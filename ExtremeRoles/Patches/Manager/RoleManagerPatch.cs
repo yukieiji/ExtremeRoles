@@ -241,10 +241,10 @@ namespace ExtremeRoles.Patches.Manager
         }
 
         private static bool isRoleSpawn(
-            int roleNum, int spawnData)
+            int roleNum, int spawnRate)
         {
             if (roleNum <= 0) { return false; }
-            if (spawnData < UnityEngine.Random.RandomRange(0, 100)) { return false; }
+            if (spawnRate < UnityEngine.Random.RandomRange(0, 100)) { return false; }
 
             return true;
         }
