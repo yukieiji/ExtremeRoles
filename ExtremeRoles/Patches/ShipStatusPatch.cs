@@ -183,13 +183,16 @@ namespace ExtremeRoles.Patches
         private static bool isNeutralSpecialWin(
             ShipStatus __instance)
         {
-            
+
+            if (OptionsHolder.Ship.DisableNeutralSpecialForceEnd) { return false; }
+
             foreach(var role in ExtremeRoleManager.GameRole.Values)
             {
                 
                 if (!role.IsNeutral()) { continue; }
                 if (role.IsWin)
                 {
+                    GameDataContainer.WinGameControlId = role.GameControlId;
 
                     GameOverReason endReason = (GameOverReason)RoleGameOverReason.UnKnown;
 

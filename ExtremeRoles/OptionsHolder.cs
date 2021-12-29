@@ -43,6 +43,7 @@ namespace ExtremeRoles
             RandomMap,
             EngineerUseImpostorVent,
             IsSameNeutralSameWin,
+            DisableNeutralSpecialForceEnd
         }
 
         public static Dictionary<int, CustomOptionBase> AllOption = new Dictionary<int, CustomOptionBase>();
@@ -132,6 +133,10 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.IsSameNeutralSameWin,
                 CommonOptionKey.IsSameNeutralSameWin.ToString(),
                 true, ventOption);
+            CustomOption.Create(
+                (int)CommonOptionKey.DisableNeutralSpecialForceEnd,
+                CommonOptionKey.DisableNeutralSpecialForceEnd.ToString(),
+                false, ventOption);
 
             int offset = 50;
 
@@ -172,20 +177,23 @@ namespace ExtremeRoles
         public static void Load()
         {
 
-            Map.MaxNumberOfMeeting = Mathf.RoundToInt(
+            Ship.MaxNumberOfMeeting = Mathf.RoundToInt(
                 AllOption[(int)CommonOptionKey.NumMeating].GetValue());
-            Map.AllowParallelMedBayScan = AllOption[
+            Ship.AllowParallelMedBayScan = AllOption[
                 (int)CommonOptionKey.ParallelMedBayScans].GetValue();
-            Map.BlockSkippingInEmergencyMeeting = AllOption[
+            Ship.BlockSkippingInEmergencyMeeting = AllOption[
                 (int)CommonOptionKey.DisableSkipInEmergencyMeeting].GetValue();
-            Map.DisableVent = AllOption[
+            Ship.DisableVent = AllOption[
                 (int)CommonOptionKey.DesableVent].GetValue();
-            Map.EngineerUseImpostorVent = AllOption[
+            Ship.EngineerUseImpostorVent = AllOption[
                 (int)CommonOptionKey.EngineerUseImpostorVent].GetValue();
-            Map.NoVoteIsSelfVote = AllOption[
+            Ship.NoVoteIsSelfVote = AllOption[
                 (int)CommonOptionKey.NoVoteToSelf].GetValue();
-            Map.IsSameNeutralSameWin = AllOption[
+            Ship.IsSameNeutralSameWin = AllOption[
                 (int)CommonOptionKey.IsSameNeutralSameWin].GetValue();
+            Ship.DisableNeutralSpecialForceEnd = AllOption[
+                (int)CommonOptionKey.DisableNeutralSpecialForceEnd].GetValue();
+
 
             Client.GhostsSeeRole = ConfigParser.GhostsSeeRoles.Value;
             Client.GhostsSeeTask = ConfigParser.GhostsSeeTasks.Value;
@@ -279,7 +287,7 @@ namespace ExtremeRoles
             public static bool StreamerMode = false;
         }
 
-        public static class Map
+        public static class Ship
         {
             public static int MaxNumberOfMeeting = 100;
             public static bool AllowParallelMedBayScan = false;
@@ -288,6 +296,7 @@ namespace ExtremeRoles
             public static bool EngineerUseImpostorVent = false;
             public static bool NoVoteIsSelfVote = false;
             public static bool IsSameNeutralSameWin = true;
+            public static bool DisableNeutralSpecialForceEnd = false;
         }
     }
 }

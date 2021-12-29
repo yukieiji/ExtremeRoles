@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -73,6 +72,11 @@ namespace ExtremeRoles.Patches
                 TempData.winners.Remove(winner);
             }
 
+            if (OptionsHolder.Ship.DisableNeutralSpecialForceEnd)
+            {
+                setNeutralWinner();
+            }
+
             switch (GameDataContainer.EndReason)
             {
                 case (GameOverReason)RoleGameOverReason.AliceKilledByImposter:
@@ -94,6 +98,32 @@ namespace ExtremeRoles.Patches
 
         }
 
+        private static void setNeutralWinner()
+        {
+            List<(ExtremeRoleId, int)> winRole = new List<(ExtremeRoleId, int)>();
+
+            foreach (var playerInfo in GameData.Instance.AllPlayers)
+            {
+                var role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
+
+                if (role.IsNeutral() && role.IsWin)
+                {
+                    int gameControlId = role.GameControlId;
+
+                    if (OptionsHolder.Ship.IsSameNeutralSameWin)
+                    {
+                        gameControlId = int.MaxValue;
+                    }
+
+                    if (!winRole.Contains((role.Id, gameControlId)))
+                    {
+                        winRole.Add((role.Id, gameControlId));
+                    }
+
+                    addWinner(playerInfo);
+                }
+            }
+        }
         private static void resetWinner()
         {
             TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
@@ -115,7 +145,8 @@ namespace ExtremeRoles.Patches
                     {
                         addWinner(player);
                     }
-                    else if ((GameDataContainer.WinGameControlId != int.MaxValue) &&
+                    else if (
+                        (GameDataContainer.WinGameControlId != int.MaxValue) &&
                         (GameDataContainer.WinGameControlId == role.GameControlId))
                     {
                         addWinner(player);
@@ -124,10 +155,15 @@ namespace ExtremeRoles.Patches
             }
         }
 
+        private static void addWinner(GameData.PlayerInfo playerInfo)
+        {
+            WinningPlayerData wpd = new WinningPlayerData(playerInfo);
+            TempData.winners.Add(wpd);
+        }
+
         private static void addWinner(PlayerControl player)
         {
-            WinningPlayerData wpd = new WinningPlayerData(player.Data);
-            TempData.winners.Add(wpd);
+            addWinner(player.Data);
         }
 
     }

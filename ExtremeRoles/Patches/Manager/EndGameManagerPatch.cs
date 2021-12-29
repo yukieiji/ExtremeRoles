@@ -16,6 +16,8 @@ namespace ExtremeRoles.Patches.Manager
     [HarmonyPatch(typeof(EndGameManager), nameof(EndGameManager.SetEverythingUp))]
     public class EndGameManagerSetUpPatch
     {
+        private static List<Roles.API.SingleRoleBase> winNeutral = new List<Roles.API.SingleRoleBase>();
+
         public static void Postfix(EndGameManager __instance)
         {
             setPlayerNameAndRole(__instance);
@@ -87,6 +89,12 @@ namespace ExtremeRoles.Patches.Manager
                     if (data.PlayerName != winningPlayerData.PlayerName) { continue; }
                     poolablePlayer.NameText.text +=
                         $"\n<size=80%>{string.Join("\n", data.Roles.GetColoredRoleName())}</size>";
+
+                    if(data.Roles.IsNeutral())
+                    {
+                        winNeutral.Add(data.Roles);
+                    }
+
                 }
             }
         }
@@ -166,30 +174,63 @@ namespace ExtremeRoles.Patches.Manager
             {
                 case GameOverReason.HumansByTask:
                 case GameOverReason.HumansByVote:
-                    bonusText = "crewWin";
+                    bonusText = Translation.GetString(
+                        RoleTypes.Crewmate.ToString());
                     textRenderer.color = Palette.White;
                     break;
                 case GameOverReason.ImpostorByKill:
                 case GameOverReason.ImpostorByVote:
                 case GameOverReason.ImpostorBySabotage:
                 case (GameOverReason)RoleGameOverReason.AssassinationMarin:
-                    bonusText = "impostorWin";
+                    bonusText = Translation.GetString(
+                        RoleTypes.Impostor.ToString());
                     textRenderer.color = Palette.ImpostorRed;
                     break;
                 case (GameOverReason)RoleGameOverReason.AliceKilledByImposter:
                 case (GameOverReason)RoleGameOverReason.AliceKillAllOthers:
-                    bonusText = "aliceWin";
+                    bonusText = Translation.GetString(
+                        ExtremeRoleId.Alice.ToString());
                     textRenderer.color = ColorPalette.AliceGold;
                     manager.BackgroundBar.material.SetColor("_Color", ColorPalette.AliceGold);
                     break;
                 case (GameOverReason)RoleGameOverReason.JackalKillAllOthers:
-                    bonusText = "jackalWin";
+                    bonusText = Translation.GetString(
+                        ExtremeRoleId.Jackal.ToString());
                     textRenderer.color = ColorPalette.JackalBlue;
                     manager.BackgroundBar.material.SetColor("_Color", ColorPalette.JackalBlue);
                     break;
                 default:
                     break;
             }
+
+            if (OptionsHolder.Ship.DisableNeutralSpecialForceEnd && winNeutral.Count != 0)
+            {
+                switch (GameDataContainer.EndReason)
+                {
+                    case GameOverReason.HumansByTask:
+                    case GameOverReason.HumansByVote:
+                    case GameOverReason.ImpostorByKill:
+                    case GameOverReason.ImpostorByVote:
+                    case GameOverReason.ImpostorBySabotage:
+                        for (int i=0; i < winNeutral.Count; ++i)
+                        {
+                            if(i != 0)
+                            {
+                                bonusText = bonusText + Translation.GetString("AndFirst");
+                            }
+                            else
+                            {
+                                bonusText = bonusText + Translation.GetString("And");
+                            }
+                            bonusText = bonusText + Translation.GetString(
+                                winNeutral[i].GetColoredRoleName());
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+
             string extraText = "";
 
             if (extraText.Length > 0)
@@ -198,7 +239,7 @@ namespace ExtremeRoles.Patches.Manager
             }
             else
             {
-                textRenderer.text = Translation.GetString(bonusText);
+                textRenderer.text = bonusText + string.Format(Translation.GetString("Wins"));
             }
         }
 
