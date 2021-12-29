@@ -8,6 +8,7 @@ namespace ExtremeRoles.Roles.API
 {
     public abstract class SingleRoleBase : RoleOptionBase
     {
+        public bool CanCallMeeting = true;
         public bool HasTask = true;
         public bool UseVent = false;
         public bool UseSabotage = false;
@@ -42,7 +43,8 @@ namespace ExtremeRoles.Roles.API
             bool canKill,
             bool hasTask,
             bool useVent,
-            bool useSabotage)
+            bool useSabotage,
+            bool canCallMeeting=true)
         {
             this.Id = id;
             this.BytedRoleId = (byte)this.Id;
@@ -53,6 +55,7 @@ namespace ExtremeRoles.Roles.API
             this.HasTask = hasTask;
             this.UseVent = useVent;
             this.UseSabotage = useSabotage;
+            this.CanCallMeeting = canCallMeeting;
         }
 
         public virtual SingleRoleBase Clone()
@@ -167,7 +170,7 @@ namespace ExtremeRoles.Roles.API
                 Design.ConcatString(
                     this.RoleName,
                     KillerCommonOption.KillCoolDown.ToString()),
-                30f, 2.5f, 120f, 2.5f,
+                30f, 1.0f, 120f, 0.5f,
                 killCoolOption, format: "unitSeconds");
 
             var killRangeOption = CustomOption.Create(
@@ -231,7 +234,7 @@ namespace ExtremeRoles.Roles.API
         }
         protected override void CommonInit()
         {
-            var allOption = OptionsHolder.AllOptions;
+            var allOption = OptionsHolder.AllOption;
 
             this.HasOtherVison = allOption[
                 GetRoleOptionId(RoleCommonOption.HasOtherVison)].GetValue();
@@ -269,10 +272,11 @@ namespace ExtremeRoles.Roles.API
             bool canKill,
             bool hasTask,
             bool useVent,
-            bool useSabotage) : base(
+            bool useSabotage,
+            bool canCallMeeting = true) : base(
                 id, team, roleName, roleColor,
                 canKill, hasTask, useVent,
-                useSabotage)
+                useSabotage, canCallMeeting)
         { }
 
         public void SetAnotherRole(SingleRoleBase role)

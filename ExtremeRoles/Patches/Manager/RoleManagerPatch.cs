@@ -27,7 +27,7 @@ namespace ExtremeRoles.Patches.Manager
             RPCOperator.GameInit();
 
             PlayerControl[] playeres = PlayerControl.AllPlayerControls.ToArray();
-            bool useStrongGen = OptionsHolder.AllOptions[
+            bool useStrongGen = OptionsHolder.AllOption[
                 (int)OptionsHolder.CommonOptionKey.UseStrongRandomGen].GetValue();
             if (useStrongGen)
             {
@@ -420,7 +420,7 @@ namespace ExtremeRoles.Patches.Manager
             Dictionary<byte, (int, int)> RoleSpawnSettingsForImposter = new Dictionary<byte, (int, int)>();
             Dictionary<byte, (int, int)> RoleSpawnSettingsForCrewmate = new Dictionary<byte, (int, int)>();
 
-            var allOption = OptionsHolder.AllOptions;
+            var allOption = OptionsHolder.AllOption;
 
             int crewmateRolesNum = UnityEngine.Random.RandomRange(
                 allOption[(int)OptionsHolder.CommonOptionKey.MinCremateRoles].GetValue(),

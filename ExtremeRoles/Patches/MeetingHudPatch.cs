@@ -44,7 +44,7 @@ namespace ExtremeRoles.Patches
             }
 
             if (!PlayerControl.GameOptions.AnonymousVotes || canSeeVote ||
-                (PlayerControl.LocalPlayer.Data.IsDead && MapOption.GhostsSeeVotes))
+                (PlayerControl.LocalPlayer.Data.IsDead && OptionsHolder.Client.GhostsSeeVotes))
             {
                 PlayerControl.SetPlayerMaterialColors(voterPlayer.DefaultOutfit.ColorId, spriteRenderer);
             }
@@ -281,7 +281,7 @@ namespace ExtremeRoles.Patches
             if (__instance.state == MeetingHud.VoteStates.Animating) { return; }
 
             // Deactivate skip Button if skipping on emergency meetings is disabled
-            if (OptionsHolder.AllOptions[
+            if (OptionsHolder.AllOption[
                 (int)OptionsHolder.CommonOptionKey.DisableSkipInEmergencyMeeting].GetValue())
             {
                 __instance.SkipVoteButton.gameObject.SetActive(false);

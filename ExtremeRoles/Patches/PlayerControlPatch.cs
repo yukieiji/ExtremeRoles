@@ -130,7 +130,7 @@ namespace ExtremeRoles.Patches
 
                 byte targetPlayerId = targetPlayer.PlayerId;
 
-                if (!MapOption.GhostsSeeRoles || !PlayerControl.LocalPlayer.Data.IsDead)
+                if (!OptionsHolder.Client.GhostsSeeRoles || !PlayerControl.LocalPlayer.Data.IsDead)
                 {
                     var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
                     Color paintColor = playerRole.GetTargetRoleSeeColor(
@@ -313,22 +313,22 @@ namespace ExtremeRoles.Patches
             else if (IsLocalPlayerAssassinFirstMeeting)
             {
                 if (((Roles.Combination.Assassin)ExtremeRoleManager.GetLocalPlayerRole()
-                    ).CanSeeRoleBeforeFirstMeeting && MapOption.GhostsSeeRoles)
+                    ).CanSeeRoleBeforeFirstMeeting && OptionsHolder.Client.GhostsSeeRoles)
                 {
                     playerInfoText = $"{roleNames}";
                 }
             }
-            else if (MapOption.GhostsSeeRoles && MapOption.GhostsSeeTasks)
+            else if (OptionsHolder.Client.GhostsSeeRoles && OptionsHolder.Client.GhostsSeeTasks)
             {
                 playerInfoText = $"{roleNames} {taskInfo}".Trim();
                 meetingInfoText = playerInfoText;
             }
-            else if (MapOption.GhostsSeeTasks)
+            else if (OptionsHolder.Client.GhostsSeeTasks)
             {
                 playerInfoText = $"{taskInfo}".Trim();
                 meetingInfoText = playerInfoText;
             }
-            else if (MapOption.GhostsSeeRoles)
+            else if (OptionsHolder.Client.GhostsSeeRoles)
             {
                 playerInfoText = $"{roleNames}";
                 meetingInfoText = playerInfoText;

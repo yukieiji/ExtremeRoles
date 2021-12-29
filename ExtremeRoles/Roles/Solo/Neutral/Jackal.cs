@@ -223,7 +223,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.isAlreadyUpgrated = false;
             this.CurRecursion = 0;
 
-            var allOption = OptionsHolder.AllOptions;
+            var allOption = OptionsHolder.AllOption;
 
             this.NumAbility = allOption[
                 GetRoleOptionId(JackalOption.SidekickNum)].GetValue();

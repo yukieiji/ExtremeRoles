@@ -117,7 +117,7 @@ namespace ExtremeRoles.Roles.API
         {
             foreach (var role in this.Roles)
             {
-                role.CanHasAnotherRole = OptionsHolder.AllOptions[
+                role.CanHasAnotherRole = OptionsHolder.AllOption[
                     GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign)].GetValue();
                 role.GameInit();
             }
@@ -209,7 +209,7 @@ namespace ExtremeRoles.Roles.API
         {
             this.Roles.Clear();
 
-            var allOptions = OptionsHolder.AllOptions;
+            var allOptions = OptionsHolder.AllOption;
             int roleAssignNum = allOptions[
                 GetRoleOptionId(CombinationRoleCommonOption.AssignsNum)].GetValue();
             for (int i = 0; i < roleAssignNum; ++i)

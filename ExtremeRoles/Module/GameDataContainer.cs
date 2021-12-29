@@ -19,11 +19,13 @@ namespace ExtremeRoles.Module
         public static List<GamePlayerInfo> EndGamePlayerInfo = new List<GamePlayerInfo>();
         public static Dictionary<byte, PoolablePlayer> PlayerIcon = new Dictionary<byte, PoolablePlayer>();
         public static List<byte> DeadedAssassin = new List<byte>();
+        public static int MeetingsCount = 0;
 
         public static void GameInit()
         {
             PlayerIcon.Clear();
             DeadedAssassin.Clear();
+            MeetingsCount = 0;
         }
 
         public static void CreatIcons(IntroCutscene __instance)

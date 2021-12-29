@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
+using static ExtremeRoles.OptionsHolder;
 using static UnityEngine.UI.Button;
 using Object = UnityEngine.Object;
 
@@ -18,22 +19,22 @@ namespace ExtremeRoles.Patches.Option
         private static SelectionBehaviour[] modOption = {
             new SelectionBehaviour(
                 "streamerModeButton",
-                () => ExtremeRolesPlugin.StreamerMode.Value = !ExtremeRolesPlugin.StreamerMode.Value,
-                ExtremeRolesPlugin.StreamerMode.Value),
+                () => JsonConfig.StreamerMode.Value = !JsonConfig.StreamerMode.Value,
+                JsonConfig.StreamerMode.Value),
             new SelectionBehaviour(
                 "ghostsSeeTasksButton",
-                () => MapOption.GhostsSeeTasks = ExtremeRolesPlugin.GhostsSeeTasks.Value = !ExtremeRolesPlugin.GhostsSeeTasks.Value,
-                ExtremeRolesPlugin.GhostsSeeTasks.Value),
+                () => Client.GhostsSeeTasks = JsonConfig.GhostsSeeTasks.Value = !JsonConfig.GhostsSeeTasks.Value,
+                JsonConfig.GhostsSeeTasks.Value),
             new SelectionBehaviour(
                 "ghostsSeeVotesButton",
-                () => MapOption.GhostsSeeVotes = ExtremeRolesPlugin.GhostsSeeVotes.Value = !ExtremeRolesPlugin.GhostsSeeVotes.Value,
-                ExtremeRolesPlugin.GhostsSeeVotes.Value),
+                () => Client.GhostsSeeVotes = JsonConfig.GhostsSeeVotes.Value = !JsonConfig.GhostsSeeVotes.Value,
+                JsonConfig.GhostsSeeVotes.Value),
             new SelectionBehaviour("ghostsSeeRolesButton",
-                () => MapOption.GhostsSeeRoles = ExtremeRolesPlugin.GhostsSeeRoles.Value = !ExtremeRolesPlugin.GhostsSeeRoles.Value,
-                ExtremeRolesPlugin.GhostsSeeRoles.Value),
+                () => Client.GhostsSeeRoles = JsonConfig.GhostsSeeRoles.Value = !JsonConfig.GhostsSeeRoles.Value,
+                JsonConfig.GhostsSeeRoles.Value),
             new SelectionBehaviour("showRoleSummaryButton",
-                () => MapOption.ShowRoleSummary = ExtremeRolesPlugin.ShowRoleSummary.Value = !ExtremeRolesPlugin.ShowRoleSummary.Value,
-                ExtremeRolesPlugin.ShowRoleSummary.Value),
+                () => Client.ShowRoleSummary = JsonConfig.ShowRoleSummary.Value = !JsonConfig.ShowRoleSummary.Value,
+                JsonConfig.ShowRoleSummary.Value),
         };
 
         private static GameObject popUp;

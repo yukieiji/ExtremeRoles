@@ -14,7 +14,7 @@ namespace ExtremeRoles.Patches.Option
     {
         public static bool Prefix(StringOption __instance)
         {
-            CustomOptionBase option = OptionsHolder.AllOptions.Values.FirstOrDefault(
+            CustomOptionBase option = OptionsHolder.AllOption.Values.FirstOrDefault(
                 option => option.Behaviour == __instance);
             if (option == null) { return true; };
             option.UpdateSelection(option.CurSelection - 1);
@@ -27,7 +27,7 @@ namespace ExtremeRoles.Patches.Option
     {
         public static bool Prefix(StringOption __instance)
         {
-            CustomOptionBase option = OptionsHolder.AllOptions.Values.FirstOrDefault(
+            CustomOptionBase option = OptionsHolder.AllOption.Values.FirstOrDefault(
                 option => option.Behaviour == __instance);
             if (option == null) { return true; };
             option.UpdateSelection(option.CurSelection + 1);
@@ -40,7 +40,7 @@ namespace ExtremeRoles.Patches.Option
     {
         public static bool Prefix(StringOption __instance)
         {
-            CustomOptionBase option = OptionsHolder.AllOptions.Values.FirstOrDefault(
+            CustomOptionBase option = OptionsHolder.AllOption.Values.FirstOrDefault(
                 option => option.Behaviour == __instance);
             if (option == null) { return true; };
 

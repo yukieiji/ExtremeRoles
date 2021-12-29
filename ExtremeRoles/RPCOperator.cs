@@ -21,6 +21,7 @@ namespace ExtremeRoles
 
         public static void GameInit()
         {
+            OptionsHolder.Load();
             Roles.ExtremeRoleManager.GameInit();
             Module.GameDataContainer.GameInit();
             Patches.AssassinMeeting.Reset();

@@ -33,7 +33,7 @@ namespace ExtremeRoles.Patches.Option
             StringBuilder entry = new StringBuilder();
             List<string> entries = new List<string>();
 
-            var allOption = OptionsHolder.AllOptions;
+            var allOption = OptionsHolder.AllOption;
 
             entries.Add(
                 optionToString(allOption[(int)OptionsHolder.CommonOptionKey.PresetSelection]));
@@ -71,7 +71,7 @@ namespace ExtremeRoles.Patches.Option
 
             entries.Add(entry.ToString().Trim('\r', '\n'));
 
-            foreach (CustomOptionBase option in OptionsHolder.AllOptions.Values)
+            foreach (CustomOptionBase option in OptionsHolder.AllOption.Values)
             {
                 if ((option == allOption[(int)OptionsHolder.CommonOptionKey.PresetSelection]) ||
                     (option == allOption[(int)OptionsHolder.CommonOptionKey.UseStrongRandomGen]) ||

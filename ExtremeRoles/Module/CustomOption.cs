@@ -78,7 +78,7 @@ namespace ExtremeRoles.Module
 
             Logging.Debug($"OptinId:{this.Id}    Name:{this.Name}");
 
-            OptionsHolder.AllOptions.Add(this.Id, this);
+            OptionsHolder.AllOption.Add(this.Id, this);
         }
 
         protected bool GetBool() => CurSelection > 0;

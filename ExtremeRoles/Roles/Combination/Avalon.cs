@@ -79,9 +79,9 @@ namespace ExtremeRoles.Roles.Combination
 
         protected override void RoleSpecificInit()
         {
-            this.IsDeadForceMeeting = OptionsHolder.AllOptions[
+            this.IsDeadForceMeeting = OptionsHolder.AllOption[
                 GetRoleOptionId((int)AssassinOption.IsDeadForceMeeting)].GetValue();
-            this.CanSeeRoleBeforeFirstMeeting = OptionsHolder.AllOptions[
+            this.CanSeeRoleBeforeFirstMeeting = OptionsHolder.AllOption[
                 GetRoleOptionId((int)AssassinOption.CanSeeRoleBeforeFirstMeeting)].GetValue();
             this.IsFirstMeeting = true;
         }
@@ -209,11 +209,11 @@ namespace ExtremeRoles.Roles.Combination
         {
             this.IsAssassinate = false;
 
-            this.HasTask = OptionsHolder.AllOptions[
+            this.HasTask = OptionsHolder.AllOption[
                 GetRoleOptionId((int)MarlinOption.HasTask)].GetValue();
-            this.CanSeeVote = OptionsHolder.AllOptions[
+            this.CanSeeVote = OptionsHolder.AllOption[
                 GetRoleOptionId((int)MarlinOption.CanSeeVote)].GetValue();
-            this.CanSeeNeutral = OptionsHolder.AllOptions[
+            this.CanSeeNeutral = OptionsHolder.AllOption[
                 GetRoleOptionId((int)MarlinOption.CanSeeNeutral)].GetValue();
         }
     }

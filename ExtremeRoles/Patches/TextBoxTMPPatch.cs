@@ -7,7 +7,7 @@ namespace ExtremeRoles.Patches
 	{
 		private static void Postfix(TextBoxTMP __instance)
 		{
-			bool flag = ExtremeRolesPlugin.StreamerMode.Value && 
+			bool flag = OptionsHolder.JsonConfig.StreamerMode.Value && 
 				(__instance.name == "GameIdText" || __instance.name == "IpTextBox" || __instance.name == "PortTextBox");
 			if (flag)
 			{

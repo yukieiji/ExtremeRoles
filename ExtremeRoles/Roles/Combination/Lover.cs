@@ -125,7 +125,7 @@ namespace ExtremeRoles.Roles.Combination
 
             CreateKillerOption(killerSetting);
 
-            OptionsHolder.AllOptions[
+            OptionsHolder.AllOption[
                 GetManagerOptionId(
                     CombinationRoleCommonOption.AssignsNum)].SetUpdateOption(deathSetting);
 
@@ -134,15 +134,15 @@ namespace ExtremeRoles.Roles.Combination
         protected override void RoleSpecificInit()
         {
 
-            if (OptionsHolder.AllOptions[
+            if (OptionsHolder.AllOption[
                     GetRoleOptionId((int)LoverOption.IsNeutral)].GetValue())
             {
                 this.Team = ExtremeRoleType.Neutral;
             }
 
-            this.becomeKiller = OptionsHolder.AllOptions[
+            this.becomeKiller = OptionsHolder.AllOption[
                 GetRoleOptionId((int)LoverOption.BecomNeutral)].GetValue();
-            this.limit = OptionsHolder.AllOptions[
+            this.limit = OptionsHolder.AllOption[
                 GetRoleOptionId((int)LoverOption.DethWhenUnderAlive)].GetValue();
 
         }

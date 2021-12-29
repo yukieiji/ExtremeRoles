@@ -93,7 +93,7 @@ namespace ExtremeRoles.Patches.Manager
 
         private static void setRoleSummary(EndGameManager manager)
         {
-            if (!MapOption.ShowRoleSummary) { return; }
+            if (!OptionsHolder.Client.ShowRoleSummary) { return; }
 
             var position = Camera.main.ViewportToWorldPoint(new Vector3(0f, 1f, Camera.main.nearClipPlane));
             GameObject roleSummary = UnityEngine.Object.Instantiate(
