@@ -141,7 +141,7 @@ namespace ExtremeRoles.Patches
 
                 if (roles.Contains(role.Id))
                 {
-                    if (OptionsHolder.Map.IsSameNeutralSameWin)
+                    if (OptionsHolder.Ship.IsSameNeutralSameWin)
                     {
                         addWinner(player);
                     }

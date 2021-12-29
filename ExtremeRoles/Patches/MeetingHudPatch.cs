@@ -176,12 +176,12 @@ namespace ExtremeRoles.Patches
         {
             __result = false;
 
-            if (OptionsHolder.Map.NoVoteIsSelfVote && 
+            if (OptionsHolder.Ship.NoVoteIsSelfVote && 
                 PlayerControl.LocalPlayer.PlayerId == suspectStateIdx)
             {
                 return false;
             }
-            if (OptionsHolder.Map.BlockSkippingInEmergencyMeeting && suspectStateIdx == -1)
+            if (OptionsHolder.Ship.BlockSkippingInEmergencyMeeting && suspectStateIdx == -1)
             {
                 return false;
             }
@@ -292,7 +292,7 @@ namespace ExtremeRoles.Patches
             if (__instance.state == MeetingHud.VoteStates.Animating) { return; }
 
             // Deactivate skip Button if skipping on emergency meetings is disabled
-            if (OptionsHolder.Map.BlockSkippingInEmergencyMeeting)
+            if (OptionsHolder.Ship.BlockSkippingInEmergencyMeeting)
             {
                 __instance.SkipVoteButton.gameObject.SetActive(false);
             }

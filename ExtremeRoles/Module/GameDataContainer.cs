@@ -110,7 +110,7 @@ namespace ExtremeRoles.Module
                     if (playerInfo.IsDead) { continue; };
 
                     int gameControlId = role.GameControlId;
-                    if (OptionsHolder.Map.IsSameNeutralSameWin)
+                    if (OptionsHolder.Ship.IsSameNeutralSameWin)
                     {
                         gameControlId = int.MaxValue;
                     }

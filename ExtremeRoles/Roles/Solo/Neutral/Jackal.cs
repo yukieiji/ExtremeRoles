@@ -158,7 +158,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     return this.IsSameTeam(multiAssignRole.AnotherRole);
                 }
             }
-            if (OptionsHolder.Map.IsSameNeutralSameWin)
+            if (OptionsHolder.Ship.IsSameNeutralSameWin)
             {
                 return this.isSameJackalTeam(targetRole);
             }
