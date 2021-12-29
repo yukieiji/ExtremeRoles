@@ -1,9 +1,52 @@
-﻿using HarmonyLib;
+﻿using System.Collections.Generic;
+using System.Reflection;
+
+using HarmonyLib;
 
 using UnityEngine;
+using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Patches.Manager
 {
+
+    [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.BeginGame))]
+    public class GameStartManageBeginGamePatch
+    {
+        public static bool Prefix(GameStartManager __instance)
+        {
+            bool continueStart = true;
+
+            if (OptionsHolder.AllOption[(int)OptionsHolder.CommonOptionKey.RandomMap].GetValue())
+            {
+                // 0 = Skeld
+                // 1 = Mira HQ
+                // 2 = Polus
+                // 3 = Dleks - deactivated
+                // 4 = Airship
+
+                bool useStrongGen = OptionsHolder.AllOption[
+                    (int)OptionsHolder.CommonOptionKey.UseStrongRandomGen].GetValue();
+                
+                System.Random rng;
+
+                if (useStrongGen)
+                {
+                    rng = RandomGenerator.CreateStrong();
+                }
+                else
+                {
+                    rng = RandomGenerator.Create();
+                }
+
+                List<byte> possibleMaps = new List<byte>() { 0, 1, 2, 4 };
+                PlayerControl.GameOptions.MapId = possibleMaps[rng.Next(possibleMaps.Count)];
+            }
+
+            return continueStart;
+
+        }
+    }
+
     [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.Start))]
     public class GameStartManagerStartPatch
     {
@@ -47,6 +90,6 @@ namespace ExtremeRoles.Patches.Manager
         {
             timer = 600f;
         }
-
     }
+
 }

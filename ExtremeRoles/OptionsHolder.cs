@@ -115,10 +115,7 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.NoVoteToSelf,
                 CommonOptionKey.NoVoteToSelf.ToString(),
                 false, blockMeating);
-            CustomOption.Create(
-                (int)CommonOptionKey.HidePlayerName,
-                CommonOptionKey.HidePlayerName.ToString(),
-                false);
+
             CustomOption.Create(
                 (int)CommonOptionKey.ParallelMedBayScans,
                 CommonOptionKey.ParallelMedBayScans.ToString(), false);
@@ -165,17 +162,22 @@ namespace ExtremeRoles
         public static void Load()
         {
 
-            Map.MaxNumberOfMeetings = Mathf.RoundToInt(
+            Map.MaxNumberOfMeeting = Mathf.RoundToInt(
                 AllOption[(int)CommonOptionKey.NumMeatings].GetValue());
-            Map.BlockSkippingInEmergencyMeetings = AllOption[
+            Map.AllowParallelMedBayScan = AllOption[
+                (int)CommonOptionKey.ParallelMedBayScans].GetValue();
+            Map.BlockSkippingInEmergencyMeeting = AllOption[
                 (int)CommonOptionKey.DisableSkipInEmergencyMeeting].GetValue();
-            Map.NoVoteIsSelfVote = AllOption[(int)CommonOptionKey.NoVoteToSelf].GetValue();
-            Map.HidePlayerNames = AllOption[(int)CommonOptionKey.HidePlayerName].GetValue();
-            Map.DisableVent = AllOption[(int)CommonOptionKey.DesableVent].GetValue();
+            Map.DisableVent = AllOption[
+                (int)CommonOptionKey.DesableVent].GetValue();
+            Map.EngineerUseImpostorVent = AllOption[
+                (int)CommonOptionKey.EngineerUseImpostorVent].GetValue();
+            Map.NoVoteIsSelfVote = AllOption[
+                (int)CommonOptionKey.NoVoteToSelf].GetValue();
 
-            Client.GhostsSeeRoles = JsonConfig.GhostsSeeRoles.Value;
-            Client.GhostsSeeTasks = JsonConfig.GhostsSeeTasks.Value;
-            Client.GhostsSeeVotes = JsonConfig.GhostsSeeVotes.Value;
+            Client.GhostsSeeRole = JsonConfig.GhostsSeeRoles.Value;
+            Client.GhostsSeeTask = JsonConfig.GhostsSeeTasks.Value;
+            Client.GhostsSeeVote = JsonConfig.GhostsSeeVotes.Value;
             Client.ShowRoleSummary = JsonConfig.ShowRoleSummary.Value;
             Client.StreamerMode = JsonConfig.StreamerMode.Value;
         }
@@ -258,21 +260,21 @@ namespace ExtremeRoles
 
         public static class Client
         {
-            public static bool GhostsSeeRoles = true;
-            public static bool GhostsSeeTasks = true;
-            public static bool GhostsSeeVotes = true;
+            public static bool GhostsSeeRole = true;
+            public static bool GhostsSeeTask = true;
+            public static bool GhostsSeeVote = true;
             public static bool ShowRoleSummary = true;
             public static bool StreamerMode = false;
-            public static bool AllowParallelMedBayScans = false;
         }
 
         public static class Map
         {
-            public static int MaxNumberOfMeetings = 100;
-            public static bool BlockSkippingInEmergencyMeetings = false;
-            public static bool NoVoteIsSelfVote = false;
-            public static bool HidePlayerNames = false;
+            public static int MaxNumberOfMeeting = 100;
+            public static bool AllowParallelMedBayScan = false;
+            public static bool BlockSkippingInEmergencyMeeting = false;
             public static bool DisableVent = false;
+            public static bool EngineerUseImpostorVent = false;
+            public static bool NoVoteIsSelfVote = false;
         }
     }
 }

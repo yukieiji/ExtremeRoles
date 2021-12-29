@@ -1,11 +1,8 @@
-﻿using System;
-
-
-using HarmonyLib;
+﻿using HarmonyLib;
 
 using UnityEngine;
 
-namespace ExtremeRoles.Patches
+namespace ExtremeRoles.Patches.MiniGame
 {
     [HarmonyPatch(typeof(EmergencyMinigame), nameof(EmergencyMinigame.Update))]
     class EmergencyMinigameUpdatePatch
@@ -29,7 +26,7 @@ namespace ExtremeRoles.Patches
             {
                 int localRemaining = PlayerControl.LocalPlayer.RemainingEmergencies;
                 int teamRemaining = Mathf.Max(
-                    0, OptionsHolder.Map.MaxNumberOfMeetings - Module.GameDataContainer.MeetingsCount);
+                    0, OptionsHolder.Map.MaxNumberOfMeeting - Module.GameDataContainer.MeetingsCount);
                 int remaining = Mathf.Min(localRemaining, teamRemaining);
 
                 __instance.StatusText.text = "<size=100%>" + string.Format(

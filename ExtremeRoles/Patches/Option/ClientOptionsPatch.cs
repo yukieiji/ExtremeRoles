@@ -23,14 +23,14 @@ namespace ExtremeRoles.Patches.Option
                 JsonConfig.StreamerMode.Value),
             new SelectionBehaviour(
                 "ghostsSeeTasksButton",
-                () => Client.GhostsSeeTasks = JsonConfig.GhostsSeeTasks.Value = !JsonConfig.GhostsSeeTasks.Value,
+                () => Client.GhostsSeeTask = JsonConfig.GhostsSeeTasks.Value = !JsonConfig.GhostsSeeTasks.Value,
                 JsonConfig.GhostsSeeTasks.Value),
             new SelectionBehaviour(
                 "ghostsSeeVotesButton",
-                () => Client.GhostsSeeVotes = JsonConfig.GhostsSeeVotes.Value = !JsonConfig.GhostsSeeVotes.Value,
+                () => Client.GhostsSeeVote = JsonConfig.GhostsSeeVotes.Value = !JsonConfig.GhostsSeeVotes.Value,
                 JsonConfig.GhostsSeeVotes.Value),
             new SelectionBehaviour("ghostsSeeRolesButton",
-                () => Client.GhostsSeeRoles = JsonConfig.GhostsSeeRoles.Value = !JsonConfig.GhostsSeeRoles.Value,
+                () => Client.GhostsSeeRole = JsonConfig.GhostsSeeRoles.Value = !JsonConfig.GhostsSeeRoles.Value,
                 JsonConfig.GhostsSeeRoles.Value),
             new SelectionBehaviour("showRoleSummaryButton",
                 () => Client.ShowRoleSummary = JsonConfig.ShowRoleSummary.Value = !JsonConfig.ShowRoleSummary.Value,

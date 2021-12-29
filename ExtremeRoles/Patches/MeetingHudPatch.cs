@@ -44,7 +44,7 @@ namespace ExtremeRoles.Patches
             }
 
             if (!PlayerControl.GameOptions.AnonymousVotes || canSeeVote ||
-                (PlayerControl.LocalPlayer.Data.IsDead && OptionsHolder.Client.GhostsSeeVotes))
+                (PlayerControl.LocalPlayer.Data.IsDead && OptionsHolder.Client.GhostsSeeVote))
             {
                 PlayerControl.SetPlayerMaterialColors(voterPlayer.DefaultOutfit.ColorId, spriteRenderer);
             }
@@ -174,9 +174,20 @@ namespace ExtremeRoles.Patches
             ref bool __result,
             [HarmonyArgument(0)] int suspectStateIdx)
         {
+            __result = false;
+
+            if (OptionsHolder.Map.NoVoteIsSelfVote && 
+                PlayerControl.LocalPlayer.PlayerId == suspectStateIdx)
+            {
+                return false;
+            }
+            if (OptionsHolder.Map.BlockSkippingInEmergencyMeeting && suspectStateIdx == -1)
+            {
+                return false;
+            }
+
             if (!AssassinMeeting.AssassinMeetingTrigger) { return true; }
 
-            __result = false;
 
             if (__instance.discussionTimer < (float)PlayerControl.GameOptions.DiscussionTime)
             {
@@ -281,8 +292,7 @@ namespace ExtremeRoles.Patches
             if (__instance.state == MeetingHud.VoteStates.Animating) { return; }
 
             // Deactivate skip Button if skipping on emergency meetings is disabled
-            if (OptionsHolder.AllOption[
-                (int)OptionsHolder.CommonOptionKey.DisableSkipInEmergencyMeeting].GetValue())
+            if (OptionsHolder.Map.BlockSkippingInEmergencyMeeting)
             {
                 __instance.SkipVoteButton.gameObject.SetActive(false);
             }
