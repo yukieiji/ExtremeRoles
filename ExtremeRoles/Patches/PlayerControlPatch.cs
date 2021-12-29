@@ -15,6 +15,19 @@ using ExtremeRoles.Roles.API.Interface;
 namespace ExtremeRoles.Patches
 {
 
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CoStartMeeting))]
+    class PlayerControlCoStartMeetingPatch
+    {
+        public static void Prefix(PlayerControl __instance, [HarmonyArgument(0)] GameData.PlayerInfo meetingTarget)
+        {
+            // Count meetings
+            if (meetingTarget == null)
+            {
+                ++Module.GameDataContainer.MeetingsCount;
+            }
+        }
+    }
+
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Exiled))]
     public static class PlayerControlExiledPatch
     {
