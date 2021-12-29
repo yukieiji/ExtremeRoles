@@ -72,7 +72,7 @@ namespace ExtremeRoles.Module
             if (id > 0)
             {
                 Entry = ExtremeRolesPlugin.Instance.Config.Bind(
-                    $"Preset{OptionsHolder.SelectedPreset}", id.ToString(), DefaultSelection);
+                    $"Preset:{OptionsHolder.SelectedPreset}", id.ToString(), DefaultSelection);
                 CurSelection = Mathf.Clamp(Entry.Value, 0, selections.Length - 1);
             }
 

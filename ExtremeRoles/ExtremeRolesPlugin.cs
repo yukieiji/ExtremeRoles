@@ -47,7 +47,7 @@ namespace ExtremeRoles
 
             Logger = Log;
 
-            DebugMode = Config.Bind("Custom", "Enable Debug Mode", false);
+            DebugMode = Config.Bind("DeBug", "Enable Debug Mode", false);
             DefaultRegions = ServerManager.DefaultRegions;
 
             GameOptionsData.RecommendedImpostors = GameOptionsData.MaxImpostors = Enumerable.Repeat(

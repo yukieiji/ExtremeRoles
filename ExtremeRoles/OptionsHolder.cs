@@ -143,20 +143,25 @@ namespace ExtremeRoles
             var config = ExtremeRolesPlugin.Instance.Config;
 
             JsonConfig.StreamerMode = config.Bind(
-                "Custom", "Enable Streamer Mode", false);
+                "ClientOption", "Enable Streamer Mode", false);
             JsonConfig.GhostsSeeTasks = config.Bind(
-                "Custom", "Ghosts See Remaining Tasks", true);
+                "ClientOption", "Ghosts See Remaining Tasks", true);
             JsonConfig.GhostsSeeRoles = config.Bind(
-                "Custom", "Ghosts See Roles", true);
+                "ClientOption", "Ghosts See Roles", true);
             JsonConfig.GhostsSeeVotes = config.Bind(
-                "Custom", "Ghosts See Votes", true);
+                "ClientOption", "Ghosts See Votes", true);
             JsonConfig.ShowRoleSummary = config.Bind(
-                "Custom", "Show Role Summary", true);
+                "ClientOption", "Show Role Summary", true);
+
+            JsonConfig.StreamerModeReplacementText = config.Bind(
+                "ClientOption", "Streamer Mode Replacement Text", "\n\nUsing Extreme Roles");
+            JsonConfig.StreamerModeReplacementColor = config.Bind(
+                "ClientOption", "Streamer Mode Replacement Text Hex Color", "#FFFFF0");
 
             JsonConfig.Ip = config.Bind(
-                "Custom", "Custom Server IP", "127.0.0.1");
+                "ClientOption", "Custom Server IP", "127.0.0.1");
             JsonConfig.Port = config.Bind(
-                "Custom", "Custom Server Port", (ushort)22023);
+                "ClientOption", "Custom Server Port", (ushort)22023);
         }
 
         public static void Load()
