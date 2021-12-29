@@ -86,7 +86,7 @@ namespace ExtremeRoles.Patches.Manager
                 {
                     if (data.PlayerName != winningPlayerData.PlayerName) { continue; }
                     poolablePlayer.NameText.text +=
-                        $"\n\n<size=80%>{string.Join("\n", data.Roles.GetColoredRoleName())}</size>";
+                        $"\n<size=80%>{string.Join("\n", data.Roles.GetColoredRoleName())}</size>";
                 }
             }
         }
