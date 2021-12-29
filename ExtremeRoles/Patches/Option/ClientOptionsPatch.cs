@@ -19,22 +19,22 @@ namespace ExtremeRoles.Patches.Option
         private static SelectionBehaviour[] modOption = {
             new SelectionBehaviour(
                 "streamerModeButton",
-                () => JsonConfig.StreamerMode.Value = !JsonConfig.StreamerMode.Value,
-                JsonConfig.StreamerMode.Value),
+                () => ConfigParser.StreamerMode.Value = !ConfigParser.StreamerMode.Value,
+                ConfigParser.StreamerMode.Value),
             new SelectionBehaviour(
                 "ghostsSeeTasksButton",
-                () => Client.GhostsSeeTask = JsonConfig.GhostsSeeTasks.Value = !JsonConfig.GhostsSeeTasks.Value,
-                JsonConfig.GhostsSeeTasks.Value),
+                () => Client.GhostsSeeTask = ConfigParser.GhostsSeeTasks.Value = !ConfigParser.GhostsSeeTasks.Value,
+                ConfigParser.GhostsSeeTasks.Value),
             new SelectionBehaviour(
                 "ghostsSeeVotesButton",
-                () => Client.GhostsSeeVote = JsonConfig.GhostsSeeVotes.Value = !JsonConfig.GhostsSeeVotes.Value,
-                JsonConfig.GhostsSeeVotes.Value),
+                () => Client.GhostsSeeVote = ConfigParser.GhostsSeeVotes.Value = !ConfigParser.GhostsSeeVotes.Value,
+                ConfigParser.GhostsSeeVotes.Value),
             new SelectionBehaviour("ghostsSeeRolesButton",
-                () => Client.GhostsSeeRole = JsonConfig.GhostsSeeRoles.Value = !JsonConfig.GhostsSeeRoles.Value,
-                JsonConfig.GhostsSeeRoles.Value),
+                () => Client.GhostsSeeRole = ConfigParser.GhostsSeeRoles.Value = !ConfigParser.GhostsSeeRoles.Value,
+                ConfigParser.GhostsSeeRoles.Value),
             new SelectionBehaviour("showRoleSummaryButton",
-                () => Client.ShowRoleSummary = JsonConfig.ShowRoleSummary.Value = !JsonConfig.ShowRoleSummary.Value,
-                JsonConfig.ShowRoleSummary.Value),
+                () => Client.ShowRoleSummary = ConfigParser.ShowRoleSummary.Value = !ConfigParser.ShowRoleSummary.Value,
+                ConfigParser.ShowRoleSummary.Value),
         };
 
         private static GameObject popUp;

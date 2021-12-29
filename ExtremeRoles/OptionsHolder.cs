@@ -34,7 +34,7 @@ namespace ExtremeRoles
             MinImpostorRoles,
             MaxImpostorRoles,
 
-            NumMeatings,
+            NumMeating,
             DesableVent,
             DisableSkipInEmergencyMeeting,
             NoVoteToSelf,
@@ -98,13 +98,13 @@ namespace ExtremeRoles
                 0, 0, MaxImposterNum, 1);
 
             CustomOption.Create(
-                (int)CommonOptionKey.NumMeatings,
-                CommonOptionKey.NumMeatings.ToString(),
+                (int)CommonOptionKey.NumMeating,
+                CommonOptionKey.NumMeating.ToString(),
                 10, 0, 100, 1, null, true);
 
             var ventOption = CustomOption.Create(
-                (int)CommonOptionKey.DisableSkipInEmergencyMeeting,
-                CommonOptionKey.DisableSkipInEmergencyMeeting.ToString(),
+                (int)CommonOptionKey.DesableVent,
+                CommonOptionKey.DesableVent.ToString(),
                 false);
 
             var blockMeating = CustomOption.Create(
@@ -142,25 +142,25 @@ namespace ExtremeRoles
         {
             var config = ExtremeRolesPlugin.Instance.Config;
 
-            JsonConfig.StreamerMode = config.Bind(
+            ConfigParser.StreamerMode = config.Bind(
                 "ClientOption", "Enable Streamer Mode", false);
-            JsonConfig.GhostsSeeTasks = config.Bind(
+            ConfigParser.GhostsSeeTasks = config.Bind(
                 "ClientOption", "Ghosts See Remaining Tasks", true);
-            JsonConfig.GhostsSeeRoles = config.Bind(
+            ConfigParser.GhostsSeeRoles = config.Bind(
                 "ClientOption", "Ghosts See Roles", true);
-            JsonConfig.GhostsSeeVotes = config.Bind(
+            ConfigParser.GhostsSeeVotes = config.Bind(
                 "ClientOption", "Ghosts See Votes", true);
-            JsonConfig.ShowRoleSummary = config.Bind(
+            ConfigParser.ShowRoleSummary = config.Bind(
                 "ClientOption", "Show Role Summary", true);
 
-            JsonConfig.StreamerModeReplacementText = config.Bind(
+            ConfigParser.StreamerModeReplacementText = config.Bind(
                 "ClientOption", "Streamer Mode Replacement Text", "\n\nUsing Extreme Roles");
-            JsonConfig.StreamerModeReplacementColor = config.Bind(
+            ConfigParser.StreamerModeReplacementColor = config.Bind(
                 "ClientOption", "Streamer Mode Replacement Text Hex Color", "#FFFFF0");
 
-            JsonConfig.Ip = config.Bind(
+            ConfigParser.Ip = config.Bind(
                 "ClientOption", "Custom Server IP", "127.0.0.1");
-            JsonConfig.Port = config.Bind(
+            ConfigParser.Port = config.Bind(
                 "ClientOption", "Custom Server Port", (ushort)22023);
         }
 
@@ -168,7 +168,7 @@ namespace ExtremeRoles
         {
 
             Map.MaxNumberOfMeeting = Mathf.RoundToInt(
-                AllOption[(int)CommonOptionKey.NumMeatings].GetValue());
+                AllOption[(int)CommonOptionKey.NumMeating].GetValue());
             Map.AllowParallelMedBayScan = AllOption[
                 (int)CommonOptionKey.ParallelMedBayScans].GetValue();
             Map.BlockSkippingInEmergencyMeeting = AllOption[
@@ -180,11 +180,11 @@ namespace ExtremeRoles
             Map.NoVoteIsSelfVote = AllOption[
                 (int)CommonOptionKey.NoVoteToSelf].GetValue();
 
-            Client.GhostsSeeRole = JsonConfig.GhostsSeeRoles.Value;
-            Client.GhostsSeeTask = JsonConfig.GhostsSeeTasks.Value;
-            Client.GhostsSeeVote = JsonConfig.GhostsSeeVotes.Value;
-            Client.ShowRoleSummary = JsonConfig.ShowRoleSummary.Value;
-            Client.StreamerMode = JsonConfig.StreamerMode.Value;
+            Client.GhostsSeeRole = ConfigParser.GhostsSeeRoles.Value;
+            Client.GhostsSeeTask = ConfigParser.GhostsSeeTasks.Value;
+            Client.GhostsSeeVote = ConfigParser.GhostsSeeVotes.Value;
+            Client.ShowRoleSummary = ConfigParser.ShowRoleSummary.Value;
+            Client.StreamerMode = ConfigParser.StreamerMode.Value;
         }
 
 
@@ -250,7 +250,7 @@ namespace ExtremeRoles
             }
         }
 
-        public static class JsonConfig
+        public static class ConfigParser
         {
             public static ConfigEntry<bool> GhostsSeeTasks { get; set; }
             public static ConfigEntry<bool> GhostsSeeRoles { get; set; }

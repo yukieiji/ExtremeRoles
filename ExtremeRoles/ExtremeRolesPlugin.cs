@@ -31,10 +31,10 @@ namespace ExtremeRoles
             IRegionInfo[] regions = DefaultRegions;
 
             var CustomRegion = new DnsRegionInfo(
-                OptionsHolder.JsonConfig.Ip.Value, "Custom",
+                OptionsHolder.ConfigParser.Ip.Value, "Custom",
                 StringNames.NoTranslation,
-                OptionsHolder.JsonConfig.Ip.Value,
-                OptionsHolder.JsonConfig.Port.Value);
+                OptionsHolder.ConfigParser.Ip.Value,
+                OptionsHolder.ConfigParser.Port.Value);
             regions = regions.Concat(new IRegionInfo[] { CustomRegion.Cast<IRegionInfo>() }).ToArray();
             ServerManager.DefaultRegions = regions;
             serverManager.AvailableRegions = regions;
