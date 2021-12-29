@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 
 using Newtonsoft.Json.Linq;
 
-using ExtremeRoles.Patches.Option;
 
 namespace ExtremeRoles.Helper
 {
@@ -14,10 +13,6 @@ namespace ExtremeRoles.Helper
         public static int DefaultLanguage = (int)SupportedLangs.English;
         public static Dictionary<string, Dictionary<int, string>> StringData = new Dictionary<string, Dictionary<int, string>>();
 
-        public Translation()
-        {
-
-        }
 
         public static void Load()
         {
