@@ -363,7 +363,9 @@ namespace ExtremeRoles.Patches.Manager
                     shuffledArange.Count == assignedPlayers ||
                     shuffledArange.Count == shuffleRolesForImpostor.Count + assignedPlayers ||
                     shuffledArange.Count == shuffleRolesForCrewmate.Count + assignedPlayers ||
-                    (shuffleRolesForImpostor.Count == 0 &&  shuffleRolesForCrewmate.Count == 0))
+                    ((extremeRolesData.ImpostorRoles == 0) && 
+                     (extremeRolesData.NeutralRoles == 0) && 
+                     (extremeRolesData.ImpostorRoles == 0)))
                 {
                     tempList = new List<int>(shuffledArange);
 
