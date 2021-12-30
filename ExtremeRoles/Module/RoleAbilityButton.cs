@@ -69,7 +69,7 @@ namespace ExtremeRoles.Module
                     this.Button.cooldownTimerText.transform.parent);
                 updateAbilityCountText();
                 this.abilityCountText.enableWordWrapping = false;
-                this.abilityCountText.transform.localScale = Vector3.one * 0.55f;
+                this.abilityCountText.transform.localScale = Vector3.one * 0.5f;
                 this.abilityCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
             }
 
@@ -163,7 +163,7 @@ namespace ExtremeRoles.Module
                 }
                 this.Button.transform.localPosition = pos + PositionOffset;
             }
-            if (this.canUse())
+            if (this.canUse() && this.abilityNum > 0)
             {
                 this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.EnabledColor;
                 this.Button.graphic.material.SetFloat("_Desat", 0f);
