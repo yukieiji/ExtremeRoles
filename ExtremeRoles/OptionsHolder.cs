@@ -128,15 +128,15 @@ namespace ExtremeRoles
             CustomOption.Create(
                 (int)CommonOptionKey.EngineerUseImpostorVent,
                 CommonOptionKey.EngineerUseImpostorVent.ToString(),
-                false, ventOption);
+                false, ventOption, invert:true);
             CustomOption.Create(
                 (int)CommonOptionKey.IsSameNeutralSameWin,
                 CommonOptionKey.IsSameNeutralSameWin.ToString(),
-                true, ventOption);
+                true);
             CustomOption.Create(
                 (int)CommonOptionKey.DisableNeutralSpecialForceEnd,
                 CommonOptionKey.DisableNeutralSpecialForceEnd.ToString(),
-                false, ventOption);
+                false);
 
             int offset = 50;
 
