@@ -104,7 +104,7 @@ namespace ExtremeRoles.Patches
                     __instance.RoleBlurbText.text += string.Format(
                         "\n{0}", Helper.Translation.GetString("impostorIntroText"));
                 }
-                else if(role.Team == Roles.API.ExtremeRoleType.Impostor)
+                else if(role.Team == Roles.API.ExtremeRoleType.Crewmate)
                 {
                     __instance.RoleBlurbText.text += string.Format(
                         "\n{0}", Helper.Translation.GetString("crewIntroText"));
