@@ -114,7 +114,7 @@ namespace ExtremeRoles.Roles.Combination
                 Design.ConcatString(
                     this.RoleName,
                     LoverOption.BecomNeutral.ToString()),
-                true, neutralSetting);
+                false, neutralSetting);
 
             var deathSetting = CustomOption.Create(
                 GetRoleOptionId((int)LoverOption.DethWhenUnderAlive),
@@ -134,14 +134,17 @@ namespace ExtremeRoles.Roles.Combination
         protected override void RoleSpecificInit()
         {
 
-            if (OptionsHolder.AllOption[
-                    GetRoleOptionId((int)LoverOption.IsNeutral)].GetValue())
+            bool isNeutral = OptionsHolder.AllOption[
+                GetRoleOptionId((int)LoverOption.IsNeutral)].GetValue();
+
+            this.becomeKiller = OptionsHolder.AllOption[
+                GetRoleOptionId((int)LoverOption.BecomNeutral)].GetValue() && isNeutral;
+
+            if (isNeutral && !this.becomeKiller)
             {
                 this.Team = ExtremeRoleType.Neutral;
             }
 
-            this.becomeKiller = OptionsHolder.AllOption[
-                GetRoleOptionId((int)LoverOption.BecomNeutral)].GetValue();
             this.limit = OptionsHolder.AllOption[
                 GetRoleOptionId((int)LoverOption.DethWhenUnderAlive)].GetValue();
 
