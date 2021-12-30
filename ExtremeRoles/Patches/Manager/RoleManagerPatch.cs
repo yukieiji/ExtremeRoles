@@ -230,7 +230,7 @@ namespace ExtremeRoles.Patches.Manager
             int roleNum, int spawnRate)
         {
             if (roleNum <= 0) { return false; }
-            if (spawnRate < UnityEngine.Random.RandomRange(0, 100)) { return false; }
+            if (spawnRate < UnityEngine.Random.RandomRange(0, 110)) { return false; }
 
             return true;
         }
@@ -246,127 +246,84 @@ namespace ExtremeRoles.Patches.Manager
             bool assigned = false;
             int assignedPlayers = 1;
 
-            do
+            shuffledArange = shuffledArange.OrderBy(item => RandomGenerator.Instance.Next()).ToList();
+            Logging.Debug($"NotAssignPlayerNum:{shuffledArange.Count}");
+
+            List<int> tempList = new List<int>(shuffledArange);
+
+            foreach (int index in tempList)
             {
-                shuffledArange = shuffledArange.OrderBy(item => RandomGenerator.Instance.Next()).ToList();
-                Logging.Debug($"NotAssignPlayerNum:{shuffledArange.Count}");
-                assignedPlayers = 1;
+                assigned = false;
 
-                List<int> tempList = new List<int>(shuffledArange);
+                List<SingleRoleBase> shuffledRoles = new List<SingleRoleBase>();
+                PlayerControl player = PlayerControl.AllPlayerControls[index];
+                RoleBehaviour roleData = player.Data.Role;
 
-                foreach (int index in tempList)
+                // Modules.Helpers.DebugLog($"ShufflePlayerIndex:{shuffledArange.Count()}");
+
+                switch (roleData.Role)
                 {
-                    assigned = false;
 
-                    List<SingleRoleBase> shuffledRoles = new List<SingleRoleBase>();
-                    PlayerControl player = PlayerControl.AllPlayerControls[index];
-                    RoleBehaviour roleData = player.Data.Role;
-
-                    // Modules.Helpers.DebugLog($"ShufflePlayerIndex:{shuffledArange.Count()}");
-
-                    switch (roleData.Role)
-                    {
-
-                        case RoleTypes.Impostor:
-                            shuffledRoles = shuffleRolesForImpostor.OrderBy(
-                                item => RandomGenerator.Instance.Next()).ToList();
-                            break;
-                        case RoleTypes.Crewmate:
-                            shuffledRoles = shuffleRolesForCrewmate.OrderBy(
-                                item => RandomGenerator.Instance.Next()).ToList();
-                            break;
-                        default:
-                            setNormalRoleToPlayer(
-                                player,
-                                (byte)roleData.Role);
-                            shuffledArange.Remove(index);
-                            assigned = true;
-                            break;
-                    }
-                    
-                    if (assigned)
-                    {
-                        continue; 
-                    };
-
-                    bool result = false;
-                    foreach (var role in shuffledRoles)
-                    {
-                        // Logging.Debug($"KeyFound?:{extremeRolesData.RoleSpawnSettings[roleData.Role].ContainsKey(role.BytedRoleId)}");
-                        var(roleNum, spawnRate) = extremeRolesData.RoleSpawnSettings[
-                            roleData.Role][role.BytedRoleId];
-
-                        result = isRoleSpawn(roleNum, spawnRate);
-                        result = result && checkLimitRoleSpawnNum(role, ref extremeRolesData);
-
-
-                        Logging.Debug($"Role:{role.Id}: AssignResult:{result}");
-
-                        if (result)
-                        {
-                            setNormalRoleToPlayer(player, role.BytedRoleId);
-                            shuffledArange.Remove(index);
-                            extremeRolesData.RoleSpawnSettings[roleData.Role][role.BytedRoleId] = (
-                                --roleNum,
-                                spawnRate);
-                            assigned = false;
-                            break;
-                        }
-                        else
-                        {
-                            extremeRolesData.RoleSpawnSettings[roleData.Role][role.BytedRoleId] = (
-                                roleNum,
-                                spawnRate);
-                            assigned = true;
-                        }
-                    }
-                    if (assigned)
-                    {
-                        ++assignedPlayers; 
-                    }
-                    
-                }
-
-                Logging.Debug($"AssignedPlayerNum:{assignedPlayers}");
-
-                Logging.Debug($"Imposter Role Num:{shuffleRolesForImpostor.Count}");
-                Logging.Debug($"Crewmate Role Num:{shuffleRolesForCrewmate.Count}");
-                Logging.Debug($"Try Assigned Player Num:{shuffledArange.Count}");
-
-                bool isEnd = true;
-                foreach (var roleSettingForVanilla in extremeRolesData.RoleSpawnSettings.Values)
-                {
-                    foreach(var (num, _) in roleSettingForVanilla.Values)
-                    {
-                        isEnd = isEnd && num <= 0;
-                    }
-                }
-
-                Logging.Debug($"ENDED:{isEnd}");
-
-
-                if (isEnd ||
-                    shuffledArange.Count == assignedPlayers ||
-                    shuffledArange.Count == shuffleRolesForImpostor.Count + assignedPlayers ||
-                    shuffledArange.Count == shuffleRolesForCrewmate.Count + assignedPlayers ||
-                    ((extremeRolesData.ImpostorRoles == 0) && 
-                     (extremeRolesData.NeutralRoles == 0) && 
-                     (extremeRolesData.ImpostorRoles == 0)))
-                {
-                    tempList = new List<int>(shuffledArange);
-
-                    foreach (int index in tempList)
-                    {
-                        PlayerControl player = PlayerControl.AllPlayerControls[index];
+                    case RoleTypes.Impostor:
+                        shuffledRoles = shuffleRolesForImpostor.OrderBy(
+                            item => RandomGenerator.Instance.Next()).ToList();
+                        break;
+                    case RoleTypes.Crewmate:
+                        shuffledRoles = shuffleRolesForCrewmate.OrderBy(
+                            item => RandomGenerator.Instance.Next()).ToList();
+                        break;
+                    default:
                         setNormalRoleToPlayer(
-                            player, (byte)(player.Data.Role.Role));
+                            player,
+                            (byte)roleData.Role);
                         shuffledArange.Remove(index);
-                    }
-
+                        assigned = true;
+                        break;
                 }
 
+                if (assigned)
+                {
+                    ++assignedPlayers;
+                    continue;
+                };
+
+                bool result = false;
+                foreach (var role in shuffledRoles)
+                {
+                    // Logging.Debug($"KeyFound?:{extremeRolesData.RoleSpawnSettings[roleData.Role].ContainsKey(role.BytedRoleId)}");
+                    var (roleNum, spawnRate) = extremeRolesData.RoleSpawnSettings[
+                        roleData.Role][role.BytedRoleId];
+
+                    result = isRoleSpawn(roleNum, spawnRate);
+                    result = result && checkLimitRoleSpawnNum(role, ref extremeRolesData);
+
+
+                    Logging.Debug($"Role:{role.Id}: AssignResult:{result}");
+
+                    if (result)
+                    {
+                        setNormalRoleToPlayer(player, role.BytedRoleId);
+                        shuffledArange.Remove(index);
+                        extremeRolesData.RoleSpawnSettings[roleData.Role][role.BytedRoleId] = (
+                            --roleNum,
+                            spawnRate);
+                        break;
+                    }
+                    else
+                    {
+                        extremeRolesData.RoleSpawnSettings[roleData.Role][role.BytedRoleId] = (
+                            roleNum,
+                            spawnRate);
+                    }
+                }
             }
-            while (shuffledArange.Count != 0);
+
+            foreach (int index in shuffledArange)
+            {
+                PlayerControl player = PlayerControl.AllPlayerControls[index];
+                setNormalRoleToPlayer(
+                    player, (byte)(player.Data.Role.Role));
+            }
         }
 
 
