@@ -356,7 +356,6 @@ namespace ExtremeRoles.Patches
             PlayerControl player,
             SingleRoleBase playerRole)
         {
-            if (playerRole.IsVanillaRole()) { return; }
 
             var removedTask = new List<PlayerTask>();
             foreach (PlayerTask task in player.myTasks)
