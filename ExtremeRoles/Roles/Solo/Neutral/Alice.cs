@@ -1,4 +1,9 @@
-﻿using ExtremeRoles.Module;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using Hazel;
+
+using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -22,6 +27,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 this.aliceShipBroken = value;
             }
         }
+
+        public int LongTask = 0;
+        public int NormalTask = 0;
+        public int CommonTask = 0;
 
         private RoleAbilityButton aliceShipBroken;
 
@@ -80,8 +89,63 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public bool UseAbility()
         {
-            Helper.Logging.Debug("Ability On");
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                PlayerControl.LocalPlayer.NetId,
+                (byte)RPCOperator.Command.SetNormalRole,
+                Hazel.SendOption.Reliable, -1);
+
+            writer.Write(PlayerControl.LocalPlayer.PlayerId);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            RPCOperator.AliceAbility(
+                PlayerControl.LocalPlayer.PlayerId);
+
             return true;
+        }
+
+        public static void ShipBroken(byte callerId)
+        {
+            var alice = (Alice)ExtremeRoleManager.GameRole[callerId];
+            var player = PlayerControl.LocalPlayer;
+
+            List<byte> addTaskId = new List<byte> ();
+            
+            for (int i = 0; i < alice.LongTask; ++i)
+            {
+                addTaskId.Add(Helper.Task.GetRandomLongTask());
+            }
+            for (int i = 0; i < alice.CommonTask; ++i)
+            {
+                addTaskId.Add(Helper.Task.GetRandomCommonTaskId());
+            }
+            for (int i = 0; i < alice.NormalTask; ++i)
+            {
+                addTaskId.Add(Helper.Task.GetRandomNormalTaskId());
+            }
+
+            var shuffled = addTaskId.OrderBy(
+                item => RandomGenerator.Instance.Next()).ToList();
+            
+            for (int i = 0; i < player.myTasks.Count; ++i)
+            {
+                if (shuffled.Count == 0) { break; }
+
+                bool isTaskComp = player.myTasks[i].IsComplete;
+                if (isTaskComp)
+                {
+                    byte taskId = shuffled[0];
+                    shuffled.RemoveAt(0);
+
+                    NormalPlayerTask normalPlayerTask = 
+                        UnityEngine.Object.Instantiate<NormalPlayerTask>(
+                            ShipStatus.Instance.GetTaskById(taskId),
+                            player.transform);
+                    normalPlayerTask.Id = taskId;
+                    normalPlayerTask.Owner = player;
+                    normalPlayerTask.Initialize();
+
+                    player.myTasks[i] = normalPlayerTask;
+                }
+            }
         }
 
         protected override void CreateSpecificOption(

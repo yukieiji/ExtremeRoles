@@ -8,22 +8,6 @@ namespace ExtremeRoles.Helper
 {
     public class Task
     {
-        public static void ClearAllTasks(ref PlayerControl player)
-        {
-            if (player == null) { return; }
-            for (int i = 0; i < player.myTasks.Count; i++)
-            {
-                PlayerTask playerTask = player.myTasks[i];
-                playerTask.OnRemove();
-                UnityEngine.Object.Destroy(playerTask.gameObject);
-            }
-            player.myTasks.Clear();
-
-            if (player.Data != null && player.Data.Tasks != null)
-            {
-                player.Data.Tasks.Clear();
-            }
-        }
 
         public static Tuple<int, int> GetTaskInfo(
             GameData.PlayerInfo playerInfo)

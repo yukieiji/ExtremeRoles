@@ -603,6 +603,7 @@ namespace ExtremeRoles.Patches
 
             byte roleId;
             byte playerId;
+            byte callerId;
 
             switch (callId)
             {
@@ -637,11 +638,18 @@ namespace ExtremeRoles.Patches
                         sourceId, targetId, useAnimationreaderreader);
                     break;
                 case (byte)RPCOperator.Command.ReplaceRole:
-                    byte callerId = reader.ReadByte();
+                    callerId = reader.ReadByte();
                     byte replaceTarget = reader.ReadByte();
                     byte ops = reader.ReadByte();
                     RPCOperator.ReplaceRole(
                         callerId, replaceTarget, ops);
+                    break;
+
+
+                case (byte)RPCOperator.Command.AliceAbility:
+                    callerId = reader.ReadByte();
+                    RPCOperator.AliceAbility(
+                        callerId);
                     break;
                 default:
                     break;

@@ -17,11 +17,14 @@ namespace ExtremeRoles
             UncheckedMurderPlayer,
 
             ReplaceRole,
+
+            AliceAbility
         }
 
         public static void GameInit()
         {
             OptionsHolder.Load();
+            RandomGenerator.Init();
             Roles.ExtremeRoleManager.GameInit();
             Module.GameDataContainer.GameInit();
             Patches.AssassinMeeting.Reset();
@@ -49,7 +52,8 @@ namespace ExtremeRoles
 
         public static void SetNormalRole(byte roleId, byte playerId)
         {
-            Roles.ExtremeRoleManager.SetPlyerIdToSingleRoleId(roleId, playerId);
+            Roles.ExtremeRoleManager.SetPlyerIdToSingleRoleId(
+                roleId, playerId);
         }
 
         public static void ShareOption(int numOptions, MessageReader reader)
@@ -69,10 +73,18 @@ namespace ExtremeRoles
                 if (useAnimation == 0)
                 {
                     Patches.KillAnimationCoPerformKillPatch.hideNextAnimation = true;
-                };
+                }
                 source.MurderPlayer(target);
-                Roles.ExtremeRoleManager.GameRole[targetId].RolePlayerKilledAction(
+
+                var targetRole = Roles.ExtremeRoleManager.GameRole[targetId];
+                targetRole.RolePlayerKilledAction(
                     target, source);
+                
+                if (!targetRole.HasTask)
+                {
+                    target.ClearTasks();
+                }
+
             }
         }
 
@@ -82,6 +94,11 @@ namespace ExtremeRoles
             Roles.ExtremeRoleManager.RoleReplace(
                 callerId, targetId,
                 (Roles.ExtremeRoleManager.ReplaceOperation)operation);
+        }
+
+        public static void AliceAbility(byte callerId)
+        {
+            Roles.Solo.Neutral.Alice.ShipBroken(callerId);
         }
 
     }
