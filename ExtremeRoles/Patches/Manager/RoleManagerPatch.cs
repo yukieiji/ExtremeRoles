@@ -263,7 +263,7 @@ namespace ExtremeRoles.Patches.Manager
             do
             {
                 shuffledArange = shuffledArange.OrderBy(item => roleRng.Next()).ToList();
-                Logging.Debug($"NotAssignPlayerNum:{shuffledArange.Count()}");
+                Logging.Debug($"NotAssignPlayerNum:{shuffledArange.Count}");
                 assignedPlayers = 1;
 
                 List<int> tempList = new List<int>(shuffledArange);
@@ -300,7 +300,6 @@ namespace ExtremeRoles.Patches.Manager
                     
                     if (assigned)
                     {
-                        ++assignedPlayers;
                         continue; 
                     };
 
@@ -346,10 +345,23 @@ namespace ExtremeRoles.Patches.Manager
 
                 Logging.Debug($"Imposter Role Num:{shuffleRolesForImpostor.Count}");
                 Logging.Debug($"Crewmate Role Num:{shuffleRolesForCrewmate.Count}");
+                Logging.Debug($"Try Assigned Player Num:{shuffledArange.Count}");
 
-                if (shuffledArange.Count == assignedPlayers ||
-                    shuffledArange.Count + shuffleRolesForImpostor.Count == assignedPlayers ||
-                    shuffledArange.Count + shuffleRolesForCrewmate.Count == assignedPlayers ||
+                bool isEnd = true;
+                foreach (var roleSettingForVanilla in extremeRolesData.RoleSpawnSettings.Values)
+                {
+                    foreach(var (num, _) in roleSettingForVanilla.Values)
+                    {
+                        isEnd = isEnd && num <= 0;
+                    }
+                }
+
+                var result = extremeRolesData.RoleSpawnSettings.Values.ToList();
+
+                if (isEnd ||
+                    shuffledArange.Count == assignedPlayers ||
+                    shuffledArange.Count == shuffleRolesForImpostor.Count + assignedPlayers ||
+                    shuffledArange.Count == shuffleRolesForCrewmate.Count + assignedPlayers ||
                     (shuffleRolesForImpostor.Count == 0 &&  shuffleRolesForCrewmate.Count == 0))
                 {
                     tempList = new List<int>(shuffledArange);
