@@ -24,24 +24,12 @@ namespace ExtremeRoles.Patches.Manager
                 // 3 = Dleks - deactivated
                 // 4 = Airship
 
-                bool useStrongGen = OptionsHolder.AllOption[
-                    (int)OptionsHolder.CommonOptionKey.UseStrongRandomGen].GetValue();
-                
-                System.Random rng;
-
-                if (useStrongGen)
-                {
-                    rng = RandomGenerator.CreateStrong();
-                }
-                else
-                {
-                    rng = RandomGenerator.Create();
-                }
+                var rng = RandomGenerator.GetTempGenerator();
 
                 List<byte> possibleMaps = new List<byte>() { 0, 1, 2, 4 };
-                PlayerControl.GameOptions.MapId = possibleMaps[rng.Next(possibleMaps.Count)];
+                PlayerControl.GameOptions.MapId = possibleMaps[
+                    rng.Next(possibleMaps.Count)];
             }
-
             return continueStart;
 
         }

@@ -15,8 +15,6 @@ namespace ExtremeRoles.Patches.Manager
     class RoleManagerSelectRolesPatch
     {
 
-        private static Random roleRng = null;
-
         public static void Postfix()
         {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
@@ -27,18 +25,6 @@ namespace ExtremeRoles.Patches.Manager
             RPCOperator.GameInit();
 
             PlayerControl[] playeres = PlayerControl.AllPlayerControls.ToArray();
-            bool useStrongGen = OptionsHolder.AllOption[
-                (int)OptionsHolder.CommonOptionKey.UseStrongRandomGen].GetValue();
-            if (useStrongGen)
-            {
-                roleRng = RandomGenerator.CreateStrong();
-                RandomGenerator.SetUnityStrongRandomSeed();
-            }
-            else
-            {
-                roleRng = RandomGenerator.Create();
-                RandomGenerator.SetUnityRandomSeed();
-            }
             
             RoleAssignmentData extremeRolesData = createRoleData();
             var playerIndexList = Enumerable.Range(0, playeres.Count()).ToList();
@@ -102,7 +88,7 @@ namespace ExtremeRoles.Patches.Manager
                 {
                     bool assign = false;
                     List<int> tempList = new List<int>(
-                        playerIndexList.OrderBy(item => roleRng.Next()).ToList());
+                        playerIndexList.OrderBy(item => RandomGenerator.Instance.Next()).ToList());
                     foreach(int playerIndex in tempList)
                     {
                         player = PlayerControl.AllPlayerControls[playerIndex];
@@ -131,7 +117,7 @@ namespace ExtremeRoles.Patches.Manager
             List<(List<MultiAssignRoleBase>, int)> assignRoles = new List<(List<MultiAssignRoleBase>, int)>();
 
             var roleDataLoop = extremeRolesData.CombinationRole.OrderBy(
-                item => roleRng.Next()).ToList();
+                item => RandomGenerator.Instance.Next()).ToList();
             List<(List<MultiAssignRoleBase>, (int, int))> newRoleData = new List<(List<MultiAssignRoleBase>, (int, int))> ();
 
             int gameControlId = 0;
@@ -262,7 +248,7 @@ namespace ExtremeRoles.Patches.Manager
 
             do
             {
-                shuffledArange = shuffledArange.OrderBy(item => roleRng.Next()).ToList();
+                shuffledArange = shuffledArange.OrderBy(item => RandomGenerator.Instance.Next()).ToList();
                 Logging.Debug($"NotAssignPlayerNum:{shuffledArange.Count}");
                 assignedPlayers = 1;
 
@@ -283,11 +269,11 @@ namespace ExtremeRoles.Patches.Manager
 
                         case RoleTypes.Impostor:
                             shuffledRoles = shuffleRolesForImpostor.OrderBy(
-                                item => roleRng.Next()).ToList();
+                                item => RandomGenerator.Instance.Next()).ToList();
                             break;
                         case RoleTypes.Crewmate:
                             shuffledRoles = shuffleRolesForCrewmate.OrderBy(
-                                item => roleRng.Next()).ToList();
+                                item => RandomGenerator.Instance.Next()).ToList();
                             break;
                         default:
                             setNormalRoleToPlayer(
@@ -507,9 +493,9 @@ namespace ExtremeRoles.Patches.Manager
             return new RoleAssignmentData
             {
                 RolesForVanillaCrewmate = RolesForVanillaCrewmate.OrderBy(
-                    item => roleRng.Next()).ToList(),
+                    item => RandomGenerator.Instance.Next()).ToList(),
                 RolesForVanillaImposter = RolesForVanillaImposter.OrderBy(
-                    item => roleRng.Next()).ToList(),
+                    item => RandomGenerator.Instance.Next()).ToList(),
                 CombinationRole = combinationRole,
 
                 RoleSpawnSettings = new Dictionary<RoleTypes, Dictionary<byte, (int, int)>>()
