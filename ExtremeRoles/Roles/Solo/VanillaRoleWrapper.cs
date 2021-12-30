@@ -1,4 +1,6 @@
-﻿using ExtremeRoles.Module;
+﻿using System;
+
+using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Roles.Solo
@@ -38,6 +40,30 @@ namespace ExtremeRoles.Roles.Solo
                 default:
                     break;
             };
+        }
+
+        public override string GetImportantText(bool isContainFakeTask = true)
+        {
+            if(this.IsImposter())
+            {
+                return string.Concat(new string[]
+                {
+                    DestroyableSingleton<TranslationController>.Instance.GetString(
+                        StringNames.ImpostorTask, Array.Empty<Il2CppSystem.Object>()),
+                    "\r\n",
+                    Palette.ImpostorRed.ToTextColor(),
+                    DestroyableSingleton<TranslationController>.Instance.GetString(
+                        StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()),
+                    "</color>"
+                });
+            }
+
+            return Helper.Design.ColoedString(
+                this.NameColor,
+                string.Format("{0}: {1}",
+                    this.GetColoredRoleName(),
+                    Helper.Translation.GetString("crewtImportantText")));
+
         }
 
         protected override void CommonInit()

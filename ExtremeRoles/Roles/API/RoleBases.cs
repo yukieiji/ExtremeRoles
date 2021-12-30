@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -84,6 +86,27 @@ namespace ExtremeRoles.Roles.API
             GameData.PlayerInfo rolePlayer)
         {
             return;
+        }
+        public virtual string GetImportantText(bool isContainFakeTask = true)
+        {
+            string baseString = Design.ColoedString(
+                this.NameColor,
+                string.Format("{0}: {1}",
+                    this.GetColoredRoleName(),
+                    Translation.GetString(
+                        string.Format("{0}{1}", this.Id, "ShortDescription"))));
+
+            if (isContainFakeTask && !this.HasTask)
+            {
+                string fakeTaskString = Design.ColoedString(
+                    this.NameColor,
+                    DestroyableSingleton<TranslationController>.Instance.GetString(
+                        StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()));
+                baseString = string.Format("{0}\r\n{1}",
+                    baseString, fakeTaskString);
+            }
+
+            return baseString;
         }
 
         public virtual string GetIntroDescription() => Translation.GetString(
@@ -304,6 +327,33 @@ namespace ExtremeRoles.Roles.API
             }
         }
 
+        public override string GetImportantText(bool isContainFakeTask = true)
+        {
+
+            if (this.AnotherRole == null)
+            {
+                return base.GetImportantText();
+            }
+
+            string baseString = base.GetImportantText(false);
+            string anotherRoleString = this.AnotherRole.GetImportantText(false);
+
+            baseString = string.Format("{0}\r\n{1}",
+                baseString, anotherRoleString);
+
+            if (isContainFakeTask && !this.HasTask)
+            {
+                string fakeTaskString = Design.ColoedString(
+                    this.NameColor,
+                    DestroyableSingleton<TranslationController>.Instance.GetString(
+                        StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()));
+                baseString = string.Format("{0}\r\n{1}",
+                    baseString, fakeTaskString);
+            }
+
+            return baseString;
+        }
+
         public override string GetIntroDescription()
         {
             if (this.AnotherRole == null)
@@ -330,6 +380,7 @@ namespace ExtremeRoles.Roles.API
 
             string concat = Design.ColoedString(
                 Palette.White, "\n and");
+
 
             return string.Format("{0}{1}{2}",
                 baseIntro, concat, anotherIntro);

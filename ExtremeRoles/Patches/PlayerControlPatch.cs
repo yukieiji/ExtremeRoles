@@ -280,7 +280,9 @@ namespace ExtremeRoles.Patches
                 TMPro.TextMeshPro meetingInfo = meetingInfoTransform != null ? meetingInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
                 if (meetingInfo == null && playerVoteArea != null)
                 {
-                    meetingInfo = UnityEngine.Object.Instantiate(playerVoteArea.NameText, playerVoteArea.NameText.transform.parent);
+                    meetingInfo = UnityEngine.Object.Instantiate(
+                        playerVoteArea.NameText,
+                        playerVoteArea.NameText.transform.parent);
                     meetingInfo.transform.localPosition += Vector3.down * 0.20f;
                     meetingInfo.fontSize *= 0.63f;
                     meetingInfo.autoSizeTextContainer = true;
@@ -376,12 +378,7 @@ namespace ExtremeRoles.Patches
             var importantTextTask = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
             importantTextTask.transform.SetParent(player.transform, false);
 
-            importantTextTask.Text = Design.ColoedString(
-                playerRole.NameColor,
-                string.Format("{0}: {1}",
-                    playerRole.GetColoredRoleName(),
-                    Translation.GetString(
-                        string.Format("{0}{1}", playerRole.Id, "ShortDescription"))));
+            importantTextTask.Text = playerRole.GetImportantText();
             player.myTasks.Insert(0, importantTextTask);
 
         }
