@@ -11,4 +11,3 @@ AmongUsの上級者向けのロール追加MOD
 - シャドウハンターズ - アリスのアイディア元
 
 - Microsoft.CSharp: dynamic型を使用するために使用
-- 
