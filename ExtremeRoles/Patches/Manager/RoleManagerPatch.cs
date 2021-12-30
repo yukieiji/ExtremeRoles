@@ -356,7 +356,8 @@ namespace ExtremeRoles.Patches.Manager
                     }
                 }
 
-                var result = extremeRolesData.RoleSpawnSettings.Values.ToList();
+                Logging.Debug($"ENDED:{isEnd}");
+
 
                 if (isEnd ||
                     shuffledArange.Count == assignedPlayers ||

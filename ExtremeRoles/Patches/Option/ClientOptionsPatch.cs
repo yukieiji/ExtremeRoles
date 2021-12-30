@@ -98,11 +98,11 @@ namespace ExtremeRoles.Patches.Option
         {
             if (titleTextTitle)
             {
-                titleTextTitle.text = Helper.Translation.GetString("moreOptionsText");
+                titleTextTitle.text = Helper.Translation.GetString("moreOptionText");
             }
             if (moreOptionButton)
             {
-                moreOptionButton.Text.text = Helper.Translation.GetString("modOptionsText");
+                moreOptionButton.Text.text = Helper.Translation.GetString("modOptionText");
             }
             for (int i = 0; i < modOption.Length; i++)
             {
@@ -148,7 +148,7 @@ namespace ExtremeRoles.Patches.Option
             moreOptionButton.transform.localPosition = origin.Value + Vector3.right * 1.3f;
 
             moreOptionButton.gameObject.SetActive(true);
-            moreOptionButton.Text.text = Helper.Translation.GetString("modOptionsText");
+            moreOptionButton.Text.text = Helper.Translation.GetString("modOptionText");
             var moreOptionsButton = moreOptionButton.GetComponent<PassiveButton>();
             moreOptionsButton.OnClick = new ButtonClickedEvent();
             moreOptionsButton.OnClick.AddListener((Action)(() =>
@@ -185,7 +185,7 @@ namespace ExtremeRoles.Patches.Option
             var title = titleTextTitle = Object.Instantiate(titleText, popUp.transform);
             title.GetComponent<RectTransform>().localPosition = Vector3.up * 2.3f;
             title.gameObject.SetActive(true);
-            title.text = Helper.Translation.GetString("moreOptionsText");
+            title.text = Helper.Translation.GetString("moreOptionText");
             title.name = "TitleText";
         }
 
@@ -213,16 +213,12 @@ namespace ExtremeRoles.Patches.Option
                 button.Text.font = Object.Instantiate(titleText.font);
                 button.Text.GetComponent<RectTransform>().sizeDelta = new Vector2(2, 2);
 
-                button.gameObject.layer = 8;
                 button.name = info.Title.Replace(" ", "") + "Toggle";
                 button.gameObject.SetActive(true);
                 button.gameObject.transform.SetAsFirstSibling();
 
                 var passiveButton = button.GetComponent<PassiveButton>();
                 var colliderButton = button.GetComponent<BoxCollider2D>();
-
-                colliderButton.gameObject.layer = 8;
-                passiveButton.gameObject.layer = 8;
 
                 colliderButton.size = new Vector2(2.2f, .7f);
 
@@ -288,6 +284,13 @@ namespace ExtremeRoles.Patches.Option
             pos.z = -2048f;
             CsvImport.InfoPopup.transform.position = pos;
             CsvExport.InfoPopup.transform.position = pos;
+
+            CsvImport.InfoPopup.TextAreaTMP.fontSize *= 0.75f;
+            CsvImport.InfoPopup.TextAreaTMP.enableAutoSizing = false;
+
+            CsvExport.InfoPopup.TextAreaTMP.fontSize *= 0.6f;
+            CsvExport.InfoPopup.TextAreaTMP.enableAutoSizing = false;
+
         }
 
         private static IEnumerable<GameObject> getAllChilds(this GameObject Go)
@@ -345,11 +348,11 @@ namespace ExtremeRoles.Patches.Option
 
                 if (result)
                 {
-                    info = Helper.Translation.GetString("ImportSuccess");
+                    info = Helper.Translation.GetString("importSuccess");
                 }
                 else
                 {
-                    info = Helper.Translation.GetString("ImportError");
+                    info = Helper.Translation.GetString("importError");
                 }
                 InfoPopup.StartCoroutine(
                     Effects.Lerp(0.01f, new System.Action<float>((p) => { setPopupText(info); })));
