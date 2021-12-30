@@ -88,7 +88,7 @@ namespace ExtremeRoles.Patches.Manager
                 {
                     if (data.PlayerName != winningPlayerData.PlayerName) { continue; }
                     poolablePlayer.NameText.text +=
-                        $"\n<size=80%>{string.Join("\n", data.Roles.GetColoredRoleName())}</size>";
+                        $"\n\n<size=80%>{string.Join("\n", data.Roles.GetColoredRoleName())}</size>";
 
                     if(data.Roles.IsNeutral())
                     {
@@ -212,9 +212,14 @@ namespace ExtremeRoles.Patches.Manager
                     case GameOverReason.ImpostorByKill:
                     case GameOverReason.ImpostorByVote:
                     case GameOverReason.ImpostorBySabotage:
+                        
+                        List<ExtremeRoleId> added = new List<ExtremeRoleId>();
+
                         for (int i=0; i < winNeutral.Count; ++i)
                         {
-                            if(i != 0)
+                            if (added.Contains(winNeutral[i].Id)) { continue; }
+
+                            if(i == 0)
                             {
                                 bonusText = bonusText + Translation.GetString("AndFirst");
                             }
@@ -224,23 +229,16 @@ namespace ExtremeRoles.Patches.Manager
                             }
                             bonusText = bonusText + Translation.GetString(
                                 winNeutral[i].GetColoredRoleName());
+                            added.Add(winNeutral[i].Id);
                         }
                         break;
                     default:
                         break;
                 }
+                winNeutral.Clear();
             }
 
-            string extraText = "";
-
-            if (extraText.Length > 0)
-            {
-                textRenderer.text = string.Format(Translation.GetString(bonusText + "Extra"), extraText);
-            }
-            else
-            {
-                textRenderer.text = bonusText + string.Format(Translation.GetString("Wins"));
-            }
+            textRenderer.text = bonusText + string.Format(Translation.GetString("Win"));
         }
 
     }
