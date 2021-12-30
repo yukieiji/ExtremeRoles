@@ -16,7 +16,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             RevartCommonTaskNum,
             RevartLongTaskNum,
-            RevartShotTaskNum,
+            RevartNormalTaskNum,
         }
 
         public RoleAbilityButton Button
@@ -28,9 +28,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
         }
 
-        public int LongTask = 0;
-        public int NormalTask = 0;
-        public int CommonTask = 0;
+        public int RevartLongTask = 0;
+        public int RevartNormalTask = 0;
+        public int RevartCommonTask = 0;
 
         private RoleAbilityButton aliceShipBroken;
 
@@ -109,15 +109,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             List<byte> addTaskId = new List<byte> ();
             
-            for (int i = 0; i < alice.LongTask; ++i)
+            for (int i = 0; i < alice.RevartLongTask; ++i)
             {
                 addTaskId.Add(Helper.Task.GetRandomLongTask());
             }
-            for (int i = 0; i < alice.CommonTask; ++i)
+            for (int i = 0; i < alice.RevartCommonTask; ++i)
             {
                 addTaskId.Add(Helper.Task.GetRandomCommonTaskId());
             }
-            for (int i = 0; i < alice.NormalTask; ++i)
+            for (int i = 0; i < alice.RevartNormalTask; ++i)
             {
                 addTaskId.Add(Helper.Task.GetRandomNormalTaskId());
             }
@@ -153,10 +153,38 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             this.CreateRoleAbilityOption(
                 parentOps, maxAbilityCount:100);
+
+            CustomOption.Create(
+                this.GetRoleOptionId((int)AliceOption.RevartLongTaskNum),
+                Helper.Design.ConcatString(
+                    this.RoleName,
+                    AliceOption.RevartLongTaskNum.ToString()),
+                1, 0, 15, 1, parentOps);
+            CustomOption.Create(
+                this.GetRoleOptionId((int)AliceOption.RevartCommonTaskNum),
+                Helper.Design.ConcatString(
+                    this.RoleName,
+                    AliceOption.RevartCommonTaskNum.ToString()),
+                1, 0, 15, 1, parentOps);
+            CustomOption.Create(
+                this.GetRoleOptionId((int)AliceOption.RevartNormalTaskNum),
+                Helper.Design.ConcatString(
+                    this.RoleName,
+                    AliceOption.RevartNormalTaskNum.ToString()),
+                1, 0, 15, 1, parentOps);
+
         }
 
         protected override void RoleSpecificInit()
         {
+            var allOption = OptionsHolder.AllOption;
+            this.RevartNormalTask = allOption[
+                GetRoleOptionId((int)AliceOption.RevartNormalTaskNum)].GetValue();
+            this.RevartLongTask = allOption[
+                GetRoleOptionId((int)AliceOption.RevartLongTaskNum)].GetValue();
+            this.RevartCommonTask = allOption[
+                GetRoleOptionId((int)AliceOption.RevartCommonTaskNum)].GetValue();
+
             this.RoleAbilityInit();
         }
     }
