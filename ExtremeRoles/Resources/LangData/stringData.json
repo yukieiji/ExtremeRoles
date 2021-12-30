@@ -240,6 +240,12 @@
     "Scientist": {
         "11": "\u30b5\u30a4\u30a8\u30f3\u30c6\u30a3\u30b9\u30c8"
     },
+    "impostorIntroText": {
+        "11": "\u30af\u30eb\u3084\u30b5\u30dc\u30bf\u30fc\u30b8\u3082\u5fd8\u308c\u308b\u306a"
+    },
+    "crewIntroText": {
+        "11": "\u30bf\u30b9\u30af\u3082\u5fd8\u308c\u305a\u306b"
+    },
     "crewImportantText": {
         "11": "\u30bf\u30b9\u30af\u3092\u5b8c\u4e86\u3055\u305b\u3088\u3046"
     },
