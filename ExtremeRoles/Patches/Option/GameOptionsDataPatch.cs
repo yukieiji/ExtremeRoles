@@ -46,7 +46,7 @@ namespace ExtremeRoles.Patches.Option
                 translate("crewmateRoles"));
             var min = allOption[(int)OptionsHolder.CommonOptionKey.MinCremateRoles].GetValue();
             var max = allOption[(int)OptionsHolder.CommonOptionKey.MaxCremateRoles].GetValue();
-            if (min > max) min = max;
+            if (min > max) { min = max; }
             var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
             entry.AppendLine($"{optionName}: {optionValue}");
 
@@ -71,9 +71,20 @@ namespace ExtremeRoles.Patches.Option
 
             entries.Add(entry.ToString().Trim('\r', '\n'));
 
+            entry = new StringBuilder();
+
+            entry.AppendLine(
+                optionToString(allOption[(int)OptionsHolder.CommonOptionKey.IsSameNeutralSameWin]));
+            entry.AppendLine(
+                optionToString(allOption[(int)OptionsHolder.CommonOptionKey.DisableNeutralSpecialForceEnd]));
+
+            entries.Add(entry.ToString().Trim('\r', '\n'));
+
             foreach (CustomOptionBase option in OptionsHolder.AllOption.Values)
             {
-                if ((option == allOption[(int)OptionsHolder.CommonOptionKey.PresetSelection]) ||
+                if ((option == allOption[(int)OptionsHolder.CommonOptionKey.IsSameNeutralSameWin]) ||
+                    (option == allOption[(int)OptionsHolder.CommonOptionKey.DisableNeutralSpecialForceEnd]) ||
+                    (option == allOption[(int)OptionsHolder.CommonOptionKey.PresetSelection]) ||
                     (option == allOption[(int)OptionsHolder.CommonOptionKey.UseStrongRandomGen]) ||
                     (option == allOption[(int)OptionsHolder.CommonOptionKey.MinCremateRoles]) ||
                     (option == allOption[(int)OptionsHolder.CommonOptionKey.MaxCremateRoles]) ||

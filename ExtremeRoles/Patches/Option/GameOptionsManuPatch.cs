@@ -34,7 +34,7 @@ namespace ExtremeRoles.Patches.Option
 
             var template = UnityEngine.Object.FindObjectsOfType<StringOption>().FirstOrDefault();
             if (template == null) return;
-            
+
             var gameSettings = GameObject.Find("Game Settings");
             var gameSettingMenu = UnityEngine.Object.FindObjectsOfType<GameSettingMenu>().FirstOrDefault();
             var erSettings = UnityEngine.Object.Instantiate(gameSettings, gameSettings.transform.parent);
@@ -58,16 +58,16 @@ namespace ExtremeRoles.Patches.Option
                 int copiedIndex = i;
                 button.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
                 button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
-                    
+
                     gameSettingMenu.RegularGameSettings.SetActive(false);
                     gameSettingMenu.RolesSettings.gameObject.SetActive(false);
                     erSettings.gameObject.SetActive(false);
 
                     gameSettingMenu.GameSettingsHightlight.enabled = false;
                     gameSettingMenu.RolesSettingsHightlight.enabled = false;
-                    
+
                     tabHighlight.enabled = false;
-                    
+
                     if (copiedIndex == 0)
                     {
                         gameSettingMenu.RegularGameSettings.SetActive(true);
@@ -122,13 +122,13 @@ namespace ExtremeRoles.Patches.Option
             // Adapt task count for main options
 
             var commonTasksOption = __instance.Children.FirstOrDefault(x => x.name == "NumCommonTasks").TryCast<NumberOption>();
-            if (commonTasksOption != null) commonTasksOption.ValidRange = new FloatRange(0f, 4f);
+            if (commonTasksOption != null) { commonTasksOption.ValidRange = new FloatRange(0f, 4f); }
 
             var shortTasksOption = __instance.Children.FirstOrDefault(x => x.name == "NumShortTasks").TryCast<NumberOption>();
-            if (shortTasksOption != null) shortTasksOption.ValidRange = new FloatRange(0f, 23f);
+            if (shortTasksOption != null){ shortTasksOption.ValidRange = new FloatRange(0f, 23f); }
 
             var longTasksOption = __instance.Children.FirstOrDefault(x => x.name == "NumLongTasks").TryCast<NumberOption>();
-            if (longTasksOption != null) longTasksOption.ValidRange = new FloatRange(0f, 15f);
+            if (longTasksOption != null) { longTasksOption.ValidRange = new FloatRange(0f, 15f); }
 
         }
     }
