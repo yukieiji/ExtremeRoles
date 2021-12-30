@@ -216,6 +216,9 @@
         "0": "{0}x",
         "11": "{0}x"
     },
+    "buttonCountText": {
+        "11": "\u6b8b\u308a"
+    },
     "neutral": {
         "11": "\u30cb\u30e5\u30fc\u30c8\u30e9\u30eb"
     },
@@ -330,6 +333,9 @@
     "AliceAbilityCoolTime": {
         "11": "\u7834\u58ca\u5de5\u4f5c\u306e\u30af\u30fc\u30eb\u30bf\u30a4\u30e0"
     },
+    "AliceAbilityCount": {
+        "11": "\u7834\u58ca\u5de5\u4f5c\u306e\u56de\u6570"
+    },
     "AliceIntroDescription": {
         "11": "\u5168\u3066\u3092\u30e1\u30c1\u30e3\u30af\u30c1\u30e3\u306b\u3059\u308b\u3001\u308f\u304c\u307e\u307e\u306e\u6a29\u5316"
     },
@@ -369,7 +375,7 @@
     "JackalKillRange": {
         "11": "\u30ad\u30eb\u30ec\u30f3\u30b8"
     },
-    "JackalSidekickNum": {
+    "JackalAbilityCount": {
         "11": "\u30b5\u30a4\u30c9\u30ad\u30c3\u30af\u4f5c\u6210\u6570"
     },
     "JackalRangeSidekickTarget": {
