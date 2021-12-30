@@ -177,6 +177,12 @@ namespace ExtremeRoles.Patches.Option
                         enabled = !enabled;
                     }
 
+                    if (option.ForceEnableCheckOption != null)
+                    {
+                        enabled = enabled && option.ForceEnableCheckOption.Enabled;
+                    }
+
+
                     option.Behaviour.gameObject.SetActive(enabled);
                     if (enabled)
                     {

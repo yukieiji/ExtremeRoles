@@ -121,7 +121,9 @@ namespace ExtremeRoles.Roles.Combination
                 Design.ConcatString(
                     this.RoleName,
                     LoverOption.DethWhenUnderAlive.ToString()),
-                1, 1, 1, killerSetting, invert: true);
+                1, 1, 1, killerSetting,
+                invert: true,
+                enableCheckOption: parentOps);
 
             CreateKillerOption(killerSetting);
 
