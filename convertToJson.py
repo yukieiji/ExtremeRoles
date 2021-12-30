@@ -7,7 +7,7 @@ from openpyxl import load_workbook
 
 WORKING_DIR = os.path.dirname(os.path.realpath(__file__))
 
-IN_FILE = os.path.join(WORKING_DIR, "Strings.xlsx")
+IN_FILE = os.path.join(WORKING_DIR, "transData.xlsx")
 OUT_FILE = os.path.join(WORKING_DIR, "ExtremeRoles", "Resources", "LangData", "stringData.json")
 
 def stringToJson(filename):

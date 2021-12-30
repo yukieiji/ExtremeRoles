@@ -216,6 +216,12 @@
         "0": "{0}x",
         "11": "{0}x"
     },
+    "neutral": {
+        "11": "\u30cb\u30e5\u30fc\u30c8\u30e9\u30eb"
+    },
+    "neutralIntro": {
+        "11": "\u81ea\u5206\u81ea\u8eab\u306e\u52dd\u5229\u306e\u305f\u3081\u306b\u52d5\u3051"
+    },
     "Impostor": {
         "11": "\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc"
     },
