@@ -360,6 +360,9 @@
     "AliceShortDescription": {
         "11": "\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc\u306b\u6bba\u3055\u308c\u308b\u304b\u3001\u5168\u3066\u3092\u7834\u58ca\u305b\u3088"
     },
+    "shipBroken": {
+        "11": "\u7834\u58ca\u5de5\u4f5c"
+    },
     "Jackal": {
         "11": "\u30b8\u30e3\u30c3\u30ab\u30eb"
     },
