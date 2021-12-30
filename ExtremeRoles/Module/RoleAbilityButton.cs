@@ -69,8 +69,8 @@ namespace ExtremeRoles.Module
                     this.Button.cooldownTimerText.transform.parent);
                 updateAbilityCountText();
                 this.abilityCountText.enableWordWrapping = false;
-                this.abilityCountText.transform.localScale = Vector3.one * 0.65f;
-                this.abilityCountText.transform.localPosition += new Vector3(-0.05f, 0.7f, 0);
+                this.abilityCountText.transform.localScale = Vector3.one * 0.60f;
+                this.abilityCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
             }
 
             LocalScale = Button.transform.localScale;
