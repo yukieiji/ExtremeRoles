@@ -44,7 +44,7 @@ namespace ExtremeRoles.Roles.Solo
 
         public override string GetImportantText(bool isContainFakeTask = true)
         {
-            if(this.IsImposter())
+            if(this.Team == ExtremeRoleType.Impostor)
             {
                 return string.Concat(new string[]
                 {
@@ -62,7 +62,7 @@ namespace ExtremeRoles.Roles.Solo
                 this.NameColor,
                 string.Format("{0}: {1}",
                     this.GetColoredRoleName(),
-                    Helper.Translation.GetString("crewtImportantText")));
+                    Helper.Translation.GetString("crewImportantText")));
 
         }
 

@@ -240,6 +240,9 @@
     "Scientist": {
         "11": "\u30b5\u30a4\u30a8\u30f3\u30c6\u30a3\u30b9\u30c8"
     },
+    "crewImportantText": {
+        "11": "\u30bf\u30b9\u30af\u3092\u5b8c\u4e86\u3055\u305b\u3088\u3046"
+    },
     "SpecialCrew": {
         "11": "\u30b9\u30da\u30b7\u30e3\u30eb\u30af\u30eb\u30fc"
     },
