@@ -15,9 +15,9 @@ namespace ExtremeRoles.Patches
             if (role.IsNeutral())
             {
                 __instance.BackgroundBar.material.color = Module.ColorPalette.NeutralColor;
-                __instance.TeamTitle.text = role.Team.ToString();
+                __instance.TeamTitle.text = Helper.Translation.GetString("neutral");
                 __instance.TeamTitle.color = Module.ColorPalette.NeutralColor;
-                __instance.ImpostorText.text = "";
+                __instance.ImpostorText.text = string.Format(Helper.Translation.GetString("neutralIntro"));
             }
         }
 

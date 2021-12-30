@@ -10,15 +10,16 @@ namespace ExtremeRoles.Module
         public Sprite ButtonSprite;
 
         public Vector3 LocalScale = Vector3.one;
-        public bool ShowButtonText = true;
         public string ButtonText = null;
 
+        private int abilityNum = int.MaxValue;
         private bool mirror;
-        private Action useAbility;
+        private Func<bool> useAbility;
         private Func<bool> canUse;
         private KeyCode hotkey;
 
         private Action cleanUp = null;
+        private Func<bool> abilityCheck = null;
 
         private bool isAbilityOn = false;
 
@@ -26,16 +27,23 @@ namespace ExtremeRoles.Module
         private float coolTime = float.MaxValue;
         private float abilityActiveTime = 0.0f;
 
+        private TMPro.TextMeshPro abilityCountText = null;
+
         public RoleAbilityButton(
-            Action ability,
+            string buttonName,
+            Func<bool> ability,
             Func<bool> canUse,
             Sprite sprite,
             Vector3 positionOffset,
-            Action abilityCleanUp=null,
+            int abilityMaxNum = int.MaxValue,
+            Action abilityCleanUp = null,
+            Func<bool> abilityCheck = null,
             KeyCode hotkey=KeyCode.F,
             bool mirror = false)
         {
-            
+
+            this.ButtonText = buttonName;
+
             this.PositionOffset = positionOffset;
             this.ButtonSprite = sprite;
 
@@ -52,26 +60,57 @@ namespace ExtremeRoles.Module
             button.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
             button.OnClick.AddListener(
                 (UnityEngine.Events.UnityAction)OnClickEvent);
+            
+            this.abilityNum = abilityMaxNum;
+            if (this.abilityNum != int.MaxValue)
+            {
+                this.abilityCountText = GameObject.Instantiate(
+                    this.Button.cooldownTimerText,
+                    this.Button.cooldownTimerText.transform.parent);
+                updateAbilityCountText();
+                this.abilityCountText.enableWordWrapping = false;
+                this.abilityCountText.transform.localScale = Vector3.one * 0.7f;
+                this.abilityCountText.transform.localPosition += new Vector3(-0.05f, 0.7f, 0);
+            }
 
             LocalScale = Button.transform.localScale;
 
+            this.abilityCheck = abilityCheck;
+            if (this.abilityCheck == null)
+            {
+                this.abilityCheck = allTrue;
+            }
+
             SetActive(false);
 
+            bool allTrue() => true;
+
+        }
+        public void ResetCoolTimer()
+        {
+            this.timer = this.coolTime;
         }
 
         public void OnClickEvent()
         {
-            if (this.timer < 0f && canUse())
+            if (this.timer < 0f && canUse() && !this.isAbilityOn)
             {
                 Button.graphic.color = new Color(1f, 1f, 1f, 0.3f);
-                this.useAbility();
-                ResetCoolTimer();
 
-                if (this.isHasCleanUp() && !this.isAbilityOn)
+                if (this.useAbility())
                 {
-                    this.timer = this.abilityActiveTime;
-                    Button.cooldownTimerText.color = new Color(0F, 0.8F, 0F);
-                    this.isAbilityOn = true;
+                    this.ResetCoolTimer();
+
+                    if (this.isHasCleanUp())
+                    {
+                        this.timer = this.abilityActiveTime;
+                        Button.cooldownTimerText.color = new Color(0F, 0.8F, 0F);
+                        this.isAbilityOn = true;
+                    }
+                    else
+                    {
+                        this.reduceAbilityCount();
+                    }
                 }
             }
         }
@@ -84,12 +123,7 @@ namespace ExtremeRoles.Module
             this.abilityActiveTime = time;
         }
 
-        public void ResetCoolTimer()
-        {
-            this.timer = this.coolTime;
-        }
-
-        public void UpdateAbility(Action newAbility)
+        public void UpdateAbility(Func<bool> newAbility)
         {
             this.useAbility = newAbility;
         }
@@ -97,6 +131,12 @@ namespace ExtremeRoles.Module
         public void ReplaceHotKey(KeyCode newKey)
         {
             this.hotkey = newKey;
+        }
+
+        public void UpdateAbilityCount(int newCount)
+        {
+            this.abilityNum = newCount;
+            this.updateAbilityCountText();
         }
 
         public void Update()
@@ -112,13 +152,8 @@ namespace ExtremeRoles.Module
             SetActive(HudManager.Instance.UseButton.isActiveAndEnabled);
 
             this.Button.graphic.sprite = this.ButtonSprite;
-            if (this.ShowButtonText && this.ButtonText != "")
-            {
-                this.Button.OverrideText(ButtonText);
-            }
+            this.Button.OverrideText(ButtonText);
 
-            this.Button.buttonLabelText.enabled = ShowButtonText; // Only show the text if it's a kill button
-            
             if (HudManager.Instance.UseButton != null)
             {
                 Vector3 pos = HudManager.Instance.UseButton.transform.localPosition;
@@ -141,23 +176,36 @@ namespace ExtremeRoles.Module
 
             if (this.timer >= 0)
             {
-                if ((this.isHasCleanUp() && isAbilityOn) || 
-                    (!PlayerControl.LocalPlayer.inVent && PlayerControl.LocalPlayer.moveable))
+                bool abilityOn = this.isHasCleanUp() && isAbilityOn;
+
+                if (abilityOn || (!PlayerControl.LocalPlayer.inVent && PlayerControl.LocalPlayer.moveable))
                 {
                     this.timer -= Time.deltaTime;
+                }
+                if (abilityOn)
+                {
+                    if(!this.abilityCheck())
+                    {
+                        this.timer = 0;
+                        this.isAbilityOn = false;
+                    }
                 }
             }
 
             if (this.timer <= 0 && this.isHasCleanUp() && isAbilityOn)
             {
-                isAbilityOn = false;
-                Button.cooldownTimerText.color = Palette.EnabledColor;
-                cleanUp();
+                this.isAbilityOn = false;
+                this.Button.cooldownTimerText.color = Palette.EnabledColor;
+                this.cleanUp();
+                this.reduceAbilityCount();
             }
 
-            Button.SetCoolDown(
-                this.timer,
-                (this.isHasCleanUp() && this.isAbilityOn) ? this.abilityActiveTime : this.coolTime);
+            if (this.abilityNum > 0)
+            {
+                Button.SetCoolDown(
+                    this.timer,
+                    (this.isHasCleanUp() && this.isAbilityOn) ? this.abilityActiveTime : this.coolTime);
+            }
 
             // Trigger OnClickEvent if the hotkey is being pressed down
             if (Input.GetKeyDown(hotkey))
@@ -181,5 +229,19 @@ namespace ExtremeRoles.Module
         }
 
         private bool isHasCleanUp() => cleanUp != null;
+
+        private void reduceAbilityCount()
+        {
+            if (this.abilityCountText == null) { return; }
+            --this.abilityNum;
+            updateAbilityCountText();
+
+        }
+        public void updateAbilityCountText()
+        {
+            this.abilityCountText.text = Helper.Translation.GetString("buttonCountText") + string.Format(
+                Helper.Translation.GetString("unitShots"), this.abilityNum);
+        }
+
     }
 }

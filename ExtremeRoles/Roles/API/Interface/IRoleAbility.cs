@@ -9,6 +9,7 @@ namespace ExtremeRoles.Roles.API.Interface
     public enum RoleAbilityCommonOption
     {
         AbilityCoolTime = 35,
+        AbilityCount,
         AbilityActiveTime,
     }
     public interface IRoleAbility
@@ -21,7 +22,7 @@ namespace ExtremeRoles.Roles.API.Interface
 
         public void CreateAbility();
 
-        public void UseAbility();
+        public bool UseAbility();
 
         public bool IsAbilityUse();
     }
@@ -30,20 +31,26 @@ namespace ExtremeRoles.Roles.API.Interface
     {
         public static RoleAbilityButton CreateAbilityButton(
             this IRoleAbility self,
+            string buttonName,
             Sprite sprite,
             Vector3? positionOffset = null,
             Action abilityCleanUp = null,
+            int abilityNum = int.MaxValue,
+            Func<bool> checkAbility = null,
             KeyCode hotkey = KeyCode.F,
             bool mirror = false)
         {   
             Vector3 offset = positionOffset ?? new Vector3(-1.8f, -0.06f, 0);
 
             return new RoleAbilityButton(
+                buttonName,
                 self.UseAbility,
                 self.IsAbilityUse,
                 sprite,
                 offset,
+                abilityNum,
                 abilityCleanUp,
+                checkAbility,
                 hotkey,
                 mirror);
         }
@@ -55,7 +62,8 @@ namespace ExtremeRoles.Roles.API.Interface
         public static void CreateRoleAbilityOption(
             this IRoleAbility self,
             CustomOptionBase parentOps,
-            bool hasActiveTime=false)
+            bool hasActiveTime=false,
+            int maxAbilityCount=int.MaxValue)
         {
 
             CustomOption.Create(
@@ -65,6 +73,7 @@ namespace ExtremeRoles.Roles.API.Interface
                     RoleAbilityCommonOption.AbilityCoolTime.ToString()),
                 30f, 2.5f, 120f, 2.5f,
                 parentOps, format: "unitSeconds");
+
             if (hasActiveTime)
             {
                 CustomOption.Create(
@@ -75,6 +84,18 @@ namespace ExtremeRoles.Roles.API.Interface
                     30f, 2.5f, 120f, 2.5f,
                     parentOps, format: "unitSeconds");
             }
+
+            if (maxAbilityCount != int.MaxValue)
+            {
+                CustomOption.Create(
+                    self.GetRoleOptionId(RoleAbilityCommonOption.AbilityCount),
+                    Design.ConcatString(
+                        ((SingleRoleBase)self).RoleName,
+                        RoleAbilityCommonOption.AbilityCount.ToString()),
+                    1, 1, maxAbilityCount, 1,
+                    parentOps, format: "unitSeconds");
+            }
+
         }
 
         public static void RoleAbilityInit(this IRoleAbility self)
@@ -93,7 +114,14 @@ namespace ExtremeRoles.Roles.API.Interface
                 self.Button.SetAbilityActiveTime(
                     allOps[checkOptionId].GetValue());
             }
-            
+            checkOptionId = self.GetRoleOptionId(RoleAbilityCommonOption.AbilityCount);
+
+            if (allOps.ContainsKey(checkOptionId))
+            {
+                self.Button.UpdateAbilityCount(
+                    allOps[checkOptionId].GetValue());
+            }
+
             self.Button.ResetCoolTimer();
         }
 

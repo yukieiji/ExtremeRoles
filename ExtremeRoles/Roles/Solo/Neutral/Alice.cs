@@ -36,6 +36,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public void CreateAbility()
         {
             this.Button = this.CreateAbilityButton(
+                Helper.Translation.GetString("shipBroken"),
                 Helper.Resources.LoadSpriteFromResources(
                     Resources.ResourcesPaths.TestButton, 115f));
         }
@@ -76,9 +77,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
            }
         }
 
-        public void UseAbility()
+        public bool UseAbility()
         {
             Helper.Logging.Debug("Ability On");
+            return true;
         }
 
         protected override void CreateSpecificOption(
