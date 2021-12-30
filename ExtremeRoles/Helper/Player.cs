@@ -40,7 +40,10 @@ namespace ExtremeRoles.Helper
 
             bool isLights = task.TaskType == TaskTypes.FixLights;
             bool isComms = task.TaskType == TaskTypes.FixComms;
-            bool isReactor = task.TaskType == TaskTypes.StopCharles || task.TaskType == TaskTypes.ResetSeismic || task.TaskType == TaskTypes.ResetReactor;
+            bool isReactor = 
+                (task.TaskType == TaskTypes.StopCharles) || 
+                (task.TaskType == TaskTypes.ResetSeismic) || 
+                (task.TaskType == TaskTypes.ResetReactor);
             bool isO2 = task.TaskType == TaskTypes.RestoreOxy;
 
             return false;

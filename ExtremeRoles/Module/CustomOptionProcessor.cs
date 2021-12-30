@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace ExtremeRoles.Module
 {
@@ -23,39 +24,45 @@ namespace ExtremeRoles.Module
 
         private const string comma = ",";
 
-        public static void Export()
+        public static bool Export()
         {
-
             Helper.Logging.Debug("Export Start!!!!!!");
-
-            using (var csv = new StreamWriter("option.csv", false, new UTF8Encoding(true)))
+            try
             {
-                csv.WriteLine(
-                    string.Format("{1}{0}{2}{0}{3}",
-                    comma,
-                    "Extreme Roles",
-                    "Version",
-                    Assembly.GetExecutingAssembly().GetName().Version));
-                csv.WriteLine(
-                    string.Format("{1}{0}{2}{0}{3}{0}{4}",
-                        comma, "Id", "Name", "Option Value", "SelectedIndex")); //ヘッダー
-               
-
-                foreach (var (_, option) in OptionsHolder.AllOption)
+                using (var csv = new StreamWriter("option.csv", false, new UTF8Encoding(true)))
                 {
                     csv.WriteLine(
+                        string.Format("{1}{0}{2}{0}{3}",
+                        comma,
+                        "Extreme Roles",
+                        "Version",
+                        Assembly.GetExecutingAssembly().GetName().Version));
+                    csv.WriteLine(
                         string.Format("{1}{0}{2}{0}{3}{0}{4}",
-                            comma,
-                            option.Id,
-                            clean(option.GetName()),
-                            clean(option.GetString()),
-                            option.CurSelection));
-                }
+                            comma, "Id", "Name", "Option Value", "SelectedIndex")); //ヘッダー
 
+
+                    foreach (var (_, option) in OptionsHolder.AllOption)
+                    {
+                        csv.WriteLine(
+                            string.Format("{1}{0}{2}{0}{3}{0}{4}",
+                                comma,
+                                option.Id,
+                                clean(option.GetName()),
+                                clean(option.GetString()),
+                                option.CurSelection));
+                    }
+                }
+                return true;
             }
+            catch (Exception e)
+            {
+                Helper.Logging.Debug(e.ToString());
+            }
+            return false;
         }
 
-        public static void Import()
+        public static bool Import()
         {
             try
             {
@@ -92,12 +99,14 @@ namespace ExtremeRoles.Module
                 }
 
                 Helper.Logging.Debug("Import Comp!!!!!!");
+                return true;
 
             }
             catch (Exception e)
             {
                 Helper.Logging.Debug(e.ToString());
             }
+            return false;
         }
 
         private static string clean(string value)

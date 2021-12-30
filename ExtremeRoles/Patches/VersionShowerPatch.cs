@@ -12,7 +12,7 @@ namespace ExtremeRoles.Patches
         static void Postfix(VersionShower __instance)
         {
             var amongUsLogo = GameObject.Find("bannerLogo_AmongUs");
-            if (amongUsLogo == null) return;
+            if (amongUsLogo == null) { return; }
 
             var modTitle = UnityEngine.Object.Instantiate<TMPro.TextMeshPro>(__instance.text);
             modTitle.transform.position = new Vector3(0, 0.3f, 0);
