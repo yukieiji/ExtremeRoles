@@ -27,15 +27,20 @@ namespace ExtremeRoles.Patches
 			__instance.Text.gameObject.SetActive(false);
             __instance.Text.text = string.Empty;
 
+            PlayerControl player = Helper.Player.GetPlayerControlById(
+                AssassinMeeting.IsMarinPlayerId);
+
             string printStr;
 
             if (AssassinMeeting.AssassinateMarin)
             {
-                printStr = "Sucsess!!";
+                printStr = player.Data.PlayerName + Helper.Translation.GetString(
+                    "assassinateMarinSucsess");
             }
             else
             {
-                printStr = "Fail!!";
+                printStr = player.Data.PlayerName + Helper.Translation.GetString(
+                    "assassinateMarinFail");
             }
             __instance.Player.gameObject.SetActive(false);
             __instance.completeString = printStr;

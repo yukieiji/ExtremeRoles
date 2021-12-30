@@ -14,6 +14,7 @@ namespace ExtremeRoles.Patches
     public class AssassinMeeting
     {
         public static byte ExiledAssassinId = Byte.MaxValue;
+        public static byte IsMarinPlayerId = Byte.MaxValue;
         public static bool AssassinMeetingTrigger = false;
         public static bool AssassinateMarin = false;
         public static void Reset()
@@ -21,6 +22,7 @@ namespace ExtremeRoles.Patches
             AssassinMeetingTrigger = false;
             AssassinateMarin = false;
             ExiledAssassinId = Byte.MaxValue;
+            IsMarinPlayerId = Byte.MaxValue;
         }
     }
 
@@ -120,6 +122,7 @@ namespace ExtremeRoles.Patches
 
                 AssassinMeeting.AssassinateMarin = ExtremeRoleManager.GameRole[
                     voteFor].Id == ExtremeRoleId.Marlin;
+                AssassinMeeting.IsMarinPlayerId = voteFor;
 
                 for (int i = 0; i < __instance.playerStates.Length; i++)
                 {
@@ -263,6 +266,19 @@ namespace ExtremeRoles.Patches
         }
     }
 
+    [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CoIntro))]
+    class MeetingHudCoIntroPatch
+    {
+        public static void Postfix(
+            MeetingHud __instance)
+        {
+            if (!AssassinMeeting.AssassinMeetingTrigger) { return; }
+            __instance.TitleText.text = Helper.Translation.GetString(
+                "whoIsMarine");
+        }
+    }
+
+
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Start))]
     class MeetingHudStartPatch
     {
@@ -278,7 +294,6 @@ namespace ExtremeRoles.Patches
             if (!AssassinMeeting.AssassinMeetingTrigger) { return; }
 
             DestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
-            __instance.TimerText.text = "WhoIsMarine";
         }
     }
 

@@ -20,6 +20,8 @@ namespace ExtremeRoles.Patches
     {
         public static void Prefix(PlayerControl __instance, [HarmonyArgument(0)] GameData.PlayerInfo meetingTarget)
         {
+            if (AssassinMeeting.AssassinMeetingTrigger) { return; }
+
             // Count meetings
             if (meetingTarget == null)
             {
@@ -35,7 +37,7 @@ namespace ExtremeRoles.Patches
         {
             if (!ExtremeRoleManager.GameRole[__instance.PlayerId].HasTask)
             {
-                Task.ClearAllTasks(ref __instance);
+                __instance.ClearTasks();
             }
         }
 
