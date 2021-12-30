@@ -35,10 +35,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void CreateAbility()
         {
-            this.Button = this.CreateAbilityButton(
+            this.CreateAbilityButton(
                 Helper.Translation.GetString("shipBroken"),
                 Helper.Resources.LoadSpriteFromResources(
-                    Resources.ResourcesPaths.TestButton, 115f));
+                    Resources.ResourcesPaths.TestButton, 115f),
+                abilityNum:10);
         }
 
         public override bool IsSameTeam(SingleRoleBase targetRole)
@@ -86,7 +87,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            this.CreateRoleAbilityOption(parentOps);
+            this.CreateRoleAbilityOption(
+                parentOps, maxAbilityCount:100);
         }
 
         protected override void RoleSpecificInit()

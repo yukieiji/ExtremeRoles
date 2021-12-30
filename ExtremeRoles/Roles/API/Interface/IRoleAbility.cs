@@ -29,7 +29,7 @@ namespace ExtremeRoles.Roles.API.Interface
 
     public static class IRoleAbilityMixin
     {
-        public static RoleAbilityButton CreateAbilityButton(
+        public static void CreateAbilityButton(
             this IRoleAbility self,
             string buttonName,
             Sprite sprite,
@@ -42,7 +42,7 @@ namespace ExtremeRoles.Roles.API.Interface
         {   
             Vector3 offset = positionOffset ?? new Vector3(-1.8f, -0.06f, 0);
 
-            return new RoleAbilityButton(
+            self.Button = new RoleAbilityButton(
                 buttonName,
                 self.UseAbility,
                 self.IsAbilityUse,
@@ -53,6 +53,9 @@ namespace ExtremeRoles.Roles.API.Interface
                 checkAbility,
                 hotkey,
                 mirror);
+
+            self.RoleAbilityInit();
+
         }
 
         public static int GetRoleOptionId(
@@ -93,7 +96,7 @@ namespace ExtremeRoles.Roles.API.Interface
                         ((SingleRoleBase)self).RoleName,
                         RoleAbilityCommonOption.AbilityCount.ToString()),
                     1, 1, maxAbilityCount, 1,
-                    parentOps, format: "unitSeconds");
+                    parentOps);
             }
 
         }

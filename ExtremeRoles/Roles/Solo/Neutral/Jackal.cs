@@ -127,19 +127,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void CreateAbility()
         {
-            this.Button = this.CreateAbilityButton(
+            this.CreateAbilityButton(
                 Translation.GetString("Sidekick"),
                 Helper.Resources.LoadSpriteFromResources(
                     Resources.ResourcesPaths.TestButton, 115f),
                 abilityNum:10);
-            this.RoleAbilityInit();
-
-            if (this.Button != null)
-            {
-                this.Button.UpdateAbilityCount(
-                   OptionsHolder.AllOption[
-                       GetRoleOptionId(JackalOption.SidekickNum)].GetValue());
-            }
         }
 
         public override Color GetTargetRoleSeeColor(
