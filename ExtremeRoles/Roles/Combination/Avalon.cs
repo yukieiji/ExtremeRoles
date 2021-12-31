@@ -71,10 +71,16 @@ namespace ExtremeRoles.Roles.Combination
             PlayerControl rolePlayer,
             PlayerControl killerPlayer)
         {
-            if (!this.IsDeadForceMeeting) { return; }
+            if (!this.IsDeadForceMeeting)
+            {
+                ExtremeRolesPlugin.GameDataStore.DeadedAssassin.Add(
+                    rolePlayer.PlayerId);
+                return; 
+            }
 
             AssassinMeetingTriggerOn(rolePlayer.PlayerId);
-            rolePlayer.CmdReportDeadBody(rolePlayer.Data);
+            killerPlayer.CmdReportDeadBody(rolePlayer.Data);
+            this.IsFirstMeeting = false;
         }
 
         protected override void RoleSpecificInit()

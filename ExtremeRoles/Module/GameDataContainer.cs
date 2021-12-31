@@ -25,6 +25,7 @@ namespace ExtremeRoles.Module
         public int WinGameControlId = int.MaxValue;
         public bool AssassinMeetingTrigger = false;
         public bool AssassinateMarin = false;
+        public bool WinCheckDisable = false;
         public byte ExiledAssassinId = byte.MaxValue;
         public byte IsMarinPlayerId = byte.MaxValue;
 

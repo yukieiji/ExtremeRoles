@@ -20,7 +20,7 @@ namespace ExtremeRoles.Patches
 
 			if (!gameData.AssassinMeetingTrigger) { return true; }
 
-			if (PlayerControl.LocalPlayer.PlayerId != __instance.Parent.reporterId)
+			if (PlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.GameDataStore.ExiledAssassinId)
 			{
 				return false;
 			}

@@ -61,7 +61,7 @@ namespace ExtremeRoles.Patches
         {
             if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return true; }
 
-            if (PlayerControl.LocalPlayer.PlayerId != __instance.reporterId)
+            if (PlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.GameDataStore.ExiledAssassinId)
             {
                 return false;
             }
@@ -115,7 +115,7 @@ namespace ExtremeRoles.Patches
                 for (int i = 0; i < __instance.playerStates.Length; i++)
                 {
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-                    if (playerVoteArea.TargetPlayerId != __instance.reporterId)
+                    if (playerVoteArea.TargetPlayerId != ExtremeRolesPlugin.GameDataStore.ExiledAssassinId)
                     {
                         playerVoteArea.VotedFor = 254;
                         __instance.SetDirtyBit(1U);
@@ -142,7 +142,7 @@ namespace ExtremeRoles.Patches
             for (int i = 0; i < __instance.playerStates.Length; i++)
             {
                 PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-                if (playerVoteArea.TargetPlayerId == __instance.reporterId)
+                if (playerVoteArea.TargetPlayerId == ExtremeRolesPlugin.GameDataStore.ExiledAssassinId)
                 {
                     isVoteEnd = playerVoteArea.DidVote;
                     voteFor = playerVoteArea.VotedFor;
@@ -184,7 +184,7 @@ namespace ExtremeRoles.Patches
             {
                 return __result;
             }
-            if (PlayerControl.LocalPlayer.PlayerId != __instance.reporterId)
+            if (PlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.GameDataStore.ExiledAssassinId)
             {
                 return __result;
             }

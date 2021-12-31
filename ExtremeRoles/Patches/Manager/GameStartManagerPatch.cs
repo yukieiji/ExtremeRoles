@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Reflection;
-
 using HarmonyLib;
 
 using UnityEngine;
-using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Patches.Manager
 {

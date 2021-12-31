@@ -101,11 +101,13 @@ namespace ExtremeRoles
                 var assassin = targetRole as Roles.Combination.Assassin;
                 if (assassin != null)
                 {
-                    ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger = true;
+                    ExtremeRolesPlugin.GameDataStore.WinCheckDisable = true;
                 }
 
                 targetRole.RolePlayerKilledAction(
                     target, source);
+
+                ExtremeRolesPlugin.GameDataStore.WinCheckDisable = false;
                 
                 if (!targetRole.HasTask)
                 {
