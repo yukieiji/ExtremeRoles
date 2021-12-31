@@ -55,16 +55,6 @@ namespace ExtremeRoles.Patches
                 GameData.Instance.RpcSetTasks(playerControl.PlayerId, new byte[0]);
             }
 
-            if ((Input.GetKeyDown(KeyCode.C)) && Map.IsGameLobby)
-            {
-                Module.CustomOptionCsvProcessor.Export();
-            }
-
-            if ((Input.GetKeyDown(KeyCode.I)) && Map.IsGameLobby)
-            {
-                Module.CustomOptionCsvProcessor.Import();
-            }
-
             // Terminate round
             if (Input.GetKeyDown(KeyCode.L) && !Map.IsGameLobby)
             {
