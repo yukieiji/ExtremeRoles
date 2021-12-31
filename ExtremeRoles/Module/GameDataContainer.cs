@@ -37,6 +37,8 @@ namespace ExtremeRoles.Module
         {
             PlayerIcon.Clear();
             DeadedAssassin.Clear();
+            EndGamePlayerInfo.Clear();
+
             MeetingsCount = 0;
             WinGameControlId = int.MaxValue;
 
@@ -156,8 +158,6 @@ namespace ExtremeRoles.Module
                     default:
                         break;
                 }
-
-                isAssassinationMarin = ExtremeRolesPlugin.GameDataStore.AssassinateMarin;
             }
 
             return new PlayerStatistics()
@@ -172,7 +172,6 @@ namespace ExtremeRoles.Module
 
                 SeparatedNeutralAlive = neutralTeam,
 
-                IsAssassinationMarin = isAssassinationMarin,
             };
         }
 
@@ -202,7 +201,6 @@ namespace ExtremeRoles.Module
             public int TotalAlive { get; set; }
 
             public Dictionary<(NeutralSeparateTeam, int), int> SeparatedNeutralAlive { get; set; }
-            public bool IsAssassinationMarin { get; set; }
 
         }
         public class GamePlayerInfo
