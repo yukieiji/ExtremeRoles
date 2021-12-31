@@ -245,7 +245,7 @@
         "11": "\u30b5\u30a4\u30a8\u30f3\u30c6\u30a3\u30b9\u30c8"
     },
     "impostorIntroText": {
-        "11": "\u30af\u30eb\u3084\u30b5\u30dc\u30bf\u30fc\u30b8\u3082\u5fd8\u308c\u308b\u306a"
+        "11": "\u30ad\u30eb\u3084\u30b5\u30dc\u30bf\u30fc\u30b8\u3082\u5fd8\u308c\u308b\u306a"
     },
     "crewIntroText": {
         "11": "\u30bf\u30b9\u30af\u3082\u5fd8\u308c\u305a\u306b"
@@ -312,6 +312,69 @@
     },
     "SpecialImpostorShortDescription": {
         "11": "\u30a8\u30af\u30b9\u30c8\u30ea\u30fc\u30e0\u306a\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc"
+    },
+    "Evolver": {
+        "11": "\u30a8\u30dc\u30eb\u30d0\u30fc"
+    },
+    "EvolverSpawnRate": {
+        "11": "\u30a8\u30dc\u30eb\u30d0\u30fc"
+    },
+    "EvolverRoleNum": {
+        "11": "\u30b9\u30dd\u30fc\u30f3\u6570"
+    },
+    "EvolverHasOtherVison": {
+        "11": "\u5225\u8996\u754c\u3092\u6301\u3064\u304b"
+    },
+    "EvolverVison": {
+        "11": "\u8996\u754c"
+    },
+    "EvolverApplyEnvironmentVisionEffect": {
+        "11": "\u8996\u754c\u52b9\u679c\u3092\u53d7\u3051\u308b\u304b"
+    },
+    "EvolverHasOtherKillCool": {
+        "11": "\u5225\u306e\u30ad\u30eb\u30af\u30fc\u30eb\u30bf\u30a4\u30e0\u3092\u6301\u3064\u304b"
+    },
+    "EvolverKillCoolDown": {
+        "11": "\u30ad\u30eb\u30af\u30fc\u30eb\u30bf\u30a4\u30e0"
+    },
+    "EvolverHasOtherKillRange": {
+        "11": "\u5225\u306e\u30ad\u30eb\u30ec\u30f3\u30b8\u3092\u6301\u3064\u304b"
+    },
+    "EvolverKillRange": {
+        "11": "\u30ad\u30eb\u30ec\u30f3\u30b8"
+    },
+    "EvolverIsEvolvedAnimation": {
+        "11": "\u9032\u5316\u6642\u3001\u30a2\u30cb\u30e1\u30fc\u30b7\u30e7\u30f3\u3092\u884c\u3046\u304b"
+    },
+    "EvolverIsEatingEndCleanBody": {
+        "11": "\u9032\u5316\u5f8c\u3001\u6b7b\u4f53\u3092\u6d88\u3059\u304b"
+    },
+    "EvolverEatingRange": {
+        "11": "\u6355\u98df\u3092\u884c\u3048\u308b\u7bc4\u56f2"
+    },
+    "EvolverKillCoolReduceRate": {
+        "11": "\u9032\u5316\u5f8c\u306e\u30ad\u30eb\u30af\u30fc\u30eb\u306e\u6e1b\u5c11\u7387"
+    },
+    "EvolverAbilityCoolTime": {
+        "11": "\u9032\u5316\u306e\u30af\u30fc\u30eb\u30bf\u30a4\u30e0"
+    },
+    "EvolverAbilityActiveTime": {
+        "11": "\u6355\u98df\u3092\u884c\u3046\u6642\u9593"
+    },
+    "EvolverAbilityCount": {
+        "11": "\u6700\u7d42\u9032\u5316\u307e\u3067\u306e\u56de\u6570"
+    },
+    "EvolverIntroDescription": {
+        "11": "\u9032\u5316\u3092\u884c\u3044\u3001\u30af\u30eb\u30fc\u3092\u7d76\u671b\u306e\u7e01\u306b\u8ffd\u3044\u8fbc\u3081"
+    },
+    "EvolverShortDescription": {
+        "11": "\u6b7b\u4f53\u3092\u55b0\u3089\u3044\u3001\u9032\u5316\u305b\u3088"
+    },
+    "Evolve": {
+        "11": "\u9032\u5316"
+    },
+    "eating": {
+        "11": "\u6355\u98df\u4e2d"
     },
     "Alice": {
         "11": "\u30a2\u30ea\u30b9"
