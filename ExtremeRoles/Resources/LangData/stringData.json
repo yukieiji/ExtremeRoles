@@ -353,7 +353,10 @@
         "11": "\u6355\u98df\u3092\u884c\u3048\u308b\u7bc4\u56f2"
     },
     "EvolverKillCoolReduceRate": {
-        "11": "\u9032\u5316\u5f8c\u306e\u30ad\u30eb\u30af\u30fc\u30eb\u306e\u6e1b\u5c11\u7387"
+        "11": "\u9032\u5316\u5f8c\u306e\u30ad\u30eb\u30af\u30fc\u30eb\u6e1b\u5c11\u7387"
+    },
+    "EvolverKillCoolResuceRateMulti": {
+        "11": "\u9032\u5316\u6bce\u306e\u30ad\u30eb\u30af\u30fc\u30eb\u6e1b\u5c11\u7387\u306e\u500d\u7387"
     },
     "EvolverAbilityCoolTime": {
         "11": "\u9032\u5316\u306e\u30af\u30fc\u30eb\u30bf\u30a4\u30e0"

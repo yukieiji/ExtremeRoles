@@ -17,6 +17,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             IsEatingEndCleanBody,
             EatingRange,
             KillCoolReduceRate,
+            KillCoolResuceRateMulti,
         }
 
 
@@ -25,6 +26,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         private float eatingRange = 1.0f;
         private float reduceRate = 1.0f;
+        private float reruceMulti = 1.0f;
         private bool isEvolvdAnimation;
         private bool isEatingEndCleanBody;
 
@@ -80,7 +82,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     PlayerControl.LocalPlayer, true);
             }
 
-            this.KillCoolTime = this.KillCoolTime * this.reduceRate;
+            this.KillCoolTime = this.KillCoolTime * ((100f - this.reduceRate) / 100f);
+            this.reduceRate = this.reduceRate * this.reruceMulti;
+            
             this.CanKill = true;
             this.KillCoolTime = Mathf.Clamp(
                 this.KillCoolTime, 0f, this.defaultKillCoolTime);
@@ -157,6 +161,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 5, 1, 50, 1,
                 parentOps, format: "unitPercentage");
 
+            CustomOption.Create(
+                GetRoleOptionId((int)EvolverOption.KillCoolResuceRateMulti),
+                Design.ConcatString(
+                    this.RoleName,
+                    EvolverOption.KillCoolResuceRateMulti.ToString()),
+                1.0f, 1.0f, 5.0f, 0.1f,
+                parentOps, format: "unitMultiplier");
+
             this.CreateRoleAbilityOption(
                 parentOps, true, 10);
         }
@@ -181,8 +193,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 GetRoleOptionId((int)EvolverOption.IsEatingEndCleanBody)].GetValue();
             this.eatingRange = allOption[
                 GetRoleOptionId((int)EvolverOption.EatingRange)].GetValue();
-            this.reduceRate = ((100f - (float)allOption[
-                GetRoleOptionId((int)EvolverOption.KillCoolReduceRate)].GetValue()) / 100f);
+            this.reduceRate = allOption[
+                GetRoleOptionId((int)EvolverOption.KillCoolReduceRate)].GetValue();
+
+            this.reruceMulti = (float)allOption[
+                GetRoleOptionId((int)EvolverOption.KillCoolReduceRate)].GetValue();
 
             this.eatingText = Translation.GetString("eating");
 
