@@ -111,6 +111,50 @@ namespace ExtremeRoles.Patches.Manager
 
         }
 
+        private static Tuple<int, int> getNotAssignedPlayer(bool multiAssign)
+        {
+
+            int crewNum = 0;
+            int impNum = 0;
+
+            foreach(var player in PlayerControl.AllPlayerControls)
+            {
+                if (multiAssign)
+                {
+                    switch (player.Data.Role.Role)
+                    {
+                        case RoleTypes.Crewmate:
+                        case RoleTypes.Scientist:
+                        case RoleTypes.Engineer:
+                            ++crewNum;
+                            break;
+                        case RoleTypes.Impostor:
+                        case RoleTypes.Shapeshifter:
+                            ++impNum;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (player.Data.Role.Role)
+                    {
+                        case RoleTypes.Crewmate:
+                            ++crewNum;
+                            break;
+                        case RoleTypes.Impostor:
+                            ++impNum;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+
+            return Tuple.Create(crewNum, impNum);
+        }
+
         private static List<(List<MultiAssignRoleBase>, int)> getMultiAssignedRoles(
             ref RoleAssignmentData extremeRolesData)
         {
@@ -124,7 +168,8 @@ namespace ExtremeRoles.Patches.Manager
 
             foreach (var oneRole in roleDataLoop)
             {
-                var (roles, (num, spawnRate)) = oneRole;
+                var (roles, (num, spawnRate, isMultiAssign)) = oneRole;
+                var (crewNum, impNum) = getNotAssignedPlayer(isMultiAssign);
 
                 for (int i = 0; i < num; i++)
                 {
@@ -135,6 +180,7 @@ namespace ExtremeRoles.Patches.Manager
 
                     foreach (var role in roles)
                     {
+
                         switch (role.Team)
                         {
                             case ExtremeRoleType.Crewmate:
@@ -153,9 +199,9 @@ namespace ExtremeRoles.Patches.Manager
 
                     isSpawn = (
                         isSpawn &&
-                        (extremeRolesData.CrewmateRoles - reduceCrewmateRole >= 0) &&
-                        (extremeRolesData.NeutralRoles - reduceNeutralRole >= 0) &&
-                        (extremeRolesData.ImpostorRoles - reduceImpostorRole >= 0));
+                        ((extremeRolesData.CrewmateRoles - reduceCrewmateRole >= 0) && impNum > 0) &&
+                        ((extremeRolesData.NeutralRoles - reduceNeutralRole >= 0) && crewNum > 0) &&
+                        ((extremeRolesData.ImpostorRoles - reduceImpostorRole >= 0) && crewNum > 0));
                     //Modules.Helpers.DebugLog($"Role:{oneRole.ToString()}   isSpawn?:{isSpawn}");
                     if (!isSpawn) { continue; }
                     
@@ -246,7 +292,8 @@ namespace ExtremeRoles.Patches.Manager
             bool assigned = false;
             int assignedPlayers = 1;
 
-            shuffledArange = shuffledArange.OrderBy(item => RandomGenerator.Instance.Next()).ToList();
+            shuffledArange = shuffledArange.OrderBy(
+                item => RandomGenerator.Instance.Next()).ToList();
             Logging.Debug($"NotAssignPlayerNum:{shuffledArange.Count}");
 
             List<int> tempList = new List<int>(shuffledArange);
@@ -372,8 +419,8 @@ namespace ExtremeRoles.Patches.Manager
             List<SingleRoleBase> RolesForVanillaCrewmate = new List<SingleRoleBase>();
             
             // コンビネーションロールに含まれているロール、コンビネーション全体のスポーン数、スポーンレート
-            List<(List<MultiAssignRoleBase>, (int, int))> combinationRole = new List<
-                (List<MultiAssignRoleBase>, (int, int))>();
+            List<(List<MultiAssignRoleBase>, (int, int, bool))> combinationRole = new List<
+                (List<MultiAssignRoleBase>, (int, int, bool))>();
 
             Dictionary<byte, (int, int)> RoleSpawnSettingsForImposter = new Dictionary<byte, (int, int)>();
             Dictionary<byte, (int, int)> RoleSpawnSettingsForCrewmate = new Dictionary<byte, (int, int)>();
@@ -397,6 +444,8 @@ namespace ExtremeRoles.Patches.Manager
                     role.GetRoleOptionId(RoleCommonOption.SpawnRate)]);
                 int roleSet = allOption[
                     role.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue();
+                bool multiAssign = allOption[
+                    role.GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign)].GetValue();
 
                 Logging.Debug($"Role:{role}    SpawnRate:{spawnRate}   RoleSet:{roleSet}");
 
@@ -406,7 +455,7 @@ namespace ExtremeRoles.Patches.Manager
                 }
 
                 combinationRole.Add(
-                    (role.Roles, (roleSet, spawnRate)));
+                    (role.Roles, (roleSet, spawnRate, multiAssign)));
             }
 
             foreach (var role in ExtremeRoleManager.NormalRole)
@@ -470,8 +519,8 @@ namespace ExtremeRoles.Patches.Manager
         {
             public List<SingleRoleBase> RolesForVanillaImposter = new List<SingleRoleBase>();
             public List<SingleRoleBase> RolesForVanillaCrewmate = new List<SingleRoleBase>();
-            public List<(List<MultiAssignRoleBase>, (int, int))> CombinationRole = new List<
-                (List<MultiAssignRoleBase>, (int, int))>();
+            public List<(List<MultiAssignRoleBase>, (int, int, bool))> CombinationRole = new List<
+                (List<MultiAssignRoleBase>, (int, int, bool))>();
 
             public Dictionary<
                 RoleTypes, Dictionary<byte, (int, int)>> RoleSpawnSettings = 
