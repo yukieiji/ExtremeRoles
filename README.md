@@ -11,3 +11,4 @@ AmongUsの上級者向けのロール追加MOD
 - シャドウハンターズ - アリスのアイディア元
 
 - Microsoft.CSharp: dynamic型を使用するために使用
+- GAHAG : https://gahag.net/ ボタンを作る際に使用

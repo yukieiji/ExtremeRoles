@@ -47,7 +47,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.CreateAbilityButton(
                 Helper.Translation.GetString("shipBroken"),
                 Helper.Resources.LoadSpriteFromResources(
-                    Resources.ResourcesPaths.TestButton, 115f),
+                    Resources.ResourcesPaths.AliceShipBroken, 115f),
                 abilityNum:10);
         }
 

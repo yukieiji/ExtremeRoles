@@ -130,7 +130,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.CreateAbilityButton(
                 Translation.GetString("Sidekick"),
                 Helper.Resources.LoadSpriteFromResources(
-                    Resources.ResourcesPaths.TestButton, 115f),
+                    Resources.ResourcesPaths.JackalSidekick, 115f),
                 abilityNum:10);
         }
 

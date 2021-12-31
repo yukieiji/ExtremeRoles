@@ -2,10 +2,14 @@
 {
     public class ResourcesPaths
     {
-        public static readonly string TitleBurner = "ExtremeRoles.Resources.TitleBurner.png";
-        public static readonly string LangData = "ExtremeRoles.Resources.LangData.stringData.json";
+        public const string TitleBurner = "ExtremeRoles.Resources.TitleBurner.png";
+        public const string LangData = "ExtremeRoles.Resources.LangData.stringData.json";
 
+        public const string EvolverEvolved = "ExtremeRoles.Resources.Evolved.png";
 
-        public static readonly string TestButton = "ExtremeRoles.Resources.TESTBUTTON.png";
+        public const string AliceShipBroken = "ExtremeRoles.Resources.ShipBroken.png";
+        public const string JackalSidekick = "ExtremeRoles.Resources.Sidekick.png";
+
+        public const string TestButton = "ExtremeRoles.Resources.TESTBUTTON.png";
     }
 }
