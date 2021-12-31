@@ -25,6 +25,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private float reduceRate;
         private bool isEvolvdAnimation;
         private bool isEatingEndCleanBody;
+
+        private float defaultKillCoolTime;
         public Evolver() : base(
             ExtremeRoleId.Evolver,
             ExtremeRoleType.Impostor,
@@ -64,6 +66,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void CleanUp()
         {
+
             if (this.isEvolvdAnimation)
             {
                 PlayerControl.LocalPlayer.RpcShapeshift(
@@ -71,6 +74,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
 
             this.KillCoolTime = this.KillCoolTime * this.reduceRate;
+            this.CanKill = true;
+            this.KillCoolTime = Mathf.Clamp(
+                this.KillCoolTime, 0f, this.defaultKillCoolTime);
 
             if (!this.isEatingEndCleanBody) { return; }
 
@@ -81,6 +87,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             writer.Write(this.eatingBodyId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCOperator.CleanDeadBody(this.eatingBodyId);
+
         }
 
         public bool CheckAbility()
@@ -123,8 +130,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.RoleName,
                     EvolverOption.KillCoolReduceRate.ToString()),
                 5, 1, 50, 1,
-                parentOps,
-                format: "unitPercentage");
+                parentOps, format: "unitPercentage");
 
             this.CreateRoleAbilityOption(
                 parentOps, true, 10);
@@ -140,15 +146,16 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.KillCoolTime = PlayerControl.GameOptions.KillCooldown;
             }
 
+            this.defaultKillCoolTime = this.KillCoolTime;
+            
             var allOption = OptionsHolder.AllOption;
 
             this.isEvolvdAnimation = allOption[
                 GetRoleOptionId((int)EvolverOption.IsEvolvdAnimation)].GetValue();
             this.isEatingEndCleanBody = allOption[
                 GetRoleOptionId((int)EvolverOption.IsEatingEndCleanBody)].GetValue();
-            this.reduceRate = (100 - allOption[
-                GetRoleOptionId((int)EvolverOption.KillCoolReduceRate)].GetValue()) / 100;
-
+            this.reduceRate = ((100f - (float)allOption[
+                GetRoleOptionId((int)EvolverOption.KillCoolReduceRate)].GetValue()) / 100f);
         }
 
         private void setTargetDeadBody()

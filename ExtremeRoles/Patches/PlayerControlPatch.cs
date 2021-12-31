@@ -695,7 +695,96 @@ namespace ExtremeRoles.Patches
 
         }
     }
-    
+
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Shapeshift))]
+    class PlayerControlShapeshiftPatch
+    {
+        public static bool Prefix(
+            PlayerControl __instance,
+            [HarmonyArgument(0)] PlayerControl targetPlayer,
+            [HarmonyArgument(1)] bool animate)
+        {
+            var roles = ExtremeRoleManager.GameRole;
+            if (roles.Count == 0 || !roles.ContainsKey(__instance.PlayerId)) { return true; }
+
+            var role = roles[__instance.PlayerId];
+            if (role.IsVanillaRole()) { return true; }
+
+
+            GameData.PlayerInfo targetPlayerInfo = targetPlayer.Data;
+            GameData.PlayerOutfit newOutfit;
+            if (targetPlayerInfo.PlayerId == __instance.Data.PlayerId)
+            {
+                newOutfit = __instance.Data.Outfits[PlayerOutfitType.Default];
+            }
+            else
+            {
+                newOutfit = targetPlayer.Data.Outfits[PlayerOutfitType.Default];
+            }
+            Action changeOutfit = delegate ()
+            {
+                __instance.RawSetName(newOutfit.PlayerName);
+                __instance.RawSetColor(newOutfit.ColorId);
+                __instance.RawSetHat(newOutfit.HatId, newOutfit.ColorId);
+                __instance.RawSetSkin(newOutfit.SkinId);
+                __instance.RawSetVisor(newOutfit.VisorId);
+                __instance.RawSetPet(newOutfit.PetId, newOutfit.ColorId);
+                __instance.Visible = __instance.Visible;
+                if (targetPlayerInfo.PlayerId == __instance.Data.PlayerId)
+                {
+                    __instance.CurrentOutfitType = PlayerOutfitType.Default;
+                    __instance.Data.Outfits.Remove(PlayerOutfitType.Shapeshifted);
+                }
+                else
+                {
+                    __instance.CurrentOutfitType = PlayerOutfitType.Shapeshifted;
+                    __instance.Data.SetOutfit(__instance.CurrentOutfitType, newOutfit);
+                }
+            };
+            if (animate)
+            {
+                __instance.shapeshifting = true;
+                if (__instance.AmOwner)
+                {
+                    PlayerControl.HideCursorTemporarily();
+                }
+                RoleEffectAnimation roleEffectAnimation = UnityEngine.Object.Instantiate<RoleEffectAnimation>(
+                    DestroyableSingleton<RoleManager>.Instance.shapeshiftAnim, __instance.gameObject.transform);
+                roleEffectAnimation.SetMaterialColor(
+                    __instance.Data.Outfits[PlayerOutfitType.Default].ColorId);
+                if (__instance.MyRend.flipX)
+                {
+                    roleEffectAnimation.transform.position -= new Vector3(0.14f, 0f, 0f);
+                }
+
+                Action changeAction = () =>
+                {
+                    changeOutfit();
+                    __instance.myRend.transform.localScale = __instance.defaultPlayerScale;
+                    __instance.MyPhysics.Skin.gameObject.transform.localScale = __instance.defaultPlayerScale;
+                };
+
+                roleEffectAnimation.MidAnimCB = changeAction;
+
+                __instance.StartCoroutine(__instance.ScalePlayer(0.7f, 0.25f));
+
+                Action roleAnimation = () =>
+                {
+                    __instance.shapeshifting = false;
+                };
+
+                roleEffectAnimation.Play(
+                    __instance, roleAnimation,
+                    PlayerControl.LocalPlayer.MyRend.flipX,
+                    RoleEffectAnimation.SoundType.Local, 0f);
+                return false;
+            }
+            changeOutfit();
+            return false;
+
+        }
+    }
+
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.RpcSyncSettings))]
     public class PlayerControlRpcSyncSettingsPatch
     {
