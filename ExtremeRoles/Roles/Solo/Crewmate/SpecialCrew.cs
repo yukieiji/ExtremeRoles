@@ -9,7 +9,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ExtremeRoleId.SpecialCrew,
             ExtremeRoleType.Crewmate,
             ExtremeRoleId.SpecialCrew.ToString(),
-            Palette.White,
+            Palette.CrewmateBlue,
             false, true, false, false)
         {}
 
