@@ -20,22 +20,26 @@ namespace ExtremeRoles.Roles
         Assassin,
         Marlin,
         Lover,
-
-        Jackal,
-        Sidekick,
         
         SpecialCrew,
 
         SpecialImpostor,
+        Evolver,
 
         Alice,
+        Jackal,
+        Sidekick,
     }
     public enum RoleGameOverReason
     {
         AssassinationMarin = 10,
+        
         AliceKilledByImposter,
-        AliceKillAllOthers,
-        JackalKillAllOthers,
+        AliceKillAllOther,
+
+        JackalKillAllOther,
+
+        LoverKillAllOther,
 
         UnKnown = 100,
     }
@@ -44,6 +48,7 @@ namespace ExtremeRoles.Roles
     {
         Jackal,
         Alice,
+        Lover
     }
 
     public static class ExtremeRoleManager

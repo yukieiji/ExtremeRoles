@@ -166,10 +166,13 @@ namespace ExtremeRoles.Patches
                 switch (team)
                 {
                     case NeutralSeparateTeam.Alice:
-                        endReason = (GameOverReason)RoleGameOverReason.AliceKillAllOthers;
+                        endReason = (GameOverReason)RoleGameOverReason.AliceKillAllOther;
                         break;
                     case NeutralSeparateTeam.Jackal:
-                        endReason = (GameOverReason)RoleGameOverReason.JackalKillAllOthers;
+                        endReason = (GameOverReason)RoleGameOverReason.JackalKillAllOther;
+                        break;
+                    case NeutralSeparateTeam.Lover:
+                        endReason = (GameOverReason)RoleGameOverReason.LoverKillAllOther;
                         break;
                     default:
                         break;

@@ -145,6 +145,12 @@ namespace ExtremeRoles.Module
                                         gameControlId,
                                         NeutralSeparateTeam.Jackal);
                                     break;
+                                case ExtremeRoleId.Lover:
+                                    addNeutralTeams(
+                                        ref neutralTeam,
+                                        gameControlId,
+                                        NeutralSeparateTeam.Lover);
+                                    break;
                                 default:
                                     break;
                             }

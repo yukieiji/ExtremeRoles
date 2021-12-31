@@ -80,15 +80,20 @@ namespace ExtremeRoles.Patches
             switch (GameDataContainer.EndReason)
             {
                 case (GameOverReason)RoleGameOverReason.AliceKilledByImposter:
-                case (GameOverReason)RoleGameOverReason.AliceKillAllOthers:
+                case (GameOverReason)RoleGameOverReason.AliceKillAllOther:
                     addSpecificRolePlayerToWinner(
                         noWinner,
                         new ExtremeRoleId[] { ExtremeRoleId.Alice });
                     break;
-                case (GameOverReason)RoleGameOverReason.JackalKillAllOthers:
+                case (GameOverReason)RoleGameOverReason.JackalKillAllOther:
                     addSpecificRolePlayerToWinner(
                         noWinner,
                         new ExtremeRoleId[] { ExtremeRoleId.Jackal, ExtremeRoleId.Sidekick });
+                    break;
+                case (GameOverReason)RoleGameOverReason.LoverKillAllOther:
+                    addSpecificRolePlayerToWinner(
+                        noWinner,
+                        new ExtremeRoleId[] { ExtremeRoleId.Lover });
                     break;
                 default:
                     break;
@@ -139,6 +144,8 @@ namespace ExtremeRoles.Patches
 
                 var role = ExtremeRoleManager.GameRole[player.PlayerId];
 
+                var multiAssignRole = role as Roles.API.MultiAssignRoleBase;
+
                 if (roles.Contains(role.Id))
                 {
                     if (OptionsHolder.Ship.IsSameNeutralSameWin)
@@ -150,6 +157,25 @@ namespace ExtremeRoles.Patches
                         (GameDataContainer.WinGameControlId == role.GameControlId))
                     {
                         addWinner(player);
+                    }
+                }
+                else if (multiAssignRole != null)
+                {
+                    if (multiAssignRole.AnotherRole != null)
+                    {
+                        if (roles.Contains(multiAssignRole.AnotherRole.Id))
+                        {
+                            if (OptionsHolder.Ship.IsSameNeutralSameWin)
+                            {
+                                addWinner(player);
+                            }
+                            else if (
+                                (GameDataContainer.WinGameControlId != int.MaxValue) &&
+                                (GameDataContainer.WinGameControlId == multiAssignRole.AnotherRole.GameControlId))
+                            {
+                                addWinner(player);
+                            }
+                        }
                     }
                 }
             }

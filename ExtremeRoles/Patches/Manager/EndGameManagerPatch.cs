@@ -187,17 +187,23 @@ namespace ExtremeRoles.Patches.Manager
                     textRenderer.color = Palette.ImpostorRed;
                     break;
                 case (GameOverReason)RoleGameOverReason.AliceKilledByImposter:
-                case (GameOverReason)RoleGameOverReason.AliceKillAllOthers:
+                case (GameOverReason)RoleGameOverReason.AliceKillAllOther:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Alice.ToString());
                     textRenderer.color = ColorPalette.AliceGold;
                     manager.BackgroundBar.material.SetColor("_Color", ColorPalette.AliceGold);
                     break;
-                case (GameOverReason)RoleGameOverReason.JackalKillAllOthers:
+                case (GameOverReason)RoleGameOverReason.JackalKillAllOther:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Jackal.ToString());
                     textRenderer.color = ColorPalette.JackalBlue;
                     manager.BackgroundBar.material.SetColor("_Color", ColorPalette.JackalBlue);
+                    break;
+                case (GameOverReason)RoleGameOverReason.LoverKillAllOther:
+                    bonusText = Translation.GetString(
+                        ExtremeRoleId.Lover.ToString());
+                    textRenderer.color = ColorPalette.LoverPink;
+                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.LoverPink);
                     break;
                 default:
                     break;
