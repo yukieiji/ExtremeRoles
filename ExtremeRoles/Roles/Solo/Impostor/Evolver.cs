@@ -195,9 +195,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 GetRoleOptionId((int)EvolverOption.EatingRange)].GetValue();
             this.reduceRate = allOption[
                 GetRoleOptionId((int)EvolverOption.KillCoolReduceRate)].GetValue();
-
             this.reruceMulti = (float)allOption[
-                GetRoleOptionId((int)EvolverOption.KillCoolReduceRate)].GetValue();
+                GetRoleOptionId((int)EvolverOption.KillCoolResuceRateMulti)].GetValue();
 
             this.eatingText = Translation.GetString("eating");
 
