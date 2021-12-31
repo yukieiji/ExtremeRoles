@@ -186,7 +186,11 @@ namespace ExtremeRoles.Roles.API
             return;
         }
 
-        public virtual bool TryRolePlayerKill(
+        public virtual bool TryRolePlayerKillTo(
+            PlayerControl rolePlayer,
+            PlayerControl targetPlayer) => true;
+
+        public virtual bool TryRolePlayerKilledFrom(
             PlayerControl rolePlayer,
             PlayerControl fromPlayer) => true;
 
