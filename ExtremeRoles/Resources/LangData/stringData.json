@@ -216,6 +216,10 @@
         "0": "{0}x",
         "11": "{0}x"
     },
+    "unitPercentage": {
+        "0": "{0}\uff05",
+        "11": "{0}\uff05"
+    },
     "buttonCountText": {
         "11": "\u6b8b\u308a"
     },
