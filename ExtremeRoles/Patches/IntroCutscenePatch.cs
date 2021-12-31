@@ -90,7 +90,9 @@ namespace ExtremeRoles.Patches
                 __instance.RoleText.color = role.NameColor;
                 __instance.RoleBlurbText.text = role.GetIntroDescription();
                 __instance.RoleBlurbText.color = role.NameColor;
-                
+
+                if (role.Id == ExtremeRoleId.Lover) { return; }
+
                 if (role is Roles.API.MultiAssignRoleBase)
                 {
                     if (((Roles.API.MultiAssignRoleBase)role).AnotherRole != null)
@@ -99,12 +101,13 @@ namespace ExtremeRoles.Patches
                     }
                 }
 
+                
                 if (role.Team == Roles.API.ExtremeRoleType.Impostor)
                 {
                     __instance.RoleBlurbText.text += string.Format(
                         "\n{0}", Helper.Translation.GetString("impostorIntroText"));
                 }
-                else if(role.Team == Roles.API.ExtremeRoleType.Crewmate)
+                else if(role.Team == Roles.API.ExtremeRoleType.Crewmate && role.HasTask)
                 {
                     __instance.RoleBlurbText.text += string.Format(
                         "\n{0}", Helper.Translation.GetString("crewIntroText"));

@@ -66,6 +66,40 @@ namespace ExtremeRoles.Roles.Combination
             return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
         }
 
+        public override string GetIntroDescription()
+        {
+            string baseString = base.GetIntroDescription();
+            baseString += Design.ColoedString(
+                ColorPalette.LoverPink, "\n♥");
+
+            List<byte> lover = getAliveSameLover();
+            baseString += Player.GetPlayerControlById(lover[0]).Data.PlayerName;
+            if (lover.Count != 0)
+            {
+                for (int i = 1; i < lover.Count; ++i)
+                {
+
+                    if (i == 1)
+                    {
+                        baseString += Translation.GetString("AndFirst");
+                    }
+                    else
+                    {
+                        baseString += Translation.GetString("And");
+                    }
+                    baseString += Player.GetPlayerControlById(
+                        lover[i]).Data.PlayerName;
+
+                }
+            }
+            
+
+            baseString += Translation.GetString("LoverIntoPlus") + Design.ColoedString(
+                ColorPalette.LoverPink, "♥");
+
+            return baseString;
+        }
+
         public override Color GetTargetRoleSeeColor(
             SingleRoleBase targetRole,
             byte targetPlayerId)
