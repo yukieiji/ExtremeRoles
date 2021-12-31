@@ -69,10 +69,14 @@ namespace ExtremeRoles.Patches
 
             if (ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return false; }
 
-            var statistics = new GameDataContainer.PlayerStatistics();
+            var statistics = ExtremeRolesPlugin.GameDataStore.CreateStatistics();
 
+
+            if (isImpostorSpecialWin(__instance)) { return false; }
             if (isSabotageWin(__instance)) { return false; }
+            
             if (isTaskWin(__instance)) { return false; };
+
 
             if (isNeutralSpecialWin(__instance)) { return false; };
             if (isNeutralAliveWin(__instance, statistics)) { return false; };
@@ -115,12 +119,6 @@ namespace ExtremeRoles.Patches
             bool isGameEnd = false;
             GameOverReason endReason = GameOverReason.HumansDisconnect;
 
-            if (statistics.IsAssassinationMarin)
-            {
-                isGameEnd = true;
-                endReason = (GameOverReason)RoleGameOverReason.AssassinationMarin;
-            }
-
             if (statistics.TeamImpostorAlive >= (statistics.TotalAlive - statistics.TeamImpostorAlive) &&
                 statistics.SeparatedNeutralAlive.Count == 0)
             {
@@ -147,6 +145,19 @@ namespace ExtremeRoles.Patches
 
             return false;
 
+        }
+        private static bool isImpostorSpecialWin(ShipStatus __instance)
+        {
+            if (ExtremeRolesPlugin.GameDataStore.AssassinateMarin)
+            {
+                gameIsEnd(
+                    ref __instance,
+                    (GameOverReason)RoleGameOverReason.AssassinationMarin);
+                return true;
+            }
+
+            return false;
+        
         }
 
         private static bool isNeutralAliveWin(
