@@ -604,9 +604,14 @@ namespace ExtremeRoles.Patches
             byte roleId;
             byte playerId;
             byte callerId;
+            byte targetId;
 
             switch (callId)
             {
+                case (byte)RPCOperator.Command.CleanDeadBody:
+                    targetId = reader.ReadByte();
+                    RPCOperator.CleanDeadBody(targetId);
+                    break;
                 case (byte)RPCOperator.Command.ForceEnd:
                     RPCOperator.ForceEnd();
                     break;
@@ -630,19 +635,19 @@ namespace ExtremeRoles.Patches
                     int numOptions = (int)reader.ReadPackedUInt32();
                     RPCOperator.ShareOption(numOptions, reader);
                     break;
-                case (byte)RPCOperator.Command.UncheckedMurderPlayer:
-                    byte sourceId = reader.ReadByte();
-                    byte targetId = reader.ReadByte();
-                    byte useAnimationreaderreader = reader.ReadByte();
-                    RPCOperator.UncheckedMurderPlayer(
-                        sourceId, targetId, useAnimationreaderreader);
-                    break;
                 case (byte)RPCOperator.Command.ReplaceRole:
                     callerId = reader.ReadByte();
                     byte replaceTarget = reader.ReadByte();
                     byte ops = reader.ReadByte();
                     RPCOperator.ReplaceRole(
                         callerId, replaceTarget, ops);
+                    break;
+                case (byte)RPCOperator.Command.UncheckedMurderPlayer:
+                    byte sourceId = reader.ReadByte();
+                    targetId = reader.ReadByte();
+                    byte useAnimationreaderreader = reader.ReadByte();
+                    RPCOperator.UncheckedMurderPlayer(
+                        sourceId, targetId, useAnimationreaderreader);
                     break;
 
 

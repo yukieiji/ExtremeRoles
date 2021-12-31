@@ -84,7 +84,7 @@ namespace ExtremeRoles.Roles.API.Interface
                     Design.ConcatString(
                         ((SingleRoleBase)self).RoleName,
                         RoleAbilityCommonOption.AbilityActiveTime.ToString()),
-                    30f, 2.5f, 120f, 2.5f,
+                    2.5f, 0.5f, 30f, 0.5f,
                     parentOps, format: "unitSeconds");
             }
 

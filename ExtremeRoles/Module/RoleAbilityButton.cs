@@ -93,14 +93,15 @@ namespace ExtremeRoles.Module
 
         public void OnClickEvent()
         {
-            if (this.timer < 0f && canUse() && !this.isAbilityOn)
+            if (canUse() &&
+                this.timer < 0f && 
+                this.abilityNum > 0 && 
+                !this.isAbilityOn)
             {
                 Button.graphic.color = new Color(1f, 1f, 1f, 0.3f);
 
                 if (this.useAbility())
                 {
-                    this.ResetCoolTimer();
-
                     if (this.isHasCleanUp())
                     {
                         this.timer = this.abilityActiveTime;
@@ -110,6 +111,7 @@ namespace ExtremeRoles.Module
                     else
                     {
                         this.reduceAbilityCount();
+                        this.ResetCoolTimer();
                     }
                 }
             }
@@ -198,6 +200,7 @@ namespace ExtremeRoles.Module
                 this.Button.cooldownTimerText.color = Palette.EnabledColor;
                 this.cleanUp();
                 this.reduceAbilityCount();
+                this.ResetCoolTimer();
             }
 
             if (this.abilityNum > 0)

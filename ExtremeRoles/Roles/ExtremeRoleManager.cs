@@ -61,6 +61,7 @@ namespace ExtremeRoles.Roles
                 new SpecialCrew(),
 
                 new SpecialImpostor(),
+                new Evolver(),
 
                 new Alice(),
                 new Jackal(),

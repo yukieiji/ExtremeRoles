@@ -15,10 +15,24 @@ namespace ExtremeRoles
             SetCombinationRole,
             ShareOption,
             UncheckedMurderPlayer,
+            CleanDeadBody,
 
             ReplaceRole,
 
             AliceAbility
+        }
+
+        public static void CleanDeadBody(byte targetId)
+        {
+            DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
+            for (int i = 0; i < array.Length; ++i)
+            {
+                if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == targetId)
+                {
+                    UnityEngine.Object.Destroy(array[i].gameObject);
+                    break;
+                }
+            }
         }
 
         public static void GameInit()
@@ -61,6 +75,14 @@ namespace ExtremeRoles
             OptionsHolder.ShareOption(numOptions, reader);
         }
 
+        public static void ReplaceRole(
+            byte callerId, byte targetId, byte operation)
+        {
+            Roles.ExtremeRoleManager.RoleReplace(
+                callerId, targetId,
+                (Roles.ExtremeRoleManager.ReplaceOperation)operation);
+        }
+
         public static void UncheckedMurderPlayer(
             byte sourceId, byte targetId, byte useAnimation)
         {
@@ -77,6 +99,12 @@ namespace ExtremeRoles
                 source.MurderPlayer(target);
 
                 var targetRole = Roles.ExtremeRoleManager.GameRole[targetId];
+                var assassin = targetRole as Roles.Combination.Assassin;
+                if (assassin != null)
+                {
+                    Patches.AssassinMeeting.AssassinMeetingTrigger = true;
+                }
+
                 targetRole.RolePlayerKilledAction(
                     target, source);
                 
@@ -87,20 +115,10 @@ namespace ExtremeRoles
 
             }
         }
-
-        public static void ReplaceRole(
-            byte callerId, byte targetId, byte operation)
-        {
-            Roles.ExtremeRoleManager.RoleReplace(
-                callerId, targetId,
-                (Roles.ExtremeRoleManager.ReplaceOperation)operation);
-        }
-
         public static void AliceAbility(byte callerId)
         {
             Roles.Solo.Neutral.Alice.ShipBroken(callerId);
         }
-
     }
 
 }
