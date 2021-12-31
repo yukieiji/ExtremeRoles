@@ -86,6 +86,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public bool CheckAbility()
         {
             setTargetDeadBody();
+
+            if (this.targetBody == null)
+            {
+                return false;
+            }
+
             return this.eatingBodyId == this.targetBody.PlayerId;
         }
 
