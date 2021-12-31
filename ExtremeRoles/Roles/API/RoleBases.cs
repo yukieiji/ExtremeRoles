@@ -145,7 +145,8 @@ namespace ExtremeRoles.Roles.API
                         multiAssignRole.AnotherRole, targetPlayerId);
                 }
             }
-            else if ((targetRole.IsImposter() || targetRole.FakeImposter) &&
+            
+            if ((targetRole.IsImposter() || targetRole.FakeImposter) &&
                 this.IsImposter())
             {
                 return Palette.ImpostorRed;
