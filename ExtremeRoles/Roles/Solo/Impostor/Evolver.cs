@@ -13,8 +13,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
     {
         public enum EvolverOption
         {
-            IsEvolvdAnimation,
+            IsEvolvedAnimation,
             IsEatingEndCleanBody,
+            EatingRange,
             KillCoolReduceRate,
         }
 
@@ -22,9 +23,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public GameData.PlayerInfo targetBody;
         public byte eatingBodyId;
 
-        private float reduceRate;
+        private float eatingRange = 1.0f;
+        private float reduceRate = 1.0f;
         private bool isEvolvdAnimation;
         private bool isEatingEndCleanBody;
+
+        private string defaultButtonText;
+        private string eatingText;
 
         private float defaultKillCoolTime;
         public Evolver() : base(
@@ -49,8 +54,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void CreateAbility()
         {
+            this.defaultButtonText = Translation.GetString("evolve");
+
             this.CreateAbilityButton(
-                Translation.GetString("Evoled"),
+                this.defaultButtonText,
                 Helper.Resources.LoadSpriteFromResources(
                     Resources.ResourcesPaths.TestButton, 115f),
                 checkAbility: CheckAbility,
@@ -66,7 +73,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void CleanUp()
         {
-
+            
             if (this.isEvolvdAnimation)
             {
                 PlayerControl.LocalPlayer.RpcShapeshift(
@@ -88,18 +95,27 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCOperator.CleanDeadBody(this.eatingBodyId);
 
+            this.Button.ButtonText = this.defaultButtonText;
         }
 
         public bool CheckAbility()
         {
             setTargetDeadBody();
 
+            bool result;
+
             if (this.targetBody == null)
             {
-                return false;
+                result = false;
             }
+            else
+            {
+                result = this.eatingBodyId == this.targetBody.PlayerId;
+            }
+            
+            this.Button.ButtonText = result ? this.eatingText : this.defaultButtonText;
 
-            return this.eatingBodyId == this.targetBody.PlayerId;
+            return result;
         }
 
         public bool UseAbility()
@@ -112,10 +128,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             CustomOptionBase parentOps)
         {
             CustomOption.Create(
-                GetRoleOptionId((int)EvolverOption.IsEvolvdAnimation),
+                GetRoleOptionId((int)EvolverOption.IsEvolvedAnimation),
                 Design.ConcatString(
                     this.RoleName,
-                    EvolverOption.IsEvolvdAnimation.ToString()),
+                    EvolverOption.IsEvolvedAnimation.ToString()),
                 true, parentOps);
 
             CustomOption.Create(
@@ -124,6 +140,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.RoleName,
                     EvolverOption.IsEatingEndCleanBody.ToString()),
                 true, parentOps);
+
+            CustomOption.Create(
+                GetRoleOptionId((int)EvolverOption.EatingRange),
+                Design.ConcatString(
+                    this.RoleName,
+                    EvolverOption.EatingRange.ToString()),
+                2.5f, 0.5f, 5.0f, 0.5f,
+                parentOps);
+
             CustomOption.Create(
                 GetRoleOptionId((int)EvolverOption.KillCoolReduceRate),
                 Design.ConcatString(
@@ -151,11 +176,16 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             var allOption = OptionsHolder.AllOption;
 
             this.isEvolvdAnimation = allOption[
-                GetRoleOptionId((int)EvolverOption.IsEvolvdAnimation)].GetValue();
+                GetRoleOptionId((int)EvolverOption.IsEvolvedAnimation)].GetValue();
             this.isEatingEndCleanBody = allOption[
                 GetRoleOptionId((int)EvolverOption.IsEatingEndCleanBody)].GetValue();
+            this.eatingRange = allOption[
+                GetRoleOptionId((int)EvolverOption.EatingRange)].GetValue();
             this.reduceRate = ((100f - (float)allOption[
                 GetRoleOptionId((int)EvolverOption.KillCoolReduceRate)].GetValue()) / 100f);
+
+            this.eatingText = Translation.GetString("eating");
+
         }
 
         private void setTargetDeadBody()
@@ -164,7 +194,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(
                 PlayerControl.LocalPlayer.GetTruePosition(),
-                PlayerControl.LocalPlayer.MaxReportDistance,
+                this.eatingRange,
                 Constants.PlayersOnlyMask))
             {
                 if (collider2D.tag == "DeadBody")
