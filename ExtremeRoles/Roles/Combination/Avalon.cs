@@ -74,7 +74,7 @@ namespace ExtremeRoles.Roles.Combination
             if (!this.IsDeadForceMeeting) { return; }
 
             AssassinMeetingTriggerOn(rolePlayer.PlayerId);
-            killerPlayer.CmdReportDeadBody(rolePlayer.Data);
+            rolePlayer.CmdReportDeadBody(rolePlayer.Data);
         }
 
         protected override void RoleSpecificInit()
