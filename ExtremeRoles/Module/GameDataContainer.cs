@@ -96,8 +96,6 @@ namespace ExtremeRoles.Module
             Dictionary<(NeutralSeparateTeam, int), int> neutralTeam = new Dictionary<
                 (NeutralSeparateTeam, int), int>();
 
-            bool isAssassinationMarin = false;
-
             foreach (GameData.PlayerInfo playerInfo in GameData.Instance.AllPlayers)
             {
                 if (playerInfo.Disconnected) { continue; }
