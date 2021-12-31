@@ -4,7 +4,7 @@
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
 
-        <VersionPrefix>1.1.0</VersionPrefix>
+        <VersionPrefix>1.1.2</VersionPrefix>
         <VersionSuffix>Test-v3</VersionSuffix> 
         <Description>Extreme Roles using Reactor Template</Description>
         <Authors>yukieiji</Authors>
