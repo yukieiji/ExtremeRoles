@@ -20,12 +20,14 @@ namespace ExtremeRoles.Patches
     {
         public static void Prefix(PlayerControl __instance, [HarmonyArgument(0)] GameData.PlayerInfo meetingTarget)
         {
-            if (AssassinMeeting.AssassinMeetingTrigger) { return; }
+            var gameData = ExtremeRolesPlugin.GameDataStore;
+
+            if (gameData.AssassinMeetingTrigger) { return; }
 
             // Count meetings
             if (meetingTarget == null)
             {
-                ++Module.GameDataContainer.MeetingsCount;
+                ++gameData.MeetingsCount;
             }
         }
     }
@@ -126,7 +128,7 @@ namespace ExtremeRoles.Patches
 
             bool voteNamePaintBlock = false;
             bool playerNamePaintBlock = false;
-            bool isBlocked = AssassinMeeting.AssassinMeetingTrigger;
+            bool isBlocked = ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger;
             if (playerRole.Id == ExtremeRoleId.Assassin)
             {
                 voteNamePaintBlock = true;
@@ -248,7 +250,7 @@ namespace ExtremeRoles.Patches
                 }
             }
 
-            var isBlocked = AssassinMeeting.AssassinMeetingTrigger;
+            var isBlocked = ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger;
 
             if (playerRole.Id == ExtremeRoleId.Assassin)
             {
@@ -615,8 +617,8 @@ namespace ExtremeRoles.Patches
                 case (byte)RPCOperator.Command.ForceEnd:
                     RPCOperator.ForceEnd();
                     break;
-                case (byte)RPCOperator.Command.GameInit:
-                    RPCOperator.GameInit();
+                case (byte)RPCOperator.Command.Initialize:
+                    RPCOperator.Initialize();
                     break;
                 case (byte)RPCOperator.Command.SetNormalRole:
                     roleId = reader.ReadByte();

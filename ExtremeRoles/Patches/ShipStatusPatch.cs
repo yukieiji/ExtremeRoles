@@ -67,7 +67,7 @@ namespace ExtremeRoles.Patches
             if (DestroyableSingleton<TutorialManager>.InstanceExists) { return true; } // InstanceExists | Don't check Custom Criteria when in Tutorial
             if (HudManager.Instance.isIntroDisplayed){ return false; }
 
-            if (AssassinMeeting.AssassinMeetingTrigger) { return false; }
+            if (ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return false; }
 
             var statistics = new GameDataContainer.PlayerStatistics();
 
@@ -160,7 +160,7 @@ namespace ExtremeRoles.Patches
 
             if (num >= (statistics.TotalAlive - num))
             {
-                GameDataContainer.WinGameControlId = id;
+                ExtremeRolesPlugin.GameDataStore.WinGameControlId = id;
 
                 GameOverReason endReason = (GameOverReason)RoleGameOverReason.UnKnown;
                 switch (team)
@@ -195,7 +195,7 @@ namespace ExtremeRoles.Patches
                 if (!role.IsNeutral()) { continue; }
                 if (role.IsWin)
                 {
-                    GameDataContainer.WinGameControlId = role.GameControlId;
+                    ExtremeRolesPlugin.GameDataStore.WinGameControlId = role.GameControlId;
 
                     GameOverReason endReason = (GameOverReason)RoleGameOverReason.UnKnown;
 

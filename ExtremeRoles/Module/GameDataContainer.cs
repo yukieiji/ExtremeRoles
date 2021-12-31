@@ -15,26 +15,40 @@ namespace ExtremeRoles.Module
             Disconnected, 
         }
 
-        public static GameOverReason EndReason;
-        public static List<GamePlayerInfo> EndGamePlayerInfo = new List<GamePlayerInfo>();
-        public static Dictionary<byte, PoolablePlayer> PlayerIcon = new Dictionary<byte, PoolablePlayer>();
-        public static List<byte> DeadedAssassin = new List<byte>();
-        public static int MeetingsCount = 0;
-        public static int WinGameControlId = int.MaxValue;
+        public GameOverReason EndReason;
+        public List<GamePlayerInfo> EndGamePlayerInfo = new List<GamePlayerInfo>();
+        public Dictionary<byte, PoolablePlayer> PlayerIcon = new Dictionary<byte, PoolablePlayer>();
+        
+        public List<byte> DeadedAssassin = new List<byte>();
 
-        public static void GameInit()
+        public int MeetingsCount = 0;
+        public int WinGameControlId = int.MaxValue;
+        public bool AssassinMeetingTrigger = false;
+        public bool AssassinateMarin = false;
+        public byte ExiledAssassinId = byte.MaxValue;
+        public byte IsMarinPlayerId = byte.MaxValue;
+
+        public GameDataContainer()
+        {
+            this.Initialize();
+        }
+
+        public void Initialize()
         {
             PlayerIcon.Clear();
             DeadedAssassin.Clear();
             MeetingsCount = 0;
             WinGameControlId = int.MaxValue;
+
+            AssassinMeetingTrigger = false;
+            AssassinateMarin = false;
+
+            ExiledAssassinId = byte.MaxValue;
+            IsMarinPlayerId = byte.MaxValue;
         }
 
-        public static void CreatIcons(IntroCutscene __instance)
+        public void CreatIcons(IntroCutscene __instance)
         {
-
-            EndGamePlayerInfo.Clear();
-
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
                 PoolablePlayer poolPlayer = UnityEngine.Object.Instantiate<PoolablePlayer>(
@@ -48,7 +62,7 @@ namespace ExtremeRoles.Module
             }
         }
 
-        public static void EndGameAddStatus(
+        public void EndGameAddStatus(
             GameData.PlayerInfo playerInfo,
             PlayerStatus finalStatus,
             SingleRoleBase role,
@@ -66,118 +80,102 @@ namespace ExtremeRoles.Module
                 });
         }
 
-        public class PlayerStatistics
+        public PlayerStatistics CreateStatistics()
         {
-            public int AllTeamCrewmate { get; set; }
-            public int TeamImpostorAlive { get; set; }
-            public int TeamCrewmateAlive { get; set; }
-            public int TeamNeutralAlive { get; set; }
-            public int TotalAlive { get; set; }
+            int numTotalAlive = 0;
 
-            public Dictionary<(NeutralSeparateTeam, int), int> SeparatedNeutralAlive;
-            public bool IsAssassinationMarin { get; set; }
+            int numCrew = 0;
+            int numCrewAlive = 0;
 
-            public PlayerStatistics()
+            int numImpostorAlive = 0;
+
+            int numNeutralAlive = 0;
+            Dictionary<(NeutralSeparateTeam, int), int> neutralTeam = new Dictionary<
+                (NeutralSeparateTeam, int), int>();
+
+            bool isAssassinationMarin = false;
+
+            foreach (GameData.PlayerInfo playerInfo in GameData.Instance.AllPlayers)
             {
-                makePlayerStatic();
-            }
+                if (playerInfo.Disconnected) { continue; }
+                SingleRoleBase role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
+                ExtremeRoleType team = role.Team;
 
-            private void makePlayerStatic()
-            {
-                int numTotalAlive = 0;
+                // クルーのカウントを数える
+                if (team == ExtremeRoleType.Crewmate) { ++numCrew; }
 
-                int numCrew = 0;
-                int numCrewAlive = 0;
+                // 死んでたら次のプレイヤーへ
+                if (playerInfo.IsDead) { continue; };
 
-                int numImpostorAlive = 0;
-
-                int numNeutralAlive = 0;
-                Dictionary<(NeutralSeparateTeam, int), int> neutralTeam = new Dictionary<
-                    (NeutralSeparateTeam, int), int>();
-
-                bool isAssassinationMarin = false;
-
-                foreach (GameData.PlayerInfo playerInfo in GameData.Instance.AllPlayers)
+                int gameControlId = role.GameControlId;
+                if (OptionsHolder.Ship.IsSameNeutralSameWin)
                 {
-                    if (playerInfo.Disconnected) { continue; }
-                    SingleRoleBase role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
-                    ExtremeRoleType team = role.Team;
-
-                    // クルーのカウントを数える
-                    if (team == ExtremeRoleType.Crewmate) { ++numCrew; }
-
-                    // 死んでたら次のプレイヤーへ
-                    if (playerInfo.IsDead) { continue; };
-
-                    int gameControlId = role.GameControlId;
-                    if (OptionsHolder.Ship.IsSameNeutralSameWin)
-                    {
-                        gameControlId = int.MaxValue;
-                    }
-
-                    ++numTotalAlive;
-
-                    // 生きてる
-                    switch(team)
-                    {
-                        case ExtremeRoleType.Crewmate:
-                            ++numCrewAlive;
-                            break;
-                        case ExtremeRoleType.Impostor:
-                            ++numImpostorAlive;
-                            break;
-                        case ExtremeRoleType.Neutral:
-                            
-                            ++numNeutralAlive;
-
-                            switch (role.Id)
-                            {
-                                case ExtremeRoleId.Alice:
-                                    addNeutralTeams(
-                                        ref neutralTeam,
-                                        gameControlId,
-                                        NeutralSeparateTeam.Alice);
-                                    break;
-                                case ExtremeRoleId.Jackal:
-                                case ExtremeRoleId.Sidekick:
-                                    addNeutralTeams(
-                                        ref neutralTeam,
-                                        gameControlId,
-                                        NeutralSeparateTeam.Jackal);
-                                    break;
-                                case ExtremeRoleId.Lover:
-                                    addNeutralTeams(
-                                        ref neutralTeam,
-                                        gameControlId,
-                                        NeutralSeparateTeam.Lover);
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-
-                    isAssassinationMarin = Patches.AssassinMeeting.AssassinateMarin;
-
+                    gameControlId = int.MaxValue;
                 }
 
-                TotalAlive = numTotalAlive;
+                ++numTotalAlive;
 
-                AllTeamCrewmate = numCrew;
+                // 生きてる
+                switch (team)
+                {
+                    case ExtremeRoleType.Crewmate:
+                        ++numCrewAlive;
+                        break;
+                    case ExtremeRoleType.Impostor:
+                        ++numImpostorAlive;
+                        break;
+                    case ExtremeRoleType.Neutral:
 
-                TeamImpostorAlive = numImpostorAlive;
-                TeamCrewmateAlive = numCrewAlive;
-                TeamNeutralAlive = numNeutralAlive;
+                        ++numNeutralAlive;
 
-                SeparatedNeutralAlive = neutralTeam;
+                        switch (role.Id)
+                        {
+                            case ExtremeRoleId.Alice:
+                                addNeutralTeams(
+                                    ref neutralTeam,
+                                    gameControlId,
+                                    NeutralSeparateTeam.Alice);
+                                break;
+                            case ExtremeRoleId.Jackal:
+                            case ExtremeRoleId.Sidekick:
+                                addNeutralTeams(
+                                    ref neutralTeam,
+                                    gameControlId,
+                                    NeutralSeparateTeam.Jackal);
+                                break;
+                            case ExtremeRoleId.Lover:
+                                addNeutralTeams(
+                                    ref neutralTeam,
+                                    gameControlId,
+                                    NeutralSeparateTeam.Lover);
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    default:
+                        break;
+                }
 
-                IsAssassinationMarin = isAssassinationMarin;
-
+                isAssassinationMarin = ExtremeRolesPlugin.GameDataStore.AssassinateMarin;
             }
+
+            return new PlayerStatistics()
+            {
+                TotalAlive = numTotalAlive,
+
+                AllTeamCrewmate = numCrew,
+
+                TeamImpostorAlive = numImpostorAlive,
+                TeamCrewmateAlive = numCrewAlive,
+                TeamNeutralAlive = numNeutralAlive,
+
+                SeparatedNeutralAlive = neutralTeam,
+
+                IsAssassinationMarin = isAssassinationMarin,
+            };
         }
-       
+
         private static void addNeutralTeams(
             ref Dictionary<(NeutralSeparateTeam, int), int> neutralTeam,
             int gameControlId,
@@ -193,6 +191,19 @@ namespace ExtremeRoles.Module
             {
                 neutralTeam.Add(key, 1);
             }
+        }
+
+        public class PlayerStatistics
+        {
+            public int AllTeamCrewmate { get; set; }
+            public int TeamImpostorAlive { get; set; }
+            public int TeamCrewmateAlive { get; set; }
+            public int TeamNeutralAlive { get; set; }
+            public int TotalAlive { get; set; }
+
+            public Dictionary<(NeutralSeparateTeam, int), int> SeparatedNeutralAlive { get; set; }
+            public bool IsAssassinationMarin { get; set; }
+
         }
         public class GamePlayerInfo
         {

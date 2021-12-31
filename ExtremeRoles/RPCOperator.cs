@@ -9,7 +9,7 @@ namespace ExtremeRoles
         public enum Command
         {
 
-            GameInit = 60,
+            Initialize = 60,
             ForceEnd,
             SetNormalRole,
             SetCombinationRole,
@@ -35,13 +35,12 @@ namespace ExtremeRoles
             }
         }
 
-        public static void GameInit()
+        public static void Initialize()
         {
             OptionsHolder.Load();
-            RandomGenerator.Init();
-            Roles.ExtremeRoleManager.GameInit();
-            Module.GameDataContainer.GameInit();
-            Patches.AssassinMeeting.Reset();
+            RandomGenerator.Initialize();
+            Roles.ExtremeRoleManager.Initialize();
+            ExtremeRolesPlugin.GameDataStore.Initialize();
         }
 
         public static void ForceEnd()
@@ -102,7 +101,7 @@ namespace ExtremeRoles
                 var assassin = targetRole as Roles.Combination.Assassin;
                 if (assassin != null)
                 {
-                    Patches.AssassinMeeting.AssassinMeetingTrigger = true;
+                    ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger = true;
                 }
 
                 targetRole.RolePlayerKilledAction(

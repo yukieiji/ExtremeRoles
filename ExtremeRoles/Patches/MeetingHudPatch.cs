@@ -11,20 +11,6 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Patches
 {
-    public class AssassinMeeting
-    {
-        public static byte ExiledAssassinId = Byte.MaxValue;
-        public static byte IsMarinPlayerId = Byte.MaxValue;
-        public static bool AssassinMeetingTrigger = false;
-        public static bool AssassinateMarin = false;
-        public static void Reset()
-        {
-            AssassinMeetingTrigger = false;
-            AssassinateMarin = false;
-            ExiledAssassinId = Byte.MaxValue;
-            IsMarinPlayerId = Byte.MaxValue;
-        }
-    }
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.BloopAVoteIcon))]
     class MeetingHudBloopAVoteIconPatch
@@ -73,7 +59,7 @@ namespace ExtremeRoles.Patches
             MeetingHud __instance,
             [HarmonyArgument(0)] byte suspectStateIdx)
         {
-            if (!AssassinMeeting.AssassinMeetingTrigger) { return true; }
+            if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return true; }
 
             if (PlayerControl.LocalPlayer.PlayerId != __instance.reporterId)
             {
@@ -106,7 +92,9 @@ namespace ExtremeRoles.Patches
         public static bool Prefix(
             MeetingHud __instance)
         {
-            if (!AssassinMeeting.AssassinMeetingTrigger) { return true; }
+            var gameData = ExtremeRolesPlugin.GameDataStore;
+
+            if (!gameData.AssassinMeetingTrigger) { return true; }
 
             var (isVoteEnd, voteFor) = assassinVoteState(__instance);
 
@@ -120,9 +108,9 @@ namespace ExtremeRoles.Patches
 
                 Helper.Logging.Debug($"IsSuccess?:{ExtremeRoleManager.GameRole[voteFor].Id == ExtremeRoleId.Marlin}");
 
-                AssassinMeeting.AssassinateMarin = ExtremeRoleManager.GameRole[
+                gameData.AssassinateMarin = ExtremeRoleManager.GameRole[
                     voteFor].Id == ExtremeRoleId.Marlin;
-                AssassinMeeting.IsMarinPlayerId = voteFor;
+                gameData.IsMarinPlayerId = voteFor;
 
                 for (int i = 0; i < __instance.playerStates.Length; i++)
                 {
@@ -189,7 +177,7 @@ namespace ExtremeRoles.Patches
                 return false;
             }
 
-            if (!AssassinMeeting.AssassinMeetingTrigger) { return true; }
+            if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return true; }
 
 
             if (__instance.discussionTimer < (float)PlayerControl.GameOptions.DiscussionTime)
@@ -227,15 +215,17 @@ namespace ExtremeRoles.Patches
         {
             DeadBody[] deadArray = UnityEngine.Object.FindObjectsOfType<DeadBody>();
 
+            var gameData = ExtremeRolesPlugin.GameDataStore;
+
             foreach (DeadBody deadBody in deadArray)
             {
                 byte id = deadBody.ParentId;
                 if (ExtremeRoleManager.GameRole[id].Id == ExtremeRoleId.Assassin)
                 {
-                    Module.GameDataContainer.DeadedAssassin.Add(id);
+                    gameData.DeadedAssassin.Add(id);
                 }
             }
-            if (AssassinMeeting.AssassinMeetingTrigger)
+            if (gameData.AssassinMeetingTrigger)
             {
                 int randomPlayerIndex = UnityEngine.Random.RandomRange(
                     0, __instance.playerStates.Length);
@@ -253,7 +243,7 @@ namespace ExtremeRoles.Patches
             MeetingHud __instance)
         {
 
-            if (!AssassinMeeting.AssassinMeetingTrigger) { return true; }
+            if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return true; }
 
             if (ExtremeRoleManager.GetLocalPlayerRole().Id != ExtremeRoleId.Assassin)
             { 
@@ -272,7 +262,7 @@ namespace ExtremeRoles.Patches
         public static void Postfix(
             MeetingHud __instance)
         {
-            if (!AssassinMeeting.AssassinMeetingTrigger) { return; }
+            if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
             __instance.TitleText.text = Helper.Translation.GetString(
                 "whoIsMarine");
         }
@@ -291,7 +281,7 @@ namespace ExtremeRoles.Patches
                 abilityRole.Button.SetActive(false);
             }
 
-            if (!AssassinMeeting.AssassinMeetingTrigger) { return; }
+            if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
 
             DestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
         }
@@ -316,7 +306,7 @@ namespace ExtremeRoles.Patches
             // results in bodies sometimes being created *after* the meeting starts, marking them as dead and
             // removing the corpses so there's no random corpses leftover afterwards
 
-            if (AssassinMeeting.AssassinMeetingTrigger) { return; }
+            if (ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
 
             foreach (DeadBody b in UnityEngine.Object.FindObjectsOfType<DeadBody>())
             {
@@ -338,7 +328,7 @@ namespace ExtremeRoles.Patches
     {
         public static bool PreFix(MeetingHud __instance)
         {
-            if (!AssassinMeeting.AssassinMeetingTrigger) { return true; }
+            if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return true; }
 
             if (AmongUsClient.Instance.AmHost)
             {

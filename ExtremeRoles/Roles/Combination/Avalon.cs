@@ -99,8 +99,8 @@ namespace ExtremeRoles.Roles.Combination
         private void AssassinMeetingTriggerOn(
             byte playerId)
         {
-            Patches.AssassinMeeting.AssassinMeetingTrigger = true;
-            Patches.AssassinMeeting.ExiledAssassinId = playerId;
+            ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger = true;
+            ExtremeRolesPlugin.GameDataStore.ExiledAssassinId = playerId;
         }
 
     }

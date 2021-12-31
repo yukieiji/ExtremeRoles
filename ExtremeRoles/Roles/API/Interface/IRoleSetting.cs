@@ -6,7 +6,7 @@ namespace ExtremeRoles.Roles.API.Interface
     {
         int GetRoleOptionId(int Option);
 
-        void GameInit();
+        void Initialize();
 
         void CreateRoleAllOption(
             int optionIdOffset);

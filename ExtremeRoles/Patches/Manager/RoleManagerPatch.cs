@@ -19,10 +19,10 @@ namespace ExtremeRoles.Patches.Manager
         {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                 PlayerControl.LocalPlayer.NetId,
-                (byte)RPCOperator.Command.GameInit,
+                (byte)RPCOperator.Command.Initialize,
                 Hazel.SendOption.Reliable, -1);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
-            RPCOperator.GameInit();
+            RPCOperator.Initialize();
 
             PlayerControl[] playeres = PlayerControl.AllPlayerControls.ToArray();
             

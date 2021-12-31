@@ -16,7 +16,9 @@ namespace ExtremeRoles.Patches
 		static bool Prefix(PlayerVoteArea __instance)
 		{
 
-			if (!AssassinMeeting.AssassinMeetingTrigger) { return true; }
+			var gameData = ExtremeRolesPlugin.GameDataStore;
+
+			if (!gameData.AssassinMeetingTrigger) { return true; }
 
 			if (PlayerControl.LocalPlayer.PlayerId != __instance.Parent.reporterId)
 			{
@@ -128,7 +130,7 @@ namespace ExtremeRoles.Patches
 			[HarmonyArgument(1)] bool isDead,
 			[HarmonyArgument(2)] bool isGuardian = false)
 		{
-			if (!AssassinMeeting.AssassinMeetingTrigger) { return true; }
+			if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return true; }
 
 
 			__instance.AmDead = false;

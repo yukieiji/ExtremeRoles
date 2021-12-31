@@ -122,12 +122,13 @@ namespace ExtremeRoles.Patches
             // Generate and initialize player icons
             if (PlayerControl.LocalPlayer != null && HudManager.Instance != null)
             {
-                Module.GameDataContainer.CreatIcons(__instance);
+                var gameData = ExtremeRolesPlugin.GameDataStore;
+                gameData.CreatIcons(__instance);
                 var role = ExtremeRoleManager.GetLocalPlayerRole();
                 if (role.Id == ExtremeRoleId.Marlin)
                 {
                     ((Roles.Combination.Marlin)role).SetPlayerIcon(
-                        Module.GameDataContainer.PlayerIcon);
+                        gameData.PlayerIcon);
                 }
             }
 

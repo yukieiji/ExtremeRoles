@@ -22,6 +22,7 @@ namespace ExtremeRoles.Patches.Manager
         {
             setPlayerNameAndRole(__instance);
             setWinBonusText(__instance);
+            RPCOperator.Initialize();
         }
 
         private static void setPlayerNameAndRole(
@@ -84,7 +85,7 @@ namespace ExtremeRoles.Patches.Manager
                     poolablePlayer.NameText.transform.localPosition.y, -15f);
                 poolablePlayer.NameText.text = winningPlayerData.PlayerName;
 
-                foreach (var data in GameDataContainer.EndGamePlayerInfo)
+                foreach (var data in ExtremeRolesPlugin.GameDataStore.EndGamePlayerInfo)
                 {
                     if (data.PlayerName != winningPlayerData.PlayerName) { continue; }
                     poolablePlayer.NameText.text +=
@@ -169,8 +170,9 @@ namespace ExtremeRoles.Patches.Manager
 
             string bonusText = "";
 
+            var gameData = ExtremeRolesPlugin.GameDataStore;
 
-            switch (GameDataContainer.EndReason)
+            switch (gameData.EndReason)
             {
                 case GameOverReason.HumansByTask:
                 case GameOverReason.HumansByVote:
@@ -211,7 +213,7 @@ namespace ExtremeRoles.Patches.Manager
 
             if (OptionsHolder.Ship.DisableNeutralSpecialForceEnd && winNeutral.Count != 0)
             {
-                switch (GameDataContainer.EndReason)
+                switch (gameData.EndReason)
                 {
                     case GameOverReason.HumansByTask:
                     case GameOverReason.HumansByVote:

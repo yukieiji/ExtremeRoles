@@ -7,7 +7,7 @@ namespace ExtremeRoles
     {
         public static Random Instance; 
 
-        public static void Init()
+        public static void Initialize()
         {
             bool useStrongGen = OptionsHolder.AllOption[
                 (int)OptionsHolder.CommonOptionKey.UseStrongRandomGen].GetValue();

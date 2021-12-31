@@ -119,7 +119,7 @@ namespace ExtremeRoles.Roles.API
             {
                 role.CanHasAnotherRole = OptionsHolder.AllOption[
                     GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign)].GetValue();
-                role.GameInit();
+                role.Initialize();
             }
         }
     }
@@ -247,7 +247,7 @@ namespace ExtremeRoles.Roles.API
                     role.UseSabotage = false;
                     role.HasTask = true;
                 }
-                role.GameInit();
+                role.Initialize();
             }
         }
 

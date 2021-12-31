@@ -40,7 +40,7 @@ namespace ExtremeRoles.Patches.Manager
     {
         public static void Prefix(GameStartManager __instance)
         {
-            RPCOperator.GameInit();
+            RPCOperator.Initialize();
         }
     }
 

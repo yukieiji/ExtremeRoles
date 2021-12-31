@@ -516,7 +516,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 multiAssignTrigger = true;
             }
             
-            newJackal.GameInit();
+            newJackal.Initialize();
             if (!curSideKick.sidekickJackalCanMakeSidekick || curSideKick.recursion >= newJackal.SidekickRecursionLimit)
             {
                 newJackal.Button.UpdateAbilityCount(0);

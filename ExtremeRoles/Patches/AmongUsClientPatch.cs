@@ -16,7 +16,7 @@ namespace ExtremeRoles.Patches
     {
         public static void Prefix(AmongUsClient __instance, [HarmonyArgument(0)] ref EndGameResult endGameResult)
         {
-            GameDataContainer.EndReason = endGameResult.GameOverReason;
+            ExtremeRolesPlugin.GameDataStore.EndReason = endGameResult.GameOverReason;
             if ((int)endGameResult.GameOverReason >= 10)
             {
                 endGameResult.GameOverReason = GameOverReason.ImpostorByKill;
@@ -27,6 +27,7 @@ namespace ExtremeRoles.Patches
             List<PlayerControl> noWinner = new List<PlayerControl>();
 
             var roleData = ExtremeRoleManager.GameRole;
+            var gameData = ExtremeRolesPlugin.GameDataStore;
 
             foreach (var playerInfo in GameData.Instance.AllPlayers)
             {
@@ -43,13 +44,13 @@ namespace ExtremeRoles.Patches
                 { 
                     finalStatus = GameDataContainer.PlayerStatus.Dead; }
                 else if (
-                    (GameDataContainer.EndReason == GameOverReason.ImpostorBySabotage) &&
+                    (gameData.EndReason == GameOverReason.ImpostorBySabotage) &&
                     (!playerInfo.Role.IsImpostor))
                 { 
                     finalStatus = GameDataContainer.PlayerStatus.Dead; 
                 }
 
-                GameDataContainer.EndGameAddStatus(
+                gameData.EndGameAddStatus(
                     playerInfo, finalStatus, role, totalTask, completedTask);
 
                 if (role.IsNeutral())
@@ -77,7 +78,7 @@ namespace ExtremeRoles.Patches
                 setNeutralWinner();
             }
 
-            switch (GameDataContainer.EndReason)
+            switch (gameData.EndReason)
             {
                 case (GameOverReason)RoleGameOverReason.AliceKilledByImposter:
                 case (GameOverReason)RoleGameOverReason.AliceKillAllOther:
@@ -98,9 +99,6 @@ namespace ExtremeRoles.Patches
                 default:
                     break;
             }
-
-            RPCOperator.GameInit();
-
         }
 
         private static void setNeutralWinner()
@@ -139,6 +137,8 @@ namespace ExtremeRoles.Patches
         {
             resetWinner();
 
+            var gameData = ExtremeRolesPlugin.GameDataStore;
+
             foreach (var player in noWinner)
             {
 
@@ -153,8 +153,8 @@ namespace ExtremeRoles.Patches
                         addWinner(player);
                     }
                     else if (
-                        (GameDataContainer.WinGameControlId != int.MaxValue) &&
-                        (GameDataContainer.WinGameControlId == role.GameControlId))
+                        (gameData.WinGameControlId != int.MaxValue) &&
+                        (gameData.WinGameControlId == role.GameControlId))
                     {
                         addWinner(player);
                     }
@@ -170,8 +170,8 @@ namespace ExtremeRoles.Patches
                                 addWinner(player);
                             }
                             else if (
-                                (GameDataContainer.WinGameControlId != int.MaxValue) &&
-                                (GameDataContainer.WinGameControlId == multiAssignRole.AnotherRole.GameControlId))
+                                (gameData.WinGameControlId != int.MaxValue) &&
+                                (gameData.WinGameControlId == multiAssignRole.AnotherRole.GameControlId))
                             {
                                 addWinner(player);
                             }

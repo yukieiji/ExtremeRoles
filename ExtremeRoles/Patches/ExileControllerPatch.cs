@@ -14,7 +14,10 @@ namespace ExtremeRoles.Patches
             [HarmonyArgument(0)] GameData.PlayerInfo exiled,
             [HarmonyArgument(1)] bool tie)
         {
-			if (!AssassinMeeting.AssassinMeetingTrigger) { return true; }
+
+            var gameData = ExtremeRolesPlugin.GameDataStore;
+
+            if (!gameData.AssassinMeetingTrigger) { return true; }
 
 			if (__instance.specialInputHandler != null)
 			{
@@ -28,11 +31,11 @@ namespace ExtremeRoles.Patches
             __instance.Text.text = string.Empty;
 
             PlayerControl player = Helper.Player.GetPlayerControlById(
-                AssassinMeeting.IsMarinPlayerId);
+                gameData.IsMarinPlayerId);
 
             string printStr;
 
-            if (AssassinMeeting.AssassinateMarin)
+            if (gameData.AssassinateMarin)
             {
                 printStr = player.Data.PlayerName + Helper.Translation.GetString(
                     "assassinateMarinSucsess");
@@ -85,14 +88,16 @@ namespace ExtremeRoles.Patches
 
         private static void resetAssassinMeeting()
         {
-            if (AssassinMeeting.AssassinMeetingTrigger)
+            if (ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
             {
-                AssassinMeeting.AssassinMeetingTrigger = false;
+                ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger = false;
             }
         }
         private static void wrapUpPostfix(GameData.PlayerInfo exiled)
         {
-            var deadedAssassin = Module.GameDataContainer.DeadedAssassin;
+            var gameData = ExtremeRolesPlugin.GameDataStore;
+
+            var deadedAssassin = gameData.DeadedAssassin;
 
             if (deadedAssassin.Count != 0)
             {
@@ -102,10 +107,9 @@ namespace ExtremeRoles.Patches
 
                     assasin.ExiledAction(
                         Helper.Player.GetPlayerControlById(playerId).Data);
-                    if (AssassinMeeting.AssassinateMarin) { break; }
-     
+
+                    gameData.DeadedAssassin.Remove(playerId);
                 }
-                Module.GameDataContainer.DeadedAssassin.Clear();
             }
 
             var role = ExtremeRoleManager.GetLocalPlayerRole() as IRoleAbility;

@@ -122,13 +122,13 @@ namespace ExtremeRoles.Roles
             }
         }
 
-        public static void GameInit()
+        public static void Initialize()
         {
             roleControlId = 0;
             GameRole.Clear();
             foreach (var role in CombRole)
             {
-                role.GameInit();
+                role.Initialize();
             }
         }
 
@@ -164,7 +164,7 @@ namespace ExtremeRoles.Roles
                         abilityRole.CreateAbility();
                     }
 
-                    addRole.GameInit();
+                    addRole.Initialize();
                     addRole.GameControlId = id;
                     roleControlId = id + 1;
 
@@ -257,7 +257,7 @@ namespace ExtremeRoles.Roles
                 abilityRole.CreateAbility();
             }
 
-            addRole.GameInit();
+            addRole.Initialize();
             addRole.GameControlId = roleControlId;
             roleControlId = roleControlId + 1;
 

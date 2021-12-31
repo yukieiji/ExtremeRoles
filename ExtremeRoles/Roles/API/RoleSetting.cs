@@ -44,7 +44,7 @@ namespace ExtremeRoles.Roles.API
 
         public int GetRoleOptionId(int option) => this.OptionIdOffset + option;
 
-        public void GameInit()
+        public void Initialize()
         {
             CommonInit();
             RoleSpecificInit();

@@ -15,8 +15,9 @@ namespace ExtremeRoles
     [BepInDependency(ReactorPlugin.Id)]
     public partial class ExtremeRolesPlugin : BasePlugin
     {
-        public Harmony harmony { get; } = new(Id);
+        public Harmony Harmony { get; } = new(Id);
         public static ExtremeRolesPlugin Instance;
+        public static Module.GameDataContainer GameDataStore = new Module.GameDataContainer();
 
         internal static BepInEx.Logging.ManualLogSource Logger;
 
@@ -25,6 +26,7 @@ namespace ExtremeRoles
         public static ConfigEntry<bool> DebugMode { get; private set; }
 
         public static IRegionInfo[] DefaultRegions;
+
         public static void UpdateRegions()
         {
             ServerManager serverManager = DestroyableSingleton<ServerManager>.Instance;
@@ -56,11 +58,12 @@ namespace ExtremeRoles
                 4, OptionsHolder.VanillaMaxPlayerNum).ToArray(); // 最小プレイヤー数 = 4人
 
             Instance = this;
+
             OptionsHolder.Create();
 
             UpdateRegions();
 
-            harmony.PatchAll();
+            Harmony.PatchAll();
         }
 
     }
