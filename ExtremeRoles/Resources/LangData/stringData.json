@@ -370,7 +370,7 @@
     "EvolverShortDescription": {
         "11": "\u6b7b\u4f53\u3092\u55b0\u3089\u3044\u3001\u9032\u5316\u305b\u3088"
     },
-    "Evolve": {
+    "evolve": {
         "11": "\u9032\u5316"
     },
     "eating": {
@@ -524,7 +524,7 @@
         "11": "\u30de\u30fc\u30ea\u30f3"
     },
     "AvalonsRolesSpawnRate": {
-        "11": "\u30a2\u30b5\u30b7\u30f3\u3068\u30de\u30fc\u30ea\u30f3"
+        "11": "<color=#FF1919FF>\u30a2\u30b5\u30b7\u30f3</color>\u3068<color=#00ffff>\u30de\u30fc\u30ea\u30f3</color>"
     },
     "AvalonsRolesRoleNum": {
         "11": "\u30b9\u30dd\u30fc\u30f3\u30bb\u30c3\u30c8\u6570"
