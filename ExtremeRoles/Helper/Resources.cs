@@ -9,6 +9,10 @@ namespace ExtremeRoles.Helper
 {
     public class Resources
     {
+
+        internal delegate bool d_LoadImage(IntPtr tex, IntPtr data, bool markNonReadable);
+        internal static d_LoadImage iCall_LoadImage;
+
         public static Sprite LoadSpriteFromResources(string path, float pixelsPerUnit)
         {
             try
@@ -21,7 +25,7 @@ namespace ExtremeRoles.Helper
             }
             catch
             {
-                System.Console.WriteLine("Error loading sprite from path: " + path);
+                Logging.Debug("Error loading sprite from path: " + path);
             }
             return null;
         }
@@ -40,36 +44,16 @@ namespace ExtremeRoles.Helper
             }
             catch
             {
-                System.Console.WriteLine("Error loading texture from resources: " + path);
+                Logging.Debug("Error loading texture from resources: " + path);
             }
             return null;
         }
-
-        public static Texture2D loadTextureFromDisk(string path)
-        {
-            try
-            {
-                if (File.Exists(path))
-                {
-                    Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
-                    byte[] byteTexture = File.ReadAllBytes(path);
-                    LoadImage(texture, byteTexture, false);
-                    return texture;
-                }
-            }
-            catch
-            {
-                System.Console.WriteLine("Error loading texture from disk: " + path);
-            }
-            return null;
-        }
-
-        internal delegate bool d_LoadImage(IntPtr tex, IntPtr data, bool markNonReadable);
-        internal static d_LoadImage iCall_LoadImage;
         private static bool LoadImage(Texture2D tex, byte[] data, bool markNonReadable)
         {
             if (iCall_LoadImage == null)
+            {
                 iCall_LoadImage = IL2CPP.ResolveICall<d_LoadImage>("UnityEngine.ImageConversion::LoadImage");
+            }
             var il2cppArray = (Il2CppStructArray<byte>)data;
             return iCall_LoadImage.Invoke(tex.Pointer, il2cppArray.Pointer, markNonReadable);
         }

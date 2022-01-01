@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 using HarmonyLib;
 using UnityEngine;
@@ -45,7 +44,8 @@ namespace ExtremeRoles.Patches
             spriteRenderer.transform.localScale = Vector3.zero;
 
             __instance.StartCoroutine(
-                Effects.Bloop((float)index * 0.3f, spriteRenderer.transform, 1f, 0.5f));
+                Effects.Bloop((float)index * 0.3f,
+                spriteRenderer.transform, 1f, 0.5f));
             parent.GetComponent<VoteSpreader>().AddVote(spriteRenderer);
 
             return false;
@@ -74,6 +74,7 @@ namespace ExtremeRoles.Patches
             __instance.SkipVoteButton.ClearButtons();
             __instance.SkipVoteButton.voteComplete = true;
             __instance.SkipVoteButton.gameObject.SetActive(false);
+
             MeetingHud.VoteStates voteStates = __instance.state;
             if (voteStates != MeetingHud.VoteStates.NotVoted)
             {
@@ -227,10 +228,20 @@ namespace ExtremeRoles.Patches
             }
             if (gameData.AssassinMeetingTrigger)
             {
-                int randomPlayerIndex = UnityEngine.Random.RandomRange(
-                    0, __instance.playerStates.Length);
-                __instance.SkipVoteButton.SetTargetPlayerId(
-                    __instance.playerStates[randomPlayerIndex].TargetPlayerId);
+
+                bool targetImposter;
+                byte targetPlayerId;
+                do
+                {
+                    int randomPlayerIndex = UnityEngine.Random.RandomRange(
+                        0, __instance.playerStates.Length);
+                    targetPlayerId = __instance.playerStates[randomPlayerIndex].TargetPlayerId;
+
+                    targetImposter = ExtremeRoleManager.GameRole[targetPlayerId].Team == Roles.API.ExtremeRoleType.Impostor;
+
+                } while (targetImposter);
+
+                __instance.SkipVoteButton.SetTargetPlayerId(targetPlayerId);
                 __instance.SkipVoteButton.Parent = __instance;
             }
         }
@@ -301,12 +312,18 @@ namespace ExtremeRoles.Patches
             {
                 __instance.SkipVoteButton.gameObject.SetActive(false);
             }
+
+            if (ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
+            {
+                __instance.TitleText.text = Helper.Translation.GetString(
+                    "whoIsMarine");
+                return;
+            }
+
             // From TOR
             // This fixes a bug with the original game where pressing the button and a kill happens simultaneously
             // results in bodies sometimes being created *after* the meeting starts, marking them as dead and
             // removing the corpses so there's no random corpses leftover afterwards
-
-            if (ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
 
             foreach (DeadBody b in UnityEngine.Object.FindObjectsOfType<DeadBody>())
             {

@@ -33,7 +33,7 @@ namespace ExtremeRoles.Patches.Option
             var gameTab = GameObject.Find("GameTab");
 
             var template = UnityEngine.Object.FindObjectsOfType<StringOption>().FirstOrDefault();
-            if (template == null) return;
+            if (template == null) { return; }
 
             var gameSettings = GameObject.Find("Game Settings");
             var gameSettingMenu = UnityEngine.Object.FindObjectsOfType<GameSettingMenu>().FirstOrDefault();
@@ -43,7 +43,9 @@ namespace ExtremeRoles.Patches.Option
 
             var erTab = UnityEngine.Object.Instantiate(roleTab, roleTab.transform.parent);
             var tabHighlight = erTab.transform.FindChild("Hat Button").FindChild("Tab Background").GetComponent<SpriteRenderer>();
-            erTab.transform.FindChild("Hat Button").FindChild("Icon").GetComponent<SpriteRenderer>().sprite = Helper.Resources.LoadSpriteFromResources("TheOtherRoles.Resources.TabIcon.png", 100f);
+            erTab.transform.FindChild("Hat Button").FindChild(
+                "Icon").GetComponent<SpriteRenderer>().sprite = Helper.Resources.LoadSpriteFromResources(
+                    Resources.ResourcesPaths.TabLogo, 100f);
 
 
             gameTab.transform.position += Vector3.left * 0.5f;

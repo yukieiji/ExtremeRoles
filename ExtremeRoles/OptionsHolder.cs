@@ -14,7 +14,9 @@ namespace ExtremeRoles
 {
     public static class OptionsHolder
     {
-        public static string[] SpawnRate = new string[] { "0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%" };
+        public static string[] SpawnRate = new string[] {
+            "0%", "10%", "20%", "30%", "40%",
+            "50%", "60%", "70%", "80%", "90%", "100%" };
         public static string[] OptionPreset = new string[] { "preset1", "preset2", "preset3", "preset4", "preset5" };
         public static string[] Range = new string[] { "short", "middle", "long"};
 
