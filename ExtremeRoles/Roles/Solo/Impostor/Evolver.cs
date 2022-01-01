@@ -61,7 +61,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.CreateAbilityButton(
                 this.defaultButtonText,
                 Helper.Resources.LoadSpriteFromResources(
-                    Resources.ResourcesPaths.TestButton, 115f),
+                    Resources.ResourcesPaths.EvolverEvolved, 115f),
                 checkAbility: CheckAbility,
                 abilityCleanUp: CleanUp,
                 abilityNum: OptionsHolder.VanillaMaxPlayerNum - 1);
