@@ -21,14 +21,4 @@ namespace ExtremeRoles.Patches.MapModule
         }
     }
 
-    [HarmonyPatch(typeof(Console), nameof(Console.Use))]
-    public static class ConsoleUsePatch
-    {
-        public static bool Prefix(Console __instance)
-        {
-            return !Helper.Player.IsBlocked(
-                __instance, PlayerControl.LocalPlayer);
-        }
-    }
-
 }
