@@ -47,13 +47,13 @@ namespace ExtremeRoles.Roles.Combination
         {
 
             var meetingOpt = CustomOption.Create(
-                this.OptionIdOffset + (int)AssassinOption.IsDeadForceMeeting,
+                GetRoleOptionId((int)AssassinOption.IsDeadForceMeeting),
                 Design.ConcatString(
                     this.RoleName,
                     AssassinOption.IsDeadForceMeeting.ToString()),
                 true, parentOps);
             CustomOption.Create(
-                this.OptionIdOffset + (int)AssassinOption.CanSeeRoleBeforeFirstMeeting,
+                GetRoleOptionId((int)AssassinOption.CanSeeRoleBeforeFirstMeeting),
                 Design.ConcatString(
                     this.RoleName,
                     AssassinOption.CanSeeRoleBeforeFirstMeeting.ToString()),
@@ -119,6 +119,7 @@ namespace ExtremeRoles.Roles.Combination
             HasTask,
             CanSeeVote,
             CanSeeNeutral,
+            CanUseVent,
         }
 
         public bool IsAssassinate = false;
@@ -192,22 +193,28 @@ namespace ExtremeRoles.Roles.Combination
             CustomOptionBase parentOps)
         {
             CustomOption.Create(
-                this.OptionIdOffset + (int)MarlinOption.HasTask,
+                GetRoleOptionId((int)MarlinOption.HasTask),
                 Design.ConcatString(
                     this.RoleName,
                     MarlinOption.HasTask.ToString()),
                 false, parentOps);
             CustomOption.Create(
-                this.OptionIdOffset + (int)MarlinOption.CanSeeVote,
+                GetRoleOptionId((int)MarlinOption.CanSeeVote),
                 Design.ConcatString(
                     this.RoleName,
                     MarlinOption.CanSeeVote.ToString()),
                 false, parentOps);
             CustomOption.Create(
-                this.OptionIdOffset + (int)MarlinOption.CanSeeNeutral,
+                GetRoleOptionId((int)MarlinOption.CanSeeNeutral),
                 Design.ConcatString(
                     this.RoleName,
                     MarlinOption.CanSeeNeutral.ToString()),
+                false, parentOps);
+            CustomOption.Create(
+                GetRoleOptionId((int)MarlinOption.CanUseVent),
+                Design.ConcatString(
+                    this.RoleName,
+                    MarlinOption.CanUseVent.ToString()),
                 false, parentOps);
         }
 
@@ -221,6 +228,8 @@ namespace ExtremeRoles.Roles.Combination
                 GetRoleOptionId((int)MarlinOption.CanSeeVote)].GetValue();
             this.CanSeeNeutral = OptionsHolder.AllOption[
                 GetRoleOptionId((int)MarlinOption.CanSeeNeutral)].GetValue();
+            this.UseVent = OptionsHolder.AllOption[
+                GetRoleOptionId((int)MarlinOption.CanUseVent)].GetValue();
         }
     }
 }
