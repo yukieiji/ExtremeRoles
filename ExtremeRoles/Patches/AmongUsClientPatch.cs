@@ -40,14 +40,15 @@ namespace ExtremeRoles.Patches
                 { 
                     finalStatus = GameDataContainer.PlayerStatus.Disconnected; 
                 }
-                else if (playerInfo.IsDead)
-                { 
-                    finalStatus = GameDataContainer.PlayerStatus.Dead; }
                 else if (
                     (gameData.EndReason == GameOverReason.ImpostorBySabotage) &&
                     (!playerInfo.Role.IsImpostor))
                 { 
                     finalStatus = GameDataContainer.PlayerStatus.Dead; 
+                }
+                else if (playerInfo.IsDead)
+                {
+                    finalStatus = GameDataContainer.PlayerStatus.Dead;
                 }
 
                 gameData.EndGameAddStatus(
