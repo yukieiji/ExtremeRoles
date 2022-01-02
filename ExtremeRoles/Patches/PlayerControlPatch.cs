@@ -16,7 +16,7 @@ namespace ExtremeRoles.Patches
 {
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CoStartMeeting))]
-    class PlayerControlCoStartMeetingPatch
+    public class PlayerControlCoStartMeetingPatch
     {
         public static void Prefix(PlayerControl __instance, [HarmonyArgument(0)] GameData.PlayerInfo meetingTarget)
         {
@@ -37,6 +37,10 @@ namespace ExtremeRoles.Patches
     {
         public static void Postfix(PlayerControl __instance)
         {
+
+            ExtremeRolesPlugin.GameDataStore.AddDeadInfo(
+                __instance, DeathReason.Exile, null);
+
             if (!ExtremeRoleManager.GameRole[__instance.PlayerId].HasTask)
             {
                 __instance.ClearTasks();
@@ -46,7 +50,7 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
-    class PlayerControlFixedUpdatePatch
+    public class PlayerControlFixedUpdatePatch
     {
         public static void Postfix(PlayerControl __instance)
         {
@@ -542,7 +546,7 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FindClosestTarget))]
-    class PlayerControlFindClosestTargetPatch
+    public class PlayerControlFindClosestTargetPatch
     {
         static bool Prefix(
             PlayerControl __instance,
@@ -604,7 +608,7 @@ namespace ExtremeRoles.Patches
 
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
-    class PlayerControlHandleRpcPatch
+    public class PlayerControlHandleRpcPatch
     {
         static void Postfix([HarmonyArgument(0)] byte callId, [HarmonyArgument(1)] MessageReader reader)
         {
@@ -670,8 +674,21 @@ namespace ExtremeRoles.Patches
         }
     }
 
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
+    public class PlayerControlMurderPlayerPatch
+    {
+        public static void Postfix(
+            PlayerControl __instance,
+            [HarmonyArgument(0)] PlayerControl target)
+        {
+            ExtremeRolesPlugin.GameDataStore.AddDeadInfo(
+                __instance, DeathReason.Kill, target);
+        }
+    }
+
+
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetKillTimer))]
-    class PlayerControlSetCoolDownPatch
+    public class PlayerControlSetCoolDownPatch
     {
         public static bool Prefix(
             PlayerControl __instance, [HarmonyArgument(0)] float time)
@@ -705,7 +722,7 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Shapeshift))]
-    class PlayerControlShapeshiftPatch
+    public class PlayerControlShapeshiftPatch
     {
         public static bool Prefix(
             PlayerControl __instance,

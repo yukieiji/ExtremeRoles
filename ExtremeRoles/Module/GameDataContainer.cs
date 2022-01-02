@@ -54,6 +54,21 @@ namespace ExtremeRoles.Module
             IsMarinPlayerId = byte.MaxValue;
         }
 
+        public void AddDeadInfo(
+            PlayerControl deadPlayer,
+            DeathReason reason,
+            PlayerControl killer)
+        {
+            DeadPlayerInfo.Add(
+                deadPlayer.PlayerId,
+                new DeadInfo
+                {
+                    DeadTime = DateTime.UtcNow,
+                    Reason = reason,
+                    Killer = killer
+                });
+        }
+
         public void CreatIcons(IntroCutscene __instance)
         {
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
@@ -201,7 +216,7 @@ namespace ExtremeRoles.Module
 
             public DateTime DeadTime { get; set; }
 
-            public PlayerControl killer { get; set; }
+            public PlayerControl Killer { get; set; }
         }
 
         public class PlayerStatistics
