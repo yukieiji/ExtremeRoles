@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -17,6 +18,7 @@ namespace ExtremeRoles.Module
 
         public GameOverReason EndReason;
         public List<GamePlayerInfo> EndGamePlayerInfo = new List<GamePlayerInfo>();
+        public Dictionary<byte, DeadInfo> DeadPlayerInfo = new Dictionary<byte, DeadInfo>();
         public Dictionary<byte, PoolablePlayer> PlayerIcon = new Dictionary<byte, PoolablePlayer>();
         
         public List<byte> DeadedAssassin = new List<byte>();
@@ -39,6 +41,7 @@ namespace ExtremeRoles.Module
             PlayerIcon.Clear();
             DeadedAssassin.Clear();
             EndGamePlayerInfo.Clear();
+            DeadPlayerInfo.Clear();
 
             MeetingsCount = 0;
             WinGameControlId = int.MaxValue;
@@ -190,6 +193,15 @@ namespace ExtremeRoles.Module
             {
                 neutralTeam.Add(key, 1);
             }
+        }
+
+        public class DeadInfo
+        {
+            public DeathReason Reason { get; set; }
+
+            public DateTime DeadTime { get; set; }
+
+            public PlayerControl killer { get; set; }
         }
 
         public class PlayerStatistics
