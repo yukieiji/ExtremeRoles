@@ -75,7 +75,7 @@ namespace ExtremeRoles.Patches
 
             if (OptionsHolder.Ship.DisableNeutralSpecialForceEnd)
             {
-                setNeutralWinner();
+                addNeutralWinner();
             }
 
             switch (gameData.EndReason)
@@ -99,37 +99,6 @@ namespace ExtremeRoles.Patches
                 default:
                     break;
             }
-        }
-
-        private static void setNeutralWinner()
-        {
-            List<(ExtremeRoleId, int)> winRole = new List<(ExtremeRoleId, int)>();
-
-            foreach (var playerInfo in GameData.Instance.AllPlayers)
-            {
-                var role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
-
-                if (role.IsNeutral() && role.IsWin)
-                {
-                    int gameControlId = role.GameControlId;
-
-                    if (OptionsHolder.Ship.IsSameNeutralSameWin)
-                    {
-                        gameControlId = int.MaxValue;
-                    }
-
-                    if (!winRole.Contains((role.Id, gameControlId)))
-                    {
-                        winRole.Add((role.Id, gameControlId));
-                    }
-
-                    addWinner(playerInfo);
-                }
-            }
-        }
-        private static void resetWinner()
-        {
-            TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
         }
         
         private static void addSpecificRolePlayerToWinner(
@@ -181,6 +150,55 @@ namespace ExtremeRoles.Patches
             }
         }
 
+        private static void addNeutralWinner()
+        {
+            List<(ExtremeRoleId, int)> winRole = new List<(ExtremeRoleId, int)>();
+
+            foreach (var playerInfo in GameData.Instance.AllPlayers)
+            {
+                var role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
+                var multiAssignRole = role as Roles.API.MultiAssignRoleBase;
+
+                if (multiAssignRole != null)
+                {
+                    if (checkAndAddWinRole(
+                            multiAssignRole.AnotherRole,
+                            playerInfo, ref winRole))
+                    { 
+                        continue;
+                    }
+                }
+                checkAndAddWinRole(role, playerInfo, ref winRole);
+            }
+        }
+
+        private static bool checkAndAddWinRole(
+            Roles.API.SingleRoleBase role,
+            GameData.PlayerInfo playerInfo,
+            ref List<(ExtremeRoleId, int)> winRole)
+        {
+            int gameControlId = role.GameControlId;
+
+            if (OptionsHolder.Ship.IsSameNeutralSameWin)
+            {
+                gameControlId = int.MaxValue;
+            }
+
+            if (winRole.Contains((role.Id, gameControlId)))
+            {
+                addWinner(playerInfo);
+                return true;
+            }
+            else if (role.IsNeutral() && role.IsWin)
+            {
+
+                winRole.Add((role.Id, gameControlId));
+                addWinner(playerInfo);
+                return true;
+            }
+            return false;
+        }
+
         private static void addWinner(GameData.PlayerInfo playerInfo)
         {
             WinningPlayerData wpd = new WinningPlayerData(playerInfo);
@@ -190,6 +208,11 @@ namespace ExtremeRoles.Patches
         private static void addWinner(PlayerControl player)
         {
             addWinner(player.Data);
+        }
+
+        private static void resetWinner()
+        {
+            TempData.winners = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
         }
 
     }
