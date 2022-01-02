@@ -336,6 +336,12 @@ namespace ExtremeRoles.Patches
                 {
                     playerInfoText = $"{roleNames}";
                 }
+                else
+                {
+                    playerInfoText = "";
+                    meetingInfoText = "";
+                }
+
             }
             else if (OptionsHolder.Client.GhostsSeeRole && OptionsHolder.Client.GhostsSeeTask)
             {

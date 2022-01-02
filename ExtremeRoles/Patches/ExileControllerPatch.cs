@@ -101,15 +101,14 @@ namespace ExtremeRoles.Patches
 
             if (deadedAssassin.Count != 0)
             {
-                foreach (var playerId in deadedAssassin)
-                {
-                    var assasin = (Roles.Combination.Assassin)ExtremeRoleManager.GameRole[playerId];
 
-                    assasin.ExiledAction(
-                        Helper.Player.GetPlayerControlById(playerId).Data);
+                int callAssassin = UnityEngine.Random.RandomRange(0, deadedAssassin.Count);
 
-                    gameData.DeadedAssassin.Remove(playerId);
-                }
+                byte playerId = deadedAssassin[callAssassin];
+
+                var assasin = (Roles.Combination.Assassin)ExtremeRoleManager.GameRole[playerId];
+                assasin.ExiledAction(
+                    Helper.Player.GetPlayerControlById(playerId).Data);
             }
 
             var role = ExtremeRoleManager.GetLocalPlayerRole() as IRoleAbility;

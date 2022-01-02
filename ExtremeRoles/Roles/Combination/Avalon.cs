@@ -14,7 +14,8 @@ namespace ExtremeRoles.Roles.Combination
         public const string Name = "AvalonsRoles";
         public Color SettingColor = Palette.White;
         public Avalon() : base(
-            Name, new Color(255f, 255f, 255f), 2)
+            Name, new Color(255f, 255f, 255f), 2,
+            OptionsHolder.MaxImposterNum)
         {
             this.Roles.Add(new Assassin());
             this.Roles.Add(new Marlin());

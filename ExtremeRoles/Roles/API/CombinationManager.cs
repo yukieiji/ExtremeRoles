@@ -56,13 +56,16 @@ namespace ExtremeRoles.Roles.API
     {
 
         private int setPlayerNum = 0;
+        private int maxSetNum = int.MaxValue;
 
         public ConstCombinationRoleManagerBase(
             string roleName,
             Color optionColor,
-            int setPlayerNum) : base (roleName, optionColor)
+            int setPlayerNum,
+            int maxSetNum = int.MaxValue) : base (roleName, optionColor)
         {
             this.setPlayerNum = setPlayerNum;
+            this.maxSetNum = maxSetNum;
         }
 
         protected override CustomOptionBase CreateSpawnOption()
@@ -77,7 +80,9 @@ namespace ExtremeRoles.Roles.API
                         RoleCommonOption.SpawnRate.ToString())),
                 OptionsHolder.SpawnRate, null, true);
 
-            int thisMaxRoleNum = (int)Math.Floor((decimal)OptionsHolder.VanillaMaxPlayerNum / this.setPlayerNum);
+            int thisMaxRoleNum =
+                this.maxSetNum == int.MaxValue ? 
+                (int)Math.Floor((decimal)OptionsHolder.VanillaMaxPlayerNum / this.setPlayerNum) : this.maxSetNum;
 
             CustomOption.Create(
                 GetRoleOptionId(RoleCommonOption.RoleNum),
