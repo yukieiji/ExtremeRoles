@@ -33,26 +33,8 @@ namespace ExtremeRoles.Patches
             {
 
                 var role = roleData[playerInfo.PlayerId];
-                var (completedTask, totalTask) = Helper.Task.GetTaskInfo(playerInfo);
 
-                var finalStatus = GameDataContainer.PlayerStatus.Alive;
-                if (playerInfo.Disconnected)
-                { 
-                    finalStatus = GameDataContainer.PlayerStatus.Disconnected; 
-                }
-                else if (
-                    (gameData.EndReason == GameOverReason.ImpostorBySabotage) &&
-                    (!playerInfo.Role.IsImpostor))
-                { 
-                    finalStatus = GameDataContainer.PlayerStatus.Dead; 
-                }
-                else if (playerInfo.IsDead)
-                {
-                    finalStatus = GameDataContainer.PlayerStatus.Dead;
-                }
-
-                gameData.EndGameAddStatus(
-                    playerInfo, finalStatus, role, totalTask, completedTask);
+                gameData.AddPlayerSummary(playerInfo);
 
                 if (role.IsNeutral())
                 {

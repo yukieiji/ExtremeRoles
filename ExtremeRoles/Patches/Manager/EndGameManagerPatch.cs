@@ -85,15 +85,15 @@ namespace ExtremeRoles.Patches.Manager
                     poolablePlayer.NameText.transform.localPosition.y, -15f);
                 poolablePlayer.NameText.text = winningPlayerData.PlayerName;
 
-                foreach (var data in ExtremeRolesPlugin.GameDataStore.EndGamePlayerInfo)
+                foreach (var data in ExtremeRolesPlugin.GameDataStore.FinalSummary)
                 {
                     if (data.PlayerName != winningPlayerData.PlayerName) { continue; }
                     poolablePlayer.NameText.text +=
-                        $"\n\n<size=80%>{string.Join("\n", data.Roles.GetColoredRoleName())}</size>";
+                        $"\n\n<size=80%>{string.Join("\n", data.Role.GetColoredRoleName())}</size>";
 
-                    if(data.Roles.IsNeutral())
+                    if(data.Role.IsNeutral())
                     {
-                        winNeutral.Add(data.Roles);
+                        winNeutral.Add(data.Role);
                     }
 
                 }
