@@ -223,11 +223,36 @@
     "buttonCountText": {
         "11": "\u6b8b\u308a"
     },
+    "summaryText": {
+        "11": "\u6700\u7d42\u7d50\u679c:"
+    },
+    "summaryInfo": {
+        "11": "\u30d7\u30ec\u30a4\u30e4\u30fc\u540d<pos=15%>\u30bf\u30b9\u30af<pos=25%>\u6700\u7d42\u72b6\u614b<pos=38%>\u5f79\u8077"
+    },
+    "Alive": {
+        "11": "\u751f\u5b58"
+    },
+    "Exiled": {
+        "11": "\u8ffd\u653e"
+    },
+    "Dead": {
+        "11": "\u6b7b\u4ea1"
+    },
+    "Killed": {
+        "11": "\u6bba\u5bb3"
+    },
+    "Suicide": {
+        "11": "\u81ea\u6c7a"
+    },
+    "Disconnected": {
+        "11": "\u5207\u65ad"
+    },
     "neutral": {
         "11": "\u30cb\u30e5\u30fc\u30c8\u30e9\u30eb"
     },
     "neutralIntro": {
-        "11": "\u81ea\u5206\u81ea\u8eab\u306e\u52dd\u5229\u306e\u305f\u3081\u306b\u52d5\u3051"
+        "11": "\u4ed6\u306e\u8ab0\u3067\u3082\u306a\u3044\u81ea\u5206\u81ea\u8eab\u306e\u52dd\u5229\u306e\u305f\u3081\u306b\u52d5\u3051",
+        "12": "\u4ee5\u4e0b\u30af\u30eb\u30fc"
     },
     "Impostor": {
         "11": "\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc"
@@ -257,7 +282,8 @@
         "11": "\u30b9\u30da\u30b7\u30e3\u30eb\u30af\u30eb\u30fc"
     },
     "SpecialCrewSpawnRate": {
-        "11": "\u30b9\u30da\u30b7\u30e3\u30eb\u30af\u30eb\u30fc"
+        "11": "\u30b9\u30da\u30b7\u30e3\u30eb\u30af\u30eb\u30fc",
+        "12": "\u4ee5\u4e0b\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc"
     },
     "SpecialCrewRoleNum": {
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570"
@@ -506,7 +532,8 @@
         "11": "\u30b5\u30a4\u30c9\u30ad\u30c3\u30af\u304c\u5225\u8996\u754c\u3092\u6301\u3064\u304b"
     },
     "JackalSidekickVison": {
-        "11": "\u30b5\u30a4\u30c9\u30ad\u30c3\u30af\u306e\u8996\u754c"
+        "11": "\u30b5\u30a4\u30c9\u30ad\u30c3\u30af\u306e\u8996\u754c",
+        "12": "\u4ee5\u4e0b\u30b3\u30f3\u30d3\u30ed\u30fc\u30eb"
     },
     "JackalSidekickApplyEnvironmentVisionEffect": {
         "11": "\u30b5\u30a4\u30c9\u30ad\u30c3\u30af\u304c\u8996\u754c\u52b9\u679c\u3092\u53d7\u3051\u308b\u304b"

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -22,6 +23,7 @@ namespace ExtremeRoles.Patches.Manager
         {
             setPlayerNameAndRole(__instance);
             setWinBonusText(__instance);
+            setRoleSummary(__instance);
             RPCOperator.Initialize();
         }
 
@@ -85,15 +87,15 @@ namespace ExtremeRoles.Patches.Manager
                     poolablePlayer.NameText.transform.localPosition.y, -15f);
                 poolablePlayer.NameText.text = winningPlayerData.PlayerName;
 
-                foreach (var data in ExtremeRolesPlugin.GameDataStore.EndGamePlayerInfo)
+                foreach (var data in ExtremeRolesPlugin.GameDataStore.FinalSummary)
                 {
                     if (data.PlayerName != winningPlayerData.PlayerName) { continue; }
                     poolablePlayer.NameText.text +=
-                        $"\n\n<size=80%>{string.Join("\n", data.Roles.GetColoredRoleName())}</size>";
+                        $"\n\n<size=80%>{string.Join("\n", data.Role.GetColoredRoleName())}</size>";
 
-                    if(data.Roles.IsNeutral())
+                    if(data.Role.IsNeutral())
                     {
-                        winNeutral.Add(data.Roles);
+                        winNeutral.Add(data.Role);
                     }
 
                 }
@@ -105,53 +107,123 @@ namespace ExtremeRoles.Patches.Manager
             if (!OptionsHolder.Client.ShowRoleSummary) { return; }
 
             var position = Camera.main.ViewportToWorldPoint(new Vector3(0f, 1f, Camera.main.nearClipPlane));
-            GameObject roleSummary = UnityEngine.Object.Instantiate(
+            GameObject summary = UnityEngine.Object.Instantiate(
                 manager.WinText.gameObject);
-            roleSummary.transform.position = new Vector3(
+            summary.transform.position = new Vector3(
                 manager.Navigation.ExitButton.transform.position.x + 0.1f,
                 position.y - 0.1f, -14f);
-            roleSummary.transform.localScale = new Vector3(1f, 1f, 1f);
+            summary.transform.localScale = new Vector3(1f, 1f, 1f);
 
-            var roleSummaryText = new StringBuilder();
-            roleSummaryText.AppendLine(Translation.GetString("roleSummaryText"));
-            /*
-            AdditionalTempData.playerRoles.Sort((x, y) =>
+            var summaryText = new StringBuilder();
+            summaryText.AppendLine(Translation.GetString("summaryText"));
+            summaryText.AppendLine(Translation.GetString("summaryInfo"));
+
+            var summaryData = ExtremeRolesPlugin.GameDataStore.FinalSummary;
+
+            summaryData.Sort((x, y) =>
             {
-                RoleInfo roleX = x.Roles.FirstOrDefault();
-                RoleInfo roleY = y.Roles.FirstOrDefault();
-                RoleId idX = roleX == null ? RoleId.NoRole : roleX.roleId;
-                RoleId idY = roleY == null ? RoleId.NoRole : roleY.roleId;
-
-                if (x.Status == y.Status)
+                if (x.StatusInfo != y.StatusInfo)
                 {
-                    if (idX == idY)
-                    {
-                        return x.PlayerName.CompareTo(y.PlayerName);
-                    }
-                    return idX.CompareTo(idY);
+                    return x.StatusInfo.CompareTo(y.StatusInfo);
                 }
-                return x.Status.CompareTo(y.Status);
+
+                if (x.Role.Id != y.Role.Id)
+                {
+                    return x.Role.Id.CompareTo(y.Role.Id);
+                }
+                if (x.Role.Id == ExtremeRoleId.VanillaRole)
+                {
+                    var xVanillaRole = (Roles.Solo.VanillaRoleWrapper)x.Role;
+                    var yVanillaRole = (Roles.Solo.VanillaRoleWrapper)y.Role;
+
+                    return xVanillaRole.VanilaRoleId.CompareTo(
+                        yVanillaRole.VanilaRoleId);
+                }
+
+                return x.PlayerName.CompareTo(y.PlayerName);
 
             });
 
-            foreach (var data in AdditionalTempData.playerRoles)
-            {
-                var taskInfo = data.TasksTotal > 0 ? $"<color=#FAD934FF>{data.TasksCompleted}/{data.TasksTotal}</color>" : "";
-                string aliveDead = ModTranslation.getString("roleSummary" + data.Status.ToString(), def: "-");
-                roleSummaryText.AppendLine($"{data.PlayerName}<pos=18.5%>{taskInfo}<pos=25%>{aliveDead}<pos=34%>{data.RoleString}");
-            }
-            */
-            TMPro.TMP_Text roleSummaryTextMesh = roleSummary.GetComponent<TMPro.TMP_Text>();
-            roleSummaryTextMesh.alignment = TMPro.TextAlignmentOptions.TopLeft;
-            roleSummaryTextMesh.color = Color.white;
-            roleSummaryTextMesh.outlineWidth *= 1.2f;
-            roleSummaryTextMesh.fontSizeMin = 1.25f;
-            roleSummaryTextMesh.fontSizeMax = 1.25f;
-            roleSummaryTextMesh.fontSize = 1.25f;
+            List<Color> tagColor = new List<Color>();
 
-            var roleSummaryTextMeshRectTransform = roleSummaryTextMesh.GetComponent<RectTransform>();
+            for (int i = 0; i < OptionsHolder.VanillaMaxPlayerNum; ++i)
+            {
+                tagColor.Add(
+                    UnityEngine.Random.ColorHSV(0f, 1f, 0.5f, 1f, 0.8f, 1f, 1f, 1f));
+            }
+
+            List<string> randomTag = new List<string> {
+                    "γ", "ζ", "δ", "ε", "η",
+                    "θ", "λ", "μ", "π", "ρ",
+                    "σ", "φ", "ψ", "χ", "ω" }.OrderBy(
+                item => RandomGenerator.Instance.Next()).ToList();
+
+
+            foreach (var playerSummary in summaryData)
+            {
+                string taskInfo = playerSummary.TotalTask > 0 ? 
+                    $"<color=#FAD934FF>{playerSummary.CompletedTask}/{playerSummary.TotalTask}</color>" : "";
+                string aliveDead = Translation.GetString(
+                    playerSummary.StatusInfo.ToString());
+
+                string roleName = playerSummary.Role.GetColoredRoleName();
+                string tag = playerSummary.Role.GetRoleTag();
+                
+                int id = playerSummary.Role.GameControlId;
+                if (tag != string.Empty)
+                {
+                    tag = Design.ColoedString(
+                        tagColor[id], tag);
+                }
+                else
+                {
+                    tag = Design.ColoedString(
+                        tagColor[id], randomTag[id]);
+                }
+
+                var mutiAssignRole = playerSummary.Role as Roles.API.MultiAssignRoleBase;
+                if (mutiAssignRole != null)
+                {
+                    if (mutiAssignRole.AnotherRole != null)
+                    {
+                        string anotherTag = playerSummary.Role.GetRoleTag();
+                        id = mutiAssignRole.AnotherRole.GameControlId;
+
+                        if (anotherTag != string.Empty)
+                        {
+                            anotherTag = Design.ColoedString(
+                                tagColor[id], anotherTag);
+                        }
+                        else
+                        {
+                            anotherTag = Design.ColoedString(
+                                tagColor[id], randomTag[id]);
+                        }
+
+                        tag = string.Format(
+                            tag, "+", anotherTag);
+
+                    }
+                }
+
+                summaryText.AppendLine(
+                    $"{playerSummary.PlayerName}<pos=18%>{taskInfo}<pos=27%>{aliveDead}<pos=35%>{tag}:{roleName}");
+            }
+
+
+            
+            TMPro.TMP_Text summaryTextMesh = summary.GetComponent<TMPro.TMP_Text>();
+            summaryTextMesh.alignment = TMPro.TextAlignmentOptions.TopLeft;
+            summaryTextMesh.color = Color.white;
+            summaryTextMesh.outlineWidth *= 1.2f;
+            summaryTextMesh.fontSizeMin = 1.25f;
+            summaryTextMesh.fontSizeMax = 1.25f;
+            summaryTextMesh.fontSize = 1.25f;
+
+            var roleSummaryTextMeshRectTransform = summaryTextMesh.GetComponent<RectTransform>();
             roleSummaryTextMeshRectTransform.anchoredPosition = new Vector2(position.x + 3.5f, position.y - 0.1f);
-            roleSummaryTextMesh.text = roleSummaryText.ToString();
+            summaryTextMesh.text = summaryText.ToString();
+
         }
 
         private static void setWinBonusText(

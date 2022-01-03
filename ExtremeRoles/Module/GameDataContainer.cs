@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -11,12 +12,15 @@ namespace ExtremeRoles.Module
         {
             Alive = 0,
             Exiled,
-            Dead, 
-            Disconnected, 
+            Dead,
+            Killed, 
+            Suicide,
+            Disconnected,
         }
 
         public GameOverReason EndReason;
-        public List<GamePlayerInfo> EndGamePlayerInfo = new List<GamePlayerInfo>();
+        public List<PlayerSummary> FinalSummary = new List<PlayerSummary>();
+        public Dictionary<byte, DeadInfo> DeadPlayerInfo = new Dictionary<byte, DeadInfo>();
         public Dictionary<byte, PoolablePlayer> PlayerIcon = new Dictionary<byte, PoolablePlayer>();
         
         public List<byte> DeadedAssassin = new List<byte>();
@@ -38,7 +42,8 @@ namespace ExtremeRoles.Module
         {
             PlayerIcon.Clear();
             DeadedAssassin.Clear();
-            EndGamePlayerInfo.Clear();
+            FinalSummary.Clear();
+            DeadPlayerInfo.Clear();
 
             MeetingsCount = 0;
             WinGameControlId = int.MaxValue;
@@ -49,6 +54,82 @@ namespace ExtremeRoles.Module
 
             ExiledAssassinId = byte.MaxValue;
             IsMarinPlayerId = byte.MaxValue;
+        }
+
+        public void AddDeadInfo(
+            PlayerControl deadPlayer,
+            DeathReason reason,
+            PlayerControl killer)
+        {
+            var newReson = PlayerStatus.Dead;
+
+            switch (reason)
+            {
+                case DeathReason.Exile:
+                    newReson = PlayerStatus.Exiled;
+                    break;
+                case DeathReason.Disconnect:
+                    newReson = PlayerStatus.Disconnected;
+                    break;
+                case DeathReason.Kill:
+                    newReson = PlayerStatus.Killed;
+                    if (killer.PlayerId == deadPlayer.PlayerId)
+                    {
+                        newReson = PlayerStatus.Suicide;
+                    }
+                    break;
+                default:
+                    break;
+
+            }
+
+            DeadPlayerInfo.Add(
+                deadPlayer.PlayerId,
+                new DeadInfo
+                {
+                    DeadTime = DateTime.UtcNow,
+                    Reason = newReson,
+                    Killer = killer
+                });
+        }
+
+        public void AddPlayerSummary(
+            GameData.PlayerInfo playerInfo)
+        {
+
+            var role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
+            var (completedTask, totalTask) = Helper.Task.GetTaskInfo(playerInfo);
+
+            var finalStatus = PlayerStatus.Alive;
+            if (
+                (this.EndReason == GameOverReason.ImpostorBySabotage) &&
+                (!playerInfo.Role.IsImpostor))
+            {
+                finalStatus = PlayerStatus.Dead;
+            }
+            else if (playerInfo.Disconnected)
+            {
+                finalStatus = PlayerStatus.Disconnected;
+            }
+            else
+            {
+                if (this.DeadPlayerInfo.ContainsKey(playerInfo.PlayerId))
+                {
+                    var info = this.DeadPlayerInfo[playerInfo.PlayerId];
+                    finalStatus = info.Reason;
+                }
+            }
+
+            this.FinalSummary.Add(
+                new PlayerSummary
+                {
+                    PlayerName = playerInfo.PlayerName,
+                    Role = role,
+                    StatusInfo = finalStatus,
+                    TotalTask = totalTask,
+                    CompletedTask = EndReason == GameOverReason.HumansByTask ? totalTask : completedTask,
+                });
+
         }
 
         public void CreatIcons(IntroCutscene __instance)
@@ -64,24 +145,6 @@ namespace ExtremeRoles.Module
                 poolPlayer.gameObject.SetActive(false);
                 PlayerIcon.Add(player.PlayerId, poolPlayer);
             }
-        }
-
-        public void EndGameAddStatus(
-            GameData.PlayerInfo playerInfo,
-            PlayerStatus finalStatus,
-            SingleRoleBase role,
-            int totalTask,
-            int completedTask)
-        {
-            EndGamePlayerInfo.Add(
-                new GamePlayerInfo()
-                {
-                    PlayerName = playerInfo.PlayerName,
-                    Roles = role,
-                    CompletedTasks = completedTask,
-                    TotalTasks = totalTask,
-                    StatusInfo = finalStatus,
-                });
         }
 
         public PlayerStatistics CreateStatistics()
@@ -175,7 +238,14 @@ namespace ExtremeRoles.Module
             };
         }
 
-        private static void addNeutralTeams(
+        public void ReplaceDeadReason(
+            byte playerId, PlayerStatus newReason)
+        {
+            if (!this.DeadPlayerInfo.ContainsKey(playerId)) { return; }
+            this.DeadPlayerInfo[playerId].Reason = newReason;
+        }
+
+        private void addNeutralTeams(
             ref Dictionary<(NeutralSeparateTeam, int), int> neutralTeam,
             int gameControlId,
             NeutralSeparateTeam team)
@@ -192,6 +262,15 @@ namespace ExtremeRoles.Module
             }
         }
 
+        public class DeadInfo
+        {
+            public PlayerStatus Reason { get; set; }
+
+            public DateTime DeadTime { get; set; }
+
+            public PlayerControl Killer { get; set; }
+        }
+
         public class PlayerStatistics
         {
             public int AllTeamCrewmate { get; set; }
@@ -203,12 +282,12 @@ namespace ExtremeRoles.Module
             public Dictionary<(NeutralSeparateTeam, int), int> SeparatedNeutralAlive { get; set; }
 
         }
-        public class GamePlayerInfo
+        public class PlayerSummary
         {
             public string PlayerName { get; set; }
-            public SingleRoleBase Roles { get; set; }
-            public int CompletedTasks { get; set; }
-            public int TotalTasks { get; set; }
+            public SingleRoleBase Role { get; set; }
+            public int CompletedTask { get; set; }
+            public int TotalTask { get; set; }
             public PlayerStatus StatusInfo { get; set; }
         }
     }
