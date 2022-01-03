@@ -682,7 +682,7 @@ namespace ExtremeRoles.Patches
             [HarmonyArgument(0)] PlayerControl target)
         {
             ExtremeRolesPlugin.GameDataStore.AddDeadInfo(
-                __instance, DeathReason.Kill, target);
+                target, DeathReason.Kill, __instance);
         }
     }
 
