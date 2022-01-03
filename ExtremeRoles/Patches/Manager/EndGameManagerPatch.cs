@@ -116,6 +116,7 @@ namespace ExtremeRoles.Patches.Manager
 
             var summaryText = new StringBuilder();
             summaryText.AppendLine(Translation.GetString("summaryText"));
+            summaryText.AppendLine(Translation.GetString("summaryInfo"));
 
             var summaryData = ExtremeRolesPlugin.GameDataStore.FinalSummary;
 
@@ -143,6 +144,21 @@ namespace ExtremeRoles.Patches.Manager
 
             });
 
+            List<Color> tagColor = new List<Color>();
+
+            for (int i = 0; i < OptionsHolder.VanillaMaxPlayerNum; ++i)
+            {
+                tagColor.Add(
+                    UnityEngine.Random.ColorHSV(0f, 1f, 0.5f, 1f, 0.8f, 1f, 1f, 1f));
+            }
+
+            List<string> randomTag = new List<string> {
+                    "γ", "ζ", "δ", "ε", "η",
+                    "θ", "λ", "μ", "π", "ρ",
+                    "σ", "φ", "ψ", "χ", "ω" }.OrderBy(
+                item => RandomGenerator.Instance.Next()).ToList();
+
+
             foreach (var playerSummary in summaryData)
             {
                 string taskInfo = playerSummary.TotalTask > 0 ? 
@@ -151,9 +167,47 @@ namespace ExtremeRoles.Patches.Manager
                     playerSummary.StatusInfo.ToString());
 
                 string roleName = playerSummary.Role.GetColoredRoleName();
+                string tag = playerSummary.Role.GetRoleTag();
+                
+                int id = playerSummary.Role.GameControlId;
+                if (tag != string.Empty)
+                {
+                    tag = Design.ColoedString(
+                        tagColor[id], tag);
+                }
+                else
+                {
+                    tag = Design.ColoedString(
+                        tagColor[id], randomTag[id]);
+                }
+
+                var mutiAssignRole = playerSummary.Role as Roles.API.MultiAssignRoleBase;
+                if (mutiAssignRole != null)
+                {
+                    if (mutiAssignRole.AnotherRole != null)
+                    {
+                        string anotherTag = playerSummary.Role.GetRoleTag();
+                        id = mutiAssignRole.AnotherRole.GameControlId;
+
+                        if (anotherTag != string.Empty)
+                        {
+                            anotherTag = Design.ColoedString(
+                                tagColor[id], anotherTag);
+                        }
+                        else
+                        {
+                            anotherTag = Design.ColoedString(
+                                tagColor[id], randomTag[id]);
+                        }
+
+                        tag = string.Format(
+                            tag, "+", anotherTag);
+
+                    }
+                }
 
                 summaryText.AppendLine(
-                    $"{playerSummary.PlayerName}<pos=18.5%>{taskInfo}<pos=25%>{aliveDead}<pos=34%>{roleName}");
+                    $"{playerSummary.PlayerName}<pos=18%>{taskInfo}<pos=27%>{aliveDead}<pos=35%>{tag}:{roleName}");
             }
 
 
@@ -169,6 +223,7 @@ namespace ExtremeRoles.Patches.Manager
             var roleSummaryTextMeshRectTransform = summaryTextMesh.GetComponent<RectTransform>();
             roleSummaryTextMeshRectTransform.anchoredPosition = new Vector2(position.x + 3.5f, position.y - 0.1f);
             summaryTextMesh.text = summaryText.ToString();
+
         }
 
         private static void setWinBonusText(

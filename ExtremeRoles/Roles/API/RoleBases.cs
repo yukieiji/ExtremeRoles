@@ -116,6 +116,8 @@ namespace ExtremeRoles.Roles.API
             this.NameColor, Translation.GetString(this.RoleName));
 
 
+        public virtual string GetRoleTag() => string.Empty;
+
         public virtual string GetRolePlayerNameTag(
             SingleRoleBase targetRole,
             byte targetPlayerId)
@@ -130,7 +132,7 @@ namespace ExtremeRoles.Roles.API
                 }
             }
 
-            return string.Empty;
+            return GetRoleTag();
         }
         public virtual Color GetTargetRoleSeeColor(
             SingleRoleBase targetRole,

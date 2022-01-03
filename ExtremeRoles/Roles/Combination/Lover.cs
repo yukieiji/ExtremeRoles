@@ -53,6 +53,8 @@ namespace ExtremeRoles.Roles.Combination
             exiledUpdate();
         }
 
+        public override string GetRoleTag() => "♥";
+
         public override string GetRolePlayerNameTag(
             SingleRoleBase targetRole, byte targetPlayerId)
         {
@@ -60,7 +62,8 @@ namespace ExtremeRoles.Roles.Combination
                 this.IsSameControlId(targetRole))
             {
                 return Design.ColoedString(
-                    ColorPalette.LoverPink, " ♥");
+                    ColorPalette.LoverPink,
+                    string.Format($" {GetRoleTag()}"));
             }
 
             return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
