@@ -301,11 +301,11 @@ namespace ExtremeRoles.Patches.Manager
 
                             if(i == 0)
                             {
-                                bonusText = bonusText + Translation.GetString("AndFirst");
+                                bonusText = bonusText + Translation.GetString("andFirst");
                             }
                             else
                             {
-                                bonusText = bonusText + Translation.GetString("And");
+                                bonusText = bonusText + Translation.GetString("and");
                             }
                             bonusText = bonusText + Translation.GetString(
                                 winNeutral[i].GetColoredRoleName());
@@ -318,7 +318,7 @@ namespace ExtremeRoles.Patches.Manager
                 winNeutral.Clear();
             }
 
-            textRenderer.text = bonusText + string.Format(Translation.GetString("Win"));
+            textRenderer.text = bonusText + string.Format(Translation.GetString("win"));
         }
 
     }
