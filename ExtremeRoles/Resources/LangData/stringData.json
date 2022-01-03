@@ -296,10 +296,10 @@
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570"
     },
     "SpecialCrewHasOtherVison": {
-        "11": "\u5225\u8996\u754c\u3092\u6301\u3064\u304b"
+        "11": "\u5225\u306e\u8996\u754c\u8a2d\u5b9a\u3092\u6301\u3064\u304b"
     },
     "SpecialCrewVison": {
-        "11": "\u8996\u754c"
+        "11": "\u30d3\u30b8\u30e7\u30f3"
     },
     "SpecialCrewApplyEnvironmentVisionEffect": {
         "11": "\u8996\u754c\u52b9\u679c\u3092\u53d7\u3051\u308b\u304b"
@@ -320,10 +320,10 @@
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570"
     },
     "SheriffHasOtherVison": {
-        "11": "\u5225\u8996\u754c\u3092\u6301\u3064\u304b"
+        "11": "\u5225\u306e\u8996\u754c\u8a2d\u5b9a\u3092\u6301\u3064\u304b"
     },
     "SheriffVison": {
-        "11": "\u8996\u754c"
+        "11": "\u30d3\u30b8\u30e7\u30f3"
     },
     "SheriffApplyEnvironmentVisionEffect": {
         "11": "\u8996\u754c\u52b9\u679c\u3092\u53d7\u3051\u308b\u304b"
@@ -362,10 +362,10 @@
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570"
     },
     "MaintainerHasOtherVison": {
-        "11": "\u5225\u8996\u754c\u3092\u6301\u3064\u304b"
+        "11": "\u5225\u306e\u8996\u754c\u8a2d\u5b9a\u3092\u6301\u3064\u304b"
     },
     "MaintainerVison": {
-        "11": "\u8996\u754c"
+        "11": "\u30d3\u30b8\u30e7\u30f3"
     },
     "MaintainerApplyEnvironmentVisionEffect": {
         "11": "\u8996\u754c\u52b9\u679c\u3092\u53d7\u3051\u308b\u304b"
@@ -392,10 +392,10 @@
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570"
     },
     "SpecialImpostorHasOtherVison": {
-        "11": "\u5225\u8996\u754c\u3092\u6301\u3064\u304b"
+        "11": "\u5225\u306e\u8996\u754c\u8a2d\u5b9a\u3092\u6301\u3064\u304b"
     },
     "SpecialImpostorVison": {
-        "11": "\u8996\u754c"
+        "11": "\u30d3\u30b8\u30e7\u30f3"
     },
     "SpecialImpostorApplyEnvironmentVisionEffect": {
         "11": "\u8996\u754c\u52b9\u679c\u3092\u53d7\u3051\u308b\u304b"
@@ -428,10 +428,10 @@
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570"
     },
     "EvolverHasOtherVison": {
-        "11": "\u5225\u8996\u754c\u3092\u6301\u3064\u304b"
+        "11": "\u5225\u306e\u8996\u754c\u8a2d\u5b9a\u3092\u6301\u3064\u304b"
     },
     "EvolverVison": {
-        "11": "\u8996\u754c"
+        "11": "\u30d3\u30b8\u30e7\u30f3"
     },
     "EvolverApplyEnvironmentVisionEffect": {
         "11": "\u8996\u754c\u52b9\u679c\u3092\u53d7\u3051\u308b\u304b"
@@ -494,10 +494,10 @@
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570"
     },
     "AliceHasOtherVison": {
-        "11": "\u5225\u8996\u754c\u3092\u6301\u3064\u304b"
+        "11": "\u5225\u306e\u8996\u754c\u8a2d\u5b9a\u3092\u6301\u3064\u304b"
     },
     "AliceVison": {
-        "11": "\u8996\u754c"
+        "11": "\u30d3\u30b8\u30e7\u30f3"
     },
     "AliceApplyEnvironmentVisionEffect": {
         "11": "\u8996\u754c\u52b9\u679c\u3092\u53d7\u3051\u308b\u304b"
@@ -551,10 +551,10 @@
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570"
     },
     "JackalHasOtherVison": {
-        "11": "\u30b8\u30e3\u30c3\u30ab\u30eb\u304c\u5225\u8996\u754c\u3092\u6301\u3064\u304b"
+        "11": "\u30b8\u30e3\u30c3\u30ab\u30eb\u304c\u5225\u306e\u8996\u754c\u8a2d\u5b9a\u3092\u6301\u3064\u304b"
     },
     "JackalVison": {
-        "11": "\u30b8\u30e3\u30c3\u30ab\u30eb\u306e\u8996\u754c"
+        "11": "\u30b8\u30e3\u30c3\u30ab\u30eb\u306e\u30d3\u30b8\u30e7\u30f3"
     },
     "JackalApplyEnvironmentVisionEffect": {
         "11": "\u30b8\u30e3\u30c3\u30ab\u30eb\u304c\u8996\u754c\u52b9\u679c\u3092\u53d7\u3051\u308b\u304b"
@@ -608,10 +608,10 @@
         "11": "\u30b5\u30a4\u30c9\u30ad\u30c3\u30af\u304c\u30ad\u30eb\u3092\u884c\u3048\u308b\u304b"
     },
     "JackalSidekickHasOtherVison": {
-        "11": "\u30b5\u30a4\u30c9\u30ad\u30c3\u30af\u304c\u5225\u8996\u754c\u3092\u6301\u3064\u304b"
+        "11": "\u30b5\u30a4\u30c9\u30ad\u30c3\u30af\u304c\u5225\u306e\u8996\u754c\u8a2d\u5b9a\u3092\u6301\u3064\u304b"
     },
     "JackalSidekickVison": {
-        "11": "\u30b5\u30a4\u30c9\u30ad\u30c3\u30af\u306e\u8996\u754c"
+        "11": "\u30b5\u30a4\u30c9\u30ad\u30c3\u30af\u306e\u30d3\u30b8\u30e7\u30f3"
     },
     "JackalSidekickApplyEnvironmentVisionEffect": {
         "11": "\u30b5\u30a4\u30c9\u30ad\u30c3\u30af\u304c\u8996\u754c\u52b9\u679c\u3092\u53d7\u3051\u308b\u304b"
@@ -641,10 +641,10 @@
         "11": "\u5225\u5f79\u8077\u306e\u80fd\u529b\u3092\u6301\u3064\u304b"
     },
     "AssassinHasOtherVison": {
-        "11": "\u30a2\u30b5\u30b7\u30f3\u304c\u5225\u8996\u754c\u3092\u6301\u3064\u304b"
+        "11": "\u30a2\u30b5\u30b7\u30f3\u304c\u5225\u306e\u8996\u754c\u8a2d\u5b9a\u3092\u6301\u3064\u304b"
     },
     "AssassinVison": {
-        "11": "\u30a2\u30b5\u30b7\u30f3\u306e\u8996\u754c"
+        "11": "\u30a2\u30b5\u30b7\u30f3\u306e\u30d3\u30b8\u30e7\u30f3"
     },
     "AssassinApplyEnvironmentVisionEffect": {
         "11": "\u30a2\u30b5\u30b7\u30f3\u304c\u8996\u754c\u52b9\u679c\u3092\u53d7\u3051\u308b\u304b"
@@ -668,10 +668,10 @@
         "11": "\u30a2\u30b5\u30b7\u30f3\u6b7b\u4ea1\u5f8c\u306e\u6700\u521d\u306e\u4f1a\u8b70\u524d\u306b\u30ed\u30fc\u30eb\u3092\u898b\u308b\u3053\u3068\u304c\u3067\u304d\u308b\u304b"
     },
     "MarlinHasOtherVison": {
-        "11": "\u30de\u30fc\u30ea\u30f3\u304c\u5225\u8996\u754c\u3092\u6301\u3064\u304b"
+        "11": "\u30de\u30fc\u30ea\u30f3\u304c\u5225\u306e\u8996\u754c\u8a2d\u5b9a\u3092\u6301\u3064\u304b"
     },
     "MarlinVison": {
-        "11": "\u30de\u30fc\u30ea\u30f3\u306e\u8996\u754c"
+        "11": "\u30de\u30fc\u30ea\u30f3\u306e\u30d3\u30b8\u30e7\u30f3"
     },
     "MarlinApplyEnvironmentVisionEffect": {
         "11": "\u30de\u30fc\u30ea\u30f3\u304c\u8996\u754c\u52b9\u679c\u3092\u53d7\u3051\u308b\u304b"
@@ -731,10 +731,10 @@
         "11": "\u5225\u5f79\u8077\u306e\u80fd\u529b\u3092\u6301\u3064\u304b"
     },
     "LoverHasOtherVison": {
-        "11": "\u5225\u8996\u754c\u3092\u6301\u3064\u304b"
+        "11": "\u5225\u306e\u8996\u754c\u8a2d\u5b9a\u3092\u6301\u3064\u304b"
     },
     "LoverVison": {
-        "11": "\u8996\u754c"
+        "11": "\u30d3\u30b8\u30e7\u30f3"
     },
     "LoverApplyEnvironmentVisionEffect": {
         "11": "\u8996\u754c\u52b9\u679c\u3092\u53d7\u3051\u308b\u304b"
