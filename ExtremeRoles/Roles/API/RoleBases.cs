@@ -127,8 +127,10 @@ namespace ExtremeRoles.Roles.API
             {
                 if (multiAssignRole.AnotherRole != null)
                 {
-                    return this.GetRolePlayerNameTag(
-                        multiAssignRole.AnotherRole, targetPlayerId);
+                    return string.Format(
+                        GetRoleTag(),
+                        this.GetRolePlayerNameTag(
+                        multiAssignRole.AnotherRole, targetPlayerId));
                 }
             }
 
@@ -138,6 +140,13 @@ namespace ExtremeRoles.Roles.API
             SingleRoleBase targetRole,
             byte targetPlayerId)
         {
+            
+            if ((targetRole.IsImposter() || targetRole.FakeImposter) &&
+                this.IsImposter())
+            {
+                return Palette.ImpostorRed;
+            }
+
             var multiAssignRole = targetRole as MultiAssignRoleBase;
             if (multiAssignRole != null)
             {
@@ -147,17 +156,18 @@ namespace ExtremeRoles.Roles.API
                         multiAssignRole.AnotherRole, targetPlayerId);
                 }
             }
-            
-            if ((targetRole.IsImposter() || targetRole.FakeImposter) &&
-                this.IsImposter())
-            {
-                return Palette.ImpostorRed;
-            }
+
             return Palette.White;
         }
 
         public virtual bool IsSameTeam(SingleRoleBase targetRole)
         {
+
+            if (this.Team == ExtremeRoleType.Crewmate)
+            {
+                return true;
+            }
+
             var multiAssignRole = targetRole as MultiAssignRoleBase;
             if (multiAssignRole != null)
             {
@@ -168,14 +178,8 @@ namespace ExtremeRoles.Roles.API
                 }
             }
 
-            if (this.Team == ExtremeRoleType.Crewmate)
-            {
-                return true;
-            }
-            else
-            {
-                return targetRole.Team == this.Team;
-            }
+            return targetRole.Team == this.Team;
+            
         }
 
         public virtual bool IsTeamsWin() => this.IsWin;

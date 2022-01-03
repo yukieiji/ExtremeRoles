@@ -71,28 +71,19 @@ namespace ExtremeRoles.Module
 
                 using (var csv = new StreamReader("option.csv", new UTF8Encoding(true)))
                 {
-                    string line = csv.ReadLine();
-                    string[] varsionHeader = line.Split(comma);
+                    string line = csv.ReadLine(); // バージョン情報
 
-                    if (varsionHeader[0].Equals("Extreme Roles") &&
-                        varsionHeader[1].Equals("Version") &&
-                        varsionHeader[2].Equals(
-                            Assembly.GetExecutingAssembly().GetName().Version.ToString()))
+                    csv.ReadLine(); // ヘッダー
+
+                    while ((line = csv.ReadLine()) != null)
                     {
+                        string[] option = line.Split(',');
 
-                        csv.ReadLine(); // ヘッダー
-
-                        while ((line = csv.ReadLine()) != null)
+                        int id = int.Parse(option[0]);
+                        int selection = int.Parse(option[3]);
+                        if (OptionsHolder.AllOption.ContainsKey(id))
                         {
-                            string[] option = line.Split(',');
-
-                            int id = int.Parse(option[0]);
-                            int selection = int.Parse(option[3]);
-                            if (OptionsHolder.AllOption.ContainsKey(id))
-                            {
-                                OptionsHolder.AllOption[id].UpdateSelection(selection);
-                            }
-
+                            OptionsHolder.AllOption[id].UpdateSelection(selection);
                         }
                     }
 
