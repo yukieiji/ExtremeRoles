@@ -14,8 +14,8 @@ namespace ExtremeRoles.Module
             Exiled,
             Dead,
             Killed, 
+            Suicide,
             Disconnected,
-            Suicide
         }
 
         public GameOverReason EndReason;
@@ -106,6 +106,10 @@ namespace ExtremeRoles.Module
                 (!playerInfo.Role.IsImpostor))
             {
                 finalStatus = PlayerStatus.Dead;
+            }
+            else if (playerInfo.Disconnected)
+            {
+                finalStatus = PlayerStatus.Disconnected;
             }
             else
             {

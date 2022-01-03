@@ -44,18 +44,4 @@ namespace ExtremeRoles.Patches
 			return false;
 		}
 	}
-
-
-	[HarmonyPatch(typeof(GameData), nameof(GameData.HandleDisconnect))]
-	public static class GameDataHandleDisconnectPatch
-	{
-		public static void Postfix(
-			GameData __instance,
-			[HarmonyArgument(0)] PlayerControl player,
-			[HarmonyArgument(1)] DisconnectReasons reason)
-        {
-			ExtremeRolesPlugin.GameDataStore.AddDeadInfo(
-				player, DeathReason.Disconnect, null);
-        }
-	}
 }
