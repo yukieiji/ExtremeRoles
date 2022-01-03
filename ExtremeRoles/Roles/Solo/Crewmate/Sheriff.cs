@@ -53,18 +53,22 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void Update(PlayerControl rolePlayer)
         {
-            if (this.killCountText != null) { return; }
-            createText();
+            if (this.killCountText == null)
+            {
+                createText();
+            }
         }
 
         private void createText()
         {
-            this.killCountText = UnityEngine.Object.Instantiate(
+            this.killCountText = GameObject.Instantiate(
                 HudManager.Instance.KillButton.cooldownTimerText,
                 HudManager.Instance.KillButton.cooldownTimerText.transform.parent);
+            updateKillCountText();
             this.killCountText.enableWordWrapping = false;
             this.killCountText.transform.localScale = Vector3.one * 0.5f;
             this.killCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
+            this.killCountText.gameObject.SetActive(true);
         }
 
 
@@ -92,6 +96,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 GetRoleOptionId((int)SheriffOption.ShootNum)].GetValue();
             this.canShootNeutral = OptionsHolder.AllOption[
                 GetRoleOptionId((int)SheriffOption.CanShootNeutral)].GetValue();
+            this.killCountText = null;
         }
 
         private void updateKillButton()
@@ -99,6 +104,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.shootNum = this.shootNum - 1;
             if (this.shootNum == 0)
             {
+                this.killCountText.gameObject.SetActive(false);
+                HudManager.Instance.KillButton.SetDisabled();
                 this.CanKill = false;
             }
             updateKillCountText();
