@@ -17,6 +17,7 @@ namespace ExtremeRoles.Roles
     {
         Null = -100,
         VanillaRole = 50,
+
         Assassin,
         Marlin,
         Lover,
