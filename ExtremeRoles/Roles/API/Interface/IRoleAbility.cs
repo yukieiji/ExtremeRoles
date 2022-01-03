@@ -66,8 +66,8 @@ namespace ExtremeRoles.Roles.API.Interface
         public static void CreateRoleAbilityOption(
             this IRoleAbility self,
             CustomOptionBase parentOps,
-            bool hasActiveTime=false,
-            int maxAbilityCount=int.MaxValue)
+            bool hasActiveTime = false,
+            int maxAbilityCount = int.MaxValue)
         {
 
             CustomOption.Create(

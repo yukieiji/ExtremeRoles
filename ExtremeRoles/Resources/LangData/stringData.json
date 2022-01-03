@@ -347,14 +347,43 @@
         "11": "\u7b2c\u4e09\u9663\u55b6\u3092\u30ad\u30eb\u3067\u304d\u308b\u304b"
     },
     "SheriffIntroDescription": {
-        "11": "\u3053\u306e\u8239\u3092\u8352\u3089\u3059\u4e0d\u5c4a\u304d\u8005\u306b\u6b63\u7fa9\u306e\u9244\u69cc\u3092\u4e0b\u305b"
+        "11": "\u3053\u306e\u8239\u3092\u8352\u3089\u3059\u4e0d\u5c4a\u304d\u8005\u306b\u6b63\u7fa9\u306e\u9244\u69cc\u3092"
     },
     "SheriffShortDescription": {
         "11": "\u306b\u6b63\u7fa9\u306e\u9244\u69cc\u3092\u4e0b\u305b"
     },
+    "Maintainer": {
+        "11": "\u30e1\u30f3\u30c6\u30ca\u30fc"
+    },
+    "MaintainerSpawnRate": {
+        "11": "\u30e1\u30f3\u30c6\u30ca\u30fc"
+    },
+    "MaintainerRoleNum": {
+        "11": "\u30b9\u30dd\u30fc\u30f3\u6570"
+    },
+    "MaintainerHasOtherVison": {
+        "11": "\u5225\u8996\u754c\u3092\u6301\u3064\u304b"
+    },
+    "MaintainerVison": {
+        "11": "\u8996\u754c"
+    },
+    "MaintainerApplyEnvironmentVisionEffect": {
+        "11": "\u8996\u754c\u52b9\u679c\u3092\u53d7\u3051\u308b\u304b"
+    },
+    "MaintainerAbilityCoolTime": {
+        "11": "\u7dca\u6025\u4fee\u7406\u306e\u30af\u30fc\u30eb\u30bf\u30a4\u30e0"
+    },
+    "MaintainerAbilityCount": {
+        "11": "\u7dca\u6025\u4fee\u7406\u306e\u56de\u6570"
+    },
+    "MaintainerIntroDescription": {
+        "11": "\u8239\u306e\u304a\u56f0\u308a\u3054\u3068\u306f\u304a\u4efb\u305b\u3042\u308c"
+    },
+    "MaintainerShortDescription": {
+        "11": "\u7dca\u6025\u30bf\u30b9\u30af\u306f\u7dca\u6025\u4fee\u7406\u3067\uff01\uff01"
+    },
     "SpecialImpostor": {
-        "11": "\u30b9\u30da\u30b7\u30e3\u30eb\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc",
-        "12": "\u4ee5\u4e0b\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc"
+        "11": "\u30b9\u30da\u30b7\u30e3\u30eb\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc"
     },
     "SpecialImpostorSpawnRate": {
         "11": "\u30b9\u30da\u30b7\u30e3\u30eb\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc"
@@ -534,8 +563,7 @@
         "11": "\u5225\u306e\u30ad\u30eb\u30af\u30fc\u30eb\u30bf\u30a4\u30e0\u3092\u6301\u3064\u304b"
     },
     "JackalKillCoolDown": {
-        "11": "\u30ad\u30eb\u30af\u30fc\u30eb\u30bf\u30a4\u30e0",
-        "12": "\u4ee5\u4e0b\u30b3\u30f3\u30d3\u30ed\u30fc\u30eb"
+        "11": "\u30ad\u30eb\u30af\u30fc\u30eb\u30bf\u30a4\u30e0"
     },
     "JackalHasOtherKillRange": {
         "11": "\u5225\u306e\u30ad\u30eb\u30ec\u30f3\u30b8\u3092\u6301\u3064\u304b"

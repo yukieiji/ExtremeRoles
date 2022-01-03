@@ -16,6 +16,7 @@ namespace ExtremeRoles
             ShareOption,
             UncheckedMurderPlayer,
             CleanDeadBody,
+            FixLightOff,
 
             ReplaceRole,
 
@@ -54,6 +55,12 @@ namespace ExtremeRoles
                     player.Data.IsDead = true;
                 }
             }
+        }
+        public static void FixLightOff()
+        {
+            SwitchSystem switchSystem = ShipStatus.Instance.Systems[
+                SystemTypes.Electrical].Cast<SwitchSystem>();
+            switchSystem.ActualSwitches = switchSystem.ExpectedSwitches;
         }
 
         public static void SetCombinationRole(

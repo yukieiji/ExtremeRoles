@@ -14,8 +14,8 @@ namespace ExtremeRoles.Patches.MapModule
             __result = float.MaxValue;
 
             //if (IsBlocked(__instance, pc.Object)) return false;
-            if (__instance.AllowImpostor) return true;
-            if (Roles.ExtremeRoleManager.GameRole[pc.PlayerId].HasTask) return true;
+            if (__instance.AllowImpostor) { return true; }
+            if (Roles.ExtremeRoleManager.GameRole[pc.PlayerId].HasTask) { return true; }
 
             return false;
         }

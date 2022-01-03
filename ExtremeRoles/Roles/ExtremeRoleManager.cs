@@ -24,6 +24,7 @@ namespace ExtremeRoles.Roles
         
         SpecialCrew,
         Sheriff,
+        Maintainer,
 
         SpecialImpostor,
         Evolver,
@@ -62,6 +63,7 @@ namespace ExtremeRoles.Roles
             {
                 new SpecialCrew(),
                 new Sheriff(),
+                new Maintainer(),
 
                 new SpecialImpostor(),
                 new Evolver(),
