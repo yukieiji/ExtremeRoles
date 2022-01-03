@@ -139,7 +139,7 @@ namespace ExtremeRoles.Patches
             if (Input.GetKeyDown(KeyCode.Tab) &&
                 AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started)
             {
-                ExtremeRolesPlugin.OptionsPage = ExtremeRolesPlugin.OptionsPage + 1;
+                OptionsHolder.OptionsPage = OptionsHolder.OptionsPage + 1;
             }
         }
     }

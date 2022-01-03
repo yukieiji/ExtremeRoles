@@ -20,9 +20,6 @@ namespace ExtremeRoles
         public static Module.GameDataContainer GameDataStore = new Module.GameDataContainer();
 
         internal static BepInEx.Logging.ManualLogSource Logger;
-
-        public static int OptionsPage = 1;
-
         public static ConfigEntry<bool> DebugMode { get; private set; }
 
         public static IRegionInfo[] DefaultRegions;

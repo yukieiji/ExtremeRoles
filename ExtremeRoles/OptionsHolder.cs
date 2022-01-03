@@ -20,6 +20,8 @@ namespace ExtremeRoles
         public static string[] OptionPreset = new string[] { "preset1", "preset2", "preset3", "preset4", "preset5" };
         public static string[] Range = new string[] { "short", "middle", "long"};
 
+        public static int OptionsPage = 1;
+
         public static int SelectedPreset = 0;
         public const int VanillaMaxPlayerNum = 15;
         public const int MaxImposterNum = 3; 

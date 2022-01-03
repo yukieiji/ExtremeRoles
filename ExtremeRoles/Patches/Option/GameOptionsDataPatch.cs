@@ -138,7 +138,7 @@ namespace ExtremeRoles.Patches.Option
             }
 
             int numPages = pages.Count;
-            int counter = ExtremeRolesPlugin.OptionsPage = ExtremeRolesPlugin.OptionsPage % numPages;
+            int counter = OptionsHolder.OptionsPage = OptionsHolder.OptionsPage % numPages;
 
             __result = pages[counter].Trim('\r', '\n') + "\n\n" + translate("pressTabForMore") + $" ({counter + 1}/{numPages})";
 
