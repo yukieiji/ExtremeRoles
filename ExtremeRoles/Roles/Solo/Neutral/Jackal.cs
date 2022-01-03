@@ -449,6 +449,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             Player.SetPlayerOutLine(this.Target, this.NameColor);
         }
 
+        public void RoleAbilityResetOnMeetingStart()
+        {
+            return;
+        }
+
+        public void RoleAbilityResetOnMeetingEnd()
+        {
+            return;
+        }
     }
 
     public class Sidekick : SingleRoleBase

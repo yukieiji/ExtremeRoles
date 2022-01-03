@@ -86,9 +86,10 @@ namespace ExtremeRoles.Module
             bool allTrue() => true;
 
         }
-        public void ResetCoolTimer()
+        public void ForceAbilityOff()
         {
-            this.timer = this.coolTime;
+            this.isAbilityOn = false;
+            this.Button.cooldownTimerText.color = Palette.EnabledColor;
         }
 
         public void OnClickEvent()
@@ -116,18 +117,10 @@ namespace ExtremeRoles.Module
                 }
             }
         }
-        public void SetAbilityCoolTime(float time)
-        {
-            this.coolTime = time;
-        }
-        public void SetAbilityActiveTime(float time)
-        {
-            this.abilityActiveTime = time;
-        }
 
-        public void UpdateAbility(Func<bool> newAbility)
+        public void ResetCoolTimer()
         {
-            this.useAbility = newAbility;
+            this.timer = this.coolTime;
         }
 
         public void ReplaceHotKey(KeyCode newKey)
@@ -135,16 +128,34 @@ namespace ExtremeRoles.Module
             this.hotkey = newKey;
         }
 
-        public void UpdateAbilityCount(int newCount)
+        public void SetAbilityActiveTime(float time)
         {
-            this.abilityNum = newCount;
-            this.updateAbilityCountText();
+            this.abilityActiveTime = time;
+        }
+
+        public void SetAbilityCoolTime(float time)
+        {
+            this.coolTime = time;
+        }
+
+        public void SetActive(bool isActive)
+        {
+            if (isActive)
+            {
+                Button.gameObject.SetActive(true);
+                Button.graphic.enabled = true;
+            }
+            else
+            {
+                Button.gameObject.SetActive(false);
+                Button.graphic.enabled = false;
+            }
         }
 
         public void Update()
         {
-            if (PlayerControl.LocalPlayer.Data == null || 
-                MeetingHud.Instance || 
+            if (PlayerControl.LocalPlayer.Data == null ||
+                MeetingHud.Instance ||
                 ExileController.Instance ||
                 PlayerControl.LocalPlayer.Data.IsDead)
             {
@@ -186,7 +197,7 @@ namespace ExtremeRoles.Module
                 }
                 if (abilityOn)
                 {
-                    if(!this.abilityCheck())
+                    if (!this.abilityCheck())
                     {
                         this.timer = 0;
                         this.isAbilityOn = false;
@@ -217,19 +228,17 @@ namespace ExtremeRoles.Module
             }
         }
 
-        public void SetActive(bool isActive)
+        public void UpdateAbility(Func<bool> newAbility)
         {
-            if (isActive)
-            {
-                Button.gameObject.SetActive(true);
-                Button.graphic.enabled = true;
-            }
-            else
-            {
-                Button.gameObject.SetActive(false);
-                Button.graphic.enabled = false;
-            }
+            this.useAbility = newAbility;
         }
+
+        public void UpdateAbilityCount(int newCount)
+        {
+            this.abilityNum = newCount;
+            this.updateAbilityCountText();
+        }
+
 
         private bool isHasCleanUp() => cleanUp != null;
 

@@ -187,5 +187,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             this.RoleAbilityInit();
         }
+
+        public void RoleAbilityResetOnMeetingStart()
+        {
+            return;
+        }
+
+        public void RoleAbilityResetOnMeetingEnd()
+        {
+            return;
+        }
     }
 }

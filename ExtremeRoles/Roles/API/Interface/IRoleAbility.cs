@@ -25,6 +25,11 @@ namespace ExtremeRoles.Roles.API.Interface
         public bool UseAbility();
 
         public bool IsAbilityUse();
+
+        public void RoleAbilityResetOnMeetingStart();
+
+        public void RoleAbilityResetOnMeetingEnd();
+
     }
 
     public static class IRoleAbilityMixin
@@ -57,10 +62,6 @@ namespace ExtremeRoles.Roles.API.Interface
             self.RoleAbilityInit();
 
         }
-
-        public static int GetRoleOptionId(
-            this IRoleAbility self,
-            RoleAbilityCommonOption option) => ((IRoleOption)self).GetRoleOptionId((int)option);
 
         public static void CreateRoleAbilityOption(
             this IRoleAbility self,
@@ -101,6 +102,29 @@ namespace ExtremeRoles.Roles.API.Interface
 
         }
 
+        public static int GetRoleOptionId(
+            this IRoleAbility self,
+            RoleAbilityCommonOption option) => ((IRoleOption)self).GetRoleOptionId((int)option);
+
+        public static bool IsCommonUse(this IRoleAbility _)
+        {
+            return PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer.CanMove;
+        }
+
+        public static void ResetOnMeetingEnd(this IRoleAbility self)
+        {
+            self.Button.ResetCoolTimer();
+            self.RoleAbilityResetOnMeetingEnd();
+        }
+
+        public static void ResetOnMeetingStart(this IRoleAbility self)
+        {
+            self.Button.SetActive(false);
+            self.Button.ForceAbilityOff();
+            self.RoleAbilityResetOnMeetingStart();
+        }
+
+
         public static void RoleAbilityInit(this IRoleAbility self)
         {
 
@@ -126,11 +150,6 @@ namespace ExtremeRoles.Roles.API.Interface
             }
 
             self.Button.ResetCoolTimer();
-        }
-
-        public static bool IsCommonUse(this IRoleAbility _)
-        {
-            return PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer.CanMove;
         }
     }
 

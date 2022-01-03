@@ -115,7 +115,7 @@ namespace ExtremeRoles.Patches
 
             if (role != null)
             {
-                role.Button.ResetCoolTimer();
+                role.ResetOnMeetingEnd();
             }
 
             if (exiled == null) { return; };

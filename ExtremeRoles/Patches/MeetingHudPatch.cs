@@ -289,7 +289,7 @@ namespace ExtremeRoles.Patches
             var abilityRole = ExtremeRoleManager.GetLocalPlayerRole() as IRoleAbility;
             if (abilityRole != null)
             {
-                abilityRole.Button.SetActive(false);
+                abilityRole.ResetOnMeetingStart();
             }
 
             if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }

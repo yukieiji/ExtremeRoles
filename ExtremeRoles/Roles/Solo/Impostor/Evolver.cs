@@ -231,5 +231,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 }
             }
         }
+
+        public void RoleAbilityResetOnMeetingStart()
+        {
+            return;
+        }
+
+        public void RoleAbilityResetOnMeetingEnd()
+        {
+            return;
+        }
     }
 }
