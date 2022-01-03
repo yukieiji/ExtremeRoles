@@ -51,6 +51,36 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         }
 
+        public override string GetImportantText(bool isContainFakeTask = true)
+        {
+            string shotText = Design.ColoedString(
+                Palette.ImpostorRed,
+                Translation.GetString("impostorShotCall"));
+
+            if (this.canShootNeutral)
+            {
+                shotText = string.Format("{0}{1}{2}",
+                    shotText,
+                    Design.ColoedString(
+                        this.NameColor,
+                        Translation.GetString("andFirst")),
+                    Design.ColoedString(
+                        ColorPalette.NeutralColor,
+                        Translation.GetString("neutralShotCall")));
+            }
+
+            string baseString = string.Format("{0}: {1}{2}",
+                this.GetColoredRoleName(),
+                shotText,
+                Design.ColoedString(
+                    this.NameColor,
+                    Translation.GetString(
+                        string.Format("{0}{1}", this.Id, "ShortDescription"))));
+
+            return baseString;
+
+        }
+
         public void Update(PlayerControl rolePlayer)
         {
             if (this.killCountText == null)
