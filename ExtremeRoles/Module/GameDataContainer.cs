@@ -15,6 +15,7 @@ namespace ExtremeRoles.Module
             Dead,
             Killed, 
             Suicide,
+            MissShot,
             Disconnected,
         }
 

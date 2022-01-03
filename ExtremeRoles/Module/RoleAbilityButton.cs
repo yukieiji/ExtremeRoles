@@ -240,7 +240,7 @@ namespace ExtremeRoles.Module
             updateAbilityCountText();
 
         }
-        public void updateAbilityCountText()
+        private void updateAbilityCountText()
         {
             this.abilityCountText.text = Helper.Translation.GetString("buttonCountText") + string.Format(
                 Helper.Translation.GetString("unitShots"), this.abilityNum);

@@ -23,6 +23,7 @@ namespace ExtremeRoles.Roles
         Lover,
         
         SpecialCrew,
+        Sheriff,
 
         SpecialImpostor,
         Evolver,
@@ -60,6 +61,7 @@ namespace ExtremeRoles.Roles
             SingleRoleBase> NormalRole = new List<SingleRoleBase>()
             {
                 new SpecialCrew(),
+                new Sheriff(),
 
                 new SpecialImpostor(),
                 new Evolver(),

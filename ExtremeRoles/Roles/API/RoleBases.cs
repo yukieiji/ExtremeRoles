@@ -165,7 +165,7 @@ namespace ExtremeRoles.Roles.API
 
             if (this.Team == ExtremeRoleType.Crewmate)
             {
-                return true;
+                return false;
             }
 
             var multiAssignRole = targetRole as MultiAssignRoleBase;
