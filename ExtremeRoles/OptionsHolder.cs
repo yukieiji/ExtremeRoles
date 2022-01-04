@@ -24,7 +24,9 @@ namespace ExtremeRoles
 
         public static int SelectedPreset = 0;
         public const int VanillaMaxPlayerNum = 15;
-        public const int MaxImposterNum = 3; 
+        public const int MaxImposterNum = 3;
+
+        public static IRegionInfo[] DefaultRegion;
         public enum CommonOptionKey
         {
             PresetSelection = 0,
@@ -54,6 +56,10 @@ namespace ExtremeRoles
 
         public static void Create()
         {
+
+            DefaultRegion = ServerManager.DefaultRegions;
+            UpdateRegion();
+
             CreateConfigOption();
 
             Roles.ExtremeRoleManager.GameRole.Clear();
@@ -267,6 +273,21 @@ namespace ExtremeRoles
             {
                 Logging.Error($"Error while deserializing options:{e.Message}");
             }
+        }
+
+        public static void UpdateRegion()
+        {
+            ServerManager serverManager = DestroyableSingleton<ServerManager>.Instance;
+            IRegionInfo[] regions = DefaultRegion;
+
+            var CustomRegion = new DnsRegionInfo(
+                ConfigParser.Ip.Value, "Custom",
+                StringNames.NoTranslation,
+                ConfigParser.Ip.Value,
+                ConfigParser.Port.Value);
+            regions = regions.Concat(new IRegionInfo[] { CustomRegion.Cast<IRegionInfo>() }).ToArray();
+            ServerManager.DefaultRegions = regions;
+            serverManager.AvailableRegions = regions;
         }
 
         public static class ConfigParser

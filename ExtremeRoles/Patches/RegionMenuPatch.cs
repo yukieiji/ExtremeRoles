@@ -29,87 +29,104 @@ using UnityEngine.UI;
 using System;
 using UnityEngine.Events;
 
-namespace TheOtherRoles.Patches {
+namespace ExtremeRoles.Patches {
     [HarmonyPatch(typeof(RegionMenu), nameof(RegionMenu.Open))]
     public static class RegionMenuOpenPatch
     {
         private static TextBoxTMP ipField;
         private static TextBoxTMP portField;
 
-        public static void Postfix(RegionMenu __instance) {
+        public static void Postfix(RegionMenu __instance)
+        {
             var template = DestroyableSingleton<JoinGameButton>.Instance;
-            if (template == null || template.GameIdText == null) return;
+            if (template == null || template.GameIdText == null) { return; }
 
-            if (ipField == null || ipField.gameObject == null) {
-                ipField = UnityEngine.Object.Instantiate(template.GameIdText, __instance.transform);
+            if (ipField == null || ipField.gameObject == null)
+            {
+                ipField = UnityEngine.Object.Instantiate(
+                    template.GameIdText, __instance.transform);
                 ipField.gameObject.name = "IpTextBox";
+
                 var arrow = ipField.transform.FindChild("arrowEnter");
-                if (arrow == null || arrow.gameObject == null) return;
+                if (arrow == null || arrow.gameObject == null) { return; }
                 UnityEngine.Object.DestroyImmediate(arrow.gameObject);
 
-                ipField.transform.localPosition = new Vector3(0, -1f, -100f);
+                ipField.transform.localPosition = new Vector3(1.0f, -1f, -100f);
                 ipField.characterLimit = 30;
                 ipField.AllowSymbols = true;
                 ipField.ForceUppercase = false;
-                ipField.SetText(TheOtherRolesPlugin.Ip.Value);
-                __instance.StartCoroutine(Effects.Lerp(0.1f, new Action<float>((p) => {
-                    ipField.outputText.SetText(TheOtherRolesPlugin.Ip.Value);
-                    ipField.SetText(TheOtherRolesPlugin.Ip.Value);
-                })));
+                ipField.SetText(
+                    OptionsHolder.ConfigParser.Ip.Value);
+                __instance.StartCoroutine(
+                    Effects.Lerp(0.1f, new Action<float>(
+                        (p) =>
+                        {
+                            ipField.outputText.SetText(OptionsHolder.ConfigParser.Ip.Value);
+                            ipField.SetText(OptionsHolder.ConfigParser.Ip.Value);
+                        })));
 
                 ipField.ClearOnFocus = false; 
-                ipField.OnEnter = ipField.OnChange = new Button.ButtonClickedEvent();
-                ipField.OnFocusLost = new Button.ButtonClickedEvent();
+                ipField.OnEnter = ipField.OnChange = new UnityEngine.UI.Button.ButtonClickedEvent();
+                ipField.OnFocusLost = new UnityEngine.UI.Button.ButtonClickedEvent();
                 ipField.OnChange.AddListener((UnityAction)onEnterOrIpChange);
                 ipField.OnFocusLost.AddListener((UnityAction)onFocusLost);
-
-                void onEnterOrIpChange() {
-                    TheOtherRolesPlugin.Ip.Value = ipField.text;
-                }
-
-                void onFocusLost() {
-                    TheOtherRolesPlugin.UpdateRegions();
-                    __instance.ChooseOption(ServerManager.DefaultRegions[ServerManager.DefaultRegions.Length - 1]);
-                }
             }
 
             if (portField == null || portField.gameObject == null) {
-                portField = UnityEngine.Object.Instantiate(template.GameIdText, __instance.transform);
+                portField = UnityEngine.Object.Instantiate(
+                    template.GameIdText, __instance.transform);
                 portField.gameObject.name = "PortTextBox";
                 var arrow = portField.transform.FindChild("arrowEnter");
-                if (arrow == null || arrow.gameObject == null) return;
+                if (arrow == null || arrow.gameObject == null) { return; }
                 UnityEngine.Object.DestroyImmediate(arrow.gameObject);
 
-                portField.transform.localPosition = new Vector3(0, -1.75f, -100f);
+                portField.transform.localPosition = new Vector3(1.0f, -1.75f, -100f);
                 portField.characterLimit = 5;
-                portField.SetText(TheOtherRolesPlugin.Port.Value.ToString());
-                __instance.StartCoroutine(Effects.Lerp(0.1f, new Action<float>((p) => {
-                    portField.outputText.SetText(TheOtherRolesPlugin.Port.Value.ToString());
-                    portField.SetText(TheOtherRolesPlugin.Port.Value.ToString()); 
-                })));
+                portField.SetText(
+                    OptionsHolder.ConfigParser.Port.Value.ToString());
+                __instance.StartCoroutine(
+                    Effects.Lerp(0.1f, new Action<float>(
+                        (p) =>
+                        {
+                            portField.outputText.SetText(OptionsHolder.ConfigParser.Port.Value.ToString());
+                            portField.SetText(OptionsHolder.ConfigParser.Port.Value.ToString()); 
+                        })));
 
 
                 portField.ClearOnFocus = false;
-                portField.OnEnter = portField.OnChange = new Button.ButtonClickedEvent();
-                portField.OnFocusLost = new Button.ButtonClickedEvent();
+                portField.OnEnter = portField.OnChange = new UnityEngine.UI.Button.ButtonClickedEvent();
+                portField.OnFocusLost = new UnityEngine.UI.Button.ButtonClickedEvent();
                 portField.OnChange.AddListener((UnityAction)onEnterOrPortFieldChange);
                 portField.OnFocusLost.AddListener((UnityAction)onFocusLost);
 
-                void onEnterOrPortFieldChange() {
-                    ushort port = 0;
-                    if (ushort.TryParse(portField.text, out port)) {
-                        TheOtherRolesPlugin.Port.Value = port;
-                        portField.outputText.color = Color.white;
-                    } else {
-                        portField.outputText.color = Color.red;
-                    }
+            }
+
+            void onEnterOrIpChange()
+            {
+                OptionsHolder.ConfigParser.Ip.Value = ipField.text;
+            }
+
+            void onFocusLost()
+            {
+                OptionsHolder.UpdateRegion();
+                __instance.ChooseOption(
+                    ServerManager.DefaultRegions[ServerManager.DefaultRegions.Length - 1]);
+            }
+
+            void onEnterOrPortFieldChange()
+            {
+                ushort port = 0;
+                if (ushort.TryParse(portField.text, out port))
+                {
+                    OptionsHolder.ConfigParser.Port.Value = port;
+                    portField.outputText.color = Color.white;
                 }
-                
-                void onFocusLost() {
-                    TheOtherRolesPlugin.UpdateRegions();
-                    __instance.ChooseOption(ServerManager.DefaultRegions[ServerManager.DefaultRegions.Length - 1]);
+                else
+                {
+                    portField.outputText.color = Color.red;
                 }
             }
+
         }
     }
 }
