@@ -41,37 +41,45 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
             {
-                if (task.TaskType == TaskTypes.FixLights)
+
+                switch (task.TaskType)
                 {
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                        PlayerControl.LocalPlayer.NetId,
-                        (byte)RPCOperator.Command.FixLightOff,
-                        Hazel.SendOption.Reliable, -1);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    RPCOperator.FixLightOff();
-                }
-                else if (task.TaskType == TaskTypes.RestoreOxy)
-                {
-                    ShipStatus.Instance.RpcRepairSystem(SystemTypes.LifeSupp, 0 | 64);
-                    ShipStatus.Instance.RpcRepairSystem(SystemTypes.LifeSupp, 1 | 64);
-                }
-                else if (task.TaskType == TaskTypes.ResetReactor)
-                {
-                    ShipStatus.Instance.RpcRepairSystem(SystemTypes.Reactor, 16);
-                }
-                else if (task.TaskType == TaskTypes.ResetSeismic)
-                {
-                    ShipStatus.Instance.RpcRepairSystem(SystemTypes.Laboratory, 16);
-                }
-                else if (task.TaskType == TaskTypes.FixComms)
-                {
-                    ShipStatus.Instance.RpcRepairSystem(SystemTypes.Comms, 16 | 0);
-                    ShipStatus.Instance.RpcRepairSystem(SystemTypes.Comms, 16 | 1);
-                }
-                else if (task.TaskType == TaskTypes.StopCharles)
-                {
-                    ShipStatus.Instance.RpcRepairSystem(SystemTypes.Reactor, 0 | 16);
-                    ShipStatus.Instance.RpcRepairSystem(SystemTypes.Reactor, 1 | 16);
+                    case TaskTypes.FixLights:
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                            PlayerControl.LocalPlayer.NetId,
+                            (byte)RPCOperator.Command.FixLightOff,
+                            Hazel.SendOption.Reliable, -1);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        RPCOperator.FixLightOff();
+                        break;
+                    case TaskTypes.RestoreOxy:
+                        ShipStatus.Instance.RpcRepairSystem(
+                            SystemTypes.LifeSupp, 0 | 64);
+                        ShipStatus.Instance.RpcRepairSystem(
+                            SystemTypes.LifeSupp, 1 | 64);
+                        break;
+                    case TaskTypes.ResetReactor:
+                        ShipStatus.Instance.RpcRepairSystem(
+                            SystemTypes.Reactor, 16);
+                        break;
+                    case TaskTypes.ResetSeismic:
+                        ShipStatus.Instance.RpcRepairSystem(
+                            SystemTypes.Laboratory, 16);
+                        break;
+                    case TaskTypes.FixComms:
+                        ShipStatus.Instance.RpcRepairSystem(
+                            SystemTypes.Comms, 16 | 0);
+                        ShipStatus.Instance.RpcRepairSystem(
+                            SystemTypes.Comms, 16 | 1);
+                        break;
+                    case TaskTypes.StopCharles:
+                        ShipStatus.Instance.RpcRepairSystem(
+                            SystemTypes.Reactor, 0 | 16);
+                        ShipStatus.Instance.RpcRepairSystem(
+                            SystemTypes.Reactor, 1 | 16);
+                        break;
+                    default:
+                        break;
                 }
             }
 
