@@ -52,7 +52,7 @@ namespace ExtremeRoles.Patches {
                 if (arrow == null || arrow.gameObject == null) { return; }
                 UnityEngine.Object.DestroyImmediate(arrow.gameObject);
 
-                ipField.transform.localPosition = new Vector3(0.25f, -1f, -100f);
+                ipField.transform.localPosition = new Vector3(0.2f, -1f, -100f);
                 ipField.characterLimit = 30;
                 ipField.AllowSymbols = true;
                 ipField.ForceUppercase = false;
@@ -84,7 +84,7 @@ namespace ExtremeRoles.Patches {
                 if (arrow == null || arrow.gameObject == null) { return; }
                 UnityEngine.Object.DestroyImmediate(arrow.gameObject);
 
-                portField.transform.localPosition = new Vector3(0.25f, -1.75f, -100f);
+                portField.transform.localPosition = new Vector3(0.2f, -1.75f, -100f);
                 portField.characterLimit = 5;
                 portField.SetText(
                     OptionsHolder.ConfigParser.Port.Value.ToString());

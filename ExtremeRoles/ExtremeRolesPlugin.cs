@@ -11,7 +11,7 @@ using HarmonyLib;
 namespace ExtremeRoles
 {
 
-    [BepInAutoPlugin()]
+    [BepInAutoPlugin("me.yukieiji.extremeroles", "Extreme Roles")]
     [BepInProcess("Among Us.exe")]
     public partial class ExtremeRolesPlugin : BasePlugin
     {
