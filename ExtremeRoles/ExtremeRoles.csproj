@@ -4,9 +4,9 @@
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
 
-        <VersionPrefix>1.2.3</VersionPrefix>
+        <VersionPrefix>1.3.0</VersionPrefix>
         <VersionSuffix>Test-v5</VersionSuffix> 
-        <Description>Extreme Roles using Reactor Template</Description>
+        <Description>Extreme Roles for Advanced user</Description>
         <Authors>yukieiji</Authors>
     </PropertyGroup>
 
