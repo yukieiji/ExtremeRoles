@@ -1,21 +1,24 @@
 ﻿using System.Linq;
+using System.Reflection;
 
 using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 
 using HarmonyLib;
-using Reactor;
+
 
 namespace ExtremeRoles
 {
 
-    [BepInAutoPlugin]
+    [BepInPlugin(Id, "Extreme Roles", "1.2.0")]
     [BepInProcess("Among Us.exe")]
-    [BepInDependency(ReactorPlugin.Id)]
     public partial class ExtremeRolesPlugin : BasePlugin
     {
-        public Harmony Harmony { get; } = new(Id);
+        public const string Id = "me.yukieiji.extremeroles";
+
+        public Harmony Harmony { get; } = new Harmony(Id);
+
         public static ExtremeRolesPlugin Instance;
         public static Module.GameDataContainer GameDataStore = new Module.GameDataContainer();
 
@@ -39,7 +42,7 @@ namespace ExtremeRoles
             Instance = this;
 
             OptionsHolder.Create();
-            OptionsHolder.UpdateRegions();
+            OptionsHolder.UpdateRegion();
 
             Harmony.PatchAll();
         }

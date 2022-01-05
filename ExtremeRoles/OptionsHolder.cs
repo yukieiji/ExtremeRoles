@@ -58,7 +58,6 @@ namespace ExtremeRoles
         {
 
             DefaultRegion = ServerManager.DefaultRegions;
-            UpdateRegion();
 
             CreateConfigOption();
 
