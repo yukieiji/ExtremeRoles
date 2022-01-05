@@ -255,9 +255,12 @@ namespace ExtremeRoles.Patches.Option
                 1.35f, -2.0f, -.5f);
 
             importButton.Text.text = Helper.Translation.GetString("csvImport");
+            importButton.Text.enableWordWrapping = false;
             importButton.Background.color = Color.green;
             importButton.Text.fontSizeMin = importButton.Text.fontSizeMax = 2.2f;
+
             exportButton.Text.text = Helper.Translation.GetString("csvExport");
+            exportButton.Text.enableWordWrapping = false;
             exportButton.Background.color = Palette.ImpostorRed;
             exportButton.Text.fontSizeMin = exportButton.Text.fontSizeMax = 2.2f;
 
