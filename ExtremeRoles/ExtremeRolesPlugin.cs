@@ -11,12 +11,10 @@ using HarmonyLib;
 namespace ExtremeRoles
 {
 
-    [BepInPlugin(Id, "Extreme Roles", "1.2.0")]
+    [BepInAutoPlugin()]
     [BepInProcess("Among Us.exe")]
     public partial class ExtremeRolesPlugin : BasePlugin
     {
-        public const string Id = "me.yukieiji.extremeroles";
-
         public Harmony Harmony { get; } = new Harmony(Id);
 
         public static ExtremeRolesPlugin Instance;

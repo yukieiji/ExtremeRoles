@@ -45,13 +45,14 @@ namespace ExtremeRoles.Patches {
             {
                 ipField = UnityEngine.Object.Instantiate(
                     template.GameIdText, __instance.transform);
+
                 ipField.gameObject.name = "IpTextBox";
 
                 var arrow = ipField.transform.FindChild("arrowEnter");
                 if (arrow == null || arrow.gameObject == null) { return; }
                 UnityEngine.Object.DestroyImmediate(arrow.gameObject);
 
-                ipField.transform.localPosition = new Vector3(1.0f, -1f, -100f);
+                ipField.transform.localPosition = new Vector3(0.25f, -1f, -100f);
                 ipField.characterLimit = 30;
                 ipField.AllowSymbols = true;
                 ipField.ForceUppercase = false;
@@ -72,15 +73,18 @@ namespace ExtremeRoles.Patches {
                 ipField.OnFocusLost.AddListener((UnityAction)onFocusLost);
             }
 
-            if (portField == null || portField.gameObject == null) {
+            if (portField == null || portField.gameObject == null)
+            {
                 portField = UnityEngine.Object.Instantiate(
                     template.GameIdText, __instance.transform);
+
                 portField.gameObject.name = "PortTextBox";
+                
                 var arrow = portField.transform.FindChild("arrowEnter");
                 if (arrow == null || arrow.gameObject == null) { return; }
                 UnityEngine.Object.DestroyImmediate(arrow.gameObject);
 
-                portField.transform.localPosition = new Vector3(1.0f, -1.75f, -100f);
+                portField.transform.localPosition = new Vector3(0.25f, -1.75f, -100f);
                 portField.characterLimit = 5;
                 portField.SetText(
                     OptionsHolder.ConfigParser.Port.Value.ToString());
