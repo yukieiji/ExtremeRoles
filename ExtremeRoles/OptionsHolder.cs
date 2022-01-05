@@ -280,7 +280,8 @@ namespace ExtremeRoles
             IRegionInfo[] regions = DefaultRegion;
 
             var CustomRegion = new DnsRegionInfo(
-                ConfigParser.Ip.Value, "Custom",
+                ConfigParser.Ip.Value,
+                Translation.GetString("custom"),
                 StringNames.NoTranslation,
                 ConfigParser.Ip.Value,
                 ConfigParser.Port.Value);

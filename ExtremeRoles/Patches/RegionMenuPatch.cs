@@ -25,19 +25,21 @@ SOFTWARE.
 
 using HarmonyLib;
 using UnityEngine;
-using UnityEngine.UI;
 using System;
 using UnityEngine.Events;
 
-namespace ExtremeRoles.Patches {
+namespace ExtremeRoles.Patches
+{
     [HarmonyPatch(typeof(RegionMenu), nameof(RegionMenu.Open))]
     public static class RegionMenuOpenPatch
     {
+
         private static TextBoxTMP ipField;
         private static TextBoxTMP portField;
 
         public static void Postfix(RegionMenu __instance)
         {
+
             var template = DestroyableSingleton<JoinGameButton>.Instance;
             if (template == null || template.GameIdText == null) { return; }
 
@@ -47,6 +49,7 @@ namespace ExtremeRoles.Patches {
                     template.GameIdText, __instance.transform);
 
                 ipField.gameObject.name = "IpTextBox";
+
 
                 var arrow = ipField.transform.FindChild("arrowEnter");
                 if (arrow == null || arrow.gameObject == null) { return; }
@@ -79,12 +82,13 @@ namespace ExtremeRoles.Patches {
                     template.GameIdText, __instance.transform);
 
                 portField.gameObject.name = "PortTextBox";
-                
+
+
                 var arrow = portField.transform.FindChild("arrowEnter");
                 if (arrow == null || arrow.gameObject == null) { return; }
                 UnityEngine.Object.DestroyImmediate(arrow.gameObject);
 
-                portField.transform.localPosition = new Vector3(0.2f, -1.75f, -100f);
+                portField.transform.localPosition = new Vector3(0.2f, -1.55f, -100f);
                 portField.characterLimit = 5;
                 portField.SetText(
                     OptionsHolder.ConfigParser.Port.Value.ToString());
