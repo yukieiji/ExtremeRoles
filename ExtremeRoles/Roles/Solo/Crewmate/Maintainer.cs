@@ -2,6 +2,7 @@
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.RoleAbilityButton;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -9,7 +10,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 {
     public class Maintainer : SingleRoleBase, IRoleAbility
     {
-        public RoleAbilityButton Button
+        public RoleAbilityButtonBase Button
         {
             get => this.maintenanceButton;
             set
@@ -18,7 +19,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
         }
 
-        private RoleAbilityButton maintenanceButton;
+        private RoleAbilityButtonBase maintenanceButton;
 
         public Maintainer() : base(
             ExtremeRoleId.Maintainer,
@@ -30,11 +31,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void CreateAbility()
         {
-            this.CreateAbilityButton(
+            this.CreateAbilityCountButton(
                 Translation.GetString("maintenance"),
                 Helper.Resources.LoadSpriteFromResources(
-                    Resources.ResourcesPaths.TestButton, 115f),
-                abilityNum: 30);
+                    Resources.ResourcesPaths.TestButton, 115f));
         }
 
         public bool UseAbility()
@@ -128,8 +128,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            this.CreateRoleAbilityOption(
-                parentOps, maxAbilityCount:30);
+            this.CreateAbilityCountOption(
+                parentOps, 30);
         }
 
         protected override void RoleSpecificInit()

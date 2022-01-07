@@ -4,6 +4,7 @@ using Hazel;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.RoleAbilityButton;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -44,7 +45,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.isEatingEndCleanBody = false;
         }
 
-        public RoleAbilityButton Button
+        public RoleAbilityButtonBase Button
         {
             get => this.evolveButton;
             set
@@ -52,19 +53,18 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.evolveButton = value;
             }
         }
-        private RoleAbilityButton evolveButton;
+        private RoleAbilityButtonBase evolveButton;
 
         public void CreateAbility()
         {
             this.defaultButtonText = Translation.GetString("evolve");
 
-            this.CreateAbilityButton(
+            this.CreateAbilityCountButton(
                 this.defaultButtonText,
                 Helper.Resources.LoadSpriteFromResources(
                     Resources.ResourcesPaths.EvolverEvolved, 115f),
                 checkAbility: CheckAbility,
-                abilityCleanUp: CleanUp,
-                abilityNum: OptionsHolder.VanillaMaxPlayerNum - 1);
+                abilityCleanUp: CleanUp);
         }
 
         public bool IsAbilityUse()
@@ -169,8 +169,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 1.0f, 1.0f, 5.0f, 0.1f,
                 parentOps, format: "unitMultiplier");
 
-            this.CreateRoleAbilityOption(
-                parentOps, true, 10);
+            this.CreateAbilityCountOption(
+                parentOps, 10, true);
         }
 
         protected override void RoleSpecificInit()

@@ -5,6 +5,7 @@ using Hazel;
 using UnityEngine;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.RoleAbilityButton;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -35,7 +36,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public List<byte> SideKickPlayerId = new List<byte>();
 
-        public RoleAbilityButton Button
+        public RoleAbilityButtonBase Button
         {
             get => this.createSidekick;
             set
@@ -61,7 +62,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public PlayerControl Target;
 
-        private RoleAbilityButton createSidekick;
+        private RoleAbilityButtonBase createSidekick;
 
         private int numUpgradeSideKick = 0;
         private int createSidekickRange = 0;
@@ -125,11 +126,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void CreateAbility()
         {
-            this.CreateAbilityButton(
+            this.CreateAbilityCountButton(
                 Translation.GetString("Sidekick"),
                 Helper.Resources.LoadSpriteFromResources(
-                    Resources.ResourcesPaths.JackalSidekick, 115f),
-                abilityNum:10);
+                    Resources.ResourcesPaths.JackalSidekick, 115f));
         }
 
         public override Color GetTargetRoleSeeColor(
@@ -275,9 +275,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private void CreateJackalOption(CustomOptionBase parentOps)
         {
 
-            this.CreateRoleAbilityOption(
-                parentOps,
-                maxAbilityCount: OptionsHolder.VanillaMaxPlayerNum - 1);
+            this.CreateAbilityCountOption(
+                parentOps, OptionsHolder.VanillaMaxPlayerNum - 1);
 
             CustomOption.Create(
                 GetRoleOptionId(JackalOption.RangeSidekickTarget),
@@ -535,7 +534,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             newJackal.Initialize();
             if (!curSideKick.sidekickJackalCanMakeSidekick || curSideKick.recursion >= newJackal.SidekickRecursionLimit)
             {
-                newJackal.Button.UpdateAbilityCount(0);
+                ((AbilityCountButton)newJackal.Button).UpdateAbilityCount(0);
             }
 
             newJackal.CurRecursion = curSideKick.recursion + 1;

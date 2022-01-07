@@ -4,6 +4,7 @@ using System.Linq;
 using Hazel;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.RoleAbilityButton;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -19,7 +20,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             RevartNormalTaskNum,
         }
 
-        public RoleAbilityButton Button
+        public RoleAbilityButtonBase Button
         { 
             get => this.aliceShipBroken;
             set
@@ -32,7 +33,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public int RevartNormalTask = 0;
         public int RevartCommonTask = 0;
 
-        private RoleAbilityButton aliceShipBroken;
+        private RoleAbilityButtonBase aliceShipBroken;
 
         public Alice(): base(
             ExtremeRoleId.Alice,
@@ -44,11 +45,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void CreateAbility()
         {
-            this.CreateAbilityButton(
+            this.CreateAbilityCountButton(
                 Helper.Translation.GetString("shipBroken"),
                 Helper.Resources.LoadSpriteFromResources(
-                    Resources.ResourcesPaths.AliceShipBroken, 115f),
-                abilityNum:10);
+                    Resources.ResourcesPaths.AliceShipBroken, 115f));
         }
 
         public override bool IsSameTeam(SingleRoleBase targetRole)
@@ -151,8 +151,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            this.CreateRoleAbilityOption(
-                parentOps, maxAbilityCount:100);
+            this.CreateAbilityCountOption(
+                parentOps, 100);
 
             CustomOption.Create(
                 this.GetRoleOptionId((int)AliceOption.RevartLongTaskNum),

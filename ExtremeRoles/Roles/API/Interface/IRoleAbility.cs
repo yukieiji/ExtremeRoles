@@ -2,6 +2,7 @@
 using UnityEngine;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.RoleAbilityButton;
 using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Roles.API.Interface
@@ -14,7 +15,7 @@ namespace ExtremeRoles.Roles.API.Interface
     }
     public interface IRoleAbility
     {
-        public RoleAbilityButton Button
+        public RoleAbilityButtonBase Button
         {
             get;
             set;
@@ -34,26 +35,24 @@ namespace ExtremeRoles.Roles.API.Interface
 
     public static class IRoleAbilityMixin
     {
-        public static void CreateAbilityButton(
+        public static void CreateAbilityCountButton(
             this IRoleAbility self,
             string buttonName,
             Sprite sprite,
             Vector3? positionOffset = null,
             Action abilityCleanUp = null,
-            int abilityNum = int.MaxValue,
             Func<bool> checkAbility = null,
             KeyCode hotkey = KeyCode.F,
             bool mirror = false)
         {   
             Vector3 offset = positionOffset ?? new Vector3(-1.8f, -0.06f, 0);
 
-            self.Button = new RoleAbilityButton(
+            self.Button = new AbilityCountButton(
                 buttonName,
                 self.UseAbility,
                 self.IsAbilityUse,
                 sprite,
                 offset,
-                abilityNum,
                 abilityCleanUp,
                 checkAbility,
                 hotkey,
@@ -63,11 +62,11 @@ namespace ExtremeRoles.Roles.API.Interface
 
         }
 
-        public static void CreateRoleAbilityOption(
+        public static void CreateAbilityCountOption(
             this IRoleAbility self,
             CustomOptionBase parentOps,
-            bool hasActiveTime = false,
-            int maxAbilityCount = int.MaxValue)
+            int maxAbilityCount,
+            bool hasActiveTime = false)
         {
 
             CustomOption.Create(
@@ -89,16 +88,13 @@ namespace ExtremeRoles.Roles.API.Interface
                     parentOps, format: "unitSeconds");
             }
 
-            if (maxAbilityCount != int.MaxValue)
-            {
-                CustomOption.Create(
-                    self.GetRoleOptionId(RoleAbilityCommonOption.AbilityCount),
-                    Design.ConcatString(
-                        ((SingleRoleBase)self).RoleName,
-                        RoleAbilityCommonOption.AbilityCount.ToString()),
-                    1, 1, maxAbilityCount, 1,
-                    parentOps);
-            }
+            CustomOption.Create(
+                self.GetRoleOptionId(RoleAbilityCommonOption.AbilityCount),
+                Design.ConcatString(
+                    ((SingleRoleBase)self).RoleName,
+                    RoleAbilityCommonOption.AbilityCount.ToString()),
+                1, 1, maxAbilityCount, 1,
+                parentOps);
 
         }
 
@@ -141,12 +137,14 @@ namespace ExtremeRoles.Roles.API.Interface
                 self.Button.SetAbilityActiveTime(
                     allOps[checkOptionId].GetValue());
             }
-            checkOptionId = self.GetRoleOptionId(RoleAbilityCommonOption.AbilityCount);
 
-            if (allOps.ContainsKey(checkOptionId))
+            var button = self.Button as AbilityCountButton;
+
+            if (button != null)
             {
-                self.Button.UpdateAbilityCount(
-                    allOps[checkOptionId].GetValue());
+                button.UpdateAbilityCount(
+                    allOps[self.GetRoleOptionId(
+                        RoleAbilityCommonOption.AbilityCount)].GetValue());
             }
 
             self.Button.ResetCoolTimer();
