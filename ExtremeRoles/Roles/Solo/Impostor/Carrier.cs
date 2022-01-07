@@ -17,7 +17,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public Color DeadBodyColor;
         private GameData.PlayerInfo targetBody;
 
-        public enum RoleOption
+        public enum CarrierOption
         {
             CanReportOnCarry,
         }
@@ -150,10 +150,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 parentOps, true);
 
             CustomOption.Create(
-                GetRoleOptionId((int)RoleOption.CanReportOnCarry),
+                GetRoleOptionId((int)CarrierOption.CanReportOnCarry),
                 Design.ConcatString(
                     this.RoleName,
-                    RoleOption.CanReportOnCarry.ToString()),
+                    CarrierOption.CanReportOnCarry.ToString()),
                 true, parentOps);
         }
 
