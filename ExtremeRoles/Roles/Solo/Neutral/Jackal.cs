@@ -537,10 +537,16 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             {
                 newJackal.Button.UpdateAbilityCount(0);
             }
+
             newJackal.CurRecursion = curSideKick.recursion + 1;
             newJackal.SideKickPlayerId = new List<byte> (curJackal.SideKickPlayerId);
             newJackal.GameControlId = curSideKick.GameControlId;
-            
+
+            if (newJackal.SideKickPlayerId.Contains(targetId))
+            {
+                newJackal.SideKickPlayerId.Remove(targetId);
+            }
+
             if (multiAssignTrigger)
             {
                 var multiAssignRole = (MultiAssignRoleBase)curRole;
@@ -580,7 +586,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     (byte)ExtremeRoleManager.ReplaceOperation.SidekickToJackal);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
 
-                Sidekick.BecomeToJackal(this.jackalPlayerId, rolePlayer.PlayerId);
+                BecomeToJackal(this.jackalPlayerId, rolePlayer.PlayerId);
             }
         }
     }
