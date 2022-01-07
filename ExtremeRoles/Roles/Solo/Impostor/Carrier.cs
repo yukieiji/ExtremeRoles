@@ -17,13 +17,22 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public Color DeadBodyColor;
         private GameData.PlayerInfo targetBody;
 
+        public enum RoleOption
+        {
+            CanReportOnCarry,
+        }
+
+        private bool canReportOnCarry;
+
         public Carrier() : base(
             ExtremeRoleId.Carrier,
             ExtremeRoleType.Impostor,
             ExtremeRoleId.Carrier.ToString(),
             Palette.ImpostorRed,
             true, false, true, true)
-        {}
+        {
+            canReportOnCarry = false;
+        }
 
         public RoleAbilityButtonBase Button
         { 
@@ -50,13 +59,19 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     array[i].gameObject.transform.position = rolePlayer.gameObject.transform.position;
                     array[i].gameObject.transform.parent= rolePlayer.gameObject.transform.parent;
                     Color oldColor = array[i].bodyRenderer.color;
-
-                    role.DeadBodyColor = new Color(
-                        oldColor.r,
-                        oldColor.g,
-                        oldColor.g,
-                        oldColor.a);
-                    array[i].bodyRenderer.color = new Color(oldColor.r, oldColor.g, oldColor.b, 0);
+                    if (role.canReportOnCarry)
+                    {
+                        role.DeadBodyColor = new Color(
+                            oldColor.r,
+                            oldColor.g,
+                            oldColor.g,
+                            oldColor.a);
+                        array[i].bodyRenderer.color = new Color(oldColor.r, oldColor.g, oldColor.b, 0);
+                    }
+                    else
+                    {
+                        array[i].gameObject.SetActive(false);
+                    }
                     role.CarringBody = array[i];
                     break;
                 }
@@ -69,10 +84,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             var role = (Carrier)ExtremeRoleManager.GameRole[rolePlayerId];
             var rolePlayer = Player.GetPlayerControlById(rolePlayerId);
 
+            role.CarringBody.gameObject.SetActive(true);
             role.CarringBody.gameObject.transform.position = rolePlayer.gameObject.transform.position;
             role.CarringBody.gameObject.transform.parent = null;
             role.CarringBody.bodyRenderer.color = role.DeadBodyColor;
-            
             role.CarringBody = null;
         }
 
@@ -133,6 +148,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             this.CreateCommonAbilityOption(
                 parentOps, true);
+
+            CustomOption.Create(
+                GetRoleOptionId((int)RoleOption.CanReportOnCarry),
+                Design.ConcatString(
+                    this.RoleName,
+                    RoleOption.CanReportOnCarry.ToString()),
+                true, parentOps);
         }
 
         protected override void RoleSpecificInit()
