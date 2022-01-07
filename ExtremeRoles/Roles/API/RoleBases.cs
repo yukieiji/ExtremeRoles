@@ -163,7 +163,7 @@ namespace ExtremeRoles.Roles.API
         public virtual bool IsSameTeam(SingleRoleBase targetRole)
         {
 
-            if (this.Team == ExtremeRoleType.Crewmate)
+            if (this.IsCrewmate())
             {
                 return false;
             }

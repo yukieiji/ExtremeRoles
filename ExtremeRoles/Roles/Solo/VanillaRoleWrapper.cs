@@ -44,7 +44,7 @@ namespace ExtremeRoles.Roles.Solo
 
         public override string GetImportantText(bool isContainFakeTask = true)
         {
-            if(this.Team == ExtremeRoleType.Impostor)
+            if(this.IsImposter())
             {
                 return string.Concat(new string[]
                 {

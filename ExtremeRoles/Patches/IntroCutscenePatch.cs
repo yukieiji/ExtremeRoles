@@ -102,12 +102,12 @@ namespace ExtremeRoles.Patches
                 }
 
                 
-                if (role.Team == Roles.API.ExtremeRoleType.Impostor)
+                if (role.IsImposter())
                 {
                     __instance.RoleBlurbText.text += string.Format(
                         "\n{0}", Helper.Translation.GetString("impostorIntroText"));
                 }
-                else if(role.Team == Roles.API.ExtremeRoleType.Crewmate && role.HasTask)
+                else if(role.IsCrewmate() && role.HasTask)
                 {
                     __instance.RoleBlurbText.text += string.Format(
                         "\n{0}", Helper.Translation.GetString("crewIntroText"));

@@ -36,8 +36,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             var targetPlayerRole = ExtremeRoleManager.GameRole[
                 targetPlayer.PlayerId];
-            if ((targetPlayerRole.Team == ExtremeRoleType.Impostor) || 
-                (targetPlayerRole.Team == ExtremeRoleType.Neutral && this.canShootNeutral))
+            if ((targetPlayerRole.IsImposter()) || 
+                (targetPlayerRole.IsNeutral() && this.canShootNeutral))
             {
                 updateKillButton();
                 return true;

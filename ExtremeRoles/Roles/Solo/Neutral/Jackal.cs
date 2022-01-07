@@ -87,7 +87,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 callerId,
                 sourceJackal.GameControlId,
                 sourceJackal.CurRecursion,
-                targetRole.Team == ExtremeRoleType.Impostor,
+                targetRole.IsImposter(),
                 sourceJackal.SidekickCanKill,
                 sourceJackal.SidekickUseVent,
                 sourceJackal.SidekickUseSabotage,
@@ -377,7 +377,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private bool isImpostorAndSetTarget(
             byte playerId)
         {
-            if (ExtremeRoleManager.GameRole[playerId].Team == ExtremeRoleType.Impostor)
+            if (ExtremeRoleManager.GameRole[playerId].IsImposter())
             {
                 return this.CanSetImpostorToSideKick;
             }
