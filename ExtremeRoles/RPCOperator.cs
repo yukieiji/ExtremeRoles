@@ -21,7 +21,9 @@ namespace ExtremeRoles
 
             ReplaceRole,
 
-            AliceAbility
+            AliceAbility,
+            CarrierCarryBody,
+            CarrierSetBody,
         }
 
         public static void CleanDeadBody(byte targetId)
@@ -133,6 +135,17 @@ namespace ExtremeRoles
         public static void AliceAbility(byte callerId)
         {
             Roles.Solo.Neutral.Alice.ShipBroken(callerId);
+        }
+        public static void CarrierCarryBody(
+            byte callerId, byte targetId)
+        {
+            Roles.Solo.Impostor.Carrier.CarryDeadBody(
+                callerId, targetId);
+        }
+        public static void CarrierSetBody(byte callerId)
+        {
+            Roles.Solo.Impostor.Carrier.PlaceDeadBody(
+                callerId);
         }
     }
 

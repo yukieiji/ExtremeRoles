@@ -62,13 +62,39 @@ namespace ExtremeRoles.Roles.API.Interface
 
         }
 
-        public static void CreateAbilityCountOption(
+
+        public static void CreateReclickableAbilityButton(
+            this IRoleAbility self,
+            string buttonName,
+            Sprite sprite,
+            Action abilityCleanUp,
+            Vector3? positionOffset = null,
+            Func<bool> checkAbility = null,
+            KeyCode hotkey = KeyCode.F,
+            bool mirror = false)
+        {
+            Vector3 offset = positionOffset ?? new Vector3(-1.8f, -0.06f, 0);
+
+            self.Button = new ReclickAbleButton(
+                buttonName,
+                self.UseAbility,
+                self.IsAbilityUse,
+                sprite,
+                offset,
+                abilityCleanUp,
+                checkAbility,
+                hotkey,
+                mirror);
+
+            self.RoleAbilityInit();
+
+        }
+
+        public static void CreateCommonAbilityOption(
             this IRoleAbility self,
             CustomOptionBase parentOps,
-            int maxAbilityCount,
             bool hasActiveTime = false)
         {
-
             CustomOption.Create(
                 self.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime),
                 Design.ConcatString(
@@ -84,9 +110,22 @@ namespace ExtremeRoles.Roles.API.Interface
                     Design.ConcatString(
                         ((SingleRoleBase)self).RoleName,
                         RoleAbilityCommonOption.AbilityActiveTime.ToString()),
-                    2.5f, 0.5f, 30f, 0.5f,
+                    2.5f, 0.5f, 60f, 0.5f,
                     parentOps, format: "unitSeconds");
             }
+
+        }
+
+        public static void CreateAbilityCountOption(
+            this IRoleAbility self,
+            CustomOptionBase parentOps,
+            int maxAbilityCount,
+            bool hasActiveTime = false)
+        {
+
+            self.CreateCommonAbilityOption(
+                parentOps,
+                hasActiveTime);
 
             CustomOption.Create(
                 self.GetRoleOptionId(RoleAbilityCommonOption.AbilityCount),

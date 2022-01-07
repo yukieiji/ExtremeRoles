@@ -28,6 +28,7 @@ namespace ExtremeRoles.Roles
 
         SpecialImpostor,
         Evolver,
+        Carrier,
 
         Alice,
         Jackal,
@@ -67,6 +68,7 @@ namespace ExtremeRoles.Roles
 
                 new SpecialImpostor(),
                 new Evolver(),
+                new Carrier(),
 
                 new Alice(),
                 new Jackal(),

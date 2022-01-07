@@ -667,12 +667,22 @@ namespace ExtremeRoles.Patches
                         sourceId, targetId, useAnimationreaderreader);
                     break;
 
+                case (byte)RPCOperator.Command.CarrierCarryBody:
+                    playerId = reader.ReadByte();
+                    targetId = reader.ReadByte();
+                    RPCOperator.CarrierCarryBody(playerId, targetId);
+                    break;
+                case (byte)RPCOperator.Command.CarrierSetBody:
+                    playerId = reader.ReadByte();
+                    RPCOperator.CarrierSetBody(playerId);
+                    break;
 
                 case (byte)RPCOperator.Command.AliceAbility:
                     callerId = reader.ReadByte();
                     RPCOperator.AliceAbility(
                         callerId);
                     break;
+
                 default:
                     break;
             }

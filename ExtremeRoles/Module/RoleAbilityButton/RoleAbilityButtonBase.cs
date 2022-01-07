@@ -22,6 +22,7 @@ namespace ExtremeRoles.Module.RoleAbilityButton
         protected Func<bool> AbilityCheck = null;
 
         protected readonly Color DisableColor = new Color(1f, 1f, 1f, 0.3f);
+        protected readonly Color TimerOnColor = new Color(0F, 0.8F, 0F);
 
         private bool mirror;
         private KeyCode hotkey;

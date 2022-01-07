@@ -104,7 +104,7 @@ namespace ExtremeRoles.Module.RoleAbilityButton
                     if (this.IsHasCleanUp())
                     {
                         this.Timer = this.AbilityActiveTime;
-                        Button.cooldownTimerText.color = new Color(0F, 0.8F, 0F);
+                        Button.cooldownTimerText.color = this.TimerOnColor;
                         this.IsAbilityOn = true;
                     }
                     else
