@@ -219,7 +219,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     {
                         Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
                         Vector2 truePosition2 = component.TruePosition;
-                        if ((Vector2.Distance(truePosition2, truePosition) <= PlayerControl.LocalPlayer.MaxReportDistance) &&
+                        if ((Vector2.Distance(truePosition2, truePosition) <= this.eatingRange) &&
                             (PlayerControl.LocalPlayer.CanMove) &&
                             (!PhysicsHelpers.AnythingBetween(
                                 truePosition, truePosition2, Constants.ShipAndObjectsMask, false)))
