@@ -89,6 +89,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.KillCoolTime = Mathf.Clamp(
                 this.KillCoolTime, 0f, this.defaultKillCoolTime);
 
+            this.Button.ButtonText = this.defaultButtonText;
+
             if (!this.isEatingEndCleanBody) { return; }
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
@@ -98,8 +100,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             writer.Write(this.eatingBodyId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCOperator.CleanDeadBody(this.eatingBodyId);
-
-            this.Button.ButtonText = this.defaultButtonText;
         }
 
         public bool CheckAbility()

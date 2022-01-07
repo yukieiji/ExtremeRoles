@@ -654,6 +654,11 @@ namespace ExtremeRoles.Patches
                     RPCOperator.ReplaceRole(
                         callerId, replaceTarget, ops);
                     break;
+                case (byte)RPCOperator.Command.ReplaceDeadReason:
+                    playerId = reader.ReadByte();
+                    byte reason = reader.ReadByte();
+                    RPCOperator.ReplaceDeadReason(playerId, reason);
+                    break;
                 case (byte)RPCOperator.Command.UncheckedMurderPlayer:
                     byte sourceId = reader.ReadByte();
                     targetId = reader.ReadByte();

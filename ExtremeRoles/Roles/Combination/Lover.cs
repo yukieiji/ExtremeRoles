@@ -131,9 +131,21 @@ namespace ExtremeRoles.Roles.Combination
 
         public static void ForceReplaceToNeutral(byte callerId, byte targetId)
         {
-            var newKiller = ExtremeRoleManager.GameRole[targetId];
+            var newKiller = (Lover)ExtremeRoleManager.GameRole[targetId];
             newKiller.Team = ExtremeRoleType.Neutral;
             newKiller.CanKill = true;
+            newKiller.ChangeAllLoverToNeutral();
+        }
+
+        public void ChangeAllLoverToNeutral()
+        {
+            foreach (var item in ExtremeRoleManager.GameRole)
+            {
+                if (this.IsSameControlId(item.Value))
+                {
+                    item.Value.Team = ExtremeRoleType.Neutral;
+                }
+            }
         }
 
         protected override void CreateSpecificOption(
@@ -217,8 +229,7 @@ namespace ExtremeRoles.Roles.Combination
             {
                 if (alive.Count != 1) { return; }
                 becomeAliveLoverToKiller(alive[0]);
-                changeAllLoverToNeutral();
-
+            
             }
             else
             {
@@ -227,20 +238,7 @@ namespace ExtremeRoles.Roles.Combination
                 foreach (byte playerId in alive)
                 {
                     var player = Player.GetPlayerControlById(playerId);
-
-                    player.RemoveInfected();
-                    player.MurderPlayer(player);
-                    player.Data.IsDead = true;
-                }
-            }
-        }
-        private void changeAllLoverToNeutral()
-        {
-            foreach (var item in ExtremeRoleManager.GameRole)
-            {
-                if (this.IsSameControlId(item.Value))
-                {
-                    item.Value.Team = ExtremeRoleType.Neutral;
+                    player.RpcMurderPlayer(player);
                 }
             }
         }

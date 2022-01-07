@@ -17,6 +17,7 @@ namespace ExtremeRoles
             UncheckedMurderPlayer,
             CleanDeadBody,
             FixLightOff,
+            ReplaceDeadReason,
 
             ReplaceRole,
 
@@ -79,6 +80,12 @@ namespace ExtremeRoles
         public static void ShareOption(int numOptions, MessageReader reader)
         {
             OptionsHolder.ShareOption(numOptions, reader);
+        }
+
+        public static void ReplaceDeadReason(byte playerId, byte reason)
+        {
+            ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
+                playerId, (Module.GameDataContainer.PlayerStatus)reason);
         }
 
         public static void ReplaceRole(
