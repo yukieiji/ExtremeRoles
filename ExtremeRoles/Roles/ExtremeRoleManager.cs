@@ -137,6 +137,14 @@ namespace ExtremeRoles.Roles
             }
         }
 
+        public static bool IsDisableWinCheckRole(SingleRoleBase role)
+        {
+            var assassin = role as Assassin;
+            var jackal = role as Jackal;
+
+            return assassin != null || jackal != null;
+        }
+
         public static SingleRoleBase GetLocalPlayerRole()
         {
             return GameRole[PlayerControl.LocalPlayer.PlayerId];

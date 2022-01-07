@@ -64,6 +64,7 @@ namespace ExtremeRoles.Patches
             public static bool Prefix(ExileController __instance)
             {
                 resetAssassinMeeting();
+                tempWinCheckDisable(__instance.exiled);
                 return true;
             }
             public static void Postfix(ExileController __instance)
@@ -78,6 +79,7 @@ namespace ExtremeRoles.Patches
             public static bool Prefix(AirshipExileController __instance)
             {
                 resetAssassinMeeting();
+                tempWinCheckDisable(__instance.exiled);
                 return true;
             }
             public static void Postfix(AirshipExileController __instance)
@@ -93,6 +95,17 @@ namespace ExtremeRoles.Patches
                 ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger = false;
             }
         }
+        private static void tempWinCheckDisable(GameData.PlayerInfo exiled)
+        {
+
+            var role = ExtremeRoleManager.GameRole[exiled.PlayerId];
+
+            if (ExtremeRoleManager.IsDisableWinCheckRole(role))
+            {
+                ExtremeRolesPlugin.GameDataStore.WinCheckDisable = true;
+            }
+        }
+
         private static void wrapUpPostfix(GameData.PlayerInfo exiled)
         {
             var gameData = ExtremeRolesPlugin.GameDataStore;
@@ -121,6 +134,7 @@ namespace ExtremeRoles.Patches
             if (exiled == null) { return; };
 
             ExtremeRoleManager.GameRole[exiled.PlayerId].ExiledAction(exiled);
+            ExtremeRolesPlugin.GameDataStore.WinCheckDisable = false;
         }
     }
 }

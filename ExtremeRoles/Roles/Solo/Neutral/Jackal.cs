@@ -11,7 +11,7 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public class Jackal : SingleRoleBase, IRoleAbility, IRoleUpdate
+    public class Jackal : SingleRoleBase, IRoleAbility
     {
         public enum JackalOption
         {
@@ -66,8 +66,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private int numUpgradeSideKick = 0;
         private int createSidekickRange = 0;
 
-        private bool isAlreadyUpgrated = false;
-
 
         public Jackal() : base(
             ExtremeRoleId.Jackal,
@@ -77,7 +75,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             true, false, true, false)
         {
             this.SideKickPlayerId.Clear();
-            this.isAlreadyUpgrated = false;
         }
 
         public static void TargetToSideKick(byte callerId, byte targetId)
@@ -87,6 +84,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             
             var sourceJackal = (Jackal)ExtremeRoleManager.GameRole[callerId];
             var newSidekick = new Sidekick(
+                callerId,
                 sourceJackal.GameControlId,
                 sourceJackal.CurRecursion,
                 targetRole.Team == ExtremeRoleType.Impostor,
@@ -169,6 +167,18 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
         }
 
+        public override void ExiledAction(
+            GameData.PlayerInfo rolePlayer)
+        {
+            sidekickToJackal(rolePlayer.Object);
+        }
+
+        public override void RolePlayerKilledAction(
+            PlayerControl rolePlayer, PlayerControl killerPlayer)
+        {
+            sidekickToJackal(rolePlayer);
+        }
+
         public bool IsAbilityUse()
         {
             this.setTarget();
@@ -199,34 +209,16 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             return true;
         }
 
-        public void Update(PlayerControl rolePlayer)
+        public void RoleAbilityResetOnMeetingStart()
         {
-            if (this.SideKickPlayerId.Count == 0 || this.isAlreadyUpgrated) { return; }
-
-            if (rolePlayer.Data.IsDead || rolePlayer.Data.Disconnected)
-            {
-                this.isAlreadyUpgrated = true;
-                for (int i = 0; i < this.numUpgradeSideKick; ++i)
-                {
-                    int useIndex = UnityEngine.Random.Range(0, this.SideKickPlayerId.Count);
-                    byte targetPlayerId = this.SideKickPlayerId[useIndex];
-                    this.SideKickPlayerId.RemoveAt(useIndex);
-
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                        rolePlayer.NetId,
-                        (byte)RPCOperator.Command.ReplaceRole,
-                        Hazel.SendOption.Reliable, -1);
-
-                    writer.Write(rolePlayer.PlayerId);
-                    writer.Write(targetPlayerId);
-                    writer.Write(
-                        (byte)ExtremeRoleManager.ReplaceOperation.SidekickToJackal);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-
-                    Sidekick.BecomeToJackal(rolePlayer.PlayerId, targetPlayerId);
-                }
-            }
+            return;
         }
+
+        public void RoleAbilityResetOnMeetingEnd()
+        {
+            return;
+        }
+
 
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
@@ -240,7 +232,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         protected override void RoleSpecificInit()
         {
-            this.isAlreadyUpgrated = false;
             this.CurRecursion = 0;
 
             var allOption = OptionsHolder.AllOption;
@@ -449,24 +440,39 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             Player.SetPlayerOutLine(this.Target, this.NameColor);
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        private void sidekickToJackal(PlayerControl rolePlayer)
         {
-            return;
-        }
+            for (int i = 0; i < this.numUpgradeSideKick; ++i)
+            {
+                int useIndex = UnityEngine.Random.Range(0, this.SideKickPlayerId.Count);
+                byte targetPlayerId = this.SideKickPlayerId[useIndex];
+                this.SideKickPlayerId.RemoveAt(useIndex);
 
-        public void RoleAbilityResetOnMeetingEnd()
-        {
-            return;
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                    rolePlayer.NetId,
+                    (byte)RPCOperator.Command.ReplaceRole,
+                    Hazel.SendOption.Reliable, -1);
+
+                writer.Write(rolePlayer.PlayerId);
+                writer.Write(targetPlayerId);
+                writer.Write(
+                    (byte)ExtremeRoleManager.ReplaceOperation.SidekickToJackal);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+
+                Sidekick.BecomeToJackal(rolePlayer.PlayerId, targetPlayerId);
+            }
         }
     }
 
-    public class Sidekick : SingleRoleBase
+    public class Sidekick : SingleRoleBase, IRoleUpdate
     {
 
+        private byte jackalPlayerId;
         private int recursion = 0;
         private bool sidekickJackalCanMakeSidekick = false;
 
         public Sidekick(
+            byte jackalPlayerId,
             int gameControleId,
             int curRecursion,
             bool isImpostor,
@@ -484,6 +490,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 ColorPalette.JackalBlue,
                 false, canKill, useVent, useSabotage)
         {
+            this.jackalPlayerId = jackalPlayerId;
             this.GameControlId = gameControleId;
             this.HasOtherVison = hasOtherVision;
             this.Vison = vison;
@@ -556,6 +563,25 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         protected override void RoleSpecificInit()
         {
             throw new Exception("Don't call this class method!!");
+        }
+
+        public void Update(PlayerControl rolePlayer)
+        {
+            if (Player.GetPlayerControlById(this.jackalPlayerId).Data.Disconnected)
+            {
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                    rolePlayer.NetId,
+                    (byte)RPCOperator.Command.ReplaceRole,
+                    Hazel.SendOption.Reliable, -1);
+
+                writer.Write(this.jackalPlayerId);
+                writer.Write(rolePlayer);
+                writer.Write(
+                    (byte)ExtremeRoleManager.ReplaceOperation.SidekickToJackal);
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+
+                Sidekick.BecomeToJackal(this.jackalPlayerId, rolePlayer.PlayerId);
+            }
         }
     }
 

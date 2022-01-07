@@ -105,8 +105,8 @@ namespace ExtremeRoles
                 source.MurderPlayer(target);
 
                 var targetRole = Roles.ExtremeRoleManager.GameRole[targetId];
-                var assassin = targetRole as Roles.Combination.Assassin;
-                if (assassin != null)
+
+                if (Roles.ExtremeRoleManager.IsDisableWinCheckRole(targetRole))
                 {
                     ExtremeRolesPlugin.GameDataStore.WinCheckDisable = true;
                 }
