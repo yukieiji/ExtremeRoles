@@ -121,8 +121,8 @@ namespace ExtremeRoles.Roles
 
             int roleOptionOffset = 0;
 
-            foreach (var item
-             in roles.Select((Value, Index) => new { Value, Index }))
+            foreach (var item in roles.Select(
+                (Value, Index) => new { Value, Index }))
             {
                 roleOptionOffset = optionIdOffsetChord + (OptionOffsetPerRole * item.Index);
                 item.Value.CreateRoleAllOption(roleOptionOffset);
