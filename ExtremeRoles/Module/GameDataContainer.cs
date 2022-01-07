@@ -62,6 +62,10 @@ namespace ExtremeRoles.Module
             DeathReason reason,
             PlayerControl killer)
         {
+
+            if (this.DeadPlayerInfo.ContainsKey(
+                deadPlayer.PlayerId)) { return; }
+ 
             var newReson = PlayerStatus.Dead;
 
             switch (reason)
