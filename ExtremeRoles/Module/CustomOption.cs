@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 
 using UnityEngine;
 
@@ -75,8 +77,11 @@ namespace ExtremeRoles.Module
             CurSelection = 0;
             if (id > 0)
             {
+                string nameClean = Regex.Replace(this.Name, "<.*?>", "");
+                nameClean = Regex.Replace(nameClean, "^-\\s*", "");
+                nameClean = nameClean.Trim();
                 Entry = ExtremeRolesPlugin.Instance.Config.Bind(
-                    $"Preset:{OptionsHolder.SelectedPreset}", id.ToString(), DefaultSelection);
+                    $"Preset:{OptionsHolder.SelectedPreset}", nameClean, DefaultSelection);
                 CurSelection = Mathf.Clamp(Entry.Value, 0, selections.Length - 1);
             }
 
