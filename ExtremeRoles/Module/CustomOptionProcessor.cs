@@ -20,6 +20,8 @@ namespace ExtremeRoles.Module
 
     public class CustomOptionCsvProcessor
     {
+        private const string modName = "Extreme Roles";
+        private const string versionStr = "Version";
 
         private const string comma = ",";
 
@@ -33,8 +35,8 @@ namespace ExtremeRoles.Module
                     csv.WriteLine(
                         string.Format("{1}{0}{2}{0}{3}",
                         comma,
-                        "Extreme Roles",
-                        "Version",
+                        modName,
+                        versionStr,
                         Assembly.GetExecutingAssembly().GetName().Version));
                     csv.WriteLine(
                         string.Format("{1}{0}{2}{0}{3}{0}{4}",
@@ -71,19 +73,32 @@ namespace ExtremeRoles.Module
                 using (var csv = new StreamReader("option.csv", new UTF8Encoding(true)))
                 {
                     string line = csv.ReadLine(); // バージョン情報
+                    string[] varsionHeader = line.Split(comma);
 
-                    csv.ReadLine(); // ヘッダー
-
-                    while ((line = csv.ReadLine()) != null)
+                    if (varsionHeader[0].Equals(modName) &&
+                        varsionHeader[1].Equals(versionStr) &&
+                        varsionHeader[2].Equals(
+                            Assembly.GetExecutingAssembly().GetName().Version.ToString()))
                     {
-                        string[] option = line.Split(',');
 
-                        int id = int.Parse(option[0]);
-                        int selection = int.Parse(option[3]);
-                        if (OptionsHolder.AllOption.ContainsKey(id))
+                        csv.ReadLine(); // ヘッダー
+
+
+                        while ((line = csv.ReadLine()) != null)
                         {
-                            OptionsHolder.AllOption[id].UpdateSelection(selection);
+                            string[] option = line.Split(',');
+
+                            int id = int.Parse(option[0]);
+                            int selection = int.Parse(option[3]);
+                            if (OptionsHolder.AllOption.ContainsKey(id))
+                            {
+                                OptionsHolder.AllOption[id].UpdateSelection(selection);
+                            }
                         }
+                    }
+                    else
+                    {
+                        return false;
                     }
 
                 }
