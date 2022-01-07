@@ -55,6 +55,7 @@ namespace ExtremeRoles.Patches.Option
         private static TextMeshPro titleTextTitle;
 
         private static ToggleButtonBehaviour buttonPrefab;
+        private static GenericPopup propPrefab;
         private static Vector3? origin;
 
         [HarmonyPostfix]
@@ -69,6 +70,15 @@ namespace ExtremeRoles.Patches.Option
             Object.Destroy(titleText.GetComponent<TextTranslatorTMP>());
             titleText.gameObject.SetActive(false);
             Object.DontDestroyOnLoad(titleText);
+            if (propPrefab == null)
+            {
+                TwitchManager man = DestroyableSingleton<TwitchManager>.Instance;
+                propPrefab = Object.Instantiate(man.TwitchPopup);
+                Object.DontDestroyOnLoad(propPrefab);
+                propPrefab.name = "propForInEx";
+                propPrefab.gameObject.SetActive(false);
+            }
+
         }
 
         [HarmonyPostfix]
@@ -244,9 +254,9 @@ namespace ExtremeRoles.Patches.Option
                 modOptionButton.Add(button);
             }
 
-            importButton = UnityEngine.Object.Instantiate(
+            importButton =Object.Instantiate(
                 buttonPrefab, popUp.transform);
-            exportButton = UnityEngine.Object.Instantiate(
+            exportButton = Object.Instantiate(
                 buttonPrefab, popUp.transform);
 
             importButton.transform.localPosition = new Vector3(
@@ -277,13 +287,12 @@ namespace ExtremeRoles.Patches.Option
             passiveImportButton.gameObject.SetActive(true);
             passiveExportButton.gameObject.SetActive(true);
 
-            TwitchManager man = DestroyableSingleton<TwitchManager>.Instance;
-            CsvImport.InfoPopup = UnityEngine.Object.Instantiate<GenericPopup>(
-                man.TwitchPopup, passiveImportButton.transform);
-            CsvExport.InfoPopup = UnityEngine.Object.Instantiate<GenericPopup>(
-                man.TwitchPopup, passiveExportButton.transform);
+            CsvImport.InfoPopup = Object.Instantiate(
+                propPrefab, passiveImportButton.transform);
+            CsvExport.InfoPopup = Object.Instantiate(
+                propPrefab, passiveExportButton.transform);
 
-            var pos =  man.TwitchPopup.transform.position;
+            var pos = propPrefab.transform.position;
             pos.z = -2048f;
             CsvImport.InfoPopup.transform.position = pos;
             CsvExport.InfoPopup.transform.position = pos;
