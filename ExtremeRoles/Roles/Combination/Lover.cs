@@ -76,7 +76,14 @@ namespace ExtremeRoles.Roles.Combination
                 ColorPalette.LoverPink, "\n♥");
 
             List<byte> lover = getAliveSameLover();
-            baseString += Player.GetPlayerControlById(lover[0]).Data.PlayerName;
+            
+            lover.Remove(PlayerControl.LocalPlayer.PlayerId);
+            
+            byte firstLover = lover[0];
+            lover.RemoveAt(0);
+            
+            baseString += Player.GetPlayerControlById(
+                firstLover).Data.PlayerName;
             if (lover.Count != 0)
             {
                 for (int i = 1; i < lover.Count; ++i)
@@ -84,11 +91,11 @@ namespace ExtremeRoles.Roles.Combination
 
                     if (i == 1)
                     {
-                        baseString += Translation.GetString("AndFirst");
+                        baseString += Translation.GetString("andFirst");
                     }
                     else
                     {
-                        baseString += Translation.GetString("And");
+                        baseString += Translation.GetString("and");
                     }
                     baseString += Player.GetPlayerControlById(
                         lover[i]).Data.PlayerName;
@@ -269,8 +276,8 @@ namespace ExtremeRoles.Roles.Combination
 
             foreach(var item in ExtremeRoleManager.GameRole)
             {
-                if (this.IsSameControlId(item.Value) &&
-                    !(GameData.Instance.GetPlayerById(item.Key).IsDead))
+                if (this.IsSameControlId(item.Value) && !(GameData.Instance.GetPlayerById(
+                    item.Key).IsDead))
                 {
                     alive.Add(item.Key);
                 }
