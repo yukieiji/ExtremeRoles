@@ -822,5 +822,53 @@
     },
     "LoverIntoPlus": {
         "11": "\u3068\u604b\u306b\u843d\u3061\u305f"
+    },
+    "Supporter": {
+        "11": "\u30b5\u30dd\u30fc\u30bf\u30fc"
+    },
+    "EvilSupporter": {
+        "11": "\u30a4\u30d3\u30eb\u30b5\u30dd\u30fc\u30bf\u30fc"
+    },
+    "NiceSupporter": {
+        "11": "\u30ca\u30a4\u30b9\u30b5\u30dd\u30fc\u30bf\u30fc"
+    },
+    "SupporterSpawnRate": {
+        "11": "\u30b5\u30dd\u30fc\u30bf\u30fc"
+    },
+    "SupporterRoleNum": {
+        "11": "\u30b9\u30dd\u30fc\u30f3\u30bb\u30c3\u30c8\u6570"
+    },
+    "SupporterIsAssignImposter": {
+        "11": "\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc\u304c\u30a2\u30b5\u30a4\u30f3\u3055\u308c\u308b\u304b"
+    },
+    "SupporterImposterSelectedRate": {
+        "11": "\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc\u306e\u30a2\u30b5\u30a4\u30f3\u30ec\u30fc\u30c8"
+    },
+    "SupporterHasOtherVison": {
+        "11": "\u5225\u306e\u8996\u754c\u8a2d\u5b9a\u3092\u6301\u3064\u304b"
+    },
+    "SupporterVison": {
+        "11": "\u30d3\u30b8\u30e7\u30f3"
+    },
+    "SupporterApplyEnvironmentVisionEffect": {
+        "11": "\u8996\u754c\u52b9\u679c\u3092\u53d7\u3051\u308b\u304b"
+    },
+    "SupporterHasOtherKillCool": {
+        "11": "\u5225\u306e\u30ad\u30eb\u30af\u30fc\u30eb\u30bf\u30a4\u30e0\u3092\u6301\u3064\u304b"
+    },
+    "SupporterKillCoolDown": {
+        "11": "\u30ad\u30eb\u30af\u30fc\u30eb\u30bf\u30a4\u30e0"
+    },
+    "SupporterHasOtherKillRange": {
+        "11": "\u5225\u306e\u30ad\u30eb\u30ec\u30f3\u30b8\u3092\u6301\u3064\u304b"
+    },
+    "SupporterKillRange": {
+        "11": "\u30ad\u30eb\u30ec\u30f3\u30b8"
+    },
+    "SupporterIntroDescription": {
+        "11": "{0}\u306f{1}\u3060\u3001\u5168\u529b\u3067\u30b5\u30dd\u30fc\u30c8\u3057\u308d"
+    },
+    "SupporterShortDescription": {
+        "11": "\u30b5\u30dd\u30fc\u30c8\u5bfe\u8c61\u3092\u5168\u529b\u3067\u624b\u52a9\u3051\u3057\u3088\u3046"
     }
 }
