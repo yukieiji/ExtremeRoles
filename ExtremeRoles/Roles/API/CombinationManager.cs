@@ -31,6 +31,11 @@ namespace ExtremeRoles.Roles.API
             this.roleName = roleName;
         }
 
+        public abstract void AssignSetUpInit();
+
+        public abstract MultiAssignRoleBase GetRole(
+            byte roleId, RoleTypes playerRoleType);
+
         protected override void CreateKillerOption(
             CustomOptionBase parentOps)
         {
@@ -66,6 +71,45 @@ namespace ExtremeRoles.Roles.API
         {
             this.setPlayerNum = setPlayerNum;
             this.maxSetNum = maxSetNum;
+        }
+
+        public override void AssignSetUpInit()
+        {
+            return;
+        }
+
+        public override MultiAssignRoleBase GetRole(
+            byte roleId, RoleTypes playerRoleType)
+        {
+
+            foreach(var checkRole in this.Roles)
+            {
+
+                if (checkRole.BytedRoleId != roleId) { continue; }
+
+                switch (checkRole.Team)
+                {
+                    case ExtremeRoleType.Crewmate:
+                    case ExtremeRoleType.Neutral:
+                        if (playerRoleType == RoleTypes.Crewmate)
+                        {
+                            return checkRole;
+                        }
+                        break;
+                    case ExtremeRoleType.Impostor:
+                        if ((playerRoleType == RoleTypes.Impostor) || 
+                            (playerRoleType == RoleTypes.Shapeshifter))
+                        {
+                            return checkRole;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return null;
+
         }
 
         protected override CustomOptionBase CreateSpawnOption()
@@ -142,6 +186,70 @@ namespace ExtremeRoles.Roles.API
         {
             this.minimumRoleNum = minimumRoleNum;
             this.baseRole = role;
+        }
+        public override void AssignSetUpInit()
+        {
+            var allOptions = OptionHolder.AllOption;
+
+            foreach (var role in this.Roles)
+            {
+                role.CanHasAnotherRole = allOptions[
+                    GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign)].GetValue();
+
+                bool isEvil = allOptions[
+                    GetRoleOptionId(CombinationRoleCommonOption.IsAssignImposter)].GetValue();
+
+                var spawnOption = allOptions[
+                        GetRoleOptionId(CombinationRoleCommonOption.ImposterSelectedRate)];
+                isEvil = isEvil && (UnityEngine.Random.RandomRange(1, 100) < (int)Decimal.Multiply(
+                    spawnOption.GetValue(), spawnOption.Selections.ToList().Count));
+
+                if (isEvil)
+                {
+                    role.Team = ExtremeRoleType.Impostor;
+                    role.NameColor = Palette.ImpostorRed;
+                    role.CanKill = true;
+                    role.UseVent = true;
+                    role.UseSabotage = true;
+                    role.HasTask = false;
+                }
+                else
+                {
+                    role.Team = ExtremeRoleType.Crewmate;
+                    role.CanKill = false;
+                    role.UseVent = false;
+                    role.UseSabotage = false;
+                    role.HasTask = true;
+                }
+                role.Initialize();
+            }
+        }
+
+        public override MultiAssignRoleBase GetRole(
+            byte roleId, RoleTypes playerRoleType)
+        {
+
+            MultiAssignRoleBase role = null;
+            
+            if (this.baseRole.BytedRoleId != roleId) { return role; }
+            role = (MultiAssignRoleBase)this.baseRole.Clone();
+
+            switch (playerRoleType)
+            {
+                case RoleTypes.Impostor:
+                case RoleTypes.Shapeshifter:
+                    role.Team = ExtremeRoleType.Impostor;
+                    role.NameColor = Palette.ImpostorRed;
+                    role.CanKill = true;
+                    role.UseVent = true;
+                    role.UseSabotage = true;
+                    role.HasTask = false;
+                    return role;
+                default:
+                    return role;
+            }
+
+
         }
 
         protected override CustomOptionBase CreateSpawnOption()
@@ -225,39 +333,6 @@ namespace ExtremeRoles.Roles.API
             for (int i = 0; i < roleAssignNum; ++i)
             {
                 this.Roles.Add((MultiAssignRoleBase)this.baseRole.Clone());
-            }
-
-            foreach (var role in this.Roles)
-            {
-                role.CanHasAnotherRole = allOptions[
-                    GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign)].GetValue();
-
-                bool isEvil = allOptions[
-                    GetRoleOptionId(CombinationRoleCommonOption.IsAssignImposter)].GetValue();
-
-                var spawnOption = allOptions[
-                        GetRoleOptionId(CombinationRoleCommonOption.ImposterSelectedRate)];
-                isEvil = isEvil && (UnityEngine.Random.RandomRange(1, 100) < (int)Decimal.Multiply(
-                    spawnOption.GetValue(), spawnOption.Selections.ToList().Count));
-
-                if (isEvil)
-                {
-                    role.Team = ExtremeRoleType.Impostor;
-                    role.NameColor = Palette.ImpostorRed;
-                    role.CanKill = true;
-                    role.UseVent = true;
-                    role.UseSabotage = true;
-                    role.HasTask = false;
-                }
-                else
-                {
-                    role.Team = ExtremeRoleType.Crewmate;
-                    role.CanKill = false;
-                    role.UseVent = false;
-                    role.UseSabotage = false;
-                    role.HasTask = true;
-                }
-                role.Initialize();
             }
         }
 

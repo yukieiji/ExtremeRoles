@@ -638,10 +638,9 @@ namespace ExtremeRoles.Patches
                 case (byte)RPCOperator.Command.SetCombinationRole:
                     roleId = reader.ReadByte();
                     playerId = reader.ReadByte();
-                    byte combinationRoleId = reader.ReadByte();
                     byte gameControlId = reader.ReadByte();
                     RPCOperator.SetCombinationRole(
-                        roleId, playerId, combinationRoleId, gameControlId);
+                        roleId, playerId, gameControlId);
                     break;
                 case (byte)RPCOperator.Command.ShareOption:
                     int numOptions = (int)reader.ReadPackedUInt32();

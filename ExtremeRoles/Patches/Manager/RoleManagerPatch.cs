@@ -84,7 +84,7 @@ namespace ExtremeRoles.Patches.Manager
 
             foreach (var(roles, id) in assignMultiAssignRole)
             {
-                foreach (var (role, index) in roles.Select((role, index) => (role, index)))
+                foreach (var role in roles)
                 {
                     bool assign = false;
                     List<int> tempList = new List<int>(
@@ -102,7 +102,7 @@ namespace ExtremeRoles.Patches.Manager
                         }
 
                         setCombinationRoleToPlayer(
-                            player, role.BytedRoleId, (byte)index, (byte)id);
+                            player, role.BytedRoleId, (byte)id);
                         break;
                     }
                 }
@@ -162,23 +162,23 @@ namespace ExtremeRoles.Patches.Manager
 
             var roleDataLoop = extremeRolesData.CombinationRole.OrderBy(
                 item => RandomGenerator.Instance.Next()).ToList();
-            List<(List<MultiAssignRoleBase>, (int, int))> newRoleData = new List<(List<MultiAssignRoleBase>, (int, int))> ();
 
             int gameControlId = 0;
 
             foreach (var oneRole in roleDataLoop)
             {
-                var (roles, (num, spawnRate, isMultiAssign)) = oneRole;
+                var (roleManager, (num, spawnRate, isMultiAssign)) = oneRole;
                 var (crewNum, impNum) = getNotAssignedPlayer(isMultiAssign);
 
                 for (int i = 0; i < num; i++)
                 {
+                    roleManager.AssignSetUpInit();
                     bool isSpawn = isRoleSpawn(num, spawnRate);
                     int reduceCrewmateRole = 0;
                     int reduceImpostorRole = 0;
                     int reduceNeutralRole = 0;
 
-                    foreach (var role in roles)
+                    foreach (var role in roleManager.Roles)
                     {
 
                         switch (role.Team)
@@ -210,7 +210,7 @@ namespace ExtremeRoles.Patches.Manager
                     extremeRolesData.ImpostorRoles = extremeRolesData.ImpostorRoles - reduceImpostorRole;
 
                     var spawnRoles = new List<MultiAssignRoleBase>();
-                    foreach (var role in roles)
+                    foreach (var role in roleManager.Roles)
                     {
                         spawnRoles.Add(
                             (MultiAssignRoleBase)role.Clone());
@@ -393,7 +393,7 @@ namespace ExtremeRoles.Patches.Manager
         }
 
         private static void setCombinationRoleToPlayer(
-            PlayerControl player, byte roleId, byte combinationRoleIndex, byte gameId)
+            PlayerControl player, byte roleId, byte gameId)
         {
 
             Logging.Debug($"Player:{player.name}  RoleId:{roleId}");
@@ -405,11 +405,10 @@ namespace ExtremeRoles.Patches.Manager
 
             writer.Write(roleId);
             writer.Write(player.PlayerId);
-            writer.Write(combinationRoleIndex);
             writer.Write(gameId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCOperator.SetCombinationRole(
-                roleId, player.PlayerId, combinationRoleIndex, gameId);
+                roleId, player.PlayerId, gameId);
         }
 
 
@@ -419,8 +418,8 @@ namespace ExtremeRoles.Patches.Manager
             List<SingleRoleBase> RolesForVanillaCrewmate = new List<SingleRoleBase>();
             
             // コンビネーションロールに含まれているロール、コンビネーション全体のスポーン数、スポーンレート
-            List<(List<MultiAssignRoleBase>, (int, int, bool))> combinationRole = new List<
-                (List<MultiAssignRoleBase>, (int, int, bool))>();
+            List<(CombinationRoleManagerBase, (int, int, bool))> combinationRole = new List<
+                (CombinationRoleManagerBase, (int, int, bool))>();
 
             Dictionary<byte, (int, int)> RoleSpawnSettingsForImposter = new Dictionary<byte, (int, int)>();
             Dictionary<byte, (int, int)> RoleSpawnSettingsForCrewmate = new Dictionary<byte, (int, int)>();
@@ -455,7 +454,7 @@ namespace ExtremeRoles.Patches.Manager
                 }
 
                 combinationRole.Add(
-                    (role.Roles, (roleSet, spawnRate, multiAssign)));
+                    (role, (roleSet, spawnRate, multiAssign)));
             }
 
             foreach (var role in ExtremeRoleManager.NormalRole)
@@ -519,8 +518,8 @@ namespace ExtremeRoles.Patches.Manager
         {
             public List<SingleRoleBase> RolesForVanillaImposter = new List<SingleRoleBase>();
             public List<SingleRoleBase> RolesForVanillaCrewmate = new List<SingleRoleBase>();
-            public List<(List<MultiAssignRoleBase>, (int, int, bool))> CombinationRole = new List<
-                (List<MultiAssignRoleBase>, (int, int, bool))>();
+            public List<(CombinationRoleManagerBase, (int, int, bool))> CombinationRole = new List<
+                (CombinationRoleManagerBase, (int, int, bool))>();
 
             public Dictionary<
                 RoleTypes, Dictionary<byte, (int, int)>> RoleSpawnSettings = 
