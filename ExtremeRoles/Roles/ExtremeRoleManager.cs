@@ -155,7 +155,7 @@ namespace ExtremeRoles.Roles
         }
 
         public static void SetPlayerIdToMultiRoleId(
-            byte roleId, byte playerId, byte roleIndex, byte id)
+            byte roleId, byte playerId, byte id)
         {
 
             RoleTypes roleType = Helper.Player.GetPlayerControlById(playerId).Data.Role.Role;
@@ -164,11 +164,10 @@ namespace ExtremeRoles.Roles
             foreach (var combRole in CombRole)
             {
 
-                if (roleIndex >= combRole.Roles.Count) { continue; }
+                var role = combRole.GetRole(
+                    roleId, roleType);
 
-                var role = combRole.Roles[roleIndex];
-
-                if (roleId == role.BytedRoleId)
+                if (role != null)
                 {
 
                     SingleRoleBase addRole = role.Clone();
@@ -196,7 +195,6 @@ namespace ExtremeRoles.Roles
                     }
                     Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
                     return;
-
                 }
             }
         }
