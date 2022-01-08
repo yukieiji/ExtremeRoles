@@ -127,14 +127,13 @@ namespace ExtremeRoles.Roles.API
             {
                 if (multiAssignRole.AnotherRole != null)
                 {
-                    return string.Format(
-                        GetRoleTag(),
-                        this.GetRolePlayerNameTag(
-                        multiAssignRole.AnotherRole, targetPlayerId));
+                    return this.GetRolePlayerNameTag(
+                        multiAssignRole.AnotherRole,
+                        targetPlayerId);
                 }
             }
 
-            return GetRoleTag();
+            return string.Empty;
         }
         public virtual Color GetTargetRoleSeeColor(
             SingleRoleBase targetRole,
@@ -328,6 +327,32 @@ namespace ExtremeRoles.Roles.API
                 canKill, hasTask, useVent,
                 useSabotage, canCallMeeting)
         { }
+
+        public void SetRoleType(RoleTypes roleType)
+        {
+            switch (roleType)
+            {
+                case RoleTypes.Shapeshifter:
+                case RoleTypes.Impostor:
+                    this.Team = ExtremeRoleType.Impostor;
+                    this.NameColor = Palette.ImpostorRed;
+                    this.CanKill = true;
+                    this.UseVent = true;
+                    this.UseSabotage = true;
+                    this.HasTask = false;
+                    break;
+                case RoleTypes.Crewmate:
+                case RoleTypes.Engineer:
+                case RoleTypes.Scientist:
+                    this.CanKill = false;
+                    this.UseVent = false;
+                    this.UseSabotage = false;
+                    this.HasTask = true;
+                    break;
+                default:
+                    break;
+            };
+        }
 
         public void SetAnotherRole(SingleRoleBase role)
         {
