@@ -1,6 +1,6 @@
 # Extreme Roles
 AmongUsの上級者向けのロール追加MOD<br>
-このMODはAmong UsまたはInnersloth LLCとは提携しておらず、含まれるコンテンツはInnersloth LLC公式もしくは、支援されているものではありません。
+このMODはAmong UsまたはInnersloth LLCとは提携しておらず、含まれるコンテンツはAmong UsやInnersloth LLCから支援、援助されているものではありません。
 ここに含まれる素材の一部は、Innersloth LLCの所有物です。©Innersloth LLC.
 
 ## クレジット&Thanks
@@ -8,7 +8,7 @@ AmongUsの上級者向けのロール追加MOD<br>
 - Jackal and Sidekick - Dhalucard氏によって作成されたMOD、ジャッカルとサイドキックのアイディア元
 - Among-Us-Love-Couple-Mod - Woodi-dev氏によって作成されたMOD、ラバーズのアイディア元
 
-- レジスタンス:アバロン - マーリン、アサシンのアイディア元
+- レジスタンス:アヴァロン - マーリン、アサシンのアイディア元
 - シャドウハンターズ - アリスのアイディア元
 
 - Microsoft.CSharp: dynamic型を使用するために使用
