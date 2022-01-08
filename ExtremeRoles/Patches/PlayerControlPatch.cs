@@ -309,14 +309,14 @@ namespace ExtremeRoles.Patches
         }
 
         private static Tuple<string, string> getRoleAndMeetingInfo(
-            PlayerControl targetPlayer, bool commsActive,
+            PlayerControl targetPlayer, bool commonActive,
             bool IsLocalPlayerAssassinFirstMeeting = false)
         {
 
             var (tasksCompleted, tasksTotal) = Task.GetTaskInfo(targetPlayer.Data);
             string roleNames = ExtremeRoleManager.GameRole[targetPlayer.PlayerId].GetColoredRoleName();
 
-            var completedStr = commsActive ? "?" : tasksCompleted.ToString();
+            var completedStr = commonActive ? "?" : tasksCompleted.ToString();
             string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({completedStr}/{tasksTotal})</color>" : "";
 
             string playerInfoText = "";

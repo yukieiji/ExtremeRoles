@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using UnityEngine;
+
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using UnityEngine;
 
 namespace ExtremeRoles.Roles.Combination
 {
@@ -97,12 +99,15 @@ namespace ExtremeRoles.Roles.Combination
         {
             var roleName = ExtremeRoleManager.GameRole[
                 this.supportTarget].GetColoredRoleName();
-            var playerName = Helper.Player.GetPlayerControlById(
+            var playerName = Player.GetPlayerControlById(
                 this.supportTarget).Data.PlayerName;
 
             return string.Format(
                 base.GetIntroDescription(),
-                playerName, roleName);
+                Design.ColoedString(
+                    Palette.White,
+                    playerName),
+                roleName);
         }
 
         protected override void CreateSpecificOption(
