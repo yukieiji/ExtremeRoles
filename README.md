@@ -1,5 +1,7 @@
 # Extreme Roles
-AmongUsの上級者向けのロール追加MOD
+AmongUsの上級者向けのロール追加MOD<br>
+このMODはAmong UsまたはInnersloth LLCとは提携しておらず、含まれるコンテンツはInnersloth LLC公式もしくは、支援されているものではありません。
+ここに含まれる素材の一部は、Innersloth LLCの所有物です。©Innersloth LLC.
 
 ## クレジット&Thanks
 - TheOtherRoles - 開発当時からTOR及びTOR-GMのコード(ロールに関するところ以外(オプションやパッチ等))を参考、引用、改変して開発しています。TORがなければ開発をこのMODを開発することは不可能でした
