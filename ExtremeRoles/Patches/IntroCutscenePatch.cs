@@ -1,11 +1,13 @@
 ﻿using HarmonyLib;
 
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Patches
 {
     class IntroCutscenceHelper
     {
+
         public static void SetupIntroTeam(
             IntroCutscene __instance,
             ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
@@ -37,6 +39,20 @@ namespace ExtremeRoles.Patches
             }
         }
 
+        public static void SetupPlayerPrefab(IntroCutscene __instance)
+        {
+            ExtremeRolesPlugin.GameDataStore.SetPoolPlayerPrefab(__instance);
+        }
+
+        public static void SetupRole()
+        {
+            var role = ExtremeRoleManager.GetLocalPlayerRole() as IRoleSetUp;
+            if (role != null)
+            {
+                role.IntroBeginSetUp();
+            }
+        }
+
     }
 
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginImpostor))]
@@ -47,6 +63,7 @@ namespace ExtremeRoles.Patches
             ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
         {
             IntroCutscenceHelper.SetupIntroTeamIcons(__instance, ref yourTeam);
+            IntroCutscenceHelper.SetupPlayerPrefab(__instance);
         }
 
         public static void Postfix(
@@ -54,6 +71,7 @@ namespace ExtremeRoles.Patches
             ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
         {
             IntroCutscenceHelper.SetupIntroTeam(__instance, ref yourTeam);
+            IntroCutscenceHelper.SetupRole();
         }
 
     }
@@ -66,6 +84,7 @@ namespace ExtremeRoles.Patches
             ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
         {
             IntroCutscenceHelper.SetupIntroTeamIcons(__instance, ref yourTeam);
+            IntroCutscenceHelper.SetupPlayerPrefab(__instance);
         }
 
         public static void Postfix(
@@ -73,6 +92,7 @@ namespace ExtremeRoles.Patches
             ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
         {
             IntroCutscenceHelper.SetupIntroTeam(__instance, ref yourTeam);
+            IntroCutscenceHelper.SetupRole();
         }
     }
 
@@ -101,13 +121,13 @@ namespace ExtremeRoles.Patches
                     }
                 }
 
-                
+
                 if (role.IsImposter())
                 {
                     __instance.RoleBlurbText.text += string.Format(
                         "\n{0}", Helper.Translation.GetString("impostorIntroText"));
                 }
-                else if(role.IsCrewmate() && role.HasTask)
+                else if (role.IsCrewmate() && role.HasTask)
                 {
                     __instance.RoleBlurbText.text += string.Format(
                         "\n{0}", Helper.Translation.GetString("crewIntroText"));
@@ -115,26 +135,18 @@ namespace ExtremeRoles.Patches
 
             }
         }
-    }
 
-    [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
-    class IntroCutsceneOnDestroyPatch
-    {
-        public static void Prefix(IntroCutscene __instance)
+        [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
+        class IntroCutsceneOnDestroyPatch
         {
-            // Generate and initialize player icons
-            if (PlayerControl.LocalPlayer != null && HudManager.Instance != null)
+            public static void Prefix(IntroCutscene __instance)
             {
-                var gameData = ExtremeRolesPlugin.GameDataStore;
-                gameData.CreatIcons(__instance);
-                var role = ExtremeRoleManager.GetLocalPlayerRole();
-                if (role.Id == ExtremeRoleId.Marlin)
+                var role = ExtremeRoleManager.GetLocalPlayerRole() as IRoleSetUp;
+                if (role != null)
                 {
-                    ((Roles.Combination.Marlin)role).SetPlayerIcon(
-                        gameData.PlayerIcon);
+                    role.IntroEndSetUp();
                 }
             }
-
         }
     }
 }

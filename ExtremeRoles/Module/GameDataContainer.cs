@@ -22,8 +22,9 @@ namespace ExtremeRoles.Module
         public GameOverReason EndReason;
         public List<PlayerSummary> FinalSummary = new List<PlayerSummary>();
         public Dictionary<byte, DeadInfo> DeadPlayerInfo = new Dictionary<byte, DeadInfo>();
-        public Dictionary<byte, PoolablePlayer> PlayerIcon = new Dictionary<byte, PoolablePlayer>();
-        
+
+        public PoolablePlayer PlayerPrefab;
+
         public List<byte> DeadedAssassin = new List<byte>();
 
         public int MeetingsCount = 0;
@@ -41,7 +42,6 @@ namespace ExtremeRoles.Module
 
         public void Initialize()
         {
-            PlayerIcon.Clear();
             DeadedAssassin.Clear();
             FinalSummary.Clear();
             DeadPlayerInfo.Clear();
@@ -137,19 +137,14 @@ namespace ExtremeRoles.Module
 
         }
 
-        public void CreatIcons(IntroCutscene __instance)
+        public void SetPoolPlayerPrefab(IntroCutscene __instance)
         {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
-            {
-                PoolablePlayer poolPlayer = UnityEngine.Object.Instantiate<PoolablePlayer>(
-                    __instance.PlayerPrefab,
-                    HudManager.Instance.transform);
-
-                poolPlayer.UpdateFromPlayerData(player.Data, PlayerOutfitType.Default);
-                poolPlayer.SetFlipX(true);
-                poolPlayer.gameObject.SetActive(false);
-                PlayerIcon.Add(player.PlayerId, poolPlayer);
-            }
+            PlayerPrefab = UnityEngine.Object.Instantiate(
+                __instance.PlayerPrefab,
+                HudManager.Instance.transform);
+            UnityEngine.Object.DontDestroyOnLoad(PlayerPrefab);
+            PlayerPrefab.name = "poolablePlayerPrefab";
+            PlayerPrefab.gameObject.SetActive(false);
         }
 
         public PlayerStatistics CreateStatistics()

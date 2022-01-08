@@ -113,7 +113,7 @@ namespace ExtremeRoles.Roles.Combination
     }
 
 
-    public class Marlin : MultiAssignRoleBase, IRoleUpdate
+    public class Marlin : MultiAssignRoleBase, IRoleSetUp
     {
         public enum MarlinOption
         {
@@ -137,10 +137,15 @@ namespace ExtremeRoles.Roles.Combination
                 false, false, false, false)
         {}
 
-        public void SetPlayerIcon(
-            Dictionary<byte, PoolablePlayer> playerIcons)
+        public void IntroBeginSetUp()
         {
-            this.PlayerIcon = playerIcons;
+            return;
+        }
+
+        public void IntroEndSetUp()
+        {
+            this.PlayerIcon = Player.CreatePlayerIcon();
+            updateIcons();
         }
 
         public override Color GetTargetRoleSeeColor(
@@ -170,37 +175,6 @@ namespace ExtremeRoles.Roles.Combination
             return Palette.White;
         }
 
-        public void Update(PlayerControl rolePlayer)
-        {
-            int visibleCounter = 0;
-            Vector3 bottomLeft = HudManager.Instance.UseButton.transform.localPosition;
-            bottomLeft.x *= -1;
-            bottomLeft += new Vector3(-0.25f, -0.25f, 0);
-
-            foreach (KeyValuePair<byte, PoolablePlayer> item in this.PlayerIcon)
-            {
-                byte playerId = item.Key;
-                var poolPlayer = item.Value;
-                if (playerId == PlayerControl.LocalPlayer.PlayerId) { continue; }
-
-                PlayerControl player = Player.GetPlayerControlById(playerId);
-                SingleRoleBase role = ExtremeRoleManager.GameRole[playerId];
-                if (player.Data.IsDead ||
-                    player.Data.Disconnected ||
-                    role.IsCrewmate() ||
-                    (role.IsNeutral() && !this.CanSeeNeutral))
-                {
-                    poolPlayer.gameObject.SetActive(false);
-                }
-                else
-                {
-                    poolPlayer.gameObject.SetActive(true);
-                    poolPlayer.transform.localScale = Vector3.one * 0.25f;
-                    poolPlayer.transform.localPosition = bottomLeft + Vector3.right * visibleCounter * 0.45f;
-                    ++visibleCounter;
-                }
-            }
-        }
 
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
@@ -244,5 +218,38 @@ namespace ExtremeRoles.Roles.Combination
             this.UseVent = OptionsHolder.AllOption[
                 GetRoleOptionId((int)MarlinOption.CanUseVent)].GetValue();
         }
+
+        private void updateIcons()
+        {
+            int visibleCounter = 0;
+            Vector3 bottomLeft = HudManager.Instance.UseButton.transform.localPosition;
+            bottomLeft.x *= -1;
+            bottomLeft += new Vector3(-0.25f, -0.25f, 0);
+
+            foreach (KeyValuePair<byte, PoolablePlayer> item in this.PlayerIcon)
+            {
+                byte playerId = item.Key;
+                var poolPlayer = item.Value;
+                if (playerId == PlayerControl.LocalPlayer.PlayerId) { continue; }
+
+                PlayerControl player = Player.GetPlayerControlById(playerId);
+                SingleRoleBase role = ExtremeRoleManager.GameRole[playerId];
+                if (player.Data.IsDead ||
+                    player.Data.Disconnected ||
+                    role.IsCrewmate() ||
+                    (role.IsNeutral() && !this.CanSeeNeutral))
+                {
+                    poolPlayer.gameObject.SetActive(false);
+                }
+                else
+                {
+                    poolPlayer.gameObject.SetActive(true);
+                    poolPlayer.transform.localScale = Vector3.one * 0.25f;
+                    poolPlayer.transform.localPosition = bottomLeft + Vector3.right * visibleCounter * 0.45f;
+                    ++visibleCounter;
+                }
+            }
+        }
+
     }
 }

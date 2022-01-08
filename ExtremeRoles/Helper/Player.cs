@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+
+using UnityEngine;
 
 namespace ExtremeRoles.Helper
 {
@@ -38,5 +40,29 @@ namespace ExtremeRoles.Helper
             target.myRend.material.SetFloat("_Outline", 1f);
             target.myRend.material.SetColor("_OutlineColor", color);
         }
+
+        public static Dictionary<byte, PoolablePlayer> CreatePlayerIcon()
+        {
+
+            Dictionary<byte, PoolablePlayer> playerIcon = new Dictionary<byte, PoolablePlayer>();
+
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            {
+                PoolablePlayer poolPlayer = UnityEngine.Object.Instantiate<PoolablePlayer>(
+                    ExtremeRolesPlugin.GameDataStore.PlayerPrefab,
+                    HudManager.Instance.transform);
+                
+                poolPlayer.gameObject.SetActive(true);
+                poolPlayer.UpdateFromPlayerData(
+                    player.Data, PlayerOutfitType.Default);
+                poolPlayer.SetFlipX(true);
+                poolPlayer.gameObject.SetActive(false);
+                playerIcon.Add(player.PlayerId, poolPlayer);
+            }
+
+            return playerIcon;
+
+        }
+
     }
 }
