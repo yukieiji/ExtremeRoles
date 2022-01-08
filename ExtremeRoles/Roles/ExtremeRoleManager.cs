@@ -21,6 +21,7 @@ namespace ExtremeRoles.Roles
         Assassin,
         Marlin,
         Lover,
+        Supporter,
         
         SpecialCrew,
         Sheriff,
@@ -79,6 +80,7 @@ namespace ExtremeRoles.Roles
             {
                 new Avalon(),
                 new LoverManager(),
+                new SupporterManager(),
             };
 
         public static Dictionary<
@@ -100,12 +102,12 @@ namespace ExtremeRoles.Roles
 
             if (roles.Count() == 0) { return; };
 
-            int roleOptionOffset = 0;
+            int roleOptionOffset = optionIdOffsetChord;
 
             foreach (var item
              in roles.Select((Value, Index) => new { Value, Index }))
             {
-                roleOptionOffset = optionIdOffsetChord + (
+                roleOptionOffset = roleOptionOffset + (
                     OptionOffsetPerRole * (item.Index + item.Value.Roles.Count + 1));
                 item.Value.CreateRoleAllOption(roleOptionOffset);
             }

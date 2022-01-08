@@ -163,7 +163,7 @@ namespace ExtremeRoles.Roles.API
                     CombinationRoleCommonOption.AssignsNum.ToString()),
                 this.minimumRoleNum, this.minimumRoleNum,
                 OptionsHolder.VanillaMaxPlayerNum - 1, 1,
-                roleSetOption);
+                roleSetOption, isHidden: this.minimumRoleNum <= 1);
 
             var roleSetNumOption = CustomOption.Create(
                 GetRoleOptionId(RoleCommonOption.RoleNum),
@@ -213,10 +213,15 @@ namespace ExtremeRoles.Roles.API
         protected override void CommonInit()
         {
             this.Roles.Clear();
-
+            int roleAssignNum = 1;
             var allOptions = OptionsHolder.AllOption;
-            int roleAssignNum = allOptions[
-                GetRoleOptionId(CombinationRoleCommonOption.AssignsNum)].GetValue();
+
+            if (allOptions.ContainsKey(GetRoleOptionId(CombinationRoleCommonOption.AssignsNum)))
+            {
+                roleAssignNum = allOptions[
+                    GetRoleOptionId(CombinationRoleCommonOption.AssignsNum)].GetValue();
+            }
+
             for (int i = 0; i < roleAssignNum; ++i)
             {
                 this.Roles.Add((MultiAssignRoleBase)this.baseRole.Clone());
