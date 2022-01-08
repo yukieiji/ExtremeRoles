@@ -113,7 +113,7 @@ namespace ExtremeRoles.Roles.Combination
     }
 
 
-    public class Marlin : MultiAssignRoleBase, IRoleSetUp
+    public class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp
     {
         public enum MarlinOption
         {

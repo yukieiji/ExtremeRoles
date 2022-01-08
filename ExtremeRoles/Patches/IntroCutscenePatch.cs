@@ -46,7 +46,7 @@ namespace ExtremeRoles.Patches
 
         public static void SetupRole()
         {
-            var role = ExtremeRoleManager.GetLocalPlayerRole() as IRoleSetUp;
+            var role = ExtremeRoleManager.GetLocalPlayerRole() as IRoleSpecialSetUp;
             if (role != null)
             {
                 role.IntroBeginSetUp();
@@ -141,7 +141,7 @@ namespace ExtremeRoles.Patches
         {
             public static void Prefix(IntroCutscene __instance)
             {
-                var role = ExtremeRoleManager.GetLocalPlayerRole() as IRoleSetUp;
+                var role = ExtremeRoleManager.GetLocalPlayerRole() as IRoleSpecialSetUp;
                 if (role != null)
                 {
                     role.IntroEndSetUp();
