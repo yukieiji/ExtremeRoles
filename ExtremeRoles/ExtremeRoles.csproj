@@ -4,8 +4,8 @@
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
 
-        <VersionPrefix>1.4.0</VersionPrefix>
-        <VersionSuffix>Test-v10</VersionSuffix> 
+        <VersionPrefix>1.4.1</VersionPrefix>
+        <VersionSuffix>Test-v11</VersionSuffix> 
         <Description>Extreme Roles for Advanced user</Description>
         <Authors>yukieiji</Authors>
     </PropertyGroup>
