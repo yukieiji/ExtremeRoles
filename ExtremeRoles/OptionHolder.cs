@@ -14,6 +14,10 @@ namespace ExtremeRoles
 {
     public static class OptionHolder
     {
+
+        public const int VanillaMaxPlayerNum = 15;
+        public const int MaxImposterNum = 3;
+
         public static string[] SpawnRate = new string[] {
             "0%", "10%", "20%", "30%", "40%",
             "50%", "60%", "70%", "80%", "90%", "100%" };
@@ -21,10 +25,7 @@ namespace ExtremeRoles
         public static string[] Range = new string[] { "short", "middle", "long"};
 
         public static int OptionsPage = 1;
-
         public static int SelectedPreset = 0;
-        public const int VanillaMaxPlayerNum = 15;
-        public const int MaxImposterNum = 3;
 
         public static IRegionInfo[] DefaultRegion;
         public enum CommonOptionKey
