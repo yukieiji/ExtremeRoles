@@ -31,7 +31,7 @@ namespace ExtremeRoles.Patches
             }
 
             if (!PlayerControl.GameOptions.AnonymousVotes || canSeeVote ||
-                (PlayerControl.LocalPlayer.Data.IsDead && OptionsHolder.Client.GhostsSeeVote))
+                (PlayerControl.LocalPlayer.Data.IsDead && OptionHolder.Client.GhostsSeeVote))
             {
                 PlayerControl.SetPlayerMaterialColors(voterPlayer.DefaultOutfit.ColorId, spriteRenderer);
             }
@@ -168,12 +168,12 @@ namespace ExtremeRoles.Patches
         {
             __result = false;
 
-            if (OptionsHolder.Ship.NoVoteIsSelfVote && 
+            if (OptionHolder.Ship.NoVoteIsSelfVote && 
                 PlayerControl.LocalPlayer.PlayerId == suspectStateIdx)
             {
                 return false;
             }
-            if (OptionsHolder.Ship.BlockSkippingInEmergencyMeeting && suspectStateIdx == -1)
+            if (OptionHolder.Ship.BlockSkippingInEmergencyMeeting && suspectStateIdx == -1)
             {
                 return false;
             }
@@ -308,7 +308,7 @@ namespace ExtremeRoles.Patches
             if (__instance.state == MeetingHud.VoteStates.Animating) { return; }
 
             // Deactivate skip Button if skipping on emergency meetings is disabled
-            if (OptionsHolder.Ship.BlockSkippingInEmergencyMeeting)
+            if (OptionHolder.Ship.BlockSkippingInEmergencyMeeting)
             {
                 __instance.SkipVoteButton.gameObject.SetActive(false);
             }

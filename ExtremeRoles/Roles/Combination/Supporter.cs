@@ -113,7 +113,7 @@ namespace ExtremeRoles.Roles.Combination
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            var imposterSetting = OptionsHolder.AllOption[
+            var imposterSetting = OptionHolder.AllOption[
                 GetManagerOptionId(CombinationRoleCommonOption.IsAssignImposter)];
 
             CreateKillerOption(imposterSetting);

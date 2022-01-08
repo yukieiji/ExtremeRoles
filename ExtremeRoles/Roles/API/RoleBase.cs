@@ -228,7 +228,7 @@ namespace ExtremeRoles.Roles.API
                 Design.ConcatString(
                     this.RoleName,
                     KillerCommonOption.KillRange.ToString()),
-                OptionsHolder.Range,
+                OptionHolder.Range,
                 killRangeOption);
         }
         protected override CustomOptionBase CreateSpawnOption()
@@ -240,14 +240,14 @@ namespace ExtremeRoles.Roles.API
                     Design.ConcatString(
                         this.RoleName,
                         RoleCommonOption.SpawnRate.ToString())),
-                OptionsHolder.SpawnRate, null, true);
+                OptionHolder.SpawnRate, null, true);
 
             CustomOption.Create(
                 GetRoleOptionId(RoleCommonOption.RoleNum),
                 Design.ConcatString(
                     this.RoleName,
                     RoleCommonOption.RoleNum.ToString()),
-                1, 1, OptionsHolder.VanillaMaxPlayerNum - 1, 1, roleSetOption);
+                1, 1, OptionHolder.VanillaMaxPlayerNum - 1, 1, roleSetOption);
 
             return roleSetOption;
         }
@@ -278,7 +278,7 @@ namespace ExtremeRoles.Roles.API
         }
         protected override void CommonInit()
         {
-            var allOption = OptionsHolder.AllOption;
+            var allOption = OptionHolder.AllOption;
 
             this.HasOtherVison = allOption[
                 GetRoleOptionId(RoleCommonOption.HasOtherVison)].GetValue();

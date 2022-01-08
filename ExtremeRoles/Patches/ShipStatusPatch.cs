@@ -199,7 +199,7 @@ namespace ExtremeRoles.Patches
             ShipStatus __instance)
         {
 
-            if (OptionsHolder.Ship.DisableNeutralSpecialForceEnd) { return false; }
+            if (OptionHolder.Ship.DisableNeutralSpecialForceEnd) { return false; }
 
             foreach(var role in ExtremeRoleManager.GameRole.Values)
             {

@@ -129,14 +129,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 Design.ConcatString(
                     this.RoleName,
                     SheriffOption.ShootNum.ToString()),
-                1, 1, OptionsHolder.VanillaMaxPlayerNum - 1, 1, parentOps);
+                1, 1, OptionHolder.VanillaMaxPlayerNum - 1, 1, parentOps);
         }
 
         protected override void RoleSpecificInit()
         {
-            this.shootNum = OptionsHolder.AllOption[
+            this.shootNum = OptionHolder.AllOption[
                 GetRoleOptionId((int)SheriffOption.ShootNum)].GetValue();
-            this.canShootNeutral = OptionsHolder.AllOption[
+            this.canShootNeutral = OptionHolder.AllOption[
                 GetRoleOptionId((int)SheriffOption.CanShootNeutral)].GetValue();
             this.killCountText = null;
         }

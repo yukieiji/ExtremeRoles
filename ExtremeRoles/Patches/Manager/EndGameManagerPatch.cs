@@ -104,7 +104,7 @@ namespace ExtremeRoles.Patches.Manager
 
         private static void setRoleSummary(EndGameManager manager)
         {
-            if (!OptionsHolder.Client.ShowRoleSummary) { return; }
+            if (!OptionHolder.Client.ShowRoleSummary) { return; }
 
             var position = Camera.main.ViewportToWorldPoint(new Vector3(0f, 1f, Camera.main.nearClipPlane));
             GameObject summary = UnityEngine.Object.Instantiate(
@@ -146,7 +146,7 @@ namespace ExtremeRoles.Patches.Manager
 
             List<Color> tagColor = new List<Color>();
 
-            for (int i = 0; i < OptionsHolder.VanillaMaxPlayerNum; ++i)
+            for (int i = 0; i < OptionHolder.VanillaMaxPlayerNum; ++i)
             {
                 tagColor.Add(
                     UnityEngine.Random.ColorHSV(0f, 1f, 0.5f, 1f, 0.8f, 1f, 1f, 1f));
@@ -283,7 +283,7 @@ namespace ExtremeRoles.Patches.Manager
                     break;
             }
 
-            if (OptionsHolder.Ship.DisableNeutralSpecialForceEnd && winNeutral.Count != 0)
+            if (OptionHolder.Ship.DisableNeutralSpecialForceEnd && winNeutral.Count != 0)
             {
                 switch (gameData.EndReason)
                 {

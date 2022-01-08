@@ -62,7 +62,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     return this.IsSameTeam(multiAssignRole.AnotherRole);
                 }
             }
-            if (OptionsHolder.Ship.IsSameNeutralSameWin)
+            if (OptionHolder.Ship.IsSameNeutralSameWin)
             {
                 return this.Id == targetRole.Id;
             }
@@ -177,7 +177,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         protected override void RoleSpecificInit()
         {
-            var allOption = OptionsHolder.AllOption;
+            var allOption = OptionHolder.AllOption;
             this.RevartNormalTask = allOption[
                 GetRoleOptionId((int)AliceOption.RevartNormalTaskNum)].GetValue();
             this.RevartLongTask = allOption[

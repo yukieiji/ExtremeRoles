@@ -33,19 +33,19 @@ namespace ExtremeRoles.Patches.Option
             StringBuilder entry = new StringBuilder();
             List<string> entries = new List<string>();
 
-            var allOption = OptionsHolder.AllOption;
+            var allOption = OptionHolder.AllOption;
 
             entries.Add(
-                optionToString(allOption[(int)OptionsHolder.CommonOptionKey.PresetSelection]));
+                optionToString(allOption[(int)OptionHolder.CommonOptionKey.PresetSelection]));
 
             entries.Add(
-                optionToString(allOption[(int)OptionsHolder.CommonOptionKey.UseStrongRandomGen]));
+                optionToString(allOption[(int)OptionHolder.CommonOptionKey.UseStrongRandomGen]));
 
             var optionName = Design.ColoedString(
                 new Color(204f / 255f, 204f / 255f, 0, 1f),
                 translate("crewmateRoles"));
-            var min = allOption[(int)OptionsHolder.CommonOptionKey.MinCremateRoles].GetValue();
-            var max = allOption[(int)OptionsHolder.CommonOptionKey.MaxCremateRoles].GetValue();
+            var min = allOption[(int)OptionHolder.CommonOptionKey.MinCremateRoles].GetValue();
+            var max = allOption[(int)OptionHolder.CommonOptionKey.MaxCremateRoles].GetValue();
             if (min > max) { min = max; }
             var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
             entry.AppendLine($"{optionName}: {optionValue}");
@@ -53,8 +53,8 @@ namespace ExtremeRoles.Patches.Option
             optionName = Design.ColoedString(
                 new Color(204f / 255f, 204f / 255f, 0, 1f),
                 translate("neutralRoles"));
-            min = allOption[(int)OptionsHolder.CommonOptionKey.MinNeutralRoles].GetValue();
-            max = allOption[(int)OptionsHolder.CommonOptionKey.MaxNeutralRoles].GetValue();
+            min = allOption[(int)OptionHolder.CommonOptionKey.MinNeutralRoles].GetValue();
+            max = allOption[(int)OptionHolder.CommonOptionKey.MaxNeutralRoles].GetValue();
             if (min > max) min = max;
             optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
             entry.AppendLine($"{optionName}: {optionValue}");
@@ -62,8 +62,8 @@ namespace ExtremeRoles.Patches.Option
             optionName = Design.ColoedString(
                 new Color(204f / 255f, 204f / 255f, 0, 1f),
                 translate("impostorRoles"));
-            min = allOption[(int)OptionsHolder.CommonOptionKey.MinImpostorRoles].GetValue();
-            max = allOption[(int)OptionsHolder.CommonOptionKey.MaxImpostorRoles].GetValue();
+            min = allOption[(int)OptionHolder.CommonOptionKey.MinImpostorRoles].GetValue();
+            max = allOption[(int)OptionHolder.CommonOptionKey.MaxImpostorRoles].GetValue();
 
             if (min > max) min = max;
             optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
@@ -74,24 +74,24 @@ namespace ExtremeRoles.Patches.Option
             entry = new StringBuilder();
 
             entry.AppendLine(
-                optionToString(allOption[(int)OptionsHolder.CommonOptionKey.IsSameNeutralSameWin]));
+                optionToString(allOption[(int)OptionHolder.CommonOptionKey.IsSameNeutralSameWin]));
             entry.AppendLine(
-                optionToString(allOption[(int)OptionsHolder.CommonOptionKey.DisableNeutralSpecialForceEnd]));
+                optionToString(allOption[(int)OptionHolder.CommonOptionKey.DisableNeutralSpecialForceEnd]));
 
             entries.Add(entry.ToString().Trim('\r', '\n'));
 
-            foreach (CustomOptionBase option in OptionsHolder.AllOption.Values)
+            foreach (CustomOptionBase option in OptionHolder.AllOption.Values)
             {
-                if ((option == allOption[(int)OptionsHolder.CommonOptionKey.IsSameNeutralSameWin]) ||
-                    (option == allOption[(int)OptionsHolder.CommonOptionKey.DisableNeutralSpecialForceEnd]) ||
-                    (option == allOption[(int)OptionsHolder.CommonOptionKey.PresetSelection]) ||
-                    (option == allOption[(int)OptionsHolder.CommonOptionKey.UseStrongRandomGen]) ||
-                    (option == allOption[(int)OptionsHolder.CommonOptionKey.MinCremateRoles]) ||
-                    (option == allOption[(int)OptionsHolder.CommonOptionKey.MaxCremateRoles]) ||
-                    (option == allOption[(int)OptionsHolder.CommonOptionKey.MinNeutralRoles]) ||
-                    (option == allOption[(int)OptionsHolder.CommonOptionKey.MaxNeutralRoles]) ||
-                    (option == allOption[(int)OptionsHolder.CommonOptionKey.MinImpostorRoles]) ||
-                    (option == allOption[(int)OptionsHolder.CommonOptionKey.MaxImpostorRoles]))
+                if ((option == allOption[(int)OptionHolder.CommonOptionKey.IsSameNeutralSameWin]) ||
+                    (option == allOption[(int)OptionHolder.CommonOptionKey.DisableNeutralSpecialForceEnd]) ||
+                    (option == allOption[(int)OptionHolder.CommonOptionKey.PresetSelection]) ||
+                    (option == allOption[(int)OptionHolder.CommonOptionKey.UseStrongRandomGen]) ||
+                    (option == allOption[(int)OptionHolder.CommonOptionKey.MinCremateRoles]) ||
+                    (option == allOption[(int)OptionHolder.CommonOptionKey.MaxCremateRoles]) ||
+                    (option == allOption[(int)OptionHolder.CommonOptionKey.MinNeutralRoles]) ||
+                    (option == allOption[(int)OptionHolder.CommonOptionKey.MaxNeutralRoles]) ||
+                    (option == allOption[(int)OptionHolder.CommonOptionKey.MinImpostorRoles]) ||
+                    (option == allOption[(int)OptionHolder.CommonOptionKey.MaxImpostorRoles]))
                 {
                     continue;
                 }
@@ -138,7 +138,7 @@ namespace ExtremeRoles.Patches.Option
             }
 
             int numPages = pages.Count;
-            int counter = OptionsHolder.OptionsPage = OptionsHolder.OptionsPage % numPages;
+            int counter = OptionHolder.OptionsPage = OptionHolder.OptionsPage % numPages;
 
             __result = pages[counter].Trim('\r', '\n') + "\n\n" + translate("pressTabForMore") + $" ({counter + 1}/{numPages})";
 

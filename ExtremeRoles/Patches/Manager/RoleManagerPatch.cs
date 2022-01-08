@@ -425,17 +425,17 @@ namespace ExtremeRoles.Patches.Manager
             Dictionary<byte, (int, int)> RoleSpawnSettingsForImposter = new Dictionary<byte, (int, int)>();
             Dictionary<byte, (int, int)> RoleSpawnSettingsForCrewmate = new Dictionary<byte, (int, int)>();
 
-            var allOption = OptionsHolder.AllOption;
+            var allOption = OptionHolder.AllOption;
 
             int crewmateRolesNum = UnityEngine.Random.RandomRange(
-                allOption[(int)OptionsHolder.CommonOptionKey.MinCremateRoles].GetValue(),
-                allOption[(int)OptionsHolder.CommonOptionKey.MaxCremateRoles].GetValue());
+                allOption[(int)OptionHolder.CommonOptionKey.MinCremateRoles].GetValue(),
+                allOption[(int)OptionHolder.CommonOptionKey.MaxCremateRoles].GetValue());
             int neutralRolesNum = UnityEngine.Random.RandomRange(
-                allOption[(int)OptionsHolder.CommonOptionKey.MinNeutralRoles].GetValue(),
-                allOption[(int)OptionsHolder.CommonOptionKey.MaxNeutralRoles].GetValue());
+                allOption[(int)OptionHolder.CommonOptionKey.MinNeutralRoles].GetValue(),
+                allOption[(int)OptionHolder.CommonOptionKey.MaxNeutralRoles].GetValue());
             int impostorRolesNum = UnityEngine.Random.RandomRange(
-                allOption[(int)OptionsHolder.CommonOptionKey.MinImpostorRoles].GetValue(),
-                allOption[(int)OptionsHolder.CommonOptionKey.MaxImpostorRoles].GetValue());
+                allOption[(int)OptionHolder.CommonOptionKey.MinImpostorRoles].GetValue(),
+                allOption[(int)OptionHolder.CommonOptionKey.MaxImpostorRoles].GetValue());
 
 
             foreach (var role in ExtremeRoleManager.CombRole)

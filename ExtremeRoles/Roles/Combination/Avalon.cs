@@ -15,7 +15,7 @@ namespace ExtremeRoles.Roles.Combination
         public Color SettingColor = Palette.White;
         public Avalon() : base(
             Name, new Color(255f, 255f, 255f), 2,
-            OptionsHolder.MaxImposterNum)
+            OptionHolder.MaxImposterNum)
         {
             this.Roles.Add(new Assassin());
             this.Roles.Add(new Marlin());
@@ -86,9 +86,9 @@ namespace ExtremeRoles.Roles.Combination
 
         protected override void RoleSpecificInit()
         {
-            this.IsDeadForceMeeting = OptionsHolder.AllOption[
+            this.IsDeadForceMeeting = OptionHolder.AllOption[
                 GetRoleOptionId((int)AssassinOption.IsDeadForceMeeting)].GetValue();
-            this.CanSeeRoleBeforeFirstMeeting = OptionsHolder.AllOption[
+            this.CanSeeRoleBeforeFirstMeeting = OptionHolder.AllOption[
                 GetRoleOptionId((int)AssassinOption.CanSeeRoleBeforeFirstMeeting)].GetValue();
             this.IsFirstMeeting = true;
         }
@@ -209,13 +209,13 @@ namespace ExtremeRoles.Roles.Combination
         {
             this.IsAssassinate = false;
 
-            this.HasTask = OptionsHolder.AllOption[
+            this.HasTask = OptionHolder.AllOption[
                 GetRoleOptionId((int)MarlinOption.HasTask)].GetValue();
-            this.CanSeeVote = OptionsHolder.AllOption[
+            this.CanSeeVote = OptionHolder.AllOption[
                 GetRoleOptionId((int)MarlinOption.CanSeeVote)].GetValue();
-            this.CanSeeNeutral = OptionsHolder.AllOption[
+            this.CanSeeNeutral = OptionHolder.AllOption[
                 GetRoleOptionId((int)MarlinOption.CanSeeNeutral)].GetValue();
-            this.UseVent = OptionsHolder.AllOption[
+            this.UseVent = OptionHolder.AllOption[
                 GetRoleOptionId((int)MarlinOption.CanUseVent)].GetValue();
         }
 

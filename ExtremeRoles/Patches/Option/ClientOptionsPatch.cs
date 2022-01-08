@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using Twitch;
 
-using static ExtremeRoles.OptionsHolder;
+using static ExtremeRoles.OptionHolder;
 using static UnityEngine.UI.Button;
 using Object = UnityEngine.Object;
 

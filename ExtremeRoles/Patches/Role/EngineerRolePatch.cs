@@ -9,8 +9,8 @@ namespace ExtremeRoles.Patches.Role
         public static void Prefix(EngineerRole __instance)
         {
 
-            bool engineerImpostorVent = OptionsHolder.AllOption[
-                (int)OptionsHolder.CommonOptionKey.EngineerUseImpostorVent].GetValue();
+            bool engineerImpostorVent = OptionHolder.AllOption[
+                (int)OptionHolder.CommonOptionKey.EngineerUseImpostorVent].GetValue();
 
             if (!engineerImpostorVent) { return; }
 

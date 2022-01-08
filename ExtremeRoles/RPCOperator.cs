@@ -41,7 +41,7 @@ namespace ExtremeRoles
 
         public static void Initialize()
         {
-            OptionsHolder.Load();
+            OptionHolder.Load();
             RandomGenerator.Initialize();
             Roles.ExtremeRoleManager.Initialize();
             ExtremeRolesPlugin.GameDataStore.Initialize();
@@ -81,7 +81,7 @@ namespace ExtremeRoles
 
         public static void ShareOption(int numOptions, MessageReader reader)
         {
-            OptionsHolder.ShareOption(numOptions, reader);
+            OptionHolder.ShareOption(numOptions, reader);
         }
 
         public static void ReplaceDeadReason(byte playerId, byte reason)

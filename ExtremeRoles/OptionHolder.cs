@@ -12,7 +12,7 @@ using ExtremeRoles.Module;
 
 namespace ExtremeRoles
 {
-    public static class OptionsHolder
+    public static class OptionHolder
     {
         public static string[] SpawnRate = new string[] {
             "0%", "10%", "20%", "30%", "40%",

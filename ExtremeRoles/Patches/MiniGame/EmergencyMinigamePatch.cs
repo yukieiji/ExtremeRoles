@@ -26,7 +26,7 @@ namespace ExtremeRoles.Patches.MiniGame
             {
                 int localRemaining = PlayerControl.LocalPlayer.RemainingEmergencies;
                 int teamRemaining = Mathf.Max(
-                    0, OptionsHolder.Ship.MaxNumberOfMeeting - ExtremeRolesPlugin.GameDataStore.MeetingsCount);
+                    0, OptionHolder.Ship.MaxNumberOfMeeting - ExtremeRolesPlugin.GameDataStore.MeetingsCount);
                 int remaining = Mathf.Min(localRemaining, teamRemaining);
 
                 __instance.StatusText.text = "<size=100%>" + string.Format(

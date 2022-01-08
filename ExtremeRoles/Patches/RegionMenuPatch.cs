@@ -60,13 +60,13 @@ namespace ExtremeRoles.Patches
                 ipField.AllowSymbols = true;
                 ipField.ForceUppercase = false;
                 ipField.SetText(
-                    OptionsHolder.ConfigParser.Ip.Value);
+                    OptionHolder.ConfigParser.Ip.Value);
                 __instance.StartCoroutine(
                     Effects.Lerp(0.1f, new Action<float>(
                         (p) =>
                         {
-                            ipField.outputText.SetText(OptionsHolder.ConfigParser.Ip.Value);
-                            ipField.SetText(OptionsHolder.ConfigParser.Ip.Value);
+                            ipField.outputText.SetText(OptionHolder.ConfigParser.Ip.Value);
+                            ipField.SetText(OptionHolder.ConfigParser.Ip.Value);
                         })));
 
                 ipField.ClearOnFocus = false; 
@@ -91,13 +91,13 @@ namespace ExtremeRoles.Patches
                 portField.transform.localPosition = new Vector3(0.2f, -1.55f, -100f);
                 portField.characterLimit = 5;
                 portField.SetText(
-                    OptionsHolder.ConfigParser.Port.Value.ToString());
+                    OptionHolder.ConfigParser.Port.Value.ToString());
                 __instance.StartCoroutine(
                     Effects.Lerp(0.1f, new Action<float>(
                         (p) =>
                         {
-                            portField.outputText.SetText(OptionsHolder.ConfigParser.Port.Value.ToString());
-                            portField.SetText(OptionsHolder.ConfigParser.Port.Value.ToString()); 
+                            portField.outputText.SetText(OptionHolder.ConfigParser.Port.Value.ToString());
+                            portField.SetText(OptionHolder.ConfigParser.Port.Value.ToString()); 
                         })));
 
 
@@ -111,12 +111,12 @@ namespace ExtremeRoles.Patches
 
             void onEnterOrIpChange()
             {
-                OptionsHolder.ConfigParser.Ip.Value = ipField.text;
+                OptionHolder.ConfigParser.Ip.Value = ipField.text;
             }
 
             void onFocusLost()
             {
-                OptionsHolder.UpdateRegion();
+                OptionHolder.UpdateRegion();
                 __instance.ChooseOption(
                     ServerManager.DefaultRegions[ServerManager.DefaultRegions.Length - 1]);
             }
@@ -126,7 +126,7 @@ namespace ExtremeRoles.Patches
                 ushort port = 0;
                 if (ushort.TryParse(portField.text, out port))
                 {
-                    OptionsHolder.ConfigParser.Port.Value = port;
+                    OptionHolder.ConfigParser.Port.Value = port;
                     portField.outputText.color = Color.white;
                 }
                 else

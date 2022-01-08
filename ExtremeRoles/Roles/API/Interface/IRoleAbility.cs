@@ -165,7 +165,7 @@ namespace ExtremeRoles.Roles.API.Interface
 
             if (self.Button == null) { return; }
 
-            var allOps = OptionsHolder.AllOption;
+            var allOps = OptionHolder.AllOption;
             self.Button.SetAbilityCoolTime(
                 allOps[self.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)].GetValue());
 

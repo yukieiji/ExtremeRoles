@@ -9,8 +9,8 @@ namespace ExtremeRoles
 
         public static void Initialize()
         {
-            bool useStrongGen = OptionsHolder.AllOption[
-                (int)OptionsHolder.CommonOptionKey.UseStrongRandomGen].GetValue();
+            bool useStrongGen = OptionHolder.AllOption[
+                (int)OptionHolder.CommonOptionKey.UseStrongRandomGen].GetValue();
             if (useStrongGen)
             {
                 Instance = new Random(createStrongRandomSeed());
@@ -26,8 +26,8 @@ namespace ExtremeRoles
 
         public static Random GetTempGenerator()
         {
-            bool useStrongGen = OptionsHolder.AllOption[
-                (int)OptionsHolder.CommonOptionKey.UseStrongRandomGen].GetValue();
+            bool useStrongGen = OptionHolder.AllOption[
+                (int)OptionHolder.CommonOptionKey.UseStrongRandomGen].GetValue();
 
             if (useStrongGen)
             {

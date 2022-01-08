@@ -43,7 +43,7 @@ namespace ExtremeRoles.Module
                             comma, "Id", "Name", "Option Value", "SelectedIndex")); //ヘッダー
 
 
-                    foreach (var (_, option) in OptionsHolder.AllOption)
+                    foreach (var (_, option) in OptionHolder.AllOption)
                     {
                         csv.WriteLine(
                             string.Format("{1}{0}{2}{0}{3}{0}{4}",
@@ -90,9 +90,9 @@ namespace ExtremeRoles.Module
 
                             int id = int.Parse(option[0]);
                             int selection = int.Parse(option[3]);
-                            if (OptionsHolder.AllOption.ContainsKey(id))
+                            if (OptionHolder.AllOption.ContainsKey(id))
                             {
-                                OptionsHolder.AllOption[id].UpdateSelection(selection);
+                                OptionHolder.AllOption[id].UpdateSelection(selection);
                             }
                         }
                     }

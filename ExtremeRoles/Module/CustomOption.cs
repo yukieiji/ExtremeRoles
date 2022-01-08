@@ -81,13 +81,13 @@ namespace ExtremeRoles.Module
                 nameClean = Regex.Replace(nameClean, "^-\\s*", "");
                 nameClean = nameClean.Trim();
                 Entry = ExtremeRolesPlugin.Instance.Config.Bind(
-                    $"Preset:{OptionsHolder.SelectedPreset}", nameClean, DefaultSelection);
+                    $"Preset:{OptionHolder.SelectedPreset}", nameClean, DefaultSelection);
                 CurSelection = Mathf.Clamp(Entry.Value, 0, selections.Length - 1);
             }
 
             Logging.Debug($"OptinId:{this.Id}    Name:{this.Name}");
 
-            OptionsHolder.AllOption.Add(this.Id, this);
+            OptionHolder.AllOption.Add(this.Id, this);
         }
 
         protected bool GetBool() => CurSelection > 0;
@@ -140,14 +140,14 @@ namespace ExtremeRoles.Module
                 {
                     if (Id == 0)
                     {
-                        OptionsHolder.SwitchPreset(CurSelection); // Switch presets
+                        OptionHolder.SwitchPreset(CurSelection); // Switch presets
                     }
                     else if (Entry != null)
                     {
                         Entry.Value = CurSelection; // Save selection to config
                     }
 
-                    OptionsHolder.ShareOptionSelections();// Share all selections
+                    OptionHolder.ShareOptionSelections();// Share all selections
                 }
             }
         }

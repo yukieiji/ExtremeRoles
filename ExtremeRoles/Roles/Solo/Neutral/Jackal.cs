@@ -157,7 +157,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     return this.IsSameTeam(multiAssignRole.AnotherRole);
                 }
             }
-            if (OptionsHolder.Ship.IsSameNeutralSameWin)
+            if (OptionHolder.Ship.IsSameNeutralSameWin)
             {
                 return this.isSameJackalTeam(targetRole);
             }
@@ -234,7 +234,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             this.CurRecursion = 0;
 
-            var allOption = OptionsHolder.AllOption;
+            var allOption = OptionHolder.AllOption;
 
             this.SidekickRecursionLimit = allOption[
                 GetRoleOptionId(JackalOption.SidekickLimitNum)].GetValue();
@@ -276,14 +276,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
 
             this.CreateAbilityCountOption(
-                parentOps, OptionsHolder.VanillaMaxPlayerNum - 1);
+                parentOps, OptionHolder.VanillaMaxPlayerNum - 1);
 
             CustomOption.Create(
                 GetRoleOptionId(JackalOption.RangeSidekickTarget),
                 Design.ConcatString(
                     this.RoleName,
                     JackalOption.RangeSidekickTarget.ToString()),
-                OptionsHolder.Range,
+                OptionHolder.Range,
                 parentOps);
 
             CustomOption.Create(
@@ -298,7 +298,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 Design.ConcatString(
                     this.RoleName,
                     JackalOption.UpgradeSidekickNum.ToString()),
-                1, 1, OptionsHolder.VanillaMaxPlayerNum - 1, 1,
+                1, 1, OptionHolder.VanillaMaxPlayerNum - 1, 1,
                 parentOps);
 
             var sidekickMakeSidekickOps = CustomOption.Create(
@@ -313,7 +313,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 Design.ConcatString(
                     this.RoleName,
                     JackalOption.SidekickLimitNum.ToString()),
-                1, 1, OptionsHolder.VanillaMaxPlayerNum / 2, 1,
+                1, 1, OptionHolder.VanillaMaxPlayerNum / 2, 1,
                 sidekickMakeSidekickOps);
         }
         private void CreateSideKickOption(CustomOptionBase parentOps)

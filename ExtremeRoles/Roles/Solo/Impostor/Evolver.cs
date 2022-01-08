@@ -185,7 +185,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             this.defaultKillCoolTime = this.KillCoolTime;
             
-            var allOption = OptionsHolder.AllOption;
+            var allOption = OptionHolder.AllOption;
 
             this.isEvolvdAnimation = allOption[
                 GetRoleOptionId((int)EvolverOption.IsEvolvedAnimation)].GetValue();

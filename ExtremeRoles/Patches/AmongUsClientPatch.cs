@@ -56,7 +56,7 @@ namespace ExtremeRoles.Patches
                 TempData.winners.Remove(winner);
             }
 
-            if (OptionsHolder.Ship.DisableNeutralSpecialForceEnd)
+            if (OptionHolder.Ship.DisableNeutralSpecialForceEnd)
             {
                 addNeutralWinner();
             }
@@ -100,7 +100,7 @@ namespace ExtremeRoles.Patches
 
                 if (roles.Contains(role.Id))
                 {
-                    if (OptionsHolder.Ship.IsSameNeutralSameWin)
+                    if (OptionHolder.Ship.IsSameNeutralSameWin)
                     {
                         addWinner(player);
                     }
@@ -117,7 +117,7 @@ namespace ExtremeRoles.Patches
                     {
                         if (roles.Contains(multiAssignRole.AnotherRole.Id))
                         {
-                            if (OptionsHolder.Ship.IsSameNeutralSameWin)
+                            if (OptionHolder.Ship.IsSameNeutralSameWin)
                             {
                                 addWinner(player);
                             }
@@ -162,7 +162,7 @@ namespace ExtremeRoles.Patches
         {
             int gameControlId = role.GameControlId;
 
-            if (OptionsHolder.Ship.IsSameNeutralSameWin)
+            if (OptionHolder.Ship.IsSameNeutralSameWin)
             {
                 gameControlId = int.MaxValue;
             }

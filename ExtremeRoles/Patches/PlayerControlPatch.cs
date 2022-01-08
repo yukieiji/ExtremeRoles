@@ -151,7 +151,7 @@ namespace ExtremeRoles.Patches
 
                 byte targetPlayerId = targetPlayer.PlayerId;
 
-                if (!OptionsHolder.Client.GhostsSeeRole || !PlayerControl.LocalPlayer.Data.IsDead)
+                if (!OptionHolder.Client.GhostsSeeRole || !PlayerControl.LocalPlayer.Data.IsDead)
                 {
                     var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
                     Color paintColor = playerRole.GetTargetRoleSeeColor(
@@ -336,7 +336,7 @@ namespace ExtremeRoles.Patches
             else if (IsLocalPlayerAssassinFirstMeeting)
             {
                 if (((Roles.Combination.Assassin)ExtremeRoleManager.GetLocalPlayerRole()
-                    ).CanSeeRoleBeforeFirstMeeting && OptionsHolder.Client.GhostsSeeRole)
+                    ).CanSeeRoleBeforeFirstMeeting && OptionHolder.Client.GhostsSeeRole)
                 {
                     playerInfoText = $"{roleNames}";
                 }
@@ -347,17 +347,17 @@ namespace ExtremeRoles.Patches
                 }
 
             }
-            else if (OptionsHolder.Client.GhostsSeeRole && OptionsHolder.Client.GhostsSeeTask)
+            else if (OptionHolder.Client.GhostsSeeRole && OptionHolder.Client.GhostsSeeTask)
             {
                 playerInfoText = $"{roleNames} {taskInfo}".Trim();
                 meetingInfoText = playerInfoText;
             }
-            else if (OptionsHolder.Client.GhostsSeeTask)
+            else if (OptionHolder.Client.GhostsSeeTask)
             {
                 playerInfoText = $"{taskInfo}".Trim();
                 meetingInfoText = playerInfoText;
             }
-            else if (OptionsHolder.Client.GhostsSeeRole)
+            else if (OptionHolder.Client.GhostsSeeRole)
             {
                 playerInfoText = $"{roleNames}";
                 meetingInfoText = playerInfoText;
@@ -830,7 +830,7 @@ namespace ExtremeRoles.Patches
     {
         public static void Postfix()
         {
-            OptionsHolder.ShareOptionSelections();
+            OptionHolder.ShareOptionSelections();
         }
     }
 }

@@ -16,7 +16,7 @@ namespace ExtremeRoles.Patches.MapModule
             float num = float.MaxValue;
             PlayerControl player = playerInfo.Object;
 
-            if (OptionsHolder.Ship.DisableVent)
+            if (OptionHolder.Ship.DisableVent)
             {
                 canUse = couldUse = false;
                 __result = num;

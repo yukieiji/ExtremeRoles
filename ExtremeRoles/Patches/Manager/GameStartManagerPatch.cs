@@ -13,7 +13,7 @@ namespace ExtremeRoles.Patches.Manager
         {
             bool continueStart = true;
 
-            if (OptionsHolder.AllOption[(int)OptionsHolder.CommonOptionKey.RandomMap].GetValue())
+            if (OptionHolder.AllOption[(int)OptionHolder.CommonOptionKey.RandomMap].GetValue())
             {
                 // 0 = Skeld
                 // 1 = Mira HQ
