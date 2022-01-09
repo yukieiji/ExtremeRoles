@@ -1,6 +1,4 @@
-﻿using Hazel;
-
-using ExtremeRoles.Helper;
+﻿using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.RoleAbilityButton;
 using ExtremeRoles.Roles.API;
