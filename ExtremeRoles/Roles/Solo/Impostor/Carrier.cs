@@ -120,7 +120,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                 PlayerControl.LocalPlayer.NetId,
-                (byte)RPCOperator.Command.CleanDeadBody,
+                (byte)RPCOperator.Command.CarrierCarryBody,
                 Hazel.SendOption.Reliable, -1);
             writer.Write(PlayerControl.LocalPlayer.PlayerId);
             writer.Write(this.targetBody.PlayerId);
@@ -135,7 +135,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                 PlayerControl.LocalPlayer.NetId,
-                (byte)RPCOperator.Command.CleanDeadBody,
+                (byte)RPCOperator.Command.CarrierSetBody,
                 Hazel.SendOption.Reliable, -1);
             writer.Write(PlayerControl.LocalPlayer.PlayerId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
