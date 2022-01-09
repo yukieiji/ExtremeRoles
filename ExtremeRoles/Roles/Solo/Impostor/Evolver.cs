@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
 
-using Hazel;
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -93,12 +93,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             if (!this.isEatingEndCleanBody) { return; }
 
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+            RPCOperator.Call(
                 PlayerControl.LocalPlayer.NetId,
-                (byte)RPCOperator.Command.CleanDeadBody,
-                Hazel.SendOption.Reliable, -1);
-            writer.Write(this.eatingBodyId);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCOperator.Command.CleanDeadBody,
+                new List<byte> { this.eatingBodyId });
+
             RPCOperator.CleanDeadBody(this.eatingBodyId);
         }
 

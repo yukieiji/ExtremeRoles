@@ -1,6 +1,4 @@
-﻿using Hazel;
-
-using ExtremeRoles.Helper;
+﻿using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.RoleAbilityButton;
 using ExtremeRoles.Roles.API;
@@ -45,11 +43,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 switch (task.TaskType)
                 {
                     case TaskTypes.FixLights:
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+
+                        RPCOperator.Call(
                             PlayerControl.LocalPlayer.NetId,
-                            (byte)RPCOperator.Command.FixLightOff,
-                            Hazel.SendOption.Reliable, -1);
-                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                            RPCOperator.Command.FixLightOff);
                         RPCOperator.FixLightOff();
                         break;
                     case TaskTypes.RestoreOxy:

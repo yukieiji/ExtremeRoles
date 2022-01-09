@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-using Hazel;
-
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.RoleAbilityButton;
 using ExtremeRoles.Roles.API;
@@ -89,13 +87,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public bool UseAbility()
         {
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+            RPCOperator.Call(
                 PlayerControl.LocalPlayer.NetId,
-                (byte)RPCOperator.Command.AliceAbility,
-                Hazel.SendOption.Reliable, -1);
-
-            writer.Write(PlayerControl.LocalPlayer.PlayerId);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCOperator.Command.AliceAbility,
+                new List<byte> { PlayerControl.LocalPlayer.PlayerId });
             RPCOperator.AliceAbility(
                 PlayerControl.LocalPlayer.PlayerId);
 

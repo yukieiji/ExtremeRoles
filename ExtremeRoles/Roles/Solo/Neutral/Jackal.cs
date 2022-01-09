@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Hazel;
 using UnityEngine;
 
 using ExtremeRoles.Module;
@@ -194,17 +193,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             this.SidekickPlayerId.Add(targetPlayerId);
 
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+            RPCOperator.Call(
                 rolePlayer.NetId,
-                (byte)RPCOperator.Command.ReplaceRole,
-                Hazel.SendOption.Reliable, -1);
-
-            writer.Write(rolePlayer.PlayerId);
-            writer.Write(this.Target.PlayerId);
-            writer.Write(
-                (byte)ExtremeRoleManager.ReplaceOperation.ForceReplaceToSidekick);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
-
+                RPCOperator.Command.ReplaceRole,
+                new List<byte>
+                {
+                    rolePlayer.PlayerId,
+                    this.Target.PlayerId,
+                    (byte)ExtremeRoleManager.ReplaceOperation.ForceReplaceToSidekick
+                });
             TargetToSideKick(rolePlayer.PlayerId, targetPlayerId);
             return true;
         }
@@ -454,16 +451,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 byte targetPlayerId = this.SidekickPlayerId[useIndex];
                 this.SidekickPlayerId.Remove(targetPlayerId);
 
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                RPCOperator.Call(
                     rolePlayer.NetId,
-                    (byte)RPCOperator.Command.ReplaceRole,
-                    Hazel.SendOption.Reliable, -1);
-
-                writer.Write(rolePlayer.PlayerId);
-                writer.Write(targetPlayerId);
-                writer.Write(
-                    (byte)ExtremeRoleManager.ReplaceOperation.SidekickToJackal);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCOperator.Command.ReplaceRole,
+                    new List<byte>
+                    {
+                        rolePlayer.PlayerId,
+                        targetPlayerId,
+                        (byte)ExtremeRoleManager.ReplaceOperation.SidekickToJackal
+                    });
 
                 Sidekick.BecomeToJackal(rolePlayer.PlayerId, targetPlayerId);
             }
@@ -581,16 +577,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             if (Player.GetPlayerControlById(this.jackalPlayerId).Data.Disconnected)
             {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                RPCOperator.Call(
                     rolePlayer.NetId,
-                    (byte)RPCOperator.Command.ReplaceRole,
-                    Hazel.SendOption.Reliable, -1);
-
-                writer.Write(this.jackalPlayerId);
-                writer.Write(rolePlayer);
-                writer.Write(
-                    (byte)ExtremeRoleManager.ReplaceOperation.SidekickToJackal);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCOperator.Command.ReplaceRole,
+                    new List<byte>
+                    {
+                        this.jackalPlayerId,
+                        rolePlayer.PlayerId,
+                        (byte)ExtremeRoleManager.ReplaceOperation.SidekickToJackal
+                    });
 
                 BecomeToJackal(this.jackalPlayerId, rolePlayer.PlayerId);
             }

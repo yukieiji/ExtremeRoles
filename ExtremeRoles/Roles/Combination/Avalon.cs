@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 
-using Hazel;
-
 using UnityEngine;
 
 using ExtremeRoles.Helper;
@@ -107,12 +105,11 @@ namespace ExtremeRoles.Roles.Combination
 
         private void rpcAssassinMeetingTriggerOn(byte playerId)
         {
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                    PlayerControl.LocalPlayer.NetId,
-                    (byte)RPCOperator.Command.AssasinSpecialMeetingOn,
-                    Hazel.SendOption.Reliable, -1);
-            writer.Write(playerId);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
+
+            RPCOperator.Call(
+                PlayerControl.LocalPlayer.NetId,
+                RPCOperator.Command.AssasinSpecialMeetingOn,
+                new List<byte> { playerId });
             AssassinMeetingTriggerOn(playerId);
         }
 

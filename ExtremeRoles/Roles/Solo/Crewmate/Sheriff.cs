@@ -1,4 +1,4 @@
-﻿using Hazel;
+﻿using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -47,14 +47,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
                 rolePlayer.RpcMurderPlayer(rolePlayer);
 
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                RPCOperator.Call(
                     rolePlayer.NetId,
-                    (byte)RPCOperator.Command.ReplaceDeadReason,
-                    Hazel.SendOption.Reliable, -1);
-
-                writer.Write(rolePlayer.PlayerId);
-                writer.Write((byte)GameDataContainer.PlayerStatus.MissShot);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    RPCOperator.Command.ReplaceDeadReason,
+                    new List<byte>
+                    {
+                        rolePlayer.PlayerId,
+                        (byte)GameDataContainer.PlayerStatus.MissShot
+                    });
 
                 ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
                     rolePlayer.PlayerId, GameDataContainer.PlayerStatus.MissShot);
