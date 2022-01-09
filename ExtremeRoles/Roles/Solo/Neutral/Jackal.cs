@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Hazel;
 using UnityEngine;
 
 using ExtremeRoles.Module;
