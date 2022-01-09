@@ -75,7 +75,10 @@ namespace ExtremeRoles.Patches
 
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
-                player.nameText.text = player.Data.PlayerName;
+                if (player.CurrentOutfitType != PlayerOutfitType.Shapeshifted)
+                {
+                    player.nameText.text = player.Data.PlayerName;
+                }
                 if (PlayerControl.LocalPlayer.Data.Role.IsImpostor && player.Data.Role.IsImpostor)
                 {
                     player.nameText.color = Palette.ImpostorRed;
