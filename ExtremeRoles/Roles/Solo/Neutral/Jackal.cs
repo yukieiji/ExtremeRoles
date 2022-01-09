@@ -441,11 +441,17 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         private void sidekickToJackal(PlayerControl rolePlayer)
         {
-            for (int i = 0; i < this.numUpgradeSideKick; ++i)
+
+            if (this.SideKickPlayerId.Count == 0) { return; }
+
+            int numUpgrade = this.SideKickPlayerId.Count >= this.numUpgradeSideKick ?
+                this.numUpgradeSideKick : this.SideKickPlayerId.Count;
+
+            for (int i = 0; i < numUpgrade; ++i)
             {
                 int useIndex = UnityEngine.Random.Range(0, this.SideKickPlayerId.Count);
                 byte targetPlayerId = this.SideKickPlayerId[useIndex];
-                this.SideKickPlayerId.RemoveAt(useIndex);
+                this.SideKickPlayerId.Remove(targetPlayerId);
 
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                     rolePlayer.NetId,
