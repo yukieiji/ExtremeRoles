@@ -87,6 +87,10 @@ namespace ExtremeRoles.Roles.API
 
                 if (checkRole.BytedRoleId != roleId) { continue; }
 
+                checkRole.CanHasAnotherRole = OptionHolder.AllOption[
+                    GetRoleOptionId(
+                        CombinationRoleCommonOption.IsMultiAssign)].GetValue();
+
                 switch (checkRole.Team)
                 {
                     case ExtremeRoleType.Crewmate:
@@ -178,23 +182,31 @@ namespace ExtremeRoles.Roles.API
 
         private MultiAssignRoleBase baseRole;
         private int minimumRoleNum = 0;
+        private bool canAssignImposter = true;
 
         public FlexibleCombinationRoleManagerBase(
             MultiAssignRoleBase role,
-            int minimumRoleNum = 2) : 
+            int minimumRoleNum = 2,
+            bool canAssignImposter = true) : 
                 base(role.Id.ToString(), role.NameColor)
         {
             this.minimumRoleNum = minimumRoleNum;
             this.baseRole = role;
+            this.canAssignImposter = canAssignImposter;
         }
         public override void AssignSetUpInit()
         {
+
             var allOptions = OptionHolder.AllOption;
 
             foreach (var role in this.Roles)
             {
                 role.CanHasAnotherRole = allOptions[
                     GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign)].GetValue();
+
+                if (!allOptions.ContainsKey(
+                        GetRoleOptionId(
+                            CombinationRoleCommonOption.IsAssignImposter))) { continue; }
 
                 bool isEvil = allOptions[
                     GetRoleOptionId(CombinationRoleCommonOption.IsAssignImposter)].GetValue();
@@ -232,6 +244,10 @@ namespace ExtremeRoles.Roles.API
             MultiAssignRoleBase role = null;
             
             if (this.baseRole.BytedRoleId != roleId) { return role; }
+
+            this.baseRole.CanHasAnotherRole = OptionHolder.AllOption[
+                GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign)].GetValue();
+
             role = (MultiAssignRoleBase)this.baseRole.Clone();
 
             switch (playerRoleType)
@@ -283,19 +299,22 @@ namespace ExtremeRoles.Roles.API
 
             roleAssignNumOption.SetUpdateOption(roleSetNumOption);
 
-            var isImposterAssignOps = CustomOption.Create(
-                GetRoleOptionId(CombinationRoleCommonOption.IsAssignImposter),
-                Design.ConcatString(
-                    this.roleName,
-                    CombinationRoleCommonOption.IsAssignImposter.ToString()),
-                false, roleSetOption);
+            if (this.canAssignImposter)
+            {
+                var isImposterAssignOps = CustomOption.Create(
+                    GetRoleOptionId(CombinationRoleCommonOption.IsAssignImposter),
+                    Design.ConcatString(
+                        this.roleName,
+                        CombinationRoleCommonOption.IsAssignImposter.ToString()),
+                    false, roleSetOption);
 
-            CustomOption.Create(
-                GetRoleOptionId(CombinationRoleCommonOption.ImposterSelectedRate),
-                Design.ConcatString(
-                    this.roleName,
-                    CombinationRoleCommonOption.ImposterSelectedRate.ToString()),
-                OptionHolder.SpawnRate, isImposterAssignOps);
+                CustomOption.Create(
+                    GetRoleOptionId(CombinationRoleCommonOption.ImposterSelectedRate),
+                    Design.ConcatString(
+                        this.roleName,
+                        CombinationRoleCommonOption.ImposterSelectedRate.ToString()),
+                    OptionHolder.SpawnRate, isImposterAssignOps);
+            }
 
             CustomOption.Create(
                 GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign),
@@ -323,6 +342,9 @@ namespace ExtremeRoles.Roles.API
             this.Roles.Clear();
             int roleAssignNum = 1;
             var allOptions = OptionHolder.AllOption;
+
+            this.baseRole.CanHasAnotherRole = allOptions[
+                GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign)].GetValue();
 
             if (allOptions.ContainsKey(GetRoleOptionId(CombinationRoleCommonOption.AssignsNum)))
             {
