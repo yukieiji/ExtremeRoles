@@ -153,7 +153,9 @@ namespace ExtremeRoles.Patches
 
                 byte targetPlayerId = targetPlayer.PlayerId;
 
-                if (!OptionHolder.Client.GhostsSeeRole || !PlayerControl.LocalPlayer.Data.IsDead)
+                if (!OptionHolder.Client.GhostsSeeRole || 
+                    !PlayerControl.LocalPlayer.Data.IsDead || 
+                    PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
                 {
                     var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
                     Color paintColor = playerRole.GetTargetRoleSeeColor(
@@ -266,7 +268,10 @@ namespace ExtremeRoles.Patches
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
 
-                if (player != PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead)
+                if ((player != PlayerControl.LocalPlayer && 
+                        !PlayerControl.LocalPlayer.Data.IsDead) ||
+                    (player != PlayerControl.LocalPlayer && 
+                        PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel))
                 {
                     continue;
                 }
