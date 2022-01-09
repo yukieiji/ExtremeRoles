@@ -98,6 +98,8 @@ namespace ExtremeRoles.Patches
         private static void tempWinCheckDisable(GameData.PlayerInfo exiled)
         {
 
+            if (exiled == null) { return; };
+
             var role = ExtremeRoleManager.GameRole[exiled.PlayerId];
 
             if (ExtremeRoleManager.IsDisableWinCheckRole(role))
