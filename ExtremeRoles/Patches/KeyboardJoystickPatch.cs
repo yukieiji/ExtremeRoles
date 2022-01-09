@@ -132,16 +132,18 @@ namespace ExtremeRoles.Patches
 #endif
 
     [HarmonyPatch(typeof(KeyboardJoystick), nameof(KeyboardJoystick.Update))]
-    public static class GameOptionsNextPagePatch
+    public static class KeyboardJoystickPatch
     {
         public static void Postfix(KeyboardJoystick __instance)
         {
+            // オプションページの変更
             if (Input.GetKeyDown(KeyCode.Tab) &&
                 AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started)
             {
                 OptionHolder.OptionsPage = OptionHolder.OptionsPage + 1;
             }
 
+            // キルとベントボタン
             if (PlayerControl.LocalPlayer.Data != null && 
                 PlayerControl.LocalPlayer.Data.Role != null &&
                 AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started)
