@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
 
-using Hazel;
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -118,13 +118,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool UseAbility()
         {
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+            RPCOperator.Call(
                 PlayerControl.LocalPlayer.NetId,
-                (byte)RPCOperator.Command.CarrierCarryBody,
-                Hazel.SendOption.Reliable, -1);
-            writer.Write(PlayerControl.LocalPlayer.PlayerId);
-            writer.Write(this.targetBody.PlayerId);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCOperator.Command.CarrierCarryBody,
+                new List<byte>
+                { 
+                    PlayerControl.LocalPlayer.PlayerId,
+                    this.targetBody.PlayerId
+                });
+
             CarryDeadBody(
                 PlayerControl.LocalPlayer.PlayerId,
                 this.targetBody.PlayerId);
@@ -133,12 +135,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void CleanUp()
         {
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+            RPCOperator.Call(
                 PlayerControl.LocalPlayer.NetId,
-                (byte)RPCOperator.Command.CarrierSetBody,
-                Hazel.SendOption.Reliable, -1);
-            writer.Write(PlayerControl.LocalPlayer.PlayerId);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCOperator.Command.CarrierSetBody,
+                new List<byte>{ PlayerControl.LocalPlayer.PlayerId });
             PlaceDeadBody(
                 PlayerControl.LocalPlayer.PlayerId);
         }
