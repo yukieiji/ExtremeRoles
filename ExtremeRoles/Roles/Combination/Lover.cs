@@ -263,7 +263,7 @@ namespace ExtremeRoles.Roles.Combination
             writer.Write(rolePlayer.PlayerId);
             writer.Write(alivePlayerId);
             writer.Write(
-                (byte)ExtremeRoleManager.ReplaceOperation.ForceReplaceToSidekick);
+                (byte)ExtremeRoleManager.ReplaceOperation.LoverBecomeToNeutral);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
 
             ForceReplaceToNeutral(rolePlayer.PlayerId, alivePlayerId);
