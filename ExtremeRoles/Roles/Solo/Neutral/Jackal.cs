@@ -22,8 +22,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             UpgradeSidekickNum,
 
-            CanSetImpostorToSideKick,
-            CanSeeImpostorToSideKickImpostor,
+            CanSetImpostorToSidekick,
+            CanSeeImpostorToSidekickImpostor,
             SidekickUseSabotage,
             SidekickUseVent,
             SidekickJackalCanMakeSidekick,
@@ -34,7 +34,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             SidekickApplyEnvironmentVisionEffect
         }
 
-        public List<byte> SideKickPlayerId = new List<byte>();
+        public List<byte> SidekickPlayerId = new List<byte>();
 
         public RoleAbilityButtonBase Button
         {
@@ -50,8 +50,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public int SidekickRecursionLimit = 0;
 
         public bool ForceReplaceLover = false;
-        public bool CanSetImpostorToSideKick = false;
-        public bool CanSeeImpostorToSideKickImpostor = false;
+        public bool CanSetImpostorToSidekick = false;
+        public bool CanSeeImpostorToSidekickImpostor = false;
         public bool SidekickCanKill = false;
         public bool SidekickUseSabotage = false;
         public bool SidekickUseVent = false;
@@ -64,7 +64,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         private RoleAbilityButtonBase createSidekick;
 
-        private int numUpgradeSideKick = 0;
+        private int numUpgradeSidekick = 0;
         private int createSidekickRange = 0;
 
 
@@ -75,7 +75,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             ColorPalette.JackalBlue,
             true, false, true, false)
         {
-            this.SideKickPlayerId.Clear();
+            this.SidekickPlayerId.Clear();
         }
 
         public static void TargetToSideKick(byte callerId, byte targetId)
@@ -92,7 +92,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 sourceJackal.SidekickCanKill,
                 sourceJackal.SidekickUseVent,
                 sourceJackal.SidekickUseSabotage,
-                sourceJackal.CanSeeImpostorToSideKickImpostor,
+                sourceJackal.CanSeeImpostorToSidekickImpostor,
                 sourceJackal.SidekickJackalCanMakeSidekick,
                 sourceJackal.SidekickHasOtherVison,
                 sourceJackal.SidekickVision,
@@ -138,7 +138,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
 
             if (targetRole.Id == ExtremeRoleId.Sidekick &&
-                this.SideKickPlayerId.Contains(targetPlayerId))
+                this.SidekickPlayerId.Contains(targetPlayerId))
             {
                 return ColorPalette.JackalBlue;
             }
@@ -192,7 +192,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             PlayerControl rolePlayer = PlayerControl.LocalPlayer;
 
-            this.SideKickPlayerId.Add(targetPlayerId);
+            this.SidekickPlayerId.Add(targetPlayerId);
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                 rolePlayer.NetId,
@@ -233,6 +233,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         protected override void RoleSpecificInit()
         {
             this.CurRecursion = 0;
+            this.SidekickPlayerId.Clear();
 
             var allOption = OptionHolder.AllOption;
 
@@ -242,10 +243,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.ForceReplaceLover = allOption[
                 GetRoleOptionId(JackalOption.ForceReplaceLover)].GetValue();
 
-            this.CanSetImpostorToSideKick = allOption[
-                GetRoleOptionId(JackalOption.CanSetImpostorToSideKick)].GetValue();
-            this.CanSeeImpostorToSideKickImpostor = allOption[
-                GetRoleOptionId(JackalOption.CanSeeImpostorToSideKickImpostor)].GetValue();
+            this.CanSetImpostorToSidekick = allOption[
+                GetRoleOptionId(JackalOption.CanSetImpostorToSidekick)].GetValue();
+            this.CanSeeImpostorToSidekickImpostor = allOption[
+                GetRoleOptionId(JackalOption.CanSeeImpostorToSidekickImpostor)].GetValue();
 
             this.SidekickCanKill = allOption[
                 GetRoleOptionId(JackalOption.SideKickCanKill)].GetValue();
@@ -266,7 +267,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.createSidekickRange = allOption[
                 GetRoleOptionId(JackalOption.RangeSidekickTarget)].GetValue();
 
-            this.numUpgradeSideKick = allOption[
+            this.numUpgradeSidekick = allOption[
                 GetRoleOptionId(JackalOption.UpgradeSidekickNum)].GetValue();
             
             this.RoleAbilityInit();
@@ -319,17 +320,17 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private void CreateSideKickOption(CustomOptionBase parentOps)
         {
             CustomOption.Create(
-                GetRoleOptionId(JackalOption.CanSetImpostorToSideKick),
+                GetRoleOptionId(JackalOption.CanSetImpostorToSidekick),
                 Design.ConcatString(
                     this.RoleName,
-                    JackalOption.CanSetImpostorToSideKick.ToString()),
+                    JackalOption.CanSetImpostorToSidekick.ToString()),
                 false, parentOps);
 
             CustomOption.Create(
-                GetRoleOptionId(JackalOption.CanSeeImpostorToSideKickImpostor),
+                GetRoleOptionId(JackalOption.CanSeeImpostorToSidekickImpostor),
                 Design.ConcatString(
                     this.RoleName,
-                    JackalOption.CanSeeImpostorToSideKickImpostor.ToString()),
+                    JackalOption.CanSeeImpostorToSidekickImpostor.ToString()),
                 false, parentOps);
 
             CustomOption.Create(
@@ -378,7 +379,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             if (ExtremeRoleManager.GameRole[playerId].IsImposter())
             {
-                return this.CanSetImpostorToSideKick;
+                return this.CanSetImpostorToSidekick;
             }
             return true;
         }
@@ -442,16 +443,16 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private void sidekickToJackal(PlayerControl rolePlayer)
         {
 
-            if (this.SideKickPlayerId.Count == 0) { return; }
+            if (this.SidekickPlayerId.Count == 0) { return; }
 
-            int numUpgrade = this.SideKickPlayerId.Count >= this.numUpgradeSideKick ?
-                this.numUpgradeSideKick : this.SideKickPlayerId.Count;
+            int numUpgrade = this.SidekickPlayerId.Count >= this.numUpgradeSidekick ?
+                this.numUpgradeSidekick : this.SidekickPlayerId.Count;
 
             for (int i = 0; i < numUpgrade; ++i)
             {
-                int useIndex = UnityEngine.Random.Range(0, this.SideKickPlayerId.Count);
-                byte targetPlayerId = this.SideKickPlayerId[useIndex];
-                this.SideKickPlayerId.Remove(targetPlayerId);
+                int useIndex = UnityEngine.Random.Range(0, this.SidekickPlayerId.Count);
+                byte targetPlayerId = this.SidekickPlayerId[useIndex];
+                this.SidekickPlayerId.Remove(targetPlayerId);
 
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                     rolePlayer.NetId,
@@ -514,7 +515,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             var jcakal = targetRole as Jackal;
             if (jcakal != null)
             {
-                if (jcakal.SideKickPlayerId.Contains(
+                if (jcakal.SidekickPlayerId.Contains(
                     PlayerControl.LocalPlayer.PlayerId))
                 {
                     return this.NameColor;
@@ -544,12 +545,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
 
             newJackal.CurRecursion = curSideKick.recursion + 1;
-            newJackal.SideKickPlayerId = new List<byte> (curJackal.SideKickPlayerId);
+            newJackal.SidekickPlayerId = new List<byte> (curJackal.SidekickPlayerId);
             newJackal.GameControlId = curSideKick.GameControlId;
 
-            if (newJackal.SideKickPlayerId.Contains(targetId))
+            if (newJackal.SidekickPlayerId.Contains(targetId))
             {
-                newJackal.SideKickPlayerId.Remove(targetId);
+                newJackal.SidekickPlayerId.Remove(targetId);
             }
 
             if (multiAssignTrigger)
