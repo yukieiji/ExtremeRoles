@@ -54,8 +54,7 @@ namespace ExtremeRoles.Patches
     {
         public static void Postfix(PlayerControl __instance)
         {
-            if (AmongUsClient.Instance.GameState !=
-                InnerNet.InnerNetClient.GameStates.Started) { return; }
+            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return; }
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
             if (PlayerControl.LocalPlayer != __instance) { return; }
 
@@ -639,6 +638,9 @@ namespace ExtremeRoles.Patches
                     break;
                 case (byte)RPCOperator.Command.Initialize:
                     RPCOperator.Initialize();
+                    break;
+                case (byte)RPCOperator.Command.RoleSetUpComplete:
+                    RPCOperator.RoleSetUpComplete();
                     break;
                 case (byte)RPCOperator.Command.SetNormalRole:
                     roleId = reader.ReadByte();

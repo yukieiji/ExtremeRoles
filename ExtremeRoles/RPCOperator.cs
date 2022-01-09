@@ -9,6 +9,7 @@ namespace ExtremeRoles
         {
 
             Initialize = 60,
+            RoleSetUpComplete,
             ForceEnd,
             SetNormalRole,
             SetCombinationRole,
@@ -46,6 +47,11 @@ namespace ExtremeRoles
             RandomGenerator.Initialize();
             Roles.ExtremeRoleManager.Initialize();
             ExtremeRolesPlugin.GameDataStore.Initialize();
+        }
+
+        public static void RoleSetUpComplete()
+        {
+            ExtremeRolesPlugin.GameDataStore.RoleSetUpEnded();
         }
 
         public static void ForceEnd()

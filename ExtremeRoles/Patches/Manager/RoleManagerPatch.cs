@@ -33,6 +33,13 @@ namespace ExtremeRoles.Patches.Manager
                 ref extremeRolesData, ref playerIndexList);
             normalExtremeRoleAssign(
                 extremeRolesData, playerIndexList);
+
+            writer = AmongUsClient.Instance.StartRpcImmediately(
+                PlayerControl.LocalPlayer.NetId,
+                (byte)RPCOperator.Command.RoleSetUpComplete,
+                Hazel.SendOption.Reliable, -1);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            RPCOperator.RoleSetUpComplete();
         }
 
         private static bool checkLimitRoleSpawnNum(

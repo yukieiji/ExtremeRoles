@@ -20,8 +20,7 @@ namespace ExtremeRoles.Patches.Manager
         }
         public static void Postfix(HudManager __instance)
         {
-            if (AmongUsClient.Instance.GameState != 
-                InnerNet.InnerNetClient.GameStates.Started) { return; }
+            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return; }
 
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
