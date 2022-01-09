@@ -4,7 +4,7 @@
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
 
-        <VersionPrefix>1.4.2</VersionPrefix>
+        <VersionPrefix>1.4.3</VersionPrefix>
         <VersionSuffix>Test-v12</VersionSuffix> 
         <Description>Extreme Roles for Advanced user</Description>
         <Authors>yukieiji</Authors>
