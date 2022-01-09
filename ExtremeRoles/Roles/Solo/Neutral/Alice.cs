@@ -91,7 +91,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                 PlayerControl.LocalPlayer.NetId,
-                (byte)RPCOperator.Command.SetNormalRole,
+                (byte)RPCOperator.Command.AliceAbility,
                 Hazel.SendOption.Reliable, -1);
 
             writer.Write(PlayerControl.LocalPlayer.PlayerId);
