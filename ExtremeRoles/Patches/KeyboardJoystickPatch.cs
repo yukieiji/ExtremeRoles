@@ -141,6 +141,24 @@ namespace ExtremeRoles.Patches
             {
                 OptionHolder.OptionsPage = OptionHolder.OptionsPage + 1;
             }
+
+            if (PlayerControl.LocalPlayer.Data != null && 
+                PlayerControl.LocalPlayer.Data.Role != null &&
+                AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started)
+            {
+
+                var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
+
+                if (role.CanKill && KeyboardJoystick.player.GetButtonDown(8))
+                {
+                    DestroyableSingleton<HudManager>.Instance.KillButton.DoClick();
+                }
+                if (role.UseVent && KeyboardJoystick.player.GetButtonDown(50))
+                {
+                    DestroyableSingleton<HudManager>.Instance.ImpostorVentButton.DoClick();
+                }
+            }
+
         }
     }
 }
