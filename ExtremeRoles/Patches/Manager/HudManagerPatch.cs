@@ -17,6 +17,12 @@ namespace ExtremeRoles.Patches.Manager
                 __instance.GameSettings.fontSize = 1.2f;
             }
 
+        }
+        public static void Postfix(HudManager __instance)
+        {
+            if (AmongUsClient.Instance.GameState != 
+                InnerNet.InnerNetClient.GameStates.Started) { return; }
+
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
             
