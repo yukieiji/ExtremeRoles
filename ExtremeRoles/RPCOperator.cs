@@ -1,4 +1,5 @@
-﻿using Hazel;
+﻿using System.Collections.Generic;
+using Hazel;
 
 namespace ExtremeRoles
 {
@@ -26,6 +27,28 @@ namespace ExtremeRoles
             AliceAbility,
             CarrierCarryBody,
             CarrierSetBody,
+        }
+
+        public static void Call(
+            uint netId, Command ops)
+        {
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                netId, (byte)ops,
+                Hazel.SendOption.Reliable, -1);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+        }
+
+        public static void Call(
+            uint netId, Command ops, List<byte> value)
+        {
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                netId, (byte)ops,
+                Hazel.SendOption.Reliable, -1);
+            foreach (byte writeVale in value)
+            {
+                writer.Write(writeVale);
+            }
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
         }
 
         public static void CleanDeadBody(byte targetId)

@@ -17,11 +17,10 @@ namespace ExtremeRoles.Patches.Manager
 
         public static void Postfix()
         {
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                PlayerControl.LocalPlayer.NetId,
-                (byte)RPCOperator.Command.Initialize,
-                Hazel.SendOption.Reliable, -1);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
+
+            uint netId = PlayerControl.LocalPlayer.NetId;
+
+            RPCOperator.Call(netId, RPCOperator.Command.Initialize);
             RPCOperator.Initialize();
 
             PlayerControl[] playeres = PlayerControl.AllPlayerControls.ToArray();
@@ -34,11 +33,7 @@ namespace ExtremeRoles.Patches.Manager
             normalExtremeRoleAssign(
                 extremeRolesData, playerIndexList);
 
-            writer = AmongUsClient.Instance.StartRpcImmediately(
-                PlayerControl.LocalPlayer.NetId,
-                (byte)RPCOperator.Command.RoleSetUpComplete,
-                Hazel.SendOption.Reliable, -1);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            RPCOperator.Call(netId, RPCOperator.Command.RoleSetUpComplete);
             RPCOperator.RoleSetUpComplete();
         }
 
@@ -387,14 +382,10 @@ namespace ExtremeRoles.Patches.Manager
 
             Logging.Debug($"Player:{player.name}  RoleId:{roleId}");
 
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+            RPCOperator.Call(
                 PlayerControl.LocalPlayer.NetId,
-                (byte)RPCOperator.Command.SetNormalRole,
-                Hazel.SendOption.Reliable, -1);
-            
-            writer.Write(roleId);
-            writer.Write(player.PlayerId);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCOperator.Command.SetCombinationRole,
+                new List<byte> { roleId, player.PlayerId});
             RPCOperator.SetNormalRole(
                 roleId, player.PlayerId);
         }
@@ -405,15 +396,10 @@ namespace ExtremeRoles.Patches.Manager
 
             Logging.Debug($"Player:{player.name}  RoleId:{roleId}");
 
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+            RPCOperator.Call(
                 PlayerControl.LocalPlayer.NetId,
-                (byte)RPCOperator.Command.SetCombinationRole,
-                Hazel.SendOption.Reliable, -1);
-
-            writer.Write(roleId);
-            writer.Write(player.PlayerId);
-            writer.Write(gameId);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCOperator.Command.SetCombinationRole,
+                new List<byte> { roleId, player.PlayerId, gameId });
             RPCOperator.SetCombinationRole(
                 roleId, player.PlayerId, gameId);
         }
