@@ -241,12 +241,14 @@ namespace ExtremeRoles.Roles.API
                         RoleCommonOption.SpawnRate.ToString())),
                 OptionHolder.SpawnRate, null, true);
 
+            int spawnNum = this.IsImposter() ? OptionHolder.MaxImposterNum : OptionHolder.VanillaMaxPlayerNum - 1;
+
             CustomOption.Create(
                 GetRoleOptionId(RoleCommonOption.RoleNum),
                 Design.ConcatString(
                     this.RoleName,
                     RoleCommonOption.RoleNum.ToString()),
-                1, 1, OptionHolder.VanillaMaxPlayerNum - 1, 1, roleSetOption);
+                1, 1, spawnNum, 1, roleSetOption);
 
             return roleSetOption;
         }
