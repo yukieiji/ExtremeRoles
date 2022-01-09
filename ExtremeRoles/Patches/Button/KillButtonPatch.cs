@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using HarmonyLib;
 
-using Hazel;
 
 namespace ExtremeRoles.Patches.Button
 {
@@ -47,16 +47,11 @@ namespace ExtremeRoles.Patches.Button
                 switch (res)
                 {
                     case MurderKillResult.NormalKill:
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+
+                        RPCOperator.Call(
                             PlayerControl.LocalPlayer.NetId,
-                            (byte)RPCOperator.Command.UncheckedMurderPlayer,
-                            Hazel.SendOption.Reliable, -1);
-
-                        writer.Write(killer.PlayerId);
-                        writer.Write(target.PlayerId);
-                        writer.Write(Byte.MaxValue);
-
-                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                            RPCOperator.Command.UncheckedMurderPlayer,
+                            new List<byte> { killer.PlayerId, target.PlayerId, byte.MaxValue });
                         RPCOperator.UncheckedMurderPlayer(
                             killer.PlayerId,
                             target.PlayerId,
