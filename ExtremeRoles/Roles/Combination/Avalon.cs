@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+using Hazel;
+
 using UnityEngine;
 
 using ExtremeRoles.Helper;
@@ -64,7 +66,7 @@ namespace ExtremeRoles.Roles.Combination
         public override void ExiledAction(
             GameData.PlayerInfo rolePlayer)
         {
-            TryAssassinateMarin(rolePlayer);
+            tryAssassinateMarin(rolePlayer);
             this.IsFirstMeeting = false;
         }
 
@@ -79,7 +81,7 @@ namespace ExtremeRoles.Roles.Combination
                 return; 
             }
 
-            AssassinMeetingTriggerOn(rolePlayer.PlayerId);
+            rpcAssassinMeetingTriggerOn(rolePlayer.PlayerId);
             killerPlayer.CmdReportDeadBody(rolePlayer.Data);
             this.IsFirstMeeting = false;
         }
@@ -93,17 +95,28 @@ namespace ExtremeRoles.Roles.Combination
             this.IsFirstMeeting = true;
         }
 
-        private void TryAssassinateMarin(
+        private void tryAssassinateMarin(
             GameData.PlayerInfo exileAssasin)
         {
-            AssassinMeetingTriggerOn(exileAssasin.PlayerId);
+            rpcAssassinMeetingTriggerOn(exileAssasin.PlayerId);
 
             MeetingRoomManager.Instance.AssignSelf(exileAssasin.Object, null);
             DestroyableSingleton<HudManager>.Instance.OpenMeetingRoom(exileAssasin.Object);
             exileAssasin.Object.RpcStartMeeting(null);
         }
 
-        private void AssassinMeetingTriggerOn(
+        private void rpcAssassinMeetingTriggerOn(byte playerId)
+        {
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                    PlayerControl.LocalPlayer.NetId,
+                    (byte)RPCOperator.Command.AssasinSpecialMeetingOn,
+                    Hazel.SendOption.Reliable, -1);
+            writer.Write(playerId);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            AssassinMeetingTriggerOn(playerId);
+        }
+
+        public static void AssassinMeetingTriggerOn(
             byte playerId)
         {
             ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger = true;

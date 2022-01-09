@@ -1,5 +1,4 @@
-﻿using System;
-using Hazel;
+﻿using Hazel;
 
 namespace ExtremeRoles
 {
@@ -21,6 +20,8 @@ namespace ExtremeRoles
 
             ReplaceRole,
 
+
+            AssasinSpecialMeetingOn,
             AliceAbility,
             CarrierCarryBody,
             CarrierSetBody,
@@ -132,6 +133,13 @@ namespace ExtremeRoles
 
             }
         }
+
+        public static void AssasinSpecialMeetingOn(byte assasinPlayerId)
+        {
+            Roles.Combination.Assassin.AssassinMeetingTriggerOn(
+                assasinPlayerId);
+        }
+
         public static void AliceAbility(byte callerId)
         {
             Roles.Solo.Neutral.Alice.ShipBroken(callerId);
