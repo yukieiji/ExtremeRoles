@@ -254,17 +254,15 @@ namespace ExtremeRoles.Roles.Combination
         {
 
             PlayerControl rolePlayer = PlayerControl.LocalPlayer;
-
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+            RPCOperator.Call(
                 rolePlayer.NetId,
-                (byte)RPCOperator.Command.ReplaceRole,
-                Hazel.SendOption.Reliable, -1);
-
-            writer.Write(rolePlayer.PlayerId);
-            writer.Write(alivePlayerId);
-            writer.Write(
-                (byte)ExtremeRoleManager.ReplaceOperation.LoverBecomeToNeutral);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
+                RPCOperator.Command.ReplaceRole,
+                new List<byte>
+                { 
+                    rolePlayer.PlayerId,
+                    alivePlayerId,
+                    (byte)ExtremeRoleManager.ReplaceOperation.LoverBecomeToNeutral,
+                });
 
             ForceReplaceToNeutral(rolePlayer.PlayerId, alivePlayerId);
         }
