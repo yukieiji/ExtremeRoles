@@ -83,6 +83,19 @@ namespace ExtremeRoles.Roles.Combination
             return;
         }
 
+        public override string GetRolePlayerNameTag(
+            SingleRoleBase targetRole, byte targetPlayerId)
+        {
+            if (targetPlayerId == this.supportTarget)
+            {
+                return Design.ColoedString(
+                    ColorPalette.SupporterGreen,
+                    string.Format($" ★"));
+            }
+
+            return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
+        }
+
 
         public override Color GetTargetRoleSeeColor(
             SingleRoleBase targetRole, byte targetPlayerId)
