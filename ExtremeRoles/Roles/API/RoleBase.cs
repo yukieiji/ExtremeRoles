@@ -379,7 +379,7 @@ namespace ExtremeRoles.Roles.API
             baseString = string.Format("{0}\r\n{1}",
                 baseString, anotherRoleString);
 
-            if (isContainFakeTask && !this.HasTask)
+            if (isContainFakeTask && (!this.HasTask || !this.AnotherRole.HasTask))
             {
                 string fakeTaskString = Design.ColoedString(
                     this.NameColor,
@@ -394,13 +394,14 @@ namespace ExtremeRoles.Roles.API
 
         public override string GetIntroDescription()
         {
-            if (this.AnotherRole == null)
-            {
-                return base.GetIntroDescription();
-            }
 
             string baseIntro = Translation.GetString(string.Format(
-            "{0}{1}", this.Id, "IntroDescription"));
+                "{0}{1}", this.Id, "IntroDescription"));
+
+            if (this.AnotherRole == null)
+            {
+                return baseIntro;
+            }
 
             string anotherIntro;
 
@@ -412,7 +413,7 @@ namespace ExtremeRoles.Roles.API
             else
             {
                 anotherIntro = Translation.GetString(string.Format(
-               "{0}{1}", this.AnotherRole.Id, "IntroDescription"));
+                    "{0}{1}", this.AnotherRole.Id, "IntroDescription"));
 
             }
 
