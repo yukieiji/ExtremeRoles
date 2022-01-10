@@ -57,7 +57,7 @@ namespace ExtremeRoles.Roles.Combination
         {
             if (!this.CanKill)
             {
-                base.GetImportantText(isContainFakeTask);
+                return base.GetImportantText(isContainFakeTask);
             }
 
             string killerText = Design.ColoedString(
