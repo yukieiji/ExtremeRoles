@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
-using Hazel;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
@@ -53,20 +53,33 @@ namespace ExtremeRoles.Roles.Combination
             exiledUpdate();
         }
 
-        public override string GetRoleTag() => "♥";
-
-        public override string GetRolePlayerNameTag(
-            SingleRoleBase targetRole, byte targetPlayerId)
+        public override string GetImportantText(bool isContainFakeTask = true)
         {
-            if (targetRole.Id == ExtremeRoleId.Lover &&
-                this.IsSameControlId(targetRole))
+            if (!this.CanKill)
             {
-                return Design.ColoedString(
-                    ColorPalette.LoverPink,
-                    string.Format($" {GetRoleTag()}"));
+                base.GetImportantText(isContainFakeTask);
             }
 
-            return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
+            string killerText = Design.ColoedString(
+                this.NameColor,
+                string.Format("{0}: {1}",
+                    this.GetColoredRoleName(),
+                    Translation.GetString(
+                        string.Format("{0}{1}", this.Id, "KillerShortDescription"))));
+
+            if (this.AnotherRole == null)
+            {
+                return this.getTaskText(
+                    killerText, isContainFakeTask);
+            }
+
+            string anotherRoleString = this.AnotherRole.GetImportantText(false);
+
+            killerText = string.Format("{0}\r\n{1}",
+                killerText, anotherRoleString);
+
+            return this.getTaskText(
+                killerText, isContainFakeTask);
         }
 
         public override string GetIntroDescription()
@@ -76,12 +89,12 @@ namespace ExtremeRoles.Roles.Combination
                 ColorPalette.LoverPink, "\n♥");
 
             List<byte> lover = getAliveSameLover();
-            
+
             lover.Remove(PlayerControl.LocalPlayer.PlayerId);
-            
+
             byte firstLover = lover[0];
             lover.RemoveAt(0);
-            
+
             baseString += Player.GetPlayerControlById(
                 firstLover).Data.PlayerName;
             if (lover.Count != 0)
@@ -102,12 +115,29 @@ namespace ExtremeRoles.Roles.Combination
 
                 }
             }
-            
+
 
             baseString += Translation.GetString("LoverIntoPlus") + Design.ColoedString(
                 ColorPalette.LoverPink, "♥");
 
             return baseString;
+        }
+
+
+        public override string GetRoleTag() => "♥";
+
+        public override string GetRolePlayerNameTag(
+            SingleRoleBase targetRole, byte targetPlayerId)
+        {
+            if (targetRole.Id == ExtremeRoleId.Lover &&
+                this.IsSameControlId(targetRole))
+            {
+                return Design.ColoedString(
+                    ColorPalette.LoverPink,
+                    string.Format($" {GetRoleTag()}"));
+            }
+
+            return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
         }
 
         public override Color GetTargetRoleSeeColor(
@@ -265,6 +295,22 @@ namespace ExtremeRoles.Roles.Combination
                 });
 
             ForceReplaceToNeutral(rolePlayer.PlayerId, alivePlayerId);
+        }
+
+        private string getTaskText(string baseString, bool isContainFakeTask)
+        {
+            if (isContainFakeTask)
+            {
+                string fakeTaskString = Design.ColoedString(
+                    this.NameColor,
+                    DestroyableSingleton<TranslationController>.Instance.GetString(
+                        StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()));
+                baseString = string.Format("{0}\r\n{1}",
+                    baseString, fakeTaskString);
+            }
+
+            return baseString;
+
         }
 
         private List<byte> getAliveSameLover()
