@@ -820,6 +820,9 @@
     "LoverShortDescription": {
         "11": "\u904b\u547d\u306e\u4eba\u3068\u751f\u304d\u6b8b\u308c"
     },
+    "LoverKillerShortDescription": {
+        "11": "\u611b\u3059\u308b\u4eba\u3092\u6bba\u3057\u305f\u8239\u54e1\u9054\u306b\u5fa9\u8b90\u305b\u3088"
+    },
     "LoverIntoPlus": {
         "11": "\u3068\u604b\u306b\u843d\u3061\u305f"
     },
