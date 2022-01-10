@@ -86,10 +86,10 @@ namespace ExtremeRoles.Roles.Combination
                 firstLover).Data.PlayerName;
             if (lover.Count != 0)
             {
-                for (int i = 1; i < lover.Count; ++i)
+                for (int i = 0; i < lover.Count; ++i)
                 {
 
-                    if (i == 1)
+                    if (i == 0)
                     {
                         baseString += Translation.GetString("andFirst");
                     }
