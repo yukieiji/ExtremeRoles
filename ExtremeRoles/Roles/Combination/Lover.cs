@@ -171,6 +171,7 @@ namespace ExtremeRoles.Roles.Combination
             var newKiller = (Lover)ExtremeRoleManager.GameRole[targetId];
             newKiller.Team = ExtremeRoleType.Neutral;
             newKiller.CanKill = true;
+            newKiller.HasTask = false;
             newKiller.ChangeAllLoverToNeutral();
         }
 
