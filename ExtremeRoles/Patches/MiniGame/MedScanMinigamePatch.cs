@@ -3,9 +3,9 @@
 namespace ExtremeRoles.Patches.MiniGame
 {
     [HarmonyPatch(typeof(MedScanMinigame), nameof(MedScanMinigame.FixedUpdate))]
-    class MedScanMinigameFixedUpdatePatch
+    public class MedScanMinigameFixedUpdatePatch
     {
-        static void Prefix(MedScanMinigame __instance)
+        public static void Prefix(MedScanMinigame __instance)
         {
             if (OptionHolder.Ship.AllowParallelMedBayScan)
             {

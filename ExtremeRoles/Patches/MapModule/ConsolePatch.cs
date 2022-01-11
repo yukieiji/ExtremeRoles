@@ -27,15 +27,7 @@ namespace ExtremeRoles.Patches.MapModule
 
             PlayerControl player = PlayerControl.LocalPlayer;
 
-            if (isSabotageBlock(__instance, player)) { return false; }
-
-            return true;
-        }
-
-        private static bool isSabotageBlock(
-            Console console, PlayerControl player)
-        {
-            switch(console.FindTask(player).TaskType)
+            switch (__instance.FindTask(player).TaskType)
             {
                 case TaskTypes.FixLights:
                 case TaskTypes.FixComms:
@@ -43,14 +35,11 @@ namespace ExtremeRoles.Patches.MapModule
                 case TaskTypes.ResetSeismic:
                 case TaskTypes.ResetReactor:
                 case TaskTypes.RestoreOxy:
-                    return !Roles.ExtremeRoleManager.GameRole[
+                    return Roles.ExtremeRoleManager.GameRole[
                         player.PlayerId].CanRepairSabotage;
-
                 default:
-                    return false;
+                    return true;
             }
-            
         }
-
     }
 }

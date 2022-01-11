@@ -5,9 +5,9 @@ using UnityEngine;
 namespace ExtremeRoles.Patches.MiniGame
 {
     [HarmonyPatch(typeof(EmergencyMinigame), nameof(EmergencyMinigame.Update))]
-    class EmergencyMinigameUpdatePatch
+    public class EmergencyMinigameUpdatePatch
     {
-        static void Postfix(EmergencyMinigame __instance)
+        public static void Postfix(EmergencyMinigame __instance)
         {
             var statusText = "";
 
