@@ -19,6 +19,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ExtremeRoleId.Neet.ToString(),
             ColorPalette.NeetSilver,
             false, false, false,
+            false, false, false,
             false, false, false)
         { }
 
