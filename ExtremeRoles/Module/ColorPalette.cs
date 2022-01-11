@@ -12,7 +12,7 @@ namespace ExtremeRoles.Module
         public readonly static Color MarineBlue = new Color32(0, 255, 255, byte.MaxValue);
         public readonly static Color MaintainerBlue = new Color32(0, 0, 205, byte.MaxValue);
         public readonly static Color SupporterGreen = new Color32(153, 255, 153, byte.MaxValue);
-        public readonly static Color NeetSilver = new Color32(192, 192, 192, byte.MaxValu);
+        public readonly static Color NeetSilver = new Color32(192, 192, 192, byte.MaxValue);
 
         public readonly static Color JackalBlue = new Color32(65, 105, 255, byte.MaxValue);
         public readonly static Color AliceGold = new Color32(255, 215, 0, byte.MaxValue);
