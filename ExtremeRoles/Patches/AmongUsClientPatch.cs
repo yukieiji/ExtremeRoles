@@ -4,7 +4,6 @@ using System.Linq;
 
 using HarmonyLib;
 
-using ExtremeRoles.Module;
 using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Patches
@@ -38,7 +37,10 @@ namespace ExtremeRoles.Patches
 
                 if (role.IsNeutral())
                 {
-                    noWinner.Add(playerInfo.Object);
+                    if (!isAliveWinNeutral(role, playerInfo))
+                    {
+                        noWinner.Add(playerInfo.Object);
+                    }
                 }
             }
 
@@ -82,6 +84,16 @@ namespace ExtremeRoles.Patches
                 default:
                     break;
             }
+        }
+
+        private static bool isAliveWinNeutral(
+            Roles.API.SingleRoleBase role, GameData.PlayerInfo playerInfo)
+        {
+            bool isAlive = (!playerInfo.IsDead && !playerInfo.Disconnected);
+
+            if (role.Id == ExtremeRoleId.Neet && isAlive) { return true; }
+
+            return false;
         }
         
         private static void addSpecificRolePlayerToWinner(
