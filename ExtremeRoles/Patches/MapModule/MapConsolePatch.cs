@@ -6,10 +6,17 @@ namespace ExtremeRoles.Patches.MiniGame
     public class MapConsolePatch
     {
         public static bool Prefix(
-            VitalsMinigamePatch __instance)
+            ref float __result, MapConsole __instance,
+            [HarmonyArgument(0)] GameData.PlayerInfo pc,
+            [HarmonyArgument(1)] out bool canUse, [HarmonyArgument(2)] out bool couldUse)
         {
-            return Roles.ExtremeRoleManager.GameRole[
-                PlayerControl.LocalPlayer.PlayerId].CanUseAdmin;
+            canUse = couldUse = false;
+            __result = float.MaxValue;
+
+            if (Roles.ExtremeRoleManager.GameRole[
+                PlayerControl.LocalPlayer.PlayerId].CanUseAdmin) { return true; }
+
+            return false;
         }
     }
 }
