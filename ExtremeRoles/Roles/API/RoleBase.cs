@@ -11,6 +11,7 @@ namespace ExtremeRoles.Roles.API
     public abstract class SingleRoleBase : RoleOptionBase
     {
         public bool CanCallMeeting = true;
+        public bool CanRepairSabotage = true;
         public bool HasTask = true;
         public bool UseVent = false;
         public bool UseSabotage = false;
@@ -46,7 +47,8 @@ namespace ExtremeRoles.Roles.API
             bool hasTask,
             bool useVent,
             bool useSabotage,
-            bool canCallMeeting=true)
+            bool canCallMeeting = true,
+            bool canRepairSabotage = true)
         {
             this.Id = id;
             this.BytedRoleId = (byte)this.Id;
@@ -58,6 +60,7 @@ namespace ExtremeRoles.Roles.API
             this.UseVent = useVent;
             this.UseSabotage = useSabotage;
             this.CanCallMeeting = canCallMeeting;
+            this.CanRepairSabotage = canRepairSabotage;
         }
 
         public virtual SingleRoleBase Clone()
