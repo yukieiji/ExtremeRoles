@@ -12,6 +12,11 @@ namespace ExtremeRoles.Roles.API
     {
         public bool CanCallMeeting = true;
         public bool CanRepairSabotage = true;
+
+        public bool CanUseAdmin = true;
+        public bool CanUseSecurity = true;
+        public bool CanUseVital = true;
+
         public bool HasTask = true;
         public bool UseVent = false;
         public bool UseSabotage = false;
@@ -48,7 +53,10 @@ namespace ExtremeRoles.Roles.API
             bool useVent,
             bool useSabotage,
             bool canCallMeeting = true,
-            bool canRepairSabotage = true)
+            bool canRepairSabotage = true,
+            bool canUseAdmin = true,
+            bool canUseSecurity = true,
+            bool canUseVital = true)
         {
             this.Id = id;
             this.BytedRoleId = (byte)this.Id;
@@ -59,8 +67,13 @@ namespace ExtremeRoles.Roles.API
             this.HasTask = hasTask;
             this.UseVent = useVent;
             this.UseSabotage = useSabotage;
+
             this.CanCallMeeting = canCallMeeting;
             this.CanRepairSabotage = canRepairSabotage;
+
+            this.CanUseAdmin = canUseAdmin;
+            this.CanUseSecurity = canUseSecurity;
+            this.CanUseVital = canUseVital;
         }
 
         public virtual SingleRoleBase Clone()
