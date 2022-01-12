@@ -145,6 +145,24 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
         }
 
+        public override string GetFullDescription()
+        {
+            string baseDesc = base.GetFullDescription();
+
+            if (SidekickPlayerId.Count != 0)
+            {
+                baseDesc = $"{baseDesc}\n{Translation.GetString("curSidekick")}:";
+
+                foreach (var playerId in SidekickPlayerId)
+                {
+                    string playerName = Player.GetPlayerControlById(playerId).Data.PlayerName;
+                    baseDesc += $"{playerName},";
+                }
+            }
+
+            return baseDesc;
+        }
+
         public override bool IsSameTeam(SingleRoleBase targetRole)
         {
             var multiAssignRole = targetRole as MultiAssignRoleBase;
@@ -518,6 +536,18 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 }
             }
             return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
+        }
+
+        public override string GetFullDescription()
+        {
+            string baseDesc = base.GetFullDescription();
+
+            baseDesc = $"{baseDesc}\n{Translation.GetString("curSidekick")}:";
+            string playerName = Player.GetPlayerControlById(
+                this.jackalPlayerId).Data.PlayerName;
+            baseDesc += $"{playerName}";
+
+            return baseDesc;
         }
 
         public static void BecomeToJackal(byte callerId, byte targetId)

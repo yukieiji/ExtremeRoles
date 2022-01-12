@@ -41,6 +41,45 @@ namespace ExtremeRoles.Roles.Combination
             false)
         {}
 
+        public override string GetFullDescription()
+        {
+            string baseDesc;
+
+            if (this.IsImposter())
+            {
+                baseDesc = Translation.GetString(
+                    string.Format("{0}{1}", this.Id, "ImposterFullDescription"));
+            }
+            else if (this.CanKill)
+            {
+                baseDesc = Translation.GetString(
+                    string.Format("{0}{1}", this.Id, "NeutralKillerFullDescription"));
+            }
+            else if (this.IsNeutral())
+            {
+                baseDesc = Translation.GetString(
+                    string.Format("{0}{1}", this.Id, "NeutralFullDescription"));
+            }
+            else
+            {
+                baseDesc = base.GetFullDescription();
+            }
+
+            baseDesc = $"{baseDesc}\n{Translation.GetString("curLover")}:";
+
+            foreach (var item in ExtremeRoleManager.GameRole)
+            {
+                if (this.IsSameControlId(item.Value))
+                {
+                    string playerName = Player.GetPlayerControlById(
+                        item.Key).Data.PlayerName;
+                    baseDesc += $"{playerName},"; ;
+                }
+            }
+
+            return baseDesc;
+        }
+
         public override void RolePlayerKilledAction(
             PlayerControl rolePlayer, PlayerControl killerPlayer)
         {

@@ -23,6 +23,17 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             false, false, false)
         { }
 
+        public override string GetFullDescription()
+        {
+            if (this.IsNeutral())
+            {
+                return Translation.GetString(
+                    string.Format("{0}{1}", this.Id, "NeutralFullDescription"));
+            }
+
+            return base.GetFullDescription();
+        }
+
         protected override void CreateSpecificOption(CustomOptionBase parentOps)
         {
             CustomOption.Create(

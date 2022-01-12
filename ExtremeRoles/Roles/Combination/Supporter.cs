@@ -82,6 +82,32 @@ namespace ExtremeRoles.Roles.Combination
             return;
         }
 
+        public override string GetFullDescription()
+        {
+
+            string baseDesc;
+
+            if (this.IsImposter())
+            {
+                baseDesc = Translation.GetString(
+                    string.Format("{0}{1}", this.Id, "ImposterFullDescription"));
+            }
+            else
+            {
+                baseDesc = base.GetFullDescription();
+            }
+
+            var roleName = ExtremeRoleManager.GameRole[
+                this.supportTarget].GetColoredRoleName();
+            var playerName = Player.GetPlayerControlById(
+                this.supportTarget).Data.PlayerName;
+
+            baseDesc = $"{baseDesc}\n{Translation.GetString("curSupportTarget")}:";
+            baseDesc = $"{baseDesc}\n    {Translation.GetString("playerName")}:{playerName}";
+            baseDesc = $"{baseDesc}\n    {Translation.GetString("roleName")}:{roleName}";
+
+            return baseDesc;
+        }
         public override string GetRolePlayerNameTag(
             SingleRoleBase targetRole, byte targetPlayerId)
         {
