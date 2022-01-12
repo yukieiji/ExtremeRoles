@@ -179,7 +179,7 @@ namespace ExtremeRoles.Patches.Option
             title.GetComponent<RectTransform>().localPosition = Vector3.up * 2.3f;
             title.gameObject.SetActive(true);
             title.text = Helper.Translation.GetString("moreOptionText");
-            title.name = "TitleText";
+            title.name = "titleText";
         }
 
         private static void setUpOptions()
@@ -206,7 +206,7 @@ namespace ExtremeRoles.Patches.Option
                 button.Text.font = Object.Instantiate(moreOptionText.font);
                 button.Text.GetComponent<RectTransform>().sizeDelta = new Vector2(2, 2);
 
-                button.name = info.Title.Replace(" ", "") + "Toggle";
+                button.name = info.Title.Replace(" ", "") + "toggle";
                 button.gameObject.SetActive(true);
                 button.gameObject.transform.SetAsFirstSibling();
 
