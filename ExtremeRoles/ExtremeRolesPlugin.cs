@@ -20,6 +20,7 @@ namespace ExtremeRoles
 
         public static ExtremeRolesPlugin Instance;
         public static Module.GameDataContainer GameDataStore = new Module.GameDataContainer();
+        public static Module.InfoOverlay Info = new Module.InfoOverlay();
 
         internal static BepInEx.Logging.ManualLogSource Logger;
         public static ConfigEntry<bool> DebugMode { get; private set; }

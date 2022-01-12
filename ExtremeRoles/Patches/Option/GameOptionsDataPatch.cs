@@ -36,10 +36,10 @@ namespace ExtremeRoles.Patches.Option
             var allOption = OptionHolder.AllOption;
 
             entries.Add(
-                optionToString(allOption[(int)OptionHolder.CommonOptionKey.PresetSelection]));
+                CustomOption.OptionToString(allOption[(int)OptionHolder.CommonOptionKey.PresetSelection]));
 
             entries.Add(
-                optionToString(allOption[(int)OptionHolder.CommonOptionKey.UseStrongRandomGen]));
+                CustomOption.OptionToString(allOption[(int)OptionHolder.CommonOptionKey.UseStrongRandomGen]));
 
             var optionName = Design.ColoedString(
                 new Color(204f / 255f, 204f / 255f, 0, 1f),
@@ -74,9 +74,9 @@ namespace ExtremeRoles.Patches.Option
             entry = new StringBuilder();
 
             entry.AppendLine(
-                optionToString(allOption[(int)OptionHolder.CommonOptionKey.IsSameNeutralSameWin]));
+                CustomOption.OptionToString(allOption[(int)OptionHolder.CommonOptionKey.IsSameNeutralSameWin]));
             entry.AppendLine(
-                optionToString(allOption[(int)OptionHolder.CommonOptionKey.DisableNeutralSpecialForceEnd]));
+                CustomOption.OptionToString(allOption[(int)OptionHolder.CommonOptionKey.DisableNeutralSpecialForceEnd]));
 
             entries.Add(entry.ToString().Trim('\r', '\n'));
 
@@ -106,7 +106,7 @@ namespace ExtremeRoles.Patches.Option
                     entry = new StringBuilder();
                     if (!option.IsHidden)
                     {
-                        entry.AppendLine(optionToString(option));
+                        entry.AppendLine(CustomOption.OptionToString(option));
                     }
                     addChildren(option, ref entry, !option.IsHidden);
                     entries.Add(entry.ToString().Trim('\r', '\n'));
@@ -152,33 +152,12 @@ namespace ExtremeRoles.Patches.Option
             {
                 if (!child.IsHidden)
                 {
-                    entry.AppendLine((indent ? "    " : "") + optionToString(child));
+                    entry.AppendLine((indent ? "    " : "") + CustomOption.OptionToString(child));
                 }
                 addChildren(child, ref entry, indent);
             }
         }
 
-        private static string optionToString(CustomOptionBase option)
-        {
-            if (option == null) { return ""; }
-            return $"{option.GetName()}: {option.GetString()}";
-        }
-        private static string optionsToString(CustomOptionBase option, bool skipFirst = false)
-        {
-            if (option == null) { return ""; }
-
-            List<string> options = new List<string>();
-            if (!option.IsHidden && !skipFirst) options.Add(optionToString(option));
-            if (option.Enabled)
-            {
-                foreach (CustomOptionBase op in option.Children)
-                {
-                    string str = optionToString(op);
-                    if (str != "") options.Add(str);
-                }
-            }
-            return string.Join("\n", options);
-        }
         private static string translate(string key)
         {
             return Translation.GetString(key);

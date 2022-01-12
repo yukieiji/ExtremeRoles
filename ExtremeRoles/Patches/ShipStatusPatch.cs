@@ -95,6 +95,7 @@ namespace ExtremeRoles.Patches
             GameOverReason reason,
             bool trigger = false)
         {
+            ExtremeRolesPlugin.Info.HideInfoOverlay();
             curShip.enabled = false;
             ShipStatus.RpcEndGame(reason, trigger);
         }

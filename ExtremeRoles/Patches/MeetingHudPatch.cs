@@ -286,6 +286,8 @@ namespace ExtremeRoles.Patches
         public static void Postfix(
             MeetingHud __instance)
         {
+            ExtremeRolesPlugin.Info.MeetingStartRest();
+
             var abilityRole = ExtremeRoleManager.GetLocalPlayerRole() as IRoleAbility;
             if (abilityRole != null)
             {
@@ -364,6 +366,25 @@ namespace ExtremeRoles.Patches
             return false;
         }
         
+    }
+
+    [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.VotingComplete))]
+    public class MeetingHudVotingCompletedPatch
+    {
+        public static void Postfix(
+            MeetingHud __instance,
+            [HarmonyArgument(0)] byte[] states,
+            [HarmonyArgument(1)] GameData.PlayerInfo exiled,
+            [HarmonyArgument(2)] bool tie)
+        {
+            ExtremeRolesPlugin.Info.HideInfoOverlay();
+
+
+            foreach (DeadBody b in UnityEngine.Object.FindObjectsOfType<DeadBody>())
+            {
+                UnityEngine.Object.Destroy(b.gameObject);
+            }
+        }
     }
 
 }

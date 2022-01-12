@@ -45,7 +45,6 @@ namespace ExtremeRoles
             DesableVent,
             DisableSkipInEmergencyMeeting,
             NoVoteToSelf,
-            HidePlayerName,
             ParallelMedBayScans,
             RandomMap,
             EngineerUseImpostorVent,

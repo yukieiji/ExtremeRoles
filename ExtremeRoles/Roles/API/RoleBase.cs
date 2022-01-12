@@ -128,6 +128,9 @@ namespace ExtremeRoles.Roles.API
         public virtual string GetIntroDescription() => Translation.GetString(
             string.Format("{0}{1}", this.Id, "IntroDescription"));
 
+        public virtual string GetFullDescription() => Translation.GetString(
+           string.Format("{0}{1}", this.Id, "FullDescription"));
+
         public virtual string GetColoredRoleName() => Design.ColoedString(
             this.NameColor, Translation.GetString(this.RoleName));
 

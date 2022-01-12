@@ -143,6 +143,12 @@ namespace ExtremeRoles.Patches
                 OptionHolder.OptionsPage = OptionHolder.OptionsPage + 1;
             }
 
+            if (Input.GetKeyDown(KeyCode.H) && ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd())
+            {
+                ExtremeRolesPlugin.Info.ToggleInfoOverlay();
+            }
+
+
             // キルとベントボタン
             if (PlayerControl.LocalPlayer.Data != null && 
                 PlayerControl.LocalPlayer.Data.Role != null &&

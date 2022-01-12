@@ -307,7 +307,6 @@ namespace ExtremeRoles.Module
         public override dynamic GetValue() => CurSelection;
     }
 
-
     public static class CustomOption
     {
         public static CustomOptionBase Create(
@@ -399,6 +398,36 @@ namespace ExtremeRoles.Module
                 defaultValue ? "optionOn" : "optionOff", parent,
                 isHeader, isHidden, format, invert, enableCheckOption);
         }
+
+        public static string OptionToString(CustomOptionBase option)
+        {
+            if (option == null) { return ""; }
+            return $"{option.GetName()}: {option.GetString()}";
+        }
+        public static string AllOptionToString(
+            CustomOptionBase option, bool skipFirst = false)
+        {
+            if (option == null) { return ""; }
+
+            List<string> options = new List<string>();
+            if (!option.IsHidden && !skipFirst)
+            {
+                options.Add(OptionToString(option));
+            }
+            if (option.Enabled)
+            {
+                foreach (CustomOptionBase op in option.Children)
+                {
+                    string str = OptionToString(op);
+                    if (str != "")
+                    {
+                        options.Add(str);
+                    }
+                }
+            }
+            return string.Join("\n", options);
+        }
+
     }
 
 }

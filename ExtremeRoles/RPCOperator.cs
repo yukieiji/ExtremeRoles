@@ -70,6 +70,7 @@ namespace ExtremeRoles
             RandomGenerator.Initialize();
             Roles.ExtremeRoleManager.Initialize();
             ExtremeRolesPlugin.GameDataStore.Initialize();
+            ExtremeRolesPlugin.Info.ResetOverlays();
         }
 
         public static void RoleSetUpComplete()

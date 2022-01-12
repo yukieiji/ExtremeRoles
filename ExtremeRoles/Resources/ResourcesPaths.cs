@@ -4,6 +4,8 @@
     {
         public const string LangData = "ExtremeRoles.Resources.LangData.stringData.json";
 
+        public const string BackGround = "ExtremeRoles.Resources.white.png";
+
         public const string TitleBurner = "ExtremeRoles.Resources.TitleBurner.png";
         public const string TabLogo = "ExtremeRoles.Resources.TabIcon.png";
 
@@ -11,6 +13,7 @@
 
         public const string AliceShipBroken = "ExtremeRoles.Resources.ShipBroken.png";
         public const string JackalSidekick = "ExtremeRoles.Resources.Sidekick.png";
+
 
         public const string TestButton = "ExtremeRoles.Resources.TESTBUTTON.png";
     }
