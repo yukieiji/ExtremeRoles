@@ -22,10 +22,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+using System;
 
 using HarmonyLib;
+
+using TMPro;
+
 using UnityEngine;
-using System;
 using UnityEngine.Events;
 
 namespace ExtremeRoles.Patches
@@ -37,19 +40,24 @@ namespace ExtremeRoles.Patches
         private static TextBoxTMP ipField;
         private static TextBoxTMP portField;
 
+        private static TextMeshPro ipText;
+        private static TextMeshPro portText;
+
         public static void Postfix(RegionMenu __instance)
         {
 
             var template = DestroyableSingleton<JoinGameButton>.Instance;
             if (template == null || template.GameIdText == null) { return; }
 
-            if (ipField == null || ipField.gameObject == null)
+            if (ipField == null || ipField.gameObject == null || ipText == null)
             {
                 ipField = UnityEngine.Object.Instantiate(
                     template.GameIdText, __instance.transform);
+                ipText = UnityEngine.Object.Instantiate(
+                    ExtremeRolesPlugin.TextPrefab);
 
-                ipField.gameObject.name = "IpTextBox";
-
+                ipField.gameObject.name = "ipTextBox";
+                ipText.gameObject.name = "ipText";
 
                 var arrow = ipField.transform.FindChild("arrowEnter");
                 if (arrow == null || arrow.gameObject == null) { return; }
@@ -74,21 +82,31 @@ namespace ExtremeRoles.Patches
                 ipField.OnFocusLost = new UnityEngine.UI.Button.ButtonClickedEvent();
                 ipField.OnChange.AddListener((UnityAction)onEnterOrIpChange);
                 ipField.OnFocusLost.AddListener((UnityAction)onFocusLost);
+
+                ipText.text =  Helper.Translation.GetString(
+                    "customServerIp");
+                ipText.font = ipField.outputText.font;
+                ipText.transform.parent = ipField.transform;
+                ipText.transform.localPosition = new Vector3(-0.2f, 0.425f, -100f);
+                ipText.gameObject.SetActive(true);
+
             }
 
             if (portField == null || portField.gameObject == null)
             {
                 portField = UnityEngine.Object.Instantiate(
                     template.GameIdText, __instance.transform);
+                portText = UnityEngine.Object.Instantiate(
+                    ExtremeRolesPlugin.TextPrefab);
 
-                portField.gameObject.name = "PortTextBox";
-
+                portField.gameObject.name = "portTextBox";
+                portText.gameObject.name = "portText";
 
                 var arrow = portField.transform.FindChild("arrowEnter");
                 if (arrow == null || arrow.gameObject == null) { return; }
                 UnityEngine.Object.DestroyImmediate(arrow.gameObject);
 
-                portField.transform.localPosition = new Vector3(0.2f, -1.55f, -100f);
+                portField.transform.localPosition = new Vector3(0.2f, -2.0f, -100f);
                 portField.characterLimit = 5;
                 portField.SetText(
                     OptionHolder.ConfigParser.Port.Value.ToString());
@@ -106,6 +124,13 @@ namespace ExtremeRoles.Patches
                 portField.OnFocusLost = new UnityEngine.UI.Button.ButtonClickedEvent();
                 portField.OnChange.AddListener((UnityAction)onEnterOrPortFieldChange);
                 portField.OnFocusLost.AddListener((UnityAction)onFocusLost);
+
+                portText.text = Helper.Translation.GetString(
+                    "customServerPort");
+                portText.font = portField.outputText.font;
+                portText.transform.parent = portField.transform;
+                portText.transform.localPosition = new Vector3(-0.2f, 0.425f, -100f);
+                portText.gameObject.SetActive(true);
 
             }
 

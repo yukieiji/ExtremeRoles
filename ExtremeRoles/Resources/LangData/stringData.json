@@ -253,6 +253,12 @@
     "MissShot": {
         "11": "\u66b4\u767a"
     },
+    "customServerIp": {
+        "11": "\u30ab\u30b9\u30bf\u30e0\u30b5\u30fc\u30d0\u30fc\u306eIP"
+    },
+    "customServerPort": {
+        "11": "\u30ab\u30b9\u30bf\u30e0\u30b5\u30fc\u30d0\u30fc\u306e\u30dd\u30fc\u30c8"
+    },
     "neutral": {
         "11": "\u30cb\u30e5\u30fc\u30c8\u30e9\u30eb"
     },
