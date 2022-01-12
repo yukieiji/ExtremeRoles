@@ -16,8 +16,13 @@ namespace ExtremeRoles.Patches.MapModule
             var role = Roles.ExtremeRoleManager.GameRole[pc.PlayerId];
             var icon = __instance.useIcon;
 
-            if ((icon == ImageNames.CamsButton) && role.CanUseSecurity) { return true; }
-            if ((icon == ImageNames.VitalsButton) && role.CanUseVital) { return true; }
+            bool isVital = icon == ImageNames.VitalsButton;
+            bool isSecurity = icon == ImageNames.CamsButton;
+
+            if (isSecurity && role.CanUseSecurity) { return true; }
+            if (isVital && role.CanUseVital) { return true; }
+
+            if (!isSecurity && !isVital) { return true; }
 
             return false;
         }
