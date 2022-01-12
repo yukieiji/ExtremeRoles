@@ -1,13 +1,16 @@
 ﻿using HarmonyLib;
 
+using TMPro;
+using Twitch;
+
 using UnityEngine;
 
 namespace ExtremeRoles.Patches.Manager
 {
     [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
-    public static class LogoPatch
+    public static class MainMenuManagerStartPatch
     {
-        static void Postfix(PingTracker __instance)
+        static void Postfix(MainMenuManager __instance)
         {
             DestroyableSingleton<ModManager>.Instance.ShowModStamp();
 
@@ -23,6 +26,27 @@ namespace ExtremeRoles.Patches.Manager
             var renderer = torLogo.AddComponent<SpriteRenderer>();
             renderer.sprite = Helper.Resources.LoadSpriteFromResources(
                 Resources.ResourcesPaths.TitleBurner, 300f);
+
+            var tmp = __instance.Announcement.transform.Find(
+                "Title_Text").gameObject.GetComponent<TextMeshPro>();
+            tmp.alignment = TextAlignmentOptions.Center;
+            tmp.transform.localPosition += Vector3.left * 0.2f;
+            ExtremeRolesPlugin.TextPrefab = Object.Instantiate(tmp);
+            Object.Destroy(ExtremeRolesPlugin.TextPrefab.GetComponent<
+                TextTranslatorTMP>());
+            ExtremeRolesPlugin.TextPrefab.gameObject.SetActive(false);
+            Object.DontDestroyOnLoad(ExtremeRolesPlugin.TextPrefab);
+
+            if (Option.OptionsMenuBehaviourStartPatch.PropPrefab == null)
+            {
+                TwitchManager man = DestroyableSingleton<TwitchManager>.Instance;
+                Option.OptionsMenuBehaviourStartPatch.PropPrefab = Object.Instantiate(man.TwitchPopup);
+                Object.DontDestroyOnLoad(
+                    Option.OptionsMenuBehaviourStartPatch.PropPrefab);
+                Option.OptionsMenuBehaviourStartPatch.PropPrefab.name = "propForInEx";
+                Option.OptionsMenuBehaviourStartPatch.PropPrefab.gameObject.SetActive(false);
+            }
+
         }
     }
 }

@@ -18,8 +18,12 @@ namespace ExtremeRoles.Patches.Option
 {
 
     [HarmonyPatch]
-    public static class ClientOptionsPatch
+    [HarmonyPatch(typeof(OptionsMenuBehaviour), nameof(OptionsMenuBehaviour.Start))]
+    public static class OptionsMenuBehaviourStartPatch
     {
+
+        public static GenericPopup PropPrefab;
+
         private static SelectionBehaviour[] modOption = {
             new SelectionBehaviour(
                 "streamerModeButton",
@@ -44,7 +48,7 @@ namespace ExtremeRoles.Patches.Option
         };
 
         private static GameObject popUp;
-        private static TextMeshPro titleText;
+        private static TextMeshPro moreOptionText;
 
         private static ToggleButtonBehaviour moreOptionButton;
         private static List<ToggleButtonBehaviour> modOptionButton;
@@ -52,40 +56,19 @@ namespace ExtremeRoles.Patches.Option
         private static ToggleButtonBehaviour importButton;
         private static ToggleButtonBehaviour exportButton;
 
-        private static TextMeshPro titleTextTitle;
-
         private static ToggleButtonBehaviour buttonPrefab;
-        private static GenericPopup propPrefab;
         private static Vector3? origin;
-
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
-        public static void MainMenuManagerStartPostfix(MainMenuManager __instance)
-        {
-            // Prefab for the title
-            var tmp = __instance.Announcement.transform.Find("Title_Text").gameObject.GetComponent<TextMeshPro>();
-            tmp.alignment = TextAlignmentOptions.Center;
-            tmp.transform.localPosition += Vector3.left * 0.2f;
-            titleText = Object.Instantiate(tmp);
-            Object.Destroy(titleText.GetComponent<TextTranslatorTMP>());
-            titleText.gameObject.SetActive(false);
-            Object.DontDestroyOnLoad(titleText);
-            if (propPrefab == null)
-            {
-                TwitchManager man = DestroyableSingleton<TwitchManager>.Instance;
-                propPrefab = Object.Instantiate(man.TwitchPopup);
-                Object.DontDestroyOnLoad(propPrefab);
-                propPrefab.name = "propForInEx";
-                propPrefab.gameObject.SetActive(false);
-            }
-
-        }
-
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(OptionsMenuBehaviour), nameof(OptionsMenuBehaviour.Start))]
-        public static void OptionsMenuBehaviourStartPostfix(OptionsMenuBehaviour __instance)
+        public static void Postfix(OptionsMenuBehaviour __instance)
         {
             if (!__instance.CensorChatButton) { return; }
+
+            if (!moreOptionText && ExtremeRolesPlugin.TextPrefab != null)
+            {
+                moreOptionText = Object.Instantiate(
+                    ExtremeRolesPlugin.TextPrefab);
+                Object.DontDestroyOnLoad(moreOptionText);
+                moreOptionText.gameObject.SetActive(false);
+            }
 
             if (!popUp)
             {
@@ -106,9 +89,9 @@ namespace ExtremeRoles.Patches.Option
 
         public static void UpdateMenuTranslation()
         {
-            if (titleTextTitle)
+            if (moreOptionText)
             {
-                titleTextTitle.text = Helper.Translation.GetString("moreOptionText");
+                moreOptionText.text = Helper.Translation.GetString("moreOptionText");
             }
             if (moreOptionButton)
             {
@@ -190,9 +173,9 @@ namespace ExtremeRoles.Patches.Option
 
         private static void checkSetTitle()
         {
-            if (!popUp || popUp.GetComponentInChildren<TextMeshPro>() || !titleText) { return; }
+            if (!popUp || popUp.GetComponentInChildren<TextMeshPro>() || !moreOptionText) { return; }
 
-            var title = titleTextTitle = Object.Instantiate(titleText, popUp.transform);
+            var title = moreOptionText = Object.Instantiate(moreOptionText, popUp.transform);
             title.GetComponent<RectTransform>().localPosition = Vector3.up * 2.3f;
             title.gameObject.SetActive(true);
             title.text = Helper.Translation.GetString("moreOptionText");
@@ -220,7 +203,7 @@ namespace ExtremeRoles.Patches.Option
 
                 button.Text.text = Helper.Translation.GetString(info.Title);
                 button.Text.fontSizeMin = button.Text.fontSizeMax = 2.2f;
-                button.Text.font = Object.Instantiate(titleText.font);
+                button.Text.font = Object.Instantiate(moreOptionText.font);
                 button.Text.GetComponent<RectTransform>().sizeDelta = new Vector2(2, 2);
 
                 button.name = info.Title.Replace(" ", "") + "Toggle";
@@ -288,11 +271,11 @@ namespace ExtremeRoles.Patches.Option
             passiveExportButton.gameObject.SetActive(true);
 
             CsvImport.InfoPopup = Object.Instantiate(
-                propPrefab, passiveImportButton.transform);
+                PropPrefab, passiveImportButton.transform);
             CsvExport.InfoPopup = Object.Instantiate(
-                propPrefab, passiveExportButton.transform);
+                PropPrefab, passiveExportButton.transform);
 
-            var pos = propPrefab.transform.position;
+            var pos = PropPrefab.transform.position;
             pos.z = -2048f;
             CsvImport.InfoPopup.transform.position = pos;
             CsvExport.InfoPopup.transform.position = pos;

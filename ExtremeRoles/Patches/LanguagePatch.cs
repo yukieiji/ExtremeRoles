@@ -9,7 +9,7 @@ namespace ExtremeRoles.Patches
     {
         static void Postfix()
         {
-            ClientOptionsPatch.UpdateMenuTranslation();
+            OptionsMenuBehaviourStartPatch.UpdateMenuTranslation();
         }
     }
 }
