@@ -17,7 +17,7 @@ namespace ExtremeRoles.Patches.MapModule
             var icon = __instance.useIcon;
 
             if ((icon == ImageNames.CamsButton) && role.CanUseSecurity) { return true; }
-            if ((icon == ImageNames.VitalsButton) && role.CanUseSecurity) { return true; }
+            if ((icon == ImageNames.VitalsButton) && role.CanUseVital) { return true; }
 
             return false;
         }
