@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using UnityEngine;
+
+using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Module
 {
@@ -291,10 +292,10 @@ namespace ExtremeRoles.Module
             infoUnderlay.transform.localScale = new Vector3(7.5f, 5f, 1f);
             infoUnderlay.enabled = true;
 
-            ruleInfoText.text = "<size=200%>gameOption</size>\n" + getCommonOptionString();
+            ruleInfoText.text = $"<size=200%>{Translation.GetString("gameOption")}</size>\n{getCommonOptionString()}";
             ruleInfoText.enabled = true;
 
-            string roleText = "<size=200%>yourRole</size>\n";
+            string roleText = $"<size=200%>{Translation.GetString("yourRole")}</size>\n";
             string anotherRoleText = "<size=200%> </size>\n";
             var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
             var allOption = OptionHolder.AllOption;
@@ -314,7 +315,7 @@ namespace ExtremeRoles.Module
             roleText += 
                 $"<size=150%>・{role.GetColoredRoleName()}</size>" +
                 (roleFullDesc != "" ? $"\n{roleFullDesc}\n" : "") + 
-                $"・{role.RoleName}roleOption\n" +
+                $"・{Translation.GetString(role.GetColoredRoleName())}{Translation.GetString("roleOption")}\n" +
                 (roleOptionString != "" ? $"{roleOptionString}" : "");
 
             var multiAssignRole = role as Roles.API.MultiAssignRoleBase;
@@ -337,7 +338,7 @@ namespace ExtremeRoles.Module
                     anotherRoleText += 
                         $"\n<size=150%>・{multiAssignRole.AnotherRole.GetColoredRoleName()}</size>" +
                         (anotherRoleFullDesc != "" ? $"\n{anotherRoleFullDesc}\n" : "") + 
-                        $"・{role.RoleName}roleOption\n" +
+                        $"・{Translation.GetString(role.GetColoredRoleName())}{Translation.GetString("roleOption")}\n" +
                         (anotherRoleOptionString != "" ? $"{anotherRoleOptionString}" : "");
                 }
             }
