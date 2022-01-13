@@ -52,7 +52,21 @@ namespace ExtremeRoles.Patches
             return false;
         }
     }
+    [HarmonyPatch(typeof(ExileController), nameof(ExileController.ReEnableGameplay))]
+    class ExileControllerReEnableGameplayPatch
+    {
+        public static void Postfix(
+            ExileController __instance)
+        {
 
+            var role = ExtremeRoleManager.GetLocalPlayerRole();
+
+            if (!role.HasOtherKillCool) { return; }
+            
+            PlayerControl.LocalPlayer.SetKillTimer(
+                role.KillCoolTime);
+        }
+    }
 
     [HarmonyPatch]
     class ExileControllerWrapUpPatch

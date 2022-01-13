@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
+using Assets.CoreScripts;
+using BepInEx.IL2CPP.Utils.Collections;
 
 using HarmonyLib;
 using Hazel;
@@ -703,6 +708,104 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
     public class PlayerControlMurderPlayerPatch
     {
+        public static bool Prefix(
+            PlayerControl __instance,
+            [HarmonyArgument(0)] PlayerControl target)
+        {
+            var role = ExtremeRoleManager.GameRole[__instance.PlayerId];
+            if (!role.HasOtherKillCool) { return true; }
+
+            float killCool = role.KillCoolTime;
+
+            Logging.Debug($"new Kill Cool:{killCool}");
+
+            GameData.PlayerInfo data = target.Data;
+            if (!target.protectedByGuardian)
+            {
+                if (__instance.AmOwner)
+                {
+                    StatsManager instance = StatsManager.Instance;
+                    uint num = instance.ImpostorKills;
+                    instance.ImpostorKills = num + 1U;
+                    if (Constants.ShouldPlaySfx())
+                    {
+                        SoundManager.Instance.PlaySound(
+                            __instance.KillSfx, false, 0.8f);
+                    }
+                    __instance.SetKillTimer(killCool);
+                }
+                DestroyableSingleton<Telemetry>.Instance.WriteMurder();
+                target.gameObject.layer = LayerMask.NameToLayer("Ghost");
+                if (target.AmOwner)
+                {
+                    StatsManager instance2 = StatsManager.Instance;
+                    uint num = instance2.TimesMurdered;
+                    instance2.TimesMurdered = num + 1U;
+                    if (Minigame.Instance)
+                    {
+                        try
+                        {
+                            Minigame.Instance.Close();
+                            Minigame.Instance.Close();
+                        }
+                        catch
+                        { }
+                    }
+                    DestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(
+                        __instance.Data, data);
+                    DestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
+                    target.nameText.GetComponent<MeshRenderer>().material.SetInt("_Mask", 0);
+                    target.RpcSetScanner(false);
+                    ImportantTextTask importantTextTask = new GameObject("_Player").AddComponent<ImportantTextTask>();
+                    importantTextTask.transform.SetParent(
+                        __instance.transform, false);
+                    if (!PlayerControl.GameOptions.GhostsDoTasks)
+                    {
+                        target.ClearTasks();
+                        importantTextTask.Text = DestroyableSingleton<TranslationController>.Instance.GetString(
+                            StringNames.GhostIgnoreTasks, Array.Empty<Il2CppSystem.Object>());
+                    }
+                    else
+                    {
+                        importantTextTask.Text = DestroyableSingleton<TranslationController>.Instance.GetString(
+                            StringNames.GhostDoTasks, Array.Empty<Il2CppSystem.Object>());
+                    }
+                    target.myTasks.Insert(0, importantTextTask);
+                }
+                DestroyableSingleton<AchievementManager>.Instance.OnMurder(
+                    __instance.AmOwner, target.AmOwner);
+
+                var killAnimation = __instance.KillAnimations.ToList();
+
+                var useKillAnimation = default(KillAnimation);
+
+                if (killAnimation.Count > 0)
+                {
+                    useKillAnimation = killAnimation[UnityEngine.Random.Range(
+                        0, killAnimation.Count)];
+                }
+
+                __instance.MyPhysics.StartCoroutine(
+                    useKillAnimation.CoPerformKill(__instance, target));
+                
+                return false;
+            }
+            target.protectedByGuardianThisRound = true;
+            if (__instance.AmOwner || PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
+            {
+                target.ShowFailedMurder();
+                __instance.SetKillTimer(killCool / 2f);
+                return false;
+            }
+            if (__instance.AmOwner)
+            {
+                __instance.SetKillTimer(killCool);
+                return false;
+            }
+            target.RemoveProtection();
+            return false;
+        }
+
         public static void Postfix(
             PlayerControl __instance,
             [HarmonyArgument(0)] PlayerControl target)
