@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
 using Assets.CoreScripts;
-using BepInEx.IL2CPP.Utils.Collections;
 
 using HarmonyLib;
 using Hazel;
@@ -432,8 +428,14 @@ namespace ExtremeRoles.Patches
             {
                 if (enable)
                 {
-                    player.SetKillTimer(player.killTimer - Time.fixedDeltaTime);
-                    PlayerControl target = player.FindClosestTarget(!role.IsImposter());
+                    bool isNotImposter = !role.IsImposter();
+
+                    if (isNotImposter)
+                    {
+                        player.SetKillTimer(player.killTimer - Time.fixedDeltaTime);
+                    }
+
+                    PlayerControl target = player.FindClosestTarget(isNotImposter);
 
                     // Logging.Debug($"TargetAlive?:{target}");
 
@@ -716,8 +718,6 @@ namespace ExtremeRoles.Patches
             if (!role.HasOtherKillCool) { return true; }
 
             float killCool = role.KillCoolTime;
-
-            Logging.Debug($"new Kill Cool:{killCool}");
 
             GameData.PlayerInfo data = target.Data;
             if (!target.protectedByGuardian)
