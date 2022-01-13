@@ -480,15 +480,15 @@ namespace ExtremeRoles.Roles.API
             this.UseSabotage = this.UseSabotage || this.AnotherRole.UseSabotage;
         }
 
-        protected int GetManagerOptionId(
+        public int GetManagerOptionId(
             RoleCommonOption option) => GetManagerOptionId((int)option);
 
-        protected int GetManagerOptionId(
+        public int GetManagerOptionId(
             KillerCommonOption option) => GetManagerOptionId((int)option);
 
-        protected int GetManagerOptionId(
+        public int GetManagerOptionId(
             CombinationRoleCommonOption option) => GetManagerOptionId((int)option);
 
-        protected int GetManagerOptionId(int option) => this.ManagerOptionOffset + option;
+        public int GetManagerOptionId(int option) => this.ManagerOptionOffset + option;
     }
 }
