@@ -81,7 +81,18 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             var targetPlayer = Player.GetPlayerControlById(targetId);
             var targetRole = ExtremeRoleManager.GameRole[targetId];
-            
+
+            var meetingResetRole = targetRole as IRoleResetMeeting;
+            if (meetingResetRole != null)
+            {
+                meetingResetRole.ResetOnMeetingStart();
+            }
+            var abilityRole = targetRole as IRoleAbility;
+            if (abilityRole != null)
+            {
+                abilityRole.ResetOnMeetingStart();
+            }
+
             var sourceJackal = (Jackal)ExtremeRoleManager.GameRole[callerId];
             var newSidekick = new Sidekick(
                 callerId,
