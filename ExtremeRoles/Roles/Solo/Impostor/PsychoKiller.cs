@@ -57,7 +57,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             return string.Format(
                 base.GetFullDescription(),
-                this.combCount);
+                this.combCount - 1);
         }
 
 
