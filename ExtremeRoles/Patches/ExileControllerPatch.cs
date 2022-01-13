@@ -143,6 +143,8 @@ namespace ExtremeRoles.Patches
                 resetRole.ResetOnMeetingEnd();
             }
 
+            ExtremeRolesPlugin.Info.HideBlackBG();
+
             if (exiled == null) { return; };
 
             ExtremeRoleManager.GameRole[exiled.PlayerId].ExiledAction(exiled);

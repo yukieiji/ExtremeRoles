@@ -23,7 +23,7 @@ namespace ExtremeRoles.Module
 
         public void ResetOverlays()
         {
-            hideBlackBG();
+            HideBlackBG();
             HideInfoOverlay();
             
             UnityEngine.Object.Destroy(meetingUnderlay);
@@ -55,6 +55,13 @@ namespace ExtremeRoles.Module
             showBlackBG();
             HideInfoOverlay();
         }
+
+        public void HideBlackBG()
+        {
+            if (meetingUnderlay == null) { return; }
+            meetingUnderlay.enabled = false;
+        }
+
         public void HideInfoOverlay()
         {
             if (!overlayShown) { return; }
@@ -148,12 +155,6 @@ namespace ExtremeRoles.Module
 
         }
 
-        private void hideBlackBG()
-        {
-            if (meetingUnderlay == null) { return; }
-            meetingUnderlay.enabled = false;
-        }
-
         private bool initializeOverlays()
         {
             HudManager hudManager = DestroyableSingleton<HudManager>.Instance;
@@ -237,7 +238,7 @@ namespace ExtremeRoles.Module
 
             meetingUnderlay.sprite = colorBackGround;
             meetingUnderlay.enabled = true;
-            meetingUnderlay.transform.localScale = new Vector3(25f, 25f, 1f);
+            meetingUnderlay.transform.localScale = new Vector3(20f, 20f, 1f);
             var clearBlack = new Color32(0, 0, 0, 0);
 
             HudManager.Instance.StartCoroutine(Effects.Lerp(0.2f, new Action<float>(t =>
