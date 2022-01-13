@@ -551,14 +551,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public override string GetFullDescription()
         {
-            string baseDesc = base.GetFullDescription();
-
-            baseDesc = $"{baseDesc}\n{Translation.GetString("curSidekick")}:";
-            string playerName = Player.GetPlayerControlById(
-                this.jackalPlayerId).Data.PlayerName;
-            baseDesc += $"{playerName}";
-
-            return baseDesc;
+            return string.Format(
+                base.GetFullDescription(),
+                Player.GetPlayerControlById(
+                    this.jackalPlayerId).Data.PlayerName);
         }
 
         public static void BecomeToJackal(byte callerId, byte targetId)

@@ -97,16 +97,12 @@ namespace ExtremeRoles.Roles.Combination
                 baseDesc = base.GetFullDescription();
             }
 
-            var roleName = ExtremeRoleManager.GameRole[
-                this.supportTarget].GetColoredRoleName();
-            var playerName = Player.GetPlayerControlById(
-                this.supportTarget).Data.PlayerName;
-
-            baseDesc = $"{baseDesc}\n{Translation.GetString("curSupportTarget")}:";
-            baseDesc = $"{baseDesc}\n    {Translation.GetString("playerName")}:{playerName}";
-            baseDesc = $"{baseDesc}\n    {Translation.GetString("roleName")}:{roleName}";
-
-            return baseDesc;
+            return string.Format(
+                baseDesc,
+                ExtremeRoleManager.GameRole[
+                    this.supportTarget].GetColoredRoleName(),
+                Player.GetPlayerControlById(
+                    this.supportTarget).Data.PlayerName);
         }
         public override string GetRolePlayerNameTag(
             SingleRoleBase targetRole, byte targetPlayerId)
