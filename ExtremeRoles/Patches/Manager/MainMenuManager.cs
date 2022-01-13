@@ -31,20 +31,20 @@ namespace ExtremeRoles.Patches.Manager
                 "Title_Text").gameObject.GetComponent<TextMeshPro>();
             tmp.alignment = TextAlignmentOptions.Center;
             tmp.transform.localPosition += Vector3.left * 0.2f;
-            ExtremeRolesPlugin.TextPrefab = Object.Instantiate(tmp);
-            Object.Destroy(ExtremeRolesPlugin.TextPrefab.GetComponent<
+            Module.Prefab.Text = Object.Instantiate(tmp);
+            Object.Destroy(Module.Prefab.Text.GetComponent<
                 TextTranslatorTMP>());
-            ExtremeRolesPlugin.TextPrefab.gameObject.SetActive(false);
-            Object.DontDestroyOnLoad(ExtremeRolesPlugin.TextPrefab);
+            Module.Prefab.Text.gameObject.SetActive(false);
+            Object.DontDestroyOnLoad(Module.Prefab.Text);
 
-            if (Option.OptionsMenuBehaviourStartPatch.PropPrefab == null)
+            if (Module.Prefab.Prop == null)
             {
                 TwitchManager man = DestroyableSingleton<TwitchManager>.Instance;
-                Option.OptionsMenuBehaviourStartPatch.PropPrefab = Object.Instantiate(man.TwitchPopup);
+                Module.Prefab.Prop = Object.Instantiate(man.TwitchPopup);
                 Object.DontDestroyOnLoad(
-                    Option.OptionsMenuBehaviourStartPatch.PropPrefab);
-                Option.OptionsMenuBehaviourStartPatch.PropPrefab.name = "propForInEx";
-                Option.OptionsMenuBehaviourStartPatch.PropPrefab.gameObject.SetActive(false);
+                    Module.Prefab.Prop);
+                Module.Prefab.Prop.name = "propForInEx";
+                Module.Prefab.Prop.gameObject.SetActive(false);
             }
 
         }

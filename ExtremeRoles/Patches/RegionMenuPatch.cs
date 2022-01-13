@@ -54,7 +54,7 @@ namespace ExtremeRoles.Patches
                 ipField = UnityEngine.Object.Instantiate(
                     template.GameIdText, __instance.transform);
                 ipText = UnityEngine.Object.Instantiate(
-                    ExtremeRolesPlugin.TextPrefab);
+                    Module.Prefab.Text);
 
                 ipField.gameObject.name = "ipTextBox";
                 ipText.gameObject.name = "ipText";
@@ -97,7 +97,7 @@ namespace ExtremeRoles.Patches
                 portField = UnityEngine.Object.Instantiate(
                     template.GameIdText, __instance.transform);
                 portText = UnityEngine.Object.Instantiate(
-                    ExtremeRolesPlugin.TextPrefab);
+                    Module.Prefab.Text);
 
                 portField.gameObject.name = "portTextBox";
                 portText.gameObject.name = "portText";

@@ -25,8 +25,6 @@ namespace ExtremeRoles
         internal static BepInEx.Logging.ManualLogSource Logger;
         public static ConfigEntry<bool> DebugMode { get; private set; }
 
-        public static TextMeshPro TextPrefab;
-
         public override void Load()
         {
 

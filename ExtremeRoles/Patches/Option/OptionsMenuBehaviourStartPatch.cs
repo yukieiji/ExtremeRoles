@@ -22,8 +22,6 @@ namespace ExtremeRoles.Patches.Option
     public static class OptionsMenuBehaviourStartPatch
     {
 
-        public static GenericPopup PropPrefab;
-
         private static SelectionBehaviour[] modOption = {
             new SelectionBehaviour(
                 "streamerModeButton",
@@ -62,10 +60,10 @@ namespace ExtremeRoles.Patches.Option
         {
             if (!__instance.CensorChatButton) { return; }
 
-            if (!moreOptionText && ExtremeRolesPlugin.TextPrefab != null)
+            if (!moreOptionText && Module.Prefab.Text != null)
             {
                 moreOptionText = Object.Instantiate(
-                    ExtremeRolesPlugin.TextPrefab);
+                    Module.Prefab.Text);
                 Object.DontDestroyOnLoad(moreOptionText);
                 moreOptionText.gameObject.SetActive(false);
             }
@@ -271,11 +269,11 @@ namespace ExtremeRoles.Patches.Option
             passiveExportButton.gameObject.SetActive(true);
 
             CsvImport.InfoPopup = Object.Instantiate(
-                PropPrefab, passiveImportButton.transform);
+                Module.Prefab.Prop, passiveImportButton.transform);
             CsvExport.InfoPopup = Object.Instantiate(
-                PropPrefab, passiveExportButton.transform);
+                Module.Prefab.Prop, passiveExportButton.transform);
 
-            var pos = PropPrefab.transform.position;
+            var pos = Module.Prefab.Prop.transform.position;
             pos.z = -2048f;
             CsvImport.InfoPopup.transform.position = pos;
             CsvExport.InfoPopup.transform.position = pos;
