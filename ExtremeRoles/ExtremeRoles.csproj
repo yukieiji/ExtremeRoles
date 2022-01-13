@@ -4,8 +4,8 @@
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
 
-        <VersionPrefix>1.7.0</VersionPrefix>
-        <VersionSuffix>Test-v19</VersionSuffix> 
+        <VersionPrefix>1.7.1</VersionPrefix>
+        <VersionSuffix>Test-v20</VersionSuffix> 
         <Description>Extreme Roles for Advanced user</Description>
         <Authors>yukieiji</Authors>
     </PropertyGroup>
