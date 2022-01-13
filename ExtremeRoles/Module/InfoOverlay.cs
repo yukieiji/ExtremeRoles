@@ -59,7 +59,7 @@ namespace ExtremeRoles.Module
         {
             if (!overlayShown) { return; }
 
-            if (MeetingHud.Instance == null) DestroyableSingleton<HudManager>.Instance.SetHudActive(true);
+            if (MeetingHud.Instance == null) { DestroyableSingleton<HudManager>.Instance.SetHudActive(true); }
 
             overlayShown = false;
             var underlayTransparent = new Color(0.1f, 0.1f, 0.1f, 0.0f);
@@ -190,7 +190,7 @@ namespace ExtremeRoles.Module
                 ruleInfoText.enableWordWrapping = false;
                 ruleInfoText.alignment = TMPro.TextAlignmentOptions.TopLeft;
                 ruleInfoText.transform.position = Vector3.zero;
-                ruleInfoText.transform.localPosition = new Vector3(-2.5f, 1.15f, -910f);
+                ruleInfoText.transform.localPosition = new Vector3(-3.6f, 1.6f, -910f);
                 ruleInfoText.transform.localScale = Vector3.one;
                 ruleInfoText.color = Palette.White;
                 ruleInfoText.enabled = false;
@@ -289,7 +289,7 @@ namespace ExtremeRoles.Module
             anotherRoleInfoText.transform.parent = parent;
 
             infoUnderlay.color = new Color(0.1f, 0.1f, 0.1f, 0.88f);
-            infoUnderlay.transform.localScale = new Vector3(7.5f, 5f, 1f);
+            infoUnderlay.transform.localScale = new Vector3(9.5f, 5.7f, 1f);
             infoUnderlay.enabled = true;
 
             ruleInfoText.text = $"<size=200%>{Translation.GetString("gameOption")}</size>\n{getCommonOptionString()}";
@@ -302,7 +302,15 @@ namespace ExtremeRoles.Module
 
             string roleOptionString = "";
 
-            if (!role.IsVanillaRole())
+            var multiAssignRole = role as Roles.API.MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                roleOptionString =
+                    CustomOption.AllOptionToString(
+                        allOption[multiAssignRole.GetManagerOptionId(
+                            Roles.API.RoleCommonOption.SpawnRate)]);
+            }
+            else if (!role.IsVanillaRole())
             {
                 roleOptionString =
                     CustomOption.AllOptionToString(
@@ -318,7 +326,6 @@ namespace ExtremeRoles.Module
                 $"・{Translation.GetString(role.GetColoredRoleName())}{Translation.GetString("roleOption")}\n" +
                 (roleOptionString != "" ? $"{roleOptionString}" : "");
 
-            var multiAssignRole = role as Roles.API.MultiAssignRoleBase;
             if (multiAssignRole != null)
             {
                 if (multiAssignRole.AnotherRole != null)
