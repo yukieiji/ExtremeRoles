@@ -32,6 +32,7 @@ namespace ExtremeRoles.Roles
         Evolver,
         Carrier,
         PsychoKiller,
+        BountyHunter,
 
         Alice,
         Jackal,
@@ -74,6 +75,7 @@ namespace ExtremeRoles.Roles
                 new Evolver(),
                 new Carrier(),
                 new PsychoKiller(),
+                new BountyHunter(),
 
                 new Alice(),
                 new Jackal(),

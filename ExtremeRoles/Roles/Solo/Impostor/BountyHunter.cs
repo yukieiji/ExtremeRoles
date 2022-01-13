@@ -27,7 +27,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private float targetKillCool;
         private float noneTargetKillCool;
 
-        private TextMeshPro targetTimerText;
+        private TextMeshPro targetTimerText = null;
+        private Arrow targetArrow = null;
 
         private Dictionary<byte, PoolablePlayer> PlayerIcon = new Dictionary<byte, PoolablePlayer>();
 
@@ -41,9 +42,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
         public BountyHunter() : base(
-            ExtremeRoleId.PsychoKiller,
+            ExtremeRoleId.BountyHunter,
             ExtremeRoleType.Impostor,
-            ExtremeRoleId.PsychoKiller.ToString(),
+            ExtremeRoleId.BountyHunter.ToString(),
             Palette.ImpostorRed,
             true, false, true, true)
         { }
@@ -66,6 +67,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             if (targetPlayer.PlayerId == this.targetId)
             {
                 this.KillCoolTime = this.targetKillCool;
+                this.setNewTarget();
             }
             else
             {
@@ -129,6 +131,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.KillCoolTime = PlayerControl.GameOptions.KillCooldown;
             }
 
+            this.defaultKillCool = this.KillCoolTime;
+
             var allOption = OptionHolder.AllOption;
 
             this.changeTargetTime = allOption[
@@ -144,7 +148,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.targetArrowUpdateTime = allOption[
                     GetRoleOptionId((int)BountyHunterOption.ArrowUpdateCycle)].GetValue();
             }
-           
+            this.targetArrowUpdateTimer = 0;
+            this.targetTimer = 0;
+            this.targetId = byte.MaxValue;
         }
 
         public void IntroBeginSetUp()
@@ -155,12 +161,24 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void IntroEndSetUp()
         {
             this.PlayerIcon = Player.CreatePlayerIcon();
-            this.setNewTarget();
         }
 
         public void Update(PlayerControl rolePlayer)
         {
             this.targetTimer -= Time.deltaTime;
+
+            if (this.targetTimerText == null)
+            {
+                this.targetTimerText = UnityEngine.Object.Instantiate(
+                    HudManager.Instance.KillButton.cooldownTimerText);
+                this.targetTimerText.alignment = TMPro.TextAlignmentOptions.Center;
+            }
+
+            if (this.PlayerIcon.Count == 0) { return; }
+
+            this.targetTimerText.text = Mathf.CeilToInt(
+                Mathf.Clamp(this.targetTimer, 0, this.changeTargetTime)).ToString();
+
             if (this.targetTimer <= 0)
             {
                 this.setNewTarget();
@@ -172,13 +190,17 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 {
                     this.updateArrow();
                 }
+                this.targetArrow.Update();
             }
         }
 
         private void setNewTarget()
         {
             this.targetTimer = this.changeTargetTime;
-            this.PlayerIcon[this.targetId].gameObject.SetActive(false);
+            if (this.targetId != byte.MaxValue)
+            {
+                this.PlayerIcon[this.targetId].gameObject.SetActive(false);
+            }
 
             List<PlayerControl> allPlayer = PlayerControl.AllPlayerControls.ToArray().ToList();
 
@@ -187,27 +209,43 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             Vector3 bottomLeft = HudManager.Instance.UseButton.transform.localPosition;
             bottomLeft.x *= -1;
-            bottomLeft += new Vector3(-0.25f, -0.25f, 0);
+            bottomLeft += new Vector3(-0.375f, -0.25f, 0);
 
             foreach (var player in allPlayer)
             {
                 if (player.Data.IsDead || player.Data.Disconnected) { continue; }
-
+                
                 SingleRoleBase role = ExtremeRoleManager.GameRole[player.PlayerId];
+                
                 if (role.IsImposter() || role.FakeImposter) { continue; }
 
                 this.targetId = player.PlayerId;
                 this.PlayerIcon[this.targetId].gameObject.SetActive(true);
-                this.PlayerIcon[this.targetId].transform.localScale = Vector3.one * 0.25f;
-                this.PlayerIcon[this.targetId].transform.localPosition = bottomLeft + Vector3.right;
-                
+                this.PlayerIcon[this.targetId].transform.localScale = Vector3.one * 0.4f;
+                this.PlayerIcon[this.targetId].transform.localPosition = bottomLeft;
+
+                this.targetTimerText.transform.parent = this.PlayerIcon[this.targetId].transform;
+                this.targetTimerText.transform.localPosition = new Vector3(0.0f, 0.0f, -100.0f);
+                this.targetTimerText.transform.localScale = new Vector3(1.5f, 1.5f, 1.0f);
+                this.targetTimerText.gameObject.SetActive(true);
+
                 break;
             }
 
         }
         private void updateArrow()
         {
+
+            if (this.targetArrow == null)
+            {
+                this.targetArrow = new Arrow(
+                    Palette.ImpostorRed);
+                this.targetArrow.Body.transform.localScale = new Vector3(0.5f, 0.5f, 0f);
+            }
+
             this.targetArrowUpdateTimer = this.targetArrowUpdateTime;
+            this.targetArrow.UpdateTarget(
+                Player.GetPlayerControlById(this.targetId).transform.position);
         }
     }
 }

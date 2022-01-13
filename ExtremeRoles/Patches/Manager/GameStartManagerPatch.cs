@@ -39,6 +39,14 @@ namespace ExtremeRoles.Patches.Manager
         {
             RPCOperator.Initialize();
         }
+        public static void Postfix(GameStartManager __instance)
+        {   
+            if (Module.Prefab.Arrow == null)
+            {
+                Module.Prefab.Arrow = __instance.StartButton.sprite;
+            }
+            
+        }
     }
 
     [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.Update))]
