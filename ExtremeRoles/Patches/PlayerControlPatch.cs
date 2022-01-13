@@ -424,18 +424,20 @@ namespace ExtremeRoles.Patches
             PlayerControl player,
             SingleRoleBase role, bool enable)
         {
+
+            bool isImposter = role.IsImposter();
+
             if (role.CanKill)
             {
                 if (enable)
                 {
-                    bool isNotImposter = !role.IsImposter();
 
-                    if (isNotImposter)
+                    if (!isImposter)
                     {
                         player.SetKillTimer(player.killTimer - Time.fixedDeltaTime);
                     }
 
-                    PlayerControl target = player.FindClosestTarget(isNotImposter);
+                    PlayerControl target = player.FindClosestTarget(!isImposter);
 
                     // Logging.Debug($"TargetAlive?:{target}");
 
@@ -448,6 +450,10 @@ namespace ExtremeRoles.Patches
                 {
                     HudManager.Instance.KillButton.SetDisabled();
                 }
+            }
+            else if (isImposter)
+            {
+                HudManager.Instance.KillButton.SetDisabled();
             }
         }
 
