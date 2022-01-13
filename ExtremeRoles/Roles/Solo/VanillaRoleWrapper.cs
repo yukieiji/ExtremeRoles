@@ -42,6 +42,12 @@ namespace ExtremeRoles.Roles.Solo
             };
         }
 
+        public override string GetFullDescription()
+        {
+            return Helper.Translation.GetString(
+                string.Format("{0}{1}", this.VanilaRoleId, "FullDescription"));
+        }
+
         public override string GetImportantText(bool isContainFakeTask = true)
         {
             if(this.IsImposter())
