@@ -53,6 +53,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
+        public override string GetFullDescription()
+        {
+            return string.Format(
+                base.GetFullDescription(),
+                this.combCount);
+        }
+
+
         public override bool TryRolePlayerKillTo(
             PlayerControl rolePlayer, PlayerControl targetPlayer)
         {

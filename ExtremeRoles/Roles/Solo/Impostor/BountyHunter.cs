@@ -61,6 +61,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.PlayerIcon[this.targetId].gameObject.SetActive(false);
         }
 
+        public override string GetFullDescription()
+        {
+            return string.Format(
+                base.GetFullDescription(),
+                this.targetKillCool,
+                this.noneTargetKillCool,
+                Player.GetPlayerControlById(this.targetId).Data.PlayerName);
+        }
+
         public override bool TryRolePlayerKillTo(
             PlayerControl rolePlayer, PlayerControl targetPlayer)
         {
@@ -118,7 +127,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.RoleName,
                     BountyHunterOption.ArrowUpdateCycle.ToString()),
                 60f, 30.0f, 120f, 0.5f,
-                arrowOption);
+                arrowOption, format: "unitSeconds");
 
         }
 
