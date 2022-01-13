@@ -419,6 +419,8 @@ namespace ExtremeRoles.Module
                 foreach (CustomOptionBase op in option.Children)
                 {
                     string str = OptionToString(op);
+                    if (option.IsHidden) { continue; }
+
                     if (str != "")
                     {
                         options.Add(str);
