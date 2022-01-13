@@ -130,11 +130,17 @@ namespace ExtremeRoles.Patches
                     Helper.Player.GetPlayerControlById(playerId).Data);
             }
 
-            var role = ExtremeRoleManager.GetLocalPlayerRole() as IRoleAbility;
+            var role = ExtremeRoleManager.GetLocalPlayerRole();
+            var abilityRole = role as IRoleAbility;
 
-            if (role != null)
+            if (abilityRole != null)
             {
-                role.ResetOnMeetingEnd();
+                abilityRole.ResetOnMeetingEnd();
+            }
+            var resetRole = role as IRoleResetMeeting;
+            if (resetRole != null)
+            {
+                resetRole.ResetOnMeetingEnd();
             }
 
             if (exiled == null) { return; };
