@@ -1,4 +1,6 @@
-﻿using ExtremeRoles.Helper;
+﻿using UnityEngine;
+
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -58,6 +60,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 this.KillCoolTime = this.KillCoolTime * (
                     (100f - (this.reduceRate * this.combCount)) / 100f);
+                this.KillCoolTime = Mathf.Clamp(
+                    this.KillCoolTime, 0.1f, this.defaultKillCoolTime);
                 ++this.combCount;
             }
             return true;

@@ -87,7 +87,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             
             this.CanKill = true;
             this.KillCoolTime = Mathf.Clamp(
-                this.KillCoolTime, 0f, this.defaultKillCoolTime);
+                this.KillCoolTime, 0.1f, this.defaultKillCoolTime);
 
             this.Button.ButtonText = this.defaultButtonText;
 
