@@ -157,8 +157,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 Design.ConcatString(
                     this.RoleName,
                     EvolverOption.KillCoolReduceRate.ToString()),
-                5, 1, 50, 1,
-                parentOps, format: "unitPercentage");
+                10, 1, 50, 1, parentOps,
+                format: "unitPercentage");
 
             CustomOption.Create(
                 GetRoleOptionId((int)EvolverOption.KillCoolResuceRateMulti),

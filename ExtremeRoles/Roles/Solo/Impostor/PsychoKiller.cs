@@ -75,8 +75,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 Design.ConcatString(
                     this.RoleName,
                     PsychoKillerOption.KillCoolReduceRate.ToString()),
-                5, 1, 25, 1,
-                parentOps, format: "unitPercentage");
+                5, 1, 10, 1, parentOps,
+                format: "unitPercentage");
 
             CustomOption.Create(
                 GetRoleOptionId((int)PsychoKillerOption.CombMax),
