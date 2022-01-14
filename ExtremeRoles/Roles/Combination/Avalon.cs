@@ -96,10 +96,12 @@ namespace ExtremeRoles.Roles.Combination
             GameData.PlayerInfo exileAssasin)
         {
             rpcAssassinMeetingTriggerOn(exileAssasin.PlayerId);
-
-            MeetingRoomManager.Instance.AssignSelf(exileAssasin.Object, null);
-            DestroyableSingleton<HudManager>.Instance.OpenMeetingRoom(exileAssasin.Object);
-            exileAssasin.Object.RpcStartMeeting(null);
+            if (PlayerControl.LocalPlayer.AmOwner)
+            {
+                MeetingRoomManager.Instance.AssignSelf(exileAssasin.Object, null);
+                DestroyableSingleton<HudManager>.Instance.OpenMeetingRoom(exileAssasin.Object);
+                exileAssasin.Object.RpcStartMeeting(null);
+            }
         }
 
         private void rpcAssassinMeetingTriggerOn(byte playerId)
