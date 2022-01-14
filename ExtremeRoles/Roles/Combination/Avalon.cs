@@ -12,7 +12,6 @@ namespace ExtremeRoles.Roles.Combination
     public class Avalon : ConstCombinationRoleManagerBase
     {
         public const string Name = "AvalonsRoles";
-        public Color SettingColor = Palette.White;
         public Avalon() : base(
             Name, new Color(255f, 255f, 255f), 2,
             OptionHolder.MaxImposterNum)
