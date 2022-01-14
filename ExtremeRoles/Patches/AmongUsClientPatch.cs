@@ -67,20 +67,23 @@ namespace ExtremeRoles.Patches
             {
                 case (GameOverReason)RoleGameOverReason.AliceKilledByImposter:
                 case (GameOverReason)RoleGameOverReason.AliceKillAllOther:
-                    addSpecificRolePlayerToWinner(
+                    replaceWinnerToSpecificNeutralRolePlayer(
                         noWinner,
                         new ExtremeRoleId[] { ExtremeRoleId.Alice });
                     break;
                 case (GameOverReason)RoleGameOverReason.JackalKillAllOther:
-                    addSpecificRolePlayerToWinner(
+                    replaceWinnerToSpecificNeutralRolePlayer(
                         noWinner,
                         new ExtremeRoleId[] { ExtremeRoleId.Jackal, ExtremeRoleId.Sidekick });
                     break;
                 case (GameOverReason)RoleGameOverReason.LoverKillAllOther:
-                case (GameOverReason)RoleGameOverReason.ShipFallInLove:
-                    addSpecificRolePlayerToWinner(
+                    replaceWinnerToSpecificNeutralRolePlayer(
                         noWinner,
                         new ExtremeRoleId[] { ExtremeRoleId.Lover });
+                    break;
+                case (GameOverReason)RoleGameOverReason.ShipFallInLove:
+                    replaceWinnerToSpecificRolePlayer(
+                        ExtremeRoleId.Lover);
                     break;
                 default:
                     break;
@@ -96,8 +99,46 @@ namespace ExtremeRoles.Patches
 
             return false;
         }
-        
-        private static void addSpecificRolePlayerToWinner(
+        private static void replaceWinnerToSpecificRolePlayer(
+            ExtremeRoleId roleId)
+        {
+            resetWinner();
+
+            var gameData = ExtremeRolesPlugin.GameDataStore;
+
+            foreach (var player in GameData.Instance.AllPlayers)
+            {
+
+                var role = ExtremeRoleManager.GameRole[player.PlayerId];
+
+                var multiAssignRole = role as Roles.API.MultiAssignRoleBase;
+
+                if (role.Id == roleId)
+                {
+                    if ((gameData.WinGameControlId != int.MaxValue) &&
+                        (gameData.WinGameControlId == role.GameControlId))
+                    {
+                        addWinner(player);
+                    }
+                }
+                else if (multiAssignRole != null)
+                {
+                    if (multiAssignRole.AnotherRole != null)
+                    {
+                        if (role.Id == roleId)
+                        {
+                            if ((gameData.WinGameControlId != int.MaxValue) &&
+                                (gameData.WinGameControlId == multiAssignRole.AnotherRole.GameControlId))
+                            {
+                                addWinner(player);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void replaceWinnerToSpecificNeutralRolePlayer(
             List<PlayerControl> noWinner, ExtremeRoleId[] roles)
         {
             resetWinner();
@@ -113,7 +154,7 @@ namespace ExtremeRoles.Patches
 
                 if (roles.Contains(role.Id))
                 {
-                    if (OptionHolder.Ship.IsSameNeutralSameWin && role.IsNeutral())
+                    if (OptionHolder.Ship.IsSameNeutralSameWin)
                     {
                         addWinner(player);
                     }
@@ -130,7 +171,7 @@ namespace ExtremeRoles.Patches
                     {
                         if (roles.Contains(multiAssignRole.AnotherRole.Id))
                         {
-                            if (OptionHolder.Ship.IsSameNeutralSameWin && role.IsNeutral())
+                            if (OptionHolder.Ship.IsSameNeutralSameWin)
                             {
                                 addWinner(player);
                             }

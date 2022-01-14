@@ -274,6 +274,7 @@ namespace ExtremeRoles.Patches.Manager
                     manager.BackgroundBar.material.SetColor("_Color", ColorPalette.JackalBlue);
                     break;
                 case (GameOverReason)RoleGameOverReason.LoverKillAllOther:
+                case (GameOverReason)RoleGameOverReason.ShipFallInLove:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Lover.ToString());
                     textRenderer.color = ColorPalette.LoverPink;
