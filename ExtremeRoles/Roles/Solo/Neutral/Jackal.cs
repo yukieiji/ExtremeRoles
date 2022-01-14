@@ -555,8 +555,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public static void BecomeToJackal(byte callerId, byte targetId)
         {
-            var curJackal = (Jackal)ExtremeRoleManager.GameRole[callerId];
-            var newJackal = (Jackal)curJackal.Clone();
+
+
+            Jackal curJackal = (Jackal)ExtremeRoleManager.GameRole[callerId];
+            Jackal newJackal = (Jackal)curJackal.Clone();
 
             bool multiAssignTrigger = false;
             var curRole = ExtremeRoleManager.GameRole[targetId];
@@ -566,21 +568,27 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 curSideKick = (Sidekick)((MultiAssignRoleBase)curRole).AnotherRole;
                 multiAssignTrigger = true;
             }
-            
+
+
             newJackal.Initialize();
+            newJackal.CreateAbility();
+
             if (!curSideKick.sidekickJackalCanMakeSidekick || curSideKick.recursion >= newJackal.SidekickRecursionLimit)
             {
                 ((AbilityCountButton)newJackal.Button).UpdateAbilityCount(0);
             }
 
+
             newJackal.CurRecursion = curSideKick.recursion + 1;
             newJackal.SidekickPlayerId = new List<byte> (curJackal.SidekickPlayerId);
             newJackal.GameControlId = curSideKick.GameControlId;
+
 
             if (newJackal.SidekickPlayerId.Contains(targetId))
             {
                 newJackal.SidekickPlayerId.Remove(targetId);
             }
+
 
             if (multiAssignTrigger)
             {
@@ -593,6 +601,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             {
                 ExtremeRoleManager.GameRole[targetId] = newJackal;
             }
+
         }
 
         protected override void CreateSpecificOption(
