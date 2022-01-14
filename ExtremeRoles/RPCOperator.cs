@@ -24,6 +24,7 @@ namespace ExtremeRoles
 
 
             AssasinSpecialMeetingOn,
+            AssasinVoteFor,
             AliceAbility,
             CarrierCarryBody,
             CarrierSetBody,
@@ -157,6 +158,11 @@ namespace ExtremeRoles
         {
             Roles.Combination.Assassin.AssassinMeetingTriggerOn(
                 assasinPlayerId);
+        }
+        public static void AssasinVoteFor(byte targetId)
+        {
+            Roles.Combination.Assassin.VoteFor(
+                targetId);
         }
 
         public static void AliceAbility(byte callerId)

@@ -96,7 +96,7 @@ namespace ExtremeRoles.Roles.Combination
             GameData.PlayerInfo exileAssasin)
         {
             rpcAssassinMeetingTriggerOn(exileAssasin.PlayerId);
-            if (PlayerControl.LocalPlayer.AmOwner)
+            if (AmongUsClient.Instance.AmHost)
             {
                 MeetingRoomManager.Instance.AssignSelf(exileAssasin.Object, null);
                 DestroyableSingleton<HudManager>.Instance.OpenMeetingRoom(exileAssasin.Object);
@@ -119,6 +119,14 @@ namespace ExtremeRoles.Roles.Combination
         {
             ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger = true;
             ExtremeRolesPlugin.GameDataStore.ExiledAssassinId = playerId;
+        }
+
+        public static void VoteFor(byte targetId)
+        {
+            ExtremeRolesPlugin.GameDataStore.AssassinateMarin = 
+                ExtremeRoleManager.GameRole[
+                    targetId].Id == ExtremeRoleId.Marlin;
+            ExtremeRolesPlugin.GameDataStore.IsMarinPlayerId = targetId;
         }
 
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using HarmonyLib;
 using UnityEngine;
@@ -122,9 +123,11 @@ namespace ExtremeRoles.Patches
 
                 Helper.Logging.Debug($"IsSuccess?:{ExtremeRoleManager.GameRole[voteFor].Id == ExtremeRoleId.Marlin}");
 
-                gameData.AssassinateMarin = ExtremeRoleManager.GameRole[
-                    voteFor].Id == ExtremeRoleId.Marlin;
-                gameData.IsMarinPlayerId = voteFor;
+                RPCOperator.Call(
+                    PlayerControl.LocalPlayer.NetId,
+                    RPCOperator.Command.AssasinVoteFor,
+                    new List<byte> { voteFor });
+                RPCOperator.AssasinVoteFor(voteFor);
 
                 for (int i = 0; i < __instance.playerStates.Length; i++)
                 {
