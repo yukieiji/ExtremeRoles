@@ -30,6 +30,11 @@ namespace ExtremeRoles.Patches
 						continue;
 					}
 
+					if (!roles[playerInfo.PlayerId].IsCrewmate())
+                    {
+						continue;
+                    }
+
 					for (int j = 0; j < playerInfo.Tasks.Count; ++j)
 					{
 						++__instance.TotalTasks;
