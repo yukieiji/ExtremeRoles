@@ -106,6 +106,19 @@ namespace ExtremeRoles.Patches
                     new Il2CppStructArray<MeetingHud.VoterState>(
                         __instance.playerStates.Length);
 
+                if (voteFor == 254 || voteFor == byte.MaxValue)
+                {
+                    bool targetImposter;
+                    do
+                    {
+                        int randomPlayerIndex = UnityEngine.Random.RandomRange(
+                            0, __instance.playerStates.Length);
+                        voteFor = __instance.playerStates[randomPlayerIndex].TargetPlayerId;
+
+                        targetImposter = ExtremeRoleManager.GameRole[voteFor].IsImposter();
+
+                    } while (targetImposter);
+                }
 
                 Helper.Logging.Debug($"IsSuccess?:{ExtremeRoleManager.GameRole[voteFor].Id == ExtremeRoleId.Marlin}");
 
@@ -152,7 +165,6 @@ namespace ExtremeRoles.Patches
             }
 
             return Tuple.Create(isVoteEnd, voteFor);
-
         }
 
     }
@@ -226,24 +238,6 @@ namespace ExtremeRoles.Patches
                     gameData.DeadedAssassin.Add(id);
                 }
             }
-            if (gameData.AssassinMeetingTrigger)
-            {
-
-                bool targetImposter;
-                byte targetPlayerId;
-                do
-                {
-                    int randomPlayerIndex = UnityEngine.Random.RandomRange(
-                        0, __instance.playerStates.Length);
-                    targetPlayerId = __instance.playerStates[randomPlayerIndex].TargetPlayerId;
-
-                    targetImposter = ExtremeRoleManager.GameRole[targetPlayerId].Team == Roles.API.ExtremeRoleType.Impostor;
-
-                } while (targetImposter);
-
-                __instance.SkipVoteButton.SetTargetPlayerId(targetPlayerId);
-                __instance.SkipVoteButton.Parent = __instance;
-            }
         }
     }
 
@@ -276,7 +270,6 @@ namespace ExtremeRoles.Patches
             if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
             __instance.TitleText.text = Helper.Translation.GetString(
                 "whoIsMarine");
-            __instance.SkipVoteButton.SetDisabled();
         }
     }
 
@@ -328,6 +321,7 @@ namespace ExtremeRoles.Patches
             {
                 __instance.TitleText.text = Helper.Translation.GetString(
                     "whoIsMarine");
+                __instance.SkipVoteButton.gameObject.SetActive(false);
                 return;
             }
 
