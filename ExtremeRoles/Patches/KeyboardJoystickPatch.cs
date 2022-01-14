@@ -136,6 +136,8 @@ namespace ExtremeRoles.Patches
     {
         public static void Postfix(KeyboardJoystick __instance)
         {
+            if (AmongUsClient.Instance == null) { return; }
+
             // オプションページの変更
             if (Input.GetKeyDown(KeyCode.Tab) &&
                 AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started)
