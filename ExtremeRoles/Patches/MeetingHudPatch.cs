@@ -228,26 +228,6 @@ namespace ExtremeRoles.Patches
         }
     }
 
-    [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.ServerStart))]
-    class MeetingHudServerStartPatch
-    {
-        static void Postfix(MeetingHud __instance)
-        {
-            DeadBody[] deadArray = UnityEngine.Object.FindObjectsOfType<DeadBody>();
-
-            var gameData = ExtremeRolesPlugin.GameDataStore;
-
-            foreach (DeadBody deadBody in deadArray)
-            {
-                byte id = deadBody.ParentId;
-                if (ExtremeRoleManager.GameRole[id].Id == ExtremeRoleId.Assassin)
-                {
-                    gameData.DeadedAssassin.Add(id);
-                }
-            }
-        }
-    }
-
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.SetForegroundForDead))]
     class MeetingHudSetForegroundForDeadPatch
     {

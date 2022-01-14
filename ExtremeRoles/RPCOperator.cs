@@ -23,7 +23,7 @@ namespace ExtremeRoles
             ReplaceRole,
 
 
-            AssasinSpecialMeetingOn,
+            AssasinAddDead,
             AssasinVoteFor,
             AliceAbility,
             CarrierCarryBody,
@@ -152,6 +152,11 @@ namespace ExtremeRoles
 
                 ExtremeRolesPlugin.GameDataStore.WinCheckDisable = false;
             }
+        }
+        public static void AssasinAddDead(byte playersId)
+        {
+            Roles.Combination.Assassin.AddDead(
+                playersId);
         }
         public static void AssasinVoteFor(byte targetId)
         {

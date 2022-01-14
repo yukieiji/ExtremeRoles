@@ -81,8 +81,11 @@ namespace ExtremeRoles.Roles.Combination
         {
             if (!this.IsDeadForceMeeting)
             {
-                ExtremeRolesPlugin.GameDataStore.DeadedAssassin.Add(
-                    rolePlayer.PlayerId);
+                RPCOperator.Call(
+                    rolePlayer.NetId,
+                    RPCOperator.Command.AssasinAddDead,
+                    new List<byte> { rolePlayer.PlayerId });
+                AddDead(rolePlayer.PlayerId);
                 return; 
             }
 
@@ -105,6 +108,12 @@ namespace ExtremeRoles.Roles.Combination
         {
             ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger = true;
             ExtremeRolesPlugin.GameDataStore.ExiledAssassinId = playerId;
+        }
+
+        public static void AddDead(byte playerId)
+        {
+            ExtremeRolesPlugin.GameDataStore.DeadedAssassin.Add(
+                playerId);
         }
 
         public static void VoteFor(byte targetId)
