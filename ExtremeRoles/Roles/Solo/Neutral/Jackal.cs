@@ -537,14 +537,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             SingleRoleBase targetRole,
             byte targetPlayerId)
         {
-            var jcakal = targetRole as Jackal;
-            if (jcakal != null)
+            
+            if (targetPlayerId == this.jackalPlayerId)
             {
-                if (jcakal.SidekickPlayerId.Contains(
-                    PlayerControl.LocalPlayer.PlayerId))
-                {
-                    return this.NameColor;
-                }
+                return ColorPalette.JackalBlue;
             }
             return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
         }
