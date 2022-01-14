@@ -451,8 +451,11 @@
     "NeetCanRepairSabotage": {
         "11": "\u30b5\u30dc\u30bf\u30fc\u30b8\u3092\u6cbb\u305b\u308b\u304b"
     },
+    "NeetHasTask": {
+        "11": "\u30bf\u30b9\u30af\u3092\u6301\u3064\u304b"
+    },
     "NeetIsNeutral": {
-        "11": "\u30cb\u30e5\u30fc\u30c8\u30e9\u30eb\u304b"
+        "11": "\u7b2c\u4e09\u9663\u55b6\u304b"
     },
     "NeetIntroDescription": {
         "11": "\u5168\u3066\u3092\u4ed6\u306e\u4eba\u306b\u4efb\u305b\u3066\u3001\u5b87\u5b99\u306e\u65c5\u3092\u697d\u3057\u3082\u3046"
