@@ -347,15 +347,14 @@ namespace ExtremeRoles.Patches
             }
             else if (IsLocalPlayerAssassinFirstMeeting)
             {
-                if (((Roles.Combination.Assassin)ExtremeRoleManager.GetLocalPlayerRole()
-                    ).CanSeeRoleBeforeFirstMeeting && OptionHolder.Client.GhostsSeeRole)
+
+                Roles.Combination.Assassin role = ExtremeRoleManager.GetLocalPlayerRole() as Roles.Combination.Assassin;
+                if (role != null)
                 {
-                    playerInfoText = $"{roleNames}";
-                }
-                else
-                {
-                    playerInfoText = "";
-                    meetingInfoText = "";
+                    if(role.CanSeeRoleBeforeFirstMeeting && OptionHolder.Client.GhostsSeeRole)
+                    {
+                        playerInfoText = $"{roleNames}";
+                    }
                 }
 
             }
