@@ -37,8 +37,6 @@ namespace ExtremeRoles.Module
         public byte ExiledAssassinId = byte.MaxValue;
         public byte IsMarinPlayerId = byte.MaxValue;
 
-        private bool isRoleSetUpEnd = false;
-
         public GameDataContainer()
         {
             this.Initialize();
@@ -53,7 +51,6 @@ namespace ExtremeRoles.Module
             MeetingsCount = 0;
             WinGameControlId = int.MaxValue;
 
-            isRoleSetUpEnd = false;
             AssassinMeetingTrigger = false;
             AssassinateMarin = false;
             WinCheckDisable = false;
@@ -141,14 +138,9 @@ namespace ExtremeRoles.Module
                 });
 
         }
-
-        public void RoleSetUpEnded()
-        {
-            this.isRoleSetUpEnd = true;
-        }
         public bool IsRoleSetUpEnd()
         {
-            return this.isRoleSetUpEnd;
+            return ExtremeRoleManager.GameRole.Count == PlayerControl.AllPlayerControls.Count;
         }
 
         public void SetPoolPlayerPrefab(IntroCutscene __instance)
