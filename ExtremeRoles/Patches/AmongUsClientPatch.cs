@@ -77,6 +77,7 @@ namespace ExtremeRoles.Patches
                         new ExtremeRoleId[] { ExtremeRoleId.Jackal, ExtremeRoleId.Sidekick });
                     break;
                 case (GameOverReason)RoleGameOverReason.LoverKillAllOther:
+                case (GameOverReason)RoleGameOverReason.ShipFallInLove:
                     addSpecificRolePlayerToWinner(
                         noWinner,
                         new ExtremeRoleId[] { ExtremeRoleId.Lover });
@@ -112,7 +113,7 @@ namespace ExtremeRoles.Patches
 
                 if (roles.Contains(role.Id))
                 {
-                    if (OptionHolder.Ship.IsSameNeutralSameWin)
+                    if (OptionHolder.Ship.IsSameNeutralSameWin && role.IsNeutral())
                     {
                         addWinner(player);
                     }
@@ -129,7 +130,7 @@ namespace ExtremeRoles.Patches
                     {
                         if (roles.Contains(multiAssignRole.AnotherRole.Id))
                         {
-                            if (OptionHolder.Ship.IsSameNeutralSameWin)
+                            if (OptionHolder.Ship.IsSameNeutralSameWin && role.IsNeutral())
                             {
                                 addWinner(player);
                             }

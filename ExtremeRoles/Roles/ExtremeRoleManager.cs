@@ -48,6 +48,7 @@ namespace ExtremeRoles.Roles
         JackalKillAllOther,
 
         LoverKillAllOther,
+        ShipFallInLove,
 
         UnKnown = 100,
     }
@@ -62,6 +63,11 @@ namespace ExtremeRoles.Roles
     public static class ExtremeRoleManager
     {
         public const int OptionOffsetPerRole = 50;
+
+        public static readonly List<ExtremeRoleId> SpecialWinCheckRole = new List<ExtremeRoleId>()
+        {
+            ExtremeRoleId.Lover,
+        };
 
         public static readonly List<
             SingleRoleBase> NormalRole = new List<SingleRoleBase>()
