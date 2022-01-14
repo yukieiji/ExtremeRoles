@@ -94,7 +94,7 @@ namespace ExtremeRoles.Roles.Combination
 
         public override string GetImportantText(bool isContainFakeTask = true)
         {
-            if (!this.CanKill)
+            if (!this.CanKill && !this.IsNeutral())
             {
                 return base.GetImportantText(isContainFakeTask);
             }
