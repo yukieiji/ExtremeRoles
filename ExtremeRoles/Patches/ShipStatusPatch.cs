@@ -182,7 +182,7 @@ namespace ExtremeRoles.Patches
 
             if (num >= (statistics.TotalAlive - num))
             {
-                ExtremeRolesPlugin.GameDataStore.WinGameControlId = id;
+                setWinGameContorlId(id);
 
                 GameOverReason endReason = (GameOverReason)RoleGameOverReason.UnKnown;
                 switch (team)
@@ -222,7 +222,7 @@ namespace ExtremeRoles.Patches
                 if (!role.IsNeutral()) { continue; }
                 if (role.IsWin)
                 {
-                    ExtremeRolesPlugin.GameDataStore.WinGameControlId = role.GameControlId;
+                    setWinGameContorlId(role.GameControlId);
 
                     GameOverReason endReason = (GameOverReason)RoleGameOverReason.UnKnown;
 
@@ -252,7 +252,7 @@ namespace ExtremeRoles.Patches
             {
                 if (checker.IsWin(statistics))
                 {
-                    ExtremeRolesPlugin.GameDataStore.WinGameControlId = id;
+                    setWinGameContorlId(id);
                     gameIsEnd(
                         ref __instance,
                         (GameOverReason)checker.Reason);
