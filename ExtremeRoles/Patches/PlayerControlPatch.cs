@@ -683,6 +683,7 @@ namespace ExtremeRoles.Patches
                     byte reason = reader.ReadByte();
                     RPCOperator.ReplaceDeadReason(playerId, reason);
                     break;
+
                 case RPCOperator.Command.UncheckedMurderPlayer:
                     byte sourceId = reader.ReadByte();
                     targetId = reader.ReadByte();
@@ -690,6 +691,16 @@ namespace ExtremeRoles.Patches
                     RPCOperator.UncheckedMurderPlayer(
                         sourceId, targetId, useAnimationreaderreader);
                     break;
+
+                case RPCOperator.Command.AssasinSpecialMeetingOn:
+                    playerId = reader.ReadByte();
+                    RPCOperator.AssasinSpecialMeetingOn(playerId);
+                    break;
+                case RPCOperator.Command.AssasinVoteFor:
+                    targetId = reader.ReadByte();
+                    RPCOperator.AssasinVoteFor(targetId);
+                    break;
+
 
                 case RPCOperator.Command.CarrierCarryBody:
                     playerId = reader.ReadByte();
