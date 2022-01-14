@@ -16,6 +16,25 @@ namespace ExtremeRoles.Patches.Manager
             {
                 __instance.GameSettings.fontSize = 1.2f;
             }
+            if (ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
+            {
+
+                __instance.UseButton.ToggleVisible(false);
+                __instance.AbilityButton.ToggleVisible(false);
+                __instance.ReportButton.ToggleVisible(false);
+                __instance.KillButton.ToggleVisible(false);
+                __instance.SabotageButton.ToggleVisible(false);
+                __instance.ImpostorVentButton.ToggleVisible(false);
+                __instance.TaskText.transform.parent.gameObject.SetActive(false);
+                __instance.roomTracker.gameObject.SetActive(false);
+                
+                IVirtualJoystick virtualJoystick = __instance.joystick;
+
+                if (virtualJoystick != null)
+                {
+                    virtualJoystick.ToggleVisuals(false);
+                }
+            }
 
         }
         public static void Postfix(HudManager __instance)

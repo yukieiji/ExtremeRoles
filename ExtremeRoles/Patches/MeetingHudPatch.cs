@@ -276,6 +276,7 @@ namespace ExtremeRoles.Patches
             if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
             __instance.TitleText.text = Helper.Translation.GetString(
                 "whoIsMarine");
+            __instance.SkipVoteButton.SetDisabled();
         }
     }
 

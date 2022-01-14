@@ -20,7 +20,8 @@ namespace ExtremeRoles.Helper
                 return (
                     !(MapBehaviour.Instance && MapBehaviour.Instance.IsOpen) &&
                     !MeetingHud.Instance &&
-                    !ExileController.Instance);
+                    !ExileController.Instance &&
+                    !ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger);
             }
         }
 
