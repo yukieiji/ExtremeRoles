@@ -129,11 +129,15 @@ namespace ExtremeRoles.Patches
                 for (int i = 0; i < __instance.playerStates.Length; i++)
                 {
                     PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-                    if (playerVoteArea.TargetPlayerId != ExtremeRolesPlugin.GameDataStore.ExiledAssassinId)
+                    if (playerVoteArea.TargetPlayerId == ExtremeRolesPlugin.GameDataStore.ExiledAssassinId)
+                    {
+                        playerVoteArea.VotedFor = voteFor;
+                    }
+                    else
                     {
                         playerVoteArea.VotedFor = 254;
-                        __instance.SetDirtyBit(1U);
                     }
+                    __instance.SetDirtyBit(1U);
 
                     array[i] = new MeetingHud.VoterState
                     {
