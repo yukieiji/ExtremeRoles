@@ -12,7 +12,7 @@ namespace ExtremeRoles.Patches.MapModule
         {
             canUse = couldUse = false;
             __result = float.MaxValue;
-
+            if (__instance == null) { return true; }
             if (__instance.AllowImpostor) { return true; }
             if (Roles.ExtremeRoleManager.GameRole[pc.PlayerId].HasTask) { return true; }
 
@@ -24,6 +24,8 @@ namespace ExtremeRoles.Patches.MapModule
     {
         public static bool Prefix(Console __instance)
         {
+
+            if (__instance == null) { return true; }
 
             PlayerControl player = PlayerControl.LocalPlayer;
 
