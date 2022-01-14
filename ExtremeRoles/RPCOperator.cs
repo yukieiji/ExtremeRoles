@@ -153,12 +153,6 @@ namespace ExtremeRoles
                 ExtremeRolesPlugin.GameDataStore.WinCheckDisable = false;
             }
         }
-
-        public static void AssasinSpecialMeetingOn(byte assasinPlayerId)
-        {
-            Roles.Combination.Assassin.AssassinMeetingTriggerOn(
-                assasinPlayerId);
-        }
         public static void AssasinVoteFor(byte targetId)
         {
             Roles.Combination.Assassin.VoteFor(

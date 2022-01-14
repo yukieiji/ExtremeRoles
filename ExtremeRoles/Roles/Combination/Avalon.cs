@@ -63,7 +63,15 @@ namespace ExtremeRoles.Roles.Combination
         public override void ExiledAction(
             GameData.PlayerInfo rolePlayer)
         {
-            tryAssassinateMarin(rolePlayer);
+
+            rpcAssassinMeetingTriggerOn(rolePlayer.PlayerId);
+            if (AmongUsClient.Instance.AmHost)
+            {
+                MeetingRoomManager.Instance.AssignSelf(rolePlayer.Object, null);
+                DestroyableSingleton<HudManager>.Instance.OpenMeetingRoom(rolePlayer.Object);
+                rolePlayer.Object.RpcStartMeeting(null);
+            }
+
             this.IsFirstMeeting = false;
         }
 
@@ -90,18 +98,6 @@ namespace ExtremeRoles.Roles.Combination
             this.CanSeeRoleBeforeFirstMeeting = OptionHolder.AllOption[
                 GetRoleOptionId((int)AssassinOption.CanSeeRoleBeforeFirstMeeting)].GetValue();
             this.IsFirstMeeting = true;
-        }
-
-        private void tryAssassinateMarin(
-            GameData.PlayerInfo exileAssasin)
-        {
-            rpcAssassinMeetingTriggerOn(exileAssasin.PlayerId);
-            if (AmongUsClient.Instance.AmHost)
-            {
-                MeetingRoomManager.Instance.AssignSelf(exileAssasin.Object, null);
-                DestroyableSingleton<HudManager>.Instance.OpenMeetingRoom(exileAssasin.Object);
-                exileAssasin.Object.RpcStartMeeting(null);
-            }
         }
 
         private void rpcAssassinMeetingTriggerOn(byte playerId)
@@ -132,7 +128,7 @@ namespace ExtremeRoles.Roles.Combination
     }
 
 
-    public class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp
+    public class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetMeeting
     {
         public enum MarlinOption
         {
@@ -164,7 +160,20 @@ namespace ExtremeRoles.Roles.Combination
         public void IntroEndSetUp()
         {
             this.PlayerIcon = Player.CreatePlayerIcon();
-            updateIcons();
+            this.showIcon();
+        }
+
+        public void ResetOnMeetingEnd()
+        {
+            this.showIcon();
+        }
+
+        public void ResetOnMeetingStart()
+        {
+            foreach (var (_, poolPlayer) in this.PlayerIcon)
+            {
+                poolPlayer.gameObject.SetActive(false);
+            }
         }
 
         public override Color GetTargetRoleSeeColor(
@@ -238,7 +247,7 @@ namespace ExtremeRoles.Roles.Combination
                 GetRoleOptionId((int)MarlinOption.CanUseVent)].GetValue();
         }
 
-        private void updateIcons()
+        private void showIcon()
         {
             int visibleCounter = 0;
             Vector3 bottomLeft = HudManager.Instance.UseButton.transform.localPosition;
@@ -253,9 +262,7 @@ namespace ExtremeRoles.Roles.Combination
 
                 PlayerControl player = Player.GetPlayerControlById(playerId);
                 SingleRoleBase role = ExtremeRoleManager.GameRole[playerId];
-                if (player.Data.IsDead ||
-                    player.Data.Disconnected ||
-                    role.IsCrewmate() ||
+                if (role.IsCrewmate() ||
                     (role.IsNeutral() && !this.CanSeeNeutral))
                 {
                     poolPlayer.gameObject.SetActive(false);
@@ -269,6 +276,5 @@ namespace ExtremeRoles.Roles.Combination
                 }
             }
         }
-
     }
 }
