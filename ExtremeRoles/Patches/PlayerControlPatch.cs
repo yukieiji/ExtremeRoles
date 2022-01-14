@@ -692,10 +692,6 @@ namespace ExtremeRoles.Patches
                         sourceId, targetId, useAnimationreaderreader);
                     break;
 
-                case RPCOperator.Command.AssasinSpecialMeetingOn:
-                    playerId = reader.ReadByte();
-                    RPCOperator.AssasinSpecialMeetingOn(playerId);
-                    break;
                 case RPCOperator.Command.AssasinVoteFor:
                     targetId = reader.ReadByte();
                     RPCOperator.AssasinVoteFor(targetId);
