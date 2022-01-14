@@ -73,11 +73,6 @@ namespace ExtremeRoles
             ExtremeRolesPlugin.Info.ResetOverlays();
         }
 
-        public static void RoleSetUpComplete()
-        {
-            ExtremeRolesPlugin.GameDataStore.RoleSetUpEnded();
-        }
-
         public static void ForceEnd()
         {
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
@@ -98,10 +93,10 @@ namespace ExtremeRoles
         }
 
         public static void SetCombinationRole(
-            byte roleId, byte playerId, byte id)
+            byte roleId, byte playerId, byte id, byte bytedRoleType)
         {
             Roles.ExtremeRoleManager.SetPlayerIdToMultiRoleId(
-                roleId, playerId, id);
+                roleId, playerId, id, bytedRoleType);
         }
 
         public static void SetNormalRole(byte roleId, byte playerId)
