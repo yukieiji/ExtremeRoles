@@ -60,7 +60,7 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.IsGameOverDueToDeath))]
     public class ShipStatusIsGameOverDueToDeathPatch
     {
-        public static void Postfix2(ShipStatus __instance, ref bool __result)
+        public static void Postfix(ShipStatus __instance, ref bool __result)
         {
             __result = false;
         }
