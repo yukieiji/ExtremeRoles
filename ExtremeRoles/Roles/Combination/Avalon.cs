@@ -64,7 +64,7 @@ namespace ExtremeRoles.Roles.Combination
             GameData.PlayerInfo rolePlayer)
         {
 
-            rpcAssassinMeetingTriggerOn(rolePlayer.PlayerId);
+            assassinMeetingTriggerOn(rolePlayer.PlayerId);
             if (AmongUsClient.Instance.AmHost)
             {
                 MeetingRoomManager.Instance.AssignSelf(rolePlayer.Object, null);
@@ -86,7 +86,7 @@ namespace ExtremeRoles.Roles.Combination
                 return; 
             }
 
-            rpcAssassinMeetingTriggerOn(rolePlayer.PlayerId);
+            assassinMeetingTriggerOn(rolePlayer.PlayerId);
             killerPlayer.CmdReportDeadBody(rolePlayer.Data);
             this.IsFirstMeeting = false;
         }
@@ -100,17 +100,7 @@ namespace ExtremeRoles.Roles.Combination
             this.IsFirstMeeting = true;
         }
 
-        private void rpcAssassinMeetingTriggerOn(byte playerId)
-        {
-
-            RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
-                RPCOperator.Command.AssasinSpecialMeetingOn,
-                new List<byte> { playerId });
-            AssassinMeetingTriggerOn(playerId);
-        }
-
-        public static void AssassinMeetingTriggerOn(
+        private void assassinMeetingTriggerOn(
             byte playerId)
         {
             ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger = true;
