@@ -44,7 +44,14 @@ namespace ExtremeRoles.Module.SpecialWinChecker
             int aliveNum = this.aliveLover.Count;
 
             if (aliveNum == 0) { return false; }
-            if (roles.Count == 1 && !roles.Contains(ExtremeRoleType.Neutral)) { return false; }
+            if (roles.Count == 1)
+            {
+                if (roles.Contains(ExtremeRoleType.Crewmate) || 
+                    roles.Contains(ExtremeRoleType.Impostor))
+                {
+                    return false;
+                }
+            }
             if (aliveNum < this.loverNum) { return false; }
             if (aliveNum == this.nonTasker) { return false; }
             if (aliveNum < statistics.TotalAlive - aliveNum) { return false; }
