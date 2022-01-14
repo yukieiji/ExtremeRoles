@@ -10,6 +10,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             CanCallMeeting,
             CanRepairSabotage,
+            HasTask,
             IsNeutral
         }
 
@@ -49,6 +50,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     NeetOption.CanRepairSabotage.ToString()),
                 false, parentOps);
             CustomOption.Create(
+                GetRoleOptionId((int)NeetOption.HasTask),
+                Design.ConcatString(
+                    this.RoleName,
+                    NeetOption.HasTask.ToString()),
+                false, parentOps);
+            CustomOption.Create(
                 GetRoleOptionId((int)NeetOption.IsNeutral),
                 Design.ConcatString(
                     this.RoleName,
@@ -64,6 +71,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 GetRoleOptionId((int)NeetOption.CanCallMeeting)].GetValue();
             this.CanRepairSabotage = allOption[
                 GetRoleOptionId((int)NeetOption.CanRepairSabotage)].GetValue();
+            this.HasTask = allOption[
+                GetRoleOptionId((int)NeetOption.HasTask)].GetValue();
+
             if (allOption[
                 GetRoleOptionId((int)NeetOption.IsNeutral)].GetValue())
             {
