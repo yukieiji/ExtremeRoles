@@ -8,7 +8,7 @@ namespace ExtremeRoles
 
         public enum Command
         {
-
+            // メインコントール
             Initialize = 60,
             RoleSetUpComplete,
             ForceEnd,
@@ -19,15 +19,20 @@ namespace ExtremeRoles
             CleanDeadBody,
             FixLightOff,
             ReplaceDeadReason,
+            SetWinGameControlId,
 
+            // 役職関連
+            // 役職メインコントール
             ReplaceRole,
 
-
+            // インポスター
             AssasinAddDead,
             AssasinVoteFor,
-            AliceAbility,
             CarrierCarryBody,
             CarrierSetBody,
+
+            // ニュートラル
+            AliceAbility,
         }
 
         public static void Call(
@@ -117,14 +122,6 @@ namespace ExtremeRoles
                 playerId, (Module.GameDataContainer.PlayerStatus)reason);
         }
 
-        public static void ReplaceRole(
-            byte callerId, byte targetId, byte operation)
-        {
-            Roles.ExtremeRoleManager.RoleReplace(
-                callerId, targetId,
-                (Roles.ExtremeRoleManager.ReplaceOperation)operation);
-        }
-
         public static void UncheckedMurderPlayer(
             byte sourceId, byte targetId, byte useAnimation)
         {
@@ -153,6 +150,20 @@ namespace ExtremeRoles
                 ExtremeRolesPlugin.GameDataStore.WinCheckDisable = false;
             }
         }
+
+        public static void SetWinGameControlId(int id)
+        {
+            ExtremeRolesPlugin.GameDataStore.WinGameControlId = id;
+        }
+
+        public static void ReplaceRole(
+            byte callerId, byte targetId, byte operation)
+        {
+            Roles.ExtremeRoleManager.RoleReplace(
+                callerId, targetId,
+                (Roles.ExtremeRoleManager.ReplaceOperation)operation);
+        }
+
         public static void AssasinAddDead(byte playersId)
         {
             Roles.Combination.Assassin.AddDead(

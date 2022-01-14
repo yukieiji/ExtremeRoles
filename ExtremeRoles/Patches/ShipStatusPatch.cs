@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 using HarmonyLib;
 using UnityEngine;
@@ -306,5 +307,15 @@ namespace ExtremeRoles.Patches
             }
             return false;
         }
+
+        private static void setWinGameContorlId(int id)
+        {
+            RPCOperator.Call(
+                PlayerControl.LocalPlayer.NetId,
+                RPCOperator.Command.SetWinGameControlId,
+                new List<byte> { (byte)id });
+            RPCOperator.SetWinGameControlId(id);
+        }
+
     }
 }
