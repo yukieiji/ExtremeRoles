@@ -213,7 +213,7 @@ namespace ExtremeRoles.Roles.API
 
                 var spawnOption = allOptions[
                         GetRoleOptionId(CombinationRoleCommonOption.ImposterSelectedRate)];
-                isEvil = isEvil && (UnityEngine.Random.RandomRange(1, 100) < (int)Decimal.Multiply(
+                isEvil = isEvil && (UnityEngine.Random.RandomRange(0, 110) < (int)Decimal.Multiply(
                     spawnOption.GetValue(), spawnOption.Selections.ToList().Count));
 
                 if (isEvil)
