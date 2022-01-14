@@ -78,7 +78,6 @@ namespace ExtremeRoles.Patches
             
             if (isTaskWin(__instance)) { return false; };
 
-
             if (isNeutralSpecialWin(__instance)) { return false; };
             if (isNeutralAliveWin(__instance, statistics)) { return false; };
 
@@ -166,7 +165,6 @@ namespace ExtremeRoles.Patches
             ShipStatus __instance,
             GameDataContainer.PlayerStatistics statistics)
         {
-            if (statistics.TeamImpostorAlive > 0) { return false; }
             if (statistics.SeparatedNeutralAlive.Count != 1) { return false; }
 
             var ((team, id), num) = statistics.SeparatedNeutralAlive.ElementAt(0);
@@ -179,12 +177,17 @@ namespace ExtremeRoles.Patches
                 switch (team)
                 {
                     case NeutralSeparateTeam.Alice:
+                        // アリス vs インポスターは絶対にインポスターが勝てないので
+                        // 別の殺人鬼が存在しないかつ、生存者数がアリスの生存者以下になれば勝利
                         endReason = (GameOverReason)RoleGameOverReason.AliceKillAllOther;
                         break;
+                    // 以下は全てインポスターと勝負しても問題ないのでインポスターが生きていると勝利できない
                     case NeutralSeparateTeam.Jackal:
+                        if (statistics.TeamImpostorAlive > 0) { return false; }
                         endReason = (GameOverReason)RoleGameOverReason.JackalKillAllOther;
                         break;
                     case NeutralSeparateTeam.Lover:
+                        if (statistics.TeamImpostorAlive > 0) { return false; }
                         endReason = (GameOverReason)RoleGameOverReason.LoverKillAllOther;
                         break;
                     default:
