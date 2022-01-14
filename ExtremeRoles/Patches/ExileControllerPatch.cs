@@ -86,7 +86,9 @@ namespace ExtremeRoles.Patches
             }
             public static void Postfix(ExileController __instance)
             {
-                wrapUpPostfix(__instance.exiled);
+                wrapUpPostfix(
+                    __instance,
+                    __instance.exiled);
             }
         }
 
@@ -104,7 +106,9 @@ namespace ExtremeRoles.Patches
             }
             public static void Postfix(AirshipExileController __instance)
             {
-                wrapUpPostfix(__instance.exiled);
+                wrapUpPostfix(
+                    __instance,
+                    __instance.exiled);
             }
         }
 
@@ -126,7 +130,9 @@ namespace ExtremeRoles.Patches
             }
         }
 
-        private static void wrapUpPostfix(GameData.PlayerInfo exiled)
+        private static void wrapUpPostfix(
+            ExileController instance,
+            GameData.PlayerInfo exiled)
         {
             var gameData = ExtremeRolesPlugin.GameDataStore;
 
@@ -163,6 +169,12 @@ namespace ExtremeRoles.Patches
 
             ExtremeRoleManager.GameRole[exiled.PlayerId].ExiledAction(exiled);
             ExtremeRolesPlugin.GameDataStore.WinCheckDisable = false;
+
+            if (ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger && ShipStatus.Instance.IsGameOverDueToDeath())
+            {
+                instance.ReEnableGameplay();
+            }
+
         }
     }
 }
