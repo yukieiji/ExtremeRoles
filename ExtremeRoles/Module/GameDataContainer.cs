@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using ExtremeRoles.Module.SpecialWinChecker;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
@@ -172,6 +173,8 @@ namespace ExtremeRoles.Module
             int numNeutralAlive = 0;
             Dictionary<(NeutralSeparateTeam, int), int> neutralTeam = new Dictionary<
                 (NeutralSeparateTeam, int), int>();
+            Dictionary<int, IWinChecker> specialWinCheckRoleAlive = new Dictionary<
+                int, IWinChecker>();
 
             foreach (GameData.PlayerInfo playerInfo in GameData.Instance.AllPlayers)
             {
@@ -185,13 +188,23 @@ namespace ExtremeRoles.Module
                 // 死んでたら次のプレイヤーへ
                 if (playerInfo.IsDead) { continue; };
 
+                ++numTotalAlive;
+
                 int gameControlId = role.GameControlId;
-                if (OptionHolder.Ship.IsSameNeutralSameWin)
+
+                if (ExtremeRoleManager.SpecialWinCheckRole.Contains(role.Id))
+                {
+                    addSpecialWinCheckRole(
+                        ref specialWinCheckRoleAlive,
+                        gameControlId,
+                        role.Id, role,
+                        playerInfo.PlayerId);
+                }
+
+                if (OptionHolder.Ship.IsSameNeutralSameWin && role.IsNeutral())
                 {
                     gameControlId = int.MaxValue;
                 }
-
-                ++numTotalAlive;
 
                 // 生きてる
                 switch (team)
@@ -246,8 +259,8 @@ namespace ExtremeRoles.Module
                 TeamCrewmateAlive = numCrewAlive,
                 TeamNeutralAlive = numNeutralAlive,
 
+                SpecialWinCheckRoleAlive = specialWinCheckRoleAlive,
                 SeparatedNeutralAlive = neutralTeam,
-
             };
         }
 
@@ -275,6 +288,38 @@ namespace ExtremeRoles.Module
             }
         }
 
+        private void addSpecialWinCheckRole(
+            ref Dictionary<int, IWinChecker> roleData,
+            int gameControlId,
+            ExtremeRoleId roleId,
+            SingleRoleBase role,
+            byte playerId)
+        {
+
+            if (roleData.ContainsKey(gameControlId))
+            {
+                roleData[gameControlId].AddAliveRole(
+                    playerId, role);
+            }
+            else
+            {
+                IWinChecker addData = null;
+                switch (roleId)
+                {
+                    case ExtremeRoleId.Lover:
+                        addData = new LoverWinChecker();
+                        addData.AddAliveRole(playerId, role);
+                        break;
+                    default:
+                        break;
+                }
+                if (addData != null)
+                {
+                    roleData.Add(gameControlId, addData);
+                }
+            }
+        }
+
         public class DeadInfo
         {
             public PlayerStatus Reason { get; set; }
@@ -291,6 +336,8 @@ namespace ExtremeRoles.Module
             public int TeamCrewmateAlive { get; set; }
             public int TeamNeutralAlive { get; set; }
             public int TotalAlive { get; set; }
+
+            public Dictionary<int, IWinChecker> SpecialWinCheckRoleAlive { get; set; }
 
             public Dictionary<(NeutralSeparateTeam, int), int> SeparatedNeutralAlive { get; set; }
 

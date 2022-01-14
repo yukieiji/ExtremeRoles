@@ -93,7 +93,7 @@ namespace ExtremeRoles.Patches
                         continue;
                     }
                     var (playerCompleted, playerTotal) = Task.GetTaskInfo(playerInfo);
-                    Debug.Log($"PlayerName:{playerInfo.PlayerName}  TotalTask:{playerTotal}   ComplatedTask:{playerCompleted}");
+                    Logging.Debug($"PlayerName:{playerInfo.PlayerName}  TotalTask:{playerTotal}   ComplatedTask:{playerCompleted}");
                 }
             }
 

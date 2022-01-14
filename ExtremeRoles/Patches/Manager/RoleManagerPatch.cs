@@ -201,15 +201,18 @@ namespace ExtremeRoles.Patches.Manager
 
                     isSpawn = (
                         isSpawn &&
-                        ((extremeRolesData.CrewmateRoles - reduceCrewmateRole >= 0) && crewNum > 0) &&
-                        ((extremeRolesData.NeutralRoles - reduceNeutralRole >= 0) && crewNum > 0) &&
-                        ((extremeRolesData.ImpostorRoles - reduceImpostorRole >= 0) && impNum > 0));
+                        ((extremeRolesData.CrewmateRoles - reduceCrewmateRole >= 0) && crewNum >= reduceCrewmateRole) &&
+                        ((extremeRolesData.NeutralRoles - reduceNeutralRole >= 0) && crewNum >= reduceNeutralRole) &&
+                        ((extremeRolesData.ImpostorRoles - reduceImpostorRole >= 0) && impNum >= reduceImpostorRole));
                     //Modules.Helpers.DebugLog($"Role:{oneRole.ToString()}   isSpawn?:{isSpawn}");
                     if (!isSpawn) { continue; }
                     
                     extremeRolesData.CrewmateRoles = extremeRolesData.CrewmateRoles - reduceCrewmateRole;
                     extremeRolesData.NeutralRoles = extremeRolesData.NeutralRoles - reduceNeutralRole;
                     extremeRolesData.ImpostorRoles = extremeRolesData.ImpostorRoles - reduceImpostorRole;
+                    
+                    impNum = impNum - reduceImpostorRole;
+                    crewNum = crewNum - (reduceCrewmateRole + reduceNeutralRole);
 
                     var spawnRoles = new List<MultiAssignRoleBase>();
                     foreach (var role in roleManager.Roles)

@@ -78,6 +78,8 @@ namespace ExtremeRoles.Patches
             
             if (isTaskWin(__instance)) { return false; };
 
+            if (isSpecialRoleWin(__instance, statistics)) { return false; }
+
             if (isNeutralSpecialWin(__instance)) { return false; };
             if (isNeutralAliveWin(__instance, statistics)) { return false; };
 
@@ -229,6 +231,25 @@ namespace ExtremeRoles.Patches
                 }
             }
 
+            return false;
+        }
+
+        private static bool isSpecialRoleWin(
+            ShipStatus __instance,
+            GameDataContainer.PlayerStatistics statistics)
+        {
+            if (statistics.SpecialWinCheckRoleAlive.Count == 0) { return false; }
+            foreach (var(id, checker) in statistics.SpecialWinCheckRoleAlive)
+            {
+                if (checker.IsWin(statistics))
+                {
+                    ExtremeRolesPlugin.GameDataStore.WinGameControlId = id;
+                    gameIsEnd(
+                        ref __instance,
+                        (GameOverReason)checker.Reason);
+                    return true;
+                }
+            }
             return false;
         }
 
