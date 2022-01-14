@@ -49,18 +49,20 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     this.RoleName,
                     NeetOption.CanRepairSabotage.ToString()),
                 false, parentOps);
-            CustomOption.Create(
-                GetRoleOptionId((int)NeetOption.HasTask),
-                Design.ConcatString(
-                    this.RoleName,
-                    NeetOption.HasTask.ToString()),
-                false, parentOps);
-            CustomOption.Create(
+            
+            var neutralOps = CustomOption.Create(
                 GetRoleOptionId((int)NeetOption.IsNeutral),
                 Design.ConcatString(
                     this.RoleName,
                     NeetOption.IsNeutral.ToString()),
                 false, parentOps);
+            CustomOption.Create(
+                GetRoleOptionId((int)NeetOption.HasTask),
+                Design.ConcatString(
+                    this.RoleName,
+                    NeetOption.HasTask.ToString()),
+                false, neutralOps,
+                invert: true);
         }
 
         protected override void RoleSpecificInit()
