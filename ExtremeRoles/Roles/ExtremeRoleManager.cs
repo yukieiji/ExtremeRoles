@@ -167,10 +167,9 @@ namespace ExtremeRoles.Roles
         }
 
         public static void SetPlayerIdToMultiRoleId(
-            byte roleId, byte playerId, byte id)
+            byte roleId, byte playerId, byte id, byte bytedRoleType)
         {
-
-            RoleTypes roleType = Helper.Player.GetPlayerControlById(playerId).Data.Role.Role;
+            RoleTypes roleType = (RoleTypes)bytedRoleType;
             bool hasVanilaRole = roleType != RoleTypes.Crewmate || roleType != RoleTypes.Impostor;
 
             foreach (var combRole in CombRole)
@@ -206,7 +205,7 @@ namespace ExtremeRoles.Roles
                                 new Solo.VanillaRoleWrapper(roleType));
                     }
                     Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
-                    return;
+                    break;
                 }
             }
         }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using HarmonyLib;
-using Hazel;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
@@ -33,8 +32,6 @@ namespace ExtremeRoles.Patches.Manager
             normalExtremeRoleAssign(
                 extremeRolesData, playerIndexList);
 
-            RPCOperator.Call(netId, RPCOperator.Command.RoleSetUpComplete);
-            RPCOperator.RoleSetUpComplete();
         }
 
         private static bool checkLimitRoleSpawnNum(
@@ -387,7 +384,7 @@ namespace ExtremeRoles.Patches.Manager
 
             RPCOperator.Call(
                 PlayerControl.LocalPlayer.NetId,
-                RPCOperator.Command.SetCombinationRole,
+                RPCOperator.Command.SetNormalRole,
                 new List<byte> { roleId, player.PlayerId});
             RPCOperator.SetNormalRole(
                 roleId, player.PlayerId);
@@ -396,15 +393,15 @@ namespace ExtremeRoles.Patches.Manager
         private static void setCombinationRoleToPlayer(
             PlayerControl player, byte roleId, byte gameId)
         {
-
+            byte bytedRoleType = (byte)player.Data.Role.Role;
             Logging.Debug($"Player:{player.name}  RoleId:{roleId}");
 
             RPCOperator.Call(
                 PlayerControl.LocalPlayer.NetId,
                 RPCOperator.Command.SetCombinationRole,
-                new List<byte> { roleId, player.PlayerId, gameId });
+                new List<byte> { roleId, player.PlayerId, gameId, bytedRoleType });
             RPCOperator.SetCombinationRole(
-                roleId, player.PlayerId, gameId);
+                roleId, player.PlayerId, gameId, bytedRoleType);
         }
 
 
