@@ -642,50 +642,48 @@ namespace ExtremeRoles.Patches
             byte callerId;
             byte targetId;
 
-            switch (callId)
+            switch ((RPCOperator.Command)callId)
             {
-                case (byte)RPCOperator.Command.CleanDeadBody:
+                case RPCOperator.Command.CleanDeadBody:
                     targetId = reader.ReadByte();
                     RPCOperator.CleanDeadBody(targetId);
                     break;
-                case (byte)RPCOperator.Command.ForceEnd:
+                case RPCOperator.Command.ForceEnd:
                     RPCOperator.ForceEnd();
                     break;
-                case (byte)RPCOperator.Command.Initialize:
+                case RPCOperator.Command.Initialize:
                     RPCOperator.Initialize();
                     break;
-                case (byte)RPCOperator.Command.RoleSetUpComplete:
-                    RPCOperator.RoleSetUpComplete();
-                    break;
-                case (byte)RPCOperator.Command.SetNormalRole:
+                case RPCOperator.Command.SetNormalRole:
                     roleId = reader.ReadByte();
                     playerId = reader.ReadByte();
                     RPCOperator.SetNormalRole(roleId, playerId);
                     break;
-                case (byte)RPCOperator.Command.SetCombinationRole:
+                case RPCOperator.Command.SetCombinationRole:
                     roleId = reader.ReadByte();
                     playerId = reader.ReadByte();
                     byte gameControlId = reader.ReadByte();
+                    byte bytedRoleType = reader.ReadByte();
                     RPCOperator.SetCombinationRole(
-                        roleId, playerId, gameControlId);
+                        roleId, playerId, gameControlId, bytedRoleType);
                     break;
-                case (byte)RPCOperator.Command.ShareOption:
+                case RPCOperator.Command.ShareOption:
                     int numOptions = (int)reader.ReadPackedUInt32();
                     RPCOperator.ShareOption(numOptions, reader);
                     break;
-                case (byte)RPCOperator.Command.ReplaceRole:
+                case RPCOperator.Command.ReplaceRole:
                     callerId = reader.ReadByte();
                     byte replaceTarget = reader.ReadByte();
                     byte ops = reader.ReadByte();
                     RPCOperator.ReplaceRole(
                         callerId, replaceTarget, ops);
                     break;
-                case (byte)RPCOperator.Command.ReplaceDeadReason:
+                case RPCOperator.Command.ReplaceDeadReason:
                     playerId = reader.ReadByte();
                     byte reason = reader.ReadByte();
                     RPCOperator.ReplaceDeadReason(playerId, reason);
                     break;
-                case (byte)RPCOperator.Command.UncheckedMurderPlayer:
+                case RPCOperator.Command.UncheckedMurderPlayer:
                     byte sourceId = reader.ReadByte();
                     targetId = reader.ReadByte();
                     byte useAnimationreaderreader = reader.ReadByte();
@@ -693,17 +691,17 @@ namespace ExtremeRoles.Patches
                         sourceId, targetId, useAnimationreaderreader);
                     break;
 
-                case (byte)RPCOperator.Command.CarrierCarryBody:
+                case RPCOperator.Command.CarrierCarryBody:
                     playerId = reader.ReadByte();
                     targetId = reader.ReadByte();
                     RPCOperator.CarrierCarryBody(playerId, targetId);
                     break;
-                case (byte)RPCOperator.Command.CarrierSetBody:
+                case RPCOperator.Command.CarrierSetBody:
                     playerId = reader.ReadByte();
                     RPCOperator.CarrierSetBody(playerId);
                     break;
 
-                case (byte)RPCOperator.Command.AliceAbility:
+                case RPCOperator.Command.AliceAbility:
                     callerId = reader.ReadByte();
                     RPCOperator.AliceAbility(
                         callerId);
