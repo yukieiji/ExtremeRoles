@@ -169,12 +169,6 @@ namespace ExtremeRoles.Patches
 
             ExtremeRoleManager.GameRole[exiled.PlayerId].ExiledAction(exiled);
             ExtremeRolesPlugin.GameDataStore.WinCheckDisable = false;
-
-            if (ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger && ShipStatus.Instance.IsGameOverDueToDeath())
-            {
-                instance.ReEnableGameplay();
-            }
-
         }
     }
 }

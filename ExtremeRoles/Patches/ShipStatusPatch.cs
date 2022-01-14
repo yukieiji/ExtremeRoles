@@ -57,6 +57,14 @@ namespace ExtremeRoles.Patches
             return false;
         }
     }
+    [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.IsGameOverDueToDeath))]
+    public class ShipStatusIsGameOverDueToDeathPatch
+    {
+        public static void Postfix2(ShipStatus __instance, ref bool __result)
+        {
+            __result = false;
+        }
+    }
 
     [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.CheckEndCriteria))]
     class ShipStatusCheckEndCriteriaPatch
