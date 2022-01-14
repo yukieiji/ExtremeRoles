@@ -304,8 +304,6 @@ namespace ExtremeRoles.Patches
             }
 
             if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
-
-            DestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
         }
     }
 
@@ -329,6 +327,7 @@ namespace ExtremeRoles.Patches
                 __instance.TitleText.text = Helper.Translation.GetString(
                     "whoIsMarine");
                 __instance.SkipVoteButton.gameObject.SetActive(false);
+                DestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
                 return;
             }
 
