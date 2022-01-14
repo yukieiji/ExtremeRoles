@@ -201,9 +201,9 @@ namespace ExtremeRoles.Patches.Manager
 
                     isSpawn = (
                         isSpawn &&
-                        ((extremeRolesData.CrewmateRoles - reduceCrewmateRole >= 0) && impNum > 0) &&
+                        ((extremeRolesData.CrewmateRoles - reduceCrewmateRole >= 0) && crewNum > 0) &&
                         ((extremeRolesData.NeutralRoles - reduceNeutralRole >= 0) && crewNum > 0) &&
-                        ((extremeRolesData.ImpostorRoles - reduceImpostorRole >= 0) && crewNum > 0));
+                        ((extremeRolesData.ImpostorRoles - reduceImpostorRole >= 0) && impNum > 0));
                     //Modules.Helpers.DebugLog($"Role:{oneRole.ToString()}   isSpawn?:{isSpawn}");
                     if (!isSpawn) { continue; }
                     
@@ -347,7 +347,7 @@ namespace ExtremeRoles.Patches.Manager
                     result = result && checkLimitRoleSpawnNum(role, ref extremeRolesData);
 
 
-                    Logging.Debug($"Role:{role.Id}: AssignResult:{result}");
+                    // Logging.Debug($"Role:{role.Id}: AssignResult:{result}");
 
                     if (result)
                     {
