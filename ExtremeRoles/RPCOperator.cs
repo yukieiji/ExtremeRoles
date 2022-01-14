@@ -155,12 +155,6 @@ namespace ExtremeRoles
                     target, source);
 
                 ExtremeRolesPlugin.GameDataStore.WinCheckDisable = false;
-                
-                if (!targetRole.HasTask)
-                {
-                    target.ClearTasks();
-                }
-
             }
         }
 

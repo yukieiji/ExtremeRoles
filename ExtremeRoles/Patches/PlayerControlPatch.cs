@@ -42,7 +42,9 @@ namespace ExtremeRoles.Patches
             ExtremeRolesPlugin.GameDataStore.AddDeadInfo(
                 __instance, DeathReason.Exile, null);
 
-            if (!ExtremeRoleManager.GameRole[__instance.PlayerId].HasTask)
+            var role = ExtremeRoleManager.GameRole[__instance.PlayerId];
+
+            if (!role.HasTask || role.IsNeutral())
             {
                 __instance.ClearTasks();
             }
@@ -818,6 +820,13 @@ namespace ExtremeRoles.Patches
         {
             ExtremeRolesPlugin.GameDataStore.AddDeadInfo(
                 target, DeathReason.Kill, __instance);
+            
+            var role = ExtremeRoleManager.GameRole[target.PlayerId];
+
+            if (!role.HasTask || role.IsNeutral())
+            {
+                __instance.ClearTasks();
+            }
         }
     }
 
