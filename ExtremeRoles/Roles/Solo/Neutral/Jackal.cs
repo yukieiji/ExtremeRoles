@@ -96,6 +96,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             var sourceJackal = (Jackal)ExtremeRoleManager.GameRole[callerId];
             var newSidekick = new Sidekick(
                 callerId,
+                sourceJackal.OptionIdOffset,
                 sourceJackal.GameControlId,
                 sourceJackal.CurRecursion,
                 targetRole.IsImposter(),
@@ -504,6 +505,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public Sidekick(
             byte jackalPlayerId,
+            int optionIdOffset,
             int gameControleId,
             int curRecursion,
             bool isImpostor,
@@ -521,6 +523,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 ColorPalette.JackalBlue,
                 false, canKill, useVent, useSabotage)
         {
+            this.OptionIdOffset = optionIdOffset;
             this.jackalPlayerId = jackalPlayerId;
             this.GameControlId = gameControleId;
             this.HasOtherVison = hasOtherVision;
