@@ -80,7 +80,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             CustomOption.Create(
                 GetRoleOptionId((int)PsychoKillerOption.KillCoolReduceRate),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     PsychoKillerOption.KillCoolReduceRate.ToString()),
                 5, 1, 10, 1, parentOps,
@@ -88,7 +88,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             CustomOption.Create(
                 GetRoleOptionId((int)PsychoKillerOption.CombMax),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     PsychoKillerOption.CombMax.ToString()),
                 2, 1, 5, 1,
@@ -96,7 +96,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             CustomOption.Create(
                 GetRoleOptionId((int)PsychoKillerOption.CombResetWhenMeeting),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     PsychoKillerOption.CombResetWhenMeeting.ToString()),
                 true, parentOps);

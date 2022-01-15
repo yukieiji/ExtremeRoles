@@ -48,13 +48,13 @@ namespace ExtremeRoles.Roles.Combination
 
             var meetingOpt = CustomOption.Create(
                 GetRoleOptionId((int)AssassinOption.IsDeadForceMeeting),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     AssassinOption.IsDeadForceMeeting.ToString()),
                 true, parentOps);
             CustomOption.Create(
                 GetRoleOptionId((int)AssassinOption.CanSeeRoleBeforeFirstMeeting),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     AssassinOption.CanSeeRoleBeforeFirstMeeting.ToString()),
                 false, meetingOpt);
@@ -208,25 +208,25 @@ namespace ExtremeRoles.Roles.Combination
         {
             CustomOption.Create(
                 GetRoleOptionId((int)MarlinOption.HasTask),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     MarlinOption.HasTask.ToString()),
                 false, parentOps);
             CustomOption.Create(
                 GetRoleOptionId((int)MarlinOption.CanSeeVote),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     MarlinOption.CanSeeVote.ToString()),
                 false, parentOps);
             CustomOption.Create(
                 GetRoleOptionId((int)MarlinOption.CanSeeNeutral),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     MarlinOption.CanSeeNeutral.ToString()),
                 false, parentOps);
             CustomOption.Create(
                 GetRoleOptionId((int)MarlinOption.CanUseVent),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     MarlinOption.CanUseVent.ToString()),
                 false, parentOps);

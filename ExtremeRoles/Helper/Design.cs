@@ -4,14 +4,6 @@ namespace ExtremeRoles.Helper
 {
     public class Design
     {
-        public static string ConcatString(string baseString, string addString)
-        {
-            return string.Format(
-                "{0}{1}",
-                baseString,
-                addString);
-        }
-
         public static string ColoedString(Color c, string s)
         {
             return string.Format(

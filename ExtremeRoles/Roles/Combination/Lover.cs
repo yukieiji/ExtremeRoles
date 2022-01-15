@@ -125,7 +125,7 @@ namespace ExtremeRoles.Roles.Combination
         {
             string baseString = base.GetIntroDescription();
             baseString += Design.ColoedString(
-                ColorPalette.LoverPink, "\n♥");
+                ColorPalette.LoverPink, "\n♥ ");
 
             List<byte> lover = getAliveSameLover();
 
@@ -231,21 +231,21 @@ namespace ExtremeRoles.Roles.Combination
         {
             var neutralSetting = CustomOption.Create(
                 GetRoleOptionId((int)LoverOption.IsNeutral),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     LoverOption.IsNeutral.ToString()),
                 false, parentOps);
 
             var killerSetting = CustomOption.Create(
                 GetRoleOptionId((int)LoverOption.BecomNeutral),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     LoverOption.BecomNeutral.ToString()),
                 false, neutralSetting);
 
             var deathSetting = CustomOption.Create(
                 GetRoleOptionId((int)LoverOption.DethWhenUnderAlive),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     LoverOption.DethWhenUnderAlive.ToString()),
                 1, 1, 1, killerSetting,

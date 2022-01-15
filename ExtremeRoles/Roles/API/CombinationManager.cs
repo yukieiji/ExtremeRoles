@@ -123,7 +123,7 @@ namespace ExtremeRoles.Roles.API
                 GetRoleOptionId(RoleCommonOption.SpawnRate),
                 Design.ColoedString(
                     this.optionColor,
-                    Design.ConcatString(
+                    string.Concat(
                         this.roleName,
                         RoleCommonOption.SpawnRate.ToString())),
                 OptionHolder.SpawnRate, null, true);
@@ -134,14 +134,14 @@ namespace ExtremeRoles.Roles.API
 
             CustomOption.Create(
                 GetRoleOptionId(RoleCommonOption.RoleNum),
-                Design.ConcatString(
+                string.Concat(
                     this.roleName,
                     RoleCommonOption.RoleNum.ToString()),
                 1, 1, thisMaxRoleNum, 1,
                 roleSetOption);
             CustomOption.Create(
                 GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign),
-                Design.ConcatString(
+                string.Concat(
                     this.roleName,
                     CombinationRoleCommonOption.IsMultiAssign.ToString()),
                 false, roleSetOption);
@@ -275,14 +275,14 @@ namespace ExtremeRoles.Roles.API
                 GetRoleOptionId(RoleCommonOption.SpawnRate),
                 Design.ColoedString(
                     this.optionColor,
-                    Design.ConcatString(
+                    string.Concat(
                         this.roleName,
                         RoleCommonOption.SpawnRate.ToString())),
                 OptionHolder.SpawnRate, null, true);
 
             var roleAssignNumOption = CustomOption.Create(
                 GetRoleOptionId(CombinationRoleCommonOption.AssignsNum),
-                Design.ConcatString(
+                string.Concat(
                     this.roleName,
                     CombinationRoleCommonOption.AssignsNum.ToString()),
                 this.minimumRoleNum, this.minimumRoleNum,
@@ -291,7 +291,7 @@ namespace ExtremeRoles.Roles.API
 
             var roleSetNumOption = CustomOption.Create(
                 GetRoleOptionId(RoleCommonOption.RoleNum),
-                Design.ConcatString(
+                string.Concat(
                     this.roleName,
                     RoleCommonOption.RoleNum.ToString()),
                 1, 1, (OptionHolder.VanillaMaxPlayerNum - 1), 1,
@@ -303,14 +303,14 @@ namespace ExtremeRoles.Roles.API
             {
                 var isImposterAssignOps = CustomOption.Create(
                     GetRoleOptionId(CombinationRoleCommonOption.IsAssignImposter),
-                    Design.ConcatString(
+                    string.Concat(
                         this.roleName,
                         CombinationRoleCommonOption.IsAssignImposter.ToString()),
                     false, roleSetOption);
 
                 CustomOption.Create(
                     GetRoleOptionId(CombinationRoleCommonOption.ImposterSelectedRate),
-                    Design.ConcatString(
+                    string.Concat(
                         this.roleName,
                         CombinationRoleCommonOption.ImposterSelectedRate.ToString()),
                     OptionHolder.SpawnRate, isImposterAssignOps);
@@ -318,7 +318,7 @@ namespace ExtremeRoles.Roles.API
 
             CustomOption.Create(
                 GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign),
-                Design.ConcatString(
+                string.Concat(
                     this.roleName,
                     CombinationRoleCommonOption.IsMultiAssign.ToString()),
                 false, roleSetOption, isHidden: this.minimumRoleNum <= 1);

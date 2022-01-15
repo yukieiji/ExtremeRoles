@@ -39,26 +39,26 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             CustomOption.Create(
                 GetRoleOptionId((int)NeetOption.CanCallMeeting),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     NeetOption.CanCallMeeting.ToString()),
                 false, parentOps);
             CustomOption.Create(
                 GetRoleOptionId((int)NeetOption.CanRepairSabotage),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     NeetOption.CanRepairSabotage.ToString()),
                 false, parentOps);
             
             var neutralOps = CustomOption.Create(
                 GetRoleOptionId((int)NeetOption.IsNeutral),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     NeetOption.IsNeutral.ToString()),
                 false, parentOps);
             CustomOption.Create(
                 GetRoleOptionId((int)NeetOption.HasTask),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     NeetOption.HasTask.ToString()),
                 false, neutralOps,

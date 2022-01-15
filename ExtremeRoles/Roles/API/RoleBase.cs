@@ -225,13 +225,13 @@ namespace ExtremeRoles.Roles.API
         {
             var killCoolOption = CustomOption.Create(
                 GetRoleOptionId(KillerCommonOption.HasOtherKillCool),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     KillerCommonOption.HasOtherKillCool.ToString()),
                 false, parentOps);
             CustomOption.Create(
                 GetRoleOptionId(KillerCommonOption.KillCoolDown),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     KillerCommonOption.KillCoolDown.ToString()),
                 30f, 1.0f, 120f, 0.5f,
@@ -239,13 +239,13 @@ namespace ExtremeRoles.Roles.API
 
             var killRangeOption = CustomOption.Create(
                 GetRoleOptionId(KillerCommonOption.HasOtherKillRange),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     KillerCommonOption.HasOtherKillRange.ToString()),
                 false, parentOps);
             CustomOption.Create(
                 GetRoleOptionId(KillerCommonOption.KillRange),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     KillerCommonOption.KillRange.ToString()),
                 OptionHolder.Range,
@@ -257,7 +257,7 @@ namespace ExtremeRoles.Roles.API
                 GetRoleOptionId(RoleCommonOption.SpawnRate),
                 Design.ColoedString(
                     this.NameColor,
-                    Design.ConcatString(
+                    string.Concat(
                         this.RoleName,
                         RoleCommonOption.SpawnRate.ToString())),
                 OptionHolder.SpawnRate, null, true);
@@ -266,7 +266,7 @@ namespace ExtremeRoles.Roles.API
 
             CustomOption.Create(
                 GetRoleOptionId(RoleCommonOption.RoleNum),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     RoleCommonOption.RoleNum.ToString()),
                 1, 1, spawnNum, 1, roleSetOption);
@@ -279,21 +279,21 @@ namespace ExtremeRoles.Roles.API
         {
             var visonOption = CustomOption.Create(
                 GetRoleOptionId(RoleCommonOption.HasOtherVison),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     RoleCommonOption.HasOtherVison.ToString()),
                 false, parentOps);
 
             CustomOption.Create(
                 GetRoleOptionId(RoleCommonOption.Vison),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     RoleCommonOption.Vison.ToString()),
                 2f, 0.25f, 5f, 0.25f,
                 visonOption, format: "unitMultiplier");
             CustomOption.Create(
                GetRoleOptionId(RoleCommonOption.ApplyEnvironmentVisionEffect),
-               Design.ConcatString(
+               string.Concat(
                    this.RoleName,
                    RoleCommonOption.ApplyEnvironmentVisionEffect.ToString()),
                this.IsCrewmate(), visonOption);

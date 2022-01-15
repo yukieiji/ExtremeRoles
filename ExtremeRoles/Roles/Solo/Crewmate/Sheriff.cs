@@ -119,14 +119,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             CustomOption.Create(
                 GetRoleOptionId((int)SheriffOption.CanShootNeutral),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     SheriffOption.CanShootNeutral.ToString()),
                 true, parentOps);
 
             CustomOption.Create(
                 GetRoleOptionId((int)SheriffOption.ShootNum),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     SheriffOption.ShootNum.ToString()),
                 1, 1, OptionHolder.VanillaMaxPlayerNum - 1, 1, parentOps);

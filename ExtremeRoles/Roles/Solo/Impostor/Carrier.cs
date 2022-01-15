@@ -159,7 +159,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             CustomOption.Create(
                 GetRoleOptionId((int)CarrierOption.CanReportOnCarry),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     CarrierOption.CanReportOnCarry.ToString()),
                 true, parentOps);

@@ -132,21 +132,21 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             CustomOption.Create(
                 GetRoleOptionId((int)EvolverOption.IsEvolvedAnimation),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     EvolverOption.IsEvolvedAnimation.ToString()),
                 true, parentOps);
 
             CustomOption.Create(
                 GetRoleOptionId((int)EvolverOption.IsEatingEndCleanBody),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     EvolverOption.IsEatingEndCleanBody.ToString()),
                 true, parentOps);
 
             CustomOption.Create(
                 GetRoleOptionId((int)EvolverOption.EatingRange),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     EvolverOption.EatingRange.ToString()),
                 2.5f, 0.5f, 5.0f, 0.5f,
@@ -154,7 +154,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             CustomOption.Create(
                 GetRoleOptionId((int)EvolverOption.KillCoolReduceRate),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     EvolverOption.KillCoolReduceRate.ToString()),
                 10, 1, 50, 1, parentOps,
@@ -162,7 +162,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             CustomOption.Create(
                 GetRoleOptionId((int)EvolverOption.KillCoolResuceRateMulti),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     EvolverOption.KillCoolResuceRateMulti.ToString()),
                 1.0f, 1.0f, 5.0f, 0.1f,

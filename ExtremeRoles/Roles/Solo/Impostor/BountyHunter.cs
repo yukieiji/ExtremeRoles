@@ -92,7 +92,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             CustomOption.Create(
                 GetRoleOptionId((int)BountyHunterOption.TargetUpdateTime),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     BountyHunterOption.TargetUpdateTime.ToString()),
                 60f, 30.0f, 120f, 0.5f,
@@ -100,7 +100,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             CustomOption.Create(
                 GetRoleOptionId((int)BountyHunterOption.TargetKillCoolTime),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     BountyHunterOption.TargetKillCoolTime.ToString()),
                 5f, 1.0f, 60f, 0.5f,
@@ -108,7 +108,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             CustomOption.Create(
                 GetRoleOptionId((int)BountyHunterOption.NoneTargetKillCoolTime),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     BountyHunterOption.NoneTargetKillCoolTime.ToString()),
                 45f, 1.0f, 120f, 0.5f,
@@ -116,14 +116,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             var arrowOption = CustomOption.Create(
                 GetRoleOptionId((int)BountyHunterOption.IsShowArrow),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     BountyHunterOption.IsShowArrow.ToString()),
                 false, parentOps);
 
             CustomOption.Create(
                 GetRoleOptionId((int)BountyHunterOption.ArrowUpdateCycle),
-                Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     BountyHunterOption.ArrowUpdateCycle.ToString()),
                 60f, 30.0f, 120f, 0.5f,

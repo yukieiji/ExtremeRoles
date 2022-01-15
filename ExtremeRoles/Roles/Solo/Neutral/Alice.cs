@@ -151,19 +151,19 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             CustomOption.Create(
                 this.GetRoleOptionId((int)AliceOption.RevartLongTaskNum),
-                Helper.Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     AliceOption.RevartLongTaskNum.ToString()),
                 1, 0, 15, 1, parentOps);
             CustomOption.Create(
                 this.GetRoleOptionId((int)AliceOption.RevartCommonTaskNum),
-                Helper.Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     AliceOption.RevartCommonTaskNum.ToString()),
                 1, 0, 15, 1, parentOps);
             CustomOption.Create(
                 this.GetRoleOptionId((int)AliceOption.RevartNormalTaskNum),
-                Helper.Design.ConcatString(
+                string.Concat(
                     this.RoleName,
                     AliceOption.RevartNormalTaskNum.ToString()),
                 1, 0, 15, 1, parentOps);

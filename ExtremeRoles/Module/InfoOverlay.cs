@@ -381,11 +381,11 @@ namespace ExtremeRoles.Module
             string roleFullDesc = role.GetFullDescription();
 
 
-            roleText +=
-                $"<size=150%>・{colorRoleName}</size>" +
-                (roleFullDesc != "" ? $"\n{roleFullDesc}\n" : "") +
-                $"・{Translation.GetString(colorRoleName)}{Translation.GetString("roleOption")}\n" +
-                (roleOptionString != "" ? $"{roleOptionString}" : "");
+            roleText += string.Concat(
+                $"<size=150%>・{colorRoleName}</size>",
+                roleFullDesc != "" ? $"\n{roleFullDesc}\n" : "",
+                $"・{Translation.GetString(colorRoleName)}{Translation.GetString("roleOption")}\n",
+                roleOptionString != "" ? $"{roleOptionString}" : "");
 
             if (multiAssignRole != null)
             {
@@ -450,11 +450,11 @@ namespace ExtremeRoles.Module
                         roleFullDesc = Translation.GetString(
                             string.Format("{0}{1}", role.Id, "FullDescription"));
 
-                        roleText =
-                            $"<size=150%>・{colorRoleName}</size>" +
-                            (roleFullDesc != "" ? $"\n{roleFullDesc}\n" : "") +
-                            $"・{Translation.GetString(colorRoleName)}{Translation.GetString("roleOption")}\n" +
-                            (roleOptionString != "" ? $"{roleOptionString}" : "");
+                        roleText = string.Concat(
+                            $"<size=150%>・{colorRoleName}</size>",
+                            roleFullDesc != "" ? $"\n{roleFullDesc}\n" : "",
+                            $"・{Translation.GetString(colorRoleName)}{Translation.GetString("roleOption")}\n",
+                            roleOptionString != "" ? $"{roleOptionString}" : "");
 
                         this.allRoleText.Add((string)roleText.Clone());
                     }
@@ -473,11 +473,11 @@ namespace ExtremeRoles.Module
                     roleFullDesc = Translation.GetString(
                         string.Format("{0}{1}", role.Id, "FullDescription"));
 
-                    roleText =
-                        $"<size=150%>・{colorRoleName}</size>" +
-                        (roleFullDesc != "" ? $"\n{roleFullDesc}\n" : "") +
-                        $"・{Translation.GetString(colorRoleName)}{Translation.GetString("roleOption")}\n" +
-                        (roleOptionString != "" ? $"{roleOptionString}" : "");
+                    roleText = string.Concat(
+                        $"<size=150%>・{colorRoleName}</size>",
+                        roleFullDesc != "" ? $"\n{roleFullDesc}\n" : "",
+                        $"・{Translation.GetString(colorRoleName)}{Translation.GetString("roleOption")}\n",
+                        roleOptionString != "" ? $"{roleOptionString}" : "");
 
                     this.allRoleText.Add((string)roleText.Clone());
                 }
@@ -493,11 +493,11 @@ namespace ExtremeRoles.Module
                 roleFullDesc = Translation.GetString(
                     string.Format("{0}{1}", role.Id, "FullDescription"));
 
-                roleText =
-                    $"<size=150%>・{colorRoleName}</size>" +
-                    (roleFullDesc != "" ? $"\n{roleFullDesc}\n" : "") +
-                    $"・{Translation.GetString(colorRoleName)}{Translation.GetString("roleOption")}\n" +
-                    (roleOptionString != "" ? $"{roleOptionString}" : "");
+                roleText = string.Concat(
+                    $"<size=150%>・{colorRoleName}</size>",
+                    roleFullDesc != "" ? $"\n{roleFullDesc}\n" : "",
+                    $"・{Translation.GetString(colorRoleName)}{Translation.GetString("roleOption")}\n",
+                    roleOptionString != "" ? $"{roleOptionString}" : "");
 
                 this.allRoleText.Add((string)roleText.Clone());
             }
