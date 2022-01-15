@@ -1,7 +1,10 @@
-﻿using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
-using System;
+﻿using System;
 using System.Collections.Generic;
+
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.Combination;
+using ExtremeRoles.Roles.Solo.Neutral;
 
 namespace ExtremeRoles.Module.SpecialWinChecker
 {
@@ -56,6 +59,40 @@ namespace ExtremeRoles.Module.SpecialWinChecker
             if (aliveNum == this.nonTasker) { return false; }
             if (aliveNum < statistics.TotalAlive - aliveNum) { return false; }
 
+            foreach (var playerId in this.aliveLover)
+            {
+
+                var lover = (Lover)ExtremeRoleManager.GameRole[playerId];
+
+                if (lover.CanHasAnotherRole)
+                {
+
+                    switch(lover.AnotherRole.Id)
+                    {
+                        case ExtremeRoleId.Sidekick:
+                            var sidekick = (Sidekick)lover.AnotherRole;
+                            var jackalPlayer = Helper.Player.GetPlayerControlById(sidekick.JackalPlayerId).Data;
+                            if (!jackalPlayer.IsDead && 
+                                !jackalPlayer.Disconnected && 
+                                statistics.TeamImpostorAlive <= 0 &&
+                                statistics.SeparatedNeutralAlive.Count == 2) // ジャッカルとサイドキックされたニュートラルラバーのみ
+                            {
+                                return true;
+                            }
+                            break;
+                        case ExtremeRoleId.Jackal:
+                            if (statistics.TeamImpostorAlive <= 0 && statistics.SeparatedNeutralAlive.Count == 1)
+                            {
+                                return true;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+
+
             int allTask = 0;
             int allCompTask = 0;
 
@@ -67,6 +104,7 @@ namespace ExtremeRoles.Module.SpecialWinChecker
                 allTask = allTask + totalTask;
             }
             if (allCompTask >= allTask) { return true; }
+
 
             return false;
         }

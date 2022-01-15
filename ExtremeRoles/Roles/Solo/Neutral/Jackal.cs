@@ -499,7 +499,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
     public class Sidekick : SingleRoleBase, IRoleUpdate
     {
 
-        private byte jackalPlayerId;
+        public byte JackalPlayerId;
+
         private int recursion = 0;
         private bool sidekickJackalCanMakeSidekick = false;
 
@@ -524,7 +525,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 false, canKill, useVent, useSabotage)
         {
             this.OptionIdOffset = optionIdOffset;
-            this.jackalPlayerId = jackalPlayerId;
+            this.JackalPlayerId = jackalPlayerId;
             this.GameControlId = gameControleId;
             this.HasOtherVison = hasOtherVision;
             this.Vison = vison;
@@ -541,7 +542,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             byte targetPlayerId)
         {
             
-            if (targetPlayerId == this.jackalPlayerId)
+            if (targetPlayerId == this.JackalPlayerId)
             {
                 return ColorPalette.JackalBlue;
             }
@@ -553,7 +554,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             return string.Format(
                 base.GetFullDescription(),
                 Player.GetPlayerControlById(
-                    this.jackalPlayerId).Data.PlayerName);
+                    this.JackalPlayerId).Data.PlayerName);
         }
 
         public static void BecomeToJackal(byte callerId, byte targetId)
@@ -620,19 +621,19 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void Update(PlayerControl rolePlayer)
         {
-            if (Player.GetPlayerControlById(this.jackalPlayerId).Data.Disconnected)
+            if (Player.GetPlayerControlById(this.JackalPlayerId).Data.Disconnected)
             {
                 RPCOperator.Call(
                     rolePlayer.NetId,
                     RPCOperator.Command.ReplaceRole,
                     new List<byte>
                     {
-                        this.jackalPlayerId,
+                        this.JackalPlayerId,
                         rolePlayer.PlayerId,
                         (byte)ExtremeRoleManager.ReplaceOperation.SidekickToJackal
                     });
 
-                BecomeToJackal(this.jackalPlayerId, rolePlayer.PlayerId);
+                BecomeToJackal(this.JackalPlayerId, rolePlayer.PlayerId);
             }
         }
     }
