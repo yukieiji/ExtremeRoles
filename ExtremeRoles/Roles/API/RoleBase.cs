@@ -108,7 +108,9 @@ namespace ExtremeRoles.Roles.API
             string baseString = Design.ColoedString(
                 this.NameColor,
                 string.Format("{0}: {1}",
-                    this.GetColoredRoleName(),
+                    Design.ColoedString(
+                        this.NameColor,
+                        Translation.GetString(this.RoleName)),
                     Translation.GetString(
                         string.Format("{0}{1}", this.Id, "ShortDescription"))));
 
