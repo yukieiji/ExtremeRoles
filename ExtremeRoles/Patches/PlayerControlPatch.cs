@@ -509,6 +509,10 @@ namespace ExtremeRoles.Patches
                     HudManager.Instance.SabotageButton.SetDisabled();
                 }
             }
+            else
+            {
+                HudManager.Instance.SabotageButton.SetDisabled();
+            }
         }
 
         private static void ventButtonUpdate(
