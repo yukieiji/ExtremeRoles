@@ -560,7 +560,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public static void BecomeToJackal(byte callerId, byte targetId)
         {
 
-
             Jackal curJackal = (Jackal)ExtremeRoleManager.GameRole[callerId];
             Jackal newJackal = (Jackal)curJackal.Clone();
 
@@ -598,6 +597,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             {
                 var multiAssignRole = (MultiAssignRoleBase)curRole;
                 multiAssignRole.AnotherRole = null;
+                multiAssignRole.CanKill = false;
+                multiAssignRole.HasTask = false;
+                multiAssignRole.UseSabotage = false;
+                multiAssignRole.UseVent = false;
                 multiAssignRole.SetAnotherRole(newJackal);
                 ExtremeRoleManager.GameRole[targetId] = multiAssignRole;
             }
