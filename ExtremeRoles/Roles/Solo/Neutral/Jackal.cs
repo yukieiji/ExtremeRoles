@@ -566,7 +566,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             bool multiAssignTrigger = false;
             var curRole = ExtremeRoleManager.GameRole[targetId];
             var curSideKick = curRole as Sidekick;
-            if (curJackal == null)
+            if (curSideKick == null)
             {
                 curSideKick = (Sidekick)((MultiAssignRoleBase)curRole).AnotherRole;
                 multiAssignTrigger = true;
