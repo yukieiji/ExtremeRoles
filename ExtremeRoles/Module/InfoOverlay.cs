@@ -312,7 +312,7 @@ namespace ExtremeRoles.Module
                         allOption[multiAssignRole.GetManagerOptionId(
                             Roles.API.RoleCommonOption.SpawnRate)]);
                 colorRoleName = Design.ColoedString(
-                    multiAssignRole.NameColor, Translation.GetString(multiAssignRole.PrevRoleName));
+                    multiAssignRole.NameColor, Translation.GetString(multiAssignRole.RoleName));
             }
             else if (!role.IsVanillaRole())
             {

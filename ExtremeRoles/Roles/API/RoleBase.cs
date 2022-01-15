@@ -164,7 +164,7 @@ namespace ExtremeRoles.Roles.API
             {
                 return Palette.ImpostorRed;
             }
-
+            // 個々の処理バグってる
             var multiAssignRole = targetRole as MultiAssignRoleBase;
             if (multiAssignRole != null)
             {
@@ -332,8 +332,6 @@ namespace ExtremeRoles.Roles.API
         public SingleRoleBase AnotherRole = null;
         public bool CanHasAnotherRole = false;
 
-        public string PrevRoleName = "";
-
         public MultiAssignRoleBase(
             ExtremeRoleId id,
             ExtremeRoleType team,
@@ -453,7 +451,7 @@ namespace ExtremeRoles.Roles.API
 
             string baseRole = Design.ColoedString(
                 this.NameColor,
-                Translation.GetString(this.PrevRoleName));
+                Translation.GetString(this.RoleName));
 
             string anotherRole = Design.ColoedString(
                 this.AnotherRole.NameColor,
@@ -468,11 +466,6 @@ namespace ExtremeRoles.Roles.API
 
         protected virtual void OverrideAnotherRoleSetting()
         {
-            this.PrevRoleName = string.Copy(this.RoleName);
-
-            this.RoleName = string.Format("{0} + {1}",
-                string.Copy(this.PrevRoleName),
-                string.Copy(this.AnotherRole.RoleName));
 
             if (this.Team != this.AnotherRole.Team && this.Team == ExtremeRoleType.Crewmate)
             {

@@ -596,7 +596,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (multiAssignTrigger)
             {
                 var multiAssignRole = (MultiAssignRoleBase)curRole;
-                multiAssignRole.RoleName = multiAssignRole.PrevRoleName;
                 multiAssignRole.AnotherRole = null;
                 multiAssignRole.SetAnotherRole(newJackal);
                 ExtremeRoleManager.GameRole[targetId] = multiAssignRole;
