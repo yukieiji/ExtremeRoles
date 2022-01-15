@@ -45,17 +45,17 @@ namespace ExtremeRoles.Roles.Combination
         {
             string baseDesc;
 
-            if (this.IsImposter())
+            if (this.IsImposter() && !this.CanHasAnotherRole)
             {
                 baseDesc = Translation.GetString(
                     string.Format("{0}{1}", this.Id, "ImposterFullDescription"));
             }
-            else if (this.CanKill)
+            else if (this.CanKill && !this.CanHasAnotherRole)
             {
                 baseDesc = Translation.GetString(
                     string.Format("{0}{1}", this.Id, "NeutralKillerFullDescription"));
             }
-            else if (this.IsNeutral())
+            else if (this.IsNeutral() && !this.CanHasAnotherRole)
             {
                 baseDesc = Translation.GetString(
                     string.Format("{0}{1}", this.Id, "NeutralFullDescription"));
@@ -94,7 +94,7 @@ namespace ExtremeRoles.Roles.Combination
 
         public override string GetImportantText(bool isContainFakeTask = true)
         {
-            if (!this.CanKill || this.IsImposter())
+            if (!this.CanKill || this.IsImposter() || this.CanHasAnotherRole)
             {
                 return base.GetImportantText(isContainFakeTask);
             }
@@ -212,6 +212,7 @@ namespace ExtremeRoles.Roles.Combination
             newKiller.CanKill = true;
             newKiller.HasTask = false;
             newKiller.ChangeAllLoverToNeutral();
+            ExtremeRoleManager.GameRole[targetId] = newKiller;
         }
 
         public void ChangeAllLoverToNeutral()
