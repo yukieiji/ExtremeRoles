@@ -138,8 +138,6 @@ namespace ExtremeRoles.Patches
         public static void Postfix(KeyboardJoystick __instance)
         {
 
-            // オプションページの変更
-
             InnerNet.InnerNetClient.GameStates state = AmongUsClient.Instance.GameState;
 
 
