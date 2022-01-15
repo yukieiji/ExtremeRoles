@@ -1,11 +1,59 @@
 ﻿using HarmonyLib;
 
+using UnityEngine;
+using UnityEngine.Events;
+
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
+using static UnityEngine.UI.Button;
+
 namespace ExtremeRoles.Patches.Manager
 {
+    [HarmonyPatch(typeof(HudManager), nameof(HudManager.Start))]
+    public static class HudManagerStartPatch
+    {
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(HudManager), nameof(HudManager.Start))]
+        public static void PostFix(HudManager __instance)
+        {
+
+            if (ExtremeRolesPlugin.RoleHelpButton == null)
+            {
+                createHelpButton();
+            }
+            else
+            {
+                setGameStartShipButtonPositon();
+            }
+        }
+        private static void setGameStartShipButtonPositon()
+        {
+            ExtremeRolesPlugin.RoleHelpButton.transform.localPosition = new Vector3(
+                4.925f, 2.0f, 0.0f);
+        }
+
+        private static void createHelpButton()
+        {
+            var topRight = GameObject.Find("TopRight");
+
+            ExtremeRolesPlugin.RoleHelpButton = Object.Instantiate(
+                Module.Prefab.HelpButton,
+                topRight.transform);
+            Object.DontDestroyOnLoad(ExtremeRolesPlugin.RoleHelpButton);
+            ExtremeRolesPlugin.RoleHelpButton.name = "infoRoleButton";
+            ExtremeRolesPlugin.RoleHelpButton.gameObject.SetActive(true);
+            ExtremeRolesPlugin.RoleHelpButton.layer = 5;
+            setGameStartShipButtonPositon();
+            var passiveButton = ExtremeRolesPlugin.RoleHelpButton.GetComponent<PassiveButton>();
+            passiveButton.OnClick = new ButtonClickedEvent();
+            passiveButton.OnClick.AddListener(
+                (UnityAction)ExtremeRolesPlugin.Info.ToggleInfoOverlay);
+        }
+
+    }
+
 
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     public class HudManagerUpdatePatch

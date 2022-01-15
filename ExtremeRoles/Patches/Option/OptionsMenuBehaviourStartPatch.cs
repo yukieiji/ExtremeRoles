@@ -6,7 +6,6 @@ using HarmonyLib;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using Twitch;
 
 using static ExtremeRoles.OptionHolder;
 using static UnityEngine.UI.Button;
@@ -77,7 +76,7 @@ namespace ExtremeRoles.Patches.Option
             {
                 buttonPrefab = Object.Instantiate(__instance.CensorChatButton);
                 Object.DontDestroyOnLoad(buttonPrefab);
-                buttonPrefab.name = "CensorChatPrefab";
+                buttonPrefab.name = "censorChatPrefab";
                 buttonPrefab.gameObject.SetActive(false);
             }
 

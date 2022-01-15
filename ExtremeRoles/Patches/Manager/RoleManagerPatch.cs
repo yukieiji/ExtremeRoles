@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using HarmonyLib;
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
@@ -31,6 +32,10 @@ namespace ExtremeRoles.Patches.Manager
                 ref extremeRolesData, ref playerIndexList);
             normalExtremeRoleAssign(
                 extremeRolesData, playerIndexList);
+
+            ExtremeRolesPlugin.RoleHelpButton.gameObject.SetActive(true);
+            ExtremeRolesPlugin.RoleHelpButton.transform.localPosition = new Vector3(
+                4.925f, 1.3f, 0.0f);
 
         }
 

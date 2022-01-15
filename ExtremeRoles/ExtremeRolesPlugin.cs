@@ -4,7 +4,7 @@ using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 
-using TMPro;
+using UnityEngine;
 
 using HarmonyLib;
 
@@ -20,6 +20,8 @@ namespace ExtremeRoles
 
         public static ExtremeRolesPlugin Instance;
         public static Module.GameDataContainer GameDataStore = new Module.GameDataContainer();
+
+        public static GameObject RoleHelpButton = null;
         public static Module.InfoOverlay Info = new Module.InfoOverlay();
 
         internal static BepInEx.Logging.ManualLogSource Logger;

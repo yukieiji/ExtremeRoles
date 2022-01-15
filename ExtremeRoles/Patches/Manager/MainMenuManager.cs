@@ -10,7 +10,7 @@ namespace ExtremeRoles.Patches.Manager
     [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
     public static class MainMenuManagerStartPatch
     {
-        static void Postfix(MainMenuManager __instance)
+        public static void Postfix(MainMenuManager __instance)
         {
             DestroyableSingleton<ModManager>.Instance.ShowModStamp();
 
