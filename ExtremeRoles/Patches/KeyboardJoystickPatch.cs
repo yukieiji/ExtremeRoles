@@ -26,6 +26,7 @@ namespace ExtremeRoles.Patches
             // ExtremeRolesPlugin.Logger.LogInfo($"DebugMode: {ExtremeRolesPlugin.DebugMode.Value}");
 
             if (!ExtremeRolesPlugin.DebugMode.Value) { return; }
+            if (!AmongUsClient.Instance.AmHost) { return; }
 
             // Spawn dummys
             if ((Input.GetKeyDown(KeyCode.F)) && Map.IsGameLobby)
@@ -136,7 +137,6 @@ namespace ExtremeRoles.Patches
     {
         public static void Postfix(KeyboardJoystick __instance)
         {
-            if (AmongUsClient.Instance == null) { return; }
 
             // オプションページの変更
             if (Input.GetKeyDown(KeyCode.Tab) &&
