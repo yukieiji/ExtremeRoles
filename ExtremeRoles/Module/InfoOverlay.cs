@@ -302,6 +302,7 @@ namespace ExtremeRoles.Module
             var allOption = OptionHolder.AllOption;
 
             string roleOptionString = "";
+            string colorRoleName = "";
 
             var multiAssignRole = role as Roles.API.MultiAssignRoleBase;
             if (multiAssignRole != null)
@@ -310,6 +311,8 @@ namespace ExtremeRoles.Module
                     CustomOption.AllOptionToString(
                         allOption[multiAssignRole.GetManagerOptionId(
                             Roles.API.RoleCommonOption.SpawnRate)]);
+                colorRoleName = Design.ColoedString(
+                    multiAssignRole.NameColor, Translation.GetString(multiAssignRole.PrevRoleName));
             }
             else if (!role.IsVanillaRole())
             {
@@ -317,14 +320,16 @@ namespace ExtremeRoles.Module
                     CustomOption.AllOptionToString(
                         allOption[role.GetRoleOptionId(
                             Roles.API.RoleCommonOption.SpawnRate)]);
+                colorRoleName = role.GetColoredRoleName();
             }
 
             string roleFullDesc = role.GetFullDescription();
+            
 
             roleText += 
-                $"<size=150%>・{role.GetColoredRoleName()}</size>" +
+                $"<size=150%>・{colorRoleName}</size>" +
                 (roleFullDesc != "" ? $"\n{roleFullDesc}\n" : "") + 
-                $"・{Translation.GetString(role.GetColoredRoleName())}{Translation.GetString("roleOption")}\n" +
+                $"・{Translation.GetString(colorRoleName)}{Translation.GetString("roleOption")}\n" +
                 (roleOptionString != "" ? $"{roleOptionString}" : "");
 
             if (multiAssignRole != null)
@@ -334,7 +339,7 @@ namespace ExtremeRoles.Module
 
                     string anotherRoleOptionString = "";
 
-                    if (!role.IsVanillaRole())
+                    if (!multiAssignRole.IsVanillaRole())
                     {
                         anotherRoleOptionString =
                             CustomOption.AllOptionToString(
@@ -346,7 +351,7 @@ namespace ExtremeRoles.Module
                     anotherRoleText += 
                         $"\n<size=150%>・{multiAssignRole.AnotherRole.GetColoredRoleName()}</size>" +
                         (anotherRoleFullDesc != "" ? $"\n{anotherRoleFullDesc}\n" : "") + 
-                        $"・{Translation.GetString(role.GetColoredRoleName())}{Translation.GetString("roleOption")}\n" +
+                        $"・{Translation.GetString(multiAssignRole.AnotherRole.GetColoredRoleName())}{Translation.GetString("roleOption")}\n" +
                         (anotherRoleOptionString != "" ? $"{anotherRoleOptionString}" : "");
                 }
             }
