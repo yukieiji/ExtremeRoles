@@ -384,6 +384,7 @@ namespace ExtremeRoles.Roles.API
             }
         }
 
+
         public override string GetImportantText(bool isContainFakeTask = true)
         {
 
@@ -464,6 +465,20 @@ namespace ExtremeRoles.Roles.API
 
             return string.Format("{0}{1}{2}",
                 baseRole, concat, anotherRole);
+        }
+
+        public override Color GetTargetRoleSeeColor(
+            SingleRoleBase targetRole,
+            byte targetPlayerId)
+        {
+
+            if (this.CanHasAnotherRole && this.AnotherRole != null)
+            {
+                return this.AnotherRole.GetTargetRoleSeeColor(
+                    targetRole, targetPlayerId);
+            }
+
+            return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
         }
 
         protected virtual void OverrideAnotherRoleSetting()
