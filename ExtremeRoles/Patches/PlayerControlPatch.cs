@@ -833,7 +833,7 @@ namespace ExtremeRoles.Patches
 
             if (!role.HasTask || role.IsNeutral())
             {
-                __instance.ClearTasks();
+                target.ClearTasks();
             }
         }
     }
