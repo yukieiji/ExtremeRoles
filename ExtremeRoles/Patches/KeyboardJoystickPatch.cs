@@ -149,22 +149,21 @@ namespace ExtremeRoles.Patches
                 {
                     OptionHolder.OptionsPage = OptionHolder.OptionsPage + 1;
                 }
-
-                if (Input.GetKeyDown(KeyCode.H))
-                {
-                    ExtremeRolesPlugin.Info.ToggleInfoOverlay();
-                }
-                if (Input.GetKeyDown(KeyCode.PageUp) &&
+                if (Input.GetKeyDown(KeyCode.PageDown) &&
                     ExtremeRolesPlugin.Info.OverlayShown)
                 {
                     ExtremeRolesPlugin.Info.ChangePage(1);
                 }
-                if (Input.GetKeyDown(KeyCode.PageDown) &&
+                if (Input.GetKeyDown(KeyCode.PageUp) &&
                     ExtremeRolesPlugin.Info.OverlayShown)
                 {
                     ExtremeRolesPlugin.Info.ChangePage(-1);
                 }
+            }
 
+            if (Input.GetKeyDown(KeyCode.H))
+            {
+                ExtremeRolesPlugin.Info.ToggleInfoOverlay();
             }
 
             // キルとベントボタン
