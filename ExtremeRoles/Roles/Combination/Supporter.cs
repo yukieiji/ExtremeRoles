@@ -90,7 +90,7 @@ namespace ExtremeRoles.Roles.Combination
             if (this.IsImposter())
             {
                 baseDesc = Translation.GetString(
-                    string.Format("{0}{1}", this.Id, "ImposterFullDescription"));
+                    $"{this.Id}ImposterFullDescription");
             }
             else
             {
@@ -111,7 +111,7 @@ namespace ExtremeRoles.Roles.Combination
             {
                 return Design.ColoedString(
                     ColorPalette.SupporterGreen,
-                    string.Format($" ★"));
+                    " ★");
             }
 
             return base.GetRolePlayerNameTag(targetRole, targetPlayerId);

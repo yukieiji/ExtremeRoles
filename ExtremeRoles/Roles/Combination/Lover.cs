@@ -47,18 +47,15 @@ namespace ExtremeRoles.Roles.Combination
 
             if (this.IsImposter() && !this.CanHasAnotherRole)
             {
-                baseDesc = Translation.GetString(
-                    string.Format("{0}{1}", this.Id, "ImposterFullDescription"));
+                baseDesc = Translation.GetString($"{this.Id}ImposterFullDescription");
             }
             else if (this.CanKill && !this.CanHasAnotherRole)
             {
-                baseDesc = Translation.GetString(
-                    string.Format("{0}{1}", this.Id, "NeutralKillerFullDescription"));
+                baseDesc = Translation.GetString($"{this.Id}NeutralKillerFullDescription"));
             }
             else if (this.IsNeutral() && !this.CanHasAnotherRole)
             {
-                baseDesc = Translation.GetString(
-                    string.Format("{0}{1}", this.Id, "NeutralFullDescription"));
+                baseDesc = Translation.GetString($"{this.Id}NeutralFullDescription"));
             }
             else
             {
@@ -101,10 +98,7 @@ namespace ExtremeRoles.Roles.Combination
 
             string killerText = Design.ColoedString(
                 this.NameColor,
-                string.Format("{0}: {1}",
-                    this.GetColoredRoleName(),
-                    Translation.GetString(
-                        string.Format("{0}{1}", this.Id, "KillerShortDescription"))));
+                $"{this.GetColoredRoleName()}: {Translation.GetString($"{this.Id}KillerShortDescription")}");
 
             if (this.AnotherRole == null)
             {
@@ -114,8 +108,7 @@ namespace ExtremeRoles.Roles.Combination
 
             string anotherRoleString = this.AnotherRole.GetImportantText(false);
 
-            killerText = string.Format("{0}\r\n{1}",
-                killerText, anotherRoleString);
+            killerText = $"{killerText}\r\n{anotherRoleString}";
 
             return this.getTaskText(
                 killerText, isContainFakeTask);
@@ -173,7 +166,7 @@ namespace ExtremeRoles.Roles.Combination
             {
                 return Design.ColoedString(
                     ColorPalette.LoverPink,
-                    string.Format($" {GetRoleTag()}"));
+                    $" {GetRoleTag()}");
             }
 
             return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
@@ -346,8 +339,7 @@ namespace ExtremeRoles.Roles.Combination
                     this.NameColor,
                     DestroyableSingleton<TranslationController>.Instance.GetString(
                         StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()));
-                baseString = string.Format("{0}\r\n{1}",
-                    baseString, fakeTaskString);
+                baseString = $"{baseString}\r\n{fakeTaskString}";
             }
 
             return baseString;

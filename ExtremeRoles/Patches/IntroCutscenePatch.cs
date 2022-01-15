@@ -19,7 +19,7 @@ namespace ExtremeRoles.Patches
                 __instance.BackgroundBar.material.color = Module.ColorPalette.NeutralColor;
                 __instance.TeamTitle.text = Helper.Translation.GetString("neutral");
                 __instance.TeamTitle.color = Module.ColorPalette.NeutralColor;
-                __instance.ImpostorText.text = string.Format(Helper.Translation.GetString("neutralIntro"));
+                __instance.ImpostorText.text = Helper.Translation.GetString("neutralIntro");
             }
         }
 
@@ -124,13 +124,13 @@ namespace ExtremeRoles.Patches
 
                 if (role.IsImposter())
                 {
-                    __instance.RoleBlurbText.text += string.Format(
-                        "\n{0}", Helper.Translation.GetString("impostorIntroText"));
+                    __instance.RoleBlurbText.text += 
+                        $"\n{Helper.Translation.GetString("impostorIntroText")}";
                 }
                 else if (role.IsCrewmate() && role.HasTask)
                 {
-                    __instance.RoleBlurbText.text += string.Format(
-                        "\n{0}", Helper.Translation.GetString("crewIntroText"));
+                    __instance.RoleBlurbText.text += 
+                        $"\n{Helper.Translation.GetString("crewIntroText")}";
                 }
 
             }

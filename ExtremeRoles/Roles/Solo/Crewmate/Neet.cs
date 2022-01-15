@@ -29,7 +29,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             if (this.IsNeutral())
             {
                 return Translation.GetString(
-                    string.Format("{0}{1}", this.Id, "NeutralFullDescription"));
+                    $"{this.Id}NeutralFullDescription");
             }
 
             return base.GetFullDescription();

@@ -71,7 +71,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             if (this.canShootNeutral)
             {
-                shotText = string.Format("{0}{1}{2}",
+                shotText = string.Concat(
                     shotText,
                     Design.ColoedString(
                         this.NameColor,
@@ -87,7 +87,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 Design.ColoedString(
                     this.NameColor,
                     Translation.GetString(
-                        string.Format("{0}{1}", this.Id, "ShortDescription"))));
+                        $"{this.Id}ShortDescription")));
 
             return baseString;
 

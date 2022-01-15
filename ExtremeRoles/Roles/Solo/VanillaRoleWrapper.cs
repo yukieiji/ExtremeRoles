@@ -45,7 +45,7 @@ namespace ExtremeRoles.Roles.Solo
         public override string GetFullDescription()
         {
             return Helper.Translation.GetString(
-                string.Format("{0}{1}", this.VanilaRoleId, "FullDescription"));
+                $"{this.VanilaRoleId}FullDescription");
         }
 
         public override string GetImportantText(bool isContainFakeTask = true)
@@ -66,9 +66,7 @@ namespace ExtremeRoles.Roles.Solo
 
             return Helper.Design.ColoedString(
                 this.NameColor,
-                string.Format("{0}: {1}",
-                    this.GetColoredRoleName(),
-                    Helper.Translation.GetString("crewImportantText")));
+                $"{this.GetColoredRoleName()}: {Helper.Translation.GetString("crewImportantText")}");
 
         }
 
