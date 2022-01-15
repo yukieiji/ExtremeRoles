@@ -4,8 +4,8 @@
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
 
-        <VersionPrefix>1.7.6</VersionPrefix>
-        <VersionSuffix>Test-v25</VersionSuffix> 
+        <VersionPrefix>1.8.0</VersionPrefix>
+        <VersionSuffix>RC-v1</VersionSuffix> 
         <Description>Extreme Roles for Advanced user</Description>
         <Authors>yukieiji</Authors>
     </PropertyGroup>
