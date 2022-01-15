@@ -125,7 +125,7 @@ namespace ExtremeRoles.Module
             
             if (this.rolePage < 0)
             {
-                this.rolePage = this.allRoleText.Count - 1 + this.rolePage;
+                this.rolePage = this.allRoleText.Count + this.rolePage;
             }
             var (roleText, anotherRoleText) = getSpecialRoleText();
             
@@ -447,8 +447,7 @@ namespace ExtremeRoles.Module
                                     Roles.API.RoleCommonOption.SpawnRate)]);
                         colorRoleName = role.GetColoredRoleName();
 
-                        roleFullDesc = Translation.GetString(
-                            string.Format("{0}{1}", role.Id, "FullDescription"));
+                        roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
 
                         roleText = string.Concat(
                             $"<size=150%>・{colorRoleName}</size>",
@@ -470,8 +469,7 @@ namespace ExtremeRoles.Module
                                 Roles.API.RoleCommonOption.SpawnRate)]);
                     colorRoleName = role.GetColoredRoleName();
 
-                    roleFullDesc = Translation.GetString(
-                        string.Format("{0}{1}", role.Id, "FullDescription"));
+                    roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
 
                     roleText = string.Concat(
                         $"<size=150%>・{colorRoleName}</size>",
@@ -490,8 +488,7 @@ namespace ExtremeRoles.Module
                             Roles.API.RoleCommonOption.SpawnRate)]);
                 colorRoleName = role.GetColoredRoleName();
 
-                roleFullDesc = Translation.GetString(
-                    string.Format("{0}{1}", role.Id, "FullDescription"));
+                roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
 
                 roleText = string.Concat(
                     $"<size=150%>・{colorRoleName}</size>",
