@@ -14,7 +14,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
     public class Carrier : SingleRoleBase, IRoleAbility
     {
         public DeadBody CarringBody;
-        public Color DeadBodyColor;
+        public float alphaValue;
+        public Transform Parent;
         private GameData.PlayerInfo targetBody;
 
         public enum CarrierOption
@@ -56,41 +57,48 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == targetPlayerId)
                 {
-                    array[i].gameObject.transform.position = rolePlayer.gameObject.transform.position;
-                    array[i].gameObject.transform.parent= rolePlayer.gameObject.transform.parent;
+                    role.Parent = array[i].transform.parent;
                     Color oldColor = array[i].bodyRenderer.color;
-                    if (role.canReportOnCarry)
-                    {
-                        role.DeadBodyColor = new Color(
-                            oldColor.r,
-                            oldColor.g,
-                            oldColor.g,
-                            oldColor.a);
-                        array[i].bodyRenderer.color = new Color(oldColor.r, oldColor.g, oldColor.b, 0);
-                    }
-                    else
-                    {
-                        array[i].gameObject.SetActive(false);
-                    }
+
                     role.CarringBody = array[i];
+                    role.CarringBody.transform.position = rolePlayer.transform.position;
+                    role.CarringBody.transform.SetParent(rolePlayer.transform);
+                    
+                    role.alphaValue = oldColor.a;
+                    role.CarringBody.bodyRenderer.color = new Color(
+                        oldColor.r, oldColor.g, oldColor.b, 0);
+                    
+                    if (!role.canReportOnCarry)
+                    {
+                        role.CarringBody.GetComponentInChildren<BoxCollider2D>().enabled = false;
+                    }
+                    
                     break;
                 }
             }
         }
 
+        
         public static void PlaceDeadBody(
             byte rolePlayerId)
         {
             var role = (Carrier)ExtremeRoleManager.GameRole[rolePlayerId];
             var rolePlayer = Player.GetPlayerControlById(rolePlayerId);
 
-            role.CarringBody.gameObject.SetActive(true);
-            role.CarringBody.gameObject.transform.position = rolePlayer.gameObject.transform.position;
-            role.CarringBody.gameObject.transform.parent = null;
-            role.CarringBody.bodyRenderer.color = role.DeadBodyColor;
+            role.CarringBody.transform.parent = null;
+            role.CarringBody.transform.position = rolePlayer.transform.position;
+            
+            
+            Color color = role.CarringBody.bodyRenderer.color;
+            role.CarringBody.bodyRenderer.color = new Color(
+                color.r, color.g, color.b, role.alphaValue);
+            if (!role.canReportOnCarry)
+            {
+                role.CarringBody.GetComponentInChildren<BoxCollider2D>().enabled = true;
+            }
             role.CarringBody = null;
         }
-
+        
         public void CreateAbility()
         {
             this.CreateReclickableAbilityButton(
@@ -159,6 +167,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         protected override void RoleSpecificInit()
         {
+            this.canReportOnCarry = OptionHolder.AllOption[
+                GetRoleOptionId((int)CarrierOption.CanReportOnCarry)].GetValue();
             this.RoleAbilityInit();
         }
 
