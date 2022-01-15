@@ -580,6 +580,9 @@ namespace ExtremeRoles.Patches
             ref PlayerControl __result,
             [HarmonyArgument(0)] bool protecting)
         {
+
+            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return true; }
+
             var gameRoles = ExtremeRoleManager.GameRole;
 
             if (gameRoles.Count == 0) { return true; }
