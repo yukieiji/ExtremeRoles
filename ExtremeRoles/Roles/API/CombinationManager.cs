@@ -180,7 +180,7 @@ namespace ExtremeRoles.Roles.API
     public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManagerBase
     {
 
-        private MultiAssignRoleBase baseRole;
+        public MultiAssignRoleBase BaseRole;
         private int minimumRoleNum = 0;
         private bool canAssignImposter = true;
 
@@ -190,8 +190,8 @@ namespace ExtremeRoles.Roles.API
             bool canAssignImposter = true) : 
                 base(role.Id.ToString(), role.NameColor)
         {
+            this.BaseRole = role;
             this.minimumRoleNum = minimumRoleNum;
-            this.baseRole = role;
             this.canAssignImposter = canAssignImposter;
         }
         public override void AssignSetUpInit()
@@ -243,12 +243,12 @@ namespace ExtremeRoles.Roles.API
 
             MultiAssignRoleBase role = null;
             
-            if (this.baseRole.BytedRoleId != roleId) { return role; }
+            if (this.BaseRole.BytedRoleId != roleId) { return role; }
 
-            this.baseRole.CanHasAnotherRole = OptionHolder.AllOption[
+            this.BaseRole.CanHasAnotherRole = OptionHolder.AllOption[
                 GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign)].GetValue();
 
-            role = (MultiAssignRoleBase)this.baseRole.Clone();
+            role = (MultiAssignRoleBase)this.BaseRole.Clone();
 
             switch (playerRoleType)
             {
@@ -331,8 +331,8 @@ namespace ExtremeRoles.Roles.API
         {
 
             int optionOffset = this.OptionIdOffset + ExtremeRoleManager.OptionOffsetPerRole;
-            this.baseRole.ManagerOptionOffset = this.OptionIdOffset;
-            this.baseRole.CreatRoleSpecificOption(
+            this.BaseRole.ManagerOptionOffset = this.OptionIdOffset;
+            this.BaseRole.CreatRoleSpecificOption(
                 parentOps,
                 optionOffset);
         }
@@ -343,7 +343,7 @@ namespace ExtremeRoles.Roles.API
             int roleAssignNum = 1;
             var allOptions = OptionHolder.AllOption;
 
-            this.baseRole.CanHasAnotherRole = allOptions[
+            this.BaseRole.CanHasAnotherRole = allOptions[
                 GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign)].GetValue();
 
             if (allOptions.ContainsKey(GetRoleOptionId(CombinationRoleCommonOption.AssignsNum)))
@@ -354,7 +354,7 @@ namespace ExtremeRoles.Roles.API
 
             for (int i = 0; i < roleAssignNum; ++i)
             {
-                this.Roles.Add((MultiAssignRoleBase)this.baseRole.Clone());
+                this.Roles.Add((MultiAssignRoleBase)this.BaseRole.Clone());
             }
         }
 

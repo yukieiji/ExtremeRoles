@@ -310,6 +310,12 @@
     "roleName": {
         "11": "\u5f79\u8077"
     },
+    "roleDesc": {
+        "11": "\u5f79\u8077\u306e\u8a73\u7d30"
+    },
+    "changeRoleMore": {
+        "11": "\u30da\u30fc\u30b8\u30a2\u30c3\u30d7\u3001\u30da\u30fc\u30b8\u30c0\u30a6\u30f3\u30ad\u30fc\u3067\u5f79\u8077\u5207\u308a\u66ff\u3048"
+    },
     "CrewmateFullDescription": {
         "11": "\u30bf\u30b9\u30af\u3092\u884c\u3046\u30af\u30eb\u30fc\u5f79\u8077"
     },

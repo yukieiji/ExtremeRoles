@@ -9,7 +9,7 @@ namespace ExtremeRoles.Module
 {
     public class InfoOverlay
     {
-        public bool overlayShown = false;
+        public bool OverlayShown = false;
 
         private Sprite colorBackGround;
         private SpriteRenderer meetingUnderlay;
@@ -18,8 +18,13 @@ namespace ExtremeRoles.Module
         private TMPro.TextMeshPro roleInfoText;
         private TMPro.TextMeshPro anotherRoleInfoText;
 
+        private int rolePage = 0;
+        private List<string> allRoleText = new List<string>();
+
         public InfoOverlay()
-        { }
+        {
+            allRoleText.Clear();
+        }
 
         public void ResetOverlays()
         {
@@ -32,15 +37,17 @@ namespace ExtremeRoles.Module
             UnityEngine.Object.Destroy(roleInfoText);
             UnityEngine.Object.Destroy(anotherRoleInfoText);
 
+            this.allRoleText.Clear();
 
             meetingUnderlay = infoUnderlay = null;
             ruleInfoText = roleInfoText = anotherRoleInfoText = null;
-            overlayShown = false;
+            this.OverlayShown = false;
+            this.rolePage = 0;
         }
 
         public void ToggleInfoOverlay()
         {
-            if (overlayShown)
+            if (OverlayShown)
             {
                 HideInfoOverlay();
             }
@@ -64,11 +71,11 @@ namespace ExtremeRoles.Module
 
         public void HideInfoOverlay()
         {
-            if (!overlayShown) { return; }
+            if (!OverlayShown) { return; }
 
             if (MeetingHud.Instance == null) { DestroyableSingleton<HudManager>.Instance.SetHudActive(true); }
 
-            overlayShown = false;
+            OverlayShown = false;
             var underlayTransparent = new Color(0.1f, 0.1f, 0.1f, 0.0f);
             var underlayOpaque = new Color(0.1f, 0.1f, 0.1f, 0.88f);
 
@@ -109,6 +116,24 @@ namespace ExtremeRoles.Module
                     }
                 }
             })));
+        }
+
+        public void ChangePage(int count)
+        {
+            if (this.allRoleText.Count == 0) { return; }
+            this.rolePage = (this.rolePage + count) % this.allRoleText.Count;
+            
+            if (this.rolePage < 0)
+            {
+                this.rolePage = this.allRoleText.Count - 1 + this.rolePage;
+            }
+            var (roleText, anotherRoleText) = getSpecialRoleText();
+            
+            roleInfoText.text = roleText;
+            roleInfoText.enabled = true;
+
+            anotherRoleInfoText.text = anotherRoleText;
+            anotherRoleInfoText.enabled = true;
         }
 
         private string getCommonOptionString()
@@ -252,11 +277,10 @@ namespace ExtremeRoles.Module
         private void showInfoOverlay()
         {
 
-            if (overlayShown) { return; }
+            if (OverlayShown) { return; }
 
             HudManager hudManager = DestroyableSingleton<HudManager>.Instance;
-            if (ShipStatus.Instance == null ||
-                PlayerControl.LocalPlayer == null ||
+            if (PlayerControl.LocalPlayer == null ||
                 hudManager == null ||
                 HudManager.Instance.isIntroDisplayed ||
                 (!PlayerControl.LocalPlayer.CanMove && MeetingHud.Instance == null))
@@ -273,7 +297,7 @@ namespace ExtremeRoles.Module
 
             hudManager.SetHudActive(false);
 
-            overlayShown = true;
+            OverlayShown = true;
 
             Transform parent;
             if (MeetingHud.Instance != null)
@@ -296,6 +320,37 @@ namespace ExtremeRoles.Module
             ruleInfoText.text = $"<size=200%>{Translation.GetString("gameOption")}</size>\n{getCommonOptionString()}";
             ruleInfoText.enabled = true;
 
+            string roleText;
+            string anotherRoleText;
+
+            if (ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd())
+            {
+                (roleText, anotherRoleText) = getGameRoleText();
+            }
+            else
+            {
+                (roleText, anotherRoleText) = getSpecialRoleText();
+            }
+
+            roleInfoText.text = roleText;
+            roleInfoText.enabled = true;
+
+            anotherRoleInfoText.text = anotherRoleText;
+            anotherRoleInfoText.enabled = true;
+
+            var underlayTransparent = new Color(0.1f, 0.1f, 0.1f, 0.0f);
+            var underlayOpaque = new Color(0.1f, 0.1f, 0.1f, 0.88f);
+            HudManager.Instance.StartCoroutine(Effects.Lerp(0.2f, new Action<float>(t =>
+            {
+                infoUnderlay.color = Color.Lerp(underlayTransparent, underlayOpaque, t);
+                ruleInfoText.color = Color.Lerp(Palette.ClearWhite, Palette.White, t);
+                roleInfoText.color = Color.Lerp(Palette.ClearWhite, Palette.White, t);
+                anotherRoleInfoText.color = Color.Lerp(Palette.ClearWhite, Palette.White, t);
+            })));
+        }
+
+        private Tuple<string, string> getGameRoleText()
+        {
             string roleText = $"<size=200%>{Translation.GetString("yourRole")}</size>\n";
             string anotherRoleText = "<size=200%> </size>\n";
             var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
@@ -324,11 +379,11 @@ namespace ExtremeRoles.Module
             }
 
             string roleFullDesc = role.GetFullDescription();
-            
 
-            roleText += 
+
+            roleText +=
                 $"<size=150%>・{colorRoleName}</size>" +
-                (roleFullDesc != "" ? $"\n{roleFullDesc}\n" : "") + 
+                (roleFullDesc != "" ? $"\n{roleFullDesc}\n" : "") +
                 $"・{Translation.GetString(colorRoleName)}{Translation.GetString("roleOption")}\n" +
                 (roleOptionString != "" ? $"{roleOptionString}" : "");
 
@@ -348,30 +403,104 @@ namespace ExtremeRoles.Module
                     }
                     string anotherRoleFullDesc = multiAssignRole.AnotherRole.GetFullDescription();
 
-                    anotherRoleText += 
+                    anotherRoleText +=
                         $"\n<size=150%>・{multiAssignRole.AnotherRole.GetColoredRoleName()}</size>" +
-                        (anotherRoleFullDesc != "" ? $"\n{anotherRoleFullDesc}\n" : "") + 
+                        (anotherRoleFullDesc != "" ? $"\n{anotherRoleFullDesc}\n" : "") +
                         $"・{Translation.GetString(multiAssignRole.AnotherRole.GetColoredRoleName())}{Translation.GetString("roleOption")}\n" +
                         (anotherRoleOptionString != "" ? $"{anotherRoleOptionString}" : "");
                 }
             }
 
-            roleInfoText.text = roleText;
-            roleInfoText.enabled = true;
+            return Tuple.Create(roleText, anotherRoleText);
 
-            anotherRoleInfoText.text = anotherRoleText;
-            anotherRoleInfoText.enabled = true;
-
-            var underlayTransparent = new Color(0.1f, 0.1f, 0.1f, 0.0f);
-            var underlayOpaque = new Color(0.1f, 0.1f, 0.1f, 0.88f);
-            HudManager.Instance.StartCoroutine(Effects.Lerp(0.2f, new Action<float>(t =>
-            {
-                infoUnderlay.color = Color.Lerp(underlayTransparent, underlayOpaque, t);
-                ruleInfoText.color = Color.Lerp(Palette.ClearWhite, Palette.White, t);
-                roleInfoText.color = Color.Lerp(Palette.ClearWhite, Palette.White, t);
-                anotherRoleInfoText.color = Color.Lerp(Palette.ClearWhite, Palette.White, t);
-            })));
         }
 
+        private Tuple<string, string> getSpecialRoleText()
+        {
+            if (this.allRoleText.Count == 0) { createAllRoleText(); }
+            string showRole = string.Concat(
+                $"<size=200%>{Translation.GetString("roleDesc")}</size>",
+                $"           {Translation.GetString("changeRoleMore")}",
+                $"({this.rolePage + 1}/{ this.allRoleText.Count })\n",
+                this.allRoleText[this.rolePage]);
+            return Tuple.Create(showRole, "");
+        }
+        private void createAllRoleText()
+        {
+
+            var allOption = OptionHolder.AllOption;
+
+            string roleOptionString;
+            string colorRoleName;
+            string roleFullDesc;
+            string roleText;
+
+            foreach (var combRole in Roles.ExtremeRoleManager.CombRole)
+            {
+                if (combRole is Roles.API.ConstCombinationRoleManagerBase)
+                {
+                    foreach (var role in combRole.Roles)
+                    {
+                        roleOptionString =
+                            CustomOption.AllOptionToString(
+                                allOption[role.GetManagerOptionId(
+                                    Roles.API.RoleCommonOption.SpawnRate)]);
+                        colorRoleName = role.GetColoredRoleName();
+
+                        roleFullDesc = Translation.GetString(
+                            string.Format("{0}{1}", role.Id, "FullDescription"));
+
+                        roleText =
+                            $"<size=150%>・{colorRoleName}</size>" +
+                            (roleFullDesc != "" ? $"\n{roleFullDesc}\n" : "") +
+                            $"・{Translation.GetString(colorRoleName)}{Translation.GetString("roleOption")}\n" +
+                            (roleOptionString != "" ? $"{roleOptionString}" : "");
+
+                        this.allRoleText.Add((string)roleText.Clone());
+                    }
+                }
+                else if (combRole is Roles.API.FlexibleCombinationRoleManagerBase)
+                {
+
+                    var role = ((Roles.API.FlexibleCombinationRoleManagerBase)combRole).BaseRole;
+
+                    roleOptionString =
+                        CustomOption.AllOptionToString(
+                            allOption[role.GetManagerOptionId(
+                                Roles.API.RoleCommonOption.SpawnRate)]);
+                    colorRoleName = role.GetColoredRoleName();
+
+                    roleFullDesc = Translation.GetString(
+                        string.Format("{0}{1}", role.Id, "FullDescription"));
+
+                    roleText =
+                        $"<size=150%>・{colorRoleName}</size>" +
+                        (roleFullDesc != "" ? $"\n{roleFullDesc}\n" : "") +
+                        $"・{Translation.GetString(colorRoleName)}{Translation.GetString("roleOption")}\n" +
+                        (roleOptionString != "" ? $"{roleOptionString}" : "");
+
+                    this.allRoleText.Add((string)roleText.Clone());
+                }
+            }
+            foreach (var role in Roles.ExtremeRoleManager.NormalRole)
+            {
+                roleOptionString =
+                    CustomOption.AllOptionToString(
+                        allOption[role.GetRoleOptionId(
+                            Roles.API.RoleCommonOption.SpawnRate)]);
+                colorRoleName = role.GetColoredRoleName();
+
+                roleFullDesc = Translation.GetString(
+                    string.Format("{0}{1}", role.Id, "FullDescription"));
+
+                roleText =
+                    $"<size=150%>・{colorRoleName}</size>" +
+                    (roleFullDesc != "" ? $"\n{roleFullDesc}\n" : "") +
+                    $"・{Translation.GetString(colorRoleName)}{Translation.GetString("roleOption")}\n" +
+                    (roleOptionString != "" ? $"{roleOptionString}" : "");
+
+                this.allRoleText.Add((string)roleText.Clone());
+            }
+        }
     }
 }

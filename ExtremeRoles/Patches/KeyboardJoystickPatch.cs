@@ -139,17 +139,33 @@ namespace ExtremeRoles.Patches
         {
 
             // オプションページの変更
-            if (Input.GetKeyDown(KeyCode.Tab) &&
-                AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started)
-            {
-                OptionHolder.OptionsPage = OptionHolder.OptionsPage + 1;
-            }
 
-            if (Input.GetKeyDown(KeyCode.H) && ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd())
-            {
-                ExtremeRolesPlugin.Info.ToggleInfoOverlay();
-            }
+            InnerNet.InnerNetClient.GameStates state = AmongUsClient.Instance.GameState;
 
+
+            if (state != InnerNet.InnerNetClient.GameStates.Started)
+            {
+                if (Input.GetKeyDown(KeyCode.Tab))
+                {
+                    OptionHolder.OptionsPage = OptionHolder.OptionsPage + 1;
+                }
+
+                if (Input.GetKeyDown(KeyCode.H))
+                {
+                    ExtremeRolesPlugin.Info.ToggleInfoOverlay();
+                }
+                if (Input.GetKeyDown(KeyCode.PageUp) &&
+                    ExtremeRolesPlugin.Info.OverlayShown)
+                {
+                    ExtremeRolesPlugin.Info.ChangePage(1);
+                }
+                if (Input.GetKeyDown(KeyCode.PageDown) &&
+                    ExtremeRolesPlugin.Info.OverlayShown)
+                {
+                    ExtremeRolesPlugin.Info.ChangePage(-1);
+                }
+
+            }
 
             // キルとベントボタン
             if (PlayerControl.LocalPlayer.Data != null && 

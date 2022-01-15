@@ -11,7 +11,10 @@ namespace ExtremeRoles.Patches.Manager
     {
         public static bool Prefix(GameStartManager __instance)
         {
+
             bool continueStart = true;
+
+            ExtremeRolesPlugin.Info.HideInfoOverlay();
 
             if (OptionHolder.AllOption[(int)OptionHolder.CommonOptionKey.RandomMap].GetValue())
             {
