@@ -19,7 +19,10 @@ namespace ExtremeRoles.Roles.Combination
 
     public class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
     {
-        private byte supportTarget;
+        private byte supportTargetId;
+        private string supportPlayerName;
+        private string supportRoleName;
+        private Color supportColor;
 
         public Supporter(
             ) : base(
@@ -73,7 +76,19 @@ namespace ExtremeRoles.Roles.Combination
             target = target.OrderBy(
                 item => RandomGenerator.Instance.Next()).ToList();
 
-            this.supportTarget = target[0];
+            this.supportTargetId = target[0];
+
+            var supportRole = ExtremeRoleManager.GameRole[
+                this.supportTargetId];
+
+            this.supportRoleName = supportRole.GetColoredRoleName();
+            this.supportPlayerName = Player.GetPlayerControlById(
+                this.supportTargetId).Data.PlayerName;
+            this.supportColor = new Color(
+                supportRole.NameColor.r,
+                supportRole.NameColor.g,
+                supportRole.NameColor.b,
+                supportRole.NameColor.a);
 
         }
 
@@ -99,15 +114,13 @@ namespace ExtremeRoles.Roles.Combination
 
             return string.Format(
                 baseDesc,
-                ExtremeRoleManager.GameRole[
-                    this.supportTarget].GetColoredRoleName(),
-                Player.GetPlayerControlById(
-                    this.supportTarget).Data.PlayerName);
+                this.supportRoleName,
+                this.supportPlayerName);
         }
         public override string GetRolePlayerNameTag(
             SingleRoleBase targetRole, byte targetPlayerId)
         {
-            if (targetPlayerId == this.supportTarget)
+            if (targetPlayerId == this.supportTargetId)
             {
                 return Design.ColoedString(
                     ColorPalette.SupporterGreen,
@@ -121,9 +134,9 @@ namespace ExtremeRoles.Roles.Combination
         public override Color GetTargetRoleSeeColor(
             SingleRoleBase targetRole, byte targetPlayerId)
         {
-            if (targetPlayerId == this.supportTarget)
+            if (targetPlayerId == this.supportTargetId)
             {
-                return targetRole.NameColor;
+                return this.supportColor;
             }
 
             return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
@@ -131,17 +144,12 @@ namespace ExtremeRoles.Roles.Combination
 
         public override string GetIntroDescription()
         {
-            var roleName = ExtremeRoleManager.GameRole[
-                this.supportTarget].GetColoredRoleName();
-            var playerName = Player.GetPlayerControlById(
-                this.supportTarget).Data.PlayerName;
-
             return string.Format(
                 base.GetIntroDescription(),
                 Design.ColoedString(
                     Palette.White,
-                    playerName),
-                roleName);
+                    supportPlayerName),
+                supportRoleName);
         }
 
         protected override void CreateSpecificOption(
@@ -156,7 +164,7 @@ namespace ExtremeRoles.Roles.Combination
 
         protected override void RoleSpecificInit()
         {
-            this.supportTarget = byte.MaxValue;
+            this.supportTargetId = byte.MaxValue;
         }
     }
 }
