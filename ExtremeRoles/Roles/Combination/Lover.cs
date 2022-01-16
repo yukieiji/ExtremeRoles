@@ -51,11 +51,11 @@ namespace ExtremeRoles.Roles.Combination
             }
             else if (this.CanKill && !this.CanHasAnotherRole)
             {
-                baseDesc = Translation.GetString($"{this.Id}NeutralKillerFullDescription"));
+                baseDesc = Translation.GetString($"{this.Id}NeutralKillerFullDescription");
             }
             else if (this.IsNeutral() && !this.CanHasAnotherRole)
             {
-                baseDesc = Translation.GetString($"{this.Id}NeutralFullDescription"));
+                baseDesc = Translation.GetString($"{this.Id}NeutralFullDescription");
             }
             else
             {
