@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 using UnityEngine;
 
@@ -357,7 +358,7 @@ namespace ExtremeRoles.Module
             var allOption = OptionHolder.AllOption;
 
             string roleOptionString = "";
-            string colorRoleName = "";
+            string colorRoleName;
 
             var multiAssignRole = role as Roles.API.MultiAssignRoleBase;
             if (multiAssignRole != null)
@@ -430,6 +431,12 @@ namespace ExtremeRoles.Module
                 this.allRoleText[this.rolePage]);
             return Tuple.Create(showRole, "");
         }
+
+        private string cleanPlaceHolder(string value)
+        {
+            return Regex.Replace(value, "\\{[0-9]+\\}", "gameStartReplace");
+        }
+
         private void createAllRoleText()
         {
 
@@ -454,6 +461,8 @@ namespace ExtremeRoles.Module
 
                         roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
 
+                        roleFullDesc = cleanPlaceHolder(roleFullDesc);
+
                         roleText = string.Concat(
                             $"<size=150%>・{colorRoleName}</size>",
                             roleFullDesc != "" ? $"\n{roleFullDesc}\n" : "",
@@ -475,6 +484,7 @@ namespace ExtremeRoles.Module
                     colorRoleName = role.GetColoredRoleName();
 
                     roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
+                    roleFullDesc = cleanPlaceHolder(roleFullDesc);
 
                     roleText = string.Concat(
                         $"<size=150%>・{colorRoleName}</size>",
@@ -494,6 +504,7 @@ namespace ExtremeRoles.Module
                 colorRoleName = role.GetColoredRoleName();
 
                 roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
+                roleFullDesc = cleanPlaceHolder(roleFullDesc);
 
                 roleText = string.Concat(
                     $"<size=150%>・{colorRoleName}</size>",
