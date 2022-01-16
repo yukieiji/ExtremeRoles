@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 using HarmonyLib;
 
@@ -46,6 +47,7 @@ namespace ExtremeRoles.Patches.Option
 
         private static GameObject popUp;
         private static TextMeshPro moreOptionText;
+        private static TextMeshPro creditText;
 
         private static ToggleButtonBehaviour moreOptionButton;
         private static List<ToggleButtonBehaviour> modOptionButton;
@@ -176,6 +178,7 @@ namespace ExtremeRoles.Patches.Option
             title.GetComponent<RectTransform>().localPosition = Vector3.up * 2.3f;
             title.gameObject.SetActive(true);
             title.text = Helper.Translation.GetString("moreOptionText");
+            title.transform.localPosition += new Vector3(0.0f, 0.25f, 0f);
             title.name = "titleText";
         }
 
@@ -183,6 +186,32 @@ namespace ExtremeRoles.Patches.Option
         {
             if (popUp.transform.GetComponentInChildren<ToggleButtonBehaviour>()) { return; }
 
+            createModOption();
+            createOptionInExButton();
+
+            creditText = Object.Instantiate(
+                Module.Prefab.Text, popUp.transform);
+            creditText.name = "credit";
+
+            string modCredit = string.Format(
+                "<size=175%>Extreme Roles<space=0.9em>{0}{1}</size>",
+                Helper.Translation.GetString("version"),
+                Assembly.GetExecutingAssembly().GetName().Version);
+            string developCredit = $"\n<align=left>{Helper.Translation.GetString("developer")}yukieiji";
+            string debugCredit = $"\n<align=left>{Helper.Translation.GetString("debugThunk")}stou59，Tyoubi，mamePi";
+
+            creditText.transform.localPosition = new Vector3(0.0f, -2.0f, -.5f);
+            creditText.fontSizeMin = creditText.fontSizeMax = 3.0f;
+            creditText.font = Object.Instantiate(moreOptionText.font);
+            creditText.GetComponent<RectTransform>().sizeDelta = new Vector2(5.4f, 5.5f);
+            creditText.text = string.Concat(
+                modCredit, developCredit, debugCredit);
+            creditText.gameObject.SetActive(true);
+
+        }
+
+        private static void createModOption()
+        {
             modOptionButton = new List<ToggleButtonBehaviour>();
 
             for (var i = 0; i < modOption.Length; i++)
@@ -192,7 +221,7 @@ namespace ExtremeRoles.Patches.Option
                 var button = Object.Instantiate(buttonPrefab, popUp.transform);
                 button.transform.localPosition = new Vector3(
                     i % 2 == 0 ? -1.17f : 1.17f,
-                    1.3f - i / 2 * 0.8f,
+                    1.75f - i / 2 * 0.8f,
                     -.5f);
 
                 button.onState = info.DefaultValue;
@@ -233,16 +262,19 @@ namespace ExtremeRoles.Patches.Option
                 }
                 modOptionButton.Add(button);
             }
+        }
 
-            importButton =Object.Instantiate(
+        private static void createOptionInExButton()
+        {
+            importButton = Object.Instantiate(
                 buttonPrefab, popUp.transform);
             exportButton = Object.Instantiate(
                 buttonPrefab, popUp.transform);
 
             importButton.transform.localPosition = new Vector3(
-                -1.35f, -2.0f, -.5f);
+                -1.35f, -0.9f, -.5f);
             exportButton.transform.localPosition = new Vector3(
-                1.35f, -2.0f, -.5f);
+                1.35f, -0.9f, -.5f);
 
             importButton.Text.text = Helper.Translation.GetString("csvImport");
             importButton.Text.enableWordWrapping = false;
@@ -257,12 +289,12 @@ namespace ExtremeRoles.Patches.Option
             var passiveImportButton = importButton.GetComponent<PassiveButton>();
             passiveImportButton.OnClick = new ButtonClickedEvent();
             passiveImportButton.OnClick.AddListener(
-                (UnityEngine.Events.UnityAction)CsvImport.Excute);
+                (UnityAction)CsvImport.Excute);
 
             var passiveExportButton = exportButton.GetComponent<PassiveButton>();
             passiveExportButton.OnClick = new ButtonClickedEvent();
             passiveExportButton.OnClick.AddListener(
-                (UnityEngine.Events.UnityAction)CsvExport.Excute);
+                (UnityAction)CsvExport.Excute);
 
             passiveImportButton.gameObject.SetActive(true);
             passiveExportButton.gameObject.SetActive(true);
@@ -282,7 +314,6 @@ namespace ExtremeRoles.Patches.Option
 
             CsvExport.InfoPopup.TextAreaTMP.fontSize *= 0.6f;
             CsvExport.InfoPopup.TextAreaTMP.enableAutoSizing = false;
-
         }
 
         private static IEnumerable<GameObject> getAllChilds(this GameObject Go)

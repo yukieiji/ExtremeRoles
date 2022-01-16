@@ -14,15 +14,20 @@ namespace ExtremeRoles.Patches
             var amongUsLogo = GameObject.Find("bannerLogo_AmongUs");
             if (amongUsLogo == null) { return; }
 
-            var modTitle = UnityEngine.Object.Instantiate<TMPro.TextMeshPro>(__instance.text);
+            var modTitle = Object.Instantiate(__instance.text);
             modTitle.transform.position = new Vector3(0, 0.3f, 0);
-            modTitle.SetText($"Version:{Assembly.GetExecutingAssembly().GetName().Version}");
+            modTitle.SetText(
+                string.Concat(
+                    Helper.Translation.GetString("version"),
+                    Assembly.GetExecutingAssembly().GetName().Version));
             modTitle.alignment = TMPro.TextAlignmentOptions.Center;
             modTitle.fontSize *= 1.5f;
 
-            var credentials = UnityEngine.Object.Instantiate<TMPro.TextMeshPro>(modTitle);
+            var credentials = Object.Instantiate(modTitle);
             credentials.transform.position = new Vector3(0, -0.25f, 0);
-            credentials.SetText($"Developed by yukieiji");
+            credentials.SetText(
+                string.Concat(
+                    Helper.Translation.GetString("developer"),"yukieiji"));
             credentials.alignment = TMPro.TextAlignmentOptions.Center;
             credentials.fontSize *= 0.85f;
 
