@@ -62,7 +62,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     this.RoleName,
                     NeetOption.HasTask.ToString()),
                 false, neutralOps,
-                invert: true);
+                invert: true,
+                enableCheckOption: parentOps);
         }
 
         protected override void RoleSpecificInit()
