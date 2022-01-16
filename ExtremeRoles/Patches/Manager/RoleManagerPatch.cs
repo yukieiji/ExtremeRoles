@@ -84,6 +84,8 @@ namespace ExtremeRoles.Patches.Manager
             List<(List<MultiAssignRoleBase>, int)> assignMultiAssignRole = getMultiAssignedRoles(
                 ref extremeRolesData);
 
+            List<int> needAnotherRoleAssigns = new List<int>();
+
             PlayerControl player = PlayerControl.LocalPlayer;
 
             foreach (var(roles, id) in assignMultiAssignRole)
@@ -100,10 +102,11 @@ namespace ExtremeRoles.Patches.Manager
                             role, player);
                         if (!assign) { continue; }
                         
-                        if (!role.CanHasAnotherRole)
+                        if (role.CanHasAnotherRole)
                         {
-                            playerIndexList.Remove(playerIndex);
+                            needAnotherRoleAssigns.Add(playerIndex);
                         }
+                        playerIndexList.Remove(playerIndex);
 
                         setCombinationRoleToPlayer(
                             player, role.BytedRoleId, (byte)id);
@@ -112,7 +115,10 @@ namespace ExtremeRoles.Patches.Manager
                 }
             }
 
-
+            if (needAnotherRoleAssigns.Count != 0)
+            {
+                playerIndexList.AddRange(needAnotherRoleAssigns);
+            }
         }
 
         private static Tuple<int, int> getNotAssignedPlayer(bool multiAssign)
