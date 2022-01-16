@@ -88,61 +88,8 @@ namespace ExtremeRoles.Patches.Manager
             // ロビータイマー設定
             if (!AmongUsClient.Instance.AmHost || !GameData.Instance){ return; } // Not host or no instance
 
-            bool blockStart = false;
-
             if (update)
             {
-                /*
-                string message = "";
-
-                foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients.ToArray())
-                {
-                    if (client.Character == null) { continue; }
-
-                    var dummyComponent = client.Character.GetComponent<DummyBehaviour>();
-                    
-                    if (dummyComponent != null && dummyComponent.enabled)
-                    {
-                        continue;
-                    }
-                    else if (!playerVersions.ContainsKey(client.Id))
-                    {
-                        blockStart = true;
-                        message += $"<color=#FF0000FF>{client.Character.Data.PlayerName}:  {Helper.Translation.GetString("errorNotInstalled")}\n</color>";
-                    }
-                    else
-                    {
-                        PlayerVersion PV = playerVersions[client.Id];
-                        int diff = TheOtherRolesPlugin.Version.CompareTo(PV.version);
-                        if (diff > 0)
-                        {
-                            message += $"<color=#FF0000FF>{client.Character.Data.PlayerName}:  {Helper.Translation.GetString("errorOlderVersion")} (v{playerVersions[client.Id].version.ToString()})\n</color>";
-                            blockStart = true;
-                        }
-                        else if (diff < 0)
-                        {
-                            message += $"<color=#FF0000FF>{client.Character.Data.PlayerName}:  {Helper.Translation.GetString("errorNewerVersion")} (v{playerVersions[client.Id].version.ToString()})\n</color>";
-                            blockStart = true;
-                        }
-                        else if (!PV.GuidMatches())
-                        { // version presumably matches, check if Guid matches
-                            message += $"<color=#FF0000FF>{client.Character.Data.PlayerName}:  {Helper.Translation.GetString("errorWrongVersion")} v{playerVersions[client.Id].version.ToString()} <size=30%>({PV.guid.ToString()})</size>\n</color>";
-                            blockStart = true;
-                        }
-                    }
-                }
-                if (blockStart)
-                {
-                    __instance.StartButton.color = __instance.startLabelText.color = Palette.DisabledClear;
-                    __instance.GameStartText.text = message;
-                    __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition + Vector3.up * 2;
-                }
-                else
-                {
-                    __instance.StartButton.color = __instance.startLabelText.color = ((__instance.LastPlayerCount >= __instance.MinPlayers) ? Palette.EnabledColor : Palette.DisabledClear);
-                    __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition;
-                }
-                */
                 // プレイヤーカウントアップデート
                 currentText = __instance.PlayerCounter.text; 
             }
