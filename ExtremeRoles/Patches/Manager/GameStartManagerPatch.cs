@@ -40,6 +40,12 @@ namespace ExtremeRoles.Patches.Manager
     {
         public static void Prefix(GameStartManager __instance)
         {
+            // ロビーコードコピー
+            string code = InnerNet.GameCode.IntToGameName(AmongUsClient.Instance.GameId);
+            GUIUtility.systemCopyBuffer = code;
+            GameStartManagerUpdatePatch.SetRoomCode(code);
+
+            // 値リセット
             RPCOperator.Initialize();
         }
         public static void Postfix(GameStartManager __instance)
@@ -59,6 +65,7 @@ namespace ExtremeRoles.Patches.Manager
 
         private static bool update = false;
         private static string currentText = "";
+        private static string roomCodeText = string.Empty;
 
         public static void Prefix(GameStartManager __instance)
         {
@@ -67,10 +74,78 @@ namespace ExtremeRoles.Patches.Manager
         }
         public static void Postfix(GameStartManager __instance)
         {
+
+            // ルームコード設定
+            if (OptionHolder.Client.StreamerMode)
+            {
+                __instance.GameRoomName.text = $"\n\n{OptionHolder.ConfigParser.StreamerModeReplacementText.Value}";
+            }
+            else
+            {
+                __instance.GameRoomName.text = roomCodeText;
+            }
+            
             // ロビータイマー設定
             if (!AmongUsClient.Instance.AmHost || !GameData.Instance){ return; } // Not host or no instance
 
-            if (update) { currentText = __instance.PlayerCounter.text; };
+            bool blockStart = false;
+
+            if (update)
+            {
+                /*
+                string message = "";
+
+                foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients.ToArray())
+                {
+                    if (client.Character == null) { continue; }
+
+                    var dummyComponent = client.Character.GetComponent<DummyBehaviour>();
+                    
+                    if (dummyComponent != null && dummyComponent.enabled)
+                    {
+                        continue;
+                    }
+                    else if (!playerVersions.ContainsKey(client.Id))
+                    {
+                        blockStart = true;
+                        message += $"<color=#FF0000FF>{client.Character.Data.PlayerName}:  {Helper.Translation.GetString("errorNotInstalled")}\n</color>";
+                    }
+                    else
+                    {
+                        PlayerVersion PV = playerVersions[client.Id];
+                        int diff = TheOtherRolesPlugin.Version.CompareTo(PV.version);
+                        if (diff > 0)
+                        {
+                            message += $"<color=#FF0000FF>{client.Character.Data.PlayerName}:  {Helper.Translation.GetString("errorOlderVersion")} (v{playerVersions[client.Id].version.ToString()})\n</color>";
+                            blockStart = true;
+                        }
+                        else if (diff < 0)
+                        {
+                            message += $"<color=#FF0000FF>{client.Character.Data.PlayerName}:  {Helper.Translation.GetString("errorNewerVersion")} (v{playerVersions[client.Id].version.ToString()})\n</color>";
+                            blockStart = true;
+                        }
+                        else if (!PV.GuidMatches())
+                        { // version presumably matches, check if Guid matches
+                            message += $"<color=#FF0000FF>{client.Character.Data.PlayerName}:  {Helper.Translation.GetString("errorWrongVersion")} v{playerVersions[client.Id].version.ToString()} <size=30%>({PV.guid.ToString()})</size>\n</color>";
+                            blockStart = true;
+                        }
+                    }
+                }
+                if (blockStart)
+                {
+                    __instance.StartButton.color = __instance.startLabelText.color = Palette.DisabledClear;
+                    __instance.GameStartText.text = message;
+                    __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition + Vector3.up * 2;
+                }
+                else
+                {
+                    __instance.StartButton.color = __instance.startLabelText.color = ((__instance.LastPlayerCount >= __instance.MinPlayers) ? Palette.EnabledColor : Palette.DisabledClear);
+                    __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition;
+                }
+                */
+                // プレイヤーカウントアップデート
+                currentText = __instance.PlayerCounter.text; 
+            }
 
             timer = Mathf.Max(0f, timer -= Time.deltaTime);
             int minutes = (int)timer / 60;
@@ -80,6 +155,11 @@ namespace ExtremeRoles.Patches.Manager
             __instance.PlayerCounter.text = currentText + suffix;
             __instance.PlayerCounter.autoSizeTextContainer = true;
 
+        }
+
+        public static void SetRoomCode(string roomCode)
+        {
+            roomCodeText = roomCode;
         }
 
         public static void RestTimer()

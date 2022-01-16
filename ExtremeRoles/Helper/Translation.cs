@@ -17,9 +17,10 @@ namespace ExtremeRoles.Helper
         public static void Load()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
-            Stream stream = assembly.GetManifestResourceStream("ExtremeRoles.Resources.LangData.stringData.json");
+            Stream stream = assembly.GetManifestResourceStream(
+                "ExtremeRoles.Resources.LangData.stringData.json");
             var byteArray = new byte[stream.Length];
-            var read = stream.Read(byteArray, 0, (int)stream.Length);
+            stream.Read(byteArray, 0, (int)stream.Length);
             string json = System.Text.Encoding.UTF8.GetString(byteArray);
 
             StringData.Clear();
@@ -28,7 +29,7 @@ namespace ExtremeRoles.Helper
             for (int i = 0; i < parsed.Count; i++)
             {
                 JProperty token = parsed.ChildrenTokens[i].TryCast<JProperty>();
-                if (token == null) continue;
+                if (token == null) { continue; }
 
                 string stringName = token.Name;
                 var val = token.Value.TryCast<JObject>();

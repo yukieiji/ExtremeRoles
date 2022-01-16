@@ -173,9 +173,9 @@ namespace ExtremeRoles
                 "ClientOption", "Show Role Summary", true);
 
             ConfigParser.StreamerModeReplacementText = config.Bind(
-                "ClientOption", "Streamer Mode Replacement Text", "\n\nUsing Extreme Roles");
-            ConfigParser.StreamerModeReplacementColor = config.Bind(
-                "ClientOption", "Streamer Mode Replacement Text Hex Color", "#FFFFF0");
+                "ClientOption",
+                "Streamer Mode Replacement Text",
+                "Playing with Extreme Roles");
 
             ConfigParser.Ip = config.Bind(
                 "ClientOption", "Custom Server IP", "127.0.0.1");
@@ -298,7 +298,6 @@ namespace ExtremeRoles
             public static ConfigEntry<bool> ShowRoleSummary { get; set; }
             public static ConfigEntry<bool> StreamerMode { get; set; }
             public static ConfigEntry<string> StreamerModeReplacementText { get; set; }
-            public static ConfigEntry<string> StreamerModeReplacementColor { get; set; }
             public static ConfigEntry<string> Ip { get; set; }
             public static ConfigEntry<ushort> Port { get; set; }
         }
