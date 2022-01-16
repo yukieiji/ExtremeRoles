@@ -150,12 +150,12 @@ namespace ExtremeRoles.Patches
                 if (Input.GetKeyDown(KeyCode.PageDown) &&
                     ExtremeRolesPlugin.Info.OverlayShown)
                 {
-                    ExtremeRolesPlugin.Info.ChangePage(1);
+                    ExtremeRolesPlugin.Info.ChangeRoleInfoPage(1);
                 }
                 if (Input.GetKeyDown(KeyCode.PageUp) &&
                     ExtremeRolesPlugin.Info.OverlayShown)
                 {
-                    ExtremeRolesPlugin.Info.ChangePage(-1);
+                    ExtremeRolesPlugin.Info.ChangeRoleInfoPage(-1);
                 }
             }
 
