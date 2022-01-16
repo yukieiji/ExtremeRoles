@@ -15,8 +15,13 @@ namespace ExtremeRoles.Module
             Exiled,
             Dead,
             Killed, 
+
             Suicide,
             MissShot,
+
+            Assassinate,
+            DeadAssassinate,
+
             Disconnected,
         }
 
@@ -108,11 +113,28 @@ namespace ExtremeRoles.Module
             var (completedTask, totalTask) = Helper.Task.GetTaskInfo(playerInfo);
 
             var finalStatus = PlayerStatus.Alive;
-            if (
-                (this.EndReason == GameOverReason.ImpostorBySabotage) &&
+            if ((this.EndReason == GameOverReason.ImpostorBySabotage) &&
                 (!playerInfo.Role.IsImpostor))
             {
                 finalStatus = PlayerStatus.Dead;
+            }
+            else if ((this.EndReason == (GameOverReason)RoleGameOverReason.AssassinationMarin))
+            {
+                if (playerInfo.PlayerId == this.ExiledAssassinId)
+                {
+                    if (playerInfo.IsDead || playerInfo.Disconnected)
+                    {
+                        finalStatus = PlayerStatus.DeadAssassinate;
+                    }
+                    else
+                    {
+                        finalStatus = PlayerStatus.Assassinate;
+                    }
+                }
+                else
+                {
+                    finalStatus = PlayerStatus.Dead;
+                }
             }
             else if (playerInfo.Disconnected)
             {

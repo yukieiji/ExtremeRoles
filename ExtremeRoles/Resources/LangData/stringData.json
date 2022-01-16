@@ -253,6 +253,12 @@
     "MissShot": {
         "11": "\u66b4\u767a"
     },
+    "Assassinate": {
+        "11": "\u6697\u6bba"
+    },
+    "DeadAssassinate": {
+        "11": "\u9664\u5916"
+    },
     "customServerIp": {
         "11": "\u30ab\u30b9\u30bf\u30e0\u30b5\u30fc\u30d0\u30fc\u306eIP"
     },
@@ -314,7 +320,7 @@
         "11": "\u5f79\u8077\u306e\u8a73\u7d30"
     },
     "changeRoleMore": {
-        "11": "\u30da\u30fc\u30b8\u30a2\u30c3\u30d7\u3001\u30da\u30fc\u30b8\u30c0\u30a6\u30f3\u30ad\u30fc\u3067\u5f79\u8077\u5207\u308a\u66ff\u3048"
+        "11": "PgUp\u30ad\u30fc\u3001PgDn\u30ad\u30fc\u3067\u5f79\u8077\u5207\u308a\u66ff\u3048"
     },
     "gameReplace": {
         "11": "\u203b\u30b2\u30fc\u30e0\u958b\u59cb\u6642\u3001\u3082\u3057\u304f\u306f\u30b2\u30fc\u30e0\u4e2d\u306b\u5224\u660e"
