@@ -329,9 +329,10 @@ namespace ExtremeRoles.Roles.API
     }
     public abstract class MultiAssignRoleBase : SingleRoleBase
     {
-        public int ManagerOptionOffset = 0;
+        
         public SingleRoleBase AnotherRole = null;
         public bool CanHasAnotherRole = false;
+        protected int ManagerOptionOffset = 0;
 
         public MultiAssignRoleBase(
             ExtremeRoleId id,
@@ -501,5 +502,12 @@ namespace ExtremeRoles.Roles.API
             CombinationRoleCommonOption option) => GetManagerOptionId((int)option);
 
         public int GetManagerOptionId(int option) => this.ManagerOptionOffset + option;
+
+        public void SetManagerOptionOffset(int offset)
+        {
+            this.ManagerOptionOffset = offset;
+        }
+
+        public int GetManagerOptionOffset() => this.ManagerOptionOffset;
     }
 }

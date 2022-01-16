@@ -31,7 +31,7 @@ namespace ExtremeRoles.Roles.API
     {
 
         public bool CanKill = false;
-        protected int OptionIdOffset = 0;
+        public int OptionIdOffset = 0;
 
         public int GetRoleOptionId(
             RoleCommonOption option) => GetRoleOptionId((int)option);
@@ -43,6 +43,8 @@ namespace ExtremeRoles.Roles.API
             CombinationRoleCommonOption option) => GetRoleOptionId((int)option);
 
         public int GetRoleOptionId(int option) => this.OptionIdOffset + option;
+
+        public int GetRoleOptionOffset() => this.OptionIdOffset;
 
         public void Initialize()
         {

@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module
 {
@@ -20,7 +21,7 @@ namespace ExtremeRoles.Module
         private TMPro.TextMeshPro anotherRoleInfoText;
 
         private int rolePage = 0;
-        private List<string> allRoleText = new List<string>();
+        private List<(string, int)> allRoleText = new List<(string, int)>();
 
         public InfoOverlay()
         {
@@ -141,24 +142,18 @@ namespace ExtremeRoles.Module
 
         private void createAllRoleText()
         {
-
-            var allOption = OptionHolder.AllOption;
-
-            string roleOptionString;
+            int optionId;
             string colorRoleName;
             string roleFullDesc;
             string roleText;
 
             foreach (var combRole in Roles.ExtremeRoleManager.CombRole)
             {
-                if (combRole is Roles.API.ConstCombinationRoleManagerBase)
+                if (combRole is ConstCombinationRoleManagerBase)
                 {
                     foreach (var role in combRole.Roles)
                     {
-                        roleOptionString =
-                            CustomOption.AllOptionToString(
-                                allOption[role.GetManagerOptionId(
-                                    Roles.API.RoleCommonOption.SpawnRate)]);
+                        optionId = role.GetManagerOptionOffset();
                         colorRoleName = role.GetColoredRoleName();
 
                         roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
@@ -169,20 +164,17 @@ namespace ExtremeRoles.Module
                             $"<size=150%>・{colorRoleName}</size>",
                             roleFullDesc != "" ? $"\n{roleFullDesc}\n" : "",
                             $"・{Translation.GetString(colorRoleName)}{Translation.GetString("roleOption")}\n",
-                            roleOptionString != "" ? $"{roleOptionString}" : "");
+                            "{0}");
 
-                        this.allRoleText.Add((string)roleText.Clone());
+                        this.allRoleText.Add(((string)roleText.Clone(), optionId));
                     }
                 }
-                else if (combRole is Roles.API.FlexibleCombinationRoleManagerBase)
+                else if (combRole is FlexibleCombinationRoleManagerBase)
                 {
 
-                    var role = ((Roles.API.FlexibleCombinationRoleManagerBase)combRole).BaseRole;
+                    var role = ((FlexibleCombinationRoleManagerBase)combRole).BaseRole;
 
-                    roleOptionString =
-                        CustomOption.AllOptionToString(
-                            allOption[role.GetManagerOptionId(
-                                Roles.API.RoleCommonOption.SpawnRate)]);
+                    optionId = role.GetManagerOptionOffset();
                     colorRoleName = role.GetColoredRoleName();
 
                     roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
@@ -192,17 +184,14 @@ namespace ExtremeRoles.Module
                         $"<size=150%>・{colorRoleName}</size>",
                         roleFullDesc != "" ? $"\n{roleFullDesc}\n" : "",
                         $"・{Translation.GetString(colorRoleName)}{Translation.GetString("roleOption")}\n",
-                        roleOptionString != "" ? $"{roleOptionString}" : "");
+                        "{0}");
 
-                    this.allRoleText.Add((string)roleText.Clone());
+                    this.allRoleText.Add(((string)roleText.Clone(), optionId));
                 }
             }
             foreach (var role in Roles.ExtremeRoleManager.NormalRole)
             {
-                roleOptionString =
-                    CustomOption.AllOptionToString(
-                        allOption[role.GetRoleOptionId(
-                            Roles.API.RoleCommonOption.SpawnRate)]);
+                optionId = role.GetRoleOptionOffset();
                 colorRoleName = role.GetColoredRoleName();
 
                 roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
@@ -212,9 +201,9 @@ namespace ExtremeRoles.Module
                     $"<size=150%>・{colorRoleName}</size>",
                     roleFullDesc != "" ? $"\n{roleFullDesc}\n" : "",
                     $"・{Translation.GetString(colorRoleName)}{Translation.GetString("roleOption")}\n",
-                    roleOptionString != "" ? $"{roleOptionString}" : "");
+                    "{0}");
 
-                this.allRoleText.Add((string)roleText.Clone());
+                this.allRoleText.Add(((string)roleText.Clone(), optionId));
             }
         }
 
@@ -272,13 +261,13 @@ namespace ExtremeRoles.Module
             string roleOptionString = "";
             string colorRoleName;
 
-            var multiAssignRole = role as Roles.API.MultiAssignRoleBase;
+            var multiAssignRole = role as MultiAssignRoleBase;
             if (multiAssignRole != null)
             {
                 roleOptionString =
                     CustomOption.AllOptionToString(
                         allOption[multiAssignRole.GetManagerOptionId(
-                            Roles.API.RoleCommonOption.SpawnRate)]);
+                            RoleCommonOption.SpawnRate)]);
                 colorRoleName = Design.ColoedString(
                     multiAssignRole.NameColor,
                     Translation.GetString(multiAssignRole.RoleName));
@@ -292,7 +281,7 @@ namespace ExtremeRoles.Module
                 roleOptionString =
                     CustomOption.AllOptionToString(
                         allOption[role.GetRoleOptionId(
-                            Roles.API.RoleCommonOption.SpawnRate)]);
+                            RoleCommonOption.SpawnRate)]);
                 colorRoleName = role.GetColoredRoleName();
             }
 
@@ -317,7 +306,7 @@ namespace ExtremeRoles.Module
                         anotherRoleOptionString =
                             CustomOption.AllOptionToString(
                                 allOption[multiAssignRole.AnotherRole.GetRoleOptionId(
-                                    Roles.API.RoleCommonOption.SpawnRate)]);
+                                    RoleCommonOption.SpawnRate)]);
                     }
                     string anotherRoleFullDesc = multiAssignRole.AnotherRole.GetFullDescription();
 
@@ -336,11 +325,17 @@ namespace ExtremeRoles.Module
         private Tuple<string, string> getRoleInfoPageText()
         {
             if (this.allRoleText.Count == 0) { createAllRoleText(); }
+
+            var (roleTextBase, optionId) = this.allRoleText[this.rolePage];
+
+            string roleOption = CustomOption.AllOptionToString(
+                OptionHolder.AllOption[optionId + (int)RoleCommonOption.SpawnRate]);
+
             string showRole = string.Concat(
                 $"<size=200%>{Translation.GetString("roleDesc")}</size>",
                 $"           {Translation.GetString("changeRoleMore")}",
                 $"({this.rolePage + 1}/{ this.allRoleText.Count })\n",
-                this.allRoleText[this.rolePage]);
+                string.Format(roleTextBase, roleOption != "" ? $"{roleOption}" : ""));
             return Tuple.Create(showRole, "");
         }
 
