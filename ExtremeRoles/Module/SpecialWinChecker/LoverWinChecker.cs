@@ -90,6 +90,13 @@ namespace ExtremeRoles.Module.SpecialWinChecker
                             break;
                     }
                 }
+                if (lover.IsImposter())
+                {
+                    if (statistics.SeparatedNeutralAlive.Count == 0) // キル能力を持つ別陣営はインポスターのみ
+                    {
+                        return true;
+                    }
+                }
             }
 
 
