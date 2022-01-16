@@ -63,25 +63,35 @@ namespace ExtremeRoles.Patches
                 addNeutralWinner();
             }
 
-            switch (gameData.EndReason)
+            switch ((RoleGameOverReason)gameData.EndReason)
             {
-                case (GameOverReason)RoleGameOverReason.AliceKilledByImposter:
-                case (GameOverReason)RoleGameOverReason.AliceKillAllOther:
+                case RoleGameOverReason.AssassinationMarin:
+                    resetWinner();
+                    foreach (var player in GameData.Instance.AllPlayers)
+                    {
+                        if (ExtremeRoleManager.GameRole[player.PlayerId].IsImposter())
+                        { 
+                            addWinner(player);
+                        }
+                    }
+                    break;
+                case RoleGameOverReason.AliceKilledByImposter:
+                case RoleGameOverReason.AliceKillAllOther:
                     replaceWinnerToSpecificNeutralRolePlayer(
                         noWinner,
                         new ExtremeRoleId[] { ExtremeRoleId.Alice });
                     break;
-                case (GameOverReason)RoleGameOverReason.JackalKillAllOther:
+                case RoleGameOverReason.JackalKillAllOther:
                     replaceWinnerToSpecificNeutralRolePlayer(
                         noWinner,
                         new ExtremeRoleId[] { ExtremeRoleId.Jackal, ExtremeRoleId.Sidekick });
                     break;
-                case (GameOverReason)RoleGameOverReason.LoverKillAllOther:
+                case RoleGameOverReason.LoverKillAllOther:
                     replaceWinnerToSpecificNeutralRolePlayer(
                         noWinner,
                         new ExtremeRoleId[] { ExtremeRoleId.Lover });
                     break;
-                case (GameOverReason)RoleGameOverReason.ShipFallInLove:
+                case RoleGameOverReason.ShipFallInLove:
                     replaceWinnerToSpecificRolePlayer(
                         ExtremeRoleId.Lover);
                     break;
