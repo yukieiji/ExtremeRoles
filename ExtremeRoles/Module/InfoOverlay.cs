@@ -25,6 +25,7 @@ namespace ExtremeRoles.Module
         public InfoOverlay()
         {
             allRoleText.Clear();
+            rolePage = 0;
         }
 
         public void ChangeRoleInfoPage(int count)
