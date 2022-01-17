@@ -128,7 +128,7 @@ namespace ExtremeRoles.Patches.Option
                     lineCount = 0;
                 }
 
-                page = page + e + "\n\n";
+                page = string.Concat(page,e,"\n\n");
                 lineCount += lines + 1;
             }
 
