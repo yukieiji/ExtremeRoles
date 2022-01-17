@@ -21,6 +21,7 @@ namespace ExtremeRoles.Module
 
             Assassinate,
             DeadAssassinate,
+            Surrender,
 
             Disconnected,
         }
@@ -133,7 +134,7 @@ namespace ExtremeRoles.Module
                 }
                 else
                 {
-                    finalStatus = PlayerStatus.Dead;
+                    finalStatus = PlayerStatus.Surrender;
                 }
             }
             else if (playerInfo.Disconnected)
