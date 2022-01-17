@@ -108,7 +108,8 @@ namespace ExtremeRoles.Patches.Option
                     {
                         entry.AppendLine(CustomOption.OptionToString(option));
                     }
-                    addChildren(option, ref entry, !option.IsHidden);
+
+                    addChildren(option, ref entry, option.IsHidden ? 1 : 0);
                     entries.Add(entry.ToString().Trim('\r', '\n'));
                 }
             }
@@ -140,12 +141,23 @@ namespace ExtremeRoles.Patches.Option
             int numPages = pages.Count;
             int counter = OptionHolder.OptionsPage = OptionHolder.OptionsPage % numPages;
 
-            __result = pages[counter].Trim('\r', '\n') + "\n\n" + translate("pressTabForMore") + $" ({counter + 1}/{numPages})";
+            __result = string.Concat(
+                pages[counter].Trim('\r', '\n'),
+                "\n\n",
+                translate("pressTabForMore"),
+                $" ({counter + 1}/{numPages})");
 
         }
 
-        private static void addChildren(CustomOptionBase option, ref StringBuilder entry, bool indent = true)
+        private static void addChildren(CustomOptionBase option, ref StringBuilder entry, int indentCount = 0)
         {
+
+            string indent = "";
+
+            if (indentCount != 0)
+            {
+                indent = string.Concat(Enumerable.Repeat("    ", indentCount));
+            }
 
             foreach (var child in option.Children)
             {
@@ -155,11 +167,17 @@ namespace ExtremeRoles.Patches.Option
                 {
                     entry.AppendLine(
                         string.Concat(
-                            (indent ? "    " : ""),
+                            indent,
                             optionString));
                 }
-
-                addChildren(child, ref entry, indent);
+                if (indentCount == 0)
+                {
+                    addChildren(child, ref entry, 0);
+                }
+                else
+                {
+                    addChildren(child, ref entry, indentCount + 1);
+                }
             }
         }
 
