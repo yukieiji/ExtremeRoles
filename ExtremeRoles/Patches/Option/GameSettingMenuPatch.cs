@@ -23,7 +23,7 @@ namespace ExtremeRoles.Patches.Option
             if (mapNameTransform == null) return;
 
             var options = new Il2CppSystem.Collections.Generic.List<Il2CppSystem.Collections.Generic.KeyValuePair<string, int>>();
-            for (int i = 0; i < Constants.MapNames.Length; i++)
+            for (int i = 0; i < Constants.MapNames.Length; ++i)
             {
                 var kvp = new Il2CppSystem.Collections.Generic.KeyValuePair<string, int>();
                 kvp.key = Constants.MapNames[i];

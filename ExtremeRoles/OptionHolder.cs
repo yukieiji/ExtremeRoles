@@ -27,7 +27,7 @@ namespace ExtremeRoles
         public static int OptionsPage = 1;
         public static int SelectedPreset = 0;
 
-        public static IRegionInfo[] DefaultRegion;
+        public static IRegionInfo[] defaultRegion;
         public enum CommonOptionKey
         {
             PresetSelection = 0,
@@ -57,7 +57,7 @@ namespace ExtremeRoles
         public static void Create()
         {
 
-            DefaultRegion = ServerManager.DefaultRegions;
+            defaultRegion = ServerManager.DefaultRegions;
 
             CreateConfigOption();
 
@@ -277,7 +277,7 @@ namespace ExtremeRoles
         public static void UpdateRegion()
         {
             ServerManager serverManager = DestroyableSingleton<ServerManager>.Instance;
-            IRegionInfo[] regions = DefaultRegion;
+            IRegionInfo[] regions = defaultRegion;
 
             var CustomRegion = new DnsRegionInfo(
                 ConfigParser.Ip.Value,
