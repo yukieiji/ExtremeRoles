@@ -455,7 +455,7 @@ namespace ExtremeRoles.Module
         }
 
         public static void childrenOptionToString(
-            CustomOptionBase option, ref List<string> options)
+            CustomOptionBase option, ref List<string> options, int indentCount = 0)
         {
             foreach (CustomOptionBase op in option.Children)
             {
@@ -463,9 +463,19 @@ namespace ExtremeRoles.Module
 
                 if (str != string.Empty)
                 {
+                    if (indentCount != 0)
+                    {
+                        str = string.Concat(
+                            string.Concat(
+                                Enumerable.Repeat("    ", indentCount)),
+                            str);
+                    }
+
                     options.Add(str);
                 }
-                childrenOptionToString(op, ref options);
+                childrenOptionToString(
+                    op, ref options,
+                    indentCount + 1);
             }
         }
 

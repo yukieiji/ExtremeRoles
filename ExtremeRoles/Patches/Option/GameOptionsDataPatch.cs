@@ -55,7 +55,7 @@ namespace ExtremeRoles.Patches.Option
                 translate("neutralRoles"));
             min = allOption[(int)OptionHolder.CommonOptionKey.MinNeutralRoles].GetValue();
             max = allOption[(int)OptionHolder.CommonOptionKey.MaxNeutralRoles].GetValue();
-            if (min > max) min = max;
+            if (min > max) { min = max; }
             optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
             entry.AppendLine($"{optionName}: {optionValue}");
 
@@ -65,7 +65,7 @@ namespace ExtremeRoles.Patches.Option
             min = allOption[(int)OptionHolder.CommonOptionKey.MinImpostorRoles].GetValue();
             max = allOption[(int)OptionHolder.CommonOptionKey.MaxImpostorRoles].GetValue();
 
-            if (min > max) min = max;
+            if (min > max) { min = max; }
             optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
             entry.AppendLine($"{optionName}: {optionValue}");
 
@@ -109,7 +109,7 @@ namespace ExtremeRoles.Patches.Option
                         entry.AppendLine(CustomOption.OptionToString(option));
                     }
 
-                    addChildren(option, ref entry, option.IsHidden ? 1 : 0);
+                    addChildren(option, ref entry, option.IsHidden ? 0 : 1);
                     entries.Add(entry.ToString().Trim('\r', '\n'));
                 }
             }
@@ -156,7 +156,8 @@ namespace ExtremeRoles.Patches.Option
 
             if (indentCount != 0)
             {
-                indent = string.Concat(Enumerable.Repeat("    ", indentCount));
+                indent = string.Concat(
+                    Enumerable.Repeat("    ", indentCount));
             }
 
             foreach (var child in option.Children)
