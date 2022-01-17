@@ -5,6 +5,7 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.RoleAbilityButton;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -61,8 +62,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             this.CreateAbilityCountButton(
                 this.defaultButtonText,
-                Helper.Resources.LoadSpriteFromResources(
-                    Resources.ResourcesPaths.EvolverEvolved, 115f),
+                Loader.CreateSpriteFromResources(
+                    Path.EvolverEvolved, 115f),
                 checkAbility: CheckAbility,
                 abilityCleanUp: CleanUp);
         }

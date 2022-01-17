@@ -7,17 +7,6 @@ using System.Text.RegularExpressions;
 
 namespace ExtremeRoles.Module
 {
-    internal class ExportableCustomOption
-    {
-        public int Id { get; set; }
-
-        public string Name { get; set; }
-
-        public string Value { get; set; }
-
-        public int SelectedIndex { get; set; }
-    }
-
     public class CustomOptionCsvProcessor
     {
         private const string modName = "Extreme Roles";

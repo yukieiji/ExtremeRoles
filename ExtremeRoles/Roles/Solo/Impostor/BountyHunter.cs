@@ -249,7 +249,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 this.targetArrow = new Arrow(
                     Palette.ImpostorRed);
-                this.targetArrow.Body.transform.localScale = new Vector3(0.5f, 0.5f, 0f);
             }
 
             this.targetArrowUpdateTimer = this.targetArrowUpdateTime;

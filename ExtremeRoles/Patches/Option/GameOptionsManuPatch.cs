@@ -8,6 +8,7 @@ using HarmonyLib;
 using UnhollowerBaseLib;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Resources;
 
 
 namespace ExtremeRoles.Patches.Option
@@ -44,8 +45,8 @@ namespace ExtremeRoles.Patches.Option
             var erTab = UnityEngine.Object.Instantiate(roleTab, roleTab.transform.parent);
             var tabHighlight = erTab.transform.FindChild("Hat Button").FindChild("Tab Background").GetComponent<SpriteRenderer>();
             erTab.transform.FindChild("Hat Button").FindChild(
-                "Icon").GetComponent<SpriteRenderer>().sprite = Helper.Resources.LoadSpriteFromResources(
-                    Resources.ResourcesPaths.TabLogo, 100f);
+                "Icon").GetComponent<SpriteRenderer>().sprite = Loader.CreateSpriteFromResources(
+                    Path.TabLogo, 100f);
 
 
             gameTab.transform.position += Vector3.left * 0.5f;

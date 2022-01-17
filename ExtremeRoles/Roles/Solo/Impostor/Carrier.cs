@@ -5,6 +5,7 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.RoleAbilityButton;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -103,8 +104,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             this.CreateReclickableAbilityButton(
                 Translation.GetString("carry"),
-                Helper.Resources.LoadSpriteFromResources(
-                   Resources.ResourcesPaths.TestButton, 115f),
+                Loader.CreateSpriteFromResources(
+                   Path.TestButton, 115f),
                 this.CleanUp);
         }
 

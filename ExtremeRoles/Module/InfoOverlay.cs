@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module
@@ -346,8 +347,8 @@ namespace ExtremeRoles.Module
 
             if (colorBackGround == null)
             {
-                colorBackGround = Helper.Resources.LoadSpriteFromResources(
-                    Resources.ResourcesPaths.BackGround, 100f);
+                colorBackGround = Loader.CreateSpriteFromResources(
+                    Path.BackGround, 100f);
             }
 
 

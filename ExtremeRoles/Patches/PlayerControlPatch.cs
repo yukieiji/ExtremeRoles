@@ -325,7 +325,7 @@ namespace ExtremeRoles.Patches
             bool IsLocalPlayerAssassinFirstMeeting = false)
         {
 
-            var (tasksCompleted, tasksTotal) = Task.GetTaskInfo(targetPlayer.Data);
+            var (tasksCompleted, tasksTotal) = GameSystem.GetTaskInfo(targetPlayer.Data);
             string roleNames = ExtremeRoleManager.GameRole[targetPlayer.PlayerId].GetColoredRoleName();
 
             var completedStr = commonActive ? "?" : tasksCompleted.ToString();

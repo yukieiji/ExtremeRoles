@@ -3,12 +3,20 @@ using System.Collections.Generic;
 
 using ExtremeRoles.Roles;
 
-
 namespace ExtremeRoles.Helper
 {
-    public class Task
+    public static class GameSystem
     {
-
+        public static bool IsLobby
+        {
+            get
+            {
+                return (
+                    AmongUsClient.Instance.GameState !=
+                    InnerNet.InnerNetClient.GameStates.Started
+                );
+            }
+        }
         public static Tuple<int, int> GetTaskInfo(
             GameData.PlayerInfo playerInfo)
         {

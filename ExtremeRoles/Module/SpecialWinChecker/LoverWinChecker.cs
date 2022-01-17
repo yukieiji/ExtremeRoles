@@ -105,7 +105,7 @@ namespace ExtremeRoles.Module.SpecialWinChecker
 
             foreach (var playerId in this.aliveLover)
             {
-                var (compTask, totalTask) = Helper.Task.GetTaskInfo(
+                var (compTask, totalTask) = Helper.GameSystem.GetTaskInfo(
                     Helper.Player.GetPlayerControlById(playerId).Data);
                 allCompTask = allCompTask + compTask;
                 allTask = allTask + totalTask;

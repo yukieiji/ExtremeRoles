@@ -2,7 +2,7 @@
 
 namespace ExtremeRoles.Helper
 {
-    public class Design
+    public static class Design
     {
         public static string ColoedString(Color c, string s)
         {

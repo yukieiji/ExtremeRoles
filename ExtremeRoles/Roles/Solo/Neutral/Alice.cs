@@ -3,6 +3,7 @@ using System.Linq;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.RoleAbilityButton;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -45,8 +46,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             this.CreateAbilityCountButton(
                 Helper.Translation.GetString("shipBroken"),
-                Helper.Resources.LoadSpriteFromResources(
-                    Resources.ResourcesPaths.AliceShipBroken, 115f));
+                Loader.CreateSpriteFromResources(
+                    Path.AliceShipBroken, 115f));
         }
 
         public override bool IsSameTeam(SingleRoleBase targetRole)
@@ -106,15 +107,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             
             for (int i = 0; i < alice.RevartLongTask; ++i)
             {
-                addTaskId.Add(Helper.Task.GetRandomLongTask());
+                addTaskId.Add(Helper.GameSystem.GetRandomLongTask());
             }
             for (int i = 0; i < alice.RevartCommonTask; ++i)
             {
-                addTaskId.Add(Helper.Task.GetRandomCommonTaskId());
+                addTaskId.Add(Helper.GameSystem.GetRandomCommonTaskId());
             }
             for (int i = 0; i < alice.RevartNormalTask; ++i)
             {
-                addTaskId.Add(Helper.Task.GetRandomNormalTaskId());
+                addTaskId.Add(Helper.GameSystem.GetRandomNormalTaskId());
             }
 
             var shuffled = addTaskId.OrderBy(

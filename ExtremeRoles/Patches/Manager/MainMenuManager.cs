@@ -4,6 +4,7 @@ using TMPro;
 using Twitch;
 
 using UnityEngine;
+using ExtremeRoles.Resources;
 
 namespace ExtremeRoles.Patches.Manager
 {
@@ -24,8 +25,8 @@ namespace ExtremeRoles.Patches.Manager
             var torLogo = new GameObject("bannerLogoExtremeRoles");
             torLogo.transform.position = Vector3.up;
             var renderer = torLogo.AddComponent<SpriteRenderer>();
-            renderer.sprite = Helper.Resources.LoadSpriteFromResources(
-                Resources.ResourcesPaths.TitleBurner, 300f);
+            renderer.sprite = Loader.CreateSpriteFromResources(
+                Path.TitleBurner, 300f);
 
             var tmp = __instance.Announcement.transform.Find(
                 "Title_Text").gameObject.GetComponent<TextMeshPro>();

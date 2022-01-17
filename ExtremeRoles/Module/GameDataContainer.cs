@@ -110,7 +110,7 @@ namespace ExtremeRoles.Module
         {
 
             var role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
-            var (completedTask, totalTask) = Helper.Task.GetTaskInfo(playerInfo);
+            var (completedTask, totalTask) = Helper.GameSystem.GetTaskInfo(playerInfo);
 
             var finalStatus = PlayerStatus.Alive;
             if ((this.EndReason == GameOverReason.ImpostorBySabotage) &&

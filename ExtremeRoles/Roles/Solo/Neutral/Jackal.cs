@@ -6,6 +6,7 @@ using UnityEngine;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.RoleAbilityButton;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -139,8 +140,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             this.CreateAbilityCountButton(
                 Translation.GetString("Sidekick"),
-                Helper.Resources.LoadSpriteFromResources(
-                    Resources.ResourcesPaths.JackalSidekick, 115f));
+                Loader.CreateSpriteFromResources(
+                    Path.JackalSidekick, 115f));
         }
 
         public override Color GetTargetRoleSeeColor(

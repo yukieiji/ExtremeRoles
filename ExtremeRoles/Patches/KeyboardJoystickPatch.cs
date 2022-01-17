@@ -29,7 +29,7 @@ namespace ExtremeRoles.Patches
             if (!AmongUsClient.Instance.AmHost) { return; }
 
             // Spawn dummys
-            if ((Input.GetKeyDown(KeyCode.F)) && Map.IsGameLobby)
+            if ((Input.GetKeyDown(KeyCode.F)) && GameSystem.IsLobby)
             {
                 var playerControl = UnityEngine.Object.Instantiate(AmongUsClient.Instance.PlayerPrefab);
                 playerControl.PlayerId = (byte)GameData.Instance.GetAvailableId();
@@ -57,7 +57,7 @@ namespace ExtremeRoles.Patches
             }
 
             // Terminate round
-            if (Input.GetKeyDown(KeyCode.L) && !Map.IsGameLobby)
+            if (Input.GetKeyDown(KeyCode.L) && !GameSystem.IsLobby)
             {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                     PlayerControl.LocalPlayer.NetId,
@@ -93,7 +93,7 @@ namespace ExtremeRoles.Patches
                     {
                         continue;
                     }
-                    var (playerCompleted, playerTotal) = Task.GetTaskInfo(playerInfo);
+                    var (playerCompleted, playerTotal) = GameSystem.GetTaskInfo(playerInfo);
                     Logging.Debug($"PlayerName:{playerInfo.PlayerName}  TotalTask:{playerTotal}   ComplatedTask:{playerCompleted}");
                 }
             }
@@ -111,12 +111,12 @@ namespace ExtremeRoles.Patches
                     {
                         continue;
                     }
-                    var (_, totalTask) = Task.GetTaskInfo(playerInfo);
+                    var (_, totalTask) = GameSystem.GetTaskInfo(playerInfo);
                     if (totalTask == 0)
                     {
-                        var taskId = Task.GetRandomCommonTaskId();
+                        var taskId = GameSystem.GetRandomCommonTaskId();
                         Logging.Debug($"PlayerName:{playerInfo.PlayerName}  AddTask:{taskId}");
-                        Task.SetTask(
+                        GameSystem.SetTask(
                             playerInfo, taskId);
                     }
 
@@ -138,10 +138,7 @@ namespace ExtremeRoles.Patches
         public static void Postfix(KeyboardJoystick __instance)
         {
 
-            InnerNet.InnerNetClient.GameStates state = AmongUsClient.Instance.GameState;
-
-
-            if (state != InnerNet.InnerNetClient.GameStates.Started)
+            if (GameSystem.IsLobby)
             {
                 if (Input.GetKeyDown(KeyCode.Tab))
                 {

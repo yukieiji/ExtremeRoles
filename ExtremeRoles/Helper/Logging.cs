@@ -2,7 +2,7 @@
 namespace ExtremeRoles.Helper
 {
 
-    public class Logging
+    public static class Logging
     {
         public static void Debug(string msg)
         {

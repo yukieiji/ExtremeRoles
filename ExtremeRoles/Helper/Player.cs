@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ExtremeRoles.Helper
 {
-    public class Player
+    public static class Player
     {
         public enum MurderAttemptResult
         {
