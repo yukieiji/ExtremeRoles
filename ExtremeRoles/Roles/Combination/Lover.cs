@@ -148,11 +148,11 @@ namespace ExtremeRoles.Roles.Combination
                 }
             }
 
-
-            baseString += Translation.GetString("LoverIntoPlus") + Design.ColoedString(
-                ColorPalette.LoverPink, "♥");
-
-            return baseString;
+            return string.Concat(
+                baseString,
+                Translation.GetString("LoverIntoPlus"),
+                Design.ColoedString(
+                    ColorPalette.LoverPink, " ♥"));
         }
 
 

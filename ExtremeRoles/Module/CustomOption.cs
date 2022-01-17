@@ -123,8 +123,8 @@ namespace ExtremeRoles.Module
                 return true;
             }
 
-            var parent = this.Parent;
-            var active = true;
+            CustomOptionBase parent = this.Parent;
+            bool active = true;
 
             while (parent != null && active)
             {
