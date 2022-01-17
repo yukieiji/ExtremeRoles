@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 using UnityEngine;
@@ -27,7 +26,7 @@ namespace ExtremeRoles.Module
         public CustomOptionBase ForceEnableCheckOption = null;
         public OptionBehaviour Behaviour;
         public List<CustomOptionBase> Children;
-        public System.Object[] Selections;
+        public object[] Selections;
 
         private string stringFormat;
         private List<CustomOptionBase> withUpdateOption = new List<CustomOptionBase>();
@@ -43,8 +42,8 @@ namespace ExtremeRoles.Module
         public CustomOptionBase(
             int id,
             string name,
-            System.Object[] selections,
-            System.Object defaultValue,
+            object[] selections,
+            object defaultValue,
             CustomOptionBase parent,
             bool isHeader,
             bool isHidden,
@@ -192,8 +191,8 @@ namespace ExtremeRoles.Module
         public BoolCustomOption(
             int id,
             string name,
-            System.Object[] selections,
-            System.Object defaultValue,
+            object[] selections,
+            object defaultValue,
             CustomOptionBase parent,
             bool isHeader,
             bool isHidden,
@@ -206,7 +205,7 @@ namespace ExtremeRoles.Module
                 isHeader, isHidden,
                 format, invert,
                 enableCheckOption)
-        {}
+        { }
         public override dynamic GetValue() => CurSelection > 0;
     }
 
@@ -215,8 +214,8 @@ namespace ExtremeRoles.Module
         public FloatCustomOption(
             int id,
             string name,
-            System.Object[] selections,
-            System.Object defaultValue,
+            object[] selections,
+            object defaultValue,
             CustomOptionBase parent,
             bool isHeader,
             bool isHidden,
@@ -241,8 +240,8 @@ namespace ExtremeRoles.Module
         public IntCustomOption(
             int id,
             string name,
-            System.Object[] selections,
-            System.Object defaultValue,
+            object[] selections,
+            object defaultValue,
             CustomOptionBase parent,
             bool isHeader,
             bool isHidden,
@@ -283,8 +282,8 @@ namespace ExtremeRoles.Module
         public IntDynamicCustomOption(
             int id,
             string name,
-            System.Object[] selections,
-            System.Object defaultValue,
+            object[] selections,
+            object defaultValue,
             CustomOptionBase parent,
             bool isHeader,
             bool isHidden,
@@ -321,8 +320,8 @@ namespace ExtremeRoles.Module
         public SelectionCustomOption(
             int id,
             string name,
-            System.Object[] selections,
-            System.Object defaultValue,
+            object[] selections,
+            object defaultValue,
             CustomOptionBase parent,
             bool isHeader,
             bool isHidden,
