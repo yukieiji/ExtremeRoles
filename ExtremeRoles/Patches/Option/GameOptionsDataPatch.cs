@@ -146,14 +146,19 @@ namespace ExtremeRoles.Patches.Option
 
         private static void addChildren(CustomOptionBase option, ref StringBuilder entry, bool indent = true)
         {
-            if (!option.Enabled) { return; }
 
             foreach (var child in option.Children)
             {
-                if (!child.IsHidden)
+
+                string optionString = CustomOption.OptionToString(child);
+                if (optionString != string.Empty)
                 {
-                    entry.AppendLine((indent ? "    " : "") + CustomOption.OptionToString(child));
+                    entry.AppendLine(
+                        string.Concat(
+                            (indent ? "    " : ""),
+                            optionString));
                 }
+
                 addChildren(child, ref entry, indent);
             }
         }

@@ -163,26 +163,7 @@ namespace ExtremeRoles.Patches.Option
                         enabled = false;
                     }
 
-                    if (option.IsHidden)
-                    {
-                        enabled = false;
-                    }
-
-                    while (parent != null && enabled)
-                    {
-                        enabled = parent.Enabled;
-                        parent = parent.Parent;
-                    }
-
-                    if (option.EnableInvert)
-                    {
-                        enabled = !enabled;
-                    }
-
-                    if (option.ForceEnableCheckOption != null)
-                    {
-                        enabled = enabled && option.ForceEnableCheckOption.Enabled;
-                    }
+                    enabled = option.IsActive();
 
 
                     option.Behaviour.gameObject.SetActive(enabled);

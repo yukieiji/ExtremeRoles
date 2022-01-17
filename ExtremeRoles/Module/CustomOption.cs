@@ -36,7 +36,7 @@ namespace ExtremeRoles.Module
         {
             get
             {
-                return this.GetBool();
+                return this.CurSelection != this.DefaultSelection;
             }
         }
 
@@ -71,7 +71,7 @@ namespace ExtremeRoles.Module
             {
                 this.EnableInvert = invert;
                 parent.Children.Add(this);
-              
+
             }
 
             CurSelection = 0;
@@ -89,8 +89,6 @@ namespace ExtremeRoles.Module
 
             OptionHolder.AllOption.Add(this.Id, this);
         }
-
-        protected bool GetBool() => CurSelection > 0;
         
         protected virtual void OptionUpdate(object newValue)
         {
@@ -111,6 +109,40 @@ namespace ExtremeRoles.Module
                     Translation.GetString(this.stringFormat), sel);
             }
             return Translation.GetString(sel);
+        }
+
+        public bool IsActive()
+        {
+            if (this.IsHidden)
+            {
+                return false;
+            }
+
+            if (this.IsHeader || this.Parent == null)
+            {
+                return true;
+            }
+
+            var parent = this.Parent;
+            var active = true;
+
+            while (parent != null && active)
+            {
+                active = parent.Enabled;
+                parent = parent.Parent;
+            }
+
+            if (this.EnableInvert)
+            {
+                active = !active;
+            }
+
+            if (this.ForceEnableCheckOption != null)
+            {
+                active = active && this.ForceEnableCheckOption.Enabled;
+            }
+
+            return active;
         }
 
         public void SetUpdateOption(CustomOptionBase option)
@@ -175,7 +207,7 @@ namespace ExtremeRoles.Module
                 format, invert,
                 enableCheckOption)
         {}
-        public override dynamic GetValue() => GetBool();
+        public override dynamic GetValue() => CurSelection > 0;
     }
 
     public class FloatCustomOption : CustomOptionBase
@@ -401,9 +433,11 @@ namespace ExtremeRoles.Module
 
         public static string OptionToString(CustomOptionBase option)
         {
-            if (option == null) { return ""; }
+            if (option == null) { return string.Empty; }
+            if (!option.IsActive()) { return string.Empty; }
             return $"{option.GetName()}: {option.GetString()}";
         }
+
         public static string AllOptionToString(
             CustomOptionBase option, bool skipFirst = false)
         {
@@ -416,18 +450,24 @@ namespace ExtremeRoles.Module
             }
             if (option.Enabled)
             {
-                foreach (CustomOptionBase op in option.Children)
-                {
-                    string str = OptionToString(op);
-                    if (option.IsHidden) { continue; }
-
-                    if (str != "")
-                    {
-                        options.Add(str);
-                    }
-                }
+                childrenOptionToString(option, ref options);
             }
             return string.Join("\n", options);
+        }
+
+        public static void childrenOptionToString(
+            CustomOptionBase option, ref List<string> options)
+        {
+            foreach (CustomOptionBase op in option.Children)
+            {
+                string str = OptionToString(op);
+
+                if (str != string.Empty)
+                {
+                    options.Add(str);
+                }
+                childrenOptionToString(op, ref options);
+            }
         }
 
     }
