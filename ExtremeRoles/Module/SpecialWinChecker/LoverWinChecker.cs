@@ -81,9 +81,21 @@ namespace ExtremeRoles.Module.SpecialWinChecker
                             }
                             break;
                         case ExtremeRoleId.Jackal:
-                            if (statistics.TeamImpostorAlive <= 0 && statistics.SeparatedNeutralAlive.Count == 1)
+                            var jackal = (Jackal)lover.AnotherRole;
+                            int sidekickNum = jackal.SidekickPlayerId.Count;
+                            if (statistics.TeamImpostorAlive <= 0)
                             {
-                                return true;
+                                if (sidekickNum == 0 && // 作ったサイドキックが居ない
+                                    statistics.SeparatedNeutralAlive.Count == 1) // 昇格したニュートラルラバージャッカルのみ
+                                {
+                                    return true;
+                                }
+                                else if (
+                                    sidekickNum != 0 && // 作ったサイドキックがいる
+                                    statistics.SeparatedNeutralAlive.Count == 2) // 昇格したニュートラルラバージャッカルとそれが作ったサイドキックのみ
+                                {
+                                    return true;
+                                }
                             }
                             break;
                         default:
