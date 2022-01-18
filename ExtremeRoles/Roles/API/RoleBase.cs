@@ -288,7 +288,7 @@ namespace ExtremeRoles.Roles.API
                 string.Concat(
                     this.RoleName,
                     RoleCommonOption.Vison.ToString()),
-                2f, 0.25f, 5f, 0.25f,
+                2f, 0.25f, 5.0f, 0.25f,
                 visonOption, format: "unitMultiplier");
             CustomOption.Create(
                GetRoleOptionId(RoleCommonOption.ApplyEnvironmentVisionEffect),
@@ -299,25 +299,45 @@ namespace ExtremeRoles.Roles.API
         }
         protected override void CommonInit()
         {
+            var baseOption = PlayerControl.GameOptions;
             var allOption = OptionHolder.AllOption;
+
+            this.Vison = this.IsImposter() ? baseOption.ImpostorLightMod : baseOption.CrewLightMod;
+            
+            this.KillCoolTime = baseOption.KillCooldown;
+            this.KillRange = baseOption.KillDistance;
+
+            this.IsApplyEnvironmentVision = !this.IsImposter();
+
 
             this.HasOtherVison = allOption[
                 GetRoleOptionId(RoleCommonOption.HasOtherVison)].GetValue();
-            this.Vison = allOption[
-                GetRoleOptionId(RoleCommonOption.Vison)].GetValue();
-            this.IsApplyEnvironmentVision = allOption[
-                GetRoleOptionId(RoleCommonOption.ApplyEnvironmentVisionEffect)].GetValue();
+            if (this.HasOtherVison)
+            {
+                this.Vison = allOption[
+                    GetRoleOptionId(RoleCommonOption.Vison)].GetValue();
+                this.IsApplyEnvironmentVision = allOption[
+                    GetRoleOptionId(RoleCommonOption.ApplyEnvironmentVisionEffect)].GetValue();
+            }
 
             if (this.CanKill)
             {
                 this.HasOtherKillCool = allOption[
                     GetRoleOptionId(KillerCommonOption.HasOtherKillCool)].GetValue();
-                this.KillCoolTime = allOption[
-                    GetRoleOptionId(KillerCommonOption.KillCoolDown)].GetValue();
+                if (this.HasOtherKillCool)
+                {
+                    this.KillCoolTime = allOption[
+                        GetRoleOptionId(KillerCommonOption.KillCoolDown)].GetValue();
+                }
+
                 this.HasOtherKillRange = allOption[
                     GetRoleOptionId(KillerCommonOption.HasOtherKillRange)].GetValue();
-                this.KillRange = allOption[
-                    GetRoleOptionId(KillerCommonOption.KillRange)].GetValue();
+
+                if (this.HasOtherKillRange)
+                {
+                    this.KillRange = allOption[
+                        GetRoleOptionId(KillerCommonOption.KillRange)].GetValue();
+                }
             }
         }
 
@@ -480,16 +500,38 @@ namespace ExtremeRoles.Roles.API
 
         protected virtual void OverrideAnotherRoleSetting()
         {
-
-            if (this.Team != this.AnotherRole.Team && this.Team == ExtremeRoleType.Crewmate)
-            {
-                this.Team = this.AnotherRole.Team;
-            }
-
             this.CanKill = this.CanKill || this.AnotherRole.CanKill;
             this.HasTask = this.HasTask || this.AnotherRole.HasTask;
             this.UseVent = this.UseVent || this.AnotherRole.UseVent;
             this.UseSabotage = this.UseSabotage || this.AnotherRole.UseSabotage;
+            this.CanUseAdmin = this.CanUseAdmin || this.AnotherRole.CanUseAdmin;
+            this.CanUseSecurity = this.CanUseSecurity || this.AnotherRole.CanUseSecurity;
+            this.CanUseVital = this.CanUseVital || this.AnotherRole.CanUseVital;
+
+            this.HasOtherVison = this.HasOtherVison || this.AnotherRole.HasOtherVison;
+
+            if (this.HasOtherVison)
+            {
+                this.IsApplyEnvironmentVision = this.IsApplyEnvironmentVision || this.AnotherRole.IsApplyEnvironmentVision;
+                this.Vison = this.Vison > this.AnotherRole.Vison ? this.Vison : this.AnotherRole.Vison;
+            }
+
+            if (this.CanKill)
+            {
+                this.HasOtherKillCool = this.HasOtherKillCool || this.AnotherRole.HasOtherKillCool;
+                this.HasOtherKillRange = this.HasOtherKillRange || this.AnotherRole.HasOtherKillRange;
+                if (this.HasOtherKillCool)
+                {
+                    this.KillCoolTime = 
+                        this.KillCoolTime < this.AnotherRole.KillCoolTime ?
+                           this.KillCoolTime : this.AnotherRole.KillCoolTime;
+                }
+                if (this.HasOtherKillRange)
+                {
+                    this.KillRange = this.KillRange > this.AnotherRole.KillRange ?
+                           this.KillRange : this.AnotherRole.KillRange;
+                }
+            }
         }
 
         public int GetManagerOptionId(
