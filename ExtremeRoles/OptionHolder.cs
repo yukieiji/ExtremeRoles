@@ -171,6 +171,8 @@ namespace ExtremeRoles
                 "ClientOption", "Ghosts See Votes", true);
             ConfigParser.ShowRoleSummary = config.Bind(
                 "ClientOption", "Show Role Summary", true);
+            ConfigParser.HideNamePlate = config.Bind(
+                "ClientOption", "Hide Name Plate", false);
 
             ConfigParser.StreamerModeReplacementText = config.Bind(
                 "ClientOption",
@@ -203,12 +205,12 @@ namespace ExtremeRoles
             Ship.DisableNeutralSpecialForceEnd = AllOption[
                 (int)CommonOptionKey.DisableNeutralSpecialForceEnd].GetValue();
 
-
+            Client.StreamerMode = ConfigParser.StreamerMode.Value;
             Client.GhostsSeeRole = ConfigParser.GhostsSeeRoles.Value;
             Client.GhostsSeeTask = ConfigParser.GhostsSeeTasks.Value;
             Client.GhostsSeeVote = ConfigParser.GhostsSeeVotes.Value;
             Client.ShowRoleSummary = ConfigParser.ShowRoleSummary.Value;
-            Client.StreamerMode = ConfigParser.StreamerMode.Value;
+            Client.HideNamePlate = ConfigParser.HideNamePlate.Value;
         }
 
 
@@ -297,6 +299,7 @@ namespace ExtremeRoles
             public static ConfigEntry<bool> GhostsSeeVotes { get; set; }
             public static ConfigEntry<bool> ShowRoleSummary { get; set; }
             public static ConfigEntry<bool> StreamerMode { get; set; }
+            public static ConfigEntry<bool> HideNamePlate { get; set; }
             public static ConfigEntry<string> StreamerModeReplacementText { get; set; }
             public static ConfigEntry<string> Ip { get; set; }
             public static ConfigEntry<ushort> Port { get; set; }
@@ -309,6 +312,7 @@ namespace ExtremeRoles
             public static bool GhostsSeeVote = true;
             public static bool ShowRoleSummary = true;
             public static bool StreamerMode = false;
+            public static bool HideNamePlate = false;
         }
 
         public static class Ship

@@ -10,6 +10,38 @@ using BepInEx.IL2CPP.Utils.Collections;
 
 namespace ExtremeRoles.Patches
 {
+	public static class NamePlateHelper
+	{
+		public static bool NameplateChange = true;
+		private static Sprite blankNameplate = null;
+
+		public static void UpdateNameplate(PlayerVoteArea pva, byte playerId = byte.MaxValue)
+		{
+			blankNameplate = blankNameplate ?? HatManager.Instance.AllNamePlates[0].Image;
+
+			var nameplate = blankNameplate;
+			if (!OptionHolder.Client.HideNamePlate)
+			{
+				var p = Helper.Player.GetPlayerControlById(
+					playerId != byte.MaxValue ? playerId : pva.TargetPlayerId);
+				var nameplateId = p?.CurrentOutfit?.NamePlateId;
+				nameplate = HatManager.Instance.GetNamePlateById(nameplateId)?.Image;
+			}
+			pva.Background.sprite = nameplate;
+		}
+	}
+
+
+	[HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.SetCosmetics))]
+	class PlayerVoteAreaCosmetics
+	{
+		static void Postfix(PlayerVoteArea __instance, GameData.PlayerInfo playerInfo)
+		{
+			NamePlateHelper.UpdateNameplate(
+				__instance, playerInfo.PlayerId);
+		}
+	}
+
 	[HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.Select))]
 	class PlayerVoteAreaSelectPatch
 	{

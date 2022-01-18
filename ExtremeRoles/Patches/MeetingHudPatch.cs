@@ -294,6 +294,17 @@ namespace ExtremeRoles.Patches
 
         public static void Postfix(MeetingHud __instance)
         {
+
+            if (NamePlateHelper.NameplateChange)
+            {
+                foreach (var pva in __instance.playerStates)
+                {
+                    NamePlateHelper.UpdateNameplate(pva);
+                }
+                NamePlateHelper.NameplateChange = false;
+            }
+
+
             if (__instance.state == MeetingHud.VoteStates.Animating) { return; }
 
             // Deactivate skip Button if skipping on emergency meetings is disabled

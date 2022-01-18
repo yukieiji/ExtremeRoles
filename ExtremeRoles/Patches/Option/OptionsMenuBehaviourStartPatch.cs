@@ -43,6 +43,14 @@ namespace ExtremeRoles.Patches.Option
                 "showRoleSummaryButton",
                 () => Client.ShowRoleSummary = ConfigParser.ShowRoleSummary.Value = !ConfigParser.ShowRoleSummary.Value,
                 ConfigParser.ShowRoleSummary.Value),
+            new SelectionBehaviour(
+                "hideNamePlateButton",
+                () =>
+                {
+                    Client.HideNamePlate = ConfigParser.HideNamePlate.Value = !ConfigParser.HideNamePlate.Value;
+                    NamePlateHelper.NameplateChange = true;
+                    return Client.HideNamePlate;
+                }, ConfigParser.HideNamePlate.Value)
         };
 
         private static GameObject popUp;
