@@ -6,13 +6,6 @@ namespace ExtremeRoles.Helper
 {
     public static class Player
     {
-        public enum MurderAttemptResult
-        {
-            PerformKill,
-            SuppressKill,
-            BlankKill
-        }
-
         public static bool ShowButtons
         {
             get

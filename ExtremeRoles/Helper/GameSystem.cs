@@ -46,7 +46,7 @@ namespace ExtremeRoles.Helper
 
         public static byte GetRandomCommonTaskId()
         {
-            if (ShipStatus.Instance == null) { return Byte.MaxValue; }
+            if (ShipStatus.Instance == null) { return byte.MaxValue; }
 
             List<int> taskIndex = getTaskIndex(
                 ShipStatus.Instance.CommonTasks);
@@ -58,7 +58,7 @@ namespace ExtremeRoles.Helper
 
         public static byte GetRandomLongTask()
         {
-            if (ShipStatus.Instance == null) { return Byte.MaxValue; }
+            if (ShipStatus.Instance == null) { return byte.MaxValue; }
 
             List<int> taskIndex = getTaskIndex(
                 ShipStatus.Instance.LongTasks);
@@ -70,7 +70,7 @@ namespace ExtremeRoles.Helper
 
         public static byte GetRandomNormalTaskId()
         {
-            if (ShipStatus.Instance == null) { return Byte.MaxValue; }
+            if (ShipStatus.Instance == null) { return byte.MaxValue; }
 
             List<int> taskIndex = getTaskIndex(
                 ShipStatus.Instance.NormalTasks);
