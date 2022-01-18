@@ -33,7 +33,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.CreateAbilityCountButton(
                 Translation.GetString("maintenance"),
                 Loader.CreateSpriteFromResources(
-                    Path.TestButton, 115f));
+                    Path.MaintainerRepair, 115f));
         }
 
         public bool UseAbility()
