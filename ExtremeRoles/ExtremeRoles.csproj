@@ -5,7 +5,7 @@
         <DebugType>embedded</DebugType>
         <!--<Version>1.10.3.2</Version>-->
         <!----><VersionPrefix>1.10.4</VersionPrefix>
-        <VersionSuffix>RC-v7</VersionSuffix> 
+        <VersionSuffix>RC-v8</VersionSuffix> 
         <Description>Extreme Roles for Advanced user</Description>
         <Authors>yukieiji</Authors>
     </PropertyGroup>
