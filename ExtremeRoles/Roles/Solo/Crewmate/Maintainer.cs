@@ -34,6 +34,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 Translation.GetString("maintenance"),
                 Loader.CreateSpriteFromResources(
                     Path.MaintainerRepair, 115f));
+            this.Button.SetLabelToCrewmate();
         }
 
         public bool UseAbility()

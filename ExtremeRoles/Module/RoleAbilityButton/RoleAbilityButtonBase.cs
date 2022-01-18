@@ -98,6 +98,18 @@ namespace ExtremeRoles.Module.RoleAbilityButton
             this.Timer = this.CoolTime;
         }
 
+        public void SetLabelToCrewmate()
+        {
+            if (HudManager.Instance == null) { return; }
+
+            var useButton = HudManager.Instance.UseButton;
+            
+            UnityEngine.Object.Destroy(
+                this.Button.buttonLabelText.fontMaterial);
+            this.Button.buttonLabelText.fontMaterial = UnityEngine.Object.Instantiate(
+                useButton.buttonLabelText.fontMaterial, this.Button.transform);
+        }
+
         public void SetActive(bool isActive)
         {
             if (isActive)
