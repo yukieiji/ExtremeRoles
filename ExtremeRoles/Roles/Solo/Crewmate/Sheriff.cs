@@ -144,7 +144,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         protected override void RoleSpecificInit()
         {
-
             this.shootNum = OptionHolder.AllOption[
                 GetRoleOptionId((int)SheriffOption.ShootNum)].GetValue();
             this.canShootNeutral = OptionHolder.AllOption[

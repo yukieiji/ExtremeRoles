@@ -182,23 +182,27 @@ namespace ExtremeRoles.Patches
 
             if (num >= (statistics.TotalAlive - num))
             {
+
                 GameOverReason endReason = (GameOverReason)RoleGameOverReason.UnKnown;
                 switch (team)
                 {
+                    // アリス vs インポスターは絶対にインポスターが勝てないので
+                    // 別の殺人鬼が存在しないかつ、生存者数がアリスの生存者以下になれば勝利
                     case NeutralSeparateTeam.Alice:
-                        // アリス vs インポスターは絶対にインポスターが勝てないので
-                        // 別の殺人鬼が存在しないかつ、生存者数がアリスの生存者以下になれば勝利
                         setWinGameContorlId(id);
                         endReason = (GameOverReason)RoleGameOverReason.AliceKillAllOther;
                         break;
                     // 以下は全てインポスターと勝負しても問題ないのでインポスターが生きていると勝利できない
+                    // アサシンがキルできないオプションのとき、ニュートラルの勝ち目が少なくなるので、勝利とする
                     case NeutralSeparateTeam.Jackal:
-                        if (statistics.TeamImpostorAlive > 0) { return false; }
+                        if (statistics.TeamImpostorAlive > 0 && 
+                            statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
                         setWinGameContorlId(id);
                         endReason = (GameOverReason)RoleGameOverReason.JackalKillAllOther;
                         break;
                     case NeutralSeparateTeam.Lover:
-                        if (statistics.TeamImpostorAlive > 0) { return false; }
+                        if (statistics.TeamImpostorAlive > 0 &&
+                            statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
                         setWinGameContorlId(id);
                         endReason = (GameOverReason)RoleGameOverReason.LoverKillAllOther;
                         break;

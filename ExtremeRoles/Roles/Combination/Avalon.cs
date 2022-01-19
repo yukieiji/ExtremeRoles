@@ -36,9 +36,9 @@ namespace ExtremeRoles.Roles.Combination
         public bool IsFirstMeeting = false;
         public bool CanSeeRoleBeforeFirstMeeting = false;
 
-        private bool canKilled = false;
-        private bool canKilledFromCrew = false;
-        private bool canKilledFromNeutral = false;
+        public bool CanKilled = false;
+        public bool CanKilledFromCrew = false;
+        public bool CanKilledFromNeutral = false;
         private bool isDeadForceMeeting = true;
 
         public Assassin(
@@ -53,17 +53,17 @@ namespace ExtremeRoles.Roles.Combination
         public override bool TryRolePlayerKilledFrom(
             PlayerControl rolePlayer, PlayerControl fromPlayer)
         {
-            if (!this.canKilled) { return false; }
+            if (!this.CanKilled) { return false; }
 
             var fromPlayerRole = ExtremeRoleManager.GameRole[fromPlayer.PlayerId];
 
             if (fromPlayerRole.IsNeutral())
             {
-                return this.canKilledFromNeutral;
+                return this.CanKilledFromNeutral;
             }
             else if (fromPlayerRole.IsCrewmate())
             {
-                return this.canKilledFromCrew;
+                return this.CanKilledFromCrew;
             }
 
             return false;

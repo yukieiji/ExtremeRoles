@@ -187,6 +187,8 @@ namespace ExtremeRoles.Module
             int numImpostorAlive = 0;
 
             int numNeutralAlive = 0;
+
+            int numAssassinAlive = 0;
             Dictionary<(NeutralSeparateTeam, int), int> neutralTeam = new Dictionary<
                 (NeutralSeparateTeam, int), int>();
             Dictionary<int, IWinChecker> specialWinCheckRoleAlive = new Dictionary<
@@ -207,6 +209,18 @@ namespace ExtremeRoles.Module
                 ++numTotalAlive;
 
                 int gameControlId = role.GameControlId;
+
+                if (role.Id == ExtremeRoleId.Assassin)
+                {
+                    var assassin = role as Roles.Combination.Assassin;
+                    if (assassin != null)
+                    {
+                        if (assassin.CanKilled && assassin.CanKilledFromNeutral)
+                        {
+                            ++numAssassinAlive;
+                        }
+                    }
+                }
 
                 if (ExtremeRoleManager.SpecialWinCheckRole.Contains(role.Id))
                 {
@@ -274,6 +288,7 @@ namespace ExtremeRoles.Module
                 TeamImpostorAlive = numImpostorAlive,
                 TeamCrewmateAlive = numCrewAlive,
                 TeamNeutralAlive = numNeutralAlive,
+                AssassinAlive = numAssassinAlive,
 
                 SpecialWinCheckRoleAlive = specialWinCheckRoleAlive,
                 SeparatedNeutralAlive = neutralTeam,
@@ -352,6 +367,7 @@ namespace ExtremeRoles.Module
             public int TeamCrewmateAlive { get; set; }
             public int TeamNeutralAlive { get; set; }
             public int TotalAlive { get; set; }
+            public int AssassinAlive { get; set; }
 
             public Dictionary<int, IWinChecker> SpecialWinCheckRoleAlive { get; set; }
 
