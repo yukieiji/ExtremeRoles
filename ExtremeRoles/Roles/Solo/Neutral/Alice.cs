@@ -102,6 +102,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             var alice = (Alice)ExtremeRoleManager.GameRole[callerId];
             var player = PlayerControl.LocalPlayer;
+            var playerInfo = GameData.Instance.GetPlayerById(
+                player.PlayerId);
 
             List<byte> addTaskId = new List<byte> ();
             
@@ -131,17 +133,24 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     byte taskId = shuffled[0];
                     shuffled.RemoveAt(0);
 
+                    playerInfo.Tasks[i] = new GameData.TaskInfo(
+                        taskId, (uint)i);
+                    playerInfo.Tasks[i].Id = (uint)i;
+
                     NormalPlayerTask normalPlayerTask = 
                         UnityEngine.Object.Instantiate<NormalPlayerTask>(
                             ShipStatus.Instance.GetTaskById(taskId),
                             player.transform);
-                    normalPlayerTask.Id = taskId;
+                    normalPlayerTask.Id = (uint)i;
                     normalPlayerTask.Owner = player;
                     normalPlayerTask.Initialize();
 
                     player.myTasks[i] = normalPlayerTask;
                 }
             }
+            GameData.Instance.SetDirtyBit(
+                1U << (int)player.PlayerId);
+
         }
 
         protected override void CreateSpecificOption(
