@@ -209,8 +209,11 @@ namespace ExtremeRoles.Patches
                     default:
                         break;
                 }
-                gameIsEnd(ref __instance, endReason);
-                return true;
+                if (endReason != (GameOverReason)RoleGameOverReason.UnKnown)
+                {
+                    gameIsEnd(ref __instance, endReason);
+                    return true;
+                }
             }
             return false;
         }
