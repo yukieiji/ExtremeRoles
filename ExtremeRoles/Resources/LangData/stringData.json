@@ -268,6 +268,9 @@
     "MissShot": {
         "11": "\u66b4\u767a"
     },
+    "Retaliate": {
+        "11": "\u8fd4\u308a\u8a0e\u3061"
+    },
     "Assassinate": {
         "11": "\u6697\u6bba"
     },
@@ -414,6 +417,9 @@
     },
     "SheriffCanShootNeutral": {
         "11": "\u7b2c\u4e09\u9663\u55b6\u3092\u30ad\u30eb\u3067\u304d\u308b\u304b"
+    },
+    "SheriffCanShootAssassin": {
+        "11": "\u30a2\u30b5\u30b7\u30f3\u3092\u30ad\u30eb\u3067\u304d\u308b\u304b"
     },
     "SheriffIntroDescription": {
         "11": "\u3053\u306e\u8239\u3092\u8352\u3089\u3059\u4e0d\u5c4a\u304d\u8005\u306b\u6b63\u7fa9\u306e\u9244\u69cc\u3092"
@@ -969,6 +975,15 @@
     },
     "AssassinKillRange": {
         "11": "\u30a2\u30b5\u30b7\u30f3\u306e\u30ad\u30eb\u30ec\u30f3\u30b8"
+    },
+    "AssassinCanKilled": {
+        "11": "\u30a2\u30b5\u30b7\u30f3\u304c\u30ad\u30eb\u3055\u308c\u308b\u304b"
+    },
+    "AssassinCanKilledFromCrew": {
+        "11": "\u30ad\u30eb\u80fd\u529b\u3092\u6301\u3064\u30af\u30eb\u30fc\u5f79\u8077\u304c\u30a2\u30b5\u30b7\u30f3\u3092\u30ad\u30eb\u3067\u304d\u308b\u304b"
+    },
+    "AssassinCanKilledFromNeutral": {
+        "11": "\u30ad\u30eb\u80fd\u529b\u3092\u6301\u3064\u7b2c\u4e09\u9663\u55b6\u304c\u30a2\u30b5\u30b7\u30f3\u3092\u30ad\u30eb\u3067\u304d\u308b\u304b"
     },
     "AssassinIsDeadForceMeeting": {
         "11": "\u30a2\u30b5\u30b7\u30f3\u6b7b\u4ea1\u6642\u3001\u5f37\u5236\u7684\u306b\u4f1a\u8b70\u3092\u884c\u3046\u304b"

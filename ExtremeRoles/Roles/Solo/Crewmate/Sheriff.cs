@@ -15,11 +15,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public enum SheriffOption
         {
             ShootNum,
+            CanShootAssassin,
             CanShootNeutral
         }
 
         private int shootNum;
         private bool canShootNeutral;
+        private bool canShootAssassin;
 
         private TMPro.TextMeshPro killCountText = null;
 
@@ -36,28 +38,29 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             var targetPlayerRole = ExtremeRoleManager.GameRole[
                 targetPlayer.PlayerId];
+            
+
             if ((targetPlayerRole.IsImposter()) || 
                 (targetPlayerRole.IsNeutral() && this.canShootNeutral))
             {
-                updateKillButton();
-                return true;
+                if (!this.canShootAssassin &&
+                    targetPlayerRole.Id == ExtremeRoleId.Assassin)
+                {
+                    missShoot(rolePlayer);
+                    return false;
+                }
+                else
+                {
+                    updateKillButton();
+                    return true;
+                }
+                
+
             }
             else
             {
 
-                rolePlayer.RpcMurderPlayer(rolePlayer);
-
-                RPCOperator.Call(
-                    rolePlayer.NetId,
-                    RPCOperator.Command.ReplaceDeadReason,
-                    new List<byte>
-                    {
-                        rolePlayer.PlayerId,
-                        (byte)GameDataContainer.PlayerStatus.MissShot
-                    });
-
-                ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
-                    rolePlayer.PlayerId, GameDataContainer.PlayerStatus.MissShot);
+                missShoot(rolePlayer);
                 return false;
             }
 
@@ -118,6 +121,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             CustomOptionBase parentOps)
         {
             CustomOption.Create(
+                GetRoleOptionId((int)SheriffOption.CanShootAssassin),
+                string.Concat(
+                    this.RoleName,
+                    SheriffOption.CanShootAssassin.ToString()),
+                false, parentOps);
+
+            CustomOption.Create(
                 GetRoleOptionId((int)SheriffOption.CanShootNeutral),
                 string.Concat(
                     this.RoleName,
@@ -140,6 +150,26 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 GetRoleOptionId((int)SheriffOption.CanShootNeutral)].GetValue();
             this.killCountText = null;
         }
+
+        private void missShoot(
+            PlayerControl rolePlayer,
+            GameDataContainer.PlayerStatus replaceReson = GameDataContainer.PlayerStatus.Retaliate)
+        {
+            rolePlayer.RpcMurderPlayer(rolePlayer);
+
+            RPCOperator.Call(
+                rolePlayer.NetId,
+                RPCOperator.Command.ReplaceDeadReason,
+                new List<byte>
+                {
+                        rolePlayer.PlayerId,
+                        (byte)replaceReson
+                });
+
+            ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
+                rolePlayer.PlayerId, replaceReson);
+        }
+
 
         private void updateKillButton()
         {

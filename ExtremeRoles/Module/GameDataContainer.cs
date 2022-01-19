@@ -18,6 +18,7 @@ namespace ExtremeRoles.Module
 
             Suicide,
             MissShot,
+            Retaliate,
 
             Assassinate,
             DeadAssassinate,
