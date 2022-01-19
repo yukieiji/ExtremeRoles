@@ -43,7 +43,7 @@ namespace ExtremeRoles.Helper
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
                 PoolablePlayer poolPlayer = UnityEngine.Object.Instantiate<PoolablePlayer>(
-                    ExtremeRolesPlugin.GameDataStore.PlayerPrefab,
+                    Module.Prefab.PlayerPrefab,
                     HudManager.Instance.transform);
                 
                 poolPlayer.gameObject.SetActive(true);

@@ -31,8 +31,6 @@ namespace ExtremeRoles.Module
         public List<PlayerSummary> FinalSummary = new List<PlayerSummary>();
         public Dictionary<byte, DeadInfo> DeadPlayerInfo = new Dictionary<byte, DeadInfo>();
 
-        public PoolablePlayer PlayerPrefab;
-
         public List<byte> DeadedAssassin = new List<byte>();
 
         public int MeetingsCount = 0;
@@ -165,16 +163,6 @@ namespace ExtremeRoles.Module
         public bool IsRoleSetUpEnd()
         {
             return ExtremeRoleManager.GameRole.Count == PlayerControl.AllPlayerControls.Count;
-        }
-
-        public void SetPoolPlayerPrefab(IntroCutscene __instance)
-        {
-            PlayerPrefab = UnityEngine.Object.Instantiate(
-                __instance.PlayerPrefab,
-                HudManager.Instance.transform);
-            UnityEngine.Object.DontDestroyOnLoad(PlayerPrefab);
-            PlayerPrefab.name = "poolablePlayerPrefab";
-            PlayerPrefab.gameObject.SetActive(false);
         }
 
         public PlayerStatistics CreateStatistics()

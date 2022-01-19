@@ -41,7 +41,11 @@ namespace ExtremeRoles.Patches
 
         public static void SetupPlayerPrefab(IntroCutscene __instance)
         {
-            ExtremeRolesPlugin.GameDataStore.SetPoolPlayerPrefab(__instance);
+            Module.Prefab.PlayerPrefab = UnityEngine.Object.Instantiate(
+                __instance.PlayerPrefab);
+            UnityEngine.Object.DontDestroyOnLoad(Module.Prefab.PlayerPrefab);
+            Module.Prefab.PlayerPrefab.name = "poolablePlayerPrefab";
+            Module.Prefab.PlayerPrefab.gameObject.SetActive(false);
         }
 
         public static void SetupRole()

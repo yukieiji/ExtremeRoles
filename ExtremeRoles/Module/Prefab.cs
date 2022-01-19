@@ -9,5 +9,6 @@ namespace ExtremeRoles.Module
         public static GameObject HelpButton;
         public static TextMeshPro Text;
         public static GenericPopup Prop;
+        public static PoolablePlayer PlayerPrefab;
     }
 }
