@@ -37,6 +37,7 @@ namespace ExtremeRoles.Roles
         Alice,
         Jackal,
         Sidekick,
+        TaskMaster,
     }
     public enum RoleGameOverReason
     {
@@ -49,6 +50,8 @@ namespace ExtremeRoles.Roles
 
         LoverKillAllOther,
         ShipFallInLove,
+
+        TaskMasterGoHome,
 
         UnKnown = 100,
     }
@@ -85,6 +88,7 @@ namespace ExtremeRoles.Roles
 
                 new Alice(),
                 new Jackal(),
+                new TaskMaster(),
             };
 
         public static readonly List<
