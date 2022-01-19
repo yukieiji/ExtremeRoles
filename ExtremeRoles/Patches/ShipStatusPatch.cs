@@ -239,6 +239,9 @@ namespace ExtremeRoles.Patches
                         case ExtremeRoleId.Alice:
                             endReason = (GameOverReason)RoleGameOverReason.AliceKilledByImposter;
                             break;
+                        case ExtremeRoleId.TaskMaster:
+                            endReason = (GameOverReason)RoleGameOverReason.TaskMasterGoHome;
+                            break;
                         default :
                             break;
                     }

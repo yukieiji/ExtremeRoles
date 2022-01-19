@@ -91,6 +91,11 @@ namespace ExtremeRoles.Patches
                         noWinner,
                         new ExtremeRoleId[] { ExtremeRoleId.Lover });
                     break;
+                case RoleGameOverReason.TaskMasterGoHome:
+                    replaceWinnerToSpecificNeutralRolePlayer(
+                        noWinner,
+                        new ExtremeRoleId[] { ExtremeRoleId.TaskMaster });
+                    break;
                 case RoleGameOverReason.ShipFallInLove:
                     replaceWinnerToSpecificRolePlayer(
                         ExtremeRoleId.Lover);

@@ -19,6 +19,7 @@ namespace ExtremeRoles
             CleanDeadBody,
             FixLightOff,
             ReplaceDeadReason,
+            SetRoleWin,
             SetWinGameControlId,
 
             // 役職関連
@@ -55,6 +56,12 @@ namespace ExtremeRoles
                 writer.Write(writeVale);
             }
             AmongUsClient.Instance.FinishRpcImmediately(writer);
+        }
+        public static void RoleIsWin(byte playerId)
+        {
+            Call(PlayerControl.LocalPlayer.NetId,
+                Command.SetRoleWin, new List<byte>{ playerId });
+            SetRoleWin(playerId);
         }
 
         public static void CleanDeadBody(byte targetId)
@@ -154,6 +161,10 @@ namespace ExtremeRoles
         public static void SetWinGameControlId(int id)
         {
             ExtremeRolesPlugin.GameDataStore.WinGameControlId = id;
+        }
+        public static void SetRoleWin(byte winPlayerId)
+        {
+            Roles.ExtremeRoleManager.GameRole[winPlayerId].IsWin = true;
         }
 
         public static void ReplaceRole(

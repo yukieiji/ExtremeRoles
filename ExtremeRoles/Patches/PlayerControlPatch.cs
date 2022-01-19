@@ -700,6 +700,10 @@ namespace ExtremeRoles.Patches
                     byte id = reader.ReadByte();
                     RPCOperator.SetWinGameControlId((int)id);
                     break;
+                case RPCOperator.Command.SetRoleWin:
+                    playerId = reader.ReadByte();
+                    RPCOperator.SetRoleWin(playerId);
+                    break;
                 case RPCOperator.Command.AssasinAddDead:
                     playerId = reader.ReadByte();
                     RPCOperator.AssasinAddDead(playerId);
