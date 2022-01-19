@@ -146,11 +146,11 @@ namespace ExtremeRoles.Roles.Combination
             var allOption = OptionHolder.AllOption;
 
 
-            this.canKilled = allOption[
+            this.CanKilled = allOption[
                 GetRoleOptionId((int)AssassinOption.CanKilled)].GetValue();
-            this.canKilledFromCrew = allOption[
+            this.CanKilledFromCrew = allOption[
                 GetRoleOptionId((int)AssassinOption.CanKilledFromCrew)].GetValue();
-            this.canKilledFromNeutral = allOption[
+            this.CanKilledFromNeutral = allOption[
                 GetRoleOptionId((int)AssassinOption.CanKilledFromNeutral)].GetValue();
 
             this.isDeadForceMeeting = allOption[
