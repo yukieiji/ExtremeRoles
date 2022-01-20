@@ -20,6 +20,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private int addLongTask = 0;
         private int addNormalTask = 0;
         private int addCommonTask = 0;
+        private bool setUpEnd = false;
 
         public TaskMaster() : base(
             ExtremeRoleId.TaskMaster,
@@ -31,7 +32,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void Update(PlayerControl rolePlayer)
         {
-            if (!ShipStatus.Instance.enabled || this.IsWin) { return; }
+            if (!ShipStatus.Instance.enabled || this.IsWin || !this.setUpEnd || GameData.Instance == null) { return; }
 
             var playerInfo = GameData.Instance.GetPlayerById(
                 rolePlayer.PlayerId);
@@ -91,6 +92,19 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
             GameData.Instance.SetDirtyBit(
                 1U << (int)player.PlayerId);
+            this.setUpEnd = true;
+        }
+
+        public override bool IsSameTeam(SingleRoleBase targetRole)
+        {
+            if(OptionHolder.Ship.IsSameNeutralSameWin)
+            {
+                return this.Id == targetRole.Id;
+            }
+            else
+            {
+                return (this.Id == targetRole.Id) && this.IsSameControlId(targetRole);
+            }
         }
 
         protected override void CreateSpecificOption(
@@ -125,6 +139,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 GetRoleOptionId((int)TaskMasterOption.AddNormalTaskNum)].GetValue();
             this.addCommonTask = allOption[
                 GetRoleOptionId((int)TaskMasterOption.AddCommonTaskNum)].GetValue();
+            this.setUpEnd = false;
         }
     }
 }
