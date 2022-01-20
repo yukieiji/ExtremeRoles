@@ -148,6 +148,23 @@ namespace ExtremeRoles.Module
             string roleFullDesc;
             string roleText;
 
+            foreach (var role in Roles.ExtremeRoleManager.NormalRole)
+            {
+                optionId = role.GetRoleOptionOffset();
+                colorRoleName = role.GetColoredRoleName();
+
+                roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
+                roleFullDesc = cleanPlaceHolder(roleFullDesc);
+
+                roleText = string.Concat(
+                    $"<size=150%>・{colorRoleName}</size>",
+                    roleFullDesc != "" ? $"\n{roleFullDesc}\n" : "",
+                    $"・{Translation.GetString(colorRoleName)}{Translation.GetString("roleOption")}\n",
+                    "{0}");
+
+                this.allRoleText.Add(((string)roleText.Clone(), optionId));
+            }
+
             foreach (var combRole in Roles.ExtremeRoleManager.CombRole)
             {
                 if (combRole is ConstCombinationRoleManagerBase)
@@ -189,22 +206,6 @@ namespace ExtremeRoles.Module
 
                     this.allRoleText.Add(((string)roleText.Clone(), optionId));
                 }
-            }
-            foreach (var role in Roles.ExtremeRoleManager.NormalRole)
-            {
-                optionId = role.GetRoleOptionOffset();
-                colorRoleName = role.GetColoredRoleName();
-
-                roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
-                roleFullDesc = cleanPlaceHolder(roleFullDesc);
-
-                roleText = string.Concat(
-                    $"<size=150%>・{colorRoleName}</size>",
-                    roleFullDesc != "" ? $"\n{roleFullDesc}\n" : "",
-                    $"・{Translation.GetString(colorRoleName)}{Translation.GetString("roleOption")}\n",
-                    "{0}");
-
-                this.allRoleText.Add(((string)roleText.Clone(), optionId));
             }
         }
 
