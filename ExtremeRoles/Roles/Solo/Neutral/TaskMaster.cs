@@ -20,7 +20,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private int addLongTask = 0;
         private int addNormalTask = 0;
         private int addCommonTask = 0;
-        private bool setUpEnd = false;
+        private List<byte> addTask = new List<byte>();
 
         public TaskMaster() : base(
             ExtremeRoleId.TaskMaster,
@@ -34,7 +34,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             if (ShipStatus.Instance == null ||
                 this.IsWin ||
-                !this.setUpEnd ||
                 GameData.Instance == null) { return; }
 
             if (!ShipStatus.Instance.enabled) { return; }
@@ -42,12 +41,36 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             var playerInfo = GameData.Instance.GetPlayerById(
                 rolePlayer.PlayerId);
 
-            foreach (var task in playerInfo.Tasks)
+            int compCount = 1;
+
+            for (int i = 0; i < playerInfo.Tasks.Count; ++i)
             {
-                if (!task.Complete) { return; }
+                if (playerInfo.Tasks[i].Complete)
+                {
+                    if (this.addTask.Count == 0)
+                    {
+                        ++compCount;
+                    }
+                    else
+                    {
+                        var shuffled = this.addTask.OrderBy(
+                            item => RandomGenerator.Instance.Next()).ToList();
+                        byte taskId = shuffled[0];
+                        this.addTask.Remove(taskId);
+
+                        RPCOperator.Call(
+                            PlayerControl.LocalPlayer.NetId,
+                            RPCOperator.Command.TaskMasterSetNetTask,
+                            new List<byte> { rolePlayer.PlayerId, (byte)i, taskId });
+                        ReplaceToNewTask(rolePlayer.PlayerId, i, taskId);
+                    }
+                }
             }
-            RPCOperator.RoleIsWin(rolePlayer.PlayerId);
-            this.IsWin = true;
+            if (compCount == playerInfo.Tasks.Count)
+            {
+                RPCOperator.RoleIsWin(rolePlayer.PlayerId);
+                this.IsWin = true;
+            }
         }
 
         public void IntroBeginSetUp()
@@ -57,47 +80,18 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void IntroEndSetUp()
         {
-            List<byte> addTaskId = new List<byte>();
-
-            var player = PlayerControl.LocalPlayer;
-            var playerInfo = GameData.Instance.GetPlayerById(
-                player.PlayerId);
-
             for (int i = 0; i < this.addLongTask; ++i)
             {
-                addTaskId.Add(GameSystem.GetRandomLongTask());
+                this.addTask.Add(GameSystem.GetRandomLongTask());
             }
             for (int i = 0; i < this.addCommonTask; ++i)
             {
-                addTaskId.Add(GameSystem.GetRandomCommonTaskId());
+                this.addTask.Add(GameSystem.GetRandomCommonTaskId());
             }
             for (int i = 0; i < this.addNormalTask; ++i)
             {
-                addTaskId.Add(GameSystem.GetRandomNormalTaskId());
+                this.addTask.Add(GameSystem.GetRandomNormalTaskId());
             }
-
-            var shuffled = addTaskId.OrderBy(
-                item => RandomGenerator.Instance.Next()).ToList();
-            foreach (byte taskId in addTaskId)
-            {
-                int length = playerInfo.Tasks.Count;
-                playerInfo.Tasks.Add(
-                    new GameData.TaskInfo(taskId, (uint)length));
-                playerInfo.Tasks[length].Id = (uint)length;
-
-                NormalPlayerTask normalPlayerTask =
-                    UnityEngine.Object.Instantiate<NormalPlayerTask>(
-                        ShipStatus.Instance.GetTaskById(taskId),
-                        player.transform);
-                normalPlayerTask.Id = playerInfo.Tasks[length].Id;
-                normalPlayerTask.Owner = player;
-                normalPlayerTask.Initialize();
-
-                player.myTasks.Add(normalPlayerTask);
-            }
-            GameData.Instance.SetDirtyBit(
-                1U << (int)player.PlayerId);
-            this.setUpEnd = true;
         }
 
         public override bool IsSameTeam(SingleRoleBase targetRole)
@@ -144,7 +138,36 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 GetRoleOptionId((int)TaskMasterOption.AddNormalTaskNum)].GetValue();
             this.addCommonTask = allOption[
                 GetRoleOptionId((int)TaskMasterOption.AddCommonTaskNum)].GetValue();
-            this.setUpEnd = false;
+            this.addTask.Clear();
         }
+
+        public static void ReplaceToNewTask(byte playerId, int index, byte taskId)
+        {
+     
+            var player = Player.GetPlayerControlById(
+                playerId);
+            var playerInfo = GameData.Instance.GetPlayerById(
+                player.PlayerId);
+
+            Logging.Debug($"Replace Start");
+
+            playerInfo.Tasks[index] = new GameData.TaskInfo(
+                taskId, (uint)index);
+            playerInfo.Tasks[index].Id = (uint)index;
+
+            NormalPlayerTask normalPlayerTask =
+                UnityEngine.Object.Instantiate<NormalPlayerTask>(
+                    ShipStatus.Instance.GetTaskById(taskId),
+                    player.transform);
+            normalPlayerTask.Id = (uint)index;
+            normalPlayerTask.Owner = player;
+            normalPlayerTask.Initialize();
+
+            player.myTasks[index] = normalPlayerTask;
+
+            GameData.Instance.SetDirtyBit(
+                1U << (int)player.PlayerId);
+        }
+
     }
 }

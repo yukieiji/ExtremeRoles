@@ -727,6 +727,13 @@ namespace ExtremeRoles.Patches
                     RPCOperator.AliceAbility(
                         callerId);
                     break;
+                case RPCOperator.Command.TaskMasterSetNetTask:
+                    playerId = reader.ReadByte();
+                    byte index = reader.ReadByte();
+                    byte taskId = reader.ReadByte();
+                    RPCOperator.TaskMasterSetNewTask(
+                        playerId, index, taskId);
+                    break;
 
                 default:
                     break;

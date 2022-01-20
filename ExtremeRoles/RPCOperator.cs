@@ -34,6 +34,7 @@ namespace ExtremeRoles
 
             // ニュートラル
             AliceAbility,
+            TaskMasterSetNetTask
         }
 
         public static void Call(
@@ -201,6 +202,13 @@ namespace ExtremeRoles
             Roles.Solo.Impostor.Carrier.PlaceDeadBody(
                 callerId);
         }
+        public static void TaskMasterSetNewTask(
+            byte callerId, byte index, byte taskId)
+        {
+            Roles.Solo.Neutral.TaskMaster.ReplaceToNewTask(
+                callerId, (int)index, taskId);
+        }
+
     }
 
 }
