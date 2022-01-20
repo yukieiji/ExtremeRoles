@@ -18,14 +18,13 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(KeyboardJoystick), nameof(KeyboardJoystick.Update))]
     public static class DebugTool
     {
-        private static readonly System.Random random = new System.Random((int)DateTime.Now.Ticks);
         private static List<PlayerControl> bots = new List<PlayerControl>();
 
         public static void Postfix(KeyboardJoystick __instance)
         {
             // ExtremeRolesPlugin.Logger.LogInfo($"DebugMode: {ExtremeRolesPlugin.DebugMode.Value}");
 
-            if (!ExtremeRolesPlugin.DebugMode.Value) { return; }
+            if (!ExtremeRolesPlugin.DebugMode.Value || AmongUsClient.Instance == null) { return; }
             if (!AmongUsClient.Instance.AmHost) { return; }
 
             // Spawn dummys
@@ -38,11 +37,11 @@ namespace ExtremeRoles.Patches
                 GameData.Instance.AddPlayer(playerControl);
                 AmongUsClient.Instance.Spawn(playerControl, -2, InnerNet.SpawnFlags.None);
 
-                int hat = random.Next(HatManager.Instance.AllHats.Count);
-                int pet = random.Next(HatManager.Instance.AllPets.Count);
-                int skin = random.Next(HatManager.Instance.AllSkins.Count);
-                int visor = random.Next(HatManager.Instance.AllVisors.Count);
-                int color = random.Next(Palette.PlayerColors.Length);
+                int hat = RandomGenerator.Instance.Next(HatManager.Instance.AllHats.Count);
+                int pet = RandomGenerator.Instance.Next(HatManager.Instance.AllPets.Count);
+                int skin = RandomGenerator.Instance.Next(HatManager.Instance.AllSkins.Count);
+                int visor = RandomGenerator.Instance.Next(HatManager.Instance.AllVisors.Count);
+                int color = RandomGenerator.Instance.Next(Palette.PlayerColors.Length);
 
                 playerControl.transform.position = PlayerControl.LocalPlayer.transform.position;
                 playerControl.GetComponent<DummyBehaviour>().enabled = true;
@@ -127,7 +126,7 @@ namespace ExtremeRoles.Patches
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, length)
-                .Select(s => s[random.Next(s.Length)]).ToArray());
+                .Select(s => s[RandomGenerator.Instance.Next(s.Length)]).ToArray());
         }
     }
 #endif
@@ -137,6 +136,7 @@ namespace ExtremeRoles.Patches
     {
         public static void Postfix(KeyboardJoystick __instance)
         {
+            if (AmongUsClient.Instance == null) { return; }
 
             if (GameSystem.IsLobby)
             {

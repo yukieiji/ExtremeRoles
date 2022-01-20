@@ -186,11 +186,6 @@ namespace ExtremeRoles
             Roles.Combination.Assassin.VoteFor(
                 targetId);
         }
-
-        public static void AliceAbility(byte callerId)
-        {
-            Roles.Solo.Neutral.Alice.ShipBroken(callerId);
-        }
         public static void CarrierCarryBody(
             byte callerId, byte targetId)
         {
@@ -202,6 +197,12 @@ namespace ExtremeRoles
             Roles.Solo.Impostor.Carrier.PlaceDeadBody(
                 callerId);
         }
+
+        public static void AliceShipBroken(byte callerId)
+        {
+            Roles.Solo.Neutral.Alice.ShipBroken(callerId);
+        }
+
         public static void TaskMasterSetNewTask(
             byte callerId, byte index, byte taskId)
         {

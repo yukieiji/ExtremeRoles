@@ -92,7 +92,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 PlayerControl.LocalPlayer.NetId,
                 RPCOperator.Command.AliceAbility,
                 new List<byte> { PlayerControl.LocalPlayer.PlayerId });
-            RPCOperator.AliceAbility(
+            RPCOperator.AliceShipBroken(
                 PlayerControl.LocalPlayer.PlayerId);
 
             return true;

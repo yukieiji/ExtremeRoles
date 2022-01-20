@@ -724,7 +724,7 @@ namespace ExtremeRoles.Patches
 
                 case RPCOperator.Command.AliceAbility:
                     callerId = reader.ReadByte();
-                    RPCOperator.AliceAbility(
+                    RPCOperator.AliceShipBroken(
                         callerId);
                     break;
                 case RPCOperator.Command.TaskMasterSetNetTask:
