@@ -33,7 +33,7 @@ namespace ExtremeRoles
             CarrierSetBody,
 
             // ニュートラル
-            AliceAbility,
+            AliceShipBroken,
             TaskMasterSetNetTask
         }
 

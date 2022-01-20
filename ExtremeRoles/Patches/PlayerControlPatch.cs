@@ -722,7 +722,7 @@ namespace ExtremeRoles.Patches
                     RPCOperator.CarrierSetBody(playerId);
                     break;
 
-                case RPCOperator.Command.AliceAbility:
+                case RPCOperator.Command.AliceShipBroken:
                     callerId = reader.ReadByte();
                     RPCOperator.AliceShipBroken(
                         callerId);
