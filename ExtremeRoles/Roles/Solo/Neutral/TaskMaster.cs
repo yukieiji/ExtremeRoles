@@ -32,7 +32,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void Update(PlayerControl rolePlayer)
         {
-            if (!ShipStatus.Instance.enabled || this.IsWin || !this.setUpEnd || GameData.Instance == null) { return; }
+            if (ShipStatus.Instance == null ||
+                this.IsWin ||
+                !this.setUpEnd ||
+                GameData.Instance == null) { return; }
+
+            if (!ShipStatus.Instance.enabled) { return; }
 
             var playerInfo = GameData.Instance.GetPlayerById(
                 rolePlayer.PlayerId);
