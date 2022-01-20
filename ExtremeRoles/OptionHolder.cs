@@ -283,7 +283,7 @@ namespace ExtremeRoles
 
             var CustomRegion = new DnsRegionInfo(
                 ConfigParser.Ip.Value,
-                Translation.GetString("custom"),
+                Patches.Region.CustomServer.Id,
                 StringNames.NoTranslation,
                 ConfigParser.Ip.Value,
                 ConfigParser.Port.Value);

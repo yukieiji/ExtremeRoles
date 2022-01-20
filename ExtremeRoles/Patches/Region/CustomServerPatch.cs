@@ -3,8 +3,14 @@
 
 using HarmonyLib;
 
-namespace ExtremeRoles.Patches
+namespace ExtremeRoles.Patches.Region
 {
+    public struct CustomServer
+    {
+        public const string Id = "Custom";
+        public const string TranslationKey = "custom";
+    }
+
     [HarmonyPatch(typeof(InnerNet.InnerNetClient), nameof(InnerNet.InnerNetClient.GetConnectionData))]
     public static class InnerNetClientGetConnectionDataPatch
     {
