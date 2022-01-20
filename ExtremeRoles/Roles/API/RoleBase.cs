@@ -165,7 +165,6 @@ namespace ExtremeRoles.Roles.API
             {
                 return Palette.ImpostorRed;
             }
-            // 個々の処理バグってる
             var multiAssignRole = targetRole as MultiAssignRoleBase;
             if (multiAssignRole != null)
             {
