@@ -7,8 +7,11 @@ namespace ExtremeRoles.Patches
 	{
 		private static void Postfix(TextBoxTMP __instance)
 		{
-			bool flag = OptionHolder.ConfigParser.StreamerMode.Value && 
-				(__instance.name == "GameIdText" || __instance.name == "IpTextBox" || __instance.name == "PortTextBox");
+			bool flag = 
+				OptionHolder.ConfigParser.StreamerMode.Value && 
+					(__instance.name == "GameIdText" ||
+					 __instance.name == "ipTextBox" || 
+					 __instance.name == "portTextBox");
 			if (flag)
 			{
 				__instance.outputText.text = new string('*', __instance.text.Length);
