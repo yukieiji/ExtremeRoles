@@ -13,11 +13,12 @@ namespace ExtremeRoles.Helper
         private static int defaultLanguage = (int)SupportedLangs.English;
         private static Dictionary<string, Dictionary<int, string>> stringData = new Dictionary<string, Dictionary<int, string>>();
 
+        private const string dataPath = "ExtremeRoles.Resources.LangData.stringData.json";
+
         public static void Load()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
-            Stream stream = assembly.GetManifestResourceStream(
-                "ExtremeRoles.Resources.LangData.stringData.json");
+            Stream stream = assembly.GetManifestResourceStream(dataPath);
             var byteArray = new byte[stream.Length];
             stream.Read(byteArray, 0, (int)stream.Length);
             string json = System.Text.Encoding.UTF8.GetString(byteArray);

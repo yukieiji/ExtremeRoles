@@ -47,7 +47,7 @@ namespace ExtremeRoles.Module
             }
             catch (Exception e)
             {
-                Helper.Logging.Debug(e.ToString());
+                Helper.Logging.Error(e.ToString());
             }
             return false;
         }
@@ -98,7 +98,7 @@ namespace ExtremeRoles.Module
             }
             catch (Exception e)
             {
-                Helper.Logging.Debug(e.ToString());
+                Helper.Logging.Error(e.ToString());
             }
             return false;
         }
