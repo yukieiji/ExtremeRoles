@@ -35,10 +35,8 @@ namespace ExtremeRoles.Roles.Combination
             ExtremeRoleType.Crewmate,
             ExtremeRoleId.Lover.ToString(),
             ColorPalette.LoverPink,
-            false,
-            true,
-            false,
-            false)
+            false, true,
+            false, false)
         {}
 
         public override string GetFullDescription()
@@ -251,7 +249,7 @@ namespace ExtremeRoles.Roles.Combination
                 GetRoleOptionId((int)LoverOption.IsNeutral)].GetValue();
 
             this.becomeKiller = allOption[
-                GetRoleOptionId((int)LoverOption.BecomNeutral)].GetValue();
+                GetRoleOptionId((int)LoverOption.BecomNeutral)].GetValue() && isNeutral;
 
             if (isNeutral && !this.becomeKiller)
             {
