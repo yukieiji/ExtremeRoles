@@ -54,7 +54,11 @@ namespace ExtremeRoles.Module.RoleAbilityButton
                 this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.DisabledClear;
                 this.Button.graphic.material.SetFloat("_Desat", 1f);
             }
-
+            if (this.abilityNum == 0)
+            {
+                Button.SetCoolDown(0, this.CoolTime);
+                return;
+            }
             if (this.Timer >= 0)
             {
                 bool abilityOn = this.IsHasCleanUp() && IsAbilityOn;
