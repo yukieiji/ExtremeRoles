@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -73,28 +74,32 @@ namespace ExtremeRoles.Patches.Option
 
             entry = new StringBuilder();
 
-            entry.AppendLine(
-                CustomOption.OptionToString(allOption[(int)OptionHolder.CommonOptionKey.IsSameNeutralSameWin]));
-            entry.AppendLine(
-                CustomOption.OptionToString(allOption[(int)OptionHolder.CommonOptionKey.DisableNeutralSpecialForceEnd]));
+            foreach (OptionHolder.CommonOptionKey id in Enum.GetValues(typeof(OptionHolder.CommonOptionKey)))
+            {
+                if ((id == OptionHolder.CommonOptionKey.PresetSelection) ||
+                    (id == OptionHolder.CommonOptionKey.UseStrongRandomGen) ||
+                    (id == OptionHolder.CommonOptionKey.MinCremateRoles) ||
+                    (id == OptionHolder.CommonOptionKey.MaxCremateRoles) ||
+                    (id == OptionHolder.CommonOptionKey.MinNeutralRoles) ||
+                    (id == OptionHolder.CommonOptionKey.MaxNeutralRoles) ||
+                    (id == OptionHolder.CommonOptionKey.MinImpostorRoles) ||
+                    (id == OptionHolder.CommonOptionKey.MaxImpostorRoles))
+                {
+                    continue;
+                }
+
+                entry.AppendLine(CustomOption.OptionToString(allOption[(int)id]));
+            }
 
             entries.Add(entry.ToString().Trim('\r', '\n'));
 
             foreach (CustomOptionBase option in OptionHolder.AllOption.Values)
             {
-                if ((option == allOption[(int)OptionHolder.CommonOptionKey.IsSameNeutralSameWin]) ||
-                    (option == allOption[(int)OptionHolder.CommonOptionKey.DisableNeutralSpecialForceEnd]) ||
-                    (option == allOption[(int)OptionHolder.CommonOptionKey.PresetSelection]) ||
-                    (option == allOption[(int)OptionHolder.CommonOptionKey.UseStrongRandomGen]) ||
-                    (option == allOption[(int)OptionHolder.CommonOptionKey.MinCremateRoles]) ||
-                    (option == allOption[(int)OptionHolder.CommonOptionKey.MaxCremateRoles]) ||
-                    (option == allOption[(int)OptionHolder.CommonOptionKey.MinNeutralRoles]) ||
-                    (option == allOption[(int)OptionHolder.CommonOptionKey.MaxNeutralRoles]) ||
-                    (option == allOption[(int)OptionHolder.CommonOptionKey.MinImpostorRoles]) ||
-                    (option == allOption[(int)OptionHolder.CommonOptionKey.MaxImpostorRoles]))
+                if (Enum.IsDefined(typeof(OptionHolder.CommonOptionKey), option.Id))
                 {
                     continue;
                 }
+
 
                 if (option.Parent == null)
                 {
