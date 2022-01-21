@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Events;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
@@ -13,7 +15,8 @@ namespace ExtremeRoles.Module
     public class InfoOverlay
     {
         public bool OverlayShown = false;
-
+        public GameObject infoButton = null;
+        
         private Sprite colorBackGround;
         private SpriteRenderer meetingUnderlay;
         private SpriteRenderer infoUnderlay;
@@ -28,6 +31,25 @@ namespace ExtremeRoles.Module
         {
             allRoleText.Clear();
             rolePage = 0;
+            infoButton = null;
+        }
+
+        public void CreateInfoButton()
+        {
+            var topRight = GameObject.Find("TopRight");
+
+            infoButton = UnityEngine.Object.Instantiate(
+                Prefab.HelpButton,
+                topRight.transform);
+            UnityEngine.Object.DontDestroyOnLoad(infoButton);
+            infoButton.name = "infoRoleButton";
+            infoButton.gameObject.SetActive(true);
+            infoButton.layer = 5;
+            SetInfoButtonToGameStartShipPositon();
+            var passiveButton = infoButton.GetComponent<PassiveButton>();
+            passiveButton.OnClick = new Button.ButtonClickedEvent();
+            passiveButton.OnClick.AddListener(
+                (UnityAction)ExtremeRolesPlugin.Info.ToggleInfoOverlay);
         }
 
         public void ChangeRoleInfoPage(int count)
@@ -132,6 +154,19 @@ namespace ExtremeRoles.Module
             {
                 showInfoOverlay();
             }
+        }
+
+        public void SetInfoButtonToGameStartShipPositon()
+        {
+            infoButton.transform.localPosition = new Vector3(
+                4.925f, 2.0f, 0.0f);
+        }
+
+        public void SetInfoButtonToInGamePositon()
+        {
+            infoButton.gameObject.SetActive(true);
+            infoButton.transform.localPosition = new Vector3(
+                4.925f, 1.3f, 0.0f);
         }
 
         private string cleanPlaceHolder(string value)

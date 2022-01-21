@@ -146,9 +146,7 @@ namespace ExtremeRoles.Patches
         {
             public static void Prefix(IntroCutscene __instance)
             {
-                ExtremeRolesPlugin.RoleHelpButton.gameObject.SetActive(true);
-                ExtremeRolesPlugin.RoleHelpButton.transform.localPosition = new Vector3(
-                    4.925f, 1.3f, 0.0f);
+                ExtremeRolesPlugin.Info.SetInfoButtonToInGamePositon();
 
                 var role = ExtremeRoleManager.GetLocalPlayerRole() as IRoleSpecialSetUp;
                 if (role != null)

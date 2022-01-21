@@ -22,7 +22,6 @@ namespace ExtremeRoles
         public static ExtremeRolesPlugin Instance;
         public static GameDataContainer GameDataStore = new GameDataContainer();
 
-        public static GameObject RoleHelpButton = null;
         public static InfoOverlay Info = new InfoOverlay();
 
         internal static BepInEx.Logging.ManualLogSource Logger;
