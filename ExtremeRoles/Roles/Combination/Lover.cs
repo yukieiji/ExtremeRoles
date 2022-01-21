@@ -245,19 +245,49 @@ namespace ExtremeRoles.Roles.Combination
 
         protected override void RoleSpecificInit()
         {
+            var allOption = OptionHolder.AllOption;
 
-            bool isNeutral = OptionHolder.AllOption[
+            bool isNeutral = allOption[
                 GetRoleOptionId((int)LoverOption.IsNeutral)].GetValue();
 
-            this.becomeKiller = OptionHolder.AllOption[
+            this.becomeKiller = allOption[
                 GetRoleOptionId((int)LoverOption.BecomNeutral)].GetValue();
 
             if (isNeutral && !this.becomeKiller)
             {
                 this.Team = ExtremeRoleType.Neutral;
             }
+            if (this.becomeKiller)
+            {
+                var baseOption = PlayerControl.GameOptions;
 
-            this.limit = OptionHolder.AllOption[
+                this.HasOtherKillCool = allOption[
+                    GetRoleOptionId(KillerCommonOption.HasOtherKillCool)].GetValue();
+                if (this.HasOtherKillCool)
+                {
+                    this.KillCoolTime = allOption[
+                        GetRoleOptionId(KillerCommonOption.KillCoolDown)].GetValue();
+                }
+                else
+                {
+                    this.KillCoolTime = baseOption.KillCooldown;
+                }
+
+                this.HasOtherKillRange = allOption[
+                    GetRoleOptionId(KillerCommonOption.HasOtherKillRange)].GetValue();
+
+                if (this.HasOtherKillRange)
+                {
+                    this.KillRange = allOption[
+                        GetRoleOptionId(KillerCommonOption.KillRange)].GetValue();
+                }
+                else
+                {
+                    this.KillRange = baseOption.KillDistance;
+                }
+            }
+
+            this.limit = allOption[
                 GetRoleOptionId((int)LoverOption.DethWhenUnderAlive)].GetValue();
 
         }
