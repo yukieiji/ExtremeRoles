@@ -177,7 +177,19 @@ namespace ExtremeRoles.Patches
                 }
                 if (role.UseVent && KeyboardJoystick.player.GetButtonDown(50))
                 {
-                    DestroyableSingleton<HudManager>.Instance.ImpostorVentButton.DoClick();
+                    if(role.IsVanillaRole())
+                    {
+                        if (!(((Roles.Solo.VanillaRoleWrapper)role).VanilaRoleId == RoleTypes.Engineer) ||
+                            OptionHolder.AllOption[
+                                (int)OptionHolder.CommonOptionKey.EngineerUseImpostorVent].GetValue())
+                        {
+                            DestroyableSingleton<HudManager>.Instance.ImpostorVentButton.DoClick();
+                        }
+                    }
+                    else
+                    {
+                        DestroyableSingleton<HudManager>.Instance.ImpostorVentButton.DoClick();
+                    }
                 }
             }
 
