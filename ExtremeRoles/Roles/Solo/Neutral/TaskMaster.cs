@@ -40,6 +40,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             var playerInfo = GameData.Instance.GetPlayerById(
                 rolePlayer.PlayerId);
+            if (playerInfo.IsDead || playerInfo.Disconnected) { return; }
 
             int compCount = 1;
 
