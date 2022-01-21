@@ -43,11 +43,12 @@ namespace ExtremeRoles
 
             NumMeating,
             DesableVent,
+            EngineerUseImpostorVent,
+            CanKillVentInPlayer,
             DisableSkipInEmergencyMeeting,
             NoVoteToSelf,
             ParallelMedBayScans,
             RandomMap,
-            EngineerUseImpostorVent,
             IsSameNeutralSameWin,
             DisableNeutralSpecialForceEnd
         }
@@ -117,6 +118,14 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.DesableVent,
                 CommonOptionKey.DesableVent.ToString(),
                 false);
+            CustomOption.Create(
+                (int)CommonOptionKey.CanKillVentInPlayer,
+                CommonOptionKey.CanKillVentInPlayer.ToString(),
+                false, ventOption, invert: true);
+            CustomOption.Create(
+                (int)CommonOptionKey.EngineerUseImpostorVent,
+                CommonOptionKey.EngineerUseImpostorVent.ToString(),
+                false, ventOption, invert: true, isHidden:true);
 
             var blockMeating = CustomOption.Create(
                 (int)CommonOptionKey.DisableSkipInEmergencyMeeting,
@@ -134,10 +143,6 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.RandomMap,
                 CommonOptionKey.RandomMap.ToString(), false, null, false);
 
-            CustomOption.Create(
-                (int)CommonOptionKey.EngineerUseImpostorVent,
-                CommonOptionKey.EngineerUseImpostorVent.ToString(),
-                false, ventOption, invert:true);
             CustomOption.Create(
                 (int)CommonOptionKey.IsSameNeutralSameWin,
                 CommonOptionKey.IsSameNeutralSameWin.ToString(),
@@ -196,6 +201,8 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.DisableSkipInEmergencyMeeting].GetValue();
             Ship.DisableVent = AllOption[
                 (int)CommonOptionKey.DesableVent].GetValue();
+            Ship.CanKillVentInPlayer = AllOption[
+                (int)CommonOptionKey.CanKillVentInPlayer].GetValue();
             Ship.EngineerUseImpostorVent = AllOption[
                 (int)CommonOptionKey.EngineerUseImpostorVent].GetValue();
             Ship.NoVoteIsSelfVote = AllOption[
@@ -322,6 +329,7 @@ namespace ExtremeRoles
             public static bool BlockSkippingInEmergencyMeeting = false;
             public static bool DisableVent = false;
             public static bool EngineerUseImpostorVent = false;
+            public static bool CanKillVentInPlayer = false;
             public static bool NoVoteIsSelfVote = false;
             public static bool IsSameNeutralSameWin = true;
             public static bool DisableNeutralSpecialForceEnd = false;

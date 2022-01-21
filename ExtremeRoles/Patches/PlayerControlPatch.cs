@@ -588,7 +588,6 @@ namespace ExtremeRoles.Patches
             if (gameRoles.Count == 0) { return true; }
 
             var role = gameRoles[__instance.PlayerId];
-            if (role.IsVanillaRole()) { return true; }
 
             __result = null;
 
@@ -606,6 +605,7 @@ namespace ExtremeRoles.Patches
             }
             Vector2 truePosition = __instance.GetTruePosition();
             Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers;
+
             for (int i = 0; i < allPlayers.Count; i++)
             {
                 GameData.PlayerInfo playerInfo = allPlayers[i];
@@ -614,7 +614,7 @@ namespace ExtremeRoles.Patches
                     (playerInfo.PlayerId != __instance.PlayerId) && 
                     !playerInfo.IsDead && 
                     !role.IsSameTeam(gameRoles[playerInfo.PlayerId]) && 
-                    !playerInfo.Object.inVent)
+                    (!playerInfo.Object.inVent || OptionHolder.Ship.CanKillVentInPlayer))
                 {
                     PlayerControl @object = playerInfo.Object;
                     if (@object && @object.Collider.enabled)
