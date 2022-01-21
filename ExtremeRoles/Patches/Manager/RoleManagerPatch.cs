@@ -32,11 +32,6 @@ namespace ExtremeRoles.Patches.Manager
                 ref extremeRolesData, ref playerIndexList);
             normalExtremeRoleAssign(
                 extremeRolesData, playerIndexList);
-
-            ExtremeRolesPlugin.RoleHelpButton.gameObject.SetActive(true);
-            ExtremeRolesPlugin.RoleHelpButton.transform.localPosition = new Vector3(
-                4.925f, 1.3f, 0.0f);
-
         }
 
         private static bool checkLimitRoleSpawnNum(

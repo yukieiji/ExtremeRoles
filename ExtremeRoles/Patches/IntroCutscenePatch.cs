@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using UnityEngine;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
@@ -145,6 +146,10 @@ namespace ExtremeRoles.Patches
         {
             public static void Prefix(IntroCutscene __instance)
             {
+                ExtremeRolesPlugin.RoleHelpButton.gameObject.SetActive(true);
+                ExtremeRolesPlugin.RoleHelpButton.transform.localPosition = new Vector3(
+                    4.925f, 1.3f, 0.0f);
+
                 var role = ExtremeRoleManager.GetLocalPlayerRole() as IRoleSpecialSetUp;
                 if (role != null)
                 {
