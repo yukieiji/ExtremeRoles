@@ -87,8 +87,8 @@ namespace ExtremeRoles.Patches.Option
                 {
                     continue;
                 }
-
-                entry.AppendLine(CustomOption.OptionToString(allOption[(int)id]));
+                string optionStr = CustomOption.OptionToString(allOption[(int)id]);
+                if (optionStr != string.Empty) { entry.AppendLine(optionStr); }
             }
 
             entries.Add(entry.ToString().Trim('\r', '\n'));
