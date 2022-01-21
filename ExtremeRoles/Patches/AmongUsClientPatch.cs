@@ -213,11 +213,14 @@ namespace ExtremeRoles.Patches
 
                 if (multiAssignRole != null)
                 {
-                    if (checkAndAddWinRole(
+                    if (multiAssignRole.AnotherRole != null)
+                    {
+                        if (checkAndAddWinRole(
                             multiAssignRole.AnotherRole,
                             playerInfo, ref winRole))
-                    { 
-                        continue;
+                        {
+                            continue;
+                        }
                     }
                 }
                 checkAndAddWinRole(role, playerInfo, ref winRole);
@@ -229,22 +232,31 @@ namespace ExtremeRoles.Patches
             GameData.PlayerInfo playerInfo,
             ref List<(ExtremeRoleId, int)> winRole)
         {
+            Helper.Logging.Debug("ckpt:0");
+
             int gameControlId = role.GameControlId;
+
+            Helper.Logging.Debug("ckpt:1");
 
             if (OptionHolder.Ship.IsSameNeutralSameWin)
             {
                 gameControlId = int.MaxValue;
+                Helper.Logging.Debug("ckpt:2");
             }
+
 
             if (winRole.Contains((role.Id, gameControlId)))
             {
+                Helper.Logging.Debug("ckpt:3");
                 addWinner(playerInfo);
+                Helper.Logging.Debug("ckpt:4");
                 return true;
             }
             else if (role.IsNeutral() && role.IsWin)
             {
-
+                Helper.Logging.Debug("ckpt:5");
                 winRole.Add((role.Id, gameControlId));
+                Helper.Logging.Debug("ckpt:6");
                 addWinner(playerInfo);
                 return true;
             }
