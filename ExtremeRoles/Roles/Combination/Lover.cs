@@ -198,21 +198,6 @@ namespace ExtremeRoles.Roles.Combination
             }
         }
 
-        public static void ForceReplaceToNeutral(byte callerId, byte targetId)
-        {
-            var newKiller = (Lover)ExtremeRoleManager.GameRole[targetId];
-            newKiller.Team = ExtremeRoleType.Neutral;
-            newKiller.CanKill = true;
-            newKiller.HasTask = false;
-            newKiller.ChangeAllLoverToNeutral();
-            ExtremeRoleManager.GameRole[targetId] = newKiller;
-            if (PlayerControl.LocalPlayer.PlayerId == targetId)
-            {
-                PlayerControl.LocalPlayer.SetKillTimer(newKiller.KillCoolTime);
-            }
-
-        }
-
         public void ChangeAllLoverToNeutral()
         {
             foreach (var item in ExtremeRoleManager.GameRole)
@@ -286,7 +271,7 @@ namespace ExtremeRoles.Roles.Combination
             if (this.becomeKiller)
             {
                 if (alive.Count != 1) { return; }
-                becomeAliveLoverToKiller(alive[0]);
+                forceReplaceToNeutral(alive[0]);
             }
             else
             {
@@ -308,7 +293,7 @@ namespace ExtremeRoles.Roles.Combination
             if (this.becomeKiller)
             {
                 if (alive.Count != 1) { return; }
-                becomeAliveLoverToKiller(alive[0]);
+                forceReplaceToNeutral(alive[0]);
             
             }
             else
@@ -323,21 +308,14 @@ namespace ExtremeRoles.Roles.Combination
             }
         }
 
-        private void becomeAliveLoverToKiller(byte alivePlayerId)
+        private void forceReplaceToNeutral(byte targetId)
         {
-
-            PlayerControl rolePlayer = PlayerControl.LocalPlayer;
-            RPCOperator.Call(
-                rolePlayer.NetId,
-                RPCOperator.Command.ReplaceRole,
-                new List<byte>
-                { 
-                    rolePlayer.PlayerId,
-                    alivePlayerId,
-                    (byte)ExtremeRoleManager.ReplaceOperation.LoverBecomeToNeutral,
-                });
-
-            ForceReplaceToNeutral(rolePlayer.PlayerId, alivePlayerId);
+            var newKiller = (Lover)ExtremeRoleManager.GameRole[targetId];
+            newKiller.Team = ExtremeRoleType.Neutral;
+            newKiller.CanKill = true;
+            newKiller.HasTask = false;
+            newKiller.ChangeAllLoverToNeutral();
+            ExtremeRoleManager.GameRole[targetId] = newKiller;
         }
 
         private string getTaskText(string baseString, bool isContainFakeTask)
