@@ -203,7 +203,7 @@ namespace ExtremeRoles.Module
                     var assassin = role as Roles.Combination.Assassin;
                     if (assassin != null)
                     {
-                        if (assassin.CanKilled && assassin.CanKilledFromNeutral)
+                        if (!assassin.CanKilled && !assassin.CanKilledFromNeutral)
                         {
                             ++numAssassinAlive;
                         }
