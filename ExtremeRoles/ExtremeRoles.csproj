@@ -4,8 +4,8 @@
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
         <!--<Version>1.1.1.1</Version>-->
-        <VersionPrefix>1.12.0</VersionPrefix>
-        <VersionSuffix>RC-v12</VersionSuffix> 
+        <VersionPrefix>1.12.1</VersionPrefix>
+        <VersionSuffix>RC-v13</VersionSuffix> 
         <Description>Extreme Roles for Advanced user</Description>
         <Authors>yukieiji</Authors>
     </PropertyGroup>
