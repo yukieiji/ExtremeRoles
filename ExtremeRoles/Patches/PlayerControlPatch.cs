@@ -529,46 +529,31 @@ namespace ExtremeRoles.Patches
                 {
                     if (((Roles.Solo.VanillaRoleWrapper)role).VanilaRoleId == RoleTypes.Engineer)
                     {
-                        if (enable) { HudManager.Instance.AbilityButton.Show(); }
-                        else { HudManager.Instance.AbilityButton.SetDisabled(); }
-                    }
-                }
-            }
-
-            // ToDo:インポスターのベントボタンをエンジニアが使えるようにする
-            /*
-            var role = Roles.ExtremeRoleManager.GameRole[__instance.PlayerId];
-            if (role.UseVent)
-            {
-                if (!(role is Roles.Solo.VanillaRoleWrapper))
-                {
-                    HudManager.Instance.ImpostorVentButton.Show();
-                }
-                else
-                {
-                    if (((Roles.Solo.VanillaRoleWrapper)role).VanilaRoleId == RoleTypes.Engineer)
-                    {
-                        if (!OptionsHolder.AllOptions[
-                            (int)OptionsHolder.CommonOptionKey.EngineerUseImpostorVent].GetBool())
+                        if (enable)
                         {
-                            HudManager.Instance.AbilityButton.Show();
+                            if (!OptionHolder.AllOption[
+                                    (int)OptionHolder.CommonOptionKey.EngineerUseImpostorVent].GetValue())
+                            {
+                                HudManager.Instance.AbilityButton.Show();
+                            }
+                            else
+                            {
+                                HudManager.Instance.ImpostorVentButton.Show();
+                                HudManager.Instance.AbilityButton.gameObject.SetActive(false);
+                            }
                         }
                         else
                         {
-                            //HudManager.Instance.AbilityButton.Hide();
-                            HudManager.Instance.ImpostorVentButton.Show();
-                            HudManager.Instance.AbilityButton.gameObject.SetActive(false);
+                            HudManager.Instance.ImpostorVentButton.SetDisabled();
+                            HudManager.Instance.AbilityButton.SetDisabled(); 
                         }
                     }
-                }    
+                }
             }
-            if (role.UseSabotage)
+            else
             {
-                HudManager.Instance.SabotageButton.Show();
-                HudManager.Instance.SabotageButton.gameObject.SetActive(true);
+                HudManager.Instance.ImpostorVentButton.SetDisabled();
             }
-            */
-
         }
     }
 
