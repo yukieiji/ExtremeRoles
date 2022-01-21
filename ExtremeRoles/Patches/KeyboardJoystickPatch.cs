@@ -24,7 +24,9 @@ namespace ExtremeRoles.Patches
         {
             // ExtremeRolesPlugin.Logger.LogInfo($"DebugMode: {ExtremeRolesPlugin.DebugMode.Value}");
 
-            if (!ExtremeRolesPlugin.DebugMode.Value || AmongUsClient.Instance == null) { return; }
+            if (!ExtremeRolesPlugin.DebugMode.Value || 
+                AmongUsClient.Instance == null || 
+                PlayerControl.LocalPlayer == null) { return; }
             if (!AmongUsClient.Instance.AmHost) { return; }
 
             // Spawn dummys
@@ -136,7 +138,7 @@ namespace ExtremeRoles.Patches
     {
         public static void Postfix(KeyboardJoystick __instance)
         {
-            if (AmongUsClient.Instance == null) { return; }
+            if (AmongUsClient.Instance == null || PlayerControl.LocalPlayer == null) { return; }
 
             if (GameSystem.IsLobby)
             {
