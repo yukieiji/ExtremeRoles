@@ -60,8 +60,6 @@ namespace ExtremeRoles.Patches.MapModule
             
             __instance.CanUse(PlayerControl.LocalPlayer.Data, out canUse, out couldUse);
 
-            // bool canMoveInVents = PlayerControl.LocalPlayer != Spy.spy && Madmate.madmate != PlayerControl.LocalPlayer;
-
             if (!canUse) { return false; }; // No need to execute the native method as using is disallowed anyways
 
             bool isEnter = !PlayerControl.LocalPlayer.inVent;

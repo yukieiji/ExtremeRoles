@@ -125,7 +125,7 @@ namespace ExtremeRoles
             CustomOption.Create(
                 (int)CommonOptionKey.EngineerUseImpostorVent,
                 CommonOptionKey.EngineerUseImpostorVent.ToString(),
-                false, ventOption, invert: true, isHidden:true);
+                false, ventOption, invert: true);
 
             var blockMeating = CustomOption.Create(
                 (int)CommonOptionKey.DisableSkipInEmergencyMeeting,
