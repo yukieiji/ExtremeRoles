@@ -170,7 +170,7 @@ namespace ExtremeRoles.Module
         }
         public bool IsRoleSetUpEnd()
         {
-            return ExtremeRoleManager.GameRole.Count == PlayerControl.AllPlayerControls.Count;
+            return ExtremeRoleManager.GameRole.Count == GameData.Instance.AllPlayers.Count;
         }
 
         public PlayerStatistics CreateStatistics()
