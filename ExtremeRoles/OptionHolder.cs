@@ -141,7 +141,7 @@ namespace ExtremeRoles
                 CommonOptionKey.ParallelMedBayScans.ToString(), false);
             CustomOption.Create(
                 (int)CommonOptionKey.RandomMap,
-                CommonOptionKey.RandomMap.ToString(), false, null, false);
+                CommonOptionKey.RandomMap.ToString(), false);
 
             CustomOption.Create(
                 (int)CommonOptionKey.IsSameNeutralSameWin,
