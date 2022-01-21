@@ -80,13 +80,13 @@ namespace ExtremeRoles.Roles.Combination
         public override void RolePlayerKilledAction(
             PlayerControl rolePlayer, PlayerControl killerPlayer)
         {
-            killedUpdate();
+            killedUpdate(rolePlayer);
         }
 
         public override void ExiledAction(
             GameData.PlayerInfo rolePlayer)
         {
-            exiledUpdate();
+            exiledUpdate(rolePlayer);
         }
 
         public override string GetImportantText(bool isContainFakeTask = true)
@@ -260,7 +260,7 @@ namespace ExtremeRoles.Roles.Combination
                 GetRoleOptionId((int)LoverOption.IsNeutral)].GetValue();
 
             this.becomeKiller = OptionHolder.AllOption[
-                GetRoleOptionId((int)LoverOption.BecomNeutral)].GetValue() && isNeutral;
+                GetRoleOptionId((int)LoverOption.BecomNeutral)].GetValue();
 
             if (isNeutral && !this.becomeKiller)
             {
@@ -272,9 +272,11 @@ namespace ExtremeRoles.Roles.Combination
 
         }
 
-        private void exiledUpdate()
+        private void exiledUpdate(
+            GameData.PlayerInfo exiledPlayer)
         {
             List<byte> alive = getAliveSameLover();
+            alive.Remove(exiledPlayer.PlayerId);
 
             if (this.becomeKiller)
             {
@@ -293,9 +295,11 @@ namespace ExtremeRoles.Roles.Combination
             }
         }
 
-        private void killedUpdate()
+        private void killedUpdate(PlayerControl killedPlayer)
         {
             List<byte> alive = getAliveSameLover();
+            alive.Remove(killedPlayer.PlayerId);
+
             if (this.becomeKiller)
             {
                 if (alive.Count != 1) { return; }
@@ -353,8 +357,9 @@ namespace ExtremeRoles.Roles.Combination
 
             foreach(var item in ExtremeRoleManager.GameRole)
             {
-                if (this.IsSameControlId(item.Value) && !(GameData.Instance.GetPlayerById(
-                    item.Key).IsDead))
+                var player = GameData.Instance.GetPlayerById(item.Key);
+                if (this.IsSameControlId(item.Value) && 
+                    (!player.IsDead || !player.Disconnected))
                 {
                     alive.Add(item.Key);
                 }
