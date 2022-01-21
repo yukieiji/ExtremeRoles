@@ -45,7 +45,7 @@ namespace ExtremeRoles.Roles.Combination
         {
             string baseDesc;
 
-            if (this.IsImposter() && !this.CanHasAnotherRole)
+            if (this.IsImpostor() && !this.CanHasAnotherRole)
             {
                 baseDesc = Translation.GetString($"{this.Id}ImposterFullDescription");
             }
@@ -91,7 +91,7 @@ namespace ExtremeRoles.Roles.Combination
 
         public override string GetImportantText(bool isContainFakeTask = true)
         {
-            if (!this.CanKill || this.IsImposter() || this.CanHasAnotherRole)
+            if (!this.CanKill || this.IsImpostor() || this.CanHasAnotherRole)
             {
                 return base.GetImportantText(isContainFakeTask);
             }

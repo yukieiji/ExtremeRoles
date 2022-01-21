@@ -12,7 +12,7 @@ namespace ExtremeRoles.Patches.Button
             var role = Roles.ExtremeRoleManager.GameRole[localPlayer.PlayerId];
             // The sabotage button behaves just fine if it's a regular impostor
             if ((localPlayer.Data.Role.TeamType == RoleTeamTypes.Impostor) ||
-                role.IsImposter()) { return true; }
+                role.IsImpostor()) { return true; }
             if (!role.UseSabotage) { return true; }
 
             DestroyableSingleton<HudManager>.Instance.ShowMap(

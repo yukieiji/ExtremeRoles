@@ -114,7 +114,7 @@ namespace ExtremeRoles.Module
             // IsImpostor
             var finalStatus = PlayerStatus.Alive;
             if ((this.EndReason == GameOverReason.ImpostorBySabotage) &&
-                (!role.IsImposter()))
+                (!role.IsImpostor()))
             {
                 finalStatus = PlayerStatus.Dead;
             }
@@ -139,7 +139,7 @@ namespace ExtremeRoles.Module
                         finalStatus = info.Reason;
                     }
                 }
-                else if (!role.IsImposter())
+                else if (!role.IsImpostor())
                 {
                     finalStatus = PlayerStatus.Surrender;
                 }

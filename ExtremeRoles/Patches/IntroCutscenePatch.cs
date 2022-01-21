@@ -126,7 +126,7 @@ namespace ExtremeRoles.Patches
                 }
 
 
-                if (role.IsImposter())
+                if (role.IsImpostor())
                 {
                     __instance.RoleBlurbText.text += 
                         $"\n{Helper.Translation.GetString("impostorIntroText")}";

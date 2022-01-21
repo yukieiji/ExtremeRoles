@@ -35,7 +35,7 @@ namespace ExtremeRoles.Roles.Combination
 
         public void IntroBeginSetUp()
         {
-            if (this.IsImposter())
+            if (this.IsImpostor())
             {
                 this.RoleName = "Evil" + this.RoleName;
             }
@@ -52,7 +52,7 @@ namespace ExtremeRoles.Roles.Combination
                 if (item.Value.Id == this.Id) { continue; }
 
                 if (((item.Value.Id == ExtremeRoleId.Marlin) && this.IsCrewmate()) ||
-                    ((item.Value.Id == ExtremeRoleId.Assassin) && this.IsImposter()))
+                    ((item.Value.Id == ExtremeRoleId.Assassin) && this.IsImpostor()))
                 {
                     target.Add(item.Key);
                 }
@@ -66,7 +66,7 @@ namespace ExtremeRoles.Roles.Combination
                     if (item.Value.Id == this.Id) { continue; }
 
                     if ((item.Value.IsCrewmate() && this.IsCrewmate()) ||
-                        (item.Value.IsImposter() && this.IsImposter()))
+                        (item.Value.IsImpostor() && this.IsImpostor()))
                     {
                         target.Add(item.Key);
                     }
@@ -102,7 +102,7 @@ namespace ExtremeRoles.Roles.Combination
 
             string baseDesc;
 
-            if (this.IsImposter())
+            if (this.IsImpostor())
             {
                 baseDesc = Translation.GetString(
                     $"{this.Id}ImposterFullDescription");

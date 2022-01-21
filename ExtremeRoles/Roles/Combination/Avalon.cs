@@ -236,7 +236,7 @@ namespace ExtremeRoles.Roles.Combination
             SingleRoleBase targetRole,
             byte targetPlayerId)
         {
-            if (targetRole.IsImposter())
+            if (targetRole.IsImpostor())
             {
                 return Palette.ImpostorRed;
             }

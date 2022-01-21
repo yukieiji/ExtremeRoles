@@ -116,7 +116,7 @@ namespace ExtremeRoles.Patches
                             0, __instance.playerStates.Length);
                         voteFor = __instance.playerStates[randomPlayerIndex].TargetPlayerId;
 
-                        targetImposter = ExtremeRoleManager.GameRole[voteFor].IsImposter();
+                        targetImposter = ExtremeRoleManager.GameRole[voteFor].IsImpostor();
 
                     } while (targetImposter);
                 }

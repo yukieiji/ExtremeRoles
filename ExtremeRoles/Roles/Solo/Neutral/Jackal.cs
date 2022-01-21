@@ -257,7 +257,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 sourceJackal.CurRecursion,
                 sourceJackal.CanSeeImpostorToSidekickImpostor,
                 sourceJackal.SidekickJackalCanMakeSidekick,
-                targetRole.IsImposter(),
+                targetRole.IsImpostor(),
                 ref sourceJackal.SidekickOption);
 
             DestroyableSingleton<RoleManager>.Instance.SetRole(
@@ -516,7 +516,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private bool isImpostorAndSetTarget(
             byte playerId)
         {
-            if (ExtremeRoleManager.GameRole[playerId].IsImposter())
+            if (ExtremeRoleManager.GameRole[playerId].IsImpostor())
             {
                 return this.CanSetImpostorToSidekick;
             }

@@ -50,7 +50,7 @@ namespace ExtremeRoles.Roles.Solo
 
         public override string GetImportantText(bool isContainFakeTask = true)
         {
-            if(this.IsImposter())
+            if(this.IsImpostor())
             {
                 return string.Concat(new string[]
                 {

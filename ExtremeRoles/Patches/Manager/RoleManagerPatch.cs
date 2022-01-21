@@ -252,7 +252,7 @@ namespace ExtremeRoles.Patches.Manager
             switch (player.Data.Role.Role)
             {
                 case RoleTypes.Impostor:
-                    if (role.IsImposter())
+                    if (role.IsImpostor())
                     {
                         return true;
                     }
@@ -265,7 +265,7 @@ namespace ExtremeRoles.Patches.Manager
                     }
                     break;
                 case RoleTypes.Shapeshifter:
-                    if (role.IsImposter() && role.CanHasAnotherRole)
+                    if (role.IsImpostor() && role.CanHasAnotherRole)
                     {
                         return true;
                     }

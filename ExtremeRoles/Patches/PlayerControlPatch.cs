@@ -426,7 +426,7 @@ namespace ExtremeRoles.Patches
             SingleRoleBase role, bool enable)
         {
 
-            bool isImposter = role.IsImposter();
+            bool isImposter = role.IsImpostor();
 
             if (role.CanKill)
             {
@@ -493,7 +493,7 @@ namespace ExtremeRoles.Patches
             if (role.UseSabotage)
             {
                 // インポスターは死んでもサボタージ使える
-                if (enable && role.IsImposter())
+                if (enable && role.IsImpostor())
                 {
                     HudManager.Instance.SabotageButton.Show();
                     HudManager.Instance.SabotageButton.gameObject.SetActive(true);

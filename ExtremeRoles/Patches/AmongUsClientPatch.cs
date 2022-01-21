@@ -69,7 +69,7 @@ namespace ExtremeRoles.Patches
                     resetWinner();
                     foreach (var player in GameData.Instance.AllPlayers)
                     {
-                        if (ExtremeRoleManager.GameRole[player.PlayerId].IsImposter())
+                        if (ExtremeRoleManager.GameRole[player.PlayerId].IsImpostor())
                         { 
                             addWinner(player);
                         }

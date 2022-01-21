@@ -94,7 +94,7 @@ namespace ExtremeRoles.Roles.API
 
         public bool IsCrewmate() => this.Team == ExtremeRoleType.Crewmate;
 
-        public bool IsImposter() => this.Team == ExtremeRoleType.Impostor;
+        public bool IsImpostor() => this.Team == ExtremeRoleType.Impostor;
 
         public bool IsNeutral() => this.Team == ExtremeRoleType.Neutral;
 
@@ -160,8 +160,8 @@ namespace ExtremeRoles.Roles.API
             byte targetPlayerId)
         {
             
-            if ((targetRole.IsImposter() || targetRole.FakeImposter) &&
-                this.IsImposter())
+            if ((targetRole.IsImpostor() || targetRole.FakeImposter) &&
+                this.IsImpostor())
             {
                 return Palette.ImpostorRed;
             }
@@ -260,7 +260,7 @@ namespace ExtremeRoles.Roles.API
                         RoleCommonOption.SpawnRate.ToString())),
                 OptionHolder.SpawnRate, null, true);
 
-            int spawnNum = this.IsImposter() ? OptionHolder.MaxImposterNum : OptionHolder.VanillaMaxPlayerNum - 1;
+            int spawnNum = this.IsImpostor() ? OptionHolder.MaxImposterNum : OptionHolder.VanillaMaxPlayerNum - 1;
 
             CustomOption.Create(
                 GetRoleOptionId(RoleCommonOption.RoleNum),
@@ -301,12 +301,12 @@ namespace ExtremeRoles.Roles.API
             var baseOption = PlayerControl.GameOptions;
             var allOption = OptionHolder.AllOption;
 
-            this.Vison = this.IsImposter() ? baseOption.ImpostorLightMod : baseOption.CrewLightMod;
+            this.Vison = this.IsImpostor() ? baseOption.ImpostorLightMod : baseOption.CrewLightMod;
             
             this.KillCoolTime = baseOption.KillCooldown;
             this.KillRange = baseOption.KillDistance;
 
-            this.IsApplyEnvironmentVision = !this.IsImposter();
+            this.IsApplyEnvironmentVision = !this.IsImpostor();
 
 
             this.HasOtherVison = allOption[

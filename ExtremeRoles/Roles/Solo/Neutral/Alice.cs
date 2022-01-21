@@ -80,7 +80,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             PlayerControl rolePlayer,
             PlayerControl killerPlayer)
         {
-           if (ExtremeRoleManager.GameRole[killerPlayer.PlayerId].IsImposter())
+           if (ExtremeRoleManager.GameRole[killerPlayer.PlayerId].IsImpostor())
            {
                 this.IsWin = true;
            }

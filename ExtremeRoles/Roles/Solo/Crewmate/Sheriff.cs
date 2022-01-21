@@ -40,7 +40,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 targetPlayer.PlayerId];
             
 
-            if ((targetPlayerRole.IsImposter()) || 
+            if ((targetPlayerRole.IsImpostor()) || 
                 (targetPlayerRole.IsNeutral() && this.canShootNeutral))
             {
                 if (!this.canShootAssassin &&
