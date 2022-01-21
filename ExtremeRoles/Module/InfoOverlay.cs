@@ -74,6 +74,7 @@ namespace ExtremeRoles.Module
         {
             if (!OverlayShown) { return; }
 
+            if (HudManager.Instance == null) { return; }
             if (MeetingHud.Instance == null) { DestroyableSingleton<HudManager>.Instance.SetHudActive(true); }
 
             OverlayShown = false;
