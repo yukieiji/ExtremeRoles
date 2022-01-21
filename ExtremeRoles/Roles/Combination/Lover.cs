@@ -206,6 +206,11 @@ namespace ExtremeRoles.Roles.Combination
             newKiller.HasTask = false;
             newKiller.ChangeAllLoverToNeutral();
             ExtremeRoleManager.GameRole[targetId] = newKiller;
+            if (PlayerControl.LocalPlayer.PlayerId == targetId)
+            {
+                PlayerControl.LocalPlayer.SetKillTimer(newKiller.KillCoolTime);
+            }
+
         }
 
         public void ChangeAllLoverToNeutral()
