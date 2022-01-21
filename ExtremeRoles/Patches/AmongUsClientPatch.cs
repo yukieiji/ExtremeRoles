@@ -15,6 +15,7 @@ namespace ExtremeRoles.Patches
     {
         public static void Prefix(AmongUsClient __instance, [HarmonyArgument(0)] ref EndGameResult endGameResult)
         {
+            ExtremeRolesPlugin.Info.HideInfoOverlay();
             ExtremeRolesPlugin.GameDataStore.EndReason = endGameResult.GameOverReason;
             if ((int)endGameResult.GameOverReason >= 10)
             {
@@ -232,31 +233,22 @@ namespace ExtremeRoles.Patches
             GameData.PlayerInfo playerInfo,
             ref List<(ExtremeRoleId, int)> winRole)
         {
-            Helper.Logging.Debug("ckpt:0");
-
             int gameControlId = role.GameControlId;
-
-            Helper.Logging.Debug("ckpt:1");
 
             if (OptionHolder.Ship.IsSameNeutralSameWin)
             {
                 gameControlId = int.MaxValue;
-                Helper.Logging.Debug("ckpt:2");
             }
 
 
             if (winRole.Contains((role.Id, gameControlId)))
             {
-                Helper.Logging.Debug("ckpt:3");
                 addWinner(playerInfo);
-                Helper.Logging.Debug("ckpt:4");
                 return true;
             }
             else if (role.IsNeutral() && role.IsWin)
             {
-                Helper.Logging.Debug("ckpt:5");
                 winRole.Add((role.Id, gameControlId));
-                Helper.Logging.Debug("ckpt:6");
                 addWinner(playerInfo);
                 return true;
             }
