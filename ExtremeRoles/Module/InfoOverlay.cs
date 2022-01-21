@@ -422,7 +422,7 @@ namespace ExtremeRoles.Module
             if (roleInfoText == null)
             {
                 roleInfoText = UnityEngine.Object.Instantiate(ruleInfoText, hudManager.transform);
-                roleInfoText.maxVisibleLines = 28;
+                roleInfoText.maxVisibleLines = 35;
                 roleInfoText.fontSize = roleInfoText.fontSizeMin = roleInfoText.fontSizeMax = 1.15f;
                 roleInfoText.outlineWidth += 0.02f;
                 roleInfoText.autoSizeTextContainer = false;
@@ -437,7 +437,7 @@ namespace ExtremeRoles.Module
             if (anotherRoleInfoText == null)
             {
                 anotherRoleInfoText = UnityEngine.Object.Instantiate(ruleInfoText, hudManager.transform);
-                anotherRoleInfoText.maxVisibleLines = 28;
+                anotherRoleInfoText.maxVisibleLines = 35;
                 anotherRoleInfoText.fontSize = anotherRoleInfoText.fontSizeMin = anotherRoleInfoText.fontSizeMax = 1.15f;
                 anotherRoleInfoText.outlineWidth += 0.02f;
                 anotherRoleInfoText.autoSizeTextContainer = false;
