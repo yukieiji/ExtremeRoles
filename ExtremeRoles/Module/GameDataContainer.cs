@@ -111,16 +111,16 @@ namespace ExtremeRoles.Module
 
             var role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
             var (completedTask, totalTask) = Helper.GameSystem.GetTaskInfo(playerInfo);
-
+            // IsImpostor
             var finalStatus = PlayerStatus.Alive;
             if ((this.EndReason == GameOverReason.ImpostorBySabotage) &&
-                (!playerInfo.Role.IsImpostor))
+                (!role.IsImposter()))
             {
                 finalStatus = PlayerStatus.Dead;
             }
             else if ((this.EndReason == (GameOverReason)RoleGameOverReason.AssassinationMarin))
             {
-                if (playerInfo.PlayerId == this.ExiledAssassinId)
+                if (playerInfo.PlayerId == this.IsMarinPlayerId)
                 {
                     if (playerInfo.IsDead || playerInfo.Disconnected)
                     {
@@ -131,7 +131,15 @@ namespace ExtremeRoles.Module
                         finalStatus = PlayerStatus.Assassinate;
                     }
                 }
-                else
+                else if (playerInfo.PlayerId == this.ExiledAssassinId)
+                {
+                    if (this.DeadPlayerInfo.ContainsKey(playerInfo.PlayerId))
+                    {
+                        var info = this.DeadPlayerInfo[playerInfo.PlayerId];
+                        finalStatus = info.Reason;
+                    }
+                }
+                else if (!role.IsImposter())
                 {
                     finalStatus = PlayerStatus.Surrender;
                 }
