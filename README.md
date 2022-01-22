@@ -11,7 +11,7 @@ AmongUsの上級者(初心者)向けのロール追加MOD、主な特徴とし�
 このMODはAmong UsまたはInnersloth LLCとは提携しておらず、含まれるコンテンツはAmong UsやInnersloth LLCから支援、援助されているものではありません。
 ここに含まれる素材の一部は、Innersloth LLCの所有物です。©Innersloth LLC.
 
-## 追加役職一覧(Extreme Roles v1.12.2.0時点)
+## 追加役職一覧(Extreme Roles v1.12.2.1時点、今後も追加予定)
 |  クルー  |  インポスター  | ニュートラル |
 | ---- | ---- | ---- |
 |  スペシャルクルー  |  スペシャルインポスター  |　アリス　|
