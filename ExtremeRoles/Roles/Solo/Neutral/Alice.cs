@@ -133,15 +133,17 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     byte taskId = (byte)shuffled[0];
                     shuffled.RemoveAt(0);
 
-                    playerInfo.Tasks[i] = new GameData.TaskInfo(
-                        taskId, (uint)i);
-                    playerInfo.Tasks[i].Id = (uint)i;
+                    int index = (int)player.myTasks[i].Id;
+
+                    playerInfo.Tasks[index] = new GameData.TaskInfo(
+                        taskId, (uint)index);
+                    playerInfo.Tasks[index].Id = (uint)index;
 
                     NormalPlayerTask normalPlayerTask = 
                         UnityEngine.Object.Instantiate<NormalPlayerTask>(
                             ShipStatus.Instance.GetTaskById(taskId),
                             player.transform);
-                    normalPlayerTask.Id = (uint)i;
+                    normalPlayerTask.Id = (uint)index;
                     normalPlayerTask.Owner = player;
                     normalPlayerTask.Initialize();
 
