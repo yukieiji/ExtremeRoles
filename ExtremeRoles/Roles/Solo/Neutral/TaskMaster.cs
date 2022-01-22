@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+using Hazel;
+
 using ExtremeRoles.Module;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
@@ -20,7 +22,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private int addLongTask = 0;
         private int addNormalTask = 0;
         private int addCommonTask = 0;
-        private List<byte> addTask = new List<byte>();
+        private List<int> addTask = new List<int>();
 
         public TaskMaster() : base(
             ExtremeRoleId.TaskMaster,
@@ -42,7 +44,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 rolePlayer.PlayerId);
             if (playerInfo.IsDead || playerInfo.Disconnected) { return; }
 
-            int compCount = 1;
+            int compCount = 0;
 
             for (int i = 0; i < playerInfo.Tasks.Count; ++i)
             {
@@ -56,14 +58,21 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     {
                         var shuffled = this.addTask.OrderBy(
                             item => RandomGenerator.Instance.Next()).ToList();
-                        byte taskId = shuffled[0];
-                        this.addTask.Remove(taskId);
+                        int taskIndex = shuffled[0];
 
-                        RPCOperator.Call(
+                        Helper.Logging.Debug($"SetTaskId:{taskIndex}");
+
+                        this.addTask.Remove(taskIndex);
+
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                             PlayerControl.LocalPlayer.NetId,
-                            RPCOperator.Command.TaskMasterSetNetTask,
-                            new List<byte> { rolePlayer.PlayerId, (byte)i, taskId });
-                        ReplaceToNewTask(rolePlayer.PlayerId, i, taskId);
+                            (byte)RPCOperator.Command.TaskMasterSetNetTask,
+                            Hazel.SendOption.Reliable, -1);
+                        writer.Write(rolePlayer.PlayerId);
+                        writer.Write(i);
+                        writer.Write(taskIndex);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        ReplaceToNewTask(rolePlayer.PlayerId, i, taskIndex);
                     }
                 }
             }
@@ -142,7 +151,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.addTask.Clear();
         }
 
-        public static void ReplaceToNewTask(byte playerId, int index, byte taskId)
+        public static void ReplaceToNewTask(byte playerId, int index, int taskIndex)
         {
      
             var player = Player.GetPlayerControlById(
@@ -150,21 +159,28 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             var playerInfo = GameData.Instance.GetPlayerById(
                 player.PlayerId);
 
-            Logging.Debug($"Replace Start");
+            byte taskId = (byte)taskIndex;
 
             playerInfo.Tasks[index] = new GameData.TaskInfo(
                 taskId, (uint)index);
             playerInfo.Tasks[index].Id = (uint)index;
 
             NormalPlayerTask normalPlayerTask =
-                UnityEngine.Object.Instantiate<NormalPlayerTask>(
+                UnityEngine.Object.Instantiate(
                     ShipStatus.Instance.GetTaskById(taskId),
                     player.transform);
             normalPlayerTask.Id = (uint)index;
             normalPlayerTask.Owner = player;
             normalPlayerTask.Initialize();
 
-            player.myTasks[index] = normalPlayerTask;
+            for (int i = 0; i < player.myTasks.Count; ++i)
+            {
+                if (player.myTasks[i].IsComplete)
+                {
+                    player.myTasks[i] = normalPlayerTask;
+                    break;
+                }
+            }
 
             GameData.Instance.SetDirtyBit(
                 1U << (int)player.PlayerId);

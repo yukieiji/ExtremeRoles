@@ -105,7 +105,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             var playerInfo = GameData.Instance.GetPlayerById(
                 player.PlayerId);
 
-            List<byte> addTaskId = new List<byte> ();
+            List<int> addTaskId = new List<int> ();
             
             for (int i = 0; i < alice.RevartLongTask; ++i)
             {
@@ -130,7 +130,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 bool isTaskComp = player.myTasks[i].IsComplete;
                 if (isTaskComp)
                 {
-                    byte taskId = shuffled[0];
+                    byte taskId = (byte)shuffled[0];
                     shuffled.RemoveAt(0);
 
                     playerInfo.Tasks[i] = new GameData.TaskInfo(

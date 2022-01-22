@@ -44,7 +44,7 @@ namespace ExtremeRoles.Helper
             return Tuple.Create(CompletedTasks, TotalTasks);
         }
 
-        public static byte GetRandomCommonTaskId()
+        public static int GetRandomCommonTaskId()
         {
             if (ShipStatus.Instance == null) { return byte.MaxValue; }
 
@@ -56,7 +56,7 @@ namespace ExtremeRoles.Helper
             return (byte)taskIndex[index];
         }
 
-        public static byte GetRandomLongTask()
+        public static int GetRandomLongTask()
         {
             if (ShipStatus.Instance == null) { return byte.MaxValue; }
 
@@ -65,10 +65,10 @@ namespace ExtremeRoles.Helper
 
             int index = UnityEngine.Random.RandomRange(0, taskIndex.Count);
 
-            return (byte)taskIndex[index];
+            return taskIndex[index];
         }
 
-        public static byte GetRandomNormalTaskId()
+        public static int GetRandomNormalTaskId()
         {
             if (ShipStatus.Instance == null) { return byte.MaxValue; }
 
@@ -77,22 +77,22 @@ namespace ExtremeRoles.Helper
 
             int index = UnityEngine.Random.RandomRange(0, taskIndex.Count);
 
-            return (byte)taskIndex[index];
+            return taskIndex[index];
         }
 
         public static void SetTask(
             GameData.PlayerInfo playerInfo,
-            byte bytedTaskIndex)
+            int taskIndex)
         {
-            NormalPlayerTask task = ShipStatus.Instance.GetTaskById(bytedTaskIndex);
+            NormalPlayerTask task = ShipStatus.Instance.GetTaskById((byte)taskIndex);
 
             PlayerControl player = playerInfo.Object;
 
             int index = playerInfo.Tasks.Count;
-            playerInfo.Tasks.Add(new GameData.TaskInfo(bytedTaskIndex, (uint)index));
+            playerInfo.Tasks.Add(new GameData.TaskInfo((byte)taskIndex, (uint)index));
             playerInfo.Tasks[index].Id = (uint)index;
 
-            task.Id = bytedTaskIndex;
+            task.Id = (uint)index;
             task.Owner = player;
             task.Initialize();
 

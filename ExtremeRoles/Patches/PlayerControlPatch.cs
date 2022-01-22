@@ -723,8 +723,8 @@ namespace ExtremeRoles.Patches
                     break;
                 case RPCOperator.Command.TaskMasterSetNetTask:
                     playerId = reader.ReadByte();
-                    byte index = reader.ReadByte();
-                    byte taskId = reader.ReadByte();
+                    int index = reader.ReadInt32();
+                    int taskId = reader.ReadInt32();
                     RPCOperator.TaskMasterSetNewTask(
                         playerId, index, taskId);
                     break;

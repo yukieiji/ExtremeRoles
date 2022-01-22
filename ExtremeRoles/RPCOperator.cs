@@ -219,10 +219,10 @@ namespace ExtremeRoles
         }
 
         public static void TaskMasterSetNewTask(
-            byte callerId, byte index, byte taskId)
+            byte callerId, int index, int taskIndex)
         {
             Roles.Solo.Neutral.TaskMaster.ReplaceToNewTask(
-                callerId, (int)index, taskId);
+                callerId, index, taskIndex);
         }
 
     }
