@@ -164,8 +164,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 GetRoleOptionId((int)CarrierOption.CarryDistance),
                 string.Concat(
                     this.RoleName,
-                    CarrierOption.CanReportOnCarry.ToString()),
-                1.0f, 1.0f, 5.0f, 1.0f,
+                    CarrierOption.CarryDistance.ToString()),
+                1.0f, 1.0f, 5.0f, 0.5f,
                 parentOps);
 
             CustomOption.Create(
