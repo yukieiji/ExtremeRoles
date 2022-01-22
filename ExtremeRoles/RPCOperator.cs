@@ -15,6 +15,7 @@ namespace ExtremeRoles
             SetNormalRole,
             SetCombinationRole,
             ShareOption,
+            UncheckedShapeShift,
             UncheckedMurderPlayer,
             CleanDeadBody,
             FixLightOff,
@@ -128,6 +129,20 @@ namespace ExtremeRoles
         {
             ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
                 playerId, (Module.GameDataContainer.PlayerStatus)reason);
+        }
+        public static void UncheckedShapeShift(
+            byte sourceId, byte targetId, byte useAnimation)
+        {
+            PlayerControl source = Helper.Player.GetPlayerControlById(sourceId);
+            PlayerControl target = Helper.Player.GetPlayerControlById(targetId);
+
+            bool animate = true;
+
+            if (useAnimation != byte.MaxValue)
+            {
+                animate = false;
+            }
+            source.Shapeshift(target, animate);
         }
 
         public static void UncheckedMurderPlayer(

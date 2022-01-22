@@ -629,9 +629,11 @@ namespace ExtremeRoles.Patches
         {
 
             byte roleId;
+            byte sourceId;
             byte playerId;
             byte callerId;
             byte targetId;
+            byte useAnimationreaderreader;
 
             switch ((RPCOperator.Command)callId)
             {
@@ -669,10 +671,17 @@ namespace ExtremeRoles.Patches
                     RPCOperator.ReplaceRole(
                         callerId, replaceTarget, ops);
                     break;
-                case RPCOperator.Command.UncheckedMurderPlayer:
-                    byte sourceId = reader.ReadByte();
+                case RPCOperator.Command.UncheckedShapeShift:
+                    sourceId = reader.ReadByte();
                     targetId = reader.ReadByte();
-                    byte useAnimationreaderreader = reader.ReadByte();
+                    useAnimationreaderreader = reader.ReadByte();
+                    RPCOperator.UncheckedShapeShift(
+                        sourceId, targetId, useAnimationreaderreader);
+                    break;
+                case RPCOperator.Command.UncheckedMurderPlayer:
+                    sourceId = reader.ReadByte();
+                    targetId = reader.ReadByte();
+                    useAnimationreaderreader = reader.ReadByte();
                     RPCOperator.UncheckedMurderPlayer(
                         sourceId, targetId, useAnimationreaderreader);
                     break;
