@@ -29,6 +29,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private float eatingRange = 1.0f;
         private float reduceRate = 1.0f;
         private float reruceMulti = 1.0f;
+        private bool isEvolvdAnimation;
         private bool isEatingEndCleanBody;
 
         private string defaultButtonText;
@@ -75,6 +76,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void CleanUp()
         {
+            
+            if (this.isEvolvdAnimation)
+            {
+                PlayerControl.LocalPlayer.RpcShapeshift(
+                    PlayerControl.LocalPlayer, true);
+            }
 
             this.KillCoolTime = this.KillCoolTime * ((100f - this.reduceRate) / 100f);
             this.reduceRate = this.reduceRate * this.reruceMulti;
@@ -125,6 +132,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             CustomOptionBase parentOps)
         {
             CustomOption.Create(
+                GetRoleOptionId((int)EvolverOption.IsEvolvedAnimation),
+                string.Concat(
+                    this.RoleName,
+                    EvolverOption.IsEvolvedAnimation.ToString()),
+                true, parentOps);
+
+            CustomOption.Create(
                 GetRoleOptionId((int)EvolverOption.IsEatingEndCleanBody),
                 string.Concat(
                     this.RoleName,
@@ -173,6 +187,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             
             var allOption = OptionHolder.AllOption;
 
+            this.isEvolvdAnimation = allOption[
+                GetRoleOptionId((int)EvolverOption.IsEvolvedAnimation)].GetValue();
             this.isEatingEndCleanBody = allOption[
                 GetRoleOptionId((int)EvolverOption.IsEatingEndCleanBody)].GetValue();
             this.eatingRange = allOption[
