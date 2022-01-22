@@ -114,8 +114,8 @@ namespace ExtremeRoles.Roles.Combination
 
             return string.Format(
                 baseDesc,
-                this.supportRoleName,
-                this.supportPlayerName);
+                this.supportPlayerName,
+                this.supportRoleName);
         }
         public override string GetRolePlayerNameTag(
             SingleRoleBase targetRole, byte targetPlayerId)
