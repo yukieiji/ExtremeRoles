@@ -165,7 +165,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 string.Concat(
                     this.RoleName,
                     CarrierOption.CanReportOnCarry.ToString()),
-                1.0f, 1.0f, PlayerControl.LocalPlayer.MaxReportDistance, 1.0f,
+                1.0f, 1.0f, 5.0f, 1.0f,
                 parentOps);
 
             CustomOption.Create(
