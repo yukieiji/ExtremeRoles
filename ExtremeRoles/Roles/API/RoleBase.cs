@@ -181,9 +181,9 @@ namespace ExtremeRoles.Roles.API
         public virtual bool IsSameTeam(SingleRoleBase targetRole)
         {
 
-            if (this.IsCrewmate())
+            if (this.IsImpostor())
             {
-                return false;
+                return targetRole.Team == ExtremeRoleType.Impostor;
             }
 
             var multiAssignRole = targetRole as MultiAssignRoleBase;
@@ -196,8 +196,7 @@ namespace ExtremeRoles.Roles.API
                 }
             }
 
-            return targetRole.Team == this.Team;
-            
+            return false;
         }
 
         public virtual bool IsTeamsWin() => this.IsWin;
