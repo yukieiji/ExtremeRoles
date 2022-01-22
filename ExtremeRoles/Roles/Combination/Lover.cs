@@ -331,7 +331,19 @@ namespace ExtremeRoles.Roles.Combination
                 foreach (byte playerId in alive)
                 {
                     var player = Player.GetPlayerControlById(playerId);
-                    player.RpcMurderPlayer(player);
+                    RPCOperator.Call(
+                        PlayerControl.LocalPlayer.NetId,
+                        RPCOperator.Command.UncheckedMurderPlayer,
+                        new List<byte>
+                        { 
+                            player.PlayerId,
+                            player.PlayerId,
+                            byte.MaxValue
+                        });
+                    RPCOperator.UncheckedMurderPlayer(
+                        player.PlayerId,
+                        player.PlayerId,
+                        Byte.MaxValue);
                 }
             }
         }
