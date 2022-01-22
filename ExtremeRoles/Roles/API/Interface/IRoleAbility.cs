@@ -99,7 +99,7 @@ namespace ExtremeRoles.Roles.API.Interface
                 string.Concat(
                     ((SingleRoleBase)self).RoleName,
                     RoleAbilityCommonOption.AbilityCoolTime.ToString()),
-                30f, 2.5f, 120f, 2.5f,
+                30f, 2.5f, 120f, 0.5f,
                 parentOps, format: "unitSeconds");
 
             if (hasActiveTime)
