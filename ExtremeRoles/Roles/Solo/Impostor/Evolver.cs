@@ -79,8 +79,16 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             
             if (this.isEvolvdAnimation)
             {
-                PlayerControl.LocalPlayer.RpcShapeshift(
-                    PlayerControl.LocalPlayer, true);
+                var rolePlayer = PlayerControl.LocalPlayer;
+
+                RPCOperator.Call(
+                    PlayerControl.LocalPlayer.NetId,
+                    RPCOperator.Command.UncheckedShapeShift,
+                    new List<byte> { rolePlayer.PlayerId, rolePlayer.PlayerId, byte.MaxValue });
+                RPCOperator.UncheckedShapeShift(
+                    rolePlayer.PlayerId,
+                    rolePlayer.PlayerId,
+                    byte.MaxValue);
             }
 
             this.KillCoolTime = this.KillCoolTime * ((100f - this.reduceRate) / 100f);
