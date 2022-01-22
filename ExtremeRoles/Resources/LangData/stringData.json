@@ -679,6 +679,9 @@
     "CarrierAbilityActiveTime": {
         "11": "\u6b7b\u4f53\u3092\u904b\u3079\u308b\u6642\u9593"
     },
+    "CarrierCarryDistance": {
+        "11": "\u30ad\u30e3\u30ea\u30fc\u304c\u767a\u52d5\u3067\u304d\u308b\u6b7b\u4f53\u304b\u3089\u306e\u8ddd\u96e2"
+    },
     "CarrierCanReportOnCarry": {
         "11": "\u6b7b\u4f53\u904b\u642c\u6642\u3001\u901a\u5831\u3055\u308c\u308b\u304b\u3069\u3046\u304b"
     },
