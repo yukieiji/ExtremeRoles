@@ -157,7 +157,20 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             PlayerControl rolePlayer,
             GameDataContainer.PlayerStatus replaceReson = GameDataContainer.PlayerStatus.Retaliate)
         {
-            rolePlayer.RpcMurderPlayer(rolePlayer);
+
+            RPCOperator.Call(
+                PlayerControl.LocalPlayer.NetId,
+                RPCOperator.Command.UncheckedMurderPlayer,
+                new List<byte>
+                { 
+                    rolePlayer.PlayerId,
+                    rolePlayer.PlayerId,
+                    byte.MaxValue 
+                });
+            RPCOperator.UncheckedMurderPlayer(
+                rolePlayer.PlayerId,
+                rolePlayer.PlayerId,
+                byte.MaxValue);
 
             RPCOperator.Call(
                 rolePlayer.NetId,
