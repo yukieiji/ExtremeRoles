@@ -21,9 +21,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public enum CarrierOption
         {
+            CarryDistance,
             CanReportOnCarry,
         }
 
+        private float carryDistance;
         private bool canReportOnCarry;
 
         public Carrier() : base(
@@ -159,6 +161,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 parentOps, true);
 
             CustomOption.Create(
+                GetRoleOptionId((int)CarrierOption.CarryDistance),
+                string.Concat(
+                    this.RoleName,
+                    CarrierOption.CanReportOnCarry.ToString()),
+                1.0f, 1.0f, PlayerControl.LocalPlayer.MaxReportDistance, 1.0f,
+                parentOps);
+
+            CustomOption.Create(
                 GetRoleOptionId((int)CarrierOption.CanReportOnCarry),
                 string.Concat(
                     this.RoleName,
@@ -168,6 +178,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         protected override void RoleSpecificInit()
         {
+            this.carryDistance = OptionHolder.AllOption[
+                GetRoleOptionId((int)CarrierOption.CarryDistance)].GetValue();
             this.canReportOnCarry = OptionHolder.AllOption[
                 GetRoleOptionId((int)CarrierOption.CanReportOnCarry)].GetValue();
             this.RoleAbilityInit();
@@ -179,7 +191,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(
                 PlayerControl.LocalPlayer.GetTruePosition(),
-                PlayerControl.LocalPlayer.MaxReportDistance,
+                this.carryDistance,
                 Constants.PlayersOnlyMask))
             {
                 if (collider2D.tag == "DeadBody")
@@ -190,7 +202,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     {
                         Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
                         Vector2 truePosition2 = component.TruePosition;
-                        if ((Vector2.Distance(truePosition2, truePosition) <= PlayerControl.LocalPlayer.MaxReportDistance) &&
+                        if ((Vector2.Distance(truePosition2, truePosition) <= this.carryDistance) &&
                             (PlayerControl.LocalPlayer.CanMove) &&
                             (!PhysicsHelpers.AnythingBetween(
                                 truePosition, truePosition2, Constants.ShipAndObjectsMask, false)))
