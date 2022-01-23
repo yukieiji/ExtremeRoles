@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
+using Hazel;
 using HarmonyLib;
 using UnityEngine;
 
@@ -320,10 +320,13 @@ namespace ExtremeRoles.Patches
 
         private static void setWinGameContorlId(int id)
         {
-            RPCOperator.Call(
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                 PlayerControl.LocalPlayer.NetId,
-                RPCOperator.Command.SetWinGameControlId,
-                new List<byte> { (byte)id });
+                (byte)RPCOperator.Command.SetWinGameControlId,
+                Hazel.SendOption.Reliable, -1);
+            writer.Write(id);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+
             RPCOperator.SetWinGameControlId(id);
         }
 

@@ -691,8 +691,8 @@ namespace ExtremeRoles.Patches
                     RPCOperator.ReplaceDeadReason(playerId, reason);
                     break;
                 case RPCOperator.Command.SetWinGameControlId:
-                    byte id = reader.ReadByte();
-                    RPCOperator.SetWinGameControlId((int)id);
+                    int id = reader.ReadInt32();
+                    RPCOperator.SetWinGameControlId(id);
                     break;
                 case RPCOperator.Command.SetRoleWin:
                     playerId = reader.ReadByte();
