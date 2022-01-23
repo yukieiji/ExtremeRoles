@@ -89,7 +89,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             var rolePlayer = Player.GetPlayerControlById(rolePlayerId);
 
             role.CarringBody.transform.parent = null;
-            role.CarringBody.transform.position = rolePlayer.transform.position;
+            role.CarringBody.transform.position = 
+                rolePlayer.GetTruePosition() + new Vector2(0.15f, 0.15f);
             
             
             Color color = role.CarringBody.bodyRenderer.color;
