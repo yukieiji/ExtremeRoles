@@ -25,6 +25,7 @@ namespace ExtremeRoles.Patches
         public static void Postfix(AmongUsClient __instance, [HarmonyArgument(0)] ref EndGameResult endGameResult)
         {
             List<PlayerControl> noWinner = new List<PlayerControl>();
+            List<PlayerControl> plusWinner = new List<PlayerControl>();
 
             var roleData = ExtremeRoleManager.GameRole;
             var gameData = ExtremeRolesPlugin.GameDataStore;
@@ -38,7 +39,11 @@ namespace ExtremeRoles.Patches
 
                 if (role.IsNeutral())
                 {
-                    if (!isAliveWinNeutral(role, playerInfo))
+                    if (isAliveWinNeutral(role, playerInfo))
+                    {
+                        plusWinner.Add(playerInfo.Object);
+                    }
+                    else
                     {
                         noWinner.Add(playerInfo.Object);
                     }
@@ -48,7 +53,8 @@ namespace ExtremeRoles.Patches
             List<WinningPlayerData> winnersToRemove = new List<WinningPlayerData>();
             foreach (WinningPlayerData winner in TempData.winners)
             {
-                if (noWinner.Any(x => x.Data.PlayerName == winner.PlayerName))
+                if (noWinner.Any(x => x.Data.PlayerName == winner.PlayerName) ||
+                    plusWinner.Any(x => x.Data.PlayerName == winner.PlayerName))
                 {
                     winnersToRemove.Add(winner);
                 }
@@ -103,6 +109,11 @@ namespace ExtremeRoles.Patches
                     break;
                 default:
                     break;
+            }
+
+            foreach(var player in plusWinner)
+            {
+                addWinner(player);
             }
         }
 
