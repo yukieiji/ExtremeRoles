@@ -46,7 +46,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 if (!this.canShootAssassin &&
                     targetPlayerRole.Id == ExtremeRoleId.Assassin)
                 {
-                    missShoot(rolePlayer);
+                    missShoot(
+                        rolePlayer,
+                        GameDataContainer.PlayerStatus.Retaliate);
                     return false;
                 }
                 else
@@ -60,7 +62,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             else
             {
 
-                missShoot(rolePlayer);
+                missShoot(
+                    rolePlayer,
+                    GameDataContainer.PlayerStatus.MissShot);
                 return false;
             }
 
@@ -155,7 +159,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         private void missShoot(
             PlayerControl rolePlayer,
-            GameDataContainer.PlayerStatus replaceReson = GameDataContainer.PlayerStatus.Retaliate)
+            GameDataContainer.PlayerStatus replaceReson)
         {
 
             RPCOperator.Call(
@@ -177,8 +181,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 RPCOperator.Command.ReplaceDeadReason,
                 new List<byte>
                 {
-                        rolePlayer.PlayerId,
-                        (byte)replaceReson
+                    rolePlayer.PlayerId,
+                    (byte)replaceReson
                 });
 
             ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
