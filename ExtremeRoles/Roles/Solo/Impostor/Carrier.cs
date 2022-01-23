@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -9,6 +10,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
+using BepInEx.IL2CPP.Utils.Collections;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -85,14 +87,41 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public static void PlaceDeadBody(
             byte rolePlayerId)
         {
-            var role = (Carrier)ExtremeRoleManager.GameRole[rolePlayerId];
             var rolePlayer = Player.GetPlayerControlById(rolePlayerId);
+            rolePlayer.StartCoroutine(
+                deadBodyToReportablePosition(
+                    rolePlayerId, rolePlayer).WrapToIl2Cpp());
+        }
+
+        private static IEnumerator deadBodyToReportablePosition(
+            byte rolePlayerId,
+            PlayerControl rolePlayer)
+        {
+            var role = (Carrier)ExtremeRoleManager.GameRole[rolePlayerId];
 
             role.CarringBody.transform.parent = null;
-            role.CarringBody.transform.position = 
-                rolePlayer.GetTruePosition() + new Vector2(0.15f, 0.15f);
-            
-            
+
+            Vector2 setPos;
+
+            if (rolePlayer.inVent)
+            {
+                setPos = rolePlayer.transform.position;
+            }
+            else
+            {
+                if (!rolePlayer.moveable)
+                {
+                    do
+                    {
+                        yield return null;
+                    }
+                    while (!rolePlayer.moveable);
+                }
+                setPos = rolePlayer.GetTruePosition() + new Vector2(0.15f, 0.15f);
+            }
+            role.CarringBody.transform.position = setPos;
+
+
             Color color = role.CarringBody.bodyRenderer.color;
             role.CarringBody.bodyRenderer.color = new Color(
                 color.r, color.g, color.b, role.alphaValue);
