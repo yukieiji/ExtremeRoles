@@ -17,6 +17,13 @@ namespace ExtremeRoles.Helper
                 );
             }
         }
+        public static bool IsFreePlay
+        {
+            get
+            {
+                return AmongUsClient.Instance.GameMode == GameModes.FreePlay;
+            }
+        }
         public static Tuple<int, int> GetTaskInfo(
             GameData.PlayerInfo playerInfo)
         {
