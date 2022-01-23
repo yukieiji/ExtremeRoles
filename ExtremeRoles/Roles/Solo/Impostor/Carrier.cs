@@ -101,25 +101,17 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             role.CarringBody.transform.parent = null;
 
-            Vector2 setPos;
 
-            if (rolePlayer.inVent)
+            if (!rolePlayer.inVent && !rolePlayer.moveable)
             {
-                setPos = rolePlayer.transform.position;
-            }
-            else
-            {
-                if (!rolePlayer.moveable)
+                do
                 {
-                    do
-                    {
-                        yield return null;
-                    }
-                    while (!rolePlayer.moveable);
+                    yield return null;
                 }
-                setPos = rolePlayer.GetTruePosition() + new Vector2(0.15f, 0.15f);
+                while (!rolePlayer.moveable);
             }
-            role.CarringBody.transform.position = setPos;
+
+            role.CarringBody.transform.position = rolePlayer.GetTruePosition() + new Vector2(0.15f, 0.15f); ;
 
 
             Color color = role.CarringBody.bodyRenderer.color;
