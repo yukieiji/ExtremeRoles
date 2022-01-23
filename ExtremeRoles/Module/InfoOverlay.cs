@@ -72,6 +72,8 @@ namespace ExtremeRoles.Module
 
         public void HideInfoOverlay()
         {
+            if (infoUnderlay == null) { return; }
+
             if (!OverlayShown) { return; }
 
             if (HudManager.Instance == null) { return; }
@@ -83,14 +85,12 @@ namespace ExtremeRoles.Module
 
             HudManager.Instance.StartCoroutine(Effects.Lerp(0.2f, new Action<float>(t =>
             {
-                if (infoUnderlay != null)
+                infoUnderlay.color = Color.Lerp(underlayOpaque, underlayTransparent, t);
+                if (t >= 1.0f)
                 {
-                    infoUnderlay.color = Color.Lerp(underlayOpaque, underlayTransparent, t);
-                    if (t >= 1.0f)
-                    {
-                        infoUnderlay.enabled = false;
-                    }
+                    infoUnderlay.enabled = false;
                 }
+                
 
                 if (ruleInfoText != null)
                 {
