@@ -30,6 +30,9 @@ namespace ExtremeRoles.Patches.Manager
         private static void setPlayerNameAndRole(
             EndGameManager manager)
         {
+
+            winNeutral.Clear();
+
             // Delete and readd PoolablePlayers always showing the name and role of the player
             foreach (PoolablePlayer pb in manager.transform.GetComponentsInChildren<PoolablePlayer>())
             {
