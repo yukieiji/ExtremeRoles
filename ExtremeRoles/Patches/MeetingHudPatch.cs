@@ -326,7 +326,12 @@ namespace ExtremeRoles.Patches
                     "whoIsMarine");
                 __instance.SkipVoteButton.gameObject.SetActive(false);
 
-                if (!ExtremeRoleManager.GetLocalPlayerRole().IsImpostor())
+                if (PlayerControl.LocalPlayer.PlayerId == ExtremeRolesPlugin.GameDataStore.ExiledAssassinId ||
+                    (ExtremeRoleManager.GetLocalPlayerRole().IsImpostor() && !PlayerControl.LocalPlayer.Data.IsDead))
+                {
+                    DestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(true);
+                }
+                else
                 {
                     DestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
                 }

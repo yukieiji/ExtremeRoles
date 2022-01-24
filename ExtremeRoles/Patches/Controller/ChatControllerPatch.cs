@@ -61,6 +61,7 @@ namespace ExtremeRoles.Patches.Controller
             {
 				return false;
             }
+
 			
 			if (__instance.chatBubPool.NotInUse == 0)
 			{
