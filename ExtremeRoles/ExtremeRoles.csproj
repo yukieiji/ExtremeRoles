@@ -3,9 +3,9 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
-        <Version>1.12.3.1</Version>
-        <!--<VersionPrefix>1.12.3</VersionPrefix>-->
-        <VersionSuffix>AirShip</VersionSuffix> 
+        <!--<Version>1.12.3.1</Version>-->
+        <VersionPrefix>1.12.4</VersionPrefix>
+        <VersionSuffix>AirShip-v2</VersionSuffix> 
         <Description>Extreme Roles for Advanced user</Description>
         <Authors>yukieiji</Authors>
     </PropertyGroup>
