@@ -8,6 +8,9 @@ namespace ExtremeRoles.Patches.MiniGame
     {
         public static bool Prefix(VitalsMinigame __instance)
         {
+
+            if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
+
             if (Roles.ExtremeRoleManager.GameRole[
                 PlayerControl.LocalPlayer.PlayerId].CanUseVital) { return true; }
 

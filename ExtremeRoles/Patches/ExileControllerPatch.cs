@@ -59,6 +59,8 @@ namespace ExtremeRoles.Patches
             ExileController __instance)
         {
 
+            if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+
             var role = ExtremeRoleManager.GetLocalPlayerRole();
 
             if (!role.HasOtherKillCool) { return; }
@@ -78,7 +80,7 @@ namespace ExtremeRoles.Patches
             public static bool Prefix(ExileController __instance)
             {
                 resetAssassinMeeting();
-                if (__instance.exiled != null)
+                if (__instance.exiled != null && ExtremeRoleManager.GameRole.Count != 0)
                 {
                     tempWinCheckDisable(__instance.exiled);
                 }
@@ -134,6 +136,11 @@ namespace ExtremeRoles.Patches
             ExileController instance,
             GameData.PlayerInfo exiled)
         {
+
+            ExtremeRolesPlugin.Info.HideBlackBG();
+
+            if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+
             var gameData = ExtremeRolesPlugin.GameDataStore;
 
             var deadedAssassin = gameData.DeadedAssassin;
@@ -162,8 +169,6 @@ namespace ExtremeRoles.Patches
             {
                 resetRole.ResetOnMeetingEnd();
             }
-
-            ExtremeRolesPlugin.Info.HideBlackBG();
 
             if (exiled == null) { return; };
 

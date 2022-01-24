@@ -20,6 +20,9 @@ namespace ExtremeRoles.Patches
             [HarmonyArgument(0)] GameData.PlayerInfo voterPlayer,
             [HarmonyArgument(1)] int index, [HarmonyArgument(2)] Transform parent)
         {
+
+            if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
+
             SpriteRenderer spriteRenderer = UnityEngine.Object.Instantiate<SpriteRenderer>(
                 __instance.PlayerVotePrefab);
 
@@ -268,6 +271,8 @@ namespace ExtremeRoles.Patches
             MeetingHud __instance)
         {
             ExtremeRolesPlugin.Info.MeetingStartRest();
+
+            if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
             var role = ExtremeRoleManager.GetLocalPlayerRole();
 
