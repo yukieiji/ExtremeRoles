@@ -33,9 +33,9 @@ namespace ExtremeRoles.Patches
 
 
 	[HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.SetCosmetics))]
-	class PlayerVoteAreaCosmetics
+	public static class PlayerVoteAreaCosmetics
 	{
-		static void Postfix(PlayerVoteArea __instance, GameData.PlayerInfo playerInfo)
+		public static void Postfix(PlayerVoteArea __instance, GameData.PlayerInfo playerInfo)
 		{
 			NamePlateHelper.UpdateNameplate(
 				__instance, playerInfo.PlayerId);
@@ -43,9 +43,9 @@ namespace ExtremeRoles.Patches
 	}
 
 	[HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.Select))]
-	class PlayerVoteAreaSelectPatch
+	public static class PlayerVoteAreaSelectPatch
 	{
-		static bool Prefix(PlayerVoteArea __instance)
+		public static bool Prefix(PlayerVoteArea __instance)
 		{
 
 			var gameData = ExtremeRolesPlugin.GameDataStore;
@@ -154,9 +154,9 @@ namespace ExtremeRoles.Patches
 	}
 
 	[HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.SetDead))]
-	class PlayerVoteAreaSetDeadPatch
+	public static class PlayerVoteAreaSetDeadPatch
 	{
-		static bool Prefix(
+		public static bool Prefix(
 			PlayerVoteArea __instance,
 			[HarmonyArgument(0)] bool didReport,
 			[HarmonyArgument(1)] bool isDead,

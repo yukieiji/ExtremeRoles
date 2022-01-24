@@ -14,12 +14,12 @@ namespace ExtremeRoles.Patches.MiniGame
             __instance.SabText.text = Helper.Translation.GetString("youDonotUse");
 
             __instance.SabText.gameObject.SetActive(true);
-			for (int j = 0; j < __instance.vitals.Length; j++)
-			{
-				__instance.vitals[j].gameObject.SetActive(false);
-			}
+            for (int j = 0; j < __instance.vitals.Length; j++)
+            {
+                __instance.vitals[j].gameObject.SetActive(false);
+            }
 
             return false;
-		}
+        }
     }
 }
