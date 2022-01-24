@@ -260,6 +260,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 targetRole.IsImpostor(),
                 ref sourceJackal.SidekickOption);
 
+            sourceJackal.SidekickPlayerId.Add(targetId);
+
             DestroyableSingleton<RoleManager>.Instance.SetRole(
                 Player.GetPlayerControlById(targetId), RoleTypes.Crewmate);
 
@@ -380,8 +382,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (!isImpostorAndSetTarget(targetPlayerId)) { return false; }
 
             PlayerControl rolePlayer = PlayerControl.LocalPlayer;
-
-            this.SidekickPlayerId.Add(targetPlayerId);
 
             RPCOperator.Call(
                 rolePlayer.NetId,
@@ -587,23 +587,20 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             int numUpgrade = this.SidekickPlayerId.Count >= this.numUpgradeSidekick ?
                 this.numUpgradeSidekick : this.SidekickPlayerId.Count;
 
+            List<byte> updateSideKick = new List<byte>();
+
             for (int i = 0; i < numUpgrade; ++i)
             {
                 int useIndex = UnityEngine.Random.Range(0, this.SidekickPlayerId.Count);
                 byte targetPlayerId = this.SidekickPlayerId[useIndex];
                 this.SidekickPlayerId.Remove(targetPlayerId);
 
-                RPCOperator.Call(
-                    rolePlayer.NetId,
-                    RPCOperator.Command.ReplaceRole,
-                    new List<byte>
-                    {
-                        rolePlayer.PlayerId,
-                        targetPlayerId,
-                        (byte)ExtremeRoleManager.ReplaceOperation.SidekickToJackal
-                    });
+                updateSideKick.Add(targetPlayerId);
 
-                Sidekick.BecomeToJackal(rolePlayer.PlayerId, targetPlayerId);
+            }
+            foreach (var playerId in updateSideKick)
+            {
+                Sidekick.BecomeToJackal(rolePlayer.PlayerId, playerId);
             }
         }
     }
@@ -739,6 +736,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             if (Player.GetPlayerControlById(this.JackalPlayerId).Data.Disconnected)
             {
+
+                ((Jackal)ExtremeRoleManager.GameRole[this.JackalPlayerId]).SidekickPlayerId.Clear();
+
                 RPCOperator.Call(
                     rolePlayer.NetId,
                     RPCOperator.Command.ReplaceRole,
