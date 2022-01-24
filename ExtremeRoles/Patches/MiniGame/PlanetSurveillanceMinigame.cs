@@ -44,7 +44,7 @@ namespace ExtremeRoles.Patches.MiniGame
 
             __instance.isStatic = true;
             __instance.ViewPort.sharedMaterial = __instance.StaticMaterial;
-            __instance.SabText.text = "youDontUseThis";
+            __instance.SabText.text = Helper.Translation.GetString("youDonotUse");
             __instance.SabText.gameObject.SetActive(true);
 
             return false;
