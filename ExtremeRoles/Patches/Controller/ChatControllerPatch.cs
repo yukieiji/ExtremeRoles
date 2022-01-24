@@ -9,8 +9,23 @@ using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Patches.Controller
 {
-	
-    [HarmonyPatch(typeof(ChatController), nameof(ChatController.AddChat))]
+	[HarmonyPatch(typeof(ChatController), nameof(ChatController.AddChatNote))]
+	public static class ChatControllerAddChatNotePatch
+	{
+		public static bool Prefix(
+			ChatController __instance,
+			[HarmonyArgument(0)] GameData.PlayerInfo srcPlayer,
+			[HarmonyArgument(1)] ChatNoteTypes noteType)
+		{
+			
+			if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return true; }
+			if (noteType == ChatNoteTypes.DidVote) { return false; }
+
+			return true;
+		}
+	}
+
+	[HarmonyPatch(typeof(ChatController), nameof(ChatController.AddChat))]
     public static class ChatControllerAddChatPatch
     {
         public static bool Prefix(
@@ -31,10 +46,21 @@ namespace ExtremeRoles.Patches.Controller
 			var role = ExtremeRoleManager.GameRole[data.PlayerId];
 			var role2 = ExtremeRoleManager.GameRole[data2.PlayerId];
 
-			if (data2 == null || data == null || (data2.IsDead && !data.IsDead))
-			{
-				return false;
+			bool assassinMeeting = ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger;
+
+			if (!assassinMeeting)
+            {
+				if (data2 == null || data == null || (data2.IsDead && !data.IsDead))
+				{
+					return false;
+				}
+
 			}
+
+			if (assassinMeeting && (!role.IsImpostor() || !role2.IsImpostor()))
+            {
+				return false;
+            }
 			
 			if (__instance.chatBubPool.NotInUse == 0)
 			{
