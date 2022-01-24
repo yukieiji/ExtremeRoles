@@ -17,8 +17,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
     public class Carrier : SingleRoleBase, IRoleAbility
     {
         public DeadBody CarringBody;
-        public float alphaValue;
-        public Transform Parent;
+        public float AlphaValue;
         private GameData.PlayerInfo targetBody;
 
         public enum CarrierOption
@@ -62,14 +61,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == targetPlayerId)
                 {
-                    role.Parent = array[i].transform.parent;
                     Color oldColor = array[i].bodyRenderer.color;
 
                     role.CarringBody = array[i];
                     role.CarringBody.transform.position = rolePlayer.transform.position;
                     role.CarringBody.transform.SetParent(rolePlayer.transform);
                     
-                    role.alphaValue = oldColor.a;
+                    role.AlphaValue = oldColor.a;
                     role.CarringBody.bodyRenderer.color = new Color(
                         oldColor.r, oldColor.g, oldColor.b, 0);
                     
@@ -112,12 +110,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
 
             role.CarringBody.transform.position = rolePlayer.GetTruePosition() + new Vector2(0.15f, 0.15f);
-            role.CarringBody.transform.position += new Vector3(0.0f, 0.0f, 0.01f);
+            role.CarringBody.transform.position -= new Vector3(0.0f, 0.0f, 0.01f);
 
 
             Color color = role.CarringBody.bodyRenderer.color;
             role.CarringBody.bodyRenderer.color = new Color(
-                color.r, color.g, color.b, role.alphaValue);
+                color.r, color.g, color.b, role.AlphaValue);
             if (!role.canReportOnCarry)
             {
                 role.CarringBody.GetComponentInChildren<BoxCollider2D>().enabled = true;
