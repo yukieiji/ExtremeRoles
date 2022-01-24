@@ -16,6 +16,8 @@ namespace ExtremeRoles.Patches.Button
         }
         public static bool Prefix(KillButton __instance)
         {
+            if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
+
             PlayerControl killer = PlayerControl.LocalPlayer;
             var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
 

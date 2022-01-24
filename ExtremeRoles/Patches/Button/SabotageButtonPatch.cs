@@ -8,6 +8,8 @@ namespace ExtremeRoles.Patches.Button
     {
         public static bool Prefix(SabotageButton __instance)
         {
+            if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
+
             var localPlayer = PlayerControl.LocalPlayer;
             var role = Roles.ExtremeRoleManager.GameRole[localPlayer.PlayerId];
             // The sabotage button behaves just fine if it's a regular impostor

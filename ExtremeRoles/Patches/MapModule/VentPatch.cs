@@ -16,12 +16,15 @@ namespace ExtremeRoles.Patches.MapModule
             float num = float.MaxValue;
             PlayerControl player = playerInfo.Object;
 
+            canUse = couldUse = false;
+
             if (OptionHolder.Ship.DisableVent)
             {
-                canUse = couldUse = false;
                 __result = num;
                 return false;
             }
+
+            if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
             bool roleCouldUse = Roles.ExtremeRoleManager.GameRole[playerInfo.PlayerId].UseVent;
 
             var usableDistance = __instance.UsableDistance;

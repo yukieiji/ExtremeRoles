@@ -11,6 +11,8 @@ namespace ExtremeRoles.Patches.MiniGame
         {
             var statusText = "";
 
+            if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return; }
+
             if (!Roles.ExtremeRoleManager.GetLocalPlayerRole().CanCallMeeting)
             {
                 __instance.StatusText.text = statusText;

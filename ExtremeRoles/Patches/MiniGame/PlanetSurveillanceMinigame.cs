@@ -39,6 +39,8 @@ namespace ExtremeRoles.Patches.MiniGame
     {
         public static bool Prefix(PlanetSurveillanceMinigame __instance)
         {
+            if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
+
             if (Roles.ExtremeRoleManager.GameRole[
                 PlayerControl.LocalPlayer.PlayerId].CanUseSecurity) { return true; }
 

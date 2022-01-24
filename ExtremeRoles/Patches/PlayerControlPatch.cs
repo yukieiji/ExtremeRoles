@@ -39,6 +39,8 @@ namespace ExtremeRoles.Patches
         public static void Postfix(PlayerControl __instance)
         {
 
+            if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+
             ExtremeRolesPlugin.GameDataStore.AddDeadInfo(
                 __instance, DeathReason.Exile, null);
 
