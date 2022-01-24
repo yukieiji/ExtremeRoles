@@ -7,7 +7,7 @@ using HarmonyLib;
 using ExtremeRoles.Roles;
 
 
-namespace ExtremeRoles.Patches
+namespace ExtremeRoles.Patches.Controller
 {
 	
     [HarmonyPatch(typeof(ChatController), nameof(ChatController.AddChat))]

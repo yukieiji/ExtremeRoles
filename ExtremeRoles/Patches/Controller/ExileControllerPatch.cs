@@ -4,7 +4,7 @@ using HarmonyLib;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
 
-namespace ExtremeRoles.Patches
+namespace ExtremeRoles.Patches.Controller
 {
     [HarmonyPatch(typeof(ExileController), nameof(ExileController.Begin))]
     class ExileControllerBeginePatch
