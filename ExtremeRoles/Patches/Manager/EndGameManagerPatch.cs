@@ -286,6 +286,9 @@ namespace ExtremeRoles.Patches.Manager
                     break;
             }
 
+            int textCounter = 0;
+            List<ExtremeRoleId> added = new List<ExtremeRoleId>();
+
             if (OptionHolder.Ship.DisableNeutralSpecialForceEnd && winNeutral.Count != 0)
             {
                 switch (gameData.EndReason)
@@ -295,14 +298,12 @@ namespace ExtremeRoles.Patches.Manager
                     case GameOverReason.ImpostorByKill:
                     case GameOverReason.ImpostorByVote:
                     case GameOverReason.ImpostorBySabotage:
-                        
-                        List<ExtremeRoleId> added = new List<ExtremeRoleId>();
 
                         for (int i=0; i < winNeutral.Count; ++i)
                         {
                             if (added.Contains(winNeutral[i].Id)) { continue; }
 
-                            if(i == 0)
+                            if(textCounter == 0)
                             {
                                 bonusText = bonusText + Translation.GetString("andFirst");
                             }
@@ -310,6 +311,9 @@ namespace ExtremeRoles.Patches.Manager
                             {
                                 bonusText = bonusText + Translation.GetString("and");
                             }
+
+                            ++textCounter;
+
                             bonusText = bonusText + Translation.GetString(
                                 winNeutral[i].GetColoredRoleName());
                             added.Add(winNeutral[i].Id);
@@ -319,6 +323,29 @@ namespace ExtremeRoles.Patches.Manager
                         break;
                 }
                 winNeutral.Clear();
+            }
+
+            foreach (var player in gameData.PlusWinner)
+            {
+
+                var role = ExtremeRoleManager.GameRole[player.PlayerId];
+
+                if (added.Contains(role.Id)) { continue; }
+
+                if (textCounter == 0)
+                {
+                    bonusText = bonusText + Translation.GetString("andFirst");
+                }
+                else
+                {
+                    bonusText = bonusText + Translation.GetString("and");
+                }
+
+                ++textCounter;
+
+                bonusText = bonusText + Translation.GetString(
+                    role.GetColoredRoleName());
+                added.Add(role.Id);
             }
 
             textRenderer.text = bonusText + string.Format(Translation.GetString("win"));

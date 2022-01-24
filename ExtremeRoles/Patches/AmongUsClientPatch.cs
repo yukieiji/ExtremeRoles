@@ -25,7 +25,6 @@ namespace ExtremeRoles.Patches
         public static void Postfix(AmongUsClient __instance, [HarmonyArgument(0)] ref EndGameResult endGameResult)
         {
             List<PlayerControl> noWinner = new List<PlayerControl>();
-            List<PlayerControl> plusWinner = new List<PlayerControl>();
 
             var roleData = ExtremeRoleManager.GameRole;
             var gameData = ExtremeRolesPlugin.GameDataStore;
@@ -39,9 +38,9 @@ namespace ExtremeRoles.Patches
 
                 if (role.IsNeutral())
                 {
-                    if (isAliveWinNeutral(role, playerInfo))
+                    if (ExtremeRoleManager.IsAliveWinNeutral(role, playerInfo))
                     {
-                        plusWinner.Add(playerInfo.Object);
+                        gameData.PlusWinner.Add(playerInfo.Object);
                     }
                     else
                     {
@@ -54,7 +53,8 @@ namespace ExtremeRoles.Patches
             foreach (WinningPlayerData winner in TempData.winners)
             {
                 if (noWinner.Any(x => x.Data.PlayerName == winner.PlayerName) ||
-                    plusWinner.Any(x => x.Data.PlayerName == winner.PlayerName))
+                    gameData.PlusWinner.Any(
+                        x => x.Data.PlayerName == winner.PlayerName))
                 {
                     winnersToRemove.Add(winner);
                 }
@@ -111,20 +111,10 @@ namespace ExtremeRoles.Patches
                     break;
             }
 
-            foreach(var player in plusWinner)
+            foreach(var player in gameData.PlusWinner)
             {
                 addWinner(player);
             }
-        }
-
-        private static bool isAliveWinNeutral(
-            Roles.API.SingleRoleBase role, GameData.PlayerInfo playerInfo)
-        {
-            bool isAlive = (!playerInfo.IsDead && !playerInfo.Disconnected);
-
-            if (role.Id == ExtremeRoleId.Neet && isAlive) { return true; }
-
-            return false;
         }
         private static void replaceWinnerToSpecificRolePlayer(
             ExtremeRoleId roleId)

@@ -30,6 +30,7 @@ namespace ExtremeRoles.Module
         public GameOverReason EndReason;
         public List<PlayerSummary> FinalSummary = new List<PlayerSummary>();
         public Dictionary<byte, DeadInfo> DeadPlayerInfo = new Dictionary<byte, DeadInfo>();
+        public List<PlayerControl> PlusWinner = new List<PlayerControl>();
 
         public List<byte> DeadedAssassin = new List<byte>();
 
@@ -52,6 +53,7 @@ namespace ExtremeRoles.Module
             DeadedAssassin.Clear();
             FinalSummary.Clear();
             DeadPlayerInfo.Clear();
+            PlusWinner.Clear();
 
             MeetingsCount = 0;
             WinGameControlId = int.MaxValue;

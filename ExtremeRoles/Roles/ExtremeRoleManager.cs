@@ -163,6 +163,15 @@ namespace ExtremeRoles.Roles
 
             return assassin != null || jackal != null;
         }
+        public static bool IsAliveWinNeutral(
+            SingleRoleBase role, GameData.PlayerInfo playerInfo)
+        {
+            bool isAlive = (!playerInfo.IsDead && !playerInfo.Disconnected);
+
+            if (role.Id == ExtremeRoleId.Neet && isAlive) { return true; }
+
+            return false;
+        }
 
         public static SingleRoleBase GetLocalPlayerRole()
         {
