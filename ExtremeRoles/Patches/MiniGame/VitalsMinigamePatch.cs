@@ -1,6 +1,5 @@
 ﻿using HarmonyLib;
 
-using UnityEngine;
 
 namespace ExtremeRoles.Patches.MiniGame
 {
