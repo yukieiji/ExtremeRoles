@@ -74,7 +74,7 @@ namespace ExtremeRoles.Roles.API.Interface
         {
             Vector3 offset = positionOffset ?? new Vector3(-1.8f, -0.06f, 0);
 
-            self.Button = new ReclickAbleButton(
+            self.Button = new ReclickableButton(
                 buttonName,
                 self.UseAbility,
                 self.IsAbilityUse,

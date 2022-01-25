@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace ExtremeRoles.Module.RoleAbilityButton
 {
-    public class ReclickAbleButton : RoleAbilityButtonBase
+    public class ReclickableButton : RoleAbilityButtonBase
     {
-        public ReclickAbleButton(
+        public ReclickableButton(
             string buttonText,
             Func<bool> ability,
             Func<bool> canUse,
