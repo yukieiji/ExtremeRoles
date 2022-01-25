@@ -78,7 +78,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     !MapBehaviour.Instance.isActiveAndEnabled);
         }
 
-        public bool IsOpen() => (Minigame.Instance != null && MapBehaviour.Instance.isActiveAndEnabled);
+        public bool IsOpen() => MapBehaviour.Instance.isActiveAndEnabled;
 
         public void RoleAbilityResetOnMeetingEnd()
         {
@@ -95,7 +95,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public bool UseAbility()
         {
-            PlayerControl.LocalPlayer.moveable = false;
             DestroyableSingleton<HudManager>.Instance.ShowMap(
                 (System.Action<MapBehaviour>)(m => m.ShowCountOverlay()));
 
