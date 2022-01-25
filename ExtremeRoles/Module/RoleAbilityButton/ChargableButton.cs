@@ -70,6 +70,7 @@ namespace ExtremeRoles.Module.RoleAbilityButton
             if (PlayerControl.LocalPlayer.AllTasksCompleted())
             {
                 this.currentCharge = this.AbilityActiveTime;
+                this.Timer = 0;
             }
 
             if (this.Timer <= 0 && IsAbilityOn)
