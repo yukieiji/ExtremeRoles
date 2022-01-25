@@ -717,6 +717,11 @@ namespace ExtremeRoles.Patches
                     playerId = reader.ReadByte();
                     RPCOperator.CarrierSetBody(playerId);
                     break;
+                case RPCOperator.Command.PainterPaintBody:
+                    playerId = reader.ReadByte();
+                    targetId = reader.ReadByte();
+                    RPCOperator.PainterPaintBody(playerId, targetId);
+                    break;
 
                 case RPCOperator.Command.AliceShipBroken:
                     callerId = reader.ReadByte();

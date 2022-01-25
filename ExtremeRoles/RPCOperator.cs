@@ -32,6 +32,7 @@ namespace ExtremeRoles
             AssasinVoteFor,
             CarrierCarryBody,
             CarrierSetBody,
+            PainterPaintBody,
 
             // ニュートラル
             AliceShipBroken,
@@ -211,6 +212,12 @@ namespace ExtremeRoles
         {
             Roles.Solo.Impostor.Carrier.PlaceDeadBody(
                 callerId);
+        }
+        public static void PainterPaintBody(
+            byte callerId, byte targetId)
+        {
+            Roles.Solo.Impostor.Painter.PaintDeadBody(
+                callerId, targetId);
         }
 
         public static void AliceShipBroken(byte callerId)

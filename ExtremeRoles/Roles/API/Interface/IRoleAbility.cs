@@ -34,6 +34,33 @@ namespace ExtremeRoles.Roles.API.Interface
 
     public static class IRoleAbilityMixin
     {
+
+        public static void CreateNormalAbilityButton(
+            this IRoleAbility self,
+            string buttonName,
+            Sprite sprite,
+            Vector3? positionOffset = null,
+            Action abilityCleanUp = null,
+            Func<bool> checkAbility = null,
+            KeyCode hotkey = KeyCode.F,
+            bool mirror = false)
+        {
+            Vector3 offset = positionOffset ?? new Vector3(-1.8f, -0.06f, 0);
+
+            self.Button = new ReusableAbilityButton(
+                buttonName,
+                self.UseAbility,
+                self.IsAbilityUse,
+                sprite,
+                offset,
+                abilityCleanUp,
+                checkAbility,
+                hotkey,
+                mirror);
+
+            self.RoleAbilityInit();
+        }
+
         public static void CreateAbilityCountButton(
             this IRoleAbility self,
             string buttonName,
