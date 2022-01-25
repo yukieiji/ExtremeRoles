@@ -64,7 +64,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 buttonText,
                 buttonImage,
                 CleanUp,
-                checkAbility: IsClose);
+                checkAbility: IsOpen);
             this.Button.SetLabelToCrewmate();
         }
 
@@ -73,7 +73,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             return this.IsCommonUse() && Minigame.Instance == null;
         }
 
-        public bool IsClose() => Minigame.Instance != null;
+        public bool IsOpen() => Minigame.Instance != null;
 
         public void RoleAbilityResetOnMeetingEnd()
         {
