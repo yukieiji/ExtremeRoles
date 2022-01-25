@@ -10,13 +10,13 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class Administrator : SingleRoleBase, IRoleAbility, IRoleUpdate
+    public class Supervisor : SingleRoleBase, IRoleAbility, IRoleUpdate
     {
-        public Administrator() : base(
-            ExtremeRoleId.Administrator,
+        public Supervisor() : base(
+            ExtremeRoleId.Supervisor,
             ExtremeRoleType.Crewmate,
-            ExtremeRoleId.Administrator.ToString(),
-            ColorPalette.AdministratorLime,
+            ExtremeRoleId.Supervisor.ToString(),
+            ColorPalette.SupervisorLime,
             false, true, false, false)
         { }
 

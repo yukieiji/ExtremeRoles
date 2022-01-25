@@ -14,7 +14,7 @@ namespace ExtremeRoles.Patches
             if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
             var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
-            var admin = role as Roles.Solo.Crewmate.Administrator;
+            var admin = role as Roles.Solo.Crewmate.Supervisor;
             
             if (admin == null) { return true; }
             if (!admin.Button.IsAbilityActive()) { return true; }
