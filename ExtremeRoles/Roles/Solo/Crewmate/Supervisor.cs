@@ -40,21 +40,21 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public void CreateAbility()
         {
             Sprite buttonImage;
-
+            var imageDict = HudManager.Instance.UseButton.fastUseSettings;
             switch (PlayerControl.GameOptions.MapId)
             {
                 case 0:
                 case 3:
-                    buttonImage = HudManager.Instance.UseButton.fastUseSettings[ImageNames.AdminMapButton].Image;
+                    buttonImage = imageDict[ImageNames.AdminMapButton].Image;
                     break;
                 case 1:
-                    buttonImage = HudManager.Instance.UseButton.fastUseSettings[ImageNames.MIRAAdminButton].Image;
+                    buttonImage = imageDict[ImageNames.MIRAAdminButton].Image;
                     break;
                 case 2:
-                    buttonImage = HudManager.Instance.UseButton.fastUseSettings[ImageNames.PolusAdminButton].Image;
+                    buttonImage = imageDict[ImageNames.PolusAdminButton].Image;
                     break;
                 case 4:
-                    buttonImage = HudManager.Instance.UseButton.fastUseSettings[ImageNames.PolusAdminButton].Image;
+                    buttonImage = imageDict[ImageNames.PolusAdminButton].Image;
                     break;
                 default:
                     buttonImage = Loader.CreateSpriteFromResources(

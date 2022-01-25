@@ -47,16 +47,16 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             string buttonText;
             Sprite buttonImage;
-
+            var imageDict = HudManager.Instance.UseButton.fastUseSettings;
             switch (PlayerControl.GameOptions.MapId)
             {
                 case 1:
                     buttonText = Translation.GetString("doorLog");
-                    buttonImage = HudManager.Instance.UseButton.fastUseSettings[ImageNames.DoorLogsButton].Image;
+                    buttonImage = imageDict[ImageNames.DoorLogsButton].Image;
                     break;
                 default:
                     buttonText = Translation.GetString("securityCamera");
-                    buttonImage = HudManager.Instance.UseButton.fastUseSettings[ImageNames.CamsButton].Image;
+                    buttonImage = imageDict[ImageNames.CamsButton].Image;
                     break;
             }
 
@@ -102,23 +102,23 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 // 3 = Dleks - deactivated
                 // 4 = Airship
                 SystemConsole watchConsole;
-
+                var systemConsoleArray = Object.FindObjectsOfType<SystemConsole>();
                 switch (PlayerControl.GameOptions.MapId)
                 {
                     case 0:
-                        watchConsole = Object.FindObjectsOfType<SystemConsole>().FirstOrDefault(
+                        watchConsole = systemConsoleArray.FirstOrDefault(
                             x => x.gameObject.name.Contains("SurvConsole"));
                         break;
                     case 1:
-                        watchConsole = Object.FindObjectsOfType<SystemConsole>().FirstOrDefault(
+                        watchConsole = systemConsoleArray.FirstOrDefault(
                             x => x.gameObject.name.Contains("SurvLogConsole"));
                         break;
                     case 2:
-                        watchConsole = Object.FindObjectsOfType<SystemConsole>().FirstOrDefault(
+                        watchConsole = systemConsoleArray.FirstOrDefault(
                             x => x.gameObject.name.Contains("Surv_Panel"));
                         break;
                     case 4:
-                        watchConsole = Object.FindObjectsOfType<SystemConsole>().FirstOrDefault(
+                        watchConsole = systemConsoleArray.FirstOrDefault(
                             x => x.gameObject.name.Contains("task_cams"));
                         break;
                     default:
