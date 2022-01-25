@@ -55,7 +55,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     buttonImage = HudManager.Instance.UseButton.fastUseSettings[ImageNames.DoorLogsButton].Image;
                     break;
                 default:
-                    buttonText = Translation.GetString("security");
+                    buttonText = Translation.GetString("securityCamera");
                     buttonImage = HudManager.Instance.UseButton.fastUseSettings[ImageNames.CamsButton].Image;
                     break;
             }
