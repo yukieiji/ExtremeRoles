@@ -27,6 +27,7 @@ namespace ExtremeRoles.Roles
         Sheriff,
         Maintainer,
         Neet,
+        Watchdog,
 
         SpecialImpostor,
         Evolver,
@@ -79,6 +80,7 @@ namespace ExtremeRoles.Roles
                 new Sheriff(),
                 new Maintainer(),
                 new Neet(),
+                new Watchdog(),
 
                 new SpecialImpostor(),
                 new Evolver(),

@@ -86,7 +86,32 @@ namespace ExtremeRoles.Roles.API.Interface
                 mirror);
 
             self.RoleAbilityInit();
+        }
 
+        public static void CreateChargeAbilityButton(
+            this IRoleAbility self,
+            string buttonName,
+            Sprite sprite,
+            Action abilityCleanUp,
+            Vector3? positionOffset = null,
+            Func<bool> checkAbility = null,
+            KeyCode hotkey = KeyCode.F,
+            bool mirror = false)
+        {
+            Vector3 offset = positionOffset ?? new Vector3(-1.8f, -0.06f, 0);
+
+            self.Button = new ChargableButton(
+                buttonName,
+                self.UseAbility,
+                self.IsAbilityUse,
+                sprite,
+                offset,
+                abilityCleanUp,
+                checkAbility,
+                hotkey,
+                mirror);
+
+            self.RoleAbilityInit();
         }
 
         public static void CreateCommonAbilityOption(

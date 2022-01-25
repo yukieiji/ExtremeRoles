@@ -77,13 +77,17 @@ namespace ExtremeRoles.Module.RoleAbilityButton
 
         protected abstract void AbilityButtonUpdate();
 
+        public float GetCurTime() => this.Timer;
+
+        public bool IsAbilityActive() => this.IsAbilityOn; 
+
         public void ForceAbilityOff()
         {
             this.IsAbilityOn = false;
             this.Button.cooldownTimerText.color = Palette.EnabledColor;
         }
 
-        public void SetAbilityActiveTime(float time)
+        public virtual void SetAbilityActiveTime(float time)
         {
             this.AbilityActiveTime = time;
         }
@@ -93,7 +97,7 @@ namespace ExtremeRoles.Module.RoleAbilityButton
             this.CoolTime = time;
         }
 
-        public void ResetCoolTimer()
+        public virtual void ResetCoolTimer()
         {
             this.Timer = this.CoolTime;
         }
