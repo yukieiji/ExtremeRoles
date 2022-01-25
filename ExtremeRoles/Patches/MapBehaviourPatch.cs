@@ -4,6 +4,26 @@ using UnityEngine;
 
 namespace ExtremeRoles.Patches
 {
+    [HarmonyPatch(typeof(MapBehaviour), "IsOpenStopped", MethodType.Getter)]
+    public static class MapBehaviourIsOpenStoppedPatch
+    {
+        public static bool Prefix(
+            MapBehaviour __instance,
+            ref bool __result)
+        {
+            if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
+
+            var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
+            var admin = role as Roles.Solo.Crewmate.Administrator;
+            
+            if (admin == null) { return true; }
+            if (!admin.Button.IsAbilityActive()) { return true; }
+
+            __result = false;
+            return false;
+        }
+    }
+
     [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.GenericShow))]
     public static class MapBehaviourShowNormalMapPatch
     {

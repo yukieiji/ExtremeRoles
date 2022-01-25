@@ -28,6 +28,7 @@ namespace ExtremeRoles.Roles
         Maintainer,
         Neet,
         Watchdog,
+        Administrator,
 
         SpecialImpostor,
         Evolver,
@@ -81,6 +82,7 @@ namespace ExtremeRoles.Roles
                 new Maintainer(),
                 new Neet(),
                 new Watchdog(),
+                new Administrator(),
 
                 new SpecialImpostor(),
                 new Evolver(),
