@@ -106,6 +106,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 switch (PlayerControl.GameOptions.MapId)
                 {
                     case 0:
+                    case 3:
                         watchConsole = systemConsoleArray.FirstOrDefault(
                             x => x.gameObject.name.Contains("SurvConsole"));
                         break;
