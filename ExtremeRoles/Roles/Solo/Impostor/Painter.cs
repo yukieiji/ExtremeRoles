@@ -34,14 +34,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public RoleAbilityButtonBase Button
         { 
-            get => this.carryButton;
+            get => this.paintButton;
             set
             {
-                this.carryButton = value;
+                this.paintButton = value;
             }
         }
 
-        private RoleAbilityButtonBase carryButton;
+        private RoleAbilityButtonBase paintButton;
 
         public static void PaintDeadBody(
             byte rolePlayerId, byte targetPlayerId)
