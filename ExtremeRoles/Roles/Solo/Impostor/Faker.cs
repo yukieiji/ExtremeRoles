@@ -76,6 +76,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         protected override void RoleSpecificInit()
         {
+            this.dummy.Clear();
             this.RoleAbilityInit();
         }
     }
