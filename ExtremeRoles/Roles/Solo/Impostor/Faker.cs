@@ -13,7 +13,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 {
     public class Faker : SingleRoleBase, IRoleAbility
     {
-        public List<byte> dummy;
+        public List<byte> DummyPlayer;
 
         public Faker() : base(
             ExtremeRoleId.Faker,
@@ -22,7 +22,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             Palette.ImpostorRed,
             true, false, true, true)
         {
-            dummy.Clear();
+            DummyPlayer.Clear();
         }
 
         public RoleAbilityButtonBase Button
@@ -76,7 +76,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         protected override void RoleSpecificInit()
         {
-            this.dummy.Clear();
+            this.DummyPlayer.Clear();
             this.RoleAbilityInit();
         }
     }
