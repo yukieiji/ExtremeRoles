@@ -27,14 +27,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public RoleAbilityButtonBase Button
         {
-            get => this.paintButton;
+            get => this.createFake;
             set
             {
-                this.paintButton = value;
+                this.createFake = value;
             }
         }
 
-        private RoleAbilityButtonBase paintButton;
+        private RoleAbilityButtonBase createFake;
 
         public static void CreateDummy(
             byte rolePlayerId, byte targetPlayerId)
