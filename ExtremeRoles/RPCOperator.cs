@@ -22,6 +22,7 @@ namespace ExtremeRoles
             ReplaceDeadReason,
             SetRoleWin,
             SetWinGameControlId,
+            ShareMapId,
 
             // 役職関連
             // 役職メインコントール
@@ -182,6 +183,10 @@ namespace ExtremeRoles
         public static void SetRoleWin(byte winPlayerId)
         {
             Roles.ExtremeRoleManager.GameRole[winPlayerId].IsWin = true;
+        }
+        public static void ShareMapId(byte mapId)
+        {
+            PlayerControl.GameOptions.MapId = mapId;
         }
 
         public static void ReplaceRole(

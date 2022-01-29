@@ -27,8 +27,13 @@ namespace ExtremeRoles.Patches.Manager
                 var rng = RandomGenerator.GetTempGenerator();
 
                 List<byte> possibleMaps = new List<byte>() { 0, 1, 2, 4 };
-                PlayerControl.GameOptions.MapId = possibleMaps[
+                byte mapId = possibleMaps[
                     rng.Next(possibleMaps.Count)];
+                RPCOperator.Call(
+                    PlayerControl.LocalPlayer.NetId,
+                    RPCOperator.Command.ShareMapId,
+                    new List<byte> { mapId });
+                RPCOperator.ShareMapId(mapId);
             }
             return continueStart;
 
