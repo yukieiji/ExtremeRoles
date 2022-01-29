@@ -189,6 +189,7 @@ namespace ExtremeRoles.Roles.Combination
         public enum MarlinOption
         {
             HasTask,
+            CanSeeAssassin,
             CanSeeVote,
             CanSeeNeutral,
             CanUseVent,
@@ -197,6 +198,7 @@ namespace ExtremeRoles.Roles.Combination
         public bool IsAssassinate = false;
         public bool CanSeeVote = false;
         public bool CanSeeNeutral = false;
+        private bool canSeeAssassin = false;
 
         private Dictionary<byte, PoolablePlayer> PlayerIcon = new Dictionary<byte, PoolablePlayer>();
         public Marlin(
@@ -236,7 +238,11 @@ namespace ExtremeRoles.Roles.Combination
             SingleRoleBase targetRole,
             byte targetPlayerId)
         {
-            if (targetRole.IsImpostor())
+            if (targetRole.Id == ExtremeRoleId.Assassin && !this.canSeeAssassin)
+            {
+                return Palette.White;
+            }
+            else if (targetRole.IsImpostor())
             {
                 return Palette.ImpostorRed;
             }
@@ -269,6 +275,14 @@ namespace ExtremeRoles.Roles.Combination
                     this.RoleName,
                     MarlinOption.HasTask.ToString()),
                 false, parentOps);
+
+            CustomOption.Create(
+                GetRoleOptionId((int)MarlinOption.CanSeeAssassin),
+                string.Concat(
+                    this.RoleName,
+                    MarlinOption.CanSeeAssassin.ToString()),
+                true, parentOps);
+
             CustomOption.Create(
                 GetRoleOptionId((int)MarlinOption.CanSeeVote),
                 string.Concat(
@@ -293,13 +307,17 @@ namespace ExtremeRoles.Roles.Combination
         {
             this.IsAssassinate = false;
 
-            this.HasTask = OptionHolder.AllOption[
+            var allOption = OptionHolder.AllOption;
+
+            this.HasTask = allOption[
                 GetRoleOptionId((int)MarlinOption.HasTask)].GetValue();
-            this.CanSeeVote = OptionHolder.AllOption[
+            this.canSeeAssassin = allOption[
+                GetRoleOptionId((int)MarlinOption.CanSeeAssassin)].GetValue();
+            this.CanSeeVote = allOption[
                 GetRoleOptionId((int)MarlinOption.CanSeeVote)].GetValue();
-            this.CanSeeNeutral = OptionHolder.AllOption[
+            this.CanSeeNeutral = allOption[
                 GetRoleOptionId((int)MarlinOption.CanSeeNeutral)].GetValue();
-            this.UseVent = OptionHolder.AllOption[
+            this.UseVent = allOption[
                 GetRoleOptionId((int)MarlinOption.CanUseVent)].GetValue();
         }
 
@@ -319,7 +337,8 @@ namespace ExtremeRoles.Roles.Combination
                 PlayerControl player = Player.GetPlayerControlById(playerId);
                 SingleRoleBase role = ExtremeRoleManager.GameRole[playerId];
                 if (role.IsCrewmate() ||
-                    (role.IsNeutral() && !this.CanSeeNeutral))
+                    (role.IsNeutral() && !this.CanSeeNeutral) ||
+                    (role.Id == ExtremeRoleId.Assassin && !this.canSeeAssassin))
                 {
                     poolPlayer.gameObject.SetActive(false);
                 }
