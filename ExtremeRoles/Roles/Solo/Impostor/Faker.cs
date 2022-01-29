@@ -13,7 +13,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 {
     public class Faker : SingleRoleBase, IRoleAbility
     {
-        public List<byte> DummyPlayer;
+        public List<byte> DummyPlayer = new List<byte>();
 
         public Faker() : base(
             ExtremeRoleId.Faker,
@@ -22,7 +22,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             Palette.ImpostorRed,
             true, false, true, true)
         {
-            DummyPlayer.Clear();
+            this.DummyPlayer.Clear();
         }
 
         public RoleAbilityButtonBase Button
@@ -39,7 +39,55 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public static void CreateDummy(
             byte rolePlayerId, byte targetPlayerId)
         {
+            PlayerControl rolePlyaer = Player.GetPlayerControlById(rolePlayerId);
+            Faker faker = (Faker)ExtremeRoleManager.GameRole[rolePlayerId];
 
+            PlayerControl playerControl = Object.Instantiate<PlayerControl>(
+                AmongUsClient.Instance.PlayerPrefab);
+            playerControl.PlayerId = (byte)GameData.Instance.GetAvailableId();
+
+            ExtremeRoleManager.GameRole.Add(playerControl.PlayerId, new FakeRole());
+            faker.DummyPlayer.Add(playerControl.PlayerId);
+
+            GameData.PlayerInfo playerInfo = GameData.Instance.AddPlayer(playerControl);
+            if (AmongUsClient.Instance.AmHost)
+            {
+                AmongUsClient.Instance.Spawn(
+                    playerControl, -2,
+                    InnerNet.SpawnFlags.None);
+            }
+            playerInfo.DefaultOutfit.dontCensorName = true;
+            playerControl.isDummy = true;
+            playerControl.transform.position = rolePlyaer.GetTruePosition();
+            playerControl.GetComponent<DummyBehaviour>().enabled = true;
+            // playerControl.GetComponentInChildren<BoxCollider2D>().enabled = false;
+            playerControl.NetTransform.enabled = false;
+            playerControl.SetName("Dummy");
+            byte b = (byte)((0 < (int)SaveManager.BodyColor) ? 0 : (0 + 1));
+            playerControl.SetColor((int)b);
+            playerControl.SetHat("", (int)b);
+            playerControl.SetSkin("");
+            playerControl.SetPet("");
+            playerControl.SetVisor("");
+            playerControl.SetNamePlate("");
+            playerControl.SetLevel(0U);
+        }
+
+        public static void RemoveAllDummyPlayer(byte rolePlayerId)
+        {
+            Faker faker = (Faker)ExtremeRoleManager.GameRole[rolePlayerId];
+
+            foreach (var player in faker.DummyPlayer)
+            {
+                PlayerControl playerControl = Player.GetPlayerControlById(player);
+                ExtremeRoleManager.GameRole.Remove(player);
+                GameData.Instance.RemovePlayer(player);
+                if (AmongUsClient.Instance.AmHost)
+                {
+                    AmongUsClient.Instance.Despawn(playerControl);
+                }
+            }
+            faker.DummyPlayer.Clear();
         }
 
         public void CreateAbility()
@@ -59,11 +107,26 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            return;
+            RPCOperator.Call(
+                PlayerControl.LocalPlayer.NetId,
+                RPCOperator.Command.FakerRemoveAllDummy,
+                new List<byte> { PlayerControl.LocalPlayer.PlayerId });
+            RemoveAllDummyPlayer(PlayerControl.LocalPlayer.PlayerId);
         }
 
         public bool UseAbility()
         {
+            RPCOperator.Call(
+                PlayerControl.LocalPlayer.NetId,
+                RPCOperator.Command.FakerCreateDummy,
+                new List<byte>
+                { 
+                    PlayerControl.LocalPlayer.PlayerId,
+                    PlayerControl.LocalPlayer.PlayerId
+                });
+            CreateDummy(
+                PlayerControl.LocalPlayer.PlayerId,
+                PlayerControl.LocalPlayer.PlayerId);
             return true;
         }
 
