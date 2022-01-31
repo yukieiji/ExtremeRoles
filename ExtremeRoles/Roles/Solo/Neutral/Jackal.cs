@@ -56,7 +56,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private int numUpgradeSidekick = 0;
         private int createSidekickRange = 0;
 
-        public class SidekickOptionHolder
+        public struct SidekickOptionHolder
         {
             public bool CanKill = false;
             public bool UseSabotage = false;
