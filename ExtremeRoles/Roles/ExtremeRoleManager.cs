@@ -29,6 +29,7 @@ namespace ExtremeRoles.Roles
         Neet,
         Watchdog,
         Supervisor,
+        BodyGuard,
 
         SpecialImpostor,
         Evolver,
