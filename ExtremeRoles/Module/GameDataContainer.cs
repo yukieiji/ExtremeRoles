@@ -19,6 +19,7 @@ namespace ExtremeRoles.Module
             Suicide,
             MissShot,
             Retaliate,
+            Departure,
 
             Assassinate,
             DeadAssassinate,
@@ -271,6 +272,12 @@ namespace ExtremeRoles.Module
                                     ref neutralTeam,
                                     gameControlId,
                                     NeutralSeparateTeam.Lover);
+                                break;
+                            case ExtremeRoleId.Missionary:
+                                addNeutralTeams(
+                                    ref neutralTeam,
+                                    gameControlId,
+                                    NeutralSeparateTeam.Missionary);
                                 break;
                             default:
                                 break;

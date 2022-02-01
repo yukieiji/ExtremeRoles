@@ -275,6 +275,12 @@ namespace ExtremeRoles.Patches.Manager
                     textRenderer.color = ColorPalette.JackalBlue;
                     manager.BackgroundBar.material.SetColor("_Color", ColorPalette.JackalBlue);
                     break;
+                case (GameOverReason)RoleGameOverReason.MissionaryAllAgainstGod:
+                    bonusText = Translation.GetString(
+                        ExtremeRoleId.Missionary.ToString());
+                    textRenderer.color = ColorPalette.MaintainerBlue;
+                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.MaintainerBlue);
+                    break;
                 case (GameOverReason)RoleGameOverReason.LoverKillAllOther:
                 case (GameOverReason)RoleGameOverReason.ShipFallInLove:
                     bonusText = Translation.GetString(

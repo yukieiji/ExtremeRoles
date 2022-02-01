@@ -311,6 +311,24 @@ namespace ExtremeRoles.Patches
                 NamePlateHelper.NameplateChange = false;
             }
 
+            // From TOR
+            // This fixes a bug with the original game where pressing the button and a kill happens simultaneously
+            // results in bodies sometimes being created *after* the meeting starts, marking them as dead and
+            // removing the corpses so there's no random corpses leftover afterwards
+
+            foreach (DeadBody b in UnityEngine.Object.FindObjectsOfType<DeadBody>())
+            {
+                foreach (PlayerVoteArea pva in __instance.playerStates)
+                {
+                    if (pva.TargetPlayerId == b.ParentId && !pva.AmDead)
+                    {
+                        pva.SetDead(pva.DidReport, true);
+                        pva.Overlay.gameObject.SetActive(true);
+                    }
+                }
+                UnityEngine.Object.Destroy(b.gameObject);
+            }
+
 
             if (__instance.state == MeetingHud.VoteStates.Animating) { return; }
 
@@ -337,24 +355,6 @@ namespace ExtremeRoles.Patches
                 }
 
                 return;
-            }
-
-            // From TOR
-            // This fixes a bug with the original game where pressing the button and a kill happens simultaneously
-            // results in bodies sometimes being created *after* the meeting starts, marking them as dead and
-            // removing the corpses so there's no random corpses leftover afterwards
-
-            foreach (DeadBody b in UnityEngine.Object.FindObjectsOfType<DeadBody>())
-            {
-                foreach (PlayerVoteArea pva in __instance.playerStates)
-                {
-                    if (pva.TargetPlayerId == b.ParentId && !pva.AmDead)
-                    {
-                        pva.SetDead(pva.DidReport, true);
-                        pva.Overlay.gameObject.SetActive(true);
-                    }
-                }
-                //UnityEngine.Object.Destroy(b.gameObject);
             }
         }
     }

@@ -205,6 +205,12 @@ namespace ExtremeRoles.Patches
                         setWinGameContorlId(id);
                         endReason = (GameOverReason)RoleGameOverReason.LoverKillAllOther;
                         break;
+                    case NeutralSeparateTeam.Missionary:
+                        if (statistics.TeamImpostorAlive > 0 &&
+                            statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
+                        setWinGameContorlId(id);
+                        endReason = (GameOverReason)RoleGameOverReason.MissionaryAllAgainstGod;
+                        break;
                     default:
                         break;
                 }

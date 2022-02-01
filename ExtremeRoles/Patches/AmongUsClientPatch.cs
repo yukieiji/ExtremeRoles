@@ -103,6 +103,11 @@ namespace ExtremeRoles.Patches
                         noWinner,
                         new ExtremeRoleId[] { ExtremeRoleId.TaskMaster });
                     break;
+                case RoleGameOverReason.MissionaryAllAgainstGod:
+                    replaceWinnerToSpecificNeutralRolePlayer(
+                        noWinner,
+                        new ExtremeRoleId[] { ExtremeRoleId.Missionary });
+                    break;
                 case RoleGameOverReason.ShipFallInLove:
                     replaceWinnerToSpecificRolePlayer(
                         ExtremeRoleId.Lover);
