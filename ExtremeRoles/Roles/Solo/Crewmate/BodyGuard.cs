@@ -53,21 +53,18 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 });
             RPCOperator.BodyGuardResetShield(
                 rolePlayer.PlayerId);
-            if (rolePlayer.PlayerId == killerPlayer.PlayerId)
-            {
-                RPCOperator.Call(
-                    rolePlayer.NetId,
-                    RPCOperator.Command.ReplaceDeadReason,
-                    new List<byte>
-                    {
-                        rolePlayer.PlayerId,
-                        (byte)GameDataContainer.PlayerStatus.Martyrdom
-                    });
 
-                ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
+            RPCOperator.Call(
+                rolePlayer.NetId,
+                RPCOperator.Command.ReplaceDeadReason,
+                new List<byte>
+                {
                     rolePlayer.PlayerId,
-                    GameDataContainer.PlayerStatus.Martyrdom);
-            }
+                    (byte)GameDataContainer.PlayerStatus.Martyrdom
+                });
+            ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
+                rolePlayer.PlayerId,
+                GameDataContainer.PlayerStatus.Martyrdom);
         }
 
         public void CreateAbility()
