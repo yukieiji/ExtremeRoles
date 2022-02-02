@@ -88,6 +88,7 @@ namespace ExtremeRoles.Roles
                 new Neet(),
                 new Watchdog(),
                 new Supervisor(),
+                new BodyGuard(),
 
                 new SpecialImpostor(),
                 new Evolver(),
