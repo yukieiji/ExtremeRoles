@@ -20,6 +20,7 @@ namespace ExtremeRoles.Resources
         public const string TabLogo = "ExtremeRoles.Resources.TabIcon.png";
 
         public const string MaintainerRepair = "ExtremeRoles.Resources.Repair.png";
+        public const string BodyGuardShield = "ExtremeRoles.Resources.Shield.png";
 
         public const string EvolverEvolved = "ExtremeRoles.Resources.Evolved.png";
         public const string CarrierCarry = "ExtremeRoles.Resources.Carry.png";
@@ -27,6 +28,7 @@ namespace ExtremeRoles.Resources
 
         public const string AliceShipBroken = "ExtremeRoles.Resources.ShipBroken.png";
         public const string JackalSidekick = "ExtremeRoles.Resources.Sidekick.png";
+        public const string MissionaryPropagate = "ExtremeRoles.Resources.Propagate.png";
 
 
         public const string TestButton = "ExtremeRoles.Resources.TESTBUTTON.png";

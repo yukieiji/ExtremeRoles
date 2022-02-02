@@ -74,7 +74,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.CreateAbilityCountButton(
                 Translation.GetString("shield"),
                 Loader.CreateSpriteFromResources(
-                    Path.TestButton, 115f));
+                    Path.BodyGuardShield, 115f));
             this.Button.SetLabelToCrewmate();
         }
 
