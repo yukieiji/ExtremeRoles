@@ -11,6 +11,7 @@ namespace ExtremeRoles.Patches.Button
     {
         public enum MurderKillResult
         {
+            Failure,
             NormalKill,
             NoAnimatedKill
         }
@@ -42,9 +43,25 @@ namespace ExtremeRoles.Patches.Button
                     target, killer);
                 if (!canKill) { return false; }
 
+                var bodyGuard = ExtremeRolesPlugin.GameDataStore.ShildPlayer.GetBodyGuardPlayerId(
+                    target.PlayerId);
+
+                if (bodyGuard != byte.MaxValue)
+                {
+                    target = Helper.Player.GetPlayerControlById(bodyGuard);
+                    if (target == null)
+                    {
+                        target = __instance.currentTarget;
+                    }
+                    else if (target.Data.IsDead || target.Data.Disconnected)
+                    {
+                        target = __instance.currentTarget;
+                    }
+                }
+
                 // Use an unchecked kill command, to allow shorter kill cooldowns etc. without getting kicked
                 MurderKillResult res = checkMuderKill(
-                    killer, target);
+                    __instance, killer, target);
 
                 switch (res)
                 {
@@ -57,7 +74,16 @@ namespace ExtremeRoles.Patches.Button
                         RPCOperator.UncheckedMurderPlayer(
                             killer.PlayerId,
                             target.PlayerId,
-                            Byte.MaxValue);
+                            byte.MaxValue);
+                        break;
+                    case MurderKillResult.NoAnimatedKill:
+                        RPCOperator.Call(
+                            PlayerControl.LocalPlayer.NetId,
+                            RPCOperator.Command.UncheckedMurderPlayer,
+                            new List<byte> { killer.PlayerId, target.PlayerId, 0 });
+                        RPCOperator.UncheckedMurderPlayer(
+                            killer.PlayerId,
+                            target.PlayerId, 0);
                         break;
                     default:
                         break;
@@ -69,24 +95,28 @@ namespace ExtremeRoles.Patches.Button
         }
 
         private static MurderKillResult checkMuderKill(
+            KillButton instance,
             PlayerControl killer,
-            PlayerControl target,
-            bool blockRewind = false)
+            PlayerControl target)
         {
-            if (AmongUsClient.Instance.IsGameOver) { return MurderKillResult.NoAnimatedKill; }
+            if (AmongUsClient.Instance.IsGameOver) { return MurderKillResult.Failure; }
             if (killer == null ||
                 killer.Data == null ||
                 killer.Data.IsDead ||
                 killer.Data.Disconnected)
             {
-                return MurderKillResult.NoAnimatedKill; // Allow non Impostor kills compared to vanilla code
+                return MurderKillResult.Failure; // Allow non Impostor kills compared to vanilla code
             }
             if (target == null || 
                 target.Data == null || 
                 target.Data.IsDead || 
                 target.Data.Disconnected)
             {
-                return MurderKillResult.NoAnimatedKill; // Allow killing players in vents compared to vanilla code
+                return MurderKillResult.Failure; // Allow killing players in vents compared to vanilla code
+            }
+            if (target.PlayerId != instance.currentTarget.PlayerId)
+            {
+                return MurderKillResult.NoAnimatedKill;
             }
 
             return MurderKillResult.NormalKill;

@@ -28,6 +28,10 @@ namespace ExtremeRoles
             // 役職メインコントール
             ReplaceRole,
 
+            // クルーメイト
+            BodyGuardFeatShield,
+            BodyGuardResetShield,
+
             // インポスター
             AssasinAddDead,
             AssasinVoteFor,
@@ -195,6 +199,19 @@ namespace ExtremeRoles
             Roles.ExtremeRoleManager.RoleReplace(
                 callerId, targetId,
                 (Roles.ExtremeRoleManager.ReplaceOperation)operation);
+        }
+
+        public static void BodyGuardFeatShield(
+            byte playerId,
+            byte targetPlayer)
+        {
+            ExtremeRolesPlugin.GameDataStore.ShildPlayer.Add(
+                playerId, targetPlayer);
+        }
+
+        public static void BodyGuardResetShield(byte playerId)
+        {
+            ExtremeRolesPlugin.GameDataStore.ShildPlayer.Remove(playerId);
         }
 
         public static void AssasinAddDead(byte playersId)

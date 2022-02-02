@@ -5,6 +5,11 @@ namespace ExtremeRoles.Module.RoleAbilityButton
 {
     public class AbilityCountButton : RoleAbilityButtonBase
     {
+        public int CurAbilityNum
+        {
+            get => this.abilityNum;
+        }
+
         private int abilityNum = 0;
         private TMPro.TextMeshPro abilityCountText = null;
 
