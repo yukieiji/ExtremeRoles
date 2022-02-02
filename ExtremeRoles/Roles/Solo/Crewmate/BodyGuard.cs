@@ -49,10 +49,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 RPCOperator.Command.BodyGuardResetShield,
                 new List<byte>
                 {
-                    PlayerControl.LocalPlayer.PlayerId
+                    rolePlayer.PlayerId
                 });
             RPCOperator.BodyGuardResetShield(
-                PlayerControl.LocalPlayer.PlayerId);
+                rolePlayer.PlayerId);
             if (rolePlayer.PlayerId == killerPlayer.PlayerId)
             {
                 RPCOperator.Call(
@@ -204,7 +204,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 byte target = result.PlayerId;
 
-                if (!ExtremeRolesPlugin.GameDataStore.ShildPlayer.ContainsKey(target))
+                if (!ExtremeRolesPlugin.GameDataStore.ShildPlayer.IsShielding(
+                        PlayerControl.LocalPlayer.PlayerId, target))
                 {
                     this.TargetPlayer = result.PlayerId;
                     Player.SetPlayerOutLine(result, this.NameColor);

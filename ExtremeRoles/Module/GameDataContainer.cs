@@ -35,7 +35,7 @@ namespace ExtremeRoles.Module
         public List<PlayerControl> PlusWinner = new List<PlayerControl>();
 
         public List<byte> DeadedAssassin = new List<byte>();
-        public Dictionary<byte, byte> ShildPlayer = new Dictionary<byte, byte>();
+        public ShieldPlayerContainer ShildPlayer = new ShieldPlayerContainer();
 
         public int MeetingsCount = 0;
         public int WinGameControlId = int.MaxValue;
@@ -395,5 +395,59 @@ namespace ExtremeRoles.Module
             public int TotalTask { get; set; }
             public PlayerStatus StatusInfo { get; set; }
         }
+
+        public class ShieldPlayerContainer
+        {
+
+            private List<(byte, byte)> shield = new List<(byte, byte)>();
+
+            public ShieldPlayerContainer()
+            {
+                shield.Clear();
+            }
+
+            public void Clear()
+            {
+
+            }
+
+            public void Add(byte rolePlayerId, byte targetPlayerId)
+            {
+                shield.Add((rolePlayerId, targetPlayerId));
+            }
+            
+            public void Remove(byte removeRolePlayerId)
+            {
+                List<(byte, byte)> remove = new List<(byte, byte)>();
+
+                foreach (var(rolePlayerId, targetPlayerId) in shield)
+                {
+                    if (rolePlayerId != removeRolePlayerId) { continue; }
+                    remove.Add((rolePlayerId, targetPlayerId));
+                }
+
+                foreach(var val in remove)
+                {
+                    shield.Remove(val);
+                }
+
+            }
+            public byte GetBodyGuardPlayerId(byte targetPlayerId)
+            {
+                if (shield.Count == 0) { return byte.MaxValue; }
+
+                foreach (var (rolePlayerId, shieldPlayerId) in shield)
+                {
+                    if (shieldPlayerId == targetPlayerId) { return rolePlayerId; }
+                }
+                return byte.MaxValue;
+            }
+            public bool IsShielding(byte rolePlayerId, byte targetPlayerId)
+            {
+                if (shield.Count == 0) { return false; }
+                return shield.Contains((rolePlayerId, targetPlayerId));
+            }
+        }
+
     }
 }
