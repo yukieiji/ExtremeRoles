@@ -42,6 +42,12 @@ namespace ExtremeRoles.Patches.Button
                     target, killer);
                 if (!canKill) { return false; }
 
+                if (ExtremeRolesPlugin.GameDataStore.ShildPlayer.ContainsKey(target.PlayerId))
+                {
+                    target = Helper.Player.GetPlayerControlById(
+                        ExtremeRolesPlugin.GameDataStore.ShildPlayer[target.PlayerId]);
+                }
+
                 // Use an unchecked kill command, to allow shorter kill cooldowns etc. without getting kicked
                 MurderKillResult res = checkMuderKill(
                     killer, target);
