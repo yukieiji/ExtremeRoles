@@ -11,6 +11,7 @@ namespace ExtremeRoles.Patches.Button
     {
         public enum MurderKillResult
         {
+            Failure,
             NormalKill,
             NoAnimatedKill
         }
@@ -98,20 +99,20 @@ namespace ExtremeRoles.Patches.Button
             PlayerControl killer,
             PlayerControl target)
         {
-            if (AmongUsClient.Instance.IsGameOver) { return MurderKillResult.NoAnimatedKill; }
+            if (AmongUsClient.Instance.IsGameOver) { return MurderKillResult.Failure; }
             if (killer == null ||
                 killer.Data == null ||
                 killer.Data.IsDead ||
                 killer.Data.Disconnected)
             {
-                return MurderKillResult.NoAnimatedKill; // Allow non Impostor kills compared to vanilla code
+                return MurderKillResult.Failure; // Allow non Impostor kills compared to vanilla code
             }
             if (target == null || 
                 target.Data == null || 
                 target.Data.IsDead || 
                 target.Data.Disconnected)
             {
-                return MurderKillResult.NoAnimatedKill; // Allow killing players in vents compared to vanilla code
+                return MurderKillResult.Failure; // Allow killing players in vents compared to vanilla code
             }
             if (target.PlayerId != instance.currentTarget.PlayerId)
             {
