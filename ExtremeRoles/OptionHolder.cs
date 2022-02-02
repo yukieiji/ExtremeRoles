@@ -157,7 +157,7 @@ namespace ExtremeRoles
             Roles.ExtremeRoleManager.CreateNormalRoleOptions(
                 offset);
 
-            offset = 1000;
+            offset = 5000;
             Roles.ExtremeRoleManager.CreateCombinationRoleOptions(
                 offset);
         }
