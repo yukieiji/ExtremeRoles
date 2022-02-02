@@ -95,8 +95,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             CustomOptionBase parentOps)
         {
 
-            this.shieldRange = OptionHolder.AllOption[
-                GetRoleOptionId((int)BodyGuardOption.ShieldeRange)].GetValue();
+            CustomOption.Create(
+               GetRoleOptionId((int)BodyGuardOption.ShieldeRange),
+               string.Concat(
+                   this.RoleName,
+                   BodyGuardOption.ShieldeRange.ToString()),
+               1.0f, 0.0f, 2.0f, 0.1f,
+               parentOps);
 
             this.CreateAbilityCountOption(
                 parentOps, 5);
@@ -104,6 +109,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         protected override void RoleSpecificInit()
         {
+            this.shieldRange = OptionHolder.AllOption[
+                GetRoleOptionId((int)BodyGuardOption.ShieldeRange)].GetValue();
+
             this.RoleAbilityInit();
             if (this.Button != null)
             {
