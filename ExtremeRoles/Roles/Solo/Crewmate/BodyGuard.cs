@@ -54,6 +54,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             RPCOperator.BodyGuardResetShield(
                 rolePlayer.PlayerId);
 
+            if (rolePlayer.PlayerId == killerPlayer.PlayerId) { return; }
+
             RPCOperator.Call(
                 rolePlayer.NetId,
                 RPCOperator.Command.ReplaceDeadReason,
