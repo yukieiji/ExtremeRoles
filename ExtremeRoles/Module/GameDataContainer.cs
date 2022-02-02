@@ -34,6 +34,7 @@ namespace ExtremeRoles.Module
         public List<PlayerControl> PlusWinner = new List<PlayerControl>();
 
         public List<byte> DeadedAssassin = new List<byte>();
+        public List<byte> ShildPlayer = new List<byte>();
 
         public int MeetingsCount = 0;
         public int WinGameControlId = int.MaxValue;
@@ -52,6 +53,8 @@ namespace ExtremeRoles.Module
         public void Initialize()
         {
             DeadedAssassin.Clear();
+            ShildPlayer.Clear();
+
             FinalSummary.Clear();
             DeadPlayerInfo.Clear();
             PlusWinner.Clear();

@@ -704,6 +704,13 @@ namespace ExtremeRoles.Patches
                     byte mapId = reader.ReadByte();
                     RPCOperator.ShareMapId(mapId);
                     break;
+                case RPCOperator.Command.BodyGuardFeatShield:
+                    targetId = reader.ReadByte();
+                    RPCOperator.BodyGuardFeatShield(targetId);
+                    break;
+                case RPCOperator.Command.BodyGuardResetShield:
+                    RPCOperator.BodyGuardResetShield();
+                    break;
                 case RPCOperator.Command.AssasinAddDead:
                     playerId = reader.ReadByte();
                     RPCOperator.AssasinAddDead(playerId);

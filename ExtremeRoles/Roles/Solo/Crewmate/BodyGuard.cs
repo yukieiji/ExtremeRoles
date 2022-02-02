@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -27,8 +29,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public byte TargetPlayer = byte.MaxValue;
 
-        private RoleAbilityButtonBase shieldButton;
+        private int shildNum;
         private float shieldRange;
+        private RoleAbilityButtonBase shieldButton;
 
         public BodyGuard() : base(
             ExtremeRoleId.BodyGuard,
@@ -43,12 +46,20 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.CreateAbilityCountButton(
                 Translation.GetString("shield"),
                 Loader.CreateSpriteFromResources(
-                    Path.MaintainerRepair, 115f));
+                    Path.TestButton, 115f));
             this.Button.SetLabelToCrewmate();
         }
 
         public bool UseAbility()
         {
+
+            RPCOperator.Call(
+                PlayerControl.LocalPlayer.NetId,
+                RPCOperator.Command.BodyGuardFeatShield,
+                new List<byte> { this.TargetPlayer });
+            RPCOperator.BodyGuardFeatShield(this.TargetPlayer);
+            this.TargetPlayer = byte.MaxValue;
+
             return true;
         }
 
@@ -60,7 +71,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            return;
+            RPCOperator.Call(
+                PlayerControl.LocalPlayer.NetId,
+                RPCOperator.Command.BodyGuardResetShield);
+            RPCOperator.BodyGuardResetShield();
+            ((AbilityCountButton)this.shieldButton).UpdateAbilityCount(
+                this.shildNum);
         }
 
         public void RoleAbilityResetOnMeetingEnd()
@@ -76,12 +92,16 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 GetRoleOptionId((int)BodyGuardOption.ShieldeRange)].GetValue();
 
             this.CreateAbilityCountOption(
-                parentOps, 30);
+                parentOps, 5);
         }
 
         protected override void RoleSpecificInit()
         {
             this.RoleAbilityInit();
+            if (this.Button != null)
+            {
+                this.shildNum = ((AbilityCountButton)this.shieldButton).CurAbilityNum;
+            }
         }
 
         private void setTarget()
@@ -133,8 +153,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
             if (result != null)
             {
-                this.TargetPlayer = result.PlayerId;
-                Helper.Player.SetPlayerOutLine(result, this.NameColor);
+                byte target = result.PlayerId;
+
+                if (!ExtremeRolesPlugin.GameDataStore.ShildPlayer.Contains(target))
+                {
+                    this.TargetPlayer = result.PlayerId;
+                    Helper.Player.SetPlayerOutLine(result, this.NameColor);
+                }
             }
         }
 
