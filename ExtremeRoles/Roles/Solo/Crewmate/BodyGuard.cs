@@ -41,6 +41,35 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             false, true, false, false)
         { }
 
+        public override void RolePlayerKilledAction(
+            PlayerControl rolePlayer, PlayerControl killerPlayer)
+        {
+            RPCOperator.Call(
+                PlayerControl.LocalPlayer.NetId,
+                RPCOperator.Command.BodyGuardResetShield,
+                new List<byte>
+                {
+                    PlayerControl.LocalPlayer.PlayerId
+                });
+            RPCOperator.BodyGuardResetShield(
+                PlayerControl.LocalPlayer.PlayerId);
+            if (rolePlayer.PlayerId == killerPlayer.PlayerId)
+            {
+                RPCOperator.Call(
+                    rolePlayer.NetId,
+                    RPCOperator.Command.ReplaceDeadReason,
+                    new List<byte>
+                    {
+                        rolePlayer.PlayerId,
+                        (byte)GameDataContainer.PlayerStatus.Martyrdom
+                    });
+
+                ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
+                    rolePlayer.PlayerId,
+                    GameDataContainer.PlayerStatus.Martyrdom);
+            }
+        }
+
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
@@ -80,8 +109,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             RPCOperator.Call(
                 PlayerControl.LocalPlayer.NetId,
-                RPCOperator.Command.BodyGuardResetShield);
-            RPCOperator.BodyGuardResetShield();
+                RPCOperator.Command.BodyGuardResetShield,
+                new List<byte>
+                {
+                    PlayerControl.LocalPlayer.PlayerId
+                });
+            RPCOperator.BodyGuardResetShield(
+                PlayerControl.LocalPlayer.PlayerId);
             ((AbilityCountButton)this.shieldButton).UpdateAbilityCount(
                 this.shildNum);
         }

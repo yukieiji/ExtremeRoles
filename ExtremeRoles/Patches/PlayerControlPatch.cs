@@ -710,7 +710,8 @@ namespace ExtremeRoles.Patches
                     RPCOperator.BodyGuardFeatShield(playerId, targetId);
                     break;
                 case RPCOperator.Command.BodyGuardResetShield:
-                    RPCOperator.BodyGuardResetShield();
+                    playerId = reader.ReadByte();
+                    RPCOperator.BodyGuardResetShield(playerId);
                     break;
                 case RPCOperator.Command.AssasinAddDead:
                     playerId = reader.ReadByte();

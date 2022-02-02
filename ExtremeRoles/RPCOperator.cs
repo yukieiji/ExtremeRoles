@@ -209,9 +209,20 @@ namespace ExtremeRoles
                 targetPlayer, playerId);
         }
 
-        public static void BodyGuardResetShield()
+        public static void BodyGuardResetShield(byte playerId)
         {
-            ExtremeRolesPlugin.GameDataStore.ShildPlayer.Clear();
+            List<byte> removeItem = new List<byte>();
+
+            foreach(var(key, val) in ExtremeRolesPlugin.GameDataStore.ShildPlayer)
+            {
+                if (val != playerId) { continue; }
+                removeItem.Add(key);
+            }
+
+            foreach(var item in removeItem)
+            {
+                ExtremeRolesPlugin.GameDataStore.ShildPlayer.Remove(item);
+            }
         }
 
         public static void AssasinAddDead(byte playersId)

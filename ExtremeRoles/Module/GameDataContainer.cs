@@ -20,6 +20,7 @@ namespace ExtremeRoles.Module
             MissShot,
             Retaliate,
             Departure,
+            Martyrdom,
 
             Assassinate,
             DeadAssassinate,
