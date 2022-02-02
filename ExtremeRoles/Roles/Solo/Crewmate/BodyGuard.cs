@@ -15,7 +15,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
     {
         public enum BodyGuardOption
         {
-            ShieldeRange
+            ShieldRange
         }
 
         public RoleAbilityButtonBase Button
@@ -129,10 +129,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
 
             CustomOption.Create(
-               GetRoleOptionId((int)BodyGuardOption.ShieldeRange),
+               GetRoleOptionId((int)BodyGuardOption.ShieldRange),
                string.Concat(
                    this.RoleName,
-                   BodyGuardOption.ShieldeRange.ToString()),
+                   BodyGuardOption.ShieldRange.ToString()),
                1.0f, 0.0f, 2.0f, 0.1f,
                parentOps);
 
@@ -143,7 +143,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         protected override void RoleSpecificInit()
         {
             this.shieldRange = OptionHolder.AllOption[
-                GetRoleOptionId((int)BodyGuardOption.ShieldeRange)].GetValue();
+                GetRoleOptionId((int)BodyGuardOption.ShieldRange)].GetValue();
 
             this.RoleAbilityInit();
             if (this.Button != null)
