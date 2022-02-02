@@ -201,10 +201,12 @@ namespace ExtremeRoles
                 (Roles.ExtremeRoleManager.ReplaceOperation)operation);
         }
 
-        public static void BodyGuardFeatShield(byte targetPlayer)
+        public static void BodyGuardFeatShield(
+            byte playerId,
+            byte targetPlayer)
         {
             ExtremeRolesPlugin.GameDataStore.ShildPlayer.Add(
-                targetPlayer);
+                targetPlayer, playerId);
         }
 
         public static void BodyGuardResetShield()

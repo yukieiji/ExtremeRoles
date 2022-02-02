@@ -53,11 +53,18 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public bool UseAbility()
         {
 
+            byte playerId = PlayerControl.LocalPlayer.PlayerId;
+
             RPCOperator.Call(
                 PlayerControl.LocalPlayer.NetId,
                 RPCOperator.Command.BodyGuardFeatShield,
-                new List<byte> { this.TargetPlayer });
-            RPCOperator.BodyGuardFeatShield(this.TargetPlayer);
+                new List<byte>
+                {
+                    playerId,
+                    this.TargetPlayer 
+                });
+            RPCOperator.BodyGuardFeatShield(
+                playerId, this.TargetPlayer);
             this.TargetPlayer = byte.MaxValue;
 
             return true;
@@ -155,10 +162,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 byte target = result.PlayerId;
 
-                if (!ExtremeRolesPlugin.GameDataStore.ShildPlayer.Contains(target))
+                if (!ExtremeRolesPlugin.GameDataStore.ShildPlayer.ContainsKey(target))
                 {
                     this.TargetPlayer = result.PlayerId;
-                    Helper.Player.SetPlayerOutLine(result, this.NameColor);
+                    Player.SetPlayerOutLine(result, this.NameColor);
                 }
             }
         }

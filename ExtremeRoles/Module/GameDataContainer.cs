@@ -34,7 +34,7 @@ namespace ExtremeRoles.Module
         public List<PlayerControl> PlusWinner = new List<PlayerControl>();
 
         public List<byte> DeadedAssassin = new List<byte>();
-        public List<byte> ShildPlayer = new List<byte>();
+        public Dictionary<byte, byte> ShildPlayer = new Dictionary<byte, byte>();
 
         public int MeetingsCount = 0;
         public int WinGameControlId = int.MaxValue;

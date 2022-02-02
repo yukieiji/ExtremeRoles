@@ -705,8 +705,9 @@ namespace ExtremeRoles.Patches
                     RPCOperator.ShareMapId(mapId);
                     break;
                 case RPCOperator.Command.BodyGuardFeatShield:
+                    playerId = reader.ReadByte();
                     targetId = reader.ReadByte();
-                    RPCOperator.BodyGuardFeatShield(targetId);
+                    RPCOperator.BodyGuardFeatShield(playerId, targetId);
                     break;
                 case RPCOperator.Command.BodyGuardResetShield:
                     RPCOperator.BodyGuardResetShield();
