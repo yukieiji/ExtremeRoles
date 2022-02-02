@@ -46,6 +46,10 @@ namespace ExtremeRoles.Patches.Button
                 {
                     target = Helper.Player.GetPlayerControlById(
                         ExtremeRolesPlugin.GameDataStore.ShildPlayer[target.PlayerId]);
+                    if (target.Data.IsDead || target.Data.Disconnected)
+                    {
+                        target = __instance.currentTarget;
+                    }
                 }
 
                 // Use an unchecked kill command, to allow shorter kill cooldowns etc. without getting kicked
