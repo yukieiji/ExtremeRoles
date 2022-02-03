@@ -191,7 +191,7 @@ namespace ExtremeRoles.Roles.API.Interface
                 defaultCoolTime, minCoolTime, maxCoolTime, step,
                 parentOps, format: "unitSeconds");
 
-            if (defaultActiveTime == float.MaxValue)
+            if (defaultActiveTime != float.MaxValue)
             {
                 defaultActiveTime = Mathf.Clamp(
                     defaultActiveTime, minActiveTime, maxActiveTime);
