@@ -38,6 +38,7 @@ namespace ExtremeRoles
             CarrierCarryBody,
             CarrierSetBody,
             PainterPaintBody,
+            OverLoaderSwitchAbility,
 
             // ニュートラル
             AliceShipBroken,
@@ -240,6 +241,14 @@ namespace ExtremeRoles
         {
             Roles.Solo.Impostor.Painter.PaintDeadBody(
                 callerId, targetId);
+        }
+
+        public static void OverLoaderSwitchAbility(
+            byte callerId, byte activate)
+        {
+
+            Roles.Solo.Impostor.OverLoader.SwitchAbility(
+                callerId, activate == byte.MaxValue);
         }
 
         public static void AliceShipBroken(byte callerId)

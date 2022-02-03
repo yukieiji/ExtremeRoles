@@ -159,6 +159,15 @@ namespace ExtremeRoles.Roles.API
             SingleRoleBase targetRole,
             byte targetPlayerId)
         {
+            var overLoader = targetRole as Solo.Impostor.OverLoader;
+
+            if (overLoader != null)
+            {
+                if(overLoader.IsOverLoad)
+                {
+                    return Palette.ImpostorRed;
+                }
+            }
             
             if ((targetRole.IsImpostor() || targetRole.FakeImposter) &&
                 this.IsImpostor())

@@ -735,6 +735,12 @@ namespace ExtremeRoles.Patches
                     targetId = reader.ReadByte();
                     RPCOperator.PainterPaintBody(playerId, targetId);
                     break;
+                case RPCOperator.Command.OverLoaderSwitchAbility:
+                    callerId = reader.ReadByte();
+                    byte activate  = reader.ReadByte();
+                    RPCOperator.OverLoaderSwitchAbility(
+                        callerId, activate);
+                    break;
 
                 case RPCOperator.Command.AliceShipBroken:
                     callerId = reader.ReadByte();
