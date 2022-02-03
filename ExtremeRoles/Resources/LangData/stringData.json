@@ -23,6 +23,26 @@
         "0": "Preset 5",
         "11": "\u30d7\u30ea\u30bb\u30c3\u30c8\uff15"
     },
+    "preset6": {
+        "0": "Preset 6",
+        "11": "\u30d7\u30ea\u30bb\u30c3\u30c8\uff16"
+    },
+    "preset7": {
+        "0": "Preset 7",
+        "11": "\u30d7\u30ea\u30bb\u30c3\u30c8\uff17"
+    },
+    "preset8": {
+        "0": "Preset 8",
+        "11": "\u30d7\u30ea\u30bb\u30c3\u30c8\uff18"
+    },
+    "preset9": {
+        "0": "Preset 9",
+        "11": "\u30d7\u30ea\u30bb\u30c3\u30c8\uff19"
+    },
+    "preset10": {
+        "0": "Preset 10",
+        "11": "\u30d7\u30ea\u30bb\u30c3\u30c8\uff11\uff10"
+    },
     "PresetSelection": {
         "0": "Preset",
         "11": "\u30d7\u30ea\u30bb\u30c3\u30c8"
