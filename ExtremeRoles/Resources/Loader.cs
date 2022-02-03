@@ -40,7 +40,8 @@ namespace ExtremeRoles.Resources
         internal delegate bool d_LoadImage(IntPtr tex, IntPtr data, bool markNonReadable);
         internal static d_LoadImage iCall_LoadImage;
 
-        public static Sprite CreateSpriteFromResources(string path, float pixelsPerUnit)
+        public static Sprite CreateSpriteFromResources(
+            string path, float pixelsPerUnit=115f)
         {
             try
             {

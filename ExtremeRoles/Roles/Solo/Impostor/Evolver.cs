@@ -63,7 +63,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.CreateAbilityCountButton(
                 this.defaultButtonText,
                 Loader.CreateSpriteFromResources(
-                    Path.EvolverEvolved, 115f),
+                    Path.EvolverEvolved),
                 checkAbility: CheckAbility,
                 abilityCleanUp: CleanUp);
         }

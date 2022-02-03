@@ -125,7 +125,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.CreateNormalAbilityButton(
                 Helper.Translation.GetString("propagate"),
                 Loader.CreateSpriteFromResources(
-                    Path.MissionaryPropagate, 115f));
+                    Path.MissionaryPropagate));
         }
 
         public bool IsAbilityUse()

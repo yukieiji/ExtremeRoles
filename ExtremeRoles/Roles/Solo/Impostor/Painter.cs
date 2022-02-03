@@ -79,7 +79,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.CreateNormalAbilityButton(
                 Translation.GetString("paint"),
                 Loader.CreateSpriteFromResources(
-                   Path.PainterPaint, 115f));
+                   Path.PainterPaint));
         }
 
         public bool IsAbilityUse()

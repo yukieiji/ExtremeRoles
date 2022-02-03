@@ -128,7 +128,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.CreateReclickableAbilityButton(
                 Translation.GetString("carry"),
                 Loader.CreateSpriteFromResources(
-                   Path.CarrierCarry, 115f),
+                   Path.CarrierCarry),
                 this.CleanUp);
         }
 

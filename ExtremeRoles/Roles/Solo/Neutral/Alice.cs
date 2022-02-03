@@ -47,7 +47,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.CreateAbilityCountButton(
                 Helper.Translation.GetString("shipBroken"),
                 Loader.CreateSpriteFromResources(
-                    Path.AliceShipBroken, 115f));
+                    Path.AliceShipBroken));
         }
 
         public override bool IsSameTeam(SingleRoleBase targetRole)

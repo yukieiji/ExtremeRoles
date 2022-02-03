@@ -302,7 +302,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.CreateAbilityCountButton(
                 Translation.GetString("Sidekick"),
                 Loader.CreateSpriteFromResources(
-                    Path.JackalSidekick, 115f));
+                    Path.JackalSidekick));
         }
 
         public override Color GetTargetRoleSeeColor(

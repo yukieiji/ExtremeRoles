@@ -58,7 +58,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     break;
                 default:
                     buttonImage = Loader.CreateSpriteFromResources(
-                        Path.TestButton, 115f);
+                        Path.TestButton);
                     break;
             }
 
