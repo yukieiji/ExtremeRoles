@@ -34,6 +34,12 @@ namespace ExtremeRoles.Roles.API.Interface
 
     public static class IRoleAbilityMixin
     {
+        private const float defaultCoolTime = 30.0f;
+        private const float minCoolTime = 0.5f;
+        private const float maxCoolTime = 120.0f;
+        private const float minActiveTime = 0.5f;
+        private const float maxActiveTime = 60.0f;
+        private const float step = 0.5f;
 
         public static void CreateNormalAbilityButton(
             this IRoleAbility self,
@@ -175,24 +181,27 @@ namespace ExtremeRoles.Roles.API.Interface
         public static void CreateCommonAbilityOption(
             this IRoleAbility self,
             CustomOptionBase parentOps,
-            bool hasActiveTime = false)
+            float defaultActiveTime = float.MaxValue)
         {
             CustomOption.Create(
                 self.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime),
                 string.Concat(
                     ((SingleRoleBase)self).RoleName,
                     RoleAbilityCommonOption.AbilityCoolTime.ToString()),
-                30f, 2.5f, 120f, 0.5f,
+                defaultCoolTime, minCoolTime, maxCoolTime, step,
                 parentOps, format: "unitSeconds");
 
-            if (hasActiveTime)
+            if (defaultActiveTime == float.MaxValue)
             {
+                defaultActiveTime = Mathf.Clamp(
+                    defaultActiveTime, minActiveTime, maxActiveTime);
+
                 CustomOption.Create(
                     self.GetRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime),
                     string.Concat(
                         ((SingleRoleBase)self).RoleName,
                         RoleAbilityCommonOption.AbilityActiveTime.ToString()),
-                    2.5f, 0.5f, 60f, 0.5f,
+                    defaultActiveTime, minActiveTime, maxActiveTime, step,
                     parentOps, format: "unitSeconds");
             }
 
@@ -202,12 +211,12 @@ namespace ExtremeRoles.Roles.API.Interface
             this IRoleAbility self,
             CustomOptionBase parentOps,
             int maxAbilityCount,
-            bool hasActiveTime = false)
+            float defaultActiveTime = float.MaxValue)
         {
 
             self.CreateCommonAbilityOption(
                 parentOps,
-                hasActiveTime);
+                defaultActiveTime);
 
             CustomOption.Create(
                 self.GetRoleOptionId(RoleAbilityCommonOption.AbilityCount),
