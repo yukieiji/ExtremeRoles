@@ -57,9 +57,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 Translation.GetString("overLoad"),
                 Translation.GetString("downLoad"),
                 Loader.CreateSpriteFromResources(
-                   Path.CarrierCarry),
+                   Path.OverLoaderOverLoad),
                 Loader.CreateSpriteFromResources(
-                   Path.TestButton),
+                   Path.OverLoaderDownLoad),
                 this.CleanUp);
         }
 

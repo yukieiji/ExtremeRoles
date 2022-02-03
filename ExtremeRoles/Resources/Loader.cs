@@ -25,6 +25,8 @@ namespace ExtremeRoles.Resources
         public const string EvolverEvolved = "ExtremeRoles.Resources.Evolved.png";
         public const string CarrierCarry = "ExtremeRoles.Resources.Carry.png";
         public const string PainterPaint = "ExtremeRoles.Resources.Paint.png";
+        public const string OverLoaderOverLoad = "ExtremeRoles.Resources.OverLoad.png";
+        public const string OverLoaderDownLoad = "ExtremeRoles.Resources.DownLoad.png";
 
         public const string AliceShipBroken = "ExtremeRoles.Resources.ShipBroken.png";
         public const string JackalSidekick = "ExtremeRoles.Resources.Sidekick.png";
