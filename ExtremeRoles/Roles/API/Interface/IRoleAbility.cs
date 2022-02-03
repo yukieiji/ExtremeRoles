@@ -141,6 +141,37 @@ namespace ExtremeRoles.Roles.API.Interface
             self.RoleAbilityInit();
         }
 
+        public static void CreatePassiveAbilityButton(
+            this IRoleAbility self,
+            string activateButtonName,
+            string deactivateButtonName,
+            Sprite activateSprite,
+            Sprite deactivateSprite,
+            Action abilityCleanUp,
+            Vector3? positionOffset = null,
+            Func<bool> checkAbility = null,
+            KeyCode hotkey = KeyCode.F,
+            bool mirror = false)
+        {
+            Vector3 offset = positionOffset ?? new Vector3(-1.8f, -0.06f, 0);
+
+            self.Button = new PassiveAbilityButton(
+                activateButtonName,
+                deactivateButtonName,
+                self.UseAbility,
+                self.IsAbilityUse,
+                activateSprite,
+                deactivateSprite,
+                offset,
+                abilityCleanUp,
+                checkAbility,
+                hotkey,
+                mirror);
+
+            self.RoleAbilityInit();
+        }
+
+
         public static void CreateCommonAbilityOption(
             this IRoleAbility self,
             CustomOptionBase parentOps,
