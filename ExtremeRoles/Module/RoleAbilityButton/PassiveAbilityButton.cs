@@ -43,7 +43,7 @@ namespace ExtremeRoles.Module.RoleAbilityButton
 
         protected override void AbilityButtonUpdate()
         {
-            if (this.CanUse() || this.IsAbilityOn)
+            if ((this.CanUse() || this.IsAbilityOn) && this.Timer < 0f)
             {
                 this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.EnabledColor;
                 this.Button.graphic.material.SetFloat("_Desat", 0f);
