@@ -94,7 +94,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             CustomOptionBase parentOps)
         {
             this.CreateCommonAbilityOption(
-                parentOps, true);
+                parentOps, 7.5f);
+
             CustomOption.Create(
                 GetRoleOptionId((int)OverLoaderOption.KillCoolReduceRate),
                 string.Concat(

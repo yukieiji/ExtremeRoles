@@ -178,7 +178,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 parentOps, format: "unitMultiplier");
 
             this.CreateAbilityCountOption(
-                parentOps, 10, true);
+                parentOps, 10, 5.0f);
         }
 
         protected override void RoleSpecificInit()

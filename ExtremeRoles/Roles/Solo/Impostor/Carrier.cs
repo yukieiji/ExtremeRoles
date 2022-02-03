@@ -179,7 +179,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             CustomOptionBase parentOps)
         {
             this.CreateCommonAbilityOption(
-                parentOps, true);
+                parentOps, 5.0f);
 
             CustomOption.Create(
                 GetRoleOptionId((int)CarrierOption.CarryDistance),

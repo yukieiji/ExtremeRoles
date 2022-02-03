@@ -124,7 +124,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             CustomOptionBase parentOps)
         {
             this.CreateCommonAbilityOption(
-                parentOps, true);
+                parentOps, 3.0f);
         }
 
         protected override void RoleSpecificInit()
