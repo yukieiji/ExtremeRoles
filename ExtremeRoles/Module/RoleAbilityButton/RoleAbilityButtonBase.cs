@@ -20,13 +20,13 @@ namespace ExtremeRoles.Module.RoleAbilityButton
         protected Func<bool> CanUse;
         protected Action CleanUp = null;
         protected Func<bool> AbilityCheck = null;
+        protected Sprite ButtonSprite;
 
         protected readonly Color DisableColor = new Color(1f, 1f, 1f, 0.3f);
         protected readonly Color TimerOnColor = new Color(0F, 0.8F, 0F);
 
         private bool mirror;
         private KeyCode hotkey;
-        private Sprite buttonSprite;
 
         public RoleAbilityButtonBase(
             string buttonText,
@@ -47,7 +47,7 @@ namespace ExtremeRoles.Module.RoleAbilityButton
 
             this.mirror = mirror;
 
-            this.buttonSprite = sprite;
+            this.ButtonSprite = sprite;
             this.PositionOffset = positionOffset;
 
             this.Button = UnityEngine.Object.Instantiate(
@@ -146,7 +146,7 @@ namespace ExtremeRoles.Module.RoleAbilityButton
             }
             SetActive(HudManager.Instance.UseButton.isActiveAndEnabled);
 
-            this.Button.graphic.sprite = this.buttonSprite;
+            this.Button.graphic.sprite = this.ButtonSprite;
             this.Button.OverrideText(ButtonText);
 
             if (HudManager.Instance.UseButton != null)
