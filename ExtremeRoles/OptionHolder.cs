@@ -245,7 +245,7 @@ namespace ExtremeRoles
                 if (option.Behaviour != null && option.Behaviour is StringOption stringOption)
                 {
                     stringOption.oldValue = stringOption.Value = option.CurSelection;
-                    stringOption.ValueText.text = option.Selections[option.CurSelection].ToString();
+                    stringOption.ValueText.text = option.GetString();
                 }
             }
         }
