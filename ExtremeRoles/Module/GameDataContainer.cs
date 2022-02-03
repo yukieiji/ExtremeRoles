@@ -403,12 +403,12 @@ namespace ExtremeRoles.Module
 
             public ShieldPlayerContainer()
             {
-                shield.Clear();
+                this.Clear();
             }
 
             public void Clear()
             {
-
+                shield.Clear();
             }
 
             public void Add(byte rolePlayerId, byte targetPlayerId)
