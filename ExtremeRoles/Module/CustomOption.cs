@@ -38,6 +38,15 @@ namespace ExtremeRoles.Module
                 return this.CurSelection != this.DefaultSelection;
             }
         }
+        public string CleanedName
+        {
+            get
+            {
+                string nameClean = Regex.Replace(this.Name, "<.*?>", "");
+                nameClean = Regex.Replace(nameClean, "^-\\s*", "");
+                return nameClean.Trim();
+            }
+        }
 
         public CustomOptionBase(
             int id,
@@ -73,15 +82,12 @@ namespace ExtremeRoles.Module
 
             }
 
-            CurSelection = 0;
+            this.CurSelection = 0;
             if (id > 0)
             {
-                string nameClean = Regex.Replace(this.Name, "<.*?>", "");
-                nameClean = Regex.Replace(nameClean, "^-\\s*", "");
-                nameClean = nameClean.Trim();
-                Entry = ExtremeRolesPlugin.Instance.Config.Bind(
-                    $"Preset:{OptionHolder.SelectedPreset}", nameClean, DefaultSelection);
-                CurSelection = Mathf.Clamp(Entry.Value, 0, selections.Length - 1);
+                this.Entry = ExtremeRolesPlugin.Instance.Config.Bind(
+                    OptionHolder.ConfigPreset, this.CleanedName, DefaultSelection);
+                this.CurSelection = Mathf.Clamp(this.Entry.Value, 0, selections.Length - 1);
             }
 
             Logging.Debug($"OptinId:{this.Id}    Name:{this.Name}");

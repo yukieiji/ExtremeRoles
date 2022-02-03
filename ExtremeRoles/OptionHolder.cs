@@ -28,6 +28,12 @@ namespace ExtremeRoles
         public static int SelectedPreset = 0;
 
         public static IRegionInfo[] defaultRegion;
+
+        public static string ConfigPreset
+        {
+            get => $"Preset:{SelectedPreset}";
+        }
+
         public enum CommonOptionKey
         {
             PresetSelection = 0,
@@ -229,8 +235,8 @@ namespace ExtremeRoles
                 if (option.Id == 0) continue;
 
                 option.Entry = ExtremeRolesPlugin.Instance.Config.Bind(
-                    $"Preset{SelectedPreset}",
-                    option.Id.ToString(),
+                    ConfigPreset,
+                    option.CleanedName,
                     option.DefaultSelection);
                 option.CurSelection = Mathf.Clamp(
                     option.Entry.Value, 0,
