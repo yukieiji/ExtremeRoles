@@ -79,6 +79,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public bool UseAbility()
         {
             this.KillCoolTime = this.defaultKillCool * ((100f - this.reduceRate) / 100f);
+            this.KillRange = 2;
             abilityOn();
             return true;
         }
