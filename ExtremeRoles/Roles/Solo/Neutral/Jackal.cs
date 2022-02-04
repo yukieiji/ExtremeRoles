@@ -373,7 +373,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public bool IsAbilityUse()
         {
         
-            this.Target = Player.GetTarget(
+            this.Target = Player.GetPlayerTarget(
                 PlayerControl.LocalPlayer,
                 this, GameOptionsData.KillDistances[
                     Mathf.Clamp(this.createSidekickRange, 0, 2)]);

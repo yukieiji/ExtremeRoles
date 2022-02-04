@@ -103,7 +103,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             this.TargetPlayer = byte.MaxValue;
 
-            PlayerControl target = Player.GetTarget(
+            PlayerControl target = Player.GetPlayerTarget(
                 PlayerControl.LocalPlayer, this,
                 this.shieldRange);
 

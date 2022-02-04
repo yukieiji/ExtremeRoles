@@ -27,7 +27,7 @@ namespace ExtremeRoles.Helper
             return null;
         }
 
-        public static PlayerControl GetTarget(
+        public static PlayerControl GetPlayerTarget(
             PlayerControl sourcePlayer,
             Roles.API.SingleRoleBase role,
             float range)
