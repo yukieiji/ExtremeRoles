@@ -146,9 +146,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void Update(PlayerControl rolePlayer)
         {
-            if (ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
-            if (!ShipStatus.Instance.enabled) { return; }
             if (this.lamb.Count == 0) { return; }
+
+            if (ShipStatus.Instance == null || 
+                GameData.Instance == null) { return; }
+            if (!ShipStatus.Instance.enabled || 
+                ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
 
             this.timer -= Time.deltaTime;
             if (this.timer > 0) { return; }
