@@ -52,6 +52,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             var killerRole = ExtremeRoleManager.GameRole[killerId];
             var targetRole = ExtremeRoleManager.GameRole[targetId];
 
+            if (!killer.CanMove) { return; }
+
             bool canKill = killerRole.TryRolePlayerKillTo(
                 killer, target);
             if (!canKill) { return; }
@@ -77,6 +79,16 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     target = prevTarget;
                 }
             }
+
+            if (AmongUsClient.Instance.IsGameOver) { return; }
+            if (killer == null ||
+                killer.Data == null ||
+                killer.Data.IsDead ||
+                killer.Data.Disconnected) { return; }
+            if (target == null ||
+                target.Data == null ||
+                target.Data.IsDead ||
+                target.Data.Disconnected) { return; }
 
             byte animate = byte.MaxValue;
 
