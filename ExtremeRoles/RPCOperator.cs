@@ -42,7 +42,8 @@ namespace ExtremeRoles
 
             // ニュートラル
             AliceShipBroken,
-            TaskMasterSetNetTask
+            TaskMasterSetNetTask,
+            JesterOutburstKill,
         }
 
         public static void Call(
@@ -262,6 +263,12 @@ namespace ExtremeRoles
         {
             Roles.Solo.Neutral.TaskMaster.ReplaceToNewTask(
                 callerId, index, taskIndex);
+        }
+        public static void JesterOutburstKill(
+            byte killerId, byte targetId)
+        {
+            Roles.Solo.Neutral.Jester.OutburstKill(
+                killerId, targetId);
         }
 
     }

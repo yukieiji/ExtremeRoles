@@ -761,7 +761,12 @@ namespace ExtremeRoles.Patches
                     RPCOperator.TaskMasterSetNewTask(
                         taskMasterId, index, taskId);
                     break;
-
+                case RPCOperator.Command.JesterOutburstKill:
+                    byte outburstKillerId = reader.ReadByte();
+                    byte killTargetId = reader.ReadByte();
+                    RPCOperator.JesterOutburstKill(
+                        outburstKillerId, killTargetId);
+                    break;
                 default:
                     break;
             }

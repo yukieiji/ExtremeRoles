@@ -25,8 +25,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
         }
 
-        private float distance;
-        private PlayerControl target;
+        private float outburstDistance;
+        private PlayerControl tmpTarget;
         private PlayerControl outburstTarget;
         private RoleAbilityButtonBase outburstButton;
 
@@ -36,7 +36,64 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             ExtremeRoleId.Jester.ToString(),
             ColorPalette.JesterPink,
             false, false, false, true)
-        {}
+        { }
+
+        public static void OutburstKill(
+            byte outburstTargetPlayerId, byte killTargetPlayerId)
+        {
+            if (outburstTargetPlayerId != PlayerControl.LocalPlayer.PlayerId) { return; }
+
+            PlayerControl killer = Helper.Player.GetPlayerControlById(outburstTargetPlayerId);
+            PlayerControl target = Helper.Player.GetPlayerControlById(killTargetPlayerId);
+
+            byte killerId = killer.PlayerId;
+            byte targetId = target.PlayerId;
+
+            var killerRole = ExtremeRoleManager.GameRole[killerId];
+            var targetRole = ExtremeRoleManager.GameRole[targetId];
+
+            bool canKill = killerRole.TryRolePlayerKillTo(
+                killer, target);
+            if (!canKill) { return; }
+
+            canKill = targetRole.TryRolePlayerKilledFrom(
+                target, killer);
+            if (!canKill) { return; }
+
+            var bodyGuard = ExtremeRolesPlugin.GameDataStore.ShildPlayer.GetBodyGuardPlayerId(
+                targetId);
+
+            PlayerControl prevTarget = target;
+
+            if (bodyGuard != byte.MaxValue)
+            {
+                target = Helper.Player.GetPlayerControlById(bodyGuard);
+                if (target == null)
+                {
+                    target = prevTarget;
+                }
+                else if (target.Data.IsDead || target.Data.Disconnected)
+                {
+                    target = prevTarget;
+                }
+            }
+
+            byte animate = byte.MaxValue;
+
+            if (target.PlayerId != prevTarget.PlayerId)
+            {
+                animate = 0;
+            }
+
+            RPCOperator.Call(
+                PlayerControl.LocalPlayer.NetId,
+                RPCOperator.Command.UncheckedMurderPlayer,
+                new List<byte> { killerId, target.PlayerId, animate });
+            RPCOperator.UncheckedMurderPlayer(
+                killerId,
+                target.PlayerId,
+                animate);
+        }
 
         public void CreateAbility()
         {
@@ -70,10 +127,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public bool IsAbilityUse()
         {
-            this.target = Helper.Player.GetPlayerTarget(
+            this.tmpTarget = Helper.Player.GetPlayerTarget(
                 PlayerControl.LocalPlayer, this,
-                this.distance);
-            return this.IsCommonUse() && this.target != null;
+                this.outburstDistance);
+            return this.IsCommonUse() && this.tmpTarget != null;
         }
 
         public override void ExiledAction(GameData.PlayerInfo rolePlayer)
@@ -83,7 +140,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public bool UseAbility()
         {
-            this.outburstTarget = this.target;
+            this.outburstTarget = this.tmpTarget;
             return true;
         }
         public void CleanUp()
@@ -101,50 +158,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (killTarget == null) { return; }
             if (killTarget.Data.IsDead || killTarget.Data.Disconnected) { return; }
             if (killTarget.PlayerId == PlayerControl.LocalPlayer.PlayerId) { return; }
-
-            var killTargetPlayerRole = ExtremeRoleManager.GameRole[killTarget.PlayerId];
-
-            bool canKill = role.TryRolePlayerKillTo(
-                this.outburstTarget, killTarget);
-            if (!canKill) { return; }
-
-            canKill = killTargetPlayerRole.TryRolePlayerKilledFrom(
-                killTarget, this.outburstTarget);
-            if (!canKill) { return; }
-
-            var bodyGuard = ExtremeRolesPlugin.GameDataStore.ShildPlayer.GetBodyGuardPlayerId(
-                killTarget.PlayerId);
-
-            PlayerControl prevTarget = killTarget;
-
-            if (bodyGuard != byte.MaxValue)
-            {
-                killTarget = Helper.Player.GetPlayerControlById(bodyGuard);
-                if (killTarget == null)
-                {
-                    killTarget = prevTarget;
-                }
-                else if (killTarget.Data.IsDead || killTarget.Data.Disconnected)
-                {
-                    killTarget = prevTarget;
-                }
-            }
-
-            byte animate = byte.MaxValue;
-
-            if (killTarget.PlayerId != prevTarget.PlayerId)
-            {
-                animate = 0;
-            }
-
+            
             RPCOperator.Call(
                 PlayerControl.LocalPlayer.NetId,
-                RPCOperator.Command.UncheckedMurderPlayer,
-                new List<byte> { this.outburstTarget.PlayerId, killTarget.PlayerId, animate });
-            RPCOperator.UncheckedMurderPlayer(
-                this.outburstTarget.PlayerId,
-                killTarget.PlayerId,
-                animate);
+                RPCOperator.Command.JesterOutburstKill,
+                new List<byte> { this.outburstTarget.PlayerId, killTarget.PlayerId });
+            OutburstKill(this.outburstTarget.PlayerId, killTarget.PlayerId);
         }
 
         protected override void CreateSpecificOption(
@@ -164,7 +183,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         protected override void RoleSpecificInit()
         {
-            this.distance = OptionHolder.AllOption[
+            this.outburstDistance = OptionHolder.AllOption[
                 GetRoleOptionId((int)JesterOption.OutburstDistance)].GetValue();
             this.RoleAbilityInit();
         }
