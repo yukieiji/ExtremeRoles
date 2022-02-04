@@ -31,7 +31,7 @@ namespace ExtremeRoles.Resources
         public const string AliceShipBroken = "ExtremeRoles.Resources.ShipBroken.png";
         public const string JackalSidekick = "ExtremeRoles.Resources.Sidekick.png";
         public const string MissionaryPropagate = "ExtremeRoles.Resources.Propagate.png";
-
+        public const string JesterOutburst = "ExtremeRoles.Resources.Outburst.png";
 
         public const string TestButton = "ExtremeRoles.Resources.TESTBUTTON.png";
     }

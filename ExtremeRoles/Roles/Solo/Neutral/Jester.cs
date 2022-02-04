@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.RoleAbilityButton;
@@ -44,7 +43,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.CreateAbilityCountButton(
                 Helper.Translation.GetString("outburst"),
                 Loader.CreateSpriteFromResources(
-                    Path.TestButton),
+                    Path.JesterOutburst),
                 abilityCleanUp:CleanUp);
         }
 
