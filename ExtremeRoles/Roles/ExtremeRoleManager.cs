@@ -44,6 +44,7 @@ namespace ExtremeRoles.Roles
         Sidekick,
         TaskMaster,
         Missionary,
+        Jester,
     }
     public enum RoleGameOverReason
     {
@@ -59,6 +60,7 @@ namespace ExtremeRoles.Roles
 
         TaskMasterGoHome,
         MissionaryAllAgainstGod,
+        JesterMeetingFavorite,
 
         UnKnown = 100,
     }
@@ -103,6 +105,7 @@ namespace ExtremeRoles.Roles
                 new Jackal(),
                 new TaskMaster(),
                 new Missionary(),
+                new Jester(),
             };
 
         public static readonly List<

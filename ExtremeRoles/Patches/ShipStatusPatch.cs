@@ -247,6 +247,9 @@ namespace ExtremeRoles.Patches
                         case ExtremeRoleId.TaskMaster:
                             endReason = (GameOverReason)RoleGameOverReason.TaskMasterGoHome;
                             break;
+                        case ExtremeRoleId.Jester:
+                            endReason = (GameOverReason)RoleGameOverReason.JesterMeetingFavorite;
+                            break;
                         default :
                             break;
                     }

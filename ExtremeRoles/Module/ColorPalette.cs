@@ -20,6 +20,7 @@ namespace ExtremeRoles.Module
         public readonly static Color JackalBlue = new Color32(65, 105, 255, byte.MaxValue);
         public readonly static Color AliceGold = new Color32(255, 215, 0, byte.MaxValue);
         public readonly static Color FanaticBlue = new Color32(103, 118, 161, byte.MaxValue);
+        public readonly static Color JesterPink = new Color32(245, 125, 167, byte.MaxValue);
 
         public readonly static Color NeutralColor = Color.gray;
     }

@@ -281,6 +281,12 @@ namespace ExtremeRoles.Patches.Manager
                     textRenderer.color = ColorPalette.MaintainerBlue;
                     manager.BackgroundBar.material.SetColor("_Color", ColorPalette.MaintainerBlue);
                     break;
+                case (GameOverReason)RoleGameOverReason.JesterMeetingFavorite:
+                    bonusText = Translation.GetString(
+                       ExtremeRoleId.Jester.ToString());
+                    textRenderer.color = ColorPalette.JesterPink;
+                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.JesterPink);
+                    break;
                 case (GameOverReason)RoleGameOverReason.LoverKillAllOther:
                 case (GameOverReason)RoleGameOverReason.ShipFallInLove:
                     bonusText = Translation.GetString(
