@@ -120,14 +120,12 @@ namespace ExtremeRoles.Helper
 
         public static void SetPlayerOutLine(PlayerControl target, Color color)
         {
-            if (target == null || target.myRend == null)
+            if (prevTarget != null && prevTarget.myRend != null)
             {
-                if (prevTarget != null && prevTarget.myRend != null)
-                {
-                    prevTarget.myRend.material.SetFloat("_Outline", 0f);
-                }
-                return; 
+                prevTarget.myRend.material.SetFloat("_Outline", 0f);
             }
+
+            if (target == null || target.myRend == null) { return; }
 
             target.myRend.material.SetFloat("_Outline", 1f);
             target.myRend.material.SetColor("_OutlineColor", color);
