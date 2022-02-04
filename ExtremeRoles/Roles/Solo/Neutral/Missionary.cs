@@ -158,6 +158,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             byte targetPlayerId = this.lamb.Dequeue();
             PlayerControl targetPlayer = Helper.Player.GetPlayerControlById(targetPlayerId);
 
+            if (targetPlayer == null) { return; }
+            if (targetPlayer.Data.IsDead || targetPlayer.Data.Disconnected) { return; }
+
             RPCOperator.Call(
                 rolePlayer.NetId,
                 RPCOperator.Command.UncheckedMurderPlayer,
