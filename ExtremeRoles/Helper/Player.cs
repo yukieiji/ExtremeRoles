@@ -82,6 +82,34 @@ namespace ExtremeRoles.Helper
             return result;
         }
 
+        public static GameData.PlayerInfo GetDeadBodyInfo(float range)
+        {
+            foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(
+                PlayerControl.LocalPlayer.GetTruePosition(),
+                range,
+                Constants.PlayersOnlyMask))
+            {
+                if (collider2D.tag == "DeadBody")
+                {
+                    DeadBody component = collider2D.GetComponent<DeadBody>();
+
+                    if (component && !component.Reported)
+                    {
+                        Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
+                        Vector2 truePosition2 = component.TruePosition;
+                        if ((Vector2.Distance(truePosition2, truePosition) <= range) &&
+                            (PlayerControl.LocalPlayer.CanMove) &&
+                            (!PhysicsHelpers.AnythingBetween(
+                                truePosition, truePosition2, Constants.ShipAndObjectsMask, false)))
+                        {
+                            return GameData.Instance.GetPlayerById(component.ParentId);
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
 
         public static void SetPlayerOutLine(PlayerControl target, Color color)
         {

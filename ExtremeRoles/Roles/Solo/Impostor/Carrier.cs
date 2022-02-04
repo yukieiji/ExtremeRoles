@@ -134,7 +134,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool IsAbilityUse()
         {
-            setTargetDeadBody();
+            this.targetBody = Player.GetDeadBodyInfo(this.carryDistance);
             return this.IsCommonUse() && this.targetBody != null;
         }
 
@@ -204,36 +204,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.canReportOnCarry = OptionHolder.AllOption[
                 GetRoleOptionId((int)CarrierOption.CanReportOnCarry)].GetValue();
             this.RoleAbilityInit();
-        }
-
-        private void setTargetDeadBody()
-        {
-            this.targetBody = null;
-
-            foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(
-                PlayerControl.LocalPlayer.GetTruePosition(),
-                this.carryDistance,
-                Constants.PlayersOnlyMask))
-            {
-                if (collider2D.tag == "DeadBody")
-                {
-                    DeadBody component = collider2D.GetComponent<DeadBody>();
-
-                    if (component && !component.Reported)
-                    {
-                        Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
-                        Vector2 truePosition2 = component.TruePosition;
-                        if ((Vector2.Distance(truePosition2, truePosition) <= this.carryDistance) &&
-                            (PlayerControl.LocalPlayer.CanMove) &&
-                            (!PhysicsHelpers.AnythingBetween(
-                                truePosition, truePosition2, Constants.ShipAndObjectsMask, false)))
-                        {
-                            this.targetBody = GameData.Instance.GetPlayerById(component.ParentId);
-                            break;
-                        }
-                    }
-                }
-            }
         }
     }
 }

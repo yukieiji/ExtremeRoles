@@ -70,7 +70,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool IsAbilityUse()
         {
-            setTargetDeadBody();
+            this.targetBody = Player.GetDeadBodyInfo(
+                this.eatingRange);
             return this.IsCommonUse() && this.targetBody != null;
         }
 
@@ -112,7 +113,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool CheckAbility()
         {
-            setTargetDeadBody();
+            this.targetBody = Player.GetDeadBodyInfo(
+                this.eatingRange);
 
             bool result;
 
@@ -208,36 +210,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             this.eatingText = Translation.GetString("eating");
 
-        }
-
-        private void setTargetDeadBody()
-        {
-            this.targetBody = null;
-
-            foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(
-                PlayerControl.LocalPlayer.GetTruePosition(),
-                this.eatingRange,
-                Constants.PlayersOnlyMask))
-            {
-                if (collider2D.tag == "DeadBody")
-                {
-                    DeadBody component = collider2D.GetComponent<DeadBody>();
-
-                    if (component && !component.Reported)
-                    {
-                        Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
-                        Vector2 truePosition2 = component.TruePosition;
-                        if ((Vector2.Distance(truePosition2, truePosition) <= this.eatingRange) &&
-                            (PlayerControl.LocalPlayer.CanMove) &&
-                            (!PhysicsHelpers.AnythingBetween(
-                                truePosition, truePosition2, Constants.ShipAndObjectsMask, false)))
-                        {
-                            this.targetBody = GameData.Instance.GetPlayerById(component.ParentId);
-                            break;
-                        }
-                    }
-                }
-            }
         }
 
         public void RoleAbilityResetOnMeetingStart()
