@@ -30,8 +30,11 @@ namespace ExtremeRoles.Patches.MapModule
             if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
             PlayerControl player = PlayerControl.LocalPlayer;
+            PlayerTask task = __instance.FindTask(player);
 
-            switch (__instance.FindTask(player).TaskType)
+            if (task == null) { return true; }
+
+            switch (task.TaskType)
             {
                 case TaskTypes.FixLights:
                 case TaskTypes.FixComms:
