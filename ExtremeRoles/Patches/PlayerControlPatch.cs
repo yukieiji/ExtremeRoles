@@ -630,18 +630,11 @@ namespace ExtremeRoles.Patches
         static void Postfix([HarmonyArgument(0)] byte callId, [HarmonyArgument(1)] MessageReader reader)
         {
 
-            byte roleId;
-            byte sourceId;
-            byte playerId;
-            byte callerId;
-            byte targetId;
-            byte useAnimationreaderreader;
-
             switch ((RPCOperator.Command)callId)
             {
                 case RPCOperator.Command.CleanDeadBody:
-                    targetId = reader.ReadByte();
-                    RPCOperator.CleanDeadBody(targetId);
+                    byte deadBodyPlayerId = reader.ReadByte();
+                    RPCOperator.CleanDeadBody(deadBodyPlayerId);
                     break;
                 case RPCOperator.Command.ForceEnd:
                     RPCOperator.ForceEnd();
@@ -650,109 +643,123 @@ namespace ExtremeRoles.Patches
                     RPCOperator.Initialize();
                     break;
                 case RPCOperator.Command.SetNormalRole:
-                    roleId = reader.ReadByte();
-                    playerId = reader.ReadByte();
-                    RPCOperator.SetNormalRole(roleId, playerId);
+                    byte normalRoleId = reader.ReadByte();
+                    byte normalRoleAssignPlayerId = reader.ReadByte();
+                    RPCOperator.SetNormalRole(
+                        normalRoleId, normalRoleAssignPlayerId);
                     break;
                 case RPCOperator.Command.SetCombinationRole:
-                    roleId = reader.ReadByte();
-                    playerId = reader.ReadByte();
+                    byte combinationRoleId = reader.ReadByte();
+                    byte combinationRoleAssignPlayerId = reader.ReadByte();
                     byte gameControlId = reader.ReadByte();
                     byte bytedRoleType = reader.ReadByte();
                     RPCOperator.SetCombinationRole(
-                        roleId, playerId, gameControlId, bytedRoleType);
+                        combinationRoleId,
+                        combinationRoleAssignPlayerId,
+                        gameControlId, bytedRoleType);
                     break;
                 case RPCOperator.Command.ShareOption:
                     int numOptions = (int)reader.ReadPackedUInt32();
                     RPCOperator.ShareOption(numOptions, reader);
                     break;
                 case RPCOperator.Command.ReplaceRole:
-                    callerId = reader.ReadByte();
+                    byte targetPlayerId = reader.ReadByte();
                     byte replaceTarget = reader.ReadByte();
                     byte ops = reader.ReadByte();
                     RPCOperator.ReplaceRole(
-                        callerId, replaceTarget, ops);
+                        targetPlayerId, replaceTarget, ops);
                     break;
                 case RPCOperator.Command.UncheckedShapeShift:
-                    sourceId = reader.ReadByte();
-                    targetId = reader.ReadByte();
-                    useAnimationreaderreader = reader.ReadByte();
+                    byte shapeShiftPlayerId = reader.ReadByte();
+                    byte shapeShiftTargetPlayerId = reader.ReadByte();
+                    byte shapeShiftAnimationTrigger = reader.ReadByte();
                     RPCOperator.UncheckedShapeShift(
-                        sourceId, targetId, useAnimationreaderreader);
+                        shapeShiftPlayerId,
+                        shapeShiftTargetPlayerId,
+                        shapeShiftAnimationTrigger);
                     break;
                 case RPCOperator.Command.UncheckedMurderPlayer:
-                    sourceId = reader.ReadByte();
-                    targetId = reader.ReadByte();
-                    useAnimationreaderreader = reader.ReadByte();
+                    byte sourceId = reader.ReadByte();
+                    byte targetId = reader.ReadByte();
+                    byte killAnimationTrigger = reader.ReadByte();
                     RPCOperator.UncheckedMurderPlayer(
-                        sourceId, targetId, useAnimationreaderreader);
+                        sourceId, targetId, killAnimationTrigger);
                     break;
                 case RPCOperator.Command.ReplaceDeadReason:
-                    playerId = reader.ReadByte();
+                    byte changePlayerId = reader.ReadByte();
                     byte reason = reader.ReadByte();
-                    RPCOperator.ReplaceDeadReason(playerId, reason);
+                    RPCOperator.ReplaceDeadReason(
+                        changePlayerId, reason);
                     break;
                 case RPCOperator.Command.SetWinGameControlId:
                     int id = reader.ReadInt32();
                     RPCOperator.SetWinGameControlId(id);
                     break;
                 case RPCOperator.Command.SetRoleWin:
-                    playerId = reader.ReadByte();
-                    RPCOperator.SetRoleWin(playerId);
+                    byte rolePlayerId = reader.ReadByte();
+                    RPCOperator.SetRoleWin(rolePlayerId);
                     break;
                 case RPCOperator.Command.ShareMapId:
                     byte mapId = reader.ReadByte();
                     RPCOperator.ShareMapId(mapId);
                     break;
                 case RPCOperator.Command.BodyGuardFeatShield:
-                    playerId = reader.ReadByte();
-                    targetId = reader.ReadByte();
-                    RPCOperator.BodyGuardFeatShield(playerId, targetId);
+                    byte bodyGuardFeatShieldOpCallPlayerId = reader.ReadByte();
+                    byte featShieldTargePlayerId = reader.ReadByte();
+                    RPCOperator.BodyGuardFeatShield(
+                        bodyGuardFeatShieldOpCallPlayerId,
+                        featShieldTargePlayerId);
                     break;
                 case RPCOperator.Command.BodyGuardResetShield:
-                    playerId = reader.ReadByte();
-                    RPCOperator.BodyGuardResetShield(playerId);
+                    byte bodyGuardResetShieldOpCallPlayerId = reader.ReadByte();
+                    RPCOperator.BodyGuardResetShield(
+                        bodyGuardResetShieldOpCallPlayerId);
                     break;
                 case RPCOperator.Command.AssasinAddDead:
-                    playerId = reader.ReadByte();
-                    RPCOperator.AssasinAddDead(playerId);
+                    byte deadAssasinPlayerId = reader.ReadByte();
+                    RPCOperator.AssasinAddDead(deadAssasinPlayerId);
                     break;
                 case RPCOperator.Command.AssasinVoteFor:
-                    targetId = reader.ReadByte();
-                    RPCOperator.AssasinVoteFor(targetId);
+                    byte voteTargetId = reader.ReadByte();
+                    RPCOperator.AssasinVoteFor(voteTargetId);
                     break;
                 case RPCOperator.Command.CarrierCarryBody:
-                    playerId = reader.ReadByte();
-                    targetId = reader.ReadByte();
-                    RPCOperator.CarrierCarryBody(playerId, targetId);
+                    byte carrierCarryOpCallPlayerId = reader.ReadByte();
+                    byte carryDeadBodyPlayerId = reader.ReadByte();
+                    RPCOperator.CarrierCarryBody(
+                        carrierCarryOpCallPlayerId,
+                        carryDeadBodyPlayerId);
                     break;
                 case RPCOperator.Command.CarrierSetBody:
-                    playerId = reader.ReadByte();
-                    RPCOperator.CarrierSetBody(playerId);
+                    byte carrierSetOpCallPlayerId = reader.ReadByte();
+                    RPCOperator.CarrierSetBody(
+                        carrierSetOpCallPlayerId);
                     break;
                 case RPCOperator.Command.PainterPaintBody:
-                    playerId = reader.ReadByte();
-                    targetId = reader.ReadByte();
-                    RPCOperator.PainterPaintBody(playerId, targetId);
+                    byte painterPlayerId = reader.ReadByte();
+                    byte paintDeadBodyPlayerId = reader.ReadByte();
+                    RPCOperator.PainterPaintBody(
+                        painterPlayerId,
+                        paintDeadBodyPlayerId);
                     break;
                 case RPCOperator.Command.OverLoaderSwitchAbility:
-                    callerId = reader.ReadByte();
+                    byte overLoaderPlayerId = reader.ReadByte();
                     byte activate  = reader.ReadByte();
                     RPCOperator.OverLoaderSwitchAbility(
-                        callerId, activate);
+                        overLoaderPlayerId, activate);
                     break;
 
                 case RPCOperator.Command.AliceShipBroken:
-                    callerId = reader.ReadByte();
+                    byte alicePlayerId = reader.ReadByte();
                     RPCOperator.AliceShipBroken(
-                        callerId);
+                        alicePlayerId);
                     break;
                 case RPCOperator.Command.TaskMasterSetNetTask:
-                    playerId = reader.ReadByte();
+                    byte taskMasterId = reader.ReadByte();
                     int index = reader.ReadInt32();
                     int taskId = reader.ReadInt32();
                     RPCOperator.TaskMasterSetNewTask(
-                        playerId, index, taskId);
+                        taskMasterId, index, taskId);
                     break;
 
                 default:
