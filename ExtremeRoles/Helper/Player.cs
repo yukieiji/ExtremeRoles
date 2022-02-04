@@ -27,6 +27,62 @@ namespace ExtremeRoles.Helper
             return null;
         }
 
+        public static PlayerControl GetTarget(
+            PlayerControl sourcePlayer,
+            Roles.API.SingleRoleBase role,
+            float range)
+        {
+            PlayerControl result = null;
+            float num = range;
+
+            if (!ShipStatus.Instance)
+            {
+                return null;
+            }
+
+            Vector2 truePosition = sourcePlayer.GetTruePosition();
+
+            Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers;
+            for (int i = 0; i < allPlayers.Count; i++)
+            {
+                GameData.PlayerInfo playerInfo = allPlayers[i];
+
+                if (!playerInfo.Disconnected &&
+                    playerInfo.PlayerId != PlayerControl.LocalPlayer.PlayerId &&
+                    !playerInfo.IsDead &&
+                    !playerInfo.Object.inVent)
+                {
+                    PlayerControl @object = playerInfo.Object;
+                    if (@object)
+                    {
+                        Vector2 vector = @object.GetTruePosition() - truePosition;
+                        float magnitude = vector.magnitude;
+                        if (magnitude <= num &&
+                            !PhysicsHelpers.AnyNonTriggersBetween(
+                                truePosition, vector.normalized,
+                                magnitude, Constants.ShipAndObjectsMask))
+                        {
+                            result = @object;
+                            num = magnitude;
+                        }
+                    }
+                }
+            }
+
+            if (result)
+            {
+                if (role.IsSameTeam(Roles.ExtremeRoleManager.GameRole[result.PlayerId]))
+                {
+                    result = null;
+                }
+            }
+
+            SetPlayerOutLine(result, role.NameColor);
+
+            return result;
+        }
+
+
         public static void SetPlayerOutLine(PlayerControl target, Color color)
         {
             if (target == null || target.myRend == null) { return; }

@@ -372,7 +372,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public bool IsAbilityUse()
         {
-            this.setTarget();
+        
+            this.Target = Player.GetTarget(
+                PlayerControl.LocalPlayer,
+                this, GameOptionsData.KillDistances[
+                    Mathf.Clamp(this.createSidekickRange, 0, 2)]);
+
             return this.Target != null && this.IsCommonUse();
         }
 
@@ -526,57 +531,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private bool isSameJackalTeam(SingleRoleBase targetRole)
         {
             return ((targetRole.Id == this.Id) || (targetRole.Id == ExtremeRoleId.Sidekick));
-        }
-
-        private void setTarget()
-        {
-            PlayerControl result = null;
-            float num = GameOptionsData.KillDistances[
-                Mathf.Clamp(this.createSidekickRange, 0, 2)];
-            if (!ShipStatus.Instance)
-            {
-                this.Target = null;
-                return;
-            }
-            Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
-
-            Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers;
-            for (int i = 0; i < allPlayers.Count; i++)
-            {
-                GameData.PlayerInfo playerInfo = allPlayers[i];
-
-                if (!playerInfo.Disconnected &&
-                    playerInfo.PlayerId != PlayerControl.LocalPlayer.PlayerId &&
-                    !playerInfo.IsDead &&
-                    !playerInfo.Object.inVent)
-                {
-                    PlayerControl @object = playerInfo.Object;
-                    if (@object)
-                    {
-                        Vector2 vector = @object.GetTruePosition() - truePosition;
-                        float magnitude = vector.magnitude;
-                        if (magnitude <= num && 
-                            !PhysicsHelpers.AnyNonTriggersBetween(
-                                truePosition, vector.normalized,
-                                magnitude, Constants.ShipAndObjectsMask))
-                        {
-                            result = @object;
-                            num = magnitude;
-                        }
-                    }
-                }
-            }
-            
-            if (result)
-            {
-                if (this.IsSameTeam(ExtremeRoleManager.GameRole[result.PlayerId]))
-                {
-                    result = null;
-                }
-            }
-            
-            this.Target = result;
-            Player.SetPlayerOutLine(this.Target, this.NameColor);
         }
 
         private void sidekickToJackal(PlayerControl rolePlayer)

@@ -130,7 +130,19 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public bool IsAbilityUse()
         {
-            this.setTarget();
+            this.TargetPlayer = byte.MaxValue;
+            PlayerControl target = Helper.Player.GetTarget(
+                PlayerControl.LocalPlayer, this,
+                this.propagateRange);
+            
+            if (target != null)
+            {
+                if (!this.lamb.Contains(target.PlayerId))
+                {
+                    this.TargetPlayer = target.PlayerId;
+                }
+            }
+            
             return this.IsCommonUse() && this.TargetPlayer != byte.MaxValue;
         }
 
@@ -217,62 +229,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 this.minTimerTime, this.maxTimerTime);
         }
 
-        private void setTarget()
-        {
-            PlayerControl result = null;
-            float num = this.propagateRange;
-            this.TargetPlayer = byte.MaxValue;
-
-            if (!ShipStatus.Instance)
-            {
-                return;
-            }
-
-            Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
-
-            Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers;
-            for (int i = 0; i < allPlayers.Count; i++)
-            {
-                GameData.PlayerInfo playerInfo = allPlayers[i];
-
-                if (!playerInfo.Disconnected &&
-                    playerInfo.PlayerId != PlayerControl.LocalPlayer.PlayerId &&
-                    !playerInfo.IsDead &&
-                    !playerInfo.Object.inVent)
-                {
-                    PlayerControl @object = playerInfo.Object;
-                    if (@object)
-                    {
-                        Vector2 vector = @object.GetTruePosition() - truePosition;
-                        float magnitude = vector.magnitude;
-                        if (magnitude <= num &&
-                            !PhysicsHelpers.AnyNonTriggersBetween(
-                                truePosition, vector.normalized,
-                                magnitude, Constants.ShipAndObjectsMask))
-                        {
-                            result = @object;
-                            num = magnitude;
-                        }
-                    }
-                }
-            }
-
-            if (result)
-            {
-                if (this.IsSameTeam(ExtremeRoleManager.GameRole[result.PlayerId]))
-                {
-                    result = null;
-                }
-            }
-            if (result != null)
-            {
-                if (!this.lamb.Contains(result.PlayerId))
-                {
-                    this.TargetPlayer = result.PlayerId;
-                    Helper.Player.SetPlayerOutLine(result, this.NameColor);
-                }
-            }
-        }
         private IEnumerator showText()
         {
             if (this.tellText == null)

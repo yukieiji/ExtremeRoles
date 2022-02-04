@@ -100,7 +100,24 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public bool IsAbilityUse()
         {
-            this.setTarget();
+
+            this.TargetPlayer = byte.MaxValue;
+
+            PlayerControl target = Player.GetTarget(
+                PlayerControl.LocalPlayer, this,
+                this.shieldRange);
+
+            if (target != null)
+            {
+                byte targetId = target.PlayerId;
+
+                if (!ExtremeRolesPlugin.GameDataStore.ShildPlayer.IsShielding(
+                        PlayerControl.LocalPlayer.PlayerId, targetId))
+                {
+                    this.TargetPlayer = targetId;
+                }
+            }
+
             return this.IsCommonUse() && this.TargetPlayer != byte.MaxValue;
         }
 
@@ -151,66 +168,5 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 this.shildNum = ((AbilityCountButton)this.shieldButton).CurAbilityNum;
             }
         }
-
-        private void setTarget()
-        {
-            PlayerControl result = null;
-            float num = this.shieldRange;
-            this.TargetPlayer = byte.MaxValue;
-
-            if (!ShipStatus.Instance)
-            {
-                return;
-            }
-
-            Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
-
-            Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers;
-            for (int i = 0; i < allPlayers.Count; i++)
-            {
-                GameData.PlayerInfo playerInfo = allPlayers[i];
-
-                if (!playerInfo.Disconnected &&
-                    playerInfo.PlayerId != PlayerControl.LocalPlayer.PlayerId &&
-                    !playerInfo.IsDead &&
-                    !playerInfo.Object.inVent)
-                {
-                    PlayerControl @object = playerInfo.Object;
-                    if (@object)
-                    {
-                        Vector2 vector = @object.GetTruePosition() - truePosition;
-                        float magnitude = vector.magnitude;
-                        if (magnitude <= num &&
-                            !PhysicsHelpers.AnyNonTriggersBetween(
-                                truePosition, vector.normalized,
-                                magnitude, Constants.ShipAndObjectsMask))
-                        {
-                            result = @object;
-                            num = magnitude;
-                        }
-                    }
-                }
-            }
-
-            if (result)
-            {
-                if (this.IsSameTeam(ExtremeRoleManager.GameRole[result.PlayerId]))
-                {
-                    result = null;
-                }
-            }
-            if (result != null)
-            {
-                byte target = result.PlayerId;
-
-                if (!ExtremeRolesPlugin.GameDataStore.ShildPlayer.IsShielding(
-                        PlayerControl.LocalPlayer.PlayerId, target))
-                {
-                    this.TargetPlayer = result.PlayerId;
-                    Player.SetPlayerOutLine(result, this.NameColor);
-                }
-            }
-        }
-
     }
 }
