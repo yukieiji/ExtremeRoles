@@ -3,9 +3,9 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
-        <Version>1.14.0.1</Version>
+        <Version>1.14.0.2</Version>
         <!--<VersionPrefix>1.14.0</VersionPrefix>-->
-        <VersionSuffix>NewRole-v2</VersionSuffix> 
+        <VersionSuffix>NewRole-v3</VersionSuffix> 
         <Description>Extreme Roles for Advanced user</Description>
         <Authors>yukieiji</Authors>
     </PropertyGroup>
