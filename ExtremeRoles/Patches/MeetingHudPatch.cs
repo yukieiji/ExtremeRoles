@@ -271,6 +271,7 @@ namespace ExtremeRoles.Patches
             MeetingHud __instance)
         {
             ExtremeRolesPlugin.Info.MeetingStartRest();
+            Helper.Player.ResetTarget();
 
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 

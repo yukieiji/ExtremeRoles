@@ -90,6 +90,7 @@ namespace ExtremeRoles
         {
             OptionHolder.Load();
             RandomGenerator.Initialize();
+            Helper.Player.ResetTarget();
             Roles.ExtremeRoleManager.Initialize();
             ExtremeRolesPlugin.GameDataStore.Initialize();
             ExtremeRolesPlugin.Info.ResetOverlays();

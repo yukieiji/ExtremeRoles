@@ -6,6 +6,13 @@ namespace ExtremeRoles.Helper
 {
     public static class Player
     {
+        private static PlayerControl prevTarget;
+
+        public static void ResetTarget()
+        {
+            prevTarget = null;
+        }
+
         public static bool ShowButtons
         {
             get
@@ -113,10 +120,18 @@ namespace ExtremeRoles.Helper
 
         public static void SetPlayerOutLine(PlayerControl target, Color color)
         {
-            if (target == null || target.myRend == null) { return; }
+            if (target == null || target.myRend == null)
+            {
+                if (prevTarget != null && prevTarget.myRend != null)
+                {
+                    prevTarget.myRend.material.SetFloat("_Outline", 0f);
+                }
+                return; 
+            }
 
             target.myRend.material.SetFloat("_Outline", 1f);
             target.myRend.material.SetColor("_OutlineColor", color);
+            prevTarget = target;
         }
 
         public static Dictionary<byte, PoolablePlayer> CreatePlayerIcon()
