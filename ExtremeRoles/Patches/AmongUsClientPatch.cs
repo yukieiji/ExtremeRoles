@@ -9,6 +9,18 @@ using ExtremeRoles.Roles;
 namespace ExtremeRoles.Patches
 {
 
+    [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerJoined))]
+    public class AmongUsClientOnPlayerJoinedPatch
+    {
+        public static void Postfix()
+        {
+            if (PlayerControl.LocalPlayer != null)
+            {
+                Helper.GameSystem.ShareVersion();
+            }
+        }
+    }
+
     // ゲームが終了した瞬間の処理
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameEnd))]
     public class AmongUsClientOnGameEndPatch
