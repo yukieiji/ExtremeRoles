@@ -13,12 +13,19 @@ namespace ExtremeRoles.Module
             this.body = new GameObject("Arrow");
             this.body.layer = 5;
             this.image = this.body.AddComponent<SpriteRenderer>();
-            this.image.sprite = Prefab.Arrow;
+            if (Prefab.Arrow != null)
+            {
+                this.image.sprite = Prefab.Arrow;
+            }
             this.image.color = color;
         }
 
         public void Update()
         {
+            if (Prefab.Arrow != null && this.image == null)
+            {
+                this.image.sprite = Prefab.Arrow;
+            }
             if (this.target == null) { this.target = Vector3.zero; }
             UpdateTarget();
         }
