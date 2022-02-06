@@ -703,6 +703,16 @@ namespace ExtremeRoles.Patches
                     byte mapId = reader.ReadByte();
                     RPCOperator.ShareMapId(mapId);
                     break;
+                case RPCOperator.Command.ShareVersion:
+                    int major = reader.ReadInt32();
+                    int minor = reader.ReadInt32();
+                    int build = reader.ReadInt32();
+                    int revision = reader.ReadInt32();
+                    int clientId = reader.ReadInt32();
+                    RPCOperator.AddVersionData(
+                        major, minor, build,
+                        revision, clientId);
+                    break;
                 case RPCOperator.Command.BodyGuardFeatShield:
                     byte bodyGuardFeatShieldOpCallPlayerId = reader.ReadByte();
                     byte featShieldTargePlayerId = reader.ReadByte();

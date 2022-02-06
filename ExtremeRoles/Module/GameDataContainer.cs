@@ -33,6 +33,7 @@ namespace ExtremeRoles.Module
         public List<PlayerSummary> FinalSummary = new List<PlayerSummary>();
         public Dictionary<byte, DeadInfo> DeadPlayerInfo = new Dictionary<byte, DeadInfo>();
         public List<PlayerControl> PlusWinner = new List<PlayerControl>();
+        public Dictionary<int, Version> PlayerVersion = new Dictionary<int, Version>();
 
         public List<byte> DeadedAssassin = new List<byte>();
         public ShieldPlayerContainer ShildPlayer = new ShieldPlayerContainer();

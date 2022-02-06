@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
+
+using Hazel;
 
 using ExtremeRoles.Roles;
 
@@ -106,6 +109,29 @@ namespace ExtremeRoles.Helper
             player.myTasks.Add(task);
             player.SetDirtyBit(1U << (int)player.PlayerId);
         }
+
+        public static void ShareVersion()
+        {
+
+            Version ver = Assembly.GetExecutingAssembly().GetName().Version;
+
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                PlayerControl.LocalPlayer.NetId,
+                (byte)RPCOperator.Command.ShareVersion,
+                Hazel.SendOption.Reliable, -1);
+            writer.Write(ver.Major);
+            writer.Write(ver.Minor);
+            writer.Write(ver.Build);
+            writer.Write(ver.Revision);
+            writer.WritePacked(AmongUsClient.Instance.ClientId);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+
+            RPCOperator.AddVersionData(
+                ver.Major, ver.Minor,
+                ver.Build, ver.Revision,
+                AmongUsClient.Instance.ClientId);
+        }
+
 
         private static List<int> getTaskIndex(
             NormalPlayerTask[] tasks)

@@ -23,6 +23,7 @@ namespace ExtremeRoles
             SetRoleWin,
             SetWinGameControlId,
             ShareMapId,
+            ShareVersion,
 
             // 役職関連
             // 役職メインコントール
@@ -194,6 +195,15 @@ namespace ExtremeRoles
         public static void ShareMapId(byte mapId)
         {
             PlayerControl.GameOptions.MapId = mapId;
+        }
+
+        public static void AddVersionData(
+            int major, int minor,
+            int build, int revision, int clientId)
+        {
+            ExtremeRolesPlugin.GameDataStore.PlayerVersion[
+                clientId] = new System.Version(
+                    major, minor, build, revision);
         }
 
         public static void ReplaceRole(
