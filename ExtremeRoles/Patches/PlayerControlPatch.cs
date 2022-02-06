@@ -627,8 +627,13 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
     public class PlayerControlHandleRpcPatch
     {
-        static void Postfix([HarmonyArgument(0)] byte callId, [HarmonyArgument(1)] MessageReader reader)
+        static void Postfix(
+            PlayerControl __instance,
+            [HarmonyArgument(0)] byte callId,
+            [HarmonyArgument(1)] MessageReader reader)
         {
+
+            if (__instance == null) { return; }
 
             switch ((RPCOperator.Command)callId)
             {
