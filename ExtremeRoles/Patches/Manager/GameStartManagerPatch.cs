@@ -83,7 +83,7 @@ namespace ExtremeRoles.Patches.Manager
             // ルームコード設定
             if (OptionHolder.Client.StreamerMode)
             {
-                __instance.GameRoomName.text = $"\n\n{OptionHolder.ConfigParser.StreamerModeReplacementText.Value}";
+                __instance.GameRoomName.text = OptionHolder.ConfigParser.StreamerModeReplacementText.Value;
             }
             else
             {

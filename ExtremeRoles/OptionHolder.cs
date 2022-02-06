@@ -190,7 +190,7 @@ namespace ExtremeRoles
             ConfigParser.StreamerModeReplacementText = config.Bind(
                 "ClientOption",
                 "Streamer Mode Replacement Text",
-                "Playing with Extreme Roles");
+                "\n\nPlaying with Extreme Roles");
 
             ConfigParser.Ip = config.Bind(
                 "ClientOption", "Custom Server IP", "127.0.0.1");
