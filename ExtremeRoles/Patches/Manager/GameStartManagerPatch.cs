@@ -40,8 +40,9 @@ namespace ExtremeRoles.Patches.Manager
                     if (client.Character == null) continue;
                     var dummyComponent = client.Character.GetComponent<DummyBehaviour>();
                     if (dummyComponent != null && dummyComponent.enabled)
+                    {
                         continue;
-
+                    }
                     if (!allPlayerVersion.ContainsKey(client.Id))
                     {
                         continueStart = false;
@@ -221,7 +222,8 @@ namespace ExtremeRoles.Patches.Manager
             }
             else
             {
-                __instance.StartButton.color = __instance.startLabelText.color = ((__instance.LastPlayerCount >= __instance.MinPlayers) ? Palette.EnabledColor : Palette.DisabledClear);
+                __instance.StartButton.color = __instance.startLabelText.color = (
+                    (__instance.LastPlayerCount >= __instance.MinPlayers) ? Palette.EnabledColor : Palette.DisabledClear);
                 __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition;
             }
 
