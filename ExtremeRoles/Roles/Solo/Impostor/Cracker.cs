@@ -101,9 +101,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void CreateAbility()
         {
             this.CreateNormalAbilityButton(
-                Translation.GetString("paint"),
+                Translation.GetString("crack"),
                 Loader.CreateSpriteFromResources(
-                   Path.PainterPaint));
+                   Path.TestButton));
         }
 
         public bool IsAbilityUse()
