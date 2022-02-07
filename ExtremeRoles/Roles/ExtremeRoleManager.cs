@@ -101,6 +101,7 @@ namespace ExtremeRoles.Roles
                 new BountyHunter(),
                 new Painter(),
                 new Faker(),
+                new OverLoader(),
 
                 new Alice(),
                 new Jackal(),
