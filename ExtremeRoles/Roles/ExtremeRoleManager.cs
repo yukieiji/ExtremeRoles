@@ -39,6 +39,7 @@ namespace ExtremeRoles.Roles
         Painter,
         Faker,
         OverLoader,
+        Cracker,
 
         Alice,
         Jackal,
