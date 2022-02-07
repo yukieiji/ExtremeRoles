@@ -58,11 +58,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
                     if (role.PaintColorIsRandom)
                     {
-                        array[i].bodyRenderer.color = new Color(
+                        Color newColor = new Color(
                             Random.value,
                             Random.value,
                             Random.value,
                             oldColor.a);
+
+                        array[i].bodyRenderer.material.SetColor("_BackColor", newColor);
+                        array[i].bodyRenderer.material.SetColor("_BodyColor", newColor);
                     }
                     else
                     {
