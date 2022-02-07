@@ -42,6 +42,8 @@ namespace ExtremeRoles
             FakerCreateDummy,
             FakerRemoveAllDummy,
             OverLoaderSwitchAbility,
+            CrackerCrackDeadBody,
+            CrackerRemoveCrackTrace,
 
             // ニュートラル
             AliceShipBroken,
@@ -274,6 +276,20 @@ namespace ExtremeRoles
 
             Roles.Solo.Impostor.OverLoader.SwitchAbility(
                 callerId, activate == byte.MaxValue);
+        }
+
+        public static void CrackerCrackDeadBody(
+            byte callerId, byte targetId)
+        {
+            Roles.Solo.Impostor.Cracker.CrackDeadBody(
+                callerId, targetId);
+        }
+
+        public static void CrackerRemoveCrackTrace(
+            byte callerId)
+        {
+            Roles.Solo.Impostor.Cracker.RemoveCrackTrace(
+                callerId);
         }
 
         public static void AliceShipBroken(byte callerId)

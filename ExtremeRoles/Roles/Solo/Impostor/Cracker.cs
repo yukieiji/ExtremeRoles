@@ -13,16 +13,36 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 {
     public class Cracker : SingleRoleBase, IRoleAbility
     {
-        private byte targetDeadBodyId;
+        public class CrackTrace
+        {
+            private SpriteRenderer image;
+            private GameObject body;
 
+            public CrackTrace(Vector3 pos)
+            {
+                this.body = new GameObject("CrackTrace");
+                this.image = this.body.AddComponent<SpriteRenderer>();
+                this.image.sprite = Loader.CreateSpriteFromResources(
+                   Path.PainterPaint);
+
+                this.body.transform.position = pos;
+            }
+
+            public void Clear()
+            {
+                Object.Destroy(this.image);
+                Object.Destroy(this.body);
+            }
+        }
         public enum CrackerOption
         {
             RemoveDeadBody,
             CanCrackDistance,
         }
-
+        public List<CrackTrace> CrakedTrace = new List<CrackTrace>();
         public bool IsRemoveDeadBody;
         private float crackDistance;
+        private byte targetDeadBodyId;
 
         public Cracker() : base(
             ExtremeRoleId.Cracker,
@@ -56,6 +76,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
                     if (role.IsRemoveDeadBody)
                     {
+                        role.CrakedTrace.Add(
+                            new CrackTrace(array[i].gameObject.transform.position));
                         Object.Destroy(array[i].gameObject);
                     }
                     else
@@ -65,6 +87,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     break;
                 }
             }
+        }
+        public static void RemoveCrackTrace(byte rolePlayerId)
+        {
+            var role = (Cracker)ExtremeRoleManager.GameRole[rolePlayerId];
+            foreach (var body in role.CrakedTrace)
+            {
+                body.Clear();
+            }
+            role.CrakedTrace.Clear();
         }
         
         public void CreateAbility()
@@ -96,7 +127,18 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            return;
+            if (this.CrakedTrace.Count == 0) { return; }
+            
+            RPCOperator.Call(
+                PlayerControl.LocalPlayer.NetId,
+                RPCOperator.Command.CrackerRemoveCrackTrace,
+                new List<byte>
+                {
+                    PlayerControl.LocalPlayer.PlayerId
+                });
+            RemoveCrackTrace(
+                PlayerControl.LocalPlayer.PlayerId);
+
         }
 
         public bool UseAbility()
@@ -104,7 +146,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             RPCOperator.Call(
                 PlayerControl.LocalPlayer.NetId,
-                RPCOperator.Command.PainterPaintBody,
+                RPCOperator.Command.CrackerCrackDeadBody,
                 new List<byte>
                 { 
                     PlayerControl.LocalPlayer.PlayerId,
