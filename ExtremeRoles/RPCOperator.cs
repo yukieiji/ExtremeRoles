@@ -39,6 +39,8 @@ namespace ExtremeRoles
             CarrierCarryBody,
             CarrierSetBody,
             PainterPaintBody,
+            FakerCreateDummy,
+            FakerRemoveAllDummy,
             OverLoaderSwitchAbility,
 
             // ニュートラル
@@ -253,6 +255,17 @@ namespace ExtremeRoles
         {
             Roles.Solo.Impostor.Painter.PaintDeadBody(
                 callerId, targetId);
+        }
+        public static void FakerCreateDummy(
+            byte callerId, byte targetId)
+        {
+            Roles.Solo.Impostor.Faker.CreateDummy(
+                callerId, targetId);
+        }
+        public static void FakerRemoveAllDummy(byte callerId)
+        {
+            Roles.Solo.Impostor.Faker.RemoveAllDummyPlayer(
+                callerId);
         }
 
         public static void OverLoaderSwitchAbility(

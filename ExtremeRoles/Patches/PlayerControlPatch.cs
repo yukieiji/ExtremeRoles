@@ -763,6 +763,16 @@ namespace ExtremeRoles.Patches
                     RPCOperator.OverLoaderSwitchAbility(
                         overLoaderPlayerId, activate);
                     break;
+                case RPCOperator.Command.FakerCreateDummy:
+                    byte fakerPlayerId = reader.ReadByte();
+                    byte colorTargetId = reader.ReadByte();
+                    RPCOperator.FakerCreateDummy(
+                        fakerPlayerId, colorTargetId);
+                    break;
+                case RPCOperator.Command.FakerRemoveAllDummy:
+                    byte removeFakerplayerId = reader.ReadByte();
+                    RPCOperator.FakerRemoveAllDummy(removeFakerplayerId);
+                    break;
 
                 case RPCOperator.Command.AliceShipBroken:
                     byte alicePlayerId = reader.ReadByte();

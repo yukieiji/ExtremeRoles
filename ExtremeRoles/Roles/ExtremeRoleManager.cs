@@ -37,6 +37,7 @@ namespace ExtremeRoles.Roles
         PsychoKiller,
         BountyHunter,
         Painter,
+        Faker,
         OverLoader,
 
         Alice,
@@ -99,7 +100,7 @@ namespace ExtremeRoles.Roles
                 new PsychoKiller(),
                 new BountyHunter(),
                 new Painter(),
-                new OverLoader(),
+                new Faker(),
 
                 new Alice(),
                 new Jackal(),
