@@ -100,6 +100,7 @@ namespace ExtremeRoles.Roles
                 new PsychoKiller(),
                 new BountyHunter(),
                 new Painter(),
+                new Faker(),
 
                 new Alice(),
                 new Jackal(),

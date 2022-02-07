@@ -749,13 +749,14 @@ namespace ExtremeRoles.Patches
                         overLoaderPlayerId, activate);
                     break;
                 case RPCOperator.Command.FakerCreateDummy:
-                    playerId = reader.ReadByte();
-                    targetId = reader.ReadByte();
-                    RPCOperator.FakerCreateDummy(playerId, targetId);
+                    byte fakerPlayerId = reader.ReadByte();
+                    byte colorTargetId = reader.ReadByte();
+                    RPCOperator.FakerCreateDummy(
+                        fakerPlayerId, colorTargetId);
                     break;
                 case RPCOperator.Command.FakerRemoveAllDummy:
-                    playerId = reader.ReadByte();
-                    RPCOperator.FakerRemoveAllDummy(playerId);
+                    byte removeFakerplayerId = reader.ReadByte();
+                    RPCOperator.FakerRemoveAllDummy(removeFakerplayerId);
                     break;
 
                 case RPCOperator.Command.AliceShipBroken:
