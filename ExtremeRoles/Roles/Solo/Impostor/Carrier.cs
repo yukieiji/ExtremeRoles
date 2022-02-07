@@ -109,6 +109,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 while (!rolePlayer.moveable);
             }
 
+            if (role.CarringBody == null) { yield break }
+
             role.CarringBody.transform.position = rolePlayer.GetTruePosition() + new Vector2(0.15f, 0.15f);
             role.CarringBody.transform.position -= new Vector3(0.0f, 0.0f, 0.01f);
 
