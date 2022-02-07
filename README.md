@@ -42,9 +42,9 @@ AmongUsの上級者(初心者)向けのロール追加MOD、主な特徴とし�
 - アサシンの特殊会議発生時、インポスターだけが使用できるチャット機能(けむりさんより提案)：v1.12.4.0で実装
 
 ## AmongUsとの対応バージョン
-|  Extreme Roles バージョン  |  AmongUs バージョン  |
+|  AmongUs バージョン  |  Extreme Roles バージョン  |
 | ---- | ---- |
-|  v1.11.1.1 ～ v1.15.0.0  |  2021.12.15s  |
+|  2021.12.15s  |  v1.11.1.1 ～ v1.15.0.0  |
 
 ## クレジット&Thanks
 - TheOtherRoles - 開発当時から[TOR](https://github.com/Eisbison/TheOtherRoles)及び[TOR-GM](https://github.com/yukinogatari/TheOtherRoles-GM)のコード(ロールに関するところ以外(オプションやパッチ等))を参考、引用、改変して開発しています。TORがなければ開発をこのMODを開発することは不可能でした。また、バウンティハンターのアイディア元
