@@ -757,12 +757,6 @@ namespace ExtremeRoles.Patches
                         painterPlayerId,
                         paintDeadBodyPlayerId);
                     break;
-                case RPCOperator.Command.OverLoaderSwitchAbility:
-                    byte overLoaderPlayerId = reader.ReadByte();
-                    byte activate  = reader.ReadByte();
-                    RPCOperator.OverLoaderSwitchAbility(
-                        overLoaderPlayerId, activate);
-                    break;
                 case RPCOperator.Command.FakerCreateDummy:
                     byte fakerPlayerId = reader.ReadByte();
                     byte colorTargetId = reader.ReadByte();
@@ -772,6 +766,12 @@ namespace ExtremeRoles.Patches
                 case RPCOperator.Command.FakerRemoveAllDummy:
                     byte removeFakerplayerId = reader.ReadByte();
                     RPCOperator.FakerRemoveAllDummy(removeFakerplayerId);
+                    break;
+                case RPCOperator.Command.OverLoaderSwitchAbility:
+                    byte overLoaderPlayerId = reader.ReadByte();
+                    byte activate  = reader.ReadByte();
+                    RPCOperator.OverLoaderSwitchAbility(
+                        overLoaderPlayerId, activate);
                     break;
                 case RPCOperator.Command.CrackerCrackDeadBody:
                     byte crackerId = reader.ReadByte();
