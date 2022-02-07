@@ -103,6 +103,7 @@ namespace ExtremeRoles.Roles
                 new Painter(),
                 new Faker(),
                 new OverLoader(),
+                new Cracker(),
 
                 new Alice(),
                 new Jackal(),
