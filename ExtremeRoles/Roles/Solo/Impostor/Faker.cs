@@ -4,6 +4,7 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.MapObject;
 using ExtremeRoles.Module.RoleAbilityButton;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;

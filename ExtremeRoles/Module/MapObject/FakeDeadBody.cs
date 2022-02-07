@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ExtremeRoles.Module
+namespace ExtremeRoles.Module.MapObject
 {
     public class FakeDeadBody
     {
