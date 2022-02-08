@@ -126,7 +126,7 @@ namespace ExtremeRoles.Roles.Combination
             PlayerControl rolePlayer,
             PlayerControl killerPlayer)
         {
-            if (!this.isDeadForceMeeting)
+            if (!this.isDeadForceMeeting || MeetingHud.Instance != null)
             {
                 RPCOperator.Call(
                     rolePlayer.NetId,
