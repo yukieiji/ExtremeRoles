@@ -98,7 +98,7 @@ namespace ExtremeRoles.Module
             this.showText = new List<Text>(size);
             for (int i = 0; i < this.showText.Capacity; ++i)
             {
-                this.showText[i] = null;
+                this.showText.Add(null);
             }
             
             this.disapearTime = disapearTime;
