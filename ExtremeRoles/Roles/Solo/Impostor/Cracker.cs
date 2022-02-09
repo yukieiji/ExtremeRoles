@@ -23,7 +23,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.body = new GameObject("CrackTrace");
                 this.image = this.body.AddComponent<SpriteRenderer>();
                 this.image.sprite = Loader.CreateSpriteFromResources(
-                   Path.PainterPaint);
+                   Path.CrackerCrackTrace, 300f);
 
                 this.body.transform.position = pos;
             }
@@ -82,7 +82,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     }
                     else
                     {
-                        array[i].GetComponentInChildren<BoxCollider2D>().enabled = false; ;
+                        array[i].GetComponentInChildren<BoxCollider2D>().enabled = false;
                     }
                     break;
                 }
@@ -103,7 +103,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.CreateNormalAbilityButton(
                 Translation.GetString("crack"),
                 Loader.CreateSpriteFromResources(
-                   Path.TestButton));
+                   Path.CrackerCrack));
         }
 
         public bool IsAbilityUse()

@@ -27,6 +27,9 @@ namespace ExtremeRoles.Resources
         public const string PainterPaint = "ExtremeRoles.Resources.Paint.png";
         public const string OverLoaderOverLoad = "ExtremeRoles.Resources.OverLoad.png";
         public const string OverLoaderDownLoad = "ExtremeRoles.Resources.DownLoad.png";
+        public const string FakerDummy = "ExtremeRoles.Resources.Dummy.png";
+        public const string CrackerCrack = "ExtremeRoles.Resources.Crack.png";
+        public const string CrackerCrackTrace = "ExtremeRoles.Resources.CrackTrace.png";
 
         public const string AliceShipBroken = "ExtremeRoles.Resources.ShipBroken.png";
         public const string JackalSidekick = "ExtremeRoles.Resources.Sidekick.png";

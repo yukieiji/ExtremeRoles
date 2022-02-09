@@ -87,9 +87,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void CreateAbility()
         {
             this.CreateNormalAbilityButton(
-                Translation.GetString("Dummy"),
+                Translation.GetString("dummy"),
                 Loader.CreateSpriteFromResources(
-                   Path.TestButton, 115f));
+                   Path.FakerDummy, 115f));
         }
 
         public bool IsAbilityUse() => this.IsCommonUse();
