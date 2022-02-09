@@ -185,6 +185,18 @@ namespace ExtremeRoles
                     target, source);
 
                 ExtremeRolesPlugin.GameDataStore.WinCheckDisable = false;
+
+                var player = PlayerControl.LocalPlayer;
+                var hockRole = Roles.ExtremeRoleManager.GameRole
+                    [player.PlayerId] as Roles.API.Interface.IRoleMurderPlayerHock;
+                if (player.PlayerId != sourceId && 
+                    player.PlayerId != targetId &&
+                    hockRole != null)
+                {
+                    hockRole.HockMuderPlayer(
+                        source, target);
+                }
+
             }
         }
 

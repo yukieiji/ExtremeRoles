@@ -30,6 +30,7 @@ namespace ExtremeRoles.Roles
         Watchdog,
         Supervisor,
         BodyGuard,
+        Whisper,
 
         SpecialImpostor,
         Evolver,
@@ -94,6 +95,7 @@ namespace ExtremeRoles.Roles
                 new Watchdog(),
                 new Supervisor(),
                 new BodyGuard(),
+                new Whisper(),
 
                 new SpecialImpostor(),
                 new Evolver(),
