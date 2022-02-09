@@ -4,8 +4,8 @@
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
         <!--<Version>1.14.0.2</Version>-->
-        <VersionPrefix>1.15.0</VersionPrefix>
-        <VersionSuffix>NewRole-v4</VersionSuffix> 
+        <VersionPrefix>1.16.0</VersionPrefix>
+        <VersionSuffix>NewRole-v5</VersionSuffix> 
         <Description>Extreme Roles for Advanced user</Description>
         <Authors>yukieiji</Authors>
     </PropertyGroup>
