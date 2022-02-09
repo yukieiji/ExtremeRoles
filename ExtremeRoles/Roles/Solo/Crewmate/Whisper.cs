@@ -51,7 +51,38 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             if (this.isAbilityOn)
             {
-                this.textPopUp.AddText("killText");
+
+                Vector2 diff = target.GetTruePosition() - PlayerControl.LocalPlayer.GetTruePosition();
+                float rad = Mathf.Atan2(diff.y, diff.x);
+                float deg = rad * (360 / ((float)System.Math.PI * 2));
+
+                string direction;
+                
+                if (45.0f < deg && deg <= 135.0f )
+                {
+                    direction = Helper.Translation.GetString(
+                        "up");
+                }
+                else if (135.0f < deg && deg <= 225.0f)
+                {
+                    direction = Helper.Translation.GetString(
+                        "left");
+                }
+                else if (225.0f < deg && deg <= 315.0f)
+                {
+                    direction = Helper.Translation.GetString(
+                        "down");
+                }
+                else
+                {
+                    direction = Helper.Translation.GetString(
+                        "right");
+                }
+
+                this.textPopUp.AddText(
+                    string.Format(
+                        Helper.Translation.GetString("killedText"),
+                        direction, System.DateTime.Now));
             }
         }
 
@@ -166,6 +197,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private void resetAbility(PlayerControl rolePlayer)
         {
             this.prevPlayerPos = rolePlayer.GetTruePosition();
+            this.abilityText.color = Palette.EnabledColor;
             this.curText = Helper.Translation.GetString(
                 "abilityRemain");
             this.isAbilityOn = false;
@@ -175,6 +207,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             this.curText = Helper.Translation.GetString(
                 "abilityOnText");
+            this.abilityText.color = new Color(0F, 0.8F, 0F);
             this.isAbilityOn = true;
             this.timer = this.abilityOnTime;
         }
