@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ExtremeRoles.Module
 {
-    public class TextPoper
+    public class TextPopUpper
     {
         /*
             ・テキスト追加時のロジック
@@ -41,7 +41,6 @@ namespace ExtremeRoles.Module
 
         private class Text
         {
-            private float timer;
             private TextMeshPro body;
             public Text(
                 string printString,
@@ -57,8 +56,7 @@ namespace ExtremeRoles.Module
                 this.body.text = printString;
 
                 this.body.gameObject.SetActive(true);
-
-                this.timer = disapearTime;
+                Object.Destroy(this.body, disapearTime);
             }
 
             public void ShiftPos(
@@ -67,15 +65,6 @@ namespace ExtremeRoles.Module
                 this.body.transform.localPosition += pos;
             }
 
-            public void Update()
-            {
-                if (this.body == null) { return; }
-                this.timer -= Time.deltaTime;
-                if (this.timer < 0)
-                {
-                    Clear();
-                }
-            }
             public void Clear()
             {
                 if (this.body == null) { return; }
@@ -89,7 +78,7 @@ namespace ExtremeRoles.Module
         private Vector3 showPos;
         private TextAlignmentOptions textOffest;
 
-        public TextPoper(
+        public TextPopUpper(
             int size,
             float disapearTime,
             Vector3 firstPos,
@@ -129,15 +118,6 @@ namespace ExtremeRoles.Module
 
             ++this.indexer;
             this.indexer = this.indexer % this.showText.Count;
-        }
-
-        public void Update()
-        {
-            foreach (var text in this.showText)
-            {
-                if (text == null) { continue; }
-                text.Update();
-            }
         }
         public void Clear()
         {
