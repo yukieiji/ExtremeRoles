@@ -31,7 +31,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ExtremeRoleId.Whisper,
             ExtremeRoleType.Crewmate,
             ExtremeRoleId.Whisper.ToString(),
-            ColorPalette.WatchdogViolet,
+            ColorPalette.WhisperMagenta,
             false, true, false, false)
         { }
 
