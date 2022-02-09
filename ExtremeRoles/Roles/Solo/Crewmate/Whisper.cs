@@ -1,17 +1,32 @@
-﻿using System.Collections;
-
-using UnityEngine;
+﻿using UnityEngine;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
-using BepInEx.IL2CPP.Utils.Collections;
-
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class Whisper : SingleRoleBase, IRoleUpdate, IRoleMurderPlayerHock
+    public class Whisper : SingleRoleBase, IRoleUpdate, IRoleMurderPlayerHock, IRoleResetMeeting
     {
+
+        public enum WhisperOption
+        {
+            AbilityOffTime,
+            AbilityOnTime,
+            TellTextTime,
+            MaxTellText,
+        }
+
+        private string curText = string.Empty;
+        private bool isAbilityOn;
+        private float abilityOnTime;
+        private float abilityOffTime;
+        private float timer = 0f;
+        private TMPro.TextMeshPro abilityText;
+        private Vector2 prevPlayerPos;
+
+        private TextPopUpper textPopUp;
+
         public Whisper() : base(
             ExtremeRoleId.Whisper,
             ExtremeRoleType.Crewmate,
@@ -20,36 +35,28 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             false, true, false, false)
         { }
 
-        private string curText = string.Empty;
-        private bool isAbilityOn;
-        private float timer = 0f;
-        private int showTextCount = 0;
-        private TMPro.TextMeshPro abilityText;
-        private TMPro.TextMeshPro tellText;
-        private Vector2 prevPlayerPos;
+        public void ResetOnMeetingEnd()
+        {
+            return;
+        }
 
-        private TextPoper textGen;
+        public void ResetOnMeetingStart()
+        {
+            this.textPopUp.Clear();
+        }
 
         public void HockMuderPlayer(
             PlayerControl source,
             PlayerControl target)
         {
-            /*
             if (this.isAbilityOn)
             {
-                PlayerControl.LocalPlayer.StartCoroutine(
-                    showText().WrapToIl2Cpp());
+                this.textPopUp.AddText("killText");
             }
-            */
         }
 
         public void Update(PlayerControl rolePlayer)
         {
-            this.textGen.Update();
-            if (Input.GetKeyDown(KeyCode.U))
-            {
-                this.textGen.AddText("TEEEEEEEEEEEEEEEEEEEEEEEEEEEEEST");
-            }
 
             if (this.abilityText == null)
             {
@@ -57,21 +64,24 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     HudManager.Instance.KillButton.cooldownTimerText,
                     Camera.main.transform, false);
                 this.abilityText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
+                this.abilityText.enableWordWrapping = false;
             }
 
             this.abilityText.gameObject.SetActive(false);
 
-            if (ShipStatus.Instance == null ||
+            if (Minigame.Instance != null ||
+                ShipStatus.Instance == null ||
                 GameData.Instance == null ||
-                MeetingHud.Instance != null)
+                MeetingHud.Instance != null ||
+                !rolePlayer.CanMove)
             {
-                resetAbility();
+                resetAbility(rolePlayer);
                 return; 
             }
             if (!ShipStatus.Instance.enabled ||
                 ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
             {
-                resetAbility();
+                resetAbility(rolePlayer);
                 return; 
             }
 
@@ -79,7 +89,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             if (this.prevPlayerPos != rolePlayer.GetTruePosition())
             {
-                resetAbility();
+                resetAbility(rolePlayer);
                 return; 
             }
 
@@ -89,7 +99,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 if (this.isAbilityOn)
                 {
-                    resetAbility();
+                    resetAbility(rolePlayer);
                 }
                 else
                 {
@@ -97,58 +107,76 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 }
             }
 
-            this.abilityText.text = string.Format(
-                this.curText, this.timer);
-            this.abilityText.gameObject.SetActive(true);
+            this.prevPlayerPos = rolePlayer.GetTruePosition();
 
+            this.abilityText.text = string.Format(
+                this.curText,
+                Mathf.CeilToInt(this.timer));
+            this.abilityText.gameObject.SetActive(true);
         }
 
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            
+            CustomOption.Create(
+                GetRoleOptionId((int)WhisperOption.AbilityOffTime),
+                string.Concat(
+                    this.RoleName,
+                    WhisperOption.AbilityOffTime.ToString()),
+                3.0f, 1.0f, 5.0f, 0.5f,
+                parentOps, format: "unitSeconds");
+            CustomOption.Create(
+                GetRoleOptionId((int)WhisperOption.AbilityOnTime),
+                string.Concat(
+                    this.RoleName,
+                    WhisperOption.AbilityOnTime.ToString()),
+                4.0f, 1.0f, 10.0f, 0.5f,
+                parentOps, format: "unitSeconds");
+            CustomOption.Create(
+                GetRoleOptionId((int)WhisperOption.TellTextTime),
+                string.Concat(
+                    this.RoleName,
+                    WhisperOption.TellTextTime.ToString()),
+                3.0f, 1.0f, 25.0f, 0.5f,
+                parentOps, format: "unitSeconds");
+            CustomOption.Create(
+                GetRoleOptionId((int)WhisperOption.MaxTellText),
+                string.Concat(
+                    this.RoleName,
+                    WhisperOption.MaxTellText.ToString()),
+                3, 1, 10, 1,
+                parentOps);
         }
 
         protected override void RoleSpecificInit()
         {
-            this.textGen = new TextPoper(
-                3, 3.0f, new Vector3(-4.0f, -2.75f, -250.0f),
+            var allOption = OptionHolder.AllOption;
+
+            this.textPopUp = new TextPopUpper(
+                allOption[GetRoleOptionId((int)WhisperOption.MaxTellText)].GetValue(),
+                allOption[GetRoleOptionId((int)WhisperOption.TellTextTime)].GetValue(),
+                new Vector3(-4.0f, -2.75f, -250.0f),
                 TMPro.TextAlignmentOptions.BottomLeft);
+
+            this.abilityOffTime = allOption[GetRoleOptionId((int)WhisperOption.AbilityOffTime)].GetValue();
+            this.abilityOnTime = allOption[GetRoleOptionId((int)WhisperOption.AbilityOffTime)].GetValue();
+
         }
 
-        private void resetAbility()
+        private void resetAbility(PlayerControl rolePlayer)
         {
+            this.prevPlayerPos = rolePlayer.GetTruePosition();
             this.curText = Helper.Translation.GetString(
                 "abilityRemain");
             this.isAbilityOn = false;
-            this.timer = 3f;
+            this.timer = this.abilityOffTime;
         }
         private void abilityOn()
         {
             this.curText = Helper.Translation.GetString(
                 "abilityOnText");
             this.isAbilityOn = true;
-            this.timer = 3f;
+            this.timer = this.abilityOnTime;
         }
-
-        private IEnumerator showText()
-        {
-            if (this.tellText == null)
-            {
-                this.tellText = Object.Instantiate(
-                    Prefab.Text, Camera.main.transform, false);
-                this.tellText.transform.localPosition = new Vector3(-4.0f, -2.75f, -250.0f);
-                this.tellText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
-                this.tellText.gameObject.layer = 5;
-                this.tellText.text = Helper.Translation.GetString("departureText");
-            }
-            this.tellText.gameObject.SetActive(true);
-
-            yield return new WaitForSeconds(3.5f);
-
-            this.tellText.gameObject.SetActive(false);
-
-        }
-
     }
 }
