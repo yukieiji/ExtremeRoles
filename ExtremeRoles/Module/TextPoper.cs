@@ -89,7 +89,7 @@ namespace ExtremeRoles.Module
         private Vector3 showPos;
         private TextAlignmentOptions textOffest;
 
-        public TextGenerator(
+        public TextPoper(
             int size,
             float disapearTime,
             Vector3 firstPos,
