@@ -66,7 +66,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                             PlayerControl.LocalPlayer.NetId,
-                            (byte)RPCOperator.Command.TaskMasterSetNetTask,
+                            (byte)RPCOperator.Command.TaskMasterSetNewTask,
                             Hazel.SendOption.Reliable, -1);
                         writer.Write(rolePlayer.PlayerId);
                         writer.Write(i);

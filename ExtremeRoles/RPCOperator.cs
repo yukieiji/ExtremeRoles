@@ -47,7 +47,7 @@ namespace ExtremeRoles
 
             // ニュートラル
             AliceShipBroken,
-            TaskMasterSetNetTask,
+            TaskMasterSetNewTask,
             JesterOutburstKill,
         }
 

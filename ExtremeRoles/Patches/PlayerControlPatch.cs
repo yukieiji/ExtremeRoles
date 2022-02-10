@@ -787,7 +787,7 @@ namespace ExtremeRoles.Patches
                     RPCOperator.AliceShipBroken(
                         alicePlayerId);
                     break;
-                case RPCOperator.Command.TaskMasterSetNetTask:
+                case RPCOperator.Command.TaskMasterSetNewTask:
                     byte taskMasterId = reader.ReadByte();
                     int index = reader.ReadInt32();
                     int taskId = reader.ReadInt32();
