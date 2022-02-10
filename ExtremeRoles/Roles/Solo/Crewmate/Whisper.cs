@@ -53,22 +53,23 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
 
                 Vector2 diff = target.GetTruePosition() - PlayerControl.LocalPlayer.GetTruePosition();
+                diff.Normalize();
                 float rad = Mathf.Atan2(diff.y, diff.x);
                 float deg = rad * (360 / ((float)System.Math.PI * 2));
 
                 string direction;
                 
-                if (45.0f < deg && deg <= 135.0f )
+                if (-45.0f < deg && deg <= 45.0f )
+                {
+                    direction = Helper.Translation.GetString(
+                        "right");
+                }
+                else if (45.0f < deg && deg <= 135.0f)
                 {
                     direction = Helper.Translation.GetString(
                         "up");
                 }
-                else if (135.0f < deg && deg <= 225.0f)
-                {
-                    direction = Helper.Translation.GetString(
-                        "left");
-                }
-                else if (225.0f < deg && deg <= 315.0f)
+                else if (-135.0f < deg && deg <= -45.0f)
                 {
                     direction = Helper.Translation.GetString(
                         "down");
@@ -76,7 +77,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 else
                 {
                     direction = Helper.Translation.GetString(
-                        "right");
+                        "left");
                 }
 
                 this.textPopUp.AddText(
