@@ -633,7 +633,7 @@ namespace ExtremeRoles.Patches
             [HarmonyArgument(1)] MessageReader reader)
         {
 
-            if (__instance == null) { return; }
+            if (__instance == null || reader == null) { return; }
 
             switch ((RPCOperator.Command)callId)
             {
