@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 using UnityEngine;
 
@@ -454,7 +454,7 @@ namespace ExtremeRoles.Module
             }
         }
 
-        public class PlayerHistory : IEnumerable
+        public class PlayerHistory
         {
             public bool BlockAddHistory;
             public Queue<Tuple<Vector3, bool>> history = new Queue<Tuple<Vector3, bool>>();
@@ -494,7 +494,7 @@ namespace ExtremeRoles.Module
                 this.init = true;
             }
 
-            public IEnumerator GetEnumerator() => this.history.GetEnumerator();
+            public IEnumerable<Tuple<Vector3, bool>> GetAllHistory() => this.history.Reverse();
         }
 
     }
