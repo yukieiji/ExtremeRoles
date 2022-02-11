@@ -266,7 +266,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     this.RoleName,
                     TimeMasterOption.RewindTime),
                 3.0f, 1.0f, 30.0f, 0.5f,
-                parentOps);
+                parentOps, format: "unitSeconds");
         }
 
         protected override void RoleSpecificInit()
