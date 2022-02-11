@@ -32,6 +32,9 @@ namespace ExtremeRoles
             // クルーメイト
             BodyGuardFeatShield,
             BodyGuardResetShield,
+            TimeMasterShieldOn,
+            TimeMasterShieldOff,
+            TimeMasterRewindTime,
 
             // インポスター
             AssasinAddDead,
@@ -241,6 +244,20 @@ namespace ExtremeRoles
         public static void BodyGuardResetShield(byte playerId)
         {
             ExtremeRolesPlugin.GameDataStore.ShildPlayer.Remove(playerId);
+        }
+        public static void TimeMasterShieldOn(
+            byte playerId)
+        {
+            Roles.Solo.Crewmate.TimeMaster.ShieldOn(playerId);
+        }
+
+        public static void TimeMasterShieldOff(byte playerId)
+        {
+            Roles.Solo.Crewmate.TimeMaster.ShieldOn(playerId);
+        }
+        public static void TimeMasterRewindTime(byte playerId)
+        {
+            Roles.Solo.Crewmate.TimeMaster.TimeRewind(playerId);
         }
 
         public static void AssasinAddDead(byte playersId)

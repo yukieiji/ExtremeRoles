@@ -72,6 +72,9 @@ namespace ExtremeRoles.Patches
             setPlayerNameTag(role);
             buttonUpdate(__instance, role);
             refreshRoleDescription(__instance, role);
+
+            ExtremeRolesPlugin.GameDataStore.History.Enqueue(__instance);
+
         }
 
         private static void resetNameTagsAndColors()
@@ -729,6 +732,21 @@ namespace ExtremeRoles.Patches
                     byte bodyGuardResetShieldOpCallPlayerId = reader.ReadByte();
                     RPCOperator.BodyGuardResetShield(
                         bodyGuardResetShieldOpCallPlayerId);
+                    break;
+                case RPCOperator.Command.TimeMasterShieldOn:
+                    byte shieldOnTimeMaster = reader.ReadByte();
+                    RPCOperator.TimeMasterShieldOn(
+                        shieldOnTimeMaster);
+                    break;
+                case RPCOperator.Command.TimeMasterShieldOff:
+                    byte shieldOffTimeMaster = reader.ReadByte();
+                    RPCOperator.TimeMasterShieldOff(
+                        shieldOffTimeMaster);
+                    break;
+                case RPCOperator.Command.TimeMasterRewindTime:
+                    byte timeMasterPlayerId = reader.ReadByte();
+                    RPCOperator.TimeMasterRewindTime(
+                        timeMasterPlayerId);
                     break;
                 case RPCOperator.Command.AssasinAddDead:
                     byte deadAssasinPlayerId = reader.ReadByte();

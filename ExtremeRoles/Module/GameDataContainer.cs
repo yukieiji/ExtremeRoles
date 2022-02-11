@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+
+using UnityEngine;
 
 using ExtremeRoles.Module.SpecialWinChecker;
 using ExtremeRoles.Roles;
@@ -37,6 +40,7 @@ namespace ExtremeRoles.Module
 
         public List<byte> DeadedAssassin = new List<byte>();
         public ShieldPlayerContainer ShildPlayer = new ShieldPlayerContainer();
+        public PlayerHistory History = new PlayerHistory();
 
         public int MeetingsCount = 0;
         public int WinGameControlId = int.MaxValue;
@@ -448,6 +452,49 @@ namespace ExtremeRoles.Module
                 if (shield.Count == 0) { return false; }
                 return shield.Contains((rolePlayerId, targetPlayerId));
             }
+        }
+
+        public class PlayerHistory : IEnumerable
+        {
+            public bool BlockAddHistory;
+            public Queue<Tuple<Vector3, bool>> history = new Queue<Tuple<Vector3, bool>>();
+            private bool init = false;
+            private int size = 0;
+
+            public PlayerHistory()
+            {
+                this.Clear();
+            }
+
+            public void Enqueue(PlayerControl player)
+            {
+                if (!this.init || this.BlockAddHistory) { return; }
+
+                int overflow = this.history.Count - this.size;
+                for (int i = 0; i < overflow; ++i)
+                {
+                    this.history.Dequeue();
+                }
+
+                this.history.Enqueue(
+                    Tuple.Create(player.transform.position, player.CanMove));
+            }
+
+            public void Clear()
+            {
+                this.BlockAddHistory = false;
+                this.history.Clear();
+                this.init = false;
+                this.size = 0;
+            }
+
+            public void Initialize(int historySecond)
+            {
+                this.size = (int)Mathf.Round(historySecond / Time.fixedDeltaTime);
+                this.init = true;
+            }
+
+            public IEnumerator GetEnumerator() => this.history.GetEnumerator();
         }
 
     }
