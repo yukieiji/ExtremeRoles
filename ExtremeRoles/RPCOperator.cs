@@ -35,6 +35,7 @@ namespace ExtremeRoles
             TimeMasterShieldOn,
             TimeMasterShieldOff,
             TimeMasterRewindTime,
+            TimeMasterResetMeeting,
 
             // インポスター
             AssasinAddDead,
@@ -258,6 +259,10 @@ namespace ExtremeRoles
         public static void TimeMasterRewindTime(byte playerId)
         {
             Roles.Solo.Crewmate.TimeMaster.TimeRewind(playerId);
+        }
+        public static void TimeMasterResetMeeting(byte playerId)
+        {
+            Roles.Solo.Crewmate.TimeMaster.ResetMeeting(playerId);
         }
 
         public static void AssasinAddDead(byte playersId)

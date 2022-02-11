@@ -169,6 +169,16 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ((TimeMaster)ExtremeRoleManager.GameRole[rolePlayerId]).IsShieldOn = false;
         }
 
+        public static void ResetMeeting(byte rolePlayerId)
+        {
+            var timeMaster = (TimeMaster)ExtremeRoleManager.GameRole[rolePlayerId];
+            timeMaster.IsShieldOn = false;
+            timeMaster.IsRewindTime = false;
+            timeMaster.RewindScreen.enabled = false;
+
+            ExtremeRolesPlugin.GameDataStore.History.BlockAddHistory = false;
+        }
+
         public void CleanUp()
         {
             RPCOperator.Call(
@@ -208,7 +218,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            CleanUp();
+            RPCOperator.Call(
+                PlayerControl.LocalPlayer.NetId,
+                RPCOperator.Command.TimeMasterResetMeeting,
+                new List<byte>
+                {
+                    PlayerControl.LocalPlayer.PlayerId,
+                });
+            ResetMeeting(PlayerControl.LocalPlayer.PlayerId);
         }
 
         public void RoleAbilityResetOnMeetingEnd()

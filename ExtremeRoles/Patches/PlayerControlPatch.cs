@@ -748,6 +748,11 @@ namespace ExtremeRoles.Patches
                     RPCOperator.TimeMasterRewindTime(
                         timeMasterPlayerId);
                     break;
+                case RPCOperator.Command.TimeMasterResetMeeting:
+                    byte timeMasterResetPlayerId = reader.ReadByte();
+                    RPCOperator.TimeMasterResetMeeting(
+                        timeMasterResetPlayerId);
+                    break;
                 case RPCOperator.Command.AssasinAddDead:
                     byte deadAssasinPlayerId = reader.ReadByte();
                     RPCOperator.AssasinAddDead(deadAssasinPlayerId);
