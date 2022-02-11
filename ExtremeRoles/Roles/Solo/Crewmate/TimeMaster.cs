@@ -192,11 +192,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void CreateAbility()
         {
-            this.CreateReclickableAbilityButton(
+            this.CreateNormalAbilityButton(
                 Translation.GetString("timeShield"),
                 Loader.CreateSpriteFromResources(
                    Path.TestButton),
-                this.CleanUp);
+                abilityCleanUp: this.CleanUp);
+            this.Button.SetLabelToCrewmate();
         }
 
         public bool UseAbility()
