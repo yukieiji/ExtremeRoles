@@ -102,7 +102,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 }
                 else
                 {
-                    // Exit current vent if necessary
                     if (localPlayer.inVent)
                     {
                         foreach (Vent vent in ShipStatus.Instance.AllVents)
@@ -266,7 +265,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 string.Concat(
                     this.RoleName,
                     TimeMasterOption.RewindTime),
-                1, 1, 30, 1,
+                3.0f, 1.0f, 30.0f, 0.5f,
                 parentOps);
         }
 
