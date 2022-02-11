@@ -40,7 +40,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ExtremeRoleId.TimeMaster,
             ExtremeRoleType.Crewmate,
             ExtremeRoleId.TimeMaster.ToString(),
-            ColorPalette.WhisperMagenta,
+            ColorPalette.TimeMasterBlue,
             false, true, false, false)
         { }
 

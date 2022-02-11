@@ -17,6 +17,7 @@ namespace ExtremeRoles.Module
         public readonly static Color SupervisorLime = new Color32(51, 204, 102, byte.MaxValue);
         public readonly static Color BodyGuardOrange = new Color32(255, 204, 102, byte.MaxValue);
         public readonly static Color WhisperMagenta = new Color32(255, 51, 255, byte.MaxValue);
+        public readonly static Color TimeMasterBlue = new Color32(112, 142, 239, byte.MaxValue);
 
         public readonly static Color JackalBlue = new Color32(65, 105, 255, byte.MaxValue);
         public readonly static Color AliceGold = new Color32(255, 215, 0, byte.MaxValue);
