@@ -54,7 +54,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     buttonImage = imageDict[ImageNames.PolusAdminButton].Image;
                     break;
                 case 4:
-                    buttonImage = imageDict[ImageNames.PolusAdminButton].Image;
+                    buttonImage = imageDict[ImageNames.AirshipAdminButton].Image;
                     break;
                 default:
                     buttonImage = Loader.CreateSpriteFromResources(
