@@ -279,10 +279,7 @@ namespace ExtremeRoles
                 {
                     uint optionId = reader.ReadPackedUInt32();
                     uint selection = reader.ReadPackedUInt32();
-                    CustomOptionBase option = AllOption.Values.FirstOrDefault(opt => opt.Id == (int)optionId);
-
-                    //FirstOrDefault(option => option.id == (int)optionId);
-                    option.UpdateSelection((int)selection);
+                    AllOption[(int)optionId].UpdateSelection((int)selection);
                 }
             }
             catch (Exception e)
