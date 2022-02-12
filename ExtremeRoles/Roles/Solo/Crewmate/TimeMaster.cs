@@ -145,6 +145,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             timeMaster.IsRewindTime = false;
             timeMaster.RewindScreen.enabled = false;
 
+            ExtremeRolesPlugin.GameDataStore.History.DataClear();
             ExtremeRolesPlugin.GameDataStore.History.BlockAddHistory = false;
         }
 

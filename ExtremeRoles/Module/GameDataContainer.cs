@@ -483,9 +483,14 @@ namespace ExtremeRoles.Module
             public void Clear()
             {
                 this.BlockAddHistory = false;
-                this.history.Clear();
+                DataClear();
                 this.init = false;
                 this.size = 0;
+            }
+
+            public void DataClear()
+            {
+                this.history.Clear();
             }
 
             public void Initialize(float historySecond)
