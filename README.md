@@ -36,10 +36,7 @@ AmongUsの上級者(初心者)向けのロール追加MOD、主な特徴とし�
 - なし
 
 ## 現在実装検討中の役職及び機能
-- ???(クルーメイト、名称未定):能力発動中、マップ内のキルが全てがわかる(ただし、発動条件あり+キルの時間と方角のみわかる仕様)
-- クラッカー(インポスター):対象の死体を通報できなくします。(消すことも可、その場合は痕跡を残します)
-- フェイカー(インポスター):死体を偽造します
-- 別のMOD(TOR等)の役職も要望があれば実装を検討します。(バランスや他の役職との兼ね合いでそのままの能力で実装されない可能性はあります)
+- I have no idea now!!!!
 
 ## 実装済み機能
 - アサシンの特殊会議発生時、インポスターだけが使用できるチャット機能(けむりさんより提案)：v1.12.4.0で実装
@@ -54,6 +51,7 @@ AmongUsの上級者(初心者)向けのロール追加MOD、主な特徴とし�
 - [Jackal and Sidekick](https://www.twitch.tv/dhalucard) - Dhalucard氏によって作成されたMOD、ジャッカルとサイドキックのアイディア元
 - [Sheriff-Mod](https://github.com/Woodi-dev/Among-Us-Sheriff-Mod) - Woodi-dev氏によって作成されたMOD、シェリフのアイディア元
 - [Among-Us-Love-Couple-Mod](https://www.curseforge.com/among-us/all-mods/love-couple-mod) - Woodi-dev氏によって作成されたMOD、ラバーズのアイディア元
+- [TooManyRolesMods](https://github.com/Hardel-DW/TooManyRolesMods) - Hardel-DW氏によって作成されたMOD、タイムマスターのアイディア元
 
 - レジスタンス:アヴァロン - マーリン、アサシンのアイディア元
 - シャドウハンターズ - アリスのアイディア元
