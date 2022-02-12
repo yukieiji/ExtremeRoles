@@ -254,7 +254,7 @@ namespace ExtremeRoles
 
         public static void TimeMasterShieldOff(byte playerId)
         {
-            Roles.Solo.Crewmate.TimeMaster.ShieldOn(playerId);
+            Roles.Solo.Crewmate.TimeMaster.ShieldOff(playerId);
         }
         public static void TimeMasterRewindTime(byte playerId)
         {
