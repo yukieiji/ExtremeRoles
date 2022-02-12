@@ -36,15 +36,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private string eatingText;
 
         private float defaultKillCoolTime;
-        public Evolver() : base(
-            ExtremeRoleId.Evolver,
-            ExtremeRoleType.Impostor,
-            ExtremeRoleId.Evolver.ToString(),
-            Palette.ImpostorRed,
-            true, false, true, true)
-        {
-            this.isEatingEndCleanBody = false;
-        }
 
         public RoleAbilityButtonBase Button
         {
@@ -55,6 +46,16 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
         private RoleAbilityButtonBase evolveButton;
+
+        public Evolver() : base(
+            ExtremeRoleId.Evolver,
+            ExtremeRoleType.Impostor,
+            ExtremeRoleId.Evolver.ToString(),
+            Palette.ImpostorRed,
+            true, false, true, true)
+        {
+            this.isEatingEndCleanBody = false;
+        }
 
         public void CreateAbility()
         {

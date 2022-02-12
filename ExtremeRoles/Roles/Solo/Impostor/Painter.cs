@@ -24,16 +24,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public bool PaintColorIsRandom;
         private float paintDistance;
 
-        public Painter() : base(
-            ExtremeRoleId.Painter,
-            ExtremeRoleType.Impostor,
-            ExtremeRoleId.Painter.ToString(),
-            Palette.ImpostorRed,
-            true, false, true, true)
-        { }
-
         public RoleAbilityButtonBase Button
-        { 
+        {
             get => this.paintButton;
             set
             {
@@ -42,6 +34,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
         private RoleAbilityButtonBase paintButton;
+
+        public Painter() : base(
+            ExtremeRoleId.Painter,
+            ExtremeRoleType.Impostor,
+            ExtremeRoleId.Painter.ToString(),
+            Palette.ImpostorRed,
+            true, false, true, true)
+        { }
 
         public static void PaintDeadBody(
             byte rolePlayerId, byte targetPlayerId)

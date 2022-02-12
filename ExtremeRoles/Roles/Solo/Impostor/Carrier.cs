@@ -29,6 +29,17 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private float carryDistance;
         private bool canReportOnCarry;
 
+        public RoleAbilityButtonBase Button
+        {
+            get => this.carryButton;
+            set
+            {
+                this.carryButton = value;
+            }
+        }
+
+        private RoleAbilityButtonBase carryButton;
+
         public Carrier() : base(
             ExtremeRoleId.Carrier,
             ExtremeRoleType.Impostor,
@@ -38,17 +49,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             canReportOnCarry = false;
         }
-
-        public RoleAbilityButtonBase Button
-        { 
-            get => this.carryButton;
-            set
-            {
-                this.carryButton = value;
-            }
-        }
-
-        private RoleAbilityButtonBase carryButton;
 
         public static void CarryDeadBody(
             byte rolePlayerId, byte targetPlayerId)
