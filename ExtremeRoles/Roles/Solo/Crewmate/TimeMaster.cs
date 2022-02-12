@@ -155,7 +155,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             timeMaster.RewindScreen.enabled = false;
 
             ExtremeRolesPlugin.GameDataStore.History.BlockAddHistory = false;
-            timeMaster.IsShieldOn = false;
         }
 
         public static void ShieldOn(byte rolePlayerId)
