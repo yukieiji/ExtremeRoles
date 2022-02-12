@@ -234,7 +234,7 @@ namespace ExtremeRoles
             SelectedPreset = newPreset;
             foreach (CustomOptionBase option in AllOption.Values)
             {
-                if (option.Id == 0) continue;
+                if (option.Id == 0) { continue; }
 
                 option.Entry = ExtremeRolesPlugin.Instance.Config.Bind(
                     ConfigPreset,
@@ -263,9 +263,9 @@ namespace ExtremeRoles
                 (byte)RPCOperator.Command.ShareOption, Hazel.SendOption.Reliable);
             messageWriter.WritePacked((uint)AllOption.Count);
             
-            foreach (CustomOptionBase option in AllOption.Values)
+            foreach (var(id, option) in AllOption)
             {
-                messageWriter.WritePacked((uint)option.Id);
+                messageWriter.WritePacked((uint)id);
                 messageWriter.WritePacked(Convert.ToUInt32(option.CurSelection));
             }
             
