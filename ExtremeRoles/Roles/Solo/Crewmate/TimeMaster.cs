@@ -186,7 +186,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.CreateNormalAbilityButton(
                 Translation.GetString("timeShield"),
                 Loader.CreateSpriteFromResources(
-                   Path.TestButton),
+                   Path.TimeMasterTimeShield),
                 abilityCleanUp: this.CleanUp);
             this.Button.SetLabelToCrewmate();
         }

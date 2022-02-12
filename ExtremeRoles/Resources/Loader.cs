@@ -21,6 +21,7 @@ namespace ExtremeRoles.Resources
 
         public const string MaintainerRepair = "ExtremeRoles.Resources.Repair.png";
         public const string BodyGuardShield = "ExtremeRoles.Resources.Shield.png";
+        public const string TimeMasterTimeShield = "ExtremeRoles.Resources.TimeShield.png";
 
         public const string EvolverEvolved = "ExtremeRoles.Resources.Evolved.png";
         public const string CarrierCarry = "ExtremeRoles.Resources.Carry.png";
