@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 
-using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -13,8 +12,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private bool isResetMeeting;
         private float reduceRate;
         private float defaultKillCoolTime;
-        private int combMax;
 
+        private int combMax;
         private int combCount;
 
         public enum PsychoKillerOption

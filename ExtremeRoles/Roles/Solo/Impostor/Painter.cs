@@ -13,7 +13,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 {
     public class Painter : SingleRoleBase, IRoleAbility
     {
-        private byte targetDeadBodyId;
 
         public enum PainterOption
         {
@@ -23,6 +22,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool PaintColorIsRandom;
         private float paintDistance;
+        private byte targetDeadBodyId;
 
         public RoleAbilityButtonBase Button
         {
