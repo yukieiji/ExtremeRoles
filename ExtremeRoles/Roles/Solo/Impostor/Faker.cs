@@ -40,16 +40,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public List<FakeDeadBody> DummyBody = new List<FakeDeadBody>();
 
-        public Faker() : base(
-            ExtremeRoleId.Faker,
-            ExtremeRoleType.Impostor,
-            ExtremeRoleId.Faker.ToString(),
-            Palette.ImpostorRed,
-            true, false, true, true)
-        {
-            this.DummyBody.Clear();
-        }
-
         public RoleAbilityButtonBase Button
         {
             get => this.createFake;
@@ -60,6 +50,16 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
         private RoleAbilityButtonBase createFake;
+
+        public Faker() : base(
+            ExtremeRoleId.Faker,
+            ExtremeRoleType.Impostor,
+            ExtremeRoleId.Faker.ToString(),
+            Palette.ImpostorRed,
+            true, false, true, true)
+        {
+            this.DummyBody.Clear();
+        }
 
         public static void CreateDummy(
             byte rolePlayerId, byte targetPlayerId)

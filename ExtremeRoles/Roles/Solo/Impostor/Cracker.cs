@@ -44,16 +44,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private float crackDistance;
         private byte targetDeadBodyId;
 
-        public Cracker() : base(
-            ExtremeRoleId.Cracker,
-            ExtremeRoleType.Impostor,
-            ExtremeRoleId.Cracker.ToString(),
-            Palette.ImpostorRed,
-            true, false, true, true)
-        { }
-
         public RoleAbilityButtonBase Button
-        { 
+        {
             get => this.crackButton;
             set
             {
@@ -62,6 +54,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
         private RoleAbilityButtonBase crackButton;
+
+        public Cracker() : base(
+            ExtremeRoleId.Cracker,
+            ExtremeRoleType.Impostor,
+            ExtremeRoleId.Cracker.ToString(),
+            Palette.ImpostorRed,
+            true, false, true, true)
+        { }
 
         public static void CrackDeadBody(
             byte rolePlayerId, byte targetPlayerId)

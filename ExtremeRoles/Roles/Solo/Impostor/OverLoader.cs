@@ -12,6 +12,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 {
     public class OverLoader : SingleRoleBase, IRoleAbility
     {
+
+        public enum OverLoaderOption
+        {
+            KillCoolReduceRate,
+            MoveSpeed
+        }
+
         public bool IsOverLoad;
         public float Speed;
 
@@ -19,11 +26,18 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private float defaultKillCool;
         private int defaultKillRange;
 
-        public enum OverLoaderOption
+
+        public RoleAbilityButtonBase Button
         {
-            KillCoolReduceRate,
-            MoveSpeed
+            get => this.overLoadButton;
+            set
+            {
+                this.overLoadButton = value;
+            }
         }
+
+        private RoleAbilityButtonBase overLoadButton;
+
 
         public OverLoader() : base(
             ExtremeRoleId.OverLoader,
@@ -34,17 +48,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             this.IsOverLoad = false;
         }
-
-        public RoleAbilityButtonBase Button
-        { 
-            get => this.overLoadButton;
-            set
-            {
-                this.overLoadButton = value;
-            }
-        }
-
-        private RoleAbilityButtonBase overLoadButton;
         
         public static void SwitchAbility(byte rolePlayerId, bool activate)
         {
