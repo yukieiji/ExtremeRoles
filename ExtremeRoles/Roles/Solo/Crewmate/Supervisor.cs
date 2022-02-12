@@ -12,16 +12,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 {
     public class Supervisor : SingleRoleBase, IRoleAbility, IRoleUpdate
     {
-        public Supervisor() : base(
-            ExtremeRoleId.Supervisor,
-            ExtremeRoleType.Crewmate,
-            ExtremeRoleId.Supervisor.ToString(),
-            ColorPalette.SupervisorLime,
-            false, true, false, false)
-        { }
-
         public RoleAbilityButtonBase Button
-        { 
+        {
             get => this.adminButton;
             set
             {
@@ -31,6 +23,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         private RoleAbilityButtonBase adminButton;
         private TMPro.TextMeshPro chargeTime;
+
+        public Supervisor() : base(
+            ExtremeRoleId.Supervisor,
+            ExtremeRoleType.Crewmate,
+            ExtremeRoleId.Supervisor.ToString(),
+            ColorPalette.SupervisorLime,
+            false, true, false, false)
+        { }
 
         public void CleanUp()
         {

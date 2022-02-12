@@ -13,16 +13,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 {
     public class Watchdog : SingleRoleBase, IRoleAbility, IRoleUpdate
     {
-        public Watchdog() : base(
-            ExtremeRoleId.Watchdog,
-            ExtremeRoleType.Crewmate,
-            ExtremeRoleId.Watchdog.ToString(),
-            ColorPalette.WatchdogViolet,
-            false, true, false, false)
-        { }
-
         public RoleAbilityButtonBase Button
-        { 
+        {
             get => this.securityButton;
             set
             {
@@ -33,6 +25,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private RoleAbilityButtonBase securityButton;
         private Minigame monitoring;
         private TMPro.TextMeshPro chargeTime;
+
+        public Watchdog() : base(
+            ExtremeRoleId.Watchdog,
+            ExtremeRoleType.Crewmate,
+            ExtremeRoleId.Watchdog.ToString(),
+            ColorPalette.WatchdogViolet,
+            false, true, false, false)
+        { }
 
         public void CleanUp()
         {
