@@ -117,10 +117,19 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     }
 
                     Vector3 newPos = item.Item1;
+                    Vector2 offset = localPlayer.Collider.offset;
+                    Vector3 newTruePos = new Vector3(
+                        newPos.x + offset.x,
+                        newPos.y + offset.y,
+                        newPos.z);
+                    Vector3 prevTruePos = new Vector3(
+                        prevPos.x + offset.x,
+                        prevPos.y + offset.y,
+                        newPos.z);
 
                     if (PhysicsHelpers.AnythingBetween(
-                            newPos, prevPos,
-                            Constants.ShipAndObjectsMask, false))
+                            prevTruePos, newTruePos,
+                            Constants.ShipAndAllObjectsMask, false) || !item.Item2)
                     {
                         localPlayer.transform.position = prevPos;
                     }
