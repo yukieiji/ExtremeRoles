@@ -84,8 +84,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 Minigame.Instance.ForceClose();
             }
 
-            Vector3 defaultPos = new Vector3(0f, 0f, 1000f);
-            Vector3 prevPos = defaultPos;
+            Vector3 prevPos = localPlayer.transform.position;
 
             foreach (Tuple<Vector3, bool> item in ExtremeRolesPlugin.GameDataStore.History.GetAllHistory())
             {
@@ -119,33 +118,16 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
                     Vector3 newPos = item.Item1;
 
-                    if (prevPos != defaultPos)
+                    if (PhysicsHelpers.AnythingBetween(
+                            newPos, prevPos,
+                            Constants.ShipAndObjectsMask, false))
                     {
-                        if (PhysicsHelpers.AnythingBetween(
-                                newPos, prevPos,
-                                Constants.ShipAndObjectsMask, false))
-                        {
-                            localPlayer.transform.position = prevPos;
-                        }
-                        else
-                        {
-                            localPlayer.transform.position = newPos;
-                            prevPos = newPos;
-                        }
+                        localPlayer.transform.position = prevPos;
                     }
                     else
                     {
-                        if (PhysicsHelpers.AnythingBetween(
-                                localPlayer.transform.position, newPos,
-                                Constants.ShipAndObjectsMask, false))
-                        {
-                            localPlayer.transform.position = prevPos;
-                        }
-                        else
-                        {
-                            localPlayer.transform.position = newPos;
-                            prevPos = newPos;
-                        }
+                        localPlayer.transform.position = newPos;
+                        prevPos = newPos;
                     }
                 }
             }
