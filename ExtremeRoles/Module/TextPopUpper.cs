@@ -7,38 +7,6 @@ namespace ExtremeRoles.Module
 {
     public class TextPopUpper
     {
-        /*
-            ・テキスト追加時のロジック
-            1. 新しいテキストを目標座標に表示
-            2. 今までのテキストの座標をずらす
-            3. 設定されたサイズを超えている場合、古いテキストをデストロイ
-
-            ・クリアロジック
-            1. 全てのテキストをデストロイ
-            2. 内部データ構造をリセット
-
-            ・各テキストアップデートロジック
-            1. 各テキストのタイマーをアップデート(タイマーを減らす)
-            2. タイマーが0になったものをデストロイ
-
-            # 上記を踏まえて
-            ・このTextGeneratorクラスのメソッド
-                ・コンストラクタ
-                ・void AddText(string printString)
-                ・void Update()
-                ・void Clear()
-            ・内部データ構造の案
-                ・List:
-                    データイン:O(1)、データアウト:O(1)(RemoveAt)、アップデート(全要素アクセス):O(n)
-                ・Queue:
-                    データイン:O(1)、データアウト:O(1)、アップデート(全要素アクセス):O(n×n)
-                    (公式ドキュメントにQueueのGetEnumerator()でQueueに先頭と末尾に以外にアクセスしたときの計算量が無い
-                     情報科学的には、Queueは先頭と末尾以外のアクセスの計算量はO(n)なので全要素アクセスはO(n×n)のはず)
-                => データ構造をListとして、追加する場所を指定するindexerをメンバ変数で管理する
-        */
-
-
-
         private class Text
         {
             private TextMeshPro body;

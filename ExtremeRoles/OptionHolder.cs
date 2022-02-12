@@ -29,7 +29,7 @@ namespace ExtremeRoles
         public static int OptionsPage = 1;
         public static int SelectedPreset = 0;
 
-        public static IRegionInfo[] defaultRegion;
+        private static IRegionInfo[] defaultRegion;
 
         public static string ConfigPreset
         {
