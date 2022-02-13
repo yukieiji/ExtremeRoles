@@ -120,6 +120,14 @@ namespace ExtremeRoles
         }
         public static void FixLightOff()
         {
+
+            var switchMiniGame = Minigame.Instance as SwitchMinigame;
+
+            if (switchMiniGame != null)
+            {
+                Minigame.Instance.ForceClose();
+            }
+
             SwitchSystem switchSystem = ShipStatus.Instance.Systems[
                 SystemTypes.Electrical].Cast<SwitchSystem>();
             switchSystem.ActualSwitches = switchSystem.ExpectedSwitches;
