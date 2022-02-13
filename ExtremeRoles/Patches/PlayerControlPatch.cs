@@ -650,6 +650,9 @@ namespace ExtremeRoles.Patches
                 case RPCOperator.Command.Initialize:
                     RPCOperator.Initialize();
                     break;
+                case RPCOperator.Command.FixLightOff:
+                    RPCOperator.FixLightOff();
+                    break;
                 case RPCOperator.Command.SetNormalRole:
                     byte normalRoleId = reader.ReadByte();
                     byte normalRoleAssignPlayerId = reader.ReadByte();
