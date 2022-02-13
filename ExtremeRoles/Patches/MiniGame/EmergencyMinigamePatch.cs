@@ -9,13 +9,11 @@ namespace ExtremeRoles.Patches.MiniGame
     {
         public static void Postfix(EmergencyMinigame __instance)
         {
-            var statusText = "";
-
             if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return; }
 
             if (!Roles.ExtremeRoleManager.GetLocalPlayerRole().CanCallMeeting)
             {
-                __instance.StatusText.text = statusText;
+                __instance.StatusText.text = Helper.Translation.GetString("youDonotUse");
                 __instance.NumberText.text = string.Empty;
                 __instance.ClosedLid.gameObject.SetActive(true);
                 __instance.OpenLid.gameObject.SetActive(false);
@@ -31,8 +29,12 @@ namespace ExtremeRoles.Patches.MiniGame
                     0, OptionHolder.Ship.MaxNumberOfMeeting - ExtremeRolesPlugin.GameDataStore.MeetingsCount);
                 int remaining = Mathf.Min(localRemaining, teamRemaining);
 
-                __instance.StatusText.text = "<size=100%>" + string.Format(
-                    Helper.Translation.GetString("meetingStatus"), PlayerControl.LocalPlayer.name) + "</size>";
+                __instance.StatusText.text = string.Concat(
+                    "<size=100%>",
+                    string.Format(
+                        Helper.Translation.GetString("meetingStatus"),
+                        PlayerControl.LocalPlayer.name),
+                    "</size>");
                 __instance.NumberText.text = string.Format(
                     Helper.Translation.GetString("meetingCount"),
                     localRemaining.ToString(),
