@@ -14,11 +14,11 @@ namespace ExtremeRoles.Patches.MiniGame
                 PlayerControl.LocalPlayer.PlayerId].CanUseSecurity) { return true; }
 
             __instance.isStatic = true;
-            for (int j = 0; j < __instance.ViewPorts.Length; j++)
+            for (int i = 0; i < __instance.ViewPorts.Length; ++i)
             {
-                __instance.ViewPorts[j].sharedMaterial = __instance.StaticMaterial;
-                __instance.SabText[j].text = Helper.Translation.GetString("youDonotUse");
-                __instance.SabText[j].gameObject.SetActive(true);
+                __instance.ViewPorts[i].sharedMaterial = __instance.StaticMaterial;
+                __instance.SabText[i].text = Helper.Translation.GetString("youDonotUse");
+                __instance.SabText[i].gameObject.SetActive(true);
             }
 
             return false;
