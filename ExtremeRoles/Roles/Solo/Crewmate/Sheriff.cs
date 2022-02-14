@@ -143,7 +143,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 string.Concat(
                     this.RoleName,
                     SheriffOption.ShootNum.ToString()),
-                1, 1, OptionHolder.VanillaMaxPlayerNum - 1, 1, parentOps);
+                1, 1, OptionHolder.VanillaMaxPlayerNum - 1, 1,
+                parentOps, format: "unitShots");
         }
 
         protected override void RoleSpecificInit()

@@ -226,7 +226,7 @@ namespace ExtremeRoles.Roles.API.Interface
                     RoleAbilityCommonOption.AbilityCount.ToString()),
                 defaultAbilityCount, 1,
                 maxAbilityCount, 1,
-                parentOps);
+                parentOps, format: "unitShots");
 
         }
 
