@@ -462,7 +462,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
 
             this.CreateAbilityCountOption(
-                parentOps, OptionHolder.VanillaMaxPlayerNum - 1);
+                parentOps, 1, OptionHolder.VanillaMaxPlayerNum - 1);
 
             CustomOption.Create(
                 GetRoleOptionId(JackalOption.RangeSidekickTarget),

@@ -154,7 +154,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                parentOps);
 
             this.CreateAbilityCountOption(
-                parentOps, 5);
+                parentOps, 2, 5);
         }
 
         protected override void RoleSpecificInit()

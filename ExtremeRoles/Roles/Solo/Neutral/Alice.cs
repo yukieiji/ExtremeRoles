@@ -159,7 +159,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             CustomOptionBase parentOps)
         {
             this.CreateAbilityCountOption(
-                parentOps, 100);
+                parentOps, 2, 100);
 
             CustomOption.Create(
                 this.GetRoleOptionId((int)AliceOption.RevartLongTaskNum),

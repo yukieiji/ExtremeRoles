@@ -100,7 +100,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         
         public void CreateAbility()
         {
-            this.CreateNormalAbilityButton(
+            this.CreateAbilityCountButton(
                 Translation.GetString("crack"),
                 Loader.CreateSpriteFromResources(
                    Path.CrackerCrack));
@@ -162,8 +162,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            this.CreateCommonAbilityOption(
-                parentOps);
+            this.CreateAbilityCountOption(
+                parentOps, 2, 5);
 
             CustomOption.Create(
                 GetRoleOptionId((int)CrackerOption.CanCrackDistance),

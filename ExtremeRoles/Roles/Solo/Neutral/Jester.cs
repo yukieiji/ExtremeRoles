@@ -190,7 +190,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 parentOps);
 
             this.CreateAbilityCountOption(
-                parentOps, 100, 2.0f);
+                parentOps, 5, 100, 2.0f);
         }
 
         protected override void RoleSpecificInit()
