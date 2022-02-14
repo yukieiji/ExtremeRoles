@@ -128,7 +128,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             CustomOptionBase parentOps)
         {
             this.CreateAbilityCountOption(
-                parentOps, 2, 30);
+                parentOps, 2, 10);
         }
 
         protected override void RoleSpecificInit()
