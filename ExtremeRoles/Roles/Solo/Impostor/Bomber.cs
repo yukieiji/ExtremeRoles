@@ -184,7 +184,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             if (bombPlayer.Data.IsDead || bombPlayer.Data.Disconnected) { return; }
             
             HashSet<PlayerControl> target = getAllPlayerInExplosion(
-                bombPlayer);
+                rolePlayer, bombPlayer);
             foreach (PlayerControl player in target)
             {
                 if (explosionKillChance > Random.RandomRange(0, 100))
@@ -202,6 +202,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
         private HashSet<PlayerControl> getAllPlayerInExplosion(
+            PlayerControl rolePlayer,
             PlayerControl sourcePlayer)
         {
             HashSet<PlayerControl> result = new HashSet<PlayerControl>();
@@ -217,7 +218,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     !playerInfo.IsDead &&
                     (playerInfo.PlayerId != sourcePlayer.PlayerId) &&
                     (!playerInfo.Object.inVent || OptionHolder.Ship.CanKillVentInPlayer) &&
-                    !ExtremeRoleManager.GameRole[playerInfo.PlayerId].IsImpostor())
+                    (!ExtremeRoleManager.GameRole[playerInfo.PlayerId].IsImpostor() ||
+                     playerInfo.PlayerId == rolePlayer.PlayerId))
                 {
                     PlayerControl @object = playerInfo.Object;
                     if (@object)
