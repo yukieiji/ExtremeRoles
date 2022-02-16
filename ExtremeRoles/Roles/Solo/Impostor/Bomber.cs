@@ -187,7 +187,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 bombPlayer);
             foreach (PlayerControl player in target)
             {
-                if (explosionKillChance > Random.RandomRange(0, 110))
+                if (explosionKillChance > Random.RandomRange(0, 100))
                 {
                     explosionKill(rolePlayer, bombPlayer, player);
                 }
