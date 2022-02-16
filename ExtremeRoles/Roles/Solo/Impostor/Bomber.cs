@@ -192,32 +192,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     explosionKill(rolePlayer, bombPlayer, player);
                 }
             }
-
-            RPCOperator.Call(
-                rolePlayer.NetId,
-                RPCOperator.Command.UncheckedMurderPlayer,
-                new List<byte>
-                {
-                    bombPlayer.PlayerId,
-                    bombPlayer.PlayerId,
-                    byte.MaxValue
-                });
-            RPCOperator.UncheckedMurderPlayer(
-                bombPlayer.PlayerId,
-                bombPlayer.PlayerId,
-                byte.MaxValue);
-            
-            RPCOperator.Call(
-                rolePlayer.NetId,
-                RPCOperator.Command.ReplaceDeadReason,
-                new List<byte>
-                {
-                    bombPlayer.PlayerId,
-                    (byte)GameDataContainer.PlayerStatus.Explosion
-                });
-            ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
-                bombPlayer.PlayerId, GameDataContainer.PlayerStatus.Explosion);
-
+            explosionKill(rolePlayer, bombPlayer, bombPlayer);
         }
 
         private void resetTimer()
@@ -286,7 +261,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             PlayerControl bombPlayer,
             PlayerControl target)
         {
-
 
             RPCOperator.Call(
                 rolePlayer.NetId,
