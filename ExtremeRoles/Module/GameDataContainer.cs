@@ -25,6 +25,8 @@ namespace ExtremeRoles.Module
             Departure,
             Martyrdom,
 
+            Explosion,
+
             Assassinate,
             DeadAssassinate,
             Surrender,

@@ -42,6 +42,7 @@ namespace ExtremeRoles.Roles
         Faker,
         OverLoader,
         Cracker,
+        Bomber,
 
         Alice,
         Jackal,
@@ -108,6 +109,7 @@ namespace ExtremeRoles.Roles
                 new Faker(),
                 new OverLoader(),
                 new Cracker(),
+                new Bomber(),
 
                 new Alice(),
                 new Jackal(),
