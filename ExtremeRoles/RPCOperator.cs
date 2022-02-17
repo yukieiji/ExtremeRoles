@@ -36,6 +36,8 @@ namespace ExtremeRoles
             TimeMasterShieldOff,
             TimeMasterRewindTime,
             TimeMasterResetMeeting,
+            AgencyTakeTask,
+            AgencySetNewTask,
 
             // インポスター
             AssasinAddDead,
@@ -271,6 +273,18 @@ namespace ExtremeRoles
         public static void TimeMasterResetMeeting(byte playerId)
         {
             Roles.Solo.Crewmate.TimeMaster.ResetMeeting(playerId);
+        }
+        public static void AgencyTakeTask(
+            byte playerId, byte targetPlayerId, byte taskNum)
+        {
+            Roles.Solo.Crewmate.Agency.TakeTargetPlayerTask(
+                playerId, targetPlayerId, taskNum);
+        }
+        public static void AgencySetNewTask(
+            byte callerId, int index, int taskIndex)
+        {
+            Roles.Solo.Crewmate.Agency.ReplaceToNewTask(
+                callerId, index, taskIndex);
         }
 
         public static void AssasinAddDead(byte playersId)

@@ -32,6 +32,7 @@ namespace ExtremeRoles.Roles
         BodyGuard,
         Whisper,
         TimeMaster,
+        Agency,
 
         SpecialImpostor,
         Evolver,
@@ -99,6 +100,7 @@ namespace ExtremeRoles.Roles
                 new BodyGuard(),
                 new Whisper(),
                 new TimeMaster(),
+                new Agency(),
 
                 new SpecialImpostor(),
                 new Evolver(),

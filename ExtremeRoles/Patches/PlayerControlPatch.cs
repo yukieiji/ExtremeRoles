@@ -756,6 +756,21 @@ namespace ExtremeRoles.Patches
                     RPCOperator.TimeMasterResetMeeting(
                         timeMasterResetPlayerId);
                     break;
+                case RPCOperator.Command.AgencyTakeTask:
+                    byte agencyPlayerId = reader.ReadByte();
+                    byte agencyTargetPlayerId = reader.ReadByte();
+                    byte taskNum = reader.ReadByte();
+                    RPCOperator.AgencyTakeTask(
+                        agencyPlayerId, agencyTargetPlayerId, taskNum);
+                    break;
+                case RPCOperator.Command.AgencySetNewTask:
+                    byte agencyCallerId = reader.ReadByte();
+                    int taskSetIndex = reader.ReadInt32();
+                    int newTaskId = reader.ReadInt32();
+                    RPCOperator.AgencySetNewTask(
+                        agencyCallerId, taskSetIndex, newTaskId);
+                    break;
+
                 case RPCOperator.Command.AssasinAddDead:
                     byte deadAssasinPlayerId = reader.ReadByte();
                     RPCOperator.AssasinAddDead(deadAssasinPlayerId);
