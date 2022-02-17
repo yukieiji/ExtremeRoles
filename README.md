@@ -55,7 +55,8 @@ AmongUsの上級者(初心者)向けのロール追加MOD、主な特徴とし�
 ## AmongUsとの対応バージョン
 |  AmongUs バージョン  |  Extreme Roles バージョン  |
 | ---- | ---- |
-|  2021.12.15s/2022.02.08s/2021.12.15e  |  v1.11.1.1 ～ v1.16.0.2  |
+|  2022.02.08s/2021.12.15s/2021.12.15e | v1.16.0.0 ～ v1.16.0.2  |
+|  2021.12.15s/2021.12.15e  |  v1.11.1.1 ～ v1.16.0.0  |
 
 ## クレジット&Thanks
 - TheOtherRoles - 開発当時から[TOR](https://github.com/Eisbison/TheOtherRoles)及び[TOR-GM](https://github.com/yukinogatari/TheOtherRoles-GM)のコード(ロールに関するところ以外(オプションやパッチ等))を参考、引用、改変して開発しています。TORがなければ開発をこのMODを開発することは不可能でした。また、バウンティハンターのアイディア元
