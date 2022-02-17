@@ -70,16 +70,16 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             int takeTask = 0;
             
-            for (int i = 0; i < shuffleTaskIndex.Count; ++i)
+            foreach (int i in shuffleTaskIndex)
             {
-
-                Logging.Debug($"Index:{i}    NewTask:{agency.TakeTask.Count}");
-
                 if (takeTask >= (int)getTaskNum) { break; }
                 if (targetPlayer.myTasks[i].IsComplete) { continue; }
 
-                NormalPlayerTask replaceTask = targetPlayer.myTasks[i] as NormalPlayerTask;
-                if (replaceTask == null) { continue; }
+                var replaceTask = targetPlayer.myTasks[i];
+                var textTask = replaceTask.gameObject.GetComponent<ImportantTextTask>();
+
+                if (textTask != null) { continue; }
+
                 GameData.TaskInfo taskInfo = targetPlayer.Data.Tasks[(int)replaceTask.Id];
                 int taskId = (int)taskInfo.TypeId;
 
@@ -100,9 +100,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 }
 
                 ++takeTask;
-                replaceTask.taskStep = replaceTask.MaxStep;
-                replaceTask.UpdateArrow();
-                targetPlayer.CompleteTask((uint)taskId);
+                targetPlayer.CompleteTask(replaceTask.Id);
+                replaceTask.OnRemove();
             }
 
             if (PlayerControl.LocalPlayer.PlayerId != rolePlayerId)
