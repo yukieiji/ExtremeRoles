@@ -55,10 +55,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             byte rolePlayerId, byte targetPlayerId, byte getTaskNum)
         {
 
-            Logging.Debug(
-                $"PlayerId:{rolePlayerId}   TargetPlayerId:{targetPlayerId}     TaskNum:{getTaskNum}");
-
-
             PlayerControl targetPlayer = Player.GetPlayerControlById(
                 targetPlayerId);
             var agency = (Agency)ExtremeRoleManager.GameRole[rolePlayerId];
@@ -151,7 +147,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
-                Translation.GetString("shield"),
+                Translation.GetString("takeTask"),
                 Loader.CreateSpriteFromResources(
                     Path.TestButton));
             this.Button.SetLabelToCrewmate();
@@ -184,7 +180,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 }
             }
 
-            Logging.Debug($"TakeTaskNum:{takeNum}");
 
             if (takeNum == 0) { return true; }
 
