@@ -72,9 +72,17 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 if (targetPlayer.myTasks[i].IsComplete) { continue; }
 
                 var replaceTask = targetPlayer.myTasks[i];
-                var textTask = replaceTask.gameObject.GetComponent<ImportantTextTask>();
+                var importantText = replaceTask.gameObject.GetComponent<ImportantTextTask>();
 
-                if (textTask != null) { continue; }
+                if (importantText != null) { continue; }
+
+                TaskTypes type = replaceTask.TaskType;
+                if (type == TaskTypes.FixLights ||
+                    type == TaskTypes.FixComms ||
+                    type == TaskTypes.StopCharles ||
+                    type == TaskTypes.ResetSeismic ||
+                    type == TaskTypes.ResetReactor ||
+                    type == TaskTypes.RestoreOxy) { continue; }
 
                 GameData.TaskInfo taskInfo = targetPlayer.Data.Tasks[(int)replaceTask.Id];
                 int taskId = (int)taskInfo.TypeId;
