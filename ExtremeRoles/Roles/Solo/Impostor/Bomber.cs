@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -8,6 +9,9 @@ using ExtremeRoles.Module.RoleAbilityButton;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+
+using BepInEx.IL2CPP.Utils.Collections;
+
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -19,6 +23,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             ExplosionKillChance,
             TimerMaxTime,
             TimerMinTime,
+            TellExplosion
         }
 
         private float timer = 0f;
@@ -26,10 +31,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private float timerMaxTime = 0f;
         private int explosionKillChance;
         private float explosionRange;
+        private bool tellExplosion;
         private byte setTargetPlayerId;
         private byte bombSettingPlayerId;
 
         private Queue<byte> bombPlayerId = new Queue<byte>();
+        private TMPro.TextMeshPro tellText;
 
         public RoleAbilityButtonBase Button
         {
@@ -40,6 +47,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
         private RoleAbilityButtonBase bombButton;
+
 
         public Bomber() : base(
             ExtremeRoleId.Bomber,
@@ -129,6 +137,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     BomberOption.TimerMinTime.ToString()),
                 60f, 45f, 75f, 0.5f,
                 parentOps, format: "unitSeconds");
+            CustomOption.Create(
+               GetRoleOptionId((int)BomberOption.TellExplosion),
+               string.Concat(
+                   this.RoleName,
+                   BomberOption.TellExplosion.ToString()),
+               true, parentOps);
         }
 
         protected override void RoleSpecificInit()
@@ -145,6 +159,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 GetRoleOptionId((int)BomberOption.ExplosionKillChance)].GetValue();
             this.explosionRange = allOption[
                 GetRoleOptionId((int)BomberOption.ExplosionRange)].GetValue();
+            this.tellExplosion = allOption[
+                GetRoleOptionId((int)BomberOption.TellExplosion)].GetValue();
 
             this.bombPlayerId.Clear();
             resetTimer();
@@ -193,6 +209,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 }
             }
             explosionKill(rolePlayer, bombPlayer, bombPlayer);
+            if (this.tellExplosion)
+            {
+                rolePlayer.StartCoroutine(
+                    showText().WrapToIl2Cpp());
+            }
         }
 
         private void resetTimer()
@@ -288,6 +309,25 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 });
             ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
                 target.PlayerId, GameDataContainer.PlayerStatus.Explosion);
+        }
+
+        private IEnumerator showText()
+        {
+            if (this.tellText == null)
+            {
+                this.tellText = Object.Instantiate(
+                    Prefab.Text, Camera.main.transform, false);
+                this.tellText.transform.localPosition = new Vector3(-4.0f, -2.75f, -250.0f);
+                this.tellText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
+                this.tellText.gameObject.layer = 5;
+                this.tellText.text = Helper.Translation.GetString("departureText");
+            }
+            this.tellText.gameObject.SetActive(true);
+
+            yield return new WaitForSeconds(3.5f);
+
+            this.tellText.gameObject.SetActive(false);
+
         }
 
     }
