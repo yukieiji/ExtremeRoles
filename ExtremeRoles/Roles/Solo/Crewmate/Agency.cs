@@ -303,7 +303,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         protected override void RoleSpecificInit()
         {
             this.maxTakeTask = OptionHolder.AllOption[
-                GetRoleOptionId((int)AgencyOption.MaxTaskNum)].GetValue();
+                GetRoleOptionId((int)AgencyOption.MaxTaskNum)].GetValue() + 1;
             this.takeTaskRange = OptionHolder.AllOption[
                 GetRoleOptionId((int)AgencyOption.TakeTaskRange)].GetValue();
 
