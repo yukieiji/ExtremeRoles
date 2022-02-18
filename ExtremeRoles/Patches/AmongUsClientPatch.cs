@@ -18,7 +18,7 @@ namespace ExtremeRoles.Patches
         }
     }
 
-        [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerJoined))]
+    [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerJoined))]
     public class AmongUsClientOnPlayerJoinedPatch
     {
         public static void Postfix()
