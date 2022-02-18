@@ -36,20 +36,22 @@ namespace ExtremeRoles.Module
 
         public void CreateInfoButton()
         {
-            var topRight = GameObject.Find("TopRight");
-
             infoButton = UnityEngine.Object.Instantiate(
-                Prefab.HelpButton,
-                topRight.transform);
+                GameObject.Find("MenuButton"),
+                GameObject.Find("TopRight").transform);
             UnityEngine.Object.DontDestroyOnLoad(infoButton);
             infoButton.name = "infoRoleButton";
             infoButton.gameObject.SetActive(true);
             infoButton.layer = 5;
             SetInfoButtonToGameStartShipPositon();
-            var passiveButton = infoButton.GetComponent<PassiveButton>();
+            var passiveButton = infoButton.GetComponent<ButtonBehavior>();
             passiveButton.OnClick = new Button.ButtonClickedEvent();
             passiveButton.OnClick.AddListener(
                 (UnityAction)ExtremeRolesPlugin.Info.ToggleInfoOverlay);
+
+            var render = infoButton.GetComponent<SpriteRenderer>();
+            render.sprite = Loader.CreateSpriteFromResources(
+                Path.HelpImage, 230f);
         }
 
         public void ChangeRoleInfoPage(int count)
