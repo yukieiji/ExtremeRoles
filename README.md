@@ -11,7 +11,7 @@ AmongUsの上級者(初心者)向けのロール追加MOD、主な特徴とし�
 このMODはAmong UsまたはInnersloth LLCとは提携しておらず、含まれるコンテンツはAmong UsやInnersloth LLCから支援、援助されているものではありません。
 ここに含まれる素材の一部は、Innersloth LLCの所有物です。©Innersloth LLC.
 
-## 追加役職一覧(Extreme Roles v1.16.0.0時点、今後も追加予定)
+## 追加役職一覧(Extreme Roles v1.16.1.0時点、今後も追加予定)
 |  クルー  |  インポスター  | ニュートラル |
 | ---- | ---- | ---- |
 |  スペシャルクルー  |  スペシャルインポスター  | アリス |
@@ -60,9 +60,8 @@ AmongUsの上級者(初心者)向けのロール追加MOD、主な特徴とし�
 ## AmongUsとの対応バージョン
 |  AmongUs バージョン  |  Extreme Roles バージョン  |
 | ---- | ---- |
-|  v2021.12.15s/v2022.02.08s/v2021.12.15e  |  v1.11.1.1 ～ v1.16.0.2  |
-
-Steam版限定のv2022.02.08sはv2021.12.15sとほぼ同じらしいので恐らく動作すると思われます。動作不良等があれば対応します
+|  v2021.12.15s/v2022.02.08s/v2021.12.15e  |  v1.16.1.0  |
+|  v2021.12.15s/v2021.12.15e  |  v1.11.1.1 ～ v1.16.0.2  |
 
 ## クレジット&Thanks
 - TheOtherRoles - 開発当時から[TOR](https://github.com/Eisbison/TheOtherRoles)及び[TOR-GM](https://github.com/yukinogatari/TheOtherRoles-GM)のコード(ロールに関するところ以外(オプションやパッチ等))を参考、引用、改変して開発しています。TORがなければ開発をこのMODを開発することは不可能でした。また、バウンティハンターのアイディア元
@@ -76,6 +75,7 @@ Steam版限定のv2022.02.08sはv2021.12.15sとほぼ同じらしいので恐ら
 
 - Microsoft.CSharp: dynamic型を使用するために使用
 - GAHAG : https://gahag.net/ ボタンを作る際に使用
+- Google Font Icons : https://fonts.google.com/icons ApacheLicenceV2、いくつかのアイコンを作るためにいくつか改変を加えて使用
 
 ### ボタンのアイコンについて
 ボタンのアイコン画像はパブリックドメインの著作権が放棄された素材を元に作成しています。気に食わなくて差し替えたい場合は連絡を下さい
