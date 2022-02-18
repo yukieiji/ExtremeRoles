@@ -9,7 +9,16 @@ using ExtremeRoles.Roles;
 namespace ExtremeRoles.Patches
 {
 
-    [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerJoined))]
+    [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.CoStartGame))]
+    public class AmongUsClientCoStartGamePatch
+    {
+        public static void Prefix(AmongUsClient __instance)
+        {
+            ExtremeRolesPlugin.Info.HideInfoOverlay();
+        }
+    }
+
+        [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerJoined))]
     public class AmongUsClientOnPlayerJoinedPatch
     {
         public static void Postfix()
