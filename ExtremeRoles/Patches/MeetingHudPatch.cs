@@ -251,6 +251,17 @@ namespace ExtremeRoles.Patches
         }
     }
 
+    [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Close))]
+    class MeetingHudClosePatch
+    {
+        public static void Prefix(
+            MeetingHud __instance)
+        {
+            ExtremeRolesPlugin.Info.HideInfoOverlay();
+        }
+    }
+
+
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CoIntro))]
     class MeetingHudCoIntroPatch
     {
