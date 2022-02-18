@@ -4,8 +4,6 @@ using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 
-using UnityEngine;
-
 using HarmonyLib;
 using ExtremeRoles.Module;
 
