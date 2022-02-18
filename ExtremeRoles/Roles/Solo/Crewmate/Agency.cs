@@ -47,7 +47,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ExtremeRoleId.Agency,
             ExtremeRoleType.Crewmate,
             ExtremeRoleId.Agency.ToString(),
-            ColorPalette.BodyGuardOrange,
+            ColorPalette.AgencyYellowGreen,
             false, true, false, false)
         { }
 
