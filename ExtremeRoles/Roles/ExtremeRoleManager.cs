@@ -44,6 +44,7 @@ namespace ExtremeRoles.Roles
         OverLoader,
         Cracker,
         Bomber,
+        Mary,
 
         Alice,
         Jackal,
