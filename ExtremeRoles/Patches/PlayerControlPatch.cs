@@ -681,10 +681,10 @@ namespace ExtremeRoles.Patches
                         targetPlayerId, replaceTarget, ops);
                     break;
                 case RPCOperator.Command.UncheckedGameEnd:
-                    int reason = reader.ReadInt32();
+                    int gameEndReason = reader.ReadInt32();
                     bool trigger = reader.ReadBoolean();
                     RPCOperator.UncheckedGameEnd(
-                        reason, trigger);
+                        gameEndReason, trigger);
                     break;
                 case RPCOperator.Command.UncheckedShapeShift:
                     byte shapeShiftPlayerId = reader.ReadByte();
