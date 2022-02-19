@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Hazel;
 
 namespace ExtremeRoles
@@ -15,6 +16,7 @@ namespace ExtremeRoles
             SetNormalRole,
             SetCombinationRole,
             ShareOption,
+            UncheckedGameEnd,
             UncheckedShapeShift,
             UncheckedMurderPlayer,
             CleanDeadBody,
@@ -156,6 +158,37 @@ namespace ExtremeRoles
             ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
                 playerId, (Module.GameDataContainer.PlayerStatus)reason);
         }
+
+        public static void UncheckedGameEnd(
+            int reason, bool trigger)
+        {
+            AmongUsClient.Instance.GameState = InnerNet.InnerNetClient.GameStates.Ended;
+            var clients = AmongUsClient.Instance.allClients;
+            lock (clients)
+            {
+                AmongUsClient.Instance.allClients.Clear();
+            }
+
+            var dispather = AmongUsClient.Instance.Dispatcher;
+            lock (dispather)
+            {
+                AmongUsClient.Instance.Dispatcher.Add(
+                    new Action(() =>
+                    {
+                        ShipStatus.Instance.enabled = false;
+                        ShipStatus.Instance.BeginCalled = false;
+                        AmongUsClient.Instance.OnGameEnd(
+                            new EndGameResult((GameOverReason)reason, trigger));
+
+                        if (AmongUsClient.Instance.AmHost)
+                        {
+                            ShipStatus.RpcEndGame(
+                                (GameOverReason)reason, trigger);
+                        }
+                    }));
+            }
+        }
+
         public static void UncheckedShapeShift(
             byte sourceId, byte targetId, byte useAnimation)
         {
