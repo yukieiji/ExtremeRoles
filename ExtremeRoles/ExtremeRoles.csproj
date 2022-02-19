@@ -4,8 +4,8 @@
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
         <!--<Version>1.16.1.0</Version>-->
-        <VersionPrefix>1.16.1</VersionPrefix>
-        <VersionSuffix>NewRole-v5SteamUpdate</VersionSuffix> 
+        <VersionPrefix>1.17.0</VersionPrefix>
+        <VersionSuffix>NewRole-v6SteamUpdate</VersionSuffix> 
         <Description>Extreme Roles for Advanced user</Description>
         <Authors>yukieiji</Authors>
     </PropertyGroup>
