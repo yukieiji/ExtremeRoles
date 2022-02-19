@@ -719,7 +719,7 @@ namespace ExtremeRoles.Patches
                     int minor = reader.ReadInt32();
                     int build = reader.ReadInt32();
                     int revision = reader.ReadInt32();
-                    int clientId = reader.ReadInt32();
+                    int clientId = reader.ReadPackedInt32();
                     RPCOperator.AddVersionData(
                         major, minor, build,
                         revision, clientId);
