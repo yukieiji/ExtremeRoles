@@ -106,15 +106,17 @@ namespace ExtremeRoles.Patches
             bool trigger = false)
         {
             curShip.enabled = false;
+            int gameId = AmongUsClient.Instance.GameId;
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                 PlayerControl.LocalPlayer.NetId,
                 (byte)RPCOperator.Command.UncheckedGameEnd,
                 Hazel.SendOption.Reliable, -1);
+            writer.Write(gameId);
             writer.Write((int)reason);
             writer.Write(trigger);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCOperator.UncheckedGameEnd(
-                (int)reason, trigger);
+                gameId, (int)reason, trigger);
         }
 
         private static bool isCrewmateWin(

@@ -160,32 +160,37 @@ namespace ExtremeRoles
         }
 
         public static void UncheckedGameEnd(
-            int reason, bool trigger)
+            int gameId, int reason, bool trigger)
         {
-            AmongUsClient.Instance.GameState = InnerNet.InnerNetClient.GameStates.Ended;
-            var clients = AmongUsClient.Instance.allClients;
-            lock (clients)
-            {
-                AmongUsClient.Instance.allClients.Clear();
-            }
 
-            var dispather = AmongUsClient.Instance.Dispatcher;
-            lock (dispather)
+            if (AmongUsClient.Instance.GameId == gameId &&
+                AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Ended)
             {
-                AmongUsClient.Instance.Dispatcher.Add(
-                    new Action(() =>
-                    {
-                        ShipStatus.Instance.enabled = false;
-                        ShipStatus.Instance.BeginCalled = false;
-                        AmongUsClient.Instance.OnGameEnd(
-                            new EndGameResult((GameOverReason)reason, trigger));
+                AmongUsClient.Instance.GameState = InnerNet.InnerNetClient.GameStates.Ended;
+                var clients = AmongUsClient.Instance.allClients;
+                lock (clients)
+                {
+                    AmongUsClient.Instance.allClients.Clear();
+                }
 
-                        if (AmongUsClient.Instance.AmHost)
+                var dispather = AmongUsClient.Instance.Dispatcher;
+                lock (dispather)
+                {
+                    AmongUsClient.Instance.Dispatcher.Add(
+                        new Action(() =>
                         {
-                            ShipStatus.RpcEndGame(
-                                (GameOverReason)reason, trigger);
-                        }
-                    }));
+                            ShipStatus.Instance.enabled = false;
+                            ShipStatus.Instance.BeginCalled = false;
+                            AmongUsClient.Instance.OnGameEnd(
+                                new EndGameResult((GameOverReason)reason, trigger));
+
+                            if (AmongUsClient.Instance.AmHost)
+                            {
+                                ShipStatus.RpcEndGame(
+                                    (GameOverReason)reason, trigger);
+                            }
+                        }));
+                }
             }
         }
 
