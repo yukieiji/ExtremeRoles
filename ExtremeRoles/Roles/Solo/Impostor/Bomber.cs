@@ -320,7 +320,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.tellText.transform.localPosition = new Vector3(-4.0f, -2.75f, -250.0f);
                 this.tellText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
                 this.tellText.gameObject.layer = 5;
-                this.tellText.text = Helper.Translation.GetString("departureText");
+                this.tellText.text = Helper.Translation.GetString("explosionText");
             }
             this.tellText.gameObject.SetActive(true);
 
