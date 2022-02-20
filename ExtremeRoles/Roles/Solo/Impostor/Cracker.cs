@@ -4,6 +4,7 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.RoleAbilityButton;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -13,7 +14,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 {
     public class Cracker : SingleRoleBase, IRoleAbility
     {
-        public class CrackTrace
+        public class CrackTrace : IMeetingResetObject
         {
             private SpriteRenderer image;
             private GameObject body;
@@ -39,7 +40,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             RemoveDeadBody,
             CanCrackDistance,
         }
-        public List<CrackTrace> CrakedTrace = new List<CrackTrace>();
+
         public bool IsRemoveDeadBody;
         private float crackDistance;
         private byte targetDeadBodyId;
@@ -76,7 +77,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
                     if (role.IsRemoveDeadBody)
                     {
-                        role.CrakedTrace.Add(
+                        ExtremeRolesPlugin.GameDataStore.AddMeetingResetObject(
                             new CrackTrace(array[i].gameObject.transform.position));
                         Object.Destroy(array[i].gameObject);
                     }
@@ -87,15 +88,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     break;
                 }
             }
-        }
-        public static void RemoveCrackTrace(byte rolePlayerId)
-        {
-            var role = (Cracker)ExtremeRoleManager.GameRole[rolePlayerId];
-            foreach (var body in role.CrakedTrace)
-            {
-                body.Clear();
-            }
-            role.CrakedTrace.Clear();
         }
         
         public void CreateAbility()
@@ -127,18 +119,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            if (this.CrakedTrace.Count == 0) { return; }
-            
-            RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
-                RPCOperator.Command.CrackerRemoveCrackTrace,
-                new List<byte>
-                {
-                    PlayerControl.LocalPlayer.PlayerId
-                });
-            RemoveCrackTrace(
-                PlayerControl.LocalPlayer.PlayerId);
-
+            return;
         }
 
         public bool UseAbility()

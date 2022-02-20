@@ -4,6 +4,7 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.RoleAbilityButton;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -13,7 +14,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 {
     public class Faker : SingleRoleBase, IRoleAbility
     {
-        public class FakeDeadBody
+        public class FakeDeadBody : IMeetingResetObject
         {
             private SpriteRenderer body;
             public FakeDeadBody(
@@ -38,8 +39,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         }
 
-        public List<FakeDeadBody> DummyBody = new List<FakeDeadBody>();
-
         public RoleAbilityButtonBase Button
         {
             get => this.createFake;
@@ -57,31 +56,18 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             ExtremeRoleId.Faker.ToString(),
             Palette.ImpostorRed,
             true, false, true, true)
-        {
-            this.DummyBody.Clear();
-        }
+        { }
 
         public static void CreateDummy(
             byte rolePlayerId, byte targetPlayerId)
         {
             PlayerControl rolePlyaer = Player.GetPlayerControlById(rolePlayerId);
             PlayerControl targetPlyaer = Player.GetPlayerControlById(targetPlayerId);
-            Faker faker = (Faker)ExtremeRoleManager.GameRole[rolePlayerId];
 
-            faker.DummyBody.Add(
+            ExtremeRolesPlugin.GameDataStore.AddMeetingResetObject(
                 new FakeDeadBody(
                     rolePlyaer,
                     targetPlyaer));            
-        }
-
-        public static void RemoveAllDummyPlayer(byte rolePlayerId)
-        {
-            Faker faker = (Faker)ExtremeRoleManager.GameRole[rolePlayerId];
-            foreach (var body in faker.DummyBody)
-            {
-                body.Clear();
-            }
-            faker.DummyBody.Clear();
         }
 
         public void CreateAbility()
@@ -101,11 +87,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
-                RPCOperator.Command.FakerRemoveAllDummy,
-                new List<byte> { PlayerControl.LocalPlayer.PlayerId });
-            RemoveAllDummyPlayer(PlayerControl.LocalPlayer.PlayerId);
+            return;
         }
 
         public bool UseAbility()
@@ -148,7 +130,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         protected override void RoleSpecificInit()
         {
-            this.DummyBody.Clear();
             this.RoleAbilityInit();
         }
     }

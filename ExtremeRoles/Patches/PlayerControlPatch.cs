@@ -796,10 +796,6 @@ namespace ExtremeRoles.Patches
                     RPCOperator.FakerCreateDummy(
                         fakerPlayerId, colorTargetId);
                     break;
-                case RPCOperator.Command.FakerRemoveAllDummy:
-                    byte removeFakerplayerId = reader.ReadByte();
-                    RPCOperator.FakerRemoveAllDummy(removeFakerplayerId);
-                    break;
                 case RPCOperator.Command.OverLoaderSwitchAbility:
                     byte overLoaderPlayerId = reader.ReadByte();
                     byte activate  = reader.ReadByte();
@@ -810,10 +806,6 @@ namespace ExtremeRoles.Patches
                     byte crackerId = reader.ReadByte();
                     byte crackTarget = reader.ReadByte();
                     RPCOperator.CrackerCrackDeadBody(crackerId, crackTarget);
-                    break;
-                case RPCOperator.Command.CrackerRemoveCrackTrace:
-                    byte crackerPlayerId = reader.ReadByte();
-                    RPCOperator.CrackerRemoveCrackTrace(crackerPlayerId);
                     break;
                 case RPCOperator.Command.AliceShipBroken:
                     byte alicePlayerId = reader.ReadByte();
