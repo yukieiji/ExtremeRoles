@@ -241,14 +241,20 @@ namespace ExtremeRoles.Roles.API.Interface
 
         public static void ResetOnMeetingEnd(this IRoleAbility self)
         {
-            self.Button.ResetCoolTimer();
+            if (self.Button != null)
+            {
+                self.Button.ResetCoolTimer();
+            }
             self.RoleAbilityResetOnMeetingEnd();
         }
 
         public static void ResetOnMeetingStart(this IRoleAbility self)
         {
-            self.Button.SetActive(false);
-            self.Button.ForceAbilityOff();
+            if (self.Button != null)
+            {
+                self.Button.SetActive(false);
+                self.Button.ForceAbilityOff();
+            }
             self.RoleAbilityResetOnMeetingStart();
         }
 
