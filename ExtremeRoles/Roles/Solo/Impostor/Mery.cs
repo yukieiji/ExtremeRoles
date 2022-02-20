@@ -184,7 +184,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             Vent newVent = camp.GetConvertedVent();
             var meryVent = ExtremeRolesPlugin.GameDataStore.CustomVent.GetCustomVent(
-                CustomVentContainer.CustomVentType.MeryVent);
+                GameDataContainer.CustomVentType.MeryVent);
 
             int ventNum = meryVent.Count;
 
@@ -214,13 +214,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             newVent.Center = null;
 
             ExtremeRolesPlugin.GameDataStore.CustomVent.AddVent(
-                newVent, CustomVentContainer.CustomVentType.MeryVent);
+                newVent, GameDataContainer.CustomVentType.MeryVent);
 
             if (!ExtremeRolesPlugin.GameDataStore.CustomVent.HasVentAnime(
-                CustomVentContainer.CustomVentType.MeryVent))
+                GameDataContainer.CustomVentType.MeryVent))
             {
                 ExtremeRolesPlugin.GameDataStore.CustomVent.SetVentAnimation(
-                    CustomVentContainer.CustomVentType.MeryVent, getAnimation());
+                    GameDataContainer.CustomVentType.MeryVent, getAnimation());
             }
             camp.Clear();
         }
