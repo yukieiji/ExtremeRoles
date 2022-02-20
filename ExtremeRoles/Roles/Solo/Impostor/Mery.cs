@@ -188,13 +188,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             int ventNum = meryVent.Count;
 
-            if (ventNum > 1)
+            if (ventNum > 0)
             {
-                var leftVent = meryVent[^1];
+                var leftVent = meryVent[ventNum - 1];
                 newVent.Left = leftVent;
                 leftVent.Right = newVent;
                 
-                if (ventNum > 2)
+                if (ventNum > 1)
                 {
                     meryVent[0].Right = newVent;
                     newVent.Right = meryVent[0];
@@ -204,12 +204,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     newVent.Right = null;
                     newVent.Center = null;
                 }
-            }
-            else if (ventNum == 1)
-            {
-                var leftVent = meryVent[0];
-                newVent.Left = leftVent;
-                leftVent.Right = newVent;
             }
             else
             {
