@@ -1,0 +1,314 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using UnityEngine;
+
+using Hazel;
+
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.RoleAbilityButton;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
+
+
+namespace ExtremeRoles.Roles.Solo.Impostor
+{
+    public class Mery : SingleRoleBase, IRoleAbility
+    {
+        public class Camp : IUpdatableObject
+        {
+            private HashSet<byte> player = new HashSet<byte>();
+
+            private GameObject body;
+            private SpriteRenderer img;
+
+            private float activePlayerNum;
+            private float activeRange;
+            private bool isActivate;
+
+            public Camp(
+                int activeNum,
+                float activateRange,
+                bool canSee,
+                Vector2 pos)
+            {
+                this.body = new GameObject("MaryCamp");
+                this.img = this.body.AddComponent<SpriteRenderer>();
+                this.img.sprite = Loader.CreateSpriteFromResources(
+                   Path.MeryNoneActiveVent, 125f); ;
+
+                this.body.gameObject.SetActive(canSee);
+                this.body.transform.position = pos;
+
+                this.activePlayerNum = activeNum;
+                this.activeRange = activateRange;
+                this.isActivate = false;
+            }
+
+            public void Update(int index)
+            {
+
+                if (this.isActivate) { return; }
+
+                Vector2 pos = new Vector2(
+                    this.body.transform.position.x,
+                    this.body.transform.position.y);
+
+                Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers;
+                for (int i = 0; i < allPlayers.Count; i++)
+                {
+                    GameData.PlayerInfo playerInfo = allPlayers[i];
+
+                    if (!playerInfo.Disconnected &&
+                        !ExtremeRoleManager.GameRole[playerInfo.PlayerId].IsImpostor() &&
+                        !playerInfo.IsDead &&
+                        !playerInfo.Object.inVent)
+                    {
+                        PlayerControl @object = playerInfo.Object;
+                        if (@object)
+                        {
+                            Vector2 vector = @object.GetTruePosition() - pos;
+                            float magnitude = vector.magnitude;
+                            if (magnitude <= activeRange &&
+                                !PhysicsHelpers.AnyNonTriggersBetween(
+                                    pos, vector.normalized,
+                                    magnitude, Constants.ShipAndObjectsMask))
+                            {
+                                this.player.Add(@object.PlayerId);
+                            }
+                        }
+                    }
+                }
+
+                if (this.player.Count >= this.activePlayerNum)
+                {
+                    this.isActivate = true;
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                        PlayerControl.LocalPlayer.NetId,
+                        (byte)RPCOperator.Command.MaryAcivateVent,
+                        Hazel.SendOption.Reliable, -1);
+                    writer.Write(index);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                }
+
+            }
+
+            public Vent GetConvertedVent()
+            {
+                var referenceVent = UnityEngine.Object.FindObjectOfType<Vent>();
+                var vent = UnityEngine.Object.Instantiate<Vent>(referenceVent);
+                vent.transform.position = this.body.gameObject.transform.position;
+                vent.Left = null;
+                vent.Right = null;
+                vent.Center = null;
+                vent.EnterVentAnim = null;
+                vent.ExitVentAnim = null;
+                vent.Offset = new Vector3(0f, 0.25f, 0f);
+                vent.GetComponent<PowerTools.SpriteAnim>()?.Stop();
+                vent.Id = ShipStatus.Instance.AllVents.Select(x => x.Id).Max() + 1;
+
+                var ventRenderer = vent.GetComponent<SpriteRenderer>();
+                ventRenderer.sprite = Loader.CreateSpriteFromResources(
+                   string.Format(Path.MeryCustomVentAnime, "00"), 125f);
+                vent.myRend = ventRenderer;
+                vent.name = "MaryVent_" + vent.Id;
+                vent.gameObject.SetActive(this.body.gameObject.active);
+
+                return vent;
+            }
+
+            public void Clear()
+            {
+                UnityEngine.Object.Destroy(this.img);
+                UnityEngine.Object.Destroy(this.body);
+            }
+        }
+
+
+        public enum MaryOption
+        {
+            ActiveNum,
+            ActiveRange
+        }
+
+        public RoleAbilityButtonBase Button
+        {
+            get => this.bombButton;
+            set
+            {
+                this.bombButton = value;
+            }
+        }
+
+        public List<Vent> ActiveVent = new List<Vent>();
+        public int ActiveNum;
+        public float ActiveRange;
+
+        private RoleAbilityButtonBase bombButton;
+
+        public Mery() : base(
+            ExtremeRoleId.Mery,
+            ExtremeRoleType.Impostor,
+            ExtremeRoleId.Mery.ToString(),
+            Palette.ImpostorRed,
+            true, false, true, true)
+        { }
+
+
+        public static void SetCamp(byte callerId)
+        {
+            var rolePlayer = Player.GetPlayerControlById(callerId);
+            var mary = (Mery)ExtremeRoleManager.GameRole[rolePlayer.PlayerId];
+            var localPlayerRole = ExtremeRoleManager.GetLocalPlayerRole();
+
+            bool isMarlin = localPlayerRole.Id == ExtremeRoleId.Marlin;
+
+            ExtremeRolesPlugin.GameDataStore.UpdateObject.Add(
+                new Camp(
+                    mary.ActiveNum,
+                    mary.ActiveRange,
+                    localPlayerRole.IsImpostor() || isMarlin,
+                    rolePlayer.GetTruePosition()));
+        }
+
+        public static void ActivateVent(
+            int activateVentIndex)
+        {
+            Camp camp = (Camp)ExtremeRolesPlugin.GameDataStore.UpdateObject[
+                activateVentIndex];
+            ExtremeRolesPlugin.GameDataStore.UpdateObject.RemoveAt(
+                activateVentIndex);
+
+            Vent newVent = camp.GetConvertedVent();
+            var maryVent = ExtremeRolesPlugin.GameDataStore.CustomVent.GetCustomVent(
+                CustomVentContainer.CustomVentType.MeryVent);
+
+            int ventNum = maryVent.Count;
+
+            if (ventNum > 0)
+            {
+                var leftVent = maryVent[^1];
+                newVent.Left = leftVent;
+                leftVent.Right = newVent;
+                
+                if (ventNum > 2)
+                {
+                    maryVent[0].Right = newVent;
+                    newVent.Right = maryVent[0];
+                }
+                else
+                {
+                    newVent.Right = null;
+                    newVent.Center = null;
+                }
+            }
+            else
+            {
+                newVent.Left = null;
+                newVent.Right = null;
+            }
+
+            newVent.Center = null;
+
+            ExtremeRolesPlugin.GameDataStore.CustomVent.AddVent(
+                newVent, CustomVentContainer.CustomVentType.MeryVent);
+
+            if (!ExtremeRolesPlugin.GameDataStore.CustomVent.HasVentAnime(
+                CustomVentContainer.CustomVentType.MeryVent))
+            {
+                ExtremeRolesPlugin.GameDataStore.CustomVent.SetVentAnimation(
+                    CustomVentContainer.CustomVentType.MeryVent, getAnimation());
+            }
+            camp.Clear();
+        }
+
+        public void CreateAbility()
+        {
+
+            this.CreateAbilityCountButton(
+                Translation.GetString("setCamp"),
+                Loader.CreateSpriteFromResources(
+                    Path.TestButton));
+        }
+
+        public bool IsAbilityUse()
+        {
+            return this.IsCommonUse();
+        }
+
+        public bool UseAbility()
+        {
+            RPCOperator.Call(
+                PlayerControl.LocalPlayer.NetId,
+                RPCOperator.Command.MarySetCamp,
+                new List<byte>
+                {
+                    PlayerControl.LocalPlayer.PlayerId,
+                });
+
+            SetCamp(PlayerControl.LocalPlayer.PlayerId);
+
+            return true;
+        }
+
+        protected override void CreateSpecificOption(
+            CustomOptionBase parentOps)
+        {
+            this.CreateAbilityCountOption(
+                parentOps, 3, 5);
+            CustomOption.Create(
+                GetRoleOptionId((int)MaryOption.ActiveNum),
+                string.Concat(
+                    this.RoleName,
+                    MaryOption.ActiveNum.ToString()),
+                2, 1, 4, 1, parentOps);
+            CustomOption.Create(
+                GetRoleOptionId((int)MaryOption.ActiveRange),
+                string.Concat(
+                    this.RoleName,
+                    MaryOption.ActiveRange.ToString()),
+                1.0f, 0.1f, 3.0f, 0.1f, parentOps);
+        }
+
+        protected override void RoleSpecificInit()
+        {
+
+            this.RoleAbilityInit();
+
+            var allOption = OptionHolder.AllOption;
+
+            this.ActiveNum = allOption[
+                GetRoleOptionId((int)MaryOption.ActiveNum)].GetValue();
+            this.ActiveRange = allOption[
+                GetRoleOptionId((int)MaryOption.ActiveRange)].GetValue();
+
+        }
+
+        public void RoleAbilityResetOnMeetingStart()
+        {
+            return;
+        }
+
+        public void RoleAbilityResetOnMeetingEnd()
+        {
+            return;
+        }
+
+        private static List<Sprite> getAnimation()
+        {
+            List<Sprite> anime = new List<Sprite>();
+
+            for (int i=0; i< 18; ++i)
+            {
+                anime.Add(
+                    Loader.CreateSpriteFromResources(
+                        string.Format(Path.MeryCustomVentAnime, $"{(i):00}"), 125f));
+            }
+
+            return anime;
+        }
+    }
+}

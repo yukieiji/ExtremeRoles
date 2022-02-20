@@ -680,6 +680,12 @@ namespace ExtremeRoles.Patches
                     RPCOperator.ReplaceRole(
                         targetPlayerId, replaceTarget, ops);
                     break;
+                case RPCOperator.Command.CustomVentUse:
+                    int ventId = reader.ReadPackedInt32();
+                    byte ventingPlayer = reader.ReadByte();
+                    byte isEnter = reader.ReadByte();
+                    RPCOperator.CustomVentUse(ventId, ventingPlayer, isEnter);
+                    break;
                 case RPCOperator.Command.UncheckedShapeShift:
                     byte shapeShiftPlayerId = reader.ReadByte();
                     byte shapeShiftTargetPlayerId = reader.ReadByte();
@@ -814,6 +820,14 @@ namespace ExtremeRoles.Patches
                     byte crackerId = reader.ReadByte();
                     byte crackTarget = reader.ReadByte();
                     RPCOperator.CrackerCrackDeadBody(crackerId, crackTarget);
+                    break;
+                case RPCOperator.Command.MarySetCamp:
+                    byte marySetCampPlayerId = reader.ReadByte();
+                    RPCOperator.MarySetCamp(marySetCampPlayerId);
+                    break;
+                case RPCOperator.Command.MaryAcivateVent:
+                    int activeObjectIndex = reader.ReadInt32();
+                    RPCOperator.MaryActiveVent(activeObjectIndex);
                     break;
                 case RPCOperator.Command.AliceShipBroken:
                     byte alicePlayerId = reader.ReadByte();

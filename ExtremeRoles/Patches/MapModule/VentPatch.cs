@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using Hazel;
 using UnityEngine;
 
 namespace ExtremeRoles.Patches.MapModule
@@ -67,6 +68,25 @@ namespace ExtremeRoles.Patches.MapModule
 
             bool isEnter = !PlayerControl.LocalPlayer.inVent;
 
+            if (ExtremeRolesPlugin.GameDataStore.CustomVent.IsCustomVent(
+                __instance.Id))
+            {
+                __instance.SetButtons(isEnter);
+                MessageWriter writer = AmongUsClient.Instance.StartRpc(
+                    PlayerControl.LocalPlayer.NetId,
+                    (byte)RPCOperator.Command.CustomVentUse,
+                    Hazel.SendOption.Reliable);
+                writer.WritePacked(__instance.Id);
+                writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                writer.Write(isEnter ? byte.MaxValue : (byte)0);
+                writer.EndMessage();
+                RPCOperator.CustomVentUse(
+                    __instance.Id,
+                    PlayerControl.LocalPlayer.PlayerId,
+                    isEnter ? byte.MaxValue : (byte)0);
+                return false;
+            }
+
             if (isEnter)
             {
                 PlayerControl.LocalPlayer.MyPhysics.RpcEnterVent(__instance.Id);
@@ -77,8 +97,6 @@ namespace ExtremeRoles.Patches.MapModule
             }
 
             __instance.SetButtons(isEnter);
-
-            Helper.Logging.Debug($"VentStatus:{canUse}   {couldUse}   {isEnter}");
 
             return false;
         }
