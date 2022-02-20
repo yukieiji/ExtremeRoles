@@ -3,8 +3,8 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
-        <!--<Version>1.16.1.0</Version>-->
-        <VersionPrefix>1.17.0</VersionPrefix>
+        <Version>1.17.0.1</Version>
+        <!--<VersionPrefix>1.17.0</VersionPrefix>-->
         <VersionSuffix>NewRole-v6SteamUpdate</VersionSuffix> 
         <Description>Extreme Roles for Advanced user</Description>
         <Authors>yukieiji</Authors>
