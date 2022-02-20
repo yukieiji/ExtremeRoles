@@ -76,7 +76,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void RoleAbilityResetOnMeetingStart()
         {
             CleanUp();
-            return;
         }
 
         public bool UseAbility()
