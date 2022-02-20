@@ -264,13 +264,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 string.Concat(
                     this.RoleName,
                     MeryOption.ActiveNum.ToString()),
-                2, 1, 4, 1, parentOps);
+                3, 1, 5, 1, parentOps);
             CustomOption.Create(
                 GetRoleOptionId((int)MeryOption.ActiveRange),
                 string.Concat(
                     this.RoleName,
                     MeryOption.ActiveRange.ToString()),
-                1.0f, 0.1f, 3.0f, 0.1f, parentOps);
+                2.0f, 0.1f, 3.0f, 0.1f, parentOps);
         }
 
         protected override void RoleSpecificInit()
