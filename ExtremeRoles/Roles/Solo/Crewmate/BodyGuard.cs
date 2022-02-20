@@ -132,6 +132,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 });
             RPCOperator.BodyGuardResetShield(
                 PlayerControl.LocalPlayer.PlayerId);
+
+            if (this.shieldButton == null) { return; }
+
             ((AbilityCountButton)this.shieldButton).UpdateAbilityCount(
                 this.shildNum);
         }
