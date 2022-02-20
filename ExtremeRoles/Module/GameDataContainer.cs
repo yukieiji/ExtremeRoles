@@ -4,6 +4,7 @@ using System.Linq;
 
 using UnityEngine;
 
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SpecialWinChecker;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -53,6 +54,8 @@ namespace ExtremeRoles.Module
         public byte ExiledAssassinId = byte.MaxValue;
         public byte IsMarinPlayerId = byte.MaxValue;
 
+        private List<IMeetingResetObject> resetObject = new List<IMeetingResetObject>();
+
         public GameDataContainer()
         {
             this.Initialize();
@@ -66,6 +69,7 @@ namespace ExtremeRoles.Module
             FinalSummary.Clear();
             DeadPlayerInfo.Clear();
             PlusWinner.Clear();
+            ClearMeetingResetObject();
 
             MeetingsCount = 0;
             WinGameControlId = int.MaxValue;
@@ -320,6 +324,20 @@ namespace ExtremeRoles.Module
         {
             if (!this.DeadPlayerInfo.ContainsKey(playerId)) { return; }
             this.DeadPlayerInfo[playerId].Reason = newReason;
+        }
+
+        public void AddMeetingResetObject(
+            IMeetingResetObject resetObject)
+        {
+            this.resetObject.Add(resetObject);
+        }
+        public void ClearMeetingResetObject()
+        {
+            foreach (var clerObject in this.resetObject)
+            { 
+                clerObject.Clear();
+            }
+            this.resetObject.Clear();
         }
 
         private void addNeutralTeams(

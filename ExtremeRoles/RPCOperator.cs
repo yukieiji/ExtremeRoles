@@ -46,10 +46,8 @@ namespace ExtremeRoles
             CarrierSetBody,
             PainterPaintBody,
             FakerCreateDummy,
-            FakerRemoveAllDummy,
             OverLoaderSwitchAbility,
             CrackerCrackDeadBody,
-            CrackerRemoveCrackTrace,
 
             // ニュートラル
             AliceShipBroken,
@@ -320,11 +318,6 @@ namespace ExtremeRoles
             Roles.Solo.Impostor.Faker.CreateDummy(
                 callerId, targetId);
         }
-        public static void FakerRemoveAllDummy(byte callerId)
-        {
-            Roles.Solo.Impostor.Faker.RemoveAllDummyPlayer(
-                callerId);
-        }
 
         public static void OverLoaderSwitchAbility(
             byte callerId, byte activate)
@@ -339,13 +332,6 @@ namespace ExtremeRoles
         {
             Roles.Solo.Impostor.Cracker.CrackDeadBody(
                 callerId, targetId);
-        }
-
-        public static void CrackerRemoveCrackTrace(
-            byte callerId)
-        {
-            Roles.Solo.Impostor.Cracker.RemoveCrackTrace(
-                callerId);
         }
 
         public static void AliceShipBroken(byte callerId)
