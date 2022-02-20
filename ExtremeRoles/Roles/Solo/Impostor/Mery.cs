@@ -88,7 +88,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.isActivate = true;
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                         PlayerControl.LocalPlayer.NetId,
-                        (byte)RPCOperator.Command.MaryAcivateVent,
+                        (byte)RPCOperator.Command.MeryAcivateVent,
                         Hazel.SendOption.Reliable, -1);
                     writer.Write(index);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
@@ -128,7 +128,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
 
-        public enum MaryOption
+        public enum MeryOption
         {
             ActiveNum,
             ActiveRange
@@ -161,15 +161,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public static void SetCamp(byte callerId)
         {
             var rolePlayer = Player.GetPlayerControlById(callerId);
-            var mary = (Mery)ExtremeRoleManager.GameRole[rolePlayer.PlayerId];
+            var mery = (Mery)ExtremeRoleManager.GameRole[rolePlayer.PlayerId];
             var localPlayerRole = ExtremeRoleManager.GetLocalPlayerRole();
 
             bool isMarlin = localPlayerRole.Id == ExtremeRoleId.Marlin;
 
             ExtremeRolesPlugin.GameDataStore.UpdateObject.Add(
                 new Camp(
-                    mary.ActiveNum,
-                    mary.ActiveRange,
+                    mery.ActiveNum,
+                    mery.ActiveRange,
                     localPlayerRole.IsImpostor() || isMarlin,
                     rolePlayer.GetTruePosition()));
         }
@@ -183,27 +183,33 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 activateVentIndex);
 
             Vent newVent = camp.GetConvertedVent();
-            var maryVent = ExtremeRolesPlugin.GameDataStore.CustomVent.GetCustomVent(
+            var meryVent = ExtremeRolesPlugin.GameDataStore.CustomVent.GetCustomVent(
                 CustomVentContainer.CustomVentType.MeryVent);
 
-            int ventNum = maryVent.Count;
+            int ventNum = meryVent.Count;
 
-            if (ventNum > 0)
+            if (ventNum > 1)
             {
-                var leftVent = maryVent[^1];
+                var leftVent = meryVent[^1];
                 newVent.Left = leftVent;
                 leftVent.Right = newVent;
                 
                 if (ventNum > 2)
                 {
-                    maryVent[0].Right = newVent;
-                    newVent.Right = maryVent[0];
+                    meryVent[0].Right = newVent;
+                    newVent.Right = meryVent[0];
                 }
                 else
                 {
                     newVent.Right = null;
                     newVent.Center = null;
                 }
+            }
+            else if (ventNum == 1)
+            {
+                var leftVent = meryVent[0];
+                newVent.Left = leftVent;
+                leftVent.Right = newVent;
             }
             else
             {
@@ -243,7 +249,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             RPCOperator.Call(
                 PlayerControl.LocalPlayer.NetId,
-                RPCOperator.Command.MarySetCamp,
+                RPCOperator.Command.MerySetCamp,
                 new List<byte>
                 {
                     PlayerControl.LocalPlayer.PlayerId,
@@ -260,16 +266,16 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.CreateAbilityCountOption(
                 parentOps, 3, 5);
             CustomOption.Create(
-                GetRoleOptionId((int)MaryOption.ActiveNum),
+                GetRoleOptionId((int)MeryOption.ActiveNum),
                 string.Concat(
                     this.RoleName,
-                    MaryOption.ActiveNum.ToString()),
+                    MeryOption.ActiveNum.ToString()),
                 2, 1, 4, 1, parentOps);
             CustomOption.Create(
-                GetRoleOptionId((int)MaryOption.ActiveRange),
+                GetRoleOptionId((int)MeryOption.ActiveRange),
                 string.Concat(
                     this.RoleName,
-                    MaryOption.ActiveRange.ToString()),
+                    MeryOption.ActiveRange.ToString()),
                 1.0f, 0.1f, 3.0f, 0.1f, parentOps);
         }
 
@@ -281,9 +287,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             var allOption = OptionHolder.AllOption;
 
             this.ActiveNum = allOption[
-                GetRoleOptionId((int)MaryOption.ActiveNum)].GetValue();
+                GetRoleOptionId((int)MeryOption.ActiveNum)].GetValue();
             this.ActiveRange = allOption[
-                GetRoleOptionId((int)MaryOption.ActiveRange)].GetValue();
+                GetRoleOptionId((int)MeryOption.ActiveRange)].GetValue();
 
         }
 

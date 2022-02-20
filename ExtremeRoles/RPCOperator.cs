@@ -50,8 +50,8 @@ namespace ExtremeRoles
             FakerCreateDummy,
             OverLoaderSwitchAbility,
             CrackerCrackDeadBody,
-            MarySetCamp,
-            MaryAcivateVent,
+            MerySetCamp,
+            MeryAcivateVent,
 
             // ニュートラル
             AliceShipBroken,

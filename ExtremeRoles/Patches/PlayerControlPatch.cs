@@ -821,11 +821,11 @@ namespace ExtremeRoles.Patches
                     byte crackTarget = reader.ReadByte();
                     RPCOperator.CrackerCrackDeadBody(crackerId, crackTarget);
                     break;
-                case RPCOperator.Command.MarySetCamp:
+                case RPCOperator.Command.MerySetCamp:
                     byte marySetCampPlayerId = reader.ReadByte();
                     RPCOperator.MarySetCamp(marySetCampPlayerId);
                     break;
-                case RPCOperator.Command.MaryAcivateVent:
+                case RPCOperator.Command.MeryAcivateVent:
                     int activeObjectIndex = reader.ReadInt32();
                     RPCOperator.MaryActiveVent(activeObjectIndex);
                     break;
