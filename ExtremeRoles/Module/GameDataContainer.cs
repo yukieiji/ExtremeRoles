@@ -42,6 +42,10 @@ namespace ExtremeRoles.Module
         public Dictionary<int, Version> PlayerVersion = new Dictionary<int, Version>();
 
         public List<byte> DeadedAssassin = new List<byte>();
+        public List<IUpdatableObject> UpdateObject = new List<IUpdatableObject>();
+        public CustomVentContainer CustomVent = new CustomVentContainer();
+
+
         public ShieldPlayerContainer ShildPlayer = new ShieldPlayerContainer();
         public PlayerHistory History = new PlayerHistory();
 
@@ -70,6 +74,9 @@ namespace ExtremeRoles.Module
             DeadPlayerInfo.Clear();
             PlusWinner.Clear();
             ClearMeetingResetObject();
+
+            clearUpdateObject();
+            CustomVent.Clear();
 
             MeetingsCount = 0;
             WinGameControlId = int.MaxValue;
@@ -389,6 +396,17 @@ namespace ExtremeRoles.Module
             }
         }
 
+        private void clearUpdateObject()
+        {
+            foreach(var updateObject in this.UpdateObject)
+            {
+                updateObject.Clear();
+            }
+
+            this.UpdateObject.Clear();
+
+        }
+
         public class DeadInfo
         {
             public PlayerStatus Reason { get; set; }
@@ -521,6 +539,71 @@ namespace ExtremeRoles.Module
 
             public IEnumerable<Tuple<Vector3, bool>> GetAllHistory() => this.history.Reverse();
         }
-
     }
+
+    public class CustomVentContainer
+    {
+        public enum CustomVentType
+        {
+            MeryVent,
+        }
+        private Dictionary<int, CustomVentType> ventType = new Dictionary<int, CustomVentType>();
+        private Dictionary<CustomVentType, List<Vent>> addVent = new Dictionary<CustomVentType, List<Vent>>();
+        private Dictionary<CustomVentType, List<Sprite>> ventAnime = new Dictionary<CustomVentType, List<Sprite>>();
+
+        public CustomVentContainer()
+        {
+            this.Clear();
+        }
+
+        public void Clear()
+        {
+            addVent.Clear();
+            ventType.Clear();
+            ventAnime.Clear();
+        }
+
+        public void AddVent(
+            Vent newVent,
+            CustomVentType type)
+        {
+            var allVents = ShipStatus.Instance.AllVents.ToList();
+            allVents.Add(newVent);
+            ShipStatus.Instance.AllVents = allVents.ToArray();
+            if (this.addVent.ContainsKey(type))
+            {
+                this.addVent[type].Add(newVent);
+            }
+            else
+            {
+                var ventList = new List<Vent>();
+                ventList.Add(newVent);
+                this.addVent.Add(type, ventList);
+            }
+
+            ventType.Add(newVent.Id, type);
+        }
+
+        public List<Vent> GetCustomVent(CustomVentType type)
+        {
+            if (this.addVent.ContainsKey(type))
+            {
+                return this.addVent[type];
+            }
+            return new List<Vent>();
+        }
+
+        public List<Sprite> GetVentAnimation(int ventId) => ventAnime[ventType[ventId]];
+
+        public bool IsCustomVent(int ventId) => this.ventType.ContainsKey(ventId);
+
+        public bool HasVentAnime(CustomVentType type) => this.ventAnime.ContainsKey(type);
+
+        public void SetVentAnimation(
+            CustomVentType type, List<Sprite> anime)
+        {
+            ventAnime.Add(type, anime);
+        }
+    }
+
 }

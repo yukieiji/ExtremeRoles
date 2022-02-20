@@ -44,7 +44,7 @@ namespace ExtremeRoles.Roles
         OverLoader,
         Cracker,
         Bomber,
-        Mary,
+        Mery,
 
         Alice,
         Jackal,
@@ -113,6 +113,7 @@ namespace ExtremeRoles.Roles
                 new OverLoader(),
                 new Cracker(),
                 new Bomber(),
+                new Mery(),
 
                 new Alice(),
                 new Jackal(),

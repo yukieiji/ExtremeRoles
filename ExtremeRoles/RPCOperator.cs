@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Hazel;
 
 namespace ExtremeRoles
@@ -15,6 +16,7 @@ namespace ExtremeRoles
             SetNormalRole,
             SetCombinationRole,
             ShareOption,
+            CustomVentUse,
             UncheckedShapeShift,
             UncheckedMurderPlayer,
             CleanDeadBody,
@@ -48,6 +50,8 @@ namespace ExtremeRoles
             FakerCreateDummy,
             OverLoaderSwitchAbility,
             CrackerCrackDeadBody,
+            MarySetCamp,
+            MaryAcivateVent,
 
             // ニュートラル
             AliceShipBroken,
@@ -156,6 +160,44 @@ namespace ExtremeRoles
             ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
                 playerId, (Module.GameDataContainer.PlayerStatus)reason);
         }
+
+        public static void CustomVentUse(
+            int ventId, byte playerId, byte isEnter)
+        {
+            PlayerControl player = Helper.Player.GetPlayerControlById(playerId);
+            if (player == null) { return; }
+
+            MessageReader reader = new MessageReader();
+            
+            byte[] bytes = System.BitConverter.GetBytes(ventId);
+            if (!System.BitConverter.IsLittleEndian)
+            {
+                System.Array.Reverse(bytes);
+            }
+            reader.Buffer = bytes;
+            reader.Length = bytes.Length;
+
+            Vent vent = ShipStatus.Instance.AllVents.FirstOrDefault(
+                (x) => x.Id == ventId);
+            var ventAnime = ExtremeRolesPlugin.GameDataStore.CustomVent.GetVentAnimation(
+                ventId);
+
+            HudManager.Instance.StartCoroutine(
+                Effects.Lerp(
+                    0.6f, new System.Action<float>((p) => {
+                        if (vent != null && vent.myRend != null)
+                        {
+                            vent.myRend.sprite = ventAnime[(int)(p * (ventAnime.Count - 1))];
+                            if (p == 1f)
+                            {
+                                vent.myRend.sprite = ventAnime[0];
+                            }
+                        }
+                    })));
+
+            player.MyPhysics.HandleRpc(isEnter != 0 ? (byte)19 : (byte)20, reader);
+        }
+
         public static void UncheckedShapeShift(
             byte sourceId, byte targetId, byte useAnimation)
         {
@@ -332,6 +374,15 @@ namespace ExtremeRoles
         {
             Roles.Solo.Impostor.Cracker.CrackDeadBody(
                 callerId, targetId);
+        }
+
+        public static void MarySetCamp(byte callerId)
+        {
+            Roles.Solo.Impostor.Mery.SetCamp(callerId);
+        }
+        public static void MaryActiveVent(int index)
+        {
+            Roles.Solo.Impostor.Mery.ActivateVent(index);
         }
 
         public static void AliceShipBroken(byte callerId)
