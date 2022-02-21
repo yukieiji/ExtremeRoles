@@ -66,11 +66,13 @@ namespace ExtremeRoles.Patches.Manager
 
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
-            for(int i = 0 ; i < ExtremeRolesPlugin.GameDataStore.UpdateObject.Count; ++i)
+            if (AmongUsClient.Instance.AmHost)
             {
-                ExtremeRolesPlugin.GameDataStore.UpdateObject[i].Update(i);
+                for (int i = 0; i < ExtremeRolesPlugin.GameDataStore.UpdateObject.Count; ++i)
+                {
+                    ExtremeRolesPlugin.GameDataStore.UpdateObject[i].Update(i);
+                }
             }
-
             
             var role = ExtremeRoleManager.GetLocalPlayerRole();
 

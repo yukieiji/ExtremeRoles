@@ -92,6 +92,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                         Hazel.SendOption.Reliable, -1);
                     writer.Write(index);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    Mery.ActivateVent(index);
                 }
 
             }
@@ -112,7 +113,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
                 var ventRenderer = vent.GetComponent<SpriteRenderer>();
                 ventRenderer.sprite = Loader.CreateSpriteFromResources(
-                   string.Format(Path.MeryCustomVentAnime, "00"), 125f);
+                   string.Format(Path.MeryCustomVentAnime, "0"), 125f);
                 vent.myRend = ventRenderer;
                 vent.name = "MaryVent_" + vent.Id;
                 vent.gameObject.SetActive(this.body.gameObject.active);
@@ -305,7 +306,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 anime.Add(
                     Loader.CreateSpriteFromResources(
-                        string.Format(Path.MeryCustomVentAnime, $"{(i):00}"), 125f));
+                        string.Format(Path.MeryCustomVentAnime, i), 125f));
             }
 
             return anime;
