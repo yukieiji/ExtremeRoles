@@ -32,7 +32,7 @@ namespace ExtremeRoles.Resources
         public const string CrackerCrack = "ExtremeRoles.Resources.Crack.png";
         public const string CrackerCrackTrace = "ExtremeRoles.Resources.CrackTrace.png";
         public const string MeryNoneActiveVent = "ExtremeRoles.Resources.NoneActivateVent.png";
-        public const string MeryCustomVentAnime = "ExtremeRoles.Resources.MeryVentAnimation.00{0}.png";
+        public const string MeryCustomVentAnime = "ExtremeRoles.Resources.MeryVentAnimation.{0}.png";
 
         public const string AliceShipBroken = "ExtremeRoles.Resources.ShipBroken.png";
         public const string JackalSidekick = "ExtremeRoles.Resources.Sidekick.png";
