@@ -192,19 +192,18 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             if (ventNum > 0)
             {
-                var leftVent = meryVent[ventNum - 1];
-                newVent.Left = leftVent;
-                leftVent.Right = newVent;
+                var prevAddVent = meryVent[ventNum - 1];
+                newVent.Left = prevAddVent;
+                prevAddVent.Right = newVent;
 
                 if (ventNum > 1)
                 {
-                    meryVent[0].Right = newVent;
+                    meryVent[0].Left = newVent;
                     newVent.Right = meryVent[0];
                 }
                 else
                 {
                     newVent.Right = null;
-                    newVent.Center = null;
                 }
             }
             else
