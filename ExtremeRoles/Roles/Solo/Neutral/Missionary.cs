@@ -57,6 +57,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public override bool IsSameTeam(SingleRoleBase targetRole)
         {
+            var multiAssignRole = targetRole as MultiAssignRoleBase;
+
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    return this.IsSameTeam(multiAssignRole.AnotherRole);
+                }
+            }
             if (OptionHolder.Ship.IsSameNeutralSameWin)
             {
                 return this.Id == targetRole.Id;
