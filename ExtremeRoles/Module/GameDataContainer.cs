@@ -549,7 +549,7 @@ namespace ExtremeRoles.Module
         {
             private Dictionary<int, CustomVentType> ventType = new Dictionary<int, CustomVentType>();
             private Dictionary<CustomVentType, List<Vent>> addVent = new Dictionary<CustomVentType, List<Vent>>();
-            private Dictionary<CustomVentType, List<Sprite>> ventAnime = new Dictionary<CustomVentType, List<Sprite>>();
+            private Dictionary<CustomVentType, Sprite[]> ventAnime = new Dictionary<CustomVentType, Sprite[]>();
 
             public CustomVentContainer()
             {
@@ -580,6 +580,10 @@ namespace ExtremeRoles.Module
                     ventList.Add(newVent);
                     this.addVent.Add(type, ventList);
                 }
+                if (!this.ventAnime.ContainsKey(type))
+                {
+                    ventAnime.Add(type, new Sprite[18]);
+                }
 
                 ventType.Add(newVent.Id, type);
             }
@@ -593,17 +597,33 @@ namespace ExtremeRoles.Module
                 return new List<Vent>();
             }
 
-            public List<Sprite> GetVentAnimation(int ventId) => ventAnime[ventType[ventId]];
+            public Sprite GetVentSprite(int ventId, int index)
+            {
+                CustomVentType type = ventType[ventId];
+                Sprite img = ventAnime[type][index];
+
+                if (img != null)
+                {
+                    return img;
+                }
+                else
+                {
+                    switch (type)
+                    {
+                        case CustomVentType.MeryVent:
+                            img = Resources.Loader.CreateSpriteFromResources(
+                                string.Format(Resources.Path.MeryCustomVentAnime, index), 125f);
+                            break;
+                        default:
+                            return null;
+                    }
+
+                    ventAnime[type][index] = img;
+                    return img;
+                }
+            }
 
             public bool IsCustomVent(int ventId) => this.ventType.ContainsKey(ventId);
-
-            public bool HasVentAnime(CustomVentType type) => this.ventAnime.ContainsKey(type);
-
-            public void SetVentAnimation(
-                CustomVentType type, List<Sprite> anime)
-            {
-                ventAnime.Add(type, anime);
-            }
         }
 
     }

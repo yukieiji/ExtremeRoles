@@ -179,18 +179,20 @@ namespace ExtremeRoles
 
             Vent vent = ShipStatus.Instance.AllVents.FirstOrDefault(
                 (x) => x.Id == ventId);
-            var ventAnime = ExtremeRolesPlugin.GameDataStore.CustomVent.GetVentAnimation(
-                ventId);
+
+            var ventContainer = ExtremeRolesPlugin.GameDataStore.CustomVent;
 
             HudManager.Instance.StartCoroutine(
                 Effects.Lerp(
                     0.6f, new System.Action<float>((p) => {
                         if (vent != null && vent.myRend != null)
                         {
-                            vent.myRend.sprite = ventAnime[(int)(p * (ventAnime.Count - 1))];
+                            vent.myRend.sprite = ventContainer.GetVentSprite(
+                                ventId, (int)(p * 17));
                             if (p == 1f)
                             {
-                                vent.myRend.sprite = ventAnime[0];
+                                vent.myRend.sprite = ventContainer.GetVentSprite(
+                                    ventId, 0);
                             }
                         }
                     })));

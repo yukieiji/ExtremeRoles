@@ -195,7 +195,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 var leftVent = meryVent[ventNum - 1];
                 newVent.Left = leftVent;
                 leftVent.Right = newVent;
-                
+
                 if (ventNum > 1)
                 {
                     meryVent[0].Right = newVent;
@@ -218,12 +218,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             ExtremeRolesPlugin.GameDataStore.CustomVent.AddVent(
                 newVent, GameDataContainer.CustomVentType.MeryVent);
 
-            if (!ExtremeRolesPlugin.GameDataStore.CustomVent.HasVentAnime(
-                GameDataContainer.CustomVentType.MeryVent))
-            {
-                ExtremeRolesPlugin.GameDataStore.CustomVent.SetVentAnimation(
-                    GameDataContainer.CustomVentType.MeryVent, getAnimation());
-            }
             camp.Clear();
         }
 
@@ -297,20 +291,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void RoleAbilityResetOnMeetingEnd()
         {
             return;
-        }
-
-        private static List<Sprite> getAnimation()
-        {
-            List<Sprite> anime = new List<Sprite>();
-
-            for (int i=0; i< 18; ++i)
-            {
-                anime.Add(
-                    Loader.CreateSpriteFromResources(
-                        string.Format(Path.MeryCustomVentAnime, i), 125f));
-            }
-
-            return anime;
         }
     }
 }
