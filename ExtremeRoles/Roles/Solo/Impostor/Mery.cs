@@ -41,7 +41,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                    Path.MeryNoneActiveVent, 125f); ;
 
                 this.body.gameObject.SetActive(canSee);
-                this.body.transform.position = pos;
+                this.body.transform.position = new Vector3(
+                    pos.x, pos.y, PlayerControl.LocalPlayer.transform.position.z + 1f);
 
                 this.activePlayerNum = activeNum;
                 this.activeRange = activateRange;
@@ -114,7 +115,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 var ventRenderer = vent.GetComponent<SpriteRenderer>();
                 ventRenderer.sprite = Loader.CreateSpriteFromResources(
                    string.Format(Path.MeryCustomVentAnime, "0"), 125f);
-                vent.myRend = ventRenderer;
+                vent.myRend = ventRenderer;           
                 vent.name = "MaryVent_" + vent.Id;
                 vent.gameObject.SetActive(this.body.gameObject.active);
 
