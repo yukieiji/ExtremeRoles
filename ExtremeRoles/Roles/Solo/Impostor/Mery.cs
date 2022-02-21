@@ -92,15 +92,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                         Hazel.SendOption.Reliable, -1);
                     writer.Write(index);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    Mery.ActivateVent(index);
+                    ActivateVent(index);
                 }
 
             }
 
             public Vent GetConvertedVent()
             {
-                var referenceVent = UnityEngine.Object.FindObjectOfType<Vent>();
-                var vent = UnityEngine.Object.Instantiate<Vent>(referenceVent);
+                var referenceVent = Object.FindObjectOfType<Vent>();
+                var vent = Object.Instantiate<Vent>(referenceVent);
                 vent.transform.position = this.body.gameObject.transform.position;
                 vent.Left = null;
                 vent.Right = null;
@@ -123,8 +123,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             public void Clear()
             {
-                UnityEngine.Object.Destroy(this.img);
-                UnityEngine.Object.Destroy(this.body);
+                Object.Destroy(this.img);
+                Object.Destroy(this.body);
             }
         }
 
