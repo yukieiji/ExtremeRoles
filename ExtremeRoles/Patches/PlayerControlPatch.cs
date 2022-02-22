@@ -828,10 +828,6 @@ namespace ExtremeRoles.Patches
                     byte crackTarget = reader.ReadByte();
                     RPCOperator.CrackerCrackDeadBody(crackerId, crackTarget);
                     break;
-                case RPCOperator.Command.CrackerRemoveCrackTrace:
-                    byte crackerPlayerId = reader.ReadByte();
-                    RPCOperator.CrackerRemoveCrackTrace(crackerPlayerId);
-                    break;
                 case RPCOperator.Command.AliceShipBroken:
                     byte alicePlayerId = reader.ReadByte();
                     RPCOperator.AliceShipBroken(
