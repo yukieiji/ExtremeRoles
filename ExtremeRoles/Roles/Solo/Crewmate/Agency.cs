@@ -157,7 +157,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.CreateAbilityCountButton(
                 Translation.GetString("takeTask"),
                 Loader.CreateSpriteFromResources(
-                    Path.TestButton));
+                    Path.AgencyTakeTask));
             this.Button.SetLabelToCrewmate();
         }
 
