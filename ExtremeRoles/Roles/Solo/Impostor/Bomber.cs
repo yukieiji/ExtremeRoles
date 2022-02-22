@@ -65,7 +65,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.CreateAbilityCountButton(
                 Translation.GetString("setBomb"),
                 Loader.CreateSpriteFromResources(
-                    Path.TestButton),
+                    Path.BomberSetBomb),
                 checkAbility: CheckAbility,
                 abilityCleanUp: CleanUp);
         }
