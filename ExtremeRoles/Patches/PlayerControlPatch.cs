@@ -74,7 +74,7 @@ namespace ExtremeRoles.Patches
             refreshRoleDescription(__instance, role);
 
             ExtremeRolesPlugin.GameDataStore.History.Enqueue(__instance);
-
+            ExtremeRolesPlugin.GameDataStore.Union.Update();
         }
 
         private static void resetNameTagsAndColors()

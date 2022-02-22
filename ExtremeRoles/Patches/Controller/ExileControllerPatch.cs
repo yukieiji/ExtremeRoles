@@ -1,14 +1,19 @@
-﻿
+﻿using System.Collections;
 using HarmonyLib;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
+
+using BepInEx.IL2CPP.Utils.Collections;
 
 namespace ExtremeRoles.Patches.Controller
 {
     [HarmonyPatch(typeof(ExileController), nameof(ExileController.Begin))]
     class ExileControllerBeginePatch
     {
+
+        private static TMPro.TextMeshPro breadText;
+
         public static bool Prefix(
             ExileController __instance,
             [HarmonyArgument(0)] GameData.PlayerInfo exiled,
@@ -51,7 +56,36 @@ namespace ExtremeRoles.Patches.Controller
 			__instance.StartCoroutine(__instance.Animate());
             return false;
         }
+
+        public static void Postfix(
+            ExileController __instance,
+            [HarmonyArgument(0)] GameData.PlayerInfo exiled,
+            [HarmonyArgument(1)] bool tie)
+        {
+            if (!ExtremeRolesPlugin.GameDataStore.Union.IsEstablish()) { return; }
+            if (breadText == null)
+            {
+                breadText = UnityEngine.Object.Instantiate(
+                    __instance.ImpostorText,
+                    __instance.Text.transform);
+                if (PlayerControl.GameOptions.ConfirmImpostor)
+                {
+                    breadText.transform.localPosition += new UnityEngine.Vector3(0f, -0.4f, 0f);
+                }
+                else
+                {
+                    breadText.transform.localPosition += new UnityEngine.Vector3(0f, -0.2f, 0f);
+                }
+                breadText.gameObject.SetActive(true);
+            }
+
+            breadText.text = ExtremeRolesPlugin.GameDataStore.Union.GetBreadBakingCondition();
+
+            __instance.StartCoroutine(
+                Effects.Bloop(0.25f, breadText.transform, 1f, 0.5f));
+        }
     }
+
     [HarmonyPatch(typeof(ExileController), nameof(ExileController.ReEnableGameplay))]
     class ExileControllerReEnableGameplayPatch
     {
@@ -138,6 +172,7 @@ namespace ExtremeRoles.Patches.Controller
         {
 
             ExtremeRolesPlugin.Info.HideBlackBG();
+            ExtremeRolesPlugin.GameDataStore.Union.ResetTimer();
 
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 

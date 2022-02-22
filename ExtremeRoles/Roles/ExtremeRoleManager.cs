@@ -33,6 +33,7 @@ namespace ExtremeRoles.Roles
         Whisper,
         TimeMaster,
         Agency,
+        Bakary,
 
         SpecialImpostor,
         Evolver,
@@ -102,6 +103,7 @@ namespace ExtremeRoles.Roles
                 new Whisper(),
                 new TimeMaster(),
                 new Agency(),
+                new Bakary(),
 
                 new SpecialImpostor(),
                 new Evolver(),

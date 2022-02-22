@@ -53,6 +53,7 @@ namespace ExtremeRoles.Module
 
         public ShieldPlayerContainer ShildPlayer = new ShieldPlayerContainer();
         public PlayerHistory History = new PlayerHistory();
+        public BakaryUnion Union = new BakaryUnion();
 
         public int MeetingsCount = 0;
         public int WinGameControlId = int.MaxValue;
@@ -78,6 +79,7 @@ namespace ExtremeRoles.Module
             FinalSummary.Clear();
             DeadPlayerInfo.Clear();
             PlusWinner.Clear();
+            Union.Clear();
             ClearMeetingResetObject();
 
             clearUpdateObject();
@@ -626,5 +628,91 @@ namespace ExtremeRoles.Module
             public bool IsCustomVent(int ventId) => this.ventType.ContainsKey(ventId);
         }
 
+        public class BakaryUnion
+        {
+            private float timer = 0; 
+            private bool isUnion = false;
+            private HashSet<byte> aliveBakary = new HashSet<byte> ();
+
+            public BakaryUnion()
+            {
+                this.Clear();
+            }
+
+            public bool IsEstablish()
+            {
+                this.updateBakaryAlive();
+                return this.aliveBakary.Count != 0;
+            }
+
+            public string GetBreadBakingCondition()
+            {
+                if (this.timer < 60f)
+                {
+                    return Helper.Translation.GetString("rawBread");
+                }
+                else if (60f <= this.timer && this.timer < 120f)
+                {
+                    return Helper.Translation.GetString("goodBread");
+                }
+                else
+                {
+                    return Helper.Translation.GetString("badBread");
+                }
+            }
+
+            public void Clear()
+            {
+                this.ResetTimer();
+                this.isUnion = false;
+                this.aliveBakary.Clear();
+            }
+
+            public void ResetTimer()
+            {
+                this.timer = 0;
+            }
+
+            public void Update()
+            {
+                if (!this.isUnion) { this.organize(); }
+                if (this.aliveBakary.Count == 0) { return; }
+                if (MeetingHud.Instance != null) { return; }
+
+                this.timer += Time.fixedDeltaTime;
+
+            }
+
+            private void organize()
+            {
+                this.isUnion = true;
+                foreach (var (playerId, role) in ExtremeRoleManager.GameRole)
+                {
+                    if (role.Id == ExtremeRoleId.Bakary)
+                    { 
+                        this.aliveBakary.Add(playerId); 
+                    }
+                }
+            }
+
+            private void updateBakaryAlive()
+            {
+                if (this.aliveBakary.Count == 0) { return; }
+
+                HashSet<byte> updatedBakary = new HashSet<byte>();
+
+                foreach (var playerId in this.aliveBakary)
+                {
+                    PlayerControl player = Helper.Player.GetPlayerControlById(playerId);
+                    if ((!player.Data.IsDead && !player.Data.Disconnected))
+                    {
+                        updatedBakary.Add(playerId);
+                    }
+                }
+
+                this.aliveBakary = updatedBakary;
+            }
+        }
     }
+
 }
