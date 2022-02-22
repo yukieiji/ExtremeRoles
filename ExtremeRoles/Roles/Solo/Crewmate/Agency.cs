@@ -180,7 +180,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 }
                 else if (0.75 < taskGauge && taskGauge <= 0.9f)
                 {
-                    takeNum = UnityEngine.Random.RandomRange(0, 1);
+                    takeNum = UnityEngine.Random.RandomRange(0, 2);
                 }
                 else if (0.5 < taskGauge && taskGauge <= 0.75f)
                 {
