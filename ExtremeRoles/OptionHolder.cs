@@ -175,27 +175,27 @@ namespace ExtremeRoles
             var config = ExtremeRolesPlugin.Instance.Config;
 
             ConfigParser.StreamerMode = config.Bind(
-                "ClientOption", "Enable Streamer Mode", false);
+                "ClientOption", "StreamerMode", false);
             ConfigParser.GhostsSeeTasks = config.Bind(
-                "ClientOption", "Ghosts See Remaining Tasks", true);
+                "ClientOption", "GhostCanSeeRemainingTasks", true);
             ConfigParser.GhostsSeeRoles = config.Bind(
-                "ClientOption", "Ghosts See Roles", true);
+                "ClientOption", "GhostCanSeeRoles", true);
             ConfigParser.GhostsSeeVotes = config.Bind(
-                "ClientOption", "Ghosts See Votes", true);
+                "ClientOption", "GhostCanSeeVotes", true);
             ConfigParser.ShowRoleSummary = config.Bind(
-                "ClientOption", "Show Role Summary", true);
+                "ClientOption", "IsShowRoleSummary", true);
             ConfigParser.HideNamePlate = config.Bind(
-                "ClientOption", "Hide Name Plate", false);
+                "ClientOption", "IsHideNamePlate", false);
 
             ConfigParser.StreamerModeReplacementText = config.Bind(
                 "ClientOption",
-                "Streamer Mode Replacement Text",
+                "ReplacementRoomCodeText",
                 "\n\nPlaying with Extreme Roles");
 
             ConfigParser.Ip = config.Bind(
-                "ClientOption", "Custom Server IP", "127.0.0.1");
+                "ClientOption", "CustomServerIP", "127.0.0.1");
             ConfigParser.Port = config.Bind(
-                "ClientOption", "Custom Server Port", (ushort)22023);
+                "ClientOption", "CustomServerPort", (ushort)22023);
         }
 
         public static void Load()

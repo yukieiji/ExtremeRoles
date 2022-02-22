@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Hazel;
 
 namespace ExtremeRoles
@@ -17,6 +18,7 @@ namespace ExtremeRoles
             SetCombinationRole,
             ShareOption,
             UncheckedGameEnd,
+            CustomVentUse,
             UncheckedShapeShift,
             UncheckedMurderPlayer,
             CleanDeadBody,
@@ -38,6 +40,8 @@ namespace ExtremeRoles
             TimeMasterShieldOff,
             TimeMasterRewindTime,
             TimeMasterResetMeeting,
+            AgencyTakeTask,
+            AgencySetNewTask,
 
             // インポスター
             AssasinAddDead,
@@ -48,6 +52,8 @@ namespace ExtremeRoles
             FakerCreateDummy,
             OverLoaderSwitchAbility,
             CrackerCrackDeadBody,
+            MerySetCamp,
+            MeryAcivateVent,
 
             // ニュートラル
             AliceShipBroken,
@@ -192,6 +198,46 @@ namespace ExtremeRoles
             }
         }
 
+
+        public static void CustomVentUse(
+            int ventId, byte playerId, byte isEnter)
+        {
+            PlayerControl player = Helper.Player.GetPlayerControlById(playerId);
+            if (player == null) { return; }
+
+            MessageReader reader = new MessageReader();
+            
+            byte[] bytes = System.BitConverter.GetBytes(ventId);
+            if (!System.BitConverter.IsLittleEndian)
+            {
+                System.Array.Reverse(bytes);
+            }
+            reader.Buffer = bytes;
+            reader.Length = bytes.Length;
+
+            Vent vent = ShipStatus.Instance.AllVents.FirstOrDefault(
+                (x) => x.Id == ventId);
+
+            var ventContainer = ExtremeRolesPlugin.GameDataStore.CustomVent;
+
+            HudManager.Instance.StartCoroutine(
+                Effects.Lerp(
+                    0.6f, new System.Action<float>((p) => {
+                        if (vent != null && vent.myRend != null)
+                        {
+                            vent.myRend.sprite = ventContainer.GetVentSprite(
+                                ventId, (int)(p * 17));
+                            if (p == 1f)
+                            {
+                                vent.myRend.sprite = ventContainer.GetVentSprite(
+                                    ventId, 0);
+                            }
+                        }
+                    })));
+
+            player.MyPhysics.HandleRpc(isEnter != 0 ? (byte)19 : (byte)20, reader);
+        }
+
         public static void UncheckedShapeShift(
             byte sourceId, byte targetId, byte useAnimation)
         {
@@ -308,6 +354,18 @@ namespace ExtremeRoles
         {
             Roles.Solo.Crewmate.TimeMaster.ResetMeeting(playerId);
         }
+        public static void AgencyTakeTask(
+            byte playerId, byte targetPlayerId, byte taskNum)
+        {
+            Roles.Solo.Crewmate.Agency.TakeTargetPlayerTask(
+                playerId, targetPlayerId, taskNum);
+        }
+        public static void AgencySetNewTask(
+            byte callerId, int index, int taskIndex)
+        {
+            Roles.Solo.Crewmate.Agency.ReplaceToNewTask(
+                callerId, index, taskIndex);
+        }
 
         public static void AssasinAddDead(byte playersId)
         {
@@ -356,6 +414,15 @@ namespace ExtremeRoles
         {
             Roles.Solo.Impostor.Cracker.CrackDeadBody(
                 callerId, targetId);
+        }
+
+        public static void MarySetCamp(byte callerId)
+        {
+            Roles.Solo.Impostor.Mery.SetCamp(callerId);
+        }
+        public static void MaryActiveVent(int index)
+        {
+            Roles.Solo.Impostor.Mery.ActivateVent(index);
         }
 
         public static void AliceShipBroken(byte callerId)

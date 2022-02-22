@@ -32,7 +32,7 @@ namespace ExtremeRoles
 
             Logger = Log;
 
-            DebugMode = Config.Bind("DeBug", "Enable Debug Mode", false);
+            DebugMode = Config.Bind("DeBug", "DebugMode", false);
 
             GameOptionsData.RecommendedImpostors = GameOptionsData.MaxImpostors = Enumerable.Repeat(
                 3, OptionHolder.VanillaMaxPlayerNum).ToArray(); // 最大インポスター数 = 推奨3人

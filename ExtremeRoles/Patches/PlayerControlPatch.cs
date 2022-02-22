@@ -74,7 +74,7 @@ namespace ExtremeRoles.Patches
             refreshRoleDescription(__instance, role);
 
             ExtremeRolesPlugin.GameDataStore.History.Enqueue(__instance);
-
+            ExtremeRolesPlugin.GameDataStore.Union.Update();
         }
 
         private static void resetNameTagsAndColors()
@@ -680,6 +680,12 @@ namespace ExtremeRoles.Patches
                     RPCOperator.ReplaceRole(
                         targetPlayerId, replaceTarget, ops);
                     break;
+                case RPCOperator.Command.CustomVentUse:
+                    int ventId = reader.ReadPackedInt32();
+                    byte ventingPlayer = reader.ReadByte();
+                    byte isEnter = reader.ReadByte();
+                    RPCOperator.CustomVentUse(ventId, ventingPlayer, isEnter);
+                    break;
                 case RPCOperator.Command.UncheckedGameEnd:
                     int gameId = reader.ReadInt32();
                     int gameEndReason = reader.ReadInt32();
@@ -763,6 +769,21 @@ namespace ExtremeRoles.Patches
                     RPCOperator.TimeMasterResetMeeting(
                         timeMasterResetPlayerId);
                     break;
+                case RPCOperator.Command.AgencyTakeTask:
+                    byte agencyPlayerId = reader.ReadByte();
+                    byte agencyTargetPlayerId = reader.ReadByte();
+                    byte taskNum = reader.ReadByte();
+                    RPCOperator.AgencyTakeTask(
+                        agencyPlayerId, agencyTargetPlayerId, taskNum);
+                    break;
+                case RPCOperator.Command.AgencySetNewTask:
+                    byte agencyCallerId = reader.ReadByte();
+                    int taskSetIndex = reader.ReadInt32();
+                    int newTaskId = reader.ReadInt32();
+                    RPCOperator.AgencySetNewTask(
+                        agencyCallerId, taskSetIndex, newTaskId);
+                    break;
+
                 case RPCOperator.Command.AssasinAddDead:
                     byte deadAssasinPlayerId = reader.ReadByte();
                     RPCOperator.AssasinAddDead(deadAssasinPlayerId);
@@ -806,6 +827,10 @@ namespace ExtremeRoles.Patches
                     byte crackerId = reader.ReadByte();
                     byte crackTarget = reader.ReadByte();
                     RPCOperator.CrackerCrackDeadBody(crackerId, crackTarget);
+                    break;
+                case RPCOperator.Command.CrackerRemoveCrackTrace:
+                    byte crackerPlayerId = reader.ReadByte();
+                    RPCOperator.CrackerRemoveCrackTrace(crackerPlayerId);
                     break;
                 case RPCOperator.Command.AliceShipBroken:
                     byte alicePlayerId = reader.ReadByte();

@@ -111,7 +111,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 string.Concat(
                     this.RoleName,
                     OverLoaderOption.MoveSpeed.ToString()),
-                1.5f, 1.1f, 3.0f, 0.1f, parentOps,
+                1.5f, 1.0f, 3.0f, 0.1f, parentOps,
                 format: "unitMultiplier");
         }
 

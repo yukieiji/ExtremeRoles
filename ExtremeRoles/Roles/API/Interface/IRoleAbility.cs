@@ -26,7 +26,7 @@ namespace ExtremeRoles.Roles.API.Interface
 
         public bool IsAbilityUse();
 
-        public void RoleAbilityResetOnMeetingStart();
+        public void RoleAbilityResetOnMeetingStart(); // サイドキック作成時に呼ばれるためnullエラーを考慮すること
 
         public void RoleAbilityResetOnMeetingEnd();
 

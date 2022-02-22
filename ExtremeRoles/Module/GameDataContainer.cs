@@ -13,6 +13,11 @@ namespace ExtremeRoles.Module
 {
     public class GameDataContainer
     {
+        public enum CustomVentType
+        {
+            MeryVent,
+        }
+
         public enum PlayerStatus
         {
             Alive = 0,
@@ -25,6 +30,8 @@ namespace ExtremeRoles.Module
             Retaliate,
             Departure,
             Martyrdom,
+
+            Explosion,
 
             Assassinate,
             DeadAssassinate,
@@ -40,8 +47,13 @@ namespace ExtremeRoles.Module
         public Dictionary<int, Version> PlayerVersion = new Dictionary<int, Version>();
 
         public List<byte> DeadedAssassin = new List<byte>();
+        public List<IUpdatableObject> UpdateObject = new List<IUpdatableObject>();
+        public CustomVentContainer CustomVent = new CustomVentContainer();
+
+
         public ShieldPlayerContainer ShildPlayer = new ShieldPlayerContainer();
         public PlayerHistory History = new PlayerHistory();
+        public BakaryUnion Union = new BakaryUnion();
 
         public int MeetingsCount = 0;
         public int WinGameControlId = int.MaxValue;
@@ -67,7 +79,11 @@ namespace ExtremeRoles.Module
             FinalSummary.Clear();
             DeadPlayerInfo.Clear();
             PlusWinner.Clear();
+            Union.Clear();
             ClearMeetingResetObject();
+
+            clearUpdateObject();
+            CustomVent.Clear();
 
             MeetingsCount = 0;
             WinGameControlId = int.MaxValue;
@@ -387,6 +403,17 @@ namespace ExtremeRoles.Module
             }
         }
 
+        private void clearUpdateObject()
+        {
+            foreach(var updateObject in this.UpdateObject)
+            {
+                updateObject.Clear();
+            }
+
+            this.UpdateObject.Clear();
+
+        }
+
         public class DeadInfo
         {
             public PlayerStatus Reason { get; set; }
@@ -520,5 +547,172 @@ namespace ExtremeRoles.Module
             public IEnumerable<Tuple<Vector3, bool>> GetAllHistory() => this.history.Reverse();
         }
 
+        public class CustomVentContainer
+        {
+            private Dictionary<int, CustomVentType> ventType = new Dictionary<int, CustomVentType>();
+            private Dictionary<CustomVentType, List<Vent>> addVent = new Dictionary<CustomVentType, List<Vent>>();
+            private Dictionary<CustomVentType, Sprite[]> ventAnime = new Dictionary<CustomVentType, Sprite[]>();
+
+            public CustomVentContainer()
+            {
+                this.Clear();
+            }
+
+            public void Clear()
+            {
+                addVent.Clear();
+                ventType.Clear();
+                ventAnime.Clear();
+            }
+
+            public void AddVent(
+                Vent newVent,
+                CustomVentType type)
+            {
+                var allVents = ShipStatus.Instance.AllVents.ToList();
+                allVents.Add(newVent);
+                ShipStatus.Instance.AllVents = allVents.ToArray();
+                if (this.addVent.ContainsKey(type))
+                {
+                    this.addVent[type].Add(newVent);
+                }
+                else
+                {
+                    var ventList = new List<Vent>();
+                    ventList.Add(newVent);
+                    this.addVent.Add(type, ventList);
+                }
+                if (!this.ventAnime.ContainsKey(type))
+                {
+                    ventAnime.Add(type, new Sprite[18]);
+                }
+
+                ventType.Add(newVent.Id, type);
+            }
+
+            public List<Vent> GetCustomVent(CustomVentType type)
+            {
+                if (this.addVent.ContainsKey(type))
+                {
+                    return this.addVent[type];
+                }
+                return new List<Vent>();
+            }
+
+            public Sprite GetVentSprite(int ventId, int index)
+            {
+                CustomVentType type = ventType[ventId];
+                Sprite img = ventAnime[type][index];
+
+                if (img != null)
+                {
+                    return img;
+                }
+                else
+                {
+                    switch (type)
+                    {
+                        case CustomVentType.MeryVent:
+                            img = Resources.Loader.CreateSpriteFromResources(
+                                string.Format(Resources.Path.MeryCustomVentAnime, index), 125f);
+                            break;
+                        default:
+                            return null;
+                    }
+
+                    ventAnime[type][index] = img;
+                    return img;
+                }
+            }
+
+            public bool IsCustomVent(int ventId) => this.ventType.ContainsKey(ventId);
+        }
+
+        public class BakaryUnion
+        {
+            private float timer = 0; 
+            private bool isUnion = false;
+            private HashSet<byte> aliveBakary = new HashSet<byte> ();
+
+            public BakaryUnion()
+            {
+                this.Clear();
+            }
+
+            public bool IsEstablish()
+            {
+                this.updateBakaryAlive();
+                return this.aliveBakary.Count != 0;
+            }
+
+            public string GetBreadBakingCondition()
+            {
+                if (this.timer < 60f)
+                {
+                    return Helper.Translation.GetString("rawBread");
+                }
+                else if (60f <= this.timer && this.timer < 120f)
+                {
+                    return Helper.Translation.GetString("goodBread");
+                }
+                else
+                {
+                    return Helper.Translation.GetString("badBread");
+                }
+            }
+
+            public void Clear()
+            {
+                this.ResetTimer();
+                this.isUnion = false;
+                this.aliveBakary.Clear();
+            }
+
+            public void ResetTimer()
+            {
+                this.timer = 0;
+            }
+
+            public void Update()
+            {
+                if (!this.isUnion) { this.organize(); }
+                if (this.aliveBakary.Count == 0) { return; }
+                if (MeetingHud.Instance != null) { return; }
+
+                this.timer += Time.fixedDeltaTime;
+
+            }
+
+            private void organize()
+            {
+                this.isUnion = true;
+                foreach (var (playerId, role) in ExtremeRoleManager.GameRole)
+                {
+                    if (role.Id == ExtremeRoleId.Bakary)
+                    { 
+                        this.aliveBakary.Add(playerId); 
+                    }
+                }
+            }
+
+            private void updateBakaryAlive()
+            {
+                if (this.aliveBakary.Count == 0) { return; }
+
+                HashSet<byte> updatedBakary = new HashSet<byte>();
+
+                foreach (var playerId in this.aliveBakary)
+                {
+                    PlayerControl player = Helper.Player.GetPlayerControlById(playerId);
+                    if ((!player.Data.IsDead && !player.Data.Disconnected))
+                    {
+                        updatedBakary.Add(playerId);
+                    }
+                }
+
+                this.aliveBakary = updatedBakary;
+            }
+        }
     }
+
 }

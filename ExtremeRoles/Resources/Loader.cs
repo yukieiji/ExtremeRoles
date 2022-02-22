@@ -23,6 +23,7 @@ namespace ExtremeRoles.Resources
         public const string MaintainerRepair = "ExtremeRoles.Resources.Repair.png";
         public const string BodyGuardShield = "ExtremeRoles.Resources.Shield.png";
         public const string TimeMasterTimeShield = "ExtremeRoles.Resources.TimeShield.png";
+        public const string AgencyTakeTask = "ExtremeRoles.Resources.TakeTask.png";
 
         public const string EvolverEvolved = "ExtremeRoles.Resources.Evolved.png";
         public const string CarrierCarry = "ExtremeRoles.Resources.Carry.png";
@@ -32,6 +33,9 @@ namespace ExtremeRoles.Resources
         public const string FakerDummy = "ExtremeRoles.Resources.Dummy.png";
         public const string CrackerCrack = "ExtremeRoles.Resources.Crack.png";
         public const string CrackerCrackTrace = "ExtremeRoles.Resources.CrackTrace.png";
+        public const string BomberSetBomb = "ExtremeRoles.Resources.SetBomb.png";
+        public const string MeryNoneActiveVent = "ExtremeRoles.Resources.NoneActivateVent.png";
+        public const string MeryCustomVentAnime = "ExtremeRoles.Resources.MeryVentAnimation.{0}.png";
 
         public const string AliceShipBroken = "ExtremeRoles.Resources.ShipBroken.png";
         public const string JackalSidekick = "ExtremeRoles.Resources.Sidekick.png";

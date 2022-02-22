@@ -32,6 +32,8 @@ namespace ExtremeRoles.Roles
         BodyGuard,
         Whisper,
         TimeMaster,
+        Agency,
+        Bakary,
 
         SpecialImpostor,
         Evolver,
@@ -42,6 +44,8 @@ namespace ExtremeRoles.Roles
         Faker,
         OverLoader,
         Cracker,
+        Bomber,
+        Mery,
 
         Alice,
         Jackal,
@@ -98,6 +102,8 @@ namespace ExtremeRoles.Roles
                 new BodyGuard(),
                 new Whisper(),
                 new TimeMaster(),
+                new Agency(),
+                new Bakary(),
 
                 new SpecialImpostor(),
                 new Evolver(),
@@ -108,6 +114,8 @@ namespace ExtremeRoles.Roles
                 new Faker(),
                 new OverLoader(),
                 new Cracker(),
+                new Bomber(),
+                new Mery(),
 
                 new Alice(),
                 new Jackal(),
