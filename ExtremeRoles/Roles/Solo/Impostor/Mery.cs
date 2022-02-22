@@ -226,7 +226,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.CreateAbilityCountButton(
                 Translation.GetString("setCamp"),
                 Loader.CreateSpriteFromResources(
-                    Path.TestButton));
+                    string.Format(Path.MeryCustomVentAnime, "0")));
         }
 
         public bool IsAbilityUse()
