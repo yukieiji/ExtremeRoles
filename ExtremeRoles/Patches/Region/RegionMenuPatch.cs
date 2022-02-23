@@ -23,8 +23,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 using HarmonyLib;
 
@@ -35,106 +33,6 @@ using UnityEngine.Events;
 
 namespace ExtremeRoles.Patches.Region
 {
-    [HarmonyPatch(typeof(RegionMenu), nameof(RegionMenu.OnEnable))]
-    public static class RegionMenuOnEnablePatch
-    {
-        public static bool Prefix(RegionMenu __instance)
-        {
-            __instance.controllerSelectable.Clear();
-            int num = 0;
-            foreach (IRegionInfo regionInfo in 
-                from s in DestroyableSingleton<ServerManager>.Instance.AvailableRegions
-                orderby (uint)GetDefaultRegionIndex(
-                    ServerManager.DefaultRegions.ToList(),
-                    (IRegionInfo d) => d.Name.Equals(s.Name))
-                select s)
-            {
-                
-                IRegionInfo region = regionInfo;
-                ServerListButton serverListButton = __instance.ButtonPool.Get<ServerListButton>();
-                serverListButton.transform.localPosition = new Vector3(0f, 2f - 0.5f * (float)num, 0f);
-                serverListButton.SetTextTranslationId(regionInfo.TranslateName, regionInfo.Name);
-
-                string printString;
-                if (regionInfo.Name.Equals(CustomServer.Id))
-                {
-                    printString = Helper.Translation.GetString(
-                        CustomServer.TranslationKey);
-                }
-                else
-                {
-                    printString = DestroyableSingleton<TranslationController>.Instance.GetStringWithDefault(
-                        regionInfo.TranslateName, regionInfo.Name, Array.Empty<Il2CppSystem.Object>());
-                }
-
-                serverListButton.Text.text = printString;
-                serverListButton.Text.ForceMeshUpdate(false, false);
-                serverListButton.Button.OnClick.RemoveAllListeners();
-                serverListButton.Button.OnClick.AddListener((Action)(() =>
-                {
-                    __instance.ChooseOption(region);
-                }));
-                serverListButton.SetSelected(DestroyableSingleton<ServerManager>.Instance.CurrentRegion.Equals(regionInfo));
-                if (DestroyableSingleton<ServerManager>.Instance.CurrentRegion.Equals(regionInfo))
-                {
-                    __instance.defaultButtonSelected = serverListButton.Button;
-                }
-                __instance.controllerSelectable.Add(serverListButton.Button);
-                ++num;
-            }
-            if (__instance.defaultButtonSelected == null && __instance.controllerSelectable.Count > 0)
-            {
-                __instance.defaultButtonSelected = __instance.controllerSelectable[0];
-            }
-
-            ControllerManager.Instance.OpenOverlayMenu(
-                __instance.name, __instance.BackButton,
-                __instance.defaultButtonSelected, __instance.controllerSelectable, false);
-            ++num;
-
-            return false;
-        }
-
-        private static int GetDefaultRegionIndex(
-            List<IRegionInfo> list, Func<IRegionInfo, bool> pred)
-        {
-            for (int i = 0; i < list.Count; i++)
-            {
-                if (pred(list[i]))
-                {
-                    return i;
-                }
-            }
-            return -1;
-        }
-    }
-    [HarmonyPatch(typeof(RegionMenu), nameof(RegionMenu.ChooseOption))]
-    public static class RegionMenuChooseOptionPatch
-    {
-        public static bool Prefix(
-            RegionMenu __instance,
-            [HarmonyArgument(0)] IRegionInfo region)
-        {
-            DestroyableSingleton<ServerManager>.Instance.SetRegion(region);
-
-            string printString;
-            if (region.Name.Equals(CustomServer.Id))
-            {
-                printString = Helper.Translation.GetString(
-                    CustomServer.TranslationKey);
-            }
-            else
-            {
-                printString = DestroyableSingleton<TranslationController>.Instance.GetStringWithDefault(
-                    region.TranslateName, region.Name, Array.Empty<Il2CppSystem.Object>());
-            }
-
-            __instance.RegionText.text = printString;
-            __instance.Close();
-            return false;
-        }
-    }
-
     [HarmonyPatch(typeof(RegionMenu), nameof(RegionMenu.Open))]
     public static class RegionMenuOpenPatch
     {
