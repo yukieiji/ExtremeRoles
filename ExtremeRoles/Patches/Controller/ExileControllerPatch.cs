@@ -1,10 +1,7 @@
-﻿using System.Collections;
-using HarmonyLib;
+﻿using HarmonyLib;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
-
-using BepInEx.IL2CPP.Utils.Collections;
 
 namespace ExtremeRoles.Patches.Controller
 {

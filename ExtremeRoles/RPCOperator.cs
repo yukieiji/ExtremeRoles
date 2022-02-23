@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Hazel;
 
@@ -181,7 +180,7 @@ namespace ExtremeRoles
                 lock (dispather)
                 {
                     AmongUsClient.Instance.Dispatcher.Add(
-                        new Action(() =>
+                        new System.Action(() =>
                         {
                             ShipStatus.Instance.enabled = false;
                             ShipStatus.Instance.BeginCalled = false;

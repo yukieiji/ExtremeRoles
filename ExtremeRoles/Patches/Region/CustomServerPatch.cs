@@ -16,8 +16,7 @@ namespace ExtremeRoles.Patches.Region
     {
         public static void Prefix(ref bool useDtlsLayout)
         {
-            var serverManager = ServerManager.Instance;
-            DnsRegionInfo region = serverManager.CurrentRegion.TryCast<DnsRegionInfo>();
+            DnsRegionInfo region = ServerManager.Instance.CurrentRegion.TryCast<DnsRegionInfo>();
             if (region == null || !region.Fqdn.EndsWith("among.us"))
             {
                 useDtlsLayout = false;
@@ -30,8 +29,7 @@ namespace ExtremeRoles.Patches.Region
     {
         public static bool Prefix(ref Hazel.Udp.UnityUdpClientConnection __result, string targetIp, ushort targetPort)
         {
-            var serverManager = ServerManager.Instance;
-            DnsRegionInfo region = serverManager.CurrentRegion.TryCast<DnsRegionInfo>();
+            DnsRegionInfo region = ServerManager.Instance.CurrentRegion.TryCast<DnsRegionInfo>();
             if (region == null || !region.Fqdn.EndsWith("among.us"))
             {
                 var remoteEndPoint = new Il2CppSystem.Net.IPEndPoint(
