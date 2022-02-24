@@ -294,22 +294,6 @@ namespace ExtremeRoles.Roles
             }
         }
 
-        private static void createOptions(
-            int optionIdOffsetChord,
-            IEnumerable<RoleOptionBase> roles)
-        {
-            if (roles.Count() == 0) { return; };
-
-            int roleOptionOffset = 0;
-
-            foreach (var item
-             in roles.Select((Value, Index) => new { Value, Index }))
-            {
-                roleOptionOffset = optionIdOffsetChord + (OptionOffsetPerRole * item.Index);
-                item.Value.CreateRoleAllOption(roleOptionOffset);
-            }
-        }
-
         private static void setPlyerIdToSingleRole(
             byte playerId, SingleRoleBase role)
         {
