@@ -301,6 +301,25 @@ namespace ExtremeRoles.Patches
                 resetRole.ResetOnMeetingStart();
             }
 
+            var multiAssignRole = role as Roles.API.MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    abilityRole = multiAssignRole.AnotherRole as IRoleAbility;
+                    if (abilityRole != null)
+                    {
+                        abilityRole.ResetOnMeetingStart();
+                    }
+
+                    resetRole = multiAssignRole.AnotherRole as IRoleResetMeeting;
+                    if (resetRole != null)
+                    {
+                        resetRole.ResetOnMeetingStart();
+                    }
+                }
+            }
+
             if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
 
             DestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);

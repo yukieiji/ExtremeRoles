@@ -202,6 +202,25 @@ namespace ExtremeRoles.Patches.Controller
                 resetRole.ResetOnMeetingEnd();
             }
 
+            var multiAssignRole = role as Roles.API.MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    abilityRole = multiAssignRole.AnotherRole as IRoleAbility;
+                    if (abilityRole != null)
+                    {
+                        abilityRole.ResetOnMeetingStart();
+                    }
+
+                    resetRole = multiAssignRole.AnotherRole as IRoleResetMeeting;
+                    if (resetRole != null)
+                    {
+                        resetRole.ResetOnMeetingStart();
+                    }
+                }
+            }
+
             if (exiled == null) { return; };
 
             ExtremeRoleManager.GameRole[exiled.PlayerId].ExiledAction(exiled);
