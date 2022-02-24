@@ -343,10 +343,13 @@ namespace ExtremeRoles.Roles
                 IRoleAbility multiAssignAbilityRole = ((MultiAssignRoleBase)GameRole[
                     playerId]) as IRoleAbility;
 
-                if (abilityRole != null)
+                if (abilityRole != null && PlayerControl.LocalPlayer.PlayerId == playerId)
                 {
-                    multiAssignAbilityRole.Button.PositionOffset = new UnityEngine.Vector3(0, 2.6f, 0);
-                    multiAssignAbilityRole.Button.ReplaceHotKey(UnityEngine.KeyCode.G);
+                    if (multiAssignAbilityRole.Button != null)
+                    {
+                        multiAssignAbilityRole.Button.PositionOffset = new UnityEngine.Vector3(0, 2.6f, 0);
+                        multiAssignAbilityRole.Button.ReplaceHotKey(UnityEngine.KeyCode.G);
+                    }
                 }
             }
             Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
