@@ -5,6 +5,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 {
     public class Bakary : SingleRoleBase
     {
+        public enum BakaryOption
+        {
+            ChangeCooking
+        }
+
         public Bakary() : base(
             ExtremeRoleId.Bakary,
             ExtremeRoleType.Crewmate,
@@ -16,12 +21,18 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            return;
+            CustomOption.Create(
+                GetRoleOptionId((int)BakaryOption.ChangeCooking),
+                string.Concat(
+                    this.RoleName,
+                    BakaryOption.ChangeCooking.ToString()),
+                true, parentOps);
         }
 
         protected override void RoleSpecificInit()
         {
-            return;
+            ExtremeRolesPlugin.GameDataStore.Union.SetCooking(OptionHolder.AllOption[
+                GetRoleOptionId((int)BakaryOption.ChangeCooking)].GetValue());
         }
     }
 }
