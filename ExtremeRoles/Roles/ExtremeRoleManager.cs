@@ -294,22 +294,6 @@ namespace ExtremeRoles.Roles
             }
         }
 
-        private static void createOptions(
-            int optionIdOffsetChord,
-            IEnumerable<RoleOptionBase> roles)
-        {
-            if (roles.Count() == 0) { return; };
-
-            int roleOptionOffset = 0;
-
-            foreach (var item
-             in roles.Select((Value, Index) => new { Value, Index }))
-            {
-                roleOptionOffset = optionIdOffsetChord + (OptionOffsetPerRole * item.Index);
-                item.Value.CreateRoleAllOption(roleOptionOffset);
-            }
-        }
-
         private static void setPlyerIdToSingleRole(
             byte playerId, SingleRoleBase role)
         {
@@ -343,10 +327,13 @@ namespace ExtremeRoles.Roles
                 IRoleAbility multiAssignAbilityRole = ((MultiAssignRoleBase)GameRole[
                     playerId]) as IRoleAbility;
 
-                if (abilityRole != null)
+                if (abilityRole != null && PlayerControl.LocalPlayer.PlayerId == playerId)
                 {
-                    multiAssignAbilityRole.Button.PositionOffset = new UnityEngine.Vector3(0, 2.6f, 0);
-                    multiAssignAbilityRole.Button.ReplaceHotKey(UnityEngine.KeyCode.G);
+                    if (multiAssignAbilityRole.Button != null)
+                    {
+                        multiAssignAbilityRole.Button.PositionOffset = new UnityEngine.Vector3(0, 2.6f, 0);
+                        multiAssignAbilityRole.Button.ReplaceHotKey(UnityEngine.KeyCode.G);
+                    }
                 }
             }
             Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");

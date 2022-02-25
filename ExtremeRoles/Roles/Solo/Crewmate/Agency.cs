@@ -62,7 +62,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             var shuffleTaskIndex = Enumerable.Range(
                 0, targetPlayer.myTasks.Count).ToList().OrderBy(
-                item => RandomGenerator.Instance.Next()).ToList();
+                    item => RandomGenerator.Instance.Next()).ToList();
 
             int takeTask = 0;
             

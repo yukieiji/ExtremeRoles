@@ -1,10 +1,7 @@
-﻿using System.Collections;
-using HarmonyLib;
+﻿using HarmonyLib;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
-
-using BepInEx.IL2CPP.Utils.Collections;
 
 namespace ExtremeRoles.Patches.Controller
 {
@@ -203,6 +200,25 @@ namespace ExtremeRoles.Patches.Controller
             if (resetRole != null)
             {
                 resetRole.ResetOnMeetingEnd();
+            }
+
+            var multiAssignRole = role as Roles.API.MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    abilityRole = multiAssignRole.AnotherRole as IRoleAbility;
+                    if (abilityRole != null)
+                    {
+                        abilityRole.ResetOnMeetingStart();
+                    }
+
+                    resetRole = multiAssignRole.AnotherRole as IRoleResetMeeting;
+                    if (resetRole != null)
+                    {
+                        resetRole.ResetOnMeetingStart();
+                    }
+                }
             }
 
             if (exiled == null) { return; };

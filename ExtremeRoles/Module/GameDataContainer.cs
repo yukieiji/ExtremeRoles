@@ -630,6 +630,8 @@ namespace ExtremeRoles.Module
 
         public class BakaryUnion
         {
+            private bool isChangeCooking = false;
+
             private float timer = 0; 
             private bool isUnion = false;
             private HashSet<byte> aliveBakary = new HashSet<byte> ();
@@ -647,6 +649,11 @@ namespace ExtremeRoles.Module
 
             public string GetBreadBakingCondition()
             {
+                if (!this.isChangeCooking)
+                {
+                    return Helper.Translation.GetString("goodBread");
+                }
+
                 if (this.timer < 60f)
                 {
                     return Helper.Translation.GetString("rawBread");
@@ -665,12 +672,18 @@ namespace ExtremeRoles.Module
             {
                 this.ResetTimer();
                 this.isUnion = false;
+                this.isChangeCooking = false;
                 this.aliveBakary.Clear();
             }
 
             public void ResetTimer()
             {
                 this.timer = 0;
+            }
+
+            public void SetCooking(bool condition)
+            {
+                this.isChangeCooking = condition;
             }
 
             public void Update()

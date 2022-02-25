@@ -250,6 +250,33 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 abilityRole.ResetOnMeetingStart();
             }
 
+            var multiAssignRole = targetRole as MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    meetingResetRole = multiAssignRole.AnotherRole as IRoleResetMeeting;
+                    if (meetingResetRole != null)
+                    {
+                        meetingResetRole.ResetOnMeetingStart();
+                    }
+
+                    abilityRole = multiAssignRole.AnotherRole as IRoleAbility;
+                    if (abilityRole != null)
+                    {
+                        abilityRole.ResetOnMeetingStart();
+                    }
+                }
+            }
+
+            if (targetRole.IsVanillaRole())
+            {
+                if (((VanillaRoleWrapper)targetRole).VanilaRoleId == RoleTypes.Shapeshifter)
+                {
+                    targetPlayer.Shapeshift(targetPlayer, false);
+                }
+            }
+
             var sourceJackal = (Jackal)ExtremeRoleManager.GameRole[callerId];
             var newSidekick = new Sidekick(
                 sourceJackal.GameControlId,
