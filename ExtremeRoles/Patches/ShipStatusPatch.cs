@@ -82,28 +82,40 @@ namespace ExtremeRoles.Patches
             var statistics = ExtremeRolesPlugin.GameDataStore.CreateStatistics();
 
 
-            if (isImpostorSpecialWin()) { return false; }
+            if (isImpostorSpecialWin(__instance)) { return false; }
             if (isSabotageWin(__instance)) { return false; }
             
-            if (isTaskWin()) { return false; };
+            if (isTaskWin(__instance)) { return false; };
 
             if (isSpecialRoleWin(__instance, statistics)) { return false; }
 
-            if (isNeutralSpecialWin()) { return false; };
-            if (isNeutralAliveWin(statistics)) { return false; };
+            if (isNeutralSpecialWin(__instance)) { return false; };
+            if (isNeutralAliveWin(__instance, statistics)) { return false; };
 
             if (statistics.SeparatedNeutralAlive.Count != 0) { return false; }
 
-            if (isImpostorWin(statistics)) { return false; };
+            if (isImpostorWin(__instance, statistics)) { return false; };
             if (isCrewmateWin(__instance, statistics)) { return false; };
             
             return false;
         }
 
         private static void gameIsEnd(
+            ref ShipStatus　instance,
             GameOverReason reason,
             bool trigger = false)
         {
+            instance.enabled = false;
+            ShipStatus.RpcEndGame(
+                reason, trigger);
+        }
+
+
+        private static void gameIsEnd(
+            GameOverReason reason,
+            bool trigger = false)
+        {
+
             int gameId = AmongUsClient.Instance.GameId;
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                 PlayerControl.LocalPlayer.NetId,
@@ -125,13 +137,14 @@ namespace ExtremeRoles.Patches
                 statistics.TeamImpostorAlive == 0 && 
                 statistics.SeparatedNeutralAlive.Count == 0)
             {
-                gameIsEnd(GameOverReason.HumansByVote);
+                gameIsEnd(ref __instance, GameOverReason.HumansByVote);
                 return true;
             }
             return false;
         }
 
         private static bool isImpostorWin(
+            ShipStatus __instance,
             GameDataContainer.PlayerStatistics statistics)
         {
             bool isGameEnd = false;
@@ -157,18 +170,20 @@ namespace ExtremeRoles.Patches
             if (isGameEnd)
             {
 
-                gameIsEnd(endReason);
+                gameIsEnd(ref __instance, endReason);
                 return true;
             }
 
             return false;
 
         }
-        private static bool isImpostorSpecialWin()
+        private static bool isImpostorSpecialWin(
+            ShipStatus __instance)
         {
             if (ExtremeRolesPlugin.GameDataStore.AssassinateMarin)
             {
                 gameIsEnd(
+                    ref __instance,
                     (GameOverReason)RoleGameOverReason.AssassinationMarin);
                 return true;
             }
@@ -178,6 +193,7 @@ namespace ExtremeRoles.Patches
         }
 
         private static bool isNeutralAliveWin(
+            ShipStatus __instance,
             GameDataContainer.PlayerStatistics statistics)
         {
             if (statistics.SeparatedNeutralAlive.Count != 1) { return false; }
@@ -221,14 +237,14 @@ namespace ExtremeRoles.Patches
                 }
                 if (endReason != (GameOverReason)RoleGameOverReason.UnKnown)
                 {
-                    gameIsEnd(endReason);
+                    gameIsEnd(ref __instance, endReason);
                     return true;
                 }
             }
             return false;
         }
 
-        private static bool isNeutralSpecialWin()
+        private static bool isNeutralSpecialWin(ShipStatus __instance)
         {
 
             if (OptionHolder.Ship.DisableNeutralSpecialForceEnd) { return false; }
@@ -257,7 +273,7 @@ namespace ExtremeRoles.Patches
                         default :
                             break;
                     }
-                    gameIsEnd(endReason);
+                    gameIsEnd(ref __instance, endReason);
                     return true;
 
                 }
@@ -277,6 +293,7 @@ namespace ExtremeRoles.Patches
                 {
                     setWinGameContorlId(id);
                     gameIsEnd(
+                        ref __instance,
                         (GameOverReason)checker.Reason);
                     return true;
                 }
@@ -295,7 +312,9 @@ namespace ExtremeRoles.Patches
                 LifeSuppSystemType lifeSuppSystemType = systemType.TryCast<LifeSuppSystemType>();
                 if (lifeSuppSystemType != null && lifeSuppSystemType.Countdown < 0f)
                 {
-                    gameIsEnd(GameOverReason.ImpostorBySabotage);
+                    gameIsEnd(
+                        ref __instance,
+                        GameOverReason.ImpostorBySabotage);
                     lifeSuppSystemType.Countdown = 10000f;
                     return true;
                 }
@@ -312,19 +331,23 @@ namespace ExtremeRoles.Patches
                 ICriticalSabotage criticalSystem = systemType2.TryCast<ICriticalSabotage>();
                 if (criticalSystem != null && criticalSystem.Countdown < 0f)
                 {
-                    gameIsEnd(GameOverReason.ImpostorBySabotage);
+                    gameIsEnd(
+                        ref __instance,
+                        GameOverReason.ImpostorBySabotage);
                     criticalSystem.ClearSabotage();
                     return true;
                 }
             }
             return false;
         }
-        private static bool isTaskWin()
+        private static bool isTaskWin(ShipStatus __instance)
         {
             if (GameData.Instance.TotalTasks > 0 && 
                 GameData.Instance.TotalTasks <= GameData.Instance.CompletedTasks)
             {
-                gameIsEnd(GameOverReason.HumansByTask);
+                gameIsEnd(
+                    ref __instance,
+                    GameOverReason.HumansByTask);
                 return true;
             }
             return false;
