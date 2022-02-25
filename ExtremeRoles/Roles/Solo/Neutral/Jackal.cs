@@ -269,6 +269,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 }
             }
 
+            if (targetRole.IsVanillaRole())
+            {
+                if (((VanillaRoleWrapper)targetRole).VanilaRoleId == RoleTypes.Shapeshifter)
+                {
+                    targetPlayer.Shapeshift(targetPlayer, false);
+                }
+            }
+
             var sourceJackal = (Jackal)ExtremeRoleManager.GameRole[callerId];
             var newSidekick = new Sidekick(
                 sourceJackal.GameControlId,
