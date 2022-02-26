@@ -109,6 +109,8 @@ namespace ExtremeRoles
             Roles.ExtremeRoleManager.Initialize();
             ExtremeRolesPlugin.GameDataStore.Initialize();
             ExtremeRolesPlugin.Info.ResetOverlays();
+
+            Patches.KillAnimationCoPerformKillPatch.HideNextAnimation = false;
         }
 
         public static void ForceEnd()
@@ -263,7 +265,7 @@ namespace ExtremeRoles
             {
                 if (useAnimation == 0)
                 {
-                    Patches.KillAnimationCoPerformKillPatch.hideNextAnimation = true;
+                    Patches.KillAnimationCoPerformKillPatch.HideNextAnimation = true;
                 }
                 source.MurderPlayer(target);
 
