@@ -503,10 +503,10 @@ namespace ExtremeRoles.Module
         {
             public bool BlockAddHistory;
 
-            // 座標、動けるか、ベント内か
+            // 座標、動けるか、ベント内か, 何か使ってるか
             public Queue<
-                Tuple<Vector3, bool, bool>> history = new Queue<
-                    Tuple<Vector3, bool, bool>>();
+                Tuple<Vector3, bool, bool, bool>> history = new Queue<
+                    Tuple<Vector3, bool, bool, bool>>();
             private bool init = false;
             private int size = 0;
 
@@ -526,7 +526,11 @@ namespace ExtremeRoles.Module
                 }
 
                 this.history.Enqueue(
-                    Tuple.Create(player.transform.position, player.CanMove, player.inVent));
+                    Tuple.Create(
+                        player.transform.position,
+                        player.CanMove,
+                        player.inVent,
+                        !(player.Collider.enabled && player.NetTransform.enabled && player.moveable)));
             }
 
             public void Clear()
@@ -549,7 +553,9 @@ namespace ExtremeRoles.Module
             }
 
             public IEnumerable<Tuple<
-                Vector3, bool, bool>> GetAllHistory() => this.history.Reverse();
+                Vector3, bool, bool, bool>> GetAllHistory() => this.history.Reverse();
+
+            public int GetSize() => this.size;
         }
 
         public class CustomVentContainer
