@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -58,11 +57,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             byte rolePlayerId,
             PlayerControl localPlayer)
         {
+            // Enable rewind
             var timeMaster = (TimeMaster)ExtremeRoleManager.GameRole[rolePlayerId];
             timeMaster.IsRewindTime = true;
 
             ExtremeRolesPlugin.GameDataStore.History.BlockAddHistory = true;
 
+            // Screen Initialize
             if (timeMaster.RewindScreen == null)
             {
                 timeMaster.RewindScreen = UnityEngine.Object.Instantiate(
@@ -72,9 +73,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 timeMaster.RewindScreen.enabled = false;
                 timeMaster.RewindScreen.color = new Color(0f, 0.5f, 0.8f, 0.3f);
             }
-
+            // Screen On
             timeMaster.RewindScreen.enabled = true;
 
+            // SetUp
             if (MapBehaviour.Instance)
             {
                 MapBehaviour.Instance.Close();
@@ -84,14 +86,41 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 Minigame.Instance.ForceClose();
             }
 
-            Vector3 prevPos = localPlayer.transform.position;
 
-            foreach (Tuple<Vector3, bool> item in ExtremeRolesPlugin.GameDataStore.History.GetAllHistory())
+            // 梯子とか使っている最中に巻き戻すと色々とおかしくなる
+            // => その処理が終わるまで待機、巻き戻しはその後
+            //    ただし、処理が終わるまでの間の時間巻き戻し時間は短くなる
+            int skipFrame = 0;
+            if (!localPlayer.inVent && !localPlayer.moveable)
             {
+                do
+                {
+                    yield return null;
+                    ++skipFrame;
+                }
+                while (!localPlayer.moveable);
+            }
+
+            int rewindFrame = ExtremeRolesPlugin.GameDataStore.History.GetSize() - skipFrame;
+
+            Logging.Debug(
+                $"History Size:{ExtremeRolesPlugin.GameDataStore.History.GetSize()}   SkipFrame:{skipFrame}");
+
+            Vector3 prevPos = localPlayer.transform.position;
+            Vector3 sefePos = prevPos;
+            bool isNotSafePos = false;
+            int frameCount = 0;
+
+            // Rewind Main Process
+            foreach (var item in ExtremeRolesPlugin.GameDataStore.History.GetAllHistory())
+            {
+                if (rewindFrame == frameCount) { break; }
 
                 yield return null;
 
                 if (localPlayer.PlayerId == rolePlayerId) { continue; }
+
+                ++frameCount;
 
                 localPlayer.moveable = false;
 
@@ -127,18 +156,38 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                         prevPos.y + offset.y,
                         newPos.z);
 
-                    if (PhysicsHelpers.AnythingBetween(
+                    bool isAnythingBetween = PhysicsHelpers.AnythingBetween(
                             prevTruePos, newTruePos,
-                            Constants.ShipAndAllObjectsMask, false) || !item.Item2)
-                    {
-                        localPlayer.transform.position = prevPos;
-                    }
-                    else
+                            Constants.ShipAndAllObjectsMask, false);
+
+                    // (間に何もない and 動ける) or ベント内だった場合
+                    // => 巻き戻しかつ、安全な座標を更新
+                    if ((!isAnythingBetween && item.Item2) || item.Item3)
                     {
                         localPlayer.transform.position = newPos;
                         prevPos = newPos;
+                        sefePos = newPos;
+                        isNotSafePos = false;
+                    }
+                    // 何か使っている時(梯子、移動床等)
+                    // => 巻き戻すが、安全ではない(壁抜けする)座標として記録
+                    else if (item.Item4)
+                    {
+                        localPlayer.transform.position = newPos;
+                        prevPos = newPos;
+                        isNotSafePos = true;
+                    }
+                    else
+                    {
+                        localPlayer.transform.position = prevPos;
                     }
                 }
+            }
+
+            // 最後の巻き戻しが壁抜けする座標だった場合、壁抜けしない場所に飛ばす
+            if (isNotSafePos)
+            {
+                localPlayer.transform.position = sefePos;
             }
 
             localPlayer.moveable = true;
@@ -164,7 +213,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             var timeMaster = (TimeMaster)ExtremeRoleManager.GameRole[rolePlayerId];
             timeMaster.IsShieldOn = false;
             timeMaster.IsRewindTime = false;
-            timeMaster.RewindScreen.enabled = false;
+            if (timeMaster.RewindScreen != null)
+            {
+                timeMaster.RewindScreen.enabled = false;
+            }
 
             ExtremeRolesPlugin.GameDataStore.History.BlockAddHistory = false;
         }
@@ -257,7 +309,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 string.Concat(
                     this.RoleName,
                     TimeMasterOption.RewindTime),
-                3.0f, 1.0f, 30.0f, 0.5f,
+                5.0f, 1.0f, 60.0f, 0.5f,
                 parentOps, format: "unitSeconds");
         }
 
