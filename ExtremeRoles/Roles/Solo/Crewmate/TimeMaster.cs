@@ -112,7 +112,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             int frameCount = 0;
 
             // Rewind Main Process
-            foreach (var item in ExtremeRolesPlugin.GameDataStore.History.GetAllHistory())
+            foreach (var hist in ExtremeRolesPlugin.GameDataStore.History.GetAllHistory())
             {
                 if (rewindFrame == frameCount) { break; }
 
@@ -126,7 +126,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
                 if (localPlayer.Data.IsDead)
                 {
-                    localPlayer.transform.position = item.Item1;
+                    localPlayer.transform.position = hist.Item1;
                 }
                 else
                 {
@@ -145,7 +145,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                         }
                     }
 
-                    Vector3 newPos = item.Item1;
+                    Vector3 newPos = hist.Item1;
                     Vector2 offset = localPlayer.Collider.offset;
                     Vector3 newTruePos = new Vector3(
                         newPos.x + offset.x,
@@ -160,18 +160,19 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                             prevTruePos, newTruePos,
                             Constants.ShipAndAllObjectsMask, false);
 
-                    // (間に何もない and 動ける) or ベント内だった場合
+
+                    // (間に何もない and 動ける) or ベント内だったの座標だった場合
                     // => 巻き戻しかつ、安全な座標を更新
-                    if ((!isAnythingBetween && item.Item2) || item.Item3)
+                    if ((!isAnythingBetween && hist.Item2) || hist.Item3)
                     {
                         localPlayer.transform.position = newPos;
                         prevPos = newPos;
                         sefePos = newPos;
                         isNotSafePos = false;
                     }
-                    // 何か使っている時(梯子、移動床等)
+                    // 何か使っている時の座標(梯子、移動床等)
                     // => 巻き戻すが、安全ではない(壁抜けする)座標として記録
-                    else if (item.Item4)
+                    else if (hist.Item4)
                     {
                         localPlayer.transform.position = newPos;
                         prevPos = newPos;
@@ -184,7 +185,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 }
             }
 
-            // 最後の巻き戻しが壁抜けする座標だった場合、壁抜けしない場所に飛ばす
+            // 最後の巻き戻しが壁抜けする座標だった場合、壁抜けしない安全な場所に飛ばす
             if (isNotSafePos)
             {
                 localPlayer.transform.position = sefePos;
