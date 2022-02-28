@@ -530,7 +530,7 @@ namespace ExtremeRoles.Module
                         player.transform.position,
                         player.CanMove,
                         player.inVent,
-                        !(player.Collider.enabled && player.NetTransform.enabled && player.moveable)));
+                        !player.Collider.enabled && !player.NetTransform.enabled && !player.moveable));
             }
 
             public void Clear()
