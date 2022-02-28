@@ -168,7 +168,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             var timeMaster = (TimeMaster)ExtremeRoleManager.GameRole[rolePlayerId];
             timeMaster.IsShieldOn = false;
             timeMaster.IsRewindTime = false;
-            timeMaster.RewindScreen.enabled = false;
+            if (timeMaster.RewindScreen != null)
+            {
+                timeMaster.RewindScreen.enabled = false;
+            }
 
             ExtremeRolesPlugin.GameDataStore.History.BlockAddHistory = false;
         }
