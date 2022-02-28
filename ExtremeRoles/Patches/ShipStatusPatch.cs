@@ -110,25 +110,6 @@ namespace ExtremeRoles.Patches
                 reason, trigger);
         }
 
-
-        private static void gameIsEnd(
-            GameOverReason reason,
-            bool trigger = false)
-        {
-
-            int gameId = AmongUsClient.Instance.GameId;
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                PlayerControl.LocalPlayer.NetId,
-                (byte)RPCOperator.Command.UncheckedGameEnd,
-                Hazel.SendOption.Reliable, -1);
-            writer.Write(gameId);
-            writer.Write((int)reason);
-            writer.Write(trigger);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
-            RPCOperator.UncheckedGameEnd(
-                gameId, (int)reason, trigger);
-        }
-
         private static bool isCrewmateWin(
             ShipStatus __instance,
             GameDataContainer.PlayerStatistics statistics)

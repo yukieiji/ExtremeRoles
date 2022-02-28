@@ -16,7 +16,6 @@ namespace ExtremeRoles
             SetNormalRole,
             SetCombinationRole,
             ShareOption,
-            UncheckedGameEnd,
             CustomVentUse,
             UncheckedShapeShift,
             UncheckedMurderPlayer,
@@ -163,42 +162,6 @@ namespace ExtremeRoles
             ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
                 playerId, (Module.GameDataContainer.PlayerStatus)reason);
         }
-
-        public static void UncheckedGameEnd(
-            int gameId, int reason, bool trigger)
-        {
-
-            if (AmongUsClient.Instance.GameId == gameId &&
-                AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Ended)
-            {
-                AmongUsClient.Instance.GameState = InnerNet.InnerNetClient.GameStates.Ended;
-                var clients = AmongUsClient.Instance.allClients;
-                lock (clients)
-                {
-                    AmongUsClient.Instance.allClients.Clear();
-                }
-
-                var dispather = AmongUsClient.Instance.Dispatcher;
-                lock (dispather)
-                {
-                    AmongUsClient.Instance.Dispatcher.Add(
-                        new System.Action(() =>
-                        {
-                            ShipStatus.Instance.enabled = false;
-                            ShipStatus.Instance.BeginCalled = false;
-                            AmongUsClient.Instance.OnGameEnd(
-                                new EndGameResult((GameOverReason)reason, trigger));
-
-                            if (AmongUsClient.Instance.AmHost)
-                            {
-                                ShipStatus.RpcEndGame(
-                                    (GameOverReason)reason, trigger);
-                            }
-                        }));
-                }
-            }
-        }
-
 
         public static void CustomVentUse(
             int ventId, byte playerId, byte isEnter)
