@@ -295,10 +295,11 @@ namespace ExtremeRoles
 
             var CustomRegion = new DnsRegionInfo(
                 ConfigParser.Ip.Value,
-                Patches.Region.CustomServer.Id,
+                "Custom",
                 StringNames.NoTranslation,
                 ConfigParser.Ip.Value,
-                ConfigParser.Port.Value);
+                ConfigParser.Port.Value,
+                false);
             regions = regions.Concat(new IRegionInfo[] { CustomRegion.Cast<IRegionInfo>() }).ToArray();
             ServerManager.DefaultRegions = regions;
             serverManager.AvailableRegions = regions;
