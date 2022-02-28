@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -115,11 +114,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             // Rewind Main Process
             foreach (var item in ExtremeRolesPlugin.GameDataStore.History.GetAllHistory())
             {
+                if (rewindFrame == frameCount) { break; }
 
                 yield return null;
 
                 if (localPlayer.PlayerId == rolePlayerId) { continue; }
-                if (rewindFrame == frameCount) { continue; }
 
                 ++frameCount;
 
