@@ -295,7 +295,7 @@ namespace ExtremeRoles
 
             var CustomRegion = new DnsRegionInfo(
                 ConfigParser.Ip.Value,
-                "Custom",
+                "custom",
                 StringNames.NoTranslation,
                 ConfigParser.Ip.Value,
                 ConfigParser.Port.Value,

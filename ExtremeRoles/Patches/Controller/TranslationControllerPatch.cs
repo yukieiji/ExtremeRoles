@@ -23,10 +23,10 @@ namespace ExtremeRoles.Patches.Controller
             [HarmonyArgument(1)] string defaultStr)
         {
             if (id == StringNames.NoTranslation && 
-                defaultStr.Equals("Custom"))
+                defaultStr.Equals("custom"))
             {
                 __result = Helper.Translation.GetString(
-                    "Custom");
+                    "custom");
                 return false;
             }
             else
