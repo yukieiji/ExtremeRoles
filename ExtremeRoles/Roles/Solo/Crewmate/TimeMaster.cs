@@ -86,7 +86,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             Vector3 prevPos = localPlayer.transform.position;
 
-            foreach (Tuple<Vector3, bool> item in ExtremeRolesPlugin.GameDataStore.History.GetAllHistory())
+            foreach (Tuple<
+                Vector3, bool, bool> item in ExtremeRolesPlugin.GameDataStore.History.GetAllHistory())
             {
 
                 yield return null;
@@ -127,16 +128,19 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                         prevPos.y + offset.y,
                         newPos.z);
 
-                    if (PhysicsHelpers.AnythingBetween(
+                    bool isAnythingBetween = PhysicsHelpers.AnythingBetween(
                             prevTruePos, newTruePos,
-                            Constants.ShipAndAllObjectsMask, false) || !item.Item2)
-                    {
-                        localPlayer.transform.position = prevPos;
-                    }
-                    else
+                            Constants.ShipAndAllObjectsMask, false);
+
+                    // (間に何もない and 動ける) or ベント内だった場合
+                    if ((!isAnythingBetween && item.Item2) || item.Item3)
                     {
                         localPlayer.transform.position = newPos;
                         prevPos = newPos;
+                    }
+                    else
+                    {
+                        localPlayer.transform.position = prevPos;
                     }
                 }
             }
