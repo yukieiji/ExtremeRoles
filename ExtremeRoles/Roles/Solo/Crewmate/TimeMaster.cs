@@ -310,7 +310,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 string.Concat(
                     this.RoleName,
                     TimeMasterOption.RewindTime),
-                3.0f, 1.0f, 30.0f, 0.5f,
+                5.0f, 1.0f, 60.0f, 0.5f,
                 parentOps, format: "unitSeconds");
         }
 
