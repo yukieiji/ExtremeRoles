@@ -13,7 +13,7 @@ EXTREMERORLS_OUT_FILE = os.path.join(WORKING_DIR, "ExtremeRoles", "Resources", "
 EXTREMESKIN_IN_FILE = os.path.join(WORKING_DIR, "ExtremeSkinTransData.xlsx")
 EXTREMESKIN_OUT_FILE = os.path.join(WORKING_DIR, "ExtremeSkins", "Resources", "LangData", "stringData.json")
 
-def stringToJson(filename):
+def stringToJson(filename, outputFile):
   wb = load_workbook(filename, read_only = True)
   
   stringData = {}
@@ -40,9 +40,9 @@ def stringToJson(filename):
       if data:
         stringData[name] = data
     
-  with open(OUT_FILE, "w") as f:
+  with open(outputFile, "w") as f:
     json.dump(stringData, f, indent=4)
 
 if __name__ == "__main__":
-  stringToJson(EXTREMERORLS_IN_FILE)
-  stringToJson(EXTREMESKIN_IN_FILE)
+  stringToJson(EXTREMERORLS_IN_FILE, EXTREMERORLS_OUT_FILE)
+  stringToJson(EXTREMESKIN_IN_FILE, EXTREMESKIN_OUT_FILE)
