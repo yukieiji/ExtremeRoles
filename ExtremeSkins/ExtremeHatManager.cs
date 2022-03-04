@@ -42,17 +42,17 @@ namespace ExtremeSkins
                     var parseList = parseJson.ChildrenTokens;
 
                     HatData.Add(
-                        parseList[1].TryCast<JProperty>().Value.ToString(),
+                        parseList[1].TryCast<JProperty>().Value.ToString(),  // Name
                         new CustomHat(
                             hat,
-                            parseList[0].TryCast<JProperty>().Value.ToString(),
-                            parseList[1].TryCast<JProperty>().Value.ToString(),
-                            (bool)(parseList[2].TryCast<JProperty>().Value),
-                            (bool)(parseList[3].TryCast<JProperty>().Value),
-                            (bool)(parseList[4].TryCast<JProperty>().Value),
-                            (bool)(parseList[5].TryCast<JProperty>().Value),
-                            (bool)(parseList[6].TryCast<JProperty>().Value),
-                            (bool)(parseList[7].TryCast<JProperty>().Value)));
+                            parseList[0].TryCast<JProperty>().Value.ToString(),  // Author
+                            parseList[1].TryCast<JProperty>().Value.ToString(),  // Name
+                            (bool)(parseList[2].TryCast<JProperty>().Value),  // FrontFlip
+                            (bool)(parseList[3].TryCast<JProperty>().Value),  // Back
+                            (bool)(parseList[4].TryCast<JProperty>().Value),  // BackFlip
+                            (bool)(parseList[5].TryCast<JProperty>().Value),  // Climb
+                            (bool)(parseList[6].TryCast<JProperty>().Value),  // Bound
+                            (bool)(parseList[7].TryCast<JProperty>().Value))); // Shader
 
                     ExtremeSkinsPlugin.Logger.LogInfo(
                         $"Skin Loaded:{parseJson.ChildrenTokens[1].TryCast<JProperty>().Value.ToString()}, from:{hat}");

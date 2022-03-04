@@ -30,7 +30,7 @@ namespace ExtremeSkins.Module
 
         private bool hasShader { get; set; }
 
-        private bool isbounce { get; set; }
+        private bool isBounce { get; set; }
 
         private Sprite frontImage;
         private Sprite frontFlipImage;
@@ -48,8 +48,8 @@ namespace ExtremeSkins.Module
             bool hasBack,
             bool hasBackFlip,
             bool hasClimb,
-            bool hasShader,
-            bool isbounce)
+            bool isBounce,
+            bool hasShader)
         {
             this.folderPath = folderPath;
             this.Author = author;
@@ -61,7 +61,7 @@ namespace ExtremeSkins.Module
             this.hasClimb = hasClimb;
             this.hasShader = hasShader;
 
-            this.isbounce = isbounce;
+            this.isBounce = isBounce;
         }
 
         public HatBehaviour GetHatBehaviour()
@@ -82,7 +82,7 @@ namespace ExtremeSkins.Module
             this.behaviour.ProductId = string.Concat(
                 "hat_", this.Name.Replace(' ', '_'));
             this.behaviour.InFront = this.hasBack;
-            this.behaviour.NoBounce = !this.isbounce;
+            this.behaviour.NoBounce = !this.isBounce;
             this.behaviour.ChipOffset = new Vector2(0f, 0.2f);
             this.behaviour.Free = true;
             this.behaviour.NotInStore = true;
