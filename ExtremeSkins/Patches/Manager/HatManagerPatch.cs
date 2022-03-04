@@ -9,7 +9,7 @@ namespace ExtremeSkins.Patches.Manager
         private static bool isRunning;
         public static void Prefix(HatManager __instance)
         {
-            if (isRunning) return;
+            if (isRunning) { return; }
             isRunning = true; // prevent simultanious execution
 
             try

@@ -1,12 +1,6 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
-using System.Linq;
-using HarmonyLib;
+﻿using HarmonyLib;
 
-
-
-namespace ExtremeRoles.Patches.Manager
+namespace ExtremeSkins.Patches.Manager
 {
     [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
     public static class MainMenuManagerStartPatch
