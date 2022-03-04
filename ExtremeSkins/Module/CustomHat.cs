@@ -72,11 +72,6 @@ namespace ExtremeSkins.Module
 
             this.behaviour = new HatBehaviour();
 
-            if (this.hasClimb)
-            {
-                this.behaviour.ClimbImage = this.climbImage;
-            }
-
             this.behaviour.name = this.Name;
             this.behaviour.Order = Order;
             this.behaviour.ProductId = string.Concat(
@@ -88,6 +83,7 @@ namespace ExtremeSkins.Module
             this.behaviour.NotInStore = true;
 
             this.behaviour.MainImage = this.frontImage;
+
             if (this.hasBack)
             {
                 this.behaviour.BackImage = this.backImage;
