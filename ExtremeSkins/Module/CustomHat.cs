@@ -15,8 +15,6 @@ namespace ExtremeSkins.Module
         public const string BackFlipImageName = "back_flip.png";
         public const string ClimbImageName = "climb.png";
 
-        public const string FolderPath = @"\ExtremeHat\";
-
         public int Order = 99;
 
 
@@ -120,31 +118,29 @@ namespace ExtremeSkins.Module
 
         private void loadAllHatResources()
         {
-            string dataDlPath = string.Concat(Path.GetDirectoryName(
-                Application.dataPath), FolderPath);
 
             this.frontImage = loadHatSprite(
-                string.Concat(dataDlPath, FrontImageName));
+                string.Concat(this.folderPath, FrontImageName));
 
             if (this.hasFrontFlip)
             {
                 this.frontFlipImage = loadHatSprite(
-                    string.Concat(dataDlPath, FrontFlipImageName));
+                    string.Concat(this.folderPath, FrontFlipImageName));
             }
             if (this.hasBack)
             {
                 this.backImage = loadHatSprite(
-                    string.Concat(dataDlPath, BackImageName));
+                    string.Concat(this.folderPath, BackImageName));
             }
             if (this.hasBackFlip)
             {
                 this.backFlipImage = loadHatSprite(
-                    string.Concat(dataDlPath, BackFlipImageName));
+                    string.Concat(this.folderPath, BackFlipImageName));
             }
             if (this.hasClimb)
             {
                 this.climbImage = loadHatSprite(
-                    string.Concat(dataDlPath, ClimbImageName));
+                    string.Concat(this.folderPath, ClimbImageName));
             }
         }
 
