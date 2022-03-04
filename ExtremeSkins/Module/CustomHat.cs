@@ -116,27 +116,27 @@ namespace ExtremeSkins.Module
         {
 
             this.frontImage = loadHatSprite(
-                string.Concat(this.folderPath, FrontImageName));
+                string.Concat(this.folderPath, @"\", FrontImageName));
 
             if (this.hasFrontFlip)
             {
                 this.frontFlipImage = loadHatSprite(
-                    string.Concat(this.folderPath, FrontFlipImageName));
+                    string.Concat(this.folderPath, @"\", FrontFlipImageName));
             }
             if (this.hasBack)
             {
                 this.backImage = loadHatSprite(
-                    string.Concat(this.folderPath, BackImageName));
+                    string.Concat(this.folderPath, @"\", BackImageName));
             }
             if (this.hasBackFlip)
             {
                 this.backFlipImage = loadHatSprite(
-                    string.Concat(this.folderPath, BackFlipImageName));
+                    string.Concat(this.folderPath, @"\", BackFlipImageName));
             }
             if (this.hasClimb)
             {
                 this.climbImage = loadHatSprite(
-                    string.Concat(this.folderPath, ClimbImageName));
+                    string.Concat(this.folderPath, @"\", ClimbImageName));
             }
         }
 
