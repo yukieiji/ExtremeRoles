@@ -10,8 +10,6 @@ namespace ExtremeRoles.Patches.Manager
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Start))]
     public static class HudManagerStartPatch
     {
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(HudManager), nameof(HudManager.Start))]
         public static void PostFix(HudManager __instance)
         {
             if (Helper.GameSystem.IsFreePlay) { return; }
