@@ -126,7 +126,7 @@ namespace ExtremeSkins.Patches.Tab
                 title.fontWeight = TMPro.FontWeight.Thin;
                 title.enableAutoSizing = false;
                 title.autoSizeTextContainer = true;
-                title.text = packageName;
+                title.text = Helper.Translation.GetString(packageName);
                 offset -= headerSize * __instance.YOffset;
                 hatsTabCustomText.Add(title);
             }

@@ -75,7 +75,7 @@ namespace ExtremeSkins.Module
 
             this.behaviour = new HatBehaviour();
 
-            this.behaviour.name = this.Name;
+            this.behaviour.name = Helper.Translation.GetString(this.Name);
             this.behaviour.Order = Order;
             this.behaviour.ProductId = this.id;
             this.behaviour.InFront = this.hasBack;
