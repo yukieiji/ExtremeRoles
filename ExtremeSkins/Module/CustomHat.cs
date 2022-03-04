@@ -24,9 +24,9 @@ namespace ExtremeSkins.Module
         private string id;
         private string folderPath;
 
-        private bool hasFrontFlip { get; set; }
+        public bool HasFrontFlip { get; set; }
+        public bool HasBackFlip { get; set; }
         private bool hasBack { get; set; }
-        private bool hasBackFlip { get; set; }
         private bool hasClimb { get; set; }
 
         private bool hasShader { get; set; }
@@ -58,9 +58,9 @@ namespace ExtremeSkins.Module
             this.Author = author;
             this.Name = name;
             
-            this.hasFrontFlip = hasFrontFlip;
+            this.HasFrontFlip = hasFrontFlip;
             this.hasBack = hasBack;
-            this.hasBackFlip = hasBackFlip;
+            this.HasBackFlip = hasBackFlip;
             this.hasClimb = hasClimb;
             this.hasShader = hasShader;
 
@@ -120,7 +120,7 @@ namespace ExtremeSkins.Module
             this.frontImage = loadHatSprite(
                 string.Concat(this.folderPath, @"\", FrontImageName));
 
-            if (this.hasFrontFlip)
+            if (this.HasFrontFlip)
             {
                 this.frontFlipImage = loadHatSprite(
                     string.Concat(this.folderPath, @"\", FrontFlipImageName));
@@ -130,7 +130,7 @@ namespace ExtremeSkins.Module
                 this.backImage = loadHatSprite(
                     string.Concat(this.folderPath, @"\", BackImageName));
             }
-            if (this.hasBackFlip)
+            if (this.HasBackFlip)
             {
                 this.backFlipImage = loadHatSprite(
                     string.Concat(this.folderPath, @"\", BackFlipImageName));
