@@ -13,7 +13,7 @@ namespace ExtremeSkins.Patches.Manager
             exrLogo.transform.position += new Vector3(3.0f, -0.75f, 0.0f);
             var renderer = exrLogo.AddComponent<SpriteRenderer>();
             renderer.sprite = Module.Loader.CreateSpriteFromResources(
-                "ExtremeSkins.Resources.TitleBurner.png", 450f);
+                "ExtremeSkins.Resources.TitleBurner.png", 425f);
 
             // ExtremeSkins.ExtremeHatManager.CheckUpdate();
             ExtremeHatManager.Load();
