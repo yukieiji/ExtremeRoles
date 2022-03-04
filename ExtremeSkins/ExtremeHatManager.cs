@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 using ExtremeSkins.Module;
 
@@ -17,19 +18,6 @@ namespace ExtremeSkins
 
         public const string FolderPath = @"\ExtremeHat\";
         public const string InfoFileName = "info.json";
-
-        private class HatInfo
-        {
-            public string Author { get; set; }
-            public string Name { get; set; }
-            public bool FrontFlip { get; set; }
-            public bool Back { get; set; }
-            public bool BackFlip { get; set; }
-            public bool Climb { get; set; }
-            public bool Bound { get; set; }
-            public bool Shader { get; set; }
-        }
-
 
         public static void Initialize()
         {
@@ -50,14 +38,27 @@ namespace ExtremeSkins
             {
                 if (!string.IsNullOrEmpty(hat))
                 {
-                    HatInfo info = JsonConvert.DeserializeObject<HatInfo>(
-                        string.Concat(hat, InfoFileName));
+                    byte[] byteArray = File.ReadAllBytes(
+                        string.Concat(hat, @"\", InfoFileName));
+                    string json = System.Text.Encoding.UTF8.GetString(byteArray);
+                    JObject parseJson = JObject.Parse(json);
+                    var parseList = parseJson.ChildrenTokens;
 
                     HatData.Add(
-                        info.Name,
+                        parseList[1].TryCast<JProperty>().Value.ToString(),
                         new CustomHat(
-                            hat, info.Author, info.Name, info.FrontFlip,
-                            info.Back, info.BackFlip, info.Climb, info.Shader, info.Bound));
+                            hat,
+                            parseList[0].TryCast<JProperty>().Value.ToString(),
+                            parseList[1].TryCast<JProperty>().Value.ToString(),
+                            (bool)(parseList[2].TryCast<JProperty>().Value),
+                            (bool)(parseList[3].TryCast<JProperty>().Value),
+                            (bool)(parseList[4].TryCast<JProperty>().Value),
+                            (bool)(parseList[5].TryCast<JProperty>().Value),
+                            (bool)(parseList[6].TryCast<JProperty>().Value),
+                            (bool)(parseList[7].TryCast<JProperty>().Value)));
+
+                    ExtremeSkinsPlugin.Logger.LogInfo(
+                        $"Skin Loaded:{parseJson.ChildrenTokens[1].TryCast<JProperty>().Value.ToString()}, from:{hat}");
                 }
             }
 

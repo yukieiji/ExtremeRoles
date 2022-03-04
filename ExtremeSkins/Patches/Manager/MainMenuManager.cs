@@ -13,7 +13,7 @@ namespace ExtremeRoles.Patches.Manager
     {
         public static void Postfix(MainMenuManager __instance)
         {
-            ExtremeSkins.ExtremeHatManager.CheckUpdate();
+            // ExtremeSkins.ExtremeHatManager.CheckUpdate();
 
 
 
