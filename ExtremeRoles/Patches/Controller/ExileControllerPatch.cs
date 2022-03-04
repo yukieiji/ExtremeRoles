@@ -183,6 +183,7 @@ namespace ExtremeRoles.Patches.Controller
                 int callAssassin = UnityEngine.Random.RandomRange(0, deadedAssassin.Count);
 
                 byte playerId = deadedAssassin[callAssassin];
+                deadedAssassin.RemoveAt(callAssassin);
 
                 var assasin = (Roles.Combination.Assassin)ExtremeRoleManager.GameRole[playerId];
                 assasin.ExiledAction(

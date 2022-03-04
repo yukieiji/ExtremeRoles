@@ -134,7 +134,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 GetRoleOptionId((int)BomberOption.TimerMaxTime),
                 string.Concat(
                     this.RoleName,
-                    BomberOption.TimerMinTime.ToString()),
+                    BomberOption.TimerMaxTime.ToString()),
                 60f, 45f, 75f, 0.5f,
                 parentOps, format: "unitSeconds");
             CustomOption.Create(

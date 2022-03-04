@@ -3,9 +3,9 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
-        <!--<Version>1.18.0.1</Version>-->
-        <VersionPrefix>1.18.4</VersionPrefix>
-        <VersionSuffix>NewRole-v6MoreSteamUpdate</VersionSuffix> 
+        <Version>1.18.4.1</Version>
+        <!--<VersionPrefix>1.18.4</VersionPrefix>-->
+        <VersionSuffix>NewRole-v6TransFix</VersionSuffix> 
         <Description>Extreme Roles for Advanced user</Description>
         <Authors>yukieiji</Authors>
     </PropertyGroup>

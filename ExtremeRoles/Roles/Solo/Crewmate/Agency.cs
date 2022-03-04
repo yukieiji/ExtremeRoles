@@ -294,7 +294,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                    this.RoleName,
                    AgencyOption.MaxTaskNum.ToString()),
                2, 1, 3, 1,
-               parentOps, format: "unitPercentage");
+               parentOps);
 
             CustomOption.Create(
                GetRoleOptionId((int)AgencyOption.TakeTaskRange),
