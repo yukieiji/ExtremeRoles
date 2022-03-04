@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using System.Text.RegularExpressions;
 
 using UnityEngine;
 
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 using ExtremeSkins.Module;
