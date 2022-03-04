@@ -80,7 +80,7 @@ namespace ExtremeSkins.Module
             this.behaviour.name = Helper.Translation.GetString(this.Name);
             this.behaviour.Order = Order;
             this.behaviour.ProductId = this.id;
-            this.behaviour.InFront = this.hasBack;
+            this.behaviour.InFront = !this.hasBack;
             this.behaviour.NoBounce = !this.isBounce;
             this.behaviour.ChipOffset = new Vector2(0f, 0.2f);
             this.behaviour.Free = true;
