@@ -21,6 +21,8 @@ namespace ExtremeSkins.Module
         public string Author { get; set; }
         public string Name { get; set; }
 
+        public HatBehaviour Body { get => this.behaviour; }
+
         private string id;
         private string folderPath;
 

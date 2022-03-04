@@ -22,6 +22,7 @@ namespace ExtremeSkins
 
         public override void Load()
         {
+            Helper.Translation.Load();
             ExtremeHatManager.Initialize();
 
             Logger = Log;

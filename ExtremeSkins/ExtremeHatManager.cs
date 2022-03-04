@@ -63,9 +63,20 @@ namespace ExtremeSkins
                         $"Skin Loaded:{parseJson.ChildrenTokens[1].TryCast<JProperty>().Value.ToString()}, from:{hat}");
                 }
             }
-
-
         }
+
+        public static void UpdateTranslation()
+        {
+            foreach (var hat in HatData.Values)
+            {
+               if (hat.Body != null)
+               {
+                    hat.Body.name = Helper.Translation.GetString(
+                        hat.Name);
+               }
+            }
+        }
+
         private static void downLoad()
         {
 
