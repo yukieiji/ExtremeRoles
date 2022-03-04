@@ -8,11 +8,7 @@ namespace ExtremeSkins.Patches.Manager
         public static void Postfix(MainMenuManager __instance)
         {
             // ExtremeSkins.ExtremeHatManager.CheckUpdate();
-
-
-
-
-            ExtremeSkins.ExtremeHatManager.Load();
+            ExtremeHatManager.Load();
         }
     }
 }
