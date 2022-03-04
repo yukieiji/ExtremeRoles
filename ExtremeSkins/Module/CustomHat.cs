@@ -64,13 +64,14 @@ namespace ExtremeSkins.Module
             this.hasShader = hasShader;
 
             this.isbounce = isbounce;
-
-            loadAllHatResources();
         }
 
         public HatBehaviour GetHatBehaviour()
         {
             if (this.behaviour != null) { return this.behaviour; }
+
+            loadAllHatResources();
+
             this.behaviour = new HatBehaviour();
 
             if (this.hasClimb)
