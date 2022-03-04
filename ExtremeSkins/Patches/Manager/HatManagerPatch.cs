@@ -7,6 +7,7 @@ namespace ExtremeSkins.Patches.Manager
     public static class HatManagerGetHatByIdPatch
     {
         private static bool isRunning;
+        private static bool isLoaded;
         public static void Prefix(HatManager __instance)
         {
             if (isRunning) { return; }
@@ -14,9 +15,13 @@ namespace ExtremeSkins.Patches.Manager
 
             try
             {
-                foreach (var hat in ExtremeHatManager.HatData.Values)
+                if (!isLoaded)
                 {
-                    __instance.AllHats.Add(hat.GetHatBehaviour());
+                    foreach (var hat in ExtremeHatManager.HatData.Values)
+                    {
+                        __instance.AllHats.Add(
+                            hat.GetHatBehaviour());
+                    }
                 }
             }
             catch (Exception e)
@@ -24,6 +29,7 @@ namespace ExtremeSkins.Patches.Manager
                 ExtremeSkinsPlugin.Logger.LogInfo(
                     $"Unable to add Custom Hats\n{e}");
             }
+            isLoaded = true;
         }
         public static void Postfix(HatManager __instance)
         {

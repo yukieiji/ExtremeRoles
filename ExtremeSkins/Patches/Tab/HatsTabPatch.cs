@@ -131,7 +131,7 @@ namespace ExtremeSkins.Patches.Tab
                 hatsTabCustomText.Add(title);
             }
 
-            var numHats = hats.Count;
+            int numHats = hats.Count;
 
             for (int i = 0; i < numHats; i++)
             {
@@ -148,9 +148,13 @@ namespace ExtremeSkins.Patches.Tab
                 colorChip.transform.localPosition = new Vector3(xpos, ypos, inventoryZ);
                 if (ActiveInputManager.currentControlType == ActiveInputManager.InputType.Keyboard)
                 {
-                    colorChip.Button.OnMouseOver.AddListener((UnityEngine.Events.UnityAction)(() => __instance.SelectHat(hat)));
-                    colorChip.Button.OnMouseOut.AddListener((UnityEngine.Events.UnityAction)(() => __instance.SelectHat(DestroyableSingleton<HatManager>.Instance.GetHatById(SaveManager.LastHat))));
-                    colorChip.Button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => __instance.ClickEquip()));
+                    colorChip.Button.OnMouseOver.AddListener(
+                        (UnityEngine.Events.UnityAction)(() => __instance.SelectHat(hat)));
+                    colorChip.Button.OnMouseOut.AddListener(
+                        (UnityEngine.Events.UnityAction)(
+                            () => __instance.SelectHat(DestroyableSingleton<HatManager>.Instance.GetHatById(SaveManager.LastHat))));
+                    colorChip.Button.OnClick.AddListener(
+                        (UnityEngine.Events.UnityAction)(() => __instance.ClickEquip()));
                 }
                 else
                 {
@@ -167,7 +171,7 @@ namespace ExtremeSkins.Patches.Tab
 
         private static void destroyList<T>(List<T> items) where T : UnityEngine.Object
         {
-            if (items == null) return;
+            if (items == null) { return; }
             foreach (T item in items)
             {
                 Object.Destroy(item);
