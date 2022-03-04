@@ -68,9 +68,9 @@ namespace ExtremeRoles.Patches.Manager
                 amongUsLogo.transform.position += Vector3.up * 0.25f;
             }
 
-            var torLogo = new GameObject("bannerLogoExtremeRoles");
-            torLogo.transform.position = Vector3.up;
-            var renderer = torLogo.AddComponent<SpriteRenderer>();
+            var exrLogo = new GameObject("bannerLogoExtremeRoles");
+            exrLogo.transform.position = Vector3.up;
+            var renderer = exrLogo.AddComponent<SpriteRenderer>();
             renderer.sprite = Loader.CreateSpriteFromResources(
                 Resources.Path.TitleBurner, 300f);
 
