@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using UnityEngine;
 
 namespace ExtremeSkins.Patches.Manager
 {
@@ -7,6 +8,13 @@ namespace ExtremeSkins.Patches.Manager
     {
         public static void Postfix(MainMenuManager __instance)
         {
+            var exrLogo = new GameObject("bannerLogoExtremeSkins");
+            exrLogo.transform.position = Vector3.up;
+            exrLogo.transform.position += new Vector3(3.0f, -0.75f, 0.0f);
+            var renderer = exrLogo.AddComponent<SpriteRenderer>();
+            renderer.sprite = Module.Loader.CreateSpriteFromResources(
+                "ExtremeSkins.Resources.TitleBurner.png", 450f);
+
             // ExtremeSkins.ExtremeHatManager.CheckUpdate();
             ExtremeHatManager.Load();
         }

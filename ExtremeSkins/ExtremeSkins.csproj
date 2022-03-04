@@ -34,6 +34,7 @@
 
     <ItemGroup>
       <EmbeddedResource Include="Resources\LangData\stringData.json" />
+      <EmbeddedResource Include="Resources\*.png" />
     </ItemGroup>
 
     <ItemGroup>

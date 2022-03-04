@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 
 using UnityEngine;
 using UnhollowerBaseLib;
@@ -10,6 +11,24 @@ namespace ExtremeSkins.Module
     {
         internal delegate bool d_LoadImage(IntPtr tex, IntPtr data, bool markNonReadable);
         internal static d_LoadImage iCall_LoadImage;
+
+        public static Sprite CreateSpriteFromResources(
+            string path, float pixelsPerUnit = 115f)
+        {
+            try
+            {
+                Texture2D texture = createTextureFromResources(path);
+                return Sprite.Create(
+                    texture,
+                    new Rect(0, 0, texture.width, texture.height),
+                    new Vector2(0.5f, 0.5f), pixelsPerUnit);
+            }
+            catch
+            {
+                ExtremeSkinsPlugin.Logger.LogInfo("Error loading sprite from path: " + path);
+            }
+            return null;
+        }
 
         public static Sprite CreateSpriteFromDisk(string path)
         {
@@ -38,10 +57,30 @@ namespace ExtremeSkins.Module
             }
             catch
             {
-                System.Console.WriteLine("Error loading texture from disk: " + path);
+                ExtremeSkinsPlugin.Logger.LogInfo("Error loading texture from disk: " + path);
             }
             return null;
         }
+
+        private static Texture2D createTextureFromResources(string path)
+        {
+            try
+            {
+                Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
+                Assembly assembly = Assembly.GetExecutingAssembly();
+                Stream stream = assembly.GetManifestResourceStream(path);
+                var byteTexture = new byte[stream.Length];
+                var read = stream.Read(byteTexture, 0, (int)stream.Length);
+                loadImage(texture, byteTexture, false);
+                return texture;
+            }
+            catch
+            {
+                ExtremeSkinsPlugin.Logger.LogInfo("Error loading texture from resources: " + path);
+            }
+            return null;
+        }
+
         private static bool loadImage(Texture2D tex, byte[] data, bool markNonReadable)
         {
             if (iCall_LoadImage == null)
