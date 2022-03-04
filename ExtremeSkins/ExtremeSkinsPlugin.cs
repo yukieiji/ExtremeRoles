@@ -23,11 +23,13 @@ namespace ExtremeSkins
         public override void Load()
         {
             Helper.Translation.Load();
-            ExtremeHatManager.Initialize();
 
             Logger = Log;
 
             DebugMode = Config.Bind("DeBug", "DebugMode", false);
+
+            ExtremeHatManager.Initialize();
+            ExtremeColorManager.Initialize();
 
             Instance = this;
 

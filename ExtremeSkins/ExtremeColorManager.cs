@@ -16,9 +16,10 @@ namespace ExtremeSkins
         {
             ColorNum = (uint)Palette.ColorNames.Length;
             LangData.Clear();
+            load();
         }
 
-        public static void Load()
+        private static void load()
         {
             var customColor = CustomColorPalette.CustomColor;
 
