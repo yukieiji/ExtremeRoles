@@ -40,13 +40,16 @@ namespace ExtremeSkins
                     string json = System.Text.Encoding.UTF8.GetString(byteArray);
                     JObject parseJson = JObject.Parse(json);
                     var parseList = parseJson.ChildrenTokens;
+                    string name = parseList[1].TryCast<JProperty>().Value.ToString();
+                    string productId = string.Concat(
+                        "hat_", parseList[1].TryCast<JProperty>().Value.ToString());
 
                     HatData.Add(
-                        parseList[1].TryCast<JProperty>().Value.ToString(),  // Name
+                        productId,  // Name
                         new CustomHat(
-                            hat,
+                            productId, hat,
                             parseList[0].TryCast<JProperty>().Value.ToString(),  // Author
-                            parseList[1].TryCast<JProperty>().Value.ToString(),  // Name
+                            name,  // Name
                             (bool)(parseList[2].TryCast<JProperty>().Value),  // FrontFlip
                             (bool)(parseList[3].TryCast<JProperty>().Value),  // Back
                             (bool)(parseList[4].TryCast<JProperty>().Value),  // BackFlip

@@ -21,6 +21,7 @@ namespace ExtremeSkins.Module
         public string Author { get; set; }
         public string Name { get; set; }
 
+        private string id;
         private string folderPath;
 
         private bool hasFrontFlip { get; set; }
@@ -41,6 +42,7 @@ namespace ExtremeSkins.Module
 
 
         public CustomHat(
+            string id,
             string folderPath,
             string author,
             string name,
@@ -51,6 +53,7 @@ namespace ExtremeSkins.Module
             bool isBounce,
             bool hasShader)
         {
+            this.id = id;
             this.folderPath = folderPath;
             this.Author = author;
             this.Name = name;
@@ -74,8 +77,7 @@ namespace ExtremeSkins.Module
 
             this.behaviour.name = this.Name;
             this.behaviour.Order = Order;
-            this.behaviour.ProductId = string.Concat(
-                "hat_", this.Name.Replace(' ', '_'));
+            this.behaviour.ProductId = this.id;
             this.behaviour.InFront = this.hasBack;
             this.behaviour.NoBounce = !this.isBounce;
             this.behaviour.ChipOffset = new Vector2(0f, 0.2f);
