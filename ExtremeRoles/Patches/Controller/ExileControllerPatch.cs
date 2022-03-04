@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using System.Linq;
+
+using HarmonyLib;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
@@ -182,8 +184,8 @@ namespace ExtremeRoles.Patches.Controller
 
                 int callAssassin = UnityEngine.Random.RandomRange(0, deadedAssassin.Count);
 
-                byte playerId = deadedAssassin[callAssassin];
-                deadedAssassin.RemoveAt(callAssassin);
+                byte playerId = deadedAssassin.ElementAt(callAssassin);
+                deadedAssassin.Remove(playerId);
 
                 var assasin = (Roles.Combination.Assassin)ExtremeRoleManager.GameRole[playerId];
                 assasin.ExiledAction(

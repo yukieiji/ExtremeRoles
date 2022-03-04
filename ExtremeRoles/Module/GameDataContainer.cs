@@ -46,7 +46,7 @@ namespace ExtremeRoles.Module
         public List<PlayerControl> PlusWinner = new List<PlayerControl>();
         public Dictionary<int, Version> PlayerVersion = new Dictionary<int, Version>();
 
-        public List<byte> DeadedAssassin = new List<byte>();
+        public HashSet<byte> DeadedAssassin = new HashSet<byte>();
         public List<IUpdatableObject> UpdateObject = new List<IUpdatableObject>();
         public CustomVentContainer CustomVent = new CustomVentContainer();
 
