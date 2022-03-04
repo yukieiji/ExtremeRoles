@@ -44,6 +44,8 @@ namespace ExtremeSkins
                     string productId = string.Concat(
                         "hat_", parseList[1].TryCast<JProperty>().Value.ToString());
 
+                    if (HatData.ContainsKey(productId)) { continue; }
+
                     HatData.Add(
                         productId,  // Name
                         new CustomHat(
