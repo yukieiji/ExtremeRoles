@@ -14,7 +14,10 @@ namespace ExtremeSkins.Module
         public const string BackImageName = "back.png";
         public const string BackFlipImageName = "back_flip.png";
         public const string ClimbImageName = "climb.png";
-        public const string ExtendImageName = "extend.png";
+
+        public const string FolderPath = @"\ExtremeHat\";
+
+        public int Order = 99;
 
 
         public string Author { get; set; }
@@ -26,14 +29,16 @@ namespace ExtremeSkins.Module
         private bool hasBack { get; set; }
         private bool hasBackFlip { get; set; }
         private bool hasClimb { get; set; }
-        private bool hasExtend { get; set; }
+
+        private bool hasShader { get; set; }
+
+        private bool isbounce { get; set; }
 
         private Sprite frontImage;
         private Sprite frontFlipImage;
         private Sprite backImage;
         private Sprite backFlipImage;
         private Sprite climbImage;
-        private Sprite extendImage;
         private HatBehaviour behaviour;
 
 
@@ -45,21 +50,101 @@ namespace ExtremeSkins.Module
             bool hasBack,
             bool hasBackFlip,
             bool hasClimb,
-            bool hasExtend)
+            bool hasShader,
+            bool isbounce)
         {
             this.folderPath = folderPath;
             this.Author = author;
             this.Name = name;
+            
             this.hasFrontFlip = hasFrontFlip;
             this.hasBack = hasBack;
             this.hasBackFlip = hasBackFlip;
             this.hasClimb = hasClimb;
-            this.hasExtend = hasExtend;
+            this.hasShader = hasShader;
+
+            this.isbounce = isbounce;
+
+            loadAllHatResources();
         }
 
         public HatBehaviour GetHatBehaviour()
         {
+            if (this.behaviour != null) { return this.behaviour; }
+            this.behaviour = new HatBehaviour();
 
+            if (this.hasClimb)
+            {
+                this.behaviour.ClimbImage = this.climbImage;
+            }
+
+            this.behaviour.name = this.Name;
+            this.behaviour.Order = Order;
+            this.behaviour.ProductId = string.Concat(
+                "hat_", this.Name.Replace(' ', '_'));
+            this.behaviour.InFront = this.hasBack;
+            this.behaviour.NoBounce = !this.isbounce;
+            this.behaviour.ChipOffset = new Vector2(0f, 0.2f);
+            this.behaviour.Free = true;
+            this.behaviour.NotInStore = true;
+
+            this.behaviour.MainImage = this.frontImage;
+            if (this.hasBack)
+            {
+                this.behaviour.BackImage = this.backImage;
+            }
+            if (this.hasClimb)
+            {
+                this.behaviour.ClimbImage = this.climbImage;
+            }
+            if (this.hasShader)
+            {
+                foreach (HatBehaviour h in DestroyableSingleton<HatManager>.Instance.AllHats)
+                {
+                    if (h.AltShader != null)
+                    {
+                        this.behaviour.AltShader = h.AltShader;
+                        break;
+                    }
+                }
+            }
+
+            return this.behaviour;
+        }
+
+        public Sprite GetFrontImage() => this.frontImage;
+        public Sprite GetFlipFrontImage() => this.frontFlipImage;
+        public Sprite GetBackImage() => this.backImage;
+        public Sprite GetBackFlipImage() => this.backFlipImage;
+
+        private void loadAllHatResources()
+        {
+            string dataDlPath = string.Concat(Path.GetDirectoryName(
+                Application.dataPath), FolderPath);
+
+            this.frontImage = loadHatSprite(
+                string.Concat(dataDlPath, FrontImageName));
+
+            if (this.hasFrontFlip)
+            {
+                this.frontFlipImage = loadHatSprite(
+                    string.Concat(dataDlPath, FrontFlipImageName));
+            }
+            if (this.hasBack)
+            {
+                this.backImage = loadHatSprite(
+                    string.Concat(dataDlPath, BackImageName));
+            }
+            if (this.hasBackFlip)
+            {
+                this.backFlipImage = loadHatSprite(
+                    string.Concat(dataDlPath, BackFlipImageName));
+            }
+            if (this.hasClimb)
+            {
+                this.climbImage = loadHatSprite(
+                    string.Concat(dataDlPath, ClimbImageName));
+            }
         }
 
         private Sprite loadHatSprite(
