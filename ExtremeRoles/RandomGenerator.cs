@@ -5,13 +5,29 @@ namespace ExtremeRoles
 {
     public static class RandomGenerator
     {
-        public static Random Instance; 
+        public static Random Instance;
+        public static bool prevValue = false;
 
         public static void Initialize()
         {
             bool useStrongGen = OptionHolder.AllOption[
                 (int)OptionHolder.CommonOptionKey.UseStrongRandomGen].GetValue();
-            if (useStrongGen)
+            if (Instance == null)
+            {
+                createGlobalRandomGenerator(useStrongGen);
+            }
+            else
+            {
+                if (useStrongGen != prevValue)
+                {
+                    createGlobalRandomGenerator(useStrongGen);
+                }
+            }
+        }
+
+        private static void createGlobalRandomGenerator(bool isStrong)
+        {
+            if (isStrong)
             {
                 Instance = new Random(createStrongRandomSeed());
                 UnityEngine.Random.InitState(createStrongRandomSeed());
@@ -21,7 +37,7 @@ namespace ExtremeRoles
                 Instance = new Random(createNormalRandomSeed());
                 UnityEngine.Random.InitState(createNormalRandomSeed());
             }
-
+            prevValue = isStrong;
         }
 
         public static Random GetTempGenerator()
