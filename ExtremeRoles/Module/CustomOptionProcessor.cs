@@ -92,6 +92,12 @@ namespace ExtremeRoles.Module
                 }
 
                 Helper.Logging.Debug("Import Comp!!!!!!");
+
+                if (AmongUsClient.Instance?.AmHost == true && PlayerControl.LocalPlayer)
+                {
+                    OptionHolder.ShareOptionSelections();// Share all selections
+                }
+
                 return true;
 
             }
