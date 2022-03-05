@@ -23,8 +23,6 @@ namespace ExtremeSkins
 
         public override void Load()
         {
-            Helper.Translation.Load();
-
             Logger = Log;
 
             DebugMode = Config.Bind("DeBug", "DebugMode", false);

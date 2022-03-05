@@ -29,10 +29,16 @@ namespace ExtremeSkins.Helper
             stream.Read(byteArray, 0, (int)stream.Length);
             string json = System.Text.Encoding.UTF8.GetString(byteArray);
 
-
             JObject parsed = JObject.Parse(json);
             addJsonToTransData(parsed);
+        }
 
+        public static void UpdateHatsTransData(string path)
+        {
+            byte[] byteArray = File.ReadAllBytes(path);
+            string json = System.Text.Encoding.UTF8.GetString(byteArray);
+            JObject parseJson = JObject.Parse(json);
+            addJsonToTransData(parseJson);
         }
 
         public static string GetString(string key)
@@ -92,7 +98,13 @@ namespace ExtremeSkins.Helper
                         }
                     }
 
-                    stringData.Add(stringName, strings);
+                    if (stringData.ContainsKey(stringName))
+                    {
+                        stringData[stringName] = strings;
+                    }
+                    {
+                        stringData.Add(stringName, strings);
+                    }
                 }
             }
         }

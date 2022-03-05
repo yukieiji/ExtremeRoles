@@ -23,6 +23,7 @@ namespace ExtremeSkins
 
         private const string repo = ""; // When using this repository with Fork, please follow the license of each hat
         private const string hatData = "hatData.json";
+        private const string hatTransData = "hatTranData.json";
 
         /*
             ・リポジトリ構造    
@@ -119,6 +120,11 @@ namespace ExtremeSkins
 
         public static void Load()
         {
+            Helper.Translation.UpdateHatsTransData(
+                string.Concat(
+                    Path.GetDirectoryName(Application.dataPath),
+                    FolderPath, @"\", hatTransData));
+
             string[] hatsFolder = Directory.GetDirectories(
                 string.Concat(Path.GetDirectoryName(Application.dataPath), FolderPath));
 
