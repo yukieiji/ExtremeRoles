@@ -232,6 +232,8 @@ namespace ExtremeRoles
                 }
                 source.MurderPlayer(target);
 
+                if (!target.Data.IsDead || !target.Data.Disconnected) { return; }
+
                 var targetRole = Roles.ExtremeRoleManager.GameRole[targetId];
 
                 if (Roles.ExtremeRoleManager.IsDisableWinCheckRole(targetRole))
