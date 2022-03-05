@@ -78,6 +78,7 @@ namespace ExtremeSkins
                         (byte)bShadowConfig.Value,
                         (byte)aShadowConfig.Value));
                 LangData.Add((StringNames)id, "configAddColor");
+                ColorNum += 1;
             }
 
             Palette.ColorNames = longlist.ToArray();
