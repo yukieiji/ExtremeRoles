@@ -172,15 +172,16 @@ namespace ExtremeRoles.Patches.Manager
                 string tag = playerSummary.Role.GetRoleTag();
                 
                 int id = playerSummary.Role.GameControlId;
+                int index = id % OptionHolder.VanillaMaxPlayerNum;
                 if (tag != string.Empty)
                 {
                     tag = Design.ColoedString(
-                        tagColor[id], tag);
+                        tagColor[index], tag);
                 }
                 else
                 {
                     tag = Design.ColoedString(
-                        tagColor[id], randomTag[id]);
+                        tagColor[index], randomTag[index]);
                 }
 
                 var mutiAssignRole = playerSummary.Role as Roles.API.MultiAssignRoleBase;
@@ -190,16 +191,17 @@ namespace ExtremeRoles.Patches.Manager
                     {
                         string anotherTag = playerSummary.Role.GetRoleTag();
                         id = mutiAssignRole.AnotherRole.GameControlId;
+                        index = id % OptionHolder.VanillaMaxPlayerNum;
 
                         if (anotherTag != string.Empty)
                         {
                             anotherTag = Design.ColoedString(
-                                tagColor[id], anotherTag);
+                                tagColor[index], anotherTag);
                         }
                         else
                         {
                             anotherTag = Design.ColoedString(
-                                tagColor[id], randomTag[id]);
+                                tagColor[index], randomTag[index]);
                         }
 
                         tag = string.Format(
