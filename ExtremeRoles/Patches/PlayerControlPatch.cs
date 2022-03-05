@@ -279,9 +279,7 @@ namespace ExtremeRoles.Patches
             {
 
                 if ((player != PlayerControl.LocalPlayer && 
-                        !PlayerControl.LocalPlayer.Data.IsDead) ||
-                    (player != PlayerControl.LocalPlayer && 
-                        PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel))
+                        !PlayerControl.LocalPlayer.Data.IsDead))
                 {
                     continue;
                 }
@@ -322,6 +320,18 @@ namespace ExtremeRoles.Patches
                 {
                     meetingInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ? "" : meetingInfoText;
                 }
+
+                if ((player != PlayerControl.LocalPlayer &&
+                    PlayerControl.LocalPlayer.Data.IsDead &&
+                    PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel))
+                {
+                    playerInfo.gameObject.SetActive(false);
+                    if (meetingInfo != null)
+                    {
+                        meetingInfo.gameObject.SetActive(false);
+                    }
+                }
+
             }
         }
 
