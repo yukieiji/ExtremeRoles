@@ -244,4 +244,22 @@ namespace ExtremeRoles.Patches.Manager
         }
 
     }
+
+    [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.SetStartCounter))]
+    public static class GameStartManagerSetStartCounterPatch
+    {
+        public static void Postfix(GameStartManager __instance, sbyte sec)
+        {
+            if (sec > 0)
+            {
+                __instance.startState = GameStartManager.StartingStates.Countdown;
+            }
+
+            if (sec <= 0)
+            {
+                __instance.startState = GameStartManager.StartingStates.NotStarting;
+            }
+        }
+    }
+
 }
