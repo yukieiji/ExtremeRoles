@@ -42,7 +42,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void ResetOnMeetingStart()
         {
-            this.textPopUp.Clear();
+            if (this.textPopUp != null)
+            {
+                this.textPopUp.Clear();
+            }
         }
 
         public void HockMuderPlayer(
