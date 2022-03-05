@@ -18,6 +18,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
     {
         public DeadBody CarringBody;
         public float AlphaValue;
+        public bool CanReportOnCarry;
         private GameData.PlayerInfo targetBody;
 
         public enum CarrierOption
@@ -27,7 +28,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
         private float carryDistance;
-        private bool canReportOnCarry;
 
         public RoleAbilityButtonBase Button
         {
@@ -47,7 +47,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             Palette.ImpostorRed,
             true, false, true, true)
         {
-            canReportOnCarry = false;
+            CanReportOnCarry = false;
         }
 
         public static void CarryDeadBody(
@@ -71,7 +71,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     role.CarringBody.bodyRenderer.color = new Color(
                         oldColor.r, oldColor.g, oldColor.b, 0);
                     
-                    if (!role.canReportOnCarry)
+                    if (!role.CanReportOnCarry)
                     {
                         role.CarringBody.GetComponentInChildren<BoxCollider2D>().enabled = false;
                     }
@@ -118,7 +118,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             Color color = role.CarringBody.bodyRenderer.color;
             role.CarringBody.bodyRenderer.color = new Color(
                 color.r, color.g, color.b, role.AlphaValue);
-            if (!role.canReportOnCarry)
+            if (!role.CanReportOnCarry)
             {
                 role.CarringBody.GetComponentInChildren<BoxCollider2D>().enabled = true;
             }
@@ -203,7 +203,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             this.carryDistance = OptionHolder.AllOption[
                 GetRoleOptionId((int)CarrierOption.CarryDistance)].GetValue();
-            this.canReportOnCarry = OptionHolder.AllOption[
+            this.CanReportOnCarry = OptionHolder.AllOption[
                 GetRoleOptionId((int)CarrierOption.CanReportOnCarry)].GetValue();
             this.RoleAbilityInit();
         }

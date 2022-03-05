@@ -239,6 +239,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             var targetPlayer = Player.GetPlayerControlById(targetId);
             var targetRole = ExtremeRoleManager.GameRole[targetId];
 
+            // プレイヤーのリセット処理
             if (PlayerControl.LocalPlayer.PlayerId == targetId)
             {
                 var meetingResetRole = targetRole as IRoleResetMeeting;
@@ -272,11 +273,34 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 }
             }
 
+            // シェイプシフターのリセット処理
             if (targetRole.IsVanillaRole())
             {
                 if (((VanillaRoleWrapper)targetRole).VanilaRoleId == RoleTypes.Shapeshifter)
                 {
                     targetPlayer.Shapeshift(targetPlayer, false);
+                }
+            }
+
+            // キャリアーのリセット処理
+            var carrier = targetRole as Impostor.Carrier;
+            if (carrier != null)
+            {
+                if (carrier.CarringBody != null)
+                {
+                    carrier.CarringBody.transform.parent = null;
+                    carrier.CarringBody.transform.position = targetPlayer.GetTruePosition() + new Vector2(0.15f, 0.15f);
+                    carrier.CarringBody.transform.position -= new Vector3(0.0f, 0.0f, 0.01f);
+
+
+                    Color color = carrier.CarringBody.bodyRenderer.color;
+                    carrier.CarringBody.bodyRenderer.color = new Color(
+                        color.r, color.g, color.b, carrier.AlphaValue);
+                    if (!carrier.CanReportOnCarry)
+                    {
+                        carrier.CarringBody.GetComponentInChildren<BoxCollider2D>().enabled = true;
+                    }
+                    carrier.CarringBody = null;
                 }
             }
 
