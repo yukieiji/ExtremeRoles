@@ -14,11 +14,12 @@ namespace ExtremeSkins.Module
 
         public static readonly List<ColorData> CustomColor = new List<ColorData>()
         {
+            // from nekowa
             new ColorData()
             { 
-                Name = "testColor",
-                MainColor = new Color32(0xF7, 0x44, 0x17, byte.MaxValue),
-                ShadowColor = new Color32(0x9B, 0x2E, 0x0F, byte.MaxValue),
+                Name = "nekowasaColor",
+                MainColor = new Color32(17, 82, 98, byte.MaxValue),
+                ShadowColor = new Color32(8, 32, 55, 0),
             }
         };
     }
