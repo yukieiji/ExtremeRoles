@@ -58,7 +58,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void ResetOnMeetingStart()
         {
-            this.PlayerIcon[this.targetId].gameObject.SetActive(false);
+            if (this.PlayerIcon.ContainsKey(this.targetId))
+            {
+                this.PlayerIcon[this.targetId].gameObject.SetActive(false);
+            }
         }
 
         public override string GetFullDescription()
