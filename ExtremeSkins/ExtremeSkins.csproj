@@ -3,9 +3,9 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
-        <!--<Version>1.18.0.1</Version>-->
-        <VersionPrefix>1.0.0</VersionPrefix>
-        <VersionSuffix>FirstBuild</VersionSuffix>
+        <!--<Version>0.7.5.0</Version>-->
+        <VersionPrefix>0.7.5</VersionPrefix>
+        <VersionSuffix>BetaThaadBuild</VersionSuffix>
         <Description>Extreme Skins for Extreme Roles</Description>
         <Authors>yukieiji</Authors>
     </PropertyGroup>
