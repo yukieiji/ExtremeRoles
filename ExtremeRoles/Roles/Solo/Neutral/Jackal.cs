@@ -239,32 +239,35 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             var targetPlayer = Player.GetPlayerControlById(targetId);
             var targetRole = ExtremeRoleManager.GameRole[targetId];
 
-            var meetingResetRole = targetRole as IRoleResetMeeting;
-            if (meetingResetRole != null)
+            if (PlayerControl.LocalPlayer.PlayerId == targetId)
             {
-                meetingResetRole.ResetOnMeetingStart();
-            }
-            var abilityRole = targetRole as IRoleAbility;
-            if (abilityRole != null)
-            {
-                abilityRole.ResetOnMeetingStart();
-            }
-
-            var multiAssignRole = targetRole as MultiAssignRoleBase;
-            if (multiAssignRole != null)
-            {
-                if (multiAssignRole.AnotherRole != null)
+                var meetingResetRole = targetRole as IRoleResetMeeting;
+                if (meetingResetRole != null)
                 {
-                    meetingResetRole = multiAssignRole.AnotherRole as IRoleResetMeeting;
-                    if (meetingResetRole != null)
-                    {
-                        meetingResetRole.ResetOnMeetingStart();
-                    }
+                    meetingResetRole.ResetOnMeetingStart();
+                }
+                var abilityRole = targetRole as IRoleAbility;
+                if (abilityRole != null)
+                {
+                    abilityRole.ResetOnMeetingStart();
+                }
 
-                    abilityRole = multiAssignRole.AnotherRole as IRoleAbility;
-                    if (abilityRole != null)
+                var multiAssignRole = targetRole as MultiAssignRoleBase;
+                if (multiAssignRole != null)
+                {
+                    if (multiAssignRole.AnotherRole != null)
                     {
-                        abilityRole.ResetOnMeetingStart();
+                        meetingResetRole = multiAssignRole.AnotherRole as IRoleResetMeeting;
+                        if (meetingResetRole != null)
+                        {
+                            meetingResetRole.ResetOnMeetingStart();
+                        }
+
+                        abilityRole = multiAssignRole.AnotherRole as IRoleAbility;
+                        if (abilityRole != null)
+                        {
+                            abilityRole.ResetOnMeetingStart();
+                        }
                     }
                 }
             }
