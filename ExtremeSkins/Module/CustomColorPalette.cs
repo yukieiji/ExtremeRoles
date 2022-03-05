@@ -17,7 +17,7 @@ namespace ExtremeSkins.Module
             // from nekowa
             new ColorData()
             { 
-                Name = "nekowasaColor",
+                Name = "kusaZunGreen",
                 MainColor = new Color32(17, 82, 98, byte.MaxValue),
                 ShadowColor = new Color32(8, 32, 55, 0),
             }
