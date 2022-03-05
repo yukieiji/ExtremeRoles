@@ -10,12 +10,18 @@ namespace ExtremeSkins.Helper
 {
     public class Translation
     {
-        private static int defaultLanguage = (int)SupportedLangs.English;
         private static Dictionary<string, Dictionary<int, string>> stringData = new Dictionary<string, Dictionary<int, string>>();
 
+        private const int defaultLanguage = (int)SupportedLangs.English;
         private const string dataPath = "ExtremeSkins.Resources.LangData.stringData.json";
 
-        public static void Load()
+        public static void Initialize()
+        {
+            stringData.Clear();
+        }
+
+
+        public static void CreateColorTransData()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
             Stream stream = assembly.GetManifestResourceStream(dataPath);
@@ -23,35 +29,10 @@ namespace ExtremeSkins.Helper
             stream.Read(byteArray, 0, (int)stream.Length);
             string json = System.Text.Encoding.UTF8.GetString(byteArray);
 
-            stringData.Clear();
+
             JObject parsed = JObject.Parse(json);
+            addJsonToTransData(parsed);
 
-            for (int i = 0; i < parsed.Count; i++)
-            {
-                JProperty token = parsed.ChildrenTokens[i].TryCast<JProperty>();
-                if (token == null) { continue; }
-
-                string stringName = token.Name;
-                var val = token.Value.TryCast<JObject>();
-
-                if (token.HasValues)
-                {
-                    var strings = new Dictionary<int, string>();
-
-                    for (int j = 0; j < (int)SupportedLangs.Irish + 1; j++)
-                    {
-                        string key = j.ToString();
-                        var text = val[key]?.TryCast<JValue>().Value.ToString();
-
-                        if (text != null && text.Length > 0)
-                        {
-                            strings.Add(j,text);
-                        }
-                    }
-
-                    stringData.Add(stringName, strings);
-                }
-            }
         }
 
         public static string GetString(string key)
@@ -84,6 +65,36 @@ namespace ExtremeSkins.Helper
             }
 
             return key;
+        }
+
+        private static void addJsonToTransData(JObject parsed)
+        {
+            for (int i = 0; i < parsed.Count; i++)
+            {
+                JProperty token = parsed.ChildrenTokens[i].TryCast<JProperty>();
+                if (token == null) { continue; }
+
+                string stringName = token.Name;
+                var val = token.Value.TryCast<JObject>();
+
+                if (token.HasValues)
+                {
+                    var strings = new Dictionary<int, string>();
+
+                    for (int j = 0; j < (int)SupportedLangs.Irish + 1; j++)
+                    {
+                        string key = j.ToString();
+                        var text = val[key]?.TryCast<JValue>().Value.ToString();
+
+                        if (text != null && text.Length > 0)
+                        {
+                            strings.Add(j, text);
+                        }
+                    }
+
+                    stringData.Add(stringName, strings);
+                }
+            }
         }
 
     }
