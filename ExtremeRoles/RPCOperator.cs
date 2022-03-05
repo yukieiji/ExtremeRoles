@@ -232,7 +232,7 @@ namespace ExtremeRoles
                 }
                 source.MurderPlayer(target);
 
-                if (!target.Data.IsDead || !target.Data.Disconnected) { return; }
+                if (!target.Data.IsDead) { return; }
 
                 var targetRole = Roles.ExtremeRoleManager.GameRole[targetId];
 
