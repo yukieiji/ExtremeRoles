@@ -28,7 +28,7 @@ namespace ExtremeSkins
             Logger = Log;
 
             DebugMode = Config.Bind("DeBug", "DebugMode", false);
-            CreatorMode = Config.Bind("NewSkinCreate", "CreatorMode", false);
+            CreatorMode = Config.Bind("CreateNewSkin", "CreatorMode", false);
             
             Instance = this;
 
