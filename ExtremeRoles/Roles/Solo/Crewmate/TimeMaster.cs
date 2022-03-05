@@ -201,14 +201,19 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public static void ShieldOn(byte rolePlayerId)
         {
-            ((TimeMaster)ExtremeRoleManager.GameRole[rolePlayerId]).IsShieldOn = true;
+            if (ExtremeRoleManager.GameRole[rolePlayerId] is TimeMaster)
+            {
+                ((TimeMaster)ExtremeRoleManager.GameRole[rolePlayerId]).IsShieldOn = true;
+            }
         }
 
         public static void ShieldOff(byte rolePlayerId)
         {
-            ((TimeMaster)ExtremeRoleManager.GameRole[rolePlayerId]).IsShieldOn = false;
+            if (ExtremeRoleManager.GameRole[rolePlayerId] is TimeMaster)
+            {
+                ((TimeMaster)ExtremeRoleManager.GameRole[rolePlayerId]).IsShieldOn = false;
+            }
         }
-
         public static void ResetMeeting(byte rolePlayerId)
         {
             var timeMaster = (TimeMaster)ExtremeRoleManager.GameRole[rolePlayerId];
