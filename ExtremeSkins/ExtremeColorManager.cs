@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
+
+using BepInEx.Configuration;
+
 using ExtremeSkins.Module;
 
 namespace ExtremeSkins
@@ -39,6 +42,42 @@ namespace ExtremeSkins
                 shadowlist.Add(cc.ShadowColor);
                 LangData.Add((StringNames)id, cc.Name);
                 ++id;
+            }
+
+            ConfigEntry<int> rMainConfig = ExtremeSkinsPlugin.Instance.Config.Bind(
+                "NewSkinCreate", "NewMainColorR", 0);
+            ConfigEntry<int> gMainConfig = ExtremeSkinsPlugin.Instance.Config.Bind(
+                "NewSkinCreate", "NewMainColorG", 0);
+            ConfigEntry<int> bMainConfig = ExtremeSkinsPlugin.Instance.Config.Bind(
+                "NewSkinCreate", "NewMainColorB", 0);
+            ConfigEntry<int> aMainConfig = ExtremeSkinsPlugin.Instance.Config.Bind(
+                "NewSkinCreate", "NewMainColorA", 0);
+
+            ConfigEntry<int> rShadowConfig = ExtremeSkinsPlugin.Instance.Config.Bind(
+                "NewSkinCreate", "NewShadowColorR", 0);
+            ConfigEntry<int> gShadowConfig = ExtremeSkinsPlugin.Instance.Config.Bind(
+                "NewSkinCreate", "NewShadowColorG", 0);
+            ConfigEntry<int> bShadowConfig = ExtremeSkinsPlugin.Instance.Config.Bind(
+                "NewSkinCreate", "NewShadowColorB", 0);
+            ConfigEntry<int> aShadowConfig = ExtremeSkinsPlugin.Instance.Config.Bind(
+                "NewSkinCreate", "NewShadowColorA", 0);
+
+            if (ExtremeSkinsPlugin.CreatorMode.Value)
+            {
+                longlist.Add((StringNames)id);
+                colorlist.Add(
+                    new Color32(
+                        (byte)rMainConfig.Value,
+                        (byte)gMainConfig.Value,
+                        (byte)bMainConfig.Value,
+                        (byte)aMainConfig.Value));
+                shadowlist.Add(
+                    new Color32(
+                        (byte)rShadowConfig.Value,
+                        (byte)gShadowConfig.Value,
+                        (byte)bShadowConfig.Value,
+                        (byte)aShadowConfig.Value));
+                LangData.Add((StringNames)id, "configAddColor");
             }
 
             Palette.ColorNames = longlist.ToArray();

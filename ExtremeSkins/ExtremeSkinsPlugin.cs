@@ -19,6 +19,7 @@ namespace ExtremeSkins
 
         internal static BepInEx.Logging.ManualLogSource Logger;
         public static ConfigEntry<bool> DebugMode { get; private set; }
+        public static ConfigEntry<bool> CreatorMode { get; private set; }
 
         public override void Load()
         {
@@ -27,11 +28,12 @@ namespace ExtremeSkins
             Logger = Log;
 
             DebugMode = Config.Bind("DeBug", "DebugMode", false);
+            CreatorMode = Config.Bind("NewSkinCreate", "CreatorMode", false);
+            
+            Instance = this;
 
             ExtremeHatManager.Initialize();
             ExtremeColorManager.Initialize();
-
-            Instance = this;
 
             Harmony.PatchAll();
         }
