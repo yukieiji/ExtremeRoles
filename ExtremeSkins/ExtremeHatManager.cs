@@ -24,6 +24,42 @@ namespace ExtremeSkins
         private const string repo = ""; // When using this repository with Fork, please follow the license of each hat
         private const string hatData = "hatData.json";
 
+        /*
+            ・リポジトリ構造    
+                ・Hat/(各種スキンフォルダ)/(各種ファイル)
+                ・Hat/transData.json
+                ・Hat/hatData.json
+                ・HatTransData.xlsx
+            
+            ・hatData.json
+            {
+                data:
+                    [(スキン0),(スキン1),(スキン2),]
+            }
+            // stringのArray
+
+            ・翻訳ロジック
+            1.transData.jsonをGitHubから落としてくる(毎回)
+            2.そのデータを最初にロードしていたマスターの翻訳データ(色のデータ)に統合及び更新
+            
+            ・スキンデータ更新チェックロジック
+            1.ディレクトリがあるか
+            2.hatData.jsonをGitHubから落としてくる(毎回)
+            3.hatData.jsonに記載されているフォルダが全てあるか
+            4.各種データに破損が無いか
+            5.全てパスすれば更新しない
+
+            ・スキンデータダウンロードロジック(全更新)
+            1.フォルダが無かったら作る
+            2.hatData.jsonをGitHubから落としてくる(毎回)
+            3.hatData.jsonに従ってスキンのinfo.json及びLICENCE.mdのDL用URLを動的生成
+            4.フォルダを作成(合った場合は消して作る)、LICENCE.mdとinfo.jsonをダウンロードしてそこに置く
+            5.info.jsonをロード
+            6.info.jsonを元にスキン本体画像のDL用URLを動的生成
+            7.DL用URLからデータを落とす
+         */
+
+
         public static void Initialize()
         {
             HatData.Clear();
