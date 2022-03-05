@@ -45,22 +45,22 @@ namespace ExtremeSkins
             }
 
             ConfigEntry<int> rMainConfig = ExtremeSkinsPlugin.Instance.Config.Bind(
-                "NewSkinCreate", "NewMainColorR", 0);
+                "CreateNewSkin", "NewMainColorR", 0);
             ConfigEntry<int> gMainConfig = ExtremeSkinsPlugin.Instance.Config.Bind(
-                "NewSkinCreate", "NewMainColorG", 0);
+                "CreateNewSkin", "NewMainColorG", 0);
             ConfigEntry<int> bMainConfig = ExtremeSkinsPlugin.Instance.Config.Bind(
-                "NewSkinCreate", "NewMainColorB", 0);
+                "CreateNewSkin", "NewMainColorB", 0);
             ConfigEntry<int> aMainConfig = ExtremeSkinsPlugin.Instance.Config.Bind(
-                "NewSkinCreate", "NewMainColorA", 0);
+                "CreateNewSkin", "NewMainColorA", 0);
 
             ConfigEntry<int> rShadowConfig = ExtremeSkinsPlugin.Instance.Config.Bind(
-                "NewSkinCreate", "NewShadowColorR", 0);
+                "CreateNewSkin", "NewShadowColorR", 0);
             ConfigEntry<int> gShadowConfig = ExtremeSkinsPlugin.Instance.Config.Bind(
-                "NewSkinCreate", "NewShadowColorG", 0);
+                "CreateNewSkin", "NewShadowColorG", 0);
             ConfigEntry<int> bShadowConfig = ExtremeSkinsPlugin.Instance.Config.Bind(
-                "NewSkinCreate", "NewShadowColorB", 0);
+                "CreateNewSkin", "NewShadowColorB", 0);
             ConfigEntry<int> aShadowConfig = ExtremeSkinsPlugin.Instance.Config.Bind(
-                "NewSkinCreate", "NewShadowColorA", 0);
+                "CreateNewSkin", "NewShadowColorA", 0);
 
             if (ExtremeSkinsPlugin.CreatorMode.Value)
             {
