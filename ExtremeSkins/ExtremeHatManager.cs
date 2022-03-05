@@ -28,8 +28,8 @@ namespace ExtremeSkins
         /*
             ・リポジトリ構造    
                 ・Hat/(各種スキンフォルダ)/(各種ファイル)
-                ・Hat/transData.json
-                ・Hat/hatData.json
+                ・transData.json
+                ・hatData.json
                 ・HatTransData.xlsx
             
             ・hatData.json
@@ -120,6 +120,7 @@ namespace ExtremeSkins
 
         public static void Load()
         {
+            // getJsonData(hatTransData).GetAwaiter().GetResult();
             Helper.Translation.UpdateHatsTransData(
                 string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
@@ -174,14 +175,14 @@ namespace ExtremeSkins
             }
         }
 
-        private static async Task updateJson()
+        private static async Task getJsonData(string fileName)
         {
             try
             {
                 HttpClient http = new HttpClient();
                 http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true };
                 var response = await http.GetAsync(
-                    new System.Uri($"{repo}/hatData.json"),
+                    new System.Uri($"{repo}/{fileName}"),
                     HttpCompletionOption.ResponseContentRead);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
@@ -196,7 +197,7 @@ namespace ExtremeSkins
                 using (var responseStream = await response.Content.ReadAsStreamAsync())
                 {
                     using (var fileStream = File.Create(string.Concat(
-                        Path.GetDirectoryName(Application.dataPath), FolderPath, hatData)))
+                        Path.GetDirectoryName(Application.dataPath), FolderPath, fileName)))
                     {
                         responseStream.CopyTo(fileStream);
                     }
