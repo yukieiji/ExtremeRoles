@@ -498,9 +498,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.SidekickJackalCanMakeSidekick = allOption[
                 GetRoleOptionId(JackalOption.SidekickJackalCanMakeSidekick)].GetValue();
 
-            this.SidekickJackalCanMakeSidekick = allOption[
-                GetRoleOptionId(JackalOption.SidekickJackalCanMakeSidekick)].GetValue();
-
             this.createSidekickRange = allOption[
                 GetRoleOptionId(JackalOption.RangeSidekickTarget)].GetValue();
 
