@@ -35,7 +35,9 @@ namespace ExtremeRoles.Patches
             }
 
             if (!PlayerControl.GameOptions.AnonymousVotes || canSeeVote ||
-                (PlayerControl.LocalPlayer.Data.IsDead && OptionHolder.Client.GhostsSeeVote))
+                (PlayerControl.LocalPlayer.Data.IsDead && 
+                 OptionHolder.Client.GhostsSeeVote &&
+                 PlayerControl.LocalPlayer.Data.Role.Role != RoleTypes.GuardianAngel))
             {
                 PlayerControl.SetPlayerMaterialColors(voterPlayer.DefaultOutfit.ColorId, spriteRenderer);
             }
