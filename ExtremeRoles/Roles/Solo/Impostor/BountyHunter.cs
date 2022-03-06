@@ -229,7 +229,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 
                 SingleRoleBase role = ExtremeRoleManager.GameRole[player.PlayerId];
                 
-                if (role.IsImpostor() || role.FakeImposter) { continue; }
+                if (role.IsImpostor() || role.FakeImposter || this.targetId == player.PlayerId) { continue; }
 
                 this.targetId = player.PlayerId;
                 this.PlayerIcon[this.targetId].gameObject.SetActive(true);
