@@ -158,7 +158,7 @@ namespace ExtremeRoles.Patches
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.H))
+            if (Input.GetKeyDown(KeyCode.H) && !HudManager.Instance.Chat.IsOpen)
             {
                 ExtremeRolesPlugin.Info.ToggleInfoOverlay();
             }
