@@ -42,6 +42,22 @@ namespace ExtremeRoles.Patches.Button
                     target, killer);
                 if (!canKill) { return false; }
 
+                var multiAssignRole = targetPlayerRole as Roles.API.MultiAssignRoleBase;
+                if (multiAssignRole != null)
+                {
+                    if (multiAssignRole.AnotherRole != null)
+                    {
+                        canKill = multiAssignRole.AnotherRole.TryRolePlayerKillTo(
+                            killer, target);
+                        if (!canKill) { return false; }
+
+                        canKill = multiAssignRole.AnotherRole.TryRolePlayerKilledFrom(
+                            target, killer);
+                        if (!canKill) { return false; }
+                    }
+                }
+
+
                 var bodyGuard = ExtremeRolesPlugin.GameDataStore.ShildPlayer.GetBodyGuardPlayerId(
                     target.PlayerId);
 
