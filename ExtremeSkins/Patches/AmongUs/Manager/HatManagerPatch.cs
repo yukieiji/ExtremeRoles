@@ -1,7 +1,7 @@
 ﻿using System;
 using HarmonyLib;
 
-namespace ExtremeSkins.Patches.Manager
+namespace ExtremeSkins.Patches.AmongUs.Manager
 {
     [HarmonyPatch(typeof(HatManager), nameof(HatManager.GetHatById))]
     public static class HatManagerGetHatByIdPatch

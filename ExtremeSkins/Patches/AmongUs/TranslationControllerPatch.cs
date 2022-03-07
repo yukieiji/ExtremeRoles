@@ -2,7 +2,7 @@
 
 using UnhollowerBaseLib;
 
-namespace ExtremeSkins.Patches
+namespace ExtremeSkins.Patches.AmongUs
 {
     [HarmonyPatch(
         typeof(TranslationController), 

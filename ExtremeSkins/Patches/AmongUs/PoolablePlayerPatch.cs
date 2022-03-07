@@ -2,7 +2,7 @@
 
 using UnityEngine;
 
-namespace ExtremeSkins.Patches
+namespace ExtremeSkins.Patches.AmongUs
 {
     [HarmonyPatch(typeof(PoolablePlayer), nameof(PoolablePlayer.UpdateFromPlayerOutfit))]
     public static class PoolablePlayerPatch

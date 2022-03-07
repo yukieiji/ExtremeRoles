@@ -7,7 +7,7 @@ using HarmonyLib;
 
 using ExtremeSkins.Module;
 
-namespace ExtremeSkins.Patches.Tab
+namespace ExtremeSkins.Patches.AmongUs.Tab
 {
     [HarmonyPatch]
     public class HatsTabPatch

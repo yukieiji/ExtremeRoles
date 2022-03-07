@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using UnityEngine;
 
-namespace ExtremeSkins.Patches.Manager
+namespace ExtremeSkins.Patches.AmongUs.Manager
 {
     [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
     public static class MainMenuManagerStartPatch

@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 
-namespace ExtremeSkins.Patches
+namespace ExtremeSkins.Patches.AmongUs
 {
 
     [HarmonyPatch(typeof(SaveManager), nameof(SaveManager.LoadPlayerPrefs))]

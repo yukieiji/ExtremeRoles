@@ -3,7 +3,7 @@ using UnhollowerBaseLib;
 
 using UnityEngine;
 
-namespace ExtremeSkins.Patches.Tab
+namespace ExtremeSkins.Patches.AmongUs.Tab
 {
     [HarmonyPatch(typeof(PlayerTab), nameof(PlayerTab.OnEnable))]
     public static class PlayerTabEnablePatch

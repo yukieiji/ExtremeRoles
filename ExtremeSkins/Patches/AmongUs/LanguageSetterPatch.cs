@@ -1,4 +1,4 @@
-﻿namespace ExtremeSkins.Patches
+﻿namespace ExtremeSkins.Patches.AmongUs
 {
     public class LanguageSetterPatch
     {

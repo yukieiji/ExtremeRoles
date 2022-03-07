@@ -3,7 +3,7 @@ using HarmonyLib;
 
 using ExtremeSkins.Module;
 
-namespace ExtremeSkins.Patches
+namespace ExtremeSkins.Patches.AmongUs
 {
     [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.HandleAnimation))]
     public static class PlayerPhysicsHandleAnimationPatch
