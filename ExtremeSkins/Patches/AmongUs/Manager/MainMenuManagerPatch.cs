@@ -15,6 +15,8 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
             renderer.sprite = Module.Loader.CreateSpriteFromResources(
                 "ExtremeSkins.Resources.TitleBurner.png", 425f);
 
+            if (ExtremeHatManager.IsLoaded) { return; }
+
             if (ExtremeHatManager.IsUpdate() && !ExtremeSkinsPlugin.CreatorMode.Value)
             {
 

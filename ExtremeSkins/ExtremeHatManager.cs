@@ -16,6 +16,7 @@ namespace ExtremeSkins
     public class ExtremeHatManager
     {
         public static Dictionary<string, CustomHat> HatData = new Dictionary<string, CustomHat>();
+        public static bool IsLoaded = false;
 
         public const string FolderPath = @"\ExtremeHat\";
         public const string InfoFileName = "info.json";
@@ -64,6 +65,7 @@ namespace ExtremeSkins
         public static void Initialize()
         {
             HatData.Clear();
+            IsLoaded = false;
         }
 
         public static bool IsUpdate()
@@ -161,6 +163,8 @@ namespace ExtremeSkins
                         $"Skin Loaded:{parseJson.ChildrenTokens[1].TryCast<JProperty>().Value.ToString()}, from:{hat}");
                 }
             }
+
+            IsLoaded = true;
         }
 
         public static void UpdateTranslation()
