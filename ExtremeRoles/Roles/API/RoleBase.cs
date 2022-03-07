@@ -458,13 +458,17 @@ namespace ExtremeRoles.Roles.API
             }
             else
             {
-                anotherIntro = Translation.GetString(
-                    $"{this.AnotherRole.Id}IntroDescription");
+                anotherIntro = Design.ColoedString(
+                    this.AnotherRole.NameColor,
+                    Translation.GetString(
+                        $"{this.AnotherRole.Id}IntroDescription"));
 
             }
 
             string concat = Design.ColoedString(
-                Palette.White, "\n and");
+                Palette.White,
+                string.Concat(
+                    "\n ", Translation.GetString("introAnd")));
 
 
             return string.Concat(baseIntro, concat, anotherIntro);
