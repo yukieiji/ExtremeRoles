@@ -9,7 +9,9 @@ namespace ExtremeSkins
 {
 
     [BepInAutoPlugin("me.yukieiji.extremeskins", "Extreme Skins")]
-    [BepInDependency("me.yukieiji.extremeroles", BepInDependency.DependencyFlags.HardDependency)] // Never change it!
+    [BepInDependency(
+        ExtremeRoles.ExtremeRolesPlugin.Id,
+        BepInDependency.DependencyFlags.HardDependency)] // Never change it!
     [BepInProcess("Among Us.exe")]
     public partial class ExtremeSkinsPlugin : BasePlugin
     {
