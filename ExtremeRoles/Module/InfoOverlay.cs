@@ -341,7 +341,7 @@ namespace ExtremeRoles.Module
 
                     string anotherRoleOptionString = "";
 
-                    if (!multiAssignRole.IsVanillaRole())
+                    if (!multiAssignRole.AnotherRole.IsVanillaRole())
                     {
                         anotherRoleOptionString =
                             CustomOption.AllOptionToString(
