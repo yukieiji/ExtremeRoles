@@ -27,12 +27,21 @@ namespace ExtremeRoles.Patches
                 __instance.PlayerVotePrefab);
 
             var role = ExtremeRoleManager.GetLocalPlayerRole();
-            bool canSeeVote = role.Id == ExtremeRoleId.Marlin;
+            
+            bool canSeeVote = false;
+            
+            var mariln = role as Roles.Combination.Marlin;
+            var assassin = role as Roles.Combination.Assassin;
 
-            if (canSeeVote)
+            if (mariln != null)
             {
-                canSeeVote = ((Roles.Combination.Marlin)role).CanSeeVote;
+                canSeeVote = mariln.CanSeeVote;
             }
+            if (assassin != null)
+            {
+                canSeeVote = assassin.CanSeeVote;
+            }
+
 
             if (!PlayerControl.GameOptions.AnonymousVotes || canSeeVote ||
                 (PlayerControl.LocalPlayer.Data.IsDead && 
