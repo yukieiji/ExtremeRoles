@@ -102,6 +102,7 @@ namespace ExtremeSkins.Helper
                     {
                         stringData[stringName] = strings;
                     }
+                    else
                     {
                         stringData.Add(stringName, strings);
                     }
