@@ -21,7 +21,7 @@ namespace ExtremeSkins
         public const string InfoFileName = "info.json";
         public const string LicenceFileName = "LICENCE.md";
 
-        private const string repo = ""; // When using this repository with Fork, please follow the license of each hat
+        private const string repo = "https://raw.githubusercontent.com/yukieiji/ExtremeHats/main"; // When using this repository with Fork, please follow the license of each hat
         private const string hatData = "hatData.json";
         private const string hatTransData = "hatTranData.json";
 
@@ -120,7 +120,7 @@ namespace ExtremeSkins
 
         public static void Load()
         {
-            // getJsonData(hatTransData).GetAwaiter().GetResult();
+            getJsonData(hatTransData).GetAwaiter().GetResult();
             Helper.Translation.UpdateHatsTransData(
                 string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
@@ -182,7 +182,7 @@ namespace ExtremeSkins
                 HttpClient http = new HttpClient();
                 http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true };
                 var response = await http.GetAsync(
-                    new System.Uri($"{repo}/{fileName}"),
+                    new System.Uri($"{repo}/hat/{fileName}"),
                     HttpCompletionOption.ResponseContentRead);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
