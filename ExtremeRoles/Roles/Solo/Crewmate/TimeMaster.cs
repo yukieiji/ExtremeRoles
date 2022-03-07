@@ -58,7 +58,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             PlayerControl localPlayer)
         {
             // Enable rewind
-            var timeMaster = (TimeMaster)ExtremeRoleManager.GameRole[rolePlayerId];
+            var timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(rolePlayerId);
+            if (timeMaster == null) { yield break; }
             timeMaster.IsRewindTime = true;
 
             ExtremeRolesPlugin.GameDataStore.History.BlockAddHistory = true;
@@ -201,22 +202,29 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public static void ShieldOn(byte rolePlayerId)
         {
-            if (ExtremeRoleManager.GameRole[rolePlayerId] is TimeMaster)
+            var timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(rolePlayerId);
+            
+            if (timeMaster != null)
             {
-                ((TimeMaster)ExtremeRoleManager.GameRole[rolePlayerId]).IsShieldOn = true;
+                timeMaster.IsShieldOn = true; 
             }
         }
 
         public static void ShieldOff(byte rolePlayerId)
         {
-            if (ExtremeRoleManager.GameRole[rolePlayerId] is TimeMaster)
+            var timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(rolePlayerId);
+
+            if (timeMaster != null)
             {
-                ((TimeMaster)ExtremeRoleManager.GameRole[rolePlayerId]).IsShieldOn = false;
+                timeMaster.IsShieldOn = false;
             }
         }
         public static void ResetMeeting(byte rolePlayerId)
         {
-            var timeMaster = (TimeMaster)ExtremeRoleManager.GameRole[rolePlayerId];
+            var timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(rolePlayerId);
+
+            if (timeMaster == null) { return; }
+            
             timeMaster.IsShieldOn = false;
             timeMaster.IsRewindTime = false;
             if (timeMaster.RewindScreen != null)
