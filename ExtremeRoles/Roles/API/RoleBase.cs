@@ -404,7 +404,8 @@ namespace ExtremeRoles.Roles.API
 
         public void SetAnotherRole(SingleRoleBase role)
         {
-            if (this.CanHasAnotherRole && this.AnotherRole == null)
+
+            if (this.CanHasAnotherRole)
             {
                 this.AnotherRole = role;
                 OverrideAnotherRoleSetting();
