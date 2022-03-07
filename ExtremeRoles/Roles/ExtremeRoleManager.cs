@@ -365,5 +365,33 @@ namespace ExtremeRoles.Roles
             return null;
 
         }
+
+        public static T GetSafeCastedLocalPlayerRole<T>() where T : SingleRoleBase
+        {
+            var role = GameRole[PlayerControl.LocalPlayer.PlayerId] as T;
+
+            if (role != null)
+            {
+                return role;
+            }
+
+            var multiAssignRole = GameRole[PlayerControl.LocalPlayer.PlayerId] as MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    role = multiAssignRole.AnotherRole as T;
+
+                    if (role != null)
+                    {
+                        return role;
+                    }
+                }
+            }
+
+            return null;
+
+        }
+
     }
 }
