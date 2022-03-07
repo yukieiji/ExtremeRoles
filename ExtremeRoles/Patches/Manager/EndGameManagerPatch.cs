@@ -205,7 +205,7 @@ namespace ExtremeRoles.Patches.Manager
                         }
 
                         tag = string.Concat(
-                            tag, "+", anotherTag);
+                            tag, " + ", anotherTag);
 
                     }
                 }
