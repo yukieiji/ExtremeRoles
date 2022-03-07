@@ -283,7 +283,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
 
             // キャリアーのリセット処理
-            var carrier = targetRole as Impostor.Carrier;
+            var carrier = ExtremeRoleManager.GetSafeCastedRole<Impostor.Carrier>(targetId);
             if (carrier != null)
             {
                 if (carrier.CarringBody != null)

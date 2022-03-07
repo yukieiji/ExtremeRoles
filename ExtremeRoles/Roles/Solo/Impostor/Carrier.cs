@@ -54,7 +54,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             byte rolePlayerId, byte targetPlayerId)
         {
             var rolePlayer = Player.GetPlayerControlById(rolePlayerId);
-            var role = (Carrier)ExtremeRoleManager.GameRole[rolePlayerId];
+            var role = ExtremeRoleManager.GetSafeCastedRole<Carrier>(rolePlayerId);
+            if (role == null) { return; }
 
             DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
             for (int i = 0; i < array.Length; ++i)
@@ -95,7 +96,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             byte rolePlayerId,
             PlayerControl rolePlayer)
         {
-            var role = (Carrier)ExtremeRoleManager.GameRole[rolePlayerId];
+            var role = ExtremeRoleManager.GetSafeCastedRole<Carrier>(rolePlayerId);
+            if (role == null) { yield break; }
 
             role.CarringBody.transform.parent = null;
 
