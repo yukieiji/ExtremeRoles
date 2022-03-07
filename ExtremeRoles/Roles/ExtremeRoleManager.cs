@@ -339,5 +339,31 @@ namespace ExtremeRoles.Roles
             Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
         }
 
+        public static T GetSafeCastedRole<T>(byte playerId) where T : SingleRoleBase
+        {
+            var role = GameRole[playerId] as T;
+            
+            if (role != null)
+            {
+                return role;
+            }
+
+            var multiAssignRole = GameRole[playerId] as MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    role = multiAssignRole.AnotherRole as T;
+
+                    if (role != null)
+                    {
+                        return role;
+                    }
+                }
+            }
+
+            return null;
+
+        }
     }
 }
