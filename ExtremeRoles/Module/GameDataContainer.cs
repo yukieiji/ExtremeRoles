@@ -716,6 +716,19 @@ namespace ExtremeRoles.Module
                     { 
                         this.aliveBakary.Add(playerId); 
                     }
+                    
+                    var multiAssignRole = role as MultiAssignRoleBase;
+                    if (multiAssignRole != null)
+                    {
+                        if (multiAssignRole.AnotherRole != null)
+                        {
+                            if (multiAssignRole.AnotherRole.Id == ExtremeRoleId.Bakary)
+                            {
+                                this.aliveBakary.Add(playerId);
+                            }
+                        }
+                    }
+
                 }
             }
 
