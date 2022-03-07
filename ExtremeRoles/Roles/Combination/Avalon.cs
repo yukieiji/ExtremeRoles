@@ -161,6 +161,8 @@ namespace ExtremeRoles.Roles.Combination
                 GetRoleOptionId((int)AssassinOption.CanKilledFromCrew)].GetValue();
             this.CanKilledFromNeutral = allOption[
                 GetRoleOptionId((int)AssassinOption.CanKilledFromNeutral)].GetValue();
+            this.CanSeeVote = allOption[
+                GetRoleOptionId((int)AssassinOption.CanSeeVote)].GetValue();
 
             this.isDeadForceMeeting = allOption[
                 GetRoleOptionId((int)AssassinOption.IsDeadForceMeeting)].GetValue();
