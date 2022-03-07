@@ -28,8 +28,8 @@ namespace ExtremeSkins
 
         /*
             ・リポジトリ構造    
-                ・Hat/(各種スキンフォルダ)/(各種ファイル)
-                ・transData.json
+                ・hat/(各種スキンフォルダ)/(各種ファイル)
+                ・hat/transData.json
                 ・hatData.json
                 ・HatTransData.xlsx
             
