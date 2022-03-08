@@ -34,6 +34,7 @@ namespace ExtremeSkins
 
             ExtremeHatManager.Initialize();
             ExtremeColorManager.Initialize();
+            VersionManager.PlayerVersion.Clear();
 
             Harmony.PatchAll();
         }

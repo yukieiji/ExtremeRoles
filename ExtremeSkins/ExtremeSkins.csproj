@@ -4,7 +4,7 @@
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
         <!--<Version>0.7.5.0</Version>-->
-        <VersionPrefix>0.8.0</VersionPrefix>
+        <VersionPrefix>0.9.0</VersionPrefix>
         <VersionSuffix>BetaForthBuild</VersionSuffix>
         <Description>Extreme Skins for Extreme Roles</Description>
         <Authors>yukieiji</Authors>

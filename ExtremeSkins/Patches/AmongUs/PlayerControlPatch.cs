@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using Hazel;
+using HarmonyLib;
 
 namespace ExtremeSkins.Patches.AmongUs
 {
@@ -6,10 +7,10 @@ namespace ExtremeSkins.Patches.AmongUs
     public static class PlayerControlCheckColorPatch
     {
         public static bool Prefix(PlayerControl __instance, [HarmonyArgument(0)] byte bodyColor)
-        { 
+        {
             // Fix incorrect color assignment
             uint color = (uint)bodyColor;
-            
+
             if (isTaken(__instance, color) || color >= Palette.PlayerColors.Length)
             {
                 int num = 0;
@@ -36,5 +37,34 @@ namespace ExtremeSkins.Patches.AmongUs
             return false;
         }
 
+    }
+
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
+    public class PlayerControlHandleRpcPatch
+    {
+        static void Postfix(
+            PlayerControl __instance,
+            [HarmonyArgument(0)] byte callId,
+            [HarmonyArgument(1)] MessageReader reader)
+        {
+
+            if (__instance == null || reader == null) { return; }
+
+            switch (callId)
+            {
+                case byte.MaxValue:
+                    int major = reader.ReadInt32();
+                    int minor = reader.ReadInt32();
+                    int build = reader.ReadInt32();
+                    int revision = reader.ReadInt32();
+                    int clientId = reader.ReadPackedInt32();
+                    VersionManager.AddVersionData(
+                        major, minor, build,
+                        revision, clientId);
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }
