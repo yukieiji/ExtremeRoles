@@ -10,7 +10,7 @@ WORKING_DIR = os.path.dirname(os.path.realpath(__file__))
 EXTREMERORLS_IN_FILE = os.path.join(WORKING_DIR, "ExtremeRolesTransData.xlsx")
 EXTREMERORLS_OUT_FILE = os.path.join(WORKING_DIR, "ExtremeRoles", "Resources", "LangData", "stringData.json")
 
-EXTREMESKIN_IN_FILE = os.path.join(WORKING_DIR, "ColorTransData.xlsx")
+EXTREMESKIN_IN_FILE = os.path.join(WORKING_DIR, "ExtremeSkinsTransData.xlsx")
 EXTREMESKIN_OUT_FILE = os.path.join(WORKING_DIR, "ExtremeSkins", "Resources", "LangData", "stringData.json")
 
 def stringToJson(filename, outputFile):
