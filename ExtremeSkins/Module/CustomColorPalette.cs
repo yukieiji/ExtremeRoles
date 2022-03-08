@@ -20,7 +20,62 @@ namespace ExtremeSkins.Module
                 Name = "kusaZunGreen",
                 MainColor = new Color32(17, 82, 98, byte.MaxValue),
                 ShadowColor = new Color32(8, 32, 55, 0),
-            }
+            },
+            new ColorData()
+            {
+                Name = "darkRed",
+                MainColor = new Color32(139, 0, 0, byte.MaxValue),
+                ShadowColor = new Color32(83, 0, 0, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "mediumVioletRed",
+                MainColor = new Color32(199, 21, 133, byte.MaxValue),
+                ShadowColor = new Color32(119, 12, 80, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "mediumPurple",
+                MainColor = new Color32(147, 112, 219, byte.MaxValue),
+                ShadowColor = new Color32(92, 67, 131, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "rosyBrown",
+                MainColor = new Color32(188, 143, 143, byte.MaxValue),
+                ShadowColor = new Color32(113, 86, 86, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "darkMagenta",
+                MainColor = new Color32(139, 0, 139, byte.MaxValue),
+                ShadowColor = new Color32(83, 0, 83, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "olive",
+                MainColor = new Color32(128, 128, 0, byte.MaxValue),
+                ShadowColor = new Color32(77, 77, 0, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "steelBlue",
+                MainColor = new Color32(70, 130, 180, byte.MaxValue),
+                ShadowColor = new Color32(42, 78, 108, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "dodgerBlue",
+                MainColor = new Color32(30, 144, 255, byte.MaxValue),
+                ShadowColor = new Color32(18, 47, 65, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "darkSeaGreen",
+                MainColor = new Color32(143, 188, 143, byte.MaxValue),
+                ShadowColor = new Color32(86, 113, 86, byte.MaxValue),
+            },
+
         };
     }
 }
