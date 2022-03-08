@@ -7,9 +7,13 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Patches.Manager
 {
+
+    // コレを消すと動かなくなる
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Start))]
     public static class HudManagerStartPatch
     {
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(HudManager), nameof(HudManager.Start))]
         public static void PostFix(HudManager __instance)
         {
             if (Helper.GameSystem.IsFreePlay) { return; }
