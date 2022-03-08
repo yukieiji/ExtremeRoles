@@ -99,29 +99,29 @@ namespace ExtremeRoles.Patches.Manager
         public static class Updater
         {
             public static GenericPopup InfoPopup;
-
-            private static string updateUri = null;
             
-            private const string checkUrl = "https://api.github.com/repos/yukieiji/ExtremeRoles/releases/latest";
-            private static bool hasUpdate = false;
-            private static Task updateTask = null;
+            public const string CheckUrl = "https://api.github.com/repos/yukieiji/ExtremeRoles/releases/latest";
+
+            public static string UpdateUri = null;
+            public static bool HasUpdate = false;
+            public static Task UpdateTask = null;
 
             public static void ExecuteCheckUpdate()
             {
                 string info = Translation.GetString("chekUpdateWait");
                 InfoPopup.Show(info); // Show originally
                 
-                checkForUpdate().GetAwaiter().GetResult();
-                if (hasUpdate)
+                CheckForUpdate().GetAwaiter().GetResult();
+                if (HasUpdate)
                 {
-                    setPopupText(Translation.GetString("updateNow"));
-                    clearOldVersions();
+                    SetPopupText(Translation.GetString("updateNow"));
+                    ClearOldVersions();
 
-                    if (updateTask == null)
+                    if (UpdateTask == null)
                     {
-                        if (updateUri != null)
+                        if (UpdateUri != null)
                         {
-                            updateTask = downloadUpdate();
+                            UpdateTask = DownloadUpdate();
                         }
                         else
                         {
@@ -134,16 +134,16 @@ namespace ExtremeRoles.Patches.Manager
                     }
 
                     InfoPopup.StartCoroutine(
-                        Effects.Lerp(0.01f, new Action<float>((p) => { setPopupText(info); })));
+                        Effects.Lerp(0.01f, new Action<float>((p) => { SetPopupText(info); })));
 
                 }
                 else
                 {
-                    setPopupText(Translation.GetString("latestNow"));
+                    SetPopupText(Translation.GetString("latestNow"));
                 }
 
             }
-            private static void clearOldVersions()
+            public static void ClearOldVersions()
             {
                 try
                 {
@@ -163,14 +163,14 @@ namespace ExtremeRoles.Patches.Manager
             }
 
 
-            private static async Task<bool> checkForUpdate()
+            public static async Task<bool> CheckForUpdate()
             {
                 try
                 {
                     HttpClient http = new HttpClient();
                     http.DefaultRequestHeaders.Add("User-Agent", "ExtremeRoles Updater");
                     var response = await http.GetAsync(
-                        new Uri(checkUrl),
+                        new Uri(CheckUrl),
                         HttpCompletionOption.ResponseContentRead);
                     if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
                     {
@@ -190,7 +190,7 @@ namespace ExtremeRoles.Patches.Manager
                     int diff = Assembly.GetExecutingAssembly().GetName().Version.CompareTo(ver);
                     if (diff < 0)
                     { // Update required
-                        hasUpdate = true;
+                        HasUpdate = true;
                         JToken assets = data["assets"];
                         if (!assets.HasValues)
                         {
@@ -204,7 +204,7 @@ namespace ExtremeRoles.Patches.Manager
                                 if (current["content_type"].ToString().Equals("application/x-msdownload") &&
                                     browser_download_url.EndsWith(".dll"))
                                 {
-                                    updateUri = browser_download_url;
+                                    UpdateUri = browser_download_url;
                                     return true;
                                 }
                             }
@@ -218,14 +218,14 @@ namespace ExtremeRoles.Patches.Manager
                 return false;
             }
 
-            public static async Task<bool> downloadUpdate()
+            public static async Task<bool> DownloadUpdate()
             {
                 try
                 {
                     HttpClient http = new HttpClient();
                     http.DefaultRequestHeaders.Add("User-Agent", "ExtremeRoles Updater");
                     var response = await http.GetAsync(
-                        new Uri(updateUri),
+                        new Uri(UpdateUri),
                         HttpCompletionOption.ResponseContentRead);
                     if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
                     {
@@ -247,24 +247,24 @@ namespace ExtremeRoles.Patches.Manager
                             responseStream.CopyTo(fileStream);
                         }
                     }
-                    showPopup(Translation.GetString("updateRestart"));
+                    ShowPopup(Translation.GetString("updateRestart"));
                     return true;
                 }
                 catch (Exception ex)
                 {
                     Logging.Error(ex.ToString());
-                    showPopup(Translation.GetString("updateManually"));
+                    ShowPopup(Translation.GetString("updateManually"));
                 }
                 return false;
             }
 
-            private static void showPopup(string message)
+            public static void ShowPopup(string message)
             {
-                setPopupText(message);
+                SetPopupText(message);
                 InfoPopup.gameObject.SetActive(true);
             }
 
-            public static void setPopupText(string message)
+            public static void SetPopupText(string message)
             {
                 if (InfoPopup == null)
                 {
