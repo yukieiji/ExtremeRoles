@@ -169,6 +169,7 @@ namespace ExtremeRoles.Patches.Manager
                 item => RandomGenerator.Instance.Next()).ToList();
 
             int gameControlId = 0;
+            int curImpNum = 0;
 
             foreach (var oneRole in roleDataLoop)
             {
@@ -177,7 +178,7 @@ namespace ExtremeRoles.Patches.Manager
 
                 for (int i = 0; i < num; i++)
                 {
-                    roleManager.AssignSetUpInit();
+                    roleManager.AssignSetUpInit(curImpNum);
                     bool isSpawn = isRoleSpawn(num, spawnRate);
                     int reduceCrewmateRole = 0;
                     int reduceImpostorRole = 0;
@@ -220,6 +221,10 @@ namespace ExtremeRoles.Patches.Manager
                     var spawnRoles = new List<MultiAssignRoleBase>();
                     foreach (var role in roleManager.Roles)
                     {
+                        if (role.IsImpostor())
+                        {
+                            ++impNum;
+                        }
                         spawnRoles.Add(
                             (MultiAssignRoleBase)role.Clone());
                     }
