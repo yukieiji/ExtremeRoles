@@ -73,48 +73,57 @@ namespace ExtremeSkins
             if (!Directory.Exists(string.Concat(
                 Path.GetDirectoryName(Application.dataPath), FolderPath))) { return true; }
 
-            // updateJson().GetAwaiter().GetResult();
+            getJsonData(hatData).GetAwaiter().GetResult();
+            
+            byte[] byteHatArray = File.ReadAllBytes(
+                string.Concat(
+                    Path.GetDirectoryName(Application.dataPath),
+                    FolderPath, hatData));
+            string hatJsonString = System.Text.Encoding.UTF8.GetString(byteHatArray);
 
-            string[] hatsFolder = Directory.GetDirectories(
-                string.Concat(Path.GetDirectoryName(Application.dataPath), FolderPath));
+            JToken hatFolder = JObject.Parse(hatJsonString)["data"];
+            JArray hatArray = hatFolder.TryCast<JArray>();
 
-            foreach (string hat in hatsFolder)
+            for (int i = 0; i < hatArray.Count; ++i)
             {
-                if (!string.IsNullOrEmpty(hat))
-                {
-                    if (!File.Exists(string.Concat(
-                            hat, @"\", LicenceFileName))) { return true; }
-                    if (!File.Exists(string.Concat(
-                            hat, @"\", CustomHat.FrontImageName))) { return true; }
+                string checkHatFolder = string.Concat(
+                    Path.GetDirectoryName(Application.dataPath),
+                    FolderPath, hatData, @"\", hatArray[i].ToString());
 
-                    byte[] byteArray = File.ReadAllBytes(
-                        string.Concat(hat, @"\", InfoFileName));
-                    string json = System.Text.Encoding.UTF8.GetString(byteArray);
-                    JObject parseJson = JObject.Parse(json);
+                if (!Directory.Exists(checkHatFolder)) { return true; }
 
-                    var parseList = parseJson.ChildrenTokens;
+                if(!File.Exists(string.Concat(
+                        checkHatFolder, @"\", LicenceFileName))) { return true; }
+
+                if (!File.Exists(string.Concat(
+                        checkHatFolder, @"\", InfoFileName))) { return true; }
+                if (!File.Exists(string.Concat(
+                        checkHatFolder, @"\", CustomHat.FrontImageName))) { return true; }
+
+                byte[] byteArray = File.ReadAllBytes(
+                    string.Concat(checkHatFolder, @"\", InfoFileName));
+                string json = System.Text.Encoding.UTF8.GetString(byteArray);
+                JObject parseJson = JObject.Parse(json);
                     
-                    if ((bool)(parseList[2].TryCast<JProperty>().Value) &&
-                        !File.Exists(string.Concat(hat, @"\", CustomHat.FrontFlipImageName)))
-                    {
-                        return true;
-                    }
-                    if ((bool)(parseList[3].TryCast<JProperty>().Value) &&
-                        !File.Exists(string.Concat(hat, @"\", CustomHat.BackImageName)))
-                    {
-                        return true;
-                    }
-                    if ((bool)(parseList[4].TryCast<JProperty>().Value) &&
-                        !File.Exists(string.Concat(hat, @"\", CustomHat.BackFlipImageName)))
-                    {
-                        return true;
-                    }
-                    if ((bool)(parseList[5].TryCast<JProperty>().Value) &&
-                        !File.Exists(string.Concat(hat, @"\", CustomHat.ClimbImageName)))
-                    {
-                        return true;
-                    }
-
+                if ((bool)(parseJson["FrontFlip"].TryCast<JProperty>().Value) &&
+                    !File.Exists(string.Concat(checkHatFolder, @"\", CustomHat.FrontFlipImageName)))
+                {
+                    return true;
+                }
+                if ((bool)(parseJson["Back"].TryCast<JProperty>().Value) &&
+                    !File.Exists(string.Concat(checkHatFolder, @"\", CustomHat.BackImageName)))
+                {
+                    return true;
+                }
+                if ((bool)(parseJson["BackFlip"].TryCast<JProperty>().Value) &&
+                    !File.Exists(string.Concat(checkHatFolder, @"\", CustomHat.BackFlipImageName)))
+                {
+                    return true;
+                }
+                if ((bool)(parseJson["Climb"].TryCast<JProperty>().Value) &&
+                    !File.Exists(string.Concat(checkHatFolder, @"\", CustomHat.ClimbImageName)))
+                {
+                    return true;
                 }
             }
             return false;
@@ -139,10 +148,10 @@ namespace ExtremeSkins
                         string.Concat(hat, @"\", InfoFileName));
                     string json = System.Text.Encoding.UTF8.GetString(byteArray);
                     JObject parseJson = JObject.Parse(json);
-                    var parseList = parseJson.ChildrenTokens;
-                    string name = parseList[1].TryCast<JProperty>().Value.ToString();
+
+                    string name = parseJson["Name"].ToString();
                     string productId = string.Concat(
-                        "hat_", parseList[1].TryCast<JProperty>().Value.ToString());
+                        "hat_", name);
 
                     if (HatData.ContainsKey(productId)) { continue; }
 
@@ -150,14 +159,14 @@ namespace ExtremeSkins
                         productId,  // Name
                         new CustomHat(
                             productId, hat,
-                            parseList[0].TryCast<JProperty>().Value.ToString(),  // Author
+                            parseJson["Author"].ToString(),  // Author
                             name,  // Name
-                            (bool)(parseList[2].TryCast<JProperty>().Value),  // FrontFlip
-                            (bool)(parseList[3].TryCast<JProperty>().Value),  // Back
-                            (bool)(parseList[4].TryCast<JProperty>().Value),  // BackFlip
-                            (bool)(parseList[5].TryCast<JProperty>().Value),  // Climb
-                            (bool)(parseList[6].TryCast<JProperty>().Value),  // Bound
-                            (bool)(parseList[7].TryCast<JProperty>().Value))); // Shader
+                            (bool)parseJson["FrontFlip"],  // FrontFlip
+                            (bool)parseJson["Back"],  // Back
+                            (bool)parseJson["BackFlip"],  // BackFlip
+                            (bool)parseJson["Climb"],  // Climb
+                            (bool)parseJson["Bound"],  // Bound
+                            (bool)parseJson["Shader"])); // Shader
 
                     ExtremeSkinsPlugin.Logger.LogInfo(
                         $"Skin Loaded:{parseJson.ChildrenTokens[1].TryCast<JProperty>().Value.ToString()}, from:{hat}");
