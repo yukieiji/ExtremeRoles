@@ -56,6 +56,7 @@ namespace ExtremeRoles.Roles
         TaskMaster,
         Missionary,
         Jester,
+        Yandere
     }
     public enum RoleGameOverReason
     {
