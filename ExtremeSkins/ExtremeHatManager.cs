@@ -253,6 +253,13 @@ namespace ExtremeSkins
             var hatInfoResponse = await http.GetAsync(
                 new System.Uri($"{repo}/hat/{hat}/{InfoFileName}"),
                 HttpCompletionOption.ResponseContentRead);
+
+            if (hatInfoResponse.Content == null)
+            {
+                System.Console.WriteLine("Server returned no data: " + hatInfoResponse.StatusCode.ToString());
+                return HttpStatusCode.ExpectationFailed;
+            }
+
             string json = await hatInfoResponse.Content.ReadAsStringAsync();
             JObject parseJson = JObject.Parse(json);
 
