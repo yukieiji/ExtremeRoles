@@ -20,7 +20,6 @@ namespace ExtremeSkins.Patches
     public class UpdaterExecuteCheckUpdatePatch
     {
         private static bool errorFlag = false;
-        private static bool skinHasUpdate = false;
         private static string skinUpdateUri = null;
         private static Task skinUpdateTask = null;
 
@@ -31,10 +30,12 @@ namespace ExtremeSkins.Patches
             MainMenuManagerStartPatch.Updater.InfoPopup.Show(info); // Show originally
 
             MainMenuManagerStartPatch.Updater.CheckForUpdate().GetAwaiter().GetResult();
-            checkSkinUpdate().GetAwaiter().GetResult();
 
-            if (MainMenuManagerStartPatch.Updater.HasUpdate || skinHasUpdate)
+            if (MainMenuManagerStartPatch.Updater.HasUpdate)
             {
+
+                setSkinUpdateUrl().GetAwaiter().GetResult();
+
                 MainMenuManagerStartPatch.Updater.SetPopupText(
                     ExtremeRoles.Helper.Translation.GetString("updateNow"));
                 MainMenuManagerStartPatch.Updater.ClearOldVersions();
@@ -91,7 +92,7 @@ namespace ExtremeSkins.Patches
             return false;
         }
 
-        private static async Task<bool> checkSkinUpdate()
+        private static async Task<bool> setSkinUpdateUrl()
         {
             try
             {
@@ -113,28 +114,22 @@ namespace ExtremeSkins.Patches
                 {
                     return false; // Something went wrong
                 }
-                // check version
-                Version ver = Version.Parse(tagname.Replace("v", ""));
-                int diff = Assembly.GetExecutingAssembly().GetName().Version.CompareTo(ver);
-                if (diff < 0)
-                { // Update required
-                    skinHasUpdate = true;
-                    JToken assets = data["assets"];
-                    if (!assets.HasValues)
+
+                JToken assets = data["assets"];
+                if (!assets.HasValues)
+                {
+                    return false;
+                }
+                for (JToken current = assets.First; current != null; current = current.Next)
+                {
+                    string browser_download_url = current["browser_download_url"]?.ToString();
+                    if (browser_download_url != null && current["content_type"] != null)
                     {
-                        return false;
-                    }
-                    for (JToken current = assets.First; current != null; current = current.Next)
-                    {
-                        string browser_download_url = current["browser_download_url"]?.ToString();
-                        if (browser_download_url != null && current["content_type"] != null)
+                        if (current["content_type"].ToString().Equals("application/x-msdownload") &&
+                            browser_download_url.EndsWith("ExtremeSkins.dll"))
                         {
-                            if (current["content_type"].ToString().Equals("application/x-msdownload") &&
-                                browser_download_url.EndsWith("ExtremeSkins.dll"))
-                            {
-                                skinUpdateUri = browser_download_url;
-                                return true;
-                            }
+                            skinUpdateUri = browser_download_url;
+                            return true;
                         }
                     }
                 }
