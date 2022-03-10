@@ -19,7 +19,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
 
             if (ExtremeHatManager.IsUpdate() && !ExtremeSkinsPlugin.CreatorMode.Value)
             {
-
+                ExtremeHatManager.PullAllData().GetAwaiter().GetResult();
             }
             ExtremeHatManager.Load();
         }

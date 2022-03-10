@@ -176,6 +176,55 @@ namespace ExtremeSkins
             IsLoaded = true;
         }
 
+        public static async Task PullAllData()
+        {
+
+            string dataSaveFolder = string.Concat(
+                Path.GetDirectoryName(Application.dataPath), FolderPath);
+
+            if (!Directory.Exists(dataSaveFolder))
+            {
+                Directory.CreateDirectory(dataSaveFolder);
+            }
+
+            getJsonData(hatData).GetAwaiter().GetResult();
+
+            byte[] byteHatArray = File.ReadAllBytes(
+                string.Concat(
+                    Path.GetDirectoryName(Application.dataPath),
+                    FolderPath, hatData));
+            string hatJsonString = System.Text.Encoding.UTF8.GetString(byteHatArray);
+
+            JToken hatFolder = JObject.Parse(hatJsonString)["data"];
+            JArray hatArray = hatFolder.TryCast<JArray>();
+
+            for (int i = 0; i < hatArray.Count; ++i)
+            {
+                string getHatData = hatArray[i].ToString();
+
+                string getHatFolder = string.Concat(
+                    dataSaveFolder, @"\", getHatData);
+                
+                // まずはフォルダとファイルを消す
+                if (Directory.Exists(getHatFolder))
+                {
+                    string[] filePaths = Directory.GetFiles(getHatFolder);
+                    foreach (string filePath in filePaths)
+                    {
+                        File.SetAttributes(filePath, FileAttributes.Normal);
+                        File.Delete(filePath);
+                    }
+                    Directory.Delete(getHatFolder, false);;
+                }
+
+                Directory.CreateDirectory(getHatFolder);
+
+                await pullHat(getHatFolder, getHatData);
+
+            }
+
+        }
+
         public static void UpdateTranslation()
         {
             foreach (var hat in HatData.Values)
@@ -223,9 +272,77 @@ namespace ExtremeSkins
             }
         }
 
-        private static void downLoad()
+        private static async Task<HttpStatusCode> pullHat(
+            string saveFolder,
+            string hat)
         {
+            HttpClient http = new HttpClient();
+            http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true };
+            // インフォファイルを落とす
+            await downLoadFileTo(http, hat, saveFolder, InfoFileName);
+
+            // ライセンスファイルを落としてくる
+            await downLoadFileTo(http, hat, saveFolder, LicenceFileName);
+
+            await downLoadFileTo(http, hat, saveFolder, CustomHat.FrontImageName);
+
+            var hatInfoResponse = await http.GetAsync(
+                new System.Uri($"{repo}/hat/{hat}/{InfoFileName}"),
+                HttpCompletionOption.ResponseContentRead);
+            string json = await hatInfoResponse.Content.ReadAsStringAsync();
+            JObject parseJson = JObject.Parse(json);
+
+            if ((bool)parseJson["FrontFlip"])
+            {
+                await downLoadFileTo(http, hat, saveFolder, CustomHat.FrontFlipImageName);
+            }
+            if ((bool)parseJson["Back"])
+            {
+                await downLoadFileTo(http, hat, saveFolder, CustomHat.BackImageName);
+            }
+            if ((bool)parseJson["BackFlip"])
+            {
+                await downLoadFileTo(http, hat, saveFolder, CustomHat.BackFlipImageName);
+            }
+            if ((bool)parseJson["Climb"])
+            {
+                await downLoadFileTo(http, hat, saveFolder, CustomHat.ClimbImageName);
+            }
+
+            return HttpStatusCode.OK;
 
         }
+
+        private static async Task<HttpStatusCode> downLoadFileTo(
+            HttpClient http, string hat, string saveFolder, string fileName)
+        {
+            var fileResponse = await http.GetAsync(
+                $"{repo}/hat/{hat}/{fileName}",
+                HttpCompletionOption.ResponseContentRead);
+
+            if (fileResponse.StatusCode != HttpStatusCode.OK)
+            {
+                ExtremeSkinsPlugin.Logger.LogInfo($"Can't load {fileName}");
+                return fileResponse.StatusCode;
+            }
+
+            if (fileResponse.Content == null)
+            {
+                ExtremeSkinsPlugin.Logger.LogInfo("Server returned no data: " + fileResponse.StatusCode.ToString());
+                return HttpStatusCode.ExpectationFailed;
+            }
+
+            using (var responseStream = await fileResponse.Content.ReadAsStreamAsync())
+            {
+                using (var fileStream = File.Create($"{saveFolder}\\{fileName}"))
+                {
+                    responseStream.CopyTo(fileStream);
+                }
+            }
+
+            return HttpStatusCode.OK;
+
+        }
+
     }
 }
