@@ -130,7 +130,7 @@ namespace ExtremeSkins.Patches
                         if (browser_download_url != null && current["content_type"] != null)
                         {
                             if (current["content_type"].ToString().Equals("application/x-msdownload") &&
-                                browser_download_url.EndsWith(".dll"))
+                                browser_download_url.EndsWith("ExtremeSkins.dll"))
                             {
                                 skinUpdateUri = browser_download_url;
                                 return true;

@@ -202,7 +202,7 @@ namespace ExtremeRoles.Patches.Manager
                             if (browser_download_url != null && current["content_type"] != null)
                             {
                                 if (current["content_type"].ToString().Equals("application/x-msdownload") &&
-                                    browser_download_url.EndsWith(".dll"))
+                                    browser_download_url.EndsWith("ExtremeRoles.dll"))
                                 {
                                     UpdateUri = browser_download_url;
                                     return true;
