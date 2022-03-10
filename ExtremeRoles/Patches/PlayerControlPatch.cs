@@ -960,6 +960,9 @@ namespace ExtremeRoles.Patches
             PlayerControl __instance,
             [HarmonyArgument(0)] PlayerControl target)
         {
+
+            if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+
             ExtremeRolesPlugin.GameDataStore.AddDeadInfo(
                 target, DeathReason.Kill, __instance);
             
