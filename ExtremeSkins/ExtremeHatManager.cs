@@ -105,22 +105,22 @@ namespace ExtremeSkins
                 string json = System.Text.Encoding.UTF8.GetString(byteArray);
                 JObject parseJson = JObject.Parse(json);
                     
-                if ((bool)(parseJson["FrontFlip"].TryCast<JProperty>().Value) &&
+                if (((bool)parseJson["FrontFlip"]) &&
                     !File.Exists(string.Concat(checkHatFolder, @"\", CustomHat.FrontFlipImageName)))
                 {
                     return true;
                 }
-                if ((bool)(parseJson["Back"].TryCast<JProperty>().Value) &&
+                if (((bool)parseJson["Back"]) &&
                     !File.Exists(string.Concat(checkHatFolder, @"\", CustomHat.BackImageName)))
                 {
                     return true;
                 }
-                if ((bool)(parseJson["BackFlip"].TryCast<JProperty>().Value) &&
+                if (((bool)parseJson["BackFlip"]) &&
                     !File.Exists(string.Concat(checkHatFolder, @"\", CustomHat.BackFlipImageName)))
                 {
                     return true;
                 }
-                if ((bool)(parseJson["Climb"].TryCast<JProperty>().Value) &&
+                if (((bool)parseJson["Climb"]) &&
                     !File.Exists(string.Concat(checkHatFolder, @"\", CustomHat.ClimbImageName)))
                 {
                     return true;
