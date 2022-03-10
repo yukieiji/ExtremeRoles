@@ -862,6 +862,8 @@ namespace ExtremeRoles.Patches
             PlayerControl __instance,
             [HarmonyArgument(0)] PlayerControl target)
         {
+            if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
+
             var role = ExtremeRoleManager.GameRole[__instance.PlayerId];
             if (!role.HasOtherKillCool) { return true; }
 
