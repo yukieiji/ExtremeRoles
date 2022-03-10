@@ -4,8 +4,8 @@
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
         <!--<Version>0.7.5.0</Version>-->
-        <VersionPrefix>0.9.5</VersionPrefix>
-        <VersionSuffix>RC1</VersionSuffix>
+        <VersionPrefix>1.0.0</VersionPrefix>
+        <VersionSuffix>FirstRelease</VersionSuffix>
         <Description>Extreme Skins for Extreme Roles</Description>
         <Authors>yukieiji</Authors>
     </PropertyGroup>
