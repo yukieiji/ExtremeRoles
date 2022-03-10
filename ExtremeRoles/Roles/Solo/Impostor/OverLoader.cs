@@ -51,9 +51,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         
         public static void SwitchAbility(byte rolePlayerId, bool activate)
         {
-            if (ExtremeRoleManager.GameRole[rolePlayerId] is OverLoader)
+            var overLoader = ExtremeRoleManager.GetSafeCastedRole<OverLoader>(rolePlayerId);
+            if (overLoader != null)
             {
-                ((OverLoader)ExtremeRoleManager.GameRole[rolePlayerId]).IsOverLoad = activate;
+                overLoader.IsOverLoad = activate;
             }
         }
 

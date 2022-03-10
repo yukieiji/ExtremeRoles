@@ -226,7 +226,18 @@ namespace ExtremeRoles.Patches.Controller
 
             if (exiled == null) { return; };
 
-            ExtremeRoleManager.GameRole[exiled.PlayerId].ExiledAction(exiled);
+            var exiledPlayerRole = ExtremeRoleManager.GameRole[exiled.PlayerId];
+            var multiAssignExiledPlayerRole = exiledPlayerRole as Roles.API.MultiAssignRoleBase;
+
+            exiledPlayerRole.ExiledAction(exiled);
+            if (multiAssignExiledPlayerRole != null)
+            {
+                if (multiAssignExiledPlayerRole.AnotherRole != null)
+                {
+                    multiAssignExiledPlayerRole.AnotherRole.ExiledAction(exiled);
+                }
+            }
+
             ExtremeRolesPlugin.GameDataStore.WinCheckDisable = false;
         }
     }

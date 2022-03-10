@@ -67,7 +67,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public static void CrackDeadBody(
             byte rolePlayerId, byte targetPlayerId)
         {
-            var role = (Cracker)ExtremeRoleManager.GameRole[rolePlayerId];
+            var role = ExtremeRoleManager.GetSafeCastedRole<Cracker>(rolePlayerId);
+            if (role == null) { return; }
 
             DeadBody[] array = Object.FindObjectsOfType<DeadBody>();
             for (int i = 0; i < array.Length; ++i)

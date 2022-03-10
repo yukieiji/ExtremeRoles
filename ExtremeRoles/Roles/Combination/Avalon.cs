@@ -29,12 +29,14 @@ namespace ExtremeRoles.Roles.Combination
             CanKilled,
             CanKilledFromCrew,
             CanKilledFromNeutral,
+            CanSeeVote,
             IsDeadForceMeeting,
             CanSeeRoleBeforeFirstMeeting,
         }
 
         public bool IsFirstMeeting = false;
         public bool CanSeeRoleBeforeFirstMeeting = false;
+        public bool CanSeeVote = false;
 
         public bool CanKilled = false;
         public bool CanKilledFromCrew = false;
@@ -92,6 +94,13 @@ namespace ExtremeRoles.Roles.Combination
                     this.RoleName,
                     AssassinOption.CanKilledFromNeutral.ToString()),
                 false, killedOps);
+
+            CustomOption.Create(
+                GetRoleOptionId((int)AssassinOption.CanSeeVote),
+                string.Concat(
+                    this.RoleName,
+                    AssassinOption.CanSeeVote.ToString()),
+                true, parentOps);
 
             var meetingOpt = CustomOption.Create(
                 GetRoleOptionId((int)AssassinOption.IsDeadForceMeeting),
@@ -152,6 +161,8 @@ namespace ExtremeRoles.Roles.Combination
                 GetRoleOptionId((int)AssassinOption.CanKilledFromCrew)].GetValue();
             this.CanKilledFromNeutral = allOption[
                 GetRoleOptionId((int)AssassinOption.CanKilledFromNeutral)].GetValue();
+            this.CanSeeVote = allOption[
+                GetRoleOptionId((int)AssassinOption.CanSeeVote)].GetValue();
 
             this.isDeadForceMeeting = allOption[
                 GetRoleOptionId((int)AssassinOption.IsDeadForceMeeting)].GetValue();
@@ -288,7 +299,7 @@ namespace ExtremeRoles.Roles.Combination
                 string.Concat(
                     this.RoleName,
                     MarlinOption.CanSeeVote.ToString()),
-                false, parentOps);
+                true, parentOps);
             CustomOption.Create(
                 GetRoleOptionId((int)MarlinOption.CanSeeNeutral),
                 string.Concat(

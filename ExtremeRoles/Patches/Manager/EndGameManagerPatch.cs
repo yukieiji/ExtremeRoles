@@ -189,7 +189,7 @@ namespace ExtremeRoles.Patches.Manager
                 {
                     if (mutiAssignRole.AnotherRole != null)
                     {
-                        string anotherTag = playerSummary.Role.GetRoleTag();
+                        string anotherTag = mutiAssignRole.AnotherRole.GetRoleTag();
                         id = mutiAssignRole.AnotherRole.GameControlId;
                         index = id % OptionHolder.VanillaMaxPlayerNum;
 
@@ -204,8 +204,8 @@ namespace ExtremeRoles.Patches.Manager
                                 tagColor[index], randomTag[index]);
                         }
 
-                        tag = string.Format(
-                            tag, "+", anotherTag);
+                        tag = string.Concat(
+                            tag, " + ", anotherTag);
 
                     }
                 }

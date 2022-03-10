@@ -327,7 +327,7 @@ namespace ExtremeRoles.Roles
                 IRoleAbility multiAssignAbilityRole = ((MultiAssignRoleBase)GameRole[
                     playerId]) as IRoleAbility;
 
-                if (abilityRole != null && PlayerControl.LocalPlayer.PlayerId == playerId)
+                if (multiAssignAbilityRole != null && PlayerControl.LocalPlayer.PlayerId == playerId)
                 {
                     if (multiAssignAbilityRole.Button != null)
                     {
@@ -337,6 +337,60 @@ namespace ExtremeRoles.Roles
                 }
             }
             Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
+        }
+
+        public static T GetSafeCastedRole<T>(byte playerId) where T : SingleRoleBase
+        {
+            var role = GameRole[playerId] as T;
+            
+            if (role != null)
+            {
+                return role;
+            }
+
+            var multiAssignRole = GameRole[playerId] as MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    role = multiAssignRole.AnotherRole as T;
+
+                    if (role != null)
+                    {
+                        return role;
+                    }
+                }
+            }
+
+            return null;
+
+        }
+
+        public static T GetSafeCastedLocalPlayerRole<T>() where T : SingleRoleBase
+        {
+            var role = GameRole[PlayerControl.LocalPlayer.PlayerId] as T;
+
+            if (role != null)
+            {
+                return role;
+            }
+
+            var multiAssignRole = GameRole[PlayerControl.LocalPlayer.PlayerId] as MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    role = multiAssignRole.AnotherRole as T;
+
+                    if (role != null)
+                    {
+                        return role;
+                    }
+                }
+            }
+
+            return null;
+
         }
 
     }

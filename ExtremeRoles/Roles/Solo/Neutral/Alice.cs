@@ -100,7 +100,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public static void ShipBroken(byte callerId)
         {
-            var alice = (Alice)ExtremeRoleManager.GameRole[callerId];
+            var alice = ExtremeRoleManager.GetSafeCastedRole<Alice>(callerId);
+            if (alice == null) { return; }
             var player = PlayerControl.LocalPlayer;
             var playerInfo = GameData.Instance.GetPlayerById(
                 player.PlayerId);

@@ -163,7 +163,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public static void SetCamp(byte callerId)
         {
             var rolePlayer = Player.GetPlayerControlById(callerId);
-            var mery = (Mery)ExtremeRoleManager.GameRole[rolePlayer.PlayerId];
+            var mery = ExtremeRoleManager.GetSafeCastedRole<Mery>(callerId);
             var localPlayerRole = ExtremeRoleManager.GetLocalPlayerRole();
 
             bool isMarlin = localPlayerRole.Id == ExtremeRoleId.Marlin;

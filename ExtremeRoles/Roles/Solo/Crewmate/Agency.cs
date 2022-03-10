@@ -57,7 +57,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             PlayerControl targetPlayer = Player.GetPlayerControlById(
                 targetPlayerId);
-            var agency = (Agency)ExtremeRoleManager.GameRole[rolePlayerId];
+            var agency = ExtremeRoleManager.GetSafeCastedRole<Agency>(rolePlayerId);
+            if (agency == null) { return; }
 
 
             var shuffleTaskIndex = Enumerable.Range(

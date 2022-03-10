@@ -14,8 +14,8 @@ namespace ExtremeRoles.Patches
 
             if (__instance.AmOwner && __instance.myPlayer.CanMove && GameData.Instance)
             {
-                var overLoader = ExtremeRoleManager.GameRole[
-                    __instance.myPlayer.PlayerId] as Roles.Solo.Impostor.OverLoader;
+                var overLoader = ExtremeRoleManager.GetSafeCastedRole<
+                    Roles.Solo.Impostor.OverLoader>(__instance.myPlayer.PlayerId);
                 if (overLoader == null) { return; }
 
                 if (overLoader.IsOverLoad)

@@ -283,7 +283,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
 
             // キャリアーのリセット処理
-            var carrier = targetRole as Impostor.Carrier;
+            var carrier = ExtremeRoleManager.GetSafeCastedRole<Impostor.Carrier>(targetId);
             if (carrier != null)
             {
                 if (carrier.CarringBody != null)
@@ -304,7 +304,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 }
             }
 
-            var sourceJackal = (Jackal)ExtremeRoleManager.GameRole[callerId];
+            var sourceJackal = ExtremeRoleManager.GetSafeCastedRole<Jackal>(callerId);
             var newSidekick = new Sidekick(
                 sourceJackal.GameControlId,
                 callerId,
@@ -498,9 +498,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.SidekickJackalCanMakeSidekick = allOption[
                 GetRoleOptionId(JackalOption.SidekickJackalCanMakeSidekick)].GetValue();
 
-            this.SidekickJackalCanMakeSidekick = allOption[
-                GetRoleOptionId(JackalOption.SidekickJackalCanMakeSidekick)].GetValue();
-
             this.createSidekickRange = allOption[
                 GetRoleOptionId(JackalOption.RangeSidekickTarget)].GetValue();
 
@@ -678,7 +675,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public static void BecomeToJackal(byte callerId, byte targetId)
         {
 
-            Jackal curJackal = (Jackal)ExtremeRoleManager.GameRole[callerId];
+            Jackal curJackal = ExtremeRoleManager.GetSafeCastedRole<Jackal>(callerId);
             Jackal newJackal = (Jackal)curJackal.Clone();
 
             bool multiAssignTrigger = false;
@@ -745,7 +742,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (Player.GetPlayerControlById(this.JackalPlayerId).Data.Disconnected)
             {
 
-                ((Jackal)ExtremeRoleManager.GameRole[this.JackalPlayerId]).SidekickPlayerId.Clear();
+                var jackal = ExtremeRoleManager.GetSafeCastedRole<Jackal>(this.JackalPlayerId);
+                jackal.SidekickPlayerId.Clear();
 
                 RPCOperator.Call(
                     rolePlayer.NetId,

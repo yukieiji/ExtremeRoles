@@ -31,7 +31,7 @@ namespace ExtremeRoles.Roles.API
             this.roleName = roleName;
         }
 
-        public abstract void AssignSetUpInit();
+        public abstract void AssignSetUpInit(int curImpNum);
 
         public abstract MultiAssignRoleBase GetRole(
             byte roleId, RoleTypes playerRoleType);
@@ -73,7 +73,7 @@ namespace ExtremeRoles.Roles.API
             this.maxSetNum = maxSetNum;
         }
 
-        public override void AssignSetUpInit()
+        public override void AssignSetUpInit(int curImpNum)
         {
             return;
         }
@@ -194,7 +194,7 @@ namespace ExtremeRoles.Roles.API
             this.minimumRoleNum = minimumRoleNum;
             this.canAssignImposter = canAssignImposter;
         }
-        public override void AssignSetUpInit()
+        public override void AssignSetUpInit(int curImpNum)
         {
 
             var allOptions = OptionHolder.AllOption;
@@ -213,8 +213,10 @@ namespace ExtremeRoles.Roles.API
 
                 var spawnOption = allOptions[
                         GetRoleOptionId(CombinationRoleCommonOption.ImposterSelectedRate)];
-                isEvil = isEvil && (UnityEngine.Random.RandomRange(0, 110) < (int)Decimal.Multiply(
-                    spawnOption.GetValue(), spawnOption.Selections.ToList().Count));
+                isEvil = isEvil && 
+                    (UnityEngine.Random.RandomRange(0, 110) < (int)Decimal.Multiply(
+                        spawnOption.GetValue(), spawnOption.Selections.ToList().Count)) &&
+                    curImpNum < PlayerControl.GameOptions.NumImpostors;
 
                 if (isEvil)
                 {
@@ -224,6 +226,7 @@ namespace ExtremeRoles.Roles.API
                     role.UseVent = true;
                     role.UseSabotage = true;
                     role.HasTask = false;
+                    ++curImpNum;
                 }
                 else
                 {

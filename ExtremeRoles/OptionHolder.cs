@@ -88,34 +88,34 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.MinCremateRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MinCremateRoles.ToString()),
-                0, 0, VanillaMaxPlayerNum - 1, 1, null, true);
+                0, 0, (VanillaMaxPlayerNum - 1) * 2, 1, null, true);
             CustomOption.Create(
                 (int)CommonOptionKey.MaxCremateRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MaxCremateRoles.ToString()),
-                0, 0, VanillaMaxPlayerNum - 1, 1);
+                0, 0, (VanillaMaxPlayerNum - 1) * 2, 1);
 
             CustomOption.Create(
                 (int)CommonOptionKey.MinNeutralRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MinNeutralRoles.ToString()),
-                0, 0, VanillaMaxPlayerNum - 2, 1);
+                0, 0, (VanillaMaxPlayerNum - 2) * 2, 1);
             CustomOption.Create(
                 (int)CommonOptionKey.MaxNeutralRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MaxNeutralRoles.ToString()),
-                0, 0, VanillaMaxPlayerNum - 2, 1);
+                0, 0, (VanillaMaxPlayerNum - 2) * 2, 1);
 
             CustomOption.Create(
                 (int)CommonOptionKey.MinImpostorRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MinImpostorRoles.ToString()),
-                0, 0, MaxImposterNum, 1);
+                0, 0, MaxImposterNum * 2, 1);
             CustomOption.Create(
                 (int)CommonOptionKey.MaxImpostorRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MaxImpostorRoles.ToString()),
-                0, 0, MaxImposterNum, 1);
+                0, 0, MaxImposterNum * 2, 1);
 
             CustomOption.Create(
                 (int)CommonOptionKey.NumMeating,

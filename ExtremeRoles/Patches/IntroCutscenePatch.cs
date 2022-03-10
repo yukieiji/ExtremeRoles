@@ -122,7 +122,7 @@ namespace ExtremeRoles.Patches
                 {
                     if (((Roles.API.MultiAssignRoleBase)role).AnotherRole != null)
                     {
-                        __instance.RoleBlurbText.fontSize *= 0.50f;
+                        __instance.RoleBlurbText.fontSize *= 0.45f;
                     }
                 }
 

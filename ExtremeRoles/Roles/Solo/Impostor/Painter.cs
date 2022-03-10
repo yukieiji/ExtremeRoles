@@ -46,7 +46,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public static void PaintDeadBody(
             byte rolePlayerId, byte targetPlayerId)
         {
-            var role = (Painter)ExtremeRoleManager.GameRole[rolePlayerId];
+            var role = ExtremeRoleManager.GetSafeCastedRole<Painter>(rolePlayerId);
+            if (role == null) { return; }
 
             DeadBody[] array = Object.FindObjectsOfType<DeadBody>();
             for (int i = 0; i < array.Length; ++i)
