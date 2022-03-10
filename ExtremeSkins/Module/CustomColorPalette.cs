@@ -67,13 +67,43 @@ namespace ExtremeSkins.Module
             {
                 Name = "dodgerBlue",
                 MainColor = new Color32(30, 144, 255, byte.MaxValue),
-                ShadowColor = new Color32(18, 47, 65, byte.MaxValue),
+                ShadowColor = new Color32(18, 86, 153, byte.MaxValue),
             },
             new ColorData()
             {
                 Name = "darkSeaGreen",
                 MainColor = new Color32(143, 188, 143, byte.MaxValue),
                 ShadowColor = new Color32(86, 113, 86, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "sikon",
+                MainColor = new Color32(66, 44, 65, byte.MaxValue),
+                ShadowColor = new Color32(40, 26, 39, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "konjou",
+                MainColor = new Color32(17, 43, 76, byte.MaxValue),
+                ShadowColor = new Color32(10, 26, 52, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "vermilion",
+                MainColor = new Color32(253, 60, 47, byte.MaxValue),
+                ShadowColor = new Color32(152, 36, 28, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "ivyGreen",
+                MainColor = new Color32(76, 103, 51, byte.MaxValue),
+                ShadowColor = new Color32(46, 62, 31, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "tilleul",
+                MainColor = new Color32(186, 205, 49, byte.MaxValue),
+                ShadowColor = new Color32(112, 123, 29, byte.MaxValue),
             },
 
         };
