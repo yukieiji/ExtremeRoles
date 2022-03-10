@@ -356,7 +356,12 @@ namespace ExtremeRoles.Patches.Manager
 
                     result = isRoleSpawn(roleNum, spawnRate);
                     result = result && checkLimitRoleSpawnNum(role, ref extremeRolesData);
-
+                    
+                    if (ExtremeRoleManager.GameRole.ContainsKey(player.PlayerId))
+                    {
+                        result = result && ExtremeRoleManager.GameRole[
+                            player.PlayerId].Team == role.Team;
+                    }
 
                     // Logging.Debug($"Role:{role.Id}: AssignResult:{result}");
 
