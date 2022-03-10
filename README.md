@@ -43,7 +43,7 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 - なし
 ## リリーススケジュール
 - Extreme Roles v1.19.0.0：
-   - Extreme Skins公開から1週間程度
+   - Extreme Skins公開から1～2週間程度
    - ふにんがすの方々や色々な人から頂いた役職案の実装
 - Extreme Roles v1.20.0.0：
    - 時期は不明、コンビネーション役職アップデート
