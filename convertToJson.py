@@ -7,10 +7,13 @@ from openpyxl import load_workbook
 
 WORKING_DIR = os.path.dirname(os.path.realpath(__file__))
 
-IN_FILE = os.path.join(WORKING_DIR, "transData.xlsx")
-OUT_FILE = os.path.join(WORKING_DIR, "ExtremeRoles", "Resources", "LangData", "stringData.json")
+EXTREMERORLS_IN_FILE = os.path.join(WORKING_DIR, "ExtremeRolesTransData.xlsx")
+EXTREMERORLS_OUT_FILE = os.path.join(WORKING_DIR, "ExtremeRoles", "Resources", "LangData", "stringData.json")
 
-def stringToJson(filename):
+EXTREMESKIN_IN_FILE = os.path.join(WORKING_DIR, "ExtremeSkinsTransData.xlsx")
+EXTREMESKIN_OUT_FILE = os.path.join(WORKING_DIR, "ExtremeSkins", "Resources", "LangData", "stringData.json")
+
+def stringToJson(filename, outputFile):
   wb = load_workbook(filename, read_only = True)
   
   stringData = {}
@@ -37,8 +40,9 @@ def stringToJson(filename):
       if data:
         stringData[name] = data
     
-  with open(OUT_FILE, "w") as f:
+  with open(outputFile, "w") as f:
     json.dump(stringData, f, indent=4)
 
 if __name__ == "__main__":
-  stringToJson(IN_FILE)
+  stringToJson(EXTREMERORLS_IN_FILE, EXTREMERORLS_OUT_FILE)
+  stringToJson(EXTREMESKIN_IN_FILE, EXTREMESKIN_OUT_FILE)
