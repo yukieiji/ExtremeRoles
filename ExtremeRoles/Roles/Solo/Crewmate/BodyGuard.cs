@@ -39,18 +39,38 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             false, true, false, false)
         { }
 
+        public override void ExiledAction(GameData.PlayerInfo rolePlayer)
+        {
+            if (AmongUsClient.Instance.AmHost)
+            {
+                RPCOperator.Call(
+                    PlayerControl.LocalPlayer.NetId,
+                    RPCOperator.Command.BodyGuardResetShield,
+                    new List<byte>
+                    {
+                        rolePlayer.PlayerId
+                    });
+                RPCOperator.BodyGuardResetShield(
+                    rolePlayer.PlayerId);
+            }
+        }
+
+
         public override void RolePlayerKilledAction(
             PlayerControl rolePlayer, PlayerControl killerPlayer)
         {
-            RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
-                RPCOperator.Command.BodyGuardResetShield,
-                new List<byte>
-                {
-                    rolePlayer.PlayerId
-                });
-            RPCOperator.BodyGuardResetShield(
-                rolePlayer.PlayerId);
+            if (AmongUsClient.Instance.AmHost)
+            {
+                RPCOperator.Call(
+                    PlayerControl.LocalPlayer.NetId,
+                    RPCOperator.Command.BodyGuardResetShield,
+                    new List<byte>
+                    {
+                        rolePlayer.PlayerId
+                    });
+                RPCOperator.BodyGuardResetShield(
+                    rolePlayer.PlayerId);
+            }
 
             if (rolePlayer.PlayerId == killerPlayer.PlayerId) { return; }
 
