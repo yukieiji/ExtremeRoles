@@ -41,47 +41,19 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public override void ExiledAction(GameData.PlayerInfo rolePlayer)
         {
-            if (AmongUsClient.Instance.AmHost)
-            {
-                RPCOperator.Call(
-                    PlayerControl.LocalPlayer.NetId,
-                    RPCOperator.Command.BodyGuardResetShield,
-                    new List<byte>
-                    {
-                        rolePlayer.PlayerId
-                    });
-                RPCOperator.BodyGuardResetShield(
+            RPCOperator.BodyGuardResetShield(
                     rolePlayer.PlayerId);
-            }
         }
 
 
         public override void RolePlayerKilledAction(
             PlayerControl rolePlayer, PlayerControl killerPlayer)
         {
-            if (AmongUsClient.Instance.AmHost)
-            {
-                RPCOperator.Call(
-                    PlayerControl.LocalPlayer.NetId,
-                    RPCOperator.Command.BodyGuardResetShield,
-                    new List<byte>
-                    {
-                        rolePlayer.PlayerId
-                    });
-                RPCOperator.BodyGuardResetShield(
-                    rolePlayer.PlayerId);
-            }
+            RPCOperator.BodyGuardResetShield(
+                rolePlayer.PlayerId);
 
             if (rolePlayer.PlayerId == killerPlayer.PlayerId) { return; }
 
-            RPCOperator.Call(
-                rolePlayer.NetId,
-                RPCOperator.Command.ReplaceDeadReason,
-                new List<byte>
-                {
-                    rolePlayer.PlayerId,
-                    (byte)GameDataContainer.PlayerStatus.Martyrdom
-                });
             ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
                 rolePlayer.PlayerId,
                 GameDataContainer.PlayerStatus.Martyrdom);
