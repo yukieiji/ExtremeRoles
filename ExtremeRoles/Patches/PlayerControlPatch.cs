@@ -400,6 +400,8 @@ namespace ExtremeRoles.Patches
             var removedTask = new List<PlayerTask>();
             foreach (PlayerTask task in player.myTasks)
             {
+                if (task == null) { return; }
+
                 var textTask = task.gameObject.GetComponent<ImportantTextTask>();
                 if (textTask != null)
                 {
