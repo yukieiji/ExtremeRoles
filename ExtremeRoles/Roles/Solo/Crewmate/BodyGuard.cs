@@ -39,29 +39,21 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             false, true, false, false)
         { }
 
+        public override void ExiledAction(GameData.PlayerInfo rolePlayer)
+        {
+            RPCOperator.BodyGuardResetShield(
+                    rolePlayer.PlayerId);
+        }
+
+
         public override void RolePlayerKilledAction(
             PlayerControl rolePlayer, PlayerControl killerPlayer)
         {
-            RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
-                RPCOperator.Command.BodyGuardResetShield,
-                new List<byte>
-                {
-                    rolePlayer.PlayerId
-                });
             RPCOperator.BodyGuardResetShield(
                 rolePlayer.PlayerId);
 
             if (rolePlayer.PlayerId == killerPlayer.PlayerId) { return; }
 
-            RPCOperator.Call(
-                rolePlayer.NetId,
-                RPCOperator.Command.ReplaceDeadReason,
-                new List<byte>
-                {
-                    rolePlayer.PlayerId,
-                    (byte)GameDataContainer.PlayerStatus.Martyrdom
-                });
             ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
                 rolePlayer.PlayerId,
                 GameDataContainer.PlayerStatus.Martyrdom);
