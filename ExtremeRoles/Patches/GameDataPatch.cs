@@ -20,7 +20,9 @@ namespace ExtremeRoles.Patches
 					playerInfo.Tasks != null &&
 					playerInfo.Object &&
 					(PlayerControl.GameOptions.GhostsDoTasks || !playerInfo.IsDead) &&
-					playerInfo.Role && playerInfo.Role.TasksCountTowardProgress)
+					playerInfo.Role && 
+					playerInfo.Role.TasksCountTowardProgress &&
+					roles.ContainsKey(playerInfo.PlayerId))
 				{
 
 					if (!roles[playerInfo.PlayerId].HasTask)
