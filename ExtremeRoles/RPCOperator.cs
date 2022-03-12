@@ -42,7 +42,6 @@ namespace ExtremeRoles
             AgencySetNewTask,
 
             // インポスター
-            AssasinAddDead,
             AssasinVoteFor,
             CarrierCarryBody,
             CarrierSetBody,
@@ -356,12 +355,6 @@ namespace ExtremeRoles
         {
             Roles.Solo.Crewmate.Agency.ReplaceToNewTask(
                 callerId, index, taskIndex);
-        }
-
-        public static void AssasinAddDead(byte playersId)
-        {
-            Roles.Combination.Assassin.AddDead(
-                playersId);
         }
         public static void AssasinVoteFor(byte targetId)
         {

@@ -788,11 +788,6 @@ namespace ExtremeRoles.Patches
                     RPCOperator.AgencySetNewTask(
                         agencyCallerId, taskSetIndex, newTaskId);
                     break;
-
-                case RPCOperator.Command.AssasinAddDead:
-                    byte deadAssasinPlayerId = reader.ReadByte();
-                    RPCOperator.AssasinAddDead(deadAssasinPlayerId);
-                    break;
                 case RPCOperator.Command.AssasinVoteFor:
                     byte voteTargetId = reader.ReadByte();
                     RPCOperator.AssasinVoteFor(voteTargetId);

@@ -137,10 +137,6 @@ namespace ExtremeRoles.Roles.Combination
         {
             if (!this.isDeadForceMeeting || MeetingHud.Instance != null)
             {
-                RPCOperator.Call(
-                    rolePlayer.NetId,
-                    RPCOperator.Command.AssasinAddDead,
-                    new List<byte> { rolePlayer.PlayerId });
                 AddDead(rolePlayer.PlayerId);
                 return; 
             }
