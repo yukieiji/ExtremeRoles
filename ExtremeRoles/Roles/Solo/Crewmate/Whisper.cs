@@ -194,7 +194,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 TMPro.TextAlignmentOptions.BottomLeft);
 
             this.abilityOffTime = allOption[GetRoleOptionId((int)WhisperOption.AbilityOffTime)].GetValue();
-            this.abilityOnTime = allOption[GetRoleOptionId((int)WhisperOption.AbilityOffTime)].GetValue();
+            this.abilityOnTime = allOption[GetRoleOptionId((int)WhisperOption.AbilityOnTime)].GetValue();
 
         }
 
