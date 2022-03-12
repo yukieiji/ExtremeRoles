@@ -203,6 +203,7 @@ namespace ExtremeRoles.Roles.Combination
                 if (this.IsSameControlId(item.Value))
                 {
                     item.Value.Team = ExtremeRoleType.Neutral;
+                    item.Value.HasTask = false;
                 }
             }
         }
