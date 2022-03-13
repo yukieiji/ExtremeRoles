@@ -30,6 +30,7 @@ namespace ExtremeRoles
             if (isStrong)
             {
                 Instance = new PermutedCongruentialGenerator(
+                    (ulong)createLongStrongSeed(),
                     (ulong)createLongStrongSeed());
                 UnityEngine.Random.InitState(createStrongRandomSeed());
             }
