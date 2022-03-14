@@ -251,6 +251,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             // キャリアーのリセット処理
             carrierReset(targetPlayer, targetId);
 
+            jackalReset(targetPlayer, targetId);
+
             var sourceJackal = ExtremeRoleManager.GetSafeCastedRole<Jackal>(callerId);
             var newSidekick = new Sidekick(
                 sourceJackal.GameControlId,
@@ -356,6 +358,19 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
         }
 
+        private static void jackalReset(
+            PlayerControl targetPlayer,
+            byte targetPlayerId)
+        {
+            var jackal = ExtremeRoleManager.GetSafeCastedRole<Jackal>(targetPlayerId);
+
+            if (jackal != null)
+            {
+                jackal.SidekickToJackal(targetPlayer);
+            }
+
+        }
+
         private static void shapeshiftReset(
             PlayerControl targetPlayer,
             SingleRoleBase targetRole)
@@ -437,13 +452,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public override void ExiledAction(
             GameData.PlayerInfo rolePlayer)
         {
-            sidekickToJackal(rolePlayer.Object);
+            SidekickToJackal(rolePlayer.Object);
         }
 
         public override void RolePlayerKilledAction(
             PlayerControl rolePlayer, PlayerControl killerPlayer)
         {
-            sidekickToJackal(rolePlayer);
+            SidekickToJackal(rolePlayer);
         }
 
         public bool IsAbilityUse()
@@ -606,7 +621,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             return ((targetRole.Id == this.Id) || (targetRole.Id == ExtremeRoleId.Sidekick));
         }
 
-        private void sidekickToJackal(PlayerControl rolePlayer)
+        public void SidekickToJackal(PlayerControl rolePlayer)
         {
 
             if (this.SidekickPlayerId.Count == 0) { return; }
