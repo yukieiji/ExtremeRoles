@@ -502,12 +502,37 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             return;
         }
 
+        public void SidekickToJackal(PlayerControl rolePlayer)
+        {
+
+            if (this.SidekickPlayerId.Count == 0) { return; }
+
+            int numUpgrade = this.SidekickPlayerId.Count >= this.numUpgradeSidekick ?
+                this.numUpgradeSidekick : this.SidekickPlayerId.Count;
+
+            List<byte> updateSideKick = new List<byte>();
+
+            for (int i = 0; i < numUpgrade; ++i)
+            {
+                int useIndex = UnityEngine.Random.Range(0, this.SidekickPlayerId.Count);
+                byte targetPlayerId = this.SidekickPlayerId[useIndex];
+                this.SidekickPlayerId.Remove(targetPlayerId);
+
+                updateSideKick.Add(targetPlayerId);
+
+            }
+            foreach (var playerId in updateSideKick)
+            {
+                Sidekick.BecomeToJackal(rolePlayer.PlayerId, playerId);
+            }
+        }
+
 
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
             // JackalOption
-            this.CreateJackalOption(parentOps);
+            this.createJackalOption(parentOps);
 
             // SideKickOption
             this.SidekickOption = new SidekickOptionHolder(
@@ -546,7 +571,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.RoleAbilityInit();
         }
 
-        private void CreateJackalOption(CustomOptionBase parentOps)
+        private void createJackalOption(CustomOptionBase parentOps)
         {
 
             this.CreateAbilityCountOption(
@@ -619,31 +644,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private bool isSameJackalTeam(SingleRoleBase targetRole)
         {
             return ((targetRole.Id == this.Id) || (targetRole.Id == ExtremeRoleId.Sidekick));
-        }
-
-        public void SidekickToJackal(PlayerControl rolePlayer)
-        {
-
-            if (this.SidekickPlayerId.Count == 0) { return; }
-
-            int numUpgrade = this.SidekickPlayerId.Count >= this.numUpgradeSidekick ?
-                this.numUpgradeSidekick : this.SidekickPlayerId.Count;
-
-            List<byte> updateSideKick = new List<byte>();
-
-            for (int i = 0; i < numUpgrade; ++i)
-            {
-                int useIndex = UnityEngine.Random.Range(0, this.SidekickPlayerId.Count);
-                byte targetPlayerId = this.SidekickPlayerId[useIndex];
-                this.SidekickPlayerId.Remove(targetPlayerId);
-
-                updateSideKick.Add(targetPlayerId);
-
-            }
-            foreach (var playerId in updateSideKick)
-            {
-                Sidekick.BecomeToJackal(rolePlayer.PlayerId, playerId);
-            }
         }
     }
 
