@@ -6,7 +6,7 @@ namespace ExtremeRoles.Module
     {
         public readonly static Color DefaultColor = Color.white;
 
-        public readonly static Color LoverPink = new Color32(255, 20, 147, byte.MaxValue);
+        public readonly static Color LoverPink = new Color32(255, 107, 228, byte.MaxValue);
 
         public readonly static Color SheriffOrange = new Color32(255, 140, 0, byte.MaxValue);
         public readonly static Color MarineBlue = new Color32(0, 255, 255, byte.MaxValue);
@@ -16,7 +16,7 @@ namespace ExtremeRoles.Module
         public readonly static Color WatchdogViolet = new Color32(102, 51, 255, byte.MaxValue);
         public readonly static Color SupervisorLime = new Color32(51, 204, 102, byte.MaxValue);
         public readonly static Color BodyGuardOrange = new Color32(255, 204, 102, byte.MaxValue);
-        public readonly static Color WhisperMagenta = new Color32(255, 51, 255, byte.MaxValue);
+        public readonly static Color WhisperMagenta = new Color32(204, 0, 204, byte.MaxValue);
         public readonly static Color TimeMasterBlue = new Color32(112, 142, 239, byte.MaxValue);
         public readonly static Color AgencyYellowGreen = new Color32(181, 255, 20, byte.MaxValue);
         public readonly static Color BakaryWheatColor = new Color32(228, 163, 067, byte.MaxValue);
