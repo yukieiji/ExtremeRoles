@@ -274,7 +274,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                         PlayerControl.LocalPlayer.NetId,
-                        (byte)RPCOperator.Command.TaskMasterSetNewTask,
+                        (byte)RPCOperator.Command.AgencySetNewTask,
                         Hazel.SendOption.Reliable, -1);
                     writer.Write(rolePlayer.PlayerId);
                     writer.Write(i);
