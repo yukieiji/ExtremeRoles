@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using Hazel;
+
+using UnityEngine;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
@@ -11,10 +14,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
     public class SlaveDriver : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IRoleMurderPlayerHock
     {
   
-        private List<byte> specialAttackedPlayerIdList = new List<byte>();
+        private List<(byte, List<int>)> specialAttackResult = new List<(byte,  List<int>)>();
 
         private int noneTaskPlayerAttakBonusChance;
         private int noneTaskPlayerSpecialAttackChance;
+
+        private int setNetNormalTaskNum;
+        private int setLongTaskNum;
+        private int setCommonTaskNum;
 
         private float reduceRate;
         private float specialAttackReduceRate;
@@ -34,6 +41,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             SpecialAttackKillCoolReduceRate,
             NoneTaskPlayerAttakBonusChance,
             NoneTaskPlayerSpecialAttackChance,
+            AdditionalNormalTaskNum,
+            AdditionalLongTaskNum,
+            AdditionalCommonTaskNum,
         }
 
         public SlaveDriver() : base(
@@ -49,6 +59,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             PlayerControl rolePlayer,
             PlayerControl targetPlayer)
         {
+
+            this.rolePlayerId = rolePlayer.PlayerId;
+
             var targetRole = ExtremeRoleManager.GameRole[targetPlayer.PlayerId];
 
             this.specialAttackPlayerId = byte.MaxValue;
@@ -77,7 +90,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 
                 // ゲーム開始時から一定時間経過後、全体のタスク進捗から大きく離れてる or タスク完了数が0～2
                 if ((0.5f < diff || (0 <= targetPlayerCompTask && targetPlayerCompTask <= 2)) && 
-                    this.timer > this.timeLimit)
+                    this.timer >= this.timeLimit)
                 {
                     setSpecialAttackPlayerKillCool();
                     this.specialAttackPlayerId = targetPlayer.PlayerId;
@@ -183,11 +196,16 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.noneTaskPlayerSpecialAttackChance = allOption[
                 GetRoleOptionId((int)SlaveDriverOption.NoneTaskPlayerSpecialAttackChance)].GetValue();
 
-
+            this.setNetNormalTaskNum = allOption[
+               GetRoleOptionId((int)SlaveDriverOption.AdditionalNormalTaskNum)].GetValue();
+            this.setLongTaskNum = allOption[
+                GetRoleOptionId((int)SlaveDriverOption.AdditionalLongTaskNum)].GetValue();
+            this.setCommonTaskNum = allOption[
+                GetRoleOptionId((int)SlaveDriverOption.AdditionalCommonTaskNum)].GetValue();
 
 
             this.defaultKillCoolTime = this.KillCoolTime;
-            this.specialAttackedPlayerIdList.Clear();
+            this.specialAttackResult.Clear();
         }
 
         public void HockMuderPlayer(PlayerControl source, PlayerControl target)
@@ -195,7 +213,26 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             if (source.PlayerId == this.rolePlayerId &&
                 target.PlayerId == this.specialAttackPlayerId)
             {
-                this.specialAttackedPlayerIdList.Add(target.PlayerId);
+                List<int> newTaskId = new List<int>();
+
+                for (int i = 0; i < this.setLongTaskNum; ++i)
+                {
+                    newTaskId.Add(Helper.GameSystem.GetRandomLongTask());
+                }
+                for (int i = 0; i < this.setCommonTaskNum; ++i)
+                {
+                    newTaskId.Add(Helper.GameSystem.GetRandomCommonTaskId());
+                }
+                for (int i = 0; i < this.setNetNormalTaskNum; ++i)
+                {
+                    newTaskId.Add(Helper.GameSystem.GetRandomNormalTaskId());
+                }
+
+                var shuffled = newTaskId.OrderBy(
+                    item => RandomGenerator.Instance.Next()).ToList();
+
+                this.specialAttackResult.Add(
+                    (target.PlayerId, shuffled));
                 this.specialAttackPlayerId = byte.MaxValue;
             }
         }
@@ -215,13 +252,18 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             if (ShipStatus.Instance == null ||
                 GameData.Instance == null) { return; }
+            if (!ShipStatus.Instance.enabled) { return; }
 
-            if (!ShipStatus.Instance.enabled ||
-                this.specialAttackedPlayerIdList.Count == 0) { return; }
+            if (MeetingHud.Instance == null && this.timer < this.timeLimit)
+            {
+                this.timer += Time.fixedDeltaTime;
+            }
 
-            List<byte> removePlayerId = new List<byte>();
+            if (this.specialAttackResult.Count == 0) { return; }
 
-            foreach (byte playerId in this.specialAttackedPlayerIdList)
+            List<(byte, List<int>)> removeResult = new List<(byte, List<int>)>();
+
+            foreach (var (playerId, newTask) in this.specialAttackResult)
             {
                 var playerInfo = GameData.Instance.GetPlayerById(
                     playerId);
@@ -230,9 +272,34 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 {
                     if (playerInfo.Tasks[i].Complete)
                     {
+                        int taskIndex = newTask[0];
+                        newTask.RemoveAt(0);
+                        Helper.Logging.Debug($"SetTaskId:{taskIndex}");
+
+                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                            PlayerControl.LocalPlayer.NetId,
+                            (byte)RPCOperator.Command.SlaveDriverSetNewTask,
+                            Hazel.SendOption.Reliable, -1);
+                        writer.Write(rolePlayer.PlayerId);
+                        writer.Write(i);
+                        writer.Write(taskIndex);
+                        AmongUsClient.Instance.FinishRpcImmediately(writer);
+                        ReplaceToNewTask(rolePlayer.PlayerId, i, taskIndex);
+
+                        if (newTask.Count == 0)
+                        {
+                            removeResult.Add((playerId, newTask));
+                        }
+
                     }
                 }
             }
+
+            foreach (var item in removeResult)
+            {
+                this.specialAttackResult.Remove(item);
+            }
+
         }
 
         private void setBonusPlayerKillCool()
@@ -242,6 +309,41 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private void setSpecialAttackPlayerKillCool()
         {
             this.KillCoolTime = this.defaultKillCoolTime * ((100f - this.specialAttackReduceRate) / 100f);
+        }
+
+        public static void ReplaceToNewTask(byte playerId, int index, int taskIndex)
+        {
+
+            var player = Helper.Player.GetPlayerControlById(
+                playerId);
+            var playerInfo = GameData.Instance.GetPlayerById(
+                player.PlayerId);
+
+            byte taskId = (byte)taskIndex;
+
+            playerInfo.Tasks[index] = new GameData.TaskInfo(
+                taskId, (uint)index);
+            playerInfo.Tasks[index].Id = (uint)index;
+
+            NormalPlayerTask normalPlayerTask =
+                UnityEngine.Object.Instantiate(
+                    ShipStatus.Instance.GetTaskById(taskId),
+                    player.transform);
+            normalPlayerTask.Id = (uint)index;
+            normalPlayerTask.Owner = player;
+            normalPlayerTask.Initialize();
+
+            for (int i = 0; i < player.myTasks.Count; ++i)
+            {
+                if (player.myTasks[i].IsComplete)
+                {
+                    player.myTasks[i] = normalPlayerTask;
+                    break;
+                }
+            }
+
+            GameData.Instance.SetDirtyBit(
+                1U << (int)player.PlayerId);
         }
 
     }
