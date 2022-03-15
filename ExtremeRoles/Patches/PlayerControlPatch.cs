@@ -835,6 +835,13 @@ namespace ExtremeRoles.Patches
                     byte crackTarget = reader.ReadByte();
                     RPCOperator.CrackerCrackDeadBody(crackerId, crackTarget);
                     break;
+                case RPCOperator.Command.SlaveDriverSetNewTask:
+                    byte slaveDriverId = reader.ReadByte();
+                    int replaceTaskIndex = reader.ReadInt32();
+                    int setTaskId = reader.ReadInt32();
+                    RPCOperator.SlaveDriverSetNewTask(
+                        slaveDriverId, replaceTaskIndex, setTaskId);
+                    break;
                 case RPCOperator.Command.AliceShipBroken:
                     byte alicePlayerId = reader.ReadByte();
                     byte newTaskSetPlayerId = reader.ReadByte();
