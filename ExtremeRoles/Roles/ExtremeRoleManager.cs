@@ -46,6 +46,7 @@ namespace ExtremeRoles.Roles
         Cracker,
         Bomber,
         Mery,
+        SlaveDriver,
 
         Alice,
         Jackal,
