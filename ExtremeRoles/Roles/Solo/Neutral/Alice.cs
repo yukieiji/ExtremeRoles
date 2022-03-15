@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+using Hazel;
+
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.RoleAbilityButton;
 using ExtremeRoles.Resources;
@@ -88,67 +90,82 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public bool UseAbility()
         {
-            RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
-                RPCOperator.Command.AliceShipBroken,
-                new List<byte> { PlayerControl.LocalPlayer.PlayerId });
-            RPCOperator.AliceShipBroken(
-                PlayerControl.LocalPlayer.PlayerId);
+            foreach(var player in PlayerControl.AllPlayerControls)
+            {
+
+                var role = ExtremeRoleManager.GameRole[player.PlayerId];
+                if (!role.HasTask) { continue; }
+
+                List<int> addTaskId = new List<int>();
+
+                for (int i = 0; i < this.RevartLongTask; ++i)
+                {
+                    addTaskId.Add(Helper.GameSystem.GetRandomLongTask());
+                }
+                for (int i = 0; i < this.RevartCommonTask; ++i)
+                {
+                    addTaskId.Add(Helper.GameSystem.GetRandomCommonTaskId());
+                }
+                for (int i = 0; i < this.RevartNormalTask; ++i)
+                {
+                    addTaskId.Add(Helper.GameSystem.GetRandomNormalTaskId());
+                }
+
+                var shuffled = addTaskId.OrderBy(
+                    item => RandomGenerator.Instance.Next()).ToList();
+
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                        PlayerControl.LocalPlayer.NetId,
+                        (byte)RPCOperator.Command.AliceShipBroken,
+                        Hazel.SendOption.Reliable, -1);
+                writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                writer.Write(player.PlayerId);
+                writer.Write(addTaskId.Count);
+                foreach (int taskId in shuffled)
+                {
+                    writer.Write(taskId);
+                }
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
+
+                ShipBroken(
+                    PlayerControl.LocalPlayer.PlayerId,
+                    player.PlayerId, addTaskId);
+            }
 
             return true;
         }
 
-        public static void ShipBroken(byte callerId)
+        public static void ShipBroken(
+            byte callerId, byte targetPlayerId, List<int> addTaskId)
         {
+
             var alice = ExtremeRoleManager.GetSafeCastedRole<Alice>(callerId);
             if (alice == null) { return; }
-            var player = PlayerControl.LocalPlayer;
+            var player = Helper.Player.GetPlayerControlById(targetPlayerId);
             var playerInfo = GameData.Instance.GetPlayerById(
                 player.PlayerId);
-
-            List<int> addTaskId = new List<int> ();
             
-            for (int i = 0; i < alice.RevartLongTask; ++i)
+            for (int i = 0; i < playerInfo.Tasks.Count; ++i)
             {
-                addTaskId.Add(Helper.GameSystem.GetRandomLongTask());
-            }
-            for (int i = 0; i < alice.RevartCommonTask; ++i)
-            {
-                addTaskId.Add(Helper.GameSystem.GetRandomCommonTaskId());
-            }
-            for (int i = 0; i < alice.RevartNormalTask; ++i)
-            {
-                addTaskId.Add(Helper.GameSystem.GetRandomNormalTaskId());
-            }
+                if (addTaskId.Count == 0) { break; }
 
-            var shuffled = addTaskId.OrderBy(
-                item => RandomGenerator.Instance.Next()).ToList();
-            
-            for (int i = 0; i < player.myTasks.Count; ++i)
-            {
-                if (shuffled.Count == 0) { break; }
-
-                bool isTaskComp = player.myTasks[i].IsComplete;
-                if (isTaskComp)
+                if (playerInfo.Tasks[i].Complete)
                 {
-                    byte taskId = (byte)shuffled[0];
-                    shuffled.RemoveAt(0);
+                    byte taskId = (byte)addTaskId[0];
+                    addTaskId.RemoveAt(0);
 
-                    int index = (int)player.myTasks[i].Id;
-
-                    playerInfo.Tasks[index] = new GameData.TaskInfo(
-                        taskId, (uint)index);
-                    playerInfo.Tasks[index].Id = (uint)index;
+                    playerInfo.Tasks[i] = new GameData.TaskInfo(
+                        taskId, playerInfo.Tasks[i].Id);
 
                     NormalPlayerTask normalPlayerTask = 
                         UnityEngine.Object.Instantiate<NormalPlayerTask>(
                             ShipStatus.Instance.GetTaskById(taskId),
                             player.transform);
-                    normalPlayerTask.Id = (uint)index;
+                    normalPlayerTask.Id = playerInfo.Tasks[i].Id;
                     normalPlayerTask.Owner = player;
                     normalPlayerTask.Initialize();
 
-                    player.myTasks[i] = normalPlayerTask;
+                    player.myTasks[(int)playerInfo.Tasks[i].Id] = normalPlayerTask;
                 }
             }
             GameData.Instance.SetDirtyBit(
