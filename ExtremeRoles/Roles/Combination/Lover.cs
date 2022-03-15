@@ -24,11 +24,18 @@ namespace ExtremeRoles.Roles.Combination
         {
             IsNeutral,
             BecomNeutral,
+            BecomeNeutralLoverHasOtherVison,
+            BecomeNeutralLoverVison,
+            BecomeNeutralLoverApplyEnvironmentVisionEffect,
             DethWhenUnderAlive,
         }
 
         private bool becomeKiller = false;
         private int limit = 0;
+
+        private bool killerLoverHasOtherVison = false;
+        private float killerLoverVison = 0.0f;
+        private bool killerLoverIsApplyEnvironmentVisionEffect = false;
 
         public Lover() : base(
             ExtremeRoleId.Lover,
@@ -235,6 +242,7 @@ namespace ExtremeRoles.Roles.Combination
                 enableCheckOption: parentOps);
 
             CreateKillerOption(killerSetting);
+            killerVisionSetting(killerSetting);
 
             OptionHolder.AllOption[
                 GetManagerOptionId(
@@ -284,11 +292,52 @@ namespace ExtremeRoles.Roles.Combination
                 {
                     this.KillRange = baseOption.KillDistance;
                 }
+
+                this.killerLoverHasOtherVison = allOption[
+                    GetRoleOptionId((int)LoverOption.BecomeNeutralLoverHasOtherVison)].GetValue();
+                if (this.killerLoverHasOtherVison)
+                {
+                    this.killerLoverVison = allOption[
+                        GetRoleOptionId((int)LoverOption.BecomeNeutralLoverVison)].GetValue();
+                    this.killerLoverIsApplyEnvironmentVisionEffect = allOption[
+                        GetRoleOptionId((int)LoverOption.BecomeNeutralLoverApplyEnvironmentVisionEffect)].GetValue();
+                }
+                else
+                {
+                    this.killerLoverVison = this.Vison;
+                    this.killerLoverIsApplyEnvironmentVisionEffect = this.IsApplyEnvironmentVision;
+                }
+
             }
 
             this.limit = allOption[
                 GetRoleOptionId((int)LoverOption.DethWhenUnderAlive)].GetValue();
 
+        }
+
+        private void killerVisionSetting(
+            CustomOptionBase killerOpt)
+        {
+            var visonOption = CustomOption.Create(
+                GetRoleOptionId((int)LoverOption.BecomeNeutralLoverHasOtherVison),
+                string.Concat(
+                    this.RoleName,
+                    LoverOption.BecomeNeutralLoverHasOtherVison.ToString()),
+                false, killerOpt);
+
+            CustomOption.Create(
+                GetRoleOptionId((int)LoverOption.BecomeNeutralLoverVison),
+                string.Concat(
+                    this.RoleName,
+                    LoverOption.BecomeNeutralLoverVison.ToString()),
+                2f, 0.25f, 5.0f, 0.25f,
+                visonOption, format: "unitMultiplier");
+            CustomOption.Create(
+               GetRoleOptionId((int)LoverOption.BecomeNeutralLoverApplyEnvironmentVisionEffect),
+               string.Concat(
+                   this.RoleName,
+                   LoverOption.BecomeNeutralLoverApplyEnvironmentVisionEffect.ToString()),
+               this.IsCrewmate(), visonOption);
         }
 
         private void exiledUpdate(
@@ -343,6 +392,9 @@ namespace ExtremeRoles.Roles.Combination
             newKiller.Team = ExtremeRoleType.Neutral;
             newKiller.CanKill = true;
             newKiller.HasTask = false;
+            newKiller.HasOtherVison = newKiller.killerLoverHasOtherVison;
+            newKiller.Vison = newKiller.killerLoverVison;
+            newKiller.IsApplyEnvironmentVision = newKiller.killerLoverIsApplyEnvironmentVisionEffect;.
             newKiller.ChangeAllLoverToNeutral();
             ExtremeRoleManager.GameRole[targetId] = newKiller;
         }
