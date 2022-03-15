@@ -41,7 +41,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ExtremeRoleId.Sorcery,
             ExtremeRoleType.Impostor,
             ExtremeRoleId.Sorcery.ToString(),
-            Palette.ImpostorRed,
+            ColorPalette.SorceryViolet,
             false, true, false, false)
         { }
 
@@ -102,7 +102,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             return true;
         }
 
-        protected override void CreateSpecificOption(CustomOptionBase parentOps)
+        protected override void CreateSpecificOption(
+            CustomOptionBase parentOps)
         {
             throw new System.NotImplementedException();
         }
