@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+using Hazel;
+
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -8,17 +10,21 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 {
     public class SlaveDriver : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IRoleMurderPlayerHock
     {
-        private bool isResetMeeting;
-        private float reduceRate;
-        private float defaultKillCoolTime;
+  
+        private List<byte> specialAttackedPlayerIdList = new List<byte>();
 
-        private List<byte> specialAttackedPlayerIdList;
+        private int noneTaskPlayerAttakBonusChance;
+        private int noneTaskPlayerSpecialAttackChance;
+
+        private float reduceRate;
+        private float specialAttackReduceRate;
+        private float defaultKillCoolTime;
+        private float noneBonusKillTaskRange;
+        private float timeLimit;
+        private float timer;
 
         private byte rolePlayerId;
         private byte specialAttackPlayerId;
-
-        private float timeLimit;
-        private float timer;
 
         public enum SlaveDriverOption
         {
@@ -26,6 +32,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             KillCoolReduceRate,
             SpecialAttackTimer,
             SpecialAttackKillCoolReduceRate,
+            NoneTaskPlayerAttakBonusChance,
+            NoneTaskPlayerSpecialAttackChance,
         }
 
         public SlaveDriver() : base(
@@ -38,9 +46,60 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
 
         public override bool TryRolePlayerKillTo(
-            PlayerControl rolePlayer, PlayerControl targetPlayer)
+            PlayerControl rolePlayer,
+            PlayerControl targetPlayer)
         {
-            
+            var targetRole = ExtremeRoleManager.GameRole[targetPlayer.PlayerId];
+
+            this.specialAttackPlayerId = byte.MaxValue;
+            this.KillCoolTime = this.defaultKillCoolTime;
+
+            if (targetRole.HasTask)
+            {
+                int targetPlayerTaskNum = targetPlayer.Data.Tasks.Count;
+                int targetPlayerCompTask = 0;
+
+                foreach (var task in targetPlayer.Data.Tasks)
+                {
+                    if (task.Complete)
+                    {
+                        ++targetPlayerCompTask;
+                    }
+                }
+
+                float targetPlayerTaskGage = (float)targetPlayerCompTask / (float)targetPlayerTaskNum;
+
+                int totalTaskNum = GameData.Instance.TotalTasks;
+                int compTaskNum = GameData.Instance.CompletedTasks;
+                float totalTaskGauge = (float)compTaskNum / (float)totalTaskNum;
+
+                float diff = totalTaskGauge - targetPlayerTaskGage;
+                
+                // ゲーム開始時から一定時間経過後、全体のタスク進捗から大きく離れてる or タスク完了数が0～2
+                if ((0.5f < diff || (0 <= targetPlayerCompTask && targetPlayerCompTask <= 2)) && 
+                    this.timer > this.timeLimit)
+                {
+                    setSpecialAttackPlayerKillCool();
+                    this.specialAttackPlayerId = targetPlayer.PlayerId;
+                }
+                else if (totalTaskGauge > (targetPlayerTaskGage + this.noneBonusKillTaskRange))
+                {
+                    setBonusPlayerKillCool();
+                }
+            }
+            else
+            {
+                int chance = UnityEngine.Random.Range(0, 100);
+                if (chance < this.noneTaskPlayerSpecialAttackChance)
+                {
+                    setSpecialAttackPlayerKillCool();
+                }
+                else if (chance < this.noneTaskPlayerAttakBonusChance)
+                {
+                    setBonusPlayerKillCool();
+                }
+            }
+
             return true;
         }
 
@@ -79,6 +138,23 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     SlaveDriverOption.SpecialAttackKillCoolReduceRate.ToString()),
                 50, 25, 75, 1, parentOps,
                 format: "unitPercentage");
+
+            CustomOption.Create(
+                GetRoleOptionId((int)SlaveDriverOption.NoneTaskPlayerAttakBonusChance),
+                string.Concat(
+                    this.RoleName,
+                    SlaveDriverOption.NoneTaskPlayerAttakBonusChance.ToString()),
+                50, 20, 100, 1, parentOps,
+                format: "unitSeconds");
+
+            CustomOption.Create(
+                GetRoleOptionId((int)SlaveDriverOption.NoneTaskPlayerSpecialAttackChance),
+                string.Concat(
+                    this.RoleName,
+                    SlaveDriverOption.NoneTaskPlayerSpecialAttackChance.ToString()),
+                10, 5, 25, 1, parentOps,
+                format: "unitSeconds");
+
         }
 
         protected override void RoleSpecificInit()
@@ -92,10 +168,26 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             var allOption = OptionHolder.AllOption;
 
+            this.noneBonusKillTaskRange = (float)allOption[
+                GetRoleOptionId((int)SlaveDriverOption.TaskProgressRange)].GetValue() / 100f;
+
             this.reduceRate = allOption[
                 GetRoleOptionId((int)SlaveDriverOption.KillCoolReduceRate)].GetValue();
+            this.specialAttackReduceRate = allOption[
+                GetRoleOptionId((int)SlaveDriverOption.SpecialAttackKillCoolReduceRate)].GetValue();
+            this.timeLimit = allOption[
+                GetRoleOptionId((int)SlaveDriverOption.SpecialAttackTimer)].GetValue();
+
+            this.noneTaskPlayerAttakBonusChance = allOption[
+                GetRoleOptionId((int)SlaveDriverOption.NoneTaskPlayerAttakBonusChance)].GetValue();
+            this.noneTaskPlayerSpecialAttackChance = allOption[
+                GetRoleOptionId((int)SlaveDriverOption.NoneTaskPlayerSpecialAttackChance)].GetValue();
+
+
+
 
             this.defaultKillCoolTime = this.KillCoolTime;
+            this.specialAttackedPlayerIdList.Clear();
         }
 
         public void HockMuderPlayer(PlayerControl source, PlayerControl target)
@@ -103,7 +195,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             if (source.PlayerId == this.rolePlayerId &&
                 target.PlayerId == this.specialAttackPlayerId)
             {
-
+                this.specialAttackedPlayerIdList.Add(target.PlayerId);
+                this.specialAttackPlayerId = byte.MaxValue;
             }
         }
 
@@ -115,11 +208,41 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void ResetOnMeetingStart()
         {
             this.KillCoolTime = this.defaultKillCoolTime;
+            this.specialAttackPlayerId = byte.MaxValue;
         }
 
         public void Update(PlayerControl rolePlayer)
         {
-            throw new System.NotImplementedException();
+            if (ShipStatus.Instance == null ||
+                GameData.Instance == null) { return; }
+
+            if (!ShipStatus.Instance.enabled ||
+                this.specialAttackedPlayerIdList.Count == 0) { return; }
+
+            List<byte> removePlayerId = new List<byte>();
+
+            foreach (byte playerId in this.specialAttackedPlayerIdList)
+            {
+                var playerInfo = GameData.Instance.GetPlayerById(
+                    playerId);
+
+                for (int i = 0; i < playerInfo.Tasks.Count; ++i)
+                {
+                    if (playerInfo.Tasks[i].Complete)
+                    {
+                    }
+                }
+            }
         }
+
+        private void setBonusPlayerKillCool()
+        {
+            this.KillCoolTime = this.defaultKillCoolTime * ((100f - this.reduceRate) / 100f);
+        }
+        private void setSpecialAttackPlayerKillCool()
+        {
+            this.KillCoolTime = this.defaultKillCoolTime * ((100f - this.specialAttackReduceRate) / 100f);
+        }
+
     }
 }
