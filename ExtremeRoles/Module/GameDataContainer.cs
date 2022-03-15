@@ -643,7 +643,9 @@ namespace ExtremeRoles.Module
         {
             private bool isChangeCooking = false;
 
-            private float timer = 0; 
+            private float timer = 0.0f;
+            private float goodTime = 0.0f;
+            private float badTime = 0.0f;
             private bool isUnion = false;
             private HashSet<byte> aliveBakary = new HashSet<byte> ();
 
@@ -665,11 +667,11 @@ namespace ExtremeRoles.Module
                     return Helper.Translation.GetString("goodBread");
                 }
 
-                if (this.timer < 60f)
+                if (this.timer < this.goodTime)
                 {
                     return Helper.Translation.GetString("rawBread");
                 }
-                else if (60f <= this.timer && this.timer < 120f)
+                else if (this.goodTime <= this.timer && this.timer < this.badTime)
                 {
                     return Helper.Translation.GetString("goodBread");
                 }
@@ -692,9 +694,14 @@ namespace ExtremeRoles.Module
                 this.timer = 0;
             }
 
-            public void SetCooking(bool condition)
+            public void SetCookingCondition(
+                float goodCookTime,
+                float badCookTime,
+                bool isChangeCooking)
             {
-                this.isChangeCooking = condition;
+                this.goodTime = goodCookTime;
+                this.badTime = badCookTime;
+                this.isChangeCooking = isChangeCooking;
             }
 
             public void Update()
