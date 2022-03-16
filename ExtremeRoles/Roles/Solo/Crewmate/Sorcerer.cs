@@ -11,7 +11,7 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class Sorcery : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHock, IRoleUpdate
+    public class Sorcerer : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHock, IRoleUpdate
     {
         public enum SorceryOption
         {
@@ -37,11 +37,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
         private RoleAbilityButtonBase curseButton;
 
-        public Sorcery() : base(
-            ExtremeRoleId.Sorcery,
+        public Sorcerer() : base(
+            ExtremeRoleId.Sorcerer,
             ExtremeRoleType.Impostor,
-            ExtremeRoleId.Sorcery.ToString(),
-            ColorPalette.SorceryViolet,
+            ExtremeRoleId.Sorcerer.ToString(),
+            ColorPalette.SorcererViolet,
             false, true, false, false)
         { }
 
