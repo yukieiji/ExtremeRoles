@@ -775,11 +775,18 @@ namespace ExtremeRoles.Patches
                         timeMasterResetPlayerId);
                     break;
                 case RPCOperator.Command.AgencyTakeTask:
-                    byte agencyPlayerId = reader.ReadByte();
                     byte agencyTargetPlayerId = reader.ReadByte();
-                    byte taskNum = reader.ReadByte();
+                    int getTaskNum = reader.ReadInt32();
+
+                    List<int> getTaskId = new List<int> ();
+                    
+                    for (int i = 0; i < getTaskNum; ++i)
+                    {
+                        getTaskId.Add(reader.ReadInt32());
+                    }
+
                     RPCOperator.AgencyTakeTask(
-                        agencyPlayerId, agencyTargetPlayerId, taskNum);
+                        agencyTargetPlayerId, getTaskId);
                     break;
                 case RPCOperator.Command.AgencySetNewTask:
                     byte agencyCallerId = reader.ReadByte();

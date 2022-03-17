@@ -52,67 +52,24 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         { }
 
         public static void TakeTargetPlayerTask(
-            byte rolePlayerId, byte targetPlayerId, byte getTaskNum)
+            byte targetPlayerId, List<int> removeTaskId)
         {
 
             PlayerControl targetPlayer = Player.GetPlayerControlById(
                 targetPlayerId);
-            var agency = ExtremeRoleManager.GetSafeCastedRole<Agency>(rolePlayerId);
-            if (agency == null) { return; }
 
-
-            var shuffleTaskIndex = Enumerable.Range(
-                0, targetPlayer.myTasks.Count).ToList().OrderBy(
-                    item => RandomGenerator.Instance.Next()).ToList();
-
-            int takeTask = 0;
-            
-            foreach (int i in shuffleTaskIndex)
+            foreach (PlayerTask task in targetPlayer.myTasks)
             {
-                if (takeTask >= (int)getTaskNum) { break; }
-                if (targetPlayer.myTasks[i].IsComplete) { continue; }
-
-                var replaceTask = targetPlayer.myTasks[i];
-                var importantText = replaceTask.gameObject.GetComponent<ImportantTextTask>();
-
-                if (importantText != null) { continue; }
-
-                TaskTypes type = replaceTask.TaskType;
-                if (type == TaskTypes.FixLights ||
-                    type == TaskTypes.FixComms ||
-                    type == TaskTypes.StopCharles ||
-                    type == TaskTypes.ResetSeismic ||
-                    type == TaskTypes.ResetReactor ||
-                    type == TaskTypes.RestoreOxy) { continue; }
-
-                GameData.TaskInfo taskInfo = targetPlayer.Data.Tasks[(int)replaceTask.Id];
-                int taskId = (int)taskInfo.TypeId;
-
-                if (ShipStatus.Instance.CommonTasks.FirstOrDefault(
-                    (NormalPlayerTask t) => t.Index == (int)taskId) != null)
+                NormalPlayerTask normalPlayerTask = task as NormalPlayerTask;
+                if (normalPlayerTask == null) { continue; }
+                
+                if (removeTaskId.Contains((int)normalPlayerTask.Id))
                 {
-                    agency.TakeTask.Add(TakeTaskType.Common);
+                    targetPlayer.CompleteTask(normalPlayerTask.Id);
+                    normalPlayerTask.OnRemove();
                 }
-                else if (ShipStatus.Instance.LongTasks.FirstOrDefault(
-                    (NormalPlayerTask t) => t.Index == (int)taskId) != null)
-                {
-                    agency.TakeTask.Add(TakeTaskType.Long);
-                }
-                else if (ShipStatus.Instance.NormalTasks.FirstOrDefault(
-                    (NormalPlayerTask t) => t.Index == (int)taskId) != null)
-                {
-                    agency.TakeTask.Add(TakeTaskType.Normal);
-                }
-
-                ++takeTask;
-                targetPlayer.CompleteTask(replaceTask.Id);
-                replaceTask.OnRemove();
             }
 
-            if (PlayerControl.LocalPlayer.PlayerId != rolePlayerId)
-            {
-                agency.TakeTask.Clear();
-            }
             GameData.Instance.SetDirtyBit(
                 1U << (int)targetPlayer.PlayerId);
         }
@@ -194,17 +151,60 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             byte playerId = PlayerControl.LocalPlayer.PlayerId;
 
-            RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
-                RPCOperator.Command.AgencyTakeTask,
-                new List<byte>
+            GameData.PlayerInfo targetPlayerInfo = GameData.Instance.GetPlayerById(
+                this.TargetPlayer);
+
+            var shuffleTaskIndex = Enumerable.Range(
+                0, targetPlayerInfo.Tasks.Count).ToList().OrderBy(
+                    item => RandomGenerator.Instance.Next()).ToList();
+            int takeTask = 0;
+            List<int> getTaskId = new List<int>();
+
+            foreach (int i in shuffleTaskIndex)
+            {
+                if (takeTask >= takeNum) { break; }
+
+                if (targetPlayerInfo.Tasks[i].Complete) { continue; }
+
+                int taskId = (int)targetPlayerInfo.Tasks[i].TypeId;
+
+                if (ShipStatus.Instance.CommonTasks.FirstOrDefault(
+                    (NormalPlayerTask t) => t.Index == taskId) != null)
                 {
-                    playerId,
-                    this.TargetPlayer,
-                    (byte)takeNum,
-                });
-            RPCOperator.AgencyTakeTask(
-                playerId, this.TargetPlayer, (byte)takeNum);
+                    this.TakeTask.Add(TakeTaskType.Common);
+                }
+                else if (ShipStatus.Instance.LongTasks.FirstOrDefault(
+                    (NormalPlayerTask t) => t.Index == taskId) != null)
+                {
+                    this.TakeTask.Add(TakeTaskType.Long);
+                }
+                else if (ShipStatus.Instance.NormalTasks.FirstOrDefault(
+                    (NormalPlayerTask t) => t.Index == taskId) != null)
+                {
+                    this.TakeTask.Add(TakeTaskType.Normal);
+                }
+
+                getTaskId.Add((int)targetPlayerInfo.Tasks[i].Id);
+            }
+
+            if (this.TakeTask.Count == 0) { return true; }
+
+
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                PlayerControl.LocalPlayer.NetId,
+                (byte)RPCOperator.Command.AgencyTakeTask,
+                Hazel.SendOption.Reliable, -1);
+            writer.Write(this.TargetPlayer);
+            writer.Write(getTaskId.Count);
+
+            foreach (int taskid in getTaskId)
+            {
+                writer.Write(taskid);
+            }
+            
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+
+            TakeTargetPlayerTask(this.TargetPlayer, getTaskId);
             this.TargetPlayer = byte.MaxValue;
 
             return true;

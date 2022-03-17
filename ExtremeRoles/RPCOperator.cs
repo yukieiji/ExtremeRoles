@@ -345,10 +345,10 @@ namespace ExtremeRoles
             Roles.Solo.Crewmate.TimeMaster.ResetMeeting(playerId);
         }
         public static void AgencyTakeTask(
-            byte playerId, byte targetPlayerId, byte taskNum)
+            byte targetPlayerId, List<int> getTaskId)
         {
             Roles.Solo.Crewmate.Agency.TakeTargetPlayerTask(
-                playerId, targetPlayerId, taskNum);
+                targetPlayerId, getTaskId);
         }
         public static void AgencySetNewTask(
             byte callerId, int index, int taskIndex)
