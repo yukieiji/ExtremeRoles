@@ -60,13 +60,15 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             foreach (PlayerTask task in targetPlayer.myTasks)
             {
-                NormalPlayerTask normalPlayerTask = task as NormalPlayerTask;
-                if (normalPlayerTask == null) { continue; }
-                
-                if (removeTaskId.Contains((int)normalPlayerTask.Id))
+                if (task == null) { continue; }
+
+                var textTask = task.gameObject.GetComponent<ImportantTextTask>();
+                if (textTask != null) { continue; }
+
+                if (removeTaskId.Contains((int)task.Id))
                 {
-                    targetPlayer.CompleteTask(normalPlayerTask.Id);
-                    normalPlayerTask.OnRemove();
+                    targetPlayer.CompleteTask(task.Id);
+                    task.OnRemove();
                 }
             }
 
@@ -183,11 +185,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 {
                     this.TakeTask.Add(TakeTaskType.Normal);
                 }
-
+                ++takeTask;
                 getTaskId.Add((int)targetPlayerInfo.Tasks[i].Id);
             }
 
-            if (this.TakeTask.Count == 0) { return true; }
+            if (getTaskId.Count == 0) { return true; }
 
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
