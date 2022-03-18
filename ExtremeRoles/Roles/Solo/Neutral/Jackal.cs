@@ -242,67 +242,16 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             // プレイヤーのリセット処理
             if (PlayerControl.LocalPlayer.PlayerId == targetId)
             {
-                var meetingResetRole = targetRole as IRoleResetMeeting;
-                if (meetingResetRole != null)
-                {
-                    meetingResetRole.ResetOnMeetingStart();
-                }
-                var abilityRole = targetRole as IRoleAbility;
-                if (abilityRole != null)
-                {
-                    abilityRole.ResetOnMeetingStart();
-                }
-
-                var multiAssignRole = targetRole as MultiAssignRoleBase;
-                if (multiAssignRole != null)
-                {
-                    if (multiAssignRole.AnotherRole != null)
-                    {
-                        meetingResetRole = multiAssignRole.AnotherRole as IRoleResetMeeting;
-                        if (meetingResetRole != null)
-                        {
-                            meetingResetRole.ResetOnMeetingStart();
-                        }
-
-                        abilityRole = multiAssignRole.AnotherRole as IRoleAbility;
-                        if (abilityRole != null)
-                        {
-                            abilityRole.ResetOnMeetingStart();
-                        }
-                    }
-                }
+                abilityReset(targetRole);
             }
 
             // シェイプシフターのリセット処理
-            if (targetRole.IsVanillaRole())
-            {
-                if (((VanillaRoleWrapper)targetRole).VanilaRoleId == RoleTypes.Shapeshifter)
-                {
-                    targetPlayer.Shapeshift(targetPlayer, false);
-                }
-            }
+            shapeshiftReset(targetPlayer, targetRole);
 
             // キャリアーのリセット処理
-            var carrier = ExtremeRoleManager.GetSafeCastedRole<Impostor.Carrier>(targetId);
-            if (carrier != null)
-            {
-                if (carrier.CarringBody != null)
-                {
-                    carrier.CarringBody.transform.parent = null;
-                    carrier.CarringBody.transform.position = targetPlayer.GetTruePosition() + new Vector2(0.15f, 0.15f);
-                    carrier.CarringBody.transform.position -= new Vector3(0.0f, 0.0f, 0.01f);
+            carrierReset(targetPlayer, targetId);
 
-
-                    Color color = carrier.CarringBody.bodyRenderer.color;
-                    carrier.CarringBody.bodyRenderer.color = new Color(
-                        color.r, color.g, color.b, carrier.AlphaValue);
-                    if (!carrier.CanReportOnCarry)
-                    {
-                        carrier.CarringBody.GetComponentInChildren<BoxCollider2D>().enabled = true;
-                    }
-                    carrier.CarringBody = null;
-                }
-            }
+            jackalReset(targetPlayer, targetId);
 
             var sourceJackal = ExtremeRoleManager.GetSafeCastedRole<Jackal>(callerId);
             var newSidekick = new Sidekick(
@@ -348,6 +297,94 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
 
         }
+
+        private static void abilityReset(
+            SingleRoleBase targetRole)
+        {
+            var meetingResetRole = targetRole as IRoleResetMeeting;
+            if (meetingResetRole != null)
+            {
+                meetingResetRole.ResetOnMeetingStart();
+            }
+            var abilityRole = targetRole as IRoleAbility;
+            if (abilityRole != null)
+            {
+                abilityRole.ResetOnMeetingStart();
+            }
+
+            var multiAssignRole = targetRole as MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    meetingResetRole = multiAssignRole.AnotherRole as IRoleResetMeeting;
+                    if (meetingResetRole != null)
+                    {
+                        meetingResetRole.ResetOnMeetingStart();
+                    }
+
+                    abilityRole = multiAssignRole.AnotherRole as IRoleAbility;
+                    if (abilityRole != null)
+                    {
+                        abilityRole.ResetOnMeetingStart();
+                    }
+                }
+            }
+        }
+
+        private static void carrierReset(
+            PlayerControl targetPlayer,
+            byte targetPlayerId)
+        {
+            var carrier = ExtremeRoleManager.GetSafeCastedRole<Impostor.Carrier>(targetPlayerId);
+            if (carrier != null)
+            {
+                if (carrier.CarringBody != null)
+                {
+                    carrier.CarringBody.transform.parent = null;
+                    carrier.CarringBody.transform.position = targetPlayer.GetTruePosition() + new Vector2(0.15f, 0.15f);
+                    carrier.CarringBody.transform.position -= new Vector3(0.0f, 0.0f, 0.01f);
+
+
+                    Color color = carrier.CarringBody.bodyRenderer.color;
+                    carrier.CarringBody.bodyRenderer.color = new Color(
+                        color.r, color.g, color.b, carrier.AlphaValue);
+                    if (!carrier.CanReportOnCarry)
+                    {
+                        carrier.CarringBody.GetComponentInChildren<BoxCollider2D>().enabled = true;
+                    }
+                    carrier.CarringBody = null;
+                }
+            }
+        }
+
+        private static void jackalReset(
+            PlayerControl targetPlayer,
+            byte targetPlayerId)
+        {
+            var jackal = ExtremeRoleManager.GetSafeCastedRole<Jackal>(targetPlayerId);
+
+            if (jackal != null)
+            {
+                jackal.SidekickToJackal(targetPlayer);
+            }
+
+        }
+
+        private static void shapeshiftReset(
+            PlayerControl targetPlayer,
+            SingleRoleBase targetRole)
+        {
+            // シェイプシフターのリセット処理
+            if (targetRole.IsVanillaRole())
+            {
+                if (((VanillaRoleWrapper)targetRole).VanilaRoleId == RoleTypes.Shapeshifter)
+                {
+                    targetPlayer.Shapeshift(targetPlayer, false);
+                }
+            }
+        }
+
 
         public int GetRoleOptionId(JackalOption option) => GetRoleOptionId((int)option);
 
@@ -415,13 +452,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public override void ExiledAction(
             GameData.PlayerInfo rolePlayer)
         {
-            sidekickToJackal(rolePlayer.Object);
+            SidekickToJackal(rolePlayer.Object);
         }
 
         public override void RolePlayerKilledAction(
             PlayerControl rolePlayer, PlayerControl killerPlayer)
         {
-            sidekickToJackal(rolePlayer);
+            SidekickToJackal(rolePlayer);
         }
 
         public bool IsAbilityUse()
@@ -465,12 +502,37 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             return;
         }
 
+        public void SidekickToJackal(PlayerControl rolePlayer)
+        {
+
+            if (this.SidekickPlayerId.Count == 0) { return; }
+
+            int numUpgrade = this.SidekickPlayerId.Count >= this.numUpgradeSidekick ?
+                this.numUpgradeSidekick : this.SidekickPlayerId.Count;
+
+            List<byte> updateSideKick = new List<byte>();
+
+            for (int i = 0; i < numUpgrade; ++i)
+            {
+                int useIndex = UnityEngine.Random.Range(0, this.SidekickPlayerId.Count);
+                byte targetPlayerId = this.SidekickPlayerId[useIndex];
+                this.SidekickPlayerId.Remove(targetPlayerId);
+
+                updateSideKick.Add(targetPlayerId);
+
+            }
+            foreach (var playerId in updateSideKick)
+            {
+                Sidekick.BecomeToJackal(rolePlayer.PlayerId, playerId);
+            }
+        }
+
 
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
             // JackalOption
-            this.CreateJackalOption(parentOps);
+            this.createJackalOption(parentOps);
 
             // SideKickOption
             this.SidekickOption = new SidekickOptionHolder(
@@ -509,7 +571,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.RoleAbilityInit();
         }
 
-        private void CreateJackalOption(CustomOptionBase parentOps)
+        private void createJackalOption(CustomOptionBase parentOps)
         {
 
             this.CreateAbilityCountOption(
@@ -582,31 +644,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private bool isSameJackalTeam(SingleRoleBase targetRole)
         {
             return ((targetRole.Id == this.Id) || (targetRole.Id == ExtremeRoleId.Sidekick));
-        }
-
-        private void sidekickToJackal(PlayerControl rolePlayer)
-        {
-
-            if (this.SidekickPlayerId.Count == 0) { return; }
-
-            int numUpgrade = this.SidekickPlayerId.Count >= this.numUpgradeSidekick ?
-                this.numUpgradeSidekick : this.SidekickPlayerId.Count;
-
-            List<byte> updateSideKick = new List<byte>();
-
-            for (int i = 0; i < numUpgrade; ++i)
-            {
-                int useIndex = UnityEngine.Random.Range(0, this.SidekickPlayerId.Count);
-                byte targetPlayerId = this.SidekickPlayerId[useIndex];
-                this.SidekickPlayerId.Remove(targetPlayerId);
-
-                updateSideKick.Add(targetPlayerId);
-
-            }
-            foreach (var playerId in updateSideKick)
-            {
-                Sidekick.BecomeToJackal(rolePlayer.PlayerId, playerId);
-            }
         }
     }
 

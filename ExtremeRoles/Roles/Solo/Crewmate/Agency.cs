@@ -52,67 +52,26 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         { }
 
         public static void TakeTargetPlayerTask(
-            byte rolePlayerId, byte targetPlayerId, byte getTaskNum)
+            byte targetPlayerId, List<int> removeTaskId)
         {
 
             PlayerControl targetPlayer = Player.GetPlayerControlById(
                 targetPlayerId);
-            var agency = ExtremeRoleManager.GetSafeCastedRole<Agency>(rolePlayerId);
-            if (agency == null) { return; }
 
-
-            var shuffleTaskIndex = Enumerable.Range(
-                0, targetPlayer.myTasks.Count).ToList().OrderBy(
-                    item => RandomGenerator.Instance.Next()).ToList();
-
-            int takeTask = 0;
-            
-            foreach (int i in shuffleTaskIndex)
+            foreach (PlayerTask task in targetPlayer.myTasks)
             {
-                if (takeTask >= (int)getTaskNum) { break; }
-                if (targetPlayer.myTasks[i].IsComplete) { continue; }
+                if (task == null) { continue; }
 
-                var replaceTask = targetPlayer.myTasks[i];
-                var importantText = replaceTask.gameObject.GetComponent<ImportantTextTask>();
+                var textTask = task.gameObject.GetComponent<ImportantTextTask>();
+                if (textTask != null) { continue; }
 
-                if (importantText != null) { continue; }
-
-                TaskTypes type = replaceTask.TaskType;
-                if (type == TaskTypes.FixLights ||
-                    type == TaskTypes.FixComms ||
-                    type == TaskTypes.StopCharles ||
-                    type == TaskTypes.ResetSeismic ||
-                    type == TaskTypes.ResetReactor ||
-                    type == TaskTypes.RestoreOxy) { continue; }
-
-                GameData.TaskInfo taskInfo = targetPlayer.Data.Tasks[(int)replaceTask.Id];
-                int taskId = (int)taskInfo.TypeId;
-
-                if (ShipStatus.Instance.CommonTasks.FirstOrDefault(
-                    (NormalPlayerTask t) => t.Index == (int)taskId) != null)
+                if (removeTaskId.Contains((int)task.Id))
                 {
-                    agency.TakeTask.Add(TakeTaskType.Common);
+                    targetPlayer.CompleteTask(task.Id);
+                    task.OnRemove();
                 }
-                else if (ShipStatus.Instance.LongTasks.FirstOrDefault(
-                    (NormalPlayerTask t) => t.Index == (int)taskId) != null)
-                {
-                    agency.TakeTask.Add(TakeTaskType.Long);
-                }
-                else if (ShipStatus.Instance.NormalTasks.FirstOrDefault(
-                    (NormalPlayerTask t) => t.Index == (int)taskId) != null)
-                {
-                    agency.TakeTask.Add(TakeTaskType.Normal);
-                }
-
-                ++takeTask;
-                targetPlayer.CompleteTask(replaceTask.Id);
-                replaceTask.OnRemove();
             }
 
-            if (PlayerControl.LocalPlayer.PlayerId != rolePlayerId)
-            {
-                agency.TakeTask.Clear();
-            }
             GameData.Instance.SetDirtyBit(
                 1U << (int)targetPlayer.PlayerId);
         }
@@ -194,17 +153,60 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             byte playerId = PlayerControl.LocalPlayer.PlayerId;
 
-            RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
-                RPCOperator.Command.AgencyTakeTask,
-                new List<byte>
+            GameData.PlayerInfo targetPlayerInfo = GameData.Instance.GetPlayerById(
+                this.TargetPlayer);
+
+            var shuffleTaskIndex = Enumerable.Range(
+                0, targetPlayerInfo.Tasks.Count).ToList().OrderBy(
+                    item => RandomGenerator.Instance.Next()).ToList();
+            int takeTask = 0;
+            List<int> getTaskId = new List<int>();
+
+            foreach (int i in shuffleTaskIndex)
+            {
+                if (takeTask >= takeNum) { break; }
+
+                if (targetPlayerInfo.Tasks[i].Complete) { continue; }
+
+                int taskId = (int)targetPlayerInfo.Tasks[i].TypeId;
+
+                if (ShipStatus.Instance.CommonTasks.FirstOrDefault(
+                    (NormalPlayerTask t) => t.Index == taskId) != null)
                 {
-                    playerId,
-                    this.TargetPlayer,
-                    (byte)takeNum,
-                });
-            RPCOperator.AgencyTakeTask(
-                playerId, this.TargetPlayer, (byte)takeNum);
+                    this.TakeTask.Add(TakeTaskType.Common);
+                }
+                else if (ShipStatus.Instance.LongTasks.FirstOrDefault(
+                    (NormalPlayerTask t) => t.Index == taskId) != null)
+                {
+                    this.TakeTask.Add(TakeTaskType.Long);
+                }
+                else if (ShipStatus.Instance.NormalTasks.FirstOrDefault(
+                    (NormalPlayerTask t) => t.Index == taskId) != null)
+                {
+                    this.TakeTask.Add(TakeTaskType.Normal);
+                }
+                ++takeTask;
+                getTaskId.Add((int)targetPlayerInfo.Tasks[i].Id);
+            }
+
+            if (getTaskId.Count == 0) { return true; }
+
+
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                PlayerControl.LocalPlayer.NetId,
+                (byte)RPCOperator.Command.AgencyTakeTask,
+                Hazel.SendOption.Reliable, -1);
+            writer.Write(this.TargetPlayer);
+            writer.Write(getTaskId.Count);
+
+            foreach (int taskid in getTaskId)
+            {
+                writer.Write(taskid);
+            }
+            
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+
+            TakeTargetPlayerTask(this.TargetPlayer, getTaskId);
             this.TargetPlayer = byte.MaxValue;
 
             return true;
@@ -274,7 +276,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                         PlayerControl.LocalPlayer.NetId,
-                        (byte)RPCOperator.Command.TaskMasterSetNewTask,
+                        (byte)RPCOperator.Command.AgencySetNewTask,
                         Hazel.SendOption.Reliable, -1);
                     writer.Write(rolePlayer.PlayerId);
                     writer.Write(i);

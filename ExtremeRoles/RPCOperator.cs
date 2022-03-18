@@ -345,10 +345,10 @@ namespace ExtremeRoles
             Roles.Solo.Crewmate.TimeMaster.ResetMeeting(playerId);
         }
         public static void AgencyTakeTask(
-            byte playerId, byte targetPlayerId, byte taskNum)
+            byte targetPlayerId, List<int> getTaskId)
         {
             Roles.Solo.Crewmate.Agency.TakeTargetPlayerTask(
-                playerId, targetPlayerId, taskNum);
+                targetPlayerId, getTaskId);
         }
         public static void AgencySetNewTask(
             byte callerId, int index, int taskIndex)
@@ -409,9 +409,11 @@ namespace ExtremeRoles
             Roles.Solo.Impostor.Mery.ActivateVent(index);
         }
 
-        public static void AliceShipBroken(byte callerId)
+        public static void AliceShipBroken(
+            byte callerId, byte targetPlayerId, List<int> taskId)
         {
-            Roles.Solo.Neutral.Alice.ShipBroken(callerId);
+            Roles.Solo.Neutral.Alice.ShipBroken(
+                callerId, targetPlayerId, taskId);
         }
 
         public static void TaskMasterSetNewTask(
