@@ -66,7 +66,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             if (PlayerControl.LocalPlayer.PlayerId != rolePlayerId) { return; }
 
-
             var fencer = ExtremeRoleManager.GetSafeCastedRole<Fencer>(rolePlayerId);
 
             if (fencer != null)

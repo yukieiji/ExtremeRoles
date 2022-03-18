@@ -336,7 +336,6 @@ namespace ExtremeRoles
         {
             Roles.Solo.Crewmate.TimeMaster.ShieldOn(playerId);
         }
-
         public static void TimeMasterShieldOff(byte playerId)
         {
             Roles.Solo.Crewmate.TimeMaster.ShieldOff(playerId);
@@ -361,6 +360,20 @@ namespace ExtremeRoles
             Roles.Solo.Crewmate.Agency.ReplaceToNewTask(
                 callerId, index, taskIndex);
         }
+        public static void FencerCounterOn(
+            byte playerId)
+        {
+            Roles.Solo.Crewmate.Fencer.CounterOn(playerId);
+        }
+        public static void FencerCounterOff(byte playerId)
+        {
+            Roles.Solo.Crewmate.Fencer.CounterOff(playerId);
+        }
+        public static void FencerEnableKillButton(byte playerId)
+        {
+            Roles.Solo.Crewmate.Fencer.EnableKillButton(playerId);
+        }
+
         public static void AssasinVoteFor(byte targetId)
         {
             Roles.Combination.Assassin.VoteFor(
