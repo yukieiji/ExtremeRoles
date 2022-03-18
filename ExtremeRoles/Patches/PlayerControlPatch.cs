@@ -797,17 +797,17 @@ namespace ExtremeRoles.Patches
                     break;
                 case RPCOperator.Command.FencerCounterOn:
                     byte counterOnTimeFencer = reader.ReadByte();
-                    RPCOperator.TimeMasterShieldOn(
+                    RPCOperator.FencerCounterOn(
                         counterOnTimeFencer);
                     break;
                 case RPCOperator.Command.FencerCounterOff:
                     byte counterOffTimeFencer = reader.ReadByte();
-                    RPCOperator.TimeMasterShieldOff(
+                    RPCOperator.FencerCounterOff(
                         counterOffTimeFencer);
                     break;
                 case RPCOperator.Command.FencerEnableKillButton:
                     byte fencerPlayerId = reader.ReadByte();
-                    RPCOperator.TimeMasterRewindTime(
+                    RPCOperator.FencerEnableKillButton(
                         fencerPlayerId);
                     break;
                 case RPCOperator.Command.AssasinVoteFor:
