@@ -40,6 +40,9 @@ namespace ExtremeRoles
             TimeMasterResetMeeting,
             AgencyTakeTask,
             AgencySetNewTask,
+            FencerCounterOn,
+            FencerCounterOff,
+            FencerEnableKillButton,
 
             // インポスター
             AssasinVoteFor,

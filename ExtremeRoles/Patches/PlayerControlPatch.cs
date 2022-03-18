@@ -795,6 +795,21 @@ namespace ExtremeRoles.Patches
                     RPCOperator.AgencySetNewTask(
                         agencyCallerId, taskSetIndex, newTaskId);
                     break;
+                case RPCOperator.Command.FencerCounterOn:
+                    byte counterOnTimeFencer = reader.ReadByte();
+                    RPCOperator.TimeMasterShieldOn(
+                        counterOnTimeFencer);
+                    break;
+                case RPCOperator.Command.FencerCounterOff:
+                    byte counterOffTimeFencer = reader.ReadByte();
+                    RPCOperator.TimeMasterShieldOff(
+                        counterOffTimeFencer);
+                    break;
+                case RPCOperator.Command.FencerEnableKillButton:
+                    byte fencerPlayerId = reader.ReadByte();
+                    RPCOperator.TimeMasterRewindTime(
+                        fencerPlayerId);
+                    break;
                 case RPCOperator.Command.AssasinVoteFor:
                     byte voteTargetId = reader.ReadByte();
                     RPCOperator.AssasinVoteFor(voteTargetId);

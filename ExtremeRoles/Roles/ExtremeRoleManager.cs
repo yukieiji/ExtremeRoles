@@ -34,6 +34,7 @@ namespace ExtremeRoles.Roles
         TimeMaster,
         Agency,
         Bakary,
+        Fencer,
 
         SpecialImpostor,
         Evolver,
