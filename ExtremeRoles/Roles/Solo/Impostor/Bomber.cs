@@ -122,21 +122,21 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                    this.RoleName,
                    BomberOption.ExplosionKillChance.ToString()),
                50, 25, 75, 1,
-               parentOps, format: "unitPercentage");
+               parentOps, format: OptionUnit.Percentage);
             CustomOption.Create(
                 GetRoleOptionId((int)BomberOption.TimerMinTime),
                 string.Concat(
                     this.RoleName,
                     BomberOption.TimerMinTime.ToString()),
                 15f, 5.0f, 30f, 0.5f,
-                parentOps, format: "unitSeconds");
+                parentOps, format: OptionUnit.Second);
             CustomOption.Create(
                 GetRoleOptionId((int)BomberOption.TimerMaxTime),
                 string.Concat(
                     this.RoleName,
                     BomberOption.TimerMaxTime.ToString()),
                 60f, 45f, 75f, 0.5f,
-                parentOps, format: "unitSeconds");
+                parentOps, format: OptionUnit.Second);
             CustomOption.Create(
                GetRoleOptionId((int)BomberOption.TellExplosion),
                string.Concat(

@@ -129,7 +129,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                         roleName,
                         SidekickOption.KillCoolDown.ToString()),
                     30f, 1.0f, 120f, 0.5f,
-                    killCoolOption, format: "unitSeconds");
+                    killCoolOption, format: OptionUnit.Second);
 
                 var killRangeOption = CustomOption.Create(
                     GetRoleOptionId(SidekickOption.HasOtherKillRange),
@@ -158,7 +158,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                         roleName,
                         SidekickOption.Vison.ToString()),
                     2f, 0.25f, 5f, 0.25f,
-                    visonOption, format: "unitMultiplier");
+                    visonOption, format: OptionUnit.Multiplier);
                 CustomOption.Create(
                    GetRoleOptionId(SidekickOption.ApplyEnvironmentVisionEffect),
                    string.Concat(

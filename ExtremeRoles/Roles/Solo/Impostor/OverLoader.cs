@@ -109,14 +109,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.RoleName,
                     OverLoaderOption.KillCoolReduceRate.ToString()),
                 75, 50, 90, 1, parentOps,
-                format: "unitPercentage");
+                format: OptionUnit.Percentage);
             CustomOption.Create(
                 GetRoleOptionId((int)OverLoaderOption.MoveSpeed),
                 string.Concat(
                     this.RoleName,
                     OverLoaderOption.MoveSpeed.ToString()),
                 1.5f, 1.0f, 3.0f, 0.1f, parentOps,
-                format: "unitMultiplier");
+                format: OptionUnit.Multiplier);
         }
 
         protected override void RoleSpecificInit()

@@ -170,7 +170,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.RoleName,
                     EvolverOption.KillCoolReduceRate.ToString()),
                 10, 1, 50, 1, parentOps,
-                format: "unitPercentage");
+                format: OptionUnit.Percentage);
 
             CustomOption.Create(
                 GetRoleOptionId((int)EvolverOption.KillCoolResuceRateMulti),
@@ -178,7 +178,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.RoleName,
                     EvolverOption.KillCoolResuceRateMulti.ToString()),
                 1.0f, 1.0f, 5.0f, 0.1f,
-                parentOps, format: "unitMultiplier");
+                parentOps, format: OptionUnit.Multiplier);
 
             this.CreateAbilityCountOption(
                 parentOps, 5, 10, 5.0f);

@@ -126,7 +126,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.RoleName,
                     SlaveDriverOption.TaskProgressRange.ToString()),
                 10, 5, 20, 1, parentOps,
-                format: "unitPercentage");
+                format: OptionUnit.Percentage);
 
             CustomOption.Create(
                 GetRoleOptionId((int)SlaveDriverOption.KillCoolReduceRate),
@@ -134,7 +134,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.RoleName,
                     SlaveDriverOption.KillCoolReduceRate.ToString()),
                 25, 1, 50, 1, parentOps,
-                format: "unitPercentage");
+                format: OptionUnit.Percentage);
 
             CustomOption.Create(
                 GetRoleOptionId((int)SlaveDriverOption.SpecialAttackTimer),
@@ -142,7 +142,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.RoleName,
                     SlaveDriverOption.SpecialAttackTimer.ToString()),
                 60f, 30f, 120f, 0.5f, parentOps,
-                format: "unitSeconds");
+                format: OptionUnit.Second);
 
             CustomOption.Create(
                 GetRoleOptionId((int)SlaveDriverOption.SpecialAttackKillCoolReduceRate),
@@ -150,7 +150,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.RoleName,
                     SlaveDriverOption.SpecialAttackKillCoolReduceRate.ToString()),
                 50, 25, 75, 1, parentOps,
-                format: "unitPercentage");
+                format: OptionUnit.Percentage);
 
             CustomOption.Create(
                 GetRoleOptionId((int)SlaveDriverOption.NoneTaskPlayerAttakBonusChance),
@@ -158,7 +158,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.RoleName,
                     SlaveDriverOption.NoneTaskPlayerAttakBonusChance.ToString()),
                 50, 20, 100, 1, parentOps,
-                format: "unitSeconds");
+                format: OptionUnit.Second);
 
             CustomOption.Create(
                 GetRoleOptionId((int)SlaveDriverOption.NoneTaskPlayerSpecialAttackChance),
@@ -166,7 +166,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.RoleName,
                     SlaveDriverOption.NoneTaskPlayerSpecialAttackChance.ToString()),
                 10, 5, 25, 1, parentOps,
-                format: "unitSeconds");
+                format: OptionUnit.Second);
 
         }
 

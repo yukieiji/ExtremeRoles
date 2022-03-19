@@ -241,7 +241,7 @@ namespace ExtremeRoles.Roles.API
                     this.RoleName,
                     KillerCommonOption.KillCoolDown.ToString()),
                 30f, 1.0f, 120f, 0.5f,
-                killCoolOption, format: "unitSeconds");
+                killCoolOption, format: OptionUnit.Second);
 
             var killRangeOption = CustomOption.Create(
                 GetRoleOptionId(KillerCommonOption.HasOtherKillRange),
@@ -296,7 +296,7 @@ namespace ExtremeRoles.Roles.API
                     this.RoleName,
                     RoleCommonOption.Vison.ToString()),
                 2f, 0.25f, 5.0f, 0.25f,
-                visonOption, format: "unitMultiplier");
+                visonOption, format: OptionUnit.Multiplier);
             CustomOption.Create(
                GetRoleOptionId(RoleCommonOption.ApplyEnvironmentVisionEffect),
                string.Concat(

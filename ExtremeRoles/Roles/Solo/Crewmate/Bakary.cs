@@ -35,7 +35,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     this.RoleName,
                     BakaryOption.GoodBakeTime.ToString()),
                 60.0f, 45.0f, 75.0f, 0.5f,
-                changeCooking, format: "unitSeconds",
+                changeCooking, format: OptionUnit.Second,
                 invert: true, enableCheckOption: parentOps);
             CustomOption.Create(
                 GetRoleOptionId((int)BakaryOption.BadBakeTime),
@@ -43,7 +43,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     this.RoleName,
                     BakaryOption.BadBakeTime.ToString()),
                 120.0f, 105.0f, 135.0f, 0.5f,
-                changeCooking, format: "unitSeconds",
+                changeCooking, format: OptionUnit.Second,
                 invert: true, enableCheckOption: parentOps);
         }
 

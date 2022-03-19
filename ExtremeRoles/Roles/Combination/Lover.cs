@@ -343,7 +343,7 @@ namespace ExtremeRoles.Roles.Combination
                     this.RoleName,
                     LoverOption.BecomeNeutralLoverVison.ToString()),
                 2f, 0.25f, 5.0f, 0.25f,
-                visonOption, format: "unitMultiplier");
+                visonOption, format: OptionUnit.Multiplier);
             CustomOption.Create(
                GetRoleOptionId((int)LoverOption.BecomeNeutralLoverApplyEnvironmentVisionEffect),
                string.Concat(
