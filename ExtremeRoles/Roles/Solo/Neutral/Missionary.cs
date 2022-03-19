@@ -91,14 +91,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     this.RoleName,
                     MissionaryOption.DepartureMinTime.ToString()),
                 10f, 1.0f, 15f, 0.5f,
-                parentOps, format: "unitSeconds");
+                parentOps, format: OptionUnit.Second);
             CustomOption.Create(
                 GetRoleOptionId((int)MissionaryOption.DepartureMaxTime),
                 string.Concat(
                     this.RoleName,
                     MissionaryOption.DepartureMaxTime.ToString()),
                 30f, 15f, 60f, 0.5f,
-                parentOps, format: "unitSeconds");
+                parentOps, format: OptionUnit.Second);
             CustomOption.Create(
                 GetRoleOptionId((int)MissionaryOption.PropagateRange),
                 string.Concat(

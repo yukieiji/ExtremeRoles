@@ -240,27 +240,23 @@
         "0": "BLOCKED",
         "11": "\u4f7f\u7528\u7981\u6b62"
     },
-    "unitSeconds": {
+    "Second": {
         "0": "{0}s",
         "11": "{0}\u79d2"
     },
-    "unitMinutes": {
+    "Minute": {
         "0": "{0}m",
         "11": "{0}\u5206"
     },
-    "unitShots": {
+    "Shot": {
         "0": "{0}",
         "11": "{0}\u56de"
     },
-    "unitScrews": {
-        "0": "{0}",
-        "11": "{0}\u672c"
-    },
-    "unitMultiplier": {
+    "Multiplier": {
         "0": "{0}x",
         "11": "{0}x"
     },
-    "unitPercentage": {
+    "Percentage": {
         "0": "{0}\uff05",
         "11": "{0}\uff05"
     },

@@ -174,7 +174,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     this.RoleName,
                     FencerOption.ResetTime.ToString()),
                 5.0f, 2.5f, 30.0f, 0.5f,
-                parentOps, format: "unitSeconds");
+                parentOps, format: OptionUnit.Second);
 
             this.CreateAbilityCountOption(
                 parentOps, 2, 5, 3.0f);

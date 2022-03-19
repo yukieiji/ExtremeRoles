@@ -99,7 +99,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.RoleName,
                     BountyHunterOption.TargetUpdateTime.ToString()),
                 60f, 30.0f, 120f, 0.5f,
-                parentOps, format: "unitSeconds");
+                parentOps, format: OptionUnit.Second);
 
             CustomOption.Create(
                 GetRoleOptionId((int)BountyHunterOption.TargetKillCoolTime),
@@ -107,7 +107,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.RoleName,
                     BountyHunterOption.TargetKillCoolTime.ToString()),
                 5f, 1.0f, 60f, 0.5f,
-                parentOps, format: "unitSeconds");
+                parentOps, format: OptionUnit.Second);
 
             CustomOption.Create(
                 GetRoleOptionId((int)BountyHunterOption.NoneTargetKillCoolTime),
@@ -115,7 +115,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.RoleName,
                     BountyHunterOption.NoneTargetKillCoolTime.ToString()),
                 45f, 1.0f, 120f, 0.5f,
-                parentOps, format: "unitSeconds");
+                parentOps, format: OptionUnit.Second);
 
             var arrowOption = CustomOption.Create(
                 GetRoleOptionId((int)BountyHunterOption.IsShowArrow),
@@ -130,7 +130,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.RoleName,
                     BountyHunterOption.ArrowUpdateCycle.ToString()),
                 60f, 30.0f, 120f, 0.5f,
-                arrowOption, format: "unitSeconds");
+                arrowOption, format: OptionUnit.Second);
 
         }
 

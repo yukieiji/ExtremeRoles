@@ -159,21 +159,21 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     this.RoleName,
                     WhisperOption.AbilityOffTime.ToString()),
                 3.0f, 1.0f, 5.0f, 0.5f,
-                parentOps, format: "unitSeconds");
+                parentOps, format: OptionUnit.Second);
             CustomOption.Create(
                 GetRoleOptionId((int)WhisperOption.AbilityOnTime),
                 string.Concat(
                     this.RoleName,
                     WhisperOption.AbilityOnTime.ToString()),
                 4.0f, 1.0f, 10.0f, 0.5f,
-                parentOps, format: "unitSeconds");
+                parentOps, format: OptionUnit.Second);
             CustomOption.Create(
                 GetRoleOptionId((int)WhisperOption.TellTextTime),
                 string.Concat(
                     this.RoleName,
                     WhisperOption.TellTextTime.ToString()),
                 3.0f, 1.0f, 25.0f, 0.5f,
-                parentOps, format: "unitSeconds");
+                parentOps, format: OptionUnit.Second);
             CustomOption.Create(
                 GetRoleOptionId((int)WhisperOption.MaxTellText),
                 string.Concat(

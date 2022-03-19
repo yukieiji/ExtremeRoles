@@ -10,6 +10,16 @@ using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Module
 {
+    public enum OptionUnit
+    {
+        None,
+        Second,
+        Minute,
+        Shot,
+        Multiplier,
+        Percentage,
+    }
+
     public abstract class CustomOptionBase
     {
         public int Id;
@@ -28,7 +38,7 @@ namespace ExtremeRoles.Module
         public List<CustomOptionBase> Children;
         public object[] Selections;
 
-        private string stringFormat;
+        private OptionUnit stringFormat;
         private List<CustomOptionBase> withUpdateOption = new List<CustomOptionBase>();
 
         public virtual bool Enabled
@@ -56,7 +66,7 @@ namespace ExtremeRoles.Module
             CustomOptionBase parent,
             bool isHeader,
             bool isHidden,
-            string format,
+            OptionUnit format,
             bool invert,
             CustomOptionBase enableCheckOption)
         {
@@ -108,10 +118,11 @@ namespace ExtremeRoles.Module
         public string GetString()
         {
             string sel = Selections[CurSelection].ToString();
-            if (this.stringFormat != "")
+            if (this.stringFormat != OptionUnit.None)
             {
                 return string.Format(
-                    Translation.GetString(this.stringFormat), sel);
+                    Translation.GetString(
+                        this.stringFormat.ToString()), sel);
             }
             return Translation.GetString(sel);
         }
@@ -202,7 +213,7 @@ namespace ExtremeRoles.Module
             CustomOptionBase parent,
             bool isHeader,
             bool isHidden,
-            string format,
+            OptionUnit format,
             bool invert,
             CustomOptionBase enableCheckOption
             ) : base(
@@ -225,7 +236,7 @@ namespace ExtremeRoles.Module
             CustomOptionBase parent,
             bool isHeader,
             bool isHidden,
-            string format,
+            OptionUnit format,
             bool invert,
             CustomOptionBase enableCheckOption
             ) : base(
@@ -251,7 +262,7 @@ namespace ExtremeRoles.Module
             CustomOptionBase parent,
             bool isHeader,
             bool isHidden,
-            string format,
+            OptionUnit format,
             bool invert,
             CustomOptionBase enableCheckOption
             ) : base(
@@ -293,7 +304,7 @@ namespace ExtremeRoles.Module
             CustomOptionBase parent,
             bool isHeader,
             bool isHidden,
-            string format,
+            OptionUnit format,
             bool invert,
             CustomOptionBase enableCheckOption
             ) : base(
@@ -331,7 +342,7 @@ namespace ExtremeRoles.Module
             CustomOptionBase parent,
             bool isHeader,
             bool isHidden,
-            string format,
+            OptionUnit format,
             bool invert,
             CustomOptionBase enableCheckOption
             ) : base(
@@ -349,7 +360,7 @@ namespace ExtremeRoles.Module
         public static CustomOptionBase Create(
             int id, string name, string[] selections,
             CustomOptionBase parent = null, bool isHeader = false,
-            bool isHidden = false, string format = "",
+            bool isHidden = false, OptionUnit format = OptionUnit.None,
             bool invert = false, CustomOptionBase enableCheckOption = null)
         {
             return new SelectionCustomOption(
@@ -361,7 +372,7 @@ namespace ExtremeRoles.Module
             int id, string name, string[] selections,
             int defaultIndex, CustomOptionBase parent = null,
             bool isHeader = false, bool isHidden = false,
-            string format = "", bool invert = false,
+            OptionUnit format = OptionUnit.None, bool invert = false,
             CustomOptionBase enableCheckOption = null)
         {
             return new SelectionCustomOption(
@@ -374,7 +385,7 @@ namespace ExtremeRoles.Module
             (int id, string name, int defaultValue,
             int min, int max, int step, CustomOptionBase parent = null,
             bool isHeader = false, bool isHidden = false,
-            string format = "", bool invert = false,
+            OptionUnit format = OptionUnit.None, bool invert = false,
             CustomOptionBase enableCheckOption = null)
         {
             List<int> selections = new List<int>();
@@ -392,7 +403,7 @@ namespace ExtremeRoles.Module
             (int id, string name, int defaultValue,
             int min, int step, CustomOptionBase parent = null,
             bool isHeader = false, bool isHidden = false,
-            string format = "", bool invert = false,
+            OptionUnit format = OptionUnit.None, bool invert = false,
             CustomOptionBase enableCheckOption = null)
         {
             List<int> selections = new List<int>();
@@ -410,7 +421,7 @@ namespace ExtremeRoles.Module
             (int id, string name, float defaultValue,
             float min, float max, float step, CustomOptionBase parent = null,
             bool isHeader = false, bool isHidden = false,
-            string format = "", bool invert = false,
+            OptionUnit format = OptionUnit.None, bool invert = false,
             CustomOptionBase enableCheckOption = null)
         {
             List<float> selections = new List<float>();
@@ -427,7 +438,8 @@ namespace ExtremeRoles.Module
         public static CustomOptionBase Create(
             int id, string name, bool defaultValue,
             CustomOptionBase parent = null, bool isHeader = false,
-            bool isHidden = false, string format = "", bool invert = false,
+            bool isHidden = false, OptionUnit format = OptionUnit.None,
+            bool invert = false,
             CustomOptionBase enableCheckOption = null)
         {
             return new BoolCustomOption(

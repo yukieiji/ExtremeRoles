@@ -189,7 +189,7 @@ namespace ExtremeRoles.Roles.API.Interface
                     ((SingleRoleBase)self).RoleName,
                     RoleAbilityCommonOption.AbilityCoolTime.ToString()),
                 defaultCoolTime, minCoolTime, maxCoolTime, step,
-                parentOps, format: "unitSeconds");
+                parentOps, format: OptionUnit.Second);
 
             if (defaultActiveTime != float.MaxValue)
             {
@@ -202,7 +202,7 @@ namespace ExtremeRoles.Roles.API.Interface
                         ((SingleRoleBase)self).RoleName,
                         RoleAbilityCommonOption.AbilityActiveTime.ToString()),
                     defaultActiveTime, minActiveTime, maxActiveTime, step,
-                    parentOps, format: "unitSeconds");
+                    parentOps, format: OptionUnit.Second);
             }
 
         }
@@ -226,7 +226,7 @@ namespace ExtremeRoles.Roles.API.Interface
                     RoleAbilityCommonOption.AbilityCount.ToString()),
                 defaultAbilityCount, 1,
                 maxAbilityCount, 1,
-                parentOps, format: "unitShots");
+                parentOps, format: OptionUnit.Shot);
 
         }
 
