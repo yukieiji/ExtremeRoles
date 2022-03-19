@@ -13,15 +13,19 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 {
     public class CurseMaker : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHock, IRoleUpdate
     {
-        public enum SorceryOption
+        public enum CurseMakerOption
         {
             CursingRange,
+            AdditionalKillCool,
+            SearchDeadBodyTime,
         }
 
 
         public GameData.PlayerInfo targetBody;
         public byte deadBodyId;
 
+        private float additionalKillCool = 1.0f;
+        private float searchDeadBodyTime = 1.0f;
         private float deadBodyCheckRange = 1.0f;
 
         private string defaultButtonText;
@@ -47,14 +51,15 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void CreateAbility()
         {
-            this.defaultButtonText = Translation.GetString("evolve");
+            this.defaultButtonText = Translation.GetString("curse");
 
             this.CreateAbilityCountButton(
                 this.defaultButtonText,
                 Loader.CreateSpriteFromResources(
-                    Path.EvolverEvolved),
+                    Path.TestButton),
                 checkAbility: CheckAbility,
                 abilityCleanUp: CleanUp);
+            this.Button.SetLabelToCrewmate();
         }
 
         public bool IsAbilityUse()
@@ -105,12 +110,51 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            throw new System.NotImplementedException();
+
+            CustomOption.Create(
+                GetRoleOptionId((int)CurseMakerOption.CursingRange),
+                string.Concat(
+                    this.RoleName,
+                    CurseMakerOption.CursingRange.ToString()),
+                2.5f, 0.5f, 5.0f, 0.5f,
+                parentOps);
+
+            CustomOption.Create(
+                GetRoleOptionId((int)CurseMakerOption.AdditionalKillCool),
+                string.Concat(
+                    this.RoleName,
+                    CurseMakerOption.AdditionalKillCool.ToString()),
+                5.0f, 1.0f, 30.0f, 0.1f,
+                parentOps, format: "unitSeconds");
+
+            this.CreateAbilityCountOption(
+                parentOps, 1, 3, 5.0f);
+
+            CustomOption.Create(
+                GetRoleOptionId((int)CurseMakerOption.SearchDeadBodyTime),
+                string.Concat(
+                    this.RoleName,
+                    CurseMakerOption.SearchDeadBodyTime.ToString()),
+                60.0f, 45.0f, 90.0f, 0.1f,
+                parentOps, format: "unitSeconds");
+
         }
 
         protected override void RoleSpecificInit()
         {
-            throw new System.NotImplementedException();
+            this.RoleAbilityInit();
+
+            var allOption = OptionHolder.AllOption;
+
+            this.additionalKillCool = allOption[
+                GetRoleOptionId((int)CurseMakerOption.AdditionalKillCool)].GetValue();
+            this.deadBodyCheckRange = allOption[
+                GetRoleOptionId((int)CurseMakerOption.CursingRange)].GetValue();
+            this.searchDeadBodyTime = allOption[
+                GetRoleOptionId((int)CurseMakerOption.SearchDeadBodyTime)].GetValue();
+
+            this.cursingText = Translation.GetString("cursing");
+
         }
 
         public void RoleAbilityResetOnMeetingStart()
