@@ -107,6 +107,8 @@ namespace ExtremeRoles.Roles
                 new TimeMaster(),
                 new Agency(),
                 new Bakary(),
+                new CurseMaker(),
+                new Fencer(),
 
                 new SpecialImpostor(),
                 new Evolver(),
@@ -119,6 +121,7 @@ namespace ExtremeRoles.Roles
                 new Cracker(),
                 new Bomber(),
                 new Mery(),
+                new SlaveDriver(),
 
                 new Alice(),
                 new Jackal(),
