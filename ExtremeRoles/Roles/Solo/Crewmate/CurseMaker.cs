@@ -118,6 +118,22 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             false, true, false, false)
         { }
 
+        public static void CurseKillCool(
+            byte rolePlayerId, byte targetPlayerId)
+        {
+            if (PlayerControl.LocalPlayer.PlayerId != targetPlayerId) { return; }
+
+            var curseMaker = ExtremeRoleManager.GetSafeCastedRole<CurseMaker>(
+                rolePlayerId);
+
+            var role = ExtremeRoleManager.GetLocalPlayerRole();
+            role.HasOtherKillCool = true;
+            role.KillCoolTime += curseMaker.additionalKillCool;
+
+            PlayerControl.LocalPlayer.SetKillTimer(
+                role.KillCoolTime);
+        }
+
         public void CreateAbility()
         {
             this.defaultButtonText = Translation.GetString("curse");
@@ -141,8 +157,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public void CleanUp()
         {
 
+            var rolePlayer = PlayerControl.LocalPlayer;
+
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                rolePlayer.NetId,
                 RPCOperator.Command.CleanDeadBody,
                 new List<byte> { this.deadBodyId });
             RPCOperator.CleanDeadBody(this.deadBodyId);
@@ -155,6 +173,26 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
 
             // 殺したやつを呪う
+            DeadBodyInfo deadbodyInfo = this.deadBodyData[this.deadBodyId];
+            byte killer = deadbodyInfo.GetKiller();
+            byte target = deadbodyInfo.GetTarget();
+            if (killer == target)
+            {
+                this.deadBodyId = byte.MaxValue;
+                return; 
+            }
+
+            RPCOperator.Call(
+                rolePlayer.NetId,
+                RPCOperator.Command.CuresMakerCurseKillCool,
+                new List<byte>
+                {
+                    rolePlayer.PlayerId,
+                    killer, 
+                });
+            CurseKillCool(rolePlayer.PlayerId, killer);
+            this.deadBodyId = byte.MaxValue;
+
         }
 
         public bool CheckAbility()

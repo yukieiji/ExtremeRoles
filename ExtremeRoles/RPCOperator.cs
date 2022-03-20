@@ -43,6 +43,7 @@ namespace ExtremeRoles
             FencerCounterOn,
             FencerCounterOff,
             FencerEnableKillButton,
+            CuresMakerCurseKillCool,
 
             // インポスター
             AssasinVoteFor,
@@ -372,6 +373,13 @@ namespace ExtremeRoles
         public static void FencerEnableKillButton(byte playerId)
         {
             Roles.Solo.Crewmate.Fencer.EnableKillButton(playerId);
+        }
+
+        public static void CuresMakerCurseKillCool(
+            byte playerId, byte targetPlayerId)
+        {
+            Roles.Solo.Crewmate.CurseMaker.CurseKillCool(
+                playerId, targetPlayerId);
         }
 
         public static void AssasinVoteFor(byte targetId)
