@@ -136,7 +136,7 @@ namespace ExtremeRoles.Module.RoleAbilityButton
         private void updateAbilityCountText()
         {
             this.abilityCountText.text = Helper.Translation.GetString("buttonCountText") + string.Format(
-                Helper.Translation.GetString("unitShots"), this.abilityNum);
+                Helper.Translation.GetString(OptionUnit.Shot.ToString()), this.abilityNum);
         }
 
     }
