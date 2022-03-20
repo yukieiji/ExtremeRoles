@@ -84,8 +84,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         }
 
-        private Dictionary<DeadBodyInfo, Arrow> deadBodyArrow = new Dictionary<DeadBodyInfo, Arrow>();
-        private List<DeadBodyInfo> deadBodyData = new List<DeadBodyInfo>();
+        private Dictionary<byte, Arrow> deadBodyArrow = new Dictionary<byte, Arrow>();
+        private Dictionary<byte, DeadBodyInfo> deadBodyData = new Dictionary<byte, DeadBodyInfo>();
 
         private GameData.PlayerInfo targetBody;
         private byte deadBodyId;
@@ -147,28 +147,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 new List<byte> { this.deadBodyId });
             RPCOperator.CleanDeadBody(this.deadBodyId);
 
-            DeadBodyInfo removeData = null;
-
-            foreach(var deadBodyInfo in deadBodyArrow.Keys)
+            // 矢印消す
+            if (this.deadBodyArrow.ContainsKey(this.deadBodyId))
             {
-                var deadBody = deadBodyInfo.GetDeadBody();
-
-                if (deadBody != null)
-                {
-                    if (GameData.Instance.GetPlayerById(
-                        deadBody.ParentId).PlayerId == this.deadBodyId)
-                    {
-                        removeData = deadBodyInfo;
-                        break;
-                    }
-                }
+                deadBodyArrow[this.deadBodyId].Clear();
+                deadBodyArrow.Remove(this.deadBodyId);
             }
 
-            if (removeData != null)
-            {
-                deadBodyArrow[removeData].Clear();
-                deadBodyArrow.Remove(removeData);
-            }
+            // 殺したやつを呪う
         }
 
         public bool CheckAbility()
@@ -279,41 +265,48 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             if (this.isDeadBodySearchUsed && this.isDeadBodySearch) { return; }
 
-            this.deadBodyData.Add(new DeadBodyInfo(
-                source, target));
+            this.deadBodyData.Add(
+                target.PlayerId,
+                new DeadBodyInfo(source, target));
 
         }
 
         public void Update(PlayerControl rolePlayer)
         {
-            foreach (var (deadBodyInfo, arrow) in deadBodyArrow)
+            foreach (var (playerId, arrow) in deadBodyArrow)
             {
-                if (deadBodyInfo.IsValid())
+                if (this.deadBodyData.ContainsKey(playerId))
                 {
-                    arrow.UpdateTarget(
-                        deadBodyInfo.GetDeadBody().transform.position);
-                    arrow.Update();
+                    var deadBodyInfo = this.deadBodyData[playerId];
+
+                    if (deadBodyInfo.IsValid())
+                    {
+                        arrow.UpdateTarget(
+                            deadBodyInfo.GetDeadBody().transform.position);
+                        arrow.Update();
+                    }
+
                 }
             }
 
             if (this.isDeadBodySearchUsed && this.isDeadBodySearch) { return; }
 
-            List<DeadBodyInfo> removeData = new List<DeadBodyInfo>();
+            List<byte> removeData = new List<byte>();
 
-            foreach (var deadBodyInfo in this.deadBodyData)
+            foreach (var (playerId, deadBodyInfo) in this.deadBodyData)
             {
                 if (deadBodyInfo.IsValid())
                 {
                     if (deadBodyInfo.ComputeDeltaTime() > this.searchDeadBodyTime && 
-                        !this.deadBodyArrow.ContainsKey(deadBodyInfo))
+                        !this.deadBodyArrow.ContainsKey(playerId))
                     {
                         var arrow = new Arrow(this.NameColor);
-                        this.deadBodyArrow.Add(deadBodyInfo, arrow);
+                        this.deadBodyArrow.Add(playerId, arrow);
                     }
                 }
                 else
                 {
-                    removeData.Add(deadBodyInfo);
+                    removeData.Add(playerId);
                 }
             }
 
