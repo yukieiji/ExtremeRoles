@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -17,12 +18,95 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             CursingRange,
             AdditionalKillCool,
+            IsDeadBodySearch,
             SearchDeadBodyTime,
         }
 
+        public class DeadBodyInfo
+        {
+            private DateTime killedTime;
 
-        public GameData.PlayerInfo targetBody;
-        public byte deadBodyId;
+            private byte killerPlayerId;
+            private byte targetPlayerId;
+
+            public DeadBodyInfo(
+                PlayerControl killer,
+                PlayerControl target)
+            {
+                this.killerPlayerId = killer.PlayerId;
+                this.targetPlayerId = target.PlayerId;
+                this.killedTime = DateTime.UtcNow;
+            }
+
+            public float ComputeDeltaTime()
+            {
+                TimeSpan deltaTime = DateTime.UtcNow - this.killedTime;
+                return (float)deltaTime.TotalSeconds;
+            }
+
+            public DeadBody GetDeadBody()
+            {
+                DeadBody[] array = getAllDeadBody();
+                for (int i = 0; i < array.Length; ++i)
+                {
+                    if (GameData.Instance.GetPlayerById(
+                            array[i].ParentId).PlayerId == this.targetPlayerId)
+                    {
+                        return array[i];
+                    }
+                }
+
+                return null;
+            }
+
+            public byte GetKiller() => this.killerPlayerId;
+
+            public bool IsValid()
+            {
+                DeadBody[] array = getAllDeadBody();
+                for (int i = 0; i < array.Length; ++i)
+                {
+                    if (GameData.Instance.GetPlayerById(
+                            array[i].ParentId).PlayerId == this.targetPlayerId)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            private DeadBody[] getAllDeadBody() => UnityEngine.Object.FindObjectsOfType<
+                DeadBody>();
+
+
+        }
+
+        /*
+         格納しておかないといけないデータ
+            キルされた時間
+            キルした本人
+            その死体のデータ
+        計算したい物
+            死体がどれくらい冷えているか
+                => float ComputeKilledTime()?
+            その死体が消えてないかどうか
+                => bool IsValid()
+        
+        上を格納するデータ構造
+            サイズ => フレキシブル(削除、追加を頻繁にやる)
+            消えているかのチェックは毎回チェックする(イテレータブルな必要がある)
+                => リスト？
+         */
+
+
+        private List<DeadBodyInfo> deadBodyData = new List<DeadBodyInfo>();
+
+        private GameData.PlayerInfo targetBody;
+        private byte deadBodyId;
+
+        private bool isDeadBodySearch = false;
+        private bool isDeadBodySearchUsed = false;
 
         private float additionalKillCool = 1.0f;
         private float searchDeadBodyTime = 1.0f;
@@ -76,7 +160,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 PlayerControl.LocalPlayer.NetId,
                 RPCOperator.Command.CleanDeadBody,
                 new List<byte> { this.deadBodyId });
-
             RPCOperator.CleanDeadBody(this.deadBodyId);
         }
 
@@ -130,13 +213,22 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.CreateAbilityCountOption(
                 parentOps, 1, 3, 5.0f);
 
+            var searchDeadBodyOption = CustomOption.Create(
+                GetRoleOptionId((int)CurseMakerOption.IsDeadBodySearch),
+                string.Concat(
+                    this.RoleName,
+                    CurseMakerOption.IsDeadBodySearch.ToString()),
+                true, parentOps);
+
             CustomOption.Create(
                 GetRoleOptionId((int)CurseMakerOption.SearchDeadBodyTime),
                 string.Concat(
                     this.RoleName,
                     CurseMakerOption.SearchDeadBodyTime.ToString()),
                 60.0f, 45.0f, 90.0f, 0.1f,
-                parentOps, format: "unitSeconds");
+                searchDeadBodyOption, format: "unitSeconds",
+                invert: true,
+                enableCheckOption: parentOps);
 
         }
 
@@ -150,11 +242,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 GetRoleOptionId((int)CurseMakerOption.AdditionalKillCool)].GetValue();
             this.deadBodyCheckRange = allOption[
                 GetRoleOptionId((int)CurseMakerOption.CursingRange)].GetValue();
+            this.isDeadBodySearch = allOption[
+                GetRoleOptionId((int)CurseMakerOption.IsDeadBodySearch)].GetValue();
             this.searchDeadBodyTime = allOption[
                 GetRoleOptionId((int)CurseMakerOption.SearchDeadBodyTime)].GetValue();
 
             this.cursingText = Translation.GetString("cursing");
-
+            this.deadBodyData.Clear();
         }
 
         public void RoleAbilityResetOnMeetingStart()
@@ -169,12 +263,19 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void HockMuderPlayer(PlayerControl source, PlayerControl target)
         {
-            throw new System.NotImplementedException();
+            if (this.isDeadBodySearchUsed && this.isDeadBodySearch) { return; }
+
+            this.deadBodyData.Add(new DeadBodyInfo(
+                source, target));
+
         }
 
         public void Update(PlayerControl rolePlayer)
         {
-            throw new System.NotImplementedException();
+
+
+
+            if (this.isDeadBodySearchUsed && this.isDeadBodySearch) { return; }
         }
     }
 }
