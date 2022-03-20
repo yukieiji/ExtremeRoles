@@ -112,7 +112,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public CurseMaker() : base(
             ExtremeRoleId.CurseMaker,
-            ExtremeRoleType.Impostor,
+            ExtremeRoleType.Crewmate,
             ExtremeRoleId.CurseMaker.ToString(),
             ColorPalette.CurseMakerViolet,
             false, true, false, false)
