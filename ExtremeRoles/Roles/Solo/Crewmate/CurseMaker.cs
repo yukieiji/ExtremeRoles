@@ -208,7 +208,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
             else
             {
-                result = this.deadBodyCheckRange == this.targetBody.PlayerId;
+                result = this.deadBodyId == this.targetBody.PlayerId;
             }
 
             this.Button.ButtonText = result ? this.cursingText : this.defaultButtonText;
@@ -218,7 +218,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public bool UseAbility()
         {
-            this.deadBodyCheckRange = this.targetBody.PlayerId;
+            this.deadBodyId = this.targetBody.PlayerId;
             return true;
         }
 
