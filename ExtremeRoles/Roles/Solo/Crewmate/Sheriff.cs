@@ -205,7 +205,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private void updateKillCountText()
         {
             this.killCountText.text = Translation.GetString("buttonCountText") + string.Format(
-                Translation.GetString("unitShots"), this.shootNum);
+                Translation.GetString(OptionUnit.Shot.ToString()), this.shootNum);
         }
     }
 }
