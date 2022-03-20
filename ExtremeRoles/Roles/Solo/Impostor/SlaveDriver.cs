@@ -27,7 +27,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private float specialAttackReduceRate;
         private float defaultKillCoolTime;
         private float noneBonusKillTaskRange;
-        private float timeLimit;
+        private float aliveCheckTime;
+        private float specialAttackStartTime;
         private float timer;
 
         private byte rolePlayerId;
@@ -39,6 +40,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             KillCoolReduceRate,
             SpecialAttackTimer,
             SpecialAttackKillCoolReduceRate,
+            SpecialAttackAliveTimer,
             NoneTaskPlayerAttakBonusChance,
             NoneTaskPlayerSpecialAttackChance,
             AdditionalNormalTaskNum,
@@ -80,6 +82,25 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     }
                 }
 
+                int taskHasPlayerNum = 0;
+                int taskHasDeadPlayerNum = 0;
+
+                foreach (var playerInfo in GameData.Instance.AllPlayers)
+                {
+                    var role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
+
+                    if (!playerInfo.Disconnected && role.HasTask)
+                    {
+                        ++taskHasPlayerNum;
+
+                        if (playerInfo.IsDead)
+                        {
+                            ++taskHasDeadPlayerNum;
+                        }
+                    }
+                }
+
+                float approximateTaskGage = (float)taskHasDeadPlayerNum / (float)taskHasPlayerNum;
                 float targetPlayerTaskGage = (float)targetPlayerCompTask / (float)targetPlayerTaskNum;
 
                 int totalTaskNum = GameData.Instance.TotalTasks;
@@ -87,10 +108,17 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 float totalTaskGauge = (float)compTaskNum / (float)totalTaskNum;
 
                 float diff = totalTaskGauge - targetPlayerTaskGage;
-                
-                // ゲーム開始時から一定時間経過後、全体のタスク進捗から大きく離れてる or タスク完了数が0～2
-                if ((0.5f < diff || (0 <= targetPlayerCompTask && targetPlayerCompTask <= 2)) && 
-                    this.timer >= this.timeLimit)
+
+                // ゲーム開始時から一定時間経過後、全体のタスク進捗が生存者に対して少ない(この時、誤差許容は行わない)
+                if (approximateTaskGage > totalTaskGauge &&
+                    this.timer >= this.aliveCheckTime)
+                {
+                    setSpecialAttackPlayerKillCool();
+                    this.specialAttackPlayerId = targetPlayer.PlayerId;
+                }
+                // ゲーム開始時から一定時間経過後、全体のタスク進捗から大きく離れてる(50％以上) or タスク完了数が0～2
+                else if ((0.5f < diff || (0 <= targetPlayerCompTask && targetPlayerCompTask <= 2)) && 
+                    this.timer >= this.specialAttackStartTime)
                 {
                     setSpecialAttackPlayerKillCool();
                     this.specialAttackPlayerId = targetPlayer.PlayerId;
@@ -142,6 +170,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.RoleName,
                     SlaveDriverOption.SpecialAttackTimer.ToString()),
                 60f, 30f, 120f, 0.5f, parentOps,
+                format: OptionUnit.Second);
+
+            CustomOption.Create(
+                GetRoleOptionId((int)SlaveDriverOption.SpecialAttackAliveTimer),
+                string.Concat(
+                    this.RoleName,
+                    SlaveDriverOption.SpecialAttackAliveTimer.ToString()),
+                600f, 300f, 900f, 30.0f, parentOps,
                 format: OptionUnit.Second);
 
             CustomOption.Create(
@@ -209,8 +245,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 GetRoleOptionId((int)SlaveDriverOption.KillCoolReduceRate)].GetValue();
             this.specialAttackReduceRate = allOption[
                 GetRoleOptionId((int)SlaveDriverOption.SpecialAttackKillCoolReduceRate)].GetValue();
-            this.timeLimit = allOption[
+            this.specialAttackStartTime = allOption[
                 GetRoleOptionId((int)SlaveDriverOption.SpecialAttackTimer)].GetValue();
+            this.aliveCheckTime = allOption[
+                GetRoleOptionId((int)SlaveDriverOption.SpecialAttackAliveTimer)].GetValue();
 
             this.noneTaskPlayerAttakBonusChance = allOption[
                 GetRoleOptionId((int)SlaveDriverOption.NoneTaskPlayerAttakBonusChance)].GetValue();
@@ -275,7 +313,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 GameData.Instance == null) { return; }
             if (!ShipStatus.Instance.enabled) { return; }
 
-            if (MeetingHud.Instance == null && this.timer < this.timeLimit)
+            if (MeetingHud.Instance == null && this.timer < this.aliveCheckTime)
             {
                 this.timer += Time.fixedDeltaTime;
             }
