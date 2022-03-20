@@ -130,8 +130,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             role.HasOtherKillCool = true;
             role.KillCoolTime += curseMaker.additionalKillCool;
 
-            PlayerControl.LocalPlayer.SetKillTimer(
-                role.KillCoolTime);
+            PlayerControl.LocalPlayer.killTimer = role.KillCoolTime;
         }
 
         public void CreateAbility()
@@ -257,7 +256,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 string.Concat(
                     this.RoleName,
                     CurseMakerOption.SearchDeadBodyTime.ToString()),
-                60.0f, 45.0f, 90.0f, 0.1f,
+                60.0f, 45.0f, 90.0f, 0.5f,
                 searchDeadBodyOption, format: OptionUnit.Second,
                 invert: true,
                 enableCheckOption: parentOps);
