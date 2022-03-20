@@ -208,7 +208,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     this.RoleName,
                     CurseMakerOption.AdditionalKillCool.ToString()),
                 5.0f, 1.0f, 30.0f, 0.1f,
-                parentOps, format: "unitSeconds");
+                parentOps, format: OptionUnit.Second);
 
             this.CreateAbilityCountOption(
                 parentOps, 1, 3, 5.0f);
@@ -226,7 +226,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     this.RoleName,
                     CurseMakerOption.SearchDeadBodyTime.ToString()),
                 60.0f, 45.0f, 90.0f, 0.1f,
-                searchDeadBodyOption, format: "unitSeconds",
+                searchDeadBodyOption, format: OptionUnit.Second,
                 invert: true,
                 enableCheckOption: parentOps);
 
