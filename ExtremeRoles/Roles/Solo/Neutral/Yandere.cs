@@ -76,18 +76,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
            }
         }
 
-        public bool UseAbility()
-        {
-            RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
-                RPCOperator.Command.AliceShipBroken,
-                new List<byte> { PlayerControl.LocalPlayer.PlayerId });
-            RPCOperator.AliceShipBroken(
-                PlayerControl.LocalPlayer.PlayerId);
-
-            return true;
-        }
-
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
