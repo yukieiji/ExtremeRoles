@@ -74,6 +74,11 @@ namespace ExtremeRoles.Module
             lookAt2d(this.body.transform, this.target);
         }
 
+        public void Clear()
+        {
+            Object.Destroy(this.body);
+        }
+
         private bool between(float value, float min, float max)
         {
             return value > min && value < max;

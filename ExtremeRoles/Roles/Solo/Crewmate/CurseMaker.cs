@@ -61,6 +61,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             public byte GetKiller() => this.killerPlayerId;
 
+            public byte GetTarget() => this.targetPlayerId;
+
             public bool IsValid()
             {
                 DeadBody[] array = getAllDeadBody();
@@ -82,24 +84,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         }
 
-        /*
-         格納しておかないといけないデータ
-            キルされた時間
-            キルした本人
-            その死体のデータ
-        計算したい物
-            死体がどれくらい冷えているか
-                => float ComputeKilledTime()?
-            その死体が消えてないかどうか
-                => bool IsValid()
-        
-        上を格納するデータ構造
-            サイズ => フレキシブル(削除、追加を頻繁にやる)
-            消えているかのチェックは毎回チェックする(イテレータブルな必要がある)
-                => リスト？
-         */
-
-
+        private Dictionary<DeadBodyInfo, Arrow> deadBodyArrow = new Dictionary<DeadBodyInfo, Arrow>();
         private List<DeadBodyInfo> deadBodyData = new List<DeadBodyInfo>();
 
         private GameData.PlayerInfo targetBody;
@@ -161,6 +146,29 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 RPCOperator.Command.CleanDeadBody,
                 new List<byte> { this.deadBodyId });
             RPCOperator.CleanDeadBody(this.deadBodyId);
+
+            DeadBodyInfo removeData = null;
+
+            foreach(var deadBodyInfo in deadBodyArrow.Keys)
+            {
+                var deadBody = deadBodyInfo.GetDeadBody();
+
+                if (deadBody != null)
+                {
+                    if (GameData.Instance.GetPlayerById(
+                        deadBody.ParentId).PlayerId == this.deadBodyId)
+                    {
+                        removeData = deadBodyInfo;
+                        break;
+                    }
+                }
+            }
+
+            if (removeData != null)
+            {
+                deadBodyArrow[removeData].Clear();
+                deadBodyArrow.Remove(removeData);
+            }
         }
 
         public bool CheckAbility()
@@ -253,7 +261,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            return;
+            foreach (var arrow in deadBodyArrow.Values)
+            {
+                arrow.Clear();
+            }
+
+            deadBodyArrow.Clear();
+            deadBodyData.Clear();
         }
 
         public void RoleAbilityResetOnMeetingEnd()
@@ -272,10 +286,42 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void Update(PlayerControl rolePlayer)
         {
-
-
+            foreach (var (deadBodyInfo, arrow) in deadBodyArrow)
+            {
+                if (deadBodyInfo.IsValid())
+                {
+                    arrow.UpdateTarget(
+                        deadBodyInfo.GetDeadBody().transform.position);
+                    arrow.Update();
+                }
+            }
 
             if (this.isDeadBodySearchUsed && this.isDeadBodySearch) { return; }
+
+            List<DeadBodyInfo> removeData = new List<DeadBodyInfo>();
+
+            foreach (var deadBodyInfo in this.deadBodyData)
+            {
+                if (deadBodyInfo.IsValid())
+                {
+                    if (deadBodyInfo.ComputeDeltaTime() > this.searchDeadBodyTime && 
+                        !this.deadBodyArrow.ContainsKey(deadBodyInfo))
+                    {
+                        var arrow = new Arrow(this.NameColor);
+                        this.deadBodyArrow.Add(deadBodyInfo, arrow);
+                    }
+                }
+                else
+                {
+                    removeData.Add(deadBodyInfo);
+                }
+            }
+
+            foreach (var deadBodyInfo in removeData)
+            {
+                this.deadBodyData.Remove(deadBodyInfo);
+            }
+
         }
     }
 }
