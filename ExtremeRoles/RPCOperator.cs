@@ -426,18 +426,18 @@ namespace ExtremeRoles
         {
             Roles.Solo.Impostor.Mery.ActivateVent(index);
         }
+        public static void SlaveDriverSetNewTask(
+            byte callerId, int index, int taskIndex)
+        {
+            Roles.Solo.Impostor.SlaveDriver.ReplaceToNewTask(
+                callerId, index, taskIndex);
+        }
 
         public static void AliceShipBroken(
             byte callerId, byte targetPlayerId, List<int> taskId)
         {
             Roles.Solo.Neutral.Alice.ShipBroken(
                 callerId, targetPlayerId, taskId);
-        }
-        public static void SlaveDriverSetNewTask(
-            byte callerId, int index, int taskIndex)
-        {
-            Roles.Solo.Impostor.SlaveDriver.ReplaceToNewTask(
-                callerId, index, taskIndex);
         }
 
         public static void TaskMasterSetNewTask(
