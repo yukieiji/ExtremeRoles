@@ -121,16 +121,26 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public static void CurseKillCool(
             byte rolePlayerId, byte targetPlayerId)
         {
-            if (PlayerControl.LocalPlayer.PlayerId != targetPlayerId) { return; }
+            PlayerControl player = Player.GetPlayerControlById(targetPlayerId);
+
+            if (player == null) { return; }
+            if (player.Data.IsDead || player.Data.Disconnected) { return; }
 
             var curseMaker = ExtremeRoleManager.GetSafeCastedRole<CurseMaker>(
                 rolePlayerId);
 
             var role = ExtremeRoleManager.GetLocalPlayerRole();
-            role.HasOtherKillCool = true;
-            role.KillCoolTime += curseMaker.additionalKillCool;
 
-            PlayerControl.LocalPlayer.killTimer = role.KillCoolTime;
+            float baseKillCool = PlayerControl.GameOptions.KillCooldown;
+
+            if (role.HasOtherKillCool)
+            {
+                baseKillCool = role.KillCoolTime;
+            }
+            role.HasOtherKillCool = true;
+            role.KillCoolTime = baseKillCool + curseMaker.additionalKillCool;
+
+            player.killTimer = role.KillCoolTime;
         }
 
         public void CreateAbility()

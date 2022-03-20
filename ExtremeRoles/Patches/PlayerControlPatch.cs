@@ -1027,8 +1027,6 @@ namespace ExtremeRoles.Patches
             if (roles.Count == 0 || !roles.ContainsKey(__instance.PlayerId)) { return true; }
 
             var role = roles[__instance.PlayerId];
-            if (role.IsVanillaRole()) { return true; }
-
 
             var killCool = PlayerControl.GameOptions.KillCooldown;
             if (killCool <= 0f) { return false; }
