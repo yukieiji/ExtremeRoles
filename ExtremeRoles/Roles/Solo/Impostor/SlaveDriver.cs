@@ -19,7 +19,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private int noneTaskPlayerAttakBonusChance;
         private int noneTaskPlayerSpecialAttackChance;
 
-        private int setNetNormalTaskNum;
+        private int setNormalTaskNum;
         private int setLongTaskNum;
         private int setCommonTaskNum;
 
@@ -168,6 +168,27 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 10, 5, 25, 1, parentOps,
                 format: OptionUnit.Second);
 
+            CustomOption.Create(
+                GetRoleOptionId((int)SlaveDriverOption.AdditionalCommonTaskNum),
+                string.Concat(
+                    this.RoleName,
+                    SlaveDriverOption.AdditionalCommonTaskNum.ToString()),
+                1, 0, 5, 1, parentOps);
+            
+            CustomOption.Create(
+                GetRoleOptionId((int)SlaveDriverOption.AdditionalNormalTaskNum),
+                string.Concat(
+                    this.RoleName,
+                    SlaveDriverOption.AdditionalNormalTaskNum.ToString()),
+                1, 0, 5, 1, parentOps);
+
+            CustomOption.Create(
+                GetRoleOptionId((int)SlaveDriverOption.AdditionalLongTaskNum),
+                string.Concat(
+                    this.RoleName,
+                    SlaveDriverOption.AdditionalLongTaskNum.ToString()),
+                1, 0, 5, 1, parentOps);
+
         }
 
         protected override void RoleSpecificInit()
@@ -196,7 +217,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.noneTaskPlayerSpecialAttackChance = allOption[
                 GetRoleOptionId((int)SlaveDriverOption.NoneTaskPlayerSpecialAttackChance)].GetValue();
 
-            this.setNetNormalTaskNum = allOption[
+            this.setNormalTaskNum = allOption[
                GetRoleOptionId((int)SlaveDriverOption.AdditionalNormalTaskNum)].GetValue();
             this.setLongTaskNum = allOption[
                 GetRoleOptionId((int)SlaveDriverOption.AdditionalLongTaskNum)].GetValue();
@@ -223,7 +244,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 {
                     newTaskId.Add(Helper.GameSystem.GetRandomCommonTaskId());
                 }
-                for (int i = 0; i < this.setNetNormalTaskNum; ++i)
+                for (int i = 0; i < this.setNormalTaskNum; ++i)
                 {
                     newTaskId.Add(Helper.GameSystem.GetRandomNormalTaskId());
                 }
