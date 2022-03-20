@@ -810,6 +810,12 @@ namespace ExtremeRoles.Patches
                     RPCOperator.FencerEnableKillButton(
                         fencerPlayerId);
                     break;
+                case RPCOperator.Command.CuresMakerCurseKillCool:
+                    byte curesMakerPlayerId = reader.ReadByte();
+                    byte curesPlayerId = reader.ReadByte();
+                    RPCOperator.CuresMakerCurseKillCool(
+                        curesMakerPlayerId, curesPlayerId);
+                    break;
                 case RPCOperator.Command.AssasinVoteFor:
                     byte voteTargetId = reader.ReadByte();
                     RPCOperator.AssasinVoteFor(voteTargetId);
