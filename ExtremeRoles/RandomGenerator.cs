@@ -91,9 +91,53 @@ namespace ExtremeRoles
 
     public class PermutedCongruentialGenerator
     {
+        /*
+            以下のURLの実装を元に実装
+             https://github.com/igiagkiozis/PCGSharp
+            
+            ToDo:PCG32-XSH-RR => PCG32-RXS-M-XS
+        
+            implement(official):
+                static xtype output(itype internal)
+                {
+                    constexpr bitcount_t xtypebits = bitcount_t(sizeof(xtype) * 8);
+                    constexpr bitcount_t bits = bitcount_t(sizeof(itype) * 8);
+                    constexpr bitcount_t opbits = xtypebits >= 128 ? 6
+                                             : xtypebits >=  64 ? 5
+                                             : xtypebits >=  32 ? 4
+                                             : xtypebits >=  16 ? 3
+                                             :                    2;
+                    constexpr bitcount_t shift = bits - xtypebits;
+                    constexpr bitcount_t mask = (1 << opbits) - 1;
+                    bitcount_t rshift =
+                        opbits ? bitcount_t(internal >> (bits - opbits)) & mask : 0;
+                    internal ^= internal >> (opbits + rshift);
+                    internal *= mcg_multiplier<itype>::multiplier();
+                    xtype result = internal >> shift;
+                    result ^= result >> ((2U*xtypebits+2U)/3U);
+                    return result;
+                }
 
-        // 以下のURLの実装を元に実装
-        // https://github.com/igiagkiozis/PCGSharp
+                static itype unoutput(itype internal)
+                {
+                    constexpr bitcount_t bits = bitcount_t(sizeof(itype) * 8);
+                    constexpr bitcount_t opbits = bits >= 128 ? 6
+                                             : bits >=  64 ? 5
+                                             : bits >=  32 ? 4
+                                             : bits >=  16 ? 3
+                                             :               2;
+                    constexpr bitcount_t mask = (1 << opbits) - 1;
+
+                    internal = unxorshift(internal, bits, (2U*bits+2U)/3U);
+
+                    internal *= mcg_unmultiplier<itype>::unmultiplier();
+
+                    bitcount_t rshift = opbits ? (internal >> (bits - opbits)) & mask : 0;
+                    internal = unxorshift(internal, bits, opbits + rshift);
+
+                    return internal;
+                }
+        */
 
         private ulong state;
         private ulong increment = 1442695040888963407ul;
