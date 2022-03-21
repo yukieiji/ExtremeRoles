@@ -52,12 +52,23 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void ResetOnMeetingEnd()
         {
             this.KillCoolTime = this.defaultKillCool;
+            
+            if (this.targetArrow != null)
+            {
+                this.targetArrow.SetActive(true);
+            }
+
             this.setNewTarget();
             this.updateArrow();
         }
 
         public void ResetOnMeetingStart()
         {
+            if (this.targetArrow != null)
+            {
+                this.targetArrow.SetActive(false);
+            }
+
             if (this.PlayerIcon.ContainsKey(this.targetId))
             {
                 this.PlayerIcon[this.targetId].gameObject.SetActive(false);

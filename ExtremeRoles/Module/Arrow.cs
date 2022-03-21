@@ -78,6 +78,13 @@ namespace ExtremeRoles.Module
         {
             Object.Destroy(this.body);
         }
+        public void SetActive(bool active)
+        {
+            if (this.body != null)
+            {
+                this.body.SetActive(active);
+            }
+        }
 
         private bool between(float value, float min, float max)
         {
