@@ -129,7 +129,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 string.Concat(
                     this.RoleName,
                     BountyHunterOption.ArrowUpdateCycle.ToString()),
-                60f, 30.0f, 120f, 0.5f,
+                60f, 1.0f, 120f, 0.5f,
                 arrowOption, format: OptionUnit.Second);
 
         }
