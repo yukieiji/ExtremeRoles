@@ -89,6 +89,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             public void Remove(byte playerId)
             {
                 this.targetPlayer.Remove(playerId);
+
+                if (this.targetArrow[playerId] != null)
+                {
+                    this.targetArrow[playerId].Clear();
+                }
+
                 this.targetArrow.Remove(playerId);
             }
 
