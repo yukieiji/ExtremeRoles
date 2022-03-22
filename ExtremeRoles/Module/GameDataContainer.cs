@@ -308,6 +308,12 @@ namespace ExtremeRoles.Module
                                     gameControlId,
                                     NeutralSeparateTeam.Missionary);
                                 break;
+                            case ExtremeRoleId.Yandere:
+                                addNeutralTeams(
+                                    ref neutralTeam,
+                                    gameControlId,
+                                    NeutralSeparateTeam.Yandere);
+                                break;
                             default:
                                 break;
                         }

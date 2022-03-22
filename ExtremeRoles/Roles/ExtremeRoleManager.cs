@@ -73,6 +73,7 @@ namespace ExtremeRoles.Roles
         TaskMasterGoHome,
         MissionaryAllAgainstGod,
         JesterMeetingFavorite,
+        YandereKillAllOther,
 
         UnKnown = 100,
     }
@@ -82,7 +83,8 @@ namespace ExtremeRoles.Roles
         Jackal,
         Alice,
         Lover,
-        Missionary
+        Missionary,
+        Yandere
     }
 
     public static class ExtremeRoleManager
@@ -92,6 +94,7 @@ namespace ExtremeRoles.Roles
         public static readonly List<ExtremeRoleId> SpecialWinCheckRole = new List<ExtremeRoleId>()
         {
             ExtremeRoleId.Lover,
+            ExtremeRoleId.Yandere,
         };
 
         public static readonly List<
