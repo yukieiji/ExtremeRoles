@@ -71,6 +71,17 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 }
             }
 
+            public void ArrowActivate(bool active)
+            {
+                foreach (var arrow in this.targetArrow.Values)
+                {
+                    if (arrow != null)
+                    {
+                        arrow.SetActive(active);
+                    }
+                }
+            }
+
             public bool IsContain(byte playerId) => targetPlayer.ContainsKey(playerId);
 
             public int Count() => this.targetPlayer.Count;
@@ -248,7 +259,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 this.isRunaway = true;
                 this.isRunawayNextMeetingEnd = false;
             }
-
+            this.target.ArrowActivate(true);
         }
 
         public void ResetOnMeetingStart()
@@ -257,6 +268,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.CanKill = false;
             this.isRunaway = false;
             this.timer = 0f;
+
+            this.target.ArrowActivate(false);
         }
 
         protected override void CreateSpecificOption(
