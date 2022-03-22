@@ -71,9 +71,13 @@ namespace ExtremeRoles.Roles
         ShipFallInLove,
 
         TaskMasterGoHome,
+
         MissionaryAllAgainstGod,
+        
         JesterMeetingFavorite,
+        
         YandereKillAllOther,
+        YandereShipJustForTwo,
 
         UnKnown = 100,
     }

@@ -302,6 +302,12 @@ namespace ExtremeRoles.Patches.Manager
                     textRenderer.color = ColorPalette.YandereVioletRed;
                     manager.BackgroundBar.material.SetColor("_Color", ColorPalette.YandereVioletRed);
                     break;
+                case (GameOverReason)RoleGameOverReason.YandereShipJustForTwo:
+                    bonusText = Translation.GetString(
+                        RoleGameOverReason.YandereShipJustForTwo.ToString());
+                    textRenderer.color = ColorPalette.YandereVioletRed;
+                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.YandereVioletRed);
+                    break;
                 default:
                     break;
             }
@@ -349,6 +355,8 @@ namespace ExtremeRoles.Patches.Manager
             {
 
                 var role = ExtremeRoleManager.GameRole[player.PlayerId];
+
+                if (!role.IsNeutral()) { continue; }
 
                 if (added.Contains(role.Id)) { continue; }
 
