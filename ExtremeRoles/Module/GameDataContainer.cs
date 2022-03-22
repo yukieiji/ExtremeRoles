@@ -399,6 +399,10 @@ namespace ExtremeRoles.Module
                         addData = new LoverWinChecker();
                         addData.AddAliveRole(playerId, role);
                         break;
+                    case ExtremeRoleId.Yandere:
+                        addData = new YandereWinChecker();
+                        addData.AddAliveRole(playerId, role);
+                        break;
                     default:
                         break;
                 }

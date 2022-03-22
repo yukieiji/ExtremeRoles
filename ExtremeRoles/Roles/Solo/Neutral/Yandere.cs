@@ -11,7 +11,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 {
     public class Yandere : SingleRoleBase, IRoleUpdate, IRoleMurderPlayerHock, IRoleResetMeeting, IRoleSpecialSetUp
     {
-        private PlayerControl oneSidedLover = null;
+        public PlayerControl OneSidedLover = null;
 
         private bool hasOneSidedArrow = false;
         private Arrow oneSidedArrow = null;
@@ -174,7 +174,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public override string GetIntroDescription() => string.Format(
             base.GetIntroDescription(),
-            this.oneSidedLover.Data.PlayerName);
+            this.OneSidedLover.Data.PlayerName);
 
 
         public void Update(PlayerControl rolePlayer)
@@ -184,10 +184,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                rolePlayer.PlayerId);
             if (playerInfo.IsDead || playerInfo.Disconnected) { return; }
 
-            Vector2 oneSideLoverPos = this.oneSidedLover.GetTruePosition();
+            Vector2 oneSideLoverPos = this.OneSidedLover.GetTruePosition();
 
             // 片思いびとが生きてる時の処理
-            if (!this.oneSidedLover.Data.Disconnected && !this.oneSidedLover.Data.IsDead)
+            if (!this.OneSidedLover.Data.Disconnected && !this.OneSidedLover.Data.IsDead)
             {
                 searchTarget(rolePlayer, oneSideLoverPos);
             }
@@ -223,9 +223,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 playerIndex = UnityEngine.Random.RandomRange(
                     0, PlayerControl.AllPlayerControls.Count - 1);
 
-                this.oneSidedLover = PlayerControl.AllPlayerControls[playerIndex];
+                this.OneSidedLover = PlayerControl.AllPlayerControls[playerIndex];
 
-                var role = ExtremeRoleManager.GameRole[this.oneSidedLover.PlayerId];
+                var role = ExtremeRoleManager.GameRole[this.OneSidedLover.PlayerId];
                 if (role.Id != ExtremeRoleId.Yandere)
                 {
                     var multiAssignRole = role as MultiAssignRoleBase;
