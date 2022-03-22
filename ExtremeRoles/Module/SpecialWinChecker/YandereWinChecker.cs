@@ -41,7 +41,7 @@ namespace ExtremeRoles.Module.SpecialWinChecker
 
             int aliveNum = aliveYandere.Count + aliveOneSideLover.Count;
 
-            if (aliveOneSideLover.Count != 0) { return false; }
+            if (aliveOneSideLover.Count != 0 || aliveYandere.Count != 0) { return false; }
             if (aliveNum < statistics.TotalAlive - aliveNum) { return false; }
 
             foreach (var player in aliveOneSideLover)
