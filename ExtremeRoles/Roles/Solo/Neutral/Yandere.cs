@@ -341,7 +341,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.hasOneSidedArrow = allOption[
                 GetRoleOptionId((int)YandereOption.HasOneSidedArrow)].GetValue();
             this.target = new KillTarget(
-                allOption[GetRoleOptionId((int)YandereOption.ta)].GetValue());
+                allOption[GetRoleOptionId((int)YandereOption.HasTargetArrow)].GetValue());
         }
 
         private void checkRunawayNextMeeting()
