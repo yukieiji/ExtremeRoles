@@ -186,6 +186,19 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public void Update(PlayerControl rolePlayer)
         {
 
+            if (Minigame.Instance != null ||
+                ShipStatus.Instance == null ||
+                GameData.Instance == null ||
+                MeetingHud.Instance != null)
+            {
+                return;
+            }
+            if (!ShipStatus.Instance.enabled ||
+                ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
+            {
+                return;
+            }
+
             var playerInfo = GameData.Instance.GetPlayerById(
                rolePlayer.PlayerId);
             if (playerInfo.IsDead || playerInfo.Disconnected) { return; }
