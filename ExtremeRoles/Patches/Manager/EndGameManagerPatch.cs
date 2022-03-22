@@ -296,6 +296,12 @@ namespace ExtremeRoles.Patches.Manager
                     textRenderer.color = ColorPalette.LoverPink;
                     manager.BackgroundBar.material.SetColor("_Color", ColorPalette.LoverPink);
                     break;
+                case (GameOverReason)RoleGameOverReason.YandereKillAllOther:
+                    bonusText = Translation.GetString(
+                        ExtremeRoleId.Yandere.ToString());
+                    textRenderer.color = ColorPalette.YandereVioletRed;
+                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.YandereVioletRed);
+                    break;
                 default:
                     break;
             }
