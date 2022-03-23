@@ -394,6 +394,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             this.progress.Clear();
 
+            if (this.HasOtherKillCool)
+            {
+                this.defaultKillCool = this.KillCoolTime;
+            }
+            else
+            {
+                this.defaultKillCool = PlayerControl.GameOptions.KillCooldown;
+                this.HasOtherKillCool = true;
+            }
         }
 
         private void checkRunawayNextMeeting()
