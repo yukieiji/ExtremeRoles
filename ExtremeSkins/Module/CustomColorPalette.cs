@@ -105,7 +105,36 @@ namespace ExtremeSkins.Module
                 MainColor = new Color32(186, 205, 49, byte.MaxValue),
                 ShadowColor = new Color32(112, 123, 29, byte.MaxValue),
             },
-
+            new ColorData()
+            {
+                Name = "ivory",
+                MainColor = new Color32(255, 255, 240, byte.MaxValue),
+                ShadowColor = new Color32(153, 153, 144, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "kenpou",
+                MainColor = new Color32(48, 47, 43, byte.MaxValue),
+                ShadowColor = new Color32(29, 28, 26, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "grisbleu",
+                MainColor = new Color32(161, 169, 186, byte.MaxValue),
+                ShadowColor = new Color32(97, 101, 112, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "melon",
+                MainColor = new Color32(245, 175, 78, byte.MaxValue),
+                ShadowColor = new Color32(147, 105, 47, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "clan",
+                MainColor = new Color32(0, 109, 102, byte.MaxValue),
+                ShadowColor = new Color32(0, 65, 61, byte.MaxValue),
+            },
         };
     }
 }
