@@ -425,9 +425,14 @@ namespace ExtremeRoles.Module
             CustomOptionBase enableCheckOption = null)
         {
             List<float> selections = new List<float>();
-            for (float s = min; s <= max; s += step)
+
+            decimal dStep = new decimal(step);
+            decimal dMin = new decimal(min);
+            decimal dMax = new decimal(max);
+
+            for (decimal s = dMin; s <= dMax; s += dStep)
             {
-                selections.Add(s);
+                selections.Add(((float)(decimal.ToDouble(s))));
             }
             return new FloatCustomOption(
                 id, name, selections.Cast<object>().ToArray(),
