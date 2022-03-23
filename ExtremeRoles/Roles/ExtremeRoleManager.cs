@@ -136,6 +136,7 @@ namespace ExtremeRoles.Roles
                 new TaskMaster(),
                 new Missionary(),
                 new Jester(),
+                new Yandere(),
             };
 
         public static readonly List<
