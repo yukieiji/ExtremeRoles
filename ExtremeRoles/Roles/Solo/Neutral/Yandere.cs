@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using UnityEngine;
 
@@ -16,10 +15,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private bool hasOneSidedArrow = false;
         private Arrow oneSidedArrow = null;
 
+        private int maxTargetNum = 0;
+
         private int targetKillReduceRate = 0;
         private float noneTargetKillMultiplier = 0;
         private float defaultKillCool;
-        private float prevKillCool;
 
         private bool isRunawayNextMeetingEnd;
         private bool isRunaway;
@@ -28,8 +28,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private float timer = 0f;
 
         private float setTargetRange;
+        private float setTargetTime;
 
         private KillTarget target;
+
+        private Dictionary<byte, float> progress = new Dictionary<byte, float>();
 
         public class KillTarget
         {
@@ -48,16 +51,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             public void Add(byte playerId)
             {
-                Add(Helper.Player.GetPlayerControlById(playerId));
-            }
-            public void Add(PlayerControl player)
-            {
 
-                this.targetPlayer.Add(player.PlayerId, player);
+                var player = Helper.Player.GetPlayerControlById(playerId);
+
+                this.targetPlayer.Add(playerId, player);
                 if (this.isUseArrow)
                 {
                     this.targetArrow.Add(
-                        player.PlayerId, new Arrow(
+                        playerId, new Arrow(
                             new Color32(
                                 byte.MaxValue,
                                 byte.MaxValue,
@@ -66,8 +67,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 }
                 else
                 {
-                    this.targetArrow.Add(
-                        player.PlayerId, null);
+                    this.targetArrow.Add(playerId, null);
                 }
             }
 
@@ -128,6 +128,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             TargetKilledKillCoolReduceRate,
             NoneTargetKilledKillCoolMultiplier,
             SetTargetRange,
+            SetTargetTime,
+            MaxTargetNum,
             RunawayTime,
             HasOneSidedArrow,
             HasTargetArrow,
@@ -185,6 +187,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void Update(PlayerControl rolePlayer)
         {
+
+            if (this.progress.ContainsKey(rolePlayer.PlayerId))
+            {
+                this.progress.Remove(rolePlayer.PlayerId);
+            }
 
             if (Minigame.Instance != null ||
                 ShipStatus.Instance == null ||
@@ -267,7 +274,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void IntroEndSetUp()
         {
-            return;
+            foreach(var player in GameData.Instance.AllPlayers)
+            {
+                this.progress.Add(player.PlayerId, 0.0f);
+            }
         }
 
         public void ResetOnMeetingEnd()
@@ -316,7 +326,22 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     this.RoleName,
                     YandereOption.SetTargetRange.ToString()),
                 1.8f, 0.5f, 5.0f, 0.1f,
+                parentOps);
+
+            CustomOption.Create(
+                GetRoleOptionId((int)YandereOption.SetTargetTime),
+                string.Concat(
+                    this.RoleName,
+                    YandereOption.SetTargetTime.ToString()),
+                2.0f, 0.1f, 7.5f, 0.1f,
                 parentOps, format: OptionUnit.Second);
+
+            CustomOption.Create(
+                GetRoleOptionId((int)YandereOption.MaxTargetNum),
+                string.Concat(
+                    this.RoleName,
+                    YandereOption.MaxTargetNum.ToString()),
+                5, 1, 15, 1, parentOps);
 
             CustomOption.Create(
                 GetRoleOptionId((int)YandereOption.RunawayTime),
@@ -348,11 +373,16 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             this.setTargetRange = allOption[
                 GetRoleOptionId((int)YandereOption.SetTargetRange)].GetValue();
+            this.setTargetTime = allOption[
+                GetRoleOptionId((int)YandereOption.SetTargetTime)].GetValue();
 
             this.targetKillReduceRate = allOption[
                 GetRoleOptionId((int)YandereOption.TargetKilledKillCoolReduceRate)].GetValue();
             this.noneTargetKillMultiplier = allOption[
                 GetRoleOptionId((int)YandereOption.NoneTargetKilledKillCoolMultiplier)].GetValue();
+            
+            this.maxTargetNum = allOption[
+                GetRoleOptionId((int)YandereOption.MaxTargetNum)].GetValue();
 
             this.timeLimit = allOption[
                 GetRoleOptionId((int)YandereOption.RunawayTime)].GetValue();
@@ -361,6 +391,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 GetRoleOptionId((int)YandereOption.HasOneSidedArrow)].GetValue();
             this.target = new KillTarget(
                 allOption[GetRoleOptionId((int)YandereOption.HasTargetArrow)].GetValue());
+
+            this.progress.Clear();
+
         }
 
         private void checkRunawayNextMeeting()
@@ -390,8 +423,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             {
                 GameData.PlayerInfo playerInfo = allPlayers[i];
 
+                if (!this.progress.ContainsKey(playerInfo.PlayerId)) { continue; }
+
+                float playerProgress = this.progress[playerInfo.PlayerId];
+
                 if (!playerInfo.Disconnected &&
-                    !ExtremeRoleManager.GameRole[playerInfo.PlayerId].IsImpostor() &&
                     !playerInfo.IsDead && 
                     rolePlayer.PlayerId != playerInfo.PlayerId &&
                     !playerInfo.Object.inVent)
@@ -401,14 +437,35 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     {
                         Vector2 vector = @object.GetTruePosition() - pos;
                         float magnitude = vector.magnitude;
+
                         if (magnitude <= this.setTargetRange &&
                             !PhysicsHelpers.AnyNonTriggersBetween(
                                 pos, vector.normalized,
                                 magnitude, Constants.ShipAndObjectsMask))
                         {
-                            // 邪魔者追加処理
+                            playerProgress += Time.fixedDeltaTime;
+                        }
+                        else
+                        {
+                            playerProgress = 0.0f;
                         }
                     }
+                }
+                else
+                {
+                    playerProgress = 0.0f;
+                }
+
+                if (playerProgress >= this.setTargetTime && 
+                    !this.target.IsContain(playerInfo.PlayerId) &&
+                    this.target.Count() < this.maxTargetNum)
+                {
+                    this.target.Add(playerInfo.PlayerId);
+                    this.progress.Remove(playerInfo.PlayerId);
+                }
+                else
+                {
+                    this.progress[playerInfo.PlayerId] = playerProgress;
                 }
             }
         }
