@@ -447,12 +447,6 @@ namespace ExtremeRoles
             Roles.Solo.Neutral.Alice.ShipBroken(
                 callerId, targetPlayerId, taskId);
         }
-        public static void SlaveDriverSetNewTask(
-            byte callerId, int index, int taskIndex)
-        {
-            Roles.Solo.Impostor.SlaveDriver.ReplaceToNewTask(
-                callerId, index, taskIndex);
-        }
 
         public static void TaskMasterSetNewTask(
             byte callerId, int index, int taskIndex)
