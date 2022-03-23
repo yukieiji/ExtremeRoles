@@ -12,7 +12,7 @@ namespace ExtremeRoles.Module
 {
     public enum OptionUnit
     {
-        None,
+        None = byte.MinValue,
         Second,
         Minute,
         Shot,
