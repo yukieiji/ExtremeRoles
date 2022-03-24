@@ -114,7 +114,27 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public override bool TryRolePlayerKillTo(
             PlayerControl rolePlayer, PlayerControl targetPlayer)
         {
-            this.KillCoolTime = this.KillCoolTime + this.killPenalty;
+            
+            bool isLightOff = false;
+
+            foreach (PlayerTask task in targetPlayer.myTasks)
+            {
+                if (task.TaskType == TaskTypes.FixLights)
+                {
+                    isLightOff = true;
+                    break;
+                }
+            }
+
+            if (isLightOff)
+            {
+                this.KillCoolTime = this.KillCoolTime - this.killBonus;
+            }
+            else
+            {
+                this.KillCoolTime = this.KillCoolTime + this.killPenalty;
+            }
+            
             return true;
         }
 
