@@ -13,8 +13,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public enum JesterOption
         {
-            OutburstDistance,
-            UseSabotage
+            UseSabotage,
+            OutburstDistance
         }
 
         public RoleAbilityButtonBase Button
@@ -203,10 +203,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         protected override void RoleSpecificInit()
         {
-            this.outburstDistance = OptionHolder.AllOption[
-                GetRoleOptionId((int)JesterOption.OutburstDistance)].GetValue();
             this.UseSabotage = OptionHolder.AllOption[
                 GetRoleOptionId((int)JesterOption.UseSabotage)].GetValue();
+            this.outburstDistance = OptionHolder.AllOption[
+                GetRoleOptionId((int)JesterOption.OutburstDistance)].GetValue();
             this.RoleAbilityInit();
         }
 
