@@ -195,7 +195,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.RoleName,
                     SandWormOption.KillCoolPenalty.ToString()),
                 5.0f, 1.0f, 10.0f, 0.1f,
-                parentOps);
+                parentOps, format: OptionUnit.Second);
 
             CustomOption.Create(
                 GetRoleOptionId((int)SandWormOption.AssaultKillCoolReduce),
@@ -203,7 +203,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.RoleName,
                     SandWormOption.AssaultKillCoolReduce.ToString()),
                 3.0f, 1.0f, 5.0f, 0.1f,
-                parentOps);
+                parentOps, format: OptionUnit.Second);
 
 
             CustomOption.Create(
