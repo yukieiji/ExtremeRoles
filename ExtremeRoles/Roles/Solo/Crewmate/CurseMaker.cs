@@ -266,7 +266,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 string.Concat(
                     this.RoleName,
                     CurseMakerOption.SearchDeadBodyTime.ToString()),
-                60.0f, 45.0f, 90.0f, 0.5f,
+                60.0f, 0.5f, 120.0f, 0.5f,
                 searchDeadBodyOption, format: OptionUnit.Second,
                 invert: true,
                 enableCheckOption: parentOps);
