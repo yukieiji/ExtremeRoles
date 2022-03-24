@@ -19,6 +19,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             CursingRange,
             AdditionalKillCool,
             IsDeadBodySearch,
+            IsMultiDeadBodySearch,
             SearchDeadBodyTime,
         }
 
@@ -91,6 +92,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private byte deadBodyId;
 
         private bool isDeadBodySearch = false;
+        private bool isMultiDeadBodySearch = false;
         private bool isDeadBodySearchUsed = false;
 
         private float additionalKillCool = 1.0f;
@@ -262,6 +264,15 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 true, parentOps);
 
             CustomOption.Create(
+                GetRoleOptionId((int)CurseMakerOption.IsMultiDeadBodySearch),
+                string.Concat(
+                    this.RoleName,
+                    CurseMakerOption.IsMultiDeadBodySearch.ToString()),
+                false, searchDeadBodyOption,
+                invert: true,
+                enableCheckOption: parentOps);
+
+            CustomOption.Create(
                 GetRoleOptionId((int)CurseMakerOption.SearchDeadBodyTime),
                 string.Concat(
                     this.RoleName,
@@ -285,8 +296,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 GetRoleOptionId((int)CurseMakerOption.CursingRange)].GetValue();
             this.isDeadBodySearch = allOption[
                 GetRoleOptionId((int)CurseMakerOption.IsDeadBodySearch)].GetValue();
+            this.isMultiDeadBodySearch = allOption[
+                GetRoleOptionId((int)CurseMakerOption.IsMultiDeadBodySearch)].GetValue();
             this.searchDeadBodyTime = allOption[
                 GetRoleOptionId((int)CurseMakerOption.SearchDeadBodyTime)].GetValue();
+
+            this.isDeadBodySearchUsed = false;
 
             this.cursingText = Translation.GetString("cursing");
             this.deadBodyData.Clear();
@@ -310,7 +325,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void HockMuderPlayer(PlayerControl source, PlayerControl target)
         {
-            if (this.isDeadBodySearchUsed && this.isDeadBodySearch) { return; }
+            if (this.isDeadBodySearchUsed || !this.isDeadBodySearch) { return; }
 
             this.deadBodyData.Add(
                 target.PlayerId,
@@ -336,7 +351,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 }
             }
 
-            if (this.isDeadBodySearchUsed && this.isDeadBodySearch) { return; }
+            if (this.isDeadBodySearchUsed || !this.isDeadBodySearch) { return; }
 
             List<byte> removeData = new List<byte>();
 
@@ -349,6 +364,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     {
                         var arrow = new Arrow(this.NameColor);
                         this.deadBodyArrow.Add(playerId, arrow);
+                        if (!this.isMultiDeadBodySearch)
+                        {
+                            this.isDeadBodySearchUsed = true;
+                        }
+
                     }
                 }
                 else
