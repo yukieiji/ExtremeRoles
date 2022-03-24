@@ -134,6 +134,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 this.KillCoolTime = this.KillCoolTime + this.killPenalty;
             }
+
+            this.KillCoolTime = Mathf.Clamp(this.KillCoolTime, 0.1f, float.MaxValue);
             
             return true;
         }
@@ -200,6 +202,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 byte.MinValue);
 
             this.KillCoolTime = this.KillCoolTime - this.killBonus;
+            this.KillCoolTime = Mathf.Clamp(this.KillCoolTime, 0.1f, float.MaxValue);
+
             this.targetPlayer = null;
             PlayerControl.LocalPlayer.SetKillTimer(prevTime);
 
