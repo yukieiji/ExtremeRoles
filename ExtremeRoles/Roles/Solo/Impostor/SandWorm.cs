@@ -81,6 +81,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public enum SandWormOption
         {
+            AssaultKillCoolReduce,
+            KillCoolPenalty,
             AssaultRange,
             IsAssultPlaySound,
         }
@@ -93,6 +95,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.assaultButton = value;
             }
         }
+
+        private float killPenalty;
+        private float killBonus;
 
         private float range;
         private bool isAssultPlaySound = false;
@@ -107,7 +112,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             Palette.ImpostorRed,
             true, false, true, true)
         { }
-        
+
+        public override bool TryRolePlayerKillTo(
+            PlayerControl rolePlayer, PlayerControl targetPlayer)
+        {
+            this.KillCoolTime = this.KillCoolTime + this.killPenalty;
+            return true;
+        }
+
+
         public void CreateAbility()
         {
             this.Button = new AssaultButton(
@@ -169,6 +182,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.targetPlayer.PlayerId,
                 byte.MinValue);
 
+            this.KillCoolTime = this.KillCoolTime - this.killBonus;
             this.targetPlayer = null;
             PlayerControl.LocalPlayer.SetKillTimer(prevTime);
 
@@ -178,6 +192,23 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
+            CustomOption.Create(
+                GetRoleOptionId((int)SandWormOption.KillCoolPenalty),
+                string.Concat(
+                    this.RoleName,
+                    SandWormOption.KillCoolPenalty.ToString()),
+                5.0f, 1.0f, 10.0f, 0.1f,
+                parentOps);
+
+            CustomOption.Create(
+                GetRoleOptionId((int)SandWormOption.AssaultKillCoolReduce),
+                string.Concat(
+                    this.RoleName,
+                    SandWormOption.AssaultKillCoolReduce.ToString()),
+                3.0f, 1.0f, 5.0f, 0.1f,
+                parentOps);
+
+
             CustomOption.Create(
                 GetRoleOptionId((int)SandWormOption.AssaultRange),
                 string.Concat(
@@ -209,6 +240,17 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 GetRoleOptionId((int)SandWormOption.AssaultRange)].GetValue();
             this.isAssultPlaySound = OptionHolder.AllOption[
                 GetRoleOptionId((int)SandWormOption.IsAssultPlaySound)].GetValue();
+
+            this.killPenalty = OptionHolder.AllOption[
+                GetRoleOptionId((int)SandWormOption.KillCoolPenalty)].GetValue();
+            this.killBonus = OptionHolder.AllOption[
+                GetRoleOptionId((int)SandWormOption.AssaultKillCoolReduce)].GetValue();
+
+            if (!this.HasOtherKillCool)
+            {
+                this.HasOtherKillCool = true;
+                this.KillCoolTime = PlayerControl.GameOptions.KillCooldown;
+            }
 
             this.RoleAbilityInit();
         }
