@@ -184,6 +184,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             base.GetIntroDescription(),
             this.OneSidedLover.Data.PlayerName);
 
+        public override string GetImportantText(
+            bool isContainFakeTask = true) => string.Format(
+                base.GetImportantText(isContainFakeTask),
+                this.OneSidedLover.Data.PlayerName);
+
 
         public void Update(PlayerControl rolePlayer)
         {
