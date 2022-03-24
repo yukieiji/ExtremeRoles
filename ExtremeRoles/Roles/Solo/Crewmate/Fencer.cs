@@ -37,7 +37,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ExtremeRoleId.Fencer,
             ExtremeRoleType.Crewmate,
             ExtremeRoleId.Fencer.ToString(),
-            ColorPalette.AgencyYellowGreen,
+            ColorPalette.FencerPin,
             false, true, false, false)
         { }
 

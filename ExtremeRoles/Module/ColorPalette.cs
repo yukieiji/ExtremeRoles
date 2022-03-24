@@ -21,6 +21,7 @@ namespace ExtremeRoles.Module
         public readonly static Color AgencyYellowGreen = new Color32(181, 255, 20, byte.MaxValue);
         public readonly static Color BakaryWheatColor = new Color32(228, 163, 067, byte.MaxValue);
         public readonly static Color CurseMakerViolet = new Color32(100, 61, 97, byte.MaxValue);
+        public readonly static Color FencerPin = new Color32(0, 87, 86, byte.MaxValue);
 
         public readonly static Color JackalBlue = new Color32(65, 105, 255, byte.MaxValue);
         public readonly static Color AliceGold = new Color32(255, 215, 0, byte.MaxValue);
