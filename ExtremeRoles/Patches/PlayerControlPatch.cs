@@ -698,6 +698,11 @@ namespace ExtremeRoles.Patches
                     byte isEnter = reader.ReadByte();
                     RPCOperator.CustomVentUse(ventId, ventingPlayer, isEnter);
                     break;
+                case RPCOperator.Command.StartVentAnimation:
+                    int animationVentId = reader.ReadPackedInt32();
+                    bool isSound = reader.ReadBoolean();
+                    RPCOperator.StartVentAnimation(animationVentId, isSound);
+                    break;
                 case RPCOperator.Command.UncheckedShapeShift:
                     byte shapeShiftPlayerId = reader.ReadByte();
                     byte shapeShiftTargetPlayerId = reader.ReadByte();

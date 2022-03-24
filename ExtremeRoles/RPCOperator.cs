@@ -17,6 +17,7 @@ namespace ExtremeRoles
             SetCombinationRole,
             ShareOption,
             CustomVentUse,
+            StartVentAnimation,
             UncheckedShapeShift,
             UncheckedMurderPlayer,
             CleanDeadBody,
@@ -205,6 +206,46 @@ namespace ExtremeRoles
                     })));
 
             player.MyPhysics.HandleRpc(isEnter != 0 ? (byte)19 : (byte)20, reader);
+        }
+
+        public static void StartVentAnimation(int ventId, bool playSound)
+        {
+            Vent vent = ShipStatus.Instance.AllVents.FirstOrDefault(
+                (x) => x.Id == ventId);
+
+            var ventContainer = ExtremeRolesPlugin.GameDataStore.CustomVent;
+
+            if (ventContainer.IsCustomVent(ventId))
+            {
+                HudManager.Instance.StartCoroutine(
+                    Effects.Lerp(
+                        0.6f, new System.Action<float>((p) => {
+                            if (vent != null && vent.myRend != null)
+                            {
+                                vent.myRend.sprite = ventContainer.GetVentSprite(
+                                    ventId, (int)(p * 17));
+                                if (p == 1f)
+                                {
+                                    vent.myRend.sprite = ventContainer.GetVentSprite(
+                                        ventId, 0);
+                                }
+                            }   
+                        })
+                    )
+                );
+            }
+            else
+            {
+                vent.GetComponent<PowerTools.SpriteAnim>().Play(
+                    vent.ExitVentAnim, 1f);
+                if (playSound && Constants.ShouldPlaySfx())
+                {
+                    SoundManager.Instance.StopSound(
+                        ShipStatus.Instance.VentEnterSound);
+                    SoundManager.Instance.PlaySound(
+                        ShipStatus.Instance.VentEnterSound, false, 1f).pitch = FloatRange.Next(0.8f, 1.2f);
+                }
+            }
         }
 
         public static void UncheckedShapeShift(
