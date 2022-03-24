@@ -14,6 +14,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public enum JesterOption
         {
             OutburstDistance,
+            UseSabotage
         }
 
         public RoleAbilityButtonBase Button
@@ -35,7 +36,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             ExtremeRoleType.Neutral,
             ExtremeRoleId.Jester.ToString(),
             ColorPalette.JesterPink,
-            false, false, false, true)
+            false, false, false, false)
         { }
 
         public static void OutburstKill(
@@ -189,6 +190,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 1.0f, 0.0f, 2.0f, 0.1f,
                 parentOps);
 
+            CustomOption.Create(
+                GetRoleOptionId((int)JesterOption.UseSabotage),
+                string.Concat(
+                    this.RoleName,
+                    JesterOption.UseSabotage.ToString()),
+                true, parentOps);
+
             this.CreateAbilityCountOption(
                 parentOps, 5, 100, 2.0f);
         }
@@ -197,6 +205,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             this.outburstDistance = OptionHolder.AllOption[
                 GetRoleOptionId((int)JesterOption.OutburstDistance)].GetValue();
+            this.UseSabotage = OptionHolder.AllOption[
+                GetRoleOptionId((int)JesterOption.UseSabotage)].GetValue();
             this.RoleAbilityInit();
         }
 
