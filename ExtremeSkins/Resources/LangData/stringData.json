@@ -61,5 +61,20 @@
     },
     "tilleul": {
         "11": "\u30c6\u30a3\u30e6\u30fc\u30eb"
+    },
+    "ivory": {
+        "11": "\u30a2\u30a4\u30dc\u30ea\u30fc"
+    },
+    "kenpou": {
+        "11": "\u61b2\u623f"
+    },
+    "grisbleu": {
+        "11": "\u30b0\u30ea\u30fc\u30fb\u30d6\u30eb\u30fc"
+    },
+    "melon": {
+        "11": "\u30e0\u30ed\u30f3"
+    },
+    "clan": {
+        "11": "\u30af\u30e9\u30f3"
     }
 }
