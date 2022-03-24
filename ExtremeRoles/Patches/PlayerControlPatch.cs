@@ -700,8 +700,7 @@ namespace ExtremeRoles.Patches
                     break;
                 case RPCOperator.Command.StartVentAnimation:
                     int animationVentId = reader.ReadPackedInt32();
-                    bool isSound = reader.ReadBoolean();
-                    RPCOperator.StartVentAnimation(animationVentId, isSound);
+                    RPCOperator.StartVentAnimation(animationVentId);
                     break;
                 case RPCOperator.Command.UncheckedShapeShift:
                     byte shapeShiftPlayerId = reader.ReadByte();

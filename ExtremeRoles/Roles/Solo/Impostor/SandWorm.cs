@@ -84,7 +84,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             AssaultKillCoolReduce,
             KillCoolPenalty,
             AssaultRange,
-            IsAssultPlaySound,
         }
 
         public RoleAbilityButtonBase Button
@@ -100,7 +99,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private float killBonus;
 
         private float range;
-        private bool isAssultPlaySound = false;
 
         private RoleAbilityButtonBase assaultButton;
         private PlayerControl targetPlayer = null;
@@ -162,10 +160,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 (byte)RPCOperator.Command.StartVentAnimation,
                 Hazel.SendOption.Reliable, -1);
             writer.WritePacked(Vent.currentVent.Id);
-            writer.Write(this.isAssultPlaySound);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCOperator.StartVentAnimation(
-                Vent.currentVent.Id, this.isAssultPlaySound);
+                Vent.currentVent.Id);
 
 
             RPCOperator.Call(
@@ -218,13 +215,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 parentOps);
 
             CustomOption.Create(
-                GetRoleOptionId((int)SandWormOption.IsAssultPlaySound),
-                string.Concat(
-                    this.RoleName,
-                    SandWormOption.IsAssultPlaySound.ToString()),
-                true, parentOps);
-
-            CustomOption.Create(
                 this.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime),
                 string.Concat(
                     this.RoleName,
@@ -238,8 +228,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             this.range = OptionHolder.AllOption[
                 GetRoleOptionId((int)SandWormOption.AssaultRange)].GetValue();
-            this.isAssultPlaySound = OptionHolder.AllOption[
-                GetRoleOptionId((int)SandWormOption.IsAssultPlaySound)].GetValue();
 
             this.killPenalty = OptionHolder.AllOption[
                 GetRoleOptionId((int)SandWormOption.KillCoolPenalty)].GetValue();

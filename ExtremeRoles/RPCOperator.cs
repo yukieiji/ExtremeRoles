@@ -208,7 +208,7 @@ namespace ExtremeRoles
             player.MyPhysics.HandleRpc(isEnter != 0 ? (byte)19 : (byte)20, reader);
         }
 
-        public static void StartVentAnimation(int ventId, bool playSound)
+        public static void StartVentAnimation(int ventId)
         {
             Vent vent = ShipStatus.Instance.AllVents.FirstOrDefault(
                 (x) => x.Id == ventId);
@@ -238,13 +238,6 @@ namespace ExtremeRoles
             {
                 vent.GetComponent<PowerTools.SpriteAnim>().Play(
                     vent.ExitVentAnim, 1f);
-                if (playSound && Constants.ShouldPlaySfx())
-                {
-                    SoundManager.Instance.StopSound(
-                        ShipStatus.Instance.VentEnterSound);
-                    SoundManager.Instance.PlaySound(
-                        ShipStatus.Instance.VentEnterSound, false, 1f).pitch = FloatRange.Next(0.8f, 1.2f);
-                }
             }
         }
 
