@@ -525,7 +525,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             if (!this.hasOneSidedArrow) { return; }
 
-            if (this.oneSidedArrow != null)
+            if (this.oneSidedArrow == null)
             {
                 this.oneSidedArrow = new Arrow(
                     this.NameColor);
