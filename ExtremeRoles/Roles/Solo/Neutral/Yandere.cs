@@ -185,37 +185,58 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.OneSidedLover.Data.PlayerName);
 
         public override string GetImportantText(
-            bool isContainFakeTask = true) => string.Format(
-                base.GetImportantText(isContainFakeTask),
-                this.OneSidedLover.Data.PlayerName);
+            bool isContainFakeTask = true)
+        {
 
+            string baseString = base.GetImportantText(isContainFakeTask);
+
+            if (this.OneSidedLover == null) { return baseString; }
+            return string.Format(
+                baseString, this.OneSidedLover.Data.PlayerName);
+        }
 
         public void Update(PlayerControl rolePlayer)
         {
+
+            Helper.Logging.Debug("ckpt:0");
+
+            if (ShipStatus.Instance == null ||
+                GameData.Instance == null ||
+                MeetingHud.Instance != null)
+            {
+                return;
+            }
+            
+            Helper.Logging.Debug("ckpt:1");
+
+            if (!ShipStatus.Instance.enabled ||
+                ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
+            {
+                return;
+            }
+            
+            Helper.Logging.Debug("ckpt:2");
 
             if (this.progress.ContainsKey(rolePlayer.PlayerId))
             {
                 this.progress.Remove(rolePlayer.PlayerId);
             }
 
-            if (Minigame.Instance != null ||
-                ShipStatus.Instance == null ||
-                GameData.Instance == null ||
-                MeetingHud.Instance != null)
-            {
-                return;
-            }
-            if (!ShipStatus.Instance.enabled ||
-                ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
-            {
-                return;
-            }
+            Helper.Logging.Debug("ckpt:3");
 
             var playerInfo = GameData.Instance.GetPlayerById(
                rolePlayer.PlayerId);
             if (playerInfo.IsDead || playerInfo.Disconnected) { return; }
 
+            Helper.Logging.Debug("ckpt:4");
+
+            if (this.OneSidedLover == null) { return; }
+
+            Helper.Logging.Debug("ckpt:5");
+
             Vector2 oneSideLoverPos = this.OneSidedLover.GetTruePosition();
+
+            Helper.Logging.Debug("ckpt:6");
 
             // 片思いびとが生きてる時の処理
             if (!this.OneSidedLover.Data.Disconnected && !this.OneSidedLover.Data.IsDead)
@@ -226,11 +247,20 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             {
                 this.isRunaway = true;
             }
-            
+
+            Helper.Logging.Debug("ckpt:7");
+
             updateOneSideLoverArrow(oneSideLoverPos);
+
+            Helper.Logging.Debug("ckpt:8");
+
             this.target.Update();
 
+            Helper.Logging.Debug("ckpt:9");
+
             updateCanKill();
+
+            Helper.Logging.Debug("ckpt:10");
 
             checkRunawayNextMeeting();
         }
