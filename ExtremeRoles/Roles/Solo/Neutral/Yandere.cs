@@ -51,7 +51,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             public void Add(byte playerId)
             {
-
                 var player = Helper.Player.GetPlayerControlById(playerId);
 
                 this.targetPlayer.Add(playerId, player);
@@ -198,45 +197,37 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public void Update(PlayerControl rolePlayer)
         {
 
-            Helper.Logging.Debug("ckpt:0");
-
             if (ShipStatus.Instance == null ||
                 GameData.Instance == null ||
                 MeetingHud.Instance != null)
             {
                 return;
             }
-            
-            Helper.Logging.Debug("ckpt:1");
 
             if (!ShipStatus.Instance.enabled ||
                 ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
             {
                 return;
             }
-            
-            Helper.Logging.Debug("ckpt:2");
-
-            if (this.progress.ContainsKey(rolePlayer.PlayerId))
-            {
-                this.progress.Remove(rolePlayer.PlayerId);
-            }
-
-            Helper.Logging.Debug("ckpt:3");
 
             var playerInfo = GameData.Instance.GetPlayerById(
                rolePlayer.PlayerId);
             if (playerInfo.IsDead || playerInfo.Disconnected) { return; }
 
-            Helper.Logging.Debug("ckpt:4");
-
             if (this.OneSidedLover == null) { return; }
+            
+            // 不必要なデータを削除、役職の人と想い人
+            if (this.progress.ContainsKey(rolePlayer.PlayerId))
+            {
+                this.progress.Remove(rolePlayer.PlayerId);
+            }
+            if (this.progress.ContainsKey(this.OneSidedLover.PlayerId))
+            {
+                this.progress.Remove(this.OneSidedLover.PlayerId);
+            }
 
-            Helper.Logging.Debug("ckpt:5");
 
             Vector2 oneSideLoverPos = this.OneSidedLover.GetTruePosition();
-
-            Helper.Logging.Debug("ckpt:6");
 
             // 片思いびとが生きてる時の処理
             if (!this.OneSidedLover.Data.Disconnected && !this.OneSidedLover.Data.IsDead)
@@ -248,19 +239,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 this.isRunaway = true;
             }
 
-            Helper.Logging.Debug("ckpt:7");
-
             updateOneSideLoverArrow(oneSideLoverPos);
-
-            Helper.Logging.Debug("ckpt:8");
 
             this.target.Update();
 
-            Helper.Logging.Debug("ckpt:9");
-
             updateCanKill();
-
-            Helper.Logging.Debug("ckpt:10");
 
             checkRunawayNextMeeting();
         }
@@ -473,6 +456,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 if (!playerInfo.Disconnected &&
                     !playerInfo.IsDead && 
                     rolePlayer.PlayerId != playerInfo.PlayerId &&
+                    this.OneSidedLover.PlayerId != playerInfo.PlayerId &&
                     !playerInfo.Object.inVent)
                 {
                     PlayerControl @object = playerInfo.Object;
@@ -517,7 +501,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             if (this.isRunaway) { return; }
 
-            this.CanKill = this.target.Count() != 0;
+            Helper.Logging.Debug($"targetNum:{this.target.Count()}");
+
+            this.CanKill = this.target.Count() > 0;
         }
 
         private void updateOneSideLoverArrow(Vector2 pos)
