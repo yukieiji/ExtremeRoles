@@ -188,6 +188,20 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void Update(PlayerControl rolePlayer)
         {
+
+            if (ShipStatus.Instance == null ||
+                GameData.Instance == null ||
+                MeetingHud.Instance != null)
+            {
+                return;
+            }
+            if (!ShipStatus.Instance.enabled ||
+                ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
+            {
+                return;
+            }
+
+
             this.targetTimer -= Time.deltaTime;
 
             if (this.targetTimerText == null)
