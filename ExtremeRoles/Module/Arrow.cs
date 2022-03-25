@@ -5,7 +5,7 @@ namespace ExtremeRoles.Module
     public class Arrow
     {
 
-        private const float maxSize = 0.7f;
+        private const float maxSize = 0.6f;
 
         private Vector3 target;
         private SpriteRenderer image;
