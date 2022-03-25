@@ -18,7 +18,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private int maxTargetNum = 0;
 
         private int targetKillReduceRate = 0;
-        private float noneTargetKillMultiplier = 0;
+        private float noneTargetKillMultiplier = 0.0f;
         private float defaultKillCool;
 
         private bool isRunawayNextMeetingEnd;
@@ -314,7 +314,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 string.Concat(
                     this.RoleName,
                     YandereOption.TargetKilledKillCoolReduceRate.ToString()),
-                85, 50, 99, 0.5f,
+                85, 50, 99, 1,
                 parentOps, format: OptionUnit.Percentage);
 
             CustomOption.Create(
@@ -346,7 +346,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 string.Concat(
                     this.RoleName,
                     YandereOption.MaxTargetNum.ToString()),
-                5, 1, 15, 1, parentOps);
+                5, 1, OptionHolder.VanillaMaxPlayerNum, 1, parentOps);
 
             CustomOption.Create(
                 GetRoleOptionId((int)YandereOption.RunawayTime),
