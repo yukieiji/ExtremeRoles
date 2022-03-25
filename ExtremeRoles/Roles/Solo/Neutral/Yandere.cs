@@ -287,18 +287,17 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 this.OneSidedLover = PlayerControl.AllPlayerControls[playerIndex];
 
                 var role = ExtremeRoleManager.GameRole[this.OneSidedLover.PlayerId];
-                if (role.Id != ExtremeRoleId.Yandere)
-                {
-                    var multiAssignRole = role as MultiAssignRoleBase;
-                    if (multiAssignRole != null)
-                    {
-                        if (multiAssignRole.AnotherRole != null)
-                        {
+                if (role.Id != ExtremeRoleId.Yandere) { break; }
 
-                            if (multiAssignRole.AnotherRole.Id != ExtremeRoleId.Yandere)
-                            {
-                                break;
-                            }
+                var multiAssignRole = role as MultiAssignRoleBase;
+                if (multiAssignRole != null)
+                {
+                    if (multiAssignRole.AnotherRole != null)
+                    {
+
+                        if (multiAssignRole.AnotherRole.Id != ExtremeRoleId.Yandere)
+                        {
+                            break;
                         }
                     }
                 }
