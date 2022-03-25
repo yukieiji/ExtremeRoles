@@ -9,7 +9,7 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class Sheriff : SingleRoleBase, IRoleUpdate
+    public class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
     {
 
         public enum SheriffOption
@@ -206,6 +206,22 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             this.killCountText.text = Translation.GetString("buttonCountText") + string.Format(
                 Translation.GetString(OptionUnit.Shot.ToString()), this.shootNum);
+        }
+
+        public void ResetOnMeetingEnd()
+        {
+            if (this.killCountText != null)
+            {
+                this.killCountText.gameObject.SetActive(true);
+            }
+        }
+
+        public void ResetOnMeetingStart()
+        {
+            if (this.killCountText != null)
+            {
+                this.killCountText.gameObject.SetActive(false);
+            }
         }
     }
 }
