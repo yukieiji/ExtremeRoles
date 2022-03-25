@@ -297,8 +297,7 @@ namespace ExtremeRoles
 
                 var player = PlayerControl.LocalPlayer;
 
-                if (player.PlayerId != sourceId && 
-                    player.PlayerId != targetId)
+                if (player.PlayerId != targetId)
                 {
                     var hockRole = Roles.ExtremeRoleManager.GameRole[
                         player.PlayerId] as Roles.API.Interface.IRoleMurderPlayerHock;

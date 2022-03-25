@@ -339,11 +339,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                             PlayerControl.LocalPlayer.NetId,
                             (byte)RPCOperator.Command.SlaveDriverSetNewTask,
                             Hazel.SendOption.Reliable, -1);
-                        writer.Write(rolePlayer.PlayerId);
+                        writer.Write(playerId);
                         writer.Write(i);
                         writer.Write(taskIndex);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        ReplaceToNewTask(rolePlayer.PlayerId, i, taskIndex);
+                        ReplaceToNewTask(playerId, i, taskIndex);
 
                         if (newTask.Count == 0)
                         {
