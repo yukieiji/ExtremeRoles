@@ -499,7 +499,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         private void updateCanKill()
         {
-            if (this.isRunaway) { return; }
+            if (this.isRunaway)
+            {
+                this.CanKill = true;
+                return; 
+            }
 
             this.CanKill = this.target.Count() > 0;
         }
