@@ -62,7 +62,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                                 byte.MaxValue,
                                 byte.MaxValue,
                                 byte.MaxValue,
-                                byte.MinValue)));
+                                byte.MaxValue)));
                 }
                 else
                 {
