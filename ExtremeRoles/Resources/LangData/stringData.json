@@ -2027,8 +2027,8 @@
     "YandereShortDescription": {
         "11": "\u300c{0}\u300d\u306b\u8fd1\u3065\u304f\u604b\u6575\u3092\u7686\u6bba\u3057\u306b\u3057\u308d"
     },
-    "YandereFullDescription": {
-        "11": "\u30e4\u30f3\u30c7\u30ec\u306e\u604b\u304c\u6210\u719f\u3057\u305f"
+    "YandereShipJustForTwo": {
+        "11": "\u30e4\u30f3\u30c7\u30ec\u306e\u604b\u304c\u6210\u719f\u3001\u7247\u601d\u3044\u306e\u4eba\u3068"
     },
     "Assassin": {
         "11": "\u30a2\u30b5\u30b7\u30f3"

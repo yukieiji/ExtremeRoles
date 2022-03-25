@@ -135,6 +135,7 @@ namespace ExtremeRoles.Patches
                         new ExtremeRoleId[] { ExtremeRoleId.Jester });
                     break;
                 case RoleGameOverReason.YandereKillAllOther:
+                case RoleGameOverReason.YandereShipJustForTwo:
                     replaceWinnerToSpecificNeutralRolePlayer(
                         noWinner,
                         new ExtremeRoleId[] { ExtremeRoleId.Yandere });

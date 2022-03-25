@@ -728,6 +728,15 @@ namespace ExtremeRoles.Patches
                     int id = reader.ReadInt32();
                     RPCOperator.SetWinGameControlId(id);
                     break;
+                case RPCOperator.Command.SetWinPlayer:
+                    int playerNum = reader.ReadInt32();
+                    List<byte> winPlayerId = new List<byte>();
+                    for (int i= 0; i < playerNum; ++i)
+                    {
+                        winPlayerId.Add(reader.ReadByte());
+                    }
+                    RPCOperator.SetWinPlayer(winPlayerId);
+                    break;
                 case RPCOperator.Command.SetRoleWin:
                     byte rolePlayerId = reader.ReadByte();
                     RPCOperator.SetRoleWin(rolePlayerId);

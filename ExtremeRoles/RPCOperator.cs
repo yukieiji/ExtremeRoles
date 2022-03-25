@@ -25,6 +25,7 @@ namespace ExtremeRoles
             ReplaceDeadReason,
             SetRoleWin,
             SetWinGameControlId,
+            SetWinPlayer,
             ShareMapId,
             ShareVersion,
 
@@ -328,6 +329,17 @@ namespace ExtremeRoles
         {
             ExtremeRolesPlugin.GameDataStore.WinGameControlId = id;
         }
+
+        public static void SetWinPlayer(List<byte> playerId)
+        {
+            foreach (byte id in playerId)
+            {
+                PlayerControl player = Helper.Player.GetPlayerControlById(id);
+                if (player == null) { continue; }
+                ExtremeRolesPlugin.GameDataStore.PlusWinner.Add(player);
+            }
+        }
+
         public static void SetRoleWin(byte winPlayerId)
         {
             Roles.ExtremeRoleManager.GameRole[winPlayerId].IsWin = true;
