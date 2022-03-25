@@ -170,6 +170,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
+            this.CreateAbilityCountOption(
+                parentOps, 2, 5, 3.0f);
             CustomOption.Create(
                 GetRoleOptionId((int)FencerOption.ResetTime),
                 string.Concat(
@@ -177,9 +179,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     FencerOption.ResetTime.ToString()),
                 5.0f, 2.5f, 30.0f, 0.5f,
                 parentOps, format: OptionUnit.Second);
-
-            this.CreateAbilityCountOption(
-                parentOps, 2, 5, 3.0f);
         }
 
         protected override void RoleSpecificInit()
