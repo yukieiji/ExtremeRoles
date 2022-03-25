@@ -5,7 +5,8 @@ namespace ExtremeRoles.Module
     public class Arrow
     {
 
-        private const float maxSize = 0.6f;
+        private const float xzMaxSize = 0.5f;
+        private const float yMaxSize = 0.6f;
 
         private Vector3 target;
         private SpriteRenderer image;
@@ -57,8 +58,9 @@ namespace ExtremeRoles.Module
             if (between(vector2.x, 0f, 1f) && between(vector2.y, 0f, 1f))
             {
                 this.body.transform.position = this.target - (Vector3)vector.normalized * 0.6f;
-                float num2 = Mathf.Clamp(num, 0f, maxSize);
-                this.body.transform.localScale = new Vector3(num2, num2, num2);
+                float xzSize = Mathf.Clamp(num, 0f, xzMaxSize);
+                float ySize = Mathf.Clamp(num, 0f, yMaxSize);
+                this.body.transform.localScale = new Vector3(xzSize, ySize, xzSize);
             }
             else
             {
@@ -71,7 +73,7 @@ namespace ExtremeRoles.Module
                     Mathf.LerpUnclamped(0f, num3 * 0.88f, vector3.x),
                     Mathf.LerpUnclamped(0f, orthographicSize * 0.79f, vector3.y), 0f);
                 this.body.transform.position = main.transform.position + vector4;
-                this.body.transform.localScale = new Vector3(maxSize, maxSize, maxSize);
+                this.body.transform.localScale = new Vector3(xzMaxSize, yMaxSize, xzMaxSize);
             }
 
             lookAt2d(this.body.transform, this.target);
