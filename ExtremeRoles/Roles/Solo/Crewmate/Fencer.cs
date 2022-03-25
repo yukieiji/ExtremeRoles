@@ -76,6 +76,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     Minigame.Instance.ForceClose();
                 }
 
+                PlayerControl.LocalPlayer.SetKillTimer(0.1f);
+
                 fencer.CanKill = true;
                 fencer.Timer = fencer.MaxTime;
             }
