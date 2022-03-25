@@ -501,8 +501,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             if (this.isRunaway) { return; }
 
-            Helper.Logging.Debug($"targetNum:{this.target.Count()}");
-
             this.CanKill = this.target.Count() > 0;
         }
 
