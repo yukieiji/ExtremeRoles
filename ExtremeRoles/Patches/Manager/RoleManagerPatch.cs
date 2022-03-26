@@ -296,7 +296,7 @@ namespace ExtremeRoles.Patches.Manager
 
         private static void normalExtremeRoleAssign(
             RoleAssignmentData extremeRolesData,
-            List<int> shuffledArange)
+            List<int> playerIndexList)
         {
 
             List<SingleRoleBase> shuffleRolesForImpostor = extremeRolesData.RolesForVanillaImposter;
@@ -305,7 +305,7 @@ namespace ExtremeRoles.Patches.Manager
             bool assigned = false;
             int assignedPlayers = 1;
 
-            shuffledArange = shuffledArange.OrderBy(
+            List<int> shuffledArange = playerIndexList.OrderBy(
                 item => RandomGenerator.Instance.Next()).ToList();
             Logging.Debug($"NotAssignPlayerNum:{shuffledArange.Count}");
 
