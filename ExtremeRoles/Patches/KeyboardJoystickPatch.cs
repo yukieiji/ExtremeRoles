@@ -19,7 +19,7 @@ namespace ExtremeRoles.Patches
     public static class DebugTool
     {
         private static List<PlayerControl> bots = new List<PlayerControl>();
-
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         public static void Postfix(KeyboardJoystick __instance)
         {
             // ExtremeRolesPlugin.Logger.LogInfo($"DebugMode: {ExtremeRolesPlugin.DebugMode.Value}");
@@ -126,7 +126,6 @@ namespace ExtremeRoles.Patches
         }
         private static string RandomString(int length)
         {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, length)
                 .Select(s => s[RandomGenerator.Instance.Next(s.Length)]).ToArray());
         }
