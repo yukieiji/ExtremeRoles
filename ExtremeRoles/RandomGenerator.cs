@@ -160,40 +160,40 @@ namespace ExtremeRoles
 
         public int Next(int maxExclusive)
         {
+            // Backport .Net6 Round logic
+            // from https://source.dot.net/#System.Private.CoreLib/Random.Xoshiro256StarStarImpl.cs,bb77e610694e64ca
+
             if (maxExclusive <= 0)
             {
                 throw new ArgumentException("Max Exclusive must be positive");
             }
 
-            uint uMaxExclusive = (uint)(maxExclusive);
-            uint threshold = (uint)(-uMaxExclusive) % uMaxExclusive;
+            if(maxExclusive == 1)
+            {
+                return 0;
+            }
 
+            int bits = (int)Math.Ceiling(Math.Log(maxExclusive, 2));
             while (true)
             {
-                uint result = NextUInt();
-                if (result >= threshold)
-                    return (int)(result % uMaxExclusive);
+                uint result = NextUInt() >> (sizeof(uint) * 8 - bits);
+                if (result < (uint)maxExclusive)
+                {
+                    return (int)maxExclusive;
+                }
             }
         }
 
         public int Next(int minInclusive, int maxExclusive)
         {
+
             if (maxExclusive <= minInclusive)
             {
                 throw new ArgumentException("MaxExclusive must be larger than MinInclusive");
             }
 
-            uint uMaxExclusive = unchecked((uint)(maxExclusive - minInclusive));
-            uint threshold = (uint)(-uMaxExclusive) % uMaxExclusive;
-
-            while (true)
-            {
-                uint result = NextUInt();
-                if (result >= threshold)
-                {
-                    return (int)(unchecked((result % uMaxExclusive) + minInclusive));
-                }
-            }
+            int range = (maxExclusive - minInclusive);
+            return Next(range) + minInclusive;
         }
 
         public uint NextUInt()
