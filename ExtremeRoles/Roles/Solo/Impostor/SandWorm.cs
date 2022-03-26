@@ -146,8 +146,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.Button = new AssaultButton(
                 UseAbility,
                 IsAbilityUse,
-                Loader.CreateSpriteFromResources(
-                    Path.TestButton));
+                HudManager.Instance.KillButton.graphic.sprite);
 
             this.RoleAbilityInit();
         }

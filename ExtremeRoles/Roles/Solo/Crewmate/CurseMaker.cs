@@ -152,7 +152,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.CreateAbilityCountButton(
                 this.defaultButtonText,
                 Loader.CreateSpriteFromResources(
-                    Path.TestButton),
+                    Path.CurseMakerCurse),
                 checkAbility: CheckAbility,
                 abilityCleanUp: CleanUp);
             this.Button.SetLabelToCrewmate();

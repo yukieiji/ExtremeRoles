@@ -89,7 +89,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.CreateAbilityCountButton(
                 Translation.GetString("counter"),
                 Loader.CreateSpriteFromResources(
-                    Path.TestButton),
+                    Path.FencerCounter),
                 abilityCleanUp: this.CleanUp);
             this.Button.SetLabelToCrewmate();
         }
