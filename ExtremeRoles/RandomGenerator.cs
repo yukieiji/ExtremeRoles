@@ -168,7 +168,7 @@ namespace ExtremeRoles
                 throw new ArgumentException("Max Exclusive must be positive");
             }
 
-            if(maxExclusive == 1)
+            if (maxExclusive == 1)
             {
                 return 0;
             }
@@ -179,7 +179,7 @@ namespace ExtremeRoles
                 uint result = NextUInt() >> (sizeof(uint) * 8 - bits);
                 if (result < (uint)maxExclusive)
                 {
-                    return (int)maxExclusive;
+                    return (int)result;
                 }
             }
         }
