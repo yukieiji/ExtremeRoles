@@ -36,4 +36,37 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
             isRunning = false;
         }
     }
+    [HarmonyPatch(typeof(HatManager), nameof(HatManager.GetNamePlateById))]
+    public static class HatManagerGetNamePlateByIdPatch
+    {
+        private static bool isRunning;
+        private static bool isLoaded;
+        public static void Prefix(HatManager __instance)
+        {
+            if (isRunning) { return; }
+            isRunning = true; // prevent simultanious execution
+
+            try
+            {
+                if (!isLoaded)
+                {
+                    foreach (var np in ExtremeNamePlateManager.NamePlateData.Values)
+                    {
+                        __instance.AllNamePlates.Add(
+                            np.GetNamePlateData());
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                ExtremeSkinsPlugin.Logger.LogInfo(
+                    $"Unable to add Custom NamePlate\n{e}");
+            }
+            isLoaded = true;
+        }
+        public static void Postfix(HatManager __instance)
+        {
+            isRunning = false;
+        }
+    }
 }
