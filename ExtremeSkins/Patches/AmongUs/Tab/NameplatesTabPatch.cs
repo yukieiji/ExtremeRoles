@@ -13,11 +13,10 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
     public class NameplatesTabPatch
     {
         private static TMPro.TMP_Text textTemplate;
-        private static List<TMPro.TMP_Text> hatsTabCustomText = new List<TMPro.TMP_Text>();
+        private static List<TMPro.TMP_Text> namePlateTabCustomText = new List<TMPro.TMP_Text>();
 
         private static float inventoryTop = 1.5f;
         private static float inventoryBot = -2.5f;
-
 
         private const string innerslothPackageName = "innerslothNamePlate";
         private const float headerSize = 0.8f;
@@ -34,10 +33,10 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
             NamePlateData[] unlockedNamePlate = DestroyableSingleton<HatManager>.Instance.GetUnlockedNamePlates();
             Dictionary<string, List<NamePlateData>> namePlatePackage = new Dictionary<string, List<NamePlateData>>();
 
-            destroyList(hatsTabCustomText);
+            destroyList(namePlateTabCustomText);
             destroyList(__instance.ColorChips.ToArray().ToList());
 
-            hatsTabCustomText.Clear();
+            namePlateTabCustomText.Clear();
             __instance.ColorChips.Clear();
 
             textTemplate = PlayerCustomizationMenu.Instance.itemName;
@@ -94,7 +93,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
         public static void NameplatesTabUpdatePostfix(NameplatesTab __instance)
         {
             // Manually hide all custom TMPro.TMP_Text objects that are outside the ScrollRect
-            foreach (TMPro.TMP_Text customText in hatsTabCustomText)
+            foreach (TMPro.TMP_Text customText in namePlateTabCustomText)
             {
                 if (customText != null && customText.transform != null && customText.gameObject != null)
                 {
@@ -128,7 +127,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                 title.autoSizeTextContainer = true;
                 title.text = Helper.Translation.GetString(packageName);
                 offset -= headerSize * __instance.YOffset;
-                hatsTabCustomText.Add(title);
+                namePlateTabCustomText.Add(title);
             }
 
             int numHats = namePlates.Count;
@@ -142,8 +141,6 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                 float ypos = offset - (i / __instance.NumPerRow) * __instance.YOffset;
                 ColorChip colorChip = UnityEngine.Object.Instantiate<ColorChip>(
                     __instance.ColorTabPrefab, __instance.scroller.Inner);
-
-                int color = __instance.HasLocalPlayer() ? PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId : SaveManager.BodyColor;
 
                 colorChip.transform.localPosition = new Vector3(xpos, ypos, inventoryZ);
                 if (ActiveInputManager.currentControlType == ActiveInputManager.InputType.Keyboard)
@@ -164,9 +161,6 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                 }
 
                 colorChip.gameObject.GetComponent<NameplateChip>().image.sprite = np.Image;
-                colorChip.Inner.transform.localPosition = np.ChipOffset;
-                colorChip.Tag = np;
-                colorChip.Button.ClickMask = __instance.scroller.Hitbox;
                 __instance.ColorChips.Add(colorChip);
             }
         }
