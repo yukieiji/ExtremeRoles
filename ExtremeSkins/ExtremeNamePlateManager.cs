@@ -26,6 +26,41 @@ namespace ExtremeSkins
         private const string hatData = "hatData.json";
         private const string hatTransData = "hatTranData.json";
 
+        /*
+
+            フォルダーデータ構造
+                ExtremeNamePlate/namePlateData.json
+                ExtremeNamePlate/namePlateTransData.json
+                ExtremeNamePlate/(グループ名キー1)/LICENCE.md
+                ExtremeNamePlate/(グループ名キー1)/(namePlate1).png
+                ExtremeNamePlate/(グループ名キー1)/(namePlate2).png
+            
+                ExtremeNamePlate/(グループ名キー2)/LICENCE.md
+                ExtremeNamePlate/(グループ名キー2)/(namePlate1).png
+                ExtremeNamePlate/(グループ名キー2)/(namePlate2).png
+            
+                ExtremeNamePlate/(グループ名キー3)/LICENCE.md
+                ExtremeNamePlate/(グループ名キー2)/(namePlate1).png
+                ExtremeNamePlate/(グループ名キー2)/(namePlate2).png
+            
+
+            データチェック：
+                1. namePlate.jsonを落とす
+                2. そこに書いてあるフォルダとデータがあるか確認
+                3. 一個でも足りなかったらDL
+            データDL
+                1. namePlate.jsonを落とす
+                2. namePlate.jsonに書いてあるフォルダを作る
+                3. namePlate.jsonにデータを落としてくる
+            ロード
+                1. namePlateTransData.jsonを落とす
+                2. フォルダ走査
+                3. 各フォルダ内のpngファイル(名前はなんでも可)を検索
+                4. Autherを「フォルダ名」、Nameをpngのファイル名としてネームプレート作る
+        */
+
+
+
         public static void Initialize()
         {
             NamePlateData.Clear();
