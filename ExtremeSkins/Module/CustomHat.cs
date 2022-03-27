@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace ExtremeSkins.Module
 {
@@ -15,7 +10,7 @@ namespace ExtremeSkins.Module
         public const string BackFlipImageName = "back_flip.png";
         public const string ClimbImageName = "climb.png";
 
-        public int Order = 99;
+        public const int Order = 99;
 
 
         public string Author { get; set; }
