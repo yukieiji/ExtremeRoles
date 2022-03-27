@@ -212,7 +212,16 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             var playerInfo = GameData.Instance.GetPlayerById(
                rolePlayer.PlayerId);
-            if (playerInfo.IsDead || playerInfo.Disconnected) { return; }
+            if (playerInfo.IsDead || playerInfo.Disconnected)
+            {
+                this.target.ArrowActivate(false);
+
+                if (this.hasOneSidedArrow && this.oneSidedArrow != null)
+                {
+                    this.oneSidedArrow.SetActive(false);
+                }
+                return; 
+            }
 
             if (this.OneSidedLover == null) { return; }
             
@@ -299,7 +308,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void ResetOnMeetingEnd()
         {
-            if(this.isRunawayNextMeetingEnd)
+            if (this.isRunawayNextMeetingEnd)
             {
                 this.CanKill = true;
                 this.isRunaway = true;
@@ -316,6 +325,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.timer = 0f;
 
             this.target.ArrowActivate(false);
+
+            if (this.hasOneSidedArrow && this.oneSidedArrow != null)
+            {
+                this.oneSidedArrow.SetActive(false);
+            }
+
         }
 
         protected override void CreateSpecificOption(
