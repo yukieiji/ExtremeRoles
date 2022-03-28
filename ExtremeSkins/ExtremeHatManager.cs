@@ -20,7 +20,7 @@ namespace ExtremeSkins
 
         public const string FolderPath = @"\ExtremeHat\";
         public const string InfoFileName = "info.json";
-        public const string LicenceFileName = "LICENCE.md";
+        public const string LicenseFileName = "LICENSE.md";
 
         private const string repo = "https://raw.githubusercontent.com/yukieiji/ExtremeHats/main"; // When using this repository with Fork, please follow the license of each hat
         private const string hatData = "hatData.json";
@@ -57,7 +57,7 @@ namespace ExtremeSkins
                 if (!Directory.Exists(checkHatFolder)) { return true; }
 
                 if(!File.Exists(string.Concat(
-                        checkHatFolder, @"\", LicenceFileName))) { return true; }
+                        checkHatFolder, @"\", LicenseFileName))) { return true; }
 
                 if (!File.Exists(string.Concat(
                         checkHatFolder, @"\", InfoFileName))) { return true; }
@@ -246,7 +246,7 @@ namespace ExtremeSkins
             await downLoadFileTo(http, hat, saveFolder, InfoFileName);
 
             // ライセンスファイルを落としてくる
-            await downLoadFileTo(http, hat, saveFolder, LicenceFileName);
+            await downLoadFileTo(http, hat, saveFolder, LicenseFileName);
 
             await downLoadFileTo(http, hat, saveFolder, CustomHat.FrontImageName);
 
