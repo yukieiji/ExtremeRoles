@@ -22,8 +22,8 @@ namespace ExtremeSkins
         public const string InfoFileName = "info.json";
         public const string LicenceFileName = "LICENCE.md";
 
-        private const string repo = ""; // When using this repository with Fork, please follow the license of each hat
-        private const string hatData = "hatData.json";
+        private const string repo = "https://raw.githubusercontent.com/yukieiji/ExtremeNamePlate/main"; // When using this repository with Fork, please follow the license of each hat
+        private const string namePlateData = "hatData.json";
         private const string hatTransData = "hatTranData.json";
 
         /*
@@ -72,12 +72,12 @@ namespace ExtremeSkins
             if (!Directory.Exists(string.Concat(
                 Path.GetDirectoryName(Application.dataPath), FolderPath))) { return true; }
 
-            getJsonData(hatData).GetAwaiter().GetResult();
+            getJsonData(namePlateData).GetAwaiter().GetResult();
             
             byte[] byteHatArray = File.ReadAllBytes(
                 string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
-                    FolderPath, hatData));
+                    FolderPath, namePlateData));
             string hatJsonString = System.Text.Encoding.UTF8.GetString(byteHatArray);
 
             return false;
@@ -141,12 +141,12 @@ namespace ExtremeSkins
                 Directory.CreateDirectory(dataSaveFolder);
             }
 
-            getJsonData(hatData).GetAwaiter().GetResult();
+            getJsonData(namePlateData).GetAwaiter().GetResult();
 
             byte[] byteHatArray = File.ReadAllBytes(
                 string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
-                    FolderPath, hatData));
+                    FolderPath, namePlateData));
             string hatJsonString = System.Text.Encoding.UTF8.GetString(byteHatArray);
 
             JToken hatFolder = JObject.Parse(hatJsonString)["data"];
@@ -198,7 +198,7 @@ namespace ExtremeSkins
                 HttpClient http = new HttpClient();
                 http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true };
                 var response = await http.GetAsync(
-                    new System.Uri($"{repo}/hat/{fileName}"),
+                    new System.Uri($"{repo}/namePlate/{fileName}"),
                     HttpCompletionOption.ResponseContentRead);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
