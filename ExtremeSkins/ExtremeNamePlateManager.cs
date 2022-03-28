@@ -56,6 +56,8 @@ namespace ExtremeSkins
 
                 string author = token.Name;
 
+                if (author == "updateComitHash") { continue; }
+
                 string checkNamePlateFolder = string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
                     FolderPath, author);
