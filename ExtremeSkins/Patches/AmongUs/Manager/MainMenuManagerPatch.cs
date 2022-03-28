@@ -15,13 +15,27 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
             renderer.sprite = Module.Loader.CreateSpriteFromResources(
                 "ExtremeSkins.Resources.TitleBurner.png", 425f);
 
-            if (ExtremeHatManager.IsLoaded) { return; }
+            bool creatorMode = ExtremeSkinsPlugin.CreatorMode.Value;
 
-            if (ExtremeHatManager.IsUpdate() && !ExtremeSkinsPlugin.CreatorMode.Value)
+            if (!ExtremeHatManager.IsLoaded)
             {
-                ExtremeHatManager.PullAllData().GetAwaiter().GetResult();
+                if (ExtremeHatManager.IsUpdate() && !creatorMode)
+                {
+                    ExtremeHatManager.PullAllData().GetAwaiter().GetResult();
+                }
+                ExtremeHatManager.Load();
             }
-            ExtremeHatManager.Load();
+
+
+            if (!ExtremeNamePlateManager.IsLoaded)
+            {
+                if (ExtremeNamePlateManager.IsUpdate() && !creatorMode)
+                {
+                    ExtremeNamePlateManager.PullAllData().GetAwaiter().GetResult();
+                }
+
+                ExtremeNamePlateManager.Load();
+            }
         }
     }
 }
