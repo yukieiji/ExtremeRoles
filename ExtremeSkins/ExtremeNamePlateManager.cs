@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -8,6 +10,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 using Newtonsoft.Json.Linq;
+
 
 using ExtremeSkins.Module;
 
@@ -20,46 +23,11 @@ namespace ExtremeSkins
 
         public const string FolderPath = @"\ExtremeNamePlate\";
         public const string InfoFileName = "info.json";
-        public const string LicenceFileName = "LICENCE.md";
+        public const string LicenseFileName = "LICENSE.md";
 
         private const string repo = "https://raw.githubusercontent.com/yukieiji/ExtremeNamePlate/main"; // When using this repository with Fork, please follow the license of each hat
-        private const string namePlateData = "hatData.json";
-        private const string hatTransData = "hatTranData.json";
-
-        /*
-
-            フォルダーデータ構造
-                ExtremeNamePlate/namePlateData.json
-                ExtremeNamePlate/namePlateTransData.json
-                ExtremeNamePlate/(グループ名キー1)/LICENCE.md
-                ExtremeNamePlate/(グループ名キー1)/(namePlate1).png
-                ExtremeNamePlate/(グループ名キー1)/(namePlate2).png
-            
-                ExtremeNamePlate/(グループ名キー2)/LICENCE.md
-                ExtremeNamePlate/(グループ名キー2)/(namePlate1).png
-                ExtremeNamePlate/(グループ名キー2)/(namePlate2).png
-            
-                ExtremeNamePlate/(グループ名キー3)/LICENCE.md
-                ExtremeNamePlate/(グループ名キー2)/(namePlate1).png
-                ExtremeNamePlate/(グループ名キー2)/(namePlate2).png
-            
-
-            データチェック：
-                1. namePlate.jsonを落とす
-                2. そこに書いてあるフォルダとデータがあるか確認
-                3. 一個でも足りなかったらDL
-            データDL
-                1. namePlate.jsonを落とす
-                2. namePlate.jsonに書いてあるフォルダを作る
-                3. namePlate.jsonにデータを落としてくる
-            ロード
-                1. namePlateTransData.jsonを落とす
-                2. フォルダ走査
-                3. 各フォルダ内のpngファイル(名前はなんでも可)を検索
-                4. Autherを「フォルダ名」、Nameをpngのファイル名としてネームプレート作る
-        */
-
-
+        private const string namePlateData = "namePlateData.json";
+        private const string namePlateTransData = "namePlateTransData.json";
 
         public static void Initialize()
         {
@@ -74,24 +42,52 @@ namespace ExtremeSkins
 
             getJsonData(namePlateData).GetAwaiter().GetResult();
             
-            byte[] byteHatArray = File.ReadAllBytes(
+            byte[] byteNamePlateArray = File.ReadAllBytes(
                 string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
                     FolderPath, namePlateData));
-            string hatJsonString = System.Text.Encoding.UTF8.GetString(byteHatArray);
+            string namePlateJsonString = System.Text.Encoding.UTF8.GetString(byteNamePlateArray);
+            JObject namePlateFolder = JObject.Parse(namePlateJsonString);
+            
+            for(int i = 0; i < namePlateFolder.Count; ++i)
+            {
+                JProperty token = namePlateFolder.ChildrenTokens[i].TryCast<JProperty>();
+                if (token == null) { continue; }
+
+                string author = token.Name;
+
+                string checkNamePlateFolder = string.Concat(
+                    Path.GetDirectoryName(Application.dataPath),
+                    FolderPath, author);
+
+                if (!Directory.Exists(checkNamePlateFolder)) { return true; }
+
+                if (!File.Exists(string.Concat(
+                    checkNamePlateFolder, @"\", LicenseFileName))) { return true; }
+
+                JArray namePlateImage = token.Value.TryCast<JArray>();
+                for (int j = 0; j < namePlateImage.Count; ++j)
+                {
+
+                    if (!File.Exists(string.Concat(
+                            checkNamePlateFolder, @"\",
+                            namePlateImage[j].TryCast<JValue>().Value.ToString(),
+                            ".png"))) { return true; }
+                }
+
+            }
 
             return false;
         }
 
         public static void Load()
         {
-            /* 
-            getJsonData(hatTransData).GetAwaiter().GetResult();
+
+            getJsonData(namePlateTransData).GetAwaiter().GetResult();
             Helper.Translation.UpdateHatsTransData(
                 string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
-                    FolderPath, @"\", hatTransData));
-            */
+                    FolderPath, namePlateTransData));
 
             string[] namePlateFolder = Directory.GetDirectories(
                 string.Concat(Path.GetDirectoryName(Application.dataPath), FolderPath));
@@ -143,38 +139,57 @@ namespace ExtremeSkins
 
             getJsonData(namePlateData).GetAwaiter().GetResult();
 
-            byte[] byteHatArray = File.ReadAllBytes(
+            HttpClient http = new HttpClient();
+            http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true };
+
+            byte[] byteNamePlateArray = File.ReadAllBytes(
                 string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
                     FolderPath, namePlateData));
-            string hatJsonString = System.Text.Encoding.UTF8.GetString(byteHatArray);
+            string namePlateJsonString = System.Text.Encoding.UTF8.GetString(byteNamePlateArray);
 
-            JToken hatFolder = JObject.Parse(hatJsonString)["data"];
-            JArray hatArray = hatFolder.TryCast<JArray>();
+            JObject namePlateFolder = JObject.Parse(namePlateJsonString);
 
-            for (int i = 0; i < hatArray.Count; ++i)
+            for (int i = 0; i < namePlateFolder.Count; ++i)
             {
-                string getHatData = hatArray[i].ToString();
+                JProperty token = namePlateFolder.ChildrenTokens[i].TryCast<JProperty>();
+                if (token == null) { continue; }
 
-                string getHatFolder = string.Concat(
-                    dataSaveFolder, @"\", getHatData);
-                
+                string author = token.Name;
+
+                if (author == "updateComitHash") { continue; }
+
+                string checkNamePlateFolder = string.Concat(
+                    Path.GetDirectoryName(Application.dataPath),
+                    FolderPath, author);
+
                 // まずはフォルダとファイルを消す
-                if (Directory.Exists(getHatFolder))
+                if (Directory.Exists(checkNamePlateFolder))
                 {
-                    string[] filePaths = Directory.GetFiles(getHatFolder);
+                    string[] filePaths = Directory.GetFiles(checkNamePlateFolder);
                     foreach (string filePath in filePaths)
                     {
                         File.SetAttributes(filePath, FileAttributes.Normal);
                         File.Delete(filePath);
                     }
-                    Directory.Delete(getHatFolder, false);;
+                    Directory.Delete(checkNamePlateFolder, false); ;
                 }
 
-                Directory.CreateDirectory(getHatFolder);
+                Directory.CreateDirectory(checkNamePlateFolder);
 
-                await pullHat(getHatFolder, getHatData);
+                await downLoadFileTo(http, author, checkNamePlateFolder, LicenseFileName);
 
+                JArray namePlateImage = token.Value.TryCast<JArray>();
+
+                for (int j = 0; j < namePlateImage.Count; ++j)
+                {
+
+                    string imgName = string.Concat(
+                        namePlateImage[j].TryCast<JValue>().Value.ToString(),
+                        ".png");
+
+                    await downLoadFileTo(http, author, checkNamePlateFolder, imgName);
+                }
             }
 
         }
@@ -226,59 +241,11 @@ namespace ExtremeSkins
             }
         }
 
-        private static async Task<HttpStatusCode> pullHat(
-            string saveFolder,
-            string hat)
-        {
-            HttpClient http = new HttpClient();
-            http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true };
-            // インフォファイルを落とす
-            await downLoadFileTo(http, hat, saveFolder, InfoFileName);
-
-            // ライセンスファイルを落としてくる
-            await downLoadFileTo(http, hat, saveFolder, LicenceFileName);
-
-            await downLoadFileTo(http, hat, saveFolder, CustomHat.FrontImageName);
-
-            var hatInfoResponse = await http.GetAsync(
-                new System.Uri($"{repo}/hat/{hat}/{InfoFileName}"),
-                HttpCompletionOption.ResponseContentRead);
-
-            if (hatInfoResponse.Content == null)
-            {
-                System.Console.WriteLine("Server returned no data: " + hatInfoResponse.StatusCode.ToString());
-                return HttpStatusCode.ExpectationFailed;
-            }
-
-            string json = await hatInfoResponse.Content.ReadAsStringAsync();
-            JObject parseJson = JObject.Parse(json);
-
-            if ((bool)parseJson["FrontFlip"])
-            {
-                await downLoadFileTo(http, hat, saveFolder, CustomHat.FrontFlipImageName);
-            }
-            if ((bool)parseJson["Back"])
-            {
-                await downLoadFileTo(http, hat, saveFolder, CustomHat.BackImageName);
-            }
-            if ((bool)parseJson["BackFlip"])
-            {
-                await downLoadFileTo(http, hat, saveFolder, CustomHat.BackFlipImageName);
-            }
-            if ((bool)parseJson["Climb"])
-            {
-                await downLoadFileTo(http, hat, saveFolder, CustomHat.ClimbImageName);
-            }
-
-            return HttpStatusCode.OK;
-
-        }
-
         private static async Task<HttpStatusCode> downLoadFileTo(
-            HttpClient http, string hat, string saveFolder, string fileName)
+            HttpClient http, string author, string saveFolder, string fileName)
         {
             var fileResponse = await http.GetAsync(
-                $"{repo}/hat/{hat}/{fileName}",
+                $"{repo}/namePlate/{author}/{fileName}",
                 HttpCompletionOption.ResponseContentRead);
 
             if (fileResponse.StatusCode != HttpStatusCode.OK)
