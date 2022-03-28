@@ -22,6 +22,9 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
                 ExtremeHatManager.PullAllData().GetAwaiter().GetResult();
             }
             ExtremeHatManager.Load();
+
+
+            ExtremeNamePlateManager.Load();
         }
     }
 }

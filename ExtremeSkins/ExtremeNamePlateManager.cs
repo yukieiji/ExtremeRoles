@@ -85,40 +85,46 @@ namespace ExtremeSkins
 
         public static void Load()
         {
+            /* 
             getJsonData(hatTransData).GetAwaiter().GetResult();
             Helper.Translation.UpdateHatsTransData(
                 string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
                     FolderPath, @"\", hatTransData));
+            */
 
-            string[] hatsFolder = Directory.GetDirectories(
+            string[] namePlateFolder = Directory.GetDirectories(
                 string.Concat(Path.GetDirectoryName(Application.dataPath), FolderPath));
 
-            foreach (string hat in hatsFolder)
+            foreach (string authorPath in namePlateFolder)
             {
-                if (!string.IsNullOrEmpty(hat))
-                {
-                    byte[] byteArray = File.ReadAllBytes(
-                        string.Concat(hat, @"\", InfoFileName));
-                    string json = System.Text.Encoding.UTF8.GetString(byteArray);
-                    JObject parseJson = JObject.Parse(json);
+                if (string.IsNullOrEmpty(authorPath)) { continue; }
+                
+                string[] authorDirs = authorPath.Split(@"\");
+                string author = authorDirs[authorDirs.Length - 1];
 
-                    string name = parseJson["Name"].ToString();
-                    string productId = string.Concat(
-                        "hat_", name);
+                string[] namePlateImage = Directory.GetFiles(
+                    authorPath, "*.png");
+
+                foreach (string namePlate in namePlateImage)
+                {
+                    string[] namePlateDir = namePlate.Split(@"\");
+                    string imageName = namePlateDir[namePlateDir.Length - 1];
+                    string name = imageName.Substring(0, imageName.Length - 4);
+                    string productId = string.Concat("namePlate_", name);
 
                     if (NamePlateData.ContainsKey(productId)) { continue; }
 
                     NamePlateData.Add(
                         productId,  // Name
                         new CustomNamePlate(
-                            productId, hat,
-                            parseJson["Author"].ToString(),  // Author
-                            name));  // Name
+                            productId, namePlate,
+                            author, name));  // Name
 
                     ExtremeSkinsPlugin.Logger.LogInfo(
-                        $"NamePlate Loaded:{parseJson.ChildrenTokens[1].TryCast<JProperty>().Value.ToString()}, from:{hat}");
+                        $"NamePlate Loaded:{name}, from:{namePlate}");
                 }
+                
             }
 
             IsLoaded = true;
@@ -175,12 +181,12 @@ namespace ExtremeSkins
 
         public static void UpdateTranslation()
         {
-            foreach (var hat in NamePlateData.Values)
+            foreach (var np in NamePlateData.Values)
             {
-               if (hat.Body != null)
+               if (np.Body != null)
                {
-                    hat.Body.name = Helper.Translation.GetString(
-                        hat.Name);
+                    np.Body.name = Helper.Translation.GetString(
+                        np.Name);
                }
             }
         }
