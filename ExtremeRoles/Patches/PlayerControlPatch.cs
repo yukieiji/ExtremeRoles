@@ -903,6 +903,12 @@ namespace ExtremeRoles.Patches
                     RPCOperator.JesterOutburstKill(
                         outburstKillerId, killTargetId);
                     break;
+                case RPCOperator.Command.YandereSetOneSidedLover:
+                    byte yanderePlayerId = reader.ReadByte();
+                    byte loverPlayerId = reader.ReadByte();
+                    RPCOperator.YandereSetOneSidedLover(
+                        yanderePlayerId, loverPlayerId);
+                    break;
                 default:
                     break;
             }

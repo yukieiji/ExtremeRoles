@@ -64,6 +64,7 @@ namespace ExtremeRoles
             AliceShipBroken,
             TaskMasterSetNewTask,
             JesterOutburstKill,
+            YandereSetOneSidedLover,
         }
 
         public static void Call(
@@ -504,6 +505,12 @@ namespace ExtremeRoles
         {
             Roles.Solo.Neutral.Jester.OutburstKill(
                 killerId, targetId);
+        }
+        public static void YandereSetOneSidedLover(
+            byte playerId, byte loverId)
+        {
+            Roles.Solo.Neutral.Yandere.SetOneSidedLover(
+                playerId, loverId);
         }
 
     }

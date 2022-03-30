@@ -12,6 +12,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
     {
         public PlayerControl OneSidedLover = null;
 
+        private bool isOneSidedLoverShare = false;
+
         private bool hasOneSidedArrow = false;
         private Arrow oneSidedArrow = null;
 
@@ -142,6 +144,16 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             false, false, true, false)
         { }
 
+        public static void SetOneSidedLover(
+            byte rolePlayerId, byte oneSidedLoverId)
+        {
+            var yandere = ExtremeRoleManager.GetSafeCastedRole<Yandere>(rolePlayerId);
+            if (yandere != null)
+            {
+                yandere.OneSidedLover = Helper.Player.GetPlayerControlById(oneSidedLoverId);
+            }
+        }
+
         public override bool TryRolePlayerKillTo(
             PlayerControl rolePlayer, PlayerControl targetPlayer)
         {
@@ -224,7 +236,26 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
 
             if (this.OneSidedLover == null) { return; }
-            
+
+            if (!this.isOneSidedLoverShare)
+            {
+                this.isOneSidedLoverShare = true;
+
+                RPCOperator.Call(
+                    rolePlayer.NetId,
+                    RPCOperator.Command.YandereSetOneSidedLover,
+                    new List<byte>
+                    {
+                        rolePlayer.PlayerId,
+                        this.OneSidedLover.PlayerId
+                    }
+                );
+                SetOneSidedLover(
+                    rolePlayer.PlayerId,
+                    this.OneSidedLover.PlayerId);
+
+            }
+
             // 不必要なデータを削除、役職の人と想い人
             if (this.progress.ContainsKey(rolePlayer.PlayerId))
             {
@@ -435,6 +466,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 this.defaultKillCool = PlayerControl.GameOptions.KillCooldown;
                 this.HasOtherKillCool = true;
             }
+
+            this.isOneSidedLoverShare = false;
+
         }
 
         private void checkRunawayNextMeeting()
