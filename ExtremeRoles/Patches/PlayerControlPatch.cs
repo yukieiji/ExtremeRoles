@@ -1098,7 +1098,7 @@ namespace ExtremeRoles.Patches
                 __instance.RawSetName(newOutfit.PlayerName);
                 __instance.RawSetColor(newOutfit.ColorId);
                 __instance.RawSetHat(newOutfit.HatId, newOutfit.ColorId);
-                __instance.RawSetSkin(newOutfit.SkinId);
+                __instance.RawSetSkin(newOutfit.SkinId, newOutfit.ColorId);
                 __instance.RawSetVisor(newOutfit.VisorId);
                 __instance.RawSetPet(newOutfit.PetId, newOutfit.ColorId);
                 __instance.Visible = __instance.Visible;
