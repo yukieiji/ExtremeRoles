@@ -1132,7 +1132,7 @@ namespace ExtremeRoles.Patches
                 Action changeAction = () =>
                 {
                     changeOutfit();
-                    __instance.myRend.transform.localScale = __instance.defaultPlayerScale;
+                    __instance.MyRend.transform.localScale = __instance.defaultPlayerScale;
                     __instance.MyPhysics.Skin.gameObject.transform.localScale = __instance.defaultPlayerScale;
                 };
 
