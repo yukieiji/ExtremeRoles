@@ -19,7 +19,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
                 {
                     foreach (var hat in ExtremeHatManager.HatData.Values)
                     {
-                        __instance.AllHats.Add(
+                        __instance.allHats.Add(
                             hat.GetHatBehaviour());
                     }
                 }
@@ -52,7 +52,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
                 {
                     foreach (var np in ExtremeNamePlateManager.NamePlateData.Values)
                     {
-                        __instance.AllNamePlates.Add(
+                        __instance.allNamePlates.Add(
                             np.GetNamePlateData());
                     }
                 }
