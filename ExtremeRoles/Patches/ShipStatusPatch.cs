@@ -74,7 +74,7 @@ namespace ExtremeRoles.Patches
         {
             if (!GameData.Instance) { return false; };
             if (DestroyableSingleton<TutorialManager>.InstanceExists) { return true; } // InstanceExists | Don't check Custom Criteria when in Tutorial
-            if (HudManager.Instance.isIntroDisplayed){ return false; }
+            if (HudManager.Instance.IsIntroDisplayed){ return false; }
 
             if (ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger ||
                 ExtremeRolesPlugin.GameDataStore.WinCheckDisable) { return false; }
