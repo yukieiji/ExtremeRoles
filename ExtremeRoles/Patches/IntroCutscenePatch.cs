@@ -86,21 +86,21 @@ namespace ExtremeRoles.Patches
     {
         public static void Prefix(
             IntroCutscene __instance,
-            ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
+            ref Il2CppSystem.Collections.Generic.List<PlayerControl> teamToDisplay)
         {
-            IntroCutscenceHelper.SetupIntroTeamIcons(__instance, ref yourTeam);
+            IntroCutscenceHelper.SetupIntroTeamIcons(__instance, ref teamToDisplay);
             IntroCutscenceHelper.SetupPlayerPrefab(__instance);
         }
 
         public static void Postfix(
             IntroCutscene __instance,
-            ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
+            ref Il2CppSystem.Collections.Generic.List<PlayerControl> teamToDisplay)
         {
-            IntroCutscenceHelper.SetupIntroTeam(__instance, ref yourTeam);
+            IntroCutscenceHelper.SetupIntroTeam(__instance, ref teamToDisplay);
             IntroCutscenceHelper.SetupRole();
         }
     }
-
+    
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.SetUpRoleText))]
     class IntroCutsceneSetUpRoleTextPatch
     {
@@ -140,19 +140,19 @@ namespace ExtremeRoles.Patches
 
             }
         }
+    }
 
-        [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
-        class IntroCutsceneOnDestroyPatch
+    [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
+    class IntroCutsceneOnDestroyPatch
+    {
+        public static void Prefix(IntroCutscene __instance)
         {
-            public static void Prefix(IntroCutscene __instance)
-            {
-                ExtremeRolesPlugin.Info.SetInfoButtonToInGamePositon();
+            ExtremeRolesPlugin.Info.SetInfoButtonToInGamePositon();
 
-                var role = ExtremeRoleManager.GetLocalPlayerRole() as IRoleSpecialSetUp;
-                if (role != null)
-                {
-                    role.IntroEndSetUp();
-                }
+            var role = ExtremeRoleManager.GetLocalPlayerRole() as IRoleSpecialSetUp;
+            if (role != null)
+            {
+                role.IntroEndSetUp();
             }
         }
     }
