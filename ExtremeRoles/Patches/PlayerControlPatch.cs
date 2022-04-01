@@ -934,9 +934,9 @@ namespace ExtremeRoles.Patches
             {
                 if (__instance.AmOwner)
                 {
-                    StatsManager instance = StatsManager.Instance;
-                    uint num = instance.ImpostorKills;
-                    instance.ImpostorKills = num + 1U;
+                    StatsManager.Instance.IncrementStat(
+                        StringNames.StatsImpostorKills);
+
                     if (Constants.ShouldPlaySfx())
                     {
                         SoundManager.Instance.PlaySound(
@@ -948,9 +948,8 @@ namespace ExtremeRoles.Patches
                 target.gameObject.layer = LayerMask.NameToLayer("Ghost");
                 if (target.AmOwner)
                 {
-                    StatsManager instance2 = StatsManager.Instance;
-                    uint num = instance2.TimesMurdered;
-                    instance2.TimesMurdered = num + 1U;
+                    StatsManager.Instance.IncrementStat(
+                        StringNames.StatsTimesMurdered);
                     if (Minigame.Instance)
                     {
                         try
