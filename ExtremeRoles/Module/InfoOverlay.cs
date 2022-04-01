@@ -43,8 +43,10 @@ namespace ExtremeRoles.Module
             infoButton.name = "infoRoleButton";
             infoButton.gameObject.SetActive(true);
             infoButton.layer = 5;
+            
             SetInfoButtonToGameStartShipPositon();
-            var passiveButton = infoButton.GetComponent<ButtonBehavior>();
+
+            var passiveButton = infoButton.GetComponent<PassiveButton>();
             passiveButton.OnClick = new Button.ButtonClickedEvent();
             passiveButton.OnClick.AddListener(
                 (UnityAction)ExtremeRolesPlugin.Info.ToggleInfoOverlay);
