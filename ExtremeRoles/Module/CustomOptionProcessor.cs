@@ -22,10 +22,10 @@ namespace ExtremeRoles.Module
                 {
                     csv.WriteLine(
                         string.Format("{1}{0}{2}{0}{3}",
-                        comma,
-                        modName,
-                        versionStr,
-                        Assembly.GetExecutingAssembly().GetName().Version));
+                            comma,
+                            modName,
+                            versionStr,
+                            Assembly.GetExecutingAssembly().GetName().Version));
                     csv.WriteLine(
                         string.Format("{1}{0}{2}{0}{3}{0}{4}",
                             comma, "Id", "Name", "Option Value", "SelectedIndex")); //ヘッダー
