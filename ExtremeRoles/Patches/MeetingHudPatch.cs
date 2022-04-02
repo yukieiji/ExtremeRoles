@@ -344,7 +344,7 @@ namespace ExtremeRoles.Patches
     {
         public static void Postfix(MeetingHud __instance)
         {
-
+            /*
             if (NamePlateHelper.NameplateChange)
             {
                 foreach (var pva in __instance.playerStates)
@@ -353,6 +353,7 @@ namespace ExtremeRoles.Patches
                 }
                 NamePlateHelper.NameplateChange = false;
             }
+            */
 
             // From TOR
             // This fixes a bug with the original game where pressing the button and a kill happens simultaneously
