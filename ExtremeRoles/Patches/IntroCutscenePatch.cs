@@ -100,11 +100,13 @@ namespace ExtremeRoles.Patches
             IntroCutscenceHelper.SetupRole();
         }
     }
+
     
-    [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.SetUpRoleText))]
+    [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.ShowRole))]
     class IntroCutsceneSetUpRoleTextPatch
     {
-        public static void Postfix(IntroCutscene __instance)
+
+        private static void setUpText(IntroCutscene __instance)
         {
             var role = ExtremeRoleManager.GetLocalPlayerRole();
 
@@ -129,16 +131,28 @@ namespace ExtremeRoles.Patches
 
                 if (role.IsImpostor())
                 {
-                    __instance.RoleBlurbText.text += 
+                    __instance.RoleBlurbText.text +=
                         $"\n{Helper.Translation.GetString("impostorIntroText")}";
                 }
                 else if (role.IsCrewmate() && role.HasTask)
                 {
-                    __instance.RoleBlurbText.text += 
+                    __instance.RoleBlurbText.text +=
                         $"\n{Helper.Translation.GetString("crewIntroText")}";
                 }
 
             }
+        }
+
+        public static void Postfix(
+            IntroCutscene __instance)
+        {
+            HudManager.Instance.StartCoroutine(
+                Effects.Lerp(1f, (System.Action<float>)((p) => {
+                    if (p > 0.1f) { return; }
+                    setUpText(__instance);
+                }))
+            );
+            setUpText(__instance);
         }
     }
 
