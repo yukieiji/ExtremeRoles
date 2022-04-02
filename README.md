@@ -45,7 +45,12 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 ## 現在確認されている不具合
 - なし
 ## リリーススケジュール
-- Extreme Roles v1.20.0.0：
+- Extreme Roles v2.0.0.0:
+  - Extreme Roles本体のAmongUs v2022.03.29完全対応
+- Extreme Roles v2.0.x.x with Extreme Skins v2.0.0.0:
+  - Extreme Skinsのv2022.03.29完全対応
+  - カスタムネームプレート及びカスタムハット機能完全復活
+- Extreme Roles v2.1.0.0：
    - 時期は不明、コンビネーション役職アップデート
    - コンビネーション役職を3つ(合計で役職を8つ)
 ## 現在実装検討中の役職及び機能
