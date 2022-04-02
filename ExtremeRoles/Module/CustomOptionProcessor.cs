@@ -81,6 +81,7 @@ namespace ExtremeRoles.Module
                             if (OptionHolder.AllOption.ContainsKey(id))
                             {
                                 OptionHolder.AllOption[id].UpdateSelection(selection);
+                                OptionHolder.AllOption[id].SaveConfigValue();
                             }
                         }
                     }
