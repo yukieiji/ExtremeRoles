@@ -4,6 +4,7 @@ using HarmonyLib;
 
 namespace ExtremeRoles.Patches.Option
 {
+    /*
     [HarmonyPatch(typeof(CreateOptionsPicker), nameof(CreateOptionsPicker.Start))]
     public class CreateOptionsPickerPatch
     {
@@ -13,4 +14,5 @@ namespace ExtremeRoles.Patches.Option
             __instance.SetImpostorButtons(numImpostors);
         }
     }
+    */
 }
