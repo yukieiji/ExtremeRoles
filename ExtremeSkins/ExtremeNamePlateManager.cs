@@ -16,6 +16,7 @@ using ExtremeSkins.Module;
 
 namespace ExtremeSkins
 {
+#if WITHNAMEPLATE
     public class ExtremeNamePlateManager
     {
         public static Dictionary<string, CustomNamePlate> NamePlateData = new Dictionary<string, CustomNamePlate>();
@@ -273,6 +274,6 @@ namespace ExtremeSkins
             return HttpStatusCode.OK;
 
         }
-
     }
+#endif
 }

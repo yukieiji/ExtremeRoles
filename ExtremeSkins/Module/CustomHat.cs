@@ -2,6 +2,8 @@
 
 namespace ExtremeSkins.Module
 {
+
+#if WITHHAT
     public class CustomHat
     {
         public const string FrontImageName = "front.png";
@@ -159,4 +161,7 @@ namespace ExtremeSkins.Module
             return sprite;
         }
     }
+
+#endif
+
 }

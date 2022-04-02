@@ -13,6 +13,7 @@ using ExtremeSkins.Module;
 
 namespace ExtremeSkins
 {
+#if WITHHAT
     public class ExtremeHatManager
     {
         public static Dictionary<string, CustomHat> HatData = new Dictionary<string, CustomHat>();
@@ -314,6 +315,6 @@ namespace ExtremeSkins
             return HttpStatusCode.OK;
 
         }
-
     }
+#endif
 }

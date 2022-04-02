@@ -17,6 +17,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
 
             bool creatorMode = ExtremeSkinsPlugin.CreatorMode.Value;
 
+#if WITHHAT
             if (!ExtremeHatManager.IsLoaded)
             {
                 if (ExtremeHatManager.IsUpdate() && !creatorMode)
@@ -25,8 +26,9 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
                 }
                 ExtremeHatManager.Load();
             }
+#endif
 
-
+#if WITHNAMEPLATE
             if (!ExtremeNamePlateManager.IsLoaded)
             {
                 if (ExtremeNamePlateManager.IsUpdate() && !creatorMode)
@@ -36,6 +38,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
 
                 ExtremeNamePlateManager.Load();
             }
+#endif
         }
     }
 }
