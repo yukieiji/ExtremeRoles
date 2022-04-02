@@ -3,6 +3,7 @@ using HarmonyLib;
 
 namespace ExtremeSkins.Patches.AmongUs.Manager
 {
+#if WITHHAT
     [HarmonyPatch(typeof(HatManager), nameof(HatManager.GetHatById))]
     public static class HatManagerGetHatByIdPatch
     {
@@ -36,6 +37,9 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
             isRunning = false;
         }
     }
+#endif
+
+#if NAMEPLATE
     [HarmonyPatch(typeof(HatManager), nameof(HatManager.GetNamePlateById))]
     public static class HatManagerGetNamePlateByIdPatch
     {
@@ -69,4 +73,5 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
             isRunning = false;
         }
     }
+#endif
 }

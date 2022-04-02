@@ -8,6 +8,7 @@
         <VersionSuffix>CustomNamePlate</VersionSuffix>
         <Description>Extreme Skins for Extreme Roles</Description>
         <Authors>yukieiji</Authors>
+        <Configurations>Debug;Release;Release_NOHAT;Release_NONAMEPLATE;Release_NOHAT_AND_NONAMEPLATE;Debug_NOHAT;Debug_NONAMEPLATE;Debug_NONAMEPLATE_AND_NOHAT;Debug_NOHAT_AND_NONAMEPLATE</Configurations>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -16,6 +17,39 @@
         <GameVersion Condition="'$(GamePlatform)' == 'Itch'">2021.12.15</GameVersion>
         <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
     </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_NONAMEPLATE|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE; WITHHAT</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_NONAMEPLATE_AND_NOHAT|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE; WITHHAT</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_NOHAT|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE;</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_NOHAT_AND_NONAMEPLATE|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE;</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_NONAMEPLATE|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE; WITHHAT;</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_NOHAT|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE; WITHNAMEPLATE</DefineConstants>
+    </PropertyGroup>
+  
 
     <ItemGroup>
         <PackageReference Include="BepInEx.Analyzers" Version="1.0.8">

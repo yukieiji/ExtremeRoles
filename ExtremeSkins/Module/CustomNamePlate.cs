@@ -2,6 +2,8 @@
 
 namespace ExtremeSkins.Module
 {
+
+#if WITHNAMEPLATE
     public class CustomNamePlate
     {
         public const int Order = 99;
@@ -69,4 +71,7 @@ namespace ExtremeSkins.Module
         }
 
     }
+
+#endif
+
 }

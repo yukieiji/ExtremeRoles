@@ -32,8 +32,13 @@ namespace ExtremeSkins
             
             Instance = this;
 
+#if WITHHAT
             ExtremeHatManager.Initialize();
+#endif
+#if WITHNAMEPLATE
             ExtremeNamePlateManager.Initialize();
+#endif
+            
             ExtremeColorManager.Initialize();
 
             VersionManager.PlayerVersion.Clear();
