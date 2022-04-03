@@ -206,6 +206,20 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 baseString, this.OneSidedLover.Data.PlayerName);
         }
 
+        public override string GetRolePlayerNameTag(
+            SingleRoleBase targetRole, byte targetPlayerId)
+        {
+            if (targetPlayerId == this.OneSidedLover.PlayerId)
+            {
+                return Helper.Design.ColoedString(
+                    ColorPalette.YandereVioletRed,
+                    $" ♥");
+            }
+
+            return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
+        }
+
+
         public void Update(PlayerControl rolePlayer)
         {
 
@@ -346,6 +360,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 this.isRunawayNextMeetingEnd = false;
             }
             this.target.ArrowActivate(true);
+
+            if (this.hasOneSidedArrow && this.oneSidedArrow != null)
+            {
+                this.oneSidedArrow.SetActive(true);
+            }
         }
 
         public void ResetOnMeetingStart()
