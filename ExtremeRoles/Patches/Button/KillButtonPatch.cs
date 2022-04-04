@@ -42,7 +42,7 @@ namespace ExtremeRoles.Patches.Button
                     target, killer);
                 if (!canKill) { return false; }
 
-                var multiAssignRole = targetPlayerRole as Roles.API.MultiAssignRoleBase;
+                var multiAssignRole = role as Roles.API.MultiAssignRoleBase;
                 if (multiAssignRole != null)
                 {
                     if (multiAssignRole.AnotherRole != null)
@@ -50,7 +50,14 @@ namespace ExtremeRoles.Patches.Button
                         canKill = multiAssignRole.AnotherRole.TryRolePlayerKillTo(
                             killer, target);
                         if (!canKill) { return false; }
+                    }
+                }
 
+                multiAssignRole = targetPlayerRole as Roles.API.MultiAssignRoleBase;
+                if (multiAssignRole != null)
+                {
+                    if (multiAssignRole.AnotherRole != null)
+                    {
                         canKill = multiAssignRole.AnotherRole.TryRolePlayerKilledFrom(
                             target, killer);
                         if (!canKill) { return false; }
