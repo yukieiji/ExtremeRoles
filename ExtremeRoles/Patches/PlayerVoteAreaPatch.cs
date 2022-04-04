@@ -15,23 +15,25 @@ namespace ExtremeRoles.Patches
 		public static bool NameplateChange = true;
 		private static Sprite blankNameplate = null;
 
+		private const string blankNamePlateId = "nameplate_NoPlate";
+
 		public static void UpdateNameplate(PlayerVoteArea pva, byte playerId = byte.MaxValue)
 		{
-			blankNameplate = blankNameplate ?? HatManager.Instance.AllNamePlates[0].Image;
-
+			blankNameplate = blankNameplate ?? HatManager.Instance.GetNamePlateById(
+				blankNamePlateId).viewData.viewData.Image;
 			var nameplate = blankNameplate;
 			if (!OptionHolder.Client.HideNamePlate)
 			{
 				var p = Helper.Player.GetPlayerControlById(
 					playerId != byte.MaxValue ? playerId : pva.TargetPlayerId);
 				var nameplateId = p?.CurrentOutfit?.NamePlateId;
-				nameplate = HatManager.Instance.GetNamePlateById(nameplateId)?.Image;
+				nameplate = HatManager.Instance.GetNamePlateById(nameplateId).viewData.viewData.Image;
 			}
 			pva.Background.sprite = nameplate;
 		}
 	}
 
-
+	
 	[HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.SetCosmetics))]
 	public static class PlayerVoteAreaCosmetics
 	{
