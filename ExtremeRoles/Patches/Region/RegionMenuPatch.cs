@@ -37,8 +37,8 @@ namespace ExtremeRoles.Patches.Region
     public static class RegionMenuOpenPatch
     {
 
-        private static TextBoxTMP ipField;
-        private static TextBoxTMP portField;
+        private static GameObject ipField;
+        private static GameObject portField;
 
         private static TextMeshPro ipText;
         private static TextMeshPro portText;
@@ -46,13 +46,13 @@ namespace ExtremeRoles.Patches.Region
         public static void Postfix(RegionMenu __instance)
         {
 
-            var template = DestroyableSingleton<JoinGameButton>.Instance;
-            if (template == null || template.GameIdText == null) { return; }
+            var gameIdTextBox = GameObject.Find("NormalMenu/JoinGameButton/JoinGameMenu/GameIdText");
+            if (gameIdTextBox == null) { return; }
 
             if (ipField == null || ipField.gameObject == null || ipText == null)
             {
                 ipField = UnityEngine.Object.Instantiate(
-                    template.GameIdText, __instance.transform);
+                    gameIdTextBox.gameObject, __instance.transform);
                 ipText = UnityEngine.Object.Instantiate(
                     Module.Prefab.Text);
 
@@ -64,28 +64,31 @@ namespace ExtremeRoles.Patches.Region
                 UnityEngine.Object.DestroyImmediate(arrow.gameObject);
 
                 ipField.transform.localPosition = new Vector3(0.2f, -1f, -100f);
-                ipField.characterLimit = 30;
-                ipField.AllowSymbols = true;
-                ipField.ForceUppercase = false;
-                ipField.SetText(
+
+                var ipTextBox = ipField.GetComponent<TextBoxTMP>();
+
+                ipTextBox.characterLimit = 30;
+                ipTextBox.AllowSymbols = true;
+                ipTextBox.ForceUppercase = false;
+                ipTextBox.SetText(
                     OptionHolder.ConfigParser.Ip.Value);
                 __instance.StartCoroutine(
                     Effects.Lerp(0.1f, new Action<float>(
                         (p) =>
                         {
-                            ipField.outputText.SetText(OptionHolder.ConfigParser.Ip.Value);
-                            ipField.SetText(OptionHolder.ConfigParser.Ip.Value);
+                            ipTextBox.outputText.SetText(OptionHolder.ConfigParser.Ip.Value);
+                            ipTextBox.SetText(OptionHolder.ConfigParser.Ip.Value);
                         })));
 
-                ipField.ClearOnFocus = false; 
-                ipField.OnEnter = ipField.OnChange = new UnityEngine.UI.Button.ButtonClickedEvent();
-                ipField.OnFocusLost = new UnityEngine.UI.Button.ButtonClickedEvent();
-                ipField.OnChange.AddListener((UnityAction)onEnterOrIpChange);
-                ipField.OnFocusLost.AddListener((UnityAction)onFocusLost);
+                ipTextBox.ClearOnFocus = false;
+                ipTextBox.OnEnter = ipTextBox.OnChange = new UnityEngine.UI.Button.ButtonClickedEvent();
+                ipTextBox.OnFocusLost = new UnityEngine.UI.Button.ButtonClickedEvent();
+                ipTextBox.OnChange.AddListener((UnityAction)onEnterOrIpChange);
+                ipTextBox.OnFocusLost.AddListener((UnityAction)onFocusLost);
 
                 ipText.text =  Helper.Translation.GetString(
                     "customServerIp");
-                ipText.font = ipField.outputText.font;
+                ipText.font = ipTextBox.outputText.font;
                 ipText.transform.parent = ipField.transform;
                 ipText.transform.localPosition = new Vector3(-0.2f, 0.425f, -100f);
                 ipText.gameObject.SetActive(true);
@@ -95,7 +98,7 @@ namespace ExtremeRoles.Patches.Region
             if (portField == null || portField.gameObject == null)
             {
                 portField = UnityEngine.Object.Instantiate(
-                    template.GameIdText, __instance.transform);
+                    gameIdTextBox.gameObject, __instance.transform);
                 portText = UnityEngine.Object.Instantiate(
                     Module.Prefab.Text);
 
@@ -107,27 +110,30 @@ namespace ExtremeRoles.Patches.Region
                 UnityEngine.Object.DestroyImmediate(arrow.gameObject);
 
                 portField.transform.localPosition = new Vector3(0.2f, -2.0f, -100f);
-                portField.characterLimit = 5;
-                portField.SetText(
+
+                var portTextBox = portField.GetComponent<TextBoxTMP>();
+
+                portTextBox.characterLimit = 5;
+                portTextBox.SetText(
                     OptionHolder.ConfigParser.Port.Value.ToString());
                 __instance.StartCoroutine(
                     Effects.Lerp(0.1f, new Action<float>(
                         (p) =>
                         {
-                            portField.outputText.SetText(OptionHolder.ConfigParser.Port.Value.ToString());
-                            portField.SetText(OptionHolder.ConfigParser.Port.Value.ToString()); 
+                            portTextBox.outputText.SetText(OptionHolder.ConfigParser.Port.Value.ToString());
+                            portTextBox.SetText(OptionHolder.ConfigParser.Port.Value.ToString()); 
                         })));
 
 
-                portField.ClearOnFocus = false;
-                portField.OnEnter = portField.OnChange = new UnityEngine.UI.Button.ButtonClickedEvent();
-                portField.OnFocusLost = new UnityEngine.UI.Button.ButtonClickedEvent();
-                portField.OnChange.AddListener((UnityAction)onEnterOrPortFieldChange);
-                portField.OnFocusLost.AddListener((UnityAction)onFocusLost);
+                portTextBox.ClearOnFocus = false;
+                portTextBox.OnEnter = portTextBox.OnChange = new UnityEngine.UI.Button.ButtonClickedEvent();
+                portTextBox.OnFocusLost = new UnityEngine.UI.Button.ButtonClickedEvent();
+                portTextBox.OnChange.AddListener((UnityAction)onEnterOrPortFieldChange);
+                portTextBox.OnFocusLost.AddListener((UnityAction)onFocusLost);
 
                 portText.text = Helper.Translation.GetString(
                     "customServerPort");
-                portText.font = portField.outputText.font;
+                portText.font = portTextBox.outputText.font;
                 portText.transform.parent = portField.transform;
                 portText.transform.localPosition = new Vector3(-0.2f, 0.425f, -100f);
                 portText.gameObject.SetActive(true);
@@ -136,7 +142,7 @@ namespace ExtremeRoles.Patches.Region
 
             void onEnterOrIpChange()
             {
-                OptionHolder.ConfigParser.Ip.Value = ipField.text;
+                OptionHolder.ConfigParser.Ip.Value = ipField.GetComponent<TextBoxTMP>().text;
             }
 
             void onFocusLost()
@@ -149,14 +155,17 @@ namespace ExtremeRoles.Patches.Region
             void onEnterOrPortFieldChange()
             {
                 ushort port = 0;
-                if (ushort.TryParse(portField.text, out port))
+
+                var portTextBox = portField.GetComponent<TextBoxTMP>();
+
+                if (ushort.TryParse(portTextBox.text, out port))
                 {
                     OptionHolder.ConfigParser.Port.Value = port;
-                    portField.outputText.color = Color.white;
+                    portTextBox.outputText.color = Color.white;
                 }
                 else
                 {
-                    portField.outputText.color = Color.red;
+                    portTextBox.outputText.color = Color.red;
                 }
             }
 
