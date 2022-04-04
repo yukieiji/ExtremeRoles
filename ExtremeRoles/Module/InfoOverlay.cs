@@ -481,7 +481,7 @@ namespace ExtremeRoles.Module
             HudManager hudManager = DestroyableSingleton<HudManager>.Instance;
             if (PlayerControl.LocalPlayer == null ||
                 hudManager == null ||
-                HudManager.Instance.isIntroDisplayed ||
+                HudManager.Instance.IsIntroDisplayed ||
                 (!PlayerControl.LocalPlayer.CanMove && MeetingHud.Instance == null))
             {
                 return;
