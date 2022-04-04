@@ -1098,7 +1098,7 @@ namespace ExtremeRoles.Patches
                 __instance.RawSetName(newOutfit.PlayerName);
                 __instance.RawSetColor(newOutfit.ColorId);
                 __instance.RawSetHat(newOutfit.HatId, newOutfit.ColorId);
-                __instance.RawSetSkin(newOutfit.SkinId);
+                __instance.RawSetSkin(newOutfit.SkinId, newOutfit.ColorId);
                 __instance.RawSetVisor(newOutfit.VisorId);
                 __instance.RawSetPet(newOutfit.PetId, newOutfit.ColorId);
                 __instance.Visible = __instance.Visible;
@@ -1132,13 +1132,21 @@ namespace ExtremeRoles.Patches
                 Action changeAction = () =>
                 {
                     changeOutfit();
-                    __instance.myRend.transform.localScale = __instance.defaultPlayerScale;
+                    __instance.CurrentBodySprite.BodySprite.transform.localScale = __instance.defaultPlayerScale;
+                    __instance.NormalBodySprite.BodySprite.transform.localScale = __instance.defaultPlayerScale;
                     __instance.MyPhysics.Skin.gameObject.transform.localScale = __instance.defaultPlayerScale;
                 };
 
                 roleEffectAnimation.MidAnimCB = changeAction;
-
-                __instance.StartCoroutine(__instance.ScalePlayer(0.7f, 0.25f));
+                
+                if (Constants.ShouldHorseAround())
+                {
+                    __instance.StartCoroutine(__instance.ScalePlayer(0.3f, 0.25f));
+                }
+                else
+                {
+                    __instance.StartCoroutine(__instance.ScalePlayer(0.7f, 0.25f));
+                }
 
                 Action roleAnimation = () =>
                 {
