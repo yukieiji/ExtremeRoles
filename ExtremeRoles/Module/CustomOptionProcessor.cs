@@ -22,10 +22,10 @@ namespace ExtremeRoles.Module
                 {
                     csv.WriteLine(
                         string.Format("{1}{0}{2}{0}{3}",
-                        comma,
-                        modName,
-                        versionStr,
-                        Assembly.GetExecutingAssembly().GetName().Version));
+                            comma,
+                            modName,
+                            versionStr,
+                            Assembly.GetExecutingAssembly().GetName().Version));
                     csv.WriteLine(
                         string.Format("{1}{0}{2}{0}{3}{0}{4}",
                             comma, "Id", "Name", "Option Value", "SelectedIndex")); //ヘッダー
@@ -33,6 +33,9 @@ namespace ExtremeRoles.Module
 
                     foreach (var (_, option) in OptionHolder.AllOption)
                     {
+
+                        if (option.Id == 0) { continue; }
+
                         csv.WriteLine(
                             string.Format("{1}{0}{2}{0}{3}{0}{4}",
                                 comma,
@@ -78,9 +81,13 @@ namespace ExtremeRoles.Module
 
                             int id = int.Parse(option[0]);
                             int selection = int.Parse(option[3]);
+
+                            if (id == 0) { continue; }
+
                             if (OptionHolder.AllOption.ContainsKey(id))
                             {
                                 OptionHolder.AllOption[id].UpdateSelection(selection);
+                                OptionHolder.AllOption[id].SaveConfigValue();
                             }
                         }
                     }

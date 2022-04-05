@@ -43,8 +43,10 @@ namespace ExtremeRoles.Module
             infoButton.name = "infoRoleButton";
             infoButton.gameObject.SetActive(true);
             infoButton.layer = 5;
+            
             SetInfoButtonToGameStartShipPositon();
-            var passiveButton = infoButton.GetComponent<ButtonBehavior>();
+
+            var passiveButton = infoButton.GetComponent<PassiveButton>();
             passiveButton.OnClick = new Button.ButtonClickedEvent();
             passiveButton.OnClick.AddListener(
                 (UnityAction)ExtremeRolesPlugin.Info.ToggleInfoOverlay);
@@ -481,7 +483,7 @@ namespace ExtremeRoles.Module
             HudManager hudManager = DestroyableSingleton<HudManager>.Instance;
             if (PlayerControl.LocalPlayer == null ||
                 hudManager == null ||
-                HudManager.Instance.isIntroDisplayed ||
+                HudManager.Instance.IsIntroDisplayed ||
                 (!PlayerControl.LocalPlayer.CanMove && MeetingHud.Instance == null))
             {
                 return;

@@ -22,6 +22,7 @@ namespace ExtremeRoles
                 {
                     createGlobalRandomGenerator(useStrongGen);
                 }
+                Instance.Next();
             }
         }
 

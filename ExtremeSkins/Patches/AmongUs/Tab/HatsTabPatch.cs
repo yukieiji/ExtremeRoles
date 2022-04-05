@@ -9,6 +9,7 @@ using ExtremeSkins.Module;
 
 namespace ExtremeSkins.Patches.AmongUs.Tab
 {
+#if WITHHAT
     [HarmonyPatch]
     public class HatsTabPatch
     {
@@ -168,7 +169,6 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                 __instance.ColorChips.Add(colorChip);
             }
         }
-
         private static void destroyList<T>(List<T> items) where T : UnityEngine.Object
         {
             if (items == null) { return; }
@@ -179,5 +179,5 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
         }
 
     }
-
+#endif
 }

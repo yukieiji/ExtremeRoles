@@ -5,6 +5,7 @@ using ExtremeSkins.Module;
 
 namespace ExtremeSkins.Patches.AmongUs
 {
+#if WITHHAT
     [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.HandleAnimation))]
     public static class PlayerPhysicsHandleAnimationPatch
     {
@@ -48,4 +49,5 @@ namespace ExtremeSkins.Patches.AmongUs
             }
         }
     }
+#endif
 }

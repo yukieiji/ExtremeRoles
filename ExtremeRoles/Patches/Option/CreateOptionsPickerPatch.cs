@@ -4,7 +4,7 @@ using HarmonyLib;
 
 namespace ExtremeRoles.Patches.Option
 {
-    [HarmonyPatch(typeof(CreateOptionsPicker), nameof(CreateOptionsPicker.Start))]
+    [HarmonyPatch(typeof(CreateOptionsPicker), nameof(CreateOptionsPicker.Awake))]
     public class CreateOptionsPickerPatch
     {
         public static void Postfix(CreateOptionsPicker __instance)

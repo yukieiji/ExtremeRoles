@@ -1,5 +1,9 @@
-﻿using HarmonyLib;
+﻿using System.Collections;
+
+using HarmonyLib;
 using UnityEngine;
+
+using BepInEx.IL2CPP.Utils.Collections;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
@@ -86,38 +90,36 @@ namespace ExtremeRoles.Patches
     {
         public static void Prefix(
             IntroCutscene __instance,
-            ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
+            ref Il2CppSystem.Collections.Generic.List<PlayerControl> teamToDisplay)
         {
-            IntroCutscenceHelper.SetupIntroTeamIcons(__instance, ref yourTeam);
+            IntroCutscenceHelper.SetupIntroTeamIcons(__instance, ref teamToDisplay);
             IntroCutscenceHelper.SetupPlayerPrefab(__instance);
         }
 
         public static void Postfix(
             IntroCutscene __instance,
-            ref Il2CppSystem.Collections.Generic.List<PlayerControl> yourTeam)
+            ref Il2CppSystem.Collections.Generic.List<PlayerControl> teamToDisplay)
         {
-            IntroCutscenceHelper.SetupIntroTeam(__instance, ref yourTeam);
+            IntroCutscenceHelper.SetupIntroTeam(__instance, ref teamToDisplay);
             IntroCutscenceHelper.SetupRole();
         }
     }
-
-    [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.SetUpRoleText))]
+    
+    [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.ShowRole))]
     class IntroCutsceneSetUpRoleTextPatch
     {
-        public static void Postfix(IntroCutscene __instance)
+        private static IEnumerator showRoleText(
+            Roles.API.SingleRoleBase role,
+            IntroCutscene __instance)
         {
-            var role = ExtremeRoleManager.GetLocalPlayerRole();
+            __instance.YouAreText.color = role.NameColor;
+            __instance.RoleText.text = role.GetColoredRoleName();
+            __instance.RoleText.color = role.NameColor;
+            __instance.RoleBlurbText.text = role.GetIntroDescription();
+            __instance.RoleBlurbText.color = role.NameColor;
 
-            if (!role.IsVanillaRole())
+            if (role.Id != ExtremeRoleId.Lover)
             {
-                __instance.YouAreText.color = role.NameColor;
-                __instance.RoleText.text = role.GetColoredRoleName();
-                __instance.RoleText.color = role.NameColor;
-                __instance.RoleBlurbText.text = role.GetIntroDescription();
-                __instance.RoleBlurbText.color = role.NameColor;
-
-                if (role.Id == ExtremeRoleId.Lover) { return; }
-
                 if (role is Roles.API.MultiAssignRoleBase)
                 {
                     if (((Roles.API.MultiAssignRoleBase)role).AnotherRole != null)
@@ -129,30 +131,63 @@ namespace ExtremeRoles.Patches
 
                 if (role.IsImpostor())
                 {
-                    __instance.RoleBlurbText.text += 
+                    __instance.RoleBlurbText.text +=
                         $"\n{Helper.Translation.GetString("impostorIntroText")}";
                 }
                 else if (role.IsCrewmate() && role.HasTask)
                 {
-                    __instance.RoleBlurbText.text += 
+                    __instance.RoleBlurbText.text +=
                         $"\n{Helper.Translation.GetString("crewIntroText")}";
                 }
-
             }
+
+            SoundManager.Instance.PlaySound(
+                PlayerControl.LocalPlayer.Data.Role.IntroSound, false, 1f);
+
+            __instance.YouAreText.gameObject.SetActive(true);
+            __instance.RoleText.gameObject.SetActive(true);
+            __instance.RoleBlurbText.gameObject.SetActive(true);
+
+            if (__instance.ourCrewmate == null)
+            {
+                __instance.ourCrewmate = __instance.CreatePlayer(0, 1, PlayerControl.LocalPlayer.Data, false);
+                __instance.ourCrewmate.gameObject.SetActive(false);
+            }
+            __instance.ourCrewmate.gameObject.SetActive(true);
+            __instance.ourCrewmate.transform.localPosition = new Vector3(0f, -1.05f, -18f);
+            __instance.ourCrewmate.transform.localScale = new Vector3(1f, 1f, 1f);
+
+            yield return new WaitForSeconds(2.5f);
+
+            __instance.YouAreText.gameObject.SetActive(false);
+            __instance.RoleText.gameObject.SetActive(false);
+            __instance.RoleBlurbText.gameObject.SetActive(false);
+            __instance.ourCrewmate.gameObject.SetActive(false);
+
+            yield break;
         }
 
-        [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
-        class IntroCutsceneOnDestroyPatch
+        public static bool Prefix(
+            IntroCutscene __instance, ref Il2CppSystem.Collections.IEnumerator __result)
         {
-            public static void Prefix(IntroCutscene __instance)
-            {
-                ExtremeRolesPlugin.Info.SetInfoButtonToInGamePositon();
+            var role = ExtremeRoleManager.GetLocalPlayerRole();
+            if (role.IsVanillaRole()) { return true; }
+            __result = showRoleText(role, __instance).WrapToIl2Cpp();
+            return false;
+        }
+    }
 
-                var role = ExtremeRoleManager.GetLocalPlayerRole() as IRoleSpecialSetUp;
-                if (role != null)
-                {
-                    role.IntroEndSetUp();
-                }
+    [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
+    class IntroCutsceneOnDestroyPatch
+    {
+        public static void Prefix(IntroCutscene __instance)
+        {
+            ExtremeRolesPlugin.Info.SetInfoButtonToInGamePositon();
+
+            var role = ExtremeRoleManager.GetLocalPlayerRole() as IRoleSpecialSetUp;
+            if (role != null)
+            {
+                role.IntroEndSetUp();
             }
         }
     }

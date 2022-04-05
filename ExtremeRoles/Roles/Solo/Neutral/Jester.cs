@@ -56,12 +56,35 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (!killer.CanMove) { return; }
 
             bool canKill = killerRole.TryRolePlayerKillTo(
-                killer, target);
+                    killer, target);
             if (!canKill) { return; }
 
             canKill = targetRole.TryRolePlayerKilledFrom(
                 target, killer);
             if (!canKill) { return; }
+
+            var multiAssignRole = killerRole as MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    canKill = multiAssignRole.AnotherRole.TryRolePlayerKillTo(
+                        killer, target);
+                    if (!canKill) { return; }
+                }
+            }
+
+            multiAssignRole = targetRole as MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    canKill = multiAssignRole.AnotherRole.TryRolePlayerKilledFrom(
+                        target, killer);
+                    if (!canKill) { return; }
+                }
+            }
+
 
             var bodyGuard = ExtremeRolesPlugin.GameDataStore.ShildPlayer.GetBodyGuardPlayerId(
                 targetId);

@@ -9,6 +9,7 @@ using ExtremeSkins.Module;
 
 namespace ExtremeSkins.Patches.AmongUs.Tab
 {
+#if WITHNAMEPLATE
     [HarmonyPatch]
     public class NameplatesTabPatch
     {
@@ -164,8 +165,6 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                 __instance.ColorChips.Add(colorChip);
             }
         }
-
-
         private static void destroyList<T>(List<T> items) where T : UnityEngine.Object
         {
             if (items == null) { return; }
@@ -174,6 +173,6 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                 Object.Destroy(item);
             }
         }
-
     }
+#endif
 }

@@ -171,7 +171,7 @@ namespace ExtremeRoles.Module
             CurSelection = Mathf.Clamp(
                 (newSelection + Selections.Length) % Selections.Length,
                 0, Selections.Length - 1);
-            
+
             if (Behaviour != null && Behaviour is StringOption stringOption)
             {
                 stringOption.oldValue = stringOption.Value = CurSelection;
@@ -197,6 +197,14 @@ namespace ExtremeRoles.Module
 
                     OptionHolder.ShareOptionSelections();// Share all selections
                 }
+            }
+        }
+
+        public void SaveConfigValue()
+        {
+            if (this.Entry != null)
+            {
+                this.Entry.Value = this.CurSelection;
             }
         }
 

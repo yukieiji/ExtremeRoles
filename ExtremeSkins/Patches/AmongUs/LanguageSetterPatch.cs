@@ -4,7 +4,12 @@
     {
         public static void Postfix()
         {
+#if WITHHAT
             ExtremeHatManager.UpdateTranslation();
+#endif
+#if WITHNAMEPLATE
+            ExtremeNamePlateManager.UpdateTranslation();
+#endif
         }
     }
 }

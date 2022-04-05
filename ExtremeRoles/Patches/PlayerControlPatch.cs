@@ -930,13 +930,36 @@ namespace ExtremeRoles.Patches
             float killCool = role.KillCoolTime;
 
             GameData.PlayerInfo data = target.Data;
-            if (!target.protectedByGuardian)
+            if (target.protectedByGuardian)
+            {
+
+                target.protectedByGuardianThisRound = true;
+                bool flag = PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel;
+                if (__instance.AmOwner || flag)
+                {
+                    target.ShowFailedMurder();
+                    __instance.SetKillTimer(killCool / 2f);
+                }
+                else
+                {
+                    target.RemoveProtection();
+                }
+                if (flag)
+                {
+                    StatsManager.Instance.IncrementStat(
+                        StringNames.StatsGuardianAngelCrewmatesProtected);
+                    return false;
+                }
+            }
+            else
             {
                 if (__instance.AmOwner)
                 {
-                    StatsManager instance = StatsManager.Instance;
-                    uint num = instance.ImpostorKills;
-                    instance.ImpostorKills = num + 1U;
+                    StatsManager.Instance.IncrementStat(StringNames.StatsImpostorKills);
+                    if (__instance.CurrentOutfitType == PlayerOutfitType.Shapeshifted)
+                    {
+                        StatsManager.Instance.IncrementStat(StringNames.StatsShapeshifterShiftedKills);
+                    }
                     if (Constants.ShouldPlaySfx())
                     {
                         SoundManager.Instance.PlaySound(
@@ -945,46 +968,44 @@ namespace ExtremeRoles.Patches
                     __instance.SetKillTimer(killCool);
                 }
                 DestroyableSingleton<Telemetry>.Instance.WriteMurder();
-                target.gameObject.layer = LayerMask.NameToLayer("Ghost");
-                if (target.AmOwner)
-                {
-                    StatsManager instance2 = StatsManager.Instance;
-                    uint num = instance2.TimesMurdered;
-                    instance2.TimesMurdered = num + 1U;
-                    if (Minigame.Instance)
-                    {
-                        try
-                        {
-                            Minigame.Instance.Close();
-                            Minigame.Instance.Close();
-                        }
-                        catch
-                        { }
-                    }
-                    DestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(
+	            target.gameObject.layer = LayerMask.NameToLayer("Ghost");
+	            if (target.AmOwner)
+	            {
+		            StatsManager.Instance.IncrementStat(StringNames.StatsTimesMurdered);
+		            if (Minigame.Instance)
+		            {
+			            try
+			            {
+				            Minigame.Instance.Close();
+				            Minigame.Instance.Close();
+			            }
+			            catch
+			            { }
+		            }
+		            DestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(
                         __instance.Data, data);
-                    DestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
-                    target.nameText.GetComponent<MeshRenderer>().material.SetInt("_Mask", 0);
-                    target.RpcSetScanner(false);
-                    ImportantTextTask importantTextTask = new GameObject("_Player").AddComponent<ImportantTextTask>();
-                    importantTextTask.transform.SetParent(
+		            DestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
+		            target.nameText.GetComponent<MeshRenderer>().material.SetInt("_Mask", 0);
+		            target.RpcSetScanner(false);
+		            ImportantTextTask importantTextTask = new GameObject("_Player").AddComponent<ImportantTextTask>();
+		            importantTextTask.transform.SetParent(
                         __instance.transform, false);
-                    if (!PlayerControl.GameOptions.GhostsDoTasks)
-                    {
-                        target.ClearTasks();
-                        importantTextTask.Text = DestroyableSingleton<TranslationController>.Instance.GetString(
+		            if (!PlayerControl.GameOptions.GhostsDoTasks)
+		            {
+			            target.ClearTasks();
+			            importantTextTask.Text = DestroyableSingleton<TranslationController>.Instance.GetString(
                             StringNames.GhostIgnoreTasks, Array.Empty<Il2CppSystem.Object>());
-                    }
-                    else
-                    {
-                        importantTextTask.Text = DestroyableSingleton<TranslationController>.Instance.GetString(
+		            }
+		            else
+		            {
+			            importantTextTask.Text = DestroyableSingleton<TranslationController>.Instance.GetString(
                             StringNames.GhostDoTasks, Array.Empty<Il2CppSystem.Object>());
-                    }
-                    target.myTasks.Insert(0, importantTextTask);
-                }
-                DestroyableSingleton<AchievementManager>.Instance.OnMurder(
+		            }
+		            target.myTasks.Insert(0, importantTextTask);
+	            }
+	            DestroyableSingleton<AchievementManager>.Instance.OnMurder(
                     __instance.AmOwner, target.AmOwner);
-
+                
                 var killAnimation = __instance.KillAnimations.ToList();
 
                 var useKillAnimation = default(KillAnimation);
@@ -997,22 +1018,8 @@ namespace ExtremeRoles.Patches
 
                 __instance.MyPhysics.StartCoroutine(
                     useKillAnimation.CoPerformKill(__instance, target));
-                
-                return false;
             }
-            target.protectedByGuardianThisRound = true;
-            if (__instance.AmOwner || PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
-            {
-                target.ShowFailedMurder();
-                __instance.SetKillTimer(killCool / 2f);
-                return false;
-            }
-            if (__instance.AmOwner)
-            {
-                __instance.SetKillTimer(killCool);
-                return false;
-            }
-            target.RemoveProtection();
+           
             return false;
         }
 
@@ -1098,7 +1105,7 @@ namespace ExtremeRoles.Patches
                 __instance.RawSetName(newOutfit.PlayerName);
                 __instance.RawSetColor(newOutfit.ColorId);
                 __instance.RawSetHat(newOutfit.HatId, newOutfit.ColorId);
-                __instance.RawSetSkin(newOutfit.SkinId);
+                __instance.RawSetSkin(newOutfit.SkinId, newOutfit.ColorId);
                 __instance.RawSetVisor(newOutfit.VisorId);
                 __instance.RawSetPet(newOutfit.PetId, newOutfit.ColorId);
                 __instance.Visible = __instance.Visible;
@@ -1132,13 +1139,21 @@ namespace ExtremeRoles.Patches
                 Action changeAction = () =>
                 {
                     changeOutfit();
-                    __instance.myRend.transform.localScale = __instance.defaultPlayerScale;
+                    __instance.CurrentBodySprite.BodySprite.transform.localScale = __instance.defaultPlayerScale;
+                    __instance.NormalBodySprite.BodySprite.transform.localScale = __instance.defaultPlayerScale;
                     __instance.MyPhysics.Skin.gameObject.transform.localScale = __instance.defaultPlayerScale;
                 };
 
                 roleEffectAnimation.MidAnimCB = changeAction;
-
-                __instance.StartCoroutine(__instance.ScalePlayer(0.7f, 0.25f));
+                
+                if (Constants.ShouldHorseAround())
+                {
+                    __instance.StartCoroutine(__instance.ScalePlayer(0.3f, 0.25f));
+                }
+                else
+                {
+                    __instance.StartCoroutine(__instance.ScalePlayer(0.7f, 0.25f));
+                }
 
                 Action roleAnimation = () =>
                 {

@@ -64,7 +64,6 @@ namespace ExtremeRoles.Patches.Option
         private static ToggleButtonBehaviour exportButton;
 
         private static ToggleButtonBehaviour buttonPrefab;
-        private static Vector3? origin;
         public static void Postfix(OptionsMenuBehaviour __instance)
         {
             if (!__instance.CensorChatButton) { return; }
@@ -92,6 +91,7 @@ namespace ExtremeRoles.Patches.Option
 
             setUpOptions();
             initializeMoreButton(__instance);
+            setLeaveGameButtonPostion();
         }
 
         public static void UpdateMenuTranslation()
@@ -141,11 +141,7 @@ namespace ExtremeRoles.Patches.Option
             moreOptionButton = Object.Instantiate(
                 buttonPrefab,
                 __instance.CensorChatButton.transform.parent);
-            var transform = __instance.CensorChatButton.transform;
-            origin ??= transform.localPosition;
-
-            transform.localPosition = origin.Value + Vector3.left * 1.3f;
-            moreOptionButton.transform.localPosition = origin.Value + Vector3.right * 1.3f;
+            moreOptionButton.transform.localPosition = __instance.CensorChatButton.transform.localPosition + Vector3.down * 0.5f;
 
             moreOptionButton.gameObject.SetActive(true);
             moreOptionButton.Text.text = Helper.Translation.GetString("modOptionText");
@@ -330,6 +326,13 @@ namespace ExtremeRoles.Patches.Option
             {
                 yield return Go.transform.GetChild(i).gameObject;
             }
+        }
+
+        private static void setLeaveGameButtonPostion()
+        {
+            var leaveGameButton = GameObject.Find("LeaveGameButton");
+            if (leaveGameButton == null) { return; }
+            leaveGameButton.transform.localPosition += (Vector3.right * 1.3f);
         }
 
         private class SelectionBehaviour
