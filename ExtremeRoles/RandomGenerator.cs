@@ -96,7 +96,7 @@ namespace ExtremeRoles
             以下のURLの実装を元に実装
              https://github.com/igiagkiozis/PCGSharp
             
-            ToDo:PCG32-XSH-RR => PCG32-RXS-M-XS
+            ToDo:PCG64-XSH-RR => PCG64-RXS-M-XS
         
             implement(official):
                 static xtype output(itype internal)
@@ -155,8 +155,17 @@ namespace ExtremeRoles
 
         public int Next()
         {
-            uint result = NextUInt();
-            return (int)(result >> 1);
+            while (true)
+            {
+                // Get top 31 bits to get a value in the range [0, int.MaxValue], but try again
+                // if the value is actually int.MaxValue, as the method is defined to return a value
+                // in the range [0, int.MaxValue).
+                uint result = NextUInt() >> 1;
+                if (result != int.MaxValue)
+                {
+                    return (int)result;
+                }
+            }
         }
 
         public int Next(int maxExclusive)
