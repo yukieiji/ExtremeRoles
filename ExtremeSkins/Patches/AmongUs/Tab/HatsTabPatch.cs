@@ -9,7 +9,7 @@ using ExtremeSkins.Module;
 
 namespace ExtremeSkins.Patches.AmongUs.Tab
 {
-#if HAT
+#if WITHHAT
     [HarmonyPatch]
     public class HatsTabPatch
     {

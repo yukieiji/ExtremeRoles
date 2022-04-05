@@ -39,7 +39,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
     }
 #endif
 
-#if NAMEPLATE
+#if WITHNAMEPLATE
     [HarmonyPatch(typeof(HatManager), nameof(HatManager.GetNamePlateById))]
     public static class HatManagerGetNamePlateByIdPatch
     {

@@ -9,7 +9,7 @@ using ExtremeSkins.Module;
 
 namespace ExtremeSkins.Patches.AmongUs.Tab
 {
-#if NAMEPLATE
+#if WITHNAMEPLATE
     [HarmonyPatch]
     public class NameplatesTabPatch
     {
