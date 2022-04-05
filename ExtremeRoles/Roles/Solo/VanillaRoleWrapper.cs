@@ -26,6 +26,8 @@ namespace ExtremeRoles.Roles.Solo
                     this.UseVent = true;
                     this.UseSabotage = true;
                     this.HasTask = false;
+                    this.KillCoolTime = PlayerControl.GameOptions.KillCooldown;
+                    this.KillRange = PlayerControl.GameOptions.KillDistance;
                     break;
                 case RoleTypes.Engineer:
                     this.Team = ExtremeRoleType.Crewmate;
