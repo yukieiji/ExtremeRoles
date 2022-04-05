@@ -3,8 +3,8 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
-        <!--<Version>1.99.99.0</Version>-->
-        <VersionPrefix>1.99.99</VersionPrefix>
+        <Version>1.99.99.1</Version>
+        <!--<VersionPrefix>1.99.99</VersionPrefix>-->
         <VersionSuffix>AmongUsV20220329</VersionSuffix>
         <Description>Extreme Skins for Extreme Roles</Description>
         <Authors>yukieiji</Authors>
