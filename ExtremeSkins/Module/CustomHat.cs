@@ -5,7 +5,7 @@ namespace ExtremeSkins.Module
 {
 
 #if WITHHAT
-    public class CustomHat : ICustomCosmicData<HatData, HatViewData>
+    public class CustomHat : ICustomCosmicData<HatData>
     {
         public const string FrontImageName = "front.png";
         public const string FrontFlipImageName = "front_flip.png";
@@ -18,10 +18,6 @@ namespace ExtremeSkins.Module
         public HatData Data
         { 
             get => this.hat; 
-        }
-        public HatViewData ViewData
-        { 
-            get => this.hatView; 
         }
 
         public string Author
@@ -38,17 +34,12 @@ namespace ExtremeSkins.Module
             get => this.id; 
         }
 
-        public bool AllDataLoaded
-        {
-            get => this.altLoaded;
-        }
-
         public bool HasFrontFlip { get; set; }
         public bool HasBackFlip { get; set; }
+        public bool HasShader { get; set; }
+        
         private bool hasBack { get; set; }
         private bool hasClimb { get; set; }
-
-        private bool hasShader { get; set; }
 
         private bool isBounce { get; set; }
 
@@ -64,10 +55,7 @@ namespace ExtremeSkins.Module
         private string name;
         private string author;
 
-        private bool altLoaded = false;
-
         private HatData hat;
-        private HatViewData hatView;
 
         public CustomHat(
             string id,
@@ -90,7 +78,7 @@ namespace ExtremeSkins.Module
             this.hasBack = hasBack;
             this.HasBackFlip = hasBackFlip;
             this.hasClimb = hasClimb;
-            this.hasShader = hasShader;
+            this.HasShader = hasShader;
 
             this.isBounce = isBounce;
         }
@@ -100,7 +88,6 @@ namespace ExtremeSkins.Module
             if (this.hat != null) { return this.hat; }
 
             this.hat = new HatData();
-            this.hatView = new HatViewData();
 
             this.hat.name = Helper.Translation.GetString(this.Name);
             this.hat.displayOrder = 99;
@@ -111,40 +98,22 @@ namespace ExtremeSkins.Module
             this.hat.Free = true;
             this.hat.NotInStore = true;
 
-            this.hat.hatViewData.viewData = this.ViewData;
+            this.hat.hatViewData.viewData = new HatViewData();
 
             loadAllHatResources();
 
-            this.hatView.MainImage = this.frontImage;
+            this.hat.hatViewData.viewData.MainImage = this.frontImage;
 
             if (this.hasBack)
             {
-                this.hatView.BackImage = this.backImage;
+                this.hat.hatViewData.viewData.BackImage = this.backImage;
             }
             if (this.hasClimb)
             {
-                this.hatView.ClimbImage = this.climbImage;
+                this.hat.hatViewData.viewData.ClimbImage = this.climbImage;
             }
 
             return this.hat;
-
-        }
-
-        public void LoadAditionalData()
-        {
-            if (this.hasShader)
-            {
-                foreach (HatData h in DestroyableSingleton<HatManager>.Instance.allHats)
-                {
-                    if (h.hatViewData?.viewData?.AltShader != null)
-                    {
-                        this.hatView.AltShader = h.hatViewData.viewData.AltShader;
-                        break;
-                    }
-                }
-            }
-
-            this.altLoaded = true;
 
         }
 

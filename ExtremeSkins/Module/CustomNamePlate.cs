@@ -5,16 +5,12 @@ namespace ExtremeSkins.Module
 {
 
 #if WITHNAMEPLATE
-    public class CustomNamePlate : ICustomCosmicData<NamePlateData, NamePlateViewData>
+    public class CustomNamePlate : ICustomCosmicData<NamePlateData>
     {
 
         public NamePlateData Data
         {
             get => this.namePlate;
-        }
-        public NamePlateViewData ViewData
-        {
-            get => this.namePlateView;
         }
 
         public string Author
@@ -37,7 +33,6 @@ namespace ExtremeSkins.Module
         }
 
         private NamePlateData namePlate;
-        private NamePlateViewData namePlateView;
 
         private string id;
         private string name;
@@ -67,18 +62,12 @@ namespace ExtremeSkins.Module
             this.namePlate.ChipOffset = new Vector2(0f, 0.2f);
             this.namePlate.Free = true;
             this.namePlate.NotInStore = true;
-            this.namePlate.viewData.viewData = this.ViewData;
 
-            this.namePlateView = new NamePlateViewData();
-            this.namePlateView.Image = loadNamePlateSprite(this.imgPath);
+            this.namePlate.viewData.viewData = new NamePlateViewData();
+            this.namePlate.viewData.viewData.Image = loadNamePlateSprite(this.imgPath);
 
             return this.namePlate;
 
-        }
-
-        public void LoadAditionalData()
-        {
-            return;
         }
 
         private Sprite loadNamePlateSprite(

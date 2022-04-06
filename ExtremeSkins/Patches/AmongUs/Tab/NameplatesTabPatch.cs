@@ -161,7 +161,13 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                         (UnityEngine.Events.UnityAction)(() => __instance.SelectNameplate(np)));
                 }
 
-                colorChip.gameObject.GetComponent<NameplateChip>().image.sprite = np.Image;
+                __instance.StartCoroutine(
+                    np.CoLoadViewData((Il2CppSystem.Action<NamePlateViewData>)((n) => {
+                    colorChip.gameObject.GetComponent<NameplateChip>().image.sprite = n.Image;
+                    __instance.ColorChips.Add(colorChip);
+                })));
+
+
                 __instance.ColorChips.Add(colorChip);
             }
         }

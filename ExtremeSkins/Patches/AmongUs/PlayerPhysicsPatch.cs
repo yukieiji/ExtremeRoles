@@ -12,7 +12,8 @@ namespace ExtremeSkins.Patches.AmongUs
         public static void Postfix(PlayerPhysics __instance)
         {
             AnimationClip currentAnimation = __instance.Animator.GetCurrentAnimation();
-            if (currentAnimation == __instance.ClimbAnim || currentAnimation == __instance.ClimbDownAnim) { return; }
+            if (currentAnimation == __instance.CurrentAnimationGroup.ClimbAnim || 
+                currentAnimation == __instance.CurrentAnimationGroup.ClimbDownAnim) { return; }
 
             HatParent hp = __instance.myPlayer.HatRenderer;
             
@@ -33,7 +34,7 @@ namespace ExtremeSkins.Patches.AmongUs
                 }
                 else
                 {
-                    hp.FrontLayer.sprite = hp.Hat.MainImage;
+                    hp.FrontLayer.sprite = hp.Hat.hatViewData.viewData.MainImage;
                 }
             }
             if (hat.HasBackFlip)
@@ -44,7 +45,7 @@ namespace ExtremeSkins.Patches.AmongUs
                 }
                 else
                 {
-                    hp.BackLayer.sprite = hp.Hat.BackImage;
+                    hp.BackLayer.sprite = hp.Hat.hatViewData.viewData.BackImage;
                 }
             }
         }
