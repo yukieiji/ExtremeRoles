@@ -163,7 +163,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
 
                 __instance.StartCoroutine(
                     np.CoLoadViewData((Il2CppSystem.Action<NamePlateViewData>)((n) => {
-                    colorChip.gameObject.GetComponent<NameplateChip>().image.sprite = n.Image;
+                        colorChip.gameObject.GetComponent<NameplateChip>().image.sprite = n.Image;
                     __instance.ColorChips.Add(colorChip);
                 })));
 
