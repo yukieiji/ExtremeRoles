@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using ExtremeSkins.Module.Interface;
+using UnityEngine;
 
 namespace ExtremeSkins.Module
 {
 
 #if WITHHAT
-    public class CustomHat
+    public class CustomHat : ICustomCosmicData<HatData, HatViewData>
     {
         public const string FrontImageName = "front.png";
         public const string FrontFlipImageName = "front_flip.png";
@@ -14,14 +15,33 @@ namespace ExtremeSkins.Module
 
         public const int Order = 99;
 
+        public HatData Data
+        { 
+            get => this.hat; 
+        }
+        public HatViewData ViewData
+        { 
+            get => this.hatView; 
+        }
 
-        public string Author { get; set; }
-        public string Name { get; set; }
+        public string Author
+        { 
+            get => this.author;
+        }
+        public string Name
+        { 
+            get => this.name; 
+        }
 
-        public HatBehaviour Body { get => this.behaviour; }
+        public string Id
+        { 
+            get => this.id; 
+        }
 
-        private string id;
-        private string folderPath;
+        public bool AllDataLoaded
+        {
+            get => this.altLoaded;
+        }
 
         public bool HasFrontFlip { get; set; }
         public bool HasBackFlip { get; set; }
@@ -32,13 +52,22 @@ namespace ExtremeSkins.Module
 
         private bool isBounce { get; set; }
 
+        private string folderPath;
+
         private Sprite frontImage;
         private Sprite frontFlipImage;
         private Sprite backImage;
         private Sprite backFlipImage;
         private Sprite climbImage;
-        private HatBehaviour behaviour;
 
+        private string id;
+        private string name;
+        private string author;
+
+        private bool altLoaded = false;
+
+        private HatData hat;
+        private HatViewData hatView;
 
         public CustomHat(
             string id,
@@ -54,8 +83,8 @@ namespace ExtremeSkins.Module
         {
             this.id = id;
             this.folderPath = folderPath;
-            this.Author = author;
-            this.Name = name;
+            this.author = author;
+            this.name = name;
             
             this.HasFrontFlip = hasFrontFlip;
             this.hasBack = hasBack;
@@ -66,46 +95,57 @@ namespace ExtremeSkins.Module
             this.isBounce = isBounce;
         }
 
-        public HatBehaviour GetHatBehaviour()
+        public HatData GetData()
         {
-            if (this.behaviour != null) { return this.behaviour; }
+            if (this.hat != null) { return this.hat; }
+
+            this.hat = new HatData();
+            this.hatView = new HatViewData();
+
+            this.hat.name = Helper.Translation.GetString(this.Name);
+            this.hat.displayOrder = 99;
+            this.hat.ProductId = this.id;
+            this.hat.InFront = !this.hasBack;
+            this.hat.NoBounce = !this.isBounce;
+            this.hat.ChipOffset = new Vector2(0f, 0.2f);
+            this.hat.Free = true;
+            this.hat.NotInStore = true;
+
+            this.hat.hatViewData.viewData = this.ViewData;
 
             loadAllHatResources();
 
-            this.behaviour = new HatBehaviour();
-
-            this.behaviour.name = Helper.Translation.GetString(this.Name);
-            this.behaviour.Order = Order;
-            this.behaviour.ProductId = this.id;
-            this.behaviour.InFront = !this.hasBack;
-            this.behaviour.NoBounce = !this.isBounce;
-            this.behaviour.ChipOffset = new Vector2(0f, 0.2f);
-            this.behaviour.Free = true;
-            this.behaviour.NotInStore = true;
-
-            this.behaviour.MainImage = this.frontImage;
+            this.hatView.MainImage = this.frontImage;
 
             if (this.hasBack)
             {
-                this.behaviour.BackImage = this.backImage;
+                this.hatView.BackImage = this.backImage;
             }
             if (this.hasClimb)
             {
-                this.behaviour.ClimbImage = this.climbImage;
+                this.hatView.ClimbImage = this.climbImage;
             }
+
+            return this.hat;
+
+        }
+
+        public void LoadAditionalData()
+        {
             if (this.hasShader)
             {
-                foreach (HatBehaviour h in DestroyableSingleton<HatManager>.Instance.AllHats)
+                foreach (HatData h in DestroyableSingleton<HatManager>.Instance.allHats)
                 {
-                    if (h.AltShader != null)
+                    if (h.hatViewData?.viewData?.AltShader != null)
                     {
-                        this.behaviour.AltShader = h.AltShader;
+                        this.hatView.AltShader = h.hatViewData.viewData.AltShader;
                         break;
                     }
                 }
             }
 
-            return this.behaviour;
+            this.altLoaded = true;
+
         }
 
         public Sprite GetFrontImage() => this.frontImage;
