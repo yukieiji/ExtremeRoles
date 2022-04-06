@@ -27,11 +27,11 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_NONAMEPLATE_AND_NOHAT|AnyCPU'">
-      <DefineConstants>$(DefineConstants)TRACE; WITHHAT</DefineConstants>
+      <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_NOHAT|AnyCPU'">
-      <DefineConstants>$(DefineConstants)TRACE;</DefineConstants>
+      <DefineConstants>$(DefineConstants)TRACE; WITHNAMEPLATE</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
