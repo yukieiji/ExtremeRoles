@@ -3,8 +3,8 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
-        <!--<Version>2.0.1.0</Version>-->
-        <VersionPrefix>2.0.1</VersionPrefix>
+        <Version>2.0.1.1</Version>
+        <!--<VersionPrefix>2.0.1</VersionPrefix>-->
       <VersionSuffix>AmongUsV20220329</VersionSuffix> 
         <Description>Extreme Roles for Advanced user</Description>
         <Authors>yukieiji</Authors>
