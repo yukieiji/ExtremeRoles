@@ -18,6 +18,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             SidekickLimitNum,
             RangeSidekickTarget,
+            CanLoverSidekick,
             ForceReplaceLover,
 
             UpgradeSidekickNum,
@@ -53,6 +54,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         private RoleAbilityButtonBase createSidekick;
 
+        private bool canLoverSidekick;
         private int numUpgradeSidekick = 0;
         private int createSidekickRange = 0;
 
@@ -476,6 +478,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             byte targetPlayerId = this.Target.PlayerId;
             if (!isImpostorAndSetTarget(targetPlayerId)) { return false; }
+            if (!isLoverAndSetTarget(targetPlayerId)) { return false; }
 
             PlayerControl rolePlayer = PlayerControl.LocalPlayer;
 
@@ -549,6 +552,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.SidekickRecursionLimit = allOption[
                 GetRoleOptionId(JackalOption.SidekickLimitNum)].GetValue();
 
+            this.canLoverSidekick = allOption[
+                GetRoleOptionId(JackalOption.CanLoverSidekick)].GetValue();
+
             this.ForceReplaceLover = allOption[
                 GetRoleOptionId(JackalOption.ForceReplaceLover)].GetValue();
 
@@ -585,12 +591,20 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 OptionHolder.Range,
                 parentOps);
 
+            var loverSkOpt = CustomOption.Create(
+                GetRoleOptionId(JackalOption.CanLoverSidekick),
+                string.Concat(
+                    this.RoleName,
+                    JackalOption.CanLoverSidekick.ToString()),
+                true, parentOps);
+
             CustomOption.Create(
                 GetRoleOptionId(JackalOption.ForceReplaceLover),
                 string.Concat(
                     this.RoleName,
                     JackalOption.ForceReplaceLover.ToString()),
-                true, parentOps);
+                true, loverSkOpt,
+                invert: true, enableCheckOption: parentOps);
 
             CustomOption.Create(
                 GetRoleOptionId(JackalOption.UpgradeSidekickNum),
@@ -637,6 +651,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (ExtremeRoleManager.GameRole[playerId].IsImpostor())
             {
                 return this.CanSetImpostorToSidekick;
+            }
+            return true;
+        }
+
+        private bool isLoverAndSetTarget(byte playerId)
+        {
+            if (ExtremeRoleManager.GameRole[playerId].Id == ExtremeRoleId.Lover)
+            {
+                return this.canLoverSidekick;
             }
             return true;
         }
