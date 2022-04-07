@@ -112,6 +112,11 @@ namespace ExtremeSkins.Module
             {
                 this.hat.hatViewData.viewData.ClimbImage = this.climbImage;
             }
+            if (this.HasShader)
+            {
+                this.hat.hatViewData.viewData.AltShader = new Material(
+                    Shader.Find("Unlit/PlayerShader"));
+            }
 
             return this.hat;
 
