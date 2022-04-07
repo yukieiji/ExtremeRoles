@@ -142,7 +142,17 @@ namespace ExtremeRoles.Roles.Combination
             }
 
             assassinMeetingTriggerOn(rolePlayer.PlayerId);
-            killerPlayer.CmdReportDeadBody(rolePlayer.Data);
+            if (AmongUsClient.Instance.AmHost &&
+                rolePlayer.PlayerId == killerPlayer.PlayerId)
+            {
+                MeetingRoomManager.Instance.AssignSelf(rolePlayer, null);
+                DestroyableSingleton<HudManager>.Instance.OpenMeetingRoom(rolePlayer);
+                rolePlayer.RpcStartMeeting(null);
+            }
+            else
+            {
+                killerPlayer.ReportDeadBody(rolePlayer.Data);
+            }
             this.IsFirstMeeting = false;
         }
 
