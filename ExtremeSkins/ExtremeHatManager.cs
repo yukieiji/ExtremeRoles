@@ -194,9 +194,9 @@ namespace ExtremeSkins
         {
             foreach (var hat in HatData.Values)
             {
-               if (hat.Body != null)
+               if (hat.Data != null)
                {
-                    hat.Body.name = Helper.Translation.GetString(
+                    hat.Data.name = Helper.Translation.GetString(
                         hat.Name);
                }
             }

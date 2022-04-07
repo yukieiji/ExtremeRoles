@@ -1,23 +1,38 @@
-﻿using UnityEngine;
+﻿using ExtremeSkins.Module.Interface;
+using UnityEngine;
 
 namespace ExtremeSkins.Module
 {
 
 #if WITHNAMEPLATE
-    public class CustomNamePlate
+    public class CustomNamePlate : ICustomCosmicData<NamePlateData>
     {
-        public const int Order = 99;
 
-        public string Author { get; set; }
-        public string Name { get; set; }
+        public NamePlateData Data
+        {
+            get => this.namePlate;
+        }
 
-        public NamePlateData Body { get => this.namePlate; }
+        public string Author
+        {
+            get => this.author;
+        }
+        public string Name
+        {
+            get => this.name;
+        }
+
+        public string Id
+        {
+            get => this.id;
+        }
 
         private NamePlateData namePlate;
-        private Sprite image;
 
-        private string imgPath;
         private string id;
+        private string name;
+        private string author;
+        private string imgPath;
 
         public CustomNamePlate(
             string id,
@@ -27,26 +42,27 @@ namespace ExtremeSkins.Module
         {
             this.id = id;
             this.imgPath = imgPath;
-            this.Author = author;
-            this.Name = name;
+            this.author = author;
+            this.name = name;
         }
 
-        public NamePlateData GetNamePlateData()
+        public NamePlateData GetData()
         {
             if (this.namePlate != null) { return this.namePlate; }
 
-            this.image = loadNamePlateSprite(this.imgPath);
-
             this.namePlate = new NamePlateData();
-            this.namePlate.Image = this.image;
             this.namePlate.name = Helper.Translation.GetString(this.Name);
-            this.namePlate.Order = Order;
+            this.namePlate.displayOrder = 99;
             this.namePlate.ProductId = this.id;
             this.namePlate.ChipOffset = new Vector2(0f, 0.2f);
             this.namePlate.Free = true;
             this.namePlate.NotInStore = true;
 
+            this.namePlate.viewData.viewData = new NamePlateViewData();
+            this.namePlate.viewData.viewData.Image = loadNamePlateSprite(this.imgPath);
+
             return this.namePlate;
+
         }
 
         private Sprite loadNamePlateSprite(
@@ -69,7 +85,6 @@ namespace ExtremeSkins.Module
             sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontUnloadUnusedAsset;
             return sprite;
         }
-
     }
 
 #endif

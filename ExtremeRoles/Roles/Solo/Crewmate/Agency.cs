@@ -319,6 +319,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 GetRoleOptionId((int)AgencyOption.TakeTaskRange)].GetValue();
 
             this.RoleAbilityInit();
+
+            this.TakeTask.Clear();
+
         }
     }
 }

@@ -55,10 +55,22 @@ namespace ExtremeRoles.Patches
 
         public static void SetupRole()
         {
-            var role = ExtremeRoleManager.GetLocalPlayerRole() as IRoleSpecialSetUp;
-            if (role != null)
+            var localRole = ExtremeRoleManager.GetLocalPlayerRole();
+
+            var setUpRole = localRole as IRoleSpecialSetUp;
+            if (setUpRole != null)
             {
-                role.IntroBeginSetUp();
+                setUpRole.IntroBeginSetUp();
+            }
+
+            var multiAssignRole = localRole as Roles.API.MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                setUpRole = multiAssignRole.AnotherRole as IRoleSpecialSetUp;
+                if (setUpRole != null)
+                {
+                    setUpRole.IntroBeginSetUp();
+                }
             }
         }
 
@@ -184,10 +196,22 @@ namespace ExtremeRoles.Patches
         {
             ExtremeRolesPlugin.Info.SetInfoButtonToInGamePositon();
 
-            var role = ExtremeRoleManager.GetLocalPlayerRole() as IRoleSpecialSetUp;
-            if (role != null)
+            var localRole = ExtremeRoleManager.GetLocalPlayerRole();
+
+            var setUpRole = localRole as IRoleSpecialSetUp;
+            if (setUpRole != null)
             {
-                role.IntroEndSetUp();
+                setUpRole.IntroEndSetUp();
+            }
+
+            var multiAssignRole = localRole as Roles.API.MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                setUpRole = multiAssignRole.AnotherRole as IRoleSpecialSetUp;
+                if (setUpRole != null)
+                {
+                    setUpRole.IntroEndSetUp();
+                }
             }
         }
     }

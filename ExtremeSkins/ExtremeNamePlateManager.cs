@@ -201,9 +201,9 @@ namespace ExtremeSkins
         {
             foreach (var np in NamePlateData.Values)
             {
-               if (np.Body != null)
+               if (np.Data != null)
                {
-                    np.Body.name = Helper.Translation.GetString(
+                    np.Data.name = Helper.Translation.GetString(
                         np.Name);
                }
             }

@@ -32,8 +32,8 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
             inventoryTop = __instance.scroller.Inner.position.y - 0.5f;
             inventoryBot = __instance.scroller.Inner.position.y - 4.5f;
 
-            HatBehaviour[] unlockedHats = DestroyableSingleton<HatManager>.Instance.GetUnlockedHats();
-            Dictionary<string, List<HatBehaviour>> hatPackage = new Dictionary<string, List<HatBehaviour>>();
+            HatData[] unlockedHats = DestroyableSingleton<HatManager>.Instance.GetUnlockedHats();
+            Dictionary<string, List<HatData>> hatPackage = new Dictionary<string, List<HatData>>();
 
             destroyList(hatsTabCustomText);
             destroyList(__instance.ColorChips.ToArray().ToList());
@@ -43,7 +43,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
 
             textTemplate = PlayerCustomizationMenu.Instance.itemName;
 
-            foreach (HatBehaviour hatBehaviour in unlockedHats)
+            foreach (HatData hatBehaviour in unlockedHats)
             {
                 CustomHat hat;
                 bool result = ExtremeHatManager.HatData.TryGetValue(
@@ -52,7 +52,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                 {
                     if (!hatPackage.ContainsKey(hat.Author))
                     {
-                        hatPackage.Add(hat.Author, new List<HatBehaviour>());
+                        hatPackage.Add(hat.Author, new List<HatData>());
                     }
                     hatPackage[hat.Author].Add(hatBehaviour);
                 }
@@ -60,7 +60,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                 {
                     if (!hatPackage.ContainsKey(innerslothPackageName))
                     {
-                        hatPackage.Add(innerslothPackageName, new List<HatBehaviour>());
+                        hatPackage.Add(innerslothPackageName, new List<HatData>());
                     }
                     hatPackage[innerslothPackageName].Add(hatBehaviour);
                 }
@@ -112,7 +112,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
         }
 
         private static void createHatTab(
-            List<HatBehaviour> hats, string packageName, float yStart, HatsTab __instance)
+            List<HatData> hats, string packageName, float yStart, HatsTab __instance)
         {
             float offset = yStart;
 
@@ -136,7 +136,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
 
             for (int i = 0; i < numHats; i++)
             {
-                HatBehaviour hat = hats[i];
+                HatData hat = hats[i];
 
                 float xpos = __instance.XRange.Lerp(
                     (i % __instance.NumPerRow) / (__instance.NumPerRow - 1f));
