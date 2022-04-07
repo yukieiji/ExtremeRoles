@@ -27,11 +27,6 @@ namespace ExtremeSkins.Module
             get => this.id;
         }
 
-        public bool AllDataLoaded
-        {
-            get => true;
-        }
-
         private NamePlateData namePlate;
 
         private string id;

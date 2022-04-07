@@ -13,8 +13,6 @@ namespace ExtremeSkins.Module
         public const string BackFlipImageName = "back_flip.png";
         public const string ClimbImageName = "climb.png";
 
-        public const int Order = 99;
-
         public HatData Data
         { 
             get => this.hat; 
@@ -36,7 +34,7 @@ namespace ExtremeSkins.Module
 
         public bool HasFrontFlip { get; set; }
         public bool HasBackFlip { get; set; }
-        public bool HasShader { get; set; }
+        private bool hasShader { get; set; }
         
         private bool hasBack { get; set; }
         private bool hasClimb { get; set; }
@@ -78,7 +76,7 @@ namespace ExtremeSkins.Module
             this.hasBack = hasBack;
             this.HasBackFlip = hasBackFlip;
             this.hasClimb = hasClimb;
-            this.HasShader = hasShader;
+            this.hasShader = hasShader;
 
             this.isBounce = isBounce;
         }
@@ -112,7 +110,7 @@ namespace ExtremeSkins.Module
             {
                 this.hat.hatViewData.viewData.ClimbImage = this.climbImage;
             }
-            if (this.HasShader)
+            if (this.hasShader)
             {
                 this.hat.hatViewData.viewData.AltShader = new Material(
                     Shader.Find("Unlit/PlayerShader"));
