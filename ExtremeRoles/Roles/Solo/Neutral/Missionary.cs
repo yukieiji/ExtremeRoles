@@ -104,7 +104,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 string.Concat(
                     this.RoleName,
                     MissionaryOption.PropagateRange.ToString()),
-                1.25f, 0.0f, 2.0f, 0.1f,
+                1.2f, 0.0f, 2.0f, 0.1f,
                 parentOps);
 
             this.CreateCommonAbilityOption(parentOps);
