@@ -1,11 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
 using HarmonyLib;
 
 using ExtremeSkins.Module;
+using ExtremeSkins.SkinManager;
 
 namespace ExtremeSkins.Patches.AmongUs.Tab
 {

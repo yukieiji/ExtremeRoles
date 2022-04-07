@@ -1,6 +1,8 @@
 ﻿using Hazel;
 using HarmonyLib;
 
+using ExtremeSkins.SkinManager;
+
 namespace ExtremeSkins.Patches.AmongUs
 {
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CheckColor))]

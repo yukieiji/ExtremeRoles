@@ -2,6 +2,8 @@
 
 using UnhollowerBaseLib;
 
+using ExtremeSkins.SkinManager;
+
 namespace ExtremeSkins.Patches.AmongUs
 {
     [HarmonyPatch(

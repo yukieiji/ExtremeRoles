@@ -8,7 +8,7 @@ using BepInEx.Configuration;
 
 using ExtremeSkins.Module;
 
-namespace ExtremeSkins
+namespace ExtremeSkins.SkinManager
 {
     public class ExtremeColorManager
     {
