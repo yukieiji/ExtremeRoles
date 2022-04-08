@@ -29,6 +29,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private float timeLimit = 0f;
         private float timer = 0f;
 
+        private float blockTargetTime = 0f;
+        private float blockTimer = 0.0f;
+
         private float setTargetRange;
         private float setTargetTime;
 
@@ -128,6 +131,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             TargetKilledKillCoolReduceRate,
             NoneTargetKilledKillCoolMultiplier,
+            BlockTargetTime,
             SetTargetRange,
             SetTargetTime,
             MaxTargetNum,
@@ -283,14 +287,21 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             Vector2 oneSideLoverPos = this.OneSidedLover.GetTruePosition();
 
-            // 片思いびとが生きてる時の処理
-            if (!this.OneSidedLover.Data.Disconnected && !this.OneSidedLover.Data.IsDead)
+            if (this.blockTimer > this.blockTargetTime)
             {
-                searchTarget(rolePlayer, oneSideLoverPos);
+                // 片思いびとが生きてる時の処理
+                if (!this.OneSidedLover.Data.Disconnected && !this.OneSidedLover.Data.IsDead)
+                {
+                    searchTarget(rolePlayer, oneSideLoverPos);
+                }
+                else
+                {
+                    this.isRunaway = true;
+                }
             }
             else
             {
-                this.isRunaway = true;
+                this.blockTimer += Time.fixedDeltaTime;
             }
 
             updateOneSideLoverArrow(oneSideLoverPos);
@@ -403,6 +414,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 parentOps, format: OptionUnit.Multiplier);
 
             CustomOption.Create(
+                GetRoleOptionId((int)YandereOption.BlockTargetTime),
+                string.Concat(
+                    this.RoleName,
+                    YandereOption.BlockTargetTime.ToString()),
+                5.0f, 0.5f, 30.0f, 0.5f,
+                parentOps, format: OptionUnit.Second);
+
+            CustomOption.Create(
                 GetRoleOptionId((int)YandereOption.SetTargetRange),
                 string.Concat(
                     this.RoleName,
@@ -466,8 +485,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.maxTargetNum = allOption[
                 GetRoleOptionId((int)YandereOption.MaxTargetNum)].GetValue();
 
+            this.timer = 0.0f;
             this.timeLimit = allOption[
                 GetRoleOptionId((int)YandereOption.RunawayTime)].GetValue();
+            
+            this.blockTimer = 0.0f;
+            this.blockTargetTime = allOption[
+                GetRoleOptionId((int)YandereOption.BlockTargetTime)].GetValue();
 
             this.hasOneSidedArrow = allOption[
                 GetRoleOptionId((int)YandereOption.HasOneSidedArrow)].GetValue();
