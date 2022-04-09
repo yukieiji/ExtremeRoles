@@ -29,9 +29,9 @@ namespace ExtremeRoles.Roles.Combination
             CanKilled,
             CanKilledFromCrew,
             CanKilledFromNeutral,
-            CanSeeVote,
             IsDeadForceMeeting,
             CanSeeRoleBeforeFirstMeeting,
+            CanSeeVote,
         }
 
         public bool IsFirstMeeting = false;
@@ -95,13 +95,6 @@ namespace ExtremeRoles.Roles.Combination
                     AssassinOption.CanKilledFromNeutral.ToString()),
                 false, killedOps);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)AssassinOption.CanSeeVote),
-                string.Concat(
-                    this.RoleName,
-                    AssassinOption.CanSeeVote.ToString()),
-                true, parentOps);
-
             var meetingOpt = CustomOption.Create(
                 GetRoleOptionId((int)AssassinOption.IsDeadForceMeeting),
                 string.Concat(
@@ -114,6 +107,13 @@ namespace ExtremeRoles.Roles.Combination
                     this.RoleName,
                     AssassinOption.CanSeeRoleBeforeFirstMeeting.ToString()),
                 false, meetingOpt);
+
+            CustomOption.Create(
+                GetRoleOptionId((int)AssassinOption.CanSeeVote),
+                string.Concat(
+                    this.RoleName,
+                    AssassinOption.CanSeeVote.ToString()),
+                true, parentOps);
         }
 
         public override void ExiledAction(
