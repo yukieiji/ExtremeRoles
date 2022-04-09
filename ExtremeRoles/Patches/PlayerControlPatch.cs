@@ -67,8 +67,20 @@ namespace ExtremeRoles.Patches
 
             var role = ExtremeRoleManager.GetLocalPlayerRole();
 
-            playerInfoUpdate(role);
-            setPlayerNameColor(__instance, role);
+            bool blockCondition = isBlockCondition(PlayerControl.LocalPlayer);
+            bool meetingInfoBlock = role.IsBlockShowMeetingRoleInfo();
+            bool playeringInfoBlock = role.IsBlockShowPlayingRoleInfo();
+
+            playerInfoUpdate(
+                blockCondition,
+                meetingInfoBlock,
+                playeringInfoBlock);
+
+            setPlayerNameColor(
+                __instance, role,
+                blockCondition,
+                meetingInfoBlock,
+                playeringInfoBlock);
             setPlayerNameTag(role);
             buttonUpdate(__instance, role);
             refreshRoleDescription(__instance, role);
@@ -138,18 +150,12 @@ namespace ExtremeRoles.Patches
 
         private static void setPlayerNameColor(
             PlayerControl player,
-            SingleRoleBase playerRole)
+            SingleRoleBase playerRole,
+            bool blockCondition,
+            bool meetingInfoBlock,
+            bool playeringInfoBlock)
         {
             var localPlayerId = player.PlayerId;
-
-            bool voteNamePaintBlock = false;
-            bool playerNamePaintBlock = false;
-            bool isBlocked = ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger;
-            if (playerRole.Id == ExtremeRoleId.Assassin)
-            {
-                voteNamePaintBlock = true;
-                playerNamePaintBlock = ((Roles.Combination.Assassin)playerRole).CanSeeRoleBeforeFirstMeeting || isBlocked;
-            }
 
             // Modules.Helpers.DebugLog($"Player Name:{role.NameColor}");
 
@@ -164,8 +170,8 @@ namespace ExtremeRoles.Patches
                 byte targetPlayerId = targetPlayer.PlayerId;
 
                 if (!OptionHolder.Client.GhostsSeeRole || 
-                    !PlayerControl.LocalPlayer.Data.IsDead || 
-                    PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
+                    !PlayerControl.LocalPlayer.Data.IsDead ||
+                    blockCondition)
                 {
                     var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
                     Color paintColor = playerRole.GetTargetRoleSeeColor(
@@ -180,14 +186,14 @@ namespace ExtremeRoles.Patches
                     var targetPlayerRole = ExtremeRoleManager.GameRole[
                         targetPlayerId];
                     Color roleColor = targetPlayerRole.NameColor;
-                    if (!playerNamePaintBlock)
+                    if (!playeringInfoBlock)
                     {
                         targetPlayer.nameText.color = roleColor;
                     }
                     setGhostVoteAreaColor(
                         targetPlayerId,
                         roleColor,
-                        voteNamePaintBlock,
+                        meetingInfoBlock,
                         targetPlayerRole.Team == playerRole.Team);
                 }
             }
@@ -255,7 +261,9 @@ namespace ExtremeRoles.Patches
         }
 
         private static void playerInfoUpdate(
-            SingleRoleBase playerRole)
+            bool blockCondition,
+            bool meetingInfoBlock,
+            bool playeringInfoBlock)
         {
 
             bool commsActive = false;
@@ -267,10 +275,6 @@ namespace ExtremeRoles.Patches
                     break;
                 }
             }
-
-            bool blockCondition = isBlockCondition(PlayerControl.LocalPlayer);
-            bool meetingInfoBlock = playerRole.IsBlockShowMeetingRoleInfo();
-            bool playeringInfoBlock = playerRole.IsBlockShowPlayingRoleInfo();
 
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
