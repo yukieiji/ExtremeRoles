@@ -194,6 +194,9 @@ namespace ExtremeRoles.Roles.Combination
             this.CanSeeRoleBeforeFirstMeeting = allOption[
                 GetRoleOptionId((int)AssassinOption.CanSeeRoleBeforeFirstMeeting)].GetValue();
             this.IsFirstMeeting = true;
+
+            ExtremeRolesPlugin.GameDataStore.IsAssassinAssign = true;
+
         }
 
         private void assassinMeetingTriggerOn(

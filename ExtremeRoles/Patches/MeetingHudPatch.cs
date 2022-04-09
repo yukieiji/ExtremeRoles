@@ -388,7 +388,7 @@ namespace ExtremeRoles.Patches
                 __instance.SkipVoteButton.gameObject.SetActive(false);
 
                 if (PlayerControl.LocalPlayer.PlayerId == ExtremeRolesPlugin.GameDataStore.ExiledAssassinId ||
-                    (ExtremeRoleManager.GetLocalPlayerRole().IsImpostor() && !PlayerControl.LocalPlayer.Data.IsDead))
+                    ExtremeRoleManager.GetLocalPlayerRole().IsImpostor())
                 {
                     DestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(true);
                 }
