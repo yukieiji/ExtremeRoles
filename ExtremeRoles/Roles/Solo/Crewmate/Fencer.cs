@@ -70,7 +70,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             if (fencer != null)
             {
-
+                if (MapBehaviour.Instance)
+                {
+                    MapBehaviour.Instance.Close();
+                }
                 if (Minigame.Instance)
                 {
                     Minigame.Instance.ForceClose();
