@@ -5,7 +5,7 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(KillAnimation), nameof(KillAnimation.CoPerformKill))]
     class KillAnimationCoPerformKillPatch
     {
-        public static bool HideNextAnimation = true;
+        public static bool HideNextAnimation = false;
         public static void Prefix(
             KillAnimation __instance,
             [HarmonyArgument(0)] ref PlayerControl source,
