@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -14,7 +12,7 @@ using Newtonsoft.Json.Linq;
 
 using ExtremeSkins.Module;
 
-namespace ExtremeSkins
+namespace ExtremeSkins.SkinManager
 {
 #if WITHNAMEPLATE
     public class ExtremeNamePlateManager

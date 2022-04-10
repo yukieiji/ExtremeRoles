@@ -1,6 +1,8 @@
 ﻿using System;
 using HarmonyLib;
 
+using ExtremeSkins.SkinManager;
+
 namespace ExtremeSkins.Patches.AmongUs.Manager
 {
 #if WITHHAT

@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 using ExtremeSkins.Module;
 
-namespace ExtremeSkins
+namespace ExtremeSkins.SkinManager
 {
 #if WITHHAT
     public class ExtremeHatManager
