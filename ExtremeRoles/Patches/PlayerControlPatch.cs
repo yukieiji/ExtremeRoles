@@ -67,7 +67,8 @@ namespace ExtremeRoles.Patches
 
             var role = ExtremeRoleManager.GetLocalPlayerRole();
 
-            bool blockCondition = isBlockCondition(PlayerControl.LocalPlayer);
+            bool blockCondition = isBlockCondition(
+                PlayerControl.LocalPlayer, role);
             bool meetingInfoBlock = role.IsBlockShowMeetingRoleInfo();
             bool playeringInfoBlock = role.IsBlockShowPlayingRoleInfo();
 
@@ -343,9 +344,20 @@ namespace ExtremeRoles.Patches
             }
         }
 
-        private static bool isBlockCondition(PlayerControl localPlayer)
+        private static bool isBlockCondition(
+            PlayerControl localPlayer, SingleRoleBase role)
         {
-            return localPlayer.Data.Role.Role == RoleTypes.GuardianAngel;
+            if (localPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
+            {
+                return true;
+            }
+            else if (role.IsImpostor())
+            {
+                return ExtremeRolesPlugin.GameDataStore.IsAssassinAssign;
+            }
+
+            return false;
+
         }
 
         private static Tuple<string, string> getRoleAndMeetingInfo(

@@ -58,6 +58,7 @@ namespace ExtremeRoles.Module
         public int MeetingsCount = 0;
         public int WinGameControlId = int.MaxValue;
 
+        public bool IsAssassinAssign = false;
         public bool AssassinMeetingTrigger = false;
         public bool AssassinateMarin = false;
         public bool WinCheckDisable = false;
@@ -90,6 +91,8 @@ namespace ExtremeRoles.Module
 
             AssassinMeetingTrigger = false;
             AssassinateMarin = false;
+            IsAssassinAssign = false;
+
             WinCheckDisable = false;
 
             ExiledAssassinId = byte.MaxValue;
