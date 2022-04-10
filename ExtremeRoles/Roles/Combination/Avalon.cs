@@ -156,6 +156,25 @@ namespace ExtremeRoles.Roles.Combination
             this.IsFirstMeeting = false;
         }
 
+        public override bool IsBlockShowPlayingRoleInfo()
+        {
+            return !this.IsFirstMeeting && !this.CanSeeRoleBeforeFirstMeeting;
+        }
+
+        public override bool IsBlockShowMeetingRoleInfo()
+        {
+            if (ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
+            { 
+                return true; 
+            }
+            else if (this.CanSeeRoleBeforeFirstMeeting)
+            {
+                return this.IsFirstMeeting;
+            }
+
+            return false;
+
+        }
         protected override void RoleSpecificInit()
         {
             var allOption = OptionHolder.AllOption;

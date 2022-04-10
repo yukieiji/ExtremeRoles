@@ -210,6 +210,8 @@ namespace ExtremeRoles.Roles.API
 
         public virtual bool IsTeamsWin() => this.IsWin;
 
+        public virtual bool IsBlockShowMeetingRoleInfo() => false;
+        public virtual bool IsBlockShowPlayingRoleInfo() => false;
 
         public virtual void RolePlayerKilledAction(
             PlayerControl rolePlayer,

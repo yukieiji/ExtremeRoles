@@ -67,8 +67,20 @@ namespace ExtremeRoles.Patches
 
             var role = ExtremeRoleManager.GetLocalPlayerRole();
 
-            playerInfoUpdate(role);
-            setPlayerNameColor(__instance, role);
+            bool blockCondition = isBlockCondition(PlayerControl.LocalPlayer);
+            bool meetingInfoBlock = role.IsBlockShowMeetingRoleInfo();
+            bool playeringInfoBlock = role.IsBlockShowPlayingRoleInfo();
+
+            playerInfoUpdate(
+                blockCondition,
+                meetingInfoBlock,
+                playeringInfoBlock);
+
+            setPlayerNameColor(
+                __instance, role,
+                blockCondition,
+                meetingInfoBlock,
+                playeringInfoBlock);
             setPlayerNameTag(role);
             buttonUpdate(__instance, role);
             refreshRoleDescription(__instance, role);
@@ -138,18 +150,12 @@ namespace ExtremeRoles.Patches
 
         private static void setPlayerNameColor(
             PlayerControl player,
-            SingleRoleBase playerRole)
+            SingleRoleBase playerRole,
+            bool blockCondition,
+            bool meetingInfoBlock,
+            bool playeringInfoBlock)
         {
             var localPlayerId = player.PlayerId;
-
-            bool voteNamePaintBlock = false;
-            bool playerNamePaintBlock = false;
-            bool isBlocked = ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger;
-            if (playerRole.Id == ExtremeRoleId.Assassin)
-            {
-                voteNamePaintBlock = true;
-                playerNamePaintBlock = ((Roles.Combination.Assassin)playerRole).CanSeeRoleBeforeFirstMeeting || isBlocked;
-            }
 
             // Modules.Helpers.DebugLog($"Player Name:{role.NameColor}");
 
@@ -164,8 +170,8 @@ namespace ExtremeRoles.Patches
                 byte targetPlayerId = targetPlayer.PlayerId;
 
                 if (!OptionHolder.Client.GhostsSeeRole || 
-                    !PlayerControl.LocalPlayer.Data.IsDead || 
-                    PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
+                    !PlayerControl.LocalPlayer.Data.IsDead ||
+                    blockCondition)
                 {
                     var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
                     Color paintColor = playerRole.GetTargetRoleSeeColor(
@@ -180,14 +186,14 @@ namespace ExtremeRoles.Patches
                     var targetPlayerRole = ExtremeRoleManager.GameRole[
                         targetPlayerId];
                     Color roleColor = targetPlayerRole.NameColor;
-                    if (!playerNamePaintBlock)
+                    if (!playeringInfoBlock)
                     {
                         targetPlayer.nameText.color = roleColor;
                     }
                     setGhostVoteAreaColor(
                         targetPlayerId,
                         roleColor,
-                        voteNamePaintBlock,
+                        meetingInfoBlock,
                         targetPlayerRole.Team == playerRole.Team);
                 }
             }
@@ -255,7 +261,9 @@ namespace ExtremeRoles.Patches
         }
 
         private static void playerInfoUpdate(
-            SingleRoleBase playerRole)
+            bool blockCondition,
+            bool meetingInfoBlock,
+            bool playeringInfoBlock)
         {
 
             bool commsActive = false;
@@ -268,18 +276,10 @@ namespace ExtremeRoles.Patches
                 }
             }
 
-            var isBlocked = ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger;
-
-            if (playerRole.Id == ExtremeRoleId.Assassin)
-            {
-                isBlocked = ((Roles.Combination.Assassin)playerRole).IsFirstMeeting || isBlocked;
-            }
-
             foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
 
-                if ((player != PlayerControl.LocalPlayer && 
-                        !PlayerControl.LocalPlayer.Data.IsDead))
+                if ((player != PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead))
                 {
                     continue;
                 }
@@ -312,32 +312,44 @@ namespace ExtremeRoles.Patches
                     meetingInfo.gameObject.name = "Info";
                 }
 
-                var (playerInfoText, meetingInfoText) = getRoleAndMeetingInfo(player, commsActive, isBlocked);
+                var (playerInfoText, meetingInfoText) = getRoleAndMeetingInfo(player, commsActive);
                 playerInfo.text = playerInfoText;
-                playerInfo.gameObject.SetActive(player.Visible);
-
-                if (meetingInfo != null)
+                
+                if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId)
                 {
-                    meetingInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ? "" : meetingInfoText;
+                    playerInfo.gameObject.SetActive(player.Visible);
+                    setMeetingInfo(meetingInfo, meetingInfoText, true);
                 }
-
-                if ((player != PlayerControl.LocalPlayer &&
-                    PlayerControl.LocalPlayer.Data.IsDead &&
-                    PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel))
+                else if (blockCondition)
                 {
                     playerInfo.gameObject.SetActive(false);
-                    if (meetingInfo != null)
-                    {
-                        meetingInfo.gameObject.SetActive(false);
-                    }
+                    setMeetingInfo(meetingInfo, "", false);
                 }
-
+                else
+                {
+                    playerInfo.gameObject.SetActive((player.Visible && !playeringInfoBlock));
+                    setMeetingInfo(meetingInfo, meetingInfoText, !meetingInfoBlock);
+                }
+            }
+        }
+        private static void setMeetingInfo(
+            TMPro.TextMeshPro meetingInfo,
+            string text, bool active)
+        {
+            if (meetingInfo != null)
+            {
+                meetingInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ? "" : text;
+                meetingInfo.gameObject.SetActive(active);
             }
         }
 
+        private static bool isBlockCondition(PlayerControl localPlayer)
+        {
+            return localPlayer.Data.Role.Role == RoleTypes.GuardianAngel;
+        }
+
         private static Tuple<string, string> getRoleAndMeetingInfo(
-            PlayerControl targetPlayer, bool commonActive,
-            bool IsLocalPlayerAssassinFirstMeeting = false)
+            PlayerControl targetPlayer, bool commonActive)
         {
 
             var (tasksCompleted, tasksTotal) = GameSystem.GetTaskInfo(targetPlayer.Data);
@@ -359,19 +371,6 @@ namespace ExtremeRoles.Patches
                     tabText.SetText($"{TranslationController.Instance.GetString(StringNames.Tasks)} {taskInfo}");
                 }
                 meetingInfoText = $"{roleNames} {taskInfo}".Trim();
-            }
-            else if (IsLocalPlayerAssassinFirstMeeting)
-            {
-
-                Roles.Combination.Assassin role = ExtremeRoleManager.GetLocalPlayerRole() as Roles.Combination.Assassin;
-                if (role != null)
-                {
-                    if(role.CanSeeRoleBeforeFirstMeeting && OptionHolder.Client.GhostsSeeRole)
-                    {
-                        playerInfoText = $"{roleNames}";
-                    }
-                }
-
             }
             else if (OptionHolder.Client.GhostsSeeRole && OptionHolder.Client.GhostsSeeTask)
             {
