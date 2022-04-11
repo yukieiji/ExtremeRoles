@@ -3,7 +3,7 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
-        <Version>2.0.0.2</Version>
+        <Version>2.0.0.3</Version>
         <!--<VersionPrefix>2.0.0</VersionPrefix>-->
         <VersionSuffix>AmongUsV20220329</VersionSuffix>
         <Description>Extreme Skins for Extreme Roles</Description>
