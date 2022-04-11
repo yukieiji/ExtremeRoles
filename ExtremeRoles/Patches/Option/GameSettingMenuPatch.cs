@@ -26,6 +26,7 @@ namespace ExtremeRoles.Patches.Option
             var options = new Il2CppSystem.Collections.Generic.List<Il2CppSystem.Collections.Generic.KeyValuePair<string, int>>();
             for (int i = 0; i < Constants.MapNames.Length; ++i)
             {
+                if (i == 3) { continue; }
                 var kvp = new Il2CppSystem.Collections.Generic.KeyValuePair<string, int>();
                 kvp.key = Constants.MapNames[i];
                 kvp.value = i;
