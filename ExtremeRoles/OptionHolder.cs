@@ -58,7 +58,8 @@ namespace ExtremeRoles
             ParallelMedBayScans,
             RandomMap,
             IsSameNeutralSameWin,
-            DisableNeutralSpecialForceEnd
+            DisableNeutralSpecialForceEnd,
+            EnableHorseMode
         }
 
         public static Dictionary<int, CustomOptionBase> AllOption = new Dictionary<int, CustomOptionBase>();
@@ -158,6 +159,10 @@ namespace ExtremeRoles
             CustomOption.Create(
                 (int)CommonOptionKey.DisableNeutralSpecialForceEnd,
                 CommonOptionKey.DisableNeutralSpecialForceEnd.ToString(),
+                false);
+            CustomOption.Create(
+                (int)CommonOptionKey.EnableHorseMode,
+                CommonOptionKey.EnableHorseMode.ToString(),
                 false);
 
             int offset = 50;
