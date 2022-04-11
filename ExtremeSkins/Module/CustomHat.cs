@@ -112,8 +112,10 @@ namespace ExtremeSkins.Module
             }
             if (this.hasShader)
             {
-                this.hat.hatViewData.viewData.AltShader = new Material(
-                    Shader.Find("Unlit/PlayerShader"));
+                Material altShader = new Material("PlayerMaterial");
+                altShader.shader = Shader.Find("Unlit/PlayerShader");
+
+                this.hat.hatViewData.viewData.AltShader = altShader;
             }
 
             return this.hat;
