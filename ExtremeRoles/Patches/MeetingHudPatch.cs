@@ -44,9 +44,8 @@ namespace ExtremeRoles.Patches
 
 
             if (!PlayerControl.GameOptions.AnonymousVotes || canSeeVote ||
-                (PlayerControl.LocalPlayer.Data.IsDead && 
-                 OptionHolder.Client.GhostsSeeVote &&
-                 PlayerControl.LocalPlayer.Data.Role.Role != RoleTypes.GuardianAngel))
+                (PlayerControl.LocalPlayer.Data.IsDead && OptionHolder.Client.GhostsSeeVote &&
+                 !isVoteSeeBlock(role)))
             {
                 PlayerControl.SetPlayerMaterialColors(voterPlayer.DefaultOutfit.ColorId, spriteRenderer);
             }
@@ -65,6 +64,21 @@ namespace ExtremeRoles.Patches
 
             return false;
         }
+
+        private static bool isVoteSeeBlock(Roles.API.SingleRoleBase role)
+        {
+            if (PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
+            {
+                return true;
+            }
+            else if (role.IsImpostor() && role.Id != ExtremeRoleId.Assassin)
+            {
+                return ExtremeRolesPlugin.GameDataStore.IsAssassinAssign;
+            }
+
+            return false;
+        }
+
     }
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Confirm))]
@@ -388,7 +402,7 @@ namespace ExtremeRoles.Patches
                 __instance.SkipVoteButton.gameObject.SetActive(false);
 
                 if (PlayerControl.LocalPlayer.PlayerId == ExtremeRolesPlugin.GameDataStore.ExiledAssassinId ||
-                    (ExtremeRoleManager.GetLocalPlayerRole().IsImpostor() && !PlayerControl.LocalPlayer.Data.IsDead))
+                    ExtremeRoleManager.GetLocalPlayerRole().IsImpostor())
                 {
                     DestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(true);
                 }

@@ -213,6 +213,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public override string GetRolePlayerNameTag(
             SingleRoleBase targetRole, byte targetPlayerId)
         {
+            if (this.OneSidedLover == null) { return ""; }
+
             if (targetPlayerId == this.OneSidedLover.PlayerId)
             {
                 return Helper.Design.ColoedString(

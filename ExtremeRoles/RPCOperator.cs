@@ -212,6 +212,8 @@ namespace ExtremeRoles
 
         public static void StartVentAnimation(int ventId)
         {
+
+            if (ShipStatus.Instance == null) { return; }
             Vent vent = ShipStatus.Instance.AllVents.FirstOrDefault(
                 (x) => x.Id == ventId);
 
@@ -219,6 +221,8 @@ namespace ExtremeRoles
 
             if (ventContainer.IsCustomVent(ventId))
             {
+                if (HudManager.Instance == null) { return; }
+
                 HudManager.Instance.StartCoroutine(
                     Effects.Lerp(
                         0.6f, new System.Action<float>((p) => {
@@ -238,7 +242,7 @@ namespace ExtremeRoles
             }
             else
             {
-                vent.GetComponent<PowerTools.SpriteAnim>().Play(
+                vent?.GetComponent<PowerTools.SpriteAnim>()?.Play(
                     vent.ExitVentAnim, 1f);
             }
         }

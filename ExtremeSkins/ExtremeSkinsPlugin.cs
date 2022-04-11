@@ -4,6 +4,8 @@ using BepInEx.IL2CPP;
 
 using HarmonyLib;
 
+using ExtremeSkins.SkinManager;
+
 
 namespace ExtremeSkins
 {

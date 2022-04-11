@@ -2,6 +2,7 @@
 using HarmonyLib;
 
 using ExtremeSkins.Module;
+using ExtremeSkins.SkinManager;
 
 namespace ExtremeSkins.Patches.AmongUs
 {
