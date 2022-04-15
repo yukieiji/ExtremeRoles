@@ -110,35 +110,35 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.CreateAbilityCountOption(
                 parentOps, 2, 5, 2.5f);
             CustomOption.Create(
-               GetRoleOptionId((int)BomberOption.ExplosionRange),
+               GetRoleOptionId(BomberOption.ExplosionRange),
                string.Concat(
                    this.RoleName,
                    BomberOption.ExplosionRange.ToString()),
                2, 1, 5, 1,
                parentOps);
             CustomOption.Create(
-               GetRoleOptionId((int)BomberOption.ExplosionKillChance),
+               GetRoleOptionId(BomberOption.ExplosionKillChance),
                string.Concat(
                    this.RoleName,
                    BomberOption.ExplosionKillChance.ToString()),
                50, 25, 75, 1,
                parentOps, format: OptionUnit.Percentage);
             CustomOption.Create(
-                GetRoleOptionId((int)BomberOption.TimerMinTime),
+                GetRoleOptionId(BomberOption.TimerMinTime),
                 string.Concat(
                     this.RoleName,
                     BomberOption.TimerMinTime.ToString()),
                 15f, 5.0f, 30f, 0.5f,
                 parentOps, format: OptionUnit.Second);
             CustomOption.Create(
-                GetRoleOptionId((int)BomberOption.TimerMaxTime),
+                GetRoleOptionId(BomberOption.TimerMaxTime),
                 string.Concat(
                     this.RoleName,
                     BomberOption.TimerMaxTime.ToString()),
                 60f, 45f, 75f, 0.5f,
                 parentOps, format: OptionUnit.Second);
             CustomOption.Create(
-               GetRoleOptionId((int)BomberOption.TellExplosion),
+               GetRoleOptionId(BomberOption.TellExplosion),
                string.Concat(
                    this.RoleName,
                    BomberOption.TellExplosion.ToString()),
@@ -152,15 +152,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             var allOption = OptionHolder.AllOption;
 
             this.timerMinTime = allOption[
-                GetRoleOptionId((int)BomberOption.TimerMinTime)].GetValue();
+                GetRoleOptionId(BomberOption.TimerMinTime)].GetValue();
             this.timerMaxTime = allOption[
-                GetRoleOptionId((int)BomberOption.TimerMaxTime)].GetValue();
+                GetRoleOptionId(BomberOption.TimerMaxTime)].GetValue();
             this.explosionKillChance = allOption[
-                GetRoleOptionId((int)BomberOption.ExplosionKillChance)].GetValue();
+                GetRoleOptionId(BomberOption.ExplosionKillChance)].GetValue();
             this.explosionRange = allOption[
-                GetRoleOptionId((int)BomberOption.ExplosionRange)].GetValue();
+                GetRoleOptionId(BomberOption.ExplosionRange)].GetValue();
             this.tellExplosion = allOption[
-                GetRoleOptionId((int)BomberOption.TellExplosion)].GetValue();
+                GetRoleOptionId(BomberOption.TellExplosion)].GetValue();
 
             this.bombPlayerId.Clear();
             resetTimer();
