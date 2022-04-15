@@ -220,25 +220,16 @@ namespace ExtremeRoles.Roles.Combination
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            var neutralSetting = CustomOption.Create(
-                GetRoleOptionId(LoverOption.IsNeutral),
-                string.Concat(
-                    this.RoleName,
-                    LoverOption.IsNeutral.ToString()),
+            var neutralSetting = CreateBoolOption(
+                LoverOption.IsNeutral,
                 false, parentOps);
 
-            var killerSetting = CustomOption.Create(
-                GetRoleOptionId(LoverOption.BecomNeutral),
-                string.Concat(
-                    this.RoleName,
-                    LoverOption.BecomNeutral.ToString()),
+            var killerSetting = CreateBoolOption(
+                LoverOption.BecomNeutral,
                 false, neutralSetting);
 
-            var deathSetting = CustomOption.Create(
-                GetRoleOptionId(LoverOption.DethWhenUnderAlive),
-                string.Concat(
-                    this.RoleName,
-                    LoverOption.DethWhenUnderAlive.ToString()),
+            var deathSetting = CreateIntDynamicOption(
+                LoverOption.DethWhenUnderAlive,
                 1, 1, 1, killerSetting,
                 invert: true,
                 enableCheckOption: parentOps);
@@ -246,11 +237,8 @@ namespace ExtremeRoles.Roles.Combination
             CreateKillerOption(killerSetting);
             killerVisionSetting(killerSetting);
 
-            CustomOption.Create(
-                GetRoleOptionId(LoverOption.BecomeNeutralLoverCanUseVent),
-                string.Concat(
-                    this.RoleName,
-                    LoverOption.BecomeNeutralLoverCanUseVent.ToString()),
+            CreateBoolOption(
+                LoverOption.BecomeNeutralLoverCanUseVent,
                 false, killerSetting);
 
             OptionHolder.AllOption[
@@ -330,26 +318,16 @@ namespace ExtremeRoles.Roles.Combination
         private void killerVisionSetting(
             CustomOptionBase killerOpt)
         {
-            var visonOption = CustomOption.Create(
-                GetRoleOptionId(LoverOption.BecomeNeutralLoverHasOtherVison),
-                string.Concat(
-                    this.RoleName,
-                    LoverOption.BecomeNeutralLoverHasOtherVison.ToString()),
+            var visonOption = CreateBoolOption(
+                LoverOption.BecomeNeutralLoverHasOtherVison,
                 false, killerOpt);
-
-            CustomOption.Create(
-                GetRoleOptionId(LoverOption.BecomeNeutralLoverVison),
-                string.Concat(
-                    this.RoleName,
-                    LoverOption.BecomeNeutralLoverVison.ToString()),
+            CreateFloatOption(LoverOption.BecomeNeutralLoverVison,
                 2f, 0.25f, 5.0f, 0.25f,
                 visonOption, format: OptionUnit.Multiplier);
-            CustomOption.Create(
-               GetRoleOptionId(LoverOption.BecomeNeutralLoverApplyEnvironmentVisionEffect),
-               string.Concat(
-                   this.RoleName,
-                   LoverOption.BecomeNeutralLoverApplyEnvironmentVisionEffect.ToString()),
-               false, visonOption);
+
+            CreateBoolOption(
+                LoverOption.BecomeNeutralLoverApplyEnvironmentVisionEffect,
+                false, visonOption);
         }
 
         private void exiledUpdate(
