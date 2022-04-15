@@ -579,64 +579,40 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.CreateAbilityCountOption(
                 parentOps, 1, OptionHolder.VanillaMaxPlayerNum - 1);
 
-            CustomOption.Create(
-                GetRoleOptionId(JackalOption.RangeSidekickTarget),
-                string.Concat(
-                    this.RoleName,
-                    JackalOption.RangeSidekickTarget.ToString()),
+            CreateSelectionOption(
+                JackalOption.RangeSidekickTarget,
                 OptionHolder.Range,
                 parentOps);
 
-            var loverSkOpt = CustomOption.Create(
-                GetRoleOptionId(JackalOption.CanLoverSidekick),
-                string.Concat(
-                    this.RoleName,
-                    JackalOption.CanLoverSidekick.ToString()),
+            var loverSkOpt = CreateBoolOption(
+                JackalOption.CanLoverSidekick,
                 true, parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId(JackalOption.ForceReplaceLover),
-                string.Concat(
-                    this.RoleName,
-                    JackalOption.ForceReplaceLover.ToString()),
+            CreateBoolOption(
+                JackalOption.ForceReplaceLover,
                 true, loverSkOpt,
                 invert: true, enableCheckOption: parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId(JackalOption.UpgradeSidekickNum),
-                string.Concat(
-                    this.RoleName,
-                    JackalOption.UpgradeSidekickNum.ToString()),
+            CreateIntOption(
+                JackalOption.UpgradeSidekickNum,
                 1, 1, OptionHolder.VanillaMaxPlayerNum - 1, 1,
                 parentOps);
 
-            var sidekickMakeSidekickOps = CustomOption.Create(
-                GetRoleOptionId(JackalOption.SidekickJackalCanMakeSidekick),
-                string.Concat(
-                    this.RoleName,
-                    JackalOption.SidekickJackalCanMakeSidekick.ToString()),
+            var sidekickMakeSidekickOps = CreateBoolOption(
+                JackalOption.SidekickJackalCanMakeSidekick,
                 false, parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId(JackalOption.SidekickLimitNum),
-                string.Concat(
-                    this.RoleName,
-                    JackalOption.SidekickLimitNum.ToString()),
+            CreateIntOption(
+                JackalOption.SidekickLimitNum,
                 1, 1, OptionHolder.VanillaMaxPlayerNum / 2, 1,
                 sidekickMakeSidekickOps);
 
-            CustomOption.Create(
-                GetRoleOptionId(JackalOption.CanSetImpostorToSidekick),
-                string.Concat(
-                    this.RoleName,
-                    JackalOption.CanSetImpostorToSidekick.ToString()),
+            CreateBoolOption(
+                JackalOption.CanSetImpostorToSidekick,
                 false, parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId(JackalOption.CanSeeImpostorToSidekickImpostor),
-                string.Concat(
-                    this.RoleName,
-                    JackalOption.CanSeeImpostorToSidekickImpostor.ToString()),
+            CreateBoolOption(
+                JackalOption.CanSeeImpostorToSidekickImpostor,
                 false, parentOps);
 
         }
