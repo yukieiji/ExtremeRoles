@@ -104,42 +104,27 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             CustomOptionBase parentOps)
         {
 
-            CustomOption.Create(
-                GetRoleOptionId(BountyHunterOption.TargetUpdateTime),
-                string.Concat(
-                    this.RoleName,
-                    BountyHunterOption.TargetUpdateTime.ToString()),
+            CreateFloatOption(
+                BountyHunterOption.TargetUpdateTime,
                 60f, 30.0f, 120f, 0.5f,
                 parentOps, format: OptionUnit.Second);
 
-            CustomOption.Create(
-                GetRoleOptionId(BountyHunterOption.TargetKillCoolTime),
-                string.Concat(
-                    this.RoleName,
-                    BountyHunterOption.TargetKillCoolTime.ToString()),
+            CreateFloatOption(
+                BountyHunterOption.TargetKillCoolTime,
                 5f, 1.0f, 60f, 0.5f,
                 parentOps, format: OptionUnit.Second);
 
-            CustomOption.Create(
-                GetRoleOptionId(BountyHunterOption.NoneTargetKillCoolTime),
-                string.Concat(
-                    this.RoleName,
-                    BountyHunterOption.NoneTargetKillCoolTime.ToString()),
+            CreateFloatOption(
+                BountyHunterOption.NoneTargetKillCoolTime,
                 45f, 1.0f, 120f, 0.5f,
                 parentOps, format: OptionUnit.Second);
 
-            var arrowOption = CustomOption.Create(
-                GetRoleOptionId(BountyHunterOption.IsShowArrow),
-                string.Concat(
-                    this.RoleName,
-                    BountyHunterOption.IsShowArrow.ToString()),
+            var arrowOption = CreateBoolOption(
+                BountyHunterOption.IsShowArrow,
                 false, parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId(BountyHunterOption.ArrowUpdateCycle),
-                string.Concat(
-                    this.RoleName,
-                    BountyHunterOption.ArrowUpdateCycle.ToString()),
+            CreateFloatOption(
+                BountyHunterOption.ArrowUpdateCycle,
                 60f, 1.0f, 120f, 0.5f,
                 arrowOption, format: OptionUnit.Second);
 
