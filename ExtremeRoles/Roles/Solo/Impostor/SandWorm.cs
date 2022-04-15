@@ -213,7 +213,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             CustomOptionBase parentOps)
         {
             CustomOption.Create(
-                GetRoleOptionId((int)SandWormOption.KillCoolPenalty),
+                GetRoleOptionId(SandWormOption.KillCoolPenalty),
                 string.Concat(
                     this.RoleName,
                     SandWormOption.KillCoolPenalty.ToString()),
@@ -221,7 +221,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 parentOps, format: OptionUnit.Second);
 
             CustomOption.Create(
-                GetRoleOptionId((int)SandWormOption.AssaultKillCoolReduce),
+                GetRoleOptionId(SandWormOption.AssaultKillCoolReduce),
                 string.Concat(
                     this.RoleName,
                     SandWormOption.AssaultKillCoolReduce.ToString()),
@@ -230,7 +230,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
 
             CustomOption.Create(
-                GetRoleOptionId((int)SandWormOption.AssaultRange),
+                GetRoleOptionId(SandWormOption.AssaultRange),
                 string.Concat(
                     this.RoleName,
                     SandWormOption.AssaultRange.ToString()),
@@ -250,12 +250,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         protected override void RoleSpecificInit()
         {
             this.range = OptionHolder.AllOption[
-                GetRoleOptionId((int)SandWormOption.AssaultRange)].GetValue();
+                GetRoleOptionId(SandWormOption.AssaultRange)].GetValue();
 
             this.killPenalty = OptionHolder.AllOption[
-                GetRoleOptionId((int)SandWormOption.KillCoolPenalty)].GetValue();
+                GetRoleOptionId(SandWormOption.KillCoolPenalty)].GetValue();
             this.killBonus = OptionHolder.AllOption[
-                GetRoleOptionId((int)SandWormOption.AssaultKillCoolReduce)].GetValue();
+                GetRoleOptionId(SandWormOption.AssaultKillCoolReduce)].GetValue();
 
             if (!this.HasOtherKillCool)
             {
