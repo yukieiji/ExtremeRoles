@@ -154,28 +154,28 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             CustomOptionBase parentOps)
         {
             CustomOption.Create(
-                GetRoleOptionId((int)WhisperOption.AbilityOffTime),
+                GetRoleOptionId(WhisperOption.AbilityOffTime),
                 string.Concat(
                     this.RoleName,
                     WhisperOption.AbilityOffTime.ToString()),
                 3.0f, 1.0f, 5.0f, 0.5f,
                 parentOps, format: OptionUnit.Second);
             CustomOption.Create(
-                GetRoleOptionId((int)WhisperOption.AbilityOnTime),
+                GetRoleOptionId(WhisperOption.AbilityOnTime),
                 string.Concat(
                     this.RoleName,
                     WhisperOption.AbilityOnTime.ToString()),
                 4.0f, 1.0f, 10.0f, 0.5f,
                 parentOps, format: OptionUnit.Second);
             CustomOption.Create(
-                GetRoleOptionId((int)WhisperOption.TellTextTime),
+                GetRoleOptionId(WhisperOption.TellTextTime),
                 string.Concat(
                     this.RoleName,
                     WhisperOption.TellTextTime.ToString()),
                 3.0f, 1.0f, 25.0f, 0.5f,
                 parentOps, format: OptionUnit.Second);
             CustomOption.Create(
-                GetRoleOptionId((int)WhisperOption.MaxTellText),
+                GetRoleOptionId(WhisperOption.MaxTellText),
                 string.Concat(
                     this.RoleName,
                     WhisperOption.MaxTellText.ToString()),
@@ -188,13 +188,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             var allOption = OptionHolder.AllOption;
 
             this.textPopUp = new TextPopUpper(
-                allOption[GetRoleOptionId((int)WhisperOption.MaxTellText)].GetValue(),
-                allOption[GetRoleOptionId((int)WhisperOption.TellTextTime)].GetValue(),
+                allOption[GetRoleOptionId(WhisperOption.MaxTellText)].GetValue(),
+                allOption[GetRoleOptionId(WhisperOption.TellTextTime)].GetValue(),
                 new Vector3(-4.0f, -2.75f, -250.0f),
                 TMPro.TextAlignmentOptions.BottomLeft);
 
-            this.abilityOffTime = allOption[GetRoleOptionId((int)WhisperOption.AbilityOffTime)].GetValue();
-            this.abilityOnTime = allOption[GetRoleOptionId((int)WhisperOption.AbilityOnTime)].GetValue();
+            this.abilityOffTime = allOption[GetRoleOptionId(WhisperOption.AbilityOffTime)].GetValue();
+            this.abilityOnTime = allOption[GetRoleOptionId(WhisperOption.AbilityOnTime)].GetValue();
 
         }
 
