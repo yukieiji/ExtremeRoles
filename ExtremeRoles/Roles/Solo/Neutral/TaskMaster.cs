@@ -119,23 +119,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            CustomOption.Create(
-                this.GetRoleOptionId(TaskMasterOption.AddCommonTaskNum),
-                string.Concat(
-                    this.RoleName,
-                    TaskMasterOption.AddCommonTaskNum.ToString()),
+            CreateIntOption(
+                TaskMasterOption.AddCommonTaskNum,
                 1, 0, 15, 1, parentOps);
-            CustomOption.Create(
-                this.GetRoleOptionId(TaskMasterOption.AddLongTaskNum),
-                string.Concat(
-                    this.RoleName,
-                    TaskMasterOption.AddLongTaskNum.ToString()),
+            CreateIntOption(
+                TaskMasterOption.AddLongTaskNum,
                 1, 0, 15, 1, parentOps);
-            CustomOption.Create(
-                this.GetRoleOptionId(TaskMasterOption.AddNormalTaskNum),
-                string.Concat(
-                    this.RoleName,
-                    TaskMasterOption.AddNormalTaskNum.ToString()),
+            CreateIntOption(
+                TaskMasterOption.AddNormalTaskNum,
                 1, 0, 15, 1, parentOps);
         }
 
