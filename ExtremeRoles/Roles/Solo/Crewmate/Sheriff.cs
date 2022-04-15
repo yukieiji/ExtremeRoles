@@ -124,25 +124,17 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            CustomOption.Create(
-                GetRoleOptionId(SheriffOption.CanShootAssassin),
-                string.Concat(
-                    this.RoleName,
-                    SheriffOption.CanShootAssassin.ToString()),
+
+            CreateBoolOption(
+                SheriffOption.CanShootAssassin,
                 false, parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId(SheriffOption.CanShootNeutral),
-                string.Concat(
-                    this.RoleName,
-                    SheriffOption.CanShootNeutral.ToString()),
+            CreateBoolOption(
+                SheriffOption.CanShootNeutral,
                 true, parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId(SheriffOption.ShootNum),
-                string.Concat(
-                    this.RoleName,
-                    SheriffOption.ShootNum.ToString()),
+            CreateIntOption(
+                SheriffOption.ShootNum,
                 1, 1, OptionHolder.VanillaMaxPlayerNum - 1, 1,
                 parentOps, format: OptionUnit.Shot);
         }
