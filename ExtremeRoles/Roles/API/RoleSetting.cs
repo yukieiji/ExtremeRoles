@@ -36,12 +36,7 @@ namespace ExtremeRoles.Roles.API
 
         public int GetRoleOptionId<T>(T option) where T : struct, IConvertible
         {
-            if (!typeof(int).IsAssignableFrom(Enum.GetUnderlyingType(typeof(T))))
-            {
-                throw new ArgumentException(nameof(T));
-
-            }
-
+            EnumCheck(option);
             return GetRoleOptionId(Convert.ToInt32(option));
         }
 
@@ -96,5 +91,12 @@ namespace ExtremeRoles.Roles.API
 
         protected abstract void RoleSpecificInit();
 
+        protected static void EnumCheck<T>(T isEnum) where T : struct, IConvertible
+        {
+            if (!typeof(int).IsAssignableFrom(Enum.GetUnderlyingType(typeof(T))))
+            {
+                throw new ArgumentException(nameof(T));
+            }
+        }
     }
 }

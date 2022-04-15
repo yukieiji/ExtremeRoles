@@ -349,12 +349,139 @@ namespace ExtremeRoles.Roles.API
                 }
             }
         }
-
         protected bool IsSameControlId(SingleRoleBase tarrgetRole)
         {
             return this.GameControlId == tarrgetRole.GameControlId;
         }
 
+        protected CustomOptionBase CreateFloatOption<T>(
+            T option,
+            float defaultValue,
+            float min, float max, float step,
+            CustomOptionBase parent = null,
+            bool isHeader = false,
+            bool isHidden = false,
+            OptionUnit format = OptionUnit.None,
+            bool invert = false,
+            CustomOptionBase enableCheckOption = null,
+            bool colored = false) where T : struct, IConvertible
+        {
+            EnumCheck(option);
+
+            return new FloatCustomOption(
+                GetRoleOptionId(option),
+                createAutoOptionString(option, colored),
+                defaultValue,
+                min, max, step,
+                parent, isHeader, isHidden,
+                format, invert, enableCheckOption);
+        }
+        protected CustomOptionBase CreateIntOption<T>(
+            T option,
+            int defaultValue,
+            int min, int max, int step,
+            CustomOptionBase parent = null,
+            bool isHeader = false,
+            bool isHidden = false,
+            OptionUnit format = OptionUnit.None,
+            bool invert = false,
+            CustomOptionBase enableCheckOption = null,
+            bool colored = false) where T : struct, IConvertible
+        {
+            EnumCheck(option);
+
+            return new IntCustomOption(
+                GetRoleOptionId(option),
+                createAutoOptionString(option, colored),
+                defaultValue,
+                min, max, step,
+                parent, isHeader, isHidden,
+                format, invert, enableCheckOption);
+        }
+
+        protected CustomOptionBase CreateIntDynamicOption<T>(
+            T option,
+            int defaultValue,
+            int min, int step,
+            CustomOptionBase parent = null,
+            bool isHeader = false,
+            bool isHidden = false,
+            OptionUnit format = OptionUnit.None,
+            bool invert = false,
+            CustomOptionBase enableCheckOption = null,
+            bool colored = false) where T : struct, IConvertible
+        {
+            EnumCheck(option);
+
+            return new IntDynamicCustomOption(
+                GetRoleOptionId(option),
+                createAutoOptionString(option, colored),
+                defaultValue,
+                min, step,
+                parent, isHeader, isHidden,
+                format, invert, enableCheckOption);
+        }
+
+        protected CustomOptionBase CreateBoolOption<T>(
+            T option,
+            bool defaultValue,
+            CustomOptionBase parent = null,
+            bool isHeader = false,
+            bool isHidden = false,
+            OptionUnit format = OptionUnit.None,
+            bool invert = false,
+            CustomOptionBase enableCheckOption = null,
+            bool colored = false) where T : struct, IConvertible
+        {
+            EnumCheck(option);
+
+            return new BoolCustomOption(
+                GetRoleOptionId(option),
+                createAutoOptionString(option, colored),
+                defaultValue,
+                parent, isHeader, isHidden,
+                format, invert, enableCheckOption);
+        }
+
+        protected CustomOptionBase CreateSelectionOption<T>(
+            T option,
+            string[] selections,
+            CustomOptionBase parent = null,
+            bool isHeader = false,
+            bool isHidden = false,
+            OptionUnit format = OptionUnit.None,
+            bool invert = false,
+            CustomOptionBase enableCheckOption = null,
+            bool colored = false) where T : struct, IConvertible
+        {
+            EnumCheck(option);
+
+            return new SelectionCustomOption(
+                GetRoleOptionId(option),
+                createAutoOptionString(option, colored),
+                selections,
+                parent, isHeader, isHidden,
+                format, invert, enableCheckOption);
+        }
+
+        private string createAutoOptionString<T>(
+            T option,
+            bool colored) where T : struct, IConvertible
+        {
+            if (!colored)
+            {
+                return string.Concat(
+                    this.RoleName, option.ToString());
+            }
+            else
+            {
+                return Design.ColoedString(
+                    this.NameColor,
+                    string.Concat(
+                        this.RoleName,
+                        RoleCommonOption.SpawnRate.ToString()));
+            }
+        }
     }
     public abstract class MultiAssignRoleBase : SingleRoleBase
     {
