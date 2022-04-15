@@ -24,13 +24,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             CustomOptionBase parentOps)
         {
             var changeCooking = CustomOption.Create(
-                GetRoleOptionId((int)BakaryOption.ChangeCooking),
+                GetRoleOptionId(BakaryOption.ChangeCooking),
                 string.Concat(
                     this.RoleName,
                     BakaryOption.ChangeCooking.ToString()),
                 true, parentOps);
             CustomOption.Create(
-                GetRoleOptionId((int)BakaryOption.GoodBakeTime),
+                GetRoleOptionId(BakaryOption.GoodBakeTime),
                 string.Concat(
                     this.RoleName,
                     BakaryOption.GoodBakeTime.ToString()),
@@ -38,7 +38,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 changeCooking, format: OptionUnit.Second,
                 invert: true, enableCheckOption: parentOps);
             CustomOption.Create(
-                GetRoleOptionId((int)BakaryOption.BadBakeTime),
+                GetRoleOptionId(BakaryOption.BadBakeTime),
                 string.Concat(
                     this.RoleName,
                     BakaryOption.BadBakeTime.ToString()),
@@ -51,11 +51,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             ExtremeRolesPlugin.GameDataStore.Union.SetCookingCondition(
                 OptionHolder.AllOption[
-                    GetRoleOptionId((int)BakaryOption.GoodBakeTime)].GetValue(),
+                    GetRoleOptionId(BakaryOption.GoodBakeTime)].GetValue(),
                 OptionHolder.AllOption[
-                    GetRoleOptionId((int)BakaryOption.BadBakeTime)].GetValue(),
+                    GetRoleOptionId(BakaryOption.BadBakeTime)].GetValue(),
                 OptionHolder.AllOption[
-                    GetRoleOptionId((int)BakaryOption.ChangeCooking)].GetValue());
+                    GetRoleOptionId(BakaryOption.ChangeCooking)].GetValue());
         }
     }
 }
