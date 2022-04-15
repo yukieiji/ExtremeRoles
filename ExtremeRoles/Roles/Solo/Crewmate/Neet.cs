@@ -37,30 +37,18 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         protected override void CreateSpecificOption(CustomOptionBase parentOps)
         {
-            CustomOption.Create(
-                GetRoleOptionId(NeetOption.CanCallMeeting),
-                string.Concat(
-                    this.RoleName,
-                    NeetOption.CanCallMeeting.ToString()),
+            CreateBoolOption(
+                NeetOption.CanCallMeeting,
                 false, parentOps);
-            CustomOption.Create(
-                GetRoleOptionId(NeetOption.CanRepairSabotage),
-                string.Concat(
-                    this.RoleName,
-                    NeetOption.CanRepairSabotage.ToString()),
+            CreateBoolOption(
+                NeetOption.CanRepairSabotage,
                 false, parentOps);
             
-            var neutralOps = CustomOption.Create(
-                GetRoleOptionId(NeetOption.IsNeutral),
-                string.Concat(
-                    this.RoleName,
-                    NeetOption.IsNeutral.ToString()),
+            var neutralOps = CreateBoolOption(
+                NeetOption.IsNeutral,
                 false, parentOps);
-            CustomOption.Create(
-                GetRoleOptionId(NeetOption.HasTask),
-                string.Concat(
-                    this.RoleName,
-                    NeetOption.HasTask.ToString()),
+            CreateBoolOption(
+                NeetOption.HasTask,
                 false, neutralOps,
                 invert: true,
                 enableCheckOption: parentOps);
