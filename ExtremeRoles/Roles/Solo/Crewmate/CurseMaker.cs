@@ -238,7 +238,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
 
             CustomOption.Create(
-                GetRoleOptionId((int)CurseMakerOption.CursingRange),
+                GetRoleOptionId(CurseMakerOption.CursingRange),
                 string.Concat(
                     this.RoleName,
                     CurseMakerOption.CursingRange.ToString()),
@@ -246,7 +246,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 parentOps);
 
             CustomOption.Create(
-                GetRoleOptionId((int)CurseMakerOption.AdditionalKillCool),
+                GetRoleOptionId(CurseMakerOption.AdditionalKillCool),
                 string.Concat(
                     this.RoleName,
                     CurseMakerOption.AdditionalKillCool.ToString()),
@@ -257,14 +257,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 parentOps, 1, 3, 5.0f);
 
             var searchDeadBodyOption = CustomOption.Create(
-                GetRoleOptionId((int)CurseMakerOption.IsDeadBodySearch),
+                GetRoleOptionId(CurseMakerOption.IsDeadBodySearch),
                 string.Concat(
                     this.RoleName,
                     CurseMakerOption.IsDeadBodySearch.ToString()),
                 true, parentOps);
 
             CustomOption.Create(
-                GetRoleOptionId((int)CurseMakerOption.IsMultiDeadBodySearch),
+                GetRoleOptionId(CurseMakerOption.IsMultiDeadBodySearch),
                 string.Concat(
                     this.RoleName,
                     CurseMakerOption.IsMultiDeadBodySearch.ToString()),
@@ -273,7 +273,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 enableCheckOption: parentOps);
 
             CustomOption.Create(
-                GetRoleOptionId((int)CurseMakerOption.SearchDeadBodyTime),
+                GetRoleOptionId(CurseMakerOption.SearchDeadBodyTime),
                 string.Concat(
                     this.RoleName,
                     CurseMakerOption.SearchDeadBodyTime.ToString()),
@@ -291,15 +291,15 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             var allOption = OptionHolder.AllOption;
 
             this.additionalKillCool = allOption[
-                GetRoleOptionId((int)CurseMakerOption.AdditionalKillCool)].GetValue();
+                GetRoleOptionId(CurseMakerOption.AdditionalKillCool)].GetValue();
             this.deadBodyCheckRange = allOption[
-                GetRoleOptionId((int)CurseMakerOption.CursingRange)].GetValue();
+                GetRoleOptionId(CurseMakerOption.CursingRange)].GetValue();
             this.isDeadBodySearch = allOption[
-                GetRoleOptionId((int)CurseMakerOption.IsDeadBodySearch)].GetValue();
+                GetRoleOptionId(CurseMakerOption.IsDeadBodySearch)].GetValue();
             this.isMultiDeadBodySearch = allOption[
-                GetRoleOptionId((int)CurseMakerOption.IsMultiDeadBodySearch)].GetValue();
+                GetRoleOptionId(CurseMakerOption.IsMultiDeadBodySearch)].GetValue();
             this.searchDeadBodyTime = allOption[
-                GetRoleOptionId((int)CurseMakerOption.SearchDeadBodyTime)].GetValue();
+                GetRoleOptionId(CurseMakerOption.SearchDeadBodyTime)].GetValue();
 
             this.isDeadBodySearchUsed = false;
 
