@@ -148,81 +148,51 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             CustomOptionBase parentOps)
         {
 
-            CustomOption.Create(
-                GetRoleOptionId(SlaveDriverOption.TaskProgressRange),
-                string.Concat(
-                    this.RoleName,
-                    SlaveDriverOption.TaskProgressRange.ToString()),
+            CreateIntOption(
+                SlaveDriverOption.TaskProgressRange,
                 10, 5, 20, 1, parentOps,
                 format: OptionUnit.Percentage);
 
-            CustomOption.Create(
-                GetRoleOptionId(SlaveDriverOption.KillCoolReduceRate),
-                string.Concat(
-                    this.RoleName,
-                    SlaveDriverOption.KillCoolReduceRate.ToString()),
+            CreateIntOption(
+                SlaveDriverOption.KillCoolReduceRate,
                 25, 1, 50, 1, parentOps,
                 format: OptionUnit.Percentage);
 
-            CustomOption.Create(
-                GetRoleOptionId(SlaveDriverOption.SpecialAttackTimer),
-                string.Concat(
-                    this.RoleName,
-                    SlaveDriverOption.SpecialAttackTimer.ToString()),
+            CreateFloatOption(
+                SlaveDriverOption.SpecialAttackTimer,
                 60f, 30f, 120f, 0.5f, parentOps,
                 format: OptionUnit.Second);
 
-            CustomOption.Create(
-                GetRoleOptionId(SlaveDriverOption.SpecialAttackAliveTimer),
-                string.Concat(
-                    this.RoleName,
-                    SlaveDriverOption.SpecialAttackAliveTimer.ToString()),
+            CreateFloatOption(
+                SlaveDriverOption.SpecialAttackAliveTimer,
                 600f, 300f, 900f, 30.0f, parentOps,
                 format: OptionUnit.Second);
 
-            CustomOption.Create(
-                GetRoleOptionId(SlaveDriverOption.SpecialAttackKillCoolReduceRate),
-                string.Concat(
-                    this.RoleName,
-                    SlaveDriverOption.SpecialAttackKillCoolReduceRate.ToString()),
+            CreateIntOption(
+                SlaveDriverOption.SpecialAttackKillCoolReduceRate,
                 50, 25, 75, 1, parentOps,
                 format: OptionUnit.Percentage);
 
-            CustomOption.Create(
-                GetRoleOptionId(SlaveDriverOption.NoneTaskPlayerAttakBonusChance),
-                string.Concat(
-                    this.RoleName,
-                    SlaveDriverOption.NoneTaskPlayerAttakBonusChance.ToString()),
+            CreateIntOption(
+                SlaveDriverOption.NoneTaskPlayerAttakBonusChance,
                 50, 20, 100, 1, parentOps,
                 format: OptionUnit.Percentage);
 
-            CustomOption.Create(
-                GetRoleOptionId(SlaveDriverOption.NoneTaskPlayerSpecialAttackChance),
-                string.Concat(
-                    this.RoleName,
-                    SlaveDriverOption.NoneTaskPlayerSpecialAttackChance.ToString()),
+            CreateIntOption(
+                SlaveDriverOption.NoneTaskPlayerSpecialAttackChance,
                 10, 5, 25, 1, parentOps,
                 format: OptionUnit.Percentage);
 
-            CustomOption.Create(
-                GetRoleOptionId(SlaveDriverOption.AdditionalCommonTaskNum),
-                string.Concat(
-                    this.RoleName,
-                    SlaveDriverOption.AdditionalCommonTaskNum.ToString()),
-                1, 0, 5, 1, parentOps);
-            
-            CustomOption.Create(
-                GetRoleOptionId(SlaveDriverOption.AdditionalNormalTaskNum),
-                string.Concat(
-                    this.RoleName,
-                    SlaveDriverOption.AdditionalNormalTaskNum.ToString()),
+            CreateIntOption(
+                SlaveDriverOption.AdditionalCommonTaskNum,
                 1, 0, 5, 1, parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId(SlaveDriverOption.AdditionalLongTaskNum),
-                string.Concat(
-                    this.RoleName,
-                    SlaveDriverOption.AdditionalLongTaskNum.ToString()),
+            CreateIntOption(
+                SlaveDriverOption.AdditionalNormalTaskNum,
+                1, 0, 5, 1, parentOps);
+
+            CreateIntOption(
+                SlaveDriverOption.AdditionalLongTaskNum,
                 1, 0, 5, 1, parentOps);
 
         }
