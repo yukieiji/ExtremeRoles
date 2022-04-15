@@ -231,6 +231,24 @@ namespace ExtremeRoles.Module
                 format, invert,
                 enableCheckOption)
         { }
+
+        public BoolCustomOption(
+            int id, string name,
+            bool defaultValue,
+            CustomOptionBase parent = null,
+            bool isHeader = false,
+            bool isHidden = false,
+            OptionUnit format = OptionUnit.None,
+            bool invert = false,
+            CustomOptionBase enableCheckOption = null) : base(
+                id, name,
+                new string[] { "optionOff", "optionOn" },
+                defaultValue ? "optionOn" : "optionOff",
+                parent, isHeader, isHidden,
+                format, invert,
+                enableCheckOption)
+        { }
+
         public override dynamic GetValue() => CurSelection > 0;
     }
 
