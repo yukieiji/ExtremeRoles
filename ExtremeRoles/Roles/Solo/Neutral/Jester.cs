@@ -205,19 +205,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            CustomOption.Create(
-                GetRoleOptionId(JesterOption.OutburstDistance),
-                string.Concat(
-                    this.RoleName,
-                    JesterOption.OutburstDistance.ToString()),
+            CreateFloatOption(
+                JesterOption.OutburstDistance,
                 1.0f, 0.0f, 2.0f, 0.1f,
                 parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId(JesterOption.UseSabotage),
-                string.Concat(
-                    this.RoleName,
-                    JesterOption.UseSabotage.ToString()),
+            CreateBoolOption(
+                JesterOption.UseSabotage,
                 true, parentOps);
 
             this.CreateAbilityCountOption(
