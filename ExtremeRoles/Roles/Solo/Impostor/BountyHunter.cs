@@ -105,7 +105,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
 
             CustomOption.Create(
-                GetRoleOptionId((int)BountyHunterOption.TargetUpdateTime),
+                GetRoleOptionId(BountyHunterOption.TargetUpdateTime),
                 string.Concat(
                     this.RoleName,
                     BountyHunterOption.TargetUpdateTime.ToString()),
@@ -113,7 +113,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 parentOps, format: OptionUnit.Second);
 
             CustomOption.Create(
-                GetRoleOptionId((int)BountyHunterOption.TargetKillCoolTime),
+                GetRoleOptionId(BountyHunterOption.TargetKillCoolTime),
                 string.Concat(
                     this.RoleName,
                     BountyHunterOption.TargetKillCoolTime.ToString()),
@@ -121,7 +121,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 parentOps, format: OptionUnit.Second);
 
             CustomOption.Create(
-                GetRoleOptionId((int)BountyHunterOption.NoneTargetKillCoolTime),
+                GetRoleOptionId(BountyHunterOption.NoneTargetKillCoolTime),
                 string.Concat(
                     this.RoleName,
                     BountyHunterOption.NoneTargetKillCoolTime.ToString()),
@@ -129,14 +129,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 parentOps, format: OptionUnit.Second);
 
             var arrowOption = CustomOption.Create(
-                GetRoleOptionId((int)BountyHunterOption.IsShowArrow),
+                GetRoleOptionId(BountyHunterOption.IsShowArrow),
                 string.Concat(
                     this.RoleName,
                     BountyHunterOption.IsShowArrow.ToString()),
                 false, parentOps);
 
             CustomOption.Create(
-                GetRoleOptionId((int)BountyHunterOption.ArrowUpdateCycle),
+                GetRoleOptionId(BountyHunterOption.ArrowUpdateCycle),
                 string.Concat(
                     this.RoleName,
                     BountyHunterOption.ArrowUpdateCycle.ToString()),
@@ -159,17 +159,17 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             var allOption = OptionHolder.AllOption;
 
             this.changeTargetTime = allOption[
-                GetRoleOptionId((int)BountyHunterOption.TargetUpdateTime)].GetValue();
+                GetRoleOptionId(BountyHunterOption.TargetUpdateTime)].GetValue();
             this.targetKillCool = allOption[
-                GetRoleOptionId((int)BountyHunterOption.TargetKillCoolTime)].GetValue();
+                GetRoleOptionId(BountyHunterOption.TargetKillCoolTime)].GetValue();
             this.noneTargetKillCool = allOption[
-                GetRoleOptionId((int)BountyHunterOption.NoneTargetKillCoolTime)].GetValue();
+                GetRoleOptionId(BountyHunterOption.NoneTargetKillCoolTime)].GetValue();
             this.isShowArrow = allOption[
-                GetRoleOptionId((int)BountyHunterOption.IsShowArrow)].GetValue();
+                GetRoleOptionId(BountyHunterOption.IsShowArrow)].GetValue();
             if (this.isShowArrow)
             {
                 this.targetArrowUpdateTime = allOption[
-                    GetRoleOptionId((int)BountyHunterOption.ArrowUpdateCycle)].GetValue();
+                    GetRoleOptionId(BountyHunterOption.ArrowUpdateCycle)].GetValue();
             }
             this.targetArrowUpdateTimer = 0;
             this.targetTimer = 0;
