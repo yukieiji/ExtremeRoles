@@ -78,7 +78,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             CustomOptionBase parentOps)
         {
             CustomOption.Create(
-                GetRoleOptionId((int)PsychoKillerOption.KillCoolReduceRate),
+                GetRoleOptionId(PsychoKillerOption.KillCoolReduceRate),
                 string.Concat(
                     this.RoleName,
                     PsychoKillerOption.KillCoolReduceRate.ToString()),
@@ -86,7 +86,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 format: OptionUnit.Percentage);
 
             CustomOption.Create(
-                GetRoleOptionId((int)PsychoKillerOption.CombMax),
+                GetRoleOptionId(PsychoKillerOption.CombMax),
                 string.Concat(
                     this.RoleName,
                     PsychoKillerOption.CombMax.ToString()),
@@ -94,7 +94,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 parentOps);
 
             CustomOption.Create(
-                GetRoleOptionId((int)PsychoKillerOption.CombResetWhenMeeting),
+                GetRoleOptionId(PsychoKillerOption.CombResetWhenMeeting),
                 string.Concat(
                     this.RoleName,
                     PsychoKillerOption.CombResetWhenMeeting.ToString()),
@@ -113,11 +113,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             var allOption = OptionHolder.AllOption;
 
             this.reduceRate = allOption[
-                GetRoleOptionId((int)PsychoKillerOption.KillCoolReduceRate)].GetValue();
+                GetRoleOptionId(PsychoKillerOption.KillCoolReduceRate)].GetValue();
             this.isResetMeeting = allOption[
-                GetRoleOptionId((int)PsychoKillerOption.CombResetWhenMeeting)].GetValue();
+                GetRoleOptionId(PsychoKillerOption.CombResetWhenMeeting)].GetValue();
             this.combMax= allOption[
-                GetRoleOptionId((int)PsychoKillerOption.CombMax)].GetValue();
+                GetRoleOptionId(PsychoKillerOption.CombMax)].GetValue();
 
             this.combCount = 1;
             this.defaultKillCoolTime = this.KillCoolTime;
