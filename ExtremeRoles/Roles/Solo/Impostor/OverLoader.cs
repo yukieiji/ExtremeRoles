@@ -104,14 +104,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 parentOps, 7.5f);
 
             CustomOption.Create(
-                GetRoleOptionId((int)OverLoaderOption.KillCoolReduceRate),
+                GetRoleOptionId(OverLoaderOption.KillCoolReduceRate),
                 string.Concat(
                     this.RoleName,
                     OverLoaderOption.KillCoolReduceRate.ToString()),
                 75, 50, 90, 1, parentOps,
                 format: OptionUnit.Percentage);
             CustomOption.Create(
-                GetRoleOptionId((int)OverLoaderOption.MoveSpeed),
+                GetRoleOptionId(OverLoaderOption.MoveSpeed),
                 string.Concat(
                     this.RoleName,
                     OverLoaderOption.MoveSpeed.ToString()),
@@ -139,9 +139,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             var allOption = OptionHolder.AllOption;
 
             this.Speed = allOption[
-                GetRoleOptionId((int)OverLoaderOption.MoveSpeed)].GetValue();
+                GetRoleOptionId(OverLoaderOption.MoveSpeed)].GetValue();
             this.reduceRate = allOption[
-                GetRoleOptionId((int)OverLoaderOption.KillCoolReduceRate)].GetValue();
+                GetRoleOptionId(OverLoaderOption.KillCoolReduceRate)].GetValue();
 
             this.RoleAbilityInit();
         }
