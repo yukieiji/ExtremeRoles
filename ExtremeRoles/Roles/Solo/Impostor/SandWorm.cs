@@ -212,36 +212,23 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            CustomOption.Create(
-                GetRoleOptionId(SandWormOption.KillCoolPenalty),
-                string.Concat(
-                    this.RoleName,
-                    SandWormOption.KillCoolPenalty.ToString()),
+            CreateFloatOption(
+                SandWormOption.KillCoolPenalty,
                 5.0f, 1.0f, 10.0f, 0.1f,
                 parentOps, format: OptionUnit.Second);
 
-            CustomOption.Create(
-                GetRoleOptionId(SandWormOption.AssaultKillCoolReduce),
-                string.Concat(
-                    this.RoleName,
-                    SandWormOption.AssaultKillCoolReduce.ToString()),
+            CreateFloatOption(
+                SandWormOption.AssaultKillCoolReduce,
                 3.0f, 1.0f, 5.0f, 0.1f,
                 parentOps, format: OptionUnit.Second);
 
-
-            CustomOption.Create(
-                GetRoleOptionId(SandWormOption.AssaultRange),
-                string.Concat(
-                    this.RoleName,
-                    SandWormOption.AssaultRange.ToString()),
+            CreateFloatOption(
+                SandWormOption.AssaultRange,
                 2.0f, 0.1f, 3.0f, 0.1f,
                 parentOps);
 
-            CustomOption.Create(
-                this.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime),
-                string.Concat(
-                    this.RoleName,
-                    RoleAbilityCommonOption.AbilityCoolTime.ToString()),
+            CreateFloatOption(
+                RoleAbilityCommonOption.AbilityCoolTime,
                 15.0f, 0.5f, 45.0f, 0.1f,
                 parentOps, format: OptionUnit.Second);
 
