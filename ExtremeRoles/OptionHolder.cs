@@ -50,11 +50,11 @@ namespace ExtremeRoles
             MaxImpostorRoles,
 
             NumMeating,
+            DisableSkipInEmergencyMeeting,
+            NoVoteToSelf,
             DesableVent,
             EngineerUseImpostorVent,
             CanKillVentInPlayer,
-            DisableSkipInEmergencyMeeting,
-            NoVoteToSelf,
             ParallelMedBayScans,
             RandomMap,
             IsSameNeutralSameWin,
@@ -123,19 +123,6 @@ namespace ExtremeRoles
                 CommonOptionKey.NumMeating.ToString(),
                 10, 0, 100, 1, null, true);
 
-            var ventOption = CustomOption.Create(
-                (int)CommonOptionKey.DesableVent,
-                CommonOptionKey.DesableVent.ToString(),
-                false);
-            CustomOption.Create(
-                (int)CommonOptionKey.CanKillVentInPlayer,
-                CommonOptionKey.CanKillVentInPlayer.ToString(),
-                false, ventOption, invert: true);
-            CustomOption.Create(
-                (int)CommonOptionKey.EngineerUseImpostorVent,
-                CommonOptionKey.EngineerUseImpostorVent.ToString(),
-                false, ventOption, invert: true);
-
             var blockMeating = CustomOption.Create(
                 (int)CommonOptionKey.DisableSkipInEmergencyMeeting,
                 CommonOptionKey.DisableSkipInEmergencyMeeting.ToString(),
@@ -144,6 +131,19 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.NoVoteToSelf,
                 CommonOptionKey.NoVoteToSelf.ToString(),
                 false, blockMeating);
+
+            var ventOption = CustomOption.Create(
+               (int)CommonOptionKey.DesableVent,
+               CommonOptionKey.DesableVent.ToString(),
+               false);
+            CustomOption.Create(
+                (int)CommonOptionKey.CanKillVentInPlayer,
+                CommonOptionKey.CanKillVentInPlayer.ToString(),
+                false, ventOption, invert: true);
+            CustomOption.Create(
+                (int)CommonOptionKey.EngineerUseImpostorVent,
+                CommonOptionKey.EngineerUseImpostorVent.ToString(),
+                false, ventOption, invert: true);
 
             CustomOption.Create(
                 (int)CommonOptionKey.ParallelMedBayScans,
@@ -160,6 +160,7 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.DisableNeutralSpecialForceEnd,
                 CommonOptionKey.DisableNeutralSpecialForceEnd.ToString(),
                 false);
+            
             CustomOption.Create(
                 (int)CommonOptionKey.EnableHorseMode,
                 CommonOptionKey.EnableHorseMode.ToString(),
