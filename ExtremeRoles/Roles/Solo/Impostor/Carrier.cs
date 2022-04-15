@@ -185,19 +185,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.CreateCommonAbilityOption(
                 parentOps, 5.0f);
 
-            CustomOption.Create(
-                GetRoleOptionId(CarrierOption.CarryDistance),
-                string.Concat(
-                    this.RoleName,
-                    CarrierOption.CarryDistance.ToString()),
+            CreateFloatOption(
+                CarrierOption.CarryDistance,
                 1.0f, 1.0f, 5.0f, 0.5f,
                 parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId(CarrierOption.CanReportOnCarry),
-                string.Concat(
-                    this.RoleName,
-                    CarrierOption.CanReportOnCarry.ToString()),
+            CreateBoolOption(
+                CarrierOption.CanReportOnCarry,
                 true, parentOps);
         }
 
