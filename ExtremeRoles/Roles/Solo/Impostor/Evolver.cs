@@ -142,41 +142,26 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            CustomOption.Create(
-                GetRoleOptionId(EvolverOption.IsEvolvedAnimation),
-                string.Concat(
-                    this.RoleName,
-                    EvolverOption.IsEvolvedAnimation.ToString()),
+            CreateBoolOption(
+                EvolverOption.IsEvolvedAnimation,
                 true, parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId(EvolverOption.IsEatingEndCleanBody),
-                string.Concat(
-                    this.RoleName,
-                    EvolverOption.IsEatingEndCleanBody.ToString()),
+            CreateBoolOption(
+                EvolverOption.IsEatingEndCleanBody,
                 true, parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId(EvolverOption.EatingRange),
-                string.Concat(
-                    this.RoleName,
-                    EvolverOption.EatingRange.ToString()),
+            CreateFloatOption(
+                EvolverOption.EatingRange,
                 2.5f, 0.5f, 5.0f, 0.5f,
                 parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId(EvolverOption.KillCoolReduceRate),
-                string.Concat(
-                    this.RoleName,
-                    EvolverOption.KillCoolReduceRate.ToString()),
+            CreateIntOption(
+                EvolverOption.KillCoolReduceRate,
                 10, 1, 50, 1, parentOps,
                 format: OptionUnit.Percentage);
 
-            CustomOption.Create(
-                GetRoleOptionId(EvolverOption.KillCoolResuceRateMulti),
-                string.Concat(
-                    this.RoleName,
-                    EvolverOption.KillCoolResuceRateMulti.ToString()),
+            CreateFloatOption(
+                EvolverOption.KillCoolResuceRateMulti,
                 1.0f, 1.0f, 5.0f, 0.1f,
                 parentOps, format: OptionUnit.Multiplier);
 
