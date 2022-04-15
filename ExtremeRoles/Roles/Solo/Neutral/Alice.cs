@@ -179,23 +179,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.CreateAbilityCountOption(
                 parentOps, 2, 100);
 
-            CustomOption.Create(
-                this.GetRoleOptionId(AliceOption.RevartLongTaskNum),
-                string.Concat(
-                    this.RoleName,
-                    AliceOption.RevartLongTaskNum.ToString()),
+            CreateIntOption(
+                AliceOption.RevartLongTaskNum,
                 1, 0, 15, 1, parentOps);
-            CustomOption.Create(
-                this.GetRoleOptionId(AliceOption.RevartCommonTaskNum),
-                string.Concat(
-                    this.RoleName,
-                    AliceOption.RevartCommonTaskNum.ToString()),
+            CreateIntOption(
+                AliceOption.RevartCommonTaskNum,
                 1, 0, 15, 1, parentOps);
-            CustomOption.Create(
-                this.GetRoleOptionId(AliceOption.RevartNormalTaskNum),
-                string.Concat(
-                    this.RoleName,
-                    AliceOption.RevartNormalTaskNum.ToString()),
+            CreateIntOption(
+                AliceOption.RevartNormalTaskNum,
                 1, 0, 15, 1, parentOps);
 
         }
