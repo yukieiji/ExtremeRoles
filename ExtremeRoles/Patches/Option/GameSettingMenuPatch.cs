@@ -32,6 +32,11 @@ namespace ExtremeRoles.Patches.Option
                 kvp.value = i;
                 options.Add(kvp);
             }
+
+            int selected = mapNameTransform.GetComponent<KeyValueOption>().Selected;
+            mapNameTransform.GetComponent<KeyValueOption>().Selected = Math.Clamp(
+                selected, 0, options.Count - 1);
+
             mapNameTransform.GetComponent<KeyValueOption>().Values = options;
             mapNameTransform.gameObject.SetActive(true);
 
