@@ -74,45 +74,24 @@ namespace ExtremeRoles.Roles.Combination
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            var killedOps = CustomOption.Create(
-                GetRoleOptionId(AssassinOption.CanKilled),
-                string.Concat(
-                    this.RoleName,
-                    AssassinOption.CanKilled.ToString()),
+            var killedOps = CreateBoolOption(
+                AssassinOption.CanKilled,
                 false, parentOps);
-
-            CustomOption.Create(
-                GetRoleOptionId(AssassinOption.CanKilledFromCrew),
-                string.Concat(
-                    this.RoleName,
-                    AssassinOption.CanKilledFromCrew.ToString()),
+            CreateBoolOption(
+                AssassinOption.CanKilledFromCrew,
                 false, killedOps);
-
-            CustomOption.Create(
-                GetRoleOptionId(AssassinOption.CanKilledFromNeutral),
-                string.Concat(
-                    this.RoleName,
-                    AssassinOption.CanKilledFromNeutral.ToString()),
+            CreateBoolOption(
+                AssassinOption.CanKilledFromNeutral,
                 false, killedOps);
-
-            var meetingOpt = CustomOption.Create(
-                GetRoleOptionId(AssassinOption.IsDeadForceMeeting),
-                string.Concat(
-                    this.RoleName,
-                    AssassinOption.IsDeadForceMeeting.ToString()),
+            var meetingOpt = CreateBoolOption(
+                AssassinOption.IsDeadForceMeeting,
                 true, killedOps);
-            CustomOption.Create(
-                GetRoleOptionId(AssassinOption.CanSeeRoleBeforeFirstMeeting),
-                string.Concat(
-                    this.RoleName,
-                    AssassinOption.CanSeeRoleBeforeFirstMeeting.ToString()),
+            CreateBoolOption(
+                AssassinOption.CanSeeRoleBeforeFirstMeeting,
                 false, meetingOpt);
 
-            CustomOption.Create(
-                GetRoleOptionId(AssassinOption.CanSeeVote),
-                string.Concat(
-                    this.RoleName,
-                    AssassinOption.CanSeeVote.ToString()),
+            CreateBoolOption(
+                 AssassinOption.CanSeeVote,
                 true, parentOps);
         }
 
@@ -308,37 +287,22 @@ namespace ExtremeRoles.Roles.Combination
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            CustomOption.Create(
-                GetRoleOptionId((int)MarlinOption.HasTask),
-                string.Concat(
-                    this.RoleName,
-                    MarlinOption.HasTask.ToString()),
+            CreateBoolOption(
+                MarlinOption.HasTask,
                 false, parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)MarlinOption.CanSeeAssassin),
-                string.Concat(
-                    this.RoleName,
-                    MarlinOption.CanSeeAssassin.ToString()),
+            CreateBoolOption(
+                MarlinOption.CanSeeAssassin,
                 true, parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)MarlinOption.CanSeeVote),
-                string.Concat(
-                    this.RoleName,
-                    MarlinOption.CanSeeVote.ToString()),
+            CreateBoolOption(
+                MarlinOption.CanSeeVote,
                 true, parentOps);
-            CustomOption.Create(
-                GetRoleOptionId((int)MarlinOption.CanSeeNeutral),
-                string.Concat(
-                    this.RoleName,
-                    MarlinOption.CanSeeNeutral.ToString()),
+            CreateBoolOption(
+                MarlinOption.CanSeeNeutral,
                 false, parentOps);
-            CustomOption.Create(
-                GetRoleOptionId((int)MarlinOption.CanUseVent),
-                string.Concat(
-                    this.RoleName,
-                    MarlinOption.CanUseVent.ToString()),
+            CreateBoolOption(
+                MarlinOption.CanUseVent,
                 false, parentOps);
         }
 
@@ -349,15 +313,15 @@ namespace ExtremeRoles.Roles.Combination
             var allOption = OptionHolder.AllOption;
 
             this.HasTask = allOption[
-                GetRoleOptionId((int)MarlinOption.HasTask)].GetValue();
+                GetRoleOptionId(MarlinOption.HasTask)].GetValue();
             this.canSeeAssassin = allOption[
-                GetRoleOptionId((int)MarlinOption.CanSeeAssassin)].GetValue();
+                GetRoleOptionId(MarlinOption.CanSeeAssassin)].GetValue();
             this.CanSeeVote = allOption[
-                GetRoleOptionId((int)MarlinOption.CanSeeVote)].GetValue();
+                GetRoleOptionId(MarlinOption.CanSeeVote)].GetValue();
             this.CanSeeNeutral = allOption[
-                GetRoleOptionId((int)MarlinOption.CanSeeNeutral)].GetValue();
+                GetRoleOptionId(MarlinOption.CanSeeNeutral)].GetValue();
             this.UseVent = allOption[
-                GetRoleOptionId((int)MarlinOption.CanUseVent)].GetValue();
+                GetRoleOptionId(MarlinOption.CanUseVent)].GetValue();
         }
 
         private void showIcon()
