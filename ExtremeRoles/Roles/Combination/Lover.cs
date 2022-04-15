@@ -221,21 +221,21 @@ namespace ExtremeRoles.Roles.Combination
             CustomOptionBase parentOps)
         {
             var neutralSetting = CustomOption.Create(
-                GetRoleOptionId((int)LoverOption.IsNeutral),
+                GetRoleOptionId(LoverOption.IsNeutral),
                 string.Concat(
                     this.RoleName,
                     LoverOption.IsNeutral.ToString()),
                 false, parentOps);
 
             var killerSetting = CustomOption.Create(
-                GetRoleOptionId((int)LoverOption.BecomNeutral),
+                GetRoleOptionId(LoverOption.BecomNeutral),
                 string.Concat(
                     this.RoleName,
                     LoverOption.BecomNeutral.ToString()),
                 false, neutralSetting);
 
             var deathSetting = CustomOption.Create(
-                GetRoleOptionId((int)LoverOption.DethWhenUnderAlive),
+                GetRoleOptionId(LoverOption.DethWhenUnderAlive),
                 string.Concat(
                     this.RoleName,
                     LoverOption.DethWhenUnderAlive.ToString()),
@@ -247,7 +247,7 @@ namespace ExtremeRoles.Roles.Combination
             killerVisionSetting(killerSetting);
 
             CustomOption.Create(
-                GetRoleOptionId((int)LoverOption.BecomeNeutralLoverCanUseVent),
+                GetRoleOptionId(LoverOption.BecomeNeutralLoverCanUseVent),
                 string.Concat(
                     this.RoleName,
                     LoverOption.BecomeNeutralLoverCanUseVent.ToString()),
@@ -264,10 +264,10 @@ namespace ExtremeRoles.Roles.Combination
             var allOption = OptionHolder.AllOption;
 
             bool isNeutral = allOption[
-                GetRoleOptionId((int)LoverOption.IsNeutral)].GetValue();
+                GetRoleOptionId(LoverOption.IsNeutral)].GetValue();
 
             this.becomeKiller = allOption[
-                GetRoleOptionId((int)LoverOption.BecomNeutral)].GetValue() && isNeutral;
+                GetRoleOptionId(LoverOption.BecomNeutral)].GetValue() && isNeutral;
 
             if (isNeutral && !this.becomeKiller)
             {
@@ -303,13 +303,13 @@ namespace ExtremeRoles.Roles.Combination
                 }
 
                 this.killerLoverHasOtherVison = allOption[
-                    GetRoleOptionId((int)LoverOption.BecomeNeutralLoverHasOtherVison)].GetValue();
+                    GetRoleOptionId(LoverOption.BecomeNeutralLoverHasOtherVison)].GetValue();
                 if (this.killerLoverHasOtherVison)
                 {
                     this.killerLoverVison = allOption[
-                        GetRoleOptionId((int)LoverOption.BecomeNeutralLoverVison)].GetValue();
+                        GetRoleOptionId(LoverOption.BecomeNeutralLoverVison)].GetValue();
                     this.killerLoverIsApplyEnvironmentVisionEffect = allOption[
-                        GetRoleOptionId((int)LoverOption.BecomeNeutralLoverApplyEnvironmentVisionEffect)].GetValue();
+                        GetRoleOptionId(LoverOption.BecomeNeutralLoverApplyEnvironmentVisionEffect)].GetValue();
                 }
                 else
                 {
@@ -318,12 +318,12 @@ namespace ExtremeRoles.Roles.Combination
                 }
 
                 this.killerLoverCanUseVent = allOption[
-                    GetRoleOptionId((int)LoverOption.BecomeNeutralLoverCanUseVent)].GetValue();
+                    GetRoleOptionId(LoverOption.BecomeNeutralLoverCanUseVent)].GetValue();
 
             }
 
             this.limit = allOption[
-                GetRoleOptionId((int)LoverOption.DethWhenUnderAlive)].GetValue();
+                GetRoleOptionId(LoverOption.DethWhenUnderAlive)].GetValue();
 
         }
 
@@ -331,21 +331,21 @@ namespace ExtremeRoles.Roles.Combination
             CustomOptionBase killerOpt)
         {
             var visonOption = CustomOption.Create(
-                GetRoleOptionId((int)LoverOption.BecomeNeutralLoverHasOtherVison),
+                GetRoleOptionId(LoverOption.BecomeNeutralLoverHasOtherVison),
                 string.Concat(
                     this.RoleName,
                     LoverOption.BecomeNeutralLoverHasOtherVison.ToString()),
                 false, killerOpt);
 
             CustomOption.Create(
-                GetRoleOptionId((int)LoverOption.BecomeNeutralLoverVison),
+                GetRoleOptionId(LoverOption.BecomeNeutralLoverVison),
                 string.Concat(
                     this.RoleName,
                     LoverOption.BecomeNeutralLoverVison.ToString()),
                 2f, 0.25f, 5.0f, 0.25f,
                 visonOption, format: OptionUnit.Multiplier);
             CustomOption.Create(
-               GetRoleOptionId((int)LoverOption.BecomeNeutralLoverApplyEnvironmentVisionEffect),
+               GetRoleOptionId(LoverOption.BecomeNeutralLoverApplyEnvironmentVisionEffect),
                string.Concat(
                    this.RoleName,
                    LoverOption.BecomeNeutralLoverApplyEnvironmentVisionEffect.ToString()),

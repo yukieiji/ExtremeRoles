@@ -75,41 +75,41 @@ namespace ExtremeRoles.Roles.Combination
             CustomOptionBase parentOps)
         {
             var killedOps = CustomOption.Create(
-                GetRoleOptionId((int)AssassinOption.CanKilled),
+                GetRoleOptionId(AssassinOption.CanKilled),
                 string.Concat(
                     this.RoleName,
                     AssassinOption.CanKilled.ToString()),
                 false, parentOps);
 
             CustomOption.Create(
-                GetRoleOptionId((int)AssassinOption.CanKilledFromCrew),
+                GetRoleOptionId(AssassinOption.CanKilledFromCrew),
                 string.Concat(
                     this.RoleName,
                     AssassinOption.CanKilledFromCrew.ToString()),
                 false, killedOps);
 
             CustomOption.Create(
-                GetRoleOptionId((int)AssassinOption.CanKilledFromNeutral),
+                GetRoleOptionId(AssassinOption.CanKilledFromNeutral),
                 string.Concat(
                     this.RoleName,
                     AssassinOption.CanKilledFromNeutral.ToString()),
                 false, killedOps);
 
             var meetingOpt = CustomOption.Create(
-                GetRoleOptionId((int)AssassinOption.IsDeadForceMeeting),
+                GetRoleOptionId(AssassinOption.IsDeadForceMeeting),
                 string.Concat(
                     this.RoleName,
                     AssassinOption.IsDeadForceMeeting.ToString()),
                 true, killedOps);
             CustomOption.Create(
-                GetRoleOptionId((int)AssassinOption.CanSeeRoleBeforeFirstMeeting),
+                GetRoleOptionId(AssassinOption.CanSeeRoleBeforeFirstMeeting),
                 string.Concat(
                     this.RoleName,
                     AssassinOption.CanSeeRoleBeforeFirstMeeting.ToString()),
                 false, meetingOpt);
 
             CustomOption.Create(
-                GetRoleOptionId((int)AssassinOption.CanSeeVote),
+                GetRoleOptionId(AssassinOption.CanSeeVote),
                 string.Concat(
                     this.RoleName,
                     AssassinOption.CanSeeVote.ToString()),
@@ -181,18 +181,18 @@ namespace ExtremeRoles.Roles.Combination
 
 
             this.CanKilled = allOption[
-                GetRoleOptionId((int)AssassinOption.CanKilled)].GetValue();
+                GetRoleOptionId(AssassinOption.CanKilled)].GetValue();
             this.CanKilledFromCrew = allOption[
-                GetRoleOptionId((int)AssassinOption.CanKilledFromCrew)].GetValue();
+                GetRoleOptionId(AssassinOption.CanKilledFromCrew)].GetValue();
             this.CanKilledFromNeutral = allOption[
-                GetRoleOptionId((int)AssassinOption.CanKilledFromNeutral)].GetValue();
+                GetRoleOptionId(AssassinOption.CanKilledFromNeutral)].GetValue();
             this.CanSeeVote = allOption[
-                GetRoleOptionId((int)AssassinOption.CanSeeVote)].GetValue();
+                GetRoleOptionId(AssassinOption.CanSeeVote)].GetValue();
 
             this.isDeadForceMeeting = allOption[
-                GetRoleOptionId((int)AssassinOption.IsDeadForceMeeting)].GetValue();
+                GetRoleOptionId(AssassinOption.IsDeadForceMeeting)].GetValue();
             this.CanSeeRoleBeforeFirstMeeting = allOption[
-                GetRoleOptionId((int)AssassinOption.CanSeeRoleBeforeFirstMeeting)].GetValue();
+                GetRoleOptionId(AssassinOption.CanSeeRoleBeforeFirstMeeting)].GetValue();
             this.IsFirstMeeting = true;
 
             ExtremeRolesPlugin.GameDataStore.IsAssassinAssign = true;
