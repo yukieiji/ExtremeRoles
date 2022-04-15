@@ -272,7 +272,44 @@ namespace ExtremeRoles.Module
                 format, invert,
                 enableCheckOption)
         { }
+
+        public FloatCustomOption(
+            int id, string name,
+            float defaultValue,
+            float min, float max, float step,
+            CustomOptionBase parent = null,
+            bool isHeader = false,
+            bool isHidden = false,
+            OptionUnit format = OptionUnit.None,
+            bool invert = false,
+            CustomOptionBase enableCheckOption = null) : base(
+                id, name,
+                createSelection(min, max, step).Cast<object>().ToArray(),
+                defaultValue, parent,
+                isHeader, isHidden,
+                format, invert,
+                enableCheckOption)
+        { }
+
         public override dynamic GetValue() => (float)GetRawValue();
+
+        private static List<float> createSelection(float min, float max, float step)
+        {
+
+            List<float> selection = new List<float>();
+
+            decimal dStep = new decimal(step);
+            decimal dMin = new decimal(min);
+            decimal dMax = new decimal(max);
+
+            for (decimal s = dMin; s <= dMax; s += dStep)
+            {
+                selection.Add(((float)(decimal.ToDouble(s))));
+            }
+
+            return selection;
+        }
+
     }
 
     public class IntCustomOption : CustomOptionBase
