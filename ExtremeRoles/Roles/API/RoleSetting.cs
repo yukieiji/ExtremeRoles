@@ -27,11 +27,11 @@ namespace ExtremeRoles.Roles.API
         KillCoolDown,
     }
 
-    abstract public class RoleOptionBase : IRoleOption
+    public abstract class RoleOptionBase : IRoleOption
     {
 
         public bool CanKill = false;
-        public int OptionIdOffset = 0;
+        protected int OptionIdOffset = 0;
 
         public int GetRoleOptionId(
             RoleCommonOption option) => GetRoleOptionId((int)option);
