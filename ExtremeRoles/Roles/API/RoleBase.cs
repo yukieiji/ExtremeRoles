@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 using UnityEngine;
 
@@ -325,6 +326,7 @@ namespace ExtremeRoles.Roles.API
             return this.GameControlId == tarrgetRole.GameControlId;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected CustomOptionBase CreateFloatOption<T>(
             T option,
             float defaultValue,
@@ -347,6 +349,8 @@ namespace ExtremeRoles.Roles.API
                 parent, isHeader, isHidden,
                 format, invert, enableCheckOption);
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected CustomOptionBase CreateIntOption<T>(
             T option,
             int defaultValue,
@@ -370,6 +374,7 @@ namespace ExtremeRoles.Roles.API
                 format, invert, enableCheckOption);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected CustomOptionBase CreateIntDynamicOption<T>(
             T option,
             int defaultValue,
@@ -393,6 +398,7 @@ namespace ExtremeRoles.Roles.API
                 format, invert, enableCheckOption);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected CustomOptionBase CreateBoolOption<T>(
             T option,
             bool defaultValue,
@@ -414,6 +420,7 @@ namespace ExtremeRoles.Roles.API
                 format, invert, enableCheckOption);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected CustomOptionBase CreateSelectionOption<T>(
             T option,
             string[] selections,
