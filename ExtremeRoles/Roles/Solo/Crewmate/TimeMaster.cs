@@ -318,11 +318,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.CreateCommonAbilityOption(
                 parentOps, 3.0f);
 
-            CustomOption.Create(
-                GetRoleOptionId(TimeMasterOption.RewindTime),
-                string.Concat(
-                    this.RoleName,
-                    TimeMasterOption.RewindTime),
+            CreateFloatOption(
+                TimeMasterOption.RewindTime,
                 5.0f, 1.0f, 60.0f, 0.5f,
                 parentOps, format: OptionUnit.Second);
         }
