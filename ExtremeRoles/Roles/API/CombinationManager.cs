@@ -160,7 +160,7 @@ namespace ExtremeRoles.Roles.API
                 int optionOffset = this.OptionIdOffset + (
                     ExtremeRoleManager.OptionOffsetPerRole * (item.Index + 1));
                 item.Value.SetManagerOptionOffset(this.OptionIdOffset);
-                item.Value.CreatRoleSpecificOption(
+                item.Value.CreateRoleSpecificOption(
                     parentOps,
                     optionOffset);
             }
@@ -335,7 +335,7 @@ namespace ExtremeRoles.Roles.API
 
             int optionOffset = this.OptionIdOffset + ExtremeRoleManager.OptionOffsetPerRole;
             this.BaseRole.SetManagerOptionOffset(this.OptionIdOffset);
-            this.BaseRole.CreatRoleSpecificOption(
+            this.BaseRole.CreateRoleSpecificOption(
                 parentOps,
                 optionOffset);
         }

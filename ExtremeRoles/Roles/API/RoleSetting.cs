@@ -69,7 +69,7 @@ namespace ExtremeRoles.Roles.API
 
             CreateSpecificOption(parentOps);
         }
-        public void CreatRoleSpecificOption(
+        public void CreateRoleSpecificOption(
             CustomOptionBase parentOps,
             int optionIdOffset)
         {
