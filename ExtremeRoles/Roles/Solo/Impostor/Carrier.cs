@@ -186,7 +186,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 parentOps, 5.0f);
 
             CustomOption.Create(
-                GetRoleOptionId((int)CarrierOption.CarryDistance),
+                GetRoleOptionId(CarrierOption.CarryDistance),
                 string.Concat(
                     this.RoleName,
                     CarrierOption.CarryDistance.ToString()),
@@ -194,7 +194,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 parentOps);
 
             CustomOption.Create(
-                GetRoleOptionId((int)CarrierOption.CanReportOnCarry),
+                GetRoleOptionId(CarrierOption.CanReportOnCarry),
                 string.Concat(
                     this.RoleName,
                     CarrierOption.CanReportOnCarry.ToString()),
@@ -204,9 +204,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         protected override void RoleSpecificInit()
         {
             this.carryDistance = OptionHolder.AllOption[
-                GetRoleOptionId((int)CarrierOption.CarryDistance)].GetValue();
+                GetRoleOptionId(CarrierOption.CarryDistance)].GetValue();
             this.CanReportOnCarry = OptionHolder.AllOption[
-                GetRoleOptionId((int)CarrierOption.CanReportOnCarry)].GetValue();
+                GetRoleOptionId(CarrierOption.CanReportOnCarry)].GetValue();
             this.RoleAbilityInit();
         }
     }
