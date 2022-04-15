@@ -147,19 +147,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.CreateAbilityCountOption(
                 parentOps, 2, 5);
 
-            CustomOption.Create(
-                GetRoleOptionId(CrackerOption.CanCrackDistance),
-                string.Concat(
-                    this.RoleName,
-                    CrackerOption.CanCrackDistance.ToString()),
+            CreateFloatOption(
+                CrackerOption.CanCrackDistance,
                 1.0f, 1.0f, 5.0f, 0.5f,
                 parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId(CrackerOption.RemoveDeadBody),
-                string.Concat(
-                    this.RoleName,
-                    CrackerOption.RemoveDeadBody.ToString()),
+            CreateBoolOption(
+                CrackerOption.RemoveDeadBody,
                 false, parentOps);
         }
 
