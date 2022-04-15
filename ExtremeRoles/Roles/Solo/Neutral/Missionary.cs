@@ -79,31 +79,19 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            CustomOption.Create(
-                GetRoleOptionId(MissionaryOption.TellDeparture),
-                string.Concat(
-                    this.RoleName,
-                    MissionaryOption.TellDeparture.ToString()),
+            CreateBoolOption(
+                MissionaryOption.TellDeparture,
                 true, parentOps);
-            CustomOption.Create(
-                GetRoleOptionId(MissionaryOption.DepartureMinTime),
-                string.Concat(
-                    this.RoleName,
-                    MissionaryOption.DepartureMinTime.ToString()),
+            CreateFloatOption(
+                MissionaryOption.DepartureMinTime,
                 10f, 1.0f, 15f, 0.5f,
                 parentOps, format: OptionUnit.Second);
-            CustomOption.Create(
-                GetRoleOptionId(MissionaryOption.DepartureMaxTime),
-                string.Concat(
-                    this.RoleName,
-                    MissionaryOption.DepartureMaxTime.ToString()),
+            CreateFloatOption(
+                MissionaryOption.DepartureMaxTime,
                 30f, 15f, 60f, 0.5f,
                 parentOps, format: OptionUnit.Second);
-            CustomOption.Create(
-                GetRoleOptionId(MissionaryOption.PropagateRange),
-                string.Concat(
-                    this.RoleName,
-                    MissionaryOption.PropagateRange.ToString()),
+            CreateFloatOption(
+                MissionaryOption.PropagateRange,
                 1.2f, 0.0f, 2.0f, 0.1f,
                 parentOps);
 
