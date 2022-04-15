@@ -180,19 +180,19 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 parentOps, 2, 100);
 
             CustomOption.Create(
-                this.GetRoleOptionId((int)AliceOption.RevartLongTaskNum),
+                this.GetRoleOptionId(AliceOption.RevartLongTaskNum),
                 string.Concat(
                     this.RoleName,
                     AliceOption.RevartLongTaskNum.ToString()),
                 1, 0, 15, 1, parentOps);
             CustomOption.Create(
-                this.GetRoleOptionId((int)AliceOption.RevartCommonTaskNum),
+                this.GetRoleOptionId(AliceOption.RevartCommonTaskNum),
                 string.Concat(
                     this.RoleName,
                     AliceOption.RevartCommonTaskNum.ToString()),
                 1, 0, 15, 1, parentOps);
             CustomOption.Create(
-                this.GetRoleOptionId((int)AliceOption.RevartNormalTaskNum),
+                this.GetRoleOptionId(AliceOption.RevartNormalTaskNum),
                 string.Concat(
                     this.RoleName,
                     AliceOption.RevartNormalTaskNum.ToString()),
@@ -204,11 +204,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             var allOption = OptionHolder.AllOption;
             this.RevartNormalTask = allOption[
-                GetRoleOptionId((int)AliceOption.RevartNormalTaskNum)].GetValue();
+                GetRoleOptionId(AliceOption.RevartNormalTaskNum)].GetValue();
             this.RevartLongTask = allOption[
-                GetRoleOptionId((int)AliceOption.RevartLongTaskNum)].GetValue();
+                GetRoleOptionId(AliceOption.RevartLongTaskNum)].GetValue();
             this.RevartCommonTask = allOption[
-                GetRoleOptionId((int)AliceOption.RevartCommonTaskNum)].GetValue();
+                GetRoleOptionId(AliceOption.RevartCommonTaskNum)].GetValue();
 
             this.RoleAbilityInit();
         }
