@@ -138,13 +138,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             CustomOptionBase parentOps)
         {
 
-            CustomOption.Create(
-               GetRoleOptionId(BodyGuardOption.ShieldRange),
-               string.Concat(
-                   this.RoleName,
-                   BodyGuardOption.ShieldRange.ToString()),
-               1.0f, 0.0f, 2.0f, 0.1f,
-               parentOps);
+            CreateFloatOption(
+                BodyGuardOption.ShieldRange,
+                1.0f, 0.0f, 2.0f, 0.1f,
+                parentOps);
 
             this.CreateAbilityCountOption(
                 parentOps, 2, 5);
