@@ -149,7 +149,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
 
             CustomOption.Create(
-                GetRoleOptionId((int)SlaveDriverOption.TaskProgressRange),
+                GetRoleOptionId(SlaveDriverOption.TaskProgressRange),
                 string.Concat(
                     this.RoleName,
                     SlaveDriverOption.TaskProgressRange.ToString()),
@@ -157,7 +157,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 format: OptionUnit.Percentage);
 
             CustomOption.Create(
-                GetRoleOptionId((int)SlaveDriverOption.KillCoolReduceRate),
+                GetRoleOptionId(SlaveDriverOption.KillCoolReduceRate),
                 string.Concat(
                     this.RoleName,
                     SlaveDriverOption.KillCoolReduceRate.ToString()),
@@ -165,7 +165,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 format: OptionUnit.Percentage);
 
             CustomOption.Create(
-                GetRoleOptionId((int)SlaveDriverOption.SpecialAttackTimer),
+                GetRoleOptionId(SlaveDriverOption.SpecialAttackTimer),
                 string.Concat(
                     this.RoleName,
                     SlaveDriverOption.SpecialAttackTimer.ToString()),
@@ -173,7 +173,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 format: OptionUnit.Second);
 
             CustomOption.Create(
-                GetRoleOptionId((int)SlaveDriverOption.SpecialAttackAliveTimer),
+                GetRoleOptionId(SlaveDriverOption.SpecialAttackAliveTimer),
                 string.Concat(
                     this.RoleName,
                     SlaveDriverOption.SpecialAttackAliveTimer.ToString()),
@@ -181,7 +181,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 format: OptionUnit.Second);
 
             CustomOption.Create(
-                GetRoleOptionId((int)SlaveDriverOption.SpecialAttackKillCoolReduceRate),
+                GetRoleOptionId(SlaveDriverOption.SpecialAttackKillCoolReduceRate),
                 string.Concat(
                     this.RoleName,
                     SlaveDriverOption.SpecialAttackKillCoolReduceRate.ToString()),
@@ -189,7 +189,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 format: OptionUnit.Percentage);
 
             CustomOption.Create(
-                GetRoleOptionId((int)SlaveDriverOption.NoneTaskPlayerAttakBonusChance),
+                GetRoleOptionId(SlaveDriverOption.NoneTaskPlayerAttakBonusChance),
                 string.Concat(
                     this.RoleName,
                     SlaveDriverOption.NoneTaskPlayerAttakBonusChance.ToString()),
@@ -197,7 +197,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 format: OptionUnit.Percentage);
 
             CustomOption.Create(
-                GetRoleOptionId((int)SlaveDriverOption.NoneTaskPlayerSpecialAttackChance),
+                GetRoleOptionId(SlaveDriverOption.NoneTaskPlayerSpecialAttackChance),
                 string.Concat(
                     this.RoleName,
                     SlaveDriverOption.NoneTaskPlayerSpecialAttackChance.ToString()),
@@ -205,21 +205,21 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 format: OptionUnit.Percentage);
 
             CustomOption.Create(
-                GetRoleOptionId((int)SlaveDriverOption.AdditionalCommonTaskNum),
+                GetRoleOptionId(SlaveDriverOption.AdditionalCommonTaskNum),
                 string.Concat(
                     this.RoleName,
                     SlaveDriverOption.AdditionalCommonTaskNum.ToString()),
                 1, 0, 5, 1, parentOps);
             
             CustomOption.Create(
-                GetRoleOptionId((int)SlaveDriverOption.AdditionalNormalTaskNum),
+                GetRoleOptionId(SlaveDriverOption.AdditionalNormalTaskNum),
                 string.Concat(
                     this.RoleName,
                     SlaveDriverOption.AdditionalNormalTaskNum.ToString()),
                 1, 0, 5, 1, parentOps);
 
             CustomOption.Create(
-                GetRoleOptionId((int)SlaveDriverOption.AdditionalLongTaskNum),
+                GetRoleOptionId(SlaveDriverOption.AdditionalLongTaskNum),
                 string.Concat(
                     this.RoleName,
                     SlaveDriverOption.AdditionalLongTaskNum.ToString()),
@@ -239,28 +239,28 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             var allOption = OptionHolder.AllOption;
 
             this.noneBonusKillTaskRange = (float)allOption[
-                GetRoleOptionId((int)SlaveDriverOption.TaskProgressRange)].GetValue() / 100f;
+                GetRoleOptionId(SlaveDriverOption.TaskProgressRange)].GetValue() / 100f;
 
             this.reduceRate = allOption[
-                GetRoleOptionId((int)SlaveDriverOption.KillCoolReduceRate)].GetValue();
+                GetRoleOptionId(SlaveDriverOption.KillCoolReduceRate)].GetValue();
             this.specialAttackReduceRate = allOption[
-                GetRoleOptionId((int)SlaveDriverOption.SpecialAttackKillCoolReduceRate)].GetValue();
+                GetRoleOptionId(SlaveDriverOption.SpecialAttackKillCoolReduceRate)].GetValue();
             this.specialAttackStartTime = allOption[
-                GetRoleOptionId((int)SlaveDriverOption.SpecialAttackTimer)].GetValue();
+                GetRoleOptionId(SlaveDriverOption.SpecialAttackTimer)].GetValue();
             this.aliveCheckTime = allOption[
-                GetRoleOptionId((int)SlaveDriverOption.SpecialAttackAliveTimer)].GetValue();
+                GetRoleOptionId(SlaveDriverOption.SpecialAttackAliveTimer)].GetValue();
 
             this.noneTaskPlayerAttakBonusChance = allOption[
-                GetRoleOptionId((int)SlaveDriverOption.NoneTaskPlayerAttakBonusChance)].GetValue();
+                GetRoleOptionId(SlaveDriverOption.NoneTaskPlayerAttakBonusChance)].GetValue();
             this.noneTaskPlayerSpecialAttackChance = allOption[
-                GetRoleOptionId((int)SlaveDriverOption.NoneTaskPlayerSpecialAttackChance)].GetValue();
+                GetRoleOptionId(SlaveDriverOption.NoneTaskPlayerSpecialAttackChance)].GetValue();
 
             this.setNormalTaskNum = allOption[
-               GetRoleOptionId((int)SlaveDriverOption.AdditionalNormalTaskNum)].GetValue();
+               GetRoleOptionId(SlaveDriverOption.AdditionalNormalTaskNum)].GetValue();
             this.setLongTaskNum = allOption[
-                GetRoleOptionId((int)SlaveDriverOption.AdditionalLongTaskNum)].GetValue();
+                GetRoleOptionId(SlaveDriverOption.AdditionalLongTaskNum)].GetValue();
             this.setCommonTaskNum = allOption[
-                GetRoleOptionId((int)SlaveDriverOption.AdditionalCommonTaskNum)].GetValue();
+                GetRoleOptionId(SlaveDriverOption.AdditionalCommonTaskNum)].GetValue();
 
 
             this.defaultKillCoolTime = this.KillCoolTime;
