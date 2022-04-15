@@ -255,13 +255,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.CreateAbilityCountOption(
                 parentOps, 3, 5);
             CustomOption.Create(
-                GetRoleOptionId((int)MeryOption.ActiveNum),
+                GetRoleOptionId(MeryOption.ActiveNum),
                 string.Concat(
                     this.RoleName,
                     MeryOption.ActiveNum.ToString()),
                 3, 1, 5, 1, parentOps);
             CustomOption.Create(
-                GetRoleOptionId((int)MeryOption.ActiveRange),
+                GetRoleOptionId(MeryOption.ActiveRange),
                 string.Concat(
                     this.RoleName,
                     MeryOption.ActiveRange.ToString()),
@@ -276,9 +276,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             var allOption = OptionHolder.AllOption;
 
             this.ActiveNum = allOption[
-                GetRoleOptionId((int)MeryOption.ActiveNum)].GetValue();
+                GetRoleOptionId(MeryOption.ActiveNum)].GetValue();
             this.ActiveRange = allOption[
-                GetRoleOptionId((int)MeryOption.ActiveRange)].GetValue();
+                GetRoleOptionId(MeryOption.ActiveRange)].GetValue();
 
         }
 
