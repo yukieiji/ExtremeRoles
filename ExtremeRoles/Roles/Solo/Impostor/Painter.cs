@@ -134,19 +134,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.CreateCommonAbilityOption(
                 parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId(PainterOption.CanPaintDistance),
-                string.Concat(
-                    this.RoleName,
-                    PainterOption.CanPaintDistance.ToString()),
+            CreateFloatOption(
+                PainterOption.CanPaintDistance,
                 1.0f, 1.0f, 5.0f, 0.5f,
                 parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId(PainterOption.PaintColorIsRandom),
-                string.Concat(
-                    this.RoleName,
-                    PainterOption.PaintColorIsRandom.ToString()),
+            CreateBoolOption(
+                PainterOption.PaintColorIsRandom,
                 false, parentOps);
         }
 
