@@ -143,21 +143,21 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             CustomOptionBase parentOps)
         {
             CustomOption.Create(
-                GetRoleOptionId((int)EvolverOption.IsEvolvedAnimation),
+                GetRoleOptionId(EvolverOption.IsEvolvedAnimation),
                 string.Concat(
                     this.RoleName,
                     EvolverOption.IsEvolvedAnimation.ToString()),
                 true, parentOps);
 
             CustomOption.Create(
-                GetRoleOptionId((int)EvolverOption.IsEatingEndCleanBody),
+                GetRoleOptionId(EvolverOption.IsEatingEndCleanBody),
                 string.Concat(
                     this.RoleName,
                     EvolverOption.IsEatingEndCleanBody.ToString()),
                 true, parentOps);
 
             CustomOption.Create(
-                GetRoleOptionId((int)EvolverOption.EatingRange),
+                GetRoleOptionId(EvolverOption.EatingRange),
                 string.Concat(
                     this.RoleName,
                     EvolverOption.EatingRange.ToString()),
@@ -165,7 +165,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 parentOps);
 
             CustomOption.Create(
-                GetRoleOptionId((int)EvolverOption.KillCoolReduceRate),
+                GetRoleOptionId(EvolverOption.KillCoolReduceRate),
                 string.Concat(
                     this.RoleName,
                     EvolverOption.KillCoolReduceRate.ToString()),
@@ -173,7 +173,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 format: OptionUnit.Percentage);
 
             CustomOption.Create(
-                GetRoleOptionId((int)EvolverOption.KillCoolResuceRateMulti),
+                GetRoleOptionId(EvolverOption.KillCoolResuceRateMulti),
                 string.Concat(
                     this.RoleName,
                     EvolverOption.KillCoolResuceRateMulti.ToString()),
@@ -199,15 +199,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             var allOption = OptionHolder.AllOption;
 
             this.isEvolvdAnimation = allOption[
-                GetRoleOptionId((int)EvolverOption.IsEvolvedAnimation)].GetValue();
+                GetRoleOptionId(EvolverOption.IsEvolvedAnimation)].GetValue();
             this.isEatingEndCleanBody = allOption[
-                GetRoleOptionId((int)EvolverOption.IsEatingEndCleanBody)].GetValue();
+                GetRoleOptionId(EvolverOption.IsEatingEndCleanBody)].GetValue();
             this.eatingRange = allOption[
-                GetRoleOptionId((int)EvolverOption.EatingRange)].GetValue();
+                GetRoleOptionId(EvolverOption.EatingRange)].GetValue();
             this.reduceRate = allOption[
-                GetRoleOptionId((int)EvolverOption.KillCoolReduceRate)].GetValue();
+                GetRoleOptionId(EvolverOption.KillCoolReduceRate)].GetValue();
             this.reruceMulti = (float)allOption[
-                GetRoleOptionId((int)EvolverOption.KillCoolResuceRateMulti)].GetValue();
+                GetRoleOptionId(EvolverOption.KillCoolResuceRateMulti)].GetValue();
 
             this.eatingText = Translation.GetString("eating");
 
