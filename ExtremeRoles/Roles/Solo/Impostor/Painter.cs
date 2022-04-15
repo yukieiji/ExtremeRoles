@@ -135,7 +135,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 parentOps);
 
             CustomOption.Create(
-                GetRoleOptionId((int)PainterOption.CanPaintDistance),
+                GetRoleOptionId(PainterOption.CanPaintDistance),
                 string.Concat(
                     this.RoleName,
                     PainterOption.CanPaintDistance.ToString()),
@@ -143,7 +143,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 parentOps);
 
             CustomOption.Create(
-                GetRoleOptionId((int)PainterOption.PaintColorIsRandom),
+                GetRoleOptionId(PainterOption.PaintColorIsRandom),
                 string.Concat(
                     this.RoleName,
                     PainterOption.PaintColorIsRandom.ToString()),
@@ -153,9 +153,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         protected override void RoleSpecificInit()
         {
             this.paintDistance = OptionHolder.AllOption[
-                GetRoleOptionId((int)PainterOption.CanPaintDistance)].GetValue();
+                GetRoleOptionId(PainterOption.CanPaintDistance)].GetValue();
             this.PaintColorIsRandom = OptionHolder.AllOption[
-                GetRoleOptionId((int)PainterOption.PaintColorIsRandom)].GetValue();
+                GetRoleOptionId(PainterOption.PaintColorIsRandom)].GetValue();
             this.RoleAbilityInit();
         }
     }
