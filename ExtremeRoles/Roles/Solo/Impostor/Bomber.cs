@@ -109,40 +109,25 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             this.CreateAbilityCountOption(
                 parentOps, 2, 5, 2.5f);
-            CustomOption.Create(
-               GetRoleOptionId(BomberOption.ExplosionRange),
-               string.Concat(
-                   this.RoleName,
-                   BomberOption.ExplosionRange.ToString()),
-               2, 1, 5, 1,
-               parentOps);
-            CustomOption.Create(
-               GetRoleOptionId(BomberOption.ExplosionKillChance),
-               string.Concat(
-                   this.RoleName,
-                   BomberOption.ExplosionKillChance.ToString()),
-               50, 25, 75, 1,
-               parentOps, format: OptionUnit.Percentage);
-            CustomOption.Create(
-                GetRoleOptionId(BomberOption.TimerMinTime),
-                string.Concat(
-                    this.RoleName,
-                    BomberOption.TimerMinTime.ToString()),
+            CreateIntOption(
+                BomberOption.ExplosionRange,
+                2, 1, 5, 1,
+                parentOps);
+            CreateIntOption(
+                BomberOption.ExplosionKillChance,
+                50, 25, 75, 1,
+                parentOps, format: OptionUnit.Percentage);
+            CreateFloatOption(
+                BomberOption.TimerMinTime,
                 15f, 5.0f, 30f, 0.5f,
                 parentOps, format: OptionUnit.Second);
-            CustomOption.Create(
-                GetRoleOptionId(BomberOption.TimerMaxTime),
-                string.Concat(
-                    this.RoleName,
-                    BomberOption.TimerMaxTime.ToString()),
+            CreateFloatOption(
+                BomberOption.TimerMaxTime,
                 60f, 45f, 75f, 0.5f,
                 parentOps, format: OptionUnit.Second);
-            CustomOption.Create(
-               GetRoleOptionId(BomberOption.TellExplosion),
-               string.Concat(
-                   this.RoleName,
-                   BomberOption.TellExplosion.ToString()),
-               true, parentOps);
+            CreateBoolOption(
+                BomberOption.TellExplosion,
+                true, parentOps);
         }
 
         protected override void RoleSpecificInit()
