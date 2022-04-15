@@ -481,6 +481,37 @@ namespace ExtremeRoles.Module
                 format, invert,
                 enableCheckOption)
         { }
+
+        public SelectionCustomOption(
+            int id, string name,
+            string[] selections,
+            CustomOptionBase parent = null,
+            bool isHeader = false,
+            bool isHidden = false,
+            OptionUnit format = OptionUnit.None,
+            bool invert = false,
+            CustomOptionBase enableCheckOption = null) : base(
+                id, name, selections, "",
+                parent, isHeader, isHidden,
+                format, invert, enableCheckOption)
+        { }
+
+        public SelectionCustomOption(
+            int id, string name,
+            string[] selections,
+            int defaultIndex,
+            CustomOptionBase parent = null,
+            bool isHeader = false,
+            bool isHidden = false,
+            OptionUnit format = OptionUnit.None,
+            bool invert = false,
+            CustomOptionBase enableCheckOption = null) : base(
+                id, name, selections, defaultIndex,
+                parent, isHeader, isHidden,
+                format, invert, enableCheckOption)
+        { }
+
+
         public override dynamic GetValue() => CurSelection;
     }
 
