@@ -37,7 +37,7 @@ namespace ExtremeRoles.Patches.Option
 
             if (AmongUsClient.Instance.GameMode != GameModes.OnlineGame) { return; }
 
-            foreach (Transform opt in __instance.AllItems.ToList())
+            foreach (Transform opt in __instance.AllItems)
             {
                 float offset = -0.5f;
                 string name = opt.name;
