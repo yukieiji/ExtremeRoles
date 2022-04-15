@@ -153,32 +153,24 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            CustomOption.Create(
-                GetRoleOptionId(WhisperOption.AbilityOffTime),
-                string.Concat(
-                    this.RoleName,
-                    WhisperOption.AbilityOffTime.ToString()),
+
+            CreateFloatOption(
+                WhisperOption.AbilityOffTime,
                 3.0f, 1.0f, 5.0f, 0.5f,
                 parentOps, format: OptionUnit.Second);
-            CustomOption.Create(
-                GetRoleOptionId(WhisperOption.AbilityOnTime),
-                string.Concat(
-                    this.RoleName,
-                    WhisperOption.AbilityOnTime.ToString()),
+
+            CreateFloatOption(
+                WhisperOption.AbilityOnTime,
                 4.0f, 1.0f, 10.0f, 0.5f,
                 parentOps, format: OptionUnit.Second);
-            CustomOption.Create(
-                GetRoleOptionId(WhisperOption.TellTextTime),
-                string.Concat(
-                    this.RoleName,
-                    WhisperOption.TellTextTime.ToString()),
+
+            CreateFloatOption(
+                WhisperOption.TellTextTime,
                 3.0f, 1.0f, 25.0f, 0.5f,
                 parentOps, format: OptionUnit.Second);
-            CustomOption.Create(
-                GetRoleOptionId(WhisperOption.MaxTellText),
-                string.Concat(
-                    this.RoleName,
-                    WhisperOption.MaxTellText.ToString()),
+
+            CreateIntOption(
+                WhisperOption.MaxTellText,
                 3, 1, 10, 1,
                 parentOps);
         }
