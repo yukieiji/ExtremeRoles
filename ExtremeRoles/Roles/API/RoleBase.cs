@@ -547,15 +547,16 @@ namespace ExtremeRoles.Roles.API
                 }
             }
         }
+        public int GetManagerOptionId<T>(T option) where T : struct, IConvertible
+        {
+            if (!typeof(int).IsAssignableFrom(Enum.GetUnderlyingType(typeof(T))))
+            {
+                throw new ArgumentException(nameof(T));
 
-        public int GetManagerOptionId(
-            RoleCommonOption option) => GetManagerOptionId((int)option);
+            }
 
-        public int GetManagerOptionId(
-            KillerCommonOption option) => GetManagerOptionId((int)option);
-
-        public int GetManagerOptionId(
-            CombinationRoleCommonOption option) => GetManagerOptionId((int)option);
+            return GetManagerOptionId(Convert.ToInt32(option));
+        }
 
         public int GetManagerOptionId(int option) => this.ManagerOptionOffset + option;
 
