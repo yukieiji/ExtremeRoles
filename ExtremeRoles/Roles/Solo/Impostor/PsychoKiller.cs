@@ -77,27 +77,18 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            CustomOption.Create(
-                GetRoleOptionId(PsychoKillerOption.KillCoolReduceRate),
-                string.Concat(
-                    this.RoleName,
-                    PsychoKillerOption.KillCoolReduceRate.ToString()),
+            CreateIntOption(
+                PsychoKillerOption.KillCoolReduceRate,
                 5, 1, 15, 1, parentOps,
                 format: OptionUnit.Percentage);
 
-            CustomOption.Create(
-                GetRoleOptionId(PsychoKillerOption.CombMax),
-                string.Concat(
-                    this.RoleName,
-                    PsychoKillerOption.CombMax.ToString()),
+            CreateIntOption(
+                PsychoKillerOption.CombMax,
                 2, 1, 5, 1,
                 parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId(PsychoKillerOption.CombResetWhenMeeting),
-                string.Concat(
-                    this.RoleName,
-                    PsychoKillerOption.CombResetWhenMeeting.ToString()),
+            CreateBoolOption(
+                PsychoKillerOption.CombResetWhenMeeting,
                 true, parentOps);
         }
 
