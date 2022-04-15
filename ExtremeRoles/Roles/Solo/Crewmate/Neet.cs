@@ -38,26 +38,26 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         protected override void CreateSpecificOption(CustomOptionBase parentOps)
         {
             CustomOption.Create(
-                GetRoleOptionId((int)NeetOption.CanCallMeeting),
+                GetRoleOptionId(NeetOption.CanCallMeeting),
                 string.Concat(
                     this.RoleName,
                     NeetOption.CanCallMeeting.ToString()),
                 false, parentOps);
             CustomOption.Create(
-                GetRoleOptionId((int)NeetOption.CanRepairSabotage),
+                GetRoleOptionId(NeetOption.CanRepairSabotage),
                 string.Concat(
                     this.RoleName,
                     NeetOption.CanRepairSabotage.ToString()),
                 false, parentOps);
             
             var neutralOps = CustomOption.Create(
-                GetRoleOptionId((int)NeetOption.IsNeutral),
+                GetRoleOptionId(NeetOption.IsNeutral),
                 string.Concat(
                     this.RoleName,
                     NeetOption.IsNeutral.ToString()),
                 false, parentOps);
             CustomOption.Create(
-                GetRoleOptionId((int)NeetOption.HasTask),
+                GetRoleOptionId(NeetOption.HasTask),
                 string.Concat(
                     this.RoleName,
                     NeetOption.HasTask.ToString()),
@@ -71,14 +71,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             var allOption = OptionHolder.AllOption;
 
             this.CanCallMeeting = allOption[
-                GetRoleOptionId((int)NeetOption.CanCallMeeting)].GetValue();
+                GetRoleOptionId(NeetOption.CanCallMeeting)].GetValue();
             this.CanRepairSabotage = allOption[
-                GetRoleOptionId((int)NeetOption.CanRepairSabotage)].GetValue();
+                GetRoleOptionId(NeetOption.CanRepairSabotage)].GetValue();
             this.HasTask = allOption[
-                GetRoleOptionId((int)NeetOption.HasTask)].GetValue();
+                GetRoleOptionId(NeetOption.HasTask)].GetValue();
 
             if (allOption[
-                GetRoleOptionId((int)NeetOption.IsNeutral)].GetValue())
+                GetRoleOptionId(NeetOption.IsNeutral)].GetValue())
             {
                 this.Team = ExtremeRoleType.Neutral;
             }
