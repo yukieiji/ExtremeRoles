@@ -1,4 +1,5 @@
-﻿using ExtremeRoles.Module;
+﻿using System;
+using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.API
@@ -33,14 +34,16 @@ namespace ExtremeRoles.Roles.API
         public bool CanKill = false;
         protected int OptionIdOffset = 0;
 
-        public int GetRoleOptionId(
-            RoleCommonOption option) => GetRoleOptionId((int)option);
+        public int GetRoleOptionId<T>(T option) where T : struct, IConvertible
+        {
+            if (!typeof(int).IsAssignableFrom(Enum.GetUnderlyingType(typeof(T))))
+            {
+                throw new ArgumentException(nameof(T));
 
-        public int GetRoleOptionId(
-            KillerCommonOption option) => GetRoleOptionId((int)option);
+            }
 
-        public int GetRoleOptionId(
-            CombinationRoleCommonOption option) => GetRoleOptionId((int)option);
+            return GetRoleOptionId(Convert.ToInt32(option));
+        }
 
         public int GetRoleOptionId(int option) => this.OptionIdOffset + option;
 
