@@ -386,10 +386,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 }
             }
         }
-
-
-        public int GetRoleOptionId(JackalOption option) => GetRoleOptionId((int)option);
-
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
