@@ -214,25 +214,6 @@ namespace ExtremeRoles.Module
     public class BoolCustomOption : CustomOptionBase
     {
         public BoolCustomOption(
-            int id,
-            string name,
-            object[] selections,
-            object defaultValue,
-            CustomOptionBase parent,
-            bool isHeader,
-            bool isHidden,
-            OptionUnit format,
-            bool invert,
-            CustomOptionBase enableCheckOption
-            ) : base(
-                id, name, selections,
-                defaultValue, parent,
-                isHeader, isHidden,
-                format, invert,
-                enableCheckOption)
-        { }
-
-        public BoolCustomOption(
             int id, string name,
             bool defaultValue,
             CustomOptionBase parent = null,
@@ -254,25 +235,6 @@ namespace ExtremeRoles.Module
 
     public class FloatCustomOption : CustomOptionBase
     {
-        public FloatCustomOption(
-            int id,
-            string name,
-            object[] selections,
-            object defaultValue,
-            CustomOptionBase parent,
-            bool isHeader,
-            bool isHidden,
-            OptionUnit format,
-            bool invert,
-            CustomOptionBase enableCheckOption
-            ) : base(
-                id, name, selections,
-                defaultValue, parent,
-                isHeader, isHidden,
-                format, invert,
-                enableCheckOption)
-        { }
-
         public FloatCustomOption(
             int id, string name,
             float defaultValue,
@@ -316,29 +278,6 @@ namespace ExtremeRoles.Module
     {
         private int maxValue;
         private int minValue;
-
-        public IntCustomOption(
-            int id,
-            string name,
-            object[] selections,
-            object defaultValue,
-            CustomOptionBase parent,
-            bool isHeader,
-            bool isHidden,
-            OptionUnit format,
-            bool invert,
-            CustomOptionBase enableCheckOption
-            ) : base(
-                id, name, selections,
-                defaultValue, parent,
-                isHeader, isHidden,
-                format, invert,
-                enableCheckOption)
-        { 
-            this.minValue = Convert.ToInt32(this.Selections[0].ToString());
-            this.maxValue = Convert.ToInt32(
-                this.Selections[this.Selections.Length - 1].ToString());
-        }
 
         public IntCustomOption(
             int id,
@@ -396,24 +335,6 @@ namespace ExtremeRoles.Module
     public class IntDynamicCustomOption : CustomOptionBase
     {
         public IntDynamicCustomOption(
-            int id,
-            string name,
-            object[] selections,
-            object defaultValue,
-            CustomOptionBase parent,
-            bool isHeader,
-            bool isHidden,
-            OptionUnit format,
-            bool invert,
-            CustomOptionBase enableCheckOption
-            ) : base(
-                id, name, selections,
-                defaultValue, parent,
-                isHeader, isHidden,
-                format, invert,
-                enableCheckOption)
-        { }
-        public IntDynamicCustomOption(
             int id, string name,
             int defaultValue,
             int min, int step,
@@ -464,25 +385,6 @@ namespace ExtremeRoles.Module
     public class SelectionCustomOption : CustomOptionBase
     {
         public SelectionCustomOption(
-            int id,
-            string name,
-            object[] selections,
-            object defaultValue,
-            CustomOptionBase parent,
-            bool isHeader,
-            bool isHidden,
-            OptionUnit format,
-            bool invert,
-            CustomOptionBase enableCheckOption
-            ) : base(
-                id, name, selections,
-                defaultValue, parent,
-                isHeader, isHidden,
-                format, invert,
-                enableCheckOption)
-        { }
-
-        public SelectionCustomOption(
             int id, string name,
             string[] selections,
             CustomOptionBase parent = null,
@@ -517,102 +419,6 @@ namespace ExtremeRoles.Module
 
     public static class CustomOption
     {
-        public static CustomOptionBase Create(
-            int id, string name, string[] selections,
-            CustomOptionBase parent = null, bool isHeader = false,
-            bool isHidden = false, OptionUnit format = OptionUnit.None,
-            bool invert = false, CustomOptionBase enableCheckOption = null)
-        {
-            return new SelectionCustomOption(
-                id, name, selections, "",
-                parent, isHeader, isHidden,
-                format, invert, enableCheckOption);
-        }
-        public static CustomOptionBase Create(
-            int id, string name, string[] selections,
-            int defaultIndex, CustomOptionBase parent = null,
-            bool isHeader = false, bool isHidden = false,
-            OptionUnit format = OptionUnit.None, bool invert = false,
-            CustomOptionBase enableCheckOption = null)
-        {
-            return new SelectionCustomOption(
-                id, name, selections, defaultIndex,
-                parent, isHeader, isHidden,
-                format, invert, enableCheckOption);
-        }
-
-        public static CustomOptionBase Create
-            (int id, string name, int defaultValue,
-            int min, int max, int step, CustomOptionBase parent = null,
-            bool isHeader = false, bool isHidden = false,
-            OptionUnit format = OptionUnit.None, bool invert = false,
-            CustomOptionBase enableCheckOption = null)
-        {
-            List<int> selections = new List<int>();
-            for (int s = min; s <= max; s += step)
-            {
-                selections.Add(s);
-            }
-            return new IntCustomOption(
-                id, name, selections.Cast<object>().ToArray(),
-                defaultValue, parent, isHeader, isHidden,
-                format, invert, enableCheckOption);
-        }
-
-        public static CustomOptionBase Create
-            (int id, string name, int defaultValue,
-            int min, int step, CustomOptionBase parent = null,
-            bool isHeader = false, bool isHidden = false,
-            OptionUnit format = OptionUnit.None, bool invert = false,
-            CustomOptionBase enableCheckOption = null)
-        {
-            List<int> selections = new List<int>();
-            for (int s = min; s <= min + 1; s += step)
-            {
-                selections.Add(s);
-            }
-            return new IntDynamicCustomOption(
-                id, name, selections.Cast<object>().ToArray(),
-                defaultValue, parent, isHeader,
-                isHidden, format, invert, enableCheckOption);
-        }
-
-        public static CustomOptionBase Create
-            (int id, string name, float defaultValue,
-            float min, float max, float step, CustomOptionBase parent = null,
-            bool isHeader = false, bool isHidden = false,
-            OptionUnit format = OptionUnit.None, bool invert = false,
-            CustomOptionBase enableCheckOption = null)
-        {
-            List<float> selections = new List<float>();
-
-            decimal dStep = new decimal(step);
-            decimal dMin = new decimal(min);
-            decimal dMax = new decimal(max);
-
-            for (decimal s = dMin; s <= dMax; s += dStep)
-            {
-                selections.Add(((float)(decimal.ToDouble(s))));
-            }
-            return new FloatCustomOption(
-                id, name, selections.Cast<object>().ToArray(),
-                defaultValue, parent, isHeader,
-                isHidden, format, invert, enableCheckOption);
-        }
-
-        public static CustomOptionBase Create(
-            int id, string name, bool defaultValue,
-            CustomOptionBase parent = null, bool isHeader = false,
-            bool isHidden = false, OptionUnit format = OptionUnit.None,
-            bool invert = false,
-            CustomOptionBase enableCheckOption = null)
-        {
-            return new BoolCustomOption(
-                id, name, new string[] { "optionOff", "optionOn" },
-                defaultValue ? "optionOn" : "optionOff", parent,
-                isHeader, isHidden, format, invert, enableCheckOption);
-        }
-
         public static string OptionToString(CustomOptionBase option)
         {
             if (option == null) { return string.Empty; }

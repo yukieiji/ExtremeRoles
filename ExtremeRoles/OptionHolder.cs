@@ -74,94 +74,95 @@ namespace ExtremeRoles
             Roles.ExtremeRoleManager.GameRole.Clear();
             AllOption.Clear();
 
-            CustomOption.Create(
+            new SelectionCustomOption(
                 (int)CommonOptionKey.PresetSelection, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.PresetSelection.ToString()),
                 OptionPreset, null, true);
 
-            CustomOption.Create(
-                (int)CommonOptionKey.UseStrongRandomGen, Design.ColoedString(
+
+            new BoolCustomOption(
+               (int)CommonOptionKey.UseStrongRandomGen, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.UseStrongRandomGen.ToString()), true);
 
-            CustomOption.Create(
+            new IntCustomOption(
                 (int)CommonOptionKey.MinCremateRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MinCremateRoles.ToString()),
                 0, 0, (VanillaMaxPlayerNum - 1) * 2, 1, null, true);
-            CustomOption.Create(
+            new IntCustomOption(
                 (int)CommonOptionKey.MaxCremateRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MaxCremateRoles.ToString()),
                 0, 0, (VanillaMaxPlayerNum - 1) * 2, 1);
 
-            CustomOption.Create(
+            new IntCustomOption(
                 (int)CommonOptionKey.MinNeutralRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MinNeutralRoles.ToString()),
                 0, 0, (VanillaMaxPlayerNum - 2) * 2, 1);
-            CustomOption.Create(
+            new IntCustomOption(
                 (int)CommonOptionKey.MaxNeutralRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MaxNeutralRoles.ToString()),
                 0, 0, (VanillaMaxPlayerNum - 2) * 2, 1);
 
-            CustomOption.Create(
+            new IntCustomOption(
                 (int)CommonOptionKey.MinImpostorRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MinImpostorRoles.ToString()),
                 0, 0, MaxImposterNum * 2, 1);
-            CustomOption.Create(
+            new IntCustomOption(
                 (int)CommonOptionKey.MaxImpostorRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MaxImpostorRoles.ToString()),
                 0, 0, MaxImposterNum * 2, 1);
 
-            CustomOption.Create(
+            new IntCustomOption(
                 (int)CommonOptionKey.NumMeating,
                 CommonOptionKey.NumMeating.ToString(),
                 10, 0, 100, 1, null, true);
 
-            var blockMeating = CustomOption.Create(
+            var blockMeating = new BoolCustomOption(
                 (int)CommonOptionKey.DisableSkipInEmergencyMeeting,
                 CommonOptionKey.DisableSkipInEmergencyMeeting.ToString(),
                 false);
-            CustomOption.Create(
+            new BoolCustomOption(
                 (int)CommonOptionKey.NoVoteToSelf,
                 CommonOptionKey.NoVoteToSelf.ToString(),
                 false, blockMeating);
 
-            var ventOption = CustomOption.Create(
+            var ventOption = new BoolCustomOption(
                (int)CommonOptionKey.DesableVent,
                CommonOptionKey.DesableVent.ToString(),
                false);
-            CustomOption.Create(
+            new BoolCustomOption(
                 (int)CommonOptionKey.CanKillVentInPlayer,
                 CommonOptionKey.CanKillVentInPlayer.ToString(),
                 false, ventOption, invert: true);
-            CustomOption.Create(
+            new BoolCustomOption(
                 (int)CommonOptionKey.EngineerUseImpostorVent,
                 CommonOptionKey.EngineerUseImpostorVent.ToString(),
                 false, ventOption, invert: true);
 
-            CustomOption.Create(
+            new BoolCustomOption(
                 (int)CommonOptionKey.ParallelMedBayScans,
                 CommonOptionKey.ParallelMedBayScans.ToString(), false);
-            CustomOption.Create(
+            new BoolCustomOption(
                 (int)CommonOptionKey.RandomMap,
                 CommonOptionKey.RandomMap.ToString(), false);
 
-            CustomOption.Create(
+            new BoolCustomOption(
                 (int)CommonOptionKey.IsSameNeutralSameWin,
                 CommonOptionKey.IsSameNeutralSameWin.ToString(),
                 true);
-            CustomOption.Create(
+            new BoolCustomOption(
                 (int)CommonOptionKey.DisableNeutralSpecialForceEnd,
                 CommonOptionKey.DisableNeutralSpecialForceEnd.ToString(),
                 false);
-            
-            CustomOption.Create(
+
+            new BoolCustomOption(
                 (int)CommonOptionKey.EnableHorseMode,
                 CommonOptionKey.EnableHorseMode.ToString(),
                 false);
