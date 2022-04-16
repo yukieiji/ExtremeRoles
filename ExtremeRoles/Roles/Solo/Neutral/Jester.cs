@@ -205,19 +205,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            CustomOption.Create(
-                GetRoleOptionId((int)JesterOption.OutburstDistance),
-                string.Concat(
-                    this.RoleName,
-                    JesterOption.OutburstDistance.ToString()),
+            CreateFloatOption(
+                JesterOption.OutburstDistance,
                 1.0f, 0.0f, 2.0f, 0.1f,
                 parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)JesterOption.UseSabotage),
-                string.Concat(
-                    this.RoleName,
-                    JesterOption.UseSabotage.ToString()),
+            CreateBoolOption(
+                JesterOption.UseSabotage,
                 true, parentOps);
 
             this.CreateAbilityCountOption(
@@ -227,9 +221,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         protected override void RoleSpecificInit()
         {
             this.UseSabotage = OptionHolder.AllOption[
-                GetRoleOptionId((int)JesterOption.UseSabotage)].GetValue();
+                GetRoleOptionId(JesterOption.UseSabotage)].GetValue();
             this.outburstDistance = OptionHolder.AllOption[
-                GetRoleOptionId((int)JesterOption.OutburstDistance)].GetValue();
+                GetRoleOptionId(JesterOption.OutburstDistance)].GetValue();
             this.RoleAbilityInit();
         }
 

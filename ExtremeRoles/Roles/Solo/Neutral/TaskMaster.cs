@@ -119,23 +119,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            CustomOption.Create(
-                this.GetRoleOptionId((int)TaskMasterOption.AddCommonTaskNum),
-                string.Concat(
-                    this.RoleName,
-                    TaskMasterOption.AddCommonTaskNum.ToString()),
+            CreateIntOption(
+                TaskMasterOption.AddCommonTaskNum,
                 1, 0, 15, 1, parentOps);
-            CustomOption.Create(
-                this.GetRoleOptionId((int)TaskMasterOption.AddLongTaskNum),
-                string.Concat(
-                    this.RoleName,
-                    TaskMasterOption.AddLongTaskNum.ToString()),
+            CreateIntOption(
+                TaskMasterOption.AddLongTaskNum,
                 1, 0, 15, 1, parentOps);
-            CustomOption.Create(
-                this.GetRoleOptionId((int)TaskMasterOption.AddNormalTaskNum),
-                string.Concat(
-                    this.RoleName,
-                    TaskMasterOption.AddNormalTaskNum.ToString()),
+            CreateIntOption(
+                TaskMasterOption.AddNormalTaskNum,
                 1, 0, 15, 1, parentOps);
         }
 
@@ -143,11 +134,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             var allOption = OptionHolder.AllOption;
             this.addLongTask = allOption[
-                GetRoleOptionId((int)TaskMasterOption.AddLongTaskNum)].GetValue();
+                GetRoleOptionId(TaskMasterOption.AddLongTaskNum)].GetValue();
             this.addNormalTask = allOption[
-                GetRoleOptionId((int)TaskMasterOption.AddNormalTaskNum)].GetValue();
+                GetRoleOptionId(TaskMasterOption.AddNormalTaskNum)].GetValue();
             this.addCommonTask = allOption[
-                GetRoleOptionId((int)TaskMasterOption.AddCommonTaskNum)].GetValue();
+                GetRoleOptionId(TaskMasterOption.AddCommonTaskNum)].GetValue();
             this.addTask.Clear();
         }
 

@@ -124,25 +124,17 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            CustomOption.Create(
-                GetRoleOptionId((int)SheriffOption.CanShootAssassin),
-                string.Concat(
-                    this.RoleName,
-                    SheriffOption.CanShootAssassin.ToString()),
+
+            CreateBoolOption(
+                SheriffOption.CanShootAssassin,
                 false, parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)SheriffOption.CanShootNeutral),
-                string.Concat(
-                    this.RoleName,
-                    SheriffOption.CanShootNeutral.ToString()),
+            CreateBoolOption(
+                SheriffOption.CanShootNeutral,
                 true, parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)SheriffOption.ShootNum),
-                string.Concat(
-                    this.RoleName,
-                    SheriffOption.ShootNum.ToString()),
+            CreateIntOption(
+                SheriffOption.ShootNum,
                 1, 1, OptionHolder.VanillaMaxPlayerNum - 1, 1,
                 parentOps, format: OptionUnit.Shot);
         }
@@ -150,11 +142,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         protected override void RoleSpecificInit()
         {
             this.shootNum = OptionHolder.AllOption[
-                GetRoleOptionId((int)SheriffOption.ShootNum)].GetValue();
+                GetRoleOptionId(SheriffOption.ShootNum)].GetValue();
             this.canShootNeutral = OptionHolder.AllOption[
-                GetRoleOptionId((int)SheriffOption.CanShootNeutral)].GetValue();
+                GetRoleOptionId(SheriffOption.CanShootNeutral)].GetValue();
             this.canShootAssassin = OptionHolder.AllOption[
-                GetRoleOptionId((int)SheriffOption.CanShootAssassin)].GetValue();
+                GetRoleOptionId(SheriffOption.CanShootAssassin)].GetValue();
             this.killCountText = null;
         }
 

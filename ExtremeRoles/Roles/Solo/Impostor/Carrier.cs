@@ -185,28 +185,22 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.CreateCommonAbilityOption(
                 parentOps, 5.0f);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)CarrierOption.CarryDistance),
-                string.Concat(
-                    this.RoleName,
-                    CarrierOption.CarryDistance.ToString()),
+            CreateFloatOption(
+                CarrierOption.CarryDistance,
                 1.0f, 1.0f, 5.0f, 0.5f,
                 parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)CarrierOption.CanReportOnCarry),
-                string.Concat(
-                    this.RoleName,
-                    CarrierOption.CanReportOnCarry.ToString()),
+            CreateBoolOption(
+                CarrierOption.CanReportOnCarry,
                 true, parentOps);
         }
 
         protected override void RoleSpecificInit()
         {
             this.carryDistance = OptionHolder.AllOption[
-                GetRoleOptionId((int)CarrierOption.CarryDistance)].GetValue();
+                GetRoleOptionId(CarrierOption.CarryDistance)].GetValue();
             this.CanReportOnCarry = OptionHolder.AllOption[
-                GetRoleOptionId((int)CarrierOption.CanReportOnCarry)].GetValue();
+                GetRoleOptionId(CarrierOption.CanReportOnCarry)].GetValue();
             this.RoleAbilityInit();
         }
     }

@@ -142,41 +142,26 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            CustomOption.Create(
-                GetRoleOptionId((int)EvolverOption.IsEvolvedAnimation),
-                string.Concat(
-                    this.RoleName,
-                    EvolverOption.IsEvolvedAnimation.ToString()),
+            CreateBoolOption(
+                EvolverOption.IsEvolvedAnimation,
                 true, parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)EvolverOption.IsEatingEndCleanBody),
-                string.Concat(
-                    this.RoleName,
-                    EvolverOption.IsEatingEndCleanBody.ToString()),
+            CreateBoolOption(
+                EvolverOption.IsEatingEndCleanBody,
                 true, parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)EvolverOption.EatingRange),
-                string.Concat(
-                    this.RoleName,
-                    EvolverOption.EatingRange.ToString()),
+            CreateFloatOption(
+                EvolverOption.EatingRange,
                 2.5f, 0.5f, 5.0f, 0.5f,
                 parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)EvolverOption.KillCoolReduceRate),
-                string.Concat(
-                    this.RoleName,
-                    EvolverOption.KillCoolReduceRate.ToString()),
+            CreateIntOption(
+                EvolverOption.KillCoolReduceRate,
                 10, 1, 50, 1, parentOps,
                 format: OptionUnit.Percentage);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)EvolverOption.KillCoolResuceRateMulti),
-                string.Concat(
-                    this.RoleName,
-                    EvolverOption.KillCoolResuceRateMulti.ToString()),
+            CreateFloatOption(
+                EvolverOption.KillCoolResuceRateMulti,
                 1.0f, 1.0f, 5.0f, 0.1f,
                 parentOps, format: OptionUnit.Multiplier);
 
@@ -199,15 +184,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             var allOption = OptionHolder.AllOption;
 
             this.isEvolvdAnimation = allOption[
-                GetRoleOptionId((int)EvolverOption.IsEvolvedAnimation)].GetValue();
+                GetRoleOptionId(EvolverOption.IsEvolvedAnimation)].GetValue();
             this.isEatingEndCleanBody = allOption[
-                GetRoleOptionId((int)EvolverOption.IsEatingEndCleanBody)].GetValue();
+                GetRoleOptionId(EvolverOption.IsEatingEndCleanBody)].GetValue();
             this.eatingRange = allOption[
-                GetRoleOptionId((int)EvolverOption.EatingRange)].GetValue();
+                GetRoleOptionId(EvolverOption.EatingRange)].GetValue();
             this.reduceRate = allOption[
-                GetRoleOptionId((int)EvolverOption.KillCoolReduceRate)].GetValue();
+                GetRoleOptionId(EvolverOption.KillCoolReduceRate)].GetValue();
             this.reruceMulti = (float)allOption[
-                GetRoleOptionId((int)EvolverOption.KillCoolResuceRateMulti)].GetValue();
+                GetRoleOptionId(EvolverOption.KillCoolResuceRateMulti)].GetValue();
 
             this.eatingText = Translation.GetString("eating");
 

@@ -291,21 +291,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             CustomOptionBase parentOps)
         {
 
-            CustomOption.Create(
-               GetRoleOptionId((int)AgencyOption.MaxTaskNum),
-               string.Concat(
-                   this.RoleName,
-                   AgencyOption.MaxTaskNum.ToString()),
-               2, 1, 3, 1,
-               parentOps);
-
-            CustomOption.Create(
-               GetRoleOptionId((int)AgencyOption.TakeTaskRange),
-               string.Concat(
-                   this.RoleName,
-                   AgencyOption.TakeTaskRange.ToString()),
-               1.0f, 0.0f, 2.0f, 0.1f,
-               parentOps);
+            CreateIntOption(
+                AgencyOption.MaxTaskNum,
+                2, 1, 3, 1, parentOps);
+            CreateFloatOption(
+                AgencyOption.TakeTaskRange,
+                1.0f, 0.0f, 2.0f, 0.1f,
+                parentOps);
 
             this.CreateAbilityCountOption(
                 parentOps, 2, 5);
@@ -314,9 +306,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         protected override void RoleSpecificInit()
         {
             this.maxTakeTask = OptionHolder.AllOption[
-                GetRoleOptionId((int)AgencyOption.MaxTaskNum)].GetValue() + 1;
+                GetRoleOptionId(AgencyOption.MaxTaskNum)].GetValue() + 1;
             this.takeTaskRange = OptionHolder.AllOption[
-                GetRoleOptionId((int)AgencyOption.TakeTaskRange)].GetValue();
+                GetRoleOptionId(AgencyOption.TakeTaskRange)].GetValue();
 
             this.RoleAbilityInit();
 

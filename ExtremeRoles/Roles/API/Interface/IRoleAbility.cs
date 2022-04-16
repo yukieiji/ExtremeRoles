@@ -183,7 +183,8 @@ namespace ExtremeRoles.Roles.API.Interface
             CustomOptionBase parentOps,
             float defaultActiveTime = float.MaxValue)
         {
-            CustomOption.Create(
+
+            new FloatCustomOption(
                 self.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime),
                 string.Concat(
                     ((SingleRoleBase)self).RoleName,
@@ -196,7 +197,7 @@ namespace ExtremeRoles.Roles.API.Interface
                 defaultActiveTime = Mathf.Clamp(
                     defaultActiveTime, minActiveTime, maxActiveTime);
 
-                CustomOption.Create(
+                new FloatCustomOption(
                     self.GetRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime),
                     string.Concat(
                         ((SingleRoleBase)self).RoleName,
@@ -219,7 +220,7 @@ namespace ExtremeRoles.Roles.API.Interface
                 parentOps,
                 defaultActiveTime);
 
-            CustomOption.Create(
+            new IntCustomOption(
                 self.GetRoleOptionId(RoleAbilityCommonOption.AbilityCount),
                 string.Concat(
                     ((SingleRoleBase)self).RoleName,

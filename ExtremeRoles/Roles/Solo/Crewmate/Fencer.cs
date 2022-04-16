@@ -175,11 +175,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             this.CreateAbilityCountOption(
                 parentOps, 2, 5, 3.0f);
-            CustomOption.Create(
-                GetRoleOptionId((int)FencerOption.ResetTime),
-                string.Concat(
-                    this.RoleName,
-                    FencerOption.ResetTime.ToString()),
+            CreateFloatOption(
+                FencerOption.ResetTime,
                 5.0f, 2.5f, 30.0f, 0.5f,
                 parentOps, format: OptionUnit.Second);
         }
@@ -188,7 +185,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             this.Timer = 0.0f;
             this.MaxTime = OptionHolder.AllOption[
-                GetRoleOptionId((int)FencerOption.ResetTime)].GetValue();
+                GetRoleOptionId(FencerOption.ResetTime)].GetValue();
 
             this.RoleAbilityInit();
         }

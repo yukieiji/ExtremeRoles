@@ -318,11 +318,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.CreateCommonAbilityOption(
                 parentOps, 3.0f);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)TimeMasterOption.RewindTime),
-                string.Concat(
-                    this.RoleName,
-                    TimeMasterOption.RewindTime),
+            CreateFloatOption(
+                TimeMasterOption.RewindTime,
                 5.0f, 1.0f, 60.0f, 0.5f,
                 parentOps, format: OptionUnit.Second);
         }
@@ -331,7 +328,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             ExtremeRolesPlugin.GameDataStore.History.Initialize(
                 OptionHolder.AllOption[
-                    GetRoleOptionId((int)TimeMasterOption.RewindTime)].GetValue());
+                    GetRoleOptionId(TimeMasterOption.RewindTime)].GetValue());
             this.RoleAbilityInit();
         }
     }

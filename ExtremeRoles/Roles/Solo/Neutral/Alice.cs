@@ -179,23 +179,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.CreateAbilityCountOption(
                 parentOps, 2, 100);
 
-            CustomOption.Create(
-                this.GetRoleOptionId((int)AliceOption.RevartLongTaskNum),
-                string.Concat(
-                    this.RoleName,
-                    AliceOption.RevartLongTaskNum.ToString()),
+            CreateIntOption(
+                AliceOption.RevartLongTaskNum,
                 1, 0, 15, 1, parentOps);
-            CustomOption.Create(
-                this.GetRoleOptionId((int)AliceOption.RevartCommonTaskNum),
-                string.Concat(
-                    this.RoleName,
-                    AliceOption.RevartCommonTaskNum.ToString()),
+            CreateIntOption(
+                AliceOption.RevartCommonTaskNum,
                 1, 0, 15, 1, parentOps);
-            CustomOption.Create(
-                this.GetRoleOptionId((int)AliceOption.RevartNormalTaskNum),
-                string.Concat(
-                    this.RoleName,
-                    AliceOption.RevartNormalTaskNum.ToString()),
+            CreateIntOption(
+                AliceOption.RevartNormalTaskNum,
                 1, 0, 15, 1, parentOps);
 
         }
@@ -204,11 +195,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             var allOption = OptionHolder.AllOption;
             this.RevartNormalTask = allOption[
-                GetRoleOptionId((int)AliceOption.RevartNormalTaskNum)].GetValue();
+                GetRoleOptionId(AliceOption.RevartNormalTaskNum)].GetValue();
             this.RevartLongTask = allOption[
-                GetRoleOptionId((int)AliceOption.RevartLongTaskNum)].GetValue();
+                GetRoleOptionId(AliceOption.RevartLongTaskNum)].GetValue();
             this.RevartCommonTask = allOption[
-                GetRoleOptionId((int)AliceOption.RevartCommonTaskNum)].GetValue();
+                GetRoleOptionId(AliceOption.RevartCommonTaskNum)].GetValue();
 
             this.RoleAbilityInit();
         }

@@ -212,36 +212,23 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            CustomOption.Create(
-                GetRoleOptionId((int)SandWormOption.KillCoolPenalty),
-                string.Concat(
-                    this.RoleName,
-                    SandWormOption.KillCoolPenalty.ToString()),
+            CreateFloatOption(
+                SandWormOption.KillCoolPenalty,
                 5.0f, 1.0f, 10.0f, 0.1f,
                 parentOps, format: OptionUnit.Second);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)SandWormOption.AssaultKillCoolReduce),
-                string.Concat(
-                    this.RoleName,
-                    SandWormOption.AssaultKillCoolReduce.ToString()),
+            CreateFloatOption(
+                SandWormOption.AssaultKillCoolReduce,
                 3.0f, 1.0f, 5.0f, 0.1f,
                 parentOps, format: OptionUnit.Second);
 
-
-            CustomOption.Create(
-                GetRoleOptionId((int)SandWormOption.AssaultRange),
-                string.Concat(
-                    this.RoleName,
-                    SandWormOption.AssaultRange.ToString()),
+            CreateFloatOption(
+                SandWormOption.AssaultRange,
                 2.0f, 0.1f, 3.0f, 0.1f,
                 parentOps);
 
-            CustomOption.Create(
-                this.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime),
-                string.Concat(
-                    this.RoleName,
-                    RoleAbilityCommonOption.AbilityCoolTime.ToString()),
+            CreateFloatOption(
+                RoleAbilityCommonOption.AbilityCoolTime,
                 15.0f, 0.5f, 45.0f, 0.1f,
                 parentOps, format: OptionUnit.Second);
 
@@ -250,12 +237,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         protected override void RoleSpecificInit()
         {
             this.range = OptionHolder.AllOption[
-                GetRoleOptionId((int)SandWormOption.AssaultRange)].GetValue();
+                GetRoleOptionId(SandWormOption.AssaultRange)].GetValue();
 
             this.killPenalty = OptionHolder.AllOption[
-                GetRoleOptionId((int)SandWormOption.KillCoolPenalty)].GetValue();
+                GetRoleOptionId(SandWormOption.KillCoolPenalty)].GetValue();
             this.killBonus = OptionHolder.AllOption[
-                GetRoleOptionId((int)SandWormOption.AssaultKillCoolReduce)].GetValue();
+                GetRoleOptionId(SandWormOption.AssaultKillCoolReduce)].GetValue();
 
             if (!this.HasOtherKillCool)
             {

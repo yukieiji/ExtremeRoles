@@ -147,28 +147,22 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.CreateAbilityCountOption(
                 parentOps, 2, 5);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)CrackerOption.CanCrackDistance),
-                string.Concat(
-                    this.RoleName,
-                    CrackerOption.CanCrackDistance.ToString()),
+            CreateFloatOption(
+                CrackerOption.CanCrackDistance,
                 1.0f, 1.0f, 5.0f, 0.5f,
                 parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)CrackerOption.RemoveDeadBody),
-                string.Concat(
-                    this.RoleName,
-                    CrackerOption.RemoveDeadBody.ToString()),
+            CreateBoolOption(
+                CrackerOption.RemoveDeadBody,
                 false, parentOps);
         }
 
         protected override void RoleSpecificInit()
         {
             this.crackDistance = OptionHolder.AllOption[
-                GetRoleOptionId((int)CrackerOption.CanCrackDistance)].GetValue();
+                GetRoleOptionId(CrackerOption.CanCrackDistance)].GetValue();
             this.IsRemoveDeadBody = OptionHolder.AllOption[
-                GetRoleOptionId((int)CrackerOption.RemoveDeadBody)].GetValue();
+                GetRoleOptionId(CrackerOption.RemoveDeadBody)].GetValue();
             this.RoleAbilityInit();
         }
     }

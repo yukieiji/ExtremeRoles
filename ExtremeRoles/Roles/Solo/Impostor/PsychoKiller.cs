@@ -77,27 +77,18 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            CustomOption.Create(
-                GetRoleOptionId((int)PsychoKillerOption.KillCoolReduceRate),
-                string.Concat(
-                    this.RoleName,
-                    PsychoKillerOption.KillCoolReduceRate.ToString()),
+            CreateIntOption(
+                PsychoKillerOption.KillCoolReduceRate,
                 5, 1, 15, 1, parentOps,
                 format: OptionUnit.Percentage);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)PsychoKillerOption.CombMax),
-                string.Concat(
-                    this.RoleName,
-                    PsychoKillerOption.CombMax.ToString()),
+            CreateIntOption(
+                PsychoKillerOption.CombMax,
                 2, 1, 5, 1,
                 parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)PsychoKillerOption.CombResetWhenMeeting),
-                string.Concat(
-                    this.RoleName,
-                    PsychoKillerOption.CombResetWhenMeeting.ToString()),
+            CreateBoolOption(
+                PsychoKillerOption.CombResetWhenMeeting,
                 true, parentOps);
         }
 
@@ -113,11 +104,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             var allOption = OptionHolder.AllOption;
 
             this.reduceRate = allOption[
-                GetRoleOptionId((int)PsychoKillerOption.KillCoolReduceRate)].GetValue();
+                GetRoleOptionId(PsychoKillerOption.KillCoolReduceRate)].GetValue();
             this.isResetMeeting = allOption[
-                GetRoleOptionId((int)PsychoKillerOption.CombResetWhenMeeting)].GetValue();
+                GetRoleOptionId(PsychoKillerOption.CombResetWhenMeeting)].GetValue();
             this.combMax= allOption[
-                GetRoleOptionId((int)PsychoKillerOption.CombMax)].GetValue();
+                GetRoleOptionId(PsychoKillerOption.CombMax)].GetValue();
 
             this.combCount = 1;
             this.defaultKillCoolTime = this.KillCoolTime;

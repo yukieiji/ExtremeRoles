@@ -79,31 +79,19 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            CustomOption.Create(
-                GetRoleOptionId((int)MissionaryOption.TellDeparture),
-                string.Concat(
-                    this.RoleName,
-                    MissionaryOption.TellDeparture.ToString()),
+            CreateBoolOption(
+                MissionaryOption.TellDeparture,
                 true, parentOps);
-            CustomOption.Create(
-                GetRoleOptionId((int)MissionaryOption.DepartureMinTime),
-                string.Concat(
-                    this.RoleName,
-                    MissionaryOption.DepartureMinTime.ToString()),
+            CreateFloatOption(
+                MissionaryOption.DepartureMinTime,
                 10f, 1.0f, 15f, 0.5f,
                 parentOps, format: OptionUnit.Second);
-            CustomOption.Create(
-                GetRoleOptionId((int)MissionaryOption.DepartureMaxTime),
-                string.Concat(
-                    this.RoleName,
-                    MissionaryOption.DepartureMaxTime.ToString()),
+            CreateFloatOption(
+                MissionaryOption.DepartureMaxTime,
                 30f, 15f, 60f, 0.5f,
                 parentOps, format: OptionUnit.Second);
-            CustomOption.Create(
-                GetRoleOptionId((int)MissionaryOption.PropagateRange),
-                string.Concat(
-                    this.RoleName,
-                    MissionaryOption.PropagateRange.ToString()),
+            CreateFloatOption(
+                MissionaryOption.PropagateRange,
                 1.2f, 0.0f, 2.0f, 0.1f,
                 parentOps);
 
@@ -116,13 +104,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.timer = 0;
 
             this.tellDeparture = OptionHolder.AllOption[
-                GetRoleOptionId((int)MissionaryOption.TellDeparture)].GetValue();
+                GetRoleOptionId(MissionaryOption.TellDeparture)].GetValue();
             this.maxTimerTime = OptionHolder.AllOption[
-                GetRoleOptionId((int)MissionaryOption.DepartureMaxTime)].GetValue();
+                GetRoleOptionId(MissionaryOption.DepartureMaxTime)].GetValue();
             this.minTimerTime = OptionHolder.AllOption[
-                GetRoleOptionId((int)MissionaryOption.DepartureMinTime)].GetValue();
+                GetRoleOptionId(MissionaryOption.DepartureMinTime)].GetValue();
             this.propagateRange = OptionHolder.AllOption[
-                GetRoleOptionId((int)MissionaryOption.PropagateRange)].GetValue();
+                GetRoleOptionId(MissionaryOption.PropagateRange)].GetValue();
 
             resetTimer();
             this.RoleAbilityInit();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 using UnityEngine;
 
@@ -231,52 +232,33 @@ namespace ExtremeRoles.Roles.API
         protected override void CreateKillerOption(
             CustomOptionBase parentOps)
         {
-            var killCoolOption = CustomOption.Create(
-                GetRoleOptionId(KillerCommonOption.HasOtherKillCool),
-                string.Concat(
-                    this.RoleName,
-                    KillerCommonOption.HasOtherKillCool.ToString()),
+            var killCoolOption = CreateBoolOption(
+                KillerCommonOption.HasOtherKillCool,
                 false, parentOps);
-            CustomOption.Create(
-                GetRoleOptionId(KillerCommonOption.KillCoolDown),
-                string.Concat(
-                    this.RoleName,
-                    KillerCommonOption.KillCoolDown.ToString()),
+            CreateFloatOption(
+                KillerCommonOption.KillCoolDown,
                 30f, 1.0f, 120f, 0.5f,
                 killCoolOption, format: OptionUnit.Second);
 
-            var killRangeOption = CustomOption.Create(
-                GetRoleOptionId(KillerCommonOption.HasOtherKillRange),
-                string.Concat(
-                    this.RoleName,
-                    KillerCommonOption.HasOtherKillRange.ToString()),
+            var killRangeOption = CreateBoolOption(
+                KillerCommonOption.HasOtherKillRange,
                 false, parentOps);
-            CustomOption.Create(
-                GetRoleOptionId(KillerCommonOption.KillRange),
-                string.Concat(
-                    this.RoleName,
-                    KillerCommonOption.KillRange.ToString()),
+            CreateSelectionOption(
+                KillerCommonOption.KillRange,
                 OptionHolder.Range,
                 killRangeOption);
         }
         protected override CustomOptionBase CreateSpawnOption()
         {
-            var roleSetOption = CustomOption.Create(
-                GetRoleOptionId(RoleCommonOption.SpawnRate),
-                Design.ColoedString(
-                    this.NameColor,
-                    string.Concat(
-                        this.RoleName,
-                        RoleCommonOption.SpawnRate.ToString())),
-                OptionHolder.SpawnRate, null, true);
+            var roleSetOption = CreateSelectionOption(
+                RoleCommonOption.SpawnRate,
+                OptionHolder.SpawnRate, null, true,
+                colored: true);
 
             int spawnNum = this.IsImpostor() ? OptionHolder.MaxImposterNum : OptionHolder.VanillaMaxPlayerNum - 1;
 
-            CustomOption.Create(
-                GetRoleOptionId(RoleCommonOption.RoleNum),
-                string.Concat(
-                    this.RoleName,
-                    RoleCommonOption.RoleNum.ToString()),
+            CreateIntOption(
+                RoleCommonOption.RoleNum,
                 1, 1, spawnNum, 1, roleSetOption);
 
             return roleSetOption;
@@ -285,25 +267,15 @@ namespace ExtremeRoles.Roles.API
         protected override void CreateVisonOption(
             CustomOptionBase parentOps)
         {
-            var visonOption = CustomOption.Create(
-                GetRoleOptionId(RoleCommonOption.HasOtherVison),
-                string.Concat(
-                    this.RoleName,
-                    RoleCommonOption.HasOtherVison.ToString()),
+            var visonOption = CreateBoolOption(
+                RoleCommonOption.HasOtherVison,
                 false, parentOps);
-
-            CustomOption.Create(
-                GetRoleOptionId(RoleCommonOption.Vison),
-                string.Concat(
-                    this.RoleName,
-                    RoleCommonOption.Vison.ToString()),
+            CreateFloatOption(RoleCommonOption.Vison,
                 2f, 0.25f, 5.0f, 0.25f,
                 visonOption, format: OptionUnit.Multiplier);
-            CustomOption.Create(
-               GetRoleOptionId(RoleCommonOption.ApplyEnvironmentVisionEffect),
-               string.Concat(
-                   this.RoleName,
-                   RoleCommonOption.ApplyEnvironmentVisionEffect.ToString()),
+
+            CreateBoolOption(
+                RoleCommonOption.ApplyEnvironmentVisionEffect,
                this.IsCrewmate(), visonOption);
         }
         protected override void CommonInit()
@@ -349,12 +321,144 @@ namespace ExtremeRoles.Roles.API
                 }
             }
         }
-
         protected bool IsSameControlId(SingleRoleBase tarrgetRole)
         {
             return this.GameControlId == tarrgetRole.GameControlId;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected CustomOptionBase CreateFloatOption<T>(
+            T option,
+            float defaultValue,
+            float min, float max, float step,
+            CustomOptionBase parent = null,
+            bool isHeader = false,
+            bool isHidden = false,
+            OptionUnit format = OptionUnit.None,
+            bool invert = false,
+            CustomOptionBase enableCheckOption = null,
+            bool colored = false) where T : struct, IConvertible
+        {
+            EnumCheck(option);
+
+            return new FloatCustomOption(
+                GetRoleOptionId(option),
+                createAutoOptionString(option, colored),
+                defaultValue,
+                min, max, step,
+                parent, isHeader, isHidden,
+                format, invert, enableCheckOption);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected CustomOptionBase CreateIntOption<T>(
+            T option,
+            int defaultValue,
+            int min, int max, int step,
+            CustomOptionBase parent = null,
+            bool isHeader = false,
+            bool isHidden = false,
+            OptionUnit format = OptionUnit.None,
+            bool invert = false,
+            CustomOptionBase enableCheckOption = null,
+            bool colored = false) where T : struct, IConvertible
+        {
+            EnumCheck(option);
+
+            return new IntCustomOption(
+                GetRoleOptionId(option),
+                createAutoOptionString(option, colored),
+                defaultValue,
+                min, max, step,
+                parent, isHeader, isHidden,
+                format, invert, enableCheckOption);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected CustomOptionBase CreateIntDynamicOption<T>(
+            T option,
+            int defaultValue,
+            int min, int step,
+            CustomOptionBase parent = null,
+            bool isHeader = false,
+            bool isHidden = false,
+            OptionUnit format = OptionUnit.None,
+            bool invert = false,
+            CustomOptionBase enableCheckOption = null,
+            bool colored = false) where T : struct, IConvertible
+        {
+            EnumCheck(option);
+
+            return new IntDynamicCustomOption(
+                GetRoleOptionId(option),
+                createAutoOptionString(option, colored),
+                defaultValue,
+                min, step,
+                parent, isHeader, isHidden,
+                format, invert, enableCheckOption);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected CustomOptionBase CreateBoolOption<T>(
+            T option,
+            bool defaultValue,
+            CustomOptionBase parent = null,
+            bool isHeader = false,
+            bool isHidden = false,
+            OptionUnit format = OptionUnit.None,
+            bool invert = false,
+            CustomOptionBase enableCheckOption = null,
+            bool colored = false) where T : struct, IConvertible
+        {
+            EnumCheck(option);
+
+            return new BoolCustomOption(
+                GetRoleOptionId(option),
+                createAutoOptionString(option, colored),
+                defaultValue,
+                parent, isHeader, isHidden,
+                format, invert, enableCheckOption);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected CustomOptionBase CreateSelectionOption<T>(
+            T option,
+            string[] selections,
+            CustomOptionBase parent = null,
+            bool isHeader = false,
+            bool isHidden = false,
+            OptionUnit format = OptionUnit.None,
+            bool invert = false,
+            CustomOptionBase enableCheckOption = null,
+            bool colored = false) where T : struct, IConvertible
+        {
+            EnumCheck(option);
+
+            return new SelectionCustomOption(
+                GetRoleOptionId(option),
+                createAutoOptionString(option, colored),
+                selections,
+                parent, isHeader, isHidden,
+                format, invert, enableCheckOption);
+        }
+
+        private string createAutoOptionString<T>(
+            T option, bool colored) where T : struct, IConvertible
+        {
+            if (!colored)
+            {
+                return string.Concat(
+                    this.RoleName, option.ToString());
+            }
+            else
+            {
+                return Design.ColoedString(
+                    this.NameColor,
+                    string.Concat(
+                        this.RoleName,
+                        RoleCommonOption.SpawnRate.ToString()));
+            }
+        }
     }
     public abstract class MultiAssignRoleBase : SingleRoleBase
     {
@@ -547,15 +651,12 @@ namespace ExtremeRoles.Roles.API
                 }
             }
         }
+        public int GetManagerOptionId<T>(T option) where T : struct, IConvertible
+        {
+            EnumCheck(option);
 
-        public int GetManagerOptionId(
-            RoleCommonOption option) => GetManagerOptionId((int)option);
-
-        public int GetManagerOptionId(
-            KillerCommonOption option) => GetManagerOptionId((int)option);
-
-        public int GetManagerOptionId(
-            CombinationRoleCommonOption option) => GetManagerOptionId((int)option);
+            return GetManagerOptionId(Convert.ToInt32(option));
+        }
 
         public int GetManagerOptionId(int option) => this.ManagerOptionOffset + option;
 

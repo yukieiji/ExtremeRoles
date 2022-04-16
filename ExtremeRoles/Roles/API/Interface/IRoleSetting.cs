@@ -10,7 +10,7 @@ namespace ExtremeRoles.Roles.API.Interface
 
         void CreateRoleAllOption(
             int optionIdOffset);
-        void CreatRoleSpecificOption(
+        void CreateRoleSpecificOption(
             CustomOptionBase parentOps,
             int optionIdOffset);
     }

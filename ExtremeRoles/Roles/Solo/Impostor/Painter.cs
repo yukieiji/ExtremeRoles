@@ -134,28 +134,22 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.CreateCommonAbilityOption(
                 parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)PainterOption.CanPaintDistance),
-                string.Concat(
-                    this.RoleName,
-                    PainterOption.CanPaintDistance.ToString()),
+            CreateFloatOption(
+                PainterOption.CanPaintDistance,
                 1.0f, 1.0f, 5.0f, 0.5f,
                 parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)PainterOption.PaintColorIsRandom),
-                string.Concat(
-                    this.RoleName,
-                    PainterOption.PaintColorIsRandom.ToString()),
+            CreateBoolOption(
+                PainterOption.PaintColorIsRandom,
                 false, parentOps);
         }
 
         protected override void RoleSpecificInit()
         {
             this.paintDistance = OptionHolder.AllOption[
-                GetRoleOptionId((int)PainterOption.CanPaintDistance)].GetValue();
+                GetRoleOptionId(PainterOption.CanPaintDistance)].GetValue();
             this.PaintColorIsRandom = OptionHolder.AllOption[
-                GetRoleOptionId((int)PainterOption.PaintColorIsRandom)].GetValue();
+                GetRoleOptionId(PainterOption.PaintColorIsRandom)].GetValue();
             this.RoleAbilityInit();
         }
     }

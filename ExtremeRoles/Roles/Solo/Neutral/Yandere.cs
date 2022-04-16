@@ -399,74 +399,47 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            CustomOption.Create(
-                GetRoleOptionId((int)YandereOption.TargetKilledKillCoolReduceRate),
-                string.Concat(
-                    this.RoleName,
-                    YandereOption.TargetKilledKillCoolReduceRate.ToString()),
+            CreateIntOption(
+                YandereOption.TargetKilledKillCoolReduceRate,
                 85, 50, 99, 1,
                 parentOps, format: OptionUnit.Percentage);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)YandereOption.NoneTargetKilledKillCoolMultiplier),
-                string.Concat(
-                    this.RoleName,
-                    YandereOption.NoneTargetKilledKillCoolMultiplier.ToString()),
+            CreateFloatOption(
+                YandereOption.NoneTargetKilledKillCoolMultiplier,
                 1.2f, 1.0f, 2.0f, 0.1f,
                 parentOps, format: OptionUnit.Multiplier);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)YandereOption.BlockTargetTime),
-                string.Concat(
-                    this.RoleName,
-                    YandereOption.BlockTargetTime.ToString()),
+            CreateFloatOption(
+                YandereOption.BlockTargetTime,
                 5.0f, 0.5f, 30.0f, 0.5f,
                 parentOps, format: OptionUnit.Second);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)YandereOption.SetTargetRange),
-                string.Concat(
-                    this.RoleName,
-                    YandereOption.SetTargetRange.ToString()),
+            CreateFloatOption(
+                YandereOption.SetTargetRange,
                 1.8f, 0.5f, 5.0f, 0.1f,
                 parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)YandereOption.SetTargetTime),
-                string.Concat(
-                    this.RoleName,
-                    YandereOption.SetTargetTime.ToString()),
+            CreateFloatOption(
+                YandereOption.SetTargetTime,
                 2.0f, 0.1f, 7.5f, 0.1f,
                 parentOps, format: OptionUnit.Second);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)YandereOption.MaxTargetNum),
-                string.Concat(
-                    this.RoleName,
-                    YandereOption.MaxTargetNum.ToString()),
+            CreateIntOption(
+                YandereOption.MaxTargetNum,
                 5, 1, OptionHolder.VanillaMaxPlayerNum, 1, parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)YandereOption.RunawayTime),
-                string.Concat(
-                    this.RoleName,
-                    YandereOption.RunawayTime.ToString()),
+            CreateFloatOption(
+                YandereOption.RunawayTime,
                 60.0f, 25.0f, 120.0f, 0.25f,
                 parentOps, format: OptionUnit.Second);
 
-            CustomOption.Create(
-                 GetRoleOptionId((int)YandereOption.HasOneSidedArrow),
-                 string.Concat(
-                     this.RoleName,
-                     YandereOption.HasOneSidedArrow.ToString()),
-                 true, parentOps);
+            CreateBoolOption(
+                YandereOption.HasOneSidedArrow,
+                true, parentOps);
 
-            CustomOption.Create(
-                GetRoleOptionId((int)YandereOption.HasTargetArrow),
-                 string.Concat(
-                     this.RoleName,
-                     YandereOption.HasTargetArrow.ToString()),
-                 true, parentOps);
+            CreateBoolOption(
+                YandereOption.HasTargetArrow,
+                true, parentOps);
         }
 
         protected override void RoleSpecificInit()
@@ -475,30 +448,30 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
 
             this.setTargetRange = allOption[
-                GetRoleOptionId((int)YandereOption.SetTargetRange)].GetValue();
+                GetRoleOptionId(YandereOption.SetTargetRange)].GetValue();
             this.setTargetTime = allOption[
-                GetRoleOptionId((int)YandereOption.SetTargetTime)].GetValue();
+                GetRoleOptionId(YandereOption.SetTargetTime)].GetValue();
 
             this.targetKillReduceRate = allOption[
-                GetRoleOptionId((int)YandereOption.TargetKilledKillCoolReduceRate)].GetValue();
+                GetRoleOptionId(YandereOption.TargetKilledKillCoolReduceRate)].GetValue();
             this.noneTargetKillMultiplier = allOption[
-                GetRoleOptionId((int)YandereOption.NoneTargetKilledKillCoolMultiplier)].GetValue();
+                GetRoleOptionId(YandereOption.NoneTargetKilledKillCoolMultiplier)].GetValue();
             
             this.maxTargetNum = allOption[
-                GetRoleOptionId((int)YandereOption.MaxTargetNum)].GetValue();
+                GetRoleOptionId(YandereOption.MaxTargetNum)].GetValue();
 
             this.timer = 0.0f;
             this.timeLimit = allOption[
-                GetRoleOptionId((int)YandereOption.RunawayTime)].GetValue();
+                GetRoleOptionId(YandereOption.RunawayTime)].GetValue();
             
             this.blockTimer = 0.0f;
             this.blockTargetTime = allOption[
-                GetRoleOptionId((int)YandereOption.BlockTargetTime)].GetValue();
+                GetRoleOptionId(YandereOption.BlockTargetTime)].GetValue();
 
             this.hasOneSidedArrow = allOption[
-                GetRoleOptionId((int)YandereOption.HasOneSidedArrow)].GetValue();
+                GetRoleOptionId(YandereOption.HasOneSidedArrow)].GetValue();
             this.target = new KillTarget(
-                allOption[GetRoleOptionId((int)YandereOption.HasTargetArrow)].GetValue());
+                allOption[GetRoleOptionId(YandereOption.HasTargetArrow)].GetValue());
 
             this.progress.Clear();
 
