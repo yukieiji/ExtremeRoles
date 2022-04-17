@@ -57,12 +57,13 @@ namespace ExtremeSkins.Module
             this.visor.NotInStore = true;
 
             this.visor.viewData.viewData = new VisorViewData();
+            this.visor.viewData.viewData.IdleFrame = loadVisorSprite(this.imgPath);
 
             return this.visor;
 
         }
 
-        private Sprite loadNamePlateSprite(
+        private Sprite loadVisorSprite(
             string path)
         {
             Texture2D texture = Loader.LoadTextureFromDisk(path);
@@ -71,9 +72,8 @@ namespace ExtremeSkins.Module
                 return null;
             }
             Sprite sprite = Sprite.Create(
-                texture,
-                new Rect(0, 0, texture.width, texture.height),
-                new Vector2(0.5f, 0.5f), 100f);
+                texture, new Rect(0, 0, texture.width, texture.height),
+                new Vector2(0.53f, 0.575f), texture.width * 0.375f);
             if (sprite == null)
             {
                 return null;
