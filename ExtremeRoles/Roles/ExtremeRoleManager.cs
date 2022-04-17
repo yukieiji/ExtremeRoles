@@ -50,6 +50,7 @@ namespace ExtremeRoles.Roles
         Mery,
         SlaveDriver,
         SandWorm,
+        Smasher,
 
         Alice,
         Jackal,
@@ -132,6 +133,7 @@ namespace ExtremeRoles.Roles
                 new Mery(),
                 new SlaveDriver(),
                 new SandWorm(),
+                new Smasher(),
 
                 new Alice(),
                 new Jackal(),
