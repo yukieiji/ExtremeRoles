@@ -15,7 +15,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
     {
         public enum SmasherOption
         {
-            SmashPenaltyKillCool;
+            SmashPenaltyKillCool,
         }
 
         public RoleAbilityButtonBase Button
@@ -125,12 +125,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 target.PlayerId,
                 byte.MaxValue);
 
-            if (!this.HasOtherKillCool)
+            if (this.penaltyKillCool > 0.0f)
             {
-                this.HasOtherKillCool = true;
-                this.KillCoolTime = PlayerControl.GameOptions.KillCooldown;
+                if (!this.HasOtherKillCool)
+                {
+                    this.HasOtherKillCool = true;
+                    this.KillCoolTime = PlayerControl.GameOptions.KillCooldown;
+                }
+                this.KillCoolTime = this.KillCoolTime + this.penaltyKillCool;
             }
-            this.KillCoolTime = this.KillCoolTime + this.penaltyKillCool;
 
             PlayerControl.LocalPlayer.killTimer = this.prevKillCool;
 
@@ -145,7 +148,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             CreateFloatOption(
                 SmasherOption.SmashPenaltyKillCool,
-                4.0f, 0.5f, 30f, 0.5f, parentOps,
+                4.0f, 0.0f, 30f, 0.5f, parentOps,
                 format: OptionUnit.Second);
 
         }
