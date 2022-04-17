@@ -76,4 +76,39 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
         }
     }
 #endif
+#if WITHNAMEPLATE
+    [HarmonyPatch(typeof(HatManager), nameof(HatManager.GetVisorById))]
+    public static class HatManagerGetVisorByIdPatch
+    {
+        private static bool isRunning;
+        private static bool isLoaded;
+        public static void Prefix(HatManager __instance)
+        {
+            if (isRunning) { return; }
+            isRunning = true; // prevent simultanious execution
+
+            try
+            {
+                if (!isLoaded)
+                {
+                    foreach (var vi in ExtremeVisorManager.VisorData.Values)
+                    {
+                        __instance.allVisors.Add(
+                            vi.GetData());
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                ExtremeSkinsPlugin.Logger.LogInfo(
+                    $"Unable to add Custom Visor\n{e}");
+            }
+            isLoaded = true;
+        }
+        public static void Postfix(HatManager __instance)
+        {
+            isRunning = false;
+        }
+    }
+#endif
 }

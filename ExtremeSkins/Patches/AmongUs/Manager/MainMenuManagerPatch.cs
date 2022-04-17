@@ -41,6 +41,19 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
                 ExtremeNamePlateManager.Load();
             }
 #endif
+#if WITHNAMEPLATE
+            if (!ExtremeVisorManager.IsLoaded)
+            {
+                /*
+                if (ExtremeVisorManager.IsUpdate() && !creatorMode)
+                {
+                    ExtremeVisorManager.PullAllData().GetAwaiter().GetResult();
+                }
+                */
+
+                ExtremeVisorManager.Load();
+            }
+#endif
         }
     }
 }

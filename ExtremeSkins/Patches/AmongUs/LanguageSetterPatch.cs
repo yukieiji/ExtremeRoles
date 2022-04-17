@@ -12,6 +12,9 @@ namespace ExtremeSkins.Patches.AmongUs
 #if WITHNAMEPLATE
             ExtremeNamePlateManager.UpdateTranslation();
 #endif
+#if WITHNAMEPLATE
+            ExtremeVisorManager.UpdateTranslation();
+#endif
         }
     }
 }
