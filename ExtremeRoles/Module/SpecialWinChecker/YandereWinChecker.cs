@@ -71,7 +71,7 @@ namespace ExtremeRoles.Module.SpecialWinChecker
 
             if (aliveOneSideLover.Count == 0 || aliveYandere.Count == 0) { return false; }
             if (aliveNum < statistics.TotalAlive - aliveNum) { return false; }
-            if (statistics.TeamImpostorAlive - oneSidedLoverImpNum > 0) { return false; }
+            if (statistics.TeamImpostorAlive - statistics.AssassinAlive - oneSidedLoverImpNum > 0) { return false; }
             if (statistics.SeparatedNeutralAlive.Count - oneSidedLoverNeutralNum > 1) { return false; }
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
