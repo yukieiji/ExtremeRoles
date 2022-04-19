@@ -129,7 +129,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             CustomOptionBase parentOps)
         {
             this.CreateAbilityCountOption(
-                parentOps, 4, 10);
+                parentOps, 2, 5);
             CreateFloatOption(
                 OpenerOption.Range,
                 2.0f, 0.5f, 5.0f, 0.1f,
