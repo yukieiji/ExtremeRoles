@@ -1,0 +1,172 @@
+﻿using System.Collections.Generic;
+
+using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.RoleAbilityButton;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
+
+
+
+namespace ExtremeRoles.Roles.Solo.Impostor
+{
+    public class Smasher : SingleRoleBase, IRoleAbility
+    {
+        public enum SmasherOption
+        {
+            SmashPenaltyKillCool,
+        }
+
+        public RoleAbilityButtonBase Button
+        {
+            get => this.smashButton;
+            set
+            {
+                this.smashButton = value;
+            }
+        }
+
+        private RoleAbilityButtonBase smashButton;
+        private byte targetPlayerId;
+        private float prevKillCool;
+        private float penaltyKillCool;
+
+        public Smasher() : base(
+            ExtremeRoleId.Smasher,
+            ExtremeRoleType.Impostor,
+            ExtremeRoleId.Smasher.ToString(),
+            Palette.ImpostorRed,
+            true, false, true, true)
+        { }
+
+        public void CreateAbility()
+        {
+            this.CreateAbilityCountButton(
+                Translation.GetString("smash"),
+                HudManager.Instance.KillButton.graphic.sprite);
+        }
+
+        public bool IsAbilityUse()
+        {
+            this.targetPlayerId = byte.MaxValue;
+            var player = PlayerControl.LocalPlayer.FindClosestTarget(false);
+            if (player != null)
+            {
+                this.targetPlayerId = player.PlayerId;
+            }
+            return this.IsCommonUse() && this.targetPlayerId != byte.MaxValue;
+        }
+
+        public bool UseAbility()
+        {
+            PlayerControl killer = PlayerControl.LocalPlayer;
+            if (killer.Data.IsDead || !killer.CanMove) { return false; }
+
+            var role = ExtremeRoleManager.GetLocalPlayerRole();
+            var targetPlayerRole = ExtremeRoleManager.GameRole[this.targetPlayerId];
+            var target = Player.GetPlayerControlById(this.targetPlayerId);
+
+            bool canKill = role.TryRolePlayerKillTo(
+                killer, target);
+            if (!canKill) { return false; }
+
+            canKill = targetPlayerRole.TryRolePlayerKilledFrom(
+                target, killer);
+            if (!canKill) { return false; }
+
+            var multiAssignRole = role as MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    canKill = multiAssignRole.AnotherRole.TryRolePlayerKillTo(
+                        killer, target);
+                    if (!canKill) { return false; }
+                }
+            }
+
+            multiAssignRole = targetPlayerRole as MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    canKill = multiAssignRole.AnotherRole.TryRolePlayerKilledFrom(
+                        target, killer);
+                    if (!canKill) { return false; }
+                }
+            }
+
+
+            var bodyGuard = ExtremeRolesPlugin.GameDataStore.ShildPlayer.GetBodyGuardPlayerId(
+                target.PlayerId);
+
+            if (bodyGuard != byte.MaxValue)
+            {
+                target = Player.GetPlayerControlById(bodyGuard);
+                if (target == null)
+                {
+                    target = Player.GetPlayerControlById(this.targetPlayerId);
+                }
+                else if (target.Data.IsDead || target.Data.Disconnected)
+                {
+                    target = Player.GetPlayerControlById(this.targetPlayerId);
+                }
+            }
+
+            this.prevKillCool = PlayerControl.LocalPlayer.killTimer;
+
+            RPCOperator.Call(
+                PlayerControl.LocalPlayer.NetId,
+                RPCOperator.Command.UncheckedMurderPlayer,
+                new List<byte> { killer.PlayerId, target.PlayerId, byte.MaxValue });
+            RPCOperator.UncheckedMurderPlayer(
+                killer.PlayerId,
+                target.PlayerId,
+                byte.MaxValue);
+
+            if (this.penaltyKillCool > 0.0f)
+            {
+                if (!role.HasOtherKillCool)
+                {
+                    role.HasOtherKillCool = true;
+                    role.KillCoolTime = PlayerControl.GameOptions.KillCooldown;
+                }
+                role.KillCoolTime = role.KillCoolTime + this.penaltyKillCool;
+            }
+
+            PlayerControl.LocalPlayer.killTimer = this.prevKillCool;
+
+            return true;
+        }
+
+        protected override void CreateSpecificOption(
+            CustomOptionBase parentOps)
+        {
+            this.CreateAbilityCountOption(
+                parentOps, 1, 14);
+
+            CreateFloatOption(
+                SmasherOption.SmashPenaltyKillCool,
+                4.0f, 0.0f, 30f, 0.5f, parentOps,
+                format: OptionUnit.Second);
+
+        }
+
+        protected override void RoleSpecificInit()
+        {
+            this.RoleAbilityInit();
+            this.penaltyKillCool = OptionHolder.AllOption[
+                GetRoleOptionId(SmasherOption.SmashPenaltyKillCool)].GetValue();
+        }
+
+        public void RoleAbilityResetOnMeetingStart()
+        {
+            return;
+        }
+
+        public void RoleAbilityResetOnMeetingEnd()
+        {
+            return;
+        }
+    }
+}
