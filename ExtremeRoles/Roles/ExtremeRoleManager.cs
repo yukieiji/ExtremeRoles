@@ -36,6 +36,7 @@ namespace ExtremeRoles.Roles
         Bakary,
         CurseMaker,
         Fencer,
+        Opener,
 
         SpecialImpostor,
         Evolver,
@@ -119,6 +120,7 @@ namespace ExtremeRoles.Roles
                 new Bakary(),
                 new CurseMaker(),
                 new Fencer(),
+                new Opener(),
 
                 new SpecialImpostor(),
                 new Evolver(),
