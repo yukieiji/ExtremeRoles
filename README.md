@@ -127,5 +127,5 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 ボタンのアイコン画像はパブリックドメインの著作権が放棄された素材を元に作成しています。気に食わなくて差し替えたい場合は連絡を下さい
 
 ### 多言語対応について
-多言語対応は出来ますが、実装速度優先で開発しているため日本語だけしか実装されていません。別の言語に翻訳したいもしくは翻訳したという方は連絡を下さい
+多言語対応は出来ますが、実装速度優先で開発しているため日本語だけしか実装されていません。別の言語に翻訳したいもしくは翻訳したという方は連絡を下さい<br>
 EXRole can support multiple languages, but only Japanese is implemented because I prioritize the speed of implementation. Please contact me if you would like to translate into another language or if you have translated into another language.
