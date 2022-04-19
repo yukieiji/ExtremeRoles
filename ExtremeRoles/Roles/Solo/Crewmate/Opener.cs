@@ -38,7 +38,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ExtremeRoleId.Opener,
             ExtremeRoleType.Crewmate,
             ExtremeRoleId.Opener.ToString(),
-            ColorPalette.MaintainerBlue,
+            ColorPalette.OpenerSpringGreen,
             false, true, false, false)
         { }
 
