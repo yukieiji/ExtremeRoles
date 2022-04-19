@@ -68,13 +68,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             
             this.targetDoor = null;
 
-            Vector3 pos = PlayerControl.LocalPlayer.gameObject.transform.position;
-
             foreach (var door in ShipStatus.Instance.AllDoors)
             {
-                Vector3 doorPos = door.gameObject.transform.position;
-
-                if (Vector3.Distance(pos, doorPos) < this.range)
+                if (Vector3.Distance(
+                        PlayerControl.LocalPlayer.transform.position,
+                        door.transform.position) < this.range)
                 {
                     this.targetDoor = door;
                     break;
