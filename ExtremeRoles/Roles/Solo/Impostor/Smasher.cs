@@ -3,6 +3,7 @@
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.RoleAbilityButton;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -126,12 +127,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             if (this.penaltyKillCool > 0.0f)
             {
-                if (!role.HasOtherKillCool)
+                if (!this.HasOtherKillCool)
                 {
-                    role.HasOtherKillCool = true;
-                    role.KillCoolTime = PlayerControl.GameOptions.KillCooldown;
+                    this.HasOtherKillCool = true;
+                    this.KillCoolTime = PlayerControl.GameOptions.KillCooldown;
                 }
-                role.KillCoolTime = role.KillCoolTime + this.penaltyKillCool;
+                this.KillCoolTime = this.KillCoolTime + this.penaltyKillCool;
             }
 
             PlayerControl.LocalPlayer.killTimer = this.prevKillCool;
