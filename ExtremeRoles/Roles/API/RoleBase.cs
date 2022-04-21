@@ -616,7 +616,7 @@ namespace ExtremeRoles.Roles.API
             return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
         }
 
-        protected virtual void OverrideAnotherRoleSetting()
+        public virtual void OverrideAnotherRoleSetting()
         {
             this.CanKill = this.CanKill || this.AnotherRole.CanKill;
             this.HasTask = this.HasTask || this.AnotherRole.HasTask;

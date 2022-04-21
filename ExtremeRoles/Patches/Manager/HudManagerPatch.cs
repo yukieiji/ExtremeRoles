@@ -89,6 +89,7 @@ namespace ExtremeRoles.Patches.Manager
                 {
                     buttonCreate(multiAssignRole.AnotherRole);
                     roleUpdate(multiAssignRole.AnotherRole);
+                    multiAssignRole.OverrideAnotherRoleSetting();
                 }
             }
             
