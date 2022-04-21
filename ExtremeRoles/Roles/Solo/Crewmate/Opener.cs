@@ -135,11 +135,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             CreateIntOption(
                 OpenerOption.ReduceRate,
                 45, 5, 95, 1,
-                parentOps);
+                parentOps,
+                format: OptionUnit.Percentage);
             CreateIntOption(
                 OpenerOption.PlusAbility,
                 5, 1, 10, 1,
-                parentOps);
+                parentOps,
+                format: OptionUnit.Second);
         }
 
         protected override void RoleSpecificInit()
