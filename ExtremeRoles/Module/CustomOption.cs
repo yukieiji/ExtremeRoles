@@ -443,7 +443,7 @@ namespace ExtremeRoles.Module
             return string.Join("\n", options);
         }
 
-        public static void childrenOptionToString(
+        private static void childrenOptionToString(
             CustomOptionBase option, ref List<string> options, int indentCount = 0)
         {
             foreach (CustomOptionBase op in option.Children)
