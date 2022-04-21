@@ -3,6 +3,8 @@ name: 役職追加要求/New Role Request
 about: 新しい役職追加用のテンプレート/Template of New Role Request
 labels: roleRequest
 ---
+<!-- 私のリソース的に5月下旬頃にリリースされるv2.1.0.0まで提案された役職の実装は行えません、ご了承下さい。 -->
+
 
 ### 役職名 / Role Name
 

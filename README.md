@@ -10,6 +10,7 @@ AmongUsの上級者(初心者)向けのロール追加MOD、主な特徴とし�
 * 多彩なゲームオプション(シャッフルの強度、エンジニアのベント調整など)
 * MODオプションのインポート/エクスポート機能
 * MODの更新/バージョンチェック機能
+* 多言語対応(現在は日本語のみ/only Jp now!!)
 
 ## 追加役職一覧(Extreme Roles v2.0.3.0時点、今後も追加予定)
 |  クルー  |  インポスター  | ニュートラル |
@@ -41,6 +42,8 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 * 誰でも簡単にスキンを追加、テスト可能
 * 誰でも簡単にネームプレートを追加、テスト可能
 * 誰でも簡単に色の追加テストを可能
+
+#### 自分のスキンを作りたい、作ったスキンを公開したいという方はTwitter等に連絡下さい！！
 
 ## 現在確認されている不具合
 
@@ -122,3 +125,7 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 
 ### ボタンのアイコンについて
 ボタンのアイコン画像はパブリックドメインの著作権が放棄された素材を元に作成しています。気に食わなくて差し替えたい場合は連絡を下さい
+
+### 多言語対応について
+多言語対応は出来ますが、実装速度優先で開発しているため日本語だけしか実装されていません。別の言語に翻訳したいもしくは翻訳したという方は連絡を下さい<br>
+EXRole can support multiple languages, but only Japanese is implemented because I prioritize the speed of implementation. Please contact me if you would like to translate into another language or if you have translated into another language.
