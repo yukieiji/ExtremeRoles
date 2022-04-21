@@ -45,7 +45,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
-                Translation.GetString("open"),
+                Translation.GetString("openDoor"),
                 Loader.CreateSpriteFromResources(
                     Path.TestButton));
             this.Button.SetLabelToCrewmate();
