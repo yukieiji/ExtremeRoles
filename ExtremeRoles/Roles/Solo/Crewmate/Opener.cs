@@ -141,7 +141,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 OpenerOption.PlusAbility,
                 5, 1, 10, 1,
                 parentOps,
-                format: OptionUnit.Second);
+                format: OptionUnit.Shot);
         }
 
         protected override void RoleSpecificInit()
