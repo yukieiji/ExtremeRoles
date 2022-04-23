@@ -109,14 +109,21 @@ namespace ExtremeSkins.SkinManager
             {
                 if (!string.IsNullOrEmpty(hat))
                 {
-                    byte[] byteArray = File.ReadAllBytes(
-                        string.Concat(hat, @"\", InfoFileName));
+                    string infoJsonFile = string.Concat(hat, @"\", InfoFileName);
+
+                    if (!File.Exists(infoJsonFile))
+                    {
+                        ExtremeSkinsPlugin.Logger.LogInfo(
+                            $"Error Detected!!:Can't load info.json for:{infoJsonFile}");
+                        continue;
+                    }
+
+                    byte[] byteArray = File.ReadAllBytes(infoJsonFile);
                     string json = System.Text.Encoding.UTF8.GetString(byteArray);
                     JObject parseJson = JObject.Parse(json);
 
                     string name = parseJson["Name"].ToString();
-                    string productId = string.Concat(
-                        "hat_", name);
+                    string productId = string.Concat("hat_", name);
 
                     if (HatData.ContainsKey(productId)) { continue; }
 
