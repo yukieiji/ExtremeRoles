@@ -251,13 +251,13 @@ namespace ExtremeSkins.SkinManager
 
             if (fileResponse.StatusCode != HttpStatusCode.OK)
             {
-                ExtremeSkinsPlugin.Logger.LogInfo($"Can't load {fileName}");
+                ExtremeSkinsPlugin.Logger.LogInfo($"Can't load: {author}/{fileName}");
                 return fileResponse.StatusCode;
             }
 
             if (fileResponse.Content == null)
             {
-                ExtremeSkinsPlugin.Logger.LogInfo("Server returned no data: " + fileResponse.StatusCode.ToString());
+                ExtremeSkinsPlugin.Logger.LogInfo($"Server returned no data: {fileResponse.StatusCode}");
                 return HttpStatusCode.ExpectationFailed;
             }
 

@@ -257,7 +257,7 @@ namespace ExtremeSkins.SkinManager
 
             if (hatInfoResponse.Content == null)
             {
-                System.Console.WriteLine("Server returned no data: " + hatInfoResponse.StatusCode.ToString());
+                System.Console.WriteLine($"Server returned no data: {hatInfoResponse.StatusCode}");
                 return HttpStatusCode.ExpectationFailed;
             }
 
@@ -294,13 +294,13 @@ namespace ExtremeSkins.SkinManager
 
             if (fileResponse.StatusCode != HttpStatusCode.OK)
             {
-                ExtremeSkinsPlugin.Logger.LogInfo($"Can't load {fileName}");
+                ExtremeSkinsPlugin.Logger.LogInfo($"Can't load: {hat}/{fileName}");
                 return fileResponse.StatusCode;
             }
 
             if (fileResponse.Content == null)
             {
-                ExtremeSkinsPlugin.Logger.LogInfo("Server returned no data: " + fileResponse.StatusCode.ToString());
+                ExtremeSkinsPlugin.Logger.LogInfo($"Server returned no data: {fileResponse.StatusCode}");
                 return HttpStatusCode.ExpectationFailed;
             }
 
