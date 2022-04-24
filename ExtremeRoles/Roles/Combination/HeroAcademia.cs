@@ -7,9 +7,23 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.RoleAbilityButton;
+using ExtremeRoles.Resources;
 
 namespace ExtremeRoles.Roles.Combination
 {
+    internal class AllPlayerArrows
+    {
+        public void SetActive(bool active)
+        {
+
+        }
+
+        public void Update()
+        {
+
+        }
+    }
+
     public class HeroAcademia : ConstCombinationRoleManagerBase
     {
         public const string Name = "HeroAca";
@@ -25,6 +39,18 @@ namespace ExtremeRoles.Roles.Combination
 
     public class Hero : MultiAssignRoleBase, IRoleAbility, IRoleUpdate
     {
+        public RoleAbilityButtonBase Button
+        {
+            get => this.searchButton;
+            set
+            {
+                this.searchButton = value;
+            }
+        }
+
+        private RoleAbilityButtonBase searchButton;
+        private AllPlayerArrows arrow;
+
         public Hero(
             ) : base(
                 ExtremeRoleId.Hero,
@@ -34,40 +60,41 @@ namespace ExtremeRoles.Roles.Combination
                 false, true, false, false)
         { }
 
-        public RoleAbilityButtonBase Button
-        { 
-            get => throw new System.NotImplementedException();
-            set => throw new System.NotImplementedException();
-        }
-
         public void CreateAbility()
         {
-            throw new System.NotImplementedException();
+            this.CreateNormalAbilityButton(
+                Translation.GetString("search"),
+                Loader.CreateSpriteFromResources(
+                    Path.TestButton),
+                abilityCleanUp: CleanUp);
         }
 
-        public bool IsAbilityUse()
-        {
-            throw new System.NotImplementedException();
-        }
+        public bool IsAbilityUse() => this.IsCommonUse();
 
         public void RoleAbilityResetOnMeetingEnd()
         {
-            throw new System.NotImplementedException();
+            return;
         }
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            throw new System.NotImplementedException();
+            arrow.SetActive(false);
         }
 
         public void Update(PlayerControl rolePlayer)
         {
-            throw new System.NotImplementedException();
+            arrow.Update();
         }
 
         public bool UseAbility()
         {
-            throw new System.NotImplementedException();
+            arrow.SetActive(true);
+            return true;
+        }
+
+        public void CleanUp()
+        {
+            arrow.SetActive(false);
         }
 
         protected override void CreateSpecificOption(
@@ -81,8 +108,20 @@ namespace ExtremeRoles.Roles.Combination
             throw new System.NotImplementedException();
         }
     }
-    public class Villain : MultiAssignRoleBase, IRoleAbility
+    public class Villain : MultiAssignRoleBase, IRoleAbility, IRoleUpdate
     {
+        public RoleAbilityButtonBase Button
+        {
+            get => this.searchButton;
+            set
+            {
+                this.searchButton = value;
+            }
+        }
+
+        private RoleAbilityButtonBase searchButton;
+        private AllPlayerArrows arrow;
+
         public Villain(
             ) : base(
                 ExtremeRoleId.Villain,
@@ -92,35 +131,41 @@ namespace ExtremeRoles.Roles.Combination
                 true, false, true, true)
         { }
 
-        public RoleAbilityButtonBase Button
-        {
-            get => throw new System.NotImplementedException();
-            set => throw new System.NotImplementedException();
-        }
-
         public void CreateAbility()
         {
-            throw new System.NotImplementedException();
+            this.CreateNormalAbilityButton(
+                Translation.GetString("search"),
+                Loader.CreateSpriteFromResources(
+                    Path.TestButton),
+                abilityCleanUp: CleanUp);
         }
 
-        public bool IsAbilityUse()
-        {
-            throw new System.NotImplementedException();
-        }
+        public bool IsAbilityUse() => this.IsCommonUse();
 
         public void RoleAbilityResetOnMeetingEnd()
         {
-            throw new System.NotImplementedException();
+            return;
         }
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            throw new System.NotImplementedException();
+            arrow.SetActive(false);
+        }
+
+        public void Update(PlayerControl rolePlayer)
+        {
+            arrow.Update();
         }
 
         public bool UseAbility()
         {
-            throw new System.NotImplementedException();
+            arrow.SetActive(true);
+            return true;
+        }
+
+        public void CleanUp()
+        {
+            arrow.SetActive(false);
         }
 
         protected override void CreateSpecificOption(
@@ -137,6 +182,17 @@ namespace ExtremeRoles.Roles.Combination
     }
     public class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleWinPlayerModifier
     {
+        public RoleAbilityButtonBase Button
+        {
+            get => this.callButton;
+            set
+            {
+                this.callButton = value;
+            }
+        }
+
+        private RoleAbilityButtonBase callButton;
+
         public Vigilante(
             ) : base(
                 ExtremeRoleId.Vigilante,
@@ -145,12 +201,6 @@ namespace ExtremeRoles.Roles.Combination
                 Palette.ImpostorRed,
                 false, false, false, false)
         { }
-
-        public RoleAbilityButtonBase Button
-        { 
-            get => throw new System.NotImplementedException();
-            set => throw new System.NotImplementedException();
-        }
 
         public void CreateAbility()
         {
