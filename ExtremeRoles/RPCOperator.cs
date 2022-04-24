@@ -11,7 +11,6 @@ namespace ExtremeRoles
         {
             // メインコントール
             Initialize = 60,
-            RoleSetUpComplete,
             ForceEnd,
             SetNormalRole,
             SetCombinationRole,
