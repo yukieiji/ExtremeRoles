@@ -131,7 +131,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             var curseMaker = ExtremeRoleManager.GetSafeCastedRole<CurseMaker>(
                 rolePlayerId);
 
-            var role = ExtremeRoleManager.GetLocalPlayerRole();
+            var role = ExtremeRoleManager.GameRole[targetPlayerId];
 
             float baseKillCool = PlayerControl.GameOptions.KillCooldown;
 
@@ -141,6 +141,23 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
             role.HasOtherKillCool = true;
             role.KillCoolTime = baseKillCool + curseMaker.additionalKillCool;
+
+            var multiAssignRole = role as MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    baseKillCool = PlayerControl.GameOptions.KillCooldown;
+
+                    if (multiAssignRole.AnotherRole.HasOtherKillCool)
+                    {
+                        baseKillCool = multiAssignRole.AnotherRole.KillCoolTime;
+                    }
+                    multiAssignRole.AnotherRole.HasOtherKillCool = true;
+                    multiAssignRole.AnotherRole.KillCoolTime = baseKillCool + curseMaker.additionalKillCool;
+                }
+            }
+
 
             player.killTimer = role.KillCoolTime;
         }
