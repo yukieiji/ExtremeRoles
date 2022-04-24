@@ -22,7 +22,10 @@ namespace ExtremeRoles.Roles
         Marlin,
         Lover,
         Supporter,
-        
+        Hero,
+        Villain,
+        Vigilante,
+
         SpecialCrew,
         Sheriff,
         Maintainer,
