@@ -46,6 +46,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 this.textPopUp.Clear();
             }
+            if (this.abilityText != null)
+            {
+                this.abilityText.gameObject.SetActive(false);
+            }
         }
 
         public void HockMuderPlayer(
