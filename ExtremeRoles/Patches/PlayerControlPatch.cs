@@ -880,6 +880,10 @@ namespace ExtremeRoles.Patches
                     byte crackTarget = reader.ReadByte();
                     RPCOperator.CrackerCrackDeadBody(crackerId, crackTarget);
                     break;
+                case RPCOperator.Command.MeryAcivateVent:
+                    int maryCampIndex = reader.ReadInt32();
+                    RPCOperator.MaryActiveVent(maryCampIndex);
+                    break;
                 case RPCOperator.Command.SlaveDriverSetNewTask:
                     byte slaveDriverId = reader.ReadByte();
                     int replaceTaskIndex = reader.ReadInt32();
