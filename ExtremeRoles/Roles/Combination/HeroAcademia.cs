@@ -14,7 +14,7 @@ namespace ExtremeRoles.Roles.Combination
     {
         public const string Name = "HeroAca";
         public HeroAcademia() : base(
-            Name, new Color(255f, 255f, 255f), 2,
+            Name, new Color(255f, 255f, 255f), 3,
             OptionHolder.MaxImposterNum)
         {
             this.Roles.Add(new Hero());
