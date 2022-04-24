@@ -182,6 +182,13 @@ namespace ExtremeRoles.Roles.Combination
     }
     public class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleWinPlayerModifier
     {
+        public enum VigilanteCondition
+        {
+            NewLawInTheShip,
+            NewHeroForTheShip,
+            NewVillainForTheShip,
+        }
+
         public RoleAbilityButtonBase Button
         {
             get => this.callButton;
