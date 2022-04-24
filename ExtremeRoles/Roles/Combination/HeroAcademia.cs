@@ -184,6 +184,7 @@ namespace ExtremeRoles.Roles.Combination
     {
         public enum VigilanteCondition
         {
+            None,
             NewLawInTheShip,
             NewHeroForTheShip,
             NewVillainForTheShip,
