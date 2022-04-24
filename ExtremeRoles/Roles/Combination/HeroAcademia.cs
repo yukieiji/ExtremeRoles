@@ -135,7 +135,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
     }
-    public class Vigilante : MultiAssignRoleBase, IRoleAbility
+    public class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleWinPlayerModifier
     {
         public Vigilante(
             ) : base(
@@ -158,6 +158,14 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         public bool IsAbilityUse()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void ModifiedWinPlayer(
+            GameData.PlayerInfo rolePlayerInfo,
+            GameOverReason reason,
+            Il2CppSystem.Collections.Generic.List<WinningPlayerData> winner)
         {
             throw new System.NotImplementedException();
         }
