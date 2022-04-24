@@ -85,6 +85,7 @@ namespace ExtremeRoles.Module
 
             clearUpdateObject();
             CustomVent.Clear();
+            History.Clear();
 
             MeetingsCount = 0;
             WinGameControlId = int.MaxValue;
