@@ -200,6 +200,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         private RoleAbilityButtonBase callButton;
+        private VigilanteCondition condition;
 
         public Vigilante(
             ) : base(
@@ -209,6 +210,16 @@ namespace ExtremeRoles.Roles.Combination
                 Palette.ImpostorRed,
                 false, false, false, false)
         { }
+
+        public static void SetCondition(
+            VigilanteCondition cond)
+        {
+            var vigilante = ExtremeRoleManager.GetLocalPlayerRole() as Vigilante;
+            if (vigilante != null)
+            {
+                vigilante.condition = cond;
+            }
+        }
 
         public void CreateAbility()
         {
