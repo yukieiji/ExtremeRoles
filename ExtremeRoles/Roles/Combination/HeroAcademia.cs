@@ -184,7 +184,7 @@ namespace ExtremeRoles.Roles.Combination
     {
         public enum VigilanteCondition
         {
-            None,
+            None = byte.MinValue,
             NewLawInTheShip,
             NewHeroForTheShip,
             NewVillainForTheShip,
