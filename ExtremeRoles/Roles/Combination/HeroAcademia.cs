@@ -56,7 +56,7 @@ namespace ExtremeRoles.Roles.Combination
                 ExtremeRoleId.Hero,
                 ExtremeRoleType.Crewmate,
                 ExtremeRoleId.Hero.ToString(),
-                Palette.ImpostorRed,
+                ColorPalette.HeroAmaIro,
                 false, true, false, false)
         { }
 
@@ -207,7 +207,7 @@ namespace ExtremeRoles.Roles.Combination
                 ExtremeRoleId.Vigilante,
                 ExtremeRoleType.Neutral,
                 ExtremeRoleId.Vigilante.ToString(),
-                Palette.ImpostorRed,
+                ColorPalette.VigilanteFujiIro,
                 false, false, false, false)
         { }
 
