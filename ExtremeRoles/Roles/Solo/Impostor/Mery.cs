@@ -145,7 +145,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        public List<Vent> ActiveVent = new List<Vent>();
         public int ActiveNum;
         public float ActiveRange;
 
