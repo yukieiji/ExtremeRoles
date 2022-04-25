@@ -76,7 +76,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
         }
     }
 #endif
-#if WITHNAMEPLATE
+#if WITHVISOR
     [HarmonyPatch(typeof(HatManager), nameof(HatManager.GetVisorById))]
     public static class HatManagerGetVisorByIdPatch
     {

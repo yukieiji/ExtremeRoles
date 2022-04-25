@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace ExtremeSkins.Module
 {
+#if WITHVISOR
     public class CustomVisor : ICustomCosmicData<VisorData>
     {
 
@@ -83,4 +84,5 @@ namespace ExtremeSkins.Module
             return sprite;
         }
     }
+#endif
 }

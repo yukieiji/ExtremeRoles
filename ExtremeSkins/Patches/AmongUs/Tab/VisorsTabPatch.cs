@@ -10,7 +10,7 @@ using ExtremeSkins.SkinManager;
 
 namespace ExtremeSkins.Patches.AmongUs.Tab
 {
-#if WITHNAMEPLATE
+#if WITHVISOR
     [HarmonyPatch]
     public class VisorsTabPatch
     {

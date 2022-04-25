@@ -14,7 +14,7 @@ using ExtremeSkins.Module;
 
 namespace ExtremeSkins.SkinManager
 {
-#if WITHNAMEPLATE
+#if WITHVISOR
     public class ExtremeVisorManager
     {
         public static Dictionary<string, CustomVisor> VisorData = new Dictionary<string, CustomVisor>();

@@ -8,7 +8,7 @@
         <VersionSuffix>AmongUsV20220329</VersionSuffix>
         <Description>Extreme Skins for Extreme Roles</Description>
         <Authors>yukieiji</Authors>
-        <Configurations>Debug;Release;Release_NOHAT;Release_NONAMEPLATE;Release_NOHAT_AND_NONAMEPLATE;Debug_NOHAT;Debug_NONAMEPLATE;Debug_NONAMEPLATE_AND_NOHAT;Debug_NOHAT_AND_NONAMEPLATE</Configurations>
+        <Configurations>Debug;Release;Release_NOHAT;Release_NONAMEPLATE;Release_NOHAT_AND_NONAMEPLATE;Debug_NOHAT;Debug_NONAMEPLATE;Debug_NONAMEPLATE_AND_NOHAT;Debug_NOHAT_AND_NONAMEPLATE_ANDDEBUG_NOVISOR;DEBUG_NOVISOR;Relese_NOVISOR</Configurations>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -19,35 +19,47 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-      <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE</DefineConstants>
+      <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE; WITHVISOR</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_NOVISOR|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE; WITHVISOR</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_NONAMEPLATE|AnyCPU'">
-      <DefineConstants>$(DefineConstants)TRACE; WITHHAT</DefineConstants>
+      <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE; WITHVISOR</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_NONAMEPLATE_AND_NOHAT|AnyCPU'">
-      <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE</DefineConstants>
+      <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE; WITHVISOR</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_NOHAT|AnyCPU'">
-      <DefineConstants>$(DefineConstants)TRACE; WITHNAMEPLATE</DefineConstants>
+      <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE; WITHVISOR</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-      <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE</DefineConstants>
+      <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE; WITHVISOR</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Relese_NOVISOR|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE; WITHVISOR</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_NOHAT_AND_NONAMEPLATE|AnyCPU'">
-      <DefineConstants>$(DefineConstants)TRACE;</DefineConstants>
+      <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE; WITHVISOR</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_NONAMEPLATE|AnyCPU'">
-      <DefineConstants>$(DefineConstants)TRACE; WITHHAT;</DefineConstants>
+      <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE; WITHVISOR</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_NOHAT|AnyCPU'">
-      <DefineConstants>$(DefineConstants)TRACE; WITHNAMEPLATE</DefineConstants>
+      <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE; WITHVISOR</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_NOHAT_AND_NONAMEPLATE_ANDDEBUG_NOVISOR|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE; WITHVISOR</DefineConstants>
     </PropertyGroup>
   
 

@@ -41,7 +41,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
                 ExtremeNamePlateManager.Load();
             }
 #endif
-#if WITHNAMEPLATE
+#if WITHVISOR
             if (!ExtremeVisorManager.IsLoaded)
             {
                 /*
