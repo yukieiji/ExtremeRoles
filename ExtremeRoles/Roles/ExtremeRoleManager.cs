@@ -166,6 +166,14 @@ namespace ExtremeRoles.Roles
         public static Dictionary<
             byte, SingleRoleBase> GameRole = new Dictionary<byte, SingleRoleBase> ();
 
+        public static readonly HashSet<ExtremeRoleId> WinCheckDisableRole = new HashSet<ExtremeRoleId>()
+        {
+            ExtremeRoleId.Jackal,
+            ExtremeRoleId.Assassin,
+            ExtremeRoleId.Hero,
+            ExtremeRoleId.Villain
+        };
+
         private static int roleControlId = 0;
 
         public enum ReplaceOperation
@@ -222,10 +230,23 @@ namespace ExtremeRoles.Roles
 
         public static bool IsDisableWinCheckRole(SingleRoleBase role)
         {
-            var assassin = role as Assassin;
-            var jackal = role as Jackal;
-
-            return assassin != null || jackal != null;
+            var mainRoleCheckResult = WinCheckDisableRole.Contains(role.Id);
+            var multiAssignRole = role as MultiAssignRoleBase;
+            if (multiAssignRole == null)
+            {
+                return mainRoleCheckResult;
+            }
+            else
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    return WinCheckDisableRole.Contains(multiAssignRole.AnotherRole.Id);
+                }
+                else
+                {
+                    return mainRoleCheckResult;
+                }
+            }
         }
         public static bool IsAliveWinNeutral(
             SingleRoleBase role, GameData.PlayerInfo playerInfo)
