@@ -13,14 +13,59 @@ namespace ExtremeRoles.Roles.Combination
 {
     internal class AllPlayerArrows
     {
-        public void SetActive(bool active)
+        private Dictionary<byte, PlayerControl> player = new Dictionary<byte, PlayerControl>();
+        private Dictionary<byte, Arrow> arrow = new Dictionary<byte, Arrow>();
+        private Dictionary<byte, TMPro.TextMeshPro> distance = new Dictionary<byte, TMPro.TextMeshPro>();
+
+        public AllPlayerArrows(byte rolePlayerId)
         {
+            this.player.Clear();
+            this.arrow.Clear();
+            this.distance.Clear();
+            
+            foreach (var player in PlayerControl.AllPlayerControls)
+            {
+                if (player.PlayerId != rolePlayerId)
+                {
+                    var playerArrow = new Arrow(
+                        new Color32(
+                            byte.MaxValue,
+                            byte.MaxValue,
+                            byte.MaxValue,
+                            byte.MaxValue));
+                    playerArrow.SetActive(false);
+
+                    var text = GameObject.Instantiate(
+                        Prefab.Text, playerArrow.Main.transform);
+                    text.fontSize = 2;
+                    text.alignment = TMPro.TextAlignmentOptions.Center;
+                    text.transform.position = text.transform.position + new Vector3(0, 0, 800f);
+
+                    this.distance.Add(player.PlayerId, text);
+                    this.player.Add(player.PlayerId, player);
+                    this.arrow.Add(player.PlayerId, playerArrow);
+                }
+            }
 
         }
 
-        public void Update()
+        public void SetActive(bool active)
         {
+            foreach (var playerId in this.player.Keys)
+            {
+                this.arrow[playerId].SetActive(active);
+                this.distance[playerId].gameObject.SetActive(active);
+            }
+        }
 
+        public void Update(Vector2 rolePlayerPos)
+        {
+            foreach(var (playerId, playerCont) in this.player)
+            {
+                var diss = Vector2.Distance(rolePlayerPos, playerCont.GetTruePosition());
+                this.distance[playerId].text = $"{diss:F1}";
+                this.arrow[playerId].UpdateTarget(playerCont.transform.position);
+            }
         }
     }
 
@@ -78,23 +123,34 @@ namespace ExtremeRoles.Roles.Combination
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            arrow.SetActive(false);
+            this.arrow.SetActive(false);
         }
 
         public void Update(PlayerControl rolePlayer)
         {
-            arrow.Update();
+            if (this.Button != null)
+            {
+                if (this.Button.IsAbilityActive() && this.arrow != null)
+                {
+                    this.arrow.Update(rolePlayer.GetTruePosition());
+                }
+            }
         }
 
         public bool UseAbility()
         {
-            arrow.SetActive(true);
+            if (this.arrow == null)
+            {
+                this.arrow = new AllPlayerArrows(
+                    PlayerControl.LocalPlayer.PlayerId);
+            }
+            this.arrow.SetActive(true);
             return true;
         }
 
         public void CleanUp()
         {
-            arrow.SetActive(false);
+            this.arrow.SetActive(false);
         }
 
         protected override void CreateSpecificOption(
@@ -149,23 +205,34 @@ namespace ExtremeRoles.Roles.Combination
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            arrow.SetActive(false);
+            this.arrow.SetActive(false);
         }
 
         public void Update(PlayerControl rolePlayer)
         {
-            arrow.Update();
+            if (this.Button != null)
+            {
+                if (this.Button.IsAbilityActive() && this.arrow != null)
+                {
+                    this.arrow.Update(rolePlayer.GetTruePosition());
+                }
+            }
         }
 
         public bool UseAbility()
         {
-            arrow.SetActive(true);
+            if (this.arrow == null)
+            {
+                this.arrow = new AllPlayerArrows(
+                    PlayerControl.LocalPlayer.PlayerId);
+            }
+            this.arrow.SetActive(true);
             return true;
         }
 
         public void CleanUp()
         {
-            arrow.SetActive(false);
+            this.arrow.SetActive(false);
         }
 
         protected override void CreateSpecificOption(
