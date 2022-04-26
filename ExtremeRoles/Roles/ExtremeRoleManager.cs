@@ -108,7 +108,7 @@ namespace ExtremeRoles.Roles
     {
         public const int OptionOffsetPerRole = 50;
 
-        public static readonly List<ExtremeRoleId> SpecialWinCheckRole = new List<ExtremeRoleId>()
+        public static readonly HashSet<ExtremeRoleId> SpecialWinCheckRole = new HashSet<ExtremeRoleId>()
         {
             ExtremeRoleId.Lover,
             ExtremeRoleId.Yandere,
