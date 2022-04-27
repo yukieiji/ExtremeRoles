@@ -49,7 +49,7 @@ namespace ExtremeSkins.Module
         {
             if (this.visor != null) { return this.visor; }
 
-            this.visor = new VisorData();
+            this.visor = ScriptableObject.CreateInstance<VisorData>();
             this.visor.name = Helper.Translation.GetString(this.Name);
             this.visor.displayOrder = 99;
             this.visor.ProductId = this.id;
@@ -58,7 +58,7 @@ namespace ExtremeSkins.Module
             this.visor.NotInStore = true;
 
             // 256×64の画像
-            this.visor.viewData.viewData = new VisorViewData();
+            this.visor.viewData.viewData = ScriptableObject.CreateInstance<VisorViewData>();
             this.visor.viewData.viewData.IdleFrame = loadVisorSprite(this.imgPath);
 
             return this.visor;

@@ -50,7 +50,7 @@ namespace ExtremeSkins.Module
         {
             if (this.namePlate != null) { return this.namePlate; }
 
-            this.namePlate = new NamePlateData();
+            this.namePlate = ScriptableObject.CreateInstance<NamePlateData>();
             this.namePlate.name = Helper.Translation.GetString(this.Name);
             this.namePlate.displayOrder = 99;
             this.namePlate.ProductId = this.id;
@@ -58,7 +58,7 @@ namespace ExtremeSkins.Module
             this.namePlate.Free = true;
             this.namePlate.NotInStore = true;
 
-            this.namePlate.viewData.viewData = new NamePlateViewData();
+            this.namePlate.viewData.viewData = ScriptableObject.CreateInstance<NamePlateViewData>();
             this.namePlate.viewData.viewData.Image = loadNamePlateSprite(this.imgPath);
 
             return this.namePlate;
