@@ -84,6 +84,13 @@ namespace ExtremeRoles.Roles.Combination
 
     public class Hero : MultiAssignRoleBase, IRoleAbility, IRoleUpdate
     {
+        public enum OneForAllCondition
+        {
+            NoGuard = byte.MinValue,
+            FeatKill,
+            FeatButtonAbility
+        }
+
         public RoleAbilityButtonBase Button
         {
             get => this.searchButton;
@@ -95,6 +102,7 @@ namespace ExtremeRoles.Roles.Combination
 
         private RoleAbilityButtonBase searchButton;
         private AllPlayerArrows arrow;
+        private OneForAllCondition cond;
 
         public Hero(
             ) : base(
@@ -123,17 +131,31 @@ namespace ExtremeRoles.Roles.Combination
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            this.arrow.SetActive(false);
+            if (this.arrow != null)
+            {
+                this.arrow.SetActive(false);
+            }
         }
 
         public void Update(PlayerControl rolePlayer)
         {
-            if (this.Button != null)
+            switch (this.cond)
             {
-                if (this.Button.IsAbilityActive() && this.arrow != null)
-                {
-                    this.arrow.Update(rolePlayer.GetTruePosition());
-                }
+                case OneForAllCondition.FeatKill:
+                    this.CanKill = true;
+                    break;
+                case OneForAllCondition.FeatButtonAbility:
+                    this.CanKill = true;
+                    if (this.Button != null)
+                    {
+                        if (this.Button.IsAbilityActive() && this.arrow != null)
+                        {
+                            this.arrow.Update(rolePlayer.GetTruePosition());
+                        }
+                    }
+                    break;
+                default:
+                    break;
             }
         }
 
