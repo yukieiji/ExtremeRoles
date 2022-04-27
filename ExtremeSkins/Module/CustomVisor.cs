@@ -57,6 +57,7 @@ namespace ExtremeSkins.Module
             this.visor.Free = true;
             this.visor.NotInStore = true;
 
+            // 256×64の画像
             this.visor.viewData.viewData = new VisorViewData();
             this.visor.viewData.viewData.IdleFrame = loadVisorSprite(this.imgPath);
 
