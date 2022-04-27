@@ -188,7 +188,7 @@ namespace ExtremeRoles.Module
             string roleFullDesc;
             string roleText;
 
-            foreach (var role in Roles.ExtremeRoleManager.NormalRole)
+            foreach (var role in Roles.ExtremeRoleManager.NormalRole.Values)
             {
                 optionId = role.GetRoleOptionOffset();
                 colorRoleName = role.GetColoredRoleName();

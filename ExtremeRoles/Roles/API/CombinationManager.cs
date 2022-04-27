@@ -85,7 +85,7 @@ namespace ExtremeRoles.Roles.API
             foreach(var checkRole in this.Roles)
             {
 
-                if (checkRole.BytedRoleId != roleId) { continue; }
+                if ((byte)checkRole.Id != roleId) { continue; }
 
                 checkRole.CanHasAnotherRole = OptionHolder.AllOption[
                     GetRoleOptionId(
@@ -246,7 +246,7 @@ namespace ExtremeRoles.Roles.API
 
             MultiAssignRoleBase role = null;
             
-            if (this.BaseRole.BytedRoleId != roleId) { return role; }
+            if ((byte)this.BaseRole.Id != roleId) { return role; }
 
             this.BaseRole.CanHasAnotherRole = OptionHolder.AllOption[
                 GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign)].GetValue();

@@ -104,45 +104,45 @@ namespace ExtremeRoles.Roles
             ExtremeRoleId.Yandere,
         };
 
-        public static readonly List<
-            SingleRoleBase> NormalRole = new List<SingleRoleBase>()
+        public static readonly Dictionary<
+            byte, SingleRoleBase> NormalRole = new Dictionary<byte, SingleRoleBase>()
             {
-                new SpecialCrew(),
-                new Sheriff(),
-                new Maintainer(),
-                new Neet(),
-                new Watchdog(),
-                new Supervisor(),
-                new BodyGuard(),
-                new Whisper(),
-                new TimeMaster(),
-                new Agency(),
-                new Bakary(),
-                new CurseMaker(),
-                new Fencer(),
-                new Opener(),
+                {(byte)ExtremeRoleId.SpecialCrew, new SpecialCrew()},
+                {(byte)ExtremeRoleId.Sheriff    , new Sheriff()},
+                {(byte)ExtremeRoleId.Maintainer , new Maintainer()},
+                {(byte)ExtremeRoleId.Neet       , new Neet()},
+                {(byte)ExtremeRoleId.Watchdog   , new Watchdog()},
+                {(byte)ExtremeRoleId.Supervisor , new Supervisor()},
+                {(byte)ExtremeRoleId.BodyGuard  , new BodyGuard()},
+                {(byte)ExtremeRoleId.Whisper    , new Whisper()},
+                {(byte)ExtremeRoleId.TimeMaster , new TimeMaster()},
+                {(byte)ExtremeRoleId.Agency     , new Agency()},
+                {(byte)ExtremeRoleId.Bakary     , new Bakary()},
+                {(byte)ExtremeRoleId.CurseMaker , new CurseMaker()},
+                {(byte)ExtremeRoleId.Fencer     , new Fencer()},
+                {(byte)ExtremeRoleId.Opener     , new Opener()},
 
-                new SpecialImpostor(),
-                new Evolver(),
-                new Carrier(),
-                new PsychoKiller(),
-                new BountyHunter(),
-                new Painter(),
-                new Faker(),
-                new OverLoader(),
-                new Cracker(),
-                new Bomber(),
-                new Mery(),
-                new SlaveDriver(),
-                new SandWorm(),
-                new Smasher(),
+                {(byte)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
+                {(byte)ExtremeRoleId.Evolver        , new Evolver()},
+                {(byte)ExtremeRoleId.Carrier        , new Carrier()},
+                {(byte)ExtremeRoleId.PsychoKiller   , new PsychoKiller()},
+                {(byte)ExtremeRoleId.BountyHunter   , new BountyHunter()},
+                {(byte)ExtremeRoleId.Painter        , new Painter()},
+                {(byte)ExtremeRoleId.Faker          , new Faker()},
+                {(byte)ExtremeRoleId.OverLoader     , new OverLoader()},
+                {(byte)ExtremeRoleId.Cracker        , new Cracker()},
+                {(byte)ExtremeRoleId.Bomber         , new Bomber()},
+                {(byte)ExtremeRoleId.Mery           , new Mery()},
+                {(byte)ExtremeRoleId.SlaveDriver    , new SlaveDriver()},
+                {(byte)ExtremeRoleId.SandWorm       , new SandWorm()},
+                {(byte)ExtremeRoleId.Smasher        , new Smasher()},
 
-                new Alice(),
-                new Jackal(),
-                new TaskMaster(),
-                new Missionary(),
-                new Jester(),
-                new Yandere(),
+                {(byte)ExtremeRoleId.Alice     , new Alice()},
+                {(byte)ExtremeRoleId.Jackal    , new Jackal()},
+                {(byte)ExtremeRoleId.TaskMaster, new TaskMaster()},
+                {(byte)ExtremeRoleId.Missionary, new Missionary()},
+                {(byte)ExtremeRoleId.Jester    , new Jester()},
+                {(byte)ExtremeRoleId.Yandere   , new Yandere()},
             };
 
         public static readonly List<
@@ -186,7 +186,7 @@ namespace ExtremeRoles.Roles
             int optionIdOffsetChord)
         {
 
-            IEnumerable<SingleRoleBase> roles = NormalRole;
+            IEnumerable<SingleRoleBase> roles = NormalRole.Values;
 
             if (roles.Count() == 0) { return; };
 
@@ -288,15 +288,7 @@ namespace ExtremeRoles.Roles
                     return;
                 }
             }
-
-            foreach (var role in NormalRole)
-            {
-                if (role.BytedRoleId == roleId)
-                {
-                    setPlyerIdToSingleRole(playerId, role);
-                    return;
-                }
-            }
+            setPlyerIdToSingleRole(playerId, NormalRole[roleId]);
         }
 
         public static void RoleReplace(

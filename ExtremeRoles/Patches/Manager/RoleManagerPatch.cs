@@ -104,7 +104,7 @@ namespace ExtremeRoles.Patches.Manager
                         playerIndexList.Remove(playerIndex);
 
                         setCombinationRoleToPlayer(
-                            player, role.BytedRoleId, (byte)id);
+                            player, (byte)role.Id, (byte)id);
                         break;
                     }
                 }
@@ -351,8 +351,10 @@ namespace ExtremeRoles.Patches.Manager
                 foreach (var role in shuffledRoles)
                 {
                     // Logging.Debug($"KeyFound?:{extremeRolesData.RoleSpawnSettings[roleData.Role].ContainsKey(role.BytedRoleId)}");
+
+                    byte bytedRoleId = (byte)role.Id;
                     var (roleNum, spawnRate) = extremeRolesData.RoleSpawnSettings[
-                        roleData.Role][role.BytedRoleId];
+                        roleData.Role][bytedRoleId];
 
                     result = isRoleSpawn(roleNum, spawnRate);
                     result = result && checkLimitRoleSpawnNum(role, ref extremeRolesData);
@@ -367,16 +369,16 @@ namespace ExtremeRoles.Patches.Manager
 
                     if (result)
                     {
-                        setNormalRoleToPlayer(player, role.BytedRoleId);
+                        setNormalRoleToPlayer(player, (byte)role.Id);
                         shuffledArange.Remove(index);
-                        extremeRolesData.RoleSpawnSettings[roleData.Role][role.BytedRoleId] = (
+                        extremeRolesData.RoleSpawnSettings[roleData.Role][bytedRoleId] = (
                             --roleNum,
                             spawnRate);
                         break;
                     }
                     else
                     {
-                        extremeRolesData.RoleSpawnSettings[roleData.Role][role.BytedRoleId] = (
+                        extremeRolesData.RoleSpawnSettings[roleData.Role][bytedRoleId] = (
                             roleNum,
                             spawnRate);
                     }
@@ -466,10 +468,8 @@ namespace ExtremeRoles.Patches.Manager
                     (role, (roleSet, spawnRate, multiAssign)));
             }
 
-            foreach (var role in ExtremeRoleManager.NormalRole)
+            foreach (var(roleId, role) in ExtremeRoleManager.NormalRole)
             {
-
-                byte roleId = role.BytedRoleId;
                 int spawnRate = computePercentage(allOption[
                     role.GetRoleOptionId(RoleCommonOption.SpawnRate)]);
                 int roleNum = allOption[
