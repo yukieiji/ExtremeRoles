@@ -53,7 +53,7 @@ namespace ExtremeSkins.SkinManager
             {
                 string checkHatFolder = string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
-                    FolderPath, hatData, @"\", hatArray[i].ToString());
+                    FolderPath, @"\", hatArray[i].ToString());
 
                 if (!Directory.Exists(checkHatFolder)) { return true; }
 
