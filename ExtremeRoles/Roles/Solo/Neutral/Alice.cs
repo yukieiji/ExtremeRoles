@@ -16,6 +16,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public enum AliceOption
         {
+            CanUseSabotage,
             RevartCommonTaskNum,
             RevartLongTaskNum,
             RevartNormalTaskNum,
@@ -42,7 +43,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             ExtremeRoleId.Alice.ToString(),
             ColorPalette.AliceGold,
             true, false, true, true)
-        {}
+        { }
 
         public void CreateAbility()
         {
@@ -115,9 +116,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     item => RandomGenerator.Instance.Next()).ToList();
 
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                        PlayerControl.LocalPlayer.NetId,
-                        (byte)RPCOperator.Command.AliceShipBroken,
-                        Hazel.SendOption.Reliable, -1);
+                    PlayerControl.LocalPlayer.NetId,
+                    (byte)RPCOperator.Command.AliceShipBroken,
+                    Hazel.SendOption.Reliable, -1);
                 writer.Write(PlayerControl.LocalPlayer.PlayerId);
                 writer.Write(player.PlayerId);
                 writer.Write(addTaskId.Count);
@@ -179,6 +180,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.CreateAbilityCountOption(
                 parentOps, 2, 100);
 
+            CreateBoolOption(
+                AliceOption.CanUseSabotage,
+                true, parentOps);
             CreateIntOption(
                 AliceOption.RevartLongTaskNum,
                 1, 0, 15, 1, parentOps);
@@ -194,6 +198,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         protected override void RoleSpecificInit()
         {
             var allOption = OptionHolder.AllOption;
+
+            this.UseSabotage = allOption[
+                GetRoleOptionId(AliceOption.CanUseSabotage)].GetValue();
             this.RevartNormalTask = allOption[
                 GetRoleOptionId(AliceOption.RevartNormalTaskNum)].GetValue();
             this.RevartLongTask = allOption[
