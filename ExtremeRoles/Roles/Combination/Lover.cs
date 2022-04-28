@@ -348,7 +348,10 @@ namespace ExtremeRoles.Roles.Combination
                 foreach (byte playerId in alive)
                 {
                     var player = Player.GetPlayerControlById(playerId);
-                    player.Exiled();
+                    if (player != null)
+                    {
+                        player.Exiled();
+                    }
                 }
             }
         }
