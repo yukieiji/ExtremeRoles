@@ -72,14 +72,14 @@ namespace ExtremeRoles.Patches.MapModule
                 __instance.Id))
             {
                 __instance.SetButtons(isEnter);
-                MessageWriter writer = AmongUsClient.Instance.StartRpc(
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                     PlayerControl.LocalPlayer.NetId,
                     (byte)RPCOperator.Command.CustomVentUse,
                     Hazel.SendOption.Reliable);
                 writer.WritePacked(__instance.Id);
                 writer.Write(PlayerControl.LocalPlayer.PlayerId);
                 writer.Write(isEnter ? byte.MaxValue : (byte)0);
-                writer.EndMessage();
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCOperator.CustomVentUse(
                     __instance.Id,
                     PlayerControl.LocalPlayer.PlayerId,

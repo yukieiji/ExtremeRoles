@@ -173,6 +173,9 @@ namespace ExtremeRoles
         public static void CustomVentUse(
             int ventId, byte playerId, byte isEnter)
         {
+
+            if (ShipStatus.Instance == null || HudManager.Instance == null) { return; }
+
             PlayerControl player = Helper.Player.GetPlayerControlById(playerId);
             if (player == null) { return; }
 
