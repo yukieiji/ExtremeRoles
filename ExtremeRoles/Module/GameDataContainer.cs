@@ -626,6 +626,9 @@ namespace ExtremeRoles.Module
 
             public Sprite GetVentSprite(int ventId, int index)
             {
+
+                if (!this.ventType.ContainsKey(ventId)) { return null; }
+
                 CustomVentType type = ventType[ventId];
                 Sprite img = ventAnime[type][index];
 
