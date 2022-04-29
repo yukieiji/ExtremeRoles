@@ -87,6 +87,7 @@ namespace ExtremeRoles.Roles.Combination
         public enum OneForAllCondition
         {
             NoGuard = byte.MinValue,
+            AwakeHero,
             FeatKill,
             FeatButtonAbility
         }
@@ -175,6 +176,19 @@ namespace ExtremeRoles.Roles.Combination
             this.arrow.SetActive(false);
         }
 
+        public override bool TryRolePlayerKilledFrom(
+            PlayerControl rolePlayer, PlayerControl fromPlayer)
+        {
+            var fromRole = ExtremeRoleManager.GameRole[fromPlayer.PlayerId];
+
+            // ヴィランのキルは特殊ロジックなのでここでは相打ち処理を入れない
+            if (fromRole.IsImpostor() && this.cond != OneForAllCondition.NoGuard)
+            {
+                return false;
+            }
+            return true;
+        }
+
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
@@ -255,6 +269,22 @@ namespace ExtremeRoles.Roles.Combination
         public void CleanUp()
         {
             this.arrow.SetActive(false);
+        }
+
+        public override bool TryRolePlayerKilledFrom(
+            PlayerControl rolePlayer, PlayerControl fromPlayer)
+        {
+            var fromRole = ExtremeRoleManager.GameRole[fromPlayer.PlayerId];
+            if (fromRole.Id == ExtremeRoleId.Hero)
+            {
+                // 相打ち処理を入れる
+                return false;
+            }
+            else if (fromRole.IsCrewmate())
+            {
+                return false;
+            }
+            return true;
         }
 
         protected override void CreateSpecificOption(
