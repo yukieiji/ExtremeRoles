@@ -104,6 +104,8 @@ namespace ExtremeRoles.Roles.Combination
         private RoleAbilityButtonBase searchButton;
         private AllPlayerArrows arrow;
         private OneForAllCondition cond;
+        private float featKillPer;
+        private float featButtonAbilityPer;
 
         public Hero(
             ) : base(
@@ -113,6 +115,15 @@ namespace ExtremeRoles.Roles.Combination
                 ColorPalette.HeroAmaIro,
                 false, true, false, false)
         { }
+        public static void SetCondition(
+            OneForAllCondition cond)
+        {
+            var hero = ExtremeRoleManager.GetLocalPlayerRole() as Hero;
+            if (hero != null)
+            {
+                hero.cond = cond;
+            }
+        }
 
         public void CreateAbility()
         {
@@ -121,6 +132,7 @@ namespace ExtremeRoles.Roles.Combination
                 Loader.CreateSpriteFromResources(
                     Path.TestButton),
                 abilityCleanUp: CleanUp);
+            this.Button.SetLabelToCrewmate();
         }
 
         public bool IsAbilityUse() => this.IsCommonUse();
@@ -140,10 +152,18 @@ namespace ExtremeRoles.Roles.Combination
 
         public void Update(PlayerControl rolePlayer)
         {
+            if (MeetingHud.Instance != null ||
+                ShipStatus.Instance != null) { return; }
+
             switch (this.cond)
             {
+                case OneForAllCondition.NoGuard:
+                case OneForAllCondition.AwakeHero:
+                    setButtonActive(false);
+                    break;
                 case OneForAllCondition.FeatKill:
                     this.CanKill = true;
+                    setButtonActive(false);
                     break;
                 case OneForAllCondition.FeatButtonAbility:
                     this.CanKill = true;
@@ -158,6 +178,37 @@ namespace ExtremeRoles.Roles.Combination
                 default:
                     break;
             }
+
+            if (this.cond == OneForAllCondition.FeatButtonAbility) { return; }
+
+            int allCrew = 0;
+            int deadCrew = 0;
+
+            foreach (var player in PlayerControl.AllPlayerControls)
+            {
+                if (player.Data.IsDead || player.Data.Disconnected)
+                {
+                    ++deadCrew;
+                }
+                ++allCrew;
+            }
+
+            if (deadCrew > 0 && this.cond == OneForAllCondition.NoGuard)
+            {
+                this.cond = OneForAllCondition.AwakeHero;
+            }
+
+            float deadPlayerPer = (float)deadCrew / (float)allCrew;
+            if (deadPlayerPer > this.featButtonAbilityPer && this.cond != OneForAllCondition.FeatButtonAbility)
+            {
+                this.cond = OneForAllCondition.FeatButtonAbility;
+                this.setButtonActive(true);
+            }
+            else if (deadPlayerPer > this.featKillPer)
+            {
+                this.cond = OneForAllCondition.FeatKill;
+            }
+
         }
 
         public bool UseAbility()
@@ -198,6 +249,13 @@ namespace ExtremeRoles.Roles.Combination
         protected override void RoleSpecificInit()
         {
             throw new System.NotImplementedException();
+        }
+        private void setButtonActive(bool active)
+        {
+            if (this.Button != null)
+            {
+                this.Button.SetActive(active);
+            }
         }
     }
     public class Villain : MultiAssignRoleBase, IRoleAbility, IRoleUpdate
