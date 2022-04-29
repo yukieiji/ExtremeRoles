@@ -147,10 +147,10 @@ namespace ExtremeRoles
         }
 
         public static void SetCombinationRole(
-            byte roleId, byte playerId, byte id, byte bytedRoleType)
+            byte combType, byte roleId, byte playerId, byte id, byte bytedRoleType)
         {
             Roles.ExtremeRoleManager.SetPlayerIdToMultiRoleId(
-                roleId, playerId, id, bytedRoleType);
+                combType, roleId, playerId, id, bytedRoleType);
         }
 
         public static void SetNormalRole(byte roleId, byte playerId)

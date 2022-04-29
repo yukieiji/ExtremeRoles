@@ -13,7 +13,6 @@ namespace ExtremeRoles.Roles.Solo
         {
             this.VanilaRoleId = id;
             this.Id = ExtremeRoleId.VanillaRole;
-            this.BytedRoleId = (byte)ExtremeRoleId.VanillaRole;
             this.RoleName = id.ToString();
 
             switch (id)

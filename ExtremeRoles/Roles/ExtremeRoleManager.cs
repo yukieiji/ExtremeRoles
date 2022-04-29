@@ -61,6 +61,13 @@ namespace ExtremeRoles.Roles
         Jester,
         Yandere
     }
+    public enum CombinationRoleType
+    {
+        Avalon,
+        Lover,
+        Supporter
+    }
+
     public enum RoleGameOverReason
     {
         AssassinationMarin = 10,
@@ -145,12 +152,12 @@ namespace ExtremeRoles.Roles
                 {(byte)ExtremeRoleId.Yandere   , new Yandere()},
             };
 
-        public static readonly List<
-            CombinationRoleManagerBase> CombRole = new List<CombinationRoleManagerBase>()
+        public static readonly Dictionary<
+            byte, CombinationRoleManagerBase> CombRole = new Dictionary<byte, CombinationRoleManagerBase>()
             {
-                new Avalon(),
-                new LoverManager(),
-                new SupporterManager(),
+                {(byte)CombinationRoleType.Avalon,    new Avalon()},
+                {(byte)CombinationRoleType.Lover,     new LoverManager()},
+                {(byte)CombinationRoleType.Supporter, new SupporterManager() },
             };
 
         public static Dictionary<
@@ -167,7 +174,7 @@ namespace ExtremeRoles.Roles
         public static void CreateCombinationRoleOptions(
             int optionIdOffsetChord)
         {
-            IEnumerable<CombinationRoleManagerBase> roles = CombRole;
+            IEnumerable<CombinationRoleManagerBase> roles = CombRole.Values;
 
             if (roles.Count() == 0) { return; };
 
@@ -204,7 +211,7 @@ namespace ExtremeRoles.Roles
         {
             roleControlId = 0;
             GameRole.Clear();
-            foreach (var role in CombRole)
+            foreach (var role in CombRole.Values)
             {
                 role.Initialize();
             }
@@ -233,46 +240,41 @@ namespace ExtremeRoles.Roles
         }
 
         public static void SetPlayerIdToMultiRoleId(
-            byte roleId, byte playerId, byte id, byte bytedRoleType)
+            byte combType, byte roleId, byte playerId, byte id, byte bytedRoleType)
         {
             RoleTypes roleType = (RoleTypes)bytedRoleType;
             bool hasVanilaRole = roleType != RoleTypes.Crewmate || roleType != RoleTypes.Impostor;
 
-            foreach (var combRole in CombRole)
-            {
-
-                var role = combRole.GetRole(
+            var role = CombRole[combType].GetRole(
                     roleId, roleType);
 
-                if (role != null)
+            if (role != null)
+            {
+
+                SingleRoleBase addRole = role.Clone();
+
+                IRoleAbility abilityRole = addRole as IRoleAbility;
+
+                if (abilityRole != null && PlayerControl.LocalPlayer.PlayerId == playerId)
                 {
-
-                    SingleRoleBase addRole = role.Clone();
-
-                    IRoleAbility abilityRole = addRole as IRoleAbility;
-
-                    if (abilityRole != null && PlayerControl.LocalPlayer.PlayerId == playerId)
-                    {
-                        Helper.Logging.Debug("Try Create Ability NOW!!!");
-                        abilityRole.CreateAbility();
-                    }
-
-                    addRole.Initialize();
-                    addRole.GameControlId = id;
-                    roleControlId = id + 1;
-
-                    GameRole.Add(
-                        playerId, addRole);
-
-                    if (hasVanilaRole)
-                    {
-                        ((MultiAssignRoleBase)GameRole[
-                            playerId]).SetAnotherRole(
-                                new Solo.VanillaRoleWrapper(roleType));
-                    }
-                    Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
-                    break;
+                    Helper.Logging.Debug("Try Create Ability NOW!!!");
+                    abilityRole.CreateAbility();
                 }
+
+                addRole.Initialize();
+                addRole.GameControlId = id;
+                roleControlId = id + 1;
+
+                GameRole.Add(
+                    playerId, addRole);
+
+                if (hasVanilaRole)
+                {
+                    ((MultiAssignRoleBase)GameRole[
+                        playerId]).SetAnotherRole(
+                            new Solo.VanillaRoleWrapper(roleType));
+                }
+                Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
             }
         }
         public static void SetPlyerIdToSingleRoleId(

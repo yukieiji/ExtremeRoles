@@ -205,7 +205,7 @@ namespace ExtremeRoles.Module
                 this.allRoleText.Add(((string)roleText.Clone(), optionId));
             }
 
-            foreach (var combRole in Roles.ExtremeRoleManager.CombRole)
+            foreach (var combRole in Roles.ExtremeRoleManager.CombRole.Values)
             {
                 if (combRole is ConstCombinationRoleManagerBase)
                 {

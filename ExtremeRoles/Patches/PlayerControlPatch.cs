@@ -683,11 +683,13 @@ namespace ExtremeRoles.Patches
                         normalRoleId, normalRoleAssignPlayerId);
                     break;
                 case RPCOperator.Command.SetCombinationRole:
+                    byte combinationType = reader.ReadByte();
                     byte combinationRoleId = reader.ReadByte();
                     byte combinationRoleAssignPlayerId = reader.ReadByte();
                     byte gameControlId = reader.ReadByte();
                     byte bytedRoleType = reader.ReadByte();
                     RPCOperator.SetCombinationRole(
+                        combinationType,
                         combinationRoleId,
                         combinationRoleAssignPlayerId,
                         gameControlId, bytedRoleType);
