@@ -946,6 +946,11 @@ namespace ExtremeRoles.Patches
             if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
             var role = ExtremeRoleManager.GameRole[__instance.PlayerId];
+            if (role.Id == ExtremeRoleId.Villain)
+            {
+                guardBreakKill(__instance, target, role.KillCoolTime);
+                return false; 
+            }
             if (!role.HasOtherKillCool) { return true; }
 
             float killCool = role.KillCoolTime;
@@ -1060,6 +1065,82 @@ namespace ExtremeRoles.Patches
             {
                 target.ClearTasks();
             }
+        }
+        private static void guardBreakKill(
+            PlayerControl instance,
+            PlayerControl target,
+            float killCool)
+        {
+            if (target.protectedByGuardian)
+            {
+                target.RemoveProtection();
+            }
+
+            if (instance.AmOwner)
+            {
+                StatsManager.Instance.IncrementStat(StringNames.StatsImpostorKills);
+                if (instance.CurrentOutfitType == PlayerOutfitType.Shapeshifted)
+                {
+                    StatsManager.Instance.IncrementStat(StringNames.StatsShapeshifterShiftedKills);
+                }
+                if (Constants.ShouldPlaySfx())
+                {
+                    SoundManager.Instance.PlaySound(
+                        instance.KillSfx, false, 0.8f);
+                }
+                instance.SetKillTimer(killCool);
+            }
+            DestroyableSingleton<Telemetry>.Instance.WriteMurder();
+            target.gameObject.layer = LayerMask.NameToLayer("Ghost");
+            if (target.AmOwner)
+            {
+                StatsManager.Instance.IncrementStat(StringNames.StatsTimesMurdered);
+                if (Minigame.Instance)
+                {
+                    try
+                    {
+                        Minigame.Instance.Close();
+                        Minigame.Instance.Close();
+                    }
+                    catch
+                    { }
+                }
+                DestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(
+                    instance.Data, target.Data);
+                DestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
+                target.nameText.GetComponent<MeshRenderer>().material.SetInt("_Mask", 0);
+                target.RpcSetScanner(false);
+                ImportantTextTask importantTextTask = new GameObject("_Player").AddComponent<ImportantTextTask>();
+                importantTextTask.transform.SetParent(
+                    instance.transform, false);
+                if (!PlayerControl.GameOptions.GhostsDoTasks)
+                {
+                    target.ClearTasks();
+                    importantTextTask.Text = DestroyableSingleton<TranslationController>.Instance.GetString(
+                        StringNames.GhostIgnoreTasks, Array.Empty<Il2CppSystem.Object>());
+                }
+                else
+                {
+                    importantTextTask.Text = DestroyableSingleton<TranslationController>.Instance.GetString(
+                        StringNames.GhostDoTasks, Array.Empty<Il2CppSystem.Object>());
+                }
+                target.myTasks.Insert(0, importantTextTask);
+            }
+            DestroyableSingleton<AchievementManager>.Instance.OnMurder(
+                instance.AmOwner, target.AmOwner);
+
+            var killAnimation = instance.KillAnimations.ToList();
+
+            var useKillAnimation = default(KillAnimation);
+
+            if (killAnimation.Count > 0)
+            {
+                useKillAnimation = killAnimation[UnityEngine.Random.Range(
+                    0, killAnimation.Count)];
+            }
+
+            instance.MyPhysics.StartCoroutine(
+                useKillAnimation.CoPerformKill(instance, target));
         }
     }
 

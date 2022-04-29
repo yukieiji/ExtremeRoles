@@ -33,6 +33,11 @@ namespace ExtremeRoles.Patches.Button
                 if (target.Data.IsDead) { return false; }
 
                 var targetPlayerRole = Roles.ExtremeRoleManager.GameRole[target.PlayerId];
+                if (role.Id == Roles.ExtremeRoleId.Villain)
+                {
+                    villainSpecialKill(__instance, killer, target, targetPlayerRole);
+                    return false;
+                }
 
                 bool canKill = role.TryRolePlayerKillTo(
                     killer, target);
@@ -143,6 +148,52 @@ namespace ExtremeRoles.Patches.Button
 
             return MurderKillResult.NormalKill;
 
+        }
+        private static void villainSpecialKill(
+            KillButton instance,
+            PlayerControl killer,
+            PlayerControl target,
+            Roles.API.SingleRoleBase targetRole)
+        {
+            if (targetRole.Id == Roles.ExtremeRoleId.Vigilante)
+            { 
+                return; 
+            }
+            else if (targetRole.Id == Roles.ExtremeRoleId.Hero)
+            {
+                // 相打ち処理
+                return;
+            }
+            
+            MurderKillResult res = checkMuderKill(
+                instance, killer, target);
+
+            switch (res)
+            {
+                case MurderKillResult.NormalKill:
+
+                    RPCOperator.Call(
+                        PlayerControl.LocalPlayer.NetId,
+                        RPCOperator.Command.UncheckedMurderPlayer,
+                        new List<byte> { killer.PlayerId, target.PlayerId, byte.MaxValue });
+                    RPCOperator.UncheckedMurderPlayer(
+                        killer.PlayerId,
+                        target.PlayerId,
+                        byte.MaxValue);
+                    break;
+                case MurderKillResult.NoAnimatedKill:
+                    RPCOperator.Call(
+                        PlayerControl.LocalPlayer.NetId,
+                        RPCOperator.Command.UncheckedMurderPlayer,
+                        new List<byte> { killer.PlayerId, target.PlayerId, 0 });
+                    RPCOperator.UncheckedMurderPlayer(
+                        killer.PlayerId,
+                        target.PlayerId, 0);
+                    break;
+                default:
+                    break;
+            }
+            instance.SetTarget(null);
         }
     }
 }
