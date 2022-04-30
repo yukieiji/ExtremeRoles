@@ -163,7 +163,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             if (this.target.IsContain(targetPlayer.PlayerId))
             {
-                this.KillCoolTime = this.KillCoolTime * (
+                this.KillCoolTime = this.defaultKillCool * (
                     (100f - this.targetKillReduceRate) / 100f);
             }
             else
