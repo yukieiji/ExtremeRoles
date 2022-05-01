@@ -161,7 +161,8 @@ namespace ExtremeRoles.Patches.Button
             }
             else if (targetRole.Id == Roles.ExtremeRoleId.Hero)
             {
-                // 相打ち処理
+                Roles.Combination.HeroAcademia.RpcDrawHeroAndVillan(
+                    target, killer);
                 return;
             }
             

@@ -32,6 +32,9 @@ namespace ExtremeRoles
             // 役職メインコントール
             ReplaceRole,
 
+            // コンビロール全般
+            HeroHeroAcademia,
+
             // クルーメイト
             BodyGuardFeatShield,
             BodyGuardResetShield,
@@ -325,7 +328,6 @@ namespace ExtremeRoles
                                 source, target);
                         }
                     }
-                    
                 }
 
             }
@@ -370,6 +372,13 @@ namespace ExtremeRoles
             Roles.ExtremeRoleManager.RoleReplace(
                 callerId, targetId,
                 (Roles.ExtremeRoleManager.ReplaceOperation)operation);
+        }
+
+        public static void HeroHeroAcademiaCommand(
+            ref MessageReader reader)
+        {
+            Roles.Combination.HeroAcademia.RpcCommand(
+                ref reader);
         }
 
         public static void BodyGuardFeatShield(

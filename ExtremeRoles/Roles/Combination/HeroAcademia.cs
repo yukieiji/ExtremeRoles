@@ -2,6 +2,8 @@
 
 using UnityEngine;
 
+using Hazel;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
@@ -71,6 +73,13 @@ namespace ExtremeRoles.Roles.Combination
 
     public class HeroAcademia : ConstCombinationRoleManagerBase
     {
+        public enum Command
+        {
+            UpdateHero,
+            UpdateVigilante,
+            DrawHeroAndVillan
+        }
+
         public const string Name = "HeroAca";
         public HeroAcademia() : base(
             Name, new Color(255f, 255f, 255f), 3,
@@ -80,6 +89,149 @@ namespace ExtremeRoles.Roles.Combination
             this.Roles.Add(new Villain());
             this.Roles.Add(new Vigilante());
         }
+
+        public static void RpcCommand(
+            ref MessageReader reader)
+        {
+
+            byte command = reader.ReadByte();
+
+            switch ((Command)command)
+            {
+                case Command.UpdateHero:
+                    byte updateHeroPlayerId = reader.ReadByte();
+                    byte heroNewCond = reader.ReadByte();
+                    updateHero(updateHeroPlayerId, heroNewCond);
+                    break;
+                case Command.DrawHeroAndVillan:
+                    byte heroPlayerId = reader.ReadByte();
+                    byte villanPlayerId = reader.ReadByte();
+                    drawHeroAndVillan(heroPlayerId, villanPlayerId);
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
+        public static void RpcDrawHeroAndVillan(
+            PlayerControl hero, PlayerControl villan)
+        {
+            RPCOperator.Call(
+                PlayerControl.LocalPlayer.NetId,
+                RPCOperator.Command.HeroHeroAcademia,
+                new List<byte>
+                {
+                    (byte)Command.DrawHeroAndVillan,
+                    hero.PlayerId,
+                    villan.PlayerId,
+                });
+            drawHeroAndVillan(hero.PlayerId, villan.PlayerId);
+        }
+        public static void RpcUpdateHero(
+            PlayerControl hero,
+            Hero.OneForAllCondition newCond)
+        {
+            RPCOperator.Call(
+                PlayerControl.LocalPlayer.NetId,
+                RPCOperator.Command.HeroHeroAcademia,
+                new List<byte>
+                {
+                    (byte)Command.UpdateHero,
+                    hero.PlayerId,
+                    (byte)newCond,
+                });
+            
+        }
+
+        private static void drawHeroAndVillan(
+            byte heroPlayerId, byte villanPlayerId)
+        {
+            PlayerControl heroPlayer = Player.GetPlayerControlById(heroPlayerId);
+            PlayerControl villanPlayer = Player.GetPlayerControlById(villanPlayerId);
+
+            if (heroPlayer != null && villanPlayer != null)
+            {
+
+                ExtremeRolesPlugin.GameDataStore.WinCheckDisable = true;
+
+                if (heroPlayer.protectedByGuardian)
+                {
+                    heroPlayer.RemoveProtection();
+                }
+                if (villanPlayer.protectedByGuardian)
+                {
+                    villanPlayer.RemoveProtection();
+                }
+
+                heroPlayer.MurderPlayer(villanPlayer);
+                villanPlayer.MurderPlayer(heroPlayer);
+
+                var hero = ExtremeRoleManager.GameRole[heroPlayerId] as MultiAssignRoleBase;
+                var villain = ExtremeRoleManager.GameRole[villanPlayerId] as MultiAssignRoleBase;
+
+                if (hero?.AnotherRole != null)
+                {
+                    hero.AnotherRole.RolePlayerKilledAction(
+                        heroPlayer, villanPlayer);
+                }
+                if (villain?.AnotherRole != null)
+                {
+                    villain.AnotherRole.RolePlayerKilledAction(
+                        heroPlayer, villanPlayer);
+                }
+
+                var player = PlayerControl.LocalPlayer;
+
+                var localRole = ExtremeRoleManager.GameRole[player.PlayerId];
+                var vigilante = localRole as Vigilante;
+                if (vigilante != null)
+                {
+                    vigilante.SetCondition(
+                        Vigilante.VigilanteCondition.NewLawInTheShip);
+                }
+
+                ExtremeRolesPlugin.GameDataStore.WinCheckDisable = false;
+
+                if (player.PlayerId != heroPlayerId &&
+                    player.PlayerId != villanPlayerId)
+                {
+                    var hockRole = localRole as IRoleMurderPlayerHock;
+                    var multiAssignRole = localRole as MultiAssignRoleBase;
+
+                    if (hockRole != null)
+                    {
+                        hockRole.HockMuderPlayer(
+                            heroPlayer, villanPlayer);
+                        hockRole.HockMuderPlayer(
+                            villanPlayer, heroPlayer);
+                    }
+                    if (multiAssignRole != null)
+                    {
+                        hockRole = multiAssignRole.AnotherRole as IRoleMurderPlayerHock;
+                        if (hockRole != null)
+                        {
+                            hockRole.HockMuderPlayer(
+                                heroPlayer, villanPlayer);
+                            hockRole.HockMuderPlayer(
+                                villanPlayer, heroPlayer);
+                        }
+                    }
+                }
+
+            }
+        }
+        private static void updateHero(
+            byte heroId,
+            byte newCond)
+        {
+            var hero = ExtremeRoleManager.GetSafeCastedRole<Hero>(heroId);
+            if (hero != null)
+            {
+                hero.SetCondition((Hero.OneForAllCondition)newCond);
+            }
+        }
+
     }
 
     public class Hero : MultiAssignRoleBase, IRoleAbility, IRoleUpdate
@@ -115,7 +267,7 @@ namespace ExtremeRoles.Roles.Combination
                 ColorPalette.HeroAmaIro,
                 false, true, false, false)
         { }
-        public static void SetCondition(
+        public void SetCondition(
             OneForAllCondition cond)
         {
             var hero = ExtremeRoleManager.GetLocalPlayerRole() as Hero;
@@ -196,6 +348,7 @@ namespace ExtremeRoles.Roles.Combination
             if (deadCrew > 0 && this.cond == OneForAllCondition.NoGuard)
             {
                 this.cond = OneForAllCondition.AwakeHero;
+                HeroAcademia.RpcUpdateHero(rolePlayer, OneForAllCondition.AwakeHero);
             }
 
             float deadPlayerPer = (float)deadCrew / (float)allCrew;
@@ -335,7 +488,8 @@ namespace ExtremeRoles.Roles.Combination
             var fromRole = ExtremeRoleManager.GameRole[fromPlayer.PlayerId];
             if (fromRole.Id == ExtremeRoleId.Hero)
             {
-                // 相打ち処理を入れる
+                HeroAcademia.RpcDrawHeroAndVillan(
+                    fromPlayer, rolePlayer);
                 return false;
             }
             else if (fromRole.IsCrewmate())
@@ -388,7 +542,7 @@ namespace ExtremeRoles.Roles.Combination
                 false, false, false, false)
         { }
 
-        public static void SetCondition(
+        public void SetCondition(
             VigilanteCondition cond)
         {
             var vigilante = ExtremeRoleManager.GetLocalPlayerRole() as Vigilante;

@@ -768,6 +768,9 @@ namespace ExtremeRoles.Patches
                         major, minor, build,
                         revision, clientId);
                     break;
+                case RPCOperator.Command.HeroHeroAcademia:
+                    RPCOperator.HeroHeroAcademiaCommand(ref reader);
+                    break;
                 case RPCOperator.Command.BodyGuardFeatShield:
                     byte bodyGuardFeatShieldOpCallPlayerId = reader.ReadByte();
                     byte featShieldTargePlayerId = reader.ReadByte();
