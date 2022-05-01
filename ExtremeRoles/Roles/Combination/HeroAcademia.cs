@@ -79,6 +79,11 @@ namespace ExtremeRoles.Roles.Combination
             UpdateVigilante,
             DrawHeroAndVillan
         }
+        public enum Condition
+        {
+            HeroDown,
+            VillainDown,
+        }
 
         public const string Name = "HeroAca";
         public HeroAcademia() : base(
@@ -142,6 +147,64 @@ namespace ExtremeRoles.Roles.Combination
                     (byte)newCond,
                 });
             
+        }
+
+        public static void UpdateVigilante(
+            Condition cond)
+        {
+
+            int crewNum = 0;
+            int impNum = 0;
+            Vigilante vigilante = null;
+
+            foreach (GameData.PlayerInfo playerInfo in GameData.Instance.AllPlayers)
+            {
+                var role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
+                if (role.IsCrewmate())
+                {
+                    ++impNum;
+                }
+                else if (role.IsImpostor())
+                {
+                    ++crewNum;
+                }
+                if (role.Id == ExtremeRoleId.Vigilante)
+                {
+                    vigilante = (Vigilante)role;
+                }
+            }
+
+            if (vigilante == null) { return; }
+
+            switch (cond)
+            {
+                case Condition.HeroDown:
+                    if ((crewNum - 1) <= impNum)
+                    {
+                        vigilante.SetCondition(
+                            Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip);
+                    }
+                    else
+                    {
+                        vigilante.SetCondition(
+                            Vigilante.VigilanteCondition.NewHeroForTheShip);
+                    }
+                    break;
+                case Condition.VillainDown:
+                    if (impNum - 1 <= 0)
+                    {
+                        vigilante.SetCondition(
+                            Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip);
+                    }
+                    else
+                    {
+                        vigilante.SetCondition(
+                            Vigilante.VigilanteCondition.NewVillainForTheShip);
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
 
         private static void drawHeroAndVillan(
@@ -393,6 +456,20 @@ namespace ExtremeRoles.Roles.Combination
             return true;
         }
 
+        public override void ExiledAction(
+            GameData.PlayerInfo rolePlayer)
+        {
+            HeroAcademia.UpdateVigilante(
+                HeroAcademia.Condition.HeroDown);
+        }
+        public override void RolePlayerKilledAction(
+            PlayerControl rolePlayer, PlayerControl killerPlayer)
+        {
+            HeroAcademia.UpdateVigilante(
+                HeroAcademia.Condition.HeroDown);
+        }
+
+
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
@@ -498,6 +575,18 @@ namespace ExtremeRoles.Roles.Combination
             }
             return true;
         }
+        public override void ExiledAction(
+            GameData.PlayerInfo rolePlayer)
+        {
+            HeroAcademia.UpdateVigilante(
+                HeroAcademia.Condition.VillainDown);
+        }
+        public override void RolePlayerKilledAction(
+            PlayerControl rolePlayer, PlayerControl killerPlayer)
+        {
+            HeroAcademia.UpdateVigilante(
+                HeroAcademia.Condition.VillainDown);
+        }
 
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
@@ -519,6 +608,7 @@ namespace ExtremeRoles.Roles.Combination
             NewLawInTheShip,
             NewHeroForTheShip,
             NewVillainForTheShip,
+            NewEnemyNeutralForTheShip,
         }
 
         public RoleAbilityButtonBase Button
