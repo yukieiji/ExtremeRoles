@@ -638,7 +638,11 @@ namespace ExtremeRoles.Roles.Combination
             var vigilante = ExtremeRoleManager.GetLocalPlayerRole() as Vigilante;
             if (vigilante != null)
             {
-                vigilante.condition = cond;
+                if (vigilante.condition == VigilanteCondition.None ||
+                    cond == VigilanteCondition.NewLawInTheShip)
+                {
+                    vigilante.condition = cond;
+                }
             }
         }
 
