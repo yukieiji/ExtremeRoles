@@ -43,8 +43,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             if ((targetPlayerRole.IsImpostor()) || 
                 (targetPlayerRole.IsNeutral() && this.canShootNeutral))
             {
-                if (!this.canShootAssassin &&
-                    targetPlayerRole.Id == ExtremeRoleId.Assassin)
+                if ((!this.canShootAssassin && targetPlayerRole.Id == ExtremeRoleId.Assassin) ||
+                    targetPlayerRole.Id == ExtremeRoleId.Villain)
                 {
                     missShoot(
                         rolePlayer,
