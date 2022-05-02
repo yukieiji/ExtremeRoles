@@ -71,13 +71,50 @@ namespace ExtremeRoles.Roles.Combination
         }
     }
 
+    internal class PlayerTargetArrow
+    {
+        public bool isActive;
+        private Arrow arrow;
+        private PlayerControl targetPlayer;
+        public PlayerTargetArrow(Color color)
+        {
+            this.arrow = new Arrow(color);
+        }
+        public void SetActive(bool active)
+        {
+            this.isActive = active;
+            this.arrow.SetActive(active);
+        }
+        public void ResetTarget()
+        {
+            this.targetPlayer = null;
+        }
+
+        public void SetTargetPlayer(PlayerControl player)
+        {
+            this.targetPlayer = player;
+        }
+
+        public void Update()
+        {
+            if (this.targetPlayer == null) { return; }
+
+            this.arrow.UpdateTarget(
+                targetPlayer.GetTruePosition());
+
+        }
+
+    }
+
     public class HeroAcademia : ConstCombinationRoleManagerBase
     {
         public enum Command
         {
             UpdateHero,
             UpdateVigilante,
-            DrawHeroAndVillan
+            DrawHeroAndVillan,
+            EmergencyCall,
+            CleanUpEmergencyCall,
         }
         public enum Condition
         {
@@ -113,10 +150,44 @@ namespace ExtremeRoles.Roles.Combination
                     byte villanPlayerId = reader.ReadByte();
                     drawHeroAndVillan(heroPlayerId, villanPlayerId);
                     break;
+                case Command.EmergencyCall:
+                    byte vigilantePlayerId = reader.ReadByte();
+                    byte targetPlayerId = reader.ReadByte();
+                    emergencyCall(vigilantePlayerId, targetPlayerId);
+                    break;
+                case Command.CleanUpEmergencyCall:
+                    cleanUpEmergencyCall();
+                    break;
                 default:
                     break;
             }
 
+        }
+        public static void RpcCleanUpEmergencyCall()
+        {
+            RPCOperator.Call(
+                PlayerControl.LocalPlayer.NetId,
+                RPCOperator.Command.HeroHeroAcademia,
+                new List<byte>
+                {
+                    (byte)Command.CleanUpEmergencyCall,
+                });
+            cleanUpEmergencyCall();
+        }
+
+        public static void RpcEmergencyCall(
+            PlayerControl vigilante, byte targetPlayerId)
+        {
+            RPCOperator.Call(
+                PlayerControl.LocalPlayer.NetId,
+                RPCOperator.Command.HeroHeroAcademia,
+                new List<byte>
+                {
+                    (byte)Command.EmergencyCall,
+                    vigilante.PlayerId,
+                    targetPlayerId,
+                });
+            emergencyCall(vigilante.PlayerId, targetPlayerId);
         }
 
         public static void RpcDrawHeroAndVillan(
@@ -204,6 +275,43 @@ namespace ExtremeRoles.Roles.Combination
                     break;
                 default:
                     break;
+            }
+        }
+        private static void cleanUpEmergencyCall()
+        {
+            var hero = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Hero>();
+            if (hero != null)
+            {
+                hero.ResetTarget();
+            }
+            var villan = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Villain>();
+            if (villan != null)
+            {
+                villan.ResetVigilante();
+            }
+        }
+
+        private static void emergencyCall(
+            byte vigilantePlayerId, byte targetPlayerId)
+        {
+            PlayerControl vigilantePlayer = Player.GetPlayerControlById(vigilantePlayerId);
+            PlayerControl targetPlayer = Player.GetPlayerControlById(targetPlayerId);
+
+            if (vigilantePlayer != null && targetPlayer != null)
+            {
+
+                var hero = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Hero>();
+                if (hero != null)
+                {
+                    hero.SetEmergencyCallTarget(targetPlayer);
+                }
+
+                var villan = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Villain>();
+                if (villan != null)
+                {
+                    villan.SetVigilante(vigilantePlayer);
+                }
+
             }
         }
 
@@ -318,6 +426,7 @@ namespace ExtremeRoles.Roles.Combination
 
         private RoleAbilityButtonBase searchButton;
         private AllPlayerArrows arrow;
+        private PlayerTargetArrow callTargetArrow;
         private OneForAllCondition cond;
         private float featKillPer;
         private float featButtonAbilityPer;
@@ -363,12 +472,25 @@ namespace ExtremeRoles.Roles.Combination
             {
                 this.arrow.SetActive(false);
             }
+            if (this.callTargetArrow != null)
+            {
+                ResetTarget();
+            }
         }
 
         public void Update(PlayerControl rolePlayer)
         {
             if (MeetingHud.Instance != null ||
                 ShipStatus.Instance != null) { return; }
+
+            if (this.callTargetArrow != null)
+            {
+                if (this.callTargetArrow.isActive)
+                {
+                    this.callTargetArrow.Update();
+                }
+            }
+
 
             switch (this.cond)
             {
@@ -443,6 +565,24 @@ namespace ExtremeRoles.Roles.Combination
             this.arrow.SetActive(false);
         }
 
+        public void SetEmergencyCallTarget(PlayerControl target)
+        {
+            if (this.callTargetArrow == null)
+            {
+                this.callTargetArrow = new PlayerTargetArrow(
+                    ColorPalette.VigilanteFujiIro);
+            }
+
+            this.callTargetArrow.SetActive(true);
+            this.callTargetArrow.SetTargetPlayer(target);
+        }
+
+        public void ResetTarget()
+        {
+            this.callTargetArrow.SetActive(false);
+            this.callTargetArrow.ResetTarget();
+        }
+
         public override bool TryRolePlayerKilledFrom(
             PlayerControl rolePlayer, PlayerControl fromPlayer)
         {
@@ -501,6 +641,7 @@ namespace ExtremeRoles.Roles.Combination
 
         private RoleAbilityButtonBase searchButton;
         private AllPlayerArrows arrow;
+        private PlayerTargetArrow vigilanteArrow;
 
         public Villain(
             ) : base(
@@ -529,11 +670,26 @@ namespace ExtremeRoles.Roles.Combination
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            this.arrow.SetActive(false);
+            if (this.arrow != null)
+            {
+                this.arrow.SetActive(false);
+            }
+            if (this.vigilanteArrow != null)
+            {
+                ResetVigilante();
+            }
         }
 
         public void Update(PlayerControl rolePlayer)
         {
+            if (this.vigilanteArrow != null)
+            {
+                if (this.vigilanteArrow.isActive)
+                {
+                    this.vigilanteArrow.Update();
+                }
+            }
+
             if (this.Button != null)
             {
                 if (this.Button.IsAbilityActive() && this.arrow != null)
@@ -558,6 +714,25 @@ namespace ExtremeRoles.Roles.Combination
         {
             this.arrow.SetActive(false);
         }
+
+        public void SetVigilante(PlayerControl target)
+        {
+            if (this.vigilanteArrow == null)
+            {
+                this.vigilanteArrow = new PlayerTargetArrow(
+                    ColorPalette.VigilanteFujiIro);
+            }
+
+            this.vigilanteArrow.SetActive(true);
+            this.vigilanteArrow.SetTargetPlayer(target);
+        }
+
+        public void ResetVigilante()
+        {
+            this.vigilanteArrow.SetActive(false);
+            this.vigilanteArrow.ResetTarget();
+        }
+
 
         public override bool TryRolePlayerKilledFrom(
             PlayerControl rolePlayer, PlayerControl fromPlayer)
@@ -622,6 +797,8 @@ namespace ExtremeRoles.Roles.Combination
 
         private RoleAbilityButtonBase callButton;
         private VigilanteCondition condition;
+        private float range;
+        private byte target;
 
         public Vigilante(
             ) : base(
@@ -648,12 +825,30 @@ namespace ExtremeRoles.Roles.Combination
 
         public void CreateAbility()
         {
-            throw new System.NotImplementedException();
+            this.CreateNormalAbilityButton(
+                Translation.GetString("call"),
+                Loader.CreateSpriteFromResources(
+                    Path.TestButton),
+                abilityCleanUp: CleanUp);
+            this.Button.SetLabelToCrewmate();
         }
 
         public bool IsAbilityUse()
         {
-            throw new System.NotImplementedException();
+            this.target = byte.MaxValue;
+
+            PlayerControl player = Player.GetPlayerTarget(
+                PlayerControl.LocalPlayer, this, this.range);
+
+            if (player == null) { return false; }
+            this.target = player.PlayerId;
+
+
+            return this.IsCommonUse() && this.target != byte.MaxValue;
+        }
+        public void CleanUp()
+        {
+            HeroAcademia.RpcCleanUpEmergencyCall();
         }
 
         public void ModifiedWinPlayer(
@@ -666,17 +861,21 @@ namespace ExtremeRoles.Roles.Combination
 
         public void RoleAbilityResetOnMeetingEnd()
         {
-            throw new System.NotImplementedException();
+            return;
         }
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            throw new System.NotImplementedException();
+            return;
         }
 
         public bool UseAbility()
         {
-            throw new System.NotImplementedException();
+            HeroAcademia.RpcEmergencyCall(
+                PlayerControl.LocalPlayer,
+                this.target);
+            this.target = byte.MaxValue;
+            return true;
         }
 
         protected override void CreateSpecificOption(
