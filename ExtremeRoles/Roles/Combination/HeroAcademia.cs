@@ -613,12 +613,13 @@ namespace ExtremeRoles.Roles.Combination
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            throw new System.NotImplementedException();
+            this.CreateCommonAbilityOption(
+                parentOps, 5.0f);
         }
 
         protected override void RoleSpecificInit()
         {
-            throw new System.NotImplementedException();
+            this.RoleAbilityInit();
         }
         private void setButtonActive(bool active)
         {
@@ -766,12 +767,13 @@ namespace ExtremeRoles.Roles.Combination
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            throw new System.NotImplementedException();
+            this.CreateCommonAbilityOption(
+                parentOps, 5.0f);
         }
 
         protected override void RoleSpecificInit()
         {
-            throw new System.NotImplementedException();
+            this.RoleAbilityInit();
         }
 
     }
@@ -881,12 +883,13 @@ namespace ExtremeRoles.Roles.Combination
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            throw new System.NotImplementedException();
+            this.CreateAbilityCountOption(
+                parentOps, 2, 10, 5.0f);
         }
 
         protected override void RoleSpecificInit()
         {
-            throw new System.NotImplementedException();
+            this.RoleAbilityInit();
         }
 
     }
