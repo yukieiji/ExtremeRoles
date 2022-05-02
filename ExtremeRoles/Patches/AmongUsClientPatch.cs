@@ -162,14 +162,15 @@ namespace ExtremeRoles.Patches
                         noWinner,
                         new ExtremeRoleId[] { ExtremeRoleId.Yandere });
                     break;
+                case RoleGameOverReason.VigilanteKillAllOther:
+                case RoleGameOverReason.VigilanteNewIdealWorld:
+                    replaceWinnerToSpecificNeutralRolePlayer(
+                        noWinner,
+                        new ExtremeRoleId[] { ExtremeRoleId.Vigilante });
+                    break;
                 case RoleGameOverReason.ShipFallInLove:
                     replaceWinnerToSpecificRolePlayer(
                         ExtremeRoleId.Lover);
-                    break;
-                case RoleGameOverReason.VigilanteKillAllOther:
-                case RoleGameOverReason.VigilanteNewIdealWorld:
-                    replaceWinnerToSpecificRolePlayer(
-                        ExtremeRoleId.Vigilante);
                     break;
                 default:
                     break;
