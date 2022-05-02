@@ -822,11 +822,12 @@ namespace ExtremeRoles.Roles.Combination
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            this.CreateFloatOption(
-                VillanOption.VigilanteSeeTime,
-                2.5f, 1.0f, 10.0f, 0.5f, parentOps);
             this.CreateCommonAbilityOption(
                 parentOps, 5.0f);
+            this.CreateFloatOption(
+                VillanOption.VigilanteSeeTime,
+                2.5f, 1.0f, 10.0f, 0.5f, parentOps,
+                format: OptionUnit.Second);
         }
 
         protected override void RoleSpecificInit()
