@@ -506,7 +506,7 @@ namespace ExtremeRoles.Roles.Combination
         public void Update(PlayerControl rolePlayer)
         {
             if (MeetingHud.Instance != null ||
-                ShipStatus.Instance != null) { return; }
+                ShipStatus.Instance == null) { return; }
             if (!ShipStatus.Instance.enabled) { return; }
 
             if (this.callTargetArrow != null)
