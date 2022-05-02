@@ -318,6 +318,16 @@ namespace ExtremeRoles.Module
                                     gameControlId,
                                     NeutralSeparateTeam.Yandere);
                                 break;
+                            case ExtremeRoleId.Vigilante:
+                                if (((Roles.Combination.Vigilante)role).Condition == 
+                                    Roles.Combination.Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip)
+                                {
+                                    addNeutralTeams(
+                                        ref neutralTeam,
+                                        gameControlId,
+                                        NeutralSeparateTeam.Vigilante);
+                                }
+                                break;
                             default:
                                 break;
                         }
@@ -406,6 +416,9 @@ namespace ExtremeRoles.Module
                     case ExtremeRoleId.Yandere:
                         addData = new YandereWinChecker();
                         addData.AddAliveRole(playerId, role);
+                        break;
+                    case ExtremeRoleId.Vigilante:
+                        addData = new VigilanteWinChecker();
                         break;
                     default:
                         break;

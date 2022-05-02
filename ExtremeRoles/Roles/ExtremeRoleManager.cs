@@ -92,6 +92,9 @@ namespace ExtremeRoles.Roles
         YandereKillAllOther,
         YandereShipJustForTwo,
 
+        VigilanteKillAllOther,
+        VigilanteNewIdealWorld,
+
         UnKnown = 100,
     }
 
@@ -101,7 +104,8 @@ namespace ExtremeRoles.Roles
         Alice,
         Lover,
         Missionary,
-        Yandere
+        Yandere,
+        Vigilante,
     }
 
     public static class ExtremeRoleManager
@@ -112,6 +116,7 @@ namespace ExtremeRoles.Roles
         {
             ExtremeRoleId.Lover,
             ExtremeRoleId.Yandere,
+            ExtremeRoleId.Vigilante,
         };
 
         public static readonly Dictionary<

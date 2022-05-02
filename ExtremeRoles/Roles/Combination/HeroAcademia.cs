@@ -797,6 +797,9 @@ namespace ExtremeRoles.Roles.Combination
             }
         }
 
+        public VigilanteCondition Condition => this.condition;
+
+
         private RoleAbilityButtonBase callButton;
         private VigilanteCondition condition;
         private float range;
@@ -858,7 +861,36 @@ namespace ExtremeRoles.Roles.Combination
             GameOverReason reason,
             Il2CppSystem.Collections.Generic.List<WinningPlayerData> winner)
         {
-            throw new System.NotImplementedException();
+            switch (reason)
+            {
+                case GameOverReason.HumansByTask:
+                case GameOverReason.HumansByVote:
+                case GameOverReason.HumansDisconnect:
+                    if (this.condition == VigilanteCondition.NewHeroForTheShip)
+                    {
+                        winner.Add(new WinningPlayerData(rolePlayerInfo));
+                    }
+                    break;
+                case GameOverReason.ImpostorByVote:
+                case GameOverReason.ImpostorByKill:
+                case GameOverReason.ImpostorBySabotage:
+                case GameOverReason.ImpostorDisconnect:
+                case (GameOverReason)RoleGameOverReason.AssassinationMarin:
+                    if (this.condition == VigilanteCondition.NewVillainForTheShip)
+                    {
+                        winner.Add(new WinningPlayerData(rolePlayerInfo));
+                    }
+                    break;
+                case (GameOverReason)RoleGameOverReason.VigilanteKillAllOther:
+                case (GameOverReason)RoleGameOverReason.VigilanteNewIdealWorld:
+                    break;
+                default:
+                    if (this.condition == VigilanteCondition.NewLawInTheShip)
+                    {
+                        winner.Add(new WinningPlayerData(rolePlayerInfo));
+                    }
+                    break;
+            }
         }
 
         public void RoleAbilityResetOnMeetingEnd()

@@ -166,6 +166,11 @@ namespace ExtremeRoles.Patches
                     replaceWinnerToSpecificRolePlayer(
                         ExtremeRoleId.Lover);
                     break;
+                case RoleGameOverReason.VigilanteKillAllOther:
+                case RoleGameOverReason.VigilanteNewIdealWorld:
+                    replaceWinnerToSpecificRolePlayer(
+                        ExtremeRoleId.Vigilante);
+                    break;
                 default:
                     break;
             }

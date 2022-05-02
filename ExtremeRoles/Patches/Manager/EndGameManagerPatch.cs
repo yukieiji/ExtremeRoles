@@ -309,6 +309,13 @@ namespace ExtremeRoles.Patches.Manager
                     textRenderer.color = ColorPalette.YandereVioletRed;
                     manager.BackgroundBar.material.SetColor("_Color", ColorPalette.YandereVioletRed);
                     break;
+                case (GameOverReason)RoleGameOverReason.VigilanteKillAllOther:
+                case (GameOverReason)RoleGameOverReason.VigilanteNewIdealWorld:
+                    bonusText = Translation.GetString(
+                        ExtremeRoleId.Vigilante.ToString());
+                    textRenderer.color = ColorPalette.VigilanteFujiIro;
+                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.VigilanteFujiIro);
+                    break;
                 default:
                     break;
             }
