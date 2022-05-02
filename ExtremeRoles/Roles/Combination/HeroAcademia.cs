@@ -597,8 +597,8 @@ namespace ExtremeRoles.Roles.Combination
 
         public void ResetTarget()
         {
-            this.callTargetArrow.SetActive(false);
-            this.callTargetArrow.ResetTarget();
+            this.callTargetArrow?.SetActive(false);
+            this.callTargetArrow?.ResetTarget();
         }
 
         public override bool TryRolePlayerKilledFrom(
@@ -649,6 +649,11 @@ namespace ExtremeRoles.Roles.Combination
     }
     public class Villain : MultiAssignRoleBase, IRoleAbility, IRoleUpdate
     {
+        public enum VillanOption
+        {
+            VigilanteSeeTime,
+        }
+
         public RoleAbilityButtonBase Button
         {
             get => this.searchButton;
@@ -660,7 +665,9 @@ namespace ExtremeRoles.Roles.Combination
 
         private RoleAbilityButtonBase searchButton;
         private AllPlayerArrows arrow;
-        private PlayerTargetArrow vigilanteArrow;
+        private Arrow vigilanteArrow;
+        private float vigilanteArrowTimer = 0.0f;
+        private float vigilanteArrowTime = 0.0f;
 
         public Villain(
             ) : base(
@@ -701,11 +708,17 @@ namespace ExtremeRoles.Roles.Combination
 
         public void Update(PlayerControl rolePlayer)
         {
+            if (MeetingHud.Instance != null) { return; }
+
             if (this.vigilanteArrow != null)
             {
-                if (this.vigilanteArrow.isActive)
+                if (this.vigilanteArrowTimer > 0f)
                 {
-                    this.vigilanteArrow.Update();
+                    this.vigilanteArrowTimer -= Time.fixedDeltaTime;
+                }
+                if (this.vigilanteArrowTimer <= 0f)
+                {
+                    this.vigilanteArrow.SetActive(false);
                 }
             }
 
@@ -738,18 +751,18 @@ namespace ExtremeRoles.Roles.Combination
         {
             if (this.vigilanteArrow == null)
             {
-                this.vigilanteArrow = new PlayerTargetArrow(
+                this.vigilanteArrow = new Arrow(
                     ColorPalette.VigilanteFujiIro);
             }
-
+            this.vigilanteArrowTimer = this.vigilanteArrowTime;
             this.vigilanteArrow.SetActive(true);
-            this.vigilanteArrow.SetTargetPlayer(target);
+            this.vigilanteArrow.UpdateTarget(target.GetTruePosition());
         }
 
         public void ResetVigilante()
         {
-            this.vigilanteArrow.SetActive(false);
-            this.vigilanteArrow.ResetTarget();
+            this.vigilanteArrowTimer = 0.0f;
+            this.vigilanteArrow?.SetActive(false);
         }
 
 
@@ -787,11 +800,17 @@ namespace ExtremeRoles.Roles.Combination
         {
             this.CreateCommonAbilityOption(
                 parentOps, 5.0f);
+            this.CreateFloatOption(
+                VillanOption.VigilanteSeeTime,
+                2.5f, 1.0f, 10.0f, 0.5f, parentOps);
         }
 
         protected override void RoleSpecificInit()
         {
             this.RoleAbilityInit();
+            this.vigilanteArrowTime = OptionHolder.AllOption[
+                GetRoleOptionId(VillanOption.VigilanteSeeTime)].GetValue();
+            this.vigilanteArrowTimer = 0.0f;
         }
 
     }
