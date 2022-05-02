@@ -40,7 +40,7 @@ namespace ExtremeRoles.Roles.Combination
                     var text = GameObject.Instantiate(
                         Prefab.Text, playerArrow.Main.transform);
                     text.fontSize = 10;
-                    text.gameObject.layer = 6;
+                    text.gameObject.layer = 5;
                     text.alignment = TMPro.TextAlignmentOptions.Center;
                     text.transform.localPosition = text.transform.localPosition + new Vector3(0, -0.725f, 800f);
                     text.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
