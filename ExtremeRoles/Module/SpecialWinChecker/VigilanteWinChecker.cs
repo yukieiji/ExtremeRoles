@@ -28,15 +28,15 @@ namespace ExtremeRoles.Module.SpecialWinChecker
                 var playerInfo = GameData.Instance.GetPlayerById(playerId);
                 if (!playerInfo.IsDead)
                 {
-                    if (role.Id != ExtremeRoleId.Hero)
+                    if (role.Id == ExtremeRoleId.Hero)
                     {
                         ++heroNum;
                     }
-                    else if (role.Id != ExtremeRoleId.Villain)
+                    else if (role.Id == ExtremeRoleId.Villain)
                     {
                         ++villanNum;
                     }
-                    else if (role.Id != ExtremeRoleId.Vigilante)
+                    else if (role.Id == ExtremeRoleId.Vigilante)
                     {
                         ++vigilanteNum;
                     }
