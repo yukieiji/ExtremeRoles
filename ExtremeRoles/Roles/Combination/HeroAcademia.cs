@@ -373,10 +373,9 @@ namespace ExtremeRoles.Roles.Combination
                         heroPlayer, villanPlayer);
                 }
 
-                var player = PlayerControl.LocalPlayer;
+                
 
-                var localRole = ExtremeRoleManager.GameRole[player.PlayerId];
-                var vigilante = localRole as Vigilante;
+                var vigilante = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Vigilante>();
                 if (vigilante != null)
                 {
                     vigilante.SetCondition(
@@ -384,6 +383,9 @@ namespace ExtremeRoles.Roles.Combination
                 }
 
                 ExtremeRolesPlugin.GameDataStore.WinCheckDisable = false;
+
+                var localRole = ExtremeRoleManager.GetLocalPlayerRole();
+                var player = PlayerControl.LocalPlayer;
 
                 if (player.PlayerId != heroPlayerId &&
                     player.PlayerId != villanPlayerId)
@@ -927,35 +929,30 @@ namespace ExtremeRoles.Roles.Combination
             GameOverReason reason,
             Il2CppSystem.Collections.Generic.List<WinningPlayerData> winner)
         {
-            switch (reason)
+            switch (this.condition)
             {
-                case GameOverReason.HumansByTask:
-                case GameOverReason.HumansByVote:
-                case GameOverReason.HumansDisconnect:
-                    if (this.condition == VigilanteCondition.NewHeroForTheShip)
+                case VigilanteCondition.NewLawInTheShip:
+                    winner.Add(new WinningPlayerData(rolePlayerInfo));
+                    break;
+                case VigilanteCondition.NewHeroForTheShip:
+                    if (reason == GameOverReason.HumansByTask ||
+                        reason == GameOverReason.HumansByVote ||
+                        reason == GameOverReason.HumansDisconnect)
                     {
                         winner.Add(new WinningPlayerData(rolePlayerInfo));
                     }
                     break;
-                case GameOverReason.ImpostorByVote:
-                case GameOverReason.ImpostorByKill:
-                case GameOverReason.ImpostorBySabotage:
-                case GameOverReason.ImpostorDisconnect:
-                case (GameOverReason)RoleGameOverReason.AssassinationMarin:
-                    if (this.condition == VigilanteCondition.NewVillainForTheShip)
-                    {
-                        winner.Add(new WinningPlayerData(rolePlayerInfo));
-                    }
-                    break;
-                case (GameOverReason)RoleGameOverReason.VigilanteKillAllOther:
-                case (GameOverReason)RoleGameOverReason.VigilanteNewIdealWorld:
+                case VigilanteCondition.NewVillainForTheShip:
+                    if (reason == GameOverReason.ImpostorByVote ||
+                        reason == GameOverReason.ImpostorByKill ||
+                        reason == GameOverReason.ImpostorBySabotage ||
+                        reason == GameOverReason.ImpostorDisconnect ||
+                        reason == (GameOverReason)RoleGameOverReason.AssassinationMarin)
+                    winner.Add(new WinningPlayerData(rolePlayerInfo));
                     break;
                 default:
-                    if (this.condition == VigilanteCondition.NewLawInTheShip)
-                    {
-                        winner.Add(new WinningPlayerData(rolePlayerInfo));
-                    }
                     break;
+
             }
         }
 
