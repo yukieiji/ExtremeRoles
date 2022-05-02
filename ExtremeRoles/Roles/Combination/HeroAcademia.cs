@@ -976,6 +976,18 @@ namespace ExtremeRoles.Roles.Combination
             return true;
         }
 
+        public override bool TryRolePlayerKilledFrom(
+            PlayerControl rolePlayer, PlayerControl fromPlayer)
+        {
+            var fromRole = ExtremeRoleManager.GameRole[fromPlayer.PlayerId];
+            if (fromRole.Id == ExtremeRoleId.Hero && 
+                this.condition != VigilanteCondition.NewEnemyNeutralForTheShip)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public override string GetFullDescription()
         {
             switch (this.condition)
