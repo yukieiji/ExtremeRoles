@@ -14,7 +14,7 @@ using BepInEx.IL2CPP.Utils.Collections;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public class Carrier : SingleRoleBase, IRoleAbility
+    public class Carrier : SingleRoleBase, IRoleAbility, IRoleSpecialReset
     {
         public DeadBody CarringBody;
         public float AlphaValue;
@@ -202,6 +202,26 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.CanReportOnCarry = OptionHolder.AllOption[
                 GetRoleOptionId(CarrierOption.CanReportOnCarry)].GetValue();
             this.RoleAbilityInit();
+        }
+
+        public void AllReset(PlayerControl rolePlayer)
+        {
+            if (this.CarringBody != null)
+            {
+                this.CarringBody.transform.parent = null;
+                this.CarringBody.transform.position = rolePlayer.GetTruePosition() + new Vector2(0.15f, 0.15f);
+                this.CarringBody.transform.position -= new Vector3(0.0f, 0.0f, 0.01f);
+
+
+                Color color = this.CarringBody.bodyRenderer.color;
+                this.CarringBody.bodyRenderer.color = new Color(
+                    color.r, color.g, color.b, this.AlphaValue);
+                if (!this.CanReportOnCarry)
+                {
+                    this.CarringBody.GetComponentInChildren<BoxCollider2D>().enabled = true;
+                }
+                this.CarringBody = null;
+            }
         }
     }
 }
