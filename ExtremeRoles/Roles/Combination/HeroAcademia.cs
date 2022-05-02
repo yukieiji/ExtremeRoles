@@ -429,7 +429,7 @@ namespace ExtremeRoles.Roles.Combination
 
     }
 
-    public class Hero : MultiAssignRoleBase, IRoleAbility, IRoleUpdate
+    public class Hero : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialReset
     {
         public enum OneForAllCondition
         {
@@ -613,6 +613,11 @@ namespace ExtremeRoles.Roles.Combination
             this.callTargetArrow?.SetActive(false);
             this.callTargetArrow?.ResetTarget();
         }
+        public void AllReset(PlayerControl rolePlayer)
+        {
+            HeroAcademia.UpdateVigilante(
+                HeroAcademia.Condition.HeroDown);
+        }
 
         public override bool TryRolePlayerKilledFrom(
             PlayerControl rolePlayer, PlayerControl fromPlayer)
@@ -674,7 +679,7 @@ namespace ExtremeRoles.Roles.Combination
             }
         }
     }
-    public class Villain : MultiAssignRoleBase, IRoleAbility, IRoleUpdate
+    public class Villain : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialReset
     {
         public enum VillanOption
         {
@@ -790,6 +795,12 @@ namespace ExtremeRoles.Roles.Combination
         {
             this.vigilanteArrowTimer = 0.0f;
             this.vigilanteArrow?.SetActive(false);
+        }
+
+        public void AllReset(PlayerControl rolePlayer)
+        {
+            HeroAcademia.UpdateVigilante(
+                HeroAcademia.Condition.VillainDown);
         }
 
 
