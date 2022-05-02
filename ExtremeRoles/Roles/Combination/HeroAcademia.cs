@@ -39,9 +39,10 @@ namespace ExtremeRoles.Roles.Combination
 
                     var text = GameObject.Instantiate(
                         Prefab.Text, playerArrow.Main.transform);
-                    text.fontSize = 5;
+                    text.fontSize = 10;
                     text.alignment = TMPro.TextAlignmentOptions.Center;
-                    text.transform.localPosition = text.transform.localPosition + new Vector3(0, 0.7f, 800f);
+                    text.transform.localPosition = text.transform.localPosition + new Vector3(0, -0.7f, 800f);
+                    text.transform.localScale = new Vector3(2.0f, 2.0f, 2.0f);
 
                     this.distance.Add(player.PlayerId, text);
                     this.player.Add(player.PlayerId, player);
@@ -252,11 +253,11 @@ namespace ExtremeRoles.Roles.Combination
                 var role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
                 if (role.IsCrewmate())
                 {
-                    ++impNum;
+                    ++crewNum;
                 }
                 else if (role.IsImpostor())
                 {
-                    ++crewNum;
+                    ++impNum;
                 }
                 if (role.Id == ExtremeRoleId.Vigilante)
                 {
