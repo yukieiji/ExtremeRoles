@@ -9,8 +9,8 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
     [HarmonyPatch(typeof(HatManager), nameof(HatManager.GetHatById))]
     public static class HatManagerGetHatByIdPatch
     {
-        private static bool isRunning;
-        private static bool isLoaded;
+        private static bool isRunning = false;
+        private static bool isLoaded = false;
         public static void Prefix(HatManager __instance)
         {
             if (isRunning) { return; }
