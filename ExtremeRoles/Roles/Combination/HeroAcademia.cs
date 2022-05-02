@@ -39,9 +39,9 @@ namespace ExtremeRoles.Roles.Combination
 
                     var text = GameObject.Instantiate(
                         Prefab.Text, playerArrow.Main.transform);
-                    text.fontSize = 2;
+                    text.fontSize = 5;
                     text.alignment = TMPro.TextAlignmentOptions.Center;
-                    text.transform.position = text.transform.position + new Vector3(0, 0, 800f);
+                    text.transform.localPosition = text.transform.localPosition + new Vector3(0, 0.7f, 800f);
 
                     this.distance.Add(player.PlayerId, text);
                     this.player.Add(player.PlayerId, player);
@@ -65,7 +65,8 @@ namespace ExtremeRoles.Roles.Combination
             foreach(var (playerId, playerCont) in this.player)
             {
                 var diss = Vector2.Distance(rolePlayerPos, playerCont.GetTruePosition());
-                this.distance[playerId].text = $"{diss:F1}";
+                this.distance[playerId].text = Design.ColoedString(
+                    Color.black, $"{diss:F1}");
                 this.arrow[playerId].UpdateTarget(playerCont.transform.position);
             }
         }
@@ -506,6 +507,7 @@ namespace ExtremeRoles.Roles.Combination
         {
             if (MeetingHud.Instance != null ||
                 ShipStatus.Instance != null) { return; }
+            if (!ShipStatus.Instance.enabled) { return; }
 
             if (this.callTargetArrow != null)
             {
@@ -545,9 +547,9 @@ namespace ExtremeRoles.Roles.Combination
             int allCrew = 0;
             int deadCrew = 0;
 
-            foreach (var player in PlayerControl.AllPlayerControls)
+            foreach (var player in GameData.Instance.AllPlayers)
             {
-                if (player.Data.IsDead || player.Data.Disconnected)
+                if (player.IsDead || player.Disconnected)
                 {
                     ++deadCrew;
                 }
