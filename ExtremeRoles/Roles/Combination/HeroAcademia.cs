@@ -42,7 +42,7 @@ namespace ExtremeRoles.Roles.Combination
                     text.fontSize = 10;
                     text.gameObject.layer = 5;
                     text.alignment = TMPro.TextAlignmentOptions.Center;
-                    text.transform.localPosition = text.transform.localPosition + new Vector3(0, -0.725f, 800f);
+                    text.transform.localPosition = text.transform.localPosition + new Vector3(0, -0.725f, -800f);
                     text.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
                     this.distance.Add(player.PlayerId, text);
@@ -66,6 +66,7 @@ namespace ExtremeRoles.Roles.Combination
         {
             foreach(var (playerId, playerCont) in this.player)
             {
+                if (playerCont.Data.IsDead || playerCont.Data.Disconnected) { continue; }
                 var diss = Vector2.Distance(rolePlayerPos, playerCont.GetTruePosition());
                 this.distance[playerId].text = Design.ColoedString(
                     Color.black, $"{diss:F1}");
