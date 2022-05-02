@@ -219,6 +219,12 @@ namespace ExtremeRoles.Patches
                         setWinGameContorlId(id);
                         endReason = (GameOverReason)RoleGameOverReason.YandereKillAllOther;
                         break;
+                    case NeutralSeparateTeam.Vigilante:
+                        if (statistics.TeamImpostorAlive > 0 &&
+                            statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
+                        setWinGameContorlId(id);
+                        endReason = (GameOverReason)RoleGameOverReason.VigilanteKillAllOther;
+                        break;
                     default:
                         break;
                 }
