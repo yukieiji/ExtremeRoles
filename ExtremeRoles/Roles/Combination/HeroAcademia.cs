@@ -145,6 +145,10 @@ namespace ExtremeRoles.Roles.Combination
                     byte heroNewCond = reader.ReadByte();
                     updateHero(updateHeroPlayerId, heroNewCond);
                     break;
+                case Command.UpdateVigilante:
+                    byte heroAcaCond = reader.ReadByte();
+                    UpdateVigilante((Condition)heroAcaCond);
+                    break;
                 case Command.DrawHeroAndVillan:
                     byte heroPlayerId = reader.ReadByte();
                     byte villanPlayerId = reader.ReadByte();
@@ -217,7 +221,21 @@ namespace ExtremeRoles.Roles.Combination
                     hero.PlayerId,
                     (byte)newCond,
                 });
-            
+            updateHero(hero.PlayerId, (byte)newCond);
+       
+        }
+        public static void RpcUpdateVigilante(
+            Condition cond)
+        {
+            RPCOperator.Call(
+                PlayerControl.LocalPlayer.NetId,
+                RPCOperator.Command.HeroHeroAcademia,
+                new List<byte>
+                {
+                    (byte)Command.UpdateHero,
+                    (byte)cond,
+                });
+            UpdateVigilante(cond);
         }
 
         public static void UpdateVigilante(
@@ -777,7 +795,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
     }
-    public class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleWinPlayerModifier
+    public class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleWinPlayerModifier
     {
         public enum VigilanteCondition
         {
@@ -924,5 +942,43 @@ namespace ExtremeRoles.Roles.Combination
             this.RoleAbilityInit();
         }
 
+        public void Update(PlayerControl rolePlayer)
+        {
+
+            switch (this.condition)
+            {
+                case VigilanteCondition.None:
+                    this.UseVent = false;
+                    this.UseSabotage = false;
+                    this.CanKill = false;
+                    foreach (var (playerId, role) in ExtremeRoleManager.GameRole)
+                    {
+                        var playerInfo = GameData.Instance.GetPlayerById(playerId);
+
+                        if (role.Id == ExtremeRoleId.Hero && playerInfo.Disconnected)
+                        {
+                            HeroAcademia.RpcUpdateVigilante(HeroAcademia.Condition.HeroDown);
+                            return;
+                        }
+                        else if (role.Id == ExtremeRoleId.Villain && playerInfo.Disconnected)
+                        {
+                            HeroAcademia.RpcUpdateVigilante(HeroAcademia.Condition.VillainDown);
+                            return;
+                        }
+                    }
+                    break;
+                case VigilanteCondition.NewVillainForTheShip:
+                    this.UseSabotage = true;
+                    this.UseVent = true;
+                    break;
+                case VigilanteCondition.NewEnemyNeutralForTheShip:
+                    this.UseSabotage = false;
+                    this.UseVent = false;
+                    this.CanKill = true;
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }

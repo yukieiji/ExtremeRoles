@@ -520,8 +520,8 @@ namespace ExtremeRoles.Patches
 
             if (role.UseSabotage)
             {
-                // インポスターは死んでもサボタージ使える
-                if (enable && role.IsImpostor())
+                // インポスターとヴィジランテは死んでもサボタージ使える
+                if (enable && (role.IsImpostor() || role.Id == ExtremeRoleId.Vigilante))
                 {
                     HudManager.Instance.SabotageButton.Show();
                     HudManager.Instance.SabotageButton.gameObject.SetActive(true);
