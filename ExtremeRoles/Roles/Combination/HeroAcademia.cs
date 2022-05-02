@@ -42,7 +42,7 @@ namespace ExtremeRoles.Roles.Combination
                     text.fontSize = 10;
                     text.gameObject.layer = 5;
                     text.alignment = TMPro.TextAlignmentOptions.Center;
-                    text.transform.localPosition = text.transform.localPosition + new Vector3(0, -0.725f, -800f);
+                    text.transform.localPosition = text.transform.localPosition + new Vector3(0.0f, 0.0f, -800f);
                     text.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
                     this.distance.Add(player.PlayerId, text);
@@ -870,7 +870,7 @@ namespace ExtremeRoles.Roles.Combination
         public VigilanteCondition Condition => this.condition;
 
         private RoleAbilityButtonBase callButton;
-        private VigilanteCondition condition;
+        private VigilanteCondition condition = VigilanteCondition.None;
         private float range;
         private byte target;
 
@@ -976,6 +976,52 @@ namespace ExtremeRoles.Roles.Combination
             return true;
         }
 
+        public override string GetFullDescription()
+        {
+            switch (this.condition)
+            {
+                case VigilanteCondition.NewHeroForTheShip:
+                    return Translation.GetString(
+                        $"{this.Id}CrewDescription");
+                case VigilanteCondition.NewVillainForTheShip:
+                    return Translation.GetString(
+                        $"{this.Id}ImpDescription");
+                case VigilanteCondition.NewEnemyNeutralForTheShip:
+                    return Translation.GetString(
+                        $"{this.Id}NeutDescription");
+                default:
+                    return base.GetFullDescription();
+            }
+        }
+
+        public override string GetRoleTag()
+        {
+            switch (this.condition)
+            {
+                case VigilanteCondition.NewHeroForTheShip:
+                    return $" ♣";
+                case VigilanteCondition.NewVillainForTheShip:
+                    return $" ◆";
+                case VigilanteCondition.NewEnemyNeutralForTheShip:
+                    return $" ♠";
+                default:
+                    return base.GetRoleTag();
+            }
+        }
+
+        public override string GetImportantText(bool isContainFakeTask = true)
+        {
+            switch (this.condition)
+            {
+                case VigilanteCondition.NewHeroForTheShip:
+                case VigilanteCondition.NewVillainForTheShip:
+                case VigilanteCondition.NewEnemyNeutralForTheShip:
+                    return this.createImportantText(isContainFakeTask);
+                default:
+                    return base.GetImportantText(isContainFakeTask);
+            }
+        }
+
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
@@ -1031,5 +1077,29 @@ namespace ExtremeRoles.Roles.Combination
                     break;
             }
         }
+
+        private string createImportantText(bool isContainFakeTask)
+        {
+            string baseString = Design.ColoedString(
+                this.NameColor,
+                string.Format("{0}: {1}",
+                    Design.ColoedString(
+                        this.NameColor,
+                        Translation.GetString(this.RoleName)),
+                    Translation.GetString(
+                        $"{this.Id}{this.condition}ShortDescription")));
+
+            if (isContainFakeTask && !this.HasTask)
+            {
+                string fakeTaskString = Design.ColoedString(
+                    this.NameColor,
+                    DestroyableSingleton<TranslationController>.Instance.GetString(
+                        StringNames.FakeTasks, System.Array.Empty<Il2CppSystem.Object>()));
+                baseString = $"{baseString}\r\n{fakeTaskString}";
+            }
+
+            return baseString;
+        }
+
     }
 }
