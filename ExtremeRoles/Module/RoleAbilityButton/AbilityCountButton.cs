@@ -127,10 +127,11 @@ namespace ExtremeRoles.Module.RoleAbilityButton
 
         private void reduceAbilityCount()
         {
-            if (this.abilityCountText == null) { return; }
             --this.abilityNum;
-            updateAbilityCountText();
-
+            if (this.abilityCountText != null)
+            {
+                updateAbilityCountText();
+            }
         }
 
         private void updateAbilityCountText()
