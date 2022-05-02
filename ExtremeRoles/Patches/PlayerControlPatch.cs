@@ -33,7 +33,7 @@ namespace ExtremeRoles.Patches
                 ++gameData.MeetingsCount;
                 if (hockRole != null)
                 {
-                    hockRole.HockReportButton();
+                    hockRole.HockReportButton(__instance);
                 }
             }
             else
