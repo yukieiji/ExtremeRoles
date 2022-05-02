@@ -2,6 +2,9 @@
 
 using HarmonyLib;
 
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.Combination;
 
 namespace ExtremeRoles.Patches.Button
 {
@@ -16,10 +19,10 @@ namespace ExtremeRoles.Patches.Button
         }
         public static bool Prefix(KillButton __instance)
         {
-            if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
+            if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
             PlayerControl killer = PlayerControl.LocalPlayer;
-            var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
+            var role = ExtremeRoleManager.GetLocalPlayerRole();
 
             if (__instance.isActiveAndEnabled &&
                 __instance.currentTarget &&
@@ -32,8 +35,8 @@ namespace ExtremeRoles.Patches.Button
 
                 if (target.Data.IsDead) { return false; }
 
-                var targetPlayerRole = Roles.ExtremeRoleManager.GameRole[target.PlayerId];
-                if (role.Id == Roles.ExtremeRoleId.Villain)
+                var targetPlayerRole = ExtremeRoleManager.GameRole[target.PlayerId];
+                if (role.Id == ExtremeRoleId.Villain)
                 {
                     villainSpecialKill(__instance, killer, target, targetPlayerRole);
                     return false;
@@ -47,7 +50,7 @@ namespace ExtremeRoles.Patches.Button
                     target, killer);
                 if (!canKill) { return false; }
 
-                var multiAssignRole = role as Roles.API.MultiAssignRoleBase;
+                var multiAssignRole = role as MultiAssignRoleBase;
                 if (multiAssignRole != null)
                 {
                     if (multiAssignRole.AnotherRole != null)
@@ -58,7 +61,7 @@ namespace ExtremeRoles.Patches.Button
                     }
                 }
 
-                multiAssignRole = targetPlayerRole as Roles.API.MultiAssignRoleBase;
+                multiAssignRole = targetPlayerRole as MultiAssignRoleBase;
                 if (multiAssignRole != null)
                 {
                     if (multiAssignRole.AnotherRole != null)
@@ -153,15 +156,19 @@ namespace ExtremeRoles.Patches.Button
             KillButton instance,
             PlayerControl killer,
             PlayerControl target,
-            Roles.API.SingleRoleBase targetRole)
+            SingleRoleBase targetRole)
         {
-            if (targetRole.Id == Roles.ExtremeRoleId.Vigilante)
-            { 
-                return; 
-            }
-            else if (targetRole.Id == Roles.ExtremeRoleId.Hero)
+            if (targetRole.Id == ExtremeRoleId.Vigilante)
             {
-                Roles.Combination.HeroAcademia.RpcDrawHeroAndVillan(
+                var vigilante = (Vigilante)targetRole;
+                if (vigilante.Condition != Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip)
+                {
+                    return;
+                }
+            }
+            else if (targetRole.Id == ExtremeRoleId.Hero)
+            {
+                HeroAcademia.RpcDrawHeroAndVillan(
                     target, killer);
                 return;
             }
