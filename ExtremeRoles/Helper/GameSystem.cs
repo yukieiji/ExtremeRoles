@@ -10,6 +10,12 @@ namespace ExtremeRoles.Helper
 {
     public static class GameSystem
     {
+        private static HashSet<TaskTypes> ignoreTask = new HashSet<TaskTypes>()
+        {
+            TaskTypes.FixWiring,
+            TaskTypes.VentCleaning,
+        };
+
         public static bool IsLobby
         {
             get
@@ -139,7 +145,10 @@ namespace ExtremeRoles.Helper
             List<int> index = new List<int>();
             for (int i = 0; i < tasks.Length; ++i)
             {
-                index.Add(tasks[i].Index);
+                if (!ignoreTask.Contains(tasks[i].TaskType))
+                {
+                    index.Add(tasks[i].Index);
+                }
             }
 
             return index;
