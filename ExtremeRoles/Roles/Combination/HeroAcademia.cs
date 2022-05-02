@@ -373,13 +373,13 @@ namespace ExtremeRoles.Roles.Combination
                         heroPlayer, villanPlayer);
                 }
 
-                
-
-                var vigilante = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Vigilante>();
-                if (vigilante != null)
+                foreach (var (_, role) in ExtremeRoleManager.GameRole)
                 {
-                    vigilante.SetCondition(
-                        Vigilante.VigilanteCondition.NewLawInTheShip);
+                    if (role.Id == ExtremeRoleId.Vigilante)
+                    {
+                        ((Vigilante)role).SetCondition(
+                            Vigilante.VigilanteCondition.NewLawInTheShip);
+                    }
                 }
 
                 ExtremeRolesPlugin.GameDataStore.WinCheckDisable = false;
