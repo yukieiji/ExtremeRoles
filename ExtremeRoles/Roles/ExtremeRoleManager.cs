@@ -68,6 +68,7 @@ namespace ExtremeRoles.Roles
     {
         Avalon,
         Lover,
+        HeroAca,
         Supporter
     }
 
@@ -165,6 +166,7 @@ namespace ExtremeRoles.Roles
             {
                 {(byte)CombinationRoleType.Avalon,    new Avalon()},
                 {(byte)CombinationRoleType.Lover,     new LoverManager()},
+                {(byte)CombinationRoleType.HeroAca,   new HeroAcademia()},
                 {(byte)CombinationRoleType.Supporter, new SupporterManager() },
             };
 

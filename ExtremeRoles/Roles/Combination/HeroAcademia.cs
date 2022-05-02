@@ -433,6 +433,12 @@ namespace ExtremeRoles.Roles.Combination
             FeatButtonAbility
         }
 
+        public enum HeroOption
+        {
+            FeatKillPercentage,
+            FeatButtonAbilityPercentage,
+        }
+
         public RoleAbilityButtonBase Button
         {
             get => this.searchButton;
@@ -633,11 +639,25 @@ namespace ExtremeRoles.Roles.Combination
         {
             this.CreateCommonAbilityOption(
                 parentOps, 5.0f);
+            CreateIntOption(
+                HeroOption.FeatKillPercentage,
+                33, 20, 50, 1, parentOps,
+                format: OptionUnit.Percentage);
+            CreateIntOption(
+                HeroOption.FeatButtonAbilityPercentage,
+                66, 50, 80, 1, parentOps,
+                format: OptionUnit.Percentage);
         }
 
         protected override void RoleSpecificInit()
         {
             this.RoleAbilityInit();
+
+            this.featKillPer = (float)OptionHolder.AllOption[
+                GetRoleOptionId(HeroOption.FeatKillPercentage)].GetValue() / 100.0f;
+            this.featButtonAbilityPer = (float)OptionHolder.AllOption[
+                GetRoleOptionId(HeroOption.FeatButtonAbilityPercentage)].GetValue() / 100.0f;
+
         }
         private void setButtonActive(bool active)
         {
@@ -798,11 +818,11 @@ namespace ExtremeRoles.Roles.Combination
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            this.CreateCommonAbilityOption(
-                parentOps, 5.0f);
             this.CreateFloatOption(
                 VillanOption.VigilanteSeeTime,
                 2.5f, 1.0f, 10.0f, 0.5f, parentOps);
+            this.CreateCommonAbilityOption(
+                parentOps, 5.0f);
         }
 
         protected override void RoleSpecificInit()
@@ -825,6 +845,11 @@ namespace ExtremeRoles.Roles.Combination
             NewEnemyNeutralForTheShip,
         }
 
+        public enum VigilanteOption
+        {
+            Range,
+        }
+
         public RoleAbilityButtonBase Button
         {
             get => this.callButton;
@@ -835,7 +860,6 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         public VigilanteCondition Condition => this.condition;
-
 
         private RoleAbilityButtonBase callButton;
         private VigilanteCondition condition;
@@ -954,11 +978,16 @@ namespace ExtremeRoles.Roles.Combination
         {
             this.CreateAbilityCountOption(
                 parentOps, 2, 10, 5.0f);
+            CreateFloatOption(
+                VigilanteOption.Range,
+                3.0f, 1.2f, 5.0f, 0.1f, parentOps);
         }
 
         protected override void RoleSpecificInit()
         {
             this.RoleAbilityInit();
+            this.range = OptionHolder.AllOption[
+                GetRoleOptionId(VigilanteOption.Range)].GetValue();
         }
 
         public void Update(PlayerControl rolePlayer)
