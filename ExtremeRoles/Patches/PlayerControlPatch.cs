@@ -25,23 +25,10 @@ namespace ExtremeRoles.Patches
 
             if (gameData.AssassinMeetingTrigger) { return; }
 
-            var hockRole = ExtremeRoleManager.GetLocalPlayerRole() as IRoleReportHock;
-
             // Count meetings
             if (meetingTarget == null)
             {
                 ++gameData.MeetingsCount;
-                if (hockRole != null)
-                {
-                    hockRole.HockReportButton(__instance);
-                }
-            }
-            else
-            {
-                if (hockRole != null)
-                {
-                    hockRole.HockBodyReport(meetingTarget);
-                }
             }
         }
     }
