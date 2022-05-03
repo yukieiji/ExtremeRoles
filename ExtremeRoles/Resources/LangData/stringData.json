@@ -1826,6 +1826,9 @@
     "AliceKillRange": {
         "11": "\u30ad\u30eb\u30ec\u30f3\u30b8"
     },
+    "AliceCanUseSabotage": {
+        "11": "\u30b5\u30dc\u30bf\u30fc\u30b8\u30e5\u3092\u4f7f\u3048\u308b\u304b"
+    },
     "AliceAbilityCoolTime": {
         "11": "\u300c\u7834\u58ca\u5de5\u4f5c\u300d\u306e\u30af\u30fc\u30eb\u30bf\u30a4\u30e0"
     },
@@ -1981,6 +1984,9 @@
     },
     "TaskMasterApplyEnvironmentVisionEffect": {
         "11": "\u8996\u754c\u52b9\u679c\u3092\u53d7\u3051\u308b\u304b"
+    },
+    "TaskMasterCanUseSabotage": {
+        "11": "\u30b5\u30dc\u30bf\u30fc\u30b8\u30e5\u3092\u4f7f\u3048\u308b\u304b"
     },
     "TaskMasterAddCommonTaskNum": {
         "11": "\u8ffd\u52a0\u306e\u30b7\u30e7\u30fc\u30c8\u30bf\u30b9\u30af\u6570"
