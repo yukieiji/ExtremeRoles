@@ -14,6 +14,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
     {
         public enum TaskMasterOption
         {
+            CanUseSabotage
             AddCommonTaskNum,
             AddLongTaskNum,
             AddNormalTaskNum,
@@ -119,6 +120,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
+            CreateBoolOption(
+                TaskMasterOption.CanUseSabotage,
+                true, parentOps);
             CreateIntOption(
                 TaskMasterOption.AddCommonTaskNum,
                 1, 0, 15, 1, parentOps);
@@ -133,6 +137,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         protected override void RoleSpecificInit()
         {
             var allOption = OptionHolder.AllOption;
+            this.UseSabotage = allOption[
+                GetRoleOptionId(TaskMasterOption.CanUseSabotage)].GetValue();
             this.addLongTask = allOption[
                 GetRoleOptionId(TaskMasterOption.AddLongTaskNum)].GetValue();
             this.addNormalTask = allOption[
