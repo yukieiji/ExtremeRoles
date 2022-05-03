@@ -7,6 +7,36 @@ namespace ExtremeRoles.Roles.API.Interface
         public void ModifiedWinPlayer(
             GameData.PlayerInfo rolePlayerInfo,
             GameOverReason reason,
-            List<WinningPlayerData> winner);
+            List<WinningPlayerData> winner,
+            System.Collections.Generic.List<PlayerControl> pulsWinner);
     }
+
+    public static class RoleWinPlayerModifierMixin
+    {
+        public static void AddWinner(
+            this IRoleWinPlayerModifier self,
+            GameData.PlayerInfo playerInfo,
+            List<WinningPlayerData> winner,
+            System.Collections.Generic.List<PlayerControl> pulsWinner)
+        {
+            winner.Add(new WinningPlayerData(playerInfo));
+            pulsWinner.Add(playerInfo.Object);
+        }
+
+        public static void RemoveWinner(
+            this IRoleWinPlayerModifier self,
+            GameData.PlayerInfo playerInfo,
+            List<WinningPlayerData> winner,
+            System.Collections.Generic.List<PlayerControl> pulsWinner)
+        {
+           
+            winner.Remove(new WinningPlayerData(playerInfo));
+            if (pulsWinner.Contains(playerInfo.Object))
+            {
+                pulsWinner.Remove(playerInfo.Object);
+            }
+        }
+
+    }
+
 }

@@ -928,19 +928,20 @@ namespace ExtremeRoles.Roles.Combination
         public void ModifiedWinPlayer(
             GameData.PlayerInfo rolePlayerInfo,
             GameOverReason reason,
-            Il2CppSystem.Collections.Generic.List<WinningPlayerData> winner)
+            Il2CppSystem.Collections.Generic.List<WinningPlayerData> winner,
+            List<PlayerControl> pulsWinner)
         {
             switch (this.condition)
             {
                 case VigilanteCondition.NewLawInTheShip:
-                    winner.Add(new WinningPlayerData(rolePlayerInfo));
+                    this.AddWinner(rolePlayerInfo, winner, pulsWinner);
                     break;
                 case VigilanteCondition.NewHeroForTheShip:
                     if (reason == GameOverReason.HumansByTask ||
                         reason == GameOverReason.HumansByVote ||
                         reason == GameOverReason.HumansDisconnect)
                     {
-                        winner.Add(new WinningPlayerData(rolePlayerInfo));
+                        this.AddWinner(rolePlayerInfo, winner, pulsWinner);
                     }
                     break;
                 case VigilanteCondition.NewVillainForTheShip:
@@ -949,7 +950,9 @@ namespace ExtremeRoles.Roles.Combination
                         reason == GameOverReason.ImpostorBySabotage ||
                         reason == GameOverReason.ImpostorDisconnect ||
                         reason == (GameOverReason)RoleGameOverReason.AssassinationMarin)
-                    winner.Add(new WinningPlayerData(rolePlayerInfo));
+                    {
+                        this.AddWinner(rolePlayerInfo, winner, pulsWinner);
+                    }
                     break;
                 default:
                     break;

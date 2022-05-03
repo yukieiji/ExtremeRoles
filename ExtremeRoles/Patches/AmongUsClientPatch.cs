@@ -186,7 +186,8 @@ namespace ExtremeRoles.Patches
                 winModRole.ModifiedWinPlayer(
                     playerInfo,
                     gameData.EndReason,
-                    TempData.winners);
+                    TempData.winners,
+                    gameData.PlusWinner);
             }
 
         }
