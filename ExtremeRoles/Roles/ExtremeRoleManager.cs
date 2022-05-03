@@ -25,6 +25,9 @@ namespace ExtremeRoles.Roles
         Hero,
         Villain,
         Vigilante,
+        Detective,
+        Assistant,
+        DetectiveApprentice,
 
         SpecialCrew,
         Sheriff,
