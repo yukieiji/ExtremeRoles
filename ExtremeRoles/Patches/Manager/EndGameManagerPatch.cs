@@ -321,7 +321,7 @@ namespace ExtremeRoles.Patches.Manager
             }
 
             int textCounter = 0;
-            List<ExtremeRoleId> added = new List<ExtremeRoleId>();
+            HashSet<ExtremeRoleId> added = new HashSet<ExtremeRoleId>();
 
             if (OptionHolder.Ship.DisableNeutralSpecialForceEnd && winNeutral.Count != 0)
             {
