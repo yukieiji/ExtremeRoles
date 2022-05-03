@@ -14,7 +14,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
     {
         public enum TaskMasterOption
         {
-            CanUseSabotage
+            CanUseSabotage,
             AddCommonTaskNum,
             AddLongTaskNum,
             AddNormalTaskNum,
