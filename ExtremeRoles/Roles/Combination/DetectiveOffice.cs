@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -27,22 +28,112 @@ namespace ExtremeRoles.Roles.Combination
         }
     }
 
-    public class Detective : MultiAssignRoleBase, IRoleReportHock, IRoleUpdate
+    public class Detective : MultiAssignRoleBase, IRoleMurderPlayerHock, IRoleResetMeeting, IRoleReportHock, IRoleUpdate
     {
+        public struct CrimeInfo
+        {
+            public Vector2 Position;
+            public DateTime KilledTime;
+            public float ReportTime;
+            public ExtremeRoleType KillerTeam;
+            public ExtremeRoleId KillerRole;
+        }
+
+        public class CrimeInfoContainer
+        {
+            public Dictionary<byte, (Vector2, DateTime)> deadBodyInfo = new Dictionary<byte, (Vector2, DateTime)>();
+            public Dictionary<byte, float> timer = new Dictionary<byte, float>();
+
+            public CrimeInfoContainer()
+            {
+                this.Clear();
+            }
+
+            public void Clear()
+            {
+                this.deadBodyInfo.Clear();
+                this.timer.Clear();
+            }
+
+            public void AddDeadBody(
+                PlayerControl deadPlayer)
+            {
+                this.deadBodyInfo.Add(
+                    deadPlayer.PlayerId,
+                    (
+                        deadPlayer.GetTruePosition(),
+                        DateTime.UtcNow
+                    ));
+                this.timer.Add(
+                    deadPlayer.PlayerId,
+                    0.0f);
+            }
+
+            public CrimeInfo? GetCrimeInfo(byte playerId)
+            {
+                if (!this.deadBodyInfo.ContainsKey(playerId))
+                { 
+                    return null;
+                }
+
+                var (pos, time) = this.deadBodyInfo[playerId];
+                var role = ExtremeRoleManager.GameRole[playerId];
+
+                return new CrimeInfo()
+                {
+                    Position = pos,
+                    KilledTime = time,
+                    ReportTime = this.timer[playerId],
+                    KillerTeam = role.Team,
+                    KillerRole = role.Id,
+                };
+            }
+
+            public void Update()
+            {
+                foreach (byte playerId in this.timer.Keys)
+                {
+                    this.timer[playerId] = this.timer[playerId] += Time.fixedDeltaTime;
+                }
+            }
+        }
+
+        private CrimeInfo? targetCrime;
+        private bool isAssistantReport = false;
+        private CrimeInfoContainer info;
+        private Arrow crimeArrow;
+        private float searchTime;
+        private float searchAssistantTime;
+        private float timer = 0.0f;
+        private float range;
+
         public Detective() : base(
             ExtremeRoleId.Detective,
             ExtremeRoleType.Crewmate,
             ExtremeRoleId.Detective.ToString(),
             Palette.White,
             false, true, false, false)
-        {
+        { }
 
+        public void ResetOnMeetingEnd()
+        {
+            this.info.Clear();
         }
+
+        public void ResetOnMeetingStart()
+        {
+            if (this.crimeArrow != null)
+            {
+                this.crimeArrow.SetActive(false);
+            }
+        }
+
         public void HockReportButton(
             PlayerControl rolePlayer,
             GameData.PlayerInfo reporter)
         {
-            throw new System.NotImplementedException();
+            this.targetCrime = null;
+            this.isAssistantReport = false;
         }
 
         public void HockBodyReport(
@@ -50,12 +141,60 @@ namespace ExtremeRoles.Roles.Combination
             GameData.PlayerInfo reporter,
             GameData.PlayerInfo reportBody)
         {
-            throw new System.NotImplementedException();
+            this.targetCrime = this.info.GetCrimeInfo(reportBody.PlayerId);
+            this.isAssistantReport = ExtremeRoleManager.GameRole[
+                reporter.PlayerId].Id == ExtremeRoleId.Assistant;
+        }
+
+        public void HockMuderPlayer(
+            PlayerControl source, PlayerControl target)
+        {
+            this.info.AddDeadBody(target);
         }
 
         public void Update(PlayerControl rolePlayer)
         {
-            throw new System.NotImplementedException();
+            if (this.targetCrime != null)
+            {
+                if (this.crimeArrow == null)
+                {
+                    this.crimeArrow = new Arrow(
+                        Color.white);
+                }
+
+                var crime = (CrimeInfo)this.targetCrime;
+                Vector2 crimePos = crime.Position;
+
+                this.crimeArrow.SetActive(true);
+                this.crimeArrow.UpdateTarget(crimePos);
+                this.crimeArrow.Update();
+
+                Vector2 playerPos = rolePlayer.GetTruePosition();
+
+                if (!PhysicsHelpers.AnythingBetween(
+                        crimePos, playerPos,
+                        Constants.ShipAndAllObjectsMask, false) &&
+                    Vector2.Distance(crimePos, playerPos) < this.range)
+                {
+                    if (this.timer > this.searchAssistantTime && this.isAssistantReport)
+                    {
+
+                    }
+                    else if (this.timer > this.searchTime)
+                    {
+                    
+                    }
+                    this.timer += Time.fixedDeltaTime;
+                }
+                else
+                {
+                    this.timer = 0;
+                }
+            }
+            if (this.crimeArrow != null)
+            {
+                this.crimeArrow.SetActive(false);
+            }
         }
 
         protected override void CreateSpecificOption(
@@ -66,7 +205,8 @@ namespace ExtremeRoles.Roles.Combination
 
         protected override void RoleSpecificInit()
         {
-            throw new System.NotImplementedException();
+            this.info = new CrimeInfoContainer();
+            this.info.Clear();
         }
     }
 
