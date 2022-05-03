@@ -177,12 +177,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            this.CreateAbilityCountOption(
-                parentOps, 2, 100);
-
             CreateBoolOption(
                 AliceOption.CanUseSabotage,
                 true, parentOps);
+
+            this.CreateAbilityCountOption(
+                parentOps, 2, 100);
             CreateIntOption(
                 AliceOption.RevartLongTaskNum,
                 1, 0, 15, 1, parentOps);
