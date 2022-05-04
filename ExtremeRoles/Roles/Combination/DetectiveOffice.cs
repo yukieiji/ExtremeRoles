@@ -19,7 +19,8 @@ namespace ExtremeRoles.Roles.Combination
         public const string Name = "DetectiveOffice";
 
         public DetectiveOffice() : base(
-            Name, new Color(255f, 255f, 255f), 2)
+            Name, new Color(255f, 255f, 255f), 2,
+            (OptionHolder.VanillaMaxPlayerNum - 1) / 2)
         {
             this.Roles.Add(new Detective());
             this.Roles.Add(new Assistant());
@@ -252,7 +253,7 @@ namespace ExtremeRoles.Roles.Combination
 
             var allOption = OptionHolder.AllOption;
             this.range = allOption[
-                GetManagerOptionId(DetectiveOption.SearchRange)].GetValue();
+                GetRoleOptionId(DetectiveOption.SearchRange)].GetValue();
             this.searchTime = allOption[
                 GetRoleOptionId(DetectiveOption.SearchTime)].GetValue();
             this.searchAssistantTime = allOption[
