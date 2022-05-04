@@ -107,6 +107,7 @@ namespace ExtremeRoles.Roles.Combination
 
         public enum DetectiveOption
         {
+            SearchRange,
             SearchTime,
             SearchAssistantTime,
             TextShowTime,
@@ -202,13 +203,14 @@ namespace ExtremeRoles.Roles.Combination
                     if ((this.timer > this.searchAssistantTime && this.isAssistantReport) ||
                         (this.timer > this.searchTime))
                     {
+                        this.timer = 0.0f;
                         updateSearchCond(crime);
                     }
-                    this.timer -= Time.fixedDeltaTime;
+                    this.timer += Time.fixedDeltaTime;
                 }
                 else
                 {
-                    this.timer = 0;
+                    this.timer = 0.0f;
                     resetSearchCond();
                 }
             }
@@ -221,6 +223,10 @@ namespace ExtremeRoles.Roles.Combination
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
+            CreateFloatOption(
+                DetectiveOption.SearchRange,
+                1.0f, 0.5f, 2.8f, 0.1f,
+                parentOps);
 
             CreateFloatOption(
                 DetectiveOption.SearchTime,
@@ -245,6 +251,8 @@ namespace ExtremeRoles.Roles.Combination
             this.info.Clear();
 
             var allOption = OptionHolder.AllOption;
+            this.range = allOption[
+                GetManagerOptionId(DetectiveOption.SearchRange)].GetValue();
             this.searchTime = allOption[
                 GetRoleOptionId(DetectiveOption.SearchTime)].GetValue();
             this.searchAssistantTime = allOption[
