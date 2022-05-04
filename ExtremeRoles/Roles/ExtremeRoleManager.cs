@@ -311,17 +311,16 @@ namespace ExtremeRoles.Roles
         public static void SetPlyerIdToSingleRoleId(
             byte roleId, byte playerId)
         {
-            foreach (RoleTypes vanilaRole in Enum.GetValues(
-                typeof(RoleTypes)))
+            if (!Enum.IsDefined(typeof(RoleTypes), roleId))
             {
-                if ((byte)vanilaRole == roleId)
-                {
-                    setPlyerIdToSingleRole(
-                        playerId, new Solo.VanillaRoleWrapper(vanilaRole));
-                    return;
-                }
+                setPlyerIdToSingleRole(playerId, NormalRole[roleId]);
             }
-            setPlyerIdToSingleRole(playerId, NormalRole[roleId]);
+            else
+            {
+                setPlyerIdToSingleRole(
+                    playerId,
+                    new Solo.VanillaRoleWrapper((RoleTypes)roleId));
+            }
         }
 
         public static void RoleReplace(
