@@ -81,7 +81,7 @@ namespace ExtremeRoles.Module.RoleAbilityButton
 
         public bool IsAbilityActive() => this.IsAbilityOn; 
 
-        public void ForceAbilityOff()
+        public virtual void ForceAbilityOff()
         {
             this.IsAbilityOn = false;
             this.Button.cooldownTimerText.color = Palette.EnabledColor;

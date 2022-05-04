@@ -41,6 +41,13 @@ namespace ExtremeRoles.Module.RoleAbilityButton
         
         }
 
+        public override void ForceAbilityOff()
+        {
+            base.ForceAbilityOff();
+            this.ButtonSprite = this.activateButtonSprite;
+            this.ButtonText = this.activateButtonText;
+        }
+
         protected override void AbilityButtonUpdate()
         {
             if ((this.CanUse() || this.IsAbilityOn) && this.Timer < 0f)
