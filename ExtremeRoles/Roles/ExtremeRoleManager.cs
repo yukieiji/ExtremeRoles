@@ -72,6 +72,7 @@ namespace ExtremeRoles.Roles
         Avalon,
         Lover,
         HeroAca,
+        DetectiveOffice,
         Supporter
     }
 
@@ -167,10 +168,11 @@ namespace ExtremeRoles.Roles
         public static readonly Dictionary<
             byte, CombinationRoleManagerBase> CombRole = new Dictionary<byte, CombinationRoleManagerBase>()
             {
-                {(byte)CombinationRoleType.Avalon,    new Avalon()},
-                {(byte)CombinationRoleType.Lover,     new LoverManager()},
-                {(byte)CombinationRoleType.HeroAca,   new HeroAcademia()},
-                {(byte)CombinationRoleType.Supporter, new SupporterManager() },
+                {(byte)CombinationRoleType.Avalon         , new Avalon()},
+                {(byte)CombinationRoleType.Lover          , new LoverManager()},
+                {(byte)CombinationRoleType.HeroAca        , new HeroAcademia()},
+                {(byte)CombinationRoleType.DetectiveOffice, new DetectiveOffice()},
+                {(byte)CombinationRoleType.Supporter      , new SupporterManager()},
             };
 
         public static Dictionary<
