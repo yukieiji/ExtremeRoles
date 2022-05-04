@@ -181,15 +181,19 @@ namespace ExtremeRoles.Roles.Combination
                 if (this.crimeArrow == null)
                 {
                     this.crimeArrow = new Arrow(
-                        Color.white);
+                        new Color32(
+                            byte.MaxValue,
+                            byte.MaxValue,
+                            byte.MaxValue,
+                            byte.MaxValue));
                 }
 
                 var crime = (CrimeInfo)this.targetCrime;
                 Vector2 crimePos = crime.Position;
 
-                this.crimeArrow.SetActive(true);
                 this.crimeArrow.UpdateTarget(crimePos);
                 this.crimeArrow.Update();
+                this.crimeArrow.SetActive(true);
 
                 Vector2 playerPos = rolePlayer.GetTruePosition();
 
@@ -231,12 +235,12 @@ namespace ExtremeRoles.Roles.Combination
 
             CreateFloatOption(
                 DetectiveOption.SearchTime,
-                4.0f, 2.0f, 10.0f, 0.1f,
+                6.0f, 3.0f, 10.0f, 0.1f,
                 parentOps, format: OptionUnit.Second);
 
             CreateFloatOption(
                 DetectiveOption.SearchAssistantTime,
-                2.0f, 1.0f, 5.0f, 0.1f,
+                4.0f, 2.0f, 7.5f, 0.1f,
                 parentOps, format: OptionUnit.Second);
 
             CreateFloatOption(
@@ -275,6 +279,10 @@ namespace ExtremeRoles.Roles.Combination
                 if (this.crimeArrow != null)
                 {
                     this.crimeArrow.SetActive(false);
+                }
+                if (this.searchText != null)
+                {
+                    this.searchText.gameObject.SetActive(false);
                 }
             }
         }
