@@ -335,22 +335,33 @@ namespace ExtremeRoles.Roles.Combination
         }
     }
 
-    public class Assistant : MultiAssignRoleBase, IRoleReportHock
+    public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHock, IRoleReportHock, IRoleUpdate
     {
+        private Dictionary<byte, DateTime> deadBodyInfo = new Dictionary<byte, DateTime>();
+        private bool isReporterMe = false;
+        private bool isInfoTell = false;
+        private DateTime? reportTime = null;
         public Assistant() : base(
             ExtremeRoleId.Assistant,
             ExtremeRoleType.Crewmate,
             ExtremeRoleId.Assistant.ToString(),
             Palette.White,
             false, true, false, false)
-        {
+        { }
 
+        public void HockMuderPlayer(
+            PlayerControl source, PlayerControl target)
+        {
+            this.deadBodyInfo.Add(target.PlayerId, DateTime.Now);
         }
+
         public void HockReportButton(
             PlayerControl rolePlayer,
             GameData.PlayerInfo reporter)
         {
-            throw new System.NotImplementedException();
+            this.isReporterMe = false;
+            this.isInfoTell = false;
+            this.deadBodyInfo.Clear();
         }
 
         public void HockBodyReport(
@@ -358,18 +369,39 @@ namespace ExtremeRoles.Roles.Combination
             GameData.PlayerInfo reporter,
             GameData.PlayerInfo reportBody)
         {
-            throw new System.NotImplementedException();
+            this.isInfoTell = false;
+            if (this.IsSameControlId(ExtremeRoleManager.GameRole[rolePlayer.PlayerId]))
+            {
+                this.isReporterMe = true;
+                if (this.deadBodyInfo.ContainsKey(reportBody.PlayerId))
+                {
+                    this.reportTime = this.deadBodyInfo[reportBody.PlayerId];
+                }
+            }
+            this.deadBodyInfo.Clear();
         }
+
+        public void Update(PlayerControl rolePlayer)
+        {
+            if (MeetingHud.Instance == null) { return; }
+            if (this.isReporterMe && 
+                this.reportTime.HasValue &&
+                !this.isInfoTell)
+            {
+                this.isInfoTell = true;
+                DestroyableSingleton<HudManager>.Instance.Chat.AddChat(
+                    PlayerControl.LocalPlayer, string.Format("reportedDeadBodyInfo", this.reportTime));
+            }
+        }
+
 
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
-        {
-            throw new System.NotImplementedException();
-        }
+        { }
 
         protected override void RoleSpecificInit()
         {
-            throw new System.NotImplementedException();
+            this.deadBodyInfo.Clear();
         }
     }
 
