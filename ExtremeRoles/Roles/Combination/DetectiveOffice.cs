@@ -3,8 +3,6 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using Hazel;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
@@ -41,8 +39,8 @@ namespace ExtremeRoles.Roles.Combination
 
         public class CrimeInfoContainer
         {
-            public Dictionary<byte, (Vector2, DateTime)> deadBodyInfo = new Dictionary<byte, (Vector2, DateTime)>();
-            public Dictionary<byte, float> timer = new Dictionary<byte, float>();
+            private Dictionary<byte, (Vector2, DateTime)> deadBodyInfo = new Dictionary<byte, (Vector2, DateTime)>();
+            private Dictionary<byte, float> timer = new Dictionary<byte, float>();
 
             public CrimeInfoContainer()
             {
@@ -98,6 +96,22 @@ namespace ExtremeRoles.Roles.Combination
             }
         }
 
+        public enum SearchCond
+        {
+            None = byte.MinValue,
+            FindKillTime,
+            FindReportTime,
+            FindTeam,
+            FindRole,
+        }
+
+        public enum DetectiveOption
+        {
+            SearchTime,
+            SearchAssistantTime,
+            TextShowTime,
+        }
+
         private CrimeInfo? targetCrime;
         private bool isAssistantReport = false;
         private CrimeInfoContainer info;
@@ -106,6 +120,10 @@ namespace ExtremeRoles.Roles.Combination
         private float searchAssistantTime;
         private float timer = 0.0f;
         private float range;
+        private SearchCond cond;
+        private string searchStrBase;
+        private TMPro.TextMeshPro searchText;
+        private TextPopUpper textPopUp;
 
         public Detective() : base(
             ExtremeRoleId.Detective,
@@ -126,6 +144,7 @@ namespace ExtremeRoles.Roles.Combination
             {
                 this.crimeArrow.SetActive(false);
             }
+            resetSearchCond();
         }
 
         public void HockReportButton(
@@ -154,6 +173,7 @@ namespace ExtremeRoles.Roles.Combination
 
         public void Update(PlayerControl rolePlayer)
         {
+
             if (this.targetCrime != null)
             {
                 if (this.crimeArrow == null)
@@ -176,19 +196,20 @@ namespace ExtremeRoles.Roles.Combination
                         Constants.ShipAndAllObjectsMask, false) &&
                     Vector2.Distance(crimePos, playerPos) < this.range)
                 {
-                    if (this.timer > this.searchAssistantTime && this.isAssistantReport)
-                    {
 
-                    }
-                    else if (this.timer > this.searchTime)
+                    updateSearchText();
+
+                    if ((this.timer > this.searchAssistantTime && this.isAssistantReport) ||
+                        (this.timer > this.searchTime))
                     {
-                    
+                        updateSearchCond(crime);
                     }
-                    this.timer += Time.fixedDeltaTime;
+                    this.timer -= Time.fixedDeltaTime;
                 }
                 else
                 {
                     this.timer = 0;
+                    resetSearchCond();
                 }
             }
             if (this.crimeArrow != null)
@@ -200,13 +221,117 @@ namespace ExtremeRoles.Roles.Combination
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            throw new System.NotImplementedException();
+
+            CreateFloatOption(
+                DetectiveOption.SearchTime,
+                4.0f, 2.0f, 10.0f, 0.1f,
+                parentOps, format: OptionUnit.Second);
+
+            CreateFloatOption(
+                DetectiveOption.SearchAssistantTime,
+                2.0f, 1.0f, 5.0f, 0.1f,
+                parentOps, format: OptionUnit.Second);
+
+            CreateFloatOption(
+                DetectiveOption.TextShowTime,
+                60.0f, 5.0f, 120.0f, 0.1f,
+                parentOps, format: OptionUnit.Second);
         }
 
         protected override void RoleSpecificInit()
         {
+            this.cond = SearchCond.None;
             this.info = new CrimeInfoContainer();
             this.info.Clear();
+
+            var allOption = OptionHolder.AllOption;
+            this.searchTime = allOption[
+                GetRoleOptionId(DetectiveOption.SearchTime)].GetValue();
+            this.searchAssistantTime = allOption[
+                GetRoleOptionId(DetectiveOption.SearchAssistantTime)].GetValue();
+
+            this.textPopUp = new TextPopUpper(
+                4, allOption[GetRoleOptionId(DetectiveOption.TextShowTime)].GetValue(),
+                new Vector3(-4.0f, -2.75f, -250.0f),
+                TMPro.TextAlignmentOptions.BottomLeft);
+        }
+
+        private void updateSearchCond(CrimeInfo info)
+        {
+            this.cond += 1;
+            showSearchResultText(info);
+            if (this.cond == SearchCond.FindRole)
+            {
+                this.targetCrime = null;
+                if (this.crimeArrow != null)
+                {
+                    this.crimeArrow.SetActive(false);
+                }
+            }
+        }
+        private void resetSearchCond()
+        {
+            this.cond = SearchCond.None;
+            if (this.searchText != null)
+            {
+                this.searchText.gameObject.SetActive(false);
+            }
+            if (this.textPopUp != null)
+            {
+                this.textPopUp.Clear();
+            }
+        }
+        private void showSearchResultText(CrimeInfo info)
+        {
+            if (this.textPopUp == null) { return; }
+            
+            string showStr = "";
+            switch (this.cond)
+            {
+                case SearchCond.FindKillTime:
+                    showStr = string.Format(
+                        Translation.GetString(SearchCond.FindKillTime.ToString()),
+                        info.KilledTime);
+                    break;
+                case SearchCond.FindReportTime:
+                    showStr = string.Format(
+                        Translation.GetString(SearchCond.FindReportTime.ToString()),
+                        info.ReportTime);
+                    break;
+                case SearchCond.FindTeam:
+                    showStr = string.Format(
+                        Translation.GetString(SearchCond.FindTeam.ToString()),
+                        Translation.GetString(info.KillerTeam.ToString()));
+                    break;
+                case SearchCond.FindRole:
+                    showStr = string.Format(
+                        Translation.GetString(SearchCond.FindRole.ToString()),
+                        Translation.GetString(info.KillerRole.ToString()));
+                    break;
+                default:
+                    break;
+            }
+
+            this.textPopUp.AddText(showStr);
+            
+        }
+
+        private void updateSearchText()
+        {
+            if (this.searchText == null)
+            {
+                this.searchText = UnityEngine.Object.Instantiate(
+                    HudManager.Instance.KillButton.cooldownTimerText,
+                    Camera.main.transform, false);
+                this.searchText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
+                this.searchText.enableWordWrapping = false;
+                this.searchStrBase = Translation.GetString("searchStrBase");
+            }
+
+            this.searchText.gameObject.SetActive(true);
+            this.searchText.text = string.Format(
+                this.searchStrBase, Mathf.CeilToInt(this.timer));
+
         }
     }
 
