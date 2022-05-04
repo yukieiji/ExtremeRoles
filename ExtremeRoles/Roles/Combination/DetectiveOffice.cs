@@ -126,6 +126,7 @@ namespace ExtremeRoles.Roles.Combination
         private string searchStrBase;
         private TMPro.TextMeshPro searchText;
         private TextPopUpper textPopUp;
+        private Vector2 prevPlayerPos;
 
         public Detective() : base(
             ExtremeRoleId.Detective,
@@ -176,6 +177,11 @@ namespace ExtremeRoles.Roles.Combination
         public void Update(PlayerControl rolePlayer)
         {
 
+            if (this.prevPlayerPos == null)
+            { 
+                this.prevPlayerPos = rolePlayer.GetTruePosition();
+            }
+
             if (this.targetCrime != null)
             {
                 if (this.crimeArrow == null)
@@ -200,7 +206,8 @@ namespace ExtremeRoles.Roles.Combination
                 if (!PhysicsHelpers.AnythingBetween(
                         crimePos, playerPos,
                         Constants.ShipAndAllObjectsMask, false) &&
-                    Vector2.Distance(crimePos, playerPos) < this.range)
+                    Vector2.Distance(crimePos, playerPos) < this.range &&
+                    this.prevPlayerPos == rolePlayer.GetTruePosition())
                 {
 
                     updateSearchText();
@@ -223,6 +230,7 @@ namespace ExtremeRoles.Roles.Combination
             {
                 this.crimeArrow.SetActive(false);
             }
+            this.prevPlayerPos = rolePlayer.GetTruePosition();
         }
 
         protected override void CreateSpecificOption(
