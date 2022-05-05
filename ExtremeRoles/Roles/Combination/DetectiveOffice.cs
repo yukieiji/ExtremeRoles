@@ -26,6 +26,15 @@ namespace ExtremeRoles.Roles.Combination
             this.Roles.Add(new Detective());
             this.Roles.Add(new Assistant());
         }
+
+        protected override void CreateSpecificOption(
+            CustomOptionBase parentOps)
+        {
+            base.CreateSpecificOption(parentOps);
+            DetectiveApprentice.DetectiveApprenticeOptionHolder.CreateOption(
+                parentOps, this.OptionIdOffset);
+        }
+
     }
 
     public class Detective : MultiAssignRoleBase, IRoleMurderPlayerHock, IRoleResetMeeting, IRoleReportHock, IRoleUpdate
@@ -233,6 +242,16 @@ namespace ExtremeRoles.Roles.Combination
             }
             this.prevPlayerPos = rolePlayer.GetTruePosition();
         }
+        public override void RolePlayerKilledAction(
+            PlayerControl rolePlayer, PlayerControl killerPlayer)
+        {
+            upgradeAssistant();
+        }
+
+        public override void ExiledAction(GameData.PlayerInfo rolePlayer)
+        {
+            upgradeAssistant();
+        }
 
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
@@ -359,6 +378,21 @@ namespace ExtremeRoles.Roles.Combination
                 this.searchStrBase, Mathf.CeilToInt(this.timer));
 
         }
+        private void upgradeAssistant()
+        {
+            foreach (var (playerId, role) in ExtremeRoleManager.GameRole)
+            {
+                if (role.Id != ExtremeRoleId.Assassin) { continue; }
+                if (!this.IsSameControlId(role)) { continue; }
+
+                var playerInfo = GameData.Instance.GetPlayerById(playerId);
+                if (!playerInfo.IsDead && !playerInfo.Disconnected)
+                {
+                    DetectiveApprentice.ChangeToDetectiveApprentice(playerId);
+                    break;
+                }
+            }
+        }
     }
 
     public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHock, IRoleReportHock
@@ -407,6 +441,17 @@ namespace ExtremeRoles.Roles.Combination
             this.deadBodyInfo.Clear();
         }
 
+        public override void RolePlayerKilledAction(
+            PlayerControl rolePlayer, PlayerControl killerPlayer)
+        {
+            downgradeDetective();
+        }
+
+        public override void ExiledAction(GameData.PlayerInfo rolePlayer)
+        {
+            downgradeDetective();
+        }
+
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         { }
@@ -415,10 +460,115 @@ namespace ExtremeRoles.Roles.Combination
         {
             this.deadBodyInfo.Clear();
         }
+        private void downgradeDetective()
+        {
+            foreach (var (playerId, role) in ExtremeRoleManager.GameRole)
+            {
+                if (role.Id != ExtremeRoleId.Detective) { continue; }
+                if (!this.IsSameControlId(role)) { continue; }
+                
+                var playerInfo = GameData.Instance.GetPlayerById(playerId);
+                if (!playerInfo.IsDead && !playerInfo.Disconnected)
+                {
+                    DetectiveApprentice.ChangeToDetectiveApprentice(playerId);
+                    break;
+                }
+            }
+        }
     }
 
     public class DetectiveApprentice : SingleRoleBase, IRoleAbility, IRoleReportHock
     {
+
+        public struct DetectiveApprenticeOptionHolder
+        {
+            public bool HasOtherVison;
+            public float Vison;
+            public bool ApplyEnvironmentVisionEffect;
+            public bool HasOtherButton;
+            public int HasOtherButtonNum;
+
+            public enum DetectiveApprenticeOption
+            {
+                HasOtherVison,
+                Vison,
+                ApplyEnvironmentVisionEffect,
+                HasOtherButton,
+                HasOtherButtonNum,
+            }
+
+            public static void CreateOption(
+                CustomOptionBase parentOps,
+                int optionId)
+            {
+                int getRoleOptionId(DetectiveApprenticeOption option)
+                {
+                    return optionId + (int)option;
+                }
+
+                string roleName = ExtremeRoleId.DetectiveApprentice.ToString();
+
+                var visonOption = new BoolCustomOption(
+                    getRoleOptionId(DetectiveApprenticeOption.HasOtherVison),
+                    string.Concat(
+                        roleName,
+                        DetectiveApprenticeOption.HasOtherVison.ToString()),
+                    false, parentOps);
+
+                new FloatCustomOption(
+                    getRoleOptionId(DetectiveApprenticeOption.Vison),
+                    string.Concat(
+                        roleName,
+                        DetectiveApprenticeOption.Vison.ToString()),
+                    2f, 0.25f, 5f, 0.25f,
+                    visonOption, format: OptionUnit.Multiplier);
+                new BoolCustomOption(
+                   getRoleOptionId(DetectiveApprenticeOption.ApplyEnvironmentVisionEffect),
+                   string.Concat(
+                       roleName,
+                       DetectiveApprenticeOption.ApplyEnvironmentVisionEffect.ToString()),
+                   false, visonOption);
+
+                var buttonOption = new BoolCustomOption(
+                    getRoleOptionId(DetectiveApprenticeOption.HasOtherButton),
+                    string.Concat(
+                        roleName,
+                        DetectiveApprenticeOption.HasOtherButton.ToString()),
+                    false, parentOps);
+                new IntCustomOption(
+                    getRoleOptionId(DetectiveApprenticeOption.HasOtherButtonNum),
+                    string.Concat(
+                        roleName,
+                        DetectiveApprenticeOption.HasOtherButtonNum.ToString()),
+                    1, 1, 10, 1, buttonOption);
+            }
+
+            public static DetectiveApprenticeOptionHolder LoadOptions(
+                int optionId)
+            {
+                int getRoleOptionId(DetectiveApprenticeOption option)
+                {
+                    return optionId + (int)option;
+                }
+
+                var allOption = OptionHolder.AllOption;
+
+                return new DetectiveApprenticeOptionHolder()
+                {
+                    HasOtherVison = allOption[
+                        getRoleOptionId(DetectiveApprenticeOption.HasOtherVison)].GetValue(),
+                    Vison = allOption[
+                        getRoleOptionId(DetectiveApprenticeOption.Vison)].GetValue(),
+                    ApplyEnvironmentVisionEffect = allOption[
+                        getRoleOptionId(DetectiveApprenticeOption.ApplyEnvironmentVisionEffect)].GetValue(),
+                    HasOtherButton = allOption[
+                        getRoleOptionId(DetectiveApprenticeOption.HasOtherButton)].GetValue(),
+                    HasOtherButtonNum = allOption[
+                        getRoleOptionId(DetectiveApprenticeOption.HasOtherButtonNum)].GetValue(),
+                };
+            }
+
+        }
 
         public RoleAbilityButtonBase Button
         { 
@@ -435,13 +585,65 @@ namespace ExtremeRoles.Roles.Combination
         private RoleAbilityButtonBase meetingButton;
         private Minigame meeting;
 
-        public DetectiveApprentice() : base(
-            ExtremeRoleId.DetectiveApprentice,
-            ExtremeRoleType.Crewmate,
-            ExtremeRoleId.DetectiveApprentice.ToString(),
-            Palette.White,
-            false, true, false, false)
-        { }
+        public DetectiveApprentice(
+            int gameControlId,
+            DetectiveApprenticeOptionHolder option
+            ) : base(
+                ExtremeRoleId.DetectiveApprentice,
+                ExtremeRoleType.Crewmate,
+                ExtremeRoleId.DetectiveApprentice.ToString(),
+                Palette.White,
+                false, true, false, false)
+        {
+            this.GameControlId = gameControlId;
+            this.HasOtherVison = option.HasOtherVison;
+            if (this.HasOtherVison)
+            {
+                this.Vison = option.Vison;
+                this.IsApplyEnvironmentVision = option.ApplyEnvironmentVisionEffect;
+            }
+            else
+            {
+                this.Vison = PlayerControl.GameOptions.CrewLightMod;
+            }
+            this.hasOtherButton = option.HasOtherButton;
+            this.buttonNum = option.HasOtherButtonNum;
+        }
+
+        public static void ChangeToDetectiveApprentice(
+            byte playerId)
+        {
+            var prevRole = ExtremeRoleManager.GameRole[playerId] as MultiAssignRoleBase;
+            if (prevRole == null) { return; }
+
+            if (prevRole.AnotherRole != null)
+            {
+                if (playerId == PlayerControl.LocalPlayer.PlayerId)
+                {
+
+                    var abilityRole = prevRole.AnotherRole as IRoleAbility;
+                    if (abilityRole != null)
+                    {
+                        abilityRole.ResetOnMeetingStart();
+                    }
+                    var resetRole = prevRole.AnotherRole as IRoleResetMeeting;
+                    if (resetRole != null)
+                    {
+                        resetRole.ResetOnMeetingStart();
+                    }
+                }
+            }
+            DetectiveApprentice newRole = new DetectiveApprentice(
+                prevRole.GameControlId,
+                DetectiveApprenticeOptionHolder.LoadOptions(
+                    prevRole.GetManagerOptionId(0)));
+            if (playerId == PlayerControl.LocalPlayer.PlayerId)
+            {
+                newRole.CreateAbility();
+            }
+
+            ExtremeRoleManager.GameRole[playerId] = newRole;
+        }
 
         public void CleanUp()
         {
