@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -421,9 +422,18 @@ namespace ExtremeRoles.Roles.Combination
 
         public RoleAbilityButtonBase Button
         { 
-            get => throw new System.NotImplementedException();
-            set => throw new System.NotImplementedException();
+            get => this.meetingButton;
+            set
+            {
+                this.meetingButton = value;
+            }
         }
+
+        private bool useAbility;
+        private bool hasOtherButton;
+        private int buttonNum;
+        private RoleAbilityButtonBase meetingButton;
+        private Minigame meeting;
 
         public DetectiveApprentice() : base(
             ExtremeRoleId.DetectiveApprentice,
@@ -431,40 +441,108 @@ namespace ExtremeRoles.Roles.Combination
             ExtremeRoleId.DetectiveApprentice.ToString(),
             Palette.White,
             false, true, false, false)
-        {
+        { }
 
+        public void CleanUp()
+        {
+            if (this.meeting != null)
+            {
+                this.meeting.Close();
+                this.useAbility = false;
+            }
         }
 
         public void CreateAbility()
         {
-            throw new System.NotImplementedException();
+
+            this.CreateAbilityCountButton(
+                "emergencyMeeting",
+                Loader.CreateSpriteFromResources(
+                    Path.TestButton),
+                abilityCleanUp: CleanUp,
+                checkAbility: IsOpen);
+            this.Button.SetLabelToCrewmate();
         }
 
         public bool IsAbilityUse()
         {
-            throw new System.NotImplementedException();
+            return this.IsCommonUse() && Minigame.Instance == null;
         }
+
+        public bool IsOpen() => Minigame.Instance != null;
 
         public void RoleAbilityResetOnMeetingEnd()
         {
-            throw new System.NotImplementedException();
+            return;
         }
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            throw new System.NotImplementedException();
+            CleanUp();
         }
 
         public bool UseAbility()
         {
-            throw new System.NotImplementedException();
+            if (this.meeting == null)
+            {
+                // 0 = Skeld
+                // 1 = Mira HQ
+                // 2 = Polus
+                // 3 = Dleks - deactivated
+                // 4 = Airship
+
+                SystemConsole emergencyConsole;
+                var systemConsoleArray = UnityEngine.Object.FindObjectsOfType<SystemConsole>();
+                switch (PlayerControl.GameOptions.MapId)
+                {
+                    case 0:
+                    case 1:
+                    case 3:
+                        emergencyConsole = systemConsoleArray.FirstOrDefault(
+                            x => x.gameObject.name.Contains("EmergencyConsole"));
+                        break;
+                    case 2:
+                        emergencyConsole = systemConsoleArray.FirstOrDefault(
+                            x => x.gameObject.name.Contains("EmergencyButton"));
+                        break;
+                    case 4:
+                        emergencyConsole = systemConsoleArray.FirstOrDefault(
+                            x => x.gameObject.name.Contains("task_emergency"));
+                        break;
+                    default:
+                        return false;
+                }
+
+                if (emergencyConsole == null || Camera.main == null)
+                {
+                    return false;
+                }
+                this.meeting = UnityEngine.Object.Instantiate(
+                    emergencyConsole.MinigamePrefab,
+                    Camera.main.transform, false);
+            }
+
+            this.meeting.transform.SetParent(Camera.main.transform, false);
+            this.meeting.transform.localPosition = new Vector3(0.0f, 0.0f, -50f);
+            this.meeting.Begin(null);
+
+            return true;
+
         }
 
         public void HockReportButton(
             PlayerControl rolePlayer,
             GameData.PlayerInfo reporter)
         {
-            throw new System.NotImplementedException();
+            if (this.useAbility &&
+                rolePlayer.PlayerId == reporter.PlayerId &&
+                rolePlayer.AmOwner &&
+                this.hasOtherButton &&
+                this.buttonNum >= 0)
+            {
+                --this.buttonNum;
+                ++rolePlayer.RemainingEmergencies;
+            }
         }
 
         public void HockBodyReport(
@@ -472,18 +550,18 @@ namespace ExtremeRoles.Roles.Combination
             GameData.PlayerInfo reporter,
             GameData.PlayerInfo reportBody)
         {
-            throw new System.NotImplementedException();
+            return;
         }
 
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            throw new System.NotImplementedException();
+            throw new Exception("Don't call this class method!!");
         }
 
         protected override void RoleSpecificInit()
         {
-            throw new System.NotImplementedException();
+            throw new Exception("Don't call this class method!!");
         }
     }
 }
