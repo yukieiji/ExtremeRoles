@@ -256,6 +256,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             jackalReset(targetPlayer, targetId);
 
             var sourceJackal = ExtremeRoleManager.GetSafeCastedRole<Jackal>(callerId);
+            if (sourceJackal == null) { return; }
             var newSidekick = new Sidekick(
                 sourceJackal.GameControlId,
                 callerId,
@@ -708,6 +709,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
 
             Jackal curJackal = ExtremeRoleManager.GetSafeCastedRole<Jackal>(callerId);
+            if (curJackal == null) { return; }
             Jackal newJackal = (Jackal)curJackal.Clone();
 
             bool multiAssignTrigger = false;
@@ -775,6 +777,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             {
 
                 var jackal = ExtremeRoleManager.GetSafeCastedRole<Jackal>(this.JackalPlayerId);
+                if (jackal == null) { return; }
                 jackal.SidekickPlayerId.Clear();
 
                 RPCOperator.Call(
