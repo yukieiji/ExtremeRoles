@@ -525,6 +525,7 @@ namespace ExtremeRoles.Roles.Combination
             this.meeting.transform.SetParent(Camera.main.transform, false);
             this.meeting.transform.localPosition = new Vector3(0.0f, 0.0f, -50f);
             this.meeting.Begin(null);
+            this.useAbility = true;
 
             return true;
 
