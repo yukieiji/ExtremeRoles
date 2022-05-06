@@ -549,6 +549,14 @@ namespace ExtremeRoles.Roles.Combination
                     30.0f, 0.5f, 60f, 0.5f,
                     parentOps, format: OptionUnit.Second);
 
+                new FloatCustomOption(
+                    getRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime),
+                    string.Concat(
+                        roleName,
+                        RoleAbilityCommonOption.AbilityActiveTime.ToString()),
+                    3.0f, 1.0f, 5.0f, 0.5f,
+                    parentOps, format: OptionUnit.Second);
+
                 var buttonOption = new BoolCustomOption(
                     getRoleOptionId(DetectiveApprenticeOption.HasOtherButton),
                     string.Concat(
@@ -602,6 +610,7 @@ namespace ExtremeRoles.Roles.Combination
 
         private bool useAbility;
         private bool hasOtherButton;
+        private bool callAnotherButton;
         private int buttonNum;
         private RoleAbilityButtonBase meetingButton;
         private Minigame meeting;
@@ -630,6 +639,7 @@ namespace ExtremeRoles.Roles.Combination
             }
             this.hasOtherButton = option.HasOtherButton;
             this.buttonNum = option.HasOtherButtonNum;
+            this.callAnotherButton = false;
         }
 
         public static void ChangeToDetectiveApprentice(
@@ -698,16 +708,21 @@ namespace ExtremeRoles.Roles.Combination
 
         public void RoleAbilityResetOnMeetingEnd()
         {
-            return;
+            this.callAnotherButton = false;
         }
 
         public void RoleAbilityResetOnMeetingStart()
         {
+            if (this.useAbility)
+            {
+                this.callAnotherButton = true;
+            }
             CleanUp();
         }
 
         public bool UseAbility()
         {
+
             if (this.meeting == null)
             {
                 // 0 = Skeld
@@ -715,7 +730,6 @@ namespace ExtremeRoles.Roles.Combination
                 // 2 = Polus
                 // 3 = Dleks - deactivated
                 // 4 = Airship
-
                 SystemConsole emergencyConsole;
                 var systemConsoleArray = UnityEngine.Object.FindObjectsOfType<SystemConsole>();
                 switch (PlayerControl.GameOptions.MapId)
@@ -737,11 +751,12 @@ namespace ExtremeRoles.Roles.Combination
                     default:
                         return false;
                 }
-
+                
                 if (emergencyConsole == null || Camera.main == null)
                 {
                     return false;
                 }
+                
                 this.meeting = UnityEngine.Object.Instantiate(
                     emergencyConsole.MinigamePrefab,
                     Camera.main.transform, false);
@@ -760,14 +775,14 @@ namespace ExtremeRoles.Roles.Combination
             PlayerControl rolePlayer,
             GameData.PlayerInfo reporter)
         {
-            if (this.useAbility &&
-                rolePlayer.PlayerId == reporter.PlayerId &&
-                rolePlayer.AmOwner &&
+            if (this.callAnotherButton &&
+                PlayerControl.LocalPlayer.PlayerId == reporter.PlayerId &&
                 this.hasOtherButton &&
-                this.buttonNum >= 0)
+                this.buttonNum > 0)
             {
                 --this.buttonNum;
                 ++rolePlayer.RemainingEmergencies;
+                this.callAnotherButton = false;
             }
         }
 
