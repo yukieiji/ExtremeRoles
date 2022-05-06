@@ -142,7 +142,7 @@ namespace ExtremeRoles.Roles.Combination
             ExtremeRoleId.Detective,
             ExtremeRoleType.Crewmate,
             ExtremeRoleId.Detective.ToString(),
-            Palette.White,
+            ColorPalette.DetectiveKokikou,
             false, true, false, false)
         { }
 
@@ -405,7 +405,7 @@ namespace ExtremeRoles.Roles.Combination
             ExtremeRoleId.Assistant,
             ExtremeRoleType.Crewmate,
             ExtremeRoleId.Assistant.ToString(),
-            Palette.White,
+            ColorPalette.AssistantBluCapri,
             false, true, false, false)
         { }
 
@@ -622,7 +622,7 @@ namespace ExtremeRoles.Roles.Combination
                 ExtremeRoleId.DetectiveApprentice,
                 ExtremeRoleType.Crewmate,
                 ExtremeRoleId.DetectiveApprentice.ToString(),
-                Palette.White,
+                ColorPalette.DetectiveApprenticeKonai,
                 false, true, false, false)
         {
             this.OptionIdOffset = option.OptionOffset;
