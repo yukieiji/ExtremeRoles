@@ -316,7 +316,7 @@ namespace ExtremeRoles.Roles
         public static void SetPlyerIdToSingleRoleId(
             byte roleId, byte playerId)
         {
-            if (!Enum.IsDefined(typeof(RoleTypes), roleId))
+            if (!Enum.IsDefined(typeof(RoleTypes), Convert.ToUInt16(roleId)))
             {
                 setPlyerIdToSingleRole(playerId, NormalRole[roleId]);
             }
