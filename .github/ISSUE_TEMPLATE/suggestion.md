@@ -1,7 +1,10 @@
 ---
 name: 機能等提案/Feature suggestion
 about: 機能等追加の提案用のテンプレート/Template for proposals for additional functions, etc
-labels: suggestion
+title: ''
+labels: 機能拡張/Enhancement, 提案/Suggestion, 未確認/Unconfirmed
+assignees: ''
+
 ---
 
 ### 追加する機能の詳細 / Feature details

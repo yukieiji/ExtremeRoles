@@ -1,7 +1,10 @@
 ---
 name: バグレポート/Bug Report
 about: MODのバグ報告用テンプレート/Template of mod bugs
-labels: bug
+title: ''
+labels: バグ/Bug, 未確認/Unconfirmed
+assignees: ''
+
 ---
 
 ## バグの情報 / Info of bug
