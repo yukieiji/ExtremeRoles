@@ -197,11 +197,7 @@ namespace ExtremeRoles.Roles.Combination
                 if (this.crimeArrow == null)
                 {
                     this.crimeArrow = new Arrow(
-                        new Color32(
-                            byte.MaxValue,
-                            byte.MaxValue,
-                            byte.MaxValue,
-                            byte.MaxValue));
+                        ColorPalette.DetectiveKokikou);
                 }
 
                 var crime = (CrimeInfo)this.targetCrime;
