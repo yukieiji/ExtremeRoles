@@ -564,7 +564,8 @@ namespace ExtremeRoles.Roles.Combination
                     string.Concat(
                         roleName,
                         DetectiveApprenticeOption.HasOtherButtonNum.ToString()),
-                    1, 1, 10, 1, buttonOption);
+                    1, 1, 10, 1, buttonOption,
+                    format: OptionUnit.Shot);
             }
 
             public static DetectiveApprenticeOptionHolder LoadOptions(
