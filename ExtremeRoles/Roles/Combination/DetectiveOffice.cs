@@ -385,7 +385,7 @@ namespace ExtremeRoles.Roles.Combination
         {
             foreach (var (playerId, role) in ExtremeRoleManager.GameRole)
             {
-                if (role.Id != ExtremeRoleId.Assassin) { continue; }
+                if (role.Id != ExtremeRoleId.Assistant) { continue; }
                 if (!this.IsSameControlId(role)) { continue; }
 
                 var playerInfo = GameData.Instance.GetPlayerById(playerId);
@@ -485,6 +485,7 @@ namespace ExtremeRoles.Roles.Combination
 
         public struct DetectiveApprenticeOptionHolder
         {
+            public int OptionOffset;
             public bool HasOtherVison;
             public float Vison;
             public bool ApplyEnvironmentVisionEffect;
@@ -504,9 +505,9 @@ namespace ExtremeRoles.Roles.Combination
                 CustomOptionBase parentOps,
                 int optionId)
             {
-                int getRoleOptionId(DetectiveApprenticeOption option)
+                int getRoleOptionId<T>(T option) where T : struct, IConvertible
                 {
-                    return optionId + (int)option;
+                    return optionId + Convert.ToInt32(option);
                 }
 
                 string roleName = ExtremeRoleId.DetectiveApprentice.ToString();
@@ -531,6 +532,22 @@ namespace ExtremeRoles.Roles.Combination
                        roleName,
                        DetectiveApprenticeOption.ApplyEnvironmentVisionEffect.ToString()),
                    false, visonOption);
+
+                new IntCustomOption(
+                    getRoleOptionId(RoleAbilityCommonOption.AbilityCount),
+                    string.Concat(
+                        roleName,
+                        RoleAbilityCommonOption.AbilityCount.ToString()),
+                    1, 1, 10, 1,
+                    parentOps, format: OptionUnit.Shot);
+
+                new FloatCustomOption(
+                    getRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime),
+                    string.Concat(
+                        roleName,
+                        RoleAbilityCommonOption.AbilityCoolTime.ToString()),
+                    30.0f, 0.5f, 60f, 0.1f,
+                    parentOps, format: OptionUnit.Second);
 
                 var buttonOption = new BoolCustomOption(
                     getRoleOptionId(DetectiveApprenticeOption.HasOtherButton),
@@ -558,6 +575,7 @@ namespace ExtremeRoles.Roles.Combination
 
                 return new DetectiveApprenticeOptionHolder()
                 {
+                    OptionOffset = optionId,
                     HasOtherVison = allOption[
                         getRoleOptionId(DetectiveApprenticeOption.HasOtherVison)].GetValue(),
                     Vison = allOption[
@@ -598,6 +616,7 @@ namespace ExtremeRoles.Roles.Combination
                 Palette.White,
                 false, true, false, false)
         {
+            this.OptionIdOffset = option.OptionOffset;
             this.GameControlId = gameControlId;
             this.HasOtherVison = option.HasOtherVison;
             if (this.HasOtherVison)
@@ -636,6 +655,7 @@ namespace ExtremeRoles.Roles.Combination
                     }
                 }
             }
+
             DetectiveApprentice newRole = new DetectiveApprentice(
                 prevRole.GameControlId,
                 DetectiveApprenticeOptionHolder.LoadOptions(
