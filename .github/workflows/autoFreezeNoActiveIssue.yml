@@ -1,0 +1,33 @@
+
+# This is a basic workflow to help you get started with Actions
+
+name: Auto Freeze issues
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  schedule:
+  - cron: "30 * * * *"
+    
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  stale:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/stale@v3
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          stale-issue-message: '自動:このチケットは30日間更新がないため「凍結/Freeze」ラベルが付与しました。ラベルを削除するか何らかのコメントがない場合、3日後に自動クローズされます。<br>Automate:This issue is 凍結/Freeze because it has been open 30 days with no activity. Remove stale label or comment or this will be closed in 3 days'
+          days-before-stale: 30
+          days-before-close: 3
+          operations-per-run: 50
+          stale-issue-label: '凍結/Freeze'
+          any-of-labels: "バグ/Bug, 新役職/New Role, 提案/Suggestion, ビジュアル/Visual, 機能拡張/Enhancement, ExtremeRoles, ExtremeSkins, 開発版で修正済み/Fixed In Dev, 開発版で実装済み/Implemented in Dev"
+          exempt-issue-labels: "未確認/Unconfirmed, 優先度:最高/Priority:EXTREME, 優先度:高/Priority:High, 優先度:低/Priority:Low, 優先度:中/Priority:Medium, 優先度:最低/Priority:Very low"
+          ascending: true
