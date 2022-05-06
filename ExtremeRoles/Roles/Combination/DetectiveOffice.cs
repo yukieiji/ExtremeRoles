@@ -37,7 +37,7 @@ namespace ExtremeRoles.Roles.Combination
 
     }
 
-    public class Detective : MultiAssignRoleBase, IRoleMurderPlayerHock, IRoleResetMeeting, IRoleReportHock, IRoleUpdate
+    public class Detective : MultiAssignRoleBase, IRoleMurderPlayerHock, IRoleResetMeeting, IRoleReportHock, IRoleUpdate, IRoleSpecialReset
     {
         public struct CrimeInfo
         {
@@ -145,6 +145,11 @@ namespace ExtremeRoles.Roles.Combination
             ColorPalette.DetectiveKokikou,
             false, true, false, false)
         { }
+
+        public void AllReset(PlayerControl rolePlayer)
+        {
+            upgradeAssistant();
+        }
 
         public void ResetOnMeetingEnd()
         {
@@ -394,7 +399,7 @@ namespace ExtremeRoles.Roles.Combination
         }
     }
 
-    public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHock, IRoleReportHock
+    public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHock, IRoleReportHock, IRoleSpecialReset
     {
         private Dictionary<byte, DateTime> deadBodyInfo = new Dictionary<byte, DateTime>();
         public Assistant() : base(
@@ -404,6 +409,11 @@ namespace ExtremeRoles.Roles.Combination
             ColorPalette.AssistantBluCapri,
             false, true, false, false)
         { }
+
+        public void AllReset(PlayerControl rolePlayer)
+        {
+            downgradeDetective();
+        }
 
         public void HockMuderPlayer(
             PlayerControl source, PlayerControl target)
