@@ -546,7 +546,7 @@ namespace ExtremeRoles.Roles.Combination
                     string.Concat(
                         roleName,
                         RoleAbilityCommonOption.AbilityCoolTime.ToString()),
-                    30.0f, 0.5f, 60f, 0.1f,
+                    30.0f, 0.5f, 60f, 0.5f,
                     parentOps, format: OptionUnit.Second);
 
                 var buttonOption = new BoolCustomOption(
