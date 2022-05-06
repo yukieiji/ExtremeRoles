@@ -236,9 +236,12 @@ namespace ExtremeRoles.Roles.Combination
                     resetSearchCond();
                 }
             }
-            if (this.crimeArrow != null)
+            else
             {
-                this.crimeArrow.SetActive(false);
+                if (this.crimeArrow != null)
+                {
+                    this.crimeArrow.SetActive(false);
+                }
             }
             this.prevPlayerPos = rolePlayer.GetTruePosition();
         }
