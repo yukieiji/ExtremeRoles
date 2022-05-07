@@ -28,6 +28,7 @@ namespace ExtremeRoles.Roles
         Detective,
         Assistant,
         DetectiveApprentice,
+        Sharer,
 
         SpecialCrew,
         Sheriff,
@@ -70,10 +71,11 @@ namespace ExtremeRoles.Roles
     public enum CombinationRoleType
     {
         Avalon,
-        Lover,
         HeroAca,
         DetectiveOffice,
-        Supporter
+        Lover,
+        Supporter,
+        Sharer,
     }
 
     public enum RoleGameOverReason
@@ -169,10 +171,11 @@ namespace ExtremeRoles.Roles
             byte, CombinationRoleManagerBase> CombRole = new Dictionary<byte, CombinationRoleManagerBase>()
             {
                 {(byte)CombinationRoleType.Avalon         , new Avalon()},
-                {(byte)CombinationRoleType.Lover          , new LoverManager()},
                 {(byte)CombinationRoleType.HeroAca        , new HeroAcademia()},
                 {(byte)CombinationRoleType.DetectiveOffice, new DetectiveOffice()},
+                {(byte)CombinationRoleType.Lover          , new LoverManager()},
                 {(byte)CombinationRoleType.Supporter      , new SupporterManager()},
+                {(byte)CombinationRoleType.Sharer         , new SharerManager()   },
             };
 
         public static Dictionary<
