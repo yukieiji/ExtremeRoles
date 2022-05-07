@@ -85,7 +85,7 @@ namespace ExtremeSkins.Module
         {
             if (this.hat != null) { return this.hat; }
 
-            this.hat = new HatData();
+            this.hat = ScriptableObject.CreateInstance<HatData>();
 
             this.hat.name = Helper.Translation.GetString(this.Name);
             this.hat.displayOrder = 99;
@@ -96,7 +96,7 @@ namespace ExtremeSkins.Module
             this.hat.Free = true;
             this.hat.NotInStore = true;
 
-            this.hat.hatViewData.viewData = new HatViewData();
+            this.hat.hatViewData.viewData = ScriptableObject.CreateInstance<HatViewData>();
 
             loadAllHatResources();
 

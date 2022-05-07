@@ -164,6 +164,7 @@ namespace ExtremeRoles.Module
         public void SetUpdateOption(CustomOptionBase option)
         {
             this.withUpdateOption.Add(option);
+            option.OptionUpdate(this.GetValue());
         }
 
         public void UpdateSelection(int newSelection)

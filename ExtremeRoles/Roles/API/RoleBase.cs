@@ -37,7 +37,6 @@ namespace ExtremeRoles.Roles.API
 
         public Color NameColor;
         public ExtremeRoleId Id;
-        public byte BytedRoleId;
         public ExtremeRoleType Team;
 
         public int GameControlId = 0;
@@ -60,7 +59,6 @@ namespace ExtremeRoles.Roles.API
             bool canUseVital = true)
         {
             this.Id = id;
-            this.BytedRoleId = (byte)this.Id;
             this.Team = team;
             this.RoleName = roleName;
             this.NameColor = roleColor;

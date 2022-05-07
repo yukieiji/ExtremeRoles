@@ -25,7 +25,7 @@ namespace ExtremeSkins.Module
             }
             catch
             {
-                ExtremeSkinsPlugin.Logger.LogInfo("Error loading sprite from path: " + path);
+                ExtremeSkinsPlugin.Logger.LogInfo($"Error loading sprite from path: {path}");
             }
             return null;
         }
@@ -57,7 +57,7 @@ namespace ExtremeSkins.Module
             }
             catch
             {
-                ExtremeSkinsPlugin.Logger.LogInfo("Error loading texture from disk: " + path);
+                ExtremeSkinsPlugin.Logger.LogInfo($"Error loading texture from disk: {path}");
             }
             return null;
         }
@@ -76,7 +76,7 @@ namespace ExtremeSkins.Module
             }
             catch
             {
-                ExtremeSkinsPlugin.Logger.LogInfo("Error loading texture from resources: " + path);
+                ExtremeSkinsPlugin.Logger.LogInfo($"Error loading texture from resources: {path}");
             }
             return null;
         }

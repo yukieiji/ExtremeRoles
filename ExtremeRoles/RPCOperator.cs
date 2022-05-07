@@ -32,6 +32,9 @@ namespace ExtremeRoles
             // 役職メインコントール
             ReplaceRole,
 
+            // コンビロール全般
+            HeroHeroAcademia,
+
             // クルーメイト
             BodyGuardFeatShield,
             BodyGuardResetShield,
@@ -147,10 +150,10 @@ namespace ExtremeRoles
         }
 
         public static void SetCombinationRole(
-            byte roleId, byte playerId, byte id, byte bytedRoleType)
+            byte combType, byte roleId, byte playerId, byte id, byte bytedRoleType)
         {
             Roles.ExtremeRoleManager.SetPlayerIdToMultiRoleId(
-                roleId, playerId, id, bytedRoleType);
+                combType, roleId, playerId, id, bytedRoleType);
         }
 
         public static void SetNormalRole(byte roleId, byte playerId)
@@ -325,7 +328,6 @@ namespace ExtremeRoles
                                 source, target);
                         }
                     }
-                    
                 }
 
             }
@@ -370,6 +372,13 @@ namespace ExtremeRoles
             Roles.ExtremeRoleManager.RoleReplace(
                 callerId, targetId,
                 (Roles.ExtremeRoleManager.ReplaceOperation)operation);
+        }
+
+        public static void HeroHeroAcademiaCommand(
+            ref MessageReader reader)
+        {
+            Roles.Combination.HeroAcademia.RpcCommand(
+                ref reader);
         }
 
         public static void BodyGuardFeatShield(

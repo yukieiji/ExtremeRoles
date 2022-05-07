@@ -109,14 +109,21 @@ namespace ExtremeSkins.SkinManager
             {
                 if (!string.IsNullOrEmpty(hat))
                 {
-                    byte[] byteArray = File.ReadAllBytes(
-                        string.Concat(hat, @"\", InfoFileName));
+                    string infoJsonFile = string.Concat(hat, @"\", InfoFileName);
+
+                    if (!File.Exists(infoJsonFile))
+                    {
+                        ExtremeSkinsPlugin.Logger.LogInfo(
+                            $"Error Detected!!:Can't load info.json for:{infoJsonFile}");
+                        continue;
+                    }
+
+                    byte[] byteArray = File.ReadAllBytes(infoJsonFile);
                     string json = System.Text.Encoding.UTF8.GetString(byteArray);
                     JObject parseJson = JObject.Parse(json);
 
                     string name = parseJson["Name"].ToString();
-                    string productId = string.Concat(
-                        "hat_", name);
+                    string productId = string.Concat("hat_", name);
 
                     if (HatData.ContainsKey(productId)) { continue; }
 
@@ -257,7 +264,7 @@ namespace ExtremeSkins.SkinManager
 
             if (hatInfoResponse.Content == null)
             {
-                System.Console.WriteLine("Server returned no data: " + hatInfoResponse.StatusCode.ToString());
+                System.Console.WriteLine($"Server returned no data: {hatInfoResponse.StatusCode}");
                 return HttpStatusCode.ExpectationFailed;
             }
 
@@ -294,13 +301,13 @@ namespace ExtremeSkins.SkinManager
 
             if (fileResponse.StatusCode != HttpStatusCode.OK)
             {
-                ExtremeSkinsPlugin.Logger.LogInfo($"Can't load {fileName}");
+                ExtremeSkinsPlugin.Logger.LogInfo($"Can't load: {hat}/{fileName}");
                 return fileResponse.StatusCode;
             }
 
             if (fileResponse.Content == null)
             {
-                ExtremeSkinsPlugin.Logger.LogInfo("Server returned no data: " + fileResponse.StatusCode.ToString());
+                ExtremeSkinsPlugin.Logger.LogInfo($"Server returned no data: {fileResponse.StatusCode}");
                 return HttpStatusCode.ExpectationFailed;
             }
 

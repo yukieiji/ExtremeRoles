@@ -130,6 +130,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             var curseMaker = ExtremeRoleManager.GetSafeCastedRole<CurseMaker>(
                 rolePlayerId);
+            if (curseMaker == null) { return; }
 
             var role = ExtremeRoleManager.GameRole[targetPlayerId];
 
