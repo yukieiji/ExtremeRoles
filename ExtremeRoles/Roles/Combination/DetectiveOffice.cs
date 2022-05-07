@@ -345,7 +345,7 @@ namespace ExtremeRoles.Roles.Combination
                 case SearchCond.FindReportTime:
                     showStr = string.Format(
                         Translation.GetString(SearchCond.FindReportTime.ToString()),
-                        info.ReportTime);
+                        Mathf.CeilToInt(info.ReportTime));
                     break;
                 case SearchCond.FindTeam:
                     showStr = string.Format(
