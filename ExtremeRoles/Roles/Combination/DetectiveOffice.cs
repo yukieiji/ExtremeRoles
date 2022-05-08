@@ -46,11 +46,12 @@ namespace ExtremeRoles.Roles.Combination
             public float ReportTime;
             public ExtremeRoleType KillerTeam;
             public ExtremeRoleId KillerRole;
+            public RoleTypes KillerVanillaRole;
         }
 
         public class CrimeInfoContainer
         {
-            private Dictionary<byte, (Vector2, DateTime)> deadBodyInfo = new Dictionary<byte, (Vector2, DateTime)>();
+            private Dictionary<byte, (Vector2, DateTime, byte)> deadBodyInfo = new Dictionary<byte, (Vector2, DateTime, byte)>();
             private Dictionary<byte, float> timer = new Dictionary<byte, float>();
 
             public CrimeInfoContainer()
@@ -65,13 +66,15 @@ namespace ExtremeRoles.Roles.Combination
             }
 
             public void AddDeadBody(
+                PlayerControl killerPlayer,
                 PlayerControl deadPlayer)
             {
                 this.deadBodyInfo.Add(
                     deadPlayer.PlayerId,
                     (
                         deadPlayer.GetTruePosition(),
-                        DateTime.UtcNow
+                        DateTime.UtcNow,
+                        killerPlayer.PlayerId
                     ));
                 this.timer.Add(
                     deadPlayer.PlayerId,
@@ -85,8 +88,8 @@ namespace ExtremeRoles.Roles.Combination
                     return null;
                 }
 
-                var (pos, time) = this.deadBodyInfo[playerId];
-                var role = ExtremeRoleManager.GameRole[playerId];
+                var (pos, time, killerPlayerId) = this.deadBodyInfo[playerId];
+                var role = ExtremeRoleManager.GameRole[killerPlayerId];
 
                 return new CrimeInfo()
                 {
@@ -95,14 +98,19 @@ namespace ExtremeRoles.Roles.Combination
                     ReportTime = this.timer[playerId],
                     KillerTeam = role.Team,
                     KillerRole = role.Id,
+                    KillerVanillaRole = role.Id == ExtremeRoleId.VanillaRole ?
+                        ((Solo.VanillaRoleWrapper)role).VanilaRoleId : RoleTypes.Crewmate
                 };
             }
 
             public void Update()
             {
+
+                if (this.timer.Count == 0) { return; }
+
                 foreach (byte playerId in this.timer.Keys)
                 {
-                    this.timer[playerId] = this.timer[playerId] += Time.fixedDeltaTime;
+                    this.timer[playerId] = this.timer[playerId] += Time.deltaTime;
                 }
             }
         }
@@ -125,12 +133,12 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         private CrimeInfo? targetCrime;
-        private bool isAssistantReport = false;
         private CrimeInfoContainer info;
         private Arrow crimeArrow;
         private float searchTime;
         private float searchAssistantTime;
         private float timer = 0.0f;
+        private float searchCrimeInfoTime;
         private float range;
         private SearchCond cond;
         private string searchStrBase;
@@ -170,7 +178,7 @@ namespace ExtremeRoles.Roles.Combination
             GameData.PlayerInfo reporter)
         {
             this.targetCrime = null;
-            this.isAssistantReport = false;
+            this.searchCrimeInfoTime = float.MaxValue;
         }
 
         public void HockBodyReport(
@@ -179,14 +187,14 @@ namespace ExtremeRoles.Roles.Combination
             GameData.PlayerInfo reportBody)
         {
             this.targetCrime = this.info.GetCrimeInfo(reportBody.PlayerId);
-            this.isAssistantReport = ExtremeRoleManager.GameRole[
-                reporter.PlayerId].Id == ExtremeRoleId.Assistant;
+            this.searchCrimeInfoTime = ExtremeRoleManager.GameRole[
+                reporter.PlayerId].Id == ExtremeRoleId.Assistant ? this.searchAssistantTime : this.searchTime;
         }
 
         public void HockMuderPlayer(
             PlayerControl source, PlayerControl target)
         {
-            this.info.AddDeadBody(target);
+            this.info.AddDeadBody(source, target);
         }
 
         public void Update(PlayerControl rolePlayer)
@@ -195,6 +203,10 @@ namespace ExtremeRoles.Roles.Combination
             if (this.prevPlayerPos == null)
             { 
                 this.prevPlayerPos = rolePlayer.GetTruePosition();
+            }
+            if (this.info != null)
+            {
+                this.info.Update();
             }
 
             if (this.targetCrime != null)
@@ -223,17 +235,19 @@ namespace ExtremeRoles.Roles.Combination
 
                     updateSearchText();
 
-                    if ((this.timer > this.searchAssistantTime && this.isAssistantReport) ||
-                        (this.timer > this.searchTime))
+                    if (this.timer > 0.0f)
                     {
-                        this.timer = 0.0f;
+                        this.timer -= Time.deltaTime;
+                    }
+                    else
+                    {
+                        this.timer = this.searchCrimeInfoTime;
                         updateSearchCond(crime);
                     }
-                    this.timer += Time.fixedDeltaTime;
                 }
                 else
                 {
-                    this.timer = 0.0f;
+                    this.timer = this.searchCrimeInfoTime;
                     resetSearchCond();
                 }
             }
@@ -299,6 +313,7 @@ namespace ExtremeRoles.Roles.Combination
                 4, allOption[GetRoleOptionId(DetectiveOption.TextShowTime)].GetValue(),
                 new Vector3(-4.0f, -2.75f, -250.0f),
                 TMPro.TextAlignmentOptions.BottomLeft);
+            this.searchCrimeInfoTime = float.MaxValue;
         }
 
         private void updateSearchCond(CrimeInfo info)
@@ -353,9 +368,18 @@ namespace ExtremeRoles.Roles.Combination
                         Translation.GetString(info.KillerTeam.ToString()));
                     break;
                 case SearchCond.FindRole:
+
+                    var role = info.KillerRole;
+                    string roleStr = Translation.GetString(info.KillerRole.ToString());
+
+                    if (role == ExtremeRoleId.VanillaRole)
+                    {
+                        roleStr = Translation.GetString(info.KillerVanillaRole.ToString());
+                    }
+
                     showStr = string.Format(
                         Translation.GetString(SearchCond.FindRole.ToString()),
-                        Translation.GetString(info.KillerRole.ToString()));
+                        roleStr);
                     break;
                 default:
                     break;
@@ -418,7 +442,7 @@ namespace ExtremeRoles.Roles.Combination
         public void HockMuderPlayer(
             PlayerControl source, PlayerControl target)
         {
-            this.deadBodyInfo.Add(target.PlayerId, DateTime.Now);
+            this.deadBodyInfo.Add(target.PlayerId, DateTime.UtcNow);
         }
 
         public void HockReportButton(
@@ -442,7 +466,7 @@ namespace ExtremeRoles.Roles.Combination
                         DestroyableSingleton<HudManager>.Instance.Chat.AddChat(
                             PlayerControl.LocalPlayer,
                             string.Format(
-                                "reportedDeadBodyInfo",
+                                Translation.GetString("reportedDeadBodyInfo"),
                                 this.deadBodyInfo[reportBody.PlayerId]));
                     }
                 }
