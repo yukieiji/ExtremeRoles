@@ -295,6 +295,8 @@ namespace ExtremeRoles.Patches
             [HarmonyArgument(0)] GameData.PlayerInfo reporter,
             [HarmonyArgument(1)] GameData.PlayerInfo reportedBody)
         {
+            if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+
             if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
             {
                 var hockRole = ExtremeRoleManager.GetLocalPlayerRole() as IRoleReportHock;
