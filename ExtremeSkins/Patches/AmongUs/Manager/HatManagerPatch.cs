@@ -45,8 +45,8 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
     [HarmonyPatch(typeof(HatManager), nameof(HatManager.GetNamePlateById))]
     public static class HatManagerGetNamePlateByIdPatch
     {
-        private static bool isRunning;
-        private static bool isLoaded;
+        private static bool isRunning = false;
+        private static bool isLoaded = false;
         public static void Prefix(HatManager __instance)
         {
             if (isRunning) { return; }
@@ -80,8 +80,8 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
     [HarmonyPatch(typeof(HatManager), nameof(HatManager.GetVisorById))]
     public static class HatManagerGetVisorByIdPatch
     {
-        private static bool isRunning;
-        private static bool isLoaded;
+        private static bool isRunning = false;
+        private static bool isLoaded = false;
         public static void Prefix(HatManager __instance)
         {
             if (isRunning) { return; }
