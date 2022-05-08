@@ -116,6 +116,8 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
 
                 ColorChip colorChip = SkinTab.SetColorChip(
                     __instance, i, offset);
+                
+                colorChip.Button.ClickMask = __instance.scroller.Hitbox;
 
                 if (ActiveInputManager.currentControlType == ActiveInputManager.InputType.Keyboard)
                 {
@@ -124,7 +126,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                     colorChip.Button.OnMouseOut.AddListener(
                         (UnityEngine.Events.UnityAction)(
                             () => __instance.SelectNameplate(
-                                DestroyableSingleton<HatManager>.Instance.GetNamePlateById(SaveManager.LastHat))));
+                                DestroyableSingleton<HatManager>.Instance.GetNamePlateById(SaveManager.LastNamePlate))));
                     colorChip.Button.OnClick.AddListener(
                         (UnityEngine.Events.UnityAction)(() => __instance.ClickEquip()));
                 }
@@ -137,10 +139,8 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                 __instance.StartCoroutine(
                     np.CoLoadViewData((Il2CppSystem.Action<NamePlateViewData>)((n) => {
                         colorChip.gameObject.GetComponent<NameplateChip>().image.sprite = n.Image;
-                    __instance.ColorChips.Add(colorChip);
                 })));
-
-
+                colorChip.ProductId = np.ProdId;
                 __instance.ColorChips.Add(colorChip);
             }
         }

@@ -86,7 +86,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                     (visorPackage[key].Count - 1) / __instance.NumPerRow) * __instance.YOffset - SkinTab.HeaderSize;
             }
 
-            __instance.scroller.ContentYBounds.max = -(yOffset + 3.0f + SkinTab.HeaderSize);
+            __instance.scroller.ContentYBounds.max = -(yOffset + 3.0f + SkinTab.HeaderSize);          
             return false;
         }
 
@@ -99,7 +99,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
         }
 
         private static void createVisorTab(
-            List<VisorData> namePlates, string packageName, float yStart, VisorsTab __instance)
+            List<VisorData> visores, string packageName, float yStart, VisorsTab __instance)
         {
             float offset = yStart;
 
@@ -108,11 +108,11 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                 __instance, yStart, packageName,
                 ref visorsTabCustomText, ref offset);
 
-            int numHats = namePlates.Count;
+            int numVisor = visores.Count;
 
-            for (int i = 0; i < numHats; i++)
+            for (int i = 0; i < numVisor; i++)
             {
-                VisorData vi = namePlates[i];
+                VisorData vi = visores[i];
 
                 ColorChip colorChip = SkinTab.SetColorChip(
                     __instance, i, offset);
@@ -125,7 +125,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                         (UnityEngine.Events.UnityAction)(
                             () => __instance.SelectVisor(
                                 colorChip,
-                                DestroyableSingleton<HatManager>.Instance.GetVisorById(SaveManager.LastHat))));
+                                DestroyableSingleton<HatManager>.Instance.GetVisorById(SaveManager.LastVisor))));
                     colorChip.Button.OnClick.AddListener(
                         (UnityEngine.Events.UnityAction)(() => __instance.ClickEquip()));
                 }
@@ -135,10 +135,14 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                         (UnityEngine.Events.UnityAction)(() => __instance.SelectVisor(colorChip, vi)));
                 }
 
+                colorChip.Inner.transform.localPosition = vi.ChipOffset;
+                colorChip.ProductId = vi.ProductId;
+                colorChip.Button.ClickMask = __instance.scroller.Hitbox;
+                colorChip.Tag = vi.ProdId;
+
                 __instance.StartCoroutine(
                     vi.CoLoadViewData((Il2CppSystem.Action<VisorViewData>)((v) => {
                         colorChip.Inner.FrontLayer.sprite = v.IdleFrame;
-                    __instance.ColorChips.Add(colorChip);
                 })));
 
                 __instance.ColorChips.Add(colorChip);
