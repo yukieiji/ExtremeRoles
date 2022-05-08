@@ -44,12 +44,11 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
 #if WITHVISOR
             if (!ExtremeVisorManager.IsLoaded)
             {
-                /*
+                
                 if (ExtremeVisorManager.IsUpdate() && !creatorMode)
                 {
                     ExtremeVisorManager.PullAllData().GetAwaiter().GetResult();
                 }
-                */
 
                 ExtremeVisorManager.Load();
             }

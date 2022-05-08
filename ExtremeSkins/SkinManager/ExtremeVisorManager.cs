@@ -83,13 +83,13 @@ namespace ExtremeSkins.SkinManager
 
         public static void Load()
         {
-            /*
+
             getJsonData(visorTransData).GetAwaiter().GetResult();
             Helper.Translation.UpdateHatsTransData(
                 string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
                     FolderPath, visorTransData));
-            */
+        
             string[] visorFolder = Directory.GetDirectories(
                 string.Concat(Path.GetDirectoryName(Application.dataPath), FolderPath));
 
