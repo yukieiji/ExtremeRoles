@@ -722,7 +722,7 @@ namespace ExtremeRoles.Roles.Combination
         {
 
             this.CreateAbilityCountButton(
-                "emergencyMeeting",
+                Translation.GetString("emergencyMeeting"),
                 Loader.CreateSpriteFromResources(
                     Path.TestButton),
                 abilityCleanUp: CleanUp,
