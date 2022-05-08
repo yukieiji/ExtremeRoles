@@ -115,9 +115,9 @@ namespace ExtremeRoles.Roles.Combination
             }
         }
 
-        public enum SearchCond
+        public enum SearchCond : byte
         {
-            None = byte.MinValue,
+            None,
             FindKillTime,
             FindReportTime,
             FindTeam,

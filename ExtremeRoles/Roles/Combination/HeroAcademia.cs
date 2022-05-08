@@ -112,7 +112,7 @@ namespace ExtremeRoles.Roles.Combination
 
     public class HeroAcademia : ConstCombinationRoleManagerBase
     {
-        public enum Command
+        public enum Command : byte
         {
             UpdateHero,
             UpdateVigilante,
@@ -120,7 +120,7 @@ namespace ExtremeRoles.Roles.Combination
             EmergencyCall,
             CleanUpEmergencyCall,
         }
-        public enum Condition
+        public enum Condition : byte
         {
             HeroDown,
             VillainDown,
@@ -431,9 +431,9 @@ namespace ExtremeRoles.Roles.Combination
 
     public class Hero : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialReset
     {
-        public enum OneForAllCondition
+        public enum OneForAllCondition : byte
         {
-            NoGuard = byte.MinValue,
+            NoGuard,
             AwakeHero,
             FeatKill,
             FeatButtonAbility
