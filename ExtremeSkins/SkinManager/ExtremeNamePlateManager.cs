@@ -25,7 +25,7 @@ namespace ExtremeSkins.SkinManager
         public const string LicenseFileName = "LICENSE.md";
 
         private const string repo = "https://raw.githubusercontent.com/yukieiji/ExtremeNamePlate/main"; // When using this repository with Fork, please follow the license of each hat
-        private const string namePlateData = "namePlateData.json";
+        private const string namePlateRepoData = "namePlateData.json";
         private const string namePlateTransData = "namePlateTransData.json";
 
         public static void Initialize()
@@ -39,12 +39,12 @@ namespace ExtremeSkins.SkinManager
             if (!Directory.Exists(string.Concat(
                 Path.GetDirectoryName(Application.dataPath), FolderPath))) { return true; }
 
-            getJsonData(namePlateData).GetAwaiter().GetResult();
+            getJsonData(namePlateRepoData).GetAwaiter().GetResult();
             
             byte[] byteNamePlateArray = File.ReadAllBytes(
                 string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
-                    FolderPath, namePlateData));
+                    FolderPath, namePlateRepoData));
             string namePlateJsonString = System.Text.Encoding.UTF8.GetString(byteNamePlateArray);
             JObject namePlateFolder = JObject.Parse(namePlateJsonString);
             
@@ -138,7 +138,7 @@ namespace ExtremeSkins.SkinManager
                 Directory.CreateDirectory(dataSaveFolder);
             }
 
-            getJsonData(namePlateData).GetAwaiter().GetResult();
+            getJsonData(namePlateRepoData).GetAwaiter().GetResult();
 
             HttpClient http = new HttpClient();
             http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true };
@@ -146,7 +146,7 @@ namespace ExtremeSkins.SkinManager
             byte[] byteNamePlateArray = File.ReadAllBytes(
                 string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
-                    FolderPath, namePlateData));
+                    FolderPath, namePlateRepoData));
             string namePlateJsonString = System.Text.Encoding.UTF8.GetString(byteNamePlateArray);
 
             JObject namePlateFolder = JObject.Parse(namePlateJsonString);

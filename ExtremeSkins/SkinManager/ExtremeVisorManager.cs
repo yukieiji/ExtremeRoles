@@ -21,11 +21,10 @@ namespace ExtremeSkins.SkinManager
         public static bool IsLoaded = false;
 
         public const string FolderPath = @"\ExtremeVisor\";
-        public const string InfoFileName = "info.json";
         public const string LicenseFileName = "LICENSE.md";
 
         private const string repo = "https://raw.githubusercontent.com/yukieiji/ExtremeVisor/main"; // When using this repository with Fork, please follow the license of each hat
-        private const string visorData = "visorData.json";
+        private const string visorRepoData = "visorData.json";
         private const string visorTransData = "visorTransData.json";
 
         public static void Initialize()
@@ -39,12 +38,12 @@ namespace ExtremeSkins.SkinManager
             if (!Directory.Exists(string.Concat(
                 Path.GetDirectoryName(Application.dataPath), FolderPath))) { return true; }
 
-            getJsonData(visorTransData).GetAwaiter().GetResult();
+            getJsonData(visorRepoData).GetAwaiter().GetResult();
             
             byte[] byteVisorArray = File.ReadAllBytes(
                 string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
-                    FolderPath, visorTransData));
+                    FolderPath, visorRepoData));
             string visorJsonString = System.Text.Encoding.UTF8.GetString(byteVisorArray);
             JObject visorFolder = JObject.Parse(visorJsonString);
             
@@ -138,7 +137,7 @@ namespace ExtremeSkins.SkinManager
                 Directory.CreateDirectory(dataSaveFolder);
             }
 
-            getJsonData(visorData).GetAwaiter().GetResult();
+            getJsonData(visorRepoData).GetAwaiter().GetResult();
 
             HttpClient http = new HttpClient();
             http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true };
@@ -146,7 +145,7 @@ namespace ExtremeSkins.SkinManager
             byte[] byteVisorArray = File.ReadAllBytes(
                 string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
-                    FolderPath, visorData));
+                    FolderPath, visorRepoData));
             string visorJsonString = System.Text.Encoding.UTF8.GetString(byteVisorArray);
 
             JObject visorFolder = JObject.Parse(visorJsonString);

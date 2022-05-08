@@ -24,7 +24,7 @@ namespace ExtremeSkins.SkinManager
         public const string LicenseFileName = "LICENSE.md";
 
         private const string repo = "https://raw.githubusercontent.com/yukieiji/ExtremeHats/main"; // When using this repository with Fork, please follow the license of each hat
-        private const string hatData = "hatData.json";
+        private const string hatRepoData = "hatData.json";
         private const string hatTransData = "hatTranData.json";
 
         public static void Initialize()
@@ -38,12 +38,12 @@ namespace ExtremeSkins.SkinManager
             if (!Directory.Exists(string.Concat(
                 Path.GetDirectoryName(Application.dataPath), FolderPath))) { return true; }
 
-            getJsonData(hatData).GetAwaiter().GetResult();
+            getJsonData(hatRepoData).GetAwaiter().GetResult();
             
             byte[] byteHatArray = File.ReadAllBytes(
                 string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
-                    FolderPath, hatData));
+                    FolderPath, hatRepoData));
             string hatJsonString = System.Text.Encoding.UTF8.GetString(byteHatArray);
 
             JToken hatFolder = JObject.Parse(hatJsonString)["data"];
@@ -159,12 +159,12 @@ namespace ExtremeSkins.SkinManager
                 Directory.CreateDirectory(dataSaveFolder);
             }
 
-            getJsonData(hatData).GetAwaiter().GetResult();
+            getJsonData(hatRepoData).GetAwaiter().GetResult();
 
             byte[] byteHatArray = File.ReadAllBytes(
                 string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
-                    FolderPath, hatData));
+                    FolderPath, hatRepoData));
             string hatJsonString = System.Text.Encoding.UTF8.GetString(byteHatArray);
 
             JToken hatFolder = JObject.Parse(hatJsonString)["data"];
