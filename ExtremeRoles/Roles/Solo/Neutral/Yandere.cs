@@ -303,7 +303,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
             else
             {
-                this.blockTimer += Time.fixedDeltaTime;
+                this.blockTimer += Time.deltaTime;
             }
 
             updateOneSideLoverArrow(oneSideLoverPos);
