@@ -1025,15 +1025,29 @@ namespace ExtremeRoles.Roles.Combination
             switch (this.condition)
             {
                 case VigilanteCondition.NewHeroForTheShip:
-                    return $" ♣";
+                    return "♣";
                 case VigilanteCondition.NewVillainForTheShip:
-                    return $" ◆";
+                    return "◆";
                 case VigilanteCondition.NewEnemyNeutralForTheShip:
-                    return $" ♠";
+                    return "♠";
                 default:
                     return base.GetRoleTag();
             }
         }
+
+        public override string GetRolePlayerNameTag(
+            SingleRoleBase targetRole, byte targetPlayerId)
+        {
+            if (targetRole.Id == ExtremeRoleId.Vigilante &&
+                this.IsSameControlId(targetRole))
+            {
+                return Design.ColoedString(
+                    ColorPalette.VigilanteFujiIro,
+                    $" {GetRoleTag()}");
+            }
+            return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
+        }
+
 
         public override string GetImportantText(bool isContainFakeTask = true)
         {
