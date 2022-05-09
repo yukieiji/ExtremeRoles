@@ -42,7 +42,7 @@ namespace ExtremeRoles.Roles.Combination
                     text.fontSize = 10;
                     text.gameObject.layer = 5;
                     text.alignment = TMPro.TextAlignmentOptions.Center;
-                    text.transform.localPosition = text.transform.localPosition + new Vector3(0.0f, 0.0f, -800f);
+                    text.transform.localPosition = new Vector3(0.0f, 0.0f, -800f);
                     text.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
                     this.distance.Add(player.PlayerId, text);
@@ -250,16 +250,19 @@ namespace ExtremeRoles.Roles.Combination
             int impNum = 0;
             Vigilante vigilante = null;
 
-            foreach (GameData.PlayerInfo playerInfo in GameData.Instance.AllPlayers)
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
-                var role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
-                if (role.IsCrewmate())
+                var role = ExtremeRoleManager.GameRole[player.PlayerId];
+                if (!player.Data.IsDead && !player.Data.Disconnected)
                 {
-                    ++crewNum;
-                }
-                else if (role.IsImpostor())
-                {
-                    ++impNum;
+                    if (role.IsCrewmate() && (player.Data.IsDead))
+                    {
+                        ++crewNum;
+                    }
+                    else if (role.IsImpostor())
+                    {
+                        ++impNum;
+                    }
                 }
                 if (role.Id == ExtremeRoleId.Vigilante)
                 {
@@ -272,7 +275,7 @@ namespace ExtremeRoles.Roles.Combination
             switch (cond)
             {
                 case Condition.HeroDown:
-                    if ((crewNum - 1) <= impNum)
+                    if (crewNum <= impNum)
                     {
                         vigilante.SetCondition(
                             Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip);
@@ -284,7 +287,7 @@ namespace ExtremeRoles.Roles.Combination
                     }
                     break;
                 case Condition.VillainDown:
-                    if (impNum - 1 <= 0)
+                    if (impNum <= 0)
                     {
                         vigilante.SetCondition(
                             Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip);
