@@ -9,8 +9,8 @@ namespace ExtremeRoles.Module
             get => this.body;
         }
 
-        private const float xzMaxSize = 0.25f;
-        private const float yMaxSize = 0.3f;
+        private const float xzMaxSize = 0.4f;
+        private const float yMaxSize = 0.525f;
 
         private Vector3 target;
         private SpriteRenderer image;
