@@ -250,12 +250,12 @@ namespace ExtremeRoles.Roles.Combination
             int impNum = 0;
             Vigilante vigilante = null;
 
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers)
             {
                 var role = ExtremeRoleManager.GameRole[player.PlayerId];
-                if (!player.Data.IsDead && !player.Data.Disconnected)
+                if (!player.IsDead && !player.Disconnected)
                 {
-                    if (role.IsCrewmate() && (player.Data.IsDead))
+                    if (role.IsCrewmate())
                     {
                         ++crewNum;
                     }
@@ -900,14 +900,10 @@ namespace ExtremeRoles.Roles.Combination
         public void SetCondition(
             VigilanteCondition cond)
         {
-            var vigilante = ExtremeRoleManager.GetLocalPlayerRole() as Vigilante;
-            if (vigilante != null)
+            if (this.condition == VigilanteCondition.None ||
+                cond == VigilanteCondition.NewLawInTheShip)
             {
-                if (vigilante.condition == VigilanteCondition.None ||
-                    cond == VigilanteCondition.NewLawInTheShip)
-                {
-                    vigilante.condition = cond;
-                }
+                this.condition = cond;
             }
         }
 
@@ -1023,21 +1019,6 @@ namespace ExtremeRoles.Roles.Combination
             }
         }
 
-        public override string GetRoleTag()
-        {
-            switch (this.condition)
-            {
-                case VigilanteCondition.NewHeroForTheShip:
-                    return "♣";
-                case VigilanteCondition.NewVillainForTheShip:
-                    return "◆";
-                case VigilanteCondition.NewEnemyNeutralForTheShip:
-                    return "♠";
-                default:
-                    return base.GetRoleTag();
-            }
-        }
-
         public override string GetRolePlayerNameTag(
             SingleRoleBase targetRole, byte targetPlayerId)
         {
@@ -1046,7 +1027,7 @@ namespace ExtremeRoles.Roles.Combination
             {
                 return Design.ColoedString(
                     ColorPalette.VigilanteFujiIro,
-                    $" {GetRoleTag()}");
+                    getInGameTag());
             }
             return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
         }
@@ -1142,6 +1123,21 @@ namespace ExtremeRoles.Roles.Combination
             }
 
             return baseString;
+        }
+
+        private string getInGameTag()
+        {
+            switch (this.condition)
+            {
+                case VigilanteCondition.NewHeroForTheShip:
+                    return " ♣";
+                case VigilanteCondition.NewVillainForTheShip:
+                    return " ◆";
+                case VigilanteCondition.NewEnemyNeutralForTheShip:
+                    return " ♠";
+                default:
+                    return string.Empty;
+            }
         }
 
     }
