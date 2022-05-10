@@ -731,7 +731,7 @@ namespace ExtremeRoles.Roles.Combination
             this.CreateAbilityCountButton(
                 Translation.GetString("emergencyMeeting"),
                 Loader.CreateSpriteFromResources(
-                    Path.TestButton),
+                    Path.DetectiveApprenticeEmergencyMeeting),
                 abilityCleanUp: CleanUp,
                 checkAbility: IsOpen);
             this.Button.SetLabelToCrewmate();

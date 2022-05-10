@@ -29,6 +29,7 @@ namespace ExtremeRoles.Resources
         public const string FencerCounter = "ExtremeRoles.Resources.Counter.png";
         public const string CurseMakerCurse = "ExtremeRoles.Resources.Curse.png";
         public const string OpenerOpenDoor = "ExtremeRoles.Resources.OpenDoor.png";
+        public const string DetectiveApprenticeEmergencyMeeting = "ExtremeRoles.Resources.EmergencyMeeting.png";
 
         public const string EvolverEvolved = "ExtremeRoles.Resources.Evolved.png";
         public const string CarrierCarry = "ExtremeRoles.Resources.Carry.png";
