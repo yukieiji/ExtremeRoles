@@ -20,6 +20,8 @@ namespace ExtremeRoles.Resources
         public const string TitleBurner = "ExtremeRoles.Resources.TitleBurner.png";
         public const string TabLogo = "ExtremeRoles.Resources.TabIcon.png";
 
+        public const string HiroAcaSearch = "ExtremeRoles.Resources.Search.png";
+
         public const string MaintainerRepair = "ExtremeRoles.Resources.Repair.png";
         public const string BodyGuardShield = "ExtremeRoles.Resources.Shield.png";
         public const string TimeMasterTimeShield = "ExtremeRoles.Resources.TimeShield.png";
@@ -40,6 +42,7 @@ namespace ExtremeRoles.Resources
         public const string MeryNoneActiveVent = "ExtremeRoles.Resources.NoneActivateVent.png";
         public const string MeryCustomVentAnime = "ExtremeRoles.Resources.MeryVentAnimation.{0}.png";
 
+        public const string VigilanteEmergencyCall = "ExtremeRoles.Resources.EmergencyCall.png";
         public const string AliceShipBroken = "ExtremeRoles.Resources.ShipBroken.png";
         public const string JackalSidekick = "ExtremeRoles.Resources.Sidekick.png";
         public const string MissionaryPropagate = "ExtremeRoles.Resources.Propagate.png";

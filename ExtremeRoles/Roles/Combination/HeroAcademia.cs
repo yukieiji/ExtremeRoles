@@ -487,7 +487,7 @@ namespace ExtremeRoles.Roles.Combination
             this.CreateNormalAbilityButton(
                 Translation.GetString("search"),
                 Loader.CreateSpriteFromResources(
-                    Path.TestButton),
+                    Path.HiroAcaSearch),
                 abilityCleanUp: CleanUp);
             this.Button.SetLabelToCrewmate();
         }
@@ -718,7 +718,7 @@ namespace ExtremeRoles.Roles.Combination
             this.CreateNormalAbilityButton(
                 Translation.GetString("search"),
                 Loader.CreateSpriteFromResources(
-                    Path.TestButton),
+                    Path.HiroAcaSearch),
                 abilityCleanUp: CleanUp);
         }
 
@@ -912,7 +912,7 @@ namespace ExtremeRoles.Roles.Combination
             this.CreateNormalAbilityButton(
                 Translation.GetString("call"),
                 Loader.CreateSpriteFromResources(
-                    Path.TestButton),
+                    Path.VigilanteEmergencyCall),
                 abilityCleanUp: CleanUp);
             this.Button.SetLabelToCrewmate();
         }
