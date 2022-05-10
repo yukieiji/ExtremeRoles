@@ -679,6 +679,13 @@ namespace ExtremeRoles.Roles.Combination
             var prevRole = ExtremeRoleManager.GameRole[playerId] as MultiAssignRoleBase;
             if (prevRole == null) { return; }
 
+            var detectiveReset = prevRole as IRoleResetMeeting;
+
+            if (detectiveReset != null)
+            {
+                detectiveReset.ResetOnMeetingStart();
+            }
+
             if (prevRole.AnotherRole != null)
             {
                 if (playerId == PlayerControl.LocalPlayer.PlayerId)
