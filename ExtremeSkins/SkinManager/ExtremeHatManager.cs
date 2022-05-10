@@ -141,7 +141,7 @@ namespace ExtremeSkins.SkinManager
                             (bool)parseJson["Shader"])); // Shader
 
                     ExtremeSkinsPlugin.Logger.LogInfo(
-                        $"Skin Loaded:{parseJson.ChildrenTokens[1].TryCast<JProperty>().Value.ToString()}, from:{hat}");
+                        $"Hat Loaded:{parseJson.ChildrenTokens[1].TryCast<JProperty>().Value.ToString()}, from:{hat}");
                 }
             }
 
