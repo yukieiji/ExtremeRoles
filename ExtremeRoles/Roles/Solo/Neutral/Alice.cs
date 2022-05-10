@@ -166,7 +166,19 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     normalPlayerTask.Owner = player;
                     normalPlayerTask.Initialize();
 
-                    player.myTasks[(int)playerInfo.Tasks[i].Id] = normalPlayerTask;
+                    for (int j = 0; j < player.myTasks.Count; ++j)
+                    {
+                        var textTask = player.myTasks[j].gameObject.GetComponent<ImportantTextTask>();
+                        if (textTask != null) { continue; }
+
+                        if (Helper.GameSystem.SaboTask.Contains(player.myTasks[j].TaskType)) { continue; }
+
+                        if (player.myTasks[j].IsComplete)
+                        {
+                            player.myTasks[j] = normalPlayerTask;
+                            break;
+                        }
+                    }
                 }
             }
             GameData.Instance.SetDirtyBit(

@@ -10,6 +10,16 @@ namespace ExtremeRoles.Helper
 {
     public static class GameSystem
     {
+        public static HashSet<TaskTypes> SaboTask = new HashSet<TaskTypes>()
+        {
+            TaskTypes.FixLights,
+            TaskTypes.RestoreOxy,
+            TaskTypes.ResetReactor,
+            TaskTypes.ResetSeismic,
+            TaskTypes.FixComms,
+            TaskTypes.StopCharles
+        };
+
         private static HashSet<TaskTypes> ignoreTask = new HashSet<TaskTypes>()
         {
             TaskTypes.FixWiring,
@@ -67,7 +77,7 @@ namespace ExtremeRoles.Helper
             List<int> taskIndex = getTaskIndex(
                 ShipStatus.Instance.CommonTasks);
 
-            int index = UnityEngine.Random.RandomRange(0, taskIndex.Count);
+            int index = RandomGenerator.Instance.Next(taskIndex.Count);
 
             return (byte)taskIndex[index];
         }
@@ -79,7 +89,7 @@ namespace ExtremeRoles.Helper
             List<int> taskIndex = getTaskIndex(
                 ShipStatus.Instance.LongTasks);
 
-            int index = UnityEngine.Random.RandomRange(0, taskIndex.Count);
+            int index = RandomGenerator.Instance.Next(taskIndex.Count);
 
             return taskIndex[index];
         }
@@ -91,7 +101,7 @@ namespace ExtremeRoles.Helper
             List<int> taskIndex = getTaskIndex(
                 ShipStatus.Instance.NormalTasks);
 
-            int index = UnityEngine.Random.RandomRange(0, taskIndex.Count);
+            int index = RandomGenerator.Instance.Next(taskIndex.Count);
 
             return taskIndex[index];
         }
