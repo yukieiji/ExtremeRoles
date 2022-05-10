@@ -172,6 +172,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             for (int i = 0; i < player.myTasks.Count; ++i)
             {
+                var textTask = player.myTasks[i].gameObject.GetComponent<
+                        ImportantTextTask>();
+                if (textTask != null) { continue; }
+                if (GameSystem.SaboTask.Contains(player.myTasks[i].TaskType)) { continue; }
                 if (player.myTasks[i].IsComplete)
                 {
                     player.myTasks[i] = normalPlayerTask;
