@@ -64,6 +64,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
                 var textTask = task.gameObject.GetComponent<ImportantTextTask>();
                 if (textTask != null) { continue; }
+                if (GameSystem.SaboTask.Contains(task.TaskType))  { continue; }
 
                 if (removeTaskId.Contains((int)task.Id))
                 {
@@ -90,22 +91,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 taskId, (uint)index);
             playerInfo.Tasks[index].Id = (uint)index;
 
-            NormalPlayerTask normalPlayerTask =
-                UnityEngine.Object.Instantiate(
-                    ShipStatus.Instance.GetTaskById(taskId),
-                    player.transform);
-            normalPlayerTask.Id = (uint)index;
-            normalPlayerTask.Owner = player;
-            normalPlayerTask.Initialize();
-
-            for (int i = 0; i < player.myTasks.Count; ++i)
-            {
-                if (player.myTasks[i].IsComplete)
-                {
-                    player.myTasks[i] = normalPlayerTask;
-                    break;
-                }
-            }
+            GameSystem.SetPlayerNewTask(
+                ref player, taskId, (uint)index);
 
             GameData.Instance.SetDirtyBit(
                 1U << (int)player.PlayerId);

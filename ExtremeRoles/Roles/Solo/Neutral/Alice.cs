@@ -91,6 +91,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public bool UseAbility()
         {
+
+            RandomGenerator.Instance.Next();
+
             foreach(var player in PlayerControl.AllPlayerControls)
             {
 
@@ -158,27 +161,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     playerInfo.Tasks[i] = new GameData.TaskInfo(
                         taskId, playerInfo.Tasks[i].Id);
 
-                    NormalPlayerTask normalPlayerTask = 
-                        UnityEngine.Object.Instantiate<NormalPlayerTask>(
-                            ShipStatus.Instance.GetTaskById(taskId),
-                            player.transform);
-                    normalPlayerTask.Id = playerInfo.Tasks[i].Id;
-                    normalPlayerTask.Owner = player;
-                    normalPlayerTask.Initialize();
-
-                    for (int j = 0; j < player.myTasks.Count; ++j)
-                    {
-                        var textTask = player.myTasks[j].gameObject.GetComponent<ImportantTextTask>();
-                        if (textTask != null) { continue; }
-
-                        if (Helper.GameSystem.SaboTask.Contains(player.myTasks[j].TaskType)) { continue; }
-
-                        if (player.myTasks[j].IsComplete)
-                        {
-                            player.myTasks[j] = normalPlayerTask;
-                            break;
-                        }
-                    }
+                    Helper.GameSystem.SetPlayerNewTask(
+                        ref player, taskId, playerInfo.Tasks[i].Id);
                 }
             }
             GameData.Instance.SetDirtyBit(

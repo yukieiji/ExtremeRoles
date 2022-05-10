@@ -162,26 +162,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 taskId, (uint)index);
             playerInfo.Tasks[index].Id = (uint)index;
 
-            NormalPlayerTask normalPlayerTask =
-                UnityEngine.Object.Instantiate(
-                    ShipStatus.Instance.GetTaskById(taskId),
-                    player.transform);
-            normalPlayerTask.Id = (uint)index;
-            normalPlayerTask.Owner = player;
-            normalPlayerTask.Initialize();
-
-            for (int i = 0; i < player.myTasks.Count; ++i)
-            {
-                var textTask = player.myTasks[i].gameObject.GetComponent<
-                        ImportantTextTask>();
-                if (textTask != null) { continue; }
-                if (GameSystem.SaboTask.Contains(player.myTasks[i].TaskType)) { continue; }
-                if (player.myTasks[i].IsComplete)
-                {
-                    player.myTasks[i] = normalPlayerTask;
-                    break;
-                }
-            }
+            GameSystem.SetPlayerNewTask(
+                ref player, taskId, (uint)index);
 
             GameData.Instance.SetDirtyBit(
                 1U << (int)player.PlayerId);

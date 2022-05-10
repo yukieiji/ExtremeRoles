@@ -126,6 +126,34 @@ namespace ExtremeRoles.Helper
             player.SetDirtyBit(1U << (int)player.PlayerId);
         }
 
+        public static void SetPlayerNewTask(
+            ref PlayerControl player,
+            byte taskId, uint gameControlTaskId)
+        {
+            NormalPlayerTask normalPlayerTask =
+                UnityEngine.Object.Instantiate<NormalPlayerTask>(
+                    ShipStatus.Instance.GetTaskById(taskId),
+                    player.transform);
+            normalPlayerTask.Id = gameControlTaskId;
+            normalPlayerTask.Owner = player;
+            normalPlayerTask.Initialize();
+
+            for (int j = 0; j < player.myTasks.Count; ++j)
+            {
+                var textTask = player.myTasks[j].gameObject.GetComponent<ImportantTextTask>();
+                if (textTask != null) { continue; }
+
+                if (SaboTask.Contains(player.myTasks[j].TaskType)) { continue; }
+
+                if (player.myTasks[j].IsComplete)
+                {
+                    player.myTasks[j] = normalPlayerTask;
+                    break;
+                }
+            }
+        }
+
+
         public static void ShareVersion()
         {
 
