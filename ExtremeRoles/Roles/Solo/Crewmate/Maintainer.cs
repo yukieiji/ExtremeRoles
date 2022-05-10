@@ -98,12 +98,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             bool sabotageActive = false;
             foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
             {
-                if (task.TaskType == TaskTypes.FixLights || 
-                    task.TaskType == TaskTypes.RestoreOxy || 
-                    task.TaskType == TaskTypes.ResetReactor || 
-                    task.TaskType == TaskTypes.ResetSeismic || 
-                    task.TaskType == TaskTypes.FixComms || 
-                    task.TaskType == TaskTypes.StopCharles)
+                if (GameSystem.SaboTask.Contains(task.TaskType))
                 {
                     sabotageActive = true;
                     break;
