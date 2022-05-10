@@ -575,7 +575,7 @@ namespace ExtremeRoles.Module
 
             public void Initialize(float historySecond)
             {
-                this.size = (int)Mathf.Round(historySecond / Time.fixedDeltaTime);
+                this.size = (int)Mathf.Round(historySecond / Time.deltaTime);
                 this.init = true;
             }
 
