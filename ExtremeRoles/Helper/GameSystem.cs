@@ -138,16 +138,21 @@ namespace ExtremeRoles.Helper
             normalPlayerTask.Owner = player;
             normalPlayerTask.Initialize();
 
-            for (int j = 0; j < player.myTasks.Count; ++j)
+            for (int i = 0; i < player.myTasks.Count; ++i)
             {
-                var textTask = player.myTasks[j].gameObject.GetComponent<ImportantTextTask>();
+                var textTask = player.myTasks[i].gameObject.GetComponent<ImportantTextTask>();
                 if (textTask != null) { continue; }
 
-                if (SaboTask.Contains(player.myTasks[j].TaskType)) { continue; }
+                if (SaboTask.Contains(player.myTasks[i].TaskType)) { continue; }
 
-                if (player.myTasks[j].IsComplete)
+                if (player.myTasks[i].IsComplete)
                 {
-                    player.myTasks[j] = normalPlayerTask;
+                    var removeTask = player.myTasks[i];
+                    player.myTasks[i] = normalPlayerTask;
+
+                    removeTask.OnRemove();
+                    UnityEngine.Object.Destroy(
+                        removeTask.gameObject);
                     break;
                 }
             }
