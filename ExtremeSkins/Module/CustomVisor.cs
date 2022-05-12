@@ -3,14 +3,13 @@ using UnityEngine;
 
 namespace ExtremeSkins.Module
 {
-
-#if WITHNAMEPLATE
-    public class CustomNamePlate : ICustomCosmicData<NamePlateData>
+#if WITHVISOR
+    public class CustomVisor : ICustomCosmicData<VisorData>
     {
 
-        public NamePlateData Data
+        public VisorData Data
         {
-            get => this.namePlate;
+            get => this.visor;
         }
 
         public string Author
@@ -27,14 +26,14 @@ namespace ExtremeSkins.Module
             get => this.id;
         }
 
-        private NamePlateData namePlate;
+        private VisorData visor;
 
         private string id;
         private string name;
         private string author;
         private string imgPath;
 
-        public CustomNamePlate(
+        public CustomVisor(
             string id,
             string imgPath,
             string author,
@@ -46,26 +45,27 @@ namespace ExtremeSkins.Module
             this.name = name;
         }
 
-        public NamePlateData GetData()
+        public VisorData GetData()
         {
-            if (this.namePlate != null) { return this.namePlate; }
+            if (this.visor != null) { return this.visor; }
 
-            this.namePlate = ScriptableObject.CreateInstance<NamePlateData>();
-            this.namePlate.name = Helper.Translation.GetString(this.Name);
-            this.namePlate.displayOrder = 99;
-            this.namePlate.ProductId = this.id;
-            this.namePlate.ChipOffset = new Vector2(0f, 0.2f);
-            this.namePlate.Free = true;
-            this.namePlate.NotInStore = true;
+            this.visor = ScriptableObject.CreateInstance<VisorData>();
+            this.visor.name = Helper.Translation.GetString(this.Name);
+            this.visor.displayOrder = 99;
+            this.visor.ProductId = this.id;
+            this.visor.ChipOffset = new Vector2(0f, 0.2f);
+            this.visor.Free = true;
+            this.visor.NotInStore = true;
 
-            this.namePlate.viewData.viewData = ScriptableObject.CreateInstance<NamePlateViewData>();
-            this.namePlate.viewData.viewData.Image = loadNamePlateSprite(this.imgPath);
+            // 256×144の画像
+            this.visor.viewData.viewData = ScriptableObject.CreateInstance<VisorViewData>();
+            this.visor.viewData.viewData.IdleFrame = loadVisorSprite(this.imgPath);
 
-            return this.namePlate;
+            return this.visor;
 
         }
 
-        private Sprite loadNamePlateSprite(
+        private Sprite loadVisorSprite(
             string path)
         {
             Texture2D texture = Loader.LoadTextureFromDisk(path);
@@ -74,9 +74,8 @@ namespace ExtremeSkins.Module
                 return null;
             }
             Sprite sprite = Sprite.Create(
-                texture,
-                new Rect(0, 0, texture.width, texture.height),
-                new Vector2(0.5f, 0.5f), 100f);
+                texture, new Rect(0, 0, texture.width, texture.height),
+                new Vector2(0.53f, 0.575f), texture.width * 0.375f);
             if (sprite == null)
             {
                 return null;
@@ -86,7 +85,5 @@ namespace ExtremeSkins.Module
             return sprite;
         }
     }
-
 #endif
-
 }

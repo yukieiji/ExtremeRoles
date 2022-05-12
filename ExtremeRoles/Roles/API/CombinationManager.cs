@@ -85,7 +85,7 @@ namespace ExtremeRoles.Roles.API
             foreach(var checkRole in this.Roles)
             {
 
-                if (checkRole.BytedRoleId != roleId) { continue; }
+                if ((byte)checkRole.Id != roleId) { continue; }
 
                 checkRole.CanHasAnotherRole = OptionHolder.AllOption[
                     GetRoleOptionId(
@@ -246,7 +246,7 @@ namespace ExtremeRoles.Roles.API
 
             MultiAssignRoleBase role = null;
             
-            if (this.BaseRole.BytedRoleId != roleId) { return role; }
+            if ((byte)this.BaseRole.Id != roleId) { return role; }
 
             this.BaseRole.CanHasAnotherRole = OptionHolder.AllOption[
                 GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign)].GetValue();
@@ -283,21 +283,28 @@ namespace ExtremeRoles.Roles.API
                         RoleCommonOption.SpawnRate.ToString())),
                 OptionHolder.SpawnRate, null, true);
 
+            int roleAssignNum = this.BaseRole.IsImpostor() ? OptionHolder.MaxImposterNum : OptionHolder.VanillaMaxPlayerNum - 1;
+
             var roleAssignNumOption = new IntCustomOption(
                 GetRoleOptionId(CombinationRoleCommonOption.AssignsNum),
                 string.Concat(
                     this.roleName,
                     CombinationRoleCommonOption.AssignsNum.ToString()),
                 this.minimumRoleNum, this.minimumRoleNum,
-                OptionHolder.VanillaMaxPlayerNum - 1, 1,
+                roleAssignNum, 1,
                 roleSetOption, isHidden: this.minimumRoleNum <= 1);
+
+
+            int maxSetNum = this.BaseRole.IsImpostor() ?
+                OptionHolder.MaxImposterNum:
+                (OptionHolder.VanillaMaxPlayerNum - 1);
 
             var roleSetNumOption = new IntCustomOption(
                 GetRoleOptionId(RoleCommonOption.RoleNum),
                 string.Concat(
                     this.roleName,
                     RoleCommonOption.RoleNum.ToString()),
-                1, 1, (OptionHolder.VanillaMaxPlayerNum - 1), 1,
+                1, 1, maxSetNum, 1,
                 roleSetOption);
 
             roleAssignNumOption.SetUpdateOption(roleSetNumOption);

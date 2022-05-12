@@ -145,12 +145,18 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            return;
+            if (this.tellText != null)
+            {
+                this.tellText.gameObject.SetActive(false);
+            }
         }
 
         public void RoleAbilityResetOnMeetingEnd()
         {
-            return;
+            if (this.tellText != null)
+            {
+                this.tellText.gameObject.SetActive(false);
+            }
         }
 
         public void Update(PlayerControl rolePlayer)

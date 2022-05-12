@@ -4,9 +4,13 @@ namespace ExtremeRoles.Module
 {
     public class Arrow
     {
+        public GameObject Main
+        {
+            get => this.body;
+        }
 
-        private const float xzMaxSize = 0.5f;
-        private const float yMaxSize = 0.6f;
+        private const float xzMaxSize = 0.4f;
+        private const float yMaxSize = 0.525f;
 
         private Vector3 target;
         private SpriteRenderer image;

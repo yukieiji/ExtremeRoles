@@ -14,23 +14,22 @@ using ExtremeSkins.Module;
 
 namespace ExtremeSkins.SkinManager
 {
-#if WITHNAMEPLATE
-    public class ExtremeNamePlateManager
+#if WITHVISOR
+    public class ExtremeVisorManager
     {
-        public static Dictionary<string, CustomNamePlate> NamePlateData = new Dictionary<string, CustomNamePlate>();
+        public static Dictionary<string, CustomVisor> VisorData = new Dictionary<string, CustomVisor>();
         public static bool IsLoaded = false;
 
-        public const string FolderPath = @"\ExtremeNamePlate\";
-        public const string InfoFileName = "info.json";
+        public const string FolderPath = @"\ExtremeVisor\";
         public const string LicenseFileName = "LICENSE.md";
 
-        private const string repo = "https://raw.githubusercontent.com/yukieiji/ExtremeNamePlate/main"; // When using this repository with Fork, please follow the license of each hat
-        private const string namePlateRepoData = "namePlateData.json";
-        private const string namePlateTransData = "namePlateTransData.json";
+        private const string repo = "https://raw.githubusercontent.com/yukieiji/ExtremeVisor/main"; // When using this repository with Fork, please follow the license of each hat
+        private const string visorRepoData = "visorData.json";
+        private const string visorTransData = "visorTransData.json";
 
         public static void Initialize()
         {
-            NamePlateData.Clear();
+            VisorData.Clear();
             IsLoaded = false;
         }
 
@@ -39,40 +38,40 @@ namespace ExtremeSkins.SkinManager
             if (!Directory.Exists(string.Concat(
                 Path.GetDirectoryName(Application.dataPath), FolderPath))) { return true; }
 
-            getJsonData(namePlateRepoData).GetAwaiter().GetResult();
+            getJsonData(visorRepoData).GetAwaiter().GetResult();
             
-            byte[] byteNamePlateArray = File.ReadAllBytes(
+            byte[] byteVisorArray = File.ReadAllBytes(
                 string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
-                    FolderPath, namePlateRepoData));
-            string namePlateJsonString = System.Text.Encoding.UTF8.GetString(byteNamePlateArray);
-            JObject namePlateFolder = JObject.Parse(namePlateJsonString);
+                    FolderPath, visorRepoData));
+            string visorJsonString = System.Text.Encoding.UTF8.GetString(byteVisorArray);
+            JObject visorFolder = JObject.Parse(visorJsonString);
             
-            for(int i = 0; i < namePlateFolder.Count; ++i)
+            for(int i = 0; i < visorFolder.Count; ++i)
             {
-                JProperty token = namePlateFolder.ChildrenTokens[i].TryCast<JProperty>();
+                JProperty token = visorFolder.ChildrenTokens[i].TryCast<JProperty>();
                 if (token == null) { continue; }
 
                 string author = token.Name;
 
                 if (author == "updateComitHash") { continue; }
 
-                string checkNamePlateFolder = string.Concat(
+                string checkVisorFolder = string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
                     FolderPath, author);
 
-                if (!Directory.Exists(checkNamePlateFolder)) { return true; }
+                if (!Directory.Exists(checkVisorFolder)) { return true; }
 
                 if (!File.Exists(string.Concat(
-                    checkNamePlateFolder, @"\", LicenseFileName))) { return true; }
+                    checkVisorFolder, @"\", LicenseFileName))) { return true; }
 
-                JArray namePlateImage = token.Value.TryCast<JArray>();
-                for (int j = 0; j < namePlateImage.Count; ++j)
+                JArray visorImage = token.Value.TryCast<JArray>();
+                for (int j = 0; j < visorImage.Count; ++j)
                 {
 
                     if (!File.Exists(string.Concat(
-                            checkNamePlateFolder, @"\",
-                            namePlateImage[j].TryCast<JValue>().Value.ToString(),
+                            checkVisorFolder, @"\",
+                            visorImage[j].TryCast<JValue>().Value.ToString(),
                             ".png"))) { return true; }
                 }
 
@@ -84,42 +83,42 @@ namespace ExtremeSkins.SkinManager
         public static void Load()
         {
 
-            getJsonData(namePlateTransData).GetAwaiter().GetResult();
+            getJsonData(visorTransData).GetAwaiter().GetResult();
             Helper.Translation.UpdateHatsTransData(
                 string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
-                    FolderPath, namePlateTransData));
-
-            string[] namePlateFolder = Directory.GetDirectories(
+                    FolderPath, visorTransData));
+        
+            string[] visorFolder = Directory.GetDirectories(
                 string.Concat(Path.GetDirectoryName(Application.dataPath), FolderPath));
 
-            foreach (string authorPath in namePlateFolder)
+            foreach (string authorPath in visorFolder)
             {
                 if (string.IsNullOrEmpty(authorPath)) { continue; }
                 
                 string[] authorDirs = authorPath.Split(@"\");
                 string author = authorDirs[authorDirs.Length - 1];
 
-                string[] namePlateImage = Directory.GetFiles(
+                string[] visorImage = Directory.GetFiles(
                     authorPath, "*.png");
 
-                foreach (string namePlate in namePlateImage)
+                foreach (string visor in visorImage)
                 {
-                    string[] namePlateDir = namePlate.Split(@"\");
-                    string imageName = namePlateDir[namePlateDir.Length - 1];
+                    string[] visorDir = visor.Split(@"\");
+                    string imageName = visorDir[visorDir.Length - 1];
                     string name = imageName.Substring(0, imageName.Length - 4);
-                    string productId = string.Concat("namePlate_", name);
+                    string productId = string.Concat("visor_", name);
 
-                    if (NamePlateData.ContainsKey(productId)) { continue; }
+                    if (VisorData.ContainsKey(productId)) { continue; }
 
-                    NamePlateData.Add(
+                    VisorData.Add(
                         productId,  // Name
-                        new CustomNamePlate(
-                            productId, namePlate,
+                        new CustomVisor(
+                            productId, visor,
                             author, name));  // Name
 
                     ExtremeSkinsPlugin.Logger.LogInfo(
-                        $"NamePlate Loaded:{name}, from:{namePlate}");
+                        $"Visor Loaded:{name}, from:{visor}");
                 }
                 
             }
@@ -138,58 +137,58 @@ namespace ExtremeSkins.SkinManager
                 Directory.CreateDirectory(dataSaveFolder);
             }
 
-            getJsonData(namePlateRepoData).GetAwaiter().GetResult();
+            getJsonData(visorRepoData).GetAwaiter().GetResult();
 
             HttpClient http = new HttpClient();
             http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true };
 
-            byte[] byteNamePlateArray = File.ReadAllBytes(
+            byte[] byteVisorArray = File.ReadAllBytes(
                 string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
-                    FolderPath, namePlateRepoData));
-            string namePlateJsonString = System.Text.Encoding.UTF8.GetString(byteNamePlateArray);
+                    FolderPath, visorRepoData));
+            string visorJsonString = System.Text.Encoding.UTF8.GetString(byteVisorArray);
 
-            JObject namePlateFolder = JObject.Parse(namePlateJsonString);
+            JObject visorFolder = JObject.Parse(visorJsonString);
 
-            for (int i = 0; i < namePlateFolder.Count; ++i)
+            for (int i = 0; i < visorFolder.Count; ++i)
             {
-                JProperty token = namePlateFolder.ChildrenTokens[i].TryCast<JProperty>();
+                JProperty token = visorFolder.ChildrenTokens[i].TryCast<JProperty>();
                 if (token == null) { continue; }
 
                 string author = token.Name;
 
                 if (author == "updateComitHash") { continue; }
 
-                string checkNamePlateFolder = string.Concat(
+                string checkVisorFolder = string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
                     FolderPath, author);
 
                 // まずはフォルダとファイルを消す
-                if (Directory.Exists(checkNamePlateFolder))
+                if (Directory.Exists(checkVisorFolder))
                 {
-                    string[] filePaths = Directory.GetFiles(checkNamePlateFolder);
+                    string[] filePaths = Directory.GetFiles(checkVisorFolder);
                     foreach (string filePath in filePaths)
                     {
                         File.SetAttributes(filePath, FileAttributes.Normal);
                         File.Delete(filePath);
                     }
-                    Directory.Delete(checkNamePlateFolder, false); ;
+                    Directory.Delete(checkVisorFolder, false); ;
                 }
 
-                Directory.CreateDirectory(checkNamePlateFolder);
+                Directory.CreateDirectory(checkVisorFolder);
 
-                await downLoadFileTo(http, author, checkNamePlateFolder, LicenseFileName);
+                await downLoadFileTo(http, author, checkVisorFolder, LicenseFileName);
 
-                JArray namePlateImage = token.Value.TryCast<JArray>();
+                JArray visorImage = token.Value.TryCast<JArray>();
 
-                for (int j = 0; j < namePlateImage.Count; ++j)
+                for (int j = 0; j < visorImage.Count; ++j)
                 {
 
                     string imgName = string.Concat(
-                        namePlateImage[j].TryCast<JValue>().Value.ToString(),
+                        visorImage[j].TryCast<JValue>().Value.ToString(),
                         ".png");
 
-                    await downLoadFileTo(http, author, checkNamePlateFolder, imgName);
+                    await downLoadFileTo(http, author, checkVisorFolder, imgName);
                 }
             }
 
@@ -197,12 +196,12 @@ namespace ExtremeSkins.SkinManager
 
         public static void UpdateTranslation()
         {
-            foreach (var np in NamePlateData.Values)
+            foreach (var vi in VisorData.Values)
             {
-               if (np.Data != null)
+               if (vi.Data != null)
                {
-                    np.Data.name = Helper.Translation.GetString(
-                        np.Name);
+                    vi.Data.name = Helper.Translation.GetString(
+                        vi.Name);
                }
             }
         }
@@ -214,7 +213,7 @@ namespace ExtremeSkins.SkinManager
                 HttpClient http = new HttpClient();
                 http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true };
                 var response = await http.GetAsync(
-                    new System.Uri($"{repo}/namePlate/{fileName}"),
+                    new System.Uri($"{repo}/visor/{fileName}"),
                     HttpCompletionOption.ResponseContentRead);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
@@ -246,7 +245,7 @@ namespace ExtremeSkins.SkinManager
             HttpClient http, string author, string saveFolder, string fileName)
         {
             var fileResponse = await http.GetAsync(
-                $"{repo}/namePlate/{author}/{fileName}",
+                $"{repo}/visor/{author}/{fileName}",
                 HttpCompletionOption.ResponseContentRead);
 
             if (fileResponse.StatusCode != HttpStatusCode.OK)

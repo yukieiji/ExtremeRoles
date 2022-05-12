@@ -22,7 +22,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
 #if WITHHAT
             if (!ExtremeHatManager.IsLoaded)
             {
-                if (ExtremeHatManager.IsUpdate() && !creatorMode)
+                if (!creatorMode && ExtremeHatManager.IsUpdate())
                 {
                     ExtremeHatManager.PullAllData().GetAwaiter().GetResult();
                 }
@@ -33,12 +33,24 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
 #if WITHNAMEPLATE
             if (!ExtremeNamePlateManager.IsLoaded)
             {
-                if (ExtremeNamePlateManager.IsUpdate() && !creatorMode)
+                if (!creatorMode && ExtremeNamePlateManager.IsUpdate())
                 {
                     ExtremeNamePlateManager.PullAllData().GetAwaiter().GetResult();
                 }
 
                 ExtremeNamePlateManager.Load();
+            }
+#endif
+#if WITHVISOR
+            if (!ExtremeVisorManager.IsLoaded)
+            {
+                
+                if (!creatorMode && ExtremeVisorManager.IsUpdate())
+                {
+                    ExtremeVisorManager.PullAllData().GetAwaiter().GetResult();
+                }
+
+                ExtremeVisorManager.Load();
             }
 #endif
         }

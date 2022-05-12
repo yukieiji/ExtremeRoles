@@ -46,6 +46,8 @@ namespace ExtremeRoles.Patches
         public static void Postfix(AmongUsClient __instance, [HarmonyArgument(0)] ref EndGameResult endGameResult)
         {
             List<PlayerControl> noWinner = new List<PlayerControl>();
+            List<(GameData.PlayerInfo, Roles.API.Interface.IRoleWinPlayerModifier)> modRole = new List<
+                (GameData.PlayerInfo, Roles.API.Interface.IRoleWinPlayerModifier)> ();
 
             var roleData = ExtremeRoleManager.GameRole;
             var gameData = ExtremeRolesPlugin.GameDataStore;
@@ -68,6 +70,26 @@ namespace ExtremeRoles.Patches
                         noWinner.Add(playerInfo.Object);
                     }
                 }
+
+                var multiAssignRole = role as Roles.API.MultiAssignRoleBase;
+
+                var winModRole = role as Roles.API.Interface.IRoleWinPlayerModifier;
+                if (winModRole != null)
+                {
+                    modRole.Add((playerInfo, winModRole));
+                }
+                if (multiAssignRole != null)
+                {
+                    if (multiAssignRole.AnotherRole != null)
+                    {
+                        winModRole = multiAssignRole.AnotherRole as Roles.API.Interface.IRoleWinPlayerModifier;
+                        if (winModRole != null)
+                        {
+                            modRole.Add((playerInfo, winModRole));
+                        }
+                    }
+                }
+
             }
 
             List<WinningPlayerData> winnersToRemove = new List<WinningPlayerData>();
@@ -140,6 +162,12 @@ namespace ExtremeRoles.Patches
                         noWinner,
                         new ExtremeRoleId[] { ExtremeRoleId.Yandere });
                     break;
+                case RoleGameOverReason.VigilanteKillAllOther:
+                case RoleGameOverReason.VigilanteNewIdealWorld:
+                    replaceWinnerToSpecificNeutralRolePlayer(
+                        noWinner,
+                        new ExtremeRoleId[] { ExtremeRoleId.Vigilante });
+                    break;
                 case RoleGameOverReason.ShipFallInLove:
                     replaceWinnerToSpecificRolePlayer(
                         ExtremeRoleId.Lover);
@@ -152,6 +180,16 @@ namespace ExtremeRoles.Patches
             {
                 addWinner(player);
             }
+
+            foreach(var (playerInfo, winModRole) in modRole)
+            {
+                winModRole.ModifiedWinPlayer(
+                    playerInfo,
+                    gameData.EndReason,
+                    TempData.winners,
+                    gameData.PlusWinner);
+            }
+
         }
         private static void replaceWinnerToSpecificRolePlayer(
             ExtremeRoleId roleId)

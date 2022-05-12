@@ -12,7 +12,7 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public class Jackal : SingleRoleBase, IRoleAbility
+    public class Jackal : SingleRoleBase, IRoleAbility, IRoleSpecialReset
     {
         public enum JackalOption
         {
@@ -251,11 +251,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             shapeshiftReset(targetPlayer, targetRole);
 
             // キャリアーのリセット処理
-            carrierReset(targetPlayer, targetId);
-
-            jackalReset(targetPlayer, targetId);
+            var resetRole = targetRole as IRoleSpecialReset;
+            if (resetRole != null)
+            {
+                resetRole.AllReset(targetPlayer);
+            }
 
             var sourceJackal = ExtremeRoleManager.GetSafeCastedRole<Jackal>(callerId);
+            if (sourceJackal == null) { return; }
             var newSidekick = new Sidekick(
                 sourceJackal.GameControlId,
                 callerId,
@@ -332,45 +335,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     }
                 }
             }
-        }
-
-        private static void carrierReset(
-            PlayerControl targetPlayer,
-            byte targetPlayerId)
-        {
-            var carrier = ExtremeRoleManager.GetSafeCastedRole<Impostor.Carrier>(targetPlayerId);
-            if (carrier != null)
-            {
-                if (carrier.CarringBody != null)
-                {
-                    carrier.CarringBody.transform.parent = null;
-                    carrier.CarringBody.transform.position = targetPlayer.GetTruePosition() + new Vector2(0.15f, 0.15f);
-                    carrier.CarringBody.transform.position -= new Vector3(0.0f, 0.0f, 0.01f);
-
-
-                    Color color = carrier.CarringBody.bodyRenderer.color;
-                    carrier.CarringBody.bodyRenderer.color = new Color(
-                        color.r, color.g, color.b, carrier.AlphaValue);
-                    if (!carrier.CanReportOnCarry)
-                    {
-                        carrier.CarringBody.GetComponentInChildren<BoxCollider2D>().enabled = true;
-                    }
-                    carrier.CarringBody = null;
-                }
-            }
-        }
-
-        private static void jackalReset(
-            PlayerControl targetPlayer,
-            byte targetPlayerId)
-        {
-            var jackal = ExtremeRoleManager.GetSafeCastedRole<Jackal>(targetPlayerId);
-
-            if (jackal != null)
-            {
-                jackal.SidekickToJackal(targetPlayer);
-            }
-
         }
 
         private static void shapeshiftReset(
@@ -526,6 +490,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
         }
 
+        public void AllReset(PlayerControl rolePlayer)
+        {
+            this.SidekickToJackal(rolePlayer);
+        }
 
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
@@ -708,6 +676,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
 
             Jackal curJackal = ExtremeRoleManager.GetSafeCastedRole<Jackal>(callerId);
+            if (curJackal == null) { return; }
             Jackal newJackal = (Jackal)curJackal.Clone();
 
             bool multiAssignTrigger = false;
@@ -775,6 +744,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             {
 
                 var jackal = ExtremeRoleManager.GetSafeCastedRole<Jackal>(this.JackalPlayerId);
+                if (jackal == null) { return; }
                 jackal.SidekickPlayerId.Clear();
 
                 RPCOperator.Call(

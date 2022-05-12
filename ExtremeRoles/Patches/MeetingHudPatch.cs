@@ -291,11 +291,37 @@ namespace ExtremeRoles.Patches
     class MeetingHudCoIntroPatch
     {
         public static void Postfix(
-            MeetingHud __instance)
+            MeetingHud __instance,
+            [HarmonyArgument(0)] GameData.PlayerInfo reporter,
+            [HarmonyArgument(1)] GameData.PlayerInfo reportedBody)
         {
-            if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
-            __instance.TitleText.text = Helper.Translation.GetString(
-                "whoIsMarine");
+            if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+
+            if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
+            {
+                var hockRole = ExtremeRoleManager.GetLocalPlayerRole() as IRoleReportHock;
+
+                if (hockRole != null)
+                {
+                    var player = PlayerControl.LocalPlayer;
+
+                    if (reportedBody == null)
+                    {
+                        hockRole.HockReportButton(
+                            player, reporter);
+                    }
+                    else
+                    {
+                        hockRole.HockBodyReport(
+                            player, reporter, reportedBody);
+                    }
+                }
+
+            }
+            else
+            {
+                __instance.TitleText.text = Helper.Translation.GetString("whoIsMarine");
+            }
         }
     }
 

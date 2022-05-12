@@ -10,9 +10,9 @@ using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Module
 {
-    public enum OptionUnit
+    public enum OptionUnit : byte
     {
-        None = byte.MinValue,
+        None,
         Second,
         Minute,
         Shot,
@@ -164,6 +164,7 @@ namespace ExtremeRoles.Module
         public void SetUpdateOption(CustomOptionBase option)
         {
             this.withUpdateOption.Add(option);
+            option.OptionUpdate(this.GetValue());
         }
 
         public void UpdateSelection(int newSelection)

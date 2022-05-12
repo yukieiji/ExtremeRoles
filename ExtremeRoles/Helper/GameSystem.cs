@@ -10,6 +10,16 @@ namespace ExtremeRoles.Helper
 {
     public static class GameSystem
     {
+        public static HashSet<TaskTypes> SaboTask = new HashSet<TaskTypes>()
+        {
+            TaskTypes.FixLights,
+            TaskTypes.RestoreOxy,
+            TaskTypes.ResetReactor,
+            TaskTypes.ResetSeismic,
+            TaskTypes.FixComms,
+            TaskTypes.StopCharles
+        };
+
         private static HashSet<TaskTypes> ignoreTask = new HashSet<TaskTypes>()
         {
             TaskTypes.FixWiring,
@@ -67,7 +77,7 @@ namespace ExtremeRoles.Helper
             List<int> taskIndex = getTaskIndex(
                 ShipStatus.Instance.CommonTasks);
 
-            int index = UnityEngine.Random.RandomRange(0, taskIndex.Count);
+            int index = RandomGenerator.Instance.Next(taskIndex.Count);
 
             return (byte)taskIndex[index];
         }
@@ -79,7 +89,7 @@ namespace ExtremeRoles.Helper
             List<int> taskIndex = getTaskIndex(
                 ShipStatus.Instance.LongTasks);
 
-            int index = UnityEngine.Random.RandomRange(0, taskIndex.Count);
+            int index = RandomGenerator.Instance.Next(taskIndex.Count);
 
             return taskIndex[index];
         }
@@ -91,7 +101,7 @@ namespace ExtremeRoles.Helper
             List<int> taskIndex = getTaskIndex(
                 ShipStatus.Instance.NormalTasks);
 
-            int index = UnityEngine.Random.RandomRange(0, taskIndex.Count);
+            int index = RandomGenerator.Instance.Next(taskIndex.Count);
 
             return taskIndex[index];
         }
@@ -115,6 +125,39 @@ namespace ExtremeRoles.Helper
             player.myTasks.Add(task);
             player.SetDirtyBit(1U << (int)player.PlayerId);
         }
+
+        public static void SetPlayerNewTask(
+            ref PlayerControl player,
+            byte taskId, uint gameControlTaskId)
+        {
+            NormalPlayerTask normalPlayerTask =
+                UnityEngine.Object.Instantiate<NormalPlayerTask>(
+                    ShipStatus.Instance.GetTaskById(taskId),
+                    player.transform);
+            normalPlayerTask.Id = gameControlTaskId;
+            normalPlayerTask.Owner = player;
+            normalPlayerTask.Initialize();
+
+            for (int i = 0; i < player.myTasks.Count; ++i)
+            {
+                var textTask = player.myTasks[i].gameObject.GetComponent<ImportantTextTask>();
+                if (textTask != null) { continue; }
+
+                if (SaboTask.Contains(player.myTasks[i].TaskType)) { continue; }
+
+                if (player.myTasks[i].IsComplete)
+                {
+                    var removeTask = player.myTasks[i];
+                    player.myTasks[i] = normalPlayerTask;
+
+                    removeTask.OnRemove();
+                    UnityEngine.Object.Destroy(
+                        removeTask.gameObject);
+                    break;
+                }
+            }
+        }
+
 
         public static void ShareVersion()
         {

@@ -188,7 +188,7 @@ namespace ExtremeRoles.Module
             string roleFullDesc;
             string roleText;
 
-            foreach (var role in Roles.ExtremeRoleManager.NormalRole)
+            foreach (var role in Roles.ExtremeRoleManager.NormalRole.Values)
             {
                 optionId = role.GetRoleOptionOffset();
                 colorRoleName = role.GetColoredRoleName();
@@ -205,7 +205,7 @@ namespace ExtremeRoles.Module
                 this.allRoleText.Add(((string)roleText.Clone(), optionId));
             }
 
-            foreach (var combRole in Roles.ExtremeRoleManager.CombRole)
+            foreach (var combRole in Roles.ExtremeRoleManager.CombRole.Values)
             {
                 if (combRole is ConstCombinationRoleManagerBase)
                 {

@@ -309,12 +309,18 @@ namespace ExtremeRoles.Patches.Manager
                     textRenderer.color = ColorPalette.YandereVioletRed;
                     manager.BackgroundBar.material.SetColor("_Color", ColorPalette.YandereVioletRed);
                     break;
+                case (GameOverReason)RoleGameOverReason.VigilanteKillAllOther:
+                case (GameOverReason)RoleGameOverReason.VigilanteNewIdealWorld:
+                    bonusText = Translation.GetString(
+                        ExtremeRoleId.Vigilante.ToString());
+                    textRenderer.color = ColorPalette.VigilanteFujiIro;
+                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.VigilanteFujiIro);
+                    break;
                 default:
                     break;
             }
 
-            int textCounter = 0;
-            List<ExtremeRoleId> added = new List<ExtremeRoleId>();
+            HashSet<ExtremeRoleId> added = new HashSet<ExtremeRoleId>();
 
             if (OptionHolder.Ship.DisableNeutralSpecialForceEnd && winNeutral.Count != 0)
             {
@@ -330,7 +336,7 @@ namespace ExtremeRoles.Patches.Manager
                         {
                             if (added.Contains(winNeutral[i].Id)) { continue; }
 
-                            if(textCounter == 0)
+                            if(added.Count == 0)
                             {
                                 bonusText = bonusText + Translation.GetString("andFirst");
                             }
@@ -338,8 +344,6 @@ namespace ExtremeRoles.Patches.Manager
                             {
                                 bonusText = bonusText + Translation.GetString("and");
                             }
-
-                            ++textCounter;
 
                             bonusText = bonusText + Translation.GetString(
                                 winNeutral[i].GetColoredRoleName());
@@ -361,7 +365,7 @@ namespace ExtremeRoles.Patches.Manager
 
                 if (added.Contains(role.Id)) { continue; }
 
-                if (textCounter == 0)
+                if (added.Count == 0)
                 {
                     bonusText = bonusText + Translation.GetString("andFirst");
                 }
@@ -369,8 +373,6 @@ namespace ExtremeRoles.Patches.Manager
                 {
                     bonusText = bonusText + Translation.GetString("and");
                 }
-
-                ++textCounter;
 
                 bonusText = bonusText + Translation.GetString(
                     role.GetColoredRoleName());

@@ -2,6 +2,9 @@
 
 using HarmonyLib;
 
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.Combination;
 
 namespace ExtremeRoles.Patches.Button
 {
@@ -16,10 +19,10 @@ namespace ExtremeRoles.Patches.Button
         }
         public static bool Prefix(KillButton __instance)
         {
-            if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
+            if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
             PlayerControl killer = PlayerControl.LocalPlayer;
-            var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
+            var role = ExtremeRoleManager.GetLocalPlayerRole();
 
             if (__instance.isActiveAndEnabled &&
                 __instance.currentTarget &&
@@ -32,7 +35,12 @@ namespace ExtremeRoles.Patches.Button
 
                 if (target.Data.IsDead) { return false; }
 
-                var targetPlayerRole = Roles.ExtremeRoleManager.GameRole[target.PlayerId];
+                var targetPlayerRole = ExtremeRoleManager.GameRole[target.PlayerId];
+                if (role.Id == ExtremeRoleId.Villain)
+                {
+                    villainSpecialKill(__instance, killer, target, targetPlayerRole);
+                    return false;
+                }
 
                 bool canKill = role.TryRolePlayerKillTo(
                     killer, target);
@@ -42,7 +50,7 @@ namespace ExtremeRoles.Patches.Button
                     target, killer);
                 if (!canKill) { return false; }
 
-                var multiAssignRole = role as Roles.API.MultiAssignRoleBase;
+                var multiAssignRole = role as MultiAssignRoleBase;
                 if (multiAssignRole != null)
                 {
                     if (multiAssignRole.AnotherRole != null)
@@ -53,7 +61,7 @@ namespace ExtremeRoles.Patches.Button
                     }
                 }
 
-                multiAssignRole = targetPlayerRole as Roles.API.MultiAssignRoleBase;
+                multiAssignRole = targetPlayerRole as MultiAssignRoleBase;
                 if (multiAssignRole != null)
                 {
                     if (multiAssignRole.AnotherRole != null)
@@ -143,6 +151,57 @@ namespace ExtremeRoles.Patches.Button
 
             return MurderKillResult.NormalKill;
 
+        }
+        private static void villainSpecialKill(
+            KillButton instance,
+            PlayerControl killer,
+            PlayerControl target,
+            SingleRoleBase targetRole)
+        {
+            if (targetRole.Id == ExtremeRoleId.Vigilante)
+            {
+                var vigilante = (Vigilante)targetRole;
+                if (vigilante.Condition != Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip)
+                {
+                    return;
+                }
+            }
+            else if (targetRole.Id == ExtremeRoleId.Hero)
+            {
+                HeroAcademia.RpcDrawHeroAndVillan(
+                    target, killer);
+                return;
+            }
+            
+            MurderKillResult res = checkMuderKill(
+                instance, killer, target);
+
+            switch (res)
+            {
+                case MurderKillResult.NormalKill:
+
+                    RPCOperator.Call(
+                        PlayerControl.LocalPlayer.NetId,
+                        RPCOperator.Command.UncheckedMurderPlayer,
+                        new List<byte> { killer.PlayerId, target.PlayerId, byte.MaxValue });
+                    RPCOperator.UncheckedMurderPlayer(
+                        killer.PlayerId,
+                        target.PlayerId,
+                        byte.MaxValue);
+                    break;
+                case MurderKillResult.NoAnimatedKill:
+                    RPCOperator.Call(
+                        PlayerControl.LocalPlayer.NetId,
+                        RPCOperator.Command.UncheckedMurderPlayer,
+                        new List<byte> { killer.PlayerId, target.PlayerId, 0 });
+                    RPCOperator.UncheckedMurderPlayer(
+                        killer.PlayerId,
+                        target.PlayerId, 0);
+                    break;
+                default:
+                    break;
+            }
+            instance.SetTarget(null);
         }
     }
 }

@@ -22,7 +22,14 @@ namespace ExtremeRoles.Roles
         Marlin,
         Lover,
         Supporter,
-        
+        Hero,
+        Villain,
+        Vigilante,
+        Detective,
+        Assistant,
+        DetectiveApprentice,
+        Sharer,
+
         SpecialCrew,
         Sheriff,
         Maintainer,
@@ -61,6 +68,16 @@ namespace ExtremeRoles.Roles
         Jester,
         Yandere
     }
+    public enum CombinationRoleType
+    {
+        Avalon,
+        HeroAca,
+        DetectiveOffice,
+        Lover,
+        Supporter,
+        Sharer,
+    }
+
     public enum RoleGameOverReason
     {
         AssassinationMarin = 10,
@@ -82,6 +99,9 @@ namespace ExtremeRoles.Roles
         YandereKillAllOther,
         YandereShipJustForTwo,
 
+        VigilanteKillAllOther,
+        VigilanteNewIdealWorld,
+
         UnKnown = 100,
     }
 
@@ -91,70 +111,83 @@ namespace ExtremeRoles.Roles
         Alice,
         Lover,
         Missionary,
-        Yandere
+        Yandere,
+        Vigilante,
     }
 
     public static class ExtremeRoleManager
     {
         public const int OptionOffsetPerRole = 50;
 
-        public static readonly List<ExtremeRoleId> SpecialWinCheckRole = new List<ExtremeRoleId>()
+        public static readonly HashSet<ExtremeRoleId> SpecialWinCheckRole = new HashSet<ExtremeRoleId>()
         {
             ExtremeRoleId.Lover,
             ExtremeRoleId.Yandere,
+            ExtremeRoleId.Vigilante,
         };
 
-        public static readonly List<
-            SingleRoleBase> NormalRole = new List<SingleRoleBase>()
+        public static readonly Dictionary<
+            byte, SingleRoleBase> NormalRole = new Dictionary<byte, SingleRoleBase>()
             {
-                new SpecialCrew(),
-                new Sheriff(),
-                new Maintainer(),
-                new Neet(),
-                new Watchdog(),
-                new Supervisor(),
-                new BodyGuard(),
-                new Whisper(),
-                new TimeMaster(),
-                new Agency(),
-                new Bakary(),
-                new CurseMaker(),
-                new Fencer(),
-                new Opener(),
+                {(byte)ExtremeRoleId.SpecialCrew, new SpecialCrew()},
+                {(byte)ExtremeRoleId.Sheriff    , new Sheriff()},
+                {(byte)ExtremeRoleId.Maintainer , new Maintainer()},
+                {(byte)ExtremeRoleId.Neet       , new Neet()},
+                {(byte)ExtremeRoleId.Watchdog   , new Watchdog()},
+                {(byte)ExtremeRoleId.Supervisor , new Supervisor()},
+                {(byte)ExtremeRoleId.BodyGuard  , new BodyGuard()},
+                {(byte)ExtremeRoleId.Whisper    , new Whisper()},
+                {(byte)ExtremeRoleId.TimeMaster , new TimeMaster()},
+                {(byte)ExtremeRoleId.Agency     , new Agency()},
+                {(byte)ExtremeRoleId.Bakary     , new Bakary()},
+                {(byte)ExtremeRoleId.CurseMaker , new CurseMaker()},
+                {(byte)ExtremeRoleId.Fencer     , new Fencer()},
+                {(byte)ExtremeRoleId.Opener     , new Opener()},
 
-                new SpecialImpostor(),
-                new Evolver(),
-                new Carrier(),
-                new PsychoKiller(),
-                new BountyHunter(),
-                new Painter(),
-                new Faker(),
-                new OverLoader(),
-                new Cracker(),
-                new Bomber(),
-                new Mery(),
-                new SlaveDriver(),
-                new SandWorm(),
-                new Smasher(),
+                {(byte)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
+                {(byte)ExtremeRoleId.Evolver        , new Evolver()},
+                {(byte)ExtremeRoleId.Carrier        , new Carrier()},
+                {(byte)ExtremeRoleId.PsychoKiller   , new PsychoKiller()},
+                {(byte)ExtremeRoleId.BountyHunter   , new BountyHunter()},
+                {(byte)ExtremeRoleId.Painter        , new Painter()},
+                {(byte)ExtremeRoleId.Faker          , new Faker()},
+                {(byte)ExtremeRoleId.OverLoader     , new OverLoader()},
+                {(byte)ExtremeRoleId.Cracker        , new Cracker()},
+                {(byte)ExtremeRoleId.Bomber         , new Bomber()},
+                {(byte)ExtremeRoleId.Mery           , new Mery()},
+                {(byte)ExtremeRoleId.SlaveDriver    , new SlaveDriver()},
+                {(byte)ExtremeRoleId.SandWorm       , new SandWorm()},
+                {(byte)ExtremeRoleId.Smasher        , new Smasher()},
 
-                new Alice(),
-                new Jackal(),
-                new TaskMaster(),
-                new Missionary(),
-                new Jester(),
-                new Yandere(),
+                {(byte)ExtremeRoleId.Alice     , new Alice()},
+                {(byte)ExtremeRoleId.Jackal    , new Jackal()},
+                {(byte)ExtremeRoleId.TaskMaster, new TaskMaster()},
+                {(byte)ExtremeRoleId.Missionary, new Missionary()},
+                {(byte)ExtremeRoleId.Jester    , new Jester()},
+                {(byte)ExtremeRoleId.Yandere   , new Yandere()},
             };
 
-        public static readonly List<
-            CombinationRoleManagerBase> CombRole = new List<CombinationRoleManagerBase>()
+        public static readonly Dictionary<
+            byte, CombinationRoleManagerBase> CombRole = new Dictionary<byte, CombinationRoleManagerBase>()
             {
-                new Avalon(),
-                new LoverManager(),
-                new SupporterManager(),
+                {(byte)CombinationRoleType.Avalon         , new Avalon()},
+                {(byte)CombinationRoleType.HeroAca        , new HeroAcademia()},
+                {(byte)CombinationRoleType.DetectiveOffice, new DetectiveOffice()},
+                {(byte)CombinationRoleType.Lover          , new LoverManager()},
+                {(byte)CombinationRoleType.Supporter      , new SupporterManager()},
+                {(byte)CombinationRoleType.Sharer         , new SharerManager()   },
             };
 
         public static Dictionary<
             byte, SingleRoleBase> GameRole = new Dictionary<byte, SingleRoleBase> ();
+
+        public static readonly HashSet<ExtremeRoleId> WinCheckDisableRole = new HashSet<ExtremeRoleId>()
+        {
+            ExtremeRoleId.Jackal,
+            ExtremeRoleId.Assassin,
+            ExtremeRoleId.Hero,
+            ExtremeRoleId.Villain
+        };
 
         private static int roleControlId = 0;
 
@@ -167,7 +200,7 @@ namespace ExtremeRoles.Roles
         public static void CreateCombinationRoleOptions(
             int optionIdOffsetChord)
         {
-            IEnumerable<CombinationRoleManagerBase> roles = CombRole;
+            IEnumerable<CombinationRoleManagerBase> roles = CombRole.Values;
 
             if (roles.Count() == 0) { return; };
 
@@ -186,7 +219,7 @@ namespace ExtremeRoles.Roles
             int optionIdOffsetChord)
         {
 
-            IEnumerable<SingleRoleBase> roles = NormalRole;
+            IEnumerable<SingleRoleBase> roles = NormalRole.Values;
 
             if (roles.Count() == 0) { return; };
 
@@ -204,7 +237,7 @@ namespace ExtremeRoles.Roles
         {
             roleControlId = 0;
             GameRole.Clear();
-            foreach (var role in CombRole)
+            foreach (var role in CombRole.Values)
             {
                 role.Initialize();
             }
@@ -212,10 +245,23 @@ namespace ExtremeRoles.Roles
 
         public static bool IsDisableWinCheckRole(SingleRoleBase role)
         {
-            var assassin = role as Assassin;
-            var jackal = role as Jackal;
-
-            return assassin != null || jackal != null;
+            var mainRoleCheckResult = WinCheckDisableRole.Contains(role.Id);
+            var multiAssignRole = role as MultiAssignRoleBase;
+            if (multiAssignRole == null)
+            {
+                return mainRoleCheckResult;
+            }
+            else
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    return WinCheckDisableRole.Contains(multiAssignRole.AnotherRole.Id);
+                }
+                else
+                {
+                    return mainRoleCheckResult;
+                }
+            }
         }
         public static bool IsAliveWinNeutral(
             SingleRoleBase role, GameData.PlayerInfo playerInfo)
@@ -233,69 +279,55 @@ namespace ExtremeRoles.Roles
         }
 
         public static void SetPlayerIdToMultiRoleId(
-            byte roleId, byte playerId, byte id, byte bytedRoleType)
+            byte combType, byte roleId, byte playerId, byte id, byte bytedRoleType)
         {
             RoleTypes roleType = (RoleTypes)bytedRoleType;
             bool hasVanilaRole = roleType != RoleTypes.Crewmate || roleType != RoleTypes.Impostor;
 
-            foreach (var combRole in CombRole)
-            {
-
-                var role = combRole.GetRole(
+            var role = CombRole[combType].GetRole(
                     roleId, roleType);
 
-                if (role != null)
+            if (role != null)
+            {
+
+                SingleRoleBase addRole = role.Clone();
+
+                IRoleAbility abilityRole = addRole as IRoleAbility;
+
+                if (abilityRole != null && PlayerControl.LocalPlayer.PlayerId == playerId)
                 {
-
-                    SingleRoleBase addRole = role.Clone();
-
-                    IRoleAbility abilityRole = addRole as IRoleAbility;
-
-                    if (abilityRole != null && PlayerControl.LocalPlayer.PlayerId == playerId)
-                    {
-                        Helper.Logging.Debug("Try Create Ability NOW!!!");
-                        abilityRole.CreateAbility();
-                    }
-
-                    addRole.Initialize();
-                    addRole.GameControlId = id;
-                    roleControlId = id + 1;
-
-                    GameRole.Add(
-                        playerId, addRole);
-
-                    if (hasVanilaRole)
-                    {
-                        ((MultiAssignRoleBase)GameRole[
-                            playerId]).SetAnotherRole(
-                                new Solo.VanillaRoleWrapper(roleType));
-                    }
-                    Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
-                    break;
+                    Helper.Logging.Debug("Try Create Ability NOW!!!");
+                    abilityRole.CreateAbility();
                 }
+
+                addRole.Initialize();
+                addRole.GameControlId = id;
+                roleControlId = id + 1;
+
+                GameRole.Add(
+                    playerId, addRole);
+
+                if (hasVanilaRole)
+                {
+                    ((MultiAssignRoleBase)GameRole[
+                        playerId]).SetAnotherRole(
+                            new Solo.VanillaRoleWrapper(roleType));
+                }
+                Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
             }
         }
         public static void SetPlyerIdToSingleRoleId(
             byte roleId, byte playerId)
         {
-            foreach (RoleTypes vanilaRole in Enum.GetValues(
-                typeof(RoleTypes)))
+            if (!Enum.IsDefined(typeof(RoleTypes), Convert.ToUInt16(roleId)))
             {
-                if ((byte)vanilaRole == roleId)
-                {
-                    setPlyerIdToSingleRole(
-                        playerId, new Solo.VanillaRoleWrapper(vanilaRole));
-                    return;
-                }
+                setPlyerIdToSingleRole(playerId, NormalRole[roleId]);
             }
-
-            foreach (var role in NormalRole)
+            else
             {
-                if (role.BytedRoleId == roleId)
-                {
-                    setPlyerIdToSingleRole(playerId, role);
-                    return;
-                }
+                setPlyerIdToSingleRole(
+                    playerId,
+                    new Solo.VanillaRoleWrapper((RoleTypes)roleId));
             }
         }
 
