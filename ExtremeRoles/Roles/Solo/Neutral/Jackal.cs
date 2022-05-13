@@ -250,12 +250,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             // シェイプシフターのリセット処理
             shapeshiftReset(targetPlayer, targetRole);
 
-            // キャリアーのリセット処理
-            var resetRole = targetRole as IRoleSpecialReset;
-            if (resetRole != null)
-            {
-                resetRole.AllReset(targetPlayer);
-            }
+            // スペシャルリセット処理
+            specialResetRoleReset(targetPlayer, targetRole);
 
             var sourceJackal = ExtremeRoleManager.GetSafeCastedRole<Jackal>(callerId);
             if (sourceJackal == null) { return; }
@@ -350,6 +346,32 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 }
             }
         }
+
+        private static void specialResetRoleReset(
+            PlayerControl targetPlayer,
+            SingleRoleBase targetRole)
+        {
+            var specialResetRole = targetRole as IRoleSpecialReset;
+            if (specialResetRole != null)
+            {
+                specialResetRole.AllReset(targetPlayer);
+            }
+
+            var multiAssignRole = targetRole as MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    specialResetRole = multiAssignRole.AnotherRole as IRoleSpecialReset;
+                    if (specialResetRole != null)
+                    {
+                        specialResetRole.AllReset(targetPlayer);
+                    }
+                }
+            }
+        }
+
+
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
