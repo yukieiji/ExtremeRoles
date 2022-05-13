@@ -702,6 +702,15 @@ namespace ExtremeRoles.Roles.Combination
                         resetRole.ResetOnMeetingStart();
                     }
                 }
+                var targetPlayer = Player.GetPlayerControlById(playerId);
+                if (targetPlayer != null)
+                {
+                    var specialResetRole = prevRole.AnotherRole as IRoleSpecialReset;
+                    if (specialResetRole != null)
+                    {
+                        specialResetRole.AllReset(targetPlayer);
+                    }
+                }
             }
 
             DetectiveApprentice newRole = new DetectiveApprentice(
