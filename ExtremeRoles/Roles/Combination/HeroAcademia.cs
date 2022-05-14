@@ -627,8 +627,13 @@ namespace ExtremeRoles.Roles.Combination
         {
             var fromRole = ExtremeRoleManager.GameRole[fromPlayer.PlayerId];
 
-            // ヴィランのキルは特殊ロジックなのでここでは相打ち処理を入れない
-            if (fromRole.IsImpostor() && this.cond != OneForAllCondition.NoGuard)
+            if (fromRole.Id == ExtremeRoleId.Villain)
+            {
+                HeroAcademia.RpcDrawHeroAndVillan(
+                    rolePlayer, fromPlayer);
+                return false;
+            }
+            else if (fromRole.IsImpostor() && this.cond != OneForAllCondition.NoGuard)
             {
                 return false;
             }
