@@ -12,6 +12,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 {
     public class Supervisor : SingleRoleBase, IRoleAbility, IRoleUpdate
     {
+        public enum SuperviosrOption
+        {
+            IsBoostTask,
+            TaskGage,
+        }
+
         public RoleAbilityButtonBase Button
         {
             get => this.adminButton;
@@ -20,6 +26,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 this.adminButton = value;
             }
         }
+
+        public bool Boosted;
+        private bool isBoostTask;
+        private float taskGage;
 
         private RoleAbilityButtonBase adminButton;
         private TMPro.TextMeshPro chargeTime;
@@ -102,6 +112,15 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
         public void Update(PlayerControl rolePlayer)
         {
+
+            if (this.isBoostTask && !this.Boosted)
+            {
+                if (Player.GetPlayerTaskGage(rolePlayer) >= this.taskGage)
+                {
+                    this.Boosted = true;
+                }
+            }
+
             if (this.chargeTime == null)
             {
                 this.chargeTime = Object.Instantiate(
@@ -125,10 +144,23 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             this.CreateCommonAbilityOption(
                 parentOps, 3.0f);
+
+            var boostOption = this.CreateBoolOption(
+                SuperviosrOption.IsBoostTask,
+                false, parentOps);
+            CreateIntOption(
+                SuperviosrOption.TaskGage,
+                100, 50, 100, 5,
+                boostOption,
+                format:OptionUnit.Percentage);
         }
 
         protected override void RoleSpecificInit()
         {
+            this.isBoostTask = OptionHolder.AllOption[
+                GetRoleOptionId(SuperviosrOption.IsBoostTask)].GetValue();
+            this.taskGage = (float)OptionHolder.AllOption[
+                GetRoleOptionId(SuperviosrOption.TaskGage)].GetValue() / 100.0f;
             this.RoleAbilityInit();
         }
     }

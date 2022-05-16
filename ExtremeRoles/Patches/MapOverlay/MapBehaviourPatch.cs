@@ -2,7 +2,7 @@
 
 using UnityEngine;
 
-namespace ExtremeRoles.Patches
+namespace ExtremeRoles.Patches.MapOverlay
 {
     [HarmonyPatch(typeof(MapBehaviour), "IsOpenStopped", MethodType.Getter)]
     public static class MapBehaviourIsOpenStoppedPatch
