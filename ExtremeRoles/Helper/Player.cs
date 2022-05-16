@@ -89,6 +89,31 @@ namespace ExtremeRoles.Helper
             return result;
         }
 
+        public static float GetPlayerTaskGage(PlayerControl player)
+        {
+            return GetPlayerTaskGage(player.Data);
+        }
+
+        public static float GetPlayerTaskGage(GameData.PlayerInfo player)
+        {
+            int taskNum = 0;
+            int compNum = 0;
+
+            foreach (GameData.TaskInfo task in player.Tasks)
+            {
+
+                ++taskNum;
+
+                if (task.Complete)
+                {
+                    ++compNum;
+                }
+            }
+
+            return (float)compNum / (float)taskNum;
+
+        }
+
         public static GameData.PlayerInfo GetDeadBodyInfo(float range)
         {
             foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(

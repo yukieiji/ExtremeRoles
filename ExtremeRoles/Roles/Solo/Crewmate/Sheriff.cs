@@ -16,12 +16,23 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             ShootNum,
             CanShootAssassin,
-            CanShootNeutral
+            CanShootNeutral,
+            EnableTaskRelated,
+            ReduceCurKillCool,
+            IsPerm,
+            IsSyncTaskAndShootNum
         }
 
         private int shootNum;
+        private int maxShootNum;
         private bool canShootNeutral;
         private bool canShootAssassin;
+
+        private bool enableTaskRelatedSetting;
+        private float prevGage;
+        private float reduceKillCool;
+        private bool isPerm;
+        private bool isSyncTaskShootNum;
 
         private TMPro.TextMeshPro killCountText = null;
 
@@ -106,6 +117,35 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 createText();
             }
+            if (this.enableTaskRelatedSetting)
+            {
+
+                float gage = Player.GetPlayerTaskGage(rolePlayer);
+
+                if (gage > this.prevGage)
+                {
+
+                    rolePlayer.killTimer = Mathf.Clamp(
+                        rolePlayer.killTimer - this.reduceKillCool,
+                        0.01f, this.KillCoolTime);
+
+                    if (this.isPerm)
+                    {
+                        this.KillCoolTime = Mathf.Clamp(
+                            this.KillCoolTime - this.reduceKillCool,
+                            0.01f, this.KillCoolTime);
+                    }
+
+                    if (this.isSyncTaskShootNum)
+                    {
+                        this.shootNum = System.Math.Clamp(
+                            this.shootNum + 1, this.shootNum, this.maxShootNum);
+                        updateKillCountText();
+                    }
+
+                }
+                this.prevGage = gage;
+            }
         }
 
         private void createText()
@@ -137,6 +177,25 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 SheriffOption.ShootNum,
                 1, 1, OptionHolder.VanillaMaxPlayerNum - 1, 1,
                 parentOps, format: OptionUnit.Shot);
+
+            var enableTaskRelatedOps = CreateBoolOption(
+                SheriffOption.EnableTaskRelated,
+                false, parentOps);
+
+            CreateFloatOption(
+                SheriffOption.ReduceCurKillCool,
+                2.0f, 1.0f, 5.0f,
+                0.1f, enableTaskRelatedOps,
+                format:OptionUnit.Second);
+
+            CreateBoolOption(
+                SheriffOption.IsPerm,
+                false, enableTaskRelatedOps);
+
+            CreateBoolOption(
+                SheriffOption.IsSyncTaskAndShootNum,
+                false, enableTaskRelatedOps);
+
         }
 
         protected override void RoleSpecificInit()
@@ -148,6 +207,24 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.canShootAssassin = OptionHolder.AllOption[
                 GetRoleOptionId(SheriffOption.CanShootAssassin)].GetValue();
             this.killCountText = null;
+
+            this.enableTaskRelatedSetting = OptionHolder.AllOption[
+                GetRoleOptionId(SheriffOption.EnableTaskRelated)].GetValue();
+            this.reduceKillCool = OptionHolder.AllOption[
+                GetRoleOptionId(SheriffOption.ReduceCurKillCool)].GetValue();
+            this.isPerm = OptionHolder.AllOption[
+                GetRoleOptionId(SheriffOption.IsPerm)].GetValue();
+            this.isSyncTaskShootNum = OptionHolder.AllOption[
+                GetRoleOptionId(SheriffOption.IsSyncTaskAndShootNum)].GetValue();
+            this.prevGage = 0.0f;
+            
+            this.maxShootNum = this.shootNum;
+
+            if (this.isSyncTaskShootNum)
+            {
+                this.maxShootNum = this.shootNum;
+                this.shootNum = 0;
+            }
         }
 
         private void missShoot(
@@ -185,7 +262,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         private void updateKillButton()
         {
-            this.shootNum = this.shootNum - 1;
+
+            this.shootNum = System.Math.Clamp(
+                this.shootNum - 1, 0, this.maxShootNum);
+
             if (this.shootNum == 0)
             {
                 this.killCountText.gameObject.SetActive(false);
