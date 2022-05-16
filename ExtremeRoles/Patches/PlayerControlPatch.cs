@@ -161,8 +161,11 @@ namespace ExtremeRoles.Patches
             // Modules.Helpers.DebugLog($"Player Name:{role.NameColor}");
 
             // まずは自分のプレイヤー名の色を変える
-            player.nameText.color = playerRole.NameColor;
-            setVoteAreaColor(localPlayerId, playerRole.NameColor);
+            Color localRoleColor = playerRole.GetNameColor(
+                PlayerControl.LocalPlayer.Data.IsDead);
+
+            player.nameText.color = localRoleColor;
+            setVoteAreaColor(localPlayerId, localRoleColor);
 
             foreach (PlayerControl targetPlayer in PlayerControl.AllPlayerControls)
             {
@@ -186,7 +189,7 @@ namespace ExtremeRoles.Patches
                 {
                     var targetPlayerRole = ExtremeRoleManager.GameRole[
                         targetPlayerId];
-                    Color roleColor = targetPlayerRole.NameColor;
+                    Color roleColor = targetPlayerRole.GetNameColor(true);
                     if (!playeringInfoBlock)
                     {
                         targetPlayer.nameText.color = roleColor;
@@ -365,7 +368,8 @@ namespace ExtremeRoles.Patches
         {
 
             var (tasksCompleted, tasksTotal) = GameSystem.GetTaskInfo(targetPlayer.Data);
-            string roleNames = ExtremeRoleManager.GameRole[targetPlayer.PlayerId].GetColoredRoleName();
+            string roleNames = ExtremeRoleManager.GameRole[targetPlayer.PlayerId].GetColoredRoleName(
+                PlayerControl.LocalPlayer.Data.IsDead);
 
             var completedStr = commonActive ? "?" : tasksCompleted.ToString();
             string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({completedStr}/{tasksTotal})</color>" : "";
@@ -471,7 +475,7 @@ namespace ExtremeRoles.Patches
                     // Logging.Debug($"TargetAlive?:{target}");
 
                     DestroyableSingleton<HudManager>.Instance.KillButton.SetTarget(target);
-                    Player.SetPlayerOutLine(target, role.NameColor);
+                    Player.SetPlayerOutLine(target, role.GetNameColor());
                     HudManager.Instance.KillButton.Show();
                     HudManager.Instance.KillButton.gameObject.SetActive(true);
                 }

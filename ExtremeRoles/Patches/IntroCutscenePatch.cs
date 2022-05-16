@@ -124,11 +124,11 @@ namespace ExtremeRoles.Patches
             Roles.API.SingleRoleBase role,
             IntroCutscene __instance)
         {
-            __instance.YouAreText.color = role.NameColor;
+            __instance.YouAreText.color = role.GetNameColor();
             __instance.RoleText.text = role.GetColoredRoleName();
-            __instance.RoleText.color = role.NameColor;
+            __instance.RoleText.color = role.GetNameColor();
             __instance.RoleBlurbText.text = role.GetIntroDescription();
-            __instance.RoleBlurbText.color = role.NameColor;
+            __instance.RoleBlurbText.color = role.GetNameColor();
 
             if (role.Id != ExtremeRoleId.Lover)
             {

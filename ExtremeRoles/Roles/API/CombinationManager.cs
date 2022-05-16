@@ -188,7 +188,7 @@ namespace ExtremeRoles.Roles.API
             MultiAssignRoleBase role,
             int minimumRoleNum = 2,
             bool canAssignImposter = true) : 
-                base(role.Id.ToString(), role.NameColor)
+                base(role.Id.ToString(), role.GetNameColor(true))
         {
             this.BaseRole = role;
             this.minimumRoleNum = minimumRoleNum;
@@ -221,7 +221,7 @@ namespace ExtremeRoles.Roles.API
                 if (isEvil)
                 {
                     role.Team = ExtremeRoleType.Impostor;
-                    role.NameColor = Palette.ImpostorRed;
+                    role.SetNameColor(Palette.ImpostorRed);
                     role.CanKill = true;
                     role.UseVent = true;
                     role.UseSabotage = true;
@@ -258,7 +258,7 @@ namespace ExtremeRoles.Roles.API
                 case RoleTypes.Impostor:
                 case RoleTypes.Shapeshifter:
                     role.Team = ExtremeRoleType.Impostor;
-                    role.NameColor = Palette.ImpostorRed;
+                    role.SetNameColor(Palette.ImpostorRed);
                     role.CanKill = true;
                     role.UseVent = true;
                     role.UseSabotage = true;

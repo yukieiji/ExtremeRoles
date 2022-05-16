@@ -191,7 +191,7 @@ namespace ExtremeRoles.Module
             foreach (var role in Roles.ExtremeRoleManager.NormalRole.Values)
             {
                 optionId = role.GetRoleOptionOffset();
-                colorRoleName = role.GetColoredRoleName();
+                colorRoleName = role.GetColoredRoleName(true);
 
                 roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
                 roleFullDesc = cleanPlaceHolder(roleFullDesc);
@@ -212,7 +212,7 @@ namespace ExtremeRoles.Module
                     foreach (var role in combRole.Roles)
                     {
                         optionId = role.GetManagerOptionOffset();
-                        colorRoleName = role.GetColoredRoleName();
+                        colorRoleName = role.GetColoredRoleName(true);
 
                         roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
 
@@ -311,7 +311,7 @@ namespace ExtremeRoles.Module
                         allOption[multiAssignRole.GetManagerOptionId(
                             RoleCommonOption.SpawnRate)]);
                 colorRoleName = Design.ColoedString(
-                    multiAssignRole.NameColor,
+                    multiAssignRole.GetNameColor(),
                     Translation.GetString(multiAssignRole.RoleName));
             }
             else if (role.IsVanillaRole())
@@ -328,13 +328,22 @@ namespace ExtremeRoles.Module
             }
 
             string roleFullDesc = role.GetFullDescription();
-
+            var awakeFromVaniraRole = role as Roles.API.Interface.IRoleAwake<RoleTypes>;
+            var awakeFromExRole = role as Roles.API.Interface.IRoleAwake<Roles.ExtremeRoleId>;
+            if (awakeFromVaniraRole != null && !awakeFromVaniraRole.IsAwake)
+            {
+                roleOptionString = "";
+            }
+            else if (awakeFromVaniraRole != null && !awakeFromExRole.IsAwake)
+            {
+                roleOptionString = awakeFromExRole.GetFakeOptionString();
+            }
 
             roleText += string.Concat(
                 $"<size=150%>・{colorRoleName}</size>",
                 roleFullDesc != "" ? $"\n{roleFullDesc}\n" : "",
                 $"・{Translation.GetString(colorRoleName)}{Translation.GetString("roleOption")}\n",
-                roleOptionString != "" ? $"{roleOptionString}" : "");
+                (roleOptionString != "") ? $"{roleOptionString}" : "");
 
             if (multiAssignRole != null)
             {
@@ -351,6 +360,17 @@ namespace ExtremeRoles.Module
                                     RoleCommonOption.SpawnRate)]);
                     }
                     string anotherRoleFullDesc = multiAssignRole.AnotherRole.GetFullDescription();
+
+                    awakeFromVaniraRole = multiAssignRole.AnotherRole as Roles.API.Interface.IRoleAwake<RoleTypes>;
+                    awakeFromExRole = multiAssignRole.AnotherRole as Roles.API.Interface.IRoleAwake<Roles.ExtremeRoleId>;
+                    if (awakeFromVaniraRole != null && !awakeFromVaniraRole.IsAwake)
+                    {
+                        anotherRoleOptionString = "";
+                    }
+                    else if (awakeFromVaniraRole != null && !awakeFromExRole.IsAwake)
+                    {
+                        anotherRoleOptionString = awakeFromExRole.GetFakeOptionString();
+                    }
 
                     anotherRoleText +=
                         $"\n<size=150%>・{multiAssignRole.AnotherRole.GetColoredRoleName()}</size>" +

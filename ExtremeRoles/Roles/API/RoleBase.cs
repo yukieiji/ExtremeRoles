@@ -35,11 +35,11 @@ namespace ExtremeRoles.Roles.API
 
         public string RoleName;
 
-        public Color NameColor;
         public ExtremeRoleId Id;
         public ExtremeRoleType Team;
 
         public int GameControlId = 0;
+        protected Color NameColor;
 
         public SingleRoleBase()
         { }
@@ -125,13 +125,20 @@ namespace ExtremeRoles.Roles.API
             return baseString;
         }
 
+        public void SetNameColor(Color newColor)
+        {
+            this.NameColor = newColor;
+        }
+
+        public virtual Color GetNameColor(bool isTruthColor = false) => this.NameColor;
+
         public virtual string GetIntroDescription() => Translation.GetString(
             $"{this.Id}IntroDescription");
 
         public virtual string GetFullDescription() => Translation.GetString(
            $"{this.Id}FullDescription");
 
-        public virtual string GetColoredRoleName() => Design.ColoedString(
+        public virtual string GetColoredRoleName(bool isTruthName = false) => Design.ColoedString(
             this.NameColor, Translation.GetString(this.RoleName));
 
 
@@ -562,10 +569,7 @@ namespace ExtremeRoles.Roles.API
             }
             else
             {
-                anotherIntro = Design.ColoedString(
-                    this.AnotherRole.NameColor,
-                    Translation.GetString(
-                        $"{this.AnotherRole.Id}IntroDescription"));
+                anotherIntro = this.AnotherRole.GetIntroDescription();
 
             }
 
@@ -578,20 +582,18 @@ namespace ExtremeRoles.Roles.API
             return string.Concat(baseIntro, concat, anotherIntro);
 
         }
-        public override string GetColoredRoleName()
+        public override string GetColoredRoleName(bool isTruthColor = false)
         {
             if (this.AnotherRole == null)
             {
-                return base.GetColoredRoleName();
+                return base.GetColoredRoleName(isTruthColor);
             }
 
             string baseRole = Design.ColoedString(
                 this.NameColor,
                 Translation.GetString(this.RoleName));
 
-            string anotherRole = Design.ColoedString(
-                this.AnotherRole.NameColor,
-                Translation.GetString(this.AnotherRole.RoleName));
+            string anotherRole = this.AnotherRole.GetColoredRoleName(isTruthColor);
 
             string concat = Design.ColoedString(
                 Palette.White, " + ");

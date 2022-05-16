@@ -1,6 +1,6 @@
 ﻿namespace ExtremeRoles.Roles.API.Interface
 {
-    interface IRoleUpdate
+    public interface IRoleUpdate
     {
         void Update(PlayerControl rolePlayer);
     }

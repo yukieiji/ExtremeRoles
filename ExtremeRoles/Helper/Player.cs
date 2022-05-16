@@ -84,7 +84,7 @@ namespace ExtremeRoles.Helper
                 }
             }
 
-            SetPlayerOutLine(result, role.NameColor);
+            SetPlayerOutLine(result, role.GetNameColor());
 
             return result;
         }

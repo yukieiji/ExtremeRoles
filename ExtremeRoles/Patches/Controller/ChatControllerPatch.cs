@@ -86,7 +86,7 @@ namespace ExtremeRoles.Patches.Controller
 
 				if (data.PlayerId == data2.PlayerId)
                 {
-					seeColor = role.NameColor;
+					seeColor = role.GetNameColor(PlayerControl.LocalPlayer.Data.IsDead);
                 }
 				else
                 {

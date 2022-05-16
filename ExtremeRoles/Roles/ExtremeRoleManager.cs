@@ -144,6 +144,7 @@ namespace ExtremeRoles.Roles
                 {(byte)ExtremeRoleId.CurseMaker , new CurseMaker()},
                 {(byte)ExtremeRoleId.Fencer     , new Fencer()},
                 {(byte)ExtremeRoleId.Opener     , new Opener()},
+                {(byte)ExtremeRoleId.SecurityGuard, new SecurityGuard()},
 
                 {(byte)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
                 {(byte)ExtremeRoleId.Evolver        , new Evolver()},

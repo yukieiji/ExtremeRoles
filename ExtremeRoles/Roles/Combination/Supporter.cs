@@ -82,13 +82,14 @@ namespace ExtremeRoles.Roles.Combination
                 this.supportTargetId];
 
             this.supportRoleName = supportRole.GetColoredRoleName();
+            Color supportColor = supportRole.GetNameColor();
             this.supportPlayerName = Player.GetPlayerControlById(
                 this.supportTargetId).Data.PlayerName;
             this.supportColor = new Color(
-                supportRole.NameColor.r,
-                supportRole.NameColor.g,
-                supportRole.NameColor.b,
-                supportRole.NameColor.a);
+                supportColor.r,
+                supportColor.g,
+                supportColor.b,
+                supportColor.a);
 
         }
 

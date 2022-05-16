@@ -94,7 +94,7 @@ namespace ExtremeRoles.Patches.Manager
                 {
                     if (data.PlayerName != winningPlayerData.PlayerName) { continue; }
                     poolablePlayer.NameText.text +=
-                        $"\n\n<size=80%>{string.Join("\n", data.Role.GetColoredRoleName())}</size>";
+                        $"\n\n<size=80%>{string.Join("\n", data.Role.GetColoredRoleName(true))}</size>";
 
                     if(data.Role.IsNeutral())
                     {
@@ -169,7 +169,7 @@ namespace ExtremeRoles.Patches.Manager
                 string aliveDead = Translation.GetString(
                     playerSummary.StatusInfo.ToString());
 
-                string roleName = playerSummary.Role.GetColoredRoleName();
+                string roleName = playerSummary.Role.GetColoredRoleName(true);
                 string tag = playerSummary.Role.GetRoleTag();
                 
                 int id = playerSummary.Role.GameControlId;
@@ -346,7 +346,7 @@ namespace ExtremeRoles.Patches.Manager
                             }
 
                             bonusText = bonusText + Translation.GetString(
-                                winNeutral[i].GetColoredRoleName());
+                                winNeutral[i].GetColoredRoleName(true));
                             added.Add(winNeutral[i].Id);
                         }
                         break;
@@ -375,7 +375,7 @@ namespace ExtremeRoles.Patches.Manager
                 }
 
                 bonusText = bonusText + Translation.GetString(
-                    role.GetColoredRoleName());
+                    role.GetColoredRoleName(true));
                 added.Add(role.Id);
             }
 
