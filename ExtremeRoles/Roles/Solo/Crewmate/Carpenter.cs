@@ -10,9 +10,9 @@ using ExtremeRoles.Module.RoleAbilityButton;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class SecurityGuard : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTypes>
+    public class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTypes>
     {
-        public class SecurityGuardAbilityButton : RoleAbilityButtonBase
+        public class CarpenterAbilityButton : RoleAbilityButtonBase
         {
             public int CurAbilityNum
             {
@@ -20,26 +20,26 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
 
             private int abilityNum = 0;
-            private bool isVentSeal;
-            private int ventSealScrewNum;
+            private bool isVentRemove;
+            private int ventRemoveScrewNum;
             private int cameraSetNum;
             private string cameraSetString;
-            private string ventSealString;
+            private string ventRemoveString;
             private Sprite cameraSetSprite;
-            private Sprite ventSealSprite;
+            private Sprite ventRemoveSprite;
             private Func<bool> ventModeCheck;
 
             private TMPro.TextMeshPro abilityCountText = null;
 
-            public SecurityGuardAbilityButton(
+            public CarpenterAbilityButton(
                 Func<bool> ability,
                 Func<bool> canUse,
                 Sprite cameraSetSprite,
-                Sprite ventSealSprite,
+                Sprite ventRemoveSprite,
                 Vector3 positionOffset,
                 Action abilityCleanUp,
                 Func<bool> abilityCheck,
-                int ventSealScrewNum,
+                int ventRemoveScrewNum,
                 int cameraSetNum,
                 Func<bool> isVentMode,
                 KeyCode hotkey = KeyCode.F,
@@ -63,14 +63,15 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
                 this.ventModeCheck = isVentMode;
 
-                this.ventSealString = Translation.GetString("ventSeal");
+                this.ventRemoveString = Translation.GetString("ventSeal");
                 this.cameraSetString = Translation.GetString("cameraSet");
                 this.ButtonText = this.cameraSetString;
 
-                this.ventSealScrewNum = ventSealScrewNum;
+                this.ventRemoveScrewNum = ventRemoveScrewNum;
                 this.cameraSetSprite = cameraSetSprite;
                 this.cameraSetNum = cameraSetNum;
-                this.ventSealSprite = ventSealSprite;
+                this.ventRemoveSprite = ventRemoveSprite;
+                this.isVentRemove = false;
             }
 
             public void UpdateAbilityCount(int newCount)
@@ -81,7 +82,20 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             protected override void AbilityButtonUpdate()
             {
-                if (this.CanUse() && this.abilityNum > 0)
+
+                this.isVentRemove = this.ventModeCheck();
+                if (this.isVentRemove)
+                {
+                    this.ButtonSprite = this.ventRemoveSprite;
+                    this.ButtonText = this.ventRemoveString;
+                }
+                else
+                {
+                    this.ButtonSprite = this.cameraSetSprite;
+                    this.ButtonText = this.cameraSetString;
+                }
+
+                if (this.CanUse() && this.abilityNum > 0 && screwCheck())
                 {
                     this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.EnabledColor;
                     this.Button.graphic.material.SetFloat("_Desat", 0f);
@@ -95,18 +109,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 {
                     Button.SetCoolDown(0, this.CoolTime);
                     return;
-                }
-
-                this.isVentSeal = this.ventModeCheck();
-                if (this.isVentSeal)
-                {
-                    this.ButtonSprite = this.ventSealSprite;
-                    this.ButtonText = this.ventSealString;
-                }
-                else
-                {
-                    this.ButtonSprite = this.cameraSetSprite;
-                    this.ButtonText = this.cameraSetString;
                 }
 
                 if (this.Timer >= 0)
@@ -150,10 +152,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     this.Timer < 0f &&
                     this.abilityNum > 0 &&
                     !this.IsAbilityOn &&
-                    (
-                        (this.abilityNum - this.ventSealScrewNum > 0 && this.isVentSeal) || 
-                        (this.abilityNum - this.cameraSetNum > 0)
-                    ))
+                    screwCheck())
                 {
                     Button.graphic.color = this.DisableColor;
 
@@ -176,8 +175,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             private void reduceAbilityCount()
             {
-                this.abilityNum = this.isVentSeal ? 
-                    this.abilityNum - this.ventSealScrewNum : this.abilityNum - this.cameraSetNum;
+                this.abilityNum = this.isVentRemove ? 
+                    this.abilityNum - this.ventRemoveScrewNum : this.abilityNum - this.cameraSetNum;
                 if (this.abilityCountText != null)
                 {
                     updateAbilityCountText();
@@ -188,9 +187,19 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 this.abilityCountText.text = string.Concat(
                     Translation.GetString("buttonCountText"),
-                    string.Format(Translation.GetString("securityGuardScrewNum"),
-                        this.abilityNum, this.isVentSeal ? this.ventSealScrewNum : this.cameraSetNum));
+                    string.Format(Translation.GetString("carpenterScrewNum"),
+                        this.abilityNum, this.isVentRemove ? this.ventRemoveScrewNum : this.cameraSetNum));
             }
+
+            private bool screwCheck()
+            {
+                return
+                (
+                    (this.abilityNum - this.ventRemoveScrewNum > 0 && this.isVentRemove) ||
+                    (this.abilityNum - this.cameraSetNum > 0)
+                );
+            }
+
         }
 
         public bool IsAwake
@@ -222,10 +231,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private Vent targetVent;
         private Vector2 prevPos;
         private RoleAbilityButtonBase abilityButton;
-        public SecurityGuard() : base(
-            ExtremeRoleId.SecurityGuard,
+        public Carpenter() : base(
+            ExtremeRoleId.Carpenter,
             ExtremeRoleType.Crewmate,
-            ExtremeRoleId.SecurityGuard.ToString(),
+            ExtremeRoleId.Carpenter.ToString(),
             Palette.CrewmateBlue,
             false, true, false, false)
         { }
@@ -244,7 +253,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
         public void CreateAbility()
         {
-            this.Button = new SecurityGuardAbilityButton(
+            this.Button = new CarpenterAbilityButton(
                 UseAbility,
                 IsAbilityUse,
                 Resources.Loader.CreateSpriteFromResources(
@@ -270,10 +279,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public bool IsVentMode()
         {
+            this.targetVent = null;
+
             Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
             foreach (Vent vent in ShipStatus.Instance.AllVents)
             {
-                if (ExtremeRolesPlugin.GameDataStore.CustomVent.IsCustomVent(vent.Id))
+                if (ExtremeRolesPlugin.GameDataStore.CustomVent.IsCustomVent(vent.Id) &&
+                    !vent.gameObject.active)
                 {
                     continue;
                 }

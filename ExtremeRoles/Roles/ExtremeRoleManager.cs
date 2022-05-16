@@ -44,7 +44,7 @@ namespace ExtremeRoles.Roles
         CurseMaker,
         Fencer,
         Opener,
-        SecurityGuard,
+        Carpenter,
 
         SpecialImpostor,
         Evolver,
@@ -144,7 +144,7 @@ namespace ExtremeRoles.Roles
                 {(byte)ExtremeRoleId.CurseMaker , new CurseMaker()},
                 {(byte)ExtremeRoleId.Fencer     , new Fencer()},
                 {(byte)ExtremeRoleId.Opener     , new Opener()},
-                {(byte)ExtremeRoleId.SecurityGuard, new SecurityGuard()},
+                {(byte)ExtremeRoleId.Carpenter  , new Carpenter()},
 
                 {(byte)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
                 {(byte)ExtremeRoleId.Evolver        , new Evolver()},
