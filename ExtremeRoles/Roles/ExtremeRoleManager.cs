@@ -44,6 +44,7 @@ namespace ExtremeRoles.Roles
         CurseMaker,
         Fencer,
         Opener,
+        SecurityGuard,
 
         SpecialImpostor,
         Evolver,
