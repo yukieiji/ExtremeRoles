@@ -61,7 +61,8 @@ namespace ExtremeRoles.Module.RoleAbilityButton
                 {
                     if (!this.AbilityCheck())
                     {
-                        this.currentCharge = this.Timer;
+                        this.currentCharge = Mathf.Clamp(
+                            this.Timer, 0.0f, this.AbilityActiveTime);
                         this.Timer = 0;
                         this.IsAbilityOn = false;
                     }
