@@ -18,6 +18,7 @@ namespace ExtremeRoles.Module
         Shot,
         Multiplier,
         Percentage,
+        Num,
     }
 
     public abstract class CustomOptionBase
