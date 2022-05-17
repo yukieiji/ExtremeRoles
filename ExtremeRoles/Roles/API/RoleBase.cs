@@ -570,7 +570,6 @@ namespace ExtremeRoles.Roles.API
             else
             {
                 anotherIntro = this.AnotherRole.GetIntroDescription();
-
             }
 
             string concat = Design.ColoedString(
@@ -579,7 +578,9 @@ namespace ExtremeRoles.Roles.API
                     "\n ", Translation.GetString("introAnd")));
 
 
-            return string.Concat(baseIntro, concat, anotherIntro);
+            return string.Concat(baseIntro, concat, Design.ColoedString(
+                this.AnotherRole.GetNameColor(),
+                anotherIntro));
 
         }
         public override string GetColoredRoleName(bool isTruthColor = false)
