@@ -184,6 +184,12 @@ namespace ExtremeRoles.Patches
         {
             var role = ExtremeRoleManager.GetLocalPlayerRole();
             if (role.IsVanillaRole()) { return true; }
+            var awakeVanillaRole = role as IRoleAwake<RoleTypes>;
+            if (awakeVanillaRole != null && !awakeVanillaRole.IsAwake)
+            {
+                return true;
+            }
+
             __result = showRoleText(role, __instance).WrapToIl2Cpp();
             return false;
         }
