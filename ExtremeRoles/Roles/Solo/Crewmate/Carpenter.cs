@@ -542,7 +542,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             this.targetVent = null;
 
-            if (ShipStatus.Instance == null) { return false; }
+            if (ShipStatus.Instance == null ||
+                !ShipStatus.Instance.enabled) { return false; }
 
             Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
             
