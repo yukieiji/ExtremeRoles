@@ -261,7 +261,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ExtremeRoleId.Carpenter,
             ExtremeRoleType.Crewmate,
             ExtremeRoleId.Carpenter.ToString(),
-            Palette.CrewmateBlue,
+            ColorPalette.CarpenterBrown,
             false, true, false, false)
         { }
 

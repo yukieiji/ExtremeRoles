@@ -27,6 +27,7 @@ namespace ExtremeRoles.Module
         public readonly static Color DetectiveKokikou = new Color32(158, 92, 70, byte.MaxValue);
         public readonly static Color AssistantBluCapri = new Color32(0, 138, 153, byte.MaxValue);
         public readonly static Color DetectiveApprenticeKonai = new Color32(65, 65, 116, byte.MaxValue);
+        public readonly static Color CarpenterBrown = new Color32(195, 178, 95, byte.MaxValue);
 
         public readonly static Color JackalBlue = new Color32(65, 105, 255, byte.MaxValue);
         public readonly static Color AliceGold = new Color32(255, 215, 0, byte.MaxValue);
