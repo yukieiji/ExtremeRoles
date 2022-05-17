@@ -334,7 +334,7 @@ namespace ExtremeRoles.Module
             {
                 roleOptionString = "";
             }
-            else if (awakeFromVaniraRole != null && !awakeFromExRole.IsAwake)
+            else if (awakeFromExRole != null && !awakeFromExRole.IsAwake)
             {
                 roleOptionString = awakeFromExRole.GetFakeOptionString();
             }

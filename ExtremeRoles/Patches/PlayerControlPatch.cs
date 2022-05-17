@@ -849,6 +849,9 @@ namespace ExtremeRoles.Patches
                     RPCOperator.CuresMakerCurseKillCool(
                         curesMakerPlayerId, curesPlayerId);
                     break;
+                case RPCOperator.Command.CarpenterUseAbility:
+                    RPCOperator.CarpenterUseAbility(ref reader);
+                    break;
                 case RPCOperator.Command.AssasinVoteFor:
                     byte voteTargetId = reader.ReadByte();
                     RPCOperator.AssasinVoteFor(voteTargetId);

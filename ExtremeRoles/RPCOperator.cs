@@ -7,7 +7,7 @@ namespace ExtremeRoles
     public static class RPCOperator
     {
 
-        public enum Command
+        public enum Command : byte
         {
             // メインコントール
             Initialize = 60,
@@ -48,6 +48,7 @@ namespace ExtremeRoles
             FencerCounterOff,
             FencerEnableKillButton,
             CuresMakerCurseKillCool,
+            CarpenterUseAbility,
 
             // インポスター
             AssasinVoteFor,
@@ -441,6 +442,11 @@ namespace ExtremeRoles
         {
             Roles.Solo.Crewmate.CurseMaker.CurseKillCool(
                 playerId, targetPlayerId);
+        }
+
+        public static void CarpenterUseAbility(ref MessageReader reader)
+        {
+            Roles.Solo.Crewmate.Carpenter.UpdateMapObject(ref reader);
         }
 
         public static void AssasinVoteFor(byte targetId)

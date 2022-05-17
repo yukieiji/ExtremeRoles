@@ -1,10 +1,36 @@
-﻿using HarmonyLib;
+﻿using System.Linq;
+using UnityEngine;
+
+using HarmonyLib;
 
 namespace ExtremeRoles.Patches.MiniGame
 {
+    [HarmonyPatch(typeof(SurveillanceMinigame), nameof(SurveillanceMinigame.Begin))]
+    public static class SurveillanceMinigameBeginPatch
+    {
+        public static void Postfix(SurveillanceMinigame __instance)
+        {
+            if (ShipStatus.Instance.AllCameras.Length > 4 && __instance.FilteredRooms.Length > 0)
+            {
+                __instance.textures = __instance.textures.ToList().Concat(
+                    new RenderTexture[ShipStatus.Instance.AllCameras.Length - 4]).ToArray();
+                for (int i = 4; i < ShipStatus.Instance.AllCameras.Length; i++)
+                {
+                    SurvCamera surv = ShipStatus.Instance.AllCameras[i];
+                    Camera camera = UnityEngine.Object.Instantiate<Camera>(__instance.CameraPrefab);
+                    camera.transform.SetParent(__instance.transform);
+                    camera.transform.position = new Vector3(surv.transform.position.x, surv.transform.position.y, 8f);
+                    camera.orthographicSize = 2.35f;
+                    RenderTexture temporary = RenderTexture.GetTemporary(256, 256, 16, (RenderTextureFormat)0);
+                    __instance.textures[i] = temporary;
+                    camera.targetTexture = temporary;
+                }
+            }
+        }
+    }
 
     [HarmonyPatch(typeof(SurveillanceMinigame), nameof(SurveillanceMinigame.Update))]
-    public class SurveillanceMinigameUpdatePatch
+    public static class SurveillanceMinigameUpdatePatch
     {
         public static bool Prefix(SurveillanceMinigame __instance)
         {
