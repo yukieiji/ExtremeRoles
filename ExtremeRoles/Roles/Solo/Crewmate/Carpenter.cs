@@ -22,7 +22,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             private int abilityNum = 0;
             private bool isVentRemove;
             private int ventRemoveScrewNum;
-            private int cameraSetNum;
+            private int cameraSetScrewNum;
+            private float ventRemoveStopTime;
+            private float cameraRemoveStopTime;
             private string cameraSetString;
             private string ventRemoveString;
             private Sprite cameraSetSprite;
@@ -39,9 +41,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 Vector3 positionOffset,
                 Action abilityCleanUp,
                 Func<bool> abilityCheck,
-                int ventRemoveScrewNum,
-                int cameraSetNum,
                 Func<bool> isVentMode,
+                int ventRemoveScrewNum,
+                int cameraSetScrewNum,
+                float ventRemoveStopTime,
+                float cameraRemoveStopTime,
                 KeyCode hotkey = KeyCode.F,
                 bool mirror = false) : base(
                     "",
@@ -68,9 +72,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 this.ButtonText = this.cameraSetString;
 
                 this.ventRemoveScrewNum = ventRemoveScrewNum;
+                this.cameraSetScrewNum = cameraSetScrewNum;
+                
+                this.ventRemoveStopTime = ventRemoveStopTime;
+                this.cameraRemoveStopTime = ventRemoveStopTime;
+
                 this.cameraSetSprite = cameraSetSprite;
-                this.cameraSetNum = cameraSetNum;
                 this.ventRemoveSprite = ventRemoveSprite;
+                
                 this.isVentRemove = false;
             }
 
@@ -88,11 +97,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 {
                     this.ButtonSprite = this.ventRemoveSprite;
                     this.ButtonText = this.ventRemoveString;
+                    this.AbilityActiveTime = this.ventRemoveStopTime;
                 }
                 else
                 {
                     this.ButtonSprite = this.cameraSetSprite;
                     this.ButtonText = this.cameraSetString;
+                    this.AbilityActiveTime = this.cameraRemoveStopTime;
                 }
 
                 if (this.CanUse() && this.abilityNum > 0 && screwCheck())
@@ -176,7 +187,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             private void reduceAbilityCount()
             {
                 this.abilityNum = this.isVentRemove ? 
-                    this.abilityNum - this.ventRemoveScrewNum : this.abilityNum - this.cameraSetNum;
+                    this.abilityNum - this.ventRemoveScrewNum : this.abilityNum - this.cameraSetScrewNum;
                 if (this.abilityCountText != null)
                 {
                     updateAbilityCountText();
@@ -188,7 +199,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 this.abilityCountText.text = string.Concat(
                     Translation.GetString("buttonCountText"),
                     string.Format(Translation.GetString("carpenterScrewNum"),
-                        this.abilityNum, this.isVentRemove ? this.ventRemoveScrewNum : this.cameraSetNum));
+                        this.abilityNum, this.isVentRemove ? this.ventRemoveScrewNum : this.cameraSetScrewNum));
             }
 
             private bool screwCheck()
@@ -196,7 +207,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 return
                 (
                     (this.abilityNum - this.ventRemoveScrewNum > 0 && this.isVentRemove) ||
-                    (this.abilityNum - this.cameraSetNum > 0)
+                    (this.abilityNum - this.cameraSetScrewNum > 0)
                 );
             }
 
@@ -263,8 +274,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 new Vector3(-1.8f, -0.06f, 0),
                 CleanUp,
                 IsAbilityCheck,
+                IsVentMode,
                 5, 10,
-                IsVentMode);
+                10f, 5f);
         }
 
         public bool UseAbility()
