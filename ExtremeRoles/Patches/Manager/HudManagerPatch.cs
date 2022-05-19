@@ -35,6 +35,7 @@ namespace ExtremeRoles.Patches.Manager
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     public class HudManagerUpdatePatch
     {
+        private static bool buttonCreated = false;
         public static void Prefix(HudManager __instance)
         {
             if (__instance.GameSettings != null)
@@ -97,14 +98,24 @@ namespace ExtremeRoles.Patches.Manager
         }
         private static void buttonCreate(SingleRoleBase checkRole)
         {
+            if (buttonCreated) { return; }
+
             var abilityRole = checkRole as IRoleAbility;
 
             if (abilityRole != null)
             {
                 if (abilityRole.Button == null)
                 {
+                    buttonCreated = true; //一時的にブロック
+                    
                     abilityRole.CreateAbility();
                     abilityRole.RoleAbilityInit();
+
+                    buttonCreated = abilityRole.Button != null; // 作れたかどうか
+                }
+                else
+                {
+                    buttonCreated = true;
                 }
             }
         }
