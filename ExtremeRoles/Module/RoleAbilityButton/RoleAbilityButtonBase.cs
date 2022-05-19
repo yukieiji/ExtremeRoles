@@ -136,6 +136,7 @@ namespace ExtremeRoles.Module.RoleAbilityButton
 
         public void Update()
         {
+            if (this.Button == null) { return; }
             if (PlayerControl.LocalPlayer.Data == null ||
                 MeetingHud.Instance ||
                 ExileController.Instance ||
