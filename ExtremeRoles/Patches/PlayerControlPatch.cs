@@ -497,7 +497,7 @@ namespace ExtremeRoles.Patches
             {
                 var abilityRole = role as IRoleAbility;
 
-                if (abilityRole != null)
+                if (abilityRole != null && abilityRole.Button != null)
                 {
                     abilityRole.Button.Update();
                 }
