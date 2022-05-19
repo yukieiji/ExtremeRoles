@@ -131,6 +131,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
                     if (this.isPerm)
                     {
+                        if (!this.HasOtherKillCool)
+                        {
+                            this.HasOtherKillCool = true;
+                            this.KillCoolTime = PlayerControl.GameOptions.KillCooldown;
+                        }
                         this.KillCoolTime = Mathf.Clamp(
                             this.KillCoolTime - this.reduceKillCool,
                             0.01f, this.KillCoolTime);
