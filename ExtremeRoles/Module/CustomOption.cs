@@ -335,6 +335,7 @@ namespace ExtremeRoles.Module
 
     public class IntDynamicCustomOption : CustomOptionBase
     {
+        private int step;
         public IntDynamicCustomOption(
             int id, string name,
             int defaultValue,
@@ -346,12 +347,14 @@ namespace ExtremeRoles.Module
             bool invert = false,
             CustomOptionBase enableCheckOption = null) : base(
                 id, name,
-                createSelection(min, step).Cast<object>().ToArray(),
+                createSelection(min, step, defaultValue).Cast<object>().ToArray(),
                 defaultValue, parent,
                 isHeader, isHidden,
                 format, invert,
                 enableCheckOption)
-        { }
+        {
+            this.step = step;
+        }
 
         public override dynamic GetValue() => Convert.ToInt32(GetRawValue().ToString());
 
@@ -361,7 +364,7 @@ namespace ExtremeRoles.Module
             int minValue = Convert.ToInt32(this.Selections[0].ToString());
 
             List<int> newSelections = new List<int>();
-            for (int s = minValue; s < maxValue; s += 1)
+            for (int s = minValue; s < maxValue; s += this.step)
             {
                 newSelections.Add(s);
             }
@@ -369,10 +372,13 @@ namespace ExtremeRoles.Module
             this.UpdateSelection(this.CurSelection);
         }
 
-        private static List<int> createSelection(int min, int step)
+        private static List<int> createSelection(int min, int step, int defaultValue)
         {
             List<int> selection = new List<int>();
-            for (int s = min; s <= min + 1; s += step)
+
+            int tempMaxVale = (min + step) < defaultValue ? defaultValue : min + step;
+
+            for (int s = min; s <= tempMaxVale; s += step)
             {
                 selection.Add(s);
             }
