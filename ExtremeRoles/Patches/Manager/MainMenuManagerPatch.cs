@@ -26,6 +26,9 @@ namespace ExtremeRoles.Patches.Manager
     {
         public static void Prefix(MainMenuManager __instance)
         {
+            
+            DestroyableSingleton<ModManager>.Instance.ShowModStamp();
+
             var template = GameObject.Find("ExitGameButton");
             if (template == null) { return; }
 
