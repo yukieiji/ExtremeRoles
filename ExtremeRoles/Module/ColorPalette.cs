@@ -35,6 +35,7 @@ namespace ExtremeRoles.Module
         public readonly static Color JesterPink = new Color32(245, 125, 167, byte.MaxValue);
         public readonly static Color YandereVioletRed = new Color32(199, 21, 133, byte.MaxValue);
         public readonly static Color VigilanteFujiIro = new Color32(186, 167, 204, byte.MaxValue);
+        public readonly static Color YokoShion = new Color32(134, 123, 169, byte.MaxValue);
 
         public readonly static Color NeutralColor = Color.gray;
     }
