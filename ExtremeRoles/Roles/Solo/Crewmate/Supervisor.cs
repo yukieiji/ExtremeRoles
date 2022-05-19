@@ -27,6 +27,16 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
         }
 
+        public bool IsAbilityActive
+        {
+            get
+            {
+                if (this.adminButton == null) { return false; }
+
+                return this.adminButton.IsAbilityActive();
+            }
+        }
+
         public bool Boosted;
         private bool isBoostTask;
         private float taskGage;

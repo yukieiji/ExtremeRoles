@@ -18,15 +18,9 @@ namespace ExtremeRoles.Patches.MapOverlay
             var admin = Roles.ExtremeRoleManager.GetSafeCastedLocalPlayerRole<
                 Roles.Solo.Crewmate.Supervisor>();
 
-			Helper.Logging.Debug("ckpt:0");
-
-			if (admin == null || !admin.Boosted) { return true; }
-
-			Helper.Logging.Debug("ckpt:1");
+			if (admin == null || !admin.Boosted || !admin.IsAbilityActive) { return true; }
 
 			PlayerColor.Clear();
-
-			Helper.Logging.Debug("ckpt:2");
 
 			__instance.timer += Time.deltaTime;
 			if (__instance.timer < 0.1f)
@@ -35,12 +29,7 @@ namespace ExtremeRoles.Patches.MapOverlay
 			}
 			__instance.timer = 0f;
 
-			Helper.Logging.Debug("ckpt:3");
-
-
 			bool commsActive = false;
-
-			Helper.Logging.Debug("ckpt:4");
 
 			foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
             {
@@ -50,8 +39,6 @@ namespace ExtremeRoles.Patches.MapOverlay
 				}
 			}
 
-			Helper.Logging.Debug("ckpt:5");
-
 			if (!__instance.isSab && commsActive)
 			{
 				__instance.isSab = true;
@@ -60,16 +47,12 @@ namespace ExtremeRoles.Patches.MapOverlay
 				return false;
 			}
 
-			Helper.Logging.Debug("ckpt:6");
-
 			if (__instance.isSab && !commsActive)
 			{
 				__instance.isSab = false;
 				__instance.BackgroundColor.SetColor(Color.green);
 				__instance.SabotageText.gameObject.SetActive(false);
 			}
-
-			Helper.Logging.Debug("ckpt:7");
 
 			for (int i = 0; i < __instance.CountAreas.Length; i++)
 			{
@@ -80,15 +63,11 @@ namespace ExtremeRoles.Patches.MapOverlay
 				if (!commsActive)
 				{
 
-					Helper.Logging.Debug("ckpt:8");
-
 					PlainShipRoom plainShipRoom = ShipStatus.Instance.FastRooms[counterArea.RoomType];
 					if (plainShipRoom != null && plainShipRoom.roomArea)
 					{
 						int num = plainShipRoom.roomArea.OverlapCollider(__instance.filter, __instance.buffer);
 						int num2 = num;
-
-						Helper.Logging.Debug("ckpt:9");
 
 						Color addColor = Palette.EnabledColor;
 
