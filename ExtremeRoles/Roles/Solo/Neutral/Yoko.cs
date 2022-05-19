@@ -124,6 +124,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (!ShipStatus.Instance.enabled ||
                 ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
 
+            if (Minigame.Instance) { return; }
+
             if (this.timer > 0)
             {
                 this.timer -= Time.deltaTime;
