@@ -233,11 +233,18 @@ namespace ExtremeRoles.Patches.Manager
                 currentText = __instance.PlayerCounter.text;
             }
 
-            timer = Mathf.Max(0f, timer -= Time.deltaTime);
-            int minutes = (int)timer / 60;
-            int seconds = (int)timer % 60;
+            string baseString = $"{currentText}";
 
-            __instance.PlayerCounter.text = $"{currentText}  ({minutes:00}:{seconds:00})";
+            if (AmongUsClient.Instance.GameMode == GameModes.OnlineGame)
+            {
+                timer = Mathf.Max(0f, timer -= Time.deltaTime);
+                int minutes = (int)timer / 60;
+                int seconds = (int)timer % 60;
+                baseString = string.Concat(
+                    baseString, $"  ({minutes:00}:{seconds:00})");
+            }
+
+            __instance.PlayerCounter.text = baseString;
 
             __instance.PlayerCounter.autoSizeTextContainer = true;
 
