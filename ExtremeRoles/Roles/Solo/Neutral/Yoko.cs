@@ -46,8 +46,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public void ModifiedWinPlayer(
             GameData.PlayerInfo rolePlayerInfo,
             GameOverReason reason,
-            Il2CppSystem.Collections.Generic.List<WinningPlayerData> winner,
-            List<PlayerControl> pulsWinner)
+            ref Il2CppSystem.Collections.Generic.List<WinningPlayerData> winner,
+            ref List<PlayerControl> pulsWinner)
         {
             if (rolePlayerInfo.IsDead || rolePlayerInfo.Disconnected) { return; }
 
@@ -61,10 +61,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     this.AddWinner(rolePlayerInfo, winner, pulsWinner);
                     break;
                 default:
-                    winner = new Il2CppSystem.Collections.Generic.List<WinningPlayerData>();
                     pulsWinner.Clear();
+                    winner.Clear();
+                    winner.Add(new WinningPlayerData(rolePlayerInfo));
                     ExtremeRolesPlugin.GameDataStore.EndReason = (GameOverReason)RoleGameOverReason.YokoAllDeceive;
-                    this.AddWinner(rolePlayerInfo, winner, pulsWinner);
                     break;
             }
         }

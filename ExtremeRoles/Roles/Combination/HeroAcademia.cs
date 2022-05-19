@@ -943,8 +943,8 @@ namespace ExtremeRoles.Roles.Combination
         public void ModifiedWinPlayer(
             GameData.PlayerInfo rolePlayerInfo,
             GameOverReason reason,
-            Il2CppSystem.Collections.Generic.List<WinningPlayerData> winner,
-            List<PlayerControl> pulsWinner)
+            ref Il2CppSystem.Collections.Generic.List<WinningPlayerData> winner,
+            ref List<PlayerControl> pulsWinner)
         {
             switch (this.condition)
             {

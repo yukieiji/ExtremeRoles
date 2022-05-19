@@ -176,19 +176,23 @@ namespace ExtremeRoles.Patches
                     break;
             }
 
-            foreach(var player in gameData.PlusWinner)
+            foreach (var player in gameData.PlusWinner)
             {
                 addWinner(player);
             }
 
-            foreach(var (playerInfo, winModRole) in modRole)
+            Il2CppSystem.Collections.Generic.List<WinningPlayerData> winnerList = TempData.winners;
+
+            foreach (var (playerInfo, winModRole) in modRole)
             {
                 winModRole.ModifiedWinPlayer(
                     playerInfo,
                     gameData.EndReason,
-                    TempData.winners,
-                    gameData.PlusWinner);
+                    ref winnerList,
+                    ref gameData.PlusWinner);
             }
+
+            TempData.winners = winnerList;
 
         }
         private static void replaceWinnerToSpecificRolePlayer(
