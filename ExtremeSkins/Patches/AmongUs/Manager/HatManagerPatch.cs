@@ -13,19 +13,16 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
         private static bool isLoaded = false;
         public static void Prefix(HatManager __instance)
         {
-            if (isRunning) { return; }
+            if (isRunning || isLoaded) { return; }
             isRunning = true; // prevent simultanious execution
 
             try
             {
-                if (!isLoaded)
+                foreach (var hat in ExtremeHatManager.HatData.Values)
                 {
-                    foreach (var hat in ExtremeHatManager.HatData.Values)
-                    {
-                        __instance.allHats.Add(
-                            hat.GetData());
-                    }
+                    __instance.allHats.Add(hat.GetData());
                 }
+                isRunning = false;
             }
             catch (Exception e)
             {
@@ -33,10 +30,6 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
                     $"Unable to add Custom Hats\n{e}");
             }
             isLoaded = true;
-        }
-        public static void Postfix(HatManager __instance)
-        {
-            isRunning = false;
         }
     }
 #endif
@@ -49,19 +42,16 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
         private static bool isLoaded = false;
         public static void Prefix(HatManager __instance)
         {
-            if (isRunning) { return; }
+            if (isRunning || isLoaded) { return; }
             isRunning = true; // prevent simultanious execution
-
+            
             try
             {
-                if (!isLoaded)
+                foreach (var np in ExtremeNamePlateManager.NamePlateData.Values)
                 {
-                    foreach (var np in ExtremeNamePlateManager.NamePlateData.Values)
-                    {
-                        __instance.allNamePlates.Add(
-                            np.GetData());
-                    }
+                    __instance.allNamePlates.Add(np.GetData());
                 }
+                isRunning = false;
             }
             catch (Exception e)
             {
@@ -69,10 +59,6 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
                     $"Unable to add Custom NamePlate\n{e}");
             }
             isLoaded = true;
-        }
-        public static void Postfix(HatManager __instance)
-        {
-            isRunning = false;
         }
     }
 #endif
@@ -84,19 +70,16 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
         private static bool isLoaded = false;
         public static void Prefix(HatManager __instance)
         {
-            if (isRunning) { return; }
+            if (isRunning || isLoaded) { return; }
             isRunning = true; // prevent simultanious execution
 
             try
             {
-                if (!isLoaded)
+                foreach (var vi in ExtremeVisorManager.VisorData.Values)
                 {
-                    foreach (var vi in ExtremeVisorManager.VisorData.Values)
-                    {
-                        __instance.allVisors.Add(
-                            vi.GetData());
-                    }
+                    __instance.allVisors.Add(vi.GetData());
                 }
+                isRunning = false;
             }
             catch (Exception e)
             {
@@ -104,10 +87,6 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
                     $"Unable to add Custom Visor\n{e}");
             }
             isLoaded = true;
-        }
-        public static void Postfix(HatManager __instance)
-        {
-            isRunning = false;
         }
     }
 #endif
