@@ -116,7 +116,7 @@ namespace ExtremeRoles.Patches
             {
                 case RoleGameOverReason.AssassinationMarin:
                     resetWinner();
-                    foreach (var player in GameData.Instance.AllPlayers)
+                    foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers)
                     {
                         if (ExtremeRoleManager.GameRole[player.PlayerId].IsImpostor())
                         { 
