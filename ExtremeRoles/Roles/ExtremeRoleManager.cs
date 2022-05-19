@@ -67,7 +67,8 @@ namespace ExtremeRoles.Roles
         TaskMaster,
         Missionary,
         Jester,
-        Yandere
+        Yandere,
+        Yoko
     }
     public enum CombinationRoleType
     {
@@ -102,6 +103,8 @@ namespace ExtremeRoles.Roles
 
         VigilanteKillAllOther,
         VigilanteNewIdealWorld,
+
+        YokoAllDeceive,
 
         UnKnown = 100,
     }
@@ -167,6 +170,7 @@ namespace ExtremeRoles.Roles
                 {(byte)ExtremeRoleId.Missionary, new Missionary()},
                 {(byte)ExtremeRoleId.Jester    , new Jester()},
                 {(byte)ExtremeRoleId.Yandere   , new Yandere()},
+                {(byte)ExtremeRoleId.Yoko      , new Yoko()},
             };
 
         public static readonly Dictionary<

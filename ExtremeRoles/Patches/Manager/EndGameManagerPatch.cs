@@ -316,6 +316,12 @@ namespace ExtremeRoles.Patches.Manager
                     textRenderer.color = ColorPalette.VigilanteFujiIro;
                     manager.BackgroundBar.material.SetColor("_Color", ColorPalette.VigilanteFujiIro);
                     break;
+                case (GameOverReason)RoleGameOverReason.YokoAllDeceive:
+                    bonusText = Translation.GetString(
+                        ExtremeRoleId.Yoko.ToString());
+                    textRenderer.color = ColorPalette.YokoShion;
+                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.YokoShion);
+                    break;
                 default:
                     break;
             }
