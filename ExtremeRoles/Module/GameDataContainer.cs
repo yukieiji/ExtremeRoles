@@ -43,7 +43,7 @@ namespace ExtremeRoles.Module
         public GameOverReason EndReason;
         public List<PlayerSummary> FinalSummary = new List<PlayerSummary>();
         public Dictionary<byte, DeadInfo> DeadPlayerInfo = new Dictionary<byte, DeadInfo>();
-        public List<PlayerControl> PlusWinner = new List<PlayerControl>();
+        public List<GameData.PlayerInfo> PlusWinner = new List<GameData.PlayerInfo>();
         public Dictionary<int, Version> PlayerVersion = new Dictionary<int, Version>();
 
         public HashSet<byte> DeadedAssassin = new HashSet<byte>();

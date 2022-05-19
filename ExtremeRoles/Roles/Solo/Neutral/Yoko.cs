@@ -47,7 +47,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             GameData.PlayerInfo rolePlayerInfo,
             GameOverReason reason,
             ref Il2CppSystem.Collections.Generic.List<WinningPlayerData> winner,
-            ref List<PlayerControl> pulsWinner)
+            ref List<GameData.PlayerInfo> pulsWinner)
         {
             if (rolePlayerInfo.IsDead || rolePlayerInfo.Disconnected) { return; }
 

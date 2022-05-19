@@ -343,7 +343,7 @@ namespace ExtremeRoles
         {
             foreach (byte id in playerId)
             {
-                PlayerControl player = Helper.Player.GetPlayerControlById(id);
+                GameData.PlayerInfo player = GameData.Instance.GetPlayerById(id);
                 if (player == null) { continue; }
                 ExtremeRolesPlugin.GameDataStore.PlusWinner.Add(player);
             }

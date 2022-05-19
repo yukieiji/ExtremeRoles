@@ -45,7 +45,7 @@ namespace ExtremeRoles.Patches
         }
         public static void Postfix(AmongUsClient __instance, [HarmonyArgument(0)] ref EndGameResult endGameResult)
         {
-            List<PlayerControl> noWinner = new List<PlayerControl>();
+            List<GameData.PlayerInfo> noWinner = new List<GameData.PlayerInfo>();
             List<(GameData.PlayerInfo, Roles.API.Interface.IRoleWinPlayerModifier)> modRole = new List<
                 (GameData.PlayerInfo, Roles.API.Interface.IRoleWinPlayerModifier)> ();
 
@@ -63,11 +63,11 @@ namespace ExtremeRoles.Patches
                 {
                     if (ExtremeRoleManager.IsAliveWinNeutral(role, playerInfo))
                     {
-                        gameData.PlusWinner.Add(playerInfo.Object);
+                        gameData.PlusWinner.Add(playerInfo);
                     }
                     else
                     {
-                        noWinner.Add(playerInfo.Object);
+                        noWinner.Add(playerInfo);
                     }
                 }
 
@@ -95,8 +95,8 @@ namespace ExtremeRoles.Patches
             List<WinningPlayerData> winnersToRemove = new List<WinningPlayerData>();
             foreach (WinningPlayerData winner in TempData.winners)
             {
-                if (noWinner.Any(x => x.Data.PlayerName == winner.PlayerName) ||
-                    gameData.PlusWinner.Any(x => x.Data.PlayerName == winner.PlayerName))
+                if (noWinner.Any(x => x.PlayerName == winner.PlayerName) ||
+                    gameData.PlusWinner.Any(x => x.PlayerName == winner.PlayerName))
                 {
                     winnersToRemove.Add(winner);
                 }
@@ -234,7 +234,7 @@ namespace ExtremeRoles.Patches
         }
 
         private static void replaceWinnerToSpecificNeutralRolePlayer(
-            List<PlayerControl> noWinner, ExtremeRoleId[] roles)
+            List<GameData.PlayerInfo> noWinner, ExtremeRoleId[] roles)
         {
             resetWinner();
 
@@ -338,11 +338,6 @@ namespace ExtremeRoles.Patches
         {
             WinningPlayerData wpd = new WinningPlayerData(playerInfo);
             TempData.winners.Add(wpd);
-        }
-
-        private static void addWinner(PlayerControl player)
-        {
-            addWinner(player.Data);
         }
 
         private static void resetWinner()

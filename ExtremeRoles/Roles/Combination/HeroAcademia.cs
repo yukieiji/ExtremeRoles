@@ -944,7 +944,7 @@ namespace ExtremeRoles.Roles.Combination
             GameData.PlayerInfo rolePlayerInfo,
             GameOverReason reason,
             ref Il2CppSystem.Collections.Generic.List<WinningPlayerData> winner,
-            ref List<PlayerControl> pulsWinner)
+            ref List<GameData.PlayerInfo> pulsWinner)
         {
             switch (this.condition)
             {

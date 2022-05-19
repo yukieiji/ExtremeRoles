@@ -8,7 +8,7 @@ namespace ExtremeRoles.Roles.API.Interface
             GameData.PlayerInfo rolePlayerInfo,
             GameOverReason reason,
             ref List<WinningPlayerData> winner,
-            ref System.Collections.Generic.List<PlayerControl> pulsWinner);
+            ref System.Collections.Generic.List<GameData.PlayerInfo> pulsWinner);
     }
 
     public static class RoleWinPlayerModifierMixin
@@ -17,23 +17,23 @@ namespace ExtremeRoles.Roles.API.Interface
             this IRoleWinPlayerModifier self,
             GameData.PlayerInfo playerInfo,
             List<WinningPlayerData> winner,
-            System.Collections.Generic.List<PlayerControl> pulsWinner)
+            System.Collections.Generic.List<GameData.PlayerInfo> pulsWinner)
         {
             winner.Add(new WinningPlayerData(playerInfo));
-            pulsWinner.Add(playerInfo.Object);
+            pulsWinner.Add(playerInfo);
         }
 
         public static void RemoveWinner(
             this IRoleWinPlayerModifier self,
             GameData.PlayerInfo playerInfo,
             List<WinningPlayerData> winner,
-            System.Collections.Generic.List<PlayerControl> pulsWinner)
+            System.Collections.Generic.List<GameData.PlayerInfo> pulsWinner)
         {
            
             winner.Remove(new WinningPlayerData(playerInfo));
-            if (pulsWinner.Contains(playerInfo.Object))
+            if (pulsWinner.Contains(playerInfo))
             {
-                pulsWinner.Remove(playerInfo.Object);
+                pulsWinner.Remove(playerInfo);
             }
         }
 
