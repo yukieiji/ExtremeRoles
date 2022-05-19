@@ -232,8 +232,8 @@ namespace ExtremeRoles.Patches.Manager
                 // プレイヤーカウントアップデート
                 currentText = __instance.PlayerCounter.text;
                 timer = Mathf.Max(0f, timer -= Time.deltaTime);
-                int minutes = (int)timer / 60;
-                int seconds = (int)timer % 60;
+                int minutes = Mathf.CeilToInt(timer / 60.0f);
+                int seconds = Mathf.CeilToInt(timer % 60.0f);
 
                 __instance.PlayerCounter.text = $"{currentText}   ({minutes:00}:{seconds:00})";
                 __instance.PlayerCounter.autoSizeTextContainer = true;
