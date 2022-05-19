@@ -16,7 +16,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             TellRange,
             SearchTime,
-            TrueInfoGage
+            TrueInfoRate,
         }
 
         private float searchRange;
@@ -102,7 +102,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 10f, 3.0f, 30f, 0.5f,
                 parentOps);
             CreateIntOption(
-                YokoOption.TrueInfoGage,
+                YokoOption.TrueInfoRate,
                 50, 25, 80, 5, parentOps,
                 format:OptionUnit.Percentage);
         }
@@ -113,7 +113,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.searchTime = OptionHolder.AllOption[
                 GetRoleOptionId(YokoOption.SearchTime)].GetValue();
             this.trueInfoGage = OptionHolder.AllOption[
-                GetRoleOptionId(YokoOption.TrueInfoGage)].GetValue();
+                GetRoleOptionId(YokoOption.TrueInfoRate)].GetValue();
             this.timer = this.searchTime;
         }
 

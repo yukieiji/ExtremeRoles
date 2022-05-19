@@ -717,7 +717,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             CreateIntOption(
                 CarpenterOption.RemoveVentScrew,
                 10, 1, 20, 1,
-                parentOps, format: OptionUnit.Num);
+                parentOps, format: OptionUnit.ScrewNum);
             CreateFloatOption(
                 CarpenterOption.RemoveVentStopTime,
                 5.0f, 2.0f, 15.0f, 0.5f,
@@ -725,7 +725,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             CreateIntOption(
                 CarpenterOption.SetCameraScrew,
                 5, 1, 10, 1,
-                parentOps, format: OptionUnit.Num);
+                parentOps, format: OptionUnit.ScrewNum);
             CreateFloatOption(
                 CarpenterOption.SetCameraStopTime,
                 2.5f, 1.0f, 5.0f, 0.5f,
