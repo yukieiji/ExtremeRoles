@@ -52,7 +52,7 @@ namespace ExtremeRoles.Patches
             var roleData = ExtremeRoleManager.GameRole;
             var gameData = ExtremeRolesPlugin.GameDataStore;
 
-            foreach (var playerInfo in GameData.Instance.AllPlayers)
+            foreach (GameData.PlayerInfo playerInfo in GameData.Instance.AllPlayers)
             {
 
                 var role = roleData[playerInfo.PlayerId];
@@ -96,14 +96,13 @@ namespace ExtremeRoles.Patches
             foreach (WinningPlayerData winner in TempData.winners)
             {
                 if (noWinner.Any(x => x.Data.PlayerName == winner.PlayerName) ||
-                    gameData.PlusWinner.Any(
-                        x => x.Data.PlayerName == winner.PlayerName))
+                    gameData.PlusWinner.Any(x => x.Data.PlayerName == winner.PlayerName))
                 {
                     winnersToRemove.Add(winner);
                 }
             }
 
-            foreach (var winner in winnersToRemove)
+            foreach (WinningPlayerData winner in winnersToRemove)
             {
                 TempData.winners.Remove(winner);
             }
@@ -287,7 +286,7 @@ namespace ExtremeRoles.Patches
         {
             List<(ExtremeRoleId, int)> winRole = new List<(ExtremeRoleId, int)>();
 
-            foreach (var playerInfo in GameData.Instance.AllPlayers)
+            foreach (GameData.PlayerInfo playerInfo in GameData.Instance.AllPlayers)
             {
                 var role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
                 var multiAssignRole = role as Roles.API.MultiAssignRoleBase;
