@@ -14,6 +14,8 @@ namespace ExtremeRoles.Patches.Manager
         private const float kickTime = 30f;
         private const float timerMaxValue = 600f;
         private const string errorColorPlaceHolder = "<color=#FF0000FF>{0}\n</color>";
+        
+        private static bool isCustomServer;
 
         private static float timer;
         private static float kickingTimer;
@@ -94,6 +96,7 @@ namespace ExtremeRoles.Patches.Manager
             roomCodeText = code;
             timer = timerMaxValue;
             kickingTimer = 0f;
+            isCustomServer = DestroyableSingleton<ServerManager>.Instance.CurrentRegion.Name == "custom";
 
             // 値リセット
             RPCOperator.Initialize();
@@ -227,13 +230,17 @@ namespace ExtremeRoles.Patches.Manager
                 __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition;
             }
 
-            if (AmongUsClient.Instance.GameMode == GameModes.OnlineGame && update)
+            if (AmongUsClient.Instance.GameMode == GameModes.OnlineGame && !isCustomServer)
             {
                 // プレイヤーカウントアップデート
-                currentText = __instance.PlayerCounter.text;
+                if (update)
+                {
+                    currentText = __instance.PlayerCounter.text;
+                }
+
                 timer = Mathf.Max(0f, timer -= Time.deltaTime);
-                int minutes = Mathf.CeilToInt(timer / 60.0f);
-                int seconds = Mathf.CeilToInt(timer % 60.0f);
+                int minutes = (int)timer / 60;
+                int seconds = (int)timer % 60;
 
                 __instance.PlayerCounter.text = $"{currentText}   ({minutes:00}:{seconds:00})";
                 __instance.PlayerCounter.autoSizeTextContainer = true;
