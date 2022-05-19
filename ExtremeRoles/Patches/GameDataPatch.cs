@@ -7,15 +7,15 @@ namespace ExtremeRoles.Patches
 	{
 		public static bool Prefix(GameData __instance)
 		{
-			__instance.TotalTasks = 0;
-			__instance.CompletedTasks = 0;
 
 			var roles = Roles.ExtremeRoleManager.GameRole;
 			if (roles.Count == 0) { return false; }
 
-			for (int i = 0; i < __instance.AllPlayers.Count; i++)
+			int totalTask = 0;
+			int completedTask = 0;
+
+			foreach (GameData.PlayerInfo playerInfo in __instance.AllPlayers)
 			{
-				GameData.PlayerInfo playerInfo = __instance.AllPlayers[i];
 				if (!playerInfo.Disconnected &&
 					playerInfo.Tasks != null &&
 					playerInfo.Object &&
@@ -35,16 +35,19 @@ namespace ExtremeRoles.Patches
 						continue;
                     }
 
-					for (int j = 0; j < playerInfo.Tasks.Count; ++j)
+					foreach (GameData.TaskInfo taskInfo in playerInfo.Tasks)
 					{
-						++__instance.TotalTasks;
-						if (playerInfo.Tasks[j].Complete)
+						++totalTask;
+						if (taskInfo.Complete)
 						{
-							++__instance.CompletedTasks;
+							++completedTask;
 						}
 					}
 				}
 			}
+
+			__instance.TotalTasks = totalTask;
+			__instance.CompletedTasks = completedTask;
 
 			return false;
 		}
