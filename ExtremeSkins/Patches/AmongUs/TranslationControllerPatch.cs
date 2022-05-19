@@ -9,7 +9,8 @@ namespace ExtremeSkins.Patches.AmongUs
     [HarmonyPatch(
         typeof(TranslationController), 
         nameof(TranslationController.GetString),
-        new[] {
+        new[]
+        {
                 typeof(StringNames),
                 typeof(Il2CppReferenceArray<Il2CppSystem.Object>)
         })]

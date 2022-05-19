@@ -40,7 +40,10 @@ namespace ExtremeSkins
 #if WITHNAMEPLATE
             ExtremeNamePlateManager.Initialize();
 #endif
-            
+#if WITHVISOR
+            ExtremeVisorManager.Initialize();
+#endif
+
             ExtremeColorManager.Initialize();
 
             VersionManager.PlayerVersion.Clear();

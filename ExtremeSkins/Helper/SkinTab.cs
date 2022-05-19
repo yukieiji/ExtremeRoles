@@ -26,7 +26,7 @@ namespace ExtremeSkins.Helper
             if (textTemplate != null)
             {
                 TMP_Text title = UnityEngine.Object.Instantiate<TMP_Text>(
-                textTemplate, instance.scroller.Inner);
+                    textTemplate, instance.scroller.Inner);
                 title.transform.parent = instance.scroller.Inner;
                 title.transform.localPosition = new Vector3(headerX, yPos, inventoryZ);
                 title.alignment = TMPro.TextAlignmentOptions.Center;
