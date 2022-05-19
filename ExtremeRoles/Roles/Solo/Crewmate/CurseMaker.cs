@@ -21,6 +21,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             IsDeadBodySearch,
             IsMultiDeadBodySearch,
             SearchDeadBodyTime,
+            IsBoostTask,
+            TaskGage,
+            ReduceSearchDeadBodyTime,
         }
 
         public class DeadBodyInfo
@@ -101,6 +104,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         private string defaultButtonText;
         private string cursingText;
+        private bool isBoostTask;
+        private bool boosted;
+        private float taskGage;
+        private float boostTime;
 
         public RoleAbilityButtonBase Button
         {
@@ -277,13 +284,35 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 invert: true,
                 enableCheckOption: parentOps);
 
-            CreateFloatOption(
+            var searchTimeOpt = CreateFloatOption(
                 CurseMakerOption.SearchDeadBodyTime,
                 60.0f, 0.5f, 120.0f, 0.5f,
                 searchDeadBodyOption, format: OptionUnit.Second,
                 invert: true,
                 enableCheckOption: parentOps);
 
+            var taskBoostOpt = CreateBoolOption(
+                CurseMakerOption.IsBoostTask,
+                false, searchDeadBodyOption,
+                invert: true,
+                enableCheckOption: parentOps);
+
+            CreateIntOption(
+                 CurseMakerOption.TaskGage,
+                 100, 50, 100, 5,
+                 taskBoostOpt,
+                 format: OptionUnit.Percentage,
+                 invert: true,
+                 enableCheckOption: parentOps);
+
+            var reduceTimeOpt = CreateFloatDynamicOption(
+                CurseMakerOption.ReduceSearchDeadBodyTime,
+                30f, 0.5f, 0.5f, taskBoostOpt,
+                format: OptionUnit.Second,
+                invert: true,
+                enableCheckOption: parentOps);
+
+            searchTimeOpt.SetUpdateOption(reduceTimeOpt);
         }
 
         protected override void RoleSpecificInit()
@@ -304,6 +333,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 GetRoleOptionId(CurseMakerOption.SearchDeadBodyTime)].GetValue();
 
             this.isDeadBodySearchUsed = false;
+            this.isBoostTask = allOption[
+                GetRoleOptionId(CurseMakerOption.IsBoostTask)].GetValue();
+            this.taskGage = allOption[
+                GetRoleOptionId(CurseMakerOption.TaskGage)].GetValue() / 100.0f;
+            this.boostTime = allOption[
+                GetRoleOptionId(CurseMakerOption.ReduceSearchDeadBodyTime)].GetValue();
 
             this.cursingText = Translation.GetString("cursing");
             this.deadBodyData.Clear();
@@ -352,6 +387,17 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
                 }
             }
+
+            if (this.isBoostTask && !this.boosted)
+            {
+                if (Player.GetPlayerTaskGage(rolePlayer) >= this.taskGage)
+                {
+                    this.boosted = true;
+                    this.searchDeadBodyTime = Mathf.Clamp(
+                        this.searchDeadBodyTime - this.boostTime, 0.01f, this.searchDeadBodyTime);
+                }
+            }
+
 
             if (this.isDeadBodySearchUsed || !this.isDeadBodySearch) { return; }
 

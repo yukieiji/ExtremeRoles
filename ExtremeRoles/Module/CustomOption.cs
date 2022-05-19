@@ -273,7 +273,6 @@ namespace ExtremeRoles.Module
 
             return selection;
         }
-
     }
 
     public class IntCustomOption : CustomOptionBase
@@ -380,8 +379,70 @@ namespace ExtremeRoles.Module
 
             return selection;
         }
-
     }
+
+    public class FloatDynamicCustomOption : CustomOptionBase
+    {
+        private float step;
+        public FloatDynamicCustomOption(
+            int id, string name,
+            float defaultValue,
+            float min, float step,
+            CustomOptionBase parent = null,
+            bool isHeader = false,
+            bool isHidden = false,
+            OptionUnit format = OptionUnit.None,
+            bool invert = false,
+            CustomOptionBase enableCheckOption = null) : base(
+                id, name,
+                createSelection(min, step, defaultValue).Cast<object>().ToArray(),
+                defaultValue, parent,
+                isHeader, isHidden,
+                format, invert,
+                enableCheckOption)
+        {
+            this.step = step;
+        }
+
+        public override dynamic GetValue() => (float)GetRawValue();
+
+        protected override void OptionUpdate(object newValue)
+        {
+            float maxValue = Convert.ToSingle(newValue.ToString());
+            float minValue = Convert.ToSingle(this.Selections[0].ToString());
+
+            decimal dStep = new decimal(this.step);
+            decimal dMin = new decimal(minValue);
+            decimal dMax = new decimal(maxValue);
+
+            List<float> newSelection = new List<float>();
+            for (decimal s = dMin; s <= dMax; s += dStep)
+            {
+                newSelection.Add(((float)(decimal.ToDouble(s))));
+            }
+            this.Selections = newSelection.Cast<object>().ToArray();
+            this.UpdateSelection(this.CurSelection);
+        }
+
+        private static List<float> createSelection(float min, float step, float defaultValue)
+        {
+
+            List<float> selection = new List<float>();
+
+            decimal dStep = new decimal(step);
+            decimal dMin = new decimal(min);
+
+            decimal tempMaxVale = (min + step) < defaultValue ? new decimal(defaultValue) : dMin + dStep;
+
+            for (decimal s = dMin; s <= tempMaxVale; s += dStep)
+            {
+                selection.Add(((float)(decimal.ToDouble(s))));
+            }
+
+            return selection;
+        }
+    }
+
 
 
     public class SelectionCustomOption : CustomOptionBase

@@ -356,6 +356,30 @@ namespace ExtremeRoles.Roles.API
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected CustomOptionBase CreateFloatDynamicOption<T>(
+            T option,
+            float defaultValue,
+            float min, float step,
+            CustomOptionBase parent = null,
+            bool isHeader = false,
+            bool isHidden = false,
+            OptionUnit format = OptionUnit.None,
+            bool invert = false,
+            CustomOptionBase enableCheckOption = null,
+            bool colored = false) where T : struct, IConvertible
+        {
+            EnumCheck(option);
+
+            return new FloatDynamicCustomOption(
+                GetRoleOptionId(option),
+                createAutoOptionString(option, colored),
+                defaultValue,
+                min, step,
+                parent, isHeader, isHidden,
+                format, invert, enableCheckOption);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected CustomOptionBase CreateIntOption<T>(
             T option,
             int defaultValue,
