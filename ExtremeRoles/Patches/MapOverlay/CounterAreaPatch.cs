@@ -19,7 +19,23 @@ namespace ExtremeRoles.Patches.MapOverlay
             var admin = Roles.ExtremeRoleManager.GetSafeCastedLocalPlayerRole<
                 Roles.Solo.Crewmate.Supervisor>();
 
-            if (admin == null || !admin.Boosted || !admin.IsAbilityActive) { return; }
+            if (admin == null || !admin.Boosted || !admin.IsAbilityActive)
+            {
+                foreach (PoolableBehavior icon in __instance.myIcons)
+                {
+                    SpriteRenderer renderer = icon.GetComponent<SpriteRenderer>();
+
+                    if (renderer != null)
+                    {
+                        if (defaultMat == null)
+                        {
+                            defaultMat = renderer.material;
+                        }
+                        renderer.material = defaultMat;
+                    }
+                }
+                return; 
+            }
 
             if (MapCountOverlayUpdatePatch.PlayerColor.ContainsKey(__instance.RoomType))
             {
@@ -32,10 +48,6 @@ namespace ExtremeRoles.Patches.MapOverlay
 
                     if (renderer != null)
                     {
-                        if (defaultMat == null)
-                        {
-                            defaultMat = renderer.material;
-                        }
                         if (newMat == null)
                         {
                             newMat = Object.Instantiate(defaultMat);
