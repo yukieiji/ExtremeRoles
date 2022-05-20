@@ -4,8 +4,8 @@
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
 		<!--<Version>2.1.0.0</Version>-->
-		<VersionPrefix>2.1.0</VersionPrefix>
-        <VersionSuffix>CombinationRoles</VersionSuffix> 
+		<VersionPrefix>2.1.1</VersionPrefix>
+        <VersionSuffix>NewGeneration</VersionSuffix> 
         <Description>Extreme Roles for Advanced user</Description>
         <Authors>yukieiji</Authors>
         <Configurations>Debug;Release</Configurations>
