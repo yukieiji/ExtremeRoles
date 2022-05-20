@@ -145,6 +145,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     {
                         this.shootNum = System.Math.Clamp(
                             this.shootNum + 1, this.shootNum, this.maxShootNum);
+                        this.CanKill = true;
                         updateKillCountText();
                     }
 
@@ -227,8 +228,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             if (this.isSyncTaskShootNum)
             {
-                this.maxShootNum = this.shootNum;
                 this.shootNum = 0;
+                HudManager.Instance.KillButton.SetDisabled();
+                this.CanKill = false;
             }
         }
 
