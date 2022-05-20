@@ -18,9 +18,9 @@ namespace ExtremeRoles.Patches.MapOverlay
             var admin = Roles.ExtremeRoleManager.GetSafeCastedLocalPlayerRole<
                 Roles.Solo.Crewmate.Supervisor>();
 
-			if (admin == null || !admin.Boosted || !admin.IsAbilityActive) { return true; }
-
 			PlayerColor.Clear();
+
+			if (admin == null || !admin.Boosted || !admin.IsAbilityActive) { return true; }
 
 			__instance.timer += Time.deltaTime;
 			if (__instance.timer < 0.1f)
