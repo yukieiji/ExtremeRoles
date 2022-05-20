@@ -7,14 +7,16 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
+using BepInEx.IL2CPP.Utils.Collections;
+
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public class Yoko : SingleRoleBase, IRoleUpdate, IRoleWinPlayerModifier
+    public class Yoko : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IRoleWinPlayerModifier
     {
         public enum YokoOption
         {
-            TellRange,
+            SearchRange,
             SearchTime,
             TrueInfoRate,
         }
@@ -94,8 +96,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             CustomOptionBase parentOps)
         {
             CreateFloatOption(
-                YokoOption.TellRange,
-                15.0f, 7.0f, 30.0f, 0.5f,
+                YokoOption.SearchRange,
+                7.5f, 5.0f, 15.0f, 0.5f,
                 parentOps);
             CreateFloatOption(
                 YokoOption.SearchTime,
@@ -109,19 +111,33 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         protected override void RoleSpecificInit()
         {
             this.searchRange = OptionHolder.AllOption[
-                GetRoleOptionId(YokoOption.TellRange)].GetValue();
+                GetRoleOptionId(YokoOption.SearchRange)].GetValue();
             this.searchTime = OptionHolder.AllOption[
                 GetRoleOptionId(YokoOption.SearchTime)].GetValue();
             this.trueInfoGage = OptionHolder.AllOption[
                 GetRoleOptionId(YokoOption.TrueInfoRate)].GetValue();
             this.timer = this.searchTime;
         }
+        public void ResetOnMeetingEnd()
+        {
+            return;
+        }
 
+        public void ResetOnMeetingStart()
+        {
+            if (this.tellText != null)
+            {
+                this.tellText.gameObject.SetActive(false);
+            }
+        }
         public void Update(PlayerControl rolePlayer)
         {
+
             if (ShipStatus.Instance == null ||
                 GameData.Instance == null) { return; }
+            
             if (!ShipStatus.Instance.enabled ||
+                MeetingHud.Instance != null ||
                 ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
 
             if (Minigame.Instance) { return; }
@@ -131,9 +147,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 this.timer -= Time.deltaTime;
                 return;
             }
-
+            
             Vector2 truePosition = rolePlayer.GetTruePosition();
+            
             this.timer = this.searchTime;
+            
             foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers)
             {
                 SingleRoleBase targetRole = ExtremeRoleManager.GameRole[player.PlayerId];
@@ -149,13 +167,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                         float magnitude = vector.magnitude;
                         if (magnitude <= this.searchRange && this.isEnemy(targetRole))
                         {
-                            this.showText(Helper.Translation.GetString("findEnemy"));
+                            rolePlayer.StartCoroutine(
+                                this.showText(Helper.Translation.GetString("findEnemy")).WrapToIl2Cpp());
                             return;
                         }
                     }
                 }
             }
-            this.showText(Helper.Translation.GetString("notFindEnemy"));
+            rolePlayer.StartCoroutine(
+                this.showText(Helper.Translation.GetString("notFindEnemy")).WrapToIl2Cpp());
         }
 
         private IEnumerator showText(string text)
@@ -164,8 +184,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             {
                 this.tellText = Object.Instantiate(
                     Prefab.Text, Camera.main.transform, false);
-                this.tellText.transform.localPosition = new Vector3(-4.0f, -2.75f, -250.0f);
-                this.tellText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
+                this.tellText.transform.localPosition = new Vector3(0.0f, -0.75f, -250.0f);
+                this.tellText.alignment = TMPro.TextAlignmentOptions.Center;
                 this.tellText.gameObject.layer = 5;
             }
             this.tellText.text = text;
