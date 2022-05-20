@@ -77,7 +77,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             addStock(this.addStockWhenMeetingButton);
         }
 
-        public bool IsAbilityUse() => this.IsCommonUse();
+        public bool IsAbilityUse() => 
+            this.IsCommonUse() &&
+            this.stock > 0 &&
+            (PlayerControl.LocalPlayer.killTimer > (this.reloadReduceTimePerStock * this.stock));
 
         public void RoleAbilityResetOnMeetingEnd()
         {
@@ -110,8 +113,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             this.curReloadCoolTime = this.defaultReloadCoolTime;
 
-            this.KillCoolTime = this.defaultKillCool * (
-                this.reloadReduceTimePerStock * this.stock);
+            this.KillCoolTime = UnityEngine.Mathf.Clamp(
+                this.defaultKillCool - (this.reloadReduceTimePerStock * this.stock),
+                0.001f, this.defaultKillCool);
+            float curKillCool = PlayerControl.LocalPlayer.killTimer;
+            PlayerControl.LocalPlayer.killTimer = UnityEngine.Mathf.Clamp(
+                curKillCool - (this.reloadReduceTimePerStock * this.stock),
+                0.001f, this.defaultKillCool);
 
             this.stock = 0;
             this.timerStock = 0;
@@ -142,7 +150,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
         public override string GetFullDescription() => string.Format(
-            base.GetFullDescription(), this.stock, this.curReloadCoolTime);
+            base.GetFullDescription(), this.stock,
+            this.stockMax, this.curReloadCoolTime);
 
         protected override void CreateSpecificOption(CustomOptionBase parentOps)
         {
@@ -193,8 +202,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 GetRoleOptionId(AssaultMasterOption.ReloadReduceKillCoolTimePerStock)].GetValue();
             this.isResetCoolTimeWhenKill = allOpt[
                 GetRoleOptionId(AssaultMasterOption.IsResetReloadCoolTimeWhenKill)].GetValue();
-            this.timerReduceRate = allOpt[
-                GetRoleOptionId(AssaultMasterOption.ReloadCoolTimeReduceRatePerHideStock)].GetValue();
+            this.timerReduceRate = (float)allOpt[
+                GetRoleOptionId(AssaultMasterOption.ReloadCoolTimeReduceRatePerHideStock)].GetValue() / 100.0f;
 
             this.stock = 0;
             this.timerStock = 0;
