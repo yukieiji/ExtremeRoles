@@ -513,9 +513,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 UseAbility,
                 IsAbilityUse,
                 Resources.Loader.CreateSpriteFromResources(
-                    Resources.Path.CurseMakerCurse),
+                    Resources.Path.CarpenterSetCamera),
                 Resources.Loader.CreateSpriteFromResources(
-                    Resources.Path.MaintainerRepair),
+                    Resources.Path.CarpenterVentSeal),
                 new Vector3(-1.8f, -0.06f, 0),
                 CleanUp,
                 IsAbilityCheck,

@@ -30,6 +30,8 @@ namespace ExtremeRoles.Resources
         public const string CurseMakerCurse = "ExtremeRoles.Resources.Curse.png";
         public const string OpenerOpenDoor = "ExtremeRoles.Resources.OpenDoor.png";
         public const string DetectiveApprenticeEmergencyMeeting = "ExtremeRoles.Resources.EmergencyMeeting.png";
+        public const string CarpenterSetCamera = "ExtremeRoles.Resources.SetCamera.png";
+        public const string CarpenterVentSeal = "ExtremeRoles.Resources.VentSeal.png";
 
         public const string EvolverEvolved = "ExtremeRoles.Resources.Evolved.png";
         public const string CarrierCarry = "ExtremeRoles.Resources.Carry.png";
@@ -42,6 +44,7 @@ namespace ExtremeRoles.Resources
         public const string BomberSetBomb = "ExtremeRoles.Resources.SetBomb.png";
         public const string MeryNoneActiveVent = "ExtremeRoles.Resources.NoneActivateVent.png";
         public const string MeryCustomVentAnime = "ExtremeRoles.Resources.MeryVentAnimation.{0}.png";
+        public const string AssaultMasterReload = "ExtremeRoles.Resources.Reload.png";
 
         public const string VigilanteEmergencyCall = "ExtremeRoles.Resources.EmergencyCall.png";
         public const string AliceShipBroken = "ExtremeRoles.Resources.ShipBroken.png";

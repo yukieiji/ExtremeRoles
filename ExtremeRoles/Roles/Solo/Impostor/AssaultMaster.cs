@@ -60,7 +60,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.CreateNormalAbilityButton(
                 Translation.GetString("reload"),
                 Loader.CreateSpriteFromResources(
-                    Path.TestButton));
+                    Path.AssaultMasterReload));
         }
 
         public void HockBodyReport(
