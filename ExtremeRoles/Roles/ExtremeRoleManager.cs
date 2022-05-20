@@ -60,6 +60,7 @@ namespace ExtremeRoles.Roles
         SlaveDriver,
         SandWorm,
         Smasher,
+        AssaultMaster,
 
         Alice,
         Jackal,
@@ -163,6 +164,7 @@ namespace ExtremeRoles.Roles
                 {(byte)ExtremeRoleId.SlaveDriver    , new SlaveDriver()},
                 {(byte)ExtremeRoleId.SandWorm       , new SandWorm()},
                 {(byte)ExtremeRoleId.Smasher        , new Smasher()},
+                {(byte)ExtremeRoleId.AssaultMaster  , new AssaultMaster()},
 
                 {(byte)ExtremeRoleId.Alice     , new Alice()},
                 {(byte)ExtremeRoleId.Jackal    , new Jackal()},

@@ -106,7 +106,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             CreateIntOption(
                 YokoOption.TrueInfoRate,
                 50, 25, 80, 5, parentOps,
-                format:OptionUnit.Percentage);
+                format: OptionUnit.Percentage);
         }
         protected override void RoleSpecificInit()
         {
