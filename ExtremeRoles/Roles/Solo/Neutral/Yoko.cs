@@ -196,7 +196,24 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     return false;
                 }
             }
+            else if (this.isYoko(role))
+            {
+                return true;
+            }
             return false;
+        }
+        private bool isYoko(SingleRoleBase targetRole)
+        {
+            var multiAssignRole = targetRole as MultiAssignRoleBase;
+
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    return this.isYoko(multiAssignRole.AnotherRole);
+                }
+            }
+            return targetRole.Id == ExtremeRoleId.Yoko;
         }
     }
 }
