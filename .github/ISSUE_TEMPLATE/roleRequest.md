@@ -22,6 +22,13 @@ assignees: ''
 
 
 ### 陣営 / Team
+<!--
+陣営の所に x をつけて下さい
+例：クルー役職
+- [x] :クルー/Crewmate
+- [ ] :インポスター/Impostor
+- [ ] :ニュートラル/Neutral
+ -->
 - [ ] :クルー/Crewmate
 - [ ] :インポスター/Impostor
 - [ ] :ニュートラル/Neutral
