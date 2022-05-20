@@ -102,7 +102,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             CreateFloatOption(
                 YokoOption.SearchTime,
                 10f, 3.0f, 30f, 0.5f,
-                parentOps);
+                parentOps,
+                format: OptionUnit.Second);
             CreateIntOption(
                 YokoOption.TrueInfoRate,
                 50, 25, 80, 5, parentOps,
@@ -151,6 +152,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             Vector2 truePosition = rolePlayer.GetTruePosition();
             
             this.timer = this.searchTime;
+            bool isEnemy = false;
             
             foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers)
             {
@@ -167,15 +169,27 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                         float magnitude = vector.magnitude;
                         if (magnitude <= this.searchRange && this.isEnemy(targetRole))
                         {
-                            rolePlayer.StartCoroutine(
-                                this.showText(Helper.Translation.GetString("findEnemy")).WrapToIl2Cpp());
-                            return;
+                            isEnemy = true;
+                            break;
                         }
                     }
                 }
             }
+
+            if (this.trueInfoGage <= RandomGenerator.Instance.Next(101))
+            {
+                isEnemy = !isEnemy;
+            }
+
+            string text = Helper.Translation.GetString("notFindEnemy");
+
+            if (isEnemy)
+            {
+                text = Helper.Translation.GetString("findEnemy");
+            }
+
             rolePlayer.StartCoroutine(
-                this.showText(Helper.Translation.GetString("notFindEnemy")).WrapToIl2Cpp());
+                showText(text).WrapToIl2Cpp());
         }
 
         private IEnumerator showText(string text)
@@ -184,7 +198,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             {
                 this.tellText = Object.Instantiate(
                     Prefab.Text, Camera.main.transform, false);
-                this.tellText.transform.localPosition = new Vector3(0.0f, -0.75f, -250.0f);
+                this.tellText.transform.localPosition = new Vector3(0.0f, -0.9f, -250.0f);
                 this.tellText.alignment = TMPro.TextAlignmentOptions.Center;
                 this.tellText.gameObject.layer = 5;
             }
@@ -205,16 +219,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
             else if (
                 role.IsImpostor() ||
-                role.CanKill || role.Id == ExtremeRoleId.Fencer)
+                role.CanKill || 
+                role.Id == ExtremeRoleId.Fencer)
             {
-                if (this.trueInfoGage > RandomGenerator.Instance.Next(101))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return true;
+                
             }
             else if (this.isYoko(role))
             {
