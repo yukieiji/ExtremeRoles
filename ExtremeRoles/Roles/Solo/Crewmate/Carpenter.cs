@@ -317,7 +317,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             var camera = UnityEngine.Object.Instantiate<SurvCamera>(referenceCamera);
             camera.transform.position = new Vector3(x, y, referenceCamera.transform.position.z - 1f);
-            camera.CamName = $"SecurityCamera_Carpenter{cameraNum}";
+            camera.CamName = $"CarpenterSecurityCameraNo{cameraNum}";
             cameraNum++;
             camera.Offset = new Vector3(0f, 0f, camera.Offset.z);
 
