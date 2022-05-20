@@ -549,6 +549,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             
             foreach (Vent vent in ShipStatus.Instance.AllVents)
             {
+                if (vent == null) { continue; }
                 if (ExtremeRolesPlugin.GameDataStore.CustomVent.IsCustomVent(vent.Id) &&
                     !vent.gameObject.active)
                 {
