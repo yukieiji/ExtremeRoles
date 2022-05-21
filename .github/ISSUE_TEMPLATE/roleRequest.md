@@ -1,7 +1,7 @@
 ---
 name: 役職追加要求/New Role Request
 about: 新しい役職追加用のテンプレート/Template of New Role Request
-title: "[陣営/Team] : 役職名/RoleName (任意で役職の説明を1文で)"
+title: "[陣営/Team] : 役職名/RoleName (このカッコ内に任意で役職の説明を1文で)"
 labels: 新役職/New Role, 提案/Suggestion, 未確認/Unconfirmed
 assignees: ''
 
