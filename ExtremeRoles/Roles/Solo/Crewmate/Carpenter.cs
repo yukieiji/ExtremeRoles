@@ -307,7 +307,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 unlinkVent(leftVent, vent);
             }
 
-            vent.gameObject.SetActive(false);
+            vent.EnterVentAnim = null;
+            vent.ExitVentAnim = null;
+            vent.GetComponent<PowerTools.SpriteAnim>()?.Stop();
+
+            var ventRenderer = vent.GetComponent<SpriteRenderer>();
+            ventRenderer.sprite = null;
+            vent.myRend = ventRenderer;
         }
 
         private static void setCamera(float x, float y, SystemTypes roomType)
@@ -530,6 +536,19 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public bool UseAbility()
         {
+            if (this.targetVent != null)
+            {
+
+                var ventilationSystem = ShipStatus.Instance.Systems[SystemTypes.Ventilation].TryCast<VentilationSystem>();
+
+                if (!PlayerControl.LocalPlayer.Data.IsDead && 
+                    ventilationSystem != null && 
+                    ventilationSystem.IsImpostorInsideVent(this.targetVent.Id))
+                {
+                    VentilationSystem.Update(VentilationSystem.Operation.BootImpostors, this.targetVent.Id);
+                    return false;
+                }
+            }
             this.prevPos = PlayerControl.LocalPlayer.GetTruePosition();
             return true;
         }

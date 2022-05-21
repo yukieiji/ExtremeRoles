@@ -43,7 +43,8 @@ namespace ExtremeRoles.Patches.MapModule
                 num = Vector2.Distance(truePosition, position);
 
                 canUse &= (
-                    num <= usableDistance && 
+                    num <= usableDistance &&
+                    __instance.myRend.sprite != null &&
                     !PhysicsHelpers.AnythingBetween(
                         truePosition,
                         position,
