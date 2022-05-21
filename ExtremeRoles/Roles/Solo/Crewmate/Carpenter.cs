@@ -702,7 +702,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             CreateIntOption(
                 CarpenterOption.AwakeTaskGage,
-                100, 0, 100, 10,
+                70, 0, 100, 10,
                 parentOps,
                 format: OptionUnit.Percentage);
             createAbilityOption(parentOps);
