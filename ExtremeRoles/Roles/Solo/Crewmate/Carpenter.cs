@@ -9,7 +9,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.RoleAbilityButton;
+using ExtremeRoles.Module.AbilityButton.Roles;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {

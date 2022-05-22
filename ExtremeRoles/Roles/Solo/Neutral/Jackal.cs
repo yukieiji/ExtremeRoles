@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.RoleAbilityButton;
+using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;

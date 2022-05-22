@@ -1,10 +1,9 @@
 ﻿using System;
 using UnityEngine;
 
-namespace ExtremeRoles.Module.RoleAbilityButton
+namespace ExtremeRoles.Module.AbilityButton
 {
-
-    public abstract class RoleAbilityButtonBase
+    public abstract class AbilityButtonBase
     {
         public Vector3 PositionOffset;
         public string ButtonText = null;
@@ -22,13 +21,13 @@ namespace ExtremeRoles.Module.RoleAbilityButton
         protected Func<bool> AbilityCheck = null;
         protected Sprite ButtonSprite;
 
+        protected bool Mirror;
+        protected KeyCode Hotkey;
+
         protected readonly Color DisableColor = new Color(1f, 1f, 1f, 0.3f);
         protected readonly Color TimerOnColor = new Color(0F, 0.8F, 0F);
 
-        private bool mirror;
-        private KeyCode hotkey;
-
-        public RoleAbilityButtonBase(
+        public AbilityButtonBase(
             string buttonText,
             Func<bool> ability,
             Func<bool> canUse,
@@ -45,7 +44,7 @@ namespace ExtremeRoles.Module.RoleAbilityButton
             this.UseAbility = ability;
             this.CanUse = canUse;
 
-            this.mirror = mirror;
+            this.Mirror = mirror;
 
             this.ButtonSprite = sprite;
             this.PositionOffset = positionOffset;
@@ -68,50 +67,23 @@ namespace ExtremeRoles.Module.RoleAbilityButton
 
             SetActive(false);
 
-            this.hotkey = hotkey;
+            this.Hotkey = hotkey;
 
             bool allTrue() => true;
         }
 
-        protected abstract void OnClickEvent();
-
-        protected abstract void AbilityButtonUpdate();
-
         public float GetCurTime() => this.Timer;
 
-        public bool IsAbilityActive() => this.IsAbilityOn; 
+        public bool IsAbilityActive() => this.IsAbilityOn;
 
-        public virtual void ForceAbilityOff()
+        public void ReplaceHotKey(KeyCode newKey)
         {
-            this.IsAbilityOn = false;
-            this.Button.cooldownTimerText.color = Palette.EnabledColor;
-        }
-
-        public virtual void SetAbilityActiveTime(float time)
-        {
-            this.AbilityActiveTime = time;
+            this.Hotkey = newKey;
         }
 
         public void SetAbilityCoolTime(float time)
         {
             this.CoolTime = time;
-        }
-
-        public virtual void ResetCoolTimer()
-        {
-            this.Timer = this.CoolTime;
-        }
-
-        public void SetLabelToCrewmate()
-        {
-            if (HudManager.Instance == null) { return; }
-
-            var useButton = HudManager.Instance.UseButton;
-            
-            UnityEngine.Object.Destroy(
-                this.Button.buttonLabelText.fontMaterial);
-            this.Button.buttonLabelText.fontMaterial = UnityEngine.Object.Instantiate(
-                useButton.buttonLabelText.fontMaterial, this.Button.transform);
         }
 
         public void SetActive(bool isActive)
@@ -128,50 +100,39 @@ namespace ExtremeRoles.Module.RoleAbilityButton
             }
         }
 
-        public void ReplaceHotKey(KeyCode newKey)
+        public void SetLabelToCrewmate()
         {
-            this.hotkey = newKey;
-        }
+            if (HudManager.Instance == null) { return; }
 
+            var useButton = HudManager.Instance.UseButton;
         public Transform GetTransform() => this.Button.transform;
 
-        public void Update()
-        {
-            if (this.Button == null) { return; }
-            if (PlayerControl.LocalPlayer.Data == null ||
-                MeetingHud.Instance ||
-                ExileController.Instance ||
-                PlayerControl.LocalPlayer.Data.IsDead)
-            {
-                SetActive(false);
-                return;
-            }
-            SetActive(HudManager.Instance.UseButton.isActiveAndEnabled);
-
-            this.Button.graphic.sprite = this.ButtonSprite;
-            this.Button.OverrideText(ButtonText);
-
-            if (HudManager.Instance.UseButton != null)
-            {
-                Vector3 pos = HudManager.Instance.UseButton.transform.localPosition;
-                if (this.mirror)
-                {
-                    pos = new Vector3(-pos.x, pos.y, pos.z);
-                }
-                this.Button.transform.localPosition = pos + PositionOffset;
-            }
-
-            AbilityButtonUpdate();
-
-            if (Input.GetKeyDown(this.hotkey))
-            {
-                OnClickEvent();
-            }
-
+            UnityEngine.Object.Destroy(
+                this.Button.buttonLabelText.fontMaterial);
+            this.Button.buttonLabelText.fontMaterial = UnityEngine.Object.Instantiate(
+                useButton.buttonLabelText.fontMaterial, this.Button.transform);
         }
-
 
         protected bool IsHasCleanUp() => this.CleanUp != null;
 
+        public virtual void ForceAbilityOff()
+        {
+            this.IsAbilityOn = false;
+            this.Button.cooldownTimerText.color = Palette.EnabledColor;
+        }
+
+        public virtual void SetAbilityActiveTime(float time)
+        {
+            this.AbilityActiveTime = time;
+        }
+
+        public virtual void ResetCoolTimer()
+        {
+            this.Timer = this.CoolTime;
+        }
+
+        public abstract void Update();
+
+        protected abstract void OnClickEvent();
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace ExtremeRoles.Module.RoleAbilityButton
+namespace ExtremeRoles.Module.AbilityButton.Roles
 {
     public class ReusableAbilityButton : RoleAbilityButtonBase
     {
