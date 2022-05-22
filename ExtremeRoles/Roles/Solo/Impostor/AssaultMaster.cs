@@ -214,7 +214,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             this.curReloadCoolTime = this.defaultReloadCoolTime;
 
-            if (this.HasOtherKillCool)
+            if (!this.HasOtherKillCool)
+            {
+                this.HasOtherKillCool = true;
+                this.defaultKillCool = PlayerControl.GameOptions.KillCooldown;
+            }
+            else
             {
                 this.defaultKillCool = this.KillCoolTime;
             }
