@@ -44,6 +44,10 @@
       <PackageReference Update="AmongUs.GameLibs.Steam" Version="2022.3.29" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="GhostRoles\API\Interface\" />
+    </ItemGroup>
+
     <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">
         <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AmongUs)/BepInEx/plugins/" UseSymboliclinksIfPossible="true" />
     </Target>
