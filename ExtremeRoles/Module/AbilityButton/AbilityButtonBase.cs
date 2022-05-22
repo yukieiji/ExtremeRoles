@@ -15,7 +15,6 @@ namespace ExtremeRoles.Module.AbilityButton
         protected float AbilityActiveTime = 0.0f;
         protected float CoolTime = float.MaxValue;
 
-        protected Func<bool> UseAbility;
         protected Func<bool> CanUse;
         protected Action CleanUp = null;
         protected Func<bool> AbilityCheck = null;
@@ -29,7 +28,6 @@ namespace ExtremeRoles.Module.AbilityButton
 
         public AbilityButtonBase(
             string buttonText,
-            Func<bool> ability,
             Func<bool> canUse,
             Sprite sprite,
             Vector3 positionOffset,
@@ -41,7 +39,6 @@ namespace ExtremeRoles.Module.AbilityButton
 
             this.ButtonText = buttonText;
 
-            this.UseAbility = ability;
             this.CanUse = canUse;
 
             this.Mirror = mirror;

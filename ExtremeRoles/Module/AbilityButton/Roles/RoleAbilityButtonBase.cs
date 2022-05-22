@@ -7,6 +7,7 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
 
     public abstract class RoleAbilityButtonBase : AbilityButtonBase
     {
+        protected Func<bool> UseAbility;
         public RoleAbilityButtonBase(
             string buttonText,
             Func<bool> ability,
@@ -17,11 +18,13 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
             Func<bool> abilityCheck = null,
             KeyCode hotkey = KeyCode.F,
             bool mirror = false) : base(
-                buttonText, ability, canUse,
+                buttonText, canUse,
                 sprite, positionOffset,
                 abilityCleanUp, abilityCheck,
                 hotkey, mirror)
-        { }
+        {
+            this.UseAbility = ability;
+        }
 
         protected abstract void AbilityButtonUpdate();
 

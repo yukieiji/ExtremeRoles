@@ -68,6 +68,8 @@ namespace ExtremeRoles
             TaskMasterSetNewTask,
             JesterOutburstKill,
             YandereSetOneSidedLover,
+
+            UseGhostRoleAbility,
         }
 
         public static void Call(
