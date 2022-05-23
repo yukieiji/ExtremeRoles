@@ -4,7 +4,7 @@ using ExtremeRoles.GhostRoles.API;
 
 namespace ExtremeRoles.GhostRoles
 {
-    public enum GhostRoleId
+    public enum ExtremeGhostRoleId
     {
 
     }
@@ -18,7 +18,8 @@ namespace ExtremeRoles.GhostRoles
 
         public static Dictionary<byte, GhostRoleBase> GameRole = new Dictionary<byte, GhostRoleBase>();
 
-        public static readonly Dictionary<GhostRoleId, GhostRoleBase> AllGhostRole = new Dictionary<GhostRoleId, GhostRoleBase>();
+        public static readonly Dictionary<
+            ExtremeGhostRoleId, GhostRoleBase> AllGhostRole = new Dictionary<ExtremeGhostRoleId, GhostRoleBase>();
 
         private static GhostRoleAssignData assignData;
 
