@@ -101,14 +101,10 @@ namespace ExtremeRoles.GhostRoles.API
 
         public bool IsNeutral() => this.Team == ExtremeRoleType.Neutral;
 
-        public bool IsVanillaRole()
-        {
-            throw new NotImplementedException();
-        }
+        public bool IsVanillaRole() => this.RoleId == ExtremeGhostRoleId.VanillaRole;
 
-        public virtual string GetImportantText(bool isContainFakeTask = true)
-        {
-            string baseString = Design.ColoedString(
+        public virtual string GetImportantText() => 
+            Design.ColoedString(
                 this.NameColor,
                 string.Format("{0}: {1}",
                     Design.ColoedString(
@@ -116,18 +112,7 @@ namespace ExtremeRoles.GhostRoles.API
                         Translation.GetString(this.RoleName)),
                     Translation.GetString(
                         $"{this.Id}ShortDescription")));
-
-            if (isContainFakeTask && !this.HasTask)
-            {
-                string fakeTaskString = Design.ColoedString(
-                    this.NameColor,
-                    DestroyableSingleton<TranslationController>.Instance.GetString(
-                        StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()));
-                baseString = $"{baseString}\r\n{fakeTaskString}";
-            }
-
-            return baseString;
-        }
+        
         public virtual string GetFullDescription() => Translation.GetString(
            $"{this.Id}FullDescription");
 
