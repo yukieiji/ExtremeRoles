@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using Hazel;
 using UnityEngine;
 
+using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
 
-namespace ExtremeRoles.GhostRoles.API
+namespace ExtremeRoles.GhostRoles
 {
     public class VanillaGhostRoleWrapper : GhostRoleBase
     {
