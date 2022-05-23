@@ -5,6 +5,7 @@ using System.Linq;
 using HarmonyLib;
 using UnityEngine;
 
+using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -24,7 +25,7 @@ namespace ExtremeRoles.Patches.Manager
             RPCOperator.Initialize();
 
             PlayerControl[] playeres = PlayerControl.AllPlayerControls.ToArray();
-            
+
             RoleAssignmentData extremeRolesData = createRoleData();
             var playerIndexList = Enumerable.Range(0, playeres.Count()).ToList();
 
@@ -80,20 +81,20 @@ namespace ExtremeRoles.Patches.Manager
 
             PlayerControl player = PlayerControl.LocalPlayer;
 
-            foreach (var(roles, id) in assignMultiAssignRole)
+            foreach (var (roles, id) in assignMultiAssignRole)
             {
-                foreach (var(combType, role) in roles)
+                foreach (var (combType, role) in roles)
                 {
                     bool assign = false;
                     List<int> tempList = new List<int>(
                         playerIndexList.OrderBy(item => RandomGenerator.Instance.Next()).ToList());
-                    foreach(int playerIndex in tempList)
+                    foreach (int playerIndex in tempList)
                     {
                         player = PlayerControl.AllPlayerControls[playerIndex];
                         assign = isAssignedToMultiRole(
                             role, player);
                         if (!assign) { continue; }
-                        
+
                         if (role.CanHasAnotherRole)
                         {
                             needAnotherRoleAssigns.Add(playerIndex);
@@ -119,7 +120,7 @@ namespace ExtremeRoles.Patches.Manager
             int crewNum = 0;
             int impNum = 0;
 
-            foreach(var player in PlayerControl.AllPlayerControls)
+            foreach (var player in PlayerControl.AllPlayerControls)
             {
                 if (multiAssign)
                 {
@@ -207,11 +208,11 @@ namespace ExtremeRoles.Patches.Manager
                         ((extremeRolesData.ImpostorRoles - reduceImpostorRole >= 0) && impNum >= reduceImpostorRole));
                     //Modules.Helpers.DebugLog($"Role:{oneRole.ToString()}   isSpawn?:{isSpawn}");
                     if (!isSpawn) { continue; }
-                    
+
                     extremeRolesData.CrewmateRoles = extremeRolesData.CrewmateRoles - reduceCrewmateRole;
                     extremeRolesData.NeutralRoles = extremeRolesData.NeutralRoles - reduceNeutralRole;
                     extremeRolesData.ImpostorRoles = extremeRolesData.ImpostorRoles - reduceImpostorRole;
-                    
+
                     impNum = impNum - reduceImpostorRole;
                     crewNum = crewNum - (reduceCrewmateRole + reduceNeutralRole);
 
@@ -427,7 +428,7 @@ namespace ExtremeRoles.Patches.Manager
             RPCOperator.Call(
                 PlayerControl.LocalPlayer.NetId,
                 RPCOperator.Command.SetNormalRole,
-                new List<byte> { roleId, player.PlayerId});
+                new List<byte> { roleId, player.PlayerId });
             RPCOperator.SetNormalRole(
                 roleId, player.PlayerId);
         }
@@ -451,7 +452,7 @@ namespace ExtremeRoles.Patches.Manager
         {
             List<SingleRoleBase> RolesForVanillaImposter = new List<SingleRoleBase>();
             List<SingleRoleBase> RolesForVanillaCrewmate = new List<SingleRoleBase>();
-            
+
             // コンビネーションロールに含まれているロール、コンビネーション全体のスポーン数、スポーンレート
             List<((byte, CombinationRoleManagerBase), (int, int, bool))> combinationRole = new List<
                 ((byte, CombinationRoleManagerBase), (int, int, bool))>();
@@ -472,7 +473,7 @@ namespace ExtremeRoles.Patches.Manager
                 allOption[(int)OptionHolder.CommonOptionKey.MaxImpostorRoles].GetValue());
 
 
-            foreach (var(combType, role) in ExtremeRoleManager.CombRole)
+            foreach (var (combType, role) in ExtremeRoleManager.CombRole)
             {
                 int spawnRate = computePercentage(allOption[
                     role.GetRoleOptionId(RoleCommonOption.SpawnRate)]);
@@ -492,7 +493,7 @@ namespace ExtremeRoles.Patches.Manager
                     ((combType, role), (roleSet, spawnRate, multiAssign)));
             }
 
-            foreach (var(roleId, role) in ExtremeRoleManager.NormalRole)
+            foreach (var (roleId, role) in ExtremeRoleManager.NormalRole)
             {
                 int spawnRate = computePercentage(allOption[
                     role.GetRoleOptionId(RoleCommonOption.SpawnRate)]);
@@ -555,12 +556,20 @@ namespace ExtremeRoles.Patches.Manager
                 ((byte, CombinationRoleManagerBase), (int, int, bool))>();
 
             public Dictionary<
-                RoleTypes, Dictionary<byte, (int, int)>> RoleSpawnSettings = 
+                RoleTypes, Dictionary<byte, (int, int)>> RoleSpawnSettings =
                     new Dictionary<RoleTypes, Dictionary<byte, (int, int)>>();
             public int CrewmateRoles { get; set; }
             public int NeutralRoles { get; set; }
             public int ImpostorRoles { get; set; }
         }
+    }
 
+    [HarmonyPatch(typeof(RoleManager), nameof(RoleManager.TryAssignRoleOnDeath))]
+    class RoleManagerTryAssignRoleOnDeathPatch
+    {
+        public static void Postfix([HarmonyArgument(0)] PlayerControl player)
+        {
+            ExtremeGhostRoleManager.AssignGhostRoleToPlayer(player);
+        }
     }
 }

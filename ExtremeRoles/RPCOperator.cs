@@ -537,6 +537,13 @@ namespace ExtremeRoles
                 playerId, loverId);
         }
 
+        public static void SetGhostRole(
+            byte playerId, byte vanillaRoleId, byte ghostRoleId)
+        {
+            GhostRoles.ExtremeGhostRoleManager.SetGhostRoleToPlayerId(
+                playerId, vanillaRoleId, ghostRoleId);
+        }
+
     }
 
 }
