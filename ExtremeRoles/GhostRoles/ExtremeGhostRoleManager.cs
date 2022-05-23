@@ -154,6 +154,7 @@ namespace ExtremeRoles.GhostRoles
             GhostRoleBase role = AllGhostRole[ghostRoleId].Clone();
             
             role.Initialize();
+            role.CreateAbility();
 
             lock(GameRole)
             {
