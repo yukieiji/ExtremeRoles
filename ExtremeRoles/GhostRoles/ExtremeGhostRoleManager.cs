@@ -71,6 +71,11 @@ namespace ExtremeRoles.GhostRoles
 
         }
 
+        public static void CreateGhostRoleAssignData()
+        {
+
+        }
+
         public static GhostRoleBase GetLocalPlayerGhostRole()
         {
             byte playerId = PlayerControl.LocalPlayer.PlayerId;
@@ -124,12 +129,6 @@ namespace ExtremeRoles.GhostRoles
             {
                 role.Initialize();
             }
-        }
-
-        public static void SetGhostRoleAssignData(
-            GhostRoleAssignData data)
-        {
-            assignData = data;
         }
 
         public static void SetGhostRoleToPlayerId(
