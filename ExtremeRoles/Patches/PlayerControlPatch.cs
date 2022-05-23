@@ -9,6 +9,7 @@ using Hazel;
 using UnityEngine;
 
 using ExtremeRoles.GhostRoles;
+using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -81,7 +82,8 @@ namespace ExtremeRoles.Patches
                 playeringInfoBlock);
 
             setPlayerNameColor(
-                __instance, role,
+                __instance,
+                role, ghostRole,
                 blockCondition,
                 meetingInfoBlock,
                 playeringInfoBlock);
@@ -155,6 +157,7 @@ namespace ExtremeRoles.Patches
         private static void setPlayerNameColor(
             PlayerControl player,
             SingleRoleBase playerRole,
+            GhostRoleBase playerGhostRole,
             bool blockCondition,
             bool meetingInfoBlock,
             bool playeringInfoBlock)
@@ -166,6 +169,12 @@ namespace ExtremeRoles.Patches
             // まずは自分のプレイヤー名の色を変える
             Color localRoleColor = playerRole.GetNameColor(
                 PlayerControl.LocalPlayer.Data.IsDead);
+
+            if (playerGhostRole != null)
+            {
+                Color blendColor = playerGhostRole.RoleColor + localRoleColor;
+                localRoleColor = blendColor / 2.0f;
+            }
 
             player.nameText.color = localRoleColor;
             setVoteAreaColor(localPlayerId, localRoleColor);
@@ -193,6 +202,12 @@ namespace ExtremeRoles.Patches
                     var targetPlayerRole = ExtremeRoleManager.GameRole[
                         targetPlayerId];
                     Color roleColor = targetPlayerRole.GetNameColor(true);
+                    if (ExtremeGhostRoleManager.GameRole.ContainsKey(targetPlayerId))
+                    {
+                        Color blendColor = ExtremeGhostRoleManager.GameRole[
+                            targetPlayerId].RoleColor + roleColor;
+                        roleColor = blendColor / 2.0f;
+                    }
                     if (!playeringInfoBlock)
                     {
                         targetPlayer.nameText.color = roleColor;
