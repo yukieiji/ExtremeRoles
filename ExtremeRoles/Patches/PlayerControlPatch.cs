@@ -89,7 +89,7 @@ namespace ExtremeRoles.Patches
                 playeringInfoBlock);
             setPlayerNameTag(role);
             buttonUpdate(__instance, role, ghostRole);
-            refreshRoleDescription(__instance, role);
+            refreshRoleDescription(__instance, role, ghostRole);
 
             ExtremeRolesPlugin.GameDataStore.History.Enqueue(__instance);
             ExtremeRolesPlugin.GameDataStore.Union.Update();
@@ -434,7 +434,8 @@ namespace ExtremeRoles.Patches
         }
         private static void refreshRoleDescription(
             PlayerControl player,
-            SingleRoleBase playerRole)
+            SingleRoleBase playerRole,
+            GhostRoleBase playerGhostRole)
         {
 
             var removedTask = new List<PlayerTask>();
@@ -459,7 +460,12 @@ namespace ExtremeRoles.Patches
             var importantTextTask = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
             importantTextTask.transform.SetParent(player.transform, false);
 
-            importantTextTask.Text = playerRole.GetImportantText();
+            string addText = playerRole.GetImportantText();
+            if (playerGhostRole != null)
+            {
+                addText =$"{addText}\n{playerGhostRole.GetImportantText()}";
+            }
+            importantTextTask.Text = addText;
             player.myTasks.Insert(0, importantTextTask);
 
         }
