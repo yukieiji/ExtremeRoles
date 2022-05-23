@@ -311,9 +311,10 @@ namespace ExtremeRoles.Roles
                 addRole.Initialize();
                 addRole.GameControlId = id;
                 roleControlId = id + 1;
-
-                GameRole.Add(
-                    playerId, addRole);
+                lock (GameRole)
+                {
+                    GameRole.Add(playerId, addRole);
+                }
 
                 if (hasVanilaRole)
                 {
@@ -376,9 +377,10 @@ namespace ExtremeRoles.Roles
 
             if (!GameRole.ContainsKey(playerId))
             {
-                GameRole.Add(
-                    playerId, addRole);
-
+                lock (GameRole)
+                {
+                    GameRole.Add(playerId, addRole);
+                }
             }
             else
             {
