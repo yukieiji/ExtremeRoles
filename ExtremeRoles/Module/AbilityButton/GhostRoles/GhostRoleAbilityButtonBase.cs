@@ -64,6 +64,18 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
             }
         }
 
+        protected bool IsComSabNow()
+        {
+            foreach (PlayerTask t in PlayerControl.LocalPlayer.myTasks)
+            {
+                if (t?.TaskType == TaskTypes.FixComms)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public sealed override void Update()
         {
             if (this.Button == null) { return; }
