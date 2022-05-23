@@ -88,7 +88,7 @@ namespace ExtremeRoles.Patches
                 meetingInfoBlock,
                 playeringInfoBlock);
             setPlayerNameTag(role);
-            buttonUpdate(__instance, role);
+            buttonUpdate(__instance, role, ghostRole);
             refreshRoleDescription(__instance, role);
 
             ExtremeRolesPlugin.GameDataStore.History.Enqueue(__instance);
@@ -465,7 +465,8 @@ namespace ExtremeRoles.Patches
         }
         private static void buttonUpdate(
             PlayerControl player,
-            SingleRoleBase playerRole)
+            SingleRoleBase playerRole,
+            GhostRoleBase playerGhostRole)
         {
             if (!player.AmOwner) { return; }
 
@@ -476,6 +477,8 @@ namespace ExtremeRoles.Patches
 
             sabotageButtonUpdate(playerRole);
             roleAbilityButtonUpdate(playerRole);
+
+            ghostRoleButtonUpdate(playerGhostRole);
         }
 
         private static void killButtonUpdate(
@@ -610,6 +613,14 @@ namespace ExtremeRoles.Patches
             else
             {
                 HudManager.Instance.ImpostorVentButton.SetDisabled();
+            }
+        }
+
+        private static void ghostRoleButtonUpdate(GhostRoleBase playerGhostRole)
+        {
+            if (playerGhostRole != null && playerGhostRole.Button != null)
+            {
+                playerGhostRole.Button.Update();
             }
         }
     }
