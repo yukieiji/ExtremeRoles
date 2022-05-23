@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 using ExtremeRoles.Module.AbilityButton.GhostRoles;
@@ -17,6 +18,10 @@ namespace ExtremeRoles.GhostRoles.API.Interface
         public Color RoleColor { get; }
 
         public bool HasTask { get; }
+
+        public HashSet<ExtremeGhostRoleId> GetRoleFilter();
+
+        public void CreateAbility();
 
         public int GetRoleOptionId<T>(T option) where T : struct, IConvertible;
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 using Hazel;
@@ -24,7 +25,7 @@ namespace ExtremeRoles.GhostRoles.API
         public string Name => this.RoleName;
 
         public GhostRoleAbilityButtonBase Button
-        { 
+        {
             get => this.AbilityButton;
             set
             {
@@ -58,6 +59,20 @@ namespace ExtremeRoles.GhostRoles.API
             this.NameColor = color;
         }
 
+        public virtual GhostRoleBase Clone()
+        {
+            GhostRoleBase copy = (GhostRoleBase)this.MemberwiseClone();
+            Color baseColor = this.NameColor;
+
+            copy.NameColor = new Color(
+                baseColor.r,
+                baseColor.g,
+                baseColor.b,
+                baseColor.a);
+
+            return copy;
+        }
+
         public void CreateRoleAllOption(int optionIdOffset)
         {
             this.OptionIdOffset = optionIdOffset;
@@ -74,16 +89,11 @@ namespace ExtremeRoles.GhostRoles.API
 
         public int GetRoleOptionId<T>(T option) where T : struct, IConvertible
         {
-            throw new NotImplementedException();
+            EnumCheck(option);
+            return GetRoleOptionId(Convert.ToInt32(option));
         }
 
         public int GetRoleOptionId(int option) => this.OptionIdOffset + option;
-
-        public void Initialize()
-        {
-            RoleSpecificInit();
-            CreateAbility();
-        }
 
         public bool IsCrewmate() => this.Team == ExtremeRoleType.Crewmate;
 
@@ -298,17 +308,19 @@ namespace ExtremeRoles.GhostRoles.API
             return roleSetOption;
         }
 
+        public abstract void CreateAbility();
+
+        public abstract HashSet<ExtremeGhostRoleId> GetRoleFilter();
+
+        public abstract void Initialize();
+
         public abstract void ReseOnMeetingEnd();
 
         public abstract void ReseOnMeetingStart();
 
         protected abstract void CreateSpecificOption(CustomOptionBase parentOps);
 
-        protected abstract void CreateAbility();
-
         protected abstract void UseAbility(MessageWriter writer);
-
-        protected abstract void RoleSpecificInit();
 
         protected static void EnumCheck<T>(T isEnum) where T : struct, IConvertible
         {

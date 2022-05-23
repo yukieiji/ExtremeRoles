@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using ExtremeRoles.GhostRoles.API;
 
@@ -9,8 +10,10 @@ namespace ExtremeRoles.GhostRoles
         VanillaRole = 0,
     }
 
-    public class ExtremeGhostRoleManager
+    public static class ExtremeGhostRoleManager
     {
+        public const int GhostRoleOptionId = 25;
+
         public struct GhostRoleAssignData
         {
 
@@ -19,7 +22,14 @@ namespace ExtremeRoles.GhostRoles
         public static Dictionary<byte, GhostRoleBase> GameRole = new Dictionary<byte, GhostRoleBase>();
 
         public static readonly Dictionary<
-            ExtremeGhostRoleId, GhostRoleBase> AllGhostRole = new Dictionary<ExtremeGhostRoleId, GhostRoleBase>();
+            ExtremeGhostRoleId, GhostRoleBase> AllGhostRole = new Dictionary<ExtremeGhostRoleId, GhostRoleBase>()
+        { 
+        };
+
+        private static readonly HashSet<RoleTypes> vanillaGhostRole = new HashSet<RoleTypes>()
+        { 
+            RoleTypes.GuardianAngel
+        };
 
         private static GhostRoleAssignData assignData;
 
@@ -28,8 +38,20 @@ namespace ExtremeRoles.GhostRoles
 
         }
 
-        public static void CreateGhostRoleOption()
+        public static void CreateGhostRoleOption(int optionIdOffset)
         {
+            IEnumerable<GhostRoleBase> roles = AllGhostRole.Values;
+
+            if (roles.Count() == 0) { return; };
+
+            int roleOptionOffset = 0;
+
+            foreach (var item in roles.Select(
+                (Value, Index) => new { Value, Index }))
+            {
+                roleOptionOffset = optionIdOffset + (GhostRoleOptionId * item.Index);
+                item.Value.CreateRoleAllOption(roleOptionOffset);
+            }
 
         }
 
@@ -82,6 +104,10 @@ namespace ExtremeRoles.GhostRoles
         public static void Initialize()
         {
             GameRole.Clear();
+            foreach (var role in AllGhostRole.Values)
+            {
+                role.Initialize();
+            }
         }
 
         public static void SetGhostRoleAssignData(
@@ -91,8 +117,33 @@ namespace ExtremeRoles.GhostRoles
         }
 
         public static void SetGhostRoleToPlayerId(
-            byte playerId, byte vallilaRoleId, byte roleId)
+            byte playerId, byte vanillaRoleId, byte roleId)
         {
+
+            if (GameRole.ContainsKey(playerId)) { return; }
+
+            RoleTypes roleType = (RoleTypes)vanillaRoleId;
+            ExtremeGhostRoleId ghostRoleId = (ExtremeGhostRoleId)roleId;
+
+            if (vanillaGhostRole.Contains(roleType) && 
+                ghostRoleId == ExtremeGhostRoleId.VanillaRole)
+            {
+                lock (GameRole)
+                {
+                    GameRole.Add(playerId,
+                        new VanillaGhostRoleWrapper(roleType));
+                }
+                return;
+            }
+            
+            GhostRoleBase role = AllGhostRole[ghostRoleId].Clone();
+            
+            role.Initialize();
+
+            lock(GameRole)
+            {
+                GameRole.Add(playerId, role);
+            }
 
         }
     }
