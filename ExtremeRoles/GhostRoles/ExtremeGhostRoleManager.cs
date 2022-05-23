@@ -35,7 +35,23 @@ namespace ExtremeRoles.GhostRoles
 
         public static void AssignGhostRoleToPlayer(PlayerControl player)
         {
+            RoleTypes roleType = player.Data.Role.Role;
 
+            if (vanillaGhostRole.Contains(roleType))
+            {
+                RPCOperator.Call(
+                    player.NetId, RPCOperator.Command.SetGhostRole,
+                    new List<byte> ()
+                    {
+                        player.PlayerId,
+                        (byte)roleType,
+                        (byte)ExtremeGhostRoleId.VanillaRole
+                    });
+                SetGhostRoleToPlayerId(
+                    player.PlayerId, (byte)roleType,
+                    (byte)ExtremeGhostRoleId.VanillaRole);
+                return;
+            }
         }
 
         public static void CreateGhostRoleOption(int optionIdOffset)

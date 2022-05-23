@@ -69,6 +69,7 @@ namespace ExtremeRoles
             JesterOutburstKill,
             YandereSetOneSidedLover,
 
+            SetGhostRole,
             UseGhostRoleAbility,
         }
 
