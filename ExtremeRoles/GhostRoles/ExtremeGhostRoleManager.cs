@@ -4,9 +4,9 @@ using ExtremeRoles.GhostRoles.API;
 
 namespace ExtremeRoles.GhostRoles
 {
-    public enum ExtremeGhostRoleId
+    public enum ExtremeGhostRoleId : byte
     {
-
+        VanillaRole = 0,
     }
 
     public class ExtremeGhostRoleManager
@@ -90,7 +90,8 @@ namespace ExtremeRoles.GhostRoles
             assignData = data;
         }
 
-        public static void SetGhostRoleToPlayerId(byte playerId)
+        public static void SetGhostRoleToPlayerId(
+            byte playerId, byte vallilaRoleId, byte roleId)
         {
 
         }
