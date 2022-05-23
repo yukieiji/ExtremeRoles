@@ -25,6 +25,9 @@ namespace ExtremeRoles.GhostRoles.API.Interface
 
         public int GetRoleOptionId<T>(T option) where T : struct, IConvertible;
 
+        public Color GetTargetRoleSeeColor(
+            byte targetPlayerId, SingleRoleBase targetRole, GhostRoleBase targetGhostRole);
+
         public bool IsCrewmate();
 
         public bool IsImpostor();

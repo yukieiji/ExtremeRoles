@@ -184,14 +184,25 @@ namespace ExtremeRoles.Patches
                 if (targetPlayer.PlayerId == player.PlayerId) { continue; }
 
                 byte targetPlayerId = targetPlayer.PlayerId;
+                var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
+
+                GhostRoleBase targetGhostRole;
+                ExtremeGhostRoleManager.GameRole.TryGetValue(targetPlayerId, out targetGhostRole);
+                
 
                 if (!OptionHolder.Client.GhostsSeeRole || 
                     !PlayerControl.LocalPlayer.Data.IsDead ||
                     blockCondition)
                 {
-                    var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
                     Color paintColor = playerRole.GetTargetRoleSeeColor(
                         targetRole, targetPlayerId);
+                    if (playerGhostRole != null)
+                    {
+                        Color targetSeaColor = playerGhostRole.GetTargetRoleSeeColor(
+                            targetPlayerId, targetRole, targetGhostRole);
+                        paintColor = (targetSeaColor + paintColor) / 2.0f;
+                    }
+
                     if (paintColor == Palette.ClearWhite) { continue; }
 
                     targetPlayer.nameText.color = paintColor;
@@ -199,10 +210,8 @@ namespace ExtremeRoles.Patches
                 }
                 else
                 {
-                    var targetPlayerRole = ExtremeRoleManager.GameRole[
-                        targetPlayerId];
-                    Color roleColor = targetPlayerRole.GetNameColor(true);
-                    if (ExtremeGhostRoleManager.GameRole.ContainsKey(targetPlayerId))
+                    Color roleColor = targetRole.GetNameColor(true);
+                    if (targetGhostRole != null)
                     {
                         Color blendColor = ExtremeGhostRoleManager.GameRole[
                             targetPlayerId].RoleColor + roleColor;
@@ -216,7 +225,7 @@ namespace ExtremeRoles.Patches
                         targetPlayerId,
                         roleColor,
                         meetingInfoBlock,
-                        targetPlayerRole.Team == playerRole.Team);
+                        targetRole.Team == playerRole.Team);
                 }
             }
 

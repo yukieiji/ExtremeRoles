@@ -119,6 +119,28 @@ namespace ExtremeRoles.GhostRoles.API
         public virtual string GetColoredRoleName() => Design.ColoedString(
             this.NameColor, Translation.GetString(this.RoleName));
 
+        public virtual Color GetTargetRoleSeeColor(
+            byte targetPlayerId, SingleRoleBase targetRole, GhostRoleBase targetGhostRole)
+        {
+            var overLoader = targetRole as Roles.Solo.Impostor.OverLoader;
+
+            if (overLoader != null)
+            {
+                if (overLoader.IsOverLoad)
+                {
+                    return Palette.ImpostorRed;
+                }
+            }
+
+            if ((targetRole.IsImpostor() || targetRole.FakeImposter || targetGhostRole.IsImpostor()) &&
+                this.IsImpostor())
+            {
+                return Palette.ImpostorRed;
+            }
+
+            return Palette.White;
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected CustomOptionBase CreateFloatOption<T>(
             T option,
