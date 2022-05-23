@@ -9,7 +9,7 @@ using UnhollowerBaseLib;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
 
-namespace ExtremeRoles.Patches
+namespace ExtremeRoles.Patches.Meeting
 {
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.BloopAVoteIcon))]

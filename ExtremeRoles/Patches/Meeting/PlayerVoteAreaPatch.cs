@@ -8,7 +8,7 @@ using UnityEngine;
 
 using BepInEx.IL2CPP.Utils.Collections;
 
-namespace ExtremeRoles.Patches
+namespace ExtremeRoles.Patches.Meeting
 {
 	public static class NamePlateHelper
 	{

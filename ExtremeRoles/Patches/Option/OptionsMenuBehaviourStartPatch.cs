@@ -48,7 +48,7 @@ namespace ExtremeRoles.Patches.Option
                 () =>
                 {
                     Client.HideNamePlate = ConfigParser.HideNamePlate.Value = !ConfigParser.HideNamePlate.Value;
-                    NamePlateHelper.NameplateChange = true;
+                    Meeting.NamePlateHelper.NameplateChange = true;
                     return Client.HideNamePlate;
                 }, ConfigParser.HideNamePlate.Value)
         };
