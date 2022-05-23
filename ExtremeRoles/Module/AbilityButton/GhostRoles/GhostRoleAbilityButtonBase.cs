@@ -6,21 +6,16 @@ using Hazel;
 
 namespace ExtremeRoles.Module.AbilityButton.GhostRoles
 {
-    public enum GhostAbilityType : byte
-    {
-
-    }
-
 
     public abstract class GhostRoleAbilityButtonBase : AbilityButtonBase
     {
 
         protected Func<bool> abilityPreCheck;
         protected Action<MessageWriter> ability;
-        private GhostAbilityType abilityType;
+        private GhostRoleAbilityManager.AbilityType abilityType;
 
         public GhostRoleAbilityButtonBase(
-            GhostAbilityType abilityType,
+            GhostRoleAbilityManager.AbilityType abilityType,
             Action<MessageWriter> ability,
             Func<bool> abilityPreCheck,
             Func<bool> canUse,
