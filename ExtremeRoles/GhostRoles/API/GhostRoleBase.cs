@@ -43,6 +43,20 @@ namespace ExtremeRoles.GhostRoles.API
 
         protected bool HasTask;
 
+        public GhostRoleBase(
+            bool hasTask,
+            ExtremeRoleType team,
+            ExtremeGhostRoleId id,
+            string roleName,
+            Color color)
+        {
+            this.HasTask = hasTask;
+            this.TeamType = team;
+            this.RoleId = id;
+            this.RoleName = roleName;
+            this.NameColor = color;
+        }
+
         public void CreateRoleAllOption(int optionIdOffset)
         {
             this.OptionIdOffset = optionIdOffset;
