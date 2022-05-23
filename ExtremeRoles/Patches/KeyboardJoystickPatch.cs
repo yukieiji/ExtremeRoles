@@ -139,6 +139,11 @@ namespace ExtremeRoles.Patches
         {
             if (AmongUsClient.Instance == null || PlayerControl.LocalPlayer == null) { return; }
 
+            if (Input.GetKeyDown(KeyCode.F8))
+            {
+                Logging.Dump();
+            }
+
             if (GameSystem.IsLobby)
             {
                 if (Input.GetKeyDown(KeyCode.Tab))
