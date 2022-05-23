@@ -116,7 +116,7 @@ namespace ExtremeRoles.GhostRoles.API
         public virtual string GetFullDescription() => Translation.GetString(
            $"{this.Id}FullDescription");
 
-        public virtual string GetColoredRoleName(bool isTruthName = false) => Design.ColoedString(
+        public virtual string GetColoredRoleName() => Design.ColoedString(
             this.NameColor, Translation.GetString(this.RoleName));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

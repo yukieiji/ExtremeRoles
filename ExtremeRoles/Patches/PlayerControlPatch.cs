@@ -8,6 +8,7 @@ using Hazel;
 
 using UnityEngine;
 
+using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -67,11 +68,12 @@ namespace ExtremeRoles.Patches
             resetNameTagsAndColors();
 
             var role = ExtremeRoleManager.GetLocalPlayerRole();
+            var ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
 
             bool blockCondition = isBlockCondition(
-                PlayerControl.LocalPlayer, role);
-            bool meetingInfoBlock = role.IsBlockShowMeetingRoleInfo();
-            bool playeringInfoBlock = role.IsBlockShowPlayingRoleInfo();
+                PlayerControl.LocalPlayer, role) || ghostRole != null;
+            bool meetingInfoBlock = role.IsBlockShowMeetingRoleInfo() || ghostRole != null;
+            bool playeringInfoBlock = role.IsBlockShowPlayingRoleInfo() || ghostRole != null;
 
             playerInfoUpdate(
                 blockCondition,
@@ -369,8 +371,15 @@ namespace ExtremeRoles.Patches
         {
 
             var (tasksCompleted, tasksTotal) = GameSystem.GetTaskInfo(targetPlayer.Data);
-            string roleNames = ExtremeRoleManager.GameRole[targetPlayer.PlayerId].GetColoredRoleName(
+            byte targetPlayerId = targetPlayer.PlayerId;
+            string roleNames = ExtremeRoleManager.GameRole[targetPlayerId].GetColoredRoleName(
                 PlayerControl.LocalPlayer.Data.IsDead);
+
+            if (ExtremeGhostRoleManager.GameRole.ContainsKey(targetPlayerId))
+            {
+                string ghostRoleName = ExtremeGhostRoleManager.GameRole[targetPlayerId].GetColoredRoleName();
+                roleNames = $"{ghostRoleName}({roleNames})";
+            }
 
             var completedStr = commonActive ? "?" : tasksCompleted.ToString();
             string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({completedStr}/{tasksTotal})</color>" : "";
