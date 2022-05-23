@@ -33,6 +33,7 @@ namespace ExtremeRoles.GhostRoles.API
         }
 
         public Color RoleColor => this.NameColor;
+        public bool HasTask => this.Task;
 
         protected ExtremeRoleType TeamType;
         protected ExtremeGhostRoleId RoleId;
@@ -41,7 +42,7 @@ namespace ExtremeRoles.GhostRoles.API
         protected int OptionIdOffset;
         protected GhostRoleAbilityButtonBase AbilityButton;
 
-        protected bool HasTask;
+        protected bool Task;
 
         public GhostRoleBase(
             bool hasTask,
@@ -50,7 +51,7 @@ namespace ExtremeRoles.GhostRoles.API
             string roleName,
             Color color)
         {
-            this.HasTask = hasTask;
+            this.Task = hasTask;
             this.TeamType = team;
             this.RoleId = id;
             this.RoleName = roleName;

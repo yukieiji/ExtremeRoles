@@ -16,6 +16,8 @@ namespace ExtremeRoles.GhostRoles.API.Interface
         public GhostRoleAbilityButtonBase Button { get; set; }
         public Color RoleColor { get; }
 
+        public bool HasTask { get; }
+
         public int GetRoleOptionId<T>(T option) where T : struct, IConvertible;
 
         public bool IsCrewmate();
