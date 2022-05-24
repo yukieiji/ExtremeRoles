@@ -172,9 +172,27 @@ namespace ExtremeRoles.Patches.Meeting
 			__instance.Megaphone.enabled = didReport;
 			__instance.Overlay.gameObject.SetActive(false);
 			__instance.XMark.gameObject.SetActive(false);
-			__instance.GAIcon.gameObject.SetActive(isGuardian);
 
 			return false;
+		}
+
+		public static void Postfix(
+			PlayerVoteArea __instance,
+			[HarmonyArgument(0)] bool didReport,
+			[HarmonyArgument(1)] bool isDead,
+			[HarmonyArgument(2)] bool isGuardian = false)
+        {
+			if (OptionHolder.Ship.IsRemoveAngleIcon)
+			{
+				__instance.GAIcon.gameObject.SetActive(false);
+			}
+			else
+			{
+				bool isGhostRole = isGuardian ||
+					GhostRoles.ExtremeGhostRoleManager.GameRole.ContainsKey(__instance.TargetPlayerId);
+
+				__instance.GAIcon.gameObject.SetActive(isGhostRole);
+			}
 		}
 	}
 }
