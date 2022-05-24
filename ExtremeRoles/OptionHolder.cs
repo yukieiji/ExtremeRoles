@@ -60,7 +60,10 @@ namespace ExtremeRoles
             RandomMap,
             IsSameNeutralSameWin,
             DisableNeutralSpecialForceEnd,
-            EnableHorseMode
+            EnableHorseMode,
+
+            IsBlockNeutralAssignToVanillaCrewGhostRole,
+            IsRemoveAngleIcon,
         }
 
         public static ConcurrentDictionary<int, CustomOptionBase> AllOption = new ConcurrentDictionary<int, CustomOptionBase>();
@@ -168,6 +171,15 @@ namespace ExtremeRoles
                 CommonOptionKey.EnableHorseMode.ToString(),
                 false);
 
+            new BoolCustomOption(
+                (int)CommonOptionKey.IsBlockNeutralAssignToVanillaCrewGhostRole,
+                CommonOptionKey.IsBlockNeutralAssignToVanillaCrewGhostRole.ToString(),
+                true);
+            new BoolCustomOption(
+                (int)CommonOptionKey.IsRemoveAngleIcon,
+                CommonOptionKey.IsRemoveAngleIcon.ToString(),
+                false);
+
             int offset = 50;
 
             Roles.ExtremeRoleManager.CreateNormalRoleOptions(
@@ -227,6 +239,11 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.IsSameNeutralSameWin].GetValue();
             Ship.DisableNeutralSpecialForceEnd = AllOption[
                 (int)CommonOptionKey.DisableNeutralSpecialForceEnd].GetValue();
+
+            Ship.IsBlockNeutralAssignToVanillaCrewGhostRole = AllOption[
+                (int)CommonOptionKey.IsBlockNeutralAssignToVanillaCrewGhostRole].GetValue();
+            Ship.IsRemoveAngleIcon = AllOption[
+                (int)CommonOptionKey.IsRemoveAngleIcon].GetValue();
 
             Client.StreamerMode = ConfigParser.StreamerMode.Value;
             Client.GhostsSeeRole = ConfigParser.GhostsSeeRoles.Value;
@@ -355,6 +372,9 @@ namespace ExtremeRoles
             public static bool DisableSelfVote = false;
             public static bool IsSameNeutralSameWin = true;
             public static bool DisableNeutralSpecialForceEnd = false;
+
+            public static bool IsBlockNeutralAssignToVanillaCrewGhostRole = true;
+            public static bool IsRemoveAngleIcon = false;
         }
     }
 }
