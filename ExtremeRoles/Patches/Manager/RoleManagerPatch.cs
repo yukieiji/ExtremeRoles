@@ -567,8 +567,21 @@ namespace ExtremeRoles.Patches.Manager
     [HarmonyPatch(typeof(RoleManager), nameof(RoleManager.TryAssignRoleOnDeath))]
     class RoleManagerTryAssignRoleOnDeathPatch
     {
+        public static bool Prefix([HarmonyArgument(0)] PlayerControl player)
+        {
+            if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
+
+            if (ExtremeRoleManager.GameRole[player.PlayerId].IsNeutral() &&
+                OptionHolder.Ship.IsBlockNeutralAssignToVanillaCrewGhostRole)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public static void Postfix([HarmonyArgument(0)] PlayerControl player)
         {
+            if (ExtremeRoleManager.GameRole.Count == 0) { return; }
             ExtremeGhostRoleManager.AssignGhostRoleToPlayer(player);
         }
     }
