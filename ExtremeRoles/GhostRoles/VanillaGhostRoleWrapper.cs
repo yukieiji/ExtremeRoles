@@ -41,7 +41,7 @@ namespace ExtremeRoles.GhostRoles
                 case RoleTypes.GuardianAngel:
                     return Helper.Design.ColoedString(
                         this.NameColor,
-                        $"{this.GetColoredRoleName()}: {Helper.Translation.GetString("guardianAngelImportantText")}");
+                        $"{this.GetColoredRoleName()}: {Helper.Translation.GetString("crewImportantText")}");
                 default:
                     return string.Empty;
             }
