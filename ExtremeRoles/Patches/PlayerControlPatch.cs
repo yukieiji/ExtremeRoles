@@ -178,6 +178,8 @@ namespace ExtremeRoles.Patches
             player.nameText.color = localRoleColor;
             setVoteAreaColor(localPlayerId, localRoleColor);
 
+            GhostRoleBase targetGhostRole;
+
             foreach (PlayerControl targetPlayer in PlayerControl.AllPlayerControls)
             {
                 if (targetPlayer.PlayerId == player.PlayerId) { continue; }
@@ -185,8 +187,7 @@ namespace ExtremeRoles.Patches
                 byte targetPlayerId = targetPlayer.PlayerId;
                 var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
 
-                // GhostRoleBase targetGhostRole = null;
-                // ExtremeGhostRoleManager.GameRole.TryGetValue(targetPlayerId, out targetGhostRole);
+                ExtremeGhostRoleManager.GameRole.TryGetValue(targetPlayerId, out targetGhostRole);
                 
 
                 if (!OptionHolder.Client.GhostsSeeRole || 
@@ -195,6 +196,17 @@ namespace ExtremeRoles.Patches
                 {
                     Color paintColor = playerRole.GetTargetRoleSeeColor(
                         targetRole, targetPlayerId);
+                    
+                    if (playerGhostRole != null)
+                    {
+                        Color paintGhostColor = playerGhostRole.GetTargetRoleSeeColor(
+                            targetPlayerId, targetRole, targetGhostRole);
+
+                        if (paintGhostColor != Color.clear)
+                        {
+                            paintColor = (paintGhostColor + paintColor) / 2.0f;
+                        }
+                    }
 
                     if (paintColor == Palette.ClearWhite) { continue; }
 

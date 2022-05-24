@@ -16,7 +16,7 @@ namespace ExtremeRoles.GhostRoles.API
 {
     public abstract class GhostRoleBase : IGhostRole
     {
-        public ExtremeRoleType Team => this.Team;
+        public ExtremeRoleType Team => this.TeamType;
 
         public ExtremeGhostRoleId Id => this.RoleId;
 
@@ -95,11 +95,11 @@ namespace ExtremeRoles.GhostRoles.API
 
         public int GetRoleOptionId(int option) => this.OptionIdOffset + option;
 
-        public bool IsCrewmate() => this.Team == ExtremeRoleType.Crewmate;
+        public bool IsCrewmate() => this.TeamType == ExtremeRoleType.Crewmate;
 
-        public bool IsImpostor() => this.Team == ExtremeRoleType.Impostor;
+        public bool IsImpostor() => this.TeamType == ExtremeRoleType.Impostor;
 
-        public bool IsNeutral() => this.Team == ExtremeRoleType.Neutral;
+        public bool IsNeutral() => this.TeamType == ExtremeRoleType.Neutral;
 
         public bool IsVanillaRole() => this.RoleId == ExtremeGhostRoleId.VanillaRole;
 
@@ -138,13 +138,17 @@ namespace ExtremeRoles.GhostRoles.API
                 isGhostRoleImpostor = targetGhostRole.IsImpostor();
             }
 
+            Helper.Logging.Debug($"isTarrgetImp:{targetRole.IsImpostor()}");
+            Helper.Logging.Debug($"isFakeImp:{targetRole.FakeImposter}");
+            Helper.Logging.Debug($"isGhostImp:{isGhostRoleImpostor}");
+
             if ((targetRole.IsImpostor() || targetRole.FakeImposter || isGhostRoleImpostor) &&
                 this.IsImpostor())
             {
                 return Palette.ImpostorRed;
             }
 
-            return Palette.White;
+            return Color.clear;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
