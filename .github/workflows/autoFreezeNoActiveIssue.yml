@@ -29,5 +29,5 @@ jobs:
           operations-per-run: 50
           stale-issue-label: '凍結/Freeze'
           any-of-labels: "バグ/Bug, 新役職/New Role, 提案/Suggestion, ビジュアル/Visual, 機能拡張/Enhancement, ExtremeRoles, ExtremeSkins, 開発版で修正済み/Fixed In Dev, 開発版で実装済み/Implemented in Dev"
-          exempt-issue-labels: "未確認/Unconfirmed, 優先度:最高/Priority:EXTREME, 優先度:高/Priority:High, 優先度:低/Priority:Low, 優先度:中/Priority:Medium, 優先度:最低/Priority:Very low"
+          exempt-issue-labels: "未確認/Unconfirmed, 優先度:最高/Priority:EXTREME, 優先度:高/Priority:High, 優先度:低/Priority:Low, 優先度:中/Priority:Medium, 優先度:最低/Priority:Very low, 実装したい/Want to implement"
           ascending: true
