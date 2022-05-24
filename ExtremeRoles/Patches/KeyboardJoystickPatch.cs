@@ -71,7 +71,7 @@ namespace ExtremeRoles.Patches
             // See All roles
             if (Input.GetKeyDown(KeyCode.K))
             {
-                Dictionary<byte, SingleRoleBase> dict = Roles.ExtremeRoleManager.GameRole;
+                var dict = Roles.ExtremeRoleManager.GameRole;
                 if (dict.Count == 0) { return; }
 
                 foreach (KeyValuePair<byte, SingleRoleBase> value in dict)
@@ -84,7 +84,7 @@ namespace ExtremeRoles.Patches
             // See All task
             if (Input.GetKeyDown(KeyCode.P))
             {
-                Dictionary<byte, SingleRoleBase> dict = Roles.ExtremeRoleManager.GameRole;
+                var dict = Roles.ExtremeRoleManager.GameRole;
                 if (dict.Count == 0) { return; }
                 for (int i = 0; i < GameData.Instance.AllPlayers.Count; i++)
                 {
@@ -102,7 +102,7 @@ namespace ExtremeRoles.Patches
             // See Player TaskInfo
             if (Input.GetKeyDown(KeyCode.I))
             {
-                Dictionary<byte, SingleRoleBase> dict = Roles.ExtremeRoleManager.GameRole;
+                var dict = Roles.ExtremeRoleManager.GameRole;
                 if (dict.Count == 0) { return; }
                 for (int i = 0; i < GameData.Instance.AllPlayers.Count; i++)
                 {
