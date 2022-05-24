@@ -124,14 +124,14 @@ namespace ExtremeRoles
                 CommonOptionKey.NumMeating.ToString(),
                 10, 0, 100, 1, null, true);
 
-            var blockMeating = new BoolCustomOption(
+            new BoolCustomOption(
                 (int)CommonOptionKey.DisableSkipInEmergencyMeeting,
                 CommonOptionKey.DisableSkipInEmergencyMeeting.ToString(),
                 false);
             new BoolCustomOption(
                 (int)CommonOptionKey.NoVoteToSelf,
                 CommonOptionKey.NoVoteToSelf.ToString(),
-                false, blockMeating);
+                false);
 
             var ventOption = new BoolCustomOption(
                (int)CommonOptionKey.DesableVent,
