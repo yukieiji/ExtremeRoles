@@ -11,12 +11,15 @@ namespace ExtremeRoles.GhostRoles
 {
     public class VanillaGhostRoleWrapper : GhostRoleBase
     {
+        private RoleTypes vanillaRoleId;
+
         public VanillaGhostRoleWrapper(
             RoleTypes vanillaRoleId) : base(
                 true, Roles.API.ExtremeRoleType.Crewmate,
                 ExtremeGhostRoleId.VanillaRole,
                 "", Color.white)
         {
+            this.vanillaRoleId = vanillaRoleId;
             this.RoleName = vanillaRoleId.ToString();
 
             switch (vanillaRoleId)
@@ -30,6 +33,26 @@ namespace ExtremeRoles.GhostRoles
                     break;
             }
         }
+
+        public override string GetImportantText()
+        {
+            switch (this.vanillaRoleId)
+            {
+                case RoleTypes.GuardianAngel:
+                    return Helper.Design.ColoedString(
+                        this.NameColor,
+                        $"{this.GetColoredRoleName()}: {Helper.Translation.GetString("guardianAngelImportantText")}");
+                default:
+                    return string.Empty;
+            }
+        }
+
+        public override string GetFullDescription()
+        {
+            return Helper.Translation.GetString(
+                $"{this.vanillaRoleId}FullDescription");
+        }
+
 
         public override HashSet<ExtremeGhostRoleId> GetRoleFilter() => new HashSet<ExtremeGhostRoleId> ();
 

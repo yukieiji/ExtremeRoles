@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 
 using ExtremeRoles.GhostRoles.API;
@@ -19,7 +20,7 @@ namespace ExtremeRoles.GhostRoles
 
         }
 
-        public static Dictionary<byte, GhostRoleBase> GameRole = new Dictionary<byte, GhostRoleBase>();
+        public static ConcurrentDictionary<byte, GhostRoleBase> GameRole = new ConcurrentDictionary<byte, GhostRoleBase>();
 
         public static readonly Dictionary<
             ExtremeGhostRoleId, GhostRoleBase> AllGhostRole = new Dictionary<ExtremeGhostRoleId, GhostRoleBase>()
@@ -135,7 +136,11 @@ namespace ExtremeRoles.GhostRoles
             byte playerId, byte vanillaRoleId, byte roleId)
         {
 
+            Helper.Logging.Debug("ckpt:0");
+
             if (GameRole.ContainsKey(playerId)) { return; }
+
+            Helper.Logging.Debug("ckpt:1");
 
             RoleTypes roleType = (RoleTypes)vanillaRoleId;
             ExtremeGhostRoleId ghostRoleId = (ExtremeGhostRoleId)roleId;
@@ -143,11 +148,8 @@ namespace ExtremeRoles.GhostRoles
             if (vanillaGhostRole.Contains(roleType) && 
                 ghostRoleId == ExtremeGhostRoleId.VanillaRole)
             {
-                lock (GameRole)
-                {
-                    GameRole.Add(playerId,
-                        new VanillaGhostRoleWrapper(roleType));
-                }
+                Helper.Logging.Debug("ckpt:2");
+                GameRole[playerId] = new VanillaGhostRoleWrapper(roleType);
                 return;
             }
             
@@ -156,10 +158,7 @@ namespace ExtremeRoles.GhostRoles
             role.Initialize();
             role.CreateAbility();
 
-            lock(GameRole)
-            {
-                GameRole.Add(playerId, role);
-            }
+            GameRole[playerId] = role;
 
         }
     }

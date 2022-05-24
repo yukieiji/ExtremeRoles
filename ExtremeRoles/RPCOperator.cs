@@ -120,6 +120,7 @@ namespace ExtremeRoles
             RandomGenerator.Initialize();
             Helper.Player.ResetTarget();
             Roles.ExtremeRoleManager.Initialize();
+            GhostRoles.ExtremeGhostRoleManager.Initialize();
             ExtremeRolesPlugin.GameDataStore.Initialize();
             ExtremeRolesPlugin.Info.ResetOverlays();
 
