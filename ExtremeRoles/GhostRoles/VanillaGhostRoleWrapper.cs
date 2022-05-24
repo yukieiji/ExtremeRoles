@@ -27,7 +27,7 @@ namespace ExtremeRoles.GhostRoles
                 case RoleTypes.GuardianAngel:
                     this.Task = true;
                     this.TeamType = Roles.API.ExtremeRoleType.Crewmate;
-                    this.NameColor = Palette.ClearWhite;
+                    this.NameColor = Palette.White;
                     break;
                 default:
                     break;
