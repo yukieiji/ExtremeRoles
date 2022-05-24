@@ -132,7 +132,13 @@ namespace ExtremeRoles.GhostRoles.API
                 }
             }
 
-            if ((targetRole.IsImpostor() || targetRole.FakeImposter || targetGhostRole.IsImpostor()) &&
+            bool isGhostRoleImpostor = false;
+            if (targetGhostRole != null)
+            {
+                isGhostRoleImpostor = targetGhostRole.IsImpostor();
+            }
+
+            if ((targetRole.IsImpostor() || targetRole.FakeImposter || isGhostRoleImpostor) &&
                 this.IsImpostor())
             {
                 return Palette.ImpostorRed;
