@@ -136,11 +136,7 @@ namespace ExtremeRoles.GhostRoles
             byte playerId, byte vanillaRoleId, byte roleId)
         {
 
-            Helper.Logging.Debug("ckpt:0");
-
             if (GameRole.ContainsKey(playerId)) { return; }
-
-            Helper.Logging.Debug("ckpt:1");
 
             RoleTypes roleType = (RoleTypes)vanillaRoleId;
             ExtremeGhostRoleId ghostRoleId = (ExtremeGhostRoleId)roleId;
@@ -148,7 +144,6 @@ namespace ExtremeRoles.GhostRoles
             if (vanillaGhostRole.Contains(roleType) && 
                 ghostRoleId == ExtremeGhostRoleId.VanillaRole)
             {
-                Helper.Logging.Debug("ckpt:2");
                 GameRole[playerId] = new VanillaGhostRoleWrapper(roleType);
                 return;
             }
