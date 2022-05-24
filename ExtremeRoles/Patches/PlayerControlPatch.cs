@@ -175,7 +175,6 @@ namespace ExtremeRoles.Patches
                 Color blendColor = playerGhostRole.RoleColor + localRoleColor;
                 localRoleColor = blendColor / 2.0f;
             }
-
             player.nameText.color = localRoleColor;
             setVoteAreaColor(localPlayerId, localRoleColor);
 
@@ -186,8 +185,8 @@ namespace ExtremeRoles.Patches
                 byte targetPlayerId = targetPlayer.PlayerId;
                 var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
 
-                GhostRoleBase targetGhostRole;
-                ExtremeGhostRoleManager.GameRole.TryGetValue(targetPlayerId, out targetGhostRole);
+                // GhostRoleBase targetGhostRole = null;
+                // ExtremeGhostRoleManager.GameRole.TryGetValue(targetPlayerId, out targetGhostRole);
                 
 
                 if (!OptionHolder.Client.GhostsSeeRole || 
@@ -196,12 +195,6 @@ namespace ExtremeRoles.Patches
                 {
                     Color paintColor = playerRole.GetTargetRoleSeeColor(
                         targetRole, targetPlayerId);
-                    if (playerGhostRole != null)
-                    {
-                        Color targetSeaColor = playerGhostRole.GetTargetRoleSeeColor(
-                            targetPlayerId, targetRole, targetGhostRole);
-                        paintColor = (targetSeaColor + paintColor) / 2.0f;
-                    }
 
                     if (paintColor == Palette.ClearWhite) { continue; }
 
@@ -211,12 +204,7 @@ namespace ExtremeRoles.Patches
                 else
                 {
                     Color roleColor = targetRole.GetNameColor(true);
-                    if (targetGhostRole != null)
-                    {
-                        Color blendColor = ExtremeGhostRoleManager.GameRole[
-                            targetPlayerId].RoleColor + roleColor;
-                        roleColor = blendColor / 2.0f;
-                    }
+
                     if (!playeringInfoBlock)
                     {
                         targetPlayer.nameText.color = roleColor;
