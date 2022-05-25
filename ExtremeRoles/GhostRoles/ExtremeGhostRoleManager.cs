@@ -29,6 +29,8 @@ namespace ExtremeRoles.GhostRoles
             public List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> UseImpostorRole;
             public List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> UseCrewGhostRole;
             public List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> UseNeutralGhostRole;
+
+            // 必要なやつ初期化処理、セットメソッド、ゲットメソッド？
         }
 
         public static ConcurrentDictionary<byte, GhostRoleBase> GameRole = new ConcurrentDictionary<byte, GhostRoleBase>();
