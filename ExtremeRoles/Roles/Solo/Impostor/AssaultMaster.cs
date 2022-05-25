@@ -251,7 +251,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 GetRoleOptionId(AssaultMasterOption.ReloadReduceKillCoolTimePerStock)].GetValue();
             this.isResetCoolTimeWhenKill = allOpt[
                 GetRoleOptionId(AssaultMasterOption.IsResetReloadCoolTimeWhenKill)].GetValue();
-            this.timerReduceRate = (float)allOpt[
+            this.timerReduceRate = 1.0f - (float)allOpt[
                 GetRoleOptionId(AssaultMasterOption.ReloadCoolTimeReduceRatePerHideStock)].GetValue() / 100.0f;
 
             this.stock = 0;
