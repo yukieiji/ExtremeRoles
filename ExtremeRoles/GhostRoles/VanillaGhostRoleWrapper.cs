@@ -68,7 +68,7 @@ namespace ExtremeRoles.GhostRoles
 
         public override void CreateAbility()
         {
-            throw new NotImplementedException();
+            throw new System.Exception("Don't call this class method!!");
         }
 
         public override void Initialize()
@@ -79,13 +79,13 @@ namespace ExtremeRoles.GhostRoles
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            throw new NotImplementedException();
+            throw new System.Exception("Don't call this class method!!");
         }
 
         protected override void UseAbility(
             MessageWriter writer)
         {
-            throw new NotImplementedException();
+            throw new System.Exception("Don't call this class method!!");
         }
     }
 }
