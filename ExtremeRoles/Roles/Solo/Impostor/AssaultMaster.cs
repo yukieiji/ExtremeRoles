@@ -128,7 +128,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 newKillCool = newKillCool - this.reloadReduceTimePerStock;
                 this.KillCoolTime = this.KillCoolTime - this.reloadReduceTimePerStock;
                 --this.stock;
-                if (newKillCool < 0)
+                if (newKillCool < 0.0f)
                 {
                     break;
                 }
