@@ -525,6 +525,8 @@ namespace ExtremeRoles.Patches.Manager
                         break;
                     case ExtremeRoleType.Null:
                         break;
+                    default:
+                        throw new System.Exception("Unknown teamType detect!!");
                 }
             }
 
