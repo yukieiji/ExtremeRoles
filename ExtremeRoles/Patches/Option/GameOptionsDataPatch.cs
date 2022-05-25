@@ -47,16 +47,25 @@ namespace ExtremeRoles.Patches.Option
 
             foreach (OptionHolder.CommonOptionKey id in Enum.GetValues(typeof(OptionHolder.CommonOptionKey)))
             {
-                if ((id == OptionHolder.CommonOptionKey.PresetSelection) ||
-                    (id == OptionHolder.CommonOptionKey.UseStrongRandomGen) ||
-                    (id == OptionHolder.CommonOptionKey.MinCrewmateRoles) ||
-                    (id == OptionHolder.CommonOptionKey.MaxCrewmateRoles) ||
-                    (id == OptionHolder.CommonOptionKey.MinNeutralRoles) ||
-                    (id == OptionHolder.CommonOptionKey.MaxNeutralRoles) ||
-                    (id == OptionHolder.CommonOptionKey.MinImpostorRoles) ||
-                    (id == OptionHolder.CommonOptionKey.MaxImpostorRoles))
+                switch(id)
                 {
-                    continue;
+                    case OptionHolder.CommonOptionKey.PresetSelection:
+                    case OptionHolder.CommonOptionKey.UseStrongRandomGen:
+                    case OptionHolder.CommonOptionKey.MinCrewmateRoles:
+                    case OptionHolder.CommonOptionKey.MaxCrewmateRoles:
+                    case OptionHolder.CommonOptionKey.MinNeutralRoles:
+                    case OptionHolder.CommonOptionKey.MaxNeutralRoles:
+                    case OptionHolder.CommonOptionKey.MinImpostorRoles:
+                    case OptionHolder.CommonOptionKey.MaxImpostorRoles:
+                    case OptionHolder.CommonOptionKey.MinCrewmateGhostRoles:
+                    case OptionHolder.CommonOptionKey.MaxCrewmateGhostRoles:
+                    case OptionHolder.CommonOptionKey.MinNeutralGhostRoles:
+                    case OptionHolder.CommonOptionKey.MaxNeutralGhostRoles:
+                    case OptionHolder.CommonOptionKey.MinImpostorGhostRoles:
+                    case OptionHolder.CommonOptionKey.MaxImpostorGhostRoles:
+                        continue;
+                    default:
+                        break;
                 }
                 string optionStr = CustomOption.OptionToString(allOption[(int)id]);
                 if (optionStr != string.Empty) { modOptionStrBuilder.AppendLine(optionStr); }
@@ -164,6 +173,7 @@ namespace ExtremeRoles.Patches.Option
 
             StringBuilder entry = new StringBuilder();
 
+            // 生存役職周り
             var optionName = Design.ColoedString(
                 new Color(204f / 255f, 204f / 255f, 0, 1f),
                 translate("crewmateRoles"));
@@ -191,6 +201,37 @@ namespace ExtremeRoles.Patches.Option
             if (min > max) { min = max; }
             optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
             entry.AppendLine($"{optionName}: {optionValue}");
+
+
+            // 幽霊役職周り
+            optionName = Design.ColoedString(
+                new Color(204f / 255f, 204f / 255f, 0, 1f),
+                translate("crewmateGhostRoles"));
+            min = allOption[(int)OptionHolder.CommonOptionKey.MinCrewmateGhostRoles].GetValue();
+            max = allOption[(int)OptionHolder.CommonOptionKey.MaxCrewmateGhostRoles].GetValue();
+            if (min > max) { min = max; }
+            optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
+            entry.AppendLine($"{optionName}: {optionValue}");
+
+            optionName = Design.ColoedString(
+                new Color(204f / 255f, 204f / 255f, 0, 1f),
+                translate("neutralGhostRoles"));
+            min = allOption[(int)OptionHolder.CommonOptionKey.MinNeutralGhostRoles].GetValue();
+            max = allOption[(int)OptionHolder.CommonOptionKey.MaxNeutralGhostRoles].GetValue();
+            if (min > max) { min = max; }
+            optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
+            entry.AppendLine($"{optionName}: {optionValue}");
+
+            optionName = Design.ColoedString(
+                new Color(204f / 255f, 204f / 255f, 0, 1f),
+                translate("impostorGhostRoles"));
+            min = allOption[(int)OptionHolder.CommonOptionKey.MinImpostorGhostRoles].GetValue();
+            max = allOption[(int)OptionHolder.CommonOptionKey.MaxImpostorGhostRoles].GetValue();
+
+            if (min > max) { min = max; }
+            optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
+            entry.AppendLine($"{optionName}: {optionValue}");
+
 
 
             return entry.ToString().Trim('\r', '\n');

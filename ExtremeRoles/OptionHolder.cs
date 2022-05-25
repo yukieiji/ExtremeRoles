@@ -50,6 +50,13 @@ namespace ExtremeRoles
             MinImpostorRoles,
             MaxImpostorRoles,
 
+            MinCrewmateGhostRoles,
+            MaxCrewmateGhostRoles,
+            MinNeutralGhostRoles,
+            MaxNeutralGhostRoles,
+            MinImpostorGhostRoles,
+            MaxImpostorGhostRoles,
+
             NumMeating,
             DisableSkipInEmergencyMeeting,
             DisableSelfVote,
@@ -90,6 +97,7 @@ namespace ExtremeRoles
                     CommonOptionKey.UseStrongRandomGen.ToString()), true);
 
             createExtremeRoleGlobalSpawnOption();
+            createExtremeGhostRoleGlobalSpawnOption();
             createShipGlobalOption();
 
             int offset = 50;
@@ -252,7 +260,6 @@ namespace ExtremeRoles
 
         private static void createExtremeRoleGlobalSpawnOption()
         {
-
             new IntCustomOption(
                 (int)CommonOptionKey.MinCrewmateRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
@@ -286,6 +293,43 @@ namespace ExtremeRoles
                     CommonOptionKey.MaxImpostorRoles.ToString()),
                 0, 0, MaxImposterNum * 2, 1);
         }
+
+        private static void createExtremeGhostRoleGlobalSpawnOption()
+        {
+            new IntCustomOption(
+                (int)CommonOptionKey.MinCrewmateGhostRoles, Design.ColoedString(
+                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    CommonOptionKey.MinCrewmateGhostRoles.ToString()),
+                0, 0, VanillaMaxPlayerNum - 1, 1, null, true);
+            new IntCustomOption(
+                (int)CommonOptionKey.MaxCrewmateGhostRoles, Design.ColoedString(
+                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    CommonOptionKey.MaxCrewmateGhostRoles.ToString()),
+                0, 0, VanillaMaxPlayerNum - 1, 1);
+
+            new IntCustomOption(
+                (int)CommonOptionKey.MinNeutralGhostRoles, Design.ColoedString(
+                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    CommonOptionKey.MinNeutralGhostRoles.ToString()),
+                0, 0, VanillaMaxPlayerNum - 2, 1);
+            new IntCustomOption(
+                (int)CommonOptionKey.MaxNeutralGhostRoles, Design.ColoedString(
+                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    CommonOptionKey.MaxNeutralGhostRoles.ToString()),
+                0, 0, VanillaMaxPlayerNum - 2, 1);
+
+            new IntCustomOption(
+                (int)CommonOptionKey.MinImpostorGhostRoles, Design.ColoedString(
+                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    CommonOptionKey.MinImpostorGhostRoles.ToString()),
+                0, 0, MaxImposterNum, 1);
+            new IntCustomOption(
+                (int)CommonOptionKey.MaxImpostorGhostRoles, Design.ColoedString(
+                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    CommonOptionKey.MaxImpostorGhostRoles.ToString()),
+                0, 0, MaxImposterNum, 1);
+        }
+
 
         private static void createShipGlobalOption()
         {
