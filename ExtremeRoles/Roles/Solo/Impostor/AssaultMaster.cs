@@ -80,7 +80,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public bool IsAbilityUse() => 
             this.IsCommonUse() &&
             this.stock > 0 &&
-            (PlayerControl.LocalPlayer.killTimer > (this.reloadReduceTimePerStock * this.stock));
+            PlayerControl.LocalPlayer.killTimer > 0;
 
         public void RoleAbilityResetOnMeetingEnd()
         {
@@ -113,13 +113,25 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             this.curReloadCoolTime = this.defaultReloadCoolTime;
 
-            this.KillCoolTime = UnityEngine.Mathf.Clamp(
-                this.defaultKillCool - (this.reloadReduceTimePerStock * this.stock),
-                0.001f, this.defaultKillCool);
             float curKillCool = PlayerControl.LocalPlayer.killTimer;
-            PlayerControl.LocalPlayer.killTimer = UnityEngine.Mathf.Clamp(
-                curKillCool - (this.reloadReduceTimePerStock * this.stock),
+            float newKillCool = curKillCool;
+            int loop = this.stock;
+            for (int i = 0; i < loop; ++i)
+            {
+                newKillCool = newKillCool - this.reloadReduceTimePerStock;
+                this.defaultKillCool = this.defaultKillCool - this.reloadReduceTimePerStock;
+                --this.stock;
+                if (newKillCool < 0)
+                {
+                    break;
+                }
+            }
+
+            this.KillCoolTime = UnityEngine.Mathf.Clamp(
+                this.defaultKillCool,
                 0.001f, this.defaultKillCool);
+            PlayerControl.LocalPlayer.killTimer = UnityEngine.Mathf.Clamp(
+                newKillCool, 0.001f, curKillCool);
 
             this.stock = 0;
             this.timerStock = 0;
