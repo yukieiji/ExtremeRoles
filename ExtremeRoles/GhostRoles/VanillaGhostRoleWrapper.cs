@@ -54,7 +54,7 @@ namespace ExtremeRoles.GhostRoles
         }
 
 
-        public override HashSet<ExtremeGhostRoleId> GetRoleFilter() => new HashSet<ExtremeGhostRoleId> ();
+        public override HashSet<Roles.ExtremeRoleId> GetRoleFilter() => new HashSet<Roles.ExtremeRoleId> ();
 
         public override void ReseOnMeetingEnd()
         {

@@ -19,7 +19,7 @@ namespace ExtremeRoles.GhostRoles.API.Interface
 
         public bool HasTask { get; }
 
-        public HashSet<ExtremeGhostRoleId> GetRoleFilter();
+        public HashSet<Roles.ExtremeRoleId> GetRoleFilter();
 
         public void CreateAbility();
 

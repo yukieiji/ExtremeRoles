@@ -2,6 +2,8 @@
 using System.Collections.Concurrent;
 using System.Linq;
 
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
 using ExtremeRoles.GhostRoles.API;
 
 namespace ExtremeRoles.GhostRoles
@@ -15,9 +17,18 @@ namespace ExtremeRoles.GhostRoles
     {
         public const int GhostRoleOptionId = 25;
 
-        public struct GhostRoleAssignData
+        public class GhostRoleAssignData
         {
+            public int CrewNum;
+            public int ImpostorNum;
+            public int NeutralNum;
 
+            public Dictionary<ExtremeRoleId, CombinationRoleType> CombRole;
+
+            // フィルター、スポーン数、スポーンレート、役職ID
+            public List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> UseImpostorRole;
+            public List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> UseCrewGhostRole;
+            public List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> UseNeutralGhostRole;
         }
 
         public static ConcurrentDictionary<byte, GhostRoleBase> GameRole = new ConcurrentDictionary<byte, GhostRoleBase>();
@@ -53,6 +64,37 @@ namespace ExtremeRoles.GhostRoles
                     (byte)ExtremeGhostRoleId.VanillaRole);
                 return;
             }
+
+            var baseRole = ExtremeRoleManager.GameRole[player.PlayerId];
+            // 全体の役職数チェック
+
+            // コンビ役職のチェック
+
+
+            // 各陣営の役職データを取得する
+            List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> sameTeamRoleAssignData = new List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)>();
+
+            foreach (var(filter, num, spawnRate, id) in sameTeamRoleAssignData)
+            {
+                if (filter.Count != 0 && !filter.Contains(baseRole.Id)) { continue; }
+                if (isRoleSpawn(num, spawnRate)) { continue; }
+
+                // 全体の役職減少処理
+
+                RPCOperator.Call(
+                    player.NetId, RPCOperator.Command.SetGhostRole,
+                    new List<byte>()
+                    {
+                        player.PlayerId,
+                        (byte)roleType,
+                        (byte)id
+                    });
+                SetGhostRoleToPlayerId(
+                    player.PlayerId, (byte)roleType,
+                    (byte)id);
+                // その役職のスポーン数をへらす処理
+                return;
+            }
         }
 
         public static void CreateGhostRoleOption(int optionIdOffset)
@@ -72,9 +114,73 @@ namespace ExtremeRoles.GhostRoles
 
         }
 
-        public static void CreateGhostRoleAssignData()
+        public static void CreateGhostRoleAssignData(
+            Dictionary<ExtremeRoleId, CombinationRoleType> useGhostCombRole)
         {
+            var allOption = OptionHolder.AllOption;
 
+
+            List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> crewGhostRole = 
+                new List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> ();
+            List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> impGhostRole =
+                new List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)>();
+            List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> neutralGhostRole =
+                new List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)>();
+
+
+            foreach (var (roleId, role) in AllGhostRole)
+            {
+                int spawnRate = computePercentage(allOption[
+                    role.GetRoleOptionId(RoleCommonOption.SpawnRate)]);
+                int roleNum = allOption[
+                    role.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue();
+
+                Helper.Logging.Debug(
+                    $"GhostRole Name:{role.Name}  SpawnRate:{spawnRate}   RoleNum:{roleNum}");
+
+                if (roleNum <= 0 || spawnRate <= 0.0)
+                {
+                    continue;
+                }
+
+                (HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId) addData = 
+                    (role.GetRoleFilter(), roleNum, spawnRate, role.Id);
+
+                switch (role.Team)
+                {
+                    case ExtremeRoleType.Crewmate:
+                        crewGhostRole.Add(addData);
+                        break;
+                    case ExtremeRoleType.Impostor:
+                        impGhostRole.Add(addData);
+                        break;
+                    case ExtremeRoleType.Neutral:
+                        neutralGhostRole.Add(addData);
+                        break;
+                    case ExtremeRoleType.Null:
+                        break;
+                    default:
+                        throw new System.Exception("Unknown teamType detect!!");
+                }
+            }
+
+            assignData = new GhostRoleAssignData
+            {
+                CrewNum = UnityEngine.Random.RandomRange(
+                    allOption[(int)OptionHolder.CommonOptionKey.MinCrewmateGhostRoles].GetValue(),
+                    allOption[(int)OptionHolder.CommonOptionKey.MaxCrewmateGhostRoles].GetValue()),
+                NeutralNum = UnityEngine.Random.RandomRange(
+                    allOption[(int)OptionHolder.CommonOptionKey.MinNeutralGhostRoles].GetValue(),
+                    allOption[(int)OptionHolder.CommonOptionKey.MaxNeutralGhostRoles].GetValue()),
+                ImpostorNum = UnityEngine.Random.RandomRange(
+                    allOption[(int)OptionHolder.CommonOptionKey.MinImpostorGhostRoles].GetValue(),
+                    allOption[(int)OptionHolder.CommonOptionKey.MaxImpostorGhostRoles].GetValue()),
+
+                CombRole = useGhostCombRole,
+                UseCrewGhostRole = crewGhostRole,
+                UseImpostorRole = impGhostRole,
+                UseNeutralGhostRole = neutralGhostRole,
+            };
         }
 
         public static GhostRoleBase GetLocalPlayerGhostRole()
@@ -156,5 +262,18 @@ namespace ExtremeRoles.GhostRoles
             GameRole[playerId] = role;
 
         }
+
+        private static bool isRoleSpawn(
+            int roleNum, int spawnRate)
+        {
+            if (roleNum <= 0) { return false; }
+            if (spawnRate < UnityEngine.Random.RandomRange(0, 110)) { return false; }
+
+            return true;
+        }
+
+        private static int computePercentage(Module.CustomOptionBase self)
+            => (int)System.Decimal.Multiply(self.GetValue(), self.Selections.ToList().Count);
+
     }
 }

@@ -327,7 +327,7 @@ namespace ExtremeRoles.GhostRoles.API
 
         public abstract void CreateAbility();
 
-        public abstract HashSet<ExtremeGhostRoleId> GetRoleFilter();
+        public abstract HashSet<Roles.ExtremeRoleId> GetRoleFilter();
 
         public abstract void Initialize();
 
