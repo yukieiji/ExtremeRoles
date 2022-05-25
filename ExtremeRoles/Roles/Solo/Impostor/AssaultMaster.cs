@@ -224,7 +224,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 format: OptionUnit.Second);
             CreateFloatOption(
                 AssaultMasterOption.ReloadReduceKillCoolTimePerStock,
-                3.0f, 2.0f, 7.5f, 0.1f, parentOps,
+                3.0f, 2.0f, 10.0f, 0.1f, parentOps,
                 format: OptionUnit.Second);
             CreateBoolOption(
                 AssaultMasterOption.IsResetReloadCoolTimeWhenKill,
