@@ -126,7 +126,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             for (int i = 0; i < loop; ++i)
             {
                 newKillCool = newKillCool - this.reloadReduceTimePerStock;
-                this.defaultKillCool = this.defaultKillCool - this.reloadReduceTimePerStock;
+                this.KillCoolTime = this.KillCoolTime - this.reloadReduceTimePerStock;
                 --this.stock;
                 if (newKillCool < 0)
                 {
@@ -135,7 +135,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
 
             this.KillCoolTime = Mathf.Clamp(
-                this.defaultKillCool,
+                this.KillCoolTime,
                 0.001f, this.defaultKillCool);
             PlayerControl.LocalPlayer.killTimer = Mathf.Clamp(
                 newKillCool, 0.001f, curKillCool);
