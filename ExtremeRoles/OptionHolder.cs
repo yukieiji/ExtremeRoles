@@ -43,8 +43,8 @@ namespace ExtremeRoles
 
             UseStrongRandomGen,
 
-            MinCremateRoles,
-            MaxCremateRoles,
+            MinCrewmateRoles,
+            MaxCrewmateRoles,
             MinNeutralRoles,
             MaxNeutralRoles,
             MinImpostorRoles,
@@ -91,14 +91,14 @@ namespace ExtremeRoles
                     CommonOptionKey.UseStrongRandomGen.ToString()), true);
 
             new IntCustomOption(
-                (int)CommonOptionKey.MinCremateRoles, Design.ColoedString(
+                (int)CommonOptionKey.MinCrewmateRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
-                    CommonOptionKey.MinCremateRoles.ToString()),
+                    CommonOptionKey.MinCrewmateRoles.ToString()),
                 0, 0, (VanillaMaxPlayerNum - 1) * 2, 1, null, true);
             new IntCustomOption(
-                (int)CommonOptionKey.MaxCremateRoles, Design.ColoedString(
+                (int)CommonOptionKey.MaxCrewmateRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
-                    CommonOptionKey.MaxCremateRoles.ToString()),
+                    CommonOptionKey.MaxCrewmateRoles.ToString()),
                 0, 0, (VanillaMaxPlayerNum - 1) * 2, 1);
 
             new IntCustomOption(

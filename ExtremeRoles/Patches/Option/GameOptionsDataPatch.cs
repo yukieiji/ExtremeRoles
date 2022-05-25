@@ -45,8 +45,8 @@ namespace ExtremeRoles.Patches.Option
             var optionName = Design.ColoedString(
                 new Color(204f / 255f, 204f / 255f, 0, 1f),
                 translate("crewmateRoles"));
-            var min = allOption[(int)OptionHolder.CommonOptionKey.MinCremateRoles].GetValue();
-            var max = allOption[(int)OptionHolder.CommonOptionKey.MaxCremateRoles].GetValue();
+            var min = allOption[(int)OptionHolder.CommonOptionKey.MinCrewmateRoles].GetValue();
+            var max = allOption[(int)OptionHolder.CommonOptionKey.MaxCrewmateRoles].GetValue();
             if (min > max) { min = max; }
             var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
             entry.AppendLine($"{optionName}: {optionValue}");
@@ -78,8 +78,8 @@ namespace ExtremeRoles.Patches.Option
             {
                 if ((id == OptionHolder.CommonOptionKey.PresetSelection) ||
                     (id == OptionHolder.CommonOptionKey.UseStrongRandomGen) ||
-                    (id == OptionHolder.CommonOptionKey.MinCremateRoles) ||
-                    (id == OptionHolder.CommonOptionKey.MaxCremateRoles) ||
+                    (id == OptionHolder.CommonOptionKey.MinCrewmateRoles) ||
+                    (id == OptionHolder.CommonOptionKey.MaxCrewmateRoles) ||
                     (id == OptionHolder.CommonOptionKey.MinNeutralRoles) ||
                     (id == OptionHolder.CommonOptionKey.MaxNeutralRoles) ||
                     (id == OptionHolder.CommonOptionKey.MinImpostorRoles) ||

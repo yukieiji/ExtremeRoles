@@ -463,8 +463,8 @@ namespace ExtremeRoles.Patches.Manager
             var allOption = OptionHolder.AllOption;
 
             int crewmateRolesNum = UnityEngine.Random.RandomRange(
-                allOption[(int)OptionHolder.CommonOptionKey.MinCremateRoles].GetValue(),
-                allOption[(int)OptionHolder.CommonOptionKey.MaxCremateRoles].GetValue());
+                allOption[(int)OptionHolder.CommonOptionKey.MinCrewmateRoles].GetValue(),
+                allOption[(int)OptionHolder.CommonOptionKey.MaxCrewmateRoles].GetValue());
             int neutralRolesNum = UnityEngine.Random.RandomRange(
                 allOption[(int)OptionHolder.CommonOptionKey.MinNeutralRoles].GetValue(),
                 allOption[(int)OptionHolder.CommonOptionKey.MaxNeutralRoles].GetValue());
