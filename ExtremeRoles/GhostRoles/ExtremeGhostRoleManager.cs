@@ -51,17 +51,9 @@ namespace ExtremeRoles.GhostRoles
 
             if (vanillaGhostRole.Contains(roleType))
             {
-                RPCOperator.Call(
-                    player.NetId, RPCOperator.Command.SetGhostRole,
-                    new List<byte> ()
-                    {
-                        player.PlayerId,
-                        (byte)roleType,
-                        (byte)ExtremeGhostRoleId.VanillaRole
-                    });
-                SetGhostRoleToPlayerId(
-                    player.PlayerId, (byte)roleType,
-                    (byte)ExtremeGhostRoleId.VanillaRole);
+                rpcSetGhostRoleToPlayerId(
+                    player, roleType,
+                    ExtremeGhostRoleId.VanillaRole);
                 return;
             }
 
@@ -81,17 +73,8 @@ namespace ExtremeRoles.GhostRoles
 
                 // 全体の役職減少処理
 
-                RPCOperator.Call(
-                    player.NetId, RPCOperator.Command.SetGhostRole,
-                    new List<byte>()
-                    {
-                        player.PlayerId,
-                        (byte)roleType,
-                        (byte)id
-                    });
-                SetGhostRoleToPlayerId(
-                    player.PlayerId, (byte)roleType,
-                    (byte)id);
+                rpcSetGhostRoleToPlayerId(player, roleType, id);
+                
                 // その役職のスポーン数をへらす処理
                 return;
             }
@@ -275,5 +258,24 @@ namespace ExtremeRoles.GhostRoles
         private static int computePercentage(Module.CustomOptionBase self)
             => (int)System.Decimal.Multiply(self.GetValue(), self.Selections.ToList().Count);
 
+
+        private static void rpcSetGhostRoleToPlayerId(
+            PlayerControl player,
+            RoleTypes baseVanillaRoleId,
+            ExtremeGhostRoleId assignGhostRoleId)
+        {
+            RPCOperator.Call(
+                player.NetId, RPCOperator.Command.SetGhostRole,
+                new List<byte>()
+                {
+                    player.PlayerId,
+                    (byte)baseVanillaRoleId,
+                    (byte)assignGhostRoleId
+                });
+            SetGhostRoleToPlayerId(
+                player.PlayerId,
+                (byte)baseVanillaRoleId,
+                (byte)assignGhostRoleId);
+        }
     }
 }
