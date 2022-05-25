@@ -155,7 +155,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.Button.GetTransform());
                 this.reduceKillCoolText.enableWordWrapping = false;
                 this.reduceKillCoolText.transform.localScale = Vector3.one * 0.5f;
-                this.reduceKillCoolText.transform.localPosition += new Vector3(-0.05f, 0.70f, 0);
+                this.reduceKillCoolText.transform.localPosition += new Vector3(-0.05f, 0.60f, 0);
             }
 
             if (this.reduceKillCoolText == null) { return; }
@@ -257,7 +257,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.stock = 0;
             this.timerStock = 0;
 
-            this.defaultKillCool = PlayerControl.GameOptions.KillCooldown;
             this.defaultReloadCoolTime = allOpt[
                 GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)].GetValue();
 
