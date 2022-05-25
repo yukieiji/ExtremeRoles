@@ -133,6 +133,7 @@ namespace ExtremeRoles.Module.RoleAbilityButton
             this.hotkey = newKey;
         }
 
+        public Transform GetTransform() => this.Button.transform;
 
         public void Update()
         {

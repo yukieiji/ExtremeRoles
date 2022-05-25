@@ -1,4 +1,6 @@
-﻿using ExtremeRoles.Helper;
+﻿using UnityEngine;
+
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.RoleAbilityButton;
 using ExtremeRoles.Resources;
@@ -7,7 +9,7 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public class AssaultMaster : SingleRoleBase, IRoleAbility, IRoleReportHock
+    public class AssaultMaster : SingleRoleBase, IRoleAbility, IRoleReportHock, IRoleUpdate
     {
         public enum AssaultMasterOption
         {
@@ -30,6 +32,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
         private RoleAbilityButtonBase reloadButton;
+        private TMPro.TextMeshPro reduceKillCoolText;
         
         private int stock;
         private int stockMax;
@@ -91,7 +94,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 {
                     newCoolTime = newCoolTime * this.timerReduceRate;
                 }
-                this.curReloadCoolTime = UnityEngine.Mathf.Clamp(
+                this.curReloadCoolTime = Mathf.Clamp(
                     newCoolTime, 0.01f, this.defaultReloadCoolTime);
 
                 this.reloadButton.SetAbilityCoolTime(
@@ -104,6 +107,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void RoleAbilityResetOnMeetingStart()
         {
             this.KillCoolTime = this.defaultKillCool;
+            if (this.reduceKillCoolText != null)
+            {
+                this.reduceKillCoolText.gameObject.SetActive(false);
+            }
         }
 
         public bool UseAbility()
@@ -127,16 +134,46 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 }
             }
 
-            this.KillCoolTime = UnityEngine.Mathf.Clamp(
+            this.KillCoolTime = Mathf.Clamp(
                 this.defaultKillCool,
                 0.001f, this.defaultKillCool);
-            PlayerControl.LocalPlayer.killTimer = UnityEngine.Mathf.Clamp(
+            PlayerControl.LocalPlayer.killTimer = Mathf.Clamp(
                 newKillCool, 0.001f, curKillCool);
 
             this.stock = 0;
             this.timerStock = 0;
 
             return true;
+        }
+        public void Update(PlayerControl rolePlayer)
+        {
+            if (this.reduceKillCoolText == null && 
+                this.Button != null)
+            {
+                this.reduceKillCoolText = GameObject.Instantiate(
+                    HudManager.Instance.KillButton.cooldownTimerText,
+                    this.Button.GetTransform());
+                this.reduceKillCoolText.enableWordWrapping = false;
+                this.reduceKillCoolText.transform.localScale = Vector3.one * 0.5f;
+                this.reduceKillCoolText.transform.localPosition += new Vector3(-0.05f, 0.70f, 0);
+            }
+
+            if (this.reduceKillCoolText == null) { return; }
+            
+            if (this.stock == 0)
+            {
+                this.reduceKillCoolText.text = 
+                    Translation.GetString("noStockNow");
+            }
+            else
+            {
+                this.reduceKillCoolText.text = string.Format(
+                    Translation.GetString("reduceKillCool"),
+                    Mathf.CeilToInt(this.stock * this.reloadReduceTimePerStock));
+            }
+
+            this.reduceKillCoolText.gameObject.SetActive(true);
+
         }
 
         public override bool TryRolePlayerKillTo(
