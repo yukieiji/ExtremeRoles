@@ -172,8 +172,8 @@ namespace ExtremeRoles.Patches
 
             if (playerGhostRole != null)
             {
-                Color blendColor = playerGhostRole.RoleColor + localRoleColor;
-                localRoleColor = blendColor / 2.0f;
+                Color ghostRoleColor = playerGhostRole.RoleColor;
+                localRoleColor = (localRoleColor / 2.0f) + (ghostRoleColor / 2.0f);
             }
             player.nameText.color = localRoleColor;
             setVoteAreaColor(localPlayerId, localRoleColor);
@@ -204,7 +204,7 @@ namespace ExtremeRoles.Patches
 
                         if (paintGhostColor != Color.clear)
                         {
-                            paintColor = (paintGhostColor + paintColor) / 2.0f;
+                            paintColor = (paintGhostColor / 2.0f) + (paintColor / 2.0f);
                         }
                     }
 
