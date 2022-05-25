@@ -174,13 +174,13 @@ namespace ExtremeRoles.Patches.Option
             StringBuilder entry = new StringBuilder();
 
             // 生存役職周り
-            var optionName = Design.ColoedString(
+            string optionName = Design.ColoedString(
                 new Color(204f / 255f, 204f / 255f, 0, 1f),
                 translate("crewmateRoles"));
-            var min = allOption[(int)OptionHolder.CommonOptionKey.MinCrewmateRoles].GetValue();
-            var max = allOption[(int)OptionHolder.CommonOptionKey.MaxCrewmateRoles].GetValue();
+            int min = allOption[(int)OptionHolder.CommonOptionKey.MinCrewmateRoles].GetValue();
+            int max = allOption[(int)OptionHolder.CommonOptionKey.MaxCrewmateRoles].GetValue();
             if (min > max) { min = max; }
-            var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
+            string optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
             entry.AppendLine($"{optionName}: {optionValue}");
 
             optionName = Design.ColoedString(
@@ -231,8 +231,6 @@ namespace ExtremeRoles.Patches.Option
             if (min > max) { min = max; }
             optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
             entry.AppendLine($"{optionName}: {optionValue}");
-
-
 
             return entry.ToString().Trim('\r', '\n');
         }
