@@ -102,13 +102,14 @@ namespace ExtremeRoles.Module.AbilityButton
             if (HudManager.Instance == null) { return; }
 
             var useButton = HudManager.Instance.UseButton;
-        public Transform GetTransform() => this.Button.transform;
 
             UnityEngine.Object.Destroy(
                 this.Button.buttonLabelText.fontMaterial);
             this.Button.buttonLabelText.fontMaterial = UnityEngine.Object.Instantiate(
                 useButton.buttonLabelText.fontMaterial, this.Button.transform);
         }
+
+        public Transform GetTransform() => this.Button.transform;
 
         protected bool IsHasCleanUp() => this.CleanUp != null;
 
