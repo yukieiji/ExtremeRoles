@@ -66,6 +66,9 @@ namespace ExtremeRoles.GhostRoles
                     throw new System.Exception("Unknown teamType detect!!");
                 }
             }
+
+            public bool IsCombRole(ExtremeRoleId roleId) => this.CombRole.ContainsKey(roleId);
+
             public bool IsGlobalSpawnLimit(ExtremeRoleType team)
             {
                 if (this.globalSpawnLimit.ContainsKey(team))
@@ -78,7 +81,62 @@ namespace ExtremeRoles.GhostRoles
                 }
             }
 
-            // 必要なやつ初期化処理、セットメソッド、ゲットメソッド？
+            public void SetCombRoleAssignData(Dictionary<ExtremeRoleId, CombinationRoleType> useGhostCombRole)
+            {
+                this.CombRole = useGhostCombRole;
+            }
+
+            public void SetGlobalSpawnLimit(int crewNum, int impNum, int neutralNum)
+            {
+                this.globalSpawnLimit.Add(ExtremeRoleType.Crewmate, crewNum);
+                this.globalSpawnLimit.Add(ExtremeRoleType.Impostor, impNum);
+                this.globalSpawnLimit.Add(ExtremeRoleType.Neutral, neutralNum);
+            }
+		    public void SetNormalRoleAssignData(
+                ExtremeRoleType team,
+                HashSet<ExtremeRoleId> filter,
+                int spawnNum,
+                int spawnRate,
+                ExtremeGhostRoleId ghostRoleId)
+            {
+
+                (HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId) addData = (
+                    filter, spawnNum, spawnRate, ghostRoleId);
+
+                if (this.useGhostRole.ContainsKey(team))
+                {
+                    List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> teamGhostRole = new List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)>()
+                    {
+                        addData,
+                    };
+
+                    this.useGhostRole.Add(team, teamGhostRole);
+                }
+                else
+                {
+                    this.useGhostRole[team].Add(addData);
+                }
+            }
+
+            public void ReduceGlobalSpawnLimit(ExtremeRoleType team)
+            {
+                this.globalSpawnLimit[team] = this.globalSpawnLimit[team] - 1;
+            }
+
+            public void ReduceRoleSpawnData(
+                ExtremeRoleType team,
+                HashSet<ExtremeRoleId> filter,
+                int spawnNum,
+                int spawnRate,
+                ExtremeGhostRoleId ghostRoleId)
+            {
+                int index = this.useGhostRole[team].FindIndex(
+                    x => x == (filter, spawnNum, spawnRate, ghostRoleId));
+
+                this.useGhostRole[team][index] = (filter, spawnNum - 1, spawnRate, ghostRoleId);
+
+            }
+
         }
 
         public static ConcurrentDictionary<byte, GhostRoleBase> GameRole = new ConcurrentDictionary<byte, GhostRoleBase>();
@@ -108,24 +166,40 @@ namespace ExtremeRoles.GhostRoles
             }
 
             var baseRole = ExtremeRoleManager.GameRole[player.PlayerId];
-            // 全体の役職数チェック
 
-            // コンビ役職のチェック
+            ExtremeRoleType team = baseRole.Team;
+            ExtremeRoleId roleId = baseRole.Id;
 
+            if (assignData.IsGlobalSpawnLimit(team)) { return; };
+
+            if (assignData.IsCombRole(roleId))
+            {
+                CombinationRoleType combRoleId = assignData.GetCombRoleType(roleId);
+                
+                // 専用のコンビ役職を取ってくる
+                var ghostCombManager = ExtremeRoleManager.CombRole[(byte)combRoleId];
+
+                assignData.ReduceGlobalSpawnLimit(team);
+                return;
+            }
 
             // 各陣営の役職データを取得する
-            List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> sameTeamRoleAssignData = new List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)>();
+            List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> sameTeamRoleAssignData = assignData.GetUseGhostRole(
+                baseRole.Team);
 
             foreach (var(filter, num, spawnRate, id) in sameTeamRoleAssignData)
             {
                 if (filter.Count != 0 && !filter.Contains(baseRole.Id)) { continue; }
                 if (isRoleSpawn(num, spawnRate)) { continue; }
-
-                // 全体の役職減少処理
-
+                
                 rpcSetGhostRoleToPlayerId(player, roleType, id);
                 
                 // その役職のスポーン数をへらす処理
+                assignData.ReduceRoleSpawnData(
+                    team, filter, num, spawnRate, id);
+                // 全体の役職減少処理
+                assignData.ReduceGlobalSpawnLimit(team);
+     
                 return;
             }
         }
@@ -152,16 +226,18 @@ namespace ExtremeRoles.GhostRoles
         {
             var allOption = OptionHolder.AllOption;
 
+            assignData.SetGlobalSpawnLimit(
+                UnityEngine.Random.RandomRange(
+                    allOption[(int)OptionHolder.CommonOptionKey.MinCrewmateGhostRoles].GetValue(),
+                    allOption[(int)OptionHolder.CommonOptionKey.MaxCrewmateGhostRoles].GetValue()),
+                UnityEngine.Random.RandomRange(
+                    allOption[(int)OptionHolder.CommonOptionKey.MinImpostorGhostRoles].GetValue(),
+                    allOption[(int)OptionHolder.CommonOptionKey.MaxImpostorGhostRoles].GetValue()),
+                UnityEngine.Random.RandomRange(
+                    allOption[(int)OptionHolder.CommonOptionKey.MinNeutralGhostRoles].GetValue(),
+                    allOption[(int)OptionHolder.CommonOptionKey.MaxNeutralGhostRoles].GetValue()));
 
-            List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> crewGhostRole = 
-                new List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> ();
-            List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> impGhostRole =
-                new List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)>();
-            List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> neutralGhostRole =
-                new List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)>();
-
-
-            foreach (var (roleId, role) in AllGhostRole)
+            foreach (var role in AllGhostRole.Values)
             {
                 int spawnRate = computePercentage(allOption[
                     role.GetRoleOptionId(RoleCommonOption.SpawnRate)]);
@@ -176,28 +252,11 @@ namespace ExtremeRoles.GhostRoles
                     continue;
                 }
 
-                (HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId) addData = 
-                    (role.GetRoleFilter(), roleNum, spawnRate, role.Id);
-
-                switch (role.Team)
-                {
-                    case ExtremeRoleType.Crewmate:
-                        crewGhostRole.Add(addData);
-                        break;
-                    case ExtremeRoleType.Impostor:
-                        impGhostRole.Add(addData);
-                        break;
-                    case ExtremeRoleType.Neutral:
-                        neutralGhostRole.Add(addData);
-                        break;
-                    case ExtremeRoleType.Null:
-                        break;
-                    default:
-                        throw new System.Exception("Unknown teamType detect!!");
-                }
+                assignData.SetNormalRoleAssignData(
+                    role.Team,
+                    role.GetRoleFilter(),
+                    roleNum, spawnRate, role.Id);
             }
-
-            
         }
 
         public static GhostRoleBase GetLocalPlayerGhostRole()
@@ -246,6 +305,8 @@ namespace ExtremeRoles.GhostRoles
 
         }
 
+        public static bool IsGlobalSpawnLimit(ExtremeRoleType team) => assignData.IsGlobalSpawnLimit(team);
+
         public static void Initialize()
         {
             GameRole.Clear();
@@ -253,6 +314,12 @@ namespace ExtremeRoles.GhostRoles
             {
                 role.Initialize();
             }
+
+            if (assignData == null)
+            {
+                assignData = new GhostRoleAssignData();
+            }
+            assignData.Clear();
         }
 
         public static void SetGhostRoleToPlayerId(
