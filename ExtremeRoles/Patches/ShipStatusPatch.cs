@@ -17,6 +17,9 @@ namespace ExtremeRoles.Patches
             ShipStatus __instance,
             [HarmonyArgument(0)] GameData.PlayerInfo playerInfo)
         {
+
+            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return true; }
+
             ISystemType systemType = __instance.Systems.ContainsKey(
                 SystemTypes.Electrical) ? __instance.Systems[SystemTypes.Electrical] : null;
             if (systemType == null) { return true; }

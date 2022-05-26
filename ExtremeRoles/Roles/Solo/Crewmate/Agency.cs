@@ -283,7 +283,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 2, 1, 3, 1, parentOps);
             CreateFloatOption(
                 AgencyOption.TakeTaskRange,
-                1.0f, 0.0f, 2.0f, 0.1f,
+                1.0f, 0.5f, 2.0f, 0.1f,
                 parentOps);
 
             this.CreateAbilityCountOption(
