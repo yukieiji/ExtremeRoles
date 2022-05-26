@@ -80,11 +80,12 @@ namespace ExtremeRoles.Module
             FinalSummary.Clear();
             DeadPlayerInfo.Clear();
             PlusWinner.Clear();
-            UpdateObject.Clear();
+            
             Union.Clear();
+            
             ClearMeetingResetObject();
-
             clearUpdateObject();
+
             CustomVent.Clear();
             History.Clear();
 
