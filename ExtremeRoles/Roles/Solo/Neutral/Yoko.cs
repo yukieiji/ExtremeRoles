@@ -16,6 +16,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
     {
         public enum YokoOption
         {
+            CanRepairSabo,
+            CanUseVent,
             SearchRange,
             SearchTime,
             TrueInfoRate,
@@ -95,6 +97,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
+            CreateBoolOption(
+                YokoOption.CanRepairSabo,
+                false, parentOps,
+                format: OptionUnit.Second);
+            CreateBoolOption(
+                YokoOption.CanUseVent,
+                false, parentOps,
+                format: OptionUnit.Second);
             CreateFloatOption(
                 YokoOption.SearchRange,
                 7.5f, 5.0f, 15.0f, 0.5f,
@@ -111,6 +121,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         }
         protected override void RoleSpecificInit()
         {
+            this.CanRepairSabotage = OptionHolder.AllOption[
+                GetRoleOptionId(YokoOption.CanRepairSabo)].GetValue();
+            this.UseVent = OptionHolder.AllOption[
+                GetRoleOptionId(YokoOption.CanUseVent)].GetValue();
             this.searchRange = OptionHolder.AllOption[
                 GetRoleOptionId(YokoOption.SearchRange)].GetValue();
             this.searchTime = OptionHolder.AllOption[
