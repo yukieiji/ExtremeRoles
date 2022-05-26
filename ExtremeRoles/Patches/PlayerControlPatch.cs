@@ -630,7 +630,8 @@ namespace ExtremeRoles.Patches
                 if (!playerInfo.Disconnected && 
                     (playerInfo.PlayerId != __instance.PlayerId) && 
                     !playerInfo.IsDead && 
-                    !role.IsSameTeam(gameRoles[playerInfo.PlayerId]) && 
+                    !role.IsSameTeam(gameRoles[playerInfo.PlayerId]) &&
+                    playerInfo.Object != null &&
                     (!playerInfo.Object.inVent || OptionHolder.Ship.CanKillVentInPlayer))
                 {
                     PlayerControl @object = playerInfo.Object;
