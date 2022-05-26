@@ -626,7 +626,9 @@ namespace ExtremeRoles.Patches
             for (int i = 0; i < allPlayers.Count; i++)
             {
                 GameData.PlayerInfo playerInfo = allPlayers[i];
-                
+
+                if (playerInfo == null) { continue; }
+
                 if (!playerInfo.Disconnected && 
                     (playerInfo.PlayerId != __instance.PlayerId) && 
                     !playerInfo.IsDead && 
