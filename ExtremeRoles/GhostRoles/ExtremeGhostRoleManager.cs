@@ -19,16 +19,64 @@ namespace ExtremeRoles.GhostRoles
 
         public class GhostRoleAssignData
         {
-            public int CrewNum;
-            public int ImpostorNum;
-            public int NeutralNum;
+            private Dictionary<ExtremeRoleType, int> globalSpawnLimit;
 
-            public Dictionary<ExtremeRoleId, CombinationRoleType> CombRole;
+            private Dictionary<ExtremeRoleId, CombinationRoleType> CombRole = new Dictionary<
+                ExtremeRoleId, CombinationRoleType>();
 
             // フィルター、スポーン数、スポーンレート、役職ID
-            public List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> UseImpostorRole;
-            public List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> UseCrewGhostRole;
-            public List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> UseNeutralGhostRole;
+            private Dictionary<ExtremeRoleType, List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)>> useGhostRole = new Dictionary<
+                ExtremeRoleType, List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)>>();
+
+            public GhostRoleAssignData()
+            {
+                this.Clear();
+            }
+
+            public void Clear()
+            {
+                this.globalSpawnLimit.Clear();
+                this.useGhostRole.Clear();
+            }
+
+            public CombinationRoleType GetCombRoleType(ExtremeRoleId roleId) => CombRole[roleId];
+
+            public int GetGlobalSpawnLimit(ExtremeRoleType team)
+            {
+                if (this.globalSpawnLimit.ContainsKey(team))
+                {
+                    return this.globalSpawnLimit[team];
+                }
+                else
+                {
+                    return int.MinValue;
+                }
+            }
+
+            public List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> GetUseGhostRole(
+                ExtremeRoleType team)
+            {
+                if (this.useGhostRole.ContainsKey(team))
+                {
+                    return this.useGhostRole[team].OrderBy(
+                        item => RandomGenerator.Instance.Next()).ToList();
+                }
+                else
+                {
+                    throw new System.Exception("Unknown teamType detect!!");
+                }
+            }
+            public bool IsGlobalSpawnLimit(ExtremeRoleType team)
+            {
+                if (this.globalSpawnLimit.ContainsKey(team))
+                {
+                    return this.globalSpawnLimit[team] <= 0;
+                }
+                else
+                {
+                    throw new System.Exception("Unknown teamType detect!!");
+                }
+            }
 
             // 必要なやつ初期化処理、セットメソッド、ゲットメソッド？
         }
@@ -149,23 +197,7 @@ namespace ExtremeRoles.GhostRoles
                 }
             }
 
-            assignData = new GhostRoleAssignData
-            {
-                CrewNum = UnityEngine.Random.RandomRange(
-                    allOption[(int)OptionHolder.CommonOptionKey.MinCrewmateGhostRoles].GetValue(),
-                    allOption[(int)OptionHolder.CommonOptionKey.MaxCrewmateGhostRoles].GetValue()),
-                NeutralNum = UnityEngine.Random.RandomRange(
-                    allOption[(int)OptionHolder.CommonOptionKey.MinNeutralGhostRoles].GetValue(),
-                    allOption[(int)OptionHolder.CommonOptionKey.MaxNeutralGhostRoles].GetValue()),
-                ImpostorNum = UnityEngine.Random.RandomRange(
-                    allOption[(int)OptionHolder.CommonOptionKey.MinImpostorGhostRoles].GetValue(),
-                    allOption[(int)OptionHolder.CommonOptionKey.MaxImpostorGhostRoles].GetValue()),
-
-                CombRole = useGhostCombRole,
-                UseCrewGhostRole = crewGhostRole,
-                UseImpostorRole = impGhostRole,
-                UseNeutralGhostRole = neutralGhostRole,
-            };
+            
         }
 
         public static GhostRoleBase GetLocalPlayerGhostRole()
