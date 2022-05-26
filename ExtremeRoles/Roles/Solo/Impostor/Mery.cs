@@ -62,10 +62,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 for (int i = 0; i < allPlayers.Count; i++)
                 {
                     GameData.PlayerInfo playerInfo = allPlayers[i];
+                    if (playerInfo == null) { continue; }
 
                     if (!playerInfo.Disconnected &&
                         !ExtremeRoleManager.GameRole[playerInfo.PlayerId].IsImpostor() &&
                         !playerInfo.IsDead &&
+                        playerInfo.Object != null &&
                         !playerInfo.Object.inVent)
                     {
                         PlayerControl @object = playerInfo.Object;
