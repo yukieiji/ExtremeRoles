@@ -998,6 +998,11 @@ namespace ExtremeRoles.Patches
                     RPCOperator.SetGhostRole(
                         ref reader);
                     break;
+                case RPCOperator.Command.UseGhostRoleAbility:
+                    byte useGhostRoleType = reader.ReadByte();
+                    RPCOperator.UseGhostRoleAbility(
+                        useGhostRoleType, ref reader);
+                    break;
                 default:
                     break;
             }

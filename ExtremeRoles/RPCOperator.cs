@@ -545,6 +545,13 @@ namespace ExtremeRoles
                 ref reader);
         }
 
+        public static void UseGhostRoleAbility(
+            byte abilityType, ref MessageReader reader)
+        {
+            ExtremeRolesPlugin.GameDataStore.AbilityManager.UseGhostAbility(
+                abilityType, ref reader);
+        }
+
     }
 
 }
