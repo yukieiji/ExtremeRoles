@@ -1,6 +1,5 @@
 ﻿using HarmonyLib;
 
-using UnityEngine;
 using TMPro;
 
 namespace ExtremeRoles.Patches.Meeting
