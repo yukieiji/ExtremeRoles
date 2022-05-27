@@ -199,6 +199,11 @@ namespace ExtremeRoles.Patches.Manager
                             default:
                                 break;
                         }
+                        var ghostComb = roleManager as GhostAndAliveCombinationRoleManagerBase;
+                        if (ghostComb != null)
+                        {
+                            isSpawn = !ExtremeGhostRoleManager.IsGlobalSpawnLimit(role.Team);
+                        }
                     }
 
                     isSpawn = (
@@ -206,6 +211,8 @@ namespace ExtremeRoles.Patches.Manager
                         ((extremeRolesData.CrewmateRoles - reduceCrewmateRole >= 0) && crewNum >= reduceCrewmateRole) &&
                         ((extremeRolesData.NeutralRoles - reduceNeutralRole >= 0) && crewNum >= reduceNeutralRole) &&
                         ((extremeRolesData.ImpostorRoles - reduceImpostorRole >= 0) && impNum >= reduceImpostorRole));
+
+
                     //Modules.Helpers.DebugLog($"Role:{oneRole.ToString()}   isSpawn?:{isSpawn}");
                     if (!isSpawn) { continue; }
 
@@ -491,6 +498,13 @@ namespace ExtremeRoles.Patches.Manager
 
                 combinationRole.Add(
                     ((combType, role), (roleSet, spawnRate, multiAssign)));
+
+                var ghostComb = role as GhostAndAliveCombinationRoleManagerBase;
+                if (ghostComb != null)
+                {
+                    ExtremeGhostRoleManager.AddCombGhostRole(
+                        (CombinationRoleType)combType, ghostComb);
+                }
             }
 
             foreach (var (roleId, role) in ExtremeRoleManager.NormalRole)
@@ -572,12 +586,18 @@ namespace ExtremeRoles.Patches.Manager
         public static bool Prefix([HarmonyArgument(0)] PlayerControl player)
         {
             if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
+            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return true; }
 
-            if (ExtremeRoleManager.GameRole[player.PlayerId].IsNeutral() &&
+            var role = ExtremeRoleManager.GameRole[player.PlayerId];
+
+            if (ExtremeGhostRoleManager.IsCombRole(role.Id)) { return false; }
+
+            if (role.IsNeutral() &&
                 OptionHolder.Ship.IsBlockNeutralAssignToVanillaCrewGhostRole)
             {
                 return false;
             }
+           
             return true;
         }
 

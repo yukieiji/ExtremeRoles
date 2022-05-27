@@ -995,13 +995,8 @@ namespace ExtremeRoles.Patches
                         yanderePlayerId, loverPlayerId);
                     break;
                 case RPCOperator.Command.SetGhostRole:
-                    byte assignPlayerId = reader.ReadByte();
-                    byte assignPlayerVanillaRoleId = reader.ReadByte();
-                    byte extremeGhostRoleId = reader.ReadByte();
                     RPCOperator.SetGhostRole(
-                        assignPlayerId,
-                        assignPlayerVanillaRoleId,
-                        extremeGhostRoleId);
+                        ref reader);
                     break;
                 default:
                     break;

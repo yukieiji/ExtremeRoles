@@ -539,10 +539,10 @@ namespace ExtremeRoles
         }
 
         public static void SetGhostRole(
-            byte playerId, byte vanillaRoleId, byte ghostRoleId)
+            ref MessageReader reader)
         {
             GhostRoles.ExtremeGhostRoleManager.SetGhostRoleToPlayerId(
-                playerId, vanillaRoleId, ghostRoleId);
+                ref reader);
         }
 
     }
