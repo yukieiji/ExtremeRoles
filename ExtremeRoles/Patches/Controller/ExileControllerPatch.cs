@@ -2,6 +2,7 @@
 
 using HarmonyLib;
 
+using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -225,6 +226,16 @@ namespace ExtremeRoles.Patches.Controller
                         resetRole.ResetOnMeetingStart();
                     }
                 }
+            }
+
+            var ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
+            if (ghostRole != null)
+            {
+                if (ghostRole.Button != null)
+                {
+                    ghostRole.Button.ResetCoolTimer();
+                }
+                ghostRole.ReseOnMeetingEnd();
             }
 
             if (exiled == null) { return; };
