@@ -544,6 +544,7 @@ namespace ExtremeRoles.Patches.Manager
                 }
             }
 
+            ExtremeGhostRoleManager.CreateGhostRoleAssignData();
 
             return new RoleAssignmentData
             {
@@ -604,6 +605,7 @@ namespace ExtremeRoles.Patches.Manager
         public static void Postfix([HarmonyArgument(0)] PlayerControl player)
         {
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return; }
             ExtremeGhostRoleManager.AssignGhostRoleToPlayer(player);
         }
     }

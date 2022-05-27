@@ -240,8 +240,7 @@ namespace ExtremeRoles.GhostRoles
 
         }
 
-        public static void CreateGhostRoleAssignData(
-            Dictionary<ExtremeRoleId, CombinationRoleType> useGhostCombRole)
+        public static void CreateGhostRoleAssignData()
         {
             var allOption = OptionHolder.AllOption;
 
