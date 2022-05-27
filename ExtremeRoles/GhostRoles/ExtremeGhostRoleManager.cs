@@ -22,7 +22,7 @@ namespace ExtremeRoles.GhostRoles
 
         public class GhostRoleAssignData
         {
-            private Dictionary<ExtremeRoleType, int> globalSpawnLimit;
+            private Dictionary<ExtremeRoleType, int> globalSpawnLimit = new Dictionary<ExtremeRoleType, int> ();
 
             private Dictionary<ExtremeRoleId, CombinationRoleType> CombRole = new Dictionary<
                 ExtremeRoleId, CombinationRoleType>();
