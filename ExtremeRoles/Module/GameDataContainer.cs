@@ -50,10 +50,11 @@ namespace ExtremeRoles.Module
         public List<IUpdatableObject> UpdateObject = new List<IUpdatableObject>();
         public CustomVentContainer CustomVent = new CustomVentContainer();
 
-
         public ShieldPlayerContainer ShildPlayer = new ShieldPlayerContainer();
         public PlayerHistory History = new PlayerHistory();
         public BakaryUnion Union = new BakaryUnion();
+
+        public GhostRoleAbilityManager AbilityManager = new GhostRoleAbilityManager();
 
         public int MeetingsCount = 0;
         public int WinGameControlId = int.MaxValue;
@@ -88,6 +89,8 @@ namespace ExtremeRoles.Module
 
             CustomVent.Clear();
             History.Clear();
+
+            AbilityManager.Clear();
 
             MeetingsCount = 0;
             WinGameControlId = int.MaxValue;

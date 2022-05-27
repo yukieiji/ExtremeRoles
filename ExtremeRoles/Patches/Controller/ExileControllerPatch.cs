@@ -174,6 +174,7 @@ namespace ExtremeRoles.Patches.Controller
 
             ExtremeRolesPlugin.Info.HideBlackBG();
             ExtremeRolesPlugin.GameDataStore.Union.ResetTimer();
+            ExtremeRolesPlugin.GameDataStore.AbilityManager.Clear();
 
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
