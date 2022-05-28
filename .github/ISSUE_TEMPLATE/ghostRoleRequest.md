@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-<!-- 幽霊役職の基礎仕様等はWikiのこのページを確認して下さい URL: -->
+<!-- 幽霊役職の基礎仕様等はWikiのこのページを確認して下さい URL:https://github.com/yukieiji/ExtremeRoles/wiki/%E3%82%B4%E3%83%BC%E3%82%B9%E3%83%88%E3%83%AD%E3%83%BC%E3%83%AB -->
 
 
 ### 幽霊役職名 / Role Name
