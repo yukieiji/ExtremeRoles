@@ -10,12 +10,21 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.GhostRoles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
 
 
 namespace ExtremeRoles.GhostRoles.API
 {
     public abstract class GhostRoleBase : IGhostRole
     {
+
+        private const float defaultCoolTime = 60.0f;
+        private const float minCoolTime = 15.0f;
+        private const float maxCoolTime = 120.0f;
+        private const float minActiveTime = 0.5f;
+        private const float maxActiveTime = 30.0f;
+        private const float step = 0.5f;
+
         public ExtremeRoleType Team => this.TeamType;
 
         public ExtremeGhostRoleId Id => this.RoleId;
@@ -145,6 +154,49 @@ namespace ExtremeRoles.GhostRoles.API
             }
 
             return Color.clear;
+        }
+
+        protected void CreateButtonOption(
+            CustomOptionBase parentOps,
+            float defaultActiveTime = float.MaxValue)
+        {
+
+            CreateFloatOption(
+                RoleAbilityCommonOption.AbilityCoolTime,
+                defaultCoolTime, minCoolTime,
+                maxCoolTime, step,
+                parentOps, format: OptionUnit.Second);
+
+            if (defaultActiveTime != float.MaxValue)
+            {
+                defaultActiveTime = Mathf.Clamp(
+                    defaultActiveTime, minActiveTime, maxActiveTime);
+
+                CreateFloatOption(
+                    RoleAbilityCommonOption.AbilityActiveTime,
+                    defaultActiveTime, minActiveTime, maxActiveTime, step,
+                    parentOps, format: OptionUnit.Second);
+            }
+
+        }
+
+        protected void ButtonInit()
+        {
+            if (this.Button == null) { return; }
+
+            var allOps = OptionHolder.AllOption;
+            this.Button.SetAbilityCoolTime(
+                allOps[this.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)].GetValue());
+
+            int checkOptionId = this.GetRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime);
+
+            if (allOps.ContainsKey(checkOptionId))
+            {
+                this.Button.SetAbilityActiveTime(
+                    allOps[checkOptionId].GetValue());
+            }
+
+            this.Button.ResetCoolTimer();
         }
 
         protected bool IsCommonUse() => 
