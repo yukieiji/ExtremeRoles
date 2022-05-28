@@ -76,7 +76,11 @@ namespace ExtremeRoles.Patches.Meeting
             {
                 return ExtremeRolesPlugin.GameDataStore.IsAssassinAssign;
             }
-
+            else if (ExtremeGhostRoleManager.GameRole.ContainsKey(
+                PlayerControl.LocalPlayer.PlayerId))
+            {
+                return true;
+            }
             return false;
         }
 
