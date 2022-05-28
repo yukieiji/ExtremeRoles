@@ -138,10 +138,6 @@ namespace ExtremeRoles.GhostRoles.API
                 isGhostRoleImpostor = targetGhostRole.IsImpostor();
             }
 
-            Helper.Logging.Debug($"isTarrgetImp:{targetRole.IsImpostor()}");
-            Helper.Logging.Debug($"isFakeImp:{targetRole.FakeImposter}");
-            Helper.Logging.Debug($"isGhostImp:{isGhostRoleImpostor}");
-
             if ((targetRole.IsImpostor() || targetRole.FakeImposter || isGhostRoleImpostor) &&
                 this.IsImpostor())
             {
@@ -150,6 +146,11 @@ namespace ExtremeRoles.GhostRoles.API
 
             return Color.clear;
         }
+
+        protected bool IsCommonUse() => 
+            PlayerControl.LocalPlayer && 
+            PlayerControl.LocalPlayer.Data.IsDead && 
+            PlayerControl.LocalPlayer.CanMove;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected CustomOptionBase CreateFloatOption<T>(
