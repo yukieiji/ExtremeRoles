@@ -19,9 +19,9 @@ namespace ExtremeRoles.GhostRoles.API.Interface
 
         public bool HasTask { get; }
 
-        public HashSet<Roles.ExtremeRoleId> GetRoleFilter();
-
         public void CreateAbility();
+
+        public HashSet<Roles.ExtremeRoleId> GetRoleFilter();
 
         public int GetRoleOptionId<T>(T option) where T : struct, IConvertible;
 
