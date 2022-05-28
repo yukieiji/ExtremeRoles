@@ -100,14 +100,13 @@ namespace ExtremeRoles
             createExtremeGhostRoleGlobalSpawnOption();
             createShipGlobalOption();
 
-            int offset = 50;
+            Roles.ExtremeRoleManager.CreateNormalRoleOptions(50);
 
-            Roles.ExtremeRoleManager.CreateNormalRoleOptions(
-                offset);
+            Roles.ExtremeRoleManager.CreateCombinationRoleOptions(5000);
 
-            offset = 5000;
-            Roles.ExtremeRoleManager.CreateCombinationRoleOptions(
-                offset);
+            GhostRoles.ExtremeGhostRoleManager.CreateGhostRoleOption(10000);
+
+
         }
 
         public static void Load()
