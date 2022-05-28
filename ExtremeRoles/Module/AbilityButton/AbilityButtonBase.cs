@@ -71,6 +71,8 @@ namespace ExtremeRoles.Module.AbilityButton
 
         public float GetCurTime() => this.Timer;
 
+        public Transform GetTransform() => this.Button.transform;
+
         public bool IsAbilityActive() => this.IsAbilityOn;
 
         public void ReplaceHotKey(KeyCode newKey)
@@ -108,8 +110,6 @@ namespace ExtremeRoles.Module.AbilityButton
             this.Button.buttonLabelText.fontMaterial = UnityEngine.Object.Instantiate(
                 useButton.buttonLabelText.fontMaterial, this.Button.transform);
         }
-
-        public Transform GetTransform() => this.Button.transform;
 
         protected bool IsHasCleanUp() => this.CleanUp != null;
 
