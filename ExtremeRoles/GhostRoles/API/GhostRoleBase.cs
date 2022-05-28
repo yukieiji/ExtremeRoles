@@ -112,6 +112,12 @@ namespace ExtremeRoles.GhostRoles.API
 
         public bool IsVanillaRole() => this.RoleId == ExtremeGhostRoleId.VanillaRole;
 
+        public virtual string GetColoredRoleName() => Design.ColoedString(
+            this.NameColor, Translation.GetString(this.RoleName));
+
+        public virtual string GetFullDescription() => Translation.GetString(
+           $"{this.Id}FullDescription");
+
         public virtual string GetImportantText() => 
             Design.ColoedString(
                 this.NameColor,
@@ -121,12 +127,6 @@ namespace ExtremeRoles.GhostRoles.API
                         Translation.GetString(this.RoleName)),
                     Translation.GetString(
                         $"{this.Id}ShortDescription")));
-        
-        public virtual string GetFullDescription() => Translation.GetString(
-           $"{this.Id}FullDescription");
-
-        public virtual string GetColoredRoleName() => Design.ColoedString(
-            this.NameColor, Translation.GetString(this.RoleName));
 
         public virtual Color GetTargetRoleSeeColor(
             byte targetPlayerId, SingleRoleBase targetRole, GhostRoleBase targetGhostRole)

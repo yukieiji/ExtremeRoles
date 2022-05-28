@@ -25,6 +25,12 @@ namespace ExtremeRoles.GhostRoles.API.Interface
 
         public int GetRoleOptionId<T>(T option) where T : struct, IConvertible;
 
+        public string GetColoredRoleName();
+
+        public string GetFullDescription();
+
+        public string GetImportantText();
+
         public Color GetTargetRoleSeeColor(
             byte targetPlayerId, SingleRoleBase targetRole, GhostRoleBase targetGhostRole);
 
