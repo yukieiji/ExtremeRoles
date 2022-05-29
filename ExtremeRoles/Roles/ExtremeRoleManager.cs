@@ -208,9 +208,10 @@ namespace ExtremeRoles.Roles
         public static void CreateCombinationRoleOptions(
             int optionIdOffsetChord)
         {
-            IEnumerable<CombinationRoleManagerBase> roles = CombRole.Values;
 
-            if (roles.Count() == 0) { return; };
+            if (CombRole.Count == 0) { return; };
+
+            IEnumerable<CombinationRoleManagerBase> roles = CombRole.Values;
 
             int roleOptionOffset = optionIdOffsetChord;
 
@@ -227,9 +228,9 @@ namespace ExtremeRoles.Roles
             int optionIdOffsetChord)
         {
 
-            IEnumerable<SingleRoleBase> roles = NormalRole.Values;
+            if (NormalRole.Count == 0) { return; };
 
-            if (roles.Count() == 0) { return; };
+            IEnumerable<SingleRoleBase> roles = NormalRole.Values;
 
             int roleOptionOffset = 0;
 
