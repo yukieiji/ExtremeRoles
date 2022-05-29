@@ -229,9 +229,9 @@ namespace ExtremeRoles.GhostRoles
 
         public static void CreateGhostRoleOption(int optionIdOffset)
         {
-            IEnumerable<GhostRoleBase> roles = AllGhostRole.Values;
+            if (AllGhostRole.Count == 0) { return; };
 
-            if (roles.Count() == 0) { return; };
+            IEnumerable<GhostRoleBase> roles = AllGhostRole.Values;
 
             int roleOptionOffset = 0;
 
