@@ -14,6 +14,10 @@ namespace ExtremeRoles.GhostRoles
     public enum ExtremeGhostRoleId : byte
     {
         VanillaRole = 0,
+        
+        
+        NoNameNow
+
     }
 
     public static class ExtremeGhostRoleManager
