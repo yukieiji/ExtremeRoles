@@ -215,7 +215,7 @@ namespace ExtremeRoles.Patches
         {
             __result = false;
 
-            if (OptionHolder.Ship.NoVoteIsSelfVote && 
+            if (OptionHolder.Ship.DisableSelfVote && 
                 PlayerControl.LocalPlayer.PlayerId == suspectStateIdx)
             {
                 return false;

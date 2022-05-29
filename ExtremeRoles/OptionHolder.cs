@@ -51,7 +51,7 @@ namespace ExtremeRoles
 
             NumMeating,
             DisableSkipInEmergencyMeeting,
-            NoVoteToSelf,
+            DisableSelfVote,
             DesableVent,
             EngineerUseImpostorVent,
             CanKillVentInPlayer,
@@ -129,8 +129,8 @@ namespace ExtremeRoles
                 CommonOptionKey.DisableSkipInEmergencyMeeting.ToString(),
                 false);
             new BoolCustomOption(
-                (int)CommonOptionKey.NoVoteToSelf,
-                CommonOptionKey.NoVoteToSelf.ToString(),
+                (int)CommonOptionKey.DisableSelfVote,
+                CommonOptionKey.DisableSelfVote.ToString(),
                 false);
 
             var ventOption = new BoolCustomOption(
@@ -220,8 +220,8 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.CanKillVentInPlayer].GetValue();
             Ship.EngineerUseImpostorVent = AllOption[
                 (int)CommonOptionKey.EngineerUseImpostorVent].GetValue();
-            Ship.NoVoteIsSelfVote = AllOption[
-                (int)CommonOptionKey.NoVoteToSelf].GetValue();
+            Ship.DisableSelfVote = AllOption[
+                (int)CommonOptionKey.DisableSelfVote].GetValue();
             Ship.IsSameNeutralSameWin = AllOption[
                 (int)CommonOptionKey.IsSameNeutralSameWin].GetValue();
             Ship.DisableNeutralSpecialForceEnd = AllOption[
@@ -343,7 +343,7 @@ namespace ExtremeRoles
             public static bool DisableVent = false;
             public static bool EngineerUseImpostorVent = false;
             public static bool CanKillVentInPlayer = false;
-            public static bool NoVoteIsSelfVote = false;
+            public static bool DisableSelfVote = false;
             public static bool IsSameNeutralSameWin = true;
             public static bool DisableNeutralSpecialForceEnd = false;
         }
