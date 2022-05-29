@@ -45,15 +45,12 @@ namespace ExtremeRoles.Patches.Manager
             {
                 case ExtremeRoleType.Crewmate:
                     result = ((extremeRolesData.CrewmateRoles - 1) >= 0);
-                    if (result) { extremeRolesData.CrewmateRoles = extremeRolesData.CrewmateRoles - 1; }
                     break;
                 case ExtremeRoleType.Neutral:
                     result = ((extremeRolesData.NeutralRoles - 1) >= 0);
-                    if (result) { extremeRolesData.NeutralRoles = extremeRolesData.NeutralRoles - 1; }
                     break;
                 case ExtremeRoleType.Impostor:
                     result = ((extremeRolesData.ImpostorRoles - 1) >= 0);
-                    if (result) { extremeRolesData.ImpostorRoles = extremeRolesData.ImpostorRoles - 1; }
                     break;
                 default:
                     result = false;
@@ -318,7 +315,9 @@ namespace ExtremeRoles.Patches.Manager
                 List<SingleRoleBase> shuffledRoles = new List<SingleRoleBase>();
                 PlayerControl player = PlayerControl.AllPlayerControls[index];
                 RoleBehaviour roleData = player.Data.Role;
-
+                
+                Logging.Debug($"-------------------AssignToPlayer:{player.Data.PlayerName}-------------------");
+                
                 // Modules.Helpers.DebugLog($"ShufflePlayerIndex:{shuffledArange.Count()}");
 
                 switch (roleData.Role)
@@ -351,24 +350,26 @@ namespace ExtremeRoles.Patches.Manager
                 foreach (var role in shuffledRoles)
                 {
                     // Logging.Debug($"KeyFound?:{extremeRolesData.RoleSpawnSettings[roleData.Role].ContainsKey(role.BytedRoleId)}");
-
+                    Logging.Debug($"---AssignRole:{role.Id}---");
                     byte bytedRoleId = (byte)role.Id;
                     var (roleNum, spawnRate) = extremeRolesData.RoleSpawnSettings[
                         roleData.Role][bytedRoleId];
 
                     result = isRoleSpawn(roleNum, spawnRate);
+                    Logging.Debug($"IsRoleSpawn:{result}");
                     result = result && checkLimitRoleSpawnNum(role, ref extremeRolesData);
-                    
+                    Logging.Debug($"IsNotSpawnLimitNum:{result}");
+
                     if (ExtremeRoleManager.GameRole.ContainsKey(player.PlayerId))
                     {
                         result = result && ExtremeRoleManager.GameRole[
                             player.PlayerId].Team == role.Team;
+                        Logging.Debug($"IsSameTeam:{result}");
                     }
-
-                    // Logging.Debug($"Role:{role.Id}: AssignResult:{result}");
 
                     if (result)
                     {
+                        reduceToSpawnDataNum(role.Team, ref extremeRolesData);
                         setNormalRoleToPlayer(player, (byte)role.Id);
                         shuffledArange.Remove(index);
                         extremeRolesData.RoleSpawnSettings[roleData.Role][bytedRoleId] = (
@@ -383,6 +384,9 @@ namespace ExtremeRoles.Patches.Manager
                             spawnRate);
                     }
                 }
+
+                Logging.Debug($"-------------------AssignEnd-------------------");
+
             }
 
             foreach (int index in shuffledArange)
@@ -390,6 +394,26 @@ namespace ExtremeRoles.Patches.Manager
                 PlayerControl player = PlayerControl.AllPlayerControls[index];
                 setNormalRoleToPlayer(
                     player, (byte)(player.Data.Role.Role));
+            }
+        }
+
+        private static void reduceToSpawnDataNum(
+            ExtremeRoleType team,
+            ref RoleAssignmentData extremeRolesData)
+        {
+            switch (team)
+            {
+                case ExtremeRoleType.Crewmate:
+                    extremeRolesData.CrewmateRoles = extremeRolesData.CrewmateRoles - 1;
+                    break;
+                case ExtremeRoleType.Impostor:
+                    extremeRolesData.ImpostorRoles = extremeRolesData.ImpostorRoles - 1;
+                    break;
+                case ExtremeRoleType.Neutral:
+                    extremeRolesData.NeutralRoles = extremeRolesData.NeutralRoles - 1;
+                    break;
+                default:
+                    break;
             }
         }
 
