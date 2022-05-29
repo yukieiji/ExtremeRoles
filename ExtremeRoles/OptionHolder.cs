@@ -342,8 +342,8 @@ namespace ExtremeRoles
                 CommonOptionKey.DisableSkipInEmergencyMeeting.ToString(),
                 false);
             new BoolCustomOption(
-                (int)CommonOptionKey.NoVoteToSelf,
-                CommonOptionKey.NoVoteToSelf.ToString(),
+                (int)CommonOptionKey.DisableSelfVote,
+                CommonOptionKey.DisableSelfVote.ToString(),
                 false);
 
 
