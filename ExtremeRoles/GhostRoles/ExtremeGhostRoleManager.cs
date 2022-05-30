@@ -110,7 +110,7 @@ namespace ExtremeRoles.GhostRoles
                 (HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId) addData = (
                     filter, spawnNum, spawnRate, ghostRoleId);
 
-                if (this.useGhostRole.ContainsKey(team))
+                if (!this.useGhostRole.ContainsKey(team))
                 {
                     List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> teamGhostRole = new List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)>()
                     {
