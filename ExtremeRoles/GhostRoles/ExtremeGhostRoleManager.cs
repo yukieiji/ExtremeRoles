@@ -215,7 +215,7 @@ namespace ExtremeRoles.GhostRoles
             foreach (var(filter, num, spawnRate, id) in sameTeamRoleAssignData)
             {
                 if (filter.Count != 0 && !filter.Contains(baseRole.Id)) { continue; }
-                if (isRoleSpawn(num, spawnRate)) { continue; }
+                if (!isRoleSpawn(num, spawnRate)) { continue; }
                 
                 rpcSetSingleGhostRoleToPlayerId(player, roleType, id);
                 
