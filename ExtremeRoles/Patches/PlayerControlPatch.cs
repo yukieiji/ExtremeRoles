@@ -635,6 +635,15 @@ namespace ExtremeRoles.Patches
         {
             if (playerGhostRole != null && playerGhostRole.Button != null)
             {
+                switch(PlayerControl.LocalPlayer.Data.Role.Role)
+                {
+                    case RoleTypes.Engineer:
+                    case RoleTypes.Shapeshifter:
+                        HudManager.Instance.AbilityButton.Hide();
+                        break;
+                    default:
+                        break;
+                }
                 playerGhostRole.Button.Update();
             }
         }
