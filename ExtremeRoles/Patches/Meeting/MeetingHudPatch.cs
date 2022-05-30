@@ -68,18 +68,15 @@ namespace ExtremeRoles.Patches.Meeting
 
         private static bool isVoteSeeBlock(Roles.API.SingleRoleBase role)
         {
-            if (PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
+            if (ExtremeGhostRoleManager.GameRole.ContainsKey(
+                    PlayerControl.LocalPlayer.PlayerId) ||
+                PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
             {
                 return true;
             }
             else if (role.IsImpostor() && role.Id != ExtremeRoleId.Assassin)
             {
                 return ExtremeRolesPlugin.GameDataStore.IsAssassinAssign;
-            }
-            else if (ExtremeGhostRoleManager.GameRole.ContainsKey(
-                PlayerControl.LocalPlayer.PlayerId))
-            {
-                return true;
             }
             return false;
         }
