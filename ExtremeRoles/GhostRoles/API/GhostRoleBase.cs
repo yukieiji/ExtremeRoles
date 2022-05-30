@@ -177,7 +177,22 @@ namespace ExtremeRoles.GhostRoles.API
                     defaultActiveTime, minActiveTime, maxActiveTime, step,
                     parentOps, format: OptionUnit.Second);
             }
+        }
 
+        protected void CreateCountButtonOption(
+            CustomOptionBase parentOps,
+            int defaultAbilityCount,
+            int maxAbilityCount,
+            float defaultActiveTime = float.MaxValue)
+        {
+            CreateButtonOption(
+                parentOps, defaultActiveTime);
+
+            CreateIntOption(
+                RoleAbilityCommonOption.AbilityCount,
+                defaultAbilityCount, 1,
+                maxAbilityCount, 1,
+                parentOps, format: OptionUnit.Shot);
         }
 
         protected void ButtonInit()
@@ -193,6 +208,15 @@ namespace ExtremeRoles.GhostRoles.API
             if (allOps.ContainsKey(checkOptionId))
             {
                 this.Button.SetAbilityActiveTime(
+                    allOps[checkOptionId].GetValue());
+            }
+
+            checkOptionId = this.GetRoleOptionId(RoleAbilityCommonOption.AbilityCount);
+            var abilityCountButton = this.Button as AbilityCountButton;
+
+            if (allOps.ContainsKey(checkOptionId) && abilityCountButton != null)
+            {
+                abilityCountButton.UpdateAbilityCount(
                     allOps[checkOptionId].GetValue());
             }
 

@@ -3,6 +3,8 @@ using System.Text;
 
 using Hazel;
 
+using ExtremeRoles.GhostRoles.Impostor;
+
 
 namespace ExtremeRoles.Module
 {
@@ -10,7 +12,7 @@ namespace ExtremeRoles.Module
     {
         public enum AbilityType : byte
         {
-
+            NoNameNowVentAnime
         }
 
         private HashSet<AbilityType> useAbility = new HashSet<AbilityType>();
@@ -44,6 +46,10 @@ namespace ExtremeRoles.Module
         {
             switch ((AbilityType)abilityType)
             {
+                case AbilityType.NoNameNowVentAnime:
+                    int ventId = reader.ReadInt32();
+                    NoNameNow.VentAnime(ventId);
+                    break;
                 default:
                     break;
             }

@@ -1,5 +1,6 @@
 ﻿using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.AbilityButton.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using Hazel;
@@ -10,6 +11,12 @@ namespace ExtremeRoles.GhostRoles.Impostor
 {
     public class NoNameNow : GhostRoleBase
     {
+        public enum Option
+        {
+            Range,
+        }
+
+        private float range;
         private Vent targetVent;
 
         public NoNameNow() : base(
@@ -20,16 +27,30 @@ namespace ExtremeRoles.GhostRoles.Impostor
             Palette.ImpostorRed)
         { }
 
+        public static void VentAnime(int ventId)
+        {
+            RPCOperator.StartVentAnimation(ventId);
+        }
+
         public override void CreateAbility()
         {
-            throw new System.NotImplementedException();
+            this.Button = new AbilityCountButton(
+                GhostRoleAbilityManager.AbilityType.NoNameNowVentAnime,
+                this.UseAbility,
+                this.isPreCheck,
+                this.isAbilityUse,
+                Resources.Loader.CreateSpriteFromResources(
+                    Resources.Path.TestButton),
+                new Vector3(-1.8f, -0.06f, 0));
+            this.ButtonInit();
         }
 
         public override HashSet<ExtremeRoleId> GetRoleFilter() => new HashSet<ExtremeRoleId>();
 
         public override void Initialize()
         {
-            throw new System.NotImplementedException();
+            this.range = OptionHolder.AllOption[
+                GetRoleOptionId(Option.Range)].GetValue();
         }
 
         public override void ReseOnMeetingEnd()
@@ -42,14 +63,50 @@ namespace ExtremeRoles.GhostRoles.Impostor
             this.targetVent = null;
         }
 
-        protected override void CreateSpecificOption(CustomOptionBase parentOps)
+        protected override void CreateSpecificOption(
+            CustomOptionBase parentOps)
         {
-            throw new System.NotImplementedException();
+            CreateFloatOption(
+                Option.Range, 1.0f,
+                0.2f, 3.0f, 0.1f,
+                parentOps);
+            CreateCountButtonOption(
+                parentOps, 2, 5);
         }
 
         protected override void UseAbility(MessageWriter writer)
         {
             writer.Write(targetVent.Id);
+        }
+
+        private bool isPreCheck() => this.targetVent != null;
+
+        private bool isAbilityUse()
+        {
+            this.targetVent = null;
+
+            if (ShipStatus.Instance == null ||
+                !ShipStatus.Instance.enabled) { return false; }
+
+            Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
+
+            foreach (Vent vent in ShipStatus.Instance.AllVents)
+            {
+                if (vent == null) { continue; }
+                if (ExtremeRolesPlugin.GameDataStore.CustomVent.IsCustomVent(vent.Id) &&
+                    !vent.gameObject.active)
+                {
+                    continue;
+                }
+                float distance = Vector2.Distance(vent.transform.position, truePosition);
+                if (distance <= this.range)
+                {
+                    this.targetVent = vent;
+                    break;
+                }
+            }
+
+            return this.IsCommonUse() && this.targetVent != null;
         }
     }
 }
