@@ -7,7 +7,7 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Module.InfoOverlay
 {
-    internal class RolesFullDecManager
+    internal class RolesFullDecManager : IFullDecManager
     {
         private int rolePage = 0;
         private List<(string, int)> allRoleText = new List<(string, int)>();

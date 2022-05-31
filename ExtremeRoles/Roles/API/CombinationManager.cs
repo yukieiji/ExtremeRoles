@@ -388,6 +388,8 @@ namespace ExtremeRoles.Roles.API
             this.CombGhostRole.Clear();
         }
 
+        public int GetOptionIdOffset() => this.OptionIdOffset;
+
         public GhostRoles.API.GhostRoleBase GetGhostRole(ExtremeRoleId id) => this.CombGhostRole[id];
 
         protected override void CreateSpecificOption(
