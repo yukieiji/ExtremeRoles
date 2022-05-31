@@ -22,6 +22,8 @@ namespace ExtremeRoles.Module.InfoOverlay
 
         private RolesFullDecManager roleFullDec = new RolesFullDecManager();
 
+        private const int maxLine = 35;
+        private const float outlineWidth = 0.02f;
 
         public InfoOverlay()
         {
@@ -61,33 +63,9 @@ namespace ExtremeRoles.Module.InfoOverlay
                 {
                     infoUnderlay.enabled = false;
                 }
-
-
-                if (ruleInfoText != null)
-                {
-                    ruleInfoText.color = Color.Lerp(Palette.White, Palette.ClearWhite, t);
-                    if (t >= 1.0f)
-                    {
-                        ruleInfoText.enabled = false;
-                    }
-                }
-
-                if (roleInfoText != null)
-                {
-                    roleInfoText.color = Color.Lerp(Palette.White, Palette.ClearWhite, t);
-                    if (t >= 1.0f)
-                    {
-                        roleInfoText.enabled = false;
-                    }
-                }
-                if (anotherRoleInfoText != null)
-                {
-                    anotherRoleInfoText.color = Color.Lerp(Palette.White, Palette.ClearWhite, t);
-                    if (t >= 1.0f)
-                    {
-                        anotherRoleInfoText.enabled = false;
-                    }
-                }
+                textLerp(ref ruleInfoText, t);
+                textLerp(ref roleInfoText, t);
+                textLerp(ref anotherRoleInfoText, t);
             })));
         }
 
@@ -113,7 +91,6 @@ namespace ExtremeRoles.Module.InfoOverlay
             meetingUnderlay = infoUnderlay = null;
             ruleInfoText = roleInfoText = anotherRoleInfoText = null;
             this.overlayShown = false;
-
         }
 
         public void ToggleInfoOverlay()
@@ -139,7 +116,6 @@ namespace ExtremeRoles.Module.InfoOverlay
                     Path.BackGround, 100f);
             }
 
-
             if (meetingUnderlay == null)
             {
                 meetingUnderlay = UnityEngine.Object.Instantiate(hudManager.FullScreen, hudManager.transform);
@@ -147,7 +123,6 @@ namespace ExtremeRoles.Module.InfoOverlay
                 meetingUnderlay.gameObject.SetActive(true);
                 meetingUnderlay.enabled = false;
             }
-
             if (infoUnderlay == null)
             {
                 infoUnderlay = UnityEngine.Object.Instantiate(meetingUnderlay, hudManager.transform);
@@ -159,46 +134,25 @@ namespace ExtremeRoles.Module.InfoOverlay
             if (ruleInfoText == null)
             {
                 ruleInfoText = UnityEngine.Object.Instantiate(hudManager.TaskText, hudManager.transform);
-                ruleInfoText.fontSize = ruleInfoText.fontSizeMin = ruleInfoText.fontSizeMax = 1.15f;
-                ruleInfoText.autoSizeTextContainer = false;
-                ruleInfoText.enableWordWrapping = false;
-                ruleInfoText.alignment = TMPro.TextAlignmentOptions.TopLeft;
-                ruleInfoText.transform.position = Vector3.zero;
+                initInfoText(ref ruleInfoText);
                 ruleInfoText.transform.localPosition = new Vector3(-3.6f, 1.6f, -910f);
-                ruleInfoText.transform.localScale = Vector3.one;
-                ruleInfoText.color = Palette.White;
-                ruleInfoText.enabled = false;
             }
 
             if (roleInfoText == null)
             {
                 roleInfoText = UnityEngine.Object.Instantiate(ruleInfoText, hudManager.transform);
-                roleInfoText.maxVisibleLines = 35;
-                roleInfoText.fontSize = roleInfoText.fontSizeMin = roleInfoText.fontSizeMax = 1.15f;
-                roleInfoText.outlineWidth += 0.02f;
-                roleInfoText.autoSizeTextContainer = false;
-                roleInfoText.enableWordWrapping = false;
-                roleInfoText.alignment = TMPro.TextAlignmentOptions.TopLeft;
-                roleInfoText.transform.position = Vector3.zero;
+                initInfoText(ref roleInfoText);
+                roleInfoText.outlineWidth += outlineWidth;
+                roleInfoText.maxVisibleLines = maxLine;
                 roleInfoText.transform.localPosition = ruleInfoText.transform.localPosition + new Vector3(3.25f, 0.0f, 0.0f);
-                roleInfoText.transform.localScale = Vector3.one;
-                roleInfoText.color = Palette.White;
-                roleInfoText.enabled = false;
             }
             if (anotherRoleInfoText == null)
             {
                 anotherRoleInfoText = UnityEngine.Object.Instantiate(ruleInfoText, hudManager.transform);
-                anotherRoleInfoText.maxVisibleLines = 35;
-                anotherRoleInfoText.fontSize = anotherRoleInfoText.fontSizeMin = anotherRoleInfoText.fontSizeMax = 1.15f;
-                anotherRoleInfoText.outlineWidth += 0.02f;
-                anotherRoleInfoText.autoSizeTextContainer = false;
-                anotherRoleInfoText.enableWordWrapping = false;
-                anotherRoleInfoText.alignment = TMPro.TextAlignmentOptions.TopLeft;
-                anotherRoleInfoText.transform.position = Vector3.zero;
+                initInfoText(ref anotherRoleInfoText);
+                anotherRoleInfoText.outlineWidth += outlineWidth;
+                anotherRoleInfoText.maxVisibleLines = maxLine;
                 anotherRoleInfoText.transform.localPosition = ruleInfoText.transform.localPosition + new Vector3(6.5f, 0.0f, 0.0f);
-                anotherRoleInfoText.transform.localScale = Vector3.one;
-                anotherRoleInfoText.color = Palette.White;
-                anotherRoleInfoText.enabled = false;
             }
 
             return true;
@@ -302,5 +256,30 @@ namespace ExtremeRoles.Module.InfoOverlay
             anotherRoleInfoText.enabled = true;
         }
 
+        private void initInfoText(
+            ref TMPro.TextMeshPro text)
+        {
+            text.fontSize = text.fontSizeMin = text.fontSizeMax = 1.15f;
+            text.autoSizeTextContainer = false;
+            text.enableWordWrapping = false;
+            text.alignment = TMPro.TextAlignmentOptions.TopLeft;
+            text.transform.position = Vector3.zero;
+            text.transform.localScale = Vector3.one;
+            text.color = Palette.White;
+            text.enabled = false;
+        }
+
+        private void textLerp(
+            ref TMPro.TextMeshPro text, float t)
+        {
+            if (text != null)
+            {
+                text.color = Color.Lerp(Palette.White, Palette.ClearWhite, t);
+                if (t >= 1.0f)
+                {
+                    text.enabled = false;
+                }
+            }
+        }
     }
 }
