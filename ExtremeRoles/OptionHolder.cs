@@ -275,12 +275,14 @@ namespace ExtremeRoles
             {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                     PlayerControl.LocalPlayer.NetId,
-                    (byte)RPCOperator.Command.ShareOption, Hazel.SendOption.Reliable);
-                writer.WritePacked(chunkSize);
+                    (byte)RPCOperator.Command.ShareOption,
+                    Hazel.SendOption.Reliable);
+
+                writer.Write((byte)chunkedOption.Count());
                 foreach (var (id, option) in chunkedOption)
                 {
-                    writer.WritePacked((uint)id);
-                    writer.WritePacked(Convert.ToUInt32(option.CurSelection));
+                    writer.WritePacked(id);
+                    writer.WritePacked(option.CurSelection);
                 }
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
             }
@@ -291,9 +293,9 @@ namespace ExtremeRoles
             {
                 for (int i = 0; i < numberOfOptions; i++)
                 {
-                    uint optionId = reader.ReadPackedUInt32();
-                    uint selection = reader.ReadPackedUInt32();
-                    AllOption[(int)optionId].UpdateSelection((int)selection);
+                    int optionId = reader.ReadPackedInt32();
+                    int selection = reader.ReadPackedInt32();
+                    AllOption[optionId].UpdateSelection(selection);
                 }
             }
             catch (Exception e)

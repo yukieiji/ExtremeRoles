@@ -703,7 +703,7 @@ namespace ExtremeRoles.Patches
                         gameControlId, bytedRoleType);
                     break;
                 case RPCOperator.Command.ShareOption:
-                    int numOptions = (int)reader.ReadPackedUInt32();
+                    int numOptions = (int)reader.ReadByte();
                     RPCOperator.ShareOption(numOptions, reader);
                     break;
                 case RPCOperator.Command.ReplaceRole:
