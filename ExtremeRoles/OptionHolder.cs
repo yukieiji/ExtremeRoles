@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 
 using UnityEngine;
@@ -17,6 +17,7 @@ namespace ExtremeRoles
 
         public const int VanillaMaxPlayerNum = 15;
         public const int MaxImposterNum = 3;
+        private const int chunkSize = 50;
 
         public static string[] SpawnRate = new string[] {
             "0%", "10%", "20%", "30%", "40%",
@@ -62,7 +63,7 @@ namespace ExtremeRoles
             EnableHorseMode
         }
 
-        public static Dictionary<int, CustomOptionBase> AllOption = new Dictionary<int, CustomOptionBase>();
+        public static ConcurrentDictionary<int, CustomOptionBase> AllOption = new ConcurrentDictionary<int, CustomOptionBase>();
 
         public static void Create()
         {
@@ -265,18 +266,24 @@ namespace ExtremeRoles
                 AmongUsClient.Instance?.AmHost == false &&
                 PlayerControl.LocalPlayer == null) { return; }
 
-            MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(
-                PlayerControl.LocalPlayer.NetId,
-                (byte)RPCOperator.Command.ShareOption, Hazel.SendOption.Reliable);
-            messageWriter.WritePacked((uint)AllOption.Count);
-            
-            foreach (var(id, option) in AllOption)
+            var splitOption = AllOption.Select((x, i) =>
+                new { data = x, indexgroup = i / chunkSize })
+                .GroupBy(x => x.indexgroup, x => x.data)
+                .Select(y => y.Select(x => x));
+
+            foreach (var chunkedOption in splitOption)
             {
-                messageWriter.WritePacked((uint)id);
-                messageWriter.WritePacked(Convert.ToUInt32(option.CurSelection));
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                    PlayerControl.LocalPlayer.NetId,
+                    (byte)RPCOperator.Command.ShareOption, Hazel.SendOption.Reliable);
+                writer.WritePacked(chunkSize);
+                foreach (var (id, option) in chunkedOption)
+                {
+                    writer.WritePacked((uint)id);
+                    writer.WritePacked(Convert.ToUInt32(option.CurSelection));
+                }
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
             }
-            
-            messageWriter.EndMessage();
         }
         public static void ShareOption(int numberOfOptions, MessageReader reader)
         {

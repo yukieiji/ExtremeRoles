@@ -103,7 +103,7 @@ namespace ExtremeRoles.Module
 
             Logging.Debug($"OptinId:{this.Id}    Name:{this.Name}");
 
-            OptionHolder.AllOption.Add(this.Id, this);
+            OptionHolder.AllOption[this.Id] = this;
         }
         
         protected virtual void OptionUpdate(object newValue)
