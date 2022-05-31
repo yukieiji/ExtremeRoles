@@ -18,15 +18,13 @@ namespace ExtremeRoles.Patches.Manager
         {
             if (Helper.GameSystem.IsFreePlay) { return; }
 
-            var info = ExtremeRolesPlugin.Info;
-
-            if (info.infoButton == null)
+            if (Module.InfoOverlay.Button.Body == null)
             {
-                info.CreateInfoButton();
+                Module.InfoOverlay.Button.CreateInfoButton();
             }
             else
             {
-                info.SetInfoButtonToGameStartShipPositon();
+                Module.InfoOverlay.Button.SetInfoButtonToGameStartShipPositon();
             }
         }
     }

@@ -200,7 +200,7 @@ namespace ExtremeRoles.Patches
     {
         public static void Prefix(IntroCutscene __instance)
         {
-            ExtremeRolesPlugin.Info.SetInfoButtonToInGamePositon();
+            Module.InfoOverlay.Button.SetInfoButtonToInGamePositon();
 
             var localRole = ExtremeRoleManager.GetLocalPlayerRole();
 

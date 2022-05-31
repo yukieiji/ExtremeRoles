@@ -6,6 +6,7 @@ using BepInEx.IL2CPP;
 
 using HarmonyLib;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.InfoOverlay;
 
 
 namespace ExtremeRoles
