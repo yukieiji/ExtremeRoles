@@ -41,7 +41,7 @@ namespace ExtremeRoles.GhostRoles.Impostor
                 this.isAbilityUse,
                 Resources.Loader.CreateSpriteFromResources(
                     Resources.Path.TestButton),
-                new Vector3(-1.8f, -0.06f, 0));
+                this.DefaultButtonOffset);
             this.ButtonInit();
         }
 
