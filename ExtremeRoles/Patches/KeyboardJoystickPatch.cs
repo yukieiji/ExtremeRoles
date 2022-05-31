@@ -164,7 +164,14 @@ namespace ExtremeRoles.Patches
 
             if (Input.GetKeyDown(KeyCode.H) && !HudManager.Instance.Chat.IsOpen)
             {
-                ExtremeRolesPlugin.Info.ToggleInfoOverlay();
+                var showType = Module.InfoOverlay.InfoOverlay.ShowType.Normal;
+                ExtremeRolesPlugin.Info.ToggleInfoOverlay(showType);
+
+            }
+            if (Input.GetKeyDown(KeyCode.G) && !HudManager.Instance.Chat.IsOpen)
+            {
+                var showType = Module.InfoOverlay.InfoOverlay.ShowType.Ghost;
+                ExtremeRolesPlugin.Info.ToggleInfoOverlay(showType);
             }
 
             // キルとベントボタン

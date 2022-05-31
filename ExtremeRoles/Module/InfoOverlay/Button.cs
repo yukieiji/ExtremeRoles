@@ -24,7 +24,7 @@ namespace ExtremeRoles.Module.InfoOverlay
             var passiveButton = Body.GetComponent<PassiveButton>();
             passiveButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
             passiveButton.OnClick.AddListener(
-                (UnityAction)ExtremeRolesPlugin.Info.ToggleInfoOverlay);
+                (UnityAction)toggleInfoOverlay);
 
             var render = Body.GetComponent<SpriteRenderer>();
             render.sprite = Loader.CreateSpriteFromResources(
@@ -44,5 +44,10 @@ namespace ExtremeRoles.Module.InfoOverlay
                 4.925f, 1.3f, 0.0f);
         }
 
+        private static void toggleInfoOverlay()
+        {
+            ExtremeRolesPlugin.Info.ToggleInfoOverlay(
+                ExtremeRolesPlugin.Info.CurShowInfo);
+        }
     }
 }

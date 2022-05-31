@@ -9,7 +9,14 @@ namespace ExtremeRoles.Module.InfoOverlay
 {
     public class InfoOverlay
     {
+        public enum ShowType : byte
+        {
+            Normal,
+            Ghost,
+        }
+
         public bool OverlayShown => this.overlayShown;
+        public ShowType CurShowInfo => this.curShow;
         
         private Sprite colorBackGround;
         private SpriteRenderer meetingUnderlay;
@@ -21,6 +28,8 @@ namespace ExtremeRoles.Module.InfoOverlay
         private bool overlayShown = false;
 
         private RolesFullDecManager roleFullDec = new RolesFullDecManager();
+        private GhostRolesFullDecManager ghostRoleFullDec = new GhostRolesFullDecManager();
+        private ShowType curShow;
 
         private const int maxLine = 35;
         private const float outlineWidth = 0.02f;
@@ -28,13 +37,28 @@ namespace ExtremeRoles.Module.InfoOverlay
         public InfoOverlay()
         {
             this.roleFullDec.Clear();
+            this.curShow = ShowType.Normal;
+            this.overlayShown = false;
         }
 
         public void ChangePage(int add)
         {
-            this.roleFullDec.ChangeRoleInfoPage(add);
-            this.updateShowText(
-                this.roleFullDec.GetRoleInfoPageText());
+            Tuple<string, string> showText;
+            switch (this.curShow)
+            {
+                case ShowType.Normal:
+                    this.roleFullDec.ChangeRoleInfoPage(add);
+                    showText = this.roleFullDec.GetRoleInfoPageText();
+                    break;
+                case ShowType.Ghost:
+                    this.ghostRoleFullDec.ChangeRoleInfoPage(add);
+                    showText = this.ghostRoleFullDec.GetRoleInfoPageText();
+                    break;
+                default:
+                    showText = Tuple.Create("", "");
+                    break;
+            }
+            updateShowText(showText);
         }
 
         public void HideBlackBG()
@@ -87,13 +111,54 @@ namespace ExtremeRoles.Module.InfoOverlay
             UnityEngine.Object.Destroy(anotherRoleInfoText);
 
             this.roleFullDec.Clear();
+            this.ghostRoleFullDec.Clear();
 
             meetingUnderlay = infoUnderlay = null;
             ruleInfoText = roleInfoText = anotherRoleInfoText = null;
             this.overlayShown = false;
         }
 
-        public void ToggleInfoOverlay()
+        public void SetShowInfo(ShowType showType)
+        {
+
+            Tuple<string, string> showText;
+
+            if (ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd())
+            {
+                switch (showType)
+                {
+                    case ShowType.Normal:
+                        showText = this.roleFullDec.GetPlayerRoleText();
+                        break;
+                    case ShowType.Ghost:
+                        showText = this.ghostRoleFullDec.GetPlayerRoleText();
+                        break;
+                    default:
+                        showText = Tuple.Create("", "");
+                        break;
+                }
+            }
+            else
+            {
+                switch (showType)
+                {
+                    case ShowType.Normal:
+                        showText = this.roleFullDec.GetRoleInfoPageText();
+                        break;
+                    case ShowType.Ghost:
+                        showText = this.ghostRoleFullDec.GetRoleInfoPageText();
+                        break;
+                    default:
+                        showText = Tuple.Create("", "");
+                        break;
+                }
+            }
+
+            updateShowText(showText);
+        }
+
+
+        public void ToggleInfoOverlay(ShowType showType)
         {
             if (OverlayShown)
             {
@@ -101,9 +166,10 @@ namespace ExtremeRoles.Module.InfoOverlay
             }
             else
             {
-                showInfoOverlay();
+                showInfoOverlay(showType);
             }
         }
+
 
         private bool initializeOverlays()
         {
@@ -174,9 +240,7 @@ namespace ExtremeRoles.Module.InfoOverlay
             })));
         }
 
-
-
-        private void showInfoOverlay()
+        private void showInfoOverlay(ShowType showType)
         {
 
             if (OverlayShown) { return; }
@@ -222,18 +286,8 @@ namespace ExtremeRoles.Module.InfoOverlay
             ruleInfoText.text = $"<size=200%>{Translation.GetString("gameOption")}</size>\n{CommonOption.GetGameOptionString()}";
             ruleInfoText.enabled = true;
 
-            Tuple<string, string> showText;
-
-            if (ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd())
-            {
-                showText = this.roleFullDec.GetPlayerRoleText();
-            }
-            else
-            {
-                showText = this.roleFullDec.GetRoleInfoPageText();
-            }
-
-            updateShowText(showText);
+            SetShowInfo(showType);
+            this.curShow = showType;
 
             var underlayTransparent = new Color(0.1f, 0.1f, 0.1f, 0.0f);
             var underlayOpaque = new Color(0.1f, 0.1f, 0.1f, 0.88f);
