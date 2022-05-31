@@ -13,6 +13,7 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
         protected Func<bool> abilityPreCheck;
         protected Action<MessageWriter> ability;
         private GhostRoleAbilityManager.AbilityType abilityType;
+        private Action rpcHostCallAbility;
 
         public GhostRoleAbilityButtonBase(
             GhostRoleAbilityManager.AbilityType abilityType,
@@ -21,6 +22,7 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
             Func<bool> canUse,
             Sprite sprite,
             Vector3 positionOffset,
+            Action rpcHostCallAbility = null,
             Action abilityCleanUp = null,
             Func<bool> abilityCheck = null,
             KeyCode hotkey = KeyCode.F,
@@ -34,6 +36,7 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
             this.ability = ability;
             this.abilityPreCheck = abilityPreCheck;
             this.abilityType = abilityType;
+            this.rpcHostCallAbility = rpcHostCallAbility;
         }
 
         protected abstract void AbilityButtonUpdate();
@@ -51,6 +54,10 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
                 this.ability(writer);
 
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
+                if (this.rpcHostCallAbility != null)
+                {
+                    this.rpcHostCallAbility();
+                }
                 return true;
             }
             else

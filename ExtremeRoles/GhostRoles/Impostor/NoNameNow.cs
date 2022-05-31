@@ -41,7 +41,8 @@ namespace ExtremeRoles.GhostRoles.Impostor
                 this.isAbilityUse,
                 Resources.Loader.CreateSpriteFromResources(
                     Resources.Path.TestButton),
-                this.DefaultButtonOffset);
+                this.DefaultButtonOffset,
+                rpcHostCallAbility: abilityCall);
             this.ButtonInit();
         }
 
@@ -107,6 +108,11 @@ namespace ExtremeRoles.GhostRoles.Impostor
             }
 
             return this.IsCommonUse() && this.targetVent != null;
+        }
+        private void abilityCall()
+        {
+            RPCOperator.StartVentAnimation(this.targetVent.Id);
+            this.targetVent = null;
         }
     }
 }
