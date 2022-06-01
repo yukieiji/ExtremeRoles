@@ -175,7 +175,7 @@ namespace ExtremeRoles.Patches.Meeting
         {
 			byte target = instance.TargetPlayerId;
 
-			if (shooter.CurShootNum <= 0 || target == 253 ||
+			if (shooter.CurShootNum <= 0 || !shooter.CanShoot || target == 253 ||
 				Roles.ExtremeRoleManager.GameRole[target].Id == Roles.ExtremeRoleId.Assassin)
 			{ 
 				return true; 
@@ -199,7 +199,7 @@ namespace ExtremeRoles.Patches.Meeting
 
 					void shooterKill()
                     {
-						shooter.ReduceShootNum();
+						shooter.Shoot();
 						RPCOperator.Call(
 							PlayerControl.LocalPlayer.NetId,
 							RPCOperator.Command.UncheckedMurderPlayer,
