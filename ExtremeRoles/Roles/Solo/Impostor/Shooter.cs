@@ -52,7 +52,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void ResetOnMeetingEnd()
         {
-
+            chargeInfoSetActive(true);
         }
 
         public void ResetOnMeetingStart()
@@ -62,7 +62,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 meetingShootText.gameObject.SetActive(false);
             }
-            chargeInfoTextOff();
+            chargeInfoSetActive(false);
         }
 
         public void Update(PlayerControl rolePlayer)
@@ -95,7 +95,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.curShootNum, this.maxShootNum,
                     this.maxMeetingShootNum - this.shootCounter);
                 meetingShootText.gameObject.SetActive(true);
-                chargeInfoTextOff();
+                chargeInfoSetActive(false);
             }
             else
             {
@@ -200,15 +200,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         }
 
-        private void chargeInfoTextOff()
+        private void chargeInfoSetActive(bool active)
         {
             if (this.chargeTimerText != null)
             {
-                this.chargeTimerText.gameObject.SetActive(false);
+                this.chargeTimerText.gameObject.SetActive(active);
             }
             if (this.chargeInfoText != null)
             {
-                this.chargeInfoText.gameObject.SetActive(false);
+                this.chargeInfoText.gameObject.SetActive(active);
             }
         }
 
