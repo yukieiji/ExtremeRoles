@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -73,7 +73,7 @@ namespace ExtremeRoles
             IsRemoveAngleIcon,
         }
 
-        public static ConcurrentDictionary<int, CustomOptionBase> AllOption = new ConcurrentDictionary<int, CustomOptionBase>();
+        public static Dictionary<int, CustomOptionBase> AllOption = new Dictionary<int, CustomOptionBase>();
 
         public static void Create()
         {
