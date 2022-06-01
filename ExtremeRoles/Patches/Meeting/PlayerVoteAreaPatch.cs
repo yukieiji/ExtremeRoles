@@ -47,12 +47,28 @@ namespace ExtremeRoles.Patches.Meeting
 	[HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.Select))]
 	public static class PlayerVoteAreaSelectPatch
 	{
+		private static Dictionary<byte, UiElement> meetingKillButton;
+
 		public static bool Prefix(PlayerVoteArea __instance)
 		{
+			if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return true; }
+			if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
 			var gameData = ExtremeRolesPlugin.GameDataStore;
+			var shooter = Roles.ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Roles.Solo.Impostor.Shooter>();
 
-			if (!gameData.AssassinMeetingTrigger) { return true; }
+			if (!gameData.AssassinMeetingTrigger)
+			{
+				if (shooter == null)
+                {
+					return true;
+                }
+				else
+				{
+					return shooterKillButton(
+						__instance, shooter);
+				}
+			}
 
 			if (PlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.GameDataStore.ExiledAssassinId)
 			{
@@ -153,6 +169,107 @@ namespace ExtremeRoles.Patches.Meeting
 			yield break;
 		}
 
+		private static bool shooterKillButton(
+			PlayerVoteArea instance,
+			Roles.Solo.Impostor.Shooter shooter)
+        {
+			byte target = instance.TargetPlayerId;
+
+			if (shooter.CurShootNum <= 0 || target == 253 ||
+				Roles.ExtremeRoleManager.GameRole[target].Id == Roles.ExtremeRoleId.Assassin)
+			{ 
+				return true; 
+			}
+
+			if (!instance.Parent)
+			{
+				return false;
+			}
+
+			if (!instance.voteComplete &&
+				instance.Parent.Select((int)target))
+			{
+				if (meetingKillButton == null)
+                {
+					meetingKillButton = new Dictionary<byte, UiElement> ();
+                }
+
+				if (!meetingKillButton.ContainsKey(target))
+                {
+
+					void shooterKill()
+                    {
+						shooter.ReduceShootNum();
+						RPCOperator.Call(
+							PlayerControl.LocalPlayer.NetId,
+							RPCOperator.Command.UncheckedMurderPlayer,
+							new List<byte> { PlayerControl.LocalPlayer.PlayerId, target, 0 });
+						RPCOperator.UncheckedMurderPlayer(
+							PlayerControl.LocalPlayer.PlayerId,
+							target, 0);
+					}
+
+					UiElement newKillButton = GameObject.Instantiate(
+						instance.ConfirmButton, instance.ConfirmButton.transform.parent);
+					newKillButton.name = $"shooterKill_{target}";
+					var passiveButton = newKillButton.GetComponent<PassiveButton>();
+					passiveButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
+					passiveButton.OnClick.AddListener(
+						(UnityEngine.Events.UnityAction)shooterKill);
+
+					var render = newKillButton.GetComponent<SpriteRenderer>();
+
+					meetingKillButton.Add(target, newKillButton);
+				}
+
+				instance.Buttons.SetActive(true);
+				var killbutton = meetingKillButton[target];
+
+				float startPos = instance.AnimateButtonsFromLeft ? 0.2f : 1.95f;
+				
+				instance.StartCoroutine(
+					effectsAllWrap(
+						new IEnumerator[]
+							{
+								effectsLerpWrap(0.25f, delegate(float t)
+								{
+									instance.CancelButton.transform.localPosition = Vector2.Lerp(
+										Vector2.right * startPos,
+										Vector2.right * 1.3f,
+										Effects.ExpOut(t));
+								}),
+								effectsLerpWrap(0.35f, delegate(float t)
+								{
+									instance.ConfirmButton.transform.localPosition = Vector2.Lerp(
+										Vector2.right * startPos,
+										Vector2.right * 0.65f,
+										Effects.ExpOut(t));
+								}),
+								effectsLerpWrap(0.45f, delegate(float t)
+								{
+									killbutton.transform.localPosition = Vector2.Lerp(
+										Vector2.right * startPos,
+										Vector2.right * -0.01f,
+										Effects.ExpOut(t));
+								})
+							}
+						).WrapToIl2Cpp()
+					);
+
+				Il2CppSystem.Collections.Generic.List<UiElement> selectableElements = new Il2CppSystem.Collections.Generic.List<UiElement>();
+				selectableElements.Add(instance.CancelButton);
+				selectableElements.Add(instance.ConfirmButton);
+				selectableElements.Add(killbutton);
+
+				ControllerManager.Instance.OpenOverlayMenu(
+					instance.name,
+					instance.CancelButton,
+					instance.ConfirmButton, selectableElements, false);
+			}
+
+			return false;
+
+		}
 	}
 
 	[HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.SetDead))]

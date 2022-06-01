@@ -62,6 +62,7 @@ namespace ExtremeRoles.Roles
         SandWorm,
         Smasher,
         AssaultMaster,
+        Shooter,
 
         Alice,
         Jackal,
@@ -166,6 +167,7 @@ namespace ExtremeRoles.Roles
                 {(byte)ExtremeRoleId.SandWorm       , new SandWorm()},
                 {(byte)ExtremeRoleId.Smasher        , new Smasher()},
                 {(byte)ExtremeRoleId.AssaultMaster  , new AssaultMaster()},
+                {(byte)ExtremeRoleId.Shooter        , new Shooter()},
 
                 {(byte)ExtremeRoleId.Alice     , new Alice()},
                 {(byte)ExtremeRoleId.Jackal    , new Jackal()},
