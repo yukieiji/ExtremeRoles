@@ -157,6 +157,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     Button.SetCoolDown(
                         this.Timer,
                         (this.IsHasCleanUp() && this.IsAbilityOn) ? this.AbilityActiveTime : this.CoolTime);
+                    this.updateAbilityCountText();
                 }
             }
 
@@ -191,26 +192,26 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 this.abilityNum = this.isVentRemove ? 
                     this.abilityNum - this.ventRemoveScrewNum : this.abilityNum - this.cameraSetScrewNum;
-                if (this.abilityCountText != null)
-                {
-                    updateAbilityCountText();
-                }
+                updateAbilityCountText();
             }
 
             private void updateAbilityCountText()
             {
+                if (this.abilityCountText == null) { return; }
+
                 this.abilityCountText.text = string.Concat(
                     Translation.GetString("buttonCountText"),
                     string.Format(Translation.GetString("carpenterScrewNum"),
-                        this.abilityNum, this.isVentRemove ? this.ventRemoveScrewNum : this.cameraSetScrewNum));
+                        this.abilityNum,
+                        this.isVentRemove ? this.ventRemoveScrewNum : this.cameraSetScrewNum));
             }
 
             private bool screwCheck()
             {
                 return
                 (
-                    (this.abilityNum - this.ventRemoveScrewNum > 0 && this.isVentRemove) ||
-                    (this.abilityNum - this.cameraSetScrewNum > 0)
+                    (this.abilityNum - this.ventRemoveScrewNum >= 0 && this.isVentRemove) ||
+                    (this.abilityNum - this.cameraSetScrewNum >= 0)
                 );
             }
 
