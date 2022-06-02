@@ -10,6 +10,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
     {
         public enum ShooterOption
         {
+            CanCallMeeting,
             MaxShootNum,
             InitShootNum,
             MaxMeetingShootNum,
@@ -136,6 +137,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
+            CreateBoolOption(
+                ShooterOption.CanCallMeeting,
+                true, parentOps);
+
             var maxShootOps = CreateIntOption(
                ShooterOption.MaxShootNum,
                1, 1, 14, 1, parentOps,
@@ -175,6 +180,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         protected override void RoleSpecificInit()
         {
             var allOps = OptionHolder.AllOption;
+
+            this.CanCallMeeting = allOps[
+                GetRoleOptionId(ShooterOption.CanCallMeeting)].GetValue();
 
             this.maxShootNum = allOps[
                 GetRoleOptionId(ShooterOption.MaxShootNum)].GetValue();
