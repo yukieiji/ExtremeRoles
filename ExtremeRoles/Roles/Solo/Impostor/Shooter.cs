@@ -163,7 +163,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             CreateFloatOption(
                 ShooterOption.KillShootChargeTimeModd,
-                7.5f, -20.0f, 20.0f, 0.5f,
+                7.5f, -30.0f, 30.0f, 0.5f,
                 parentOps, format: OptionUnit.Second);
 
             CreateFloatOption(
