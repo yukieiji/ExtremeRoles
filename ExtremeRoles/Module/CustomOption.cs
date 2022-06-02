@@ -210,6 +210,11 @@ namespace ExtremeRoles.Module
             }
         }
 
+        public void UpdateOptionUnit(OptionUnit unit)
+        {
+            this.stringFormat = unit;
+        }
+
         public abstract dynamic GetValue();
     }
 

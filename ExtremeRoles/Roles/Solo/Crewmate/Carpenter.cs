@@ -751,6 +751,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 CarpenterOption.SetCameraStopTime,
                 2.5f, 1.0f, 5.0f, 0.5f,
                 parentOps, format: OptionUnit.Second);
+            OptionHolder.AllOption[
+                GetRoleOptionId(
+                    RoleAbilityCommonOption.AbilityCount)].UpdateOptionUnit(OptionUnit.ScrewNum);
         }
 
         private void abilityInit()
