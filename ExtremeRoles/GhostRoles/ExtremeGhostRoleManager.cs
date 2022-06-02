@@ -15,8 +15,8 @@ namespace ExtremeRoles.GhostRoles
     public enum ExtremeGhostRoleId : byte
     {
         VanillaRole = 0,
-        
-        
+
+        Poltergeist,
         NoNameNow
 
     }

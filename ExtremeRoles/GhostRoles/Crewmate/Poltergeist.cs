@@ -7,9 +7,9 @@ using Hazel;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace ExtremeRoles.GhostRoles.Impostor
+namespace ExtremeRoles.GhostRoles.Crewmate
 {
-    public class NoNameNow : GhostRoleBase
+    public class Poltergeist : GhostRoleBase
     {
         public enum Option
         {
@@ -19,11 +19,11 @@ namespace ExtremeRoles.GhostRoles.Impostor
         private float range;
         private Vent targetVent;
 
-        public NoNameNow() : base(
-            false,
+        public Poltergeist() : base(
+            true,
             ExtremeRoleType.Impostor,
-            ExtremeGhostRoleId.NoNameNow,
-            ExtremeGhostRoleId.NoNameNow.ToString(),
+            ExtremeGhostRoleId.Poltergeist,
+            ExtremeGhostRoleId.Poltergeist.ToString(),
             Palette.ImpostorRed)
         { }
 
