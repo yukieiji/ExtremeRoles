@@ -120,8 +120,8 @@ namespace ExtremeRoles.GhostRoles.Crewmate
                 Option.Range, 1.0f,
                 0.2f, 3.0f, 0.1f,
                 parentOps);
-            CreateCountButtonOption(
-                parentOps, 2, 5);
+            CreateButtonOption(
+                parentOps, 3.0f);
         }
 
         protected override void UseAbility(MessageWriter writer)
