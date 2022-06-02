@@ -753,7 +753,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 parentOps, format: OptionUnit.Second);
             OptionHolder.AllOption[
                 GetRoleOptionId(
-                    RoleAbilityCommonOption.AbilityCount)].UpdateOptionUnit(OptionUnit.ScrewNum);
+                    RoleAbilityCommonOption.AbilityCount)].SetOptionUnit(OptionUnit.ScrewNum);
         }
 
         private void abilityInit()

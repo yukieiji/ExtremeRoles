@@ -210,7 +210,7 @@ namespace ExtremeRoles.Module
             }
         }
 
-        public void UpdateOptionUnit(OptionUnit unit)
+        public void SetOptionUnit(OptionUnit unit)
         {
             this.stringFormat = unit;
         }
