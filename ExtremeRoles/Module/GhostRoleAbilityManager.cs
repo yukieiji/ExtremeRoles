@@ -3,6 +3,7 @@ using System.Text;
 
 using Hazel;
 
+using ExtremeRoles.GhostRoles.Crewmate;
 using ExtremeRoles.GhostRoles.Impostor;
 
 
@@ -12,7 +13,8 @@ namespace ExtremeRoles.Module
     {
         public enum AbilityType : byte
         {
-            NoNameNowVentAnime
+            NoNameNowVentAnime,
+            PoltergeistMoveDeadbody
         }
 
         private HashSet<AbilityType> useAbility = new HashSet<AbilityType>();
@@ -49,6 +51,14 @@ namespace ExtremeRoles.Module
                 case AbilityType.NoNameNowVentAnime:
                     int ventId = reader.ReadInt32();
                     NoNameNow.VentAnime(ventId);
+                    break;
+                case AbilityType.PoltergeistMoveDeadbody:
+                    byte poltergeistPlayerId = reader.ReadByte();
+                    byte poltergeistMoveDeadbodyPlayerId = reader.ReadByte();
+                    bool pickUp = reader.ReadBoolean();
+                    Poltergeist.DeadbodyMove(
+                        poltergeistPlayerId,
+                        poltergeistMoveDeadbodyPlayerId, pickUp);
                     break;
                 default:
                     break;

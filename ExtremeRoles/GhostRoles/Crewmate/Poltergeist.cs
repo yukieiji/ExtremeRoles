@@ -7,6 +7,8 @@ using Hazel;
 using System.Collections.Generic;
 using UnityEngine;
 
+using ExtremeRoles.Helper;
+
 namespace ExtremeRoles.GhostRoles.Crewmate
 {
     public class Poltergeist : GhostRoleBase
@@ -16,8 +18,10 @@ namespace ExtremeRoles.GhostRoles.Crewmate
             Range,
         }
 
+        public DeadBody CarringBody;
+
         private float range;
-        private Vent targetVent;
+        private GameData.PlayerInfo targetBody;
 
         public Poltergeist() : base(
             true,
@@ -27,22 +31,67 @@ namespace ExtremeRoles.GhostRoles.Crewmate
             Palette.ImpostorRed)
         { }
 
-        public static void VentAnime(int ventId)
+        public static void DeadbodyMove(
+            byte playerId, byte targetPlayerId, bool pickUp)
         {
-            RPCOperator.StartVentAnimation(ventId);
+
+            var rolePlayer = Player.GetPlayerControlById(playerId);
+            var role = ExtremeGhostRoleManager.GetSafeCastedGhostRole<Poltergeist>(playerId);
+            if (role == null) { return; }
+
+            if (pickUp)
+            {
+                pickUpDeadBody(rolePlayer, role, targetPlayerId);
+            }
+            else
+            {
+                setDeadBody(rolePlayer, role);
+            }
+        }
+        private static void pickUpDeadBody(
+            PlayerControl rolePlayer,
+            Poltergeist role,
+            byte targetPlayerId)
+        {
+
+            DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
+            for (int i = 0; i < array.Length; ++i)
+            {
+                if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == targetPlayerId)
+                {
+                    role.CarringBody = array[i];
+                    role.CarringBody.transform.position = rolePlayer.transform.position;
+                    role.CarringBody.transform.SetParent(rolePlayer.transform);
+                    break;
+                }
+            }
+        }
+
+        private static void setDeadBody(
+            PlayerControl rolePlayer,
+            Poltergeist role)
+        {
+            if (role.CarringBody == null) { return; }
+            if (role.CarringBody.transform.parent != rolePlayer.transform) { return; }
+
+            role.CarringBody.transform.parent = null;
+            role.CarringBody.transform.position = rolePlayer.GetTruePosition() + new Vector2(0.15f, 0.15f);
+            role.CarringBody.transform.position -= new Vector3(0.0f, 0.0f, 0.01f);
+            role.CarringBody = null;
         }
 
         public override void CreateAbility()
         {
-            this.Button = new AbilityCountButton(
-                GhostRoleAbilityManager.AbilityType.NoNameNowVentAnime,
+            this.Button = new ReusableAbilityButton(
+                GhostRoleAbilityManager.AbilityType.PoltergeistMoveDeadbody,
                 this.UseAbility,
                 this.isPreCheck,
                 this.isAbilityUse,
                 Resources.Loader.CreateSpriteFromResources(
                     Resources.Path.TestButton),
                 this.DefaultButtonOffset,
-                rpcHostCallAbility: abilityCall);
+                rpcHostCallAbility: abilityCall,
+                abilityCleanUp: cleanUp);
             this.ButtonInit();
         }
 
@@ -61,7 +110,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
 
         public override void ReseOnMeetingStart()
         {
-            this.targetVent = null;
+            this.targetBody = null;
         }
 
         protected override void CreateSpecificOption(
@@ -77,42 +126,65 @@ namespace ExtremeRoles.GhostRoles.Crewmate
 
         protected override void UseAbility(MessageWriter writer)
         {
-            writer.Write(targetVent.Id);
+            writer.Write(PlayerControl.LocalPlayer.PlayerId);
+            writer.Write(this.targetBody.PlayerId);
+            writer.Write(true);
         }
 
-        private bool isPreCheck() => this.targetVent != null;
+        private bool isPreCheck() => this.targetBody != null;
 
         private bool isAbilityUse()
         {
-            this.targetVent = null;
+            this.targetBody = null;
 
             if (ShipStatus.Instance == null ||
                 !ShipStatus.Instance.enabled) { return false; }
 
-            Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
-
-            foreach (Vent vent in ShipStatus.Instance.AllVents)
+            foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(
+                PlayerControl.LocalPlayer.GetTruePosition(),
+                this.range,
+                Constants.PlayersOnlyMask))
             {
-                if (vent == null) { continue; }
-                if (ExtremeRolesPlugin.GameDataStore.CustomVent.IsCustomVent(vent.Id) &&
-                    !vent.gameObject.active)
+                if (collider2D.tag == "DeadBody")
                 {
-                    continue;
-                }
-                float distance = Vector2.Distance(vent.transform.position, truePosition);
-                if (distance <= this.range)
-                {
-                    this.targetVent = vent;
-                    break;
+                    DeadBody component = collider2D.GetComponent<DeadBody>();
+
+                    if (component && !component.Reported && component.transform.parent == null)
+                    {
+                        Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
+                        Vector2 truePosition2 = component.TruePosition;
+                        if ((Vector2.Distance(truePosition2, truePosition) <= range) &&
+                            (PlayerControl.LocalPlayer.CanMove) &&
+                            (!PhysicsHelpers.AnythingBetween(
+                                truePosition, truePosition2,
+                                Constants.ShipAndObjectsMask, false)))
+                        {
+                            this.targetBody = GameData.Instance.GetPlayerById(component.ParentId);
+                            break;
+                        }
+                    }
                 }
             }
 
-            return this.IsCommonUse() && this.targetVent != null;
+            return this.IsCommonUse() && this.targetBody != null;
         }
         private void abilityCall()
         {
-            RPCOperator.StartVentAnimation(this.targetVent.Id);
-            this.targetVent = null;
+            pickUpDeadBody(PlayerControl.LocalPlayer, this, this.targetBody.PlayerId);
+            this.targetBody = null;
+        }
+        private void cleanUp()
+        {
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                    PlayerControl.LocalPlayer.NetId,
+                    (byte)RPCOperator.Command.UseGhostRoleAbility,
+                    Hazel.SendOption.Reliable, -1);
+            writer.Write((byte)GhostRoleAbilityManager.AbilityType.PoltergeistMoveDeadbody);
+            writer.Write(PlayerControl.LocalPlayer.PlayerId);
+            writer.Write(byte.MinValue);
+            writer.Write(false);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            setDeadBody(PlayerControl.LocalPlayer, this);
         }
     }
 }
