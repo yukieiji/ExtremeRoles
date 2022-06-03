@@ -9,8 +9,6 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
 
     public class ReusableAbilityButton : GhostRoleAbilityButtonBase
     {
-        private int abilityNum = 0;
-        private TMPro.TextMeshPro abilityCountText = null;
 
         public ReusableAbilityButton(
             GhostRoleAbilityManager.AbilityType abilityType,
@@ -70,12 +68,9 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
                 this.ResetCoolTimer();
             }
 
-            if (this.abilityNum > 0)
-            {
-                Button.SetCoolDown(
-                    this.Timer,
-                    (this.IsHasCleanUp() && this.IsAbilityOn) ? this.AbilityActiveTime : this.CoolTime);
-            }
+            Button.SetCoolDown(
+                this.Timer,
+                (this.IsHasCleanUp() && this.IsAbilityOn) ? this.AbilityActiveTime : this.CoolTime);
         }
 
         protected override void OnClickEvent()
@@ -83,7 +78,6 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
             if (!this.IsComSabNow() &&
                 this.CanUse() &&
                 this.Timer < 0f &&
-                this.abilityNum > 0 &&
                 !this.IsAbilityOn)
             {
                 Button.graphic.color = this.DisableColor;
