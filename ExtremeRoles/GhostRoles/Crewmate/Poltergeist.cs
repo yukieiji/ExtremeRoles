@@ -25,7 +25,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
 
         public Poltergeist() : base(
             true,
-            ExtremeRoleType.Impostor,
+            ExtremeRoleType.Crewmate,
             ExtremeGhostRoleId.Poltergeist,
             ExtremeGhostRoleId.Poltergeist.ToString(),
             Palette.ImpostorRed)
@@ -88,11 +88,12 @@ namespace ExtremeRoles.GhostRoles.Crewmate
                 this.isPreCheck,
                 this.isAbilityUse,
                 Resources.Loader.CreateSpriteFromResources(
-                    Resources.Path.TestButton),
+                    Resources.Path.CarrierCarry),
                 this.DefaultButtonOffset,
                 rpcHostCallAbility: abilityCall,
                 abilityCleanUp: cleanUp);
             this.ButtonInit();
+            this.Button.SetLabelToCrewmate();
         }
 
         public override HashSet<ExtremeRoleId> GetRoleFilter() => new HashSet<ExtremeRoleId>();

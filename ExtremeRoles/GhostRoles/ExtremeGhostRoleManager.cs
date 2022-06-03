@@ -76,7 +76,7 @@ namespace ExtremeRoles.GhostRoles
                 }
                 else
                 {
-                    throw new System.Exception("Unknown teamType detect!!");
+                    return new List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> ();
                 }
             }
 
