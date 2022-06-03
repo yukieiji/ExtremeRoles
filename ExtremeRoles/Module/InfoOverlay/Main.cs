@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Module.InfoOverlay.FullDec;
 
 namespace ExtremeRoles.Module.InfoOverlay
 {
@@ -11,8 +13,10 @@ namespace ExtremeRoles.Module.InfoOverlay
     {
         public enum ShowType : byte
         {
-            Normal,
-            Ghost,
+            LocalPlayerRole,
+            LocalPlayerGhostRole,
+            AllRole,
+            AllGhostRole,
         }
 
         public bool OverlayShown => this.overlayShown;
@@ -27,8 +31,13 @@ namespace ExtremeRoles.Module.InfoOverlay
 
         private bool overlayShown = false;
 
-        private RolesFullDecManager roleFullDec = new RolesFullDecManager();
-        private GhostRolesFullDecManager ghostRoleFullDec = new GhostRolesFullDecManager();
+        private Dictionary<ShowType, IShowTextBuilder> showText = new Dictionary<ShowType, IShowTextBuilder>
+        {
+            { ShowType.LocalPlayerRole     , new LocalPlayerRoleShowTextBuilder()      },
+            { ShowType.LocalPlayerGhostRole, new LocalPlayerGhostRoleShowTextBuilder() },
+            { ShowType.AllRole             , new AllRoleShowTextBuilder()              },
+            { ShowType.AllGhostRole        , new AllGhostRoleShowTextBuilder()         },
+        };
         private ShowType curShow;
 
         private const int maxLine = 35;
@@ -36,29 +45,19 @@ namespace ExtremeRoles.Module.InfoOverlay
 
         public InfoOverlay()
         {
-            this.roleFullDec.Clear();
-            this.curShow = ShowType.Normal;
+            pageClear();
             this.overlayShown = false;
         }
 
         public void ChangePage(int add)
         {
-            Tuple<string, string> showText;
-            switch (this.curShow)
-            {
-                case ShowType.Normal:
-                    this.roleFullDec.ChangeRoleInfoPage(add);
-                    showText = this.roleFullDec.GetRoleInfoPageText();
-                    break;
-                case ShowType.Ghost:
-                    this.ghostRoleFullDec.ChangeRoleInfoPage(add);
-                    showText = this.ghostRoleFullDec.GetRoleInfoPageText();
-                    break;
-                default:
-                    showText = Tuple.Create("", "");
-                    break;
-            }
-            updateShowText(showText);
+            if (!ExtremeRolesPlugin.Info.OverlayShown) { return; }
+            var pageBuilder = this.showText[this.curShow] as PageShowTextBuilderBase;
+            
+            if (pageBuilder == null) { return; }
+
+            pageBuilder.ChangePage(add);
+            this.updateShowText();
         }
 
         public void HideBlackBG()
@@ -110,8 +109,7 @@ namespace ExtremeRoles.Module.InfoOverlay
             UnityEngine.Object.Destroy(roleInfoText);
             UnityEngine.Object.Destroy(anotherRoleInfoText);
 
-            this.roleFullDec.Clear();
-            this.ghostRoleFullDec.Clear();
+            pageClear();
 
             meetingUnderlay = infoUnderlay = null;
             ruleInfoText = roleInfoText = anotherRoleInfoText = null;
@@ -120,49 +118,41 @@ namespace ExtremeRoles.Module.InfoOverlay
 
         public void SetShowInfo(ShowType showType)
         {
-
-            Tuple<string, string> showText;
-
-            if (ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd())
-            {
-                switch (showType)
-                {
-                    case ShowType.Normal:
-                        showText = this.roleFullDec.GetPlayerRoleText();
-                        break;
-                    case ShowType.Ghost:
-                        showText = this.ghostRoleFullDec.GetPlayerRoleText();
-                        break;
-                    default:
-                        showText = Tuple.Create("", "");
-                        break;
-                }
-            }
-            else
-            {
-                switch (showType)
-                {
-                    case ShowType.Normal:
-                        showText = this.roleFullDec.GetRoleInfoPageText();
-                        break;
-                    case ShowType.Ghost:
-                        showText = this.ghostRoleFullDec.GetRoleInfoPageText();
-                        break;
-                    default:
-                        showText = Tuple.Create("", "");
-                        break;
-                }
-            }
-
-            updateShowText(showText);
+            this.curShow = showType;
+            updateShowText();
         }
 
 
         public void ToggleInfoOverlay(ShowType showType)
         {
+            if (HudManager.Instance.Chat.IsOpen) { return; }
+
+            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd())
+            {
+                switch (showType)
+                {
+                    case ShowType.LocalPlayerRole:
+                        showType = ShowType.AllRole;
+                        break;
+                    case ShowType.LocalPlayerGhostRole:
+                        showType = ShowType.AllGhostRole;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+
             if (OverlayShown)
             {
-                HideInfoOverlay();
+                if (this.curShow == showType)
+                {
+                    HideInfoOverlay();
+                }
+                else
+                {
+                    SetShowInfo(showType);
+                }
             }
             else
             {
@@ -287,7 +277,6 @@ namespace ExtremeRoles.Module.InfoOverlay
             ruleInfoText.enabled = true;
 
             SetShowInfo(showType);
-            this.curShow = showType;
 
             var underlayTransparent = new Color(0.1f, 0.1f, 0.1f, 0.0f);
             var underlayOpaque = new Color(0.1f, 0.1f, 0.1f, 0.88f);
@@ -299,9 +288,9 @@ namespace ExtremeRoles.Module.InfoOverlay
                 anotherRoleInfoText.color = Color.Lerp(Palette.ClearWhite, Palette.White, t);
             })));
         }
-        private void updateShowText(Tuple<string, string> text)
+        private void updateShowText()
         {
-            var (roleText, anotherRoleText) = text;
+            var (roleText, anotherRoleText) = this.showText[this.curShow].GetShowText();
 
             roleInfoText.text = roleText;
             roleInfoText.enabled = true;
@@ -333,6 +322,15 @@ namespace ExtremeRoles.Module.InfoOverlay
                 {
                     text.enabled = false;
                 }
+            }
+        }
+
+        private void pageClear()
+        {
+            foreach (var builder in this.showText.Values)
+            {
+                var pageBuilder = builder as PageShowTextBuilderBase;
+                pageBuilder?.Clear();
             }
         }
     }

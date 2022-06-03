@@ -150,29 +150,41 @@ namespace ExtremeRoles.Patches
                 {
                     OptionHolder.OptionsPage = OptionHolder.OptionsPage + 1;
                 }
-                if (Input.GetKeyDown(KeyCode.PageDown) &&
-                    ExtremeRolesPlugin.Info.OverlayShown)
+            }
+            else
+            {
+                if (Input.GetKeyDown(KeyCode.I))
                 {
-                    ExtremeRolesPlugin.Info.ChangePage(1);
+                    ExtremeRolesPlugin.Info.ToggleInfoOverlay(
+                        Module.InfoOverlay.InfoOverlay.ShowType.AllRole);
                 }
-                if (Input.GetKeyDown(KeyCode.PageUp) &&
-                    ExtremeRolesPlugin.Info.OverlayShown)
+                if (Input.GetKeyDown(KeyCode.U))
                 {
-                    ExtremeRolesPlugin.Info.ChangePage(-1);
+                    ExtremeRolesPlugin.Info.ToggleInfoOverlay(
+                        Module.InfoOverlay.InfoOverlay.ShowType.AllGhostRole);
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.H) && !HudManager.Instance.Chat.IsOpen)
+            if (Input.GetKeyDown(KeyCode.H))
             {
-                var showType = Module.InfoOverlay.InfoOverlay.ShowType.Normal;
-                ExtremeRolesPlugin.Info.ToggleInfoOverlay(showType);
+                ExtremeRolesPlugin.Info.ToggleInfoOverlay(
+                    Module.InfoOverlay.InfoOverlay.ShowType.LocalPlayerRole);
+            }
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                ExtremeRolesPlugin.Info.ToggleInfoOverlay(
+                    Module.InfoOverlay.InfoOverlay.ShowType.LocalPlayerGhostRole);
+            }
 
-            }
-            if (Input.GetKeyDown(KeyCode.G) && !HudManager.Instance.Chat.IsOpen)
+            if (Input.GetKeyDown(KeyCode.PageDown))
             {
-                var showType = Module.InfoOverlay.InfoOverlay.ShowType.Ghost;
-                ExtremeRolesPlugin.Info.ToggleInfoOverlay(showType);
+                ExtremeRolesPlugin.Info.ChangePage(1);
             }
+            if (Input.GetKeyDown(KeyCode.PageUp))
+            {
+                ExtremeRolesPlugin.Info.ChangePage(-1);
+            }
+
 
             // キルとベントボタン
             if (PlayerControl.LocalPlayer.Data != null && 
