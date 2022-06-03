@@ -475,11 +475,7 @@ namespace ExtremeRoles.Roles.Combination
         public void SetCondition(
             OneForAllCondition cond)
         {
-            var hero = ExtremeRoleManager.GetLocalPlayerRole() as Hero;
-            if (hero != null)
-            {
-                hero.cond = cond;
-            }
+            this.cond = cond;
         }
 
         public void CreateAbility()
