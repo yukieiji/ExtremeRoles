@@ -203,7 +203,10 @@ namespace ExtremeRoles
                 {
                     int optionId = reader.ReadPackedInt32();
                     int selection = reader.ReadPackedInt32();
-                    AllOption[optionId].UpdateSelection(selection);
+                    lock (AllOption)
+                    {
+                        AllOption[optionId].UpdateSelection(selection);
+                    }
                 }
             }
             catch (Exception e)
