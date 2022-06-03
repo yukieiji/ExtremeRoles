@@ -241,7 +241,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             this.chargeTimerText = Object.Instantiate(
                 HudManager.Instance.KillButton.cooldownTimerText,
-                HudManager.Instance.KillButton.transform.parent);
+                HudManager.Instance.KillButton.transform);
             this.chargeTimerText.transform.localPosition += new Vector3(-1.8f, -0.06f, 0);
             this.chargeTimerText.gameObject.SetActive(true);
 
