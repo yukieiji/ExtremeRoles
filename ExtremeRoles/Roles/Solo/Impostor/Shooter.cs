@@ -15,6 +15,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             InitShootNum,
             MaxMeetingShootNum,
             ShootChargeTime,
+            MaxChargeGiveNum,
             KillShootChargeTimeModd,
             ShootKillCoolPenalty
         }
@@ -26,11 +27,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private float killCoolPenalty = 0.0f;
         private float killShootChargeTimeModd = 0.0f;
         private float chargeTime = 0.0f;
-        private float timer = 0.0f;
+        private float timer = float.MaxValue;
         private int maxShootNum = 0;
         private int curShootNum = 0;
         private int maxMeetingShootNum = 0;
         private int shootCounter = 0;
+
+        private int chargeNum = 0;
+        private int maxChargeNum = 0;
 
         private TMPro.TextMeshPro chargeInfoText = null;
         private TMPro.TextMeshPro chargeTimerText = null;
@@ -106,16 +110,21 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 }
             }
 
-            if (rolePlayer.CanMove && 
-                this.curShootNum < this.maxShootNum)
+            if (rolePlayer.CanMove)
             {
-                this.timer -= Time.deltaTime;
-            }
-            if (this.timer < 0.0f)
-            {
-                this.timer = this.chargeTime;
-                this.curShootNum = System.Math.Clamp(
-                    this.curShootNum + 1, 0, this.maxShootNum);
+                if (this.chargeNum < this.maxChargeNum &&
+                    this.curShootNum < this.maxShootNum)
+                {
+                    this.timer -= Time.deltaTime;
+                }
+
+                if (this.timer < 0.0f)
+                {
+                    this.timer = this.chargeTime;
+                    this.curShootNum = System.Math.Clamp(
+                        this.curShootNum + 1, 0, this.maxShootNum);
+                    this.chargeNum = this.chargeNum + 1;
+                }
             }
 
             if (this.chargeInfoText == null || this.chargeTimerText == null)
@@ -161,6 +170,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 75.0f, 30.0f, 240.0f, 5.0f,
                 parentOps, format: OptionUnit.Second);
 
+            CreateIntOption(
+               ShooterOption.MaxChargeGiveNum,
+               14, 1, 14, 1, parentOps,
+               format: OptionUnit.Shot);
+
             CreateFloatOption(
                 ShooterOption.KillShootChargeTimeModd,
                 7.5f, -30.0f, 30.0f, 0.5f,
@@ -192,6 +206,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 GetRoleOptionId(ShooterOption.MaxMeetingShootNum)].GetValue();
             this.chargeTime = allOps[
                 GetRoleOptionId(ShooterOption.ShootChargeTime)].GetValue();
+            this.maxChargeNum = allOps[
+                GetRoleOptionId(ShooterOption.MaxChargeGiveNum)].GetValue();
             this.killShootChargeTimeModd = allOps[
                 GetRoleOptionId(ShooterOption.KillShootChargeTimeModd)].GetValue();
             this.killCoolPenalty = allOps[
@@ -205,7 +221,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             this.defaultKillCool = this.KillCoolTime;
             this.timer = this.chargeTime;
-
+            this.chargeNum = 0;
         }
 
         private void chargeInfoSetActive(bool active)
