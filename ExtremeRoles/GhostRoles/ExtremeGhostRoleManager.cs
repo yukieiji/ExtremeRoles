@@ -7,6 +7,7 @@ using Hazel;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.GhostRoles.API;
+using ExtremeRoles.GhostRoles.Crewmate;
 using ExtremeRoles.GhostRoles.Impostor;
 
 
@@ -15,8 +16,8 @@ namespace ExtremeRoles.GhostRoles
     public enum ExtremeGhostRoleId : byte
     {
         VanillaRole = 0,
-        
-        
+
+        Poltergeist,
         NoNameNow
 
     }
@@ -75,7 +76,7 @@ namespace ExtremeRoles.GhostRoles
                 }
                 else
                 {
-                    throw new System.Exception("Unknown teamType detect!!");
+                    return new List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> ();
                 }
             }
 
@@ -150,9 +151,12 @@ namespace ExtremeRoles.GhostRoles
 
         public static readonly Dictionary<
             ExtremeGhostRoleId, GhostRoleBase> AllGhostRole = new Dictionary<ExtremeGhostRoleId, GhostRoleBase>()
-        {
-            { ExtremeGhostRoleId.NoNameNow, new NoNameNow() },
-        };
+            {
+                { ExtremeGhostRoleId.Poltergeist, new Poltergeist() },
+                
+                { ExtremeGhostRoleId.NoNameNow, new NoNameNow() },
+            
+            };
 
         private static readonly HashSet<RoleTypes> vanillaGhostRole = new HashSet<RoleTypes>()
         { 

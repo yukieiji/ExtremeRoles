@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 
+using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -91,7 +92,12 @@ namespace ExtremeRoles.Patches.Manager
                     multiAssignRole.OverrideAnotherRoleSetting();
                 }
             }
-            
+
+            var ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
+            if (ghostRole != null)
+            {
+                role.HasTask = role.HasTask && ghostRole.HasTask;
+            }
 
         }
         private static void buttonCreate(SingleRoleBase checkRole)

@@ -20,7 +20,7 @@ namespace ExtremeRoles.GhostRoles.Impostor
         private Vent targetVent;
 
         public NoNameNow() : base(
-            true,
+            false,
             ExtremeRoleType.Impostor,
             ExtremeGhostRoleId.NoNameNow,
             ExtremeGhostRoleId.NoNameNow.ToString(),
