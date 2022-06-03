@@ -175,7 +175,9 @@ namespace ExtremeRoles.Patches.Meeting
         {
 			byte target = instance.TargetPlayerId;
 
-			if (shooter.CurShootNum <= 0 || !shooter.CanShoot || target == 253 ||
+			if (instance.AmDead ||
+				shooter.CurShootNum <= 0 || 
+				!shooter.CanShoot || target == 253 ||
 				Roles.ExtremeRoleManager.GameRole[target].Id == Roles.ExtremeRoleId.Assassin)
 			{ 
 				return true; 
@@ -207,6 +209,8 @@ namespace ExtremeRoles.Patches.Meeting
 						RPCOperator.UncheckedMurderPlayer(
 							PlayerControl.LocalPlayer.PlayerId,
 							target, 0);
+						ControllerManager.Instance.CloseOverlayMenu(
+							instance.name);
 					}
 
 					UiElement newKillButton = GameObject.Instantiate(
