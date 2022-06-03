@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace ExtremeRoles.GhostRoles.Impostor
 {
-    public class NoNameNow : GhostRoleBase
+    public class Ventgeist : GhostRoleBase
     {
         public enum Option
         {
@@ -19,11 +19,11 @@ namespace ExtremeRoles.GhostRoles.Impostor
         private float range;
         private Vent targetVent;
 
-        public NoNameNow() : base(
+        public Ventgeist() : base(
             false,
             ExtremeRoleType.Impostor,
-            ExtremeGhostRoleId.NoNameNow,
-            ExtremeGhostRoleId.NoNameNow.ToString(),
+            ExtremeGhostRoleId.Ventgeist,
+            ExtremeGhostRoleId.Ventgeist.ToString(),
             Palette.ImpostorRed)
         { }
 

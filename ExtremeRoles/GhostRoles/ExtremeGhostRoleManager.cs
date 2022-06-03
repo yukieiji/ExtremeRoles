@@ -18,7 +18,8 @@ namespace ExtremeRoles.GhostRoles
         VanillaRole = 0,
 
         Poltergeist,
-        NoNameNow
+
+        Ventgeist
 
     }
 
@@ -154,7 +155,7 @@ namespace ExtremeRoles.GhostRoles
             {
                 { ExtremeGhostRoleId.Poltergeist, new Poltergeist() },
                 
-                { ExtremeGhostRoleId.NoNameNow, new NoNameNow() },
+                { ExtremeGhostRoleId.Ventgeist, new Ventgeist() },
             
             };
 

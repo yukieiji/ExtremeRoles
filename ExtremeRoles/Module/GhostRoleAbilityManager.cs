@@ -50,7 +50,7 @@ namespace ExtremeRoles.Module
             {
                 case AbilityType.NoNameNowVentAnime:
                     int ventId = reader.ReadInt32();
-                    NoNameNow.VentAnime(ventId);
+                    Ventgeist.VentAnime(ventId);
                     break;
                 case AbilityType.PoltergeistMoveDeadbody:
                     byte poltergeistPlayerId = reader.ReadByte();
