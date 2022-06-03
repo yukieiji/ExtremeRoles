@@ -69,7 +69,7 @@ namespace ExtremeRoles
             DisableNeutralSpecialForceEnd,
             EnableHorseMode,
 
-            IsBlockNeutralAssignToVanillaCrewGhostRole,
+            IsAssignNeutralToVanillaCrewGhostRole,
             IsRemoveAngleIcon,
         }
 
@@ -131,8 +131,8 @@ namespace ExtremeRoles
             Ship.DisableNeutralSpecialForceEnd = AllOption[
                 (int)CommonOptionKey.DisableNeutralSpecialForceEnd].GetValue();
 
-            Ship.IsBlockNeutralAssignToVanillaCrewGhostRole = AllOption[
-                (int)CommonOptionKey.IsBlockNeutralAssignToVanillaCrewGhostRole].GetValue();
+            Ship.IsAssignNeutralToVanillaCrewGhostRole = AllOption[
+                (int)CommonOptionKey.IsAssignNeutralToVanillaCrewGhostRole].GetValue();
             Ship.IsRemoveAngleIcon = AllOption[
                 (int)CommonOptionKey.IsRemoveAngleIcon].GetValue();
 
@@ -386,8 +386,8 @@ namespace ExtremeRoles
 
 
             new BoolCustomOption(
-                (int)CommonOptionKey.IsBlockNeutralAssignToVanillaCrewGhostRole,
-                CommonOptionKey.IsBlockNeutralAssignToVanillaCrewGhostRole.ToString(),
+                (int)CommonOptionKey.IsAssignNeutralToVanillaCrewGhostRole,
+                CommonOptionKey.IsAssignNeutralToVanillaCrewGhostRole.ToString(),
                 true);
             new BoolCustomOption(
                 (int)CommonOptionKey.IsRemoveAngleIcon,
@@ -431,7 +431,7 @@ namespace ExtremeRoles
             public static bool IsSameNeutralSameWin = true;
             public static bool DisableNeutralSpecialForceEnd = false;
 
-            public static bool IsBlockNeutralAssignToVanillaCrewGhostRole = true;
+            public static bool IsAssignNeutralToVanillaCrewGhostRole = true;
             public static bool IsRemoveAngleIcon = false;
         }
     }

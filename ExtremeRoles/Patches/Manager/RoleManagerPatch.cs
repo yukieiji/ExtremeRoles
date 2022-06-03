@@ -594,7 +594,7 @@ namespace ExtremeRoles.Patches.Manager
             if (ExtremeGhostRoleManager.IsCombRole(role.Id)) { return false; }
 
             if (role.IsNeutral() &&
-                OptionHolder.Ship.IsBlockNeutralAssignToVanillaCrewGhostRole)
+                !OptionHolder.Ship.IsAssignNeutralToVanillaCrewGhostRole)
             {
                 return false;
             }
