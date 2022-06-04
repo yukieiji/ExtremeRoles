@@ -18,6 +18,7 @@ namespace ExtremeRoles.GhostRoles
         VanillaRole = 0,
 
         Poltergeist,
+        Faunus,
 
         Ventgeist
 
@@ -154,7 +155,8 @@ namespace ExtremeRoles.GhostRoles
             ExtremeGhostRoleId, GhostRoleBase> AllGhostRole = new Dictionary<ExtremeGhostRoleId, GhostRoleBase>()
             {
                 { ExtremeGhostRoleId.Poltergeist, new Poltergeist() },
-                
+                { ExtremeGhostRoleId.Faunus, new Faunus() },
+
                 { ExtremeGhostRoleId.Ventgeist, new Ventgeist() },
             
             };

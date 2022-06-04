@@ -14,7 +14,8 @@ namespace ExtremeRoles.Module
         public enum AbilityType : byte
         {
             NoNameNowVentAnime,
-            PoltergeistMoveDeadbody
+            PoltergeistMoveDeadbody,
+            FaunusOpenSaboConsole
         }
 
         private HashSet<AbilityType> useAbility = new HashSet<AbilityType>();
