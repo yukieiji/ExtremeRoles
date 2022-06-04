@@ -13,11 +13,6 @@ namespace ExtremeRoles.GhostRoles.Crewmate
 {
     public class Faunus : GhostRoleBase
     {
-        public enum Option
-        {
-            Range,
-        }
-
         public enum SaboType
         {
             None,

@@ -13,9 +13,10 @@ namespace ExtremeRoles.Module
     {
         public enum AbilityType : byte
         {
-            NoNameNowVentAnime,
             PoltergeistMoveDeadbody,
-            FaunusOpenSaboConsole
+            FaunusOpenSaboConsole,
+
+            VentgeistVentAnime,
         }
 
         private HashSet<AbilityType> useAbility = new HashSet<AbilityType>();
@@ -49,7 +50,7 @@ namespace ExtremeRoles.Module
         {
             switch ((AbilityType)abilityType)
             {
-                case AbilityType.NoNameNowVentAnime:
+                case AbilityType.VentgeistVentAnime:
                     int ventId = reader.ReadInt32();
                     Ventgeist.VentAnime(ventId);
                     break;

@@ -35,7 +35,7 @@ namespace ExtremeRoles.GhostRoles.Impostor
         public override void CreateAbility()
         {
             this.Button = new AbilityCountButton(
-                GhostRoleAbilityManager.AbilityType.NoNameNowVentAnime,
+                GhostRoleAbilityManager.AbilityType.VentgeistVentAnime,
                 this.UseAbility,
                 this.isPreCheck,
                 this.isAbilityUse,
