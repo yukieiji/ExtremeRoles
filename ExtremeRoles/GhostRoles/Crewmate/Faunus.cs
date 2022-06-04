@@ -31,7 +31,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
             ExtremeRoleType.Crewmate,
             ExtremeGhostRoleId.Faunus,
             ExtremeGhostRoleId.Faunus.ToString(),
-            ColorPalette.MaintainerBlue)
+            ColorPalette.FaunusAntiquewhite)
         { }
 
         public override void CreateAbility()
