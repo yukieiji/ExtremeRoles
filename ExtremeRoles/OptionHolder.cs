@@ -17,6 +17,7 @@ namespace ExtremeRoles
 
         public const int VanillaMaxPlayerNum = 15;
         public const int MaxImposterNum = 3;
+        private const int chunkSize = 50;
 
         public static string[] SpawnRate = new string[] {
             "0%", "10%", "20%", "30%", "40%",
@@ -42,16 +43,23 @@ namespace ExtremeRoles
 
             UseStrongRandomGen,
 
-            MinCremateRoles,
-            MaxCremateRoles,
+            MinCrewmateRoles,
+            MaxCrewmateRoles,
             MinNeutralRoles,
             MaxNeutralRoles,
             MinImpostorRoles,
             MaxImpostorRoles,
 
+            MinCrewmateGhostRoles,
+            MaxCrewmateGhostRoles,
+            MinNeutralGhostRoles,
+            MaxNeutralGhostRoles,
+            MinImpostorGhostRoles,
+            MaxImpostorGhostRoles,
+
             NumMeating,
             DisableSkipInEmergencyMeeting,
-            NoVoteToSelf,
+            DisableSelfVote,
             DesableVent,
             EngineerUseImpostorVent,
             CanKillVentInPlayer,
@@ -59,7 +67,10 @@ namespace ExtremeRoles
             RandomMap,
             IsSameNeutralSameWin,
             DisableNeutralSpecialForceEnd,
-            EnableHorseMode
+            EnableHorseMode,
+
+            IsAssignNeutralToVanillaCrewGhostRole,
+            IsRemoveAngleIcon,
         }
 
         public static Dictionary<int, CustomOptionBase> AllOption = new Dictionary<int, CustomOptionBase>();
@@ -69,7 +80,7 @@ namespace ExtremeRoles
 
             defaultRegion = ServerManager.DefaultRegions;
 
-            CreateConfigOption();
+            createConfigOption();
 
             Roles.ExtremeRoleManager.GameRole.Clear();
             AllOption.Clear();
@@ -80,129 +91,22 @@ namespace ExtremeRoles
                     CommonOptionKey.PresetSelection.ToString()),
                 OptionPreset, null, true);
 
-
             new BoolCustomOption(
                (int)CommonOptionKey.UseStrongRandomGen, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.UseStrongRandomGen.ToString()), true);
 
-            new IntCustomOption(
-                (int)CommonOptionKey.MinCremateRoles, Design.ColoedString(
-                    new Color(204f / 255f, 204f / 255f, 0, 1f),
-                    CommonOptionKey.MinCremateRoles.ToString()),
-                0, 0, (VanillaMaxPlayerNum - 1) * 2, 1, null, true);
-            new IntCustomOption(
-                (int)CommonOptionKey.MaxCremateRoles, Design.ColoedString(
-                    new Color(204f / 255f, 204f / 255f, 0, 1f),
-                    CommonOptionKey.MaxCremateRoles.ToString()),
-                0, 0, (VanillaMaxPlayerNum - 1) * 2, 1);
+            createExtremeRoleGlobalSpawnOption();
+            createExtremeGhostRoleGlobalSpawnOption();
+            createShipGlobalOption();
 
-            new IntCustomOption(
-                (int)CommonOptionKey.MinNeutralRoles, Design.ColoedString(
-                    new Color(204f / 255f, 204f / 255f, 0, 1f),
-                    CommonOptionKey.MinNeutralRoles.ToString()),
-                0, 0, (VanillaMaxPlayerNum - 2) * 2, 1);
-            new IntCustomOption(
-                (int)CommonOptionKey.MaxNeutralRoles, Design.ColoedString(
-                    new Color(204f / 255f, 204f / 255f, 0, 1f),
-                    CommonOptionKey.MaxNeutralRoles.ToString()),
-                0, 0, (VanillaMaxPlayerNum - 2) * 2, 1);
+            Roles.ExtremeRoleManager.CreateNormalRoleOptions(50);
 
-            new IntCustomOption(
-                (int)CommonOptionKey.MinImpostorRoles, Design.ColoedString(
-                    new Color(204f / 255f, 204f / 255f, 0, 1f),
-                    CommonOptionKey.MinImpostorRoles.ToString()),
-                0, 0, MaxImposterNum * 2, 1);
-            new IntCustomOption(
-                (int)CommonOptionKey.MaxImpostorRoles, Design.ColoedString(
-                    new Color(204f / 255f, 204f / 255f, 0, 1f),
-                    CommonOptionKey.MaxImpostorRoles.ToString()),
-                0, 0, MaxImposterNum * 2, 1);
+            Roles.ExtremeRoleManager.CreateCombinationRoleOptions(5000);
 
-            new IntCustomOption(
-                (int)CommonOptionKey.NumMeating,
-                CommonOptionKey.NumMeating.ToString(),
-                10, 0, 100, 1, null, true);
+            GhostRoles.ExtremeGhostRoleManager.CreateGhostRoleOption(10000);
 
-            new BoolCustomOption(
-                (int)CommonOptionKey.DisableSkipInEmergencyMeeting,
-                CommonOptionKey.DisableSkipInEmergencyMeeting.ToString(),
-                false);
-            new BoolCustomOption(
-                (int)CommonOptionKey.NoVoteToSelf,
-                CommonOptionKey.NoVoteToSelf.ToString(),
-                false);
 
-            var ventOption = new BoolCustomOption(
-               (int)CommonOptionKey.DesableVent,
-               CommonOptionKey.DesableVent.ToString(),
-               false);
-            new BoolCustomOption(
-                (int)CommonOptionKey.CanKillVentInPlayer,
-                CommonOptionKey.CanKillVentInPlayer.ToString(),
-                false, ventOption, invert: true);
-            new BoolCustomOption(
-                (int)CommonOptionKey.EngineerUseImpostorVent,
-                CommonOptionKey.EngineerUseImpostorVent.ToString(),
-                false, ventOption, invert: true);
-
-            new BoolCustomOption(
-                (int)CommonOptionKey.ParallelMedBayScans,
-                CommonOptionKey.ParallelMedBayScans.ToString(), false);
-            new BoolCustomOption(
-                (int)CommonOptionKey.RandomMap,
-                CommonOptionKey.RandomMap.ToString(), false);
-
-            new BoolCustomOption(
-                (int)CommonOptionKey.IsSameNeutralSameWin,
-                CommonOptionKey.IsSameNeutralSameWin.ToString(),
-                true);
-            new BoolCustomOption(
-                (int)CommonOptionKey.DisableNeutralSpecialForceEnd,
-                CommonOptionKey.DisableNeutralSpecialForceEnd.ToString(),
-                false);
-
-            new BoolCustomOption(
-                (int)CommonOptionKey.EnableHorseMode,
-                CommonOptionKey.EnableHorseMode.ToString(),
-                false);
-
-            int offset = 50;
-
-            Roles.ExtremeRoleManager.CreateNormalRoleOptions(
-                offset);
-
-            offset = 5000;
-            Roles.ExtremeRoleManager.CreateCombinationRoleOptions(
-                offset);
-        }
-
-        public static void CreateConfigOption()
-        {
-            var config = ExtremeRolesPlugin.Instance.Config;
-
-            ConfigParser.StreamerMode = config.Bind(
-                "ClientOption", "StreamerMode", false);
-            ConfigParser.GhostsSeeTasks = config.Bind(
-                "ClientOption", "GhostCanSeeRemainingTasks", true);
-            ConfigParser.GhostsSeeRoles = config.Bind(
-                "ClientOption", "GhostCanSeeRoles", true);
-            ConfigParser.GhostsSeeVotes = config.Bind(
-                "ClientOption", "GhostCanSeeVotes", true);
-            ConfigParser.ShowRoleSummary = config.Bind(
-                "ClientOption", "IsShowRoleSummary", true);
-            ConfigParser.HideNamePlate = config.Bind(
-                "ClientOption", "IsHideNamePlate", false);
-
-            ConfigParser.StreamerModeReplacementText = config.Bind(
-                "ClientOption",
-                "ReplacementRoomCodeText",
-                "\n\nPlaying with Extreme Roles");
-
-            ConfigParser.Ip = config.Bind(
-                "ClientOption", "CustomServerIP", "127.0.0.1");
-            ConfigParser.Port = config.Bind(
-                "ClientOption", "CustomServerPort", (ushort)22023);
         }
 
         public static void Load()
@@ -220,12 +124,17 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.CanKillVentInPlayer].GetValue();
             Ship.EngineerUseImpostorVent = AllOption[
                 (int)CommonOptionKey.EngineerUseImpostorVent].GetValue();
-            Ship.NoVoteIsSelfVote = AllOption[
-                (int)CommonOptionKey.NoVoteToSelf].GetValue();
+            Ship.DisableSelfVote = AllOption[
+                (int)CommonOptionKey.DisableSelfVote].GetValue();
             Ship.IsSameNeutralSameWin = AllOption[
                 (int)CommonOptionKey.IsSameNeutralSameWin].GetValue();
             Ship.DisableNeutralSpecialForceEnd = AllOption[
                 (int)CommonOptionKey.DisableNeutralSpecialForceEnd].GetValue();
+
+            Ship.IsAssignNeutralToVanillaCrewGhostRole = AllOption[
+                (int)CommonOptionKey.IsAssignNeutralToVanillaCrewGhostRole].GetValue();
+            Ship.IsRemoveAngleIcon = AllOption[
+                (int)CommonOptionKey.IsRemoveAngleIcon].GetValue();
 
             Client.StreamerMode = ConfigParser.StreamerMode.Value;
             Client.GhostsSeeRole = ConfigParser.GhostsSeeRoles.Value;
@@ -265,18 +174,26 @@ namespace ExtremeRoles
                 AmongUsClient.Instance?.AmHost == false &&
                 PlayerControl.LocalPlayer == null) { return; }
 
-            MessageWriter messageWriter = AmongUsClient.Instance.StartRpc(
-                PlayerControl.LocalPlayer.NetId,
-                (byte)RPCOperator.Command.ShareOption, Hazel.SendOption.Reliable);
-            messageWriter.WritePacked((uint)AllOption.Count);
-            
-            foreach (var(id, option) in AllOption)
+            var splitOption = AllOption.Select((x, i) =>
+                new { data = x, indexgroup = i / chunkSize })
+                .GroupBy(x => x.indexgroup, x => x.data)
+                .Select(y => y.Select(x => x));
+
+            foreach (var chunkedOption in splitOption)
             {
-                messageWriter.WritePacked((uint)id);
-                messageWriter.WritePacked(Convert.ToUInt32(option.CurSelection));
+                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                    PlayerControl.LocalPlayer.NetId,
+                    (byte)RPCOperator.Command.ShareOption,
+                    Hazel.SendOption.Reliable);
+
+                writer.Write((byte)chunkedOption.Count());
+                foreach (var (id, option) in chunkedOption)
+                {
+                    writer.WritePacked(id);
+                    writer.WritePacked(option.CurSelection);
+                }
+                AmongUsClient.Instance.FinishRpcImmediately(writer);
             }
-            
-            messageWriter.EndMessage();
         }
         public static void ShareOption(int numberOfOptions, MessageReader reader)
         {
@@ -284,9 +201,12 @@ namespace ExtremeRoles
             {
                 for (int i = 0; i < numberOfOptions; i++)
                 {
-                    uint optionId = reader.ReadPackedUInt32();
-                    uint selection = reader.ReadPackedUInt32();
-                    AllOption[(int)optionId].UpdateSelection((int)selection);
+                    int optionId = reader.ReadPackedInt32();
+                    int selection = reader.ReadPackedInt32();
+                    lock (AllOption)
+                    {
+                        AllOption[optionId].UpdateSelection(selection);
+                    }
                 }
             }
             catch (Exception e)
@@ -310,6 +230,173 @@ namespace ExtremeRoles
             regions = regions.Concat(new IRegionInfo[] { CustomRegion.Cast<IRegionInfo>() }).ToArray();
             ServerManager.DefaultRegions = regions;
             serverManager.AvailableRegions = regions;
+        }
+
+        private static void createConfigOption()
+        {
+            var config = ExtremeRolesPlugin.Instance.Config;
+
+            ConfigParser.StreamerMode = config.Bind(
+                "ClientOption", "StreamerMode", false);
+            ConfigParser.GhostsSeeTasks = config.Bind(
+                "ClientOption", "GhostCanSeeRemainingTasks", true);
+            ConfigParser.GhostsSeeRoles = config.Bind(
+                "ClientOption", "GhostCanSeeRoles", true);
+            ConfigParser.GhostsSeeVotes = config.Bind(
+                "ClientOption", "GhostCanSeeVotes", true);
+            ConfigParser.ShowRoleSummary = config.Bind(
+                "ClientOption", "IsShowRoleSummary", true);
+            ConfigParser.HideNamePlate = config.Bind(
+                "ClientOption", "IsHideNamePlate", false);
+
+            ConfigParser.StreamerModeReplacementText = config.Bind(
+                "ClientOption",
+                "ReplacementRoomCodeText",
+                "\n\nPlaying with Extreme Roles");
+
+            ConfigParser.Ip = config.Bind(
+                "ClientOption", "CustomServerIP", "127.0.0.1");
+            ConfigParser.Port = config.Bind(
+                "ClientOption", "CustomServerPort", (ushort)22023);
+        }
+
+        private static void createExtremeRoleGlobalSpawnOption()
+        {
+            new IntCustomOption(
+                (int)CommonOptionKey.MinCrewmateRoles, Design.ColoedString(
+                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    CommonOptionKey.MinCrewmateRoles.ToString()),
+                0, 0, (VanillaMaxPlayerNum - 1) * 2, 1, null, true);
+            new IntCustomOption(
+                (int)CommonOptionKey.MaxCrewmateRoles, Design.ColoedString(
+                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    CommonOptionKey.MaxCrewmateRoles.ToString()),
+                0, 0, (VanillaMaxPlayerNum - 1) * 2, 1);
+
+            new IntCustomOption(
+                (int)CommonOptionKey.MinNeutralRoles, Design.ColoedString(
+                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    CommonOptionKey.MinNeutralRoles.ToString()),
+                0, 0, (VanillaMaxPlayerNum - 2) * 2, 1);
+            new IntCustomOption(
+                (int)CommonOptionKey.MaxNeutralRoles, Design.ColoedString(
+                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    CommonOptionKey.MaxNeutralRoles.ToString()),
+                0, 0, (VanillaMaxPlayerNum - 2) * 2, 1);
+
+            new IntCustomOption(
+                (int)CommonOptionKey.MinImpostorRoles, Design.ColoedString(
+                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    CommonOptionKey.MinImpostorRoles.ToString()),
+                0, 0, MaxImposterNum * 2, 1);
+            new IntCustomOption(
+                (int)CommonOptionKey.MaxImpostorRoles, Design.ColoedString(
+                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    CommonOptionKey.MaxImpostorRoles.ToString()),
+                0, 0, MaxImposterNum * 2, 1);
+        }
+
+        private static void createExtremeGhostRoleGlobalSpawnOption()
+        {
+            new IntCustomOption(
+                (int)CommonOptionKey.MinCrewmateGhostRoles, Design.ColoedString(
+                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    CommonOptionKey.MinCrewmateGhostRoles.ToString()),
+                0, 0, VanillaMaxPlayerNum - 1, 1, null, true);
+            new IntCustomOption(
+                (int)CommonOptionKey.MaxCrewmateGhostRoles, Design.ColoedString(
+                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    CommonOptionKey.MaxCrewmateGhostRoles.ToString()),
+                0, 0, VanillaMaxPlayerNum - 1, 1);
+
+            new IntCustomOption(
+                (int)CommonOptionKey.MinNeutralGhostRoles, Design.ColoedString(
+                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    CommonOptionKey.MinNeutralGhostRoles.ToString()),
+                0, 0, VanillaMaxPlayerNum - 2, 1);
+            new IntCustomOption(
+                (int)CommonOptionKey.MaxNeutralGhostRoles, Design.ColoedString(
+                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    CommonOptionKey.MaxNeutralGhostRoles.ToString()),
+                0, 0, VanillaMaxPlayerNum - 2, 1);
+
+            new IntCustomOption(
+                (int)CommonOptionKey.MinImpostorGhostRoles, Design.ColoedString(
+                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    CommonOptionKey.MinImpostorGhostRoles.ToString()),
+                0, 0, MaxImposterNum, 1);
+            new IntCustomOption(
+                (int)CommonOptionKey.MaxImpostorGhostRoles, Design.ColoedString(
+                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    CommonOptionKey.MaxImpostorGhostRoles.ToString()),
+                0, 0, MaxImposterNum, 1);
+        }
+
+
+        private static void createShipGlobalOption()
+        {
+
+            new IntCustomOption(
+                (int)CommonOptionKey.NumMeating,
+                CommonOptionKey.NumMeating.ToString(),
+                10, 0, 100, 1, null, true);
+            new BoolCustomOption(
+                (int)CommonOptionKey.DisableSkipInEmergencyMeeting,
+                CommonOptionKey.DisableSkipInEmergencyMeeting.ToString(),
+                false);
+            new BoolCustomOption(
+                (int)CommonOptionKey.DisableSelfVote,
+                CommonOptionKey.DisableSelfVote.ToString(),
+                false);
+
+
+            var ventOption = new BoolCustomOption(
+               (int)CommonOptionKey.DesableVent,
+               CommonOptionKey.DesableVent.ToString(),
+               false);
+            new BoolCustomOption(
+                (int)CommonOptionKey.CanKillVentInPlayer,
+                CommonOptionKey.CanKillVentInPlayer.ToString(),
+                false, ventOption, invert: true);
+            new BoolCustomOption(
+                (int)CommonOptionKey.EngineerUseImpostorVent,
+                CommonOptionKey.EngineerUseImpostorVent.ToString(),
+                false, ventOption, invert: true);
+
+
+            new BoolCustomOption(
+                (int)CommonOptionKey.ParallelMedBayScans,
+                CommonOptionKey.ParallelMedBayScans.ToString(), false);
+            new BoolCustomOption(
+                (int)CommonOptionKey.RandomMap,
+                CommonOptionKey.RandomMap.ToString(), false);
+
+
+            new BoolCustomOption(
+                (int)CommonOptionKey.IsSameNeutralSameWin,
+                CommonOptionKey.IsSameNeutralSameWin.ToString(),
+                true);
+            new BoolCustomOption(
+                (int)CommonOptionKey.DisableNeutralSpecialForceEnd,
+                CommonOptionKey.DisableNeutralSpecialForceEnd.ToString(),
+                false);
+
+
+            new BoolCustomOption(
+                (int)CommonOptionKey.EnableHorseMode,
+                CommonOptionKey.EnableHorseMode.ToString(),
+                false);
+
+
+            new BoolCustomOption(
+                (int)CommonOptionKey.IsAssignNeutralToVanillaCrewGhostRole,
+                CommonOptionKey.IsAssignNeutralToVanillaCrewGhostRole.ToString(),
+                true);
+            new BoolCustomOption(
+                (int)CommonOptionKey.IsRemoveAngleIcon,
+                CommonOptionKey.IsRemoveAngleIcon.ToString(),
+                false);
+
         }
 
         public static class ConfigParser
@@ -343,9 +430,12 @@ namespace ExtremeRoles
             public static bool DisableVent = false;
             public static bool EngineerUseImpostorVent = false;
             public static bool CanKillVentInPlayer = false;
-            public static bool NoVoteIsSelfVote = false;
+            public static bool DisableSelfVote = false;
             public static bool IsSameNeutralSameWin = true;
             public static bool DisableNeutralSpecialForceEnd = false;
+
+            public static bool IsAssignNeutralToVanillaCrewGhostRole = true;
+            public static bool IsRemoveAngleIcon = false;
         }
     }
 }

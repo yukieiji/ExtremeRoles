@@ -68,6 +68,9 @@ namespace ExtremeRoles
             TaskMasterSetNewTask,
             JesterOutburstKill,
             YandereSetOneSidedLover,
+
+            SetGhostRole,
+            UseGhostRoleAbility,
         }
 
         public static void Call(
@@ -117,6 +120,7 @@ namespace ExtremeRoles
             RandomGenerator.Initialize();
             Helper.Player.ResetTarget();
             Roles.ExtremeRoleManager.Initialize();
+            GhostRoles.ExtremeGhostRoleManager.Initialize();
             ExtremeRolesPlugin.GameDataStore.Initialize();
             ExtremeRolesPlugin.Info.ResetOverlays();
 
@@ -532,6 +536,20 @@ namespace ExtremeRoles
         {
             Roles.Solo.Neutral.Yandere.SetOneSidedLover(
                 playerId, loverId);
+        }
+
+        public static void SetGhostRole(
+            ref MessageReader reader)
+        {
+            GhostRoles.ExtremeGhostRoleManager.SetGhostRoleToPlayerId(
+                ref reader);
+        }
+
+        public static void UseGhostRoleAbility(
+            byte abilityType, ref MessageReader reader)
+        {
+            ExtremeRolesPlugin.GameDataStore.AbilityManager.UseGhostAbility(
+                abilityType, ref reader);
         }
 
     }

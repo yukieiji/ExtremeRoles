@@ -8,7 +8,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.RoleAbilityButton;
+using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 
 namespace ExtremeRoles.Roles.Combination
@@ -475,11 +475,7 @@ namespace ExtremeRoles.Roles.Combination
         public void SetCondition(
             OneForAllCondition cond)
         {
-            var hero = ExtremeRoleManager.GetLocalPlayerRole() as Hero;
-            if (hero != null)
-            {
-                hero.cond = cond;
-            }
+            this.cond = cond;
         }
 
         public void CreateAbility()

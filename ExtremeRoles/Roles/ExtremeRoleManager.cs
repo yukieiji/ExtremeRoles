@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 
 using ExtremeRoles.Roles.API;
@@ -61,6 +62,7 @@ namespace ExtremeRoles.Roles
         SandWorm,
         Smasher,
         AssaultMaster,
+        Shooter,
 
         Alice,
         Jackal,
@@ -165,6 +167,7 @@ namespace ExtremeRoles.Roles
                 {(byte)ExtremeRoleId.SandWorm       , new SandWorm()},
                 {(byte)ExtremeRoleId.Smasher        , new Smasher()},
                 {(byte)ExtremeRoleId.AssaultMaster  , new AssaultMaster()},
+                {(byte)ExtremeRoleId.Shooter        , new Shooter()},
 
                 {(byte)ExtremeRoleId.Alice     , new Alice()},
                 {(byte)ExtremeRoleId.Jackal    , new Jackal()},
@@ -186,8 +189,8 @@ namespace ExtremeRoles.Roles
                 {(byte)CombinationRoleType.Sharer         , new SharerManager()   },
             };
 
-        public static Dictionary<
-            byte, SingleRoleBase> GameRole = new Dictionary<byte, SingleRoleBase> ();
+        public static ConcurrentDictionary<
+            byte, SingleRoleBase> GameRole = new ConcurrentDictionary<byte, SingleRoleBase> ();
 
         public static readonly HashSet<ExtremeRoleId> WinCheckDisableRole = new HashSet<ExtremeRoleId>()
         {
@@ -208,9 +211,10 @@ namespace ExtremeRoles.Roles
         public static void CreateCombinationRoleOptions(
             int optionIdOffsetChord)
         {
-            IEnumerable<CombinationRoleManagerBase> roles = CombRole.Values;
 
-            if (roles.Count() == 0) { return; };
+            if (CombRole.Count == 0) { return; };
+
+            IEnumerable<CombinationRoleManagerBase> roles = CombRole.Values;
 
             int roleOptionOffset = optionIdOffsetChord;
 
@@ -227,9 +231,9 @@ namespace ExtremeRoles.Roles
             int optionIdOffsetChord)
         {
 
-            IEnumerable<SingleRoleBase> roles = NormalRole.Values;
+            if (NormalRole.Count == 0) { return; };
 
-            if (roles.Count() == 0) { return; };
+            IEnumerable<SingleRoleBase> roles = NormalRole.Values;
 
             int roleOptionOffset = 0;
 
@@ -311,10 +315,7 @@ namespace ExtremeRoles.Roles
                 addRole.Initialize();
                 addRole.GameControlId = id;
                 roleControlId = id + 1;
-                lock (GameRole)
-                {
-                    GameRole.Add(playerId, addRole);
-                }
+                GameRole[playerId] = addRole;
 
                 if (hasVanilaRole)
                 {
@@ -377,10 +378,7 @@ namespace ExtremeRoles.Roles
 
             if (!GameRole.ContainsKey(playerId))
             {
-                lock (GameRole)
-                {
-                    GameRole.Add(playerId, addRole);
-                }
+                GameRole[playerId] = addRole;
             }
             else
             {

@@ -2920,5 +2920,8 @@
     },
     "sharerKill": {
         "11": "\u30b7\u30a7\u30a2\u30fc\u30ba\uff1a{0}\u304c\u30ad\u30eb\u3057\u305f\u307f\u305f\u3044\u3060"
+    },
+    "GuardianAngel": {
+        "11": "\u5b88\u8b77\u5929\u4f7f"
     }
 }

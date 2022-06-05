@@ -30,68 +30,48 @@ namespace ExtremeRoles.Patches.Option
 
             List<string> pages = new List<string>();
             pages.Add(__result);
-
-            StringBuilder entry = new StringBuilder();
-            List<string> entries = new List<string>();
+        
+            List<string> allOptionStr = new List<string>();
 
             var allOption = OptionHolder.AllOption;
 
-            entries.Add(
+            allOptionStr.Add(
                 CustomOption.OptionToString(allOption[(int)OptionHolder.CommonOptionKey.PresetSelection]));
 
-            entries.Add(
+            allOptionStr.Add(
                 CustomOption.OptionToString(allOption[(int)OptionHolder.CommonOptionKey.UseStrongRandomGen]));
 
-            var optionName = Design.ColoedString(
-                new Color(204f / 255f, 204f / 255f, 0, 1f),
-                translate("crewmateRoles"));
-            var min = allOption[(int)OptionHolder.CommonOptionKey.MinCremateRoles].GetValue();
-            var max = allOption[(int)OptionHolder.CommonOptionKey.MaxCremateRoles].GetValue();
-            if (min > max) { min = max; }
-            var optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
-            entry.AppendLine($"{optionName}: {optionValue}");
+            allOptionStr.Add(createRoleSpawnNumOptions());
 
-            optionName = Design.ColoedString(
-                new Color(204f / 255f, 204f / 255f, 0, 1f),
-                translate("neutralRoles"));
-            min = allOption[(int)OptionHolder.CommonOptionKey.MinNeutralRoles].GetValue();
-            max = allOption[(int)OptionHolder.CommonOptionKey.MaxNeutralRoles].GetValue();
-            if (min > max) { min = max; }
-            optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
-            entry.AppendLine($"{optionName}: {optionValue}");
-
-            optionName = Design.ColoedString(
-                new Color(204f / 255f, 204f / 255f, 0, 1f),
-                translate("impostorRoles"));
-            min = allOption[(int)OptionHolder.CommonOptionKey.MinImpostorRoles].GetValue();
-            max = allOption[(int)OptionHolder.CommonOptionKey.MaxImpostorRoles].GetValue();
-
-            if (min > max) { min = max; }
-            optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
-            entry.AppendLine($"{optionName}: {optionValue}");
-
-            entries.Add(entry.ToString().Trim('\r', '\n'));
-
-            entry = new StringBuilder();
+            StringBuilder modOptionStrBuilder = new StringBuilder();
 
             foreach (OptionHolder.CommonOptionKey id in Enum.GetValues(typeof(OptionHolder.CommonOptionKey)))
             {
-                if ((id == OptionHolder.CommonOptionKey.PresetSelection) ||
-                    (id == OptionHolder.CommonOptionKey.UseStrongRandomGen) ||
-                    (id == OptionHolder.CommonOptionKey.MinCremateRoles) ||
-                    (id == OptionHolder.CommonOptionKey.MaxCremateRoles) ||
-                    (id == OptionHolder.CommonOptionKey.MinNeutralRoles) ||
-                    (id == OptionHolder.CommonOptionKey.MaxNeutralRoles) ||
-                    (id == OptionHolder.CommonOptionKey.MinImpostorRoles) ||
-                    (id == OptionHolder.CommonOptionKey.MaxImpostorRoles))
+                switch(id)
                 {
-                    continue;
+                    case OptionHolder.CommonOptionKey.PresetSelection:
+                    case OptionHolder.CommonOptionKey.UseStrongRandomGen:
+                    case OptionHolder.CommonOptionKey.MinCrewmateRoles:
+                    case OptionHolder.CommonOptionKey.MaxCrewmateRoles:
+                    case OptionHolder.CommonOptionKey.MinNeutralRoles:
+                    case OptionHolder.CommonOptionKey.MaxNeutralRoles:
+                    case OptionHolder.CommonOptionKey.MinImpostorRoles:
+                    case OptionHolder.CommonOptionKey.MaxImpostorRoles:
+                    case OptionHolder.CommonOptionKey.MinCrewmateGhostRoles:
+                    case OptionHolder.CommonOptionKey.MaxCrewmateGhostRoles:
+                    case OptionHolder.CommonOptionKey.MinNeutralGhostRoles:
+                    case OptionHolder.CommonOptionKey.MaxNeutralGhostRoles:
+                    case OptionHolder.CommonOptionKey.MinImpostorGhostRoles:
+                    case OptionHolder.CommonOptionKey.MaxImpostorGhostRoles:
+                        continue;
+                    default:
+                        break;
                 }
                 string optionStr = CustomOption.OptionToString(allOption[(int)id]);
-                if (optionStr != string.Empty) { entry.AppendLine(optionStr); }
+                if (optionStr != string.Empty) { modOptionStrBuilder.AppendLine(optionStr); }
             }
 
-            entries.Add(entry.ToString().Trim('\r', '\n'));
+            allOptionStr.Add(modOptionStrBuilder.ToString().Trim('\r', '\n'));
 
             foreach (CustomOptionBase option in OptionHolder.AllOption.Values)
             {
@@ -108,23 +88,23 @@ namespace ExtremeRoles.Patches.Option
                         continue;
                     }
 
-                    entry = new StringBuilder();
+                    StringBuilder optionStrBuilder = new StringBuilder();
                     if (!option.IsHidden)
                     {
-                        entry.AppendLine(CustomOption.OptionToString(option));
+                        optionStrBuilder.AppendLine(CustomOption.OptionToString(option));
                     }
 
-                    addChildren(option, ref entry, option.IsHidden ? 0 : 1);
-                    entries.Add(entry.ToString().Trim('\r', '\n'));
+                    addChildren(option, ref optionStrBuilder, option.IsHidden ? 0 : 1);
+                    allOptionStr.Add(optionStrBuilder.ToString().Trim('\r', '\n'));
                 }
             }
 
             int maxLines = 28;
             int lineCount = 0;
             string page = "";
-            foreach (var e in entries)
+            foreach (string optionStr in allOptionStr)
             {
-                int lines = e.Count(c => c == '\n') + 1;
+                int lines = optionStr.Count(c => c == '\n') + 1;
 
                 if (lineCount + lines > maxLines)
                 {
@@ -133,7 +113,7 @@ namespace ExtremeRoles.Patches.Option
                     lineCount = 0;
                 }
 
-                page = string.Concat(page,e,"\n\n");
+                page = string.Concat(page, optionStr, "\n\n");
                 lineCount += lines + 1;
             }
 
@@ -185,6 +165,74 @@ namespace ExtremeRoles.Patches.Option
                     addChildren(child, ref entry, indentCount + 1);
                 }
             }
+        }
+
+        private static string createRoleSpawnNumOptions()
+        {
+            var allOption = OptionHolder.AllOption;
+
+            StringBuilder entry = new StringBuilder();
+
+            // 生存役職周り
+            string optionName = Design.ColoedString(
+                new Color(204f / 255f, 204f / 255f, 0, 1f),
+                translate("crewmateRoles"));
+            int min = allOption[(int)OptionHolder.CommonOptionKey.MinCrewmateRoles].GetValue();
+            int max = allOption[(int)OptionHolder.CommonOptionKey.MaxCrewmateRoles].GetValue();
+            if (min > max) { min = max; }
+            string optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
+            entry.AppendLine($"{optionName}: {optionValue}");
+
+            optionName = Design.ColoedString(
+                new Color(204f / 255f, 204f / 255f, 0, 1f),
+                translate("neutralRoles"));
+            min = allOption[(int)OptionHolder.CommonOptionKey.MinNeutralRoles].GetValue();
+            max = allOption[(int)OptionHolder.CommonOptionKey.MaxNeutralRoles].GetValue();
+            if (min > max) { min = max; }
+            optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
+            entry.AppendLine($"{optionName}: {optionValue}");
+
+            optionName = Design.ColoedString(
+                new Color(204f / 255f, 204f / 255f, 0, 1f),
+                translate("impostorRoles"));
+            min = allOption[(int)OptionHolder.CommonOptionKey.MinImpostorRoles].GetValue();
+            max = allOption[(int)OptionHolder.CommonOptionKey.MaxImpostorRoles].GetValue();
+
+            if (min > max) { min = max; }
+            optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
+            entry.AppendLine($"{optionName}: {optionValue}");
+
+
+            // 幽霊役職周り
+            optionName = Design.ColoedString(
+                new Color(204f / 255f, 204f / 255f, 0, 1f),
+                translate("crewmateGhostRoles"));
+            min = allOption[(int)OptionHolder.CommonOptionKey.MinCrewmateGhostRoles].GetValue();
+            max = allOption[(int)OptionHolder.CommonOptionKey.MaxCrewmateGhostRoles].GetValue();
+            if (min > max) { min = max; }
+            optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
+            entry.AppendLine($"{optionName}: {optionValue}");
+
+            optionName = Design.ColoedString(
+                new Color(204f / 255f, 204f / 255f, 0, 1f),
+                translate("neutralGhostRoles"));
+            min = allOption[(int)OptionHolder.CommonOptionKey.MinNeutralGhostRoles].GetValue();
+            max = allOption[(int)OptionHolder.CommonOptionKey.MaxNeutralGhostRoles].GetValue();
+            if (min > max) { min = max; }
+            optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
+            entry.AppendLine($"{optionName}: {optionValue}");
+
+            optionName = Design.ColoedString(
+                new Color(204f / 255f, 204f / 255f, 0, 1f),
+                translate("impostorGhostRoles"));
+            min = allOption[(int)OptionHolder.CommonOptionKey.MinImpostorGhostRoles].GetValue();
+            max = allOption[(int)OptionHolder.CommonOptionKey.MaxImpostorGhostRoles].GetValue();
+
+            if (min > max) { min = max; }
+            optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
+            entry.AppendLine($"{optionName}: {optionValue}");
+
+            return entry.ToString().Trim('\r', '\n');
         }
 
         private static string translate(string key)

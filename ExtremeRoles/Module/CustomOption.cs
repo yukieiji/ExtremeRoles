@@ -369,7 +369,7 @@ namespace ExtremeRoles.Module
             int minValue = Convert.ToInt32(this.Selections[0].ToString());
 
             List<int> newSelections = new List<int>();
-            for (int s = minValue; s < maxValue; s += this.step)
+            for (int s = minValue; s <= maxValue; s += this.step)
             {
                 newSelections.Add(s);
             }

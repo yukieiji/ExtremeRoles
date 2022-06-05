@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+using System.Text.RegularExpressions;
+
 namespace ExtremeRoles.Helper
 {
     public static class Design
@@ -13,6 +15,14 @@ namespace ExtremeRoles.Helper
                 toByte(c.b),
                 toByte(c.a), s);
         }
+
+        public static string CleanPlaceHolder(string value)
+        {
+            return Regex.Replace(
+                value, "\\{[0-9]+\\}",
+                Translation.GetString("gameReplace"));
+        }
+
 
         private static byte toByte(float f)
         {

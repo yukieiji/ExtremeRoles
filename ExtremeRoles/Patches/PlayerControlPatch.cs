@@ -8,6 +8,8 @@ using Hazel;
 
 using UnityEngine;
 
+using ExtremeRoles.GhostRoles;
+using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -67,11 +69,12 @@ namespace ExtremeRoles.Patches
             resetNameTagsAndColors();
 
             var role = ExtremeRoleManager.GetLocalPlayerRole();
+            var ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
 
             bool blockCondition = isBlockCondition(
-                PlayerControl.LocalPlayer, role);
-            bool meetingInfoBlock = role.IsBlockShowMeetingRoleInfo();
-            bool playeringInfoBlock = role.IsBlockShowPlayingRoleInfo();
+                PlayerControl.LocalPlayer, role) || ghostRole != null;
+            bool meetingInfoBlock = role.IsBlockShowMeetingRoleInfo() || ghostRole != null;
+            bool playeringInfoBlock = role.IsBlockShowPlayingRoleInfo() || ghostRole != null;
 
             playerInfoUpdate(
                 blockCondition,
@@ -79,13 +82,14 @@ namespace ExtremeRoles.Patches
                 playeringInfoBlock);
 
             setPlayerNameColor(
-                __instance, role,
+                __instance,
+                role, ghostRole,
                 blockCondition,
                 meetingInfoBlock,
                 playeringInfoBlock);
             setPlayerNameTag(role);
-            buttonUpdate(__instance, role);
-            refreshRoleDescription(__instance, role);
+            buttonUpdate(__instance, role, ghostRole);
+            refreshRoleDescription(__instance, role, ghostRole);
 
             ExtremeRolesPlugin.GameDataStore.History.Enqueue(__instance);
             ExtremeRolesPlugin.GameDataStore.Union.Update();
@@ -153,6 +157,7 @@ namespace ExtremeRoles.Patches
         private static void setPlayerNameColor(
             PlayerControl player,
             SingleRoleBase playerRole,
+            GhostRoleBase playerGhostRole,
             bool blockCondition,
             bool meetingInfoBlock,
             bool playeringInfoBlock)
@@ -165,22 +170,44 @@ namespace ExtremeRoles.Patches
             Color localRoleColor = playerRole.GetNameColor(
                 PlayerControl.LocalPlayer.Data.IsDead);
 
+            if (playerGhostRole != null)
+            {
+                Color ghostRoleColor = playerGhostRole.RoleColor;
+                localRoleColor = (localRoleColor / 2.0f) + (ghostRoleColor / 2.0f);
+            }
             player.nameText.color = localRoleColor;
             setVoteAreaColor(localPlayerId, localRoleColor);
+
+            GhostRoleBase targetGhostRole;
 
             foreach (PlayerControl targetPlayer in PlayerControl.AllPlayerControls)
             {
                 if (targetPlayer.PlayerId == player.PlayerId) { continue; }
 
                 byte targetPlayerId = targetPlayer.PlayerId;
+                var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
+
+                ExtremeGhostRoleManager.GameRole.TryGetValue(targetPlayerId, out targetGhostRole);
+                
 
                 if (!OptionHolder.Client.GhostsSeeRole || 
                     !PlayerControl.LocalPlayer.Data.IsDead ||
                     blockCondition)
                 {
-                    var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
                     Color paintColor = playerRole.GetTargetRoleSeeColor(
                         targetRole, targetPlayerId);
+                    
+                    if (playerGhostRole != null)
+                    {
+                        Color paintGhostColor = playerGhostRole.GetTargetRoleSeeColor(
+                            targetPlayerId, targetRole, targetGhostRole);
+
+                        if (paintGhostColor != Color.clear)
+                        {
+                            paintColor = (paintGhostColor / 2.0f) + (paintColor / 2.0f);
+                        }
+                    }
+
                     if (paintColor == Palette.ClearWhite) { continue; }
 
                     targetPlayer.nameText.color = paintColor;
@@ -188,9 +215,8 @@ namespace ExtremeRoles.Patches
                 }
                 else
                 {
-                    var targetPlayerRole = ExtremeRoleManager.GameRole[
-                        targetPlayerId];
-                    Color roleColor = targetPlayerRole.GetNameColor(true);
+                    Color roleColor = targetRole.GetNameColor(true);
+
                     if (!playeringInfoBlock)
                     {
                         targetPlayer.nameText.color = roleColor;
@@ -199,7 +225,7 @@ namespace ExtremeRoles.Patches
                         targetPlayerId,
                         roleColor,
                         meetingInfoBlock,
-                        targetPlayerRole.Team == playerRole.Team);
+                        targetRole.Team == playerRole.Team);
                 }
             }
 
@@ -369,8 +395,15 @@ namespace ExtremeRoles.Patches
         {
 
             var (tasksCompleted, tasksTotal) = GameSystem.GetTaskInfo(targetPlayer.Data);
-            string roleNames = ExtremeRoleManager.GameRole[targetPlayer.PlayerId].GetColoredRoleName(
+            byte targetPlayerId = targetPlayer.PlayerId;
+            string roleNames = ExtremeRoleManager.GameRole[targetPlayerId].GetColoredRoleName(
                 PlayerControl.LocalPlayer.Data.IsDead);
+
+            if (ExtremeGhostRoleManager.GameRole.ContainsKey(targetPlayerId))
+            {
+                string ghostRoleName = ExtremeGhostRoleManager.GameRole[targetPlayerId].GetColoredRoleName();
+                roleNames = $"{ghostRoleName}({roleNames})";
+            }
 
             var completedStr = commonActive ? "?" : tasksCompleted.ToString();
             string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({completedStr}/{tasksTotal})</color>" : "";
@@ -410,7 +443,8 @@ namespace ExtremeRoles.Patches
         }
         private static void refreshRoleDescription(
             PlayerControl player,
-            SingleRoleBase playerRole)
+            SingleRoleBase playerRole,
+            GhostRoleBase playerGhostRole)
         {
 
             var removedTask = new List<PlayerTask>();
@@ -435,13 +469,19 @@ namespace ExtremeRoles.Patches
             var importantTextTask = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
             importantTextTask.transform.SetParent(player.transform, false);
 
-            importantTextTask.Text = playerRole.GetImportantText();
+            string addText = playerRole.GetImportantText();
+            if (playerGhostRole != null)
+            {
+                addText =$"{addText}\n{playerGhostRole.GetImportantText()}";
+            }
+            importantTextTask.Text = addText;
             player.myTasks.Insert(0, importantTextTask);
 
         }
         private static void buttonUpdate(
             PlayerControl player,
-            SingleRoleBase playerRole)
+            SingleRoleBase playerRole,
+            GhostRoleBase playerGhostRole)
         {
             if (!player.AmOwner) { return; }
 
@@ -452,6 +492,8 @@ namespace ExtremeRoles.Patches
 
             sabotageButtonUpdate(playerRole);
             roleAbilityButtonUpdate(playerRole);
+
+            ghostRoleButtonUpdate(playerGhostRole);
         }
 
         private static void killButtonUpdate(
@@ -588,6 +630,23 @@ namespace ExtremeRoles.Patches
                 HudManager.Instance.ImpostorVentButton.SetDisabled();
             }
         }
+
+        private static void ghostRoleButtonUpdate(GhostRoleBase playerGhostRole)
+        {
+            if (playerGhostRole != null && playerGhostRole.Button != null)
+            {
+                switch(PlayerControl.LocalPlayer.Data.Role.Role)
+                {
+                    case RoleTypes.Engineer:
+                    case RoleTypes.Shapeshifter:
+                        HudManager.Instance.AbilityButton.Hide();
+                        break;
+                    default:
+                        break;
+                }
+                playerGhostRole.Button.Update();
+            }
+        }
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FindClosestTarget))]
@@ -703,7 +762,7 @@ namespace ExtremeRoles.Patches
                         gameControlId, bytedRoleType);
                     break;
                 case RPCOperator.Command.ShareOption:
-                    int numOptions = (int)reader.ReadPackedUInt32();
+                    int numOptions = (int)reader.ReadByte();
                     RPCOperator.ShareOption(numOptions, reader);
                     break;
                 case RPCOperator.Command.ReplaceRole:
@@ -943,6 +1002,15 @@ namespace ExtremeRoles.Patches
                     byte loverPlayerId = reader.ReadByte();
                     RPCOperator.YandereSetOneSidedLover(
                         yanderePlayerId, loverPlayerId);
+                    break;
+                case RPCOperator.Command.SetGhostRole:
+                    RPCOperator.SetGhostRole(
+                        ref reader);
+                    break;
+                case RPCOperator.Command.UseGhostRoleAbility:
+                    byte useGhostRoleType = reader.ReadByte();
+                    RPCOperator.UseGhostRoleAbility(
+                        useGhostRoleType, ref reader);
                     break;
                 default:
                     break;

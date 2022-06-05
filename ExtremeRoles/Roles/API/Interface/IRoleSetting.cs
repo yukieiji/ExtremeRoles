@@ -4,7 +4,7 @@ namespace ExtremeRoles.Roles.API.Interface
 {
     interface IRoleOption
     {
-        int GetRoleOptionId(int Option);
+        int GetRoleOptionId(int option);
 
         void Initialize();
 

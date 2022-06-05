@@ -2,7 +2,7 @@
 using UnityEngine;
 
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.RoleAbilityButton;
+using ExtremeRoles.Module.AbilityButton.Roles;
 
 namespace ExtremeRoles.Roles.API.Interface
 {

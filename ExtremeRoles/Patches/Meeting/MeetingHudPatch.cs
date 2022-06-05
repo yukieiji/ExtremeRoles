@@ -6,10 +6,11 @@ using UnityEngine;
 
 using UnhollowerBaseLib;
 
+using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
 
-namespace ExtremeRoles.Patches
+namespace ExtremeRoles.Patches.Meeting
 {
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.BloopAVoteIcon))]
@@ -67,7 +68,9 @@ namespace ExtremeRoles.Patches
 
         private static bool isVoteSeeBlock(Roles.API.SingleRoleBase role)
         {
-            if (PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
+            if (ExtremeGhostRoleManager.GameRole.ContainsKey(
+                    PlayerControl.LocalPlayer.PlayerId) ||
+                PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
             {
                 return true;
             }
@@ -75,7 +78,6 @@ namespace ExtremeRoles.Patches
             {
                 return ExtremeRolesPlugin.GameDataStore.IsAssassinAssign;
             }
-
             return false;
         }
 
@@ -215,7 +217,7 @@ namespace ExtremeRoles.Patches
         {
             __result = false;
 
-            if (OptionHolder.Ship.NoVoteIsSelfVote && 
+            if (OptionHolder.Ship.DisableSelfVote && 
                 PlayerControl.LocalPlayer.PlayerId == suspectStateIdx)
             {
                 return false;
@@ -369,6 +371,17 @@ namespace ExtremeRoles.Patches
                         resetRole.ResetOnMeetingStart();
                     }
                 }
+            }
+
+            var ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
+            if (ghostRole != null)
+            {
+                if (ghostRole.Button != null)
+                {
+                    ghostRole.Button.SetActive(false);
+                    ghostRole.Button.ForceAbilityOff();
+                }
+                ghostRole.ReseOnMeetingStart();
             }
 
             if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }

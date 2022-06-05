@@ -2,6 +2,7 @@
 
 using HarmonyLib;
 
+using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -174,6 +175,7 @@ namespace ExtremeRoles.Patches.Controller
 
             ExtremeRolesPlugin.Info.HideBlackBG();
             ExtremeRolesPlugin.GameDataStore.Union.ResetTimer();
+            ExtremeRolesPlugin.GameDataStore.AbilityManager.Clear();
 
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
@@ -224,6 +226,16 @@ namespace ExtremeRoles.Patches.Controller
                         resetRole.ResetOnMeetingStart();
                     }
                 }
+            }
+
+            var ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
+            if (ghostRole != null)
+            {
+                if (ghostRole.Button != null)
+                {
+                    ghostRole.Button.ResetCoolTimer();
+                }
+                ghostRole.ReseOnMeetingEnd();
             }
 
             if (exiled == null) { return; };
