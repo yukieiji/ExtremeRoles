@@ -17,6 +17,7 @@ namespace ExtremeRoles.Module
             FaunusOpenSaboConsole,
 
             VentgeistVentAnime,
+            SaboEvilResetSabotageCool
         }
 
         private HashSet<AbilityType> useAbility = new HashSet<AbilityType>();
@@ -61,6 +62,9 @@ namespace ExtremeRoles.Module
                     Poltergeist.DeadbodyMove(
                         poltergeistPlayerId,
                         poltergeistMoveDeadbodyPlayerId, pickUp);
+                    break;
+                case AbilityType.SaboEvilResetSabotageCool:
+                    SaboEvil.ResetCool();
                     break;
                 default:
                     break;

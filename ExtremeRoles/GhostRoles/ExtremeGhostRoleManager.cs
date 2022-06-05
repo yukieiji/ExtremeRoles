@@ -20,8 +20,8 @@ namespace ExtremeRoles.GhostRoles
         Poltergeist,
         Faunus,
 
-        Ventgeist
-
+        Ventgeist,
+        SaboEvil
     }
 
     public static class ExtremeGhostRoleManager
@@ -155,10 +155,10 @@ namespace ExtremeRoles.GhostRoles
             ExtremeGhostRoleId, GhostRoleBase> AllGhostRole = new Dictionary<ExtremeGhostRoleId, GhostRoleBase>()
             {
                 { ExtremeGhostRoleId.Poltergeist, new Poltergeist() },
-                { ExtremeGhostRoleId.Faunus, new Faunus() },
+                { ExtremeGhostRoleId.Faunus,      new Faunus()      },
 
                 { ExtremeGhostRoleId.Ventgeist, new Ventgeist() },
-            
+                { ExtremeGhostRoleId.SaboEvil,  new SaboEvil()  },
             };
 
         private static readonly HashSet<RoleTypes> vanillaGhostRole = new HashSet<RoleTypes>()
