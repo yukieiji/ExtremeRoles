@@ -6,11 +6,12 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public class Shooter : SingleRoleBase, IRoleResetMeeting, IRoleUpdate
+    public class Shooter : SingleRoleBase, IRoleReportHock, IRoleResetMeeting, IRoleUpdate
     {
         public enum ShooterOption
         {
             CanCallMeeting,
+            CanShootSelfCallMeeting,
             MaxShootNum,
             InitShootNum,
             MaxMeetingShootNum,
@@ -21,7 +22,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
         public int CurShootNum => this.curShootNum;
-        public bool CanShoot => this.shootCounter < this.maxMeetingShootNum;
+        public bool CanShoot => this.shootCounter < this.maxMeetingShootNum && this.canShootThisMeeting;
 
         private float defaultKillCool = 0.0f;
         private float killCoolPenalty = 0.0f;
@@ -36,6 +37,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private int chargeNum = 0;
         private int maxChargeNum = 0;
 
+        private bool canShootThisMeeting = false;
+        private bool canShootSelfCallMeeting = false;
+
         private TMPro.TextMeshPro chargeInfoText = null;
         private TMPro.TextMeshPro chargeTimerText = null;
         private TMPro.TextMeshPro meetingShootText = null;
@@ -48,6 +52,26 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             true, false, true, true)
         {}
 
+        public void HockReportButton(
+            PlayerControl rolePlayer, GameData.PlayerInfo reporter)
+        {
+            if (rolePlayer.PlayerId == reporter.PlayerId)
+            {
+                this.canShootThisMeeting = this.canShootSelfCallMeeting;
+            }
+            else
+            {
+                this.canShootSelfCallMeeting = true;
+            }
+        }
+
+        public void HockBodyReport(
+            PlayerControl rolePlayer, GameData.PlayerInfo reporter, GameData.PlayerInfo reportBody)
+        {
+            this.canShootThisMeeting = true;
+        }
+
+
         public void Shoot()
         {
             this.curShootNum = this.curShootNum - 1;
@@ -58,6 +82,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void ResetOnMeetingEnd()
         {
             chargeInfoSetActive(true);
+            this.canShootThisMeeting = true;
         }
 
         public void ResetOnMeetingStart()
@@ -146,9 +171,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
-            CreateBoolOption(
+            var meetingOps = CreateBoolOption(
                 ShooterOption.CanCallMeeting,
                 true, parentOps);
+
+            CreateBoolOption(
+                ShooterOption.CanShootSelfCallMeeting,
+                true, meetingOps,
+                invert: true,
+                enableCheckOption: parentOps);
 
             var maxShootOps = CreateIntOption(
                ShooterOption.MaxShootNum,
@@ -197,6 +228,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             this.CanCallMeeting = allOps[
                 GetRoleOptionId(ShooterOption.CanCallMeeting)].GetValue();
+            this.canShootSelfCallMeeting = allOps[
+                GetRoleOptionId(ShooterOption.CanShootSelfCallMeeting)].GetValue();
 
             this.maxShootNum = allOps[
                 GetRoleOptionId(ShooterOption.MaxShootNum)].GetValue();
@@ -268,6 +301,5 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.curShootNum, this.maxShootNum);
             }
         }
-
     }
 }
