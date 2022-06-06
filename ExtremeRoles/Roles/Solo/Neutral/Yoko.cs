@@ -99,12 +99,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             CreateBoolOption(
                 YokoOption.CanRepairSabo,
-                false, parentOps,
-                format: OptionUnit.Second);
+                false, parentOps);
             CreateBoolOption(
                 YokoOption.CanUseVent,
-                false, parentOps,
-                format: OptionUnit.Second);
+                false, parentOps);
             CreateFloatOption(
                 YokoOption.SearchRange,
                 7.5f, 5.0f, 15.0f, 0.5f,

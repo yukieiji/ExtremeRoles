@@ -202,6 +202,7 @@ namespace ExtremeRoles.Patches.Option
             optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
             entry.AppendLine($"{optionName}: {optionValue}");
 
+            entry.AppendLine("");
 
             // 幽霊役職周り
             optionName = Design.ColoedString(

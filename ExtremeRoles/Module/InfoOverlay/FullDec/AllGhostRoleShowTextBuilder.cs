@@ -21,7 +21,7 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
 
             string showRole = string.Concat(
                 $"<size=200%>{Translation.GetString("ghostRoleDesc")}</size>",
-                $"           {Translation.GetString("changeRoleMore")}",
+                $"           {Translation.GetString("changeGhostRoleMore")}",
                 $"({this.Page + 1}/{this.AllPage.Count})\n",
                 string.Format(roleTextBase, roleOption != "" ? $"{roleOption}" : ""));
             return Tuple.Create(showRole, "");
