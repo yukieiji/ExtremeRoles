@@ -199,20 +199,6 @@ namespace ExtremeRoles.Patches.Meeting
 				if (!meetingKillButton.ContainsKey(target))
                 {
 
-					void shooterKill()
-                    {
-						shooter.Shoot();
-						RPCOperator.Call(
-							PlayerControl.LocalPlayer.NetId,
-							RPCOperator.Command.UncheckedMurderPlayer,
-							new List<byte> { PlayerControl.LocalPlayer.PlayerId, target, 0 });
-						RPCOperator.UncheckedMurderPlayer(
-							PlayerControl.LocalPlayer.PlayerId,
-							target, 0);
-						ControllerManager.Instance.CloseOverlayMenu(
-							instance.name);
-					}
-
 					UiElement newKillButton = GameObject.Instantiate(
 						instance.ConfirmButton, instance.ConfirmButton.transform.parent);
 					newKillButton.name = $"shooterKill_{target}";
@@ -222,8 +208,24 @@ namespace ExtremeRoles.Patches.Meeting
 						(UnityEngine.Events.UnityAction)shooterKill);
 
 					var render = newKillButton.GetComponent<SpriteRenderer>();
+					render.sprite = HudManager.Instance.KillButton.graphic.sprite;
+					render.transform.localScale *= new Vector2(0.75f, 0.75f);
 
 					meetingKillButton.Add(target, newKillButton);
+
+					void shooterKill()
+					{
+						if (instance.AmDead) { return; }
+						shooter.Shoot();
+						RPCOperator.Call(
+							PlayerControl.LocalPlayer.NetId,
+							RPCOperator.Command.UncheckedMurderPlayer,
+							new List<byte> { PlayerControl.LocalPlayer.PlayerId, target, 0 });
+						RPCOperator.UncheckedMurderPlayer(
+							PlayerControl.LocalPlayer.PlayerId,
+							target, 0);
+					}
+
 				}
 
 				instance.Buttons.SetActive(true);

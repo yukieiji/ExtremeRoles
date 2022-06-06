@@ -114,13 +114,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                         HudManager.Instance.TaskText, MeetingHud.Instance.transform);
                     meetingShootText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
                     meetingShootText.transform.position = Vector3.zero;
-                    meetingShootText.transform.localPosition = new Vector3(-3.07f, 3.33f, -20f);
-                    meetingShootText.transform.localScale *= 1.1f;
+                    meetingShootText.transform.localPosition = new Vector3(-2.85f, 3.15f, -20f);
+                    meetingShootText.transform.localScale *= 0.9f;
                     meetingShootText.color = Palette.White;
                     meetingShootText.gameObject.SetActive(false);
                 }
 
-                meetingShootText.text = string.Concat(
+                meetingShootText.text = string.Format(
                     Helper.Translation.GetString("shooterShootStatus"),
                     this.curShootNum, this.maxShootNum,
                     this.maxMeetingShootNum - this.shootCounter);
@@ -275,7 +275,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.chargeTimerText = Object.Instantiate(
                 HudManager.Instance.KillButton.cooldownTimerText,
                 HudManager.Instance.KillButton.transform);
-            this.chargeTimerText.transform.localPosition += new Vector3(-1.8f, -0.06f, 0);
+            this.chargeTimerText.transform.localPosition += new Vector3(-2.7f, -1.7f, 0);
             this.chargeTimerText.gameObject.SetActive(true);
 
             this.chargeInfoText = Object.Instantiate(
@@ -283,7 +283,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.chargeTimerText.transform);
             this.chargeInfoText.enableWordWrapping = false;
             this.chargeInfoText.transform.localScale = Vector3.one * 0.5f;
-            this.chargeInfoText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
+            this.chargeInfoText.transform.localPosition += new Vector3(-0.05f, 0.6f, 0);
             this.chargeInfoText.gameObject.SetActive(true);
         }
 
