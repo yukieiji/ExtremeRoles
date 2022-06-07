@@ -46,6 +46,11 @@ namespace ExtremeRoles.Module
         }
         public bool IsUseAbility() => this.useAbility.Count > 0;
 
+        public void GhostAbilityCall(AbilityType abilityType)
+        {
+            this.useAbility.Add(abilityType);
+        }
+
         public void UseGhostAbility(
             byte abilityType, ref MessageReader reader)
         {
