@@ -46,7 +46,7 @@ namespace ExtremeRoles.Module
         }
         public bool IsUseAbility() => this.useAbility.Count > 0;
 
-        public void GhostAbilityCall(AbilityType abilityType)
+        public void AddAbilityCall(AbilityType abilityType)
         {
             this.useAbility.Add(abilityType);
         }

@@ -58,7 +58,7 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
                 {
                     this.rpcHostCallAbility();
                 }
-                ExtremeRolesPlugin.GameDataStore.AbilityManager.GhostAbilityCall(
+                ExtremeRolesPlugin.GameDataStore.AbilityManager.AddAbilityCall(
                     this.abilityType);
                 return true;
             }
