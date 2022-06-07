@@ -15,6 +15,7 @@ namespace ExtremeRoles.Module.InfoOverlay
         {
             LocalPlayerRole,
             LocalPlayerGhostRole,
+            VanilaOption,
             AllRole,
             AllGhostRole,
         }
@@ -35,6 +36,7 @@ namespace ExtremeRoles.Module.InfoOverlay
         {
             { ShowType.LocalPlayerRole     , new LocalPlayerRoleShowTextBuilder()      },
             { ShowType.LocalPlayerGhostRole, new LocalPlayerGhostRoleShowTextBuilder() },
+            { ShowType.VanilaOption        , new VanillaOptionBuillder()               },
             { ShowType.AllRole             , new AllRoleShowTextBuilder()              },
             { ShowType.AllGhostRole        , new AllGhostRoleShowTextBuilder()         },
         };

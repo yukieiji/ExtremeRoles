@@ -175,6 +175,11 @@ namespace ExtremeRoles.Patches
                 ExtremeRolesPlugin.Info.ToggleInfoOverlay(
                     Module.InfoOverlay.InfoOverlay.ShowType.LocalPlayerGhostRole);
             }
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                ExtremeRolesPlugin.Info.ToggleInfoOverlay(
+                    Module.InfoOverlay.InfoOverlay.ShowType.VanilaOption);
+            }
 
             if (Input.GetKeyDown(KeyCode.PageDown))
             {

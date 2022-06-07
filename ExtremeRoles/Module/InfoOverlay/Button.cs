@@ -54,7 +54,7 @@ namespace ExtremeRoles.Module.InfoOverlay
             }
             else
             {
-                show(InfoOverlay.ShowType.LocalPlayerGhostRole);
+                show(InfoOverlay.ShowType.VanilaOption);
             }
         }
 
