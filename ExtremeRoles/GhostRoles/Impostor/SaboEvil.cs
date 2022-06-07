@@ -38,8 +38,7 @@ namespace ExtremeRoles.GhostRoles.Impostor
                 this.UseAbility,
                 this.isPreCheck,
                 this.isAbilityUse,
-                Resources.Loader.CreateSpriteFromResources(
-                    Resources.Path.TestButton),
+                HudManager.Instance.SabotageButton.graphic.sprite,
                 this.DefaultButtonOffset,
                 rpcHostCallAbility: abilityCall);
             this.ButtonInit();
