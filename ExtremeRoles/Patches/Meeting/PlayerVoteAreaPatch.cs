@@ -200,7 +200,7 @@ namespace ExtremeRoles.Patches.Meeting
                 {
 
 					UiElement newKillButton = GameObject.Instantiate(
-						instance.ConfirmButton, instance.ConfirmButton.transform.parent);
+						instance.CancelButton, instance.ConfirmButton.transform.parent);
 					newKillButton.name = $"shooterKill_{target}";
 					var passiveButton = newKillButton.GetComponent<PassiveButton>();
 					passiveButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
@@ -210,6 +210,12 @@ namespace ExtremeRoles.Patches.Meeting
 					var render = newKillButton.GetComponent<SpriteRenderer>();
 					render.sprite = HudManager.Instance.KillButton.graphic.sprite;
 					render.transform.localScale *= new Vector2(0.75f, 0.75f);
+
+					var controllerHighlight = newKillButton.transform.FindChild("ControllerHighlight");
+					if (controllerHighlight != null)
+                    {
+						controllerHighlight.localScale *= new Vector2(1.25f, 1.25f);
+                    }
 
 					meetingKillButton.Add(target, newKillButton);
 
