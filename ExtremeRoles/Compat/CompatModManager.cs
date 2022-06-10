@@ -21,7 +21,7 @@ namespace ExtremeRoles.Compat
 
         private static Dictionary<string, Type> compatMod = new Dictionary<string, Type>()
         {
-
+            { Submerged.Guid, typeof(Submerged) },
         };
 
         internal CompatModManager()
@@ -34,7 +34,7 @@ namespace ExtremeRoles.Compat
                 {
                     this.loadedMod.Add(
                         (CompatModBase)Activator.CreateInstance(
-                            mod, BindingFlags.CreateInstance, null, new object[] { plugin }, null));
+                            mod, new object[] { plugin }));
                 }
             }
         }

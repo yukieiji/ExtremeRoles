@@ -6,12 +6,12 @@ using HarmonyLib;
 
 namespace ExtremeRoles.Compat.Mods
 {
-    internal abstract class CompatModBase
+    public abstract class CompatModBase
     {
         protected BasePlugin Plugin;
         protected SemanticVersioning.Version Version;
         protected Assembly Dll;
-        protected System.Type[] Function;
+        protected System.Type[] ClassType;
 
         internal CompatModBase(
             string guid, PluginInfo plugin)
@@ -19,10 +19,11 @@ namespace ExtremeRoles.Compat.Mods
             this.Plugin = plugin!.Instance as BasePlugin;
             this.Version = plugin.Metadata.Version;
             this.Dll = Plugin!.GetType().Assembly;
-            this.Function = AccessTools.GetTypesFromAssembly(this.Dll);
+            this.ClassType = AccessTools.GetTypesFromAssembly(this.Dll);
 
-            this.PatchAll(new Harmony(guid));
+            this.PatchAll(new Harmony($"ExR.{guid}.Patch"));
         }
+
         protected abstract void PatchAll(Harmony harmony);
     }
 }

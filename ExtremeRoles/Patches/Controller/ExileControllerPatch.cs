@@ -93,15 +93,21 @@ namespace ExtremeRoles.Patches.Controller
             ExileController __instance)
         {
 
+            ReEnablePostfix();
+        }
+
+        public static void ReEnablePostfix()
+        {
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
             var role = ExtremeRoleManager.GetLocalPlayerRole();
 
             if (!role.HasOtherKillCool) { return; }
-            
+
             PlayerControl.LocalPlayer.SetKillTimer(
                 role.KillCoolTime);
         }
+
     }
 
     [HarmonyPatch]
@@ -113,18 +119,12 @@ namespace ExtremeRoles.Patches.Controller
         {
             public static bool Prefix(ExileController __instance)
             {
-                resetAssassinMeeting();
-                if (__instance.exiled != null && ExtremeRoleManager.GameRole.Count != 0)
-                {
-                    tempWinCheckDisable(__instance.exiled);
-                }
+                WrapUpPrefix(__instance);
                 return true;
             }
             public static void Postfix(ExileController __instance)
             {
-                wrapUpPostfix(
-                    __instance,
-                    __instance.exiled);
+                WrapUpPostfix(__instance.exiled);
             }
         }
 
@@ -133,44 +133,25 @@ namespace ExtremeRoles.Patches.Controller
         {
             public static bool Prefix(AirshipExileController __instance)
             {
-                resetAssassinMeeting();
-                if (__instance.exiled != null)
-                {
-                    tempWinCheckDisable(__instance.exiled);
-                }
+                WrapUpPrefix(__instance);
                 return true;
             }
             public static void Postfix(AirshipExileController __instance)
             {
-                wrapUpPostfix(
-                    __instance,
-                    __instance.exiled);
+                WrapUpPostfix(__instance.exiled);
             }
         }
 
-        private static void resetAssassinMeeting()
+        public static void WrapUpPrefix(ExileController __instance)
         {
-            if (ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
+            resetAssassinMeeting();
+            if (__instance.exiled != null)
             {
-                ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger = false;
-            }
-        }
-        private static void tempWinCheckDisable(GameData.PlayerInfo exiled)
-        {
-
-            if (ExtremeRoleManager.GameRole.Count == 0) { return; }
-
-            var role = ExtremeRoleManager.GameRole[exiled.PlayerId];
-
-            if (ExtremeRoleManager.IsDisableWinCheckRole(role))
-            {
-                ExtremeRolesPlugin.GameDataStore.WinCheckDisable = true;
+                tempWinCheckDisable(__instance.exiled);
             }
         }
 
-        private static void wrapUpPostfix(
-            ExileController instance,
-            GameData.PlayerInfo exiled)
+        public static void WrapUpPostfix(GameData.PlayerInfo exiled)
         {
 
             ExtremeRolesPlugin.Info.HideBlackBG();
@@ -254,5 +235,26 @@ namespace ExtremeRoles.Patches.Controller
 
             ExtremeRolesPlugin.GameDataStore.WinCheckDisable = false;
         }
+
+        private static void resetAssassinMeeting()
+        {
+            if (ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
+            {
+                ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger = false;
+            }
+        }
+        private static void tempWinCheckDisable(GameData.PlayerInfo exiled)
+        {
+
+            if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+
+            var role = ExtremeRoleManager.GameRole[exiled.PlayerId];
+
+            if (ExtremeRoleManager.IsDisableWinCheckRole(role))
+            {
+                ExtremeRolesPlugin.GameDataStore.WinCheckDisable = true;
+            }
+        }
+
     }
 }

@@ -2,7 +2,7 @@
 
 namespace ExtremeRoles.Compat.Interface
 {
-	internal interface IMultiFloorModMap : IMapMod
+	public interface IMultiFloorModMap : IMapMod
 	{
 		public bool IsOtherFloor(PlayerControl player);
 		public bool IsOtherFloor(byte playerId);

@@ -2,13 +2,13 @@
 
 namespace ExtremeRoles.Compat.Interface
 {
-	enum SystemConsoleType
+	public enum SystemConsoleType
 	{
 		SecurityCamera,
 		Vital,
 	}
 
-	internal interface IMapMod
+	public interface IMapMod
     {
 		public ShipStatus.MapType MapType { get; }
 		public bool IsCustomSabotageNow();
