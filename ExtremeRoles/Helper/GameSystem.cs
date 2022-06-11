@@ -144,6 +144,11 @@ namespace ExtremeRoles.Helper
                 if (textTask != null) { continue; }
 
                 if (SaboTask.Contains(player.myTasks[i].TaskType)) { continue; }
+                if (ExtremeRolesPlugin.Compat.IsModMap)
+                {
+                    if (ExtremeRolesPlugin.Compat.ModMap.IsCustomSabotageTask(
+                            player.myTasks[i].TaskType)) { continue; }
+                }
 
                 if (player.myTasks[i].IsComplete)
                 {

@@ -45,8 +45,9 @@ namespace ExtremeRoles.Compat.Mods
                 submarineOxygenSystem, "RepairDamage");
 
             injectedTypes = (Dictionary<string, Type>)AccessTools.PropertyGetter(
-                ClassType.FirstOrDefault(t => t.Name == "RegisterInIl2CppAttribute"), "RegisteredTypes").Invoke(
-                    null, Array.Empty<object>());
+                ClassType.FirstOrDefault(
+                    t => t.Name == "RegisterInIl2CppAttribute"), "RegisteredTypes").Invoke(
+                        null, Array.Empty<object>());
 
         }
         public void Awake()
