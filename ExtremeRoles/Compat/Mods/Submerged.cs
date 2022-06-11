@@ -63,16 +63,45 @@ namespace ExtremeRoles.Compat.Mods
                 t => t.Name == "SubmergedExileController");
             MethodInfo wrapUpAndSpawn = AccessTools.Method(
                 exileCont, "WrapUpAndSpawn");
-
             ExileController cont = null;
             MethodInfo wrapUpAndSpawnPrefix = SymbolExtensions.GetMethodInfo(
                 () => Patches.SubmergedExileControllerWrapUpAndSpawnPatch.Prefix(cont));
             MethodInfo wrapUpAndSpawnPostfix = SymbolExtensions.GetMethodInfo(
                 () => Patches.SubmergedExileControllerWrapUpAndSpawnPatch.Postfix(cont));
-            
+
+
+            Type submarineSelectSpawn = ClassType.First(
+                t => t.Name == "SubmarineSelectSpawn");
+            MethodInfo prespawnStep = AccessTools.Method(
+                submarineSelectSpawn, "PrespawnStep");
+            MethodInfo prespawnStepPrefix = SymbolExtensions.GetMethodInfo(
+                () => Patches.SubmarineSelectSpawnPrespawnStepPatch.Prefix());
+
+
+            Type hudManagerUpdatePatch = ClassType.First(
+                t => t.Name == "HudManager_Update_Patch");
+            MethodInfo hudManagerUpdatePatchPostfix = AccessTools.Method(
+                hudManagerUpdatePatch, "Postfix");
+            object hudManagerUpdatePatchInstance = null;
+            Patches.HudManager_Update_PatchPostfixPatch.SetType(
+                hudManagerUpdatePatch);
+            MethodInfo hubManagerUpdatePatchPostfixPatch = SymbolExtensions.GetMethodInfo(
+                () => Patches.HudManager_Update_PatchPostfixPatch.Postfix(
+                    hudManagerUpdatePatchInstance));
+
+
+            // 会議終了時のリセット処理を呼び出せるように
             harmony.Patch(wrapUpAndSpawn,
                 new HarmonyMethod(wrapUpAndSpawnPrefix),
                 new HarmonyMethod(wrapUpAndSpawnPostfix));
+            
+            // アサシン会議発動するとスポーン画面が出ないように
+            harmony.Patch(prespawnStep,
+                new HarmonyMethod(prespawnStepPrefix));
+
+            // フロアの階層変更ボタンの位置を変えるパッチ
+            harmony.Patch(hudManagerUpdatePatchPostfix,
+                postfix : new HarmonyMethod(hubManagerUpdatePatchPostfixPatch));
         }
     }
 }
