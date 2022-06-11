@@ -1,6 +1,9 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+
+using BepInEx;
 
 using HarmonyLib;
 
@@ -88,15 +91,10 @@ namespace ExtremeRoles.Compat.Patches
     public static class HudManagerUpdatePatchPostfixPatch
     {
         private static bool changed = false;
-        private static System.Type hubManagerUpdateType;
+        private static FieldInfo floorButtonInfo;
         
         public static void Postfix(object __instance)
         {
-
-            FieldInfo[] hubManagerUpdateField = hubManagerUpdateType.GetFields(
-                BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public);
-            FieldInfo floorButtonInfo = hubManagerUpdateField.First(f => f.Name == "FloorButton");
-            floorButtonInfo = hubManagerUpdateType.GetField("FloorButton");
             GameObject floorButton = floorButtonInfo.GetValue(__instance) as GameObject;
 
             if (!Helper.GameSystem.IsFreePlay && floorButton != null && !changed)
@@ -109,7 +107,10 @@ namespace ExtremeRoles.Compat.Patches
         public static void SetType(System.Type type)
         {
             changed = false;
-            hubManagerUpdateType = type;
+            FieldInfo[] hubManagerUpdateField = type.GetFields(
+                BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public);
+            floorButtonInfo = hubManagerUpdateField.First(f => f.Name == "FloorButton");
+            floorButtonInfo = type.GetField("FloorButton");
         }
 
         public static void ButtonTriggerReset()
@@ -120,27 +121,37 @@ namespace ExtremeRoles.Compat.Patches
 
     public static class SubmarineOxygenSystemDetorioratePatch
     {
-        private static System.Type submarineOxygenSystemType;
+        private static PropertyInfo submarineOxygenSystemInstance;
+        private static PropertyInfo submarineOxygenSystemPlayersWithMask;
 
-        public static void Postfix()
+        public static void Postfix(object __instance)
         {
+            /*
             if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return; }
-            if (Roles.ExtremeRoleManager.GetLocalPlayerRole().Id == Roles.ExtremeRoleId.Assassin)
-            {
-                ShipStatus.Instance.RpcRepairSystem((SystemTypes)130, 64);
+            if (Roles.ExtremeRoleManager.GetLocalPlayerRole().Id != Roles.ExtremeRoleId.Assassin) { return; }
 
-                MethodInfo submarineOxygenSystemInstanceField = AccessTools.PropertyGetter(
-                    submarineOxygenSystemType, "Instance");
-                MethodInfo RepairDamageMethod = AccessTools.Method(
-                    submarineOxygenSystemType, "RepairDamage");
-                RepairDamageMethod.Invoke(submarineOxygenSystemInstanceField.Invoke(
-                    null, System.Array.Empty<object>()),
-                    new object[] { PlayerControl.LocalPlayer.PlayerId, 64 });
+            object instance = submarineOxygenSystemInstance.GetValue(null);
+            if (instance == null) { return; }
+
+            HashSet<byte> playersWithMask = submarineOxygenSystemPlayersWithMask.GetValue(__instance) as HashSet<byte>;
+
+            if (playersWithMask != null && 
+                !playersWithMask.Contains(PlayerControl.LocalPlayer.PlayerId))
+            {
+                var submergedMod = ExtremeRolesPlugin.Compat.ModMap as Mods.Submerged;
+                if (submergedMod != null)
+                {
+                    submergedMod.RepairCustomSabotage(
+                        submergedMod.RetrieveOxygenMask);
+                }
             }
+            */
         }
         public static void SetType(System.Type type)
         {
-            submarineOxygenSystemType = type;
+            submarineOxygenSystemInstance = AccessTools.Property(type, "Instance");
+            submarineOxygenSystemPlayersWithMask = AccessTools.Property(type, "PlayersWithMask");
         }
+
     }
 }

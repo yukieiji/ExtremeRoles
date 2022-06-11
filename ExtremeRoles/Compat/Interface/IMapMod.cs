@@ -8,17 +8,26 @@ namespace ExtremeRoles.Compat.Interface
 		Vital,
 	}
 
+	public enum MapRpcCall : byte
+    {
+		RepairAllSabo,
+		RepairCustomSaboType
+    }
+
 	public interface IMapMod
     {
+		public const byte RpcCallType = 1;
 		public ShipStatus.MapType MapType { get; }
 		public void Awake();
 		public bool IsCustomSabotageNow();
 		public bool IsCustomSabotageTask(TaskTypes saboTask);
+
+		public void RpcRepairCustomSabotage();
+		public void RpcRepairCustomSabotage(TaskTypes saboTask);
 		public void RepairCustomSabotage();
 		public void RepairCustomSabotage(TaskTypes saboTask);
 		public Console GetConsole(TaskTypes task);
 		public SystemConsole GetSystemConsole(SystemConsoleType sysConsole);
 		public Sprite SystemConsoleUseSprite(SystemConsoleType sysConsole);
-
 	}
 }

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 
 using BepInEx;
 using BepInEx.IL2CPP;
+
+using Hazel;
 
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.Mods;
@@ -57,6 +58,34 @@ namespace ExtremeRoles.Compat
         internal void RemoveMap()
         {
             this.map = null;
+        }
+
+        internal void IntegrateModCall(ref MessageReader reader)
+        {
+            byte callType = reader.ReadByte();
+
+            switch (callType)
+            {
+                case IMapMod.RpcCallType:
+                    byte mapRpcType = reader.ReadByte();
+                    switch ((MapRpcCall)mapRpcType)
+                    {
+                        case MapRpcCall.RepairAllSabo:
+                            this.ModMap.RepairCustomSabotage();
+                            break;
+                        case MapRpcCall.RepairCustomSaboType:
+                            int repairSaboType = reader.ReadInt32();
+                            this.ModMap.RepairCustomSabotage(
+                                (TaskTypes)repairSaboType);
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                default:
+                    break;
+            }
+
         }
 
     }

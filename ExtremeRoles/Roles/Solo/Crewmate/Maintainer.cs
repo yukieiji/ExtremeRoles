@@ -41,8 +41,20 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
             {
+                if (task == null){ continue; }
 
-                switch (task.TaskType)
+                TaskTypes taskType = task.TaskType;
+
+                if (ExtremeRolesPlugin.Compat.IsModMap)
+                {
+                    if (ExtremeRolesPlugin.Compat.ModMap.IsCustomSabotageTask(taskType))
+                    {
+                        ExtremeRolesPlugin.Compat.ModMap.RpcRepairCustomSabotage(
+                            taskType);
+                        continue;
+                    }
+                }
+                switch (taskType)
                 {
                     case TaskTypes.FixLights:
 
@@ -89,7 +101,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 door.SetDoorway(true);
             }
 
-
             return true;
         }
 
@@ -98,7 +109,19 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             bool sabotageActive = false;
             foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
             {
-                if (GameSystem.SaboTask.Contains(task.TaskType))
+                if (task == null) { continue; }
+
+                TaskTypes taskType = task.TaskType;
+                if (ExtremeRolesPlugin.Compat.IsModMap)
+                {
+                    if (ExtremeRolesPlugin.Compat.ModMap.IsCustomSabotageTask(taskType))
+                    {
+                        sabotageActive = true;
+                        break;
+                    }
+                }
+
+                if (GameSystem.SaboTask.Contains(taskType))
                 {
                     sabotageActive = true;
                     break;

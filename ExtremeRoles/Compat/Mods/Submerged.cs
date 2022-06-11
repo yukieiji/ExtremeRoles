@@ -7,6 +7,7 @@ using ExtremeRoles.Compat.Interface;
 using BepInEx;
 
 using HarmonyLib;
+using Hazel;
 using UnityEngine;
 
 namespace ExtremeRoles.Compat.Mods
@@ -16,9 +17,26 @@ namespace ExtremeRoles.Compat.Mods
         public const string Guid = "Submerged";
 
         public ShipStatus.MapType MapType => (ShipStatus.MapType)5;
+        public TaskTypes RetrieveOxygenMask;
+
+        private Type taskType;
+
+        private Type submarineOxygenSystem;
+        private PropertyInfo submarineOxygenSystemInstanceGetter;
+        private MethodInfo submarineOxygenSystemRepairDamageMethod;
 
         public Submerged(PluginInfo plugin) : base(Guid, plugin)
         {
+            // カスタムサボのタスクタイプ取得
+            taskType = ClassType.First(
+                t => t.Name == "CustomTaskTypes");
+            var retrieveOxigenMaskField = AccessTools.Field(taskType, "RetrieveOxygenMask");
+            RetrieveOxygenMask = (TaskTypes)retrieveOxigenMaskField.GetValue(null);
+
+            submarineOxygenSystemInstanceGetter = AccessTools.Property(
+                submarineOxygenSystem, "Instance");
+            submarineOxygenSystemRepairDamageMethod = AccessTools.Method(
+                submarineOxygenSystem, "RepairDamage");
 
         }
         public void Awake()
@@ -38,22 +56,58 @@ namespace ExtremeRoles.Compat.Mods
 
         public bool IsCustomSabotageNow()
         {
-            throw new System.NotImplementedException();
+            foreach (NormalPlayerTask task in PlayerControl.LocalPlayer.myTasks)
+            {
+                if (task != null && IsCustomSabotageTask(task.TaskType))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
-        public bool IsCustomSabotageTask(TaskTypes saboTask)
+        public bool IsCustomSabotageTask(TaskTypes saboTask) => saboTask == this.RetrieveOxygenMask;
+
+
+        public void RpcRepairCustomSabotage()
         {
-            throw new System.NotImplementedException();
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                PlayerControl.LocalPlayer.NetId,
+                (byte)RPCOperator.Command.IntegrateModCall,
+                Hazel.SendOption.Reliable, -1);
+            writer.Write(IMapMod.RpcCallType);
+            writer.Write((byte)MapRpcCall.RepairAllSabo);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            RepairCustomSabotage();
+        }
+
+        public void RpcRepairCustomSabotage(TaskTypes saboTask)
+        {
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                PlayerControl.LocalPlayer.NetId,
+                (byte)RPCOperator.Command.IntegrateModCall,
+                Hazel.SendOption.Reliable, -1);
+            writer.Write(IMapMod.RpcCallType);
+            writer.Write((byte)MapRpcCall.RepairAllSabo);
+            writer.Write((int)saboTask);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            RepairCustomSabotage(saboTask);
         }
 
         public void RepairCustomSabotage()
         {
-            throw new System.NotImplementedException();
+            RepairCustomSabotage(this.RetrieveOxygenMask);
         }
 
         public void RepairCustomSabotage(TaskTypes saboTask)
         {
-            throw new System.NotImplementedException();
+            if (saboTask == this.RetrieveOxygenMask)
+            {
+                ShipStatus.Instance.RpcRepairSystem((SystemTypes)130, 64);
+                submarineOxygenSystemRepairDamageMethod.Invoke(
+                    submarineOxygenSystemInstanceGetter.GetValue(null),
+                    new object[] { PlayerControl.LocalPlayer, (byte)64 });
+            }
         }
 
         public Sprite SystemConsoleUseSprite(SystemConsoleType sysConsole)
@@ -105,15 +159,15 @@ namespace ExtremeRoles.Compat.Mods
                 () => Patches.ExileControllerBeginPrefixPatch.Postfix(
                     exileControllerBeginPatchInstance));
 
-
-            Type submarineOxygenSystem = ClassType.First(
+            this.submarineOxygenSystem = ClassType.First(
                 t => t.Name == "SubmarineOxygenSystem");
             MethodInfo submarineOxygenSystemDetoriorate = AccessTools.Method(
                 submarineOxygenSystem, "Detoriorate");
-            Patches.SubmarineOxygenSystemDetorioratePatch.SetType(
-                submarineOxygenSystem);
+            object submarineOxygenSystemInstance = null;
+            Patches.SubmarineOxygenSystemDetorioratePatch.SetType(this.submarineOxygenSystem);
             MethodInfo submarineOxygenSystemDetorioratePostfixPatch = SymbolExtensions.GetMethodInfo(
-                () => Patches.SubmarineOxygenSystemDetorioratePatch.Postfix());
+                () => Patches.SubmarineOxygenSystemDetorioratePatch.Postfix(
+                    submarineOxygenSystemInstance));
 
 
             // 会議終了時のリセット処理を呼び出せるように

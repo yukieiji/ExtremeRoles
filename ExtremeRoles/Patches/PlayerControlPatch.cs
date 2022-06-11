@@ -835,6 +835,9 @@ namespace ExtremeRoles.Patches
                         major, minor, build,
                         revision, clientId);
                     break;
+                case RPCOperator.Command.IntegrateModCall:
+                    RPCOperator.IntegrateModCall(ref reader);
+                    break;
                 case RPCOperator.Command.HeroHeroAcademia:
                     RPCOperator.HeroHeroAcademiaCommand(ref reader);
                     break;

@@ -27,6 +27,7 @@ namespace ExtremeRoles
             SetWinPlayer,
             ShareMapId,
             ShareVersion,
+            IntegrateModCall,
 
             // 役職関連
             // 役職メインコントール
@@ -370,6 +371,13 @@ namespace ExtremeRoles
                 clientId] = new System.Version(
                     major, minor, build, revision);
         }
+
+        public static void IntegrateModCall(
+            ref MessageReader readeer)
+        {
+            ExtremeRolesPlugin.Compat.IntegrateModCall(ref readeer);
+        }
+
 
         public static void ReplaceRole(
             byte callerId, byte targetId, byte operation)
