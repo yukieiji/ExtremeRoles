@@ -122,19 +122,18 @@ namespace ExtremeRoles.Compat.Patches
     public static class SubmarineOxygenSystemDetorioratePatch
     {
         private static PropertyInfo submarineOxygenSystemInstance;
-        private static PropertyInfo submarineOxygenSystemPlayersWithMask;
+        private static FieldInfo submarineOxygenSystemPlayersWithMask;
 
         public static void Postfix(object __instance)
         {
-            /*
             if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return; }
             if (Roles.ExtremeRoleManager.GetLocalPlayerRole().Id != Roles.ExtremeRoleId.Assassin) { return; }
 
             object instance = submarineOxygenSystemInstance.GetValue(null);
             if (instance == null) { return; }
-
+            
             HashSet<byte> playersWithMask = submarineOxygenSystemPlayersWithMask.GetValue(__instance) as HashSet<byte>;
-
+            
             if (playersWithMask != null && 
                 !playersWithMask.Contains(PlayerControl.LocalPlayer.PlayerId))
             {
@@ -145,12 +144,16 @@ namespace ExtremeRoles.Compat.Patches
                         submergedMod.RetrieveOxygenMask);
                 }
             }
-            */
         }
         public static void SetType(System.Type type)
         {
             submarineOxygenSystemInstance = AccessTools.Property(type, "Instance");
-            submarineOxygenSystemPlayersWithMask = AccessTools.Property(type, "PlayersWithMask");
+
+            FieldInfo[] submarineOxygenSystemField = type.GetFields(
+                BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public);
+            submarineOxygenSystemPlayersWithMask = submarineOxygenSystemField.First(f => f.Name == "PlayersWithMask");
+            submarineOxygenSystemPlayersWithMask = type.GetField("PlayersWithMask");
+
         }
 
     }
