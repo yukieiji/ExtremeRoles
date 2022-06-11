@@ -270,6 +270,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     writer.Write(taskIndex);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     ReplaceToNewTask(rolePlayer.PlayerId, i, taskIndex);
+                    break;
                 }
             }
         }

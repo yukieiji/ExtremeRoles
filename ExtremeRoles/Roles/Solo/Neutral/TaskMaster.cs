@@ -74,6 +74,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                         writer.Write(taskIndex);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         ReplaceToNewTask(rolePlayer.PlayerId, i, taskIndex);
+                        break;
                     }
                 }
             }

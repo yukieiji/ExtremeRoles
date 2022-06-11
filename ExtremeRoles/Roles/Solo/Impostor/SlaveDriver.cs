@@ -319,7 +319,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                         {
                             removeResult.Add((playerId, newTask));
                         }
-
+                        break;
                     }
                 }
             }
