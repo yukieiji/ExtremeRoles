@@ -35,19 +35,19 @@ namespace ExtremeRoles.Patches.Controller
 			__instance.Text.gameObject.SetActive(false);
             __instance.Text.text = string.Empty;
 
-            PlayerControl player = Helper.Player.GetPlayerControlById(
+            GameData.PlayerInfo player = GameData.Instance.GetPlayerById(
                 gameData.IsMarinPlayerId);
 
             string printStr;
 
             if (gameData.AssassinateMarin)
             {
-                printStr = player.Data.PlayerName + Helper.Translation.GetString(
+                printStr = player?.PlayerName + Helper.Translation.GetString(
                     "assassinateMarinSucsess");
             }
             else
             {
-                printStr = player.Data.PlayerName + Helper.Translation.GetString(
+                printStr = player?.PlayerName + Helper.Translation.GetString(
                     "assassinateMarinFail");
             }            
             __instance.Player?.gameObject.SetActive(false);

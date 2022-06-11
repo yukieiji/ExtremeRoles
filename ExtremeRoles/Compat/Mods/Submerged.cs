@@ -21,6 +21,10 @@ namespace ExtremeRoles.Compat.Mods
         {
 
         }
+        public void Awake()
+        {
+            Patches.HudManagerUpdatePatchPostfixPatch.ButtonTriggerReset();
+        }
 
         public Console GetConsole(TaskTypes task)
         {
@@ -83,11 +87,23 @@ namespace ExtremeRoles.Compat.Mods
             MethodInfo hudManagerUpdatePatchPostfix = AccessTools.Method(
                 hudManagerUpdatePatch, "Postfix");
             object hudManagerUpdatePatchInstance = null;
-            Patches.HudManager_Update_PatchPostfixPatch.SetType(
+            Patches.HudManagerUpdatePatchPostfixPatch.SetType(
                 hudManagerUpdatePatch);
             MethodInfo hubManagerUpdatePatchPostfixPatch = SymbolExtensions.GetMethodInfo(
-                () => Patches.HudManager_Update_PatchPostfixPatch.Postfix(
+                () => Patches.HudManagerUpdatePatchPostfixPatch.Postfix(
                     hudManagerUpdatePatchInstance));
+
+
+            Type exileControllerBeginPatch = ClassType.First(
+                t => t.Name == "ExileController_Begin_Patch");
+            MethodInfo exileControllerBeginPatchPrefix = AccessTools.Method(
+                exileControllerBeginPatch, "Prefix");
+            object exileControllerBeginPatchInstance = null;
+            Patches.ExileControllerBeginPrefixPatch.SetType(
+                exileControllerBeginPatch);
+            MethodInfo exileControllerBeginPatchPrefixPatch = SymbolExtensions.GetMethodInfo(
+                () => Patches.ExileControllerBeginPrefixPatch.Postfix(
+                    exileControllerBeginPatchInstance));
 
 
             // 会議終了時のリセット処理を呼び出せるように
@@ -102,6 +118,11 @@ namespace ExtremeRoles.Compat.Mods
             // フロアの階層変更ボタンの位置を変えるパッチ
             harmony.Patch(hudManagerUpdatePatchPostfix,
                 postfix : new HarmonyMethod(hubManagerUpdatePatchPostfixPatch));
+
+            // アサシン会議終了後のテキスト表示を変えるパッチ
+            harmony.Patch(exileControllerBeginPatchPrefix,
+                postfix: new HarmonyMethod(exileControllerBeginPatchPrefixPatch));
+
         }
     }
 }

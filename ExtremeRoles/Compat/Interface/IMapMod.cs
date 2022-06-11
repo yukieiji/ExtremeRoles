@@ -11,6 +11,7 @@ namespace ExtremeRoles.Compat.Interface
 	public interface IMapMod
     {
 		public ShipStatus.MapType MapType { get; }
+		public void Awake();
 		public bool IsCustomSabotageNow();
 		public bool IsCustomSabotageTask(TaskTypes saboTask);
 		public void RepairCustomSabotage();

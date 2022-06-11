@@ -22,6 +22,51 @@ namespace ExtremeRoles.Compat.Patches
         }
     }
 
+    public static class ExileControllerBeginPrefixPatch
+    {
+        private static System.Type exileControllerBeginPatchType;
+
+        public static void Postfix(object __instance)
+        {
+            var gameData = ExtremeRolesPlugin.GameDataStore;
+
+            if (!gameData.AssassinMeetingTrigger) { return; }
+
+            GameData.PlayerInfo player = GameData.Instance.GetPlayerById(
+                gameData.IsMarinPlayerId);
+
+            string printStr;
+
+            if (gameData.AssassinateMarin)
+            {
+                printStr = player?.PlayerName + Helper.Translation.GetString(
+                    "assassinateMarinSucsess");
+            }
+            else
+            {
+                printStr = player?.PlayerName + Helper.Translation.GetString(
+                    "assassinateMarinFail");
+            }
+
+            FieldInfo[] exileControllerBeginPatchField = exileControllerBeginPatchType.GetFields(
+                BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public);
+            FieldInfo completeStringInfo = exileControllerBeginPatchField.First(f => f.Name == "CompleteString");
+            completeStringInfo = exileControllerBeginPatchType.GetField("CompleteString");
+
+            FieldInfo impostorTextInfo = exileControllerBeginPatchField.First(f => f.Name == "ImpostorText");
+            impostorTextInfo = exileControllerBeginPatchType.GetField("ImpostorText");
+
+            completeStringInfo.SetValue(__instance, printStr);
+            impostorTextInfo.SetValue(__instance, string.Empty);
+        }
+
+        public static void SetType(System.Type type)
+        {
+            exileControllerBeginPatchType = type;
+        }
+    }
+
+
     public static class SubmarineSelectSpawnPrespawnStepPatch
     {
         public static bool Prefix(ref IEnumerator __result)
@@ -39,7 +84,7 @@ namespace ExtremeRoles.Compat.Patches
         }
     }
 
-    public static class HudManager_Update_PatchPostfixPatch
+    public static class HudManagerUpdatePatchPostfixPatch
     {
         private static bool changed = false;
         private static System.Type hubManagerUpdateType;
@@ -65,5 +110,11 @@ namespace ExtremeRoles.Compat.Patches
             changed = false;
             hubManagerUpdateType = type;
         }
+
+        public static void ButtonTriggerReset()
+        {
+            changed = false;
+        }
+
     }
 }
