@@ -43,16 +43,19 @@ namespace ExtremeRoles.Compat.Mods
             var retrieveOxigenMaskField = AccessTools.Field(taskType, "RetrieveOxygenMask");
             RetrieveOxygenMask = (TaskTypes)retrieveOxigenMaskField.GetValue(null);
 
+            // サブマージドの酸素妨害の修理用
             submarineOxygenSystemInstanceGetter = AccessTools.Property(
                 submarineOxygenSystem, "Instance");
             submarineOxygenSystemRepairDamageMethod = AccessTools.Method(
                 submarineOxygenSystem, "RepairDamage");
 
+            // サブマージドのカスタムMonoを取ってくる
             injectedTypes = (Dictionary<string, Type>)AccessTools.PropertyGetter(
                 ClassType.FirstOrDefault(
                     t => t.Name == "RegisterInIl2CppAttribute"), "RegisteredTypes").Invoke(
                         null, Array.Empty<object>());
 
+            // フロアを変える用
             Type floorHandlerType = ClassType.First(t => t.Name == "FloorHandler");
             getFloorHandlerInfo = AccessTools.Method(
                 floorHandlerType, "GetFloorHandler", new Type[] { typeof(PlayerControl) });
