@@ -174,7 +174,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 case 3:
                     return systemConsoleArray.FirstOrDefault(
                         x => x.gameObject.name.Contains("SurvConsole"));
-                    break;
                 case 1:
                     return systemConsoleArray.FirstOrDefault(
                         x => x.gameObject.name.Contains("SurvLogConsole"));
