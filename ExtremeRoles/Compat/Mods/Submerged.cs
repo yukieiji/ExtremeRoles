@@ -150,6 +150,19 @@ namespace ExtremeRoles.Compat.Mods
             }
         }
 
+        public void SetUpNewCamera(SurvCamera camera)
+        {
+            var fixConsole = camera.transform.FindChild("FixConsole");
+            if (fixConsole != null)
+            {
+                var boxCollider = fixConsole.GetComponent<BoxCollider2D>();
+                if (boxCollider != null)
+                {
+                    UnityEngine.Object.Destroy(boxCollider);
+                }
+            }
+        }
+
         protected override void PatchAll(Harmony harmony)
         {
             Type exileCont = ClassType.First(

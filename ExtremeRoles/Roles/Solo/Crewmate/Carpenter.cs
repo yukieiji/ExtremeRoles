@@ -473,6 +473,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 camera.transform.localRotation = new Quaternion(0, 0, 1, 1);
             }
+            if (ExtremeRolesPlugin.Compat.IsModMap)
+            {
+                ExtremeRolesPlugin.Compat.ModMap.SetUpNewCamera(camera);
+            }
+
             var allCameras = ShipStatus.Instance.AllCameras.ToList();
             camera.gameObject.SetActive(true);
             allCameras.Add(camera);

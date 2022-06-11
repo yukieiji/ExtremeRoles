@@ -36,5 +36,7 @@ namespace ExtremeRoles.Compat.Interface
 		public void AddCustomComponent(
 			GameObject addObject, CustomMonoBehaviourType customMonoType);
 
+		public void SetUpNewCamera(SurvCamera camera);
+
 	}
 }
