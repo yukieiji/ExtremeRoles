@@ -14,7 +14,7 @@ using UnityEngine;
 
 namespace ExtremeRoles.Compat.Mods
 {
-    public class Submerged : CompatModBase, IMapMod
+    public class Submerged : CompatModBase, IMultiFloorModMap
     {
         public const string Guid = "Submerged";
 
@@ -28,6 +28,10 @@ namespace ExtremeRoles.Compat.Mods
         private Type submarineOxygenSystem;
         private PropertyInfo submarineOxygenSystemInstanceGetter;
         private MethodInfo submarineOxygenSystemRepairDamageMethod;
+
+        private MethodInfo getFloorHandlerInfo;
+        private MethodInfo rpcRequestChangeFloorMethod;
+        private FieldInfo onUpperField;
 
         private const string elevatorMover = "ElevatorMover";
 
@@ -49,10 +53,36 @@ namespace ExtremeRoles.Compat.Mods
                     t => t.Name == "RegisterInIl2CppAttribute"), "RegisteredTypes").Invoke(
                         null, Array.Empty<object>());
 
+            Type floorHandlerType = ClassType.First(t => t.Name == "FloorHandler");
+            getFloorHandlerInfo = AccessTools.Method(
+                floorHandlerType, "GetFloorHandler", new Type[] { typeof(PlayerControl) });
+            rpcRequestChangeFloorMethod = AccessTools.Method(
+                floorHandlerType, "RpcRequestChangeFloor");
+            onUpperField = AccessTools.Field(floorHandlerType, "OnUpper");
+
         }
         public void Awake()
         {
             Patches.HudManagerUpdatePatchPostfixPatch.ButtonTriggerReset();
+        }
+        public int GetLocalPlayerFloor() => GetFloor(PlayerControl.LocalPlayer);
+        public int GetFloor(PlayerControl player)
+        {
+            MonoBehaviour floorHandler = getFloorHandler(player);
+            if (floorHandler == null) { return int.MaxValue; }
+            bool isUp = (bool)onUpperField.GetValue(floorHandler);
+            return isUp ? 1 : 0;
+        }
+        public void ChangeLocalPlayerFloor(int floor)
+        {
+            ChangeFloor(PlayerControl.LocalPlayer, floor);
+        }
+        public void ChangeFloor(PlayerControl player, int floor)
+        {
+            if (floor > 1) { return; }
+            MonoBehaviour floorHandler = getFloorHandler(player);
+            if (floorHandler == null) { return; }
+            rpcRequestChangeFloorMethod.Invoke(floorHandler, new object[] { floor == 1 });
         }
 
         public Console GetConsole(TaskTypes task)
@@ -239,6 +269,9 @@ namespace ExtremeRoles.Compat.Mods
             harmony.Patch(submarineOxygenSystemDetoriorate,
                 postfix: new HarmonyMethod(submarineOxygenSystemDetorioratePostfixPatch));
         }
+
+        private MonoBehaviour getFloorHandler(PlayerControl player) => ((Component)getFloorHandlerInfo.Invoke(
+                null, new object[] { player })) as MonoBehaviour;
     }
 
     public class MissingSubmergedBehaviour : MonoBehaviour
