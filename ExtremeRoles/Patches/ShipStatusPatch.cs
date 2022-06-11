@@ -9,6 +9,16 @@ using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Patches
 {
+    [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Awake))]
+    class ShipStatusAwakePatch
+    {
+        [HarmonyPostfix, HarmonyPriority(Priority.Last)]
+        public static void Postfix(ShipStatus __instance)
+        {
+            ExtremeRolesPlugin.Compat.SetUpMap(__instance);
+        }
+    }
+
     [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.CalculateLightRadius))]
     class ShipStatusCalculateLightRadiusPatch
     {
@@ -360,6 +370,15 @@ namespace ExtremeRoles.Patches
 
             RPCOperator.SetWinGameControlId(id);
         }
+    }
 
+    [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.OnDestroy))]
+    public static class ShipStatusOnDestroyPatch
+    {
+        [HarmonyPostfix, HarmonyPriority(Priority.Last)]
+        public static void Postfix()
+        {
+            ExtremeRolesPlugin.Compat.RemoveMap();
+        }
     }
 }

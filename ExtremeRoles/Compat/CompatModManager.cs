@@ -26,6 +26,7 @@ namespace ExtremeRoles.Compat
 
         internal CompatModManager()
         {
+            RemoveMap();
             foreach (var (guid, mod) in compatMod)
             {
                 PluginInfo plugin;
@@ -37,6 +38,25 @@ namespace ExtremeRoles.Compat
                             mod, new object[] { plugin }));
                 }
             }
+        }
+
+        internal void SetUpMap(ShipStatus shipStatus)
+        {
+            foreach (var mod in loadedMod)
+            {
+                IMapMod mapMod = mod as IMapMod;
+                if (mapMod != null && 
+                    mapMod.MapType == shipStatus.Type)
+                {
+                    mapMod.Awake();
+                    this.map = mapMod;
+                    break;
+                }
+            }
+        }
+        internal void RemoveMap()
+        {
+            this.map = null;
         }
 
     }
