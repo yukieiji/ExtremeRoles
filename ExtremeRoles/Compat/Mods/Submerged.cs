@@ -110,12 +110,10 @@ namespace ExtremeRoles.Compat.Mods
                 t => t.Name == "SubmarineOxygenSystem");
             MethodInfo submarineOxygenSystemDetoriorate = AccessTools.Method(
                 submarineOxygenSystem, "Detoriorate");
-            object submarineOxygenSystemInstance = null;
             Patches.SubmarineOxygenSystemDetorioratePatch.SetType(
                 submarineOxygenSystem);
             MethodInfo submarineOxygenSystemDetorioratePostfixPatch = SymbolExtensions.GetMethodInfo(
-                () => Patches.SubmarineOxygenSystemDetorioratePatch.Postfix(
-                    submarineOxygenSystemInstance));
+                () => Patches.SubmarineOxygenSystemDetorioratePatch.Postfix());
 
 
             // 会議終了時のリセット処理を呼び出せるように

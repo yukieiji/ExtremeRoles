@@ -122,7 +122,7 @@ namespace ExtremeRoles.Compat.Patches
     {
         private static System.Type submarineOxygenSystemType;
 
-        public static void Postfix(object __instance)
+        public static void Postfix()
         {
             if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return; }
             if (Roles.ExtremeRoleManager.GetLocalPlayerRole().Id == Roles.ExtremeRoleId.Assassin)
