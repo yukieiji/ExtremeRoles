@@ -62,7 +62,15 @@ namespace ExtremeRoles.Compat.Mods
 
         public SystemConsole GetSystemConsole(SystemConsoleType sysConsole)
         {
-            throw new System.NotImplementedException();
+            var systemConsoleArray = UnityEngine.Object.FindObjectsOfType<SystemConsole>();
+            switch (sysConsole)
+            {
+                case SystemConsoleType.SecurityCamera:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("SecurityConsole"));
+                default:
+                    return null;
+            }
         }
 
         public bool IsCustomSabotageNow()

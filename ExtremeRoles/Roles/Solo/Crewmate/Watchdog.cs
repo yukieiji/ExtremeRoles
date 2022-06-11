@@ -102,28 +102,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 // 3 = Dleks - deactivated
                 // 4 = Airship
                 SystemConsole watchConsole;
-                var systemConsoleArray = Object.FindObjectsOfType<SystemConsole>();
-                switch (PlayerControl.GameOptions.MapId)
+                if (ExtremeRolesPlugin.Compat.IsModMap)
                 {
-                    case 0:
-                    case 3:
-                        watchConsole = systemConsoleArray.FirstOrDefault(
-                            x => x.gameObject.name.Contains("SurvConsole"));
-                        break;
-                    case 1:
-                        watchConsole = systemConsoleArray.FirstOrDefault(
-                            x => x.gameObject.name.Contains("SurvLogConsole"));
-                        break;
-                    case 2:
-                        watchConsole = systemConsoleArray.FirstOrDefault(
-                            x => x.gameObject.name.Contains("Surv_Panel"));
-                        break;
-                    case 4:
-                        watchConsole = systemConsoleArray.FirstOrDefault(
-                            x => x.gameObject.name.Contains("task_cams"));
-                        break;
-                    default:
-                        return false;
+                    watchConsole = ExtremeRolesPlugin.Compat.ModMap.GetSystemConsole(
+                        Compat.Interface.SystemConsoleType.SecurityCamera);
+                }
+                else
+                {
+                    watchConsole = getSecurityConsole();
                 }
 
                 if (watchConsole == null || Camera.main == null)
@@ -173,5 +159,35 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             this.RoleAbilityInit();
         }
+
+        private SystemConsole getSecurityConsole()
+        {
+            // 0 = Skeld
+            // 1 = Mira HQ
+            // 2 = Polus
+            // 3 = Dleks - deactivated
+            // 4 = Airship
+            var systemConsoleArray = Object.FindObjectsOfType<SystemConsole>();
+            switch (PlayerControl.GameOptions.MapId)
+            {
+                case 0:
+                case 3:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("SurvConsole"));
+                    break;
+                case 1:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("SurvLogConsole"));
+                case 2:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("Surv_Panel"));
+                case 4:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("task_cams"));
+                default:
+                    return null;
+            }
+        }
+
     }
 }
