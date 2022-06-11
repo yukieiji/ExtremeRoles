@@ -11,7 +11,11 @@ namespace ExtremeRoles.Patches.Meeting
         public static void Postfix(
             MeetingIntroAnimation __instance)
         {
-
+			if (OptionHolder.Ship.IsBlockGhostRoleAbilityReport)
+            {
+				__instance.ProtectedRecently.SetActive(false);
+				return;
+			}
 			if (!ExtremeRolesPlugin.GameDataStore.AbilityManager.IsUseAbility()) { return; }
 
 			bool someoneWasProtected = false;

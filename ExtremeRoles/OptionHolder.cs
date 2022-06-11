@@ -71,6 +71,7 @@ namespace ExtremeRoles
 
             IsAssignNeutralToVanillaCrewGhostRole,
             IsRemoveAngleIcon,
+            IsBlockGhostRoleAbilityReport,
         }
 
         public static Dictionary<int, CustomOptionBase> AllOption = new Dictionary<int, CustomOptionBase>();
@@ -135,6 +136,8 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.IsAssignNeutralToVanillaCrewGhostRole].GetValue();
             Ship.IsRemoveAngleIcon = AllOption[
                 (int)CommonOptionKey.IsRemoveAngleIcon].GetValue();
+            Ship.IsBlockGhostRoleAbilityReport = AllOption[
+                (int)CommonOptionKey.IsBlockGhostRoleAbilityReport].GetValue();
 
             Client.StreamerMode = ConfigParser.StreamerMode.Value;
             Client.GhostsSeeRole = ConfigParser.GhostsSeeRoles.Value;
@@ -396,7 +399,10 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.IsRemoveAngleIcon,
                 CommonOptionKey.IsRemoveAngleIcon.ToString(),
                 false);
-
+            new BoolCustomOption(
+                (int)CommonOptionKey.IsBlockGhostRoleAbilityReport,
+                CommonOptionKey.IsBlockGhostRoleAbilityReport.ToString(),
+                false);
         }
 
         public static class ConfigParser
@@ -436,6 +442,7 @@ namespace ExtremeRoles
 
             public static bool IsAssignNeutralToVanillaCrewGhostRole = true;
             public static bool IsRemoveAngleIcon = false;
+            public static bool IsBlockGhostRoleAbilityReport = false;
         }
     }
 }
