@@ -69,13 +69,13 @@ namespace ExtremeRoles.Compat.Mods
             MethodInfo wrapUpAndSpawnPostfix = SymbolExtensions.GetMethodInfo(
                 () => Patches.SubmergedExileControllerWrapUpAndSpawnPatch.Postfix(cont));
 
-
+            System.Collections.IEnumerator enumerator = null;
             Type submarineSelectSpawn = ClassType.First(
                 t => t.Name == "SubmarineSelectSpawn");
             MethodInfo prespawnStep = AccessTools.Method(
                 submarineSelectSpawn, "PrespawnStep");
             MethodInfo prespawnStepPrefix = SymbolExtensions.GetMethodInfo(
-                () => Patches.SubmarineSelectSpawnPrespawnStepPatch.Prefix());
+                () => Patches.SubmarineSelectSpawnPrespawnStepPatch.Prefix(ref enumerator));
 
 
             Type hudManagerUpdatePatch = ClassType.First(

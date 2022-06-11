@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Linq;
 using System.Reflection;
 
 using UnityEngine;
@@ -23,9 +24,18 @@ namespace ExtremeRoles.Compat.Patches
 
     public static class SubmarineSelectSpawnPrespawnStepPatch
     {
-        public static bool Prefix()
+        public static bool Prefix(ref IEnumerator __result)
         {
-            return !ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger;
+            if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return true; }
+            __result = assassinMeetingEnumerator();
+            return false;
+        }
+        public static IEnumerator assassinMeetingEnumerator()
+        {
+            // 真っ暗になるのでそれを解除する
+            HudManager.Instance.StartCoroutine(
+                HudManager.Instance.CoFadeFullScreen(Color.black, Color.clear, 0.2f));
+            yield break;
         }
     }
 
