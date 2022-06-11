@@ -14,6 +14,11 @@ namespace ExtremeRoles.Compat.Interface
 		RepairCustomSaboType
     }
 
+	public enum CustomMonoBehaviourType
+    {
+		MovableFloorBehaviour
+    }
+
 	public interface IMapMod
     {
 		public const byte RpcCallType = 1;
@@ -29,5 +34,8 @@ namespace ExtremeRoles.Compat.Interface
 		public Console GetConsole(TaskTypes task);
 		public SystemConsole GetSystemConsole(SystemConsoleType sysConsole);
 		public Sprite SystemConsoleUseSprite(SystemConsoleType sysConsole);
+		public void AddCustomComponent(
+			GameObject addObject, CustomMonoBehaviourType customMonoType);
+
 	}
 }

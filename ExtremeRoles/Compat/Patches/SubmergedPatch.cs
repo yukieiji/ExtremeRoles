@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-using BepInEx;
-
 using HarmonyLib;
 
 using UnityEngine;
@@ -153,7 +151,6 @@ namespace ExtremeRoles.Compat.Patches
                 BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public);
             submarineOxygenSystemPlayersWithMask = submarineOxygenSystemField.First(f => f.Name == "PlayersWithMask");
             submarineOxygenSystemPlayersWithMask = type.GetField("PlayersWithMask");
-
         }
 
     }

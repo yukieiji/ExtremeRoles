@@ -42,7 +42,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
                 this.body.gameObject.SetActive(canSee);
                 this.body.transform.position = new Vector3(
-                    pos.x, pos.y, PlayerControl.LocalPlayer.transform.position.z + 1f);
+                    pos.x, pos.y, (pos.y / 1000f) + 0.01f);
+
+                if (ExtremeRolesPlugin.Compat.IsModMap)
+                {
+                    ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
+                        this.body, Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
+                }
 
                 this.activePlayerNum = activeNum;
                 this.activeRange = activateRange;
@@ -120,6 +126,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 vent.myRend = ventRenderer;           
                 vent.name = "MaryVent_" + vent.Id;
                 vent.gameObject.SetActive(this.body.gameObject.active);
+
+                if (ExtremeRolesPlugin.Compat.IsModMap)
+                {
+                    ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
+                        vent.gameObject, Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
+                }
 
                 return vent;
             }

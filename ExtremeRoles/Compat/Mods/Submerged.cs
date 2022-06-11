@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -7,23 +8,28 @@ using ExtremeRoles.Compat.Interface;
 using BepInEx;
 
 using HarmonyLib;
+using UnhollowerRuntimeLib;
 using Hazel;
 using UnityEngine;
 
 namespace ExtremeRoles.Compat.Mods
 {
-    public class Submerged : CompatModBase, IMapMod 
+    public class Submerged : CompatModBase, IMapMod
     {
         public const string Guid = "Submerged";
 
         public ShipStatus.MapType MapType => (ShipStatus.MapType)5;
         public TaskTypes RetrieveOxygenMask;
 
+        private Dictionary<string, Type> injectedTypes;
+
         private Type taskType;
 
         private Type submarineOxygenSystem;
         private PropertyInfo submarineOxygenSystemInstanceGetter;
         private MethodInfo submarineOxygenSystemRepairDamageMethod;
+
+        private const string elevatorMover = "ElevatorMover";
 
         public Submerged(PluginInfo plugin) : base(Guid, plugin)
         {
@@ -37,6 +43,10 @@ namespace ExtremeRoles.Compat.Mods
                 submarineOxygenSystem, "Instance");
             submarineOxygenSystemRepairDamageMethod = AccessTools.Method(
                 submarineOxygenSystem, "RepairDamage");
+
+            injectedTypes = (Dictionary<string, Type>)AccessTools.PropertyGetter(
+                ClassType.FirstOrDefault(t => t.Name == "RegisterInIl2CppAttribute"), "RegisteredTypes").Invoke(
+                    null, Array.Empty<object>());
 
         }
         public void Awake()
@@ -114,6 +124,27 @@ namespace ExtremeRoles.Compat.Mods
         {
             throw new System.NotImplementedException();
         }
+        public void AddCustomComponent(
+            GameObject addObject, CustomMonoBehaviourType customMonoType)
+        {
+            switch (customMonoType)
+            {
+                case CustomMonoBehaviourType.MovableFloorBehaviour:
+                    bool validType = injectedTypes.TryGetValue(elevatorMover, out Type type);
+                    if (validType)
+                    {
+                        addObject.AddComponent(Il2CppType.From(type)).TryCast<MonoBehaviour>();
+                    }
+                    else
+                    {
+                        addObject.AddComponent<MissingSubmergedBehaviour>();
+                    }
+                    break;
+                default:
+                    break;
+
+            }
+        }
 
         protected override void PatchAll(Harmony harmony)
         {
@@ -190,7 +221,13 @@ namespace ExtremeRoles.Compat.Mods
             // 酸素枯渇発動時アサシンは常にマスクを持つパッチ
             harmony.Patch(submarineOxygenSystemDetoriorate,
                 postfix: new HarmonyMethod(submarineOxygenSystemDetorioratePostfixPatch));
-
         }
     }
+
+    public class MissingSubmergedBehaviour : MonoBehaviour
+    {
+        static MissingSubmergedBehaviour() => ClassInjector.RegisterTypeInIl2Cpp<MissingSubmergedBehaviour>();
+        public MissingSubmergedBehaviour(IntPtr ptr) : base(ptr) { }
+    }
+
 }
