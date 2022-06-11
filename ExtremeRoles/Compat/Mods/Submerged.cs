@@ -128,11 +128,6 @@ namespace ExtremeRoles.Compat.Mods
                     new object[] { PlayerControl.LocalPlayer, (byte)64 });
             }
         }
-
-        public Sprite SystemConsoleUseSprite(SystemConsoleType sysConsole)
-        {
-            throw new System.NotImplementedException();
-        }
         public void AddCustomComponent(
             GameObject addObject, CustomMonoBehaviourType customMonoType)
         {

@@ -33,7 +33,6 @@ namespace ExtremeRoles.Compat.Interface
 		public void RepairCustomSabotage(TaskTypes saboTask);
 		public Console GetConsole(TaskTypes task);
 		public SystemConsole GetSystemConsole(SystemConsoleType sysConsole);
-		public Sprite SystemConsoleUseSprite(SystemConsoleType sysConsole);
 		public void AddCustomComponent(
 			GameObject addObject, CustomMonoBehaviourType customMonoType);
 
