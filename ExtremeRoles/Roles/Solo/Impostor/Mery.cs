@@ -47,7 +47,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 if (ExtremeRolesPlugin.Compat.IsModMap)
                 {
                     ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
-                        this.body, Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
+                        this.body.gameObject,
+                        Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
                 }
 
                 this.activePlayerNum = activeNum;
