@@ -59,32 +59,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void CreateAbility()
         {
-            Sprite buttonImage;
-            var imageDict = HudManager.Instance.UseButton.fastUseSettings;
-            switch (PlayerControl.GameOptions.MapId)
-            {
-                case 0:
-                case 3:
-                    buttonImage = imageDict[ImageNames.AdminMapButton].Image;
-                    break;
-                case 1:
-                    buttonImage = imageDict[ImageNames.MIRAAdminButton].Image;
-                    break;
-                case 2:
-                    buttonImage = imageDict[ImageNames.PolusAdminButton].Image;
-                    break;
-                case 4:
-                    buttonImage = imageDict[ImageNames.AirshipAdminButton].Image;
-                    break;
-                default:
-                    buttonImage = Loader.CreateSpriteFromResources(
-                        Path.TestButton);
-                    break;
-            }
-
             this.CreateChargeAbilityButton(
                 Translation.GetString("admin"),
-                buttonImage,
+                getAdminButtonImage(),
                 CleanUp,
                 checkAbility: IsOpen);
             this.Button.SetLabelToCrewmate();
@@ -172,6 +149,22 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.taskGage = (float)OptionHolder.AllOption[
                 GetRoleOptionId(SuperviosrOption.TaskGage)].GetValue() / 100.0f;
             this.RoleAbilityInit();
+        }
+        private Sprite getAdminButtonImage()
+        {
+            var imageDict = HudManager.Instance.UseButton.fastUseSettings;
+            switch (PlayerControl.GameOptions.MapId)
+            {
+                case 0:
+                case 3:
+                    return imageDict[ImageNames.AdminMapButton].Image;
+                case 1:
+                    return imageDict[ImageNames.MIRAAdminButton].Image;
+                case 2:
+                    return imageDict[ImageNames.PolusAdminButton].Image;
+                default:
+                    return imageDict[ImageNames.AirshipAdminButton].Image;
+            }
         }
     }
 }
