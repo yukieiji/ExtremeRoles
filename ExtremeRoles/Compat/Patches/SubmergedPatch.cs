@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Reflection;
 
+using HarmonyLib;
+
 using UnityEngine;
 
 namespace ExtremeRoles.Compat.Patches
@@ -114,6 +116,31 @@ namespace ExtremeRoles.Compat.Patches
         {
             changed = false;
         }
+    }
 
+    public static class SubmarineOxygenSystemDetorioratePatch
+    {
+        private static System.Type submarineOxygenSystemType;
+
+        public static void Postfix(object __instance)
+        {
+            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return; }
+            if (Roles.ExtremeRoleManager.GetLocalPlayerRole().Id == Roles.ExtremeRoleId.Assassin)
+            {
+                ShipStatus.Instance.RpcRepairSystem((SystemTypes)130, 64);
+
+                MethodInfo submarineOxygenSystemInstanceField = AccessTools.PropertyGetter(
+                    submarineOxygenSystemType, "Instance");
+                MethodInfo RepairDamageMethod = AccessTools.Method(
+                    submarineOxygenSystemType, "RepairDamage");
+                RepairDamageMethod.Invoke(submarineOxygenSystemInstanceField.Invoke(
+                    null, System.Array.Empty<object>()),
+                    new object[] { PlayerControl.LocalPlayer.PlayerId, 64 });
+            }
+        }
+        public static void SetType(System.Type type)
+        {
+            submarineOxygenSystemType = type;
+        }
     }
 }

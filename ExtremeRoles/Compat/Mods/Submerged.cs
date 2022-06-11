@@ -106,6 +106,18 @@ namespace ExtremeRoles.Compat.Mods
                     exileControllerBeginPatchInstance));
 
 
+            Type submarineOxygenSystem = ClassType.First(
+                t => t.Name == "SubmarineOxygenSystem");
+            MethodInfo submarineOxygenSystemDetoriorate = AccessTools.Method(
+                submarineOxygenSystem, "Detoriorate");
+            object submarineOxygenSystemInstance = null;
+            Patches.SubmarineOxygenSystemDetorioratePatch.SetType(
+                submarineOxygenSystem);
+            MethodInfo submarineOxygenSystemDetorioratePostfixPatch = SymbolExtensions.GetMethodInfo(
+                () => Patches.SubmarineOxygenSystemDetorioratePatch.Postfix(
+                    submarineOxygenSystemInstance));
+
+
             // 会議終了時のリセット処理を呼び出せるように
             harmony.Patch(wrapUpAndSpawn,
                 new HarmonyMethod(wrapUpAndSpawnPrefix),
@@ -122,6 +134,10 @@ namespace ExtremeRoles.Compat.Mods
             // アサシン会議終了後のテキスト表示を変えるパッチ
             harmony.Patch(exileControllerBeginPatchPrefix,
                 postfix: new HarmonyMethod(exileControllerBeginPatchPrefixPatch));
+
+            // 酸素枯渇発動時アサシンは常にマスクを持つパッチ
+            harmony.Patch(submarineOxygenSystemDetoriorate,
+                postfix: new HarmonyMethod(submarineOxygenSystemDetorioratePostfixPatch));
 
         }
     }
