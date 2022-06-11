@@ -6,6 +6,23 @@ using UnityEngine;
 
 namespace ExtremeRoles.Compat.Patches
 {
+    public static class SubmarineSelectSpawnPrespawnStepPatch
+    {
+        public static bool Prefix(ref IEnumerator __result)
+        {
+            if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return true; }
+            __result = assassinMeetingEnumerator();
+            return false;
+        }
+        public static IEnumerator assassinMeetingEnumerator()
+        {
+            // 真っ暗になるのでそれを解除する
+            HudManager.Instance.StartCoroutine(
+                HudManager.Instance.CoFadeFullScreen(Color.black, Color.clear, 0.2f));
+            yield break;
+        }
+    }
+
     public static class SubmergedExileControllerWrapUpAndSpawnPatch
     {
         public static void Prefix(ExileController __instance)
@@ -63,24 +80,6 @@ namespace ExtremeRoles.Compat.Patches
         public static void SetType(System.Type type)
         {
             exileControllerBeginPatchType = type;
-        }
-    }
-
-
-    public static class SubmarineSelectSpawnPrespawnStepPatch
-    {
-        public static bool Prefix(ref IEnumerator __result)
-        {
-            if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return true; }
-            __result = assassinMeetingEnumerator();
-            return false;
-        }
-        public static IEnumerator assassinMeetingEnumerator()
-        {
-            // 真っ暗になるのでそれを解除する
-            HudManager.Instance.StartCoroutine(
-                HudManager.Instance.CoFadeFullScreen(Color.black, Color.clear, 0.2f));
-            yield break;
         }
     }
 
