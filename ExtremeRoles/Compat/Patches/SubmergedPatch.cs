@@ -53,7 +53,7 @@ namespace ExtremeRoles.Compat.Patches
             floorButtonInfo = hubManagerUpdateType.GetField("FloorButton");
             GameObject floorButton = floorButtonInfo.GetValue(__instance) as GameObject;
 
-            if (floorButton != null && !changed)
+            if (!Helper.GameSystem.IsFreePlay && floorButton != null && !changed)
             {
                 changed = true;
                 floorButton.transform.localPosition -= new Vector3(0.0f, 0.75f, 0.0f);
