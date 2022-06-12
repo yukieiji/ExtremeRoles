@@ -6,6 +6,7 @@ using UnityEngine;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches
 {
@@ -15,6 +16,7 @@ namespace ExtremeRoles.Patches
         [HarmonyPostfix, HarmonyPriority(Priority.Last)]
         public static void Postfix(ShipStatus __instance)
         {
+            CachedShipStatus.SetUp(__instance);
             ExtremeRolesPlugin.Compat.SetUpMap(__instance);
         }
     }
@@ -378,6 +380,7 @@ namespace ExtremeRoles.Patches
         [HarmonyPostfix, HarmonyPriority(Priority.Last)]
         public static void Postfix()
         {
+            CachedShipStatus.Destroy();
             ExtremeRolesPlugin.Compat.RemoveMap();
         }
     }
