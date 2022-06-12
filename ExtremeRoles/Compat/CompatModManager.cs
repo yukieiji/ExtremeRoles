@@ -22,7 +22,7 @@ namespace ExtremeRoles.Compat
 
         private static Dictionary<string, Type> compatMod = new Dictionary<string, Type>()
         {
-            { Submerged.Guid, typeof(Submerged) },
+            { SubmergedMap.Guid, typeof(SubmergedMap) },
         };
 
         internal CompatModManager()

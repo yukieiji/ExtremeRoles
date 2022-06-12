@@ -14,7 +14,7 @@ using UnityEngine;
 
 namespace ExtremeRoles.Compat.Mods
 {
-    public class Submerged : CompatModBase, IMultiFloorModMap
+    public class SubmergedMap : CompatModBase, IMultiFloorModMap
     {
         public const string Guid = "Submerged";
 
@@ -35,7 +35,7 @@ namespace ExtremeRoles.Compat.Mods
 
         private const string elevatorMover = "ElevatorMover";
 
-        public Submerged(PluginInfo plugin) : base(Guid, plugin)
+        public SubmergedMap(PluginInfo plugin) : base(Guid, plugin)
         {
             // カスタムサボのタスクタイプ取得
             taskType = ClassType.First(

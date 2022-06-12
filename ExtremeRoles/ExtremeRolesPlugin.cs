@@ -15,7 +15,7 @@ namespace ExtremeRoles
 
     [BepInAutoPlugin("me.yukieiji.extremeroles", "Extreme Roles")]
     [BepInDependency(
-        ExtremeRoles.Compat.Mods.Submerged.Guid,
+        ExtremeRoles.Compat.Mods.SubmergedMap.Guid,
         BepInDependency.DependencyFlags.SoftDependency)]
     [BepInProcess("Among Us.exe")]
     public partial class ExtremeRolesPlugin : BasePlugin

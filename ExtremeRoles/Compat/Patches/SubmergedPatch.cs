@@ -48,6 +48,9 @@ namespace ExtremeRoles.Compat.Patches
 
         public static void Postfix(object __instance)
         {
+            var submergedMod = ExtremeRolesPlugin.Compat.ModMap as Mods.SubmergedMap;
+            if (submergedMod == null) { return; }
+
             var gameData = ExtremeRolesPlugin.GameDataStore;
 
             if (!gameData.AssassinMeetingTrigger) { return; }
@@ -93,6 +96,9 @@ namespace ExtremeRoles.Compat.Patches
         
         public static void Postfix(object __instance)
         {
+            var submergedMod = ExtremeRolesPlugin.Compat.ModMap as Mods.SubmergedMap;
+            if (submergedMod == null) { return; }
+
             GameObject floorButton = floorButtonInfo.GetValue(__instance) as GameObject;
 
             if (!Helper.GameSystem.IsFreePlay && floorButton != null && !changed)
@@ -124,6 +130,9 @@ namespace ExtremeRoles.Compat.Patches
 
         public static void Postfix(object __instance)
         {
+            var submergedMod = ExtremeRolesPlugin.Compat.ModMap as Mods.SubmergedMap;
+            if (submergedMod == null) { return; }
+
             if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return; }
             if (Roles.ExtremeRoleManager.GetLocalPlayerRole().Id != Roles.ExtremeRoleId.Assassin) { return; }
 
@@ -135,12 +144,8 @@ namespace ExtremeRoles.Compat.Patches
             if (playersWithMask != null && 
                 !playersWithMask.Contains(PlayerControl.LocalPlayer.PlayerId))
             {
-                var submergedMod = ExtremeRolesPlugin.Compat.ModMap as Mods.Submerged;
-                if (submergedMod != null)
-                {
-                    submergedMod.RepairCustomSabotage(
+                submergedMod.RepairCustomSabotage(
                         submergedMod.RetrieveOxygenMask);
-                }
             }
         }
         public static void SetType(System.Type type)
