@@ -146,23 +146,23 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             var alice = ExtremeRoleManager.GetSafeCastedRole<Alice>(callerId);
             if (alice == null) { return; }
             var player = Helper.Player.GetPlayerControlById(targetPlayerId);
-            var playerInfo = GameData.Instance.GetPlayerById(
-                player.PlayerId);
+            if (player == null) { return; }
             
-            for (int i = 0; i < playerInfo.Tasks.Count; ++i)
+            for (int i = 0; i < player.Data.Tasks.Count; ++i)
             {
                 if (addTaskId.Count == 0) { break; }
 
-                if (playerInfo.Tasks[i].Complete)
+                if (player.Data.Tasks[i].Complete)
                 {
                     byte taskId = (byte)addTaskId[0];
                     addTaskId.RemoveAt(0);
 
-                    playerInfo.Tasks[i] = new GameData.TaskInfo(
-                        taskId, playerInfo.Tasks[i].Id);
-
-                    Helper.GameSystem.SetPlayerNewTask(
-                        ref player, taskId, playerInfo.Tasks[i].Id);
+                    if (Helper.GameSystem.SetPlayerNewTask(
+                        ref player, taskId, player.Data.Tasks[i].Id))
+                    {
+                        player.Data.Tasks[i] = new GameData.TaskInfo(
+                            taskId, player.Data.Tasks[i].Id);
+                    }
                 }
             }
             GameData.Instance.SetDirtyBit(

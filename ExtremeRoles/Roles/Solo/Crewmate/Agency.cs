@@ -82,20 +82,21 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             var player = Player.GetPlayerControlById(
                 playerId);
-            var playerInfo = GameData.Instance.GetPlayerById(
-                player.PlayerId);
+
+            if (player == null) { return; }
 
             byte taskId = (byte)taskIndex;
 
-            playerInfo.Tasks[index] = new GameData.TaskInfo(
-                taskId, (uint)index);
-            playerInfo.Tasks[index].Id = (uint)index;
+            if (GameSystem.SetPlayerNewTask(
+                ref player, taskId, (uint)index))
+            {
+                player.Data.Tasks[index] = new GameData.TaskInfo(
+                    taskId, (uint)index);
+                player.Data.Tasks[index].Id = (uint)index;
 
-            GameSystem.SetPlayerNewTask(
-                ref player, taskId, (uint)index);
-
-            GameData.Instance.SetDirtyBit(
-                1U << (int)player.PlayerId);
+                GameData.Instance.SetDirtyBit(
+                    1U << (int)player.PlayerId);
+            }
         }
 
 

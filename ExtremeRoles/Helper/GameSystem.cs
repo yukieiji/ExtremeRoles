@@ -126,17 +126,12 @@ namespace ExtremeRoles.Helper
             player.SetDirtyBit(1U << (int)player.PlayerId);
         }
 
-        public static void SetPlayerNewTask(
+        public static bool SetPlayerNewTask(
             ref PlayerControl player,
             byte taskId, uint gameControlTaskId)
         {
-            NormalPlayerTask normalPlayerTask =
-                UnityEngine.Object.Instantiate<NormalPlayerTask>(
-                    ShipStatus.Instance.GetTaskById(taskId),
-                    player.transform);
-            normalPlayerTask.Id = gameControlTaskId;
-            normalPlayerTask.Owner = player;
-            normalPlayerTask.Initialize();
+            NormalPlayerTask addTask = ShipStatus.Instance.GetTaskById(taskId);
+            if (addTask == null) { return false; }
 
             for (int i = 0; i < player.myTasks.Count; ++i)
             {
@@ -152,15 +147,22 @@ namespace ExtremeRoles.Helper
 
                 if (player.myTasks[i].IsComplete)
                 {
+                    NormalPlayerTask normalPlayerTask = UnityEngine.Object.Instantiate(
+                        addTask, player.transform);
+                    normalPlayerTask.Id = gameControlTaskId;
+                    normalPlayerTask.Owner = player;
+                    normalPlayerTask.Initialize();
+
                     var removeTask = player.myTasks[i];
                     player.myTasks[i] = normalPlayerTask;
 
                     removeTask.OnRemove();
                     UnityEngine.Object.Destroy(
                         removeTask.gameObject);
-                    break;
+                    return true;
                 }
             }
+            return false;
         }
 
 
