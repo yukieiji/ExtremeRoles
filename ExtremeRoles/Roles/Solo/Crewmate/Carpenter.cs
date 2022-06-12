@@ -559,7 +559,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             return true;
         }
 
-        public bool IsAbilityUse() => this.IsCommonUse() && !(PlayerControl.GameOptions.MapId == 1 && this.targetVent != null);
+        public bool IsAbilityUse() => 
+            this.IsCommonUse() && 
+            !(PlayerControl.GameOptions.MapId == 1 && this.targetVent == null) &&
+            !(this.targetVent == null && 
+                ExtremeRolesPlugin.Compat.IsModMap && 
+                !ExtremeRolesPlugin.Compat.ModMap.CanPlaceCamera);
 
         public bool IsAbilityCheck() => this.prevPos == PlayerControl.LocalPlayer.GetTruePosition();
 

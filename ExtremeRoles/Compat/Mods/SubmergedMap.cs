@@ -19,6 +19,8 @@ namespace ExtremeRoles.Compat.Mods
         public const string Guid = "Submerged";
 
         public ShipStatus.MapType MapType => (ShipStatus.MapType)5;
+        public bool CanPlaceCamera => false;
+
         public TaskTypes RetrieveOxygenMask;
 
         private Dictionary<string, Type> injectedTypes;

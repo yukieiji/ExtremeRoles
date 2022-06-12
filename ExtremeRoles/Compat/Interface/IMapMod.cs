@@ -23,6 +23,7 @@ namespace ExtremeRoles.Compat.Interface
     {
 		public const byte RpcCallType = 1;
 		public ShipStatus.MapType MapType { get; }
+		public bool CanPlaceCamera { get; }
 		public void Awake();
 		public bool IsCustomSabotageNow();
 		public bool IsCustomSabotageTask(TaskTypes saboTask);
