@@ -90,7 +90,30 @@ namespace ExtremeRoles.Compat.Mods
 
         public Console GetConsole(TaskTypes task)
         {
-            throw new System.NotImplementedException();
+            var console = UnityEngine.Object.FindObjectsOfType<Console>();
+            switch (task)
+            {
+                case TaskTypes.FixLights:
+                    return console.FirstOrDefault(
+                        x => x.gameObject.name.Contains("LightsConsole"));
+                case TaskTypes.StopCharles:
+                    List<Console> res = new List<Console>(2);
+                    Console leftConsole = console.FirstOrDefault(
+                        x => x.gameObject.name.Contains("BallastConsole_1"));
+                    if (leftConsole != null)
+                    {
+                        res.Add(leftConsole);
+                    }
+                    Console rightConsole = console.FirstOrDefault(
+                        x => x.gameObject.name.Contains("BallastConsole_2"));
+                    if (rightConsole != null)
+                    {
+                        res.Add(rightConsole);
+                    }
+                    return res[RandomGenerator.Instance.Next(res.Count)];
+                default:
+                    return null;
+            }
         }
 
         public SystemConsole GetSystemConsole(SystemConsoleType sysConsole)

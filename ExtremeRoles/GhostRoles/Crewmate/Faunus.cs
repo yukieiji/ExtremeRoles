@@ -23,7 +23,8 @@ namespace ExtremeRoles.GhostRoles.Crewmate
             RestoreOxy,
         }
 
-        private SaboType saboType;
+        private TaskTypes saboTask;
+        private bool saboActive;
         private Minigame saboGame;
 
         public Faunus() : base(
@@ -52,7 +53,9 @@ namespace ExtremeRoles.GhostRoles.Crewmate
         public override HashSet<ExtremeRoleId> GetRoleFilter() => new HashSet<ExtremeRoleId>();
 
         public override void Initialize()
-        { }
+        {
+            this.saboActive = false;
+        }
 
         public override void ReseOnMeetingEnd()
         {
@@ -74,31 +77,37 @@ namespace ExtremeRoles.GhostRoles.Crewmate
         protected override void UseAbility(MessageWriter writer)
         {
 
-            Console console; 
-
-            switch (this.saboType)
+            Console console;
+            if (ExtremeRolesPlugin.Compat.IsModMap)
             {
-                case SaboType.FixLight:
-                    console = getLightConsole();
-                    break;
-                case SaboType.RestoreOxy:
-                case SaboType.StopCharles:
-                    List<Console> oxyConsole = getOxyConsole();
-                    int oxyCount = oxyConsole.Count;
-                    if (oxyCount == 0) { return; }
-                    int oxyIndex = RandomGenerator.Instance.Next(oxyCount);
-                    console = oxyConsole[oxyIndex];
-                    break;
-                case SaboType.ResetReactor:
-                case SaboType.ResetSeismic:
-                    List<Console> handConsole = getHandConsole();
-                    int handCount = handConsole.Count;
-                    if (handCount == 0) { return; }
-                    int seismicIndex = RandomGenerator.Instance.Next(handCount);
-                    console = handConsole[seismicIndex];
-                    break;
-                default:
-                    return;
+                console = ExtremeRolesPlugin.Compat.ModMap.GetConsole(this.saboTask);
+            }
+            else
+            {
+                switch (this.saboTask)
+                {
+                    case TaskTypes.FixLights:
+                        console = getLightConsole();
+                        break;
+                    case TaskTypes.RestoreOxy:
+                    case TaskTypes.StopCharles:
+                        List<Console> oxyConsole = getOxyConsole();
+                        int oxyCount = oxyConsole.Count;
+                        if (oxyCount == 0) { return; }
+                        int oxyIndex = RandomGenerator.Instance.Next(oxyCount);
+                        console = oxyConsole[oxyIndex];
+                        break;
+                    case TaskTypes.ResetReactor:
+                    case TaskTypes.ResetSeismic:
+                        List<Console> handConsole = getHandConsole();
+                        int handCount = handConsole.Count;
+                        if (handCount == 0) { return; }
+                        int seismicIndex = RandomGenerator.Instance.Next(handCount);
+                        console = handConsole[seismicIndex];
+                        break;
+                    default:
+                        return;
+                }
             }
 
             if (console == null || Camera.main == null)
@@ -129,11 +138,11 @@ namespace ExtremeRoles.GhostRoles.Crewmate
             }
         }
 
-        private bool isPreCheck() => this.saboType != SaboType.None;
+        private bool isPreCheck() => this.saboActive;
 
         private bool isAbilityUse()
         {
-            this.saboType = SaboType.None;
+            this.saboActive = false;
 
             foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
             {
@@ -141,27 +150,20 @@ namespace ExtremeRoles.GhostRoles.Crewmate
                 switch (task?.TaskType)
                 {
                     case TaskTypes.FixLights:
-                        this.saboType = SaboType.FixLight;
-                        break;
                     case TaskTypes.RestoreOxy:
-                        this.saboType = SaboType.RestoreOxy;
-                        break;
                     case TaskTypes.ResetReactor:
-                        this.saboType = SaboType.ResetReactor;
-                        break;
                     case TaskTypes.ResetSeismic:
-                        this.saboType = SaboType.ResetSeismic;
-                        break;
                     case TaskTypes.StopCharles:
-                        this.saboType = SaboType.StopCharles;
+                        this.saboActive = true;
+                        this.saboTask = task.TaskType;
                         break;
                     default:
                         break;
                 }
-                if (this.saboType != SaboType.None){ break; }
+                if (this.saboActive) { break; }
             }
 
-            return this.IsCommonUse() && this.saboType != SaboType.None;
+            return this.IsCommonUse() && this.saboActive;
         }
 
         private Console getLightConsole()
