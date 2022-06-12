@@ -10,6 +10,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Combination
 {
@@ -510,8 +511,8 @@ namespace ExtremeRoles.Roles.Combination
         public void Update(PlayerControl rolePlayer)
         {
             if (MeetingHud.Instance != null ||
-                ShipStatus.Instance == null) { return; }
-            if (!ShipStatus.Instance.enabled) { return; }
+                CachedShipStatus.Instance == null) { return; }
+            if (!CachedShipStatus.Instance.enabled) { return; }
 
             if (this.callTargetArrow != null)
             {

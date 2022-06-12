@@ -3,6 +3,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Performance;
 using Hazel;
 using System.Collections.Generic;
 using UnityEngine;
@@ -138,8 +139,8 @@ namespace ExtremeRoles.GhostRoles.Crewmate
         {
             this.targetBody = null;
 
-            if (ShipStatus.Instance == null ||
-                !ShipStatus.Instance.enabled) { return false; }
+            if (CachedShipStatus.Instance == null ||
+                !CachedShipStatus.Instance.enabled) { return false; }
 
             foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(
                 PlayerControl.LocalPlayer.GetTruePosition(),

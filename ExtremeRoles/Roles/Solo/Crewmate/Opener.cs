@@ -6,6 +6,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
@@ -54,7 +55,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             if (this.targetDoor == null) { return false; }
             
-            ShipStatus.Instance.RpcRepairSystem(
+            CachedShipStatus.Instance.RpcRepairSystem(
                 SystemTypes.Doors, this.targetDoor.Id | 64);
             this.targetDoor.SetDoorway(true);
             this.targetDoor = null;
@@ -68,7 +69,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             
             this.targetDoor = null;
 
-            foreach (var door in ShipStatus.Instance.AllDoors)
+            foreach (var door in CachedShipStatus.Instance.AllDoors)
             {
                 if (Vector3.Distance(
                         PlayerControl.LocalPlayer.transform.position,
@@ -100,9 +101,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public void Update(
             PlayerControl rolePlayer)
         {
-            if (ShipStatus.Instance == null ||
+            if (CachedShipStatus.Instance == null ||
                 GameData.Instance == null) { return; }
-            if (!ShipStatus.Instance.enabled ||
+            if (!CachedShipStatus.Instance.enabled ||
                 this.Button == null) { return; }
 
             if (rolePlayer.Data.IsDead || rolePlayer.Data.Disconnected || this.isUpgraded) { return; }

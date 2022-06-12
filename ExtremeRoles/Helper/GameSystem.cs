@@ -5,6 +5,7 @@ using System.Reflection;
 using Hazel;
 
 using ExtremeRoles.Roles;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Helper
 {
@@ -75,7 +76,7 @@ namespace ExtremeRoles.Helper
             if (ShipStatus.Instance == null) { return byte.MaxValue; }
 
             List<int> taskIndex = getTaskIndex(
-                ShipStatus.Instance.CommonTasks);
+                CachedShipStatus.Instance.CommonTasks);
 
             int index = RandomGenerator.Instance.Next(taskIndex.Count);
 
@@ -87,7 +88,7 @@ namespace ExtremeRoles.Helper
             if (ShipStatus.Instance == null) { return byte.MaxValue; }
 
             List<int> taskIndex = getTaskIndex(
-                ShipStatus.Instance.LongTasks);
+                CachedShipStatus.Instance.LongTasks);
 
             int index = RandomGenerator.Instance.Next(taskIndex.Count);
 
@@ -99,7 +100,7 @@ namespace ExtremeRoles.Helper
             if (ShipStatus.Instance == null) { return byte.MaxValue; }
 
             List<int> taskIndex = getTaskIndex(
-                ShipStatus.Instance.NormalTasks);
+                CachedShipStatus.Instance.NormalTasks);
 
             int index = RandomGenerator.Instance.Next(taskIndex.Count);
 
@@ -110,7 +111,7 @@ namespace ExtremeRoles.Helper
             GameData.PlayerInfo playerInfo,
             int taskIndex)
         {
-            NormalPlayerTask task = ShipStatus.Instance.GetTaskById((byte)taskIndex);
+            NormalPlayerTask task = CachedShipStatus.Instance.GetTaskById((byte)taskIndex);
 
             PlayerControl player = playerInfo.Object;
 
@@ -130,7 +131,7 @@ namespace ExtremeRoles.Helper
             ref PlayerControl player,
             byte taskId, uint gameControlTaskId)
         {
-            NormalPlayerTask addTask = ShipStatus.Instance.GetTaskById(taskId);
+            NormalPlayerTask addTask = CachedShipStatus.Instance.GetTaskById(taskId);
             if (addTask == null) { return false; }
 
             for (int i = 0; i < player.myTasks.Count; ++i)

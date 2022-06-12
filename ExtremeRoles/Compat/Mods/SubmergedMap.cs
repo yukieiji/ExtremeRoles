@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 
 using ExtremeRoles.Compat.Interface;
+using ExtremeRoles.Performance;
 
 using BepInEx;
 
@@ -180,7 +181,7 @@ namespace ExtremeRoles.Compat.Mods
         {
             if (saboTask == this.RetrieveOxygenMask)
             {
-                ShipStatus.Instance.RpcRepairSystem((SystemTypes)130, 64);
+                CachedShipStatus.Instance.RpcRepairSystem((SystemTypes)130, 64);
                 submarineOxygenSystemRepairDamageMethod.Invoke(
                     submarineOxygenSystemInstanceGetter.GetValue(null),
                     new object[] { PlayerControl.LocalPlayer, (byte)64 });

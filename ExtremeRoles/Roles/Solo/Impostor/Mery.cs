@@ -12,6 +12,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 
 namespace ExtremeRoles.Roles.Solo.Impostor
@@ -119,7 +120,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 vent.ExitVentAnim = null;
                 vent.Offset = new Vector3(0f, 0.25f, 0f);
                 vent.GetComponent<PowerTools.SpriteAnim>()?.Stop();
-                vent.Id = ShipStatus.Instance.AllVents.Select(x => x.Id).Max() + 1;
+                vent.Id = CachedShipStatus.Instance.AllVents.Select(x => x.Id).Max() + 1;
 
                 var ventRenderer = vent.GetComponent<SpriteRenderer>();
                 ventRenderer.sprite = Loader.CreateSpriteFromResources(

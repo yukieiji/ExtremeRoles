@@ -10,6 +10,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.AbilityButton.Roles;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
@@ -478,10 +479,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 ExtremeRolesPlugin.Compat.ModMap.SetUpNewCamera(camera);
             }
 
-            var allCameras = ShipStatus.Instance.AllCameras.ToList();
+            var allCameras = CachedShipStatus.Instance.AllCameras.ToList();
             camera.gameObject.SetActive(true);
             allCameras.Add(camera);
-            ShipStatus.Instance.AllCameras = allCameras.ToArray();
+            CachedShipStatus.Instance.AllCameras = allCameras.ToArray();
         }
 
         private static void unlinkVent(Vent targetVent, Vent unlinkVent)
@@ -545,7 +546,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             if (this.targetVent != null)
             {
 
-                var ventilationSystem = ShipStatus.Instance.Systems[SystemTypes.Ventilation].TryCast<VentilationSystem>();
+                var ventilationSystem = CachedShipStatus.Systems[SystemTypes.Ventilation].TryCast<VentilationSystem>();
 
                 if (!PlayerControl.LocalPlayer.Data.IsDead && 
                     ventilationSystem != null && 
@@ -572,12 +573,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             this.targetVent = null;
 
-            if (ShipStatus.Instance == null ||
-                !ShipStatus.Instance.enabled) { return false; }
+            if (CachedShipStatus.Instance == null ||
+                !CachedShipStatus.Instance.enabled) { return false; }
 
             Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
             
-            foreach (Vent vent in ShipStatus.Instance.AllVents)
+            foreach (Vent vent in CachedShipStatus.Instance.AllVents)
             {
                 if (vent == null) { continue; }
                 if (ExtremeRolesPlugin.GameDataStore.CustomVent.IsCustomVent(vent.Id) &&

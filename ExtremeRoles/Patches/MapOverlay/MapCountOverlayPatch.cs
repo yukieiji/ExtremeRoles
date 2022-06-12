@@ -4,6 +4,9 @@ using UnityEngine;
 
 using HarmonyLib;
 
+using ExtremeRoles.Performance;
+
+
 namespace ExtremeRoles.Patches.MapOverlay
 {
     [HarmonyPatch(typeof(MapCountOverlay), nameof(MapCountOverlay.Update))]
@@ -63,7 +66,7 @@ namespace ExtremeRoles.Patches.MapOverlay
 				if (!commsActive)
 				{
 
-					PlainShipRoom plainShipRoom = ShipStatus.Instance.FastRooms[counterArea.RoomType];
+					PlainShipRoom plainShipRoom = CachedShipStatus.Instance.FastRooms[counterArea.RoomType];
 					if (plainShipRoom != null && plainShipRoom.roomArea)
 					{
 						int num = plainShipRoom.roomArea.OverlapCollider(__instance.filter, __instance.buffer);

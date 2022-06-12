@@ -7,6 +7,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
@@ -35,11 +36,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void Update(PlayerControl rolePlayer)
         {
-            if (ShipStatus.Instance == null ||
+            if (CachedShipStatus.Instance == null ||
                 this.IsWin ||
                 GameData.Instance == null) { return; }
 
-            if (!ShipStatus.Instance.enabled) { return; }
+            if (!CachedShipStatus.Instance.enabled) { return; }
 
             var playerInfo = GameData.Instance.GetPlayerById(
                 rolePlayer.PlayerId);

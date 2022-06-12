@@ -1,6 +1,7 @@
 ﻿using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.GhostRoles;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using Hazel;
@@ -24,7 +25,7 @@ namespace ExtremeRoles.GhostRoles.Impostor
             var role = ExtremeRoleManager.GetLocalPlayerRole();
             if (!role.IsImpostor()) { return; }
 
-            var sabSystem = ShipStatus.Instance.Systems[SystemTypes.Sabotage].TryCast<SabotageSystemType>();
+            var sabSystem = CachedShipStatus.Systems[SystemTypes.Sabotage].TryCast<SabotageSystemType>();
             if (sabSystem != null)
             {
                 sabSystem.Timer = 0.0f;

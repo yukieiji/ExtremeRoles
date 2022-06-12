@@ -2,6 +2,8 @@
 using System.Linq;
 using Hazel;
 
+using ExtremeRoles.Performance;
+
 namespace ExtremeRoles
 {
     public static class RPCOperator
@@ -150,7 +152,7 @@ namespace ExtremeRoles
                 Minigame.Instance.ForceClose();
             }
 
-            SwitchSystem switchSystem = ShipStatus.Instance.Systems[
+            SwitchSystem switchSystem = CachedShipStatus.Systems[
                 SystemTypes.Electrical].Cast<SwitchSystem>();
             switchSystem.ActualSwitches = switchSystem.ExpectedSwitches;
         }
@@ -198,7 +200,7 @@ namespace ExtremeRoles
             reader.Buffer = bytes;
             reader.Length = bytes.Length;
 
-            Vent vent = ShipStatus.Instance.AllVents.FirstOrDefault(
+            Vent vent = CachedShipStatus.Instance.AllVents.FirstOrDefault(
                 (x) => x.Id == ventId);
 
             var ventContainer = ExtremeRolesPlugin.GameDataStore.CustomVent;
@@ -224,8 +226,8 @@ namespace ExtremeRoles
         public static void StartVentAnimation(int ventId)
         {
 
-            if (ShipStatus.Instance == null) { return; }
-            Vent vent = ShipStatus.Instance.AllVents.FirstOrDefault(
+            if (CachedShipStatus.Instance == null) { return; }
+            Vent vent = CachedShipStatus.Instance.AllVents.FirstOrDefault(
                 (x) => x.Id == ventId);
 
             var ventContainer = ExtremeRolesPlugin.GameDataStore.CustomVent;

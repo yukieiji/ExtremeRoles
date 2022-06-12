@@ -9,6 +9,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.AbilityButton.Roles;
+using ExtremeRoles.Performance;
 
 using BepInEx.IL2CPP.Utils.Collections;
 
@@ -133,7 +134,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 {
                     if (localPlayer.inVent)
                     {
-                        foreach (Vent vent in ShipStatus.Instance.AllVents)
+                        foreach (Vent vent in CachedShipStatus.Instance.AllVents)
                         {
                             bool canUse;
                             bool couldUse;

@@ -8,6 +8,7 @@ using UnityEngine;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -279,9 +280,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void Update(PlayerControl rolePlayer)
         {
-            if (ShipStatus.Instance == null ||
+            if (CachedShipStatus.Instance == null ||
                 GameData.Instance == null) { return; }
-            if (!ShipStatus.Instance.enabled) { return; }
+            if (!CachedShipStatus.Instance.enabled) { return; }
 
             if (MeetingHud.Instance == null && this.timer < this.aliveCheckTime)
             {

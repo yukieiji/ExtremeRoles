@@ -1,6 +1,7 @@
 ﻿using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.GhostRoles;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using Hazel;
@@ -85,12 +86,12 @@ namespace ExtremeRoles.GhostRoles.Impostor
         {
             this.targetVent = null;
 
-            if (ShipStatus.Instance == null ||
-                !ShipStatus.Instance.enabled) { return false; }
+            if (CachedShipStatus.Instance == null ||
+                !CachedShipStatus.Instance.enabled) { return false; }
 
             Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
 
-            foreach (Vent vent in ShipStatus.Instance.AllVents)
+            foreach (Vent vent in CachedShipStatus.Instance.AllVents)
             {
                 if (vent == null) { continue; }
                 if (ExtremeRolesPlugin.GameDataStore.CustomVent.IsCustomVent(vent.Id) &&

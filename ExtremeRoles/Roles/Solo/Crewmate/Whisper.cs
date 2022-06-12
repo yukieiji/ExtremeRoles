@@ -3,6 +3,7 @@
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
@@ -109,7 +110,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.abilityText.gameObject.SetActive(false);
 
             if (Minigame.Instance != null ||
-                ShipStatus.Instance == null ||
+                CachedShipStatus.Instance == null ||
                 GameData.Instance == null ||
                 MeetingHud.Instance != null ||
                 !rolePlayer.CanMove)
@@ -117,7 +118,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 resetAbility(rolePlayer);
                 return; 
             }
-            if (!ShipStatus.Instance.enabled ||
+            if (!CachedShipStatus.Instance.enabled ||
                 ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
             {
                 resetAbility(rolePlayer);

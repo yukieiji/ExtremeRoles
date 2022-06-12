@@ -9,6 +9,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
@@ -158,17 +159,17 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
                 int taskId = (int)targetPlayerInfo.Tasks[i].TypeId;
 
-                if (ShipStatus.Instance.CommonTasks.FirstOrDefault(
+                if (CachedShipStatus.Instance.CommonTasks.FirstOrDefault(
                     (NormalPlayerTask t) => t.Index == taskId) != null)
                 {
                     this.TakeTask.Add(TakeTaskType.Common);
                 }
-                else if (ShipStatus.Instance.LongTasks.FirstOrDefault(
+                else if (CachedShipStatus.Instance.LongTasks.FirstOrDefault(
                     (NormalPlayerTask t) => t.Index == taskId) != null)
                 {
                     this.TakeTask.Add(TakeTaskType.Long);
                 }
-                else if (ShipStatus.Instance.NormalTasks.FirstOrDefault(
+                else if (CachedShipStatus.Instance.NormalTasks.FirstOrDefault(
                     (NormalPlayerTask t) => t.Index == taskId) != null)
                 {
                     this.TakeTask.Add(TakeTaskType.Normal);
@@ -229,10 +230,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void Update(PlayerControl rolePlayer)
         {
-            if (ShipStatus.Instance == null ||
+            if (CachedShipStatus.Instance == null ||
                 GameData.Instance == null) { return; }
 
-            if (!ShipStatus.Instance.enabled ||
+            if (!CachedShipStatus.Instance.enabled ||
                 this.TakeTask.Count == 0) { return; }
 
             var playerInfo = GameData.Instance.GetPlayerById(
