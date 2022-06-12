@@ -16,6 +16,7 @@
         <GameVersion Condition="'$(GamePlatform)' == 'Steam'">2022.3.29</GameVersion>
         <GameVersion Condition="'$(GamePlatform)' == 'Itch'">2022.3.29</GameVersion>
         <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <ItemGroup>
