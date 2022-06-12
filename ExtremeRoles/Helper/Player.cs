@@ -2,6 +2,8 @@
 
 using UnityEngine;
 
+using ExtremeRoles.Performance;
+
 namespace ExtremeRoles.Helper
 {
     public static class Player
@@ -166,7 +168,7 @@ namespace ExtremeRoles.Helper
             {
                 PoolablePlayer poolPlayer = UnityEngine.Object.Instantiate<PoolablePlayer>(
                     Module.Prefab.PlayerPrefab,
-                    HudManager.Instance.transform);
+                    FastDestroyableSingleton<HudManager>.Instance.transform);
                 
                 poolPlayer.gameObject.SetActive(true);
                 poolPlayer.UpdateFromPlayerData(

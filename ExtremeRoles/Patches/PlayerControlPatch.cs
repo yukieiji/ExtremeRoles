@@ -14,6 +14,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches
 {
@@ -503,6 +504,8 @@ namespace ExtremeRoles.Patches
 
             bool isImposter = role.IsImpostor();
 
+            HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
+
             if (role.CanKill)
             {
                 if (enable)
@@ -517,19 +520,19 @@ namespace ExtremeRoles.Patches
 
                     // Logging.Debug($"TargetAlive?:{target}");
 
-                    DestroyableSingleton<HudManager>.Instance.KillButton.SetTarget(target);
+                    hudManager.KillButton.SetTarget(target);
                     Player.SetPlayerOutLine(target, role.GetNameColor());
-                    HudManager.Instance.KillButton.Show();
-                    HudManager.Instance.KillButton.gameObject.SetActive(true);
+                    hudManager.KillButton.Show();
+                    hudManager.KillButton.gameObject.SetActive(true);
                 }
                 else
                 {
-                    HudManager.Instance.KillButton.SetDisabled();
+                    hudManager.KillButton.SetDisabled();
                 }
             }
             else if (isImposter)
             {
-                HudManager.Instance.KillButton.SetDisabled();
+                hudManager.KillButton.SetDisabled();
             }
         }
 
@@ -565,40 +568,45 @@ namespace ExtremeRoles.Patches
 
             bool enable = Player.ShowButtons;
 
+            HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
+
             if (role.UseSabotage)
             {
                 // インポスターとヴィジランテは死んでもサボタージ使える
                 if (enable && (role.IsImpostor() || role.Id == ExtremeRoleId.Vigilante))
                 {
-                    HudManager.Instance.SabotageButton.Show();
-                    HudManager.Instance.SabotageButton.gameObject.SetActive(true);
+                    hudManager.SabotageButton.Show();
+                    hudManager.SabotageButton.gameObject.SetActive(true);
                 }
                 // それ以外は死んでないときだけサボタージ使える
                 else if(enable && !PlayerControl.LocalPlayer.Data.IsDead)
                 {
-                    HudManager.Instance.SabotageButton.Show();
-                    HudManager.Instance.SabotageButton.gameObject.SetActive(true);
+                    hudManager.SabotageButton.Show();
+                    hudManager.SabotageButton.gameObject.SetActive(true);
                 }
                 else
                 {
-                    HudManager.Instance.SabotageButton.SetDisabled();
+                    hudManager.SabotageButton.SetDisabled();
                 }
             }
             else
             {
-                HudManager.Instance.SabotageButton.SetDisabled();
+                hudManager.SabotageButton.SetDisabled();
             }
         }
 
         private static void ventButtonUpdate(
             SingleRoleBase role, bool enable)
         {
+
+            HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
+
             if (role.UseVent)
             {
                 if (!role.IsVanillaRole())
                 {
-                    if (enable) { HudManager.Instance.ImpostorVentButton.Show(); }
-                    else { HudManager.Instance.ImpostorVentButton.SetDisabled(); }
+                    if (enable) { hudManager.ImpostorVentButton.Show(); }
+                    else { hudManager.ImpostorVentButton.SetDisabled(); }
                 }
                 else
                 {
@@ -609,25 +617,25 @@ namespace ExtremeRoles.Patches
                             if (!OptionHolder.AllOption[
                                     (int)OptionHolder.CommonOptionKey.EngineerUseImpostorVent].GetValue())
                             {
-                                HudManager.Instance.AbilityButton.Show();
+                                hudManager.AbilityButton.Show();
                             }
                             else
                             {
-                                HudManager.Instance.ImpostorVentButton.Show();
-                                HudManager.Instance.AbilityButton.gameObject.SetActive(false);
+                                hudManager.ImpostorVentButton.Show();
+                                hudManager.AbilityButton.gameObject.SetActive(false);
                             }
                         }
                         else
                         {
-                            HudManager.Instance.ImpostorVentButton.SetDisabled();
-                            HudManager.Instance.AbilityButton.SetDisabled(); 
+                            hudManager.ImpostorVentButton.SetDisabled();
+                            hudManager.AbilityButton.SetDisabled(); 
                         }
                     }
                 }
             }
             else
             {
-                HudManager.Instance.ImpostorVentButton.SetDisabled();
+                hudManager.ImpostorVentButton.SetDisabled();
             }
         }
 
@@ -639,7 +647,7 @@ namespace ExtremeRoles.Patches
                 {
                     case RoleTypes.Engineer:
                     case RoleTypes.Shapeshifter:
-                        HudManager.Instance.AbilityButton.Hide();
+                        FastDestroyableSingleton<HudManager>.Instance.AbilityButton.Hide();
                         break;
                     default:
                         break;
@@ -1078,7 +1086,7 @@ namespace ExtremeRoles.Patches
                     }
                     __instance.SetKillTimer(killCool);
                 }
-                DestroyableSingleton<Telemetry>.Instance.WriteMurder();
+                FastDestroyableSingleton<Telemetry>.Instance.WriteMurder();
 	            target.gameObject.layer = LayerMask.NameToLayer("Ghost");
 	            if (target.AmOwner)
 	            {
@@ -1093,9 +1101,9 @@ namespace ExtremeRoles.Patches
 			            catch
 			            { }
 		            }
-		            DestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(
+                    FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(
                         __instance.Data, data);
-		            DestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
+                    FastDestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
 		            target.nameText.GetComponent<MeshRenderer>().material.SetInt("_Mask", 0);
 		            target.RpcSetScanner(false);
 		            ImportantTextTask importantTextTask = new GameObject("_Player").AddComponent<ImportantTextTask>();
@@ -1104,17 +1112,17 @@ namespace ExtremeRoles.Patches
 		            if (!PlayerControl.GameOptions.GhostsDoTasks)
 		            {
 			            target.ClearTasks();
-			            importantTextTask.Text = DestroyableSingleton<TranslationController>.Instance.GetString(
+			            importantTextTask.Text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
                             StringNames.GhostIgnoreTasks, Array.Empty<Il2CppSystem.Object>());
 		            }
 		            else
 		            {
-			            importantTextTask.Text = DestroyableSingleton<TranslationController>.Instance.GetString(
+			            importantTextTask.Text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
                             StringNames.GhostDoTasks, Array.Empty<Il2CppSystem.Object>());
 		            }
 		            target.myTasks.Insert(0, importantTextTask);
 	            }
-	            DestroyableSingleton<AchievementManager>.Instance.OnMurder(
+                FastDestroyableSingleton<AchievementManager>.Instance.OnMurder(
                     __instance.AmOwner, target.AmOwner);
                 
                 var killAnimation = __instance.KillAnimations.ToList();
@@ -1254,7 +1262,7 @@ namespace ExtremeRoles.Patches
 
             __instance.killTimer = Mathf.Clamp(
                 time, 0f, maxTime);
-            DestroyableSingleton<HudManager>.Instance.KillButton.SetCoolDown(
+            FastDestroyableSingleton<HudManager>.Instance.KillButton.SetCoolDown(
                 __instance.killTimer, maxTime);
 
             return false;

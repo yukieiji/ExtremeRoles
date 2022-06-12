@@ -615,7 +615,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 byte roomId;
                 try
                 {
-                    roomId = (byte)HudManager.Instance.roomTracker.LastRoom.RoomId;
+                    roomId = (byte)FastDestroyableSingleton<HudManager>.Instance.roomTracker.LastRoom.RoomId;
                 }
                 catch
                 {

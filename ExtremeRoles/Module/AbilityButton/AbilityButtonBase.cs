@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 
+using ExtremeRoles.Performance;
+
 namespace ExtremeRoles.Module.AbilityButton
 {
     public abstract class AbilityButtonBase
@@ -47,8 +49,8 @@ namespace ExtremeRoles.Module.AbilityButton
             this.PositionOffset = positionOffset;
 
             this.Button = UnityEngine.Object.Instantiate(
-                HudManager.Instance.KillButton,
-                HudManager.Instance.KillButton.transform.parent);
+                FastDestroyableSingleton<HudManager>.Instance.KillButton,
+                FastDestroyableSingleton<HudManager>.Instance.KillButton.transform.parent);
             PassiveButton button = Button.GetComponent<PassiveButton>();
             button.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
             button.OnClick.AddListener(
@@ -101,9 +103,9 @@ namespace ExtremeRoles.Module.AbilityButton
 
         public void SetLabelToCrewmate()
         {
-            if (HudManager.Instance == null) { return; }
+            if (FastDestroyableSingleton<HudManager>.Instance == null) { return; }
 
-            var useButton = HudManager.Instance.UseButton;
+            var useButton = FastDestroyableSingleton<HudManager>.Instance.UseButton;
 
             UnityEngine.Object.Destroy(
                 this.Button.buttonLabelText.fontMaterial);

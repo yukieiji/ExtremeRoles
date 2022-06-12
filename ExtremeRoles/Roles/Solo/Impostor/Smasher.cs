@@ -5,7 +5,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-
+using ExtremeRoles.Performance;
 
 
 namespace ExtremeRoles.Roles.Solo.Impostor
@@ -43,7 +43,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             this.CreateAbilityCountButton(
                 Translation.GetString("smash"),
-                HudManager.Instance.KillButton.graphic.sprite);
+                FastDestroyableSingleton<HudManager>.Instance.KillButton.graphic.sprite);
         }
 
         public bool IsAbilityUse()

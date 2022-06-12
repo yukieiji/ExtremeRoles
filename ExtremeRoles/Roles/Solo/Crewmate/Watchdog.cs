@@ -7,6 +7,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
@@ -47,7 +48,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             string buttonText;
             Sprite buttonImage;
-            var imageDict = HudManager.Instance.UseButton.fastUseSettings;
+            var imageDict = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
             switch (PlayerControl.GameOptions.MapId)
             {
                 case 1:
@@ -132,7 +133,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             if (this.chargeTime == null)
             {
                 this.chargeTime = Object.Instantiate(
-                    HudManager.Instance.KillButton.cooldownTimerText,
+                    FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
                     Camera.main.transform, false);
                 this.chargeTime.transform.localPosition = new Vector3(3.5f, 2.25f, -250.0f);
             }

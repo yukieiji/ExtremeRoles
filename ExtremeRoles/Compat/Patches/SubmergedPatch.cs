@@ -6,6 +6,7 @@ using System.Reflection;
 using HarmonyLib;
 
 using UnityEngine;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Compat.Patches
 {
@@ -20,8 +21,8 @@ namespace ExtremeRoles.Compat.Patches
         public static IEnumerator assassinMeetingEnumerator()
         {
             // 真っ暗になるのでそれを解除する
-            HudManager.Instance.StartCoroutine(
-                HudManager.Instance.CoFadeFullScreen(Color.black, Color.clear, 0.2f));
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(
+                FastDestroyableSingleton<HudManager>.Instance.CoFadeFullScreen(Color.black, Color.clear, 0.2f));
             yield break;
         }
     }

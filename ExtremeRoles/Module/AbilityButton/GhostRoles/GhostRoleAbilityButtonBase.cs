@@ -3,6 +3,8 @@ using UnityEngine;
 
 using Hazel;
 
+using ExtremeRoles.Performance;
+
 
 namespace ExtremeRoles.Module.AbilityButton.GhostRoles
 {
@@ -91,14 +93,14 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
                 SetActive(false);
                 return;
             }
-            SetActive(HudManager.Instance.UseButton.isActiveAndEnabled);
+            SetActive(FastDestroyableSingleton<HudManager>.Instance.UseButton.isActiveAndEnabled);
 
             this.Button.graphic.sprite = this.ButtonSprite;
             this.Button.OverrideText(ButtonText);
 
-            if (HudManager.Instance.UseButton != null)
+            if (FastDestroyableSingleton<HudManager>.Instance.UseButton != null)
             {
-                Vector3 pos = HudManager.Instance.UseButton.transform.localPosition;
+                Vector3 pos = FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition;
                 if (this.Mirror)
                 {
                     pos = new Vector3(-pos.x, pos.y, pos.z);

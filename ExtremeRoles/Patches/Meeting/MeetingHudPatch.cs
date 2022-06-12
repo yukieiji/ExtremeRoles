@@ -9,6 +9,7 @@ using UnhollowerBaseLib;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.Meeting
 {
@@ -386,7 +387,7 @@ namespace ExtremeRoles.Patches.Meeting
 
             if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
 
-            DestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
+            FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
 
         }
     }
@@ -443,11 +444,11 @@ namespace ExtremeRoles.Patches.Meeting
                 if (PlayerControl.LocalPlayer.PlayerId == ExtremeRolesPlugin.GameDataStore.ExiledAssassinId ||
                     ExtremeRoleManager.GetLocalPlayerRole().IsImpostor())
                 {
-                    DestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(true);
+                    FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(true);
                 }
                 else
                 {
-                    DestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
+                    FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
                 }
 
                 return;

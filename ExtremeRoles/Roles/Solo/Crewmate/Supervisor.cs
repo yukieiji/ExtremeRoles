@@ -3,7 +3,7 @@
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.Roles;
-using ExtremeRoles.Resources;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -92,7 +92,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public bool UseAbility()
         {
-            DestroyableSingleton<HudManager>.Instance.ShowMap(
+            FastDestroyableSingleton<HudManager>.Instance.ShowMap(
                 (System.Action<MapBehaviour>)(m => m.ShowCountOverlay()));
 
             return true;
@@ -111,7 +111,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             if (this.chargeTime == null)
             {
                 this.chargeTime = Object.Instantiate(
-                    HudManager.Instance.KillButton.cooldownTimerText,
+                    FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
                     Camera.main.transform, false);
                 this.chargeTime.transform.localPosition = new Vector3(3.5f, 2.25f, -250.0f);
             }
@@ -152,7 +152,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
         private Sprite getAdminButtonImage()
         {
-            var imageDict = HudManager.Instance.UseButton.fastUseSettings;
+            var imageDict = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
             switch (PlayerControl.GameOptions.MapId)
             {
                 case 0:

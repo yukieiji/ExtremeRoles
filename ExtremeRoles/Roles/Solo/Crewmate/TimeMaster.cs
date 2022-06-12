@@ -69,7 +69,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             if (timeMaster.RewindScreen == null)
             {
                 timeMaster.RewindScreen = UnityEngine.Object.Instantiate(
-                     HudManager.Instance.FullScreen, HudManager.Instance.transform);
+                     FastDestroyableSingleton<HudManager>.Instance.FullScreen,
+                     FastDestroyableSingleton<HudManager>.Instance.transform);
                 timeMaster.RewindScreen.transform.localPosition = new Vector3(0f, 0f, 20f);
                 timeMaster.RewindScreen.gameObject.SetActive(true);
                 timeMaster.RewindScreen.enabled = false;

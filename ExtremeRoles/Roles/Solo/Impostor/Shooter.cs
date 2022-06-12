@@ -3,6 +3,7 @@
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -111,7 +112,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 if (meetingShootText == null)
                 {
                     meetingShootText = UnityEngine.Object.Instantiate(
-                        HudManager.Instance.TaskText, MeetingHud.Instance.transform);
+                        FastDestroyableSingleton<HudManager>.Instance.TaskText,
+                        MeetingHud.Instance.transform);
                     meetingShootText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
                     meetingShootText.transform.position = Vector3.zero;
                     meetingShootText.transform.localPosition = new Vector3(-2.85f, 3.15f, -20f);
@@ -273,13 +275,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private void createText()
         {
             this.chargeTimerText = Object.Instantiate(
-                HudManager.Instance.KillButton.cooldownTimerText,
-                HudManager.Instance.KillButton.transform);
+                FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+                FastDestroyableSingleton<HudManager>.Instance.KillButton.transform);
             this.chargeTimerText.transform.localPosition += new Vector3(-2.7f, -1.7f, 0);
             this.chargeTimerText.gameObject.SetActive(true);
 
             this.chargeInfoText = Object.Instantiate(
-                HudManager.Instance.KillButton.cooldownTimerText,
+                FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
                 this.chargeTimerText.transform);
             this.chargeInfoText.enableWordWrapping = false;
             this.chargeInfoText.transform.localScale = Vector3.one * 0.5f;

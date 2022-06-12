@@ -1,5 +1,7 @@
 ﻿using HarmonyLib;
 
+using ExtremeRoles.Performance;
+
 namespace ExtremeRoles.Patches.Button
 {
 
@@ -17,7 +19,7 @@ namespace ExtremeRoles.Patches.Button
                 role.IsImpostor()) { return true; }
             if (!role.UseSabotage) { return true; }
 
-            DestroyableSingleton<HudManager>.Instance.ShowMap(
+            FastDestroyableSingleton<HudManager>.Instance.ShowMap(
                 (Il2CppSystem.Action<MapBehaviour>)((m) => { m.ShowSabotageMap(); }));
             return false;
         }

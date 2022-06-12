@@ -185,7 +185,9 @@ namespace ExtremeRoles
             int ventId, byte playerId, byte isEnter)
         {
 
-            if (ShipStatus.Instance == null || HudManager.Instance == null) { return; }
+            HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
+
+            if (ShipStatus.Instance == null || hudManager == null) { return; }
 
             PlayerControl player = Helper.Player.GetPlayerControlById(playerId);
             if (player == null) { return; }
@@ -205,7 +207,7 @@ namespace ExtremeRoles
 
             var ventContainer = ExtremeRolesPlugin.GameDataStore.CustomVent;
 
-            HudManager.Instance.StartCoroutine(
+            hudManager.StartCoroutine(
                 Effects.Lerp(
                     0.6f, new System.Action<float>((p) => {
                         if (vent != null && vent.myRend != null)
@@ -230,13 +232,15 @@ namespace ExtremeRoles
             Vent vent = CachedShipStatus.Instance.AllVents.FirstOrDefault(
                 (x) => x.Id == ventId);
 
+            HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
+
             var ventContainer = ExtremeRolesPlugin.GameDataStore.CustomVent;
 
             if (ventContainer.IsCustomVent(ventId))
             {
-                if (HudManager.Instance == null) { return; }
+                if (hudManager == null) { return; }
 
-                HudManager.Instance.StartCoroutine(
+                hudManager.StartCoroutine(
                     Effects.Lerp(
                         0.6f, new System.Action<float>((p) => {
                             if (vent != null && vent.myRend != null)

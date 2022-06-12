@@ -7,6 +7,7 @@ using HarmonyLib;
 using UnityEngine;
 
 using BepInEx.IL2CPP.Utils.Collections;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.Meeting
 {
@@ -208,7 +209,7 @@ namespace ExtremeRoles.Patches.Meeting
 						(UnityEngine.Events.UnityAction)shooterKill);
 
 					var render = newKillButton.GetComponent<SpriteRenderer>();
-					render.sprite = HudManager.Instance.KillButton.graphic.sprite;
+					render.sprite = FastDestroyableSingleton<HudManager>.Instance.KillButton.graphic.sprite;
 					render.transform.localScale *= new Vector2(0.75f, 0.75f);
 
 					var controllerHighlight = newKillButton.transform.FindChild("ControllerHighlight");

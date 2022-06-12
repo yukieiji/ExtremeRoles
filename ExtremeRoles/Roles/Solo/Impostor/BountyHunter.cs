@@ -193,7 +193,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             if (this.targetTimerText == null)
             {
                 this.targetTimerText = UnityEngine.Object.Instantiate(
-                    HudManager.Instance.KillButton.cooldownTimerText);
+                    FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText);
                 this.targetTimerText.alignment = TMPro.TextAlignmentOptions.Center;
             }
 
@@ -230,7 +230,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             allPlayer = allPlayer.OrderBy(
                 item => RandomGenerator.Instance.Next()).ToList();
 
-            Vector3 bottomLeft = HudManager.Instance.UseButton.transform.localPosition;
+            Vector3 bottomLeft = FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition;
             bottomLeft.x *= -1;
             bottomLeft += new Vector3(-0.375f, -0.25f, 0);
 
