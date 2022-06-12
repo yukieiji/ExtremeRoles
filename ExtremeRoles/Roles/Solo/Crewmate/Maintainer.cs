@@ -5,6 +5,8 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
+
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
@@ -40,7 +42,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public bool UseAbility()
         {
-            foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
+            foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks.GetFastEnumerator())
             {
                 if (task == null){ continue; }
 
@@ -108,7 +110,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public bool IsAbilityUse()
         {
             bool sabotageActive = false;
-            foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
+            foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks.GetFastEnumerator())
             {
                 if (task == null) { continue; }
 

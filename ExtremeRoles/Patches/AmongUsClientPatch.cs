@@ -5,6 +5,7 @@ using System.Linq;
 using HarmonyLib;
 
 using ExtremeRoles.Roles;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Patches
 {
@@ -52,7 +53,7 @@ namespace ExtremeRoles.Patches
             var roleData = ExtremeRoleManager.GameRole;
             var gameData = ExtremeRolesPlugin.GameDataStore;
 
-            foreach (GameData.PlayerInfo playerInfo in GameData.Instance.AllPlayers)
+            foreach (GameData.PlayerInfo playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
             {
 
                 var role = roleData[playerInfo.PlayerId];
@@ -93,7 +94,7 @@ namespace ExtremeRoles.Patches
             }
 
             List<WinningPlayerData> winnersToRemove = new List<WinningPlayerData>();
-            foreach (WinningPlayerData winner in TempData.winners)
+            foreach (WinningPlayerData winner in TempData.winners.GetFastEnumerator())
             {
                 if (noWinner.Any(x => x.PlayerName == winner.PlayerName) ||
                     gameData.PlusWinner.Any(x => x.PlayerName == winner.PlayerName))
@@ -116,7 +117,7 @@ namespace ExtremeRoles.Patches
             {
                 case RoleGameOverReason.AssassinationMarin:
                     resetWinner();
-                    foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers)
+                    foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers.GetFastEnumerator())
                     {
                         if (ExtremeRoleManager.GameRole[player.PlayerId].IsImpostor())
                         { 
@@ -201,7 +202,7 @@ namespace ExtremeRoles.Patches
 
             var gameData = ExtremeRolesPlugin.GameDataStore;
 
-            foreach (var player in GameData.Instance.AllPlayers)
+            foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
             {
 
                 var role = ExtremeRoleManager.GameRole[player.PlayerId];
@@ -286,7 +287,7 @@ namespace ExtremeRoles.Patches
         {
             List<(ExtremeRoleId, int)> winRole = new List<(ExtremeRoleId, int)>();
 
-            foreach (GameData.PlayerInfo playerInfo in GameData.Instance.AllPlayers)
+            foreach (GameData.PlayerInfo playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 var role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
                 var multiAssignRole = role as Roles.API.MultiAssignRoleBase;

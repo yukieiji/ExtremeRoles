@@ -5,6 +5,7 @@ using UnityEngine;
 using HarmonyLib;
 
 using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 
 
 namespace ExtremeRoles.Patches.MapOverlay
@@ -34,7 +35,7 @@ namespace ExtremeRoles.Patches.MapOverlay
 
 			bool commsActive = false;
 
-			foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
+			foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks.GetFastEnumerator())
             {
 				if (task.TaskType == TaskTypes.FixComms)
 				{

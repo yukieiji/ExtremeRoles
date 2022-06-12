@@ -6,6 +6,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
@@ -359,7 +360,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void IntroEndSetUp()
         {
-            foreach(var player in GameData.Instance.AllPlayers)
+            foreach(var player in GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 this.progress.Add(player.PlayerId, 0.0f);
             }

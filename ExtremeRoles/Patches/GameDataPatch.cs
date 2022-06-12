@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Patches
 {
@@ -14,7 +15,7 @@ namespace ExtremeRoles.Patches
 			int totalTask = 0;
 			int completedTask = 0;
 
-			foreach (GameData.PlayerInfo playerInfo in __instance.AllPlayers)
+			foreach (GameData.PlayerInfo playerInfo in __instance.AllPlayers.GetFastEnumerator())
 			{
 				if (!playerInfo.Disconnected &&
 					playerInfo.Tasks != null &&
@@ -35,7 +36,7 @@ namespace ExtremeRoles.Patches
 						continue;
                     }
 
-					foreach (GameData.TaskInfo taskInfo in playerInfo.Tasks)
+					foreach (GameData.TaskInfo taskInfo in playerInfo.Tasks.GetFastEnumerator())
 					{
 						++totalTask;
 						if (taskInfo.Complete)

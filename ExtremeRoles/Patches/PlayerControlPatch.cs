@@ -15,6 +15,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Patches
 {
@@ -449,7 +450,7 @@ namespace ExtremeRoles.Patches
         {
 
             var removedTask = new List<PlayerTask>();
-            foreach (PlayerTask task in player.myTasks)
+            foreach (PlayerTask task in player.myTasks.GetFastEnumerator())
             {
                 if (task == null) { return; }
 

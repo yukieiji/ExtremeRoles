@@ -10,6 +10,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
@@ -59,7 +60,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             PlayerControl targetPlayer = Player.GetPlayerControlById(
                 targetPlayerId);
 
-            foreach (PlayerTask task in targetPlayer.myTasks)
+            foreach (PlayerTask task in targetPlayer.myTasks.GetFastEnumerator())
             {
                 if (task == null) { continue; }
 

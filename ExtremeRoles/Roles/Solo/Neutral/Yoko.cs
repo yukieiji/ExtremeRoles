@@ -7,6 +7,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 
 using BepInEx.IL2CPP.Utils.Collections;
 
@@ -167,7 +168,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.timer = this.searchTime;
             bool isEnemy = false;
             
-            foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers)
+            foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 SingleRoleBase targetRole = ExtremeRoleManager.GameRole[player.PlayerId];
 

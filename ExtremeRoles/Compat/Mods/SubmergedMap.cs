@@ -5,6 +5,7 @@ using System.Reflection;
 
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 
 using BepInEx;
 
@@ -134,7 +135,7 @@ namespace ExtremeRoles.Compat.Mods
 
         public bool IsCustomSabotageNow()
         {
-            foreach (NormalPlayerTask task in PlayerControl.LocalPlayer.myTasks)
+            foreach (NormalPlayerTask task in PlayerControl.LocalPlayer.myTasks.GetFastEnumerator())
             {
                 if (task != null && IsCustomSabotageTask(task.TaskType))
                 {

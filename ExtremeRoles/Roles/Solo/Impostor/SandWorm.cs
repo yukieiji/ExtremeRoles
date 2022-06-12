@@ -10,6 +10,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -33,7 +34,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             protected override void AbilityButtonUpdate()
             {
                 bool isLightOff = false;
-                foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
+                foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks.GetFastEnumerator())
                 {
                     if (task.TaskType == TaskTypes.FixLights)
                     {
@@ -117,7 +118,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             
             bool isLightOff = false;
 
-            foreach (PlayerTask task in targetPlayer.myTasks)
+            foreach (PlayerTask task in targetPlayer.myTasks.GetFastEnumerator())
             {
                 if (task.TaskType == TaskTypes.FixLights)
                 {

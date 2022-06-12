@@ -9,6 +9,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -75,7 +76,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 int targetPlayerTaskNum = targetPlayer.Data.Tasks.Count;
                 int targetPlayerCompTask = 0;
 
-                foreach (var task in targetPlayer.Data.Tasks)
+                foreach (var task in targetPlayer.Data.Tasks.GetFastEnumerator())
                 {
                     if (task.Complete)
                     {

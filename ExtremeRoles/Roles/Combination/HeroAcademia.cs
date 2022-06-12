@@ -11,6 +11,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Combination
 {
@@ -251,7 +252,7 @@ namespace ExtremeRoles.Roles.Combination
             int impNum = 0;
             Vigilante vigilante = null;
 
-            foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers)
+            foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 var role = ExtremeRoleManager.GameRole[player.PlayerId];
                 if (!player.IsDead && !player.Disconnected)
@@ -552,7 +553,7 @@ namespace ExtremeRoles.Roles.Combination
             int allCrew = 0;
             int deadCrew = 0;
 
-            foreach (var player in GameData.Instance.AllPlayers)
+            foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 if (player.IsDead || player.Disconnected)
                 {

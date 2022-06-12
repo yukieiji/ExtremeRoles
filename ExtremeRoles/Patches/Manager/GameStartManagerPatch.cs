@@ -5,6 +5,7 @@ using HarmonyLib;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Patches.Manager
 {
@@ -37,7 +38,7 @@ namespace ExtremeRoles.Patches.Manager
             {
                 var allPlayerVersion = ExtremeRolesPlugin.GameDataStore.PlayerVersion;
 
-                foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients)
+                foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients.GetFastEnumerator())
                 {
                     if (client.Character == null) continue;
                     var dummyComponent = client.Character.GetComponent<DummyBehaviour>();
@@ -180,7 +181,7 @@ namespace ExtremeRoles.Patches.Manager
             string message = string.Format(
                 errorColorPlaceHolder,
                 Translation.GetString("errorCannotGameStart"));
-            foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients.ToArray())
+            foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients.GetFastEnumerator())
             {
                 if (client.Character == null) { continue; }
 

@@ -4,6 +4,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Performance.Il2Cpp;
 using Hazel;
 using System.Collections.Generic;
 using System.Linq;
@@ -144,7 +145,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
         {
             this.saboActive = false;
 
-            foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
+            foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks.GetFastEnumerator())
             {
 
                 switch (task?.TaskType)

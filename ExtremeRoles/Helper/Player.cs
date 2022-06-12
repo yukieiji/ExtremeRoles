@@ -3,6 +3,7 @@
 using UnityEngine;
 
 using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Helper
 {
@@ -101,7 +102,7 @@ namespace ExtremeRoles.Helper
             int taskNum = 0;
             int compNum = 0;
 
-            foreach (GameData.TaskInfo task in player.Tasks)
+            foreach (GameData.TaskInfo task in player.Tasks.GetFastEnumerator())
             {
 
                 ++taskNum;
