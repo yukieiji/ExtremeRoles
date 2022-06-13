@@ -2,6 +2,8 @@
 
 using TMPro;
 
+using ExtremeRoles.Performance;
+
 namespace ExtremeRoles.Patches.Meeting
 {
 
@@ -15,7 +17,7 @@ namespace ExtremeRoles.Patches.Meeting
 			if (!ExtremeRolesPlugin.GameDataStore.AbilityManager.IsUseAbility()) { return; }
 
 			bool someoneWasProtected = false;
-			foreach(var pc in PlayerControl.AllPlayerControls)
+			foreach(PlayerControl pc in CachedPlayerControl.AllPlayerControls)
 			{
 				if (pc.protectedByGuardianThisRound)
 				{

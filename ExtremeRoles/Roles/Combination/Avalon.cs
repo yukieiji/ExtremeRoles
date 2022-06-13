@@ -336,7 +336,7 @@ namespace ExtremeRoles.Roles.Combination
             {
                 byte playerId = item.Key;
                 var poolPlayer = item.Value;
-                if (playerId == PlayerControl.LocalPlayer.PlayerId) { continue; }
+                if (playerId == CachedPlayerControl.LocalPlayer.PlayerId) { continue; }
 
                 PlayerControl player = Player.GetPlayerControlById(playerId);
                 SingleRoleBase role = ExtremeRoleManager.GameRole[playerId];

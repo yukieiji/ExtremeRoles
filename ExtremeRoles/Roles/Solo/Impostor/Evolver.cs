@@ -8,6 +8,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -78,13 +79,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void CleanUp()
         {
-            
+
+            PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
+
             if (this.isEvolvdAnimation)
             {
-                var rolePlayer = PlayerControl.LocalPlayer;
-
                 RPCOperator.Call(
-                    PlayerControl.LocalPlayer.NetId,
+                    rolePlayer.NetId,
                     RPCOperator.Command.UncheckedShapeShift,
                     new List<byte> { rolePlayer.PlayerId, rolePlayer.PlayerId, byte.MaxValue });
                 RPCOperator.UncheckedShapeShift(
@@ -105,7 +106,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             if (!this.isEatingEndCleanBody) { return; }
 
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                rolePlayer.NetId,
                 RPCOperator.Command.CleanDeadBody,
                 new List<byte> { this.eatingBodyId });
 

@@ -6,6 +6,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 
 namespace ExtremeRoles.Roles.Solo.Impostor
@@ -143,21 +144,21 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private void abilityOn()
         {
             RPCOperator.Call(
-                   PlayerControl.LocalPlayer.NetId,
-                   RPCOperator.Command.OverLoaderSwitchAbility,
-                   new List<byte> { PlayerControl.LocalPlayer.PlayerId, byte.MaxValue });
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                RPCOperator.Command.OverLoaderSwitchAbility,
+                new List<byte> { CachedPlayerControl.LocalPlayer.PlayerId, byte.MaxValue });
             SwitchAbility(
-                PlayerControl.LocalPlayer.PlayerId, true);
+                CachedPlayerControl.LocalPlayer.PlayerId, true);
 
         }
         private void abilityOff()
         {
             RPCOperator.Call(
-                   PlayerControl.LocalPlayer.NetId,
-                   RPCOperator.Command.OverLoaderSwitchAbility,
-                   new List<byte> { PlayerControl.LocalPlayer.PlayerId, 0 });
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                RPCOperator.Command.OverLoaderSwitchAbility,
+                new List<byte> { CachedPlayerControl.LocalPlayer.PlayerId, 0 });
             SwitchAbility(
-                PlayerControl.LocalPlayer.PlayerId, false);
+                CachedPlayerControl.LocalPlayer.PlayerId, false);
         }
 
     }

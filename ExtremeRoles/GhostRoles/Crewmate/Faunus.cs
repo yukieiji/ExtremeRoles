@@ -4,6 +4,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using Hazel;
 using System.Collections.Generic;
@@ -116,7 +117,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
                 return;
             }
 
-            PlayerControl localPlayer = PlayerControl.LocalPlayer;
+            PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
             PlayerTask playerTask = console.FindTask(localPlayer);
 
             this.saboGame = Object.Instantiate(
@@ -126,7 +127,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
             this.saboGame.transform.localPosition = new Vector3(0f, 0f, -50f);
             this.saboGame.Console = console;
             this.saboGame.Begin(playerTask);
-            DestroyableSingleton<Telemetry>.Instance.WriteUse(
+            FastDestroyableSingleton<Telemetry>.Instance.WriteUse(
                 localPlayer.PlayerId,
                 playerTask.TaskType,
                 console.transform.position);
@@ -145,7 +146,8 @@ namespace ExtremeRoles.GhostRoles.Crewmate
         {
             this.saboActive = false;
 
-            foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks.GetFastEnumerator())
+            foreach (PlayerTask task in 
+                CachedPlayerControl.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
             {
 
                 switch (task?.TaskType)

@@ -5,6 +5,7 @@ using HarmonyLib;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Patches.Manager
@@ -97,7 +98,7 @@ namespace ExtremeRoles.Patches.Manager
             roomCodeText = code;
             timer = timerMaxValue;
             kickingTimer = 0f;
-            isCustomServer = DestroyableSingleton<ServerManager>.Instance.CurrentRegion.Name == "custom";
+            isCustomServer = FastDestroyableSingleton<ServerManager>.Instance.CurrentRegion.Name == "custom";
 
             // 値リセット
             RPCOperator.Initialize();

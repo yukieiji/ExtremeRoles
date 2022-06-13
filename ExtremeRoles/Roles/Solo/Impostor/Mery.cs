@@ -98,7 +98,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 {
                     this.isActivate = true;
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                        PlayerControl.LocalPlayer.NetId,
+                        CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                         (byte)RPCOperator.Command.MeryAcivateVent,
                         Hazel.SendOption.Reliable, -1);
                     writer.Write(index);
@@ -253,14 +253,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public bool UseAbility()
         {
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.MerySetCamp,
                 new List<byte>
                 {
-                    PlayerControl.LocalPlayer.PlayerId,
+                    CachedPlayerControl.LocalPlayer.PlayerId,
                 });
 
-            SetCamp(PlayerControl.LocalPlayer.PlayerId);
+            SetCamp(CachedPlayerControl.LocalPlayer.PlayerId);
 
             return true;
         }

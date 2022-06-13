@@ -30,7 +30,7 @@ namespace ExtremeRoles.Helper
 
         public static PlayerControl GetPlayerControlById(byte id)
         {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
             {
                 if (player.PlayerId == id) { return player; }
             }
@@ -165,7 +165,7 @@ namespace ExtremeRoles.Helper
 
             Dictionary<byte, PoolablePlayer> playerIcon = new Dictionary<byte, PoolablePlayer>();
 
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
             {
                 PoolablePlayer poolPlayer = UnityEngine.Object.Instantiate<PoolablePlayer>(
                     Module.Prefab.PlayerPrefab,

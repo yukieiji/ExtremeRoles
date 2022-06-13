@@ -110,7 +110,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public bool IsAbilityUse()
         {
             bool sabotageActive = false;
-            foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks.GetFastEnumerator())
+            foreach (PlayerTask task in 
+                CachedPlayerControl.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
             {
                 if (task == null) { continue; }
 

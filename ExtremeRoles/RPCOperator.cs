@@ -99,7 +99,7 @@ namespace ExtremeRoles
         }
         public static void RoleIsWin(byte playerId)
         {
-            Call(PlayerControl.LocalPlayer.NetId,
+            Call(CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 Command.SetRoleWin, new List<byte>{ playerId });
             SetRoleWin(playerId);
         }
@@ -317,7 +317,7 @@ namespace ExtremeRoles
 
                 ExtremeRolesPlugin.GameDataStore.WinCheckDisable = false;
 
-                var player = PlayerControl.LocalPlayer;
+                var player = CachedPlayerControl.LocalPlayer;
 
                 if (player.PlayerId != targetId)
                 {

@@ -8,6 +8,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
@@ -94,7 +95,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             RandomGenerator.Instance.Next();
 
-            foreach(var player in PlayerControl.AllPlayerControls)
+            foreach(var player in CachedPlayerControl.AllPlayerControls)
             {
 
                 var role = ExtremeRoleManager.GameRole[player.PlayerId];
@@ -119,10 +120,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     item => RandomGenerator.Instance.Next()).ToList();
 
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                    PlayerControl.LocalPlayer.NetId,
+                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                     (byte)RPCOperator.Command.AliceShipBroken,
                     Hazel.SendOption.Reliable, -1);
-                writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                writer.Write(CachedPlayerControl.LocalPlayer.PlayerId);
                 writer.Write(player.PlayerId);
                 writer.Write(addTaskId.Count);
                 foreach (int taskId in shuffled)
@@ -132,7 +133,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
 
                 ShipBroken(
-                    PlayerControl.LocalPlayer.PlayerId,
+                    CachedPlayerControl.LocalPlayer.PlayerId,
                     player.PlayerId, addTaskId);
             }
 

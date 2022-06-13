@@ -5,6 +5,7 @@ using HarmonyLib;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.Controller
 {
@@ -104,7 +105,7 @@ namespace ExtremeRoles.Patches.Controller
 
             if (!role.HasOtherKillCool) { return; }
 
-            PlayerControl.LocalPlayer.SetKillTimer(
+            CachedPlayerControl.LocalPlayer.PlayerControl.SetKillTimer(
                 role.KillCoolTime);
         }
 

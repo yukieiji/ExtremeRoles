@@ -130,7 +130,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 {
                     bool abilityOn = this.IsHasCleanUp() && IsAbilityOn;
 
-                    if (abilityOn || (!PlayerControl.LocalPlayer.inVent && PlayerControl.LocalPlayer.moveable))
+                    if (abilityOn || (
+                            !CachedPlayerControl.LocalPlayer.PlayerControl.inVent &&
+                            CachedPlayerControl.LocalPlayer.PlayerControl.moveable))
                     {
                         this.Timer -= Time.deltaTime;
                     }
@@ -556,7 +558,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     return false;
                 }
             }
-            this.prevPos = PlayerControl.LocalPlayer.GetTruePosition();
+            this.prevPos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
             return true;
         }
 
@@ -567,7 +569,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 ExtremeRolesPlugin.Compat.IsModMap && 
                 !ExtremeRolesPlugin.Compat.ModMap.CanPlaceCamera);
 
-        public bool IsAbilityCheck() => this.prevPos == PlayerControl.LocalPlayer.GetTruePosition();
+        public bool IsAbilityCheck() => 
+            this.prevPos == CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
 
         public bool IsVentMode()
         {
@@ -576,7 +579,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             if (CachedShipStatus.Instance == null ||
                 !CachedShipStatus.Instance.enabled) { return false; }
 
-            Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
+            Vector2 truePosition = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
             
             foreach (Vent vent in CachedShipStatus.Instance.AllVents)
             {
@@ -599,7 +602,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public void CleanUp()
         {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 (byte)RPCOperator.Command.CarpenterUseAbility,
                 Hazel.SendOption.Reliable, -1);
             if (this.targetVent != null)
@@ -611,7 +614,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
             else
             {
-                var pos = PlayerControl.LocalPlayer.GetTruePosition();
+                var pos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
                 byte roomId;
                 try
                 {

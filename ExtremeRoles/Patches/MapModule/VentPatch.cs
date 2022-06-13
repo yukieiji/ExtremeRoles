@@ -2,6 +2,8 @@
 using Hazel;
 using UnityEngine;
 
+using ExtremeRoles.Performance;
+
 namespace ExtremeRoles.Patches.MapModule
 {
     [HarmonyPatch(typeof(Vent), nameof(Vent.CanUse))]
@@ -63,22 +65,22 @@ namespace ExtremeRoles.Patches.MapModule
             bool canUse;
             bool couldUse;
             
-            __instance.CanUse(PlayerControl.LocalPlayer.Data, out canUse, out couldUse);
+            __instance.CanUse(CachedPlayerControl.LocalPlayer.Data, out canUse, out couldUse);
 
             if (!canUse) { return false; }; // No need to execute the native method as using is disallowed anyways
 
-            bool isEnter = !PlayerControl.LocalPlayer.inVent;
+            bool isEnter = !CachedPlayerControl.LocalPlayer.PlayerControl.inVent;
 
             if (ExtremeRolesPlugin.GameDataStore.CustomVent.IsCustomVent(
                 __instance.Id))
             {
                 __instance.SetButtons(isEnter);
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                    PlayerControl.LocalPlayer.NetId,
+                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                     (byte)RPCOperator.Command.CustomVentUse,
                     Hazel.SendOption.Reliable);
                 writer.WritePacked(__instance.Id);
-                writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                writer.Write(CachedPlayerControl.LocalPlayer.PlayerId);
                 writer.Write(isEnter ? byte.MaxValue : (byte)0);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCOperator.CustomVentUse(
@@ -90,11 +92,11 @@ namespace ExtremeRoles.Patches.MapModule
 
             if (isEnter)
             {
-                PlayerControl.LocalPlayer.MyPhysics.RpcEnterVent(__instance.Id);
+                CachedPlayerControl.LocalPlayer.PlayerPhysics.RpcEnterVent(__instance.Id);
             }
             else
             {
-                PlayerControl.LocalPlayer.MyPhysics.RpcExitVent(__instance.Id);
+                CachedPlayerControl.LocalPlayer.PlayerPhysics.RpcExitVent(__instance.Id);
             }
 
             __instance.SetButtons(isEnter);

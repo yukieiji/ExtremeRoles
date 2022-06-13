@@ -139,10 +139,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                         {
                             bool canUse;
                             bool couldUse;
-                            vent.CanUse(PlayerControl.LocalPlayer.Data, out canUse, out couldUse);
+                            vent.CanUse(CachedPlayerControl.LocalPlayer.Data, out canUse, out couldUse);
                             if (canUse)
                             {
-                                PlayerControl.LocalPlayer.MyPhysics.RpcExitVent(vent.Id);
+                                CachedPlayerControl.LocalPlayer.PlayerPhysics.RpcExitVent(vent.Id);
                                 vent.SetButtons(false);
                             }
                         }
@@ -240,13 +240,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public void CleanUp()
         {
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.TimeMasterShieldOff,
                 new List<byte>
                 {
-                    PlayerControl.LocalPlayer.PlayerId,
+                   CachedPlayerControl.LocalPlayer.PlayerId,
                 });
-            ShieldOff(PlayerControl.LocalPlayer.PlayerId);
+            ShieldOff(CachedPlayerControl.LocalPlayer.PlayerId);
         }
 
         public void CreateAbility()
@@ -262,13 +262,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public bool UseAbility()
         {
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.TimeMasterShieldOn,
                 new List<byte>
                 {
-                    PlayerControl.LocalPlayer.PlayerId,
+                    CachedPlayerControl.LocalPlayer.PlayerId,
                 });
-            ShieldOn(PlayerControl.LocalPlayer.PlayerId);
+            ShieldOn(CachedPlayerControl.LocalPlayer.PlayerId);
 
             return true;
         }
@@ -278,13 +278,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public void RoleAbilityResetOnMeetingStart()
         {
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.TimeMasterResetMeeting,
                 new List<byte>
                 {
-                    PlayerControl.LocalPlayer.PlayerId,
+                    CachedPlayerControl.LocalPlayer.PlayerId,
                 });
-            ResetMeeting(PlayerControl.LocalPlayer.PlayerId);
+            ResetMeeting(CachedPlayerControl.LocalPlayer.PlayerId);
         }
 
         public void RoleAbilityResetOnMeetingEnd()
@@ -300,7 +300,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             if (this.IsShieldOn)
             {
                 RPCOperator.Call(
-                    PlayerControl.LocalPlayer.NetId,
+                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                     RPCOperator.Command.TimeMasterRewindTime,
                     new List<byte>
                     {

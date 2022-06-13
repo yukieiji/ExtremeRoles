@@ -130,7 +130,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             this.TargetPlayer = byte.MaxValue;
             PlayerControl target = Helper.Player.GetPlayerTarget(
-                PlayerControl.LocalPlayer, this,
+                CachedPlayerControl.LocalPlayer, this,
                 this.propagateRange);
             
             if (target != null)

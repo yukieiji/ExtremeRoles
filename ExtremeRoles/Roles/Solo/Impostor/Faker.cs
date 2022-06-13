@@ -9,6 +9,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -108,15 +109,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             } while (contine);
 
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.FakerCreateDummy,
                 new List<byte>
-                { 
-                    PlayerControl.LocalPlayer.PlayerId,
+                {
+                    CachedPlayerControl.LocalPlayer.PlayerId,
                     targetPlayerId
                 });
             CreateDummy(
-                PlayerControl.LocalPlayer.PlayerId,
+                CachedPlayerControl.LocalPlayer.PlayerId,
                 targetPlayerId);
             return true;
         }

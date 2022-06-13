@@ -68,8 +68,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     updateKillButton();
                     return true;
                 }
-                
-
             }
             else
             {
@@ -241,7 +239,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
 
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                rolePlayer.NetId,
                 RPCOperator.Command.UncheckedMurderPlayer,
                 new List<byte>
                 { 

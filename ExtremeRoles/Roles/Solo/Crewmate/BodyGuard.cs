@@ -6,6 +6,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
@@ -71,10 +72,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public bool UseAbility()
         {
 
-            byte playerId = PlayerControl.LocalPlayer.PlayerId;
+            byte playerId = CachedPlayerControl.LocalPlayer.PlayerId;
 
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.BodyGuardFeatShield,
                 new List<byte>
                 {
@@ -94,7 +95,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.TargetPlayer = byte.MaxValue;
 
             PlayerControl target = Player.GetPlayerTarget(
-                PlayerControl.LocalPlayer, this,
+                CachedPlayerControl.LocalPlayer, this,
                 this.shieldRange);
 
             if (target != null)
@@ -102,7 +103,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 byte targetId = target.PlayerId;
 
                 if (!ExtremeRolesPlugin.GameDataStore.ShildPlayer.IsShielding(
-                        PlayerControl.LocalPlayer.PlayerId, targetId))
+                        CachedPlayerControl.LocalPlayer.PlayerId, targetId))
                 {
                     this.TargetPlayer = targetId;
                 }
@@ -114,14 +115,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public void RoleAbilityResetOnMeetingStart()
         {
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.BodyGuardResetShield,
                 new List<byte>
                 {
-                    PlayerControl.LocalPlayer.PlayerId
+                    CachedPlayerControl.LocalPlayer.PlayerId
                 });
             RPCOperator.BodyGuardResetShield(
-                PlayerControl.LocalPlayer.PlayerId);
+                CachedPlayerControl.LocalPlayer.PlayerId);
 
             if (this.shieldButton == null) { return; }
 

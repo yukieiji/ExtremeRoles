@@ -45,8 +45,7 @@ namespace ExtremeRoles.Patches.MiniGame
         {
             if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
-            if (Roles.ExtremeRoleManager.GameRole[
-                PlayerControl.LocalPlayer.PlayerId].CanUseSecurity)
+            if (Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity)
             {
                 updateCamera(__instance);
                 return false;
@@ -83,7 +82,7 @@ namespace ExtremeRoles.Patches.MiniGame
                 Timer = ChangeTime;
             }
 
-            if ((instance.isStatic || update) && !PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(PlayerControl.LocalPlayer))
+            if ((instance.isStatic || update) && !PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(CachedPlayerControl.LocalPlayer))
             {
                 instance.isStatic = false;
                 for (int i = 0; i < instance.ViewPorts.Length; i++)
@@ -101,7 +100,7 @@ namespace ExtremeRoles.Patches.MiniGame
                     }
                 }
             }
-            else if (!instance.isStatic && PlayerTask.PlayerHasTaskOfType<HudOverrideTask>(PlayerControl.LocalPlayer))
+            else if (!instance.isStatic && PlayerTask.PlayerHasTaskOfType<HudOverrideTask>(CachedPlayerControl.LocalPlayer))
             {
                 instance.isStatic = true;
                 for (int j = 0; j < instance.ViewPorts.Length; j++)

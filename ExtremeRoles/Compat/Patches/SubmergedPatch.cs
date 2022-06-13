@@ -143,7 +143,7 @@ namespace ExtremeRoles.Compat.Patches
             HashSet<byte> playersWithMask = submarineOxygenSystemPlayersWithMask.GetValue(__instance) as HashSet<byte>;
             
             if (playersWithMask != null && 
-                !playersWithMask.Contains(PlayerControl.LocalPlayer.PlayerId))
+                !playersWithMask.Contains(CachedPlayerControl.LocalPlayer.PlayerId))
             {
                 submergedMod.RepairCustomSabotage(
                         submergedMod.RetrieveOxygenMask);

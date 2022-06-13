@@ -27,7 +27,7 @@ namespace ExtremeRoles.Roles.Combination
             this.arrow.Clear();
             this.distance.Clear();
             
-            foreach (var player in PlayerControl.AllPlayerControls)
+            foreach (var player in CachedPlayerControl.AllPlayerControls)
             {
                 if (player.PlayerId != rolePlayerId)
                 {
@@ -176,7 +176,7 @@ namespace ExtremeRoles.Roles.Combination
         public static void RpcCleanUpEmergencyCall()
         {
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.HeroHeroAcademia,
                 new List<byte>
                 {
@@ -189,7 +189,7 @@ namespace ExtremeRoles.Roles.Combination
             PlayerControl vigilante, byte targetPlayerId)
         {
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.HeroHeroAcademia,
                 new List<byte>
                 {
@@ -204,7 +204,7 @@ namespace ExtremeRoles.Roles.Combination
             PlayerControl hero, PlayerControl villan)
         {
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.HeroHeroAcademia,
                 new List<byte>
                 {
@@ -219,7 +219,7 @@ namespace ExtremeRoles.Roles.Combination
             Hero.OneForAllCondition newCond)
         {
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.HeroHeroAcademia,
                 new List<byte>
                 {
@@ -234,7 +234,7 @@ namespace ExtremeRoles.Roles.Combination
             Condition cond)
         {
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.HeroHeroAcademia,
                 new List<byte>
                 {
@@ -586,7 +586,7 @@ namespace ExtremeRoles.Roles.Combination
             if (this.arrow == null)
             {
                 this.arrow = new AllPlayerArrows(
-                    PlayerControl.LocalPlayer.PlayerId);
+                    CachedPlayerControl.LocalPlayer.PlayerId);
             }
             this.arrow.SetActive(true);
             return true;
@@ -774,7 +774,7 @@ namespace ExtremeRoles.Roles.Combination
             if (this.arrow == null)
             {
                 this.arrow = new AllPlayerArrows(
-                    PlayerControl.LocalPlayer.PlayerId);
+                    CachedPlayerControl.LocalPlayer.PlayerId);
             }
             this.arrow.SetActive(true);
             return true;
@@ -925,7 +925,7 @@ namespace ExtremeRoles.Roles.Combination
             this.target = byte.MaxValue;
 
             PlayerControl player = Player.GetPlayerTarget(
-                PlayerControl.LocalPlayer, this, this.range);
+                CachedPlayerControl.LocalPlayer, this, this.range);
 
             if (player == null) { return false; }
             this.target = player.PlayerId;
@@ -1120,7 +1120,7 @@ namespace ExtremeRoles.Roles.Combination
             {
                 string fakeTaskString = Design.ColoedString(
                     this.NameColor,
-                    DestroyableSingleton<TranslationController>.Instance.GetString(
+                    FastDestroyableSingleton<TranslationController>.Instance.GetString(
                         StringNames.FakeTasks, System.Array.Empty<Il2CppSystem.Object>()));
                 baseString = $"{baseString}\r\n{fakeTaskString}";
             }

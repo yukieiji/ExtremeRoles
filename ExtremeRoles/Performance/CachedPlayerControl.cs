@@ -10,7 +10,7 @@ namespace ExtremeRoles.Performance
     public class CachedPlayerControl
 	{
 		public static readonly Dictionary<IntPtr, CachedPlayerControl> PlayerPtrs = new Dictionary<IntPtr, CachedPlayerControl>();
-		public static readonly List<CachedPlayerControl> AllPlayerControl = new List<CachedPlayerControl>();
+		public static readonly List<CachedPlayerControl> AllPlayerControls = new List<CachedPlayerControl>();
 		public static CachedPlayerControl LocalPlayer;
 
 		public Transform transform;
@@ -26,13 +26,13 @@ namespace ExtremeRoles.Performance
 			PlayerControl = pc;
 			PlayerPhysics = pc.MyPhysics;
             NetTransform = pc.NetTransform;
-			AllPlayerControl.Add(this);
+			AllPlayerControls.Add(this);
 			PlayerPtrs[pc.Pointer] = this;
 		}
 
 		public static void Remove(PlayerControl pc)
         {
-			AllPlayerControl.RemoveAll(
+			AllPlayerControls.RemoveAll(
 				p => p.PlayerControl.Pointer == pc.Pointer);
 			PlayerPtrs.Remove(pc.Pointer);
 		}

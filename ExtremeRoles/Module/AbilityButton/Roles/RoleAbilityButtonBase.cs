@@ -33,10 +33,10 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
         public sealed override void Update()
         {
             if (this.Button == null) { return; }
-            if (PlayerControl.LocalPlayer.Data == null ||
+            if (CachedPlayerControl.LocalPlayer.Data == null ||
                 MeetingHud.Instance ||
                 ExileController.Instance ||
-                PlayerControl.LocalPlayer.Data.IsDead)
+                CachedPlayerControl.LocalPlayer.Data.IsDead)
             {
                 SetActive(false);
                 return;

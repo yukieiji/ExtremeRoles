@@ -73,7 +73,7 @@ namespace ExtremeRoles.Helper
 
         public static int GetRandomCommonTaskId()
         {
-            if (ShipStatus.Instance == null) { return byte.MaxValue; }
+            if (CachedShipStatus.Instance == null) { return byte.MaxValue; }
 
             List<int> taskIndex = getTaskIndex(
                 CachedShipStatus.Instance.CommonTasks);
@@ -85,7 +85,7 @@ namespace ExtremeRoles.Helper
 
         public static int GetRandomLongTask()
         {
-            if (ShipStatus.Instance == null) { return byte.MaxValue; }
+            if (CachedShipStatus.Instance == null) { return byte.MaxValue; }
 
             List<int> taskIndex = getTaskIndex(
                 CachedShipStatus.Instance.LongTasks);
@@ -97,7 +97,7 @@ namespace ExtremeRoles.Helper
 
         public static int GetRandomNormalTaskId()
         {
-            if (ShipStatus.Instance == null) { return byte.MaxValue; }
+            if (CachedShipStatus.Instance == null) { return byte.MaxValue; }
 
             List<int> taskIndex = getTaskIndex(
                 CachedShipStatus.Instance.NormalTasks);
@@ -173,7 +173,7 @@ namespace ExtremeRoles.Helper
             Version ver = Assembly.GetExecutingAssembly().GetName().Version;
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                PlayerControl.LocalPlayer.NetId,
+                 CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 (byte)RPCOperator.Command.ShareVersion,
                 Hazel.SendOption.Reliable, -1);
             writer.Write(ver.Major);

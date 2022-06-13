@@ -208,7 +208,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.TargetPlayer = byte.MaxValue;
 
             PlayerControl target = Player.GetPlayerTarget(
-                PlayerControl.LocalPlayer, this,
+                CachedPlayerControl.LocalPlayer, this,
                 this.takeTaskRange);
 
             if (target != null)
@@ -265,7 +265,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     }
 
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                        PlayerControl.LocalPlayer.NetId,
+                        CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                         (byte)RPCOperator.Command.AgencySetNewTask,
                         Hazel.SendOption.Reliable, -1);
                     writer.Write(rolePlayer.PlayerId);

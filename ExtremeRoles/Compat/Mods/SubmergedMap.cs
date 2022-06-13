@@ -72,7 +72,7 @@ namespace ExtremeRoles.Compat.Mods
         {
             Patches.HudManagerUpdatePatchPostfixPatch.ButtonTriggerReset();
         }
-        public int GetLocalPlayerFloor() => GetFloor(PlayerControl.LocalPlayer);
+        public int GetLocalPlayerFloor() => GetFloor(CachedPlayerControl.LocalPlayer);
         public int GetFloor(PlayerControl player)
         {
             MonoBehaviour floorHandler = getFloorHandler(player);
@@ -82,7 +82,7 @@ namespace ExtremeRoles.Compat.Mods
         }
         public void ChangeLocalPlayerFloor(int floor)
         {
-            ChangeFloor(PlayerControl.LocalPlayer, floor);
+            ChangeFloor(CachedPlayerControl.LocalPlayer, floor);
         }
         public void ChangeFloor(PlayerControl player, int floor)
         {

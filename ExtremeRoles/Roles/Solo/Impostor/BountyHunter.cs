@@ -225,7 +225,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.PlayerIcon[this.targetId].gameObject.SetActive(false);
             }
 
-            List<PlayerControl> allPlayer = PlayerControl.AllPlayerControls.ToArray().ToList();
+            List<CachedPlayerControl> allPlayer = CachedPlayerControl.AllPlayerControls;
 
             allPlayer = allPlayer.OrderBy(
                 item => RandomGenerator.Instance.Next()).ToList();

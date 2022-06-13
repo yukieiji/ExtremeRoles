@@ -5,6 +5,7 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Performance;
 
 
 namespace ExtremeRoles.Roles.API
@@ -588,7 +589,7 @@ namespace ExtremeRoles.Roles.API
 
             if (this.AnotherRole.IsVanillaRole())
             {
-                RoleBehaviour role = PlayerControl.LocalPlayer.Data.Role;
+                RoleBehaviour role = CachedPlayerControl.LocalPlayer.Data.Role;
                 anotherIntro = role.Blurb;
             }
             else

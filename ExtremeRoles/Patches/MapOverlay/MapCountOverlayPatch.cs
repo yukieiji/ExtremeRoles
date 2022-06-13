@@ -35,7 +35,8 @@ namespace ExtremeRoles.Patches.MapOverlay
 
 			bool commsActive = false;
 
-			foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks.GetFastEnumerator())
+			foreach (PlayerTask task in 
+				CachedPlayerControl.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
             {
 				if (task.TaskType == TaskTypes.FixComms)
 				{

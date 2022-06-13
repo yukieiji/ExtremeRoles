@@ -9,6 +9,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
@@ -193,7 +194,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public void CleanUp()
         {
 
-            var rolePlayer = PlayerControl.LocalPlayer;
+            PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
 
             RPCOperator.Call(
                 rolePlayer.NetId,

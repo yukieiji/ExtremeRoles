@@ -465,7 +465,7 @@ namespace ExtremeRoles.Roles.Combination
                     if (AmongUsClient.Instance.AmClient && FastDestroyableSingleton<HudManager>.Instance)
                     {
                         FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(
-                            PlayerControl.LocalPlayer,
+                            CachedPlayerControl.LocalPlayer,
                             string.Format(
                                 Translation.GetString("reportedDeadBodyInfo"),
                                 this.deadBodyInfo[reportBody.PlayerId]));
@@ -689,7 +689,7 @@ namespace ExtremeRoles.Roles.Combination
 
             if (prevRole.AnotherRole != null)
             {
-                if (playerId == PlayerControl.LocalPlayer.PlayerId)
+                if (playerId == CachedPlayerControl.LocalPlayer.PlayerId)
                 {
 
                     var abilityRole = prevRole.AnotherRole as IRoleAbility;
@@ -718,7 +718,7 @@ namespace ExtremeRoles.Roles.Combination
                 prevRole.GameControlId,
                 DetectiveApprenticeOptionHolder.LoadOptions(
                     prevRole.GetManagerOptionId(0)));
-            if (playerId == PlayerControl.LocalPlayer.PlayerId)
+            if (playerId == CachedPlayerControl.LocalPlayer.PlayerId)
             {
                 newRole.CreateAbility();
             }
@@ -824,7 +824,7 @@ namespace ExtremeRoles.Roles.Combination
             GameData.PlayerInfo reporter)
         {
             if (this.callAnotherButton &&
-                PlayerControl.LocalPlayer.PlayerId == reporter.PlayerId &&
+                CachedPlayerControl.LocalPlayer.PlayerId == reporter.PlayerId &&
                 this.hasOtherButton &&
                 this.buttonNum > 0)
             {

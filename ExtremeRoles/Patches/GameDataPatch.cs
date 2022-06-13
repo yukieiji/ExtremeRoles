@@ -9,7 +9,7 @@ namespace ExtremeRoles.Patches
 	{
 		public static void Postfix()
 		{
-			foreach (CachedPlayerControl cachedPlayer in CachedPlayerControl.AllPlayerControl)
+			foreach (CachedPlayerControl cachedPlayer in CachedPlayerControl.AllPlayerControls)
 			{
 				cachedPlayer.Data = cachedPlayer.PlayerControl.Data;
 				cachedPlayer.PlayerId = cachedPlayer.PlayerControl.PlayerId;
@@ -22,7 +22,7 @@ namespace ExtremeRoles.Patches
 	{
 		public static void Postfix()
 		{
-			foreach (CachedPlayerControl cachedPlayer in CachedPlayerControl.AllPlayerControl)
+			foreach (CachedPlayerControl cachedPlayer in CachedPlayerControl.AllPlayerControls)
 			{
 				cachedPlayer.Data = cachedPlayer.PlayerControl.Data;
 				cachedPlayer.PlayerId = cachedPlayer.PlayerControl.PlayerId;

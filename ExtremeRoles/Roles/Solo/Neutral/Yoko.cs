@@ -173,7 +173,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 SingleRoleBase targetRole = ExtremeRoleManager.GameRole[player.PlayerId];
 
                 if (!player.Disconnected &&
-                    (player.PlayerId != PlayerControl.LocalPlayer.PlayerId) &&
+                    (player.PlayerId != CachedPlayerControl.LocalPlayer.PlayerId) &&
                     !player.IsDead && !this.IsSameTeam(targetRole))
                 {
                     PlayerControl @object = player.Object;

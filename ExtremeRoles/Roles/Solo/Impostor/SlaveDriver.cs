@@ -308,7 +308,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                         Helper.Logging.Debug($"SetTaskId:{taskIndex}");
 
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                            PlayerControl.LocalPlayer.NetId,
+                            rolePlayer.NetId,
                             (byte)RPCOperator.Command.SlaveDriverSetNewTask,
                             Hazel.SendOption.Reliable, -1);
                         writer.Write(playerId);

@@ -4,7 +4,7 @@ using UnityEngine;
 using Hazel;
 
 using ExtremeRoles.Performance;
-
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Module.AbilityButton.GhostRoles
 {
@@ -48,7 +48,7 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
             if (this.abilityPreCheck())
             {
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                    PlayerControl.LocalPlayer.NetId,
+                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                     (byte)RPCOperator.Command.UseGhostRoleAbility,
                     Hazel.SendOption.Reliable, -1);
                 writer.Write((byte)this.abilityType);
@@ -72,7 +72,8 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
 
         protected bool IsComSabNow()
         {
-            foreach (PlayerTask t in PlayerControl.LocalPlayer.myTasks)
+            foreach (PlayerTask t in 
+                CachedPlayerControl.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
             {
                 if (t?.TaskType == TaskTypes.FixComms)
                 {
@@ -85,10 +86,10 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
         public sealed override void Update()
         {
             if (this.Button == null) { return; }
-            if (PlayerControl.LocalPlayer.Data == null ||
+            if (CachedPlayerControl.LocalPlayer.Data == null ||
                 MeetingHud.Instance ||
                 ExileController.Instance ||
-                !PlayerControl.LocalPlayer.Data.IsDead)
+                !CachedPlayerControl.LocalPlayer.Data.IsDead)
             {
                 SetActive(false);
                 return;

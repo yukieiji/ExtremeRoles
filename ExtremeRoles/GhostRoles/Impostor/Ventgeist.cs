@@ -89,7 +89,7 @@ namespace ExtremeRoles.GhostRoles.Impostor
             if (CachedShipStatus.Instance == null ||
                 !CachedShipStatus.Instance.enabled) { return false; }
 
-            Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
+            Vector2 truePosition = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
 
             foreach (Vent vent in CachedShipStatus.Instance.AllVents)
             {

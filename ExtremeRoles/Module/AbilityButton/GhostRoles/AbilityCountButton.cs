@@ -3,6 +3,8 @@ using UnityEngine;
 
 using Hazel;
 
+using ExtremeRoles.Performance;
+
 
 namespace ExtremeRoles.Module.AbilityButton.GhostRoles
 {
@@ -86,7 +88,9 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
             {
                 bool abilityOn = this.IsHasCleanUp() && IsAbilityOn;
 
-                if (abilityOn || (!PlayerControl.LocalPlayer.inVent && PlayerControl.LocalPlayer.moveable))
+                if (abilityOn || (
+                        !CachedPlayerControl.LocalPlayer.PlayerControl.inVent && 
+                        CachedPlayerControl.LocalPlayer.PlayerControl.moveable))
                 {
                     this.Timer -= Time.deltaTime;
                 }

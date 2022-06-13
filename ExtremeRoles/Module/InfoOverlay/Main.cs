@@ -244,10 +244,10 @@ namespace ExtremeRoles.Module.InfoOverlay
             if (OverlayShown) { return; }
 
             HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
-            if (PlayerControl.LocalPlayer == null ||
+            if (CachedPlayerControl.LocalPlayer == null ||
                 hudManager == null ||
                 hudManager.IsIntroDisplayed ||
-                (!PlayerControl.LocalPlayer.CanMove && MeetingHud.Instance == null))
+                (!CachedPlayerControl.LocalPlayer.PlayerControl.CanMove && MeetingHud.Instance == null))
             {
                 return;
             }

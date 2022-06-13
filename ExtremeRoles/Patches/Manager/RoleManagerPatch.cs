@@ -9,6 +9,7 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.Manager
 {
@@ -19,12 +20,12 @@ namespace ExtremeRoles.Patches.Manager
         public static void Postfix()
         {
 
-            uint netId = PlayerControl.LocalPlayer.NetId;
+            uint netId = CachedPlayerControl.LocalPlayer.PlayerControl.NetId;
 
             RPCOperator.Call(netId, RPCOperator.Command.Initialize);
             RPCOperator.Initialize();
 
-            PlayerControl[] playeres = PlayerControl.AllPlayerControls.ToArray();
+            CachedPlayerControl[] playeres = CachedPlayerControl.AllPlayerControls.ToArray();
 
             RoleAssignmentData extremeRolesData = createRoleData();
             var playerIndexList = Enumerable.Range(0, playeres.Count()).ToList();
@@ -79,7 +80,7 @@ namespace ExtremeRoles.Patches.Manager
 
             List<int> needAnotherRoleAssigns = new List<int>();
 
-            PlayerControl player = PlayerControl.LocalPlayer;
+            CachedPlayerControl player = CachedPlayerControl.LocalPlayer;
 
             foreach (var (roles, id) in assignMultiAssignRole)
             {
@@ -90,7 +91,7 @@ namespace ExtremeRoles.Patches.Manager
                         playerIndexList.OrderBy(item => RandomGenerator.Instance.Next()).ToList());
                     foreach (int playerIndex in tempList)
                     {
-                        player = PlayerControl.AllPlayerControls[playerIndex];
+                        player = CachedPlayerControl.AllPlayerControls[playerIndex];
                         assign = isAssignedToMultiRole(
                             role, player);
                         if (!assign) { continue; }
@@ -120,7 +121,7 @@ namespace ExtremeRoles.Patches.Manager
             int crewNum = 0;
             int impNum = 0;
 
-            foreach (var player in PlayerControl.AllPlayerControls)
+            foreach (CachedPlayerControl player in CachedPlayerControl.AllPlayerControls)
             {
                 if (multiAssign)
                 {
@@ -321,7 +322,7 @@ namespace ExtremeRoles.Patches.Manager
                 assigned = false;
 
                 List<SingleRoleBase> shuffledRoles = new List<SingleRoleBase>();
-                PlayerControl player = PlayerControl.AllPlayerControls[index];
+                CachedPlayerControl player = CachedPlayerControl.AllPlayerControls[index];
                 RoleBehaviour roleData = player.Data.Role;
                 
                 Logging.Debug($"-------------------AssignToPlayer:{player.Data.PlayerName}-------------------");

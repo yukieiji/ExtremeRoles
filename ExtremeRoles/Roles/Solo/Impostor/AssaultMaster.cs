@@ -121,7 +121,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             this.curReloadCoolTime = this.defaultReloadCoolTime;
 
-            float curKillCool = PlayerControl.LocalPlayer.killTimer;
+            float curKillCool = CachedPlayerControl.LocalPlayer.PlayerControl.killTimer;
             float newKillCool = curKillCool;
             int loop = this.stock;
             for (int i = 0; i < loop; ++i)

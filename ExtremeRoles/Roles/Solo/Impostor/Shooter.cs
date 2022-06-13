@@ -98,7 +98,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void Update(PlayerControl rolePlayer)
         {
-            if (ShipStatus.Instance == null ||
+            if (CachedShipStatus.Instance == null ||
                 GameData.Instance == null) { return; }
             if (rolePlayer.Data.IsDead || rolePlayer.Data.Disconnected)
             {

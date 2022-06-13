@@ -59,7 +59,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool UseAbility()
         {
-            PlayerControl killer = PlayerControl.LocalPlayer;
+            PlayerControl killer = CachedPlayerControl.LocalPlayer;
             if (killer.Data.IsDead || !killer.CanMove) { return false; }
 
             var role = ExtremeRoleManager.GetLocalPlayerRole();
@@ -116,7 +116,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.prevKillCool = PlayerControl.LocalPlayer.killTimer;
 
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                killer.NetId,
                 RPCOperator.Command.UncheckedMurderPlayer,
                 new List<byte> { killer.PlayerId, target.PlayerId, byte.MaxValue });
             RPCOperator.UncheckedMurderPlayer(
@@ -134,7 +134,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.KillCoolTime = this.KillCoolTime + this.penaltyKillCool;
             }
 
-            PlayerControl.LocalPlayer.killTimer = this.prevKillCool;
+            killer.killTimer = this.prevKillCool;
 
             return true;
         }

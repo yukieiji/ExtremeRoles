@@ -143,7 +143,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
                 !CachedShipStatus.Instance.enabled) { return false; }
 
             foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(
-                PlayerControl.LocalPlayer.GetTruePosition(),
+                CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition(),
                 this.range,
                 Constants.PlayersOnlyMask))
             {
@@ -153,7 +153,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
 
                     if (component && !component.Reported && component.transform.parent == null)
                     {
-                        Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
+                        Vector2 truePosition = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
                         Vector2 truePosition2 = component.TruePosition;
                         if ((Vector2.Distance(truePosition2, truePosition) <= range) &&
                             (PlayerControl.LocalPlayer.CanMove) &&
@@ -172,7 +172,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
         }
         private void abilityCall()
         {
-            pickUpDeadBody(PlayerControl.LocalPlayer, this, this.targetBody.PlayerId);
+            pickUpDeadBody(CachedPlayerControl.LocalPlayer, this, this.targetBody.PlayerId);
             this.targetBody = null;
         }
         private void cleanUp()
@@ -186,7 +186,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
             writer.Write(byte.MinValue);
             writer.Write(false);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
-            setDeadBody(PlayerControl.LocalPlayer, this);
+            setDeadBody(CachedPlayerControl.LocalPlayer, this);
         }
     }
 }

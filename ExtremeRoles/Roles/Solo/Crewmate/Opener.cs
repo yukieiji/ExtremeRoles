@@ -65,14 +65,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public bool IsAbilityUse()
         {
-            if (ShipStatus.Instance == null) { return false; }
+            if (CachedShipStatus.Instance == null) { return false; }
             
             this.targetDoor = null;
 
             foreach (var door in CachedShipStatus.Instance.AllDoors)
             {
                 if (Vector3.Distance(
-                        PlayerControl.LocalPlayer.transform.position,
+                        CachedPlayerControl.LocalPlayer.PlayerControl.transform.position,
                         door.transform.position) < this.range)
                 {
                     this.targetDoor = door;
