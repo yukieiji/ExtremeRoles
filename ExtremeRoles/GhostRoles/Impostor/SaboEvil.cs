@@ -21,9 +21,6 @@ namespace ExtremeRoles.GhostRoles.Impostor
 
         public static void ResetCool()
         {
-            var role = ExtremeRoleManager.GetLocalPlayerRole();
-            if (!role.IsImpostor()) { return; }
-
             var sabSystem = ShipStatus.Instance.Systems[SystemTypes.Sabotage].TryCast<SabotageSystemType>();
             if (sabSystem != null)
             {
