@@ -19,7 +19,7 @@ namespace ExtremeRoles.GhostRoles.API
     {
 
         private const float defaultCoolTime = 60.0f;
-        private const float minCoolTime = 15.0f;
+        private const float minCoolTime = 5.0f;
         private const float maxCoolTime = 120.0f;
         private const float minActiveTime = 0.5f;
         private const float maxActiveTime = 30.0f;
