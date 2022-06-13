@@ -261,8 +261,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private RoleAbilityButtonBase abilityButton;
 
         private bool awakeHasOtherVision;
-        private float awakeVision;
-        private bool awakeIsApplyEnvironmentVision;
 
         private static int cameraNum = 0;
         public Carpenter() : base(
