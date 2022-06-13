@@ -257,6 +257,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private Vector2 prevPos;
         private RoleAbilityButtonBase abilityButton;
 
+        private bool awakeHasOtherVision;
+        private float awakeVision;
+        private bool awakeIsApplyEnvironmentVision;
+
         private static int cameraNum = 0;
         public Carpenter() : base(
             ExtremeRoleId.Carpenter,
@@ -508,6 +512,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 if (Player.GetPlayerTaskGage(rolePlayer) >= this.awakeTaskGage)
                 {
                     this.awakeRole = true;
+                    this.HasOtherVison = this.awakeHasOtherVision;
                 }
             }
         }
@@ -714,13 +719,18 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.targetVent = null;
             this.awakeTaskGage = (float)OptionHolder.AllOption[
                 GetRoleOptionId(CarpenterOption.AwakeTaskGage)].GetValue() / 100.0f;
+            
+            this.awakeHasOtherVision = this.HasOtherVison;
+            
             if (this.awakeTaskGage <= 0.0f)
             {
                 this.awakeRole = true;
+                this.HasOtherVison = false;
             }
             else
             {
                 this.awakeRole = false;
+                this.HasOtherVison = false;
             }
             abilityInit();
         }
