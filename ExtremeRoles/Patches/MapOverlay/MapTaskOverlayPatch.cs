@@ -46,7 +46,8 @@ namespace ExtremeRoles.Patches.MapOverlay
 				while (__instance.data.ContainsKey(key))
                 {
 					key = $"{key}_{index}";
-                }
+					++index;
+				}
 
 				__instance.data.Add(key, pooledMapIcon);
 			}
