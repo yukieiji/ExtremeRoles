@@ -52,12 +52,13 @@ namespace ExtremeRoles.Patches.Meeting
 
 		public static bool Prefix(PlayerVoteArea __instance)
 		{
+			Helper.Logging.Debug("ckpt:0");
 			if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return true; }
 			if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
-
+			Helper.Logging.Debug("ckpt:1");
 			var gameData = ExtremeRolesPlugin.GameDataStore;
 			var shooter = Roles.ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Roles.Solo.Impostor.Shooter>();
-
+			Helper.Logging.Debug("ckpt:2");
 			if (!gameData.AssassinMeetingTrigger)
 			{
 				if (shooter == null)
@@ -71,7 +72,7 @@ namespace ExtremeRoles.Patches.Meeting
 				}
 			}
 
-			if (PlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.GameDataStore.ExiledAssassinId)
+			if (CachedPlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.GameDataStore.ExiledAssassinId)
 			{
 				return false;
 			}
@@ -175,6 +176,8 @@ namespace ExtremeRoles.Patches.Meeting
 			Roles.Solo.Impostor.Shooter shooter)
         {
 			byte target = instance.TargetPlayerId;
+			
+			Helper.Logging.Debug("ckpt:3");
 
 			if (instance.AmDead ||
 				shooter.CurShootNum <= 0 || 
@@ -183,21 +186,29 @@ namespace ExtremeRoles.Patches.Meeting
 			{ 
 				return true; 
 			}
-
+			Helper.Logging.Debug("ckpt:4");
 			if (!instance.Parent)
 			{
 				return false;
 			}
-
+			Helper.Logging.Debug("ckpt:5");
 			if (!instance.voteComplete &&
 				instance.Parent.Select((int)target))
 			{
+				Helper.Logging.Debug("ckpt:6");
+
 				if (meetingKillButton == null)
                 {
 					meetingKillButton = new Dictionary<byte, UiElement> ();
                 }
 
-				if (!meetingKillButton.ContainsKey(target))
+				Helper.Logging.Debug("ckpt:7");
+
+				UiElement killbutton = null;
+
+				meetingKillButton.TryGetValue(target, out killbutton);
+
+				if (killbutton == null)
                 {
 
 					UiElement newKillButton = GameObject.Instantiate(
@@ -218,25 +229,35 @@ namespace ExtremeRoles.Patches.Meeting
 						controllerHighlight.localScale *= new Vector2(1.25f, 1.25f);
                     }
 
-					meetingKillButton.Add(target, newKillButton);
+					meetingKillButton[target] =  newKillButton;
+
+					killbutton = newKillButton;
 
 					void shooterKill()
 					{
 						if (instance.AmDead) { return; }
 						shooter.Shoot();
 						RPCOperator.Call(
-							PlayerControl.LocalPlayer.NetId,
+							CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
 							RPCOperator.Command.UncheckedMurderPlayer,
-							new List<byte> { PlayerControl.LocalPlayer.PlayerId, target, 0 });
+							new List<byte> { CachedPlayerControl.LocalPlayer.PlayerId, target, 0 });
 						RPCOperator.UncheckedMurderPlayer(
-							PlayerControl.LocalPlayer.PlayerId,
+							CachedPlayerControl.LocalPlayer.PlayerId,
 							target, 0);
+						RPCOperator.Call(
+							CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+							RPCOperator.Command.PlaySound,
+							new List<byte> { (byte)RPCOperator.SoundType.Kill });
+						RPCOperator.PlaySound((byte)RPCOperator.SoundType.Kill);
 					}
 
 				}
 
+				Helper.Logging.Debug($"null?:{killbutton == null}");
+
+				if (killbutton == null) { return true; }
+
 				instance.Buttons.SetActive(true);
-				var killbutton = meetingKillButton[target];
 
 				float startPos = instance.AnimateButtonsFromLeft ? 0.2f : 1.95f;
 				

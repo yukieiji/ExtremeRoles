@@ -921,6 +921,10 @@ namespace ExtremeRoles.Patches
                         major, minor, build,
                         revision, clientId);
                     break;
+                case RPCOperator.Command.PlaySound:
+                    byte soundType = reader.ReadByte();
+                    RPCOperator.PlaySound(soundType);
+                    break;
                 case RPCOperator.Command.IntegrateModCall:
                     RPCOperator.IntegrateModCall(ref reader);
                     break;

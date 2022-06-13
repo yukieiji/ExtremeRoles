@@ -8,6 +8,10 @@ namespace ExtremeRoles
 {
     public static class RPCOperator
     {
+        public enum SoundType : byte
+        {
+            Kill,
+        }
 
         public enum Command : byte
         {
@@ -29,6 +33,7 @@ namespace ExtremeRoles
             SetWinPlayer,
             ShareMapId,
             ShareVersion,
+            PlaySound,
             IntegrateModCall,
 
             // 役職関連
@@ -378,12 +383,29 @@ namespace ExtremeRoles
                     major, minor, build, revision);
         }
 
+        public static void PlaySound(byte soundType)
+        {
+            UnityEngine.AudioClip clip;
+            switch ((SoundType)soundType)
+            {
+                case SoundType.Kill:
+                    clip = CachedPlayerControl.LocalPlayer.PlayerControl.KillSfx;
+                    break;
+                default:
+                    return;
+            }
+
+            if (Constants.ShouldPlaySfx() && clip != null)
+            {
+                SoundManager.Instance.PlaySound(clip, false, 0.8f);
+            }
+        }
+
         public static void IntegrateModCall(
             ref MessageReader readeer)
         {
             ExtremeRolesPlugin.Compat.IntegrateModCall(ref readeer);
         }
-
 
         public static void ReplaceRole(
             byte callerId, byte targetId, byte operation)
