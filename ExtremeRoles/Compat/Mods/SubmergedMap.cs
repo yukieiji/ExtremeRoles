@@ -37,6 +37,8 @@ namespace ExtremeRoles.Compat.Mods
         private MethodInfo rpcRequestChangeFloorMethod;
         private FieldInfo onUpperField;
 
+        private FieldInfo inTransitionField;
+
         private const string elevatorMover = "ElevatorMover";
 
         public SubmergedMap(PluginInfo plugin) : base(Guid, plugin)
@@ -67,6 +69,9 @@ namespace ExtremeRoles.Compat.Mods
                 floorHandlerType, "RpcRequestChangeFloor");
             onUpperField = AccessTools.Field(floorHandlerType, "OnUpper");
 
+
+            Type ventMoveToVentPatchType = ClassType.First(t => t.Name == "Vent_MoveToVent_Patch");
+            inTransitionField = AccessTools.Field(ventMoveToVentPatchType, "InTransition");
         }
         public void Awake()
         {
@@ -147,6 +152,48 @@ namespace ExtremeRoles.Compat.Mods
 
         public bool IsCustomSabotageTask(TaskTypes saboTask) => saboTask == this.RetrieveOxygenMask;
 
+        public bool IsCustomVentUse(Vent vent)
+        {
+            switch (vent.Id)
+            {
+                case 9:  // Cannot enter vent 9 (Engine Room Exit Only Vent)!
+                    if (CachedPlayerControl.LocalPlayer.PlayerControl.inVent)
+                    { 
+                        return false; 
+                    }
+                    return true;
+                case 14: // Lower Central
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        public (float, bool, bool) IsCustomVentUseResult(
+            Vent vent, GameData.PlayerInfo player, bool isVentUse)
+        {
+            if ((bool)inTransitionField.GetValue(null))
+            {
+                return (float.MaxValue, false, false);
+            }
+            switch (vent.Id)
+            {
+                case 14: // Lower Central
+                    float result = float.MaxValue;
+                    bool couldUse = isVentUse && !player.IsDead && (player.Object.CanMove || player.Object.inVent);
+                    bool canUse = couldUse;
+                    if (canUse)
+                    {
+                        Vector3 center = player.Object.Collider.bounds.center;
+                        Vector3 position = vent.transform.position;
+                        result = Vector2.Distance(center, position);
+                        canUse &= result <= vent.UsableDistance;
+                    }
+                    return (result, canUse, couldUse);
+                default:
+                    return (float.MaxValue, false, false);
+            }
+        }
 
         public void RpcRepairCustomSabotage()
         {

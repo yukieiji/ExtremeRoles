@@ -27,8 +27,29 @@ namespace ExtremeRoles.Patches.MapModule
                 return false;
             }
 
-            if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
+            if (Roles.ExtremeRoleManager.GameRole.Count == 0)
+            {
+                if (ExtremeRolesPlugin.Compat.IsModMap &&
+                    ExtremeRolesPlugin.Compat.ModMap.IsCustomVentUse(__instance))
+                {
+                    (__result, canUse, couldUse) = ExtremeRolesPlugin.Compat.ModMap.IsCustomVentUseResult(
+                        __instance, playerInfo,
+                        playerInfo.Role.IsImpostor || playerInfo.Role.Role == RoleTypes.Engineer);
+                    return false;
+                }
+                return true; 
+            }
+
+
             bool roleCouldUse = Roles.ExtremeRoleManager.GameRole[playerInfo.PlayerId].UseVent;
+
+            if (ExtremeRolesPlugin.Compat.IsModMap &&
+                ExtremeRolesPlugin.Compat.ModMap.IsCustomVentUse(__instance))
+            {
+                (__result, canUse, couldUse) = ExtremeRolesPlugin.Compat.ModMap.IsCustomVentUseResult(
+                    __instance, playerInfo, roleCouldUse);
+                return false;
+            }
 
             var usableDistance = __instance.UsableDistance;
 

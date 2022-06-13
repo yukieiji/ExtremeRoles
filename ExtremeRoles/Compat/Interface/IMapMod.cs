@@ -27,7 +27,9 @@ namespace ExtremeRoles.Compat.Interface
 		public void Awake();
 		public bool IsCustomSabotageNow();
 		public bool IsCustomSabotageTask(TaskTypes saboTask);
-
+		public bool IsCustomVentUse(Vent vent);
+		public (float, bool, bool) IsCustomVentUseResult(
+			Vent vent, GameData.PlayerInfo player, bool isVentUse);
 		public void RpcRepairCustomSabotage();
 		public void RpcRepairCustomSabotage(TaskTypes saboTask);
 		public void RepairCustomSabotage();
