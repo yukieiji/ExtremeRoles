@@ -16,6 +16,7 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
         protected Action<MessageWriter> ability;
         private GhostRoleAbilityManager.AbilityType abilityType;
         private Action rpcHostCallAbility;
+        private bool reportAbility;
 
         public GhostRoleAbilityButtonBase(
             GhostRoleAbilityManager.AbilityType abilityType,
@@ -41,6 +42,11 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
             this.rpcHostCallAbility = rpcHostCallAbility;
         }
 
+        public void SetReportAbility(bool active)
+        {
+            this.reportAbility = active;
+        }
+
         protected abstract void AbilityButtonUpdate();
 
         protected bool UseAbility()
@@ -52,6 +58,7 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
                     (byte)RPCOperator.Command.UseGhostRoleAbility,
                     Hazel.SendOption.Reliable, -1);
                 writer.Write((byte)this.abilityType);
+                writer.Write(this.reportAbility);
                 
                 this.ability(writer);
 
@@ -60,8 +67,11 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
                 {
                     this.rpcHostCallAbility();
                 }
-                ExtremeRolesPlugin.GameDataStore.AbilityManager.AddAbilityCall(
-                    this.abilityType);
+                if (this.reportAbility)
+                {
+                    ExtremeRolesPlugin.GameDataStore.AbilityManager.AddAbilityCall(
+                        this.abilityType);
+                }
                 return true;
             }
             else

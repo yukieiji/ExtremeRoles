@@ -1102,8 +1102,9 @@ namespace ExtremeRoles.Patches
                     break;
                 case RPCOperator.Command.UseGhostRoleAbility:
                     byte useGhostRoleType = reader.ReadByte();
+                    bool isReport = reader.ReadBoolean();
                     RPCOperator.UseGhostRoleAbility(
-                        useGhostRoleType, ref reader);
+                        useGhostRoleType, isReport, ref reader);
                     break;
                 default:
                     break;

@@ -15,6 +15,11 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.GhostRoles.API
 {
+    public enum GhostRoleOption
+    {
+        IsReportAbility = 40 
+    }
+
     public abstract class GhostRoleBase : IGhostRole
     {
 
@@ -179,6 +184,10 @@ namespace ExtremeRoles.GhostRoles.API
                     defaultActiveTime, minActiveTime, maxActiveTime, step,
                     parentOps, format: OptionUnit.Second);
             }
+
+            CreateBoolOption(
+               GhostRoleOption.IsReportAbility,
+               true, parentOps);
         }
 
         protected void CreateCountButtonOption(
@@ -221,6 +230,9 @@ namespace ExtremeRoles.GhostRoles.API
                 abilityCountButton.UpdateAbilityCount(
                     allOps[checkOptionId].GetValue());
             }
+
+            this.Button.SetReportAbility(
+                allOps[this.GetRoleOptionId(GhostRoleOption.IsReportAbility)].GetValue());
 
             this.Button.ResetCoolTimer();
         }

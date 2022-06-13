@@ -52,7 +52,7 @@ namespace ExtremeRoles.Module
         }
 
         public void UseGhostAbility(
-            byte abilityType, ref MessageReader reader)
+            byte abilityType, bool isReport, ref MessageReader reader)
         {
             switch ((AbilityType)abilityType)
             {
@@ -74,7 +74,11 @@ namespace ExtremeRoles.Module
                 default:
                     break;
             }
-            this.useAbility.Add((AbilityType)abilityType);
+
+            if (isReport)
+            {
+                this.useAbility.Add((AbilityType)abilityType);
+            }
         }
     }
 }
