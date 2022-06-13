@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Concurrent;
 using System.Linq;
 
 using Hazel;
@@ -150,7 +149,7 @@ namespace ExtremeRoles.GhostRoles
 
         }
 
-        public static ConcurrentDictionary<byte, GhostRoleBase> GameRole = new ConcurrentDictionary<byte, GhostRoleBase>();
+        public static Dictionary<byte, GhostRoleBase> GameRole = new Dictionary<byte, GhostRoleBase>();
 
         public static readonly Dictionary<
             ExtremeGhostRoleId, GhostRoleBase> AllGhostRole = new Dictionary<ExtremeGhostRoleId, GhostRoleBase>()
@@ -429,8 +428,10 @@ namespace ExtremeRoles.GhostRoles
 
             role.Initialize();
             role.CreateAbility();
-
-            GameRole[playerId] = role;
+            lock (GameRole)
+            {
+                GameRole.Add(playerId, role);
+            }
         }
 
 
@@ -448,7 +449,10 @@ namespace ExtremeRoles.GhostRoles
             role.Initialize();
             role.CreateAbility();
 
-            GameRole[playerId] = role;
+            lock (GameRole)
+            {
+                GameRole.Add(playerId, role);
+            }
         }
     }
 }

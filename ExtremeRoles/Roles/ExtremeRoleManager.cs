@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
 using System.Linq;
 
 using ExtremeRoles.Roles.API;
@@ -191,8 +190,8 @@ namespace ExtremeRoles.Roles
                 {(byte)CombinationRoleType.Sharer         , new SharerManager()   },
             };
 
-        public static ConcurrentDictionary<
-            byte, SingleRoleBase> GameRole = new ConcurrentDictionary<byte, SingleRoleBase> ();
+        public static Dictionary<
+            byte, SingleRoleBase> GameRole = new Dictionary<byte, SingleRoleBase> ();
 
         public static readonly HashSet<ExtremeRoleId> WinCheckDisableRole = new HashSet<ExtremeRoleId>()
         {
@@ -317,7 +316,10 @@ namespace ExtremeRoles.Roles
                 addRole.Initialize();
                 addRole.GameControlId = id;
                 roleControlId = id + 1;
-                GameRole[playerId] = addRole;
+                lock (GameRole)
+                {
+                    GameRole[playerId] = addRole;
+                }
 
                 if (hasVanilaRole)
                 {
@@ -380,7 +382,10 @@ namespace ExtremeRoles.Roles
 
             if (!GameRole.ContainsKey(playerId))
             {
-                GameRole[playerId] = addRole;
+                lock (GameRole)
+                {
+                    GameRole.Add(playerId, addRole);
+                }
             }
             else
             {
