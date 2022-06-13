@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Assets.CoreScripts;
 
 using HarmonyLib;
@@ -19,6 +20,79 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Patches
 {
+    [HarmonyPatch]
+    public class CacheLocalPlayerPatch
+    {
+        [HarmonyTargetMethod]
+        public static MethodBase TargetMethod()
+        {
+            var type = typeof(PlayerControl).GetNestedTypes(AccessTools.all).FirstOrDefault(t => t.Name.Contains("Start"));
+            return AccessTools.Method(type, nameof(Il2CppSystem.Collections.IEnumerator.MoveNext));
+        }
+
+        [HarmonyPostfix]
+        public static void SetLocalPlayer()
+        {
+            PlayerControl localPlayer = PlayerControl.LocalPlayer;
+            if (!localPlayer)
+            {
+                CachedPlayerControl.LocalPlayer = null;
+                return;
+            }
+
+            CachedPlayerControl cached = CachedPlayerControl.AllPlayerControl.FirstOrDefault(
+                p => p.PlayerControl.Pointer == localPlayer.Pointer);
+            if (cached != null)
+            {
+                CachedPlayerControl.LocalPlayer = cached;
+                return;
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Awake))]
+    public class PlayerControlAwakePatch
+    {
+        public static void Postfix(PlayerControl __instance)
+        {
+            if (__instance.notRealPlayer) { return; }
+
+            new CachedPlayerControl(__instance);
+
+#if DEBUG
+            foreach (var cachedPlayer in CachedPlayerControl.AllPlayerControl)
+            {
+                if (!cachedPlayer.PlayerControl || 
+                    !cachedPlayer.PlayerPhysics || 
+                    !cachedPlayer.NetTransform || 
+                    !cachedPlayer.transform)
+                {
+                    Logging.Debug($"CachedPlayer {cachedPlayer.PlayerControl.name} has null fields");
+                }
+            }
+#endif
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Deserialize))]
+    public class PlayerControlDeserializePatch
+    {
+        public static void Postfix(PlayerControl __instance)
+        {
+            CachedPlayerControl.PlayerPtrs[__instance.Pointer].PlayerId = __instance.PlayerId;
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.OnDestroy))]
+    public class PlayerControlOnDestroyPatch
+    {
+        public static void Postfix(PlayerControl __instance)
+        {
+            if (__instance.notRealPlayer) { return; }
+            CachedPlayerControl.Remove(__instance);
+        }
+    }
+
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CoStartMeeting))]
     public class PlayerControlCoStartMeetingPatch
