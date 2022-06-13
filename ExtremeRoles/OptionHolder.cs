@@ -65,6 +65,8 @@ namespace ExtremeRoles
             CanKillVentInPlayer,
             ParallelMedBayScans,
             RandomMap,
+            DisableTaskWinWhenNoneTaskCrew,
+            DisableTaskWin,
             IsSameNeutralSameWin,
             DisableNeutralSpecialForceEnd,
             EnableHorseMode,
@@ -374,6 +376,15 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.RandomMap,
                 CommonOptionKey.RandomMap.ToString(), false);
 
+            var taskDisableOpt = new BoolCustomOption(
+                (int)CommonOptionKey.DisableTaskWinWhenNoneTaskCrew,
+                CommonOptionKey.DisableTaskWinWhenNoneTaskCrew.ToString(),
+                false);
+            new BoolCustomOption(
+                (int)CommonOptionKey.DisableTaskWin,
+                CommonOptionKey.DisableTaskWin.ToString(),
+                false, taskDisableOpt);
+
 
             new BoolCustomOption(
                 (int)CommonOptionKey.IsSameNeutralSameWin,
@@ -437,6 +448,8 @@ namespace ExtremeRoles
             public static bool EngineerUseImpostorVent = false;
             public static bool CanKillVentInPlayer = false;
             public static bool DisableSelfVote = false;
+            public static bool DisableTaskWinWhenNoneTaskCrew = false;
+            public static bool DisableTaskWin = false;
             public static bool IsSameNeutralSameWin = true;
             public static bool DisableNeutralSpecialForceEnd = false;
 
