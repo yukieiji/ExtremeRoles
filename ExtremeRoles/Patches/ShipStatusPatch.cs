@@ -62,7 +62,6 @@ namespace ExtremeRoles.Patches
 
             if (requireCustomCustomCalculateLightRadius())
             {
-                float visonMod = __instance.MaxLightRadius;
                 float visonMulti;
                 bool applayVisonEffects = !playerInfo.Role.IsImpostor;
 
@@ -81,7 +80,7 @@ namespace ExtremeRoles.Patches
                 }
 
                 __result = ExtremeRolesPlugin.Compat.ModMap.CalculateLightRadius(
-                    playerInfo, visonMod * visonMulti, applayVisonEffects);
+                    playerInfo, visonMulti, applayVisonEffects);
 
                 return false;
             }
