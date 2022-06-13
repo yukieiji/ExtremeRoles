@@ -57,6 +57,8 @@ namespace ExtremeRoles.Compat
         }
         internal void RemoveMap()
         {
+            if (this.map == null) { return; }
+
             this.map.Destroy();
             this.map = null;
         }
