@@ -71,7 +71,7 @@ namespace ExtremeRoles.GhostRoles.Impostor
                 0.2f, 3.0f, 0.1f,
                 parentOps);
             CreateCountButtonOption(
-                parentOps, 2, 5);
+                parentOps, 2, 10);
         }
 
         protected override void UseAbility(MessageWriter writer)
