@@ -49,7 +49,7 @@ namespace ExtremeRoles.Compat
                 if (mapMod != null && 
                     mapMod.MapType == shipStatus.Type)
                 {
-                    mapMod.Awake();
+                    mapMod.Awake(shipStatus);
                     this.map = mapMod;
                     break;
                 }
@@ -57,6 +57,7 @@ namespace ExtremeRoles.Compat
         }
         internal void RemoveMap()
         {
+            this.map.Destroy();
             this.map = null;
         }
 

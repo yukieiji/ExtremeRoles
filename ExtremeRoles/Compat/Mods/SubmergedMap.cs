@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 
 using ExtremeRoles.Compat.Interface;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
@@ -22,6 +23,7 @@ namespace ExtremeRoles.Compat.Mods
 
         public ShipStatus.MapType MapType => (ShipStatus.MapType)5;
         public bool CanPlaceCamera => false;
+        public bool IsCustomCalculateLightRadius => true;
 
         public TaskTypes RetrieveOxygenMask;
 
@@ -38,6 +40,10 @@ namespace ExtremeRoles.Compat.Mods
         private FieldInfo onUpperField;
 
         private FieldInfo inTransitionField;
+
+        private Type submarineStatusType;
+        private MethodInfo calculateLightRadiusMethod;
+        private MonoBehaviour submarineStatus;
 
         private const string elevatorMover = "ElevatorMover";
 
@@ -69,14 +75,44 @@ namespace ExtremeRoles.Compat.Mods
                 floorHandlerType, "RpcRequestChangeFloor");
             onUpperField = AccessTools.Field(floorHandlerType, "OnUpper");
 
+            submarineStatusType = ClassType.First(
+                t => t.Name == "SubmarineStatus");
+            calculateLightRadiusMethod = AccessTools.Method(
+                submarineStatusType, "CalculateLightRadius");
+
 
             Type ventMoveToVentPatchType = ClassType.First(t => t.Name == "Vent_MoveToVent_Patch");
             inTransitionField = AccessTools.Field(ventMoveToVentPatchType, "InTransition");
         }
-        public void Awake()
+        public void Awake(ShipStatus map)
         {
             Patches.HudManagerUpdatePatchPostfixPatch.ButtonTriggerReset();
+            submarineStatus = map.GetComponent(
+                Il2CppType.From(submarineStatusType))?.TryCast(submarineStatusType) as MonoBehaviour;
         }
+
+        public void Destroy()
+        {
+            submarineStatus = null;
+        }
+
+        public float CalculateLightRadius(GameData.PlayerInfo player, bool neutral, bool neutralImpostor)
+        {
+            return (float)calculateLightRadiusMethod.Invoke(
+                submarineStatus, new object[] { null, neutral, neutralImpostor });
+        }
+
+        public float CalculateLightRadius(
+            GameData.PlayerInfo player, float visonMod, bool applayVisonEffects = true)
+        {
+            // this is hotFix;
+            float baseVision = PlayerControl.GameOptions.CrewLightMod;
+            PlayerControl.GameOptions.CrewLightMod = visonMod;
+            float result = CalculateLightRadius(player, false, applayVisonEffects);
+            PlayerControl.GameOptions.CrewLightMod = baseVision;
+            return result;
+        }
+
         public int GetLocalPlayerFloor() => GetFloor(CachedPlayerControl.LocalPlayer);
         public int GetFloor(PlayerControl player)
         {
