@@ -63,7 +63,7 @@ namespace ExtremeRoles.Patches
             if (requireCustomCustomCalculateLightRadius())
             {
                 float visonMulti;
-                bool applayVisonEffects = !playerInfo.Role.IsImpostor;
+                bool applayVisonEffects = allRole[playerInfo.PlayerId].IsCrewmate();
 
                 if (allRole[playerInfo.PlayerId].HasOtherVison)
                 {
