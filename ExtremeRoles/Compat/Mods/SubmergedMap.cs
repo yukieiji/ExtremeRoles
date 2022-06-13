@@ -108,7 +108,7 @@ namespace ExtremeRoles.Compat.Mods
             // this is hotFix;
             float baseVision = PlayerControl.GameOptions.CrewLightMod;
             PlayerControl.GameOptions.CrewLightMod = visonMod;
-            float result = CalculateLightRadius(player, true, !applayVisonEffects)
+            float result = CalculateLightRadius(player, true, !applayVisonEffects);
             PlayerControl.GameOptions.CrewLightMod = baseVision;
             return result;
         }
