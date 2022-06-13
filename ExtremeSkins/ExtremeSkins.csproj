@@ -3,7 +3,7 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
-		<Version>2.1.0.8</Version>
+		<Version>2.1.0.9</Version>
 		<!--<VersionPrefix>2.1.0</VersionPrefix>-->
         <VersionSuffix>CustomVisor</VersionSuffix>
         <Description>Extreme Skins for Extreme Roles</Description>
@@ -55,7 +55,7 @@
       <PackageReference Update="AmongUs.GameLibs.Steam" Version="2022.3.29" />
     </ItemGroup>
 
-    <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs_Submerged)' != ''">
-        <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AmongUs_Submerged)/BepInEx/plugins/" UseSymboliclinksIfPossible="true" />
+    <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">
+        <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AmongUs)/BepInEx/plugins/" UseSymboliclinksIfPossible="true" />
     </Target>
 </Project>

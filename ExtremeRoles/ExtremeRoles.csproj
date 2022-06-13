@@ -4,8 +4,8 @@
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
 		<!--<Version>2.2.0.0</Version>-->
-		<VersionPrefix>2.2.0</VersionPrefix>
-        <VersionSuffix>GhostRole</VersionSuffix> 
+		<VersionPrefix>3.0.0</VersionPrefix>
+        <VersionSuffix>Submerged</VersionSuffix> 
         <Description>Extreme Roles for Advanced user</Description>
         <Authors>yukieiji</Authors>
         <Configurations>Debug;Release</Configurations>
@@ -45,7 +45,7 @@
       <PackageReference Update="AmongUs.GameLibs.Steam" Version="2022.3.29" />
     </ItemGroup>
 
-    <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs_Submerged)' != ''">
-        <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AmongUs_Submerged)/BepInEx/plugins/" UseSymboliclinksIfPossible="true" />
+    <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">
+        <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AmongUs)/BepInEx/plugins/" UseSymboliclinksIfPossible="true" />
     </Target>
 </Project>
