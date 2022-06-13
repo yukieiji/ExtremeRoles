@@ -13,13 +13,6 @@ namespace ExtremeRoles.Patches.Meeting
         public static void Postfix(
             MeetingIntroAnimation __instance)
         {
-			if (OptionHolder.Ship.IsBlockGhostRoleAbilityReport)
-            {
-				__instance.ProtectedRecently.SetActive(false);
-				return;
-			}
-			if (!ExtremeRolesPlugin.GameDataStore.AbilityManager.IsUseAbility()) { return; }
-
 			bool someoneWasProtected = false;
 			foreach(PlayerControl pc in CachedPlayerControl.AllPlayerControls)
 			{
@@ -35,16 +28,27 @@ namespace ExtremeRoles.Patches.Meeting
 
 			TMP_Text text = __instance.ProtectedRecently.GetComponentInChildren<TMP_SubMesh>().textComponent;
 
-			string abilityText = ExtremeRolesPlugin.GameDataStore.AbilityManager.CreateAbilityReport();
+			string gaAbilityText = string.Empty;
 
-			if (someoneWasProtected)
+			if (someoneWasProtected && !OptionHolder.Ship.IsBlockGAAbilityReport)
 			{
-				string showText = string.Concat(text.text, "\n", abilityText);
-				text.text = showText;
+				gaAbilityText = text.text;
+			}
+
+			string exrAbiltyText = ExtremeRolesPlugin.GameDataStore.AbilityManager.CreateAbilityReport();
+
+
+			if (gaAbilityText == string.Empty && exrAbiltyText == string.Empty)
+            {
+				__instance.ProtectedRecently.SetActive(false);
+				SoundManager.Instance.StopSound(__instance.ProtectedRecentlySound);
 			}
 			else
             {
-				text.text = abilityText;
+				string showText = gaAbilityText == string.Empty ? gaAbilityText : string.Empty;
+				showText = showText == string.Empty ? exrAbiltyText : string.Concat(showText, "\n", exrAbiltyText);
+
+				text.text = showText;
 				SoundManager.Instance.PlaySound(__instance.ProtectedRecentlySound, false, 1f);
 				__instance.ProtectedRecently.SetActive(true);
 			}
