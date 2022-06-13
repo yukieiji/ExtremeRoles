@@ -13,6 +13,10 @@ namespace ExtremeRoles.Patches.Meeting
         public static void Postfix(
             MeetingIntroAnimation __instance)
         {
+
+			__instance.ProtectedRecently.SetActive(false);
+			SoundManager.Instance.StopSound(__instance.ProtectedRecentlySound);
+
 			bool someoneWasProtected = false;
 			foreach(PlayerControl pc in CachedPlayerControl.AllPlayerControls)
 			{
@@ -37,13 +41,7 @@ namespace ExtremeRoles.Patches.Meeting
 
 			string exrAbiltyText = ExtremeRolesPlugin.GameDataStore.AbilityManager.CreateAbilityReport();
 
-
-			if (gaAbilityText == string.Empty && exrAbiltyText == string.Empty)
-            {
-				__instance.ProtectedRecently.SetActive(false);
-				SoundManager.Instance.StopSound(__instance.ProtectedRecentlySound);
-			}
-			else
+			if (gaAbilityText != string.Empty || exrAbiltyText != string.Empty)
             {
 				string showText = gaAbilityText == string.Empty ? gaAbilityText : string.Empty;
 				showText = showText == string.Empty ? exrAbiltyText : string.Concat(showText, "\n", exrAbiltyText);
