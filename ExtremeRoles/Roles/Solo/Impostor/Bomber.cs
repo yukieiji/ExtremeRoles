@@ -9,6 +9,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 using BepInEx.IL2CPP.Utils.Collections;
 
@@ -73,7 +74,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public bool IsAbilityUse()
         {
             this.setTargetPlayerId = byte.MaxValue;
-            var player = PlayerControl.LocalPlayer.FindClosestTarget(false);
+            var player = CachedPlayerControl.LocalPlayer.PlayerControl.FindClosestTarget(false);
             if (player != null)
             {
                 this.setTargetPlayerId = player.PlayerId;
@@ -90,7 +91,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public bool CheckAbility()
         {
             byte targetPlayerId = byte.MaxValue;
-            var player = PlayerControl.LocalPlayer.FindClosestTarget(false);
+            var player = CachedPlayerControl.LocalPlayer.PlayerControl.FindClosestTarget(false);
             if (player != null)
             {
                 targetPlayerId = player.PlayerId;
@@ -168,9 +169,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             if (this.bombPlayerId.Count == 0) { return; }
 
             if (MeetingHud.Instance != null ||
-                ShipStatus.Instance == null ||
+                CachedShipStatus.Instance == null ||
                 GameData.Instance == null) { return; }
-            if (!ShipStatus.Instance.enabled ||
+            if (!CachedShipStatus.Instance.enabled ||
                 ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
 
             this.timer -= Time.deltaTime;

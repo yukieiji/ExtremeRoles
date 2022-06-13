@@ -5,6 +5,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
@@ -122,7 +123,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
 
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                killer.NetId,
                 RPCOperator.Command.UncheckedMurderPlayer,
                 new List<byte> { killerId, target.PlayerId, animate });
             RPCOperator.UncheckedMurderPlayer(
@@ -193,10 +194,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             if (killTarget == null) { return; }
             if (killTarget.Data.IsDead || killTarget.Data.Disconnected) { return; }
-            if (killTarget.PlayerId == PlayerControl.LocalPlayer.PlayerId) { return; }
+            if (killTarget.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId) { return; }
             
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.JesterOutburstKill,
                 new List<byte> { this.outburstTarget.PlayerId, killTarget.PlayerId });
             OutburstKill(this.outburstTarget.PlayerId, killTarget.PlayerId);

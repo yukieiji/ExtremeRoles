@@ -5,6 +5,8 @@ using UnityEngine;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
@@ -229,14 +231,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public void Update(PlayerControl rolePlayer)
         {
 
-            if (ShipStatus.Instance == null ||
+            if (CachedShipStatus.Instance == null ||
                 GameData.Instance == null ||
                 MeetingHud.Instance != null)
             {
                 return;
             }
 
-            if (!ShipStatus.Instance.enabled ||
+            if (!CachedShipStatus.Instance.enabled ||
                 ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
             {
                 return;
@@ -334,7 +336,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 playerIndex = UnityEngine.Random.RandomRange(
                     0, PlayerControl.AllPlayerControls.Count - 1);
 
-                this.OneSidedLover = PlayerControl.AllPlayerControls[playerIndex];
+                this.OneSidedLover = CachedPlayerControl.AllPlayerControls[playerIndex];
 
                 var role = ExtremeRoleManager.GameRole[this.OneSidedLover.PlayerId];
                 if (role.Id != ExtremeRoleId.Yandere) { break; }
@@ -358,7 +360,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void IntroEndSetUp()
         {
-            foreach(var player in GameData.Instance.AllPlayers)
+            foreach(var player in GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 this.progress.Add(player.PlayerId, 0.0f);
             }

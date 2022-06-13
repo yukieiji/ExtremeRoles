@@ -9,6 +9,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GhostRoles.Crewmate;
 using ExtremeRoles.GhostRoles.Impostor;
+using ExtremeRoles.Performance;
 
 
 namespace ExtremeRoles.GhostRoles
@@ -321,7 +322,7 @@ namespace ExtremeRoles.GhostRoles
         public static T GetSafeCastedLocalPlayerRole<T>() where T : GhostRoleBase
         {
 
-            byte playerId = PlayerControl.LocalPlayer.PlayerId;
+            byte playerId = CachedPlayerControl.LocalPlayer.PlayerId;
 
             if (!GameRole.ContainsKey(playerId)) { return null; }
 

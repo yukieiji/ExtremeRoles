@@ -11,6 +11,8 @@ using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Neutral;
 using ExtremeRoles.Roles.Solo.Impostor;
 
+using ExtremeRoles.Performance;
+
 
 namespace ExtremeRoles.Roles
 {
@@ -287,7 +289,7 @@ namespace ExtremeRoles.Roles
 
         public static SingleRoleBase GetLocalPlayerRole()
         {
-            return GameRole[PlayerControl.LocalPlayer.PlayerId];
+            return GameRole[CachedPlayerControl.LocalPlayer.PlayerId];
         }
 
         public static void SetPlayerIdToMultiRoleId(
@@ -388,7 +390,7 @@ namespace ExtremeRoles.Roles
                 IRoleAbility multiAssignAbilityRole = ((MultiAssignRoleBase)GameRole[
                     playerId]) as IRoleAbility;
 
-                if (multiAssignAbilityRole != null && PlayerControl.LocalPlayer.PlayerId == playerId)
+                if (multiAssignAbilityRole != null && CachedPlayerControl.LocalPlayer.PlayerId == playerId)
                 {
                     if (multiAssignAbilityRole.Button != null)
                     {
@@ -429,14 +431,17 @@ namespace ExtremeRoles.Roles
 
         public static T GetSafeCastedLocalPlayerRole<T>() where T : SingleRoleBase
         {
-            var role = GameRole[PlayerControl.LocalPlayer.PlayerId] as T;
+
+            var localPlayer = CachedPlayerControl.LocalPlayer;
+
+            var role = GameRole[localPlayer.PlayerId] as T;
 
             if (role != null)
             {
                 return role;
             }
 
-            var multiAssignRole = GameRole[PlayerControl.LocalPlayer.PlayerId] as MultiAssignRoleBase;
+            var multiAssignRole = GameRole[localPlayer.PlayerId] as MultiAssignRoleBase;
             if (multiAssignRole != null)
             {
                 if (multiAssignRole.AnotherRole != null)

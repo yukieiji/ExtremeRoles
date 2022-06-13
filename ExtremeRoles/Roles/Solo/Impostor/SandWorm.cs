@@ -7,9 +7,10 @@ using Hazel;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.Roles;
-using ExtremeRoles.Resources;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -33,7 +34,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             protected override void AbilityButtonUpdate()
             {
                 bool isLightOff = false;
-                foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
+                foreach (PlayerTask task in 
+                    CachedPlayerControl.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
                 {
                     if (task.TaskType == TaskTypes.FixLights)
                     {
@@ -117,7 +119,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             
             bool isLightOff = false;
 
-            foreach (PlayerTask task in targetPlayer.myTasks)
+            foreach (PlayerTask task in targetPlayer.myTasks.GetFastEnumerator())
             {
                 if (task.TaskType == TaskTypes.FixLights)
                 {
@@ -146,7 +148,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.Button = new AssaultButton(
                 UseAbility,
                 IsAbilityUse,
-                HudManager.Instance.KillButton.graphic.sprite);
+                FastDestroyableSingleton<HudManager>.Instance.KillButton.graphic.sprite);
 
             this.RoleAbilityInit();
         }
@@ -154,7 +156,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public bool IsAbilityUse()
         {
             this.targetPlayer = Player.GetPlayerTarget(
-                PlayerControl.LocalPlayer,
+                CachedPlayerControl.LocalPlayer,
                 this, this.range);
 
             return isVentIn() && this.targetPlayer != null;
@@ -187,16 +189,16 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
 
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.UncheckedMurderPlayer,
                 new List<byte>
-                { 
-                    PlayerControl.LocalPlayer.PlayerId,
+                {
+                    CachedPlayerControl.LocalPlayer.PlayerId,
                     this.targetPlayer.PlayerId,
                     byte.MinValue
                 });
             RPCOperator.UncheckedMurderPlayer(
-                PlayerControl.LocalPlayer.PlayerId,
+                CachedPlayerControl.LocalPlayer.PlayerId,
                 this.targetPlayer.PlayerId,
                 byte.MinValue);
 
@@ -204,7 +206,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.KillCoolTime = Mathf.Clamp(this.KillCoolTime, 0.1f, float.MaxValue);
 
             this.targetPlayer = null;
-            PlayerControl.LocalPlayer.SetKillTimer(prevTime);
+            CachedPlayerControl.LocalPlayer.PlayerControl.SetKillTimer(prevTime);
 
             return true;
         }
@@ -255,7 +257,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         private static bool isVentIn()
         {
-            bool result = PlayerControl.LocalPlayer.inVent;
+            bool result = CachedPlayerControl.LocalPlayer.PlayerControl.inVent;
             Vent vent = Vent.currentVent;
 
             if (!result || vent == null) { return false; }

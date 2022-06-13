@@ -9,6 +9,8 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
@@ -58,7 +60,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             PlayerControl targetPlayer = Player.GetPlayerControlById(
                 targetPlayerId);
 
-            foreach (PlayerTask task in targetPlayer.myTasks)
+            foreach (PlayerTask task in targetPlayer.myTasks.GetFastEnumerator())
             {
                 if (task == null) { continue; }
 
@@ -82,20 +84,21 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             var player = Player.GetPlayerControlById(
                 playerId);
-            var playerInfo = GameData.Instance.GetPlayerById(
-                player.PlayerId);
+
+            if (player == null) { return; }
 
             byte taskId = (byte)taskIndex;
 
-            playerInfo.Tasks[index] = new GameData.TaskInfo(
-                taskId, (uint)index);
-            playerInfo.Tasks[index].Id = (uint)index;
+            if (GameSystem.SetPlayerNewTask(
+                ref player, taskId, (uint)index))
+            {
+                player.Data.Tasks[index] = new GameData.TaskInfo(
+                    taskId, (uint)index);
+                player.Data.Tasks[index].Id = (uint)index;
 
-            GameSystem.SetPlayerNewTask(
-                ref player, taskId, (uint)index);
-
-            GameData.Instance.SetDirtyBit(
-                1U << (int)player.PlayerId);
+                GameData.Instance.SetDirtyBit(
+                    1U << (int)player.PlayerId);
+            }
         }
 
 
@@ -157,17 +160,17 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
                 int taskId = (int)targetPlayerInfo.Tasks[i].TypeId;
 
-                if (ShipStatus.Instance.CommonTasks.FirstOrDefault(
+                if (CachedShipStatus.Instance.CommonTasks.FirstOrDefault(
                     (NormalPlayerTask t) => t.Index == taskId) != null)
                 {
                     this.TakeTask.Add(TakeTaskType.Common);
                 }
-                else if (ShipStatus.Instance.LongTasks.FirstOrDefault(
+                else if (CachedShipStatus.Instance.LongTasks.FirstOrDefault(
                     (NormalPlayerTask t) => t.Index == taskId) != null)
                 {
                     this.TakeTask.Add(TakeTaskType.Long);
                 }
-                else if (ShipStatus.Instance.NormalTasks.FirstOrDefault(
+                else if (CachedShipStatus.Instance.NormalTasks.FirstOrDefault(
                     (NormalPlayerTask t) => t.Index == taskId) != null)
                 {
                     this.TakeTask.Add(TakeTaskType.Normal);
@@ -205,7 +208,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.TargetPlayer = byte.MaxValue;
 
             PlayerControl target = Player.GetPlayerTarget(
-                PlayerControl.LocalPlayer, this,
+                CachedPlayerControl.LocalPlayer, this,
                 this.takeTaskRange);
 
             if (target != null)
@@ -228,10 +231,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void Update(PlayerControl rolePlayer)
         {
-            if (ShipStatus.Instance == null ||
+            if (CachedShipStatus.Instance == null ||
                 GameData.Instance == null) { return; }
 
-            if (!ShipStatus.Instance.enabled ||
+            if (!CachedShipStatus.Instance.enabled ||
                 this.TakeTask.Count == 0) { return; }
 
             var playerInfo = GameData.Instance.GetPlayerById(
@@ -262,7 +265,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     }
 
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                        PlayerControl.LocalPlayer.NetId,
+                        CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                         (byte)RPCOperator.Command.AgencySetNewTask,
                         Hazel.SendOption.Reliable, -1);
                     writer.Write(rolePlayer.PlayerId);
@@ -270,6 +273,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     writer.Write(taskIndex);
                     AmongUsClient.Instance.FinishRpcImmediately(writer);
                     ReplaceToNewTask(rolePlayer.PlayerId, i, taskIndex);
+                    break;
                 }
             }
         }

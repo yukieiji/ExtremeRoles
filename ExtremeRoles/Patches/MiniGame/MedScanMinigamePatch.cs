@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.MiniGame
 {
@@ -9,7 +10,7 @@ namespace ExtremeRoles.Patches.MiniGame
         {
             if (OptionHolder.Ship.AllowParallelMedBayScan)
             {
-                __instance.medscan.CurrentUser = PlayerControl.LocalPlayer.PlayerId;
+                __instance.medscan.CurrentUser = CachedPlayerControl.LocalPlayer.PlayerId;
                 __instance.medscan.UsersList.Clear();
             }
         }

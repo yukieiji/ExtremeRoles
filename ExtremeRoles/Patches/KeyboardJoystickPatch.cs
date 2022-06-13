@@ -10,6 +10,7 @@ using Hazel;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches
 {
@@ -201,7 +202,7 @@ namespace ExtremeRoles.Patches
 
                 if (role.CanKill && KeyboardJoystick.player.GetButtonDown(8))
                 {
-                    DestroyableSingleton<HudManager>.Instance.KillButton.DoClick();
+                    FastDestroyableSingleton<HudManager>.Instance.KillButton.DoClick();
                 }
                 if (role.UseVent && KeyboardJoystick.player.GetButtonDown(50))
                 {
@@ -211,12 +212,12 @@ namespace ExtremeRoles.Patches
                             OptionHolder.AllOption[
                                 (int)OptionHolder.CommonOptionKey.EngineerUseImpostorVent].GetValue())
                         {
-                            DestroyableSingleton<HudManager>.Instance.ImpostorVentButton.DoClick();
+                            FastDestroyableSingleton<HudManager>.Instance.ImpostorVentButton.DoClick();
                         }
                     }
                     else
                     {
-                        DestroyableSingleton<HudManager>.Instance.ImpostorVentButton.DoClick();
+                        FastDestroyableSingleton<HudManager>.Instance.ImpostorVentButton.DoClick();
                     }
                 }
             }

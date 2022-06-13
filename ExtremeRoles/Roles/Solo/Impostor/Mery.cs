@@ -12,6 +12,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 
 namespace ExtremeRoles.Roles.Solo.Impostor
@@ -42,7 +43,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
                 this.body.gameObject.SetActive(canSee);
                 this.body.transform.position = new Vector3(
-                    pos.x, pos.y, PlayerControl.LocalPlayer.transform.position.z + 1f);
+                    pos.x, pos.y, (pos.y / 1000f) + 0.01f);
+
+                if (ExtremeRolesPlugin.Compat.IsModMap)
+                {
+                    ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
+                        this.body.gameObject,
+                        Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
+                }
 
                 this.activePlayerNum = activeNum;
                 this.activeRange = activateRange;
@@ -90,7 +98,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 {
                     this.isActivate = true;
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                        PlayerControl.LocalPlayer.NetId,
+                        CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                         (byte)RPCOperator.Command.MeryAcivateVent,
                         Hazel.SendOption.Reliable, -1);
                     writer.Write(index);
@@ -112,7 +120,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 vent.ExitVentAnim = null;
                 vent.Offset = new Vector3(0f, 0.25f, 0f);
                 vent.GetComponent<PowerTools.SpriteAnim>()?.Stop();
-                vent.Id = ShipStatus.Instance.AllVents.Select(x => x.Id).Max() + 1;
+                vent.Id = CachedShipStatus.Instance.AllVents.Select(x => x.Id).Max() + 1;
 
                 var ventRenderer = vent.GetComponent<SpriteRenderer>();
                 ventRenderer.sprite = Loader.CreateSpriteFromResources(
@@ -120,6 +128,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 vent.myRend = ventRenderer;           
                 vent.name = "MaryVent_" + vent.Id;
                 vent.gameObject.SetActive(this.body.gameObject.active);
+
+                if (ExtremeRolesPlugin.Compat.IsModMap)
+                {
+                    ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
+                        vent.gameObject, Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
+                }
 
                 return vent;
             }
@@ -239,14 +253,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public bool UseAbility()
         {
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.MerySetCamp,
                 new List<byte>
                 {
-                    PlayerControl.LocalPlayer.PlayerId,
+                    CachedPlayerControl.LocalPlayer.PlayerId,
                 });
 
-            SetCamp(PlayerControl.LocalPlayer.PlayerId);
+            SetCamp(CachedPlayerControl.LocalPlayer.PlayerId);
 
             return true;
         }

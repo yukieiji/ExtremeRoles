@@ -1,6 +1,7 @@
 ﻿using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.GhostRoles;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using Hazel;
@@ -39,7 +40,7 @@ namespace ExtremeRoles.GhostRoles.Impostor
                 this.UseAbility,
                 this.isPreCheck,
                 this.isAbilityUse,
-                HudManager.Instance.ImpostorVentButton.graphic.sprite,
+                FastDestroyableSingleton<HudManager>.Instance.ImpostorVentButton.graphic.sprite,
                 this.DefaultButtonOffset,
                 rpcHostCallAbility: abilityCall);
             this.ButtonInit();
@@ -85,12 +86,12 @@ namespace ExtremeRoles.GhostRoles.Impostor
         {
             this.targetVent = null;
 
-            if (ShipStatus.Instance == null ||
-                !ShipStatus.Instance.enabled) { return false; }
+            if (CachedShipStatus.Instance == null ||
+                !CachedShipStatus.Instance.enabled) { return false; }
 
-            Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
+            Vector2 truePosition = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
 
-            foreach (Vent vent in ShipStatus.Instance.AllVents)
+            foreach (Vent vent in CachedShipStatus.Instance.AllVents)
             {
                 if (vent == null) { continue; }
                 if (ExtremeRolesPlugin.GameDataStore.CustomVent.IsCustomVent(vent.Id) &&

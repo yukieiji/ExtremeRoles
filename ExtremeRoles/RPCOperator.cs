@@ -2,6 +2,8 @@
 using System.Linq;
 using Hazel;
 
+using ExtremeRoles.Performance;
+
 namespace ExtremeRoles
 {
     public static class RPCOperator
@@ -27,6 +29,7 @@ namespace ExtremeRoles
             SetWinPlayer,
             ShareMapId,
             ShareVersion,
+            IntegrateModCall,
 
             // 役職関連
             // 役職メインコントール
@@ -96,7 +99,7 @@ namespace ExtremeRoles
         }
         public static void RoleIsWin(byte playerId)
         {
-            Call(PlayerControl.LocalPlayer.NetId,
+            Call(CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 Command.SetRoleWin, new List<byte>{ playerId });
             SetRoleWin(playerId);
         }
@@ -149,7 +152,7 @@ namespace ExtremeRoles
                 Minigame.Instance.ForceClose();
             }
 
-            SwitchSystem switchSystem = ShipStatus.Instance.Systems[
+            SwitchSystem switchSystem = CachedShipStatus.Systems[
                 SystemTypes.Electrical].Cast<SwitchSystem>();
             switchSystem.ActualSwitches = switchSystem.ExpectedSwitches;
         }
@@ -182,7 +185,9 @@ namespace ExtremeRoles
             int ventId, byte playerId, byte isEnter)
         {
 
-            if (ShipStatus.Instance == null || HudManager.Instance == null) { return; }
+            HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
+
+            if (ShipStatus.Instance == null || hudManager == null) { return; }
 
             PlayerControl player = Helper.Player.GetPlayerControlById(playerId);
             if (player == null) { return; }
@@ -197,12 +202,12 @@ namespace ExtremeRoles
             reader.Buffer = bytes;
             reader.Length = bytes.Length;
 
-            Vent vent = ShipStatus.Instance.AllVents.FirstOrDefault(
+            Vent vent = CachedShipStatus.Instance.AllVents.FirstOrDefault(
                 (x) => x.Id == ventId);
 
             var ventContainer = ExtremeRolesPlugin.GameDataStore.CustomVent;
 
-            HudManager.Instance.StartCoroutine(
+            hudManager.StartCoroutine(
                 Effects.Lerp(
                     0.6f, new System.Action<float>((p) => {
                         if (vent != null && vent.myRend != null)
@@ -223,17 +228,19 @@ namespace ExtremeRoles
         public static void StartVentAnimation(int ventId)
         {
 
-            if (ShipStatus.Instance == null) { return; }
-            Vent vent = ShipStatus.Instance.AllVents.FirstOrDefault(
+            if (CachedShipStatus.Instance == null) { return; }
+            Vent vent = CachedShipStatus.Instance.AllVents.FirstOrDefault(
                 (x) => x.Id == ventId);
+
+            HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
             var ventContainer = ExtremeRolesPlugin.GameDataStore.CustomVent;
 
             if (ventContainer.IsCustomVent(ventId))
             {
-                if (HudManager.Instance == null) { return; }
+                if (hudManager == null) { return; }
 
-                HudManager.Instance.StartCoroutine(
+                hudManager.StartCoroutine(
                     Effects.Lerp(
                         0.6f, new System.Action<float>((p) => {
                             if (vent != null && vent.myRend != null)
@@ -310,7 +317,7 @@ namespace ExtremeRoles
 
                 ExtremeRolesPlugin.GameDataStore.WinCheckDisable = false;
 
-                var player = PlayerControl.LocalPlayer;
+                var player = CachedPlayerControl.LocalPlayer;
 
                 if (player.PlayerId != targetId)
                 {
@@ -370,6 +377,13 @@ namespace ExtremeRoles
                 clientId] = new System.Version(
                     major, minor, build, revision);
         }
+
+        public static void IntegrateModCall(
+            ref MessageReader readeer)
+        {
+            ExtremeRolesPlugin.Compat.IntegrateModCall(ref readeer);
+        }
+
 
         public static void ReplaceRole(
             byte callerId, byte targetId, byte operation)

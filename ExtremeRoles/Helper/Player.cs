@@ -2,6 +2,9 @@
 
 using UnityEngine;
 
+using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
+
 namespace ExtremeRoles.Helper
 {
     public static class Player
@@ -27,7 +30,7 @@ namespace ExtremeRoles.Helper
 
         public static PlayerControl GetPlayerControlById(byte id)
         {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
             {
                 if (player.PlayerId == id) { return player; }
             }
@@ -99,7 +102,7 @@ namespace ExtremeRoles.Helper
             int taskNum = 0;
             int compNum = 0;
 
-            foreach (GameData.TaskInfo task in player.Tasks)
+            foreach (GameData.TaskInfo task in player.Tasks.GetFastEnumerator())
             {
 
                 ++taskNum;
@@ -162,11 +165,11 @@ namespace ExtremeRoles.Helper
 
             Dictionary<byte, PoolablePlayer> playerIcon = new Dictionary<byte, PoolablePlayer>();
 
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
             {
                 PoolablePlayer poolPlayer = UnityEngine.Object.Instantiate<PoolablePlayer>(
                     Module.Prefab.PlayerPrefab,
-                    HudManager.Instance.transform);
+                    FastDestroyableSingleton<HudManager>.Instance.transform);
                 
                 poolPlayer.gameObject.SetActive(true);
                 poolPlayer.UpdateFromPlayerData(

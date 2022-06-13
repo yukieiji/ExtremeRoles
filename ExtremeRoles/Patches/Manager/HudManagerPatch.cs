@@ -4,6 +4,7 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 
 namespace ExtremeRoles.Patches.Manager
@@ -129,7 +130,7 @@ namespace ExtremeRoles.Patches.Manager
             var updatableRole = checkRole as IRoleUpdate;
             if (updatableRole != null)
             {
-                updatableRole.Update(PlayerControl.LocalPlayer);
+                updatableRole.Update(CachedPlayerControl.LocalPlayer);
             }
         }
 

@@ -8,6 +8,8 @@ using UnityEngine;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -74,7 +76,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 int targetPlayerTaskNum = targetPlayer.Data.Tasks.Count;
                 int targetPlayerCompTask = 0;
 
-                foreach (var task in targetPlayer.Data.Tasks)
+                foreach (var task in targetPlayer.Data.Tasks.GetFastEnumerator())
                 {
                     if (task.Complete)
                     {
@@ -279,9 +281,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void Update(PlayerControl rolePlayer)
         {
-            if (ShipStatus.Instance == null ||
+            if (CachedShipStatus.Instance == null ||
                 GameData.Instance == null) { return; }
-            if (!ShipStatus.Instance.enabled) { return; }
+            if (!CachedShipStatus.Instance.enabled) { return; }
 
             if (MeetingHud.Instance == null && this.timer < this.aliveCheckTime)
             {
@@ -306,7 +308,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                         Helper.Logging.Debug($"SetTaskId:{taskIndex}");
 
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                            PlayerControl.LocalPlayer.NetId,
+                            rolePlayer.NetId,
                             (byte)RPCOperator.Command.SlaveDriverSetNewTask,
                             Hazel.SendOption.Reliable, -1);
                         writer.Write(playerId);
@@ -319,7 +321,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                         {
                             removeResult.Add((playerId, newTask));
                         }
-
+                        break;
                     }
                 }
             }
@@ -345,20 +347,21 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             var player = Helper.Player.GetPlayerControlById(
                 playerId);
-            var playerInfo = GameData.Instance.GetPlayerById(
-                player.PlayerId);
+
+            if (player == null) { return; }
 
             byte taskId = (byte)taskIndex;
 
-            playerInfo.Tasks[index] = new GameData.TaskInfo(
-                taskId, (uint)index);
-            playerInfo.Tasks[index].Id = (uint)index;
+            if (Helper.GameSystem.SetPlayerNewTask(
+                ref player, taskId, (uint)index))
+            {
+                player.Data.Tasks[index] = new GameData.TaskInfo(
+                    taskId, (uint)index);
+                player.Data.Tasks[index].Id = (uint)index;
 
-            Helper.GameSystem.SetPlayerNewTask(
-                ref player, taskId, (uint)index);
-
-            GameData.Instance.SetDirtyBit(
-                1U << (int)player.PlayerId);
+                GameData.Instance.SetDirtyBit(
+                    1U << (int)player.PlayerId);
+            }
         }
 
     }

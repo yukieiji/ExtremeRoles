@@ -8,6 +8,7 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SpecialWinChecker;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module
 {
@@ -612,9 +613,9 @@ namespace ExtremeRoles.Module
                 Vent newVent,
                 CustomVentType type)
             {
-                var allVents = ShipStatus.Instance.AllVents.ToList();
+                var allVents = CachedShipStatus.Instance.AllVents.ToList();
                 allVents.Add(newVent);
-                ShipStatus.Instance.AllVents = allVents.ToArray();
+                CachedShipStatus.Instance.AllVents = allVents.ToArray();
                 if (this.addVent.ContainsKey(type))
                 {
                     this.addVent[type].Add(newVent);

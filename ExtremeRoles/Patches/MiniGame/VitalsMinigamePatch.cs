@@ -11,8 +11,7 @@ namespace ExtremeRoles.Patches.MiniGame
 
             if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
-            if (Roles.ExtremeRoleManager.GameRole[
-                PlayerControl.LocalPlayer.PlayerId].CanUseVital) { return true; }
+            if (Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseVital) { return true; }
 
             __instance.SabText.text = Helper.Translation.GetString("youDonotUse");
 

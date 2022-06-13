@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module.AbilityButton.Roles
 {
@@ -32,22 +33,22 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
         public sealed override void Update()
         {
             if (this.Button == null) { return; }
-            if (PlayerControl.LocalPlayer.Data == null ||
+            if (CachedPlayerControl.LocalPlayer.Data == null ||
                 MeetingHud.Instance ||
                 ExileController.Instance ||
-                PlayerControl.LocalPlayer.Data.IsDead)
+                CachedPlayerControl.LocalPlayer.Data.IsDead)
             {
                 SetActive(false);
                 return;
             }
-            SetActive(HudManager.Instance.UseButton.isActiveAndEnabled);
+            SetActive(FastDestroyableSingleton<HudManager>.Instance.UseButton.isActiveAndEnabled);
 
             this.Button.graphic.sprite = this.ButtonSprite;
             this.Button.OverrideText(ButtonText);
 
-            if (HudManager.Instance.UseButton != null)
+            if (FastDestroyableSingleton<HudManager>.Instance.UseButton != null)
             {
-                Vector3 pos = HudManager.Instance.UseButton.transform.localPosition;
+                Vector3 pos = FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition;
                 if (this.Mirror)
                 {
                     pos = new Vector3(-pos.x, pos.y, pos.z);

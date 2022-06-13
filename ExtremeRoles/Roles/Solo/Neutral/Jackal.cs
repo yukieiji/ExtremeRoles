@@ -9,6 +9,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
@@ -242,7 +243,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             var targetRole = ExtremeRoleManager.GameRole[targetId];
 
             // プレイヤーのリセット処理
-            if (PlayerControl.LocalPlayer.PlayerId == targetId)
+            if (CachedPlayerControl.LocalPlayer.PlayerId == targetId)
             {
                 abilityReset(targetRole);
             }
@@ -266,7 +267,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             sourceJackal.SidekickPlayerId.Add(targetId);
 
-            DestroyableSingleton<RoleManager>.Instance.SetRole(
+            FastDestroyableSingleton<RoleManager>.Instance.SetRole(
                 Player.GetPlayerControlById(targetId), RoleTypes.Crewmate);
 
             if (targetRole.Id != ExtremeRoleId.Lover)
@@ -449,7 +450,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
         
             this.Target = Player.GetPlayerTarget(
-                PlayerControl.LocalPlayer,
+                CachedPlayerControl.LocalPlayer,
                 this, GameOptionsData.KillDistances[
                     Mathf.Clamp(this.createSidekickRange, 0, 2)]);
 
@@ -462,7 +463,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (!isImpostorAndSetTarget(targetPlayerId)) { return false; }
             if (!isLoverAndSetTarget(targetPlayerId)) { return false; }
 
-            PlayerControl rolePlayer = PlayerControl.LocalPlayer;
+            PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
 
             RPCOperator.Call(
                 rolePlayer.NetId,

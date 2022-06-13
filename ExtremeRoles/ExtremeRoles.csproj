@@ -16,6 +16,7 @@
         <GameVersion Condition="'$(GamePlatform)' == 'Steam'">2022.3.29</GameVersion>
         <GameVersion Condition="'$(GamePlatform)' == 'Itch'">2022.3.29</GameVersion>
         <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <ItemGroup>
@@ -24,13 +25,13 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="BepInEx.Il2Cpp.TlsAdapter" Version="1.0.1" />
-        <PackageReference Include="HarmonyX" Version="2.9.0" />
+        <PackageReference Include="HarmonyX" Version="2.10.0" />
         <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-        <PackageReference Include="BepInEx.IL2CPP" Version="6.0.0-be.521" />
+        <PackageReference Include="BepInEx.IL2CPP" Version="6.0.0-be.565" />
         <PackageReference Include="AmongUs.GameLibs.$(GamePlatform)" Version="$(GameVersion)" PrivateAssets="all" />
 
         <PackageReference Include="BepInEx.AutoPlugin" Version="1.0.1" PrivateAssets="all" />
-        <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="1.0.2" PrivateAssets="all" />
+        <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="1.1.1" PrivateAssets="all" />
     </ItemGroup>
 
     <ItemGroup>
@@ -44,7 +45,7 @@
       <PackageReference Update="AmongUs.GameLibs.Steam" Version="2022.3.29" />
     </ItemGroup>
 
-    <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">
-        <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AmongUs)/BepInEx/plugins/" UseSymboliclinksIfPossible="true" />
+    <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs_Submerged)' != ''">
+        <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AmongUs_Submerged)/BepInEx/plugins/" UseSymboliclinksIfPossible="true" />
     </Target>
 </Project>

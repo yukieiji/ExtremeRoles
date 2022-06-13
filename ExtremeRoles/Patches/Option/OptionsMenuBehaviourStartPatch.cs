@@ -8,6 +8,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
+using ExtremeRoles.Performance;
+
 using static ExtremeRoles.OptionHolder;
 using static UnityEngine.UI.Button;
 using Object = UnityEngine.Object;
@@ -151,9 +153,11 @@ namespace ExtremeRoles.Patches.Option
             {
                 if (!popUp) { return; }
 
-                if (__instance.transform.parent && __instance.transform.parent == HudManager.Instance.transform)
+                var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+
+                if (__instance.transform.parent && __instance.transform.parent == hudManager.transform)
                 {
-                    popUp.transform.SetParent(HudManager.Instance.transform);
+                    popUp.transform.SetParent(hudManager.transform);
                     popUp.transform.localPosition = new Vector3(0, 0, -800f);
                 }
                 else

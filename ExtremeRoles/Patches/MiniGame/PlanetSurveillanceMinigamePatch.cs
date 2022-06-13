@@ -1,5 +1,6 @@
 ﻿using System;
 using HarmonyLib;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.MiniGame
 {
@@ -10,8 +11,7 @@ namespace ExtremeRoles.Patches.MiniGame
             PlanetSurveillanceMinigame __instance,
             [HarmonyArgument(0)] int direction)
         {
-            if (Roles.ExtremeRoleManager.GameRole[
-                PlayerControl.LocalPlayer.PlayerId].CanUseSecurity) { return true; }
+            if (Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity) { return true; }
 
             if (direction != 0 && Constants.ShouldPlaySfx())
             {
@@ -26,7 +26,7 @@ namespace ExtremeRoles.Patches.MiniGame
                 __instance.currentCamera].Offset;
             __instance.LocationName.text = (
                 (survCamera.NewName > StringNames.ExitButton) ? 
-                    DestroyableSingleton<TranslationController>.Instance.GetString(
+                    FastDestroyableSingleton<TranslationController>.Instance.GetString(
                         survCamera.NewName, Array.Empty<Il2CppSystem.Object>()) : survCamera.CamName);
 
             return false;

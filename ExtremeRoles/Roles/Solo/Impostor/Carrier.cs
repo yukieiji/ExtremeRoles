@@ -9,6 +9,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 using BepInEx.IL2CPP.Utils.Collections;
 
@@ -155,16 +156,16 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public bool UseAbility()
         {
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.CarrierCarryBody,
                 new List<byte>
                 { 
-                    PlayerControl.LocalPlayer.PlayerId,
+                    CachedPlayerControl.LocalPlayer.PlayerId,
                     this.targetBody.PlayerId
                 });
 
             CarryDeadBody(
-                PlayerControl.LocalPlayer.PlayerId,
+                CachedPlayerControl.LocalPlayer.PlayerId,
                 this.targetBody.PlayerId);
             return true;
         }
@@ -172,11 +173,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void CleanUp()
         {
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.CarrierSetBody,
-                new List<byte>{ PlayerControl.LocalPlayer.PlayerId });
+                new List<byte>{ CachedPlayerControl.LocalPlayer.PlayerId });
             PlaceDeadBody(
-                PlayerControl.LocalPlayer.PlayerId);
+                CachedPlayerControl.LocalPlayer.PlayerId);
         }
 
         protected override void CreateSpecificOption(

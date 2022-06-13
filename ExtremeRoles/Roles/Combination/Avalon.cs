@@ -6,6 +6,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Combination
 {
@@ -103,7 +104,7 @@ namespace ExtremeRoles.Roles.Combination
             if (AmongUsClient.Instance.AmHost)
             {
                 MeetingRoomManager.Instance.AssignSelf(rolePlayer.Object, null);
-                DestroyableSingleton<HudManager>.Instance.OpenMeetingRoom(rolePlayer.Object);
+                FastDestroyableSingleton<HudManager>.Instance.OpenMeetingRoom(rolePlayer.Object);
                 rolePlayer.Object.RpcStartMeeting(null);
             }
 
@@ -125,7 +126,7 @@ namespace ExtremeRoles.Roles.Combination
                 rolePlayer.PlayerId == killerPlayer.PlayerId)
             {
                 MeetingRoomManager.Instance.AssignSelf(rolePlayer, null);
-                DestroyableSingleton<HudManager>.Instance.OpenMeetingRoom(rolePlayer);
+                FastDestroyableSingleton<HudManager>.Instance.OpenMeetingRoom(rolePlayer);
                 rolePlayer.RpcStartMeeting(null);
             }
             else
@@ -327,7 +328,7 @@ namespace ExtremeRoles.Roles.Combination
         private void showIcon()
         {
             int visibleCounter = 0;
-            Vector3 bottomLeft = HudManager.Instance.UseButton.transform.localPosition;
+            Vector3 bottomLeft = FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition;
             bottomLeft.x *= -1;
             bottomLeft += new Vector3(-0.25f, -0.25f, 0);
 
@@ -335,7 +336,7 @@ namespace ExtremeRoles.Roles.Combination
             {
                 byte playerId = item.Key;
                 var poolPlayer = item.Value;
-                if (playerId == PlayerControl.LocalPlayer.PlayerId) { continue; }
+                if (playerId == CachedPlayerControl.LocalPlayer.PlayerId) { continue; }
 
                 PlayerControl player = Player.GetPlayerControlById(playerId);
                 SingleRoleBase role = ExtremeRoleManager.GameRole[playerId];

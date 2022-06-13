@@ -8,6 +8,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
@@ -99,25 +100,25 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public void CleanUp()
         {
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.FencerCounterOff,
                 new List<byte>
                 {
-                    PlayerControl.LocalPlayer.PlayerId,
+                    CachedPlayerControl.LocalPlayer.PlayerId,
                 });
-            CounterOff(PlayerControl.LocalPlayer.PlayerId);
+            CounterOff(CachedPlayerControl.LocalPlayer.PlayerId);
         }
 
         public bool UseAbility()
         {
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.FencerCounterOn,
                 new List<byte>
                 {
-                    PlayerControl.LocalPlayer.PlayerId,
+                    CachedPlayerControl.LocalPlayer.PlayerId,
                 });
-            CounterOn(PlayerControl.LocalPlayer.PlayerId);
+            CounterOn(CachedPlayerControl.LocalPlayer.PlayerId);
             return true;
         }
 

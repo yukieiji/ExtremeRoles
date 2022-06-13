@@ -3,6 +3,7 @@
 using UnityEngine;
 
 using HarmonyLib;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Patches.MapOverlay
 {
@@ -21,7 +22,7 @@ namespace ExtremeRoles.Patches.MapOverlay
 
             if (admin == null || !admin.Boosted || !admin.IsAbilityActive)
             {
-                foreach (PoolableBehavior icon in __instance.myIcons)
+                foreach (PoolableBehavior icon in __instance.myIcons.GetFastEnumerator())
                 {
                     SpriteRenderer renderer = icon.GetComponent<SpriteRenderer>();
 

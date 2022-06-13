@@ -6,9 +6,21 @@ using UnityEngine;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches
 {
+    [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Awake))]
+    class ShipStatusAwakePatch
+    {
+        [HarmonyPostfix, HarmonyPriority(Priority.Last)]
+        public static void Postfix(ShipStatus __instance)
+        {
+            CachedShipStatus.SetUp(__instance);
+            ExtremeRolesPlugin.Compat.SetUpMap(__instance);
+        }
+    }
+
     [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.CalculateLightRadius))]
     class ShipStatusCalculateLightRadiusPatch
     {
@@ -18,17 +30,60 @@ namespace ExtremeRoles.Patches
             [HarmonyArgument(0)] GameData.PlayerInfo playerInfo)
         {
 
-            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return true; }
+            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd())
+            {
+                return checkNormalOrCustomCalculateLightRadius(playerInfo, ref __result);
+            }
 
             ISystemType systemType = __instance.Systems.ContainsKey(
                 SystemTypes.Electrical) ? __instance.Systems[SystemTypes.Electrical] : null;
-            if (systemType == null) { return true; }
+            if (systemType == null)
+            {
+                return checkNormalOrCustomCalculateLightRadius(playerInfo, ref __result);
+            }
 
             SwitchSystem switchSystem = systemType.TryCast<SwitchSystem>();
-            if (switchSystem == null) { return true; }
+            if (switchSystem == null)
+            {
+                return checkNormalOrCustomCalculateLightRadius(playerInfo, ref __result);
+            }
 
             var allRole = ExtremeRoleManager.GameRole;
-            if (allRole.Count == 0) { return true; }
+            if (allRole.Count == 0)
+            {
+                if (requireCustomCustomCalculateLightRadius())
+                {
+                    __result = ExtremeRolesPlugin.Compat.ModMap.CalculateLightRadius(
+                        playerInfo, false, playerInfo.Role.IsImpostor);
+                    return false;
+                }
+                return true;
+            }
+
+            if (requireCustomCustomCalculateLightRadius())
+            {
+                float visonMulti;
+                bool applayVisonEffects = allRole[playerInfo.PlayerId].IsCrewmate();
+
+                if (allRole[playerInfo.PlayerId].HasOtherVison)
+                {
+                    visonMulti = allRole[playerInfo.PlayerId].Vison;
+                    applayVisonEffects = allRole[playerInfo.PlayerId].IsApplyEnvironmentVision;
+                }
+                else if (playerInfo.Role.IsImpostor)
+                {
+                    visonMulti = PlayerControl.GameOptions.ImpostorLightMod;
+                }
+                else
+                {
+                    visonMulti = PlayerControl.GameOptions.CrewLightMod;
+                }
+
+                __result = ExtremeRolesPlugin.Compat.ModMap.CalculateLightRadius(
+                    playerInfo, visonMulti, applayVisonEffects);
+
+                return false;
+            }
 
             float num = (float)switchSystem.Value / 255f;
             float switchVisonMulti = Mathf.Lerp(
@@ -57,10 +112,27 @@ namespace ExtremeRoles.Patches
             {
                 __result = switchVisonMulti * PlayerControl.GameOptions.CrewLightMod;
             }
-
             return false;
         }
+
+        private static bool requireCustomCustomCalculateLightRadius() =>
+            ExtremeRolesPlugin.Compat.IsModMap &&
+            ExtremeRolesPlugin.Compat.ModMap.IsCustomCalculateLightRadius;
+
+        private static bool checkNormalOrCustomCalculateLightRadius(
+            GameData.PlayerInfo player, ref float result)
+        {
+            if (requireCustomCustomCalculateLightRadius())
+            {
+                result = ExtremeRolesPlugin.Compat.ModMap.CalculateLightRadius(
+                    player, false, player.Role.IsImpostor);
+                return false;
+            }
+            return true;
+        }
+
     }
+
     [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.IsGameOverDueToDeath))]
     public class ShipStatusIsGameOverDueToDeathPatch
     {
@@ -77,7 +149,7 @@ namespace ExtremeRoles.Patches
         {
             if (!GameData.Instance) { return false; };
             if (DestroyableSingleton<TutorialManager>.InstanceExists) { return true; } // InstanceExists | Don't check Custom Criteria when in Tutorial
-            if (HudManager.Instance.IsIntroDisplayed){ return false; }
+            if (FastDestroyableSingleton<HudManager>.Instance.IsIntroDisplayed){ return false; }
 
             if (ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger ||
                 ExtremeRolesPlugin.GameDataStore.WinCheckDisable) { return false; }
@@ -360,6 +432,16 @@ namespace ExtremeRoles.Patches
 
             RPCOperator.SetWinGameControlId(id);
         }
+    }
 
+    [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.OnDestroy))]
+    public static class ShipStatusOnDestroyPatch
+    {
+        [HarmonyPostfix, HarmonyPriority(Priority.Last)]
+        public static void Postfix()
+        {
+            CachedShipStatus.Destroy();
+            ExtremeRolesPlugin.Compat.RemoveMap();
+        }
     }
 }

@@ -3,6 +3,8 @@ using UnityEngine;
 
 using HarmonyLib;
 
+using ExtremeRoles.Performance;
+
 namespace ExtremeRoles.Patches.MiniGame
 {
     [HarmonyPatch(typeof(SurveillanceMinigame), nameof(SurveillanceMinigame.Begin))]
@@ -13,13 +15,13 @@ namespace ExtremeRoles.Patches.MiniGame
             SurveillanceMinigameUpdatePatch.Timer = SurveillanceMinigameUpdatePatch.ChangeTime;
             SurveillanceMinigameUpdatePatch.Page = 0;
 
-            if (ShipStatus.Instance.AllCameras.Length > 4 && __instance.FilteredRooms.Length > 0)
+            if (CachedShipStatus.Instance.AllCameras.Length > 4 && __instance.FilteredRooms.Length > 0)
             {
                 __instance.textures = __instance.textures.ToList().Concat(
-                    new RenderTexture[ShipStatus.Instance.AllCameras.Length - 4]).ToArray();
-                for (int i = 4; i < ShipStatus.Instance.AllCameras.Length; i++)
+                    new RenderTexture[CachedShipStatus.Instance.AllCameras.Length - 4]).ToArray();
+                for (int i = 4; i < CachedShipStatus.Instance.AllCameras.Length; i++)
                 {
-                    SurvCamera surv = ShipStatus.Instance.AllCameras[i];
+                    SurvCamera surv = CachedShipStatus.Instance.AllCameras[i];
                     Camera camera = UnityEngine.Object.Instantiate<Camera>(__instance.CameraPrefab);
                     camera.transform.SetParent(__instance.transform);
                     camera.transform.position = new Vector3(surv.transform.position.x, surv.transform.position.y, 8f);
@@ -43,8 +45,7 @@ namespace ExtremeRoles.Patches.MiniGame
         {
             if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
-            if (Roles.ExtremeRoleManager.GameRole[
-                PlayerControl.LocalPlayer.PlayerId].CanUseSecurity)
+            if (Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity)
             {
                 updateCamera(__instance);
                 return false;
@@ -64,7 +65,7 @@ namespace ExtremeRoles.Patches.MiniGame
         private static void updateCamera(SurveillanceMinigame instance)
         {
             Timer -= Time.deltaTime;
-            int numberOfPages = Mathf.CeilToInt(ShipStatus.Instance.AllCameras.Length / 4f);
+            int numberOfPages = Mathf.CeilToInt(CachedShipStatus.Instance.AllCameras.Length / 4f);
 
             bool update = false;
 
@@ -81,7 +82,7 @@ namespace ExtremeRoles.Patches.MiniGame
                 Timer = ChangeTime;
             }
 
-            if ((instance.isStatic || update) && !PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(PlayerControl.LocalPlayer))
+            if ((instance.isStatic || update) && !PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(CachedPlayerControl.LocalPlayer))
             {
                 instance.isStatic = false;
                 for (int i = 0; i < instance.ViewPorts.Length; i++)
@@ -99,7 +100,7 @@ namespace ExtremeRoles.Patches.MiniGame
                     }
                 }
             }
-            else if (!instance.isStatic && PlayerTask.PlayerHasTaskOfType<HudOverrideTask>(PlayerControl.LocalPlayer))
+            else if (!instance.isStatic && PlayerTask.PlayerHasTaskOfType<HudOverrideTask>(CachedPlayerControl.LocalPlayer))
             {
                 instance.isStatic = true;
                 for (int j = 0; j < instance.ViewPorts.Length; j++)

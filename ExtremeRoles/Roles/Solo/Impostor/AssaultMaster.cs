@@ -6,6 +6,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -120,7 +121,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             this.curReloadCoolTime = this.defaultReloadCoolTime;
 
-            float curKillCool = PlayerControl.LocalPlayer.killTimer;
+            float curKillCool = CachedPlayerControl.LocalPlayer.PlayerControl.killTimer;
             float newKillCool = curKillCool;
             int loop = this.stock;
             for (int i = 0; i < loop; ++i)
@@ -151,7 +152,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.Button != null)
             {
                 this.reduceKillCoolText = GameObject.Instantiate(
-                    HudManager.Instance.KillButton.cooldownTimerText,
+                    FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
                     this.Button.GetTransform());
                 this.reduceKillCoolText.enableWordWrapping = false;
                 this.reduceKillCoolText.transform.localScale = Vector3.one * 0.5f;
