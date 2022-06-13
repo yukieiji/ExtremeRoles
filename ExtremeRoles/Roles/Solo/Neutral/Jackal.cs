@@ -272,13 +272,19 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             if (targetRole.Id != ExtremeRoleId.Lover)
             {
-                ExtremeRoleManager.GameRole[targetId] = newSidekick;
+                lock (ExtremeRoleManager.GameRole)
+                {
+                    ExtremeRoleManager.GameRole[targetId] = newSidekick;
+                }
             }
             else
             {
                 if (sourceJackal.ForceReplaceLover)
                 {
-                    ExtremeRoleManager.GameRole[targetId] = newSidekick;
+                    lock (ExtremeRoleManager.GameRole)
+                    {
+                        ExtremeRoleManager.GameRole[targetId] = newSidekick;
+                    }
                     targetRole.RolePlayerKilledAction(targetPlayer, targetPlayer);
                 }
                 else
