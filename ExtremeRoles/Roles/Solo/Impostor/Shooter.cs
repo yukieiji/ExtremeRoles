@@ -104,6 +104,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.curShootNum = 0;
                 this.shootCounter = int.MaxValue;
                 this.timer = this.chargeTime;
+                chargeInfoSetActive(false);
                 return;
             }
             if (MeetingHud.Instance)
