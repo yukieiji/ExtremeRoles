@@ -43,7 +43,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             false, true, false, false)
         { }
 
-        public static void WinWithDead(byte rolePlayerId)
+        public static void DeadWin(byte rolePlayerId)
         {
             Survivor survivor = ExtremeRoleManager.GetSafeCastedRole<Survivor>(rolePlayerId);
             if (survivor != null)
@@ -86,9 +86,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     this.isDeadWin = true;
                     RPCOperator.Call(
                         rolePlayer.NetId,
-                        RPCOperator.Command.SurvivorWinDead,
+                        RPCOperator.Command.SurvivorDeadWin,
                         new List<byte> { rolePlayer.PlayerId });
-                    WinWithDead(rolePlayer.PlayerId);
+                    DeadWin(rolePlayer.PlayerId);
                 }
 
                 if (taskGage >= this.awakeTaskGage && !this.awakeRole)

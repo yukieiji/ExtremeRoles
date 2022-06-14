@@ -57,7 +57,7 @@ namespace ExtremeRoles
             FencerEnableKillButton,
             CuresMakerCurseKillCool,
             CarpenterUseAbility,
-            SurvivorWinDead,
+            SurvivorDeadWin,
 
             // インポスター
             AssasinVoteFor,
@@ -490,9 +490,9 @@ namespace ExtremeRoles
             Roles.Solo.Crewmate.Carpenter.UpdateMapObject(ref reader);
         }
 
-        public static void SurvivorWinDead(byte playerId)
+        public static void SurvivorDeadWin(byte playerId)
         {
-            Roles.Solo.Crewmate.Survivor.WinWithDead(playerId);
+            Roles.Solo.Crewmate.Survivor.DeadWin(playerId);
         }
 
         public static void AssasinVoteFor(byte targetId)
