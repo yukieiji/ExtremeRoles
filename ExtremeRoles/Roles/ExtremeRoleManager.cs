@@ -47,6 +47,7 @@ namespace ExtremeRoles.Roles
         Fencer,
         Opener,
         Carpenter,
+        Survivor,
 
         SpecialImpostor,
         Evolver,
@@ -152,6 +153,7 @@ namespace ExtremeRoles.Roles
                 {(byte)ExtremeRoleId.Fencer     , new Fencer()},
                 {(byte)ExtremeRoleId.Opener     , new Opener()},
                 {(byte)ExtremeRoleId.Carpenter  , new Carpenter()},
+                {(byte)ExtremeRoleId.Survivor , new Survivor()},
 
                 {(byte)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
                 {(byte)ExtremeRoleId.Evolver        , new Evolver()},
