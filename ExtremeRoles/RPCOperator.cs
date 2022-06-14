@@ -134,6 +134,7 @@ namespace ExtremeRoles
             ExtremeRolesPlugin.Info.ResetOverlays();
 
             Patches.KillAnimationCoPerformKillPatch.HideNextAnimation = false;
+            Patches.Meeting.PlayerVoteAreaSelectPatch.Reset();
         }
 
         public static void ForceEnd()
