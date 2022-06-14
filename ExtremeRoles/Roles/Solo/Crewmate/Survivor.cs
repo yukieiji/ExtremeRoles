@@ -39,7 +39,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ExtremeRoleId.Survivor,
             ExtremeRoleType.Crewmate,
             ExtremeRoleId.Survivor.ToString(),
-            ColorPalette.CarpenterBrown,
+            ColorPalette.SurvivorYellow,
             false, true, false, false)
         { }
 
