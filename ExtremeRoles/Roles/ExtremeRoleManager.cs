@@ -316,7 +316,7 @@ namespace ExtremeRoles.Roles
                 roleControlId = id + 1;
                 lock (GameRole)
                 {
-                    GameRole[playerId] = addRole;
+                    GameRole.Add(playerId, addRole);
                 }
 
                 if (hasVanilaRole)
