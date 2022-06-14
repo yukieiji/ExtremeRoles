@@ -138,7 +138,7 @@ namespace ExtremeRoles.Patches
     {
         public static void Postfix(KeyboardJoystick __instance)
         {
-            if (AmongUsClient.Instance == null || PlayerControl.LocalPlayer == null) { return; }
+            if (AmongUsClient.Instance == null || CachedPlayerControl.LocalPlayer == null) { return; }
 
             if (Input.GetKeyDown(KeyCode.F8))
             {
@@ -193,8 +193,8 @@ namespace ExtremeRoles.Patches
 
 
             // キルとベントボタン
-            if (PlayerControl.LocalPlayer.Data != null && 
-                PlayerControl.LocalPlayer.Data.Role != null &&
+            if (CachedPlayerControl.LocalPlayer.Data != null &&
+                CachedPlayerControl.LocalPlayer.Data.Role != null &&
                 ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd())
             {
 

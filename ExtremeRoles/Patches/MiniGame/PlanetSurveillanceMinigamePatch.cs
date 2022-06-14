@@ -41,8 +41,7 @@ namespace ExtremeRoles.Patches.MiniGame
         {
             if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
-            if (Roles.ExtremeRoleManager.GameRole[
-                PlayerControl.LocalPlayer.PlayerId].CanUseSecurity) { return true; }
+            if (Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity) { return true; }
 
             __instance.isStatic = true;
             __instance.ViewPort.sharedMaterial = __instance.StaticMaterial;

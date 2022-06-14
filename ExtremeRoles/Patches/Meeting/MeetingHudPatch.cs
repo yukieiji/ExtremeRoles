@@ -155,7 +155,7 @@ namespace ExtremeRoles.Patches.Meeting
                 Helper.Logging.Debug($"IsSuccess?:{ExtremeRoleManager.GameRole[voteFor].Id == ExtremeRoleId.Marlin}");
 
                 RPCOperator.Call(
-                    PlayerControl.LocalPlayer.NetId,
+                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                     RPCOperator.Command.AssasinVoteFor,
                     new List<byte> { voteFor });
                 RPCOperator.AssasinVoteFor(voteFor);
@@ -306,7 +306,7 @@ namespace ExtremeRoles.Patches.Meeting
 
                 if (hockRole != null)
                 {
-                    var player = PlayerControl.LocalPlayer;
+                    var player = CachedPlayerControl.LocalPlayer;
 
                     if (reportedBody == null)
                     {

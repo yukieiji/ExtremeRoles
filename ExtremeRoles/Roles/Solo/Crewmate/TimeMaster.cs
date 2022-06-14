@@ -48,7 +48,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             if (ExtremeRolesPlugin.GameDataStore.History.BlockAddHistory) { return; }
 
-            var localPlayer = PlayerControl.LocalPlayer;
+            PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
             localPlayer.StartCoroutine(rewind(
                 rolePlayerId, localPlayer).WrapToIl2Cpp());
 

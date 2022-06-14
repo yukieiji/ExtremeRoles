@@ -453,7 +453,7 @@ namespace ExtremeRoles.Patches
         }
 
         private static bool isBlockCondition(
-            PlayerControl localPlayer, SingleRoleBase role)
+            CachedPlayerControl localPlayer, SingleRoleBase role)
         {
             if (localPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
             {

@@ -7,6 +7,7 @@ using BepInEx.IL2CPP.Utils.Collections;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches
 {
@@ -39,7 +40,7 @@ namespace ExtremeRoles.Patches
             if (role.IsNeutral())
             {
                 var soloTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
-                soloTeam.Add(PlayerControl.LocalPlayer);
+                soloTeam.Add(CachedPlayerControl.LocalPlayer);
                 yourTeam = soloTeam;
             }
         }
@@ -154,7 +155,7 @@ namespace ExtremeRoles.Patches
             }
 
             SoundManager.Instance.PlaySound(
-                PlayerControl.LocalPlayer.Data.Role.IntroSound, false, 1f);
+                CachedPlayerControl.LocalPlayer.Data.Role.IntroSound, false, 1f);
 
             __instance.YouAreText.gameObject.SetActive(true);
             __instance.RoleText.gameObject.SetActive(true);
@@ -162,7 +163,8 @@ namespace ExtremeRoles.Patches
 
             if (__instance.ourCrewmate == null)
             {
-                __instance.ourCrewmate = __instance.CreatePlayer(0, 1, PlayerControl.LocalPlayer.Data, false);
+                __instance.ourCrewmate = __instance.CreatePlayer(
+                    0, 1, CachedPlayerControl.LocalPlayer.Data, false);
                 __instance.ourCrewmate.gameObject.SetActive(false);
             }
             __instance.ourCrewmate.gameObject.SetActive(true);

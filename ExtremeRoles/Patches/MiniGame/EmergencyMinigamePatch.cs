@@ -34,7 +34,7 @@ namespace ExtremeRoles.Patches.MiniGame
                     "<size=100%>",
                     string.Format(
                         Helper.Translation.GetString("meetingStatus"),
-                        PlayerControl.LocalPlayer.name),
+                        CachedPlayerControl.LocalPlayer.PlayerControl.name),
                     "</size>");
                 __instance.NumberText.text = string.Format(
                     Helper.Translation.GetString("meetingCount"),
