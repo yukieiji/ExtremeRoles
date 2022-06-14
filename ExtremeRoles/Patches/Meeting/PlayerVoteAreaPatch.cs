@@ -196,9 +196,11 @@ namespace ExtremeRoles.Patches.Meeting
 					meetingKillButton = new Dictionary<byte, UiElement> ();
                 }
 
-				if (!meetingKillButton.ContainsKey(target))
-                {
+				UiElement killbutton = null;
+				meetingKillButton.TryGetValue(target, out killbutton);
 
+				if (killbutton == null)
+                {
 					UiElement newKillButton = GameObject.Instantiate(
 						instance.CancelButton, instance.ConfirmButton.transform.parent);
 					newKillButton.name = $"shooterKill_{target}";
@@ -217,7 +219,9 @@ namespace ExtremeRoles.Patches.Meeting
 						controllerHighlight.localScale *= new Vector2(1.25f, 1.25f);
                     }
 
-					meetingKillButton.Add(target, newKillButton);
+					meetingKillButton[target] = newKillButton;
+
+					killbutton = newKillButton;
 
 					void shooterKill()
 					{
@@ -234,8 +238,9 @@ namespace ExtremeRoles.Patches.Meeting
 
 				}
 
+				if (killbutton == null) { return true; }
+
 				instance.Buttons.SetActive(true);
-				var killbutton = meetingKillButton[target];
 
 				float startPos = instance.AnimateButtonsFromLeft ? 0.2f : 1.95f;
 				
