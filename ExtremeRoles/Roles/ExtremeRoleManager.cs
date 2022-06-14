@@ -371,7 +371,6 @@ namespace ExtremeRoles.Roles
 
             SingleRoleBase addRole = role.Clone();
 
-
             IRoleAbility abilityRole = addRole as IRoleAbility;
 
             if (abilityRole != null && CachedPlayerControl.LocalPlayer.PlayerId == playerId)
@@ -413,14 +412,16 @@ namespace ExtremeRoles.Roles
 
         public static T GetSafeCastedRole<T>(byte playerId) where T : SingleRoleBase
         {
-            var role = GameRole[playerId] as T;
+            var checRole = GameRole[playerId];
+
+            var role = checRole as T;
             
             if (role != null)
             {
                 return role;
             }
 
-            var multiAssignRole = GameRole[playerId] as MultiAssignRoleBase;
+            var multiAssignRole = checRole as MultiAssignRoleBase;
             if (multiAssignRole != null)
             {
                 if (multiAssignRole.AnotherRole != null)
