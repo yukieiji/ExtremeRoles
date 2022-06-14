@@ -1008,6 +1008,10 @@ namespace ExtremeRoles.Patches
                 case RPCOperator.Command.CarpenterUseAbility:
                     RPCOperator.CarpenterUseAbility(ref reader);
                     break;
+                case RPCOperator.Command.SurvivorWinDead:
+                    byte survivorPlayerId = reader.ReadByte();
+                    RPCOperator.SurvivorWinDead(survivorPlayerId);
+                    break;
                 case RPCOperator.Command.AssasinVoteFor:
                     byte voteTargetId = reader.ReadByte();
                     RPCOperator.AssasinVoteFor(voteTargetId);

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -41,6 +43,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             false, true, false, false)
         { }
 
+        public static void WinWithDead(byte rolePlayerId)
+        {
+            Survivor survivor = ExtremeRoleManager.GetSafeCastedRole<Survivor>(rolePlayerId);
+            if (survivor != null)
+            {
+                survivor.isDeadWin = true;
+            }
+        }
 
         public string GetFakeOptionString() => "";
 
@@ -48,7 +58,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             GameData.PlayerInfo rolePlayerInfo,
             GameOverReason reason,
             ref Il2CppSystem.Collections.Generic.List<WinningPlayerData> winner,
-            ref System.Collections.Generic.List<GameData.PlayerInfo> pulsWinner)
+            ref List<GameData.PlayerInfo> pulsWinner)
         {
             if (!rolePlayerInfo.IsDead || this.isDeadWin) { return; }
 
@@ -74,6 +84,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     taskGage >= this.deadWinTaskGage)
                 {
                     this.isDeadWin = true;
+                    RPCOperator.Call(
+                        rolePlayer.NetId,
+                        RPCOperator.Command.SurvivorWinDead,
+                        new List<byte> { rolePlayer.PlayerId });
+                    WinWithDead(rolePlayer.PlayerId);
                 }
 
                 if (taskGage >= this.awakeTaskGage && !this.awakeRole)
@@ -148,6 +163,25 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             else
             {
                 return Palette.White;
+            }
+        }
+
+        public override void ExiledAction(
+            GameData.PlayerInfo rolePlayer)
+        {
+            if (!this.isDeadWin)
+            {
+                this.HasTask = false;
+            }
+        }
+
+        public override void RolePlayerKilledAction(
+            PlayerControl rolePlayer,
+            PlayerControl killerPlayer)
+        {
+            if (!this.isDeadWin)
+            {
+                this.HasTask = false;
             }
         }
 
