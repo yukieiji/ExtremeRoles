@@ -55,13 +55,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void HockReportButton(
             PlayerControl rolePlayer, GameData.PlayerInfo reporter)
         {
+            this.canShootThisMeeting = true;
             if (rolePlayer.PlayerId == reporter.PlayerId)
             {
                 this.canShootThisMeeting = this.canShootSelfCallMeeting;
-            }
-            else
-            {
-                this.canShootSelfCallMeeting = true;
             }
         }
 
@@ -70,8 +67,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             this.canShootThisMeeting = true;
         }
-
-
         public void Shoot()
         {
             this.curShootNum = this.curShootNum - 1;
