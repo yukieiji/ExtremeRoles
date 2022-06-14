@@ -129,6 +129,10 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.EngineerUseImpostorVent].GetValue();
             Ship.DisableSelfVote = AllOption[
                 (int)CommonOptionKey.DisableSelfVote].GetValue();
+            Ship.DisableTaskWinWhenNoneTaskCrew = AllOption[
+                (int)CommonOptionKey.DisableTaskWinWhenNoneTaskCrew].GetValue();
+            Ship.DisableTaskWin = AllOption[
+                (int)CommonOptionKey.DisableTaskWin].GetValue();
             Ship.IsSameNeutralSameWin = AllOption[
                 (int)CommonOptionKey.IsSameNeutralSameWin].GetValue();
             Ship.DisableNeutralSpecialForceEnd = AllOption[
