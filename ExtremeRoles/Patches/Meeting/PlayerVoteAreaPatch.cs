@@ -52,13 +52,12 @@ namespace ExtremeRoles.Patches.Meeting
 
 		public static bool Prefix(PlayerVoteArea __instance)
 		{
-			Helper.Logging.Debug("ckpt:0");
 			if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return true; }
 			if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
-			Helper.Logging.Debug("ckpt:1");
+
 			var gameData = ExtremeRolesPlugin.GameDataStore;
 			var shooter = Roles.ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Roles.Solo.Impostor.Shooter>();
-			Helper.Logging.Debug("ckpt:2");
+
 			if (!gameData.AssassinMeetingTrigger)
 			{
 				if (shooter == null)
