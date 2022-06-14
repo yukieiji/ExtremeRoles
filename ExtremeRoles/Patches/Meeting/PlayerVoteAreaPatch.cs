@@ -176,33 +176,26 @@ namespace ExtremeRoles.Patches.Meeting
 			Roles.Solo.Impostor.Shooter shooter)
         {
 			byte target = instance.TargetPlayerId;
-			
-			Helper.Logging.Debug("ckpt:3");
 
 			if (instance.AmDead ||
 				shooter.CurShootNum <= 0 || 
-				!shooter.CanShoot || target == 253 ||
+				!shooter.CanShoot || 
+				target == 253 ||
 				Roles.ExtremeRoleManager.GameRole[target].Id == Roles.ExtremeRoleId.Assassin)
 			{ 
 				return true; 
 			}
-			Helper.Logging.Debug("ckpt:4");
 			if (!instance.Parent)
 			{
 				return false;
 			}
-			Helper.Logging.Debug("ckpt:5");
 			if (!instance.voteComplete &&
 				instance.Parent.Select((int)target))
 			{
-				Helper.Logging.Debug("ckpt:6");
-
 				if (meetingKillButton == null)
                 {
 					meetingKillButton = new Dictionary<byte, UiElement> ();
                 }
-
-				Helper.Logging.Debug("ckpt:7");
 
 				UiElement killbutton = null;
 
@@ -252,8 +245,6 @@ namespace ExtremeRoles.Patches.Meeting
 					}
 
 				}
-
-				Helper.Logging.Debug($"null?:{killbutton == null}");
 
 				if (killbutton == null) { return true; }
 
