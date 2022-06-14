@@ -699,7 +699,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 return Design.ColoedString(
                     Palette.CrewmateBlue,
-                    PlayerControl.LocalPlayer.Data.Role.Blurb);
+                    CachedPlayerControl.LocalPlayer.Data.Role.Blurb);
             }
         }
 
