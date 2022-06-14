@@ -16,9 +16,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             InitShootNum,
             MaxMeetingShootNum,
             ShootChargeTime,
-            MaxChargeGiveNum,
+            CurShootNumChargePenalty,
             KillShootChargeTimeModd,
-            ShootKillCoolPenalty
+            MaxChargeGiveNum,
+            ShootKillCoolPenalty,
+            ShootShootChargePenalty,
         }
 
         public int CurShootNum => this.curShootNum;
@@ -28,6 +30,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private float killCoolPenalty = 0.0f;
         private float killShootChargeTimeModd = 0.0f;
         private float chargeTime = 0.0f;
+        private float shootChargePenalty = 0.0f;
+        private float curShootNumPenalty = 0.0f;
         private float timer = float.MaxValue;
         private int maxShootNum = 0;
         private int curShootNum = 0;
@@ -72,6 +76,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.curShootNum = this.curShootNum - 1;
             this.KillCoolTime = this.KillCoolTime + killCoolPenalty;
             this.shootCounter  = this.shootCounter + 1;
+            this.timer = this.timer + this.shootChargePenalty;
         }
 
         public void ResetOnMeetingEnd()
@@ -141,7 +146,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
                 if (this.timer < 0.0f)
                 {
-                    this.timer = this.chargeTime;
+                    this.timer = this.chargeTime + (this.curShootNum * this.curShootNumPenalty);
                     this.curShootNum = System.Math.Clamp(
                         this.curShootNum + 1, 0, this.maxShootNum);
                     this.chargeNum = this.chargeNum + 1;
@@ -197,20 +202,30 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 75.0f, 30.0f, 240.0f, 5.0f,
                 parentOps, format: OptionUnit.Second);
 
-            CreateIntOption(
-               ShooterOption.MaxChargeGiveNum,
-               14, 1, 14, 1, parentOps,
-               format: OptionUnit.Shot);
+            CreateFloatOption(
+               ShooterOption.CurShootNumChargePenalty,
+               0.0f, 0.0f, 20.0f, 0.5f,
+               parentOps, format: OptionUnit.Second);
 
             CreateFloatOption(
                 ShooterOption.KillShootChargeTimeModd,
                 7.5f, -30.0f, 30.0f, 0.5f,
                 parentOps, format: OptionUnit.Second);
 
+            CreateIntOption(
+               ShooterOption.MaxChargeGiveNum,
+               14, 1, 14, 1, parentOps,
+               format: OptionUnit.Shot);
+
             CreateFloatOption(
                 ShooterOption.ShootKillCoolPenalty,
                 5.0f, 0.0f, 10.0f, 0.5f,
                 parentOps, format: OptionUnit.Second);
+
+            CreateFloatOption(
+               ShooterOption.ShootShootChargePenalty,
+               0.0f, 0.0f, 20.0f, 0.5f,
+               parentOps, format: OptionUnit.Second);
 
 
             maxShootOps.SetUpdateOption(initShootOps);
@@ -235,12 +250,16 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 GetRoleOptionId(ShooterOption.MaxMeetingShootNum)].GetValue();
             this.chargeTime = allOps[
                 GetRoleOptionId(ShooterOption.ShootChargeTime)].GetValue();
+            this.curShootNumPenalty = allOps[
+                GetRoleOptionId(ShooterOption.CurShootNumChargePenalty)].GetValue();
             this.maxChargeNum = allOps[
                 GetRoleOptionId(ShooterOption.MaxChargeGiveNum)].GetValue();
             this.killShootChargeTimeModd = allOps[
                 GetRoleOptionId(ShooterOption.KillShootChargeTimeModd)].GetValue();
             this.killCoolPenalty = allOps[
                 GetRoleOptionId(ShooterOption.ShootKillCoolPenalty)].GetValue();
+            this.shootChargePenalty = allOps[
+                GetRoleOptionId(ShooterOption.ShootShootChargePenalty)].GetValue();
 
             if (!this.HasOtherKillCool)
             {
@@ -249,7 +268,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
 
             this.defaultKillCool = this.KillCoolTime;
-            this.timer = this.chargeTime;
+            this.timer = this.chargeTime + (this.curShootNum * this.curShootNumPenalty);
             this.chargeNum = 0;
         }
 
