@@ -28,6 +28,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                    Path.CrackerCrackTrace, 300f);
 
                 this.body.transform.position = pos;
+
+                if (ExtremeRolesPlugin.Compat.IsModMap)
+                {
+                    ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
+                        this.body.gameObject,
+                        Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
+                }
             }
 
             public void Clear()
