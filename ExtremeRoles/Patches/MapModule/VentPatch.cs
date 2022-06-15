@@ -27,6 +27,11 @@ namespace ExtremeRoles.Patches.MapModule
                 return false;
             }
 
+            if (__instance.myRend.sprite == null)
+            {
+                return false;
+            }
+
             if (Roles.ExtremeRoleManager.GameRole.Count == 0)
             {
                 if (ExtremeRolesPlugin.Compat.IsModMap &&
@@ -39,7 +44,6 @@ namespace ExtremeRoles.Patches.MapModule
                 }
                 return true; 
             }
-
 
             bool roleCouldUse = Roles.ExtremeRoleManager.GameRole[playerInfo.PlayerId].UseVent;
 
@@ -67,7 +71,6 @@ namespace ExtremeRoles.Patches.MapModule
 
                 canUse &= (
                     num <= usableDistance &&
-                    __instance.myRend.sprite != null &&
                     !PhysicsHelpers.AnythingBetween(
                         truePosition,
                         position,
