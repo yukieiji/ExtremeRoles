@@ -375,7 +375,7 @@ namespace ExtremeRoles.Roles.Combination
                 foreach (byte playerId in alive)
                 {
                     var player = Player.GetPlayerControlById(playerId);
-                    if (player != null)
+                    if (player != null && !player.Data.IsDead && !player.Data.Disconnected)
                     {
                         player.MurderPlayer(player);
                     }

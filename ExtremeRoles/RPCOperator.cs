@@ -300,55 +300,6 @@ namespace ExtremeRoles
                     Patches.KillAnimationCoPerformKillPatch.HideNextAnimation = true;
                 }
                 source.MurderPlayer(target);
-
-                if (!target.Data.IsDead) { return; }
-
-                var targetRole = Roles.ExtremeRoleManager.GameRole[targetId];
-                var multiAssignRole = targetRole as Roles.API.MultiAssignRoleBase;
-
-                if (Roles.ExtremeRoleManager.IsDisableWinCheckRole(targetRole))
-                {
-                    ExtremeRolesPlugin.GameDataStore.WinCheckDisable = true;
-                }
-
-                targetRole.RolePlayerKilledAction(
-                    target, source);
-                if (multiAssignRole != null)
-                {
-                    if (multiAssignRole.AnotherRole != null)
-                    {
-                        multiAssignRole.AnotherRole.RolePlayerKilledAction(
-                            target, source);
-                    }
-                }
-
-                ExtremeRolesPlugin.GameDataStore.WinCheckDisable = false;
-
-                var player = CachedPlayerControl.LocalPlayer;
-
-                if (player.PlayerId != targetId)
-                {
-                    var hockRole = Roles.ExtremeRoleManager.GameRole[
-                        player.PlayerId] as Roles.API.Interface.IRoleMurderPlayerHock;
-                    multiAssignRole = Roles.ExtremeRoleManager.GameRole[
-                        player.PlayerId] as Roles.API.MultiAssignRoleBase;
-
-                    if (hockRole != null)
-                    {
-                        hockRole.HockMuderPlayer(
-                            source, target);
-                    }
-                    if (multiAssignRole != null)
-                    {
-                        hockRole = multiAssignRole.AnotherRole as Roles.API.Interface.IRoleMurderPlayerHock;
-                        if (hockRole != null)
-                        {
-                            hockRole.HockMuderPlayer(
-                                source, target);
-                        }
-                    }
-                }
-
             }
         }
 

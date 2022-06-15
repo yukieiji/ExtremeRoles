@@ -1236,14 +1236,63 @@ namespace ExtremeRoles.Patches
 
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
+            if (!target.Data.IsDead) { return; }
+
             ExtremeRolesPlugin.GameDataStore.AddDeadInfo(
                 target, DeathReason.Kill, __instance);
-            
-            var role = ExtremeRoleManager.GameRole[target.PlayerId];
+
+            byte targetPlayerId = target.PlayerId;
+
+            var role = ExtremeRoleManager.GameRole[targetPlayerId];
 
             if (!role.HasTask || role.IsNeutral())
             {
                 target.ClearTasks();
+            }
+
+            if (ExtremeRoleManager.IsDisableWinCheckRole(role))
+            {
+                ExtremeRolesPlugin.GameDataStore.WinCheckDisable = true;
+            }
+
+            var multiAssignRole = role as MultiAssignRoleBase;
+
+            role.RolePlayerKilledAction(
+                target, __instance);
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    multiAssignRole.AnotherRole.RolePlayerKilledAction(
+                        target, __instance);
+                }
+            }
+
+            ExtremeRolesPlugin.GameDataStore.WinCheckDisable = false;
+
+            var player = CachedPlayerControl.LocalPlayer;
+
+            if (player.PlayerId != targetPlayerId)
+            {
+                var hockRole = ExtremeRoleManager.GameRole[
+                    player.PlayerId] as IRoleMurderPlayerHock;
+                multiAssignRole = ExtremeRoleManager.GameRole[
+                    player.PlayerId] as MultiAssignRoleBase;
+
+                if (hockRole != null)
+                {
+                    hockRole.HockMuderPlayer(
+                        __instance, target);
+                }
+                if (multiAssignRole != null)
+                {
+                    hockRole = multiAssignRole.AnotherRole as IRoleMurderPlayerHock;
+                    if (hockRole != null)
+                    {
+                        hockRole.HockMuderPlayer(
+                            __instance, target);
+                    }
+                }
             }
         }
         private static void guardBreakKill(
