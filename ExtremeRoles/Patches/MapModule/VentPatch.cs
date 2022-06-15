@@ -32,10 +32,12 @@ namespace ExtremeRoles.Patches.MapModule
                 return false;
             }
 
+            bool isCustomMapVent = ExtremeRolesPlugin.Compat.IsModMap &&
+                ExtremeRolesPlugin.Compat.ModMap.IsCustomVentUse(__instance);
+
             if (Roles.ExtremeRoleManager.GameRole.Count == 0)
             {
-                if (ExtremeRolesPlugin.Compat.IsModMap &&
-                    ExtremeRolesPlugin.Compat.ModMap.IsCustomVentUse(__instance))
+                if (isCustomMapVent)
                 {
                     (__result, canUse, couldUse) = ExtremeRolesPlugin.Compat.ModMap.IsCustomVentUseResult(
                         __instance, playerInfo,
@@ -47,8 +49,7 @@ namespace ExtremeRoles.Patches.MapModule
 
             bool roleCouldUse = Roles.ExtremeRoleManager.GameRole[playerInfo.PlayerId].UseVent;
 
-            if (ExtremeRolesPlugin.Compat.IsModMap &&
-                ExtremeRolesPlugin.Compat.ModMap.IsCustomVentUse(__instance))
+            if (isCustomMapVent)
             {
                 (__result, canUse, couldUse) = ExtremeRolesPlugin.Compat.ModMap.IsCustomVentUseResult(
                     __instance, playerInfo, roleCouldUse);

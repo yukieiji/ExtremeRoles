@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Runtime.CompilerServices;
 
 using Hazel;
 using HarmonyLib;
@@ -115,6 +116,7 @@ namespace ExtremeRoles.Patches
             return false;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool requireCustomCustomCalculateLightRadius() =>
             ExtremeRolesPlugin.Compat.IsModMap &&
             ExtremeRolesPlugin.Compat.ModMap.IsCustomCalculateLightRadius;

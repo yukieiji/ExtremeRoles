@@ -494,7 +494,7 @@ namespace ExtremeRoles.Patches
                 playerInfoText = $"{roleNames}";
                 if (DestroyableSingleton<TaskPanelBehaviour>.InstanceExists)
                 {
-                    TMPro.TextMeshPro tabText = DestroyableSingleton<
+                    TMPro.TextMeshPro tabText = FastDestroyableSingleton<
                         TaskPanelBehaviour>.Instance.tab.transform.FindChild("TabText_TMP").GetComponent<TMPro.TextMeshPro>();
                     tabText.SetText(
                         $"{FastDestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Tasks)} {taskInfo}");
@@ -1270,7 +1270,7 @@ namespace ExtremeRoles.Patches
                 }
                 instance.SetKillTimer(killCool);
             }
-            DestroyableSingleton<Telemetry>.Instance.WriteMurder();
+            FastDestroyableSingleton<Telemetry>.Instance.WriteMurder();
             target.gameObject.layer = LayerMask.NameToLayer("Ghost");
             if (target.AmOwner)
             {
@@ -1285,9 +1285,9 @@ namespace ExtremeRoles.Patches
                     catch
                     { }
                 }
-                DestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(
+                FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(
                     instance.Data, target.Data);
-                DestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
+                FastDestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
                 target.nameText.GetComponent<MeshRenderer>().material.SetInt("_Mask", 0);
                 target.RpcSetScanner(false);
                 ImportantTextTask importantTextTask = new GameObject("_Player").AddComponent<ImportantTextTask>();
@@ -1296,17 +1296,17 @@ namespace ExtremeRoles.Patches
                 if (!PlayerControl.GameOptions.GhostsDoTasks)
                 {
                     target.ClearTasks();
-                    importantTextTask.Text = DestroyableSingleton<TranslationController>.Instance.GetString(
+                    importantTextTask.Text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
                         StringNames.GhostIgnoreTasks, Array.Empty<Il2CppSystem.Object>());
                 }
                 else
                 {
-                    importantTextTask.Text = DestroyableSingleton<TranslationController>.Instance.GetString(
+                    importantTextTask.Text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
                         StringNames.GhostDoTasks, Array.Empty<Il2CppSystem.Object>());
                 }
                 target.myTasks.Insert(0, importantTextTask);
             }
-            DestroyableSingleton<AchievementManager>.Instance.OnMurder(
+            FastDestroyableSingleton<AchievementManager>.Instance.OnMurder(
                 instance.AmOwner, target.AmOwner);
 
             var killAnimation = instance.KillAnimations.ToList();
@@ -1410,7 +1410,7 @@ namespace ExtremeRoles.Patches
                     PlayerControl.HideCursorTemporarily();
                 }
                 RoleEffectAnimation roleEffectAnimation = UnityEngine.Object.Instantiate<RoleEffectAnimation>(
-                    DestroyableSingleton<RoleManager>.Instance.shapeshiftAnim, __instance.gameObject.transform);
+                    FastDestroyableSingleton<RoleManager>.Instance.shapeshiftAnim, __instance.gameObject.transform);
                 roleEffectAnimation.SetMaterialColor(
                     __instance.Data.Outfits[PlayerOutfitType.Default].ColorId);
                 if (__instance.MyRend.flipX)
