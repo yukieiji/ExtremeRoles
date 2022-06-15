@@ -31,6 +31,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 vector.z = vector.y / 1000f;
                 this.body.transform.position = vector;
                 this.body.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
+
+                if (ExtremeRolesPlugin.Compat.IsModMap)
+                {
+                    ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
+                        this.body.gameObject,
+                        Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
+                }
             }
 
             public void Clear()
