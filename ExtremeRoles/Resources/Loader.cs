@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
@@ -58,56 +59,54 @@ namespace ExtremeRoles.Resources
     public static class Loader
     {
 
-        internal delegate bool d_LoadImage(IntPtr tex, IntPtr data, bool markNonReadable);
-        internal static d_LoadImage iCall_LoadImage;
+        private static Dictionary<string, Sprite> cachedSprite = new Dictionary<string, Sprite> ();
 
         public static Sprite CreateSpriteFromResources(
             string path, float pixelsPerUnit=115f)
         {
             try
             {
+                string key = $"{path}{pixelsPerUnit}";
+
+                if (cachedSprite.TryGetValue(key, out Sprite sprite)) { return sprite; }
+
                 Texture2D texture = createTextureFromResources(path);
-                return Sprite.Create(
+                sprite = Sprite.Create(
                     texture,
                     new Rect(0, 0, texture.width, texture.height),
                     new Vector2(0.5f, 0.5f), pixelsPerUnit);
+
+                sprite.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
+                cachedSprite.Add(key, sprite);
+
+                return sprite;
             }
             catch
             {
-                Logging.Debug("Error loading sprite from path: " + path);
+                Logging.Debug($"Error loading sprite from path: {path}");
             }
             return null;
         }
 
-        private static Texture2D createTextureFromResources(string path)
+        private static unsafe Texture2D createTextureFromResources(string path)
         {
             try
             {
                 Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
                 Assembly assembly = Assembly.GetExecutingAssembly();
                 Stream stream = assembly.GetManifestResourceStream(path);
-                var byteTexture = new byte[stream.Length];
-                var read = stream.Read(byteTexture, 0, (int)stream.Length);
-                loadImage(texture, byteTexture, false);
+                long length = stream.Length;
+                var byteTexture = new Il2CppStructArray<byte>(length);
+                var read = stream.Read(new Span<byte>(
+                    IntPtr.Add(byteTexture.Pointer, IntPtr.Size * 4).ToPointer(), (int)length));
+                ImageConversion.LoadImage(texture, byteTexture, false);
                 return texture;
             }
             catch
             {
-                Logging.Debug("Error loading texture from resources: " + path);
+                Logging.Debug($"Error loading texture from resources: {path}");
             }
             return null;
         }
-        private static bool loadImage(Texture2D tex, byte[] data, bool markNonReadable)
-        {
-            if (iCall_LoadImage == null)
-            {
-                iCall_LoadImage = IL2CPP.ResolveICall<d_LoadImage>("UnityEngine.ImageConversion::LoadImage");
-            }
-            
-            var il2cppArray = (Il2CppStructArray<byte>)data;
-
-            return iCall_LoadImage.Invoke(tex.Pointer, il2cppArray.Pointer, markNonReadable);
-        }
-
     }
 }
