@@ -11,7 +11,6 @@ namespace ExtremeSkins.Module
     public static class Loader
     {
         private static Sprite titleLog = null;
-        private static Dictionary<string, Texture2D> cachedTex = new Dictionary<string, Texture2D>();
 
         private const string titleLogPath = "ExtremeSkins.Resources.TitleBurner.png";
         private const float titlePixelPerUnit = 425f;
@@ -43,19 +42,11 @@ namespace ExtremeSkins.Module
         {
             try
             {
+                Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
+                byte[] byteTexture = File.ReadAllBytes(path);
+                ImageConversion.LoadImage(texture, byteTexture, false);
 
-                if (cachedTex.TryGetValue(path, out Texture2D texture)) { return texture; }
-
-                if (File.Exists(path))
-                {
-                    texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
-                    byte[] byteTexture = File.ReadAllBytes(path);
-                    ImageConversion.LoadImage(texture, byteTexture, false);
-
-                    cachedTex.Add(path, texture);
-
-                    return texture;
-                }
+                return texture;
             }
             catch
             {
