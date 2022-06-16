@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -289,7 +288,6 @@ namespace ExtremeRoles.Roles
             return false;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SingleRoleBase GetLocalPlayerRole()
         {
             return GameRole[CachedPlayerControl.LocalPlayer.PlayerId];

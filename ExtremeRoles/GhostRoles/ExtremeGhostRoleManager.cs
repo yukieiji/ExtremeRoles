@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 using Hazel;
 
@@ -291,7 +290,7 @@ namespace ExtremeRoles.GhostRoles
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+
         public static GhostRoleBase GetLocalPlayerGhostRole()
         {
             byte playerId = CachedPlayerControl.LocalPlayer.PlayerId;
