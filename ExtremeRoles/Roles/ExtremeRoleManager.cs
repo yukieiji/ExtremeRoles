@@ -65,6 +65,7 @@ namespace ExtremeRoles.Roles
         Smasher,
         AssaultMaster,
         Shooter,
+        LastWolf,
 
         Alice,
         Jackal,
