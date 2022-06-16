@@ -74,7 +74,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void CreateAbility()
         {
-            this.CreateAbilityCountButton(
+            this.CreateNormalAbilityButton(
                 Translation.GetString("smash"),
                 FastDestroyableSingleton<HudManager>.Instance.KillButton.graphic.sprite);
 
