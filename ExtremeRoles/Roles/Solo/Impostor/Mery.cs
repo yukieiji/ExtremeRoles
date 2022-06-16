@@ -39,11 +39,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.body = new GameObject("MaryCamp");
                 this.img = this.body.AddComponent<SpriteRenderer>();
                 this.img.sprite = Loader.CreateSpriteFromResources(
-                   Path.MeryNoneActiveVent, 125f); ;
+                   Path.MeryNoneActiveVent, 125f);
 
                 this.body.gameObject.SetActive(canSee);
                 this.body.transform.position = new Vector3(
-                    pos.x, pos.y, (pos.y / 1000f) + 0.01f);
+                    pos.x, pos.y, (pos.y / 1000f));
 
                 if (ExtremeRolesPlugin.Compat.IsModMap)
                 {

@@ -22,7 +22,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 PlayerControl rolePlayer,
                 PlayerControl targetPlayer)
             {
-                var killAnimation = PlayerControl.LocalPlayer.KillAnimations[0];
+                var killAnimation = rolePlayer.KillAnimations[0];
                 this.body = Object.Instantiate(
                     killAnimation.bodyPrefab.bodyRenderer);
                 targetPlayer.SetPlayerMaterialColors(this.body);
