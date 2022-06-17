@@ -76,7 +76,7 @@ namespace ExtremeRoles.Compat
 
         private static void createCompatModLines()
         {
-            var buttonTemplate = GameObject.Find("ExitGameButton");
+            var buttonTemplate = GameObject.Find("ExitGameButton/ExtremeRolesUpdateButton");
             
             if (buttonTemplate == null) { return; }
             
