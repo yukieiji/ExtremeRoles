@@ -147,8 +147,6 @@ namespace ExtremeRoles.Compat
         {
             GameObject button = Object.Instantiate(
                 template, text.transform);
-            Object.Destroy(button.GetComponent<AspectPosition>());
-            Object.Destroy(button.GetComponent<ConditionalHide>());
             PassiveButton passiveButton = button.GetComponent<PassiveButton>();
             passiveButton.OnClick = new Button.ButtonClickedEvent();
 
