@@ -17,6 +17,7 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Performance;
 
 
 namespace ExtremeRoles.Patches.Manager
@@ -33,6 +34,7 @@ namespace ExtremeRoles.Patches.Manager
             if (template == null) { return; }
 
             var button = UnityEngine.Object.Instantiate(template, null);
+            button.name = "ExtremeRolesUpdateButton";
             button.transform.localPosition = new Vector3(
                 button.transform.localPosition.x,
                 button.transform.localPosition.y + 0.6f,
@@ -48,7 +50,7 @@ namespace ExtremeRoles.Patches.Manager
             })));
             if (Updater.InfoPopup == null)
             {
-                TwitchManager man = DestroyableSingleton<TwitchManager>.Instance;
+                TwitchManager man = FastDestroyableSingleton<TwitchManager>.Instance;
                 Updater.InfoPopup = UnityEngine.Object.Instantiate<GenericPopup>(man.TwitchPopup);
                 Updater.InfoPopup.TextAreaTMP.fontSize *= 0.7f;
                 Updater.InfoPopup.TextAreaTMP.enableAutoSizing = false;
@@ -62,7 +64,7 @@ namespace ExtremeRoles.Patches.Manager
 
         public static void Postfix(MainMenuManager __instance)
         {
-            DestroyableSingleton<ModManager>.Instance.ShowModStamp();
+            FastDestroyableSingleton<ModManager>.Instance.ShowModStamp();
 
             var amongUsLogo = GameObject.Find("bannerLogo_AmongUs");
             if (amongUsLogo != null)
@@ -96,7 +98,7 @@ namespace ExtremeRoles.Patches.Manager
                 Module.Prefab.Prop.name = "propForInEx";
                 Module.Prefab.Prop.gameObject.SetActive(false);
             }
-
+            Compat.CompatModMenu.CreateMenuButton(__instance);
         }
 
         public static class Updater
