@@ -120,7 +120,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
                 foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
                 {
-                    if (ExtremeRoleManager.GameRole[player.PlayerId].IsImpostor())
+                    if (ExtremeRoleManager.GameRole[player.PlayerId].IsImpostor() && 
+                        (!player.IsDead && !player.Disconnected))
                     {
                         ++impNum;
                     }
@@ -259,7 +260,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)];
             int curSelection = cooltimeOpt.CurSelection;
             cooltimeOpt.CurSelection = Mathf.Clamp(
-                curSelection * 2, 0, cooltimeOpt.Selections.Length - 1);
+                (curSelection * 2) + 1, 0,
+                cooltimeOpt.Selections.Length - 1);
             cooltimeOpt.SetUpdateOption(firstLightOffOpt);
         }
 
