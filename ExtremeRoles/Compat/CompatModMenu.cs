@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 using UnhollowerBaseLib.Attributes;
 
+using TMPro;
 using ExtremeRoles.Performance;
 
-using BepInEx.IL2CPP.Utils.Collections;
 
 namespace ExtremeRoles.Compat
 {
@@ -22,8 +23,19 @@ namespace ExtremeRoles.Compat
     {
         private static GameObject menuBody;
 
+        private enum ButtonType
+        {
+            Install,
+            Update,
+            Uninstall
+        }
+
+        private static Dictionary<CompatModType,(TextMeshPro, Dictionary<ButtonType, GameObject>)> compatModMenuLine = new Dictionary<
+            CompatModType, (TextMeshPro, Dictionary<ButtonType, GameObject>)>();
+
         public static void CreateMenuButton(MainMenuManager instance)
         {
+            compatModMenuLine.Clear();
             GameObject buttonTemplate = GameObject.Find("AnnounceButton");
             GameObject compatModMenuButton = Object.Instantiate<GameObject>(
                 buttonTemplate, buttonTemplate.transform.parent);
@@ -49,7 +61,7 @@ namespace ExtremeRoles.Compat
                 FastDestroyableSingleton<EOSManager>.Instance.TimeOutPopup);
             menuBody.name = "ExtremeRoles_CompatModMenu";
 
-            TMPro.TextMeshPro title = Object.Instantiate(
+            TextMeshPro title = Object.Instantiate(
                 Module.Prefab.Text, menuBody.transform);
             title.GetComponent<RectTransform>().localPosition = Vector3.up * 2.3f;
             title.gameObject.SetActive(true);
@@ -64,28 +76,83 @@ namespace ExtremeRoles.Compat
 
         private static void createCompatModLines()
         {
-
-            var mods = new string[] {
-                "0%", "10%", "20%", "30%", "40%",
-                "50%", "60%", "70%", "80%", "90%", "100%" };
-
+            var buttonTemplate = GameObject.Find("ExitGameButton");
+            
+            if (buttonTemplate == null) { return; }
+            
             int index = 0;
 
-            foreach (string mod in mods)
+            foreach (CompatModType mod in System.Enum.GetValues(typeof(CompatModType)))
             {
-                TMPro.TextMeshPro modText = Object.Instantiate(
-                    Module.Prefab.Text, menuBody.transform);
-                modText.name = mod;
+                string modKey = mod.ToString();
 
-                modText.transform.localPosition = new Vector3(0.1f, 2.0f - (index * 0.35f), 0f);
+                TextMeshPro modText = Object.Instantiate(
+                    Module.Prefab.Text, menuBody.transform);
+                modText.name = modKey;
+
+                modText.transform.localPosition = new Vector3(0.15f, 2.0f - (index * 0.35f), 0f);
                 modText.fontSizeMin = modText.fontSizeMax = 3.0f;
                 modText.font = Object.Instantiate(Module.Prefab.Text.font);
                 modText.GetComponent<RectTransform>().sizeDelta = new Vector2(5.4f, 5.5f);
-                modText.text = mod;
-                modText.alignment = TMPro.TextAlignmentOptions.Left;
+                modText.text = $"{Helper.Translation.GetString(modKey)}";
+                modText.alignment = TextAlignmentOptions.Left;
                 modText.gameObject.SetActive(true);
+
+                Dictionary<ButtonType, GameObject> button = new Dictionary<ButtonType, GameObject>();
+
+                if (ExtremeRolesPlugin.Compat.LoadedMod.ContainsKey(mod))
+                {
+                    var (uninstallButton, passiveUninstallButton) = createButton(buttonTemplate, modText);
+                    uninstallButton.transform.localPosition = new Vector3(1.95f, 0.0f, -5.0f);
+                    passiveUninstallButton.OnClick.AddListener((System.Action)(() =>
+                        {
+                            Helper.Logging.Debug("uninstallButtonClick");
+                        })
+                    );
+                    updateButtonTextAndName(ButtonType.Uninstall, uninstallButton);
+
+                    var (updateButton, passiveUpdateButton) = createButton(buttonTemplate, modText);
+                    updateButton.transform.localPosition = new Vector3(0.45f, 0.0f, -5.0f);
+                    passiveUpdateButton.OnClick.AddListener((System.Action)(() =>
+                        {
+                            Helper.Logging.Debug("updateButtonClick");
+                        })
+                    );
+                    updateButtonTextAndName(ButtonType.Update, updateButton);
+
+                    button.Add(ButtonType.Uninstall, uninstallButton);
+                    button.Add(ButtonType.Update, updateButton);
+                }
+                else
+                {
+                    var (installButton, passiveInstallButton) = createButton(buttonTemplate, modText);
+                    installButton.transform.localPosition = new Vector3(1.2f, 0.0f, -5.0f);
+                    passiveInstallButton.OnClick.AddListener((System.Action)(() =>
+                        {
+                            Helper.Logging.Debug("installButtonClick");
+                        })
+                    );
+                    updateButtonTextAndName(ButtonType.Install, installButton);
+                    button.Add(ButtonType.Install, installButton);
+                }
+
+                compatModMenuLine.Add(mod, (modText, button));
+
                 ++index;
             }
+        }
+
+        private static (GameObject, PassiveButton) createButton(
+            GameObject template, TextMeshPro text)
+        {
+            GameObject button = Object.Instantiate(
+                template, text.transform);
+            Object.Destroy(button.GetComponent<AspectPosition>());
+            Object.Destroy(button.GetComponent<ConditionalHide>());
+            PassiveButton passiveButton = button.GetComponent<PassiveButton>();
+            passiveButton.OnClick = new Button.ButtonClickedEvent();
+
+            return (button, passiveButton);
         }
 
         private static void removeUnnecessaryComponent()
@@ -130,6 +197,22 @@ namespace ExtremeRoles.Compat
                 bkSprite.localPosition = new Vector3(0.0f, 0.0f, 2.0f);
             }
         }
+
+        private static void updateButtonTextAndName(
+            ButtonType buttonType, GameObject button)
+        {
+            button.name = buttonType.ToString();
+            updateButtonText(buttonType, button);
+        }
+
+        private static void updateButtonText(ButtonType buttonType, GameObject button)
+        {
+            var text = button.transform.GetChild(0).GetComponent<TMPro.TMP_Text>();
+            GameObject.FindObjectOfType<MainMenuManager>().StartCoroutine(Effects.Lerp(0.1f, new System.Action<float>((p) => {
+                text.SetText(Helper.Translation.GetString(buttonType.ToString()));
+            })));
+        }
+
 
     }
 }
