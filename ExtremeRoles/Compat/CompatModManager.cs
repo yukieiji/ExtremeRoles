@@ -11,39 +11,48 @@ using ExtremeRoles.Compat.Mods;
 
 namespace ExtremeRoles.Compat
 {
+
+    internal enum CompatModType
+    {
+        Submerged,
+    }
+
     internal class CompatModManager
     {
         public bool IsModMap => this.map != null;
         public IMapMod ModMap => this.map;
 
+        public readonly Dictionary<CompatModType, CompatModBase> LoadedMod = new Dictionary<CompatModType, CompatModBase>();
+
         private IMapMod map;
 
-        private HashSet<CompatModBase> loadedMod = new HashSet<CompatModBase>();
-
-        private static Dictionary<string, Type> compatMod = new Dictionary<string, Type>()
+        private static HashSet<(string, CompatModType, Type)> compatMod = new HashSet<(string, CompatModType, Type)>()
         {
-            { SubmergedMap.Guid, typeof(SubmergedMap) },
+            (SubmergedMap.Guid, CompatModType.Submerged, typeof(SubmergedMap)),
         };
 
         internal CompatModManager()
         {
             RemoveMap();
-            foreach (var (guid, mod) in compatMod)
+            foreach (var (guid, modType, mod) in compatMod)
             {
                 PluginInfo plugin;
 
                 if (IL2CPPChainloader.Instance.Plugins.TryGetValue(guid, out plugin))
                 {
-                    this.loadedMod.Add(
+                    this.LoadedMod.Add(
+                        modType,
                         (CompatModBase)Activator.CreateInstance(
                             mod, new object[] { plugin }));
+
+                    Helper.Logging.Debug($"CompatMod:{guid} loaded!!");
                 }
             }
         }
 
         internal void SetUpMap(ShipStatus shipStatus)
         {
-            foreach (var mod in loadedMod)
+            foreach (var mod in LoadedMod.Values)
             {
                 IMapMod mapMod = mod as IMapMod;
                 if (mapMod != null && 
