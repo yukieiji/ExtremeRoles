@@ -100,13 +100,16 @@ namespace ExtremeRoles.Compat
 
                 Dictionary<ButtonType, GameObject> button = new Dictionary<ButtonType, GameObject>();
 
+                var (dllName, repoURI) = CompatModManager.ModInfo[mod];
+
                 if (ExtremeRolesPlugin.Compat.LoadedMod.ContainsKey(mod))
                 {
                     var (uninstallButton, passiveUninstallButton) = createButton(buttonTemplate, modText);
                     uninstallButton.transform.localPosition = new Vector3(1.95f, 0.0f, -5.0f);
                     passiveUninstallButton.OnClick.AddListener((System.Action)(() =>
                         {
-                            Helper.Logging.Debug("uninstallButtonClick");
+                            var uninstaller = new Excuter.Uninstaller(dllName);
+                            uninstaller.Excute();
                         })
                     );
                     updateButtonTextAndName(ButtonType.Uninstall, uninstallButton);
