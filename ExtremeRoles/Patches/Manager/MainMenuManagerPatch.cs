@@ -97,7 +97,7 @@ namespace ExtremeRoles.Patches.Manager
                 Module.Prefab.Prop.name = "propForInEx";
                 Module.Prefab.Prop.gameObject.SetActive(false);
             }
-            Compat.CompatModMenu.CreateMenuButton(__instance);
+            Compat.CompatModMenu.CreateMenuButton();
         }
 
         public static class Updater

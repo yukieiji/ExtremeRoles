@@ -33,7 +33,7 @@ namespace ExtremeRoles.Compat
         private static Dictionary<CompatModType,(TextMeshPro, Dictionary<ButtonType, GameObject>)> compatModMenuLine = new Dictionary<
             CompatModType, (TextMeshPro, Dictionary<ButtonType, GameObject>)>();
 
-        public static void CreateMenuButton(MainMenuManager instance)
+        public static void CreateMenuButton()
         {
             compatModMenuLine.Clear();
             GameObject buttonTemplate = GameObject.Find("AnnounceButton");
@@ -118,7 +118,8 @@ namespace ExtremeRoles.Compat
                     updateButton.transform.localPosition = new Vector3(0.45f, 0.0f, -5.0f);
                     passiveUpdateButton.OnClick.AddListener((System.Action)(() =>
                         {
-                            Helper.Logging.Debug("updateButtonClick");
+                            var updater = new Excuter.Updater(mod, dllName, repoURI);
+                            updater.Excute();
                         })
                     );
                     updateButtonTextAndName(ButtonType.Update, updateButton);

@@ -9,8 +9,8 @@ namespace ExtremeRoles.Compat.Mods
 {
     public abstract class CompatModBase
     {
+        public readonly SemanticVersioning.Version Version;
         protected BasePlugin Plugin;
-        protected SemanticVersioning.Version Version;
         protected Assembly Dll;
         protected System.Type[] ClassType;
 
