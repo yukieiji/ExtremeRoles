@@ -45,7 +45,7 @@ namespace ExtremeRoles.Patches.Manager
 
             var text = button.transform.GetChild(0).GetComponent<TMPro.TMP_Text>();
             __instance.StartCoroutine(Effects.Lerp(0.1f, new Action<float>((p) => {
-                text.SetText(Translation.GetString("updateButton"));
+                text.SetText(Translation.GetString("UpdateButton"));
             })));
             if (Updater.InfoPopup == null)
             {

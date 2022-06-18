@@ -2,32 +2,21 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-using UnhollowerBaseLib.Attributes;
-
 using TMPro;
 using ExtremeRoles.Performance;
 
 
 namespace ExtremeRoles.Compat
 {
-    public class CompatModMenuPopUp : MonoBehaviour
-    {
-        [HideFromIl2Cpp]
-        public void OnDisable()
-        {
-            base.gameObject.SetActive(false);
-        }
-    }
-
     internal static class CompatModMenu
     {
         private static GameObject menuBody;
 
         private enum ButtonType
         {
-            Install,
-            Update,
-            Uninstall
+            InstallButton,
+            UpdateButton,
+            UninstallButton
         }
 
         private static Dictionary<CompatModType,(TextMeshPro, Dictionary<ButtonType, GameObject>)> compatModMenuLine = new Dictionary<
@@ -112,7 +101,7 @@ namespace ExtremeRoles.Compat
                             uninstaller.Excute();
                         })
                     );
-                    updateButtonTextAndName(ButtonType.Uninstall, uninstallButton);
+                    updateButtonTextAndName(ButtonType.UninstallButton, uninstallButton);
 
                     var (updateButton, passiveUpdateButton) = createButton(buttonTemplate, modText);
                     updateButton.transform.localPosition = new Vector3(0.45f, 0.0f, -5.0f);
@@ -122,10 +111,10 @@ namespace ExtremeRoles.Compat
                             updater.Excute();
                         })
                     );
-                    updateButtonTextAndName(ButtonType.Update, updateButton);
+                    updateButtonTextAndName(ButtonType.UpdateButton, updateButton);
 
-                    button.Add(ButtonType.Uninstall, uninstallButton);
-                    button.Add(ButtonType.Update, updateButton);
+                    button.Add(ButtonType.UninstallButton, uninstallButton);
+                    button.Add(ButtonType.UpdateButton, updateButton);
                 }
                 else
                 {
@@ -137,8 +126,8 @@ namespace ExtremeRoles.Compat
                             installer.Excute();
                         })
                     );
-                    updateButtonTextAndName(ButtonType.Install, installButton);
-                    button.Add(ButtonType.Install, installButton);
+                    updateButtonTextAndName(ButtonType.InstallButton, installButton);
+                    button.Add(ButtonType.InstallButton, installButton);
                 }
 
                 compatModMenuLine.Add(mod, (modText, button));
