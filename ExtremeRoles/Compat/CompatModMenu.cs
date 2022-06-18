@@ -132,7 +132,8 @@ namespace ExtremeRoles.Compat
                     installButton.transform.localPosition = new Vector3(1.2f, 0.0f, -5.0f);
                     passiveInstallButton.OnClick.AddListener((System.Action)(() =>
                         {
-                            Helper.Logging.Debug("installButtonClick");
+                            var installer = new Excuter.Installer(dllName, repoURI);
+                            installer.Excute();
                         })
                     );
                     updateButtonTextAndName(ButtonType.Install, installButton);
