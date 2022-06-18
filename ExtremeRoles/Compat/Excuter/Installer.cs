@@ -55,11 +55,8 @@ namespace ExtremeRoles.Compat.Excuter
 
                 if (installTask == null)
                 {
-                    installTask = downloadAndInstall(repoData.Value);
-                }
-                else
-                {
                     info = Translation.GetString("installInProgress");
+                    installTask = downloadAndInstall(repoData.Value);
                 }
 
                 this.Popup.StartCoroutine(
