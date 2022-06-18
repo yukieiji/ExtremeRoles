@@ -18,7 +18,7 @@ namespace ExtremeRoles.Compat.Excuter
 
         public override void Excute()
         {
-            if (!File.Exists(Path.Combine(this.modDllPath)))
+            if (!File.Exists(this.modDllPath))
             {
                 Popup.Show(Translation.GetString("alreadyUninstall"));
                 return;

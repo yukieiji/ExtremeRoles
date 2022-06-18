@@ -49,6 +49,12 @@ namespace ExtremeRoles.Compat.Excuter
 
         public override void Excute()
         {
+            
+            if (!File.Exists(Path.Combine(this.modFolderPath, this.dllName)))
+            {
+                Popup.Show(Translation.GetString("alreadyUninstallAfterInstall"));
+                return;
+            }
 
             string info = Translation.GetString("checkUpdateNow");
             Popup.Show(info);
