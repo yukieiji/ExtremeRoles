@@ -27,6 +27,7 @@ namespace ExtremeRoles.Compat.Excuter
 
 
         private const string agentName = "ExtremeRoles CompateModInstaller";
+        private Task installTask = null;
         private string dllName;
         private string repoUrl;
 
@@ -34,10 +35,17 @@ namespace ExtremeRoles.Compat.Excuter
         {
             this.dllName = $"{dllName}.dll";
             this.repoUrl = repoUrl;
+            this.installTask = null;
         }
 
         public override void Excute()
         {
+            if (File.Exists(Path.Combine(this.modFolderPath, this.dllName)))
+            {
+                Popup.Show(Translation.GetString("alreadyInstall"));
+                return;
+            }
+
             string info = Translation.GetString("checkInstallNow");
             Popup.Show(info);
 
@@ -45,20 +53,24 @@ namespace ExtremeRoles.Compat.Excuter
 
             if (repoData.HasValue)
             {
-                SetPopupText(Translation.GetString("installNow"));
+                info = Translation.GetString("installNow");
 
-                if (downloadAndInstall(repoData.Value).GetAwaiter().GetResult())
+                if (installTask == null)
                 {
-                    ShowPopup(Translation.GetString("installRestart"));
+                    installTask = downloadAndInstall(repoData.Value);
                 }
                 else
                 {
-                    ShowPopup(Translation.GetString("installManual"));
+                    info = Translation.GetString("installInProgress");
                 }
+
+                this.Popup.StartCoroutine(
+                    Effects.Lerp(0.01f, new Action<float>((p) => { SetPopupText(info); })));
+
             }
             else
             {
-                SetPopupText(Translation.GetString("installFall"));
+                SetPopupText(Translation.GetString("installManual"));
             }
         }
 
@@ -121,6 +133,8 @@ namespace ExtremeRoles.Compat.Excuter
             await using var fileStream = File.Create(filePath);
             await responseStream.CopyToAsync(fileStream);
 
+            ShowPopup(Translation.GetString("installRestart"));
+            
             return true;
         }
 

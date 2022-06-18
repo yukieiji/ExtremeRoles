@@ -13,11 +13,17 @@ namespace ExtremeRoles.Compat.Excuter
 
         internal Uninstaller(string dllName) : base()
         {
-            this.modDllPath = @$"{this.modFolderPath}\{dllName}.dll";
+            this.modDllPath = Path.Combine(this.modFolderPath, $"{dllName}.dll");
         }
 
         public override void Excute()
         {
+            if (!File.Exists(Path.Combine(this.modDllPath)))
+            {
+                Popup.Show(Translation.GetString("alreadyUninstall"));
+                return;
+            }
+
             string info = Translation.GetString("checkUninstallNow");
             Popup.Show(info);
 
@@ -30,7 +36,7 @@ namespace ExtremeRoles.Compat.Excuter
             }
             else
             {
-                SetPopupText(Translation.GetString("uninstallFall"));
+                SetPopupText(Translation.GetString("uninstallManual"));
             }
         }
 
