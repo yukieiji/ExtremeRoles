@@ -53,7 +53,7 @@ namespace ExtremeRoles.Compat
 
             Process.Start(
                 Path.Combine(Paths.GameRootPath, "tmp", batFileName),
-                $"{extractPath} {Paths.GameRootPath} \"{Path.Combine(Paths.GameRootPath, "Among Us.exe")}\"");
+                $"{extractPath} {Paths.GameRootPath}");
         }
     }
 }
