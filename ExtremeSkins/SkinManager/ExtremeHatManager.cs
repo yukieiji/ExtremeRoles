@@ -16,7 +16,7 @@ namespace ExtremeSkins.SkinManager
 #if WITHHAT
     public class ExtremeHatManager
     {
-        public static Dictionary<string, CustomHat> HatData = new Dictionary<string, CustomHat>();
+        public static readonly Dictionary<string, CustomHat> HatData = new Dictionary<string, CustomHat>();
         public static bool IsLoaded = false;
 
         public const string FolderPath = @"\ExtremeHat\";

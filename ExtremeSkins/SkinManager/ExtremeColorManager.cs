@@ -13,7 +13,7 @@ namespace ExtremeSkins.SkinManager
     public class ExtremeColorManager
     {
         public static uint ColorNum;
-        public static Dictionary<StringNames, string> LangData = new Dictionary<StringNames, string>();
+        public static readonly Dictionary<StringNames, string> LangData = new Dictionary<StringNames, string>();
 
         public static void Initialize()
         {

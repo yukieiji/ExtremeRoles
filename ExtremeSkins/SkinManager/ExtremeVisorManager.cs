@@ -17,7 +17,7 @@ namespace ExtremeSkins.SkinManager
 #if WITHVISOR
     public class ExtremeVisorManager
     {
-        public static Dictionary<string, CustomVisor> VisorData = new Dictionary<string, CustomVisor>();
+        public static readonly Dictionary<string, CustomVisor> VisorData = new Dictionary<string, CustomVisor>();
         public static bool IsLoaded = false;
 
         public const string FolderPath = @"\ExtremeVisor\";

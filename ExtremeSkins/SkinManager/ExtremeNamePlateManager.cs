@@ -17,7 +17,7 @@ namespace ExtremeSkins.SkinManager
 #if WITHNAMEPLATE
     public class ExtremeNamePlateManager
     {
-        public static Dictionary<string, CustomNamePlate> NamePlateData = new Dictionary<string, CustomNamePlate>();
+        public static readonly Dictionary<string, CustomNamePlate> NamePlateData = new Dictionary<string, CustomNamePlate>();
         public static bool IsLoaded = false;
 
         public const string FolderPath = @"\ExtremeNamePlate\";
