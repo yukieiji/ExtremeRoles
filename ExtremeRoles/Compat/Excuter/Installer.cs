@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 
@@ -25,8 +24,7 @@ namespace ExtremeRoles.Compat.Excuter
             }
         }
 
-
-        private const string agentName = "ExtremeRoles CompateModInstaller";
+        private const string agentName = "ExtremeRoles CompatModInstaller";
         private Task installTask = null;
         private string dllName;
         private string repoUrl;

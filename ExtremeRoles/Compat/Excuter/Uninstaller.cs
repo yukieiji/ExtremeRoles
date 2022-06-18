@@ -45,7 +45,7 @@ namespace ExtremeRoles.Compat.Excuter
             try
             {
                 DirectoryInfo d = new DirectoryInfo(this.modFolderPath);
-                string[] files = d.GetFiles($"*{uninstallName}").Select(x => x.FullName).ToArray(); // Getting old versions
+                string[] files = d.GetFiles($"*{uninstallName}").Select(x => x.FullName).ToArray(); // Remove uninstall versions
                 foreach (string f in files)
                 {
                     File.Delete(f);
@@ -53,7 +53,7 @@ namespace ExtremeRoles.Compat.Excuter
             }
             catch (Exception e)
             {
-                Logging.Error("Exception occured when clearing old versions:\n" + e);
+                Logging.Error($"Exception occured when clearing old versions:\n{e}");
             }
         }
 
