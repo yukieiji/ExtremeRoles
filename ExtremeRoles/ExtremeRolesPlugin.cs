@@ -54,6 +54,10 @@ namespace ExtremeRoles
 
             Compat = new CompatModManager();
 
+            if (BepInExUpdater.UpdateRequired)
+            {
+                AddComponent<BepInExUpdater>();
+            }
         }
 
     }
