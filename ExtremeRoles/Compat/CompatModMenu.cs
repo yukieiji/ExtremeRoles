@@ -19,6 +19,8 @@ namespace ExtremeRoles.Compat
             UninstallButton
         }
 
+        private const string titleName = "compatModMenu";
+
         private static Dictionary<CompatModType,(TextMeshPro, Dictionary<ButtonType, GameObject>)> compatModMenuLine = new Dictionary<
             CompatModType, (TextMeshPro, Dictionary<ButtonType, GameObject>)>();
 
@@ -44,6 +46,24 @@ namespace ExtremeRoles.Compat
             }));
         }
 
+        public static void UpdateTranslation()
+        {
+
+            TextMeshPro title = menuBody.GetComponent<TextMeshPro>();
+            title.text = Helper.Translation.GetString(titleName);
+
+            foreach (var (mod, (modText, buttons)) in compatModMenuLine)
+            {
+                modText.text = $"{Helper.Translation.GetString(mod.ToString())}";
+
+                foreach (var (buttonType, button) in buttons)
+                {
+                    updateButtonText(buttonType, button);
+                }
+            }
+
+        }
+
         private static void initMenu()
         {
             menuBody = Object.Instantiate(
@@ -52,10 +72,14 @@ namespace ExtremeRoles.Compat
 
             TextMeshPro title = Object.Instantiate(
                 Module.Prefab.Text, menuBody.transform);
+            var rect = title.GetComponent<RectTransform>();
+            rect.sizeDelta = new Vector2(5.4f, 2.0f);
             title.GetComponent<RectTransform>().localPosition = Vector3.up * 2.3f;
             title.gameObject.SetActive(true);
             title.name = "title";
-            title.text = "compatModMenu";
+            title.text = Helper.Translation.GetString(titleName);
+            title.autoSizeTextContainer = false;
+            title.fontSizeMin = title.fontSizeMax = 4.0f;
             title.transform.localPosition = new Vector3(0.0f, 2.45f, 0f);
 
             removeUnnecessaryComponent();
@@ -79,7 +103,7 @@ namespace ExtremeRoles.Compat
                     Module.Prefab.Text, menuBody.transform);
                 modText.name = modKey;
 
-                modText.transform.localPosition = new Vector3(0.15f, 2.0f - (index * 0.35f), 0f);
+                modText.transform.localPosition = new Vector3(0.25f, 1.9f - (index * 0.35f), 0f);
                 modText.fontSizeMin = modText.fontSizeMax = 3.0f;
                 modText.font = Object.Instantiate(Module.Prefab.Text.font);
                 modText.GetComponent<RectTransform>().sizeDelta = new Vector2(5.4f, 5.5f);
@@ -94,7 +118,7 @@ namespace ExtremeRoles.Compat
                 if (ExtremeRolesPlugin.Compat.LoadedMod.ContainsKey(mod))
                 {
                     var (uninstallButton, passiveUninstallButton) = createButton(buttonTemplate, modText);
-                    uninstallButton.transform.localPosition = new Vector3(1.95f, 0.0f, -5.0f);
+                    uninstallButton.transform.localPosition = new Vector3(1.85f, 0.0f, -5.0f);
                     passiveUninstallButton.OnClick.AddListener((System.Action)(() =>
                         {
                             var uninstaller = new Excuter.Uninstaller(dllName);
@@ -104,7 +128,7 @@ namespace ExtremeRoles.Compat
                     updateButtonTextAndName(ButtonType.UninstallButton, uninstallButton);
 
                     var (updateButton, passiveUpdateButton) = createButton(buttonTemplate, modText);
-                    updateButton.transform.localPosition = new Vector3(0.45f, 0.0f, -5.0f);
+                    updateButton.transform.localPosition = new Vector3(0.35f, 0.0f, -5.0f);
                     passiveUpdateButton.OnClick.AddListener((System.Action)(() =>
                         {
                             var updater = new Excuter.Updater(mod, dllName, repoURI);
@@ -119,7 +143,7 @@ namespace ExtremeRoles.Compat
                 else
                 {
                     var (installButton, passiveInstallButton) = createButton(buttonTemplate, modText);
-                    installButton.transform.localPosition = new Vector3(1.2f, 0.0f, -5.0f);
+                    installButton.transform.localPosition = new Vector3(1.1f, 0.0f, -5.0f);
                     passiveInstallButton.OnClick.AddListener((System.Action)(() =>
                         {
                             var installer = new Excuter.Installer(dllName, repoURI);
