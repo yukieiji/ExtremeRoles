@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using BepInEx;
@@ -10,7 +13,6 @@ using BepInEx.IL2CPP.Utils;
 using UnhollowerBaseLib.Attributes;
 using UnityEngine;
 using UnityEngine.Networking;
-using System.Diagnostics;
 
 
 namespace ExtremeRoles.Compat
@@ -59,6 +61,20 @@ namespace ExtremeRoles.Compat
             File.WriteAllBytes(zipPath, www.downloadHandler.data);
             
             ZipFile.ExtractToDirectory(zipPath, extractPath);
+
+            Assembly asm = Assembly.GetExecutingAssembly();
+            string exePath = asm.GetManifestResourceNames().FirstOrDefault(n => n.EndsWith(exeFileName));
+
+            using (var resource = asm.GetManifestResourceStream(exePath))
+            {
+                using (var file = new FileStream(
+                    Path.Combine(tmpFolder, exeFileName),
+                    FileMode.OpenOrCreate, FileAccess.Write))
+                {
+                    resource!.CopyTo(file);
+                }
+            }
+
 
             Process.Start(
                 Path.Combine(Paths.GameRootPath, "tmp", exeFileName),

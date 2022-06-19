@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtremeRoles", "ExtremeRoles\ExtremeRoles.csproj", "{11FBC798-BAF5-4EE5-9511-BE6DB0592F99}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2DC77B62-C0AF-4C7A-BF6A-436B466BEA4C} = {2DC77B62-C0AF-4C7A-BF6A-436B466BEA4C}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtremeSkins", "ExtremeSkins\ExtremeSkins.csproj", "{59F4A51B-B12C-41D6-B638-FF26A77940B1}"
 EndProject
