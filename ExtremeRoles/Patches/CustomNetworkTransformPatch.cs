@@ -13,15 +13,13 @@ namespace ExtremeRoles.Patches
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
             byte playerId = __instance.gameObject.GetComponent<PlayerControl>().PlayerId;
-            var overLoader = ExtremeRoleManager.GetSafeCastedRole<Roles.Solo.Impostor.OverLoader>(playerId);
+            var role = ExtremeRoleManager.GameRole[playerId];
 
-            if (overLoader == null) { return; }
-
-            if (overLoader.IsOverLoad &&
+            if (role.IsBoost &&
                 !__instance.AmOwner && 
                 __instance.interpolateMovement != 0.0f)
             {
-                __instance.body.velocity *= overLoader.Speed;
+                __instance.body.velocity *= role.MoveSpeed;
             }
         }
     }

@@ -21,7 +21,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
         public bool IsOverLoad;
-        public float Speed;
 
         private float reduceRate;
         private float defaultKillCool;
@@ -56,6 +55,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             if (overLoader != null)
             {
                 overLoader.IsOverLoad = activate;
+                overLoader.IsBoost = activate;
             }
         }
 
@@ -133,7 +133,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             var allOption = OptionHolder.AllOption;
 
-            this.Speed = allOption[
+            this.MoveSpeed = allOption[
                 GetRoleOptionId(OverLoaderOption.MoveSpeed)].GetValue();
             this.reduceRate = allOption[
                 GetRoleOptionId(OverLoaderOption.KillCoolReduceRate)].GetValue();

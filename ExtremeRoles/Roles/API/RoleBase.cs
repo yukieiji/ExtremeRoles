@@ -29,6 +29,8 @@ namespace ExtremeRoles.Roles.API
         public bool IsWin = false;
 
         public bool FakeImposter = false;
+        public bool IsBoost = false;
+        public float MoveSpeed = 1.0f;
 
         public float Vison = 0f;
         public float KillCoolTime = 0f;
@@ -653,6 +655,8 @@ namespace ExtremeRoles.Roles.API
             this.CanUseVital = this.CanUseVital || this.AnotherRole.CanUseVital;
 
             this.HasOtherVison = this.HasOtherVison || this.AnotherRole.HasOtherVison;
+            
+            this.IsBoost = this.IsBoost || this.AnotherRole.IsBoost;
 
             if (this.HasOtherVison)
             {
@@ -676,6 +680,13 @@ namespace ExtremeRoles.Roles.API
                            this.KillRange : this.AnotherRole.KillRange;
                 }
             }
+
+            if (this.IsBoost)
+            {
+                this.MoveSpeed = this.MoveSpeed > this.AnotherRole.MoveSpeed ?
+                    this.MoveSpeed : this.AnotherRole.MoveSpeed;
+            }
+
         }
         public int GetManagerOptionId<T>(T option) where T : struct, IConvertible
         {
