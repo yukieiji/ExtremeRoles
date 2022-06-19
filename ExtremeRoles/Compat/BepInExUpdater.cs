@@ -2,6 +2,8 @@
 using System.Collections;
 using System.IO;
 using System.IO.Compression;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using BepInEx;
 using BepInEx.IL2CPP;
 using BepInEx.IL2CPP.Utils;
@@ -19,7 +21,7 @@ namespace ExtremeRoles.Compat
 
         private const string minimumBepInExVersion = "6.0.0.565";
         private const string bepInExDownloadURL = "https://builds.bepinex.dev/projects/bepinex_be/565/BepInEx_UnityIL2CPP_x86_265107c_6.0.0-be.565.zip";
-        private const string batFileName = "BepInExInstaller.bat";
+        private const string exeFileName = "ExtremeBepInExInstaller.exe";
 
         public void Awake()
         {
@@ -30,6 +32,12 @@ namespace ExtremeRoles.Compat
         [HideFromIl2Cpp]
         public IEnumerator Excute()
         {
+
+            Task.Run(() => MessageBox(
+                IntPtr.Zero,
+                Helper.Translation.GetString("ReqBepInExUpdate"),
+                "Extreme Roles", 0));
+
             UnityWebRequest www = UnityWebRequest.Get(bepInExDownloadURL);
             yield return www.SendWebRequest();
             if (www.isNetworkError || www.isHttpError)
@@ -41,6 +49,7 @@ namespace ExtremeRoles.Compat
             string tmpFolder = Path.Combine(Paths.GameRootPath, "tmp");
             string zipPath = Path.Combine(tmpFolder, "BepInEx.zip");
             string extractPath = Path.Combine(tmpFolder, "BepInEx");
+
             if (Directory.Exists(tmpFolder))
             {
                 Directory.Delete(tmpFolder, true);
@@ -48,12 +57,18 @@ namespace ExtremeRoles.Compat
             Directory.CreateDirectory(tmpFolder);
             
             File.WriteAllBytes(zipPath, www.downloadHandler.data);
-
+            
             ZipFile.ExtractToDirectory(zipPath, extractPath);
 
             Process.Start(
-                Path.Combine(Paths.GameRootPath, "tmp", batFileName),
-                $"{extractPath} {Paths.GameRootPath}");
+                Path.Combine(Paths.GameRootPath, "tmp", exeFileName),
+                $"{Paths.GameRootPath} {extractPath} {SaveManager.LastLanguage}");
+
+            Application.Quit();
         }
+
+        [DllImport("user32.dll")]
+        public static extern int MessageBox(IntPtr hWnd, String text, String caption, int options);
+
     }
 }
