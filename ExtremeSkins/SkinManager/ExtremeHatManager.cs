@@ -160,6 +160,9 @@ namespace ExtremeSkins.SkinManager
 
             ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Hat Manager : HatData Download Start!! ---------- ");
 
+            HttpClient http = new HttpClient();
+            http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true };
+
             string dataSaveFolder = string.Concat(
                 Path.GetDirectoryName(Application.dataPath), FolderPath);
 
@@ -200,7 +203,7 @@ namespace ExtremeSkins.SkinManager
 
                 Directory.CreateDirectory(getHatFolder);
 
-                await pullHat(getHatFolder, getHatData);
+                await pullHat(http, getHatFolder, getHatData);
 
             }
 
@@ -226,6 +229,7 @@ namespace ExtremeSkins.SkinManager
             {
                 HttpClient http = new HttpClient();
                 http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true };
+
                 var response = await http.GetAsync(
                     new System.Uri($"{repo}/hat/{fileName}"),
                     HttpCompletionOption.ResponseContentRead);
@@ -256,11 +260,9 @@ namespace ExtremeSkins.SkinManager
         }
 
         private static async Task<HttpStatusCode> pullHat(
-            string saveFolder,
-            string hat)
+            HttpClient http, string saveFolder, string hat)
         {
-            HttpClient http = new HttpClient();
-            http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true };
+
             // インフォファイルを落とす
             await downLoadFileTo(http, hat, saveFolder, InfoFileName);
 
