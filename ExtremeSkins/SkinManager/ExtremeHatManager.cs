@@ -35,6 +35,9 @@ namespace ExtremeSkins.SkinManager
 
         public static bool IsUpdate()
         {
+
+            ExtremeSkinsPlugin.Logger.LogInfo("Extreme Hat Manager : Checking Update....");
+
             if (!Directory.Exists(string.Concat(
                 Path.GetDirectoryName(Application.dataPath), FolderPath))) { return true; }
 
@@ -96,6 +99,9 @@ namespace ExtremeSkins.SkinManager
 
         public static void Load()
         {
+
+            ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Hat Manager : Hat Loading Start!! ----------");
+
             getJsonData(hatTransData).GetAwaiter().GetResult();
             Helper.Translation.UpdateHatsTransData(
                 string.Concat(
@@ -146,10 +152,13 @@ namespace ExtremeSkins.SkinManager
             }
 
             IsLoaded = true;
+            ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Hat Manager : Hat Loading Complete!! ----------");
         }
 
         public static async Task PullAllData()
         {
+
+            ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Hat Manager : HatData Download Start!! ---------- ");
 
             string dataSaveFolder = string.Concat(
                 Path.GetDirectoryName(Application.dataPath), FolderPath);
@@ -194,6 +203,8 @@ namespace ExtremeSkins.SkinManager
                 await pullHat(getHatFolder, getHatData);
 
             }
+
+            ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Hat Manager : HatData Download Complete!! ---------- ");
 
         }
 
@@ -295,9 +306,12 @@ namespace ExtremeSkins.SkinManager
         private static async Task<HttpStatusCode> downLoadFileTo(
             HttpClient http, string hat, string saveFolder, string fileName)
         {
+            string dlUrl = $"{repo}/hat/{hat}/{fileName}";
+
+            ExtremeSkinsPlugin.Logger.LogInfo($"DownLoad from:{dlUrl}");
+
             var fileResponse = await http.GetAsync(
-                $"{repo}/hat/{hat}/{fileName}",
-                HttpCompletionOption.ResponseContentRead);
+                dlUrl, HttpCompletionOption.ResponseContentRead);
 
             if (fileResponse.StatusCode != HttpStatusCode.OK)
             {
