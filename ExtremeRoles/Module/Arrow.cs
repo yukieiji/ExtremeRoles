@@ -27,8 +27,6 @@ namespace ExtremeRoles.Module
 
             this.body.layer = 5;
             this.image = this.body.AddComponent<SpriteRenderer>();
-            var resizer = this.body.AddComponent<Resizeer>();
-            resizer.Scale = 0.5f;
 
             if (Prefab.Arrow != null)
             {
@@ -37,6 +35,9 @@ namespace ExtremeRoles.Module
             this.image.color = color;
             this.arrowBehaviour = this.body.AddComponent<ArrowBehaviour>();
             this.arrowBehaviour.image = this.image;
+
+            Resizeer resizer = this.body.AddComponent<Resizeer>();
+            resizer.SetScale(xzMaxSize, yMaxSize, xzMaxSize);
         }
 
         public void Update()

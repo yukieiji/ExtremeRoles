@@ -5,13 +5,18 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
     [Il2CppRegister]
     public class Resizeer : MonoBehaviour
     {
-        public float Scale = 0.5f;
+        private Vector3 targetScale = Vector3.one;
 
         public Resizeer(System.IntPtr ptr) : base(ptr) { }
 
         public void LateUpdate()
         {
-            this.transform.localScale *= Scale;
+            this.transform.localScale = Vector3.Scale(this.transform.localScale, targetScale);
+        }
+
+        public void SetScale(float targetX, float targetY, float targetZ)
+        {
+            this.targetScale = new Vector3(targetX, targetY, targetZ);
         }
     }
 }
