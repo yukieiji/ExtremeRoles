@@ -1,24 +1,12 @@
 ﻿using UnityEngine;
 
+using ExtremeRoles.Module.CustomMonoBehaviour;
+
 namespace ExtremeRoles.Module
 {
 
-    public class Resize : MonoBehaviour
-    {
-        public float Scale = 0.5f;
-
-        public Resize(System.IntPtr ptr) : base(ptr) { }
-
-        public void LateUpdate()
-        {
-            this.transform.localScale *= Scale;
-        }
-    }
-
-
     public class Arrow
     {
-    
         public GameObject Main
         {
             get => this.body;
@@ -39,7 +27,7 @@ namespace ExtremeRoles.Module
 
             this.body.layer = 5;
             this.image = this.body.AddComponent<SpriteRenderer>();
-            var resizer = this.body.AddComponent<Resize>();
+            var resizer = this.body.AddComponent<Resizeer>();
             resizer.Scale = 0.5f;
 
             if (Prefab.Arrow != null)
