@@ -57,7 +57,7 @@ namespace ExtremeRoles.Helper
             {
 
                 if (!playerInfo.Disconnected &&
-                    playerInfo.PlayerId != PlayerControl.LocalPlayer.PlayerId &&
+                    playerInfo.PlayerId != CachedPlayerControl.LocalPlayer.PlayerId &&
                     !playerInfo.IsDead &&
                     !playerInfo.Object.inVent)
                 {
@@ -118,9 +118,11 @@ namespace ExtremeRoles.Helper
 
         public static GameData.PlayerInfo GetDeadBodyInfo(float range)
         {
+
+            Vector2 playerPos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+
             foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(
-                PlayerControl.LocalPlayer.GetTruePosition(),
-                range,
+                playerPos, range,
                 Constants.PlayersOnlyMask))
             {
                 if (collider2D.tag == "DeadBody")
@@ -129,12 +131,11 @@ namespace ExtremeRoles.Helper
 
                     if (component && !component.Reported)
                     {
-                        Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
-                        Vector2 truePosition2 = component.TruePosition;
-                        if ((Vector2.Distance(truePosition2, truePosition) <= range) &&
-                            (PlayerControl.LocalPlayer.CanMove) &&
+                        Vector2 truePosition = component.TruePosition;
+                        if ((Vector2.Distance(truePosition, playerPos) <= range) &&
+                            (CachedPlayerControl.LocalPlayer.PlayerControl.CanMove) &&
                             (!PhysicsHelpers.AnythingBetween(
-                                truePosition, truePosition2, Constants.ShipAndObjectsMask, false)))
+                                playerPos, truePosition, Constants.ShipAndObjectsMask, false)))
                         {
                             return GameData.Instance.GetPlayerById(component.ParentId);
                         }
