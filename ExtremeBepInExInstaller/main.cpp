@@ -107,6 +107,8 @@ namespace
         remove_all(bepInExPath / "unhollowed");
         remove_all(bepInExPath / "unity-libs");
 
+        remove(bepInExPath / "config" / "BepInEx.cfg");
+
         remove_all(rootPath / "mono");
 
         remove(rootPath / "changelog.txt");
