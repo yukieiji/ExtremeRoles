@@ -203,7 +203,8 @@ namespace ExtremeRoles.GhostRoles
                 
                 // 専用のコンビ役職を取ってくる
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                    player.NetId, (byte)RPCOperator.Command.SetGhostRole,
+                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                    (byte)RPCOperator.Command.SetGhostRole,
                     Hazel.SendOption.Reliable, -1);
                     writer.Write(false);
                     writer.Write(player.PlayerId);
@@ -395,7 +396,8 @@ namespace ExtremeRoles.GhostRoles
         {
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                player.NetId, (byte)RPCOperator.Command.SetGhostRole,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                (byte)RPCOperator.Command.SetGhostRole,
                 Hazel.SendOption.Reliable, -1);
             writer.Write(false);
             writer.Write(player.PlayerId);
