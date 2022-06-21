@@ -9,6 +9,7 @@ using ExtremeRoles.Module.SpecialWinChecker;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Module
 {
@@ -236,7 +237,8 @@ namespace ExtremeRoles.Module
             Dictionary<int, IWinChecker> specialWinCheckRoleAlive = new Dictionary<
                 int, IWinChecker>();
 
-            foreach (GameData.PlayerInfo playerInfo in GameData.Instance.AllPlayers)
+            foreach (GameData.PlayerInfo playerInfo in 
+                GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 if (playerInfo.Disconnected) { continue; }
                 SingleRoleBase role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];

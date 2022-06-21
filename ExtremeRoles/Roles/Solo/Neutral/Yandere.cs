@@ -513,10 +513,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             PlayerControl rolePlayer,
             Vector2 pos)
         {
-            Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers;
-            for (int i = 0; i < allPlayers.Count; i++)
+            foreach (GameData.PlayerInfo playerInfo in 
+                GameData.Instance.AllPlayers.GetFastEnumerator())
             {
-                GameData.PlayerInfo playerInfo = allPlayers[i];
 
                 if (!this.progress.ContainsKey(playerInfo.PlayerId)) { continue; }
 

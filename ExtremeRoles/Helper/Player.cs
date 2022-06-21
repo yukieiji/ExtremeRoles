@@ -52,10 +52,9 @@ namespace ExtremeRoles.Helper
 
             Vector2 truePosition = sourcePlayer.GetTruePosition();
 
-            Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers;
-            for (int i = 0; i < allPlayers.Count; i++)
+            foreach (GameData.PlayerInfo playerInfo in 
+                GameData.Instance.AllPlayers.GetFastEnumerator())
             {
-                GameData.PlayerInfo playerInfo = allPlayers[i];
 
                 if (!playerInfo.Disconnected &&
                     playerInfo.PlayerId != PlayerControl.LocalPlayer.PlayerId &&

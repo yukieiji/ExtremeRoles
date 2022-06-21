@@ -10,6 +10,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 
 using BepInEx.IL2CPP.Utils.Collections;
 
@@ -216,10 +217,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             Vector2 truePosition = sourcePlayer.GetTruePosition();
 
-            Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers;
-            for (int i = 0; i < allPlayers.Count; i++)
+            foreach (GameData.PlayerInfo playerInfo in 
+                GameData.Instance.AllPlayers.GetFastEnumerator())
             {
-                GameData.PlayerInfo playerInfo = allPlayers[i];
 
                 if (!playerInfo.Disconnected &&
                     !playerInfo.IsDead &&

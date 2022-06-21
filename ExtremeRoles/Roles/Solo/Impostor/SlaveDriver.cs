@@ -87,7 +87,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 int taskHasPlayerNum = 0;
                 int taskHasDeadPlayerNum = 0;
 
-                foreach (var playerInfo in GameData.Instance.AllPlayers)
+                foreach (var playerInfo in 
+                    GameData.Instance.AllPlayers.GetFastEnumerator())
                 {
                     var role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
 

@@ -144,8 +144,8 @@ namespace ExtremeRoles.Patches
 
             resetNameTagsAndColors();
 
-            var role = ExtremeRoleManager.GetLocalPlayerRole();
-            var ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
+            SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
+            GhostRoleBase ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
 
             bool blockCondition = isBlockCondition(
                 CachedPlayerControl.LocalPlayer, role) || ghostRole != null;
@@ -494,8 +494,8 @@ namespace ExtremeRoles.Patches
                 playerInfoText = $"{roleNames}";
                 if (DestroyableSingleton<TaskPanelBehaviour>.InstanceExists)
                 {
-                    TMPro.TextMeshPro tabText = FastDestroyableSingleton<
-                        TaskPanelBehaviour>.Instance.tab.transform.FindChild("TabText_TMP").GetComponent<TMPro.TextMeshPro>();
+                    TMPro.TextMeshPro tabText = FastDestroyableSingleton<TaskPanelBehaviour>.Instance.tab.transform.FindChild(
+                        "TabText_TMP").GetComponent<TMPro.TextMeshPro>();
                     tabText.SetText(
                         $"{FastDestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Tasks)} {taskInfo}");
                 }
@@ -767,11 +767,10 @@ namespace ExtremeRoles.Patches
                 return false;
             }
             Vector2 truePosition = __instance.GetTruePosition();
-            Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers;
 
-            for (int i = 0; i < allPlayers.Count; i++)
+            foreach (GameData.PlayerInfo playerInfo in 
+                GameData.Instance.AllPlayers.GetFastEnumerator())
             {
-                GameData.PlayerInfo playerInfo = allPlayers[i];
 
                 if (playerInfo == null) { continue; }
 
