@@ -2,8 +2,23 @@
 
 namespace ExtremeRoles.Module
 {
+
+    public class Resize : MonoBehaviour
+    {
+        public float Scale = 0.5f;
+
+        public Resize(System.IntPtr ptr) : base(ptr) { }
+
+        public void LateUpdate()
+        {
+            this.transform.localScale *= Scale;
+        }
+    }
+
+
     public class Arrow
     {
+    
         public GameObject Main
         {
             get => this.body;
@@ -13,19 +28,23 @@ namespace ExtremeRoles.Module
         private const float yMaxSize = 0.525f;
 
         private Vector3 target;
+
         private GameObject body;
         private SpriteRenderer image;
         private ArrowBehaviour arrowBehaviour;
 
         public Arrow(Color color)
-        {
+        {            
             this.body = new GameObject("Arrow");
+
             this.body.layer = 5;
             this.image = this.body.AddComponent<SpriteRenderer>();
+            var resizer = this.body.AddComponent<Resize>();
+            resizer.Scale = 0.5f;
+
             if (Prefab.Arrow != null)
             {
                 this.image.sprite = Prefab.Arrow;
-                this.body.transform.localScale = new Vector3(xzMaxSize, yMaxSize, xzMaxSize);
             }
             this.image.color = color;
             this.arrowBehaviour = this.body.AddComponent<ArrowBehaviour>();

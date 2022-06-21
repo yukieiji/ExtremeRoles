@@ -58,7 +58,8 @@ namespace ExtremeRoles
             {
                 AddComponent<BepInExUpdater>();
             }
-        }
 
+            UnhollowerRuntimeLib.ClassInjector.RegisterTypeInIl2Cpp<Resize>();
+        }
     }
 }
