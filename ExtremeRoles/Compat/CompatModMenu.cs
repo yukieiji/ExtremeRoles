@@ -34,6 +34,8 @@ namespace ExtremeRoles.Compat
             compatModMenuButton.transform.SetSiblingIndex(7);
             PassiveButton compatModButton = compatModMenuButton.GetComponent<PassiveButton>();
             SpriteRenderer compatModSprite = compatModMenuButton.GetComponent<SpriteRenderer>();
+            compatModSprite.sprite = Resources.Loader.CreateSpriteFromResources(
+                Resources.Path.CompatModMenuImage, 200f);
             compatModButton.OnClick = new Button.ButtonClickedEvent();
             compatModButton.OnClick.AddListener((System.Action)(() =>
             {

@@ -17,6 +17,7 @@ namespace ExtremeRoles.Resources
 
         public const string BackGround = "ExtremeRoles.Resources.white.png";
         public const string HelpImage = "ExtremeRoles.Resources.Help.png";
+        public const string CompatModMenuImage = "ExtremeRoles.Resources.CompatModMenu.png";
 
         public const string TitleBurner = "ExtremeRoles.Resources.TitleBurner.png";
         public const string TabLogo = "ExtremeRoles.Resources.TabIcon.png";
