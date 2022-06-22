@@ -143,7 +143,10 @@ namespace ExtremeRoles.Patches.Option
             moreOptionButton = Object.Instantiate(
                 buttonPrefab,
                 __instance.CensorChatButton.transform.parent);
-            moreOptionButton.transform.localPosition = __instance.CensorChatButton.transform.localPosition + Vector3.down * 0.5f;
+            moreOptionButton.transform.localPosition = 
+                __instance.CensorChatButton.transform.localPosition + 
+                Vector3.down * 0.5f + new Vector3(0.0f, -1.5f, 0.0f);
+            moreOptionButton.name = "modMenuButton";
 
             moreOptionButton.gameObject.SetActive(true);
             moreOptionButton.Text.text = Helper.Translation.GetString("modOptionText");
