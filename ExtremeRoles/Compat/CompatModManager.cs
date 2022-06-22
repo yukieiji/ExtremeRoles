@@ -14,7 +14,7 @@ namespace ExtremeRoles.Compat
 
     internal enum CompatModType
     {
-        Submerged,
+        // Submerged,
     }
 
     internal class CompatModManager
