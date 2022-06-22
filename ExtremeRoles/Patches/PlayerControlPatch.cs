@@ -595,7 +595,7 @@ namespace ExtremeRoles.Patches
                         player.SetKillTimer(player.killTimer - Time.fixedDeltaTime);
                     }
 
-                    PlayerControl target = player.FindClosestTarget(!isImposter);
+                    PlayerControl target = player.Data.Role.FindClosestTarget();
 
                     // Logging.Debug($"TargetAlive?:{target}");
 
@@ -733,72 +733,6 @@ namespace ExtremeRoles.Patches
                 }
                 playerGhostRole.Button.Update();
             }
-        }
-    }
-
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FindClosestTarget))]
-    public class PlayerControlFindClosestTargetPatch
-    {
-        static bool Prefix(
-            PlayerControl __instance,
-            ref PlayerControl __result,
-            [HarmonyArgument(0)] bool protecting)
-        {
-
-            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return true; }
-
-            var gameRoles = ExtremeRoleManager.GameRole;
-
-            if (gameRoles.Count == 0) { return true; }
-
-            var role = gameRoles[__instance.PlayerId];
-
-            __result = null;
-
-            int killRange = PlayerControl.GameOptions.KillDistance;
-            if (role.HasOtherKillRange)
-            {
-                killRange = role.KillRange;
-            }
-
-            float num = GameOptionsData.KillDistances[Mathf.Clamp(killRange, 0, 2)];
-            
-            if (!ShipStatus.Instance)
-            {
-                return false;
-            }
-            Vector2 truePosition = __instance.GetTruePosition();
-
-            foreach (GameData.PlayerInfo playerInfo in 
-                GameData.Instance.AllPlayers.GetFastEnumerator())
-            {
-
-                if (playerInfo == null) { continue; }
-
-                if (!playerInfo.Disconnected && 
-                    (playerInfo.PlayerId != __instance.PlayerId) && 
-                    !playerInfo.IsDead && 
-                    !role.IsSameTeam(gameRoles[playerInfo.PlayerId]) &&
-                    playerInfo.Object != null &&
-                    (!playerInfo.Object.inVent || OptionHolder.Ship.CanKillVentInPlayer))
-                {
-                    PlayerControl @object = playerInfo.Object;
-                    if (@object && @object.Collider.enabled)
-                    {
-                        Vector2 vector = @object.GetTruePosition() - truePosition;
-                        float magnitude = vector.magnitude;
-                        if (magnitude <= num && 
-                            !PhysicsHelpers.AnyNonTriggersBetween(
-                                truePosition, vector.normalized,
-                                magnitude, Constants.ShipAndObjectsMask))
-                        {
-                            __result = @object;
-                            num = magnitude;
-                        }
-                    }
-                }
-            }
-            return false;
         }
     }
 

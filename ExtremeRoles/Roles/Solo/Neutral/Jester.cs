@@ -189,8 +189,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             var role = ExtremeRoleManager.GameRole[this.outburstTarget.PlayerId];
             if (!role.CanKill) { return; }
 
-            PlayerControl killTarget = this.outburstTarget.FindClosestTarget(
-                !role.IsImpostor());
+            PlayerControl killTarget = this.outburstTarget.Data.Role.FindClosestTarget();
 
             if (killTarget == null) { return; }
             if (killTarget.Data.IsDead || killTarget.Data.Disconnected) { return; }
