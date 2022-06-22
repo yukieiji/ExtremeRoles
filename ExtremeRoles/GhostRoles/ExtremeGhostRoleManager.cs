@@ -86,13 +86,15 @@ namespace ExtremeRoles.GhostRoles
 
             public bool IsGlobalSpawnLimit(ExtremeRoleType team)
             {
-                if (this.globalSpawnLimit.ContainsKey(team))
+                try
                 {
                     return this.globalSpawnLimit[team] <= 0;
                 }
-                else
+                catch (System.Exception e)
                 {
-                    throw new System.Exception("Unknown teamType detect!!");
+                    ExtremeRolesPlugin.Logger.LogInfo(
+                        $"Unknown teamType detect!!    tema:{team}  exception:{e}");
+                    return false;
                 }
             }
 
@@ -190,7 +192,7 @@ namespace ExtremeRoles.GhostRoles
                 return;
             }
 
-            var baseRole = ExtremeRoleManager.GameRole[player.PlayerId];
+            SingleRoleBase baseRole = ExtremeRoleManager.GameRole[player.PlayerId];
 
             ExtremeRoleType team = baseRole.Team;
             ExtremeRoleId roleId = baseRole.Id;
