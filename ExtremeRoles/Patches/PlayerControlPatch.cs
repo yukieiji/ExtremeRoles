@@ -1493,7 +1493,7 @@ namespace ExtremeRoles.Patches
                     changeOutfit();
                     __instance.cosmetics.currentBodySprite.BodySprite.transform.localScale = __instance.defaultPlayerScale;
                     __instance.cosmetics.normalBodySprite.BodySprite.transform.localScale = __instance.defaultPlayerScale;
-                    __instance.MyPhysics.Skin.gameObject.transform.localScale = __instance.defaultPlayerScale;
+                    // __instance.MyPhysics.Skin.gameObject.transform.localScale = __instance.defaultPlayerScale;
                 };
 
                 roleEffectAnimation.MidAnimCB = changeAction;

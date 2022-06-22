@@ -49,11 +49,13 @@ namespace ExtremeRoles.Patches.Meeting
                 (CachedPlayerControl.LocalPlayer.Data.IsDead && OptionHolder.Client.GhostsSeeVote &&
                  !isVoteSeeBlock(role)))
             {
-                PlayerControl.SetPlayerMaterialColors(voterPlayer.DefaultOutfit.ColorId, spriteRenderer);
+                voterPlayer.Object.SetPlayerMaterialColors(spriteRenderer);
             }
             else
             {
-                PlayerControl.SetPlayerMaterialColors(Palette.DisabledGrey, spriteRenderer);
+                // this is hot fiiiiix!!!!!!!!
+                spriteRenderer.material.SetColor("_BackColor", Palette.DisabledGrey);
+                spriteRenderer.material.SetColor("_BodyColor", Palette.DisabledGrey);
             }
 
             spriteRenderer.transform.SetParent(parent);
