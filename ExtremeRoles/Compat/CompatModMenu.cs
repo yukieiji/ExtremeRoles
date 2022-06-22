@@ -97,6 +97,8 @@ namespace ExtremeRoles.Compat
 
             foreach (CompatModType mod in System.Enum.GetValues(typeof(CompatModType)))
             {
+                if (!CompatModManager.ModInfo.ContainsKey(mod)) { continue; }
+
                 string modKey = mod.ToString();
 
                 TextMeshPro modText = Object.Instantiate(
