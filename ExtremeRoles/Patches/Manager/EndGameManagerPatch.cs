@@ -76,8 +76,7 @@ namespace ExtremeRoles.Patches.Manager
 
                 if (winningPlayerData.IsDead)
                 {
-                    poolablePlayer.cosmetics.currentBodySprite.BodySprite.sprite =
-                        poolablePlayer.cosmetics.currentBodySprite.GhostSprite;
+                    poolablePlayer.cosmetics.SetGhost();
                     poolablePlayer.SetDeadFlipX(i % 2 == 0);
                 }
                 else
