@@ -218,11 +218,11 @@ namespace ExtremeRoles.GhostRoles
 
             // 各陣営の役職データを取得する
             List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> sameTeamRoleAssignData = assignData.GetUseGhostRole(
-                baseRole.Team);
+                team);
 
             foreach (var(filter, num, spawnRate, id) in sameTeamRoleAssignData)
             {
-                if (filter.Count != 0 && !filter.Contains(baseRole.Id)) { continue; }
+                if (filter.Count != 0 && !filter.Contains(roleId)) { continue; }
                 if (!isRoleSpawn(num, spawnRate)) { continue; }
                 
                 rpcSetSingleGhostRoleToPlayerId(player, roleType, id);
