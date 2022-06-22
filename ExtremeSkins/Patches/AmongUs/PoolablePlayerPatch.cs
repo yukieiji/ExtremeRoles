@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace ExtremeSkins.Patches.AmongUs
 {
+    /*
     [HarmonyPatch(typeof(PoolablePlayer), nameof(PoolablePlayer.UpdateFromPlayerOutfit))]
     public static class PoolablePlayerPatch
     {
@@ -19,4 +20,5 @@ namespace ExtremeSkins.Patches.AmongUs
                 __instance.HatSlot.transform.localPosition.z - 1);
         }
     }
+    */
 }

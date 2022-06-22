@@ -173,8 +173,9 @@ namespace ExtremeRoles.Helper
                 
                 poolPlayer.gameObject.SetActive(true);
                 poolPlayer.UpdateFromPlayerData(
-                    player.Data, PlayerOutfitType.Default);
-                poolPlayer.NameText.text = player.Data.DefaultOutfit.PlayerName;
+                    player.Data, PlayerOutfitType.Default,
+                    PlayerMaterial.MaskType.None, true);
+                poolPlayer.cosmetics.SetName(player.Data.DefaultOutfit.PlayerName);
                 poolPlayer.SetFlipX(true);
                 poolPlayer.gameObject.SetActive(false);
                 playerIcon.Add(player.PlayerId, poolPlayer);

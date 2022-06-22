@@ -178,15 +178,15 @@ namespace ExtremeRoles.Patches
             {
                 if (player.CurrentOutfitType != PlayerOutfitType.Shapeshifted)
                 {
-                    player.nameText.text = player.Data.PlayerName;
+                    player.cosmetics.SetName(player.Data.PlayerName);
                 }
                 if (CachedPlayerControl.LocalPlayer.Data.Role.IsImpostor && player.Data.Role.IsImpostor)
                 {
-                    player.nameText.color = Palette.ImpostorRed;
+                    player.cosmetics.SetNameColor(Palette.ImpostorRed);
                 }
                 else
                 {
-                    player.nameText.color = Color.white;
+                    player.cosmetics.SetNameColor(Color.white);
                 }
                 if (MeetingHud.Instance != null)
                 {
@@ -216,7 +216,7 @@ namespace ExtremeRoles.Patches
                 impostors.RemoveAll(x => !(x.Data.Role.IsImpostor));
                 foreach (PlayerControl player in impostors)
                 {
-                    player.nameText.color = Palette.ImpostorRed;
+                    player.cosmetics.SetNameColor(Palette.ImpostorRed);
                     if (MeetingHud.Instance != null)
                     {
                         foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)
@@ -251,7 +251,7 @@ namespace ExtremeRoles.Patches
                 Color ghostRoleColor = playerGhostRole.RoleColor;
                 localRoleColor = (localRoleColor / 2.0f) + (ghostRoleColor / 2.0f);
             }
-            player.nameText.color = localRoleColor;
+            player.cosmetics.SetNameColor(localRoleColor);
             setVoteAreaColor(localPlayerId, localRoleColor);
 
             GhostRoleBase targetGhostRole;
@@ -286,7 +286,7 @@ namespace ExtremeRoles.Patches
 
                     if (paintColor == Palette.ClearWhite) { continue; }
 
-                    targetPlayer.nameText.color = paintColor;
+                    targetPlayer.cosmetics.SetNameColor(paintColor);
                     setVoteAreaColor(targetPlayerId, paintColor);
                 }
                 else
@@ -295,7 +295,7 @@ namespace ExtremeRoles.Patches
 
                     if (!playeringInfoBlock)
                     {
-                        targetPlayer.nameText.color = roleColor;
+                        targetPlayer.cosmetics.SetNameColor(roleColor);
                     }
                     setGhostVoteAreaColor(
                         targetPlayerId,
@@ -318,7 +318,7 @@ namespace ExtremeRoles.Patches
                     ExtremeRoleManager.GameRole[playerId], playerId);
                 if (tag == string.Empty) { continue; }
 
-                targetPlayer.nameText.text += tag;
+                targetPlayer.cosmetics.nameText.text += tag;
 
                 if (MeetingHud.Instance != null)
                 {
@@ -393,19 +393,20 @@ namespace ExtremeRoles.Patches
                     continue;
                 }
 
-                Transform playerInfoTransform = player.nameText.transform.parent.FindChild("Info");
+                Transform playerInfoTransform = player.cosmetics.nameText.transform.parent.FindChild("Info");
                 TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
 
                 if (playerInfo == null)
                 {
                     playerInfo = UnityEngine.Object.Instantiate(
-                        player.nameText, player.nameText.transform.parent);
+                        player.cosmetics.nameText,
+                        player.cosmetics.nameText.transform.parent);
                     playerInfo.fontSize *= 0.75f;
                     playerInfo.gameObject.name = "Info";
                 }
 
                 // Set the position every time bc it sometimes ends up in the wrong place due to camoflauge
-                playerInfo.transform.localPosition = player.nameText.transform.localPosition + Vector3.up * 0.5f;
+                playerInfo.transform.localPosition = player.cosmetics.nameText.transform.localPosition + Vector3.up * 0.5f;
 
                 PlayerVoteArea playerVoteArea = MeetingHud.Instance?.playerStates?.FirstOrDefault(x => x.TargetPlayerId == player.PlayerId);
                 Transform meetingInfoTransform = playerVoteArea != null ? playerVoteArea.NameText.transform.parent.FindChild("Info") : null;
@@ -1190,7 +1191,7 @@ namespace ExtremeRoles.Patches
                     FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(
                         __instance.Data, data);
                     FastDestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
-		            target.nameText.GetComponent<MeshRenderer>().material.SetInt("_Mask", 0);
+		            target.cosmetics.nameText.GetComponent<MeshRenderer>()?.material.SetInt("_Mask", 0);
 		            target.RpcSetScanner(false);
 		            ImportantTextTask importantTextTask = new GameObject("_Player").AddComponent<ImportantTextTask>();
 		            importantTextTask.transform.SetParent(
@@ -1336,7 +1337,7 @@ namespace ExtremeRoles.Patches
                 FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(
                     instance.Data, target.Data);
                 FastDestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
-                target.nameText.GetComponent<MeshRenderer>().material.SetInt("_Mask", 0);
+                target.cosmetics.nameText.GetComponent<MeshRenderer>()?.material.SetInt("_Mask", 0);
                 target.RpcSetScanner(false);
                 ImportantTextTask importantTextTask = new GameObject("_Player").AddComponent<ImportantTextTask>();
                 importantTextTask.transform.SetParent(
@@ -1482,7 +1483,7 @@ namespace ExtremeRoles.Patches
                     FastDestroyableSingleton<RoleManager>.Instance.shapeshiftAnim, __instance.gameObject.transform);
                 roleEffectAnimation.SetMaterialColor(
                     __instance.Data.Outfits[PlayerOutfitType.Default].ColorId);
-                if (__instance.MyRend.flipX)
+                if (__instance.cosmetics.FlipX)
                 {
                     roleEffectAnimation.transform.position -= new Vector3(0.14f, 0f, 0f);
                 }
@@ -1490,8 +1491,8 @@ namespace ExtremeRoles.Patches
                 Action changeAction = () =>
                 {
                     changeOutfit();
-                    __instance.CurrentBodySprite.BodySprite.transform.localScale = __instance.defaultPlayerScale;
-                    __instance.NormalBodySprite.BodySprite.transform.localScale = __instance.defaultPlayerScale;
+                    __instance.cosmetics.currentBodySprite.BodySprite.transform.localScale = __instance.defaultPlayerScale;
+                    __instance.cosmetics.normalBodySprite.BodySprite.transform.localScale = __instance.defaultPlayerScale;
                     __instance.MyPhysics.Skin.gameObject.transform.localScale = __instance.defaultPlayerScale;
                 };
 
@@ -1513,7 +1514,7 @@ namespace ExtremeRoles.Patches
 
                 roleEffectAnimation.Play(
                     __instance, roleAnimation,
-                    CachedPlayerControl.LocalPlayer.PlayerControl.MyRend.flipX,
+                    CachedPlayerControl.LocalPlayer.PlayerControl.cosmetics.FlipX,
                     RoleEffectAnimation.SoundType.Local, 0f);
                 return false;
             }
