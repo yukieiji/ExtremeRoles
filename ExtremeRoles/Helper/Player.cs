@@ -148,15 +148,16 @@ namespace ExtremeRoles.Helper
 
         public static void SetPlayerOutLine(PlayerControl target, Color color)
         {
-            if (prevTarget != null && prevTarget.MyRend != null)
+            if (prevTarget != null &&
+                prevTarget.cosmetics.currentBodySprite.BodySprite != null)
             {
-                prevTarget.MyRend.material.SetFloat("_Outline", 0f);
+                prevTarget.cosmetics.currentBodySprite.BodySprite.material.SetFloat("_Outline", 0f);
             }
 
-            if (target == null || target.MyRend == null) { return; }
+            if (target == null || target.cosmetics.currentBodySprite.BodySprite == null) { return; }
 
-            target.MyRend.material.SetFloat("_Outline", 1f);
-            target.MyRend.material.SetColor("_OutlineColor", color);
+            target.cosmetics.currentBodySprite.BodySprite.material.SetFloat("_Outline", 1f);
+            target.cosmetics.currentBodySprite.BodySprite.material.SetColor("_OutlineColor", color);
             prevTarget = target;
         }
 

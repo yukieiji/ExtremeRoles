@@ -86,7 +86,7 @@ namespace ExtremeRoles.Patches.MapOverlay
 								{
 									num2--;
 								}
-								else if (component?.MyRend?.material != null)
+								else if (component?.cosmetics.currentBodySprite.BodySprite?.material != null)
                                 {
 									addColor = Palette.PlayerColors[component.Data.DefaultOutfit.ColorId];
 								}
