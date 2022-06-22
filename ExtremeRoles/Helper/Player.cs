@@ -175,9 +175,10 @@ namespace ExtremeRoles.Helper
                 poolPlayer.gameObject.SetActive(true);
                 poolPlayer.UpdateFromPlayerData(
                     player.Data, PlayerOutfitType.Default,
-                    PlayerMaterial.MaskType.None, true);
+                    PlayerMaterial.MaskType.SimpleUI, true);
                 poolPlayer.cosmetics.SetName(player.Data.DefaultOutfit.PlayerName);
                 poolPlayer.SetFlipX(true);
+                poolPlayer.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
                 poolPlayer.gameObject.SetActive(false);
                 playerIcon.Add(player.PlayerId, poolPlayer);
             }
