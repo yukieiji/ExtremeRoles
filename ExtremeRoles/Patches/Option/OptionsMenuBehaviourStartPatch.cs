@@ -156,11 +156,11 @@ namespace ExtremeRoles.Patches.Option
             {
                 if (!popUp) { return; }
 
-                var hudManager = FastDestroyableSingleton<HudManager>.Instance;
-
-                if (__instance.transform.parent && __instance.transform.parent == hudManager.transform)
+                if (DestroyableSingleton<HudManager>.InstanceExists &&
+                    __instance.transform.parent && 
+                    __instance.transform.parent == FastDestroyableSingleton<HudManager>.Instance.transform)
                 {
-                    popUp.transform.SetParent(hudManager.transform);
+                    popUp.transform.SetParent(FastDestroyableSingleton<HudManager>.Instance.transform);
                     popUp.transform.localPosition = new Vector3(0, 0, -800f);
                 }
                 else
