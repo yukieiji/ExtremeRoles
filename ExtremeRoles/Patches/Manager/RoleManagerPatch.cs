@@ -21,7 +21,7 @@ namespace ExtremeRoles.Patches.Manager
         public static void Postfix()
         {
 
-            uint netId = CachedPlayerControl.LocalPlayer.PlayerControl.NetId;
+            uint netId = PlayerControl.LocalPlayer.NetId;
 
             RPCOperator.Call(netId, RPCOperator.Command.Initialize);
             RPCOperator.Initialize();
@@ -81,7 +81,7 @@ namespace ExtremeRoles.Patches.Manager
 
             List<int> needAnotherRoleAssigns = new List<int>();
 
-            PlayerControl player = CachedPlayerControl.LocalPlayer;
+            PlayerControl player = PlayerControl.LocalPlayer;
 
             foreach (var (roles, id) in assignMultiAssignRole)
             {
@@ -436,7 +436,7 @@ namespace ExtremeRoles.Patches.Manager
             Logging.Debug($"Player:{player.name}  RoleId:{roleId}");
 
             RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                PlayerControl.LocalPlayer.NetId,
                 RPCOperator.Command.SetNormalRole,
                 new List<byte> { roleId, player.PlayerId });
             RPCOperator.SetNormalRole(
@@ -450,7 +450,7 @@ namespace ExtremeRoles.Patches.Manager
             Logging.Debug($"Player:{player.name}  RoleId:{roleId}");
 
             RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                PlayerControl.LocalPlayer.NetId,
                 RPCOperator.Command.SetCombinationRole,
                 new List<byte> { combType, roleId, player.PlayerId, gameId, bytedRoleType });
             RPCOperator.SetCombinationRole(
