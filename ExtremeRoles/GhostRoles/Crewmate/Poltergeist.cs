@@ -178,11 +178,11 @@ namespace ExtremeRoles.GhostRoles.Crewmate
         private void cleanUp()
         {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                    PlayerControl.LocalPlayer.NetId,
-                    (byte)RPCOperator.Command.UseGhostRoleAbility,
-                    Hazel.SendOption.Reliable, -1);
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                (byte)RPCOperator.Command.UseGhostRoleAbility,
+                Hazel.SendOption.Reliable, -1);
             writer.Write((byte)GhostRoleAbilityManager.AbilityType.PoltergeistMoveDeadbody);
-            writer.Write(PlayerControl.LocalPlayer.PlayerId);
+            writer.Write(CachedPlayerControl.LocalPlayer.PlayerId);
             writer.Write(byte.MinValue);
             writer.Write(false);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
