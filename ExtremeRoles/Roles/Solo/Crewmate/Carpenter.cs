@@ -737,7 +737,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             if (this.awakeTaskGage <= 0.0f)
             {
                 this.awakeRole = true;
-                this.HasOtherVison = false;
+                this.HasOtherVison = this.awakeHasOtherVision;
             }
             else
             {
