@@ -133,6 +133,7 @@ namespace ExtremeRoles.Patches.Manager
             }
 
             // ルームコード設定
+            /*
             if (OptionHolder.Client.StreamerMode)
             {
                 __instance.GameRoomNameCode.text = OptionHolder.ConfigParser.StreamerModeReplacementText.Value;
@@ -141,6 +142,7 @@ namespace ExtremeRoles.Patches.Manager
             {
                 __instance.GameRoomNameCode.text = roomCodeText;
             }
+            */
 
             // Instanceミス
             if (!GameData.Instance) { return; }

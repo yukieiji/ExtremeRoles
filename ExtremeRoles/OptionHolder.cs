@@ -145,7 +145,6 @@ namespace ExtremeRoles
             Ship.IsBlockGAAbilityReport = AllOption[
                 (int)CommonOptionKey.IsBlockGAAbilityReport].GetValue();
 
-            Client.StreamerMode = ConfigParser.StreamerMode.Value;
             Client.GhostsSeeRole = ConfigParser.GhostsSeeRoles.Value;
             Client.GhostsSeeTask = ConfigParser.GhostsSeeTasks.Value;
             Client.GhostsSeeVote = ConfigParser.GhostsSeeVotes.Value;
@@ -257,11 +256,6 @@ namespace ExtremeRoles
                 "ClientOption", "IsShowRoleSummary", true);
             ConfigParser.HideNamePlate = config.Bind(
                 "ClientOption", "IsHideNamePlate", false);
-
-            ConfigParser.StreamerModeReplacementText = config.Bind(
-                "ClientOption",
-                "ReplacementRoomCodeText",
-                "\n\nPlaying with Extreme Roles");
 
             ConfigParser.Ip = config.Bind(
                 "ClientOption", "CustomServerIP", "127.0.0.1");
@@ -428,7 +422,6 @@ namespace ExtremeRoles
             public static ConfigEntry<bool> ShowRoleSummary { get; set; }
             public static ConfigEntry<bool> StreamerMode { get; set; }
             public static ConfigEntry<bool> HideNamePlate { get; set; }
-            public static ConfigEntry<string> StreamerModeReplacementText { get; set; }
             public static ConfigEntry<string> Ip { get; set; }
             public static ConfigEntry<ushort> Port { get; set; }
         }
