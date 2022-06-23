@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 
 using HarmonyLib;
-using UnityEngine;
 
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Patches.Manager
