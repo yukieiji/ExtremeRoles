@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Assets.CoreScripts;
 
 using HarmonyLib;
@@ -14,21 +15,96 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Patches
 {
+    [HarmonyPatch]
+    public class CacheLocalPlayerPatch
+    {
+        [HarmonyTargetMethod]
+        public static MethodBase TargetMethod()
+        {
+            var type = typeof(PlayerControl).GetNestedTypes(AccessTools.all).FirstOrDefault(t => t.Name.Contains("Start"));
+            return AccessTools.Method(type, nameof(Il2CppSystem.Collections.IEnumerator.MoveNext));
+        }
 
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.CoStartMeeting))]
+        [HarmonyPostfix]
+        public static void SetLocalPlayer()
+        {
+            PlayerControl localPlayer = PlayerControl.LocalPlayer;
+            if (!localPlayer)
+            {
+                CachedPlayerControl.LocalPlayer = null;
+                return;
+            }
+
+            CachedPlayerControl cached = CachedPlayerControl.AllPlayerControls.FirstOrDefault(
+                p => p.PlayerControl.Pointer == localPlayer.Pointer);
+            if (cached != null)
+            {
+                CachedPlayerControl.LocalPlayer = cached;
+                return;
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Awake))]
+    public class PlayerControlAwakePatch
+    {
+        public static void Postfix(PlayerControl __instance)
+        {
+            if (__instance.notRealPlayer) { return; }
+
+            new CachedPlayerControl(__instance);
+
+#if DEBUG
+            foreach (var cachedPlayer in CachedPlayerControl.AllPlayerControls)
+            {
+                if (!cachedPlayer.PlayerControl || 
+                    !cachedPlayer.PlayerPhysics || 
+                    !cachedPlayer.NetTransform || 
+                    !cachedPlayer.transform)
+                {
+                    Logging.Debug($"CachedPlayer {cachedPlayer.PlayerControl.name} has null fields");
+                }
+            }
+#endif
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Deserialize))]
+    public class PlayerControlDeserializePatch
+    {
+        public static void Postfix(PlayerControl __instance)
+        {
+            CachedPlayerControl.PlayerPtrs[__instance.Pointer].PlayerId = __instance.PlayerId;
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.OnDestroy))]
+    public class PlayerControlOnDestroyPatch
+    {
+        public static void Postfix(PlayerControl __instance)
+        {
+            if (__instance.notRealPlayer) { return; }
+            CachedPlayerControl.Remove(__instance);
+        }
+    }
+
+
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.StartMeeting))]
     public class PlayerControlCoStartMeetingPatch
     {
-        public static void Prefix(PlayerControl __instance, [HarmonyArgument(0)] GameData.PlayerInfo meetingTarget)
+        public static void Prefix([HarmonyArgument(0)] GameData.PlayerInfo target)
         {
             var gameData = ExtremeRolesPlugin.GameDataStore;
 
             if (gameData.AssassinMeetingTrigger) { return; }
 
             // Count meetings
-            if (meetingTarget == null)
+            if (target == null)
             {
                 ++gameData.MeetingsCount;
             }
@@ -64,15 +140,15 @@ namespace ExtremeRoles.Patches
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) { return; }
             if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return; }
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
-            if (PlayerControl.LocalPlayer != __instance) { return; }
+            if (CachedPlayerControl.LocalPlayer.PlayerId != __instance.PlayerId) { return; }
 
             resetNameTagsAndColors();
 
-            var role = ExtremeRoleManager.GetLocalPlayerRole();
-            var ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
+            SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
+            GhostRoleBase ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
 
             bool blockCondition = isBlockCondition(
-                PlayerControl.LocalPlayer, role) || ghostRole != null;
+                CachedPlayerControl.LocalPlayer, role) || ghostRole != null;
             bool meetingInfoBlock = role.IsBlockShowMeetingRoleInfo() || ghostRole != null;
             bool playeringInfoBlock = role.IsBlockShowPlayingRoleInfo() || ghostRole != null;
 
@@ -98,19 +174,19 @@ namespace ExtremeRoles.Patches
         private static void resetNameTagsAndColors()
         {
 
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
             {
                 if (player.CurrentOutfitType != PlayerOutfitType.Shapeshifted)
                 {
-                    player.nameText.text = player.Data.PlayerName;
+                    player.cosmetics.SetName(player.Data.PlayerName);
                 }
-                if (PlayerControl.LocalPlayer.Data.Role.IsImpostor && player.Data.Role.IsImpostor)
+                if (CachedPlayerControl.LocalPlayer.Data.Role.IsImpostor && player.Data.Role.IsImpostor)
                 {
-                    player.nameText.color = Palette.ImpostorRed;
+                    player.cosmetics.SetNameColor(Palette.ImpostorRed);
                 }
                 else
                 {
-                    player.nameText.color = Color.white;
+                    player.cosmetics.SetNameColor(Color.white);
                 }
                 if (MeetingHud.Instance != null)
                 {
@@ -120,7 +196,7 @@ namespace ExtremeRoles.Patches
                         
                         pva.NameText.text = player.Data.PlayerName;
                        
-                        if (PlayerControl.LocalPlayer.Data.Role.IsImpostor &&
+                        if (CachedPlayerControl.LocalPlayer.Data.Role.IsImpostor &&
                             player.Data.Role.IsImpostor)
                         {
                             pva.NameText.color = Palette.ImpostorRed;
@@ -134,13 +210,13 @@ namespace ExtremeRoles.Patches
                 }
             }
 
-            if (PlayerControl.LocalPlayer.Data.Role.IsImpostor)
+            if (CachedPlayerControl.LocalPlayer.Data.Role.IsImpostor)
             {
-                List<PlayerControl> impostors = PlayerControl.AllPlayerControls.ToArray().ToList();
+                List<CachedPlayerControl> impostors = CachedPlayerControl.AllPlayerControls.ToArray().ToList();
                 impostors.RemoveAll(x => !(x.Data.Role.IsImpostor));
                 foreach (PlayerControl player in impostors)
                 {
-                    player.nameText.color = Palette.ImpostorRed;
+                    player.cosmetics.SetNameColor(Palette.ImpostorRed);
                     if (MeetingHud.Instance != null)
                     {
                         foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)
@@ -168,19 +244,19 @@ namespace ExtremeRoles.Patches
 
             // まずは自分のプレイヤー名の色を変える
             Color localRoleColor = playerRole.GetNameColor(
-                PlayerControl.LocalPlayer.Data.IsDead);
+                CachedPlayerControl.LocalPlayer.Data.IsDead);
 
             if (playerGhostRole != null)
             {
                 Color ghostRoleColor = playerGhostRole.RoleColor;
                 localRoleColor = (localRoleColor / 2.0f) + (ghostRoleColor / 2.0f);
             }
-            player.nameText.color = localRoleColor;
+            player.cosmetics.SetNameColor(localRoleColor);
             setVoteAreaColor(localPlayerId, localRoleColor);
 
             GhostRoleBase targetGhostRole;
 
-            foreach (PlayerControl targetPlayer in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl targetPlayer in CachedPlayerControl.AllPlayerControls)
             {
                 if (targetPlayer.PlayerId == player.PlayerId) { continue; }
 
@@ -191,7 +267,7 @@ namespace ExtremeRoles.Patches
                 
 
                 if (!OptionHolder.Client.GhostsSeeRole || 
-                    !PlayerControl.LocalPlayer.Data.IsDead ||
+                    !CachedPlayerControl.LocalPlayer.Data.IsDead ||
                     blockCondition)
                 {
                     Color paintColor = playerRole.GetTargetRoleSeeColor(
@@ -210,7 +286,7 @@ namespace ExtremeRoles.Patches
 
                     if (paintColor == Palette.ClearWhite) { continue; }
 
-                    targetPlayer.nameText.color = paintColor;
+                    targetPlayer.cosmetics.SetNameColor(paintColor);
                     setVoteAreaColor(targetPlayerId, paintColor);
                 }
                 else
@@ -219,7 +295,7 @@ namespace ExtremeRoles.Patches
 
                     if (!playeringInfoBlock)
                     {
-                        targetPlayer.nameText.color = roleColor;
+                        targetPlayer.cosmetics.SetNameColor(roleColor);
                     }
                     setGhostVoteAreaColor(
                         targetPlayerId,
@@ -235,14 +311,14 @@ namespace ExtremeRoles.Patches
             SingleRoleBase playerRole)
         {
 
-            foreach (PlayerControl targetPlayer in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl targetPlayer in CachedPlayerControl.AllPlayerControls)
             {
                 byte playerId = targetPlayer.PlayerId;
                 string tag = playerRole.GetRolePlayerNameTag(
                     ExtremeRoleManager.GameRole[playerId], playerId);
                 if (tag == string.Empty) { continue; }
 
-                targetPlayer.nameText.text += tag;
+                targetPlayer.cosmetics.nameText.text += tag;
 
                 if (MeetingHud.Instance != null)
                 {
@@ -298,7 +374,8 @@ namespace ExtremeRoles.Patches
         {
 
             bool commsActive = false;
-            foreach (PlayerTask t in PlayerControl.LocalPlayer.myTasks)
+            foreach (PlayerTask t in 
+                CachedPlayerControl.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
             {
                 if (t.TaskType == TaskTypes.FixComms)
                 {
@@ -307,27 +384,29 @@ namespace ExtremeRoles.Patches
                 }
             }
 
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
             {
 
-                if ((player != PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead))
+                if (player.PlayerId != CachedPlayerControl.LocalPlayer.PlayerId && 
+                    !CachedPlayerControl.LocalPlayer.Data.IsDead)
                 {
                     continue;
                 }
 
-                Transform playerInfoTransform = player.nameText.transform.parent.FindChild("Info");
+                Transform playerInfoTransform = player.cosmetics.nameText.transform.parent.FindChild("Info");
                 TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
 
                 if (playerInfo == null)
                 {
                     playerInfo = UnityEngine.Object.Instantiate(
-                        player.nameText, player.nameText.transform.parent);
+                        player.cosmetics.nameText,
+                        player.cosmetics.nameText.transform.parent);
                     playerInfo.fontSize *= 0.75f;
                     playerInfo.gameObject.name = "Info";
                 }
 
                 // Set the position every time bc it sometimes ends up in the wrong place due to camoflauge
-                playerInfo.transform.localPosition = player.nameText.transform.localPosition + Vector3.up * 0.5f;
+                playerInfo.transform.localPosition = player.cosmetics.nameText.transform.localPosition + Vector3.up * 0.5f;
 
                 PlayerVoteArea playerVoteArea = MeetingHud.Instance?.playerStates?.FirstOrDefault(x => x.TargetPlayerId == player.PlayerId);
                 Transform meetingInfoTransform = playerVoteArea != null ? playerVoteArea.NameText.transform.parent.FindChild("Info") : null;
@@ -346,7 +425,7 @@ namespace ExtremeRoles.Patches
                 var (playerInfoText, meetingInfoText) = getRoleAndMeetingInfo(player, commsActive);
                 playerInfo.text = playerInfoText;
                 
-                if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId)
+                if (player.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
                 {
                     playerInfo.gameObject.SetActive(player.Visible);
                     setMeetingInfo(meetingInfo, meetingInfoText, true);
@@ -375,7 +454,7 @@ namespace ExtremeRoles.Patches
         }
 
         private static bool isBlockCondition(
-            PlayerControl localPlayer, SingleRoleBase role)
+            CachedPlayerControl localPlayer, SingleRoleBase role)
         {
             if (localPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
             {
@@ -397,7 +476,7 @@ namespace ExtremeRoles.Patches
             var (tasksCompleted, tasksTotal) = GameSystem.GetTaskInfo(targetPlayer.Data);
             byte targetPlayerId = targetPlayer.PlayerId;
             string roleNames = ExtremeRoleManager.GameRole[targetPlayerId].GetColoredRoleName(
-                PlayerControl.LocalPlayer.Data.IsDead);
+                CachedPlayerControl.LocalPlayer.Data.IsDead);
 
             if (ExtremeGhostRoleManager.GameRole.ContainsKey(targetPlayerId))
             {
@@ -411,14 +490,15 @@ namespace ExtremeRoles.Patches
             string playerInfoText = "";
             string meetingInfoText = "";
 
-            if (targetPlayer == PlayerControl.LocalPlayer)
+            if (targetPlayer.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
             {
                 playerInfoText = $"{roleNames}";
                 if (DestroyableSingleton<TaskPanelBehaviour>.InstanceExists)
                 {
-                    TMPro.TextMeshPro tabText = DestroyableSingleton<
-                        TaskPanelBehaviour>.Instance.tab.transform.FindChild("TabText_TMP").GetComponent<TMPro.TextMeshPro>();
-                    tabText.SetText($"{TranslationController.Instance.GetString(StringNames.Tasks)} {taskInfo}");
+                    TMPro.TextMeshPro tabText = FastDestroyableSingleton<TaskPanelBehaviour>.Instance.tab.transform.FindChild(
+                        "TabText_TMP").GetComponent<TMPro.TextMeshPro>();
+                    tabText.SetText(
+                        $"{FastDestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Tasks)} {taskInfo}");
                 }
                 meetingInfoText = $"{roleNames} {taskInfo}".Trim();
             }
@@ -448,7 +528,7 @@ namespace ExtremeRoles.Patches
         {
 
             var removedTask = new List<PlayerTask>();
-            foreach (PlayerTask task in player.myTasks)
+            foreach (PlayerTask task in player.myTasks.GetFastEnumerator())
             {
                 if (task == null) { return; }
 
@@ -485,7 +565,7 @@ namespace ExtremeRoles.Patches
         {
             if (!player.AmOwner) { return; }
 
-            bool enable = Player.ShowButtons && !PlayerControl.LocalPlayer.Data.IsDead;
+            bool enable = Player.ShowButtons && !CachedPlayerControl.LocalPlayer.Data.IsDead;
 
             killButtonUpdate(player, playerRole, enable);
             ventButtonUpdate(playerRole, enable);
@@ -503,6 +583,8 @@ namespace ExtremeRoles.Patches
 
             bool isImposter = role.IsImpostor();
 
+            HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
+
             if (role.CanKill)
             {
                 if (enable)
@@ -513,23 +595,23 @@ namespace ExtremeRoles.Patches
                         player.SetKillTimer(player.killTimer - Time.fixedDeltaTime);
                     }
 
-                    PlayerControl target = player.FindClosestTarget(!isImposter);
+                    PlayerControl target = player.Data.Role.FindClosestTarget();
 
                     // Logging.Debug($"TargetAlive?:{target}");
 
-                    DestroyableSingleton<HudManager>.Instance.KillButton.SetTarget(target);
+                    hudManager.KillButton.SetTarget(target);
                     Player.SetPlayerOutLine(target, role.GetNameColor());
-                    HudManager.Instance.KillButton.Show();
-                    HudManager.Instance.KillButton.gameObject.SetActive(true);
+                    hudManager.KillButton.Show();
+                    hudManager.KillButton.gameObject.SetActive(true);
                 }
                 else
                 {
-                    HudManager.Instance.KillButton.SetDisabled();
+                    hudManager.KillButton.SetDisabled();
                 }
             }
             else if (isImposter)
             {
-                HudManager.Instance.KillButton.SetDisabled();
+                hudManager.KillButton.SetDisabled();
             }
         }
 
@@ -565,40 +647,45 @@ namespace ExtremeRoles.Patches
 
             bool enable = Player.ShowButtons;
 
+            HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
+
             if (role.UseSabotage)
             {
                 // インポスターとヴィジランテは死んでもサボタージ使える
                 if (enable && (role.IsImpostor() || role.Id == ExtremeRoleId.Vigilante))
                 {
-                    HudManager.Instance.SabotageButton.Show();
-                    HudManager.Instance.SabotageButton.gameObject.SetActive(true);
+                    hudManager.SabotageButton.Show();
+                    hudManager.SabotageButton.gameObject.SetActive(true);
                 }
                 // それ以外は死んでないときだけサボタージ使える
-                else if(enable && !PlayerControl.LocalPlayer.Data.IsDead)
+                else if(enable && !CachedPlayerControl.LocalPlayer.Data.IsDead)
                 {
-                    HudManager.Instance.SabotageButton.Show();
-                    HudManager.Instance.SabotageButton.gameObject.SetActive(true);
+                    hudManager.SabotageButton.Show();
+                    hudManager.SabotageButton.gameObject.SetActive(true);
                 }
                 else
                 {
-                    HudManager.Instance.SabotageButton.SetDisabled();
+                    hudManager.SabotageButton.SetDisabled();
                 }
             }
             else
             {
-                HudManager.Instance.SabotageButton.SetDisabled();
+                hudManager.SabotageButton.SetDisabled();
             }
         }
 
         private static void ventButtonUpdate(
             SingleRoleBase role, bool enable)
         {
+
+            HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
+
             if (role.UseVent)
             {
                 if (!role.IsVanillaRole())
                 {
-                    if (enable) { HudManager.Instance.ImpostorVentButton.Show(); }
-                    else { HudManager.Instance.ImpostorVentButton.SetDisabled(); }
+                    if (enable) { hudManager.ImpostorVentButton.Show(); }
+                    else { hudManager.ImpostorVentButton.SetDisabled(); }
                 }
                 else
                 {
@@ -609,25 +696,25 @@ namespace ExtremeRoles.Patches
                             if (!OptionHolder.AllOption[
                                     (int)OptionHolder.CommonOptionKey.EngineerUseImpostorVent].GetValue())
                             {
-                                HudManager.Instance.AbilityButton.Show();
+                                hudManager.AbilityButton.Show();
                             }
                             else
                             {
-                                HudManager.Instance.ImpostorVentButton.Show();
-                                HudManager.Instance.AbilityButton.gameObject.SetActive(false);
+                                hudManager.ImpostorVentButton.Show();
+                                hudManager.AbilityButton.gameObject.SetActive(false);
                             }
                         }
                         else
                         {
-                            HudManager.Instance.ImpostorVentButton.SetDisabled();
-                            HudManager.Instance.AbilityButton.SetDisabled(); 
+                            hudManager.ImpostorVentButton.SetDisabled();
+                            hudManager.AbilityButton.SetDisabled(); 
                         }
                     }
                 }
             }
             else
             {
-                HudManager.Instance.ImpostorVentButton.SetDisabled();
+                hudManager.ImpostorVentButton.SetDisabled();
             }
         }
 
@@ -635,84 +722,17 @@ namespace ExtremeRoles.Patches
         {
             if (playerGhostRole != null && playerGhostRole.Button != null)
             {
-                switch(PlayerControl.LocalPlayer.Data.Role.Role)
+                switch(CachedPlayerControl.LocalPlayer.Data.Role.Role)
                 {
                     case RoleTypes.Engineer:
                     case RoleTypes.Shapeshifter:
-                        HudManager.Instance.AbilityButton.Hide();
+                        FastDestroyableSingleton<HudManager>.Instance.AbilityButton.Hide();
                         break;
                     default:
                         break;
                 }
                 playerGhostRole.Button.Update();
             }
-        }
-    }
-
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FindClosestTarget))]
-    public class PlayerControlFindClosestTargetPatch
-    {
-        static bool Prefix(
-            PlayerControl __instance,
-            ref PlayerControl __result,
-            [HarmonyArgument(0)] bool protecting)
-        {
-
-            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return true; }
-
-            var gameRoles = ExtremeRoleManager.GameRole;
-
-            if (gameRoles.Count == 0) { return true; }
-
-            var role = gameRoles[__instance.PlayerId];
-
-            __result = null;
-
-            int killRange = PlayerControl.GameOptions.KillDistance;
-            if (role.HasOtherKillRange)
-            {
-                killRange = role.KillRange;
-            }
-
-            float num = GameOptionsData.KillDistances[Mathf.Clamp(killRange, 0, 2)];
-            
-            if (!ShipStatus.Instance)
-            {
-                return false;
-            }
-            Vector2 truePosition = __instance.GetTruePosition();
-            Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers;
-
-            for (int i = 0; i < allPlayers.Count; i++)
-            {
-                GameData.PlayerInfo playerInfo = allPlayers[i];
-
-                if (playerInfo == null) { continue; }
-
-                if (!playerInfo.Disconnected && 
-                    (playerInfo.PlayerId != __instance.PlayerId) && 
-                    !playerInfo.IsDead && 
-                    !role.IsSameTeam(gameRoles[playerInfo.PlayerId]) &&
-                    playerInfo.Object != null &&
-                    (!playerInfo.Object.inVent || OptionHolder.Ship.CanKillVentInPlayer))
-                {
-                    PlayerControl @object = playerInfo.Object;
-                    if (@object && @object.Collider.enabled)
-                    {
-                        Vector2 vector = @object.GetTruePosition() - truePosition;
-                        float magnitude = vector.magnitude;
-                        if (magnitude <= num && 
-                            !PhysicsHelpers.AnyNonTriggersBetween(
-                                truePosition, vector.normalized,
-                                magnitude, Constants.ShipAndObjectsMask))
-                        {
-                            __result = @object;
-                            num = magnitude;
-                        }
-                    }
-                }
-            }
-            return false;
         }
     }
 
@@ -835,6 +855,13 @@ namespace ExtremeRoles.Patches
                         major, minor, build,
                         revision, clientId);
                     break;
+                case RPCOperator.Command.PlaySound:
+                    byte soundType = reader.ReadByte();
+                    RPCOperator.PlaySound(soundType);
+                    break;
+                case RPCOperator.Command.IntegrateModCall:
+                    RPCOperator.IntegrateModCall(ref reader);
+                    break;
                 case RPCOperator.Command.HeroHeroAcademia:
                     RPCOperator.HeroHeroAcademiaCommand(ref reader);
                     break;
@@ -914,6 +941,10 @@ namespace ExtremeRoles.Patches
                     break;
                 case RPCOperator.Command.CarpenterUseAbility:
                     RPCOperator.CarpenterUseAbility(ref reader);
+                    break;
+                case RPCOperator.Command.SurvivorDeadWin:
+                    byte survivorPlayerId = reader.ReadByte();
+                    RPCOperator.SurvivorDeadWin(survivorPlayerId);
                     break;
                 case RPCOperator.Command.AssasinVoteFor:
                     byte voteTargetId = reader.ReadByte();
@@ -1009,8 +1040,9 @@ namespace ExtremeRoles.Patches
                     break;
                 case RPCOperator.Command.UseGhostRoleAbility:
                     byte useGhostRoleType = reader.ReadByte();
+                    bool isReport = reader.ReadBoolean();
                     RPCOperator.UseGhostRoleAbility(
-                        useGhostRoleType, ref reader);
+                        useGhostRoleType, isReport, ref reader);
                     break;
                 default:
                     break;
@@ -1042,7 +1074,7 @@ namespace ExtremeRoles.Patches
             {
 
                 target.protectedByGuardianThisRound = true;
-                bool flag = PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel;
+                bool flag = CachedPlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel;
                 if (__instance.AmOwner || flag)
                 {
                     target.ShowFailedMurder();
@@ -1075,7 +1107,7 @@ namespace ExtremeRoles.Patches
                     }
                     __instance.SetKillTimer(killCool);
                 }
-                DestroyableSingleton<Telemetry>.Instance.WriteMurder();
+                FastDestroyableSingleton<Telemetry>.Instance.WriteMurder();
 	            target.gameObject.layer = LayerMask.NameToLayer("Ghost");
 	            if (target.AmOwner)
 	            {
@@ -1090,10 +1122,10 @@ namespace ExtremeRoles.Patches
 			            catch
 			            { }
 		            }
-		            DestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(
+                    FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(
                         __instance.Data, data);
-		            DestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
-		            target.nameText.GetComponent<MeshRenderer>().material.SetInt("_Mask", 0);
+                    FastDestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
+		            target.cosmetics.nameText.GetComponent<MeshRenderer>()?.material.SetInt("_Mask", 0);
 		            target.RpcSetScanner(false);
 		            ImportantTextTask importantTextTask = new GameObject("_Player").AddComponent<ImportantTextTask>();
 		            importantTextTask.transform.SetParent(
@@ -1101,17 +1133,17 @@ namespace ExtremeRoles.Patches
 		            if (!PlayerControl.GameOptions.GhostsDoTasks)
 		            {
 			            target.ClearTasks();
-			            importantTextTask.Text = DestroyableSingleton<TranslationController>.Instance.GetString(
+			            importantTextTask.Text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
                             StringNames.GhostIgnoreTasks, Array.Empty<Il2CppSystem.Object>());
 		            }
 		            else
 		            {
-			            importantTextTask.Text = DestroyableSingleton<TranslationController>.Instance.GetString(
+			            importantTextTask.Text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
                             StringNames.GhostDoTasks, Array.Empty<Il2CppSystem.Object>());
 		            }
 		            target.myTasks.Insert(0, importantTextTask);
 	            }
-	            DestroyableSingleton<AchievementManager>.Instance.OnMurder(
+                FastDestroyableSingleton<AchievementManager>.Instance.OnMurder(
                     __instance.AmOwner, target.AmOwner);
                 
                 var killAnimation = __instance.KillAnimations.ToList();
@@ -1138,14 +1170,63 @@ namespace ExtremeRoles.Patches
 
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
+            if (!target.Data.IsDead) { return; }
+
             ExtremeRolesPlugin.GameDataStore.AddDeadInfo(
                 target, DeathReason.Kill, __instance);
-            
-            var role = ExtremeRoleManager.GameRole[target.PlayerId];
+
+            byte targetPlayerId = target.PlayerId;
+
+            var role = ExtremeRoleManager.GameRole[targetPlayerId];
 
             if (!role.HasTask || role.IsNeutral())
             {
                 target.ClearTasks();
+            }
+
+            if (ExtremeRoleManager.IsDisableWinCheckRole(role))
+            {
+                ExtremeRolesPlugin.GameDataStore.WinCheckDisable = true;
+            }
+
+            var multiAssignRole = role as MultiAssignRoleBase;
+
+            role.RolePlayerKilledAction(
+                target, __instance);
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    multiAssignRole.AnotherRole.RolePlayerKilledAction(
+                        target, __instance);
+                }
+            }
+
+            ExtremeRolesPlugin.GameDataStore.WinCheckDisable = false;
+
+            var player = CachedPlayerControl.LocalPlayer;
+
+            if (player.PlayerId != targetPlayerId)
+            {
+                var hockRole = ExtremeRoleManager.GameRole[
+                    player.PlayerId] as IRoleMurderPlayerHock;
+                multiAssignRole = ExtremeRoleManager.GameRole[
+                    player.PlayerId] as MultiAssignRoleBase;
+
+                if (hockRole != null)
+                {
+                    hockRole.HockMuderPlayer(
+                        __instance, target);
+                }
+                if (multiAssignRole != null)
+                {
+                    hockRole = multiAssignRole.AnotherRole as IRoleMurderPlayerHock;
+                    if (hockRole != null)
+                    {
+                        hockRole.HockMuderPlayer(
+                            __instance, target);
+                    }
+                }
             }
         }
         private static void guardBreakKill(
@@ -1172,7 +1253,7 @@ namespace ExtremeRoles.Patches
                 }
                 instance.SetKillTimer(killCool);
             }
-            DestroyableSingleton<Telemetry>.Instance.WriteMurder();
+            FastDestroyableSingleton<Telemetry>.Instance.WriteMurder();
             target.gameObject.layer = LayerMask.NameToLayer("Ghost");
             if (target.AmOwner)
             {
@@ -1187,10 +1268,10 @@ namespace ExtremeRoles.Patches
                     catch
                     { }
                 }
-                DestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(
+                FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(
                     instance.Data, target.Data);
-                DestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
-                target.nameText.GetComponent<MeshRenderer>().material.SetInt("_Mask", 0);
+                FastDestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
+                target.cosmetics.nameText.GetComponent<MeshRenderer>()?.material.SetInt("_Mask", 0);
                 target.RpcSetScanner(false);
                 ImportantTextTask importantTextTask = new GameObject("_Player").AddComponent<ImportantTextTask>();
                 importantTextTask.transform.SetParent(
@@ -1198,17 +1279,17 @@ namespace ExtremeRoles.Patches
                 if (!PlayerControl.GameOptions.GhostsDoTasks)
                 {
                     target.ClearTasks();
-                    importantTextTask.Text = DestroyableSingleton<TranslationController>.Instance.GetString(
+                    importantTextTask.Text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
                         StringNames.GhostIgnoreTasks, Array.Empty<Il2CppSystem.Object>());
                 }
                 else
                 {
-                    importantTextTask.Text = DestroyableSingleton<TranslationController>.Instance.GetString(
+                    importantTextTask.Text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
                         StringNames.GhostDoTasks, Array.Empty<Il2CppSystem.Object>());
                 }
                 target.myTasks.Insert(0, importantTextTask);
             }
-            DestroyableSingleton<AchievementManager>.Instance.OnMurder(
+            FastDestroyableSingleton<AchievementManager>.Instance.OnMurder(
                 instance.AmOwner, target.AmOwner);
 
             var killAnimation = instance.KillAnimations.ToList();
@@ -1251,7 +1332,7 @@ namespace ExtremeRoles.Patches
 
             __instance.killTimer = Mathf.Clamp(
                 time, 0f, maxTime);
-            DestroyableSingleton<HudManager>.Instance.KillButton.SetCoolDown(
+            FastDestroyableSingleton<HudManager>.Instance.KillButton.SetCoolDown(
                 __instance.killTimer, maxTime);
 
             return false;
@@ -1312,10 +1393,10 @@ namespace ExtremeRoles.Patches
                     PlayerControl.HideCursorTemporarily();
                 }
                 RoleEffectAnimation roleEffectAnimation = UnityEngine.Object.Instantiate<RoleEffectAnimation>(
-                    DestroyableSingleton<RoleManager>.Instance.shapeshiftAnim, __instance.gameObject.transform);
+                    FastDestroyableSingleton<RoleManager>.Instance.shapeshiftAnim, __instance.gameObject.transform);
                 roleEffectAnimation.SetMaterialColor(
                     __instance.Data.Outfits[PlayerOutfitType.Default].ColorId);
-                if (__instance.MyRend.flipX)
+                if (__instance.cosmetics.FlipX)
                 {
                     roleEffectAnimation.transform.position -= new Vector3(0.14f, 0f, 0f);
                 }
@@ -1323,9 +1404,9 @@ namespace ExtremeRoles.Patches
                 Action changeAction = () =>
                 {
                     changeOutfit();
-                    __instance.CurrentBodySprite.BodySprite.transform.localScale = __instance.defaultPlayerScale;
-                    __instance.NormalBodySprite.BodySprite.transform.localScale = __instance.defaultPlayerScale;
-                    __instance.MyPhysics.Skin.gameObject.transform.localScale = __instance.defaultPlayerScale;
+                    __instance.cosmetics.currentBodySprite.BodySprite.transform.localScale = __instance.defaultPlayerScale;
+                    __instance.cosmetics.normalBodySprite.BodySprite.transform.localScale = __instance.defaultPlayerScale;
+                    // __instance.MyPhysics.Skin.gameObject.transform.localScale = __instance.defaultPlayerScale;
                 };
 
                 roleEffectAnimation.MidAnimCB = changeAction;
@@ -1346,7 +1427,7 @@ namespace ExtremeRoles.Patches
 
                 roleEffectAnimation.Play(
                     __instance, roleAnimation,
-                    PlayerControl.LocalPlayer.MyRend.flipX,
+                    CachedPlayerControl.LocalPlayer.PlayerControl.cosmetics.FlipX,
                     RoleEffectAnimation.SoundType.Local, 0f);
                 return false;
             }

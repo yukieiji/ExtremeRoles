@@ -5,6 +5,7 @@ using System.Reflection;
 using Hazel;
 
 using ExtremeRoles.Roles;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Helper
 {
@@ -72,10 +73,10 @@ namespace ExtremeRoles.Helper
 
         public static int GetRandomCommonTaskId()
         {
-            if (ShipStatus.Instance == null) { return byte.MaxValue; }
+            if (CachedShipStatus.Instance == null) { return byte.MaxValue; }
 
             List<int> taskIndex = getTaskIndex(
-                ShipStatus.Instance.CommonTasks);
+                CachedShipStatus.Instance.CommonTasks);
 
             int index = RandomGenerator.Instance.Next(taskIndex.Count);
 
@@ -84,10 +85,10 @@ namespace ExtremeRoles.Helper
 
         public static int GetRandomLongTask()
         {
-            if (ShipStatus.Instance == null) { return byte.MaxValue; }
+            if (CachedShipStatus.Instance == null) { return byte.MaxValue; }
 
             List<int> taskIndex = getTaskIndex(
-                ShipStatus.Instance.LongTasks);
+                CachedShipStatus.Instance.LongTasks);
 
             int index = RandomGenerator.Instance.Next(taskIndex.Count);
 
@@ -96,10 +97,10 @@ namespace ExtremeRoles.Helper
 
         public static int GetRandomNormalTaskId()
         {
-            if (ShipStatus.Instance == null) { return byte.MaxValue; }
+            if (CachedShipStatus.Instance == null) { return byte.MaxValue; }
 
             List<int> taskIndex = getTaskIndex(
-                ShipStatus.Instance.NormalTasks);
+                CachedShipStatus.Instance.NormalTasks);
 
             int index = RandomGenerator.Instance.Next(taskIndex.Count);
 
@@ -110,7 +111,7 @@ namespace ExtremeRoles.Helper
             GameData.PlayerInfo playerInfo,
             int taskIndex)
         {
-            NormalPlayerTask task = ShipStatus.Instance.GetTaskById((byte)taskIndex);
+            NormalPlayerTask task = CachedShipStatus.Instance.GetTaskById((byte)taskIndex);
 
             PlayerControl player = playerInfo.Object;
 
@@ -126,17 +127,12 @@ namespace ExtremeRoles.Helper
             player.SetDirtyBit(1U << (int)player.PlayerId);
         }
 
-        public static void SetPlayerNewTask(
+        public static bool SetPlayerNewTask(
             ref PlayerControl player,
             byte taskId, uint gameControlTaskId)
         {
-            NormalPlayerTask normalPlayerTask =
-                UnityEngine.Object.Instantiate<NormalPlayerTask>(
-                    ShipStatus.Instance.GetTaskById(taskId),
-                    player.transform);
-            normalPlayerTask.Id = gameControlTaskId;
-            normalPlayerTask.Owner = player;
-            normalPlayerTask.Initialize();
+            NormalPlayerTask addTask = CachedShipStatus.Instance.GetTaskById(taskId);
+            if (addTask == null) { return false; }
 
             for (int i = 0; i < player.myTasks.Count; ++i)
             {
@@ -144,18 +140,30 @@ namespace ExtremeRoles.Helper
                 if (textTask != null) { continue; }
 
                 if (SaboTask.Contains(player.myTasks[i].TaskType)) { continue; }
+                if (ExtremeRolesPlugin.Compat.IsModMap)
+                {
+                    if (ExtremeRolesPlugin.Compat.ModMap.IsCustomSabotageTask(
+                            player.myTasks[i].TaskType)) { continue; }
+                }
 
                 if (player.myTasks[i].IsComplete)
                 {
+                    NormalPlayerTask normalPlayerTask = UnityEngine.Object.Instantiate(
+                        addTask, player.transform);
+                    normalPlayerTask.Id = gameControlTaskId;
+                    normalPlayerTask.Owner = player;
+                    normalPlayerTask.Initialize();
+
                     var removeTask = player.myTasks[i];
                     player.myTasks[i] = normalPlayerTask;
 
                     removeTask.OnRemove();
                     UnityEngine.Object.Destroy(
                         removeTask.gameObject);
-                    break;
+                    return true;
                 }
             }
+            return false;
         }
 
 
@@ -165,7 +173,7 @@ namespace ExtremeRoles.Helper
             Version ver = Assembly.GetExecutingAssembly().GetName().Version;
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                PlayerControl.LocalPlayer.NetId,
+                 CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 (byte)RPCOperator.Command.ShareVersion,
                 Hazel.SendOption.Reliable, -1);
             writer.Write(ver.Major);

@@ -1,6 +1,7 @@
 ﻿using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.GhostRoles;
+using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using Hazel;
@@ -21,7 +22,7 @@ namespace ExtremeRoles.GhostRoles.Impostor
 
         public static void ResetCool()
         {
-            var sabSystem = ShipStatus.Instance.Systems[SystemTypes.Sabotage].TryCast<SabotageSystemType>();
+            var sabSystem = CachedShipStatus.Systems[SystemTypes.Sabotage].TryCast<SabotageSystemType>();
             if (sabSystem != null)
             {
                 sabSystem.Timer = 0.0f;
@@ -35,7 +36,7 @@ namespace ExtremeRoles.GhostRoles.Impostor
                 this.UseAbility,
                 this.isPreCheck,
                 this.isAbilityUse,
-                HudManager.Instance.SabotageButton.graphic.sprite,
+                FastDestroyableSingleton<HudManager>.Instance.SabotageButton.graphic.sprite,
                 this.DefaultButtonOffset,
                 rpcHostCallAbility: abilityCall);
             this.ButtonInit();

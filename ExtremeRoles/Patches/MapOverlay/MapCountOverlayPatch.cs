@@ -4,6 +4,10 @@ using UnityEngine;
 
 using HarmonyLib;
 
+using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
+
+
 namespace ExtremeRoles.Patches.MapOverlay
 {
     [HarmonyPatch(typeof(MapCountOverlay), nameof(MapCountOverlay.Update))]
@@ -31,7 +35,8 @@ namespace ExtremeRoles.Patches.MapOverlay
 
 			bool commsActive = false;
 
-			foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
+			foreach (PlayerTask task in 
+				CachedPlayerControl.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
             {
 				if (task.TaskType == TaskTypes.FixComms)
 				{
@@ -63,7 +68,7 @@ namespace ExtremeRoles.Patches.MapOverlay
 				if (!commsActive)
 				{
 
-					PlainShipRoom plainShipRoom = ShipStatus.Instance.FastRooms[counterArea.RoomType];
+					PlainShipRoom plainShipRoom = CachedShipStatus.Instance.FastRooms[counterArea.RoomType];
 					if (plainShipRoom != null && plainShipRoom.roomArea)
 					{
 						int num = plainShipRoom.roomArea.OverlapCollider(__instance.filter, __instance.buffer);
@@ -81,7 +86,7 @@ namespace ExtremeRoles.Patches.MapOverlay
 								{
 									num2--;
 								}
-								else if (component?.MyRend?.material != null)
+								else if (component?.cosmetics.currentBodySprite.BodySprite?.material != null)
                                 {
 									addColor = Palette.PlayerColors[component.Data.DefaultOutfit.ColorId];
 								}

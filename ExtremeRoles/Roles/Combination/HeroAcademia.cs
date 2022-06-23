@@ -10,6 +10,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Combination
 {
@@ -25,7 +27,7 @@ namespace ExtremeRoles.Roles.Combination
             this.arrow.Clear();
             this.distance.Clear();
             
-            foreach (var player in PlayerControl.AllPlayerControls)
+            foreach (var player in CachedPlayerControl.AllPlayerControls)
             {
                 if (player.PlayerId != rolePlayerId)
                 {
@@ -174,7 +176,7 @@ namespace ExtremeRoles.Roles.Combination
         public static void RpcCleanUpEmergencyCall()
         {
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.HeroHeroAcademia,
                 new List<byte>
                 {
@@ -187,7 +189,7 @@ namespace ExtremeRoles.Roles.Combination
             PlayerControl vigilante, byte targetPlayerId)
         {
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.HeroHeroAcademia,
                 new List<byte>
                 {
@@ -202,7 +204,7 @@ namespace ExtremeRoles.Roles.Combination
             PlayerControl hero, PlayerControl villan)
         {
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.HeroHeroAcademia,
                 new List<byte>
                 {
@@ -217,7 +219,7 @@ namespace ExtremeRoles.Roles.Combination
             Hero.OneForAllCondition newCond)
         {
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.HeroHeroAcademia,
                 new List<byte>
                 {
@@ -232,7 +234,7 @@ namespace ExtremeRoles.Roles.Combination
             Condition cond)
         {
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.HeroHeroAcademia,
                 new List<byte>
                 {
@@ -250,7 +252,7 @@ namespace ExtremeRoles.Roles.Combination
             int impNum = 0;
             Vigilante vigilante = null;
 
-            foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers)
+            foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 var role = ExtremeRoleManager.GameRole[player.PlayerId];
                 if (!player.IsDead && !player.Disconnected)
@@ -510,8 +512,8 @@ namespace ExtremeRoles.Roles.Combination
         public void Update(PlayerControl rolePlayer)
         {
             if (MeetingHud.Instance != null ||
-                ShipStatus.Instance == null) { return; }
-            if (!ShipStatus.Instance.enabled) { return; }
+                CachedShipStatus.Instance == null) { return; }
+            if (!CachedShipStatus.Instance.enabled) { return; }
 
             if (this.callTargetArrow != null)
             {
@@ -551,7 +553,7 @@ namespace ExtremeRoles.Roles.Combination
             int allCrew = 0;
             int deadCrew = 0;
 
-            foreach (var player in GameData.Instance.AllPlayers)
+            foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 if (player.IsDead || player.Disconnected)
                 {
@@ -584,7 +586,7 @@ namespace ExtremeRoles.Roles.Combination
             if (this.arrow == null)
             {
                 this.arrow = new AllPlayerArrows(
-                    PlayerControl.LocalPlayer.PlayerId);
+                    CachedPlayerControl.LocalPlayer.PlayerId);
             }
             this.arrow.SetActive(true);
             return true;
@@ -772,7 +774,7 @@ namespace ExtremeRoles.Roles.Combination
             if (this.arrow == null)
             {
                 this.arrow = new AllPlayerArrows(
-                    PlayerControl.LocalPlayer.PlayerId);
+                    CachedPlayerControl.LocalPlayer.PlayerId);
             }
             this.arrow.SetActive(true);
             return true;
@@ -923,7 +925,7 @@ namespace ExtremeRoles.Roles.Combination
             this.target = byte.MaxValue;
 
             PlayerControl player = Player.GetPlayerTarget(
-                PlayerControl.LocalPlayer, this, this.range);
+                CachedPlayerControl.LocalPlayer, this, this.range);
 
             if (player == null) { return false; }
             this.target = player.PlayerId;
@@ -1118,7 +1120,7 @@ namespace ExtremeRoles.Roles.Combination
             {
                 string fakeTaskString = Design.ColoedString(
                     this.NameColor,
-                    DestroyableSingleton<TranslationController>.Instance.GetString(
+                    FastDestroyableSingleton<TranslationController>.Instance.GetString(
                         StringNames.FakeTasks, System.Array.Empty<Il2CppSystem.Object>()));
                 baseString = $"{baseString}\r\n{fakeTaskString}";
             }

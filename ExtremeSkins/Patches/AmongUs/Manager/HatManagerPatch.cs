@@ -1,6 +1,7 @@
 ﻿using System;
 using HarmonyLib;
 
+using ExtremeSkins.Module;
 using ExtremeSkins.SkinManager;
 
 namespace ExtremeSkins.Patches.AmongUs.Manager
@@ -18,7 +19,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
 
             try
             {
-                foreach (var hat in ExtremeHatManager.HatData.Values)
+                foreach (CustomHat hat in ExtremeHatManager.HatData.Values)
                 {
                     __instance.allHats.Add(hat.GetData());
                 }
@@ -47,7 +48,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
             
             try
             {
-                foreach (var np in ExtremeNamePlateManager.NamePlateData.Values)
+                foreach (CustomNamePlate np in ExtremeNamePlateManager.NamePlateData.Values)
                 {
                     __instance.allNamePlates.Add(np.GetData());
                 }
@@ -75,7 +76,7 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
 
             try
             {
-                foreach (var vi in ExtremeVisorManager.VisorData.Values)
+                foreach (CustomVisor vi in ExtremeVisorManager.VisorData.Values)
                 {
                     __instance.allVisors.Add(vi.GetData());
                 }

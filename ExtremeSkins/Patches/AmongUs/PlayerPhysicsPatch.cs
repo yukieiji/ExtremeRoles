@@ -16,7 +16,7 @@ namespace ExtremeSkins.Patches.AmongUs
             if (currentAnimation == __instance.CurrentAnimationGroup.ClimbAnim || 
                 currentAnimation == __instance.CurrentAnimationGroup.ClimbDownAnim) { return; }
 
-            HatParent hp = __instance.myPlayer.HatRenderer;
+            HatParent hp = __instance.myPlayer.cosmetics.hat;
             
             if (hp.Hat == null) { return; }
 
@@ -29,7 +29,7 @@ namespace ExtremeSkins.Patches.AmongUs
 
             if (hat.HasFrontFlip)
             {
-                if (__instance.rend.flipX)
+                if (__instance.FlipX)
                 {
                     hp.FrontLayer.sprite = hat.GetFlipFrontImage();
                 }
@@ -40,7 +40,7 @@ namespace ExtremeSkins.Patches.AmongUs
             }
             if (hat.HasBackFlip)
             {
-                if (__instance.rend.flipX)
+                if (__instance.FlipX)
                 {
                     hp.BackLayer.sprite = hat.GetBackFlipImage();
                 }

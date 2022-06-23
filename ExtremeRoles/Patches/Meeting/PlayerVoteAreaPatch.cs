@@ -7,6 +7,7 @@ using HarmonyLib;
 using UnityEngine;
 
 using BepInEx.IL2CPP.Utils.Collections;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.Meeting
 {
@@ -47,7 +48,13 @@ namespace ExtremeRoles.Patches.Meeting
 	[HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.Select))]
 	public static class PlayerVoteAreaSelectPatch
 	{
-		private static Dictionary<byte, UiElement> meetingKillButton;
+
+		private static Dictionary<byte, UiElement> meetingAbilityButton = new Dictionary<byte, UiElement>();
+
+		public static void Reset()
+        {
+			meetingAbilityButton.Clear();
+        }
 
 		public static bool Prefix(PlayerVoteArea __instance)
 		{
@@ -55,22 +62,21 @@ namespace ExtremeRoles.Patches.Meeting
 			if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
 			var gameData = ExtremeRolesPlugin.GameDataStore;
-			var shooter = Roles.ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Roles.Solo.Impostor.Shooter>();
+			var buttonRole = Roles.ExtremeRoleManager.GetLocalPlayerRole() as Roles.API.Interface.IRoleMeetingButtonAbility;
 
 			if (!gameData.AssassinMeetingTrigger)
 			{
-				if (shooter == null)
+				if (buttonRole == null)
                 {
 					return true;
                 }
 				else
 				{
-					return shooterKillButton(
-						__instance, shooter);
+					return meetingButtonAbility(__instance, buttonRole);
 				}
 			}
 
-			if (PlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.GameDataStore.ExiledAssassinId)
+			if (CachedPlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.GameDataStore.ExiledAssassinId)
 			{
 				return false;
 			}
@@ -169,76 +175,57 @@ namespace ExtremeRoles.Patches.Meeting
 			yield break;
 		}
 
-		private static bool shooterKillButton(
+		private static bool meetingButtonAbility(
 			PlayerVoteArea instance,
-			Roles.Solo.Impostor.Shooter shooter)
-        {
+			Roles.API.Interface.IRoleMeetingButtonAbility role)
+		{
 			byte target = instance.TargetPlayerId;
 
-			if (instance.AmDead ||
-				shooter.CurShootNum <= 0 || 
-				!shooter.CanShoot || target == 253 ||
-				Roles.ExtremeRoleManager.GameRole[target].Id == Roles.ExtremeRoleId.Assassin)
-			{ 
-				return true; 
+			if (instance.AmDead)
+			{
+				return true;
 			}
-
 			if (!instance.Parent)
 			{
 				return false;
 			}
+			if (role.IsBlockMeetingButtonAbility(instance))
+            {
+				return true;
+            }
 
 			if (!instance.voteComplete &&
 				instance.Parent.Select((int)target))
 			{
-				if (meetingKillButton == null)
-                {
-					meetingKillButton = new Dictionary<byte, UiElement> ();
-                }
 
-				if (!meetingKillButton.ContainsKey(target))
-                {
+				UiElement abilitybutton = null;
 
-					UiElement newKillButton = GameObject.Instantiate(
+				meetingAbilityButton.TryGetValue(target, out abilitybutton);
+
+				if (abilitybutton == null)
+				{
+					UiElement newAbilitybutton = GameObject.Instantiate(
 						instance.CancelButton, instance.ConfirmButton.transform.parent);
-					newKillButton.name = $"shooterKill_{target}";
-					var passiveButton = newKillButton.GetComponent<PassiveButton>();
+					var passiveButton = newAbilitybutton.GetComponent<PassiveButton>();
 					passiveButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
 					passiveButton.OnClick.AddListener(
-						(UnityEngine.Events.UnityAction)shooterKill);
+						(UnityEngine.Events.UnityAction)role.CreateAbilityAction(instance));
 
-					var render = newKillButton.GetComponent<SpriteRenderer>();
-					render.sprite = HudManager.Instance.KillButton.graphic.sprite;
-					render.transform.localScale *= new Vector2(0.75f, 0.75f);
+					var render = newAbilitybutton.GetComponent<SpriteRenderer>();
 
-					var controllerHighlight = newKillButton.transform.FindChild("ControllerHighlight");
-					if (controllerHighlight != null)
-                    {
-						controllerHighlight.localScale *= new Vector2(1.25f, 1.25f);
-                    }
+					role.ButtonMod(instance, newAbilitybutton);
+					role.SetSprite(render);
 
-					meetingKillButton.Add(target, newKillButton);
-
-					void shooterKill()
-					{
-						if (instance.AmDead) { return; }
-						shooter.Shoot();
-						RPCOperator.Call(
-							PlayerControl.LocalPlayer.NetId,
-							RPCOperator.Command.UncheckedMurderPlayer,
-							new List<byte> { PlayerControl.LocalPlayer.PlayerId, target, 0 });
-						RPCOperator.UncheckedMurderPlayer(
-							PlayerControl.LocalPlayer.PlayerId,
-							target, 0);
-					}
-
+					meetingAbilityButton[target] = newAbilitybutton;
+					abilitybutton = newAbilitybutton;
 				}
 
+				if (abilitybutton == null) { return true; }
+
 				instance.Buttons.SetActive(true);
-				var killbutton = meetingKillButton[target];
 
 				float startPos = instance.AnimateButtonsFromLeft ? 0.2f : 1.95f;
-				
+
 				instance.StartCoroutine(
 					effectsAllWrap(
 						new IEnumerator[]
@@ -259,7 +246,7 @@ namespace ExtremeRoles.Patches.Meeting
 								}),
 								effectsLerpWrap(0.45f, delegate(float t)
 								{
-									killbutton.transform.localPosition = Vector2.Lerp(
+									abilitybutton.transform.localPosition = Vector2.Lerp(
 										Vector2.right * startPos,
 										Vector2.right * -0.01f,
 										Effects.ExpOut(t));
@@ -271,7 +258,7 @@ namespace ExtremeRoles.Patches.Meeting
 				Il2CppSystem.Collections.Generic.List<UiElement> selectableElements = new Il2CppSystem.Collections.Generic.List<UiElement>();
 				selectableElements.Add(instance.CancelButton);
 				selectableElements.Add(instance.ConfirmButton);
-				selectableElements.Add(killbutton);
+				selectableElements.Add(abilitybutton);
 
 				ControllerManager.Instance.OpenOverlayMenu(
 					instance.name,

@@ -69,12 +69,16 @@ namespace ExtremeRoles.Patches.Manager
                 Vector3 vector = new Vector3(num7, num7, 1f);
 
                 poolablePlayer.transform.localScale = vector;
-                poolablePlayer.UpdateFromPlayerOutfit(winningPlayerData, winningPlayerData.IsDead);
+                poolablePlayer.UpdateFromPlayerOutfit(
+                    winningPlayerData,
+                    PlayerMaterial.MaskType.None,
+                    winningPlayerData.IsDead, true);
 
                 if (winningPlayerData.IsDead)
                 {
-                    poolablePlayer.CurrentBodySprite.BodySprite.sprite = 
-                        poolablePlayer.CurrentBodySprite.GhostSprite;
+                    poolablePlayer.cosmetics.currentBodySprite.BodySprite.sprite =
+                        poolablePlayer.cosmetics.currentBodySprite.GhostSprite;
+                    poolablePlayer.cosmetics.SetGhost();
                     poolablePlayer.SetDeadFlipX(i % 2 == 0);
                 }
                 else
@@ -82,18 +86,18 @@ namespace ExtremeRoles.Patches.Manager
                     poolablePlayer.SetFlipX(i % 2 == 0);
                 }
 
-                poolablePlayer.NameText.color = Color.white;
-                poolablePlayer.NameText.lineSpacing *= 0.7f;
-                poolablePlayer.NameText.transform.localScale = new Vector3(1f / vector.x, 1f / vector.y, 1f / vector.z);
-                poolablePlayer.NameText.transform.localPosition = new Vector3(
-                    poolablePlayer.NameText.transform.localPosition.x,
-                    poolablePlayer.NameText.transform.localPosition.y, -15f);
-                poolablePlayer.NameText.text = winningPlayerData.PlayerName;
+                poolablePlayer.cosmetics.nameText.color = Color.white;
+                poolablePlayer.cosmetics.nameText.lineSpacing *= 0.7f;
+                poolablePlayer.cosmetics.nameText.transform.localScale = new Vector3(1f / vector.x, 1f / vector.y, 1f / vector.z);
+                poolablePlayer.cosmetics.nameText.transform.localPosition = new Vector3(
+                    poolablePlayer.cosmetics.nameText.transform.localPosition.x,
+                    poolablePlayer.cosmetics.nameText.transform.localPosition.y, -15f);
+                poolablePlayer.cosmetics.nameText.text = winningPlayerData.PlayerName;
 
                 foreach (var data in ExtremeRolesPlugin.GameDataStore.FinalSummary)
                 {
                     if (data.PlayerName != winningPlayerData.PlayerName) { continue; }
-                    poolablePlayer.NameText.text +=
+                    poolablePlayer.cosmetics.nameText.text +=
                         $"\n\n<size=80%>{string.Join("\n", data.Role.GetColoredRoleName(true))}</size>";
 
                     if(data.Role.IsNeutral())

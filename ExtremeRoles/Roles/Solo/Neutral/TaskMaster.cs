@@ -7,6 +7,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
@@ -35,11 +36,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void Update(PlayerControl rolePlayer)
         {
-            if (ShipStatus.Instance == null ||
+            if (CachedShipStatus.Instance == null ||
                 this.IsWin ||
                 GameData.Instance == null) { return; }
 
-            if (!ShipStatus.Instance.enabled) { return; }
+            if (!CachedShipStatus.Instance.enabled) { return; }
 
             var playerInfo = GameData.Instance.GetPlayerById(
                 rolePlayer.PlayerId);
@@ -66,7 +67,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                         this.addTask.Remove(taskIndex);
 
                         MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                            PlayerControl.LocalPlayer.NetId,
+                            CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                             (byte)RPCOperator.Command.TaskMasterSetNewTask,
                             Hazel.SendOption.Reliable, -1);
                         writer.Write(rolePlayer.PlayerId);
@@ -74,6 +75,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                         writer.Write(taskIndex);
                         AmongUsClient.Instance.FinishRpcImmediately(writer);
                         ReplaceToNewTask(rolePlayer.PlayerId, i, taskIndex);
+                        break;
                     }
                 }
             }
@@ -153,20 +155,20 @@ namespace ExtremeRoles.Roles.Solo.Neutral
      
             var player = Player.GetPlayerControlById(
                 playerId);
-            var playerInfo = GameData.Instance.GetPlayerById(
-                player.PlayerId);
+            if (player == null) { return; }
 
             byte taskId = (byte)taskIndex;
 
-            playerInfo.Tasks[index] = new GameData.TaskInfo(
-                taskId, (uint)index);
-            playerInfo.Tasks[index].Id = (uint)index;
+            if (GameSystem.SetPlayerNewTask(
+                ref player, taskId, (uint)index))
+            {
+                player.Data.Tasks[index] = new GameData.TaskInfo(
+                    taskId, (uint)index);
+                player.Data.Tasks[index].Id = (uint)index;
 
-            GameSystem.SetPlayerNewTask(
-                ref player, taskId, (uint)index);
-
-            GameData.Instance.SetDirtyBit(
-                1U << (int)player.PlayerId);
+                GameData.Instance.SetDirtyBit(
+                    1U << (int)player.PlayerId);
+            }
         }
 
     }

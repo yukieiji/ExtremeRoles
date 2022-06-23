@@ -9,6 +9,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -27,6 +28,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                    Path.CrackerCrackTrace, 300f);
 
                 this.body.transform.position = pos;
+
+                if (ExtremeRolesPlugin.Compat.IsModMap)
+                {
+                    ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
+                        this.body.gameObject,
+                        Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
+                }
             }
 
             public void Clear()
@@ -127,16 +135,16 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
 
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.CrackerCrackDeadBody,
                 new List<byte>
-                { 
-                    PlayerControl.LocalPlayer.PlayerId,
+                {
+                    CachedPlayerControl.LocalPlayer.PlayerId,
                     this.targetDeadBodyId
                 });
 
             CrackDeadBody(
-                PlayerControl.LocalPlayer.PlayerId,
+                CachedPlayerControl.LocalPlayer.PlayerId,
                 this.targetDeadBodyId);
             return true;
         }

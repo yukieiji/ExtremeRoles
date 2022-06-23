@@ -6,6 +6,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Combination
 {
@@ -107,7 +108,7 @@ namespace ExtremeRoles.Roles.Combination
             PlayerControl rolePlayer)
         {
             if (Minigame.Instance != null ||
-                ShipStatus.Instance == null ||
+                CachedShipStatus.Instance == null ||
                 GameData.Instance == null ||
                 MeetingHud.Instance != null)
             {
@@ -164,7 +165,7 @@ namespace ExtremeRoles.Roles.Combination
 
             List<byte> sharer = getAliveSameSharer();
 
-            sharer.Remove(PlayerControl.LocalPlayer.PlayerId);
+            sharer.Remove(CachedPlayerControl.LocalPlayer.PlayerId);
 
             this.sameSharer = new SharerContainer(sharer);
 

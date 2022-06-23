@@ -17,7 +17,7 @@ namespace ExtremeSkins.SkinManager
 #if WITHVISOR
     public class ExtremeVisorManager
     {
-        public static Dictionary<string, CustomVisor> VisorData = new Dictionary<string, CustomVisor>();
+        public static readonly Dictionary<string, CustomVisor> VisorData = new Dictionary<string, CustomVisor>();
         public static bool IsLoaded = false;
 
         public const string FolderPath = @"\ExtremeVisor\";
@@ -35,6 +35,9 @@ namespace ExtremeSkins.SkinManager
 
         public static bool IsUpdate()
         {
+
+            ExtremeSkinsPlugin.Logger.LogInfo("Extreme Visor Manager : Checking Update....");
+
             if (!Directory.Exists(string.Concat(
                 Path.GetDirectoryName(Application.dataPath), FolderPath))) { return true; }
 
@@ -83,6 +86,8 @@ namespace ExtremeSkins.SkinManager
         public static void Load()
         {
 
+            ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Visor Manager : Visor Loading Start!! ----------");
+
             getJsonData(visorTransData).GetAwaiter().GetResult();
             Helper.Translation.UpdateHatsTransData(
                 string.Concat(
@@ -124,10 +129,15 @@ namespace ExtremeSkins.SkinManager
             }
 
             IsLoaded = true;
+
+            ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Visor Manager : Visor Loading Complete!! ----------");
+
         }
 
         public static async Task PullAllData()
         {
+
+            ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Visor Manager : VisorData Download Start!! ---------- ");
 
             string dataSaveFolder = string.Concat(
                 Path.GetDirectoryName(Application.dataPath), FolderPath);
@@ -192,6 +202,8 @@ namespace ExtremeSkins.SkinManager
                 }
             }
 
+            ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Visor Manager : VisorData Download Complete!! ---------- ");
+
         }
 
         public static void UpdateTranslation()
@@ -244,9 +256,12 @@ namespace ExtremeSkins.SkinManager
         private static async Task<HttpStatusCode> downLoadFileTo(
             HttpClient http, string author, string saveFolder, string fileName)
         {
+            string dlUrl = $"{repo}/visor/{author}/{fileName}";
+
+            ExtremeSkinsPlugin.Logger.LogInfo($"DownLoad from:{dlUrl}");
+
             var fileResponse = await http.GetAsync(
-                $"{repo}/visor/{author}/{fileName}",
-                HttpCompletionOption.ResponseContentRead);
+                dlUrl, HttpCompletionOption.ResponseContentRead);
 
             if (fileResponse.StatusCode != HttpStatusCode.OK)
             {

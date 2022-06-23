@@ -14,10 +14,11 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
             exrLogo.transform.position = Vector3.up;
             exrLogo.transform.position += new Vector3(3.0f, -0.75f, 0.0f);
             var renderer = exrLogo.AddComponent<SpriteRenderer>();
-            renderer.sprite = Module.Loader.CreateSpriteFromResources(
-                "ExtremeSkins.Resources.TitleBurner.png", 425f);
+            renderer.sprite = Module.Loader.GetTitleLog();
 
             bool creatorMode = ExtremeSkinsPlugin.CreatorMode.Value;
+
+            ExtremeSkinsPlugin.Logger.LogInfo("------------------------------ Skin Load Start!! ------------------------------");
 
 #if WITHHAT
             if (!ExtremeHatManager.IsLoaded)
@@ -53,6 +54,9 @@ namespace ExtremeSkins.Patches.AmongUs.Manager
                 ExtremeVisorManager.Load();
             }
 #endif
+
+            ExtremeSkinsPlugin.Logger.LogInfo("------------------------------ All Skin Load Complete!! ------------------------------");
+
         }
     }
 }

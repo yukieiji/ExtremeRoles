@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 
+using ExtremeRoles.Performance;
+
 namespace ExtremeRoles.Module.AbilityButton.Roles
 {
     public class ReclickableButton : RoleAbilityButtonBase
@@ -40,7 +42,9 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
 
             if (this.Timer >= 0)
             {
-                if (IsAbilityOn || (!PlayerControl.LocalPlayer.inVent && PlayerControl.LocalPlayer.moveable))
+                if (IsAbilityOn || (
+                        !CachedPlayerControl.LocalPlayer.PlayerControl.inVent &&
+                        CachedPlayerControl.LocalPlayer.PlayerControl.moveable))
                 {
                     this.Timer -= Time.deltaTime;
                 }

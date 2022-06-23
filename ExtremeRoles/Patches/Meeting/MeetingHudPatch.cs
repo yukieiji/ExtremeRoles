@@ -9,6 +9,7 @@ using UnhollowerBaseLib;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.Meeting
 {
@@ -45,14 +46,16 @@ namespace ExtremeRoles.Patches.Meeting
 
 
             if (!PlayerControl.GameOptions.AnonymousVotes || canSeeVote ||
-                (PlayerControl.LocalPlayer.Data.IsDead && OptionHolder.Client.GhostsSeeVote &&
+                (CachedPlayerControl.LocalPlayer.Data.IsDead && OptionHolder.Client.GhostsSeeVote &&
                  !isVoteSeeBlock(role)))
             {
-                PlayerControl.SetPlayerMaterialColors(voterPlayer.DefaultOutfit.ColorId, spriteRenderer);
+                voterPlayer.Object.SetPlayerMaterialColors(spriteRenderer);
             }
             else
             {
-                PlayerControl.SetPlayerMaterialColors(Palette.DisabledGrey, spriteRenderer);
+                // this is hot fiiiiix!!!!!!!!
+                spriteRenderer.material.SetColor("_BackColor", Palette.DisabledGrey);
+                spriteRenderer.material.SetColor("_BodyColor", Palette.DisabledGrey);
             }
 
             spriteRenderer.transform.SetParent(parent);
@@ -69,8 +72,8 @@ namespace ExtremeRoles.Patches.Meeting
         private static bool isVoteSeeBlock(Roles.API.SingleRoleBase role)
         {
             if (ExtremeGhostRoleManager.GameRole.ContainsKey(
-                    PlayerControl.LocalPlayer.PlayerId) ||
-                PlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
+                    CachedPlayerControl.LocalPlayer.PlayerId) ||
+                CachedPlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
             {
                 return true;
             }
@@ -92,7 +95,7 @@ namespace ExtremeRoles.Patches.Meeting
         {
             if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return true; }
 
-            if (PlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.GameDataStore.ExiledAssassinId)
+            if (CachedPlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.GameDataStore.ExiledAssassinId)
             {
                 return false;
             }
@@ -154,7 +157,7 @@ namespace ExtremeRoles.Patches.Meeting
                 Helper.Logging.Debug($"IsSuccess?:{ExtremeRoleManager.GameRole[voteFor].Id == ExtremeRoleId.Marlin}");
 
                 RPCOperator.Call(
-                    PlayerControl.LocalPlayer.NetId,
+                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                     RPCOperator.Command.AssasinVoteFor,
                     new List<byte> { voteFor });
                 RPCOperator.AssasinVoteFor(voteFor);
@@ -217,8 +220,8 @@ namespace ExtremeRoles.Patches.Meeting
         {
             __result = false;
 
-            if (OptionHolder.Ship.DisableSelfVote && 
-                PlayerControl.LocalPlayer.PlayerId == suspectStateIdx)
+            if (OptionHolder.Ship.DisableSelfVote &&
+                CachedPlayerControl.LocalPlayer.PlayerId == suspectStateIdx)
             {
                 return false;
             }
@@ -234,7 +237,7 @@ namespace ExtremeRoles.Patches.Meeting
             {
                 return __result;
             }
-            if (PlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.GameDataStore.ExiledAssassinId)
+            if (CachedPlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.GameDataStore.ExiledAssassinId)
             {
                 return __result;
             }
@@ -305,7 +308,7 @@ namespace ExtremeRoles.Patches.Meeting
 
                 if (hockRole != null)
                 {
-                    var player = PlayerControl.LocalPlayer;
+                    var player = CachedPlayerControl.LocalPlayer;
 
                     if (reportedBody == null)
                     {
@@ -386,7 +389,7 @@ namespace ExtremeRoles.Patches.Meeting
 
             if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
 
-            DestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
+            FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
 
         }
     }
@@ -440,14 +443,14 @@ namespace ExtremeRoles.Patches.Meeting
                     "whoIsMarine");
                 __instance.SkipVoteButton.gameObject.SetActive(false);
 
-                if (PlayerControl.LocalPlayer.PlayerId == ExtremeRolesPlugin.GameDataStore.ExiledAssassinId ||
+                if (CachedPlayerControl.LocalPlayer.PlayerId == ExtremeRolesPlugin.GameDataStore.ExiledAssassinId ||
                     ExtremeRoleManager.GetLocalPlayerRole().IsImpostor())
                 {
-                    DestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(true);
+                    FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(true);
                 }
                 else
                 {
-                    DestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
+                    FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
                 }
 
                 return;

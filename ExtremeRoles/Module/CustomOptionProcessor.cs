@@ -4,6 +4,8 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
+using ExtremeRoles.Performance;
+
 namespace ExtremeRoles.Module
 {
     public class CustomOptionCsvProcessor
@@ -100,7 +102,7 @@ namespace ExtremeRoles.Module
 
                 Helper.Logging.Debug("Import Comp!!!!!!");
 
-                if (AmongUsClient.Instance?.AmHost == true && PlayerControl.LocalPlayer)
+                if (AmongUsClient.Instance?.AmHost == true && CachedPlayerControl.LocalPlayer)
                 {
                     OptionHolder.ShareOptionSelections();// Share all selections
                 }

@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 
 using UnityEngine;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.MapOverlay
 {
@@ -45,7 +46,7 @@ namespace ExtremeRoles.Patches.MapOverlay
             __instance.taskOverlay.Hide();
             __instance.HerePoint.enabled = false;
 
-            DestroyableSingleton<HudManager>.Instance.SetHudActive(false);
+            FastDestroyableSingleton<HudManager>.Instance.SetHudActive(false);
             
             return false;
         }

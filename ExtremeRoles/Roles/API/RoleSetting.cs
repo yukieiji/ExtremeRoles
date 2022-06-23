@@ -5,7 +5,7 @@ using ExtremeRoles.Roles.API.Interface;
 namespace ExtremeRoles.Roles.API
 {
 
-    public enum ExtremeRoleType
+    public enum ExtremeRoleType : int
     {
         Null = -2,
         Neutral = -1,

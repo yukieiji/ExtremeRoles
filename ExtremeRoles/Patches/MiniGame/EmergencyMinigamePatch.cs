@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 
 using UnityEngine;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.MiniGame
 {
@@ -24,7 +25,7 @@ namespace ExtremeRoles.Patches.MiniGame
             // Handle max number of meetings
             if (__instance.state == 1)
             {
-                int localRemaining = PlayerControl.LocalPlayer.RemainingEmergencies;
+                int localRemaining = CachedPlayerControl.LocalPlayer.PlayerControl.RemainingEmergencies;
                 int teamRemaining = Mathf.Max(
                     0, OptionHolder.Ship.MaxNumberOfMeeting - ExtremeRolesPlugin.GameDataStore.MeetingsCount);
                 int remaining = Mathf.Min(localRemaining, teamRemaining);
@@ -33,7 +34,7 @@ namespace ExtremeRoles.Patches.MiniGame
                     "<size=100%>",
                     string.Format(
                         Helper.Translation.GetString("meetingStatus"),
-                        PlayerControl.LocalPlayer.name),
+                        CachedPlayerControl.LocalPlayer.PlayerControl.name),
                     "</size>");
                 __instance.NumberText.text = string.Format(
                     Helper.Translation.GetString("meetingCount"),

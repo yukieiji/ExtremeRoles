@@ -8,6 +8,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
+using ExtremeRoles.Performance;
+
 using static ExtremeRoles.OptionHolder;
 using static UnityEngine.UI.Button;
 using Object = UnityEngine.Object;
@@ -141,7 +143,10 @@ namespace ExtremeRoles.Patches.Option
             moreOptionButton = Object.Instantiate(
                 buttonPrefab,
                 __instance.CensorChatButton.transform.parent);
-            moreOptionButton.transform.localPosition = __instance.CensorChatButton.transform.localPosition + Vector3.down * 0.5f;
+            moreOptionButton.transform.localPosition =
+                __instance.CensorChatButton.transform.localPosition +
+                Vector3.down * 1.0f;
+            moreOptionButton.name = "modMenuButton";
 
             moreOptionButton.gameObject.SetActive(true);
             moreOptionButton.Text.text = Helper.Translation.GetString("modOptionText");
@@ -151,9 +156,11 @@ namespace ExtremeRoles.Patches.Option
             {
                 if (!popUp) { return; }
 
-                if (__instance.transform.parent && __instance.transform.parent == HudManager.Instance.transform)
+                if (DestroyableSingleton<HudManager>.InstanceExists &&
+                    __instance.transform.parent && 
+                    __instance.transform.parent == FastDestroyableSingleton<HudManager>.Instance.transform)
                 {
-                    popUp.transform.SetParent(HudManager.Instance.transform);
+                    popUp.transform.SetParent(FastDestroyableSingleton<HudManager>.Instance.transform);
                     popUp.transform.localPosition = new Vector3(0, 0, -800f);
                 }
                 else

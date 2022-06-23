@@ -6,6 +6,7 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Combination
 {
@@ -129,7 +130,7 @@ namespace ExtremeRoles.Roles.Combination
 
             List<byte> lover = getAliveSameLover();
 
-            lover.Remove(PlayerControl.LocalPlayer.PlayerId);
+            lover.Remove(CachedPlayerControl.LocalPlayer.PlayerId);
 
             byte firstLover = lover[0];
             lover.RemoveAt(0);
@@ -374,7 +375,7 @@ namespace ExtremeRoles.Roles.Combination
                 foreach (byte playerId in alive)
                 {
                     var player = Player.GetPlayerControlById(playerId);
-                    if (player != null)
+                    if (player != null && !player.Data.IsDead && !player.Data.Disconnected)
                     {
                         player.MurderPlayer(player);
                     }
@@ -402,7 +403,7 @@ namespace ExtremeRoles.Roles.Combination
             {
                 string fakeTaskString = Design.ColoedString(
                     this.NameColor,
-                    DestroyableSingleton<TranslationController>.Instance.GetString(
+                    FastDestroyableSingleton<TranslationController>.Instance.GetString(
                         StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()));
                 baseString = $"{baseString}\r\n{fakeTaskString}";
             }

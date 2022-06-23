@@ -10,6 +10,7 @@ namespace ExtremeRoles.Patches
         static void Postfix()
         {
             OptionsMenuBehaviourStartPatch.UpdateMenuTranslation();
+            Compat.CompatModMenu.UpdateTranslation();
         }
     }
 }

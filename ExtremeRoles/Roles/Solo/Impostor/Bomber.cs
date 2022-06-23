@@ -9,6 +9,8 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 
 using BepInEx.IL2CPP.Utils.Collections;
 
@@ -73,7 +75,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public bool IsAbilityUse()
         {
             this.setTargetPlayerId = byte.MaxValue;
-            var player = PlayerControl.LocalPlayer.FindClosestTarget(false);
+            var player = CachedPlayerControl.LocalPlayer.Data.Role.FindClosestTarget();
             if (player != null)
             {
                 this.setTargetPlayerId = player.PlayerId;
@@ -90,7 +92,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public bool CheckAbility()
         {
             byte targetPlayerId = byte.MaxValue;
-            var player = PlayerControl.LocalPlayer.FindClosestTarget(false);
+            var player = CachedPlayerControl.LocalPlayer.PlayerControl.Data.Role.FindClosestTarget();
             if (player != null)
             {
                 targetPlayerId = player.PlayerId;
@@ -168,9 +170,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             if (this.bombPlayerId.Count == 0) { return; }
 
             if (MeetingHud.Instance != null ||
-                ShipStatus.Instance == null ||
+                CachedShipStatus.Instance == null ||
                 GameData.Instance == null) { return; }
-            if (!ShipStatus.Instance.enabled ||
+            if (!CachedShipStatus.Instance.enabled ||
                 ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
 
             this.timer -= Time.deltaTime;
@@ -215,10 +217,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             Vector2 truePosition = sourcePlayer.GetTruePosition();
 
-            Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers;
-            for (int i = 0; i < allPlayers.Count; i++)
+            foreach (GameData.PlayerInfo playerInfo in 
+                GameData.Instance.AllPlayers.GetFastEnumerator())
             {
-                GameData.PlayerInfo playerInfo = allPlayers[i];
 
                 if (!playerInfo.Disconnected &&
                     !playerInfo.IsDead &&

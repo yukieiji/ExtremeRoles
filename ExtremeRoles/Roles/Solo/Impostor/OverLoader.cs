@@ -6,6 +6,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 
 namespace ExtremeRoles.Roles.Solo.Impostor
@@ -20,7 +21,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
         public bool IsOverLoad;
-        public float Speed;
 
         private float reduceRate;
         private float defaultKillCool;
@@ -55,6 +55,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             if (overLoader != null)
             {
                 overLoader.IsOverLoad = activate;
+                overLoader.IsBoost = activate;
             }
         }
 
@@ -132,7 +133,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             var allOption = OptionHolder.AllOption;
 
-            this.Speed = allOption[
+            this.MoveSpeed = allOption[
                 GetRoleOptionId(OverLoaderOption.MoveSpeed)].GetValue();
             this.reduceRate = allOption[
                 GetRoleOptionId(OverLoaderOption.KillCoolReduceRate)].GetValue();
@@ -143,21 +144,21 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private void abilityOn()
         {
             RPCOperator.Call(
-                   PlayerControl.LocalPlayer.NetId,
-                   RPCOperator.Command.OverLoaderSwitchAbility,
-                   new List<byte> { PlayerControl.LocalPlayer.PlayerId, byte.MaxValue });
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                RPCOperator.Command.OverLoaderSwitchAbility,
+                new List<byte> { CachedPlayerControl.LocalPlayer.PlayerId, byte.MaxValue });
             SwitchAbility(
-                PlayerControl.LocalPlayer.PlayerId, true);
+                CachedPlayerControl.LocalPlayer.PlayerId, true);
 
         }
         private void abilityOff()
         {
             RPCOperator.Call(
-                   PlayerControl.LocalPlayer.NetId,
-                   RPCOperator.Command.OverLoaderSwitchAbility,
-                   new List<byte> { PlayerControl.LocalPlayer.PlayerId, 0 });
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                RPCOperator.Command.OverLoaderSwitchAbility,
+                new List<byte> { CachedPlayerControl.LocalPlayer.PlayerId, 0 });
             SwitchAbility(
-                PlayerControl.LocalPlayer.PlayerId, false);
+                CachedPlayerControl.LocalPlayer.PlayerId, false);
         }
 
     }

@@ -5,6 +5,7 @@ using BepInEx.Configuration;
 using BepInEx.IL2CPP;
 
 using HarmonyLib;
+using ExtremeRoles.Compat;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.InfoOverlay;
 
@@ -13,6 +14,9 @@ namespace ExtremeRoles
 {
 
     [BepInAutoPlugin("me.yukieiji.extremeroles", "Extreme Roles")]
+    [BepInDependency(
+        ExtremeRoles.Compat.Mods.SubmergedMap.Guid,
+        BepInDependency.DependencyFlags.SoftDependency)]
     [BepInProcess("Among Us.exe")]
     public partial class ExtremeRolesPlugin : BasePlugin
     {
@@ -24,6 +28,7 @@ namespace ExtremeRoles
         public static InfoOverlay Info = new InfoOverlay();
 
         internal static BepInEx.Logging.ManualLogSource Logger;
+        internal static CompatModManager Compat;
         public static ConfigEntry<bool> DebugMode { get; private set; }
 
         public override void Load()
@@ -46,7 +51,17 @@ namespace ExtremeRoles
             OptionHolder.UpdateRegion();
 
             Harmony.PatchAll();
-        }
 
+            Compat = new CompatModManager();
+
+            if (BepInExUpdater.UpdateRequired)
+            {
+                AddComponent<BepInExUpdater>();
+            }
+
+            Il2CppRegisterAttribute.Registration(
+                System.Reflection.Assembly.GetAssembly(this.GetType()));
+        
+        }
     }
 }

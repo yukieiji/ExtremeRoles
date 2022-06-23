@@ -12,16 +12,14 @@ namespace ExtremeRoles.Patches
             if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return; }
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
-            if (__instance.AmOwner && __instance.myPlayer.CanMove && GameData.Instance)
-            {
-                var overLoader = ExtremeRoleManager.GetSafeCastedRole<
-                    Roles.Solo.Impostor.OverLoader>(__instance.myPlayer.PlayerId);
-                if (overLoader == null) { return; }
+            var role = ExtremeRoleManager.GetLocalPlayerRole();
 
-                if (overLoader.IsOverLoad)
-                {
-                    __instance.body.velocity *= overLoader.Speed;
-                }
+            if (role.IsBoost &&
+                __instance.AmOwner && 
+                __instance.myPlayer.CanMove && 
+                GameData.Instance)
+            {
+                __instance.body.velocity *= role.MoveSpeed;
             }
         }
     }

@@ -1,12 +1,14 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public class Shooter : SingleRoleBase, IRoleReportHock, IRoleResetMeeting, IRoleUpdate
+    public class Shooter : SingleRoleBase, IRoleMeetingButtonAbility, IRoleReportHock, IRoleResetMeeting, IRoleUpdate
     {
         public enum ShooterOption
         {
@@ -56,6 +58,56 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             true, false, true, true)
         {}
 
+        public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
+        {
+            byte target = instance.TargetPlayerId;
+
+            return this.CurShootNum <= 0 || !this.CanShoot || target == 253 ||
+                ExtremeRoleManager.GameRole[target].Id == ExtremeRoleId.Assassin;
+        }
+
+        public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
+        {
+            abilityButton.name = $"shooterKill_{instance.TargetPlayerId}";
+            var controllerHighlight = abilityButton.transform.FindChild("ControllerHighlight");
+            if (controllerHighlight != null)
+            {
+                controllerHighlight.localScale *= new Vector2(1.25f, 1.25f);
+            }
+        }
+
+        public System.Action CreateAbilityAction(PlayerVoteArea instance)
+        {
+
+            byte target = instance.TargetPlayerId;
+
+            void shooterKill()
+            {
+                if (instance.AmDead) { return; }
+                Shoot();
+                RPCOperator.Call(
+                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                    RPCOperator.Command.UncheckedMurderPlayer,
+                    new List<byte> { CachedPlayerControl.LocalPlayer.PlayerId, target, 0 });
+                RPCOperator.UncheckedMurderPlayer(
+                    CachedPlayerControl.LocalPlayer.PlayerId,
+                    target, 0);
+                RPCOperator.Call(
+                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                    RPCOperator.Command.PlaySound,
+                    new List<byte> { (byte)RPCOperator.SoundType.Kill });
+                RPCOperator.PlaySound((byte)RPCOperator.SoundType.Kill);
+            }
+
+            return shooterKill;
+        }
+
+        public void SetSprite(SpriteRenderer render)
+        {
+            render.sprite = FastDestroyableSingleton<HudManager>.Instance.KillButton.graphic.sprite;
+            render.transform.localScale *= new Vector2(0.75f, 0.75f);
+        }
+
         public void HockReportButton(
             PlayerControl rolePlayer, GameData.PlayerInfo reporter)
         {
@@ -97,7 +149,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void Update(PlayerControl rolePlayer)
         {
-            if (ShipStatus.Instance == null ||
+            if (CachedShipStatus.Instance == null ||
                 GameData.Instance == null) { return; }
             if (rolePlayer.Data.IsDead || rolePlayer.Data.Disconnected)
             {
@@ -112,7 +164,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 if (meetingShootText == null)
                 {
                     meetingShootText = UnityEngine.Object.Instantiate(
-                        HudManager.Instance.TaskText, MeetingHud.Instance.transform);
+                        FastDestroyableSingleton<HudManager>.Instance.TaskText,
+                        MeetingHud.Instance.transform);
                     meetingShootText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
                     meetingShootText.transform.position = Vector3.zero;
                     meetingShootText.transform.localPosition = new Vector3(-2.85f, 3.15f, -20f);
@@ -288,13 +341,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private void createText()
         {
             this.chargeTimerText = Object.Instantiate(
-                HudManager.Instance.KillButton.cooldownTimerText,
-                HudManager.Instance.KillButton.transform);
+                FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+                FastDestroyableSingleton<HudManager>.Instance.KillButton.transform);
             this.chargeTimerText.transform.localPosition += new Vector3(-2.7f, -1.7f, 0);
             this.chargeTimerText.gameObject.SetActive(true);
 
             this.chargeInfoText = Object.Instantiate(
-                HudManager.Instance.KillButton.cooldownTimerText,
+                FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
                 this.chargeTimerText.transform);
             this.chargeInfoText.enableWordWrapping = false;
             this.chargeInfoText.transform.localScale = Vector3.one * 0.5f;

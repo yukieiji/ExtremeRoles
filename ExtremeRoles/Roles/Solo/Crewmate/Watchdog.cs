@@ -7,6 +7,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
@@ -47,7 +48,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             string buttonText;
             Sprite buttonImage;
-            var imageDict = HudManager.Instance.UseButton.fastUseSettings;
+            var imageDict = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
             switch (PlayerControl.GameOptions.MapId)
             {
                 case 1:
@@ -102,28 +103,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 // 3 = Dleks - deactivated
                 // 4 = Airship
                 SystemConsole watchConsole;
-                var systemConsoleArray = Object.FindObjectsOfType<SystemConsole>();
-                switch (PlayerControl.GameOptions.MapId)
+                if (ExtremeRolesPlugin.Compat.IsModMap)
                 {
-                    case 0:
-                    case 3:
-                        watchConsole = systemConsoleArray.FirstOrDefault(
-                            x => x.gameObject.name.Contains("SurvConsole"));
-                        break;
-                    case 1:
-                        watchConsole = systemConsoleArray.FirstOrDefault(
-                            x => x.gameObject.name.Contains("SurvLogConsole"));
-                        break;
-                    case 2:
-                        watchConsole = systemConsoleArray.FirstOrDefault(
-                            x => x.gameObject.name.Contains("Surv_Panel"));
-                        break;
-                    case 4:
-                        watchConsole = systemConsoleArray.FirstOrDefault(
-                            x => x.gameObject.name.Contains("task_cams"));
-                        break;
-                    default:
-                        return false;
+                    watchConsole = ExtremeRolesPlugin.Compat.ModMap.GetSystemConsole(
+                        Compat.Interface.SystemConsoleType.SecurityCamera);
+                }
+                else
+                {
+                    watchConsole = getSecurityConsole();
                 }
 
                 if (watchConsole == null || Camera.main == null)
@@ -146,7 +133,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             if (this.chargeTime == null)
             {
                 this.chargeTime = Object.Instantiate(
-                    HudManager.Instance.KillButton.cooldownTimerText,
+                    FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
                     Camera.main.transform, false);
                 this.chargeTime.transform.localPosition = new Vector3(3.5f, 2.25f, -250.0f);
             }
@@ -173,5 +160,34 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             this.RoleAbilityInit();
         }
+
+        private SystemConsole getSecurityConsole()
+        {
+            // 0 = Skeld
+            // 1 = Mira HQ
+            // 2 = Polus
+            // 3 = Dleks - deactivated
+            // 4 = Airship
+            var systemConsoleArray = Object.FindObjectsOfType<SystemConsole>();
+            switch (PlayerControl.GameOptions.MapId)
+            {
+                case 0:
+                case 3:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("SurvConsole"));
+                case 1:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("SurvLogConsole"));
+                case 2:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("Surv_Panel"));
+                case 4:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("task_cams"));
+                default:
+                    return null;
+            }
+        }
+
     }
 }

@@ -8,6 +8,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GhostRoles.Crewmate;
 using ExtremeRoles.GhostRoles.Impostor;
+using ExtremeRoles.Performance;
 
 
 namespace ExtremeRoles.GhostRoles
@@ -85,13 +86,15 @@ namespace ExtremeRoles.GhostRoles
 
             public bool IsGlobalSpawnLimit(ExtremeRoleType team)
             {
-                if (this.globalSpawnLimit.ContainsKey(team))
+                try
                 {
                     return this.globalSpawnLimit[team] <= 0;
                 }
-                else
+                catch (System.Exception e)
                 {
-                    throw new System.Exception("Unknown teamType detect!!");
+                    ExtremeRolesPlugin.Logger.LogInfo(
+                        $"Unknown teamType detect!!    tema:{team}  exception:{e}");
+                    return false;
                 }
             }
 
@@ -189,7 +192,7 @@ namespace ExtremeRoles.GhostRoles
                 return;
             }
 
-            var baseRole = ExtremeRoleManager.GameRole[player.PlayerId];
+            SingleRoleBase baseRole = ExtremeRoleManager.GameRole[player.PlayerId];
 
             ExtremeRoleType team = baseRole.Team;
             ExtremeRoleId roleId = baseRole.Id;
@@ -202,7 +205,8 @@ namespace ExtremeRoles.GhostRoles
                 
                 // 専用のコンビ役職を取ってくる
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                    player.NetId, (byte)RPCOperator.Command.SetGhostRole,
+                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                    (byte)RPCOperator.Command.SetGhostRole,
                     Hazel.SendOption.Reliable, -1);
                     writer.Write(false);
                     writer.Write(player.PlayerId);
@@ -216,11 +220,11 @@ namespace ExtremeRoles.GhostRoles
 
             // 各陣営の役職データを取得する
             List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> sameTeamRoleAssignData = assignData.GetUseGhostRole(
-                baseRole.Team);
+                team);
 
             foreach (var(filter, num, spawnRate, id) in sameTeamRoleAssignData)
             {
-                if (filter.Count != 0 && !filter.Contains(baseRole.Id)) { continue; }
+                if (filter.Count != 0 && !filter.Contains(roleId)) { continue; }
                 if (!isRoleSpawn(num, spawnRate)) { continue; }
                 
                 rpcSetSingleGhostRoleToPlayerId(player, roleType, id);
@@ -289,9 +293,10 @@ namespace ExtremeRoles.GhostRoles
             }
         }
 
+
         public static GhostRoleBase GetLocalPlayerGhostRole()
         {
-            byte playerId = PlayerControl.LocalPlayer.PlayerId;
+            byte playerId = CachedPlayerControl.LocalPlayer.PlayerId;
 
             if (!GameRole.ContainsKey(playerId))
             {
@@ -320,7 +325,7 @@ namespace ExtremeRoles.GhostRoles
         public static T GetSafeCastedLocalPlayerRole<T>() where T : GhostRoleBase
         {
 
-            byte playerId = PlayerControl.LocalPlayer.PlayerId;
+            byte playerId = CachedPlayerControl.LocalPlayer.PlayerId;
 
             if (!GameRole.ContainsKey(playerId)) { return null; }
 
@@ -393,7 +398,8 @@ namespace ExtremeRoles.GhostRoles
         {
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                player.NetId, (byte)RPCOperator.Command.SetGhostRole,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                (byte)RPCOperator.Command.SetGhostRole,
                 Hazel.SendOption.Reliable, -1);
             writer.Write(false);
             writer.Write(player.PlayerId);

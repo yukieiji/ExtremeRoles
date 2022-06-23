@@ -120,11 +120,10 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                 if (ActiveInputManager.currentControlType == ActiveInputManager.InputType.Keyboard)
                 {
                     colorChip.Button.OnMouseOver.AddListener(
-                        (UnityEngine.Events.UnityAction)(() => __instance.SelectVisor(colorChip, vi)));
+                        (UnityEngine.Events.UnityAction)(() => __instance.SelectVisor(vi)));
                     colorChip.Button.OnMouseOut.AddListener(
                         (UnityEngine.Events.UnityAction)(
                             () => __instance.SelectVisor(
-                                colorChip,
                                 DestroyableSingleton<HatManager>.Instance.GetVisorById(SaveManager.LastVisor))));
                     colorChip.Button.OnClick.AddListener(
                         (UnityEngine.Events.UnityAction)(() => __instance.ClickEquip()));
@@ -132,7 +131,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                 else
                 {
                     colorChip.Button.OnClick.AddListener(
-                        (UnityEngine.Events.UnityAction)(() => __instance.SelectVisor(colorChip, vi)));
+                        (UnityEngine.Events.UnityAction)(() => __instance.SelectVisor(vi)));
                 }
 
                 colorChip.Inner.transform.localPosition = vi.ChipOffset;

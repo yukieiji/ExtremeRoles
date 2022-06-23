@@ -8,6 +8,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -174,13 +175,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void Update(PlayerControl rolePlayer)
         {
 
-            if (ShipStatus.Instance == null ||
+            if (CachedShipStatus.Instance == null ||
                 GameData.Instance == null ||
                 MeetingHud.Instance != null)
             {
                 return;
             }
-            if (!ShipStatus.Instance.enabled ||
+            if (!CachedShipStatus.Instance.enabled ||
                 ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
             {
                 return;
@@ -192,7 +193,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             if (this.targetTimerText == null)
             {
                 this.targetTimerText = UnityEngine.Object.Instantiate(
-                    HudManager.Instance.KillButton.cooldownTimerText);
+                    FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText);
                 this.targetTimerText.alignment = TMPro.TextAlignmentOptions.Center;
             }
 
@@ -224,12 +225,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.PlayerIcon[this.targetId].gameObject.SetActive(false);
             }
 
-            List<PlayerControl> allPlayer = PlayerControl.AllPlayerControls.ToArray().ToList();
+            List<CachedPlayerControl> allPlayer = CachedPlayerControl.AllPlayerControls;
 
             allPlayer = allPlayer.OrderBy(
                 item => RandomGenerator.Instance.Next()).ToList();
 
-            Vector3 bottomLeft = HudManager.Instance.UseButton.transform.localPosition;
+            Vector3 bottomLeft = FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition;
             bottomLeft.x *= -1;
             bottomLeft += new Vector3(-0.375f, -0.25f, 0);
 

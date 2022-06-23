@@ -5,6 +5,7 @@ using HarmonyLib;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Combination;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.Button
 {
@@ -21,7 +22,7 @@ namespace ExtremeRoles.Patches.Button
         {
             if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
-            PlayerControl killer = PlayerControl.LocalPlayer;
+            PlayerControl killer = CachedPlayerControl.LocalPlayer;
             var role = ExtremeRoleManager.GetLocalPlayerRole();
 
             if (__instance.isActiveAndEnabled &&
@@ -98,7 +99,7 @@ namespace ExtremeRoles.Patches.Button
                     case MurderKillResult.NormalKill:
 
                         RPCOperator.Call(
-                            PlayerControl.LocalPlayer.NetId,
+                            CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                             RPCOperator.Command.UncheckedMurderPlayer,
                             new List<byte> { killer.PlayerId, target.PlayerId, byte.MaxValue });
                         RPCOperator.UncheckedMurderPlayer(
@@ -108,7 +109,7 @@ namespace ExtremeRoles.Patches.Button
                         break;
                     case MurderKillResult.NoAnimatedKill:
                         RPCOperator.Call(
-                            PlayerControl.LocalPlayer.NetId,
+                            CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                             RPCOperator.Command.UncheckedMurderPlayer,
                             new List<byte> { killer.PlayerId, target.PlayerId, 0 });
                         RPCOperator.UncheckedMurderPlayer(
@@ -181,7 +182,7 @@ namespace ExtremeRoles.Patches.Button
                 case MurderKillResult.NormalKill:
 
                     RPCOperator.Call(
-                        PlayerControl.LocalPlayer.NetId,
+                        CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                         RPCOperator.Command.UncheckedMurderPlayer,
                         new List<byte> { killer.PlayerId, target.PlayerId, byte.MaxValue });
                     RPCOperator.UncheckedMurderPlayer(
@@ -191,7 +192,7 @@ namespace ExtremeRoles.Patches.Button
                     break;
                 case MurderKillResult.NoAnimatedKill:
                     RPCOperator.Call(
-                        PlayerControl.LocalPlayer.NetId,
+                        CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                         RPCOperator.Command.UncheckedMurderPlayer,
                         new List<byte> { killer.PlayerId, target.PlayerId, 0 });
                     RPCOperator.UncheckedMurderPlayer(

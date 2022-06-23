@@ -17,7 +17,7 @@ namespace ExtremeSkins.SkinManager
 #if WITHNAMEPLATE
     public class ExtremeNamePlateManager
     {
-        public static Dictionary<string, CustomNamePlate> NamePlateData = new Dictionary<string, CustomNamePlate>();
+        public static readonly Dictionary<string, CustomNamePlate> NamePlateData = new Dictionary<string, CustomNamePlate>();
         public static bool IsLoaded = false;
 
         public const string FolderPath = @"\ExtremeNamePlate\";
@@ -36,6 +36,9 @@ namespace ExtremeSkins.SkinManager
 
         public static bool IsUpdate()
         {
+
+            ExtremeSkinsPlugin.Logger.LogInfo("Extreme NamePlate Manager : Checking Update....");
+
             if (!Directory.Exists(string.Concat(
                 Path.GetDirectoryName(Application.dataPath), FolderPath))) { return true; }
 
@@ -84,6 +87,8 @@ namespace ExtremeSkins.SkinManager
         public static void Load()
         {
 
+            ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme NamePlate Manager : NamePlate Loading Start!! ----------");
+
             getJsonData(namePlateTransData).GetAwaiter().GetResult();
             Helper.Translation.UpdateHatsTransData(
                 string.Concat(
@@ -125,10 +130,14 @@ namespace ExtremeSkins.SkinManager
             }
 
             IsLoaded = true;
+
+            ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme NamePlate Manager : NamePlate Loading Complete!! ----------");
         }
 
         public static async Task PullAllData()
         {
+
+            ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme NamePlate Manager : NamePlateData Download Start!! ---------- ");
 
             string dataSaveFolder = string.Concat(
                 Path.GetDirectoryName(Application.dataPath), FolderPath);
@@ -193,6 +202,8 @@ namespace ExtremeSkins.SkinManager
                 }
             }
 
+            ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme NamePlate Manager : NamePlateData Download Complete!! ---------- ");
+
         }
 
         public static void UpdateTranslation()
@@ -245,9 +256,13 @@ namespace ExtremeSkins.SkinManager
         private static async Task<HttpStatusCode> downLoadFileTo(
             HttpClient http, string author, string saveFolder, string fileName)
         {
+
+            string dlUrl = $"{repo}/namePlate/{author}/{fileName}";
+
+            ExtremeSkinsPlugin.Logger.LogInfo($"DownLoad from:{dlUrl}");
+
             var fileResponse = await http.GetAsync(
-                $"{repo}/namePlate/{author}/{fileName}",
-                HttpCompletionOption.ResponseContentRead);
+                dlUrl, HttpCompletionOption.ResponseContentRead);
 
             if (fileResponse.StatusCode != HttpStatusCode.OK)
             {

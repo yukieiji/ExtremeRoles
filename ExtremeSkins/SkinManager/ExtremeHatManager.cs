@@ -16,7 +16,7 @@ namespace ExtremeSkins.SkinManager
 #if WITHHAT
     public class ExtremeHatManager
     {
-        public static Dictionary<string, CustomHat> HatData = new Dictionary<string, CustomHat>();
+        public static readonly Dictionary<string, CustomHat> HatData = new Dictionary<string, CustomHat>();
         public static bool IsLoaded = false;
 
         public const string FolderPath = @"\ExtremeHat\";
@@ -35,6 +35,9 @@ namespace ExtremeSkins.SkinManager
 
         public static bool IsUpdate()
         {
+
+            ExtremeSkinsPlugin.Logger.LogInfo("Extreme Hat Manager : Checking Update....");
+
             if (!Directory.Exists(string.Concat(
                 Path.GetDirectoryName(Application.dataPath), FolderPath))) { return true; }
 
@@ -96,6 +99,9 @@ namespace ExtremeSkins.SkinManager
 
         public static void Load()
         {
+
+            ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Hat Manager : Hat Loading Start!! ----------");
+
             getJsonData(hatTransData).GetAwaiter().GetResult();
             Helper.Translation.UpdateHatsTransData(
                 string.Concat(
@@ -146,10 +152,16 @@ namespace ExtremeSkins.SkinManager
             }
 
             IsLoaded = true;
+            ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Hat Manager : Hat Loading Complete!! ----------");
         }
 
         public static async Task PullAllData()
         {
+
+            ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Hat Manager : HatData Download Start!! ---------- ");
+
+            HttpClient http = new HttpClient();
+            http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true };
 
             string dataSaveFolder = string.Concat(
                 Path.GetDirectoryName(Application.dataPath), FolderPath);
@@ -191,9 +203,11 @@ namespace ExtremeSkins.SkinManager
 
                 Directory.CreateDirectory(getHatFolder);
 
-                await pullHat(getHatFolder, getHatData);
+                await pullHat(http, getHatFolder, getHatData);
 
             }
+
+            ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Hat Manager : HatData Download Complete!! ---------- ");
 
         }
 
@@ -215,6 +229,7 @@ namespace ExtremeSkins.SkinManager
             {
                 HttpClient http = new HttpClient();
                 http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true };
+
                 var response = await http.GetAsync(
                     new System.Uri($"{repo}/hat/{fileName}"),
                     HttpCompletionOption.ResponseContentRead);
@@ -245,11 +260,9 @@ namespace ExtremeSkins.SkinManager
         }
 
         private static async Task<HttpStatusCode> pullHat(
-            string saveFolder,
-            string hat)
+            HttpClient http, string saveFolder, string hat)
         {
-            HttpClient http = new HttpClient();
-            http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true };
+
             // インフォファイルを落とす
             await downLoadFileTo(http, hat, saveFolder, InfoFileName);
 
@@ -295,9 +308,12 @@ namespace ExtremeSkins.SkinManager
         private static async Task<HttpStatusCode> downLoadFileTo(
             HttpClient http, string hat, string saveFolder, string fileName)
         {
+            string dlUrl = $"{repo}/hat/{hat}/{fileName}";
+
+            ExtremeSkinsPlugin.Logger.LogInfo($"DownLoad from:{dlUrl}");
+
             var fileResponse = await http.GetAsync(
-                $"{repo}/hat/{hat}/{fileName}",
-                HttpCompletionOption.ResponseContentRead);
+                dlUrl, HttpCompletionOption.ResponseContentRead);
 
             if (fileResponse.StatusCode != HttpStatusCode.OK)
             {

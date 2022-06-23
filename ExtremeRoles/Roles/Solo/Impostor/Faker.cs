@@ -9,6 +9,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -21,7 +22,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 PlayerControl rolePlayer,
                 PlayerControl targetPlayer)
             {
-                var killAnimation = PlayerControl.LocalPlayer.KillAnimations[0];
+                var killAnimation = rolePlayer.KillAnimations[0];
                 this.body = Object.Instantiate(
                     killAnimation.bodyPrefab.bodyRenderer);
                 targetPlayer.SetPlayerMaterialColors(this.body);
@@ -30,6 +31,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 vector.z = vector.y / 1000f;
                 this.body.transform.position = vector;
                 this.body.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
+
+                if (ExtremeRolesPlugin.Compat.IsModMap)
+                {
+                    ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
+                        this.body.gameObject,
+                        Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
+                }
             }
 
             public void Clear()
@@ -108,15 +116,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             } while (contine);
 
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.FakerCreateDummy,
                 new List<byte>
-                { 
-                    PlayerControl.LocalPlayer.PlayerId,
+                {
+                    CachedPlayerControl.LocalPlayer.PlayerId,
                     targetPlayerId
                 });
             CreateDummy(
-                PlayerControl.LocalPlayer.PlayerId,
+                CachedPlayerControl.LocalPlayer.PlayerId,
                 targetPlayerId);
             return true;
         }

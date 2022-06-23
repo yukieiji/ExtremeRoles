@@ -17,6 +17,7 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Performance;
 
 
 namespace ExtremeRoles.Patches.Manager
@@ -32,11 +33,11 @@ namespace ExtremeRoles.Patches.Manager
             var template = GameObject.Find("ExitGameButton");
             if (template == null) { return; }
 
-            var button = UnityEngine.Object.Instantiate(template, null);
-            button.transform.localPosition = new Vector3(
-                button.transform.localPosition.x,
-                button.transform.localPosition.y + 0.6f,
-                button.transform.localPosition.z);
+            var button = UnityEngine.Object.Instantiate(template, template.transform);
+            button.name = "ExtremeRolesUpdateButton";
+            UnityEngine.Object.Destroy(button.GetComponent<AspectPosition>());
+            UnityEngine.Object.Destroy(button.GetComponent<ConditionalHide>());
+            button.transform.localPosition = new Vector3(0.0f, 0.6f, 0.0f);
 
             PassiveButton passiveButton = button.GetComponent<PassiveButton>();
             passiveButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
@@ -44,11 +45,11 @@ namespace ExtremeRoles.Patches.Manager
 
             var text = button.transform.GetChild(0).GetComponent<TMPro.TMP_Text>();
             __instance.StartCoroutine(Effects.Lerp(0.1f, new Action<float>((p) => {
-                text.SetText(Translation.GetString("updateButton"));
+                text.SetText(Translation.GetString("UpdateButton"));
             })));
             if (Updater.InfoPopup == null)
             {
-                TwitchManager man = DestroyableSingleton<TwitchManager>.Instance;
+                TwitchManager man = FastDestroyableSingleton<TwitchManager>.Instance;
                 Updater.InfoPopup = UnityEngine.Object.Instantiate<GenericPopup>(man.TwitchPopup);
                 Updater.InfoPopup.TextAreaTMP.fontSize *= 0.7f;
                 Updater.InfoPopup.TextAreaTMP.enableAutoSizing = false;
@@ -62,7 +63,7 @@ namespace ExtremeRoles.Patches.Manager
 
         public static void Postfix(MainMenuManager __instance)
         {
-            DestroyableSingleton<ModManager>.Instance.ShowModStamp();
+            FastDestroyableSingleton<ModManager>.Instance.ShowModStamp();
 
             var amongUsLogo = GameObject.Find("bannerLogo_AmongUs");
             if (amongUsLogo != null)
@@ -96,7 +97,7 @@ namespace ExtremeRoles.Patches.Manager
                 Module.Prefab.Prop.name = "propForInEx";
                 Module.Prefab.Prop.gameObject.SetActive(false);
             }
-
+            Compat.CompatModMenu.CreateMenuButton();
         }
 
         public static class Updater

@@ -7,6 +7,7 @@ using UnityEngine;
 
 using BepInEx.Configuration;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module
 {
@@ -186,7 +187,7 @@ namespace ExtremeRoles.Module
                     }
                 }
 
-                if (AmongUsClient.Instance?.AmHost == true && PlayerControl.LocalPlayer)
+                if (AmongUsClient.Instance?.AmHost == true && CachedPlayerControl.LocalPlayer)
                 {
                     if (Id == 0)
                     {

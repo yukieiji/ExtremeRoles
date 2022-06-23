@@ -1,5 +1,7 @@
 ﻿using HarmonyLib;
 
+using ExtremeRoles.Performance;
+
 namespace ExtremeRoles.Patches.Button
 {
 
@@ -10,14 +12,13 @@ namespace ExtremeRoles.Patches.Button
         {
             if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
-            var localPlayer = PlayerControl.LocalPlayer;
-            var role = Roles.ExtremeRoleManager.GameRole[localPlayer.PlayerId];
+            var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
             // The sabotage button behaves just fine if it's a regular impostor
-            if ((localPlayer.Data.Role.TeamType == RoleTeamTypes.Impostor) ||
+            if ((CachedPlayerControl.LocalPlayer.Data.Role.TeamType == RoleTeamTypes.Impostor) ||
                 role.IsImpostor()) { return true; }
             if (!role.UseSabotage) { return true; }
 
-            DestroyableSingleton<HudManager>.Instance.ShowMap(
+            FastDestroyableSingleton<HudManager>.Instance.ShowMap(
                 (Il2CppSystem.Action<MapBehaviour>)((m) => { m.ShowSabotageMap(); }));
             return false;
         }

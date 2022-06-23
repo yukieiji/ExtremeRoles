@@ -6,6 +6,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
@@ -67,8 +68,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     updateKillButton();
                     return true;
                 }
-                
-
             }
             else
             {
@@ -157,8 +156,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private void createText()
         {
             this.killCountText = GameObject.Instantiate(
-                HudManager.Instance.KillButton.cooldownTimerText,
-                HudManager.Instance.KillButton.cooldownTimerText.transform.parent);
+                FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+                FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText.transform.parent);
             updateKillCountText();
             this.killCountText.enableWordWrapping = false;
             this.killCountText.transform.localScale = Vector3.one * 0.5f;
@@ -229,7 +228,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             if (this.isSyncTaskShootNum)
             {
                 this.shootNum = 0;
-                HudManager.Instance.KillButton.SetDisabled();
+                FastDestroyableSingleton<HudManager>.Instance.KillButton.SetDisabled();
                 this.CanKill = false;
             }
         }
@@ -240,7 +239,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
 
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                rolePlayer.NetId,
                 RPCOperator.Command.UncheckedMurderPlayer,
                 new List<byte>
                 { 
@@ -276,7 +275,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             if (this.shootNum == 0)
             {
                 this.killCountText.gameObject.SetActive(false);
-                HudManager.Instance.KillButton.SetDisabled();
+                FastDestroyableSingleton<HudManager>.Instance.KillButton.SetDisabled();
                 this.CanKill = false;
             }
             updateKillCountText();

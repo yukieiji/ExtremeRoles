@@ -65,12 +65,15 @@ namespace ExtremeRoles
             CanKillVentInPlayer,
             ParallelMedBayScans,
             RandomMap,
+            DisableTaskWinWhenNoneTaskCrew,
+            DisableTaskWin,
             IsSameNeutralSameWin,
             DisableNeutralSpecialForceEnd,
             EnableHorseMode,
 
             IsAssignNeutralToVanillaCrewGhostRole,
             IsRemoveAngleIcon,
+            IsBlockGAAbilityReport,
         }
 
         public static Dictionary<int, CustomOptionBase> AllOption = new Dictionary<int, CustomOptionBase>();
@@ -126,6 +129,10 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.EngineerUseImpostorVent].GetValue();
             Ship.DisableSelfVote = AllOption[
                 (int)CommonOptionKey.DisableSelfVote].GetValue();
+            Ship.DisableTaskWinWhenNoneTaskCrew = AllOption[
+                (int)CommonOptionKey.DisableTaskWinWhenNoneTaskCrew].GetValue();
+            Ship.DisableTaskWin = AllOption[
+                (int)CommonOptionKey.DisableTaskWin].GetValue();
             Ship.IsSameNeutralSameWin = AllOption[
                 (int)CommonOptionKey.IsSameNeutralSameWin].GetValue();
             Ship.DisableNeutralSpecialForceEnd = AllOption[
@@ -135,6 +142,8 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.IsAssignNeutralToVanillaCrewGhostRole].GetValue();
             Ship.IsRemoveAngleIcon = AllOption[
                 (int)CommonOptionKey.IsRemoveAngleIcon].GetValue();
+            Ship.IsBlockGAAbilityReport = AllOption[
+                (int)CommonOptionKey.IsBlockGAAbilityReport].GetValue();
 
             Client.StreamerMode = ConfigParser.StreamerMode.Value;
             Client.GhostsSeeRole = ConfigParser.GhostsSeeRoles.Value;
@@ -371,6 +380,15 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.RandomMap,
                 CommonOptionKey.RandomMap.ToString(), false);
 
+            var taskDisableOpt = new BoolCustomOption(
+                (int)CommonOptionKey.DisableTaskWinWhenNoneTaskCrew,
+                CommonOptionKey.DisableTaskWinWhenNoneTaskCrew.ToString(),
+                false);
+            new BoolCustomOption(
+                (int)CommonOptionKey.DisableTaskWin,
+                CommonOptionKey.DisableTaskWin.ToString(),
+                false, taskDisableOpt);
+
 
             new BoolCustomOption(
                 (int)CommonOptionKey.IsSameNeutralSameWin,
@@ -396,7 +414,10 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.IsRemoveAngleIcon,
                 CommonOptionKey.IsRemoveAngleIcon.ToString(),
                 false);
-
+            new BoolCustomOption(
+                (int)CommonOptionKey.IsBlockGAAbilityReport,
+                CommonOptionKey.IsBlockGAAbilityReport.ToString(),
+                false);
         }
 
         public static class ConfigParser
@@ -431,11 +452,14 @@ namespace ExtremeRoles
             public static bool EngineerUseImpostorVent = false;
             public static bool CanKillVentInPlayer = false;
             public static bool DisableSelfVote = false;
+            public static bool DisableTaskWinWhenNoneTaskCrew = false;
+            public static bool DisableTaskWin = false;
             public static bool IsSameNeutralSameWin = true;
             public static bool DisableNeutralSpecialForceEnd = false;
 
             public static bool IsAssignNeutralToVanillaCrewGhostRole = true;
             public static bool IsRemoveAngleIcon = false;
+            public static bool IsBlockGAAbilityReport = false;
         }
     }
 }

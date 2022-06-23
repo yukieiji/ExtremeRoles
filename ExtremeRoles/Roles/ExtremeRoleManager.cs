@@ -10,6 +10,8 @@ using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Neutral;
 using ExtremeRoles.Roles.Solo.Impostor;
 
+using ExtremeRoles.Performance;
+
 
 namespace ExtremeRoles.Roles
 {
@@ -45,6 +47,7 @@ namespace ExtremeRoles.Roles
         Fencer,
         Opener,
         Carpenter,
+        Survivor,
 
         SpecialImpostor,
         Evolver,
@@ -150,6 +153,7 @@ namespace ExtremeRoles.Roles
                 {(byte)ExtremeRoleId.Fencer     , new Fencer()},
                 {(byte)ExtremeRoleId.Opener     , new Opener()},
                 {(byte)ExtremeRoleId.Carpenter  , new Carpenter()},
+                {(byte)ExtremeRoleId.Survivor , new Survivor()},
 
                 {(byte)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
                 {(byte)ExtremeRoleId.Evolver        , new Evolver()},
@@ -286,7 +290,7 @@ namespace ExtremeRoles.Roles
 
         public static SingleRoleBase GetLocalPlayerRole()
         {
-            return GameRole[PlayerControl.LocalPlayer.PlayerId];
+            return GameRole[CachedPlayerControl.LocalPlayer.PlayerId];
         }
 
         public static void SetPlayerIdToMultiRoleId(
@@ -305,7 +309,7 @@ namespace ExtremeRoles.Roles
 
                 IRoleAbility abilityRole = addRole as IRoleAbility;
 
-                if (abilityRole != null && PlayerControl.LocalPlayer.PlayerId == playerId)
+                if (abilityRole != null && CachedPlayerControl.LocalPlayer.PlayerId == playerId)
                 {
                     Helper.Logging.Debug("Try Create Ability NOW!!!");
                     abilityRole.CreateAbility();
@@ -316,7 +320,7 @@ namespace ExtremeRoles.Roles
                 roleControlId = id + 1;
                 lock (GameRole)
                 {
-                    GameRole[playerId] = addRole;
+                    GameRole.Add(playerId, addRole);
                 }
 
                 if (hasVanilaRole)
@@ -365,10 +369,9 @@ namespace ExtremeRoles.Roles
 
             SingleRoleBase addRole = role.Clone();
 
-
             IRoleAbility abilityRole = addRole as IRoleAbility;
 
-            if (abilityRole != null && PlayerControl.LocalPlayer.PlayerId == playerId)
+            if (abilityRole != null && CachedPlayerControl.LocalPlayer.PlayerId == playerId)
             {
                 Helper.Logging.Debug("Try Create Ability NOW!!!");
                 abilityRole.CreateAbility();
@@ -393,7 +396,7 @@ namespace ExtremeRoles.Roles
                 IRoleAbility multiAssignAbilityRole = ((MultiAssignRoleBase)GameRole[
                     playerId]) as IRoleAbility;
 
-                if (multiAssignAbilityRole != null && PlayerControl.LocalPlayer.PlayerId == playerId)
+                if (multiAssignAbilityRole != null && CachedPlayerControl.LocalPlayer.PlayerId == playerId)
                 {
                     if (multiAssignAbilityRole.Button != null)
                     {
@@ -407,14 +410,16 @@ namespace ExtremeRoles.Roles
 
         public static T GetSafeCastedRole<T>(byte playerId) where T : SingleRoleBase
         {
-            var role = GameRole[playerId] as T;
+            var checRole = GameRole[playerId];
+
+            var role = checRole as T;
             
             if (role != null)
             {
                 return role;
             }
 
-            var multiAssignRole = GameRole[playerId] as MultiAssignRoleBase;
+            var multiAssignRole = checRole as MultiAssignRoleBase;
             if (multiAssignRole != null)
             {
                 if (multiAssignRole.AnotherRole != null)
@@ -434,14 +439,16 @@ namespace ExtremeRoles.Roles
 
         public static T GetSafeCastedLocalPlayerRole<T>() where T : SingleRoleBase
         {
-            var role = GameRole[PlayerControl.LocalPlayer.PlayerId] as T;
+            var checkRole = GetLocalPlayerRole();
+
+            var role = checkRole as T;
 
             if (role != null)
             {
                 return role;
             }
 
-            var multiAssignRole = GameRole[PlayerControl.LocalPlayer.PlayerId] as MultiAssignRoleBase;
+            var multiAssignRole = checkRole as MultiAssignRoleBase;
             if (multiAssignRole != null)
             {
                 if (multiAssignRole.AnotherRole != null)

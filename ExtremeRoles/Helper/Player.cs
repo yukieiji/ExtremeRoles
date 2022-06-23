@@ -2,6 +2,9 @@
 
 using UnityEngine;
 
+using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
+
 namespace ExtremeRoles.Helper
 {
     public static class Player
@@ -27,7 +30,7 @@ namespace ExtremeRoles.Helper
 
         public static PlayerControl GetPlayerControlById(byte id)
         {
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
             {
                 if (player.PlayerId == id) { return player; }
             }
@@ -49,13 +52,12 @@ namespace ExtremeRoles.Helper
 
             Vector2 truePosition = sourcePlayer.GetTruePosition();
 
-            Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo> allPlayers = GameData.Instance.AllPlayers;
-            for (int i = 0; i < allPlayers.Count; i++)
+            foreach (GameData.PlayerInfo playerInfo in 
+                GameData.Instance.AllPlayers.GetFastEnumerator())
             {
-                GameData.PlayerInfo playerInfo = allPlayers[i];
 
                 if (!playerInfo.Disconnected &&
-                    playerInfo.PlayerId != PlayerControl.LocalPlayer.PlayerId &&
+                    playerInfo.PlayerId != CachedPlayerControl.LocalPlayer.PlayerId &&
                     !playerInfo.IsDead &&
                     !playerInfo.Object.inVent)
                 {
@@ -99,7 +101,7 @@ namespace ExtremeRoles.Helper
             int taskNum = 0;
             int compNum = 0;
 
-            foreach (GameData.TaskInfo task in player.Tasks)
+            foreach (GameData.TaskInfo task in player.Tasks.GetFastEnumerator())
             {
 
                 ++taskNum;
@@ -116,9 +118,11 @@ namespace ExtremeRoles.Helper
 
         public static GameData.PlayerInfo GetDeadBodyInfo(float range)
         {
+
+            Vector2 playerPos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+
             foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(
-                PlayerControl.LocalPlayer.GetTruePosition(),
-                range,
+                playerPos, range,
                 Constants.PlayersOnlyMask))
             {
                 if (collider2D.tag == "DeadBody")
@@ -127,12 +131,11 @@ namespace ExtremeRoles.Helper
 
                     if (component && !component.Reported)
                     {
-                        Vector2 truePosition = PlayerControl.LocalPlayer.GetTruePosition();
-                        Vector2 truePosition2 = component.TruePosition;
-                        if ((Vector2.Distance(truePosition2, truePosition) <= range) &&
-                            (PlayerControl.LocalPlayer.CanMove) &&
+                        Vector2 truePosition = component.TruePosition;
+                        if ((Vector2.Distance(truePosition, playerPos) <= range) &&
+                            (CachedPlayerControl.LocalPlayer.PlayerControl.CanMove) &&
                             (!PhysicsHelpers.AnythingBetween(
-                                truePosition, truePosition2, Constants.ShipAndObjectsMask, false)))
+                                playerPos, truePosition, Constants.ShipAndObjectsMask, false)))
                         {
                             return GameData.Instance.GetPlayerById(component.ParentId);
                         }
@@ -145,15 +148,16 @@ namespace ExtremeRoles.Helper
 
         public static void SetPlayerOutLine(PlayerControl target, Color color)
         {
-            if (prevTarget != null && prevTarget.MyRend != null)
+            if (prevTarget != null &&
+                prevTarget.cosmetics.currentBodySprite.BodySprite != null)
             {
-                prevTarget.MyRend.material.SetFloat("_Outline", 0f);
+                prevTarget.cosmetics.currentBodySprite.BodySprite.material.SetFloat("_Outline", 0f);
             }
 
-            if (target == null || target.MyRend == null) { return; }
+            if (target == null || target.cosmetics.currentBodySprite.BodySprite == null) { return; }
 
-            target.MyRend.material.SetFloat("_Outline", 1f);
-            target.MyRend.material.SetColor("_OutlineColor", color);
+            target.cosmetics.currentBodySprite.BodySprite.material.SetFloat("_Outline", 1f);
+            target.cosmetics.currentBodySprite.BodySprite.material.SetColor("_OutlineColor", color);
             prevTarget = target;
         }
 
@@ -162,17 +166,19 @@ namespace ExtremeRoles.Helper
 
             Dictionary<byte, PoolablePlayer> playerIcon = new Dictionary<byte, PoolablePlayer>();
 
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
             {
                 PoolablePlayer poolPlayer = UnityEngine.Object.Instantiate<PoolablePlayer>(
                     Module.Prefab.PlayerPrefab,
-                    HudManager.Instance.transform);
+                    FastDestroyableSingleton<HudManager>.Instance.transform);
                 
                 poolPlayer.gameObject.SetActive(true);
                 poolPlayer.UpdateFromPlayerData(
-                    player.Data, PlayerOutfitType.Default);
-                poolPlayer.NameText.text = player.Data.DefaultOutfit.PlayerName;
+                    player.Data, PlayerOutfitType.Default,
+                    PlayerMaterial.MaskType.SimpleUI, true);
+                poolPlayer.cosmetics.SetName(player.Data.DefaultOutfit.PlayerName);
                 poolPlayer.SetFlipX(true);
+                poolPlayer.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
                 poolPlayer.gameObject.SetActive(false);
                 playerIcon.Add(player.PlayerId, poolPlayer);
             }

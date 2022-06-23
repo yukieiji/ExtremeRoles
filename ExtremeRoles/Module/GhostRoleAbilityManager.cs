@@ -33,6 +33,7 @@ namespace ExtremeRoles.Module
         }
         public string CreateAbilityReport()
         {
+            if (this.useAbility.Count == 0) { return string.Empty; }
 
             StringBuilder creater = new StringBuilder(this.useAbility.Count);
             foreach (AbilityType abilityType in this.useAbility)
@@ -44,7 +45,6 @@ namespace ExtremeRoles.Module
 
             return creater.ToString();
         }
-        public bool IsUseAbility() => this.useAbility.Count > 0;
 
         public void AddAbilityCall(AbilityType abilityType)
         {
@@ -52,7 +52,7 @@ namespace ExtremeRoles.Module
         }
 
         public void UseGhostAbility(
-            byte abilityType, ref MessageReader reader)
+            byte abilityType, bool isReport, ref MessageReader reader)
         {
             switch ((AbilityType)abilityType)
             {
@@ -74,7 +74,11 @@ namespace ExtremeRoles.Module
                 default:
                     break;
             }
-            this.useAbility.Add((AbilityType)abilityType);
+
+            if (isReport)
+            {
+                this.useAbility.Add((AbilityType)abilityType);
+            }
         }
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 using HarmonyLib;
 
 using ExtremeRoles.Roles;
+using ExtremeRoles.Performance;
 
 
 namespace ExtremeRoles.Patches.Controller
@@ -35,12 +36,12 @@ namespace ExtremeRoles.Patches.Controller
         {
             if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
-			if (!sourcePlayer || !PlayerControl.LocalPlayer)
+			if (!sourcePlayer || !CachedPlayerControl.LocalPlayer)
 			{
 				return false;
 			}
 
-			GameData.PlayerInfo data = PlayerControl.LocalPlayer.Data;
+			GameData.PlayerInfo data = CachedPlayerControl.LocalPlayer.Data;
 			GameData.PlayerInfo data2 = sourcePlayer.Data;
 
 			var role = ExtremeRoleManager.GameRole[data.PlayerId];
@@ -72,7 +73,7 @@ namespace ExtremeRoles.Patches.Controller
 			{
 				chatBubble.transform.SetParent(__instance.scroller.Inner);
 				chatBubble.transform.localScale = Vector3.one;
-				bool flag = sourcePlayer == PlayerControl.LocalPlayer;
+				bool flag = sourcePlayer.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId;
 				if (flag)
 				{
 					chatBubble.SetRight();
@@ -86,7 +87,7 @@ namespace ExtremeRoles.Patches.Controller
 
 				if (data.PlayerId == data2.PlayerId)
                 {
-					seeColor = role.GetNameColor(PlayerControl.LocalPlayer.Data.IsDead);
+					seeColor = role.GetNameColor(CachedPlayerControl.LocalPlayer.Data.IsDead);
                 }
 				else
                 {

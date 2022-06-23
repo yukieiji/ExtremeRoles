@@ -8,6 +8,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -114,16 +115,16 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
 
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.PainterPaintBody,
                 new List<byte>
-                { 
-                    PlayerControl.LocalPlayer.PlayerId,
+                {
+                    CachedPlayerControl.LocalPlayer.PlayerId,
                     this.targetDeadBodyId
                 });
 
             PaintDeadBody(
-                PlayerControl.LocalPlayer.PlayerId,
+                CachedPlayerControl.LocalPlayer.PlayerId,
                 this.targetDeadBodyId);
             return true;
         }

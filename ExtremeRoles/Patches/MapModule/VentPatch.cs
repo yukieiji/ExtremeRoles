@@ -2,6 +2,8 @@
 using Hazel;
 using UnityEngine;
 
+using ExtremeRoles.Performance;
+
 namespace ExtremeRoles.Patches.MapModule
 {
     [HarmonyPatch(typeof(Vent), nameof(Vent.CanUse))]
@@ -25,8 +27,34 @@ namespace ExtremeRoles.Patches.MapModule
                 return false;
             }
 
-            if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
+            if (__instance.myRend.sprite == null)
+            {
+                return false;
+            }
+
+            bool isCustomMapVent = ExtremeRolesPlugin.Compat.IsModMap &&
+                ExtremeRolesPlugin.Compat.ModMap.IsCustomVentUse(__instance);
+
+            if (Roles.ExtremeRoleManager.GameRole.Count == 0)
+            {
+                if (isCustomMapVent)
+                {
+                    (__result, canUse, couldUse) = ExtremeRolesPlugin.Compat.ModMap.IsCustomVentUseResult(
+                        __instance, playerInfo,
+                        playerInfo.Role.IsImpostor || playerInfo.Role.Role == RoleTypes.Engineer);
+                    return false;
+                }
+                return true; 
+            }
+
             bool roleCouldUse = Roles.ExtremeRoleManager.GameRole[playerInfo.PlayerId].UseVent;
+
+            if (isCustomMapVent)
+            {
+                (__result, canUse, couldUse) = ExtremeRolesPlugin.Compat.ModMap.IsCustomVentUseResult(
+                    __instance, playerInfo, roleCouldUse);
+                return false;
+            }
 
             var usableDistance = __instance.UsableDistance;
 
@@ -44,7 +72,6 @@ namespace ExtremeRoles.Patches.MapModule
 
                 canUse &= (
                     num <= usableDistance &&
-                    __instance.myRend.sprite != null &&
                     !PhysicsHelpers.AnythingBetween(
                         truePosition,
                         position,
@@ -63,22 +90,22 @@ namespace ExtremeRoles.Patches.MapModule
             bool canUse;
             bool couldUse;
             
-            __instance.CanUse(PlayerControl.LocalPlayer.Data, out canUse, out couldUse);
+            __instance.CanUse(CachedPlayerControl.LocalPlayer.Data, out canUse, out couldUse);
 
             if (!canUse) { return false; }; // No need to execute the native method as using is disallowed anyways
 
-            bool isEnter = !PlayerControl.LocalPlayer.inVent;
+            bool isEnter = !CachedPlayerControl.LocalPlayer.PlayerControl.inVent;
 
             if (ExtremeRolesPlugin.GameDataStore.CustomVent.IsCustomVent(
                 __instance.Id))
             {
                 __instance.SetButtons(isEnter);
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                    PlayerControl.LocalPlayer.NetId,
+                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                     (byte)RPCOperator.Command.CustomVentUse,
                     Hazel.SendOption.Reliable);
                 writer.WritePacked(__instance.Id);
-                writer.Write(PlayerControl.LocalPlayer.PlayerId);
+                writer.Write(CachedPlayerControl.LocalPlayer.PlayerId);
                 writer.Write(isEnter ? byte.MaxValue : (byte)0);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCOperator.CustomVentUse(
@@ -90,11 +117,11 @@ namespace ExtremeRoles.Patches.MapModule
 
             if (isEnter)
             {
-                PlayerControl.LocalPlayer.MyPhysics.RpcEnterVent(__instance.Id);
+                CachedPlayerControl.LocalPlayer.PlayerPhysics.RpcEnterVent(__instance.Id);
             }
             else
             {
-                PlayerControl.LocalPlayer.MyPhysics.RpcExitVent(__instance.Id);
+                CachedPlayerControl.LocalPlayer.PlayerPhysics.RpcExitVent(__instance.Id);
             }
 
             __instance.SetButtons(isEnter);

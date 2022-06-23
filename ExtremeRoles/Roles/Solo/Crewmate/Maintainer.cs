@@ -4,6 +4,9 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
+
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
@@ -39,10 +42,22 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public bool UseAbility()
         {
-            foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
+            foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks.GetFastEnumerator())
             {
+                if (task == null){ continue; }
 
-                switch (task.TaskType)
+                TaskTypes taskType = task.TaskType;
+
+                if (ExtremeRolesPlugin.Compat.IsModMap)
+                {
+                    if (ExtremeRolesPlugin.Compat.ModMap.IsCustomSabotageTask(taskType))
+                    {
+                        ExtremeRolesPlugin.Compat.ModMap.RpcRepairCustomSabotage(
+                            taskType);
+                        continue;
+                    }
+                }
+                switch (taskType)
                 {
                     case TaskTypes.FixLights:
 
@@ -52,29 +67,29 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                         RPCOperator.FixLightOff();
                         break;
                     case TaskTypes.RestoreOxy:
-                        ShipStatus.Instance.RpcRepairSystem(
+                        CachedShipStatus.Instance.RpcRepairSystem(
                             SystemTypes.LifeSupp, 0 | 64);
-                        ShipStatus.Instance.RpcRepairSystem(
+                        CachedShipStatus.Instance.RpcRepairSystem(
                             SystemTypes.LifeSupp, 1 | 64);
                         break;
                     case TaskTypes.ResetReactor:
-                        ShipStatus.Instance.RpcRepairSystem(
+                        CachedShipStatus.Instance.RpcRepairSystem(
                             SystemTypes.Reactor, 16);
                         break;
                     case TaskTypes.ResetSeismic:
-                        ShipStatus.Instance.RpcRepairSystem(
+                        CachedShipStatus.Instance.RpcRepairSystem(
                             SystemTypes.Laboratory, 16);
                         break;
                     case TaskTypes.FixComms:
-                        ShipStatus.Instance.RpcRepairSystem(
+                        CachedShipStatus.Instance.RpcRepairSystem(
                             SystemTypes.Comms, 16 | 0);
-                        ShipStatus.Instance.RpcRepairSystem(
+                        CachedShipStatus.Instance.RpcRepairSystem(
                             SystemTypes.Comms, 16 | 1);
                         break;
                     case TaskTypes.StopCharles:
-                        ShipStatus.Instance.RpcRepairSystem(
+                        CachedShipStatus.Instance.RpcRepairSystem(
                             SystemTypes.Reactor, 0 | 16);
-                        ShipStatus.Instance.RpcRepairSystem(
+                        CachedShipStatus.Instance.RpcRepairSystem(
                             SystemTypes.Reactor, 1 | 16);
                         break;
                     default:
@@ -82,13 +97,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 }
             }
 
-            foreach (var door in ShipStatus.Instance.AllDoors)
+            foreach (var door in CachedShipStatus.Instance.AllDoors)
             {
-                ShipStatus.Instance.RpcRepairSystem(
+                CachedShipStatus.Instance.RpcRepairSystem(
                     SystemTypes.Doors, door.Id | 64);
                 door.SetDoorway(true);
             }
-
 
             return true;
         }
@@ -96,9 +110,22 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public bool IsAbilityUse()
         {
             bool sabotageActive = false;
-            foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks)
+            foreach (PlayerTask task in 
+                CachedPlayerControl.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
             {
-                if (GameSystem.SaboTask.Contains(task.TaskType))
+                if (task == null) { continue; }
+
+                TaskTypes taskType = task.TaskType;
+                if (ExtremeRolesPlugin.Compat.IsModMap)
+                {
+                    if (ExtremeRolesPlugin.Compat.ModMap.IsCustomSabotageTask(taskType))
+                    {
+                        sabotageActive = true;
+                        break;
+                    }
+                }
+
+                if (GameSystem.SaboTask.Contains(taskType))
                 {
                     sabotageActive = true;
                     break;

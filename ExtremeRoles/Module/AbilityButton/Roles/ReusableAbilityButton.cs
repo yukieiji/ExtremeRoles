@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 
+using ExtremeRoles.Performance;
+
 namespace ExtremeRoles.Module.AbilityButton.Roles
 {
     public class ReusableAbilityButton : RoleAbilityButtonBase
@@ -42,7 +44,9 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
             {
                 bool abilityOn = this.IsHasCleanUp() && IsAbilityOn;
 
-                if (abilityOn || (!PlayerControl.LocalPlayer.inVent && PlayerControl.LocalPlayer.moveable))
+                if (abilityOn || (
+                        !CachedPlayerControl.LocalPlayer.PlayerControl.inVent &&
+                        CachedPlayerControl.LocalPlayer.PlayerControl.moveable))
                 {
                     this.Timer -= Time.deltaTime;
                 }

@@ -29,8 +29,14 @@ namespace ExtremeRoles.Roles.API.Interface
             List<WinningPlayerData> winner,
             System.Collections.Generic.List<GameData.PlayerInfo> pulsWinner)
         {
-           
-            winner.Remove(new WinningPlayerData(playerInfo));
+            for(int index = 0; index < winner.Count; ++index)
+            {
+                if (winner[index].PlayerName == playerInfo.PlayerName)
+                {
+                    winner.RemoveAt(index);
+                    break;
+                }
+            }
             if (pulsWinner.Contains(playerInfo))
             {
                 pulsWinner.Remove(playerInfo);

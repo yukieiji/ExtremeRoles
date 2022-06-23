@@ -15,11 +15,12 @@ namespace ExtremeRoles.Module.InfoOverlay
         {
             Body = Object.Instantiate(
                 GameObject.Find("MenuButton"),
-                GameObject.Find("TopRight").transform);
+                GameObject.Find("TopRight/MenuButton").transform);
             Object.DontDestroyOnLoad(Body);
             Body.name = "infoRoleButton";
             Body.gameObject.SetActive(true);
             Body.layer = 5;
+            Body.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
             SetInfoButtonToGameStartShipPositon();
 
@@ -36,14 +37,14 @@ namespace ExtremeRoles.Module.InfoOverlay
         public static void SetInfoButtonToGameStartShipPositon()
         {
             Body.transform.localPosition = new Vector3(
-                4.925f, 2.0f, 0.0f);
+                0.0f, -0.825f, 0.0f);
         }
 
         public static void SetInfoButtonToInGamePositon()
         {
             Body.gameObject.SetActive(true);
             Body.transform.localPosition = new Vector3(
-                4.925f, 1.3f, 0.0f);
+                0.0f, -1.75f, 0.0f);
         }
 
         private static void toggleInfoOverlay()
