@@ -10,6 +10,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Patches.Manager
 {
@@ -121,7 +122,8 @@ namespace ExtremeRoles.Patches.Manager
             int crewNum = 0;
             int impNum = 0;
 
-            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
+            foreach (PlayerControl player in 
+                PlayerControl.AllPlayerControls.GetFastEnumerator())
             {
                 if (multiAssign)
                 {
@@ -434,7 +436,7 @@ namespace ExtremeRoles.Patches.Manager
             Logging.Debug($"Player:{player.name}  RoleId:{roleId}");
 
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.SetNormalRole,
                 new List<byte> { roleId, player.PlayerId });
             RPCOperator.SetNormalRole(
@@ -448,7 +450,7 @@ namespace ExtremeRoles.Patches.Manager
             Logging.Debug($"Player:{player.name}  RoleId:{roleId}");
 
             RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.SetCombinationRole,
                 new List<byte> { combType, roleId, player.PlayerId, gameId, bytedRoleType });
             RPCOperator.SetCombinationRole(
