@@ -11,6 +11,7 @@ namespace ExtremeRoles.Patches.MiniGame
             PlanetSurveillanceMinigame __instance,
             [HarmonyArgument(0)] int direction)
         {
+            if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
             if (Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity) { return true; }
 
             if (direction != 0 && Constants.ShouldPlaySfx())
