@@ -25,7 +25,7 @@ namespace ExtremeRoles.Patches.Manager
             RPCOperator.Call(netId, RPCOperator.Command.Initialize);
             RPCOperator.Initialize();
 
-            CachedPlayerControl[] playeres = CachedPlayerControl.AllPlayerControls.ToArray();
+            PlayerControl[] playeres = PlayerControl.AllPlayerControls.ToArray();
 
             RoleAssignmentData extremeRolesData = createRoleData();
             var playerIndexList = Enumerable.Range(0, playeres.Count()).ToList();
@@ -80,7 +80,7 @@ namespace ExtremeRoles.Patches.Manager
 
             List<int> needAnotherRoleAssigns = new List<int>();
 
-            CachedPlayerControl player = CachedPlayerControl.LocalPlayer;
+            PlayerControl player = CachedPlayerControl.LocalPlayer;
 
             foreach (var (roles, id) in assignMultiAssignRole)
             {
@@ -91,7 +91,7 @@ namespace ExtremeRoles.Patches.Manager
                         playerIndexList.OrderBy(item => RandomGenerator.Instance.Next()).ToList());
                     foreach (int playerIndex in tempList)
                     {
-                        player = CachedPlayerControl.AllPlayerControls[playerIndex];
+                        player = PlayerControl.AllPlayerControls[playerIndex];
                         assign = isAssignedToMultiRole(
                             role, player);
                         if (!assign) { continue; }
@@ -121,7 +121,7 @@ namespace ExtremeRoles.Patches.Manager
             int crewNum = 0;
             int impNum = 0;
 
-            foreach (CachedPlayerControl player in CachedPlayerControl.AllPlayerControls)
+            foreach (PlayerControl player in PlayerControl.AllPlayerControls)
             {
                 if (multiAssign)
                 {
@@ -322,7 +322,7 @@ namespace ExtremeRoles.Patches.Manager
                 assigned = false;
 
                 List<SingleRoleBase> shuffledRoles = new List<SingleRoleBase>();
-                CachedPlayerControl player = CachedPlayerControl.AllPlayerControls[index];
+                PlayerControl player = PlayerControl.AllPlayerControls[index];
                 RoleBehaviour roleData = player.Data.Role;
                 
                 Logging.Debug($"-------------------AssignToPlayer:{player.Data.PlayerName}-------------------");
