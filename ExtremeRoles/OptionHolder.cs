@@ -74,6 +74,10 @@ namespace ExtremeRoles
             IsAssignNeutralToVanillaCrewGhostRole,
             IsRemoveAngleIcon,
             IsBlockGAAbilityReport,
+
+            IsRemoveAirShipArchiveAdmin,
+            IsRemoveAirShipCockpitAdmin
+
         }
 
         public static Dictionary<int, CustomOptionBase> AllOption = new Dictionary<int, CustomOptionBase>();
@@ -102,6 +106,7 @@ namespace ExtremeRoles
             createExtremeRoleGlobalSpawnOption();
             createExtremeGhostRoleGlobalSpawnOption();
             createShipGlobalOption();
+            createMapOption();
 
             Roles.ExtremeRoleManager.CreateNormalRoleOptions(50);
 
@@ -144,6 +149,13 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.IsRemoveAngleIcon].GetValue();
             Ship.IsBlockGAAbilityReport = AllOption[
                 (int)CommonOptionKey.IsBlockGAAbilityReport].GetValue();
+
+
+            Map.IsRemoveAirShipCockpitAdmin = AllOption[
+                (int)CommonOptionKey.IsRemoveAirShipCockpitAdmin].GetValue();
+            Map.IsRemoveAirShipArchiveAdmin = AllOption[
+                (int)CommonOptionKey.IsRemoveAirShipArchiveAdmin].GetValue();
+
 
             Client.GhostsSeeRole = ConfigParser.GhostsSeeRoles.Value;
             Client.GhostsSeeTask = ConfigParser.GhostsSeeTasks.Value;
@@ -417,6 +429,19 @@ namespace ExtremeRoles
                 false);
         }
 
+        private static void createMapOption()
+        {
+            new BoolCustomOption(
+                (int)CommonOptionKey.IsRemoveAirShipCockpitAdmin,
+                CommonOptionKey.IsRemoveAirShipCockpitAdmin.ToString(),
+                false);
+            new BoolCustomOption(
+                (int)CommonOptionKey.IsRemoveAirShipArchiveAdmin,
+                CommonOptionKey.IsRemoveAirShipArchiveAdmin.ToString(),
+                false);
+        }
+
+
         public static class ConfigParser
         {
             public static ConfigEntry<string> StreamerModeReplacementText { get; set; }
@@ -455,6 +480,11 @@ namespace ExtremeRoles
             public static bool IsAssignNeutralToVanillaCrewGhostRole = true;
             public static bool IsRemoveAngleIcon = false;
             public static bool IsBlockGAAbilityReport = false;
+        }
+        public static class Map
+        {
+            public static bool IsRemoveAirShipCockpitAdmin = false;
+            public static bool IsRemoveAirShipArchiveAdmin = false;
         }
     }
 }
