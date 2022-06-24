@@ -459,7 +459,7 @@ namespace ExtremeRoles.Patches.Meeting
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.UpdateButtons))]
     class MeetingHudUpdateButtonsPatch
     {
-        public static bool PreFix(MeetingHud __instance)
+        public static bool Prefix(MeetingHud __instance)
         {
             if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return true; }
 
