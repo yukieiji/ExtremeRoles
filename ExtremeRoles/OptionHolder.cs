@@ -105,7 +105,6 @@ namespace ExtremeRoles
             createExtremeRoleGlobalSpawnOption();
             createExtremeGhostRoleGlobalSpawnOption();
             createShipGlobalOption();
-            createMapOption();
 
             Roles.ExtremeRoleManager.CreateNormalRoleOptions(50);
 
@@ -150,9 +149,9 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.IsBlockGAAbilityReport].GetValue();
 
 
-            Map.IsRemoveAirShipCockpitAdmin = AllOption[
+            Ship.IsRemoveAirShipCockpitAdmin = AllOption[
                 (int)CommonOptionKey.IsRemoveAirShipCockpitAdmin].GetValue();
-            Map.IsRemoveAirShipArchiveAdmin = AllOption[
+            Ship.IsRemoveAirShipArchiveAdmin = AllOption[
                 (int)CommonOptionKey.IsRemoveAirShipArchiveAdmin].GetValue();
 
 
@@ -466,10 +465,16 @@ namespace ExtremeRoles
             public static int MaxNumberOfMeeting = 100;
             public static bool AllowParallelMedBayScan = false;
             public static bool BlockSkippingInEmergencyMeeting = false;
+            
             public static bool DisableVent = false;
             public static bool EngineerUseImpostorVent = false;
             public static bool CanKillVentInPlayer = false;
+
+            public static bool IsRemoveAirShipCockpitAdmin = false;
+            public static bool IsRemoveAirShipArchiveAdmin = false;
+
             public static bool DisableSelfVote = false;
+
             public static bool DisableTaskWinWhenNoneTaskCrew = false;
             public static bool DisableTaskWin = false;
             public static bool IsSameNeutralSameWin = true;
@@ -478,11 +483,6 @@ namespace ExtremeRoles
             public static bool IsAssignNeutralToVanillaCrewGhostRole = true;
             public static bool IsRemoveAngleIcon = false;
             public static bool IsBlockGAAbilityReport = false;
-        }
-        public static class Map
-        {
-            public static bool IsRemoveAirShipCockpitAdmin = false;
-            public static bool IsRemoveAirShipArchiveAdmin = false;
         }
     }
 }
