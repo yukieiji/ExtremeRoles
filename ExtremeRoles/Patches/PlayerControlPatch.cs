@@ -1125,7 +1125,7 @@ namespace ExtremeRoles.Patches
                     FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(
                         __instance.Data, data);
                     FastDestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
-		            target.cosmetics.nameText.GetComponent<MeshRenderer>()?.material.SetInt("_Mask", 0);
+		            target.cosmetics.SetNameMask(false);
 		            target.RpcSetScanner(false);
 		            ImportantTextTask importantTextTask = new GameObject("_Player").AddComponent<ImportantTextTask>();
 		            importantTextTask.transform.SetParent(
@@ -1271,7 +1271,7 @@ namespace ExtremeRoles.Patches
                 FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(
                     instance.Data, target.Data);
                 FastDestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
-                target.cosmetics.nameText.GetComponent<MeshRenderer>()?.material.SetInt("_Mask", 0);
+                target.cosmetics.SetNameMask(false);
                 target.RpcSetScanner(false);
                 ImportantTextTask importantTextTask = new GameObject("_Player").AddComponent<ImportantTextTask>();
                 importantTextTask.transform.SetParent(
@@ -1425,9 +1425,7 @@ namespace ExtremeRoles.Patches
                 Action changeAction = () =>
                 {
                     changeOutfit();
-                    __instance.cosmetics.currentBodySprite.BodySprite.transform.localScale = __instance.defaultPlayerScale;
-                    __instance.cosmetics.normalBodySprite.BodySprite.transform.localScale = __instance.defaultPlayerScale;
-                    // __instance.MyPhysics.Skin.gameObject.transform.localScale = __instance.defaultPlayerScale;
+                    __instance.cosmetics.SetScale(__instance.defaultPlayerScale);
                 };
 
                 roleEffectAnimation.MidAnimCB = changeAction;
