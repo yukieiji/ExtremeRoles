@@ -123,7 +123,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
             if (!this.HasOtherKillRange)
             {
-                this.HasOtherKillCool = true;
+                this.HasOtherKillRange = true;
                 this.KillRange = PlayerControl.GameOptions.KillDistance;
             }
 
