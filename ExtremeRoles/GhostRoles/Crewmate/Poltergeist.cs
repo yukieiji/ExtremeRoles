@@ -128,7 +128,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
 
         protected override void UseAbility(MessageWriter writer)
         {
-            writer.Write(PlayerControl.LocalPlayer.PlayerId);
+            writer.Write(CachedPlayerControl.LocalPlayer.PlayerId);
             writer.Write(this.targetBody.PlayerId);
             writer.Write(true);
         }
@@ -142,10 +142,10 @@ namespace ExtremeRoles.GhostRoles.Crewmate
             if (CachedShipStatus.Instance == null ||
                 !CachedShipStatus.Instance.enabled) { return false; }
 
+            Vector2 truePosition = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+
             foreach (Collider2D collider2D in Physics2D.OverlapCircleAll(
-                CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition(),
-                this.range,
-                Constants.PlayersOnlyMask))
+                truePosition, this.range, Constants.PlayersOnlyMask))
             {
                 if (collider2D.tag == "DeadBody")
                 {
@@ -153,10 +153,9 @@ namespace ExtremeRoles.GhostRoles.Crewmate
 
                     if (component && !component.Reported && component.transform.parent == null)
                     {
-                        Vector2 truePosition = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
                         Vector2 truePosition2 = component.TruePosition;
                         if ((Vector2.Distance(truePosition2, truePosition) <= range) &&
-                            (PlayerControl.LocalPlayer.CanMove) &&
+                            (CachedPlayerControl.LocalPlayer.PlayerControl.CanMove) &&
                             (!PhysicsHelpers.AnythingBetween(
                                 truePosition, truePosition2,
                                 Constants.ShipAndObjectsMask, false)))
@@ -178,11 +177,11 @@ namespace ExtremeRoles.GhostRoles.Crewmate
         private void cleanUp()
         {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                    PlayerControl.LocalPlayer.NetId,
-                    (byte)RPCOperator.Command.UseGhostRoleAbility,
-                    Hazel.SendOption.Reliable, -1);
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                (byte)RPCOperator.Command.UseGhostRoleAbility,
+                Hazel.SendOption.Reliable, -1);
             writer.Write((byte)GhostRoleAbilityManager.AbilityType.PoltergeistMoveDeadbody);
-            writer.Write(PlayerControl.LocalPlayer.PlayerId);
+            writer.Write(CachedPlayerControl.LocalPlayer.PlayerId);
             writer.Write(byte.MinValue);
             writer.Write(false);
             AmongUsClient.Instance.FinishRpcImmediately(writer);

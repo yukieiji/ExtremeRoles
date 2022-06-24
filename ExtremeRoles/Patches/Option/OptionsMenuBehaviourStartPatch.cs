@@ -26,10 +26,6 @@ namespace ExtremeRoles.Patches.Option
 
         private static SelectionBehaviour[] modOption = {
             new SelectionBehaviour(
-                "streamerModeButton",
-                () => Client.StreamerMode = ConfigParser.StreamerMode.Value = !ConfigParser.StreamerMode.Value,
-                ConfigParser.StreamerMode.Value),
-            new SelectionBehaviour(
                 "ghostsSeeTasksButton",
                 () => Client.GhostsSeeTask = ConfigParser.GhostsSeeTasks.Value = !ConfigParser.GhostsSeeTasks.Value,
                 ConfigParser.GhostsSeeTasks.Value),
@@ -80,7 +76,7 @@ namespace ExtremeRoles.Patches.Option
 
             if (!popUp)
             {
-                createCustom(__instance);
+                createCustomMenu(__instance);
             }
 
             if (!buttonPrefab)
@@ -117,9 +113,10 @@ namespace ExtremeRoles.Patches.Option
 
         }
 
-        private static void createCustom(OptionsMenuBehaviour prefab)
+        private static void createCustomMenu(OptionsMenuBehaviour prefab)
         {
             popUp = Object.Instantiate(prefab.gameObject);
+            popUp.name = "modMenu";
             Object.DontDestroyOnLoad(popUp);
             var transform = popUp.transform;
             var pos = transform.localPosition;
@@ -183,7 +180,7 @@ namespace ExtremeRoles.Patches.Option
 
         private static void checkSetTitle()
         {
-            if (!popUp || popUp.GetComponentInChildren<TextMeshPro>() || !moreOptionText) { return; }
+            if (!popUp || !moreOptionText) { return; }
 
             var title = moreOptionText = Object.Instantiate(moreOptionText, popUp.transform);
             title.GetComponent<RectTransform>().localPosition = Vector3.up * 2.3f;

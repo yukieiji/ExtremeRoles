@@ -41,14 +41,17 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
                 SetActive(false);
                 return;
             }
-            SetActive(FastDestroyableSingleton<HudManager>.Instance.UseButton.isActiveAndEnabled);
+
+            var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+
+            SetActive(hudManager.UseButton.isActiveAndEnabled);
 
             this.Button.graphic.sprite = this.ButtonSprite;
             this.Button.OverrideText(ButtonText);
 
-            if (FastDestroyableSingleton<HudManager>.Instance.UseButton != null)
+            if (hudManager.UseButton != null)
             {
-                Vector3 pos = FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition;
+                Vector3 pos = hudManager.UseButton.transform.localPosition;
                 if (this.Mirror)
                 {
                     pos = new Vector3(-pos.x, pos.y, pos.z);

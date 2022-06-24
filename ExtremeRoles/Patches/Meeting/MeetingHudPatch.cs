@@ -49,13 +49,11 @@ namespace ExtremeRoles.Patches.Meeting
                 (CachedPlayerControl.LocalPlayer.Data.IsDead && OptionHolder.Client.GhostsSeeVote &&
                  !isVoteSeeBlock(role)))
             {
-                voterPlayer.Object.SetPlayerMaterialColors(spriteRenderer);
+                PlayerMaterial.SetColors(voterPlayer.DefaultOutfit.ColorId, spriteRenderer);
             }
             else
             {
-                // this is hot fiiiiix!!!!!!!!
-                spriteRenderer.material.SetColor("_BackColor", Palette.DisabledGrey);
-                spriteRenderer.material.SetColor("_BodyColor", Palette.DisabledGrey);
+                PlayerMaterial.SetColors(Palette.DisabledClear, spriteRenderer);
             }
 
             spriteRenderer.transform.SetParent(parent);
@@ -461,7 +459,7 @@ namespace ExtremeRoles.Patches.Meeting
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.UpdateButtons))]
     class MeetingHudUpdateButtonsPatch
     {
-        public static bool PreFix(MeetingHud __instance)
+        public static bool Prefix(MeetingHud __instance)
         {
             if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return true; }
 
