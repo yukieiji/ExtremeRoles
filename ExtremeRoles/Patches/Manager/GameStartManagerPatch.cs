@@ -271,7 +271,7 @@ namespace ExtremeRoles.Patches.Manager
                 text.GetComponent<RectTransform>().sizeDelta += new Vector2(7.5f, 2.5f);
                 if (button != null)
                 {
-                    button.transform.localPosition = new Vector3(0.0f, -0.85f, 0.0f);
+                    button.transform.localPosition = new Vector3(0.0f, -0.875f, 0.0f);
                 }
             }
             else
