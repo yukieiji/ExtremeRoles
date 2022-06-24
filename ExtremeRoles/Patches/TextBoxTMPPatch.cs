@@ -8,7 +8,7 @@ namespace ExtremeRoles.Patches
 		private static void Postfix(TextBoxTMP __instance)
 		{
 			bool flag = 
-				OptionHolder.Client.StreamerMode && 
+				SaveManager.StreamerMode && 
 					(__instance.name == "ipTextBox" || 
 					 __instance.name == "portTextBox");
 			if (flag)

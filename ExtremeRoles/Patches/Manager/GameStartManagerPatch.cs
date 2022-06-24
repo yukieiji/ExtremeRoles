@@ -24,8 +24,10 @@ namespace ExtremeRoles.Patches.Manager
 
         private static bool isVersionSent;
         private static bool update = false;
+
         private static string currentText = "";
-        private static string roomCodeText = string.Empty;
+        private static string originalString;
+        private static bool prevOptionValue;
 
 
         [HarmonyPrefix]
@@ -91,14 +93,14 @@ namespace ExtremeRoles.Patches.Manager
         public static void StartPrefix(GameStartManager __instance)
         {
             // ロビーコードコピー
-            string code = InnerNet.GameCode.IntToGameName(AmongUsClient.Instance.GameId);
-            GUIUtility.systemCopyBuffer = code;
+            GUIUtility.systemCopyBuffer = InnerNet.GameCode.IntToGameName(
+                AmongUsClient.Instance.GameId);
 
             isVersionSent = false;
-            roomCodeText = code;
             timer = timerMaxValue;
             kickingTimer = 0f;
             isCustomServer = FastDestroyableSingleton<ServerManager>.Instance.CurrentRegion.Name == "custom";
+            prevOptionValue = SaveManager.StreamerMode;
 
             // 値リセット
             RPCOperator.Initialize();
@@ -112,6 +114,12 @@ namespace ExtremeRoles.Patches.Manager
             {
                 Module.Prefab.Arrow = __instance.StartButton.sprite;
             }
+
+            originalString = __instance.GameRoomNameInfo.text;
+            updateText(
+                __instance.GameRoomNameInfo,
+                SaveManager.StreamerMode);
+
         }
 
         [HarmonyPrefix]
@@ -133,16 +141,18 @@ namespace ExtremeRoles.Patches.Manager
             }
 
             // ルームコード設定
-            /*
-            if (OptionHolder.Client.StreamerMode)
+
+            bool isStreamerMode = SaveManager.StreamerMode;
+
+            if (isStreamerMode != prevOptionValue)
             {
-                __instance.GameRoomNameCode.text = OptionHolder.ConfigParser.StreamerModeReplacementText.Value;
+
+                prevOptionValue = isStreamerMode;
+
+                updateText(
+                    __instance.GameRoomNameInfo,
+                    isStreamerMode);
             }
-            else
-            {
-                __instance.GameRoomNameCode.text = roomCodeText;
-            }
-            */
 
             // Instanceミス
             if (!GameData.Instance) { return; }
@@ -251,6 +261,28 @@ namespace ExtremeRoles.Patches.Manager
             }
         }
 
+        private static void updateText(
+            TMPro.TextMeshPro text, bool isStreamerMode)
+        {
+            var button = GameObject.Find("Main Camera/Hud/GameStartManager/GameRoomButton");
+            if (isStreamerMode)
+            {
+                text.text += $"<size=150%>{OptionHolder.ConfigParser.StreamerModeReplacementText.Value}<size=150%>";
+                text.GetComponent<RectTransform>().sizeDelta += new Vector2(7.5f, 2.5f);
+                if (button != null)
+                {
+                    button.transform.localPosition = new Vector3(0.0f, -0.85f, 0.0f);
+                }
+            }
+            else
+            {
+                text.text = originalString;
+                if (button != null)
+                {
+                    button.transform.localPosition = new Vector3(0.0f, -0.958f, 0.0f);
+                }
+            }
+        }
     }
 
     [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.SetStartCounter))]
