@@ -64,7 +64,10 @@ namespace ExtremeRoles
             EngineerUseImpostorVent,
             CanKillVentInPlayer,
             ParallelMedBayScans,
+            IsRemoveAirShipArchiveAdmin,
+            IsRemoveAirShipCockpitAdmin,
             RandomMap,
+            
             DisableTaskWinWhenNoneTaskCrew,
             DisableTaskWin,
             IsSameNeutralSameWin,
@@ -74,10 +77,6 @@ namespace ExtremeRoles
             IsAssignNeutralToVanillaCrewGhostRole,
             IsRemoveAngleIcon,
             IsBlockGAAbilityReport,
-
-            IsRemoveAirShipArchiveAdmin,
-            IsRemoveAirShipCockpitAdmin
-
         }
 
         public static Dictionary<int, CustomOptionBase> AllOption = new Dictionary<int, CustomOptionBase>();
@@ -385,6 +384,17 @@ namespace ExtremeRoles
             new BoolCustomOption(
                 (int)CommonOptionKey.ParallelMedBayScans,
                 CommonOptionKey.ParallelMedBayScans.ToString(), false);
+
+            new BoolCustomOption(
+                (int)CommonOptionKey.IsRemoveAirShipCockpitAdmin,
+                CommonOptionKey.IsRemoveAirShipCockpitAdmin.ToString(),
+                false);
+            new BoolCustomOption(
+                (int)CommonOptionKey.IsRemoveAirShipArchiveAdmin,
+                CommonOptionKey.IsRemoveAirShipArchiveAdmin.ToString(),
+                false);
+
+
             new BoolCustomOption(
                 (int)CommonOptionKey.RandomMap,
                 CommonOptionKey.RandomMap.ToString(), false);
@@ -426,18 +436,6 @@ namespace ExtremeRoles
             new BoolCustomOption(
                 (int)CommonOptionKey.IsBlockGAAbilityReport,
                 CommonOptionKey.IsBlockGAAbilityReport.ToString(),
-                false);
-        }
-
-        private static void createMapOption()
-        {
-            new BoolCustomOption(
-                (int)CommonOptionKey.IsRemoveAirShipCockpitAdmin,
-                CommonOptionKey.IsRemoveAirShipCockpitAdmin.ToString(),
-                false);
-            new BoolCustomOption(
-                (int)CommonOptionKey.IsRemoveAirShipArchiveAdmin,
-                CommonOptionKey.IsRemoveAirShipArchiveAdmin.ToString(),
                 false);
         }
 
