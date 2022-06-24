@@ -26,10 +26,6 @@ namespace ExtremeRoles.Patches.Option
 
         private static SelectionBehaviour[] modOption = {
             new SelectionBehaviour(
-                "streamerModeButton",
-                () => Client.StreamerMode = ConfigParser.StreamerMode.Value = !ConfigParser.StreamerMode.Value,
-                ConfigParser.StreamerMode.Value),
-            new SelectionBehaviour(
                 "ghostsSeeTasksButton",
                 () => Client.GhostsSeeTask = ConfigParser.GhostsSeeTasks.Value = !ConfigParser.GhostsSeeTasks.Value,
                 ConfigParser.GhostsSeeTasks.Value),

@@ -145,7 +145,6 @@ namespace ExtremeRoles
             Ship.IsBlockGAAbilityReport = AllOption[
                 (int)CommonOptionKey.IsBlockGAAbilityReport].GetValue();
 
-            Client.StreamerMode = ConfigParser.StreamerMode.Value;
             Client.GhostsSeeRole = ConfigParser.GhostsSeeRoles.Value;
             Client.GhostsSeeTask = ConfigParser.GhostsSeeTasks.Value;
             Client.GhostsSeeVote = ConfigParser.GhostsSeeVotes.Value;
@@ -245,8 +244,6 @@ namespace ExtremeRoles
         {
             var config = ExtremeRolesPlugin.Instance.Config;
 
-            ConfigParser.StreamerMode = config.Bind(
-                "ClientOption", "StreamerMode", false);
             ConfigParser.GhostsSeeTasks = config.Bind(
                 "ClientOption", "GhostCanSeeRemainingTasks", true);
             ConfigParser.GhostsSeeRoles = config.Bind(
@@ -261,7 +258,7 @@ namespace ExtremeRoles
             ConfigParser.StreamerModeReplacementText = config.Bind(
                 "ClientOption",
                 "ReplacementRoomCodeText",
-                "\n\nPlaying with Extreme Roles");
+                "\nPlaying with Extreme Roles");
 
             ConfigParser.Ip = config.Bind(
                 "ClientOption", "CustomServerIP", "127.0.0.1");
@@ -422,13 +419,12 @@ namespace ExtremeRoles
 
         public static class ConfigParser
         {
+            public static ConfigEntry<string> StreamerModeReplacementText { get; set; }
             public static ConfigEntry<bool> GhostsSeeTasks { get; set; }
             public static ConfigEntry<bool> GhostsSeeRoles { get; set; }
             public static ConfigEntry<bool> GhostsSeeVotes { get; set; }
             public static ConfigEntry<bool> ShowRoleSummary { get; set; }
-            public static ConfigEntry<bool> StreamerMode { get; set; }
             public static ConfigEntry<bool> HideNamePlate { get; set; }
-            public static ConfigEntry<string> StreamerModeReplacementText { get; set; }
             public static ConfigEntry<string> Ip { get; set; }
             public static ConfigEntry<ushort> Port { get; set; }
         }
@@ -439,7 +435,6 @@ namespace ExtremeRoles
             public static bool GhostsSeeTask = true;
             public static bool GhostsSeeVote = true;
             public static bool ShowRoleSummary = true;
-            public static bool StreamerMode = false;
             public static bool HideNamePlate = false;
         }
 
