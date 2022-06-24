@@ -595,7 +595,7 @@ namespace ExtremeRoles.Patches
                         player.SetKillTimer(player.killTimer - Time.fixedDeltaTime);
                     }
 
-                    PlayerControl target = player.Data.Role.FindClosestTarget();
+                    PlayerControl target = Player.GetClosestKillRangePlayer();
 
                     // Logging.Debug($"TargetAlive?:{target}");
 

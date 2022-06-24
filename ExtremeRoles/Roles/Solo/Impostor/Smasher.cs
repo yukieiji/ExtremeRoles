@@ -49,7 +49,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public bool IsAbilityUse()
         {
             this.targetPlayerId = byte.MaxValue;
-            var player = CachedPlayerControl.LocalPlayer.Data.Role.FindClosestTarget();
+            var player = Player.GetClosestKillRangePlayer();
             if (player != null)
             {
                 this.targetPlayerId = player.PlayerId;

@@ -37,6 +37,30 @@ namespace ExtremeRoles.Helper
             return null;
         }
 
+        public static PlayerControl GetClosestKillRangePlayer()
+        {
+            var playersInAbilityRangeSorted = 
+                CachedPlayerControl.LocalPlayer.Data.Role.GetPlayersInAbilityRangeSorted(
+                    RoleBehaviour.GetTempPlayerList());
+            if (playersInAbilityRangeSorted.Count <= 0)
+            {
+                return null;
+            }
+            return playersInAbilityRangeSorted[0];
+        }
+
+        public static PlayerControl GetClosestKillRangePlayer(PlayerControl player)
+        {
+            var playersInAbilityRangeSorted =
+                player.Data.Role.GetPlayersInAbilityRangeSorted(
+                    RoleBehaviour.GetTempPlayerList());
+            if (playersInAbilityRangeSorted.Count <= 0)
+            {
+                return null;
+            }
+            return playersInAbilityRangeSorted[0];
+        }
+
         public static PlayerControl GetPlayerTarget(
             PlayerControl sourcePlayer,
             Roles.API.SingleRoleBase role,
