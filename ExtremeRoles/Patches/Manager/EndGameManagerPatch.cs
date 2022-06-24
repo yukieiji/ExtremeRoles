@@ -280,6 +280,12 @@ namespace ExtremeRoles.Patches.Manager
                     textRenderer.color = ColorPalette.JackalBlue;
                     manager.BackgroundBar.material.SetColor("_Color", ColorPalette.JackalBlue);
                     break;
+                case (GameOverReason)RoleGameOverReason.TaskMasterGoHome:
+                    bonusText = Translation.GetString(
+                        ExtremeRoleId.TaskMaster.ToString());
+                    textRenderer.color = ColorPalette.NeutralColor;
+                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.NeutralColor);
+                    break;
                 case (GameOverReason)RoleGameOverReason.MissionaryAllAgainstGod:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Missionary.ToString());
