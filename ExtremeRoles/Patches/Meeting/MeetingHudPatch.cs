@@ -53,7 +53,7 @@ namespace ExtremeRoles.Patches.Meeting
             }
             else
             {
-                PlayerMaterial.SetColors(Palette.DisabledClear, spriteRenderer);
+                PlayerMaterial.SetColors(Palette.DisabledGrey, spriteRenderer);
             }
 
             spriteRenderer.transform.SetParent(parent);
