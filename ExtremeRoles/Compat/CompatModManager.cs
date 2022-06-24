@@ -28,12 +28,12 @@ namespace ExtremeRoles.Compat
 
         public static readonly Dictionary<CompatModType, (string, string)> ModInfo = new Dictionary<CompatModType, (string, string)>
         {
-            // { CompatModType.Submerged, ("Submerged", "https://api.github.com/repos/SubmergedAmongUs/Submerged/releases/latest") },
+            { CompatModType.Submerged, ("Submerged", "https://api.github.com/repos/SubmergedAmongUs/Submerged/releases/latest") },
         };
 
         private static HashSet<(string, CompatModType, Type)> compatMod = new HashSet<(string, CompatModType, Type)>()
         {
-            // (SubmergedMap.Guid, CompatModType.Submerged, typeof(SubmergedMap)),
+            (SubmergedMap.Guid, CompatModType.Submerged, typeof(SubmergedMap)),
         };
 
         internal CompatModManager()
