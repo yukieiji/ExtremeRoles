@@ -16,7 +16,7 @@ namespace ExtremeRoles.Patches.Role
 
             if (!role.CanKill || !role.HasOtherKillRange) { return true; }
 
-            __result = role.KillRange;
+            __result = GameOptionsData.KillDistances[role.KillRange];
 
             return false;
         }
