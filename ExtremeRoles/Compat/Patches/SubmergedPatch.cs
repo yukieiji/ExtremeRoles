@@ -40,7 +40,11 @@ namespace ExtremeRoles.Compat.Patches
             ExtremeRoles.Patches.Controller.ExileControllerReEnableGameplayPatch.ReEnablePostfix();
             ExtremeRoles.Patches.Controller.ExileControllerWrapUpPatch.WrapUpPostfix(
                 __instance.exiled);
-            HudManagerUpdatePatchPostfixPatch.ButtonTriggerReset();
+            
+            if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
+            {
+                HudManagerUpdatePatchPostfixPatch.ButtonTriggerReset();
+            }
         }
     }
 
