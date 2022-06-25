@@ -40,6 +40,11 @@ namespace ExtremeRoles.Compat.Patches
             ExtremeRoles.Patches.Controller.ExileControllerReEnableGameplayPatch.ReEnablePostfix();
             ExtremeRoles.Patches.Controller.ExileControllerWrapUpPatch.WrapUpPostfix(
                 __instance.exiled);
+            
+            if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
+            {
+                HudManagerUpdatePatchPostfixPatch.ButtonTriggerReset();
+            }
         }
     }
 
@@ -146,7 +151,7 @@ namespace ExtremeRoles.Compat.Patches
                 !playersWithMask.Contains(CachedPlayerControl.LocalPlayer.PlayerId))
             {
                 submergedMod.RepairCustomSabotage(
-                        submergedMod.RetrieveOxygenMask);
+                    submergedMod.RetrieveOxygenMask);
             }
         }
         public static void SetType(System.Type type)
