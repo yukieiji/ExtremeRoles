@@ -286,15 +286,6 @@ namespace ExtremeRoles.Patches.Manager
             }
         }
     }
-    [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.UpdateStreamerModeUI))]
-    public static class GameStartManagerUpdateStreamerModeUIPatch
-    {
-        public static void Postfix(GameStartManager __instance)
-        {
-            
-        }
-    }
-
 
     [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.SetStartCounter))]
     public static class GameStartManagerSetStartCounterPatch
