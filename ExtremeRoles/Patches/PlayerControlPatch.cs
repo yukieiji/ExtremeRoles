@@ -1339,27 +1339,6 @@ namespace ExtremeRoles.Patches
 
         }
     }
-    [HarmonyPatch(
-        typeof(PlayerControl),
-        nameof(PlayerControl.SetPet),
-        new Type[]
-        {
-            typeof(string),
-        })]
-    public class PlayerControlSetPetPatch
-    {
-        public static bool Prefix(
-            PlayerControl __instance,
-            [HarmonyArgument(0)] string petId)
-        {
-            if (__instance.Data != null && __instance.Data.DefaultOutfit != null)
-            { 
-                return true;
-            }
-            return true;
-        }
-    }
-
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Shapeshift))]
     public class PlayerControlShapeshiftPatch

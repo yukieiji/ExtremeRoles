@@ -117,7 +117,70 @@ namespace ExtremeRoles.Patches
             IntroCutscenceHelper.SetupRole();
         }
     }
-    
+    [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CoBegin))]
+    class IntroCutsceneCoBeginPatch
+    {
+       
+        private static IEnumerator coBeginPatch(
+            IntroCutscene instance)
+        {
+            // バニラの役職アサイン後すぐこの処理が走るので全員の役職が入るまで待機
+            while (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd())
+            {
+                yield return null;
+            }
+
+            SoundManager.Instance.PlaySound(instance.IntroStinger, false, 1f);
+            if (PlayerControl.GameOptions.gameType == GameType.Normal)
+            {
+
+                bool roleFillter(GameData.PlayerInfo pcd)
+                {
+                    return !CachedPlayerControl.LocalPlayer.Data.Role.IsImpostor ||
+                        pcd.Role.TeamType == CachedPlayerControl.LocalPlayer.Data.Role.TeamType;
+                }
+
+                Il2CppSystem.Collections.Generic.List<PlayerControl> teamToShow = IntroCutscene.SelectTeamToShow(
+                    (Il2CppSystem.Func<GameData.PlayerInfo, bool>)roleFillter);
+                
+                if (CachedPlayerControl.LocalPlayer.Data.Role.IsImpostor)
+                {
+                    instance.ImpostorText.gameObject.SetActive(false);
+                }
+                else
+                {
+                    int adjustedNumImpostors = PlayerControl.GameOptions.GetAdjustedNumImpostors(
+                        GameData.Instance.PlayerCount);
+                    if (adjustedNumImpostors == 1)
+                    {
+                        instance.ImpostorText.text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                            StringNames.NumImpostorsS, System.Array.Empty<Il2CppSystem.Object>());
+                    }
+                    else
+                    {
+                        instance.ImpostorText.text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                            StringNames.NumImpostorsP, new Il2CppSystem.Object[]
+                            {
+                                adjustedNumImpostors.ToString()
+                            });
+                    }
+                    instance.ImpostorText.text = instance.ImpostorText.text.Replace("[FF1919FF]", "<color=#FF1919FF>");
+                    instance.ImpostorText.text = instance.ImpostorText.text.Replace("[]", "</color>");
+                }
+                yield return instance.ShowTeam(teamToShow);
+                yield return instance.ShowRole();
+            }
+            Object.Destroy(instance.gameObject);
+            yield break;
+        }
+        public static bool Prefix(
+            IntroCutscene __instance, ref Il2CppSystem.Collections.IEnumerator __result)
+        {
+            __result = coBeginPatch(__instance).WrapToIl2Cpp();
+            return false;
+        }
+    }
+
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.ShowRole))]
     class IntroCutsceneSetUpRoleTextPatch
     {
