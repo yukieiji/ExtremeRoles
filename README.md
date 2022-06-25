@@ -71,8 +71,6 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 - なし
 
 ## リリーススケジュール
-- Extreme Roles v3.1.0.0
-  - AmongUs v2022.06.21完全対応リリース
 - Extreme Roles v3.2.0.0
   - 7月末から8月頭にリリース予定
   - Extreme Roles夏の中型アップデート「ニュートラル」
