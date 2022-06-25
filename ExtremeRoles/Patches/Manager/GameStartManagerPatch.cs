@@ -26,8 +26,8 @@ namespace ExtremeRoles.Patches.Manager
         private static bool update = false;
 
         private static string currentText = "";
-        private static string originalString;
         private static bool prevOptionValue;
+        private static TMPro.TextMeshPro customShowText;
 
 
         [HarmonyPrefix]
@@ -114,12 +114,7 @@ namespace ExtremeRoles.Patches.Manager
             {
                 Module.Prefab.Arrow = __instance.StartButton.sprite;
             }
-
-            originalString = __instance.GameRoomNameInfo.text;
-            updateText(
-                __instance.GameRoomNameInfo,
-                SaveManager.StreamerMode);
-
+            updateText(__instance, SaveManager.StreamerMode);
         }
 
         [HarmonyPrefix]
@@ -146,12 +141,8 @@ namespace ExtremeRoles.Patches.Manager
 
             if (isStreamerMode != prevOptionValue)
             {
-
                 prevOptionValue = isStreamerMode;
-
-                updateText(
-                    __instance.GameRoomNameInfo,
-                    isStreamerMode);
+                updateText(__instance, isStreamerMode);
             }
 
             // Instanceミス
@@ -262,28 +253,48 @@ namespace ExtremeRoles.Patches.Manager
         }
 
         private static void updateText(
-            TMPro.TextMeshPro text, bool isStreamerMode)
+            GameStartManager instance,
+            bool isStreamerMode)
         {
             var button = GameObject.Find("Main Camera/Hud/GameStartManager/GameRoomButton");
+            if (button == null) { return; }
+
+            var info = button.transform.FindChild("GameRoomInfo_TMP");
+            if (info == null) { return; }
+
+            if (customShowText == null)
+            {
+                customShowText = Object.Instantiate(
+                    instance.GameStartText, button.transform);
+                customShowText.name = "StreamerModeCustomMessage";
+                customShowText.transform.localPosition = new Vector3(0.0f, -0.32f, 0.0f);
+                customShowText.text = $"<size=60%>{OptionHolder.ConfigParser.StreamerModeReplacementText.Value}</size>";
+                customShowText.gameObject.SetActive(false);
+            }
+
             if (isStreamerMode)
             {
-                text.text += $"<size=150%>{OptionHolder.ConfigParser.StreamerModeReplacementText.Value}<size=150%>";
-                text.GetComponent<RectTransform>().sizeDelta += new Vector2(7.5f, 2.5f);
-                if (button != null)
-                {
-                    button.transform.localPosition = new Vector3(0.0f, -0.875f, 0.0f);
-                }
+                button.transform.localPosition = new Vector3(0.0f, -0.85f, 0.0f);
+                info.localPosition = new Vector3(0.0f, -0.08f, 0.0f);
+                customShowText.gameObject.SetActive(true);
             }
             else
             {
-                text.text = originalString;
-                if (button != null)
-                {
-                    button.transform.localPosition = new Vector3(0.0f, -0.958f, 0.0f);
-                }
+                button.transform.localPosition = new Vector3(0.0f, -0.958f, 0.0f);
+                info.localPosition = new Vector3(0.0f, -0.229f, 0.0f);
+                customShowText.gameObject.SetActive(false);
             }
         }
     }
+    [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.UpdateStreamerModeUI))]
+    public static class GameStartManagerUpdateStreamerModeUIPatch
+    {
+        public static void Postfix(GameStartManager __instance)
+        {
+            
+        }
+    }
+
 
     [HarmonyPatch(typeof(GameStartManager), nameof(GameStartManager.SetStartCounter))]
     public static class GameStartManagerSetStartCounterPatch
