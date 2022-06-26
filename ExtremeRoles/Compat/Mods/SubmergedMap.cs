@@ -198,7 +198,8 @@ namespace ExtremeRoles.Compat.Mods
                         return false; 
                     }
                     return true;
-                case 14: // Lower Central
+                case 0:
+                case 14: // Lower and Upper Central
                     return true;
                 default:
                     return false;
@@ -214,7 +215,8 @@ namespace ExtremeRoles.Compat.Mods
             }
             switch (vent.Id)
             {
-                case 14: // Lower Central
+                case 0:
+                case 14: // Lower and Upper Central
                     float result = float.MaxValue;
                     bool couldUse = isVentUse && !player.IsDead && (player.Object.CanMove || player.Object.inVent);
                     bool canUse = couldUse;
