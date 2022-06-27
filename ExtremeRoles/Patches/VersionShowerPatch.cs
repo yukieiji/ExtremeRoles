@@ -27,13 +27,37 @@ namespace ExtremeRoles.Patches
 
             var credentials = Object.Instantiate(
                 modTitle, modTitle.transform);
-            credentials.transform.localPosition = new Vector3(0, -0.5f, 0);
-            credentials.transform.localScale = new Vector3(0.9f, 0.9f, 1.0f);
             credentials.SetText(
                 string.Concat(
                     Helper.Translation.GetString("developer"),"yukieiji"));
             credentials.alignment = TMPro.TextAlignmentOptions.Center;
             credentials.fontSize *= 0.85f;
+
+            var translator = Object.Instantiate(
+                    credentials, credentials.transform);
+            translator.transform.localPosition = new Vector3(0, -0.35f, 0);
+            translator.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+
+            if ((SupportedLangs)SaveManager.LastLanguage != SupportedLangs.Japanese)
+            {
+                translator.gameObject.SetActive(true);
+                translator.SetText(
+                    string.Concat(
+                        Helper.Translation.GetString("translator"),
+                        Helper.Translation.GetString("translatorMember")));
+                translator.alignment = TMPro.TextAlignmentOptions.Center;
+                translator.fontSize *= 0.85f;
+
+                credentials.transform.localPosition = new Vector3(0, -0.4f, 0);
+                credentials.transform.localScale = new Vector3(0.8f, 0.8f, 1.0f);
+            }
+            else
+            {
+                credentials.transform.localPosition = new Vector3(0, -0.5f, 0);
+                credentials.transform.localScale = new Vector3(0.9f, 0.9f, 1.0f);
+                translator.gameObject.SetActive(false);
+            }
+
         }
     }
 }
