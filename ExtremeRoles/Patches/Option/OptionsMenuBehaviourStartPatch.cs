@@ -94,23 +94,30 @@ namespace ExtremeRoles.Patches.Option
 
         public static void UpdateMenuTranslation()
         {
-            if (moreOptionText)
+            if (moreOptionText != null)
             {
                 moreOptionText.text = Helper.Translation.GetString("moreOptionText");
             }
-            if (moreOptionButton)
+            if (moreOptionButton != null)
             {
                 moreOptionButton.Text.text = Helper.Translation.GetString("modOptionText");
             }
-            for (int i = 0; i < modOption.Length; i++)
+            if (modOptionButton != null)
             {
-                if (i >= modOptionButton.Count) { break; }
-                modOptionButton[i].Text.text = Helper.Translation.GetString(modOption[i].Title);
+                for (int i = 0; i < modOption.Length; i++)
+                {
+                    if (i >= modOptionButton.Count || modOptionButton[i] == null) { break; }
+                    modOptionButton[i].Text.text = Helper.Translation.GetString(modOption[i].Title);
+                }
             }
-
-            importButton.Text.text = Helper.Translation.GetString("csvImport");
-            exportButton.Text.text = Helper.Translation.GetString("csvExport");
-
+            if (importButton != null)
+            {
+                importButton.Text.text = Helper.Translation.GetString("csvImport");
+            }
+            if (exportButton != null)
+            {
+                exportButton.Text.text = Helper.Translation.GetString("csvExport");
+            }
         }
 
         private static void createCustomMenu(OptionsMenuBehaviour prefab)
