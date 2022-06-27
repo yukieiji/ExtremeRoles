@@ -22,6 +22,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
         public DeadBody CarringBody;
 
         private float range;
+        private bool isAbilityReport;
         private GameData.PlayerInfo targetBody;
 
         public Poltergeist() : base(
@@ -103,6 +104,8 @@ namespace ExtremeRoles.GhostRoles.Crewmate
         {
             this.range = OptionHolder.AllOption[
                 GetRoleOptionId(Option.Range)].GetValue();
+            this.isAbilityReport = OptionHolder.AllOption[
+                this.GetRoleOptionId(GhostRoleOption.IsReportAbility)].GetValue();
         }
 
         public override void ReseOnMeetingEnd()
@@ -180,7 +183,8 @@ namespace ExtremeRoles.GhostRoles.Crewmate
                 CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 (byte)RPCOperator.Command.UseGhostRoleAbility,
                 Hazel.SendOption.Reliable, -1);
-            writer.Write((byte)GhostRoleAbilityManager.AbilityType.PoltergeistMoveDeadbody);
+            writer.Write((byte)GhostRoleAbilityManager.AbilityType.PoltergeistMoveDeadbody); // アビリティタイプ
+            writer.Write(this.isAbilityReport); // 報告できるかどうか
             writer.Write(CachedPlayerControl.LocalPlayer.PlayerId);
             writer.Write(byte.MinValue);
             writer.Write(false);
