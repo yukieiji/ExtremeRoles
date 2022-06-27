@@ -15,9 +15,9 @@ AmongUsの上級者(初心者)向けのロール追加MOD、主な特徴とし�
 * MODオプションのインポート/エクスポート機能
 * MODの更新/バージョンチェック機能
 * 互換性のあるMODのインストール/アップデートチェック/アンインストール機能
-* 多言語対応(現在は日本語のみ/only Japanese now!!)
+* 多言語対応(現在は日本語と简体中文のみ/only Japanese and SChinese now!!)
 
-## 追加役職一覧(Extreme Roles v3.1.0.0時点、今後も追加予定)
+## 追加役職一覧(Extreme Roles v3.1.1.0時点、今後も追加予定)
 #### 通常役職
 |  クルー  |  インポスター  | ニュートラル |
 | ---- | ---- | ---- |
@@ -71,9 +71,6 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 - なし
 
 ## リリーススケジュール
-- Extreme Roles v3.1.1.0:
-  - 今週中
-  - 中国語対応アップデート(現在最終翻訳確認中)
 - Extreme Roles v3.2.0.0
   - 7月末から8月頭にリリース予定
   - Extreme Roles夏の中型アップデート「ニュートラル」
@@ -112,7 +109,7 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 
 |  AmongUs バージョン  |  Extreme Roles バージョン  |
 | ---- | ---- |
-|  v2022.06.21s/v2022.06.22e  |  v3.0.0.0 ～ v3.1.0.0 |
+|  v2022.06.21s/v2022.06.22e  |  v3.0.0.0 ～ v3.1.1.0 |
 |  v2022.03.29s/v2022.03.29e/v2022.04.19e  |  v2.0.5.0 ～ v2.2.0.2 |
 |  v2022.03.29s/v2022.03.29e  |  v1.99.90.0 ～ v2.0.4.0 |
 |  v2021.12.15s/v2022.02.08s/v2022.02.23s/v2022.02.24s/v2021.12.15e/v2022.02.24e  |  v1.18.2.0 ～ v1.19.0.0 |
@@ -138,5 +135,11 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 ボタンのアイコン画像はパブリックドメインの著作権が放棄された素材を元に作成しています。気に食わなくて差し替えたい場合は連絡を下さい
 
 ### 多言語対応について
-多言語対応は出来ますが、実装速度優先で開発しているため日本語だけしか実装されていません。別の言語に翻訳したいもしくは翻訳したという方は連絡を下さい<br>
+多言語対応は出来ますが、実装速度優先で開発しているため日本語が優先的に実装。別の言語に翻訳したいもしくは翻訳したという方は連絡を下さい<br>
 EXRole can support multiple languages, but only Japanese is implemented because I prioritize the speed of implementation. Please contact me if you would like to translate into another language or if you have translated into another language.
+
+- 言語対応状況
+|  言語名/Languages  |  対応状況/Status |
+| ---- | ---- |
+|  日本語/Japanese  |  完全翻訳済み/Fully Translated  |
+|  简体中文/SChinese  |  完全翻訳済み/Fully Translated  |
