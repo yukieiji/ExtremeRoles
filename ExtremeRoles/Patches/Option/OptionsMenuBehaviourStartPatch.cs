@@ -214,15 +214,27 @@ namespace ExtremeRoles.Patches.Option
                 Assembly.GetExecutingAssembly().GetName().Version);
             string developCredit = $"\n<align=left>{Helper.Translation.GetString("developer")}yukieiji";
             string debugCredit = $"\n<align=left>{Helper.Translation.GetString("debugThunk")}stou59，Tyoubi，mamePi";
+            string showText = string.Concat(modCredit, developCredit, debugCredit);
 
-            creditText.transform.localPosition = new Vector3(0.0f, -2.0f, -.5f);
             creditText.fontSizeMin = creditText.fontSizeMax = 3.0f;
             creditText.font = Object.Instantiate(moreOptionText.font);
             creditText.GetComponent<RectTransform>().sizeDelta = new Vector2(5.4f, 5.5f);
-            creditText.text = string.Concat(
-                modCredit, developCredit, debugCredit);
             creditText.gameObject.SetActive(true);
 
+            if ((SupportedLangs)SaveManager.LastLanguage != SupportedLangs.Japanese)
+            {
+                creditText.transform.localPosition = new Vector3(0.0f, -1.895f, -.5f);
+                showText = string.Concat(
+                    showText,
+                    $"\n<align=left>{Helper.Translation.GetString("langTranslate")}",
+                    Helper.Translation.GetString("translatorMember"));
+            }
+            else
+            {
+                creditText.transform.localPosition = new Vector3(0.0f, -2.0f, -.5f);
+            }
+
+            creditText.text = showText;
         }
 
         private static void createModOption()

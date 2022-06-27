@@ -43,7 +43,7 @@ namespace ExtremeRoles.Patches
                 translator.gameObject.SetActive(true);
                 translator.SetText(
                     string.Concat(
-                        Helper.Translation.GetString("translator"),
+                        Helper.Translation.GetString("langTranslate"),
                         Helper.Translation.GetString("translatorMember")));
                 translator.alignment = TMPro.TextAlignmentOptions.Center;
                 translator.fontSize *= 0.85f;
