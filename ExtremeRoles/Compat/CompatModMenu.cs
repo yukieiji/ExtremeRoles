@@ -50,6 +50,7 @@ namespace ExtremeRoles.Compat
 
         public static void UpdateTranslation()
         {
+            if (menuBody == null) { return; }
 
             TextMeshPro title = menuBody.GetComponent<TextMeshPro>();
             title.text = Helper.Translation.GetString(titleName);
