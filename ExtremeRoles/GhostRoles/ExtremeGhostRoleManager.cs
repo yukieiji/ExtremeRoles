@@ -425,7 +425,10 @@ namespace ExtremeRoles.GhostRoles
             if (vanillaGhostRole.Contains(roleType) &&
                 ghostRoleId == ExtremeGhostRoleId.VanillaRole)
             {
-                GameRole[playerId] = new VanillaGhostRoleWrapper(roleType);
+                lock (GameRole)
+                {
+                    GameRole[playerId] = new VanillaGhostRoleWrapper(roleType);
+                }
                 return;
             }
 
