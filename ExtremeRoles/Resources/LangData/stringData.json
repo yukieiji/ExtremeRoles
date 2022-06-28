@@ -1680,7 +1680,7 @@
     },
     "SpecialImpostorSpawnRate": {
         "11": "\u30b9\u30da\u30b7\u30e3\u30eb\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc",
-        "13": "\u751f\u6210\u51e0\u7387"
+        "13": "\u7279\u6b8a\u5185\u9b3c\u751f\u6210\u51e0\u7387"
     },
     "SpecialImpostorRoleNum": {
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570",
@@ -1732,7 +1732,7 @@
     },
     "EvolverSpawnRate": {
         "11": "\u30a8\u30dc\u30eb\u30d0\u30fc",
-        "13": "\u751f\u6210\u51e0\u7387"
+        "13": "\u5360\u636e\u8005\u751f\u6210\u51e0\u7387"
     },
     "EvolverRoleNum": {
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570",
@@ -1824,7 +1824,7 @@
     },
     "CarrierSpawnRate": {
         "11": "\u30ad\u30e3\u30ea\u30e4\u30fc",
-        "13": "\u751f\u6210\u51e0\u7387"
+        "13": "\u642c\u8fd0\u5de5\u751f\u6210\u51e0\u7387"
     },
     "CarrierRoleNum": {
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570",
@@ -1896,7 +1896,7 @@
     },
     "PsychoKillerSpawnRate": {
         "11": "\u30b5\u30a4\u30b3\u30ad\u30e9\u30fc",
-        "13": "\u751f\u6210\u51e0\u7387"
+        "13": "\u8fde\u73af\u6740\u624b\u751f\u6210\u51e0\u7387"
     },
     "PsychoKillerRoleNum": {
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570",
@@ -1960,7 +1960,7 @@
     },
     "BountyHunterSpawnRate": {
         "11": "\u30d0\u30a6\u30f3\u30c6\u30a3\u30fc\u30cf\u30f3\u30bf\u30fc",
-        "13": "\u751f\u6210\u51e0\u7387"
+        "13": "\u8d4f\u91d1\u730e\u4eba\u751f\u6210\u51e0\u7387"
     },
     "BountyHunterRoleNum": {
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570",
@@ -2032,7 +2032,7 @@
     },
     "PainterSpawnRate": {
         "11": "\u30da\u30a4\u30f3\u30bf\u30fc",
-        "13": "\u751f\u6210\u51e0\u7387"
+        "13": "\u753b\u5bb6\u751f\u6210\u51e0\u7387"
     },
     "PainterRoleNum": {
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570",
@@ -2100,7 +2100,7 @@
     },
     "FakerSpawnRate": {
         "11": "\u30d5\u30a7\u30a4\u30ab\u30fc",
-        "13": "\u751f\u6210\u51e0\u7387"
+        "13": "\u9053\u5177\u5e08\u751f\u6210\u51e0\u7387"
     },
     "FakerRoleNum": {
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570",
@@ -2160,7 +2160,7 @@
     },
     "OverLoaderSpawnRate": {
         "11": "\u30aa\u30fc\u30d0\u30fc\u30ed\u30fc\u30c0\u30fc",
-        "13": "\u751f\u6210\u51e0\u7387"
+        "13": "\u55dc\u8840\u72c2\u5f92\u751f\u6210\u51e0\u7387"
     },
     "OverLoaderRoleNum": {
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570",
@@ -2236,7 +2236,7 @@
     },
     "CrackerSpawnRate": {
         "11": "\u30af\u30e9\u30c3\u30ab\u30fc",
-        "13": "\u751f\u6210\u51e0\u7387"
+        "13": "\u6e05\u6d01\u5de5\u751f\u6210\u51e0\u7387"
     },
     "CrackerRoleNum": {
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570",
@@ -2308,7 +2308,7 @@
     },
     "BomberSpawnRate": {
         "11": "\u30dc\u30de\u30fc",
-        "13": "\u751f\u6210\u51e0\u7387"
+        "13": "\u57cb\u96f7\u5de5\u751f\u6210\u51e0\u7387"
     },
     "BomberRoleNum": {
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570",
@@ -2400,7 +2400,7 @@
     },
     "MerySpawnRate": {
         "11": "\u30e1\u30ea\u30fc",
-        "13": "\u751f\u6210\u51e0\u7387"
+        "13": "\u7ba1\u9053\u5de5\u751f\u6210\u51e0\u7387"
     },
     "MeryRoleNum": {
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570",
@@ -2472,7 +2472,7 @@
     },
     "SlaveDriverSpawnRate": {
         "11": "\u30b9\u30ec\u30a4\u30f4\u30c9\u30e9\u30a4\u30d0\u30fc",
-        "13": "\u751f\u6210\u51e0\u7387"
+        "13": "\u60ac\u8d4f\u730e\u4eba\u751f\u6210\u51e0\u7387"
     },
     "SlaveDriverRoleNum": {
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570",
@@ -2564,7 +2564,7 @@
     },
     "SandWormSpawnRate": {
         "11": "\u30b5\u30f3\u30c9\u30ef\u30fc\u30e0",
-        "13": "\u751f\u6210\u51e0\u7387"
+        "13": "\u6f5c\u4f0f\u8005\u751f\u6210\u51e0\u7387"
     },
     "SandWormRoleNum": {
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570",
@@ -2636,7 +2636,7 @@
     },
     "SmasherSpawnRate": {
         "11": "\u30b9\u30de\u30c3\u30b7\u30e3\u30fc",
-        "13": "\u751f\u6210\u51e0\u7387"
+        "13": "\u62f3\u51fb\u624b\u751f\u6210\u51e0\u7387"
     },
     "SmasherRoleNum": {
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570",
@@ -2704,7 +2704,7 @@
     },
     "AssaultMasterSpawnRate": {
         "11": "\u30a2\u30b5\u30eb\u30c8\u30de\u30b9\u30bf\u30fc",
-        "13": "\u751f\u6210\u51e0\u7387"
+        "13": "\u7a81\u51fb\u5927\u5e08\u751f\u6210\u51e0\u7387"
     },
     "AssaultMasterRoleNum": {
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570",
@@ -2800,7 +2800,7 @@
     },
     "ShooterSpawnRate": {
         "11": "\u30b7\u30e5\u30fc\u30bf\u30fc",
-        "13": "\u751f\u6210\u51e0\u7387"
+        "13": "\u72d9\u51fb\u624b\u751f\u6210\u51e0\u7387"
     },
     "ShooterRoleNum": {
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570",
@@ -4204,7 +4204,7 @@
     },
     "PoltergeistSpawnRate": {
         "11": "\u30dd\u30eb\u30bf\u30fc\u30ac\u30a4\u30b9\u30c8",
-        "13": "\u751f\u6210\u51e0\u7387"
+        "13": "\u5e7d\u7075*\u6363\u86cb\u9b3c\u751f\u6210\u51e0\u7387"
     },
     "PoltergeistRoleNum": {
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570",
@@ -4248,7 +4248,7 @@
     },
     "FaunusSpawnRate": {
         "11": "\u30d5\u30a1\u30a6\u30cc\u30b9",
-        "13": "\u751f\u6210\u51e0\u7387"
+        "13": "\u5e7d\u7075*\u5de5\u7a0b\u5e08\u751f\u6210\u51e0\u7387"
     },
     "FaunusRoleNum": {
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570",
@@ -4292,7 +4292,7 @@
     },
     "VentgeistSpawnRate": {
         "11": "\u30d9\u30f3\u30c8\u30ac\u30a4\u30b9\u30c8",
-        "13": "\u751f\u6210\u51e0\u7387"
+        "13": "\u5e7d\u7075*\u7ba1\u9053\u5de5\u751f\u6210\u51e0\u7387"
     },
     "VentgeistRoleNum": {
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570",
@@ -4336,7 +4336,7 @@
     },
     "SaboEvilSpawnRate": {
         "11": "\u30b5\u30dc\u308a\u9b54",
-        "13": "\u751f\u6210\u51e0\u7387"
+        "13": "\u5e7d\u7075*\u7834\u574f\u8005\u751f\u6210\u51e0\u7387"
     },
     "SaboEvilRoleNum": {
         "11": "\u30b9\u30dd\u30fc\u30f3\u6570",
