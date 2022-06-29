@@ -754,32 +754,42 @@ namespace ExtremeRoles.Patches
                     byte deadBodyPlayerId = reader.ReadByte();
                     RPCOperator.CleanDeadBody(deadBodyPlayerId);
                     break;
-                case RPCOperator.Command.ForceEnd:
-                    RPCOperator.ForceEnd();
-                    break;
                 case RPCOperator.Command.Initialize:
                     RPCOperator.Initialize();
                     break;
+                case RPCOperator.Command.ForceEnd:
+                    RPCOperator.ForceEnd();
+                    break;
+                case RPCOperator.Command.SetRoleToAllPlayer:
+                    List<Module.IAssignedPlayer> assignData = new List<Module.IAssignedPlayer>();
+                    int assignDataNum = reader.ReadPackedInt32();
+                    for (int i = 0; i < assignDataNum; ++i)
+                    {
+                        byte assignedPlayerId = reader.ReadByte();
+                        byte assignRoleType = reader.ReadByte();
+                        byte exRoleId = reader.ReadByte();
+                        switch (assignRoleType)
+                        {
+                            case (byte)Module.IAssignedPlayer.ExRoleType.Single:
+                                assignData.Add(new
+                                    Module.AssignedPlayerToSingleRoleData(
+                                        assignedPlayerId, exRoleId));
+                                break;
+                            case (byte)Module.IAssignedPlayer.ExRoleType.Comb:
+                                byte assignCombType = reader.ReadByte(); // combTypeId
+                                byte bytedGameContId = reader.ReadByte(); // byted GameContId
+                                byte bytedAmongUsVanillaRoleId = reader.ReadByte(); // byted AmongUsVanillaRoleId
+                                assignData.Add(new
+                                    Module.AssignedPlayerToCombRoleData(
+                                        assignedPlayerId, exRoleId, assignCombType,
+                                        bytedGameContId, bytedAmongUsVanillaRoleId));
+                                break;
+                        }
+                    }
+                    RPCOperator.SetRoleToAllPlayer(assignData);
+                    break;
                 case RPCOperator.Command.FixLightOff:
                     RPCOperator.FixLightOff();
-                    break;
-                case RPCOperator.Command.SetNormalRole:
-                    byte normalRoleId = reader.ReadByte();
-                    byte normalRoleAssignPlayerId = reader.ReadByte();
-                    RPCOperator.SetNormalRole(
-                        normalRoleId, normalRoleAssignPlayerId);
-                    break;
-                case RPCOperator.Command.SetCombinationRole:
-                    byte combinationType = reader.ReadByte();
-                    byte combinationRoleId = reader.ReadByte();
-                    byte combinationRoleAssignPlayerId = reader.ReadByte();
-                    byte gameControlId = reader.ReadByte();
-                    byte bytedRoleType = reader.ReadByte();
-                    RPCOperator.SetCombinationRole(
-                        combinationType,
-                        combinationRoleId,
-                        combinationRoleAssignPlayerId,
-                        gameControlId, bytedRoleType);
                     break;
                 case RPCOperator.Command.ShareOption:
                     int numOptions = (int)reader.ReadByte();

@@ -18,8 +18,7 @@ namespace ExtremeRoles
             // メインコントール
             Initialize = 60,
             ForceEnd,
-            SetNormalRole,
-            SetCombinationRole,
+            SetRoleToAllPlayer,
             ShareOption,
             CustomVentUse,
             StartVentAnimation,
@@ -164,17 +163,27 @@ namespace ExtremeRoles
             switchSystem.ActualSwitches = switchSystem.ExpectedSwitches;
         }
 
-        public static void SetCombinationRole(
-            byte combType, byte roleId, byte playerId, byte id, byte bytedRoleType)
+        public static void SetRoleToAllPlayer(List<Module.IAssignedPlayer> assignData)
         {
-            Roles.ExtremeRoleManager.SetPlayerIdToMultiRoleId(
-                combType, roleId, playerId, id, bytedRoleType);
-        }
-
-        public static void SetNormalRole(byte roleId, byte playerId)
-        {
-            Roles.ExtremeRoleManager.SetPlyerIdToSingleRoleId(
-                roleId, playerId);
+            foreach (var data in assignData)
+            {
+                switch (data.RoleType)
+                {
+                    case (byte)Module.IAssignedPlayer.ExRoleType.Single:
+                        Roles.ExtremeRoleManager.SetPlyerIdToSingleRoleId(
+                            data.RoleId, data.PlayerId);
+                        break;
+                    case (byte)Module.IAssignedPlayer.ExRoleType.Comb:
+                        var combData = (Module.AssignedPlayerToCombRoleData)data;
+                        Roles.ExtremeRoleManager.SetPlayerIdToMultiRoleId(
+                            combData.CombTypeId,
+                            combData.RoleId,
+                            combData.PlayerId,
+                            combData.GameContId,
+                            combData.AmongUsRoleId);
+                        break;
+                }
+            }
         }
 
         public static void ShareOption(int numOptions, MessageReader reader)

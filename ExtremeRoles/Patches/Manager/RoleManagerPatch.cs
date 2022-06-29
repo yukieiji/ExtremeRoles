@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 
 using HarmonyLib;
+using Hazel;
 
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance.Il2Cpp;
@@ -29,10 +31,46 @@ namespace ExtremeRoles.Patches.Manager
             RoleAssignmentData extremeRolesData = createRoleData();
             var playerIndexList = Enumerable.Range(0, playeres.Count()).ToList();
 
-            combinationExtremeRoleAssign(
-                ref extremeRolesData, ref playerIndexList);
-            normalExtremeRoleAssign(
-                extremeRolesData, playerIndexList);
+            List<IAssignedPlayer> assignedPlayerData = new List<IAssignedPlayer>();
+            Dictionary<byte, ExtremeRoleType> combRoleAssignedPlayerId = new Dictionary<byte, ExtremeRoleType>();
+
+            createCombinationExtremeRoleAssign(
+                ref extremeRolesData,
+                ref playerIndexList,
+                ref assignedPlayerData,
+                ref combRoleAssignedPlayerId);
+            createNormalExtremeRoleAssign(
+                ref extremeRolesData,
+                ref playerIndexList,
+                ref assignedPlayerData,
+                combRoleAssignedPlayerId);
+            allPlayerAssignToExRole(netId, assignedPlayerData);
+        }
+
+        private static void allPlayerAssignToExRole(
+            uint netId, List<IAssignedPlayer> assignData)
+        {
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                netId, (byte)RPCOperator.Command.SetRoleToAllPlayer,
+                Hazel.SendOption.Reliable, -1);
+            writer.WritePacked(assignData.Count); // 何個あるか
+
+            foreach (IAssignedPlayer data in assignData)
+            {
+                writer.Write(data.PlayerId); // PlayerId
+                writer.Write(data.RoleType); // RoleType : single or comb
+                writer.Write(data.RoleId); // RoleId
+
+                if (data.RoleType == (byte)IAssignedPlayer.ExRoleType.Comb)
+                {
+                    var combData = (AssignedPlayerToCombRoleData)data;
+                    writer.Write(combData.CombTypeId); // combTypeId
+                    writer.Write(combData.GameContId); // byted GameContId
+                    writer.Write(combData.AmongUsRoleId); // byted AmongUsVanillaRoleId
+                }
+            }
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            RPCOperator.SetRoleToAllPlayer(assignData);
         }
 
         private static bool checkLimitRoleSpawnNum(
@@ -65,9 +103,11 @@ namespace ExtremeRoles.Patches.Manager
             => (int)Decimal.Multiply(
                 self.GetValue(), self.Selections.ToList().Count);
 
-        private static void combinationExtremeRoleAssign(
+        private static void createCombinationExtremeRoleAssign(
             ref RoleAssignmentData extremeRolesData,
-            ref List<int> playerIndexList)
+            ref List<int> playerIndexList,
+            ref List<IAssignedPlayer> assinedPlayer,
+            ref Dictionary<byte, ExtremeRoleType> assinedPlayerId)
         {
 
             Logging.Debug($"NotAssignPlayerNum:{playerIndexList.Count}");
@@ -101,8 +141,11 @@ namespace ExtremeRoles.Patches.Manager
                         }
                         playerIndexList.Remove(playerIndex);
 
-                        setCombinationRoleToPlayer(
-                            player, combType, (byte)role.Id, (byte)id);
+                        assinedPlayerId.Add(player.PlayerId, role.Team);
+                        assinedPlayer.Add(new AssignedPlayerToCombRoleData(
+                            player.PlayerId, (byte)role.Id,
+                            combType, (byte)id,
+                            (byte)player.Data.Role.Role));
                         break;
                     }
                 }
@@ -300,9 +343,11 @@ namespace ExtremeRoles.Patches.Manager
             return true;
         }
 
-        private static void normalExtremeRoleAssign(
-            RoleAssignmentData extremeRolesData,
-            List<int> playerIndexList)
+        private static void createNormalExtremeRoleAssign(
+            ref RoleAssignmentData extremeRolesData,
+            ref List<int> playerIndexList,
+            ref List<IAssignedPlayer> assignedPlayer,
+            Dictionary<byte, ExtremeRoleType> combRoleAssignedPlayerId)
         {
 
             List<SingleRoleBase> shuffleRolesForImpostor = extremeRolesData.RolesForVanillaImposter;
@@ -341,9 +386,8 @@ namespace ExtremeRoles.Patches.Manager
                             item => RandomGenerator.Instance.Next()).ToList();
                         break;
                     default:
-                        setNormalRoleToPlayer(
-                            player,
-                            (byte)roleData.Role);
+                        assignedPlayer.Add(new AssignedPlayerToSingleRoleData(
+                            player.PlayerId, (byte)roleData.Role));
                         shuffledArange.Remove(index);
                         assigned = true;
                         break;
@@ -369,17 +413,18 @@ namespace ExtremeRoles.Patches.Manager
                     result = result && checkLimitRoleSpawnNum(role, ref extremeRolesData);
                     Logging.Debug($"IsNotSpawnLimitNum:{result}");
 
-                    if (ExtremeRoleManager.GameRole.ContainsKey(player.PlayerId))
+                    if (combRoleAssignedPlayerId.ContainsKey(player.PlayerId))
                     {
-                        result = result && ExtremeRoleManager.GameRole[
-                            player.PlayerId].Team == role.Team;
+                        result = result && combRoleAssignedPlayerId[player.PlayerId] == role.Team;
                         Logging.Debug($"IsSameTeam:{result}");
                     }
 
                     if (result)
                     {
                         reduceToSpawnDataNum(role.Team, ref extremeRolesData);
-                        setNormalRoleToPlayer(player, (byte)role.Id);
+                        assignedPlayer.Add(new AssignedPlayerToSingleRoleData(
+                            player.PlayerId, (byte)role.Id));
+
                         shuffledArange.Remove(index);
                         extremeRolesData.RoleSpawnSettings[roleData.Role][bytedRoleId] = (
                             --roleNum,
@@ -401,8 +446,8 @@ namespace ExtremeRoles.Patches.Manager
             foreach (int index in shuffledArange)
             {
                 PlayerControl player = PlayerControl.AllPlayerControls[index];
-                setNormalRoleToPlayer(
-                    player, (byte)(player.Data.Role.Role));
+                assignedPlayer.Add(new AssignedPlayerToSingleRoleData(
+                    player.PlayerId, (byte)player.Data.Role.Role));
             }
         }
 
@@ -425,36 +470,6 @@ namespace ExtremeRoles.Patches.Manager
                     break;
             }
         }
-
-
-        private static void setNormalRoleToPlayer(
-            PlayerControl player, byte roleId)
-        {
-
-            Logging.Debug($"Player:{player.name}  RoleId:{roleId}");
-
-            RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
-                RPCOperator.Command.SetNormalRole,
-                new List<byte> { roleId, player.PlayerId });
-            RPCOperator.SetNormalRole(
-                roleId, player.PlayerId);
-        }
-
-        private static void setCombinationRoleToPlayer(
-            PlayerControl player, byte combType, byte roleId, byte gameId)
-        {
-            byte bytedRoleType = (byte)player.Data.Role.Role;
-            Logging.Debug($"Player:{player.name}  RoleId:{roleId}");
-
-            RPCOperator.Call(
-                PlayerControl.LocalPlayer.NetId,
-                RPCOperator.Command.SetCombinationRole,
-                new List<byte> { combType, roleId, player.PlayerId, gameId, bytedRoleType });
-            RPCOperator.SetCombinationRole(
-                combType, roleId, player.PlayerId, gameId, bytedRoleType);
-        }
-
 
         private static RoleAssignmentData createRoleData()
         {
