@@ -31,7 +31,7 @@ namespace ExtremeRoles.Patches
             [HarmonyArgument(0)] GameData.PlayerInfo playerInfo)
         {
 
-            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd())
+            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd)
             {
                 return checkNormalOrCustomCalculateLightRadius(playerInfo, ref __result);
             }

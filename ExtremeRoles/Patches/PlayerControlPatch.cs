@@ -138,7 +138,7 @@ namespace ExtremeRoles.Patches
         public static void Postfix(PlayerControl __instance)
         {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) { return; }
-            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return; }
+            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return; }
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
             if (CachedPlayerControl.LocalPlayer.PlayerId != __instance.PlayerId) { return; }
 
@@ -787,6 +787,7 @@ namespace ExtremeRoles.Patches
                         }
                     }
                     RPCOperator.SetRoleToAllPlayer(assignData);
+                    ExtremeRolesPlugin.GameDataStore.RoleSetUpEnd();
                     break;
                 case RPCOperator.Command.FixLightOff:
                     RPCOperator.FixLightOff();

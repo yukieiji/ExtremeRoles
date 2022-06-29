@@ -125,7 +125,7 @@ namespace ExtremeRoles.Patches
             IntroCutscene instance)
         {
             // バニラの役職アサイン後すぐこの処理が走るので全員の役職が入るまで待機
-            while (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd())
+            while (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd)
             {
                 yield return null;
             }

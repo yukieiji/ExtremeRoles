@@ -195,7 +195,7 @@ namespace ExtremeRoles.Patches
             // キルとベントボタン
             if (CachedPlayerControl.LocalPlayer.Data != null &&
                 CachedPlayerControl.LocalPlayer.Data.Role != null &&
-                ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd())
+                ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd)
             {
 
                 var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();

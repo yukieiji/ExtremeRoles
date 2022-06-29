@@ -15,7 +15,7 @@ namespace ExtremeRoles.Patches.MapModule
             if (__instance == null) { return true; }
             if (__instance.AllowImpostor) { return true; }
             if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
-            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return true; }
+            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return true; }
             if (Roles.ExtremeRoleManager.GameRole[pc.PlayerId].HasTask) { return true; }
 
             return false;
@@ -28,7 +28,7 @@ namespace ExtremeRoles.Patches.MapModule
         {
 
             if (__instance == null) { return true; }
-            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return true; }
+            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return true; }
             if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
             PlayerControl player = PlayerControl.LocalPlayer;

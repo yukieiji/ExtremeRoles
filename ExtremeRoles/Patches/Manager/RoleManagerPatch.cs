@@ -71,6 +71,7 @@ namespace ExtremeRoles.Patches.Manager
             }
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCOperator.SetRoleToAllPlayer(assignData);
+            ExtremeRolesPlugin.GameDataStore.RoleSetUpEnd();
         }
 
         private static bool checkLimitRoleSpawnNum(
@@ -603,7 +604,7 @@ namespace ExtremeRoles.Patches.Manager
         public static bool Prefix([HarmonyArgument(0)] PlayerControl player)
         {
             if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
-            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return true; }
+            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return true; }
 
             var role = ExtremeRoleManager.GameRole[player.PlayerId];
 
@@ -621,7 +622,7 @@ namespace ExtremeRoles.Patches.Manager
         public static void Postfix([HarmonyArgument(0)] PlayerControl player)
         {
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
-            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return; }
+            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return; }
             ExtremeGhostRoleManager.AssignGhostRoleToPlayer(player);
         }
     }
