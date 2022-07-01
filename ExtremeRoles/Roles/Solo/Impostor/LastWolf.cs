@@ -21,7 +21,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             AwakeImpostorNum,
             DeadPlayerNumBonus,
             KillPlayerNumBonus,
-            FirstLightOffCoolTime
+            FinalLightOffCoolTime
         }
 
         public RoleAbilityButtonBase Button
@@ -69,19 +69,36 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             true, false, true, true)
         { }
 
-        public string GetFakeOptionString() => "";
+        public static void SwitchLight(bool lightOn)
+        {
+            var lastWolf = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<LastWolf>();
 
+            if (lastWolf != null) { return; }
+            if (lightOn)
+            {
+                ExtremeRolesPlugin.GameDataStore.CurVison = GameDataContainer.ForceVisionType.None;
+            }
+            else
+            {
+                ExtremeRolesPlugin.GameDataStore.CurVison = GameDataContainer.ForceVisionType.LastWolfLightOff;
+            }
+        }
+
+        public string GetFakeOptionString() => "";
 
         public void CreateAbility()
         {
             this.CreateNormalAbilityButton(
-                Translation.GetString("smash"),
-                FastDestroyableSingleton<HudManager>.Instance.KillButton.graphic.sprite);
+                Translation.GetString("liightOff"),
+                Resources.Loader.CreateSpriteFromResources(
+                   Resources.Path.TestButton));
 
             setCurCooltime();
         }
 
-        public bool IsAbilityUse() => this.IsCommonUse();
+        public bool IsAbilityUse() => 
+            this.IsCommonUse() &&
+            ExtremeRolesPlugin.GameDataStore.CurVison == GameDataContainer.ForceVisionType.None;
 
         public void RoleAbilityResetOnMeetingStart()
         {
@@ -104,6 +121,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool UseAbility()
         {
+
+
             return true;
         }
 
@@ -247,22 +266,23 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 parentOps,
                 format: OptionUnit.Percentage);
 
-            var firstLightOffOpt = CreateFloatDynamicOption(
-                LastWolfOption.FirstLightOffCoolTime,
+            var cooltimeOpt = CreateFloatDynamicOption(
+                RoleAbilityCommonOption.AbilityCoolTime,
                 5.0f, 0.5f, 0.5f,
-                parentOps,
-                format: OptionUnit.Second);
+                parentOps, format: OptionUnit.Second);
 
-            this.CreateCommonAbilityOption(
-                parentOps, 10f);
+            var lastLightOffOption = CreateFloatOption(
+               LastWolfOption.FinalLightOffCoolTime,
+               60.0f, 30.0f, 120.0f, 0.5f,
+               parentOps,
+               format: OptionUnit.Second);
 
-            var cooltimeOpt = OptionHolder.AllOption[
-                GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)];
-            int curSelection = cooltimeOpt.CurSelection;
-            cooltimeOpt.CurSelection = Mathf.Clamp(
-                (curSelection * 2) + 1, 0,
-                cooltimeOpt.Selections.Length - 1);
-            cooltimeOpt.SetUpdateOption(firstLightOffOpt);
+            CreateFloatOption(
+                RoleAbilityCommonOption.AbilityActiveTime,
+                5.0f, 1.0f, 60.0f, 0.5f,
+                parentOps, format: OptionUnit.Second);
+
+            cooltimeOpt.SetUpdateOption(lastLightOffOption);
         }
 
         protected override void RoleSpecificInit()
@@ -273,9 +293,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             this.awakeImpNum = allOpt[
                 GetRoleOptionId(LastWolfOption.AwakeImpostorNum)].GetValue();
-            this.firstCooltime = allOpt[
-                GetRoleOptionId(LastWolfOption.FirstLightOffCoolTime)].GetValue();
             this.finalCooltime = allOpt[
+                GetRoleOptionId(LastWolfOption.FinalLightOffCoolTime)].GetValue();
+            this.firstCooltime = allOpt[
                 GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)].GetValue();
 
             this.noneAwakeKillBonus = allOpt[

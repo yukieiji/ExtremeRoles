@@ -30,6 +30,14 @@ namespace ExtremeRoles.Patches
             ShipStatus __instance,
             [HarmonyArgument(0)] GameData.PlayerInfo playerInfo)
         {
+            switch (ExtremeRolesPlugin.GameDataStore.CurVison)
+            {
+                case GameDataContainer.ForceVisionType.LastWolfLightOff:
+                    __result = 0.15f;
+                    return false;
+                default:
+                    break;
+            }
 
             if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd)
             {

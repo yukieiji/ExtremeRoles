@@ -42,6 +42,12 @@ namespace ExtremeRoles.Module
             Disconnected,
         }
 
+        public enum ForceVisionType
+        {
+            None,
+            LastWolfLightOff
+        }
+
         public bool IsRoleSetUpEnd => this.isRoleSetUpEnd;
 
         public GameOverReason EndReason;
@@ -73,6 +79,8 @@ namespace ExtremeRoles.Module
         private List<IMeetingResetObject> resetObject = new List<IMeetingResetObject>();
         private bool isRoleSetUpEnd;
 
+        public ForceVisionType CurVison;
+
         public GameDataContainer()
         {
             this.Initialize();
@@ -80,6 +88,7 @@ namespace ExtremeRoles.Module
 
         public void Initialize()
         {
+            CurVison = ForceVisionType.None;
             DeadedAssassin.Clear();
             ShildPlayer.Clear();
 
