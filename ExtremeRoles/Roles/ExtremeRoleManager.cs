@@ -74,7 +74,7 @@ namespace ExtremeRoles.Roles
         Jester,
         Yandere,
         Yoko,
-
+        Totocalcio,
         Miner
     }
     public enum CombinationRoleType

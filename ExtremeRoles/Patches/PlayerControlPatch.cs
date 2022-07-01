@@ -1045,6 +1045,12 @@ namespace ExtremeRoles.Patches
                     RPCOperator.YandereSetOneSidedLover(
                         yanderePlayerId, loverPlayerId);
                     break;
+                case RPCOperator.Command.TotocalcioSetBetPlayer:
+                    byte totocalcioPlayerId = reader.ReadByte();
+                    byte betPlayerId = reader.ReadByte();
+                    RPCOperator.TotocalcioSetBetPlayer(
+                        totocalcioPlayerId, betPlayerId);
+                    break;
                 case RPCOperator.Command.SetGhostRole:
                     RPCOperator.SetGhostRole(
                         ref reader);

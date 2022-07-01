@@ -76,7 +76,9 @@ namespace ExtremeRoles
             TaskMasterSetNewTask,
             JesterOutburstKill,
             YandereSetOneSidedLover,
+            TotocalcioSetBetPlayer,
 
+            // 幽霊役職
             SetGhostRole,
             UseGhostRoleAbility,
         }
@@ -539,6 +541,12 @@ namespace ExtremeRoles
         {
             Roles.Solo.Neutral.Yandere.SetOneSidedLover(
                 playerId, loverId);
+        }
+        public static void TotocalcioSetBetPlayer(
+            byte playerId, byte betPlayerId)
+        {
+            Roles.Solo.Neutral.Totocalcio.SetBetTarget(
+                playerId, betPlayerId);
         }
 
         public static void SetGhostRole(
