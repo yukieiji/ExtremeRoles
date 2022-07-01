@@ -177,6 +177,7 @@ namespace ExtremeRoles.Roles
                 {(int)ExtremeRoleId.Smasher        , new Smasher()},
                 {(int)ExtremeRoleId.AssaultMaster  , new AssaultMaster()},
                 {(int)ExtremeRoleId.Shooter        , new Shooter()},
+                {(int)ExtremeRoleId.LastWolf       , new LastWolf()},
 
                 {(int)ExtremeRoleId.Alice     , new Alice()},
                 {(int)ExtremeRoleId.Jackal    , new Jackal()},
