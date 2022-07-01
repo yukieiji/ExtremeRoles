@@ -330,6 +330,12 @@ namespace ExtremeRoles.Patches.Manager
                     textRenderer.color = ColorPalette.YokoShion;
                     manager.BackgroundBar.material.SetColor("_Color", ColorPalette.YokoShion);
                     break;
+                case (GameOverReason)RoleGameOverReason.MinerExplodeEverything:
+                    bonusText = Translation.GetString(
+                        ExtremeRoleId.Miner.ToString());
+                    textRenderer.color = ColorPalette.MinerIvyGreen;
+                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.MinerIvyGreen);
+                    break;
                 default:
                     break;
             }

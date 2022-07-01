@@ -188,6 +188,11 @@ namespace ExtremeRoles.Patches
                         noWinner,
                         new ExtremeRoleId[] { ExtremeRoleId.Vigilante });
                     break;
+                case RoleGameOverReason.MinerExplodeEverything:
+                    replaceWinnerToSpecificNeutralRolePlayer(
+                        noWinner,
+                        new ExtremeRoleId[] { ExtremeRoleId.Miner });
+                    break;
                 case RoleGameOverReason.ShipFallInLove:
                     replaceWinnerToSpecificRolePlayer(
                         ExtremeRoleId.Lover);

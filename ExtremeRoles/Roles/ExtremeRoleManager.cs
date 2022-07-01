@@ -73,7 +73,9 @@ namespace ExtremeRoles.Roles
         Missionary,
         Jester,
         Yandere,
-        Yoko
+        Yoko,
+
+        Miner
     }
     public enum CombinationRoleType
     {
@@ -111,6 +113,8 @@ namespace ExtremeRoles.Roles
 
         YokoAllDeceive,
 
+        MinerExplodeEverything,
+
         UnKnown = 100,
     }
 
@@ -122,6 +126,7 @@ namespace ExtremeRoles.Roles
         Missionary,
         Yandere,
         Vigilante,
+        Miner
     }
 
     public static class ExtremeRoleManager

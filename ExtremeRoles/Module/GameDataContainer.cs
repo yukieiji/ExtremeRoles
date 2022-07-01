@@ -337,6 +337,12 @@ namespace ExtremeRoles.Module
                                         NeutralSeparateTeam.Vigilante);
                                 }
                                 break;
+                            case ExtremeRoleId.Miner:
+                                addNeutralTeams(
+                                    ref neutralTeam,
+                                    gameControlId,
+                                    NeutralSeparateTeam.Miner);
+                                break;
                             default:
                                 break;
                         }

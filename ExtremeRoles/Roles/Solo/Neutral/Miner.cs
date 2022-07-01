@@ -1,0 +1,253 @@
+﻿using System.Collections.Generic;
+
+using UnityEngine;
+
+using ExtremeRoles.Module;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Module.AbilityButton.Roles;
+
+namespace ExtremeRoles.Roles.Solo.Neutral
+{
+    public class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate
+    {
+        public enum MinerOption
+        {
+            MineKillRange,
+            NoneActiveTime,
+            ShowKillLog
+        }
+
+        public RoleAbilityButtonBase Button
+        { 
+            get => this.setMine;
+            set
+            {
+                this.setMine = value;
+            }
+        }
+
+        private RoleAbilityButtonBase setMine;
+
+        private List<Vector2> mines = new List<Vector2>();
+        private float killRange;
+        private float nonActiveTime;
+        private float timer;
+        private bool isShowKillLog;
+        private Vector2? setPos;
+
+        public Miner() : base(
+            ExtremeRoleId.Miner,
+            ExtremeRoleType.Neutral,
+            ExtremeRoleId.Miner.ToString(),
+            ColorPalette.MinerIvyGreen,
+            false, false, true, false)
+        { }
+
+        public void CreateAbility()
+        {
+            this.CreateNormalAbilityButton(
+                Helper.Translation.GetString("setMine"),
+                Loader.CreateSpriteFromResources(
+                    Path.MissionaryPropagate),
+                abilityCleanUp: CleanUp);
+        }
+
+        public bool UseAbility()
+        {
+
+            this.setPos = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
+            return true;
+        }
+
+        public void CleanUp()
+        {
+            if (this.setPos.HasValue)
+            {
+                this.mines.Add(this.setPos.Value);
+            }
+            this.setPos = null;
+        }
+
+        public bool IsAbilityUse() => this.IsCommonUse();
+
+        public void RoleAbilityResetOnMeetingStart()
+        {
+            return;
+        }
+
+        public void RoleAbilityResetOnMeetingEnd()
+        {
+            return;
+        }
+
+        public void Update(PlayerControl rolePlayer)
+        {
+            if (rolePlayer.Data.IsDead || rolePlayer.Data.Disconnected) { return; }
+            if (this.mines.Count == 0) { return; }
+
+            if (CachedShipStatus.Instance == null ||
+                GameData.Instance == null) { return; }
+            if (!CachedShipStatus.Instance.enabled ||
+                ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
+            if (MeetingHud.Instance)
+            {
+                this.timer = this.nonActiveTime;
+                return;
+            }
+
+            if (this.timer > 0.0f)
+            {
+                this.timer -= Time.fixedDeltaTime;
+                return;
+            }
+
+            HashSet<int> activateMine = new HashSet<int>();
+            HashSet<byte> killedPlayer = new HashSet<byte>();
+
+            for (int i = 0; i < mines.Count; ++i)
+            {
+                Vector2 pos = mines[i];
+
+                foreach (GameData.PlayerInfo playerInfo in
+                    GameData.Instance.AllPlayers.GetFastEnumerator())
+                {
+                    if (playerInfo == null) { continue; }
+
+                    if (killedPlayer.Contains(playerInfo.PlayerId)) { continue; }
+                    
+                    var assassin = ExtremeRoleManager.GameRole[
+                        playerInfo.PlayerId] as Combination.Assassin;
+
+                    if (assassin != null)
+                    {
+                        if (!assassin.CanKilled || !assassin.CanKilledFromNeutral)
+                        {
+                            continue;
+                        }
+                    }
+
+                    if (!playerInfo.Disconnected &&
+                        !playerInfo.IsDead &&
+                        playerInfo.Object != null &&
+                        !playerInfo.Object.inVent)
+                    {
+                        PlayerControl @object = playerInfo.Object;
+                        if (@object)
+                        {
+                            Vector2 vector = @object.GetTruePosition() - pos;
+                            float magnitude = vector.magnitude;
+                            if (magnitude <= this.killRange &&
+                                !PhysicsHelpers.AnyNonTriggersBetween(
+                                    pos, vector.normalized,
+                                    magnitude, Constants.ShipAndObjectsMask))
+                            {
+                                activateMine.Add(i);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach (var index in activateMine)
+            {
+                mines.RemoveAt(index);
+            }
+            foreach (var player in killedPlayer)
+            {
+                RPCOperator.Call(
+                    rolePlayer.NetId,
+                    RPCOperator.Command.UncheckedMurderPlayer,
+                    new List<byte> { rolePlayer.PlayerId, player, 0 });
+                RPCOperator.UncheckedMurderPlayer(
+                    rolePlayer.PlayerId, player, 0);
+
+                RPCOperator.Call(
+                    rolePlayer.NetId,
+                    RPCOperator.Command.ReplaceDeadReason,
+                    new List<byte>
+                    {
+                        player,
+                        (byte)GameDataContainer.PlayerStatus.Explosion
+                    });
+                ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
+                    player, GameDataContainer.PlayerStatus.Explosion);
+
+                if (this.isShowKillLog)
+                {
+                    // 以下のテキスト表示処理
+                    // [AuExM32 対船員地雷] {プレイヤー名} 100↑
+                }
+            }
+
+        }
+
+        public override void ExiledAction(GameData.PlayerInfo rolePlayer)
+        {
+            this.mines.Clear();
+        }
+        public override void RolePlayerKilledAction(
+            PlayerControl rolePlayer, PlayerControl killerPlayer)
+        {
+            this.mines.Clear();
+        }
+
+        public override bool IsSameTeam(SingleRoleBase targetRole)
+        {
+            var multiAssignRole = targetRole as MultiAssignRoleBase;
+
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    return this.IsSameTeam(multiAssignRole.AnotherRole);
+                }
+            }
+            if (OptionHolder.Ship.IsSameNeutralSameWin)
+            {
+                return this.Id == targetRole.Id;
+            }
+            else
+            {
+                return (this.Id == targetRole.Id) && this.IsSameControlId(targetRole);
+            }
+        }
+
+        protected override void CreateSpecificOption(
+            CustomOptionBase parentOps)
+        {
+            CreateFloatOption(
+                MinerOption.MineKillRange,
+                1.8f, 0.5f, 5f, 0.1f, parentOps);
+            CreateFloatOption(
+                MinerOption.NoneActiveTime,
+                7.5f, 1.0f, 15f, 0.5f,
+                parentOps, format: OptionUnit.Second);
+            CreateBoolOption(
+                MinerOption.ShowKillLog,
+                true, parentOps);
+            this.CreateCommonAbilityOption(
+                parentOps, 1.5f);
+        }
+
+        protected override void RoleSpecificInit()
+        {
+            var allOpt = OptionHolder.AllOption;
+
+            this.killRange = allOpt[GetRoleOptionId(
+                MinerOption.MineKillRange)].GetValue();
+            this.nonActiveTime = allOpt[GetRoleOptionId(
+                MinerOption.NoneActiveTime)].GetValue();
+            this.isShowKillLog = allOpt[GetRoleOptionId(
+                MinerOption.ShowKillLog)].GetValue();
+
+            this.mines.Clear();
+            this.timer = this.nonActiveTime;
+            this.setPos = null;
+        }
+    }
+}

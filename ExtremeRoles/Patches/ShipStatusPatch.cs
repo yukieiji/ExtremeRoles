@@ -302,6 +302,12 @@ namespace ExtremeRoles.Patches
                         setWinGameContorlId(id);
                         endReason = (GameOverReason)RoleGameOverReason.VigilanteKillAllOther;
                         break;
+                    case NeutralSeparateTeam.Miner:
+                        if (statistics.TeamImpostorAlive > 0 &&
+                            statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
+                        setWinGameContorlId(id);
+                        endReason = (GameOverReason)RoleGameOverReason.MinerExplodeEverything;
+                        break;
                     default:
                         break;
                 }
