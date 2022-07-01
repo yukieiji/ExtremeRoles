@@ -767,7 +767,7 @@ namespace ExtremeRoles.Patches
                     {
                         byte assignedPlayerId = reader.ReadByte();
                         byte assignRoleType = reader.ReadByte();
-                        byte exRoleId = reader.ReadByte();
+                        int exRoleId = reader.ReadPackedInt32();
                         switch (assignRoleType)
                         {
                             case (byte)Module.IAssignedPlayer.ExRoleType.Single:

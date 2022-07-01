@@ -59,7 +59,7 @@ namespace ExtremeRoles.Patches.Manager
             {
                 writer.Write(data.PlayerId); // PlayerId
                 writer.Write(data.RoleType); // RoleType : single or comb
-                writer.Write(data.RoleId); // RoleId
+                writer.WritePacked(data.RoleId); // RoleId
 
                 if (data.RoleType == (byte)IAssignedPlayer.ExRoleType.Comb)
                 {
@@ -144,7 +144,7 @@ namespace ExtremeRoles.Patches.Manager
 
                         assinedPlayerId.Add(player.PlayerId, role.Team);
                         assinedPlayer.Add(new AssignedPlayerToCombRoleData(
-                            player.PlayerId, (byte)role.Id,
+                            player.PlayerId, (int)role.Id,
                             combType, (byte)id,
                             (byte)player.Data.Role.Role));
                         break;
@@ -388,7 +388,7 @@ namespace ExtremeRoles.Patches.Manager
                         break;
                     default:
                         assignedPlayer.Add(new AssignedPlayerToSingleRoleData(
-                            player.PlayerId, (byte)roleData.Role));
+                            player.PlayerId, (int)roleData.Role));
                         shuffledArange.Remove(index);
                         assigned = true;
                         break;
@@ -405,9 +405,9 @@ namespace ExtremeRoles.Patches.Manager
                 {
                     // Logging.Debug($"KeyFound?:{extremeRolesData.RoleSpawnSettings[roleData.Role].ContainsKey(role.BytedRoleId)}");
                     Logging.Debug($"---AssignRole:{role.Id}---");
-                    byte bytedRoleId = (byte)role.Id;
+                    int intedRoleId = (int)role.Id;
                     var (roleNum, spawnRate) = extremeRolesData.RoleSpawnSettings[
-                        roleData.Role][bytedRoleId];
+                        roleData.Role][intedRoleId];
 
                     result = isRoleSpawn(roleNum, spawnRate);
                     Logging.Debug($"IsRoleSpawn:{result}");
@@ -424,17 +424,17 @@ namespace ExtremeRoles.Patches.Manager
                     {
                         reduceToSpawnDataNum(role.Team, ref extremeRolesData);
                         assignedPlayer.Add(new AssignedPlayerToSingleRoleData(
-                            player.PlayerId, (byte)role.Id));
+                            player.PlayerId, (int)role.Id));
 
                         shuffledArange.Remove(index);
-                        extremeRolesData.RoleSpawnSettings[roleData.Role][bytedRoleId] = (
+                        extremeRolesData.RoleSpawnSettings[roleData.Role][intedRoleId] = (
                             --roleNum,
                             spawnRate);
                         break;
                     }
                     else
                     {
-                        extremeRolesData.RoleSpawnSettings[roleData.Role][bytedRoleId] = (
+                        extremeRolesData.RoleSpawnSettings[roleData.Role][intedRoleId] = (
                             roleNum,
                             spawnRate);
                     }
@@ -481,8 +481,8 @@ namespace ExtremeRoles.Patches.Manager
             List<((byte, CombinationRoleManagerBase), (int, int, bool))> combinationRole = new List<
                 ((byte, CombinationRoleManagerBase), (int, int, bool))>();
 
-            Dictionary<byte, (int, int)> RoleSpawnSettingsForImposter = new Dictionary<byte, (int, int)>();
-            Dictionary<byte, (int, int)> RoleSpawnSettingsForCrewmate = new Dictionary<byte, (int, int)>();
+            Dictionary<int, (int, int)> RoleSpawnSettingsForImposter = new Dictionary<int, (int, int)>();
+            Dictionary<int, (int, int)> RoleSpawnSettingsForCrewmate = new Dictionary<int, (int, int)>();
 
             var allOption = OptionHolder.AllOption;
 
@@ -571,9 +571,10 @@ namespace ExtremeRoles.Patches.Manager
                     item => RandomGenerator.Instance.Next()).ToList(),
                 CombinationRole = combinationRole,
 
-                RoleSpawnSettings = new Dictionary<RoleTypes, Dictionary<byte, (int, int)>>()
-                { {RoleTypes.Impostor, RoleSpawnSettingsForImposter},
-                  {RoleTypes.Crewmate, RoleSpawnSettingsForCrewmate},
+                RoleSpawnSettings = new Dictionary<RoleTypes, Dictionary<int, (int, int)>>()
+                { 
+                    {RoleTypes.Impostor, RoleSpawnSettingsForImposter},
+                    {RoleTypes.Crewmate, RoleSpawnSettingsForCrewmate},
                 },
 
                 CrewmateRoles = crewmateRolesNum,
@@ -590,8 +591,8 @@ namespace ExtremeRoles.Patches.Manager
                 ((byte, CombinationRoleManagerBase), (int, int, bool))>();
 
             public Dictionary<
-                RoleTypes, Dictionary<byte, (int, int)>> RoleSpawnSettings =
-                    new Dictionary<RoleTypes, Dictionary<byte, (int, int)>>();
+                RoleTypes, Dictionary<int, (int, int)>> RoleSpawnSettings =
+                    new Dictionary<RoleTypes, Dictionary<int, (int, int)>>();
             public int CrewmateRoles { get; set; }
             public int NeutralRoles { get; set; }
             public int ImpostorRoles { get; set; }

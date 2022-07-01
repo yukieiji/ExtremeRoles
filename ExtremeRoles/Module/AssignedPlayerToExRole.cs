@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ExtremeRoles.Module
+﻿namespace ExtremeRoles.Module
 {
     public interface IAssignedPlayer
     {
@@ -13,7 +9,7 @@ namespace ExtremeRoles.Module
         }
 
         public byte PlayerId { get; }
-        public byte RoleId { get; }
+        public int RoleId { get; }
         public byte RoleType { get; }
     }
 
@@ -23,17 +19,17 @@ namespace ExtremeRoles.Module
         {
             get => playerId;
         }
-        public byte RoleId
+        public int RoleId
         {
             get => roleId;
         }
         public byte RoleType { get => (byte)IAssignedPlayer.ExRoleType.Single; }
 
         private byte playerId;
-        private byte roleId;
+        private int roleId;
 
         public AssignedPlayerToSingleRoleData(
-            byte playerId, byte roleId)
+            byte playerId, int roleId)
         {
             this.playerId = playerId;
             this.roleId = roleId;
@@ -47,7 +43,7 @@ namespace ExtremeRoles.Module
         {
             get => playerId;
         }
-        public byte RoleId
+        public int RoleId
         {
             get => roleId;
         }
@@ -59,13 +55,13 @@ namespace ExtremeRoles.Module
         public byte AmongUsRoleId => this.amongUsRoleId;
 
         private byte playerId;
-        private byte roleId;
+        private int roleId;
         private byte combTypeId;
         private byte gameContId;
         private byte amongUsRoleId;
 
         public AssignedPlayerToCombRoleData(
-            byte playerId, byte roleId,
+            byte playerId, int roleId,
             byte combType, byte gameContId,
             byte amongUsRoleId)
         {

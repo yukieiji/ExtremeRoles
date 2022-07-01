@@ -15,7 +15,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles
 {
-    public enum ExtremeRoleId
+    public enum ExtremeRoleId : int
     {
         Null = -100,
         VanillaRole = 50,
@@ -136,49 +136,49 @@ namespace ExtremeRoles.Roles
         };
 
         public static readonly Dictionary<
-            byte, SingleRoleBase> NormalRole = new Dictionary<byte, SingleRoleBase>()
+            int, SingleRoleBase> NormalRole = new Dictionary<int, SingleRoleBase>()
             {
-                {(byte)ExtremeRoleId.SpecialCrew, new SpecialCrew()},
-                {(byte)ExtremeRoleId.Sheriff    , new Sheriff()},
-                {(byte)ExtremeRoleId.Maintainer , new Maintainer()},
-                {(byte)ExtremeRoleId.Neet       , new Neet()},
-                {(byte)ExtremeRoleId.Watchdog   , new Watchdog()},
-                {(byte)ExtremeRoleId.Supervisor , new Supervisor()},
-                {(byte)ExtremeRoleId.BodyGuard  , new BodyGuard()},
-                {(byte)ExtremeRoleId.Whisper    , new Whisper()},
-                {(byte)ExtremeRoleId.TimeMaster , new TimeMaster()},
-                {(byte)ExtremeRoleId.Agency     , new Agency()},
-                {(byte)ExtremeRoleId.Bakary     , new Bakary()},
-                {(byte)ExtremeRoleId.CurseMaker , new CurseMaker()},
-                {(byte)ExtremeRoleId.Fencer     , new Fencer()},
-                {(byte)ExtremeRoleId.Opener     , new Opener()},
-                {(byte)ExtremeRoleId.Carpenter  , new Carpenter()},
-                {(byte)ExtremeRoleId.Survivor , new Survivor()},
+                {(int)ExtremeRoleId.SpecialCrew, new SpecialCrew()},
+                {(int)ExtremeRoleId.Sheriff    , new Sheriff()},
+                {(int)ExtremeRoleId.Maintainer , new Maintainer()},
+                {(int)ExtremeRoleId.Neet       , new Neet()},
+                {(int)ExtremeRoleId.Watchdog   , new Watchdog()},
+                {(int)ExtremeRoleId.Supervisor , new Supervisor()},
+                {(int)ExtremeRoleId.BodyGuard  , new BodyGuard()},
+                {(int)ExtremeRoleId.Whisper    , new Whisper()},
+                {(int)ExtremeRoleId.TimeMaster , new TimeMaster()},
+                {(int)ExtremeRoleId.Agency     , new Agency()},
+                {(int)ExtremeRoleId.Bakary     , new Bakary()},
+                {(int)ExtremeRoleId.CurseMaker , new CurseMaker()},
+                {(int)ExtremeRoleId.Fencer     , new Fencer()},
+                {(int)ExtremeRoleId.Opener     , new Opener()},
+                {(int)ExtremeRoleId.Carpenter  , new Carpenter()},
+                {(int)ExtremeRoleId.Survivor   , new Survivor()},
 
-                {(byte)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
-                {(byte)ExtremeRoleId.Evolver        , new Evolver()},
-                {(byte)ExtremeRoleId.Carrier        , new Carrier()},
-                {(byte)ExtremeRoleId.PsychoKiller   , new PsychoKiller()},
-                {(byte)ExtremeRoleId.BountyHunter   , new BountyHunter()},
-                {(byte)ExtremeRoleId.Painter        , new Painter()},
-                {(byte)ExtremeRoleId.Faker          , new Faker()},
-                {(byte)ExtremeRoleId.OverLoader     , new OverLoader()},
-                {(byte)ExtremeRoleId.Cracker        , new Cracker()},
-                {(byte)ExtremeRoleId.Bomber         , new Bomber()},
-                {(byte)ExtremeRoleId.Mery           , new Mery()},
-                {(byte)ExtremeRoleId.SlaveDriver    , new SlaveDriver()},
-                {(byte)ExtremeRoleId.SandWorm       , new SandWorm()},
-                {(byte)ExtremeRoleId.Smasher        , new Smasher()},
-                {(byte)ExtremeRoleId.AssaultMaster  , new AssaultMaster()},
-                {(byte)ExtremeRoleId.Shooter        , new Shooter()},
+                {(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
+                {(int)ExtremeRoleId.Evolver        , new Evolver()},
+                {(int)ExtremeRoleId.Carrier        , new Carrier()},
+                {(int)ExtremeRoleId.PsychoKiller   , new PsychoKiller()},
+                {(int)ExtremeRoleId.BountyHunter   , new BountyHunter()},
+                {(int)ExtremeRoleId.Painter        , new Painter()},
+                {(int)ExtremeRoleId.Faker          , new Faker()},
+                {(int)ExtremeRoleId.OverLoader     , new OverLoader()},
+                {(int)ExtremeRoleId.Cracker        , new Cracker()},
+                {(int)ExtremeRoleId.Bomber         , new Bomber()},
+                {(int)ExtremeRoleId.Mery           , new Mery()},
+                {(int)ExtremeRoleId.SlaveDriver    , new SlaveDriver()},
+                {(int)ExtremeRoleId.SandWorm       , new SandWorm()},
+                {(int)ExtremeRoleId.Smasher        , new Smasher()},
+                {(int)ExtremeRoleId.AssaultMaster  , new AssaultMaster()},
+                {(int)ExtremeRoleId.Shooter        , new Shooter()},
 
-                {(byte)ExtremeRoleId.Alice     , new Alice()},
-                {(byte)ExtremeRoleId.Jackal    , new Jackal()},
-                {(byte)ExtremeRoleId.TaskMaster, new TaskMaster()},
-                {(byte)ExtremeRoleId.Missionary, new Missionary()},
-                {(byte)ExtremeRoleId.Jester    , new Jester()},
-                {(byte)ExtremeRoleId.Yandere   , new Yandere()},
-                {(byte)ExtremeRoleId.Yoko      , new Yoko()},
+                {(int)ExtremeRoleId.Alice     , new Alice()},
+                {(int)ExtremeRoleId.Jackal    , new Jackal()},
+                {(int)ExtremeRoleId.TaskMaster, new TaskMaster()},
+                {(int)ExtremeRoleId.Missionary, new Missionary()},
+                {(int)ExtremeRoleId.Jester    , new Jester()},
+                {(int)ExtremeRoleId.Yandere   , new Yandere()},
+                {(int)ExtremeRoleId.Yoko      , new Yoko()},
             };
 
         public static readonly Dictionary<
@@ -294,7 +294,7 @@ namespace ExtremeRoles.Roles
         }
 
         public static void SetPlayerIdToMultiRoleId(
-            byte combType, byte roleId, byte playerId, byte id, byte bytedRoleType)
+            byte combType, int roleId, byte playerId, byte id, byte bytedRoleType)
         {
             RoleTypes roleType = (RoleTypes)bytedRoleType;
             bool hasVanilaRole = roleType != RoleTypes.Crewmate || roleType != RoleTypes.Impostor;
@@ -333,7 +333,7 @@ namespace ExtremeRoles.Roles
             }
         }
         public static void SetPlyerIdToSingleRoleId(
-            byte roleId, byte playerId)
+            int roleId, byte playerId)
         {
             if (!Enum.IsDefined(typeof(RoleTypes), Convert.ToUInt16(roleId)))
             {

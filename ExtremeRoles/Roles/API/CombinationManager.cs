@@ -34,7 +34,7 @@ namespace ExtremeRoles.Roles.API
         public abstract void AssignSetUpInit(int curImpNum);
 
         public abstract MultiAssignRoleBase GetRole(
-            byte roleId, RoleTypes playerRoleType);
+            int roleId, RoleTypes playerRoleType);
 
         protected override void CreateKillerOption(
             CustomOptionBase parentOps)
@@ -79,13 +79,13 @@ namespace ExtremeRoles.Roles.API
         }
 
         public override MultiAssignRoleBase GetRole(
-            byte roleId, RoleTypes playerRoleType)
+            int roleId, RoleTypes playerRoleType)
         {
 
             foreach(var checkRole in this.Roles)
             {
 
-                if ((byte)checkRole.Id != roleId) { continue; }
+                if (checkRole.Id != (ExtremeRoleId)roleId) { continue; }
 
                 checkRole.CanHasAnotherRole = OptionHolder.AllOption[
                     GetRoleOptionId(
@@ -241,12 +241,12 @@ namespace ExtremeRoles.Roles.API
         }
 
         public override MultiAssignRoleBase GetRole(
-            byte roleId, RoleTypes playerRoleType)
+            int roleId, RoleTypes playerRoleType)
         {
 
             MultiAssignRoleBase role = null;
             
-            if ((byte)this.BaseRole.Id != roleId) { return role; }
+            if (this.BaseRole.Id != (ExtremeRoleId)roleId) { return role; }
 
             this.BaseRole.CanHasAnotherRole = OptionHolder.AllOption[
                 GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign)].GetValue();
