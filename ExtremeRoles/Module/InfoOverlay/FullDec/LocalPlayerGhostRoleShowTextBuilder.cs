@@ -18,7 +18,7 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
                 return Tuple.Create($"<size=200%>{Translation.GetString("yourAliveNow")}</size>\n", "");
             }
             var role = GhostRoles.ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
-            if (role == null && CachedPlayerControl.LocalPlayer.Data.IsDead)
+            if (role == null)
             {
                 return Tuple.Create($"<size=200%>{Translation.GetString("yourNoAssignGhostRole")}</size>\n", "");
             }
