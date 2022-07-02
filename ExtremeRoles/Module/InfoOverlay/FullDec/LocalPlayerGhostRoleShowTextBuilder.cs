@@ -2,6 +2,7 @@
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module.InfoOverlay.FullDec
 {
@@ -12,10 +13,14 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
 
         public Tuple<string, string> GetShowText()
         {
+            if (!CachedPlayerControl.LocalPlayer.Data.IsDead)
+            {
+                return Tuple.Create($"<size=200%>{Translation.GetString("yourAliveNow")}</size>\n", "");
+            }
             var role = GhostRoles.ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
             if (role == null)
             {
-                return Tuple.Create($"<size=200%>{Translation.GetString("yourAliveNow")}</size>\n", "");
+                return Tuple.Create($"<size=200%>{Translation.GetString("yourNoAssignGhostRole")}</size>\n", "");
             }
             string roleText = $"<size=200%>{Translation.GetString("yourGhostRole")}</size>\n";
             string anotherRoleText = "<size=200%> </size>\n";

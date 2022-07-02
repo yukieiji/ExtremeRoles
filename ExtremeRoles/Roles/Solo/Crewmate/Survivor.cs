@@ -12,6 +12,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 {
     public class Survivor : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleWinPlayerModifier
     {
+        public override bool IsAssignGhostRole
+        {
+            get => this.isDeadWin || this.isNoWinSurvivorAssignGhostRole;
+        }
+
         public bool IsAwake
         {
             get
@@ -26,6 +31,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             AwakeTaskGage,
             DeadWinTaskGage,
+            NoWinSurvivorAssignGhostRole
         }
 
         private bool awakeRole;
@@ -34,6 +40,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         private bool isDeadWin;
         private float deadWinTaskGage;
+
+        private bool isNoWinSurvivorAssignGhostRole;
 
         public Survivor() : base(
             ExtremeRoleId.Survivor,
@@ -198,6 +206,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 100, 50, 100, 10,
                 parentOps,
                 format: OptionUnit.Percentage);
+            CreateBoolOption(
+                SurvivorOption.NoWinSurvivorAssignGhostRole,
+                true, parentOps);
         }
 
         protected override void RoleSpecificInit()
@@ -206,6 +217,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 GetRoleOptionId(SurvivorOption.AwakeTaskGage)].GetValue() / 100.0f;
             this.deadWinTaskGage = (float)OptionHolder.AllOption[
                 GetRoleOptionId(SurvivorOption.DeadWinTaskGage)].GetValue() / 100.0f;
+            this.isNoWinSurvivorAssignGhostRole = OptionHolder.AllOption[
+                GetRoleOptionId(SurvivorOption.NoWinSurvivorAssignGhostRole)].GetValue();
 
             this.awakeHasOtherVision = this.HasOtherVison;
             this.isDeadWin = false;

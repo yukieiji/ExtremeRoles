@@ -609,6 +609,7 @@ namespace ExtremeRoles.Patches.Manager
 
             var role = ExtremeRoleManager.GameRole[player.PlayerId];
 
+            if (!role.IsAssignGhostRole) { return false; }
             if (ExtremeGhostRoleManager.IsCombRole(role.Id)) { return false; }
 
             if (role.IsNeutral() &&
