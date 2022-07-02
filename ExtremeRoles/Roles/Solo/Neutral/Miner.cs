@@ -112,9 +112,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             HashSet<int> activateMine = new HashSet<int>();
             HashSet<byte> killedPlayer = new HashSet<byte>();
 
-            for (int i = 0; i < mines.Count; ++i)
+            for (int i = 0; i < this.mines.Count; ++i)
             {
-                Vector2 pos = mines[i];
+                Vector2 pos = this.mines[i];
 
                 foreach (GameData.PlayerInfo playerInfo in
                     GameData.Instance.AllPlayers.GetFastEnumerator())
@@ -158,11 +158,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 }
             }
 
-            foreach (var index in activateMine)
+            foreach (int index in activateMine)
             {
-                mines.RemoveAt(index);
+                this.mines.RemoveAt(index);
             }
-            foreach (var player in killedPlayer)
+            foreach (byte player in killedPlayer)
             {
                 RPCOperator.Call(
                     rolePlayer.NetId,
