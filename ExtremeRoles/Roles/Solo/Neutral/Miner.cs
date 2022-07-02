@@ -150,6 +150,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                                     magnitude, Constants.ShipAndObjectsMask))
                             {
                                 activateMine.Add(i);
+                                killedPlayer.Add(playerInfo.PlayerId);
                                 break;
                             }
                         }
@@ -192,7 +193,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                         // [AUER32-ACM] {プレイヤー名} 100↑
                         // AmongUs ExtremeRoles v3.2.0.0 - AntiCrewmateMine
                         this.killLogger.AddText(
-                            $"[AUER32-ACM] {Helper.Design.ColoedString(new Color(255, 153, 0), killPlayer.DefaultOutfit.PlayerName)} 100↑");
+                            $"[AUER32-ACM] {Helper.Design.ColoedString(new Color32(255, 153, 51, byte.MaxValue), killPlayer.DefaultOutfit.PlayerName)} 100↑");
                     }
                 }
             }
@@ -233,6 +234,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
+            
+            this.CreateCommonAbilityOption(
+                parentOps, 2.0f);
             CreateFloatOption(
                 MinerOption.MineKillRange,
                 1.8f, 0.5f, 5f, 0.1f, parentOps);
@@ -243,8 +247,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             CreateBoolOption(
                 MinerOption.ShowKillLog,
                 true, parentOps);
-            this.CreateCommonAbilityOption(
-                parentOps, 1.5f);
         }
 
         protected override void RoleSpecificInit()
@@ -262,7 +264,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.timer = this.nonActiveTime;
             this.setPos = null;
             this.killLogger = new TextPopUpper(
-                2, 2.5f, new Vector3(0, 1.2f, 0.0f),
+                2, 2.5f, new Vector3(0, -1.2f, 0.0f),
                 TMPro.TextAlignmentOptions.Center);
         }
     }
