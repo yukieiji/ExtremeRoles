@@ -184,7 +184,7 @@ namespace ExtremeRoles.Roles
                 {(int)ExtremeRoleId.Jester    , new Jester()},
                 {(int)ExtremeRoleId.Yandere   , new Yandere()},
                 {(int)ExtremeRoleId.Yoko      , new Yoko()},
-                
+                {(int)ExtremeRoleId.Totocalcio, new Totocalcio()},
                 {(int)ExtremeRoleId.Miner     , new Miner()},
             };
 
