@@ -18,7 +18,7 @@ namespace ExtremeRoles.Patches
         public static void Postfix(ShipStatus __instance)
         {
             CachedShipStatus.SetUp(__instance);
-            ExtremeRolesPlugin.Compat.SetUpMap(__instance);
+            ExtremeRolesPlugin.Compat.SetUpMap(__instance);   
         }
     }
 
@@ -31,7 +31,7 @@ namespace ExtremeRoles.Patches
             [HarmonyArgument(0)] GameData.PlayerInfo playerInfo)
         {
 
-            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd())
+            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd)
             {
                 return checkNormalOrCustomCalculateLightRadius(playerInfo, ref __result);
             }

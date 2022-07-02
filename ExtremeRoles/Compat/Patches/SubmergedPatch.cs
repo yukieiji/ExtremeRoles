@@ -139,7 +139,7 @@ namespace ExtremeRoles.Compat.Patches
             var submergedMod = ExtremeRolesPlugin.Compat.ModMap as Mods.SubmergedMap;
             if (submergedMod == null) { return; }
 
-            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return; }
+            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return; }
             if (Roles.ExtremeRoleManager.GetLocalPlayerRole().Id != Roles.ExtremeRoleId.Assassin) { return; }
 
             object instance = submarineOxygenSystemInstance.GetValue(null);

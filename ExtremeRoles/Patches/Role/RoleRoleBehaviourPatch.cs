@@ -10,7 +10,7 @@ namespace ExtremeRoles.Patches.Role
             RoleBehaviour __instance,
             ref float __result)
         {
-            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return true; }
+            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return true; }
 
             var role = ExtremeRoleManager.GameRole[__instance.Player.PlayerId];
 
@@ -30,7 +30,7 @@ namespace ExtremeRoles.Patches.Role
             ref bool __result,
             [HarmonyArgument(0)] GameData.PlayerInfo target)
         {
-            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return true; }
+            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return true; }
 
             var gameRoles = ExtremeRoleManager.GameRole;
             var role = ExtremeRoleManager.GameRole[__instance.Player.PlayerId];

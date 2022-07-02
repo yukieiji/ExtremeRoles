@@ -132,7 +132,7 @@ namespace ExtremeRoles.Module.InfoOverlay
         {
             if (FastDestroyableSingleton<HudManager>.Instance.Chat.IsOpen) { return; }
 
-            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd())
+            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd)
             {
                 switch (showType)
                 {

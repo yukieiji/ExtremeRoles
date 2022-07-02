@@ -9,7 +9,7 @@ namespace ExtremeRoles.Patches
     {
         public static void Postfix(CustomNetworkTransform __instance)
         {
-            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return; }
+            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return; }
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
             byte playerId = __instance.gameObject.GetComponent<PlayerControl>().PlayerId;

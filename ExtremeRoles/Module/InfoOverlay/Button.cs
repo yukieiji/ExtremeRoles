@@ -49,7 +49,7 @@ namespace ExtremeRoles.Module.InfoOverlay
 
         private static void toggleInfoOverlay()
         {
-            if (ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd())
+            if (ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd)
             {
                 show(InfoOverlay.ShowType.AllGhostRole);
             }

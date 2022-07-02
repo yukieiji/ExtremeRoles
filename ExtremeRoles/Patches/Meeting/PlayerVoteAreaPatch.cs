@@ -58,7 +58,7 @@ namespace ExtremeRoles.Patches.Meeting
 
 		public static bool Prefix(PlayerVoteArea __instance)
 		{
-			if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd()) { return true; }
+			if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return true; }
 			if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
 			var gameData = ExtremeRolesPlugin.GameDataStore;

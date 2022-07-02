@@ -42,6 +42,8 @@ namespace ExtremeRoles.Module
             Disconnected,
         }
 
+        public bool IsRoleSetUpEnd => this.isRoleSetUpEnd;
+
         public GameOverReason EndReason;
         public List<PlayerSummary> FinalSummary = new List<PlayerSummary>();
         public Dictionary<byte, DeadInfo> DeadPlayerInfo = new Dictionary<byte, DeadInfo>();
@@ -69,6 +71,7 @@ namespace ExtremeRoles.Module
         public byte IsMarinPlayerId = byte.MaxValue;
 
         private List<IMeetingResetObject> resetObject = new List<IMeetingResetObject>();
+        private bool isRoleSetUpEnd;
 
         public GameDataContainer()
         {
@@ -105,6 +108,8 @@ namespace ExtremeRoles.Module
 
             ExiledAssassinId = byte.MaxValue;
             IsMarinPlayerId = byte.MaxValue;
+
+            isRoleSetUpEnd = false;
         }
 
         public void AddDeadInfo(
@@ -211,13 +216,9 @@ namespace ExtremeRoles.Module
                 });
 
         }
-        public bool IsRoleSetUpEnd()
+        public void RoleSetUpEnd()
         {
-            if (GameData.Instance == null)
-            {
-                return false;
-            }
-            return ExtremeRoleManager.GameRole.Count == GameData.Instance.AllPlayers.Count;
+            this.isRoleSetUpEnd = true;
         }
 
         public PlayerStatistics CreateStatistics()

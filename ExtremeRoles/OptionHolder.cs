@@ -64,7 +64,10 @@ namespace ExtremeRoles
             EngineerUseImpostorVent,
             CanKillVentInPlayer,
             ParallelMedBayScans,
+            IsRemoveAirShipArchiveAdmin,
+            IsRemoveAirShipCockpitAdmin,
             RandomMap,
+            
             DisableTaskWinWhenNoneTaskCrew,
             DisableTaskWin,
             IsSameNeutralSameWin,
@@ -144,6 +147,13 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.IsRemoveAngleIcon].GetValue();
             Ship.IsBlockGAAbilityReport = AllOption[
                 (int)CommonOptionKey.IsBlockGAAbilityReport].GetValue();
+
+
+            Ship.IsRemoveAirShipCockpitAdmin = AllOption[
+                (int)CommonOptionKey.IsRemoveAirShipCockpitAdmin].GetValue();
+            Ship.IsRemoveAirShipArchiveAdmin = AllOption[
+                (int)CommonOptionKey.IsRemoveAirShipArchiveAdmin].GetValue();
+
 
             Client.GhostsSeeRole = ConfigParser.GhostsSeeRoles.Value;
             Client.GhostsSeeTask = ConfigParser.GhostsSeeTasks.Value;
@@ -373,6 +383,17 @@ namespace ExtremeRoles
             new BoolCustomOption(
                 (int)CommonOptionKey.ParallelMedBayScans,
                 CommonOptionKey.ParallelMedBayScans.ToString(), false);
+
+            new BoolCustomOption(
+                (int)CommonOptionKey.IsRemoveAirShipCockpitAdmin,
+                CommonOptionKey.IsRemoveAirShipCockpitAdmin.ToString(),
+                false);
+            new BoolCustomOption(
+                (int)CommonOptionKey.IsRemoveAirShipArchiveAdmin,
+                CommonOptionKey.IsRemoveAirShipArchiveAdmin.ToString(),
+                false);
+
+
             new BoolCustomOption(
                 (int)CommonOptionKey.RandomMap,
                 CommonOptionKey.RandomMap.ToString(), false);
@@ -417,6 +438,7 @@ namespace ExtremeRoles
                 false);
         }
 
+
         public static class ConfigParser
         {
             public static ConfigEntry<string> StreamerModeReplacementText { get; set; }
@@ -443,10 +465,16 @@ namespace ExtremeRoles
             public static int MaxNumberOfMeeting = 100;
             public static bool AllowParallelMedBayScan = false;
             public static bool BlockSkippingInEmergencyMeeting = false;
+            
             public static bool DisableVent = false;
             public static bool EngineerUseImpostorVent = false;
             public static bool CanKillVentInPlayer = false;
+
+            public static bool IsRemoveAirShipCockpitAdmin = false;
+            public static bool IsRemoveAirShipArchiveAdmin = false;
+
             public static bool DisableSelfVote = false;
+
             public static bool DisableTaskWinWhenNoneTaskCrew = false;
             public static bool DisableTaskWin = false;
             public static bool IsSameNeutralSameWin = true;

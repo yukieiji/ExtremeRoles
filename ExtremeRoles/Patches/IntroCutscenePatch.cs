@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 
 using HarmonyLib;
 using UnityEngine;
@@ -11,7 +12,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches
 {
-    class IntroCutscenceHelper
+    public static class IntroCutscenceHelper
     {
 
         public static void SetupIntroTeam(
@@ -78,7 +79,7 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginImpostor))]
-    class IntroCutsceneBeginImpostorPatch
+    public static class IntroCutsceneBeginImpostorPatch
     {
         public static void Prefix(
             IntroCutscene __instance,
@@ -99,7 +100,7 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.BeginCrewmate))]
-    class BeginCrewmatePatch
+    public static class BeginCrewmatePatch
     {
         public static void Prefix(
             IntroCutscene __instance,
@@ -118,14 +119,14 @@ namespace ExtremeRoles.Patches
         }
     }
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CoBegin))]
-    class IntroCutsceneCoBeginPatch
+    public static class IntroCutsceneCoBeginPatch
     {
        
         private static IEnumerator coBeginPatch(
             IntroCutscene instance)
         {
             // バニラの役職アサイン後すぐこの処理が走るので全員の役職が入るまで待機
-            while (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd())
+            while (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd)
             {
                 yield return null;
             }
@@ -182,7 +183,7 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.ShowRole))]
-    class IntroCutsceneSetUpRoleTextPatch
+    public static class IntroCutsceneSetUpRoleTextPatch
     {
         private static IEnumerator showRoleText(
             Roles.API.SingleRoleBase role,
@@ -261,8 +262,11 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
-    class IntroCutsceneOnDestroyPatch
+    public static class IntroCutsceneOnDestroyPatch
     {
+        private const string airShipArchiveAdmin = "Airship(Clone)/Records/records_admin_map";
+        private const string airShipCockpitAdmin = "Airship(Clone)/Cockpit/panel_cockpit_map";
+
         public static void Prefix(IntroCutscene __instance)
         {
             Module.InfoOverlay.Button.SetInfoButtonToInGamePositon();
@@ -284,6 +288,36 @@ namespace ExtremeRoles.Patches
                     setUpRole.IntroEndSetUp();
                 }
             }
+            disableMapObject();
+        }
+
+        private static void disableMapObject()
+        {
+            HashSet<string> disableObjectName = new HashSet<string>();
+            switch (PlayerControl.GameOptions.MapId)
+            {
+                case 4:
+                    if (!ExtremeRolesPlugin.Compat.IsModMap)
+                    {
+                        if (OptionHolder.Ship.IsRemoveAirShipArchiveAdmin)
+                        {
+                            disableObjectName.Add(airShipArchiveAdmin);
+                        }
+                        if (OptionHolder.Ship.IsRemoveAirShipCockpitAdmin)
+                        {
+                            disableObjectName.Add(airShipCockpitAdmin);
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            foreach (string objectName in disableObjectName)
+            {
+                GameObject.Find(objectName)?.SetActive(false);
+            }
+
         }
     }
 }
