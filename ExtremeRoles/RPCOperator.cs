@@ -69,7 +69,7 @@ namespace ExtremeRoles
             MerySetCamp,
             MeryAcivateVent,
             SlaveDriverSetNewTask,
-
+            LastWolfSwitchLight,
 
             // ニュートラル
             AliceShipBroken,
@@ -515,6 +515,11 @@ namespace ExtremeRoles
         {
             Roles.Solo.Impostor.SlaveDriver.ReplaceToNewTask(
                 callerId, index, taskIndex);
+        }
+        public static void LastWolfSwitchLight(byte swichStatus)
+        {
+            Roles.Solo.Impostor.LastWolf.SwitchLight(
+                swichStatus == byte.MinValue);
         }
 
         public static void AliceShipBroken(

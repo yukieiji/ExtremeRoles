@@ -94,6 +94,15 @@ namespace ExtremeRoles.Patches.Button
                 MurderKillResult res = checkMuderKill(
                     __instance, killer, target);
 
+                var lastWolf = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Roles.Solo.Impostor.LastWolf>();
+                if (lastWolf != null)
+                {
+                    if (lastWolf.IsAwake)
+                    {
+                        res = MurderKillResult.NoAnimatedKill;
+                    }
+                }
+
                 switch (res)
                 {
                     case MurderKillResult.NormalKill:

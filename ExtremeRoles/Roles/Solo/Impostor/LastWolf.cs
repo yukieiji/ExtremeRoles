@@ -91,7 +91,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.CreateNormalAbilityButton(
                 Translation.GetString("liightOff"),
                 Resources.Loader.CreateSpriteFromResources(
-                   Resources.Path.TestButton));
+                   Resources.Path.TestButton),
+                abilityCleanUp:CleanUp);
 
             setCurCooltime();
         }
@@ -102,6 +103,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void RoleAbilityResetOnMeetingStart()
         {
+            CleanUp();
             setCurCooltime();
             if (this.isAwake)
             {
@@ -121,9 +123,27 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool UseAbility()
         {
-
-
+            RPCOperator.Call(
+               CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+               RPCOperator.Command.LastWolfSwitchLight,
+               new List<byte>
+               {
+                    byte.MaxValue,
+               });
+            SwitchLight(true);
             return true;
+        }
+
+        public void CleanUp()
+        {
+            RPCOperator.Call(
+               CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+               RPCOperator.Command.LastWolfSwitchLight,
+               new List<byte>
+               {
+                    byte.MinValue,
+               });
+            SwitchLight(false);
         }
 
         public void Update(PlayerControl rolePlayer)

@@ -1012,6 +1012,10 @@ namespace ExtremeRoles.Patches
                     RPCOperator.SlaveDriverSetNewTask(
                         slaveDriverId, replaceTaskIndex, setTaskId);
                     break;
+                case RPCOperator.Command.LastWolfSwitchLight:
+                    byte swichStatus = reader.ReadByte();
+                    RPCOperator.LastWolfSwitchLight(swichStatus);
+                    break;
                 case RPCOperator.Command.AliceShipBroken:
                     byte alicePlayerId = reader.ReadByte();
                     byte newTaskSetPlayerId = reader.ReadByte();

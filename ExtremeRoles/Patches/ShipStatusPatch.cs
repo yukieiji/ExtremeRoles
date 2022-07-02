@@ -33,7 +33,7 @@ namespace ExtremeRoles.Patches
             switch (ExtremeRolesPlugin.GameDataStore.CurVison)
             {
                 case GameDataContainer.ForceVisionType.LastWolfLightOff:
-                    __result = 0.15f;
+                    __result = 0.3f;
                     return false;
                 default:
                     break;
