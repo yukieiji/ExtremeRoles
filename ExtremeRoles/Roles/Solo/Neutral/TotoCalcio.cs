@@ -47,7 +47,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
            ExtremeRoleId.Totocalcio,
            ExtremeRoleType.Neutral,
            ExtremeRoleId.Totocalcio.ToString(),
-           ColorPalette.TotocalcioPink,
+           ColorPalette.TotocalcioGreen,
            false, false, false, false)
         { }
 
@@ -145,7 +145,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     CachedPlayerControl.LocalPlayer.PlayerId,
                     this.tmpTarget.PlayerId,
                 });
-
+            SetBetTarget(
+                CachedPlayerControl.LocalPlayer.PlayerId,
+                this.tmpTarget.PlayerId);
             this.tmpTarget = null;
             return true;
         }
@@ -185,8 +187,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (targetPlayerId == this.betPlayer.PlayerId)
             {
                 return Helper.Design.ColoedString(
-                    ColorPalette.YandereVioletRed,
-                    $" ▲");
+                    this.NameColor, $" ▲");
             }
 
             return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
@@ -206,7 +207,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             CreateFloatOption(
                 TotocalcioOption.FinalCoolTime,
                 80.0f, 45.0f, 180.0f, 0.1f,
-                parentOps);
+                parentOps, format: OptionUnit.Second);
         }
 
         protected override void RoleSpecificInit()

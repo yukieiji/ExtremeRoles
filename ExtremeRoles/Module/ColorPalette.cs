@@ -37,7 +37,7 @@ namespace ExtremeRoles.Module
         public readonly static Color YandereVioletRed = new Color32(199, 21, 133, byte.MaxValue);
         public readonly static Color VigilanteFujiIro = new Color32(186, 167, 204, byte.MaxValue);
         public readonly static Color YokoShion = new Color32(134, 123, 169, byte.MaxValue);
-        public readonly static Color TotocalcioPink = new Color32(245, 125, 167, byte.MaxValue);
+        public readonly static Color TotocalcioGreen = new Color32(0, 255, 0, byte.MaxValue);
 
         public readonly static Color MinerIvyGreen = new Color32(76, 103, 51, byte.MaxValue);
 
