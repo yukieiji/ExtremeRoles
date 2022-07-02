@@ -12,6 +12,8 @@ namespace ExtremeRoles.Roles.API
 {
     public abstract class SingleRoleBase : RoleOptionBase
     {
+        public virtual bool IsAssignGhostRole => true;
+
         public bool CanCallMeeting = true;
         public bool CanRepairSabotage = true;
 
