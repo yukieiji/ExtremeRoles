@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 
 using HarmonyLib;
 using UnityEngine;
@@ -263,6 +264,9 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
     public static class IntroCutsceneOnDestroyPatch
     {
+        private const string airShipArchiveAdmin = "Airship(Clone)/Records/records_admin_map";
+        private const string airShipCockpitAdmin = "Airship(Clone)/Cockpit/panel_cockpit_map";
+
         public static void Prefix(IntroCutscene __instance)
         {
             Module.InfoOverlay.Button.SetInfoButtonToInGamePositon();
@@ -289,6 +293,7 @@ namespace ExtremeRoles.Patches
 
         private static void disableMapObject()
         {
+            HashSet<string> disableObjectName = new HashSet<string>();
             switch (PlayerControl.GameOptions.MapId)
             {
                 case 4:
@@ -296,19 +301,23 @@ namespace ExtremeRoles.Patches
                     {
                         if (OptionHolder.Ship.IsRemoveAirShipArchiveAdmin)
                         {
-                            GameObject admin = GameObject.Find("Airship(Clone)/Records/records_admin_map");
-                            admin?.SetActive(false);
+                            disableObjectName.Add(airShipArchiveAdmin);
                         }
                         if (OptionHolder.Ship.IsRemoveAirShipCockpitAdmin)
                         {
-                            GameObject admin = GameObject.Find("Airship(Clone)/Cockpit/panel_cockpit_map");
-                            admin?.SetActive(false);
+                            disableObjectName.Add(airShipCockpitAdmin);
                         }
                     }
                     break;
                 default:
                     break;
             }
+
+            foreach (string objectName in disableObjectName)
+            {
+                GameObject.Find(objectName)?.SetActive(false);
+            }
+
         }
     }
 }
