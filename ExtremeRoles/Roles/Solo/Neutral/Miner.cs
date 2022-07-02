@@ -38,6 +38,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private float timer;
         private bool isShowKillLog;
         private Vector2? setPos;
+        private TextPopUpper killLogger = null;
 
         public Miner() : base(
             ExtremeRoleId.Miner,
@@ -76,7 +77,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            return;
+            if (this.killLogger != null)
+            {
+                this.killLogger.Clear();
+            }
         }
 
         public void RoleAbilityResetOnMeetingEnd()
@@ -179,8 +183,17 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
                 if (this.isShowKillLog)
                 {
-                    // 以下のテキスト表示処理
-                    // [AuExM32 対船員地雷] {プレイヤー名} 100↑
+
+                    GameData.PlayerInfo killPlayer = GameData.Instance.GetPlayerById(player);
+
+                    if (killPlayer != null)
+                    {
+                        // 以下のテキスト表示処理
+                        // [AUER32-ACM] {プレイヤー名} 100↑
+                        // AmongUs ExtremeRoles v3.2.0.0 - AntiCrewmateMine
+                        this.killLogger.AddText(
+                            $"[AUER32-ACM] {Helper.Design.ColoedString(new Color(255, 153, 0), killPlayer.DefaultOutfit.PlayerName)} 100↑");
+                    }
                 }
             }
 
@@ -248,6 +261,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.mines.Clear();
             this.timer = this.nonActiveTime;
             this.setPos = null;
+            this.killLogger = new TextPopUpper(
+                2, 2.5f, new Vector3(0, 1.2f, 0.0f),
+                TMPro.TextAlignmentOptions.Center);
         }
     }
 }
