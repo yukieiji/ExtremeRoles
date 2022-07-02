@@ -64,8 +64,11 @@ namespace ExtremeRoles
             EngineerUseImpostorVent,
             CanKillVentInPlayer,
             ParallelMedBayScans,
+            IsRemoveAdmin,
             IsRemoveAirShipArchiveAdmin,
             IsRemoveAirShipCockpitAdmin,
+            IsRemoveVital,
+            IsRemoveSecurity,
             RandomMap,
             
             DisableTaskWinWhenNoneTaskCrew,
@@ -384,13 +387,27 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.ParallelMedBayScans,
                 CommonOptionKey.ParallelMedBayScans.ToString(), false);
 
+            var adminOpt = new BoolCustomOption(
+                (int)CommonOptionKey.IsRemoveAdmin,
+                CommonOptionKey.IsRemoveAdmin.ToString(),
+                false);
             new BoolCustomOption(
                 (int)CommonOptionKey.IsRemoveAirShipCockpitAdmin,
                 CommonOptionKey.IsRemoveAirShipCockpitAdmin.ToString(),
-                false);
+                true, adminOpt);
             new BoolCustomOption(
                 (int)CommonOptionKey.IsRemoveAirShipArchiveAdmin,
                 CommonOptionKey.IsRemoveAirShipArchiveAdmin.ToString(),
+                true, adminOpt);
+
+            new BoolCustomOption(
+                (int)CommonOptionKey.IsRemoveVital,
+                CommonOptionKey.IsRemoveVital.ToString(),
+                false);
+
+            new BoolCustomOption(
+                (int)CommonOptionKey.IsRemoveSecurity,
+                CommonOptionKey.IsRemoveSecurity.ToString(),
                 false);
 
 
