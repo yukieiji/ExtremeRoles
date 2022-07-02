@@ -22,40 +22,6 @@ namespace ExtremeRoles.Patches
         }
     }
 
-    [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.SpawnPlayer))]
-    public static class ShipStatusOnEnablePatch
-    {
-        public static void Postfix(ShipStatus __instance)
-        {
-            disableMapObject();
-        }
-
-        private static void disableMapObject()
-        {
-            switch (PlayerControl.GameOptions.MapId)
-            {
-                case 4:
-                    if (!ExtremeRolesPlugin.Compat.IsModMap)
-                    {
-                        if (OptionHolder.Ship.IsRemoveAirShipArchiveAdmin)
-                        {
-                            GameObject admin = GameObject.Find("Airship(Clone)/Records/records_admin_map");
-                            admin?.SetActive(false);
-                        }
-                        if (OptionHolder.Ship.IsRemoveAirShipCockpitAdmin)
-                        {
-                            GameObject admin = GameObject.Find("Airship(Clone)/Cockpit/panel_cockpit_map");
-                            admin?.SetActive(false);
-                        }
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-
     [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.CalculateLightRadius))]
     class ShipStatusCalculateLightRadiusPatch
     {

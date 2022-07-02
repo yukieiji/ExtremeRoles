@@ -284,6 +284,31 @@ namespace ExtremeRoles.Patches
                     setUpRole.IntroEndSetUp();
                 }
             }
+            disableMapObject();
+        }
+
+        private static void disableMapObject()
+        {
+            switch (PlayerControl.GameOptions.MapId)
+            {
+                case 4:
+                    if (!ExtremeRolesPlugin.Compat.IsModMap)
+                    {
+                        if (OptionHolder.Ship.IsRemoveAirShipArchiveAdmin)
+                        {
+                            GameObject admin = GameObject.Find("Airship(Clone)/Records/records_admin_map");
+                            admin?.SetActive(false);
+                        }
+                        if (OptionHolder.Ship.IsRemoveAirShipCockpitAdmin)
+                        {
+                            GameObject admin = GameObject.Find("Airship(Clone)/Cockpit/panel_cockpit_map");
+                            admin?.SetActive(false);
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
