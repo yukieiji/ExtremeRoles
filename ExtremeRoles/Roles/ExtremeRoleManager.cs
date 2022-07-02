@@ -184,6 +184,8 @@ namespace ExtremeRoles.Roles
                 {(int)ExtremeRoleId.Jester    , new Jester()},
                 {(int)ExtremeRoleId.Yandere   , new Yandere()},
                 {(int)ExtremeRoleId.Yoko      , new Yoko()},
+                
+                {(int)ExtremeRoleId.Miner     , new Miner()},
             };
 
         public static readonly Dictionary<
