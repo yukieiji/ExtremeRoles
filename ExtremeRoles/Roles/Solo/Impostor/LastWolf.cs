@@ -130,7 +130,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                {
                     byte.MaxValue,
                });
-            SwitchLight(true);
+            SwitchLight(false);
             return true;
         }
 
@@ -143,7 +143,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                {
                     byte.MinValue,
                });
-            SwitchLight(false);
+            SwitchLight(true);
         }
 
         public void Update(PlayerControl rolePlayer)
