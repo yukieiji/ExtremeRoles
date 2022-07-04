@@ -193,6 +193,12 @@ namespace ExtremeRoles.Patches
                         noWinner,
                         new ExtremeRoleId[] { ExtremeRoleId.Miner });
                     break;
+                case RoleGameOverReason.EaterAllEatInTheShip:
+                case RoleGameOverReason.EaterAliveAlone:
+                    replaceWinnerToSpecificNeutralRolePlayer(
+                        noWinner,
+                        new ExtremeRoleId[] { ExtremeRoleId.Eater });
+                    break;
                 case RoleGameOverReason.ShipFallInLove:
                     replaceWinnerToSpecificRolePlayer(
                         ExtremeRoleId.Lover);

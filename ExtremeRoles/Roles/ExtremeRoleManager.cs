@@ -117,6 +117,9 @@ namespace ExtremeRoles.Roles
 
         MinerExplodeEverything,
 
+        EaterAllEatInTheShip,
+        EaterAliveAlone,
+
         UnKnown = 100,
     }
 
@@ -128,7 +131,8 @@ namespace ExtremeRoles.Roles
         Missionary,
         Yandere,
         Vigilante,
-        Miner
+        Miner,
+        Eater
     }
 
     public static class ExtremeRoleManager
@@ -189,6 +193,7 @@ namespace ExtremeRoles.Roles
                 {(int)ExtremeRoleId.Yoko      , new Yoko()},
                 {(int)ExtremeRoleId.Totocalcio, new Totocalcio()},
                 {(int)ExtremeRoleId.Miner     , new Miner()},
+                {(int)ExtremeRoleId.Eater     , new Eater()},
             };
 
         public static readonly Dictionary<

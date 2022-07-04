@@ -352,6 +352,12 @@ namespace ExtremeRoles.Module
                                     gameControlId,
                                     NeutralSeparateTeam.Miner);
                                 break;
+                            case ExtremeRoleId.Eater:
+                                addNeutralTeams(
+                                    ref neutralTeam,
+                                    gameControlId,
+                                    NeutralSeparateTeam.Eater);
+                                break;
                             default:
                                 break;
                         }

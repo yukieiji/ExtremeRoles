@@ -336,6 +336,13 @@ namespace ExtremeRoles.Patches.Manager
                     textRenderer.color = ColorPalette.MinerIvyGreen;
                     manager.BackgroundBar.material.SetColor("_Color", ColorPalette.MinerIvyGreen);
                     break;
+                case (GameOverReason)RoleGameOverReason.EaterAllEatInTheShip:
+                case (GameOverReason)RoleGameOverReason.EaterAliveAlone:
+                    bonusText = Translation.GetString(
+                        ExtremeRoleId.Eater.ToString());
+                    textRenderer.color = ColorPalette.MinerIvyGreen;
+                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.MinerIvyGreen);
+                    break;
                 default:
                     break;
             }

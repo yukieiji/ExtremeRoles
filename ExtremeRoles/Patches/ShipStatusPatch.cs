@@ -316,6 +316,12 @@ namespace ExtremeRoles.Patches
                         setWinGameContorlId(id);
                         endReason = (GameOverReason)RoleGameOverReason.MinerExplodeEverything;
                         break;
+                    case NeutralSeparateTeam.Eater:
+                        if (statistics.TeamImpostorAlive > 0 &&
+                            statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
+                        setWinGameContorlId(id);
+                        endReason = (GameOverReason)RoleGameOverReason.EaterAliveAlone;
+                        break;
                     default:
                         break;
                 }
@@ -353,6 +359,9 @@ namespace ExtremeRoles.Patches
                             break;
                         case ExtremeRoleId.Jester:
                             endReason = (GameOverReason)RoleGameOverReason.JesterMeetingFavorite;
+                            break;
+                        case ExtremeRoleId.Eater:
+                            endReason = (GameOverReason)RoleGameOverReason.EaterAllEatInTheShip;
                             break;
                         default :
                             break;
