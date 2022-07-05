@@ -245,9 +245,9 @@ namespace ExtremeRoles.Patches.Manager
             bonusTextObject.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
 
             TMPro.TMP_Text textRenderer = bonusTextObject.GetComponent<TMPro.TMP_Text>();
-            textRenderer.text = "";
+            textRenderer.text = string.Empty;
 
-            string bonusText = "";
+            string bonusText = string.Empty;
 
             var gameData = ExtremeRolesPlugin.GameDataStore;
 
@@ -365,15 +365,18 @@ namespace ExtremeRoles.Patches.Manager
 
                             if(added.Count == 0)
                             {
-                                bonusText = bonusText + Translation.GetString("andFirst");
+                                bonusText = string.Concat(
+                                    bonusText, Translation.GetString("andFirst"));
                             }
                             else
                             {
-                                bonusText = bonusText + Translation.GetString("and");
+                                bonusText = string.Concat(
+                                    bonusText, Translation.GetString("and"));
                             }
 
-                            bonusText = bonusText + Translation.GetString(
-                                winNeutral[i].GetColoredRoleName(true));
+                            bonusText = string.Concat(
+                                bonusText, Translation.GetString(
+                                    winNeutral[i].GetColoredRoleName(true)));
                             added.Add(winNeutral[i].Id);
                         }
                         break;
@@ -394,19 +397,19 @@ namespace ExtremeRoles.Patches.Manager
 
                 if (added.Count == 0)
                 {
-                    bonusText = bonusText + Translation.GetString("andFirst");
+                    bonusText = string.Concat(bonusText, Translation.GetString("andFirst"));
                 }
                 else
                 {
-                    bonusText = bonusText + Translation.GetString("and");
+                    bonusText = string.Concat(bonusText, Translation.GetString("and"));
                 }
 
-                bonusText = bonusText + Translation.GetString(
-                    role.GetColoredRoleName(true));
+                bonusText = string.Concat(bonusText, Translation.GetString(
+                    role.GetColoredRoleName(true)));
                 added.Add(role.Id);
             }
 
-            textRenderer.text = bonusText + string.Format(Translation.GetString("win"));
+            textRenderer.text = string.Concat(bonusText, Translation.GetString("win"));
         }
 
     }
