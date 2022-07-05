@@ -52,6 +52,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 Vector3 positionOffset,
                 Action abilityCleanUp,
                 Func<bool> abilityCheck,
+                int winAbilityNum,
                 float killEatTime,
                 KeyCode hotkey = KeyCode.F,
                 bool mirror = false) : base(
@@ -82,6 +83,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 this.killEatTime = killEatTime;
 
                 this.isKillEatMode = false;
+                this.abilityNum = winAbilityNum;
             }
 
             public void UpdateAbilityCount(int newCount)
@@ -262,6 +264,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 new Vector3(-1.8f, -0.06f, 0),
                 CleanUp,
                 IsAbilityCheck,
+                (int)allOpt[GetRoleOptionId(
+                    RoleAbilityCommonOption.AbilityCount)].GetValue(),
                 (float)allOpt[GetRoleOptionId(
                     RoleAbilityCommonOption.AbilityActiveTime)].GetValue());
 
@@ -427,6 +431,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 RoleAbilityCommonOption.AbilityActiveTime,
                 7.5f, 2.5f, 15.0f, 0.5f,
                 parentOps, format: OptionUnit.Second);
+            CreateIntOption(
+                RoleAbilityCommonOption.AbilityCount,
+                5, 1, 7, 1, parentOps);
             CreateFloatOption(
                 EaterOption.EatRange,
                 1.0f, 0.0f, 2.0f, 0.1f,
@@ -477,7 +484,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             this.defaultCoolTime = allOps[
                 GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)].GetValue();
-
+            
             this.Button.SetAbilityCoolTime(this.defaultCoolTime);
             this.Button.ResetCoolTimer();
         }
