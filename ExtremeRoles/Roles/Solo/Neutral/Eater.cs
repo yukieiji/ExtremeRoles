@@ -249,7 +249,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
            ExtremeRoleId.Eater,
            ExtremeRoleType.Neutral,
            ExtremeRoleId.Eater.ToString(),
-           ColorPalette.TotocalcioGreen,
+           ColorPalette.EaterKenpou,
            false, false, false, false)
         { }
 
@@ -337,7 +337,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            foreach (Arrow arrow in this.deadBodyArrow)
+            foreach (Arrow arrow in this.deadBodyArrow.Values)
             {
                 arrow.Clear();
             }
