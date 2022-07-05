@@ -340,8 +340,8 @@ namespace ExtremeRoles.Patches.Manager
                 case (GameOverReason)RoleGameOverReason.EaterAliveAlone:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Eater.ToString());
-                    textRenderer.color = ColorPalette.MinerIvyGreen;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.MinerIvyGreen);
+                    textRenderer.color = ColorPalette.EaterKenpou;
+                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.EaterKenpou);
                     break;
                 default:
                     break;
