@@ -343,6 +343,12 @@ namespace ExtremeRoles.Patches.Manager
                     textRenderer.color = ColorPalette.EaterKenpou;
                     manager.BackgroundBar.material.SetColor("_Color", ColorPalette.EaterKenpou);
                     break;
+                case (GameOverReason)RoleGameOverReason.TraitorKillAllOther:
+                    bonusText = Translation.GetString(
+                        ExtremeRoleId.Traitor.ToString());
+                    textRenderer.color = ColorPalette.TraitorShikon;
+                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.TraitorShikon);
+                    break;
                 default:
                     break;
             }

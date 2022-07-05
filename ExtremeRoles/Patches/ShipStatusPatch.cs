@@ -322,6 +322,12 @@ namespace ExtremeRoles.Patches
                         setWinGameContorlId(id);
                         endReason = (GameOverReason)RoleGameOverReason.EaterAliveAlone;
                         break;
+                    case NeutralSeparateTeam.Traitor:
+                        if (statistics.TeamImpostorAlive > 0 &&
+                            statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
+                        setWinGameContorlId(id);
+                        endReason = (GameOverReason)RoleGameOverReason.TraitorKillAllOther;
+                        break;
                     default:
                         break;
                 }

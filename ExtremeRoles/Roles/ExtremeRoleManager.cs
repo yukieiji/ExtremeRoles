@@ -77,7 +77,8 @@ namespace ExtremeRoles.Roles
         Yoko,
         Totocalcio,
         Miner,
-        Eater
+        Eater,
+        Traitor,
     }
     public enum CombinationRoleType
     {
@@ -87,6 +88,7 @@ namespace ExtremeRoles.Roles
         Lover,
         Supporter,
         Sharer,
+        Traitor,
     }
 
     public enum RoleGameOverReason
@@ -120,6 +122,8 @@ namespace ExtremeRoles.Roles
         EaterAllEatInTheShip,
         EaterAliveAlone,
 
+        TraitorKillAllOther,
+
         UnKnown = 100,
     }
 
@@ -132,7 +136,8 @@ namespace ExtremeRoles.Roles
         Yandere,
         Vigilante,
         Miner,
-        Eater
+        Eater,
+        Traitor,
     }
 
     public static class ExtremeRoleManager
@@ -205,6 +210,7 @@ namespace ExtremeRoles.Roles
                 {(byte)CombinationRoleType.Lover          , new LoverManager()},
                 {(byte)CombinationRoleType.Supporter      , new SupporterManager()},
                 {(byte)CombinationRoleType.Sharer         , new SharerManager()   },
+                {(byte)CombinationRoleType.Traitor        , new TraitorManager()  },
             };
 
         public static Dictionary<

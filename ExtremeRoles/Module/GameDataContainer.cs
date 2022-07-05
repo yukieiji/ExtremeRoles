@@ -358,6 +358,12 @@ namespace ExtremeRoles.Module
                                     gameControlId,
                                     NeutralSeparateTeam.Eater);
                                 break;
+                            case ExtremeRoleId.Traitor:
+                                addNeutralTeams(
+                                    ref neutralTeam,
+                                    gameControlId,
+                                    NeutralSeparateTeam.Traitor);
+                                break;
                             default:
                                 break;
                         }

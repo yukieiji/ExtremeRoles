@@ -40,6 +40,7 @@ namespace ExtremeRoles.Module
         public readonly static Color TotocalcioGreen = new Color32(0, 255, 0, byte.MaxValue);
         public readonly static Color MinerIvyGreen = new Color32(76, 103, 51, byte.MaxValue);
         public readonly static Color EaterKenpou = new Color32(48, 47, 43, byte.MaxValue);
+        public readonly static Color TraitorShikon = new Color32(46, 16, 49, byte.MaxValue);
 
         public readonly static Color PoltergeistKenpou = new Color32(48, 47, 43, byte.MaxValue);
         public readonly static Color FaunusAntiquewhite = new Color32(250, 235, 215, byte.MaxValue);
