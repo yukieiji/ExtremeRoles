@@ -318,7 +318,19 @@ namespace ExtremeRoles.Roles
             byte combType, int roleId, byte playerId, byte id, byte bytedRoleType)
         {
             RoleTypes roleType = (RoleTypes)bytedRoleType;
-            bool hasVanilaRole = roleType != RoleTypes.Crewmate || roleType != RoleTypes.Impostor;
+
+            bool hasVanilaRole = false;
+
+            switch (roleType)
+            {
+                case RoleTypes.Scientist:
+                case RoleTypes.Engineer:
+                case RoleTypes.Shapeshifter:
+                    hasVanilaRole = true;
+                    break;
+                default:
+                    break;
+            }
 
             var role = CombRole[combType].GetRole(
                     roleId, roleType);
