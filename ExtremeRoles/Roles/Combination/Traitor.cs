@@ -16,6 +16,42 @@ namespace ExtremeRoles.Roles.Combination
         public TraitorManager() : base(new Traitor(), 1, false)
         { }
 
+        public override void AssignSetUpInit(int curImpNum)
+        {
+            foreach (var role in this.Roles)
+            {
+                role.CanHasAnotherRole = true;
+            }
+        }
+
+        public override MultiAssignRoleBase GetRole(
+            int roleId, RoleTypes playerRoleType)
+        {
+
+            MultiAssignRoleBase role = null;
+
+            if (this.BaseRole.Id != (ExtremeRoleId)roleId) { return role; }
+
+            this.BaseRole.CanHasAnotherRole = true;
+
+            role = (MultiAssignRoleBase)this.BaseRole.Clone();
+
+            switch (playerRoleType)
+            {
+                case RoleTypes.Impostor:
+                case RoleTypes.Shapeshifter:
+                    role.Team = ExtremeRoleType.Impostor;
+                    role.SetNameColor(Palette.ImpostorRed);
+                    role.CanKill = true;
+                    role.UseVent = true;
+                    role.UseSabotage = true;
+                    role.HasTask = false;
+                    return role;
+                default:
+                    return role;
+            }
+        }
+
         protected override void CommonInit()
         {
             this.Roles.Clear();
@@ -76,6 +112,7 @@ namespace ExtremeRoles.Roles.Combination
         private ExtremeRoleId crewRole;
 
         private AbilityType curAbilityType;
+        private AbilityType nextUseAbilityType;
         private TMPro.TextMeshPro chargeTime;
 
         private Sprite adminSprite;
@@ -127,12 +164,12 @@ namespace ExtremeRoles.Roles.Combination
 
         public bool UseAbility()
         {
-            switch (this.curAbilityType)
+            switch (this.nextUseAbilityType)
             {
                 case AbilityType.Admin:
                     FastDestroyableSingleton<HudManager>.Instance.ShowMap(
                         (System.Action<MapBehaviour>)(m => m.ShowCountOverlay()));
-                    return true;
+                    break;
                 case AbilityType.Security:
                     SystemConsole watchConsole;
                     if (ExtremeRolesPlugin.Compat.IsModMap)
@@ -149,13 +186,8 @@ namespace ExtremeRoles.Roles.Combination
                     {
                         return false;
                     }
-                    this.minigame = Object.Instantiate(
-                        watchConsole.MinigamePrefab,
-                        Camera.main.transform, false);
-                    this.minigame.transform.SetParent(Camera.main.transform, false);
-                    this.minigame.transform.localPosition = new Vector3(0.0f, 0.0f, -50f);
-                    this.minigame.Begin(null);
-                    return true;
+                    openConsole(watchConsole.MinigamePrefab);
+                    break;
                 case AbilityType.Vital:
                     SystemConsole vitalConsole;
                     if (ExtremeRolesPlugin.Compat.IsModMap)
@@ -172,16 +204,18 @@ namespace ExtremeRoles.Roles.Combination
                     {
                         return false;
                     }
-                    this.minigame = Object.Instantiate(
-                        vitalConsole.MinigamePrefab,
-                        Camera.main.transform, false);
-                    this.minigame.transform.SetParent(Camera.main.transform, false);
-                    this.minigame.transform.localPosition = new Vector3(0.0f, 0.0f, -50f);
-                    this.minigame.Begin(null);
-                    return true;
+                    openConsole(vitalConsole.MinigamePrefab);
+                    break;
                 default:
                     return false;
             }
+
+            this.curAbilityType = this.nextUseAbilityType;
+
+            updateAbility();
+            updateButtonSprite();
+
+            return true;
         }
 
         public bool CheckAbility()
@@ -215,42 +249,27 @@ namespace ExtremeRoles.Roles.Combination
                 default:
                     break;
             }
-
-            ++this.curAbilityType;
-            this.curAbilityType = (AbilityType)((int)this.curAbilityType % 3);
-            if (this.curAbilityType == AbilityType.Vital &&
-                (
-                    PlayerControl.GameOptions.MapId == 0 || 
-                    PlayerControl.GameOptions.MapId == 1 || 
-                    PlayerControl.GameOptions.MapId == 3
-                ))
-            {
-                this.curAbilityType = AbilityType.Admin;
-            }
-
-            var traitorButton = this.Button as TraitorCrackButton;
-
-            Sprite sprite = Resources.Loader.CreateSpriteFromResources(
-                Resources.Path.TestButton);
-
-            switch (this.curAbilityType)
-            {
-                case AbilityType.Admin:
-                    sprite = this.adminSprite;
-                    break;
-                case AbilityType.Security:
-                    sprite = this.securitySprite;
-                    break;
-                case AbilityType.Vital:
-                    sprite = this.vitalSprite;
-                    break;
-                default:
-                    break;
-            }
-            traitorButton.SetSprite(sprite);
         }
 
-        public bool IsAbilityUse() => this.IsCommonUse();
+        public bool IsAbilityUse()
+        {
+         
+            switch (this.nextUseAbilityType)
+            {
+                case AbilityType.Admin:
+                    return
+                        this.IsCommonUse() &&
+                        (
+                            MapBehaviour.Instance == null ||
+                            !MapBehaviour.Instance.isActiveAndEnabled
+                        );
+                case AbilityType.Security:
+                case AbilityType.Vital:
+                    return this.IsCommonUse() && Minigame.Instance == null;
+                default:
+                    return false;
+            }
+        }
 
 
         public void RoleAbilityResetOnMeetingStart()
@@ -304,6 +323,7 @@ namespace ExtremeRoles.Roles.Combination
 
             this.Team = ExtremeRoleType.Neutral;
             this.crewRole = this.AnotherRole.Id;
+            Logging.Debug($"Traitor Get Role:{this.crewRole}");
             
             byte rolePlayerId = byte.MaxValue;
 
@@ -337,6 +357,7 @@ namespace ExtremeRoles.Roles.Combination
                 resetRole.AllReset(
                     Player.GetPlayerControlById(rolePlayerId));
             }
+            this.AnotherRole = null;
         }
 
         public override string GetIntroDescription()
@@ -356,7 +377,7 @@ namespace ExtremeRoles.Roles.Combination
         protected override void RoleSpecificInit()
         {
             this.canUseButton = false;
-            this.curAbilityType = AbilityType.Admin;
+            this.nextUseAbilityType = AbilityType.Admin;
             this.RoleAbilityInit();
         }
 
@@ -435,6 +456,52 @@ namespace ExtremeRoles.Roles.Combination
                 default:
                     return null;
             }
+        }
+
+        private void openConsole(Minigame game)
+        {
+            this.minigame = Object.Instantiate(game, Camera.main.transform, false);
+            this.minigame.transform.SetParent(Camera.main.transform, false);
+            this.minigame.transform.localPosition = new Vector3(0.0f, 0.0f, -50f);
+            this.minigame.Begin(null);
+        }
+
+        private void updateAbility()
+        {
+            ++this.nextUseAbilityType;
+            this.nextUseAbilityType = (AbilityType)((int)this.nextUseAbilityType % 3);
+            if (this.nextUseAbilityType == AbilityType.Vital &&
+                (
+                    PlayerControl.GameOptions.MapId == 0 ||
+                    PlayerControl.GameOptions.MapId == 1 ||
+                    PlayerControl.GameOptions.MapId == 3
+                ))
+            {
+                this.nextUseAbilityType = AbilityType.Admin;
+            }
+        }
+        private void updateButtonSprite()
+        {
+            var traitorButton = this.Button as TraitorCrackButton;
+
+            Sprite sprite = Resources.Loader.CreateSpriteFromResources(
+                Resources.Path.TestButton);
+
+            switch (this.nextUseAbilityType)
+            {
+                case AbilityType.Admin:
+                    sprite = this.adminSprite;
+                    break;
+                case AbilityType.Security:
+                    sprite = this.securitySprite;
+                    break;
+                case AbilityType.Vital:
+                    sprite = this.vitalSprite;
+                    break;
+                default:
+                    break;
+            }
+            traitorButton.SetSprite(sprite);
         }
     }
 }
