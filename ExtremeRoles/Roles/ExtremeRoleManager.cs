@@ -429,7 +429,11 @@ namespace ExtremeRoles.Roles
                 IRoleAbility multiAssignAbilityRole = ((MultiAssignRoleBase)GameRole[
                     playerId]) as IRoleAbility;
 
-                if (multiAssignAbilityRole != null && CachedPlayerControl.LocalPlayer.PlayerId == playerId)
+                IRoleAbility anotherAbilityRole = ((MultiAssignRoleBase)GameRole[playerId]).AnotherRole as IRoleAbility;
+
+                if (multiAssignAbilityRole != null && 
+                    anotherAbilityRole != null &&
+                    CachedPlayerControl.LocalPlayer.PlayerId == playerId)
                 {
                     if (multiAssignAbilityRole.Button != null)
                     {
