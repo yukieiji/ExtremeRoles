@@ -137,7 +137,7 @@ namespace ExtremeRoles.Roles.Combination
                 ExtremeRoleType.Crewmate,
                 ExtremeRoleId.Traitor.ToString(),
                 ColorPalette.TraitorShikon,
-                true, false, false, false)
+                true, false, true, false)
         { }
 
         public void CreateAbility()
