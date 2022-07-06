@@ -169,6 +169,9 @@ namespace ExtremeRoles.Compat.Mods
                 case SystemConsoleType.SecurityCamera:
                     return systemConsoleArray.FirstOrDefault(
                         x => x.gameObject.name.Contains("SecurityConsole"));
+                case SystemConsoleType.Vital:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("panel_vitals(Clone)"));
                 default:
                     return null;
             }

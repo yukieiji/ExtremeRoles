@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 using UnityEngine;
 
@@ -59,8 +58,7 @@ namespace ExtremeRoles.Roles.Combination
                     abilityCleanUp,
                     abilityCheck,
                     hotkey, mirror)
-            {
-            }
+            {  }
             public void SetSprite(Sprite img)
             {
                 this.ButtonSprite = img;
@@ -123,7 +121,7 @@ namespace ExtremeRoles.Roles.Combination
                 CheckAbility,
                 KeyCode.F,
                 false);
-
+            
             this.RoleAbilityInit();
         }
 
@@ -220,6 +218,15 @@ namespace ExtremeRoles.Roles.Combination
 
             ++this.curAbilityType;
             this.curAbilityType = (AbilityType)((int)this.curAbilityType % 3);
+            if (this.curAbilityType == AbilityType.Vital &&
+                (
+                    PlayerControl.GameOptions.MapId == 0 || 
+                    PlayerControl.GameOptions.MapId == 1 || 
+                    PlayerControl.GameOptions.MapId == 3
+                ))
+            {
+                this.curAbilityType = AbilityType.Admin;
+            }
 
             var traitorButton = this.Button as TraitorCrackButton;
 
@@ -342,12 +349,15 @@ namespace ExtremeRoles.Roles.Combination
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
+            this.CreateCommonAbilityOption(
+                parentOps, 5.0f);
         }
 
         protected override void RoleSpecificInit()
         {
             this.canUseButton = false;
             this.curAbilityType = AbilityType.Admin;
+            this.RoleAbilityInit();
         }
 
         private Sprite getAdminButtonImage()
@@ -415,18 +425,13 @@ namespace ExtremeRoles.Roles.Combination
             switch (PlayerControl.GameOptions.MapId)
             {
                 case 0:
-                case 3:
-                    return systemConsoleArray.FirstOrDefault(
-                        x => x.gameObject.name.Contains("SurvConsole"));
                 case 1:
-                    return systemConsoleArray.FirstOrDefault(
-                        x => x.gameObject.name.Contains("SurvLogConsole"));
+                case 3:
+                    return null;
                 case 2:
-                    return systemConsoleArray.FirstOrDefault(
-                        x => x.gameObject.name.Contains("Surv_Panel"));
                 case 4:
                     return systemConsoleArray.FirstOrDefault(
-                        x => x.gameObject.name.Contains("task_cams"));
+                        x => x.gameObject.name.Contains("panel_vitals"));
                 default:
                     return null;
             }
