@@ -108,11 +108,16 @@ namespace ExtremeRoles.Roles.Combination
         public void CreateAbility()
         {
 
+            this.adminSprite = getAdminButtonImage();
+            this.securitySprite = getSecurityImage();
+            this.vitalSprite = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[
+                ImageNames.VitalsButton].Image;
+
             this.Button = new TraitorCrackButton(
                 Translation.GetString("traitorCracking"),
                 UseAbility,
                 IsAbilityUse,
-                getAdminButtonImage(),
+                this.adminSprite,
                 new Vector3(-1.8f, -0.06f, 0),
                 CleanUp,
                 CheckAbility,
@@ -224,14 +229,13 @@ namespace ExtremeRoles.Roles.Combination
             switch (this.curAbilityType)
             {
                 case AbilityType.Admin:
-                    sprite = getAdminButtonImage();
+                    sprite = this.adminSprite;
                     break;
                 case AbilityType.Security:
-                    sprite = getSecurityImage();
+                    sprite = this.securitySprite;
                     break;
                 case AbilityType.Vital:
-                    sprite = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[
-                        ImageNames.VitalsButton].Image;
+                    sprite = this.vitalSprite;
                     break;
                 default:
                     break;
