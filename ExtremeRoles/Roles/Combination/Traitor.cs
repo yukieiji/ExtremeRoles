@@ -41,6 +41,32 @@ namespace ExtremeRoles.Roles.Combination
 
     public class Traitor : MultiAssignRoleBase, IRoleAbility, IRoleUpdate
     {
+        public class TraitorCrackButton : ChargableButton
+        {
+            public TraitorCrackButton(
+                string buttonText,
+                System.Func<bool> ability,
+                System.Func<bool> canUse,
+                Sprite sprite,
+                Vector3 positionOffset,
+                System.Action abilityCleanUp,
+                System.Func<bool> abilityCheck = null,
+                KeyCode hotkey = KeyCode.F,
+                bool mirror = false) : base(
+                    buttonText, ability,
+                    canUse, sprite,
+                    positionOffset,
+                    abilityCleanUp,
+                    abilityCheck,
+                    hotkey, mirror)
+            {
+            }
+            public void SetSprite(Sprite img)
+            {
+                this.ButtonSprite = img;
+            }
+        }
+
         public enum AbilityType : byte
         {
             Admin,
@@ -48,15 +74,27 @@ namespace ExtremeRoles.Roles.Combination
             Vital,
         }
 
-        private bool canUseButton;
+        private bool canUseButton = false;
         private ExtremeRoleId crewRole;
+
         private AbilityType curAbilityType;
+        private TMPro.TextMeshPro chargeTime;
+
+        private Sprite adminSprite;
+        private Sprite securitySprite;
+        private Sprite vitalSprite;
 
         public RoleAbilityButtonBase Button
         { 
-            get => throw new System.NotImplementedException();
-            set => throw new System.NotImplementedException();
+            get => this.crackButton;
+            set
+            {
+                this.crackButton = value;
+            }
         }
+
+        private RoleAbilityButtonBase crackButton;
+        private Minigame minigame;
 
         public Traitor(
             ) : base(
@@ -69,17 +107,136 @@ namespace ExtremeRoles.Roles.Combination
 
         public void CreateAbility()
         {
-            throw new System.NotImplementedException();
+
+            this.Button = new TraitorCrackButton(
+                Translation.GetString("traitorCracking"),
+                UseAbility,
+                IsAbilityUse,
+                getAdminButtonImage(),
+                new Vector3(-1.8f, -0.06f, 0),
+                CleanUp,
+                CheckAbility,
+                KeyCode.F,
+                false);
+
+            this.RoleAbilityInit();
         }
 
         public bool UseAbility()
         {
-            throw new System.NotImplementedException();
+            switch (this.curAbilityType)
+            {
+                case AbilityType.Admin:
+                    FastDestroyableSingleton<HudManager>.Instance.ShowMap(
+                        (System.Action<MapBehaviour>)(m => m.ShowCountOverlay()));
+                    return true;
+                case AbilityType.Security:
+                    SystemConsole watchConsole;
+                    if (ExtremeRolesPlugin.Compat.IsModMap)
+                    {
+                        watchConsole = ExtremeRolesPlugin.Compat.ModMap.GetSystemConsole(
+                            Compat.Interface.SystemConsoleType.SecurityCamera);
+                    }
+                    else
+                    {
+                        watchConsole = getSecurityConsole();
+                    }
+
+                    if (watchConsole == null || Camera.main == null)
+                    {
+                        return false;
+                    }
+                    this.minigame = Object.Instantiate(
+                        watchConsole.MinigamePrefab,
+                        Camera.main.transform, false);
+                    this.minigame.transform.SetParent(Camera.main.transform, false);
+                    this.minigame.transform.localPosition = new Vector3(0.0f, 0.0f, -50f);
+                    this.minigame.Begin(null);
+                    return true;
+                case AbilityType.Vital:
+                    SystemConsole vitalConsole;
+                    if (ExtremeRolesPlugin.Compat.IsModMap)
+                    {
+                        vitalConsole = ExtremeRolesPlugin.Compat.ModMap.GetSystemConsole(
+                            Compat.Interface.SystemConsoleType.Vital);
+                    }
+                    else
+                    {
+                        vitalConsole = getVitalConsole();
+                    }
+
+                    if (vitalConsole == null || Camera.main == null)
+                    {
+                        return false;
+                    }
+                    this.minigame = Object.Instantiate(
+                        vitalConsole.MinigamePrefab,
+                        Camera.main.transform, false);
+                    this.minigame.transform.SetParent(Camera.main.transform, false);
+                    this.minigame.transform.localPosition = new Vector3(0.0f, 0.0f, -50f);
+                    this.minigame.Begin(null);
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        public bool CheckAbility()
+        {
+            switch (this.curAbilityType)
+            {
+                case AbilityType.Admin:
+                    return MapBehaviour.Instance.isActiveAndEnabled;
+                case AbilityType.Security:
+                case AbilityType.Vital:
+                    return Minigame.Instance != null;
+                default:
+                    return false;
+            }
         }
 
         public void CleanUp()
         {
+            switch (this.curAbilityType)
+            {
+                case AbilityType.Admin:
+                    MapBehaviour.Instance.Close();
+                    break;
+                case AbilityType.Security:
+                case AbilityType.Vital:
+                    if (this.minigame != null)
+                    {
+                        this.minigame.Close();
+                    }
+                    break;
+                default:
+                    break;
+            }
 
+            ++this.curAbilityType;
+            this.curAbilityType = (AbilityType)((int)this.curAbilityType % 3);
+
+            var traitorButton = this.Button as TraitorCrackButton;
+
+            Sprite sprite = Resources.Loader.CreateSpriteFromResources(
+                Resources.Path.TestButton);
+
+            switch (this.curAbilityType)
+            {
+                case AbilityType.Admin:
+                    sprite = getAdminButtonImage();
+                    break;
+                case AbilityType.Security:
+                    sprite = getSecurityImage();
+                    break;
+                case AbilityType.Vital:
+                    sprite = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[
+                        ImageNames.VitalsButton].Image;
+                    break;
+                default:
+                    break;
+            }
+            traitorButton.SetSprite(sprite);
         }
 
         public bool IsAbilityUse() => this.IsCommonUse();
@@ -92,7 +249,11 @@ namespace ExtremeRoles.Roles.Combination
 
         public void RoleAbilityResetOnMeetingEnd()
         {
-            return;
+            if (this.chargeTime != null)
+            {
+                this.chargeTime.gameObject.SetActive(false);
+            }
+            CleanUp();
         }
 
         public void Update(PlayerControl rolePlayer)
@@ -101,6 +262,23 @@ namespace ExtremeRoles.Roles.Combination
             {
                 this.Button.SetActive(false);
             }
+
+            if (this.chargeTime == null)
+            {
+                this.chargeTime = Object.Instantiate(
+                    FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+                    Camera.main.transform, false);
+                this.chargeTime.transform.localPosition = new Vector3(3.5f, 2.25f, -250.0f);
+            }
+
+            if (!this.Button.IsAbilityActive())
+            {
+                this.chargeTime.gameObject.SetActive(false);
+                return;
+            }
+
+            this.chargeTime.text = Mathf.CeilToInt(this.Button.GetCurTime()).ToString();
+            this.chargeTime.gameObject.SetActive(true);
         }
 
         public override bool TryRolePlayerKillTo(PlayerControl rolePlayer, PlayerControl targetPlayer)
@@ -166,6 +344,88 @@ namespace ExtremeRoles.Roles.Combination
         {
             this.canUseButton = false;
             this.curAbilityType = AbilityType.Admin;
+        }
+
+        private Sprite getAdminButtonImage()
+        {
+            var imageDict = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
+            switch (PlayerControl.GameOptions.MapId)
+            {
+                case 0:
+                case 3:
+                    return imageDict[ImageNames.AdminMapButton].Image;
+                case 1:
+                    return imageDict[ImageNames.MIRAAdminButton].Image;
+                case 2:
+                    return imageDict[ImageNames.PolusAdminButton].Image;
+                default:
+                    return imageDict[ImageNames.AirshipAdminButton].Image;
+            }
+        }
+        private Sprite getSecurityImage()
+        {
+            var imageDict = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
+            switch (PlayerControl.GameOptions.MapId)
+            {
+                case 1:
+                    return imageDict[ImageNames.DoorLogsButton].Image;
+                default:
+                    return imageDict[ImageNames.CamsButton].Image;
+            }
+        }
+        private SystemConsole getSecurityConsole()
+        {
+            // 0 = Skeld
+            // 1 = Mira HQ
+            // 2 = Polus
+            // 3 = Dleks - deactivated
+            // 4 = Airship
+            var systemConsoleArray = Object.FindObjectsOfType<SystemConsole>();
+            switch (PlayerControl.GameOptions.MapId)
+            {
+                case 0:
+                case 3:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("SurvConsole"));
+                case 1:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("SurvLogConsole"));
+                case 2:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("Surv_Panel"));
+                case 4:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("task_cams"));
+                default:
+                    return null;
+            }
+        }
+        private SystemConsole getVitalConsole()
+        {
+            // 0 = Skeld
+            // 1 = Mira HQ
+            // 2 = Polus
+            // 3 = Dleks - deactivated
+            // 4 = Airship
+            var systemConsoleArray = Object.FindObjectsOfType<SystemConsole>();
+            switch (PlayerControl.GameOptions.MapId)
+            {
+                case 0:
+                case 3:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("SurvConsole"));
+                case 1:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("SurvLogConsole"));
+                case 2:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("Surv_Panel"));
+                case 4:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("task_cams"));
+                default:
+                    return null;
+            }
         }
     }
 }
