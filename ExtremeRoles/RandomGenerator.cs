@@ -72,6 +72,9 @@ namespace ExtremeRoles
             {
                 rng.GetBytes(bs);
             }
+
+            Helper.Logging.Debug($"Int32 SeedValue:{string.Join("", bs)}");
+
             //RNGCryptoServiceProviderで得たbit列をInt32型に変換してシード値とする。
             return BitConverter.ToInt32(bs, 0);
         }
@@ -84,7 +87,10 @@ namespace ExtremeRoles
             {
                 rng.GetBytes(bs);
             }
-            //RNGCryptoServiceProviderで得たbit列をInt32型に変換してシード値とする。
+
+            Helper.Logging.Debug($"UInt64 Seed:{string.Join("", bs)}");
+
+            //RNGCryptoServiceProviderで得たbit列をUInt64型に変換してシード値とする。
             return BitConverter.ToUInt64(bs, 0);
         }
 
