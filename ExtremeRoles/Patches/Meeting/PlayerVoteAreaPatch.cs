@@ -69,7 +69,7 @@ namespace ExtremeRoles.Patches.Meeting
 			{
 				if (buttonRole != null && anotherButtonRole != null)
                 {
-					return true;
+					return true; // TODO:Can use both role ability
                 }
 				else if (buttonRole != null && anotherButtonRole == null)
                 {
