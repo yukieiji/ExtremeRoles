@@ -8,6 +8,9 @@ using UnityEngine;
 
 using BepInEx.IL2CPP.Utils.Collections;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Roles;
+using ExtremeRoles.GhostRoles;
+using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Patches.Meeting
 {
@@ -59,11 +62,11 @@ namespace ExtremeRoles.Patches.Meeting
 		public static bool Prefix(PlayerVoteArea __instance)
 		{
 			if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return true; }
-			if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
+			if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
 			var gameData = ExtremeRolesPlugin.GameDataStore;
-			var (buttonRole, anotherButtonRole) = Roles.ExtremeRoleManager.GetInterfaceCastedLocalRole<
-				Roles.API.Interface.IRoleMeetingButtonAbility>();
+			var (buttonRole, anotherButtonRole) = ExtremeRoleManager.GetInterfaceCastedLocalRole<
+				IRoleMeetingButtonAbility>();
 
 			if (!gameData.AssassinMeetingTrigger)
 			{
@@ -187,7 +190,7 @@ namespace ExtremeRoles.Patches.Meeting
 
 		private static bool meetingButtonAbility(
 			PlayerVoteArea instance,
-			Roles.API.Interface.IRoleMeetingButtonAbility role)
+			IRoleMeetingButtonAbility role)
 		{
 			byte target = instance.TargetPlayerId;
 
@@ -315,7 +318,7 @@ namespace ExtremeRoles.Patches.Meeting
 			else
 			{
 				bool isGhostRole = isGuardian ||
-					GhostRoles.ExtremeGhostRoleManager.GameRole.ContainsKey(__instance.TargetPlayerId);
+					ExtremeGhostRoleManager.GameRole.ContainsKey(__instance.TargetPlayerId);
 
 				__instance.GAIcon.gameObject.SetActive(isGhostRole);
 			}
