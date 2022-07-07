@@ -31,8 +31,8 @@ namespace ExtremeRoles
             if (isStrong)
             {
                 Instance = new PermutedCongruentialGenerator(
-                    (ulong)createLongStrongSeed(),
-                    (ulong)createLongStrongSeed());
+                    createLongStrongSeed(),
+                    createLongStrongSeed());
                 UnityEngine.Random.InitState(createStrongRandomSeed());
             }
             else
@@ -76,7 +76,7 @@ namespace ExtremeRoles
             return BitConverter.ToInt32(bs, 0);
         }
 
-        private static long createLongStrongSeed()
+        private static ulong createLongStrongSeed()
         {
             var bs = new byte[8];
             //Int64と同じサイズのバイト配列にランダムな値を設定する
@@ -85,7 +85,7 @@ namespace ExtremeRoles
                 rng.GetBytes(bs);
             }
             //RNGCryptoServiceProviderで得たbit列をInt32型に変換してシード値とする。
-            return BitConverter.ToInt64(bs, 0);
+            return BitConverter.ToUInt64(bs, 0);
         }
 
     }
