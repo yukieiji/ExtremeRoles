@@ -62,17 +62,26 @@ namespace ExtremeRoles.Patches.Meeting
 			if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
 			var gameData = ExtremeRolesPlugin.GameDataStore;
-			var buttonRole = Roles.ExtremeRoleManager.GetLocalPlayerRole() as Roles.API.Interface.IRoleMeetingButtonAbility;
+			var (buttonRole, anotherButtonRole) = Roles.ExtremeRoleManager.GetInterfaceCastedLocalRole<
+				Roles.API.Interface.IRoleMeetingButtonAbility>();
 
 			if (!gameData.AssassinMeetingTrigger)
 			{
-				if (buttonRole == null)
+				if (buttonRole != null && anotherButtonRole != null)
                 {
 					return true;
                 }
+				else if (buttonRole != null && anotherButtonRole == null)
+                {
+					return meetingButtonAbility(__instance, buttonRole);
+				}
+				else if (buttonRole == null && anotherButtonRole != null)
+				{
+					return meetingButtonAbility(__instance, anotherButtonRole);
+				}
 				else
 				{
-					return meetingButtonAbility(__instance, buttonRole);
+					return true;
 				}
 			}
 
@@ -112,7 +121,8 @@ namespace ExtremeRoles.Patches.Meeting
 						).WrapToIl2Cpp()
 					);
 			
-				Il2CppSystem.Collections.Generic.List<UiElement> selectableElements = new Il2CppSystem.Collections.Generic.List<UiElement>();
+				Il2CppSystem.Collections.Generic.List<UiElement> selectableElements = new Il2CppSystem.Collections.Generic.List<
+					UiElement>();
 				selectableElements.Add(__instance.CancelButton);
 				selectableElements.Add(__instance.ConfirmButton);
 				ControllerManager.Instance.OpenOverlayMenu(
