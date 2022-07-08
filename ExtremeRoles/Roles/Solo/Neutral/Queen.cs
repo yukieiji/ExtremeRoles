@@ -98,6 +98,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
             else
             {
+                resetRole(targetRole, targetPlayerId, targetPlayer);
                 setNewRole(servant, targetPlayerId);
             }
             queen.ServantPlayerId.Add(targetPlayerId);
@@ -157,6 +158,31 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     break;
                 default:
                     break;
+            }
+        }
+        private static void resetRole(
+            SingleRoleBase targetRole,
+            byte targetPlayerId,
+            PlayerControl targetPlayer)
+        {
+            if (CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
+            {
+                var meetingResetRole = targetRole as IRoleResetMeeting;
+                if (meetingResetRole != null)
+                {
+                    meetingResetRole.ResetOnMeetingStart();
+                }
+                var abilityRole = targetRole as IRoleAbility;
+                if (abilityRole != null)
+                {
+                    abilityRole.ResetOnMeetingStart();
+                }
+            }
+
+            var specialResetRole = targetRole as IRoleSpecialReset;
+            if (specialResetRole != null)
+            {
+                specialResetRole.AllReset(targetPlayer);
             }
         }
 
@@ -267,6 +293,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             return;
         }
+
         public override void ExiledAction(GameData.PlayerInfo rolePlayer)
         {
             foreach (var playerId in this.ServantPlayerId)
@@ -484,6 +511,45 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 playerId,
                 byte.MaxValue);
             return true;
+        }
+
+        public override bool TryRolePlayerKillTo(
+            PlayerControl rolePlayer, PlayerControl targetPlayer)
+        {
+            if (this.AnotherRole?.Id == ExtremeRoleId.Sheriff)
+            {
+                RPCOperator.Call(
+                   rolePlayer.NetId,
+                   RPCOperator.Command.UncheckedMurderPlayer,
+                   new List<byte>
+                   {
+                        rolePlayer.PlayerId,
+                        rolePlayer.PlayerId,
+                        byte.MaxValue
+                   });
+                RPCOperator.UncheckedMurderPlayer(
+                    rolePlayer.PlayerId,
+                    rolePlayer.PlayerId,
+                    byte.MaxValue);
+
+                RPCOperator.Call(
+                    rolePlayer.NetId,
+                    RPCOperator.Command.ReplaceDeadReason,
+                    new List<byte>
+                    {
+                        rolePlayer.PlayerId,
+                        (byte)GameDataContainer.PlayerStatus.MissShot
+                    });
+                ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
+                    rolePlayer.PlayerId, GameDataContainer.PlayerStatus.MissShot);
+                return false;
+            }
+            else if (targetPlayer.PlayerId == this.queenPlayerId)
+            {
+                return false;
+            }
+
+            return base.TryRolePlayerKillTo(rolePlayer, targetPlayer);
         }
 
         public override Color GetTargetRoleSeeColor(
