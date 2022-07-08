@@ -360,7 +360,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             CreateFloatOption(
                 QueenOption.ServantSelfKillCool,
                 30.0f, 0.5f, 60.0f, 0.5f,
-                parentOps);
+                parentOps,
+                format: OptionUnit.Second);
         }
 
         protected override void RoleSpecificInit()
