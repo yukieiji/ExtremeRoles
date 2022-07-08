@@ -418,6 +418,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.GameControlId = queen.GameControlId;
             this.queenPlayerId = queenPlayerId;
             this.FakeImposter = baseRole.Team == ExtremeRoleType.Impostor;
+
+            this.Vison = baseRole.Vison;
+            this.HasOtherVison = baseRole.HasOtherVison;
+            this.IsApplyEnvironmentVision = baseRole.IsApplyEnvironmentVision;
+
+            this.HasOtherKillCool = baseRole.HasOtherKillCool;
+            this.KillCoolTime = baseRole.KillCoolTime;
+            this.HasOtherKillRange = baseRole.HasOtherKillRange;
+            this.KillRange = baseRole.KillRange;
         }
 
         public RoleAbilityButtonBase Button
@@ -428,7 +437,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 this.selfKillButton = value;
             }
         }
-
+         
         private RoleAbilityButtonBase selfKillButton;
 
         public void SelfKillAbility(float coolTime)
