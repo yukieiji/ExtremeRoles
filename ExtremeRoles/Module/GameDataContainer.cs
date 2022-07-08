@@ -364,7 +364,17 @@ namespace ExtremeRoles.Module
                                     gameControlId,
                                     NeutralSeparateTeam.Traitor);
                                 break;
+                            case ExtremeRoleId.Queen:
+                            case ExtremeRoleId.Servant:
+                                addNeutralTeams(
+                                    ref neutralTeam,
+                                    gameControlId,
+                                    NeutralSeparateTeam.Queen);
+                                break;
                             default:
+                                checkMultiAssignedServant(
+                                    ref neutralTeam,
+                                    gameControlId, role);
                                 break;
                         }
                         break;
@@ -408,6 +418,24 @@ namespace ExtremeRoles.Module
                 clerObject.Clear();
             }
             this.resetObject.Clear();
+        }
+
+        private void checkMultiAssignedServant(
+            ref Dictionary<(NeutralSeparateTeam, int), int> neutralTeam,
+            int gameControlId,
+            SingleRoleBase role)
+        {
+            var multiAssignRole = role as MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole?.Id == ExtremeRoleId.Servant)
+                {
+                    addNeutralTeams(
+                        ref neutralTeam,
+                        gameControlId,
+                        NeutralSeparateTeam.Queen);
+                }
+            }
         }
 
         private void addNeutralTeams(

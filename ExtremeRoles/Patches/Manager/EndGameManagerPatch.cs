@@ -349,6 +349,12 @@ namespace ExtremeRoles.Patches.Manager
                     textRenderer.color = ColorPalette.TraitorShikon;
                     manager.BackgroundBar.material.SetColor("_Color", ColorPalette.TraitorShikon);
                     break;
+                case (GameOverReason)RoleGameOverReason.QueenKillAllOther:
+                    bonusText = Translation.GetString(
+                        ExtremeRoleId.Queen.ToString());
+                    textRenderer.color = ColorPalette.TraitorShikon;
+                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.TraitorShikon);
+                    break;
                 default:
                     break;
             }

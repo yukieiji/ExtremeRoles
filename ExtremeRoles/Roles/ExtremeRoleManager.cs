@@ -79,6 +79,8 @@ namespace ExtremeRoles.Roles
         Miner,
         Eater,
         Traitor,
+        Queen,
+        Servant,
     }
     public enum CombinationRoleType
     {
@@ -124,6 +126,8 @@ namespace ExtremeRoles.Roles
 
         TraitorKillAllOther,
 
+        QueenKillAllOther,
+
         UnKnown = 100,
     }
 
@@ -138,6 +142,7 @@ namespace ExtremeRoles.Roles
         Miner,
         Eater,
         Traitor,
+        Queen,
     }
 
     public static class ExtremeRoleManager
@@ -199,6 +204,7 @@ namespace ExtremeRoles.Roles
                 {(int)ExtremeRoleId.Totocalcio, new Totocalcio()},
                 {(int)ExtremeRoleId.Miner     , new Miner()},
                 {(int)ExtremeRoleId.Eater     , new Eater()},
+                {(int)ExtremeRoleId.Queen     , new Queen()},
             };
 
         public static readonly Dictionary<
@@ -226,10 +232,11 @@ namespace ExtremeRoles.Roles
 
         private static int roleControlId = 0;
 
-        public enum ReplaceOperation
+        public enum ReplaceOperation : byte
         {
             ForceReplaceToSidekick = 0,
             SidekickToJackal,
+            CreateServant,
         }
 
         public static void CreateCombinationRoleOptions(
@@ -390,6 +397,9 @@ namespace ExtremeRoles.Roles
                     break;
                 case ReplaceOperation.SidekickToJackal:
                     Sidekick.BecomeToJackal(caller, targetId);
+                    break;
+                case ReplaceOperation.CreateServant:
+                    Queen.TargetToServant(caller, targetId);
                     break;
                 default:
                     break;
