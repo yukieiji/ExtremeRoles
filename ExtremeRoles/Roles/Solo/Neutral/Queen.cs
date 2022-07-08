@@ -110,29 +110,29 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             PlayerControl targetPlayer)
         {
             var multiAssignRole = targetRole as MultiAssignRoleBase;
-            if (multiAssignRole != null)
-            {
-                if (CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
-                {
-                    IRoleResetMeeting meetingResetRole = multiAssignRole.AnotherRole as IRoleResetMeeting;
-                    if (meetingResetRole != null)
-                    {
-                        meetingResetRole.ResetOnMeetingStart();
-                    }
+            if (multiAssignRole == null) { return; }
 
-                    IRoleAbility abilityRole = multiAssignRole.AnotherRole as IRoleAbility;
-                    if (abilityRole != null)
-                    {
-                        abilityRole.ResetOnMeetingStart();
-                    }
+            if (CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
+            {
+                IRoleResetMeeting meetingResetRole = multiAssignRole.AnotherRole as IRoleResetMeeting;
+                if (meetingResetRole != null)
+                {
+                    meetingResetRole.ResetOnMeetingStart();
                 }
 
-                IRoleSpecialReset specialResetRole = multiAssignRole.AnotherRole as IRoleSpecialReset;
-                if (specialResetRole != null)
+                IRoleAbility abilityRole = multiAssignRole.AnotherRole as IRoleAbility;
+                if (abilityRole != null)
                 {
-                    specialResetRole.AllReset(targetPlayer);
+                    abilityRole.ResetOnMeetingStart();
                 }
             }
+
+            IRoleSpecialReset specialResetRole = multiAssignRole.AnotherRole as IRoleSpecialReset;
+            if (specialResetRole != null)
+            {
+                specialResetRole.AllReset(targetPlayer);
+            }
+
         }
         private static void replaceVanilaRole(
             SingleRoleBase targetRole,
