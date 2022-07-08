@@ -406,6 +406,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 baseRole.UseVent,
                 baseRole.UseSabotage)
         {
+            var multiAssignRole = baseRole as MultiAssignRoleBase;
+            if (multiAssignRole != null || baseRole.Team == ExtremeRoleType.Neutral)
+            {
+                this.CanHasAnotherRole = false;
+            }
+            else
+            {
+                this.CanHasAnotherRole = true;
+            }
             this.GameControlId = queen.GameControlId;
             this.queenPlayerId = queenPlayerId;
             this.FakeImposter = baseRole.Team == ExtremeRoleType.Impostor;
