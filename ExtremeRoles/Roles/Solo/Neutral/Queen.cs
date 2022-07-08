@@ -13,12 +13,14 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public class Queen : SingleRoleBase, IRoleAbility, IRoleSpecialReset
+    public class Queen : SingleRoleBase, IRoleAbility, IRoleSpecialReset, IRoleMurderPlayerHock, IRoleUpdate
     {
         public enum QueenOption
         {
             Range,
             CanUseVent,
+            ServantKillKillCoolReduceRate,
+            ServantTaskKillCoolReduceRate,
             ServantSelfKillCool
         }
 
@@ -37,6 +39,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public float ServantSelfKillCool;
         private RoleAbilityButtonBase createServant;
         private float range;
+        private float killKillCoolReduceRate;
+        private float taskKillCoolReduceRate;
+        private Dictionary<byte, float> servantTaskGage = new Dictionary<byte, float>();
 
         public Queen() : base(
             ExtremeRoleId.Queen,
@@ -61,7 +66,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             replaceVanilaRole(targetRole, targetPlayer);
 
             Servant servant = new Servant(
-                queen, targetRole);
+                rolePlayerId, queen, targetRole);
 
             if (CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
             {
@@ -164,6 +169,48 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 ExtremeRoleManager.GameRole[targetPlayerId] = role;
             }
         }
+
+        public void HockMuderPlayer(
+            PlayerControl source, PlayerControl target)
+        {
+            if (source.PlayerId != target.PlayerId &&
+                this.ServantPlayerId.Contains(source.PlayerId))
+            {
+
+                float killcool = CachedPlayerControl.LocalPlayer.PlayerControl.killTimer;
+                if (killcool > 0.0f)
+                {
+                    CachedPlayerControl.LocalPlayer.PlayerControl.killTimer = killcool * this.killKillCoolReduceRate;
+                }
+            }
+        }
+
+        public void Update(PlayerControl rolePlayer)
+        {
+            float killcool = CachedPlayerControl.LocalPlayer.PlayerControl.killTimer;
+            
+            if (killcool <= 0.0f) { return; }
+
+            foreach (byte playerId in this.ServantPlayerId)
+            {
+                var player = Player.GetPlayerControlById(playerId);
+                if (player != null)
+                {
+                    float gage = Player.GetPlayerTaskGage(player);
+
+                    if (!this.servantTaskGage.ContainsKey(playerId))
+                    {
+                        this.servantTaskGage.Add(playerId, gage);
+                    }
+                    float prevGage = this.servantTaskGage[playerId];
+                    if (gage > prevGage)
+                    {
+                        CachedPlayerControl.LocalPlayer.PlayerControl.killTimer = killcool * this.taskKillCoolReduceRate;
+                    }
+                }
+            }
+        }
+
 
         public void AllReset(PlayerControl rolePlayer)
         {
@@ -273,6 +320,16 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 QueenOption.Range,
                 1.0f, 0.5f, 2.6f, 0.1f,
                 parentOps);
+            CreateIntOption(
+                QueenOption.ServantKillKillCoolReduceRate,
+                25, 5, 75, 1,
+                parentOps,
+                format:OptionUnit.Percentage);
+            CreateIntOption(
+                QueenOption.ServantTaskKillCoolReduceRate,
+                50, 5, 75, 1,
+                parentOps,
+                format: OptionUnit.Percentage);
             CreateFloatOption(
                 QueenOption.ServantSelfKillCool,
                 30.0f, 0.5f, 60.0f, 0.5f,
@@ -287,6 +344,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 GetRoleOptionId(QueenOption.CanUseVent)].GetValue();
             this.ServantSelfKillCool = OptionHolder.AllOption[
                 GetRoleOptionId(QueenOption.ServantSelfKillCool)].GetValue();
+            this.killKillCoolReduceRate = OptionHolder.AllOption[
+                GetRoleOptionId(QueenOption.ServantKillKillCoolReduceRate)].GetValue();
+            this.taskKillCoolReduceRate = OptionHolder.AllOption[
+                GetRoleOptionId(QueenOption.ServantTaskKillCoolReduceRate)].GetValue();
+
+            this.servantTaskGage.Clear();
+            this.ServantPlayerId.Clear();
         }
 
         private bool isSameQueenTeam(SingleRoleBase targetRole)
@@ -295,9 +359,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         }
     }
 
-    public class Servant : MultiAssignRoleBase, IRoleAbility
+    public class Servant : MultiAssignRoleBase, IRoleAbility, IRoleMurderPlayerHock
     {
+        private byte queenPlayerId;
+        private SpriteRenderer killFlash;
+
         public Servant(
+            byte queenPlayerId,
             Queen queen,
             SingleRoleBase baseRole) : 
             base(
@@ -311,6 +379,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 baseRole.UseSabotage)
         {
             this.GameControlId = queen.GameControlId;
+            this.queenPlayerId = queenPlayerId;
+            this.FakeImposter = baseRole.Team == ExtremeRoleType.Impostor;
         }
 
         public RoleAbilityButtonBase Button
@@ -338,6 +408,48 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.Button.SetAbilityCoolTime(coolTime);
         }
 
+        public void HockMuderPlayer(
+            PlayerControl source, PlayerControl target)
+        {
+            if (this.killFlash == null)
+            {
+                this.killFlash = UnityEngine.Object.Instantiate(
+                     FastDestroyableSingleton<HudManager>.Instance.FullScreen,
+                     FastDestroyableSingleton<HudManager>.Instance.transform);
+                this.killFlash.transform.localPosition = new Vector3(0f, 0f, 20f);
+                this.killFlash.gameObject.SetActive(true);
+            }
+
+            Color32 color = Palette.EnabledColor;
+
+            if (source.PlayerId == this.queenPlayerId)
+            {
+                color = this.NameColor;
+            }
+            
+            this.killFlash.enabled = true;
+
+            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(
+                Effects.Lerp(1.0f, new Action<float>((p) =>
+                {
+                    if (this.killFlash == null) { return; }
+                    if (p < 0.5)
+                    {
+                        this.killFlash.color = new Color(color.r, color.g, color.b, Mathf.Clamp01(p * 2 * 0.75f));
+
+                    }
+                    else
+                    {
+                        this.killFlash.color = new Color(color.r, color.g, color.b, Mathf.Clamp01((1 - p) * 2 * 0.75f));
+                    }
+                    if (p == 1f)
+                    {
+                        this.killFlash.enabled = false;
+                    }
+                }))
+            );
+        }
+
         public void CreateAbility()
         {
             throw new Exception("Don't call this class method!!");
@@ -352,7 +464,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            return;
+            if (this.killFlash == null)
+            {
+                this.killFlash.enabled = false; 
+            }
         }
 
         public bool UseAbility()
@@ -369,6 +484,18 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 playerId,
                 byte.MaxValue);
             return true;
+        }
+
+        public override Color GetTargetRoleSeeColor(
+            SingleRoleBase targetRole,
+            byte targetPlayerId)
+        {
+
+            if (targetPlayerId == this.queenPlayerId)
+            {
+                return ColorPalette.QueenWhite;
+            }
+            return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
         }
 
         protected override void CreateSpecificOption(
