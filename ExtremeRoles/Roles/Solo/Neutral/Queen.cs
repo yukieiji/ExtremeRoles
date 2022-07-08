@@ -42,7 +42,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             ExtremeRoleId.Queen,
             ExtremeRoleType.Neutral,
             ExtremeRoleId.Queen.ToString(),
-            ColorPalette.JackalBlue,
+            ColorPalette.QueenWhite,
             true, false, false, false)
         { }
 
@@ -304,7 +304,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 ExtremeRoleId.Servant,
                 ExtremeRoleType.Neutral,
                 ExtremeRoleId.Servant.ToString(),
-                ColorPalette.JackalBlue,
+                ColorPalette.QueenWhite,
                 baseRole.CanKill,
                 baseRole.Team == ExtremeRoleType.Crewmate ? true : baseRole.HasTask,
                 baseRole.UseVent,

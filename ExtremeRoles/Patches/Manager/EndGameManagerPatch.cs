@@ -352,8 +352,8 @@ namespace ExtremeRoles.Patches.Manager
                 case (GameOverReason)RoleGameOverReason.QueenKillAllOther:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Queen.ToString());
-                    textRenderer.color = ColorPalette.TraitorShikon;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.TraitorShikon);
+                    textRenderer.color = ColorPalette.QueenWhite;
+                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.QueenWhite);
                     break;
                 default:
                     break;
