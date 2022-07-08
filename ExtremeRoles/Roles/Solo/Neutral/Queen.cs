@@ -17,7 +17,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
     {
         public enum QueenOption
         {
-            CanUseVent
+            Range,
+            CanUseVent,
+            ServantSelfKillCool
         }
 
         public List<byte> ServantPlayerId = new List<byte>();
@@ -32,9 +34,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         }
 
         public PlayerControl Target;
+        public float ServantSelfKillCool;
         private RoleAbilityButtonBase createServant;
         private float range;
-
 
         public Queen() : base(
             ExtremeRoleId.Queen,
@@ -60,7 +62,17 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             Servant servant = new Servant(
                 queen, targetRole);
-            servant.SelfKillAbility();
+
+            if (CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
+            {
+                servant.SelfKillAbility(queen.ServantSelfKillCool);
+                if (targetRole is IRoleAbility &&
+                    targetRole.Team != ExtremeRoleType.Neutral)
+                {
+                    servant.Button.PositionOffset = new Vector3(0, 2.6f, 0);
+                    servant.Button.ReplaceHotKey(KeyCode.C);
+                }
+            }
 
             if (targetRole.Team != ExtremeRoleType.Neutral)
             {
@@ -165,7 +177,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void CreateAbility()
         {
-            throw new NotImplementedException();
+            this.CreateAbilityCountButton(
+                Translation.GetString("queenCharm"),
+                Loader.CreateSpriteFromResources(
+                    Path.TestButton));
         }
 
         public bool UseAbility()
@@ -247,12 +262,31 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         protected override void CreateSpecificOption(CustomOptionBase parentOps)
         {
-            throw new NotImplementedException();
+            CreateBoolOption(
+                QueenOption.CanUseVent,
+                false, parentOps);
+
+            this.CreateAbilityCountOption(
+                parentOps, 1, 3);
+            
+            CreateFloatOption(
+                QueenOption.Range,
+                1.0f, 0.5f, 2.6f, 0.1f,
+                parentOps);
+            CreateFloatOption(
+                QueenOption.ServantSelfKillCool,
+                30.0f, 0.5f, 60.0f, 0.5f,
+                parentOps);
         }
 
         protected override void RoleSpecificInit()
         {
-            throw new NotImplementedException();
+            this.range = OptionHolder.AllOption[
+                GetRoleOptionId(QueenOption.Range)].GetValue();
+            this.UseVent = OptionHolder.AllOption[
+                GetRoleOptionId(QueenOption.CanUseVent)].GetValue();
+            this.ServantSelfKillCool = OptionHolder.AllOption[
+                GetRoleOptionId(QueenOption.ServantSelfKillCool)].GetValue();
         }
 
         private bool isSameQueenTeam(SingleRoleBase targetRole)
@@ -290,9 +324,18 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         private RoleAbilityButtonBase selfKillButton;
 
-        public void SelfKillAbility()
+        public void SelfKillAbility(float coolTime)
         {
-
+            this.Button = new ReusableAbilityButton(
+                Translation.GetString("selfKill"),
+                this.UseAbility,
+                this.IsAbilityUse,
+                Loader.CreateSpriteFromResources(
+                    Path.TestButton),
+                new Vector3(-1.8f, -0.06f, 0),
+                null, null,
+                KeyCode.F, false);
+            this.Button.SetAbilityCoolTime(coolTime);
         }
 
         public void CreateAbility()
