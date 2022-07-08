@@ -552,6 +552,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             return base.TryRolePlayerKillTo(rolePlayer, targetPlayer);
         }
 
+        public override string GetFullDescription()
+        {
+            return string.Format(
+                base.GetFullDescription(),
+                Player.GetPlayerControlById(
+                    this.queenPlayerId)?.Data.PlayerName);
+        }
+
         public override Color GetTargetRoleSeeColor(
             SingleRoleBase targetRole,
             byte targetPlayerId)

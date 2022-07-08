@@ -698,7 +698,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             return string.Format(
                 base.GetFullDescription(),
                 Player.GetPlayerControlById(
-                    this.JackalPlayerId).Data.PlayerName);
+                    this.JackalPlayerId)?.Data.PlayerName);
         }
 
         public static void BecomeToJackal(byte callerId, byte targetId)
