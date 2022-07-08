@@ -269,7 +269,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 {
                     rolePlayer.PlayerId,
                     this.Target.PlayerId,
-                    (byte)ExtremeRoleManager.ReplaceOperation.ForceReplaceToSidekick
+                    (byte)ExtremeRoleManager.ReplaceOperation.CreateServant
                 });
             TargetToServant(rolePlayer.PlayerId, targetPlayerId);
             return true;
