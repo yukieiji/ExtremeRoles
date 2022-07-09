@@ -270,8 +270,22 @@ namespace ExtremeRoles.Roles.Combination
         {
             this.Button.PositionOffset = new Vector3(-1.8f, -0.06f, 0);
             this.Button.ReplaceHotKey(KeyCode.F);
-        }
 
+            byte playerId = CachedPlayerControl.LocalPlayer.PlayerId;
+
+            RPCOperator.Call(
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                RPCOperator.Command.ReplaceRole,
+                new System.Collections.Generic.List<byte>
+                {
+                    playerId,
+                    playerId,
+                    (byte)ExtremeRoleManager.ReplaceOperation.ResetVanillaRole
+                });
+            RPCOperator.ReplaceRole(
+                playerId, playerId,
+                (byte)ExtremeRoleManager.ReplaceOperation.ResetVanillaRole);
+        }
 
         public void RoleAbilityResetOnMeetingStart()
         {

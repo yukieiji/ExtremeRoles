@@ -234,7 +234,8 @@ namespace ExtremeRoles.Roles
 
         public enum ReplaceOperation : byte
         {
-            ForceReplaceToSidekick = 0,
+            ResetVanillaRole = 0,
+            ForceReplaceToSidekick,
             SidekickToJackal,
             CreateServant,
         }
@@ -392,6 +393,11 @@ namespace ExtremeRoles.Roles
         {
             switch(ops)
             {
+                case ReplaceOperation.ResetVanillaRole:
+                    FastDestroyableSingleton<RoleManager>.Instance.SetRole(
+                        Helper.Player.GetPlayerControlById(targetId),
+                        RoleTypes.Crewmate);
+                    break;
                 case ReplaceOperation.ForceReplaceToSidekick:
                     Jackal.TargetToSideKick(caller, targetId);
                     break;
