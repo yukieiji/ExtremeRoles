@@ -243,6 +243,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private float defaultCoolTime;
         private bool isResetCoolTimeWhenMeeting;
         private bool isShowArrow;
+        private bool isActivated;
         private Dictionary<byte, Arrow> deadBodyArrow = new Dictionary<byte, Arrow>();
 
         public Eater() : base(
@@ -329,10 +330,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     this.eatButton.SetAbilityCoolTime(this.defaultCoolTime);
                     this.eatButton.ResetCoolTimer();
                 }
-                EaterAbilityButton eaterButton = (EaterAbilityButton)this.eatButton;
-                eaterButton.SetKillEatTime(
-                    eaterButton.KillEatTime * this.killEatActiveCoolTimeReduceRate);
+                if (!this.isActivated)
+                {
+                    EaterAbilityButton eaterButton = (EaterAbilityButton)this.eatButton;
+                    eaterButton.SetKillEatTime(
+                        eaterButton.KillEatTime * this.killEatActiveCoolTimeReduceRate);
+                }
             }
+            this.isActivated = false;
         }
 
         public void RoleAbilityResetOnMeetingStart()
@@ -432,6 +437,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 eaterButton.SetAbilityCoolTime(
                     eaterButton.CurButtonCoolTime * this.killEatCoolTimePenalty);
             }
+            this.isActivated = true;
         }
 
         public bool IsAbilityCheck()
@@ -530,6 +536,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                GetRoleOptionId(EaterOption.IsShowArrowForDeadBody)].GetValue();
 
             this.deadBodyArrow.Clear();
+            this.isActivated = false;
 
             this.abilityInit();
         }
