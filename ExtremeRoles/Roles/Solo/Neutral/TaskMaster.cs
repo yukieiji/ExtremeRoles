@@ -111,13 +111,20 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public override bool IsSameTeam(SingleRoleBase targetRole)
         {
-            if(OptionHolder.Ship.IsSameNeutralSameWin)
+            if (this.Id == targetRole.Id)
             {
-                return this.Id == targetRole.Id;
+                if (OptionHolder.Ship.IsSameNeutralSameWin)
+                {
+                    return true;
+                }
+                else
+                {
+                    return this.IsSameControlId(targetRole);
+                }
             }
             else
             {
-                return (this.Id == targetRole.Id) && this.IsSameControlId(targetRole);
+                return base.IsSameTeam(targetRole);
             }
         }
 
