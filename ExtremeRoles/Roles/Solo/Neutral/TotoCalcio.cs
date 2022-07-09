@@ -65,7 +65,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void CreateAbility()
         {
-            this.CreateNormalAbilityButton(
+            this.CreateAbilityCountButton(
                 Helper.Translation.GetString("betPlayer"),
                 Loader.CreateSpriteFromResources(
                     Path.TestButton));
@@ -200,7 +200,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 1.0f, 0.0f, 2.0f, 0.1f,
                 parentOps);
 
-            this.CreateCommonAbilityOption(parentOps);
+            this.CreateAbilityCountOption(parentOps, 3, 5);
 
             CreateFloatOption(
                 TotocalcioOption.FinalCoolTime,
