@@ -525,9 +525,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.range = allOps[
                 GetRoleOptionId(EaterOption.EatRange)].GetValue();
             this.deadBodyEatActiveCoolTimePenalty = (float)allOps[
-               GetRoleOptionId(EaterOption.DeadBodyEatActiveCoolTimePenalty)].GetValue() / 100.0f + 1;
+               GetRoleOptionId(EaterOption.DeadBodyEatActiveCoolTimePenalty)].GetValue() / 100.0f + 1.0f;
             this.killEatCoolTimePenalty = (float)allOps[
-               GetRoleOptionId(EaterOption.KillEatCoolTimePenalty)].GetValue() / 100.0f + 1;
+               GetRoleOptionId(EaterOption.KillEatCoolTimePenalty)].GetValue() / 100.0f + 1.0f;
             this.killEatActiveCoolTimeReduceRate = 1.0f - (float)allOps[
                GetRoleOptionId(EaterOption.KillEatCoolTimePenalty)].GetValue() / 100.0f;
             this.isResetCoolTimeWhenMeeting = allOps[
