@@ -85,6 +85,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 {
                     multiAssignRole.Team = ExtremeRoleType.Neutral;
                     multiAssignRole.AnotherRole = null;
+                    multiAssignRole.CanHasAnotherRole = true;
                     multiAssignRole.SetAnotherRole(servant);
                     setNewRole(multiAssignRole, targetPlayerId);
                 }
