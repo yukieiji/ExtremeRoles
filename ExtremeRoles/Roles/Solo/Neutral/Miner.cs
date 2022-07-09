@@ -240,7 +240,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 1.8f, 0.5f, 5f, 0.1f, parentOps);
             CreateFloatOption(
                 MinerOption.NoneActiveTime,
-                15.0f, 1.0f, 30f, 0.5f,
+                20.0f, 1.0f, 45f, 0.5f,
                 parentOps, format: OptionUnit.Second);
             CreateBoolOption(
                 MinerOption.ShowKillLog,
