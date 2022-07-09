@@ -69,6 +69,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 Helper.Translation.GetString("betPlayer"),
                 Loader.CreateSpriteFromResources(
                     Path.TestButton));
+            this.Button.SetLabelToCrewmate();
         }
 
         public bool IsAbilityUse()
