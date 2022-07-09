@@ -132,8 +132,15 @@ namespace ExtremeRoles.Patches.Manager
                     foreach (int playerIndex in tempList)
                     {
                         player = PlayerControl.AllPlayerControls[playerIndex];
+
+                        Logging.Debug($"-------------------AssignToPlayer:{player.Data.PlayerName}-------------------");
+                        Logging.Debug($"---AssignRole:{role.Id}---");
+                        
                         assign = isAssignedToMultiRole(
                             role, player);
+
+                        Logging.Debug($"AssignResult:{assign}");
+
                         if (!assign) { continue; }
 
                         if (role.CanHasAnotherRole)
@@ -147,6 +154,9 @@ namespace ExtremeRoles.Patches.Manager
                             player.PlayerId, (int)role.Id,
                             combType, (byte)id,
                             (byte)player.Data.Role.Role));
+
+                        Logging.Debug($"-------------------AssignEnd-------------------");
+                        
                         break;
                     }
                 }
