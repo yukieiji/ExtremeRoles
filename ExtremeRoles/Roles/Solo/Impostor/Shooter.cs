@@ -340,14 +340,21 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         private void createText()
         {
+
+            HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
+
             this.chargeTimerText = Object.Instantiate(
-                FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
-                FastDestroyableSingleton<HudManager>.Instance.KillButton.transform);
-            this.chargeTimerText.transform.localPosition += new Vector3(-2.7f, -1.7f, 0);
+                hudManager.KillButton.cooldownTimerText,
+                hudManager.KillButton.transform.parent);
+
+            this.chargeTimerText.transform.localScale = 
+                hudManager.KillButton.cooldownTimerText.transform.localScale;
+            this.chargeTimerText.transform.localPosition = 
+                hudManager.UseButton.transform.localPosition + new Vector3(-1.9f, -1.00f, 0);
             this.chargeTimerText.gameObject.SetActive(true);
 
             this.chargeInfoText = Object.Instantiate(
-                FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+                hudManager.KillButton.cooldownTimerText,
                 this.chargeTimerText.transform);
             this.chargeInfoText.enableWordWrapping = false;
             this.chargeInfoText.transform.localScale = Vector3.one * 0.5f;
