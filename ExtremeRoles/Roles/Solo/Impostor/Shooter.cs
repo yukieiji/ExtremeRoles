@@ -25,9 +25,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             ShootShootChargePenalty,
         }
 
-        public int CurShootNum => this.curShootNum;
-        public bool CanShoot => this.shootCounter < this.maxMeetingShootNum && this.canShootThisMeeting;
-
         private float defaultKillCool = 0.0f;
         private float killCoolPenalty = 0.0f;
         private float killShootChargeTimeModd = 0.0f;
@@ -60,9 +57,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
         {
-            byte target = instance.TargetPlayerId;
+            byte target = instance.TargetPlayerId
 
-            return this.CurShootNum <= 0 || !this.CanShoot || target == 253 ||
+            return 
+                this.curShootNum <= 0 || 
+                !(this.shootCounter < this.maxMeetingShootNum && this.canShootThisMeeting) || 
+                target == 253 ||
                 ExtremeRoleManager.GameRole[target].Id == ExtremeRoleId.Assassin;
         }
 
