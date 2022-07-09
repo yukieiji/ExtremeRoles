@@ -66,7 +66,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public void CreateAbility()
         {
             this.CreateNormalAbilityButton(
-                Helper.Translation.GetString("bet"),
+                Helper.Translation.GetString("betPlayer"),
                 Loader.CreateSpriteFromResources(
                     Path.TestButton));
         }
