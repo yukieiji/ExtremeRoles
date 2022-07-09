@@ -301,6 +301,19 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 Player.GetPlayerControlById(playerId)?.Exiled();
             }
         }
+        public override Color GetTargetRoleSeeColor(
+            SingleRoleBase targetRole,
+            byte targetPlayerId)
+        {
+
+            if (targetRole.Id == ExtremeRoleId.Servant &&
+                this.ServantPlayerId.Contains(targetPlayerId))
+            {
+                return ColorPalette.QueenWhite;
+            }
+
+            return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
+        }
 
         public override void RolePlayerKilledAction(
             PlayerControl rolePlayer, PlayerControl killerPlayer)
@@ -373,9 +386,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.ServantSelfKillCool = OptionHolder.AllOption[
                 GetRoleOptionId(QueenOption.ServantSelfKillCool)].GetValue();
             this.killKillCoolReduceRate = 1.0f - ((float)OptionHolder.AllOption[
-                GetRoleOptionId(QueenOption.ServantKillKillCoolReduceRate)].GetValue() * 100.0f);
+                GetRoleOptionId(QueenOption.ServantKillKillCoolReduceRate)].GetValue() / 100.0f);
             this.taskKillCoolReduceRate = 1.0f - ((float)OptionHolder.AllOption[
-                GetRoleOptionId(QueenOption.ServantTaskKillCoolReduceRate)].GetValue() * 100.0f);
+                GetRoleOptionId(QueenOption.ServantTaskKillCoolReduceRate)].GetValue() / 100.0f);
 
             this.servantTaskGage.Clear();
             this.ServantPlayerId.Clear();
