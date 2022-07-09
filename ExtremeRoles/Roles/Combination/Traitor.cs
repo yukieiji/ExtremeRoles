@@ -34,22 +34,7 @@ namespace ExtremeRoles.Roles.Combination
 
             this.BaseRole.CanHasAnotherRole = true;
 
-            role = (MultiAssignRoleBase)this.BaseRole.Clone();
-
-            switch (playerRoleType)
-            {
-                case RoleTypes.Impostor:
-                case RoleTypes.Shapeshifter:
-                    role.Team = ExtremeRoleType.Impostor;
-                    role.SetNameColor(Palette.ImpostorRed);
-                    role.CanKill = true;
-                    role.UseVent = true;
-                    role.UseSabotage = true;
-                    role.HasTask = false;
-                    return role;
-                default:
-                    return role;
-            }
+            return (MultiAssignRoleBase)this.BaseRole.Clone();
         }
 
         protected override void CommonInit()
@@ -59,6 +44,9 @@ namespace ExtremeRoles.Roles.Combination
             var allOptions = OptionHolder.AllOption;
 
             this.BaseRole.CanHasAnotherRole = true;
+
+            // 0:オフ、1:オン
+            allOptions[GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign)].CurSelection = 1;
 
             if (allOptions.ContainsKey(GetRoleOptionId(CombinationRoleCommonOption.AssignsNum)))
             {
@@ -74,7 +62,7 @@ namespace ExtremeRoles.Roles.Combination
 
     }
 
-    public class Traitor : MultiAssignRoleBase, IRoleAbility, IRoleUpdate
+    public class Traitor : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialSetUp
     {
         public class TraitorCrackButton : ChargableButton
         {
@@ -109,7 +97,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         private bool canUseButton = false;
-        private ExtremeRoleId crewRole;
+        private string crewRoleStr;
 
         private AbilityType curAbilityType;
         private AbilityType nextUseAbilityType;
@@ -138,7 +126,9 @@ namespace ExtremeRoles.Roles.Combination
                 ExtremeRoleId.Traitor.ToString(),
                 ColorPalette.TraitorShikon,
                 true, false, true, false)
-        { }
+        {
+            this.CanHasAnotherRole = true;
+        }
 
         public void CreateAbility()
         {
@@ -271,6 +261,17 @@ namespace ExtremeRoles.Roles.Combination
             }
         }
 
+        public void IntroBeginSetUp()
+        {
+            return;
+        }
+
+        public void IntroEndSetUp()
+        {
+            this.Button.PositionOffset = new Vector3(-1.8f, -0.06f, 0);
+            this.Button.ReplaceHotKey(KeyCode.F);
+        }
+
 
         public void RoleAbilityResetOnMeetingStart()
         {
@@ -322,8 +323,12 @@ namespace ExtremeRoles.Roles.Combination
             this.CanHasAnotherRole = false;
 
             this.Team = ExtremeRoleType.Neutral;
-            this.crewRole = this.AnotherRole.Id;
-            Logging.Debug($"Traitor Get Role:{this.crewRole}");
+            this.crewRoleStr = this.AnotherRole.Id.ToString();
+            if (this.AnotherRole.Id == ExtremeRoleId.VanillaRole)
+            {
+                this.crewRoleStr = this.AnotherRole.RoleName;
+            }
+            Logging.Debug($"Traitor Get Role:{this.crewRoleStr}");
             
             byte rolePlayerId = byte.MaxValue;
 
@@ -354,8 +359,7 @@ namespace ExtremeRoles.Roles.Combination
             var resetRole = this.AnotherRole as IRoleSpecialReset;
             if (resetRole != null)
             {
-                resetRole.AllReset(
-                    Player.GetPlayerControlById(rolePlayerId));
+                resetRole.AllReset(Player.GetPlayerControlById(rolePlayerId));
             }
             this.AnotherRole = null;
         }
@@ -364,14 +368,14 @@ namespace ExtremeRoles.Roles.Combination
         {
             return string.Format(
                 base.GetIntroDescription(),
-                Translation.GetString(this.crewRole.ToString()));
+                Translation.GetString(this.crewRoleStr));
         }
 
         public override string GetFullDescription()
         {
             return string.Format(
                 base.GetFullDescription(),
-                Translation.GetString(this.crewRole.ToString()));
+                Translation.GetString(this.crewRoleStr));
         }
 
         protected override void CreateSpecificOption(
