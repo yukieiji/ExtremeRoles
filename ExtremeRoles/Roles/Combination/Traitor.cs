@@ -367,6 +367,13 @@ namespace ExtremeRoles.Roles.Combination
                 Translation.GetString(this.crewRole.ToString()));
         }
 
+        public override string GetFullDescription()
+        {
+            return string.Format(
+                base.GetFullDescription(),
+                Translation.GetString(this.crewRole.ToString()));
+        }
+
         protected override void CreateSpecificOption(
             CustomOptionBase parentOps)
         {
