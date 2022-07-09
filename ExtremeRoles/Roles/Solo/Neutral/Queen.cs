@@ -73,7 +73,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 servant.SelfKillAbility(queen.ServantSelfKillCool);
                 if (targetRole.Team != ExtremeRoleType.Neutral)
                 {
-                    servant.Button.PositionOffset = new Vector3(0, 1.6f, 0);
+                    servant.Button.PositionOffset = new Vector3(0, 2.0f, 0);
                     servant.Button.ReplaceHotKey(KeyCode.C);
                 }
             }
