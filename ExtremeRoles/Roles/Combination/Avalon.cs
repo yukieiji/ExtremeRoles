@@ -99,6 +99,8 @@ namespace ExtremeRoles.Roles.Combination
         public override void ExiledAction(
             GameData.PlayerInfo rolePlayer)
         {
+            
+            if (isServant()) { return; }
 
             assassinMeetingTriggerOn(rolePlayer.PlayerId);
             if (AmongUsClient.Instance.AmHost)
@@ -115,6 +117,9 @@ namespace ExtremeRoles.Roles.Combination
             PlayerControl rolePlayer,
             PlayerControl killerPlayer)
         {
+
+            if (isServant()) { return; }
+
             if (!this.isDeadForceMeeting || MeetingHud.Instance != null)
             {
                 AddDead(rolePlayer.PlayerId);
@@ -199,7 +204,7 @@ namespace ExtremeRoles.Roles.Combination
                     targetId].Id == ExtremeRoleId.Marlin;
             ExtremeRolesPlugin.GameDataStore.IsMarinPlayerId = targetId;
         }
-
+        private bool isServant() => this.AnotherRole?.Id == ExtremeRoleId.Servant;
     }
 
 
