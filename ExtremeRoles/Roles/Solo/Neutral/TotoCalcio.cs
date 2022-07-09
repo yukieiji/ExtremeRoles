@@ -119,17 +119,19 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             if (this.Button == null) { return; }
 
-            int aliveNum = 0;
+            int deadNum = 0;
             
             foreach (var player in 
                 GameData.Instance.AllPlayers.GetFastEnumerator())
             {
-                if (player.IsDead || player.Disconnected) { ++aliveNum; }
+                if (player.IsDead || player.Disconnected) { ++deadNum; }
             }
+
+            if (deadNum == 0) { return; }
 
             this.Button.SetAbilityCoolTime(
                 this.defaultCoolTime + (
-                    (this.finalCoolTime - this.defaultCoolTime) * (aliveNum / GameData.Instance.AllPlayers.Count)));
+                    (this.finalCoolTime - this.defaultCoolTime) * ((float)deadNum / (float)GameData.Instance.AllPlayers.Count)));
             this.Button.ResetCoolTimer();
         }
 
