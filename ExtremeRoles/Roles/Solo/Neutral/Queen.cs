@@ -372,10 +372,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 GetRoleOptionId(QueenOption.CanUseVent)].GetValue();
             this.ServantSelfKillCool = OptionHolder.AllOption[
                 GetRoleOptionId(QueenOption.ServantSelfKillCool)].GetValue();
-            this.killKillCoolReduceRate = OptionHolder.AllOption[
-                GetRoleOptionId(QueenOption.ServantKillKillCoolReduceRate)].GetValue();
-            this.taskKillCoolReduceRate = OptionHolder.AllOption[
-                GetRoleOptionId(QueenOption.ServantTaskKillCoolReduceRate)].GetValue();
+            this.killKillCoolReduceRate = 1.0f - ((float)OptionHolder.AllOption[
+                GetRoleOptionId(QueenOption.ServantKillKillCoolReduceRate)].GetValue() * 100.0f);
+            this.taskKillCoolReduceRate = 1.0f - ((float)OptionHolder.AllOption[
+                GetRoleOptionId(QueenOption.ServantTaskKillCoolReduceRate)].GetValue() * 100.0f);
 
             this.servantTaskGage.Clear();
             this.ServantPlayerId.Clear();
@@ -466,7 +466,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 this.killFlash.gameObject.SetActive(true);
             }
 
-            Color32 color = Palette.EnabledColor;
+            Color32 color = new Color(0f, 0.8f, 0f); ;
 
             if (source.PlayerId == this.queenPlayerId)
             {
