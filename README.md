@@ -1,8 +1,9 @@
 Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携しておらず、含まれるコンテンツはAmong UsやInnersloth LLCから支援、援助されているものではありません。
 ここに含まれる素材の一部は、Innersloth LLCの所有物です。©Innersloth LLC.
 
-### 製作者SNS
+### 各種リンク
 [![Twitter URL](https://img.shields.io/twitter/url?label=Twitter&style=social&url=https%3A%2F%2Ftwitter.com%2Fyukieiji)](https://twitter.com/yukieiji)
+[![Discord](https://img.shields.io/discord/994790791304200252?label=Discord)](https://t.co/czLmgXLUBU)
 
 
 # Extreme Roles
@@ -17,7 +18,7 @@ AmongUsの上級者(初心者)向けのロール追加MOD、主な特徴とし�
 * 互換性のあるMODのインストール/アップデートチェック/アンインストール機能
 * 多言語対応(現在は日本語と简体中文のみ/only Japanese and SChinese now!!)
 
-## 追加役職一覧(Extreme Roles v3.1.1.0時点、今後も追加予定)
+## 追加役職一覧(Extreme Roles v3.1.3.0時点、今後も追加予定)
 #### 通常役職
 |  クルー  |  インポスター  | ニュートラル |
 | ---- | ---- | ---- |
@@ -72,9 +73,13 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 
 ## リリーススケジュール
 - Extreme Roles v3.2.0.0
-  - 7月末から8月頭にリリース予定
+  - 7月末リリース予定
   - Extreme Roles夏の中型アップデート「ニュートラル」
   - 第三陣営が少ない問題に対処するため多数の第三陣営をリリースします
+- Extreme Roles v3.3.0.0
+  - 9月頃リリース予定
+  - Extreme Roles秋の中型アップデート「アウェイキング」
+  - タスク覚醒役職を始めとした覚醒役職を多数リリースします
 
 ## 現在実装検討中の役職及び機能
 - ???(第三陣営)
@@ -113,7 +118,7 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 
 |  AmongUs バージョン  |  Extreme Roles バージョン  |
 | ---- | ---- |
-|  v2022.06.21s/v2022.06.22e  |  v3.0.0.0 ～ v3.1.1.0 |
+|  v2022.06.21s/v2022.06.22e  |  v3.0.0.0 ～ v3.1.3.0 |
 |  v2022.03.29s/v2022.03.29e/v2022.04.19e  |  v2.0.5.0 ～ v2.2.0.2 |
 |  v2022.03.29s/v2022.03.29e  |  v1.99.90.0 ～ v2.0.4.0 |
 |  v2021.12.15s/v2022.02.08s/v2022.02.23s/v2022.02.24s/v2021.12.15e/v2022.02.24e  |  v1.18.2.0 ～ v1.19.0.0 |
