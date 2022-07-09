@@ -57,7 +57,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
         {
-            byte target = instance.TargetPlayerId
+            byte target = instance.TargetPlayerId;
 
             return 
                 this.curShootNum <= 0 || 
