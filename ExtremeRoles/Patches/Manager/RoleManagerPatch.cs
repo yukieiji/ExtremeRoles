@@ -268,7 +268,7 @@ namespace ExtremeRoles.Patches.Manager
                         ((extremeRolesData.ImpostorRoles - reduceImpostorRole >= 0) && impNum >= reduceImpostorRole));
 
 
-                    //Modules.Helpers.DebugLog($"Role:{oneRole.ToString()}   isSpawn?:{isSpawn}");
+                    // Logging.Debug($"Role:{oneRole}   isSpawn?:{isSpawn}");
                     if (!isSpawn) { continue; }
 
                     extremeRolesData.CrewmateRoles = extremeRolesData.CrewmateRoles - reduceCrewmateRole;
