@@ -264,7 +264,8 @@ namespace ExtremeRoles.Module
 
                 int gameControlId = role.GameControlId;
 
-                if (role.Id == ExtremeRoleId.Assassin)
+                if (role.Id == ExtremeRoleId.Assassin && 
+                    role.IsImpostor())
                 {
                     var assassin = role as Roles.Combination.Assassin;
                     if (assassin != null)
