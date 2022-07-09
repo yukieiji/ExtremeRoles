@@ -97,7 +97,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 GameData.Instance == null) { return; }
             if (!CachedShipStatus.Instance.enabled ||
                 ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
-            if (MeetingHud.Instance)
+            if (MeetingHud.Instance || ExileController.Instance)
             {
                 this.timer = this.nonActiveTime;
                 return;
@@ -240,7 +240,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 1.8f, 0.5f, 5f, 0.1f, parentOps);
             CreateFloatOption(
                 MinerOption.NoneActiveTime,
-                7.5f, 1.0f, 15f, 0.5f,
+                15.0f, 1.0f, 30f, 0.5f,
                 parentOps, format: OptionUnit.Second);
             CreateBoolOption(
                 MinerOption.ShowKillLog,
@@ -262,7 +262,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.timer = this.nonActiveTime;
             this.setPos = null;
             this.killLogger = new TextPopUpper(
-                2, 2.5f, new Vector3(0, -1.2f, 0.0f),
+                2, 3.5f, new Vector3(0, -1.2f, 0.0f),
                 TMPro.TextAlignmentOptions.Center);
         }
     }
