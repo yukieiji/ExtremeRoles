@@ -106,7 +106,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 this.HasOtherKillCool = true;
                 float reduceRate = this.noneAwakeKillBonus * this.noneAwakeKillCount + 
-                    this.deadPlayerKillBonus * (
+                    this.deadPlayerKillBonus * (float)(
                         GameData.Instance.AllPlayers.Count - computeAlivePlayerNum() - this.noneAwakeKillCount);
                 this.KillCoolTime = this.KillCoolTime * (100.0f - reduceRate);
             }
@@ -361,7 +361,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             if (this.Button != null)
             {
                 float curCool = (this.finalCooltime - this.firstCooltime) *
-                    (1.0f - computeAlivePlayerNum() / GameData.Instance.AllPlayers.Count) + this.firstCooltime;
+                    (1.0f - ((float)computeAlivePlayerNum() / (float)GameData.Instance.AllPlayers.Count)) + this.firstCooltime;
                 this.Button.SetAbilityCoolTime(curCool);
             }
         }
