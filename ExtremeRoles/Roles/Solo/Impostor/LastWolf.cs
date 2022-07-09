@@ -71,9 +71,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public static void SwitchLight(bool lightOn)
         {
-            var lastWolf = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<LastWolf>();
-
-            if (lastWolf != null) { return; }
             if (lightOn)
             {
                 ExtremeRolesPlugin.GameDataStore.CurVison = GameDataContainer.ForceVisionType.None;

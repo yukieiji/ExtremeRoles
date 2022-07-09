@@ -33,8 +33,13 @@ namespace ExtremeRoles.Patches
             switch (ExtremeRolesPlugin.GameDataStore.CurVison)
             {
                 case GameDataContainer.ForceVisionType.LastWolfLightOff:
-                    __result = 0.3f;
-                    return false;
+                    if (ExtremeRoleManager.GetSafeCastedLocalPlayerRole<
+                        Roles.Solo.Impostor.LastWolf>() == null)
+                    {
+                        __result = 0.3f;
+                        return false;
+                    }
+                    break;
                 default:
                     break;
             }
