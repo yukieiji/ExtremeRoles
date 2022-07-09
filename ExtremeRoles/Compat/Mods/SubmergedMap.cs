@@ -331,6 +331,10 @@ namespace ExtremeRoles.Compat.Mods
             MethodInfo prespawnStepPrefix = SymbolExtensions.GetMethodInfo(
                 () => Patches.SubmarineSelectSpawnPrespawnStepPatch.Prefix(ref enumerator));
 
+            MethodInfo onDestroy = AccessTools.Method(
+                submarineSelectSpawn, "OnDestroy");
+            MethodInfo onDestroyPrefix = SymbolExtensions.GetMethodInfo(
+                () => Patches.SubmarineSelectOnDestroyPatch.Prefix());
 
             Type hudManagerUpdatePatch = ClassType.First(
                 t => t.Name == "HudManager_Update_Patch");
@@ -374,6 +378,10 @@ namespace ExtremeRoles.Compat.Mods
             // アサシン会議発動するとスポーン画面が出ないように
             harmony.Patch(prespawnStep,
                 new HarmonyMethod(prespawnStepPrefix));
+
+            // キルクール周りが上書きされているのでそれの調整
+            harmony.Patch(onDestroy,
+                new HarmonyMethod(onDestroyPrefix));
 
             // フロアの階層変更ボタンの位置を変えるパッチ
             harmony.Patch(hudManagerUpdatePatchPostfix,
