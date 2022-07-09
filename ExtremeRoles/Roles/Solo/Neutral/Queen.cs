@@ -464,6 +464,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 null, null,
                 KeyCode.F, false);
             this.Button.SetAbilityCoolTime(coolTime);
+            this.Button.ResetCoolTimer();
         }
 
         public void HockMuderPlayer(
