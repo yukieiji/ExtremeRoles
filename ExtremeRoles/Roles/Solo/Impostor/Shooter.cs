@@ -349,7 +349,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             this.chargeTimerText.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
             this.chargeTimerText.transform.localPosition = 
-                hudManager.UseButton.transform.localPosition + new Vector3(-2.0f, -0.11f, 0);
+                hudManager.UseButton.transform.localPosition + new Vector3(-2.0f, -0.125f, 0);
             this.chargeTimerText.gameObject.SetActive(true);
 
             this.chargeInfoText = Object.Instantiate(
