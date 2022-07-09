@@ -8,6 +8,7 @@ using UnhollowerBaseLib;
 
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
@@ -302,12 +303,12 @@ namespace ExtremeRoles.Patches.Meeting
 
             if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
             {
+                var player = CachedPlayerControl.LocalPlayer;
                 var hockRole = ExtremeRoleManager.GetLocalPlayerRole() as IRoleReportHock;
+                var multiAssignRole = ExtremeRoleManager.GetLocalPlayerRole() as MultiAssignRoleBase;
 
                 if (hockRole != null)
                 {
-                    var player = CachedPlayerControl.LocalPlayer;
-
                     if (reportedBody == null)
                     {
                         hockRole.HockReportButton(
@@ -317,6 +318,24 @@ namespace ExtremeRoles.Patches.Meeting
                     {
                         hockRole.HockBodyReport(
                             player, reporter, reportedBody);
+                    }
+                }
+                if (multiAssignRole != null)
+                {
+                    hockRole = multiAssignRole.AnotherRole as IRoleReportHock;
+                    if (hockRole != null)
+                    {
+
+                        if (reportedBody == null)
+                        {
+                            hockRole.HockReportButton(
+                                player, reporter);
+                        }
+                        else
+                        {
+                            hockRole.HockBodyReport(
+                                player, reporter, reportedBody);
+                        }
                     }
                 }
 
@@ -355,7 +374,7 @@ namespace ExtremeRoles.Patches.Meeting
                 resetRole.ResetOnMeetingStart();
             }
 
-            var multiAssignRole = role as Roles.API.MultiAssignRoleBase;
+            var multiAssignRole = role as MultiAssignRoleBase;
             if (multiAssignRole != null)
             {
                 if (multiAssignRole.AnotherRole != null)
