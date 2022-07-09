@@ -102,7 +102,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             role.CarringBody.transform.parent = null;
 
-
             if (!rolePlayer.inVent && !rolePlayer.moveable)
             {
                 do
@@ -114,9 +113,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             if (role.CarringBody == null) { yield break; }
 
-            role.CarringBody.transform.position = rolePlayer.GetTruePosition() + new Vector2(0.15f, 0.15f);
-            role.CarringBody.transform.position -= new Vector3(0.0f, 0.0f, 0.01f);
-
+            Vector2 pos = rolePlayer.GetTruePosition();
+            role.CarringBody.transform.position = new Vector3(pos.x, pos.y, (pos.y / 1000f));
 
             Color color = role.CarringBody.bodyRenderer.color;
             role.CarringBody.bodyRenderer.color = new Color(
