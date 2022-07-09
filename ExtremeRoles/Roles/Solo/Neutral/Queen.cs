@@ -233,6 +233,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     {
                         CachedPlayerControl.LocalPlayer.PlayerControl.killTimer = killcool * this.taskKillCoolReduceRate;
                     }
+                    this.servantTaskGage[playerId] = gage;
                 }
             }
         }
