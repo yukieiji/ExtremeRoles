@@ -439,15 +439,12 @@ namespace ExtremeRoles.Roles
                 IRoleAbility multiAssignAbilityRole = ((MultiAssignRoleBase)GameRole[
                     playerId]) as IRoleAbility;
 
-                IRoleAbility anotherAbilityRole = ((MultiAssignRoleBase)GameRole[playerId]).AnotherRole as IRoleAbility;
-
-                if (multiAssignAbilityRole != null && 
-                    anotherAbilityRole != null &&
+                if (multiAssignAbilityRole != null &&
                     CachedPlayerControl.LocalPlayer.PlayerId == playerId)
                 {
                     if (multiAssignAbilityRole.Button != null)
                     {
-                        multiAssignAbilityRole.Button.PositionOffset = new UnityEngine.Vector3(0, 2.6f, 0);
+                        multiAssignAbilityRole.Button.PositionOffset = new UnityEngine.Vector3(0, 1.6f, 0);
                         multiAssignAbilityRole.Button.ReplaceHotKey(UnityEngine.KeyCode.C);
                     }
                 }

@@ -71,10 +71,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
             {
                 servant.SelfKillAbility(queen.ServantSelfKillCool);
-                if (targetRole is IRoleAbility &&
-                    targetRole.Team != ExtremeRoleType.Neutral)
+                if (targetRole.Team != ExtremeRoleType.Neutral)
                 {
-                    servant.Button.PositionOffset = new Vector3(0, 2.6f, 0);
+                    servant.Button.PositionOffset = new Vector3(0, 1.6f, 0);
                     servant.Button.ReplaceHotKey(KeyCode.C);
                 }
             }
