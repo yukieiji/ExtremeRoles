@@ -515,12 +515,12 @@ namespace ExtremeRoles.Roles
 
         public static (T, T) GetInterfaceCastedLocalRole<T>() where T : class
         {
-            SingleRoleBase checRole = GameRole[CachedPlayerControl.LocalPlayer.PlayerId];
+            SingleRoleBase checkRole = GameRole[CachedPlayerControl.LocalPlayer.PlayerId];
 
-            T interfacedSingleRole = checRole as T;
+            T interfacedSingleRole = checkRole as T;
             T interfacedMultiRole = null;
 
-            MultiAssignRoleBase multiAssignRole = checRole as MultiAssignRoleBase;
+            MultiAssignRoleBase multiAssignRole = checkRole as MultiAssignRoleBase;
             if (multiAssignRole != null)
             {
                 interfacedMultiRole = multiAssignRole.AnotherRole as T;
@@ -531,12 +531,12 @@ namespace ExtremeRoles.Roles
 
         public static (T, T) GetInterfaceCastedRole<T>(byte playerId) where T : class
         {
-            SingleRoleBase checRole = GameRole[playerId];
+            SingleRoleBase checkRole = GameRole[playerId];
 
-            T interfacedSingleRole = checRole as T;
+            T interfacedSingleRole = checkRole as T;
             T interfacedMultiRole = null;
 
-            MultiAssignRoleBase multiAssignRole = checRole as MultiAssignRoleBase;
+            MultiAssignRoleBase multiAssignRole = checkRole as MultiAssignRoleBase;
             if (multiAssignRole != null)
             {
                 interfacedMultiRole = multiAssignRole.AnotherRole as T;
