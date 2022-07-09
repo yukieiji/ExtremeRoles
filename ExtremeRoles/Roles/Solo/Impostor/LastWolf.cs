@@ -108,7 +108,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 float reduceRate = this.noneAwakeKillBonus * this.noneAwakeKillCount + 
                     this.deadPlayerKillBonus * (float)(
                         GameData.Instance.AllPlayers.Count - computeAlivePlayerNum() - this.noneAwakeKillCount);
-                this.KillCoolTime = this.KillCoolTime * (100.0f - reduceRate);
+                this.KillCoolTime = this.KillCoolTime * (100.0f - reduceRate) / 100.0f;
             }
         }
 
