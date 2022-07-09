@@ -523,7 +523,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            if (this.killFlash == null)
+            if (this.killFlash != null)
             {
                 this.killFlash.enabled = false; 
             }
