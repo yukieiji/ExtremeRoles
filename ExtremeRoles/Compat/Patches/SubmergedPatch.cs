@@ -27,6 +27,15 @@ namespace ExtremeRoles.Compat.Patches
         }
     }
 
+    public static class SubmarineSelectOnDestroyPatch
+    {
+        public static void Prefix()
+        {
+            ExtremeRoles.Patches.Controller.ExileControllerReEnableGameplayPatch.ReEnablePostfix();
+        }
+    }
+
+
     public static class SubmergedExileControllerWrapUpAndSpawnPatch
     {
         public static void Prefix(ExileController __instance)
@@ -37,7 +46,6 @@ namespace ExtremeRoles.Compat.Patches
 
         public static void Postfix(ExileController __instance)
         {
-            ExtremeRoles.Patches.Controller.ExileControllerReEnableGameplayPatch.ReEnablePostfix();
             ExtremeRoles.Patches.Controller.ExileControllerWrapUpPatch.WrapUpPostfix(
                 __instance.exiled);
             
