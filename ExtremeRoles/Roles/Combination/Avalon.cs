@@ -354,7 +354,7 @@ namespace ExtremeRoles.Roles.Combination
                 else
                 {
                     poolPlayer.gameObject.SetActive(true);
-                    poolPlayer.transform.localScale = Vector3.one * 0.25f;
+                    poolPlayer.transform.localScale = Vector3.one * 0.275f;
                     poolPlayer.transform.localPosition = bottomLeft + Vector3.right * visibleCounter * 0.45f;
                     ++visibleCounter;
                 }
