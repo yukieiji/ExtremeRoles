@@ -470,6 +470,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public void HockMuderPlayer(
             PlayerControl source, PlayerControl target)
         {
+            
+            if (MeetingHud.Instance ||
+                source.PlayerId == target.PlayerId) { return; }
+
             if (this.killFlash == null)
             {
                 this.killFlash = UnityEngine.Object.Instantiate(
@@ -479,7 +483,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 this.killFlash.gameObject.SetActive(true);
             }
 
-            Color32 color = new Color(0f, 0.8f, 0f); ;
+            Color32 color = new Color(0f, 0.8f, 0f);
 
             if (source.PlayerId == this.queenPlayerId)
             {
