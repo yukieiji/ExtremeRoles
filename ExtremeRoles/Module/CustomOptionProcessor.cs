@@ -33,7 +33,7 @@ namespace ExtremeRoles.Module
                             comma, "Id", "Name", "Option Value", "SelectedIndex")); //ヘッダー
 
 
-                    foreach (var (_, option) in OptionHolder.AllOption)
+                    foreach (CustomOptionBase option in OptionHolder.AllOption.Values)
                     {
 
                         if (option.Id == 0) { continue; }
@@ -119,7 +119,8 @@ namespace ExtremeRoles.Module
 
         private static string clean(string value)
         {
-            value = Regex.Replace(value, "<.*?>", "");
+            value = Regex.Replace(value, "<.*?>", string.Empty);
+            value = Regex.Replace(value, "\\\n", string.Empty);
             return value.Trim();
         }
     }
