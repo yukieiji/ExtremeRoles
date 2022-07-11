@@ -414,7 +414,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 ExtremeRoleId.Servant.ToString(),
                 ColorPalette.QueenWhite,
                 baseRole.CanKill,
-                baseRole.Team == ExtremeRoleType.Crewmate ? true : baseRole.HasTask,
+                baseRole.Team != ExtremeRoleType.Impostor,
                 baseRole.UseVent,
                 baseRole.UseSabotage)
         {
