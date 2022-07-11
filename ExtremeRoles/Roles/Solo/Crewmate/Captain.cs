@@ -32,6 +32,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private bool awakeHasOtherVision;
 
         private float chargedVote;
+        private float defaultVote;
+        private byte voteTarget;
 
         public Captain() : base(
             ExtremeRoleId.Captain,
@@ -41,14 +43,41 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             false, true, false, false)
         { }
 
-        public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
+        public static void SetTargetVote(byte rolePlayerId, byte targetPlayerId)
         {
-            throw new NotImplementedException();
+            Captain captain = ExtremeRoleManager.GetSafeCastedRole<Captain>(rolePlayerId);
+            captain.voteTarget = targetPlayerId;
+        }
+
+        public void ButtonMod(
+            PlayerVoteArea instance, UiElement abilityButton)
+        {
+            abilityButton.name = $"captainSpecialVote_{instance.TargetPlayerId}";
+            var controllerHighlight = abilityButton.transform.FindChild("ControllerHighlight");
+            if (controllerHighlight != null)
+            {
+                controllerHighlight.localScale *= new Vector2(1.25f, 1.25f);
+            }
         }
 
         public Action CreateAbilityAction(PlayerVoteArea instance)
         {
-            throw new NotImplementedException();
+            void setTarget()
+            {
+                RPCOperator.Call(
+                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                    RPCOperator.Command.CaptainTargetVote,
+                    new List<byte>
+                    {
+                        CachedPlayerControl.LocalPlayer.PlayerId,
+                        instance.TargetPlayerId
+                    });
+                SetTargetVote(
+                    CachedPlayerControl.LocalPlayer.PlayerId,
+                    instance.TargetPlayerId);
+            }
+
+            return setTarget;
         }
 
         public string GetFakeOptionString() => "";
@@ -166,6 +195,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 this.awakeRole = false;
                 this.HasOtherVison = false;
             }
+
+            this.voteTarget = byte.MaxValue;
+        
         }
     }
 }

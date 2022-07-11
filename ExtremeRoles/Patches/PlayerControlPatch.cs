@@ -957,6 +957,12 @@ namespace ExtremeRoles.Patches
                     byte survivorPlayerId = reader.ReadByte();
                     RPCOperator.SurvivorDeadWin(survivorPlayerId);
                     break;
+                case RPCOperator.Command.CaptainTargetVote:
+                    byte captainPlayerId = reader.ReadByte();
+                    byte specialVotePlayerId = reader.ReadByte();
+                    RPCOperator.CaptainTargetVote(
+                        captainPlayerId, specialVotePlayerId);
+                    break;
                 case RPCOperator.Command.AssasinVoteFor:
                     byte voteTargetId = reader.ReadByte();
                     RPCOperator.AssasinVoteFor(voteTargetId);

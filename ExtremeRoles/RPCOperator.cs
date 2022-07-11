@@ -57,6 +57,7 @@ namespace ExtremeRoles
             CuresMakerCurseKillCool,
             CarpenterUseAbility,
             SurvivorDeadWin,
+            CaptainTargetVote,
 
             // インポスター
             AssasinVoteFor,
@@ -456,6 +457,13 @@ namespace ExtremeRoles
         public static void SurvivorDeadWin(byte playerId)
         {
             Roles.Solo.Crewmate.Survivor.DeadWin(playerId);
+        }
+
+        public static void CaptainTargetVote(
+            byte playerId, byte targetPlayerId)
+        {
+            Roles.Solo.Crewmate.Captain.SetTargetVote(
+                playerId, targetPlayerId);
         }
 
         public static void AssasinVoteFor(byte targetId)
