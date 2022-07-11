@@ -20,6 +20,7 @@ namespace ExtremeRoles.Module
         Multiplier,
         Percentage,
         ScrewNum,
+        VoteNum
     }
 
     public abstract class CustomOptionBase

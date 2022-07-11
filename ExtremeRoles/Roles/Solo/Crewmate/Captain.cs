@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,11 +11,13 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class Captain : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleMeetingButtonAbility
+    public class Captain : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleMeetingButtonAbility, IRoleVoteModifier
     {
         public enum CaptainOption
         {
-            AwakeTaskGage
+            AwakeTaskGage,
+            ChargeVoteWhenSkip,
+            AwakedDefaultVoteNum,
         }
 
         public bool IsAwake
@@ -25,15 +28,20 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
         }
 
+        public int Order => (int)IRoleVoteModifier.ModOrder.CaptainSpecialVote;
+
         public RoleTypes NoneAwakeRole => RoleTypes.Crewmate;
 
         private bool awakeRole;
         private float awakeTaskGage;
         private bool awakeHasOtherVision;
 
-        private float chargedVote;
+        private float curChargedVote;
+        private float chargeVoteNum;
         private float defaultVote;
         private byte voteTarget;
+
+        private TMPro.TextMeshPro meetingVoteText = null;
 
         public Captain() : base(
             ExtremeRoleId.Captain,
@@ -48,6 +56,65 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             Captain captain = ExtremeRoleManager.GetSafeCastedRole<Captain>(rolePlayerId);
             if (captain == null) { return; }
             captain.voteTarget = targetPlayerId;
+        }
+        public void ModifiedVote(
+            byte rolePlayerId,
+            ref Dictionary<byte, byte> voteTarget,
+            ref Dictionary<byte, int> voteResult)
+        {
+            byte voteFor = voteTarget[rolePlayerId];
+
+            // 能力を使ってない
+            if (this.voteTarget == byte.MaxValue)
+            {
+                // スキップ => チャージ
+                if (voteFor == 252 ||
+                    voteFor == 253 ||
+                    voteFor == 254 || 
+                    voteFor == byte.MaxValue)
+                {
+                    this.curChargedVote = this.curChargedVote + this.chargeVoteNum;
+                }
+            }
+            else
+            {
+                int curVoteNum;
+                int addVoteNum = (int)Math.Floor(this.curChargedVote);
+
+                if (voteResult.TryGetValue(this.voteTarget, out curVoteNum))
+                {
+                    voteResult[this.voteTarget] = curVoteNum + addVoteNum;
+                }
+                else
+                {
+                    voteResult[this.voteTarget] = addVoteNum;
+                }
+            }
+        }
+        public void ModifiedVoteAnime(
+            MeetingHud instance,
+            GameData.PlayerInfo rolePlayer,
+            ref Dictionary<byte, int> voteIndex)
+        {
+            PlayerVoteArea pva = instance.playerStates.FirstOrDefault(
+                x => x.TargetPlayerId == this.voteTarget);
+            
+            if (pva == null) { return; }
+
+            int startIndex = voteIndex[pva.TargetPlayerId];
+
+            int addVoteNum = (int)Math.Floor(this.curChargedVote);
+            for (int i = 0; i < addVoteNum; ++i)
+            {
+                instance.BloopAVoteIcon(rolePlayer, startIndex + i, pva.transform);
+            }
+            voteIndex[pva.TargetPlayerId] = startIndex + addVoteNum;
+        }
+
+        public void ResetModifier()
+        {
+            this.voteTarget = byte.MaxValue;
+            this.curChargedVote = this.defaultVote;
         }
 
         public void ButtonMod(
@@ -83,7 +150,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public string GetFakeOptionString() => "";
 
-        public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance) => !this.IsAwake && chargedVote < 1.0f;
+        public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance) => 
+            instance.TargetPlayerId == 253 || isNotUseSpecialVote();
 
         public void SetSprite(SpriteRenderer render)
         {
@@ -99,6 +167,27 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     this.awakeRole = true;
                     this.HasOtherVison = this.awakeHasOtherVision;
                 }
+            }
+            if (this.IsAwake && MeetingHud.Instance)
+            {
+                if (meetingVoteText == null)
+                {
+                    meetingVoteText = UnityEngine.Object.Instantiate(
+                        FastDestroyableSingleton<HudManager>.Instance.TaskText,
+                        MeetingHud.Instance.transform);
+                    meetingVoteText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
+                    meetingVoteText.transform.position = Vector3.zero;
+                    meetingVoteText.transform.localPosition = new Vector3(-2.85f, 3.15f, -20f);
+                    meetingVoteText.transform.localScale *= 0.9f;
+                    meetingVoteText.color = Palette.White;
+                    meetingVoteText.gameObject.SetActive(false);
+                }
+
+                meetingVoteText.text = string.Format(
+                    Translation.GetString("captainVoteStatus"),
+                    isNotUseSpecialVote() ? Translation.GetString("cannotDo") : Translation.GetString("canDo"),
+                    this.curChargedVote);
+                meetingVoteText.gameObject.SetActive(true);
             }
         }
 
@@ -177,14 +266,29 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 70, 0, 100, 10,
                 parentOps,
                 format: OptionUnit.Percentage);
+            CreateFloatOption(
+                CaptainOption.ChargeVoteWhenSkip,
+                0.7f, 0.1f, 100.0f, 0.1f,
+                parentOps);
+                // format: OptionUnit.VoteNum);
+            CreateFloatOption(
+                CaptainOption.AwakedDefaultVoteNum,
+                0.0f, 0.0f, 100.0f, 0.1f,
+                parentOps);
+                // format: OptionUnit.VoteNum);
         }
 
         protected override void RoleSpecificInit()
         {
+            this.chargeVoteNum = OptionHolder.AllOption[
+               GetRoleOptionId(CaptainOption.ChargeVoteWhenSkip)].GetValue();
+            this.defaultVote = OptionHolder.AllOption[
+               GetRoleOptionId(CaptainOption.AwakedDefaultVoteNum)].GetValue();
             this.awakeTaskGage = (float)OptionHolder.AllOption[
                GetRoleOptionId(CaptainOption.AwakeTaskGage)].GetValue() / 100.0f;
 
             this.awakeHasOtherVision = this.HasOtherVison;
+            this.curChargedVote = this.defaultVote;
 
             if (this.awakeTaskGage <= 0.0f)
             {
@@ -198,7 +302,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
 
             this.voteTarget = byte.MaxValue;
-        
         }
+        private bool isNotUseSpecialVote() => !this.IsAwake || this.curChargedVote < 1.0f;
     }
 }
