@@ -12,7 +12,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate
+    public class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialReset
     {
         public enum MinerOption
         {
@@ -74,6 +74,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         }
 
         public bool IsAbilityUse() => this.IsCommonUse();
+
+        public void AllReset(PlayerControl rolePlayer)
+        {
+            this.mines.Clear();
+        }
 
         public void RoleAbilityResetOnMeetingStart()
         {
