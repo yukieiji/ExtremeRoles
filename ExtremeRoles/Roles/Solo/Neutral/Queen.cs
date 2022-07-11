@@ -414,12 +414,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 ExtremeRoleId.Servant.ToString(),
                 ColorPalette.QueenWhite,
                 baseRole.CanKill,
-                baseRole.Team != ExtremeRoleType.Impostor,
+                baseRole.Team != ExtremeRoleType.Impostor ? true : baseRole.HasTask,
                 baseRole.UseVent,
                 baseRole.UseSabotage)
         {
             var multiAssignRole = baseRole as MultiAssignRoleBase;
-            if (multiAssignRole != null || baseRole.Team == ExtremeRoleType.Neutral)
+            if (multiAssignRole != null || 
+                baseRole.Team == ExtremeRoleType.Neutral)
             {
                 this.CanHasAnotherRole = false;
             }
