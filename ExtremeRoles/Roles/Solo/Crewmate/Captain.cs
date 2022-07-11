@@ -46,6 +46,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public static void SetTargetVote(byte rolePlayerId, byte targetPlayerId)
         {
             Captain captain = ExtremeRoleManager.GetSafeCastedRole<Captain>(rolePlayerId);
+            if (captain == null) { return; }
             captain.voteTarget = targetPlayerId;
         }
 
@@ -86,7 +87,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void SetSprite(SpriteRenderer render)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void Update(PlayerControl rolePlayer)
