@@ -47,7 +47,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ExtremeRoleId.Captain,
             ExtremeRoleType.Crewmate,
             ExtremeRoleId.Captain.ToString(),
-            ColorPalette.CarpenterBrown,
+            ColorPalette.CaptainLightKonjou,
             false, true, false, false)
         { }
 
