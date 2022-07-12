@@ -30,7 +30,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
             ExtremeRoleType.Crewmate,
             ExtremeGhostRoleId.Poltergeist,
             ExtremeGhostRoleId.Poltergeist.ToString(),
-            ColorPalette.PoltergeistKenpou)
+            ColorPalette.PoltergeistLightKenpou)
         { }
 
         public static void DeadbodyMove(

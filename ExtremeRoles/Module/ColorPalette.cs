@@ -33,7 +33,7 @@ namespace ExtremeRoles.Module
 
         public readonly static Color JackalBlue = new Color32(65, 105, 255, byte.MaxValue);
         public readonly static Color AliceGold = new Color32(255, 215, 0, byte.MaxValue);
-        public readonly static Color FanaticBlue = new Color32(103, 118, 161, byte.MaxValue);
+        public readonly static Color MissionaryBlue = new Color32(103, 118, 161, byte.MaxValue);
         public readonly static Color JesterPink = new Color32(245, 125, 167, byte.MaxValue);
         public readonly static Color YandereVioletRed = new Color32(199, 21, 133, byte.MaxValue);
         public readonly static Color VigilanteFujiIro = new Color32(186, 167, 204, byte.MaxValue);
@@ -44,7 +44,7 @@ namespace ExtremeRoles.Module
         public readonly static Color TraitorLightShikon = new Color32(76, 16, 80, byte.MaxValue);
         public readonly static Color QueenWhite = new Color32(240, 240, 210, byte.MaxValue);
 
-        public readonly static Color PoltergeistKenpou = new Color32(84, 82, 75, byte.MaxValue);
+        public readonly static Color PoltergeistLightKenpou = new Color32(84, 82, 75, byte.MaxValue);
         public readonly static Color FaunusAntiquewhite = new Color32(250, 235, 215, byte.MaxValue);
 
         public readonly static Color NeutralColor = Color.gray;

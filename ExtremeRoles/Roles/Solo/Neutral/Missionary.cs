@@ -52,7 +52,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             ExtremeRoleId.Missionary,
             ExtremeRoleType.Neutral,
             ExtremeRoleId.Missionary.ToString(),
-            ColorPalette.FanaticBlue,
+            ColorPalette.MissionaryBlue,
             false, false, false, false)
         { }
 
