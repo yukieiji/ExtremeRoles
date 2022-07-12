@@ -269,13 +269,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             CreateFloatOption(
                 CaptainOption.ChargeVoteWhenSkip,
                 0.7f, 0.1f, 100.0f, 0.1f,
-                parentOps);
-                // format: OptionUnit.VoteNum);
+                parentOps,
+                format: OptionUnit.VoteNum);
             CreateFloatOption(
                 CaptainOption.AwakedDefaultVoteNum,
                 0.0f, 0.0f, 100.0f, 0.1f,
-                parentOps);
-                // format: OptionUnit.VoteNum);
+                parentOps,
+                format: OptionUnit.VoteNum);
         }
 
         protected override void RoleSpecificInit()
