@@ -183,6 +183,7 @@ namespace ExtremeRoles.Module.InfoOverlay
                 meetingUnderlay.transform.localPosition = new Vector3(0f, 0f, 20f);
                 meetingUnderlay.gameObject.SetActive(true);
                 meetingUnderlay.enabled = false;
+                meetingUnderlay.name = "infoOverlay";
             }
             if (infoUnderlay == null)
             {
@@ -190,13 +191,15 @@ namespace ExtremeRoles.Module.InfoOverlay
                 infoUnderlay.transform.localPosition = new Vector3(0f, 0f, -900f);
                 infoUnderlay.gameObject.SetActive(true);
                 infoUnderlay.enabled = false;
+                infoUnderlay.name = "infoOverlay";
             }
 
             if (ruleInfoText == null)
             {
                 ruleInfoText = UnityEngine.Object.Instantiate(hudManager.TaskText, hudManager.transform);
                 initInfoText(ref ruleInfoText);
-                ruleInfoText.transform.localPosition = new Vector3(-3.6f, 1.6f, -910f);
+                ruleInfoText.transform.localPosition = new Vector3(-4.0f, 1.6f, -910f);
+                ruleInfoText.name = "ruleInfoText";
             }
 
             if (roleInfoText == null)
@@ -205,7 +208,8 @@ namespace ExtremeRoles.Module.InfoOverlay
                 initInfoText(ref roleInfoText);
                 roleInfoText.outlineWidth += outlineWidth;
                 roleInfoText.maxVisibleLines = maxLine;
-                roleInfoText.transform.localPosition = ruleInfoText.transform.localPosition + new Vector3(3.25f, 0.0f, 0.0f);
+                roleInfoText.transform.localPosition = ruleInfoText.transform.localPosition + new Vector3(3.5f, 0.0f, 0.0f);
+                roleInfoText.name = "roleInfoText";
             }
             if (anotherRoleInfoText == null)
             {
@@ -213,7 +217,8 @@ namespace ExtremeRoles.Module.InfoOverlay
                 initInfoText(ref anotherRoleInfoText);
                 anotherRoleInfoText.outlineWidth += outlineWidth;
                 anotherRoleInfoText.maxVisibleLines = maxLine;
-                anotherRoleInfoText.transform.localPosition = ruleInfoText.transform.localPosition + new Vector3(6.5f, 0.0f, 0.0f);
+                anotherRoleInfoText.transform.localPosition = ruleInfoText.transform.localPosition + new Vector3(7.0f, 0.0f, 0.0f);
+                anotherRoleInfoText.name = "roleInfoText";
             }
 
             return true;
@@ -278,7 +283,7 @@ namespace ExtremeRoles.Module.InfoOverlay
             anotherRoleInfoText.transform.parent = parent;
 
             infoUnderlay.color = new Color(0.1f, 0.1f, 0.1f, 0.88f);
-            infoUnderlay.transform.localScale = new Vector3(9.5f, 5.7f, 1f);
+            infoUnderlay.transform.localScale = new Vector3(10.25f, 5.7f, 1f);
             infoUnderlay.enabled = true;
 
             ruleInfoText.text = $"<size=200%>{Translation.GetString("gameOption")}</size>\n{CommonOption.GetGameOptionString()}";

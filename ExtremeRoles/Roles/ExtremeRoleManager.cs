@@ -48,6 +48,7 @@ namespace ExtremeRoles.Roles
         Opener,
         Carpenter,
         Survivor,
+        Captain,
 
         SpecialImpostor,
         Evolver,
@@ -82,6 +83,7 @@ namespace ExtremeRoles.Roles
         Queen,
         Servant,
     }
+
     public enum CombinationRoleType
     {
         Avalon,
@@ -175,6 +177,7 @@ namespace ExtremeRoles.Roles
                 {(int)ExtremeRoleId.Opener     , new Opener()},
                 {(int)ExtremeRoleId.Carpenter  , new Carpenter()},
                 {(int)ExtremeRoleId.Survivor   , new Survivor()},
+                {(int)ExtremeRoleId.Captain    , new Captain()},
 
                 {(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
                 {(int)ExtremeRoleId.Evolver        , new Evolver()},
