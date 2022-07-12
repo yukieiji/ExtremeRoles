@@ -20,6 +20,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             AwakedDefaultVoteNum,
         }
 
+        public enum AbilityType : byte
+        {
+            SetVoteTarget,
+            ChargeVote,
+        }
+
         public bool IsAwake
         {
             get
@@ -51,12 +57,40 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             false, true, false, false)
         { }
 
-        public static void SetTargetVote(byte rolePlayerId, byte targetPlayerId)
+        public static void UseAbility(ref Hazel.MessageReader reader)
         {
+            AbilityType type = (AbilityType)reader.ReadByte();
+            byte rolePlayerId = reader.ReadByte();
+
             Captain captain = ExtremeRoleManager.GetSafeCastedRole<Captain>(rolePlayerId);
-            if (captain == null) { return; }
-            captain.voteTarget = targetPlayerId;
+
+            switch (type)
+            {
+                case AbilityType.SetVoteTarget:
+                    byte targetPlayerId = reader.ReadByte();
+                    if (captain == null) { return; }
+                    captain.SetTargetVote(targetPlayerId);
+                    break;
+                case AbilityType.ChargeVote:
+                    if (captain == null) { return; }
+                    captain.ChargeVote();
+                    break;
+                default:
+                    break;
+            }
+
         }
+
+        public void SetTargetVote(byte targetPlayerId)
+        {
+            this.voteTarget = targetPlayerId;
+        }
+
+        public void ChargeVote()
+        {
+            this.curChargedVote = this.curChargedVote + this.chargeVoteNum;
+        }
+
         public void ModifiedVote(
             byte rolePlayerId,
             ref Dictionary<byte, byte> voteTarget,
@@ -73,7 +107,15 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     voteFor == 254 || 
                     voteFor == byte.MaxValue)
                 {
-                    this.curChargedVote = this.curChargedVote + this.chargeVoteNum;
+                    RPCOperator.Call(
+                        CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                        RPCOperator.Command.CaptainAbility,
+                        new List<byte>
+                        {
+                            (byte)AbilityType.ChargeVote,
+                            rolePlayerId
+                        });
+                    this.ChargeVote();
                 }
             }
             else
@@ -113,8 +155,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void ResetModifier()
         {
+            if (this.voteTarget != byte.MaxValue)
+            {
+                this.curChargedVote = this.defaultVote;
+            }
             this.voteTarget = byte.MaxValue;
-            this.curChargedVote = this.defaultVote;
         }
 
         public void ButtonMod(
@@ -134,14 +179,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 RPCOperator.Call(
                     CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                    RPCOperator.Command.CaptainTargetVote,
+                    RPCOperator.Command.CaptainAbility,
                     new List<byte>
                     {
+                        (byte)AbilityType.SetVoteTarget,
                         CachedPlayerControl.LocalPlayer.PlayerId,
                         instance.TargetPlayerId
                     });
-                SetTargetVote(
-                    CachedPlayerControl.LocalPlayer.PlayerId,
+                this.SetTargetVote(
                     instance.TargetPlayerId);
             }
 
