@@ -129,6 +129,8 @@ namespace ExtremeRoles.Patches.Meeting
         {
             var gameData = ExtremeRolesPlugin.GameDataStore;
 
+            if (!gameData.IsRoleSetUpEnd) { return true; }
+
             if (!gameData.AssassinMeetingTrigger)
             {
                 normalMeetingVote(__instance);
@@ -587,6 +589,9 @@ namespace ExtremeRoles.Patches.Meeting
             MeetingHud __instance,
             [HarmonyArgument(0)] MeetingHud.VoterState[] states)
         {
+
+            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return true; }
+
             __instance.TitleText.text = DestroyableSingleton<TranslationController>.Instance.GetString(
                 StringNames.MeetingVotingResults, Array.Empty<Il2CppSystem.Object>());
 
@@ -615,7 +620,9 @@ namespace ExtremeRoles.Patches.Meeting
                     GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(voterState.VoterId);
 				    if (playerById == null)
 				    {
-					    Debug.LogError(string.Format("Couldn't find player info for voter: {0}", voterState.VoterId));
+					    Debug.LogError(
+                            string.Format("Couldn't find player info for voter: {0}",
+                            voterState.VoterId));
 				    }
 				    else if (i == 0 && voterState.SkippedVote)
 				    {
