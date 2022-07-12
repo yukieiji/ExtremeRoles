@@ -44,7 +44,7 @@ namespace ExtremeRoles.Module
         public readonly static Color TraitorShikon = new Color32(46, 16, 49, byte.MaxValue);
         public readonly static Color QueenWhite = new Color32(240, 240, 210, byte.MaxValue);
 
-        public readonly static Color PoltergeistKenpou = new Color32(48, 47, 43, byte.MaxValue);
+        public readonly static Color PoltergeistKenpou = new Color32(84, 82, 75, byte.MaxValue);
         public readonly static Color FaunusAntiquewhite = new Color32(250, 235, 215, byte.MaxValue);
 
         public readonly static Color NeutralColor = Color.gray;
