@@ -340,14 +340,14 @@ namespace ExtremeRoles.Patches.Manager
                 case (GameOverReason)RoleGameOverReason.EaterAliveAlone:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Eater.ToString());
-                    textRenderer.color = ColorPalette.EaterKenpou;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.EaterKenpou);
+                    textRenderer.color = ColorPalette.EaterMaroon;
+                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.EaterMaroon);
                     break;
                 case (GameOverReason)RoleGameOverReason.TraitorKillAllOther:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Traitor.ToString());
-                    textRenderer.color = ColorPalette.TraitorShikon;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.TraitorShikon);
+                    textRenderer.color = ColorPalette.TraitorLightShikon;
+                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.TraitorLightShikon);
                     break;
                 case (GameOverReason)RoleGameOverReason.QueenKillAllOther:
                     bonusText = Translation.GetString(

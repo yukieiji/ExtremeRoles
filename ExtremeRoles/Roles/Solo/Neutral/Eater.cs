@@ -250,7 +250,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
            ExtremeRoleId.Eater,
            ExtremeRoleType.Neutral,
            ExtremeRoleId.Eater.ToString(),
-           ColorPalette.EaterKenpou,
+           ColorPalette.EaterMaroon,
            false, false, false, false)
         { }
 
