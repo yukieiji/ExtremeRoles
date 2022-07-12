@@ -289,8 +289,8 @@ namespace ExtremeRoles.Patches.Manager
                 case (GameOverReason)RoleGameOverReason.MissionaryAllAgainstGod:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Missionary.ToString());
-                    textRenderer.color = ColorPalette.MaintainerBlue;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.MaintainerBlue);
+                    textRenderer.color = ColorPalette.MissionaryBlue;
+                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.MissionaryBlue);
                     break;
                 case (GameOverReason)RoleGameOverReason.JesterMeetingFavorite:
                     bonusText = Translation.GetString(
