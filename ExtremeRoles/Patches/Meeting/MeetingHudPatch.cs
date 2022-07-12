@@ -587,7 +587,7 @@ namespace ExtremeRoles.Patches.Meeting
     {
         public static bool Prefix(
             MeetingHud __instance,
-            [HarmonyArgument(0)] MeetingHud.VoterState[] states)
+            [HarmonyArgument(0)] Il2CppStructArray<MeetingHud.VoterState> states)
         {
 
             if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return true; }
@@ -606,13 +606,13 @@ namespace ExtremeRoles.Patches.Meeting
 			    PlayerVoteArea playerVoteArea = __instance.playerStates[i];
 			    playerVoteArea.ClearForResults();
 
-                byte playerId = playerVoteArea.TargetPlayerId;
+                byte checkPlayerId = playerVoteArea.TargetPlayerId;
 
                 // 投票をいじる役職か？
                 var (voteModRole, voteAnotherRole) = ExtremeRoleManager.GetInterfaceCastedRole<IRoleVoteModifier>(
-                    playerId);
-                addVoteModRole(voteModRole, playerId, ref voteModifier);
-                addVoteModRole(voteAnotherRole, playerId, ref voteModifier);
+                    checkPlayerId);
+                addVoteModRole(voteModRole, checkPlayerId, ref voteModifier);
+                addVoteModRole(voteAnotherRole, checkPlayerId, ref voteModifier);
 
                 int num2 = 0;
 			    foreach (MeetingHud.VoterState voterState in states)
@@ -630,7 +630,7 @@ namespace ExtremeRoles.Patches.Meeting
                         __instance.BloopAVoteIcon(playerById, num, __instance.SkippedVoting.transform);
 					    num++;
                     }
-				    else if (voterState.VotedForId == playerId)
+				    else if (voterState.VotedForId == checkPlayerId)
 				    {
                         // 投票された人のアニメーション
                         __instance.BloopAVoteIcon(playerById, num2, playerVoteArea.transform);
