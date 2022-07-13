@@ -11,14 +11,14 @@ using ExtremeRoles.Performance;
 namespace ExtremeRoles.Roles.Combination
 {
 
-    public class LoverManager : FlexibleCombinationRoleManagerBase
+    public sealed class LoverManager : FlexibleCombinationRoleManagerBase
     {
         public LoverManager() : base(new Lover())
         { }
 
     }
 
-    public class Lover : MultiAssignRoleBase
+    public sealed class Lover : MultiAssignRoleBase
     {
 
         public enum LoverOption 

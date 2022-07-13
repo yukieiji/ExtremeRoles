@@ -220,7 +220,7 @@ namespace ExtremeRoles.Module
         public abstract dynamic GetValue();
     }
 
-    public class BoolCustomOption : CustomOptionBase
+    public sealed class BoolCustomOption : CustomOptionBase
     {
         public BoolCustomOption(
             int id, string name,
@@ -242,7 +242,7 @@ namespace ExtremeRoles.Module
         public override dynamic GetValue() => CurSelection > 0;
     }
 
-    public class FloatCustomOption : CustomOptionBase
+    public sealed class FloatCustomOption : CustomOptionBase
     {
         public FloatCustomOption(
             int id, string name,
@@ -282,7 +282,7 @@ namespace ExtremeRoles.Module
         }
     }
 
-    public class IntCustomOption : CustomOptionBase
+    public sealed class IntCustomOption : CustomOptionBase
     {
         private int maxValue;
         private int minValue;
@@ -340,7 +340,7 @@ namespace ExtremeRoles.Module
 
     }
 
-    public class IntDynamicCustomOption : CustomOptionBase
+    public sealed class IntDynamicCustomOption : CustomOptionBase
     {
         private int step;
         public IntDynamicCustomOption(
@@ -394,7 +394,7 @@ namespace ExtremeRoles.Module
         }
     }
 
-    public class FloatDynamicCustomOption : CustomOptionBase
+    public sealed class FloatDynamicCustomOption : CustomOptionBase
     {
         private float step;
         public FloatDynamicCustomOption(
@@ -458,7 +458,7 @@ namespace ExtremeRoles.Module
 
 
 
-    public class SelectionCustomOption : CustomOptionBase
+    public sealed class SelectionCustomOption : CustomOptionBase
     {
         public SelectionCustomOption(
             int id, string name,

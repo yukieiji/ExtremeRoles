@@ -6,7 +6,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo
 {
-    public class VanillaRoleWrapper : SingleRoleBase
+    public sealed class VanillaRoleWrapper : SingleRoleBase
     {
         public RoleTypes VanilaRoleId;
         public VanillaRoleWrapper(

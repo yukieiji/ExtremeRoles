@@ -3,7 +3,7 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class SpecialCrew : SingleRoleBase
+    public sealed class SpecialCrew : SingleRoleBase
     {
         public SpecialCrew(): base(
             ExtremeRoleId.SpecialCrew,

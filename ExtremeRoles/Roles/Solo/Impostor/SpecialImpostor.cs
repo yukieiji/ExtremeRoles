@@ -3,7 +3,7 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public class SpecialImpostor : SingleRoleBase
+    public sealed class SpecialImpostor : SingleRoleBase
     {
         public SpecialImpostor(): base(
             ExtremeRoleId.SpecialImpostor,

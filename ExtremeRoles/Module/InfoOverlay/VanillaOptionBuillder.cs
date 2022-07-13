@@ -4,7 +4,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module.InfoOverlay
 {
-    public class VanillaOptionBuillder : IShowTextBuilder
+	public sealed class VanillaOptionBuillder : IShowTextBuilder
     {
 		private Il2CppSystem.Text.StringBuilder settings = new Il2CppSystem.Text.StringBuilder();
         public VanillaOptionBuillder() : base()

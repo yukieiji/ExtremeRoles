@@ -4,7 +4,7 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class Neet : SingleRoleBase
+    public sealed class Neet : SingleRoleBase
     {
         public enum NeetOption
         {

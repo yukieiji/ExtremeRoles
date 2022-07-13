@@ -28,7 +28,7 @@ namespace ExtremeRoles.Roles.API
         KillCoolDown,
     }
 
-    public abstract class RoleOptionBase : IRoleOption
+    public abstract class RoleOptionBase
     {
 
         public bool CanKill = false;

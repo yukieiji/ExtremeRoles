@@ -8,7 +8,7 @@ using ExtremeRoles.Module;
 
 namespace ExtremeRoles.GhostRoles
 {
-    public class VanillaGhostRoleWrapper : GhostRoleBase
+    public sealed class VanillaGhostRoleWrapper : GhostRoleBase
     {
         private RoleTypes vanillaRoleId;
 

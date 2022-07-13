@@ -13,7 +13,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Module
 {
-    public class GameDataContainer
+    public sealed class GameDataContainer
     {
         public enum CustomVentType
         {
@@ -506,7 +506,7 @@ namespace ExtremeRoles.Module
 
         }
 
-        public class DeadInfo
+        public sealed class DeadInfo
         {
             public PlayerStatus Reason { get; set; }
 
@@ -515,7 +515,7 @@ namespace ExtremeRoles.Module
             public PlayerControl Killer { get; set; }
         }
 
-        public class PlayerStatistics
+        public sealed class PlayerStatistics
         {
             public int AllTeamCrewmate { get; set; }
             public int TeamImpostorAlive { get; set; }
@@ -529,7 +529,7 @@ namespace ExtremeRoles.Module
             public Dictionary<(NeutralSeparateTeam, int), int> SeparatedNeutralAlive { get; set; }
 
         }
-        public class PlayerSummary
+        public sealed class PlayerSummary
         {
             public string PlayerName { get; set; }
             public SingleRoleBase Role { get; set; }
@@ -538,7 +538,7 @@ namespace ExtremeRoles.Module
             public PlayerStatus StatusInfo { get; set; }
         }
 
-        public class ShieldPlayerContainer
+        public sealed class ShieldPlayerContainer
         {
 
             private List<(byte, byte)> shield = new List<(byte, byte)>();
@@ -591,7 +591,7 @@ namespace ExtremeRoles.Module
             }
         }
 
-        public class PlayerHistory
+        public sealed class PlayerHistory
         {
             public bool BlockAddHistory;
 
@@ -650,7 +650,7 @@ namespace ExtremeRoles.Module
             public int GetSize() => this.size;
         }
 
-        public class CustomVentContainer
+        public sealed class CustomVentContainer
         {
             private Dictionary<int, CustomVentType> ventType = new Dictionary<int, CustomVentType>();
             private Dictionary<CustomVentType, List<Vent>> addVent = new Dictionary<CustomVentType, List<Vent>>();
@@ -734,7 +734,7 @@ namespace ExtremeRoles.Module
             public bool IsCustomVent(int ventId) => this.ventType.ContainsKey(ventId);
         }
 
-        public class BakaryUnion
+        public sealed class BakaryUnion
         {
             private bool isChangeCooking = false;
 

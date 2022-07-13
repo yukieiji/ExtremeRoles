@@ -10,7 +10,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Combination
 {
-    public class Avalon : ConstCombinationRoleManagerBase
+    public sealed class Avalon : ConstCombinationRoleManagerBase
     {
         public const string Name = "AvalonsRoles";
         public Avalon() : base(
@@ -23,7 +23,7 @@ namespace ExtremeRoles.Roles.Combination
 
     }
 
-    public class Assassin : MultiAssignRoleBase
+    public sealed class Assassin : MultiAssignRoleBase
     {
         public enum AssassinOption
         {
@@ -208,7 +208,7 @@ namespace ExtremeRoles.Roles.Combination
     }
 
 
-    public class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetMeeting
+    public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetMeeting
     {
         public enum MarlinOption
         {

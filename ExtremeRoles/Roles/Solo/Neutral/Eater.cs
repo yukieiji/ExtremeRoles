@@ -14,9 +14,9 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public class Eater : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHock, IRoleUpdate
+    public sealed class Eater : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHock, IRoleUpdate
     {
-        public class EaterAbilityButton : RoleAbilityButtonBase
+        public sealed class EaterAbilityButton : RoleAbilityButtonBase
         {
             public int CurAbilityNum
             {

@@ -12,7 +12,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class Watchdog : SingleRoleBase, IRoleAbility, IRoleUpdate
+    public sealed class Watchdog : SingleRoleBase, IRoleAbility, IRoleUpdate
     {
         public RoleAbilityButtonBase Button
         {

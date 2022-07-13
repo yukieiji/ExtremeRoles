@@ -28,7 +28,7 @@ namespace ExtremeRoles.GhostRoles
     {
         public const int GhostRoleOptionId = 25;
 
-        public class GhostRoleAssignData
+        public sealed class GhostRoleAssignData
         {
             private Dictionary<ExtremeRoleType, int> globalSpawnLimit = new Dictionary<ExtremeRoleType, int> ();
 

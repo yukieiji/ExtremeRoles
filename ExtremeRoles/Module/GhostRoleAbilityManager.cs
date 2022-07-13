@@ -9,7 +9,7 @@ using ExtremeRoles.GhostRoles.Impostor;
 
 namespace ExtremeRoles.Module
 {
-    public class GhostRoleAbilityManager
+    public sealed class GhostRoleAbilityManager
     {
         public enum AbilityType : byte
         {

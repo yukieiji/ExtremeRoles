@@ -14,9 +14,9 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public class SandWorm : SingleRoleBase, IRoleAbility
+    public sealed class SandWorm : SingleRoleBase, IRoleAbility
     {
-        public class AssaultButton : RoleAbilityButtonBase
+        public sealed class AssaultButton : RoleAbilityButtonBase
         {
             public AssaultButton(
                 Func<bool> ability,

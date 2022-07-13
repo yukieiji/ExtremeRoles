@@ -5,7 +5,7 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module.InfoOverlay.FullDec
 {
-    internal class AllGhostRoleShowTextBuilder : PageShowTextBuilderBase
+    internal sealed class AllGhostRoleShowTextBuilder : PageShowTextBuilderBase
     {
         public AllGhostRoleShowTextBuilder() : base()
         { }

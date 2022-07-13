@@ -12,7 +12,7 @@ using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.GhostRoles.Crewmate
 {
-    public class Poltergeist : GhostRoleBase
+    public sealed class Poltergeist : GhostRoleBase
     {
         public enum Option
         {

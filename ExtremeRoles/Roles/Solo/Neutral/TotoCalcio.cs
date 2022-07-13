@@ -11,7 +11,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public class Totocalcio : SingleRoleBase, IRoleAbility, IRoleWinPlayerModifier
+    public sealed class Totocalcio : SingleRoleBase, IRoleAbility, IRoleWinPlayerModifier
     {
         public enum TotocalcioOption
         {

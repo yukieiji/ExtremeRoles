@@ -12,7 +12,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialReset
+    public sealed class Miner : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialReset
     {
         public enum MinerOption
         {

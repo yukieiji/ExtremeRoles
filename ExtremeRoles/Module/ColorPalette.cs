@@ -2,7 +2,7 @@
 
 namespace ExtremeRoles.Module
 {
-    public class ColorPalette
+    public static class ColorPalette
     {
         public readonly static Color DefaultColor = Color.white;
 

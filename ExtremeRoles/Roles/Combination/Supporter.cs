@@ -10,14 +10,14 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Combination
 {
-    public class SupporterManager : FlexibleCombinationRoleManagerBase
+    public sealed class SupporterManager : FlexibleCombinationRoleManagerBase
     {
         public SupporterManager() : base(new Supporter(), 1)
         { }
 
     }
 
-    public class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
+    public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
     {
         private byte supportTargetId;
         private string supportPlayerName;

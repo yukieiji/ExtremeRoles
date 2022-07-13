@@ -11,7 +11,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public class TaskMaster : SingleRoleBase, IRoleSpecialSetUp, IRoleUpdate
+    public sealed class TaskMaster : SingleRoleBase, IRoleSpecialSetUp, IRoleUpdate
     {
         public enum TaskMasterOption
         {

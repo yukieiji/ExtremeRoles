@@ -14,7 +14,7 @@ using BepInEx.IL2CPP.Utils.Collections;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public class Missionary : SingleRoleBase, IRoleAbility, IRoleUpdate
+    public sealed class Missionary : SingleRoleBase, IRoleAbility, IRoleUpdate
     {
 
         public enum MissionaryOption

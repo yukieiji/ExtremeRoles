@@ -17,7 +17,7 @@ using BepInEx.IL2CPP.Utils.Collections;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public class Bomber : SingleRoleBase, IRoleAbility, IRoleUpdate
+    public sealed class Bomber : SingleRoleBase, IRoleAbility, IRoleUpdate
     {
         public enum BomberOption
         {

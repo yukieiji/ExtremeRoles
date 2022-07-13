@@ -7,7 +7,7 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Module.InfoOverlay.FullDec
 {
-    internal class LocalPlayerRoleShowTextBuilder : IShowTextBuilder
+    internal sealed class LocalPlayerRoleShowTextBuilder : IShowTextBuilder
     {
         public LocalPlayerRoleShowTextBuilder()
         { }

@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace ExtremeRoles.GhostRoles.Crewmate
 {
-    public class Faunus : GhostRoleBase
+    public sealed class Faunus : GhostRoleBase
     {
         public enum SaboType
         {

@@ -12,7 +12,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public class Evolver : SingleRoleBase, IRoleAbility
+    public sealed class Evolver : SingleRoleBase, IRoleAbility
     {
         public enum EvolverOption
         {

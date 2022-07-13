@@ -10,7 +10,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public class Smasher : SingleRoleBase, IRoleAbility
+    public sealed class Smasher : SingleRoleBase, IRoleAbility
     {
         public enum SmasherOption
         {

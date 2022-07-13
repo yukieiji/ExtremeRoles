@@ -593,7 +593,7 @@ namespace ExtremeRoles.Patches.Manager
             };
         }
 
-        private class RoleAssignmentData
+        private sealed class RoleAssignmentData
         {
             public List<SingleRoleBase> RolesForVanillaImposter = new List<SingleRoleBase>();
             public List<SingleRoleBase> RolesForVanillaCrewmate = new List<SingleRoleBase>();

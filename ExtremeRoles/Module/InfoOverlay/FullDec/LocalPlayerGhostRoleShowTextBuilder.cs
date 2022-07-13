@@ -6,7 +6,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module.InfoOverlay.FullDec
 {
-    internal class LocalPlayerGhostRoleShowTextBuilder : IShowTextBuilder
+    internal sealed class LocalPlayerGhostRoleShowTextBuilder : IShowTextBuilder
     {
         public LocalPlayerGhostRoleShowTextBuilder()
         { }

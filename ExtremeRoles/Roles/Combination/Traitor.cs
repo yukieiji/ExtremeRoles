@@ -11,7 +11,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 
 namespace ExtremeRoles.Roles.Combination
 {
-    public class TraitorManager : FlexibleCombinationRoleManagerBase
+    public sealed class TraitorManager : FlexibleCombinationRoleManagerBase
     {
         public TraitorManager() : base(new Traitor(), 1, false)
         { }
@@ -62,7 +62,7 @@ namespace ExtremeRoles.Roles.Combination
 
     }
 
-    public class Traitor : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialSetUp
+    public sealed class Traitor : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialSetUp
     {
         public class TraitorCrackButton : ChargableButton
         {

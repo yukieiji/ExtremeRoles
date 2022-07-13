@@ -17,7 +17,7 @@ using UnityEngine.Networking;
 
 namespace ExtremeRoles.Compat
 {
-    public class BepInExUpdater : MonoBehaviour
+    public sealed class BepInExUpdater : MonoBehaviour
     {
         public static bool UpdateRequired => typeof(IL2CPPChainloader).Assembly.GetName().Version < Version.Parse(minimumBepInExVersion);
 

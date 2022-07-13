@@ -8,7 +8,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module
 {
-    public class CustomOptionCsvProcessor
+    public static class CustomOptionCsvProcessor
     {
         private const string modName = "Extreme Roles";
         private const string versionStr = "Version";

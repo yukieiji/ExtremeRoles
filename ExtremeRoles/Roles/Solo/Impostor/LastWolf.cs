@@ -14,7 +14,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public class LastWolf : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTypes>
+    public sealed class LastWolf : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTypes>
     {
         public enum LastWolfOption
         {

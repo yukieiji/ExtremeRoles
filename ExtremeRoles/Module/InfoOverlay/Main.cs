@@ -10,7 +10,7 @@ using ExtremeRoles.Module.InfoOverlay.FullDec;
 
 namespace ExtremeRoles.Module.InfoOverlay
 {
-    public class InfoOverlay
+    public sealed class InfoOverlay
     {
         public enum ShowType : byte
         {

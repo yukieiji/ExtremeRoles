@@ -12,7 +12,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class Fencer : SingleRoleBase, IRoleAbility, IRoleUpdate
+    public sealed class Fencer : SingleRoleBase, IRoleAbility, IRoleUpdate
     {
         public enum FencerOption
         {

@@ -15,7 +15,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Combination
 {
-    public class DetectiveOffice : ConstCombinationRoleManagerBase
+    public sealed class DetectiveOffice : ConstCombinationRoleManagerBase
     {
 
         public const string Name = "DetectiveOffice";
@@ -38,7 +38,7 @@ namespace ExtremeRoles.Roles.Combination
 
     }
 
-    public class Detective : MultiAssignRoleBase, IRoleMurderPlayerHock, IRoleResetMeeting, IRoleReportHock, IRoleUpdate, IRoleSpecialReset
+    public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHock, IRoleResetMeeting, IRoleReportHock, IRoleUpdate, IRoleSpecialReset
     {
         public struct CrimeInfo
         {

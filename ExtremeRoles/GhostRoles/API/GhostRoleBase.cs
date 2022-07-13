@@ -5,7 +5,6 @@ using System.Runtime.CompilerServices;
 using Hazel;
 using UnityEngine;
 
-using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.GhostRoles;
@@ -20,9 +19,8 @@ namespace ExtremeRoles.GhostRoles.API
         IsReportAbility = 40 
     }
 
-    public abstract class GhostRoleBase : IGhostRole
+    public abstract class GhostRoleBase
     {
-
         private const float defaultCoolTime = 60.0f;
         private const float minCoolTime = 5.0f;
         private const float maxCoolTime = 120.0f;

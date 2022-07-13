@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace ExtremeRoles.GhostRoles.Impostor
 {
-    public class Ventgeist : GhostRoleBase
+    public sealed class Ventgeist : GhostRoleBase
     {
         public enum Option
         {

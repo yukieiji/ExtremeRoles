@@ -14,7 +14,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class Agency : SingleRoleBase, IRoleAbility, IRoleUpdate
+    public sealed class Agency : SingleRoleBase, IRoleAbility, IRoleUpdate
     {
         public enum AgencyOption
         {

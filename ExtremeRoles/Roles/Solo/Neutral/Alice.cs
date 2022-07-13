@@ -12,7 +12,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public class Alice : SingleRoleBase, IRoleAbility
+    public sealed class Alice : SingleRoleBase, IRoleAbility
     {
 
         public enum AliceOption

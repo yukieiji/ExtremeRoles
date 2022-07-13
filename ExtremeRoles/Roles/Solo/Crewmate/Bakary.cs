@@ -3,7 +3,7 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class Bakary : SingleRoleBase
+    public sealed class Bakary : SingleRoleBase
     {
         public enum BakaryOption
         {

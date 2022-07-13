@@ -13,7 +13,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public class Jackal : SingleRoleBase, IRoleAbility, IRoleSpecialReset
+    public sealed class Jackal : SingleRoleBase, IRoleAbility, IRoleSpecialReset
     {
         public enum JackalOption
         {

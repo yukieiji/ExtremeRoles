@@ -11,7 +11,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public class OverLoader : SingleRoleBase, IRoleAbility
+    public sealed class OverLoader : SingleRoleBase, IRoleAbility
     {
 
         public enum OverLoaderOption

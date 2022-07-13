@@ -17,7 +17,7 @@ using UnityEngine;
 
 namespace ExtremeRoles.Compat.Mods
 {
-    public class SubmergedMap : CompatModBase, IMultiFloorModMap
+    public sealed class SubmergedMap : CompatModBase, IMultiFloorModMap
     {
         public const string Guid = "Submerged";
 

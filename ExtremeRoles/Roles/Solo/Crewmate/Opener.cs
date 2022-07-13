@@ -10,7 +10,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class Opener : SingleRoleBase, IRoleAbility, IRoleUpdate
+    public sealed class Opener : SingleRoleBase, IRoleAbility, IRoleUpdate
     {
         public enum OpenerOption
         {

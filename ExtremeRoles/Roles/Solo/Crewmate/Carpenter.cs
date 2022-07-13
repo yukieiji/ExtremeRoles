@@ -14,9 +14,9 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTypes>
+    public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTypes>
     {
-        public class CarpenterAbilityButton : RoleAbilityButtonBase
+        public sealed class CarpenterAbilityButton : RoleAbilityButtonBase
         {
             public int CurAbilityNum
             {
