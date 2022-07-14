@@ -36,7 +36,7 @@ namespace ExtremeRoles.Compat
         {
             string showStr = Helper.Translation.GetString("ReqBepInExUpdate");
 
-            Task.Run(() => MessageBox(
+            Task.Run(() => Module.DllApi.MessageBox(
                 IntPtr.Zero,
                 showStr, "Extreme Roles", 0));
 
@@ -82,8 +82,5 @@ namespace ExtremeRoles.Compat
 
             Application.Quit();
         }
-
-        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        public static extern int MessageBox(IntPtr hWnd, string text, string caption, int options);
     }
 }

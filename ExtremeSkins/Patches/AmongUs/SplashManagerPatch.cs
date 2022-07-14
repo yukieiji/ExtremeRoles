@@ -6,6 +6,7 @@ using HarmonyLib;
 using UnityEngine;
 
 using ExtremeSkins.SkinManager;
+using ExtremeRoles.Module;
 
 using BepInEx.IL2CPP.Utils.Collections;
 
@@ -63,7 +64,7 @@ namespace ExtremeSkins.Patches.AmongUs
             {
                 string showStr = Helper.Translation.GetString("waitSkinDl");
 
-                Task.Run(() => ExtremeRoles.Compat.BepInExUpdater.MessageBox(
+                Task.Run(() => DllApi.MessageBox(
                     System.IntPtr.Zero,
                     showStr, "Extreme Skins", 0));
 
