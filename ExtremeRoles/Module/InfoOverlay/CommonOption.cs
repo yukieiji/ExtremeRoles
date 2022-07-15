@@ -31,18 +31,6 @@ namespace ExtremeRoles.Module.InfoOverlay
                     printOption.Add(
                         CustomOption.OptionToString(option));
                 }
-                if (option.Enabled)
-                {
-                    foreach (CustomOptionBase op in option.Children)
-                    {
-                        string str = CustomOption.OptionToString(op);
-                        if (str != "")
-                        {
-                            printOption.Add(str);
-                        }
-                    }
-                }
-
             }
 
             return string.Join("\n", printOption);
