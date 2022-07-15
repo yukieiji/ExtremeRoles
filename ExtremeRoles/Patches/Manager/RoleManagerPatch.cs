@@ -15,7 +15,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 namespace ExtremeRoles.Patches.Manager
 {
     [HarmonyPatch(typeof(RoleManager), nameof(RoleManager.SelectRoles))]
-    class RoleManagerSelectRolesPatch
+    public static class RoleManagerSelectRolesPatch
     {
 
         public static void Postfix()

@@ -14,7 +14,7 @@ namespace ExtremeRoles.Patches.Manager
 {
 
     [HarmonyPatch(typeof(EndGameManager), nameof(EndGameManager.SetEverythingUp))]
-    public class EndGameManagerSetUpPatch
+    public static class EndGameManagerSetUpPatch
     {
         private static List<Roles.API.SingleRoleBase> winNeutral = new List<Roles.API.SingleRoleBase>();
 

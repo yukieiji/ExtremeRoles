@@ -15,7 +15,7 @@ using ExtremeRoles.Module;
 namespace ExtremeRoles.Patches.Option
 {
     [HarmonyPatch]
-    class GameOptionsDataPatch
+    public static class GameOptionsDataPatch
     {
         private static IEnumerable<MethodBase> TargetMethods()
         {

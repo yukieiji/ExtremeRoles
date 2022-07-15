@@ -4,7 +4,7 @@
 namespace ExtremeRoles.Patches.MiniGame
 {
     [HarmonyPatch(typeof(VitalsMinigame), nameof(VitalsMinigame.Update))]
-    public class VitalsMinigameUpdatePatch
+    public static class VitalsMinigameUpdatePatch
     {
         public static bool Prefix(VitalsMinigame __instance)
         {

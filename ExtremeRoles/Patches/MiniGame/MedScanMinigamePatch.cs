@@ -4,7 +4,7 @@ using ExtremeRoles.Performance;
 namespace ExtremeRoles.Patches.MiniGame
 {
     [HarmonyPatch(typeof(MedScanMinigame), nameof(MedScanMinigame.FixedUpdate))]
-    public class MedScanMinigameFixedUpdatePatch
+    public static class MedScanMinigameFixedUpdatePatch
     {
         public static void Prefix(MedScanMinigame __instance)
         {

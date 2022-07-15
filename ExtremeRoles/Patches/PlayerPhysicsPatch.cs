@@ -5,7 +5,7 @@ namespace ExtremeRoles.Patches
 {
 
     [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.FixedUpdate))]
-    public class PlayerPhysicsPatch
+    public static class PlayerPhysicsPatch
     {
         public static void Postfix(PlayerPhysics __instance)
         {

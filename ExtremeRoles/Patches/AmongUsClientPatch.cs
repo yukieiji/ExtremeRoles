@@ -31,7 +31,7 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.CoStartGame))]
-    public class AmongUsClientCoStartGamePatch
+    public static class AmongUsClientCoStartGamePatch
     {
         public static void Prefix(AmongUsClient __instance)
         {
@@ -40,7 +40,7 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerJoined))]
-    public class AmongUsClientOnPlayerJoinedPatch
+    public static class AmongUsClientOnPlayerJoinedPatch
     {
         public static void Postfix()
         {
@@ -53,7 +53,7 @@ namespace ExtremeRoles.Patches
 
     // ゲームが終了した瞬間の処理
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameEnd))]
-    public class AmongUsClientOnGameEndPatch
+    public static class AmongUsClientOnGameEndPatch
     {
         public static void Prefix(AmongUsClient __instance, [HarmonyArgument(0)] ref EndGameResult endGameResult)
         {

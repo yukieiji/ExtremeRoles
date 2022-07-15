@@ -9,7 +9,7 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(VersionShower), nameof(VersionShower.Start))]
     public static class VersionShowerPatch
     {
-        static void Postfix(VersionShower __instance)
+        public static void Postfix(VersionShower __instance)
         {
             var amongUsLogo = GameObject.Find("bannerLogo_AmongUs");
             if (amongUsLogo == null) { return; }

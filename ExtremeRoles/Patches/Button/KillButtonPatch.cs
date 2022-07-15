@@ -10,7 +10,7 @@ using ExtremeRoles.Performance;
 namespace ExtremeRoles.Patches.Button
 {
     [HarmonyPatch(typeof(KillButton), nameof(KillButton.DoClick))]
-    class KillButtonDoClickPatch
+    public static class KillButtonDoClickPatch
     {
         public enum MurderKillResult
         {

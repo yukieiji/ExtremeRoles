@@ -17,7 +17,7 @@ namespace ExtremeRoles.Patches.Meeting
 {
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.BloopAVoteIcon))]
-    class MeetingHudBloopAVoteIconPatch
+    public static class MeetingHudBloopAVoteIconPatch
     {
         public static bool Prefix(
             MeetingHud __instance,
@@ -87,7 +87,7 @@ namespace ExtremeRoles.Patches.Meeting
     }
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Confirm))]
-    class MeetingHudConfirmPatch
+    public static class MeetingHudConfirmPatch
     {
         public static bool Prefix(
             MeetingHud __instance,
@@ -122,7 +122,7 @@ namespace ExtremeRoles.Patches.Meeting
     }
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CheckForEndVoting))]
-    class MeetingHudCheckForEndVotingPatch
+    public static class MeetingHudCheckForEndVotingPatch
     {
         public static bool Prefix(
             MeetingHud __instance)
@@ -317,7 +317,7 @@ namespace ExtremeRoles.Patches.Meeting
 
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Select))]
-    class MeetingHudSelectPatch
+    public static class MeetingHudSelectPatch
     {
         public static bool Prefix(
             MeetingHud __instance,
@@ -368,7 +368,7 @@ namespace ExtremeRoles.Patches.Meeting
     }
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.SetForegroundForDead))]
-    class MeetingHudSetForegroundForDeadPatch
+    public static class MeetingHudSetForegroundForDeadPatch
     {
         public static bool Prefix(
             MeetingHud __instance)
@@ -388,7 +388,7 @@ namespace ExtremeRoles.Patches.Meeting
     }
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Close))]
-    class MeetingHudClosePatch
+    public static class MeetingHudClosePatch
     {
         public static void Prefix(
             MeetingHud __instance)
@@ -399,7 +399,7 @@ namespace ExtremeRoles.Patches.Meeting
 
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CoIntro))]
-    class MeetingHudCoIntroPatch
+    public static class MeetingHudCoIntroPatch
     {
         public static void Postfix(
             MeetingHud __instance,
@@ -456,7 +456,7 @@ namespace ExtremeRoles.Patches.Meeting
 
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Start))]
-    class MeetingHudStartPatch
+    public static class MeetingHudStartPatch
     {
         public static void Postfix(
             MeetingHud __instance)
@@ -520,7 +520,7 @@ namespace ExtremeRoles.Patches.Meeting
 
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Update))]
-    class MeetingHudUpdatePatch
+    public static class MeetingHudUpdatePatch
     {
         public static void Postfix(MeetingHud __instance)
         {
@@ -583,7 +583,7 @@ namespace ExtremeRoles.Patches.Meeting
     }
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.PopulateResults))]
-    public class MeetingHudPopulateResultsPatch
+    public static class MeetingHudPopulateResultsPatch
     {
         public static bool Prefix(
             MeetingHud __instance,
@@ -664,7 +664,7 @@ namespace ExtremeRoles.Patches.Meeting
 
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.UpdateButtons))]
-    class MeetingHudUpdateButtonsPatch
+    public static class MeetingHudUpdateButtonsPatch
     {
         public static bool Prefix(MeetingHud __instance)
         {
@@ -690,7 +690,7 @@ namespace ExtremeRoles.Patches.Meeting
     }
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.VotingComplete))]
-    public class MeetingHudVotingCompletedPatch
+    public static class MeetingHudVotingCompletedPatch
     {
         public static void Postfix(
             MeetingHud __instance,

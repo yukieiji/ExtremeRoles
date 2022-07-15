@@ -5,7 +5,7 @@ namespace ExtremeRoles.Patches
 {
 
     [HarmonyPatch(typeof(CustomNetworkTransform), nameof(CustomNetworkTransform.FixedUpdate))]
-    public class CustomNetworkTransformPatch
+    public static class CustomNetworkTransformPatch
     {
         public static void Postfix(CustomNetworkTransform __instance)
         {

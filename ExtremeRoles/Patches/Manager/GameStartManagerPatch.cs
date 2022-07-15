@@ -11,7 +11,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 namespace ExtremeRoles.Patches.Manager
 {
     [HarmonyPatch]
-    public class GameStartManagerPatch
+    public static class GameStartManagerPatch
     {
         private const float kickTime = 30f;
         private const float timerMaxValue = 600f;

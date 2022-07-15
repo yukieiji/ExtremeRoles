@@ -10,7 +10,7 @@ namespace ExtremeRoles.Patches.Option
 {
 
     [HarmonyPatch(typeof(StringOption), nameof(StringOption.Decrease))]
-    public class StringOptionDecreasePatch
+    public static class StringOptionDecreasePatch
     {
         public static bool Prefix(StringOption __instance)
         {
@@ -23,7 +23,7 @@ namespace ExtremeRoles.Patches.Option
     }
 
     [HarmonyPatch(typeof(StringOption), nameof(StringOption.Increase))]
-    public class StringOptionIncreasePatch
+    public static class StringOptionIncreasePatch
     {
         public static bool Prefix(StringOption __instance)
         {

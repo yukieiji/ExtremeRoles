@@ -15,7 +15,7 @@ namespace ExtremeRoles.Patches.Option
 {
 
     [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Start))]
-    class GameOptionsMenuStartPatch
+    public static class GameOptionsMenuStartPatch
     {
         public static void Postfix(GameOptionsMenu __instance)
         {
@@ -137,7 +137,7 @@ namespace ExtremeRoles.Patches.Option
     }
 
     [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Update))]
-    class GameOptionsMenuUpdatePatch
+    public static class GameOptionsMenuUpdatePatch
     {
         private static float timer = 1f;
         public static void Postfix(GameOptionsMenu __instance)

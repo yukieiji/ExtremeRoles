@@ -12,7 +12,7 @@ using ExtremeRoles.Performance;
 namespace ExtremeRoles.Patches
 {
     [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Awake))]
-    class ShipStatusAwakePatch
+    public static class ShipStatusAwakePatch
     {
         [HarmonyPostfix, HarmonyPriority(Priority.Last)]
         public static void Postfix(ShipStatus __instance)
@@ -23,7 +23,7 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.CalculateLightRadius))]
-    class ShipStatusCalculateLightRadiusPatch
+    public static class ShipStatusCalculateLightRadiusPatch
     {
         public static bool Prefix(
             ref float __result,
@@ -149,7 +149,7 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.IsGameOverDueToDeath))]
-    public class ShipStatusIsGameOverDueToDeathPatch
+    public static class ShipStatusIsGameOverDueToDeathPatch
     {
         public static void Postfix(ShipStatus __instance, ref bool __result)
         {
@@ -158,7 +158,7 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.CheckEndCriteria))]
-    class ShipStatusCheckEndCriteriaPatch
+    public static class ShipStatusCheckEndCriteriaPatch
     {
         public static bool Prefix(ShipStatus __instance)
         {

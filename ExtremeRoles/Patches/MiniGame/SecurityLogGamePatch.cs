@@ -4,7 +4,7 @@ namespace ExtremeRoles.Patches.MiniGame
 {
 
     [HarmonyPatch(typeof(SecurityLogGame), nameof(SecurityLogGame.Update))]
-    public class SecurityLogGameUpdatePatch
+    public static class SecurityLogGameUpdatePatch
     {
         public static bool Prefix(SecurityLogGame __instance)
         {
