@@ -183,7 +183,7 @@ namespace ExtremeRoles.Module.InfoOverlay
                 meetingUnderlay.transform.localPosition = new Vector3(0f, 0f, 20f);
                 meetingUnderlay.gameObject.SetActive(true);
                 meetingUnderlay.enabled = false;
-                meetingUnderlay.name = "infoOverlay";
+                meetingUnderlay.name = "meetingOverlay";
             }
             if (infoUnderlay == null)
             {
@@ -218,7 +218,7 @@ namespace ExtremeRoles.Module.InfoOverlay
                 anotherRoleInfoText.outlineWidth += outlineWidth;
                 anotherRoleInfoText.maxVisibleLines = maxLine;
                 anotherRoleInfoText.transform.localPosition = ruleInfoText.transform.localPosition + new Vector3(7.0f, 0.0f, 0.0f);
-                anotherRoleInfoText.name = "roleInfoText";
+                anotherRoleInfoText.name = "anotherRoleInfoText";
             }
 
             return true;
