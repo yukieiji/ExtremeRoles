@@ -17,7 +17,7 @@ namespace ExtremeSkins.Patches
     [HarmonyPatch(
         typeof(MainMenuManagerStartPatch.Updater),
         nameof(MainMenuManagerStartPatch.Updater.ExecuteCheckUpdate))]
-    public class UpdaterExecuteCheckUpdatePatch
+    public static class UpdaterExecuteCheckUpdatePatch
     {
         private static bool errorFlag = false;
         private static string skinUpdateUri = null;

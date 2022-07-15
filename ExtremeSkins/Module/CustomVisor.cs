@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ExtremeSkins.Module
 {
 #if WITHVISOR
-    public class CustomVisor : ICustomCosmicData<VisorData>
+    public sealed class CustomVisor : ICustomCosmicData<VisorData>
     {
 
         public VisorData Data

@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 
 namespace ExtremeSkins.Helper
 {
-    public class Translation
+    public static class Translation
     {
         private static Dictionary<string, Dictionary<int, string>> stringData = new Dictionary<string, Dictionary<int, string>>();
 

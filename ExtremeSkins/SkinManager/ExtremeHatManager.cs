@@ -14,7 +14,7 @@ using ExtremeSkins.Module;
 namespace ExtremeSkins.SkinManager
 {
 #if WITHHAT
-    public class ExtremeHatManager
+    public static class ExtremeHatManager
     {
         public static readonly Dictionary<string, CustomHat> HatData = new Dictionary<string, CustomHat>();
         public static bool IsLoaded = false;

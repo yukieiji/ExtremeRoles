@@ -12,7 +12,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
 {
 #if WITHHAT
     [HarmonyPatch]
-    public class HatsTabPatch
+    public static class HatsTabPatch
     {
         private static List<TMPro.TMP_Text> hatsTabCustomText = new List<TMPro.TMP_Text>();
 

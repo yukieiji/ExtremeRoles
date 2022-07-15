@@ -12,7 +12,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
 {
 #if WITHNAMEPLATE
     [HarmonyPatch]
-    public class NameplatesTabPatch
+    public static class NameplatesTabPatch
     {
         private static List<TMPro.TMP_Text> namePlateTabCustomText = new List<TMPro.TMP_Text>();
 

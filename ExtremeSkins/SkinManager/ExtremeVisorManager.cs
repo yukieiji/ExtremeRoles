@@ -15,7 +15,7 @@ using ExtremeSkins.Module;
 namespace ExtremeSkins.SkinManager
 {
 #if WITHVISOR
-    public class ExtremeVisorManager
+    public static class ExtremeVisorManager
     {
         public static readonly Dictionary<string, CustomVisor> VisorData = new Dictionary<string, CustomVisor>();
         public static bool IsLoaded = false;

@@ -3,7 +3,7 @@
 namespace ExtremeSkins.Patches.AmongUs
 {
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerJoined))]
-    public class AmongUsClientOnPlayerJoinedPatch
+    public static class AmongUsClientOnPlayerJoinedPatch
     {
         public static void Postfix()
         {
