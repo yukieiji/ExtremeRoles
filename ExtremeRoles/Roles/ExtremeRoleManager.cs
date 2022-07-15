@@ -67,6 +67,7 @@ namespace ExtremeRoles.Roles
         AssaultMaster,
         Shooter,
         LastWolf,
+        Commander,
 
         Alice,
         Jackal,
@@ -196,6 +197,7 @@ namespace ExtremeRoles.Roles
                 {(int)ExtremeRoleId.AssaultMaster  , new AssaultMaster()},
                 {(int)ExtremeRoleId.Shooter        , new Shooter()},
                 {(int)ExtremeRoleId.LastWolf       , new LastWolf()},
+                {(int)ExtremeRoleId.Commander      , new Commander()},
 
                 {(int)ExtremeRoleId.Alice     , new Alice()},
                 {(int)ExtremeRoleId.Jackal    , new Jackal()},

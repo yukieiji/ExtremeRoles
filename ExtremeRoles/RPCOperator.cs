@@ -70,6 +70,7 @@ namespace ExtremeRoles
             MeryAcivateVent,
             SlaveDriverSetNewTask,
             LastWolfSwitchLight,
+            CommanderAttackCommand,
 
             // ニュートラル
             AliceShipBroken,
@@ -531,6 +532,11 @@ namespace ExtremeRoles
         {
             Roles.Solo.Impostor.LastWolf.SwitchLight(
                 swichStatus == byte.MinValue);
+        }
+        public static void CommanderAttackCommand(byte rolePlayerId)
+        {
+            Roles.Solo.Impostor.Commander.AttackCommad(
+                rolePlayerId);
         }
 
         public static void AliceShipBroken(

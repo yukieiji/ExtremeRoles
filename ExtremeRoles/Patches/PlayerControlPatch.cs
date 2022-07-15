@@ -1021,6 +1021,10 @@ namespace ExtremeRoles.Patches
                     byte swichStatus = reader.ReadByte();
                     RPCOperator.LastWolfSwitchLight(swichStatus);
                     break;
+                case RPCOperator.Command.CommanderAttackCommand:
+                    byte commanderPlayerId = reader.ReadByte();
+                    RPCOperator.CommanderAttackCommand(commanderPlayerId);
+                    break;
                 case RPCOperator.Command.AliceShipBroken:
                     byte alicePlayerId = reader.ReadByte();
                     byte newTaskSetPlayerId = reader.ReadByte();
