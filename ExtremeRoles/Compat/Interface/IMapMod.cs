@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace ExtremeRoles.Compat.Interface
 {
 	public enum SystemConsoleType
 	{
+		Admin,
 		SecurityCamera,
 		Vital,
 	}
@@ -39,6 +41,7 @@ namespace ExtremeRoles.Compat.Interface
 		public void RepairCustomSabotage();
 		public void RepairCustomSabotage(TaskTypes saboTask);
 		public Console GetConsole(TaskTypes task);
+		public HashSet<string> GetSystemObjectName(SystemConsoleType sysConsole);
 		public SystemConsole GetSystemConsole(SystemConsoleType sysConsole);
 		public void AddCustomComponent(
 			GameObject addObject, CustomMonoBehaviourType customMonoType);

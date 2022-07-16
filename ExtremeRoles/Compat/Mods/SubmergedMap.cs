@@ -160,6 +160,30 @@ namespace ExtremeRoles.Compat.Mods
                     return null;
             }
         }
+        public HashSet<string> GetSystemObjectName(SystemConsoleType sysConsole)
+        {
+            switch (sysConsole)
+            {
+                case SystemConsoleType.Admin:
+                    return new HashSet<string>()
+                    {
+                        "Submerged(Clone)/TopFloor/Adm-Obsv-Loun-MR/TaskConsoles/console-adm-admintable",
+                        "Submerged(Clone)/TopFloor/Adm-Obsv-Loun-MR/TaskConsoles/console-adm-admintable (1)",
+                    };
+                case SystemConsoleType.Vital:
+                    return new HashSet<string>()
+                    {
+                        "Submerged(Clone)/panel_vitals(Clone)",
+                    };
+                case SystemConsoleType.SecurityCamera:
+                    return new HashSet<string>()
+                    {
+                        "Submerged(Clone)/BottomFloor/Engines-Security/TaskConsoles/SecurityConsole",
+                    };
+                default:
+                    return new HashSet<string>();
+            }
+        }
 
         public SystemConsole GetSystemConsole(SystemConsoleType sysConsole)
         {
