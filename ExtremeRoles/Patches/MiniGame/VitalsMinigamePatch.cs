@@ -31,7 +31,7 @@ namespace ExtremeRoles.Patches.MiniGame
 
             if (ExtremeRoleManager.GetLocalPlayerRole().CanUseVital) { return true; }
 
-            __instance.SabText.text = Helper.Translation.GetString("youDonotUse");
+            __instance.SabText.text = Translation.GetString("youDonotUse");
 
             __instance.SabText.gameObject.SetActive(true);
             for (int j = 0; j < __instance.vitals.Length; j++)
