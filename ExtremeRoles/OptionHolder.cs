@@ -429,13 +429,13 @@ namespace ExtremeRoles
                 CommonOptionKey.IsRemoveAirShipArchiveAdmin.ToString(),
                 true, adminOpt);
             var adminLimitOpt = new BoolCustomOption(
-                (int)CommonOptionKey.EnableSecurityLimit,
-                CommonOptionKey.EnableSecurityLimit.ToString(),
+                (int)CommonOptionKey.EnableAdminLimit,
+                CommonOptionKey.EnableAdminLimit.ToString(),
                 false, adminOpt,
                 invert: true);
             new FloatCustomOption(
-                (int)CommonOptionKey.SecurityLimitTime,
-                CommonOptionKey.SecurityLimitTime.ToString(),
+                (int)CommonOptionKey.AdminLimitTime,
+                CommonOptionKey.AdminLimitTime.ToString(),
                 30.0f, 5.0f, 120.0f, 0.5f, adminLimitOpt,
                 format: OptionUnit.Second,
                 invert: true,
