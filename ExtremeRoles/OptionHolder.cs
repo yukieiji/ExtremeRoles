@@ -68,6 +68,8 @@ namespace ExtremeRoles
             IsRemoveAdmin,
             IsRemoveAirShipArchiveAdmin,
             IsRemoveAirShipCockpitAdmin,
+            EnableAdminLimit,
+            AdminLimitTime,
 
             IsRemoveSecurity,
             EnableSecurityLimit,
@@ -161,11 +163,15 @@ namespace ExtremeRoles
 
             Ship.IsRemoveAdmin = AllOption[
                 (int)CommonOptionKey.IsRemoveAdmin].GetValue();
-
             Ship.IsRemoveAirShipCockpitAdmin = AllOption[
                 (int)CommonOptionKey.IsRemoveAirShipCockpitAdmin].GetValue();
             Ship.IsRemoveAirShipArchiveAdmin = AllOption[
                 (int)CommonOptionKey.IsRemoveAirShipArchiveAdmin].GetValue();
+            Ship.EnableAdminLimit = AllOption[
+                (int)CommonOptionKey.EnableAdminLimit].GetValue();
+            Ship.AdminLimitTime = AllOption[
+                (int)CommonOptionKey.AdminLimitTime].GetValue();
+
 
             Ship.IsRemoveSecurity = AllOption[
                 (int)CommonOptionKey.IsRemoveSecurity].GetValue();
@@ -422,6 +428,18 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.IsRemoveAirShipArchiveAdmin,
                 CommonOptionKey.IsRemoveAirShipArchiveAdmin.ToString(),
                 true, adminOpt);
+            var adminLimitOpt = new BoolCustomOption(
+                (int)CommonOptionKey.EnableSecurityLimit,
+                CommonOptionKey.EnableSecurityLimit.ToString(),
+                false, adminOpt,
+                invert: true);
+            new FloatCustomOption(
+                (int)CommonOptionKey.SecurityLimitTime,
+                CommonOptionKey.SecurityLimitTime.ToString(),
+                30.0f, 5.0f, 120.0f, 0.5f, adminLimitOpt,
+                format: OptionUnit.Second,
+                invert: true,
+                enableCheckOption: adminLimitOpt);
 
             var secOpt = new BoolCustomOption(
                 (int)CommonOptionKey.IsRemoveSecurity,
@@ -537,6 +555,8 @@ namespace ExtremeRoles
             public static bool IsRemoveAdmin = false;
             public static bool IsRemoveAirShipCockpitAdmin = false;
             public static bool IsRemoveAirShipArchiveAdmin = false;
+            public static bool EnableAdminLimit = false;
+            public static float AdminLimitTime = 0.0f;
 
             public static bool IsRemoveSecurity = false;
             public static bool EnableSecurityLimit = false;

@@ -144,6 +144,7 @@ namespace ExtremeRoles
             // 各種システムコンソールリセット
             Patches.MiniGame.VitalsMinigameUpdatePatch.Initialize();
             Patches.MiniGame.SecurityHelper.Initialize();
+            Patches.MapOverlay.MapCountOverlayUpdatePatch.Initialize();
         }
 
         public static void ForceEnd()

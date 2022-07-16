@@ -4,6 +4,10 @@ using UnityEngine;
 
 using HarmonyLib;
 
+using ExtremeRoles.Helper;
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
@@ -15,11 +19,22 @@ namespace ExtremeRoles.Patches.MapOverlay
     {
         public static Dictionary<SystemTypes, List<Color>> PlayerColor = new Dictionary<SystemTypes, List<Color>>();
 
+        private static float adminTimer = 0.0f;
+        private static bool enableAdminLimit = false;
+        private static bool isRemoveAdmin = false;
+        private static TMPro.TextMeshPro timerText;
+
+        private static readonly HashSet<ExtremeRoleId> adminUseRole = new HashSet<ExtremeRoleId>()
+        {
+            ExtremeRoleId.Supervisor,
+            ExtremeRoleId.Traitor
+        };
+
         public static bool Prefix(MapCountOverlay __instance)
         {
-            if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
+            if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
-            var admin = Roles.ExtremeRoleManager.GetSafeCastedLocalPlayerRole<
+            var admin = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<
                 Roles.Solo.Crewmate.Supervisor>();
 
 			PlayerColor.Clear();
@@ -111,7 +126,7 @@ namespace ExtremeRoles.Patches.MapOverlay
 					}
 					else
 					{
-						Helper.Logging.Debug($"Couldn't find counter for: {counterArea.RoomType}");
+						Logging.Debug($"Couldn't find counter for: {counterArea.RoomType}");
 					}
 				}
 				else
@@ -121,5 +136,112 @@ namespace ExtremeRoles.Patches.MapOverlay
 			}
 			return false;
 		}
+
+        public static void Postfix(MapCountOverlay __instance)
+        {
+
+            if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+
+            if (isRemoveAdmin || // アドミン無効化してる
+                !enableAdminLimit) //アドミン制限あるか
+            {
+                return;
+            }
+
+            foreach (ExtremeRoleId roleId in adminUseRole)
+            {
+
+                SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
+                MultiAssignRoleBase multiAssignRole = role as MultiAssignRoleBase;
+
+                if (role.Id == roleId)
+                {
+                    if (((IRoleAbility)role).Button.IsAbilityActive())
+                    {
+                        return;
+                    }
+                }
+                if (multiAssignRole?.AnotherRole?.Id == roleId)
+                {
+                    if (((IRoleAbility)multiAssignRole.AnotherRole).Button.IsAbilityActive())
+                    {
+                        return;
+                    }
+                }
+            }
+
+            if (timerText == null)
+            {
+                timerText = Object.Instantiate(
+                    FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+                    __instance.transform);
+                timerText.transform.localPosition = new Vector3(3.4f, 2.7f, -9.0f);
+                timerText.name = "vitalTimer";
+            }
+
+            if (adminTimer > 0.0f)
+            {
+                adminTimer -= Time.deltaTime;
+            }
+
+            timerText.text = $"{Mathf.CeilToInt(adminTimer)}";
+            timerText.gameObject.SetActive(true);
+
+            if (adminTimer <= 0.0f)
+            {
+                disableVital();
+                MapBehaviour.Instance.Close();
+            }
+        }
+
+        public static void Initialize()
+        {
+            Object.Destroy(timerText);
+            adminTimer = OptionHolder.Ship.AdminLimitTime;
+            isRemoveAdmin = OptionHolder.Ship.IsRemoveAdmin;
+            enableAdminLimit = OptionHolder.Ship.EnableAdminLimit;
+
+            Logging.Debug("---- AdminCondition ----");
+            Logging.Debug($"IsRemoveAdmin:{isRemoveAdmin}");
+            Logging.Debug($"EnableAdminLimit:{enableAdminLimit}");
+            Logging.Debug($"AdminTime:{adminTimer}");
+        }
+
+        private static void disableVital()
+        {
+            HashSet<string> vitalObj = new HashSet<string>();
+            if (ExtremeRolesPlugin.Compat.IsModMap)
+            {
+                vitalObj = ExtremeRolesPlugin.Compat.ModMap.GetSystemObjectName(
+                    Compat.Interface.SystemConsoleType.Admin);
+            }
+            else
+            {
+                switch (PlayerControl.GameOptions.MapId)
+                {
+                    case 0:
+                        vitalObj.Add(GameSystem.SkeldAdmin);
+                        break;
+                    case 1:
+                        vitalObj.Add(GameSystem.MiraHqAdmin);
+                        break;
+                    case 2:
+                        vitalObj.Add(GameSystem.PolusAdmin1);
+                        vitalObj.Add(GameSystem.PolusAdmin2);
+                        break;
+                    case 4:
+                        vitalObj.Add(GameSystem.AirShipArchiveAdmin);
+                        vitalObj.Add(GameSystem.AirShipCockpitAdmin);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            foreach (string objectName in vitalObj)
+            {
+                GameSystem.DisableMapModule(objectName);
+            }
+        }
     }
 }
