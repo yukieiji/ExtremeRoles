@@ -7,6 +7,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 
 namespace ExtremeRoles.Patches.MiniGame
@@ -19,7 +20,7 @@ namespace ExtremeRoles.Patches.MiniGame
         private static bool isRemoveVital = false;
         private static TMPro.TextMeshPro timerText;
 
-        private static HashSet<ExtremeRoleId> vitalUseRole = new HashSet<ExtremeRoleId>()
+        private static readonly HashSet<ExtremeRoleId> vitalUseRole = new HashSet<ExtremeRoleId>()
         {
             ExtremeRoleId.Traitor
         };
@@ -79,10 +80,9 @@ namespace ExtremeRoles.Patches.MiniGame
             if (timerText == null)
             {
                 timerText = Object.Instantiate(
-                    __instance.BatteryText,
+                    FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
                     __instance.transform);
-                timerText.transform.localPosition = 
-                    __instance.BatteryText.transform.localPosition;
+                timerText.transform.localPosition = new Vector3(3.4f, 2.7f, -9.0f);
                 timerText.name = "vitalTimer";
             }
 

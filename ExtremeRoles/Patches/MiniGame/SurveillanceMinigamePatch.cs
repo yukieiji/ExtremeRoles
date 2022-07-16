@@ -1,12 +1,134 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 using HarmonyLib;
 
+using ExtremeRoles.Helper;
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.MiniGame
 {
+    public static class SecurityHelper
+    {
+        private static float cameraTimer = 0.0f;
+        private static bool enableCameraLimit = false;
+        private static bool isRemoveSecurity = false;
+        private static TMPro.TextMeshPro timerText;
+
+        private static readonly HashSet<ExtremeRoleId> securityUseRole = new HashSet<ExtremeRoleId>()
+        {
+            ExtremeRoleId.Traitor,
+            ExtremeRoleId.Watchdog,
+        };
+
+
+        public static void Initialize()
+        {
+            cameraTimer = OptionHolder.Ship.SecurityLimitTime;
+            isRemoveSecurity = OptionHolder.Ship.IsRemoveSecurity;
+            enableCameraLimit = OptionHolder.Ship.EnableSecurityLimit;
+
+            Logging.Debug("---- SecurityCondition ----");
+            Logging.Debug($"IsRemoveSecurity:{enableCameraLimit}");
+            Logging.Debug($"EnableSecurityLimit:{isRemoveSecurity}");
+            Logging.Debug($"SecurityTime:{cameraTimer}");
+
+        }
+
+        public static void PostUpdate(Minigame instance)
+        {
+            if (isRemoveSecurity || // セキュリティ無効化してる
+                !enableCameraLimit) // セキュリティ制限あるか
+            {
+                return;
+            }
+
+            foreach (ExtremeRoleId roleId in securityUseRole)
+            {
+
+                SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
+                MultiAssignRoleBase multiAssignRole = role as MultiAssignRoleBase;
+
+                if (role.Id == roleId)
+                {
+                    if (((IRoleAbility)role).Button.IsAbilityActive())
+                    {
+                        return;
+                    }
+                }
+                if (multiAssignRole?.AnotherRole?.Id == roleId)
+                {
+                    if (((IRoleAbility)multiAssignRole.AnotherRole).Button.IsAbilityActive())
+                    {
+                        return;
+                    }
+                }
+            }
+
+            if (timerText == null)
+            {
+                timerText = Object.Instantiate(
+                    FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+                    instance.transform);
+                timerText.transform.localPosition = new Vector3(3.4f, 2.7f, -9.0f);
+                timerText.name = "cameraTimer";
+            }
+
+            if (cameraTimer > 0.0f)
+            {
+                cameraTimer -= Time.deltaTime;
+            }
+
+            timerText.text = $"{Mathf.CeilToInt(cameraTimer)}";
+            timerText.gameObject.SetActive(true);
+
+            if (cameraTimer <= 0.0f)
+            {
+                disableSecurity();
+                instance.ForceClose();
+            }
+        }
+
+        private static void disableSecurity()
+        {
+            HashSet<string> vitalObj = new HashSet<string>();
+            if (ExtremeRolesPlugin.Compat.IsModMap)
+            {
+                vitalObj = ExtremeRolesPlugin.Compat.ModMap.GetSystemObjectName(
+                    Compat.Interface.SystemConsoleType.Vital);
+            }
+            else
+            {
+                switch (PlayerControl.GameOptions.MapId)
+                {
+                    case 0:
+                        vitalObj.Add(GameSystem.SkeldSecurity);
+                        break;
+                    case 1:
+                        vitalObj.Add(GameSystem.MiraHqSecurity);
+                        break;
+                    case 2:
+                        vitalObj.Add(GameSystem.PolusSecurity);
+                        break;
+                    case 4:
+                        vitalObj.Add(GameSystem.AirShipSecurity);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            foreach (string objectName in vitalObj)
+            {
+                GameSystem.DisableMapModule(objectName);
+            }
+        }
+    }
+
     [HarmonyPatch(typeof(SurveillanceMinigame), nameof(SurveillanceMinigame.Begin))]
     public static class SurveillanceMinigameBeginPatch
     {
@@ -43,9 +165,9 @@ namespace ExtremeRoles.Patches.MiniGame
 
         public static bool Prefix(SurveillanceMinigame __instance)
         {
-            if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
+            if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
-            if (Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity)
+            if (ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity)
             {
                 updateCamera(__instance);
                 return false;
@@ -55,7 +177,7 @@ namespace ExtremeRoles.Patches.MiniGame
             for (int i = 0; i < __instance.ViewPorts.Length; ++i)
             {
                 __instance.ViewPorts[i].sharedMaterial = __instance.StaticMaterial;
-                __instance.SabText[i].text = Helper.Translation.GetString("youDonotUse");
+                __instance.SabText[i].text = Translation.GetString("youDonotUse");
                 __instance.SabText[i].gameObject.SetActive(true);
             }
 
@@ -111,5 +233,9 @@ namespace ExtremeRoles.Patches.MiniGame
             }
         }
 
+        public static void Postfix(SurveillanceMinigame __instance)
+        {
+            SecurityHelper.PostUpdate(__instance);
+        }
     }
 }

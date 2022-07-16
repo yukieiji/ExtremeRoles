@@ -137,10 +137,13 @@ namespace ExtremeRoles
 
             // キルアニメーションリセット
             Patches.KillAnimationCoPerformKillPatch.HideNextAnimation = false;
+
+            // ミーティング能力リセット
             Patches.Meeting.PlayerVoteAreaSelectPatch.Reset();
 
             // 各種システムコンソールリセット
             Patches.MiniGame.VitalsMinigameUpdatePatch.Initialize();
+            Patches.MiniGame.SecurityHelper.Initialize();
         }
 
         public static void ForceEnd()

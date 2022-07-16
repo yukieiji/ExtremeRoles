@@ -70,6 +70,8 @@ namespace ExtremeRoles
             IsRemoveAirShipCockpitAdmin,
 
             IsRemoveSecurity,
+            EnableSecurityLimit,
+            SecurityLimitTime,
 
             IsRemoveVital,
             EnableVitalLimit,
@@ -167,6 +169,10 @@ namespace ExtremeRoles
 
             Ship.IsRemoveSecurity = AllOption[
                 (int)CommonOptionKey.IsRemoveSecurity].GetValue();
+            Ship.EnableSecurityLimit = AllOption[
+                (int)CommonOptionKey.EnableSecurityLimit].GetValue();
+            Ship.SecurityLimitTime = AllOption[
+                (int)CommonOptionKey.SecurityLimitTime].GetValue();
 
             Ship.IsRemoveVital = AllOption[
                 (int)CommonOptionKey.IsRemoveVital].GetValue();
@@ -417,10 +423,22 @@ namespace ExtremeRoles
                 CommonOptionKey.IsRemoveAirShipArchiveAdmin.ToString(),
                 true, adminOpt);
 
-            new BoolCustomOption(
+            var secOpt = new BoolCustomOption(
                 (int)CommonOptionKey.IsRemoveSecurity,
                 CommonOptionKey.IsRemoveSecurity.ToString(),
                 false);
+            var secLimitOpt = new BoolCustomOption(
+                (int)CommonOptionKey.EnableSecurityLimit,
+                CommonOptionKey.EnableSecurityLimit.ToString(),
+                false, secOpt,
+                invert: true);
+            new FloatCustomOption(
+                (int)CommonOptionKey.SecurityLimitTime,
+                CommonOptionKey.SecurityLimitTime.ToString(),
+                30.0f, 5.0f, 120.0f, 0.5f, secLimitOpt,
+                format: OptionUnit.Second,
+                invert: true,
+                enableCheckOption: secLimitOpt);
 
             var vitalOpt = new BoolCustomOption(
                 (int)CommonOptionKey.IsRemoveVital,
@@ -521,6 +539,9 @@ namespace ExtremeRoles
             public static bool IsRemoveAirShipArchiveAdmin = false;
 
             public static bool IsRemoveSecurity = false;
+            public static bool EnableSecurityLimit = false;
+            public static float SecurityLimitTime = 0.0f;
+
             public static bool IsRemoveVital = false;
             public static bool EnableVitalLimit = false;
             public static float VitalLimitTime = 0.0f;
