@@ -99,7 +99,7 @@ namespace ExtremeRoles.Patches.MiniGame
             if (ExtremeRolesPlugin.Compat.IsModMap)
             {
                 vitalObj = ExtremeRolesPlugin.Compat.ModMap.GetSystemObjectName(
-                    Compat.Interface.SystemConsoleType.Vital);
+                    Compat.Interface.SystemConsoleType.SecurityCamera);
             }
             else
             {
