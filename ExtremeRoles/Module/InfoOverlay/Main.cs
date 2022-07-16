@@ -338,20 +338,6 @@ namespace ExtremeRoles.Module.InfoOverlay
             }
         }
 
-
-        private void textLerp(
-            ref TMPro.TextMeshPro text, float t)
-        {
-            if (text != null)
-            {
-                text.color = Color.Lerp(Palette.White, Palette.ClearWhite, t);
-                if (t >= 1.0f)
-                {
-                    text.enabled = false;
-                }
-            }
-        }
-
         private void pageClear()
         {
             foreach (var builder in this.showText.Values)
