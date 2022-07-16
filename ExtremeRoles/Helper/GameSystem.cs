@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 
 using Hazel;
+using UnityEngine;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Performance;
@@ -11,6 +12,22 @@ namespace ExtremeRoles.Helper
 {
     public static class GameSystem
     {
+        public const string SkeldAdmin = "SkeldShip(Clone)/Admin/Ground/admin_bridge/MapRoomConsole";
+        public const string SkeldSecurity = "SkeldShip(Clone)/Security/Ground/map_surveillance/SurvConsole";
+
+        public const string MiraHqAdmin = "MiraShip(Clone)/Admin/MapTable/AdminMapConsole";
+        public const string MiraHqSecurity = "MiraShip(Clone)/Comms/comms-top/SurvLogConsole";
+
+        public const string PolusAdmin1 = "PolusShip(Clone)/Admin/mapTable/panel_map";
+        public const string PolusAdmin2 = "PolusShip(Clone)/Admin/mapTable/panel_map (1)";
+        public const string PolusSecurity = "PolusShip(Clone)/Electrical/Surv_Panel";
+        public const string PolusVital = "PolusShip(Clone)/Office/panel_vitals";
+
+        public const string AirShipSecurity = "Airship(Clone)/Security/task_cams";
+        public const string AirShipVital = "Airship(Clone)/Medbay/panel_vitals";
+        public const string AirShipArchiveAdmin = "Airship(Clone)/Records/records_admin_map";
+        public const string AirShipCockpitAdmin = "Airship(Clone)/Cockpit/panel_cockpit_map";
+
         public static HashSet<TaskTypes> SaboTask = new HashSet<TaskTypes>()
         {
             TaskTypes.FixLights,
@@ -44,6 +61,19 @@ namespace ExtremeRoles.Helper
                 return AmongUsClient.Instance.GameMode == GameModes.FreePlay;
             }
         }
+
+        public static void DisableMapModule(string mapModuleName)
+        {
+            GameObject obj = GameObject.Find(mapModuleName);
+            if (obj != null)
+            {
+                disableCollider<Collider2D>(obj);
+                disableCollider<PolygonCollider2D>(obj);
+                disableCollider<BoxCollider2D>(obj);
+                disableCollider<CircleCollider2D>(obj);
+            }
+        }
+
         public static Tuple<int, int> GetTaskInfo(
             GameData.PlayerInfo playerInfo)
         {
@@ -189,6 +219,14 @@ namespace ExtremeRoles.Helper
                 AmongUsClient.Instance.ClientId);
         }
 
+        private static void disableCollider<T>(GameObject obj) where T : Collider2D
+        {
+            T comp = obj.GetComponent<T>();
+            if (comp != null)
+            {
+                comp.enabled = false;
+            }
+        }
 
         private static List<int> getTaskIndex(
             NormalPlayerTask[] tasks)

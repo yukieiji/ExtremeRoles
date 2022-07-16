@@ -135,8 +135,12 @@ namespace ExtremeRoles
             ExtremeRolesPlugin.GameDataStore.Initialize();
             ExtremeRolesPlugin.Info.ResetOverlays();
 
+            // キルアニメーションリセット
             Patches.KillAnimationCoPerformKillPatch.HideNextAnimation = false;
             Patches.Meeting.PlayerVoteAreaSelectPatch.Reset();
+
+            // 各種システムコンソールリセット
+            Patches.MiniGame.VitalsMinigameUpdatePatch.Initialize();
         }
 
         public static void ForceEnd()
