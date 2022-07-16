@@ -28,10 +28,9 @@ namespace ExtremeRoles.Module.InfoOverlay
         private SpriteRenderer meetingUnderlay;
         private SpriteRenderer infoUnderlay;
 
-        private ScrollableText ruleInfo = new ScrollableText("ruleInfo", 25, 0.0001f, 0.002f);
-
-        private TMPro.TextMeshPro roleInfoText;
-        private TMPro.TextMeshPro anotherRoleInfoText;
+        private ScrollableText ruleInfo = new ScrollableText("ruleInfo", 50, 0.0001f, 0.002f);
+        private ScrollableText roleInfo = new ScrollableText("roleInfo", 50, 0.0001f, 0.1f);
+        private ScrollableText anotherRoleInfo = new ScrollableText("anotherRoleInfo", 50, 0.0001f, 0.1f);
 
         private bool overlayShown = false;
 
@@ -45,8 +44,7 @@ namespace ExtremeRoles.Module.InfoOverlay
         };
         private ShowType curShow;
 
-        private const int maxLine = 35;
-        private const float outlineWidth = 0.02f;
+        private static readonly Vector3 infoAnchorFirstPos = new Vector3(-4.0f, 1.6f, -910f);
 
         public InfoOverlay()
         {
@@ -94,8 +92,8 @@ namespace ExtremeRoles.Module.InfoOverlay
                     infoUnderlay.enabled = false;
                 }
                 infoLerp(ruleInfo, t, false, Palette.White, Palette.ClearWhite);
-                textLerp(ref roleInfoText, t);
-                textLerp(ref anotherRoleInfoText, t);
+                infoLerp(roleInfo, t, false, Palette.White, Palette.ClearWhite);
+                infoLerp(anotherRoleInfo, t, false, Palette.White, Palette.ClearWhite);
             })));
         }
 
@@ -114,14 +112,12 @@ namespace ExtremeRoles.Module.InfoOverlay
             UnityEngine.Object.Destroy(infoUnderlay);
             
             ruleInfo.Clear();
-            
-            UnityEngine.Object.Destroy(roleInfoText);
-            UnityEngine.Object.Destroy(anotherRoleInfoText);
+            roleInfo.Clear();
+            anotherRoleInfo.Clear();
 
             pageClear();
 
             meetingUnderlay = infoUnderlay = null;
-            roleInfoText = anotherRoleInfoText = null;
             this.overlayShown = false;
         }
 
@@ -206,25 +202,18 @@ namespace ExtremeRoles.Module.InfoOverlay
                 hudManager.TaskText,
                 hudManager.transform,
                 initInfoText);
-
-            if (roleInfoText == null)
-            {
-                roleInfoText = UnityEngine.Object.Instantiate(hudManager.TaskText, hudManager.transform);
-                initInfoText(roleInfoText);
-                roleInfoText.outlineWidth += outlineWidth;
-                roleInfoText.maxVisibleLines = maxLine;
-                roleInfoText.transform.localPosition = new Vector3(-4.0f, 1.6f, -910f) + new Vector3(3.5f, 0.0f, 0.0f);
-                roleInfoText.name = "roleInfoText";
-            }
-            if (anotherRoleInfoText == null)
-            {
-                anotherRoleInfoText = UnityEngine.Object.Instantiate(hudManager.TaskText, hudManager.transform);
-                initInfoText(anotherRoleInfoText);
-                anotherRoleInfoText.outlineWidth += outlineWidth;
-                anotherRoleInfoText.maxVisibleLines = maxLine;
-                anotherRoleInfoText.transform.localPosition = new Vector3(-4.0f, 1.6f, -910f) + new Vector3(7.0f, 0.0f, 0.0f);
-                anotherRoleInfoText.name = "anotherRoleInfoText";
-            }
+            roleInfo.Initialize(
+                infoAnchorFirstPos + new Vector3(3.5f, 0.0f, 0.0f),
+                new Vector3(0.0f, -0.325f, 0.0f),
+                hudManager.TaskText,
+                hudManager.transform,
+                initInfoText);
+            anotherRoleInfo.Initialize(
+                infoAnchorFirstPos + new Vector3(7.0f, 0.0f, 0.0f),
+                new Vector3(0.0f, -0.325f, 0.0f),
+                hudManager.TaskText,
+                hudManager.transform,
+                initInfoText);
 
             return true;
         }
@@ -281,12 +270,10 @@ namespace ExtremeRoles.Module.InfoOverlay
             {
                 parent = hudManager.transform;
             }
-            infoUnderlay.transform.parent = parent;
-
-            roleInfoText.transform.parent = parent;
-            anotherRoleInfoText.transform.parent = parent;
 
             ruleInfo.AnchorPoint.transform.parent = parent;
+            roleInfo.AnchorPoint.transform.parent = parent;
+            anotherRoleInfo.AnchorPoint.transform.parent = parent;
 
             infoUnderlay.color = new Color(0.1f, 0.1f, 0.1f, 0.88f);
             infoUnderlay.enabled = true;
@@ -303,21 +290,18 @@ namespace ExtremeRoles.Module.InfoOverlay
             hudManager.StartCoroutine(Effects.Lerp(0.2f, new Action<float>(t =>
             {
                 infoLerp(ruleInfo, t, true, Palette.ClearWhite, Palette.White);
+                infoLerp(roleInfo, t, true, Palette.ClearWhite, Palette.White);
+                infoLerp(anotherRoleInfo, t, true, Palette.ClearWhite, Palette.White);
 
                 infoUnderlay.color = Color.Lerp(underlayTransparent, underlayOpaque, t);
-                roleInfoText.color = Color.Lerp(Palette.ClearWhite, Palette.White, t);
-                anotherRoleInfoText.color = Color.Lerp(Palette.ClearWhite, Palette.White, t);
             })));
         }
         private void updateShowText()
         {
-            var (roleText, anotherRoleText) = this.showText[this.curShow].GetShowText();
+            var (title, roleText, anotherRoleText) = this.showText[this.curShow].GetShowText();
 
-            roleInfoText.text = roleText;
-            roleInfoText.enabled = true;
-
-            anotherRoleInfoText.text = anotherRoleText;
-            anotherRoleInfoText.enabled = true;
+            roleInfo.UpdateText(title, roleText);
+            anotherRoleInfo.UpdateText("", anotherRoleText);
         }
 
         private void initInfoText(
