@@ -11,6 +11,21 @@ namespace ExtremeRoles.Helper
     {
         private const string LogFileDir = @"\BepInEx/LogOutput.log";
         private const string CopyedLogFileBase = "ExtremeRolesDumpedLog ";
+
+        private static int ckpt = 0;
+        
+        public static void CheckPointDebugLog()
+        {
+            Debug($"ckpt:{ckpt}");
+            ++ckpt;
+        }
+
+        public static void CheckPointReleaseLog()
+        {
+            ExtremeRolesPlugin.Logger.LogInfo($"ckpt:{ckpt}");
+            ++ckpt;
+        }
+
         public static void Debug(string msg)
         {
 #if DEBUG
@@ -20,6 +35,7 @@ namespace ExtremeRoles.Helper
             }
 #endif
         }
+
         public static void Error(string msg)
         {
 
@@ -41,6 +57,11 @@ namespace ExtremeRoles.Helper
 
             System.Diagnostics.Process.Start(
                 "EXPLORER.EXE", $@"/select, ""{copyPath}""");
+        }
+
+        public static void ResetCkpt()
+        {
+            ckpt = 0;
         }
     }
 }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using Hazel;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.Roles;
@@ -51,13 +53,31 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             CanReportOnCarry = false;
         }
 
-        public static void CarryDeadBody(
-            byte rolePlayerId, byte targetPlayerId)
+        public static void Ability(
+            byte rolePlayerId, float x, float y,
+            byte targetPlayerId, bool isCarry)
         {
             var rolePlayer = Player.GetPlayerControlById(rolePlayerId);
             var role = ExtremeRoleManager.GetSafeCastedRole<Carrier>(rolePlayerId);
-            if (role == null) { return; }
+            if (role == null || rolePlayer == null) { return; }
 
+            rolePlayer.NetTransform.SnapTo(new Vector2(x, y));
+
+            if (isCarry)
+            {
+                carryDeadBody(role, rolePlayer, targetPlayerId);
+            }
+            else
+            {
+                rolePlayer.StartCoroutine(
+                    deadBodyToReportablePosition(
+                        role, rolePlayer).WrapToIl2Cpp());
+            }
+        }
+
+        private static void carryDeadBody(
+            Carrier role, PlayerControl rolePlayer, byte targetPlayerId)
+        {
             DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
             for (int i = 0; i < array.Length; ++i)
             {
@@ -83,23 +103,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        
-        public static void PlaceDeadBody(
-            byte rolePlayerId)
-        {
-            var rolePlayer = Player.GetPlayerControlById(rolePlayerId);
-            rolePlayer.StartCoroutine(
-                deadBodyToReportablePosition(
-                    rolePlayerId, rolePlayer).WrapToIl2Cpp());
-        }
-
         private static IEnumerator deadBodyToReportablePosition(
-            byte rolePlayerId,
+            Carrier role,
             PlayerControl rolePlayer)
         {
-            var role = ExtremeRoleManager.GetSafeCastedRole<Carrier>(rolePlayerId);
-            if (role == null) { yield break; }
-
             role.CarringBody.transform.parent = null;
 
             if (!rolePlayer.inVent && !rolePlayer.moveable)
@@ -153,29 +160,43 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool UseAbility()
         {
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.CarrierCarryBody,
-                new List<byte>
-                { 
-                    CachedPlayerControl.LocalPlayer.PlayerId,
-                    this.targetBody.PlayerId
-                });
+            PlayerControl player = CachedPlayerControl.LocalPlayer;
+            Vector3 pos = player.transform.position;
 
-            CarryDeadBody(
-                CachedPlayerControl.LocalPlayer.PlayerId,
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                player.NetId, (byte)RPCOperator.Command.CarrierAbility,
+                Hazel.SendOption.Reliable, -1);
+            writer.Write(player.PlayerId);
+            writer.Write(pos.x);
+            writer.Write(pos.y);
+            writer.Write(this.targetBody.PlayerId);
+            writer.Write(true);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+
+            carryDeadBody(
+                this, CachedPlayerControl.LocalPlayer,
                 this.targetBody.PlayerId);
             return true;
         }
 
         public void CleanUp()
         {
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.CarrierSetBody,
-                new List<byte>{ CachedPlayerControl.LocalPlayer.PlayerId });
-            PlaceDeadBody(
-                CachedPlayerControl.LocalPlayer.PlayerId);
+            PlayerControl player = CachedPlayerControl.LocalPlayer;
+            Vector3 pos = player.transform.position;
+
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                player.NetId, (byte)RPCOperator.Command.CarrierAbility,
+                Hazel.SendOption.Reliable, -1);
+            writer.Write(player.PlayerId);
+            writer.Write(pos.x);
+            writer.Write(pos.y);
+            writer.Write(byte.MinValue);
+            writer.Write(false);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+
+            player.StartCoroutine(
+                deadBodyToReportablePosition(
+                    this, player).WrapToIl2Cpp());
         }
 
         protected override void CreateSpecificOption(
