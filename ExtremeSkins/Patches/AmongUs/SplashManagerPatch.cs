@@ -22,14 +22,14 @@ namespace ExtremeSkins.Patches.AmongUs
 
             bool creatorMode = ExtremeSkinsPlugin.CreatorMode.Value;
 
-            List<Task> dlTask = new List<Task>();
+            List<IEnumerator> dlTask = new List<IEnumerator>();
 
 #if WITHHAT
             if (!ExtremeHatManager.IsLoaded)
             {
                 if (!creatorMode && ExtremeHatManager.IsUpdate())
                 {
-                    dlTask.Add(ExtremeHatManager.PullAllData());
+                    dlTask.Add(ExtremeHatManager.InstallData());
                 }
             }
 #endif
@@ -38,7 +38,7 @@ namespace ExtremeSkins.Patches.AmongUs
             {
                 if (!creatorMode && ExtremeNamePlateManager.IsUpdate())
                 {
-                    dlTask.Add(ExtremeNamePlateManager.PullAllData());
+                    dlTask.Add(ExtremeNamePlateManager.InstallData());
                 }
             }
 #endif
@@ -48,7 +48,7 @@ namespace ExtremeSkins.Patches.AmongUs
 
                 if (!creatorMode && ExtremeVisorManager.IsUpdate())
                 {
-                    dlTask.Add(ExtremeVisorManager.PullAllData());
+                    dlTask.Add(ExtremeVisorManager.InstallData());
                 }
             }
 #endif
@@ -56,22 +56,13 @@ namespace ExtremeSkins.Patches.AmongUs
                 loadSkin(dlTask).WrapToIl2Cpp());
         }
 
-        private static IEnumerator loadSkin(List<Task> dlTask)
+        private static IEnumerator loadSkin(List<IEnumerator> dlTask)
         {
             SplashManagerUpdatePatch.SetSkinLoadMode(true);
 
-            if (dlTask.Count > 0)
+            foreach (IEnumerator task in dlTask)
             {
-                string showStr = Helper.Translation.GetString("waitSkinDl");
-
-                Task.Run(() => DllApi.MessageBox(
-                    System.IntPtr.Zero,
-                    showStr, "Extreme Skins", 0));
-
-                while (!isDlEnd(dlTask))
-                {
-                    yield return new WaitForSeconds(1.0f);
-                }
+                yield return task;
             }
 
             ExtremeSkinsPlugin.Logger.LogInfo("------------------------------ Skin Load Start!! ------------------------------");

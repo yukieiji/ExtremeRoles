@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -25,6 +27,12 @@ namespace ExtremeSkins.SkinManager
         public const string LicenseFileName = "LICENSE.md";
 
         private const string repo = "https://raw.githubusercontent.com/yukieiji/ExtremeNamePlate/main"; // When using this repository with Fork, please follow the license of each hat
+        private const string skinDlUrl = "https://github.com/yukieiji/ExtremeNamePlate/archive/refs/heads/main.zip";
+
+        private const string workingFolder = @"\ExNWorking\";
+        private const string dlZipName = "ExtremeNamePlate-main.zip";
+        private const string namePlateDataPath = @"\ExtremeNamePlate-main\namePlate\";
+
         private const string namePlateRepoData = "namePlateData.json";
         private const string namePlateTransData = "namePlateTransData.json";
 
@@ -134,76 +142,39 @@ namespace ExtremeSkins.SkinManager
             ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme NamePlate Manager : NamePlate Loading Complete!! ----------");
         }
 
-        public static async Task PullAllData()
+        public static IEnumerator InstallData()
         {
 
             ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme NamePlate Manager : NamePlateData Download Start!! ---------- ");
 
-            string dataSaveFolder = string.Concat(
-                Path.GetDirectoryName(Application.dataPath), FolderPath);
+            string ausFolder = Path.GetDirectoryName(Application.dataPath);
+            string dataSaveFolder = string.Concat(ausFolder, FolderPath);
 
-            if (!Directory.Exists(dataSaveFolder))
+            cleanUpCurSkinData(dataSaveFolder);
+
+            string dlFolder = string.Concat(ausFolder, workingFolder);
+#if DEBUG
+            Helper.FileUtility.DeleteDir(dlFolder);
+# endif
+            if (!Directory.Exists(dlFolder))
             {
-                Directory.CreateDirectory(dataSaveFolder);
+                Directory.CreateDirectory(dlFolder);
             }
 
-            getJsonData(namePlateRepoData).GetAwaiter().GetResult();
+            string zipPath = string.Concat(dlFolder, dlZipName);
 
-            HttpClient http = new HttpClient();
-            http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true };
-
-            byte[] byteNamePlateArray = File.ReadAllBytes(
-                string.Concat(
-                    Path.GetDirectoryName(Application.dataPath),
-                    FolderPath, namePlateRepoData));
-            string namePlateJsonString = System.Text.Encoding.UTF8.GetString(byteNamePlateArray);
-
-            JObject namePlateFolder = JObject.Parse(namePlateJsonString);
-
-            for (int i = 0; i < namePlateFolder.Count; ++i)
-            {
-                JProperty token = namePlateFolder.ChildrenTokens[i].TryCast<JProperty>();
-                if (token == null) { continue; }
-
-                string author = token.Name;
-
-                if (author == "updateComitHash") { continue; }
-
-                string checkNamePlateFolder = string.Concat(
-                    Path.GetDirectoryName(Application.dataPath),
-                    FolderPath, author);
-
-                // まずはフォルダとファイルを消す
-                if (Directory.Exists(checkNamePlateFolder))
-                {
-                    string[] filePaths = Directory.GetFiles(checkNamePlateFolder);
-                    foreach (string filePath in filePaths)
-                    {
-                        File.SetAttributes(filePath, FileAttributes.Normal);
-                        File.Delete(filePath);
-                    }
-                    Directory.Delete(checkNamePlateFolder, false); ;
-                }
-
-                Directory.CreateDirectory(checkNamePlateFolder);
-
-                await downLoadFileTo(http, author, checkNamePlateFolder, LicenseFileName);
-
-                JArray namePlateImage = token.Value.TryCast<JArray>();
-
-                for (int j = 0; j < namePlateImage.Count; ++j)
-                {
-
-                    string imgName = string.Concat(
-                        namePlateImage[j].TryCast<JValue>().Value.ToString(),
-                        ".png");
-
-                    await downLoadFileTo(http, author, checkNamePlateFolder, imgName);
-                }
-            }
+            yield return Helper.FileUtility.DlToZip(skinDlUrl, zipPath);
 
             ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme NamePlate Manager : NamePlateData Download Complete!! ---------- ");
 
+            ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme NamePlate Manager : NamePlateData Install Start!! ---------- ");
+
+            installVisorData(dlFolder, zipPath, dataSaveFolder);
+
+            ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme NamePlate Manager : NamePlateData Install Complete!! ---------- ");
+#if RELEASE
+            Helper.FileUtility.DeleteDir(dlFolder);
+# endif
         }
 
         public static void UpdateTranslation()
@@ -253,40 +224,84 @@ namespace ExtremeSkins.SkinManager
             }
         }
 
-        private static async Task<HttpStatusCode> downLoadFileTo(
-            HttpClient http, string author, string saveFolder, string fileName)
+        private static void cleanUpCurSkinData(
+            string dataSaveFolder)
         {
 
-            string dlUrl = $"{repo}/namePlate/{author}/{fileName}";
-
-            ExtremeSkinsPlugin.Logger.LogInfo($"DownLoad from:{dlUrl}");
-
-            var fileResponse = await http.GetAsync(
-                dlUrl, HttpCompletionOption.ResponseContentRead);
-
-            if (fileResponse.StatusCode != HttpStatusCode.OK)
+            if (!Directory.Exists(dataSaveFolder))
             {
-                ExtremeSkinsPlugin.Logger.LogInfo($"Can't load: {author}/{fileName}");
-                return fileResponse.StatusCode;
+                Directory.CreateDirectory(dataSaveFolder);
             }
 
-            if (fileResponse.Content == null)
-            {
-                ExtremeSkinsPlugin.Logger.LogInfo($"Server returned no data: {fileResponse.StatusCode}");
-                return HttpStatusCode.ExpectationFailed;
-            }
+            getJsonData(namePlateRepoData).GetAwaiter().GetResult();
 
-            using (var responseStream = await fileResponse.Content.ReadAsStreamAsync())
+            byte[] byteVisorArray = File.ReadAllBytes(
+                string.Concat(
+                    dataSaveFolder, namePlateRepoData));
+            string visorJsonString = System.Text.Encoding.UTF8.GetString(byteVisorArray);
+
+            JObject visorFolder = JObject.Parse(visorJsonString);
+
+            for (int i = 0; i < visorFolder.Count; ++i)
             {
-                using (var fileStream = File.Create($"{saveFolder}\\{fileName}"))
+                JProperty token = visorFolder.ChildrenTokens[i].TryCast<JProperty>();
+                if (token == null) { continue; }
+
+                string author = token.Name;
+
+                if (author == "updateComitHash") { continue; }
+
+                string checkVisorFolder = string.Concat(dataSaveFolder, author);
+
+                // まずはフォルダとファイルを消す
+                if (Directory.Exists(checkVisorFolder))
                 {
-                    responseStream.CopyTo(fileStream);
+                    string[] filePaths = Directory.GetFiles(checkVisorFolder);
+                    foreach (string filePath in filePaths)
+                    {
+                        File.SetAttributes(filePath, FileAttributes.Normal);
+                        File.Delete(filePath);
+                    }
+                    Directory.Delete(checkVisorFolder, false); ;
                 }
             }
-
-            return HttpStatusCode.OK;
-
         }
+
+        private static void installVisorData(
+            string workingDir,
+            string zipPath,
+            string installFolder)
+        {
+            string extractPath = string.Concat(workingDir, "namePlate");
+            ZipFile.ExtractToDirectory(zipPath, extractPath);
+
+            byte[] byteNamePlateArray = File.ReadAllBytes(
+                string.Concat(
+                    Path.GetDirectoryName(Application.dataPath),
+                    FolderPath, namePlateRepoData));
+            string namePlateJsonString = System.Text.Encoding.UTF8.GetString(byteNamePlateArray);
+
+            JObject namePlateFolder = JObject.Parse(namePlateJsonString);
+
+            for (int i = 0; i < namePlateFolder.Count; ++i)
+            {
+                JProperty token = namePlateFolder.ChildrenTokens[i].TryCast<JProperty>();
+                if (token == null) { continue; }
+
+                string author = token.Name;
+
+                if (author == "updateComitHash") { continue; }
+
+                string namePlateMoveToFolder = string.Concat(installFolder, @"\", author);
+                string namePlateSourceFolder = string.Concat(extractPath, namePlateDataPath, author);
+
+                ExtremeSkinsPlugin.Logger.LogInfo($"Installing NamePlate:{author} namePlate");
+
+                Directory.Move(namePlateSourceFolder, namePlateMoveToFolder);
+            }
+        }
+
+
     }
 #endif
 }
