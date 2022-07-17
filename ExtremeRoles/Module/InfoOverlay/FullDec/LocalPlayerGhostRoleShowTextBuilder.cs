@@ -1,6 +1,4 @@
-﻿using System;
-
-using ExtremeRoles.Helper;
+﻿using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 
@@ -11,18 +9,18 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
         public LocalPlayerGhostRoleShowTextBuilder()
         { }
 
-        public Tuple<string, string> GetShowText()
+        public (string, string, string) GetShowText()
         {
             if (!CachedPlayerControl.LocalPlayer.Data.IsDead)
             {
-                return Tuple.Create($"<size=200%>{Translation.GetString("yourAliveNow")}</size>\n", "");
+                return ($"<size=200%>{Translation.GetString("yourAliveNow")}</size>\n", "", "");
             }
             var role = GhostRoles.ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
             if (role == null)
             {
-                return Tuple.Create($"<size=200%>{Translation.GetString("yourNoAssignGhostRole")}</size>\n", "");
+                return ($"<size=200%>{Translation.GetString("yourNoAssignGhostRole")}</size>\n", "", "");
             }
-            string roleText = $"<size=200%>{Translation.GetString("yourGhostRole")}</size>\n";
+            string title = $"<size=200%>{Translation.GetString("yourGhostRole")}</size>";
             string anotherRoleText = "<size=200%> </size>\n";
             var allOption = OptionHolder.AllOption;
 
@@ -44,13 +42,13 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
 
             string roleFullDesc = role.GetFullDescription();
 
-            roleText += string.Concat(
+            string roleText = string.Concat(
                 $"<size=150%>・{colorRoleName}</size>",
                 roleFullDesc != "" ? $"\n{roleFullDesc}\n" : "",
                 $"・{Translation.GetString(colorRoleName)}{Translation.GetString("roleOption")}\n",
                 roleOptionString != "" ? $"{roleOptionString}" : "");
 
-            return Tuple.Create(roleText, anotherRoleText);
+            return (title, roleText, anotherRoleText);
         }
     }
 }

@@ -28,8 +28,11 @@ namespace ExtremeRoles.Module.InfoOverlay
 
                 if (!option.IsHidden)
                 {
-                    printOption.Add(
-                        CustomOption.OptionToString(option));
+                    string optStr = CustomOption.OptionToString(option);
+                    if (optStr != string.Empty)
+                    {
+                        printOption.Add(optStr);
+                    }
                 }
             }
 

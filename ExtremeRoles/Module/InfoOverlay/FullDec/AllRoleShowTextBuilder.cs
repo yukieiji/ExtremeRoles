@@ -10,7 +10,7 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
         public AllRoleShowTextBuilder() : base()
         { }
 
-        public override Tuple<string, string> GetShowText()
+        public override (string, string, string) GetShowText()
         {
             if (this.AllPage.Count == 0) { createAllRoleText(); }
 
@@ -19,12 +19,13 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
             string roleOption = CustomOption.AllOptionToString(
                 OptionHolder.AllOption[optionId + (int)RoleCommonOption.SpawnRate]);
 
-            string showRole = string.Concat(
+            string title = string.Concat(
                 $"<size=200%>{Translation.GetString("roleDesc")}</size>",
                 $"           {Translation.GetString("changeRoleMore")}",
-                $"({this.Page + 1}/{this.AllPage.Count})\n",
-                string.Format(roleTextBase, roleOption != "" ? $"{roleOption}" : ""));
-            return Tuple.Create(showRole, "");
+                $"({this.Page + 1}/{this.AllPage.Count})");
+
+
+            return (title, string.Format(roleTextBase, roleOption != "" ? $"{roleOption}" : ""), "");
         }
         private void createAllRoleText()
         {

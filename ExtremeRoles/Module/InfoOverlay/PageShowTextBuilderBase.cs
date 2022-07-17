@@ -30,6 +30,6 @@ namespace ExtremeRoles.Module.InfoOverlay
             }
         }
 
-        public abstract Tuple<string, string> GetShowText();
+        public abstract (string, string, string) GetShowText();
     }
 }
