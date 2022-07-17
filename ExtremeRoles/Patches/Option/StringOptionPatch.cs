@@ -15,7 +15,7 @@ namespace ExtremeRoles.Patches.Option
         public static bool Prefix(StringOption __instance)
         {
             IOption option = OptionHolder.AllOption.Values.FirstOrDefault(
-                option => option.Behaviour == __instance);
+                option => option.Body == __instance);
             if (option == null) { return true; };
             option.UpdateSelection(option.CurSelection - 1);
             return false;
@@ -28,7 +28,7 @@ namespace ExtremeRoles.Patches.Option
         public static bool Prefix(StringOption __instance)
         {
             IOption option = OptionHolder.AllOption.Values.FirstOrDefault(
-                option => option.Behaviour == __instance);
+                option => option.Body == __instance);
             if (option == null) { return true; };
             option.UpdateSelection(option.CurSelection + 1);
             return false;
@@ -41,7 +41,7 @@ namespace ExtremeRoles.Patches.Option
         public static bool Prefix(StringOption __instance)
         {
             IOption option = OptionHolder.AllOption.Values.FirstOrDefault(
-                option => option.Behaviour == __instance);
+                option => option.Body == __instance);
             if (option == null) { return true; };
 
             __instance.OnValueChanged = new Action<OptionBehaviour>((o) => { });

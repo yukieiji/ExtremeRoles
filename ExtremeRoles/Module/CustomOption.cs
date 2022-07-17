@@ -39,7 +39,7 @@ namespace ExtremeRoles.Module
         public List<IOption> Children { get; }
         public ConfigEntry<int> Entry { set; get; }
 
-        public OptionBehaviour Behaviour { set; get; }
+        public OptionBehaviour Body { set; get; }
 
         public bool IsActive();
         public string GetString();
@@ -73,7 +73,7 @@ namespace ExtremeRoles.Module
         public IOption ForceEnableCheckOption => this.forceEnableCheckOption;
         public List<IOption> Children => this.children;
 
-        public OptionBehaviour Behaviour
+        public OptionBehaviour Body
         {
             get => this.behaviour;
             set
@@ -271,7 +271,7 @@ namespace ExtremeRoles.Module
         {
             if (this.Entry != null)
             {
-                this.Entry.Value = this.CurSelection;
+                this.Entry.Value = this.curSelection;
             }
         }
 
