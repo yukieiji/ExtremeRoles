@@ -300,8 +300,6 @@ namespace ExtremeSkins.SkinManager
                 Directory.Move(namePlateSourceFolder, namePlateMoveToFolder);
             }
         }
-
-
     }
 #endif
 }
