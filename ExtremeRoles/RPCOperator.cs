@@ -134,6 +134,7 @@ namespace ExtremeRoles
             GhostRoles.ExtremeGhostRoleManager.Initialize();
             ExtremeRolesPlugin.GameDataStore.Initialize();
             ExtremeRolesPlugin.Info.ResetOverlays();
+            Helper.Logging.ResetCkpt();
 
             // キルアニメーションリセット
             Patches.KillAnimationCoPerformKillPatch.HideNextAnimation = false;
