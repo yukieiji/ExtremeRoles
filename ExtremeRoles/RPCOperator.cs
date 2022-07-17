@@ -61,8 +61,7 @@ namespace ExtremeRoles
 
             // インポスター
             AssasinVoteFor,
-            CarrierCarryBody,
-            CarrierSetBody,
+            CarrierAbility,
             PainterPaintBody,
             FakerCreateDummy,
             OverLoaderSwitchAbility,
@@ -478,17 +477,14 @@ namespace ExtremeRoles
             Roles.Combination.Assassin.VoteFor(
                 targetId);
         }
-        public static void CarrierCarryBody(
-            byte callerId, byte targetId)
+        public static void CarrierAbility(
+            byte callerId, float x, float y,
+            byte targetId, bool deadBodyPickUp)
         {
-            Roles.Solo.Impostor.Carrier.CarryDeadBody(
-                callerId, targetId);
+            Roles.Solo.Impostor.Carrier.Ability(
+                callerId, x, y, targetId, deadBodyPickUp);
         }
-        public static void CarrierSetBody(byte callerId)
-        {
-            Roles.Solo.Impostor.Carrier.PlaceDeadBody(
-                callerId);
-        }
+
         public static void PainterPaintBody(
             byte callerId, byte targetId)
         {

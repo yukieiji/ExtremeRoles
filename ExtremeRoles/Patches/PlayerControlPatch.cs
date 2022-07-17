@@ -964,17 +964,18 @@ namespace ExtremeRoles.Patches
                     byte voteTargetId = reader.ReadByte();
                     RPCOperator.AssasinVoteFor(voteTargetId);
                     break;
-                case RPCOperator.Command.CarrierCarryBody:
+                case RPCOperator.Command.CarrierAbility:
                     byte carrierCarryOpCallPlayerId = reader.ReadByte();
+                    float carrierPlayerPosX = reader.ReadSingle();
+                    float carrierPlayerPosY = reader.ReadSingle();
                     byte carryDeadBodyPlayerId = reader.ReadByte();
-                    RPCOperator.CarrierCarryBody(
+                    bool isCarryDeadBody = reader.ReadBoolean();
+                    RPCOperator.CarrierAbility(
                         carrierCarryOpCallPlayerId,
-                        carryDeadBodyPlayerId);
-                    break;
-                case RPCOperator.Command.CarrierSetBody:
-                    byte carrierSetOpCallPlayerId = reader.ReadByte();
-                    RPCOperator.CarrierSetBody(
-                        carrierSetOpCallPlayerId);
+                        carrierPlayerPosX,
+                        carrierPlayerPosY,
+                        carryDeadBodyPlayerId,
+                        isCarryDeadBody);
                     break;
                 case RPCOperator.Command.PainterPaintBody:
                     byte painterPlayerId = reader.ReadByte();
