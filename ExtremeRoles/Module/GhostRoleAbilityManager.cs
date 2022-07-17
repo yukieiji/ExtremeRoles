@@ -63,10 +63,13 @@ namespace ExtremeRoles.Module
                 case AbilityType.PoltergeistMoveDeadbody:
                     byte poltergeistPlayerId = reader.ReadByte();
                     byte poltergeistMoveDeadbodyPlayerId = reader.ReadByte();
+                    float x = reader.ReadSingle();
+                    float y = reader.ReadSingle();
                     bool pickUp = reader.ReadBoolean();
                     Poltergeist.DeadbodyMove(
                         poltergeistPlayerId,
-                        poltergeistMoveDeadbodyPlayerId, pickUp);
+                        poltergeistMoveDeadbodyPlayerId,
+                        x, y, pickUp);
                     break;
                 case AbilityType.SaboEvilResetSabotageCool:
                     SaboEvil.ResetCool();

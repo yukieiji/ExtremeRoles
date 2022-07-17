@@ -34,12 +34,15 @@ namespace ExtremeRoles.GhostRoles.Crewmate
         { }
 
         public static void DeadbodyMove(
-            byte playerId, byte targetPlayerId, bool pickUp)
+            byte playerId, byte targetPlayerId,
+            float x, float y, bool pickUp)
         {
             
             var rolePlayer = Player.GetPlayerControlById(playerId);
             var role = ExtremeGhostRoleManager.GetSafeCastedGhostRole<Poltergeist>(playerId);
-            if (role == null) { return; }
+            if (role == null || rolePlayer == null) { return; }
+
+            rolePlayer.NetTransform.SnapTo(new Vector2(x, y));
 
             if (pickUp)
             {
@@ -131,8 +134,13 @@ namespace ExtremeRoles.GhostRoles.Crewmate
 
         protected override void UseAbility(MessageWriter writer)
         {
-            writer.Write(CachedPlayerControl.LocalPlayer.PlayerId);
+            PlayerControl player = CachedPlayerControl.LocalPlayer;
+            Vector3 pos = player.transform.position;
+
+            writer.Write(player.PlayerId);
             writer.Write(this.targetBody.PlayerId);
+            writer.Write(pos.x);
+            writer.Write(pos.y);
             writer.Write(true);
         }
 
@@ -179,17 +187,22 @@ namespace ExtremeRoles.GhostRoles.Crewmate
         }
         private void cleanUp()
         {
+            PlayerControl player = CachedPlayerControl.LocalPlayer;
+            Vector3 pos = player.transform.position;
+
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                player.NetId,
                 (byte)RPCOperator.Command.UseGhostRoleAbility,
                 Hazel.SendOption.Reliable, -1);
             writer.Write((byte)GhostRoleAbilityManager.AbilityType.PoltergeistMoveDeadbody); // アビリティタイプ
             writer.Write(this.isAbilityReport); // 報告できるかどうか
-            writer.Write(CachedPlayerControl.LocalPlayer.PlayerId);
+            writer.Write(player.PlayerId);
             writer.Write(byte.MinValue);
+            writer.Write(pos.x);
+            writer.Write(pos.y);
             writer.Write(false);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
-            setDeadBody(CachedPlayerControl.LocalPlayer, this);
+            setDeadBody(player, this);
         }
     }
 }
