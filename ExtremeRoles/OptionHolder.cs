@@ -64,8 +64,11 @@ namespace ExtremeRoles
             EngineerUseImpostorVent,
             CanKillVentInPlayer,
             ParallelMedBayScans,
+            IsRemoveAdmin,
             IsRemoveAirShipArchiveAdmin,
             IsRemoveAirShipCockpitAdmin,
+            IsRemoveVital,
+            IsRemoveSecurity,
             RandomMap,
             
             DisableTaskWinWhenNoneTaskCrew,
@@ -148,12 +151,18 @@ namespace ExtremeRoles
             Ship.IsBlockGAAbilityReport = AllOption[
                 (int)CommonOptionKey.IsBlockGAAbilityReport].GetValue();
 
-
+            Ship.IsRemoveAdmin = AllOption[
+                (int)CommonOptionKey.IsRemoveAdmin].GetValue();
             Ship.IsRemoveAirShipCockpitAdmin = AllOption[
                 (int)CommonOptionKey.IsRemoveAirShipCockpitAdmin].GetValue();
             Ship.IsRemoveAirShipArchiveAdmin = AllOption[
                 (int)CommonOptionKey.IsRemoveAirShipArchiveAdmin].GetValue();
 
+            Ship.IsRemoveSecurity = AllOption[
+                (int)CommonOptionKey.IsRemoveSecurity].GetValue();
+
+            Ship.IsRemoveVital = AllOption[
+                (int)CommonOptionKey.IsRemoveVital].GetValue();
 
             Client.GhostsSeeRole = ConfigParser.GhostsSeeRoles.Value;
             Client.GhostsSeeTask = ConfigParser.GhostsSeeTasks.Value;
@@ -384,13 +393,27 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.ParallelMedBayScans,
                 CommonOptionKey.ParallelMedBayScans.ToString(), false);
 
+            var adminOpt = new BoolCustomOption(
+                (int)CommonOptionKey.IsRemoveAdmin,
+                CommonOptionKey.IsRemoveAdmin.ToString(),
+                false);
             new BoolCustomOption(
                 (int)CommonOptionKey.IsRemoveAirShipCockpitAdmin,
                 CommonOptionKey.IsRemoveAirShipCockpitAdmin.ToString(),
-                false);
+                true, adminOpt);
             new BoolCustomOption(
                 (int)CommonOptionKey.IsRemoveAirShipArchiveAdmin,
                 CommonOptionKey.IsRemoveAirShipArchiveAdmin.ToString(),
+                true, adminOpt);
+
+            new BoolCustomOption(
+                (int)CommonOptionKey.IsRemoveVital,
+                CommonOptionKey.IsRemoveVital.ToString(),
+                false);
+
+            new BoolCustomOption(
+                (int)CommonOptionKey.IsRemoveSecurity,
+                CommonOptionKey.IsRemoveSecurity.ToString(),
                 false);
 
 
@@ -470,8 +493,12 @@ namespace ExtremeRoles
             public static bool EngineerUseImpostorVent = false;
             public static bool CanKillVentInPlayer = false;
 
+            public static bool IsRemoveAdmin = false;
             public static bool IsRemoveAirShipCockpitAdmin = false;
             public static bool IsRemoveAirShipArchiveAdmin = false;
+
+            public static bool IsRemoveSecurity = false;
+            public static bool IsRemoveVital = false;
 
             public static bool DisableSelfVote = false;
 

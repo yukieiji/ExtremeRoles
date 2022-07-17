@@ -264,6 +264,19 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
     public static class IntroCutsceneOnDestroyPatch
     {
+        private const string skeldAdmin = "SkeldShip(Clone)/Admin/Ground/admin_bridge/MapRoomConsole";
+        private const string skeldSecurity = "SkeldShip(Clone)/Security/Ground/map_surveillance/SurvConsole";
+
+        private const string miraHqAdmin = "MiraShip(Clone)/Admin/MapTable/AdminMapConsole";
+        private const string miraHqSecurity = "MiraShip(Clone)/Comms/comms-top/SurvLogConsole";
+
+        private const string polusAdmin1 = "PolusShip(Clone)/Admin/mapTable/panel_map";
+        private const string polusAdmin2 = "PolusShip(Clone)/Admin/mapTable/panel_map (1)";
+        private const string polusSecurity = "PolusShip(Clone)/Electrical/Surv_Panel";
+        private const string polusVital = "PolusShip(Clone)/Office/panel_vitals";
+
+        private const string airShipSecurity = "Airship(Clone)/Security/task_cams";
+        private const string airShipVital = "Airship(Clone)/Medbay/panel_vitals";
         private const string airShipArchiveAdmin = "Airship(Clone)/Records/records_admin_map";
         private const string airShipCockpitAdmin = "Airship(Clone)/Cockpit/panel_cockpit_map";
 
@@ -294,30 +307,118 @@ namespace ExtremeRoles.Patches
         private static void disableMapObject()
         {
             HashSet<string> disableObjectName = new HashSet<string>();
-            switch (PlayerControl.GameOptions.MapId)
+
+            bool isRemoveAdmin = OptionHolder.Ship.IsRemoveAdmin;
+            bool isRemoveSecurity = OptionHolder.Ship.IsRemoveSecurity;
+            bool isRemoveVital = OptionHolder.Ship.IsRemoveVital;
+
+            if (ExtremeRolesPlugin.Compat.IsModMap)
             {
-                case 4:
-                    if (!ExtremeRolesPlugin.Compat.IsModMap)
-                    {
-                        if (OptionHolder.Ship.IsRemoveAirShipArchiveAdmin)
+                var modMap = ExtremeRolesPlugin.Compat.ModMap;
+
+                if (isRemoveAdmin)
+                {
+                    disableObjectName.UnionWith(
+                        modMap.GetSystemObjectName(
+                            Compat.Interface.SystemConsoleType.Admin));
+                }
+                if (isRemoveSecurity)
+                {
+                    disableObjectName.UnionWith(
+                        modMap.GetSystemObjectName(
+                            Compat.Interface.SystemConsoleType.SecurityCamera));
+                }
+                if (isRemoveVital)
+                {
+                    disableObjectName.UnionWith(
+                        modMap.GetSystemObjectName(
+                            Compat.Interface.SystemConsoleType.Vital));
+                }
+            }
+            else
+            {
+                switch (PlayerControl.GameOptions.MapId)
+                {
+                    case 0:
+                        if (isRemoveAdmin)
                         {
-                            disableObjectName.Add(airShipArchiveAdmin);
+                            disableObjectName.Add(skeldAdmin);
                         }
-                        if (OptionHolder.Ship.IsRemoveAirShipCockpitAdmin)
+                        if (isRemoveSecurity)
                         {
-                            disableObjectName.Add(airShipCockpitAdmin);
+                            disableObjectName.Add(skeldSecurity);
                         }
-                    }
-                    break;
-                default:
-                    break;
+                        break;
+                    case 1:
+                        if (isRemoveAdmin)
+                        {
+                            disableObjectName.Add(miraHqAdmin);
+                        }
+                        if (isRemoveSecurity)
+                        {
+                            disableObjectName.Add(miraHqSecurity);
+                        }
+                        break;
+                    case 2:
+                        if (isRemoveAdmin)
+                        {
+                            disableObjectName.Add(polusAdmin1);
+                            disableObjectName.Add(polusAdmin2);
+                        }
+                        if (isRemoveSecurity)
+                        {
+                            disableObjectName.Add(miraHqSecurity);
+                        }
+                        if (isRemoveVital)
+                        {
+                            disableObjectName.Add(polusVital);
+                        }
+                        break;
+                    case 4:
+                        if (isRemoveAdmin)
+                        {
+                            if (OptionHolder.Ship.IsRemoveAirShipArchiveAdmin)
+                            {
+                                disableObjectName.Add(airShipArchiveAdmin);
+                            }
+                            if (OptionHolder.Ship.IsRemoveAirShipCockpitAdmin)
+                            {
+                                disableObjectName.Add(airShipCockpitAdmin);
+                            }
+                        }
+                        if (isRemoveSecurity)
+                        {
+                            disableObjectName.Add(airShipSecurity);
+                        }
+                        if (isRemoveVital)
+                        {
+                            disableObjectName.Add(airShipVital);
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
 
             foreach (string objectName in disableObjectName)
             {
-                GameObject.Find(objectName)?.SetActive(false);
+                GameObject obj = GameObject.Find(objectName);
+                if (obj != null)
+                {
+                    disableCollider<Collider2D>(obj);
+                    disableCollider<PolygonCollider2D>(obj);
+                    disableCollider<BoxCollider2D>(obj);
+                    disableCollider<CircleCollider2D>(obj);
+                }
             }
-
+        }
+        private static void disableCollider<T>(GameObject obj) where T : Collider2D
+        {
+            T comp = obj.GetComponent<T>();
+            if (comp != null)
+            {
+                comp.enabled = false;
+            }
         }
     }
 }

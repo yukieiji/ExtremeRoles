@@ -28,7 +28,7 @@ namespace ExtremeRoles.Module.InfoOverlay
         private SpriteRenderer meetingUnderlay;
         private SpriteRenderer infoUnderlay;
 
-        private ScrollableText ruleInfo = new ScrollableText("ruleInfo", 50, 0.0001f, 0.002f);
+        private ScrollableText ruleInfo = new ScrollableText("ruleInfo", 50, 0.0001f, 0.1f);
         private ScrollableText roleInfo = new ScrollableText("roleInfo", 50, 0.0001f, 0.1f);
         private ScrollableText anotherRoleInfo = new ScrollableText("anotherRoleInfo", 50, 0.0001f, 0.1f);
 
