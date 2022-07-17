@@ -284,6 +284,19 @@ namespace ExtremeRoles.Patches.Meeting
 		}
 	}
 
+	[HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.SetCosmetics))]
+	public static class PlayerVoteAreaSetCosmeticsPatch
+	{
+		public static void Postfix(PlayerVoteArea __instance)
+		{
+			if (OptionHolder.Ship.FixedMeetingPlayerLevel)
+            {
+				__instance.LevelNumberText.text = "99";
+			}
+		}
+	}
+
+
 	[HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.SetDead))]
 	public static class PlayerVoteAreaSetDeadPatch
 	{
