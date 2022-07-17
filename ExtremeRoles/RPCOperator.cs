@@ -131,6 +131,7 @@ namespace ExtremeRoles
             GhostRoles.ExtremeGhostRoleManager.Initialize();
             ExtremeRolesPlugin.GameDataStore.Initialize();
             ExtremeRolesPlugin.Info.ResetOverlays();
+            Helper.Logging.ResetCkpt();
 
             Patches.KillAnimationCoPerformKillPatch.HideNextAnimation = false;
             Patches.Meeting.PlayerVoteAreaSelectPatch.Reset();
