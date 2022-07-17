@@ -64,11 +64,21 @@ namespace ExtremeRoles
             EngineerUseImpostorVent,
             CanKillVentInPlayer,
             ParallelMedBayScans,
+            
             IsRemoveAdmin,
             IsRemoveAirShipArchiveAdmin,
             IsRemoveAirShipCockpitAdmin,
-            IsRemoveVital,
+            EnableAdminLimit,
+            AdminLimitTime,
+
             IsRemoveSecurity,
+            EnableSecurityLimit,
+            SecurityLimitTime,
+
+            IsRemoveVital,
+            EnableVitalLimit,
+            VitalLimitTime,
+
             RandomMap,
             
             DisableTaskWinWhenNoneTaskCrew,
@@ -157,12 +167,25 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.IsRemoveAirShipCockpitAdmin].GetValue();
             Ship.IsRemoveAirShipArchiveAdmin = AllOption[
                 (int)CommonOptionKey.IsRemoveAirShipArchiveAdmin].GetValue();
+            Ship.EnableAdminLimit = AllOption[
+                (int)CommonOptionKey.EnableAdminLimit].GetValue();
+            Ship.AdminLimitTime = AllOption[
+                (int)CommonOptionKey.AdminLimitTime].GetValue();
+
 
             Ship.IsRemoveSecurity = AllOption[
                 (int)CommonOptionKey.IsRemoveSecurity].GetValue();
+            Ship.EnableSecurityLimit = AllOption[
+                (int)CommonOptionKey.EnableSecurityLimit].GetValue();
+            Ship.SecurityLimitTime = AllOption[
+                (int)CommonOptionKey.SecurityLimitTime].GetValue();
 
             Ship.IsRemoveVital = AllOption[
                 (int)CommonOptionKey.IsRemoveVital].GetValue();
+            Ship.EnableVitalLimit = AllOption[
+                (int)CommonOptionKey.EnableVitalLimit].GetValue();
+            Ship.VitalLimitTime = AllOption[
+                (int)CommonOptionKey.VitalLimitTime].GetValue();
 
             Client.GhostsSeeRole = ConfigParser.GhostsSeeRoles.Value;
             Client.GhostsSeeTask = ConfigParser.GhostsSeeTasks.Value;
@@ -405,16 +428,52 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.IsRemoveAirShipArchiveAdmin,
                 CommonOptionKey.IsRemoveAirShipArchiveAdmin.ToString(),
                 true, adminOpt);
+            var adminLimitOpt = new BoolCustomOption(
+                (int)CommonOptionKey.EnableAdminLimit,
+                CommonOptionKey.EnableAdminLimit.ToString(),
+                false, adminOpt,
+                invert: true);
+            new FloatCustomOption(
+                (int)CommonOptionKey.AdminLimitTime,
+                CommonOptionKey.AdminLimitTime.ToString(),
+                30.0f, 5.0f, 120.0f, 0.5f, adminLimitOpt,
+                format: OptionUnit.Second,
+                invert: true,
+                enableCheckOption: adminLimitOpt);
 
-            new BoolCustomOption(
-                (int)CommonOptionKey.IsRemoveVital,
-                CommonOptionKey.IsRemoveVital.ToString(),
-                false);
-
-            new BoolCustomOption(
+            var secOpt = new BoolCustomOption(
                 (int)CommonOptionKey.IsRemoveSecurity,
                 CommonOptionKey.IsRemoveSecurity.ToString(),
                 false);
+            var secLimitOpt = new BoolCustomOption(
+                (int)CommonOptionKey.EnableSecurityLimit,
+                CommonOptionKey.EnableSecurityLimit.ToString(),
+                false, secOpt,
+                invert: true);
+            new FloatCustomOption(
+                (int)CommonOptionKey.SecurityLimitTime,
+                CommonOptionKey.SecurityLimitTime.ToString(),
+                30.0f, 5.0f, 120.0f, 0.5f, secLimitOpt,
+                format: OptionUnit.Second,
+                invert: true,
+                enableCheckOption: secLimitOpt);
+
+            var vitalOpt = new BoolCustomOption(
+                (int)CommonOptionKey.IsRemoveVital,
+                CommonOptionKey.IsRemoveVital.ToString(),
+                false);
+            var vitalLimitOpt = new BoolCustomOption(
+                (int)CommonOptionKey.EnableVitalLimit,
+                CommonOptionKey.EnableVitalLimit.ToString(),
+                false, vitalOpt,
+                invert: true);
+            new FloatCustomOption(
+                (int)CommonOptionKey.VitalLimitTime,
+                CommonOptionKey.VitalLimitTime.ToString(),
+                30.0f, 5.0f, 120.0f, 0.5f, vitalLimitOpt,
+                format: OptionUnit.Second,
+                invert: true,
+                enableCheckOption: vitalLimitOpt);
 
 
             new BoolCustomOption(
@@ -496,9 +555,16 @@ namespace ExtremeRoles
             public static bool IsRemoveAdmin = false;
             public static bool IsRemoveAirShipCockpitAdmin = false;
             public static bool IsRemoveAirShipArchiveAdmin = false;
+            public static bool EnableAdminLimit = false;
+            public static float AdminLimitTime = 0.0f;
 
             public static bool IsRemoveSecurity = false;
+            public static bool EnableSecurityLimit = false;
+            public static float SecurityLimitTime = 0.0f;
+
             public static bool IsRemoveVital = false;
+            public static bool EnableVitalLimit = false;
+            public static float VitalLimitTime = 0.0f;
 
             public static bool DisableSelfVote = false;
 

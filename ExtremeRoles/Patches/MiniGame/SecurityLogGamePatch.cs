@@ -18,5 +18,9 @@ namespace ExtremeRoles.Patches.MiniGame
 
             return false;
         }
+        public static void Postfix(SurveillanceMinigame __instance)
+        {
+            SecurityHelper.PostUpdate(__instance);
+        }
     }
 }
