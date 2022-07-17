@@ -193,7 +193,7 @@ namespace ExtremeSkins.SkinManager
             installHatData(dlFolder, zipPath, dataSaveFolder);
 
             ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Hat Manager : HatData Install Complete!! ---------- ");
-#if DEBUG
+#if RELEASE
             Helper.FileUtility.DeleteDir(dlFolder);
 # endif
         }

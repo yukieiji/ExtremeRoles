@@ -168,7 +168,7 @@ namespace ExtremeSkins.SkinManager
             installVisorData(dlFolder, zipPath, dataSaveFolder);
 
             ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Visor Manager : VisorData Install Complete!! ---------- ");
-#if DEBUG
+#if RELEASE
             Helper.FileUtility.DeleteDir(dlFolder);
 # endif
         }
