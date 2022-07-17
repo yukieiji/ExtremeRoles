@@ -67,7 +67,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
                     role.CarringBody = array[i];
                     role.CarringBody.transform.position = rolePlayer.transform.position;
-                    role.CarringBody.transform.SetParent(rolePlayer.transform);
+                    role.CarringBody.transform.parent = rolePlayer.transform;
                     
                     role.AlphaValue = oldColor.a;
                     role.CarringBody.bodyRenderer.color = new Color(
