@@ -33,7 +33,6 @@ namespace ExtremeRoles.Module
         public int Id { get; }
         public bool IsHidden { get; }
         public bool IsHeader { get; }
-        public string Name { get; }
         public int ValueCount { get; }
         public IOption Parent { get; }
         public IOption ForceEnableCheckOption { get; }
@@ -65,8 +64,6 @@ namespace ExtremeRoles.Module
         
         public bool IsHidden => this.isHidden;
         public bool IsHeader => this.isHeader;
-
-        public string Name => this.name;
 
         public int ValueCount => this.Selections.Length;
 
@@ -102,7 +99,7 @@ namespace ExtremeRoles.Module
         {
             get
             {
-                string nameClean = Regex.Replace(this.Name, "<.*?>", "");
+                string nameClean = Regex.Replace(this.name, "<.*?>", "");
                 nameClean = Regex.Replace(nameClean, "^-\\s*", "");
                 return nameClean.Trim();
             }
@@ -170,7 +167,7 @@ namespace ExtremeRoles.Module
                 this.curSelection = Mathf.Clamp(this.entry.Value, 0, selections.Length - 1);
             }
 
-            Logging.Debug($"OptinId:{this.Id}    Name:{this.Name}");
+            Logging.Debug($"OptinId:{this.Id}    Name:{this.name}");
 
             OptionHolder.AllOption.Add(this.Id, this);
         }

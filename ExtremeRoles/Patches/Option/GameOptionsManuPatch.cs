@@ -106,7 +106,7 @@ namespace ExtremeRoles.Patches.Option
                 {
                     StringOption stringOption = UnityEngine.Object.Instantiate(template, erMenu.transform);
                     stringOption.OnValueChanged = new Action<OptionBehaviour>((o) => { });
-                    stringOption.TitleText.text = option.Name;
+                    stringOption.TitleText.text = option.GetName();
                     stringOption.Value = stringOption.oldValue = option.CurSelection;
                     stringOption.ValueText.text = option.GetString();
 
