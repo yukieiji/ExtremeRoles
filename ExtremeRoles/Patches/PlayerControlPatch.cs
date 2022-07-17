@@ -725,6 +725,7 @@ namespace ExtremeRoles.Patches
                 switch(CachedPlayerControl.LocalPlayer.Data.Role.Role)
                 {
                     case RoleTypes.Engineer:
+                    case RoleTypes.Scientist:
                     case RoleTypes.Shapeshifter:
                         FastDestroyableSingleton<HudManager>.Instance.AbilityButton.Hide();
                         break;
