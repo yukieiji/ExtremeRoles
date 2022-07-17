@@ -46,7 +46,7 @@ namespace ExtremeRoles.Roles.Combination
             this.BaseRole.CanHasAnotherRole = true;
 
             // 0:オフ、1:オン
-            allOptions[GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign)].CurSelection = 1;
+            allOptions[GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign)].UpdateSelection(1);
 
             if (allOptions.ContainsKey(GetRoleOptionId(CombinationRoleCommonOption.AssignsNum)))
             {
@@ -393,7 +393,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             this.CreateCommonAbilityOption(
                 parentOps, 5.0f);

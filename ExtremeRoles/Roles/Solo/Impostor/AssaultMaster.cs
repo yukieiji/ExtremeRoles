@@ -203,7 +203,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             base.GetFullDescription(), this.stock,
             this.stockMax, this.curReloadCoolTime);
 
-        protected override void CreateSpecificOption(CustomOptionBase parentOps)
+        protected override void CreateSpecificOption(IOption parentOps)
         {
             this.CreateCommonAbilityOption(parentOps);
 

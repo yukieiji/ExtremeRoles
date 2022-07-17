@@ -58,7 +58,7 @@ namespace ExtremeRoles.GhostRoles.Impostor
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             CreateCountButtonOption(
                 parentOps, 3, 20);

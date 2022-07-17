@@ -167,7 +167,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
 
             CreateBoolOption(

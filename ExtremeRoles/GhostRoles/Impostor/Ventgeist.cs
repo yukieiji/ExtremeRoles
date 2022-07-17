@@ -65,7 +65,7 @@ namespace ExtremeRoles.GhostRoles.Impostor
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             CreateFloatOption(
                 Option.Range, 1.0f,

@@ -304,7 +304,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
         }
 
-        protected override void CreateSpecificOption(CustomOptionBase parentOps)
+        protected override void CreateSpecificOption(IOption parentOps)
         {
             CreateIntOption(
                 CaptainOption.AwakeTaskGage,

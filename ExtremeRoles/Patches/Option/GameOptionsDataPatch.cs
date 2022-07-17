@@ -73,7 +73,7 @@ namespace ExtremeRoles.Patches.Option
 
             allOptionStr.Add(modOptionStrBuilder.ToString().Trim('\r', '\n'));
 
-            foreach (CustomOptionBase option in OptionHolder.AllOption.Values)
+            foreach (IOption option in OptionHolder.AllOption.Values)
             {
                 if (Enum.IsDefined(typeof(OptionHolder.CommonOptionKey), option.Id))
                 {
@@ -134,7 +134,7 @@ namespace ExtremeRoles.Patches.Option
 
         }
 
-        private static void addChildren(CustomOptionBase option, ref StringBuilder entry, int indentCount = 0)
+        private static void addChildren(IOption option, ref StringBuilder entry, int indentCount = 0)
         {
 
             string indent = "";

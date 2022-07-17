@@ -388,8 +388,8 @@ namespace ExtremeRoles.GhostRoles
             return true;
         }
 
-        private static int computePercentage(Module.CustomOptionBase self)
-            => (int)System.Decimal.Multiply(self.GetValue(), self.Selections.ToList().Count);
+        private static int computePercentage(Module.IOption self)
+            => (int)System.Decimal.Multiply(self.GetValue(), self.ValueCount);
 
         private static void rpcSetSingleGhostRoleToPlayerId(
             PlayerControl player,

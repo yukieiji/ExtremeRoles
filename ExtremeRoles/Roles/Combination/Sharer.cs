@@ -243,7 +243,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             CreateBoolOption(
                 SharerOption.SharerTellKill,

@@ -76,7 +76,7 @@ namespace ExtremeRoles.GhostRoles
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             throw new System.Exception("Don't call this class method!!");
         }

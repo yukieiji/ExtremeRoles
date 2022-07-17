@@ -95,7 +95,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             CreateBoolOption(
                 YokoOption.CanRepairSabo,

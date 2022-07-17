@@ -81,11 +81,11 @@ namespace ExtremeRoles.Roles.Solo
             return;
         }
 
-        protected override void CreateSpecificOption(CustomOptionBase parentOps)
+        protected override void CreateSpecificOption(IOption parentOps)
         {
             throw new System.Exception("Don't call this class method!!");
         }
-        protected override CustomOptionBase CreateSpawnOption()
+        protected override IOption CreateSpawnOption()
         {
             throw new System.Exception("Don't call this class method!!");
         }

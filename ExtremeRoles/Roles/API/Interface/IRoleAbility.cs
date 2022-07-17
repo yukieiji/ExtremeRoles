@@ -180,7 +180,7 @@ namespace ExtremeRoles.Roles.API.Interface
 
         public static void CreateCommonAbilityOption(
             this IRoleAbility self,
-            CustomOptionBase parentOps,
+            IOption parentOps,
             float defaultActiveTime = float.MaxValue)
         {
 
@@ -210,7 +210,7 @@ namespace ExtremeRoles.Roles.API.Interface
 
         public static void CreateAbilityCountOption(
             this IRoleAbility self,
-            CustomOptionBase parentOps,
+            IOption parentOps,
             int defaultAbilityCount,
             int maxAbilityCount,
             float defaultActiveTime = float.MaxValue)

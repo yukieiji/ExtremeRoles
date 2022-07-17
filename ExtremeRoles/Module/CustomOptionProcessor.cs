@@ -33,7 +33,7 @@ namespace ExtremeRoles.Module
                             comma, "Id", "Name", "Option Value", "SelectedIndex")); //ヘッダー
 
 
-                    foreach (CustomOptionBase option in OptionHolder.AllOption.Values)
+                    foreach (IOption option in OptionHolder.AllOption.Values)
                     {
 
                         if (option.Id == 0) { continue; }

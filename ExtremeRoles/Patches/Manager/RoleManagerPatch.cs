@@ -100,9 +100,9 @@ namespace ExtremeRoles.Patches.Manager
             return result;
         }
 
-        private static int computePercentage(Module.CustomOptionBase self)
+        private static int computePercentage(Module.IOption self)
             => (int)Decimal.Multiply(
-                self.GetValue(), self.Selections.ToList().Count);
+                self.GetValue(), self.ValueCount);
 
         private static void createCombinationExtremeRoleAssign(
             ref RoleAssignmentData extremeRolesData,

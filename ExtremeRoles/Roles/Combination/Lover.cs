@@ -219,7 +219,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             var neutralSetting = CreateBoolOption(
                 LoverOption.IsNeutral,
@@ -242,9 +242,9 @@ namespace ExtremeRoles.Roles.Combination
                 LoverOption.BecomeNeutralLoverCanUseVent,
                 false, killerSetting);
 
-            OptionHolder.AllOption[
+            ((IWithUpdatableOption<int>)OptionHolder.AllOption[
                 GetManagerOptionId(
-                    CombinationRoleCommonOption.AssignsNum)].SetUpdateOption(deathSetting);
+                    CombinationRoleCommonOption.AssignsNum)]).SetUpdateOption(deathSetting);
 
         }
 
@@ -317,7 +317,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         private void killerVisionSetting(
-            CustomOptionBase killerOpt)
+            IOption killerOpt)
         {
             var visonOption = CreateBoolOption(
                 LoverOption.BecomeNeutralLoverHasOtherVison,

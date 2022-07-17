@@ -94,7 +94,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
 
             public SidekickOptionHolder(
-                CustomOptionBase parentOps,
+                IOption parentOps,
                 int optionOffset)
             {
                 this.OptionIdOffset = optionOffset;
@@ -523,7 +523,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             // JackalOption
             this.createJackalOption(parentOps);
@@ -568,7 +568,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.RoleAbilityInit();
         }
 
-        private void createJackalOption(CustomOptionBase parentOps)
+        private void createJackalOption(IOption parentOps)
         {
 
             this.CreateAbilityCountOption(
@@ -755,7 +755,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             throw new Exception("Don't call this class method!!");
         }

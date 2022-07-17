@@ -264,7 +264,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             CreateIntOption(
                 LastWolfOption.AwakeImpostorNum,

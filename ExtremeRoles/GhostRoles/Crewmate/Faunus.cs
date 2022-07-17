@@ -70,7 +70,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             CreateCountButtonOption(
                 parentOps, 1, 5, 3.0f);

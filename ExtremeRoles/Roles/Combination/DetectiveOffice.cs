@@ -29,7 +29,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             base.CreateSpecificOption(parentOps);
             DetectiveApprentice.DetectiveApprenticeOptionHolder.CreateOption(
@@ -273,7 +273,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             CreateFloatOption(
                 DetectiveOption.SearchRange,
@@ -487,7 +487,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         { }
 
         protected override void RoleSpecificInit()
@@ -533,7 +533,7 @@ namespace ExtremeRoles.Roles.Combination
             }
 
             public static void CreateOption(
-                CustomOptionBase parentOps,
+                IOption parentOps,
                 int optionId)
             {
                 int getRoleOptionId<T>(T option) where T : struct, IConvertible
@@ -843,7 +843,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             throw new Exception("Don't call this class method!!");
         }

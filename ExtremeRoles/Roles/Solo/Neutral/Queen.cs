@@ -369,7 +369,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
         }
 
-        protected override void CreateSpecificOption(CustomOptionBase parentOps)
+        protected override void CreateSpecificOption(IOption parentOps)
         {
             CreateBoolOption(
                 QueenOption.CanUseVent,
@@ -640,7 +640,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             throw new Exception("Don't call this class method!!");
         }

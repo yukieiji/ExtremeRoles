@@ -94,7 +94,7 @@ namespace ExtremeRoles
             IsBlockGAAbilityReport,
         }
 
-        public static Dictionary<int, CustomOptionBase> AllOption = new Dictionary<int, CustomOptionBase>();
+        public static Dictionary<int, IOption> AllOption = new Dictionary<int, IOption>();
 
         public static void Create()
         {
@@ -204,7 +204,7 @@ namespace ExtremeRoles
         public static void SwitchPreset(int newPreset)
         {
             SelectedPreset = newPreset;
-            foreach (CustomOptionBase option in AllOption.Values)
+            foreach (IOption option in AllOption.Values)
             {
                 if (option.Id == 0) { continue; }
 
@@ -212,9 +212,9 @@ namespace ExtremeRoles
                     ConfigPreset,
                     option.CleanedName,
                     option.DefaultSelection);
-                option.CurSelection = Mathf.Clamp(
+                option.UpdateSelection(Mathf.Clamp(
                     option.Entry.Value, 0,
-                    option.Selections.Length - 1);
+                    option.ValueCount - 1));
 
                 if (option.Behaviour != null && option.Behaviour is StringOption stringOption)
                 {

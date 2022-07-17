@@ -154,7 +154,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             var imposterSetting = OptionHolder.AllOption[
                 GetManagerOptionId(CombinationRoleCommonOption.IsAssignImposter)];

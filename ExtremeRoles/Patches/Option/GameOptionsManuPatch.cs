@@ -103,7 +103,7 @@ namespace ExtremeRoles.Patches.Option
 
             for (int i = 0; i < optionsList.Count(); ++i)
             {
-                CustomOptionBase option = optionsList[i];
+                IOption option = optionsList[i];
                 // ExtremeRolesPlugin.Instance.Log.LogInfo($"Option: {option.Behaviour == null}");
                 if (option.Behaviour == null)
                 {
@@ -111,7 +111,7 @@ namespace ExtremeRoles.Patches.Option
                     stringOption.OnValueChanged = new Action<OptionBehaviour>((o) => { });
                     stringOption.TitleText.text = option.Name;
                     stringOption.Value = stringOption.oldValue = option.CurSelection;
-                    stringOption.ValueText.text = option.Selections[option.CurSelection].ToString();
+                    stringOption.ValueText.text = option.GetValue().ToString();
 
                     option.Behaviour = stringOption;
                 }
@@ -152,7 +152,7 @@ namespace ExtremeRoles.Patches.Option
 
             float offset = 2.75f;
 
-            foreach (CustomOptionBase option in OptionHolder.AllOption.Values)
+            foreach (IOption option in OptionHolder.AllOption.Values)
             {
                 if (option?.Behaviour != null && option.Behaviour.gameObject != null)
                 {
