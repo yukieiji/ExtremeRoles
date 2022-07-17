@@ -422,6 +422,8 @@ namespace ExtremeRoles.GhostRoles
             RoleTypes roleType = (RoleTypes)vanillaRoleId;
             ExtremeGhostRoleId ghostRoleId = (ExtremeGhostRoleId)roleId;
 
+            resetVanillaRole(playerId);
+
             if (vanillaGhostRole.Contains(roleType) &&
                 ghostRoleId == ExtremeGhostRoleId.VanillaRole)
             {
@@ -442,15 +444,15 @@ namespace ExtremeRoles.GhostRoles
             }
         }
 
-
-
         private static void setPlyaerToCombGhostRole(
             byte playerId, byte combType, byte baseRoleId)
         {
             if (GameRole.ContainsKey(playerId)) { return; }
-
+            
             var ghostCombManager = ExtremeRoleManager.CombRole[combType] as GhostAndAliveCombinationRoleManagerBase;
             if (ghostCombManager == null) { return; }
+
+            resetVanillaRole(playerId);
 
             GhostRoleBase role = ghostCombManager.GetGhostRole((ExtremeRoleId)baseRoleId).Clone();
 
@@ -462,5 +464,27 @@ namespace ExtremeRoles.GhostRoles
                 GameRole.Add(playerId, role);
             }
         }
+
+        private static void resetVanillaRole(byte playerId)
+        {
+            var role = ExtremeRoleManager.GetSafeCastedRole<Roles.Solo.VanillaRoleWrapper>(playerId);
+            var player = Helper.Player.GetPlayerControlById(playerId);
+
+            if (role == null) { return; }
+
+            if (role.VanilaRoleId == RoleTypes.Scientist ||
+                role.VanilaRoleId == RoleTypes.Engineer)
+            {
+                FastDestroyableSingleton<RoleManager>.Instance.SetRole(
+                    player, RoleTypes.Crewmate);
+            }
+            else if (role.VanilaRoleId == RoleTypes.Shapeshifter)
+            {
+                FastDestroyableSingleton<RoleManager>.Instance.SetRole(
+                    player, RoleTypes.Impostor);
+            }
+
+        }
+
     }
 }
