@@ -581,6 +581,35 @@ namespace ExtremeRoles.Patches.Meeting
             }
         }
     }
+    [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.SortButtons))]
+    public static class MeetingHudSortButtonsPatch
+    {
+        public static bool Prefix(MeetingHud __instance)
+        {
+            if (!OptionHolder.Ship.ChangeMeetingVoteAreaSort) { return true; }
+            if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
+
+            PlayerVoteArea[] array = __instance.playerStates.OrderBy(delegate (PlayerVoteArea p)
+            {
+                if (!p.AmDead)
+                {
+                    return 0;
+                }
+                return 50;
+            }).ThenBy(x => ExtremeRoleManager.GameRole[x.TargetPlayerId].GameControlId).ToArray();
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                int num = i % 3;
+                int num2 = i / 3;
+                array[i].transform.localPosition = __instance.VoteOrigin + new Vector3(
+                    __instance.VoteButtonOffsets.x * (float)num,
+                    __instance.VoteButtonOffsets.y * (float)num2, -0.9f - (float)num2 * 0.01f);
+            }
+
+            return false;
+        }
+    }
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.PopulateResults))]
     public static class MeetingHudPopulateResultsPatch

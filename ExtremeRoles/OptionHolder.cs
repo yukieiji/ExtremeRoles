@@ -58,6 +58,7 @@ namespace ExtremeRoles
             MaxImpostorGhostRoles,
 
             NumMeating,
+            ChangeMeetingVoteAreaSort,
             FixedMeetingPlayerLevel,
             DisableSkipInEmergencyMeeting,
             DisableSelfVote,
@@ -131,9 +132,10 @@ namespace ExtremeRoles
 
         public static void Load()
         {
-
             Ship.MaxNumberOfMeeting = AllOption[
                 (int)CommonOptionKey.NumMeating].GetValue();
+            Ship.ChangeMeetingVoteAreaSort = AllOption[
+                (int)CommonOptionKey.ChangeMeetingVoteAreaSort].GetValue();
             Ship.FixedMeetingPlayerLevel = AllOption[
                 (int)CommonOptionKey.FixedMeetingPlayerLevel].GetValue();
 
@@ -387,11 +389,14 @@ namespace ExtremeRoles
 
         private static void createShipGlobalOption()
         {
-
             new IntCustomOption(
                 (int)CommonOptionKey.NumMeating,
                 CommonOptionKey.NumMeating.ToString(),
                 10, 0, 100, 1, null, true);
+            new BoolCustomOption(
+              (int)CommonOptionKey.ChangeMeetingVoteAreaSort,
+              CommonOptionKey.ChangeMeetingVoteAreaSort.ToString(),
+              false);
             new BoolCustomOption(
                (int)CommonOptionKey.FixedMeetingPlayerLevel,
                CommonOptionKey.FixedMeetingPlayerLevel.ToString(),
@@ -554,6 +559,7 @@ namespace ExtremeRoles
         {
             public static int MaxNumberOfMeeting = 100;
 
+            public static bool ChangeMeetingVoteAreaSort = true;
             public static bool FixedMeetingPlayerLevel = false;
             public static bool AllowParallelMedBayScan = false;
             public static bool BlockSkippingInEmergencyMeeting = false;
