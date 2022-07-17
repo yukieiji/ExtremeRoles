@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 using UnityEngine;
@@ -565,20 +566,20 @@ namespace ExtremeRoles.Module
         {
             if (option == null) { return ""; }
 
-            List<string> options = new List<string>();
+            StringBuilder options = new StringBuilder();
             if (!option.IsHidden && !skipFirst)
             {
-                options.Add(OptionToString(option));
+                options.AppendLine(OptionToString(option));
             }
             if (option.Enabled)
             {
                 childrenOptionToString(option, ref options);
             }
-            return string.Join("\n", options);
+            return options.ToString();
         }
 
         private static void childrenOptionToString(
-            IOption option, ref List<string> options, int indentCount = 0)
+            IOption option, ref StringBuilder options, int indentCount = 0)
         {
             foreach (IOption op in option.Children)
             {
@@ -594,7 +595,7 @@ namespace ExtremeRoles.Module
                             str);
                     }
 
-                    options.Add(str);
+                    options.AppendLine(str);
                 }
                 childrenOptionToString(
                     op, ref options,

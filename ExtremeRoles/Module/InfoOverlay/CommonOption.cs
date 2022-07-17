@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace ExtremeRoles.Module.InfoOverlay
 {
@@ -10,7 +11,7 @@ namespace ExtremeRoles.Module.InfoOverlay
 
             var allOption = OptionHolder.AllOption;
 
-            List<string> printOption = new List<string>();
+            StringBuilder printOption = new StringBuilder();
 
             foreach (OptionHolder.CommonOptionKey key in Enum.GetValues(
                 typeof(OptionHolder.CommonOptionKey)))
@@ -19,7 +20,7 @@ namespace ExtremeRoles.Module.InfoOverlay
 
                 if (key == OptionHolder.CommonOptionKey.NumMeating)
                 {
-                    printOption.Add("");
+                    printOption.AppendLine("");
                 }
 
                 var option = allOption[(int)key];
@@ -31,12 +32,12 @@ namespace ExtremeRoles.Module.InfoOverlay
                     string optStr = CustomOption.OptionToString(option);
                     if (optStr != string.Empty)
                     {
-                        printOption.Add(optStr);
+                        printOption.AppendLine(optStr);
                     }
                 }
             }
 
-            return string.Join("\n", printOption);
+            return printOption.ToString();
 
         }
     }
