@@ -37,7 +37,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
             byte playerId, byte targetPlayerId,
             float x, float y, bool pickUp)
         {
-            
+
             var rolePlayer = Player.GetPlayerControlById(playerId);
             var role = ExtremeGhostRoleManager.GetSafeCastedGhostRole<Poltergeist>(playerId);
             if (role == null || rolePlayer == null) { return; }
@@ -66,7 +66,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
                 {
                     role.CarringBody = array[i];
                     role.CarringBody.transform.position = rolePlayer.transform.position;
-                    role.CarringBody.transform.parent = rolePlayer.transform;
+                    role.CarringBody.transform.SetParent(rolePlayer.transform);
                     break;
                 }
             }
