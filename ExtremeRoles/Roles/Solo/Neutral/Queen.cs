@@ -64,6 +64,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             resetTargetAnotherRole(targetRole, targetPlayerId, targetPlayer);
             replaceVanilaRole(targetRole, targetPlayer);
+            resetAbility(targetRole, targetPlayerId);
 
             Servant servant = new Servant(
                 rolePlayerId, queen, targetRole);
@@ -183,6 +184,28 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (specialResetRole != null)
             {
                 specialResetRole.AllReset(targetPlayer);
+            }
+        }
+
+        private static void resetAbility(
+            SingleRoleBase targetRole,
+            byte targetPlayerId)
+        {
+            // 会議開始と終了の処理を呼び出すことで能力を使用可能な状態でリセット
+            if (CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
+            {
+                var meetingResetRole = targetRole as IRoleResetMeeting;
+                if (meetingResetRole != null)
+                {
+                    meetingResetRole.ResetOnMeetingStart();
+                    meetingResetRole.ResetOnMeetingEnd();
+                }
+                var abilityRole = targetRole as IRoleAbility;
+                if (abilityRole != null)
+                {
+                    abilityRole.ResetOnMeetingStart();
+                    abilityRole.ResetOnMeetingEnd();
+                }
             }
         }
 
@@ -432,8 +455,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.queenPlayerId = queenPlayerId;
             this.FakeImposter = baseRole.Team == ExtremeRoleType.Impostor;
 
+            if (baseRole.IsImpostor())
+            {
+                this.HasOtherVison = true;
+            }
+            else
+            {
+                this.HasOtherVison = baseRole.HasOtherVison;
+            }
             this.Vison = baseRole.Vison;
-            this.HasOtherVison = baseRole.HasOtherVison;
             this.IsApplyEnvironmentVision = baseRole.IsApplyEnvironmentVision;
 
             this.HasOtherKillCool = baseRole.HasOtherKillCool;
