@@ -203,6 +203,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
                 this.HasOtherVison = allOption[
                     GetRoleOptionId(SidekickOption.HasOtherVison)].GetValue();
+                this.Vison = PlayerControl.GameOptions.CrewLightMod;
+                this.ApplyEnvironmentVisionEffect = false;
                 if (this.HasOtherVison)
                 {
                     this.Vison = allOption[
