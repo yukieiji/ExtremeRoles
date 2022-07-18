@@ -681,6 +681,25 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.sidekickJackalCanMakeSidekick = sidekickJackalCanMakeSidekick;
         }
 
+        public override bool IsSameTeam(SingleRoleBase targetRole)
+        {
+            if (this.isSameJackalTeam(targetRole))
+            {
+                if (OptionHolder.Ship.IsSameNeutralSameWin)
+                {
+                    return true;
+                }
+                else
+                {
+                    return this.IsSameControlId(targetRole);
+                }
+            }
+            else
+            {
+                return base.IsSameTeam(targetRole);
+            }
+        }
+
         public override Color GetTargetRoleSeeColor(
             SingleRoleBase targetRole,
             byte targetPlayerId)
@@ -788,6 +807,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
                 BecomeToJackal(this.JackalPlayerId, rolePlayer.PlayerId);
             }
+        }
+
+        private bool isSameJackalTeam(SingleRoleBase targetRole)
+        {
+            return ((targetRole.Id == this.Id) || (targetRole.Id == ExtremeRoleId.Jackal));
         }
     }
 
