@@ -87,7 +87,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 parentOps, format: OptionUnit.Second);
             CreateFloatOption(
                 MissionaryOption.DepartureMaxTime,
-                30f, 15f, 60f, 0.5f,
+                30f, 15f, 120f, 0.5f,
                 parentOps, format: OptionUnit.Second);
             CreateFloatOption(
                 MissionaryOption.PropagateRange,
