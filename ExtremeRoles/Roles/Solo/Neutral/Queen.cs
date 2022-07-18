@@ -505,11 +505,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (MeetingHud.Instance ||
                 source.PlayerId == target.PlayerId) { return; }
 
+            var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+
             if (this.killFlash == null)
             {
                 this.killFlash = UnityEngine.Object.Instantiate(
-                     FastDestroyableSingleton<HudManager>.Instance.FullScreen,
-                     FastDestroyableSingleton<HudManager>.Instance.transform);
+                     hudManager.FullScreen,
+                     hudManager.transform);
                 this.killFlash.transform.localPosition = new Vector3(0f, 0f, 20f);
                 this.killFlash.gameObject.SetActive(true);
             }
@@ -523,7 +525,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             
             this.killFlash.enabled = true;
 
-            FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(
+            hudManager.StartCoroutine(
                 Effects.Lerp(1.0f, new Action<float>((p) =>
                 {
                     if (this.killFlash == null) { return; }
