@@ -173,4 +173,13 @@ namespace ExtremeRoles.Compat.Patches
         }
 
     }
+
+    public static class SubmarineSurvillanceMinigamePatch
+    {
+        public static void Postfix(Minigame __instance)
+        {
+            ExtremeRoles.Patches.MiniGame.SecurityHelper.PostUpdate(__instance);
+        }
+    }
+
 }

@@ -393,6 +393,15 @@ namespace ExtremeRoles.Compat.Mods
                 () => Patches.SubmarineOxygenSystemDetorioratePatch.Postfix(
                     submarineOxygenSystemInstance));
 
+            Minigame game = null;
+
+            Type submarineSurvillanceMinigame = ClassType.First(
+                t => t.Name == "SubmarineSurvillanceMinigame");
+            MethodInfo submarineSurvillanceMinigameSystemUpdate = AccessTools.Method(
+                submarineSurvillanceMinigame, "Update");
+            MethodInfo submarineSurvillanceMinigameSystemUpdatePostfixPatch = SymbolExtensions.GetMethodInfo(
+                () => Patches.SubmarineSurvillanceMinigamePatch.Postfix(game));
+
 
             // 会議終了時のリセット処理を呼び出せるように
             harmony.Patch(wrapUpAndSpawn,
@@ -418,6 +427,10 @@ namespace ExtremeRoles.Compat.Mods
             // 酸素枯渇発動時アサシンは常にマスクを持つパッチ
             harmony.Patch(submarineOxygenSystemDetoriorate,
                 postfix: new HarmonyMethod(submarineOxygenSystemDetorioratePostfixPatch));
+
+            // サブマージドのセキュリティカメラの制限をつけるパッチ
+            harmony.Patch(submarineSurvillanceMinigameSystemUpdate,
+                postfix: new HarmonyMethod(submarineSurvillanceMinigameSystemUpdatePostfixPatch));
         }
 
         private MonoBehaviour getFloorHandler(PlayerControl player) => ((Component)getFloorHandlerInfo.Invoke(
