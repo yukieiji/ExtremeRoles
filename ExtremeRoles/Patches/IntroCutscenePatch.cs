@@ -359,7 +359,7 @@ namespace ExtremeRoles.Patches
                         if (isRemoveSecurity)
                         {
                             disableObjectName.Add(
-                                GameSystem.MiraHqSecurity);
+                                GameSystem.PolusSecurity);
                         }
                         if (isRemoveVital)
                         {
