@@ -49,4 +49,8 @@
     <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">
         <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AmongUs)/BepInEx/plugins/" UseSymboliclinksIfPossible="true" />
     </Target>
+
+    <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+      <Exec Command="python $(SolutionDir)\convertToJson.py" />
+    </Target>
 </Project>
