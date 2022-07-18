@@ -41,6 +41,9 @@ namespace ExtremeRoles.Patches.MiniGame
 
         public static void PostUpdate(Minigame instance)
         {
+
+            if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+
             if (isRemoveSecurity || // セキュリティ無効化してる
                 !enableCameraLimit) // セキュリティ制限あるか
             {
@@ -75,7 +78,7 @@ namespace ExtremeRoles.Patches.MiniGame
                     FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
                     instance.transform);
                 timerText.transform.localPosition = new Vector3(3.4f, 2.7f, -9.0f);
-                timerText.name = "cameraTimer";
+                timerText.name = "securityTimer";
             }
 
             if (cameraTimer > 0.0f)
@@ -92,6 +95,8 @@ namespace ExtremeRoles.Patches.MiniGame
                 instance.ForceClose();
             }
         }
+
+        public static TMPro.TextMeshPro GetTimerText() => timerText;
 
         private static void disableSecurity()
         {
