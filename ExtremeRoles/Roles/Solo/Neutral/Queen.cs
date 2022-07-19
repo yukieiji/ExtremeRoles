@@ -277,7 +277,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.CreateAbilityCountButton(
                 Translation.GetString("queenCharm"),
                 Loader.CreateSpriteFromResources(
-                    Path.TestButton));
+                    Path.QueenCharm));
         }
 
         public bool UseAbility()
@@ -490,7 +490,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 this.UseAbility,
                 this.IsAbilityUse,
                 Loader.CreateSpriteFromResources(
-                    Path.TestButton),
+                    Path.ServantSucide),
                 new Vector3(-1.8f, -0.06f, 0),
                 null, null,
                 KeyCode.F, false);

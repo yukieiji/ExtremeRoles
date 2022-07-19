@@ -34,6 +34,8 @@ namespace ExtremeRoles.Resources
         public const string DetectiveApprenticeEmergencyMeeting = "ExtremeRoles.Resources.EmergencyMeeting.png";
         public const string CarpenterSetCamera = "ExtremeRoles.Resources.SetCamera.png";
         public const string CarpenterVentSeal = "ExtremeRoles.Resources.VentSeal.png";
+        public const string CaptainSpecialVote = "ExtremeRoles.Resources.SpecialVote.png";
+        public const string CaptainSpecialVoteCheck = "ExtremeRoles.Resources.SpecialVote.png";
 
         public const string EvolverEvolved = "ExtremeRoles.Resources.Evolved.png";
         public const string CarrierCarry = "ExtremeRoles.Resources.Carry.png";
@@ -47,12 +49,20 @@ namespace ExtremeRoles.Resources
         public const string MeryNoneActiveVent = "ExtremeRoles.Resources.NoneActivateVent.png";
         public const string MeryCustomVentAnime = "ExtremeRoles.Resources.MeryVentAnimation.{0}.png";
         public const string AssaultMasterReload = "ExtremeRoles.Resources.Reload.png";
+        public const string LastWolfLightOff = "ExtremeRoles.Resources.LightOff.png";
+        public const string CommanderAttackCommand = "ExtremeRoles.Resources.AttackCommand.png";
 
         public const string VigilanteEmergencyCall = "ExtremeRoles.Resources.EmergencyCall.png";
         public const string AliceShipBroken = "ExtremeRoles.Resources.ShipBroken.png";
         public const string JackalSidekick = "ExtremeRoles.Resources.Sidekick.png";
         public const string MissionaryPropagate = "ExtremeRoles.Resources.Propagate.png";
         public const string JesterOutburst = "ExtremeRoles.Resources.Outburst.png";
+        public const string EaterDeadBodyEat = "ExtremeRoles.Resources.DeadBodyEat.png";
+        public const string EaterEatKill = "ExtremeRoles.Resources.EatKil.png";
+        public const string MinerSetMine = "ExtremeRoles.Resources.Mine.png";
+        public const string TotocalcioBetPlayer = "ExtremeRoles.Resources.BedPlayer.png";
+        public const string QueenCharm = "ExtremeRoles.Resources.Charm.png";
+        public const string ServantSucide = "ExtremeRoles.Resources.Suicide.png";
 
         public const string TestButton = "ExtremeRoles.Resources.TESTBUTTON.png";
     }

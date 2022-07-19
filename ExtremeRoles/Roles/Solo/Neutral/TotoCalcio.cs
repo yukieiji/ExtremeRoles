@@ -68,7 +68,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.CreateAbilityCountButton(
                 Helper.Translation.GetString("betPlayer"),
                 Loader.CreateSpriteFromResources(
-                    Path.TestButton));
+                    Path.TotocalcioBetPlayer));
             this.Button.SetLabelToCrewmate();
         }
 

@@ -266,9 +266,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 UseAbility,
                 IsAbilityUse,
                 Loader.CreateSpriteFromResources(
-                    Path.CarpenterSetCamera),
+                    Path.EaterDeadBodyEat),
                 Loader.CreateSpriteFromResources(
-                    Path.CarpenterVentSeal),
+                    Path.EaterEatKill),
                 new Vector3(-1.8f, -0.06f, 0),
                 CleanUp,
                 IsAbilityCheck,

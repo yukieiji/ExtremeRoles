@@ -88,7 +88,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.CreateNormalAbilityButton(
                 Translation.GetString("liightOff"),
                 Resources.Loader.CreateSpriteFromResources(
-                   Resources.Path.TestButton),
+                   Resources.Path.LastWolfLightOff),
                 abilityCleanUp:CleanUp);
 
             setCurCooltime();

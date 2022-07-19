@@ -82,7 +82,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.CreateAbilityCountButton(
                 Translation.GetString("attackCommand"),
                 Loader.CreateSpriteFromResources(
-                   Path.TestButton));
+                   Path.CommanderAttackCommand));
         }
 
         public bool IsAbilityUse() => this.IsCommonUse();

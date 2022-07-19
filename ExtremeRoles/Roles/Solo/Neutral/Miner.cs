@@ -53,7 +53,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.CreateNormalAbilityButton(
                 Helper.Translation.GetString("setMine"),
                 Loader.CreateSpriteFromResources(
-                    Path.MissionaryPropagate),
+                    Path.MinerSetMine),
                 abilityCleanUp: CleanUp);
         }
 
