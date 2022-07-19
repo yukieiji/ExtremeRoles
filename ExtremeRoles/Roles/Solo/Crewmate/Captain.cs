@@ -48,6 +48,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private byte voteTarget;
 
         private TMPro.TextMeshPro meetingVoteText = null;
+        private Dictionary<byte, SpriteRenderer> voteCheckMark = new Dictionary<byte, SpriteRenderer>();
 
         public Captain() : base(
             ExtremeRoleId.Captain,
@@ -188,6 +189,25 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     });
                 this.SetTargetVote(
                     instance.TargetPlayerId);
+
+                foreach (SpriteRenderer checkMark in this.voteCheckMark.Values)
+                {
+                    checkMark?.gameObject.SetActive(false);
+                }
+
+                if (!this.voteCheckMark.ContainsKey(instance.TargetPlayerId))
+                {
+                    SpriteRenderer checkMark = UnityEngine.Object.Instantiate(
+                        instance.Background, instance.LevelNumberText.transform);
+                    checkMark.name = $"captain_SpecialVoteCheckMark_{instance.TargetPlayerId}";
+                    checkMark.sprite = Resources.Loader.CreateSpriteFromResources(
+                        Resources.Path.CaptainSpecialVoteCheck);
+                    checkMark.transform.localPosition = new Vector3(7.25f, -0.5f, -3f);
+                    checkMark.transform.localScale = new Vector3(1.0f, 3.5f, 1.0f);
+                    checkMark.gameObject.layer = 5;
+                    this.voteCheckMark.Add(instance.TargetPlayerId, checkMark);
+                }
+                this.voteCheckMark[instance.TargetPlayerId]?.gameObject.SetActive(true);
             }
 
             return setTarget;
@@ -200,7 +220,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void SetSprite(SpriteRenderer render)
         {
-            
+            render.sprite = Resources.Loader.CreateSpriteFromResources(
+                Resources.Path.CaptainSpecialVote);
+            render.transform.localScale *= new Vector2(0.625f, 0.625f);
         }
 
         public void Update(PlayerControl rolePlayer)
@@ -347,6 +369,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
 
             this.voteTarget = byte.MaxValue;
+            this.voteCheckMark.Clear();
         }
         private bool isNotUseSpecialVote() => !this.IsAwake || this.curChargedVote < 1.0f;
     }

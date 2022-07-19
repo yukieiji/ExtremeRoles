@@ -35,7 +35,7 @@ namespace ExtremeRoles.Resources
         public const string CarpenterSetCamera = "ExtremeRoles.Resources.SetCamera.png";
         public const string CarpenterVentSeal = "ExtremeRoles.Resources.VentSeal.png";
         public const string CaptainSpecialVote = "ExtremeRoles.Resources.SpecialVote.png";
-        public const string CaptainSpecialVoteCheck = "ExtremeRoles.Resources.SpecialVote.png";
+        public const string CaptainSpecialVoteCheck = "ExtremeRoles.Resources.SpecialVoteCheck.png";
 
         public const string EvolverEvolved = "ExtremeRoles.Resources.Evolved.png";
         public const string CarrierCarry = "ExtremeRoles.Resources.Carry.png";
