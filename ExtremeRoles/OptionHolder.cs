@@ -22,19 +22,24 @@ namespace ExtremeRoles
         public static string[] SpawnRate = new string[] {
             "0%", "10%", "20%", "30%", "40%",
             "50%", "60%", "70%", "80%", "90%", "100%" };
-        public static string[] OptionPreset = new string[] { 
-            "preset1", "preset2", "preset3", "preset4", "preset5",
-            "preset6", "preset7", "preset8", "preset9", "preset10" };
+
         public static string[] Range = new string[] { "short", "middle", "long"};
 
         public static int OptionsPage = 1;
-        public static int SelectedPreset = 0;
+        
+        private static int selectedPreset = 0;
+        private static string[] optionPreset = new string[] {
+            "preset1", "preset2", "preset3", "preset4", "preset5",
+            "preset6", "preset7", "preset8", "preset9", "preset10" };
+        private static string[] prngAlgorithm = new string[] {
+            "Pcg32XshRr", "Pcg64RxsMXs",
+            "Xorshiro256StarStar", "Xorshiro512StarStar"};
 
         private static IRegionInfo[] defaultRegion;
 
         public static string ConfigPreset
         {
-            get => $"Preset:{SelectedPreset}";
+            get => $"Preset:{selectedPreset}";
         }
 
         public enum CommonOptionKey
@@ -42,6 +47,7 @@ namespace ExtremeRoles
             PresetSelection = 0,
 
             UseStrongRandomGen,
+            UsePrngAlgorithm,
 
             MinCrewmateRoles,
             MaxCrewmateRoles,
@@ -110,12 +116,18 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.PresetSelection, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.PresetSelection.ToString()),
-                OptionPreset, null, true);
+                optionPreset, null, true);
 
-            new BoolCustomOption(
+            var strongGen = new BoolCustomOption(
                (int)CommonOptionKey.UseStrongRandomGen, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.UseStrongRandomGen.ToString()), true);
+            new SelectionCustomOption(
+               (int)CommonOptionKey.UsePrngAlgorithm, Design.ColoedString(
+                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    CommonOptionKey.UsePrngAlgorithm.ToString()),
+               prngAlgorithm, strongGen,
+               invert: true);
 
             createExtremeRoleGlobalSpawnOption();
             createExtremeGhostRoleGlobalSpawnOption();
@@ -203,7 +215,7 @@ namespace ExtremeRoles
 
         public static void SwitchPreset(int newPreset)
         {
-            SelectedPreset = newPreset;
+            selectedPreset = newPreset;
             foreach (IOption option in AllOption.Values)
             {
                 if (option.Id == 0) { continue; }

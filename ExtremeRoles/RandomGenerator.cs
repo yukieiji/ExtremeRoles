@@ -9,38 +9,56 @@ namespace ExtremeRoles
     {
         public static RNGBase Instance;
         public static bool prevValue = false;
+        public static int prevSelection = 0;
 
         public static void Initialize()
         {
             bool useStrongGen = OptionHolder.AllOption[
                 (int)OptionHolder.CommonOptionKey.UseStrongRandomGen].GetValue();
-            if (Instance == null)
-            {
-                createGlobalRandomGenerator(useStrongGen);
-            }
-            else
+            if (Instance != null)
             {
                 if (useStrongGen != prevValue)
                 {
                     createGlobalRandomGenerator(useStrongGen);
                 }
+                else
+                {
+                    int selection = OptionHolder.AllOption[
+                        (int)OptionHolder.CommonOptionKey.UsePrngAlgorithm].GetValue();
+                    if (prevSelection != selection)
+                    {
+                        Instance = getAditionalPrng(selection);
+                        UnityEngine.Random.InitState(CreateStrongRandomSeed());
+                        prevSelection = selection;
+                    }
+                }
                 Instance.Next();
             }
+            else
+            {
+                createGlobalRandomGenerator(useStrongGen);
+            }
+
+            Helper.Logging.Debug($"UsePRNG:{Instance}");
+
         }
 
         private static void createGlobalRandomGenerator(bool isStrong)
         {
+
             if (isStrong)
             {
-                Instance = new PermutedCongruentialGenerator(
-                    createLongStrongSeed(),
-                    createLongStrongSeed());
-                UnityEngine.Random.InitState(createStrongRandomSeed());
+                int selection = OptionHolder.AllOption[
+                    (int)OptionHolder.CommonOptionKey.UsePrngAlgorithm].GetValue();
+                Instance = getAditionalPrng(selection);
+                UnityEngine.Random.InitState(CreateStrongRandomSeed());
+                prevSelection = selection;
             }
             else
             {
-                Instance = new Pcg64XshRr(guidBasedSeed());
+                Instance = new SystemRandomWrapper(0, 0);
                 UnityEngine.Random.InitState(createNormalRandomSeed());
+                prevSelection = -1;
             }
             prevValue = isStrong;
         }
@@ -52,17 +70,12 @@ namespace ExtremeRoles
 
             if (useStrongGen)
             {
-                return new Random(createStrongRandomSeed());
+                return new Random(CreateStrongRandomSeed());
             }
             else
             {
                 return new Random(createNormalRandomSeed());
             }
-        }
-
-        private static int createNormalRandomSeed()
-        {
-            return ((int)DateTime.Now.Ticks & 0x0000FFFF) + UnityEngine.SystemInfo.processorFrequency;
         }
 
         public static int CreateStrongRandomSeed()
@@ -94,11 +107,35 @@ namespace ExtremeRoles
             //RNGCryptoServiceProviderで得たbit列をUInt64型に変換してシード値とする。
             return BitConverter.ToUInt64(bs, 0);
         }
-        private static ulong guidBasedSeed()
+
+        private static int createNormalRandomSeed()
         {
-            ulong upper = (ulong)(Environment.TickCount ^ Guid.NewGuid().GetHashCode()) << 32;
-            ulong lower = (ulong)(Environment.TickCount ^ Guid.NewGuid().GetHashCode());
-            return (upper | lower);
+            return ((int)DateTime.Now.Ticks & 0x0000FFFF) + UnityEngine.SystemInfo.processorFrequency;
+        }
+
+        private static RNGBase getAditionalPrng(int selection)
+        {
+            switch (selection)
+            {
+                case 0:
+                    return new Pcg32XshRr(
+                        CreateLongStrongSeed(),
+                        CreateLongStrongSeed());
+                case 1:
+                    return new Pcg64RxsMXs(
+                        CreateLongStrongSeed(),
+                        CreateLongStrongSeed());
+                case 2:
+                    return new Xorshiro256StarStar(
+                        CreateLongStrongSeed(),
+                        CreateLongStrongSeed());
+                case 3:
+                    return new Xorshiro512StarStar(
+                        CreateLongStrongSeed(),
+                        CreateLongStrongSeed());
+                default:
+                    return new SystemRandomWrapper(0, 0);
+            }
         }
 
     }
