@@ -4,7 +4,7 @@
     {
         /*
             以下のURLの実装を元に実装
-             https://github.com/andanteyk/prng-shioi/blob/master/shioi128.c
+             https://github.com/andanteyk/prng-shioi/
              ライセンス：https://creativecommons.org/publicdomain/zero/1.0/
             
         */
