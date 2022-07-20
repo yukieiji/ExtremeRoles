@@ -38,8 +38,12 @@ namespace ExtremeRoles.Patches.Option
             allOptionStr.Add(
                 CustomOption.OptionToString(allOption[(int)OptionHolder.CommonOptionKey.PresetSelection]));
 
-            allOptionStr.Add(
+            StringBuilder rngOptBuilder = new StringBuilder();
+            rngOptBuilder.AppendLine(
                 CustomOption.OptionToString(allOption[(int)OptionHolder.CommonOptionKey.UseStrongRandomGen]));
+            rngOptBuilder.AppendLine(
+                CustomOption.OptionToString(allOption[(int)OptionHolder.CommonOptionKey.UsePrngAlgorithm]));
+            allOptionStr.Add(rngOptBuilder.ToString().Trim('\r', '\n'));
 
             allOptionStr.Add(createRoleSpawnNumOptions());
 
@@ -51,6 +55,7 @@ namespace ExtremeRoles.Patches.Option
                 {
                     case OptionHolder.CommonOptionKey.PresetSelection:
                     case OptionHolder.CommonOptionKey.UseStrongRandomGen:
+                    case OptionHolder.CommonOptionKey.UsePrngAlgorithm:
                     case OptionHolder.CommonOptionKey.MinCrewmateRoles:
                     case OptionHolder.CommonOptionKey.MaxCrewmateRoles:
                     case OptionHolder.CommonOptionKey.MinNeutralRoles:
