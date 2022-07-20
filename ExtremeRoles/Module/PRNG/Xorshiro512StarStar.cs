@@ -18,7 +18,7 @@
         {
             ulong s0 = _s0, s1 = _s1, s2 = _s2, s3 = _s3, s4 = _s4, s5 = _s5, s6 = _s6, s7 = _s7;
 
-            ulong result = leftOps(s1 * 5, 7) * 9;
+            ulong result = LeftOps(s1 * 5, 7) * 9;
             ulong t = s1 << 11;
 
             s2 ^= s0;
@@ -31,7 +31,7 @@
             s6 ^= s7;
             s6 ^= t;
 
-            s7 = leftOps(s7, 21);
+            s7 = LeftOps(s7, 21);
 
             _s0 = s0;
             _s1 = s1;

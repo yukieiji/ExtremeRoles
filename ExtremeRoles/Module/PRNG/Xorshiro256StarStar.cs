@@ -18,7 +18,7 @@
         {
             ulong s0 = _s0, s1 = _s1, s2 = _s2, s3 = _s3;
 
-            ulong result = leftOps(s1 * 5, 7) * 9;
+            ulong result = LeftOps(s1 * 5, 7) * 9;
             ulong t = s1 << 17;
 
             s2 ^= s0;
@@ -27,7 +27,7 @@
             s0 ^= s3;
 
             s2 ^= t;
-            s3 = leftOps(s3, 45);
+            s3 = LeftOps(s3, 45);
 
             _s0 = s0;
             _s1 = s1;
@@ -48,8 +48,5 @@
             } 
             while ((_s2 | _s3) == 0); // at least one value must be non-zero
         }
-        // BitOperations.Left : https://github.com/dotnet/runtime/blob/main/src/libraries/System.Private.CoreLib/src/System/Numerics/BitOperations.cs
-        private ulong leftOps(ulong value, int offset)
-            => (value << offset) | (value >> (64 - offset));
     }
 }
