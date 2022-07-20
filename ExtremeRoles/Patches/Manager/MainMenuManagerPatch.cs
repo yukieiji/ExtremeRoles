@@ -43,7 +43,8 @@ namespace ExtremeRoles.Patches.Manager
 
             PassiveButton passiveUpdateButton = updateButton.GetComponent<PassiveButton>();
             passiveUpdateButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
-            passiveUpdateButton.OnClick.AddListener((UnityEngine.Events.UnityAction)onClick);
+            passiveUpdateButton.OnClick.AddListener(
+                (UnityEngine.Events.UnityAction)(() => Updater.ExecuteCheckUpdate()));
 
             TMP_Text textUpdate = updateButton.transform.GetChild(0).GetComponent<TMP_Text>();
             __instance.StartCoroutine(Effects.Lerp(0.1f, new Action<float>((p) => {
@@ -79,11 +80,6 @@ namespace ExtremeRoles.Patches.Manager
                 Updater.InfoPopup = UnityEngine.Object.Instantiate<GenericPopup>(man.TwitchPopup);
                 Updater.InfoPopup.TextAreaTMP.fontSize *= 0.7f;
                 Updater.InfoPopup.TextAreaTMP.enableAutoSizing = false;
-            }
-
-            void onClick()
-            {
-                Updater.ExecuteCheckUpdate();
             }
         }
 
