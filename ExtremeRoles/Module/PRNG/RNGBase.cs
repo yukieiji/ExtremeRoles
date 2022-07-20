@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ExtremeRoles.Module.RNG
+namespace ExtremeRoles.Module.PRNG
 {
     public abstract class RNGBase
     {

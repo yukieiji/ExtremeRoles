@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ExtremeRoles.Module.RNG
+namespace ExtremeRoles.Module.PRNG
 {
     public sealed class SystemRandomWrapper : RNG32Base
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 
-using ExtremeRoles.Module.RNG;
+using ExtremeRoles.Module.PRNG;
 
 namespace ExtremeRoles
 {

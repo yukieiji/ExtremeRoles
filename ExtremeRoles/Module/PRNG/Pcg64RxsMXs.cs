@@ -1,7 +1,10 @@
-﻿namespace ExtremeRoles.Module.RNG
+﻿namespace ExtremeRoles.Module.PRNG
 {
-    public sealed class Pcg32XshRr : RNG32Base
+    public sealed class Pcg64RxsMXs : RNG64Base
     {
+        // 以下のURLを元に実装
+        // https://github.com/Shiroechi/Litdex.Security.RNG/blob/main/Source/Security/RNG/PRNG/PcgRxsMXs64.cs
+
         private ulong state;
         private ulong increment = 1442695040888963407ul;
 
@@ -9,18 +12,16 @@
         private const ulong ShiftedIncrement = 721347520444481703ul;
         private const ulong Multiplier = 6364136223846793005ul;
 
-        public Pcg32XshRr(
+        public Pcg64RxsMXs(
             ulong seed, ulong state = ShiftedIncrement) : base(seed, state)
         { }
 
-        public override uint NextUInt()
+        public override ulong NextUInt64()
         {
-            ulong oldState = this.state;
-            this.state = unchecked(oldState * Multiplier + this.increment);
-            uint xorShifted = (uint)(((oldState >> 18) ^ oldState) >> 27);
-            int rot = (int)(oldState >> 59);
-            uint result = (xorShifted >> rot) | (xorShifted << ((-rot) & 31));
-            return result;
+            ulong oldseed = this.state;
+            this.state = (oldseed * Multiplier) + (increment | 1);
+            ulong word = ((oldseed >> ((int)(oldseed >> 59) + 5)) ^ oldseed) * 12605985483714917081;
+            return (word >> 43) ^ word;
         }
 
         protected override void Initialize(ulong seed, ulong initStete)

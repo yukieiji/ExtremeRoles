@@ -1,4 +1,4 @@
-﻿namespace ExtremeRoles.Module.RNG
+﻿namespace ExtremeRoles.Module.PRNG
 {
     public sealed class Xorshiro256StarStar : RNG64Base
     {
