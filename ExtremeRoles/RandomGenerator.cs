@@ -32,15 +32,16 @@ namespace ExtremeRoles
                         prevSelection = selection;
                     }
                 }
-                Instance.Next();
             }
             else
             {
                 createGlobalRandomGenerator(useStrongGen);
             }
 
-            Helper.Logging.Debug($"UsePRNG:{Instance}");
+            int sample = Instance.Next();
 
+            Helper.Logging.Debug($"UsePRNG:{Instance}");
+            Helper.Logging.Debug($"Sample OutPut:{sample}");
         }
 
         private static void createGlobalRandomGenerator(bool isStrong)
