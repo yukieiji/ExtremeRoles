@@ -110,7 +110,7 @@ namespace ExtremeRoles.Patches.Option
                     stringOption.Value = stringOption.oldValue = option.CurSelection;
                     stringOption.ValueText.text = option.GetString();
 
-                    option.Body = stringOption;
+                    option.SetOptionBehaviour(stringOption);
                 }
                 option.Body.gameObject.SetActive(true);
 

@@ -27,7 +27,6 @@ namespace ExtremeRoles.Module
     public interface IOption
     {
         public int CurSelection { get; }
-        public string CleanedName { get; }
         public int DefaultSelection { get; }
         public bool Enabled { get; }
         public int Id { get; }
@@ -38,9 +37,10 @@ namespace ExtremeRoles.Module
         public IOption ForceEnableCheckOption { get; }
         public List<IOption> Children { get; }
 
-        public OptionBehaviour Body { set; get; }
+        public OptionBehaviour Body { get; }
 
         public bool IsActive();
+        public void SetOptionBehaviour(OptionBehaviour newBehaviour);
         public string GetString();
         public string GetName();
         public void UpdateSelection(int newSelection);
@@ -74,25 +74,12 @@ namespace ExtremeRoles.Module
         public OptionBehaviour Body
         {
             get => this.behaviour;
-            set
-            {
-                this.behaviour = value;
-            }
         }
         public virtual bool Enabled
         {
             get
             {
                 return this.CurSelection != this.DefaultSelection;
-            }
-        }
-        public string CleanedName
-        {
-            get
-            {
-                string nameClean = Regex.Replace(this.name, "<.*?>", "");
-                nameClean = Regex.Replace(nameClean, "^-\\s*", "");
-                return nameClean.Trim();
             }
         }
         
@@ -275,6 +262,10 @@ namespace ExtremeRoles.Module
                 stringOption.ValueText.text = this.GetString();
             }
         }
+        public void SetOptionBehaviour(OptionBehaviour newBehaviour)
+        {
+            this.behaviour = newBehaviour;
+        }
 
         public void SetOptionUnit(OptionUnit unit)
         {
@@ -285,8 +276,15 @@ namespace ExtremeRoles.Module
         {
             this.entry = ExtremeRolesPlugin.Instance.Config.Bind(
                 OptionHolder.ConfigPreset,
-                this.CleanedName,
+                this.cleanName(),
                 this.defaultSelection);
+        }
+
+        private string cleanName()
+        {
+            string nameClean = Regex.Replace(this.name, "<.*?>", "");
+            nameClean = Regex.Replace(nameClean, "^-\\s*", "");
+            return nameClean.Trim();
         }
 
         public abstract dynamic GetValue();
