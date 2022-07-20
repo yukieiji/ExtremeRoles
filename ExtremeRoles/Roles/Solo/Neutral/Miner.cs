@@ -96,8 +96,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public void Update(PlayerControl rolePlayer)
         {
             if (rolePlayer.Data.IsDead || rolePlayer.Data.Disconnected) { return; }
-            if (this.mines.Count == 0) { return; }
-
+            
             if (CachedShipStatus.Instance == null ||
                 GameData.Instance == null) { return; }
             if (!CachedShipStatus.Instance.enabled ||
@@ -113,6 +112,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 this.timer -= Time.fixedDeltaTime;
                 return;
             }
+            
+            if (this.mines.Count == 0) { return; }
 
             HashSet<int> activateMine = new HashSet<int>();
             HashSet<byte> killedPlayer = new HashSet<byte>();
