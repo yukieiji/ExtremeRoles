@@ -65,7 +65,7 @@ namespace ExtremeRoles
             return ((int)DateTime.Now.Ticks & 0x0000FFFF) + UnityEngine.SystemInfo.processorFrequency;
         }
 
-        private static int createStrongRandomSeed()
+        public static int CreateStrongRandomSeed()
         {
             var bs = new byte[4];
             //Int32と同じサイズのバイト配列にランダムな値を設定する
