@@ -8,8 +8,8 @@ namespace ExtremeRoles
     public static class RandomGenerator
     {
         public static RNGBase Instance;
-        public static bool prevValue = false;
-        public static int prevSelection = 0;
+        private static bool prevValue = false;
+        private static int prevSelection = 0;
 
         public static void Initialize()
         {
