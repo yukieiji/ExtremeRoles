@@ -133,6 +133,22 @@ namespace ExtremeRoles
                     return new Xorshiro512StarStar(
                         CreateLongStrongSeed(),
                         CreateLongStrongSeed());
+                case 4:
+                    return new RomuTrio(
+                        CreateLongStrongSeed(),
+                        CreateLongStrongSeed());
+                case 5:
+                    return new RomuQuad(
+                        CreateLongStrongSeed(),
+                        CreateLongStrongSeed());
+                case 6:
+                    return new Seiran128(
+                        CreateLongStrongSeed(),
+                        CreateLongStrongSeed());
+                case 7:
+                    return new Shioi128(
+                        CreateLongStrongSeed(),
+                        CreateLongStrongSeed());
                 default:
                     return new SystemRandomWrapper(0, 0);
             }

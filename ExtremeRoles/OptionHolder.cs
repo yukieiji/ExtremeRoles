@@ -31,9 +31,13 @@ namespace ExtremeRoles
         private static string[] optionPreset = new string[] {
             "preset1", "preset2", "preset3", "preset4", "preset5",
             "preset6", "preset7", "preset8", "preset9", "preset10" };
-        private static string[] prngAlgorithm = new string[] {
+        private static string[] prngAlgorithm = new string[]
+        {
             "Pcg32XshRr", "Pcg64RxsMXs",
-            "Xorshiro256StarStar", "Xorshiro512StarStar"};
+            "Xorshiro256StarStar", "Xorshiro512StarStar",
+            "RomuTrio", "RomuQuad",
+            "Seiran128", "Shioi128"
+        };
 
         private static IRegionInfo[] defaultRegion;
 
