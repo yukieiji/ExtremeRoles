@@ -39,7 +39,7 @@ namespace ExtremeRoles
             }
             else
             {
-                Instance = new PermutedCongruentialGenerator(guidBasedSeed());
+                Instance = new Pcg64XshRr(guidBasedSeed());
                 UnityEngine.Random.InitState(createNormalRandomSeed());
             }
             prevValue = isStrong;

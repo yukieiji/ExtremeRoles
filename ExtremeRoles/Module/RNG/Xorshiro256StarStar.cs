@@ -11,7 +11,7 @@
         private ulong _s0, _s1, _s2, _s3;
 
         public Xorshiro256StarStar(
-            ulong seed, ulong state = 0) : base(seed, state)
+            ulong seed, ulong state) : base(seed, state)
         { }
 
         public override ulong NextUInt64()
