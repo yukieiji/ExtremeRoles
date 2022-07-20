@@ -59,7 +59,7 @@ namespace ExtremeRoles.Resources
         public const string JesterOutburst = "ExtremeRoles.Resources.Outburst.png";
         public const string EaterDeadBodyEat = "ExtremeRoles.Resources.DeadBodyEat.png";
         public const string EaterEatKill = "ExtremeRoles.Resources.EatKil.png";
-        public const string MinerSetMine = "ExtremeRoles.Resources.Mine.png";
+        public const string MinerSetMine = "ExtremeRoles.Resources.SetMine.png";
         public const string TotocalcioBetPlayer = "ExtremeRoles.Resources.BedPlayer.png";
         public const string QueenCharm = "ExtremeRoles.Resources.Charm.png";
         public const string ServantSucide = "ExtremeRoles.Resources.Suicide.png";
