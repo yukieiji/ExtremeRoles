@@ -10,7 +10,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public class AssaultMaster : SingleRoleBase, IRoleAbility, IRoleReportHock, IRoleUpdate
+    public sealed class AssaultMaster : SingleRoleBase, IRoleAbility, IRoleReportHock, IRoleUpdate
     {
         public enum AssaultMasterOption
         {
@@ -203,7 +203,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             base.GetFullDescription(), this.stock,
             this.stockMax, this.curReloadCoolTime);
 
-        protected override void CreateSpecificOption(CustomOptionBase parentOps)
+        protected override void CreateSpecificOption(IOption parentOps)
         {
             this.CreateCommonAbilityOption(parentOps);
 

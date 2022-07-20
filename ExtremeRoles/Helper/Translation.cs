@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 
 namespace ExtremeRoles.Helper
 {
-    public class Translation
+    public static class Translation
     {
         private static int defaultLanguage = (int)SupportedLangs.English;
         private static Dictionary<string, Dictionary<int, string>> stringData = new Dictionary<string, Dictionary<int, string>>();

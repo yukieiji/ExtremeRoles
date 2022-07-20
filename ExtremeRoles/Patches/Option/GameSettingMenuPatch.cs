@@ -8,7 +8,7 @@ using HarmonyLib;
 namespace ExtremeRoles.Patches.Option
 {
     [HarmonyPatch(typeof(GameSettingMenu), nameof(GameSettingMenu.Start))]
-    class GameSettingMenuStartPatch
+    public static class GameSettingMenuStartPatch
     {
         public static void Prefix(GameSettingMenu __instance)
         {

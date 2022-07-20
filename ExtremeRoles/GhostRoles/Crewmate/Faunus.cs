@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace ExtremeRoles.GhostRoles.Crewmate
 {
-    public class Faunus : GhostRoleBase
+    public sealed class Faunus : GhostRoleBase
     {
         public enum SaboType
         {
@@ -70,7 +70,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             CreateCountButtonOption(
                 parentOps, 1, 5, 3.0f);

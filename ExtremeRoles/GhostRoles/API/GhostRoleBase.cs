@@ -5,7 +5,6 @@ using System.Runtime.CompilerServices;
 using Hazel;
 using UnityEngine;
 
-using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.GhostRoles;
@@ -20,9 +19,8 @@ namespace ExtremeRoles.GhostRoles.API
         IsReportAbility = 40 
     }
 
-    public abstract class GhostRoleBase : IGhostRole
+    public abstract class GhostRoleBase
     {
-
         private const float defaultCoolTime = 60.0f;
         private const float minCoolTime = 5.0f;
         private const float maxCoolTime = 120.0f;
@@ -97,7 +95,7 @@ namespace ExtremeRoles.GhostRoles.API
         }
 
         public void CreateRoleSpecificOption(
-            CustomOptionBase parentOps, int optionIdOffset)
+            IOption parentOps, int optionIdOffset)
         {
             this.OptionIdOffset = optionIdOffset;
             CreateSpecificOption(parentOps);
@@ -164,7 +162,7 @@ namespace ExtremeRoles.GhostRoles.API
         }
 
         protected void CreateButtonOption(
-            CustomOptionBase parentOps,
+            IOption parentOps,
             float defaultActiveTime = float.MaxValue)
         {
 
@@ -191,7 +189,7 @@ namespace ExtremeRoles.GhostRoles.API
         }
 
         protected void CreateCountButtonOption(
-            CustomOptionBase parentOps,
+            IOption parentOps,
             int defaultAbilityCount,
             int maxAbilityCount,
             float defaultActiveTime = float.MaxValue)
@@ -243,16 +241,16 @@ namespace ExtremeRoles.GhostRoles.API
             PlayerControl.LocalPlayer.CanMove;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected CustomOptionBase CreateFloatOption<T>(
+        protected FloatCustomOption CreateFloatOption<T>(
             T option,
             float defaultValue,
             float min, float max, float step,
-            CustomOptionBase parent = null,
+            IOption parent = null,
             bool isHeader = false,
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            CustomOptionBase enableCheckOption = null,
+            IOption enableCheckOption = null,
             bool colored = false) where T : struct, IConvertible
         {
             EnumCheck(option);
@@ -267,16 +265,16 @@ namespace ExtremeRoles.GhostRoles.API
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected CustomOptionBase CreateFloatDynamicOption<T>(
+        protected FloatDynamicCustomOption CreateFloatDynamicOption<T>(
             T option,
             float defaultValue,
             float min, float step,
-            CustomOptionBase parent = null,
+            IOption parent = null,
             bool isHeader = false,
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            CustomOptionBase enableCheckOption = null,
+            IOption enableCheckOption = null,
             bool colored = false) where T : struct, IConvertible
         {
             EnumCheck(option);
@@ -291,16 +289,16 @@ namespace ExtremeRoles.GhostRoles.API
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected CustomOptionBase CreateIntOption<T>(
+        protected IntCustomOption CreateIntOption<T>(
             T option,
             int defaultValue,
             int min, int max, int step,
-            CustomOptionBase parent = null,
+            IOption parent = null,
             bool isHeader = false,
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            CustomOptionBase enableCheckOption = null,
+            IOption enableCheckOption = null,
             bool colored = false) where T : struct, IConvertible
         {
             EnumCheck(option);
@@ -315,16 +313,16 @@ namespace ExtremeRoles.GhostRoles.API
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected CustomOptionBase CreateIntDynamicOption<T>(
+        protected IntDynamicCustomOption CreateIntDynamicOption<T>(
             T option,
             int defaultValue,
             int min, int step,
-            CustomOptionBase parent = null,
+            IOption parent = null,
             bool isHeader = false,
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            CustomOptionBase enableCheckOption = null,
+            IOption enableCheckOption = null,
             bool colored = false) where T : struct, IConvertible
         {
             EnumCheck(option);
@@ -339,15 +337,15 @@ namespace ExtremeRoles.GhostRoles.API
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected CustomOptionBase CreateBoolOption<T>(
+        protected BoolCustomOption CreateBoolOption<T>(
             T option,
             bool defaultValue,
-            CustomOptionBase parent = null,
+            IOption parent = null,
             bool isHeader = false,
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            CustomOptionBase enableCheckOption = null,
+            IOption enableCheckOption = null,
             bool colored = false) where T : struct, IConvertible
         {
             EnumCheck(option);
@@ -361,15 +359,15 @@ namespace ExtremeRoles.GhostRoles.API
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected CustomOptionBase CreateSelectionOption<T>(
+        protected SelectionCustomOption CreateSelectionOption<T>(
             T option,
             string[] selections,
-            CustomOptionBase parent = null,
+            IOption parent = null,
             bool isHeader = false,
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            CustomOptionBase enableCheckOption = null,
+            IOption enableCheckOption = null,
             bool colored = false) where T : struct, IConvertible
         {
             EnumCheck(option);
@@ -400,7 +398,7 @@ namespace ExtremeRoles.GhostRoles.API
             }
         }
 
-        private CustomOptionBase createSpawnOption()
+        private IOption createSpawnOption()
         {
             var roleSetOption = CreateSelectionOption(
                 RoleCommonOption.SpawnRate,
@@ -426,7 +424,7 @@ namespace ExtremeRoles.GhostRoles.API
 
         public abstract void ReseOnMeetingStart();
 
-        protected abstract void CreateSpecificOption(CustomOptionBase parentOps);
+        protected abstract void CreateSpecificOption(IOption parentOps);
 
         protected abstract void UseAbility(MessageWriter writer);
 

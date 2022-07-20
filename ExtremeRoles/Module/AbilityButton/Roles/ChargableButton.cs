@@ -111,10 +111,10 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
 
         private void abilityOff()
         {
-            this.IsAbilityOn = false;
             this.currentCharge = this.Timer;
             this.Button.cooldownTimerText.color = Palette.EnabledColor;
             this.CleanUp();
+            this.IsAbilityOn = false;
             if (this.currentCharge > 0.0f)
             {
                 this.Timer = 0.0f;

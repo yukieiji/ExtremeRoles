@@ -6,6 +6,7 @@ using UnityEngine;
 
 using BepInEx.IL2CPP.Utils.Collections;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
@@ -264,9 +265,6 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
     public static class IntroCutsceneOnDestroyPatch
     {
-        private const string airShipArchiveAdmin = "Airship(Clone)/Records/records_admin_map";
-        private const string airShipCockpitAdmin = "Airship(Clone)/Cockpit/panel_cockpit_map";
-
         public static void Prefix(IntroCutscene __instance)
         {
             Module.InfoOverlay.Button.SetInfoButtonToInGamePositon();
@@ -294,30 +292,116 @@ namespace ExtremeRoles.Patches
         private static void disableMapObject()
         {
             HashSet<string> disableObjectName = new HashSet<string>();
-            switch (PlayerControl.GameOptions.MapId)
+
+            bool isRemoveAdmin = OptionHolder.Ship.IsRemoveAdmin;
+            bool isRemoveSecurity = OptionHolder.Ship.IsRemoveSecurity;
+            bool isRemoveVital = OptionHolder.Ship.IsRemoveVital;
+
+            if (ExtremeRolesPlugin.Compat.IsModMap)
             {
-                case 4:
-                    if (!ExtremeRolesPlugin.Compat.IsModMap)
-                    {
-                        if (OptionHolder.Ship.IsRemoveAirShipArchiveAdmin)
+                var modMap = ExtremeRolesPlugin.Compat.ModMap;
+
+                if (isRemoveAdmin)
+                {
+                    disableObjectName.UnionWith(
+                        modMap.GetSystemObjectName(
+                            Compat.Interface.SystemConsoleType.Admin));
+                }
+                if (isRemoveSecurity)
+                {
+                    disableObjectName.UnionWith(
+                        modMap.GetSystemObjectName(
+                            Compat.Interface.SystemConsoleType.SecurityCamera));
+                }
+                if (isRemoveVital)
+                {
+                    disableObjectName.UnionWith(
+                        modMap.GetSystemObjectName(
+                            Compat.Interface.SystemConsoleType.Vital));
+                }
+            }
+            else
+            {
+                switch (PlayerControl.GameOptions.MapId)
+                {
+                    case 0:
+                        if (isRemoveAdmin)
                         {
-                            disableObjectName.Add(airShipArchiveAdmin);
+                            disableObjectName.Add(
+                                GameSystem.SkeldAdmin);
                         }
-                        if (OptionHolder.Ship.IsRemoveAirShipCockpitAdmin)
+                        if (isRemoveSecurity)
                         {
-                            disableObjectName.Add(airShipCockpitAdmin);
+                            disableObjectName.Add(
+                                GameSystem.SkeldSecurity);
                         }
-                    }
-                    break;
-                default:
-                    break;
+                        break;
+                    case 1:
+                        if (isRemoveAdmin)
+                        {
+                            disableObjectName.Add(
+                                GameSystem.MiraHqAdmin);
+                        }
+                        if (isRemoveSecurity)
+                        {
+                            disableObjectName.Add(
+                                GameSystem.MiraHqSecurity);
+                        }
+                        break;
+                    case 2:
+                        if (isRemoveAdmin)
+                        {
+                            disableObjectName.Add(
+                                GameSystem.PolusAdmin1);
+                            disableObjectName.Add(
+                                GameSystem.PolusAdmin2);
+                        }
+                        if (isRemoveSecurity)
+                        {
+                            disableObjectName.Add(
+                                GameSystem.PolusSecurity);
+                        }
+                        if (isRemoveVital)
+                        {
+                            disableObjectName.Add(
+                                GameSystem.PolusVital);
+                        }
+                        break;
+                    case 4:
+                        if (isRemoveAdmin)
+                        {
+                            if (OptionHolder.Ship.IsRemoveAirShipArchiveAdmin)
+                            {
+                                disableObjectName.Add(
+                                    GameSystem.AirShipArchiveAdmin);
+                            }
+                            if (OptionHolder.Ship.IsRemoveAirShipCockpitAdmin)
+                            {
+                                disableObjectName.Add(
+                                    GameSystem.AirShipCockpitAdmin);
+                            }
+                        }
+                        if (isRemoveSecurity)
+                        {
+                            disableObjectName.Add(
+                                GameSystem.AirShipSecurity);
+                        }
+                        if (isRemoveVital)
+                        {
+                            disableObjectName.Add(
+                                GameSystem.AirShipVital);
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
 
             foreach (string objectName in disableObjectName)
             {
-                GameObject.Find(objectName)?.SetActive(false);
+                GameSystem.DisableMapModule(objectName);
             }
-
         }
+        
     }
 }

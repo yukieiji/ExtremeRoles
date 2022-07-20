@@ -173,4 +173,21 @@ namespace ExtremeRoles.Compat.Patches
         }
 
     }
+
+    public static class SubmarineSurvillanceMinigamePatch
+    {
+        public static void Postfix(Minigame __instance)
+        {
+            ExtremeRoles.Patches.MiniGame.SecurityHelper.PostUpdate(__instance);
+
+            var timer = ExtremeRoles.Patches.MiniGame.SecurityHelper.GetTimerText();
+            if (timer != null)
+            {
+                timer.gameObject.layer = 5;
+                timer.transform.localPosition = new Vector3(15.3f, 9.3f, -900.0f);
+                timer.transform.localScale = new Vector3(3.0f, 3.0f, 3.0f);
+            }
+        }
+    }
+
 }

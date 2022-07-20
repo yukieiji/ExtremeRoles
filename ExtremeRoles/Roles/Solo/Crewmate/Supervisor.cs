@@ -10,7 +10,7 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class Supervisor : SingleRoleBase, IRoleAbility, IRoleUpdate
+    public sealed class Supervisor : SingleRoleBase, IRoleAbility, IRoleUpdate
     {
         public enum SuperviosrOption
         {
@@ -127,7 +127,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             this.CreateCommonAbilityOption(
                 parentOps, 3.0f);

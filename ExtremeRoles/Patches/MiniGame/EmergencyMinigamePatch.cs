@@ -6,7 +6,7 @@ using ExtremeRoles.Performance;
 namespace ExtremeRoles.Patches.MiniGame
 {
     [HarmonyPatch(typeof(EmergencyMinigame), nameof(EmergencyMinigame.Update))]
-    public class EmergencyMinigameUpdatePatch
+    public static class EmergencyMinigameUpdatePatch
     {
         public static void Postfix(EmergencyMinigame __instance)
         {

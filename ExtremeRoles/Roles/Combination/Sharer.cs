@@ -11,7 +11,7 @@ using ExtremeRoles.Performance;
 namespace ExtremeRoles.Roles.Combination
 {
 
-    public class SharerManager : FlexibleCombinationRoleManagerBase
+    public sealed class SharerManager : FlexibleCombinationRoleManagerBase
     {
         public SharerManager() : base(
             new Sharer(), 2, false)
@@ -19,7 +19,7 @@ namespace ExtremeRoles.Roles.Combination
 
     }
 
-    public class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHock, IRoleResetMeeting, IRoleUpdate
+    public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHock, IRoleResetMeeting, IRoleUpdate
     {
         public enum SharerOption
         {
@@ -243,7 +243,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             CreateBoolOption(
                 SharerOption.SharerTellKill,

@@ -15,7 +15,7 @@ namespace ExtremeRoles.Patches.Option
 {
 
     [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Start))]
-    class GameOptionsMenuStartPatch
+    public static class GameOptionsMenuStartPatch
     {
         public static void Postfix(GameOptionsMenu __instance)
         {
@@ -97,25 +97,22 @@ namespace ExtremeRoles.Patches.Option
 
             List<OptionBehaviour> erOptions = new List<OptionBehaviour>();
 
-            // ExtremeRolesPlugin.Instance.Log.LogInfo($"Option num: {OptionsHolder.AllOptions.Count}");
-
             var optionsList = OptionHolder.AllOption.Values.ToList();
 
-            for (int i = 0; i < optionsList.Count(); ++i)
+            for (int i = 0; i < optionsList.Count; ++i)
             {
-                CustomOptionBase option = optionsList[i];
-                // ExtremeRolesPlugin.Instance.Log.LogInfo($"Option: {option.Behaviour == null}");
-                if (option.Behaviour == null)
+                IOption option = optionsList[i];
+                if (option.Body == null)
                 {
                     StringOption stringOption = UnityEngine.Object.Instantiate(template, erMenu.transform);
                     stringOption.OnValueChanged = new Action<OptionBehaviour>((o) => { });
-                    stringOption.TitleText.text = option.Name;
+                    stringOption.TitleText.text = option.GetName();
                     stringOption.Value = stringOption.oldValue = option.CurSelection;
-                    stringOption.ValueText.text = option.Selections[option.CurSelection].ToString();
+                    stringOption.ValueText.text = option.GetString();
 
-                    option.Behaviour = stringOption;
+                    option.SetOptionBehaviour(stringOption);
                 }
-                option.Behaviour.gameObject.SetActive(true);
+                option.Body.gameObject.SetActive(true);
 
             }
 
@@ -137,7 +134,7 @@ namespace ExtremeRoles.Patches.Option
     }
 
     [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Update))]
-    class GameOptionsMenuUpdatePatch
+    public static class GameOptionsMenuUpdatePatch
     {
         private static float timer = 1f;
         public static void Postfix(GameOptionsMenu __instance)
@@ -152,9 +149,9 @@ namespace ExtremeRoles.Patches.Option
 
             float offset = 2.75f;
 
-            foreach (CustomOptionBase option in OptionHolder.AllOption.Values)
+            foreach (IOption option in OptionHolder.AllOption.Values)
             {
-                if (option?.Behaviour != null && option.Behaviour.gameObject != null)
+                if (option?.Body != null && option.Body.gameObject != null)
                 {
                     bool enabled = true;
                     var parent = option.Parent;
@@ -167,13 +164,13 @@ namespace ExtremeRoles.Patches.Option
                     enabled = option.IsActive();
 
 
-                    option.Behaviour.gameObject.SetActive(enabled);
+                    option.Body.gameObject.SetActive(enabled);
                     if (enabled)
                     {
                         offset -= option.IsHeader ? 0.75f : 0.5f;
-                        option.Behaviour.transform.localPosition = new Vector3(
-                            option.Behaviour.transform.localPosition.x, offset,
-                            option.Behaviour.transform.localPosition.z);
+                        option.Body.transform.localPosition = new Vector3(
+                            option.Body.transform.localPosition.x, offset,
+                            option.Body.transform.localPosition.z);
 
                         if (option.IsHeader)
                         {

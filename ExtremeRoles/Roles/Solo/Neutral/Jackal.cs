@@ -13,7 +13,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public class Jackal : SingleRoleBase, IRoleAbility, IRoleSpecialReset
+    public sealed class Jackal : SingleRoleBase, IRoleAbility, IRoleSpecialReset
     {
         public enum JackalOption
         {
@@ -94,7 +94,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
 
             public SidekickOptionHolder(
-                CustomOptionBase parentOps,
+                IOption parentOps,
                 int optionOffset)
             {
                 this.OptionIdOffset = optionOffset;
@@ -203,6 +203,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
                 this.HasOtherVison = allOption[
                     GetRoleOptionId(SidekickOption.HasOtherVison)].GetValue();
+                this.Vison = PlayerControl.GameOptions.CrewLightMod;
+                this.ApplyEnvironmentVisionEffect = false;
                 if (this.HasOtherVison)
                 {
                     this.Vison = allOption[
@@ -421,22 +423,20 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public override bool IsSameTeam(SingleRoleBase targetRole)
         {
-            var multiAssignRole = targetRole as MultiAssignRoleBase;
-            
-            if (multiAssignRole != null)
+            if (this.isSameJackalTeam(targetRole))
             {
-                if(multiAssignRole.AnotherRole != null)
+                if (OptionHolder.Ship.IsSameNeutralSameWin)
                 {
-                    return this.IsSameTeam(multiAssignRole.AnotherRole);
+                    return true;
                 }
-            }
-            if (OptionHolder.Ship.IsSameNeutralSameWin)
-            {
-                return this.isSameJackalTeam(targetRole);
+                else
+                {
+                    return this.IsSameControlId(targetRole);
+                }
             }
             else
             {
-                return this.isSameJackalTeam(targetRole) && this.IsSameControlId(targetRole);
+                return base.IsSameTeam(targetRole);
             }
         }
 
@@ -525,7 +525,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             // JackalOption
             this.createJackalOption(parentOps);
@@ -570,7 +570,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.RoleAbilityInit();
         }
 
-        private void createJackalOption(CustomOptionBase parentOps)
+        private void createJackalOption(IOption parentOps)
         {
 
             this.CreateAbilityCountOption(
@@ -681,6 +681,25 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.sidekickJackalCanMakeSidekick = sidekickJackalCanMakeSidekick;
         }
 
+        public override bool IsSameTeam(SingleRoleBase targetRole)
+        {
+            if (this.isSameJackalTeam(targetRole))
+            {
+                if (OptionHolder.Ship.IsSameNeutralSameWin)
+                {
+                    return true;
+                }
+                else
+                {
+                    return this.IsSameControlId(targetRole);
+                }
+            }
+            else
+            {
+                return base.IsSameTeam(targetRole);
+            }
+        }
+
         public override Color GetTargetRoleSeeColor(
             SingleRoleBase targetRole,
             byte targetPlayerId)
@@ -698,7 +717,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             return string.Format(
                 base.GetFullDescription(),
                 Player.GetPlayerControlById(
-                    this.JackalPlayerId).Data.PlayerName);
+                    this.JackalPlayerId)?.Data.PlayerName);
         }
 
         public static void BecomeToJackal(byte callerId, byte targetId)
@@ -757,7 +776,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             throw new Exception("Don't call this class method!!");
         }
@@ -788,6 +807,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
                 BecomeToJackal(this.JackalPlayerId, rolePlayer.PlayerId);
             }
+        }
+
+        private bool isSameJackalTeam(SingleRoleBase targetRole)
+        {
+            return ((targetRole.Id == this.Id) || (targetRole.Id == ExtremeRoleId.Jackal));
         }
     }
 

@@ -5,7 +5,7 @@ using ExtremeRoles.Performance;
 namespace ExtremeRoles.Patches.MiniGame
 {
     [HarmonyPatch(typeof(PlanetSurveillanceMinigame), nameof(PlanetSurveillanceMinigame.NextCamera))]
-    public class PlanetSurveillanceMinigameNextCameraPatch
+    public static class PlanetSurveillanceMinigameNextCameraPatch
     {
         public static bool Prefix(
             PlanetSurveillanceMinigame __instance,
@@ -36,7 +36,7 @@ namespace ExtremeRoles.Patches.MiniGame
 
 
     [HarmonyPatch(typeof(PlanetSurveillanceMinigame), nameof(PlanetSurveillanceMinigame.Update))]
-    public class PlanetSurveillanceMinigameUpdatePatch
+    public static class PlanetSurveillanceMinigameUpdatePatch
     {
         public static bool Prefix(PlanetSurveillanceMinigame __instance)
         {
@@ -50,6 +50,11 @@ namespace ExtremeRoles.Patches.MiniGame
             __instance.SabText.gameObject.SetActive(true);
 
             return false;
+        }
+
+        public static void Postfix(SurveillanceMinigame __instance)
+        {
+            SecurityHelper.PostUpdate(__instance);
         }
     }
 }

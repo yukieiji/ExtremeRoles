@@ -10,7 +10,7 @@ using ExtremeRoles.Performance;
 namespace ExtremeRoles.Patches.Controller
 {
     [HarmonyPatch(typeof(ExileController), nameof(ExileController.Begin))]
-    class ExileControllerBeginePatch
+    public static class ExileControllerBeginePatch
     {
 
         private static TMPro.TextMeshPro breadText;
@@ -112,11 +112,11 @@ namespace ExtremeRoles.Patches.Controller
     }
 
     [HarmonyPatch]
-    class ExileControllerWrapUpPatch
+    public static class ExileControllerWrapUpPatch
     {
 
         [HarmonyPatch(typeof(ExileController), nameof(ExileController.WrapUp))]
-        class BaseExileControllerPatch
+        public static class BaseExileControllerPatch
         {
             public static bool Prefix(ExileController __instance)
             {

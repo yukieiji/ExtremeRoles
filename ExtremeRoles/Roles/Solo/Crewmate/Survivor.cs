@@ -10,7 +10,7 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class Survivor : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleWinPlayerModifier
+    public sealed class Survivor : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleWinPlayerModifier
     {
         public override bool IsAssignGhostRole
         {
@@ -194,7 +194,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             CreateIntOption(
                 SurvivorOption.AwakeTaskGage,

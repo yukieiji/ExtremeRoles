@@ -4,18 +4,20 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module.InfoOverlay
 {
-    public class VanillaOptionBuillder : IShowTextBuilder
+	public sealed class VanillaOptionBuillder : IShowTextBuilder
     {
 		private Il2CppSystem.Text.StringBuilder settings = new Il2CppSystem.Text.StringBuilder();
         public VanillaOptionBuillder() : base()
         { }
-        public Tuple<string, string> GetShowText()
+        public (string, string, string) GetShowText()
         {
 			if (settings.Length == 0) { setVanillaOptions(); }
-            return Tuple.Create(
-				string.Concat(
+            return 
+				(
 					$"<size=200%>{Helper.Translation.GetString("vanilaOptions")}</size>\n",
-					settings.ToString()), "");
+					settings.ToString(),
+					""
+				);
         }
         private void setVanillaOptions()
         {

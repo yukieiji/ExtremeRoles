@@ -3,7 +3,7 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public class SpecialImpostor : SingleRoleBase
+    public sealed class SpecialImpostor : SingleRoleBase
     {
         public SpecialImpostor(): base(
             ExtremeRoleId.SpecialImpostor,
@@ -13,7 +13,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             true, false, true, true)
         {}
 
-        protected override void CreateSpecificOption(CustomOptionBase parentOps)
+        protected override void CreateSpecificOption(IOption parentOps)
         {
             return;
         }

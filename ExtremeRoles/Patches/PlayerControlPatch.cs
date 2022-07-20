@@ -21,7 +21,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 namespace ExtremeRoles.Patches
 {
     [HarmonyPatch]
-    public class CacheLocalPlayerPatch
+    public static class CacheLocalPlayerPatch
     {
         [HarmonyTargetMethod]
         public static MethodBase TargetMethod()
@@ -75,7 +75,7 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Deserialize))]
-    public class PlayerControlDeserializePatch
+    public static class PlayerControlDeserializePatch
     {
         public static void Postfix(PlayerControl __instance)
         {
@@ -84,7 +84,7 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.OnDestroy))]
-    public class PlayerControlOnDestroyPatch
+    public static class PlayerControlOnDestroyPatch
     {
         public static void Postfix(PlayerControl __instance)
         {
@@ -95,7 +95,7 @@ namespace ExtremeRoles.Patches
 
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.StartMeeting))]
-    public class PlayerControlCoStartMeetingPatch
+    public static class PlayerControlCoStartMeetingPatch
     {
         public static void Prefix([HarmonyArgument(0)] GameData.PlayerInfo target)
         {
@@ -133,7 +133,7 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
-    public class PlayerControlFixedUpdatePatch
+    public static class PlayerControlFixedUpdatePatch
     {
         public static void Postfix(PlayerControl __instance)
         {
@@ -739,9 +739,9 @@ namespace ExtremeRoles.Patches
 
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
-    public class PlayerControlHandleRpcPatch
+    public static class PlayerControlHandleRpcPatch
     {
-        static void Postfix(
+        public static void Postfix(
             PlayerControl __instance,
             [HarmonyArgument(0)] byte callId,
             [HarmonyArgument(1)] MessageReader reader)
@@ -958,6 +958,9 @@ namespace ExtremeRoles.Patches
                     byte survivorPlayerId = reader.ReadByte();
                     RPCOperator.SurvivorDeadWin(survivorPlayerId);
                     break;
+                case RPCOperator.Command.CaptainAbility:
+                    RPCOperator.CaptainTargetVote(ref reader);
+                    break;
                 case RPCOperator.Command.AssasinVoteFor:
                     byte voteTargetId = reader.ReadByte();
                     RPCOperator.AssasinVoteFor(voteTargetId);
@@ -1014,6 +1017,14 @@ namespace ExtremeRoles.Patches
                     RPCOperator.SlaveDriverSetNewTask(
                         slaveDriverId, replaceTaskIndex, setTaskId);
                     break;
+                case RPCOperator.Command.LastWolfSwitchLight:
+                    byte swichStatus = reader.ReadByte();
+                    RPCOperator.LastWolfSwitchLight(swichStatus);
+                    break;
+                case RPCOperator.Command.CommanderAttackCommand:
+                    byte commanderPlayerId = reader.ReadByte();
+                    RPCOperator.CommanderAttackCommand(commanderPlayerId);
+                    break;
                 case RPCOperator.Command.AliceShipBroken:
                     byte alicePlayerId = reader.ReadByte();
                     byte newTaskSetPlayerId = reader.ReadByte();
@@ -1047,6 +1058,12 @@ namespace ExtremeRoles.Patches
                     RPCOperator.YandereSetOneSidedLover(
                         yanderePlayerId, loverPlayerId);
                     break;
+                case RPCOperator.Command.TotocalcioSetBetPlayer:
+                    byte totocalcioPlayerId = reader.ReadByte();
+                    byte betPlayerId = reader.ReadByte();
+                    RPCOperator.TotocalcioSetBetPlayer(
+                        totocalcioPlayerId, betPlayerId);
+                    break;
                 case RPCOperator.Command.SetGhostRole:
                     RPCOperator.SetGhostRole(
                         ref reader);
@@ -1064,7 +1081,7 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
-    public class PlayerControlMurderPlayerPatch
+    public static class PlayerControlMurderPlayerPatch
     {
         public static bool Prefix(
             PlayerControl __instance,
@@ -1322,7 +1339,7 @@ namespace ExtremeRoles.Patches
 
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetKillTimer))]
-    public class PlayerControlSetCoolDownPatch
+    public static class PlayerControlSetCoolDownPatch
     {
         public static bool Prefix(
             PlayerControl __instance, [HarmonyArgument(0)] float time)
@@ -1354,7 +1371,7 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Shapeshift))]
-    public class PlayerControlShapeshiftPatch
+    public static class PlayerControlShapeshiftPatch
     {
         public static bool Prefix(
             PlayerControl __instance,
@@ -1449,7 +1466,7 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.RpcSyncSettings))]
-    public class PlayerControlRpcSyncSettingsPatch
+    public static class PlayerControlRpcSyncSettingsPatch
     {
         public static void Postfix()
         {

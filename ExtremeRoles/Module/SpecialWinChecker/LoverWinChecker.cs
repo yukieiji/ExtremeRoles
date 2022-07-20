@@ -8,7 +8,7 @@ using ExtremeRoles.Roles.Solo.Neutral;
 
 namespace ExtremeRoles.Module.SpecialWinChecker
 {
-    internal class LoverWinChecker : IWinChecker
+    internal sealed class LoverWinChecker : IWinChecker
     {
         public RoleGameOverReason Reason => RoleGameOverReason.ShipFallInLove;
 

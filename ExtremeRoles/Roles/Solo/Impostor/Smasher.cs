@@ -10,7 +10,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public class Smasher : SingleRoleBase, IRoleAbility
+    public sealed class Smasher : SingleRoleBase, IRoleAbility
     {
         public enum SmasherOption
         {
@@ -140,7 +140,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             this.CreateAbilityCountOption(
                 parentOps, 1, 14);

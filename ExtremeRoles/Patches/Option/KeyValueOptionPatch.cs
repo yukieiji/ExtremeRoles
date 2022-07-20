@@ -5,7 +5,7 @@ using HarmonyLib;
 namespace ExtremeRoles.Patches
 {
     [HarmonyPatch(typeof(KeyValueOption), nameof(KeyValueOption.OnEnable))]
-    public class KeyValueOptionOnEnablePatch
+    public static class KeyValueOptionOnEnablePatch
     {
         public static void Postfix(KeyValueOption __instance)
         {

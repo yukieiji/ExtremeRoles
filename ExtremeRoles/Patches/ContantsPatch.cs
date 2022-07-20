@@ -3,7 +3,7 @@
 namespace ExtremeRoles.Patches
 {
     [HarmonyPatch(typeof(Constants), nameof(Constants.ShouldHorseAround))]
-    class ConstantsShouldHorseAroundPatch
+    public static class ConstantsShouldHorseAroundPatch
     {
         public static bool Prefix(ref bool __result)
         {

@@ -10,7 +10,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class Opener : SingleRoleBase, IRoleAbility, IRoleUpdate
+    public sealed class Opener : SingleRoleBase, IRoleAbility, IRoleUpdate
     {
         public enum OpenerOption
         {
@@ -125,7 +125,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             this.CreateAbilityCountOption(
                 parentOps, 2, 5);

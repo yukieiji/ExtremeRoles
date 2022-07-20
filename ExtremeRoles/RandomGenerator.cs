@@ -1,45 +1,64 @@
 ﻿using System;
 using System.Security.Cryptography;
 
+using ExtremeRoles.Module.PRNG;
+
 namespace ExtremeRoles
 {
     public static class RandomGenerator
     {
-        public static PermutedCongruentialGenerator Instance;
+        public static RNGBase Instance;
         public static bool prevValue = false;
+        public static int prevSelection = 0;
 
         public static void Initialize()
         {
             bool useStrongGen = OptionHolder.AllOption[
                 (int)OptionHolder.CommonOptionKey.UseStrongRandomGen].GetValue();
-            if (Instance == null)
-            {
-                createGlobalRandomGenerator(useStrongGen);
-            }
-            else
+            if (Instance != null)
             {
                 if (useStrongGen != prevValue)
                 {
                     createGlobalRandomGenerator(useStrongGen);
                 }
+                else
+                {
+                    int selection = OptionHolder.AllOption[
+                        (int)OptionHolder.CommonOptionKey.UsePrngAlgorithm].GetValue();
+                    if (prevSelection != selection)
+                    {
+                        Instance = getAditionalPrng(selection);
+                        UnityEngine.Random.InitState(CreateStrongRandomSeed());
+                        prevSelection = selection;
+                    }
+                }
                 Instance.Next();
             }
+            else
+            {
+                createGlobalRandomGenerator(useStrongGen);
+            }
+
+            Helper.Logging.Debug($"UsePRNG:{Instance}");
+
         }
 
         private static void createGlobalRandomGenerator(bool isStrong)
         {
+
             if (isStrong)
             {
-                Instance = new PermutedCongruentialGenerator(
-                    createLongStrongSeed(),
-                    createLongStrongSeed());
-                UnityEngine.Random.InitState(createStrongRandomSeed());
+                int selection = OptionHolder.AllOption[
+                    (int)OptionHolder.CommonOptionKey.UsePrngAlgorithm].GetValue();
+                Instance = getAditionalPrng(selection);
+                UnityEngine.Random.InitState(CreateStrongRandomSeed());
+                prevSelection = selection;
             }
             else
             {
-                Instance = new PermutedCongruentialGenerator(
-                    PermutedCongruentialGenerator.GuidBasedSeed());
+                Instance = new SystemRandomWrapper(0, 0);
                 UnityEngine.Random.InitState(createNormalRandomSeed());
+                prevSelection = -1;
             }
             prevValue = isStrong;
         }
@@ -51,7 +70,7 @@ namespace ExtremeRoles
 
             if (useStrongGen)
             {
-                return new Random(createStrongRandomSeed());
+                return new Random(CreateStrongRandomSeed());
             }
             else
             {
@@ -59,12 +78,7 @@ namespace ExtremeRoles
             }
         }
 
-        private static int createNormalRandomSeed()
-        {
-            return ((int)DateTime.Now.Ticks & 0x0000FFFF) + UnityEngine.SystemInfo.processorFrequency;
-        }
-
-        private static int createStrongRandomSeed()
+        public static int CreateStrongRandomSeed()
         {
             var bs = new byte[4];
             //Int32と同じサイズのバイト配列にランダムな値を設定する
@@ -72,11 +86,14 @@ namespace ExtremeRoles
             {
                 rng.GetBytes(bs);
             }
+
+            Helper.Logging.Debug($"Int32 SeedValue:{string.Join("", bs)}");
+
             //RNGCryptoServiceProviderで得たbit列をInt32型に変換してシード値とする。
             return BitConverter.ToInt32(bs, 0);
         }
 
-        private static ulong createLongStrongSeed()
+        public static ulong CreateLongStrongSeed()
         {
             var bs = new byte[8];
             //Int64と同じサイズのバイト配列にランダムな値を設定する
@@ -84,162 +101,57 @@ namespace ExtremeRoles
             {
                 rng.GetBytes(bs);
             }
-            //RNGCryptoServiceProviderで得たbit列をInt32型に変換してシード値とする。
+
+            Helper.Logging.Debug($"UInt64 Seed:{string.Join("", bs)}");
+
+            //RNGCryptoServiceProviderで得たbit列をUInt64型に変換してシード値とする。
             return BitConverter.ToUInt64(bs, 0);
         }
 
-    }
-
-    public class PermutedCongruentialGenerator
-    {
-        /*
-            以下のURLの実装を元に実装
-             https://github.com/igiagkiozis/PCGSharp
-            
-            ToDo:PCG64-XSH-RR => PCG64-RXS-M-XS
-        
-            implement(official):
-                static xtype output(itype internal)
-                {
-                    constexpr bitcount_t xtypebits = bitcount_t(sizeof(xtype) * 8);
-                    constexpr bitcount_t bits = bitcount_t(sizeof(itype) * 8);
-                    constexpr bitcount_t opbits = xtypebits >= 128 ? 6
-                                             : xtypebits >=  64 ? 5
-                                             : xtypebits >=  32 ? 4
-                                             : xtypebits >=  16 ? 3
-                                             :                    2;
-                    constexpr bitcount_t shift = bits - xtypebits;
-                    constexpr bitcount_t mask = (1 << opbits) - 1;
-                    bitcount_t rshift =
-                        opbits ? bitcount_t(internal >> (bits - opbits)) & mask : 0;
-                    internal ^= internal >> (opbits + rshift);
-                    internal *= mcg_multiplier<itype>::multiplier();
-                    xtype result = internal >> shift;
-                    result ^= result >> ((2U*xtypebits+2U)/3U);
-                    return result;
-                }
-
-                static itype unoutput(itype internal)
-                {
-                    constexpr bitcount_t bits = bitcount_t(sizeof(itype) * 8);
-                    constexpr bitcount_t opbits = bits >= 128 ? 6
-                                             : bits >=  64 ? 5
-                                             : bits >=  32 ? 4
-                                             : bits >=  16 ? 3
-                                             :               2;
-                    constexpr bitcount_t mask = (1 << opbits) - 1;
-
-                    internal = unxorshift(internal, bits, (2U*bits+2U)/3U);
-
-                    internal *= mcg_unmultiplier<itype>::unmultiplier();
-
-                    bitcount_t rshift = opbits ? (internal >> (bits - opbits)) & mask : 0;
-                    internal = unxorshift(internal, bits, opbits + rshift);
-
-                    return internal;
-                }
-        */
-
-        private ulong state;
-        private ulong increment = 1442695040888963407ul;
-
-        // This shifted to the left and or'ed with 1ul results in the default increment.
-        private const ulong ShiftedIncrement = 721347520444481703ul;
-        private const ulong Multiplier = 6364136223846793005ul;
-
-        public PermutedCongruentialGenerator(
-            ulong seed, ulong state = ShiftedIncrement)
+        private static int createNormalRandomSeed()
         {
-            initialize(seed, state);
+            return ((int)DateTime.Now.Ticks & 0x0000FFFF) + UnityEngine.SystemInfo.processorFrequency;
         }
 
-        public int Next()
+        private static RNGBase getAditionalPrng(int selection)
         {
-            while (true)
+            switch (selection)
             {
-                // Get top 31 bits to get a value in the range [0, int.MaxValue], but try again
-                // if the value is actually int.MaxValue, as the method is defined to return a value
-                // in the range [0, int.MaxValue).
-                uint result = NextUInt() >> 1;
-                if (result != int.MaxValue)
-                {
-                    return (int)result;
-                }
+                case 0:
+                    return new Pcg32XshRr(
+                        CreateLongStrongSeed(),
+                        CreateLongStrongSeed());
+                case 1:
+                    return new Pcg64RxsMXs(
+                        CreateLongStrongSeed(),
+                        CreateLongStrongSeed());
+                case 2:
+                    return new Xorshiro256StarStar(
+                        CreateLongStrongSeed(),
+                        CreateLongStrongSeed());
+                case 3:
+                    return new Xorshiro512StarStar(
+                        CreateLongStrongSeed(),
+                        CreateLongStrongSeed());
+                case 4:
+                    return new RomuTrio(
+                        CreateLongStrongSeed(),
+                        CreateLongStrongSeed());
+                case 5:
+                    return new RomuQuad(
+                        CreateLongStrongSeed(),
+                        CreateLongStrongSeed());
+                case 6:
+                    return new Seiran128(
+                        CreateLongStrongSeed(),
+                        CreateLongStrongSeed());
+                case 7:
+                    return new Shioi128(
+                        CreateLongStrongSeed(),
+                        CreateLongStrongSeed());
+                default:
+                    return new SystemRandomWrapper(0, 0);
             }
-        }
-
-        public int Next(int maxExclusive)
-        {
-            // Backport .Net6 Round logic
-            // from https://source.dot.net/#System.Private.CoreLib/Random.Xoshiro256StarStarImpl.cs,bb77e610694e64ca
-
-            if (maxExclusive <= 0)
-            {
-                throw new ArgumentException("Max Exclusive must be positive");
-            }
-
-            if (maxExclusive == 1)
-            {
-                return 0;
-            }
-
-            int bits = (int)Math.Ceiling(Math.Log(maxExclusive, 2));
-            while (true)
-            {
-                uint result = NextUInt() >> (sizeof(uint) * 8 - bits);
-                if (result < (uint)maxExclusive)
-                {
-                    return (int)result;
-                }
-            }
-        }
-
-        public int Next(int minInclusive, int maxExclusive)
-        {
-
-            if (maxExclusive <= minInclusive)
-            {
-                throw new ArgumentException("MaxExclusive must be larger than MinInclusive");
-            }
-
-            int range = (maxExclusive - minInclusive);
-            return Next(range) + minInclusive;
-        }
-
-        public uint NextUInt()
-        {
-            ulong oldState = this.state;
-            this.state = unchecked(oldState * Multiplier + this.increment);
-            uint xorShifted = (uint)(((oldState >> 18) ^ oldState) >> 27);
-            int rot = (int)(oldState >> 59);
-            uint result = (xorShifted >> rot) | (xorShifted << ((-rot) & 31));
-            return result;
-        }
-
-        public void SetStream(ulong sequence)
-        {
-            this.increment = (sequence << 1) | 1;
-        }
-
-        public static ulong GuidBasedSeed()
-        {
-            ulong upper = (ulong)(Environment.TickCount ^ Guid.NewGuid().GetHashCode()) << 32;
-            ulong lower = (ulong)(Environment.TickCount ^ Guid.NewGuid().GetHashCode());
-            return (upper | lower);
-        }
-
-        private void initialize(
-            ulong seed, ulong initStete)
-        {
-            this.state = 0ul;
-            SetStream(initStete);
-
-            NextUInt();
-
-            this.state += seed;
-
-            NextUInt();
-
         }
 
     }

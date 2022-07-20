@@ -48,6 +48,7 @@ namespace ExtremeRoles.Roles
         Opener,
         Carpenter,
         Survivor,
+        Captain,
 
         SpecialImpostor,
         Evolver,
@@ -65,6 +66,8 @@ namespace ExtremeRoles.Roles
         Smasher,
         AssaultMaster,
         Shooter,
+        LastWolf,
+        Commander,
 
         Alice,
         Jackal,
@@ -73,8 +76,15 @@ namespace ExtremeRoles.Roles
         Missionary,
         Jester,
         Yandere,
-        Yoko
+        Yoko,
+        Totocalcio,
+        Miner,
+        Eater,
+        Traitor,
+        Queen,
+        Servant,
     }
+
     public enum CombinationRoleType
     {
         Avalon,
@@ -83,6 +93,7 @@ namespace ExtremeRoles.Roles
         Lover,
         Supporter,
         Sharer,
+        Traitor,
     }
 
     public enum RoleGameOverReason
@@ -111,6 +122,15 @@ namespace ExtremeRoles.Roles
 
         YokoAllDeceive,
 
+        MinerExplodeEverything,
+
+        EaterAllEatInTheShip,
+        EaterAliveAlone,
+
+        TraitorKillAllOther,
+
+        QueenKillAllOther,
+
         UnKnown = 100,
     }
 
@@ -122,6 +142,10 @@ namespace ExtremeRoles.Roles
         Missionary,
         Yandere,
         Vigilante,
+        Miner,
+        Eater,
+        Traitor,
+        Queen,
     }
 
     public static class ExtremeRoleManager
@@ -154,6 +178,7 @@ namespace ExtremeRoles.Roles
                 {(int)ExtremeRoleId.Opener     , new Opener()},
                 {(int)ExtremeRoleId.Carpenter  , new Carpenter()},
                 {(int)ExtremeRoleId.Survivor   , new Survivor()},
+                {(int)ExtremeRoleId.Captain    , new Captain()},
 
                 {(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
                 {(int)ExtremeRoleId.Evolver        , new Evolver()},
@@ -171,6 +196,8 @@ namespace ExtremeRoles.Roles
                 {(int)ExtremeRoleId.Smasher        , new Smasher()},
                 {(int)ExtremeRoleId.AssaultMaster  , new AssaultMaster()},
                 {(int)ExtremeRoleId.Shooter        , new Shooter()},
+                {(int)ExtremeRoleId.LastWolf       , new LastWolf()},
+                {(int)ExtremeRoleId.Commander      , new Commander()},
 
                 {(int)ExtremeRoleId.Alice     , new Alice()},
                 {(int)ExtremeRoleId.Jackal    , new Jackal()},
@@ -179,6 +206,10 @@ namespace ExtremeRoles.Roles
                 {(int)ExtremeRoleId.Jester    , new Jester()},
                 {(int)ExtremeRoleId.Yandere   , new Yandere()},
                 {(int)ExtremeRoleId.Yoko      , new Yoko()},
+                {(int)ExtremeRoleId.Totocalcio, new Totocalcio()},
+                {(int)ExtremeRoleId.Miner     , new Miner()},
+                {(int)ExtremeRoleId.Eater     , new Eater()},
+                {(int)ExtremeRoleId.Queen     , new Queen()},
             };
 
         public static readonly Dictionary<
@@ -190,6 +221,7 @@ namespace ExtremeRoles.Roles
                 {(byte)CombinationRoleType.Lover          , new LoverManager()},
                 {(byte)CombinationRoleType.Supporter      , new SupporterManager()},
                 {(byte)CombinationRoleType.Sharer         , new SharerManager()   },
+                {(byte)CombinationRoleType.Traitor        , new TraitorManager()  },
             };
 
         public static Dictionary<
@@ -205,10 +237,12 @@ namespace ExtremeRoles.Roles
 
         private static int roleControlId = 0;
 
-        public enum ReplaceOperation
+        public enum ReplaceOperation : byte
         {
-            ForceReplaceToSidekick = 0,
+            ResetVanillaRole = 0,
+            ForceReplaceToSidekick,
             SidekickToJackal,
+            CreateServant,
         }
 
         public static void CreateCombinationRoleOptions(
@@ -297,7 +331,19 @@ namespace ExtremeRoles.Roles
             byte combType, int roleId, byte playerId, byte id, byte bytedRoleType)
         {
             RoleTypes roleType = (RoleTypes)bytedRoleType;
-            bool hasVanilaRole = roleType != RoleTypes.Crewmate || roleType != RoleTypes.Impostor;
+
+            bool hasVanilaRole = false;
+
+            switch (roleType)
+            {
+                case RoleTypes.Scientist:
+                case RoleTypes.Engineer:
+                case RoleTypes.Shapeshifter:
+                    hasVanilaRole = true;
+                    break;
+                default:
+                    break;
+            }
 
             var role = CombRole[combType].GetRole(
                     roleId, roleType);
@@ -352,11 +398,19 @@ namespace ExtremeRoles.Roles
         {
             switch(ops)
             {
+                case ReplaceOperation.ResetVanillaRole:
+                    FastDestroyableSingleton<RoleManager>.Instance.SetRole(
+                        Helper.Player.GetPlayerControlById(targetId),
+                        RoleTypes.Crewmate);
+                    break;
                 case ReplaceOperation.ForceReplaceToSidekick:
                     Jackal.TargetToSideKick(caller, targetId);
                     break;
                 case ReplaceOperation.SidekickToJackal:
                     Sidekick.BecomeToJackal(caller, targetId);
+                    break;
+                case ReplaceOperation.CreateServant:
+                    Queen.TargetToServant(caller, targetId);
                     break;
                 default:
                     break;
@@ -396,11 +450,12 @@ namespace ExtremeRoles.Roles
                 IRoleAbility multiAssignAbilityRole = ((MultiAssignRoleBase)GameRole[
                     playerId]) as IRoleAbility;
 
-                if (multiAssignAbilityRole != null && CachedPlayerControl.LocalPlayer.PlayerId == playerId)
+                if (multiAssignAbilityRole != null &&
+                    CachedPlayerControl.LocalPlayer.PlayerId == playerId)
                 {
                     if (multiAssignAbilityRole.Button != null)
                     {
-                        multiAssignAbilityRole.Button.PositionOffset = new UnityEngine.Vector3(0, 2.6f, 0);
+                        multiAssignAbilityRole.Button.PositionOffset = new UnityEngine.Vector3(0, 2.0f, 0);
                         multiAssignAbilityRole.Button.ReplaceHotKey(UnityEngine.KeyCode.C);
                     }
                 }
@@ -464,6 +519,38 @@ namespace ExtremeRoles.Roles
 
             return null;
 
+        }
+
+        public static (T, T) GetInterfaceCastedLocalRole<T>() where T : class
+        {
+            SingleRoleBase checkRole = GameRole[CachedPlayerControl.LocalPlayer.PlayerId];
+
+            T interfacedSingleRole = checkRole as T;
+            T interfacedMultiRole = null;
+
+            MultiAssignRoleBase multiAssignRole = checkRole as MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                interfacedMultiRole = multiAssignRole.AnotherRole as T;
+            }
+
+            return (interfacedSingleRole, interfacedMultiRole);
+        }
+
+        public static (T, T) GetInterfaceCastedRole<T>(byte playerId) where T : class
+        {
+            SingleRoleBase checkRole = GameRole[playerId];
+
+            T interfacedSingleRole = checkRole as T;
+            T interfacedMultiRole = null;
+
+            MultiAssignRoleBase multiAssignRole = checkRole as MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                interfacedMultiRole = multiAssignRole.AnotherRole as T;
+            }
+
+            return (interfacedSingleRole, interfacedMultiRole);
         }
 
     }

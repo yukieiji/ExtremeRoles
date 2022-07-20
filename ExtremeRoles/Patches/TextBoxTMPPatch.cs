@@ -5,7 +5,7 @@ namespace ExtremeRoles.Patches
 	[HarmonyPatch(typeof(TextBoxTMP), nameof(TextBoxTMP.SetText))]
 	public static class HiddenTextPatch
 	{
-		private static void Postfix(TextBoxTMP __instance)
+		public static void Postfix(TextBoxTMP __instance)
 		{
 			bool flag = 
 				SaveManager.StreamerMode && 

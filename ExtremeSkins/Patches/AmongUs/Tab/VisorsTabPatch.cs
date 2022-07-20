@@ -12,7 +12,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
 {
 #if WITHVISOR
     [HarmonyPatch]
-    public class VisorsTabPatch
+    public static class VisorsTabPatch
     {
         private static List<TMPro.TMP_Text> visorsTabCustomText = new List<TMPro.TMP_Text>();
 

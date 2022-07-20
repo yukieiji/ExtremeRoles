@@ -4,7 +4,7 @@ namespace ExtremeRoles.Patches.MiniGame
 {
 
     [HarmonyPatch(typeof(SecurityLogGame), nameof(SecurityLogGame.Update))]
-    public class SecurityLogGameUpdatePatch
+    public static class SecurityLogGameUpdatePatch
     {
         public static bool Prefix(SecurityLogGame __instance)
         {
@@ -17,6 +17,10 @@ namespace ExtremeRoles.Patches.MiniGame
             __instance.SabText.gameObject.SetActive(true);
 
             return false;
+        }
+        public static void Postfix(SurveillanceMinigame __instance)
+        {
+            SecurityHelper.PostUpdate(__instance);
         }
     }
 }

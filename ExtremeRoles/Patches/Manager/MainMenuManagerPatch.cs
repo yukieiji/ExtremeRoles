@@ -25,39 +25,61 @@ namespace ExtremeRoles.Patches.Manager
     [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
     public static class MainMenuManagerStartPatch
     {
+
+        private static Color discordColor = new Color32(88, 101, 242, byte.MaxValue);
+
         public static void Prefix(MainMenuManager __instance)
         {
-            
-            DestroyableSingleton<ModManager>.Instance.ShowModStamp();
 
             var template = GameObject.Find("ExitGameButton");
             if (template == null) { return; }
 
-            var button = UnityEngine.Object.Instantiate(template, template.transform);
-            button.name = "ExtremeRolesUpdateButton";
-            UnityEngine.Object.Destroy(button.GetComponent<AspectPosition>());
-            UnityEngine.Object.Destroy(button.GetComponent<ConditionalHide>());
-            button.transform.localPosition = new Vector3(0.0f, 0.6f, 0.0f);
+            // UpdateButton
+            GameObject updateButton = UnityEngine.Object.Instantiate(template, template.transform);
+            updateButton.name = "ExtremeRolesUpdateButton";
+            UnityEngine.Object.Destroy(updateButton.GetComponent<AspectPosition>());
+            UnityEngine.Object.Destroy(updateButton.GetComponent<ConditionalHide>());
+            updateButton.transform.localPosition = new Vector3(0.0f, 0.6f, 0.0f);
 
-            PassiveButton passiveButton = button.GetComponent<PassiveButton>();
-            passiveButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
-            passiveButton.OnClick.AddListener((UnityEngine.Events.UnityAction)onClick);
+            PassiveButton passiveUpdateButton = updateButton.GetComponent<PassiveButton>();
+            passiveUpdateButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
+            passiveUpdateButton.OnClick.AddListener(
+                (UnityEngine.Events.UnityAction)(() => Updater.ExecuteCheckUpdate()));
 
-            var text = button.transform.GetChild(0).GetComponent<TMPro.TMP_Text>();
+            TMP_Text textUpdate = updateButton.transform.GetChild(0).GetComponent<TMP_Text>();
             __instance.StartCoroutine(Effects.Lerp(0.1f, new Action<float>((p) => {
-                text.SetText(Translation.GetString("UpdateButton"));
+                textUpdate.SetText(Translation.GetString("UpdateButton"));
             })));
+
+            // DiscordButton
+            GameObject discordButton = UnityEngine.Object.Instantiate(updateButton, template.transform);
+            discordButton.name = "ExtremeRolesDiscordButton";
+            discordButton.transform.localPosition = new Vector3(0.0f, 1.2f, 0.0f);
+
+            PassiveButton passiveDiscordButton = discordButton.GetComponent<PassiveButton>();
+            passiveDiscordButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
+            passiveDiscordButton.OnClick.AddListener(
+                (UnityEngine.Events.UnityAction)(() => Application.OpenURL("https://discord.gg/UzJcfBYcyS")));
+
+            TMP_Text textDiscord = discordButton.transform.GetChild(0).GetComponent<TMP_Text>();
+            __instance.StartCoroutine(Effects.Lerp(0.1f, new Action<float>((p) => {
+                textDiscord.SetText("Discord");
+            })));
+
+            SpriteRenderer buttonSpriteDiscord = discordButton.GetComponent<SpriteRenderer>();
+            buttonSpriteDiscord.color = textDiscord.color = discordColor;
+            passiveDiscordButton.OnMouseOut.AddListener((Action)delegate
+            {
+                buttonSpriteDiscord.color = textDiscord.color = discordColor;
+            });
+
+
             if (Updater.InfoPopup == null)
             {
                 TwitchManager man = FastDestroyableSingleton<TwitchManager>.Instance;
                 Updater.InfoPopup = UnityEngine.Object.Instantiate<GenericPopup>(man.TwitchPopup);
                 Updater.InfoPopup.TextAreaTMP.fontSize *= 0.7f;
                 Updater.InfoPopup.TextAreaTMP.enableAutoSizing = false;
-            }
-
-            void onClick()
-            {
-                Updater.ExecuteCheckUpdate();
             }
         }
 

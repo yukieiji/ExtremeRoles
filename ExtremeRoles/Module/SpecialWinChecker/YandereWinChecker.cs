@@ -9,7 +9,7 @@ using ExtremeRoles.Roles.Solo.Neutral;
 
 namespace ExtremeRoles.Module.SpecialWinChecker
 {
-    internal class YandereWinChecker : IWinChecker
+    internal sealed class YandereWinChecker : IWinChecker
     {
         public RoleGameOverReason Reason => RoleGameOverReason.YandereShipJustForTwo;
 

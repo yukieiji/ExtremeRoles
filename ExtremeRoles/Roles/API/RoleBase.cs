@@ -240,7 +240,7 @@ namespace ExtremeRoles.Roles.API
             PlayerControl fromPlayer) => true;
 
         protected override void CreateKillerOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             var killCoolOption = CreateBoolOption(
                 KillerCommonOption.HasOtherKillCool,
@@ -258,7 +258,7 @@ namespace ExtremeRoles.Roles.API
                 OptionHolder.Range,
                 killRangeOption);
         }
-        protected override CustomOptionBase CreateSpawnOption()
+        protected override IOption CreateSpawnOption()
         {
             var roleSetOption = CreateSelectionOption(
                 RoleCommonOption.SpawnRate,
@@ -275,7 +275,7 @@ namespace ExtremeRoles.Roles.API
         }
 
         protected override void CreateVisonOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             var visonOption = CreateBoolOption(
                 RoleCommonOption.HasOtherVison,
@@ -337,16 +337,16 @@ namespace ExtremeRoles.Roles.API
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected CustomOptionBase CreateFloatOption<T>(
+        protected FloatCustomOption CreateFloatOption<T>(
             T option,
             float defaultValue,
             float min, float max, float step,
-            CustomOptionBase parent = null,
+            IOption parent = null,
             bool isHeader = false,
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            CustomOptionBase enableCheckOption = null,
+            IOption enableCheckOption = null,
             bool colored = false) where T : struct, IConvertible
         {
             EnumCheck(option);
@@ -361,16 +361,16 @@ namespace ExtremeRoles.Roles.API
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected CustomOptionBase CreateFloatDynamicOption<T>(
+        protected FloatDynamicCustomOption CreateFloatDynamicOption<T>(
             T option,
             float defaultValue,
             float min, float step,
-            CustomOptionBase parent = null,
+            IOption parent = null,
             bool isHeader = false,
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            CustomOptionBase enableCheckOption = null,
+            IOption enableCheckOption = null,
             bool colored = false) where T : struct, IConvertible
         {
             EnumCheck(option);
@@ -385,16 +385,16 @@ namespace ExtremeRoles.Roles.API
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected CustomOptionBase CreateIntOption<T>(
+        protected IntCustomOption CreateIntOption<T>(
             T option,
             int defaultValue,
             int min, int max, int step,
-            CustomOptionBase parent = null,
+            IOption parent = null,
             bool isHeader = false,
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            CustomOptionBase enableCheckOption = null,
+            IOption enableCheckOption = null,
             bool colored = false) where T : struct, IConvertible
         {
             EnumCheck(option);
@@ -409,16 +409,16 @@ namespace ExtremeRoles.Roles.API
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected CustomOptionBase CreateIntDynamicOption<T>(
+        protected IntDynamicCustomOption CreateIntDynamicOption<T>(
             T option,
             int defaultValue,
             int min, int step,
-            CustomOptionBase parent = null,
+            IOption parent = null,
             bool isHeader = false,
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            CustomOptionBase enableCheckOption = null,
+            IOption enableCheckOption = null,
             bool colored = false) where T : struct, IConvertible
         {
             EnumCheck(option);
@@ -433,15 +433,15 @@ namespace ExtremeRoles.Roles.API
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected CustomOptionBase CreateBoolOption<T>(
+        protected BoolCustomOption CreateBoolOption<T>(
             T option,
             bool defaultValue,
-            CustomOptionBase parent = null,
+            IOption parent = null,
             bool isHeader = false,
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            CustomOptionBase enableCheckOption = null,
+            IOption enableCheckOption = null,
             bool colored = false) where T : struct, IConvertible
         {
             EnumCheck(option);
@@ -455,15 +455,15 @@ namespace ExtremeRoles.Roles.API
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected CustomOptionBase CreateSelectionOption<T>(
+        protected SelectionCustomOption CreateSelectionOption<T>(
             T option,
             string[] selections,
-            CustomOptionBase parent = null,
+            IOption parent = null,
             bool isHeader = false,
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            CustomOptionBase enableCheckOption = null,
+            IOption enableCheckOption = null,
             bool colored = false) where T : struct, IConvertible
         {
             EnumCheck(option);
@@ -570,7 +570,7 @@ namespace ExtremeRoles.Roles.API
             {
                 string fakeTaskString = Design.ColoedString(
                     this.NameColor,
-                    DestroyableSingleton<TranslationController>.Instance.GetString(
+                    FastDestroyableSingleton<TranslationController>.Instance.GetString(
                         StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()));
                 baseString = $"{baseString}\r\n{fakeTaskString}";
             }

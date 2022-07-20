@@ -15,7 +15,7 @@ using ExtremeRoles.Module;
 namespace ExtremeRoles.Patches.Option
 {
     [HarmonyPatch]
-    class GameOptionsDataPatch
+    public static class GameOptionsDataPatch
     {
         private static IEnumerable<MethodBase> TargetMethods()
         {
@@ -38,8 +38,12 @@ namespace ExtremeRoles.Patches.Option
             allOptionStr.Add(
                 CustomOption.OptionToString(allOption[(int)OptionHolder.CommonOptionKey.PresetSelection]));
 
-            allOptionStr.Add(
+            StringBuilder rngOptBuilder = new StringBuilder();
+            rngOptBuilder.AppendLine(
                 CustomOption.OptionToString(allOption[(int)OptionHolder.CommonOptionKey.UseStrongRandomGen]));
+            rngOptBuilder.AppendLine(
+                CustomOption.OptionToString(allOption[(int)OptionHolder.CommonOptionKey.UsePrngAlgorithm]));
+            allOptionStr.Add(rngOptBuilder.ToString().Trim('\r', '\n'));
 
             allOptionStr.Add(createRoleSpawnNumOptions());
 
@@ -51,6 +55,7 @@ namespace ExtremeRoles.Patches.Option
                 {
                     case OptionHolder.CommonOptionKey.PresetSelection:
                     case OptionHolder.CommonOptionKey.UseStrongRandomGen:
+                    case OptionHolder.CommonOptionKey.UsePrngAlgorithm:
                     case OptionHolder.CommonOptionKey.MinCrewmateRoles:
                     case OptionHolder.CommonOptionKey.MaxCrewmateRoles:
                     case OptionHolder.CommonOptionKey.MinNeutralRoles:
@@ -73,7 +78,7 @@ namespace ExtremeRoles.Patches.Option
 
             allOptionStr.Add(modOptionStrBuilder.ToString().Trim('\r', '\n'));
 
-            foreach (CustomOptionBase option in OptionHolder.AllOption.Values)
+            foreach (IOption option in OptionHolder.AllOption.Values)
             {
                 if (Enum.IsDefined(typeof(OptionHolder.CommonOptionKey), option.Id))
                 {
@@ -134,7 +139,7 @@ namespace ExtremeRoles.Patches.Option
 
         }
 
-        private static void addChildren(CustomOptionBase option, ref StringBuilder entry, int indentCount = 0)
+        private static void addChildren(IOption option, ref StringBuilder entry, int indentCount = 0)
         {
 
             string indent = "";

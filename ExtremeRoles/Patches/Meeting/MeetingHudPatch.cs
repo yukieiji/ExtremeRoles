@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using HarmonyLib;
 using UnityEngine;
@@ -8,6 +9,7 @@ using UnhollowerBaseLib;
 
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
@@ -15,7 +17,7 @@ namespace ExtremeRoles.Patches.Meeting
 {
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.BloopAVoteIcon))]
-    class MeetingHudBloopAVoteIconPatch
+    public static class MeetingHudBloopAVoteIconPatch
     {
         public static bool Prefix(
             MeetingHud __instance,
@@ -85,7 +87,7 @@ namespace ExtremeRoles.Patches.Meeting
     }
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Confirm))]
-    class MeetingHudConfirmPatch
+    public static class MeetingHudConfirmPatch
     {
         public static bool Prefix(
             MeetingHud __instance,
@@ -120,23 +122,37 @@ namespace ExtremeRoles.Patches.Meeting
     }
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CheckForEndVoting))]
-    class MeetingHudCheckForEndVotingPatch
+    public static class MeetingHudCheckForEndVotingPatch
     {
         public static bool Prefix(
             MeetingHud __instance)
         {
             var gameData = ExtremeRolesPlugin.GameDataStore;
 
-            if (!gameData.AssassinMeetingTrigger) { return true; }
+            if (!gameData.IsRoleSetUpEnd) { return true; }
 
-            var (isVoteEnd, voteFor) = assassinVoteState(__instance);
+            if (!gameData.AssassinMeetingTrigger)
+            {
+                normalMeetingVote(__instance);
+            }
+            else
+            {
+                assassinMeetingVote(__instance);
+            }
+
+            return false;
+        }
+
+        private static void assassinMeetingVote(MeetingHud instance)
+        {
+            var (isVoteEnd, voteFor) = assassinVoteState(instance);
 
             if (isVoteEnd)
             {
                 //GameData.PlayerInfo exiled = Helper.Player.GetPlayerControlById(voteFor).Data;
-                Il2CppStructArray<MeetingHud.VoterState> array = 
+                Il2CppStructArray<MeetingHud.VoterState> array =
                     new Il2CppStructArray<MeetingHud.VoterState>(
-                        __instance.playerStates.Length);
+                        instance.playerStates.Length);
 
                 if (voteFor == 254 || voteFor == byte.MaxValue)
                 {
@@ -144,12 +160,13 @@ namespace ExtremeRoles.Patches.Meeting
                     do
                     {
                         int randomPlayerIndex = UnityEngine.Random.RandomRange(
-                            0, __instance.playerStates.Length);
-                        voteFor = __instance.playerStates[randomPlayerIndex].TargetPlayerId;
+                            0, instance.playerStates.Length);
+                        voteFor = instance.playerStates[randomPlayerIndex].TargetPlayerId;
 
                         targetImposter = ExtremeRoleManager.GameRole[voteFor].IsImpostor();
 
-                    } while (targetImposter);
+                    }
+                    while (targetImposter);
                 }
 
                 Helper.Logging.Debug($"IsSuccess?:{ExtremeRoleManager.GameRole[voteFor].Id == ExtremeRoleId.Marlin}");
@@ -160,9 +177,9 @@ namespace ExtremeRoles.Patches.Meeting
                     new List<byte> { voteFor });
                 RPCOperator.AssasinVoteFor(voteFor);
 
-                for (int i = 0; i < __instance.playerStates.Length; i++)
+                for (int i = 0; i < instance.playerStates.Length; i++)
                 {
-                    PlayerVoteArea playerVoteArea = __instance.playerStates[i];
+                    PlayerVoteArea playerVoteArea = instance.playerStates[i];
                     if (playerVoteArea.TargetPlayerId == ExtremeRolesPlugin.GameDataStore.ExiledAssassinId)
                     {
                         playerVoteArea.VotedFor = voteFor;
@@ -171,7 +188,7 @@ namespace ExtremeRoles.Patches.Meeting
                     {
                         playerVoteArea.VotedFor = 254;
                     }
-                    __instance.SetDirtyBit(1U);
+                    instance.SetDirtyBit(1U);
 
                     array[i] = new MeetingHud.VoterState
                     {
@@ -180,20 +197,17 @@ namespace ExtremeRoles.Patches.Meeting
                     };
 
                 }
-                __instance.RpcVotingComplete(array, null, true);
+                instance.RpcVotingComplete(array, null, true);
             }
-
-            return false;
         }
 
-        private static Tuple<bool, byte> assassinVoteState(MeetingHud __instance)
+        private static Tuple<bool, byte> assassinVoteState(MeetingHud instance)
         {
             bool isVoteEnd = false;
             byte voteFor = byte.MaxValue;
 
-            for (int i = 0; i < __instance.playerStates.Length; i++)
+            foreach (PlayerVoteArea playerVoteArea in instance.playerStates)
             {
-                PlayerVoteArea playerVoteArea = __instance.playerStates[i];
                 if (playerVoteArea.TargetPlayerId == ExtremeRolesPlugin.GameDataStore.ExiledAssassinId)
                 {
                     isVoteEnd = playerVoteArea.DidVote;
@@ -205,11 +219,105 @@ namespace ExtremeRoles.Patches.Meeting
             return Tuple.Create(isVoteEnd, voteFor);
         }
 
+        private static void addVoteModRole(
+            IRoleVoteModifier role, byte rolePlayerId,
+            ref SortedList<int, (IRoleVoteModifier, byte)> voteModifier)
+        {
+            if (role != null)
+            {
+                voteModifier.Add(role.Order, (role, rolePlayerId));
+            }
+        }
+
+        private static Dictionary<byte, int> calculateVote(MeetingHud instance)
+        {
+            Dictionary<byte, int> voteResult = new Dictionary<byte, int>();
+            Dictionary<byte, byte> voteTarget = new Dictionary<byte, byte>();
+
+            SortedList<int, (IRoleVoteModifier, byte)> voteModifier = new SortedList<int, (IRoleVoteModifier, byte)>();
+
+            foreach (PlayerVoteArea playerVoteArea in instance.playerStates)
+            {
+                
+                byte playerId = playerVoteArea.TargetPlayerId;
+
+                // 投票をいじる役職か？
+                var (voteModRole, voteAnotherRole) = ExtremeRoleManager.GetInterfaceCastedRole<IRoleVoteModifier>(
+                    playerId);
+                addVoteModRole(voteModRole, playerId, ref voteModifier);
+                addVoteModRole(voteAnotherRole, playerId, ref voteModifier);
+
+                // 投票先を全格納
+                voteTarget.Add(playerId, playerVoteArea.VotedFor);
+
+                if (playerVoteArea.VotedFor != 252 && 
+                    playerVoteArea.VotedFor != 255 && 
+                    playerVoteArea.VotedFor != 254)
+                {
+                    int currentVotes;
+                    if (voteResult.TryGetValue(playerVoteArea.VotedFor, out currentVotes))
+                    {
+                        voteResult[playerVoteArea.VotedFor] = currentVotes + 1;
+                    }
+                    else
+                    {
+                        voteResult[playerVoteArea.VotedFor] = 1;
+                    }
+                }
+            }
+
+            foreach (var (role, playerId) in voteModifier.Values)
+            {
+                role.ModifiedVote(playerId, ref voteTarget, ref voteResult);
+            }
+            return voteResult;
+
+        }
+
+        private static void normalMeetingVote(MeetingHud instance)
+        {
+            if (instance.playerStates.All((PlayerVoteArea ps) => ps.AmDead || ps.DidVote))
+            {
+                Dictionary<byte, int> result = calculateVote(instance);
+
+                bool isExiled = true;
+                
+                KeyValuePair<byte, int> exiledResult = new KeyValuePair<byte, int>(byte.MaxValue, int.MinValue);
+                foreach (KeyValuePair<byte, int> item in result)
+                {
+                    if (item.Value > exiledResult.Value)
+                    {
+                        exiledResult = item;
+                        isExiled = false;
+                    }
+                    else if (item.Value == exiledResult.Value)
+                    {
+                        isExiled = true;
+                    }
+                }
+
+                GameData.PlayerInfo exiled = GameData.Instance.AllPlayers.ToArray().FirstOrDefault(
+                    (GameData.PlayerInfo v) => !isExiled && v.PlayerId == exiledResult.Key);
+                
+                MeetingHud.VoterState[] array = new MeetingHud.VoterState[instance.playerStates.Length];
+                for (int i = 0; i < instance.playerStates.Length; i++)
+                {
+                    PlayerVoteArea playerVoteArea = instance.playerStates[i];
+                    array[i] = new MeetingHud.VoterState
+                    {
+                        VoterId = playerVoteArea.TargetPlayerId,
+                        VotedForId = playerVoteArea.VotedFor
+                    };
+                }
+                
+                instance.RpcVotingComplete(array, exiled, isExiled);
+            }
+        }
     }
 
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Select))]
-    class MeetingHudSelectPatch
+    public static class MeetingHudSelectPatch
     {
         public static bool Prefix(
             MeetingHud __instance,
@@ -260,7 +368,7 @@ namespace ExtremeRoles.Patches.Meeting
     }
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.SetForegroundForDead))]
-    class MeetingHudSetForegroundForDeadPatch
+    public static class MeetingHudSetForegroundForDeadPatch
     {
         public static bool Prefix(
             MeetingHud __instance)
@@ -280,7 +388,7 @@ namespace ExtremeRoles.Patches.Meeting
     }
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Close))]
-    class MeetingHudClosePatch
+    public static class MeetingHudClosePatch
     {
         public static void Prefix(
             MeetingHud __instance)
@@ -291,7 +399,7 @@ namespace ExtremeRoles.Patches.Meeting
 
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.CoIntro))]
-    class MeetingHudCoIntroPatch
+    public static class MeetingHudCoIntroPatch
     {
         public static void Postfix(
             MeetingHud __instance,
@@ -302,12 +410,12 @@ namespace ExtremeRoles.Patches.Meeting
 
             if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
             {
+                var player = CachedPlayerControl.LocalPlayer;
                 var hockRole = ExtremeRoleManager.GetLocalPlayerRole() as IRoleReportHock;
+                var multiAssignRole = ExtremeRoleManager.GetLocalPlayerRole() as MultiAssignRoleBase;
 
                 if (hockRole != null)
                 {
-                    var player = CachedPlayerControl.LocalPlayer;
-
                     if (reportedBody == null)
                     {
                         hockRole.HockReportButton(
@@ -317,6 +425,24 @@ namespace ExtremeRoles.Patches.Meeting
                     {
                         hockRole.HockBodyReport(
                             player, reporter, reportedBody);
+                    }
+                }
+                if (multiAssignRole != null)
+                {
+                    hockRole = multiAssignRole.AnotherRole as IRoleReportHock;
+                    if (hockRole != null)
+                    {
+
+                        if (reportedBody == null)
+                        {
+                            hockRole.HockReportButton(
+                                player, reporter);
+                        }
+                        else
+                        {
+                            hockRole.HockBodyReport(
+                                player, reporter, reportedBody);
+                        }
                     }
                 }
 
@@ -330,7 +456,7 @@ namespace ExtremeRoles.Patches.Meeting
 
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Start))]
-    class MeetingHudStartPatch
+    public static class MeetingHudStartPatch
     {
         public static void Postfix(
             MeetingHud __instance)
@@ -355,7 +481,7 @@ namespace ExtremeRoles.Patches.Meeting
                 resetRole.ResetOnMeetingStart();
             }
 
-            var multiAssignRole = role as Roles.API.MultiAssignRoleBase;
+            var multiAssignRole = role as MultiAssignRoleBase;
             if (multiAssignRole != null)
             {
                 if (multiAssignRole.AnotherRole != null)
@@ -394,7 +520,7 @@ namespace ExtremeRoles.Patches.Meeting
 
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Update))]
-    class MeetingHudUpdatePatch
+    public static class MeetingHudUpdatePatch
     {
         public static void Postfix(MeetingHud __instance)
         {
@@ -455,9 +581,119 @@ namespace ExtremeRoles.Patches.Meeting
             }
         }
     }
+    [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.SortButtons))]
+    public static class MeetingHudSortButtonsPatch
+    {
+        public static bool Prefix(MeetingHud __instance)
+        {
+            if (!OptionHolder.Ship.ChangeMeetingVoteAreaSort) { return true; }
+            if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
+
+            PlayerVoteArea[] array = __instance.playerStates.OrderBy(delegate (PlayerVoteArea p)
+            {
+                if (!p.AmDead)
+                {
+                    return 0;
+                }
+                return 50;
+            }).ThenBy(x => ExtremeRoleManager.GameRole[x.TargetPlayerId].GameControlId).ToArray();
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                int num = i % 3;
+                int num2 = i / 3;
+                array[i].transform.localPosition = __instance.VoteOrigin + new Vector3(
+                    __instance.VoteButtonOffsets.x * (float)num,
+                    __instance.VoteButtonOffsets.y * (float)num2, -0.9f - (float)num2 * 0.01f);
+            }
+
+            return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.PopulateResults))]
+    public static class MeetingHudPopulateResultsPatch
+    {
+        public static bool Prefix(
+            MeetingHud __instance,
+            [HarmonyArgument(0)] Il2CppStructArray<MeetingHud.VoterState> states)
+        {
+
+            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return true; }
+
+            __instance.TitleText.text = DestroyableSingleton<TranslationController>.Instance.GetString(
+                StringNames.MeetingVotingResults, Array.Empty<Il2CppSystem.Object>());
+
+            Dictionary<byte, int> voteIndex = new Dictionary<byte, int>();
+            SortedList<int, (IRoleVoteModifier, GameData.PlayerInfo)> voteModifier = new SortedList<
+                int, (IRoleVoteModifier, GameData.PlayerInfo)>();
+
+            int num = 0;
+            // それぞれの人に対してどんな投票があったか
+		    for (int i = 0; i < __instance.playerStates.Length; i++)
+		    {
+			    PlayerVoteArea playerVoteArea = __instance.playerStates[i];
+			    playerVoteArea.ClearForResults();
+
+                byte checkPlayerId = playerVoteArea.TargetPlayerId;
+
+                // 投票をいじる役職か？
+                var (voteModRole, voteAnotherRole) = ExtremeRoleManager.GetInterfaceCastedRole<IRoleVoteModifier>(
+                    checkPlayerId);
+                addVoteModRole(voteModRole, checkPlayerId, ref voteModifier);
+                addVoteModRole(voteAnotherRole, checkPlayerId, ref voteModifier);
+
+                int num2 = 0;
+			    foreach (MeetingHud.VoterState voterState in states)
+			    {
+                    GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(voterState.VoterId);
+				    if (playerById == null)
+				    {
+					    Debug.LogError(
+                            string.Format("Couldn't find player info for voter: {0}",
+                            voterState.VoterId));
+				    }
+				    else if (i == 0 && voterState.SkippedVote)
+				    {
+                        // スキップのアニメーション
+                        __instance.BloopAVoteIcon(playerById, num, __instance.SkippedVoting.transform);
+					    num++;
+                    }
+				    else if (voterState.VotedForId == checkPlayerId)
+				    {
+                        // 投票された人のアニメーション
+                        __instance.BloopAVoteIcon(playerById, num2, playerVoteArea.transform);
+					    num2++;
+                    }
+			    }
+                voteIndex.Add(playerVoteArea.TargetPlayerId, num2);
+            }
+
+            voteIndex[ __instance.playerStates[0].TargetPlayerId] = num;
+
+            foreach (var (role, player) in voteModifier.Values)
+            {
+                role.ModifiedVoteAnime(
+                    __instance, player, ref voteIndex);
+                role.ResetModifier();
+            }
+            return false;
+        }
+        private static void addVoteModRole(
+            IRoleVoteModifier role, byte rolePlayerId,
+            ref SortedList<int, (IRoleVoteModifier, GameData.PlayerInfo)> voteModifier)
+        {
+            GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(rolePlayerId);
+            if (role != null)
+            {
+                voteModifier.Add(role.Order, (role, playerById));
+            }
+        }
+    }
+
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.UpdateButtons))]
-    class MeetingHudUpdateButtonsPatch
+    public static class MeetingHudUpdateButtonsPatch
     {
         public static bool Prefix(MeetingHud __instance)
         {
@@ -483,7 +719,7 @@ namespace ExtremeRoles.Patches.Meeting
     }
 
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.VotingComplete))]
-    public class MeetingHudVotingCompletedPatch
+    public static class MeetingHudVotingCompletedPatch
     {
         public static void Postfix(
             MeetingHud __instance,
@@ -492,7 +728,6 @@ namespace ExtremeRoles.Patches.Meeting
             [HarmonyArgument(2)] bool tie)
         {
             ExtremeRolesPlugin.Info.HideInfoOverlay();
-
 
             foreach (DeadBody b in UnityEngine.Object.FindObjectsOfType<DeadBody>())
             {

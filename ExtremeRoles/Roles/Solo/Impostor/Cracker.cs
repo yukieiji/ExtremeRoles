@@ -13,9 +13,9 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public class Cracker : SingleRoleBase, IRoleAbility
+    public sealed class Cracker : SingleRoleBase, IRoleAbility
     {
-        public class CrackTrace : IMeetingResetObject
+        public sealed class CrackTrace : IMeetingResetObject
         {
             private SpriteRenderer image;
             private GameObject body;
@@ -150,7 +150,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             this.CreateAbilityCountOption(
                 parentOps, 2, 5);

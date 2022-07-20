@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace ExtremeRoles.Module
 {
-    public class TextPopUpper
+    public sealed class TextPopUpper
     {
-        private class Text
+        private sealed class Text
         {
             private TextMeshPro body;
             public Text(

@@ -5,7 +5,7 @@ namespace ExtremeSkins.Module
 {
 
 #if WITHHAT
-    public class CustomHat : ICustomCosmicData<HatData>
+    public sealed class CustomHat : ICustomCosmicData<HatData>
     {
         public const string FrontImageName = "front.png";
         public const string FrontFlipImageName = "front_flip.png";

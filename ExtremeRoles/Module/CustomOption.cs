@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 using UnityEngine;
@@ -20,29 +21,60 @@ namespace ExtremeRoles.Module
         Multiplier,
         Percentage,
         ScrewNum,
+        VoteNum
     }
 
-    public abstract class CustomOptionBase
+    public interface IOption
     {
-        public int Id;
-        public int CurSelection;
-        public int DefaultSelection;
-        public string Name;
+        public int CurSelection { get; }
+        public int DefaultSelection { get; }
+        public bool Enabled { get; }
+        public int Id { get; }
+        public bool IsHidden { get; }
+        public bool IsHeader { get; }
+        public int ValueCount { get; }
+        public IOption Parent { get; }
+        public IOption ForceEnableCheckOption { get; }
+        public List<IOption> Children { get; }
 
-        public bool IsHeader;
-        public bool IsHidden;
-        public bool EnableInvert;
+        public OptionBehaviour Body { get; }
 
-        public ConfigEntry<int> Entry;
-        public CustomOptionBase Parent;
-        public CustomOptionBase ForceEnableCheckOption = null;
-        public OptionBehaviour Behaviour;
-        public List<CustomOptionBase> Children;
-        public object[] Selections;
+        public bool IsActive();
+        public void SetOptionBehaviour(OptionBehaviour newBehaviour);
+        public string GetString();
+        public string GetName();
+        public void UpdateSelection(int newSelection);
+        public void SaveConfigValue();
+        public void SwitchPreset();
+        public dynamic GetValue();
+    }
 
-        private OptionUnit stringFormat;
-        private List<CustomOptionBase> withUpdateOption = new List<CustomOptionBase>();
+    public interface IWithUpdatableOption<T>
+    {
+        public void Update(T newValue);
+        public void SetUpdateOption(IWithUpdatableOption<T> option);
+    }
 
+
+    public abstract class CustomOptionBase<OutType, SelectionType> : IOption, IWithUpdatableOption<OutType>
+    {
+        public int CurSelection => this.curSelection;
+        public int DefaultSelection => this.defaultSelection;
+        public int Id => this.id;
+        
+        public bool IsHidden => this.isHidden;
+        public bool IsHeader => this.isHeader;
+
+        public int ValueCount => this.Selections.Length;
+
+        public IOption Parent => this.parent;
+        public IOption ForceEnableCheckOption => this.forceEnableCheckOption;
+        public List<IOption> Children => this.children;
+
+        public OptionBehaviour Body
+        {
+            get => this.behaviour;
+        }
         public virtual bool Enabled
         {
             get
@@ -50,76 +82,82 @@ namespace ExtremeRoles.Module
                 return this.CurSelection != this.DefaultSelection;
             }
         }
-        public string CleanedName
-        {
-            get
-            {
-                string nameClean = Regex.Replace(this.Name, "<.*?>", "");
-                nameClean = Regex.Replace(nameClean, "^-\\s*", "");
-                return nameClean.Trim();
-            }
-        }
+        
+        protected SelectionType[] Selections;
+
+        private OptionUnit stringFormat;
+        private List<IWithUpdatableOption<OutType>> withUpdateOption = new List<IWithUpdatableOption<OutType>>();
+
+        private IOption parent;
+        private IOption forceEnableCheckOption;
+        private List<IOption> children = new List<IOption>();
+
+        private bool enableInvert;
+        private bool isHidden;
+        private bool isHeader;
+        private string name;
+        private int curSelection = 0;
+        private int defaultSelection = 0;
+        private int id = 0;
+        private ConfigEntry<int> entry;
+
+        private OptionBehaviour behaviour;
 
         public CustomOptionBase(
             int id,
             string name,
-            object[] selections,
-            object defaultValue,
-            CustomOptionBase parent,
+            SelectionType[] selections,
+            SelectionType defaultValue,
+            IOption parent,
             bool isHeader,
             bool isHidden,
             OptionUnit format,
             bool invert,
-            CustomOptionBase enableCheckOption)
+            IOption enableCheckOption)
         {
             int index = Array.IndexOf(selections, defaultValue);
 
-            this.Id = id;
-            this.Name = name;
+            this.id = id;
+            this.name = name;
             this.stringFormat = format;
             this.Selections = selections;
-            this.DefaultSelection = index >= 0 ? index : 0;
-            this.Parent = parent;
-            this.IsHeader = isHeader;
-            this.IsHidden = isHidden;
-            this.EnableInvert = false;
+            this.defaultSelection = index >= 0 ? index : 0;
+            this.parent = parent;
+            this.isHeader = isHeader;
+            this.isHidden = isHidden;
+            this.enableInvert = false;
 
-            this.Children = new List<CustomOptionBase>();
-            this.ForceEnableCheckOption = enableCheckOption;
+            this.children = new List<IOption>();
+            this.forceEnableCheckOption = enableCheckOption;
 
             if (parent != null)
             {
-                this.EnableInvert = invert;
+                this.enableInvert = invert;
                 parent.Children.Add(this);
-
             }
 
-            this.CurSelection = 0;
+            this.curSelection = 0;
             if (id > 0)
             {
-                this.Entry = ExtremeRolesPlugin.Instance.Config.Bind(
-                    OptionHolder.ConfigPreset, this.CleanedName, DefaultSelection);
-                this.CurSelection = Mathf.Clamp(this.Entry.Value, 0, selections.Length - 1);
+                bindConfig();
+                this.curSelection = Mathf.Clamp(this.entry.Value, 0, selections.Length - 1);
             }
 
-            Logging.Debug($"OptinId:{this.Id}    Name:{this.Name}");
+            Logging.Debug($"OptinId:{this.Id}    Name:{this.name}");
 
             OptionHolder.AllOption.Add(this.Id, this);
         }
         
-        protected virtual void OptionUpdate(object newValue)
+        public virtual void Update(OutType newValue)
         {
             return;
         }
 
-        public string GetName() => Translation.GetString(Name);
-
-        public object GetRawValue() => Selections[CurSelection];
-
+        public string GetName() => Translation.GetString(this.name);
 
         public string GetString()
         {
-            string sel = Selections[CurSelection].ToString();
+            string sel = this.Selections[this.curSelection].ToString();
             if (this.stringFormat != OptionUnit.None)
             {
                 return string.Format(
@@ -131,17 +169,17 @@ namespace ExtremeRoles.Module
 
         public bool IsActive()
         {
-            if (this.IsHidden)
+            if (this.isHidden)
             {
                 return false;
             }
 
-            if (this.IsHeader || this.Parent == null)
+            if (this.isHeader || this.parent == null)
             {
                 return true;
             }
 
-            CustomOptionBase parent = this.Parent;
+            IOption parent = this.parent;
             bool active = true;
 
             while (parent != null && active)
@@ -150,40 +188,40 @@ namespace ExtremeRoles.Module
                 parent = parent.Parent;
             }
 
-            if (this.EnableInvert)
+            if (this.enableInvert)
             {
                 active = !active;
             }
 
-            if (this.ForceEnableCheckOption != null)
+            if (this.forceEnableCheckOption != null)
             {
-                active = active && this.ForceEnableCheckOption.Enabled;
+                active = active && this.forceEnableCheckOption.Enabled;
             }
 
             return active;
         }
 
-        public void SetUpdateOption(CustomOptionBase option)
+        public void SetUpdateOption(IWithUpdatableOption<OutType> option)
         {
             this.withUpdateOption.Add(option);
-            option.OptionUpdate(this.GetValue());
+            option.Update(this.GetValue());
         }
 
         public void UpdateSelection(int newSelection)
         {
-            CurSelection = Mathf.Clamp(
-                (newSelection + Selections.Length) % Selections.Length,
-                0, Selections.Length - 1);
+            this.curSelection = Mathf.Clamp(
+                (newSelection + this.Selections.Length) % this.Selections.Length,
+                0, this.Selections.Length - 1);
 
-            if (Behaviour != null && Behaviour is StringOption stringOption)
+            if (this.behaviour != null && this.behaviour is StringOption stringOption)
             {
-                stringOption.oldValue = stringOption.Value = CurSelection;
+                stringOption.oldValue = stringOption.Value = this.curSelection;
                 stringOption.ValueText.text = this.GetString();
                 if (this.withUpdateOption.Count != 0)
                 {
-                    foreach (CustomOptionBase option in this.withUpdateOption)
+                    foreach (IWithUpdatableOption<OutType> option in this.withUpdateOption)
                     {
-                        option.OptionUpdate(this.GetValue());
+                        option.Update(this.GetValue());
                     }
                 }
 
@@ -191,11 +229,11 @@ namespace ExtremeRoles.Module
                 {
                     if (Id == 0)
                     {
-                        OptionHolder.SwitchPreset(CurSelection); // Switch presets
+                        OptionHolder.SwitchPreset(this.curSelection); // Switch presets
                     }
-                    else if (Entry != null)
+                    else if (this.entry != null)
                     {
-                        Entry.Value = CurSelection; // Save selection to config
+                        this.entry.Value = this.curSelection; // Save selection to config
                     }
 
                     OptionHolder.ShareOptionSelections();// Share all selections
@@ -205,10 +243,28 @@ namespace ExtremeRoles.Module
 
         public void SaveConfigValue()
         {
-            if (this.Entry != null)
+            if (this.entry != null)
             {
-                this.Entry.Value = this.CurSelection;
+                this.entry.Value = this.curSelection;
             }
+        }
+
+        public void SwitchPreset()
+        {
+            bindConfig();
+            this.UpdateSelection(Mathf.Clamp(
+                this.entry.Value, 0,
+                this.ValueCount - 1));
+
+            if (this.behaviour != null && this.behaviour is StringOption stringOption)
+            {
+                stringOption.oldValue = stringOption.Value = this.CurSelection;
+                stringOption.ValueText.text = this.GetString();
+            }
+        }
+        public void SetOptionBehaviour(OptionBehaviour newBehaviour)
+        {
+            this.behaviour = newBehaviour;
         }
 
         public void SetOptionUnit(OptionUnit unit)
@@ -216,20 +272,35 @@ namespace ExtremeRoles.Module
             this.stringFormat = unit;
         }
 
+        private void bindConfig()
+        {
+            this.entry = ExtremeRolesPlugin.Instance.Config.Bind(
+                OptionHolder.ConfigPreset,
+                this.cleanName(),
+                this.defaultSelection);
+        }
+
+        private string cleanName()
+        {
+            string nameClean = Regex.Replace(this.name, "<.*?>", "");
+            nameClean = Regex.Replace(nameClean, "^-\\s*", "");
+            return nameClean.Trim();
+        }
+
         public abstract dynamic GetValue();
     }
 
-    public class BoolCustomOption : CustomOptionBase
+    public sealed class BoolCustomOption : CustomOptionBase<bool, string>
     {
         public BoolCustomOption(
             int id, string name,
             bool defaultValue,
-            CustomOptionBase parent = null,
+            IOption parent = null,
             bool isHeader = false,
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            CustomOptionBase enableCheckOption = null) : base(
+            IOption enableCheckOption = null) : base(
                 id, name,
                 new string[] { "optionOff", "optionOn" },
                 defaultValue ? "optionOn" : "optionOff",
@@ -241,27 +312,27 @@ namespace ExtremeRoles.Module
         public override dynamic GetValue() => CurSelection > 0;
     }
 
-    public class FloatCustomOption : CustomOptionBase
+    public sealed class FloatCustomOption : CustomOptionBase<float, float>
     {
         public FloatCustomOption(
             int id, string name,
             float defaultValue,
             float min, float max, float step,
-            CustomOptionBase parent = null,
+            IOption parent = null,
             bool isHeader = false,
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            CustomOptionBase enableCheckOption = null) : base(
+            IOption enableCheckOption = null) : base(
                 id, name,
-                createSelection(min, max, step).Cast<object>().ToArray(),
+                createSelection(min, max, step).ToArray(),
                 defaultValue, parent,
                 isHeader, isHidden,
                 format, invert,
                 enableCheckOption)
         { }
 
-        public override dynamic GetValue() => (float)GetRawValue();
+        public override dynamic GetValue() => Selections[CurSelection];
 
         private static List<float> createSelection(float min, float max, float step)
         {
@@ -281,7 +352,7 @@ namespace ExtremeRoles.Module
         }
     }
 
-    public class IntCustomOption : CustomOptionBase
+    public sealed class IntCustomOption : CustomOptionBase<int, int>
     {
         private int maxValue;
         private int minValue;
@@ -291,14 +362,14 @@ namespace ExtremeRoles.Module
             string name,
             int defaultValue,
             int min, int max, int step,
-            CustomOptionBase parent = null,
+            IOption parent = null,
             bool isHeader = false, 
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            CustomOptionBase enableCheckOption = null) : base(
+            IOption enableCheckOption = null) : base(
                 id, name,
-                createSelection(min, max, step).Cast<object>().ToArray(),
+                createSelection(min, max, step).ToArray(),
                 defaultValue, parent,
                 isHeader, isHidden,
                 format, invert,
@@ -309,12 +380,11 @@ namespace ExtremeRoles.Module
                 this.Selections[this.Selections.Length - 1].ToString());
         }
 
-        public override dynamic GetValue() => Convert.ToInt32(GetRawValue().ToString());
+        public override dynamic GetValue() => Selections[CurSelection];
 
-        protected override void OptionUpdate(object newValue)
+        public override void Update(int newValue)
         {
-            int newIntedValue = Convert.ToInt32(newValue.ToString());
-            int newMaxValue = this.maxValue / newIntedValue;
+            int newMaxValue = this.maxValue / newValue;
 
             List<int> newSelections = new List<int>();
             for (int s = minValue; s <= newMaxValue; ++s)
@@ -322,7 +392,7 @@ namespace ExtremeRoles.Module
                 newSelections.Add(s);
             }
 
-            this.Selections = newSelections.Cast<object>().ToArray();
+            this.Selections = newSelections.ToArray();
             this.UpdateSelection(this.CurSelection);
         }
 
@@ -339,21 +409,21 @@ namespace ExtremeRoles.Module
 
     }
 
-    public class IntDynamicCustomOption : CustomOptionBase
+    public sealed class IntDynamicCustomOption : CustomOptionBase<int, int>
     {
         private int step;
         public IntDynamicCustomOption(
             int id, string name,
             int defaultValue,
             int min, int step,
-            CustomOptionBase parent = null,
+            IOption parent = null,
             bool isHeader = false,
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            CustomOptionBase enableCheckOption = null) : base(
+            IOption enableCheckOption = null) : base(
                 id, name,
-                createSelection(min, step, defaultValue).Cast<object>().ToArray(),
+                createSelection(min, step, defaultValue).ToArray(),
                 defaultValue, parent,
                 isHeader, isHidden,
                 format, invert,
@@ -362,19 +432,18 @@ namespace ExtremeRoles.Module
             this.step = step;
         }
 
-        public override dynamic GetValue() => Convert.ToInt32(GetRawValue().ToString());
+        public override dynamic GetValue() => Selections[CurSelection];
 
-        protected override void OptionUpdate(object newValue)
+        public override void Update(int newValue)
         {
-            int maxValue = Convert.ToInt32(newValue.ToString());
-            int minValue = Convert.ToInt32(this.Selections[0].ToString());
+            int minValue = this.Selections[0];
 
             List<int> newSelections = new List<int>();
-            for (int s = minValue; s <= maxValue; s += this.step)
+            for (int s = minValue; s <= newValue; s += this.step)
             {
                 newSelections.Add(s);
             }
-            this.Selections = newSelections.Cast<object>().ToArray();
+            this.Selections = newSelections.ToArray();
             this.UpdateSelection(this.CurSelection);
         }
 
@@ -393,21 +462,21 @@ namespace ExtremeRoles.Module
         }
     }
 
-    public class FloatDynamicCustomOption : CustomOptionBase
+    public sealed class FloatDynamicCustomOption : CustomOptionBase<float, float>
     {
         private float step;
         public FloatDynamicCustomOption(
             int id, string name,
             float defaultValue,
             float min, float step,
-            CustomOptionBase parent = null,
+            IOption parent = null,
             bool isHeader = false,
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            CustomOptionBase enableCheckOption = null) : base(
+            IOption enableCheckOption = null) : base(
                 id, name,
-                createSelection(min, step, defaultValue).Cast<object>().ToArray(),
+                createSelection(min, step, defaultValue).ToArray(),
                 defaultValue, parent,
                 isHeader, isHidden,
                 format, invert,
@@ -416,23 +485,20 @@ namespace ExtremeRoles.Module
             this.step = step;
         }
 
-        public override dynamic GetValue() => (float)GetRawValue();
+        public override dynamic GetValue() => Selections[CurSelection];
 
-        protected override void OptionUpdate(object newValue)
+        public override void Update(float newValue)
         {
-            float maxValue = Convert.ToSingle(newValue.ToString());
-            float minValue = Convert.ToSingle(this.Selections[0].ToString());
-
             decimal dStep = new decimal(this.step);
-            decimal dMin = new decimal(minValue);
-            decimal dMax = new decimal(maxValue);
+            decimal dMin = new decimal(this.Selections[0]);
+            decimal dMax = new decimal(newValue);
 
             List<float> newSelection = new List<float>();
             for (decimal s = dMin; s <= dMax; s += dStep)
             {
                 newSelection.Add(((float)(decimal.ToDouble(s))));
             }
-            this.Selections = newSelection.Cast<object>().ToArray();
+            this.Selections = newSelection.ToArray();
             this.UpdateSelection(this.CurSelection);
         }
 
@@ -457,17 +523,17 @@ namespace ExtremeRoles.Module
 
 
 
-    public class SelectionCustomOption : CustomOptionBase
+    public sealed class SelectionCustomOption : CustomOptionBase<int, string>
     {
         public SelectionCustomOption(
             int id, string name,
             string[] selections,
-            CustomOptionBase parent = null,
+            IOption parent = null,
             bool isHeader = false,
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            CustomOptionBase enableCheckOption = null) : base(
+            IOption enableCheckOption = null) : base(
                 id, name, selections, "",
                 parent, isHeader, isHidden,
                 format, invert, enableCheckOption)
@@ -477,13 +543,13 @@ namespace ExtremeRoles.Module
             int id, string name,
             string[] selections,
             int defaultIndex,
-            CustomOptionBase parent = null,
+            IOption parent = null,
             bool isHeader = false,
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            CustomOptionBase enableCheckOption = null) : base(
-                id, name, selections, defaultIndex,
+            IOption enableCheckOption = null) : base(
+                id, name, selections, selections[defaultIndex],
                 parent, isHeader, isHidden,
                 format, invert, enableCheckOption)
         { }
@@ -494,7 +560,7 @@ namespace ExtremeRoles.Module
 
     public static class CustomOption
     {
-        public static string OptionToString(CustomOptionBase option)
+        public static string OptionToString(IOption option)
         {
             if (option == null) { return string.Empty; }
             if (!option.IsActive()) { return string.Empty; }
@@ -502,26 +568,26 @@ namespace ExtremeRoles.Module
         }
 
         public static string AllOptionToString(
-            CustomOptionBase option, bool skipFirst = false)
+            IOption option, bool skipFirst = false)
         {
             if (option == null) { return ""; }
 
-            List<string> options = new List<string>();
+            StringBuilder options = new StringBuilder();
             if (!option.IsHidden && !skipFirst)
             {
-                options.Add(OptionToString(option));
+                options.AppendLine(OptionToString(option));
             }
             if (option.Enabled)
             {
                 childrenOptionToString(option, ref options);
             }
-            return string.Join("\n", options);
+            return options.ToString();
         }
 
         private static void childrenOptionToString(
-            CustomOptionBase option, ref List<string> options, int indentCount = 0)
+            IOption option, ref StringBuilder options, int indentCount = 0)
         {
-            foreach (CustomOptionBase op in option.Children)
+            foreach (IOption op in option.Children)
             {
                 string str = OptionToString(op);
 
@@ -535,7 +601,7 @@ namespace ExtremeRoles.Module
                             str);
                     }
 
-                    options.Add(str);
+                    options.AppendLine(str);
                 }
                 childrenOptionToString(
                     op, ref options,

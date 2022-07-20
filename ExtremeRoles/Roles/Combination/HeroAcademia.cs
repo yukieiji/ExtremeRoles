@@ -15,7 +15,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Combination
 {
-    internal class AllPlayerArrows
+    internal sealed class AllPlayerArrows
     {
         private Dictionary<byte, PlayerControl> player = new Dictionary<byte, PlayerControl>();
         private Dictionary<byte, Arrow> arrow = new Dictionary<byte, Arrow>();
@@ -77,7 +77,7 @@ namespace ExtremeRoles.Roles.Combination
         }
     }
 
-    internal class PlayerTargetArrow
+    internal sealed class PlayerTargetArrow
     {
         public bool isActive;
         private Arrow arrow;
@@ -112,7 +112,7 @@ namespace ExtremeRoles.Roles.Combination
 
     }
 
-    public class HeroAcademia : ConstCombinationRoleManagerBase
+    public sealed class HeroAcademia : ConstCombinationRoleManagerBase
     {
         public enum Command : byte
         {
@@ -434,7 +434,7 @@ namespace ExtremeRoles.Roles.Combination
 
     }
 
-    public class Hero : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialReset
+    public sealed class Hero : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialReset
     {
         public enum OneForAllCondition : byte
         {
@@ -653,7 +653,7 @@ namespace ExtremeRoles.Roles.Combination
 
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             this.CreateCommonAbilityOption(
                 parentOps, 5.0f);
@@ -685,7 +685,7 @@ namespace ExtremeRoles.Roles.Combination
             }
         }
     }
-    public class Villain : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialReset
+    public sealed class Villain : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialReset
     {
         public enum VillanOption
         {
@@ -840,7 +840,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             this.CreateCommonAbilityOption(
                 parentOps, 5.0f);
@@ -859,7 +859,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
     }
-    public class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleWinPlayerModifier
+    public sealed class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleWinPlayerModifier
     {
         public enum VigilanteCondition
         {
@@ -1050,7 +1050,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             this.CreateAbilityCountOption(
                 parentOps, 2, 10, 5.0f);
