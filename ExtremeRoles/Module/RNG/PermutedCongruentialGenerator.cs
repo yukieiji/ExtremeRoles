@@ -82,7 +82,7 @@
 
             NextUInt();
         }
-        public void setStream(ulong sequence)
+        private void setStream(ulong sequence)
         {
             this.increment = (sequence << 1) | 1;
         }

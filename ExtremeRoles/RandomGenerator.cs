@@ -80,7 +80,7 @@ namespace ExtremeRoles
             return BitConverter.ToInt32(bs, 0);
         }
 
-        private static ulong createLongStrongSeed()
+        public static ulong CreateLongStrongSeed()
         {
             var bs = new byte[8];
             //Int64と同じサイズのバイト配列にランダムな値を設定する
