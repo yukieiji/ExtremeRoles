@@ -37,7 +37,6 @@ namespace ExtremeRoles.Module
         public IOption Parent { get; }
         public IOption ForceEnableCheckOption { get; }
         public List<IOption> Children { get; }
-        public ConfigEntry<int> Entry { set; get; }
 
         public OptionBehaviour Body { set; get; }
 
@@ -46,6 +45,7 @@ namespace ExtremeRoles.Module
         public string GetName();
         public void UpdateSelection(int newSelection);
         public void SaveConfigValue();
+        public void SwitchPreset();
         public dynamic GetValue();
     }
 
@@ -79,15 +79,6 @@ namespace ExtremeRoles.Module
                 this.behaviour = value;
             }
         }
-
-        public ConfigEntry<int> Entry
-        {
-            get => this.entry;
-            set
-            {
-                this.entry = value;
-            }
-        }
         public virtual bool Enabled
         {
             get
@@ -118,9 +109,9 @@ namespace ExtremeRoles.Module
         private bool isHidden;
         private bool isHeader;
         private string name;
-        private int curSelection;
-        private int defaultSelection;
-        private int id;
+        private int curSelection = 0;
+        private int defaultSelection = 0;
+        private int id = 0;
         private ConfigEntry<int> entry;
 
         private OptionBehaviour behaviour;
@@ -156,14 +147,12 @@ namespace ExtremeRoles.Module
             {
                 this.enableInvert = invert;
                 parent.Children.Add(this);
-
             }
 
             this.curSelection = 0;
             if (id > 0)
             {
-                this.entry = ExtremeRolesPlugin.Instance.Config.Bind(
-                    OptionHolder.ConfigPreset, this.CleanedName, DefaultSelection);
+                bindConfig();
                 this.curSelection = Mathf.Clamp(this.entry.Value, 0, selections.Length - 1);
             }
 
@@ -181,7 +170,7 @@ namespace ExtremeRoles.Module
 
         public string GetString()
         {
-            string sel = Selections[CurSelection].ToString();
+            string sel = this.Selections[this.curSelection].ToString();
             if (this.stringFormat != OptionUnit.None)
             {
                 return string.Format(
@@ -193,17 +182,17 @@ namespace ExtremeRoles.Module
 
         public bool IsActive()
         {
-            if (this.IsHidden)
+            if (this.isHidden)
             {
                 return false;
             }
 
-            if (this.IsHeader || this.Parent == null)
+            if (this.isHeader || this.parent == null)
             {
                 return true;
             }
 
-            IOption parent = this.Parent;
+            IOption parent = this.parent;
             bool active = true;
 
             while (parent != null && active)
@@ -217,9 +206,9 @@ namespace ExtremeRoles.Module
                 active = !active;
             }
 
-            if (this.ForceEnableCheckOption != null)
+            if (this.forceEnableCheckOption != null)
             {
-                active = active && this.ForceEnableCheckOption.Enabled;
+                active = active && this.forceEnableCheckOption.Enabled;
             }
 
             return active;
@@ -233,13 +222,13 @@ namespace ExtremeRoles.Module
 
         public void UpdateSelection(int newSelection)
         {
-            curSelection = Mathf.Clamp(
-                (newSelection + Selections.Length) % Selections.Length,
-                0, Selections.Length - 1);
+            this.curSelection = Mathf.Clamp(
+                (newSelection + this.Selections.Length) % this.Selections.Length,
+                0, this.Selections.Length - 1);
 
-            if (behaviour != null && behaviour is StringOption stringOption)
+            if (this.behaviour != null && this.behaviour is StringOption stringOption)
             {
-                stringOption.oldValue = stringOption.Value = CurSelection;
+                stringOption.oldValue = stringOption.Value = this.curSelection;
                 stringOption.ValueText.text = this.GetString();
                 if (this.withUpdateOption.Count != 0)
                 {
@@ -253,11 +242,11 @@ namespace ExtremeRoles.Module
                 {
                     if (Id == 0)
                     {
-                        OptionHolder.SwitchPreset(CurSelection); // Switch presets
+                        OptionHolder.SwitchPreset(this.curSelection); // Switch presets
                     }
-                    else if (entry != null)
+                    else if (this.entry != null)
                     {
-                        entry.Value = CurSelection; // Save selection to config
+                        this.entry.Value = this.curSelection; // Save selection to config
                     }
 
                     OptionHolder.ShareOptionSelections();// Share all selections
@@ -267,15 +256,37 @@ namespace ExtremeRoles.Module
 
         public void SaveConfigValue()
         {
-            if (this.Entry != null)
+            if (this.entry != null)
             {
-                this.Entry.Value = this.curSelection;
+                this.entry.Value = this.curSelection;
+            }
+        }
+
+        public void SwitchPreset()
+        {
+            bindConfig();
+            this.UpdateSelection(Mathf.Clamp(
+                this.entry.Value, 0,
+                this.ValueCount - 1));
+
+            if (this.behaviour != null && this.behaviour is StringOption stringOption)
+            {
+                stringOption.oldValue = stringOption.Value = this.CurSelection;
+                stringOption.ValueText.text = this.GetString();
             }
         }
 
         public void SetOptionUnit(OptionUnit unit)
         {
             this.stringFormat = unit;
+        }
+
+        private void bindConfig()
+        {
+            this.entry = ExtremeRolesPlugin.Instance.Config.Bind(
+                OptionHolder.ConfigPreset,
+                this.CleanedName,
+                this.defaultSelection);
         }
 
         public abstract dynamic GetValue();

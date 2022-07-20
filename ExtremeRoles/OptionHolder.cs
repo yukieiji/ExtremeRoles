@@ -223,20 +223,7 @@ namespace ExtremeRoles
             foreach (IOption option in AllOption.Values)
             {
                 if (option.Id == 0) { continue; }
-
-                option.Entry = ExtremeRolesPlugin.Instance.Config.Bind(
-                    ConfigPreset,
-                    option.CleanedName,
-                    option.DefaultSelection);
-                option.UpdateSelection(Mathf.Clamp(
-                    option.Entry.Value, 0,
-                    option.ValueCount - 1));
-
-                if (option.Body != null && option.Body is StringOption stringOption)
-                {
-                    stringOption.oldValue = stringOption.Value = option.CurSelection;
-                    stringOption.ValueText.text = option.GetString();
-                }
+                option.SwitchPreset();
             }
         }
 
