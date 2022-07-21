@@ -60,8 +60,5 @@
             } 
             while ((_s2 | _s3 | _s4 | _s5 | _s6 | _s7) == 0); // at least one value must be non-zero
         }
-        // BitOperations.Left : https://github.com/dotnet/runtime/blob/main/src/libraries/System.Private.CoreLib/src/System/Numerics/BitOperations.cs
-        private ulong leftOps(ulong value, int offset)
-            => (value << offset) | (value >> (64 - offset));
     }
 }

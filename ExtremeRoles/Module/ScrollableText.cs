@@ -42,10 +42,10 @@ namespace ExtremeRoles.Module
 
         public void Clear()
         {
-            GameObject.Destroy(this.bodyText);
-            GameObject.Destroy(this.body);
-            GameObject.Destroy(this.title);
-            GameObject.Destroy(this.anchorPoint);
+            UnityEngine.Object.Destroy(this.bodyText);
+            UnityEngine.Object.Destroy(this.body);
+            UnityEngine.Object.Destroy(this.title);
+            UnityEngine.Object.Destroy(this.anchorPoint);
         }
 
         public void Enable(bool isEnable)
@@ -116,7 +116,6 @@ namespace ExtremeRoles.Module
             this.bodyText.text = bodyText;
 
             int row = bodyText.Count(c  => c == '\n');
-            Helper.Logging.Debug($"CurRow:{row}");
             float maxY = Mathf.Max(this.minHight, row * this.maxHight + (row - this.maxRow) * this.maxHight);
             this.textScroller.ContentYBounds = new FloatRange(this.minHight, maxY);
         }
