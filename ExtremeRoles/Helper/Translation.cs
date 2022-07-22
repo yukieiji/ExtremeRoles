@@ -26,6 +26,8 @@ namespace ExtremeRoles.Helper
             stringData.Clear();
             JObject parsed = JObject.Parse(json);
 
+            uint lastLang = (uint)SupportedLangs.Irish;
+
             for (int i = 0; i < parsed.Count; i++)
             {
                 JProperty token = parsed.ChildrenTokens[i].TryCast<JProperty>();
@@ -38,7 +40,7 @@ namespace ExtremeRoles.Helper
                 {
                     var strings = new Dictionary<uint, string>();
 
-                    for (uint j = 0; j < (uint)SupportedLangs.Irish + 1; j++)
+                    for (uint j = 0; j <= lastLang; j++)
                     {
                         string key = j.ToString();
                         var text = val[key]?.TryCast<JValue>().Value.ToString();

@@ -20,7 +20,6 @@ namespace ExtremeSkins.Helper
             stringData.Clear();
         }
 
-
         public static void CreateColorTransData()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
@@ -80,11 +79,13 @@ namespace ExtremeSkins.Helper
                 string stringName = token.Name;
                 var val = token.Value.TryCast<JObject>();
 
+                uint lastLang = (uint)SupportedLangs.Irish;
+
                 if (token.HasValues)
                 {
                     var strings = new Dictionary<uint, string>();
 
-                    for (uint j = 0; j < (uint)SupportedLangs.Irish + 1; j++)
+                    for (uint j = 0; j <= lastLang; j++)
                     {
                         string key = j.ToString();
                         var text = val[key]?.TryCast<JValue>().Value.ToString();
