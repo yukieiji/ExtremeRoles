@@ -405,10 +405,9 @@ namespace ExtremeRoles.Patches
                     continue;
                 }
 
-                TextMeshPro playerInfo;
-                allPlayerInfo.TryGetValue(player.PlayerId, out playerInfo);
                 
-                if (playerInfo == null)
+                if (!allPlayerInfo.TryGetValue(
+                    player.PlayerId, out TextMeshPro playerInfo))
                 {
                     playerInfo = UnityEngine.Object.Instantiate(
                         player.cosmetics.nameText,
@@ -425,8 +424,7 @@ namespace ExtremeRoles.Patches
                 TextMeshPro meetingInfo = null;
                 if (MeetingHud.Instance)
                 {
-                    allMeetingInfo.TryGetValue(player.PlayerId, out meetingInfo);
-                    if (meetingInfo == null)
+                    if (!allMeetingInfo.TryGetValue(player.PlayerId, out meetingInfo))
                     {
                         playerVoteArea = MeetingHud.Instance.playerStates?.FirstOrDefault(x => x.TargetPlayerId == player.PlayerId);
 
