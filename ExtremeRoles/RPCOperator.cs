@@ -139,6 +139,9 @@ namespace ExtremeRoles
             // キルアニメーションリセット
             Patches.KillAnimationCoPerformKillPatch.HideNextAnimation = false;
 
+            // 各種表示系リセット
+            Patches.PlayerControlFixedUpdatePatch.Reset();
+
             // ミーティング能力リセット
             Patches.Meeting.PlayerVoteAreaSelectPatch.Reset();
 

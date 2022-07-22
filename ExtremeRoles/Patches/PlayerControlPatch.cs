@@ -8,6 +8,7 @@ using HarmonyLib;
 using Hazel;
 
 using UnityEngine;
+using TMPro;
 
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
@@ -135,6 +136,17 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
     public static class PlayerControlFixedUpdatePatch
     {
+        private static Dictionary<byte, TextMeshPro> allPlayerInfo = new Dictionary<byte, TextMeshPro>();
+        private static Dictionary<byte, TextMeshPro> allMeetingInfo = new Dictionary<byte, TextMeshPro>();
+        private static TextMeshPro tabText;
+
+        public static void Reset()
+        {
+            allMeetingInfo.Clear();
+            allPlayerInfo.Clear();
+            tabText = null;
+        }
+
         public static void Postfix(PlayerControl __instance)
         {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) { return; }
@@ -393,9 +405,9 @@ namespace ExtremeRoles.Patches
                     continue;
                 }
 
-                Transform playerInfoTransform = player.cosmetics.nameText.transform.parent.FindChild("Info");
-                TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
-
+                TextMeshPro playerInfo;
+                allPlayerInfo.TryGetValue(player.PlayerId, out playerInfo);
+                
                 if (playerInfo == null)
                 {
                     playerInfo = UnityEngine.Object.Instantiate(
@@ -403,23 +415,33 @@ namespace ExtremeRoles.Patches
                         player.cosmetics.nameText.transform.parent);
                     playerInfo.fontSize *= 0.75f;
                     playerInfo.gameObject.name = "Info";
+                    allPlayerInfo.Add(player.PlayerId, playerInfo);
                 }
 
                 // Set the position every time bc it sometimes ends up in the wrong place due to camoflauge
                 playerInfo.transform.localPosition = player.cosmetics.nameText.transform.localPosition + Vector3.up * 0.5f;
-
-                PlayerVoteArea playerVoteArea = MeetingHud.Instance?.playerStates?.FirstOrDefault(x => x.TargetPlayerId == player.PlayerId);
-                Transform meetingInfoTransform = playerVoteArea != null ? playerVoteArea.NameText.transform.parent.FindChild("Info") : null;
-                TMPro.TextMeshPro meetingInfo = meetingInfoTransform != null ? meetingInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
-                if (meetingInfo == null && playerVoteArea != null)
+                
+                PlayerVoteArea playerVoteArea = null;
+                TextMeshPro meetingInfo = null;
+                if (MeetingHud.Instance)
                 {
-                    meetingInfo = UnityEngine.Object.Instantiate(
-                        playerVoteArea.NameText,
-                        playerVoteArea.NameText.transform.parent);
-                    meetingInfo.transform.localPosition += Vector3.down * 0.20f;
-                    meetingInfo.fontSize *= 0.63f;
-                    meetingInfo.autoSizeTextContainer = true;
-                    meetingInfo.gameObject.name = "Info";
+                    allMeetingInfo.TryGetValue(player.PlayerId, out meetingInfo);
+                    if (meetingInfo == null)
+                    {
+                        playerVoteArea = MeetingHud.Instance.playerStates?.FirstOrDefault(x => x.TargetPlayerId == player.PlayerId);
+
+                        if (playerVoteArea != null)
+                        {
+                            meetingInfo = UnityEngine.Object.Instantiate(
+                                playerVoteArea.NameText,
+                                playerVoteArea.NameText.transform.parent);
+                            meetingInfo.transform.localPosition += Vector3.down * 0.20f;
+                            meetingInfo.fontSize *= 0.63f;
+                            meetingInfo.autoSizeTextContainer = true;
+                            meetingInfo.gameObject.name = "Info";
+                            allMeetingInfo.Add(player.PlayerId, meetingInfo);
+                        }
+                    }
                 }
 
                 var (playerInfoText, meetingInfoText) = getRoleAndMeetingInfo(player, commsActive);
@@ -443,7 +465,7 @@ namespace ExtremeRoles.Patches
             }
         }
         private static void setMeetingInfo(
-            TMPro.TextMeshPro meetingInfo,
+            TextMeshPro meetingInfo,
             string text, bool active)
         {
             if (meetingInfo != null)
@@ -495,8 +517,11 @@ namespace ExtremeRoles.Patches
                 playerInfoText = $"{roleNames}";
                 if (DestroyableSingleton<TaskPanelBehaviour>.InstanceExists)
                 {
-                    TMPro.TextMeshPro tabText = FastDestroyableSingleton<TaskPanelBehaviour>.Instance.tab.transform.FindChild(
-                        "TabText_TMP").GetComponent<TMPro.TextMeshPro>();
+                    if (tabText == null)
+                    {
+                        tabText = FastDestroyableSingleton<TaskPanelBehaviour>.Instance.tab.transform.FindChild(
+                            "TabText_TMP").GetComponent<TextMeshPro>();
+                    }
                     tabText.SetText(
                         $"{FastDestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Tasks)} {taskInfo}");
                 }
