@@ -304,14 +304,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                  taskBoostOpt,
                  format: OptionUnit.Percentage,
                  invert: true,
-                 enableCheckOption: parentOps);
+                 enableCheckOption: taskBoostOpt);
 
             var reduceTimeOpt = CreateFloatDynamicOption(
                 CurseMakerOption.ReduceSearchDeadBodyTime,
                 30f, 0.5f, 0.5f, taskBoostOpt,
                 format: OptionUnit.Second,
                 invert: true,
-                enableCheckOption: parentOps);
+                enableCheckOption: taskBoostOpt);
 
             searchTimeOpt.SetUpdateOption(reduceTimeOpt);
         }
