@@ -6,7 +6,7 @@ namespace ExtremeRoles.Performance
 {
     public static class CachedShipStatus
     {
-        public static ShipStatus Instance { get; set; }
+        public static ShipStatus Instance { get; private set; }
         public static Dictionary<SystemTypes, ISystemType> Systems
         {
             get
