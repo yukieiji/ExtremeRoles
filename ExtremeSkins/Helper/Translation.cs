@@ -10,9 +10,9 @@ namespace ExtremeSkins.Helper
 {
     public static class Translation
     {
-        private static Dictionary<string, Dictionary<int, string>> stringData = new Dictionary<string, Dictionary<int, string>>();
+        private static Dictionary<string, Dictionary<uint, string>> stringData = new Dictionary<string, Dictionary<uint, string>>();
 
-        private const int defaultLanguage = (int)SupportedLangs.English;
+        private const uint defaultLanguage = (uint)SupportedLangs.English;
         private const string dataPath = "ExtremeSkins.Resources.LangData.stringData.json";
 
         public static void Initialize()
@@ -53,21 +53,18 @@ namespace ExtremeSkins.Helper
             keyClean = Regex.Replace(keyClean, "^-\\s*", "");
             keyClean = keyClean.Trim();
 
-            if (!stringData.ContainsKey(keyClean))
+            if (!stringData.TryGetValue(keyClean, out var data))
             {
                 return key;
             }
 
-            var data = stringData[keyClean];
-            int lang = (int)SaveManager.LastLanguage;
-
-            if (data.ContainsKey(lang))
+            if (data.TryGetValue(SaveManager.LastLanguage, out string transStr))
             {
-                return key.Replace(keyClean, data[lang]);
+                return key.Replace(keyClean, transStr);
             }
-            else if (data.ContainsKey(defaultLanguage))
+            else if (data.TryGetValue(defaultLanguage, out string defaultStr))
             {
-                return key.Replace(keyClean, data[defaultLanguage]);
+                return key.Replace(keyClean, defaultStr);
             }
 
             return key;
@@ -85,9 +82,9 @@ namespace ExtremeSkins.Helper
 
                 if (token.HasValues)
                 {
-                    var strings = new Dictionary<int, string>();
+                    var strings = new Dictionary<uint, string>();
 
-                    for (int j = 0; j < (int)SupportedLangs.Irish + 1; j++)
+                    for (uint j = 0; j < (uint)SupportedLangs.Irish + 1; j++)
                     {
                         string key = j.ToString();
                         var text = val[key]?.TryCast<JValue>().Value.ToString();
