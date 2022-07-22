@@ -14,24 +14,34 @@ namespace ExtremeRoles
 {
     public static class OptionHolder
     {
-
         public const int VanillaMaxPlayerNum = 15;
         public const int MaxImposterNum = 3;
+
+        private const int singleRoleOptionStartOffset = 100;
+        private const int combRoleOptionStartOffset = 5000;
+        private const int ghostRoleOptionStartOffset = 10000;
         private const int chunkSize = 50;
 
-        public static string[] SpawnRate = new string[] {
+        public static readonly string[] SpawnRate = new string[] {
             "0%", "10%", "20%", "30%", "40%",
             "50%", "60%", "70%", "80%", "90%", "100%" };
 
-        public static string[] Range = new string[] { "short", "middle", "long"};
+        public static readonly string[] Range = new string[] { "short", "middle", "long"};
+
+        public static string ConfigPreset
+        {
+            get => $"Preset:{selectedPreset}";
+        }
 
         public static int OptionsPage = 1;
+
+        public static Dictionary<int, IOption> AllOption = new Dictionary<int, IOption>();
         
-        private static int selectedPreset = 0;
-        private static string[] optionPreset = new string[] {
+        private static readonly string[] optionPreset = new string[] {
             "preset1", "preset2", "preset3", "preset4", "preset5",
             "preset6", "preset7", "preset8", "preset9", "preset10" };
-        private static string[] prngAlgorithm = new string[]
+
+        private static readonly string[] prngAlgorithm = new string[]
         {
             "Pcg32XshRr", "Pcg64RxsMXs",
             "Xorshiro256StarStar", "Xorshiro512StarStar",
@@ -39,12 +49,9 @@ namespace ExtremeRoles
             "Seiran128", "Shioi128"
         };
 
-        private static IRegionInfo[] defaultRegion;
+        private static int selectedPreset = 0;
 
-        public static string ConfigPreset
-        {
-            get => $"Preset:{selectedPreset}";
-        }
+        private static IRegionInfo[] defaultRegion;
 
         public enum CommonOptionKey
         {
@@ -104,8 +111,6 @@ namespace ExtremeRoles
             IsBlockGAAbilityReport,
         }
 
-        public static Dictionary<int, IOption> AllOption = new Dictionary<int, IOption>();
-
         public static void Create()
         {
 
@@ -137,13 +142,14 @@ namespace ExtremeRoles
             createExtremeGhostRoleGlobalSpawnOption();
             createShipGlobalOption();
 
-            Roles.ExtremeRoleManager.CreateNormalRoleOptions(50);
+            Roles.ExtremeRoleManager.CreateNormalRoleOptions(
+                singleRoleOptionStartOffset);
 
-            Roles.ExtremeRoleManager.CreateCombinationRoleOptions(5000);
+            Roles.ExtremeRoleManager.CreateCombinationRoleOptions(
+                combRoleOptionStartOffset);
 
-            GhostRoles.ExtremeGhostRoleManager.CreateGhostRoleOption(10000);
-
-
+            GhostRoles.ExtremeGhostRoleManager.CreateGhostRoleOption(
+                ghostRoleOptionStartOffset);
         }
 
         public static void Load()
