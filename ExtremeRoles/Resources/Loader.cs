@@ -20,7 +20,15 @@ namespace ExtremeRoles.Resources
         public const string CompatModMenuImage = "ExtremeRoles.Resources.CompatModMenu.png";
 
         public const string TitleBurner = "ExtremeRoles.Resources.TitleBurner.png";
-        public const string TabLogo = "ExtremeRoles.Resources.TabIcon.png";
+
+        public const string TabGlobal = "ExtremeRoles.Resources.TabGlobalSetting.png";
+        public const string TabCrewmate = "ExtremeRoles.Resources.TabCrewmateSetting.png";
+        public const string TabImpostor = "ExtremeRoles.Resources.TabImpostorSetting.png";
+        public const string TabNeutral = "ExtremeRoles.Resources.TabNeutralSetting.png";
+        public const string TabCombination = "ExtremeRoles.Resources.TabCombinationSetting.png";
+        public const string TabGhostCrewmate = "ExtremeRoles.Resources.TabGhostCrewmateSetting.png";
+        public const string TabGhostImpostor = "ExtremeRoles.Resources.TabGhostImpostorSetting.png";
+        public const string TabGhostNeutral = "ExtremeRoles.Resources.TabGhostNeutralSetting.png";
 
         public const string HiroAcaSearch = "ExtremeRoles.Resources.Search.png";
 

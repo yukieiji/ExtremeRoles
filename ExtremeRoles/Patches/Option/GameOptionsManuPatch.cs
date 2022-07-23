@@ -45,39 +45,39 @@ namespace ExtremeRoles.Patches.Option
             var gameSettings = GameObject.Find("Game Settings"); 
 
             var (erSettings, erMenu) = createOptionSettingAndMenu(gameSettings, GeneralSetting);
-            var (erTab, tabHighlight) = createTab(roleTab, roleTab.transform.parent, "ExtremeGlobalTab", Path.TabLogo);
+            var (erTab, tabHighlight) = createTab(roleTab, roleTab.transform.parent, "ExtremeGlobalTab", Path.TabGlobal);
 
             // 生きてる役職
             var (crewSettings, crewMenu) = createOptionSettingAndMenu(
                 gameSettings, CrewmateSetting);
             var (crewTab, crewTabHighlight) = createTab(
-                roleTab, erTab.transform, "ExtremeCrewTab", Path.TabLogo);
+                roleTab, erTab.transform, "ExtremeCrewTab", Path.TabCrewmate);
             var (impostorSettings, impostorMenu) = createOptionSettingAndMenu(
                 gameSettings, ImpostorSetting);
             var (impostorTab, impostorTabHighlight) = createTab(
-                roleTab, crewTab.transform, "ExtremeImpostorTab", Path.TabLogo);
+                roleTab, crewTab.transform, "ExtremeImpostorTab", Path.TabImpostor);
             var (neutralSettings, neutralMenu) = createOptionSettingAndMenu(
                 gameSettings, NeutralSetting);
             var (neutralTab, neutralTabHighlight) = createTab(
-                roleTab, impostorTab.transform, "ExtremeNeutralTab", Path.TabLogo);
+                roleTab, impostorTab.transform, "ExtremeNeutralTab", Path.TabNeutral);
             var (combinationSettings, combinationMenu) = createOptionSettingAndMenu(
                 gameSettings, CombinationSetting);
             var (combinationTab, combinationTabHighlight) = createTab(
-                roleTab, neutralTab.transform, "ExtremeCombTab", Path.TabLogo);
+                roleTab, neutralTab.transform, "ExtremeCombTab", Path.TabCombination);
 
             // 幽霊役職
             var (ghostCrewSettings, ghostCrewMenu) = createOptionSettingAndMenu(
                 gameSettings, GhostCrewSetting);
             var (ghostCrewTab, ghostCrewTabHighlight) = createTab(
-                roleTab, combinationTab.transform, "ExtremeGhostCrewTab", Path.TabLogo);
+                roleTab, combinationTab.transform, "ExtremeGhostCrewTab", Path.TabGhostCrewmate);
             var (ghostImpostorSettings, ghostImpostorMenu) = createOptionSettingAndMenu(
                 gameSettings, GhostImpSetting);
             var (ghostImpostorTab, ghostImpostorTabHighlight) = createTab(
-                roleTab, ghostCrewTab.transform, "ExtremeGhostImpTab", Path.TabLogo);
+                roleTab, ghostCrewTab.transform, "ExtremeGhostImpTab", Path.TabGhostImpostor);
             var (ghostNeutralSettings, ghostNeutralMenu) = createOptionSettingAndMenu(
                 gameSettings, GhostNeutSetting);
             var (ghostNeutralTab, ghostNeutralTabHighlight) = createTab(
-                roleTab, ghostImpostorTab.transform, "ExtremeGhostNeutTab", Path.TabLogo);
+                roleTab, ghostImpostorTab.transform, "ExtremeGhostNeutTab", Path.TabGhostNeutral);
 
             gameTab.transform.position += Vector3.left * 3.75f;
             roleTab.transform.position += Vector3.left * 4.0f;
