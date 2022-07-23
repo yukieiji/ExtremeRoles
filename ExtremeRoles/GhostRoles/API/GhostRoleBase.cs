@@ -59,18 +59,41 @@ namespace ExtremeRoles.GhostRoles.API
 
         protected readonly Vector3 DefaultButtonOffset = new Vector3(-1.8f, -0.06f, 0);
 
+        private OptionTab tab = OptionTab.General;
+
         public GhostRoleBase(
             bool hasTask,
             ExtremeRoleType team,
             ExtremeGhostRoleId id,
             string roleName,
-            Color color)
+            Color color,
+            OptionTab tab = OptionTab.General)
         {
             this.Task = hasTask;
             this.TeamType = team;
             this.RoleId = id;
             this.RoleName = roleName;
             this.NameColor = color;
+            
+            if (tab == OptionTab.General)
+            {
+                switch (team)
+                {
+                    case ExtremeRoleType.Crewmate:
+                        this.tab = OptionTab.GhostCrewmate;
+                        break;
+                    case ExtremeRoleType.Impostor:
+                        this.tab = OptionTab.GhostImpostor;
+                        break;
+                    case ExtremeRoleType.Neutral:
+                        this.tab = OptionTab.GhostNeutral;
+                        break;
+                }
+            }
+            else
+            {
+                this.tab = tab;
+            }
         }
 
         public virtual GhostRoleBase Clone()
@@ -261,7 +284,8 @@ namespace ExtremeRoles.GhostRoles.API
                 defaultValue,
                 min, max, step,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption);
+                format, invert, enableCheckOption,
+                tab: this.tab);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -285,7 +309,8 @@ namespace ExtremeRoles.GhostRoles.API
                 defaultValue,
                 min, step,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption);
+                format, invert, enableCheckOption,
+                tab: this.tab);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -309,7 +334,8 @@ namespace ExtremeRoles.GhostRoles.API
                 defaultValue,
                 min, max, step,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption);
+                format, invert, enableCheckOption,
+                tab: this.tab);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -333,7 +359,8 @@ namespace ExtremeRoles.GhostRoles.API
                 defaultValue,
                 min, step,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption);
+                format, invert, enableCheckOption,
+                tab: this.tab);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -355,7 +382,8 @@ namespace ExtremeRoles.GhostRoles.API
                 createAutoOptionString(option, colored),
                 defaultValue,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption);
+                format, invert, enableCheckOption,
+                tab: this.tab);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -377,7 +405,8 @@ namespace ExtremeRoles.GhostRoles.API
                 createAutoOptionString(option, colored),
                 selections,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption);
+                format, invert, enableCheckOption,
+                tab: this.tab);
         }
 
         private string createAutoOptionString<T>(

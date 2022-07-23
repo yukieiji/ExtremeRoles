@@ -46,7 +46,7 @@ namespace ExtremeRoles.Roles.API
         public int GameControlId = 0;
         protected Color NameColor;
 
-        protected OptionTab Tab = OptionTab.General;
+        private OptionTab tab = OptionTab.General;
 
         public SingleRoleBase()
         { }
@@ -87,22 +87,22 @@ namespace ExtremeRoles.Roles.API
                 switch (this.Team)
                 {
                     case ExtremeRoleType.Crewmate:
-                        this.Tab = OptionTab.Crewmate;
+                        this.tab = OptionTab.Crewmate;
                         break;
                     case ExtremeRoleType.Impostor:
-                        this.Tab = OptionTab.Impostor;
+                        this.tab = OptionTab.Impostor;
                         break;
                     case ExtremeRoleType.Neutral:
-                        this.Tab = OptionTab.Neutral;
+                        this.tab = OptionTab.Neutral;
                         break;
                     default:
-                        this.Tab = OptionTab.General;
+                        this.tab = OptionTab.General;
                         break;
                 }
             }
             else
             {
-                this.Tab = tab;
+                this.tab = tab;
             }
         }
 
@@ -383,7 +383,7 @@ namespace ExtremeRoles.Roles.API
                 defaultValue,
                 min, max, step,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption, this.Tab);
+                format, invert, enableCheckOption, this.tab);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -407,7 +407,7 @@ namespace ExtremeRoles.Roles.API
                 defaultValue,
                 min, step,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption, this.Tab);
+                format, invert, enableCheckOption, this.tab);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -431,7 +431,7 @@ namespace ExtremeRoles.Roles.API
                 defaultValue,
                 min, max, step,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption, this.Tab);
+                format, invert, enableCheckOption, this.tab);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -455,7 +455,7 @@ namespace ExtremeRoles.Roles.API
                 defaultValue,
                 min, step,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption, this.Tab);
+                format, invert, enableCheckOption, this.tab);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -477,7 +477,7 @@ namespace ExtremeRoles.Roles.API
                 createAutoOptionString(option, colored),
                 defaultValue,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption, this.Tab);
+                format, invert, enableCheckOption, this.tab);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -499,7 +499,7 @@ namespace ExtremeRoles.Roles.API
                 createAutoOptionString(option, colored),
                 selections,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption, this.Tab);
+                format, invert, enableCheckOption, this.tab);
         }
 
         private string createAutoOptionString<T>(
