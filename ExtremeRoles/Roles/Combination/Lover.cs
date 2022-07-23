@@ -46,7 +46,8 @@ namespace ExtremeRoles.Roles.Combination
             ExtremeRoleId.Lover.ToString(),
             ColorPalette.LoverPink,
             false, true,
-            false, false)
+            false, false,
+            tab: OptionTab.Combination)
         { }
 
         public override string GetFullDescription()

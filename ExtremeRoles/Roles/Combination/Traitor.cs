@@ -125,7 +125,8 @@ namespace ExtremeRoles.Roles.Combination
                 ExtremeRoleType.Crewmate,
                 ExtremeRoleId.Traitor.ToString(),
                 ColorPalette.TraitorLightShikon,
-                true, false, true, false)
+                true, false, true, false,
+                tab: OptionTab.Combination)
         {
             this.CanHasAnotherRole = true;
         }

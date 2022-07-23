@@ -86,7 +86,8 @@ namespace ExtremeRoles.Roles.Combination
             ExtremeRoleId.Sharer.ToString(),
             Palette.ImpostorRed,
             true, false,
-            true, true)
+            true, true,
+            tab: OptionTab.Combination)
         { }
 
         public void HockMuderPlayer(

@@ -12,6 +12,18 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module
 {
+    public enum OptionTab : byte
+    {
+        General,
+        Crewmate,
+        Impostor,
+        Neutral,
+        Combination,
+        GhostCrewmate,
+        GhostImpostor,
+        GhostNeutral,
+    }
+
     public enum OptionUnit : byte
     {
         None,
@@ -33,6 +45,7 @@ namespace ExtremeRoles.Module
         public bool IsHidden { get; }
         public bool IsHeader { get; }
         public int ValueCount { get; }
+        public OptionTab Tab { get; }
         public IOption Parent { get; }
         public IOption ForceEnableCheckOption { get; }
         public List<IOption> Children { get; }
@@ -67,6 +80,7 @@ namespace ExtremeRoles.Module
 
         public int ValueCount => this.Selections.Length;
 
+        public OptionTab Tab => this.tab;
         public IOption Parent => this.parent;
         public IOption ForceEnableCheckOption => this.forceEnableCheckOption;
         public List<IOption> Children => this.children;
@@ -88,6 +102,7 @@ namespace ExtremeRoles.Module
         private OptionUnit stringFormat;
         private List<IWithUpdatableOption<OutType>> withUpdateOption = new List<IWithUpdatableOption<OutType>>();
 
+        private OptionTab tab;
         private IOption parent;
         private IOption forceEnableCheckOption;
         private List<IOption> children = new List<IOption>();
@@ -113,8 +128,12 @@ namespace ExtremeRoles.Module
             bool isHidden,
             OptionUnit format,
             bool invert,
-            IOption enableCheckOption)
+            IOption enableCheckOption,
+            OptionTab tab = OptionTab.General)
         {
+
+            this.tab = tab;
+
             int index = Array.IndexOf(selections, defaultValue);
 
             this.id = id;
@@ -147,7 +166,7 @@ namespace ExtremeRoles.Module
 
             OptionHolder.AllOption.Add(this.Id, this);
         }
-        
+
         public virtual void Update(OutType newValue)
         {
             return;
@@ -300,13 +319,14 @@ namespace ExtremeRoles.Module
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            IOption enableCheckOption = null) : base(
+            IOption enableCheckOption = null,
+            OptionTab tab = OptionTab.General) : base(
                 id, name,
                 new string[] { "optionOff", "optionOn" },
                 defaultValue ? "optionOn" : "optionOff",
                 parent, isHeader, isHidden,
                 format, invert,
-                enableCheckOption)
+                enableCheckOption, tab)
         { }
 
         public override dynamic GetValue() => CurSelection > 0;
@@ -323,13 +343,14 @@ namespace ExtremeRoles.Module
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            IOption enableCheckOption = null) : base(
+            IOption enableCheckOption = null,
+            OptionTab tab = OptionTab.General) : base(
                 id, name,
                 createSelection(min, max, step).ToArray(),
                 defaultValue, parent,
                 isHeader, isHidden,
                 format, invert,
-                enableCheckOption)
+                enableCheckOption, tab)
         { }
 
         public override dynamic GetValue() => Selections[CurSelection];
@@ -367,13 +388,14 @@ namespace ExtremeRoles.Module
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            IOption enableCheckOption = null) : base(
+            IOption enableCheckOption = null,
+            OptionTab tab = OptionTab.General) : base(
                 id, name,
                 createSelection(min, max, step).ToArray(),
                 defaultValue, parent,
                 isHeader, isHidden,
                 format, invert,
-                enableCheckOption)
+                enableCheckOption, tab)
         {
             this.minValue = Convert.ToInt32(this.Selections[0].ToString());
             this.maxValue = Convert.ToInt32(
@@ -421,13 +443,14 @@ namespace ExtremeRoles.Module
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            IOption enableCheckOption = null) : base(
+            IOption enableCheckOption = null,
+            OptionTab tab = OptionTab.General) : base(
                 id, name,
                 createSelection(min, step, defaultValue).ToArray(),
                 defaultValue, parent,
                 isHeader, isHidden,
                 format, invert,
-                enableCheckOption)
+                enableCheckOption, tab)
         {
             this.step = step;
         }
@@ -474,13 +497,14 @@ namespace ExtremeRoles.Module
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            IOption enableCheckOption = null) : base(
+            IOption enableCheckOption = null,
+            OptionTab tab = OptionTab.General) : base(
                 id, name,
                 createSelection(min, step, defaultValue).ToArray(),
                 defaultValue, parent,
                 isHeader, isHidden,
                 format, invert,
-                enableCheckOption)
+                enableCheckOption, tab)
         {
             this.step = step;
         }
@@ -533,10 +557,11 @@ namespace ExtremeRoles.Module
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            IOption enableCheckOption = null) : base(
+            IOption enableCheckOption = null,
+            OptionTab tab = OptionTab.General) : base(
                 id, name, selections, "",
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption)
+                format, invert, enableCheckOption, tab)
         { }
 
         public SelectionCustomOption(

@@ -30,7 +30,8 @@ namespace ExtremeRoles.Roles.Combination
                 ExtremeRoleType.Crewmate,
                 ExtremeRoleId.Supporter.ToString(),
                 ColorPalette.SupporterGreen,
-                false, true, false, false)
+                false, true, false, false,
+                tab: OptionTab.Combination)
         {}
 
         public void IntroBeginSetUp()

@@ -152,7 +152,8 @@ namespace ExtremeRoles.Roles.Combination
             ExtremeRoleType.Crewmate,
             ExtremeRoleId.Detective.ToString(),
             ColorPalette.DetectiveKokikou,
-            false, true, false, false)
+            false, true, false, false,
+            tab: OptionTab.Combination)
         { }
 
         public void AllReset(PlayerControl rolePlayer)
@@ -432,7 +433,8 @@ namespace ExtremeRoles.Roles.Combination
             ExtremeRoleType.Crewmate,
             ExtremeRoleId.Assistant.ToString(),
             ColorPalette.AssistantBluCapri,
-            false, true, false, false)
+            false, true, false, false,
+            tab: OptionTab.Combination)
         { }
 
         public void AllReset(PlayerControl rolePlayer)

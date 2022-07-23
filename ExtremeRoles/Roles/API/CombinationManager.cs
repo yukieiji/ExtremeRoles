@@ -126,7 +126,8 @@ namespace ExtremeRoles.Roles.API
                     string.Concat(
                         this.roleName,
                         RoleCommonOption.SpawnRate.ToString())),
-                OptionHolder.SpawnRate, null, true);
+                OptionHolder.SpawnRate, null, true,
+                tab: OptionTab.Combination);
 
             int thisMaxRoleNum =
                 this.maxSetNum == int.MaxValue ? 
@@ -138,13 +139,15 @@ namespace ExtremeRoles.Roles.API
                     this.roleName,
                     RoleCommonOption.RoleNum.ToString()),
                 1, 1, thisMaxRoleNum, 1,
-                roleSetOption);
+                roleSetOption,
+                tab: OptionTab.Combination);
             new BoolCustomOption(
                 GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign),
                 string.Concat(
                     this.roleName,
                     CombinationRoleCommonOption.IsMultiAssign.ToString()),
-                false, roleSetOption);
+                false, roleSetOption,
+                tab: OptionTab.Combination);
 
             return roleSetOption;
         }
@@ -281,7 +284,8 @@ namespace ExtremeRoles.Roles.API
                     string.Concat(
                         this.roleName,
                         RoleCommonOption.SpawnRate.ToString())),
-                OptionHolder.SpawnRate, null, true);
+                OptionHolder.SpawnRate, null, true,
+                tab: OptionTab.Combination);
 
             int roleAssignNum = this.BaseRole.IsImpostor() ? OptionHolder.MaxImposterNum : OptionHolder.VanillaMaxPlayerNum - 1;
 
@@ -292,7 +296,8 @@ namespace ExtremeRoles.Roles.API
                     CombinationRoleCommonOption.AssignsNum.ToString()),
                 this.minimumRoleNum, this.minimumRoleNum,
                 roleAssignNum, 1,
-                roleSetOption, isHidden: this.minimumRoleNum <= 1);
+                roleSetOption, isHidden: this.minimumRoleNum <= 1,
+                tab: OptionTab.Combination);
 
 
             int maxSetNum = this.BaseRole.IsImpostor() ?
@@ -305,7 +310,8 @@ namespace ExtremeRoles.Roles.API
                     this.roleName,
                     RoleCommonOption.RoleNum.ToString()),
                 1, 1, maxSetNum, 1,
-                roleSetOption);
+                roleSetOption,
+                tab: OptionTab.Combination);
 
             roleAssignNumOption.SetUpdateOption(roleSetNumOption);
 
@@ -316,14 +322,16 @@ namespace ExtremeRoles.Roles.API
                     string.Concat(
                         this.roleName,
                         CombinationRoleCommonOption.IsAssignImposter.ToString()),
-                    false, roleSetOption);
+                    false, roleSetOption,
+                tab: OptionTab.Combination);
 
                 new SelectionCustomOption(
                     GetRoleOptionId(CombinationRoleCommonOption.ImposterSelectedRate),
                     string.Concat(
                         this.roleName,
                         CombinationRoleCommonOption.ImposterSelectedRate.ToString()),
-                    OptionHolder.SpawnRate, isImposterAssignOps);
+                    OptionHolder.SpawnRate, isImposterAssignOps,
+                tab: OptionTab.Combination);
             }
 
             new BoolCustomOption(
@@ -331,7 +339,8 @@ namespace ExtremeRoles.Roles.API
                 string.Concat(
                     this.roleName,
                     CombinationRoleCommonOption.IsMultiAssign.ToString()),
-                false, roleSetOption, isHidden: this.minimumRoleNum <= 1);
+                false, roleSetOption, isHidden: this.minimumRoleNum <= 1,
+                tab: OptionTab.Combination);
 
             return roleSetOption;
         }

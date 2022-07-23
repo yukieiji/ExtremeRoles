@@ -50,7 +50,8 @@ namespace ExtremeRoles.Roles.Combination
                 ExtremeRoleType.Impostor,
                 ExtremeRoleId.Assassin.ToString(),
                 Palette.ImpostorRed,
-                true, false, true, true)
+                true, false, true, true,
+                tab: OptionTab.Combination)
         {}
 
         public override bool TryRolePlayerKilledFrom(
@@ -231,7 +232,8 @@ namespace ExtremeRoles.Roles.Combination
                 ExtremeRoleType.Crewmate,
                 ExtremeRoleId.Marlin.ToString(),
                 ColorPalette.MarineBlue,
-                false, false, false, false)
+                false, false, false, false,
+                tab: OptionTab.Combination)
         {}
 
         public void IntroBeginSetUp()

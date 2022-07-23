@@ -472,7 +472,8 @@ namespace ExtremeRoles.Roles.Combination
                 ExtremeRoleType.Crewmate,
                 ExtremeRoleId.Hero.ToString(),
                 ColorPalette.HeroAmaIro,
-                false, true, false, false)
+                false, true, false, false,
+                tab: OptionTab.Combination)
         { }
         public void SetCondition(
             OneForAllCondition cond)
@@ -713,7 +714,8 @@ namespace ExtremeRoles.Roles.Combination
                 ExtremeRoleType.Impostor,
                 ExtremeRoleId.Villain.ToString(),
                 Palette.ImpostorRed,
-                true, false, true, true)
+                true, false, true, true,
+                tab: OptionTab.Combination)
         { }
 
         public void CreateAbility()
@@ -897,7 +899,8 @@ namespace ExtremeRoles.Roles.Combination
                 ExtremeRoleType.Neutral,
                 ExtremeRoleId.Vigilante.ToString(),
                 ColorPalette.VigilanteFujiIro,
-                false, false, false, false)
+                false, false, false, false,
+                tab: OptionTab.Combination)
         { }
 
         public void SetCondition(

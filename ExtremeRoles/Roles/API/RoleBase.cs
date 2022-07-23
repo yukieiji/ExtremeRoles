@@ -46,6 +46,8 @@ namespace ExtremeRoles.Roles.API
         public int GameControlId = 0;
         protected Color NameColor;
 
+        protected OptionTab Tab = OptionTab.General;
+
         public SingleRoleBase()
         { }
         public SingleRoleBase(
@@ -61,7 +63,8 @@ namespace ExtremeRoles.Roles.API
             bool canRepairSabotage = true,
             bool canUseAdmin = true,
             bool canUseSecurity = true,
-            bool canUseVital = true)
+            bool canUseVital = true,
+            OptionTab tab = OptionTab.General)
         {
             this.Id = id;
             this.Team = team;
@@ -78,6 +81,29 @@ namespace ExtremeRoles.Roles.API
             this.CanUseAdmin = canUseAdmin;
             this.CanUseSecurity = canUseSecurity;
             this.CanUseVital = canUseVital;
+
+            if (tab == OptionTab.General)
+            {
+                switch (this.Team)
+                {
+                    case ExtremeRoleType.Crewmate:
+                        this.Tab = OptionTab.Crewmate;
+                        break;
+                    case ExtremeRoleType.Impostor:
+                        this.Tab = OptionTab.Impostor;
+                        break;
+                    case ExtremeRoleType.Neutral:
+                        this.Tab = OptionTab.Neutral;
+                        break;
+                    default:
+                        this.Tab = OptionTab.General;
+                        break;
+                }
+            }
+            else
+            {
+                this.Tab = tab;
+            }
         }
 
         public virtual SingleRoleBase Clone()
@@ -357,7 +383,7 @@ namespace ExtremeRoles.Roles.API
                 defaultValue,
                 min, max, step,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption);
+                format, invert, enableCheckOption, this.Tab);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -381,7 +407,7 @@ namespace ExtremeRoles.Roles.API
                 defaultValue,
                 min, step,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption);
+                format, invert, enableCheckOption, this.Tab);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -405,7 +431,7 @@ namespace ExtremeRoles.Roles.API
                 defaultValue,
                 min, max, step,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption);
+                format, invert, enableCheckOption, this.Tab);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -429,7 +455,7 @@ namespace ExtremeRoles.Roles.API
                 defaultValue,
                 min, step,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption);
+                format, invert, enableCheckOption, this.Tab);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -451,7 +477,7 @@ namespace ExtremeRoles.Roles.API
                 createAutoOptionString(option, colored),
                 defaultValue,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption);
+                format, invert, enableCheckOption, this.Tab);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -473,7 +499,7 @@ namespace ExtremeRoles.Roles.API
                 createAutoOptionString(option, colored),
                 selections,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption);
+                format, invert, enableCheckOption, this.Tab);
         }
 
         private string createAutoOptionString<T>(
@@ -510,10 +536,17 @@ namespace ExtremeRoles.Roles.API
             bool hasTask,
             bool useVent,
             bool useSabotage,
-            bool canCallMeeting = true) : base(
+            bool canCallMeeting = true,
+            bool canRepairSabotage = true,
+            bool canUseAdmin = true,
+            bool canUseSecurity = true,
+            bool canUseVital = true,
+            OptionTab tab = OptionTab.General) : base(
                 id, team, roleName, roleColor,
                 canKill, hasTask, useVent,
-                useSabotage, canCallMeeting)
+                useSabotage, canCallMeeting,
+                canRepairSabotage, canUseAdmin,
+                canUseSecurity, canUseVital, tab)
         { }
 
         public void SetRoleType(RoleTypes roleType)
