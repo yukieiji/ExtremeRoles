@@ -27,14 +27,14 @@ namespace ExtremeRoles.Patches.Option
 
         public static void Postfix(GameOptionsMenu __instance)
         {
-            if (isFindAndTrans(GeneralSetting, "ERSettings")) { return; }
-            if (isFindAndTrans(CrewmateSetting, "ERSettings")) { return; }
-            if (isFindAndTrans(ImpostorSetting, "ERSettings")) { return; }
-            if (isFindAndTrans(NeutralSetting, "ERSettings")) { return; }
-            if (isFindAndTrans(CombinationSetting, "ERSettings")) { return; }
-            if (isFindAndTrans(GhostCrewSetting, "ERSettings")) { return; }
-            if (isFindAndTrans(GhostImpSetting, "ERSettings")) { return; }
-            if (isFindAndTrans(GhostNeutSetting, "ERSettings")) { return; }
+            if (isFindAndTrans(GeneralSetting, "ERGlobalSetting")) { return; }
+            if (isFindAndTrans(CrewmateSetting, "ERCrewmateRoleSetting")) { return; }
+            if (isFindAndTrans(ImpostorSetting, "ERImpostorRoleSetting")) { return; }
+            if (isFindAndTrans(NeutralSetting, "ERNeutralRoleSetting")) { return; }
+            if (isFindAndTrans(CombinationSetting, "ERCombinationRoleSetting")) { return; }
+            if (isFindAndTrans(GhostCrewSetting, "ERGhostCrewmateRoleSetting")) { return; }
+            if (isFindAndTrans(GhostImpSetting, "ERGhostImpostorRoleSetting")) { return; }
+            if (isFindAndTrans(GhostNeutSetting, "ERGhostNeutralRoleSetting")) { return; }
 
             var template = UnityEngine.Object.FindObjectsOfType<StringOption>().FirstOrDefault();
             if (template == null) { return; }
@@ -45,25 +45,39 @@ namespace ExtremeRoles.Patches.Option
             var gameSettings = GameObject.Find("Game Settings"); 
 
             var (erSettings, erMenu) = createOptionSettingAndMenu(gameSettings, GeneralSetting);
-            var (erTab, tabHighlight) = createTab(roleTab, roleTab.transform.parent, "ExtremeRoleTab", Path.TabLogo);
+            var (erTab, tabHighlight) = createTab(roleTab, roleTab.transform.parent, "ExtremeGlobalTab", Path.TabLogo);
 
             // 生きてる役職
-            var (crewSettings, crewMenu) = createOptionSettingAndMenu(gameSettings, CrewmateSetting);
-            var (crewTab, crewTabHighlight) = createTab(roleTab, erTab.transform, "ExtremeRoleTab", Path.TabLogo);
-            var (impostorSettings, impostorMenu) = createOptionSettingAndMenu(gameSettings, ImpostorSetting);
-            var (impostorTab, impostorTabHighlight) = createTab(roleTab, crewTab.transform, "ExtremeRoleTab", Path.TabLogo);
-            var (neutralSettings, neutralMenu) = createOptionSettingAndMenu(gameSettings, NeutralSetting);
-            var (neutralTab, neutralTabHighlight) = createTab(roleTab, impostorTab.transform, "ExtremeRoleTab", Path.TabLogo);
-            var (combinationSettings, combinationMenu) = createOptionSettingAndMenu(gameSettings, CombinationSetting);
-            var (combinationTab, combinationTabHighlight) = createTab(roleTab, neutralTab.transform, "ExtremeRoleTab", Path.TabLogo);
+            var (crewSettings, crewMenu) = createOptionSettingAndMenu(
+                gameSettings, CrewmateSetting);
+            var (crewTab, crewTabHighlight) = createTab(
+                roleTab, erTab.transform, "ExtremeCrewTab", Path.TabLogo);
+            var (impostorSettings, impostorMenu) = createOptionSettingAndMenu(
+                gameSettings, ImpostorSetting);
+            var (impostorTab, impostorTabHighlight) = createTab(
+                roleTab, crewTab.transform, "ExtremeImpostorTab", Path.TabLogo);
+            var (neutralSettings, neutralMenu) = createOptionSettingAndMenu(
+                gameSettings, NeutralSetting);
+            var (neutralTab, neutralTabHighlight) = createTab(
+                roleTab, impostorTab.transform, "ExtremeNeutralTab", Path.TabLogo);
+            var (combinationSettings, combinationMenu) = createOptionSettingAndMenu(
+                gameSettings, CombinationSetting);
+            var (combinationTab, combinationTabHighlight) = createTab(
+                roleTab, neutralTab.transform, "ExtremeCombTab", Path.TabLogo);
 
             // 幽霊役職
-            var (ghostCrewSettings, ghostCrewMenu) = createOptionSettingAndMenu(gameSettings, GhostCrewSetting);
-            var (ghostCrewTab, ghostCrewTabHighlight) = createTab(roleTab, combinationTab.transform, "ExtremeRoleTab", Path.TabLogo);
-            var (ghostImpostorSettings, ghostImpostorMenu) = createOptionSettingAndMenu(gameSettings, GhostImpSetting);
-            var (ghostImpostorTab, ghostImpostorTabHighlight) = createTab(roleTab, ghostCrewTab.transform, "ExtremeRoleTab", Path.TabLogo);
-            var (ghostNeutralSettings, ghostNeutralMenu) = createOptionSettingAndMenu(gameSettings, GhostNeutSetting);
-            var (ghostNeutralTab, ghostNeutralTabHighlight) = createTab(roleTab, ghostImpostorTab.transform, "ExtremeRoleTab", Path.TabLogo);
+            var (ghostCrewSettings, ghostCrewMenu) = createOptionSettingAndMenu(
+                gameSettings, GhostCrewSetting);
+            var (ghostCrewTab, ghostCrewTabHighlight) = createTab(
+                roleTab, combinationTab.transform, "ExtremeGhostCrewTab", Path.TabLogo);
+            var (ghostImpostorSettings, ghostImpostorMenu) = createOptionSettingAndMenu(
+                gameSettings, GhostImpSetting);
+            var (ghostImpostorTab, ghostImpostorTabHighlight) = createTab(
+                roleTab, ghostCrewTab.transform, "ExtremeGhostImpTab", Path.TabLogo);
+            var (ghostNeutralSettings, ghostNeutralMenu) = createOptionSettingAndMenu(
+                gameSettings, GhostNeutSetting);
+            var (ghostNeutralTab, ghostNeutralTabHighlight) = createTab(
+                roleTab, ghostImpostorTab.transform, "ExtremeGhostNeutTab", Path.TabLogo);
 
             gameTab.transform.position += Vector3.left * 3.75f;
             roleTab.transform.position += Vector3.left * 4.0f;

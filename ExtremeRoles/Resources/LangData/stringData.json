@@ -1,8 +1,28 @@
 {
-    "ERSettings": {
-        "0": "Extreme Roles Settings",
-        "11": "Extreme Roles\u306e\u8a2d\u5b9a",
-        "13": "EX\u6781\u7aef\u804c\u4e1a\u8bbe\u7f6e"
+    "ERGlobalSetting": {
+        "0": "Extreme Roles\n Global Setting",
+        "11": "Extreme Roles\n\u30b0\u30ed\u30fc\u30d0\u30eb\u8a2d\u5b9a"
+    },
+    "ERCrewmateRoleSetting": {
+        "11": "Extreme Roles\n\u30af\u30eb\u30fc\u5f79\u8077\u8a2d\u5b9a"
+    },
+    "ERImpostorRoleSetting": {
+        "11": "Extreme Roles\n\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc\u5f79\u8077\u8a2d\u5b9a"
+    },
+    "ERNeutralRoleSetting": {
+        "11": "Extreme Roles\n\u30cb\u30e5\u30fc\u30c8\u30e9\u30eb\u5f79\u8077\u8a2d\u5b9a"
+    },
+    "ERCombinationRoleSetting": {
+        "11": "Extreme Roles\n\u30b3\u30f3\u30d3\u30cd\u30fc\u30b7\u30e7\u30f3\u5f79\u8077\u8a2d\u5b9a"
+    },
+    "ERGhostCrewmateRoleSetting": {
+        "11": "Extreme Roles\n\u30b4\u30fc\u30b9\u30c8\u30af\u30eb\u30fc\u5f79\u8077\u8a2d\u5b9a"
+    },
+    "ERGhostImpostorRoleSetting": {
+        "11": "Extreme Roles\n\u30b4\u30fc\u30b9\u30c8\u30a4\u30f3\u30dd\u30b9\u30bf\u30fc\u5f79\u8077\u8a2d\u5b9a"
+    },
+    "ERGhostNeutralRoleSetting": {
+        "11": "Extreme Roles\n\u30b4\u30fc\u30b9\u30c8\u30cb\u30e5\u30fc\u30c8\u30e9\u30eb\u5f79\u8077\u8a2d\u5b9a"
     },
     "preset1": {
         "0": "Preset 1",
