@@ -17,17 +17,12 @@ namespace ExtremeRoles.Patches.Option
     [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Start))]
     public static class GameOptionsMenuStartPatch
     {
+        private const string generalSetting = "ExtremeRoleSettings";
+        private const string crewmateSetting = "ExtremeCrewmateSettings";
+
         public static void Postfix(GameOptionsMenu __instance)
         {
-            if (GameObject.Find("ExtremeRoleSettings") != null)
-            { // Settings setup has already been performed, fixing the title of the tab and returning
-                GameObject.Find(
-                    "ExtremeRoleSettings").transform.FindChild(
-                        "GameGroup").FindChild(
-                            "Text").GetComponent<TMPro.TextMeshPro>().SetText(
-                                Helper.Translation.GetString("ERSettings"));
-                return;
-            }
+            if (isFindAndTrans(generalSetting, "ERSettings")) { return; }
 
             var template = UnityEngine.Object.FindObjectsOfType<StringOption>().FirstOrDefault();
             if (template == null) { return; }
@@ -151,6 +146,16 @@ namespace ExtremeRoles.Patches.Option
             }
         }
 
+        private static bool isFindAndTrans(string name, string transKey)
+        {
+            if (GameObject.Find(name) == null) { return false; }
+
+            // Settings setup has already been performed, fixing the title of the tab and returning
+            GameObject.Find(name).transform.FindChild("GameGroup").FindChild(
+                "Text").GetComponent<TMPro.TextMeshPro>().SetText(Helper.Translation.GetString(transKey));
+            return true;
+        }
+
     }
 
     [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Update))]
@@ -159,7 +164,8 @@ namespace ExtremeRoles.Patches.Option
         private static float timer = 1f;
         public static void Postfix(GameOptionsMenu __instance)
         {
-            if (__instance.transform.parent.parent.name.CompareTo("ExtremeRoleSettings") != 0) { return; }
+            var gameSettingMenu = UnityEngine.Object.FindObjectsOfType<GameSettingMenu>().FirstOrDefault();
+            if (gameSettingMenu.RegularGameSettings.active || gameSettingMenu.RolesSettings.gameObject.active) { return; }
 
             timer += Time.deltaTime;
             if (timer < 0.1f) { return; }
