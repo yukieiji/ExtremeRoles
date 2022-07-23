@@ -29,30 +29,22 @@ namespace ExtremeRoles.Patches.Option
                 return;
             }
 
-            // Setup ExtreamRole tab
-            var roleTab = GameObject.Find("RoleTab");
-            var gameTab = GameObject.Find("GameTab");
-
             var template = UnityEngine.Object.FindObjectsOfType<StringOption>().FirstOrDefault();
             if (template == null) { return; }
 
+            // Setup ExtreamRole tab
+            var roleTab = GameObject.Find("RoleTab");
+            var gameTab = GameObject.Find("GameTab");
             var gameSettings = GameObject.Find("Game Settings");
-            var gameSettingMenu = UnityEngine.Object.FindObjectsOfType<GameSettingMenu>().FirstOrDefault();
-            var erSettings = UnityEngine.Object.Instantiate(gameSettings, gameSettings.transform.parent);
-            var erMenu = erSettings.transform.FindChild("GameGroup").FindChild("SliderInner").GetComponent<GameOptionsMenu>();
-            erSettings.name = "ExtremeRoleSettings";
 
-            var erTab = UnityEngine.Object.Instantiate(roleTab, roleTab.transform.parent);
-            var tabHighlight = erTab.transform.FindChild("Hat Button").FindChild("Tab Background").GetComponent<SpriteRenderer>();
-            erTab.transform.FindChild("Hat Button").FindChild(
-                "Icon").GetComponent<SpriteRenderer>().sprite = Loader.CreateSpriteFromResources(
-                    Path.TabLogo, 100f);
-
+            var (erSettings, erMenu) = createOptionSettingAndMenu(gameSettings, "ExtremeRoleSettings");
+            var (erTab, tabHighlight) = createTab(roleTab, "ExtremeRoleTab", Path.TabLogo);
 
             gameTab.transform.position += Vector3.left * 0.5f;
             roleTab.transform.position += Vector3.left * 0.5f;
             erTab.transform.position += Vector3.right * 0.5f;
 
+            var gameSettingMenu = UnityEngine.Object.FindObjectsOfType<GameSettingMenu>().FirstOrDefault();
             var tabs = new GameObject[] { gameTab, roleTab, erTab };
             for (int i = 0; i < tabs.Length; i++)
             {
@@ -89,11 +81,7 @@ namespace ExtremeRoles.Patches.Option
                 }));
             }
 
-            // まずは元々入っているオプションを消す
-            foreach (OptionBehaviour option in erMenu.GetComponentsInChildren<OptionBehaviour>())
-            {
-                UnityEngine.Object.Destroy(option.gameObject);
-            }
+            removeAllOption(erMenu);
 
             List<OptionBehaviour> erOptions = new List<OptionBehaviour>();
 
@@ -113,7 +101,6 @@ namespace ExtremeRoles.Patches.Option
                     option.SetOptionBehaviour(stringOption);
                 }
                 option.Body.gameObject.SetActive(true);
-
             }
 
             erMenu.Children = new Il2CppReferenceArray<OptionBehaviour>(erOptions.ToArray());
@@ -131,6 +118,39 @@ namespace ExtremeRoles.Patches.Option
             if (longTasksOption != null) { longTasksOption.ValidRange = new FloatRange(0f, 15f); }
 
         }
+
+        private static (GameObject, GameOptionsMenu) createOptionSettingAndMenu(
+            GameObject template, string name)
+        {
+            GameObject setting = UnityEngine.Object.Instantiate(template, template.transform.parent);
+            GameOptionsMenu menu = setting.transform.FindChild("GameGroup").FindChild("SliderInner").GetComponent<GameOptionsMenu>();
+            setting.name = name;
+
+            return (setting, menu);
+        }
+
+        private static (GameObject, SpriteRenderer) createTab(GameObject template, string name, string imgPath)
+        {
+            GameObject tab = UnityEngine.Object.Instantiate(template, template.transform.parent);
+            SpriteRenderer tabHighlight = tab.transform.FindChild(
+                "Hat Button").FindChild("Tab Background").GetComponent<SpriteRenderer>();
+            tab.name = name;
+            tab.transform.FindChild("Hat Button").FindChild(
+                "Icon").GetComponent<SpriteRenderer>().sprite = 
+                    Loader.CreateSpriteFromResources(imgPath, 100f);
+
+            return (tab, tabHighlight);
+        }
+
+        private static void removeAllOption(GameOptionsMenu menu)
+        {
+            // まずは元々入っているオプションを消す
+            foreach (OptionBehaviour option in menu.GetComponentsInChildren<OptionBehaviour>())
+            {
+                UnityEngine.Object.Destroy(option.gameObject);
+            }
+        }
+
     }
 
     [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Update))]
