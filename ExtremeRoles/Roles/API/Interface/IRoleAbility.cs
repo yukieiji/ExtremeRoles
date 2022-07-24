@@ -184,13 +184,16 @@ namespace ExtremeRoles.Roles.API.Interface
             float defaultActiveTime = float.MaxValue)
         {
 
+            SingleRoleBase role = (SingleRoleBase)self;
+
             new FloatCustomOption(
                 self.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime),
                 string.Concat(
-                    ((SingleRoleBase)self).RoleName,
+                    role.RoleName,
                     RoleAbilityCommonOption.AbilityCoolTime.ToString()),
                 defaultCoolTime, minCoolTime, maxCoolTime, step,
-                parentOps, format: OptionUnit.Second);
+                parentOps, format: OptionUnit.Second,
+                tab: role.Tab);
 
             if (defaultActiveTime != float.MaxValue)
             {
@@ -200,10 +203,11 @@ namespace ExtremeRoles.Roles.API.Interface
                 new FloatCustomOption(
                     self.GetRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime),
                     string.Concat(
-                        ((SingleRoleBase)self).RoleName,
+                        role.RoleName,
                         RoleAbilityCommonOption.AbilityActiveTime.ToString()),
                     defaultActiveTime, minActiveTime, maxActiveTime, step,
-                    parentOps, format: OptionUnit.Second);
+                    parentOps, format: OptionUnit.Second,
+                    tab: role.Tab);
             }
 
         }
@@ -216,6 +220,8 @@ namespace ExtremeRoles.Roles.API.Interface
             float defaultActiveTime = float.MaxValue)
         {
 
+            SingleRoleBase role = (SingleRoleBase)self;
+
             self.CreateCommonAbilityOption(
                 parentOps,
                 defaultActiveTime);
@@ -223,11 +229,12 @@ namespace ExtremeRoles.Roles.API.Interface
             new IntCustomOption(
                 self.GetRoleOptionId(RoleAbilityCommonOption.AbilityCount),
                 string.Concat(
-                    ((SingleRoleBase)self).RoleName,
+                    role.RoleName,
                     RoleAbilityCommonOption.AbilityCount.ToString()),
                 defaultAbilityCount, 1,
                 maxAbilityCount, 1,
-                parentOps, format: OptionUnit.Shot);
+                parentOps, format: OptionUnit.Shot,
+                tab: role.Tab);
 
         }
 

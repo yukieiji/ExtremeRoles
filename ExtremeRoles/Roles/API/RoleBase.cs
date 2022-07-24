@@ -46,6 +46,8 @@ namespace ExtremeRoles.Roles.API
         public int GameControlId = 0;
         protected Color NameColor;
 
+        public OptionTab Tab => this.tab;
+
         private OptionTab tab = OptionTab.General;
 
         public SingleRoleBase()
