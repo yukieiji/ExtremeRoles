@@ -89,7 +89,7 @@ namespace ExtremeRoles.Module
         {
             get => this.behaviour;
         }
-        public virtual bool Enabled
+        public bool Enabled
         {
             get
             {
@@ -214,7 +214,14 @@ namespace ExtremeRoles.Module
 
             if (this.forceEnableCheckOption != null)
             {
-                active = active && this.forceEnableCheckOption.Enabled;
+                bool forceEnable = this.forceEnableCheckOption.Enabled;
+
+                if (this.forceEnableCheckOption.Parent != null)
+                {
+                    forceEnable = forceEnable && this.forceEnableCheckOption.Parent.IsActive();
+                }
+
+                active = active && forceEnable;
             }
 
             return active;
