@@ -95,7 +95,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             public SidekickOptionHolder(
                 IOption parentOps,
-                int optionOffset)
+                int optionOffset,
+                OptionTab tab)
             {
                 this.OptionIdOffset = optionOffset;
                 string roleName = ExtremeRoleId.Sidekick.ToString();
@@ -105,55 +106,63 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     string.Concat(
                         roleName,
                         SidekickOption.UseSabotage.ToString()),
-                    true, parentOps);
+                    true, parentOps,
+                    tab: tab);
                 new BoolCustomOption(
                     GetRoleOptionId(SidekickOption.UseVent),
                     string.Concat(
                         roleName,
                         SidekickOption.UseVent.ToString()),
-                    true, parentOps);
+                    true, parentOps,
+                    tab: tab);
 
                 var sidekickKillerOps = new BoolCustomOption(
                     GetRoleOptionId(SidekickOption.CanKill),
                     string.Concat(
                         roleName,
                         SidekickOption.CanKill.ToString()),
-                    false, parentOps);
+                    false, parentOps,
+                    tab: tab);
 
                 var killCoolOption = new BoolCustomOption(
                     GetRoleOptionId(SidekickOption.HasOtherKillCool),
                     string.Concat(
                         roleName,
                         SidekickOption.HasOtherKillCool.ToString()),
-                    false, sidekickKillerOps);
+                    false, sidekickKillerOps,
+                    tab: tab);
                 new FloatCustomOption(
                     GetRoleOptionId(SidekickOption.KillCoolDown),
                     string.Concat(
                         roleName,
                         SidekickOption.KillCoolDown.ToString()),
                     30f, 1.0f, 120f, 0.5f,
-                    killCoolOption, format: OptionUnit.Second);
+                    killCoolOption, format: OptionUnit.Second,
+                    tab: tab);
 
                 var killRangeOption = new BoolCustomOption(
                     GetRoleOptionId(SidekickOption.HasOtherKillRange),
                     string.Concat(
                         roleName,
                         SidekickOption.HasOtherKillRange.ToString()),
-                    false, sidekickKillerOps);
+                    false, sidekickKillerOps,
+                    tab: tab);
                 new SelectionCustomOption(
                     GetRoleOptionId(SidekickOption.KillRange),
                     string.Concat(
                         roleName,
                         SidekickOption.KillRange.ToString()),
                     OptionHolder.Range,
-                    killRangeOption);
+                    killRangeOption,
+                    tab: tab);
 
                 var visonOption = new BoolCustomOption(
                     GetRoleOptionId(SidekickOption.HasOtherVison),
                     string.Concat(
                         roleName,
                         SidekickOption.HasOtherVison.ToString()),
-                    false, parentOps);
+                    false, parentOps,
+                    tab: tab);
 
                 new FloatCustomOption(
                     GetRoleOptionId(SidekickOption.Vison),
@@ -161,13 +170,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                         roleName,
                         SidekickOption.Vison.ToString()),
                     2f, 0.25f, 5f, 0.25f,
-                    visonOption, format: OptionUnit.Multiplier);
+                    visonOption, format: OptionUnit.Multiplier,
+                    tab: tab);
                 new BoolCustomOption(
-                   GetRoleOptionId(SidekickOption.ApplyEnvironmentVisionEffect),
-                   string.Concat(
-                       roleName,
-                       SidekickOption.ApplyEnvironmentVisionEffect.ToString()),
-                   false, visonOption);
+                    GetRoleOptionId(SidekickOption.ApplyEnvironmentVisionEffect),
+                    string.Concat(
+                        roleName,
+                        SidekickOption.ApplyEnvironmentVisionEffect.ToString()),
+                    false, visonOption,
+                    tab: tab);
             }
 
             public void ApplyOption()
@@ -532,7 +543,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             // SideKickOption
             this.SidekickOption = new SidekickOptionHolder(
-                parentOps, this.OptionIdOffset);
+                parentOps, this.OptionIdOffset, this.Tab);
         }
 
         protected override void RoleSpecificInit()
