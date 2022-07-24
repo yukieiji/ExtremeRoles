@@ -105,6 +105,7 @@ namespace ExtremeRoles.Module
             {
                 try
                 {
+                    // 後方互換性を維持するために残す、v3.3.0.0リリース時には消す
                     return prevOptionCsvLoad();
                 }
                 catch (Exception prevE)
@@ -117,6 +118,7 @@ namespace ExtremeRoles.Module
             return false;
         }
 
+        // 後方互換性を維持するために残す、v3.3.0.0リリース時には消す
         private static bool prevOptionCsvLoad()
         {
             using (var csv = new StreamReader(csvName, new UTF8Encoding(true)))
