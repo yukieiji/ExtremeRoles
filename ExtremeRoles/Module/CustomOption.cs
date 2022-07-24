@@ -42,6 +42,7 @@ namespace ExtremeRoles.Module
         public int DefaultSelection { get; }
         public bool Enabled { get; }
         public int Id { get; }
+        public string Name { get; }
         public bool IsHidden { get; }
         public bool IsHeader { get; }
         public int ValueCount { get; }
@@ -55,7 +56,7 @@ namespace ExtremeRoles.Module
         public bool IsActive();
         public void SetOptionBehaviour(OptionBehaviour newBehaviour);
         public string GetString();
-        public string GetName();
+        public string GetTranedName();
         public void UpdateSelection(int newSelection);
         public void SaveConfigValue();
         public void SwitchPreset();
@@ -74,6 +75,7 @@ namespace ExtremeRoles.Module
         public int CurSelection => this.curSelection;
         public int DefaultSelection => this.defaultSelection;
         public int Id => this.id;
+        public string Name => this.name;
         
         public bool IsHidden => this.isHidden;
         public bool IsHeader => this.isHeader;
@@ -172,7 +174,7 @@ namespace ExtremeRoles.Module
             return;
         }
 
-        public string GetName() => Translation.GetString(this.name);
+        public string GetTranedName() => Translation.GetString(this.name);
 
         public string GetString()
         {
@@ -253,7 +255,7 @@ namespace ExtremeRoles.Module
 
                 if (AmongUsClient.Instance?.AmHost == true && CachedPlayerControl.LocalPlayer)
                 {
-                    if (Id == 0)
+                    if (this.id == 0)
                     {
                         OptionHolder.SwitchPreset(this.curSelection); // Switch presets
                     }
@@ -596,7 +598,7 @@ namespace ExtremeRoles.Module
         {
             if (option == null) { return string.Empty; }
             if (!option.IsActive()) { return string.Empty; }
-            return $"{option.GetName()}: {option.GetString()}";
+            return $"{option.GetTranedName()}: {option.GetString()}";
         }
 
         public static string AllOptionToString(
