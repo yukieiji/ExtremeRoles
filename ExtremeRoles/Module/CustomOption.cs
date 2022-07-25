@@ -406,9 +406,8 @@ namespace ExtremeRoles.Module
                 format, invert,
                 enableCheckOption, tab)
         {
-            this.minValue = Convert.ToInt32(this.Selections[0].ToString());
-            this.maxValue = Convert.ToInt32(
-                this.Selections[this.Selections.Length - 1].ToString());
+            this.minValue = this.Selections[0];
+            this.maxValue = this.Selections[this.Selections.Length - 1];
         }
 
         public override dynamic GetValue() => Selections[CurSelection];
