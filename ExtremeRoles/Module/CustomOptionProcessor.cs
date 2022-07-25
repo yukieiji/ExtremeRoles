@@ -26,6 +26,14 @@ namespace ExtremeRoles.Module
                 using (var csv = new StreamWriter(csvName, false, new UTF8Encoding(true)))
                 {
                     csv.WriteLine(
+                       string.Format("{1}{0}{2}{0}{3}{0}{4}",
+                           comma,
+                           modName,
+                           versionStr,
+                           Assembly.GetExecutingAssembly().GetName().Version,
+                           $"{DateTime.UtcNow}"));
+
+                    csv.WriteLine(
                         string.Format("{1}{0}{2}{0}{3}{0}{4}",
                             comma, "Name", "OptionValue", "CustomOptionName", "SelectedIndex")); //ヘッダー
 
@@ -58,12 +66,16 @@ namespace ExtremeRoles.Module
             try
             {
 
-                Helper.Logging.Debug("Import Start!!!!!!");
+                ExtremeRolesPlugin.Logger.LogInfo("---------- Option Import Start ----------");
 
                 Dictionary<string, int> importedOption = new Dictionary<string, int>();
 
                 using (var csv = new StreamReader(csvName, new UTF8Encoding(true)))
                 {
+                    string verInfo = csv.ReadLine(); // verHeader
+                    string[] info = verInfo.Split(',');
+
+                    ExtremeRolesPlugin.Logger.LogInfo($"Loading from : {modName} {versionStr} {info[2]}    {info[3]}");
 
                     string line = csv.ReadLine(); // ヘッダー
                     while ((line = csv.ReadLine()) != null)
@@ -86,23 +98,27 @@ namespace ExtremeRoles.Module
                         clean(option.Name),
                         out int selection))
                     {
+                        ExtremeRolesPlugin.Logger.LogInfo($"Update Option : {option.Name} to Selection:{selection}");
                         option.UpdateSelection(selection);
                         option.SaveConfigValue();
                     }
                 }
-
-                Helper.Logging.Debug("Import Comp!!!!!!");
 
                 if (AmongUsClient.Instance?.AmHost == true && CachedPlayerControl.LocalPlayer)
                 {
                     OptionHolder.ShareOptionSelections();// Share all selections
                 }
 
+                ExtremeRolesPlugin.Logger.LogInfo("---------- Option Import Complete ----------");
+
                 return true;
 
             }
             catch (Exception newE)
             {
+                
+                Helper.Logging.Error($"Newed csv load error:{newE}");
+
                 try
                 {
                     // 後方互換性を維持するために残す、v3.3.0.0リリース時には消す
@@ -112,8 +128,6 @@ namespace ExtremeRoles.Module
                 {
                     Helper.Logging.Error($"prev csv load error:{prevE}");
                 }
-
-                Helper.Logging.Error($"Newed csv load error:{newE}");
             }
             return false;
         }
