@@ -57,10 +57,17 @@ namespace ExtremeRoles.Roles.Combination
 
         public void SetActive(bool active)
         {
-            foreach (var playerId in this.player.Keys)
+            foreach (var (playerId, playerCont) in this.player)
             {
                 this.arrow[playerId].SetActive(active);
                 this.distance[playerId].gameObject.SetActive(active);
+
+                if (playerCont.Data.IsDead || 
+                    playerCont.Data.Disconnected)
+                {
+                    this.arrow[playerId].SetActive(false);
+                    this.distance[playerId].gameObject.SetActive(false);
+                }
             }
         }
 
@@ -69,7 +76,9 @@ namespace ExtremeRoles.Roles.Combination
             foreach(var (playerId, playerCont) in this.player)
             {
                 if (playerCont.Data.IsDead || playerCont.Data.Disconnected) { continue; }
-                var diss = Vector2.Distance(rolePlayerPos, playerCont.GetTruePosition());
+                
+                float diss = Vector2.Distance(rolePlayerPos, playerCont.GetTruePosition());
+                
                 this.distance[playerId].text = Design.ColoedString(
                     Color.black, $"{diss:F1}");
                 this.arrow[playerId].UpdateTarget(playerCont.transform.position);
