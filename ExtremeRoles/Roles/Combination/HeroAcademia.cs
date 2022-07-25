@@ -630,6 +630,44 @@ namespace ExtremeRoles.Roles.Combination
                 HeroAcademia.Condition.HeroDown);
         }
 
+        public override bool TryRolePlayerKillTo(PlayerControl rolePlayer, PlayerControl targetPlayer)
+        {
+            Assassin assassin = ExtremeRoleManager.GameRole[targetPlayer.PlayerId] as Assassin;
+
+            if (assassin != null && !assassin.CanKilledFromCrew)
+            {
+
+                RPCOperator.Call(
+                    rolePlayer.NetId,
+                    RPCOperator.Command.UncheckedMurderPlayer,
+                    new List<byte>
+                    {
+                    rolePlayer.PlayerId,
+                    rolePlayer.PlayerId,
+                    byte.MaxValue
+                    });
+                RPCOperator.UncheckedMurderPlayer(
+                    rolePlayer.PlayerId,
+                    rolePlayer.PlayerId,
+                    byte.MaxValue);
+
+                RPCOperator.Call(
+                    rolePlayer.NetId,
+                    RPCOperator.Command.ReplaceDeadReason,
+                    new List<byte>
+                    {
+                    rolePlayer.PlayerId,
+                    (byte)GameDataContainer.PlayerStatus.Retaliate
+                    });
+
+                ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
+                    rolePlayer.PlayerId, GameDataContainer.PlayerStatus.Retaliate);
+                return false;
+            }
+
+            return true;
+        }
+
         public override bool TryRolePlayerKilledFrom(
             PlayerControl rolePlayer, PlayerControl fromPlayer)
         {
