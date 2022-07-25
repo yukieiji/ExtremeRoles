@@ -95,7 +95,7 @@ namespace ExtremeRoles.Module
         {
             get
             {
-                return this.CurSelection != this.DefaultSelection;
+                return this.CurSelection != this.defaultSelection;
             }
         }
         
@@ -148,7 +148,8 @@ namespace ExtremeRoles.Module
             this.isHidden = isHidden;
             this.enableInvert = false;
 
-            this.children = new List<IOption>();
+            this.children.Clear();
+            this.withUpdateOption.Clear();
             this.forceEnableCheckOption = enableCheckOption;
 
             if (parent != null)
@@ -286,7 +287,7 @@ namespace ExtremeRoles.Module
 
             if (this.behaviour != null && this.behaviour is StringOption stringOption)
             {
-                stringOption.oldValue = stringOption.Value = this.CurSelection;
+                stringOption.oldValue = stringOption.Value = this.curSelection;
                 stringOption.ValueText.text = this.GetString();
             }
         }
@@ -407,7 +408,7 @@ namespace ExtremeRoles.Module
                 enableCheckOption, tab)
         {
             this.minValue = this.Selections[0];
-            this.maxValue = this.Selections[this.Selections.Length - 1];
+            this.maxValue = this.Selections[this.ValueCount - 1];
         }
 
         public override dynamic GetValue() => Selections[CurSelection];
