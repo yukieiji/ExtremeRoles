@@ -259,9 +259,9 @@ namespace ExtremeRoles.Roles.Combination
 
             int crewNum = 0;
             int impNum = 0;
-            Vigilante vigilante = null;
 
-            foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers.GetFastEnumerator())
+            foreach (GameData.PlayerInfo player in 
+                GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 var role = ExtremeRoleManager.GameRole[player.PlayerId];
                 if (!player.IsDead && !player.Disconnected)
@@ -275,42 +275,41 @@ namespace ExtremeRoles.Roles.Combination
                         ++impNum;
                     }
                 }
-                if (role.Id == ExtremeRoleId.Vigilante)
+
+                Vigilante vigilante = ExtremeRoleManager.GetSafeCastedRole<Vigilante>(player.PlayerId);
+
+                if (vigilante != null)
                 {
-                    vigilante = (Vigilante)role;
+                    switch (cond)
+                    {
+                        case Condition.HeroDown:
+                            if (crewNum <= impNum)
+                            {
+                                vigilante.SetCondition(
+                                    Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip);
+                            }
+                            else
+                            {
+                                vigilante.SetCondition(
+                                    Vigilante.VigilanteCondition.NewHeroForTheShip);
+                            }
+                            break;
+                        case Condition.VillainDown:
+                            if (impNum <= 0)
+                            {
+                                vigilante.SetCondition(
+                                    Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip);
+                            }
+                            else
+                            {
+                                vigilante.SetCondition(
+                                    Vigilante.VigilanteCondition.NewVillainForTheShip);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
                 }
-            }
-
-            if (vigilante == null) { return; }
-
-            switch (cond)
-            {
-                case Condition.HeroDown:
-                    if (crewNum <= impNum)
-                    {
-                        vigilante.SetCondition(
-                            Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip);
-                    }
-                    else
-                    {
-                        vigilante.SetCondition(
-                            Vigilante.VigilanteCondition.NewHeroForTheShip);
-                    }
-                    break;
-                case Condition.VillainDown:
-                    if (impNum <= 0)
-                    {
-                        vigilante.SetCondition(
-                            Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip);
-                    }
-                    else
-                    {
-                        vigilante.SetCondition(
-                            Vigilante.VigilanteCondition.NewVillainForTheShip);
-                    }
-                    break;
-                default:
-                    break;
             }
         }
         private static void cleanUpEmergencyCall()
