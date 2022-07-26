@@ -642,9 +642,9 @@ namespace ExtremeRoles.Roles.Combination
                     RPCOperator.Command.UncheckedMurderPlayer,
                     new List<byte>
                     {
-                    rolePlayer.PlayerId,
-                    rolePlayer.PlayerId,
-                    byte.MaxValue
+                        rolePlayer.PlayerId,
+                        rolePlayer.PlayerId,
+                        byte.MaxValue
                     });
                 RPCOperator.UncheckedMurderPlayer(
                     rolePlayer.PlayerId,
@@ -656,12 +656,12 @@ namespace ExtremeRoles.Roles.Combination
                     RPCOperator.Command.ReplaceDeadReason,
                     new List<byte>
                     {
-                    rolePlayer.PlayerId,
-                    (byte)GameDataContainer.PlayerStatus.Retaliate
+                        rolePlayer.PlayerId,
+                        (byte)GameDataContainer.PlayerStatus.Retaliate
                     });
-
                 ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
                     rolePlayer.PlayerId, GameDataContainer.PlayerStatus.Retaliate);
+                
                 return false;
             }
 
