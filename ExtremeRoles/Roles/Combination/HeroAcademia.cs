@@ -371,20 +371,6 @@ namespace ExtremeRoles.Roles.Combination
                 heroPlayer.MurderPlayer(villanPlayer);
                 villanPlayer.MurderPlayer(heroPlayer);
 
-                var hero = ExtremeRoleManager.GameRole[heroPlayerId] as MultiAssignRoleBase;
-                var villain = ExtremeRoleManager.GameRole[villanPlayerId] as MultiAssignRoleBase;
-
-                if (hero?.AnotherRole != null)
-                {
-                    hero.AnotherRole.RolePlayerKilledAction(
-                        heroPlayer, villanPlayer);
-                }
-                if (villain?.AnotherRole != null)
-                {
-                    villain.AnotherRole.RolePlayerKilledAction(
-                        heroPlayer, villanPlayer);
-                }
-
                 foreach (var (_, role) in ExtremeRoleManager.GameRole)
                 {
                     if (role.Id == ExtremeRoleId.Vigilante)
@@ -395,36 +381,6 @@ namespace ExtremeRoles.Roles.Combination
                 }
 
                 ExtremeRolesPlugin.GameDataStore.WinCheckDisable = false;
-
-                var localRole = ExtremeRoleManager.GetLocalPlayerRole();
-                var player = PlayerControl.LocalPlayer;
-
-                if (player.PlayerId != heroPlayerId &&
-                    player.PlayerId != villanPlayerId)
-                {
-                    var hockRole = localRole as IRoleMurderPlayerHock;
-                    var multiAssignRole = localRole as MultiAssignRoleBase;
-
-                    if (hockRole != null)
-                    {
-                        hockRole.HockMuderPlayer(
-                            heroPlayer, villanPlayer);
-                        hockRole.HockMuderPlayer(
-                            villanPlayer, heroPlayer);
-                    }
-                    if (multiAssignRole != null)
-                    {
-                        hockRole = multiAssignRole.AnotherRole as IRoleMurderPlayerHock;
-                        if (hockRole != null)
-                        {
-                            hockRole.HockMuderPlayer(
-                                heroPlayer, villanPlayer);
-                            hockRole.HockMuderPlayer(
-                                villanPlayer, heroPlayer);
-                        }
-                    }
-                }
-
             }
         }
         private static void updateHero(
