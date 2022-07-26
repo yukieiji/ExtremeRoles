@@ -75,8 +75,6 @@ namespace ExtremeRoles.Roles.Combination
         {
             foreach(var (playerId, playerCont) in this.player)
             {
-                if (playerCont.Data.IsDead || playerCont.Data.Disconnected) { continue; }
-                
                 float diss = Vector2.Distance(rolePlayerPos, playerCont.GetTruePosition());
                 
                 this.distance[playerId].text = Design.ColoedString(
