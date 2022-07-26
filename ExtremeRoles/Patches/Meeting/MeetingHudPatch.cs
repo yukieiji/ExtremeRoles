@@ -596,7 +596,7 @@ namespace ExtremeRoles.Patches.Meeting
                     return 0;
                 }
                 return 50;
-            }).ThenBy(x => ExtremeRoleManager.GameRole[x.TargetPlayerId].GameControlId).ToArray();
+            }).ThenBy(x => playerName2Int(x)).ToArray();
 
             for (int i = 0; i < array.Length; i++)
             {
@@ -608,6 +608,15 @@ namespace ExtremeRoles.Patches.Meeting
             }
 
             return false;
+        }
+        private static int playerName2Int(PlayerVoteArea pva)
+        {
+            var player = Helper.Player.GetPlayerControlById(pva.TargetPlayerId);
+            if (player == null) { return 0; }
+            byte[] bytedPlayerName = System.Text.Encoding.UTF8.GetBytes(
+                player.Data.PlayerName);
+            
+            return BitConverter.ToInt32(bytedPlayerName, 0);
         }
     }
 
