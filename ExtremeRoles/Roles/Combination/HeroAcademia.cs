@@ -57,8 +57,17 @@ namespace ExtremeRoles.Roles.Combination
 
         public void SetActive(bool active)
         {
+            List<byte> removePlayer = new List<byte>();
             foreach (var (playerId, playerCont) in this.player)
             {
+                if (playerCont == null)
+                {
+                    this.arrow[playerId].SetActive(active);
+                    this.distance[playerId].gameObject.SetActive(active);
+                    removePlayer.Add(playerId);
+                    continue;
+                }
+
                 this.arrow[playerId].SetActive(active);
                 this.distance[playerId].gameObject.SetActive(active);
 
@@ -68,6 +77,15 @@ namespace ExtremeRoles.Roles.Combination
                     this.arrow[playerId].SetActive(false);
                     this.distance[playerId].gameObject.SetActive(false);
                 }
+            }
+
+            foreach (byte playerId in removePlayer)
+            {
+                GameObject.Destroy(this.distance[playerId]);
+                this.arrow[playerId].Clear();
+                this.distance.Remove(playerId);
+                this.arrow.Remove(playerId);
+                this.player.Remove(playerId);
             }
         }
 
