@@ -223,6 +223,8 @@ namespace ExtremeRoles.Patches.Manager
 
             int gameControlId = 0;
             int curImpNum = 0;
+            int curCrewNum = 0;
+            int maxImpNum = PlayerControl.GameOptions.NumImpostors;
 
             foreach (var oneRole in roleDataLoop)
             {
@@ -263,9 +265,23 @@ namespace ExtremeRoles.Patches.Manager
 
                     isSpawn = (
                         isSpawn &&
-                        ((extremeRolesData.CrewmateRoles - reduceCrewmateRole >= 0) && crewNum >= reduceCrewmateRole) &&
-                        ((extremeRolesData.NeutralRoles - reduceNeutralRole >= 0) && crewNum >= reduceNeutralRole) &&
-                        ((extremeRolesData.ImpostorRoles - reduceImpostorRole >= 0) && impNum >= reduceImpostorRole));
+                        (
+                            curCrewNum + (reduceCrewmateRole + reduceNeutralRole) <= crewNum &&
+                            curImpNum + reduceImpostorRole <= maxImpNum
+                        ) &&
+                        (
+                            (extremeRolesData.CrewmateRoles - reduceCrewmateRole >= 0) && 
+                            crewNum >= reduceCrewmateRole
+                        ) &&
+                        (
+                            (extremeRolesData.NeutralRoles - reduceNeutralRole >= 0) && 
+                            crewNum >= reduceNeutralRole
+                        ) &&
+                        (
+                            (extremeRolesData.ImpostorRoles - reduceImpostorRole >= 0) && 
+                            impNum >= reduceImpostorRole
+                        )
+                    );
 
 
                     // Logging.Debug($"Role:{oneRole}   isSpawn?:{isSpawn}");
@@ -275,8 +291,8 @@ namespace ExtremeRoles.Patches.Manager
                     extremeRolesData.NeutralRoles = extremeRolesData.NeutralRoles - reduceNeutralRole;
                     extremeRolesData.ImpostorRoles = extremeRolesData.ImpostorRoles - reduceImpostorRole;
 
-                    impNum = impNum - reduceImpostorRole;
-                    crewNum = crewNum - (reduceCrewmateRole + reduceNeutralRole);
+                    curImpNum = curImpNum + reduceImpostorRole;
+                    curCrewNum = curCrewNum + (reduceCrewmateRole + reduceNeutralRole);
 
                     var spawnRoles = new List<(byte, MultiAssignRoleBase)>();
                     foreach (var role in roleManager.Roles)
