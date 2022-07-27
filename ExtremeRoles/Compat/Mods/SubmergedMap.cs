@@ -399,6 +399,9 @@ namespace ExtremeRoles.Compat.Mods
                 t => t.Name == "SubmarineSurvillanceMinigame");
             MethodInfo submarineSurvillanceMinigameSystemUpdate = AccessTools.Method(
                 submarineSurvillanceMinigame, "Update");
+            Patches.SubmarineSurvillanceMinigamePatch.SetType(submarineSurvillanceMinigame);
+            MethodInfo submarineSurvillanceMinigameSystemUpdatePrefixPatch = SymbolExtensions.GetMethodInfo(
+                () => Patches.SubmarineSurvillanceMinigamePatch.Prefix(game));
             MethodInfo submarineSurvillanceMinigameSystemUpdatePostfixPatch = SymbolExtensions.GetMethodInfo(
                 () => Patches.SubmarineSurvillanceMinigamePatch.Postfix(game));
 
@@ -430,7 +433,8 @@ namespace ExtremeRoles.Compat.Mods
 
             // サブマージドのセキュリティカメラの制限をつけるパッチ
             harmony.Patch(submarineSurvillanceMinigameSystemUpdate,
-                postfix: new HarmonyMethod(submarineSurvillanceMinigameSystemUpdatePostfixPatch));
+                new HarmonyMethod(submarineSurvillanceMinigameSystemUpdatePrefixPatch),
+                new HarmonyMethod(submarineSurvillanceMinigameSystemUpdatePostfixPatch));
         }
 
         private MonoBehaviour getFloorHandler(PlayerControl player) => ((Component)getFloorHandlerInfo.Invoke(
