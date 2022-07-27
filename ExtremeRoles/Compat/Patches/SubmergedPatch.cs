@@ -85,13 +85,8 @@ namespace ExtremeRoles.Compat.Patches
                     "assassinateMarinFail");
             }
 
-            FieldInfo[] exileControllerBeginPatchField = exileControllerBeginPatchType.GetFields(
-                BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public);
-            FieldInfo completeStringInfo = exileControllerBeginPatchField.First(f => f.Name == "CompleteString");
-            completeStringInfo = exileControllerBeginPatchType.GetField("CompleteString");
-
-            FieldInfo impostorTextInfo = exileControllerBeginPatchField.First(f => f.Name == "ImpostorText");
-            impostorTextInfo = exileControllerBeginPatchType.GetField("ImpostorText");
+            FieldInfo completeStringInfo = exileControllerBeginPatchType.GetField("CompleteString");
+            FieldInfo impostorTextInfo = exileControllerBeginPatchType.GetField("ImpostorText");
 
             completeStringInfo.SetValue(__instance, printStr);
             impostorTextInfo.SetValue(__instance, string.Empty);
@@ -125,9 +120,6 @@ namespace ExtremeRoles.Compat.Patches
         public static void SetType(System.Type type)
         {
             changed = false;
-            FieldInfo[] hubManagerUpdateField = type.GetFields(
-                BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public);
-            floorButtonInfo = hubManagerUpdateField.First(f => f.Name == "FloorButton");
             floorButtonInfo = type.GetField("FloorButton");
         }
 
@@ -165,10 +157,6 @@ namespace ExtremeRoles.Compat.Patches
         public static void SetType(System.Type type)
         {
             submarineOxygenSystemInstance = AccessTools.Property(type, "Instance");
-
-            FieldInfo[] submarineOxygenSystemField = type.GetFields(
-                BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public);
-            submarineOxygenSystemPlayersWithMask = submarineOxygenSystemField.First(f => f.Name == "PlayersWithMask");
             submarineOxygenSystemPlayersWithMask = type.GetField("PlayersWithMask");
         }
 
