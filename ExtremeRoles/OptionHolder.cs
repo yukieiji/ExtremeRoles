@@ -155,6 +155,7 @@ namespace ExtremeRoles
 
         public static void Load()
         {
+            // 不具合等が発生しないようにブロック機能を有効化する
             isBlockShare = false;
 
             Ship.MaxNumberOfMeeting = AllOption[
@@ -229,12 +230,16 @@ namespace ExtremeRoles
         public static void SwitchPreset(int newPreset)
         {
             selectedPreset = newPreset;
+            
+            // オプションの共有でネットワーク帯域とサーバーに負荷をかけて人が落ちたりするので一時的に無効化
             isBlockShare = true;
             foreach (IOption option in AllOption.Values)
             {
                 if (option.Id == 0) { continue; }
                 option.SwitchPreset();
             }
+
+            // ロードしたプリセットのオプションを共有するために無効化した共有機能を有効化
             isBlockShare = false;
             ShareOptionSelections();
         }

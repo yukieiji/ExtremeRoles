@@ -275,6 +275,8 @@ namespace ExtremeRoles.Roles.Combination
 
             int crewNum = 0;
             int impNum = 0;
+
+            // 追放時、追放された人が死亡するというロジックの前にこの処理が入るのでオフセットを1追加
             int impOffset = exiled ? 1 : 0;
             int crewOffset = exiled ? 1 : 0;
 
