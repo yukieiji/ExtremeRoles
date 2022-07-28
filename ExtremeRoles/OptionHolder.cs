@@ -50,6 +50,7 @@ namespace ExtremeRoles
         };
 
         private static int selectedPreset = 0;
+        private static bool isBlockShare = false;
 
         private static IRegionInfo[] defaultRegion;
 
@@ -154,6 +155,8 @@ namespace ExtremeRoles
 
         public static void Load()
         {
+            isBlockShare = false;
+
             Ship.MaxNumberOfMeeting = AllOption[
                 (int)CommonOptionKey.NumMeating].GetValue();
             Ship.ChangeMeetingVoteAreaSort = AllOption[
@@ -226,15 +229,20 @@ namespace ExtremeRoles
         public static void SwitchPreset(int newPreset)
         {
             selectedPreset = newPreset;
+            isBlockShare = true;
             foreach (IOption option in AllOption.Values)
             {
                 if (option.Id == 0) { continue; }
                 option.SwitchPreset();
             }
+            isBlockShare = false;
+            ShareOptionSelections();
         }
 
         public static void ShareOptionSelections()
         {
+            if (isBlockShare) { return; }
+
             if (PlayerControl.AllPlayerControls.Count <= 1 ||
                 AmongUsClient.Instance?.AmHost == false &&
                 PlayerControl.LocalPlayer == null) { return; }
