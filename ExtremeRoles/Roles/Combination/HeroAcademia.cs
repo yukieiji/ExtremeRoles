@@ -270,11 +270,13 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         public static void UpdateVigilante(
-            Condition cond)
+            Condition cond, bool exiled = false)
         {
 
             int crewNum = 0;
             int impNum = 0;
+            int impOffset = exiled ? 1 : 0;
+            int crewOffset = exiled ? 1 : 0;
 
             foreach (GameData.PlayerInfo player in 
                 GameData.Instance.AllPlayers.GetFastEnumerator())
@@ -299,7 +301,7 @@ namespace ExtremeRoles.Roles.Combination
                     switch (cond)
                     {
                         case Condition.HeroDown:
-                            if (crewNum <= impNum)
+                            if (crewNum - crewOffset <= impNum)
                             {
                                 vigilante.SetCondition(
                                     Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip);
@@ -311,7 +313,7 @@ namespace ExtremeRoles.Roles.Combination
                             }
                             break;
                         case Condition.VillainDown:
-                            if (impNum <= 0)
+                            if (impNum - impOffset <= 0)
                             {
                                 vigilante.SetCondition(
                                     Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip);
@@ -661,7 +663,7 @@ namespace ExtremeRoles.Roles.Combination
             GameData.PlayerInfo rolePlayer)
         {
             HeroAcademia.UpdateVigilante(
-                HeroAcademia.Condition.HeroDown);
+                HeroAcademia.Condition.HeroDown, true);
         }
         public override void RolePlayerKilledAction(
             PlayerControl rolePlayer, PlayerControl killerPlayer)
@@ -850,7 +852,7 @@ namespace ExtremeRoles.Roles.Combination
             GameData.PlayerInfo rolePlayer)
         {
             HeroAcademia.UpdateVigilante(
-                HeroAcademia.Condition.VillainDown);
+                HeroAcademia.Condition.VillainDown, true);
         }
         public override void RolePlayerKilledAction(
             PlayerControl rolePlayer, PlayerControl killerPlayer)
