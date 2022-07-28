@@ -15,7 +15,7 @@ using BepInEx.IL2CPP.Utils.Collections;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class TimeMaster : SingleRoleBase, IRoleAbility
+    public sealed class TimeMaster : SingleRoleBase, IRoleAbility
     {
         public enum TimeMasterOption
         {
@@ -315,7 +315,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             this.CreateCommonAbilityOption(
                 parentOps, 3.0f);

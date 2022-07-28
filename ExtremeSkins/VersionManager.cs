@@ -6,7 +6,7 @@ using Hazel;
 
 namespace ExtremeSkins
 {
-    public class VersionManager
+    public static class VersionManager
     {
         public static Dictionary<int, Version> PlayerVersion = new Dictionary<int, Version>();
         public const byte RpcCommand = byte.MaxValue;

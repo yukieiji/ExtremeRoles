@@ -13,9 +13,9 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public class Faker : SingleRoleBase, IRoleAbility
+    public sealed class Faker : SingleRoleBase, IRoleAbility
     {
-        public class FakeDeadBody : IMeetingResetObject
+        public sealed class FakeDeadBody : IMeetingResetObject
         {
             private SpriteRenderer body;
             public FakeDeadBody(
@@ -130,7 +130,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             this.CreateCommonAbilityOption(
                 parentOps);

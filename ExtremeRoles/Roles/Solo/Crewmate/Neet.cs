@@ -4,7 +4,7 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class Neet : SingleRoleBase
+    public sealed class Neet : SingleRoleBase
     {
         public enum NeetOption
         {
@@ -35,7 +35,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             return base.GetFullDescription();
         }
 
-        protected override void CreateSpecificOption(CustomOptionBase parentOps)
+        protected override void CreateSpecificOption(IOption parentOps)
         {
             CreateBoolOption(
                 NeetOption.CanCallMeeting,

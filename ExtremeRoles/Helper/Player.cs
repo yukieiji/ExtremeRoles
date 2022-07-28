@@ -195,14 +195,14 @@ namespace ExtremeRoles.Helper
                 PoolablePlayer poolPlayer = UnityEngine.Object.Instantiate<PoolablePlayer>(
                     Module.Prefab.PlayerPrefab,
                     FastDestroyableSingleton<HudManager>.Instance.transform);
-                
+
                 poolPlayer.gameObject.SetActive(true);
                 poolPlayer.UpdateFromPlayerData(
                     player.Data, PlayerOutfitType.Default,
-                    PlayerMaterial.MaskType.SimpleUI, true);
+                    PlayerMaterial.MaskType.None, true);
                 poolPlayer.cosmetics.SetName(player.Data.DefaultOutfit.PlayerName);
+                poolPlayer.name = $"poolable_{player.PlayerId}";
                 poolPlayer.SetFlipX(true);
-                poolPlayer.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
                 poolPlayer.gameObject.SetActive(false);
                 playerIcon.Add(player.PlayerId, poolPlayer);
             }

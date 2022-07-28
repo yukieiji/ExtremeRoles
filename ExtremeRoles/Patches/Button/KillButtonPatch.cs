@@ -10,7 +10,7 @@ using ExtremeRoles.Performance;
 namespace ExtremeRoles.Patches.Button
 {
     [HarmonyPatch(typeof(KillButton), nameof(KillButton.DoClick))]
-    class KillButtonDoClickPatch
+    public static class KillButtonDoClickPatch
     {
         public enum MurderKillResult
         {
@@ -93,6 +93,15 @@ namespace ExtremeRoles.Patches.Button
                 // Use an unchecked kill command, to allow shorter kill cooldowns etc. without getting kicked
                 MurderKillResult res = checkMuderKill(
                     __instance, killer, target);
+
+                var lastWolf = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Roles.Solo.Impostor.LastWolf>();
+                if (lastWolf != null)
+                {
+                    if (lastWolf.IsAwake)
+                    {
+                        res = MurderKillResult.NoAnimatedKill;
+                    }
+                }
 
                 switch (res)
                 {

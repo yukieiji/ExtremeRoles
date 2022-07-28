@@ -10,7 +10,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class BodyGuard : SingleRoleBase, IRoleAbility
+    public sealed class BodyGuard : SingleRoleBase, IRoleAbility
     {
         public enum BodyGuardOption
         {
@@ -136,7 +136,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
 
             CreateFloatOption(

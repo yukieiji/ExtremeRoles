@@ -13,7 +13,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class CurseMaker : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHock, IRoleUpdate
+    public sealed class CurseMaker : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHock, IRoleUpdate
     {
         public enum CurseMakerOption
         {
@@ -260,7 +260,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             CreateFloatOption(
                 CurseMakerOption.CursingRange,
@@ -304,14 +304,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                  taskBoostOpt,
                  format: OptionUnit.Percentage,
                  invert: true,
-                 enableCheckOption: parentOps);
+                 enableCheckOption: taskBoostOpt);
 
             var reduceTimeOpt = CreateFloatDynamicOption(
                 CurseMakerOption.ReduceSearchDeadBodyTime,
                 30f, 0.5f, 0.5f, taskBoostOpt,
                 format: OptionUnit.Second,
                 invert: true,
-                enableCheckOption: parentOps);
+                enableCheckOption: taskBoostOpt);
 
             searchTimeOpt.SetUpdateOption(reduceTimeOpt);
         }

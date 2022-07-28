@@ -5,7 +5,7 @@ namespace ExtremeSkins.Module
 {
 
 #if WITHNAMEPLATE
-    public class CustomNamePlate : ICustomCosmicData<NamePlateData>
+    public sealed class CustomNamePlate : ICustomCosmicData<NamePlateData>
     {
 
         public NamePlateData Data

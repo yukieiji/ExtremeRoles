@@ -12,7 +12,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public class Evolver : SingleRoleBase, IRoleAbility
+    public sealed class Evolver : SingleRoleBase, IRoleAbility
     {
         public enum EvolverOption
         {
@@ -141,7 +141,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             CreateBoolOption(
                 EvolverOption.IsEvolvedAnimation,

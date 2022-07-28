@@ -5,7 +5,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 namespace ExtremeRoles.Module
 {
 
-    public class Arrow
+    public sealed class Arrow
     {
         public GameObject Main
         {

@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -14,7 +16,7 @@ using ExtremeSkins.Module;
 namespace ExtremeSkins.SkinManager
 {
 #if WITHHAT
-    public class ExtremeHatManager
+    public static class ExtremeHatManager
     {
         public static readonly Dictionary<string, CustomHat> HatData = new Dictionary<string, CustomHat>();
         public static bool IsLoaded = false;
@@ -24,6 +26,12 @@ namespace ExtremeSkins.SkinManager
         public const string LicenseFileName = "LICENSE.md";
 
         private const string repo = "https://raw.githubusercontent.com/yukieiji/ExtremeHats/main"; // When using this repository with Fork, please follow the license of each hat
+        private const string skinDlUrl = "https://github.com/yukieiji/ExtremeHats/archive/refs/heads/main.zip";
+        
+        private const string workingFolder = @"\ExHWorking\";
+        private const string dlZipName = "ExtremeHats-main.zip";
+        private const string hatDataPath = @"\ExtremeHats-main\hat\";
+        
         private const string hatRepoData = "hatData.json";
         private const string hatTransData = "hatTranData.json";
 
@@ -155,60 +163,39 @@ namespace ExtremeSkins.SkinManager
             ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Hat Manager : Hat Loading Complete!! ----------");
         }
 
-        public static async Task PullAllData()
+        public static IEnumerator InstallData()
         {
 
             ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Hat Manager : HatData Download Start!! ---------- ");
 
-            HttpClient http = new HttpClient();
-            http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true };
+            string ausFolder = Path.GetDirectoryName(Application.dataPath);
+            string dataSaveFolder = string.Concat(ausFolder, FolderPath);
 
-            string dataSaveFolder = string.Concat(
-                Path.GetDirectoryName(Application.dataPath), FolderPath);
+            cleanUpCurSkinData(ausFolder, dataSaveFolder);
 
-            if (!Directory.Exists(dataSaveFolder))
+            string dlFolder = string.Concat(ausFolder, workingFolder);
+#if DEBUG
+            Helper.FileUtility.DeleteDir(dlFolder);
+# endif
+            if (!Directory.Exists(dlFolder))
             {
-                Directory.CreateDirectory(dataSaveFolder);
+                Directory.CreateDirectory(dlFolder);
             }
 
-            getJsonData(hatRepoData).GetAwaiter().GetResult();
+            string zipPath = string.Concat(dlFolder, dlZipName);
 
-            byte[] byteHatArray = File.ReadAllBytes(
-                string.Concat(
-                    Path.GetDirectoryName(Application.dataPath),
-                    FolderPath, hatRepoData));
-            string hatJsonString = System.Text.Encoding.UTF8.GetString(byteHatArray);
-
-            JToken hatFolder = JObject.Parse(hatJsonString)["data"];
-            JArray hatArray = hatFolder.TryCast<JArray>();
-
-            for (int i = 0; i < hatArray.Count; ++i)
-            {
-                string getHatData = hatArray[i].ToString();
-
-                string getHatFolder = string.Concat(
-                    dataSaveFolder, @"\", getHatData);
-                
-                // まずはフォルダとファイルを消す
-                if (Directory.Exists(getHatFolder))
-                {
-                    string[] filePaths = Directory.GetFiles(getHatFolder);
-                    foreach (string filePath in filePaths)
-                    {
-                        File.SetAttributes(filePath, FileAttributes.Normal);
-                        File.Delete(filePath);
-                    }
-                    Directory.Delete(getHatFolder, false);;
-                }
-
-                Directory.CreateDirectory(getHatFolder);
-
-                await pullHat(http, getHatFolder, getHatData);
-
-            }
+            yield return Helper.FileUtility.DlToZip(skinDlUrl, zipPath);
 
             ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Hat Manager : HatData Download Complete!! ---------- ");
+            
+            ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Hat Manager : HatData Install Start!! ---------- ");
 
+            installHatData(dlFolder, zipPath, dataSaveFolder);
+
+            ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Hat Manager : HatData Install Complete!! ---------- ");
+#if RELEASE
+            Helper.FileUtility.DeleteDir(dlFolder);
+# endif
         }
 
         public static void UpdateTranslation()
@@ -259,84 +246,71 @@ namespace ExtremeSkins.SkinManager
             }
         }
 
-        private static async Task<HttpStatusCode> pullHat(
-            HttpClient http, string saveFolder, string hat)
+        private static void cleanUpCurSkinData(
+            string ausFolder, string dataSaveFolder)
         {
 
-            // インフォファイルを落とす
-            await downLoadFileTo(http, hat, saveFolder, InfoFileName);
-
-            // ライセンスファイルを落としてくる
-            await downLoadFileTo(http, hat, saveFolder, LicenseFileName);
-
-            await downLoadFileTo(http, hat, saveFolder, CustomHat.FrontImageName);
-
-            var hatInfoResponse = await http.GetAsync(
-                new System.Uri($"{repo}/hat/{hat}/{InfoFileName}"),
-                HttpCompletionOption.ResponseContentRead);
-
-            if (hatInfoResponse.Content == null)
+            if (!Directory.Exists(dataSaveFolder))
             {
-                System.Console.WriteLine($"Server returned no data: {hatInfoResponse.StatusCode}");
-                return HttpStatusCode.ExpectationFailed;
+                Directory.CreateDirectory(dataSaveFolder);
             }
 
-            string json = await hatInfoResponse.Content.ReadAsStringAsync();
-            JObject parseJson = JObject.Parse(json);
+            getJsonData(hatRepoData).GetAwaiter().GetResult();
 
-            if ((bool)parseJson["FrontFlip"])
+            byte[] byteHatArray = File.ReadAllBytes(
+                string.Concat(ausFolder, FolderPath, hatRepoData));
+            string hatJsonString = System.Text.Encoding.UTF8.GetString(byteHatArray);
+
+            JToken hatFolder = JObject.Parse(hatJsonString)["data"];
+            JArray hatArray = hatFolder.TryCast<JArray>();
+
+            for (int i = 0; i < hatArray.Count; ++i)
             {
-                await downLoadFileTo(http, hat, saveFolder, CustomHat.FrontFlipImageName);
-            }
-            if ((bool)parseJson["Back"])
-            {
-                await downLoadFileTo(http, hat, saveFolder, CustomHat.BackImageName);
-            }
-            if ((bool)parseJson["BackFlip"])
-            {
-                await downLoadFileTo(http, hat, saveFolder, CustomHat.BackFlipImageName);
-            }
-            if ((bool)parseJson["Climb"])
-            {
-                await downLoadFileTo(http, hat, saveFolder, CustomHat.ClimbImageName);
-            }
+                string getHatData = hatArray[i].ToString();
 
-            return HttpStatusCode.OK;
+                string getHatFolder = string.Concat(
+                    dataSaveFolder, @"\", getHatData);
 
-        }
-
-        private static async Task<HttpStatusCode> downLoadFileTo(
-            HttpClient http, string hat, string saveFolder, string fileName)
-        {
-            string dlUrl = $"{repo}/hat/{hat}/{fileName}";
-
-            ExtremeSkinsPlugin.Logger.LogInfo($"DownLoad from:{dlUrl}");
-
-            var fileResponse = await http.GetAsync(
-                dlUrl, HttpCompletionOption.ResponseContentRead);
-
-            if (fileResponse.StatusCode != HttpStatusCode.OK)
-            {
-                ExtremeSkinsPlugin.Logger.LogInfo($"Can't load: {hat}/{fileName}");
-                return fileResponse.StatusCode;
-            }
-
-            if (fileResponse.Content == null)
-            {
-                ExtremeSkinsPlugin.Logger.LogInfo($"Server returned no data: {fileResponse.StatusCode}");
-                return HttpStatusCode.ExpectationFailed;
-            }
-
-            using (var responseStream = await fileResponse.Content.ReadAsStreamAsync())
-            {
-                using (var fileStream = File.Create($"{saveFolder}\\{fileName}"))
+                // まずはフォルダとファイルを消す
+                if (Directory.Exists(getHatFolder))
                 {
-                    responseStream.CopyTo(fileStream);
+                    string[] filePaths = Directory.GetFiles(getHatFolder);
+                    foreach (string filePath in filePaths)
+                    {
+                        File.SetAttributes(filePath, FileAttributes.Normal);
+                        File.Delete(filePath);
+                    }
+                    Directory.Delete(getHatFolder, false); ;
                 }
             }
+        }
 
-            return HttpStatusCode.OK;
+        private static void installHatData(
+            string workingDir,
+            string zipPath,
+            string installFolder)
+        {
+            string extractPath = string.Concat(workingDir, "hats");
+            ZipFile.ExtractToDirectory(zipPath, extractPath);
 
+            byte[] byteHatArray = File.ReadAllBytes(
+               string.Concat(installFolder, hatRepoData));
+            string hatJsonString = System.Text.Encoding.UTF8.GetString(byteHatArray);
+
+            JToken hatFolder = JObject.Parse(hatJsonString)["data"];
+            JArray hatArray = hatFolder.TryCast<JArray>();
+
+            for (int i = 0; i < hatArray.Count; ++i)
+            {
+                string hatData = hatArray[i].ToString();
+
+                string hatMoveToFolder = string.Concat(installFolder, @"\", hatData);
+                string hatSourceFolder = string.Concat(extractPath, hatDataPath, hatData);
+
+                ExtremeSkinsPlugin.Logger.LogInfo($"Installing Hat:{hatData}");
+
+                Directory.Move(hatSourceFolder, hatMoveToFolder);
+            }
         }
     }
 #endif

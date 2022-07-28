@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace ExtremeRoles.GhostRoles.Impostor
 {
-    public class SaboEvil : GhostRoleBase
+    public sealed class SaboEvil : GhostRoleBase
     {
 
         public SaboEvil() : base(
@@ -58,7 +58,7 @@ namespace ExtremeRoles.GhostRoles.Impostor
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             CreateCountButtonOption(
                 parentOps, 3, 20);

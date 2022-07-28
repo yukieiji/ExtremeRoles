@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Il2CppSystem;
 
 // from TOR : https://github.com/Eisbison/TheOtherRoles/blob/main/TheOtherRoles/Utilities/MapUtilities.cs
 
@@ -7,8 +6,8 @@ namespace ExtremeRoles.Performance
 {
     public static class CachedShipStatus
     {
-        public static ShipStatus Instance { get; set; }
-        public static Dictionary<SystemTypes, Object> Systems
+        public static ShipStatus Instance { get; private set; }
+        public static Dictionary<SystemTypes, ISystemType> Systems
         {
             get
             {
@@ -16,7 +15,7 @@ namespace ExtremeRoles.Performance
                 return allSystems;
             }
         }
-        private static readonly Dictionary<SystemTypes, Object> allSystems = new Dictionary<SystemTypes, Object>();
+        private static readonly Dictionary<SystemTypes, ISystemType> allSystems = new Dictionary<SystemTypes, ISystemType>();
         
         public static void SetUp(ShipStatus instance)
         {
@@ -39,7 +38,7 @@ namespace ExtremeRoles.Performance
             foreach (var systemTypes in SystemTypeHelpers.AllTypes)
             {
                 if (!systems.ContainsKey(systemTypes)) { continue; }
-                allSystems[systemTypes] = systems[systemTypes].TryCast<Object>();
+                allSystems[systemTypes] = systems[systemTypes];
             }
         }
     }

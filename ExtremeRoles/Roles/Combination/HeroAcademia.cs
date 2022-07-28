@@ -15,7 +15,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Combination
 {
-    internal class AllPlayerArrows
+    internal sealed class AllPlayerArrows
     {
         private Dictionary<byte, PlayerControl> player = new Dictionary<byte, PlayerControl>();
         private Dictionary<byte, Arrow> arrow = new Dictionary<byte, Arrow>();
@@ -57,10 +57,35 @@ namespace ExtremeRoles.Roles.Combination
 
         public void SetActive(bool active)
         {
-            foreach (var playerId in this.player.Keys)
+            List<byte> removePlayer = new List<byte>();
+            foreach (var (playerId, playerCont) in this.player)
             {
+                if (playerCont == null)
+                {
+                    this.arrow[playerId].SetActive(active);
+                    this.distance[playerId].gameObject.SetActive(active);
+                    removePlayer.Add(playerId);
+                    continue;
+                }
+
                 this.arrow[playerId].SetActive(active);
                 this.distance[playerId].gameObject.SetActive(active);
+
+                if (playerCont.Data.IsDead || 
+                    playerCont.Data.Disconnected)
+                {
+                    this.arrow[playerId].SetActive(false);
+                    this.distance[playerId].gameObject.SetActive(false);
+                }
+            }
+
+            foreach (byte playerId in removePlayer)
+            {
+                GameObject.Destroy(this.distance[playerId]);
+                this.arrow[playerId].Clear();
+                this.distance.Remove(playerId);
+                this.arrow.Remove(playerId);
+                this.player.Remove(playerId);
             }
         }
 
@@ -68,8 +93,8 @@ namespace ExtremeRoles.Roles.Combination
         {
             foreach(var (playerId, playerCont) in this.player)
             {
-                if (playerCont.Data.IsDead || playerCont.Data.Disconnected) { continue; }
-                var diss = Vector2.Distance(rolePlayerPos, playerCont.GetTruePosition());
+                float diss = Vector2.Distance(rolePlayerPos, playerCont.GetTruePosition());
+                
                 this.distance[playerId].text = Design.ColoedString(
                     Color.black, $"{diss:F1}");
                 this.arrow[playerId].UpdateTarget(playerCont.transform.position);
@@ -77,7 +102,7 @@ namespace ExtremeRoles.Roles.Combination
         }
     }
 
-    internal class PlayerTargetArrow
+    internal sealed class PlayerTargetArrow
     {
         public bool isActive;
         private Arrow arrow;
@@ -112,7 +137,7 @@ namespace ExtremeRoles.Roles.Combination
 
     }
 
-    public class HeroAcademia : ConstCombinationRoleManagerBase
+    public sealed class HeroAcademia : ConstCombinationRoleManagerBase
     {
         public enum Command : byte
         {
@@ -250,9 +275,9 @@ namespace ExtremeRoles.Roles.Combination
 
             int crewNum = 0;
             int impNum = 0;
-            Vigilante vigilante = null;
 
-            foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers.GetFastEnumerator())
+            foreach (GameData.PlayerInfo player in 
+                GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 var role = ExtremeRoleManager.GameRole[player.PlayerId];
                 if (!player.IsDead && !player.Disconnected)
@@ -266,42 +291,41 @@ namespace ExtremeRoles.Roles.Combination
                         ++impNum;
                     }
                 }
-                if (role.Id == ExtremeRoleId.Vigilante)
+
+                Vigilante vigilante = ExtremeRoleManager.GetSafeCastedRole<Vigilante>(player.PlayerId);
+
+                if (vigilante != null)
                 {
-                    vigilante = (Vigilante)role;
+                    switch (cond)
+                    {
+                        case Condition.HeroDown:
+                            if (crewNum <= impNum)
+                            {
+                                vigilante.SetCondition(
+                                    Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip);
+                            }
+                            else
+                            {
+                                vigilante.SetCondition(
+                                    Vigilante.VigilanteCondition.NewHeroForTheShip);
+                            }
+                            break;
+                        case Condition.VillainDown:
+                            if (impNum <= 0)
+                            {
+                                vigilante.SetCondition(
+                                    Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip);
+                            }
+                            else
+                            {
+                                vigilante.SetCondition(
+                                    Vigilante.VigilanteCondition.NewVillainForTheShip);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
                 }
-            }
-
-            if (vigilante == null) { return; }
-
-            switch (cond)
-            {
-                case Condition.HeroDown:
-                    if (crewNum <= impNum)
-                    {
-                        vigilante.SetCondition(
-                            Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip);
-                    }
-                    else
-                    {
-                        vigilante.SetCondition(
-                            Vigilante.VigilanteCondition.NewHeroForTheShip);
-                    }
-                    break;
-                case Condition.VillainDown:
-                    if (impNum <= 0)
-                    {
-                        vigilante.SetCondition(
-                            Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip);
-                    }
-                    else
-                    {
-                        vigilante.SetCondition(
-                            Vigilante.VigilanteCondition.NewVillainForTheShip);
-                    }
-                    break;
-                default:
-                    break;
             }
         }
         private static void cleanUpEmergencyCall()
@@ -365,20 +389,6 @@ namespace ExtremeRoles.Roles.Combination
                 heroPlayer.MurderPlayer(villanPlayer);
                 villanPlayer.MurderPlayer(heroPlayer);
 
-                var hero = ExtremeRoleManager.GameRole[heroPlayerId] as MultiAssignRoleBase;
-                var villain = ExtremeRoleManager.GameRole[villanPlayerId] as MultiAssignRoleBase;
-
-                if (hero?.AnotherRole != null)
-                {
-                    hero.AnotherRole.RolePlayerKilledAction(
-                        heroPlayer, villanPlayer);
-                }
-                if (villain?.AnotherRole != null)
-                {
-                    villain.AnotherRole.RolePlayerKilledAction(
-                        heroPlayer, villanPlayer);
-                }
-
                 foreach (var (_, role) in ExtremeRoleManager.GameRole)
                 {
                     if (role.Id == ExtremeRoleId.Vigilante)
@@ -389,36 +399,6 @@ namespace ExtremeRoles.Roles.Combination
                 }
 
                 ExtremeRolesPlugin.GameDataStore.WinCheckDisable = false;
-
-                var localRole = ExtremeRoleManager.GetLocalPlayerRole();
-                var player = PlayerControl.LocalPlayer;
-
-                if (player.PlayerId != heroPlayerId &&
-                    player.PlayerId != villanPlayerId)
-                {
-                    var hockRole = localRole as IRoleMurderPlayerHock;
-                    var multiAssignRole = localRole as MultiAssignRoleBase;
-
-                    if (hockRole != null)
-                    {
-                        hockRole.HockMuderPlayer(
-                            heroPlayer, villanPlayer);
-                        hockRole.HockMuderPlayer(
-                            villanPlayer, heroPlayer);
-                    }
-                    if (multiAssignRole != null)
-                    {
-                        hockRole = multiAssignRole.AnotherRole as IRoleMurderPlayerHock;
-                        if (hockRole != null)
-                        {
-                            hockRole.HockMuderPlayer(
-                                heroPlayer, villanPlayer);
-                            hockRole.HockMuderPlayer(
-                                villanPlayer, heroPlayer);
-                        }
-                    }
-                }
-
             }
         }
         private static void updateHero(
@@ -434,7 +414,7 @@ namespace ExtremeRoles.Roles.Combination
 
     }
 
-    public class Hero : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialReset
+    public sealed class Hero : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialReset
     {
         public enum OneForAllCondition : byte
         {
@@ -472,7 +452,8 @@ namespace ExtremeRoles.Roles.Combination
                 ExtremeRoleType.Crewmate,
                 ExtremeRoleId.Hero.ToString(),
                 ColorPalette.HeroAmaIro,
-                false, true, false, false)
+                false, true, false, false,
+                tab: OptionTab.Combination)
         { }
         public void SetCondition(
             OneForAllCondition cond)
@@ -620,6 +601,44 @@ namespace ExtremeRoles.Roles.Combination
                 HeroAcademia.Condition.HeroDown);
         }
 
+        public override bool TryRolePlayerKillTo(PlayerControl rolePlayer, PlayerControl targetPlayer)
+        {
+            Assassin assassin = ExtremeRoleManager.GameRole[targetPlayer.PlayerId] as Assassin;
+
+            if (assassin != null && !assassin.CanKilledFromCrew)
+            {
+
+                RPCOperator.Call(
+                    rolePlayer.NetId,
+                    RPCOperator.Command.UncheckedMurderPlayer,
+                    new List<byte>
+                    {
+                        rolePlayer.PlayerId,
+                        rolePlayer.PlayerId,
+                        byte.MaxValue
+                    });
+                RPCOperator.UncheckedMurderPlayer(
+                    rolePlayer.PlayerId,
+                    rolePlayer.PlayerId,
+                    byte.MaxValue);
+
+                RPCOperator.Call(
+                    rolePlayer.NetId,
+                    RPCOperator.Command.ReplaceDeadReason,
+                    new List<byte>
+                    {
+                        rolePlayer.PlayerId,
+                        (byte)GameDataContainer.PlayerStatus.Retaliate
+                    });
+                ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
+                    rolePlayer.PlayerId, GameDataContainer.PlayerStatus.Retaliate);
+                
+                return false;
+            }
+
+            return true;
+        }
+
         public override bool TryRolePlayerKilledFrom(
             PlayerControl rolePlayer, PlayerControl fromPlayer)
         {
@@ -653,7 +672,7 @@ namespace ExtremeRoles.Roles.Combination
 
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             this.CreateCommonAbilityOption(
                 parentOps, 5.0f);
@@ -685,7 +704,7 @@ namespace ExtremeRoles.Roles.Combination
             }
         }
     }
-    public class Villain : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialReset
+    public sealed class Villain : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialReset
     {
         public enum VillanOption
         {
@@ -713,7 +732,8 @@ namespace ExtremeRoles.Roles.Combination
                 ExtremeRoleType.Impostor,
                 ExtremeRoleId.Villain.ToString(),
                 Palette.ImpostorRed,
-                true, false, true, true)
+                true, false, true, true,
+                tab: OptionTab.Combination)
         { }
 
         public void CreateAbility()
@@ -840,7 +860,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             this.CreateCommonAbilityOption(
                 parentOps, 5.0f);
@@ -859,7 +879,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
     }
-    public class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleWinPlayerModifier
+    public sealed class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleWinPlayerModifier
     {
         public enum VigilanteCondition
         {
@@ -897,7 +917,8 @@ namespace ExtremeRoles.Roles.Combination
                 ExtremeRoleType.Neutral,
                 ExtremeRoleId.Vigilante.ToString(),
                 ColorPalette.VigilanteFujiIro,
-                false, false, false, false)
+                false, false, false, false,
+                tab: OptionTab.Combination)
         { }
 
         public void SetCondition(
@@ -1050,7 +1071,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             this.CreateAbilityCountOption(
                 parentOps, 2, 10, 5.0f);

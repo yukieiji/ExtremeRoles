@@ -17,7 +17,7 @@ using UnityEngine;
 
 namespace ExtremeRoles.Compat.Mods
 {
-    public class SubmergedMap : CompatModBase, IMultiFloorModMap
+    public sealed class SubmergedMap : CompatModBase, IMultiFloorModMap
     {
         public const string Guid = "Submerged";
 
@@ -160,6 +160,30 @@ namespace ExtremeRoles.Compat.Mods
                     return null;
             }
         }
+        public HashSet<string> GetSystemObjectName(SystemConsoleType sysConsole)
+        {
+            switch (sysConsole)
+            {
+                case SystemConsoleType.Admin:
+                    return new HashSet<string>()
+                    {
+                        "Submerged(Clone)/TopFloor/Adm-Obsv-Loun-MR/TaskConsoles/console-adm-admintable",
+                        "Submerged(Clone)/TopFloor/Adm-Obsv-Loun-MR/TaskConsoles/console-adm-admintable (1)",
+                    };
+                case SystemConsoleType.Vital:
+                    return new HashSet<string>()
+                    {
+                        "Submerged(Clone)/panel_vitals(Clone)",
+                    };
+                case SystemConsoleType.SecurityCamera:
+                    return new HashSet<string>()
+                    {
+                        "Submerged(Clone)/BottomFloor/Engines-Security/TaskConsoles/SecurityConsole",
+                    };
+                default:
+                    return new HashSet<string>();
+            }
+        }
 
         public SystemConsole GetSystemConsole(SystemConsoleType sysConsole)
         {
@@ -169,6 +193,9 @@ namespace ExtremeRoles.Compat.Mods
                 case SystemConsoleType.SecurityCamera:
                     return systemConsoleArray.FirstOrDefault(
                         x => x.gameObject.name.Contains("SecurityConsole"));
+                case SystemConsoleType.Vital:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("panel_vitals(Clone)"));
                 default:
                     return null;
             }
@@ -366,6 +393,18 @@ namespace ExtremeRoles.Compat.Mods
                 () => Patches.SubmarineOxygenSystemDetorioratePatch.Postfix(
                     submarineOxygenSystemInstance));
 
+            Minigame game = null;
+
+            Type submarineSurvillanceMinigame = ClassType.First(
+                t => t.Name == "SubmarineSurvillanceMinigame");
+            MethodInfo submarineSurvillanceMinigameSystemUpdate = AccessTools.Method(
+                submarineSurvillanceMinigame, "Update");
+            Patches.SubmarineSurvillanceMinigamePatch.SetType(submarineSurvillanceMinigame);
+            MethodInfo submarineSurvillanceMinigameSystemUpdatePrefixPatch = SymbolExtensions.GetMethodInfo(
+                () => Patches.SubmarineSurvillanceMinigamePatch.Prefix(game));
+            MethodInfo submarineSurvillanceMinigameSystemUpdatePostfixPatch = SymbolExtensions.GetMethodInfo(
+                () => Patches.SubmarineSurvillanceMinigamePatch.Postfix(game));
+
 
             // 会議終了時のリセット処理を呼び出せるように
             harmony.Patch(wrapUpAndSpawn,
@@ -391,6 +430,11 @@ namespace ExtremeRoles.Compat.Mods
             // 酸素枯渇発動時アサシンは常にマスクを持つパッチ
             harmony.Patch(submarineOxygenSystemDetoriorate,
                 postfix: new HarmonyMethod(submarineOxygenSystemDetorioratePostfixPatch));
+
+            // サブマージドのセキュリティカメラの制限をつけるパッチ
+            harmony.Patch(submarineSurvillanceMinigameSystemUpdate,
+                new HarmonyMethod(submarineSurvillanceMinigameSystemUpdatePrefixPatch),
+                new HarmonyMethod(submarineSurvillanceMinigameSystemUpdatePostfixPatch));
         }
 
         private MonoBehaviour getFloorHandler(PlayerControl player) => ((Component)getFloorHandlerInfo.Invoke(

@@ -12,7 +12,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class Watchdog : SingleRoleBase, IRoleAbility, IRoleUpdate
+    public sealed class Watchdog : SingleRoleBase, IRoleAbility, IRoleUpdate
     {
         public RoleAbilityButtonBase Button
         {
@@ -150,7 +150,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             this.CreateCommonAbilityOption(
                 parentOps, 3.0f);

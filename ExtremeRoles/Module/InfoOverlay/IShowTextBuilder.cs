@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace ExtremeRoles.Module.InfoOverlay
+﻿namespace ExtremeRoles.Module.InfoOverlay
 {
     internal interface IShowTextBuilder
     {
-        Tuple<string, string> GetShowText();
+        (string, string, string) GetShowText();
     }
 }

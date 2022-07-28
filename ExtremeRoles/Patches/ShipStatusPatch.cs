@@ -12,7 +12,7 @@ using ExtremeRoles.Performance;
 namespace ExtremeRoles.Patches
 {
     [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.Awake))]
-    class ShipStatusAwakePatch
+    public static class ShipStatusAwakePatch
     {
         [HarmonyPostfix, HarmonyPriority(Priority.Last)]
         public static void Postfix(ShipStatus __instance)
@@ -23,13 +23,26 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.CalculateLightRadius))]
-    class ShipStatusCalculateLightRadiusPatch
+    public static class ShipStatusCalculateLightRadiusPatch
     {
         public static bool Prefix(
             ref float __result,
             ShipStatus __instance,
             [HarmonyArgument(0)] GameData.PlayerInfo playerInfo)
         {
+            switch (ExtremeRolesPlugin.GameDataStore.CurVison)
+            {
+                case GameDataContainer.ForceVisionType.LastWolfLightOff:
+                    if (ExtremeRoleManager.GetSafeCastedLocalPlayerRole<
+                        Roles.Solo.Impostor.LastWolf>() == null)
+                    {
+                        __result = 0.3f;
+                        return false;
+                    }
+                    break;
+                default:
+                    break;
+            }
 
             if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd)
             {
@@ -136,7 +149,7 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.IsGameOverDueToDeath))]
-    public class ShipStatusIsGameOverDueToDeathPatch
+    public static class ShipStatusIsGameOverDueToDeathPatch
     {
         public static void Postfix(ShipStatus __instance, ref bool __result)
         {
@@ -145,7 +158,7 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(ShipStatus), nameof(ShipStatus.CheckEndCriteria))]
-    class ShipStatusCheckEndCriteriaPatch
+    public static class ShipStatusCheckEndCriteriaPatch
     {
         public static bool Prefix(ShipStatus __instance)
         {
@@ -302,6 +315,30 @@ namespace ExtremeRoles.Patches
                         setWinGameContorlId(id);
                         endReason = (GameOverReason)RoleGameOverReason.VigilanteKillAllOther;
                         break;
+                    case NeutralSeparateTeam.Miner:
+                        if (statistics.TeamImpostorAlive > 0 &&
+                            statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
+                        setWinGameContorlId(id);
+                        endReason = (GameOverReason)RoleGameOverReason.MinerExplodeEverything;
+                        break;
+                    case NeutralSeparateTeam.Eater:
+                        if (statistics.TeamImpostorAlive > 0 &&
+                            statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
+                        setWinGameContorlId(id);
+                        endReason = (GameOverReason)RoleGameOverReason.EaterAliveAlone;
+                        break;
+                    case NeutralSeparateTeam.Traitor:
+                        if (statistics.TeamImpostorAlive > 0 &&
+                            statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
+                        setWinGameContorlId(id);
+                        endReason = (GameOverReason)RoleGameOverReason.TraitorKillAllOther;
+                        break;
+                    case NeutralSeparateTeam.Queen:
+                        if (statistics.TeamImpostorAlive > 0 &&
+                            statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
+                        setWinGameContorlId(id);
+                        endReason = (GameOverReason)RoleGameOverReason.QueenKillAllOther;
+                        break;
                     default:
                         break;
                 }
@@ -339,6 +376,9 @@ namespace ExtremeRoles.Patches
                             break;
                         case ExtremeRoleId.Jester:
                             endReason = (GameOverReason)RoleGameOverReason.JesterMeetingFavorite;
+                            break;
+                        case ExtremeRoleId.Eater:
+                            endReason = (GameOverReason)RoleGameOverReason.EaterAllEatInTheShip;
                             break;
                         default :
                             break;

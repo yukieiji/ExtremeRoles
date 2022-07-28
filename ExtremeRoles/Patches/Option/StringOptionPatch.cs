@@ -10,12 +10,12 @@ namespace ExtremeRoles.Patches.Option
 {
 
     [HarmonyPatch(typeof(StringOption), nameof(StringOption.Decrease))]
-    public class StringOptionDecreasePatch
+    public static class StringOptionDecreasePatch
     {
         public static bool Prefix(StringOption __instance)
         {
-            CustomOptionBase option = OptionHolder.AllOption.Values.FirstOrDefault(
-                option => option.Behaviour == __instance);
+            IOption option = OptionHolder.AllOption.Values.FirstOrDefault(
+                option => option.Body == __instance);
             if (option == null) { return true; };
             option.UpdateSelection(option.CurSelection - 1);
             return false;
@@ -23,12 +23,12 @@ namespace ExtremeRoles.Patches.Option
     }
 
     [HarmonyPatch(typeof(StringOption), nameof(StringOption.Increase))]
-    public class StringOptionIncreasePatch
+    public static class StringOptionIncreasePatch
     {
         public static bool Prefix(StringOption __instance)
         {
-            CustomOptionBase option = OptionHolder.AllOption.Values.FirstOrDefault(
-                option => option.Behaviour == __instance);
+            IOption option = OptionHolder.AllOption.Values.FirstOrDefault(
+                option => option.Body == __instance);
             if (option == null) { return true; };
             option.UpdateSelection(option.CurSelection + 1);
             return false;
@@ -40,12 +40,12 @@ namespace ExtremeRoles.Patches.Option
     {
         public static bool Prefix(StringOption __instance)
         {
-            CustomOptionBase option = OptionHolder.AllOption.Values.FirstOrDefault(
-                option => option.Behaviour == __instance);
+            IOption option = OptionHolder.AllOption.Values.FirstOrDefault(
+                option => option.Body == __instance);
             if (option == null) { return true; };
 
             __instance.OnValueChanged = new Action<OptionBehaviour>((o) => { });
-            __instance.TitleText.text = option.GetName();
+            __instance.TitleText.text = option.GetTranedName();
             __instance.Value = __instance.oldValue = option.CurSelection;
             __instance.ValueText.text = option.GetString();
 

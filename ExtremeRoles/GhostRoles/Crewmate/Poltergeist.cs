@@ -12,7 +12,7 @@ using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.GhostRoles.Crewmate
 {
-    public class Poltergeist : GhostRoleBase
+    public sealed class Poltergeist : GhostRoleBase
     {
         public enum Option
         {
@@ -30,7 +30,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
             ExtremeRoleType.Crewmate,
             ExtremeGhostRoleId.Poltergeist,
             ExtremeGhostRoleId.Poltergeist.ToString(),
-            ColorPalette.PoltergeistKenpou)
+            ColorPalette.PoltergeistLightKenpou)
         { }
 
         public static void DeadbodyMove(
@@ -122,7 +122,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             CreateFloatOption(
                 Option.Range, 1.0f,

@@ -33,7 +33,7 @@ namespace ExtremeRoles.Patches.Manager
 
 
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
-    public class HudManagerUpdatePatch
+    public static class HudManagerUpdatePatch
     {
         private static bool buttonCreated = false;
         public static void Prefix(HudManager __instance)

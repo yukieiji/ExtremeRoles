@@ -37,14 +37,14 @@ namespace ExtremeRoles.Roles.API
             int roleId, RoleTypes playerRoleType);
 
         protected override void CreateKillerOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             // 複数ロールの中に殺戮者がいる可能性がため、管理ロールで殺戮者の設定はしない
             return;
         }
 
         protected override void CreateVisonOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             // 複数のロールがまとまっているため、管理ロールで視界の設定はしない
             return;
@@ -116,7 +116,7 @@ namespace ExtremeRoles.Roles.API
 
         }
 
-        protected override CustomOptionBase CreateSpawnOption()
+        protected override IOption CreateSpawnOption()
         {
             // ExtremeRolesPlugin.Instance.Log.LogInfo($"Color: {this.optionColor}");
             var roleSetOption = new SelectionCustomOption(
@@ -126,7 +126,8 @@ namespace ExtremeRoles.Roles.API
                     string.Concat(
                         this.roleName,
                         RoleCommonOption.SpawnRate.ToString())),
-                OptionHolder.SpawnRate, null, true);
+                OptionHolder.SpawnRate, null, true,
+                tab: OptionTab.Combination);
 
             int thisMaxRoleNum =
                 this.maxSetNum == int.MaxValue ? 
@@ -138,19 +139,21 @@ namespace ExtremeRoles.Roles.API
                     this.roleName,
                     RoleCommonOption.RoleNum.ToString()),
                 1, 1, thisMaxRoleNum, 1,
-                roleSetOption);
+                roleSetOption,
+                tab: OptionTab.Combination);
             new BoolCustomOption(
                 GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign),
                 string.Concat(
                     this.roleName,
                     CombinationRoleCommonOption.IsMultiAssign.ToString()),
-                false, roleSetOption);
+                false, roleSetOption,
+                tab: OptionTab.Combination);
 
             return roleSetOption;
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             IEnumerable<MultiAssignRoleBase> collection = Roles;
 
@@ -215,7 +218,7 @@ namespace ExtremeRoles.Roles.API
                         GetRoleOptionId(CombinationRoleCommonOption.ImposterSelectedRate)];
                 isEvil = isEvil && 
                     (UnityEngine.Random.RandomRange(0, 110) < (int)Decimal.Multiply(
-                        spawnOption.GetValue(), spawnOption.Selections.ToList().Count)) &&
+                        spawnOption.GetValue(), spawnOption.ValueCount)) &&
                     curImpNum < PlayerControl.GameOptions.NumImpostors;
 
                 if (isEvil)
@@ -271,7 +274,7 @@ namespace ExtremeRoles.Roles.API
 
         }
 
-        protected override CustomOptionBase CreateSpawnOption()
+        protected override IOption CreateSpawnOption()
         {
             // ExtremeRolesPlugin.Instance.Log.LogInfo($"Color: {this.optionColor}");
             var roleSetOption = new SelectionCustomOption(
@@ -281,7 +284,8 @@ namespace ExtremeRoles.Roles.API
                     string.Concat(
                         this.roleName,
                         RoleCommonOption.SpawnRate.ToString())),
-                OptionHolder.SpawnRate, null, true);
+                OptionHolder.SpawnRate, null, true,
+                tab: OptionTab.Combination);
 
             int roleAssignNum = this.BaseRole.IsImpostor() ? OptionHolder.MaxImposterNum : OptionHolder.VanillaMaxPlayerNum - 1;
 
@@ -292,7 +296,8 @@ namespace ExtremeRoles.Roles.API
                     CombinationRoleCommonOption.AssignsNum.ToString()),
                 this.minimumRoleNum, this.minimumRoleNum,
                 roleAssignNum, 1,
-                roleSetOption, isHidden: this.minimumRoleNum <= 1);
+                roleSetOption, isHidden: this.minimumRoleNum <= 1,
+                tab: OptionTab.Combination);
 
 
             int maxSetNum = this.BaseRole.IsImpostor() ?
@@ -305,7 +310,8 @@ namespace ExtremeRoles.Roles.API
                     this.roleName,
                     RoleCommonOption.RoleNum.ToString()),
                 1, 1, maxSetNum, 1,
-                roleSetOption);
+                roleSetOption,
+                tab: OptionTab.Combination);
 
             roleAssignNumOption.SetUpdateOption(roleSetNumOption);
 
@@ -316,14 +322,16 @@ namespace ExtremeRoles.Roles.API
                     string.Concat(
                         this.roleName,
                         CombinationRoleCommonOption.IsAssignImposter.ToString()),
-                    false, roleSetOption);
+                    false, roleSetOption,
+                tab: OptionTab.Combination);
 
                 new SelectionCustomOption(
                     GetRoleOptionId(CombinationRoleCommonOption.ImposterSelectedRate),
                     string.Concat(
                         this.roleName,
                         CombinationRoleCommonOption.ImposterSelectedRate.ToString()),
-                    OptionHolder.SpawnRate, isImposterAssignOps);
+                    OptionHolder.SpawnRate, isImposterAssignOps,
+                tab: OptionTab.Combination);
             }
 
             new BoolCustomOption(
@@ -331,13 +339,14 @@ namespace ExtremeRoles.Roles.API
                 string.Concat(
                     this.roleName,
                     CombinationRoleCommonOption.IsMultiAssign.ToString()),
-                false, roleSetOption, isHidden: this.minimumRoleNum <= 1);
+                false, roleSetOption, isHidden: this.minimumRoleNum <= 1,
+                tab: OptionTab.Combination);
 
             return roleSetOption;
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
 
             int optionOffset = this.OptionIdOffset + ExtremeRoleManager.OptionOffsetPerRole;
@@ -393,7 +402,7 @@ namespace ExtremeRoles.Roles.API
         public GhostRoles.API.GhostRoleBase GetGhostRole(ExtremeRoleId id) => this.CombGhostRole[id];
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
 
             base.CreateSpecificOption(parentOps);

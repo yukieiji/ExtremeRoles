@@ -85,13 +85,8 @@ namespace ExtremeRoles.Compat.Patches
                     "assassinateMarinFail");
             }
 
-            FieldInfo[] exileControllerBeginPatchField = exileControllerBeginPatchType.GetFields(
-                BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public);
-            FieldInfo completeStringInfo = exileControllerBeginPatchField.First(f => f.Name == "CompleteString");
-            completeStringInfo = exileControllerBeginPatchType.GetField("CompleteString");
-
-            FieldInfo impostorTextInfo = exileControllerBeginPatchField.First(f => f.Name == "ImpostorText");
-            impostorTextInfo = exileControllerBeginPatchType.GetField("ImpostorText");
+            FieldInfo completeStringInfo = exileControllerBeginPatchType.GetField("CompleteString");
+            FieldInfo impostorTextInfo = exileControllerBeginPatchType.GetField("ImpostorText");
 
             completeStringInfo.SetValue(__instance, printStr);
             impostorTextInfo.SetValue(__instance, string.Empty);
@@ -125,9 +120,6 @@ namespace ExtremeRoles.Compat.Patches
         public static void SetType(System.Type type)
         {
             changed = false;
-            FieldInfo[] hubManagerUpdateField = type.GetFields(
-                BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public);
-            floorButtonInfo = hubManagerUpdateField.First(f => f.Name == "FloorButton");
             floorButtonInfo = type.GetField("FloorButton");
         }
 
@@ -165,12 +157,62 @@ namespace ExtremeRoles.Compat.Patches
         public static void SetType(System.Type type)
         {
             submarineOxygenSystemInstance = AccessTools.Property(type, "Instance");
-
-            FieldInfo[] submarineOxygenSystemField = type.GetFields(
-                BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public);
-            submarineOxygenSystemPlayersWithMask = submarineOxygenSystemField.First(f => f.Name == "PlayersWithMask");
             submarineOxygenSystemPlayersWithMask = type.GetField("PlayersWithMask");
         }
 
     }
+
+    public static class SubmarineSurvillanceMinigamePatch
+    {
+        private static FieldInfo screenStaticInfo;
+        private static FieldInfo screenTextInfo;
+
+        public static bool Prefix(Minigame __instance)
+        {
+            if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
+
+            if (Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity) { return true; }
+
+
+            GameObject screenStatic = screenStaticInfo.GetValue(__instance) as GameObject;
+            GameObject screenText = screenTextInfo.GetValue(__instance) as GameObject;
+
+            if (screenStatic != null)
+            {
+                TMPro.TextMeshPro comText = screenStatic.GetComponentInChildren<TMPro.TextMeshPro>();
+                if (comText != null)
+                {
+                    comText.text = Helper.Translation.GetString("youDonotUse");
+                }
+
+                screenStatic.SetActive(true);
+            }
+            if (screenText != null)
+            {
+                screenText.SetActive(true);
+            }
+
+            return false;
+        }
+
+        public static void Postfix(Minigame __instance)
+        {
+            ExtremeRoles.Patches.MiniGame.SecurityHelper.PostUpdate(__instance);
+
+            var timer = ExtremeRoles.Patches.MiniGame.SecurityHelper.GetTimerText();
+            if (timer != null)
+            {
+                timer.gameObject.layer = 5;
+                timer.transform.localPosition = new Vector3(15.3f, 9.3f, -900.0f);
+                timer.transform.localScale = new Vector3(3.0f, 3.0f, 3.0f);
+            }
+        }
+
+        public static void SetType(System.Type type)
+        {
+            screenStaticInfo = type.GetField("ScreenStatic");
+            screenTextInfo = type.GetField("ScreenText");
+        }
+    }
+
 }

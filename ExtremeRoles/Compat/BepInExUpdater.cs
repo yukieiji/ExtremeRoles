@@ -17,7 +17,7 @@ using UnityEngine.Networking;
 
 namespace ExtremeRoles.Compat
 {
-    public class BepInExUpdater : MonoBehaviour
+    public sealed class BepInExUpdater : MonoBehaviour
     {
         public static bool UpdateRequired => typeof(IL2CPPChainloader).Assembly.GetName().Version < Version.Parse(minimumBepInExVersion);
 
@@ -34,11 +34,11 @@ namespace ExtremeRoles.Compat
         [HideFromIl2Cpp]
         public IEnumerator Excute()
         {
+            string showStr = Helper.Translation.GetString("ReqBepInExUpdate");
 
-            Task.Run(() => MessageBox(
+            Task.Run(() => Module.DllApi.MessageBox(
                 IntPtr.Zero,
-                Helper.Translation.GetString("ReqBepInExUpdate"),
-                "Extreme Roles", 0));
+                showStr, "Extreme Roles", 0));
 
             UnityWebRequest www = UnityWebRequest.Get(bepInExDownloadURL);
             yield return www.SendWebRequest();
@@ -82,9 +82,5 @@ namespace ExtremeRoles.Compat
 
             Application.Quit();
         }
-
-        [DllImport("user32.dll")]
-        public static extern int MessageBox(IntPtr hWnd, String text, String caption, int options);
-
     }
 }

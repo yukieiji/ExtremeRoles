@@ -57,6 +57,7 @@ namespace ExtremeRoles
             CuresMakerCurseKillCool,
             CarpenterUseAbility,
             SurvivorDeadWin,
+            CaptainAbility,
 
             // インポスター
             AssasinVoteFor,
@@ -68,14 +69,17 @@ namespace ExtremeRoles
             MerySetCamp,
             MeryAcivateVent,
             SlaveDriverSetNewTask,
-
+            LastWolfSwitchLight,
+            CommanderAttackCommand,
 
             // ニュートラル
             AliceShipBroken,
             TaskMasterSetNewTask,
             JesterOutburstKill,
             YandereSetOneSidedLover,
+            TotocalcioSetBetPlayer,
 
+            // 幽霊役職
             SetGhostRole,
             UseGhostRoleAbility,
         }
@@ -132,8 +136,19 @@ namespace ExtremeRoles
             ExtremeRolesPlugin.Info.ResetOverlays();
             Helper.Logging.ResetCkpt();
 
+            // キルアニメーションリセット
             Patches.KillAnimationCoPerformKillPatch.HideNextAnimation = false;
+
+            // 各種表示系リセット
+            Patches.PlayerControlFixedUpdatePatch.Reset();
+
+            // ミーティング能力リセット
             Patches.Meeting.PlayerVoteAreaSelectPatch.Reset();
+
+            // 各種システムコンソールリセット
+            Patches.MiniGame.VitalsMinigameUpdatePatch.Initialize();
+            Patches.MiniGame.SecurityHelper.Initialize();
+            Patches.MapOverlay.MapCountOverlayUpdatePatch.Initialize();
         }
 
         public static void ForceEnd()
@@ -456,6 +471,11 @@ namespace ExtremeRoles
             Roles.Solo.Crewmate.Survivor.DeadWin(playerId);
         }
 
+        public static void CaptainTargetVote(ref MessageReader reader)
+        {
+            Roles.Solo.Crewmate.Captain.UseAbility(ref reader);
+        }
+
         public static void AssasinVoteFor(byte targetId)
         {
             Roles.Combination.Assassin.VoteFor(
@@ -511,6 +531,16 @@ namespace ExtremeRoles
             Roles.Solo.Impostor.SlaveDriver.ReplaceToNewTask(
                 callerId, index, taskIndex);
         }
+        public static void LastWolfSwitchLight(byte swichStatus)
+        {
+            Roles.Solo.Impostor.LastWolf.SwitchLight(
+                swichStatus == byte.MinValue);
+        }
+        public static void CommanderAttackCommand(byte rolePlayerId)
+        {
+            Roles.Solo.Impostor.Commander.AttackCommad(
+                rolePlayerId);
+        }
 
         public static void AliceShipBroken(
             byte callerId, byte targetPlayerId, List<int> taskId)
@@ -536,6 +566,12 @@ namespace ExtremeRoles
         {
             Roles.Solo.Neutral.Yandere.SetOneSidedLover(
                 playerId, loverId);
+        }
+        public static void TotocalcioSetBetPlayer(
+            byte playerId, byte betPlayerId)
+        {
+            Roles.Solo.Neutral.Totocalcio.SetBetTarget(
+                playerId, betPlayerId);
         }
 
         public static void SetGhostRole(

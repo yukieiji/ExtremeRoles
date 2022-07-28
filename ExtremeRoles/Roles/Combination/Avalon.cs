@@ -10,7 +10,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Combination
 {
-    public class Avalon : ConstCombinationRoleManagerBase
+    public sealed class Avalon : ConstCombinationRoleManagerBase
     {
         public const string Name = "AvalonsRoles";
         public Avalon() : base(
@@ -23,7 +23,7 @@ namespace ExtremeRoles.Roles.Combination
 
     }
 
-    public class Assassin : MultiAssignRoleBase
+    public sealed class Assassin : MultiAssignRoleBase
     {
         public enum AssassinOption
         {
@@ -50,7 +50,8 @@ namespace ExtremeRoles.Roles.Combination
                 ExtremeRoleType.Impostor,
                 ExtremeRoleId.Assassin.ToString(),
                 Palette.ImpostorRed,
-                true, false, true, true)
+                true, false, true, true,
+                tab: OptionTab.Combination)
         {}
 
         public override bool TryRolePlayerKilledFrom(
@@ -73,7 +74,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             var killedOps = CreateBoolOption(
                 AssassinOption.CanKilled,
@@ -99,6 +100,8 @@ namespace ExtremeRoles.Roles.Combination
         public override void ExiledAction(
             GameData.PlayerInfo rolePlayer)
         {
+            
+            if (isServant()) { return; }
 
             assassinMeetingTriggerOn(rolePlayer.PlayerId);
             if (AmongUsClient.Instance.AmHost)
@@ -115,6 +118,9 @@ namespace ExtremeRoles.Roles.Combination
             PlayerControl rolePlayer,
             PlayerControl killerPlayer)
         {
+
+            if (isServant()) { return; }
+
             if (!this.isDeadForceMeeting || MeetingHud.Instance != null)
             {
                 AddDead(rolePlayer.PlayerId);
@@ -199,11 +205,11 @@ namespace ExtremeRoles.Roles.Combination
                     targetId].Id == ExtremeRoleId.Marlin;
             ExtremeRolesPlugin.GameDataStore.IsMarinPlayerId = targetId;
         }
-
+        private bool isServant() => this.AnotherRole?.Id == ExtremeRoleId.Servant;
     }
 
 
-    public class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetMeeting
+    public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetMeeting
     {
         public enum MarlinOption
         {
@@ -226,7 +232,8 @@ namespace ExtremeRoles.Roles.Combination
                 ExtremeRoleType.Crewmate,
                 ExtremeRoleId.Marlin.ToString(),
                 ColorPalette.MarineBlue,
-                false, false, false, false)
+                false, false, false, false,
+                tab: OptionTab.Combination)
         {}
 
         public void IntroBeginSetUp()
@@ -286,7 +293,7 @@ namespace ExtremeRoles.Roles.Combination
 
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             CreateBoolOption(
                 MarlinOption.HasTask,
@@ -349,7 +356,7 @@ namespace ExtremeRoles.Roles.Combination
                 else
                 {
                     poolPlayer.gameObject.SetActive(true);
-                    poolPlayer.transform.localScale = Vector3.one * 0.25f;
+                    poolPlayer.transform.localScale = Vector3.one * 0.275f;
                     poolPlayer.transform.localPosition = bottomLeft + Vector3.right * visibleCounter * 0.45f;
                     ++visibleCounter;
                 }

@@ -7,7 +7,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class Whisper : SingleRoleBase, IRoleUpdate, IRoleMurderPlayerHock, IRoleResetMeeting
+    public sealed class Whisper : SingleRoleBase, IRoleUpdate, IRoleMurderPlayerHock, IRoleResetMeeting
     {
 
         public enum WhisperOption
@@ -156,7 +156,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
 
             CreateFloatOption(

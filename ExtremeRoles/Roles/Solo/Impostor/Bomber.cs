@@ -17,7 +17,7 @@ using BepInEx.IL2CPP.Utils.Collections;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public class Bomber : SingleRoleBase, IRoleAbility, IRoleUpdate
+    public sealed class Bomber : SingleRoleBase, IRoleAbility, IRoleUpdate
     {
         public enum BomberOption
         {
@@ -107,7 +107,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             this.CreateAbilityCountOption(
                 parentOps, 2, 5, 2.5f);

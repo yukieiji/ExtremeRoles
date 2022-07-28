@@ -4,7 +4,7 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module.SpecialWinChecker
 {
-    internal class VigilanteWinChecker : IWinChecker
+    internal sealed class VigilanteWinChecker : IWinChecker
     {
         public RoleGameOverReason Reason => RoleGameOverReason.VigilanteNewIdealWorld;
 

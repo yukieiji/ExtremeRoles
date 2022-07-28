@@ -15,7 +15,7 @@ namespace ExtremeRoles.Patches.Controller
             typeof(string),
             typeof(Il2CppReferenceArray<Il2CppSystem.Object>)
         })]
-    public class TranslationControllerGetStringWithDefaultPatch
+    public static class TranslationControllerGetStringWithDefaultPatch
     {
         public static bool Prefix(
             ref string __result,

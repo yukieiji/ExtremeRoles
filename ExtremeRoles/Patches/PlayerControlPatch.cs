@@ -8,6 +8,7 @@ using HarmonyLib;
 using Hazel;
 
 using UnityEngine;
+using TMPro;
 
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
@@ -21,7 +22,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 namespace ExtremeRoles.Patches
 {
     [HarmonyPatch]
-    public class CacheLocalPlayerPatch
+    public static class CacheLocalPlayerPatch
     {
         [HarmonyTargetMethod]
         public static MethodBase TargetMethod()
@@ -75,7 +76,7 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Deserialize))]
-    public class PlayerControlDeserializePatch
+    public static class PlayerControlDeserializePatch
     {
         public static void Postfix(PlayerControl __instance)
         {
@@ -84,7 +85,7 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.OnDestroy))]
-    public class PlayerControlOnDestroyPatch
+    public static class PlayerControlOnDestroyPatch
     {
         public static void Postfix(PlayerControl __instance)
         {
@@ -95,7 +96,7 @@ namespace ExtremeRoles.Patches
 
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.StartMeeting))]
-    public class PlayerControlCoStartMeetingPatch
+    public static class PlayerControlCoStartMeetingPatch
     {
         public static void Prefix([HarmonyArgument(0)] GameData.PlayerInfo target)
         {
@@ -133,8 +134,19 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
-    public class PlayerControlFixedUpdatePatch
+    public static class PlayerControlFixedUpdatePatch
     {
+        private static Dictionary<byte, TextMeshPro> allPlayerInfo = new Dictionary<byte, TextMeshPro>();
+        private static Dictionary<byte, TextMeshPro> allMeetingInfo = new Dictionary<byte, TextMeshPro>();
+        private static TextMeshPro tabText;
+
+        public static void Reset()
+        {
+            allMeetingInfo.Clear();
+            allPlayerInfo.Clear();
+            tabText = null;
+        }
+
         public static void Postfix(PlayerControl __instance)
         {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) { return; }
@@ -393,33 +405,41 @@ namespace ExtremeRoles.Patches
                     continue;
                 }
 
-                Transform playerInfoTransform = player.cosmetics.nameText.transform.parent.FindChild("Info");
-                TMPro.TextMeshPro playerInfo = playerInfoTransform != null ? playerInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
-
-                if (playerInfo == null)
+                
+                if (!allPlayerInfo.TryGetValue(
+                    player.PlayerId, out TextMeshPro playerInfo))
                 {
                     playerInfo = UnityEngine.Object.Instantiate(
                         player.cosmetics.nameText,
                         player.cosmetics.nameText.transform.parent);
                     playerInfo.fontSize *= 0.75f;
                     playerInfo.gameObject.name = "Info";
+                    allPlayerInfo.Add(player.PlayerId, playerInfo);
                 }
 
                 // Set the position every time bc it sometimes ends up in the wrong place due to camoflauge
                 playerInfo.transform.localPosition = player.cosmetics.nameText.transform.localPosition + Vector3.up * 0.5f;
-
-                PlayerVoteArea playerVoteArea = MeetingHud.Instance?.playerStates?.FirstOrDefault(x => x.TargetPlayerId == player.PlayerId);
-                Transform meetingInfoTransform = playerVoteArea != null ? playerVoteArea.NameText.transform.parent.FindChild("Info") : null;
-                TMPro.TextMeshPro meetingInfo = meetingInfoTransform != null ? meetingInfoTransform.GetComponent<TMPro.TextMeshPro>() : null;
-                if (meetingInfo == null && playerVoteArea != null)
+                
+                PlayerVoteArea playerVoteArea = null;
+                TextMeshPro meetingInfo = null;
+                if (MeetingHud.Instance)
                 {
-                    meetingInfo = UnityEngine.Object.Instantiate(
-                        playerVoteArea.NameText,
-                        playerVoteArea.NameText.transform.parent);
-                    meetingInfo.transform.localPosition += Vector3.down * 0.20f;
-                    meetingInfo.fontSize *= 0.63f;
-                    meetingInfo.autoSizeTextContainer = true;
-                    meetingInfo.gameObject.name = "Info";
+                    if (!allMeetingInfo.TryGetValue(player.PlayerId, out meetingInfo))
+                    {
+                        playerVoteArea = MeetingHud.Instance.playerStates?.FirstOrDefault(x => x.TargetPlayerId == player.PlayerId);
+
+                        if (playerVoteArea != null)
+                        {
+                            meetingInfo = UnityEngine.Object.Instantiate(
+                                playerVoteArea.NameText,
+                                playerVoteArea.NameText.transform.parent);
+                            meetingInfo.transform.localPosition += Vector3.down * 0.20f;
+                            meetingInfo.fontSize *= 0.63f;
+                            meetingInfo.autoSizeTextContainer = true;
+                            meetingInfo.gameObject.name = "Info";
+                            allMeetingInfo.Add(player.PlayerId, meetingInfo);
+                        }
+                    }
                 }
 
                 var (playerInfoText, meetingInfoText) = getRoleAndMeetingInfo(player, commsActive);
@@ -443,7 +463,7 @@ namespace ExtremeRoles.Patches
             }
         }
         private static void setMeetingInfo(
-            TMPro.TextMeshPro meetingInfo,
+            TextMeshPro meetingInfo,
             string text, bool active)
         {
             if (meetingInfo != null)
@@ -495,8 +515,11 @@ namespace ExtremeRoles.Patches
                 playerInfoText = $"{roleNames}";
                 if (DestroyableSingleton<TaskPanelBehaviour>.InstanceExists)
                 {
-                    TMPro.TextMeshPro tabText = FastDestroyableSingleton<TaskPanelBehaviour>.Instance.tab.transform.FindChild(
-                        "TabText_TMP").GetComponent<TMPro.TextMeshPro>();
+                    if (tabText == null)
+                    {
+                        tabText = FastDestroyableSingleton<TaskPanelBehaviour>.Instance.tab.transform.FindChild(
+                            "TabText_TMP").GetComponent<TextMeshPro>();
+                    }
                     tabText.SetText(
                         $"{FastDestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Tasks)} {taskInfo}");
                 }
@@ -739,9 +762,9 @@ namespace ExtremeRoles.Patches
 
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
-    public class PlayerControlHandleRpcPatch
+    public static class PlayerControlHandleRpcPatch
     {
-        static void Postfix(
+        public static void Postfix(
             PlayerControl __instance,
             [HarmonyArgument(0)] byte callId,
             [HarmonyArgument(1)] MessageReader reader)
@@ -958,6 +981,9 @@ namespace ExtremeRoles.Patches
                     byte survivorPlayerId = reader.ReadByte();
                     RPCOperator.SurvivorDeadWin(survivorPlayerId);
                     break;
+                case RPCOperator.Command.CaptainAbility:
+                    RPCOperator.CaptainTargetVote(ref reader);
+                    break;
                 case RPCOperator.Command.AssasinVoteFor:
                     byte voteTargetId = reader.ReadByte();
                     RPCOperator.AssasinVoteFor(voteTargetId);
@@ -1014,6 +1040,14 @@ namespace ExtremeRoles.Patches
                     RPCOperator.SlaveDriverSetNewTask(
                         slaveDriverId, replaceTaskIndex, setTaskId);
                     break;
+                case RPCOperator.Command.LastWolfSwitchLight:
+                    byte swichStatus = reader.ReadByte();
+                    RPCOperator.LastWolfSwitchLight(swichStatus);
+                    break;
+                case RPCOperator.Command.CommanderAttackCommand:
+                    byte commanderPlayerId = reader.ReadByte();
+                    RPCOperator.CommanderAttackCommand(commanderPlayerId);
+                    break;
                 case RPCOperator.Command.AliceShipBroken:
                     byte alicePlayerId = reader.ReadByte();
                     byte newTaskSetPlayerId = reader.ReadByte();
@@ -1047,6 +1081,12 @@ namespace ExtremeRoles.Patches
                     RPCOperator.YandereSetOneSidedLover(
                         yanderePlayerId, loverPlayerId);
                     break;
+                case RPCOperator.Command.TotocalcioSetBetPlayer:
+                    byte totocalcioPlayerId = reader.ReadByte();
+                    byte betPlayerId = reader.ReadByte();
+                    RPCOperator.TotocalcioSetBetPlayer(
+                        totocalcioPlayerId, betPlayerId);
+                    break;
                 case RPCOperator.Command.SetGhostRole:
                     RPCOperator.SetGhostRole(
                         ref reader);
@@ -1064,7 +1104,7 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
-    public class PlayerControlMurderPlayerPatch
+    public static class PlayerControlMurderPlayerPatch
     {
         public static bool Prefix(
             PlayerControl __instance,
@@ -1322,7 +1362,7 @@ namespace ExtremeRoles.Patches
 
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetKillTimer))]
-    public class PlayerControlSetCoolDownPatch
+    public static class PlayerControlSetCoolDownPatch
     {
         public static bool Prefix(
             PlayerControl __instance, [HarmonyArgument(0)] float time)
@@ -1354,7 +1394,7 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Shapeshift))]
-    public class PlayerControlShapeshiftPatch
+    public static class PlayerControlShapeshiftPatch
     {
         public static bool Prefix(
             PlayerControl __instance,
@@ -1449,7 +1489,7 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.RpcSyncSettings))]
-    public class PlayerControlRpcSyncSettingsPatch
+    public static class PlayerControlRpcSyncSettingsPatch
     {
         public static void Postfix()
         {

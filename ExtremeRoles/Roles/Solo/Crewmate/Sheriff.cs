@@ -10,7 +10,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
+    public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
     {
 
         public enum SheriffOption
@@ -167,7 +167,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
 
             CreateBoolOption(

@@ -10,14 +10,14 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Combination
 {
-    public class SupporterManager : FlexibleCombinationRoleManagerBase
+    public sealed class SupporterManager : FlexibleCombinationRoleManagerBase
     {
         public SupporterManager() : base(new Supporter(), 1)
         { }
 
     }
 
-    public class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
+    public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
     {
         private byte supportTargetId;
         private string supportPlayerName;
@@ -30,7 +30,8 @@ namespace ExtremeRoles.Roles.Combination
                 ExtremeRoleType.Crewmate,
                 ExtremeRoleId.Supporter.ToString(),
                 ColorPalette.SupporterGreen,
-                false, true, false, false)
+                false, true, false, false,
+                tab: OptionTab.Combination)
         {}
 
         public void IntroBeginSetUp()
@@ -154,7 +155,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             var imposterSetting = OptionHolder.AllOption[
                 GetManagerOptionId(CombinationRoleCommonOption.IsAssignImposter)];

@@ -3,9 +3,9 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
-		<Version>3.1.3.2</Version>
-		<!--<VersionPrefix>3.1.3</VersionPrefix>-->
-		<VersionSuffix>Submerged</VersionSuffix> 
+		<!--<Version>3.2.0.0</Version>-->
+		<VersionPrefix>3.2.0</VersionPrefix>
+		<VersionSuffix>Neutral</VersionSuffix> 
         <Description>Extreme Roles for Advanced user</Description>
         <Authors>yukieiji</Authors>
         <Configurations>Debug;Release</Configurations>
@@ -48,5 +48,9 @@
 
     <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">
         <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AmongUs)/BepInEx/plugins/" UseSymboliclinksIfPossible="true" />
+    </Target>
+
+    <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+      <Exec Command="python $(SolutionDir)\convertToJson.py" />
     </Target>
 </Project>

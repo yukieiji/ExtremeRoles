@@ -10,7 +10,7 @@ using ExtremeSkins.Module;
 
 namespace ExtremeSkins.SkinManager
 {
-    public class ExtremeColorManager
+    public static class ExtremeColorManager
     {
         public static uint ColorNum;
         public static readonly Dictionary<StringNames, string> LangData = new Dictionary<StringNames, string>();

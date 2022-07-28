@@ -3,7 +3,7 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class Bakary : SingleRoleBase
+    public sealed class Bakary : SingleRoleBase
     {
         public enum BakaryOption
         {
@@ -21,7 +21,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         { }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             var changeCooking = CreateBoolOption(
                 BakaryOption.ChangeCooking,

@@ -7,14 +7,14 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Module.InfoOverlay.FullDec
 {
-    internal class LocalPlayerRoleShowTextBuilder : IShowTextBuilder
+    internal sealed class LocalPlayerRoleShowTextBuilder : IShowTextBuilder
     {
         public LocalPlayerRoleShowTextBuilder()
         { }
 
-        public Tuple<string, string> GetShowText()
+        public (string, string, string) GetShowText()
         {
-            string roleText = $"<size=200%>{Translation.GetString("yourRole")}</size>\n";
+            string title = $"<size=200%>{Translation.GetString("yourRole")}</size>";
             string anotherRoleText = "<size=200%> </size>\n";
             var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
             var allOption = OptionHolder.AllOption;
@@ -58,7 +58,7 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
                 roleOptionString = awakeFromExRole.GetFakeOptionString();
             }
 
-            roleText += string.Concat(
+            string roleText = string.Concat(
                 $"<size=150%>・{colorRoleName}</size>",
                 roleFullDesc != "" ? $"\n{roleFullDesc}\n" : "",
                 $"・{Translation.GetString(colorRoleName)}{Translation.GetString("roleOption")}\n",
@@ -99,7 +99,7 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
                 }
             }
 
-            return Tuple.Create(roleText, anotherRoleText);
+            return (title, roleText, anotherRoleText);
         }
     }
 }

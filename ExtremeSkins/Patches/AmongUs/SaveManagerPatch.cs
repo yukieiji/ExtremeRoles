@@ -5,7 +5,7 @@ namespace ExtremeSkins.Patches.AmongUs
 {
 
     [HarmonyPatch(typeof(SaveManager), nameof(SaveManager.LoadPlayerPrefs))]
-    public class SaveManagerLoadPlayerPrefsPatch
+    public static class SaveManagerLoadPlayerPrefsPatch
     {
         // Fix Potential issues with broken colors
         private static bool needsPatch = false;

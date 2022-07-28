@@ -13,7 +13,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public class SlaveDriver : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IRoleMurderPlayerHock
+    public sealed class SlaveDriver : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IRoleMurderPlayerHock
     {
   
         private List<(byte, List<int>)> specialAttackResult = new List<(byte,  List<int>)>();
@@ -148,7 +148,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
 
             CreateIntOption(

@@ -14,7 +14,7 @@ using BepInEx.IL2CPP.Utils.Collections;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public class Missionary : SingleRoleBase, IRoleAbility, IRoleUpdate
+    public sealed class Missionary : SingleRoleBase, IRoleAbility, IRoleUpdate
     {
 
         public enum MissionaryOption
@@ -52,33 +52,31 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             ExtremeRoleId.Missionary,
             ExtremeRoleType.Neutral,
             ExtremeRoleId.Missionary.ToString(),
-            ColorPalette.FanaticBlue,
+            ColorPalette.MissionaryBlue,
             false, false, false, false)
         { }
 
         public override bool IsSameTeam(SingleRoleBase targetRole)
         {
-            var multiAssignRole = targetRole as MultiAssignRoleBase;
-
-            if (multiAssignRole != null)
+            if (this.Id == targetRole.Id)
             {
-                if (multiAssignRole.AnotherRole != null)
+                if (OptionHolder.Ship.IsSameNeutralSameWin)
                 {
-                    return this.IsSameTeam(multiAssignRole.AnotherRole);
+                    return true;
                 }
-            }
-            if (OptionHolder.Ship.IsSameNeutralSameWin)
-            {
-                return this.Id == targetRole.Id;
+                else
+                {
+                    return this.IsSameControlId(targetRole);
+                }
             }
             else
             {
-                return (this.Id == targetRole.Id) && this.IsSameControlId(targetRole);
+                return base.IsSameTeam(targetRole);
             }
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             CreateBoolOption(
                 MissionaryOption.TellDeparture,
@@ -89,7 +87,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 parentOps, format: OptionUnit.Second);
             CreateFloatOption(
                 MissionaryOption.DepartureMaxTime,
-                30f, 15f, 60f, 0.5f,
+                30f, 15f, 120f, 0.5f,
                 parentOps, format: OptionUnit.Second);
             CreateFloatOption(
                 MissionaryOption.PropagateRange,

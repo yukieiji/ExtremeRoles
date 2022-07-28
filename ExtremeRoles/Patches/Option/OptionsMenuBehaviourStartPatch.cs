@@ -426,7 +426,7 @@ namespace ExtremeRoles.Patches.Option
                 }
             }
         }
-        private class CsvExport
+        private static class CsvExport
         {
             public static GenericPopup InfoPopup;
 

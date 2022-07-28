@@ -13,7 +13,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Module
 {
-    public class GameDataContainer
+    public sealed class GameDataContainer
     {
         public enum CustomVentType
         {
@@ -40,6 +40,12 @@ namespace ExtremeRoles.Module
             Surrender,
 
             Disconnected,
+        }
+
+        public enum ForceVisionType
+        {
+            None,
+            LastWolfLightOff
         }
 
         public bool IsRoleSetUpEnd => this.isRoleSetUpEnd;
@@ -73,6 +79,8 @@ namespace ExtremeRoles.Module
         private List<IMeetingResetObject> resetObject = new List<IMeetingResetObject>();
         private bool isRoleSetUpEnd;
 
+        public ForceVisionType CurVison;
+
         public GameDataContainer()
         {
             this.Initialize();
@@ -80,6 +88,7 @@ namespace ExtremeRoles.Module
 
         public void Initialize()
         {
+            CurVison = ForceVisionType.None;
             DeadedAssassin.Clear();
             ShildPlayer.Clear();
 
@@ -255,7 +264,8 @@ namespace ExtremeRoles.Module
 
                 int gameControlId = role.GameControlId;
 
-                if (role.Id == ExtremeRoleId.Assassin)
+                if (role.Id == ExtremeRoleId.Assassin && 
+                    role.IsImpostor())
                 {
                     var assassin = role as Roles.Combination.Assassin;
                     if (assassin != null)
@@ -337,7 +347,35 @@ namespace ExtremeRoles.Module
                                         NeutralSeparateTeam.Vigilante);
                                 }
                                 break;
+                            case ExtremeRoleId.Miner:
+                                addNeutralTeams(
+                                    ref neutralTeam,
+                                    gameControlId,
+                                    NeutralSeparateTeam.Miner);
+                                break;
+                            case ExtremeRoleId.Eater:
+                                addNeutralTeams(
+                                    ref neutralTeam,
+                                    gameControlId,
+                                    NeutralSeparateTeam.Eater);
+                                break;
+                            case ExtremeRoleId.Traitor:
+                                addNeutralTeams(
+                                    ref neutralTeam,
+                                    gameControlId,
+                                    NeutralSeparateTeam.Traitor);
+                                break;
+                            case ExtremeRoleId.Queen:
+                            case ExtremeRoleId.Servant:
+                                addNeutralTeams(
+                                    ref neutralTeam,
+                                    gameControlId,
+                                    NeutralSeparateTeam.Queen);
+                                break;
                             default:
+                                checkMultiAssignedServant(
+                                    ref neutralTeam,
+                                    gameControlId, role);
                                 break;
                         }
                         break;
@@ -381,6 +419,24 @@ namespace ExtremeRoles.Module
                 clerObject.Clear();
             }
             this.resetObject.Clear();
+        }
+
+        private void checkMultiAssignedServant(
+            ref Dictionary<(NeutralSeparateTeam, int), int> neutralTeam,
+            int gameControlId,
+            SingleRoleBase role)
+        {
+            var multiAssignRole = role as MultiAssignRoleBase;
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole?.Id == ExtremeRoleId.Servant)
+                {
+                    addNeutralTeams(
+                        ref neutralTeam,
+                        gameControlId,
+                        NeutralSeparateTeam.Queen);
+                }
+            }
         }
 
         private void addNeutralTeams(
@@ -450,7 +506,7 @@ namespace ExtremeRoles.Module
 
         }
 
-        public class DeadInfo
+        public sealed class DeadInfo
         {
             public PlayerStatus Reason { get; set; }
 
@@ -459,7 +515,7 @@ namespace ExtremeRoles.Module
             public PlayerControl Killer { get; set; }
         }
 
-        public class PlayerStatistics
+        public sealed class PlayerStatistics
         {
             public int AllTeamCrewmate { get; set; }
             public int TeamImpostorAlive { get; set; }
@@ -473,7 +529,7 @@ namespace ExtremeRoles.Module
             public Dictionary<(NeutralSeparateTeam, int), int> SeparatedNeutralAlive { get; set; }
 
         }
-        public class PlayerSummary
+        public sealed class PlayerSummary
         {
             public string PlayerName { get; set; }
             public SingleRoleBase Role { get; set; }
@@ -482,7 +538,7 @@ namespace ExtremeRoles.Module
             public PlayerStatus StatusInfo { get; set; }
         }
 
-        public class ShieldPlayerContainer
+        public sealed class ShieldPlayerContainer
         {
 
             private List<(byte, byte)> shield = new List<(byte, byte)>();
@@ -535,7 +591,7 @@ namespace ExtremeRoles.Module
             }
         }
 
-        public class PlayerHistory
+        public sealed class PlayerHistory
         {
             public bool BlockAddHistory;
 
@@ -594,7 +650,7 @@ namespace ExtremeRoles.Module
             public int GetSize() => this.size;
         }
 
-        public class CustomVentContainer
+        public sealed class CustomVentContainer
         {
             private Dictionary<int, CustomVentType> ventType = new Dictionary<int, CustomVentType>();
             private Dictionary<CustomVentType, List<Vent>> addVent = new Dictionary<CustomVentType, List<Vent>>();
@@ -678,7 +734,7 @@ namespace ExtremeRoles.Module
             public bool IsCustomVent(int ventId) => this.ventType.ContainsKey(ventId);
         }
 
-        public class BakaryUnion
+        public sealed class BakaryUnion
         {
             private bool isChangeCooking = false;
 

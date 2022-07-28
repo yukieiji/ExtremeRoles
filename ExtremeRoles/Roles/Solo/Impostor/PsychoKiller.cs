@@ -6,7 +6,7 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public class PsychoKiller : SingleRoleBase, IRoleResetMeeting
+    public sealed class PsychoKiller : SingleRoleBase, IRoleResetMeeting
     {
 
         private bool isResetMeeting;
@@ -75,7 +75,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             CreateIntOption(
                 PsychoKillerOption.KillCoolReduceRate,

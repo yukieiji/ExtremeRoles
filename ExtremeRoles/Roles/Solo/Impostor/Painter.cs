@@ -12,7 +12,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public class Painter : SingleRoleBase, IRoleAbility
+    public sealed class Painter : SingleRoleBase, IRoleAbility
     {
 
         public enum PainterOption
@@ -130,7 +130,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             this.CreateCommonAbilityOption(
                 parentOps);

@@ -14,34 +14,51 @@ namespace ExtremeRoles
 {
     public static class OptionHolder
     {
-
         public const int VanillaMaxPlayerNum = 15;
         public const int MaxImposterNum = 3;
+
+        private const int singleRoleOptionStartOffset = 100;
+        private const int combRoleOptionStartOffset = 5000;
+        private const int ghostRoleOptionStartOffset = 10000;
         private const int chunkSize = 50;
 
-        public static string[] SpawnRate = new string[] {
+        public static readonly string[] SpawnRate = new string[] {
             "0%", "10%", "20%", "30%", "40%",
             "50%", "60%", "70%", "80%", "90%", "100%" };
-        public static string[] OptionPreset = new string[] { 
-            "preset1", "preset2", "preset3", "preset4", "preset5",
-            "preset6", "preset7", "preset8", "preset9", "preset10" };
-        public static string[] Range = new string[] { "short", "middle", "long"};
 
-        public static int OptionsPage = 1;
-        public static int SelectedPreset = 0;
-
-        private static IRegionInfo[] defaultRegion;
+        public static readonly string[] Range = new string[] { "short", "middle", "long"};
 
         public static string ConfigPreset
         {
-            get => $"Preset:{SelectedPreset}";
+            get => $"Preset:{selectedPreset}";
         }
+
+        public static int OptionsPage = 1;
+
+        public static Dictionary<int, IOption> AllOption = new Dictionary<int, IOption>();
+        
+        private static readonly string[] optionPreset = new string[] {
+            "preset1", "preset2", "preset3", "preset4", "preset5",
+            "preset6", "preset7", "preset8", "preset9", "preset10" };
+
+        private static readonly string[] prngAlgorithm = new string[]
+        {
+            "Pcg32XshRr", "Pcg64RxsMXs",
+            "Xorshiro256StarStar", "Xorshiro512StarStar",
+            "RomuTrio", "RomuQuad",
+            "Seiran128", "Shioi128"
+        };
+
+        private static int selectedPreset = 0;
+
+        private static IRegionInfo[] defaultRegion;
 
         public enum CommonOptionKey
         {
             PresetSelection = 0,
 
             UseStrongRandomGen,
+            UsePrngAlgorithm,
 
             MinCrewmateRoles,
             MaxCrewmateRoles,
@@ -58,14 +75,29 @@ namespace ExtremeRoles
             MaxImpostorGhostRoles,
 
             NumMeating,
+            ChangeMeetingVoteAreaSort,
+            FixedMeetingPlayerLevel,
             DisableSkipInEmergencyMeeting,
             DisableSelfVote,
             DesableVent,
             EngineerUseImpostorVent,
             CanKillVentInPlayer,
             ParallelMedBayScans,
+            
+            IsRemoveAdmin,
             IsRemoveAirShipArchiveAdmin,
             IsRemoveAirShipCockpitAdmin,
+            EnableAdminLimit,
+            AdminLimitTime,
+
+            IsRemoveSecurity,
+            EnableSecurityLimit,
+            SecurityLimitTime,
+
+            IsRemoveVital,
+            EnableVitalLimit,
+            VitalLimitTime,
+
             RandomMap,
             
             DisableTaskWinWhenNoneTaskCrew,
@@ -78,8 +110,6 @@ namespace ExtremeRoles
             IsRemoveAngleIcon,
             IsBlockGAAbilityReport,
         }
-
-        public static Dictionary<int, CustomOptionBase> AllOption = new Dictionary<int, CustomOptionBase>();
 
         public static void Create()
         {
@@ -95,31 +125,42 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.PresetSelection, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.PresetSelection.ToString()),
-                OptionPreset, null, true);
+                optionPreset, null, true);
 
-            new BoolCustomOption(
+            var strongGen = new BoolCustomOption(
                (int)CommonOptionKey.UseStrongRandomGen, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.UseStrongRandomGen.ToString()), true);
+            new SelectionCustomOption(
+               (int)CommonOptionKey.UsePrngAlgorithm, Design.ColoedString(
+                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    CommonOptionKey.UsePrngAlgorithm.ToString()),
+               prngAlgorithm, strongGen,
+               invert: true);
 
             createExtremeRoleGlobalSpawnOption();
             createExtremeGhostRoleGlobalSpawnOption();
             createShipGlobalOption();
 
-            Roles.ExtremeRoleManager.CreateNormalRoleOptions(50);
+            Roles.ExtremeRoleManager.CreateNormalRoleOptions(
+                singleRoleOptionStartOffset);
 
-            Roles.ExtremeRoleManager.CreateCombinationRoleOptions(5000);
+            Roles.ExtremeRoleManager.CreateCombinationRoleOptions(
+                combRoleOptionStartOffset);
 
-            GhostRoles.ExtremeGhostRoleManager.CreateGhostRoleOption(10000);
-
-
+            GhostRoles.ExtremeGhostRoleManager.CreateGhostRoleOption(
+                ghostRoleOptionStartOffset);
         }
 
         public static void Load()
         {
+            Ship.MaxNumberOfMeeting = AllOption[
+                (int)CommonOptionKey.NumMeating].GetValue();
+            Ship.ChangeMeetingVoteAreaSort = AllOption[
+                (int)CommonOptionKey.ChangeMeetingVoteAreaSort].GetValue();
+            Ship.FixedMeetingPlayerLevel = AllOption[
+                (int)CommonOptionKey.FixedMeetingPlayerLevel].GetValue();
 
-            Ship.MaxNumberOfMeeting = Mathf.RoundToInt(
-                AllOption[(int)CommonOptionKey.NumMeating].GetValue());
             Ship.AllowParallelMedBayScan = AllOption[
                 (int)CommonOptionKey.ParallelMedBayScans].GetValue();
             Ship.BlockSkippingInEmergencyMeeting = AllOption[
@@ -148,12 +189,31 @@ namespace ExtremeRoles
             Ship.IsBlockGAAbilityReport = AllOption[
                 (int)CommonOptionKey.IsBlockGAAbilityReport].GetValue();
 
-
+            Ship.IsRemoveAdmin = AllOption[
+                (int)CommonOptionKey.IsRemoveAdmin].GetValue();
             Ship.IsRemoveAirShipCockpitAdmin = AllOption[
                 (int)CommonOptionKey.IsRemoveAirShipCockpitAdmin].GetValue();
             Ship.IsRemoveAirShipArchiveAdmin = AllOption[
                 (int)CommonOptionKey.IsRemoveAirShipArchiveAdmin].GetValue();
+            Ship.EnableAdminLimit = AllOption[
+                (int)CommonOptionKey.EnableAdminLimit].GetValue();
+            Ship.AdminLimitTime = AllOption[
+                (int)CommonOptionKey.AdminLimitTime].GetValue();
 
+
+            Ship.IsRemoveSecurity = AllOption[
+                (int)CommonOptionKey.IsRemoveSecurity].GetValue();
+            Ship.EnableSecurityLimit = AllOption[
+                (int)CommonOptionKey.EnableSecurityLimit].GetValue();
+            Ship.SecurityLimitTime = AllOption[
+                (int)CommonOptionKey.SecurityLimitTime].GetValue();
+
+            Ship.IsRemoveVital = AllOption[
+                (int)CommonOptionKey.IsRemoveVital].GetValue();
+            Ship.EnableVitalLimit = AllOption[
+                (int)CommonOptionKey.EnableVitalLimit].GetValue();
+            Ship.VitalLimitTime = AllOption[
+                (int)CommonOptionKey.VitalLimitTime].GetValue();
 
             Client.GhostsSeeRole = ConfigParser.GhostsSeeRoles.Value;
             Client.GhostsSeeTask = ConfigParser.GhostsSeeTasks.Value;
@@ -165,24 +225,11 @@ namespace ExtremeRoles
 
         public static void SwitchPreset(int newPreset)
         {
-            SelectedPreset = newPreset;
-            foreach (CustomOptionBase option in AllOption.Values)
+            selectedPreset = newPreset;
+            foreach (IOption option in AllOption.Values)
             {
                 if (option.Id == 0) { continue; }
-
-                option.Entry = ExtremeRolesPlugin.Instance.Config.Bind(
-                    ConfigPreset,
-                    option.CleanedName,
-                    option.DefaultSelection);
-                option.CurSelection = Mathf.Clamp(
-                    option.Entry.Value, 0,
-                    option.Selections.Length - 1);
-
-                if (option.Behaviour != null && option.Behaviour is StringOption stringOption)
-                {
-                    stringOption.oldValue = stringOption.Value = option.CurSelection;
-                    stringOption.ValueText.text = option.GetString();
-                }
+                option.SwitchPreset();
             }
         }
 
@@ -351,11 +398,18 @@ namespace ExtremeRoles
 
         private static void createShipGlobalOption()
         {
-
             new IntCustomOption(
                 (int)CommonOptionKey.NumMeating,
                 CommonOptionKey.NumMeating.ToString(),
                 10, 0, 100, 1, null, true);
+            new BoolCustomOption(
+              (int)CommonOptionKey.ChangeMeetingVoteAreaSort,
+              CommonOptionKey.ChangeMeetingVoteAreaSort.ToString(),
+              false);
+            new BoolCustomOption(
+               (int)CommonOptionKey.FixedMeetingPlayerLevel,
+               CommonOptionKey.FixedMeetingPlayerLevel.ToString(),
+               false);
             new BoolCustomOption(
                 (int)CommonOptionKey.DisableSkipInEmergencyMeeting,
                 CommonOptionKey.DisableSkipInEmergencyMeeting.ToString(),
@@ -384,14 +438,64 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.ParallelMedBayScans,
                 CommonOptionKey.ParallelMedBayScans.ToString(), false);
 
+            var adminOpt = new BoolCustomOption(
+                (int)CommonOptionKey.IsRemoveAdmin,
+                CommonOptionKey.IsRemoveAdmin.ToString(),
+                false);
             new BoolCustomOption(
                 (int)CommonOptionKey.IsRemoveAirShipCockpitAdmin,
                 CommonOptionKey.IsRemoveAirShipCockpitAdmin.ToString(),
-                false);
+                true, adminOpt);
             new BoolCustomOption(
                 (int)CommonOptionKey.IsRemoveAirShipArchiveAdmin,
                 CommonOptionKey.IsRemoveAirShipArchiveAdmin.ToString(),
+                true, adminOpt);
+            var adminLimitOpt = new BoolCustomOption(
+                (int)CommonOptionKey.EnableAdminLimit,
+                CommonOptionKey.EnableAdminLimit.ToString(),
+                false, adminOpt,
+                invert: true);
+            new FloatCustomOption(
+                (int)CommonOptionKey.AdminLimitTime,
+                CommonOptionKey.AdminLimitTime.ToString(),
+                30.0f, 5.0f, 120.0f, 0.5f, adminLimitOpt,
+                format: OptionUnit.Second,
+                invert: true,
+                enableCheckOption: adminLimitOpt);
+
+            var secOpt = new BoolCustomOption(
+                (int)CommonOptionKey.IsRemoveSecurity,
+                CommonOptionKey.IsRemoveSecurity.ToString(),
                 false);
+            var secLimitOpt = new BoolCustomOption(
+                (int)CommonOptionKey.EnableSecurityLimit,
+                CommonOptionKey.EnableSecurityLimit.ToString(),
+                false, secOpt,
+                invert: true);
+            new FloatCustomOption(
+                (int)CommonOptionKey.SecurityLimitTime,
+                CommonOptionKey.SecurityLimitTime.ToString(),
+                30.0f, 5.0f, 120.0f, 0.5f, secLimitOpt,
+                format: OptionUnit.Second,
+                invert: true,
+                enableCheckOption: secLimitOpt);
+
+            var vitalOpt = new BoolCustomOption(
+                (int)CommonOptionKey.IsRemoveVital,
+                CommonOptionKey.IsRemoveVital.ToString(),
+                false);
+            var vitalLimitOpt = new BoolCustomOption(
+                (int)CommonOptionKey.EnableVitalLimit,
+                CommonOptionKey.EnableVitalLimit.ToString(),
+                false, vitalOpt,
+                invert: true);
+            new FloatCustomOption(
+                (int)CommonOptionKey.VitalLimitTime,
+                CommonOptionKey.VitalLimitTime.ToString(),
+                30.0f, 5.0f, 120.0f, 0.5f, vitalLimitOpt,
+                format: OptionUnit.Second,
+                invert: true,
+                enableCheckOption: vitalLimitOpt);
 
 
             new BoolCustomOption(
@@ -463,6 +567,9 @@ namespace ExtremeRoles
         public static class Ship
         {
             public static int MaxNumberOfMeeting = 100;
+
+            public static bool ChangeMeetingVoteAreaSort = true;
+            public static bool FixedMeetingPlayerLevel = false;
             public static bool AllowParallelMedBayScan = false;
             public static bool BlockSkippingInEmergencyMeeting = false;
             
@@ -470,8 +577,19 @@ namespace ExtremeRoles
             public static bool EngineerUseImpostorVent = false;
             public static bool CanKillVentInPlayer = false;
 
+            public static bool IsRemoveAdmin = false;
             public static bool IsRemoveAirShipCockpitAdmin = false;
             public static bool IsRemoveAirShipArchiveAdmin = false;
+            public static bool EnableAdminLimit = false;
+            public static float AdminLimitTime = 0.0f;
+
+            public static bool IsRemoveSecurity = false;
+            public static bool EnableSecurityLimit = false;
+            public static float SecurityLimitTime = 0.0f;
+
+            public static bool IsRemoveVital = false;
+            public static bool EnableVitalLimit = false;
+            public static float VitalLimitTime = 0.0f;
 
             public static bool DisableSelfVote = false;
 

@@ -17,7 +17,7 @@ namespace ExtremeRoles.Compat
         Submerged,
     }
 
-    internal class CompatModManager
+    internal sealed class CompatModManager
     {
         public bool IsModMap => this.map != null;
         public IMapMod ModMap => this.map;

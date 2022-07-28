@@ -17,7 +17,7 @@ using BepInEx.IL2CPP.Utils.Collections;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public class Carrier : SingleRoleBase, IRoleAbility, IRoleSpecialReset
+    public sealed class Carrier : SingleRoleBase, IRoleAbility, IRoleSpecialReset
     {
         public DeadBody CarringBody;
         public float AlphaValue;
@@ -200,7 +200,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             this.CreateCommonAbilityOption(
                 parentOps, 5.0f);

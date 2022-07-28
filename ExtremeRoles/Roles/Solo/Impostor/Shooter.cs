@@ -8,7 +8,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public class Shooter : SingleRoleBase, IRoleMeetingButtonAbility, IRoleReportHock, IRoleResetMeeting, IRoleUpdate
+    public sealed class Shooter : SingleRoleBase, IRoleMeetingButtonAbility, IRoleReportHock, IRoleResetMeeting, IRoleUpdate
     {
         public enum ShooterOption
         {
@@ -24,9 +24,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             ShootKillCoolPenalty,
             ShootShootChargePenalty,
         }
-
-        public int CurShootNum => this.curShootNum;
-        public bool CanShoot => this.shootCounter < this.maxMeetingShootNum && this.canShootThisMeeting;
 
         private float defaultKillCool = 0.0f;
         private float killCoolPenalty = 0.0f;
@@ -62,7 +59,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             byte target = instance.TargetPlayerId;
 
-            return this.CurShootNum <= 0 || !this.CanShoot || target == 253 ||
+            return 
+                this.curShootNum <= 0 || 
+                !(this.shootCounter < this.maxMeetingShootNum && this.canShootThisMeeting) || 
+                target == 253 ||
                 ExtremeRoleManager.GameRole[target].Id == ExtremeRoleId.Assassin;
         }
 
@@ -223,7 +223,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             var meetingOps = CreateBoolOption(
                 ShooterOption.CanCallMeeting,
@@ -340,14 +340,20 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         private void createText()
         {
+
+            HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
+
             this.chargeTimerText = Object.Instantiate(
-                FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
-                FastDestroyableSingleton<HudManager>.Instance.KillButton.transform);
-            this.chargeTimerText.transform.localPosition += new Vector3(-2.7f, -1.7f, 0);
+                hudManager.KillButton.cooldownTimerText,
+                hudManager.KillButton.transform.parent);
+
+            this.chargeTimerText.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+            this.chargeTimerText.transform.localPosition = 
+                hudManager.UseButton.transform.localPosition + new Vector3(-2.0f, -0.125f, 0);
             this.chargeTimerText.gameObject.SetActive(true);
 
             this.chargeInfoText = Object.Instantiate(
-                FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+                hudManager.KillButton.cooldownTimerText,
                 this.chargeTimerText.transform);
             this.chargeInfoText.enableWordWrapping = false;
             this.chargeInfoText.transform.localScale = Vector3.one * 0.5f;

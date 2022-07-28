@@ -11,7 +11,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public class OverLoader : SingleRoleBase, IRoleAbility
+    public sealed class OverLoader : SingleRoleBase, IRoleAbility
     {
 
         public enum OverLoaderOption
@@ -99,7 +99,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             this.CreateCommonAbilityOption(
                 parentOps, 7.5f);

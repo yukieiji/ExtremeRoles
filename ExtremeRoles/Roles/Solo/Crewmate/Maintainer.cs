@@ -10,7 +10,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class Maintainer : SingleRoleBase, IRoleAbility
+    public sealed class Maintainer : SingleRoleBase, IRoleAbility
     {
         public RoleAbilityButtonBase Button
         {
@@ -147,7 +147,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             this.CreateAbilityCountOption(
                 parentOps, 2, 10);

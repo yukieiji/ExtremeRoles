@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace ExtremeRoles.GhostRoles.Impostor
 {
-    public class Ventgeist : GhostRoleBase
+    public sealed class Ventgeist : GhostRoleBase
     {
         public enum Option
         {
@@ -65,7 +65,7 @@ namespace ExtremeRoles.GhostRoles.Impostor
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             CreateFloatOption(
                 Option.Range, 1.0f,

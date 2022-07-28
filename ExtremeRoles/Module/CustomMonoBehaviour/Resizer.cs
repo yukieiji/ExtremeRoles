@@ -3,7 +3,7 @@
 namespace ExtremeRoles.Module.CustomMonoBehaviour
 {
     [Il2CppRegister]
-    public class Resizeer : MonoBehaviour
+    public sealed class Resizeer : MonoBehaviour
     {
         private Vector3 targetScale = Vector3.one;
 

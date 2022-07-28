@@ -15,7 +15,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 namespace ExtremeRoles.Patches.Manager
 {
     [HarmonyPatch(typeof(RoleManager), nameof(RoleManager.SelectRoles))]
-    class RoleManagerSelectRolesPatch
+    public static class RoleManagerSelectRolesPatch
     {
 
         public static void Postfix()
@@ -100,9 +100,9 @@ namespace ExtremeRoles.Patches.Manager
             return result;
         }
 
-        private static int computePercentage(Module.CustomOptionBase self)
+        private static int computePercentage(Module.IOption self)
             => (int)Decimal.Multiply(
-                self.GetValue(), self.Selections.ToList().Count);
+                self.GetValue(), self.ValueCount);
 
         private static void createCombinationExtremeRoleAssign(
             ref RoleAssignmentData extremeRolesData,
@@ -132,8 +132,15 @@ namespace ExtremeRoles.Patches.Manager
                     foreach (int playerIndex in tempList)
                     {
                         player = PlayerControl.AllPlayerControls[playerIndex];
+
+                        Logging.Debug($"-------------------AssignToPlayer:{player.Data.PlayerName}-------------------");
+                        Logging.Debug($"---AssignRole:{role.Id}---");
+                        
                         assign = isAssignedToMultiRole(
                             role, player);
+
+                        Logging.Debug($"AssignResult:{assign}");
+
                         if (!assign) { continue; }
 
                         if (role.CanHasAnotherRole)
@@ -147,6 +154,9 @@ namespace ExtremeRoles.Patches.Manager
                             player.PlayerId, (int)role.Id,
                             combType, (byte)id,
                             (byte)player.Data.Role.Role));
+
+                        Logging.Debug($"-------------------AssignEnd-------------------");
+                        
                         break;
                     }
                 }
@@ -213,6 +223,8 @@ namespace ExtremeRoles.Patches.Manager
 
             int gameControlId = 0;
             int curImpNum = 0;
+            int curCrewNum = 0;
+            int maxImpNum = PlayerControl.GameOptions.NumImpostors;
 
             foreach (var oneRole in roleDataLoop)
             {
@@ -253,20 +265,34 @@ namespace ExtremeRoles.Patches.Manager
 
                     isSpawn = (
                         isSpawn &&
-                        ((extremeRolesData.CrewmateRoles - reduceCrewmateRole >= 0) && crewNum >= reduceCrewmateRole) &&
-                        ((extremeRolesData.NeutralRoles - reduceNeutralRole >= 0) && crewNum >= reduceNeutralRole) &&
-                        ((extremeRolesData.ImpostorRoles - reduceImpostorRole >= 0) && impNum >= reduceImpostorRole));
+                        (
+                            curCrewNum + (reduceCrewmateRole + reduceNeutralRole) <= crewNum &&
+                            curImpNum + reduceImpostorRole <= maxImpNum
+                        ) &&
+                        (
+                            (extremeRolesData.CrewmateRoles - reduceCrewmateRole >= 0) && 
+                            crewNum >= reduceCrewmateRole
+                        ) &&
+                        (
+                            (extremeRolesData.NeutralRoles - reduceNeutralRole >= 0) && 
+                            crewNum >= reduceNeutralRole
+                        ) &&
+                        (
+                            (extremeRolesData.ImpostorRoles - reduceImpostorRole >= 0) && 
+                            impNum >= reduceImpostorRole
+                        )
+                    );
 
 
-                    //Modules.Helpers.DebugLog($"Role:{oneRole.ToString()}   isSpawn?:{isSpawn}");
+                    // Logging.Debug($"Role:{oneRole}   isSpawn?:{isSpawn}");
                     if (!isSpawn) { continue; }
 
                     extremeRolesData.CrewmateRoles = extremeRolesData.CrewmateRoles - reduceCrewmateRole;
                     extremeRolesData.NeutralRoles = extremeRolesData.NeutralRoles - reduceNeutralRole;
                     extremeRolesData.ImpostorRoles = extremeRolesData.ImpostorRoles - reduceImpostorRole;
 
-                    impNum = impNum - reduceImpostorRole;
-                    crewNum = crewNum - (reduceCrewmateRole + reduceNeutralRole);
+                    curImpNum = curImpNum + reduceImpostorRole;
+                    curCrewNum = curCrewNum + (reduceCrewmateRole + reduceNeutralRole);
 
                     var spawnRoles = new List<(byte, MultiAssignRoleBase)>();
                     foreach (var role in roleManager.Roles)
@@ -583,7 +609,7 @@ namespace ExtremeRoles.Patches.Manager
             };
         }
 
-        private class RoleAssignmentData
+        private sealed class RoleAssignmentData
         {
             public List<SingleRoleBase> RolesForVanillaImposter = new List<SingleRoleBase>();
             public List<SingleRoleBase> RolesForVanillaCrewmate = new List<SingleRoleBase>();

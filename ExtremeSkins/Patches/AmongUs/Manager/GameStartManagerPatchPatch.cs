@@ -7,7 +7,7 @@ using UnityEngine;
 namespace ExtremeSkins.Patches.AmongUs.Manager
 {
     [HarmonyPatch]
-    public class GameStartManagerPatch
+    public static class GameStartManagerPatch
     {
         private const float kickTime = 30f;
         private const float timerMaxValue = 600f;

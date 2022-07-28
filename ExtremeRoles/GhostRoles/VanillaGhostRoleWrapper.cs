@@ -8,7 +8,7 @@ using ExtremeRoles.Module;
 
 namespace ExtremeRoles.GhostRoles
 {
-    public class VanillaGhostRoleWrapper : GhostRoleBase
+    public sealed class VanillaGhostRoleWrapper : GhostRoleBase
     {
         private RoleTypes vanillaRoleId;
 
@@ -76,7 +76,7 @@ namespace ExtremeRoles.GhostRoles
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             throw new System.Exception("Don't call this class method!!");
         }

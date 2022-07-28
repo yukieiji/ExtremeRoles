@@ -18,9 +18,9 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public class Mery : SingleRoleBase, IRoleAbility
+    public sealed class Mery : SingleRoleBase, IRoleAbility
     {
-        public class Camp : IUpdatableObject
+        public sealed class Camp : IUpdatableObject
         {
             private HashSet<byte> player = new HashSet<byte>();
 
@@ -266,7 +266,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             this.CreateAbilityCountOption(
                 parentOps, 3, 5);

@@ -15,7 +15,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Combination
 {
-    public class DetectiveOffice : ConstCombinationRoleManagerBase
+    public sealed class DetectiveOffice : ConstCombinationRoleManagerBase
     {
 
         public const string Name = "DetectiveOffice";
@@ -29,7 +29,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             base.CreateSpecificOption(parentOps);
             DetectiveApprentice.DetectiveApprenticeOptionHolder.CreateOption(
@@ -38,7 +38,7 @@ namespace ExtremeRoles.Roles.Combination
 
     }
 
-    public class Detective : MultiAssignRoleBase, IRoleMurderPlayerHock, IRoleResetMeeting, IRoleReportHock, IRoleUpdate, IRoleSpecialReset
+    public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHock, IRoleResetMeeting, IRoleReportHock, IRoleUpdate, IRoleSpecialReset
     {
         public struct CrimeInfo
         {
@@ -152,7 +152,8 @@ namespace ExtremeRoles.Roles.Combination
             ExtremeRoleType.Crewmate,
             ExtremeRoleId.Detective.ToString(),
             ColorPalette.DetectiveKokikou,
-            false, true, false, false)
+            false, true, false, false,
+            tab: OptionTab.Combination)
         { }
 
         public void AllReset(PlayerControl rolePlayer)
@@ -273,7 +274,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             CreateFloatOption(
                 DetectiveOption.SearchRange,
@@ -432,7 +433,8 @@ namespace ExtremeRoles.Roles.Combination
             ExtremeRoleType.Crewmate,
             ExtremeRoleId.Assistant.ToString(),
             ColorPalette.AssistantBluCapri,
-            false, true, false, false)
+            false, true, false, false,
+            tab: OptionTab.Combination)
         { }
 
         public void AllReset(PlayerControl rolePlayer)
@@ -487,7 +489,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         { }
 
         protected override void RoleSpecificInit()
@@ -533,7 +535,7 @@ namespace ExtremeRoles.Roles.Combination
             }
 
             public static void CreateOption(
-                CustomOptionBase parentOps,
+                IOption parentOps,
                 int optionId)
             {
                 int getRoleOptionId<T>(T option) where T : struct, IConvertible
@@ -548,7 +550,8 @@ namespace ExtremeRoles.Roles.Combination
                     string.Concat(
                         roleName,
                         DetectiveApprenticeOption.HasOtherVison.ToString()),
-                    false, parentOps);
+                    false, parentOps,
+                    tab: OptionTab.Combination);
 
                 new FloatCustomOption(
                     getRoleOptionId(DetectiveApprenticeOption.Vison),
@@ -556,13 +559,15 @@ namespace ExtremeRoles.Roles.Combination
                         roleName,
                         DetectiveApprenticeOption.Vison.ToString()),
                     2f, 0.25f, 5f, 0.25f,
-                    visonOption, format: OptionUnit.Multiplier);
+                    visonOption, format: OptionUnit.Multiplier,
+                    tab: OptionTab.Combination);
                 new BoolCustomOption(
-                   getRoleOptionId(DetectiveApprenticeOption.ApplyEnvironmentVisionEffect),
-                   string.Concat(
-                       roleName,
-                       DetectiveApprenticeOption.ApplyEnvironmentVisionEffect.ToString()),
-                   false, visonOption);
+                    getRoleOptionId(DetectiveApprenticeOption.ApplyEnvironmentVisionEffect),
+                    string.Concat(
+                        roleName,
+                        DetectiveApprenticeOption.ApplyEnvironmentVisionEffect.ToString()),
+                    false, visonOption,
+                    tab: OptionTab.Combination);
 
                 new IntCustomOption(
                     getRoleOptionId(RoleAbilityCommonOption.AbilityCount),
@@ -570,7 +575,8 @@ namespace ExtremeRoles.Roles.Combination
                         roleName,
                         RoleAbilityCommonOption.AbilityCount.ToString()),
                     1, 1, 10, 1,
-                    parentOps, format: OptionUnit.Shot);
+                    parentOps, format: OptionUnit.Shot,
+                    tab: OptionTab.Combination);
 
                 new FloatCustomOption(
                     getRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime),
@@ -578,7 +584,8 @@ namespace ExtremeRoles.Roles.Combination
                         roleName,
                         RoleAbilityCommonOption.AbilityCoolTime.ToString()),
                     30.0f, 0.5f, 60f, 0.5f,
-                    parentOps, format: OptionUnit.Second);
+                    parentOps, format: OptionUnit.Second,
+                    tab: OptionTab.Combination);
 
                 new FloatCustomOption(
                     getRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime),
@@ -586,21 +593,24 @@ namespace ExtremeRoles.Roles.Combination
                         roleName,
                         RoleAbilityCommonOption.AbilityActiveTime.ToString()),
                     3.0f, 1.0f, 5.0f, 0.5f,
-                    parentOps, format: OptionUnit.Second);
+                    parentOps, format: OptionUnit.Second,
+                    tab: OptionTab.Combination);
 
                 var buttonOption = new BoolCustomOption(
                     getRoleOptionId(DetectiveApprenticeOption.HasOtherButton),
                     string.Concat(
                         roleName,
                         DetectiveApprenticeOption.HasOtherButton.ToString()),
-                    false, parentOps);
+                    false, parentOps,
+                    tab: OptionTab.Combination);
                 new IntCustomOption(
                     getRoleOptionId(DetectiveApprenticeOption.HasOtherButtonNum),
                     string.Concat(
                         roleName,
                         DetectiveApprenticeOption.HasOtherButtonNum.ToString()),
                     1, 1, 10, 1, buttonOption,
-                    format: OptionUnit.Shot);
+                    format: OptionUnit.Shot,
+                    tab: OptionTab.Combination);
             }
 
             public static DetectiveApprenticeOptionHolder LoadOptions(
@@ -843,7 +853,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             throw new Exception("Don't call this class method!!");
         }

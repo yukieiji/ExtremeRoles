@@ -46,6 +46,10 @@ namespace ExtremeRoles.Roles.API
         public int GameControlId = 0;
         protected Color NameColor;
 
+        public OptionTab Tab => this.tab;
+
+        private OptionTab tab = OptionTab.General;
+
         public SingleRoleBase()
         { }
         public SingleRoleBase(
@@ -61,7 +65,8 @@ namespace ExtremeRoles.Roles.API
             bool canRepairSabotage = true,
             bool canUseAdmin = true,
             bool canUseSecurity = true,
-            bool canUseVital = true)
+            bool canUseVital = true,
+            OptionTab tab = OptionTab.General)
         {
             this.Id = id;
             this.Team = team;
@@ -78,6 +83,29 @@ namespace ExtremeRoles.Roles.API
             this.CanUseAdmin = canUseAdmin;
             this.CanUseSecurity = canUseSecurity;
             this.CanUseVital = canUseVital;
+
+            if (tab == OptionTab.General)
+            {
+                switch (this.Team)
+                {
+                    case ExtremeRoleType.Crewmate:
+                        this.tab = OptionTab.Crewmate;
+                        break;
+                    case ExtremeRoleType.Impostor:
+                        this.tab = OptionTab.Impostor;
+                        break;
+                    case ExtremeRoleType.Neutral:
+                        this.tab = OptionTab.Neutral;
+                        break;
+                    default:
+                        this.tab = OptionTab.General;
+                        break;
+                }
+            }
+            else
+            {
+                this.tab = tab;
+            }
         }
 
         public virtual SingleRoleBase Clone()
@@ -240,7 +268,7 @@ namespace ExtremeRoles.Roles.API
             PlayerControl fromPlayer) => true;
 
         protected override void CreateKillerOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             var killCoolOption = CreateBoolOption(
                 KillerCommonOption.HasOtherKillCool,
@@ -258,7 +286,7 @@ namespace ExtremeRoles.Roles.API
                 OptionHolder.Range,
                 killRangeOption);
         }
-        protected override CustomOptionBase CreateSpawnOption()
+        protected override IOption CreateSpawnOption()
         {
             var roleSetOption = CreateSelectionOption(
                 RoleCommonOption.SpawnRate,
@@ -275,7 +303,7 @@ namespace ExtremeRoles.Roles.API
         }
 
         protected override void CreateVisonOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             var visonOption = CreateBoolOption(
                 RoleCommonOption.HasOtherVison,
@@ -337,16 +365,16 @@ namespace ExtremeRoles.Roles.API
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected CustomOptionBase CreateFloatOption<T>(
+        protected FloatCustomOption CreateFloatOption<T>(
             T option,
             float defaultValue,
             float min, float max, float step,
-            CustomOptionBase parent = null,
+            IOption parent = null,
             bool isHeader = false,
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            CustomOptionBase enableCheckOption = null,
+            IOption enableCheckOption = null,
             bool colored = false) where T : struct, IConvertible
         {
             EnumCheck(option);
@@ -357,20 +385,20 @@ namespace ExtremeRoles.Roles.API
                 defaultValue,
                 min, max, step,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption);
+                format, invert, enableCheckOption, this.tab);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected CustomOptionBase CreateFloatDynamicOption<T>(
+        protected FloatDynamicCustomOption CreateFloatDynamicOption<T>(
             T option,
             float defaultValue,
             float min, float step,
-            CustomOptionBase parent = null,
+            IOption parent = null,
             bool isHeader = false,
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            CustomOptionBase enableCheckOption = null,
+            IOption enableCheckOption = null,
             bool colored = false) where T : struct, IConvertible
         {
             EnumCheck(option);
@@ -381,20 +409,20 @@ namespace ExtremeRoles.Roles.API
                 defaultValue,
                 min, step,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption);
+                format, invert, enableCheckOption, this.tab);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected CustomOptionBase CreateIntOption<T>(
+        protected IntCustomOption CreateIntOption<T>(
             T option,
             int defaultValue,
             int min, int max, int step,
-            CustomOptionBase parent = null,
+            IOption parent = null,
             bool isHeader = false,
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            CustomOptionBase enableCheckOption = null,
+            IOption enableCheckOption = null,
             bool colored = false) where T : struct, IConvertible
         {
             EnumCheck(option);
@@ -405,20 +433,20 @@ namespace ExtremeRoles.Roles.API
                 defaultValue,
                 min, max, step,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption);
+                format, invert, enableCheckOption, this.tab);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected CustomOptionBase CreateIntDynamicOption<T>(
+        protected IntDynamicCustomOption CreateIntDynamicOption<T>(
             T option,
             int defaultValue,
             int min, int step,
-            CustomOptionBase parent = null,
+            IOption parent = null,
             bool isHeader = false,
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            CustomOptionBase enableCheckOption = null,
+            IOption enableCheckOption = null,
             bool colored = false) where T : struct, IConvertible
         {
             EnumCheck(option);
@@ -429,19 +457,19 @@ namespace ExtremeRoles.Roles.API
                 defaultValue,
                 min, step,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption);
+                format, invert, enableCheckOption, this.tab);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected CustomOptionBase CreateBoolOption<T>(
+        protected BoolCustomOption CreateBoolOption<T>(
             T option,
             bool defaultValue,
-            CustomOptionBase parent = null,
+            IOption parent = null,
             bool isHeader = false,
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            CustomOptionBase enableCheckOption = null,
+            IOption enableCheckOption = null,
             bool colored = false) where T : struct, IConvertible
         {
             EnumCheck(option);
@@ -451,19 +479,19 @@ namespace ExtremeRoles.Roles.API
                 createAutoOptionString(option, colored),
                 defaultValue,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption);
+                format, invert, enableCheckOption, this.tab);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected CustomOptionBase CreateSelectionOption<T>(
+        protected SelectionCustomOption CreateSelectionOption<T>(
             T option,
             string[] selections,
-            CustomOptionBase parent = null,
+            IOption parent = null,
             bool isHeader = false,
             bool isHidden = false,
             OptionUnit format = OptionUnit.None,
             bool invert = false,
-            CustomOptionBase enableCheckOption = null,
+            IOption enableCheckOption = null,
             bool colored = false) where T : struct, IConvertible
         {
             EnumCheck(option);
@@ -473,7 +501,7 @@ namespace ExtremeRoles.Roles.API
                 createAutoOptionString(option, colored),
                 selections,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption);
+                format, invert, enableCheckOption, this.tab);
         }
 
         private string createAutoOptionString<T>(
@@ -510,10 +538,17 @@ namespace ExtremeRoles.Roles.API
             bool hasTask,
             bool useVent,
             bool useSabotage,
-            bool canCallMeeting = true) : base(
+            bool canCallMeeting = true,
+            bool canRepairSabotage = true,
+            bool canUseAdmin = true,
+            bool canUseSecurity = true,
+            bool canUseVital = true,
+            OptionTab tab = OptionTab.General) : base(
                 id, team, roleName, roleColor,
                 canKill, hasTask, useVent,
-                useSabotage, canCallMeeting)
+                useSabotage, canCallMeeting,
+                canRepairSabotage, canUseAdmin,
+                canUseSecurity, canUseVital, tab)
         { }
 
         public void SetRoleType(RoleTypes roleType)
@@ -570,7 +605,7 @@ namespace ExtremeRoles.Roles.API
             {
                 string fakeTaskString = Design.ColoedString(
                     this.NameColor,
-                    DestroyableSingleton<TranslationController>.Instance.GetString(
+                    FastDestroyableSingleton<TranslationController>.Instance.GetString(
                         StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()));
                 baseString = $"{baseString}\r\n{fakeTaskString}";
             }

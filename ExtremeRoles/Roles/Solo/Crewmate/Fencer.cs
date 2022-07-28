@@ -12,7 +12,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class Fencer : SingleRoleBase, IRoleAbility, IRoleUpdate
+    public sealed class Fencer : SingleRoleBase, IRoleAbility, IRoleUpdate
     {
         public enum FencerOption
         {
@@ -172,7 +172,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             this.CreateAbilityCountOption(
                 parentOps, 2, 5, 3.0f);

@@ -14,9 +14,9 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTypes>
+    public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTypes>
     {
-        public class CarpenterAbilityButton : RoleAbilityButtonBase
+        public sealed class CarpenterAbilityButton : RoleAbilityButtonBase
         {
             public int CurAbilityNum
             {
@@ -716,7 +716,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
 
         protected override void CreateSpecificOption(
-            CustomOptionBase parentOps)
+            IOption parentOps)
         {
             CreateIntOption(
                 CarpenterOption.AwakeTaskGage,
@@ -747,7 +747,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             abilityInit();
         }
 
-        private void createAbilityOption(CustomOptionBase parentOps)
+        private void createAbilityOption(IOption parentOps)
         {
             CreateFloatOption(
                 RoleAbilityCommonOption.AbilityCoolTime,
@@ -773,9 +773,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 CarpenterOption.SetCameraStopTime,
                 2.5f, 1.0f, 5.0f, 0.5f,
                 parentOps, format: OptionUnit.Second);
-            OptionHolder.AllOption[
+            ((IntCustomOption)OptionHolder.AllOption[
                 GetRoleOptionId(
-                    RoleAbilityCommonOption.AbilityCount)].SetOptionUnit(OptionUnit.ScrewNum);
+                    RoleAbilityCommonOption.AbilityCount)]).SetOptionUnit(OptionUnit.ScrewNum);
         }
 
         private void abilityInit()

@@ -14,7 +14,7 @@ namespace ExtremeRoles.Patches.Manager
 {
 
     [HarmonyPatch(typeof(EndGameManager), nameof(EndGameManager.SetEverythingUp))]
-    public class EndGameManagerSetUpPatch
+    public static class EndGameManagerSetUpPatch
     {
         private static List<Roles.API.SingleRoleBase> winNeutral = new List<Roles.API.SingleRoleBase>();
 
@@ -245,9 +245,9 @@ namespace ExtremeRoles.Patches.Manager
             bonusTextObject.transform.localScale = new Vector3(0.7f, 0.7f, 1f);
 
             TMPro.TMP_Text textRenderer = bonusTextObject.GetComponent<TMPro.TMP_Text>();
-            textRenderer.text = "";
+            textRenderer.text = string.Empty;
 
-            string bonusText = "";
+            string bonusText = string.Empty;
 
             var gameData = ExtremeRolesPlugin.GameDataStore;
 
@@ -289,8 +289,8 @@ namespace ExtremeRoles.Patches.Manager
                 case (GameOverReason)RoleGameOverReason.MissionaryAllAgainstGod:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Missionary.ToString());
-                    textRenderer.color = ColorPalette.MaintainerBlue;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.MaintainerBlue);
+                    textRenderer.color = ColorPalette.MissionaryBlue;
+                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.MissionaryBlue);
                     break;
                 case (GameOverReason)RoleGameOverReason.JesterMeetingFavorite:
                     bonusText = Translation.GetString(
@@ -330,6 +330,31 @@ namespace ExtremeRoles.Patches.Manager
                     textRenderer.color = ColorPalette.YokoShion;
                     manager.BackgroundBar.material.SetColor("_Color", ColorPalette.YokoShion);
                     break;
+                case (GameOverReason)RoleGameOverReason.MinerExplodeEverything:
+                    bonusText = Translation.GetString(
+                        ExtremeRoleId.Miner.ToString());
+                    textRenderer.color = ColorPalette.MinerIvyGreen;
+                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.MinerIvyGreen);
+                    break;
+                case (GameOverReason)RoleGameOverReason.EaterAllEatInTheShip:
+                case (GameOverReason)RoleGameOverReason.EaterAliveAlone:
+                    bonusText = Translation.GetString(
+                        ExtremeRoleId.Eater.ToString());
+                    textRenderer.color = ColorPalette.EaterMaroon;
+                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.EaterMaroon);
+                    break;
+                case (GameOverReason)RoleGameOverReason.TraitorKillAllOther:
+                    bonusText = Translation.GetString(
+                        ExtremeRoleId.Traitor.ToString());
+                    textRenderer.color = ColorPalette.TraitorLightShikon;
+                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.TraitorLightShikon);
+                    break;
+                case (GameOverReason)RoleGameOverReason.QueenKillAllOther:
+                    bonusText = Translation.GetString(
+                        ExtremeRoleId.Queen.ToString());
+                    textRenderer.color = ColorPalette.QueenWhite;
+                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.QueenWhite);
+                    break;
                 default:
                     break;
             }
@@ -352,15 +377,18 @@ namespace ExtremeRoles.Patches.Manager
 
                             if(added.Count == 0)
                             {
-                                bonusText = bonusText + Translation.GetString("andFirst");
+                                bonusText = string.Concat(
+                                    bonusText, Translation.GetString("andFirst"));
                             }
                             else
                             {
-                                bonusText = bonusText + Translation.GetString("and");
+                                bonusText = string.Concat(
+                                    bonusText, Translation.GetString("and"));
                             }
 
-                            bonusText = bonusText + Translation.GetString(
-                                winNeutral[i].GetColoredRoleName(true));
+                            bonusText = string.Concat(
+                                bonusText, Translation.GetString(
+                                    winNeutral[i].GetColoredRoleName(true)));
                             added.Add(winNeutral[i].Id);
                         }
                         break;
@@ -381,19 +409,19 @@ namespace ExtremeRoles.Patches.Manager
 
                 if (added.Count == 0)
                 {
-                    bonusText = bonusText + Translation.GetString("andFirst");
+                    bonusText = string.Concat(bonusText, Translation.GetString("andFirst"));
                 }
                 else
                 {
-                    bonusText = bonusText + Translation.GetString("and");
+                    bonusText = string.Concat(bonusText, Translation.GetString("and"));
                 }
 
-                bonusText = bonusText + Translation.GetString(
-                    role.GetColoredRoleName(true));
+                bonusText = string.Concat(bonusText, Translation.GetString(
+                    role.GetColoredRoleName(true)));
                 added.Add(role.Id);
             }
 
-            textRenderer.text = bonusText + string.Format(Translation.GetString("win"));
+            textRenderer.text = string.Concat(bonusText, Translation.GetString("win"));
         }
 
     }

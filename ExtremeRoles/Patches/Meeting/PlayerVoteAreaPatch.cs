@@ -8,6 +8,9 @@ using UnityEngine;
 
 using BepInEx.IL2CPP.Utils.Collections;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Roles;
+using ExtremeRoles.GhostRoles;
+using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Patches.Meeting
 {
@@ -59,20 +62,29 @@ namespace ExtremeRoles.Patches.Meeting
 		public static bool Prefix(PlayerVoteArea __instance)
 		{
 			if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return true; }
-			if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
+			if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
 			var gameData = ExtremeRolesPlugin.GameDataStore;
-			var buttonRole = Roles.ExtremeRoleManager.GetLocalPlayerRole() as Roles.API.Interface.IRoleMeetingButtonAbility;
+			var (buttonRole, anotherButtonRole) = ExtremeRoleManager.GetInterfaceCastedLocalRole<
+				IRoleMeetingButtonAbility>();
 
 			if (!gameData.AssassinMeetingTrigger)
 			{
-				if (buttonRole == null)
+				if (buttonRole != null && anotherButtonRole != null)
                 {
-					return true;
+					return true; // TODO:Can use both role ability
                 }
+				else if (buttonRole != null && anotherButtonRole == null)
+                {
+					return meetingButtonAbility(__instance, buttonRole);
+				}
+				else if (buttonRole == null && anotherButtonRole != null)
+				{
+					return meetingButtonAbility(__instance, anotherButtonRole);
+				}
 				else
 				{
-					return meetingButtonAbility(__instance, buttonRole);
+					return true;
 				}
 			}
 
@@ -112,7 +124,8 @@ namespace ExtremeRoles.Patches.Meeting
 						).WrapToIl2Cpp()
 					);
 			
-				Il2CppSystem.Collections.Generic.List<UiElement> selectableElements = new Il2CppSystem.Collections.Generic.List<UiElement>();
+				Il2CppSystem.Collections.Generic.List<UiElement> selectableElements = new Il2CppSystem.Collections.Generic.List<
+					UiElement>();
 				selectableElements.Add(__instance.CancelButton);
 				selectableElements.Add(__instance.ConfirmButton);
 				ControllerManager.Instance.OpenOverlayMenu(
@@ -177,7 +190,7 @@ namespace ExtremeRoles.Patches.Meeting
 
 		private static bool meetingButtonAbility(
 			PlayerVoteArea instance,
-			Roles.API.Interface.IRoleMeetingButtonAbility role)
+			IRoleMeetingButtonAbility role)
 		{
 			byte target = instance.TargetPlayerId;
 
@@ -271,6 +284,19 @@ namespace ExtremeRoles.Patches.Meeting
 		}
 	}
 
+	[HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.SetCosmetics))]
+	public static class PlayerVoteAreaSetCosmeticsPatch
+	{
+		public static void Postfix(PlayerVoteArea __instance)
+		{
+			if (OptionHolder.Ship.FixedMeetingPlayerLevel)
+            {
+				__instance.LevelNumberText.text = "99";
+			}
+		}
+	}
+
+
 	[HarmonyPatch(typeof(PlayerVoteArea), nameof(PlayerVoteArea.SetDead))]
 	public static class PlayerVoteAreaSetDeadPatch
 	{
@@ -305,7 +331,7 @@ namespace ExtremeRoles.Patches.Meeting
 			else
 			{
 				bool isGhostRole = isGuardian ||
-					GhostRoles.ExtremeGhostRoleManager.GameRole.ContainsKey(__instance.TargetPlayerId);
+					ExtremeGhostRoleManager.GameRole.ContainsKey(__instance.TargetPlayerId);
 
 				__instance.GAIcon.gameObject.SetActive(isGhostRole);
 			}
