@@ -352,38 +352,42 @@ namespace ExtremeRoles
 
         private static void createExtremeRoleGlobalSpawnOption()
         {
-            new IntCustomOption(
+            var crewSpawnMinOpt = new IntDynamicCustomOption(
                 (int)CommonOptionKey.MinCrewmateRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MinCrewmateRoles.ToString()),
-                0, 0, (VanillaMaxPlayerNum - 1) * 2, 1, null, true);
-            new IntCustomOption(
+                0, 0, 1, null, true);
+            var crewSpawnMaxOpt = new IntCustomOption(
                 (int)CommonOptionKey.MaxCrewmateRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MaxCrewmateRoles.ToString()),
                 0, 0, (VanillaMaxPlayerNum - 1) * 2, 1);
 
-            new IntCustomOption(
+            var neutSpawnMinOpt = new IntDynamicCustomOption(
                 (int)CommonOptionKey.MinNeutralRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MinNeutralRoles.ToString()),
-                0, 0, (VanillaMaxPlayerNum - 2) * 2, 1);
-            new IntCustomOption(
+                0, 0, 1);
+            var neutSpawnMaxOpt = new IntCustomOption(
                 (int)CommonOptionKey.MaxNeutralRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MaxNeutralRoles.ToString()),
                 0, 0, (VanillaMaxPlayerNum - 2) * 2, 1);
 
-            new IntCustomOption(
+            var impSpawnMinOpt = new IntDynamicCustomOption(
                 (int)CommonOptionKey.MinImpostorRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MinImpostorRoles.ToString()),
-                0, 0, MaxImposterNum * 2, 1);
-            new IntCustomOption(
+                0, 0, 1);
+            var impSpawnMaxOpt = new IntCustomOption(
                 (int)CommonOptionKey.MaxImpostorRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MaxImpostorRoles.ToString()),
                 0, 0, MaxImposterNum * 2, 1);
+
+            crewSpawnMaxOpt.SetUpdateOption(crewSpawnMinOpt);
+            neutSpawnMaxOpt.SetUpdateOption(neutSpawnMinOpt);
+            impSpawnMaxOpt.SetUpdateOption(impSpawnMinOpt);
         }
 
         private static void createExtremeGhostRoleGlobalSpawnOption()
