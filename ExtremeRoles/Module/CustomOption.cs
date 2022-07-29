@@ -284,12 +284,6 @@ namespace ExtremeRoles.Module
             this.UpdateSelection(Mathf.Clamp(
                 this.entry.Value, 0,
                 this.ValueCount - 1));
-
-            if (this.behaviour != null && this.behaviour is StringOption stringOption)
-            {
-                stringOption.oldValue = stringOption.Value = this.curSelection;
-                stringOption.ValueText.text = this.GetString();
-            }
         }
         public void SetOptionBehaviour(OptionBehaviour newBehaviour)
         {

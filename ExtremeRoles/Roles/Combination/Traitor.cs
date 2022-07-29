@@ -46,7 +46,11 @@ namespace ExtremeRoles.Roles.Combination
             this.BaseRole.CanHasAnotherRole = true;
 
             // 0:オフ、1:オン
-            allOptions[GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign)].UpdateSelection(1);
+            OptionHolder.ExecuteWithBlockOptionShare(
+                () =>
+                { 
+                    allOptions[GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign)].UpdateSelection(1);
+                });
 
             if (allOptions.ContainsKey(GetRoleOptionId(CombinationRoleCommonOption.AssignsNum)))
             {

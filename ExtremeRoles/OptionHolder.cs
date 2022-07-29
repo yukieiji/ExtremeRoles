@@ -50,6 +50,7 @@ namespace ExtremeRoles
         };
 
         private static int selectedPreset = 0;
+        private static bool isBlockShare = false;
 
         private static IRegionInfo[] defaultRegion;
 
@@ -111,6 +112,20 @@ namespace ExtremeRoles
             IsBlockGAAbilityReport,
         }
 
+        public static void ExecuteWithBlockOptionShare(Action func)
+        {
+            isBlockShare = true;
+            try
+            {
+                func();
+            }
+            catch (Exception e)
+            {
+                ExtremeRolesPlugin.Logger.LogInfo($"BlockShareExcuteFailed!!:{e}");
+            }
+            isBlockShare = false;
+        }
+
         public static void Create()
         {
 
@@ -154,6 +169,9 @@ namespace ExtremeRoles
 
         public static void Load()
         {
+            // 不具合等が発生しないようにブロック機能を有効化する
+            isBlockShare = false;
+
             Ship.MaxNumberOfMeeting = AllOption[
                 (int)CommonOptionKey.NumMeating].GetValue();
             Ship.ChangeMeetingVoteAreaSort = AllOption[
@@ -226,15 +244,24 @@ namespace ExtremeRoles
         public static void SwitchPreset(int newPreset)
         {
             selectedPreset = newPreset;
-            foreach (IOption option in AllOption.Values)
-            {
-                if (option.Id == 0) { continue; }
-                option.SwitchPreset();
-            }
+
+            // オプションの共有でネットワーク帯域とサーバーに負荷をかけて人が落ちたりするので共有を一時的に無効化して実行
+            ExecuteWithBlockOptionShare(
+                () =>
+                {
+                    foreach (IOption option in AllOption.Values)
+                    {
+                        if (option.Id == 0) { continue; }
+                        option.SwitchPreset();
+                    }
+                });
+            ShareOptionSelections();
         }
 
         public static void ShareOptionSelections()
         {
+            if (isBlockShare) { return; }
+
             if (PlayerControl.AllPlayerControls.Count <= 1 ||
                 AmongUsClient.Instance?.AmHost == false &&
                 PlayerControl.LocalPlayer == null) { return; }
@@ -325,38 +352,42 @@ namespace ExtremeRoles
 
         private static void createExtremeRoleGlobalSpawnOption()
         {
-            new IntCustomOption(
+            var crewSpawnMinOpt = new IntDynamicCustomOption(
                 (int)CommonOptionKey.MinCrewmateRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MinCrewmateRoles.ToString()),
-                0, 0, (VanillaMaxPlayerNum - 1) * 2, 1, null, true);
-            new IntCustomOption(
+                0, 0, 1, null, true);
+            var crewSpawnMaxOpt = new IntCustomOption(
                 (int)CommonOptionKey.MaxCrewmateRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MaxCrewmateRoles.ToString()),
                 0, 0, (VanillaMaxPlayerNum - 1) * 2, 1);
 
-            new IntCustomOption(
+            var neutSpawnMinOpt = new IntDynamicCustomOption(
                 (int)CommonOptionKey.MinNeutralRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MinNeutralRoles.ToString()),
-                0, 0, (VanillaMaxPlayerNum - 2) * 2, 1);
-            new IntCustomOption(
+                0, 0, 1);
+            var neutSpawnMaxOpt = new IntCustomOption(
                 (int)CommonOptionKey.MaxNeutralRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MaxNeutralRoles.ToString()),
                 0, 0, (VanillaMaxPlayerNum - 2) * 2, 1);
 
-            new IntCustomOption(
+            var impSpawnMinOpt = new IntDynamicCustomOption(
                 (int)CommonOptionKey.MinImpostorRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MinImpostorRoles.ToString()),
-                0, 0, MaxImposterNum * 2, 1);
-            new IntCustomOption(
+                0, 0, 1);
+            var impSpawnMaxOpt = new IntCustomOption(
                 (int)CommonOptionKey.MaxImpostorRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MaxImpostorRoles.ToString()),
                 0, 0, MaxImposterNum * 2, 1);
+
+            crewSpawnMaxOpt.SetUpdateOption(crewSpawnMinOpt);
+            neutSpawnMaxOpt.SetUpdateOption(neutSpawnMinOpt);
+            impSpawnMaxOpt.SetUpdateOption(impSpawnMinOpt);
         }
 
         private static void createExtremeGhostRoleGlobalSpawnOption()
