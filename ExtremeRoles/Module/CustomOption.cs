@@ -447,9 +447,11 @@ namespace ExtremeRoles.Module
             OptionUnit format = OptionUnit.None,
             bool invert = false,
             IOption enableCheckOption = null,
-            OptionTab tab = OptionTab.General) : base(
+            OptionTab tab = OptionTab.General,
+            int tempMaxValue = 0) : base(
                 id, name,
-                createSelection(min, step, defaultValue).ToArray(),
+                createSelection(
+                    min, step, defaultValue, tempMaxValue).ToArray(),
                 defaultValue, parent,
                 isHeader, isHidden,
                 format, invert,
@@ -473,13 +475,17 @@ namespace ExtremeRoles.Module
             this.UpdateSelection(this.CurSelection);
         }
 
-        private static List<int> createSelection(int min, int step, int defaultValue)
+        private static List<int> createSelection(
+            int min, int step, int defaultValue, int tempMaxValue)
         {
             List<int> selection = new List<int>();
 
-            int tempMaxVale = (min + step) < defaultValue ? defaultValue : min + step;
+            if (tempMaxValue == 0)
+            {
+                tempMaxValue = (min + step) < defaultValue ? defaultValue : min + step;
+            }
 
-            for (int s = min; s <= tempMaxVale; s += step)
+            for (int s = min; s <= tempMaxValue; s += step)
             {
                 selection.Add(s);
             }
