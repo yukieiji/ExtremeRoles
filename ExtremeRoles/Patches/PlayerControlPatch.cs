@@ -406,15 +406,15 @@ namespace ExtremeRoles.Patches
                 }
 
                 
-                if (!allPlayerInfo.TryGetValue(
-                    player.PlayerId, out TextMeshPro playerInfo))
+                if (!allPlayerInfo.TryGetValue(player.PlayerId, out TextMeshPro playerInfo) || 
+                    playerInfo == null)
                 {
                     playerInfo = UnityEngine.Object.Instantiate(
                         player.cosmetics.nameText,
                         player.cosmetics.nameText.transform.parent);
                     playerInfo.fontSize *= 0.75f;
                     playerInfo.gameObject.name = "Info";
-                    allPlayerInfo.Add(player.PlayerId, playerInfo);
+                    allPlayerInfo[player.PlayerId] = playerInfo;
                 }
 
                 // Set the position every time bc it sometimes ends up in the wrong place due to camoflauge
@@ -424,7 +424,8 @@ namespace ExtremeRoles.Patches
                 TextMeshPro meetingInfo = null;
                 if (MeetingHud.Instance)
                 {
-                    if (!allMeetingInfo.TryGetValue(player.PlayerId, out meetingInfo))
+                    if (!allMeetingInfo.TryGetValue(player.PlayerId, out meetingInfo) ||
+                        meetingInfo == null)
                     {
                         playerVoteArea = MeetingHud.Instance.playerStates?.FirstOrDefault(x => x.TargetPlayerId == player.PlayerId);
 
@@ -437,7 +438,7 @@ namespace ExtremeRoles.Patches
                             meetingInfo.fontSize *= 0.63f;
                             meetingInfo.autoSizeTextContainer = true;
                             meetingInfo.gameObject.name = "Info";
-                            allMeetingInfo.Add(player.PlayerId, meetingInfo);
+                            allMeetingInfo[player.PlayerId] = meetingInfo;
                         }
                     }
                 }
@@ -462,6 +463,7 @@ namespace ExtremeRoles.Patches
                 }
             }
         }
+
         private static void setMeetingInfo(
             TextMeshPro meetingInfo,
             string text, bool active)
