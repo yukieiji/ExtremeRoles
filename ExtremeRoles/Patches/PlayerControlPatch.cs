@@ -136,17 +136,6 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
     public static class PlayerControlFixedUpdatePatch
     {
-        private static Dictionary<byte, TextMeshPro> allPlayerInfo = new Dictionary<byte, TextMeshPro>();
-        private static Dictionary<byte, TextMeshPro> allMeetingInfo = new Dictionary<byte, TextMeshPro>();
-        private static TextMeshPro tabText;
-
-        public static void Reset()
-        {
-            allMeetingInfo.Clear();
-            allPlayerInfo.Clear();
-            tabText = null;
-        }
-
         public static void Postfix(PlayerControl __instance)
         {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) { return; }
@@ -154,28 +143,9 @@ namespace ExtremeRoles.Patches
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
             if (CachedPlayerControl.LocalPlayer.PlayerId != __instance.PlayerId) { return; }
 
-            resetNameTagsAndColors();
-
             SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
             GhostRoleBase ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
 
-            bool blockCondition = isBlockCondition(
-                CachedPlayerControl.LocalPlayer, role) || ghostRole != null;
-            bool meetingInfoBlock = role.IsBlockShowMeetingRoleInfo() || ghostRole != null;
-            bool playeringInfoBlock = role.IsBlockShowPlayingRoleInfo() || ghostRole != null;
-
-            playerInfoUpdate(
-                blockCondition,
-                meetingInfoBlock,
-                playeringInfoBlock);
-
-            setPlayerNameColor(
-                __instance,
-                role, ghostRole,
-                blockCondition,
-                meetingInfoBlock,
-                playeringInfoBlock);
-            setPlayerNameTag(role);
             buttonUpdate(__instance, role, ghostRole);
             refreshRoleDescription(__instance, role, ghostRole);
 
@@ -183,369 +153,6 @@ namespace ExtremeRoles.Patches
             ExtremeRolesPlugin.GameDataStore.Union.Update();
         }
 
-        private static void resetNameTagsAndColors()
-        {
-
-            foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
-            {
-                if (player.CurrentOutfitType != PlayerOutfitType.Shapeshifted)
-                {
-                    player.cosmetics.SetName(player.Data.PlayerName);
-                }
-                if (CachedPlayerControl.LocalPlayer.Data.Role.IsImpostor && player.Data.Role.IsImpostor)
-                {
-                    player.cosmetics.SetNameColor(Palette.ImpostorRed);
-                }
-                else
-                {
-                    player.cosmetics.SetNameColor(Color.white);
-                }
-                if (MeetingHud.Instance != null)
-                {
-                    foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)
-                    {
-                        if (pva.TargetPlayerId != player.PlayerId) { continue; }
-                        
-                        pva.NameText.text = player.Data.PlayerName;
-                       
-                        if (CachedPlayerControl.LocalPlayer.Data.Role.IsImpostor &&
-                            player.Data.Role.IsImpostor)
-                        {
-                            pva.NameText.color = Palette.ImpostorRed;
-                        }
-                        else
-                        {
-                            pva.NameText.color = Palette.White;
-                        }
-                        break;
-                    }
-                }
-            }
-
-            if (CachedPlayerControl.LocalPlayer.Data.Role.IsImpostor)
-            {
-                List<CachedPlayerControl> impostors = CachedPlayerControl.AllPlayerControls.ToArray().ToList();
-                impostors.RemoveAll(x => !(x.Data.Role.IsImpostor));
-                foreach (PlayerControl player in impostors)
-                {
-                    player.cosmetics.SetNameColor(Palette.ImpostorRed);
-                    if (MeetingHud.Instance != null)
-                    {
-                        foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)
-                        {
-                            if (player.PlayerId != pva.TargetPlayerId) { continue; }
-                            pva.NameText.color = Palette.ImpostorRed;
-                        }
-                    }
-                }
-            }
-
-        }
-
-        private static void setPlayerNameColor(
-            PlayerControl player,
-            SingleRoleBase playerRole,
-            GhostRoleBase playerGhostRole,
-            bool blockCondition,
-            bool meetingInfoBlock,
-            bool playeringInfoBlock)
-        {
-            var localPlayerId = player.PlayerId;
-
-            // Modules.Helpers.DebugLog($"Player Name:{role.NameColor}");
-
-            // まずは自分のプレイヤー名の色を変える
-            Color localRoleColor = playerRole.GetNameColor(
-                CachedPlayerControl.LocalPlayer.Data.IsDead);
-
-            if (playerGhostRole != null)
-            {
-                Color ghostRoleColor = playerGhostRole.RoleColor;
-                localRoleColor = (localRoleColor / 2.0f) + (ghostRoleColor / 2.0f);
-            }
-            player.cosmetics.SetNameColor(localRoleColor);
-            setVoteAreaColor(localPlayerId, localRoleColor);
-
-            GhostRoleBase targetGhostRole;
-
-            foreach (PlayerControl targetPlayer in CachedPlayerControl.AllPlayerControls)
-            {
-                if (targetPlayer.PlayerId == player.PlayerId) { continue; }
-
-                byte targetPlayerId = targetPlayer.PlayerId;
-                var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
-
-                ExtremeGhostRoleManager.GameRole.TryGetValue(targetPlayerId, out targetGhostRole);
-                
-
-                if (!OptionHolder.Client.GhostsSeeRole || 
-                    !CachedPlayerControl.LocalPlayer.Data.IsDead ||
-                    blockCondition)
-                {
-                    Color paintColor = playerRole.GetTargetRoleSeeColor(
-                        targetRole, targetPlayerId);
-                    
-                    if (playerGhostRole != null)
-                    {
-                        Color paintGhostColor = playerGhostRole.GetTargetRoleSeeColor(
-                            targetPlayerId, targetRole, targetGhostRole);
-
-                        if (paintGhostColor != Color.clear)
-                        {
-                            paintColor = (paintGhostColor / 2.0f) + (paintColor / 2.0f);
-                        }
-                    }
-
-                    if (paintColor == Palette.ClearWhite) { continue; }
-
-                    targetPlayer.cosmetics.SetNameColor(paintColor);
-                    setVoteAreaColor(targetPlayerId, paintColor);
-                }
-                else
-                {
-                    Color roleColor = targetRole.GetNameColor(true);
-
-                    if (!playeringInfoBlock)
-                    {
-                        targetPlayer.cosmetics.SetNameColor(roleColor);
-                    }
-                    setGhostVoteAreaColor(
-                        targetPlayerId,
-                        roleColor,
-                        meetingInfoBlock,
-                        targetRole.Team == playerRole.Team);
-                }
-            }
-
-        }
-
-        private static void setPlayerNameTag(
-            SingleRoleBase playerRole)
-        {
-
-            foreach (PlayerControl targetPlayer in CachedPlayerControl.AllPlayerControls)
-            {
-                byte playerId = targetPlayer.PlayerId;
-                string tag = playerRole.GetRolePlayerNameTag(
-                    ExtremeRoleManager.GameRole[playerId], playerId);
-                if (tag == string.Empty) { continue; }
-
-                targetPlayer.cosmetics.nameText.text += tag;
-
-                if (MeetingHud.Instance != null)
-                {
-                    foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)
-                    {
-                        if (targetPlayer.PlayerId != pva.TargetPlayerId) { continue; }
-                        pva.NameText.text += tag;
-                    }
-                }
-            }
-        }
-
-        private static void setVoteAreaColor(
-            byte targetPlayerId,
-            Color targetColor)
-        {
-            if (MeetingHud.Instance != null)
-            {
-                foreach (PlayerVoteArea voteArea in MeetingHud.Instance.playerStates)
-                {
-                    if (voteArea.NameText != null && targetPlayerId == voteArea.TargetPlayerId)
-                    {
-                        voteArea.NameText.color = targetColor;
-                    }
-                }
-            }
-        }
-
-        private static void setGhostVoteAreaColor(
-            byte targetPlayerId,
-            Color targetColor,
-            bool voteNamePaintBlock,
-            bool isSameTeam)
-        {
-            if (MeetingHud.Instance != null)
-            {
-                foreach (PlayerVoteArea voteArea in MeetingHud.Instance.playerStates)
-                {
-                    if (voteArea.NameText != null &&
-                        targetPlayerId == voteArea.TargetPlayerId &&
-                        (!voteNamePaintBlock || isSameTeam))
-                    {
-                        voteArea.NameText.color = targetColor;
-                    }
-                }
-            }
-        }
-
-        private static void playerInfoUpdate(
-            bool blockCondition,
-            bool meetingInfoBlock,
-            bool playeringInfoBlock)
-        {
-
-            bool commsActive = false;
-            foreach (PlayerTask t in 
-                CachedPlayerControl.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
-            {
-                if (t.TaskType == TaskTypes.FixComms)
-                {
-                    commsActive = true;
-                    break;
-                }
-            }
-
-            foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
-            {
-
-                if (player.PlayerId != CachedPlayerControl.LocalPlayer.PlayerId && 
-                    !CachedPlayerControl.LocalPlayer.Data.IsDead)
-                {
-                    continue;
-                }
-
-                
-                if (!allPlayerInfo.TryGetValue(player.PlayerId, out TextMeshPro playerInfo) || 
-                    playerInfo == null)
-                {
-                    playerInfo = UnityEngine.Object.Instantiate(
-                        player.cosmetics.nameText,
-                        player.cosmetics.nameText.transform.parent);
-                    playerInfo.fontSize *= 0.75f;
-                    playerInfo.gameObject.name = "Info";
-                    allPlayerInfo[player.PlayerId] = playerInfo;
-                }
-
-                // Set the position every time bc it sometimes ends up in the wrong place due to camoflauge
-                playerInfo.transform.localPosition = player.cosmetics.nameText.transform.localPosition + Vector3.up * 0.5f;
-                
-                PlayerVoteArea playerVoteArea = null;
-                TextMeshPro meetingInfo = null;
-                if (MeetingHud.Instance)
-                {
-                    if (!allMeetingInfo.TryGetValue(player.PlayerId, out meetingInfo) ||
-                        meetingInfo == null)
-                    {
-                        playerVoteArea = MeetingHud.Instance.playerStates?.FirstOrDefault(x => x.TargetPlayerId == player.PlayerId);
-
-                        if (playerVoteArea != null)
-                        {
-                            meetingInfo = UnityEngine.Object.Instantiate(
-                                playerVoteArea.NameText,
-                                playerVoteArea.NameText.transform.parent);
-                            meetingInfo.transform.localPosition += Vector3.down * 0.20f;
-                            meetingInfo.fontSize *= 0.63f;
-                            meetingInfo.autoSizeTextContainer = true;
-                            meetingInfo.gameObject.name = "Info";
-                            allMeetingInfo[player.PlayerId] = meetingInfo;
-                        }
-                    }
-                }
-
-                var (playerInfoText, meetingInfoText) = getRoleAndMeetingInfo(player, commsActive);
-                playerInfo.text = playerInfoText;
-                
-                if (player.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
-                {
-                    playerInfo.gameObject.SetActive(player.Visible);
-                    setMeetingInfo(meetingInfo, meetingInfoText, true);
-                }
-                else if (blockCondition)
-                {
-                    playerInfo.gameObject.SetActive(false);
-                    setMeetingInfo(meetingInfo, "", false);
-                }
-                else
-                {
-                    playerInfo.gameObject.SetActive((player.Visible && !playeringInfoBlock));
-                    setMeetingInfo(meetingInfo, meetingInfoText, !meetingInfoBlock);
-                }
-            }
-        }
-
-        private static void setMeetingInfo(
-            TextMeshPro meetingInfo,
-            string text, bool active)
-        {
-            if (meetingInfo != null)
-            {
-                meetingInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ? "" : text;
-                meetingInfo.gameObject.SetActive(active);
-            }
-        }
-
-        private static bool isBlockCondition(
-            CachedPlayerControl localPlayer, SingleRoleBase role)
-        {
-            if (localPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
-            {
-                return true;
-            }
-            else if (role.IsImpostor())
-            {
-                return ExtremeRolesPlugin.GameDataStore.IsAssassinAssign;
-            }
-
-            return false;
-
-        }
-
-        private static Tuple<string, string> getRoleAndMeetingInfo(
-            PlayerControl targetPlayer, bool commonActive)
-        {
-
-            var (tasksCompleted, tasksTotal) = GameSystem.GetTaskInfo(targetPlayer.Data);
-            byte targetPlayerId = targetPlayer.PlayerId;
-            string roleNames = ExtremeRoleManager.GameRole[targetPlayerId].GetColoredRoleName(
-                CachedPlayerControl.LocalPlayer.Data.IsDead);
-
-            if (ExtremeGhostRoleManager.GameRole.ContainsKey(targetPlayerId))
-            {
-                string ghostRoleName = ExtremeGhostRoleManager.GameRole[targetPlayerId].GetColoredRoleName();
-                roleNames = $"{ghostRoleName}({roleNames})";
-            }
-
-            var completedStr = commonActive ? "?" : tasksCompleted.ToString();
-            string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({completedStr}/{tasksTotal})</color>" : "";
-
-            string playerInfoText = "";
-            string meetingInfoText = "";
-
-            if (targetPlayer.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
-            {
-                playerInfoText = $"{roleNames}";
-                if (DestroyableSingleton<TaskPanelBehaviour>.InstanceExists)
-                {
-                    if (tabText == null)
-                    {
-                        tabText = FastDestroyableSingleton<TaskPanelBehaviour>.Instance.tab.transform.FindChild(
-                            "TabText_TMP").GetComponent<TextMeshPro>();
-                    }
-                    tabText.SetText(
-                        $"{FastDestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Tasks)} {taskInfo}");
-                }
-                meetingInfoText = $"{roleNames} {taskInfo}".Trim();
-            }
-            else if (OptionHolder.Client.GhostsSeeRole && OptionHolder.Client.GhostsSeeTask)
-            {
-                playerInfoText = $"{roleNames} {taskInfo}".Trim();
-                meetingInfoText = playerInfoText;
-            }
-            else if (OptionHolder.Client.GhostsSeeTask)
-            {
-                playerInfoText = $"{taskInfo}".Trim();
-                meetingInfoText = playerInfoText;
-            }
-            else if (OptionHolder.Client.GhostsSeeRole)
-            {
-                playerInfoText = $"{roleNames}";
-                meetingInfoText = playerInfoText;
-            }
-
-            return Tuple.Create(playerInfoText, meetingInfoText);
-
-        }
         private static void refreshRoleDescription(
             PlayerControl player,
             SingleRoleBase playerRole,
@@ -590,7 +197,7 @@ namespace ExtremeRoles.Patches
         {
             if (!player.AmOwner) { return; }
 
-            bool enable = Player.ShowButtons && !CachedPlayerControl.LocalPlayer.Data.IsDead;
+            bool enable = Player.ShowButtons && !player.Data.IsDead;
 
             killButtonUpdate(player, playerRole, enable);
             ventButtonUpdate(playerRole, enable);
@@ -643,27 +250,23 @@ namespace ExtremeRoles.Patches
         private static void roleAbilityButtonUpdate(
             SingleRoleBase role)
         {
-            void buttonUpdate(SingleRoleBase role)
-            {
-                var abilityRole = role as IRoleAbility;
-
-                if (abilityRole != null && abilityRole.Button != null)
-                {
-                    abilityRole.Button.Update();
-                }
-            }
-
-            buttonUpdate(role);
+            abilityButtonUpdate(role as IRoleAbility);
 
             var multiAssignRole = role as MultiAssignRoleBase;
             if (multiAssignRole != null)
             {
-                if (multiAssignRole.AnotherRole != null)
-                {
-                    buttonUpdate(multiAssignRole.AnotherRole);
-                }
+                abilityButtonUpdate(
+                    multiAssignRole.AnotherRole as IRoleAbility);
             }
+        }
 
+        private static void abilityButtonUpdate(IRoleAbility abilityRole)
+        {
+            if (abilityRole != null &&
+                abilityRole.Button != null)
+            {
+                abilityRole.Button.Update();
+            }
         }
 
         private static void sabotageButtonUpdate(

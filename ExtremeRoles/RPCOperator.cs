@@ -140,7 +140,7 @@ namespace ExtremeRoles
             Patches.KillAnimationCoPerformKillPatch.HideNextAnimation = false;
 
             // 各種表示系リセット
-            Patches.PlayerControlFixedUpdatePatch.Reset();
+            Patches.Manager.HudManagerUpdatePatch.Reset();
 
             // ミーティング能力リセット
             Patches.Meeting.PlayerVoteAreaSelectPatch.Reset();
