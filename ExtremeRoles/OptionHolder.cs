@@ -112,6 +112,13 @@ namespace ExtremeRoles
             IsBlockGAAbilityReport,
         }
 
+        public static void ExecuteWithBlockOptionShare(Action func)
+        {
+            isBlockShare = true;
+            func();
+            isBlockShare = false;
+        }
+
         public static void Create()
         {
 
@@ -230,17 +237,17 @@ namespace ExtremeRoles
         public static void SwitchPreset(int newPreset)
         {
             selectedPreset = newPreset;
-            
-            // オプションの共有でネットワーク帯域とサーバーに負荷をかけて人が落ちたりするので一時的に無効化
-            isBlockShare = true;
-            foreach (IOption option in AllOption.Values)
-            {
-                if (option.Id == 0) { continue; }
-                option.SwitchPreset();
-            }
 
-            // ロードしたプリセットのオプションを共有するために無効化した共有機能を有効化
-            isBlockShare = false;
+            // オプションの共有でネットワーク帯域とサーバーに負荷をかけて人が落ちたりするので共有を一時的に無効化して実行
+            ExecuteWithBlockOptionShare(
+                () =>
+                {
+                    foreach (IOption option in AllOption.Values)
+                    {
+                        if (option.Id == 0) { continue; }
+                        option.SwitchPreset();
+                    }
+                });
             ShareOptionSelections();
         }
 
