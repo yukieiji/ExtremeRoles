@@ -286,7 +286,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             var cooltimeOpt = CreateFloatDynamicOption(
                 RoleAbilityCommonOption.AbilityCoolTime,
                 5.0f, 0.5f, 0.5f,
-                parentOps, format: OptionUnit.Second);
+                parentOps, format: OptionUnit.Second,
+                tempMaxValue: 120.0f);
 
             var lastLightOffOption = CreateFloatOption(
                LastWolfOption.FinalLightOffCoolTime,

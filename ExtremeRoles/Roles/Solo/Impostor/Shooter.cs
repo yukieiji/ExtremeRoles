@@ -243,12 +243,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             var initShootOps = CreateIntDynamicOption(
                 ShooterOption.InitShootNum,
                 0, 0, 1, parentOps,
-                format: OptionUnit.Shot);
+                format: OptionUnit.Shot,
+                tempMaxValue: 14);
 
             var maxMeetingShootOps = CreateIntDynamicOption(
                 ShooterOption.MaxMeetingShootNum,
                 1, 1, 1, parentOps,
-                format: OptionUnit.Shot);
+                format: OptionUnit.Shot,
+                tempMaxValue: 14);
 
             CreateFloatOption(
                 ShooterOption.ShootChargeTime,

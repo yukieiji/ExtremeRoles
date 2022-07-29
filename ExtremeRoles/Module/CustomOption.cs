@@ -507,9 +507,10 @@ namespace ExtremeRoles.Module
             OptionUnit format = OptionUnit.None,
             bool invert = false,
             IOption enableCheckOption = null,
-            OptionTab tab = OptionTab.General) : base(
+            OptionTab tab = OptionTab.General,
+            float tempMaxValue = 0.0f) : base(
                 id, name,
-                createSelection(min, step, defaultValue).ToArray(),
+                createSelection(min, step, defaultValue, tempMaxValue).ToArray(),
                 defaultValue, parent,
                 isHeader, isHidden,
                 format, invert,
@@ -535,17 +536,26 @@ namespace ExtremeRoles.Module
             this.UpdateSelection(this.CurSelection);
         }
 
-        private static List<float> createSelection(float min, float step, float defaultValue)
+        private static List<float> createSelection(
+            float min, float step, float defaultValue, float floatTempMaxValue)
         {
 
             List<float> selection = new List<float>();
 
             decimal dStep = new decimal(step);
             decimal dMin = new decimal(min);
+            
+            decimal tempMaxValue;
+            if (floatTempMaxValue == 0.0f)
+            {
+                tempMaxValue = (min + step) < defaultValue ? new decimal(defaultValue) : dMin + dStep;
+            }
+            else
+            {
+                tempMaxValue = new decimal(floatTempMaxValue);
+            }
 
-            decimal tempMaxVale = (min + step) < defaultValue ? new decimal(defaultValue) : dMin + dStep;
-
-            for (decimal s = dMin; s <= tempMaxVale; s += dStep)
+            for (decimal s = dMin; s <= tempMaxValue; s += dStep)
             {
                 selection.Add(((float)(decimal.ToDouble(s))));
             }
