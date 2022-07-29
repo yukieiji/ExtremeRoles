@@ -300,7 +300,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 5.0f, 1.0f, 60.0f, 0.5f,
                 parentOps, format: OptionUnit.Second);
 
-            cooltimeOpt.SetUpdateOption(lastLightOffOption);
+            lastLightOffOption.SetUpdateOption(cooltimeOpt);
         }
 
         protected override void RoleSpecificInit()
