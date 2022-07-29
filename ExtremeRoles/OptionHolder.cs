@@ -115,7 +115,14 @@ namespace ExtremeRoles
         public static void ExecuteWithBlockOptionShare(Action func)
         {
             isBlockShare = true;
-            func();
+            try
+            {
+                func();
+            }
+            catch (Exception e)
+            {
+                ExtremeRolesPlugin.Logger.LogInfo($"BlockShareExcuteFailed!!:{e}");
+            }
             isBlockShare = false;
         }
 
