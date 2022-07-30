@@ -42,10 +42,12 @@ namespace ExtremeRoles.Module
 
         public void Clear()
         {
+            UnityEngine.Object.Destroy(this.textScroller);
             UnityEngine.Object.Destroy(this.bodyText);
             UnityEngine.Object.Destroy(this.body);
             UnityEngine.Object.Destroy(this.title);
             UnityEngine.Object.Destroy(this.anchorPoint);
+            this.anchorPoint = null;
         }
 
         public void Enable(bool isEnable)
