@@ -72,7 +72,7 @@ namespace ExtremeRoles.Module.SpecialWinChecker
                         case ExtremeRoleId.Sidekick:
                             var sidekick = (Sidekick)lover.AnotherRole;
                             var jackalPlayer = Helper.Player.GetPlayerControlById(sidekick.JackalPlayerId);
-                            if (jackalPlayer == null) { break; 
+                            if (jackalPlayer == null) { break; }
                             if (!jackalPlayer.Data.IsDead && 
                                 !jackalPlayer.Data.Disconnected && 
                                 statistics.TeamImpostorAlive <= 0 &&
