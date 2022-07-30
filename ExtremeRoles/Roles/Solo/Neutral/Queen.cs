@@ -424,6 +424,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
     public class Servant : MultiAssignRoleBase, IRoleAbility, IRoleMurderPlayerHock
     {
+        public byte QueenPlayerId => this.queenPlayerId;
+
         private byte queenPlayerId;
         private SpriteRenderer killFlash;
 
