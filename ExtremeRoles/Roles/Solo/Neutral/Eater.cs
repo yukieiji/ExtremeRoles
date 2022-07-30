@@ -488,7 +488,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 parentOps, format: OptionUnit.Second);
             CreateIntOption(
                 RoleAbilityCommonOption.AbilityCount,
-                5, 1, 7, 1, parentOps);
+                5, 1, 7, 1, parentOps,
+                format: OptionUnit.Shot);
             CreateFloatOption(
                 EaterOption.EatRange,
                 1.0f, 0.0f, 2.0f, 0.1f,
