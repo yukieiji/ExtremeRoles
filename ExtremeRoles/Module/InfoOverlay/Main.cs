@@ -21,6 +21,7 @@ namespace ExtremeRoles.Module.InfoOverlay
             AllGhostRole,
         }
 
+        public bool IsBlock => this.isBlock;
         public bool OverlayShown => this.overlayShown;
         public ShowType CurShowInfo => this.curShow;
         
@@ -33,6 +34,7 @@ namespace ExtremeRoles.Module.InfoOverlay
         private ScrollableText anotherRoleInfo = new ScrollableText("anotherRoleInfo", 50, 0.0001f, 0.1f);
 
         private bool overlayShown = false;
+        private bool isBlock = false;
 
         private Dictionary<ShowType, IShowTextBuilder> showText = new Dictionary<ShowType, IShowTextBuilder>
         {
@@ -50,6 +52,16 @@ namespace ExtremeRoles.Module.InfoOverlay
         {
             pageClear();
             this.overlayShown = false;
+            this.isBlock = false;
+        }
+
+        public void BlockShow(bool isBlock)
+        {
+            this.isBlock = isBlock;
+            if (this.isBlock)
+            {
+                HideInfoOverlay();
+            }
         }
 
         public void ChangePage(int add)
@@ -95,12 +107,6 @@ namespace ExtremeRoles.Module.InfoOverlay
                 infoLerp(roleInfo, t, false, Palette.White, Palette.ClearWhite);
                 infoLerp(anotherRoleInfo, t, false, Palette.White, Palette.ClearWhite);
             })));
-        }
-
-        public void MeetingStartRest()
-        {
-            showBlackBG();
-            HideInfoOverlay();
         }
 
         public void ResetOverlays()
@@ -218,7 +224,7 @@ namespace ExtremeRoles.Module.InfoOverlay
             return true;
         }
 
-        private void showBlackBG()
+        public void ShowBlackBG()
         {
 
             HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
@@ -239,7 +245,7 @@ namespace ExtremeRoles.Module.InfoOverlay
         private void showInfoOverlay(ShowType showType)
         {
 
-            if (OverlayShown) { return; }
+            if (OverlayShown || this.isBlock) { return; }
 
             HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
             if (CachedPlayerControl.LocalPlayer == null ||
