@@ -550,7 +550,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 this.UseAbility,
                 this.IsAbilityUse,
                 Loader.CreateSpriteFromResources(
-                    Path.ServantSucide),
+                    Path.SucideSprite),
                 new Vector3(-1.8f, -0.06f, 0),
                 null, null,
                 KeyCode.F, false);
