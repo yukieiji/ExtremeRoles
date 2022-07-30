@@ -42,6 +42,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         private RoleAbilityButtonBase madmateAbilityButton;
 
+        public Madmate() : base(
+            ExtremeRoleId.Madmate,
+            ExtremeRoleType.Neutral,
+            ExtremeRoleId.Madmate.ToString(),
+            Palette.ImpostorRed,
+            false, false, false, false)
+        { }
+
         public static void ToFakeImpostor(byte playerId)
         {
 

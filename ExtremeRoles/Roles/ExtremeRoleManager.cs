@@ -83,6 +83,7 @@ namespace ExtremeRoles.Roles
         Traitor,
         Queen,
         Servant,
+        Madmate,
     }
 
     public enum CombinationRoleType
@@ -210,6 +211,7 @@ namespace ExtremeRoles.Roles
                 {(int)ExtremeRoleId.Miner     , new Miner()},
                 {(int)ExtremeRoleId.Eater     , new Eater()},
                 {(int)ExtremeRoleId.Queen     , new Queen()},
+                {(int)ExtremeRoleId.Madmate   , new Madmate()},
             };
 
         public static readonly Dictionary<
