@@ -311,7 +311,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 30f, 0.5f, 0.5f, taskBoostOpt,
                 format: OptionUnit.Second,
                 invert: true,
-                enableCheckOption: taskBoostOpt);
+                enableCheckOption: taskBoostOpt,
+                tempMaxValue: 120.0f);
 
             searchTimeOpt.SetUpdateOption(reduceTimeOpt);
         }

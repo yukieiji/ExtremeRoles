@@ -74,7 +74,7 @@ namespace ExtremeRoles.Helper
             }
         }
 
-        public static Tuple<int, int> GetTaskInfo(
+        public static (int, int) GetTaskInfo(
             GameData.PlayerInfo playerInfo)
         {
             int TotalTasks = 0;
@@ -98,7 +98,7 @@ namespace ExtremeRoles.Helper
                     }
                 }
             }
-            return Tuple.Create(CompletedTasks, TotalTasks);
+            return (CompletedTasks, TotalTasks);
         }
 
         public static int GetRandomCommonTaskId()

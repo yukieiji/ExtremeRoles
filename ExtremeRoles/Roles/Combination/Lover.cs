@@ -234,7 +234,8 @@ namespace ExtremeRoles.Roles.Combination
                 LoverOption.DethWhenUnderAlive,
                 1, 1, 1, killerSetting,
                 invert: true,
-                enableCheckOption: parentOps);
+                enableCheckOption: parentOps,
+                tempMaxValue: OptionHolder.VanillaMaxPlayerNum - 1);
 
             CreateKillerOption(killerSetting);
             killerVisionSetting(killerSetting);

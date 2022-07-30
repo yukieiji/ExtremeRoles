@@ -356,7 +356,7 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.MinCrewmateRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MinCrewmateRoles.ToString()),
-                0, 0, 1, null, true);
+                0, 0, 1, null, true, tempMaxValue: (VanillaMaxPlayerNum - 1) * 2);
             var crewSpawnMaxOpt = new IntCustomOption(
                 (int)CommonOptionKey.MaxCrewmateRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
@@ -367,7 +367,7 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.MinNeutralRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MinNeutralRoles.ToString()),
-                0, 0, 1);
+                0, 0, 1, tempMaxValue: (VanillaMaxPlayerNum - 2) * 2);
             var neutSpawnMaxOpt = new IntCustomOption(
                 (int)CommonOptionKey.MaxNeutralRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
@@ -378,7 +378,7 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.MinImpostorRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MinImpostorRoles.ToString()),
-                0, 0, 1);
+                0, 0, 1, tempMaxValue: 3);
             var impSpawnMaxOpt = new IntCustomOption(
                 (int)CommonOptionKey.MaxImpostorRoles, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),

@@ -503,7 +503,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 format: OptionUnit.Percentage);
             CreateIntOption(
                 EaterOption.KillEatActiveCoolTimeReduceRate,
-                10, 0, 25, 1, parentOps,
+                10, 0, 50, 1, parentOps,
                 format: OptionUnit.Percentage);
             CreateBoolOption(
                 EaterOption.IsResetCoolTimeWhenMeeting,

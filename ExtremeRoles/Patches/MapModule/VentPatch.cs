@@ -82,6 +82,31 @@ namespace ExtremeRoles.Patches.MapModule
             return false;
         }
     }
+
+    [HarmonyPatch(typeof(Vent), nameof(Vent.SetOutline))]
+    public static class VentSetOutlinePatch
+    {
+        public static bool Prefix(
+            Vent __instance,
+            [HarmonyArgument(0)] bool on,
+            [HarmonyArgument(1)] bool mainTarget)
+        {
+            if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
+
+            var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
+
+            if (role.IsVanillaRole() || role.IsImpostor()) { return true; }
+
+            Color color = role.GetNameColor();
+            
+            __instance.myRend.material.SetFloat("_Outline", (float)(on ? 1 : 0));
+            __instance.myRend.material.SetColor("_OutlineColor", color);
+            __instance.myRend.material.SetColor("_AddColor", mainTarget ? color : Color.clear);
+
+            return false;
+        }
+    }
+
     [HarmonyPatch(typeof(Vent), nameof(Vent.Use))]
     public static class VentUsePatch
     {

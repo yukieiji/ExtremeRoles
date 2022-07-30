@@ -299,7 +299,8 @@ namespace ExtremeRoles.GhostRoles.API
             OptionUnit format = OptionUnit.None,
             bool invert = false,
             IOption enableCheckOption = null,
-            bool colored = false) where T : struct, IConvertible
+            bool colored = false,
+            float tempMaxValue = 0.0f) where T : struct, IConvertible
         {
             EnumCheck(option);
 
@@ -310,7 +311,7 @@ namespace ExtremeRoles.GhostRoles.API
                 min, step,
                 parent, isHeader, isHidden,
                 format, invert, enableCheckOption,
-                tab: this.tab);
+                this.tab, tempMaxValue);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -349,7 +350,8 @@ namespace ExtremeRoles.GhostRoles.API
             OptionUnit format = OptionUnit.None,
             bool invert = false,
             IOption enableCheckOption = null,
-            bool colored = false) where T : struct, IConvertible
+            bool colored = false,
+            int tempMaxValue = 0) where T : struct, IConvertible
         {
             EnumCheck(option);
 
@@ -360,7 +362,7 @@ namespace ExtremeRoles.GhostRoles.API
                 min, step,
                 parent, isHeader, isHidden,
                 format, invert, enableCheckOption,
-                tab: this.tab);
+                this.tab, tempMaxValue);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

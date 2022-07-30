@@ -144,7 +144,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             
             if (pva == null) { return; }
 
-            int startIndex = voteIndex[pva.TargetPlayerId];
+            if (!voteIndex.TryGetValue(pva.TargetPlayerId, out int startIndex))
+            {
+                startIndex = 0;
+            }
 
             int addVoteNum = (int)Math.Floor(this.curChargedVote);
             for (int i = 0; i < addVoteNum; ++i)
@@ -161,6 +164,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 this.curChargedVote = this.defaultVote;
             }
             this.voteTarget = byte.MaxValue;
+            this.voteCheckMark.Clear();
         }
 
         public void ButtonMod(
@@ -190,14 +194,20 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 this.SetTargetVote(
                     instance.TargetPlayerId);
 
-                foreach (SpriteRenderer checkMark in this.voteCheckMark.Values)
+                foreach (SpriteRenderer vote in this.voteCheckMark.Values)
                 {
-                    checkMark?.gameObject.SetActive(false);
+                    if (vote != null)
+                    {
+                        vote.gameObject.SetActive(false);
+                    }
                 }
 
-                if (!this.voteCheckMark.ContainsKey(instance.TargetPlayerId))
+                if (!this.voteCheckMark.TryGetValue(
+                        instance.TargetPlayerId,
+                        out SpriteRenderer checkMark) ||
+                    checkMark == null)
                 {
-                    SpriteRenderer checkMark = UnityEngine.Object.Instantiate(
+                    checkMark = UnityEngine.Object.Instantiate(
                         instance.Background, instance.LevelNumberText.transform);
                     checkMark.name = $"captain_SpecialVoteCheckMark_{instance.TargetPlayerId}";
                     checkMark.sprite = Resources.Loader.CreateSpriteFromResources(
@@ -205,9 +215,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     checkMark.transform.localPosition = new Vector3(7.25f, -0.5f, -3f);
                     checkMark.transform.localScale = new Vector3(1.0f, 3.5f, 1.0f);
                     checkMark.gameObject.layer = 5;
-                    this.voteCheckMark.Add(instance.TargetPlayerId, checkMark);
+                    this.voteCheckMark[instance.TargetPlayerId] = checkMark;
                 }
-                this.voteCheckMark[instance.TargetPlayerId]?.gameObject.SetActive(true);
+                checkMark.gameObject.SetActive(true);
             }
 
             return setTarget;
