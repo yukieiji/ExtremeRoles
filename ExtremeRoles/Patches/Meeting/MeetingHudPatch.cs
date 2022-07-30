@@ -461,7 +461,7 @@ namespace ExtremeRoles.Patches.Meeting
         public static void Postfix(
             MeetingHud __instance)
         {
-            ExtremeRolesPlugin.Info.MeetingStartRest();
+            ExtremeRolesPlugin.Info.ShowBlackBG();
             ExtremeRolesPlugin.GameDataStore.ClearMeetingResetObject();
             Helper.Player.ResetTarget();
 
@@ -514,7 +514,6 @@ namespace ExtremeRoles.Patches.Meeting
             if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
 
             FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
-
         }
     }
 
@@ -524,6 +523,11 @@ namespace ExtremeRoles.Patches.Meeting
     {
         public static void Postfix(MeetingHud __instance)
         {
+            if (ExtremeRolesPlugin.Info.IsBlock &&
+                __instance.state == MeetingHud.VoteStates.Discussion)
+            {
+                ExtremeRolesPlugin.Info.BlockShow(false);
+            }
 
             if (NamePlateHelper.NameplateChange)
             {

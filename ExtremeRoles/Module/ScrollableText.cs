@@ -42,10 +42,12 @@ namespace ExtremeRoles.Module
 
         public void Clear()
         {
+            UnityEngine.Object.Destroy(this.textScroller);
             UnityEngine.Object.Destroy(this.bodyText);
             UnityEngine.Object.Destroy(this.body);
             UnityEngine.Object.Destroy(this.title);
             UnityEngine.Object.Destroy(this.anchorPoint);
+            this.anchorPoint = null;
         }
 
         public void Enable(bool isEnable)
@@ -68,47 +70,30 @@ namespace ExtremeRoles.Module
             Action<TextMeshPro> textProcess = null)
         {
 
-            if (this.anchorPoint == null)
-            {
-                this.anchorPoint = new GameObject($"{this.name}Anchor");
-            }
+            if (this.anchorPoint != null) { return; }
 
-            if (this.title == null)
-            {
-                this.title = UnityEngine.Object.Instantiate(
-                    template, this.anchorPoint.transform);
-                this.title.name = $"{this.name}Title";
-            }
+            this.anchorPoint = new GameObject($"{this.name}Anchor");
+
+            this.title = UnityEngine.Object.Instantiate(
+                template, this.anchorPoint.transform);
+            this.title.name = $"{this.name}Title";
 
             if (textProcess != null)
             {
                 textProcess(this.title);
             }
 
-            if (this.body == null)
-            {
-                this.body = new GameObject($"{this.name}Body");
-            }
+            this.body = new GameObject($"{this.name}Body");
             this.body.transform.SetParent(this.anchorPoint.transform);
-            
-            if (this.bodyText == null)
-            {
-                this.bodyText = UnityEngine.Object.Instantiate(
-                    template, this.body.transform);
-            }
-
+            this.bodyText = UnityEngine.Object.Instantiate(
+                template, this.body.transform);
             if (textProcess != null)
             {
                 textProcess(this.bodyText);
             }
-
             this.bodyText.name = $"{this.name}Text";
 
-            if (this.textScroller == null)
-            {
-                this.textScroller = this.body.AddComponent<Scroller>();
-            }
-
+            this.textScroller = this.body.AddComponent<Scroller>();
             this.textScroller.gameObject.layer = 5;
             this.textScroller.transform.localScale = Vector3.one;
             this.textScroller.allowX = false;
