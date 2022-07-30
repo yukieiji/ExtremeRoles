@@ -175,7 +175,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 MadmateOption.CanUseVent,
                 false, parentOps);
             CreateBoolOption(
-                MadmateOption.CanUseVent,
+                MadmateOption.CanMoveVentToVent,
                 false, ventUseOpt);
             var taskOpt = CreateBoolOption(
                 MadmateOption.HasTask,
