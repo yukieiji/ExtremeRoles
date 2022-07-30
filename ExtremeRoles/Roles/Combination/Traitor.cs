@@ -232,7 +232,10 @@ namespace ExtremeRoles.Roles.Combination
             switch (this.curAbilityType)
             {
                 case AbilityType.Admin:
-                    MapBehaviour.Instance.Close();
+                    if (MapBehaviour.Instance)
+                    {
+                        MapBehaviour.Instance.Close();
+                    }
                     break;
                 case AbilityType.Security:
                 case AbilityType.Vital:
