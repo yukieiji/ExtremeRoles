@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+using UnityEngine;
+
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
@@ -25,6 +27,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private bool canSeeFromImpostor = false;
 
         private bool isSeeImpostorNow = false;
+        private bool isUpdateMadmate = false;
+        private float seeImpostorTaskGage;
+        private float seeFromImpostorTaskGage;
 
         public RoleAbilityButtonBase Button
         {
@@ -80,7 +85,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void IntroEndSetUp()
         {
-            if (!this.canMoveVentToVent) { return; }
+            if (this.canMoveVentToVent) { return; }
+            
+            // 全てのベントリンクを解除
+            foreach (Vent vent in CachedShipStatus.Instance.AllVents)
+            {
+                vent.Right = null;
+                vent.Center = null;
+                vent.Left = null;
+            }
         }
 
         public void ModifiedWinPlayer(
@@ -105,7 +118,33 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void Update(PlayerControl rolePlayer)
         {
-            throw new System.NotImplementedException();
+            if (!this.HasTask) { return; }
+
+            float taskGage = Helper.Player.GetPlayerTaskGage(rolePlayer);
+            if (taskGage > this.seeImpostorTaskGage && !isSeeImpostorNow)
+            {
+                this.isSeeImpostorNow = true;
+            }
+            if (this.canSeeFromImpostor &&
+                taskGage > this.seeFromImpostorTaskGage &&
+                !this.isUpdateMadmate)
+            {
+                this.isUpdateMadmate = false;
+                this.FakeImposter = true;
+            }
+        }
+
+        public override Color GetTargetRoleSeeColor(
+            SingleRoleBase targetRole, byte targetPlayerId)
+        {
+            if (this.isSeeImpostorNow ||
+                targetRole.IsImpostor() || 
+                targetRole.FakeImposter)
+            {
+                return Palette.ImpostorRed;
+            }
+            
+            return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
         }
 
         protected override void CreateSpecificOption(
@@ -138,12 +177,20 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         protected override void RoleSpecificInit()
         {
             var allOpt = OptionHolder.AllOption;
+            this.isSeeImpostorNow = false;
+
             this.UseVent = allOpt[
                 GetRoleOptionId(MadmateOption.CanUseVent)].GetValue();
             this.canMoveVentToVent = allOpt[
                 GetRoleOptionId(MadmateOption.CanMoveVentToVent)].GetValue();
             this.HasTask = allOpt[
                 GetRoleOptionId(MadmateOption.HasTask)].GetValue();
+            this.seeImpostorTaskGage = allOpt[
+                GetRoleOptionId(MadmateOption.SeeImpostorTaskGage)].GetValue();
+            this.canSeeFromImpostor = allOpt[
+                GetRoleOptionId(MadmateOption.CanSeeFromImpostor)].GetValue();
+            this.seeFromImpostorTaskGage = allOpt[
+                GetRoleOptionId(MadmateOption.CanSeeFromImpostorTaskGage)].GetValue();
         }
     }
 }
