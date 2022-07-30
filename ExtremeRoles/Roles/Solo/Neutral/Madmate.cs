@@ -42,6 +42,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         private RoleAbilityButtonBase madmateAbilityButton;
 
+        public static void ToFakeImpostor(byte playerId)
+        {
+
+            Madmate madmate = ExtremeRoleManager.GetSafeCastedRole<Madmate>(playerId);
+            if (madmate == null) { return; }
+
+            madmate.FakeImposter = true;
+        }
+
         public void CreateAbility()
         {
             this.CreateNormalAbilityButton(
@@ -130,7 +139,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 !this.isUpdateMadmate)
             {
                 this.isUpdateMadmate = false;
-                this.FakeImposter = true;
+                RPCOperator.Call(
+                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                    RPCOperator.Command.MadmateToFakeImpostor,
+                    new List<byte> { rolePlayer.PlayerId });
+                ToFakeImpostor(rolePlayer.PlayerId);
             }
         }
 
