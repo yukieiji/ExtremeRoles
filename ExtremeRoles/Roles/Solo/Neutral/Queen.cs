@@ -346,6 +346,20 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
         }
 
+        public override string GetRolePlayerNameTag(
+            SingleRoleBase targetRole, byte targetPlayerId)
+        {
+
+            if (this.ServantPlayerId.Contains(targetPlayerId))
+            {
+                return Helper.Design.ColoedString(
+                    ColorPalette.QueenWhite,
+                    $" ♛");
+            }
+
+            return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
+        }
+
         public override void RolePlayerKilledAction(
             PlayerControl rolePlayer, PlayerControl killerPlayer)
         {
@@ -655,6 +669,20 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 return ColorPalette.QueenWhite;
             }
             return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
+        }
+
+        public override string GetRolePlayerNameTag(
+            SingleRoleBase targetRole, byte targetPlayerId)
+        {
+
+            if (targetPlayerId == this.queenPlayerId)
+            {
+                return Helper.Design.ColoedString(
+                    ColorPalette.QueenWhite,
+                    $" ♛");
+            }
+
+            return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
         }
 
         protected override void CreateSpecificOption(
