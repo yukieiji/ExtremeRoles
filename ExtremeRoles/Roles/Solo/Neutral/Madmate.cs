@@ -138,12 +138,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (!this.HasTask) { return; }
 
             float taskGage = Helper.Player.GetPlayerTaskGage(rolePlayer);
-            if (taskGage > this.seeImpostorTaskGage && !isSeeImpostorNow)
+            if (taskGage >= this.seeImpostorTaskGage && !isSeeImpostorNow)
             {
                 this.isSeeImpostorNow = true;
             }
             if (this.canSeeFromImpostor &&
-                taskGage > this.seeFromImpostorTaskGage &&
+                taskGage >= this.seeFromImpostorTaskGage &&
                 !this.isUpdateMadmate)
             {
                 this.isUpdateMadmate = false;
@@ -187,7 +187,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 format: OptionUnit.Percentage);
             var impFromSeeOpt = CreateBoolOption(
                 MadmateOption.CanSeeFromImpostor,
-                false, parentOps);
+                false, taskOpt);
             CreateIntOption(
                 MadmateOption.CanSeeFromImpostorTaskGage,
                 70, 0, 100, 10,
