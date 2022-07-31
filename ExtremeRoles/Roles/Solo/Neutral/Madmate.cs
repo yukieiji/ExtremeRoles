@@ -193,6 +193,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 70, 0, 100, 10,
                 impFromSeeOpt,
                 format: OptionUnit.Percentage);
+
+            this.CreateCommonAbilityOption(parentOps);
         }
 
         protected override void RoleSpecificInit()
@@ -212,6 +214,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 GetRoleOptionId(MadmateOption.CanSeeFromImpostor)].GetValue();
             this.seeFromImpostorTaskGage = allOpt[
                 GetRoleOptionId(MadmateOption.CanSeeFromImpostorTaskGage)].GetValue();
+            this.RoleAbilityInit();
         }
     }
 }
