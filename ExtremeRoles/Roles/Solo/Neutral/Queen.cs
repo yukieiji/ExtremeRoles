@@ -266,6 +266,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             foreach (var playerId in this.ServantPlayerId)
             {
+                var player = Player.GetPlayerControlById(playerId);
+
+                if (player == null) { continue; }
+
+                if (player.Data.IsDead ||
+                    player.Data.Disconnected) { continue; }
+
                 RPCOperator.UncheckedMurderPlayer(
                     playerId, playerId,
                     byte.MaxValue);
@@ -344,6 +351,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             foreach (var playerId in this.ServantPlayerId)
             {
+                var player = Player.GetPlayerControlById(playerId);
+                
+                if (player == null) { continue; }
+
+                if (player.Data.IsDead || 
+                    player.Data.Disconnected) { continue; }
+
                 RPCOperator.UncheckedMurderPlayer(
                     playerId, playerId,
                     byte.MaxValue);
