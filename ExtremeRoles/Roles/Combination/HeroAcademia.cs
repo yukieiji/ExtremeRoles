@@ -178,7 +178,8 @@ namespace ExtremeRoles.Roles.Combination
                     break;
                 case Command.UpdateVigilante:
                     byte heroAcaCond = reader.ReadByte();
-                    UpdateVigilante((Condition)heroAcaCond);
+                    byte downPlayerId = reader.ReadByte();
+                    UpdateVigilante((Condition)heroAcaCond, downPlayerId);
                     break;
                 case Command.DrawHeroAndVillan:
                     byte heroPlayerId = reader.ReadByte();
@@ -256,35 +257,34 @@ namespace ExtremeRoles.Roles.Combination
        
         }
         public static void RpcUpdateVigilante(
-            Condition cond)
+            Condition cond, byte playerId)
         {
             RPCOperator.Call(
                 CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.HeroHeroAcademia,
                 new List<byte>
                 {
-                    (byte)Command.UpdateHero,
+                    (byte)Command.UpdateVigilante,
                     (byte)cond,
+                    playerId
                 });
-            UpdateVigilante(cond);
+            UpdateVigilante(cond, playerId);
         }
 
         public static void UpdateVigilante(
-            Condition cond, bool exiled = false)
+            Condition cond, byte downPlayerId)
         {
 
             int crewNum = 0;
             int impNum = 0;
 
-            // 追放時、追放された人が死亡するというロジックの前にこの処理が入るのでオフセットを1追加
-            int impOffset = exiled ? 1 : 0;
-            int crewOffset = exiled ? 1 : 0;
-
             foreach (GameData.PlayerInfo player in 
                 GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 var role = ExtremeRoleManager.GameRole[player.PlayerId];
-                if (!player.IsDead && !player.Disconnected)
+                if (!player.IsDead && 
+                    !player.Disconnected &&
+                    player.PlayerId != downPlayerId)
                 {
                     if (role.IsCrewmate())
                     {
@@ -303,7 +303,7 @@ namespace ExtremeRoles.Roles.Combination
                     switch (cond)
                     {
                         case Condition.HeroDown:
-                            if (crewNum - crewOffset <= impNum)
+                            if (crewNum <= impNum)
                             {
                                 vigilante.SetCondition(
                                     Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip);
@@ -315,7 +315,7 @@ namespace ExtremeRoles.Roles.Combination
                             }
                             break;
                         case Condition.VillainDown:
-                            if (impNum - impOffset <= 0)
+                            if (impNum <= 0)
                             {
                                 vigilante.SetCondition(
                                     Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip);
@@ -602,7 +602,8 @@ namespace ExtremeRoles.Roles.Combination
         public void AllReset(PlayerControl rolePlayer)
         {
             HeroAcademia.UpdateVigilante(
-                HeroAcademia.Condition.HeroDown);
+                HeroAcademia.Condition.HeroDown,
+                rolePlayer.PlayerId);
         }
 
         public override bool TryRolePlayerKillTo(PlayerControl rolePlayer, PlayerControl targetPlayer)
@@ -665,15 +666,16 @@ namespace ExtremeRoles.Roles.Combination
             GameData.PlayerInfo rolePlayer)
         {
             HeroAcademia.UpdateVigilante(
-                HeroAcademia.Condition.HeroDown, true);
+                HeroAcademia.Condition.HeroDown,
+                rolePlayer.PlayerId);
         }
         public override void RolePlayerKilledAction(
             PlayerControl rolePlayer, PlayerControl killerPlayer)
         {
             HeroAcademia.UpdateVigilante(
-                HeroAcademia.Condition.HeroDown);
+                HeroAcademia.Condition.HeroDown,
+                rolePlayer.PlayerId);
         }
-
 
         protected override void CreateSpecificOption(
             IOption parentOps)
@@ -830,7 +832,8 @@ namespace ExtremeRoles.Roles.Combination
         public void AllReset(PlayerControl rolePlayer)
         {
             HeroAcademia.UpdateVigilante(
-                HeroAcademia.Condition.VillainDown);
+                HeroAcademia.Condition.VillainDown,
+                rolePlayer.PlayerId);
         }
 
 
@@ -854,13 +857,15 @@ namespace ExtremeRoles.Roles.Combination
             GameData.PlayerInfo rolePlayer)
         {
             HeroAcademia.UpdateVigilante(
-                HeroAcademia.Condition.VillainDown, true);
+                HeroAcademia.Condition.VillainDown,
+                rolePlayer.PlayerId);
         }
         public override void RolePlayerKilledAction(
             PlayerControl rolePlayer, PlayerControl killerPlayer)
         {
             HeroAcademia.UpdateVigilante(
-                HeroAcademia.Condition.VillainDown);
+                HeroAcademia.Condition.VillainDown,
+                rolePlayer.PlayerId);
         }
 
         protected override void CreateSpecificOption(
@@ -1106,12 +1111,16 @@ namespace ExtremeRoles.Roles.Combination
 
                         if (role.Id == ExtremeRoleId.Hero && playerInfo.Disconnected)
                         {
-                            HeroAcademia.RpcUpdateVigilante(HeroAcademia.Condition.HeroDown);
+                            HeroAcademia.RpcUpdateVigilante(
+                                HeroAcademia.Condition.HeroDown,
+                                playerInfo.PlayerId);
                             return;
                         }
                         else if (role.Id == ExtremeRoleId.Villain && playerInfo.Disconnected)
                         {
-                            HeroAcademia.RpcUpdateVigilante(HeroAcademia.Condition.VillainDown);
+                            HeroAcademia.RpcUpdateVigilante(
+                                HeroAcademia.Condition.VillainDown,
+                                playerInfo.PlayerId);
                             return;
                         }
                     }
