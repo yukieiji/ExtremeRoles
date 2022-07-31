@@ -257,7 +257,7 @@ namespace ExtremeRoles.Roles.Combination
        
         }
         public static void RpcUpdateVigilante(
-            Condition cond, byte playerId)
+            Condition cond, byte downPlayerId)
         {
             RPCOperator.Call(
                 CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
@@ -266,9 +266,9 @@ namespace ExtremeRoles.Roles.Combination
                 {
                     (byte)Command.UpdateVigilante,
                     (byte)cond,
-                    playerId
+                    downPlayerId
                 });
-            UpdateVigilante(cond, playerId);
+            UpdateVigilante(cond, downPlayerId);
         }
 
         public static void UpdateVigilante(
@@ -393,7 +393,7 @@ namespace ExtremeRoles.Roles.Combination
                 heroPlayer.MurderPlayer(villanPlayer);
                 villanPlayer.MurderPlayer(heroPlayer);
 
-                foreach (var (_, role) in ExtremeRoleManager.GameRole)
+                foreach (var role in ExtremeRoleManager.GameRole.Values)
                 {
                     if (role.Id == ExtremeRoleId.Vigilante)
                     {
@@ -836,7 +836,6 @@ namespace ExtremeRoles.Roles.Combination
                 rolePlayer.PlayerId);
         }
 
-
         public override bool TryRolePlayerKilledFrom(
             PlayerControl rolePlayer, PlayerControl fromPlayer)
         {
@@ -1108,6 +1107,8 @@ namespace ExtremeRoles.Roles.Combination
                     foreach (var (playerId, role) in ExtremeRoleManager.GameRole)
                     {
                         var playerInfo = GameData.Instance.GetPlayerById(playerId);
+
+                        if (playerInfo == null) { continue; }
 
                         if (role.Id == ExtremeRoleId.Hero && playerInfo.Disconnected)
                         {
