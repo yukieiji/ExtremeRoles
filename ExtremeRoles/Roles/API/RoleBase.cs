@@ -179,21 +179,8 @@ namespace ExtremeRoles.Roles.API
 
         public virtual string GetRolePlayerNameTag(
             SingleRoleBase targetRole,
-            byte targetPlayerId)
-        {
-            var multiAssignRole = targetRole as MultiAssignRoleBase;
-            if (multiAssignRole != null)
-            {
-                if (multiAssignRole.AnotherRole != null)
-                {
-                    return this.GetRolePlayerNameTag(
-                        multiAssignRole.AnotherRole,
-                        targetPlayerId);
-                }
-            }
+            byte targetPlayerId) => string.Empty;
 
-            return string.Empty;
-        }
         public virtual Color GetTargetRoleSeeColor(
             SingleRoleBase targetRole,
             byte targetPlayerId)
@@ -589,6 +576,19 @@ namespace ExtremeRoles.Roles.API
                 this.AnotherRole = role;
                 OverrideAnotherRoleSetting();
             }
+        }
+
+        public override string GetRolePlayerNameTag(
+            SingleRoleBase targetRole,
+            byte targetPlayerId)
+        {
+            if (this.AnotherRole != null)
+            {
+                return this.AnotherRole.GetRolePlayerNameTag(
+                    targetRole, targetPlayerId);
+            }
+
+            return string.Empty;
         }
 
 
