@@ -15,7 +15,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 {
     public sealed class Queen : SingleRoleBase, IRoleAbility, IRoleSpecialReset, IRoleMurderPlayerHock, IRoleUpdate
     {
-        public const string RoleShowTag = "<b>Q</b>";
+        public const string RoleShowTag = "<b>Ⓠ</b>";
 
         public enum QueenOption
         {
@@ -348,6 +348,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
         }
 
+        public override string GetRoleTag() => RoleShowTag;
+
         public override string GetRolePlayerNameTag(
             SingleRoleBase targetRole, byte targetPlayerId)
         {
@@ -356,7 +358,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             {
                 return Helper.Design.ColoedString(
                     ColorPalette.QueenWhite,
-                    $" {Queen.RoleShowTag}");
+                    $" {RoleShowTag}");
             }
 
             return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
@@ -672,6 +674,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
             return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
         }
+
+        public override string GetRoleTag() => Queen.RoleShowTag;
 
         public override string GetRolePlayerNameTag(
             SingleRoleBase targetRole, byte targetPlayerId)
