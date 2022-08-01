@@ -21,6 +21,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             CanUseVent,
             ServantKillKillCoolReduceRate,
             ServantTaskKillCoolReduceRate,
+            ServantTaskCompKillCoolReduceRate,
             ServantSelfKillCool
         }
 
@@ -41,7 +42,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private float range;
         private float killKillCoolReduceRate;
         private float taskKillCoolReduceRate;
+        private float taskCompKillCoolReduceRate;
         private Dictionary<byte, float> servantTaskGage = new Dictionary<byte, float>();
+        private HashSet<byte> taskCompServant = new HashSet<byte>();
 
         public Queen() : base(
             ExtremeRoleId.Queen,
@@ -257,6 +260,16 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                         CachedPlayerControl.LocalPlayer.PlayerControl.killTimer = killcool * this.taskKillCoolReduceRate;
                     }
                     this.servantTaskGage[playerId] = gage;
+                    if (gage >= 1.0f && !this.taskCompServant.Contains(playerId))
+                    {
+                        this.taskCompServant.Add(playerId);
+                        if (!this.HasOtherKillCool)
+                        {
+                            this.KillCoolTime = PlayerControl.GameOptions.KillCooldown;
+                        }
+                        this.HasOtherKillCool = true;
+                        this.KillCoolTime = this.KillCoolTime * this.taskCompKillCoolReduceRate;
+                    }
                 }
             }
         }
@@ -406,6 +419,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 50, 5, 75, 1,
                 parentOps,
                 format: OptionUnit.Percentage);
+            CreateIntOption(
+                QueenOption.ServantTaskCompKillCoolReduceRate,
+                0, 10, 50, 1,
+                parentOps,
+                format: OptionUnit.Percentage);
             CreateFloatOption(
                 QueenOption.ServantSelfKillCool,
                 30.0f, 0.5f, 60.0f, 0.5f,
@@ -425,9 +443,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 GetRoleOptionId(QueenOption.ServantKillKillCoolReduceRate)].GetValue() / 100.0f);
             this.taskKillCoolReduceRate = 1.0f - ((float)OptionHolder.AllOption[
                 GetRoleOptionId(QueenOption.ServantTaskKillCoolReduceRate)].GetValue() / 100.0f);
+            this.taskCompKillCoolReduceRate = 1.0f - ((float)OptionHolder.AllOption[
+                GetRoleOptionId(QueenOption.ServantTaskCompKillCoolReduceRate)].GetValue() / 100.0f);
 
             this.servantTaskGage.Clear();
             this.ServantPlayerId.Clear();
+            this.taskCompServant.Clear();
         }
 
         private bool isSameQueenTeam(SingleRoleBase targetRole)
