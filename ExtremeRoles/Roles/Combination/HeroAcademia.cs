@@ -1033,6 +1033,26 @@ namespace ExtremeRoles.Roles.Combination
             return true;
         }
 
+        public override bool IsSameTeam(SingleRoleBase targetRole)
+        {
+            if (this.Id == targetRole.Id)
+            {
+                if (OptionHolder.Ship.IsSameNeutralSameWin)
+                {
+                    return true;
+                }
+                else
+                {
+                    return this.IsSameControlId(targetRole);
+                }
+            }
+            else
+            {
+                return base.IsSameTeam(targetRole);
+            }
+        }
+
+
         public override string GetFullDescription()
         {
             switch (this.condition)
