@@ -678,8 +678,10 @@ namespace ExtremeRoles.Roles.API
 
             if (this.CanHasAnotherRole && this.AnotherRole != null)
             {
-                return this.AnotherRole.GetTargetRoleSeeColor(
+                Color color = this.AnotherRole.GetTargetRoleSeeColor(
                     targetRole, targetPlayerId);
+
+                if (color != Palette.White) { return color; }
             }
 
             return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
