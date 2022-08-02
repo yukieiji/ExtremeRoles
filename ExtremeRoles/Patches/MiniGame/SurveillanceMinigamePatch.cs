@@ -151,7 +151,9 @@ namespace ExtremeRoles.Patches.MiniGame
                     SurvCamera surv = CachedShipStatus.Instance.AllCameras[i];
                     Camera camera = UnityEngine.Object.Instantiate<Camera>(__instance.CameraPrefab);
                     camera.transform.SetParent(__instance.transform);
-                    camera.transform.position = new Vector3(surv.transform.position.x, surv.transform.position.y, 8f);
+                    camera.transform.position = new Vector3(
+                        surv.transform.position.x,
+                        surv.transform.position.y, 8f);
                     camera.orthographicSize = 2.35f;
                     RenderTexture temporary = RenderTexture.GetTemporary(256, 256, 16, (RenderTextureFormat)0);
                     __instance.textures[i] = temporary;
@@ -209,7 +211,9 @@ namespace ExtremeRoles.Patches.MiniGame
                 Timer = ChangeTime;
             }
 
-            if ((instance.isStatic || update) && !PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(CachedPlayerControl.LocalPlayer))
+            if ((instance.isStatic || update) && 
+                !PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(
+                    CachedPlayerControl.LocalPlayer))
             {
                 instance.isStatic = false;
                 for (int i = 0; i < instance.ViewPorts.Length; i++)
@@ -227,7 +231,9 @@ namespace ExtremeRoles.Patches.MiniGame
                     }
                 }
             }
-            else if (!instance.isStatic && PlayerTask.PlayerHasTaskOfType<HudOverrideTask>(CachedPlayerControl.LocalPlayer))
+            else if (!instance.isStatic && 
+                PlayerTask.PlayerHasTaskOfType<HudOverrideTask>(
+                    CachedPlayerControl.LocalPlayer))
             {
                 instance.isStatic = true;
                 for (int j = 0; j < instance.ViewPorts.Length; j++)

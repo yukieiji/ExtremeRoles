@@ -115,7 +115,9 @@ namespace ExtremeRoles.Patches.MapModule
             bool canUse;
             bool couldUse;
             
-            __instance.CanUse(CachedPlayerControl.LocalPlayer.Data, out canUse, out couldUse);
+            __instance.CanUse(
+                CachedPlayerControl.LocalPlayer.Data,
+                out canUse, out couldUse);
 
             if (!canUse) { return false; }; // No need to execute the native method as using is disallowed anyways
 
