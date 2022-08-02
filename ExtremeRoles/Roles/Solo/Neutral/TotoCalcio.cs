@@ -23,6 +23,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             ExtremeRoleId.Yoko,
             ExtremeRoleId.Vigilante,
+            ExtremeRoleId.Totocalcio,
         };
 
         public RoleAbilityButtonBase Button

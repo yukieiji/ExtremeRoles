@@ -241,11 +241,15 @@ namespace ExtremeRoles.Patches.Meeting
                 
                 byte playerId = playerVoteArea.TargetPlayerId;
 
-                // 投票をいじる役職か？
-                var (voteModRole, voteAnotherRole) = ExtremeRoleManager.GetInterfaceCastedRole<IRoleVoteModifier>(
-                    playerId);
-                addVoteModRole(voteModRole, playerId, ref voteModifier);
-                addVoteModRole(voteAnotherRole, playerId, ref voteModifier);
+                // 切断されたプレイヤーは残っている状態で役職を持たない状態になるのでキーチェックはしておく
+                if (ExtremeRoleManager.GameRole.ContainsKey(playerId))
+                {
+                    // 投票をいじる役職か？
+                    var (voteModRole, voteAnotherRole) = 
+                        ExtremeRoleManager.GetInterfaceCastedRole<IRoleVoteModifier>(playerId);
+                    addVoteModRole(voteModRole, playerId, ref voteModifier);
+                    addVoteModRole(voteAnotherRole, playerId, ref voteModifier);
+                }
 
                 // 投票先を全格納
                 voteTarget.Add(playerId, playerVoteArea.VotedFor);
@@ -650,11 +654,15 @@ namespace ExtremeRoles.Patches.Meeting
 
                 byte checkPlayerId = playerVoteArea.TargetPlayerId;
 
-                // 投票をいじる役職か？
-                var (voteModRole, voteAnotherRole) = ExtremeRoleManager.GetInterfaceCastedRole<IRoleVoteModifier>(
-                    checkPlayerId);
-                addVoteModRole(voteModRole, checkPlayerId, ref voteModifier);
-                addVoteModRole(voteAnotherRole, checkPlayerId, ref voteModifier);
+                // 切断されたプレイヤーは残っている状態で役職を持たない状態になるのでキーチェックはしておく
+                if (ExtremeRoleManager.GameRole.ContainsKey(checkPlayerId))
+                {
+                    // 投票をいじる役職か？
+                    var (voteModRole, voteAnotherRole) = 
+                        ExtremeRoleManager.GetInterfaceCastedRole<IRoleVoteModifier>(checkPlayerId);
+                    addVoteModRole(voteModRole, checkPlayerId, ref voteModifier);
+                    addVoteModRole(voteAnotherRole, checkPlayerId, ref voteModifier);
+                }
 
                 int num2 = 0;
 			    foreach (MeetingHud.VoterState voterState in states)

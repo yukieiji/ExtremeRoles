@@ -277,18 +277,7 @@ namespace ExtremeRoles.Roles.Combination
                 return Palette.DisabledGrey;
             }
 
-            var multiAssignRole = targetRole as MultiAssignRoleBase;
-            if (multiAssignRole != null)
-            {
-                if (multiAssignRole.AnotherRole != null)
-                {
-                    return this.GetTargetRoleSeeColor(
-                        multiAssignRole.AnotherRole,
-                        targetPlayerId);
-                }
-            }
-
-            return Palette.White;
+            return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
         }
 
 
