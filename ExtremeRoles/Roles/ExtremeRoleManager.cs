@@ -477,14 +477,11 @@ namespace ExtremeRoles.Roles
             var multiAssignRole = checRole as MultiAssignRoleBase;
             if (multiAssignRole != null)
             {
-                if (multiAssignRole.AnotherRole != null)
-                {
-                    role = multiAssignRole.AnotherRole as T;
+                role = multiAssignRole.AnotherRole as T;
 
-                    if (role != null)
-                    {
-                        return role;
-                    }
+                if (role != null)
+                {
+                    return role;
                 }
             }
 
@@ -506,14 +503,11 @@ namespace ExtremeRoles.Roles
             var multiAssignRole = checkRole as MultiAssignRoleBase;
             if (multiAssignRole != null)
             {
-                if (multiAssignRole.AnotherRole != null)
-                {
-                    role = multiAssignRole.AnotherRole as T;
+                role = multiAssignRole.AnotherRole as T;
 
-                    if (role != null)
-                    {
-                        return role;
-                    }
+                if (role != null)
+                {
+                    return role;
                 }
             }
 
