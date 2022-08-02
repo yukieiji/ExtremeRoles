@@ -344,7 +344,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             foreach (var playerId in this.ServantPlayerId)
             {
-                Player.GetPlayerControlById(playerId)?.Exiled();
+                var player = Player.GetPlayerControlById(playerId);
+
+                if (player == null) { continue; }
+                if (player.Data.IsDead || player.Data.Disconnected) { continue; }
+
+                player.Exiled();
             }
         }
         public override Color GetTargetRoleSeeColor(
