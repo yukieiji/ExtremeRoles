@@ -84,6 +84,7 @@ namespace ExtremeRoles.Roles
         Queen,
         Servant,
         Madmate,
+        Umbrer,
     }
 
     public enum CombinationRoleType
@@ -212,6 +213,7 @@ namespace ExtremeRoles.Roles
                 {(int)ExtremeRoleId.Eater     , new Eater()},
                 {(int)ExtremeRoleId.Queen     , new Queen()},
                 {(int)ExtremeRoleId.Madmate   , new Madmate()},
+                {(int)ExtremeRoleId.Umbrer    , new Umbrer()},
             };
 
         public static readonly Dictionary<
