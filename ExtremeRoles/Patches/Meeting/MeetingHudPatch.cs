@@ -69,7 +69,7 @@ namespace ExtremeRoles.Patches.Meeting
             return false;
         }
 
-        private static bool isVoteSeeBlock(Roles.API.SingleRoleBase role)
+        private static bool isVoteSeeBlock(SingleRoleBase role)
         {
             if (ExtremeGhostRoleManager.GameRole.ContainsKey(
                     CachedPlayerControl.LocalPlayer.PlayerId) ||
@@ -528,7 +528,7 @@ namespace ExtremeRoles.Patches.Meeting
         public static void Postfix(MeetingHud __instance)
         {
             if (ExtremeRolesPlugin.Info.IsBlock &&
-                __instance.state == MeetingHud.VoteStates.Discussion)
+                __instance.state != MeetingHud.VoteStates.Animating)
             {
                 ExtremeRolesPlugin.Info.BlockShow(false);
             }

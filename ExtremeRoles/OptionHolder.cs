@@ -44,9 +44,11 @@ namespace ExtremeRoles
         private static readonly string[] prngAlgorithm = new string[]
         {
             "Pcg32XshRr", "Pcg64RxsMXs",
-            "Xorshiro256StarStar", "Xorshiro512StarStar",
-            "RomuTrio", "RomuQuad",
-            "Seiran128", "Shioi128"
+            "Xorshift64", "Xorshift128",
+            "Xorshiro256StarStar",
+            "Xorshiro512StarStar",
+            "RomuMono", "RomuTrio", "RomuQuad",
+            "Seiran128", "Shioi128", "JFT32",
         };
 
         private static int selectedPreset = 0;

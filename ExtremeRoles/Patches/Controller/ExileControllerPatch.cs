@@ -154,7 +154,7 @@ namespace ExtremeRoles.Patches.Controller
 
         public static void WrapUpPostfix(GameData.PlayerInfo exiled)
         {
-
+            ExtremeRolesPlugin.Info.BlockShow(false);
             ExtremeRolesPlugin.Info.HideBlackBG();
             ExtremeRolesPlugin.GameDataStore.Union.ResetTimer();
             ExtremeRolesPlugin.GameDataStore.AbilityManager.Clear();
