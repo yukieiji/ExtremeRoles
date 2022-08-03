@@ -107,6 +107,13 @@ namespace ExtremeRoles.Module.InfoOverlay
                 infoLerp(roleInfo, t, false, Palette.White, Palette.ClearWhite);
                 infoLerp(anotherRoleInfo, t, false, Palette.White, Palette.ClearWhite);
             })));
+
+            Transform parent = hudManager.transform;
+
+            ruleInfo.AnchorPoint.transform.parent = parent;
+            roleInfo.AnchorPoint.transform.parent = parent;
+            anotherRoleInfo.AnchorPoint.transform.parent = parent;
+
         }
 
         public void ResetOverlays()
