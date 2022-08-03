@@ -563,7 +563,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             
             if (MeetingHud.Instance ||
-                source.PlayerId == target.PlayerId) { return; }
+                source.PlayerId == target.PlayerId ||
+                ExtremeRoleManager.GameRole[source.PlayerId] == this) { return; }
 
             var hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
