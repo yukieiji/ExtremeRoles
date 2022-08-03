@@ -16,11 +16,6 @@ namespace ExtremeRoles.Module.PRNG
         public abstract int Next(int minInclusive, int maxExclusive);
 
         protected abstract void Initialize(ulong seed, ulong initStete);
-
-        // BitOperations.Left : https://github.com/dotnet/runtime/blob/main/src/libraries/System.Private.CoreLib/src/System/Numerics/BitOperations.cs
-        protected ulong LeftOps(ulong value, int offset)
-            => (value << offset) | (value >> (64 - offset));
-
     }
 
     public abstract class RNG32Base : RNGBase
@@ -83,6 +78,9 @@ namespace ExtremeRoles.Module.PRNG
 
         public abstract uint NextUInt();
 
+        // BitOperations.Left : https://github.com/dotnet/runtime/blob/main/src/libraries/System.Private.CoreLib/src/System/Numerics/BitOperations.cs
+        protected uint LeftOps(uint value, int offset)
+            => (value << offset) | (value >> (32 - offset));
     }
     public abstract class RNG64Base : RNGBase
     {
@@ -195,5 +193,10 @@ namespace ExtremeRoles.Module.PRNG
         }
 
         public abstract ulong NextUInt64();
+
+        // BitOperations.Left : https://github.com/dotnet/runtime/blob/main/src/libraries/System.Private.CoreLib/src/System/Numerics/BitOperations.cs
+        protected ulong LeftOps(ulong value, int offset)
+            => (value << offset) | (value >> (64 - offset));
+
     }
 }

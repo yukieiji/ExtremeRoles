@@ -94,6 +94,22 @@ namespace ExtremeRoles
             return BitConverter.ToInt32(bs, 0);
         }
 
+        public static uint CreateStrongSeed()
+        {
+            var bs = new byte[4];
+            //Int32と同じサイズのバイト配列にランダムな値を設定する
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(bs);
+            }
+
+            Helper.Logging.Debug($"Int32 SeedValue:{string.Join("", bs)}");
+
+            //RNGCryptoServiceProviderで得たbit列をUInt32型に変換してシード値とする。
+            return BitConverter.ToUInt32(bs, 0);
+        }
+
+
         public static ulong CreateLongStrongSeed()
         {
             var bs = new byte[8];
@@ -127,29 +143,46 @@ namespace ExtremeRoles
                         CreateLongStrongSeed(),
                         CreateLongStrongSeed());
                 case 2:
-                    return new Xorshiro256StarStar(
+                    return new Xorshift64(
                         CreateLongStrongSeed(),
                         CreateLongStrongSeed());
                 case 3:
-                    return new Xorshiro512StarStar(
+                    return new Xorshift128(
                         CreateLongStrongSeed(),
                         CreateLongStrongSeed());
                 case 4:
-                    return new RomuTrio(
+                    return new Xorshiro256StarStar(
                         CreateLongStrongSeed(),
                         CreateLongStrongSeed());
                 case 5:
-                    return new RomuQuad(
+                    return new Xorshiro512StarStar(
                         CreateLongStrongSeed(),
                         CreateLongStrongSeed());
                 case 6:
-                    return new Seiran128(
+                    return new RomuMono(
                         CreateLongStrongSeed(),
                         CreateLongStrongSeed());
                 case 7:
-                    return new Shioi128(
+                    return new RomuTrio(
                         CreateLongStrongSeed(),
                         CreateLongStrongSeed());
+                case 8:
+                    return new RomuQuad(
+                        CreateLongStrongSeed(),
+                        CreateLongStrongSeed());
+                case 9:
+                    return new Seiran128(
+                        CreateLongStrongSeed(),
+                        CreateLongStrongSeed());
+                case 10:
+                    return new Shioi128(
+                        CreateLongStrongSeed(),
+                        CreateLongStrongSeed());;
+                case 11:
+                    return new JFT32(
+                        CreateLongStrongSeed(),
+                        CreateLongStrongSeed());
+                
                 default:
                     return new SystemRandomWrapper(0, 0);
             }
