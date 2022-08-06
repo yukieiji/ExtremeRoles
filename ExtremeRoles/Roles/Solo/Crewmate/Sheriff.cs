@@ -225,7 +225,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             
             this.maxShootNum = this.shootNum;
 
-            if (this.isSyncTaskShootNum)
+            if (this.enableTaskRelatedSetting && this.isSyncTaskShootNum)
             {
                 this.shootNum = 0;
                 FastDestroyableSingleton<HudManager>.Instance.KillButton.SetDisabled();
