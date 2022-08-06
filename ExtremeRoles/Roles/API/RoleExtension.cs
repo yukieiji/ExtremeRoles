@@ -206,7 +206,10 @@ namespace ExtremeRoles.Roles.API.Extension
         private static bool isNotMultiAssign(SingleRoleBase role, out MultiAssignRoleBase multiAssignRole)
         {
             multiAssignRole = role as MultiAssignRoleBase;
-            return multiAssignRole == null || multiAssignRole.AnotherRole == null;
+            return 
+                multiAssignRole == null || 
+                multiAssignRole.AnotherRole == null ||
+                multiAssignRole.AnotherRole.Id == ExtremeRoleId.VanillaRole;
         }
     }
 }
