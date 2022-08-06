@@ -406,6 +406,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
 
             if (targetRole.Id == ExtremeRoleId.Sidekick &&
+                this.IsSameControlId(targetRole) &&
                 this.SidekickPlayerId.Contains(targetPlayerId))
             {
                 return ColorPalette.JackalBlue;

@@ -358,6 +358,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
 
             if (targetRole.Id == ExtremeRoleId.Servant &&
+                this.IsSameControlId(targetRole) &&
                 this.ServantPlayerId.Contains(targetPlayerId))
             {
                 return ColorPalette.QueenWhite;
