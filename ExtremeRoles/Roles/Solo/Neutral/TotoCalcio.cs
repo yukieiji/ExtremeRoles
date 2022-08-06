@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Helper.Neutral;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
@@ -156,24 +157,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             return true;
         }
 
-        public override bool IsSameTeam(SingleRoleBase targetRole)
-        {
-            if (this.Id == targetRole.Id)
-            {
-                if (OptionHolder.Ship.IsSameNeutralSameWin)
-                {
-                    return true;
-                }
-                else
-                {
-                    return this.IsSameControlId(targetRole);
-                }
-            }
-            else
-            {
-                return base.IsSameTeam(targetRole);
-            }
-        }
+        public override bool IsSameTeam(SingleRoleBase targetRole) =>
+            this.IsNeutralSameTeam(targetRole);
 
         public override string GetFullDescription() => 
             string.Format(

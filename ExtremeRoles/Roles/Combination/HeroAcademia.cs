@@ -5,6 +5,7 @@ using UnityEngine;
 using Hazel;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Helper.Neutral;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -1033,25 +1034,8 @@ namespace ExtremeRoles.Roles.Combination
             return true;
         }
 
-        public override bool IsSameTeam(SingleRoleBase targetRole)
-        {
-            if (this.Id == targetRole.Id)
-            {
-                if (OptionHolder.Ship.IsSameNeutralSameWin)
-                {
-                    return true;
-                }
-                else
-                {
-                    return this.IsSameControlId(targetRole);
-                }
-            }
-            else
-            {
-                return base.IsSameTeam(targetRole);
-            }
-        }
-
+        public override bool IsSameTeam(SingleRoleBase targetRole) => 
+            this.IsNeutralSameTeam(targetRole);
 
         public override string GetFullDescription()
         {

@@ -3,6 +3,7 @@
 using UnityEngine;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Helper.Neutral;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
@@ -216,24 +217,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.mines.Clear();
         }
 
-        public override bool IsSameTeam(SingleRoleBase targetRole)
-        {
-            if (this.Id == targetRole.Id)
-            {
-                if (OptionHolder.Ship.IsSameNeutralSameWin)
-                {
-                    return true;
-                }
-                else
-                {
-                    return this.IsSameControlId(targetRole);
-                }
-            }
-            else
-            {
-                return base.IsSameTeam(targetRole);
-            }
-        }
+        public override bool IsSameTeam(SingleRoleBase targetRole) =>
+            this.IsNeutralSameTeam(targetRole);
 
         protected override void CreateSpecificOption(
             IOption parentOps)
