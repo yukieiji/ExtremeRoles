@@ -4,6 +4,7 @@ using HarmonyLib;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension;
 using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Performance;
 
@@ -30,7 +31,7 @@ namespace ExtremeRoles.Patches.Button
                 !__instance.isCoolingDown &&
                 !killer.Data.IsDead &&
                 killer.CanMove && 
-                role.CanKill)
+                role.CanKill())
             {
                 PlayerControl target = __instance.currentTarget;
 

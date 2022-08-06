@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 
 using UnityEngine;
+using ExtremeRoles.Roles.API.Extension;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.MapOverlay
@@ -39,7 +40,7 @@ namespace ExtremeRoles.Patches.MapOverlay
         public static bool Prefix(MapBehaviour __instance)
         {
             if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
-            if (Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseAdmin) { return true; }
+            if (Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseAdmin()) { return true; }
 
             __instance.GenericShow();
             __instance.ColorControl.SetColor(new Color(0.05f, 0.2f, 1f, 1f));

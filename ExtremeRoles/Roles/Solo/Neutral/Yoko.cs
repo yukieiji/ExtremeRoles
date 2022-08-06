@@ -5,6 +5,7 @@ using UnityEngine;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
@@ -231,7 +232,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
             else if (
                 role.IsImpostor() ||
-                role.CanKill || 
+                role.CanKill() || 
                 role.Id == ExtremeRoleId.Fencer)
             {
                 return true;

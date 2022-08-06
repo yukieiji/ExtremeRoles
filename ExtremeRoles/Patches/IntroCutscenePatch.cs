@@ -8,6 +8,7 @@ using BepInEx.IL2CPP.Utils.Collections;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API.Extension;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
@@ -212,7 +213,7 @@ namespace ExtremeRoles.Patches
                     __instance.RoleBlurbText.text +=
                         $"\n{Helper.Translation.GetString("impostorIntroText")}";
                 }
-                else if (role.IsCrewmate() && role.HasTask)
+                else if (role.IsCrewmate() && role.HasTask())
                 {
                     __instance.RoleBlurbText.text +=
                         $"\n{Helper.Translation.GetString("crewIntroText")}";

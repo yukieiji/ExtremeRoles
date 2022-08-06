@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 
+using ExtremeRoles.Roles.API.Extension;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.Button
@@ -16,7 +17,7 @@ namespace ExtremeRoles.Patches.Button
             // The sabotage button behaves just fine if it's a regular impostor
             if ((CachedPlayerControl.LocalPlayer.Data.Role.TeamType == RoleTeamTypes.Impostor) ||
                 role.IsImpostor()) { return true; }
-            if (!role.UseSabotage) { return true; }
+            if (!role.CanUseSabotage()) { return true; }
 
             FastDestroyableSingleton<HudManager>.Instance.ShowMap(
                 (Il2CppSystem.Action<MapBehaviour>)((m) => { m.ShowSabotageMap(); }));

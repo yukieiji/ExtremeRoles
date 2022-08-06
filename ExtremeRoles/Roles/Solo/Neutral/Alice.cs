@@ -7,6 +7,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
@@ -97,7 +98,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             {
 
                 var role = ExtremeRoleManager.GameRole[player.PlayerId];
-                if (!role.HasTask) { continue; }
+                if (!role.HasTask()) { continue; }
 
                 List<int> addTaskId = new List<int>();
 

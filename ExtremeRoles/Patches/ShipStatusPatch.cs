@@ -7,6 +7,8 @@ using UnityEngine;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches
@@ -74,15 +76,17 @@ namespace ExtremeRoles.Patches
                 return true;
             }
 
+            SingleRoleBase role = allRole[playerInfo.PlayerId];
+
             if (requireCustomCustomCalculateLightRadius())
             {
                 float visonMulti;
-                bool applayVisonEffects = allRole[playerInfo.PlayerId].IsCrewmate();
+                bool applayVisonEffects = role.IsCrewmate();
 
-                if (allRole[playerInfo.PlayerId].HasOtherVison)
+                if (role.TryGetVisonMod(out float vison, out bool isApplyEnvironmentVision))
                 {
-                    visonMulti = allRole[playerInfo.PlayerId].Vison;
-                    applayVisonEffects = allRole[playerInfo.PlayerId].IsApplyEnvironmentVision;
+                    visonMulti = vison;
+                    applayVisonEffects = isApplyEnvironmentVision;
                 }
                 else if (playerInfo.Role.IsImpostor)
                 {
@@ -110,13 +114,13 @@ namespace ExtremeRoles.Patches
             {
                 __result = baseVison;
             }
-            else if (allRole[playerInfo.PlayerId].HasOtherVison)
-            {   
-                if (allRole[playerInfo.PlayerId].IsApplyEnvironmentVision)
+            else if (role.TryGetVisonMod(out float vison, out bool isApplyEnvironmentVision))
+            {
+                if (isApplyEnvironmentVision)
                 {
                     baseVison = switchVisonMulti;
                 }
-                __result = baseVison * allRole[playerInfo.PlayerId].Vison;
+                __result = baseVison * vison;
             }
             else if (playerInfo.Role.IsImpostor)
             {

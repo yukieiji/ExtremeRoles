@@ -7,6 +7,7 @@ using UnityEngine;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
@@ -71,7 +72,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.specialAttackPlayerId = byte.MaxValue;
             this.KillCoolTime = this.defaultKillCoolTime;
 
-            if (targetRole.HasTask)
+            if (targetRole.HasTask())
             {
                 int targetPlayerTaskNum = targetPlayer.Data.Tasks.Count;
                 int targetPlayerCompTask = 0;
@@ -92,7 +93,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 {
                     var role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
 
-                    if (!playerInfo.Disconnected && role.HasTask)
+                    if (!playerInfo.Disconnected && role.HasTask())
                     {
                         ++taskHasPlayerNum;
 

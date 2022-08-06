@@ -1,5 +1,6 @@
 ﻿using System;
 using HarmonyLib;
+using ExtremeRoles.Roles.API.Extension;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.MiniGame
@@ -12,7 +13,7 @@ namespace ExtremeRoles.Patches.MiniGame
             [HarmonyArgument(0)] int direction)
         {
             if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
-            if (Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity) { return true; }
+            if (Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity()) { return true; }
 
             if (direction != 0 && Constants.ShouldPlaySfx())
             {
@@ -42,7 +43,7 @@ namespace ExtremeRoles.Patches.MiniGame
         {
             if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
-            if (Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity) { return true; }
+            if (Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity()) { return true; }
 
             __instance.isStatic = true;
             __instance.ViewPort.sharedMaterial = __instance.StaticMaterial;

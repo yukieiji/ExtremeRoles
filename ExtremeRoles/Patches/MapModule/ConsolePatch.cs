@@ -1,5 +1,7 @@
 ﻿using HarmonyLib;
 
+using ExtremeRoles.Roles.API.Extension;
+
 namespace ExtremeRoles.Patches.MapModule
 {
     [HarmonyPatch(typeof(Console), nameof(Console.CanUse))]
@@ -16,7 +18,7 @@ namespace ExtremeRoles.Patches.MapModule
             if (__instance.AllowImpostor) { return true; }
             if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
             if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return true; }
-            if (Roles.ExtremeRoleManager.GameRole[pc.PlayerId].HasTask) { return true; }
+            if (Roles.ExtremeRoleManager.GameRole[pc.PlayerId].HasTask()) { return true; }
 
             return false;
         }
@@ -45,7 +47,7 @@ namespace ExtremeRoles.Patches.MapModule
                 case TaskTypes.ResetReactor:
                 case TaskTypes.RestoreOxy:
                     return Roles.ExtremeRoleManager.GameRole[
-                        player.PlayerId].CanRepairSabotage;
+                        player.PlayerId].CanRepairSabotage();
                 default:
                     return true;
             }

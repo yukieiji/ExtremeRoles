@@ -4,6 +4,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
@@ -185,7 +186,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
             var role = ExtremeRoleManager.GameRole[this.outburstTarget.PlayerId];
-            if (!role.CanKill) { return; }
+            if (!role.CanKill()) { return; }
 
             PlayerControl killTarget = Helper.Player.GetClosestKillRangePlayer(this.outburstTarget);
 

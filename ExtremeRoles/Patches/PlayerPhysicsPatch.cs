@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API.Extension;
 
 namespace ExtremeRoles.Patches
 {
@@ -30,14 +31,12 @@ namespace ExtremeRoles.Patches
             if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return; }
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
-            var role = ExtremeRoleManager.GetLocalPlayerRole();
-
-            if (role.IsBoost &&
-                __instance.AmOwner && 
+            if (__instance.AmOwner && 
                 __instance.myPlayer.CanMove && 
-                GameData.Instance)
+                GameData.Instance &&
+                ExtremeRoleManager.GetLocalPlayerRole().TryGetVelocity(out float velocity))
             {
-                __instance.body.velocity *= role.MoveSpeed;
+                __instance.body.velocity *= velocity;
             }
         }
     }

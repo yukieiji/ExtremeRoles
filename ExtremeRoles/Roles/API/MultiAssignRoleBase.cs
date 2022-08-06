@@ -186,47 +186,7 @@ namespace ExtremeRoles.Roles.API
 
         public virtual void OverrideAnotherRoleSetting()
         {
-            this.CanKill = this.CanKill || this.AnotherRole.CanKill;
-            this.HasTask = this.HasTask || this.AnotherRole.HasTask;
-            this.UseVent = this.UseVent || this.AnotherRole.UseVent;
-            this.UseSabotage = this.UseSabotage || this.AnotherRole.UseSabotage;
-            this.CanUseAdmin = this.CanUseAdmin || this.AnotherRole.CanUseAdmin;
-            this.CanUseSecurity = this.CanUseSecurity || this.AnotherRole.CanUseSecurity;
-            this.CanUseVital = this.CanUseVital || this.AnotherRole.CanUseVital;
-
-            this.HasOtherVison = this.HasOtherVison || this.AnotherRole.HasOtherVison;
-            
-            this.IsBoost = this.IsBoost || this.AnotherRole.IsBoost;
-
-            if (this.HasOtherVison)
-            {
-                this.IsApplyEnvironmentVision = this.IsApplyEnvironmentVision || this.AnotherRole.IsApplyEnvironmentVision;
-                this.Vison = this.Vison > this.AnotherRole.Vison ? this.Vison : this.AnotherRole.Vison;
-            }
-
-            if (this.CanKill)
-            {
-                this.HasOtherKillCool = this.HasOtherKillCool || this.AnotherRole.HasOtherKillCool;
-                this.HasOtherKillRange = this.HasOtherKillRange || this.AnotherRole.HasOtherKillRange;
-                if (this.HasOtherKillCool)
-                {
-                    this.KillCoolTime = 
-                        this.KillCoolTime < this.AnotherRole.KillCoolTime ?
-                           this.KillCoolTime : this.AnotherRole.KillCoolTime;
-                }
-                if (this.HasOtherKillRange)
-                {
-                    this.KillRange = this.KillRange > this.AnotherRole.KillRange ?
-                           this.KillRange : this.AnotherRole.KillRange;
-                }
-            }
-
-            if (this.IsBoost)
-            {
-                this.MoveSpeed = this.MoveSpeed > this.AnotherRole.MoveSpeed ?
-                    this.MoveSpeed : this.AnotherRole.MoveSpeed;
-            }
-
+            return;
         }
         public int GetManagerOptionId<T>(T option) where T : struct, IConvertible
         {

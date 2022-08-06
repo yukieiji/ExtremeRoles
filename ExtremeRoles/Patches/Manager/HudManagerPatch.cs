@@ -134,11 +134,13 @@ namespace ExtremeRoles.Patches.Manager
                     multiAssignRole.OverrideAnotherRoleSetting();
                 }
             }
-
+            
+            /* TODO:幽霊役職タスク
             if (ghostRole != null)
             {
                 role.HasTask = role.HasTask && ghostRole.HasTask;
             }
+            */
 
         }
         private static void buttonCreate(SingleRoleBase checkRole)

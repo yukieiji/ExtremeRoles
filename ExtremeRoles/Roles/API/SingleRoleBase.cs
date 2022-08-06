@@ -8,6 +8,8 @@ namespace ExtremeRoles.Roles.API
     {
         public virtual bool IsAssignGhostRole => true;
 
+        public OptionTab Tab => this.tab;
+
         public bool CanCallMeeting = true;
         public bool CanRepairSabotage = true;
 
@@ -36,9 +38,6 @@ namespace ExtremeRoles.Roles.API
 
         public ExtremeRoleId Id;
         public ExtremeRoleType Team;
-
-
-        public OptionTab Tab => this.tab;
 
         protected Color NameColor;
 

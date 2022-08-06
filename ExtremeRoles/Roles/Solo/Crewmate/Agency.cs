@@ -8,6 +8,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
@@ -118,7 +119,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             int takeNum = UnityEngine.Random.RandomRange(1, this.maxTakeTask);
             
-            if (!targetRole.HasTask)
+            if (!targetRole.HasTask())
             {
                 int totakTaskNum = GameData.Instance.TotalTasks;
                 int compTaskNum = GameData.Instance.CompletedTasks;
