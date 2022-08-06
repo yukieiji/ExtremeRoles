@@ -8,43 +8,87 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
     public sealed class Umbrer : SingleRoleBase, IRoleAbility, IRoleUpdate
     {
-        private sealed class InfectedPlayer
+        private sealed class InfectedContainer
         {
-            private HashSet<byte> infectedPlayer = new HashSet<byte>();
+            public HashSet<PlayerControl> FirstStage => this.firstStage;
+            public HashSet<PlayerControl> FinalStage => this.finalStage;
 
-            public InfectedPlayer()
+            private HashSet<PlayerControl> firstStage = new HashSet<PlayerControl>();
+            private HashSet<PlayerControl> finalStage = new HashSet<PlayerControl>();
+
+            public InfectedContainer()
             {
-                
+                this.firstStage.Clear();
+                this.finalStage.Clear();
+            }
+            public void AddPlayer(PlayerControl player)
+            {
+                finalStage.Add(player);
             }
 
-            public void AddPlayer(byte playerId)
+            public bool IsAllPlayerInfected()
             {
+                if (this.firstStage.Count <= 0) { return false; }
+
+                foreach (GameData.PlayerInfo player in
+                    GameData.Instance.AllPlayers.GetFastEnumerator())
+                {
+                    if (player == null || player?.Object == null) { continue; }
+                    if (player.IsDead || player.Disconnected) { continue; }
+
+                    if (!this.firstStage.Contains(player.Object))
+                    {
+                        return false;
+                    }
+
+                }
+                return true;
             }
 
-            public HashSet<byte> GetNoneInfectedPlayer()
-            {
-            }
-            public HashSet<byte> GetNonePowerfulInfectedPlayer()
-            {
+            public bool IsContain(PlayerControl player) =>
+                this.firstStage.Contains(player) || this.finalStage.Contains(player);
 
+            public bool IsFirstStage(PlayerControl player) => 
+                this.firstStage.Contains(player);
+
+            public void Update()
+            {
+                removeToHashSet(ref this.firstStage);
+                removeToHashSet(ref this.finalStage);
             }
+
+            private void removeToHashSet(ref HashSet<PlayerControl> cont)
+            {
+                List<PlayerControl> remove = new List<PlayerControl>();
+
+                foreach (PlayerControl player in this.firstStage)
+                {
+                    if (player == null ||
+                        player.Data == null ||
+                        player.Data.IsDead ||
+                        player.Data.Disconnected)
+                    {
+                        remove.Add(player);
+                    }
+                }
+                foreach (PlayerControl player in remove)
+                {
+                    cont.Remove(player);
+                }
+            }
+
         }
 
         public enum UmbrerOption
         {
-            CanUseVent,
-            CanMoveVentToVent,
-            HasTask,
-            SeeImpostorTaskGage,
-            CanSeeFromImpostor,
-            CanSeeFromImpostorTaskGage,
+            
         }
-
 
         public RoleAbilityButtonBase Button
         {
@@ -56,6 +100,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         }
 
         private RoleAbilityButtonBase madmateAbilityButton;
+        private InfectedContainer container;
 
         public Umbrer() : base(
             ExtremeRoleId.Umbrer,
@@ -76,16 +121,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public bool UseAbility()
         {
 
-            byte playerId = CachedPlayerControl.LocalPlayer.PlayerId;
-
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.UncheckedMurderPlayer,
-                new List<byte> { playerId, playerId, byte.MaxValue });
-            RPCOperator.UncheckedMurderPlayer(
-                playerId,
-                playerId,
-                byte.MaxValue);
+            
             return true;
         }
 
@@ -103,19 +139,38 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void Update(PlayerControl rolePlayer)
         {
-            
+            if (CachedShipStatus.Instance == null ||
+                this.IsWin ||
+                GameData.Instance == null) { return; }
+            if (!CachedShipStatus.Instance.enabled) { return; }
+
+            if (this.container.IsAllPlayerInfected())
+            {
+                this.IsWin = true;
+                RPCOperator.RoleIsWin(rolePlayer.PlayerId);
+                return;
+            }
+
+            this.container.Update();
         }
 
-        public override Color GetTargetRoleSeeColor(
-            SingleRoleBase targetRole, byte targetPlayerId)
+        public override bool IsSameTeam(SingleRoleBase targetRole)
         {
-            if (targetRole.IsImpostor() || 
-                targetRole.FakeImposter)
+            if (this.Id == targetRole.Id)
             {
-                return Palette.ImpostorRed;
+                if (OptionHolder.Ship.IsSameNeutralSameWin)
+                {
+                    return true;
+                }
+                else
+                {
+                    return this.IsSameControlId(targetRole);
+                }
             }
-            
-            return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
+            else
+            {
+                return base.IsSameTeam(targetRole);
+            }
         }
 
         protected override void CreateSpecificOption(
@@ -128,8 +183,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         protected override void RoleSpecificInit()
         {
+            this.container = new InfectedContainer();
+
             var allOpt = OptionHolder.AllOption;
-            this.isSeeImpostorNow = false;
+
             this.RoleAbilityInit();
         }
     }
