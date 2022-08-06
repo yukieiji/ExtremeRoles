@@ -71,21 +71,12 @@ namespace ExtremeRoles.Roles.Solo
                 $"{this.GetColoredRoleName()}: {Helper.Translation.GetString("crewImportantText")}");
 
         }
-
-        protected override void CommonInit()
-        {
-            return;
-        }
         protected override void RoleSpecificInit()
         {
             return;
         }
 
         protected override void CreateSpecificOption(IOption parentOps)
-        {
-            throw new System.Exception("Don't call this class method!!");
-        }
-        protected override IOption CreateSpawnOption()
         {
             throw new System.Exception("Don't call this class method!!");
         }
