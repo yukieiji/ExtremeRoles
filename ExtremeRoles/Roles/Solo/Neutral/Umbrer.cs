@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -85,6 +86,141 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         }
 
+        private sealed class UmbrerVirusAbility : RoleAbilityButtonBase
+        {
+            public bool IsUpgradeMode => this.isUpgradeVirus;
+
+            private Sprite setVirusSprite;
+            private string setVirusButtonText;
+            private float setVirusTime;
+
+            private Sprite upgradeVirusSprite;
+            private string upgradeVirusButtonText;
+            private float upgradeVirusTime;
+
+            private bool isUpgradeVirus;
+            private Func<bool> upgradeVirusFunc;
+
+            public UmbrerVirusAbility(
+                string setVirusButtonText,
+                string upgradeVirusButtonText,
+                Sprite setVirusSprite,
+                Sprite upgradeVirusSprite,
+                float setVirusTime,
+                float upgradeVirusTime,
+                Func<bool> upgradeVirusModeCheck,
+                Func<bool> ability,
+                Func<bool> canUse,
+                Vector3 positionOffset,
+                Action abilityCleanUp = null,
+                Func<bool> abilityCheck = null,
+                KeyCode hotkey = KeyCode.F,
+                bool mirror = false) : base(
+                    setVirusButtonText,
+                    ability, canUse,
+                    setVirusSprite,
+                    positionOffset,
+                    abilityCleanUp,
+                    abilityCheck,
+                    hotkey, mirror)
+            {
+
+                this.setVirusSprite = setVirusSprite;
+                this.setVirusButtonText = setVirusButtonText;
+                this.setVirusTime = setVirusTime;
+
+                this.upgradeVirusSprite = upgradeVirusSprite;
+                this.upgradeVirusButtonText = upgradeVirusButtonText;
+                this.upgradeVirusTime = upgradeVirusTime;
+
+                this.isUpgradeVirus = false;
+                this.upgradeVirusFunc = upgradeVirusModeCheck;
+            }
+
+            protected override void AbilityButtonUpdate()
+            {
+                this.isUpgradeVirus = this.upgradeVirusFunc();
+                if (this.isUpgradeVirus)
+                {
+                    this.ButtonSprite = this.setVirusSprite;
+                    this.ButtonText = this.setVirusButtonText;
+                    this.AbilityActiveTime = this.setVirusTime;
+                }
+                else
+                {
+                    this.ButtonSprite = this.upgradeVirusSprite;
+                    this.ButtonText = this.upgradeVirusButtonText;
+                    this.AbilityActiveTime = this.upgradeVirusTime;
+                }
+
+                if (this.CanUse())
+                {
+                    this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.EnabledColor;
+                    this.Button.graphic.material.SetFloat("_Desat", 0f);
+                }
+                else
+                {
+                    this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.DisabledClear;
+                    this.Button.graphic.material.SetFloat("_Desat", 1f);
+                }
+
+                if (this.Timer >= 0)
+                {
+                    bool abilityOn = this.IsHasCleanUp() && IsAbilityOn;
+
+                    if (abilityOn || (
+                            !CachedPlayerControl.LocalPlayer.PlayerControl.inVent &&
+                            CachedPlayerControl.LocalPlayer.PlayerControl.moveable))
+                    {
+                        this.Timer -= Time.deltaTime;
+                    }
+                    if (abilityOn)
+                    {
+                        if (!this.AbilityCheck())
+                        {
+                            this.Timer = 0;
+                            this.IsAbilityOn = false;
+                        }
+                    }
+                }
+
+                if (this.Timer <= 0 && this.IsHasCleanUp() && IsAbilityOn)
+                {
+                    this.IsAbilityOn = false;
+                    this.Button.cooldownTimerText.color = Palette.EnabledColor;
+                    this.CleanUp();
+                    this.ResetCoolTimer();
+                }
+
+                Button.SetCoolDown(
+                    this.Timer,
+                    (this.IsHasCleanUp() && this.IsAbilityOn) ? this.AbilityActiveTime : this.CoolTime);
+            }
+
+            protected override void OnClickEvent()
+            {
+                if (this.CanUse() &&
+                    this.Timer < 0f &&
+                    !this.IsAbilityOn)
+                {
+                    Button.graphic.color = this.DisableColor;
+
+                    if (this.UseAbility())
+                    {
+                        if (this.IsHasCleanUp())
+                        {
+                            this.Timer = this.AbilityActiveTime;
+                            Button.cooldownTimerText.color = this.TimerOnColor;
+                            this.IsAbilityOn = true;
+                        }
+                        else
+                        {
+                            this.ResetCoolTimer();
+                        }
+                    }
+                }
+            }
+        }
         public enum UmbrerOption
         {
             
