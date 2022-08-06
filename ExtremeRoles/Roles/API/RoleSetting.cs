@@ -1,6 +1,5 @@
 ﻿using System;
 using ExtremeRoles.Module;
-using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.API
 {

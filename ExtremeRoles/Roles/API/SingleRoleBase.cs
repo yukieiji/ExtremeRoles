@@ -2,7 +2,6 @@
 
 using ExtremeRoles.Module;
 
-
 namespace ExtremeRoles.Roles.API
 {
     public abstract partial class SingleRoleBase : RoleOptionBase
