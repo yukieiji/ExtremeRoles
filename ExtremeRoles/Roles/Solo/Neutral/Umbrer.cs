@@ -435,15 +435,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 parentOps, 3.0f);
 
             CreateFloatOption(
-                UmbrerOption.InfectRange,
-                0.8f, 0.1f, 3.0f, 0.1f,
-                parentOps);
-
-            CreateFloatOption(
                 UmbrerOption.UpgradeVirusTime,
                 3.5f, 0.5f, 10.0f, 0.1f,
                 parentOps,
                 format: OptionUnit.Second);
+
+            CreateFloatOption(
+                UmbrerOption.InfectRange,
+                0.8f, 0.1f, 3.0f, 0.1f,
+                parentOps);
 
             CreateFloatOption(
                 UmbrerOption.KeepUpgradedVirus,
