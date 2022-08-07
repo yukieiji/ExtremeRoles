@@ -145,15 +145,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 this.isUpgradeVirus = this.upgradeVirusFunc();
                 if (this.isUpgradeVirus)
                 {
-                    this.ButtonSprite = this.setVirusSprite;
-                    this.ButtonText = this.setVirusButtonText;
-                    this.AbilityActiveTime = this.setVirusTime;
-                }
-                else
-                {
                     this.ButtonSprite = this.upgradeVirusSprite;
                     this.ButtonText = this.upgradeVirusButtonText;
                     this.AbilityActiveTime = this.upgradeVirusTime;
+                }
+                else
+                {
+                    this.ButtonSprite = this.setVirusSprite;
+                    this.ButtonText = this.setVirusButtonText;
+                    this.AbilityActiveTime = this.setVirusTime;
                 }
 
                 if (this.CanUse())
