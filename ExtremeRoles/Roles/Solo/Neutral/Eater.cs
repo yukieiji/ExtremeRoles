@@ -374,10 +374,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             if (eaterButton.CurAbilityNum != 0) { return; }
 
-            RPCOperator.Call(
-                rolePlayer.NetId,
-                RPCOperator.Command.SetRoleWin,
-                new List<byte> { rolePlayer.PlayerId });
+            RPCOperator.RoleIsWin(rolePlayer.PlayerId);
             this.IsWin = true;
         }
 

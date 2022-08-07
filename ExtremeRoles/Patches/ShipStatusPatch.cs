@@ -380,6 +380,9 @@ namespace ExtremeRoles.Patches
                         case ExtremeRoleId.Eater:
                             endReason = (GameOverReason)RoleGameOverReason.EaterAllEatInTheShip;
                             break;
+                        case ExtremeRoleId.Umbrer:
+                            endReason = (GameOverReason)RoleGameOverReason.UmbrerBiohazard;
+                            break;
                         default :
                             break;
                     }
