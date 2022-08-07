@@ -363,12 +363,34 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (!CachedShipStatus.Instance.enabled ||
                 ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
 
-            foreach (Arrow arrow in this.deadBodyArrow.Values)
+            DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
+            HashSet<byte> existDeadBodyPlayerId = new HashSet<byte>();
+            for (int i = 0; i < array.Length; ++i)
             {
-                arrow.Update();
+                byte playerId = GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId;
+
+                if (this.deadBodyArrow.TryGetValue(playerId, out Arrow arrow))
+                {
+                    arrow.Update();
+                    existDeadBodyPlayerId.Add(playerId);
+                }
             }
 
-            if (this.eatButton == null) { return; }
+            HashSet<byte> removePlayerId = new HashSet<byte>();
+            foreach (byte playerId in this.deadBodyArrow.Keys)
+            {
+                if (!existDeadBodyPlayerId.Contains(playerId))
+                {
+                    removePlayerId.Add(playerId);
+                }
+            }
+
+            foreach (byte playerId in removePlayerId)
+            {
+                this.deadBodyArrow[playerId].Clear();
+                this.deadBodyArrow.Remove(playerId);
+            }
+
 
             EaterAbilityButton eaterButton = (EaterAbilityButton)this.eatButton;
 
