@@ -416,9 +416,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 parentOps, 3.0f);
 
             CreateFloatOption(
+                UmbrerOption.InfectRange,
+                0.8f, 0.1f, 3.0f, 0.1f,
+                parentOps);
+
+            CreateFloatOption(
                 UmbrerOption.UpgradeVirusTime,
                 3.5f, 0.5f, 10.0f, 0.1f,
-                parentOps);
+                parentOps,
+                format: OptionUnit.Second);
 
             CreateFloatOption(
                 UmbrerOption.KeepUpgradedVirus,
@@ -434,7 +440,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             this.range = allOpt[GetRoleOptionId(UmbrerOption.Range)].GetValue();
             this.infectRange = allOpt[GetRoleOptionId(UmbrerOption.InfectRange)].GetValue();
-            this.timer = allOpt[GetRoleOptionId(UmbrerOption.KeepUpgradedVirus)].GetValue();
+            this.maxTimer = allOpt[GetRoleOptionId(UmbrerOption.KeepUpgradedVirus)].GetValue();
 
             abilityInit();
         }
