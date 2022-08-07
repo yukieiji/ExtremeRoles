@@ -102,7 +102,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void IntroEndSetUp()
         {
-            if (this.canMoveVentToVent) { return; }
+            if (!this.UseVent || this.canMoveVentToVent) { return; }
             
             // 全てのベントリンクを解除
             foreach (Vent vent in CachedShipStatus.Instance.AllVents)
@@ -146,7 +146,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 taskGage >= this.seeFromImpostorTaskGage &&
                 !this.isUpdateMadmate)
             {
-                this.isUpdateMadmate = false;
+                this.isUpdateMadmate = true;
                 RPCOperator.Call(
                     CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                     RPCOperator.Command.MadmateToFakeImpostor,
@@ -201,6 +201,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             var allOpt = OptionHolder.AllOption;
             this.isSeeImpostorNow = false;
+            this.isUpdateMadmate = false;
 
             this.UseVent = allOpt[
                 GetRoleOptionId(MadmateOption.CanUseVent)].GetValue();
