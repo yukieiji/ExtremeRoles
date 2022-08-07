@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -11,6 +12,8 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 
 using ExtremeRoles.Module.AbilityButton.Roles;
+
+using BepInEx.IL2CPP.Utils.Collections;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
@@ -444,20 +447,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
                 if (!this.targetPlayer.Data.IsDead) { return; }
 
-                RPCOperator.Call(
-                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                    RPCOperator.Command.CleanDeadBody,
-                    new List<byte> { this.targetPlayer.PlayerId });
-                RPCOperator.CleanDeadBody(this.targetPlayer.PlayerId);
-
-                this.targetPlayer = null;
-
-                if (this.eatButton == null) { return; }
-
-                EaterAbilityButton eaterButton = (EaterAbilityButton)this.eatButton;
-
-                eaterButton.SetAbilityCoolTime(
-                    eaterButton.CurButtonCoolTime * this.killEatCoolTimePenalty);
+                CachedPlayerControl.LocalPlayer.PlayerControl.StartCoroutine(
+                    this.cleanDeadBodyOps(
+                        this.targetPlayer.PlayerId).WrapToIl2Cpp());
             }
             this.isActivated = true;
         }
@@ -576,5 +568,44 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.Button.SetAbilityCoolTime(this.defaultCoolTime);
             this.Button.ResetCoolTimer();
         }
+
+        private IEnumerator cleanDeadBodyOps(byte targetPlayerId)
+        {
+            DeadBody checkDeadBody = null;
+
+            DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
+            for (int i = 0; i < array.Length; ++i)
+            {
+                if (GameData.Instance.GetPlayerById(
+                    array[i].ParentId).PlayerId == targetPlayerId)
+                {
+                    checkDeadBody = array[i];
+                    break;
+                }
+            }
+
+            if (checkDeadBody == null) { yield break; }
+
+            while(!checkDeadBody.enabled)
+            {
+                yield return null;
+            }
+
+            RPCOperator.Call(
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                RPCOperator.Command.CleanDeadBody,
+                new List<byte> { targetPlayerId });
+            RPCOperator.CleanDeadBody(targetPlayerId);
+
+            this.targetPlayer = null;
+
+            if (this.eatButton == null) { yield break; }
+
+            EaterAbilityButton eaterButton = (EaterAbilityButton)this.eatButton;
+
+            eaterButton.SetAbilityCoolTime(
+                eaterButton.CurButtonCoolTime * this.killEatCoolTimePenalty);
+        }
+
     }
 }
