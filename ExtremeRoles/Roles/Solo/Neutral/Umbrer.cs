@@ -17,20 +17,16 @@ namespace ExtremeRoles.Roles.Solo.Neutral
     {
         private sealed class InfectedContainer
         {
-            public HashSet<PlayerControl> FirstStage => this.firstStage;
-            public HashSet<PlayerControl> FinalStage => this.finalStage;
+            public HashSet<byte> FirstStage => this.firstStage;
+            public HashSet<byte> FinalStage => this.finalStage;
 
-            private HashSet<PlayerControl> firstStage = new HashSet<PlayerControl>();
-            private HashSet<PlayerControl> finalStage = new HashSet<PlayerControl>();
+            private HashSet<byte> firstStage = new HashSet<byte>();
+            private HashSet<byte> finalStage = new HashSet<byte>();
 
             public InfectedContainer()
             {
                 this.firstStage.Clear();
                 this.finalStage.Clear();
-            }
-            public void AddPlayer(PlayerControl player)
-            {
-                finalStage.Add(player);
             }
 
             public bool IsAllPlayerInfected()
@@ -43,7 +39,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     if (player == null || player?.Object == null) { continue; }
                     if (player.IsDead || player.Disconnected) { continue; }
 
-                    if (!this.firstStage.Contains(player.Object))
+                    if (!this.firstStage.Contains(player.PlayerId))
                     {
                         return false;
                     }
@@ -52,14 +48,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 return true;
             }
 
-            public bool IsContain(PlayerControl player) =>
-                this.firstStage.Contains(player) || this.finalStage.Contains(player);
+            public bool IsContain(byte playerId) =>
+                this.firstStage.Contains(playerId) || this.finalStage.Contains(playerId);
 
-            public bool IsFirstStage(PlayerControl player) => 
-                this.firstStage.Contains(player);
+            public bool IsFirstStage(byte playerId) => 
+                this.firstStage.Contains(playerId);
 
-            public bool IsFinalStage(PlayerControl player) =>
-                this.finalStage.Contains(player);
+            public bool IsFinalStage(byte playerId) =>
+                this.finalStage.Contains(playerId);
 
             public void Update()
             {
@@ -67,23 +63,25 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 removeToHashSet(ref this.finalStage);
             }
 
-            private void removeToHashSet(ref HashSet<PlayerControl> cont)
+            private void removeToHashSet(ref HashSet<byte> cont)
             {
-                List<PlayerControl> remove = new List<PlayerControl>();
+                List<byte> remove = new List<byte>();
 
-                foreach (PlayerControl player in this.firstStage)
+                foreach (byte playerId in this.firstStage)
                 {
+
+                    GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
+
                     if (player == null ||
-                        player.Data == null ||
-                        player.Data.IsDead ||
-                        player.Data.Disconnected)
+                        player.IsDead ||
+                        player.Disconnected)
                     {
-                        remove.Add(player);
+                        remove.Add(playerId);
                     }
                 }
-                foreach (PlayerControl player in remove)
+                foreach (byte playerId in remove)
                 {
-                    cont.Remove(player);
+                    cont.Remove(playerId);
                 }
             }
 
@@ -312,19 +310,21 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void CleanUp()
         {
-            if (IsUpgrade())
+            if (this.container.IsFirstStage(this.target.PlayerId))
             {
-                this.container.FinalStage.Add(this.target);
+                this.container.FinalStage.Add(this.target.PlayerId);
                 this.timer.Add(this.target.PlayerId, maxTimer);
             }
             else
             {
-                this.container.FirstStage.Add(this.target);
+                this.container.FirstStage.Add(this.target.PlayerId);
             }
+            this.target = null;
         }
 
 
-        public bool IsUpgrade() => this.container.IsFirstStage(target);
+        public bool IsUpgrade() => this.container.IsFirstStage(
+            this.tmpTarget == null ? byte.MaxValue : this.tmpTarget.PlayerId);
 
         public bool IsAbilityUse()
         {
@@ -332,7 +332,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 CachedPlayerControl.LocalPlayer, this, this.range);
             if (this.tmpTarget == null) { return false; }
 
-            return this.IsCommonUse() && !this.container.IsFinalStage(this.tmpTarget);
+            return this.IsCommonUse() && !this.container.IsFinalStage(this.tmpTarget.PlayerId);
         }
 
         public void RoleAbilityResetOnMeetingStart()
@@ -364,21 +364,22 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 return;
             }
 
-            HashSet<PlayerControl> remove = new HashSet<PlayerControl> ();
+            HashSet<byte> remove = new HashSet<byte> ();
 
-            foreach (PlayerControl player in this.container.FinalStage)
+            foreach (byte playerId in this.container.FinalStage)
             {
-                this.timer[player.PlayerId] = this.timer[player.PlayerId] - Time.fixedDeltaTime;
-                if (this.timer[player.PlayerId] <= 0.0f ||
-                    isInfectOtherPlayer(player))
+                this.timer[playerId] = this.timer[playerId] - Time.fixedDeltaTime;
+                if (this.timer[playerId] <= 0.0f ||
+                    isInfectOtherPlayer(
+                        Helper.Player.GetPlayerControlById(playerId)))
                 {
-                    remove.Add(player);
+                    remove.Add(playerId);
                 }
             }
 
-            foreach (PlayerControl player in remove)
+            foreach (byte playerId in remove)
             {
-                this.container.FinalStage.Remove(player);
+                this.container.FinalStage.Remove(playerId);
             }
 
             this.container.Update();
@@ -446,6 +447,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         }
         private bool isInfectOtherPlayer(PlayerControl sourcePlayer)
         {
+            if (sourcePlayer == null) { return false; }
             Vector2 pos = sourcePlayer.GetTruePosition();
 
             foreach (GameData.PlayerInfo playerInfo in
@@ -468,7 +470,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                                 pos, vector.normalized,
                                 magnitude, Constants.ShipAndObjectsMask))
                         {
-                            this.container.AddPlayer(@object);
+                            this.container.FirstStage.Add(playerInfo.PlayerId);
                             return true;
                         }
                     }
@@ -499,8 +501,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             {
                 if (playerId == CachedPlayerControl.LocalPlayer.PlayerId) { continue; }
 
-                if (this.container.IsContain(
-                    Helper.Player.GetPlayerControlById(playerId)))
+                if (this.container.IsContain(playerId))
                 {
                     poolPlayer.gameObject.SetActive(false);
                 }
