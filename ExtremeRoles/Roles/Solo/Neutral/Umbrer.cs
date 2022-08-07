@@ -13,7 +13,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public sealed class Umbrer : SingleRoleBase, IRoleAbility, IRoleUpdate
+    public sealed class Umbrer : SingleRoleBase, IRoleAbility, IRoleSpecialSetUp, IRoleUpdate
     {
         private sealed class InfectedContainer
         {
@@ -228,6 +228,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             Range,
             UpgradeVirusTime,
+            InfectRange,
             KeepUpgradedVirus
         }
 
@@ -242,10 +243,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         private RoleAbilityButtonBase madmateAbilityButton;
         private InfectedContainer container;
+        private PlayerControl tmpTarget;
         private PlayerControl target;
         private float range;
+        private float infectRange;
         private float maxTimer;
-        private Dictionary<byte, float> timer = new Dictionary<byte, float>(); 
+        private Dictionary<byte, float> timer = new Dictionary<byte, float>();
+        private Dictionary<byte, PoolablePlayer> playerIcon = new Dictionary<byte, PoolablePlayer>();
+
 
         public Umbrer() : base(
             ExtremeRoleId.Umbrer,
@@ -272,10 +277,38 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 UseAbility,
                 IsAbilityUse,
                 new Vector3(-1.8f, -0.06f, 0),
-                CleanUp);
+                CleanUp,
+                IsAbilityCheck);
+            abilityInit();
         }
 
-        public bool UseAbility() => true;
+        public bool UseAbility()
+        {
+            this.target = this.tmpTarget;
+            return true;
+        }
+
+        public void IntroBeginSetUp()
+        {
+            return;
+        }
+
+        public void IntroEndSetUp()
+        {
+            this.playerIcon = Helper.Player.CreatePlayerIcon();
+            this.showIcon();
+        }
+
+
+        public bool IsAbilityCheck()
+        {
+            PlayerControl checkPlayer = Helper.Player.GetPlayerTarget(
+                CachedPlayerControl.LocalPlayer, this, this.range);
+
+            if (checkPlayer == null) { return false; }
+
+            return checkPlayer.PlayerId == this.target.PlayerId;
+        }
 
         public void CleanUp()
         {
@@ -295,16 +328,19 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public bool IsAbilityUse()
         {
-            this.target = Helper.Player.GetPlayerTarget(
+            this.tmpTarget = Helper.Player.GetPlayerTarget(
                 CachedPlayerControl.LocalPlayer, this, this.range);
-            if (this.target == null) { return false; }
+            if (this.tmpTarget == null) { return false; }
 
-            return this.IsCommonUse() && !this.container.IsFinalStage(this.target);
+            return this.IsCommonUse() && !this.container.IsFinalStage(this.tmpTarget);
         }
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            return;
+            foreach (var (_, poolPlayer) in this.playerIcon)
+            {
+                poolPlayer.gameObject.SetActive(false);
+            }
         }
 
         public void RoleAbilityResetOnMeetingEnd()
@@ -314,9 +350,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void Update(PlayerControl rolePlayer)
         {
-            if (CachedShipStatus.Instance == null ||
+            if (MeetingHud.Instance != null ||
+                CachedShipStatus.Instance == null ||
                 this.IsWin ||
-                GameData.Instance == null) { return; }
+                GameData.Instance == null ||
+                this.container == null) { return; }
             if (!CachedShipStatus.Instance.enabled) { return; }
 
             if (this.container.IsAllPlayerInfected())
@@ -326,7 +364,25 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 return;
             }
 
+            HashSet<PlayerControl> remove = new HashSet<PlayerControl> ();
+
+            foreach (PlayerControl player in this.container.FinalStage)
+            {
+                this.timer[player.PlayerId] = this.timer[player.PlayerId] - Time.fixedDeltaTime;
+                if (this.timer[player.PlayerId] <= 0.0f ||
+                    isInfectOtherPlayer(player))
+                {
+                    remove.Add(player);
+                }
+            }
+
+            foreach (PlayerControl player in remove)
+            {
+                this.container.FinalStage.Remove(player);
+            }
+
             this.container.Update();
+            this.showIcon();
         }
 
         public override bool IsSameTeam(SingleRoleBase targetRole)
@@ -376,9 +432,80 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             var allOpt = OptionHolder.AllOption;
 
+            this.range = allOpt[GetRoleOptionId(UmbrerOption.Range)].GetValue();
+            this.infectRange = allOpt[GetRoleOptionId(UmbrerOption.InfectRange)].GetValue();
             this.timer = allOpt[GetRoleOptionId(UmbrerOption.KeepUpgradedVirus)].GetValue();
 
-            this.RoleAbilityInit();
+            abilityInit();
+        }
+        private bool isInfectOtherPlayer(PlayerControl sourcePlayer)
+        {
+            Vector2 pos = sourcePlayer.GetTruePosition();
+
+            foreach (GameData.PlayerInfo playerInfo in
+                    GameData.Instance.AllPlayers.GetFastEnumerator())
+            {
+                if (playerInfo == null) { continue; }
+
+                if (!playerInfo.Disconnected &&
+                    !playerInfo.IsDead &&
+                    playerInfo.Object != null &&
+                    !playerInfo.Object.inVent)
+                {
+                    PlayerControl @object = playerInfo.Object;
+                    if (@object)
+                    {
+                        Vector2 vector = @object.GetTruePosition() - pos;
+                        float magnitude = vector.magnitude;
+                        if (magnitude <= this.infectRange &&
+                            !PhysicsHelpers.AnyNonTriggersBetween(
+                                pos, vector.normalized,
+                                magnitude, Constants.ShipAndObjectsMask))
+                        {
+                            this.container.AddPlayer(@object);
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        private void abilityInit()
+        {
+            if (this.Button == null) { return; }
+
+            var allOps = OptionHolder.AllOption;
+            this.Button.SetAbilityCoolTime(
+                allOps[GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)].GetValue());
+            this.Button.SetAbilityActiveTime(1.0f);
+            this.Button.ResetCoolTimer();
+        }
+
+        private void showIcon()
+        {
+            int visibleCounter = 0;
+            Vector3 bottomLeft = FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition;
+            bottomLeft.x *= -1;
+            bottomLeft += new Vector3(-0.25f, -0.25f, 0);
+
+            foreach (var (playerId, poolPlayer) in this.playerIcon)
+            {
+                if (playerId == CachedPlayerControl.LocalPlayer.PlayerId) { continue; }
+
+                if (this.container.IsContain(
+                    Helper.Player.GetPlayerControlById(playerId)))
+                {
+                    poolPlayer.gameObject.SetActive(false);
+                }
+                else
+                {
+                    poolPlayer.gameObject.SetActive(true);
+                    poolPlayer.transform.localScale = Vector3.one * 0.275f;
+                    poolPlayer.transform.localPosition = bottomLeft + Vector3.right * visibleCounter * 0.45f;
+                    ++visibleCounter;
+                }
+            }
         }
     }
 }
