@@ -235,6 +235,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         }
 
         private RoleAbilityButtonBase eatButton;
+        private PlayerControl tmpTarget;
         private PlayerControl targetPlayer;
         private GameData.PlayerInfo targetDeadBody;
         
@@ -306,7 +307,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public bool IsAbilityUse()
         {
 
-            this.targetPlayer = Player.GetPlayerTarget(
+            this.tmpTarget = Player.GetPlayerTarget(
                 CachedPlayerControl.LocalPlayer, this, this.range);
 
             this.targetDeadBody = Player.GetDeadBodyInfo(
@@ -314,7 +315,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             if (this.eatButton == null) { return false; }
 
-            bool hasPlayerTarget = this.targetPlayer != null;
+            bool hasPlayerTarget = this.tmpTarget != null;
             bool hasDedBodyTarget = this.targetDeadBody != null;
 
             ((EaterAbilityButton)this.eatButton).SetKillEatMode(
@@ -354,6 +355,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public bool UseAbility()
         {
+            this.targetPlayer = this.tmpTarget;
             return true;
         }
 
