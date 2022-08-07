@@ -209,6 +209,11 @@ namespace ExtremeRoles.Patches
                         noWinner,
                         new ExtremeRoleId[] { ExtremeRoleId.Queen, ExtremeRoleId.Servant });
                     break;
+                case RoleGameOverReason.UmbrerBiohazard:
+                    replaceWinnerToSpecificNeutralRolePlayer(
+                        noWinner,
+                        new ExtremeRoleId[] { ExtremeRoleId.Umbrer });
+                    break;
                 case RoleGameOverReason.ShipFallInLove:
                     replaceWinnerToSpecificRolePlayer(
                         ExtremeRoleId.Lover);

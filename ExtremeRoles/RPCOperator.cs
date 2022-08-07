@@ -78,6 +78,7 @@ namespace ExtremeRoles
             JesterOutburstKill,
             YandereSetOneSidedLover,
             TotocalcioSetBetPlayer,
+            MadmateToFakeImpostor,
 
             // 幽霊役職
             SetGhostRole,
@@ -572,6 +573,10 @@ namespace ExtremeRoles
         {
             Roles.Solo.Neutral.Totocalcio.SetBetTarget(
                 playerId, betPlayerId);
+        }
+        public static void MadmateToFakeImpostor(byte playerId)
+        {
+            Roles.Solo.Neutral.Madmate.ToFakeImpostor(playerId);
         }
 
         public static void SetGhostRole(

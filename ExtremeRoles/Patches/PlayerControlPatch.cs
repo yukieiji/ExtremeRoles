@@ -694,6 +694,11 @@ namespace ExtremeRoles.Patches
                     RPCOperator.TotocalcioSetBetPlayer(
                         totocalcioPlayerId, betPlayerId);
                     break;
+                case RPCOperator.Command.MadmateToFakeImpostor:
+                    byte madmatePlayerId = reader.ReadByte();
+                    RPCOperator.MadmateToFakeImpostor(
+                        madmatePlayerId);
+                    break;
                 case RPCOperator.Command.SetGhostRole:
                     RPCOperator.SetGhostRole(
                         ref reader);
