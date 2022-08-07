@@ -482,7 +482,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     !playerInfo.IsDead &&
                     playerInfo.Object != null &&
                     !playerInfo.Object.inVent &&
-                    (playerInfo.PlayerId == sourcePlayerId || playerInfo.PlayerId == rolePlayerId))
+                    (playerInfo.PlayerId != sourcePlayerId || playerInfo.PlayerId != rolePlayerId))
                 {
                     PlayerControl @object = playerInfo.Object;
                     if (@object)
