@@ -133,6 +133,8 @@ namespace ExtremeRoles.Roles
 
         QueenKillAllOther,
 
+        UmbrerBiohazard,
+
         UnKnown = 100,
     }
 
