@@ -58,6 +58,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             public bool IsFirstStage(PlayerControl player) => 
                 this.firstStage.Contains(player);
 
+            public bool IsFinalStage(PlayerControl player) =>
+                this.finalStage.Contains(player);
+
             public void Update()
             {
                 removeToHashSet(ref this.firstStage);
@@ -223,7 +226,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         }
         public enum UmbrerOption
         {
-            
+            Range,
+            UpgradeVirusTime,
+            KeepUpgradedVirus
         }
 
         public RoleAbilityButtonBase Button
@@ -237,6 +242,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         private RoleAbilityButtonBase madmateAbilityButton;
         private InfectedContainer container;
+        private PlayerControl target;
+        private float range;
+        private float maxTimer;
+        private Dictionary<byte, float> timer = new Dictionary<byte, float>(); 
 
         public Umbrer() : base(
             ExtremeRoleId.Umbrer,
@@ -248,20 +257,50 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void CreateAbility()
         {
-            this.CreateNormalAbilityButton(
-                Helper.Translation.GetString("selfKill"),
+            var allOpt = OptionHolder.AllOption;
+
+            this.Button = new UmbrerVirusAbility(
+                Helper.Translation.GetString("featVirus"),
+                Helper.Translation.GetString("upgradeVirus"),
                 Loader.CreateSpriteFromResources(
-                    Path.SucideSprite));
+                    Path.CarpenterSetCamera),
+                Loader.CreateSpriteFromResources(
+                    Path.CarpenterVentSeal),
+                (float)allOpt[GetRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime)].GetValue(),
+                (float)allOpt[GetRoleOptionId(UmbrerOption.UpgradeVirusTime)].GetValue(),
+                IsUpgrade,
+                UseAbility,
+                IsAbilityUse,
+                new Vector3(-1.8f, -0.06f, 0),
+                CleanUp);
         }
 
-        public bool UseAbility()
+        public bool UseAbility() => true;
+
+        public void CleanUp()
         {
-
-            
-            return true;
+            if (IsUpgrade())
+            {
+                this.container.FinalStage.Add(this.target);
+                this.timer.Add(this.target.PlayerId, maxTimer);
+            }
+            else
+            {
+                this.container.FirstStage.Add(this.target);
+            }
         }
 
-        public bool IsAbilityUse() => this.IsCommonUse();
+
+        public bool IsUpgrade() => this.container.IsFirstStage(target);
+
+        public bool IsAbilityUse()
+        {
+            this.target = Helper.Player.GetPlayerTarget(
+                CachedPlayerControl.LocalPlayer, this, this.range);
+            if (this.target == null) { return false; }
+
+            return this.IsCommonUse() && !this.container.IsFinalStage(this.target);
+        }
 
         public void RoleAbilityResetOnMeetingStart()
         {
@@ -312,9 +351,23 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         protected override void CreateSpecificOption(
             IOption parentOps)
         {
-            
+            CreateFloatOption(
+                UmbrerOption.Range,
+                1.0f, 0.1f, 4.0f, 0.1f,
+                parentOps);
 
-            this.CreateCommonAbilityOption(parentOps);
+            this.CreateCommonAbilityOption(
+                parentOps, 3.0f);
+
+            CreateFloatOption(
+                UmbrerOption.UpgradeVirusTime,
+                3.5f, 0.5f, 10.0f, 0.1f,
+                parentOps);
+
+            CreateFloatOption(
+                UmbrerOption.KeepUpgradedVirus,
+                10.0f, 2.5f, 30.0f, 0.1f,
+                parentOps);
         }
 
         protected override void RoleSpecificInit()
@@ -322,6 +375,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.container = new InfectedContainer();
 
             var allOpt = OptionHolder.AllOption;
+
+            this.timer = allOpt[GetRoleOptionId(UmbrerOption.KeepUpgradedVirus)].GetValue();
 
             this.RoleAbilityInit();
         }
