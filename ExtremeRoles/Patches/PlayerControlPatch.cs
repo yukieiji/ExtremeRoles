@@ -8,13 +8,13 @@ using HarmonyLib;
 using Hazel;
 
 using UnityEngine;
-using TMPro;
 
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
@@ -127,7 +127,7 @@ namespace ExtremeRoles.Patches
 
             var role = ExtremeRoleManager.GameRole[__instance.PlayerId];
 
-            if (!role.HasTask || role.IsNeutral())
+            if (!role.HasTask() || role.IsNeutral())
             {
                 __instance.ClearTasks();
             }
@@ -219,7 +219,7 @@ namespace ExtremeRoles.Patches
 
             HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
-            if (role.CanKill)
+            if (role.CanKill())
             {
                 if (enable)
                 {
@@ -279,7 +279,7 @@ namespace ExtremeRoles.Patches
 
             HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
-            if (role.UseSabotage)
+            if (role.CanUseSabotage())
             {
                 // インポスターとヴィジランテは死んでもサボタージ使える
                 if (enable && (role.IsImpostor() || role.Id == ExtremeRoleId.Vigilante))
@@ -310,7 +310,7 @@ namespace ExtremeRoles.Patches
 
             HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
-            if (role.UseVent)
+            if (role.CanUseVent())
             {
                 if (!role.IsVanillaRole())
                 {
@@ -694,6 +694,11 @@ namespace ExtremeRoles.Patches
                     RPCOperator.TotocalcioSetBetPlayer(
                         totocalcioPlayerId, betPlayerId);
                     break;
+                case RPCOperator.Command.MadmateToFakeImpostor:
+                    byte madmatePlayerId = reader.ReadByte();
+                    RPCOperator.MadmateToFakeImpostor(
+                        madmatePlayerId);
+                    break;
                 case RPCOperator.Command.SetGhostRole:
                     RPCOperator.SetGhostRole(
                         ref reader);
@@ -720,14 +725,15 @@ namespace ExtremeRoles.Patches
             if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
             var role = ExtremeRoleManager.GameRole[__instance.PlayerId];
+
+            bool hasOtherKillCool = role.TryGetKillCool(out float killCool);
+
             if (role.Id == ExtremeRoleId.Villain)
             {
-                guardBreakKill(__instance, target, role.KillCoolTime);
+                guardBreakKill(__instance, target, killCool);
                 return false; 
             }
-            if (!role.HasOtherKillCool) { return true; }
-
-            float killCool = role.KillCoolTime;
+            if (!hasOtherKillCool) { return true; }
 
             GameData.PlayerInfo data = target.Data;
             if (target.protectedByGuardian)
@@ -839,7 +845,7 @@ namespace ExtremeRoles.Patches
 
             var role = ExtremeRoleManager.GameRole[targetPlayerId];
 
-            if (!role.HasTask || role.IsNeutral())
+            if (!role.HasTask() || role.IsNeutral())
             {
                 target.ClearTasks();
             }
@@ -983,11 +989,11 @@ namespace ExtremeRoles.Patches
             if (killCool <= 0f) { return false; }
             float maxTime = killCool;
 
-            if (!role.CanKill) { return false; }
+            if (!role.CanKill()) { return false; }
 
-            if (role.HasOtherKillCool)
+            if (role.TryGetKillCool(out float otherKillCool))
             {
-                maxTime = role.KillCoolTime;
+                maxTime = otherKillCool;
             }
 
             __instance.killTimer = Mathf.Clamp(

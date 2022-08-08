@@ -6,6 +6,7 @@ using Hazel;
 using UnityEngine;
 
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API.Extension;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Helper
@@ -85,7 +86,7 @@ namespace ExtremeRoles.Helper
                  (playerInfo.Role) &&
                  (playerInfo.Role.TasksCountTowardProgress) &&
                  (PlayerControl.GameOptions.GhostsDoTasks || !playerInfo.IsDead) &&
-                  ExtremeRoleManager.GameRole[playerInfo.PlayerId].HasTask
+                  ExtremeRoleManager.GameRole[playerInfo.PlayerId].HasTask()
                 )
             {
 

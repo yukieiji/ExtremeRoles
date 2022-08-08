@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 using HarmonyLib;
 
 using UnityEngine;
+using ExtremeRoles.Roles.API.Extension;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Compat.Patches
@@ -171,7 +171,7 @@ namespace ExtremeRoles.Compat.Patches
         {
             if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
-            if (Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity) { return true; }
+            if (Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity()) { return true; }
 
 
             GameObject screenStatic = screenStaticInfo.GetValue(__instance) as GameObject;

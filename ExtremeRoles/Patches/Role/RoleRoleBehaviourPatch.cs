@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API.Extension;
 
 namespace ExtremeRoles.Patches.Role
 {
@@ -14,9 +15,9 @@ namespace ExtremeRoles.Patches.Role
 
             var role = ExtremeRoleManager.GameRole[__instance.Player.PlayerId];
 
-            if (!role.CanKill || !role.HasOtherKillRange) { return true; }
+            if (!role.CanKill() || !role.TryGetKillRange(out int range)) { return true; }
 
-            __result = GameOptionsData.KillDistances[role.KillRange];
+            __result = GameOptionsData.KillDistances[range];
 
             return false;
         }
@@ -35,7 +36,7 @@ namespace ExtremeRoles.Patches.Role
             var gameRoles = ExtremeRoleManager.GameRole;
             var role = ExtremeRoleManager.GameRole[__instance.Player.PlayerId];
 
-            if (!role.CanKill) { return true; }
+            if (!role.CanKill()) { return true; }
 
             __result = 
                 target != null && 

@@ -2,6 +2,7 @@
 using Hazel;
 using UnityEngine;
 
+using ExtremeRoles.Roles.API.Extension;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.MapModule
@@ -47,7 +48,7 @@ namespace ExtremeRoles.Patches.MapModule
                 return true; 
             }
 
-            bool roleCouldUse = Roles.ExtremeRoleManager.GameRole[playerInfo.PlayerId].UseVent;
+            bool roleCouldUse = Roles.ExtremeRoleManager.GameRole[playerInfo.PlayerId].CanUseVent();
 
             if (isCustomMapVent)
             {

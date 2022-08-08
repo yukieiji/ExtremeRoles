@@ -70,7 +70,9 @@ namespace ExtremeRoles.Resources
         public const string MinerSetMine = "ExtremeRoles.Resources.SetMine.png";
         public const string TotocalcioBetPlayer = "ExtremeRoles.Resources.BedPlayer.png";
         public const string QueenCharm = "ExtremeRoles.Resources.Charm.png";
-        public const string ServantSucide = "ExtremeRoles.Resources.Suicide.png";
+        public const string SucideSprite = "ExtremeRoles.Resources.Suicide.png";
+        public const string UmbrerFeatVirus = "ExtremeRoles.Resources.FeatVirus.png";
+        public const string UmbrerUpgradeVirus = "ExtremeRoles.Resources.UpgradeVirus.png";
 
         public const string TestButton = "ExtremeRoles.Resources.TESTBUTTON.png";
     }

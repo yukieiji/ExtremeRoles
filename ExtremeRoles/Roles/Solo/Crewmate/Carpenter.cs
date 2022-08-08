@@ -214,7 +214,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 return
                 (
                     (this.abilityNum - this.ventRemoveScrewNum >= 0 && this.isVentRemove) ||
-                    (this.abilityNum - this.cameraSetScrewNum >= 0)
+                    (this.abilityNum - this.cameraSetScrewNum >= 0 && !this.isVentRemove)
                 );
             }
 

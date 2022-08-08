@@ -355,6 +355,12 @@ namespace ExtremeRoles.Patches.Manager
                     textRenderer.color = ColorPalette.QueenWhite;
                     manager.BackgroundBar.material.SetColor("_Color", ColorPalette.QueenWhite);
                     break;
+                case (GameOverReason)RoleGameOverReason.UmbrerBiohazard:
+                    bonusText = Translation.GetString(
+                        ExtremeRoleId.Umbrer.ToString());
+                    textRenderer.color = ColorPalette.QueenWhite;
+                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.QueenWhite);
+                    break;
                 default:
                     break;
             }

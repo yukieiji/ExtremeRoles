@@ -104,9 +104,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.CreateCommonAbilityOption(
                 parentOps, 7.5f);
 
-            CreateIntOption(
+            CreateFloatOption(
                 OverLoaderOption.KillCoolReduceRate,
-                75, 50, 90, 1, parentOps,
+                75.0f, 50.0f, 90.0f, 1.0f, parentOps,
                 format: OptionUnit.Percentage);
             CreateFloatOption(
                 OverLoaderOption.MoveSpeed,

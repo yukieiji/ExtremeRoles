@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -11,6 +12,8 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 
 using ExtremeRoles.Module.AbilityButton.Roles;
+
+using BepInEx.IL2CPP.Utils.Collections;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
@@ -232,6 +235,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         }
 
         private RoleAbilityButtonBase eatButton;
+        private PlayerControl tmpTarget;
         private PlayerControl targetPlayer;
         private GameData.PlayerInfo targetDeadBody;
         
@@ -303,7 +307,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public bool IsAbilityUse()
         {
 
-            this.targetPlayer = Player.GetPlayerTarget(
+            this.tmpTarget = Player.GetPlayerTarget(
                 CachedPlayerControl.LocalPlayer, this, this.range);
 
             this.targetDeadBody = Player.GetDeadBodyInfo(
@@ -311,7 +315,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             if (this.eatButton == null) { return false; }
 
-            bool hasPlayerTarget = this.targetPlayer != null;
+            bool hasPlayerTarget = this.tmpTarget != null;
             bool hasDedBodyTarget = this.targetDeadBody != null;
 
             ((EaterAbilityButton)this.eatButton).SetKillEatMode(
@@ -351,6 +355,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public bool UseAbility()
         {
+            this.targetPlayer = this.tmpTarget;
             return true;
         }
 
@@ -363,21 +368,40 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (!CachedShipStatus.Instance.enabled ||
                 ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
 
-            foreach (Arrow arrow in this.deadBodyArrow.Values)
+            DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
+            HashSet<byte> existDeadBodyPlayerId = new HashSet<byte>();
+            for (int i = 0; i < array.Length; ++i)
             {
-                arrow.Update();
+                byte playerId = GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId;
+
+                if (this.deadBodyArrow.TryGetValue(playerId, out Arrow arrow))
+                {
+                    arrow.Update();
+                    existDeadBodyPlayerId.Add(playerId);
+                }
             }
 
-            if (this.eatButton == null) { return; }
+            HashSet<byte> removePlayerId = new HashSet<byte>();
+            foreach (byte playerId in this.deadBodyArrow.Keys)
+            {
+                if (!existDeadBodyPlayerId.Contains(playerId))
+                {
+                    removePlayerId.Add(playerId);
+                }
+            }
+
+            foreach (byte playerId in removePlayerId)
+            {
+                this.deadBodyArrow[playerId].Clear();
+                this.deadBodyArrow.Remove(playerId);
+            }
+
 
             EaterAbilityButton eaterButton = (EaterAbilityButton)this.eatButton;
 
             if (eaterButton.CurAbilityNum != 0) { return; }
 
-            RPCOperator.Call(
-                rolePlayer.NetId,
-                RPCOperator.Command.SetRoleWin,
-                new List<byte> { rolePlayer.PlayerId });
+            RPCOperator.RoleIsWin(rolePlayer.PlayerId);
             this.IsWin = true;
         }
 
@@ -422,20 +446,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
                 if (!this.targetPlayer.Data.IsDead) { return; }
 
-                RPCOperator.Call(
-                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                    RPCOperator.Command.CleanDeadBody,
-                    new List<byte> { this.targetPlayer.PlayerId });
-                RPCOperator.CleanDeadBody(this.targetPlayer.PlayerId);
-
-                this.targetPlayer = null;
-
-                if (this.eatButton == null) { return; }
-
-                EaterAbilityButton eaterButton = (EaterAbilityButton)this.eatButton;
-
-                eaterButton.SetAbilityCoolTime(
-                    eaterButton.CurButtonCoolTime * this.killEatCoolTimePenalty);
+                CachedPlayerControl.LocalPlayer.PlayerControl.StartCoroutine(
+                    this.cleanDeadBodyOps(
+                        this.targetPlayer.PlayerId).WrapToIl2Cpp());
             }
             this.isActivated = true;
         }
@@ -554,5 +567,44 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.Button.SetAbilityCoolTime(this.defaultCoolTime);
             this.Button.ResetCoolTimer();
         }
+
+        private IEnumerator cleanDeadBodyOps(byte targetPlayerId)
+        {
+            DeadBody checkDeadBody = null;
+
+            DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
+            for (int i = 0; i < array.Length; ++i)
+            {
+                if (GameData.Instance.GetPlayerById(
+                    array[i].ParentId).PlayerId == targetPlayerId)
+                {
+                    checkDeadBody = array[i];
+                    break;
+                }
+            }
+
+            if (checkDeadBody == null) { yield break; }
+
+            while(!checkDeadBody.enabled)
+            {
+                yield return null;
+            }
+
+            RPCOperator.Call(
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                RPCOperator.Command.CleanDeadBody,
+                new List<byte> { targetPlayerId });
+            RPCOperator.CleanDeadBody(targetPlayerId);
+
+            this.targetPlayer = null;
+
+            if (this.eatButton == null) { yield break; }
+
+            EaterAbilityButton eaterButton = (EaterAbilityButton)this.eatButton;
+
+            eaterButton.SetAbilityCoolTime(
+                eaterButton.CurButtonCoolTime * this.killEatCoolTimePenalty);
+        }
+
     }
 }

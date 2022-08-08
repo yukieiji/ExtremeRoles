@@ -126,7 +126,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             CreateFloatOption(
                 BountyHunterOption.ArrowUpdateCycle,
-                60f, 1.0f, 120f, 0.5f,
+                10f, 1.0f, 120f, 0.5f,
                 arrowOption, format: OptionUnit.Second);
 
         }

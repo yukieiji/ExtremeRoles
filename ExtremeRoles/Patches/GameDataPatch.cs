@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using ExtremeRoles.Roles.API.Extension;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
@@ -61,7 +62,7 @@ namespace ExtremeRoles.Patches
 					roles.ContainsKey(playerInfo.PlayerId))
 				{
 
-					if (!roles[playerInfo.PlayerId].HasTask)
+					if (!roles[playerInfo.PlayerId].HasTask())
 					{
 						continue;
 					}

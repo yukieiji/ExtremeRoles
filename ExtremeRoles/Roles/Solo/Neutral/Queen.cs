@@ -358,6 +358,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
 
             if (targetRole.Id == ExtremeRoleId.Servant &&
+                this.IsSameControlId(targetRole) &&
                 this.ServantPlayerId.Contains(targetPlayerId))
             {
                 return ColorPalette.QueenWhite;
@@ -550,7 +551,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 this.UseAbility,
                 this.IsAbilityUse,
                 Loader.CreateSpriteFromResources(
-                    Path.ServantSucide),
+                    Path.SucideSprite),
                 new Vector3(-1.8f, -0.06f, 0),
                 null, null,
                 KeyCode.F, false);
@@ -563,7 +564,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             
             if (MeetingHud.Instance ||
-                source.PlayerId == target.PlayerId) { return; }
+                source.PlayerId == target.PlayerId ||
+                ExtremeRoleManager.GameRole[source.PlayerId] == this) { return; }
 
             var hudManager = FastDestroyableSingleton<HudManager>.Instance;
 

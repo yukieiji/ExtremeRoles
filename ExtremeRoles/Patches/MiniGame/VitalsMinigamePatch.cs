@@ -6,6 +6,7 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
@@ -30,7 +31,7 @@ namespace ExtremeRoles.Patches.MiniGame
 
             if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
-            if (ExtremeRoleManager.GetLocalPlayerRole().CanUseVital) { return true; }
+            if (ExtremeRoleManager.GetLocalPlayerRole().CanUseVital()) { return true; }
 
             __instance.SabText.text = Translation.GetString("youDonotUse");
 

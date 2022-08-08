@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 
 using UnityEngine;
+using ExtremeRoles.Roles.API.Extension;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.MiniGame
@@ -12,7 +13,7 @@ namespace ExtremeRoles.Patches.MiniGame
         {
             if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return; }
 
-            if (!Roles.ExtremeRoleManager.GetLocalPlayerRole().CanCallMeeting)
+            if (!Roles.ExtremeRoleManager.GetLocalPlayerRole().CanCallMeeting())
             {
                 __instance.StatusText.text = Helper.Translation.GetString("youDonotUse");
                 __instance.NumberText.text = string.Empty;

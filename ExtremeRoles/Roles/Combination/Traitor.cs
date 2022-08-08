@@ -334,6 +334,25 @@ namespace ExtremeRoles.Roles.Combination
             this.chargeTime.gameObject.SetActive(true);
         }
 
+        public override bool IsSameTeam(SingleRoleBase targetRole)
+        {
+            if (this.Id == targetRole.Id)
+            {
+                if (OptionHolder.Ship.IsSameNeutralSameWin)
+                {
+                    return true;
+                }
+                else
+                {
+                    return this.IsSameControlId(targetRole);
+                }
+            }
+            else
+            {
+                return base.IsSameTeam(targetRole);
+            }
+        }
+
         public override bool TryRolePlayerKillTo(PlayerControl rolePlayer, PlayerControl targetPlayer)
         {
             this.canUseButton = true;

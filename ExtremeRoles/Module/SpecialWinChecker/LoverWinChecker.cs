@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension;
 using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Roles.Solo.Neutral;
 
@@ -34,7 +34,7 @@ namespace ExtremeRoles.Module.SpecialWinChecker
                 this.loverNum = OptionHolder.AllOption[((MultiAssignRoleBase)role).GetManagerOptionId(
                     CombinationRoleCommonOption.AssignsNum)].GetValue();
             }
-            if (!role.HasTask)
+            if (!role.HasTask())
             {
                 ++this.nonTasker;
             }

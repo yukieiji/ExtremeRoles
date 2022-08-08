@@ -10,6 +10,7 @@ using Hazel;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches
@@ -91,7 +92,7 @@ namespace ExtremeRoles.Patches
                 {
                     GameData.PlayerInfo playerInfo = GameData.Instance.AllPlayers[i];
                     var role = dict[playerInfo.PlayerId];
-                    if (!role.HasTask)
+                    if (!role.HasTask())
                     {
                         continue;
                     }
@@ -109,7 +110,7 @@ namespace ExtremeRoles.Patches
                 {
                     GameData.PlayerInfo playerInfo = GameData.Instance.AllPlayers[i];
                     var role = dict[playerInfo.PlayerId];
-                    if (!role.HasTask)
+                    if (!role.HasTask())
                     {
                         continue;
                     }
@@ -217,11 +218,11 @@ namespace ExtremeRoles.Patches
 
                 var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
 
-                if (role.CanKill && KeyboardJoystick.player.GetButtonDown(8))
+                if (role.CanKill() && KeyboardJoystick.player.GetButtonDown(8))
                 {
                     FastDestroyableSingleton<HudManager>.Instance.KillButton.DoClick();
                 }
-                if (role.UseVent && KeyboardJoystick.player.GetButtonDown(50))
+                if (role.CanUseVent() && KeyboardJoystick.player.GetButtonDown(50))
                 {
                     if(role.IsVanillaRole())
                     {
