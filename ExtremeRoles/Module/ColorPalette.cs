@@ -43,7 +43,7 @@ namespace ExtremeRoles.Module
         public readonly static Color EaterMaroon = new Color32(102, 43, 44, byte.MaxValue);
         public readonly static Color TraitorLightShikon = new Color32(76, 16, 80, byte.MaxValue);
         public readonly static Color QueenWhite = new Color32(240, 240, 210, byte.MaxValue);
-        public readonly static Color UmbrerRed = new Color32(142, 0, 21, byte.MaxValue);
+        public readonly static Color UmbrerRed = new Color32(200, 0, 21, byte.MaxValue);
 
         public readonly static Color PoltergeistLightKenpou = new Color32(84, 82, 75, byte.MaxValue);
         public readonly static Color FaunusAntiquewhite = new Color32(250, 235, 215, byte.MaxValue);
