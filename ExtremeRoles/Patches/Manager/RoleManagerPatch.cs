@@ -271,11 +271,11 @@ namespace ExtremeRoles.Patches.Manager
                         ) &&
                         (
                             (extremeRolesData.CrewmateRoles - reduceCrewmateRole >= 0) && 
-                            crewNum >= reduceCrewmateRole
+                            crewNum >= reduceCrewmateRole + reduceNeutralRole
                         ) &&
                         (
                             (extremeRolesData.NeutralRoles - reduceNeutralRole >= 0) && 
-                            crewNum >= reduceNeutralRole
+                            crewNum >= reduceCrewmateRole + reduceNeutralRole
                         ) &&
                         (
                             (extremeRolesData.ImpostorRoles - reduceImpostorRole >= 0) && 
