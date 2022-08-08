@@ -310,7 +310,8 @@ namespace ExtremeRoles.Module
             return nameClean.Trim();
         }
 
-        public abstract dynamic GetValue();
+        public dynamic GetValue() => GetOptionValue();
+        protected abstract OutType GetOptionValue();
     }
 
     public sealed class BoolCustomOption : CustomOptionBase<bool, string>
@@ -332,8 +333,7 @@ namespace ExtremeRoles.Module
                 format, invert,
                 enableCheckOption, tab)
         { }
-
-        public override dynamic GetValue() => CurSelection > 0;
+        protected override bool GetOptionValue() => CurSelection > 0;
     }
 
     public sealed class FloatCustomOption : CustomOptionBase<float, float>
@@ -356,8 +356,7 @@ namespace ExtremeRoles.Module
                 format, invert,
                 enableCheckOption, tab)
         { }
-
-        public override dynamic GetValue() => Selections[CurSelection];
+        protected override float GetOptionValue() => Selections[CurSelection];
 
         private static List<float> createSelection(float min, float max, float step)
         {
@@ -404,8 +403,7 @@ namespace ExtremeRoles.Module
             this.minValue = this.Selections[0];
             this.maxValue = this.Selections[this.ValueCount - 1];
         }
-
-        public override dynamic GetValue() => Selections[CurSelection];
+        protected override int GetOptionValue() => Selections[CurSelection];
 
         public override void Update(int newValue)
         {
@@ -459,8 +457,7 @@ namespace ExtremeRoles.Module
         {
             this.step = step;
         }
-
-        public override dynamic GetValue() => Selections[CurSelection];
+        protected override int GetOptionValue() => Selections[CurSelection];
 
         public override void Update(int newValue)
         {
@@ -518,8 +515,7 @@ namespace ExtremeRoles.Module
         {
             this.step = step;
         }
-
-        public override dynamic GetValue() => Selections[CurSelection];
+        protected override float GetOptionValue() => Selections[CurSelection];
 
         public override void Update(float newValue)
         {
@@ -598,8 +594,7 @@ namespace ExtremeRoles.Module
                 format, invert, enableCheckOption)
         { }
 
-
-        public override dynamic GetValue() => CurSelection;
+        protected override int GetOptionValue() => CurSelection;
     }
 
     public static class CustomOption
