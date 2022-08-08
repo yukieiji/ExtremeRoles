@@ -266,7 +266,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             ExtremeRoleId.Umbrer,
             ExtremeRoleType.Neutral,
             ExtremeRoleId.Umbrer.ToString(),
-            Palette.ImpostorRed,
+            ColorPalette.UmbrerRed,
             false, false, false, false)
         { }
 
@@ -278,9 +278,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 Helper.Translation.GetString("featVirus"),
                 Helper.Translation.GetString("upgradeVirus"),
                 Loader.CreateSpriteFromResources(
-                    Path.CarpenterSetCamera),
+                    Path.UmbrerFeatVirus),
                 Loader.CreateSpriteFromResources(
-                    Path.CarpenterVentSeal),
+                    Path.UmbrerUpgradeVirus),
                 (float)allOpt[GetRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime)].GetValue(),
                 (float)allOpt[GetRoleOptionId(UmbrerOption.UpgradeVirusTime)].GetValue(),
                 IsUpgrade,
