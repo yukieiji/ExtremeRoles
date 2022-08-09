@@ -39,7 +39,9 @@ def stringToJson(filename, outputFile):
       
       if data:
         stringData[name] = data
-    
+
+  os.makedirs(os.path.dirname(outputFile))
+  
   with open(outputFile, "w") as f:
     json.dump(stringData, f, indent=4)
 
