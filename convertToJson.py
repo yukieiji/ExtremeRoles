@@ -40,7 +40,7 @@ def stringToJson(filename, outputFile):
       if data:
         stringData[name] = data
 
-  os.makedirs(os.path.dirname(outputFile))
+  os.makedirs(os.path.dirname(outputFile), exist_ok=True)
   
   with open(outputFile, "w") as f:
     json.dump(stringData, f, indent=4)
