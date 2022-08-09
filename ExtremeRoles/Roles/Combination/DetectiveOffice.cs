@@ -775,7 +775,9 @@ namespace ExtremeRoles.Roles.Combination
             {
                 this.callAnotherButton = true;
             }
-            CleanUp();
+
+            UnityEngine.Object.Destroy(this.meeting);
+            this.useAbility = false;
         }
 
         public bool UseAbility()

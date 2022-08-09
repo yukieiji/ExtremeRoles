@@ -66,7 +66,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
 
         public override void ReseOnMeetingStart()
         {
-            this.saboGame = null;
+            Object.Destroy(this.saboGame);
         }
 
         protected override void CreateSpecificOption(
