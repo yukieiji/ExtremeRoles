@@ -3,8 +3,8 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
-        <!--<Version>3.2.1.0</Version>-->
-        <VersionPrefix>3.2.1</VersionPrefix>
+        <Version>3.2.1.1</Version>
+        <!--<VersionPrefix>3.2.1</VersionPrefix>-->
 		    <VersionSuffix>Neutral</VersionSuffix> 
         <Description>Extreme Roles for Advanced user</Description>
         <Authors>yukieiji</Authors>
