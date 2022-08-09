@@ -306,7 +306,14 @@ namespace ExtremeRoles.Roles.Combination
             {
                 this.chargeTime.gameObject.SetActive(false);
             }
-            CleanUp();
+            if (this.minigame != null)
+            {
+                this.minigame.Close();
+            }
+            if (MapBehaviour.Instance)
+            {
+                MapBehaviour.Instance.Close();
+            }
         }
 
         public void Update(PlayerControl rolePlayer)
