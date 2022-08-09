@@ -71,6 +71,10 @@ namespace ExtremeRoles.Roles.Solo
                 $"{this.GetColoredRoleName()}: {Helper.Translation.GetString("crewImportantText")}");
 
         }
+        protected override void CommonInit()
+        {
+            return;
+        }
         protected override void RoleSpecificInit()
         {
             return;

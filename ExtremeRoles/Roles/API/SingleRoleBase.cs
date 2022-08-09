@@ -117,7 +117,7 @@ namespace ExtremeRoles.Roles.API
 
         public virtual bool IsTeamsWin() => this.IsWin;
 
-        protected sealed override void CommonInit()
+        protected override void CommonInit()
         {
             var baseOption = PlayerControl.GameOptions;
             var allOption = OptionHolder.AllOption;
