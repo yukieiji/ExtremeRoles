@@ -38,6 +38,7 @@ namespace ExtremeRoles.Module
             Assassinate,
             DeadAssassinate,
             Surrender,
+            Zombied,
 
             Disconnected,
         }
@@ -190,9 +191,9 @@ namespace ExtremeRoles.Module
                 }
                 else if (playerInfo.PlayerId == this.ExiledAssassinId)
                 {
-                    if (this.DeadPlayerInfo.ContainsKey(playerInfo.PlayerId))
+                    if (this.DeadPlayerInfo.TryGetValue(
+                        playerInfo.PlayerId, out DeadInfo info))
                     {
-                        var info = this.DeadPlayerInfo[playerInfo.PlayerId];
                         finalStatus = info.Reason;
                     }
                 }
@@ -201,15 +202,32 @@ namespace ExtremeRoles.Module
                     finalStatus = PlayerStatus.Surrender;
                 }
             }
+            else if ((this.EndReason == (GameOverReason)RoleGameOverReason.UmbrerBiohazard))
+            {
+                if (role.Id != ExtremeRoleId.Umbrer &&
+                    !playerInfo.IsDead &&
+                    !playerInfo.Disconnected)
+                {
+                    finalStatus = PlayerStatus.Zombied;
+                }
+                else
+                {
+                    if (this.DeadPlayerInfo.TryGetValue(
+                        playerInfo.PlayerId, out DeadInfo info))
+                    {
+                        finalStatus = info.Reason;
+                    }
+                }
+            }
             else if (playerInfo.Disconnected)
             {
                 finalStatus = PlayerStatus.Disconnected;
             }
             else
             {
-                if (this.DeadPlayerInfo.ContainsKey(playerInfo.PlayerId))
+                if (this.DeadPlayerInfo.TryGetValue(
+                        playerInfo.PlayerId, out DeadInfo info))
                 {
-                    var info = this.DeadPlayerInfo[playerInfo.PlayerId];
                     finalStatus = info.Reason;
                 }
             }
