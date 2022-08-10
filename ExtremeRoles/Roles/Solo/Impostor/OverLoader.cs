@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -7,17 +10,30 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public sealed class OverLoader : SingleRoleBase, IRoleAbility
+    public sealed class OverLoader : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTypes>
     {
 
         public enum OverLoaderOption
         {
+            AwakeImpostorNum,
+            AwakeKillCount,
             KillCoolReduceRate,
             MoveSpeed
+        }
+
+        public RoleTypes NoneAwakeRole => RoleTypes.Impostor;
+
+        public bool IsAwake
+        {
+            get
+            {
+                return GameSystem.IsLobby || this.isAwake;
+            }
         }
 
         public bool IsOverLoad;
@@ -25,6 +41,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private float reduceRate;
         private float defaultKillCool;
         private int defaultKillRange;
+
+        private bool isAwake;
+        private int awakeImpNum;
+        private int awakeKillCount;
+        private int killCount;
+
+        private bool isAwakedHasOtherVision;
+        private bool isAwakedHasOtherKillCool;
+        private bool isAwakedHasOtherKillRange;
 
 
         public RoleAbilityButtonBase Button
@@ -73,6 +98,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool IsAbilityUse() => this.IsCommonUse();
 
+
         public void RoleAbilityResetOnMeetingEnd()
         {
             return;
@@ -80,7 +106,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            CleanUp();
+            if (IsAwake)
+            {
+                CleanUp();
+            }
         }
 
         public bool UseAbility()
@@ -98,9 +127,137 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             abilityOff();
         }
 
+        public string GetFakeOptionString() => "";
+
+        public void Update(PlayerControl rolePlayer)
+        {
+            if (!this.isAwake)
+            {
+                if (this.Button != null)
+                {
+                    this.Button.SetActive(false);
+                }
+
+                int impNum = 0;
+
+                foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
+                {
+                    if (ExtremeRoleManager.GameRole[player.PlayerId].IsImpostor() &&
+                        (!player.IsDead && !player.Disconnected))
+                    {
+                        ++impNum;
+                    }
+                }
+
+                if (this.awakeImpNum >= impNum && this.killCount >= this.awakeKillCount)
+                {
+                    this.isAwake = true;
+                    this.HasOtherVison = this.isAwakedHasOtherVision;
+                    this.HasOtherKillCool = this.isAwakedHasOtherKillCool;
+                    this.HasOtherKillRange = this.isAwakedHasOtherKillRange;
+                }
+            }
+        }
+
+        public override bool TryRolePlayerKillTo(
+            PlayerControl rolePlayer, PlayerControl targetPlayer)
+        {
+            if (!IsAwake)
+            {
+                ++this.killCount;
+            }
+            return true;
+        }
+
+        public override string GetColoredRoleName(bool isTruthColor = false)
+        {
+            if (isTruthColor || IsAwake)
+            {
+                return base.GetColoredRoleName();
+            }
+            else
+            {
+                return Design.ColoedString(
+                    Palette.ImpostorRed, Translation.GetString(RoleTypes.Impostor.ToString()));
+            }
+        }
+        public override string GetFullDescription()
+        {
+            if (IsAwake)
+            {
+                return Translation.GetString(
+                    $"{this.Id}FullDescription");
+            }
+            else
+            {
+                return Translation.GetString(
+                    $"{RoleTypes.Impostor}FullDescription");
+            }
+        }
+
+        public override string GetImportantText(bool isContainFakeTask = true)
+        {
+            if (IsAwake)
+            {
+                return base.GetImportantText(isContainFakeTask);
+
+            }
+            else
+            {
+                return string.Concat(new string[]
+                {
+                    FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                        StringNames.ImpostorTask, Array.Empty<Il2CppSystem.Object>()),
+                    "\r\n",
+                    Palette.ImpostorRed.ToTextColor(),
+                    FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                        StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()),
+                    "</color>"
+                });
+            }
+        }
+
+        public override string GetIntroDescription()
+        {
+            if (IsAwake)
+            {
+                return base.GetIntroDescription();
+            }
+            else
+            {
+                return Design.ColoedString(
+                    Palette.ImpostorRed,
+                    CachedPlayerControl.LocalPlayer.Data.Role.Blurb);
+            }
+        }
+
+        public override Color GetNameColor(bool isTruthColor = false)
+        {
+            if (isTruthColor || IsAwake)
+            {
+                return base.GetNameColor(isTruthColor);
+            }
+            else
+            {
+                return Palette.ImpostorRed;
+            }
+        }
+
+
         protected override void CreateSpecificOption(
             IOption parentOps)
         {
+            CreateIntOption(
+                OverLoaderOption.AwakeImpostorNum,
+                OptionHolder.MaxImposterNum, 1,
+                OptionHolder.MaxImposterNum, 1,
+                parentOps);
+
+            CreateIntOption(
+                OverLoaderOption.AwakeKillCount,
+                0, 0, 3, 1,
+                parentOps);
+
             this.CreateCommonAbilityOption(
                 parentOps, 7.5f);
 
@@ -133,10 +290,48 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             var allOption = OptionHolder.AllOption;
 
+            this.awakeImpNum = allOption[
+                GetRoleOptionId(OverLoaderOption.AwakeImpostorNum)].GetValue();
+            this.awakeKillCount = allOption[
+                GetRoleOptionId(OverLoaderOption.AwakeKillCount)].GetValue();
+
             this.MoveSpeed = allOption[
                 GetRoleOptionId(OverLoaderOption.MoveSpeed)].GetValue();
             this.reduceRate = allOption[
                 GetRoleOptionId(OverLoaderOption.KillCoolReduceRate)].GetValue();
+
+            this.killCount = 0;
+
+            this.isAwakedHasOtherVision = false;
+            this.isAwakedHasOtherKillCool = true;
+            this.isAwakedHasOtherKillRange = false;
+
+            if (this.HasOtherVison)
+            {
+                this.HasOtherVison = false;
+                this.isAwakedHasOtherVision = true;
+            }
+
+            this.defaultKillCool = this.KillCoolTime;
+
+            if (this.HasOtherKillCool)
+            {
+                this.HasOtherKillCool = false;
+            }
+
+            if (this.HasOtherKillRange)
+            {
+                this.HasOtherKillRange = false;
+                this.isAwakedHasOtherKillRange = true;
+            }
+
+            if (this.awakeImpNum >= PlayerControl.GameOptions.NumImpostors)
+            {
+                this.isAwake = true;
+                this.HasOtherVison = this.isAwakedHasOtherVision;
+                this.HasOtherKillCool = this.isAwakedHasOtherKillCool;
+                this.HasOtherKillRange = this.isAwakedHasOtherKillRange;
+            }
 
             this.RoleAbilityInit();
         }
@@ -160,6 +355,5 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             SwitchAbility(
                 CachedPlayerControl.LocalPlayer.PlayerId, false);
         }
-
     }
 }
