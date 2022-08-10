@@ -149,7 +149,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     }
                 }
 
-                if (this.awakeImpNum >= impNum && this.killCount >= this.awakeKillCount)
+                if (this.awakeImpNum >= impNum && 
+                    this.killCount >= this.awakeKillCount)
                 {
                     this.isAwake = true;
                     this.HasOtherVison = this.isAwakedHasOtherVision;
@@ -162,7 +163,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public override bool TryRolePlayerKillTo(
             PlayerControl rolePlayer, PlayerControl targetPlayer)
         {
-            if (!IsAwake)
+            if (!this.isAwake)
             {
                 ++this.killCount;
             }
@@ -325,7 +326,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.isAwakedHasOtherKillRange = true;
             }
 
-            if (this.awakeImpNum >= PlayerControl.GameOptions.NumImpostors)
+            if (this.awakeImpNum >= PlayerControl.GameOptions.NumImpostors && 
+                this.awakeKillCount == 0)
             {
                 this.isAwake = true;
                 this.HasOtherVison = this.isAwakedHasOtherVision;
