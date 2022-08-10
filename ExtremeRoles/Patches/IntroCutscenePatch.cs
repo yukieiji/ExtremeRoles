@@ -26,9 +26,16 @@ namespace ExtremeRoles.Patches
             if (role.IsNeutral())
             {
                 __instance.BackgroundBar.material.color = Module.ColorPalette.NeutralColor;
-                __instance.TeamTitle.text = Helper.Translation.GetString("Neutral");
+                __instance.TeamTitle.text = Translation.GetString("Neutral");
                 __instance.TeamTitle.color = Module.ColorPalette.NeutralColor;
-                __instance.ImpostorText.text = Helper.Translation.GetString("neutralIntro");
+                __instance.ImpostorText.text = Translation.GetString("neutralIntro");
+            }
+            else if (role.Id == ExtremeRoleId.Xion)
+            {
+                __instance.BackgroundBar.material.color = Module.ColorPalette.NeutralColor;
+                __instance.TeamTitle.text = Translation.GetString("yourHost");
+                __instance.TeamTitle.color = Module.ColorPalette.NeutralColor;
+                __instance.ImpostorText.text = Translation.GetString("youAreNewRuleEditor");
             }
         }
 
@@ -40,7 +47,7 @@ namespace ExtremeRoles.Patches
             var role = ExtremeRoleManager.GetLocalPlayerRole();
 
             // Intro solo teams
-            if (role.IsNeutral())
+            if (role.IsNeutral() || role.Id == ExtremeRoleId.Xion)
             {
                 var soloTeam = new Il2CppSystem.Collections.Generic.List<PlayerControl>();
                 soloTeam.Add(CachedPlayerControl.LocalPlayer);
@@ -232,12 +239,12 @@ namespace ExtremeRoles.Patches
                 if (role.IsImpostor())
                 {
                     __instance.RoleBlurbText.text +=
-                        $"\n{Helper.Translation.GetString("impostorIntroText")}";
+                        $"\n{Translation.GetString("impostorIntroText")}";
                 }
                 else if (role.IsCrewmate() && role.HasTask())
                 {
                     __instance.RoleBlurbText.text +=
-                        $"\n{Helper.Translation.GetString("crewIntroText")}";
+                        $"\n{Translation.GetString("crewIntroText")}";
                 }
             }
 

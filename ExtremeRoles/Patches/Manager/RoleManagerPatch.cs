@@ -17,9 +17,23 @@ namespace ExtremeRoles.Patches.Manager
     [HarmonyPatch(typeof(RoleManager), nameof(RoleManager.SelectRoles))]
     public static class RoleManagerSelectRolesPatch
     {
+        private static List<IAssignedPlayer> roleList = new List<IAssignedPlayer>();
+        public static void Prefix()
+        {
+            if (OptionHolder.AllOption[(int)OptionHolder.CommonOptionKey.UseXion].GetValue())
+            {
+                var loaclPlayer = PlayerControl.LocalPlayer;
 
-        private static List<IAssignedPlayer> roleList;
+                bool isHost(PlayerControl x) => x == loaclPlayer;
 
+                PlayerControl.AllPlayerControls.RemoveAll(
+                    (Il2CppSystem.Predicate<PlayerControl>)isHost);
+                roleList.Add(new AssignedPlayerToSingleRoleData(
+                    loaclPlayer.PlayerId, (int)ExtremeRoleId.Xion));
+                loaclPlayer.RpcSetRole(RoleTypes.Crewmate);
+                loaclPlayer.Data.IsDead = true;
+            }
+        }
         public static void Postfix()
         {
 
@@ -33,7 +47,7 @@ namespace ExtremeRoles.Patches.Manager
             RoleAssignmentData extremeRolesData = createRoleData();
             var playerIndexList = Enumerable.Range(0, playeres.Count()).ToList();
 
-            List<IAssignedPlayer> assignedPlayerData = new List<IAssignedPlayer>();
+            List<IAssignedPlayer> assignedPlayerData = roleList;
             Dictionary<byte, ExtremeRoleType> combRoleAssignedPlayerId = new Dictionary<byte, ExtremeRoleType>();
 
             createCombinationExtremeRoleAssign(

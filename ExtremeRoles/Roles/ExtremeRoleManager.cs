@@ -85,6 +85,8 @@ namespace ExtremeRoles.Roles
         Servant,
         Madmate,
         Umbrer,
+        
+        Xion, 
     }
 
     public enum CombinationRoleType
@@ -387,9 +389,20 @@ namespace ExtremeRoles.Roles
         public static void SetPlyerIdToSingleRoleId(
             int roleId, byte playerId)
         {
+
             if (!Enum.IsDefined(typeof(RoleTypes), Convert.ToUInt16(roleId)))
             {
-                setPlyerIdToSingleRole(playerId, NormalRole[roleId]);
+                SingleRoleBase role;
+                if (roleId != (int)ExtremeRoleId.Xion)
+                {
+                    role = NormalRole[roleId];
+                }
+                else
+                {
+                    role = new Solo.Xion();
+                }
+
+                setPlyerIdToSingleRole(playerId, role);
             }
             else
             {
