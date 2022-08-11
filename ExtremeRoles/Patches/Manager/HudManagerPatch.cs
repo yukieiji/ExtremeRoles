@@ -336,6 +336,7 @@ namespace ExtremeRoles.Patches.Manager
             byte targetPlayerId,
             Color targetColor)
         {
+            /*
             if (MeetingHud.Instance != null)
             {
                 foreach (PlayerVoteArea voteArea in MeetingHud.Instance.playerStates)
@@ -346,6 +347,7 @@ namespace ExtremeRoles.Patches.Manager
                     }
                 }
             }
+            */
         }
 
         private static void setGhostVoteAreaColor(
@@ -354,6 +356,7 @@ namespace ExtremeRoles.Patches.Manager
             bool voteNamePaintBlock,
             bool isSameTeam)
         {
+            /*
             if (MeetingHud.Instance != null)
             {
                 foreach (PlayerVoteArea voteArea in MeetingHud.Instance.playerStates)
@@ -366,6 +369,7 @@ namespace ExtremeRoles.Patches.Manager
                     }
                 }
             }
+            */
         }
 
         private static void playerInfoUpdate(
@@ -408,8 +412,10 @@ namespace ExtremeRoles.Patches.Manager
                 // Set the position every time bc it sometimes ends up in the wrong place due to camoflauge
                 playerInfo.transform.localPosition = player.cosmetics.nameText.transform.localPosition + Vector3.up * 0.5f;
 
+                /*
                 PlayerVoteArea playerVoteArea = null;
                 TextMeshPro meetingInfo = null;
+  
                 if (MeetingHud.Instance)
                 {
                     if (!allMeetingInfo.TryGetValue(player.PlayerId, out meetingInfo) ||
@@ -430,6 +436,7 @@ namespace ExtremeRoles.Patches.Manager
                         }
                     }
                 }
+                */
 
                 var (playerInfoText, meetingInfoText) = getRoleAndMeetingInfo(
                     localPlayer, player, commsActive);
@@ -457,11 +464,13 @@ namespace ExtremeRoles.Patches.Manager
             TextMeshPro meetingInfo,
             string text, bool active)
         {
+            /*
             if (meetingInfo != null)
             {
                 meetingInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ? "" : text;
                 meetingInfo.gameObject.SetActive(active);
             }
+            */
         }
 
         private static bool isBlockCondition(
