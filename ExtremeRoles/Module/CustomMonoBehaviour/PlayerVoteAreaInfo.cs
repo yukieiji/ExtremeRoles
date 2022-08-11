@@ -26,8 +26,8 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             this.nameText = pva.NameText;
 
             this.meetingInfo = UnityEngine.Object.Instantiate(
-                this.nameText, this.nameText.transform.parent);
-            this.meetingInfo.transform.localPosition += Vector3.down * 0.20f;
+                this.nameText, this.nameText.transform);
+            this.meetingInfo.transform.localPosition += Vector3.down * 0.20f + Vector3.left * 0.30f;
             this.meetingInfo.fontSize *= 0.63f;
             this.meetingInfo.autoSizeTextContainer = false;
             this.meetingInfo.gameObject.name = "Info";
@@ -142,8 +142,8 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             this.nameText = pva.NameText;
 
             this.meetingInfo = UnityEngine.Object.Instantiate(
-                this.nameText, this.nameText.transform.parent);
-            this.meetingInfo.transform.localPosition += Vector3.down * 0.20f;
+                this.nameText, this.nameText.transform);
+            this.meetingInfo.transform.localPosition += Vector3.down * 0.20f + Vector3.left * 0.30f;
             this.meetingInfo.fontSize *= 0.63f;
             this.meetingInfo.autoSizeTextContainer = false;
             this.meetingInfo.gameObject.name = "Info";
