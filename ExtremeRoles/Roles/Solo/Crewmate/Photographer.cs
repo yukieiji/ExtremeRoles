@@ -17,9 +17,50 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 {
     public sealed class Photographer : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTypes>
     {
+        private sealed class PhotoCamera
+        {
+            public bool IsUpgraded = false;
+
+            private float range;
+
+            public PhotoCamera(float range)
+            {
+                this.range = range;
+            }
+            public void Reset()
+            {
+            }
+
+            public void TakePhoto()
+            {
+                Vector3 photoCenter = CachedPlayerControl.LocalPlayer.PlayerControl.transform.position;
+
+                foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
+                {
+                    if (player == null ||
+                        player.IsDead ||
+                        player.Disconnected ||
+                        player.Object == null) { continue; }
+
+                    Vector3 position = player.Object.transform.position;
+                    if (this.range >= Vector2.Distance(photoCenter, position))
+                    {
+                    }
+
+                }
+
+            }
+            public override string ToString()
+            {
+
+            }
+        }
+
         public enum PhotographerOption
         {
             AwakeTaskGage,
+            PhotoRange,
+            UpgradePhotoTaskGage
         }
 
         public RoleAbilityButtonBase Button
@@ -46,6 +87,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private float awakeTaskGage;
         private bool awakeHasOtherVision;
 
+        private float upgradePhotoTaskGage;
+        private PhotoCamera photoCreater;
+
         public Photographer() : base(
             ExtremeRoleId.Photographer,
             ExtremeRoleType.Crewmate,
@@ -66,9 +110,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public bool UseAbility()
         {
-
-            
-
+            this.photoCreater.TakePhoto();
             return true;
         }
 
@@ -83,12 +125,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void RoleAbilityResetOnMeetingEnd()
         {
+            this.photoCreater.Reset();
             return;
         }
 
         public void Update(PlayerControl rolePlayer)
         {
-            if (!this.awakeRole)
+            if (!this.awakeRole || !this.photoCreater.IsUpgraded)
             {
                 float taskGage = Player.GetPlayerTaskGage(rolePlayer);
 
@@ -96,6 +139,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 {
                     this.awakeRole = true;
                     this.HasOtherVison = this.awakeHasOtherVision;
+                }
+                if (taskGage >= this.upgradePhotoTaskGage && !this.photoCreater.IsUpgraded)
+                {
+                    this.photoCreater.IsUpgraded = true;
                 }
             }
         }
@@ -176,6 +223,16 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 parentOps,
                 format: OptionUnit.Percentage);
 
+            CreateIntOption(
+                PhotographerOption.UpgradePhotoTaskGage,
+                60, 0, 100, 10,
+                parentOps,
+                format: OptionUnit.Percentage);
+
+            CreateFloatOption(
+                PhotographerOption.PhotoRange,
+                10.0f, 0.0f, 25f, 0.1f,
+                parentOps);
 
             this.CreateAbilityCountOption(
                 parentOps, 5, 10);
@@ -185,6 +242,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             this.awakeTaskGage = (float)OptionHolder.AllOption[
                 GetRoleOptionId(PhotographerOption.AwakeTaskGage)].GetValue() / 100.0f;
+            this.upgradePhotoTaskGage = (float)OptionHolder.AllOption[
+                GetRoleOptionId(PhotographerOption.UpgradePhotoTaskGage)].GetValue() / 100.0f;
 
             this.awakeHasOtherVision = this.HasOtherVison;
 
@@ -198,6 +257,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 this.awakeRole = false;
                 this.HasOtherVison = false;
             }
+
+            this.photoCreater = new PhotoCamera(
+                (float)OptionHolder.AllOption[
+                    GetRoleOptionId(PhotographerOption.PhotoRange)].GetValue());
+
+            this.photoCreater.IsUpgraded = this.upgradePhotoTaskGage <= 0.0f;
 
             this.RoleAbilityInit();
 
