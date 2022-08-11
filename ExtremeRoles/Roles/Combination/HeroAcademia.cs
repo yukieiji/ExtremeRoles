@@ -5,10 +5,10 @@ using UnityEngine;
 using Hazel;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Helper.Neutral;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;

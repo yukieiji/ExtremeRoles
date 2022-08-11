@@ -1,7 +1,4 @@
-﻿using System;
-using ExtremeRoles.Roles.API;
-
-namespace ExtremeRoles.Helper.Neutral
+﻿namespace ExtremeRoles.Roles.API.Extension.Neutral
 {
     public static class NeutralRoleExtension
     {

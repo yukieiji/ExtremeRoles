@@ -2,7 +2,7 @@
 using Hazel;
 using UnityEngine;
 
-using ExtremeRoles.Roles.API.Extension;
+using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.MapModule

@@ -5,9 +5,9 @@ using Hazel;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Helper.Neutral;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Neutral

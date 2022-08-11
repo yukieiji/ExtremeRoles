@@ -5,10 +5,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Helper.Neutral;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 

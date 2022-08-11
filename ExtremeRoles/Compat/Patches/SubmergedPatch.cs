@@ -5,7 +5,7 @@ using System.Reflection;
 using HarmonyLib;
 
 using UnityEngine;
-using ExtremeRoles.Roles.API.Extension;
+using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Compat.Patches
