@@ -184,6 +184,7 @@ namespace ExtremeRoles.Patches.Manager
                 {
                     player.cosmetics.SetNameColor(Color.white);
                 }
+                /*
                 if (MeetingHud.Instance != null)
                 {
                     foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)
@@ -204,6 +205,7 @@ namespace ExtremeRoles.Patches.Manager
                         break;
                     }
                 }
+                */
             }
 
             if (localPlayer.Data.Role.IsImpostor)
@@ -213,6 +215,7 @@ namespace ExtremeRoles.Patches.Manager
                 foreach (PlayerControl player in impostors)
                 {
                     player.cosmetics.SetNameColor(Palette.ImpostorRed);
+                    /*
                     if (MeetingHud.Instance != null)
                     {
                         foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)
@@ -221,6 +224,7 @@ namespace ExtremeRoles.Patches.Manager
                             pva.NameText.color = Palette.ImpostorRed;
                         }
                     }
+                    */
                 }
             }
 
@@ -282,7 +286,7 @@ namespace ExtremeRoles.Patches.Manager
                     if (paintColor == Palette.ClearWhite) { continue; }
 
                     targetPlayer.cosmetics.SetNameColor(paintColor);
-                    setVoteAreaColor(targetPlayerId, paintColor);
+                    // setVoteAreaColor(targetPlayerId, paintColor);
                 }
                 else
                 {
@@ -292,11 +296,13 @@ namespace ExtremeRoles.Patches.Manager
                     {
                         targetPlayer.cosmetics.SetNameColor(roleColor);
                     }
+                    /*
                     setGhostVoteAreaColor(
                         targetPlayerId,
                         roleColor,
                         meetingInfoBlock,
                         targetRole.Team == playerRole.Team);
+                    */
                 }
             }
         }
@@ -313,7 +319,7 @@ namespace ExtremeRoles.Patches.Manager
                 if (tag == string.Empty) { continue; }
 
                 targetPlayer.cosmetics.nameText.text += tag;
-
+                /*
                 if (MeetingHud.Instance != null)
                 {
                     foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)
@@ -322,6 +328,7 @@ namespace ExtremeRoles.Patches.Manager
                         pva.NameText.text += tag;
                     }
                 }
+                */
             }
         }
 
@@ -431,17 +438,17 @@ namespace ExtremeRoles.Patches.Manager
                 if (player.PlayerId == localPlayer.PlayerId)
                 {
                     playerInfo.gameObject.SetActive(player.Visible);
-                    setMeetingInfo(meetingInfo, meetingInfoText, true);
+                    // setMeetingInfo(meetingInfo, meetingInfoText, true);
                 }
                 else if (blockCondition)
                 {
                     playerInfo.gameObject.SetActive(false);
-                    setMeetingInfo(meetingInfo, "", false);
+                    // setMeetingInfo(meetingInfo, "", false);
                 }
                 else
                 {
                     playerInfo.gameObject.SetActive((player.Visible && !playeringInfoBlock));
-                    setMeetingInfo(meetingInfo, meetingInfoText, !meetingInfoBlock);
+                    // setMeetingInfo(meetingInfo, meetingInfoText, !meetingInfoBlock);
                 }
             }
         }

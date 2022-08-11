@@ -8,6 +8,8 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 
+using UnhollowerBaseLib.Attributes;
+
 namespace ExtremeRoles.Module.CustomMonoBehaviour
 {
     [Il2CppRegister]
@@ -66,6 +68,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             }
         }
 
+        [HideFromIl2Cpp]
         private void setColor(
             SingleRoleBase role,
             GhostRoleBase ghostRole)
@@ -82,6 +85,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             this.nameText.color = paintColor;
         }
 
+        [HideFromIl2Cpp]
         private void setInfo(
             SingleRoleBase role,
             GhostRoleBase ghostRole)
@@ -90,6 +94,8 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                 "" : getMeetingInfo(role, ghostRole);
             meetingInfo.gameObject.SetActive(true);
         }
+
+        [HideFromIl2Cpp]
         private string getMeetingInfo(
             SingleRoleBase role, GhostRoleBase ghostRole)
         {
@@ -108,6 +114,8 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
             return $"{roleNames} {taskInfo}".Trim(); ;
         }
+
+        [HideFromIl2Cpp]
         private void setTag(SingleRoleBase role)
         {
             string tag = role.GetRolePlayerNameTag(
@@ -199,6 +207,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             }
         }
 
+        [HideFromIl2Cpp]
         private void setNameColor(
             SingleRoleBase localRole,
             SingleRoleBase targetRole,
@@ -243,6 +252,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             }
         }
 
+        [HideFromIl2Cpp]
         private void setMeetingInfo(
             SingleRoleBase targetRole,
             GhostRoleBase targetGhostRole,
@@ -261,6 +271,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             }
         }
 
+        [HideFromIl2Cpp]
         private string getMeetingInfo(
             SingleRoleBase targetRole,
             GhostRoleBase targetGhostRole)
@@ -294,6 +305,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             return meetingInfoText;
         }
 
+        [HideFromIl2Cpp]
         private void setPlayerNameTag(
             SingleRoleBase localRole,
             SingleRoleBase targetRole)
@@ -305,6 +317,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             this.nameText.text += tag;
         }
 
+        [HideFromIl2Cpp]
         private bool isBlockCondition(SingleRoleBase role)
         {
             if (this.localPlayer.Data.Role.Role == RoleTypes.GuardianAngel)

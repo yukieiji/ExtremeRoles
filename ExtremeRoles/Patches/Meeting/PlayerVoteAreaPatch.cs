@@ -7,6 +7,7 @@ using HarmonyLib;
 using UnityEngine;
 
 using BepInEx.IL2CPP.Utils.Collections;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.GhostRoles;
@@ -43,6 +44,19 @@ namespace ExtremeRoles.Patches.Meeting
 	{
 		public static void Postfix(PlayerVoteArea __instance, GameData.PlayerInfo playerInfo)
 		{
+			if (playerInfo.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
+			{
+				var infoUpdater = __instance.gameObject.AddComponent<LocalPlayerVoteAreaInfo>();
+				infoUpdater.SetPlayerVoteArea(__instance);
+				infoUpdater.gameObject.SetActive(true);
+			}
+			else
+			{
+				var infoUpdater = __instance.gameObject.AddComponent<OtherPlayerVoteAreaInfo>();
+				infoUpdater.SetPlayerVoteArea(__instance);
+				infoUpdater.gameObject.SetActive(true);
+			}
+
 			NamePlateHelper.UpdateNameplate(
 				__instance, playerInfo.PlayerId);
 		}
