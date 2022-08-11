@@ -102,20 +102,17 @@ namespace ExtremeRoles.Patches.Manager
             resetNameTagsAndColors(player);
 
             bool blockCondition = isBlockCondition(player, role) || ghostRole != null;
-            bool meetingInfoBlock = role.IsBlockShowMeetingRoleInfo() || ghostRole != null;
             bool playeringInfoBlock = role.IsBlockShowPlayingRoleInfo() || ghostRole != null;
 
             playerInfoUpdate(
                 player,
                 blockCondition,
-                meetingInfoBlock,
                 playeringInfoBlock);
 
             setPlayerNameColor(
                 player,
                 role, ghostRole,
                 blockCondition,
-                meetingInfoBlock,
                 playeringInfoBlock);
             setPlayerNameTag(role);
 
@@ -201,7 +198,6 @@ namespace ExtremeRoles.Patches.Manager
             SingleRoleBase playerRole,
             GhostRoleBase playerGhostRole,
             bool blockCondition,
-            bool meetingInfoBlock,
             bool playeringInfoBlock)
         {
             var localPlayerId = localPlayer.PlayerId;
@@ -282,7 +278,6 @@ namespace ExtremeRoles.Patches.Manager
         private static void playerInfoUpdate(
             CachedPlayerControl localPlayer,
             bool blockCondition,
-            bool meetingInfoBlock,
             bool playeringInfoBlock)
         {
 
@@ -316,8 +311,7 @@ namespace ExtremeRoles.Patches.Manager
                     allPlayerInfo[player.PlayerId] = playerInfo;
                 }
 
-                var (playerInfoText, meetingInfoText) = getRoleAndMeetingInfo(
-                    localPlayer, player, commsActive);
+                string playerInfoText = getRoleInfo(localPlayer, player, commsActive);
                 playerInfo.text = playerInfoText;
 
                 if (player.PlayerId == localPlayer.PlayerId)
@@ -351,7 +345,7 @@ namespace ExtremeRoles.Patches.Manager
 
         }
 
-        private static (string, string) getRoleAndMeetingInfo(
+        private static string getRoleInfo(
             CachedPlayerControl localPlayer,
             PlayerControl targetPlayer,
             bool commonActive)
@@ -372,7 +366,6 @@ namespace ExtremeRoles.Patches.Manager
             string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({completedStr}/{tasksTotal})</color>" : "";
 
             string playerInfoText = "";
-            string meetingInfoText = "";
 
             if (targetPlayer.PlayerId == localPlayer.PlayerId)
             {
@@ -387,24 +380,20 @@ namespace ExtremeRoles.Patches.Manager
                     tabText.SetText(
                         $"{FastDestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Tasks)} {taskInfo}");
                 }
-                meetingInfoText = $"{roleNames} {taskInfo}".Trim();
             }
             else if (OptionHolder.Client.GhostsSeeRole && OptionHolder.Client.GhostsSeeTask)
             {
                 playerInfoText = $"{roleNames} {taskInfo}".Trim();
-                meetingInfoText = playerInfoText;
             }
             else if (OptionHolder.Client.GhostsSeeTask)
             {
                 playerInfoText = $"{taskInfo}".Trim();
-                meetingInfoText = playerInfoText;
             }
             else if (OptionHolder.Client.GhostsSeeRole)
             {
                 playerInfoText = $"{roleNames}";
-                meetingInfoText = playerInfoText;
             }
-            return (playerInfoText, meetingInfoText);
+            return playerInfoText;
         }
 
 
