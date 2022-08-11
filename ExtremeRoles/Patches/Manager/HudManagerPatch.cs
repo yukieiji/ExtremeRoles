@@ -46,12 +46,10 @@ namespace ExtremeRoles.Patches.Manager
         private static bool buttonCreated = false;
 
         private static Dictionary<byte, TextMeshPro> allPlayerInfo = new Dictionary<byte, TextMeshPro>();
-        private static Dictionary<byte, TextMeshPro> allMeetingInfo = new Dictionary<byte, TextMeshPro>();
         private static TextMeshPro tabText;
 
         public static void Reset()
         {
-            allMeetingInfo.Clear();
             allPlayerInfo.Clear();
             tabText = null;
         }
@@ -184,28 +182,6 @@ namespace ExtremeRoles.Patches.Manager
                 {
                     player.cosmetics.SetNameColor(Color.white);
                 }
-                /*
-                if (MeetingHud.Instance != null)
-                {
-                    foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)
-                    {
-                        if (pva.TargetPlayerId != player.PlayerId) { continue; }
-
-                        pva.NameText.text = player.Data.PlayerName;
-
-                        if (localPlayer.Data.Role.IsImpostor &&
-                            player.Data.Role.IsImpostor)
-                        {
-                            pva.NameText.color = Palette.ImpostorRed;
-                        }
-                        else
-                        {
-                            pva.NameText.color = Palette.White;
-                        }
-                        break;
-                    }
-                }
-                */
             }
 
             if (localPlayer.Data.Role.IsImpostor)
@@ -215,16 +191,6 @@ namespace ExtremeRoles.Patches.Manager
                 foreach (PlayerControl player in impostors)
                 {
                     player.cosmetics.SetNameColor(Palette.ImpostorRed);
-                    /*
-                    if (MeetingHud.Instance != null)
-                    {
-                        foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)
-                        {
-                            if (player.PlayerId != pva.TargetPlayerId) { continue; }
-                            pva.NameText.color = Palette.ImpostorRed;
-                        }
-                    }
-                    */
                 }
             }
 
@@ -251,7 +217,6 @@ namespace ExtremeRoles.Patches.Manager
                 localRoleColor = (localRoleColor / 2.0f) + (ghostRoleColor / 2.0f);
             }
             localPlayer.cosmetics.SetNameColor(localRoleColor);
-            setVoteAreaColor(localPlayerId, localRoleColor);
 
             GhostRoleBase targetGhostRole;
 
@@ -286,7 +251,6 @@ namespace ExtremeRoles.Patches.Manager
                     if (paintColor == Palette.ClearWhite) { continue; }
 
                     targetPlayer.cosmetics.SetNameColor(paintColor);
-                    // setVoteAreaColor(targetPlayerId, paintColor);
                 }
                 else
                 {
@@ -296,13 +260,6 @@ namespace ExtremeRoles.Patches.Manager
                     {
                         targetPlayer.cosmetics.SetNameColor(roleColor);
                     }
-                    /*
-                    setGhostVoteAreaColor(
-                        targetPlayerId,
-                        roleColor,
-                        meetingInfoBlock,
-                        targetRole.Team == playerRole.Team);
-                    */
                 }
             }
         }
@@ -319,57 +276,7 @@ namespace ExtremeRoles.Patches.Manager
                 if (tag == string.Empty) { continue; }
 
                 targetPlayer.cosmetics.nameText.text += tag;
-                /*
-                if (MeetingHud.Instance != null)
-                {
-                    foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)
-                    {
-                        if (targetPlayer.PlayerId != pva.TargetPlayerId) { continue; }
-                        pva.NameText.text += tag;
-                    }
-                }
-                */
             }
-        }
-
-        private static void setVoteAreaColor(
-            byte targetPlayerId,
-            Color targetColor)
-        {
-            /*
-            if (MeetingHud.Instance != null)
-            {
-                foreach (PlayerVoteArea voteArea in MeetingHud.Instance.playerStates)
-                {
-                    if (voteArea.NameText != null && targetPlayerId == voteArea.TargetPlayerId)
-                    {
-                        voteArea.NameText.color = targetColor;
-                    }
-                }
-            }
-            */
-        }
-
-        private static void setGhostVoteAreaColor(
-            byte targetPlayerId,
-            Color targetColor,
-            bool voteNamePaintBlock,
-            bool isSameTeam)
-        {
-            /*
-            if (MeetingHud.Instance != null)
-            {
-                foreach (PlayerVoteArea voteArea in MeetingHud.Instance.playerStates)
-                {
-                    if (voteArea.NameText != null &&
-                        targetPlayerId == voteArea.TargetPlayerId &&
-                        (!voteNamePaintBlock || isSameTeam))
-                    {
-                        voteArea.NameText.color = targetColor;
-                    }
-                }
-            }
-            */
         }
 
         private static void playerInfoUpdate(
@@ -409,35 +316,6 @@ namespace ExtremeRoles.Patches.Manager
                     allPlayerInfo[player.PlayerId] = playerInfo;
                 }
 
-                // Set the position every time bc it sometimes ends up in the wrong place due to camoflauge
-                playerInfo.transform.localPosition = player.cosmetics.nameText.transform.localPosition + Vector3.up * 0.5f;
-
-                /*
-                PlayerVoteArea playerVoteArea = null;
-                TextMeshPro meetingInfo = null;
-  
-                if (MeetingHud.Instance)
-                {
-                    if (!allMeetingInfo.TryGetValue(player.PlayerId, out meetingInfo) ||
-                        meetingInfo == null)
-                    {
-                        playerVoteArea = MeetingHud.Instance.playerStates?.FirstOrDefault(x => x.TargetPlayerId == player.PlayerId);
-
-                        if (playerVoteArea != null)
-                        {
-                            meetingInfo = UnityEngine.Object.Instantiate(
-                                playerVoteArea.NameText,
-                                playerVoteArea.NameText.transform.parent);
-                            meetingInfo.transform.localPosition += Vector3.down * 0.20f;
-                            meetingInfo.fontSize *= 0.63f;
-                            meetingInfo.autoSizeTextContainer = true;
-                            meetingInfo.gameObject.name = "Info";
-                            allMeetingInfo[player.PlayerId] = meetingInfo;
-                        }
-                    }
-                }
-                */
-
                 var (playerInfoText, meetingInfoText) = getRoleAndMeetingInfo(
                     localPlayer, player, commsActive);
                 playerInfo.text = playerInfoText;
@@ -445,32 +323,16 @@ namespace ExtremeRoles.Patches.Manager
                 if (player.PlayerId == localPlayer.PlayerId)
                 {
                     playerInfo.gameObject.SetActive(player.Visible);
-                    // setMeetingInfo(meetingInfo, meetingInfoText, true);
                 }
                 else if (blockCondition)
                 {
                     playerInfo.gameObject.SetActive(false);
-                    // setMeetingInfo(meetingInfo, "", false);
                 }
                 else
                 {
                     playerInfo.gameObject.SetActive((player.Visible && !playeringInfoBlock));
-                    // setMeetingInfo(meetingInfo, meetingInfoText, !meetingInfoBlock);
                 }
             }
-        }
-
-        private static void setMeetingInfo(
-            TextMeshPro meetingInfo,
-            string text, bool active)
-        {
-            /*
-            if (meetingInfo != null)
-            {
-                meetingInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ? "" : text;
-                meetingInfo.gameObject.SetActive(active);
-            }
-            */
         }
 
         private static bool isBlockCondition(
