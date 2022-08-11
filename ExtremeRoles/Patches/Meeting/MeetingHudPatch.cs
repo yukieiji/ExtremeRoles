@@ -7,6 +7,7 @@ using UnityEngine;
 
 using UnhollowerBaseLib;
 
+using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -625,6 +626,35 @@ namespace ExtremeRoles.Patches.Meeting
 
             return false;
         }
+
+        public static void Postfix(MeetingHud __instance)
+        {
+            for (int i = 0; i < __instance.playerStates.Length; i++)
+            {
+                PlayerVoteArea playerVoteArea = __instance.playerStates[i];
+
+                if(playerVoteArea.TargetPlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
+                {
+                
+                    if (__instance.gameObject.GetComponent<LocalPlayerVoteAreaInfo>() == null)
+                    {
+                        var infoUpdater = __instance.gameObject.AddComponent<LocalPlayerVoteAreaInfo>();
+                        infoUpdater.SetPlayerVoteArea(playerVoteArea);
+                        infoUpdater.gameObject.SetActive(true);
+                    }
+                }
+                else
+                {
+                    if (__instance.gameObject.GetComponent<OtherPlayerVoteAreaInfo>() == null)
+                    {
+                        var infoUpdater = __instance.gameObject.AddComponent<OtherPlayerVoteAreaInfo>();
+                        infoUpdater.SetPlayerVoteArea(playerVoteArea);
+                        infoUpdater.gameObject.SetActive(true);
+                    }
+                }
+            }
+        }
+
         private static int playerName2Int(PlayerVoteArea pva)
         {
             var player = GameData.Instance.GetPlayerById(pva.TargetPlayerId);
