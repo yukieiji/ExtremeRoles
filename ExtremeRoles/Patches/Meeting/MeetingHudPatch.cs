@@ -629,28 +629,24 @@ namespace ExtremeRoles.Patches.Meeting
 
         public static void Postfix(MeetingHud __instance)
         {
+            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return; }
+            
             for (int i = 0; i < __instance.playerStates.Length; i++)
             {
                 PlayerVoteArea playerVoteArea = __instance.playerStates[i];
 
                 if(playerVoteArea.TargetPlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
                 {
-                
-                    if (__instance.gameObject.GetComponent<LocalPlayerVoteAreaInfo>() == null)
-                    {
-                        var infoUpdater = __instance.gameObject.AddComponent<LocalPlayerVoteAreaInfo>();
-                        infoUpdater.SetPlayerVoteArea(playerVoteArea);
-                        infoUpdater.gameObject.SetActive(true);
-                    }
+
+                    var infoUpdater = __instance.gameObject.AddComponent<LocalPlayerVoteAreaInfo>();
+                    infoUpdater.SetPlayerVoteArea(playerVoteArea);
+                    infoUpdater.gameObject.SetActive(true);
                 }
                 else
                 {
-                    if (__instance.gameObject.GetComponent<OtherPlayerVoteAreaInfo>() == null)
-                    {
-                        var infoUpdater = __instance.gameObject.AddComponent<OtherPlayerVoteAreaInfo>();
-                        infoUpdater.SetPlayerVoteArea(playerVoteArea);
-                        infoUpdater.gameObject.SetActive(true);
-                    }
+                    var infoUpdater = __instance.gameObject.AddComponent<OtherPlayerVoteAreaInfo>();
+                    infoUpdater.SetPlayerVoteArea(playerVoteArea);
+                    infoUpdater.gameObject.SetActive(true);
                 }
             }
         }
