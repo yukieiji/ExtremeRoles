@@ -29,8 +29,9 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                 this.nameText, this.nameText.transform.parent);
             this.meetingInfo.transform.localPosition += Vector3.down * 0.20f;
             this.meetingInfo.fontSize *= 0.63f;
-            this.meetingInfo.autoSizeTextContainer = true;
+            this.meetingInfo.autoSizeTextContainer = false;
             this.meetingInfo.gameObject.name = "Info";
+            this.commActive = false;
 
             foreach (PlayerTask t in this.localPlayer.PlayerControl.myTasks)
             {
@@ -90,9 +91,9 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             SingleRoleBase role,
             GhostRoleBase ghostRole)
         {
-            meetingInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ?
+            this.meetingInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ?
                 "" : getMeetingInfo(role, ghostRole);
-            meetingInfo.gameObject.SetActive(true);
+            this.meetingInfo.gameObject.SetActive(true);
         }
 
         [HideFromIl2Cpp]
@@ -101,7 +102,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         {
             var (tasksCompleted, tasksTotal) = GameSystem.GetTaskInfo(
                 this.localPlayer.Data);
-            string roleNames = role.GetColoredRoleName(localPlayer.Data.IsDead);
+            string roleNames = role.GetColoredRoleName(this.localPlayer.Data.IsDead);
 
             if (ghostRole != null)
             {
@@ -137,16 +138,17 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         public void SetPlayerVoteArea(PlayerVoteArea pva)
         {
             this.localPlayer = CachedPlayerControl.LocalPlayer;
-            this.votePlayerInfo = GameData.Instance.GetPlayerById(
-                pva.TargetPlayerId);
+            this.votePlayerInfo = GameData.Instance.GetPlayerById(pva.TargetPlayerId); ;
             this.nameText = pva.NameText;
 
             this.meetingInfo = UnityEngine.Object.Instantiate(
                 this.nameText, this.nameText.transform.parent);
             this.meetingInfo.transform.localPosition += Vector3.down * 0.20f;
             this.meetingInfo.fontSize *= 0.63f;
-            this.meetingInfo.autoSizeTextContainer = true;
+            this.meetingInfo.autoSizeTextContainer = false;
             this.meetingInfo.gameObject.name = "Info";
+
+            this.commActive = false;
 
             foreach (PlayerTask t in localPlayer.PlayerControl.myTasks)
             {
@@ -259,7 +261,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             bool isMeetingInfoBlock,
             bool blockCondition)
         {
-            if (blockCondition)
+            if (!this.localPlayer.Data.IsDead || blockCondition)
             {
                 this.meetingInfo.gameObject.SetActive(false);
             }
