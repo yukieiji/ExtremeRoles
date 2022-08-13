@@ -1,9 +1,9 @@
 ﻿using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 
-namespace ExtremeRoles.Roles.Solo
+namespace ExtremeRoles.Roles.Solo.Host
 {
-    public sealed class Xion : SingleRoleBase
+    public sealed partial class Xion : SingleRoleBase
     {
         public Xion() : base(
             ExtremeRoleId.Xion,
@@ -14,18 +14,8 @@ namespace ExtremeRoles.Roles.Solo
             false, false, false, false, false)
         { }
 
-        protected override void CommonInit()
-        {
-            return;
-        }
-
         protected override void CreateSpecificOption(
             IOption parentOps)
         { }
-
-        protected override void RoleSpecificInit()
-        {
-            return;
-        }
     }
 }
