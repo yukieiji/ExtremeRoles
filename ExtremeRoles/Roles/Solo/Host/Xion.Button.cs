@@ -21,6 +21,7 @@ namespace ExtremeRoles.Roles.Solo.Host
 
             private string buttonText;
             private Vector3 offset;
+            private Vector3 scale;
             private bool mirror;
 
             private const float coolTime = 0.0001f;
@@ -29,6 +30,7 @@ namespace ExtremeRoles.Roles.Solo.Host
                 Sprite sprite,
                 Action buttonAction,
                 Vector3 positionOffset,
+                Vector3 scale,
                 string buttonText = "",
                 bool mirror = false)
             {
@@ -46,6 +48,7 @@ namespace ExtremeRoles.Roles.Solo.Host
                 SetActive(false);
 
                 this.mirror = mirror;
+                this.scale = scale;
 
                 var useButton = hudManager.UseButton;
 
@@ -113,6 +116,7 @@ namespace ExtremeRoles.Roles.Solo.Host
                         pos = new Vector3(-pos.x, pos.y, pos.z);
                     }
                     this.body.transform.localPosition = pos + this.offset;
+                    this.body.transform.localScale = this.scale;
                 }
 
                 if (this.timer >= 0)
@@ -140,7 +144,8 @@ namespace ExtremeRoles.Roles.Solo.Host
             }
         }
 
-        private HashSet<NoneCoolTimeButton> buttons = new HashSet<NoneCoolTimeButton>();
+        private List<NoneCoolTimeButton> funcButton = new List<NoneCoolTimeButton>();
+        private Dictionary<byte, (PoolablePlayer, NoneCoolTimeButton)> acitonToPlayerButton = new Dictionary<byte, (PoolablePlayer, NoneCoolTimeButton)>();
 
         private const float zoomOutFactor = 1.25f;
         private const float zoomInFactor = 0.8f;
@@ -149,56 +154,84 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         public void CreateButton()
         {
+            this.funcButton.Clear();
+
             // メンテナンスボタン
-            this.buttons.Add(
+            this.funcButton.Add(
                 new NoneCoolTimeButton(
                     Loader.CreateSpriteFromResources(
                         Path.MaintainerRepair),
                     this.RpcRepairSabotage,
                     new Vector3(-0.9f, -0.06f, 0),
+                    Vector3.one,
                     Helper.Translation.GetString("maintenance")));
 
             // 会議招集ボタン
-            this.buttons.Add(
+            this.funcButton.Add(
                 new NoneCoolTimeButton(
                     Loader.CreateSpriteFromResources(
                         Path.DetectiveApprenticeEmergencyMeeting),
                     this.RpcCallMeeting,
                     new Vector3(0, 1.0f, 0),
+                    Vector3.one,
                     Helper.Translation.GetString("emergencyMeeting")));
 
             // ズームインアウト
-            this.buttons.Add(
+            this.funcButton.Add(
                 new NoneCoolTimeButton(
                     Loader.CreateSpriteFromResources(
                         Path.TestButton),
                     this.cameraZoomOut,
                     new Vector3(-1.8f, 1.0f, 0),
+                    Vector3.one
                     Helper.Translation.GetString("zoomOut")));
 
-            this.buttons.Add(
+            this.funcButton.Add(
                 new NoneCoolTimeButton(
                     Loader.CreateSpriteFromResources(
                         Path.TestButton),
                     this.cameraZoomIn,
-                    new Vector3(-1.8f, -0.06f, 0),
+                   new Vector3(-1.8f, -0.06f, 0),
+                    Vector3.one,
                     Helper.Translation.GetString("zoomIn")));
 
             // スピード変更
-            this.buttons.Add(
+            this.funcButton.Add(
                 new NoneCoolTimeButton(
                     Loader.CreateSpriteFromResources(
                         Path.TestButton),
                     this.RpcSpeedUp,
                     new Vector3(-2.7f, 1.0f, 0),
+                    Vector3.one,
                     Helper.Translation.GetString("speedUp")));
-            this.buttons.Add(
+            this.funcButton.Add(
                 new NoneCoolTimeButton(
                     Loader.CreateSpriteFromResources(
                         Path.TestButton),
                     this.RpcSpeedDown,
                     new Vector3(-2.7f, -0.06f, 0),
+                    Vector3.one,
                     Helper.Translation.GetString("speedDown")));
+
+            this.acitonToPlayerButton.Clear();
+            Dictionary<byte, PoolablePlayer> poolPlayer = Helper.Player.CreatePlayerIcon();
+            foreach (var (playerId, pool) in poolPlayer)
+            {
+                if (playerId == this.playerId) { continue; }
+
+                this.acitonToPlayerButton.Add(
+                    playerId,
+                    (
+                        pool,
+                        new NoneCoolTimeButton(
+                            null,
+                            this.RpcSpeedDown,
+                            new Vector3(-1.8f, -0.06f, 0), // 座標設定
+                            Vector3.one,
+                            "")
+                    ));
+            }
+
         }
 
         private void disableButton()
@@ -224,7 +257,11 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         private void buttonUpdate()
         {
-            foreach(NoneCoolTimeButton button in this.buttons)
+            foreach(NoneCoolTimeButton button in this.funcButton)
+            {
+                button.Update();
+            }
+            foreach (var (playerId, (playerIcon, button)) in this.acitonToPlayerButton)
             {
                 button.Update();
             }
@@ -232,7 +269,11 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         private void resetCoolTime()
         {
-            foreach (NoneCoolTimeButton button in this.buttons)
+            foreach (NoneCoolTimeButton button in this.funcButton)
+            {
+                button.ResetCoolTimer();
+            }
+            foreach (var (_, button) in this.acitonToPlayerButton.Values)
             {
                 button.ResetCoolTimer();
             }
@@ -245,7 +286,11 @@ namespace ExtremeRoles.Roles.Solo.Host
             {
                 active = false;
             }
-            foreach (NoneCoolTimeButton button in this.buttons)
+            foreach (NoneCoolTimeButton button in this.funcButton)
+            {
+                button.SetActive(active);
+            }
+            foreach (var(_, button) in this.acitonToPlayerButton.Values)
             {
                 button.SetActive(active);
             }
