@@ -5,41 +5,23 @@ using UnityEngine;
 
 namespace ExtremeRoles.Roles.Solo.Host
 {
-    public sealed partial class Xion : IRoleResetMeeting, IRoleMeetingButtonAbility, IRoleUpdate
+    public sealed partial class Xion : IRoleResetMeeting, IRoleUpdate
     {
-        public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Action CreateAbilityAction(PlayerVoteArea instance)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
-        {
-            throw new NotImplementedException();
-        }
-
         public void ResetOnMeetingEnd()
         {
-            throw new NotImplementedException();
+            this.resetCoolTime();
         }
 
         public void ResetOnMeetingStart()
         {
-            throw new NotImplementedException();
-        }
-
-        public void SetSprite(SpriteRenderer render)
-        {
-            throw new NotImplementedException();
+            this.setButtonActive(false);
         }
 
         public void Update(PlayerControl rolePlayer)
         {
-            throw new NotImplementedException();
+            this.keyBind();
+            this.disableButton();
+            this.buttonUpdate();
         }
     }
 }

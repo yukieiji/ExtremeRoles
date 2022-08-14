@@ -400,7 +400,7 @@ namespace ExtremeRoles.Roles
                 }
                 else
                 {
-                    role = new Xion();
+                    role = new Xion(playerId);
                 }
 
                 setPlyerIdToSingleRole(playerId, role);
