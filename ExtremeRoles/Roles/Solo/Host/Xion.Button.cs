@@ -183,7 +183,7 @@ namespace ExtremeRoles.Roles.Solo.Host
                         Path.TestButton),
                     this.cameraZoomOut,
                     new Vector3(-1.8f, 1.0f, 0),
-                    Vector3.one
+                    Vector3.one,
                     Helper.Translation.GetString("zoomOut")));
 
             this.funcButton.Add(
