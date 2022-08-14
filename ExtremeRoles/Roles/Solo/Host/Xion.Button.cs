@@ -152,11 +152,11 @@ namespace ExtremeRoles.Roles.Solo.Host
             var hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
             // 基本的にレポートボタンを無効化
-            hudManager.ReportButton.SetDisabled();
+            hudManager.ReportButton.Hide();
             if (this.isHideGUI)
             {
-                hudManager.KillButton.SetDisabled();
-                hudManager.UseButton.SetDisabled();
+                hudManager.KillButton.Hide();
+                hudManager.UseButton.Hide();
                 setButtonActive(false);
             }
         }
