@@ -204,7 +204,7 @@ namespace ExtremeRoles.Roles.Solo.Host
                     xion.MoveSpeed = Mathf.Clamp(newBoostSpeed, MinSpeed, MaxSpeed);
                     break;
                 case SpeedOps.Down:
-                    xion.IsBoost = false;
+                    xion.IsBoost = true;
                     float newDownSpeed = xion.MoveSpeed * 0.85f;
                     xion.MoveSpeed = Mathf.Clamp(newDownSpeed, MinSpeed, MaxSpeed);
                     break;
