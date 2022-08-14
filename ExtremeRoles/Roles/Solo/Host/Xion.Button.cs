@@ -126,6 +126,11 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         private HashSet<NoneCoolTimeButton> buttons = new HashSet<NoneCoolTimeButton>();
 
+        private const float zoomOutFactor = 1.5f;
+        private const float zoomInFactor = 0.5f;
+        private const float maxZoomIn = 0.0001f;
+        private const float maxZoomOut = 50.0f;
+
         public void CreateButton()
         {
             // メンテナンスボタン
@@ -188,6 +193,31 @@ namespace ExtremeRoles.Roles.Solo.Host
             {
                 button.SetActive(active);
             }
+        }
+
+        private void cameraZoomOut()
+        {
+            modCamera(zoomOutFactor);
+        }
+        private void cameraZoomIn()
+        {
+            modCamera(zoomInFactor);
+        }
+
+        private void resetCamera()
+        {
+            modCamera(this.defaultCameraZoom / Camera.main.orthographicSize);
+        }
+
+        private void modCamera(float zoomFactor)
+        {
+            float newZoomSize = Camera.main.orthographicSize * zoomFactor;
+            newZoomSize = Mathf.Clamp(newZoomSize, maxZoomIn, maxZoomOut);
+            Camera.main.orthographicSize = newZoomSize;
+            FastDestroyableSingleton<HudManager>.Instance.UICamera.orthographicSize = newZoomSize;
+
+            ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height);
+            // This will move button positions to the correct position.
         }
 
     }

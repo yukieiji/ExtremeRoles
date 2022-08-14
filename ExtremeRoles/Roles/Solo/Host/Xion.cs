@@ -5,6 +5,8 @@ namespace ExtremeRoles.Roles.Solo.Host
 {
     public sealed partial class Xion : SingleRoleBase
     {
+        private float defaultCameraZoom;
+
         public Xion(byte xionPlayerId) : base(
             ExtremeRoleId.Xion,
             ExtremeRoleType.Null,
@@ -14,6 +16,8 @@ namespace ExtremeRoles.Roles.Solo.Host
             false, false, false, false, false)
         {
             this.MoveSpeed = PlayerControl.GameOptions.PlayerSpeedMod;
+            this.defaultCameraZoom = UnityEngine.Camera.main.orthographicSize;
+
             Init(xionPlayerId);
         }
 
