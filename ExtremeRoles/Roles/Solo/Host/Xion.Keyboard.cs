@@ -33,34 +33,40 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         private void keyBind()
         {
-            if (!Input.GetKeyDown(OpsKey)) { return; }
+
+            bool pressCtrl = Input.GetKey(OpsKey);
 
             // ゲーム終了
-            if (Input.GetKeyDown(endGame))
+            if (pressCtrl &&
+                Input.GetKeyDown(endGame))
             {
                 RpcForceEndGame();
             }
 
             // GUI非表示
-            if (Input.GetKeyDown(hideGUI))
+            if (pressCtrl &&
+                Input.GetKeyDown(hideGUI))
             {
                 this.isHideGUI = !this.isHideGUI;
             }
 
             // 高速移動
-            if (Input.GetKeyDown(speedUp))
+            if (pressCtrl &&
+                Input.GetKeyDown(speedUp))
             {
                 this.RpcSpeedUp();
             }
 
             // 低速移動
-            if (Input.GetKeyDown(speedDown))
+            if (pressCtrl &&
+                Input.GetKeyDown(speedDown))
             {
                 this.RpcSpeedDown();
             }
 
 
-            if (Input.GetKeyDown(reset))
+            if (pressCtrl &&
+                Input.GetKeyDown(reset))
             {
                 this.RpcResetSpeed();
             }

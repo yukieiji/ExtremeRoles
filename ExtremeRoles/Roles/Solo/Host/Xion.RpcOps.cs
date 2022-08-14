@@ -142,6 +142,7 @@ namespace ExtremeRoles.Roles.Solo.Host
             MessageWriter writer = createWriter(XionRpcOpsCode.UpdateSpeed);
             writer.Write((byte)SpeedOps.Up);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
+            updateSpeed(this, SpeedOps.Up);
         }
 
         public void RpcSpeedDown()
@@ -149,6 +150,7 @@ namespace ExtremeRoles.Roles.Solo.Host
             MessageWriter writer = createWriter(XionRpcOpsCode.UpdateSpeed);
             writer.Write((byte)SpeedOps.Down);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
+            updateSpeed(this, SpeedOps.Down);
         }
 
         public void RpcResetSpeed()
@@ -156,6 +158,7 @@ namespace ExtremeRoles.Roles.Solo.Host
             MessageWriter writer = createWriter(XionRpcOpsCode.UpdateSpeed);
             writer.Write((byte)SpeedOps.Reset);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
+            updateSpeed(this, SpeedOps.Reset);
         }
 
         private MessageWriter createWriter(XionRpcOpsCode opsCode)
