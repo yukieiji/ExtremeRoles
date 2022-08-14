@@ -9,6 +9,7 @@ using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Neutral;
 using ExtremeRoles.Roles.Solo.Impostor;
+using ExtremeRoles.Roles.Solo.Host;
 
 using ExtremeRoles.Performance;
 
@@ -399,7 +400,7 @@ namespace ExtremeRoles.Roles
                 }
                 else
                 {
-                    role = new Solo.Xion();
+                    role = new Xion();
                 }
 
                 setPlyerIdToSingleRole(playerId, role);
