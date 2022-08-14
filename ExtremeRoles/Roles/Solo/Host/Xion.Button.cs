@@ -15,10 +15,13 @@ namespace ExtremeRoles.Roles.Solo.Host
         private sealed class NoneCoolTimeButton
         {
             private ActionButton body;
-            private KeyCode hotkey;
 
             private float timer;
             private Action buttonAction;
+
+            private string buttonText;
+            private Vector3 offset;
+            private bool mirror;
 
             private const float coolTime = 0.0001f;
 
@@ -27,7 +30,7 @@ namespace ExtremeRoles.Roles.Solo.Host
                 Action buttonAction,
                 Vector3 positionOffset,
                 string buttonText = "",
-                KeyCode hotkey = KeyCode.F)
+                bool mirror = false)
             {
 
                 var hudManager = FastDestroyableSingleton<HudManager>.Instance;
@@ -42,7 +45,7 @@ namespace ExtremeRoles.Roles.Solo.Host
 
                 SetActive(false);
 
-                this.hotkey = hotkey;
+                this.mirror = mirror;
 
                 var useButton = hudManager.UseButton;
 
@@ -56,6 +59,11 @@ namespace ExtremeRoles.Roles.Solo.Host
 
                 this.body.graphic.sprite = sprite;
                 this.body.OverrideText(buttonText);
+
+                this.buttonText = buttonText;
+                this.offset = positionOffset;
+
+                ResetCoolTimer();
             }
 
             public void SetActive(bool isActive)
@@ -82,17 +90,30 @@ namespace ExtremeRoles.Roles.Solo.Host
                 if (this.body == null) { return; }
                 if (CachedPlayerControl.LocalPlayer.Data == null ||
                     MeetingHud.Instance ||
-                    ExileController.Instance ||
-                    CachedPlayerControl.LocalPlayer.Data.IsDead)
+                    ExileController.Instance)
                 {
                     SetActive(false);
                     return;
                 }
 
-                SetActive(FastDestroyableSingleton<HudManager>.Instance.UseButton.isActiveAndEnabled);
+                var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+
+                SetActive(hudManager.UseButton.isActiveAndEnabled);
 
                 this.body.graphic.color = this.body.buttonLabelText.color = Palette.EnabledColor;
                 this.body.graphic.material.SetFloat("_Desat", 0f);
+
+                this.body.OverrideText(this.buttonText);
+
+                if (hudManager.UseButton != null)
+                {
+                    Vector3 pos = hudManager.UseButton.transform.localPosition;
+                    if (this.mirror)
+                    {
+                        pos = new Vector3(-pos.x, pos.y, pos.z);
+                    }
+                    this.body.transform.localPosition = pos + this.offset;
+                }
 
                 if (this.timer >= 0)
                 {
@@ -104,12 +125,7 @@ namespace ExtremeRoles.Roles.Solo.Host
                     }
                 }
 
-               this.body.SetCoolDown(this.timer, coolTime);
-
-                if (Input.GetKeyDown(this.hotkey))
-                {
-                    onClickEvent();
-                }
+                this.body.SetCoolDown(this.timer, coolTime);
             }
 
             private void onClickEvent()
@@ -126,30 +142,63 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         private HashSet<NoneCoolTimeButton> buttons = new HashSet<NoneCoolTimeButton>();
 
-        private const float zoomOutFactor = 1.5f;
-        private const float zoomInFactor = 0.5f;
+        private const float zoomOutFactor = 1.25f;
+        private const float zoomInFactor = 0.8f;
         private const float maxZoomIn = 0.0001f;
         private const float maxZoomOut = 50.0f;
 
         public void CreateButton()
         {
             // メンテナンスボタン
-            var maintenanceButton = new NoneCoolTimeButton(
-                Loader.CreateSpriteFromResources(
-                    Path.MaintainerRepair),
-                RpcRepairSabotage,
-                new Vector3(),
-                Helper.Translation.GetString("maintenance"));
-            buttons.Add(maintenanceButton);
+            this.buttons.Add(
+                new NoneCoolTimeButton(
+                    Loader.CreateSpriteFromResources(
+                        Path.MaintainerRepair),
+                    this.RpcRepairSabotage,
+                    new Vector3(-0.9f, -0.06f, 0),
+                    Helper.Translation.GetString("maintenance")));
 
-            var meetingButton = new NoneCoolTimeButton(
-                Loader.CreateSpriteFromResources(
-                    Path.DetectiveApprenticeEmergencyMeeting),
-                RpcCallMeeting,
-                new Vector3(),
-                Helper.Translation.GetString("emergencyMeeting"));
-            buttons.Add(maintenanceButton);
+            // 会議招集ボタン
+            this.buttons.Add(
+                new NoneCoolTimeButton(
+                    Loader.CreateSpriteFromResources(
+                        Path.DetectiveApprenticeEmergencyMeeting),
+                    this.RpcCallMeeting,
+                    new Vector3(0, 1.0f, 0),
+                    Helper.Translation.GetString("emergencyMeeting")));
 
+            // ズームインアウト
+            this.buttons.Add(
+                new NoneCoolTimeButton(
+                    Loader.CreateSpriteFromResources(
+                        Path.TestButton),
+                    this.cameraZoomOut,
+                    new Vector3(-1.8f, 1.0f, 0),
+                    Helper.Translation.GetString("zoomOut")));
+
+            this.buttons.Add(
+                new NoneCoolTimeButton(
+                    Loader.CreateSpriteFromResources(
+                        Path.TestButton),
+                    this.cameraZoomIn,
+                    new Vector3(-1.8f, -0.06f, 0),
+                    Helper.Translation.GetString("zoomIn")));
+
+            // スピード変更
+            this.buttons.Add(
+                new NoneCoolTimeButton(
+                    Loader.CreateSpriteFromResources(
+                        Path.TestButton),
+                    this.RpcSpeedUp,
+                    new Vector3(-2.7f, 1.0f, 0),
+                    Helper.Translation.GetString("speedUp")));
+            this.buttons.Add(
+                new NoneCoolTimeButton(
+                    Loader.CreateSpriteFromResources(
+                        Path.TestButton),
+                    this.RpcSpeedDown,
+                    new Vector3(-2.7f, -0.06f, 0),
+                    Helper.Translation.GetString("speedDown")));
         }
 
         private void disableButton()
@@ -160,9 +209,16 @@ namespace ExtremeRoles.Roles.Solo.Host
             hudManager.ReportButton.Hide();
             if (this.isHideGUI)
             {
-                hudManager.KillButton.Hide();
                 hudManager.UseButton.Hide();
+                hudManager.SabotageButton.Hide();
                 setButtonActive(false);
+            }
+            else
+            {
+                if (MeetingHud.Instance) { return; }
+                hudManager.UseButton.Show();
+                hudManager.SabotageButton.Show();
+                setButtonActive(true);
             }
         }
 
