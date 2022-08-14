@@ -2,8 +2,17 @@
 
 namespace ExtremeRoles.Roles.Solo.Host
 {
-    public sealed partial class Xion : IRoleResetMeeting, IRoleUpdate
+    public sealed partial class Xion : IRoleResetMeeting, IRoleSpecialSetUp, IRoleUpdate
     {
+        public void IntroBeginSetUp()
+        {
+            return;
+        }
+
+        public void IntroEndSetUp()
+        {
+            CreateButton();
+        }
 
         public void ResetOnMeetingEnd()
         {

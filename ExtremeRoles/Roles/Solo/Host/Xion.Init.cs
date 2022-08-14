@@ -1,7 +1,4 @@
-﻿using ExtremeRoles.Helper;
-using ExtremeRoles.Performance;
-
-namespace ExtremeRoles.Roles.Solo.Host
+﻿namespace ExtremeRoles.Roles.Solo.Host
 {
     public sealed partial class Xion
     {
@@ -13,14 +10,6 @@ namespace ExtremeRoles.Roles.Solo.Host
         protected override void RoleSpecificInit()
         {
             return;
-        }
-
-        private void Init()
-        {
-            if (this.playerId == CachedPlayerControl.LocalPlayer.PlayerId)
-            {
-                CreateButton();
-            }
         }
     }
 }
