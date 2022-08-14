@@ -130,7 +130,7 @@ namespace ExtremeRoles.Roles.Solo.Host
 
             private void onClickEvent()
             {
-                if (this.timer < 0f)
+                if (this.timer <= 0f)
                 {
                     this.body.graphic.color = new Color(1f, 1f, 1f, 0.3f);
 
