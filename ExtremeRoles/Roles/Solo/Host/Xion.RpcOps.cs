@@ -30,8 +30,6 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         private const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-        private static List<PlayerControl> bot = new List<PlayerControl>();
-
         public static void UseAbility(ref MessageReader reader)
         {
             byte playerId = reader.ReadByte();
@@ -240,7 +238,6 @@ namespace ExtremeRoles.Roles.Solo.Host
             playerControl.SetPet(HatManager.Instance.allPets[pet].ProdId, color);
             playerControl.SetVisor(HatManager.Instance.allVisors[visor].ProdId);
             playerControl.SetSkin(HatManager.Instance.allSkins[skin].ProdId, color);
-            bot.Add(playerControl);
             GameData.Instance.RpcSetTasks(
                 playerControl.PlayerId,
                 new byte[0]);

@@ -1,12 +1,10 @@
-﻿using ExtremeRoles.Module;
-using ExtremeRoles.Roles.API.Interface;
-using System;
-using UnityEngine;
+﻿using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Solo.Host
 {
     public sealed partial class Xion : IRoleResetMeeting, IRoleUpdate
     {
+
         public void ResetOnMeetingEnd()
         {
             this.resetCoolTime();

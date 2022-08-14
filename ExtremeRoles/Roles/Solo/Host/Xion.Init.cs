@@ -19,15 +19,7 @@ namespace ExtremeRoles.Roles.Solo.Host
         {
             if (xionPlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
             {
-                // まずは適当にダミーにタスクを突っ込む
-                foreach (var dummy in bot)
-                {
-                    if (dummy == null || dummy.Data == null) { continue; }
-                    GameData.PlayerInfo playerInfo = dummy.Data;
-                    var taskId = GameSystem.GetRandomCommonTaskId();
-                    Logging.Debug($"PlayerName:{playerInfo.PlayerName}  AddTask:{taskId}");
-                    GameSystem.SetTask(playerInfo, taskId);
-                }
+                
             }
         }
 
