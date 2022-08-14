@@ -16,13 +16,13 @@ namespace ExtremeRoles.Roles.Solo.Host
             ExtremeRoleId.Xion.ToString(),
             ColorPalette.YokoShion,
             false, false, false, true,
-            false, false, false, false, false)
+            true, true, true, true, true)
         {
             this.MoveSpeed = PlayerControl.GameOptions.PlayerSpeedMod;
             this.defaultCameraZoom = UnityEngine.Camera.main.orthographicSize;
             this.playerId = xionPlayerId;
 
-            Init(xionPlayerId);
+            Init();
         }
 
         protected override void CreateSpecificOption(

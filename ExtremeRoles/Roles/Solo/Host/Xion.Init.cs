@@ -15,13 +15,12 @@ namespace ExtremeRoles.Roles.Solo.Host
             return;
         }
 
-        private void Init(byte xionPlayerId)
+        private void Init()
         {
-            if (xionPlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
+            if (this.playerId == CachedPlayerControl.LocalPlayer.PlayerId)
             {
-                
+                CreateButton();
             }
         }
-
     }
 }
