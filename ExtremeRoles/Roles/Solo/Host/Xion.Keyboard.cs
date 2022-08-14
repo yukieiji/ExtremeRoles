@@ -41,6 +41,8 @@ namespace ExtremeRoles.Roles.Solo.Host
                 RpcForceEndGame();
             }
 
+            if (MeetingHud.Instance) { return; }
+
             // GUI非表示
             if (Input.GetKey(ops) &&
                 Input.GetKeyDown(hideGUI))
