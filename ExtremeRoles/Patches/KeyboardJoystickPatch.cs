@@ -155,13 +155,13 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(KeyboardJoystick), nameof(KeyboardJoystick.Update))]
     public static class KeyboardJoystickPatch
     {
-        private static bool isUseXion = OptionHolder.AllOption[
-            (int)OptionHolder.CommonOptionKey.UseXion].GetValue();
+        private static Module.IOption UseXionOption = OptionHolder.AllOption[
+            (int)OptionHolder.CommonOptionKey.UseXion];
 
         public static void Postfix(KeyboardJoystick __instance)
         {
             if (AmongUsClient.Instance == null || CachedPlayerControl.LocalPlayer == null) { return; }
-            if (isUseXion)
+            if (UseXionOption.GetValue())
             {
                 Roles.Solo.Host.Xion.SpecialKeyShortCut();
             }

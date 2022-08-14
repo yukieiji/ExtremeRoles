@@ -25,7 +25,7 @@ namespace ExtremeRoles.Roles.Solo.Host
             if (!AmongUsClient.Instance.AmHost) { return; }
             if (Input.GetKeyDown(SpawnDummy) &&
                 AmongUsClient.Instance.GameMode == GameModes.LocalGame &&
-                Helper.GameSystem.IsLobby )
+                Helper.GameSystem.IsLobby)
             {
                 spawnDummy();
             }
