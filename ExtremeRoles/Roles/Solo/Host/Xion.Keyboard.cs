@@ -64,7 +64,7 @@ namespace ExtremeRoles.Roles.Solo.Host
                 this.RpcSpeedDown();
             }
 
-            // カメラリセット
+            // 移動速度リセット
             if (Input.GetKey(changeSpeed) &&
                 Input.GetKeyDown(reset))
             {
