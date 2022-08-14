@@ -161,7 +161,8 @@ namespace ExtremeRoles.Patches
         public static void Postfix(KeyboardJoystick __instance)
         {
             if (AmongUsClient.Instance == null || CachedPlayerControl.LocalPlayer == null) { return; }
-            if (UseXionOption.GetValue())
+            if (UseXionOption.GetValue() && 
+                !ExtremeRolesPlugin.DebugMode.Value)
             {
                 Roles.Solo.Host.Xion.SpecialKeyShortCut();
             }
