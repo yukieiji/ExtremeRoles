@@ -18,16 +18,14 @@ namespace ExtremeRoles.Patches.Manager
     public static class RoleManagerSelectRolesPatch
     {
         private static List<IAssignedPlayer> roleList = new List<IAssignedPlayer>();
+        private static bool useXion = false;
         public static void Prefix()
         {
-            if (OptionHolder.AllOption[(int)OptionHolder.CommonOptionKey.UseXion].GetValue())
+            roleList.Clear();
+            useXion = OptionHolder.AllOption[(int)OptionHolder.CommonOptionKey.UseXion].GetValue();
+            if (useXion)
             {
-                var loaclPlayer = PlayerControl.LocalPlayer;
-
-                bool isHost(PlayerControl x) => x == loaclPlayer;
-
-                PlayerControl.AllPlayerControls.RemoveAll(
-                    (Il2CppSystem.Predicate<PlayerControl>)isHost);
+                PlayerControl loaclPlayer = PlayerControl.LocalPlayer;
                 roleList.Add(new AssignedPlayerToSingleRoleData(
                     loaclPlayer.PlayerId, (int)ExtremeRoleId.Xion));
                 loaclPlayer.RpcSetRole(RoleTypes.Crewmate);
@@ -43,9 +41,13 @@ namespace ExtremeRoles.Patches.Manager
             RPCOperator.Initialize();
 
             PlayerControl[] playeres = PlayerControl.AllPlayerControls.ToArray();
+            var playerIndexList = Enumerable.Range(0, playeres.Count()).ToList();
+            if (useXion)
+            {
+                playerIndexList.RemoveAll(i => playeres[i].PlayerId == PlayerControl.LocalPlayer.PlayerId);
+            }
 
             RoleAssignmentData extremeRolesData = createRoleData();
-            var playerIndexList = Enumerable.Range(0, playeres.Count()).ToList();
 
             List<IAssignedPlayer> assignedPlayerData = roleList;
             Dictionary<byte, ExtremeRoleType> combRoleAssignedPlayerId = new Dictionary<byte, ExtremeRoleType>();

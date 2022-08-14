@@ -296,6 +296,11 @@ namespace ExtremeRoles.Patches
     {
         public static void Prefix(IntroCutscene __instance)
         {
+            if (OptionHolder.AllOption[(int)OptionHolder.CommonOptionKey.UseXion].GetValue())
+            {
+                removeXionPlayerToAllPlayerControl();
+            }
+
             Module.InfoOverlay.Button.SetInfoButtonToInGamePositon();
 
             var localRole = ExtremeRoleManager.GetLocalPlayerRole();
@@ -429,6 +434,23 @@ namespace ExtremeRoles.Patches
             foreach (string objectName in disableObjectName)
             {
                 GameSystem.DisableMapModule(objectName);
+            }
+        }
+
+        private static void removeXionPlayerToAllPlayerControl()
+        {
+            foreach (var role in ExtremeRoleManager.GameRole.Values)
+            {
+                Roles.Solo.Host.Xion xion = role as Roles.Solo.Host.Xion;
+                if (xion != null)
+                {
+                    bool isXion(PlayerControl x) => x.PlayerId == xion.PlayerId;
+
+                    PlayerControl.AllPlayerControls.RemoveAll(
+                        (Il2CppSystem.Predicate<PlayerControl>)isXion);
+                    CachedPlayerControl.AllPlayerControls.RemoveAll(
+                        x => x.PlayerId == xion.PlayerId);
+                }
             }
         }
         

@@ -17,12 +17,6 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         private void Init(byte xionPlayerId)
         {
-
-            bool isXion(PlayerControl x) => x.PlayerId == xionPlayerId;
-
-            PlayerControl.AllPlayerControls.RemoveAll(
-                (Il2CppSystem.Predicate<PlayerControl>)isXion);
-
             if (xionPlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
             {
                 // まずは適当にダミーにタスクを突っ込む
@@ -33,7 +27,6 @@ namespace ExtremeRoles.Roles.Solo.Host
                     var taskId = GameSystem.GetRandomCommonTaskId();
                     Logging.Debug($"PlayerName:{playerInfo.PlayerName}  AddTask:{taskId}");
                     GameSystem.SetTask(playerInfo, taskId);
-
                 }
             }
         }
