@@ -9,7 +9,8 @@ namespace ExtremeRoles.Patches
     {
         // もしもっと高速で動くやつを実装する場合ここを変える
         // 正直9倍速でもカメラ追いつかねぇ・・・
-        private const float maxModSpeed = 3.0f;
+        // 2022/08/14:Xionは最大20倍速で動けるのでとりあえず100を突っ込んどく
+        private const float maxModSpeed = 100.0f;
 
         public static bool Prefix(
             PlayerPhysics __instance,
