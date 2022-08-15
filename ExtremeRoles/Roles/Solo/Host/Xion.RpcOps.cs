@@ -18,7 +18,6 @@ namespace ExtremeRoles.Roles.Solo.Host
         public enum XionRpcOpsCode : byte
         {
             ForceEndGame,
-            SpawnDummyDeadBody,
             UpdateSpeed,
             Teleport,
             NoXionVote,
@@ -30,6 +29,8 @@ namespace ExtremeRoles.Roles.Solo.Host
             Up,
             Down
         }
+
+        private List<SpriteRenderer> dummyDeadBody = new List<SpriteRenderer>();
 
         private const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
@@ -44,11 +45,6 @@ namespace ExtremeRoles.Roles.Solo.Host
             {
                 case XionRpcOpsCode.ForceEndGame:
                     RPCOperator.ForceEnd();
-                    break;
-                case XionRpcOpsCode.SpawnDummyDeadBody:
-                    float posX = reader.ReadSingle();
-                    float posY = reader.ReadSingle();
-                    spawnDummyDeadBody(playerId, posX, posY);
                     break;
                 case XionRpcOpsCode.UpdateSpeed:
                     SpeedOps speedOps = (SpeedOps)reader.ReadByte();
@@ -156,6 +152,26 @@ namespace ExtremeRoles.Roles.Solo.Host
             }
         }
 
+        public void spawnDummyDeadBody()
+        {
+            PlayerControl player = CachedPlayerControl.LocalPlayer;
+            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(
+                Input.mousePosition);
+            mouseWorldPos.z = mouseWorldPos.y / 1000f;
+
+            var killAnimation = player.KillAnimations[0];
+            SpriteRenderer body = UnityEngine.Object.Instantiate(
+                killAnimation.bodyPrefab.bodyRenderer);
+
+            player.SetPlayerMaterialColors(body);
+
+            Vector3 vector = mouseWorldPos + killAnimation.BodyOffset;
+            vector.z = vector.y / 1000f;
+            body.transform.position = vector;
+            body.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
+            this.dummyDeadBody.Add(body);
+        }
+
         public void RpcSpeedUp()
         {
             MessageWriter writer = createWriter(XionRpcOpsCode.UpdateSpeed);
@@ -237,24 +253,6 @@ namespace ExtremeRoles.Roles.Solo.Host
         {
             AmongUsClient.Instance.FinishRpcImmediately(
                 createWriter(XionRpcOpsCode.NoXionVote));
-        }
-
-        private static void spawnDummyDeadBody(
-            byte playerId, float posX, float posY)
-        {
-            PlayerControl player = Player.GetPlayerControlById(playerId);
-
-            if (player == null) { return; }
-
-            var killAnimation = player.KillAnimations[0];
-            SpriteRenderer body = UnityEngine.Object.Instantiate(
-                killAnimation.bodyPrefab.bodyRenderer);
-
-            player.SetPlayerMaterialColors(body);
-
-            Vector3 vector = new Vector3(posX, posY, posY / 1000f) + killAnimation.BodyOffset;
-            body.transform.position = vector;
-            body.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
         }
 
         private static void updateSpeed(

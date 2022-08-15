@@ -17,6 +17,7 @@ namespace ExtremeRoles.Roles.Solo.Host
         private const KeyCode up = KeyCode.PageUp;
 
         private const KeyCode forceMeetingEnd = KeyCode.C;
+        private const KeyCode spawnDeadBody = KeyCode.B;
         private const KeyCode functionCall = KeyCode.F;
 
         private bool isHideGUI = false;
@@ -100,6 +101,14 @@ namespace ExtremeRoles.Roles.Solo.Host
                 Input.GetKeyDown(reset))
             {
                 this.resetCamera();
+            }
+
+            // カメラリセット
+            if (Input.GetKey(ops) &&
+                Input.GetKeyDown(spawnDeadBody) &&
+                isLocalGame())
+            {
+                this.spawnDummyDeadBody();
             }
 
 # if DEBUG

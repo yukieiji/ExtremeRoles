@@ -23,6 +23,15 @@ namespace ExtremeRoles.Roles.Solo.Host
         public void ResetOnMeetingStart()
         {
             this.setButtonActive(false);
+            
+            foreach (var body in this.dummyDeadBody)
+            {
+                if (body != null)
+                {
+                    UnityEngine.Object.Destroy(body);
+                }
+            }
+            this.dummyDeadBody.Clear();
         }
 
         public void Update(PlayerControl rolePlayer)
