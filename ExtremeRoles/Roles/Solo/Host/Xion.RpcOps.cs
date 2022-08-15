@@ -21,6 +21,7 @@ namespace ExtremeRoles.Roles.Solo.Host
             SpawnDummyDeadBody,
             UpdateSpeed,
             Teleport,
+            ForceMeetingEnd,
             TestRpc,
         }
         private enum SpeedOps : byte
@@ -59,6 +60,9 @@ namespace ExtremeRoles.Roles.Solo.Host
                     float y = reader.ReadSingle();
                     if (xionPlayer == null) { return; }
                     teleport(xionPlayer, new Vector2(x, y));
+                    break;
+                case XionRpcOpsCode.ForceMeetingEnd:
+                    forceEndMeeting();
                     break;
                 case XionRpcOpsCode.TestRpc:
                     // 色々と
@@ -216,6 +220,13 @@ namespace ExtremeRoles.Roles.Solo.Host
             teleport(CachedPlayerControl.LocalPlayer, targetPos);
         }
 
+        public void RpcForceEndMeeting()
+        {
+            AmongUsClient.Instance.FinishRpcImmediately(
+                createWriter(XionRpcOpsCode.ForceMeetingEnd));
+            forceEndMeeting();
+        }
+
         private MessageWriter createWriter(XionRpcOpsCode opsCode)
         {
             PlayerControl xionPlayer = CachedPlayerControl.LocalPlayer;
@@ -275,6 +286,14 @@ namespace ExtremeRoles.Roles.Solo.Host
         private static void teleport(PlayerControl xionPlayer, Vector2 targetPos)
         {
             xionPlayer.NetTransform.SnapTo(targetPos);
+        }
+
+        private static void forceEndMeeting()
+        {
+            if (MeetingHud.Instance)
+            {
+                MeetingHud.Instance.discussionTimer = PlayerControl.GameOptions.DiscussionTime;
+            }
         }
 
         private static void spawnDummy()

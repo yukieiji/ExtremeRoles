@@ -16,6 +16,7 @@ namespace ExtremeRoles.Roles.Solo.Host
         private const KeyCode down = KeyCode.PageDown;
         private const KeyCode up = KeyCode.PageUp;
 
+        private const KeyCode forceMeetingEnd = KeyCode.C;
         private const KeyCode functionCall = KeyCode.F;
 
         private bool isHideGUI = false;
@@ -41,7 +42,16 @@ namespace ExtremeRoles.Roles.Solo.Host
                 RpcForceEndGame();
             }
 
-            if (MeetingHud.Instance) { return; }
+            if (MeetingHud.Instance)
+            {
+                // 会議強制終了
+                if (Input.GetKey(ops) &&
+                    Input.GetKeyDown(forceMeetingEnd))
+                {
+                    RpcForceEndMeeting();
+                }
+                return;
+            }
 
             // GUI非表示
             if (Input.GetKey(ops) &&
