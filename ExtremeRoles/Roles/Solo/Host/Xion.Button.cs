@@ -225,7 +225,7 @@ namespace ExtremeRoles.Roles.Solo.Host
                         pool,
                         new NoneCoolTimeButton(
                             null,
-                            this.RpcSpeedDown,
+                            this.createPlayerButtonAction(playerId),
                             new Vector3(-1.8f, -0.06f, 0), // 座標設定
                             Vector3.one,
                             "")
@@ -338,6 +338,32 @@ namespace ExtremeRoles.Roles.Solo.Host
 
             ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height);
             // This will move button positions to the correct position.
+        }
+
+        private Action createPlayerButtonAction(byte playerId)
+        {
+            return () =>
+            {
+                GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
+
+                if (player == null || player.Disconnected) { return; }
+
+                if (Input.GetKey(ops))
+                {
+                    if (player.IsDead)
+                    {
+                        this.RpcRevive(playerId);
+                    }
+                    else
+                    {
+                        this.RpcKill(playerId);
+                    }
+                }
+                else
+                {
+                    this.RpcTeleport(player.Object);
+                }
+            };
         }
 
     }

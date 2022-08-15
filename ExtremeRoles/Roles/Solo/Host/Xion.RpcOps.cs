@@ -20,6 +20,7 @@ namespace ExtremeRoles.Roles.Solo.Host
             ForceEndGame,
             SpawnDummyDeadBody,
             UpdateSpeed,
+            Teleport,
             TestRpc,
         }
         private enum SpeedOps : byte
@@ -36,6 +37,8 @@ namespace ExtremeRoles.Roles.Solo.Host
             byte playerId = reader.ReadByte();
             XionRpcOpsCode ops = (XionRpcOpsCode)reader.ReadByte();
             Xion xion = ExtremeRoleManager.GetSafeCastedRole<Xion>(playerId);
+            PlayerControl xionPlayer = Player.GetPlayerControlById(playerId);
+
             switch (ops)
             {
                 case XionRpcOpsCode.ForceEndGame:
@@ -50,6 +53,12 @@ namespace ExtremeRoles.Roles.Solo.Host
                     SpeedOps speedOps = (SpeedOps)reader.ReadByte();
                     if (xion == null) { return; }
                     updateSpeed(xion, speedOps);
+                    break;
+                case XionRpcOpsCode.Teleport:
+                    float x = reader.ReadSingle();
+                    float y = reader.ReadSingle();
+                    if (xionPlayer == null) { return; }
+                    teleport(xionPlayer, new Vector2(x, y));
                     break;
                 case XionRpcOpsCode.TestRpc:
                     // 色々と
@@ -174,6 +183,43 @@ namespace ExtremeRoles.Roles.Solo.Host
             // 必要な関数書く
         }
 
+        public void RpcKill(byte targetPlayerId)
+        {
+            PlayerControl xionPlayer = CachedPlayerControl.LocalPlayer;
+
+            RPCOperator.Call(
+                xionPlayer.NetId,
+                RPCOperator.Command.UncheckedMurderPlayer,
+                new List<byte> { xionPlayer.PlayerId, targetPlayerId, byte.MinValue });
+            RPCOperator.UncheckedMurderPlayer(
+                xionPlayer.PlayerId,
+                targetPlayerId,
+                byte.MinValue);
+        }
+
+        public void RpcRevive(byte targetPlayerId)
+        {
+            PlayerControl xionPlayer = CachedPlayerControl.LocalPlayer;
+
+            RPCOperator.Call(
+                xionPlayer.NetId,
+                RPCOperator.Command.UncheckedRevive,
+                new List<byte> { targetPlayerId });
+            RPCOperator.UncheckedRevive(
+                targetPlayerId);
+        }
+
+        public void RpcTeleport(PlayerControl targetPlayer)
+        {
+            if (targetPlayer == null) { return; }
+            Vector2 targetPos = targetPlayer.transform.position;
+            MessageWriter writer = createWriter(XionRpcOpsCode.UpdateSpeed);
+            writer.Write(targetPos.x);
+            writer.Write(targetPos.y);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            teleport(CachedPlayerControl.LocalPlayer, targetPos);
+        }
+
         private MessageWriter createWriter(XionRpcOpsCode opsCode)
         {
             PlayerControl xionPlayer = CachedPlayerControl.LocalPlayer;
@@ -228,6 +274,11 @@ namespace ExtremeRoles.Roles.Solo.Host
                 default:
                     break;
             }
+        }
+
+        private static void teleport(PlayerControl xionPlayer, Vector2 targetPos)
+        {
+            xionPlayer.NetTransform.SnapTo(targetPos);
         }
 
         private static void spawnDummy()

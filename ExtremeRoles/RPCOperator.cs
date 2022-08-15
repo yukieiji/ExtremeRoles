@@ -24,6 +24,7 @@ namespace ExtremeRoles
             StartVentAnimation,
             UncheckedShapeShift,
             UncheckedMurderPlayer,
+            UncheckedRevive,
             CleanDeadBody,
             FixLightOff,
             ReplaceDeadReason,
@@ -329,6 +330,17 @@ namespace ExtremeRoles
                 source.MurderPlayer(target);
             }
         }
+
+        public static void UncheckedRevive(byte targetId)
+        {
+            PlayerControl target = Helper.Player.GetPlayerControlById(targetId);
+
+            if (target != null)
+            {
+                target.Revive();
+            }
+        }
+
 
         public static void SetWinGameControlId(int id)
         {
