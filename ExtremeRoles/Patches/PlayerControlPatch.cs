@@ -519,6 +519,10 @@ namespace ExtremeRoles.Patches
                     RPCOperator.UncheckedMurderPlayer(
                         sourceId, targetId, killAnimationTrigger);
                     break;
+                case RPCOperator.Command.UncheckedRevive:
+                    byte reviveTargetId = reader.ReadByte();
+                    RPCOperator.UncheckedRevive(reviveTargetId);
+                    break;
                 case RPCOperator.Command.ReplaceDeadReason:
                     byte changePlayerId = reader.ReadByte();
                     byte reason = reader.ReadByte();
@@ -1162,6 +1166,39 @@ namespace ExtremeRoles.Patches
         public static void Postfix()
         {
             OptionHolder.ShareOptionSelections();
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Revive))]
+    public static class PlayerControlRevivePatch
+    {
+        public static void Postfix(PlayerControl __instance)
+        {
+            if (ExtremeRolesPlugin.GameDataStore.DeadPlayerInfo.ContainsKey(
+                __instance.PlayerId))
+            {
+                ExtremeRolesPlugin.GameDataStore.DeadPlayerInfo.Remove(
+                    __instance.PlayerId);
+            }
+
+            if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return; }
+
+            var ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
+            if (ghostRole == null) { return; }
+
+            if (ghostRole.Button != null)
+            {
+                ghostRole.Button.SetActive(false);
+                ghostRole.Button.ForceAbilityOff();
+            }
+
+            ghostRole.ReseOnMeetingStart();
+
+            lock(ExtremeGhostRoleManager.GameRole)
+            {
+                ExtremeGhostRoleManager.GameRole.Remove(__instance.PlayerId);
+            }
         }
     }
 }
