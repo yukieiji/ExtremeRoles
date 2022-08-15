@@ -94,9 +94,9 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         public void AddNoXionCount()
         {
-            ++noXionCount;
+            ++this.noXionCount;
         }
       
-        private bool isNoXion() => noXionCount >= ((GameData.Instance.AllPlayers.Count - 1) * 2 / 3);
+        private bool isNoXion() => this.noXionCount >= ((GameData.Instance.AllPlayers.Count - 1) * 2 / 3);
     }
 }
