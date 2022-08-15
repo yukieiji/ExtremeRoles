@@ -16,14 +16,14 @@ namespace ExtremeRoles.Roles.Solo.Host
         private const KeyCode down = KeyCode.PageDown;
         private const KeyCode up = KeyCode.PageUp;
 
-        private const KeyCode SpawnDummy = KeyCode.F;
+        private const KeyCode functionCall = KeyCode.F;
 
         private bool isHideGUI = false;
 
         public static void SpecialKeyShortCut()
         {
             if (!AmongUsClient.Instance.AmHost) { return; }
-            if (Input.GetKeyDown(SpawnDummy) &&
+            if (Input.GetKeyDown(functionCall) &&
                 AmongUsClient.Instance.GameMode == GameModes.LocalGame &&
                 Helper.GameSystem.IsLobby)
             {
@@ -91,6 +91,15 @@ namespace ExtremeRoles.Roles.Solo.Host
             {
                 this.resetCamera();
             }
+
+# if DEBUG
+            // テスト用能力
+            if (Input.GetKey(ops) &&
+                Input.GetKeyDown(functionCall))
+            {
+                this.RpcTestAbilityCall();
+            }
+#endif
         }
 
     }

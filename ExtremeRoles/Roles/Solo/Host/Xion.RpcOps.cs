@@ -20,6 +20,7 @@ namespace ExtremeRoles.Roles.Solo.Host
             ForceEndGame,
             SpawnDummyDeadBody,
             UpdateSpeed,
+            TestRpc,
         }
         private enum SpeedOps : byte
         {
@@ -34,6 +35,7 @@ namespace ExtremeRoles.Roles.Solo.Host
         {
             byte playerId = reader.ReadByte();
             XionRpcOpsCode ops = (XionRpcOpsCode)reader.ReadByte();
+            Xion xion = ExtremeRoleManager.GetSafeCastedRole<Xion>(playerId);
             switch (ops)
             {
                 case XionRpcOpsCode.ForceEndGame:
@@ -45,9 +47,14 @@ namespace ExtremeRoles.Roles.Solo.Host
                     spawnDummyDeadBody(playerId, posX, posY);
                     break;
                 case XionRpcOpsCode.UpdateSpeed:
-                    Xion xion = ExtremeRoleManager.GetSafeCastedRole<Xion>(playerId);
                     SpeedOps speedOps = (SpeedOps)reader.ReadByte();
+                    if (xion == null) { return; }
                     updateSpeed(xion, speedOps);
+                    break;
+                case XionRpcOpsCode.TestRpc:
+                    // 色々と
+                    if (xion == null) { return; }
+                    // 呼び出す関数
                     break;
                 default:
                     break;
@@ -157,6 +164,14 @@ namespace ExtremeRoles.Roles.Solo.Host
             writer.Write((byte)SpeedOps.Reset);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             updateSpeed(this, SpeedOps.Reset);
+        }
+
+        public void RpcTestAbilityCall()
+        {
+            MessageWriter writer = createWriter(XionRpcOpsCode.TestRpc);
+            // 色々と
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            // 必要な関数書く
         }
 
         private MessageWriter createWriter(XionRpcOpsCode opsCode)
