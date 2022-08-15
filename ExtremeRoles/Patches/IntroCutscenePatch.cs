@@ -439,19 +439,12 @@ namespace ExtremeRoles.Patches
 
         private static void removeXionPlayerToAllPlayerControl()
         {
-            foreach (var role in ExtremeRoleManager.GameRole.Values)
-            {
-                Roles.Solo.Host.Xion xion = role as Roles.Solo.Host.Xion;
-                if (xion != null)
-                {
-                    bool isXion(PlayerControl x) => x.PlayerId == xion.PlayerId;
+            bool isXion(PlayerControl x) => x.PlayerId == Roles.Solo.Host.Xion.PlayerId;
 
-                    PlayerControl.AllPlayerControls.RemoveAll(
-                        (Il2CppSystem.Predicate<PlayerControl>)isXion);
-                    CachedPlayerControl.AllPlayerControls.RemoveAll(
-                        x => x.PlayerId == xion.PlayerId);
-                }
-            }
+            PlayerControl.AllPlayerControls.RemoveAll(
+                (Il2CppSystem.Predicate<PlayerControl>)isXion);
+            CachedPlayerControl.AllPlayerControls.RemoveAll(
+                x => x.PlayerId == Roles.Solo.Host.Xion.PlayerId);
         }
         
     }
