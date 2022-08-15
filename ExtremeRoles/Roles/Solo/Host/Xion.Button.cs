@@ -309,8 +309,9 @@ namespace ExtremeRoles.Roles.Solo.Host
             {
                 button.SetActive(active);
             }
-            foreach (var(_, button) in this.acitonToPlayerButton.Values)
+            foreach (var(pool, button) in this.acitonToPlayerButton.Values)
             {
+                pool.gameObject.SetActive(active);
                 button.SetActive(active);
             }
         }

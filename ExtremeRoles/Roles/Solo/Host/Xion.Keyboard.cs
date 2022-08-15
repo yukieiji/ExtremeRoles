@@ -45,10 +45,9 @@ namespace ExtremeRoles.Roles.Solo.Host
             if (MeetingHud.Instance)
             {
                 // 会議強制終了
-                if (Input.GetKey(ops) &&
-                    Input.GetKeyDown(forceMeetingEnd))
+                if (Input.GetKey(ops) && Input.GetKeyDown(forceMeetingEnd))
                 {
-                    RpcForceEndMeeting();
+                    MeetingHud.Instance.ForceSkipAll();
                 }
                 return;
             }
