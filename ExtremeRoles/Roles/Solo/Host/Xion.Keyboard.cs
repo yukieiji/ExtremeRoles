@@ -26,7 +26,8 @@ namespace ExtremeRoles.Roles.Solo.Host
             if (!AmongUsClient.Instance.AmHost) { return; }
             if (Input.GetKeyDown(functionCall) &&
                 isLocalGame() &&
-                Helper.GameSystem.IsLobby)
+                Helper.GameSystem.IsLobby &&
+                isAllPlyerDummy())
             {
                 spawnDummy();
             }
@@ -109,6 +110,20 @@ namespace ExtremeRoles.Roles.Solo.Host
                 this.RpcTestAbilityCall();
             }
 #endif
+        }
+
+        private static bool isAllPlyerDummy()
+        {
+            foreach (var player in PlayerControl.AllPlayerControls)
+            {
+                if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId) { continue; }
+
+                if (!player.GetComponent<DummyBehaviour>().enabled)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
     }
