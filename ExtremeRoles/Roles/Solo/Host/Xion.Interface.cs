@@ -1,4 +1,5 @@
 ﻿using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Host
 {
@@ -26,6 +27,7 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         public void Update(PlayerControl rolePlayer)
         {
+            FastDestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
             this.keyBind();
             this.disableButton();
             this.buttonUpdate();

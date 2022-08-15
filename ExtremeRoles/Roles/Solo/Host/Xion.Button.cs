@@ -315,8 +315,6 @@ namespace ExtremeRoles.Roles.Solo.Host
         private void modCamera(float zoomFactor)
         {
             Camera.main.orthographicSize *= zoomFactor;
-
-            var hudManager = FastDestroyableSingleton<HudManager>.Instance;
             foreach (var cam in Camera.allCameras)
             {
                 if (cam != null && cam.gameObject.name == "UI Camera")
@@ -324,16 +322,6 @@ namespace ExtremeRoles.Roles.Solo.Host
                     cam.orthographicSize *= zoomFactor;
                     // The UI is scaled too, else we cant click the buttons. Downside: }map is super small.
                 }
-            }
-            
-            if (Camera.main.orthographicSize == this.defaultCameraZoom)
-            {
-                hudManager.ShadowQuad.gameObject.SetActive(true);
-            }
-            else
-            {
-                // 見た目が悪くなるので無効化しとく
-                hudManager.ShadowQuad.gameObject.SetActive(false);
             }
 
             ResolutionManager.ResolutionChanged.Invoke((float)Screen.width / Screen.height);
