@@ -1187,13 +1187,16 @@ namespace ExtremeRoles.Patches
             var ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
             if (ghostRole == null) { return; }
 
-            if (ghostRole.Button != null)
+            if (__instance.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
             {
-                ghostRole.Button.SetActive(false);
-                ghostRole.Button.ForceAbilityOff();
-            }
+                if (ghostRole.Button != null)
+                {
+                    ghostRole.Button.SetActive(false);
+                    ghostRole.Button.ForceAbilityOff();
+                }
 
-            ghostRole.ReseOnMeetingStart();
+                ghostRole.ReseOnMeetingStart();
+            }
 
             lock(ExtremeGhostRoleManager.GameRole)
             {
