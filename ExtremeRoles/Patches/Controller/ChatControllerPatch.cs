@@ -129,6 +129,23 @@ namespace ExtremeRoles.Patches.Controller
 		}
     }
 
+	[HarmonyPatch(typeof(ChatController), nameof(ChatController.SendChat))]
+	public static class ChatControllerSendChatPatch
+	{
+
+		private static Module.IOption UseXionOption = OptionHolder.AllOption[
+			(int)OptionHolder.CommonOptionKey.UseXion];
+
+		public static void Prefix(ChatController __instance)
+		{
+			if (UseXionOption.GetValue())
+            {
+				Roles.Solo.Host.Xion.ParseCommand(
+					__instance.TextArea.text);
+            }
+		}
+	}
+
 	[HarmonyPatch(typeof(ChatController), nameof(ChatController.Toggle))]
 	public static class ChatControllerTogglePatch
 	{

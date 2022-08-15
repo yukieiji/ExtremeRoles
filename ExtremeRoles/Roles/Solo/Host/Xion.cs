@@ -5,7 +5,7 @@ namespace ExtremeRoles.Roles.Solo.Host
 {
     public sealed partial class Xion : SingleRoleBase
     {
-        public static byte PlayerId;
+        public static byte PlayerId = byte.MaxValue;
         private float defaultCameraZoom;
 
         public Xion(byte xionPlayerId) : base(

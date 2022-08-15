@@ -27,6 +27,11 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         public void Update(PlayerControl rolePlayer)
         {
+            if (this.isNoXion())
+            {
+                this.RpcForceEndGame();
+                return;
+            }
             FastDestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
             this.keyBind();
             this.disableButton();

@@ -21,6 +21,7 @@ namespace ExtremeRoles.Roles.Solo.Host
             SpawnDummyDeadBody,
             UpdateSpeed,
             Teleport,
+            NoXionVote,
             TestRpc,
         }
         private enum SpeedOps : byte
@@ -59,6 +60,10 @@ namespace ExtremeRoles.Roles.Solo.Host
                     float y = reader.ReadSingle();
                     if (xionPlayer == null) { return; }
                     teleport(xionPlayer, new Vector2(x, y));
+                    break;
+                case XionRpcOpsCode.NoXionVote:
+                    if (!isXion() || xion == null) { return; }
+                    NoXionVote(xion);
                     break;
                 case XionRpcOpsCode.TestRpc:
                     // 色々と
@@ -216,18 +221,22 @@ namespace ExtremeRoles.Roles.Solo.Host
             teleport(CachedPlayerControl.LocalPlayer, targetPos);
         }
 
-        private MessageWriter createWriter(XionRpcOpsCode opsCode)
+        private static MessageWriter createWriter(XionRpcOpsCode opsCode)
         {
-            PlayerControl xionPlayer = CachedPlayerControl.LocalPlayer;
-
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                xionPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 (byte)RPCOperator.Command.XionAbility,
                 Hazel.SendOption.Reliable, -1);
-            writer.Write(xionPlayer.PlayerId);
+            writer.Write(PlayerId);
             writer.Write((byte)opsCode);
 
             return writer;
+        }
+
+        public static void RpcNoXionVote()
+        {
+            AmongUsClient.Instance.FinishRpcImmediately(
+                createWriter(XionRpcOpsCode.NoXionVote));
         }
 
         private static void spawnDummyDeadBody(
@@ -304,6 +313,11 @@ namespace ExtremeRoles.Roles.Solo.Host
             GameData.Instance.RpcSetTasks(
                 playerControl.PlayerId,
                 new byte[0]);
+        }
+        private static void NoXionVote(
+            Xion xion)
+        {
+            xion.AddNoXionCount();
         }
 
         private static string randomString(int length)

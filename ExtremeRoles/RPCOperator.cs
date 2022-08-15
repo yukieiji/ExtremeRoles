@@ -135,6 +135,8 @@ namespace ExtremeRoles
             GhostRoles.ExtremeGhostRoleManager.Initialize();
             ExtremeRolesPlugin.GameDataStore.Initialize();
             ExtremeRolesPlugin.Info.ResetOverlays();
+            
+            // チェックポイントリセット
             Helper.Logging.ResetCkpt();
 
             // ポジションセッターリセット
@@ -153,6 +155,9 @@ namespace ExtremeRoles
             Patches.MiniGame.VitalsMinigameUpdatePatch.Initialize();
             Patches.MiniGame.SecurityHelper.Initialize();
             Patches.MapOverlay.MapCountOverlayUpdatePatch.Initialize();
+
+            // シオンのリセット
+            Roles.Solo.Host.Xion.Purge();
         }
 
         public static void ForceEnd()
