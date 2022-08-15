@@ -375,6 +375,9 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         private void replacePlayerButtonPos()
         {
+            
+            if (MeetingHud.Instance) { return; }
+
             Vector3 iconBase = FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition;
             iconBase.x *= -1;
             int index = 0;
