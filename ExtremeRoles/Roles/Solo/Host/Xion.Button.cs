@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -30,7 +31,6 @@ namespace ExtremeRoles.Roles.Solo.Host
                 Sprite sprite,
                 Action buttonAction,
                 Vector3 positionOffset,
-                Vector3 scale,
                 string buttonText = "",
                 bool mirror = false)
             {
@@ -48,7 +48,7 @@ namespace ExtremeRoles.Roles.Solo.Host
                 SetActive(false);
 
                 this.mirror = mirror;
-                this.scale = scale;
+                this.scale = this.body.transform.localScale;
 
                 var useButton = hudManager.UseButton;
 
@@ -81,6 +81,11 @@ namespace ExtremeRoles.Roles.Solo.Host
                     this.body.gameObject.SetActive(false);
                     this.body.graphic.enabled = false;
                 }
+            }
+
+            public void SetOffset(Vector3 newOffset)
+            {
+                this.offset = newOffset;
             }
 
             public void ResetCoolTimer()
@@ -152,6 +157,14 @@ namespace ExtremeRoles.Roles.Solo.Host
         private const float maxZoomIn = 0.0001f;
         private const float maxZoomOut = 50.0f;
 
+        private enum PlayerState : byte
+        {
+            Alive,
+            Dead
+        }
+
+        private Dictionary<byte, PlayerState> playerState = new Dictionary<byte, PlayerState>();
+
         public void CreateButton()
         {
             this.funcButton.Clear();
@@ -163,7 +176,6 @@ namespace ExtremeRoles.Roles.Solo.Host
                         Path.MaintainerRepair),
                     this.RpcRepairSabotage,
                     new Vector3(-0.9f, -0.06f, 0),
-                    Vector3.one,
                     Helper.Translation.GetString("maintenance")));
 
             // 会議招集ボタン
@@ -173,7 +185,6 @@ namespace ExtremeRoles.Roles.Solo.Host
                         Path.DetectiveApprenticeEmergencyMeeting),
                     this.RpcCallMeeting,
                     new Vector3(0, 1.0f, 0),
-                    Vector3.one,
                     Helper.Translation.GetString("emergencyMeeting")));
 
             // ズームインアウト
@@ -183,7 +194,6 @@ namespace ExtremeRoles.Roles.Solo.Host
                         Path.TestButton),
                     this.cameraZoomOut,
                     new Vector3(-1.8f, 1.0f, 0),
-                    Vector3.one,
                     Helper.Translation.GetString("zoomOut")));
 
             this.funcButton.Add(
@@ -192,7 +202,6 @@ namespace ExtremeRoles.Roles.Solo.Host
                         Path.TestButton),
                     this.cameraZoomIn,
                    new Vector3(-1.8f, -0.06f, 0),
-                    Vector3.one,
                     Helper.Translation.GetString("zoomIn")));
 
             // スピード変更
@@ -202,7 +211,6 @@ namespace ExtremeRoles.Roles.Solo.Host
                         Path.TestButton),
                     this.RpcSpeedUp,
                     new Vector3(-2.7f, 1.0f, 0),
-                    Vector3.one,
                     Helper.Translation.GetString("speedUp")));
             this.funcButton.Add(
                 new NoneCoolTimeButton(
@@ -210,28 +218,36 @@ namespace ExtremeRoles.Roles.Solo.Host
                         Path.TestButton),
                     this.RpcSpeedDown,
                     new Vector3(-2.7f, -0.06f, 0),
-                    Vector3.one,
                     Helper.Translation.GetString("speedDown")));
 
+            // プレイヤーに関する能力周り
             this.acitonToPlayerButton.Clear();
+            this.playerState.Clear();
             Dictionary<byte, PoolablePlayer> poolPlayer = Helper.Player.CreatePlayerIcon();
             foreach (var (playerId, pool) in poolPlayer)
             {
-                if (playerId == this.playerId) { continue; }
 
+                if (playerId == this.playerId) { continue; }
+                GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
+                if (player == null || player.Disconnected)
+                {
+                    continue;
+                }
+
+                this.playerState[playerId] = player.IsDead ? PlayerState.Dead : PlayerState.Alive;
+                pool.transform.localScale = Vector3.one * 0.275f;
                 this.acitonToPlayerButton.Add(
                     playerId,
                     (
                         pool,
                         new NoneCoolTimeButton(
                             null,
-                            this.createPlayerButtonAction(playerId),
-                            new Vector3(-1.8f, -0.06f, 0), // 座標設定
-                            Vector3.one,
-                            "")
+                            this.createPlayerButtonAction(playerId), // 座標設定
+                            new Vector3(0.4f, 0.25f, 1.0f),
+                            "", true)
                     ));
             }
-
+            this.replacePlayerButtonPos();
         }
 
         private void disableButton()
@@ -261,6 +277,9 @@ namespace ExtremeRoles.Roles.Solo.Host
             {
                 button.Update();
             }
+            
+            this.replacePlayerButtonPos();
+
             foreach (var (playerId, (playerIcon, button)) in this.acitonToPlayerButton)
             {
                 button.Update();
@@ -330,10 +349,10 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         private Action createPlayerButtonAction(byte playerId)
         {
+            GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
+
             return () =>
             {
-                GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
-
                 if (player == null || player.Disconnected) { return; }
 
                 if (Input.GetKey(ops))
@@ -354,5 +373,49 @@ namespace ExtremeRoles.Roles.Solo.Host
             };
         }
 
+        private void replacePlayerButtonPos()
+        {
+            Vector3 iconBase = FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition;
+            iconBase.x *= -1;
+            int index = 0;
+
+            List<byte> remove = new List<byte>();
+
+            foreach (var (playerId,(pool, button)) in this.acitonToPlayerButton)
+            {
+
+                GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
+                if (player == null || player.Disconnected)
+                {
+                    button.SetActive(false);
+                    pool.gameObject.SetActive(false);
+                    remove.Add(playerId);
+                    continue;
+                }
+
+                pool.gameObject.SetActive(true);
+                bool isDead = player.IsDead;
+                PlayerState curState = isDead ? PlayerState.Dead : PlayerState.Alive;
+
+                if (this.playerState[playerId] != curState)
+                {
+                    pool.UpdateFromPlayerData(
+                        player, PlayerOutfitType.Default,
+                        PlayerMaterial.MaskType.None, isDead);
+                }
+                Vector3 pos = new Vector3(-0.35f, -0.25f, 1.0f) + Vector3.right * index * 0.55f;
+                button.SetOffset(pos);
+                pool.transform.localPosition = iconBase + pos;
+
+                this.playerState[playerId] = curState;
+                
+                ++index;
+            }
+
+            foreach (byte playerId in remove)
+            {
+                this.acitonToPlayerButton.Remove(playerId);
+            }
+        }
     }
 }

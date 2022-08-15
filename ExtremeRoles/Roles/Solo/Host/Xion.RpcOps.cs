@@ -185,24 +185,20 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         public void RpcKill(byte targetPlayerId)
         {
-            PlayerControl xionPlayer = CachedPlayerControl.LocalPlayer;
-
             RPCOperator.Call(
-                xionPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.UncheckedMurderPlayer,
-                new List<byte> { xionPlayer.PlayerId, targetPlayerId, byte.MinValue });
+                new List<byte> { targetPlayerId, targetPlayerId, byte.MinValue });
             RPCOperator.UncheckedMurderPlayer(
-                xionPlayer.PlayerId,
+                targetPlayerId,
                 targetPlayerId,
                 byte.MinValue);
         }
 
         public void RpcRevive(byte targetPlayerId)
         {
-            PlayerControl xionPlayer = CachedPlayerControl.LocalPlayer;
-
             RPCOperator.Call(
-                xionPlayer.NetId,
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.UncheckedRevive,
                 new List<byte> { targetPlayerId });
             RPCOperator.UncheckedRevive(
