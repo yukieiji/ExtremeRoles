@@ -36,7 +36,7 @@ namespace ExtremeRoles.Module.SpecialWinChecker
 
             foreach (Yandere role in aliveYandere)
             {
-                if (role.OneSidedLover == null) { return false; }
+                if (role.OneSidedLover == null) { continue; }
 
                 var playerInfo = role.OneSidedLover.Data;
                 var oneSidedLoverRole = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
