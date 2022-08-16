@@ -38,6 +38,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private float setTargetRange;
         private float setTargetTime;
 
+        private string oneSidePlayerName = string.Empty;
+
         private KillTarget target;
 
         private Dictionary<byte, float> progress = new Dictionary<byte, float>();
@@ -182,17 +184,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public override string GetIntroDescription() => string.Format(
             base.GetIntroDescription(),
-            this.OneSidedLover.Data.PlayerName);
+            this.oneSidePlayerName);
 
         public override string GetImportantText(
             bool isContainFakeTask = true)
         {
-
-            string baseString = base.GetImportantText(isContainFakeTask);
-
-            if (this.OneSidedLover == null) { return baseString; }
             return string.Format(
-                baseString, this.OneSidedLover.Data.PlayerName);
+                base.GetImportantText(isContainFakeTask),
+                this.oneSidePlayerName);
         }
 
         public override string GetRolePlayerNameTag(
@@ -240,7 +239,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 return; 
             }
 
-            if (this.OneSidedLover == null) { return; }
+            if (this.OneSidedLover == null)
+            {
+                this.isRunaway = true;
+                this.target.Update();
+                updateCanKill();
+                return; 
+            }
 
             if (!this.isOneSidedLoverShare)
             {
@@ -277,7 +282,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (this.blockTimer > this.blockTargetTime)
             {
                 // 片思いびとが生きてる時の処理
-                if (!this.OneSidedLover.Data.Disconnected && !this.OneSidedLover.Data.IsDead)
+                if (!this.OneSidedLover.Data.Disconnected && 
+                    !this.OneSidedLover.Data.IsDead)
                 {
                     searchTarget(rolePlayer, oneSideLoverPos);
                 }
@@ -338,7 +344,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 }
 
             } while (true);
-
+            this.oneSidePlayerName = this.OneSidedLover.Data.PlayerName;
         }
 
         public void IntroEndSetUp()
@@ -471,7 +477,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
 
             this.isOneSidedLoverShare = false;
-
+            this.oneSidePlayerName = string.Empty;
         }
 
         private void checkRunawayNextMeeting()
