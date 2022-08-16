@@ -225,7 +225,13 @@ namespace ExtremeRoles.Patches.Meeting
         {
             if (role != null)
             {
-                voteModifier.Add(role.Order, (role, rolePlayerId));
+                int order = role.Order;
+                // 同じ役職は同じ優先度になるので次の優先度になるようにセット
+                while (voteModifier.ContainsKey(order))
+                {
+                    ++order;
+                }
+                voteModifier.Add(order, (role, rolePlayerId));
             }
         }
 
@@ -707,7 +713,13 @@ namespace ExtremeRoles.Patches.Meeting
             GameData.PlayerInfo playerById = GameData.Instance.GetPlayerById(rolePlayerId);
             if (role != null)
             {
-                voteModifier.Add(role.Order, (role, playerById));
+                int order = role.Order;
+                // 同じ役職は同じ優先度になるので次の優先度になるようにセット
+                while (voteModifier.ContainsKey(order))
+                {
+                    ++order;
+                }
+                voteModifier.Add(order, (role, playerById));
             }
         }
     }
@@ -756,5 +768,4 @@ namespace ExtremeRoles.Patches.Meeting
             }
         }
     }
-
 }
