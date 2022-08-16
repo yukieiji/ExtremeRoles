@@ -227,7 +227,7 @@ namespace ExtremeRoles.Roles.Solo.Host
             foreach (var (playerId, pool) in poolPlayer)
             {
 
-                if (playerId == this.playerId) { continue; }
+                if (playerId == PlayerId) { continue; }
                 GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
                 if (player == null || player.Disconnected)
                 {
