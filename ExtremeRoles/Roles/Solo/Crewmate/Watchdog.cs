@@ -83,7 +83,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            Object.Destroy(this.monitoring);
+            if (this.monitoring != null)
+            {
+                this.monitoring.Close();
+            }
             if (this.chargeTime != null)
             {
                 this.chargeTime.gameObject.SetActive(false);

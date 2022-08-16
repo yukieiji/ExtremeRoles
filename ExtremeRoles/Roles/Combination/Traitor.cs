@@ -306,9 +306,10 @@ namespace ExtremeRoles.Roles.Combination
             {
                 this.chargeTime.gameObject.SetActive(false);
             }
-
-            Object.Destroy(this.minigame);
-
+            if (this.minigame != null)
+            {
+                this.minigame.Close();
+            }
             if (MapBehaviour.Instance)
             {
                 MapBehaviour.Instance.Close();
