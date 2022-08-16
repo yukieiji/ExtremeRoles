@@ -40,6 +40,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             if (this.monitoring != null)
             {
                 this.monitoring.Close();
+                this.monitoring = null;
             }
         }
 
@@ -86,6 +87,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             if (this.monitoring != null)
             {
                 this.monitoring.Close();
+                this.monitoring = null;
             }
             if (this.chargeTime != null)
             {

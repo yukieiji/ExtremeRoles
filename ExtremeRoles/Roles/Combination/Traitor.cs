@@ -242,6 +242,7 @@ namespace ExtremeRoles.Roles.Combination
                     if (this.minigame != null)
                     {
                         this.minigame.Close();
+                        this.minigame = null;
                     }
                     break;
                 default:
@@ -297,11 +298,6 @@ namespace ExtremeRoles.Roles.Combination
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            return;
-        }
-
-        public void RoleAbilityResetOnMeetingEnd()
-        {
             if (this.chargeTime != null)
             {
                 this.chargeTime.gameObject.SetActive(false);
@@ -309,11 +305,17 @@ namespace ExtremeRoles.Roles.Combination
             if (this.minigame != null)
             {
                 this.minigame.Close();
+                this.minigame = null;
             }
             if (MapBehaviour.Instance)
             {
                 MapBehaviour.Instance.Close();
             }
+        }
+
+        public void RoleAbilityResetOnMeetingEnd()
+        {
+            return;
         }
 
         public void Update(PlayerControl rolePlayer)

@@ -742,6 +742,7 @@ namespace ExtremeRoles.Roles.Combination
             {
                 this.meeting.Close();
                 this.useAbility = false;
+                this.meeting = null;
             }
         }
 
