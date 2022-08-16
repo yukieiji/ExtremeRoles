@@ -1,8 +1,8 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace ExtremeRoles.Roles.API.Extension
+namespace ExtremeRoles.Roles.API.Extension.State
 {
-    public static class RoleExtension
+    public static class RoleState
     {
         public static bool TryGetVisonMod(this SingleRoleBase role,
             out float vison, out bool isApplyEnvironmentVision)

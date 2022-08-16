@@ -7,7 +7,7 @@ using HarmonyLib;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Extension;
+using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 

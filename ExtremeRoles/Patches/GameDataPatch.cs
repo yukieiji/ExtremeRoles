@@ -1,5 +1,5 @@
 ﻿using HarmonyLib;
-using ExtremeRoles.Roles.API.Extension;
+using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 

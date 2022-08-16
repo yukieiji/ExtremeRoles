@@ -8,7 +8,7 @@ using BepInEx.IL2CPP.Utils.Collections;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API.Extension;
+using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
