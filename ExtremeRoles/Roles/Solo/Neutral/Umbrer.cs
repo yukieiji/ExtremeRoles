@@ -523,7 +523,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             foreach (var (playerId, poolPlayer) in this.playerIcon)
             {
-                if (this.container.IsContain(playerId))
+                GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
+
+                if (this.container.IsContain(playerId) ||
+                    player == null ||
+                    player.IsDead ||
+                    player.Disconnected)
                 {
                     poolPlayer.gameObject.SetActive(false);
                 }
