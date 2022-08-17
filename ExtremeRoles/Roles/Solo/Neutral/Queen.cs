@@ -342,9 +342,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public override void ExiledAction(GameData.PlayerInfo rolePlayer)
         {
-            foreach (var playerId in this.ServantPlayerId)
+            foreach (byte playerId in this.ServantPlayerId)
             {
-                var player = Player.GetPlayerControlById(playerId);
+                PlayerControl player = Player.GetPlayerControlById(playerId);
 
                 if (player == null) { continue; }
                 if (player.Data.IsDead || player.Data.Disconnected) { continue; }
@@ -386,9 +386,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public override void RolePlayerKilledAction(
             PlayerControl rolePlayer, PlayerControl killerPlayer)
         {
-            foreach (var playerId in this.ServantPlayerId)
+            foreach (byte playerId in this.ServantPlayerId)
             {
-                var player = Player.GetPlayerControlById(playerId);
+                PlayerControl player = Player.GetPlayerControlById(playerId);
                 
                 if (player == null) { continue; }
 
