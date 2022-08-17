@@ -550,7 +550,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         protected override void RoleSpecificInit()
         {
             this.CurRecursion = 0;
-            this.SidekickPlayerId.Clear();
+            this.SidekickPlayerId = new List<byte>();
 
             var allOption = OptionHolder.AllOption;
 

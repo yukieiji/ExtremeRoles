@@ -249,7 +249,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private bool isResetCoolTimeWhenMeeting;
         private bool isShowArrow;
         private bool isActivated;
-        private Dictionary<byte, Arrow> deadBodyArrow = new Dictionary<byte, Arrow>();
+        private Dictionary<byte, Arrow> deadBodyArrow;
 
         public Eater() : base(
            ExtremeRoleId.Eater,
@@ -534,7 +534,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.isShowArrow = allOps[
                GetRoleOptionId(EaterOption.IsShowArrowForDeadBody)].GetValue();
 
-            this.deadBodyArrow.Clear();
+            this.deadBodyArrow = new Dictionary<byte, Arrow>();
             this.isActivated = false;
 
             this.abilityInit();

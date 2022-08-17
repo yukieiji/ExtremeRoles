@@ -141,7 +141,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 GetRoleOptionId(TaskMasterOption.AddNormalTaskNum)].GetValue();
             this.addCommonTask = allOption[
                 GetRoleOptionId(TaskMasterOption.AddCommonTaskNum)].GetValue();
-            this.addTask.Clear();
+            this.addTask = new List<int>();
         }
 
         public static void ReplaceToNewTask(byte playerId, int index, int taskIndex)

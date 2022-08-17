@@ -33,7 +33,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         private RoleAbilityButtonBase setMine;
 
-        private List<Vector2> mines = new List<Vector2>();
+        private List<Vector2> mines;
         private float killRange;
         private float nonActiveTime;
         private float timer;
@@ -249,7 +249,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.isShowKillLog = allOpt[GetRoleOptionId(
                 MinerOption.ShowKillLog)].GetValue();
 
-            this.mines.Clear();
+            this.mines = new List<Vector2>();
             this.timer = this.nonActiveTime;
             this.setPos = null;
             this.killLogger = new TextPopUpper(

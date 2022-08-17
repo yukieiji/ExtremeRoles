@@ -42,7 +42,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         private KillTarget target;
 
-        private Dictionary<byte, float> progress = new Dictionary<byte, float>();
+        private Dictionary<byte, float> progress;
 
         public class KillTarget
         {
@@ -464,7 +464,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.target = new KillTarget(
                 allOption[GetRoleOptionId(YandereOption.HasTargetArrow)].GetValue());
 
-            this.progress.Clear();
+            this.progress = new Dictionary<byte, float>();
 
             if (this.HasOtherKillCool)
             {

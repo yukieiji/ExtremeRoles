@@ -37,7 +37,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public byte TargetPlayer = byte.MaxValue;
 
-        private Queue<byte> lamb = new Queue<byte>();
+        private Queue<byte> lamb;
         private float timer;
 
         private float propagateRange;
@@ -84,7 +84,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         protected override void RoleSpecificInit()
         {
-            this.lamb.Clear();
+            this.lamb = new Queue<byte>();
             this.timer = 0;
 
             this.tellDeparture = OptionHolder.AllOption[

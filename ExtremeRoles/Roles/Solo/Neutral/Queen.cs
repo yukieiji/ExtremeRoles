@@ -45,8 +45,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private float killKillCoolReduceRate;
         private float taskKillCoolReduceRate;
         private float taskCompKillCoolReduceRate;
-        private Dictionary<byte, float> servantTaskGage = new Dictionary<byte, float>();
-        private HashSet<byte> taskCompServant = new HashSet<byte>();
+        private Dictionary<byte, float> servantTaskGage;
+        private HashSet<byte> taskCompServant;
 
         public Queen() : base(
             ExtremeRoleId.Queen,
@@ -470,9 +470,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.taskCompKillCoolReduceRate = 1.0f - ((float)OptionHolder.AllOption[
                 GetRoleOptionId(QueenOption.ServantTaskCompKillCoolReduceRate)].GetValue() / 100.0f);
 
-            this.servantTaskGage.Clear();
-            this.ServantPlayerId.Clear();
-            this.taskCompServant.Clear();
+            this.servantTaskGage = new Dictionary<byte, float>();
+            this.ServantPlayerId = new List<byte>();
+            this.taskCompServant = new HashSet<byte>();
         }
 
         private bool isSameQueenTeam(SingleRoleBase targetRole)

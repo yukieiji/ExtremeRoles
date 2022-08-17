@@ -258,8 +258,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private float infectRange;
         private float maxTimer;
         private bool isFetch = false;
-        private Dictionary<byte, float> timer = new Dictionary<byte, float>();
-        private Dictionary<byte, PoolablePlayer> playerIcon = new Dictionary<byte, PoolablePlayer>();
+        private Dictionary<byte, float> timer;
+        private Dictionary<byte, PoolablePlayer> playerIcon;
 
 
         public Umbrer() : base(
@@ -455,6 +455,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         protected override void RoleSpecificInit()
         {
             this.container = new InfectedContainer();
+
+            this.timer = new Dictionary<byte, float>();
+            this.playerIcon = new Dictionary<byte, PoolablePlayer>();
 
             var allOpt = OptionHolder.AllOption;
 
