@@ -255,6 +255,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             var targetPlayer = Player.GetPlayerControlById(targetId);
             var targetRole = ExtremeRoleManager.GameRole[targetId];
 
+            IRoleHasParent.PurgeParent(targetId);
+
             // プレイヤーのリセット処理
             if (CachedPlayerControl.LocalPlayer.PlayerId == targetId)
             {

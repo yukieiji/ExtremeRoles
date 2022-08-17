@@ -66,7 +66,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             var targetPlayer = Player.GetPlayerControlById(targetPlayerId);
             var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
 
-            purgeParent(targetPlayerId);
+            IRoleHasParent.PurgeParent(targetPlayerId);
             resetTargetAnotherRole(targetRole, targetPlayerId, targetPlayer);
             replaceVanilaRole(targetRole, targetPlayer);
             resetAbility(targetRole, targetPlayerId);
@@ -212,12 +212,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     abilityRole.ResetOnMeetingEnd();
                 }
             }
-        }
-        private static void purgeParent(byte targetPlayerId)
-        {
-            var (role, anotherRole) = ExtremeRoleManager.GetInterfaceCastedRole<IRoleHasParent>(targetPlayerId);
-            role?.RemoveParent(targetPlayerId);
-            anotherRole?.RemoveParent(targetPlayerId);
         }
 
         private static void setNewRole(
