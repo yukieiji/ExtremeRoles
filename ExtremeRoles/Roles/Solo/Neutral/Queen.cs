@@ -67,6 +67,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             var targetPlayer = Player.GetPlayerControlById(targetPlayerId);
             var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
 
+            purgeParent(targetPlayerId);
             resetTargetAnotherRole(targetRole, targetPlayerId, targetPlayer);
             replaceVanilaRole(targetRole, targetPlayer);
             resetAbility(targetRole, targetPlayerId);
@@ -212,6 +213,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     abilityRole.ResetOnMeetingEnd();
                 }
             }
+        }
+        private static void purgeParent(byte targetPlayerId)
+        {
+            var (role, anotherRole) = ExtremeRoleManager.GetInterfaceCastedRole<IRoleHasParent>(targetPlayerId);
+            role?.RemoveParent(targetPlayerId);
+            anotherRole?.RemoveParent(targetPlayerId);
         }
 
         private static void setNewRole(
@@ -481,12 +488,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         }
     }
 
-    public class Servant : MultiAssignRoleBase, IRoleAbility, IRoleMurderPlayerHock
+    public class Servant : MultiAssignRoleBase, IRoleAbility, IRoleMurderPlayerHock, IRoleHasParent
     {
-        public byte QueenPlayerId => this.queenPlayerId;
+        public byte Parent => this.queenPlayerId;
 
         private byte queenPlayerId;
         private SpriteRenderer killFlash;
+        private Queen queen;
 
         public Servant(
             byte queenPlayerId,
@@ -514,6 +522,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
             this.GameControlId = queen.GameControlId;
             this.queenPlayerId = queenPlayerId;
+            this.queen = queen;
             this.FakeImposter = baseRole.Team == ExtremeRoleType.Impostor;
 
             if (baseRole.IsImpostor())
@@ -642,6 +651,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 playerId,
                 byte.MaxValue);
             return true;
+        }
+
+        public void RemoveParent(byte rolePlayerId)
+        {
+            this.queen.ServantPlayerId.Remove(rolePlayerId);
         }
 
         public override bool TryRolePlayerKillTo(

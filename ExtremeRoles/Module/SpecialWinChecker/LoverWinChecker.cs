@@ -71,7 +71,7 @@ namespace ExtremeRoles.Module.SpecialWinChecker
                     {
                         case ExtremeRoleId.Sidekick:
                             var sidekick = (Sidekick)lover.AnotherRole;
-                            var jackalPlayer = Helper.Player.GetPlayerControlById(sidekick.JackalPlayerId);
+                            var jackalPlayer = Helper.Player.GetPlayerControlById(sidekick.Parent);
                             if (jackalPlayer == null) { break; }
                             if (!jackalPlayer.Data.IsDead && 
                                 !jackalPlayer.Data.Disconnected && 
@@ -101,7 +101,7 @@ namespace ExtremeRoles.Module.SpecialWinChecker
                             break;
                         case ExtremeRoleId.Servant:
                             var servant = (Servant)lover.AnotherRole;
-                            var queenPlayer = Helper.Player.GetPlayerControlById(servant.QueenPlayerId);
+                            var queenPlayer = Helper.Player.GetPlayerControlById(servant.Parent);
                             if (queenPlayer == null) { break; }
                             if (!queenPlayer.Data.IsDead &&
                                 !queenPlayer.Data.Disconnected &&
