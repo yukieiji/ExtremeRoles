@@ -45,6 +45,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private float taskCompKillCoolReduceRate;
         private Dictionary<byte, float> servantTaskGage;
         private HashSet<byte> taskCompServant;
+        private HashSet<byte> servantPlayerId;
 
         public Queen() : base(
             ExtremeRoleId.Queen,
@@ -486,7 +487,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 GetRoleOptionId(QueenOption.ServantTaskCompKillCoolReduceRate)].GetValue() / 100.0f);
 
             this.servantTaskGage = new Dictionary<byte, float>();
-            this.ServantPlayerId = new List<byte>();
+            this.servantPlayerId = new HashSet<byte>();
             this.taskCompServant = new HashSet<byte>();
         }
 
