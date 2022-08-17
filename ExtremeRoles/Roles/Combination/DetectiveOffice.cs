@@ -427,7 +427,7 @@ namespace ExtremeRoles.Roles.Combination
 
     public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHock, IRoleReportHock, IRoleSpecialReset
     {
-        private Dictionary<byte, DateTime> deadBodyInfo = new Dictionary<byte, DateTime>();
+        private Dictionary<byte, DateTime> deadBodyInfo;
         public Assistant() : base(
             ExtremeRoleId.Assistant,
             ExtremeRoleType.Crewmate,
@@ -494,7 +494,7 @@ namespace ExtremeRoles.Roles.Combination
 
         protected override void RoleSpecificInit()
         {
-            this.deadBodyInfo.Clear();
+            this.deadBodyInfo = new Dictionary<byte, DateTime>();
         }
         private void downgradeDetective()
         {
