@@ -27,8 +27,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             ServantSelfKillCool
         }
 
-        public List<byte> ServantPlayerId = new List<byte>();
-
         public RoleAbilityButtonBase Button
         {
             get => this.createServant;
@@ -75,7 +73,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             Servant servant = new Servant(
                 rolePlayerId, queen, targetRole);
 
-            if (CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
+            if (targetPlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
             {
                 servant.SelfKillAbility(queen.ServantSelfKillCool);
                 if (targetRole.Team != ExtremeRoleType.Neutral)
@@ -108,7 +106,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 resetRole(targetRole, targetPlayerId, targetPlayer);
                 setNewRole(servant, targetPlayerId);
             }
-            queen.ServantPlayerId.Add(targetPlayerId);
+            queen.AddServantPlayer(targetPlayerId);
         }
 
         private static void resetTargetAnotherRole(
@@ -231,11 +229,21 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
         }
 
+        public void AddServantPlayer(byte servantPlayerId)
+        {
+            this.servantPlayerId.Add(servantPlayerId);
+        }
+
+        public void RemoveServantPlayer(byte servantPlayerId)
+        {
+            this.servantPlayerId.Remove(servantPlayerId);
+        }
+
         public void HockMuderPlayer(
             PlayerControl source, PlayerControl target)
         {
             if (source.PlayerId != target.PlayerId &&
-                this.ServantPlayerId.Contains(source.PlayerId))
+                this.servantPlayerId.Contains(source.PlayerId))
             {
 
                 float killcool = CachedPlayerControl.LocalPlayer.PlayerControl.killTimer;
@@ -252,7 +260,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             
             if (killcool <= 0.0f) { return; }
 
-            foreach (byte playerId in this.ServantPlayerId)
+            foreach (byte playerId in this.servantPlayerId)
             {
                 var player = Player.GetPlayerControlById(playerId);
                 if (player != null)
@@ -286,7 +294,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void AllReset(PlayerControl rolePlayer)
         {
-            foreach (var playerId in this.ServantPlayerId)
+            foreach (var playerId in this.servantPlayerId)
             {
                 var player = Player.GetPlayerControlById(playerId);
 
@@ -349,7 +357,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public override void ExiledAction(GameData.PlayerInfo rolePlayer)
         {
-            foreach (byte playerId in this.ServantPlayerId)
+            foreach (byte playerId in this.servantPlayerId)
             {
                 PlayerControl player = Player.GetPlayerControlById(playerId);
 
@@ -366,7 +374,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             if (targetRole.Id == ExtremeRoleId.Servant &&
                 this.IsSameControlId(targetRole) &&
-                this.ServantPlayerId.Contains(targetPlayerId))
+                this.servantPlayerId.Contains(targetPlayerId))
             {
                 return ColorPalette.QueenWhite;
             }
@@ -380,7 +388,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             SingleRoleBase targetRole, byte targetPlayerId)
         {
 
-            if (this.ServantPlayerId.Contains(targetPlayerId))
+            if (this.servantPlayerId.Contains(targetPlayerId))
             {
                 return Helper.Design.ColoedString(
                     ColorPalette.QueenWhite,
@@ -393,7 +401,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public override void RolePlayerKilledAction(
             PlayerControl rolePlayer, PlayerControl killerPlayer)
         {
-            foreach (byte playerId in this.ServantPlayerId)
+            foreach (byte playerId in this.servantPlayerId)
             {
                 PlayerControl player = Player.GetPlayerControlById(playerId);
                 
@@ -655,7 +663,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void RemoveParent(byte rolePlayerId)
         {
-            this.queen.ServantPlayerId.Remove(rolePlayerId);
+            this.queen.RemoveServantPlayer(rolePlayerId);
         }
 
         public override bool TryRolePlayerKillTo(
