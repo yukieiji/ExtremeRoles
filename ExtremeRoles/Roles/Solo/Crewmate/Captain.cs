@@ -48,7 +48,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private byte voteTarget;
 
         private TMPro.TextMeshPro meetingVoteText = null;
-        private Dictionary<byte, SpriteRenderer> voteCheckMark = new Dictionary<byte, SpriteRenderer>();
+        private Dictionary<byte, SpriteRenderer> voteCheckMark;
 
         public Captain() : base(
             ExtremeRoleId.Captain,
@@ -379,7 +379,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
 
             this.voteTarget = byte.MaxValue;
-            this.voteCheckMark.Clear();
+            this.voteCheckMark = new Dictionary<byte, SpriteRenderer>();
         }
         private bool isNotUseSpecialVote() => !this.IsAwake || this.curChargedVote < 1.0f;
     }

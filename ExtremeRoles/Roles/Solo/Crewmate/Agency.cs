@@ -40,7 +40,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
 
         public byte TargetPlayer = byte.MaxValue;
-        public List<TakeTaskType> TakeTask = new List<TakeTaskType>();
+        public List<TakeTaskType> TakeTask;
 
         private int maxTakeTask;
         private float takeTaskRange;
@@ -304,7 +304,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             this.RoleAbilityInit();
 
-            this.TakeTask.Clear();
+            this.TakeTask = new List<TakeTaskType>();
 
         }
     }
