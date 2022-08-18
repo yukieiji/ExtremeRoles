@@ -57,9 +57,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             ExtremeRoleId.Bomber.ToString(),
             Palette.ImpostorRed,
             true, false, true, true)
-        {
-            this.bombPlayerId.Clear();
-        }
+        { }
 
         public void CreateAbility()
         {
