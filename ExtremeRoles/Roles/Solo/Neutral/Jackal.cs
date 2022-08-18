@@ -29,7 +29,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             SidekickJackalCanMakeSidekick,
         }
 
-        public List<byte> SidekickPlayerId = new List<byte>();
+        public List<byte> SidekickPlayerId;
 
         public RoleAbilityButtonBase Button
         {
@@ -238,9 +238,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             ExtremeRoleId.Jackal.ToString(),
             ColorPalette.JackalBlue,
             true, false, true, false)
-        {
-            this.SidekickPlayerId.Clear();
-        }
+        { }
 
         public override SingleRoleBase Clone()
         {

@@ -34,7 +34,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         private TMPro.TextMeshPro tellText;
 
-        private HashSet<ExtremeRoleId> noneEnemy = new HashSet<ExtremeRoleId>()
+        private readonly HashSet<ExtremeRoleId> noneEnemy = new HashSet<ExtremeRoleId>()
         {
             ExtremeRoleId.Villain,
             ExtremeRoleId.Vigilante,

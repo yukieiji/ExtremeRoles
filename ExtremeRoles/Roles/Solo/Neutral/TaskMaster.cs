@@ -25,7 +25,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private int addLongTask = 0;
         private int addNormalTask = 0;
         private int addCommonTask = 0;
-        private List<int> addTask = new List<int>();
+        private List<int> addTask;
 
         public TaskMaster() : base(
             ExtremeRoleId.TaskMaster,
