@@ -15,6 +15,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
     {
         public enum MadmateOption
         {
+            CanFixSabotage,
             CanUseVent,
             CanMoveVentToVent,
             HasTask,
@@ -171,6 +172,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         protected override void CreateSpecificOption(
             IOption parentOps)
         {
+            CreateBoolOption(
+                MadmateOption.CanFixSabotage,
+                false, parentOps);
             var ventUseOpt = CreateBoolOption(
                 MadmateOption.CanUseVent,
                 false, parentOps);
@@ -203,6 +207,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.isSeeImpostorNow = false;
             this.isUpdateMadmate = false;
 
+            this.CanRepairSabotage = allOpt[
+                GetRoleOptionId(MadmateOption.CanFixSabotage)].GetValue();
             this.UseVent = allOpt[
                 GetRoleOptionId(MadmateOption.CanUseVent)].GetValue();
             this.canMoveVentToVent = allOpt[
