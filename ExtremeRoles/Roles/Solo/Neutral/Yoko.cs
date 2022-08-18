@@ -5,7 +5,8 @@ using UnityEngine;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Extension;
+using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
@@ -33,7 +34,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         private TMPro.TextMeshPro tellText;
 
-        private HashSet<ExtremeRoleId> noneEnemy = new HashSet<ExtremeRoleId>()
+        private readonly HashSet<ExtremeRoleId> noneEnemy = new HashSet<ExtremeRoleId>()
         {
             ExtremeRoleId.Villain,
             ExtremeRoleId.Vigilante,
@@ -76,24 +77,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
         }
 
-        public override bool IsSameTeam(SingleRoleBase targetRole)
-        {
-            if (this.Id == targetRole.Id)
-            {
-                if (OptionHolder.Ship.IsSameNeutralSameWin)
-                {
-                    return true;
-                }
-                else
-                {
-                    return this.IsSameControlId(targetRole);
-                }
-            }
-            else
-            {
-                return base.IsSameTeam(targetRole);
-            }
-        }
+        public override bool IsSameTeam(SingleRoleBase targetRole) =>
+            this.IsNeutralSameTeam(targetRole);
 
         protected override void CreateSpecificOption(
             IOption parentOps)

@@ -8,6 +8,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 
 using BepInEx.IL2CPP.Utils.Collections;
@@ -36,7 +37,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public byte TargetPlayer = byte.MaxValue;
 
-        private Queue<byte> lamb = new Queue<byte>();
+        private Queue<byte> lamb;
         private float timer;
 
         private float propagateRange;
@@ -56,24 +57,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             false, false, false, false)
         { }
 
-        public override bool IsSameTeam(SingleRoleBase targetRole)
-        {
-            if (this.Id == targetRole.Id)
-            {
-                if (OptionHolder.Ship.IsSameNeutralSameWin)
-                {
-                    return true;
-                }
-                else
-                {
-                    return this.IsSameControlId(targetRole);
-                }
-            }
-            else
-            {
-                return base.IsSameTeam(targetRole);
-            }
-        }
+        public override bool IsSameTeam(SingleRoleBase targetRole) =>
+            this.IsNeutralSameTeam(targetRole);
 
         protected override void CreateSpecificOption(
             IOption parentOps)
@@ -99,7 +84,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         protected override void RoleSpecificInit()
         {
-            this.lamb.Clear();
+            this.lamb = new Queue<byte>();
             this.timer = 0;
 
             this.tellDeparture = OptionHolder.AllOption[

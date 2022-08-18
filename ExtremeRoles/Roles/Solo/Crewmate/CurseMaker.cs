@@ -89,8 +89,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         }
 
-        private Dictionary<byte, Arrow> deadBodyArrow = new Dictionary<byte, Arrow>();
-        private Dictionary<byte, DeadBodyInfo> deadBodyData = new Dictionary<byte, DeadBodyInfo>();
+        private Dictionary<byte, Arrow> deadBodyArrow;
+        private Dictionary<byte, DeadBodyInfo> deadBodyData;
 
         private GameData.PlayerInfo targetBody;
         private byte deadBodyId;
@@ -343,7 +343,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 GetRoleOptionId(CurseMakerOption.ReduceSearchDeadBodyTime)].GetValue();
 
             this.cursingText = Translation.GetString("cursing");
-            this.deadBodyData.Clear();
+            this.deadBodyData = new Dictionary<byte, DeadBodyInfo>();
+            this.deadBodyArrow = new Dictionary<byte, Arrow>();
         }
 
         public void RoleAbilityResetOnMeetingStart()

@@ -6,6 +6,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.AbilityButton.Roles;
 
@@ -242,6 +243,7 @@ namespace ExtremeRoles.Roles.Combination
                     if (this.minigame != null)
                     {
                         this.minigame.Close();
+                        this.minigame = null;
                     }
                     break;
                 default:
@@ -297,11 +299,6 @@ namespace ExtremeRoles.Roles.Combination
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            return;
-        }
-
-        public void RoleAbilityResetOnMeetingEnd()
-        {
             if (this.chargeTime != null)
             {
                 this.chargeTime.gameObject.SetActive(false);
@@ -309,11 +306,17 @@ namespace ExtremeRoles.Roles.Combination
             if (this.minigame != null)
             {
                 this.minigame.Close();
+                this.minigame = null;
             }
             if (MapBehaviour.Instance)
             {
                 MapBehaviour.Instance.Close();
             }
+        }
+
+        public void RoleAbilityResetOnMeetingEnd()
+        {
+            return;
         }
 
         public void Update(PlayerControl rolePlayer)
@@ -341,24 +344,8 @@ namespace ExtremeRoles.Roles.Combination
             this.chargeTime.gameObject.SetActive(true);
         }
 
-        public override bool IsSameTeam(SingleRoleBase targetRole)
-        {
-            if (this.Id == targetRole.Id)
-            {
-                if (OptionHolder.Ship.IsSameNeutralSameWin)
-                {
-                    return true;
-                }
-                else
-                {
-                    return this.IsSameControlId(targetRole);
-                }
-            }
-            else
-            {
-                return base.IsSameTeam(targetRole);
-            }
-        }
+        public override bool IsSameTeam(SingleRoleBase targetRole) =>
+            this.IsNeutralSameTeam(targetRole);
 
         public override bool TryRolePlayerKillTo(PlayerControl rolePlayer, PlayerControl targetPlayer)
         {

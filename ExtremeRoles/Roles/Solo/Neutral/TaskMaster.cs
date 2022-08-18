@@ -7,6 +7,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
@@ -24,7 +25,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private int addLongTask = 0;
         private int addNormalTask = 0;
         private int addCommonTask = 0;
-        private List<int> addTask = new List<int>();
+        private List<int> addTask;
 
         public TaskMaster() : base(
             ExtremeRoleId.TaskMaster,
@@ -109,24 +110,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
         }
 
-        public override bool IsSameTeam(SingleRoleBase targetRole)
-        {
-            if (this.Id == targetRole.Id)
-            {
-                if (OptionHolder.Ship.IsSameNeutralSameWin)
-                {
-                    return true;
-                }
-                else
-                {
-                    return this.IsSameControlId(targetRole);
-                }
-            }
-            else
-            {
-                return base.IsSameTeam(targetRole);
-            }
-        }
+        public override bool IsSameTeam(SingleRoleBase targetRole) =>
+            this.IsNeutralSameTeam(targetRole);
 
         protected override void CreateSpecificOption(
             IOption parentOps)
@@ -156,7 +141,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 GetRoleOptionId(TaskMasterOption.AddNormalTaskNum)].GetValue();
             this.addCommonTask = allOption[
                 GetRoleOptionId(TaskMasterOption.AddCommonTaskNum)].GetValue();
-            this.addTask.Clear();
+            this.addTask = new List<int>();
         }
 
         public static void ReplaceToNewTask(byte playerId, int index, int taskIndex)

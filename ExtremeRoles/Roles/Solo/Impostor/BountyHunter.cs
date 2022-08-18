@@ -31,7 +31,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private TextMeshPro targetTimerText = null;
         private Arrow targetArrow = null;
 
-        private Dictionary<byte, PoolablePlayer> PlayerIcon = new Dictionary<byte, PoolablePlayer>();
+        private Dictionary<byte, PoolablePlayer> PlayerIcon;
 
         public enum BountyHunterOption
         {
@@ -160,6 +160,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.targetArrowUpdateTimer = 0;
             this.targetTimer = 0;
             this.targetId = byte.MaxValue;
+            this.PlayerIcon = new Dictionary<byte, PoolablePlayer>();
         }
 
         public void IntroBeginSetUp()

@@ -27,8 +27,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             ServantSelfKillCool
         }
 
-        public List<byte> ServantPlayerId = new List<byte>();
-
         public RoleAbilityButtonBase Button
         {
             get => this.createServant;
@@ -45,8 +43,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private float killKillCoolReduceRate;
         private float taskKillCoolReduceRate;
         private float taskCompKillCoolReduceRate;
-        private Dictionary<byte, float> servantTaskGage = new Dictionary<byte, float>();
-        private HashSet<byte> taskCompServant = new HashSet<byte>();
+        private Dictionary<byte, float> servantTaskGage;
+        private HashSet<byte> taskCompServant;
+        private HashSet<byte> servantPlayerId;
 
         public Queen() : base(
             ExtremeRoleId.Queen,
@@ -67,6 +66,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             var targetPlayer = Player.GetPlayerControlById(targetPlayerId);
             var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
 
+            IRoleHasParent.PurgeParent(targetPlayerId);
             resetTargetAnotherRole(targetRole, targetPlayerId, targetPlayer);
             replaceVanilaRole(targetRole, targetPlayer);
             resetAbility(targetRole, targetPlayerId);
@@ -74,7 +74,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             Servant servant = new Servant(
                 rolePlayerId, queen, targetRole);
 
-            if (CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
+            if (targetPlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
             {
                 servant.SelfKillAbility(queen.ServantSelfKillCool);
                 if (targetRole.Team != ExtremeRoleType.Neutral)
@@ -107,7 +107,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 resetRole(targetRole, targetPlayerId, targetPlayer);
                 setNewRole(servant, targetPlayerId);
             }
-            queen.ServantPlayerId.Add(targetPlayerId);
+            queen.AddServantPlayer(targetPlayerId);
         }
 
         private static void resetTargetAnotherRole(
@@ -224,11 +224,21 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
         }
 
+        public void AddServantPlayer(byte servantPlayerId)
+        {
+            this.servantPlayerId.Add(servantPlayerId);
+        }
+
+        public void RemoveServantPlayer(byte servantPlayerId)
+        {
+            this.servantPlayerId.Remove(servantPlayerId);
+        }
+
         public void HockMuderPlayer(
             PlayerControl source, PlayerControl target)
         {
             if (source.PlayerId != target.PlayerId &&
-                this.ServantPlayerId.Contains(source.PlayerId))
+                this.servantPlayerId.Contains(source.PlayerId))
             {
 
                 float killcool = CachedPlayerControl.LocalPlayer.PlayerControl.killTimer;
@@ -245,7 +255,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             
             if (killcool <= 0.0f) { return; }
 
-            foreach (byte playerId in this.ServantPlayerId)
+            foreach (byte playerId in this.servantPlayerId)
             {
                 var player = Player.GetPlayerControlById(playerId);
                 if (player != null)
@@ -279,7 +289,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void AllReset(PlayerControl rolePlayer)
         {
-            foreach (var playerId in this.ServantPlayerId)
+            foreach (var playerId in this.servantPlayerId)
             {
                 var player = Player.GetPlayerControlById(playerId);
 
@@ -342,9 +352,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public override void ExiledAction(GameData.PlayerInfo rolePlayer)
         {
-            foreach (var playerId in this.ServantPlayerId)
+            foreach (byte playerId in this.servantPlayerId)
             {
-                var player = Player.GetPlayerControlById(playerId);
+                PlayerControl player = Player.GetPlayerControlById(playerId);
 
                 if (player == null) { continue; }
                 if (player.Data.IsDead || player.Data.Disconnected) { continue; }
@@ -359,7 +369,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             if (targetRole.Id == ExtremeRoleId.Servant &&
                 this.IsSameControlId(targetRole) &&
-                this.ServantPlayerId.Contains(targetPlayerId))
+                this.servantPlayerId.Contains(targetPlayerId))
             {
                 return ColorPalette.QueenWhite;
             }
@@ -373,7 +383,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             SingleRoleBase targetRole, byte targetPlayerId)
         {
 
-            if (this.ServantPlayerId.Contains(targetPlayerId))
+            if (this.servantPlayerId.Contains(targetPlayerId))
             {
                 return Helper.Design.ColoedString(
                     ColorPalette.QueenWhite,
@@ -386,9 +396,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public override void RolePlayerKilledAction(
             PlayerControl rolePlayer, PlayerControl killerPlayer)
         {
-            foreach (var playerId in this.ServantPlayerId)
+            foreach (byte playerId in this.servantPlayerId)
             {
-                var player = Player.GetPlayerControlById(playerId);
+                PlayerControl player = Player.GetPlayerControlById(playerId);
                 
                 if (player == null) { continue; }
 
@@ -435,12 +445,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 parentOps);
             CreateIntOption(
                 QueenOption.ServantKillKillCoolReduceRate,
-                25, 5, 75, 1,
+                25, 0, 75, 1,
                 parentOps,
                 format:OptionUnit.Percentage);
             CreateIntOption(
                 QueenOption.ServantTaskKillCoolReduceRate,
-                50, 5, 75, 1,
+                50, 0, 75, 1,
                 parentOps,
                 format: OptionUnit.Percentage);
             CreateIntOption(
@@ -470,9 +480,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.taskCompKillCoolReduceRate = 1.0f - ((float)OptionHolder.AllOption[
                 GetRoleOptionId(QueenOption.ServantTaskCompKillCoolReduceRate)].GetValue() / 100.0f);
 
-            this.servantTaskGage.Clear();
-            this.ServantPlayerId.Clear();
-            this.taskCompServant.Clear();
+            this.servantTaskGage = new Dictionary<byte, float>();
+            this.servantPlayerId = new HashSet<byte>();
+            this.taskCompServant = new HashSet<byte>();
         }
 
         private bool isSameQueenTeam(SingleRoleBase targetRole)
@@ -481,12 +491,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         }
     }
 
-    public class Servant : MultiAssignRoleBase, IRoleAbility, IRoleMurderPlayerHock
+    public class Servant : MultiAssignRoleBase, IRoleAbility, IRoleMurderPlayerHock, IRoleHasParent
     {
-        public byte QueenPlayerId => this.queenPlayerId;
+        public byte Parent => this.queenPlayerId;
 
         private byte queenPlayerId;
         private SpriteRenderer killFlash;
+        private Queen queen;
 
         public Servant(
             byte queenPlayerId,
@@ -514,6 +525,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
             this.GameControlId = queen.GameControlId;
             this.queenPlayerId = queenPlayerId;
+            this.queen = queen;
             this.FakeImposter = baseRole.Team == ExtremeRoleType.Impostor;
 
             if (baseRole.IsImpostor())
@@ -642,6 +654,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 playerId,
                 byte.MaxValue);
             return true;
+        }
+
+        public void RemoveParent(byte rolePlayerId)
+        {
+            this.queen.RemoveServantPlayer(rolePlayerId);
         }
 
         public override bool TryRolePlayerKillTo(

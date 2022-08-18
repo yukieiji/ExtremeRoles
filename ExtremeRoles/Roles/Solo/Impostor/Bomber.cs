@@ -37,7 +37,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private byte setTargetPlayerId;
         private byte bombSettingPlayerId;
 
-        private Queue<byte> bombPlayerId = new Queue<byte>();
+        private Queue<byte> bombPlayerId;
         private TMPro.TextMeshPro tellText;
 
         public RoleAbilityButtonBase Button
@@ -57,9 +57,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             ExtremeRoleId.Bomber.ToString(),
             Palette.ImpostorRed,
             true, false, true, true)
-        {
-            this.bombPlayerId.Clear();
-        }
+        { }
 
         public void CreateAbility()
         {
@@ -149,7 +147,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.tellExplosion = allOption[
                 GetRoleOptionId(BomberOption.TellExplosion)].GetValue();
 
-            this.bombPlayerId.Clear();
+            this.bombPlayerId = new Queue<byte>();
             resetTimer();
 
         }

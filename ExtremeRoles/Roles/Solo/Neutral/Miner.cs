@@ -5,6 +5,7 @@ using UnityEngine;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
@@ -32,7 +33,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         private RoleAbilityButtonBase setMine;
 
-        private List<Vector2> mines = new List<Vector2>();
+        private List<Vector2> mines;
         private float killRange;
         private float nonActiveTime;
         private float timer;
@@ -216,24 +217,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.mines.Clear();
         }
 
-        public override bool IsSameTeam(SingleRoleBase targetRole)
-        {
-            if (this.Id == targetRole.Id)
-            {
-                if (OptionHolder.Ship.IsSameNeutralSameWin)
-                {
-                    return true;
-                }
-                else
-                {
-                    return this.IsSameControlId(targetRole);
-                }
-            }
-            else
-            {
-                return base.IsSameTeam(targetRole);
-            }
-        }
+        public override bool IsSameTeam(SingleRoleBase targetRole) =>
+            this.IsNeutralSameTeam(targetRole);
 
         protected override void CreateSpecificOption(
             IOption parentOps)
@@ -264,7 +249,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.isShowKillLog = allOpt[GetRoleOptionId(
                 MinerOption.ShowKillLog)].GetValue();
 
-            this.mines.Clear();
+            this.mines = new List<Vector2>();
             this.timer = this.nonActiveTime;
             this.setPos = null;
             this.killLogger = new TextPopUpper(

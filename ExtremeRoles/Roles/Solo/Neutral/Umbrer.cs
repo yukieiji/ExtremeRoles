@@ -258,8 +258,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private float infectRange;
         private float maxTimer;
         private bool isFetch = false;
-        private Dictionary<byte, float> timer = new Dictionary<byte, float>();
-        private Dictionary<byte, PoolablePlayer> playerIcon = new Dictionary<byte, PoolablePlayer>();
+        private Dictionary<byte, float> timer;
+        private Dictionary<byte, PoolablePlayer> playerIcon;
 
 
         public Umbrer() : base(
@@ -456,6 +456,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             this.container = new InfectedContainer();
 
+            this.timer = new Dictionary<byte, float>();
+            this.playerIcon = new Dictionary<byte, PoolablePlayer>();
+
             var allOpt = OptionHolder.AllOption;
 
             this.range = allOpt[GetRoleOptionId(UmbrerOption.Range)].GetValue();
@@ -523,7 +526,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             foreach (var (playerId, poolPlayer) in this.playerIcon)
             {
-                if (this.container.IsContain(playerId))
+                GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
+
+                if (this.container.IsContain(playerId) ||
+                    player == null ||
+                    player.IsDead ||
+                    player.Disconnected)
                 {
                     poolPlayer.gameObject.SetActive(false);
                 }

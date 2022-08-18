@@ -5,6 +5,7 @@ using UnityEngine;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
@@ -37,9 +38,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private float setTargetRange;
         private float setTargetTime;
 
+        private string oneSidePlayerName = string.Empty;
+
         private KillTarget target;
 
-        private Dictionary<byte, float> progress = new Dictionary<byte, float>();
+        private Dictionary<byte, float> progress;
 
         public class KillTarget
         {
@@ -176,38 +179,19 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             return true;
         }
 
-        public override bool IsSameTeam(SingleRoleBase targetRole)
-        {
-            if (this.Id == targetRole.Id)
-            {
-                if (OptionHolder.Ship.IsSameNeutralSameWin)
-                {
-                    return true;
-                }
-                else
-                {
-                    return this.IsSameControlId(targetRole);
-                }
-            }
-            else
-            {
-                return base.IsSameTeam(targetRole);
-            }
-        }
+        public override bool IsSameTeam(SingleRoleBase targetRole) =>
+            this.IsNeutralSameTeam(targetRole);
 
         public override string GetIntroDescription() => string.Format(
             base.GetIntroDescription(),
-            this.OneSidedLover.Data.PlayerName);
+            this.oneSidePlayerName);
 
         public override string GetImportantText(
             bool isContainFakeTask = true)
         {
-
-            string baseString = base.GetImportantText(isContainFakeTask);
-
-            if (this.OneSidedLover == null) { return baseString; }
             return string.Format(
-                baseString, this.OneSidedLover.Data.PlayerName);
+                base.GetImportantText(isContainFakeTask),
+                this.oneSidePlayerName);
         }
 
         public override string GetRolePlayerNameTag(
@@ -255,7 +239,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 return; 
             }
 
-            if (this.OneSidedLover == null) { return; }
+            if (this.OneSidedLover == null)
+            {
+                this.isRunaway = true;
+                this.target.Update();
+                updateCanKill();
+                return; 
+            }
 
             if (!this.isOneSidedLoverShare)
             {
@@ -292,7 +282,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (this.blockTimer > this.blockTargetTime)
             {
                 // 片思いびとが生きてる時の処理
-                if (!this.OneSidedLover.Data.Disconnected && !this.OneSidedLover.Data.IsDead)
+                if (!this.OneSidedLover.Data.Disconnected && 
+                    !this.OneSidedLover.Data.IsDead)
                 {
                     searchTarget(rolePlayer, oneSideLoverPos);
                 }
@@ -353,7 +344,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 }
 
             } while (true);
-
+            this.oneSidePlayerName = this.OneSidedLover.Data.PlayerName;
         }
 
         public void IntroEndSetUp()
@@ -473,7 +464,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.target = new KillTarget(
                 allOption[GetRoleOptionId(YandereOption.HasTargetArrow)].GetValue());
 
-            this.progress.Clear();
+            this.progress = new Dictionary<byte, float>();
 
             if (this.HasOtherKillCool)
             {
@@ -486,7 +477,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
 
             this.isOneSidedLoverShare = false;
-
+            this.oneSidePlayerName = string.Empty;
         }
 
         private void checkRunawayNextMeeting()

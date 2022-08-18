@@ -358,8 +358,8 @@ namespace ExtremeRoles.Patches.Manager
                 case (GameOverReason)RoleGameOverReason.UmbrerBiohazard:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Umbrer.ToString());
-                    textRenderer.color = ColorPalette.QueenWhite;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.QueenWhite);
+                    textRenderer.color = ColorPalette.UmbrerRed;
+                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.UmbrerRed);
                     break;
                 default:
                     break;

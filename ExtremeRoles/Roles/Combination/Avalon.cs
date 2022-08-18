@@ -225,7 +225,7 @@ namespace ExtremeRoles.Roles.Combination
         public bool CanSeeNeutral = false;
         private bool canSeeAssassin = false;
 
-        private Dictionary<byte, PoolablePlayer> PlayerIcon = new Dictionary<byte, PoolablePlayer>();
+        private Dictionary<byte, PoolablePlayer> PlayerIcon;
         public Marlin(
             ) : base(
                 ExtremeRoleId.Marlin,
@@ -319,6 +319,7 @@ namespace ExtremeRoles.Roles.Combination
                 GetRoleOptionId(MarlinOption.CanSeeNeutral)].GetValue();
             this.UseVent = allOption[
                 GetRoleOptionId(MarlinOption.CanUseVent)].GetValue();
+            this.PlayerIcon = new Dictionary<byte, PoolablePlayer>();
         }
 
         private void showIcon()

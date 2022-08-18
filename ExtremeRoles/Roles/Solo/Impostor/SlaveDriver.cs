@@ -7,7 +7,7 @@ using UnityEngine;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Extension;
+using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
@@ -17,7 +17,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
     public sealed class SlaveDriver : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IRoleMurderPlayerHock
     {
   
-        private List<(byte, List<int>)> specialAttackResult = new List<(byte,  List<int>)>();
+        private List<(byte, List<int>)> specialAttackResult;
 
         private int noneTaskPlayerAttakBonusChance;
         private int noneTaskPlayerSpecialAttackChance;
@@ -238,7 +238,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
 
             this.defaultKillCoolTime = this.KillCoolTime;
-            this.specialAttackResult.Clear();
+            this.specialAttackResult = new List<(byte, List<int>)>();
         }
 
         public void HockMuderPlayer(PlayerControl source, PlayerControl target)

@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API.Extension;
+using ExtremeRoles.Roles.API.Extension.State;
 
 namespace ExtremeRoles.Patches.Role
 {
