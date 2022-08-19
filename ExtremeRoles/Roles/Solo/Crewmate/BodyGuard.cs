@@ -9,11 +9,12 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using System;
 using ExtremeRoles.Module.ExtremeShipStatus;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public sealed class BodyGuard : SingleRoleBase, IRoleAbility, IRoleUpdate
+    public sealed class BodyGuard : SingleRoleBase, IRoleAbility, IRoleMeetingButtonAbility, IRoleUpdate
     {
         public enum BodyGuardOption
         {
@@ -174,6 +175,60 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public void RoleAbilityResetOnMeetingEnd()
         {
             return;
+        }
+
+        public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
+        {
+
+            int abilityNum = 0;
+
+            AbilityCountButton button = this.shieldButton as AbilityCountButton;
+            if (button != null)
+            {
+                abilityNum = button.CurAbilityNum;
+            }
+
+            return
+                !this.awakeMeetingAbility ||
+                abilityNum <= 0 ||
+                instance.TargetPlayerId == 253;
+        }
+
+        public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
+        {
+            abilityButton.name = $"bodyGuardFeatShield_{instance.TargetPlayerId}";
+            var controllerHighlight = abilityButton.transform.FindChild("ControllerHighlight");
+            if (controllerHighlight != null)
+            {
+                controllerHighlight.localScale *= new Vector2(1.25f, 1.25f);
+            }
+        }
+
+        public Action CreateAbilityAction(PlayerVoteArea instance)
+        {
+            PlayerControl player = CachedPlayerControl.LocalPlayer;
+            byte targetPlayerId = instance.TargetPlayerId;
+
+            void featShield()
+            {
+                RPCOperator.Call(
+                   player.NetId,
+                    RPCOperator.Command.BodyGuardFeatShield,
+                    new List<byte>
+                    {
+                        player.PlayerId,
+                        this.TargetPlayer
+                    });
+                RPCOperator.BodyGuardFeatShield(
+                    player.PlayerId, targetPlayerId);
+            }
+            return featShield;
+        }
+
+        public void SetSprite(SpriteRenderer render)
+        {
+            render.sprite = this.shildButtonImage;
+            render.transform.localScale *= new Vector2(0.625f, 0.625f);
         }
 
         public void Update(PlayerControl rolePlayer)
