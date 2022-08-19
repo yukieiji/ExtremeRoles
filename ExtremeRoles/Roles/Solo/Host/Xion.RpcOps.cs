@@ -4,6 +4,10 @@ using Hazel;
 
 using UnityEngine;
 
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
+
+using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
@@ -21,6 +25,8 @@ namespace ExtremeRoles.Roles.Solo.Host
             UpdateSpeed,
             Teleport,
             NoXionVote,
+            BackXion,
+            RepcalePlayerRole,
             TestRpc,
         }
         private enum SpeedOps : byte
@@ -61,6 +67,14 @@ namespace ExtremeRoles.Roles.Solo.Host
                     if (!isXion() || xion == null) { return; }
                     NoXionVote(xion);
                     break;
+                case XionRpcOpsCode.BackXion:
+                    hostToXion(playerId);
+                    break;
+                case XionRpcOpsCode.RepcalePlayerRole:
+                    byte targetPlayerId = reader.ReadByte();
+                    int roleId = reader.ReadPackedInt32();
+                    replaceToRole(targetPlayerId, roleId);
+                    break;
                 case XionRpcOpsCode.TestRpc:
                     // 色々と
                     if (xion == null) { return; }
@@ -71,6 +85,27 @@ namespace ExtremeRoles.Roles.Solo.Host
             }
         }
 
+        public void SpawnDummyDeadBody()
+        {
+            PlayerControl player = CachedPlayerControl.LocalPlayer;
+            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(
+                Input.mousePosition);
+            mouseWorldPos.z = mouseWorldPos.y / 1000f;
+
+            var killAnimation = player.KillAnimations[0];
+            SpriteRenderer body = UnityEngine.Object.Instantiate(
+                killAnimation.bodyPrefab.bodyRenderer);
+
+            player.SetPlayerMaterialColors(body);
+
+            Vector3 vector = mouseWorldPos + killAnimation.BodyOffset;
+            vector.z = vector.y / 1000f;
+            body.transform.position = vector;
+            body.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
+            this.dummyDeadBody.Add(body);
+        }
+
+        // RPC周り
         public void RpcCallMeeting()
         {
             PlayerControl xionPlayer = CachedPlayerControl.LocalPlayer;
@@ -82,7 +117,7 @@ namespace ExtremeRoles.Roles.Solo.Host
         public void RpcForceEndGame()
         {
             MessageWriter writer = createWriter(XionRpcOpsCode.ForceEndGame);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            finishWrite(writer);
             RPCOperator.ForceEnd();
         }
 
@@ -152,31 +187,11 @@ namespace ExtremeRoles.Roles.Solo.Host
             }
         }
 
-        public void spawnDummyDeadBody()
-        {
-            PlayerControl player = CachedPlayerControl.LocalPlayer;
-            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(
-                Input.mousePosition);
-            mouseWorldPos.z = mouseWorldPos.y / 1000f;
-
-            var killAnimation = player.KillAnimations[0];
-            SpriteRenderer body = UnityEngine.Object.Instantiate(
-                killAnimation.bodyPrefab.bodyRenderer);
-
-            player.SetPlayerMaterialColors(body);
-
-            Vector3 vector = mouseWorldPos + killAnimation.BodyOffset;
-            vector.z = vector.y / 1000f;
-            body.transform.position = vector;
-            body.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
-            this.dummyDeadBody.Add(body);
-        }
-
         public void RpcSpeedUp()
         {
             MessageWriter writer = createWriter(XionRpcOpsCode.UpdateSpeed);
             writer.Write((byte)SpeedOps.Up);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            finishWrite(writer);
             updateSpeed(this, SpeedOps.Up);
         }
 
@@ -184,7 +199,7 @@ namespace ExtremeRoles.Roles.Solo.Host
         {
             MessageWriter writer = createWriter(XionRpcOpsCode.UpdateSpeed);
             writer.Write((byte)SpeedOps.Down);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            finishWrite(writer);
             updateSpeed(this, SpeedOps.Down);
         }
 
@@ -192,7 +207,7 @@ namespace ExtremeRoles.Roles.Solo.Host
         {
             MessageWriter writer = createWriter(XionRpcOpsCode.UpdateSpeed);
             writer.Write((byte)SpeedOps.Reset);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            finishWrite(writer);
             updateSpeed(this, SpeedOps.Reset);
         }
 
@@ -233,9 +248,56 @@ namespace ExtremeRoles.Roles.Solo.Host
             MessageWriter writer = createWriter(XionRpcOpsCode.UpdateSpeed);
             writer.Write(targetPos.x);
             writer.Write(targetPos.y);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            finishWrite(writer);
             teleport(CachedPlayerControl.LocalPlayer, targetPos);
         }
+
+        public static void RpcNoXionVote()
+        {
+            AmongUsClient.Instance.FinishRpcImmediately(
+                createWriter(XionRpcOpsCode.NoXionVote));
+        }
+
+        public static void RpcRoleReplaceOps(byte targetPlayerId, string roleName)
+        {
+            if (!System.Enum.TryParse(roleName, out ExtremeRoleId roleId))
+            {
+                addChat(Translation.GetString("invalidRoleName"));
+                return;
+            }
+
+            if (!System.Enum.IsDefined(typeof(ExtremeRoleId), roleId))
+            {
+                addChat(Translation.GetString("invalidRoleName"));
+                return;
+            }
+            int intedRoleId = (int)roleId;
+
+            MessageWriter writer = createWriter(XionRpcOpsCode.RepcalePlayerRole);
+            writer.Write(targetPlayerId);
+            writer.WritePacked(intedRoleId);
+            finishWrite(writer);
+            replaceToRole(targetPlayerId, intedRoleId);
+        }
+
+        public static void RpcHostToXion()
+        {
+            if (xionBuffer == null)
+            {
+                addChat(Translation.GetString("XionNow"));
+                return;
+            }
+
+            addChat(Translation.GetString("RevartXionStart"));
+
+            byte xionPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
+
+            finishWrite(createWriter(XionRpcOpsCode.BackXion));
+            hostToXion(xionPlayerId);
+
+            addChat(Translation.GetString("RevartXionEnd"));
+        }
+        // RPC終了
 
         private static MessageWriter createWriter(XionRpcOpsCode opsCode)
         {
@@ -249,10 +311,47 @@ namespace ExtremeRoles.Roles.Solo.Host
             return writer;
         }
 
-        public static void RpcNoXionVote()
+        private static void finishWrite(MessageWriter writer)
         {
-            AmongUsClient.Instance.FinishRpcImmediately(
-                createWriter(XionRpcOpsCode.NoXionVote));
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+        }
+
+        private static void hostToXion(byte hostPlayerId)
+        {
+            xionPlayerToDead(hostPlayerId);
+            resetRole(hostPlayerId);
+            setNewRole(hostPlayerId, xionBuffer);
+            xionBuffer = null;
+        }
+
+        private static void replaceToRole(byte targetPlayerId, int roleId)
+        {
+            resetRole(targetPlayerId);
+            SingleRoleBase baseRole = ExtremeRoleManager.GameRole[targetPlayerId];
+            SingleRoleBase role = ExtremeRoleManager.NormalRole[roleId];
+            SingleRoleBase addRole = role.Clone();
+
+            IRoleAbility abilityRole = addRole as IRoleAbility;
+
+            if (abilityRole != null && 
+                CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
+            {
+                Logging.Debug("Try Create Ability NOW!!!");
+                abilityRole.CreateAbility();
+            }
+
+            addRole.Initialize();
+            addRole.GameControlId = baseRole.GameControlId;
+
+            lock (ExtremeRoleManager.GameRole)
+            {
+                ExtremeRoleManager.GameRole[targetPlayerId] = addRole;
+            }
+            Logging.Debug($"PlayerId:{targetPlayerId}   AssignTo:{addRole.RoleName}");
+            if (baseRole.Id == ExtremeRoleId.Xion)
+            {
+                xionBuffer = (Xion)baseRole;
+            }
         }
 
         private static void updateSpeed(

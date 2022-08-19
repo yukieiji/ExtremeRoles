@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
-using ExtremeRoles.Module;
+using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -48,33 +49,39 @@ namespace ExtremeRoles.Roles.Solo.Host
                 case setRole:
                     if (checkLocalOnlyCommand())
                     {
-
+                        // 一つはコマンドボディ
+                        if (args.Length == 2)
+                        {
+                            hostToSpecificRole(args);
+                        }
+                        else if (args.Length == 3)
+                        {
+                            specificPlayerIdToSpecificRole(args);
+                        }
+                        else
+                        {
+                            invalidArgs();
+                        }
                     }
                     break;
+                /* TODO:CombRoleAssign
                 case setCombRole:
                     if (checkLocalOnlyCommand())
                     {
 
                     }
                     break;
+                */
                 case revartXion:
                     if (checkLocalOnlyCommand())
                     {
-                        rpcHostToXion();
+                        RpcHostToXion();
                     }
                     break;
                 default:
                     break;
             }
 
-        }
-
-        public static void HostToXion(byte hostPlayerId)
-        {
-            xionPlayerToDead(hostPlayerId);
-            resetRole(hostPlayerId);
-            setNewRole(hostPlayerId, xionBuffer);
-            xionBuffer = null;
         }
 
         private static bool checkLocalOnlyCommand()
@@ -85,7 +92,7 @@ namespace ExtremeRoles.Roles.Solo.Host
             }
             else
             {
-                addChat(Helper.Translation.GetString("CannotUseThisGameMode"));
+                addChat(Translation.GetString("CannotUseThisGameMode"));
                 return false;
             }
 
@@ -106,30 +113,32 @@ namespace ExtremeRoles.Roles.Solo.Host
                 CachedPlayerControl.LocalPlayer, text);
         }
 
-        private static void rpcHostToXion()
+        private static void hostToSpecificRole(string[] args)
         {
-            if (xionBuffer == null)
+            RpcRoleReplaceOps(CachedPlayerControl.LocalPlayer.PlayerId, args[1]);
+        }
+
+        private static void specificPlayerIdToSpecificRole(string[] args)
+        {
+            string playerName = args[1];
+            playerName = playerName.Replace('_', ' ');
+
+            byte targetPlayerId = byte.MaxValue;
+
+            foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers)
             {
-                addChat(Helper.Translation.GetString("XionNow"));
+                if (player.DefaultOutfit.PlayerName == playerName)
+                {
+                    targetPlayerId = player.PlayerId;
+                }
+            }
+            if (targetPlayerId == byte.MaxValue)
+            {
+                addChat(Translation.GetString("invalidPlayerName"));
                 return;
             }
 
-            addChat(Helper.Translation.GetString("RevartXionStart"));
-
-            byte xionPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
-
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.ReplaceRole,
-                new List<byte>
-                {
-                    xionPlayerId,
-                    xionPlayerId,
-                    (byte)ExtremeRoleManager.ReplaceOperation.CreateServant
-                });
-            HostToXion(xionPlayerId);
-
-            addChat(Helper.Translation.GetString("RevartXionEnd"));
+            RpcRoleReplaceOps(targetPlayerId, args[2]);
         }
 
         private static void setNewRole(byte targetPlayerId, SingleRoleBase role)
@@ -142,7 +151,7 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         private static void resetRole(byte targetPlayerId)
         {
-            var targetPlayer = Helper.Player.GetPlayerControlById(targetPlayerId);
+            var targetPlayer = Player.GetPlayerControlById(targetPlayerId);
             var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
             IRoleHasParent.PurgeParent(targetPlayerId);
 
@@ -239,6 +248,11 @@ namespace ExtremeRoles.Roles.Solo.Host
             
             RPCOperator.UncheckedMurderPlayer(
                 xionPlayerId, xionPlayerId, byte.MaxValue);
+        }
+
+        private static void invalidArgs()
+        {
+            addChat(Translation.GetString("invalidArgs"));
         }
 
         public void AddNoXionCount()

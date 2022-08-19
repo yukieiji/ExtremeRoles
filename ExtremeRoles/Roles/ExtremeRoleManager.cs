@@ -252,8 +252,6 @@ namespace ExtremeRoles.Roles
             ForceReplaceToSidekick,
             SidekickToJackal,
             CreateServant,
-            
-            HostToXion,
         }
 
         public static void CreateCombinationRoleOptions(
@@ -433,9 +431,6 @@ namespace ExtremeRoles.Roles
                     break;
                 case ReplaceOperation.CreateServant:
                     Queen.TargetToServant(caller, targetId);
-                    break;
-                case ReplaceOperation.HostToXion:
-                    Xion.HostToXion(caller);
                     break;
                 default:
                     break;
