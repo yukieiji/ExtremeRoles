@@ -85,15 +85,26 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 if (instance.AmDead) { return; }
                 Shoot();
+
+                byte newTarget = ExtremeRolesPlugin.GameDataStore.ShildPlayer.GetBodyGuardPlayerId(
+                    target);
+
+                if (newTarget == byte.MaxValue)
+                {
+                    newTarget = target;
+                }
+
+                PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+
                 RPCOperator.Call(
-                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                    localPlayer.NetId,
                     RPCOperator.Command.UncheckedMurderPlayer,
-                    new List<byte> { CachedPlayerControl.LocalPlayer.PlayerId, target, 0 });
+                    new List<byte> { localPlayer.PlayerId, newTarget, 0 });
                 RPCOperator.UncheckedMurderPlayer(
                     CachedPlayerControl.LocalPlayer.PlayerId,
-                    target, 0);
+                    newTarget, 0);
                 RPCOperator.Call(
-                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                    localPlayer.NetId,
                     RPCOperator.Command.PlaySound,
                     new List<byte> { (byte)RPCOperator.SoundType.Kill });
                 RPCOperator.PlaySound((byte)RPCOperator.SoundType.Kill);
