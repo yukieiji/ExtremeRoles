@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+using UnityEngine;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.Roles;
@@ -33,6 +35,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private float shieldRange;
         private RoleAbilityButtonBase shieldButton;
 
+        private string shieldButtonText = string.Empty;
+        private string shieldResetButtonText = string.Empty;
+
+        private Sprite shildButtonImage;
+        private Sprite shieldResetButtonImage;
+
         public BodyGuard() : base(
             ExtremeRoleId.BodyGuard,
             ExtremeRoleType.Crewmate,
@@ -62,10 +70,18 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void CreateAbility()
         {
+
+            this.shildButtonImage = Loader.CreateSpriteFromResources(
+                 Path.BodyGuardShield);
+            this.shieldResetButtonImage = Loader.CreateSpriteFromResources(
+                 Path.TestButton);
+
+            this.shieldButtonText = Translation.GetString("shield");
+            this.shieldResetButtonText = Translation.GetString("resetShield");
+
             this.CreateAbilityCountButton(
-                Translation.GetString("shield"),
-                Loader.CreateSpriteFromResources(
-                    Path.BodyGuardShield));
+                this.shieldButtonText,
+                this.shildButtonImage);
             this.Button.SetLabelToCrewmate();
         }
 
@@ -127,6 +143,17 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 {
                     this.TargetPlayer = targetId;
                 }
+            }
+            
+            if (this.TargetPlayer == byte.MaxValue)
+            {
+                this.shieldButton.SetButtonText(this.shieldResetButtonText);
+                this.shieldButton.SetButtonImage(this.shieldResetButtonImage);
+            }
+            else
+            {
+                this.shieldButton.SetButtonText(this.shieldButtonText);
+                this.shieldButton.SetButtonImage(this.shildButtonImage);
             }
 
             return this.IsCommonUse();

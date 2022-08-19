@@ -265,7 +265,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 result = this.deadBodyId == this.targetBody.PlayerId;
             }
 
-            this.Button.ButtonText = result ? this.cursingText : this.defaultButtonText;
+            this.Button.SetButtonText(
+                result ? this.cursingText : this.defaultButtonText);
 
             return result;
         }
