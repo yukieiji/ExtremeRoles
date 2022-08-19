@@ -10,6 +10,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Roles.API.Extension.State;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
@@ -131,6 +132,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public static void CurseKillCool(
             byte rolePlayerId, byte targetPlayerId)
         {
+
+            if (CachedPlayerControl.LocalPlayer.PlayerId != targetPlayerId) { return; }
+
             PlayerControl player = Player.GetPlayerControlById(targetPlayerId);
 
             if (player == null) { return; }
@@ -141,34 +145,27 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             if (curseMaker == null) { return; }
 
             var role = ExtremeRoleManager.GameRole[targetPlayerId];
-
-            float baseKillCool = PlayerControl.GameOptions.KillCooldown;
-
-            if (role.HasOtherKillCool)
-            {
-                baseKillCool = role.KillCoolTime;
-            }
             role.HasOtherKillCool = true;
-            role.KillCoolTime = baseKillCool + curseMaker.additionalKillCool;
 
             var multiAssignRole = role as MultiAssignRoleBase;
             if (multiAssignRole != null)
             {
                 if (multiAssignRole.AnotherRole != null)
                 {
-                    baseKillCool = PlayerControl.GameOptions.KillCooldown;
-
-                    if (multiAssignRole.AnotherRole.HasOtherKillCool)
-                    {
-                        baseKillCool = multiAssignRole.AnotherRole.KillCoolTime;
-                    }
                     multiAssignRole.AnotherRole.HasOtherKillCool = true;
-                    multiAssignRole.AnotherRole.KillCoolTime = baseKillCool + curseMaker.additionalKillCool;
                 }
             }
 
+            RoleState.KillCoolOffset = curseMaker.additionalKillCool;
 
-            player.killTimer = role.KillCoolTime;
+            if (role.TryGetKillCool(out float resetKillCool))
+            {
+                player.killTimer = resetKillCool;
+            }
+            else
+            {
+                player.killTimer = PlayerControl.GameOptions.KillCooldown;
+            }
         }
 
         public void CreateAbility()

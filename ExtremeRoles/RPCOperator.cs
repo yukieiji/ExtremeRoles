@@ -158,6 +158,9 @@ namespace ExtremeRoles
 
             // シオンのリセット
             Roles.Solo.Host.Xion.Purge();
+
+            // APIのステータスのリセット
+            Roles.API.Extension.State.RoleState.Reset();
         }
 
         public static void ForceEnd()
