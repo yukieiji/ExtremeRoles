@@ -108,7 +108,7 @@ namespace ExtremeRoles.Roles.Solo.Host
                 Input.GetKeyDown(spawnDeadBody) &&
                 isLocalGame())
             {
-                this.spawnDummyDeadBody();
+                this.SpawnDummyDeadBody();
             }
 
 # if DEBUG
