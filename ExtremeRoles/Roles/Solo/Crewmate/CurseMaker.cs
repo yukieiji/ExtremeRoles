@@ -20,6 +20,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             CursingRange,
             AdditionalKillCool,
+            TaskCurseTimeReduceRate,
             IsDeadBodySearch,
             IsMultiDeadBodySearch,
             SearchDeadBodyTime,
@@ -110,6 +111,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private bool isReducedSearchTime;
         private float reduceSearchtaskGage;
         private float reduceTime;
+
+        private float prevTaskGage;
+        private float curCurseTime;
+        private float curseTimeReduceRate;
 
         public RoleAbilityButtonBase Button
         {
@@ -272,6 +277,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.CreateAbilityCountOption(
                 parentOps, 1, 3, 5.0f);
 
+            CreateIntOption(
+                CurseMakerOption.TaskCurseTimeReduceRate,
+                0, 0, 10, 1, parentOps,
+                format: OptionUnit.Percentage);
+
             var searchDeadBodyOption = CreateBoolOption(
                 CurseMakerOption.IsDeadBodySearch,
                 true, parentOps);
@@ -296,12 +306,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 enableCheckOption: parentOps);
 
             CreateIntOption(
-                 CurseMakerOption.ReduceSearchTaskGage,
-                 100, 50, 100, 5,
-                 taskBoostOpt,
-                 format: OptionUnit.Percentage,
-                 invert: true,
-                 enableCheckOption: taskBoostOpt);
+                CurseMakerOption.ReduceSearchTaskGage,
+                100, 50, 100, 5,
+                taskBoostOpt,
+                format: OptionUnit.Percentage,
+                invert: true,
+                enableCheckOption: taskBoostOpt);
 
             var reduceTimeOpt = CreateFloatDynamicOption(
                 CurseMakerOption.ReduceSearchDeadBodyTime,
@@ -324,6 +334,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 GetRoleOptionId(CurseMakerOption.AdditionalKillCool)].GetValue();
             this.deadBodyCheckRange = allOption[
                 GetRoleOptionId(CurseMakerOption.CursingRange)].GetValue();
+            this.curseTimeReduceRate = 1.0f - ((float)allOption[
+                GetRoleOptionId(CurseMakerOption.TaskCurseTimeReduceRate)].GetValue() / 100.0f);
             this.isDeadBodySearch = allOption[
                 GetRoleOptionId(CurseMakerOption.IsDeadBodySearch)].GetValue();
             this.isMultiDeadBodySearch = allOption[
@@ -334,7 +346,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.isDeadBodySearchUsed = false;
             this.isReduceSearchForTask = allOption[
                 GetRoleOptionId(CurseMakerOption.IsReduceSearchForTask)].GetValue();
-            this.reduceSearchtaskGage = allOption[
+            this.reduceSearchtaskGage = (float)allOption[
                 GetRoleOptionId(CurseMakerOption.ReduceSearchTaskGage)].GetValue() / 100.0f;
             this.reduceTime = allOption[
                 GetRoleOptionId(CurseMakerOption.ReduceSearchDeadBodyTime)].GetValue();
@@ -342,6 +354,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.cursingText = Translation.GetString("cursing");
             this.deadBodyData = new Dictionary<byte, DeadBodyInfo>();
             this.deadBodyArrow = new Dictionary<byte, Arrow>();
+            this.curCurseTime = allOption[
+                GetRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime)].GetValue();
         }
 
         public void RoleAbilityResetOnMeetingStart()
@@ -388,16 +402,23 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 }
             }
 
+            float taskGage = Player.GetPlayerTaskGage(rolePlayer);
+            if (taskGage > this.prevTaskGage)
+            {
+                this.curCurseTime = this.curCurseTime * this.curseTimeReduceRate;
+                this.curseButton.SetAbilityActiveTime(this.curCurseTime);
+            }
+
             if (this.isReduceSearchForTask && !this.isReducedSearchTime)
             {
-                if (Player.GetPlayerTaskGage(rolePlayer) >= this.reduceSearchtaskGage)
+                if (taskGage >= this.reduceSearchtaskGage)
                 {
                     this.isReducedSearchTime = true;
                     this.searchDeadBodyTime = Mathf.Clamp(
                         this.searchDeadBodyTime - this.reduceTime, 0.01f, this.searchDeadBodyTime);
                 }
             }
-
+            this.prevTaskGage = taskGage;
 
             if (this.isDeadBodySearchUsed || !this.isDeadBodySearch) { return; }
 
