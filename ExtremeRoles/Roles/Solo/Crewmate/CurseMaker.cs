@@ -22,8 +22,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             IsDeadBodySearch,
             IsMultiDeadBodySearch,
             SearchDeadBodyTime,
-            IsBoostTask,
-            TaskGage,
+            IsReduceSearchForTask,
+            ReduceSearchTaskGage,
             ReduceSearchDeadBodyTime,
         }
 
@@ -105,9 +105,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         private string defaultButtonText;
         private string cursingText;
-        private bool isBoostTask;
-        private bool boosted;
-        private float taskGage;
+        private bool isReduceSearchForTask;
+        private bool isReducedSearchTime;
+        private float reduceSearchtaskGage;
         private float boostTime;
 
         public RoleAbilityButtonBase Button
@@ -293,13 +293,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 enableCheckOption: parentOps);
 
             var taskBoostOpt = CreateBoolOption(
-                CurseMakerOption.IsBoostTask,
+                CurseMakerOption.IsReduceSearchForTask,
                 false, searchDeadBodyOption,
                 invert: true,
                 enableCheckOption: parentOps);
 
             CreateIntOption(
-                 CurseMakerOption.TaskGage,
+                 CurseMakerOption.ReduceSearchTaskGage,
                  100, 50, 100, 5,
                  taskBoostOpt,
                  format: OptionUnit.Percentage,
@@ -335,10 +335,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 GetRoleOptionId(CurseMakerOption.SearchDeadBodyTime)].GetValue();
 
             this.isDeadBodySearchUsed = false;
-            this.isBoostTask = allOption[
-                GetRoleOptionId(CurseMakerOption.IsBoostTask)].GetValue();
-            this.taskGage = allOption[
-                GetRoleOptionId(CurseMakerOption.TaskGage)].GetValue() / 100.0f;
+            this.isReduceSearchForTask = allOption[
+                GetRoleOptionId(CurseMakerOption.IsReduceSearchForTask)].GetValue();
+            this.reduceSearchtaskGage = allOption[
+                GetRoleOptionId(CurseMakerOption.ReduceSearchTaskGage)].GetValue() / 100.0f;
             this.boostTime = allOption[
                 GetRoleOptionId(CurseMakerOption.ReduceSearchDeadBodyTime)].GetValue();
 
@@ -391,11 +391,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 }
             }
 
-            if (this.isBoostTask && !this.boosted)
+            if (this.isReduceSearchForTask && !this.isReducedSearchTime)
             {
-                if (Player.GetPlayerTaskGage(rolePlayer) >= this.taskGage)
+                if (Player.GetPlayerTaskGage(rolePlayer) >= this.reduceSearchtaskGage)
                 {
-                    this.boosted = true;
+                    this.isReducedSearchTime = true;
                     this.searchDeadBodyTime = Mathf.Clamp(
                         this.searchDeadBodyTime - this.boostTime, 0.01f, this.searchDeadBodyTime);
                 }
