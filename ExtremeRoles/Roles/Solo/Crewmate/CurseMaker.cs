@@ -108,7 +108,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private bool isReduceSearchForTask;
         private bool isReducedSearchTime;
         private float reduceSearchtaskGage;
-        private float boostTime;
+        private float reduceTime;
 
         public RoleAbilityButtonBase Button
         {
@@ -339,7 +339,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 GetRoleOptionId(CurseMakerOption.IsReduceSearchForTask)].GetValue();
             this.reduceSearchtaskGage = allOption[
                 GetRoleOptionId(CurseMakerOption.ReduceSearchTaskGage)].GetValue() / 100.0f;
-            this.boostTime = allOption[
+            this.reduceTime = allOption[
                 GetRoleOptionId(CurseMakerOption.ReduceSearchDeadBodyTime)].GetValue();
 
             this.cursingText = Translation.GetString("cursing");
@@ -397,7 +397,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 {
                     this.isReducedSearchTime = true;
                     this.searchDeadBodyTime = Mathf.Clamp(
-                        this.searchDeadBodyTime - this.boostTime, 0.01f, this.searchDeadBodyTime);
+                        this.searchDeadBodyTime - this.reduceTime, 0.01f, this.searchDeadBodyTime);
                 }
             }
 
