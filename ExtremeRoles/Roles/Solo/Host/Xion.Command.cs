@@ -71,27 +71,9 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         public static void HostToXion(byte hostPlayerId)
         {
-            var targetPlayer = Helper.Player.GetPlayerControlById(hostPlayerId);
-            var targetRole = ExtremeRoleManager.GameRole[hostPlayerId];
-
-            IRoleHasParent.PurgeParent(hostPlayerId);
-
-            // プレイヤーのリセット処理
-            if (CachedPlayerControl.LocalPlayer.PlayerId == hostPlayerId)
-            {
-                abilityReset(targetRole);
-            }
-
-            // シェイプシフターのリセット処理
-            shapeshiftReset(targetPlayer, targetRole);
-
-            // スペシャルリセット処理
-            specialResetRoleReset(targetPlayer, targetRole);
-
-            lock (ExtremeRoleManager.GameRole)
-            {
-                ExtremeRoleManager.GameRole[hostPlayerId] = xionBuffer;
-            }
+            xionPlayerToDead(hostPlayerId);
+            resetRole(hostPlayerId);
+            setNewRole(hostPlayerId, xionBuffer);
             xionBuffer = null;
         }
 
@@ -132,6 +114,8 @@ namespace ExtremeRoles.Roles.Solo.Host
                 return;
             }
 
+            addChat(Helper.Translation.GetString("RevartXionStart"));
+
             byte xionPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
 
             RPCOperator.Call(
@@ -144,6 +128,35 @@ namespace ExtremeRoles.Roles.Solo.Host
                     (byte)ExtremeRoleManager.ReplaceOperation.CreateServant
                 });
             HostToXion(xionPlayerId);
+
+            addChat(Helper.Translation.GetString("RevartXionEnd"));
+        }
+
+        private static void setNewRole(byte targetPlayerId, SingleRoleBase role)
+        {
+            lock (ExtremeRoleManager.GameRole)
+            {
+                ExtremeRoleManager.GameRole[targetPlayerId] = role;
+            }
+        }
+
+        private static void resetRole(byte targetPlayerId)
+        {
+            var targetPlayer = Helper.Player.GetPlayerControlById(targetPlayerId);
+            var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
+            IRoleHasParent.PurgeParent(targetPlayerId);
+
+            // プレイヤーのリセット処理
+            if (CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
+            {
+                abilityReset(targetRole);
+            }
+
+            // シェイプシフターのリセット処理
+            shapeshiftReset(targetPlayer, targetRole);
+
+            // スペシャルリセット処理
+            specialResetRoleReset(targetPlayer, targetRole);
         }
 
         private static void abilityReset(
@@ -218,6 +231,15 @@ namespace ExtremeRoles.Roles.Solo.Host
             }
         }
 
+        private static void xionPlayerToDead(byte xionPlayerId)
+        {
+            GameData.PlayerInfo player = GameData.Instance.GetPlayerById(xionPlayerId);
+            
+            if (player.IsDead) { return; }
+            
+            RPCOperator.UncheckedMurderPlayer(
+                xionPlayerId, xionPlayerId, byte.MaxValue);
+        }
 
         public void AddNoXionCount()
         {
