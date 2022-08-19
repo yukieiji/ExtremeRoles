@@ -50,5 +50,7 @@ namespace ExtremeRoles.Module
         public readonly static Color FaunusAntiquewhite = new Color32(250, 235, 215, byte.MaxValue);
 
         public readonly static Color NeutralColor = Color.gray;
+
+        public readonly static Color XionBlue = new Color32(109, 129, 255, byte.MaxValue);
     }
 }

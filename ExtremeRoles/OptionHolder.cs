@@ -161,9 +161,10 @@ namespace ExtremeRoles
             createExtremeGhostRoleGlobalSpawnOption();
 
             new BoolCustomOption(
-                (int)CommonOptionKey.UseXion, Design.ColoedString(
-                new Color(204f / 255f, 204f / 255f, 0, 1f),
-                CommonOptionKey.UseXion.ToString()),
+                (int)CommonOptionKey.UseXion,
+                Design.ColoedString(
+                    ColorPalette.XionBlue,
+                    CommonOptionKey.UseXion.ToString()),
                 false, null, true);
 
             createShipGlobalOption();

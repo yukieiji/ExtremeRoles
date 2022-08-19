@@ -32,9 +32,9 @@ namespace ExtremeRoles.Patches
             }
             else if (role.Id == ExtremeRoleId.Xion)
             {
-                __instance.BackgroundBar.material.color = Module.ColorPalette.NeutralColor;
+                __instance.BackgroundBar.material.color = Module.ColorPalette.XionBlue;
                 __instance.TeamTitle.text = Translation.GetString("yourHost");
-                __instance.TeamTitle.color = Module.ColorPalette.NeutralColor;
+                __instance.TeamTitle.color = Module.ColorPalette.XionBlue;
                 __instance.ImpostorText.text = Translation.GetString("youAreNewRuleEditor");
             }
         }

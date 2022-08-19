@@ -12,7 +12,7 @@ namespace ExtremeRoles.Roles.Solo.Host
             ExtremeRoleId.Xion,
             ExtremeRoleType.Null,
             ExtremeRoleId.Xion.ToString(),
-            ColorPalette.YokoShion,
+            ColorPalette.XionBlue,
             false, false, false, true,
             true, true, true, true, true)
         {
