@@ -13,11 +13,13 @@ using ExtremeRoles.Module.ExtremeShipStatus;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public sealed class BodyGuard : SingleRoleBase, IRoleAbility
+    public sealed class BodyGuard : SingleRoleBase, IRoleAbility, IRoleUpdate
     {
         public enum BodyGuardOption
         {
-            ShieldRange
+            ShieldRange,
+            FeatMeetingAbilityTaskGage,
+            FeatMeetingReportTaskGage,
         }
 
         public RoleAbilityButtonBase Button
@@ -40,6 +42,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         private Sprite shildButtonImage;
         private Sprite shieldResetButtonImage;
+
+        private bool awakeMeetingAbility;
+        private float meetingAbilityTaskGage;
+        private bool awakeMeetingReport;
+        private float meetingReportTaskGage;
 
         public BodyGuard() : base(
             ExtremeRoleId.BodyGuard,
@@ -169,6 +176,27 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             return;
         }
 
+        public void Update(PlayerControl rolePlayer)
+        {
+            if (!this.awakeMeetingAbility || !this.awakeMeetingReport)
+            {
+                
+                float taskGage = Player.GetPlayerTaskGage(rolePlayer);
+                
+                if (taskGage >= this.meetingAbilityTaskGage && 
+                    !this.awakeMeetingAbility)
+                {
+                    this.awakeMeetingAbility = true;
+                }
+                if (taskGage >= this.meetingReportTaskGage &&
+                    !this.awakeMeetingReport)
+                {
+                    this.awakeMeetingReport = true;
+                }
+                
+            }
+        }
+
         protected override void CreateSpecificOption(
             IOption parentOps)
         {
@@ -180,12 +208,32 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             this.CreateAbilityCountOption(
                 parentOps, 2, 5);
+
+            CreateIntOption(
+                BodyGuardOption.FeatMeetingAbilityTaskGage,
+                30, 0, 100, 10,
+                parentOps,
+                format: OptionUnit.Percentage);
+            CreateIntOption(
+                BodyGuardOption.FeatMeetingReportTaskGage,
+                60, 0, 100, 10,
+                parentOps,
+                format: OptionUnit.Percentage);
+
         }
 
         protected override void RoleSpecificInit()
         {
-            this.shieldRange = OptionHolder.AllOption[
+
+            var allOpt = OptionHolder.AllOption;
+
+            this.shieldRange = allOpt[
                 GetRoleOptionId(BodyGuardOption.ShieldRange)].GetValue();
+
+            this.meetingAbilityTaskGage = (float)allOpt[
+                GetRoleOptionId(BodyGuardOption.FeatMeetingAbilityTaskGage)].GetValue() / 100.0f;
+            this.meetingReportTaskGage = (float)allOpt[
+                GetRoleOptionId(BodyGuardOption.FeatMeetingReportTaskGage)].GetValue() / 100.0f;
 
             this.RoleAbilityInit();
             if (this.Button != null)
