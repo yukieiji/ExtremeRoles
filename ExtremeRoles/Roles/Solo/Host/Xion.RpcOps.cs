@@ -326,8 +326,16 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         private static void replaceToRole(byte targetPlayerId, int roleId)
         {
-            resetRole(targetPlayerId);
             SingleRoleBase baseRole = ExtremeRoleManager.GameRole[targetPlayerId];
+            bool isXion = baseRole.Id == ExtremeRoleId.Xion;
+
+            if (isXion)
+            {
+                RPCOperator.UncheckedRevive(targetPlayerId);
+            }
+
+            resetRole(targetPlayerId);
+            
             SingleRoleBase role = ExtremeRoleManager.NormalRole[roleId];
             SingleRoleBase addRole = role.Clone();
 
@@ -348,7 +356,8 @@ namespace ExtremeRoles.Roles.Solo.Host
                 ExtremeRoleManager.GameRole[targetPlayerId] = addRole;
             }
             Logging.Debug($"PlayerId:{targetPlayerId}   AssignTo:{addRole.RoleName}");
-            if (baseRole.Id == ExtremeRoleId.Xion)
+            
+            if (isXion)
             {
                 xionBuffer = (Xion)baseRole;
             }
