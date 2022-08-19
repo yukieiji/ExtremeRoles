@@ -44,9 +44,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public override void ExiledAction(GameData.PlayerInfo rolePlayer)
         {
             RPCOperator.BodyGuardResetShield(
-                    rolePlayer.PlayerId);
+                rolePlayer.PlayerId);
         }
-
 
         public override void RolePlayerKilledAction(
             PlayerControl rolePlayer, PlayerControl killerPlayer)
@@ -72,20 +71,40 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public bool UseAbility()
         {
+            PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+            byte playerId = localPlayer.PlayerId;
 
-            byte playerId = CachedPlayerControl.LocalPlayer.PlayerId;
+            if (this.TargetPlayer != byte.MaxValue)
+            {
+                RPCOperator.Call(
+                   localPlayer.NetId,
+                    RPCOperator.Command.BodyGuardFeatShield,
+                    new List<byte>
+                    {
+                        playerId,
+                        this.TargetPlayer
+                    });
+                RPCOperator.BodyGuardFeatShield(
+                    playerId, this.TargetPlayer);
+                
+                this.TargetPlayer = byte.MaxValue;
+            }
+            else
+            {
+                RPCOperator.Call(
+                    localPlayer.NetId,
+                    RPCOperator.Command.BodyGuardResetShield,
+                    new List<byte>
+                    {
+                        playerId
+                    });
+                RPCOperator.BodyGuardResetShield(playerId);
 
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.BodyGuardFeatShield,
-                new List<byte>
-                {
-                    playerId,
-                    this.TargetPlayer 
-                });
-            RPCOperator.BodyGuardFeatShield(
-                playerId, this.TargetPlayer);
-            this.TargetPlayer = byte.MaxValue;
+                if (this.shieldButton == null) { return true; }
+
+                ((AbilityCountButton)this.shieldButton).UpdateAbilityCount(
+                    this.shildNum);
+            }
 
             return true;
         }
@@ -110,25 +129,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 }
             }
 
-            return this.IsCommonUse() && this.TargetPlayer != byte.MaxValue;
+            return this.IsCommonUse();
         }
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.BodyGuardResetShield,
-                new List<byte>
-                {
-                    CachedPlayerControl.LocalPlayer.PlayerId
-                });
-            RPCOperator.BodyGuardResetShield(
-                CachedPlayerControl.LocalPlayer.PlayerId);
-
-            if (this.shieldButton == null) { return; }
-
-            ((AbilityCountButton)this.shieldButton).UpdateAbilityCount(
-                this.shildNum);
+            return;
         }
 
         public void RoleAbilityResetOnMeetingEnd()
