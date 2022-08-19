@@ -784,31 +784,39 @@ namespace ExtremeRoles.Roles.Combination
 
             if (this.meeting == null)
             {
-                // 0 = Skeld
-                // 1 = Mira HQ
-                // 2 = Polus
-                // 3 = Dleks - deactivated
-                // 4 = Airship
                 SystemConsole emergencyConsole;
-                var systemConsoleArray = UnityEngine.Object.FindObjectsOfType<SystemConsole>();
-                switch (PlayerControl.GameOptions.MapId)
+                if (ExtremeRolesPlugin.Compat.IsModMap)
                 {
-                    case 0:
-                    case 1:
-                    case 3:
-                        emergencyConsole = systemConsoleArray.FirstOrDefault(
-                            x => x.gameObject.name.Contains("EmergencyConsole"));
-                        break;
-                    case 2:
-                        emergencyConsole = systemConsoleArray.FirstOrDefault(
-                            x => x.gameObject.name.Contains("EmergencyButton"));
-                        break;
-                    case 4:
-                        emergencyConsole = systemConsoleArray.FirstOrDefault(
-                            x => x.gameObject.name.Contains("task_emergency"));
-                        break;
-                    default:
-                        return false;
+                    emergencyConsole = ExtremeRolesPlugin.Compat.ModMap.GetSystemConsole(
+                        Compat.Interface.SystemConsoleType.EmergencyButton);
+                }
+                else
+                {
+                    // 0 = Skeld
+                    // 1 = Mira HQ
+                    // 2 = Polus
+                    // 3 = Dleks - deactivated
+                    // 4 = Airship
+                    var systemConsoleArray = UnityEngine.Object.FindObjectsOfType<SystemConsole>();
+                    switch (PlayerControl.GameOptions.MapId)
+                    {
+                        case 0:
+                        case 1:
+                        case 3:
+                            emergencyConsole = systemConsoleArray.FirstOrDefault(
+                                x => x.gameObject.name.Contains("EmergencyConsole"));
+                            break;
+                        case 2:
+                            emergencyConsole = systemConsoleArray.FirstOrDefault(
+                                x => x.gameObject.name.Contains("EmergencyButton"));
+                            break;
+                        case 4:
+                            emergencyConsole = systemConsoleArray.FirstOrDefault(
+                                x => x.gameObject.name.Contains("task_emergency"));
+                            break;
+                        default:
+                            return false;
+                    }
                 }
                 
                 if (emergencyConsole == null || Camera.main == null)

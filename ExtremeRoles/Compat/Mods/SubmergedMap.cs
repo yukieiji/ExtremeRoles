@@ -196,6 +196,9 @@ namespace ExtremeRoles.Compat.Mods
                 case SystemConsoleType.Vital:
                     return systemConsoleArray.FirstOrDefault(
                         x => x.gameObject.name.Contains("panel_vitals(Clone)"));
+                case SystemConsoleType.EmergencyButton:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("console-mr-callmeeting"));
                 default:
                     return null;
             }

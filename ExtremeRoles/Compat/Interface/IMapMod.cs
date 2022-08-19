@@ -8,6 +8,7 @@ namespace ExtremeRoles.Compat.Interface
 		Admin,
 		SecurityCamera,
 		Vital,
+		EmergencyButton
 	}
 
 	public enum MapRpcCall : byte
