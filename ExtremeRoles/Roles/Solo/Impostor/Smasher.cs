@@ -64,14 +64,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             var role = ExtremeRoleManager.GetLocalPlayerRole();
             var targetPlayerRole = ExtremeRoleManager.GameRole[this.targetPlayerId];
-            var target = Player.GetPlayerControlById(this.targetPlayerId);
+            var prevTarget = Player.GetPlayerControlById(this.targetPlayerId);
 
             bool canKill = role.TryRolePlayerKillTo(
-                killer, target);
+                killer, prevTarget);
             if (!canKill) { return false; }
 
             canKill = targetPlayerRole.TryRolePlayerKilledFrom(
-                target, killer);
+                prevTarget, killer);
             if (!canKill) { return false; }
 
             var multiAssignRole = role as MultiAssignRoleBase;
@@ -80,7 +80,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 if (multiAssignRole.AnotherRole != null)
                 {
                     canKill = multiAssignRole.AnotherRole.TryRolePlayerKillTo(
-                        killer, target);
+                        killer, prevTarget);
                     if (!canKill) { return false; }
                 }
             }
@@ -91,26 +91,35 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 if (multiAssignRole.AnotherRole != null)
                 {
                     canKill = multiAssignRole.AnotherRole.TryRolePlayerKilledFrom(
-                        target, killer);
+                        prevTarget, killer);
                     if (!canKill) { return false; }
                 }
             }
 
 
             var bodyGuard = ExtremeRolesPlugin.GameDataStore.ShildPlayer.GetBodyGuardPlayerId(
-                target.PlayerId);
+                prevTarget.PlayerId);
+
+            PlayerControl newTarget = prevTarget;
 
             if (bodyGuard != byte.MaxValue)
             {
-                target = Player.GetPlayerControlById(bodyGuard);
-                if (target == null)
+                newTarget = Player.GetPlayerControlById(bodyGuard);
+                if (newTarget == null)
                 {
-                    target = Player.GetPlayerControlById(this.targetPlayerId);
+                    newTarget = prevTarget;
                 }
-                else if (target.Data.IsDead || target.Data.Disconnected)
+                else if (newTarget.Data.IsDead || newTarget.Data.Disconnected)
                 {
-                    target = Player.GetPlayerControlById(this.targetPlayerId);
+                    newTarget = prevTarget;
                 }
+            }
+
+            byte useAnimation = byte.MaxValue;
+
+            if (newTarget.PlayerId != prevTarget.PlayerId)
+            {
+                useAnimation = byte.MinValue;
             }
 
             this.prevKillCool = PlayerControl.LocalPlayer.killTimer;
@@ -118,11 +127,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             RPCOperator.Call(
                 killer.NetId,
                 RPCOperator.Command.UncheckedMurderPlayer,
-                new List<byte> { killer.PlayerId, target.PlayerId, byte.MaxValue });
+                new List<byte> { killer.PlayerId, newTarget.PlayerId, useAnimation });
             RPCOperator.UncheckedMurderPlayer(
                 killer.PlayerId,
-                target.PlayerId,
-                byte.MaxValue);
+                newTarget.PlayerId,
+                useAnimation);
 
             if (this.penaltyKillCool > 0.0f)
             {
