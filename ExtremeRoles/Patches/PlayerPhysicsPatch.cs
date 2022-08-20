@@ -24,7 +24,7 @@ namespace ExtremeRoles.Patches
 
 
     [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.FixedUpdate))]
-    public static class PlayerPhysicsPatch
+    public static class PlayerPhysicsFixedUpdatePatch
     {
         public static void Postfix(PlayerPhysics __instance)
         {
@@ -38,6 +38,15 @@ namespace ExtremeRoles.Patches
             {
                 __instance.body.velocity *= velocity;
             }
+        }
+    }
+
+    [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.ResetAnimState))]
+    public static class PlayerPhysicsPatch
+    {
+        public static bool Prefix(PlayerPhysics __instance)
+        {
+            return __instance.myPlayer != null;
         }
     }
 }
