@@ -45,10 +45,7 @@ namespace ExtremeRoles
             // クルーメイト
             BodyGuardFeatShield,
             BodyGuardResetShield,
-            TimeMasterShieldOn,
-            TimeMasterShieldOff,
-            TimeMasterRewindTime,
-            TimeMasterResetMeeting,
+            TimeMasterAbility,
             AgencyTakeTask,
             AgencySetNewTask,
             FencerCounterOn,
@@ -412,23 +409,12 @@ namespace ExtremeRoles
         {
             ExtremeRolesPlugin.GameDataStore.ShildPlayer.Remove(playerId);
         }
-        public static void TimeMasterShieldOn(
-            byte playerId)
+
+        public static void TimeMasterAbility(ref MessageReader reader)
         {
-            Roles.Solo.Crewmate.TimeMaster.ShieldOn(playerId);
+            Roles.Solo.Crewmate.TimeMaster.Ability(ref reader);
         }
-        public static void TimeMasterShieldOff(byte playerId)
-        {
-            Roles.Solo.Crewmate.TimeMaster.ShieldOff(playerId);
-        }
-        public static void TimeMasterRewindTime(byte playerId)
-        {
-            Roles.Solo.Crewmate.TimeMaster.TimeRewind(playerId);
-        }
-        public static void TimeMasterResetMeeting(byte playerId)
-        {
-            Roles.Solo.Crewmate.TimeMaster.ResetMeeting(playerId);
-        }
+
         public static void AgencyTakeTask(
             byte targetPlayerId, List<int> getTaskId)
         {

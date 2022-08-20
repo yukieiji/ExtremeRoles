@@ -519,25 +519,8 @@ namespace ExtremeRoles.Patches
                     RPCOperator.BodyGuardResetShield(
                         bodyGuardResetShieldOpCallPlayerId);
                     break;
-                case RPCOperator.Command.TimeMasterShieldOn:
-                    byte shieldOnTimeMaster = reader.ReadByte();
-                    RPCOperator.TimeMasterShieldOn(
-                        shieldOnTimeMaster);
-                    break;
-                case RPCOperator.Command.TimeMasterShieldOff:
-                    byte shieldOffTimeMaster = reader.ReadByte();
-                    RPCOperator.TimeMasterShieldOff(
-                        shieldOffTimeMaster);
-                    break;
-                case RPCOperator.Command.TimeMasterRewindTime:
-                    byte timeMasterPlayerId = reader.ReadByte();
-                    RPCOperator.TimeMasterRewindTime(
-                        timeMasterPlayerId);
-                    break;
-                case RPCOperator.Command.TimeMasterResetMeeting:
-                    byte timeMasterResetPlayerId = reader.ReadByte();
-                    RPCOperator.TimeMasterResetMeeting(
-                        timeMasterResetPlayerId);
+                case RPCOperator.Command.TimeMasterAbility:
+                    RPCOperator.TimeMasterAbility(ref reader);
                     break;
                 case RPCOperator.Command.AgencyTakeTask:
                     byte agencyTargetPlayerId = reader.ReadByte();

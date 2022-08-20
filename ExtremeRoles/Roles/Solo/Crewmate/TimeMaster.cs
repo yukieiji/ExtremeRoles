@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using UnityEngine;
+using Hazel;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -20,6 +21,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public enum TimeMasterOption
         {
             RewindTime
+        }
+
+        public enum TimeMasterOps : byte
+        {
+            ShieldOff,
+            ShieldOn,
+            RewindTime,
+            ResetMeeting,
         }
 
         public RoleAbilityButtonBase Button
@@ -44,17 +53,41 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             false, true, false, false)
         { }
 
-        public static void TimeRewind(byte rolePlayerId)
+        public static void Ability(ref MessageReader reader)
+        {
+            byte tmPlayerId = reader.ReadByte();
+            TimeMasterOps ops = (TimeMasterOps)reader.ReadByte();
+            switch (ops)
+            {
+                case TimeMasterOps.ShieldOff:
+                    shieldOff(tmPlayerId);
+                    break;
+                case TimeMasterOps.ShieldOn:
+                    shieldOn(tmPlayerId);
+                    break;
+                case TimeMasterOps.RewindTime:
+                    timeRewind(tmPlayerId);
+                    break;
+                case TimeMasterOps.ResetMeeting:
+                    resetMeeting(tmPlayerId);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+
+        private static void timeRewind(byte rolePlayerId)
         {
             if (ExtremeRolesPlugin.GameDataStore.History.BlockAddHistory) { return; }
 
             PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
-            localPlayer.StartCoroutine(rewind(
+            localPlayer.StartCoroutine(coRewind(
                 rolePlayerId, localPlayer).WrapToIl2Cpp());
 
         }
 
-        private static IEnumerator rewind(
+        private static IEnumerator coRewind(
             byte rolePlayerId,
             PlayerControl localPlayer)
         {
@@ -202,9 +235,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ExtremeRolesPlugin.GameDataStore.History.BlockAddHistory = false;
         }
 
-        public static void ShieldOn(byte rolePlayerId)
+        private static void shieldOn(byte rolePlayerId)
         {
-            var timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(rolePlayerId);
+            TimeMaster timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(rolePlayerId);
             
             if (timeMaster != null)
             {
@@ -212,18 +245,18 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
         }
 
-        public static void ShieldOff(byte rolePlayerId)
+        private static void shieldOff(byte rolePlayerId)
         {
-            var timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(rolePlayerId);
+            TimeMaster timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(rolePlayerId);
 
             if (timeMaster != null)
             {
                 timeMaster.IsShieldOn = false;
             }
         }
-        public static void ResetMeeting(byte rolePlayerId)
+        private static void resetMeeting(byte rolePlayerId)
         {
-            var timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(rolePlayerId);
+            TimeMaster timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(rolePlayerId);
 
             if (timeMaster == null) { return; }
             
@@ -241,12 +274,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             RPCOperator.Call(
                 CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.TimeMasterShieldOff,
+                RPCOperator.Command.TimeMasterAbility,
                 new List<byte>
                 {
                    CachedPlayerControl.LocalPlayer.PlayerId,
+                   (byte)TimeMasterOps.ShieldOff,
                 });
-            ShieldOff(CachedPlayerControl.LocalPlayer.PlayerId);
+            shieldOff(CachedPlayerControl.LocalPlayer.PlayerId);
         }
 
         public void CreateAbility()
@@ -263,12 +297,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             RPCOperator.Call(
                 CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.TimeMasterShieldOn,
+                RPCOperator.Command.TimeMasterAbility,
                 new List<byte>
                 {
                     CachedPlayerControl.LocalPlayer.PlayerId,
+                    (byte)TimeMasterOps.ShieldOn,
                 });
-            ShieldOn(CachedPlayerControl.LocalPlayer.PlayerId);
+            shieldOn(CachedPlayerControl.LocalPlayer.PlayerId);
 
             return true;
         }
@@ -279,12 +314,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             RPCOperator.Call(
                 CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.TimeMasterResetMeeting,
+                RPCOperator.Command.TimeMasterAbility,
                 new List<byte>
                 {
                     CachedPlayerControl.LocalPlayer.PlayerId,
+                    (byte)TimeMasterOps.ResetMeeting,
                 });
-            ResetMeeting(CachedPlayerControl.LocalPlayer.PlayerId);
+            resetMeeting(CachedPlayerControl.LocalPlayer.PlayerId);
         }
 
         public void RoleAbilityResetOnMeetingEnd()
@@ -301,12 +337,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 RPCOperator.Call(
                     CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                    RPCOperator.Command.TimeMasterRewindTime,
+                    RPCOperator.Command.TimeMasterAbility,
                     new List<byte>
                     {
                         rolePlayer.PlayerId,
+                        (byte)TimeMasterOps.RewindTime,
                     });
-                TimeRewind(rolePlayer.PlayerId);
+                timeRewind(rolePlayer.PlayerId);
 
                 return false;
             }
