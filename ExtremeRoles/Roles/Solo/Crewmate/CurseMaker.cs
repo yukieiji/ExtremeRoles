@@ -299,7 +299,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             CreateIntOption(
                 CurseMakerOption.NotRemoveDeadBodyTaskGage,
-                100, 50, 100, 5, removeDeadBodyOpt,
+                100, 0, 100, 5, removeDeadBodyOpt,
                 format: OptionUnit.Percentage);
 
             var searchDeadBodyOption = CreateBoolOption(
@@ -327,7 +327,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             CreateIntOption(
                 CurseMakerOption.ReduceSearchTaskGage,
-                100, 50, 100, 5,
+                100, 25, 100, 5,
                 taskBoostOpt,
                 format: OptionUnit.Percentage,
                 invert: true,
