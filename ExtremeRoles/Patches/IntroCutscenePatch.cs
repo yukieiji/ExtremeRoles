@@ -123,24 +123,15 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CoBegin))]
     public static class IntroCutsceneCoBeginPatch
     {
-
-        private static TMPro.TextMeshPro roleAssignText;
-
         private static IEnumerator coBeginPatch(
             IntroCutscene instance)
         {
-            if (roleAssignText == null)
-            {
-                var hudManager = FastDestroyableSingleton<HudManager>.Instance;
-                roleAssignText = Object.Instantiate(
-                    hudManager.TaskText,
-                    hudManager.transform.parent);
-                roleAssignText.transform.localPosition = new Vector3(0.0f, 0.0f, -910f);
-                roleAssignText.alignment = TMPro.TextAlignmentOptions.Center;
-                roleAssignText.gameObject.layer = 5;
-            }
 
-            roleAssignText.text = Translation.GetString("roleAssignNow");
+            GameObject roleAssignText = new GameObject("roleAssignText");
+            var text = roleAssignText.AddComponent<Module.CustomMonoBehaviour.LoadingText>();
+            text.SetFontSize(3.0f);
+            text.SetMessage("ExRの役職を割当中です\nしばらくお待ち下さい");
+
             roleAssignText.gameObject.SetActive(true);
 
             if (AmongUsClient.Instance.AmHost)
@@ -157,10 +148,6 @@ namespace ExtremeRoles.Patches
             {
                 yield return null;
             }
-
-            roleAssignText.gameObject.SetActive(false);
-            Object.Destroy(roleAssignText);
-            roleAssignText = null;
 
             SoundManager.Instance.PlaySound(instance.IntroStinger, false, 1f);
             if (PlayerControl.GameOptions.gameType == GameType.Normal)
@@ -199,6 +186,11 @@ namespace ExtremeRoles.Patches
                     instance.ImpostorText.text = instance.ImpostorText.text.Replace("[FF1919FF]", "<color=#FF1919FF>");
                     instance.ImpostorText.text = instance.ImpostorText.text.Replace("[]", "</color>");
                 }
+                
+                roleAssignText.gameObject.SetActive(false);
+                Object.Destroy(roleAssignText);
+                roleAssignText = null;
+
                 yield return instance.ShowTeam(teamToShow);
                 yield return instance.ShowRole();
             }
