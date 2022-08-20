@@ -130,7 +130,7 @@ namespace ExtremeRoles.Patches
             GameObject roleAssignText = new GameObject("roleAssignText");
             var text = roleAssignText.AddComponent<Module.CustomMonoBehaviour.LoadingText>();
             text.SetFontSize(3.0f);
-            text.SetMessage("ExRの役職を割当中です\nしばらくお待ち下さい");
+            text.SetMessage(Translation.GetString("roleAssignNow"));
 
             roleAssignText.gameObject.SetActive(true);
 
