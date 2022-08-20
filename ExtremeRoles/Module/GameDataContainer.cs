@@ -614,9 +614,8 @@ namespace ExtremeRoles.Module
             public bool BlockAddHistory;
 
             // 座標、動けるか、ベント内か, 何か使ってるか
-            public Queue<
-                Tuple<Vector3, bool, bool, bool>> history = new Queue<
-                    Tuple<Vector3, bool, bool, bool>>();
+            public Queue<(Vector3, bool, bool, bool)> history = new Queue<
+                (Vector3, bool, bool, bool)>();
             private bool init = false;
             private int size = 0;
 
@@ -636,11 +635,13 @@ namespace ExtremeRoles.Module
                 }
 
                 this.history.Enqueue(
-                    Tuple.Create(
+                    (
                         player.transform.position,
                         player.CanMove,
                         player.inVent,
-                        !player.Collider.enabled && !player.NetTransform.enabled && !player.moveable));
+                        !player.Collider.enabled && !player.NetTransform.enabled && !player.moveable
+                    )
+                );
             }
 
             public void Clear()
@@ -662,8 +663,8 @@ namespace ExtremeRoles.Module
                 this.init = true;
             }
 
-            public IEnumerable<Tuple<
-                Vector3, bool, bool, bool>> GetAllHistory() => this.history.Reverse();
+            public IEnumerator<
+                (Vector3, bool, bool, bool)> GetAllHistory() => this.history.Reverse().GetEnumerator();
 
             public int GetSize() => this.size;
         }

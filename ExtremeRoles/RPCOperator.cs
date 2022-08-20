@@ -134,6 +134,9 @@ namespace ExtremeRoles
             ExtremeRolesPlugin.Info.ResetOverlays();
             Helper.Logging.ResetCkpt();
 
+            // ポジションセッターリセット
+            Patches.PlayerControlFixedUpdatePatch.ResetPosionSetter();
+
             // キルアニメーションリセット
             Patches.KillAnimationCoPerformKillPatch.HideNextAnimation = false;
 
