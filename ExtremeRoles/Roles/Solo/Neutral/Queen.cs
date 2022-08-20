@@ -491,7 +491,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         }
     }
 
-    public class Servant : MultiAssignRoleBase, IRoleAbility, IRoleMurderPlayerHock, IRoleHasParent
+    public sealed class Servant : MultiAssignRoleBase, IRoleAbility, IRoleMurderPlayerHock, IRoleHasParent
     {
         public byte Parent => this.queenPlayerId;
 
