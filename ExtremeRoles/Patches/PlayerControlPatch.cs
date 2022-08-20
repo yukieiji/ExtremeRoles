@@ -138,6 +138,28 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
     public static class PlayerControlFixedUpdatePatch
     {
+        public enum PostionSetType
+        {
+            None,
+            TimeMaster,
+        }
+
+        private static IEnumerator<(Vector3, bool, bool, bool)> enumerator;
+        private static PostionSetType type;
+
+        public static void SetNewPosionSetter(
+            IEnumerator<(Vector3, bool, bool, bool)> postionSetter,
+            PostionSetType setType)
+        {
+            enumerator = postionSetter;
+            type = setType;
+        }
+        public static void ResetPosionSetter()
+        {
+            enumerator = null;
+            type = PostionSetType.None;
+        }
+
         public static void Postfix(PlayerControl __instance)
         {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) { return; }
@@ -153,6 +175,7 @@ namespace ExtremeRoles.Patches
 
             ExtremeRolesPlugin.GameDataStore.History.Enqueue(__instance);
             ExtremeRolesPlugin.GameDataStore.Union.Update();
+            setPlayerPostion();
         }
 
         private static void refreshRoleDescription(
@@ -365,6 +388,38 @@ namespace ExtremeRoles.Patches
                 playerGhostRole.Button.Update();
             }
         }
+
+        private static void setPlayerPostion()
+        {
+            if (enumerator == null) { return; }
+
+            if (enumerator.MoveNext())
+            {
+
+                var item = enumerator.Current;
+
+                switch (type)
+                {
+                    case PostionSetType.TimeMaster:
+                        Roles.Solo.Crewmate.TimeMaster.RewindPostion(item);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                switch (type)
+                {
+                    case PostionSetType.TimeMaster:
+                        Roles.Solo.Crewmate.TimeMaster.RewindCleanUp();
+                        break;
+                    default:
+                        break;
+                }
+                ResetPosionSetter();
+            }
+        }
     }
 
 
@@ -519,25 +574,8 @@ namespace ExtremeRoles.Patches
                     RPCOperator.BodyGuardResetShield(
                         bodyGuardResetShieldOpCallPlayerId);
                     break;
-                case RPCOperator.Command.TimeMasterShieldOn:
-                    byte shieldOnTimeMaster = reader.ReadByte();
-                    RPCOperator.TimeMasterShieldOn(
-                        shieldOnTimeMaster);
-                    break;
-                case RPCOperator.Command.TimeMasterShieldOff:
-                    byte shieldOffTimeMaster = reader.ReadByte();
-                    RPCOperator.TimeMasterShieldOff(
-                        shieldOffTimeMaster);
-                    break;
-                case RPCOperator.Command.TimeMasterRewindTime:
-                    byte timeMasterPlayerId = reader.ReadByte();
-                    RPCOperator.TimeMasterRewindTime(
-                        timeMasterPlayerId);
-                    break;
-                case RPCOperator.Command.TimeMasterResetMeeting:
-                    byte timeMasterResetPlayerId = reader.ReadByte();
-                    RPCOperator.TimeMasterResetMeeting(
-                        timeMasterResetPlayerId);
+                case RPCOperator.Command.TimeMasterAbility:
+                    RPCOperator.TimeMasterAbility(ref reader);
                     break;
                 case RPCOperator.Command.AgencyTakeTask:
                     byte agencyTargetPlayerId = reader.ReadByte();

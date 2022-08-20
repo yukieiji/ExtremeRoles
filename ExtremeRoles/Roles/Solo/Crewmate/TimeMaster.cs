@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using UnityEngine;
+using Hazel;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -22,6 +23,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             RewindTime
         }
 
+        public enum TimeMasterOps : byte
+        {
+            ShieldOff,
+            ShieldOn,
+            RewindTime,
+            ResetMeeting,
+        }
+
         public RoleAbilityButtonBase Button
         { 
             get => this.timeShieldButton;
@@ -36,6 +45,16 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public SpriteRenderer RewindScreen;
         private RoleAbilityButtonBase timeShieldButton;
 
+        private static int skipFrame;
+        private static int historyFrame;
+        private static int frameCount;
+        private static Vector3 prevPos;
+        private static Vector3 sefePos;
+        private static bool isNotSafePos;
+        private static byte rolePlayerId;
+        private static TimeMaster rewindingTM;
+        private static bool rewindingTrigger;
+
         public TimeMaster() : base(
             ExtremeRoleId.TimeMaster,
             ExtremeRoleType.Crewmate,
@@ -44,40 +63,184 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             false, true, false, false)
         { }
 
-        public static void TimeRewind(byte rolePlayerId)
+        public static void Ability(ref MessageReader reader)
+        {
+            byte tmPlayerId = reader.ReadByte();
+            TimeMasterOps ops = (TimeMasterOps)reader.ReadByte();
+            switch (ops)
+            {
+                case TimeMasterOps.ShieldOff:
+                    shieldOff(tmPlayerId);
+                    break;
+                case TimeMasterOps.ShieldOn:
+                    shieldOn(tmPlayerId);
+                    break;
+                case TimeMasterOps.RewindTime:
+                    startRewind(tmPlayerId);
+                    break;
+                case TimeMasterOps.ResetMeeting:
+                    resetMeeting(tmPlayerId);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public static void RewindCleanUp()
+        {
+            PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+
+            // 最後の巻き戻しが壁抜けする座標だった場合、壁抜けしない安全な場所に飛ばす
+            if (isNotSafePos)
+            {
+                localPlayer.transform.position = sefePos;
+            }
+
+            localPlayer.moveable = true;
+            rewindingTM.IsRewindTime = false;
+            rewindingTM.RewindScreen.enabled = false;
+
+            ExtremeRolesPlugin.GameDataStore.History.DataClear();
+            ExtremeRolesPlugin.GameDataStore.History.BlockAddHistory = false;
+
+            rewindingTM = null;
+            skipFrame = 0;
+            historyFrame = 0;
+            frameCount = 0;
+            prevPos = Vector3.zero;
+            sefePos = Vector3.zero;
+            isNotSafePos = false;
+            rolePlayerId = byte.MinValue;
+            rewindingTrigger = false;
+        }
+
+        public static void RewindPostion((Vector3, bool, bool, bool) hist)
+        {
+            PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+
+            // 梯子とか使っている最中に巻き戻すと色々とおかしくなる
+            // => その処理が終わるまで待機、巻き戻しはその後
+            //    ただし、処理が終わるまでの間の時間巻き戻し時間は短くなる
+            // この時巻き戻しの処理はまだ行ってないのでトリガーはオフっとく
+            if (!rewindingTrigger && 
+                !localPlayer.inVent && 
+                !localPlayer.moveable)
+            {
+                ++skipFrame;
+                
+                prevPos = localPlayer.transform.position;
+                sefePos = prevPos;
+                isNotSafePos = false;
+
+                return;
+            }
+
+            // 巻き戻し自体の処理開始 => トリガーをオンにしておく
+            rewindingTrigger = true;
+
+            ++frameCount;
+
+            int rewindFrame = historyFrame - skipFrame;
+
+            if (rewindFrame <= frameCount)
+            {
+                return;
+            }
+
+            if (localPlayer.PlayerId == rolePlayerId)
+            {
+                return;
+            }
+
+            localPlayer.moveable = false;
+
+            if (localPlayer.Data.IsDead)
+            {
+                localPlayer.transform.position = hist.Item1;
+            }
+            else
+            {
+                if (localPlayer.inVent)
+                {
+                    foreach (Vent vent in CachedShipStatus.Instance.AllVents)
+                    {
+                        vent.CanUse(localPlayer.Data, out bool canUse, out _);
+                        if (canUse)
+                        {
+                            localPlayer.MyPhysics.RpcExitVent(vent.Id);
+                            vent.SetButtons(false);
+                        }
+                    }
+                }
+
+                Vector3 newPos = hist.Item1;
+                Vector2 offset = localPlayer.Collider.offset;
+                Vector3 newTruePos = new Vector3(
+                    newPos.x + offset.x,
+                    newPos.y + offset.y,
+                    newPos.z);
+                Vector3 prevTruePos = new Vector3(
+                    prevPos.x + offset.x,
+                    prevPos.y + offset.y,
+                    newPos.z);
+
+                bool isAnythingBetween = PhysicsHelpers.AnythingBetween(
+                    prevTruePos, newTruePos,
+                    Constants.ShipAndAllObjectsMask, false);
+
+                // (間に何もない and 動ける) or ベント内だったの座標だった場合
+                // => 巻き戻しかつ、安全な座標を更新
+                if ((!isAnythingBetween && hist.Item2) || hist.Item3)
+                {
+                    localPlayer.transform.position = newPos;
+                    prevPos = newPos;
+                    sefePos = newPos;
+                    isNotSafePos = false;
+                }
+                // 何か使っている時の座標(梯子、移動床等)
+                // => 巻き戻すが、安全ではない(壁抜けする)座標として記録
+                else if (hist.Item4)
+                {
+                    localPlayer.transform.position = newPos;
+                    prevPos = newPos;
+                    isNotSafePos = true;
+                }
+                else
+                {
+                    localPlayer.transform.position = prevPos;
+                }
+            }
+        }
+
+        private static void startRewind(byte playerId)
         {
             if (ExtremeRolesPlugin.GameDataStore.History.BlockAddHistory) { return; }
 
             PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
-            localPlayer.StartCoroutine(rewind(
-                rolePlayerId, localPlayer).WrapToIl2Cpp());
 
-        }
-
-        private static IEnumerator rewind(
-            byte rolePlayerId,
-            PlayerControl localPlayer)
-        {
             // Enable rewind
-            var timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(rolePlayerId);
-            if (timeMaster == null) { yield break; }
-            timeMaster.IsRewindTime = true;
+            var timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(playerId);
+            if (timeMaster == null) { return; }
+
+            rolePlayerId = playerId;
+            rewindingTM = timeMaster;
+            rewindingTM.IsRewindTime = true;
 
             ExtremeRolesPlugin.GameDataStore.History.BlockAddHistory = true;
 
             // Screen Initialize
-            if (timeMaster.RewindScreen == null)
+            if (rewindingTM.RewindScreen == null)
             {
-                timeMaster.RewindScreen = UnityEngine.Object.Instantiate(
+                rewindingTM.RewindScreen = UnityEngine.Object.Instantiate(
                      FastDestroyableSingleton<HudManager>.Instance.FullScreen,
                      FastDestroyableSingleton<HudManager>.Instance.transform);
-                timeMaster.RewindScreen.transform.localPosition = new Vector3(0f, 0f, 20f);
-                timeMaster.RewindScreen.gameObject.SetActive(true);
-                timeMaster.RewindScreen.enabled = false;
-                timeMaster.RewindScreen.color = new Color(0f, 0.5f, 0.8f, 0.3f);
+                rewindingTM.RewindScreen.transform.localPosition = new Vector3(0f, 0f, 20f);
+                rewindingTM.RewindScreen.gameObject.SetActive(true);
+                rewindingTM.RewindScreen.enabled = false;
+                rewindingTM.RewindScreen.color = new Color(0f, 0.5f, 0.8f, 0.3f);
             }
             // Screen On
-            timeMaster.RewindScreen.enabled = true;
+            rewindingTM.RewindScreen.enabled = true;
 
             // SetUp
             if (MapBehaviour.Instance)
@@ -89,122 +252,25 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 Minigame.Instance.ForceClose();
             }
 
-
-            // 梯子とか使っている最中に巻き戻すと色々とおかしくなる
-            // => その処理が終わるまで待機、巻き戻しはその後
-            //    ただし、処理が終わるまでの間の時間巻き戻し時間は短くなる
-            int skipFrame = 0;
-            if (!localPlayer.inVent && !localPlayer.moveable)
-            {
-                do
-                {
-                    yield return null;
-                    ++skipFrame;
-                }
-                while (!localPlayer.moveable);
-            }
-
-            int rewindFrame = ExtremeRolesPlugin.GameDataStore.History.GetSize() - skipFrame;
+            skipFrame = 0;
+            historyFrame = ExtremeRolesPlugin.GameDataStore.History.GetSize();
+            frameCount = 0;
+            prevPos = localPlayer.transform.position;
+            sefePos = prevPos;
+            isNotSafePos = false;
+            rewindingTrigger = false;
 
             Logging.Debug(
                 $"History Size:{ExtremeRolesPlugin.GameDataStore.History.GetSize()}   SkipFrame:{skipFrame}");
 
-            Vector3 prevPos = localPlayer.transform.position;
-            Vector3 sefePos = prevPos;
-            bool isNotSafePos = false;
-            int frameCount = 0;
-
-            // Rewind Main Process
-            foreach (var hist in ExtremeRolesPlugin.GameDataStore.History.GetAllHistory())
-            {
-                if (rewindFrame == frameCount) { break; }
-
-                yield return null;
-
-                if (localPlayer.PlayerId == rolePlayerId) { continue; }
-
-                ++frameCount;
-
-                localPlayer.moveable = false;
-
-                if (localPlayer.Data.IsDead)
-                {
-                    localPlayer.transform.position = hist.Item1;
-                }
-                else
-                {
-                    if (localPlayer.inVent)
-                    {
-                        foreach (Vent vent in CachedShipStatus.Instance.AllVents)
-                        {
-                            bool canUse;
-                            bool couldUse;
-                            vent.CanUse(CachedPlayerControl.LocalPlayer.Data, out canUse, out couldUse);
-                            if (canUse)
-                            {
-                                CachedPlayerControl.LocalPlayer.PlayerPhysics.RpcExitVent(vent.Id);
-                                vent.SetButtons(false);
-                            }
-                        }
-                    }
-
-                    Vector3 newPos = hist.Item1;
-                    Vector2 offset = localPlayer.Collider.offset;
-                    Vector3 newTruePos = new Vector3(
-                        newPos.x + offset.x,
-                        newPos.y + offset.y,
-                        newPos.z);
-                    Vector3 prevTruePos = new Vector3(
-                        prevPos.x + offset.x,
-                        prevPos.y + offset.y,
-                        newPos.z);
-
-                    bool isAnythingBetween = PhysicsHelpers.AnythingBetween(
-                            prevTruePos, newTruePos,
-                            Constants.ShipAndAllObjectsMask, false);
-
-
-                    // (間に何もない and 動ける) or ベント内だったの座標だった場合
-                    // => 巻き戻しかつ、安全な座標を更新
-                    if ((!isAnythingBetween && hist.Item2) || hist.Item3)
-                    {
-                        localPlayer.transform.position = newPos;
-                        prevPos = newPos;
-                        sefePos = newPos;
-                        isNotSafePos = false;
-                    }
-                    // 何か使っている時の座標(梯子、移動床等)
-                    // => 巻き戻すが、安全ではない(壁抜けする)座標として記録
-                    else if (hist.Item4)
-                    {
-                        localPlayer.transform.position = newPos;
-                        prevPos = newPos;
-                        isNotSafePos = true;
-                    }
-                    else
-                    {
-                        localPlayer.transform.position = prevPos;
-                    }
-                }
-            }
-
-            // 最後の巻き戻しが壁抜けする座標だった場合、壁抜けしない安全な場所に飛ばす
-            if (isNotSafePos)
-            {
-                localPlayer.transform.position = sefePos;
-            }
-
-            localPlayer.moveable = true;
-            timeMaster.IsRewindTime = false;
-            timeMaster.RewindScreen.enabled = false;
-
-            ExtremeRolesPlugin.GameDataStore.History.DataClear();
-            ExtremeRolesPlugin.GameDataStore.History.BlockAddHistory = false;
+            Patches.PlayerControlFixedUpdatePatch.SetNewPosionSetter(
+                ExtremeRolesPlugin.GameDataStore.History.GetAllHistory(),
+                Patches.PlayerControlFixedUpdatePatch.PostionSetType.TimeMaster);
         }
 
-        public static void ShieldOn(byte rolePlayerId)
+        private static void shieldOn(byte rolePlayerId)
         {
-            var timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(rolePlayerId);
+            TimeMaster timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(rolePlayerId);
             
             if (timeMaster != null)
             {
@@ -212,18 +278,18 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
         }
 
-        public static void ShieldOff(byte rolePlayerId)
+        private static void shieldOff(byte rolePlayerId)
         {
-            var timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(rolePlayerId);
+            TimeMaster timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(rolePlayerId);
 
             if (timeMaster != null)
             {
                 timeMaster.IsShieldOn = false;
             }
         }
-        public static void ResetMeeting(byte rolePlayerId)
+        private static void resetMeeting(byte rolePlayerId)
         {
-            var timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(rolePlayerId);
+            TimeMaster timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(rolePlayerId);
 
             if (timeMaster == null) { return; }
             
@@ -241,12 +307,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             RPCOperator.Call(
                 CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.TimeMasterShieldOff,
+                RPCOperator.Command.TimeMasterAbility,
                 new List<byte>
                 {
                    CachedPlayerControl.LocalPlayer.PlayerId,
+                   (byte)TimeMasterOps.ShieldOff,
                 });
-            ShieldOff(CachedPlayerControl.LocalPlayer.PlayerId);
+            shieldOff(CachedPlayerControl.LocalPlayer.PlayerId);
         }
 
         public void CreateAbility()
@@ -263,12 +330,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             RPCOperator.Call(
                 CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.TimeMasterShieldOn,
+                RPCOperator.Command.TimeMasterAbility,
                 new List<byte>
                 {
                     CachedPlayerControl.LocalPlayer.PlayerId,
+                    (byte)TimeMasterOps.ShieldOn,
                 });
-            ShieldOn(CachedPlayerControl.LocalPlayer.PlayerId);
+            shieldOn(CachedPlayerControl.LocalPlayer.PlayerId);
 
             return true;
         }
@@ -279,12 +347,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             RPCOperator.Call(
                 CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.TimeMasterResetMeeting,
+                RPCOperator.Command.TimeMasterAbility,
                 new List<byte>
                 {
                     CachedPlayerControl.LocalPlayer.PlayerId,
+                    (byte)TimeMasterOps.ResetMeeting,
                 });
-            ResetMeeting(CachedPlayerControl.LocalPlayer.PlayerId);
+            resetMeeting(CachedPlayerControl.LocalPlayer.PlayerId);
         }
 
         public void RoleAbilityResetOnMeetingEnd()
@@ -301,12 +370,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 RPCOperator.Call(
                     CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                    RPCOperator.Command.TimeMasterRewindTime,
+                    RPCOperator.Command.TimeMasterAbility,
                     new List<byte>
                     {
                         rolePlayer.PlayerId,
+                        (byte)TimeMasterOps.RewindTime,
                     });
-                TimeRewind(rolePlayer.PlayerId);
+                startRewind(rolePlayer.PlayerId);
 
                 return false;
             }
