@@ -122,11 +122,15 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 
 
 ## クレジット&Thanks
-- TheOtherRoles - 開発当時から[TOR](https://github.com/Eisbison/TheOtherRoles)及び[TOR-GM](https://github.com/yukinogatari/TheOtherRoles-GM)のコード(ロールに関するところ以外(オプションやパッチ等))を参考、引用、改変して開発しています。TORがなければ開発をこのMODを開発することは不可能でした。また、バウンティハンターのアイディア元
-- [Jackal and Sidekick](https://www.twitch.tv/dhalucard) - Dhalucard氏によって作成されたMOD、ジャッカルとサイドキックのアイディア元
-- [Sheriff-Mod](https://github.com/Woodi-dev/Among-Us-Sheriff-Mod) - Woodi-dev氏によって作成されたMOD、シェリフのアイディア元
-- [Among-Us-Love-Couple-Mod](https://www.curseforge.com/among-us/all-mods/love-couple-mod) - Woodi-dev氏によって作成されたMOD、ラバーズのアイディア元
-- [TooManyRolesMods](https://github.com/Hardel-DW/TooManyRolesMods) - Hardel-DW氏によって作成されたMOD、タイムマスターのアイディア元
+- TheOtherRoles - 開発当時から[TOR](https://github.com/Eisbison/TheOtherRoles)及び[TOR-GM](https://github.com/yukinogatari/TheOtherRoles-GM)のコード(ロールに関するところ以外(オプションやパッチ等))を参考、引用、改変して開発しています。TORがなければ開発をこのMODを開発することは不可能でした。また、バウンティハンター、カーペンター、シューター、キャプテンのアイディア元
+- [Jackal and Sidekick](https://www.twitch.tv/dhalucard) - **Dhalucard**氏によって作成されたMOD、ジャッカルとサイドキックのアイディア元
+- [Sheriff-Mod](https://github.com/Woodi-dev/Among-Us-Sheriff-Mod) - **Woodi-dev**氏によって作成されたMOD、シェリフのアイディア元
+- [Among-Us-Love-Couple-Mod](https://www.curseforge.com/among-us/all-mods/love-couple-mod) - **Woodi-dev**氏によって作成されたMOD、ラバーズのアイディア元
+- [TooManyRolesMods](https://github.com/Hardel-DW/TooManyRolesMods) - **Hardel-DW**氏によって作成されたMOD、タイムマスターのアイディア元
+- [TownOfUs](https://github.com/slushiegoose/Town-Of-Us) - **Slushiegoose**氏によって作成されたMOD、アンブレイヤーのアイディア元
+- [Jester](https://github.com/Maartii/Jester) - **Maartii**氏によって作成されたMOD、ジェスターのアイディア元
+- [Goose-Goose-Duck](https://store.steampowered.com/app/1568590/Goose_Goose_Duck) - **Slushygoose**氏によって作成されたMOD、イーターのアイディア元
+
 
 - レジスタンス:アヴァロン - マーリン、アサシンのアイディア元
 - シャドウハンターズ - アリス、オーバーローダーのアイディア元
