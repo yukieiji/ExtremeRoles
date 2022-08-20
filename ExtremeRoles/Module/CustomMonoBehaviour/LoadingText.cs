@@ -14,7 +14,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         private int frameCount = 0;
 
         private const int addCommaFrame = 45;
-        private const int maxFrame = 135;
+        private const int maxFrame = 180;
         private const string comma = "・";
         private static readonly Color[] commaColor =
             { Palette.CrewmateBlue, Palette.ImpostorRed, ColorPalette.NeutralColor };
