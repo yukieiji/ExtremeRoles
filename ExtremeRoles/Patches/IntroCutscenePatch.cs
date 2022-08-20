@@ -123,9 +123,26 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CoBegin))]
     public static class IntroCutsceneCoBeginPatch
     {
+
+        private static TMPro.TextMeshPro roleAssignText;
+
         private static IEnumerator coBeginPatch(
             IntroCutscene instance)
         {
+            if (roleAssignText == null)
+            {
+                var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+                roleAssignText = Object.Instantiate(
+                    hudManager.TaskText,
+                    hudManager.transform.parent);
+                roleAssignText.transform.localPosition = new Vector3(0.0f, 0.0f, -910f);
+                roleAssignText.alignment = TMPro.TextAlignmentOptions.Center;
+                roleAssignText.gameObject.layer = 5;
+            }
+
+            roleAssignText.text = Translation.GetString("roleAssignNow");
+            roleAssignText.gameObject.SetActive(true);
+
             if (AmongUsClient.Instance.AmHost)
             {
                 // とりあえず5.0秒待機
@@ -140,6 +157,10 @@ namespace ExtremeRoles.Patches
             {
                 yield return null;
             }
+
+            roleAssignText.gameObject.SetActive(false);
+            Object.Destroy(roleAssignText);
+            roleAssignText = null;
 
             SoundManager.Instance.PlaySound(instance.IntroStinger, false, 1f);
             if (PlayerControl.GameOptions.gameType == GameType.Normal)
