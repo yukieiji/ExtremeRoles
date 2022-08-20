@@ -311,6 +311,8 @@ namespace ExtremeRoles.Patches.Manager
                     allPlayerInfo[player.PlayerId] = playerInfo;
                 }
 
+                playerInfo.transform.localPosition = 
+                    player.cosmetics.nameText.transform.localPosition + Vector3.up * 0.5f;
                 string playerInfoText = getRoleInfo(localPlayer, player, commsActive);
                 playerInfo.text = playerInfoText;
 
