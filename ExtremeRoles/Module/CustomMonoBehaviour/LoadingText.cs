@@ -69,6 +69,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         public void SetMessage(string message)
         {
             this.message = message;
+            this.text.text = message;
         }
         public void SetFontSize(float size)
         {
