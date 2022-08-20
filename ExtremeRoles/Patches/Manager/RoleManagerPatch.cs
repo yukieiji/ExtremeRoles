@@ -18,6 +18,8 @@ namespace ExtremeRoles.Patches.Manager
     public static class RoleManagerSelectRolesPatch
     {
 
+        private static List<IAssignedPlayer> roleList;
+
         public static void Postfix()
         {
 
@@ -44,18 +46,18 @@ namespace ExtremeRoles.Patches.Manager
                 ref playerIndexList,
                 ref assignedPlayerData,
                 combRoleAssignedPlayerId);
-            allPlayerAssignToExRole(netId, assignedPlayerData);
+            roleList = assignedPlayerData;
         }
 
-        private static void allPlayerAssignToExRole(
-            uint netId, List<IAssignedPlayer> assignData)
+        public static void AllPlayerAssignToExRole()
         {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                netId, (byte)RPCOperator.Command.SetRoleToAllPlayer,
+                PlayerControl.LocalPlayer.NetId,
+                (byte)RPCOperator.Command.SetRoleToAllPlayer,
                 Hazel.SendOption.Reliable, -1);
-            writer.WritePacked(assignData.Count); // 何個あるか
+            writer.WritePacked(roleList.Count); // 何個あるか
 
-            foreach (IAssignedPlayer data in assignData)
+            foreach (IAssignedPlayer data in roleList)
             {
                 writer.Write(data.PlayerId); // PlayerId
                 writer.Write(data.RoleType); // RoleType : single or comb
@@ -70,8 +72,9 @@ namespace ExtremeRoles.Patches.Manager
                 }
             }
             AmongUsClient.Instance.FinishRpcImmediately(writer);
-            RPCOperator.SetRoleToAllPlayer(assignData);
+            RPCOperator.SetRoleToAllPlayer(roleList);
             ExtremeRolesPlugin.GameDataStore.RoleSetUpEnd();
+            roleList.Clear();
         }
 
         private static bool checkLimitRoleSpawnNum(

@@ -123,10 +123,18 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CoBegin))]
     public static class IntroCutsceneCoBeginPatch
     {
-       
         private static IEnumerator coBeginPatch(
             IntroCutscene instance)
         {
+            if (AmongUsClient.Instance.AmHost)
+            {
+                // とりあえず5.0秒待機
+                // Ping300があっても5秒たっても役職アサイン待ちコードに到達しないのは中々のはず
+                yield return new WaitForSeconds(5.0f);
+           
+                Manager.RoleManagerSelectRolesPatch.AllPlayerAssignToExRole();
+            }
+
             // バニラの役職アサイン後すぐこの処理が走るので全員の役職が入るまで待機
             while (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd)
             {
