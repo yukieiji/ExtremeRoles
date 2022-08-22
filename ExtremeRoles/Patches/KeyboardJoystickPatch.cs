@@ -34,7 +34,8 @@ namespace ExtremeRoles.Patches
             // Spawn dummys
             if ((Input.GetKeyDown(KeyCode.F)) && GameSystem.IsLobby)
             {
-                var playerControl = UnityEngine.Object.Instantiate(AmongUsClient.Instance.PlayerPrefab);
+                PlayerControl playerControl = UnityEngine.Object.Instantiate(
+                    AmongUsClient.Instance.PlayerPrefab);
                 playerControl.PlayerId = (byte)GameData.Instance.GetAvailableId();
 
                 bots.Add(playerControl);

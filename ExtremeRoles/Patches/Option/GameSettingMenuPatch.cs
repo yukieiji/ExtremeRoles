@@ -5,6 +5,8 @@ using UnityEngine;
 
 using HarmonyLib;
 
+using Il2CppSystem.Collections.Generic;
+
 namespace ExtremeRoles.Patches.Option
 {
     [HarmonyPatch(typeof(GameSettingMenu), nameof(GameSettingMenu.Start))]
@@ -23,11 +25,11 @@ namespace ExtremeRoles.Patches.Option
 
             if (mapNameTransform == null) { return; }
 
-            var options = new Il2CppSystem.Collections.Generic.List<Il2CppSystem.Collections.Generic.KeyValuePair<string, int>>();
+            List<KeyValuePair<string, int>> options = new List<KeyValuePair<string, int>>();
             for (int i = 0; i < Constants.MapNames.Length; ++i)
             {
                 if (i == 3) { continue; }
-                var kvp = new Il2CppSystem.Collections.Generic.KeyValuePair<string, int>();
+                KeyValuePair<string, int> kvp = new KeyValuePair<string, int>();
                 kvp.key = Constants.MapNames[i];
                 kvp.value = i;
                 options.Add(kvp);

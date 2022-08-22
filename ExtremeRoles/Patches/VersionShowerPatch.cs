@@ -34,7 +34,7 @@ namespace ExtremeRoles.Patches
             credentials.fontSize *= 0.85f;
 
             var translator = Object.Instantiate(
-                    credentials, credentials.transform);
+                credentials, credentials.transform);
             translator.transform.localPosition = new Vector3(0, -0.35f, 0);
             translator.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 

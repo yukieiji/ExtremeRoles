@@ -36,7 +36,7 @@ namespace ExtremeRoles.Patches.Option
     }
 
     [HarmonyPatch(typeof(StringOption), nameof(StringOption.OnEnable))]
-    public class StringOptionOnEnablePatch
+    public static class StringOptionOnEnablePatch
     {
         public static bool Prefix(StringOption __instance)
         {

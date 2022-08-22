@@ -52,7 +52,7 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Awake))]
-    public class PlayerControlAwakePatch
+    public static class PlayerControlAwakePatch
     {
         public static void Postfix(PlayerControl __instance)
         {

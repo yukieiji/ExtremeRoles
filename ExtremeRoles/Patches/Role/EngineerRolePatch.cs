@@ -10,5 +10,4 @@ namespace ExtremeRoles.Patches.Role
             return !OptionHolder.Ship.EngineerUseImpostorVent;
         }
     }
-
 }
