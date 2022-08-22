@@ -34,7 +34,8 @@ namespace ExtremeRoles.Roles.API
                 OptionHolder.SpawnRate, null, true,
                 colored: true);
 
-            int spawnNum = this.IsImpostor() ? OptionHolder.MaxImposterNum : OptionHolder.VanillaMaxPlayerNum - 1;
+            int spawnNum = this.IsImpostor() ? 
+                OptionHolder.MaxImposterNum : OptionHolder.VanillaMaxPlayerNum - 1;
 
             CreateIntOption(
                 RoleCommonOption.RoleNum,
