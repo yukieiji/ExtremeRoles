@@ -292,15 +292,24 @@ namespace ExtremeRoles.Patches.Option
 
             // Adapt task count for main options
 
-            NumberOption commonTasksOption = __instance.Children.FirstOrDefault(
+            UnhollowerBaseLib.Il2CppReferenceArray<OptionBehaviour> child = __instance.Children;
+
+            NumberOption numImpostorsOption = child.FirstOrDefault(
+                x => x.name == "NumImpostors").TryCast<NumberOption>();
+            if (numImpostorsOption != null)
+            { 
+                numImpostorsOption.ValidRange = new FloatRange(0f, OptionHolder.MaxImposterNum); 
+            }
+
+            NumberOption commonTasksOption = child.FirstOrDefault(
                 x => x.name == "NumCommonTasks").TryCast<NumberOption>();
             if (commonTasksOption != null) { commonTasksOption.ValidRange = new FloatRange(0f, 4f); }
 
-            NumberOption shortTasksOption = __instance.Children.FirstOrDefault(
+            NumberOption shortTasksOption = child.FirstOrDefault(
                 x => x.name == "NumShortTasks").TryCast<NumberOption>();
             if (shortTasksOption != null){ shortTasksOption.ValidRange = new FloatRange(0f, 23f); }
 
-            NumberOption longTasksOption = __instance.Children.FirstOrDefault(
+            NumberOption longTasksOption = child.FirstOrDefault(
                 x => x.name == "NumLongTasks").TryCast<NumberOption>();
             if (longTasksOption != null) { longTasksOption.ValidRange = new FloatRange(0f, 15f); }
 
