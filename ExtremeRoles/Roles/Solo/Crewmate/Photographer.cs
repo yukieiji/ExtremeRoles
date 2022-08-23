@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Text;
 
 using UnityEngine;
 
@@ -8,7 +8,6 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Extension;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
@@ -17,22 +16,43 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 {
     public sealed class Photographer : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTypes>
     {
-        private sealed class PhotoCamera
+        private struct PlayerPosInfo
         {
-            public bool IsUpgraded = false;
+            public GameData.PlayerInfo Player;
+            public SystemTypes? Room;
 
-            private float range;
-
-            public PhotoCamera(float range)
+            public PlayerPosInfo(
+                GameData.PlayerInfo player,
+                ContactFilter2D filter)
             {
-                this.range = range;
+                this.Player = player;
+                this.Room = null;
+
+                Collider2D[] buffer = new Collider2D[10];
+
+                foreach (PlainShipRoom room in CachedShipStatus.Instance.AllRooms)
+                {
+                    if (room.roomArea)
+                    {
+                        int hitCount = room.roomArea.OverlapCollider(filter, buffer);
+                        if (RoomTracker.CheckHitsForPlayer(buffer, hitCount))
+                        {
+                            this.Room = room.RoomId;
+                        }
+                    }
+                }
             }
-            public void Reset()
-            {
-            }
 
-            public void TakePhoto()
+        }
+
+        private struct Photo
+        {
+            public List<PlayerPosInfo> Player;
+
+            public Photo(float range, ContactFilter2D filter)
             {
+                this.Player = new List<PlayerPosInfo>();
+
                 Vector3 photoCenter = CachedPlayerControl.LocalPlayer.PlayerControl.transform.position;
 
                 foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
@@ -43,16 +63,59 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                         player.Object == null) { continue; }
 
                     Vector3 position = player.Object.transform.position;
-                    if (this.range >= Vector2.Distance(photoCenter, position))
+                    if (range >= Vector2.Distance(photoCenter, position))
                     {
+                        this.Player.Add(new PlayerPosInfo(player, filter));
                     }
 
                 }
+            }
 
+            public string ToString(bool isUpgrade)
+            {
+                return ToString();
+            }
+        }
+
+        private sealed class PhotoCamera
+        {
+            public bool IsUpgraded = false;
+
+            private float range;
+            private List<Photo> film = new List<Photo>();
+            private ContactFilter2D filter;
+
+            public PhotoCamera(float range)
+            {
+                this.range = range;
+                
+                this.filter = default(ContactFilter2D);
+                this.filter.layerMask = Constants.PlayersOnlyMask;
+                this.filter.useLayerMask = true;
+                this.filter.useTriggers = false;
+
+                this.film.Clear();
+            }
+            public void Reset()
+            {
+                this.film.Clear();
+            }
+
+            public void TakePhoto()
+            {
+                this.film.Add(new Photo(this.range, this.filter));
             }
             public override string ToString()
             {
+                StringBuilder builder = new StringBuilder();
 
+                foreach (Photo photo in this.film)
+                {
+                    builder.AppendLine(
+                        photo.ToString(this.IsUpgraded));
+                }
+
+                return builder.ToString();
             }
         }
 
