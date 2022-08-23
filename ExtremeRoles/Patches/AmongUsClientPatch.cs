@@ -5,6 +5,8 @@ using System.Linq;
 using HarmonyLib;
 
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Patches
@@ -55,7 +57,7 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnGameEnd))]
     public static class AmongUsClientOnGameEndPatch
     {
-        public static void Prefix(AmongUsClient __instance, [HarmonyArgument(0)] ref EndGameResult endGameResult)
+        public static void Prefix([HarmonyArgument(0)] ref EndGameResult endGameResult)
         {
             ExtremeRolesPlugin.Info.HideInfoOverlay();
             ExtremeRolesPlugin.GameDataStore.EndReason = endGameResult.GameOverReason;
@@ -64,11 +66,11 @@ namespace ExtremeRoles.Patches
                 endGameResult.GameOverReason = GameOverReason.ImpostorByKill;
             }
         }
-        public static void Postfix(AmongUsClient __instance, [HarmonyArgument(0)] ref EndGameResult endGameResult)
+        public static void Postfix()
         {
             List<GameData.PlayerInfo> noWinner = new List<GameData.PlayerInfo>();
-            List<(GameData.PlayerInfo, Roles.API.Interface.IRoleWinPlayerModifier)> modRole = new List<
-                (GameData.PlayerInfo, Roles.API.Interface.IRoleWinPlayerModifier)> ();
+            List<(GameData.PlayerInfo, IRoleWinPlayerModifier)> modRole = new List<
+                (GameData.PlayerInfo, IRoleWinPlayerModifier)> ();
 
             var roleData = ExtremeRoleManager.GameRole;
             var gameData = ExtremeRolesPlugin.GameDataStore;
@@ -92,9 +94,9 @@ namespace ExtremeRoles.Patches
                     }
                 }
 
-                var multiAssignRole = role as Roles.API.MultiAssignRoleBase;
+                var multiAssignRole = role as MultiAssignRoleBase;
 
-                var winModRole = role as Roles.API.Interface.IRoleWinPlayerModifier;
+                var winModRole = role as IRoleWinPlayerModifier;
                 if (winModRole != null)
                 {
                     modRole.Add((playerInfo, winModRole));
@@ -103,7 +105,7 @@ namespace ExtremeRoles.Patches
                 {
                     if (multiAssignRole.AnotherRole != null)
                     {
-                        winModRole = multiAssignRole.AnotherRole as Roles.API.Interface.IRoleWinPlayerModifier;
+                        winModRole = multiAssignRole.AnotherRole as IRoleWinPlayerModifier;
                         if (winModRole != null)
                         {
                             modRole.Add((playerInfo, winModRole));
@@ -253,7 +255,7 @@ namespace ExtremeRoles.Patches
 
                 var role = ExtremeRoleManager.GameRole[player.PlayerId];
 
-                var multiAssignRole = role as Roles.API.MultiAssignRoleBase;
+                var multiAssignRole = role as MultiAssignRoleBase;
 
                 if (role.Id == roleId)
                 {
@@ -292,7 +294,7 @@ namespace ExtremeRoles.Patches
 
                 var role = ExtremeRoleManager.GameRole[player.PlayerId];
 
-                var multiAssignRole = role as Roles.API.MultiAssignRoleBase;
+                var multiAssignRole = role as MultiAssignRoleBase;
 
                 if (roles.Contains(role.Id))
                 {
@@ -336,7 +338,7 @@ namespace ExtremeRoles.Patches
             foreach (GameData.PlayerInfo playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 var role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
-                var multiAssignRole = role as Roles.API.MultiAssignRoleBase;
+                var multiAssignRole = role as MultiAssignRoleBase;
 
                 if (multiAssignRole != null)
                 {
@@ -355,7 +357,7 @@ namespace ExtremeRoles.Patches
         }
 
         private static bool checkAndAddWinRole(
-            Roles.API.SingleRoleBase role,
+            SingleRoleBase role,
             GameData.PlayerInfo playerInfo,
             ref List<(ExtremeRoleId, int)> winRole)
         {
