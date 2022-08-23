@@ -18,14 +18,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
     {
         private struct PlayerPosInfo
         {
-            public GameData.PlayerInfo Player;
+            public string PlayerName;
             public SystemTypes? Room;
 
             public PlayerPosInfo(
                 GameData.PlayerInfo player,
                 ContactFilter2D filter)
             {
-                this.Player = player;
+                this.PlayerName = player.PlayerName;
                 this.Room = null;
 
                 Collider2D[] buffer = new Collider2D[10];
