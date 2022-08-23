@@ -45,7 +45,7 @@ namespace ExtremeRoles.Roles.Solo.Host
             byte playerId = reader.ReadByte();
             XionRpcOpsCode ops = (XionRpcOpsCode)reader.ReadByte();
             Xion xion = ExtremeRoleManager.GetSafeCastedRole<Xion>(playerId);
-            PlayerControl xionPlayer = Player.GetPlayerControlById(playerId);
+            GameData.PlayerInfo xionPlayer = GameData.Instance.GetPlayerById(playerId);
 
             switch (ops)
             {
@@ -60,8 +60,8 @@ namespace ExtremeRoles.Roles.Solo.Host
                 case XionRpcOpsCode.Teleport:
                     float x = reader.ReadSingle();
                     float y = reader.ReadSingle();
-                    if (xionPlayer == null) { return; }
-                    teleport(xionPlayer, new Vector2(x, y));
+                    if (xionPlayer?.Object == null) { return; }
+                    teleport(xionPlayer.Object, new Vector2(x, y));
                     break;
                 case XionRpcOpsCode.NoXionVote:
                     if (!isXion() || xion == null) { return; }
