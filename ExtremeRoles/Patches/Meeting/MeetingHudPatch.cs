@@ -625,10 +625,10 @@ namespace ExtremeRoles.Patches.Meeting
         }
         private static int playerName2Int(PlayerVoteArea pva)
         {
-            var player = Helper.Player.GetPlayerControlById(pva.TargetPlayerId);
+            var player = GameData.Instance.GetPlayerById(pva.TargetPlayerId);
             if (player == null) { return 0; }
             byte[] bytedPlayerName = System.Text.Encoding.UTF8.GetBytes(
-                player.Data.PlayerName);
+                player.DefaultOutfit.PlayerName.Trim());
             
             return BitConverter.ToInt32(bytedPlayerName, 0);
         }
