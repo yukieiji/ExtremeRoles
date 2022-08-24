@@ -8,6 +8,7 @@ using HarmonyLib;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Performance;
 
 
 namespace ExtremeRoles.Patches.Option
@@ -294,11 +295,16 @@ namespace ExtremeRoles.Patches.Option
 
             UnhollowerBaseLib.Il2CppReferenceArray<OptionBehaviour> child = __instance.Children;
 
-            NumberOption numImpostorsOption = child.FirstOrDefault(
-                x => x.name == "NumImpostors").TryCast<NumberOption>();
-            if (numImpostorsOption != null)
-            { 
-                numImpostorsOption.ValidRange = new FloatRange(0f, OptionHolder.MaxImposterNum); 
+
+            if (AmongUsClient.Instance.GameMode == GameModes.LocalGame ||
+                FastDestroyableSingleton<ServerManager>.Instance.CurrentRegion.Name == "custom")
+            {
+                NumberOption numImpostorsOption = child.FirstOrDefault(
+                    x => x.name == "NumImpostors").TryCast<NumberOption>();
+                if (numImpostorsOption != null)
+                {
+                    numImpostorsOption.ValidRange = new FloatRange(0f, OptionHolder.MaxImposterNum);
+                }
             }
 
             NumberOption commonTasksOption = child.FirstOrDefault(
