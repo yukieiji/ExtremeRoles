@@ -55,7 +55,7 @@ namespace ExtremeRoles.Patches
                 playerControl.SetColor(color);
                 playerControl.SetHat(HatManager.Instance.allHats[hat].ProdId, color);
                 playerControl.SetPet(HatManager.Instance.allPets[pet].ProdId, color);
-                playerControl.SetVisor(HatManager.Instance.allVisors[visor].ProdId);
+                playerControl.SetVisor(HatManager.Instance.allVisors[visor].ProdId, color);
                 playerControl.SetSkin(HatManager.Instance.allSkins[skin].ProdId, color);
                 GameData.Instance.RpcSetTasks(playerControl.PlayerId, new byte[0]);
             }
