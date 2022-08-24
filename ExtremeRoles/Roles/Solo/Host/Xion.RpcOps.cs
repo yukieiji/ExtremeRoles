@@ -401,21 +401,23 @@ namespace ExtremeRoles.Roles.Solo.Host
             GameData.Instance.AddPlayer(playerControl);
             AmongUsClient.Instance.Spawn(playerControl, -2, InnerNet.SpawnFlags.None);
 
-            int hat = RandomGenerator.Instance.Next(HatManager.Instance.allHats.Count);
-            int pet = RandomGenerator.Instance.Next(HatManager.Instance.allPets.Count);
-            int skin = RandomGenerator.Instance.Next(HatManager.Instance.allSkins.Count);
-            int visor = RandomGenerator.Instance.Next(HatManager.Instance.allVisors.Count);
+            var hatManager = FastDestroyableSingleton<HatManager>.Instance;
+
+            int hat = RandomGenerator.Instance.Next(hatManager.allHats.Count);
+            int pet = RandomGenerator.Instance.Next(hatManager.allPets.Count);
+            int skin = RandomGenerator.Instance.Next(hatManager.allSkins.Count);
+            int visor = RandomGenerator.Instance.Next(hatManager.allVisors.Count);
             int color = RandomGenerator.Instance.Next(Palette.PlayerColors.Length);
 
-            playerControl.transform.position = PlayerControl.LocalPlayer.transform.position;
+            playerControl.transform.position = CachedPlayerControl.LocalPlayer.transform.position;
             playerControl.GetComponent<DummyBehaviour>().enabled = true;
             playerControl.NetTransform.enabled = false;
             playerControl.SetName($"XionDummy_{randomString(10)}");
             playerControl.SetColor(color);
-            playerControl.SetHat(HatManager.Instance.allHats[hat].ProdId, color);
-            playerControl.SetPet(HatManager.Instance.allPets[pet].ProdId, color);
-            playerControl.SetVisor(HatManager.Instance.allVisors[visor].ProdId, color);
-            playerControl.SetSkin(HatManager.Instance.allSkins[skin].ProdId, color);
+            playerControl.SetHat(hatManager.allHats[hat].ProdId, color);
+            playerControl.SetPet(hatManager.allPets[pet].ProdId, color);
+            playerControl.SetVisor(hatManager.allVisors[visor].ProdId, color);
+            playerControl.SetSkin(hatManager.allSkins[skin].ProdId, color);
             GameData.Instance.RpcSetTasks(
                 playerControl.PlayerId,
                 new byte[0]);
