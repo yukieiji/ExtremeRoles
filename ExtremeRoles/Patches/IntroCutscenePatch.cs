@@ -123,10 +123,26 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CoBegin))]
     public static class IntroCutsceneCoBeginPatch
     {
-       
         private static IEnumerator coBeginPatch(
             IntroCutscene instance)
         {
+
+            GameObject roleAssignText = new GameObject("roleAssignText");
+            var text = roleAssignText.AddComponent<Module.CustomMonoBehaviour.LoadingText>();
+            text.SetFontSize(3.0f);
+            text.SetMessage(Translation.GetString("roleAssignNow"));
+
+            roleAssignText.gameObject.SetActive(true);
+
+            if (AmongUsClient.Instance.AmHost)
+            {
+                // とりあえず5.0秒待機
+                // Ping300があっても5秒たっても役職アサイン待ちコードに到達しないのは中々のはず
+                yield return new WaitForSeconds(5.0f);
+           
+                Manager.RoleManagerSelectRolesPatch.AllPlayerAssignToExRole();
+            }
+
             // バニラの役職アサイン後すぐこの処理が走るので全員の役職が入るまで待機
             while (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd)
             {
@@ -170,6 +186,11 @@ namespace ExtremeRoles.Patches
                     instance.ImpostorText.text = instance.ImpostorText.text.Replace("[FF1919FF]", "<color=#FF1919FF>");
                     instance.ImpostorText.text = instance.ImpostorText.text.Replace("[]", "</color>");
                 }
+                
+                roleAssignText.gameObject.SetActive(false);
+                Object.Destroy(roleAssignText);
+                roleAssignText = null;
+
                 yield return instance.ShowTeam(teamToShow);
                 yield return instance.ShowRole();
             }

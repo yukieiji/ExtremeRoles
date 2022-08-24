@@ -9,8 +9,8 @@ namespace ExtremeRoles.Patches
 		{
 			bool flag = 
 				SaveManager.StreamerMode && 
-					(__instance.name == "ipTextBox" || 
-					 __instance.name == "portTextBox");
+				(__instance.name == "ipTextBox" || 
+					__instance.name == "portTextBox");
 			if (flag)
 			{
 				__instance.outputText.text = new string('*', __instance.text.Length);

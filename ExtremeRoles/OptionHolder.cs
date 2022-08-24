@@ -15,7 +15,7 @@ namespace ExtremeRoles
     public static class OptionHolder
     {
         public const int VanillaMaxPlayerNum = 15;
-        public const int MaxImposterNum = 3;
+        public const int MaxImposterNum = 14;
 
         private const int singleRoleOptionStartOffset = 100;
         private const int combRoleOptionStartOffset = 5000;

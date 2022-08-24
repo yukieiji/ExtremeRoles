@@ -52,7 +52,7 @@ namespace ExtremeRoles.Patches
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Awake))]
-    public class PlayerControlAwakePatch
+    public static class PlayerControlAwakePatch
     {
         public static void Postfix(PlayerControl __instance)
         {
@@ -1075,7 +1075,7 @@ namespace ExtremeRoles.Patches
                 __instance.RawSetColor(newOutfit.ColorId);
                 __instance.RawSetHat(newOutfit.HatId, newOutfit.ColorId);
                 __instance.RawSetSkin(newOutfit.SkinId, newOutfit.ColorId);
-                __instance.RawSetVisor(newOutfit.VisorId);
+                __instance.RawSetVisor(newOutfit.VisorId, newOutfit.ColorId);
                 __instance.RawSetPet(newOutfit.PetId, newOutfit.ColorId);
                 __instance.Visible = __instance.Visible;
                 if (targetPlayerInfo.PlayerId == __instance.Data.PlayerId)

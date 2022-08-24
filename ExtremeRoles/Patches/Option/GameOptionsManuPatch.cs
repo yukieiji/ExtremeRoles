@@ -8,6 +8,7 @@ using HarmonyLib;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Performance;
 
 
 namespace ExtremeRoles.Patches.Option
@@ -40,9 +41,9 @@ namespace ExtremeRoles.Patches.Option
             if (template == null) { return; }
 
             // Setup ExtreamRole tab
-            var roleTab = GameObject.Find("RoleTab");
-            var gameTab = GameObject.Find("GameTab");
-            var gameSettings = GameObject.Find("Game Settings"); 
+            GameObject roleTab = GameObject.Find("RoleTab");
+            GameObject gameTab = GameObject.Find("GameTab");
+            GameObject gameSettings = GameObject.Find("Game Settings"); 
 
             var (erSettings, erMenu) = createOptionSettingAndMenu(gameSettings, GeneralSetting);
             var (erTab, tabHighlight) = createTab(roleTab, roleTab.transform.parent, "ExtremeGlobalTab", Path.TabGlobal);
@@ -90,9 +91,10 @@ namespace ExtremeRoles.Patches.Option
             ghostImpostorTab.transform.localPosition = Vector3.right * 0.85f;
             ghostNeutralTab.transform.localPosition = Vector3.right * 0.85f;
 
-            var gameSettingMenu = UnityEngine.Object.FindObjectsOfType<GameSettingMenu>().FirstOrDefault();
-            
-            var tabs = new GameObject[]
+            GameSettingMenu gameSettingMenu = 
+                UnityEngine.Object.FindObjectsOfType<GameSettingMenu>().FirstOrDefault();
+
+            GameObject[] tabs = new GameObject[]
             { 
                 gameTab,
                 roleTab,
@@ -107,7 +109,7 @@ namespace ExtremeRoles.Patches.Option
             };
             for (int i = 0; i < tabs.Length; i++)
             {
-                var button = tabs[i].GetComponentInChildren<PassiveButton>();
+                PassiveButton button = tabs[i].GetComponentInChildren<PassiveButton>();
                 if (button == null) { continue; }
                 int copiedIndex = i;
                 button.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
@@ -291,13 +293,30 @@ namespace ExtremeRoles.Patches.Option
 
             // Adapt task count for main options
 
-            var commonTasksOption = __instance.Children.FirstOrDefault(x => x.name == "NumCommonTasks").TryCast<NumberOption>();
+            UnhollowerBaseLib.Il2CppReferenceArray<OptionBehaviour> child = __instance.Children;
+
+
+            if (AmongUsClient.Instance.GameMode == GameModes.LocalGame ||
+                FastDestroyableSingleton<ServerManager>.Instance.CurrentRegion.Name == "custom")
+            {
+                NumberOption numImpostorsOption = child.FirstOrDefault(
+                    x => x.name == "NumImpostors").TryCast<NumberOption>();
+                if (numImpostorsOption != null)
+                {
+                    numImpostorsOption.ValidRange = new FloatRange(0f, OptionHolder.MaxImposterNum);
+                }
+            }
+
+            NumberOption commonTasksOption = child.FirstOrDefault(
+                x => x.name == "NumCommonTasks").TryCast<NumberOption>();
             if (commonTasksOption != null) { commonTasksOption.ValidRange = new FloatRange(0f, 4f); }
 
-            var shortTasksOption = __instance.Children.FirstOrDefault(x => x.name == "NumShortTasks").TryCast<NumberOption>();
+            NumberOption shortTasksOption = child.FirstOrDefault(
+                x => x.name == "NumShortTasks").TryCast<NumberOption>();
             if (shortTasksOption != null){ shortTasksOption.ValidRange = new FloatRange(0f, 23f); }
 
-            var longTasksOption = __instance.Children.FirstOrDefault(x => x.name == "NumLongTasks").TryCast<NumberOption>();
+            NumberOption longTasksOption = child.FirstOrDefault(
+                x => x.name == "NumLongTasks").TryCast<NumberOption>();
             if (longTasksOption != null) { longTasksOption.ValidRange = new FloatRange(0f, 15f); }
 
         }

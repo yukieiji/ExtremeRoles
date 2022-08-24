@@ -9,7 +9,8 @@ namespace ExtremeRoles.Patches.Option
     {
         public static void Postfix(CreateOptionsPicker __instance)
         {
-            int numImpostors = Math.Clamp(__instance.GetTargetOptions().NumImpostors, 1, 3);
+            int numImpostors = Math.Clamp(
+                __instance.GetTargetOptions().NumImpostors, 1, 3);
             __instance.SetImpostorButtons(numImpostors);
         }
     }
