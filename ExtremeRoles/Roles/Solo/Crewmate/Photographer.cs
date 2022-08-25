@@ -16,7 +16,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public sealed class Photographer : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTypes>
+    public sealed class Photographer : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTypes>, IRoleReportHock
     {
         private struct PlayerPosInfo
         {
@@ -93,24 +93,32 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                         this.takeTime,
                         Translation.GetString("photoName"),
                         getRandomPhotoName()));
-
-                foreach (PlayerPosInfo playerInfo in this.player)
+                
+                if (this.player.Count == 0)
                 {
-
-                    string roomInfo = string.Empty;
-
-                    if (isUpgrade &&
-                        playerInfo.Room != null)
-                    {
-                        roomInfo = 
-                            FastDestroyableSingleton<TranslationController>.Instance.GetString(
-                                playerInfo.Room.Value);
-                    }
-
                     photoInfoBuilder.AppendLine(
-                        $"{playerInfo.PlayerName}{roomInfo}");
+                        Translation.GetString("noPlayerInPhoto"));
                 }
+                else
+                {
+                    foreach (PlayerPosInfo playerInfo in this.player)
+                    {
 
+                        string roomInfo = string.Empty;
+
+                        if (isUpgrade &&
+                            playerInfo.Room != null)
+                        {
+                            roomInfo =
+                                FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                                    playerInfo.Room.Value);
+                        }
+
+                        photoInfoBuilder.AppendLine(
+                            $"{playerInfo.PlayerName}{roomInfo}");
+                    }
+                }
+               
                 return photoInfoBuilder.ToString();
             }
             private string getRandomPhotoName()
@@ -180,8 +188,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
             public override string ToString()
             {
-                StringBuilder builder = new StringBuilder();
+                if (this.film.Count == 0) { return string.Empty; }
 
+                StringBuilder builder = new StringBuilder();
+                
                 builder.AppendLine(separateLine);
 
                 foreach (Photo photo in this.film)
@@ -199,8 +209,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public enum PhotographerOption
         {
             AwakeTaskGage,
+            UpgradePhotoTaskGage,
+            EnableAllSendChat,
+            UpgradeAllSendChatTaskGage,
             PhotoRange,
-            UpgradePhotoTaskGage
         }
 
         public RoleAbilityButtonBase Button
@@ -228,6 +240,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private bool awakeHasOtherVision;
 
         private float upgradePhotoTaskGage;
+        private bool enableAllSend;
+        private float upgradeAllSendChatTaskGage;
+        private bool isUpgradeChat;
         private PhotoCamera photoCreater;
 
         public Photographer() : base(
@@ -258,6 +273,20 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public string GetFakeOptionString() => "";
 
+        public void HockReportButton(
+            PlayerControl rolePlayer, GameData.PlayerInfo reporter)
+        {
+            sendPhotoInfo();
+        }
+
+        public void HockBodyReport(
+            PlayerControl rolePlayer,
+            GameData.PlayerInfo reporter,
+            GameData.PlayerInfo reportBody)
+        {
+            sendPhotoInfo();
+        }
+
         public void RoleAbilityResetOnMeetingStart()
         {
             return;
@@ -284,6 +313,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     !this.photoCreater.IsUpgraded)
                 {
                     this.photoCreater.IsUpgraded = true;
+                }
+                if (this.enableAllSend &&
+                    taskGage >= this.upgradeAllSendChatTaskGage &&
+                    !this.isUpgradeChat)
+                {
+                    this.isUpgradeChat = true;
                 }
             }
         }
@@ -369,6 +404,16 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 60, 0, 100, 10,
                 parentOps,
                 format: OptionUnit.Percentage);
+            
+            var chatUpgradeOpt = CreateBoolOption(
+                PhotographerOption.EnableAllSendChat,
+                false, parentOps);
+
+            CreateIntOption(
+                PhotographerOption.UpgradeAllSendChatTaskGage,
+                40, 0, 100, 10,
+                chatUpgradeOpt,
+                format: OptionUnit.Percentage);
 
             CreateFloatOption(
                 PhotographerOption.PhotoRange,
@@ -381,10 +426,16 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         protected override void RoleSpecificInit()
         {
-            this.awakeTaskGage = (float)OptionHolder.AllOption[
+            var allOpt = OptionHolder.AllOption;
+
+            this.awakeTaskGage = allOpt[
                 GetRoleOptionId(PhotographerOption.AwakeTaskGage)].GetValue() / 100.0f;
-            this.upgradePhotoTaskGage = (float)OptionHolder.AllOption[
+            this.upgradePhotoTaskGage = allOpt[
                 GetRoleOptionId(PhotographerOption.UpgradePhotoTaskGage)].GetValue() / 100.0f;
+            this.enableAllSend = allOpt[
+                GetRoleOptionId(PhotographerOption.EnableAllSendChat)].GetValue();
+            this.upgradeAllSendChatTaskGage = allOpt[
+                GetRoleOptionId(PhotographerOption.UpgradeAllSendChatTaskGage)].GetValue() / 100.0f;
 
             this.awakeHasOtherVision = this.HasOtherVison;
 
@@ -399,6 +450,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 this.HasOtherVison = false;
             }
 
+            this.isUpgradeChat = this.enableAllSend && 
+                this.upgradeAllSendChatTaskGage <= 0.0f;
+
             this.photoCreater = new PhotoCamera(
                 (float)OptionHolder.AllOption[
                     GetRoleOptionId(PhotographerOption.PhotoRange)].GetValue());
@@ -407,6 +461,34 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             this.RoleAbilityInit();
 
+        }
+
+        private void sendPhotoInfo()
+        {
+            string photoInfo = this.photoCreater.ToString();
+
+            HudManager hud = FastDestroyableSingleton<HudManager>.Instance;
+
+            if (photoInfo == string.Empty ||
+                !AmongUsClient.Instance.AmClient ||
+                !hud) { return; }
+
+            string chatText = string.Format(
+                Translation.GetString("photoChat"),
+                photoInfo);
+
+            if (this.enableAllSend &&
+                this.isUpgradeChat)
+            {
+                hud.Chat.TextArea.text = chatText;
+                hud.Chat.SendChat();
+            }
+            else
+            {
+                hud.Chat.AddChat(
+                    CachedPlayerControl.LocalPlayer,
+                    chatText);
+            }
         }
     }
 }
