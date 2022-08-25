@@ -159,9 +159,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public override Color GetTargetRoleSeeColor(
             SingleRoleBase targetRole, byte targetPlayerId)
         {
-            if (this.isSeeImpostorNow ||
-                targetRole.IsImpostor() || 
-                targetRole.FakeImposter)
+            if (this.isSeeImpostorNow && 
+                (targetRole.IsImpostor() || targetRole.FakeImposter))
             {
                 return Palette.ImpostorRed;
             }
