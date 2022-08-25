@@ -115,7 +115,8 @@ namespace ExtremeRoles.Patches.Meeting
                 return false;
             }
             __instance.state = MeetingHud.VoteStates.Voted;
-            __instance.CmdCastVote(PlayerControl.LocalPlayer.PlayerId, suspectStateIdx);
+            __instance.CmdCastVote(
+                CachedPlayerControl.LocalPlayer.PlayerId, suspectStateIdx);
 
             return false;
         }
@@ -357,7 +358,8 @@ namespace ExtremeRoles.Patches.Meeting
             {
                 return __result;
             }
-            SoundManager.Instance.PlaySound(__instance.VoteSound, false, 1f).volume = 0.8f;
+            SoundManager.Instance.PlaySound(
+                __instance.VoteSound, false, 1f, null).volume = 0.8f;
             for (int i = 0; i < __instance.playerStates.Length; i++)
             {
                 PlayerVoteArea playerVoteArea = __instance.playerStates[i];
@@ -644,8 +646,9 @@ namespace ExtremeRoles.Patches.Meeting
 
             if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return true; }
 
-            __instance.TitleText.text = DestroyableSingleton<TranslationController>.Instance.GetString(
-                StringNames.MeetingVotingResults, Array.Empty<Il2CppSystem.Object>());
+            __instance.TitleText.text = 
+                FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                    StringNames.MeetingVotingResults, Array.Empty<Il2CppSystem.Object>());
 
             Dictionary<byte, int> voteIndex = new Dictionary<byte, int>();
             SortedList<int, (IRoleVoteModifier, GameData.PlayerInfo)> voteModifier = new SortedList<

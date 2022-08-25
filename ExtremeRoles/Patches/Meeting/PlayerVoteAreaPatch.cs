@@ -52,7 +52,8 @@ namespace ExtremeRoles.Patches.Meeting
 	public static class PlayerVoteAreaSelectPatch
 	{
 
-		private static Dictionary<byte, UiElement> meetingAbilityButton = new Dictionary<byte, UiElement>();
+		private static Dictionary<byte, UiElement> meetingAbilityButton = 
+			new Dictionary<byte, UiElement>();
 
 		public static void Reset()
         {
