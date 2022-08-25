@@ -20,6 +20,7 @@ namespace ExtremeRoles.Module
         private GameObject body;
         private SpriteRenderer image;
         private ArrowBehaviour arrowBehaviour;
+        private static readonly Vector3 defaultPos = new Vector3(100.0f, 100.0f, 100.0f);
 
         public Arrow(Color color)
         {            
@@ -38,6 +39,7 @@ namespace ExtremeRoles.Module
 
             Resizeer resizer = this.body.AddComponent<Resizeer>();
             resizer.SetScale(xzMaxSize, yMaxSize, xzMaxSize);
+            this.target = defaultPos;
         }
 
         public void Update()
@@ -46,7 +48,10 @@ namespace ExtremeRoles.Module
             {
                 this.image.sprite = Prefab.Arrow;
             }
-            if (this.target == null) { this.target = Vector3.zero; }
+            if (this.target == defaultPos)
+            { 
+                this.target = Vector3.zero;
+            }
             UpdateTarget();
         }
 
