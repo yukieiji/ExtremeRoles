@@ -215,12 +215,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 GetRoleOptionId(MadmateOption.CanMoveVentToVent)].GetValue();
             this.HasTask = allOpt[
                 GetRoleOptionId(MadmateOption.HasTask)].GetValue();
-            this.seeImpostorTaskGage = allOpt[
-                GetRoleOptionId(MadmateOption.SeeImpostorTaskGage)].GetValue();
+            this.seeImpostorTaskGage = (float)allOpt[
+                GetRoleOptionId(MadmateOption.SeeImpostorTaskGage)].GetValue() / 100.0f;
             this.canSeeFromImpostor = allOpt[
                 GetRoleOptionId(MadmateOption.CanSeeFromImpostor)].GetValue();
-            this.seeFromImpostorTaskGage = allOpt[
-                GetRoleOptionId(MadmateOption.CanSeeFromImpostorTaskGage)].GetValue();
+            this.seeFromImpostorTaskGage = (float)allOpt[
+                GetRoleOptionId(MadmateOption.CanSeeFromImpostorTaskGage)].GetValue() / 100.0f;
             this.RoleAbilityInit();
         }
     }
