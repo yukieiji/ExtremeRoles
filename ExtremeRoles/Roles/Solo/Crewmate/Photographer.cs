@@ -30,7 +30,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 this.PlayerName = player.PlayerName;
                 this.Room = null;
 
-                Collider2D[] buffer = new Collider2D[10];
+                UnhollowerBaseLib.Il2CppReferenceArray<Collider2D> buffer = 
+                    new UnhollowerBaseLib.Il2CppReferenceArray<Collider2D>(10);
                 Collider2D playerCollinder = player.Object.GetComponent<Collider2D>();
 
                 foreach (PlainShipRoom room in CachedShipStatus.Instance.AllRooms)
@@ -511,6 +512,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 Translation.GetString("photoChat"),
                 photoInfo);
 
+            hud.Chat.AddChat(
+                CachedPlayerControl.LocalPlayer,
+                photoInfo);
+
+            /*
             if (this.enableAllSend &&
                 this.isUpgradeChat)
             {
@@ -523,6 +529,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     CachedPlayerControl.LocalPlayer,
                     chatText);
             }
+            */
         }
     }
 }
