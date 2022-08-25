@@ -117,13 +117,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 StringBuilder photoInfoBuilder = new StringBuilder();
                 photoInfoBuilder.AppendLine(
                     string.Format(
-                        "{0}{1}:{2}--{3}:{4}{0}",
-                        separateLine,
+                        "{0}:{1}<br>{2}:{3}",
                         Translation.GetString("takePhotoTime"),
                         this.takeTime,
                         Translation.GetString("photoName"),
                         getRandomPhotoName()));
-                
+                photoInfoBuilder.AppendLine("");
                 if (this.player.Count == 0)
                 {
                     photoInfoBuilder.AppendLine(
@@ -144,11 +143,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                                     playerInfo.Room.Value);
                         }
 
-                        photoInfoBuilder.AppendLine(
-                            $"{playerInfo.PlayerName}{roomInfo}");
+                        string photoPlayerInfo =
+                            roomInfo == string.Empty ?
+                            $"{playerInfo.PlayerName}" :
+                            $"{playerInfo.PlayerName}   {roomInfo}";
+
+                        photoInfoBuilder.AppendLine(photoPlayerInfo);
                     }
                 }
-               
                 return photoInfoBuilder.ToString();
             }
             private string getRandomPhotoName()
@@ -168,7 +170,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 ExtremeRoleId roleId = (ExtremeRoleId)RandomGenerator.Instance.Next(
                     maxRoleId + 1);
 
-                if (roleId != ExtremeRoleId.Null || roleId != ExtremeRoleId.VanillaRole)
+                if (roleId != ExtremeRoleId.Null || 
+                    roleId != ExtremeRoleId.VanillaRole)
                 {
                     photoName.Add(Translation.GetString(roleId.ToString()));
                 }
@@ -511,12 +514,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             string chatText = string.Format(
                 Translation.GetString("photoChat"),
                 photoInfo);
-
-            hud.Chat.AddChat(
-                CachedPlayerControl.LocalPlayer,
-                photoInfo);
-
-            /*
             if (this.enableAllSend &&
                 this.isUpgradeChat)
             {
@@ -529,7 +526,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     CachedPlayerControl.LocalPlayer,
                     chatText);
             }
-            */
         }
     }
 }
