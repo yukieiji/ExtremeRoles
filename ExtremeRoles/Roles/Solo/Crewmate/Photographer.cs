@@ -55,8 +55,20 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             private const string separateLine = "-----------";
             private static readonly string[] randomStr = new string[]
             { 
+                "NoName",
+                "NewFile",
+                "NewPhoto",
+                "sudo",
+                "HelloWorld",
                 "AmongUs",
                 "yukieiji",
+                "ExtremeRoles",
+                "ExtremeSkins",
+                "ExtremeHat",
+                "ExtremeVisor",
+                "ExtremeNamePlate",
+                "ExR", "ExS","ExV",
+                "ExH", "ExN"
             };
             
             public Photo(float range, ContactFilter2D filter)
