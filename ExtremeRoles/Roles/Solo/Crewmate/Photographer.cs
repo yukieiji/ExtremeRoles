@@ -31,13 +31,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 this.Room = null;
 
                 Collider2D[] buffer = new Collider2D[10];
+                Collider2D playerCollinder = player.Object.GetComponent<Collider2D>();
 
                 foreach (PlainShipRoom room in CachedShipStatus.Instance.AllRooms)
                 {
-                    if (room.roomArea)
+                    if (room != null && room.roomArea)
                     {
                         int hitCount = room.roomArea.OverlapCollider(filter, buffer);
-                        if (RoomTracker.CheckHitsForPlayer(buffer, hitCount))
+                        if (isHit(playerCollinder, buffer, hitCount))
                         {
                             this.Room = room.RoomId;
                         }
@@ -45,6 +46,22 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 }
             }
 
+            private bool isHit(
+                Collider2D playerCollinder,
+                Collider2D[] buffer,
+                int hitCount)
+            {
+                for (int i = 0; i < hitCount; i++)
+                {
+                    Helper.Logging.Debug($"Null?:{buffer[i] == null}");
+
+                    if (buffer[i] == playerCollinder)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
         }
 
         private struct Photo
@@ -312,26 +329,31 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void Update(PlayerControl rolePlayer)
         {
-            if (!this.awakeRole || !this.photoCreater.IsUpgraded)
-            {
-                float taskGage = Player.GetPlayerTaskGage(rolePlayer);
+            float taskGage = Player.GetPlayerTaskGage(rolePlayer);
 
+            if (!this.awakeRole)
+            {
                 if (taskGage >= this.awakeTaskGage && !this.awakeRole)
                 {
                     this.awakeRole = true;
                     this.HasOtherVison = this.awakeHasOtherVision;
                 }
-                if (taskGage >= this.upgradePhotoTaskGage && 
-                    !this.photoCreater.IsUpgraded)
+                else
                 {
-                    this.photoCreater.IsUpgraded = true;
+                    this.takePhotoButton.SetActive(false);
                 }
-                if (this.enableAllSend &&
-                    taskGage >= this.upgradeAllSendChatTaskGage &&
-                    !this.isUpgradeChat)
-                {
-                    this.isUpgradeChat = true;
-                }
+            }
+
+            if (taskGage >= this.upgradePhotoTaskGage &&
+                !this.photoCreater.IsUpgraded)
+            {
+                this.photoCreater.IsUpgraded = true;
+            }
+            if (this.enableAllSend &&
+                taskGage >= this.upgradeAllSendChatTaskGage &&
+                !this.isUpgradeChat)
+            {
+                this.isUpgradeChat = true;
             }
         }
 
