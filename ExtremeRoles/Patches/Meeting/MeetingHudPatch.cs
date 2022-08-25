@@ -645,20 +645,18 @@ namespace ExtremeRoles.Patches.Meeting
             for (int i = 0; i < __instance.playerStates.Length; i++)
             {
                 PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-
-                PlayerVoteAreaInfo infoUpdater;
+                IVoteAreaInfo playerInfoUpdater;
                 if (playerVoteArea.TargetPlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
                 {
-
-                    infoUpdater = __instance.gameObject.AddComponent<LocalPlayerVoteAreaInfo>();
+                    playerInfoUpdater = 
+                        __instance.gameObject.AddComponent<LocalPlayerVoteAreaInfo>();
                 }
                 else
                 {
-                    infoUpdater = __instance.gameObject.AddComponent<OtherPlayerVoteAreaInfo>();
+                    playerInfoUpdater = 
+                        __instance.gameObject.AddComponent<OtherPlayerVoteAreaInfo>();
                 }
-                infoUpdater.SetPlayerVoteArea(playerVoteArea);
-                infoUpdater.SetCommActive(commActive);
-                infoUpdater.gameObject.SetActive(true);
+                playerInfoUpdater.Init(playerVoteArea, commActive);
             }
         }
 
