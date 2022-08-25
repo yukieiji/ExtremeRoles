@@ -277,6 +277,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private float upgradeAllSendChatTaskGage;
         private bool isUpgradeChat;
         private PhotoCamera photoCreater;
+        private SpriteRenderer flash;
+        private const float flashTime = 1.0f; 
 
         public Photographer() : base(
             ExtremeRoleId.Photographer,
@@ -298,7 +300,42 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public bool UseAbility()
         {
+            var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+
+            if (this.flash == null)
+            {
+                this.flash = UnityEngine.Object.Instantiate(
+                     hudManager.FullScreen,
+                     hudManager.transform);
+                this.flash.transform.localPosition = new Vector3(0f, 0f, 20f);
+                this.flash.gameObject.SetActive(true);
+            }
+
+            this.flash.enabled = true;
+            
             this.photoCreater.TakePhoto();
+
+            hudManager.StartCoroutine(
+                Effects.Lerp(flashTime, new Action<float>((p) =>
+                {
+                    if (this.flash == null) { return; }
+                    if (p < 0.25f)
+                    {
+                        this.flash.color = new Color(
+                            255f, 255f, 255f, Mathf.Clamp01(p * 2 * 0.75f));
+
+                    }
+                    else if (p >= 0.5f)
+                    {
+                        this.flash.color = new Color(
+                            255f, 255f, 255f, Mathf.Clamp01((1 - p) * 2 * 0.75f));
+                    }
+                    if (p == flashTime)
+                    {
+                        this.flash.enabled = false;
+                    }
+                }))
+            );
             return true;
         }
 
@@ -322,13 +359,15 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            return;
+            if (this.flash != null)
+            {
+                this.flash.enabled = false;
+            }
         }
 
         public void RoleAbilityResetOnMeetingEnd()
         {
             this.photoCreater.Reset();
-            return;
         }
 
         public void Update(PlayerControl rolePlayer)
