@@ -47,8 +47,7 @@ namespace ExtremeRoles
             HeroHeroAcademia,
 
             // クルーメイト
-            BodyGuardFeatShield,
-            BodyGuardResetShield,
+            BodyGuardAbility,
             TimeMasterAbility,
             AgencyTakeTask,
             AgencySetNewTask,
@@ -435,17 +434,9 @@ namespace ExtremeRoles
                 ref reader);
         }
 
-        public static void BodyGuardFeatShield(
-            byte playerId,
-            byte targetPlayer)
+        public static void BodyGuardAbility(ref MessageReader reader)
         {
-            ExtremeRolesPlugin.ShipState.ShildPlayer.Add(
-                playerId, targetPlayer);
-        }
-
-        public static void BodyGuardResetShield(byte playerId)
-        {
-            ExtremeRolesPlugin.ShipState.ShildPlayer.Remove(playerId);
+            Roles.Solo.Crewmate.BodyGuard.Ability(ref reader);
         }
 
         public static void TimeMasterAbility(ref MessageReader reader)

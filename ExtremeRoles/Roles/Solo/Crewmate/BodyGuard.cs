@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using UnityEngine;
+using Hazel;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -9,7 +11,6 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-using System;
 using ExtremeRoles.Module.ExtremeShipStatus;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
@@ -21,6 +22,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ShieldRange,
             FeatMeetingAbilityTaskGage,
             FeatMeetingReportTaskGage,
+        }
+
+        public enum BodyGuardRpcOps : byte
+        {
+            FeatShield,
+            ResetShield
         }
 
         public RoleAbilityButtonBase Button
@@ -57,17 +64,45 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             false, true, false, false)
         { }
 
+        public static void Ability(ref MessageReader reader)
+        {
+            BodyGuardRpcOps ops = (BodyGuardRpcOps)reader.ReadByte();
+            switch (ops)
+            {
+                case BodyGuardRpcOps.FeatShield:
+                    byte featBodyGuardPlayerId = reader.ReadByte();
+                    byte targetPlayerId = reader.ReadByte();
+                    featShield(featBodyGuardPlayerId, targetPlayerId);
+                    break;
+                case BodyGuardRpcOps.ResetShield:
+                    byte resetBodyGuardPlayerId = reader.ReadByte();
+                    resetShield(resetBodyGuardPlayerId);
+                    break;
+                default:
+                    break;
+            }
+
+        }
+        private static void featShield(byte rolePlayerId, byte targetPlayer)
+        {
+            ExtremeRolesPlugin.GameDataStore.ShildPlayer.Add(
+                rolePlayerId, targetPlayer);
+        }
+
+        private static void resetShield(byte playerId)
+        {
+            ExtremeRolesPlugin.GameDataStore.ShildPlayer.Remove(playerId);
+        }
+
         public override void ExiledAction(GameData.PlayerInfo rolePlayer)
         {
-            RPCOperator.BodyGuardResetShield(
-                rolePlayer.PlayerId);
+            resetShield(rolePlayer.PlayerId);
         }
 
         public override void RolePlayerKilledAction(
             PlayerControl rolePlayer, PlayerControl killerPlayer)
         {
-            RPCOperator.BodyGuardResetShield(
-                rolePlayer.PlayerId);
+            resetShield(rolePlayer.PlayerId);
 
             if (rolePlayer.PlayerId == killerPlayer.PlayerId) { return; }
 
@@ -102,14 +137,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 RPCOperator.Call(
                    localPlayer.NetId,
-                    RPCOperator.Command.BodyGuardFeatShield,
+                    RPCOperator.Command.BodyGuardAbility,
                     new List<byte>
                     {
+                        (byte)BodyGuardRpcOps.FeatShield,
                         playerId,
                         this.TargetPlayer
                     });
-                RPCOperator.BodyGuardFeatShield(
-                    playerId, this.TargetPlayer);
+                featShield(playerId, this.TargetPlayer);
                 
                 this.TargetPlayer = byte.MaxValue;
             }
@@ -117,12 +152,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 RPCOperator.Call(
                     localPlayer.NetId,
-                    RPCOperator.Command.BodyGuardResetShield,
+                    RPCOperator.Command.BodyGuardAbility,
                     new List<byte>
                     {
+                        (byte)BodyGuardRpcOps.ResetShield,
                         playerId
                     });
-                RPCOperator.BodyGuardResetShield(playerId);
+                resetShield(playerId);
 
                 if (this.shieldButton == null) { return true; }
 
@@ -209,20 +245,20 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             PlayerControl player = CachedPlayerControl.LocalPlayer;
             byte targetPlayerId = instance.TargetPlayerId;
 
-            void featShield()
+            void meetingfeatShield()
             {
                 RPCOperator.Call(
-                   player.NetId,
-                    RPCOperator.Command.BodyGuardFeatShield,
+                    player.NetId,
+                    RPCOperator.Command.BodyGuardAbility,
                     new List<byte>
                     {
+                        (byte)BodyGuardRpcOps.FeatShield,
                         player.PlayerId,
                         this.TargetPlayer
                     });
-                RPCOperator.BodyGuardFeatShield(
-                    player.PlayerId, targetPlayerId);
+                featShield(player.PlayerId, targetPlayerId);
             }
-            return featShield;
+            return meetingfeatShield;
         }
 
         public void SetSprite(SpriteRenderer render)

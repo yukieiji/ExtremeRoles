@@ -574,17 +574,8 @@ namespace ExtremeRoles.Patches
                 case RPCOperator.Command.HeroHeroAcademia:
                     RPCOperator.HeroHeroAcademiaCommand(ref reader);
                     break;
-                case RPCOperator.Command.BodyGuardFeatShield:
-                    byte bodyGuardFeatShieldOpCallPlayerId = reader.ReadByte();
-                    byte featShieldTargePlayerId = reader.ReadByte();
-                    RPCOperator.BodyGuardFeatShield(
-                        bodyGuardFeatShieldOpCallPlayerId,
-                        featShieldTargePlayerId);
-                    break;
-                case RPCOperator.Command.BodyGuardResetShield:
-                    byte bodyGuardResetShieldOpCallPlayerId = reader.ReadByte();
-                    RPCOperator.BodyGuardResetShield(
-                        bodyGuardResetShieldOpCallPlayerId);
+                case RPCOperator.Command.BodyGuardAbility:
+                    RPCOperator.BodyGuardAbility(ref reader);
                     break;
                 case RPCOperator.Command.TimeMasterAbility:
                     RPCOperator.TimeMasterAbility(ref reader);
