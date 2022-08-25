@@ -116,12 +116,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 StringBuilder photoInfoBuilder = new StringBuilder();
                 photoInfoBuilder.AppendLine(
-                    string.Format(
-                        "{0}:{1}<br>{2}:{3}",
-                        Translation.GetString("takePhotoTime"),
-                        this.takeTime,
-                        Translation.GetString("photoName"),
-                        getRandomPhotoName()));
+                    $"{Translation.GetString("takePhotoTime")} : {this.takeTime}");
+                photoInfoBuilder.AppendLine(
+                    $"{Translation.GetString("photoName")} : {getRandomPhotoName()}");
                 photoInfoBuilder.AppendLine("");
                 if (this.player.Count == 0)
                 {
@@ -151,7 +148,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                         photoInfoBuilder.AppendLine(photoPlayerInfo);
                     }
                 }
-                return photoInfoBuilder.ToString();
+                return photoInfoBuilder.ToString().Trim('\r', '\n');
             }
             private string getRandomPhotoName()
             {
@@ -235,7 +232,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
                 builder.AppendLine(separateLine);
 
-                return builder.ToString();
+                return builder.ToString().Trim('\r', '\n');
             }
         }
 
