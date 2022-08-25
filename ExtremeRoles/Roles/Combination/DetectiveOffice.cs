@@ -146,6 +146,7 @@ namespace ExtremeRoles.Roles.Combination
         private TMPro.TextMeshPro searchText;
         private TextPopUpper textPopUp;
         private Vector2 prevPlayerPos;
+        private static readonly Vector2 defaultPos = new Vector2(100.0f, 100.0f);
 
         public Detective() : base(
             ExtremeRoleId.Detective,
@@ -202,7 +203,7 @@ namespace ExtremeRoles.Roles.Combination
         public void Update(PlayerControl rolePlayer)
         {
 
-            if (this.prevPlayerPos == null)
+            if (this.prevPlayerPos == defaultPos)
             { 
                 this.prevPlayerPos = rolePlayer.GetTruePosition();
             }
@@ -316,6 +317,7 @@ namespace ExtremeRoles.Roles.Combination
                 new Vector3(-4.0f, -2.75f, -250.0f),
                 TMPro.TextAlignmentOptions.BottomLeft);
             this.searchCrimeInfoTime = float.MaxValue;
+            this.prevPlayerPos = defaultPos;
         }
 
         private void updateSearchCond(CrimeInfo info)

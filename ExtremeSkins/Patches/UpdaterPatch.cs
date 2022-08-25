@@ -155,7 +155,7 @@ namespace ExtremeSkins.Patches
                     ExtremeSkinsPlugin.Logger.LogError("Server returned no data: " + response.StatusCode.ToString());
                     return false;
                 }
-                string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+                string codeBase = Assembly.GetExecutingAssembly().Location;
                 UriBuilder uri = new UriBuilder(codeBase);
                 string fullname = Uri.UnescapeDataString(uri.Path);
                 if (File.Exists(fullname + ".old")) // Clear old file in case it wasnt;
