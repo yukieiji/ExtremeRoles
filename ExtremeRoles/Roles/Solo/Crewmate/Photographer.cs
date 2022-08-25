@@ -503,6 +503,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         private void sendPhotoInfo()
         {
+            if (!this.IsAwake) { return; }
+
             string photoInfo = this.photoCreater.ToString();
 
             HudManager hud = FastDestroyableSingleton<HudManager>.Instance;
@@ -514,17 +516,18 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             string chatText = string.Format(
                 Translation.GetString("photoChat"),
                 photoInfo);
+
+            PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+
             if (this.enableAllSend &&
                 this.isUpgradeChat)
             {
-                hud.Chat.TextArea.text = chatText;
-                hud.Chat.SendChat();
+                localPlayer.RpcSendChat(chatText);
             }
             else
             {
                 hud.Chat.AddChat(
-                    CachedPlayerControl.LocalPlayer,
-                    chatText);
+                    localPlayer, chatText);
             }
         }
     }
