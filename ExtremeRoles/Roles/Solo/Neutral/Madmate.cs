@@ -206,6 +206,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             var allOpt = OptionHolder.AllOption;
             this.isSeeImpostorNow = false;
             this.isUpdateMadmate = false;
+            this.FakeImposter = false;
 
             this.CanRepairSabotage = allOpt[
                 GetRoleOptionId(MadmateOption.CanFixSabotage)].GetValue();
@@ -221,6 +222,17 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 GetRoleOptionId(MadmateOption.CanSeeFromImpostor)].GetValue();
             this.seeFromImpostorTaskGage = (float)allOpt[
                 GetRoleOptionId(MadmateOption.CanSeeFromImpostorTaskGage)].GetValue() / 100.0f;
+
+            this.isSeeImpostorNow = 
+                this.HasTask && 
+                this.seeImpostorTaskGage <= 0.0f;
+            this.isUpdateMadmate = 
+                this.HasTask &&
+                this.canSeeFromImpostor &&
+                this.seeFromImpostorTaskGage <= 0.0f;
+
+            this.FakeImposter = this.isUpdateMadmate;
+
             this.RoleAbilityInit();
         }
     }
