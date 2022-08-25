@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 using UnityEngine;
@@ -47,11 +49,20 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         private struct Photo
         {
-            public List<PlayerPosInfo> Player;
+            private List<PlayerPosInfo> player;
+            private DateTime takeTime;
 
+            private const string separateLine = "-----------";
+            private static readonly string[] randomStr = new string[]
+            { 
+                "AmongUs",
+                "yukieiji",
+            };
+            
             public Photo(float range, ContactFilter2D filter)
             {
-                this.Player = new List<PlayerPosInfo>();
+                this.takeTime = DateTime.UtcNow;
+                this.player = new List<PlayerPosInfo>();
 
                 Vector3 photoCenter = CachedPlayerControl.LocalPlayer.PlayerControl.transform.position;
 
@@ -65,7 +76,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     Vector3 position = player.Object.transform.position;
                     if (range >= Vector2.Distance(photoCenter, position))
                     {
-                        this.Player.Add(new PlayerPosInfo(player, filter));
+                        this.player.Add(new PlayerPosInfo(player, filter));
                     }
 
                 }
@@ -73,7 +84,68 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             public string ToString(bool isUpgrade)
             {
-                return ToString();
+                StringBuilder photoInfoBuilder = new StringBuilder();
+                photoInfoBuilder.AppendLine(
+                    string.Format(
+                        "{0}{1}:{2}--{3}:{4}{0}",
+                        separateLine,
+                        Translation.GetString("takePhotoTime"),
+                        this.takeTime,
+                        Translation.GetString("photoName"),
+                        getRandomPhotoName()));
+
+                foreach (PlayerPosInfo playerInfo in this.player)
+                {
+
+                    string roomInfo = string.Empty;
+
+                    if (isUpgrade &&
+                        playerInfo.Room != null)
+                    {
+                        roomInfo = 
+                            FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                                playerInfo.Room.Value);
+                    }
+
+                    photoInfoBuilder.AppendLine(
+                        $"{playerInfo.PlayerName}{roomInfo}");
+                }
+
+                return photoInfoBuilder.ToString();
+            }
+            private string getRandomPhotoName()
+            {
+                // 適当な役職名とかを写真名にする
+                List<string> photoName = new List<string>();
+
+                // 適当な陣営
+                int maxTeamId = Enum.GetValues(typeof(ExtremeRoleType)).Cast<int>().Max();
+                ExtremeRoleType intedTeamId = (ExtremeRoleType)RandomGenerator.Instance.Next(
+                    maxTeamId + 1);
+                photoName.Add(Translation.GetString(intedTeamId.ToString()));
+
+
+                // 適当な役職名
+                int maxRoleId = Enum.GetValues(typeof(ExtremeRoleId)).Cast<int>().Max();
+                ExtremeRoleId roleId = (ExtremeRoleId)RandomGenerator.Instance.Next(
+                    maxRoleId + 1);
+
+                if (roleId != ExtremeRoleId.Null || roleId != ExtremeRoleId.VanillaRole)
+                {
+                    photoName.Add(Translation.GetString(roleId.ToString()));
+                }
+                else
+                {
+                    int maxAmongUsRoleId = Enum.GetValues(typeof(RoleTypes)).Cast<int>().Max();
+                    RoleTypes amongUsRoleId = (RoleTypes)RandomGenerator.Instance.Next(
+                        maxAmongUsRoleId + 1);
+
+                    photoName.Add(Translation.GetString(amongUsRoleId.ToString()));
+                }
+                
+                photoName.Add(randomStr[RandomGenerator.Instance.Next(randomStr.Length)]);
+                return string.Concat(photoName.OrderBy(
+                    item => RandomGenerator.Instance.Next()));
             }
         }
 
@@ -81,6 +153,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             public bool IsUpgraded = false;
 
+            private const string separateLine = "---------------------------------";
             private float range;
             private List<Photo> film = new List<Photo>();
             private ContactFilter2D filter;
@@ -109,11 +182,15 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 StringBuilder builder = new StringBuilder();
 
+                builder.AppendLine(separateLine);
+
                 foreach (Photo photo in this.film)
                 {
                     builder.AppendLine(
                         photo.ToString(this.IsUpgraded));
                 }
+
+                builder.AppendLine(separateLine);
 
                 return builder.ToString();
             }
@@ -203,7 +280,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     this.awakeRole = true;
                     this.HasOtherVison = this.awakeHasOtherVision;
                 }
-                if (taskGage >= this.upgradePhotoTaskGage && !this.photoCreater.IsUpgraded)
+                if (taskGage >= this.upgradePhotoTaskGage && 
+                    !this.photoCreater.IsUpgraded)
                 {
                     this.photoCreater.IsUpgraded = true;
                 }
@@ -294,7 +372,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             CreateFloatOption(
                 PhotographerOption.PhotoRange,
-                10.0f, 0.0f, 25f, 0.1f,
+                10.0f, 0.0f, 50f, 0.5f,
                 parentOps);
 
             this.CreateAbilityCountOption(
