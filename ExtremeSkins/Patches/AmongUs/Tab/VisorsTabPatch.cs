@@ -138,10 +138,14 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                 colorChip.ProductId = vi.ProductId;
                 colorChip.Button.ClickMask = __instance.scroller.Hitbox;
                 colorChip.Tag = vi.ProdId;
-
+                
+                int color = __instance.HasLocalPlayer() ? 
+                    PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId : 
+                    ((int)SaveManager.BodyColor);
                 __instance.StartCoroutine(
                     vi.CoLoadViewData((Il2CppSystem.Action<VisorViewData>)((v) => {
                         colorChip.Inner.FrontLayer.sprite = v.IdleFrame;
+                        __instance.UpdateSpriteMaterialColor(colorChip, v, color);
                 })));
 
                 __instance.ColorChips.Add(colorChip);

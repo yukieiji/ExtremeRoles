@@ -132,6 +132,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                     colorChip.Button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => __instance.SelectHat(hat)));
                 }
 
+                colorChip.Inner.SetMaskType(PlayerMaterial.MaskType.ScrollingUI);
                 colorChip.Inner.SetHat(hat, color);
                 colorChip.Inner.transform.localPosition = hat.ChipOffset;
                 colorChip.Tag = hat;

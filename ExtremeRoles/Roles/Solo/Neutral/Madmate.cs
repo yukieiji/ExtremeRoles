@@ -159,9 +159,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public override Color GetTargetRoleSeeColor(
             SingleRoleBase targetRole, byte targetPlayerId)
         {
-            if (this.isSeeImpostorNow ||
-                targetRole.IsImpostor() || 
-                targetRole.FakeImposter)
+            if (this.isSeeImpostorNow && 
+                (targetRole.IsImpostor() || targetRole.FakeImposter))
             {
                 return Palette.ImpostorRed;
             }
@@ -206,6 +205,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             var allOpt = OptionHolder.AllOption;
             this.isSeeImpostorNow = false;
             this.isUpdateMadmate = false;
+            this.FakeImposter = false;
 
             this.CanRepairSabotage = allOpt[
                 GetRoleOptionId(MadmateOption.CanFixSabotage)].GetValue();
@@ -215,12 +215,23 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 GetRoleOptionId(MadmateOption.CanMoveVentToVent)].GetValue();
             this.HasTask = allOpt[
                 GetRoleOptionId(MadmateOption.HasTask)].GetValue();
-            this.seeImpostorTaskGage = allOpt[
-                GetRoleOptionId(MadmateOption.SeeImpostorTaskGage)].GetValue();
+            this.seeImpostorTaskGage = (float)allOpt[
+                GetRoleOptionId(MadmateOption.SeeImpostorTaskGage)].GetValue() / 100.0f;
             this.canSeeFromImpostor = allOpt[
                 GetRoleOptionId(MadmateOption.CanSeeFromImpostor)].GetValue();
-            this.seeFromImpostorTaskGage = allOpt[
-                GetRoleOptionId(MadmateOption.CanSeeFromImpostorTaskGage)].GetValue();
+            this.seeFromImpostorTaskGage = (float)allOpt[
+                GetRoleOptionId(MadmateOption.CanSeeFromImpostorTaskGage)].GetValue() / 100.0f;
+
+            this.isSeeImpostorNow = 
+                this.HasTask && 
+                this.seeImpostorTaskGage <= 0.0f;
+            this.isUpdateMadmate = 
+                this.HasTask &&
+                this.canSeeFromImpostor &&
+                this.seeFromImpostorTaskGage <= 0.0f;
+
+            this.FakeImposter = this.isUpdateMadmate;
+
             this.RoleAbilityInit();
         }
     }
