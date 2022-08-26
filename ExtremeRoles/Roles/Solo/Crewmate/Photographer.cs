@@ -54,8 +54,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 for (int i = 0; i < hitCount; i++)
                 {
-                    Helper.Logging.Debug($"Null?:{buffer[i] == null}");
-
                     if (buffer[i] == playerCollinder)
                     {
                         return true;
@@ -70,7 +68,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             private List<PlayerPosInfo> player;
             private DateTime takeTime;
 
-            private const string separateLine = "-----------";
             private static readonly string[] randomStr = new string[]
             { 
                 "NoName",
