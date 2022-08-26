@@ -1,10 +1,10 @@
 ﻿using System;
-
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module.InfoOverlay
 {
-	public sealed class VanillaOptionBuillder : IShowTextBuilder
+    public sealed class VanillaOptionBuillder : IShowTextBuilder
     {
 		private Il2CppSystem.Text.StringBuilder settings = new Il2CppSystem.Text.StringBuilder();
         public VanillaOptionBuillder() : base()

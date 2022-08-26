@@ -11,18 +11,21 @@ namespace ExtremeRoles.Module
 
 		public static void Registration(Assembly dll)
         {
-			ExtremeRolesPlugin.Logger.LogInfo("---------- Il2CppRegister: Start Registration ----------");
+			ExtremeRolesPlugin.Logger.LogInfo(
+				"---------- Il2CppRegister: Start Registration ----------");
 
 			foreach (Type type in dll.GetTypes())
 			{
-				Il2CppRegisterAttribute attribute = CustomAttributeExtensions.GetCustomAttribute<Il2CppRegisterAttribute>(type);
+				Il2CppRegisterAttribute attribute = 
+					CustomAttributeExtensions.GetCustomAttribute<Il2CppRegisterAttribute>(type);
 				if (attribute != null)
 				{
 					registrationForTarget(type);
 				}
 			}
 
-			ExtremeRolesPlugin.Logger.LogInfo("---------- Il2CppRegister: Complete Registration ----------");
+			ExtremeRolesPlugin.Logger.LogInfo(
+				"---------- Il2CppRegister: Complete Registration ----------");
 
 		}
 
@@ -31,7 +34,8 @@ namespace ExtremeRoles.Module
 			Type targetBase = targetType.BaseType;
 
 			Il2CppRegisterAttribute baseAttribute = 
-				(targetType == null) ? null :
+				(targetType == null) ? 
+				null :
 				CustomAttributeExtensions.GetCustomAttribute<Il2CppRegisterAttribute>(targetBase);
 			
 			if (baseAttribute != null)
@@ -39,7 +43,8 @@ namespace ExtremeRoles.Module
 				registrationForTarget(targetType);
             }
 
-			ExtremeRolesPlugin.Logger.LogInfo($"Il2CppRegister:  Register {targetType}");
+			ExtremeRolesPlugin.Logger.LogInfo(
+				$"Il2CppRegister:  Register {targetType}");
 
 			if (ClassInjector.IsTypeRegisteredInIl2Cpp(targetType)) { return; }
 
@@ -49,7 +54,10 @@ namespace ExtremeRoles.Module
 			}
 			catch (Exception e)
             {
-				ExtremeRolesPlugin.Logger.LogError($"Registion Fail!!    Target:{GeneralExtensions.FullDescription(targetType)}   Il2CppError:{e}");
+
+				string excStr = GeneralExtensions.FullDescription(targetType);
+				ExtremeRolesPlugin.Logger.LogError(
+					$"Registion Fail!!    Target:{excStr}   Il2CppError:{e}");
             }
 		}
 	}

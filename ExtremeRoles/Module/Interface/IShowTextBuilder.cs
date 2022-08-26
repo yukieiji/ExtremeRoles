@@ -1,4 +1,4 @@
-﻿namespace ExtremeRoles.Module.InfoOverlay
+﻿namespace ExtremeRoles.Module.Interface
 {
     internal interface IShowTextBuilder
     {
