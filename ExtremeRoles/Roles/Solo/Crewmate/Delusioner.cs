@@ -115,7 +115,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 this.curVoteCount = this.curVoteCount + forRolePlayerVote;
                 this.isAwakeRole = this.curVoteCount >= this.awakeVoteCount;
                 if (this.Button != null &&
-                    this.voteCoolTimeReduceRate > 0.0f)
+                    this.voteCoolTimeReduceRate < 1.0f)
                 {
                     this.Button.SetAbilityCoolTime(
                         this.defaultCoolTime * (this.voteCoolTimeReduceRate * forRolePlayerVote));
@@ -247,7 +247,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             RPCOperator.UncheckedSnapTo(this.targetPlayerId, teleportPos);
 
             if (this.Button != null &&
-                this.deflectDamagePenaltyRate > 0.0f)
+                this.deflectDamagePenaltyRate < 1.0f)
             {
                 this.curCoolTime = this.curCoolTime * this.deflectDamagePenaltyRate;
                 this.Button.SetAbilityCoolTime(this.curCoolTime);
