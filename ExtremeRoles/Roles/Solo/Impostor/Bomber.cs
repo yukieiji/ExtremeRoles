@@ -154,7 +154,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            return;
+            if (this.tellText != null)
+            {
+                this.tellText.gameObject.SetActive(false);
+            }
         }
 
         public void RoleAbilityResetOnMeetingEnd()
