@@ -8,6 +8,7 @@ using UnityEngine;
 using UnhollowerBaseLib;
 
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -792,11 +793,7 @@ namespace ExtremeRoles.Patches.Meeting
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.VotingComplete))]
     public static class MeetingHudVotingCompletedPatch
     {
-        public static void Postfix(
-            MeetingHud __instance,
-            [HarmonyArgument(0)] byte[] states,
-            [HarmonyArgument(1)] GameData.PlayerInfo exiled,
-            [HarmonyArgument(2)] bool tie)
+        public static void Postfix()
         {
             ExtremeRolesPlugin.Info.HideInfoOverlay();
 
