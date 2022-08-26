@@ -362,4 +362,20 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.RoleAbilityInit();
         }
     }
+#if DEBUG
+    [HarmonyLib.HarmonyPatch(typeof(SpawnInMinigame), nameof(SpawnInMinigame.Begin))]
+    public static class AirShipSpawnCheck
+    {
+        public static void Postfix(SpawnInMinigame __instance)
+        {
+            if (AmongUsClient.Instance.GameMode == GameModes.FreePlay)
+            {
+                foreach (SpawnInMinigame.SpawnLocation pos in __instance.Locations)
+                {
+                    Logging.Debug($"Name:{pos.Name}  Pos:{pos.Location}");
+                }
+            }
+        }
+    }
+#endif
 }
