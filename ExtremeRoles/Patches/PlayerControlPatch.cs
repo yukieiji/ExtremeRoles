@@ -503,6 +503,13 @@ namespace ExtremeRoles.Patches
                     int animationVentId = reader.ReadPackedInt32();
                     RPCOperator.StartVentAnimation(animationVentId);
                     break;
+                case RPCOperator.Command.UncheckedSnapTo:
+                    byte snapPlayerId = reader.ReadByte();
+                    float snapX = reader.ReadSingle();
+                    float snapY = reader.ReadSingle();
+                    RPCOperator.UncheckedSnapTo(
+                        snapPlayerId, new Vector2(snapX, snapY));
+                    break;
                 case RPCOperator.Command.UncheckedShapeShift:
                     byte shapeShiftPlayerId = reader.ReadByte();
                     byte shapeShiftTargetPlayerId = reader.ReadByte();

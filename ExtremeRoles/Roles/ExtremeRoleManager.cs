@@ -51,6 +51,7 @@ namespace ExtremeRoles.Roles
         Survivor,
         Captain,
         Photographer,
+        Delusioner,
 
         SpecialImpostor,
         Evolver,
@@ -188,6 +189,7 @@ namespace ExtremeRoles.Roles
                 {(int)ExtremeRoleId.Survivor    , new Survivor()},
                 {(int)ExtremeRoleId.Captain     , new Captain()},
                 {(int)ExtremeRoleId.Photographer, new Photographer()},
+                {(int)ExtremeRoleId.Delusioner  , new Delusioner()},
 
                 {(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
                 {(int)ExtremeRoleId.Evolver        , new Evolver()},

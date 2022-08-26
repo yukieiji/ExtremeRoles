@@ -8,6 +8,8 @@ namespace ExtremeRoles.Roles.API.Interface
         public enum ModOrder : int
         {
             CaptainSpecialVote = 0,
+
+            DelusionerCheckVote = -(int.MaxValue - 1),
         }
 
         public int Order { get; }

@@ -22,6 +22,7 @@ namespace ExtremeRoles
             ShareOption,
             CustomVentUse,
             StartVentAnimation,
+            UncheckedSnapTo,
             UncheckedShapeShift,
             UncheckedMurderPlayer,
             UncheckedRevive,
@@ -304,6 +305,16 @@ namespace ExtremeRoles
             {
                 vent?.GetComponent<PowerTools.SpriteAnim>()?.Play(
                     vent.ExitVentAnim, 1f);
+            }
+        }
+
+        public static void UncheckedSnapTo(
+            byte teleporterId, UnityEngine.Vector2 pos)
+        {
+            PlayerControl teleportPlayer = Helper.Player.GetPlayerControlById(teleporterId);
+            if (teleportPlayer != null)
+            {
+                teleportPlayer.NetTransform.SnapTo(pos);
             }
         }
 
