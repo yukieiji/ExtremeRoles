@@ -278,7 +278,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ExtremeRoleId.Photographer,
             ExtremeRoleType.Crewmate,
             ExtremeRoleId.Photographer.ToString(),
-            ColorPalette.AgencyYellowGreen,
+            ColorPalette.PhotographerVerdeSiena,
             false, true, false, false)
         { }
 

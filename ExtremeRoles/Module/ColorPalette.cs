@@ -31,6 +31,8 @@ namespace ExtremeRoles.Module
         public readonly static Color CarpenterBrown = new Color32(195, 178, 95, byte.MaxValue);
         public readonly static Color SurvivorYellow = new Color32(255, 255, 153, byte.MaxValue);
         public readonly static Color CaptainLightKonjou = new Color32(34, 85, 147, byte.MaxValue);
+        public readonly static Color PhotographerVerdeSiena = new Color32(
+            59, 129, 60, byte.MaxValue);
 
         public readonly static Color JackalBlue = new Color32(65, 105, 255, byte.MaxValue);
         public readonly static Color AliceGold = new Color32(255, 215, 0, byte.MaxValue);
