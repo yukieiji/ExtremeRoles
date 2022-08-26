@@ -93,6 +93,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public bool IsAbilityUse()
         {
+            this.targetPlayerId = byte.MaxValue;
+
             PlayerControl target = Player.GetPlayerTarget(
                 CachedPlayerControl.LocalPlayer, this,
                 this.range);
@@ -161,6 +163,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public bool UseAbility()
         {
             List<Vector2> randomPos = new List<Vector2>();
+            byte teloportTarget = this.targetPlayerId;
 
             PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
             var allPlayer = GameData.Instance.AllPlayers;
@@ -220,7 +223,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 if (player == null) { continue; }
                 if (!player.Disconnected &&
-                    player.PlayerId != localPlayer.PlayerId &&
+                    player.PlayerId != localPlayer.PlayerId && 
+                    player.PlayerId != teloportTarget &&
                     !player.IsDead &&
                     player.Object != null &&
                     !player.Object.inVent)
@@ -236,7 +240,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 localPlayer.NetId,
                 (byte)RPCOperator.Command.UncheckedSnapTo,
                 Hazel.SendOption.Reliable, -1);
-            writer.Write(this.targetPlayerId);
+            writer.Write(teloportTarget);
             writer.Write(teleportPos.x);
             writer.Write(teleportPos.y);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
