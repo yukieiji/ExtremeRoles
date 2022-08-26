@@ -316,13 +316,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     if (p < 0.25f)
                     {
                         this.flash.color = new Color(
-                            255f, 255f, 255f, Mathf.Clamp01(p * 2 * 0.75f));
+                            255f, 255f, 255f, Mathf.Clamp01(p * 5 * 0.75f));
 
                     }
                     else if (p >= 0.5f)
                     {
                         this.flash.color = new Color(
-                            255f, 255f, 255f, Mathf.Clamp01((1 - p) * 2 * 0.75f));
+                            255f, 255f, 255f, Mathf.Clamp01((1 - p) * 5 * 0.75f));
                     }
                     if (p == flashTime)
                     {
