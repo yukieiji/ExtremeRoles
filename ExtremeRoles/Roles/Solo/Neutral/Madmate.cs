@@ -11,7 +11,12 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public sealed class Madmate : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialSetUp, IRoleWinPlayerModifier
+    public sealed class Madmate : 
+        SingleRoleBase, 
+        IRoleAbility, 
+        IRoleUpdate, 
+        IRoleSpecialSetUp, 
+        IRoleWinPlayerModifier
     {
         public enum MadmateOption
         {

@@ -14,7 +14,11 @@ using ExtremeRoles.Roles.API.Extension.State;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public sealed class CurseMaker : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHock, IRoleUpdate
+    public sealed class CurseMaker : 
+        SingleRoleBase, 
+        IRoleAbility, 
+        IRoleMurderPlayerHock,
+        IRoleUpdate
     {
         public enum CurseMakerOption
         {

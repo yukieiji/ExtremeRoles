@@ -16,7 +16,11 @@ using BepInEx.IL2CPP.Utils.Collections;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public sealed class Yoko : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IRoleWinPlayerModifier
+    public sealed class Yoko : 
+        SingleRoleBase, 
+        IRoleUpdate, 
+        IRoleResetMeeting, 
+        IRoleWinPlayerModifier
     {
         public enum YokoOption
         {

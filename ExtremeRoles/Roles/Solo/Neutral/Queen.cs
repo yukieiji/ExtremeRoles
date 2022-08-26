@@ -13,7 +13,12 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public sealed class Queen : SingleRoleBase, IRoleAbility, IRoleSpecialReset, IRoleMurderPlayerHock, IRoleUpdate
+    public sealed class Queen : 
+        SingleRoleBase, 
+        IRoleAbility, 
+        IRoleSpecialReset, 
+        IRoleMurderPlayerHock, 
+        IRoleUpdate
     {
         public const string RoleShowTag = "<b>Ⓠ</b>";
 
@@ -491,7 +496,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         }
     }
 
-    public sealed class Servant : MultiAssignRoleBase, IRoleAbility, IRoleMurderPlayerHock, IRoleHasParent
+    public sealed class Servant : 
+        MultiAssignRoleBase, 
+        IRoleAbility, 
+        IRoleMurderPlayerHock, 
+        IRoleHasParent
     {
         public byte Parent => this.queenPlayerId;
 

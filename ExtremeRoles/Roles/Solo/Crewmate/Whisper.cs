@@ -7,7 +7,11 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public sealed class Whisper : SingleRoleBase, IRoleUpdate, IRoleMurderPlayerHock, IRoleResetMeeting
+    public sealed class Whisper : 
+        SingleRoleBase, 
+        IRoleUpdate, 
+        IRoleMurderPlayerHock, 
+        IRoleResetMeeting
     {
 
         public enum WhisperOption

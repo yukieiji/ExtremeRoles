@@ -16,7 +16,11 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public sealed class Photographer : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTypes>, IRoleReportHock
+    public sealed class Photographer : 
+        SingleRoleBase, 
+        IRoleAbility, 
+        IRoleAwake<RoleTypes>, 
+        IRoleReportHock
     {
         private struct PlayerPosInfo
         {
