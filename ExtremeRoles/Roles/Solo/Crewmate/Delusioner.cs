@@ -236,11 +236,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 localPlayer.NetId,
                 (byte)RPCOperator.Command.UncheckedSnapTo,
                 Hazel.SendOption.Reliable, -1);
-            writer.Write(targetPlayerId);
+            writer.Write(this.targetPlayerId);
             writer.Write(teleportPos.x);
             writer.Write(teleportPos.y);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
-            RPCOperator.UncheckedSnapTo(targetPlayerId, teleportPos);
+            RPCOperator.UncheckedSnapTo(this.targetPlayerId, teleportPos);
 
             if (this.Button != null &&
                 this.deflectDamagePenaltyRate > 0.0f)
@@ -322,15 +322,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         protected override void CreateSpecificOption(
             IOption parentOps)
         {
-            var voteAwakeOpt = CreateIntOption(
+            CreateIntOption(
                 DelusionerOption.AwakeVoteNum,
                 3, 0, 8, 1, parentOps,
                 format: OptionUnit.VoteNum);
             CreateBoolOption(
                 DelusionerOption.IsOnetimeAwake,
-                false, voteAwakeOpt,
-                invert: true,
-                enableCheckOption: parentOps);
+                false, parentOps);
 
             CreateFloatOption(
                 DelusionerOption.Range,
@@ -381,6 +379,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.defaultCoolTime = allOpt[
                 GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)].GetValue();
             this.curCoolTime = this.defaultCoolTime;
+            this.isAwakeRole = this.awakeVoteCount == 0;
+            if (this.isAwakeRole)
+            {
+                this.isOneTimeAwake = false;
+            }
             this.RoleAbilityInit();
         }
     }
