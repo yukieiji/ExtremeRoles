@@ -45,6 +45,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             AwakeVoteNum,
             IsOnetimeAwake,
+            Range,
             VoteCoolTimeReduceRate,
             DeflectDamagePenaltyRate,
             IsIncludeLocalPlayer,
@@ -193,7 +194,21 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                             randomPos.Add(ship.MeetingSpawnCenter + offset);
                             break;
                         case 4:
-                            // ランダムスポーンポイントを追加
+                            // Airshipランダムスポーンポイントを追加(v2022.8.23)
+                            /*
+                                [Info   :Extreme Roles] Name:Brig  Pos:(-0.7, 8.5, 0.0)
+                                [Info   :Extreme Roles] Name:Engine  Pos:(-0.7, -1.0, 0.0)
+                                [Info   :Extreme Roles] Name:MainHall  Pos:(15.5, 0.0, 0.0)
+                                [Info   :Extreme Roles] Name:Kitchen  Pos:(-7.0, -11.5, 0.0)
+                                [Info   :Extreme Roles] Name:Records  Pos:(20.0, 10.5, 0.0)
+                                [Info   :Extreme Roles] Name:CargoBay  Pos:(33.5, -1.5, 0.0)
+                             */
+                            randomPos.Add(new Vector2(-0.7f, 8.5f));
+                            randomPos.Add(new Vector2(-0.7f, -1.0f));
+                            randomPos.Add(new Vector2(15.5f, 0.0f));
+                            randomPos.Add(new Vector2(-7.0f, -11.5f));
+                            randomPos.Add(new Vector2(20.0f, 10.5f));
+                            randomPos.Add(new Vector2(33.5f, -1.5f));
                             break;
                         default:
                             break;
@@ -317,6 +332,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 invert: true,
                 enableCheckOption: parentOps);
 
+            CreateFloatOption(
+                DelusionerOption.Range,
+                2.5f, 0.0f, 7.5f, 0.1f,
+                parentOps);
+
             this.CreateAbilityCountOption(
                 parentOps, 3, 25);
 
@@ -349,6 +369,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 GetRoleOptionId(DelusionerOption.VoteCoolTimeReduceRate)].GetValue()) / 100f);
             this.deflectDamagePenaltyRate = ((100f - allOpt[
                 GetRoleOptionId(DelusionerOption.DeflectDamagePenaltyRate)].GetValue()) / 100f);
+            this.range = allOpt[
+                GetRoleOptionId(DelusionerOption.Range)].GetValue();
 
             this.includeLocalPlayer = allOpt[
                 GetRoleOptionId(DelusionerOption.IsIncludeLocalPlayer)].GetValue();
