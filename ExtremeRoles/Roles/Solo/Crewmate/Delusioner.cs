@@ -76,7 +76,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ExtremeRoleId.Delusioner,
             ExtremeRoleType.Crewmate,
             ExtremeRoleId.Delusioner.ToString(),
-            ColorPalette.CurseMakerViolet,
+            ColorPalette.DelusionerPink,
             false, true, false, false)
         { }
 
