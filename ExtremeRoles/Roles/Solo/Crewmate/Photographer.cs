@@ -488,7 +488,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             CreateFloatOption(
                 PhotographerOption.PhotoRange,
-                10.0f, 0.0f, 50f, 0.5f,
+                10.0f, 2.5f, 50f, 0.5f,
                 parentOps);
 
             this.CreateAbilityCountOption(
