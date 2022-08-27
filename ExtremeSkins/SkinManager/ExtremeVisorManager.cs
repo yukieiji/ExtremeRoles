@@ -152,10 +152,9 @@ namespace ExtremeSkins.SkinManager
             cleanUpCurSkinData(dataSaveFolder);
 
             string dlFolder = string.Concat(ausFolder, workingFolder);
-            if (!Directory.Exists(dlFolder))
-            {
-                Directory.CreateDirectory(dlFolder);
-            }
+
+            Helper.FileUtility.DeleteDir(dlFolder);
+            Directory.CreateDirectory(dlFolder);
 
             string zipPath = string.Concat(dlFolder, dlZipName);
 

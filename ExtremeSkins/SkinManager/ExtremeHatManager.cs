@@ -174,13 +174,9 @@ namespace ExtremeSkins.SkinManager
             cleanUpCurSkinData(ausFolder, dataSaveFolder);
 
             string dlFolder = string.Concat(ausFolder, workingFolder);
-#if DEBUG
+            
             Helper.FileUtility.DeleteDir(dlFolder);
-# endif
-            if (!Directory.Exists(dlFolder))
-            {
-                Directory.CreateDirectory(dlFolder);
-            }
+            Directory.CreateDirectory(dlFolder);
 
             string zipPath = string.Concat(dlFolder, dlZipName);
 
@@ -304,9 +300,11 @@ namespace ExtremeSkins.SkinManager
             {
                 string hatData = hatArray[i].ToString();
 
+                if (hatData == hatRepoData || hatData == hatTransData) { continue; }
+
                 string hatMoveToFolder = string.Concat(installFolder, @"\", hatData);
                 string hatSourceFolder = string.Concat(extractPath, hatDataPath, hatData);
-
+                
                 ExtremeSkinsPlugin.Logger.LogInfo($"Installing Hat:{hatData}");
 
                 Directory.Move(hatSourceFolder, hatMoveToFolder);

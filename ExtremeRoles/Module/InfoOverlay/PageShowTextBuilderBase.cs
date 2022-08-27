@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExtremeRoles.Module.Interface;
+using System;
 using System.Collections.Generic;
 using System.Text;
 

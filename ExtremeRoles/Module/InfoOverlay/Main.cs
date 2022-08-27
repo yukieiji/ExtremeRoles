@@ -7,6 +7,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Module.InfoOverlay.FullDec;
+using ExtremeRoles.Module.Interface;
 
 namespace ExtremeRoles.Module.InfoOverlay
 {
