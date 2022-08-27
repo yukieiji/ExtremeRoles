@@ -304,9 +304,11 @@ namespace ExtremeSkins.SkinManager
             {
                 string hatData = hatArray[i].ToString();
 
+                if (hatData == hatRepoData || hatData == hatTransData) { continue; }
+
                 string hatMoveToFolder = string.Concat(installFolder, @"\", hatData);
                 string hatSourceFolder = string.Concat(extractPath, hatDataPath, hatData);
-
+                
                 ExtremeSkinsPlugin.Logger.LogInfo($"Installing Hat:{hatData}");
 
                 Directory.Move(hatSourceFolder, hatMoveToFolder);
