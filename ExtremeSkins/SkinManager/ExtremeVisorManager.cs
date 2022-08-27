@@ -64,7 +64,9 @@ namespace ExtremeSkins.SkinManager
 
                 string author = token.Name;
 
-                if (author == "updateComitHash") { continue; }
+                if (author == "updateComitHash" ||
+                    author == visorRepoData ||
+                    author == visorTransData) { continue; }
 
                 string checkVisorFolder = string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
@@ -285,7 +287,9 @@ namespace ExtremeSkins.SkinManager
 
                 string author = token.Name;
 
-                if (author == "updateComitHash") { continue; }
+                if (author == "updateComitHash" ||
+                    author == visorRepoData ||
+                    author == visorTransData) { continue; }
 
                 string visorMoveToFolder = string.Concat(installFolder, @"\", author);
                 string visorSourceFolder = string.Concat(extractPath, visorDataPath, author);

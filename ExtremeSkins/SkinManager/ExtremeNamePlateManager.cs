@@ -66,7 +66,9 @@ namespace ExtremeSkins.SkinManager
 
                 string author = token.Name;
 
-                if (author == "updateComitHash") { continue; }
+                if (author == "updateComitHash" || 
+                    author == namePlateRepoData ||
+                    author == namePlateTransData) { continue; }
 
                 string checkNamePlateFolder = string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
@@ -245,7 +247,9 @@ namespace ExtremeSkins.SkinManager
 
                 string author = token.Name;
 
-                if (author == "updateComitHash") { continue; }
+                if (author == "updateComitHash" ||
+                    author == namePlateRepoData ||
+                    author == namePlateTransData) { continue; }
 
                 string checkVisorFolder = string.Concat(dataSaveFolder, author);
 

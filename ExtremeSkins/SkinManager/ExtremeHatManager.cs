@@ -62,9 +62,13 @@ namespace ExtremeSkins.SkinManager
 
             for (int i = 0; i < hatArray.Count; ++i)
             {
+                string hatData = hatArray[i].ToString();
+
+                if (hatData == hatRepoData || hatData == hatTransData) { continue; }
+
                 string checkHatFolder = string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
-                    FolderPath, @"\", hatArray[i].ToString());
+                    FolderPath, @"\", hatData);
 
                 if (!Directory.Exists(checkHatFolder)) { return true; }
 
