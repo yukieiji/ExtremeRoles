@@ -40,7 +40,7 @@ namespace ExtremeRoles.Module
 			
 			if (baseAttribute != null)
             {
-				registrationForTarget(targetType);
+				registrationForTarget(targetBase);
             }
 
 			ExtremeRolesPlugin.Logger.LogInfo(
