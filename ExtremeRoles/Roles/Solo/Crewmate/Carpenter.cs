@@ -593,7 +593,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     continue;
                 }
                 float distance = Vector2.Distance(vent.transform.position, truePosition);
-                if (distance <= vent.UsableDistance)
+                if (distance <= vent.UsableDistance &&
+                    vent.myRend.sprite != null)
                 {
                     this.targetVent = vent;
                     return true;
