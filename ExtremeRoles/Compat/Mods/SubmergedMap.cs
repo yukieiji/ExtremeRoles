@@ -47,6 +47,9 @@ namespace ExtremeRoles.Compat.Mods
 
         private const string elevatorMover = "ElevatorMover";
 
+        private float crewVison;
+        private float impostorVison;
+
         public SubmergedMap(PluginInfo plugin) : base(Guid, plugin)
         {
             // カスタムサボのタスクタイプ取得
@@ -89,11 +92,19 @@ namespace ExtremeRoles.Compat.Mods
             Patches.HudManagerUpdatePatchPostfixPatch.ButtonTriggerReset();
             submarineStatus = map.GetComponent(
                 Il2CppType.From(submarineStatusType))?.TryCast(submarineStatusType) as MonoBehaviour;
+            
+            // 毎回毎回取得すると重いのでキャッシュ化
+            crewVison = PlayerControl.GameOptions.CrewLightMod;
+            impostorVison = PlayerControl.GameOptions.ImpostorLightMod;
         }
 
         public void Destroy()
         {
             submarineStatus = null;
+
+            // バグってるかもしれないのでもとに戻しとく
+            PlayerControl.GameOptions.CrewLightMod = crewVison;
+            PlayerControl.GameOptions.ImpostorLightMod = impostorVison;
         }
 
         public float CalculateLightRadius(GameData.PlayerInfo player, bool neutral, bool neutralImpostor)
@@ -106,10 +117,14 @@ namespace ExtremeRoles.Compat.Mods
             GameData.PlayerInfo player, float visonMod, bool applayVisonEffects = true)
         {
             // this is hotFix;
-            float baseVision = PlayerControl.GameOptions.CrewLightMod;
             PlayerControl.GameOptions.CrewLightMod = visonMod;
+            PlayerControl.GameOptions.ImpostorLightMod = visonMod;
+
             float result = CalculateLightRadius(player, true, !applayVisonEffects);
-            PlayerControl.GameOptions.CrewLightMod = baseVision;
+            
+            PlayerControl.GameOptions.CrewLightMod = crewVison;
+            PlayerControl.GameOptions.ImpostorLightMod = impostorVison;
+            
             return result;
         }
 

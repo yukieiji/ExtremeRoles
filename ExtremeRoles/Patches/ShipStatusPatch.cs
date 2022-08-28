@@ -81,7 +81,7 @@ namespace ExtremeRoles.Patches
             if (requireCustomCustomCalculateLightRadius())
             {
                 float visonMulti;
-                bool applayVisonEffects = role.IsCrewmate();
+                bool applayVisonEffects = !role.IsImpostor();
 
                 if (role.TryGetVisonMod(out float vison, out bool isApplyEnvironmentVision))
                 {
