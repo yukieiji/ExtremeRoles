@@ -116,7 +116,11 @@ namespace ExtremeRoles.Compat.Mods
         public float CalculateLightRadius(
             GameData.PlayerInfo player, float visonMod, bool applayVisonEffects = true)
         {
-            // this is hotFix;
+            // サブマージドの視界計算のロジックは「クルーだと停電効果受ける、インポスターだと受けないので」
+            // 1. まずはデフォルトの視界をMOD側で用意した視界の広さにリプレイス
+            // 2. 視界効果を受けるかをインポスターかどうかで渡して計算
+            // 3. 元の視界の広さに戻す
+
             PlayerControl.GameOptions.CrewLightMod = visonMod;
             PlayerControl.GameOptions.ImpostorLightMod = visonMod;
 
