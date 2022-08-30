@@ -262,8 +262,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             if (!result || vent == null) { return false; }
 
-            if (ExtremeRolesPlugin.GameDataStore.CustomVent.IsCustomVent(
-                    vent.Id)) { return false; }
+            if (ExtremeRolesPlugin.GameDataStore.IsCustomVent(vent.Id)) { return false; }
 
             return true;
         }

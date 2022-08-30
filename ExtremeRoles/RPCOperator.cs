@@ -250,18 +250,18 @@ namespace ExtremeRoles
             Vent vent = CachedShipStatus.Instance.AllVents.FirstOrDefault(
                 (x) => x.Id == ventId);
 
-            var ventContainer = ExtremeRolesPlugin.GameDataStore.CustomVent;
+            var exShipStatus = ExtremeRolesPlugin.GameDataStore;
 
             hudManager.StartCoroutine(
                 Effects.Lerp(
                     0.6f, new System.Action<float>((p) => {
                         if (vent != null && vent.myRend != null)
                         {
-                            vent.myRend.sprite = ventContainer.GetVentSprite(
+                            vent.myRend.sprite = exShipStatus.GetVentSprite(
                                 ventId, (int)(p * 17));
                             if (p == 1f)
                             {
-                                vent.myRend.sprite = ventContainer.GetVentSprite(
+                                vent.myRend.sprite = exShipStatus.GetVentSprite(
                                     ventId, 0);
                             }
                         }
@@ -279,9 +279,9 @@ namespace ExtremeRoles
 
             HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
-            var ventContainer = ExtremeRolesPlugin.GameDataStore.CustomVent;
+            var exShipStatus = ExtremeRolesPlugin.GameDataStore;
 
-            if (ventContainer.IsCustomVent(ventId))
+            if (exShipStatus.IsCustomVent(ventId))
             {
                 if (hudManager == null) { return; }
 
@@ -290,11 +290,11 @@ namespace ExtremeRoles
                         0.6f, new System.Action<float>((p) => {
                             if (vent != null && vent.myRend != null)
                             {
-                                vent.myRend.sprite = ventContainer.GetVentSprite(
+                                vent.myRend.sprite = exShipStatus.GetVentSprite(
                                     ventId, (int)(p * 17));
                                 if (p == 1f)
                                 {
-                                    vent.myRend.sprite = ventContainer.GetVentSprite(
+                                    vent.myRend.sprite = exShipStatus.GetVentSprite(
                                         ventId, 0);
                                 }
                             }   
