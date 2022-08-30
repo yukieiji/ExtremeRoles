@@ -613,7 +613,7 @@ namespace ExtremeRoles
         public static void UseGhostRoleAbility(
             byte abilityType, bool isReport, ref MessageReader reader)
         {
-            ExtremeRolesPlugin.GameDataStore.AbilityManager.UseGhostAbility(
+            GhostRoles.ExtremeGhostRoleManager.UseAbility(
                 abilityType, isReport, ref reader);
         }
 

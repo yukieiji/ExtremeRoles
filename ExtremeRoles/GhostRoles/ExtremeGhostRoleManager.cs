@@ -10,7 +10,6 @@ using ExtremeRoles.GhostRoles.Crewmate;
 using ExtremeRoles.GhostRoles.Impostor;
 using ExtremeRoles.Performance;
 
-
 namespace ExtremeRoles.GhostRoles
 {
     public enum ExtremeGhostRoleId : byte
@@ -22,6 +21,15 @@ namespace ExtremeRoles.GhostRoles
 
         Ventgeist,
         SaboEvil
+    }
+
+    public enum AbilityType : byte
+    {
+        PoltergeistMoveDeadbody,
+        FaunusOpenSaboConsole,
+
+        VentgeistVentAnime,
+        SaboEvilResetSabotageCool
     }
 
     public static class ExtremeGhostRoleManager
@@ -340,7 +348,8 @@ namespace ExtremeRoles.GhostRoles
 
         }
 
-        public static bool IsGlobalSpawnLimit(ExtremeRoleType team) => assignData.IsGlobalSpawnLimit(team);
+        public static bool IsGlobalSpawnLimit(ExtremeRoleType team) => 
+            assignData.IsGlobalSpawnLimit(team);
 
         public static bool IsCombRole(ExtremeRoleId roleId) => assignData.IsCombRole(roleId);
 
@@ -376,7 +385,45 @@ namespace ExtremeRoles.GhostRoles
                 byte ghostRoleId = reader.ReadByte();
                 setPlyaerToSingleGhostRole(playerId, vanillaRoleId, ghostRoleId);
             }
+        }
 
+        public static void UseAbility(
+            byte abilityType,
+            bool isReport,
+            ref MessageReader reader)
+        {
+
+            AbilityType callAbility = (AbilityType)abilityType;
+
+            switch (callAbility)
+            {
+                case AbilityType.VentgeistVentAnime:
+                    int ventId = reader.ReadInt32();
+                    Ventgeist.VentAnime(ventId);
+                    break;
+                case AbilityType.PoltergeistMoveDeadbody:
+                    byte poltergeistPlayerId = reader.ReadByte();
+                    byte poltergeistMoveDeadbodyPlayerId = reader.ReadByte();
+                    float x = reader.ReadSingle();
+                    float y = reader.ReadSingle();
+                    bool pickUp = reader.ReadBoolean();
+                    Poltergeist.DeadbodyMove(
+                        poltergeistPlayerId,
+                        poltergeistMoveDeadbodyPlayerId,
+                        x, y, pickUp);
+                    break;
+                case AbilityType.SaboEvilResetSabotageCool:
+                    SaboEvil.ResetCool();
+                    break;
+                default:
+                    break;
+            }
+
+            if (isReport)
+            {
+                ExtremeRolesPlugin.GameDataStore.AddGhostRoleAbilityReport(
+                    callAbility);
+            }
         }
 
         private static bool isRoleSpawn(

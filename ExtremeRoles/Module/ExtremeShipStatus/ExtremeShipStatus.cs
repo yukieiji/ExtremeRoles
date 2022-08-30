@@ -46,7 +46,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
         public PlayerHistory History = new PlayerHistory();
         public BakaryUnion Union = new BakaryUnion();
 
-        public GhostRoleAbilityManager AbilityManager = new GhostRoleAbilityManager();
 
         public int MeetingsCount = 0;
 
@@ -73,8 +72,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 
             History.Clear();
 
-            AbilityManager.Clear();
-
             MeetingsCount = 0;
 
             AssassinMeetingTrigger = false;
@@ -94,6 +91,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             this.resetWins();
 
             this.ClearMeetingResetObject();
+            this.ResetGhostAbilityReport();
             this.ResetVison();
 
             if (!includeGameObject) { return; }

@@ -1,4 +1,5 @@
-﻿using ExtremeRoles.GhostRoles.API;
+﻿using ExtremeRoles.GhostRoles;
+using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.GhostRoles;
 using ExtremeRoles.Performance;
@@ -32,7 +33,7 @@ namespace ExtremeRoles.GhostRoles.Impostor
         public override void CreateAbility()
         {
             this.Button = new AbilityCountButton(
-                GhostRoleAbilityManager.AbilityType.SaboEvilResetSabotageCool,
+                AbilityType.SaboEvilResetSabotageCool,
                 this.UseAbility,
                 this.isPreCheck,
                 this.isAbilityUse,

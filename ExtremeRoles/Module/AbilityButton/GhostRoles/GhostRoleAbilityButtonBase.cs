@@ -3,6 +3,7 @@ using UnityEngine;
 
 using Hazel;
 
+using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
@@ -14,12 +15,12 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
 
         protected Func<bool> abilityPreCheck;
         protected Action<MessageWriter> ability;
-        private GhostRoleAbilityManager.AbilityType abilityType;
+        private AbilityType abilityType;
         private Action rpcHostCallAbility;
         private bool reportAbility;
 
         public GhostRoleAbilityButtonBase(
-            GhostRoleAbilityManager.AbilityType abilityType,
+            AbilityType abilityType,
             Action<MessageWriter> ability,
             Func<bool> abilityPreCheck,
             Func<bool> canUse,
@@ -69,7 +70,7 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
                 }
                 if (this.reportAbility)
                 {
-                    ExtremeRolesPlugin.GameDataStore.AbilityManager.AddAbilityCall(
+                    ExtremeRolesPlugin.GameDataStore.AddGhostRoleAbilityReport(
                         this.abilityType);
                 }
                 return true;
