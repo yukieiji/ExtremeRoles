@@ -38,12 +38,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             Disconnected,
         }
 
-        public enum ForceVisionType
-        {
-            None,
-            LastWolfLightOff
-        }
-
         public bool IsRoleSetUpEnd => isRoleSetUpEnd;
 
         public GameOverReason EndReason;
@@ -74,8 +68,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
         private List<IMeetingResetObject> resetObject = new List<IMeetingResetObject>();
         private bool isRoleSetUpEnd;
 
-        public ForceVisionType CurVison;
-
         public ExtremeShipStatus()
         {
             Initialize();
@@ -83,7 +75,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 
         public void Initialize()
         {
-            CurVison = ForceVisionType.None;
             DeadedAssassin.Clear();
             ShildPlayer.Clear();
 
@@ -115,6 +106,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             isRoleSetUpEnd = false;
 
             this.resetVent();
+            this.ResetVison();
         }
 
         public void AddDeadInfo(
