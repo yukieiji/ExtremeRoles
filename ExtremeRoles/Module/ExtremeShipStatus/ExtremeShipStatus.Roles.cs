@@ -16,6 +16,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             switch (role.Id)
             {
                 case ExtremeRoleId.Bakary:
+                    if (this.union != null) { return; }
                     this.union = this.status.AddComponent<BakeryUnion>();
                     this.union.SetCookingCondition(
                         allOpt[role.GetRoleOptionId(Bakary.BakaryOption.GoodBakeTime)].GetValue(),
