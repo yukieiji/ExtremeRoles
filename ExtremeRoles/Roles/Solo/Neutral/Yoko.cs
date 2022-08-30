@@ -76,7 +76,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     pulsWinner.Clear();
                     winner.Clear();
                     winner.Add(new WinningPlayerData(rolePlayerInfo));
-                    ExtremeRolesPlugin.GameDataStore.EndReason = (GameOverReason)RoleGameOverReason.YokoAllDeceive;
+                    ExtremeRolesPlugin.GameDataStore.SetGameOverReason(
+                        (GameOverReason)RoleGameOverReason.YokoAllDeceive);
                     break;
             }
         }

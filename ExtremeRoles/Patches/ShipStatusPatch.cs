@@ -170,7 +170,7 @@ namespace ExtremeRoles.Patches
             if (FastDestroyableSingleton<HudManager>.Instance.IsIntroDisplayed){ return false; }
 
             if (ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger ||
-                ExtremeRolesPlugin.GameDataStore.WinCheckDisable) { return false; }
+                ExtremeRolesPlugin.GameDataStore.IsDisableWinCheck) { return false; }
 
             var statistics = ExtremeRolesPlugin.GameDataStore.CreateStatistics();
 

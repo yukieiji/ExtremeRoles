@@ -381,7 +381,7 @@ namespace ExtremeRoles.Roles.Combination
             if (heroPlayer != null && villanPlayer != null)
             {
 
-                ExtremeRolesPlugin.GameDataStore.WinCheckDisable = true;
+                ExtremeRolesPlugin.GameDataStore.SetDisableWinCheck(true);
 
                 if (heroPlayer.protectedByGuardian)
                 {
@@ -404,7 +404,7 @@ namespace ExtremeRoles.Roles.Combination
                     }
                 }
 
-                ExtremeRolesPlugin.GameDataStore.WinCheckDisable = false;
+                ExtremeRolesPlugin.GameDataStore.SetDisableWinCheck(false);
             }
         }
         private static void updateHero(

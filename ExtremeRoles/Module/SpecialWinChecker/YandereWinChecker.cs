@@ -83,7 +83,7 @@ namespace ExtremeRoles.Module.SpecialWinChecker
             foreach (var player in aliveOneSideLover)
             {
                 writer.Write(player.PlayerId);
-                ExtremeRolesPlugin.GameDataStore.PlusWinner.Add(player.Data);
+                ExtremeRolesPlugin.GameDataStore.AddWinner(player);
             }
             AmongUsClient.Instance.FinishRpcImmediately(writer);
 

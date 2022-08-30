@@ -918,7 +918,7 @@ namespace ExtremeRoles.Patches
 
             if (ExtremeRoleManager.IsDisableWinCheckRole(role))
             {
-                ExtremeRolesPlugin.GameDataStore.WinCheckDisable = true;
+                ExtremeRolesPlugin.GameDataStore.SetDisableWinCheck(true);
             }
 
             var multiAssignRole = role as MultiAssignRoleBase;
@@ -934,7 +934,7 @@ namespace ExtremeRoles.Patches
                 }
             }
 
-            ExtremeRolesPlugin.GameDataStore.WinCheckDisable = false;
+            ExtremeRolesPlugin.GameDataStore.SetDisableWinCheck(false);
 
             var player = CachedPlayerControl.LocalPlayer;
 

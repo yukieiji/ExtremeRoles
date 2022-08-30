@@ -364,7 +364,7 @@ namespace ExtremeRoles
 
         public static void SetWinGameControlId(int id)
         {
-            ExtremeRolesPlugin.GameDataStore.WinGameControlId = id;
+            ExtremeRolesPlugin.GameDataStore.SetWinControlId(id);
         }
 
         public static void SetWinPlayer(List<byte> playerId)
@@ -373,7 +373,7 @@ namespace ExtremeRoles
             {
                 GameData.PlayerInfo player = GameData.Instance.GetPlayerById(id);
                 if (player == null) { continue; }
-                ExtremeRolesPlugin.GameDataStore.PlusWinner.Add(player);
+                ExtremeRolesPlugin.GameDataStore.AddWinner(player);
             }
         }
 

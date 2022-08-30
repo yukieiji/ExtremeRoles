@@ -404,7 +404,7 @@ namespace ExtremeRoles.Patches.Manager
                 winNeutral.Clear();
             }
 
-            foreach (var player in gameData.PlusWinner)
+            foreach (var player in gameData.GetPlusWinner())
             {
 
                 var role = ExtremeRoleManager.GameRole[player.PlayerId];

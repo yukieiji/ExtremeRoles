@@ -234,7 +234,7 @@ namespace ExtremeRoles.Patches.Controller
                 }
             }
 
-            ExtremeRolesPlugin.GameDataStore.WinCheckDisable = false;
+            ExtremeRolesPlugin.GameDataStore.SetDisableWinCheck(false);
         }
 
         private static void resetAssassinMeeting()
@@ -253,7 +253,7 @@ namespace ExtremeRoles.Patches.Controller
 
             if (ExtremeRoleManager.IsDisableWinCheckRole(role))
             {
-                ExtremeRolesPlugin.GameDataStore.WinCheckDisable = true;
+                ExtremeRolesPlugin.GameDataStore.SetDisableWinCheck(true);
             }
         }
 

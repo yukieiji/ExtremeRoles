@@ -40,10 +40,8 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 
         public bool IsRoleSetUpEnd => isRoleSetUpEnd;
 
-        public GameOverReason EndReason;
         public List<PlayerSummary> FinalSummary = new List<PlayerSummary>();
         public Dictionary<byte, DeadInfo> DeadPlayerInfo = new Dictionary<byte, DeadInfo>();
-        public List<GameData.PlayerInfo> PlusWinner = new List<GameData.PlayerInfo>();
         public Dictionary<int, Version> PlayerVersion = new Dictionary<int, Version>();
 
         public HashSet<byte> DeadedAssassin = new HashSet<byte>();
@@ -56,12 +54,10 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
         public GhostRoleAbilityManager AbilityManager = new GhostRoleAbilityManager();
 
         public int MeetingsCount = 0;
-        public int WinGameControlId = int.MaxValue;
 
         public bool IsAssassinAssign = false;
         public bool AssassinMeetingTrigger = false;
         public bool AssassinateMarin = false;
-        public bool WinCheckDisable = false;
         public byte ExiledAssassinId = byte.MaxValue;
         public byte IsMarinPlayerId = byte.MaxValue;
 
@@ -80,7 +76,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 
             FinalSummary.Clear();
             DeadPlayerInfo.Clear();
-            PlusWinner.Clear();
 
             Union.Clear();
 
@@ -92,13 +87,11 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             AbilityManager.Clear();
 
             MeetingsCount = 0;
-            WinGameControlId = int.MaxValue;
 
             AssassinMeetingTrigger = false;
             AssassinateMarin = false;
             IsAssassinAssign = false;
 
-            WinCheckDisable = false;
 
             ExiledAssassinId = byte.MaxValue;
             IsMarinPlayerId = byte.MaxValue;
@@ -106,6 +99,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             isRoleSetUpEnd = false;
 
             this.resetVent();
+            this.resetWins();
             this.ResetVison();
         }
 

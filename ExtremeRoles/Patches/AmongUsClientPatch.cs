@@ -60,7 +60,7 @@ namespace ExtremeRoles.Patches
         public static void Prefix([HarmonyArgument(0)] ref EndGameResult endGameResult)
         {
             ExtremeRolesPlugin.Info.HideInfoOverlay();
-            ExtremeRolesPlugin.GameDataStore.EndReason = endGameResult.GameOverReason;
+            ExtremeRolesPlugin.GameDataStore.SetGameOverReason(endGameResult.GameOverReason);
             if ((int)endGameResult.GameOverReason >= 10)
             {
                 endGameResult.GameOverReason = GameOverReason.ImpostorByKill;
@@ -86,7 +86,7 @@ namespace ExtremeRoles.Patches
                 {
                     if (ExtremeRoleManager.IsAliveWinNeutral(role, playerInfo))
                     {
-                        gameData.PlusWinner.Add(playerInfo);
+                        gameData.AddWinner(playerInfo);
                     }
                     else
                     {
@@ -120,10 +120,11 @@ namespace ExtremeRoles.Patches
             }
 
             List<WinningPlayerData> winnersToRemove = new List<WinningPlayerData>();
+            List<GameData.PlayerInfo> plusWinner = gameData.GetPlusWinner();
             foreach (WinningPlayerData winner in TempData.winners.GetFastEnumerator())
             {
                 if (noWinner.Any(x => x.PlayerName == winner.PlayerName) ||
-                    gameData.PlusWinner.Any(x => x.PlayerName == winner.PlayerName))
+                    plusWinner.Any(x => x.PlayerName == winner.PlayerName))
                 {
                     winnersToRemove.Add(winner);
                 }
@@ -228,7 +229,7 @@ namespace ExtremeRoles.Patches
                     break;
             }
 
-            foreach (var player in gameData.PlusWinner)
+            foreach (var player in gameData.GetPlusWinner())
             {
                 addWinner(player);
             }
@@ -241,9 +242,10 @@ namespace ExtremeRoles.Patches
                     playerInfo,
                     gameData.EndReason,
                     ref winnerList,
-                    ref gameData.PlusWinner);
+                    ref plusWinner);
             }
 
+            gameData.SetPlusWinner(plusWinner);
             TempData.winners = winnerList;
 
         }
