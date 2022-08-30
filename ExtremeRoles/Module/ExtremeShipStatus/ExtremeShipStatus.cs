@@ -44,7 +44,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 
         public ShieldPlayerContainer ShildPlayer = new ShieldPlayerContainer();
         public PlayerHistory History = new PlayerHistory();
-        public BakaryUnion Union = new BakaryUnion();
 
         public bool IsAssassinAssign = false;
         public bool AssassinMeetingTrigger = false;
@@ -65,8 +64,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             DeadedAssassin.Clear();
             ShildPlayer.Clear();
 
-            Union.Clear();
-
             History.Clear();
 
             AssassinMeetingTrigger = false;
@@ -79,6 +76,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             // 以下リファクタ済み
             
             this.resetDeadPlayerInfo();
+            this.resetGhostAbilityReport();
             this.resetPlayerSummary();
             this.resetMeetingCount();
             this.resetRoleAssign();
@@ -86,7 +84,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             this.resetWins();
 
             this.ClearMeetingResetObject();
-            this.ResetGhostAbilityReport();
             this.ResetVison();
 
             if (!includeGameObject) { return; }
@@ -213,125 +210,5 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 
             public int GetSize() => size;
         }
-
-        public sealed class BakaryUnion
-        {
-            private bool isChangeCooking = false;
-
-            private float timer = 0.0f;
-            private float goodTime = 0.0f;
-            private float badTime = 0.0f;
-            private bool isUnion = false;
-            private HashSet<byte> aliveBakary = new HashSet<byte>();
-
-            public BakaryUnion()
-            {
-                Clear();
-            }
-
-            public bool IsEstablish()
-            {
-                updateBakaryAlive();
-                return aliveBakary.Count != 0;
-            }
-
-            public string GetBreadBakingCondition()
-            {
-                if (!isChangeCooking)
-                {
-                    return Helper.Translation.GetString("goodBread");
-                }
-
-                if (timer < goodTime)
-                {
-                    return Helper.Translation.GetString("rawBread");
-                }
-                else if (goodTime <= timer && timer < badTime)
-                {
-                    return Helper.Translation.GetString("goodBread");
-                }
-                else
-                {
-                    return Helper.Translation.GetString("badBread");
-                }
-            }
-
-            public void Clear()
-            {
-                ResetTimer();
-                isUnion = false;
-                isChangeCooking = false;
-                aliveBakary.Clear();
-            }
-
-            public void ResetTimer()
-            {
-                timer = 0;
-            }
-
-            public void SetCookingCondition(
-                float goodCookTime,
-                float badCookTime,
-                bool isChangeCooking)
-            {
-                goodTime = goodCookTime;
-                badTime = badCookTime;
-                this.isChangeCooking = isChangeCooking;
-            }
-
-            public void Update()
-            {
-                if (!isUnion) { organize(); }
-                if (aliveBakary.Count == 0) { return; }
-                if (MeetingHud.Instance != null) { return; }
-
-                timer += Time.fixedDeltaTime;
-
-            }
-
-            private void organize()
-            {
-                isUnion = true;
-                foreach (var (playerId, role) in ExtremeRoleManager.GameRole)
-                {
-                    if (role.Id == ExtremeRoleId.Bakary)
-                    {
-                        aliveBakary.Add(playerId);
-                    }
-
-                    var multiAssignRole = role as MultiAssignRoleBase;
-                    if (multiAssignRole != null)
-                    {
-                        if (multiAssignRole.AnotherRole != null)
-                        {
-                            if (multiAssignRole.AnotherRole.Id == ExtremeRoleId.Bakary)
-                            {
-                                aliveBakary.Add(playerId);
-                            }
-                        }
-                    }
-
-                }
-            }
-
-            private void updateBakaryAlive()
-            {
-                if (aliveBakary.Count == 0) { return; }
-
-                HashSet<byte> updatedBakary = new HashSet<byte>();
-
-                foreach (var playerId in aliveBakary)
-                {
-                    PlayerControl player = Helper.Player.GetPlayerControlById(playerId);
-                    if (!player.Data.IsDead && !player.Data.Disconnected)
-                    {
-                        updatedBakary.Add(playerId);
-                    }
-                }
-
-                aliveBakary = updatedBakary;
-            }
-        }
     }
-
 }

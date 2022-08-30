@@ -175,7 +175,6 @@ namespace ExtremeRoles.Patches
             refreshRoleDescription(__instance, role, ghostRole);
 
             ExtremeRolesPlugin.GameDataStore.History.Enqueue(__instance);
-            ExtremeRolesPlugin.GameDataStore.Union.Update();
             setPlayerPostion();
         }
 

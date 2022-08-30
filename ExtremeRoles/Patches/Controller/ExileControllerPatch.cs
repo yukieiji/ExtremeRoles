@@ -12,9 +12,6 @@ namespace ExtremeRoles.Patches.Controller
     [HarmonyPatch(typeof(ExileController), nameof(ExileController.Begin))]
     public static class ExileControllerBeginePatch
     {
-
-        private static TMPro.TextMeshPro breadText;
-
         public static bool Prefix(
             ExileController __instance,
             [HarmonyArgument(0)] GameData.PlayerInfo exiled,
@@ -63,27 +60,24 @@ namespace ExtremeRoles.Patches.Controller
             [HarmonyArgument(0)] GameData.PlayerInfo exiled,
             [HarmonyArgument(1)] bool tie)
         {
-            if (!ExtremeRolesPlugin.GameDataStore.Union.IsEstablish()) { return; }
-            if (breadText == null)
+            if (!ExtremeRolesPlugin.GameDataStore.IsShowAditionalInfo()) { return; }
+            TMPro.TextMeshPro infoText = UnityEngine.Object.Instantiate(
+                __instance.ImpostorText,
+                __instance.Text.transform);
+            if (PlayerControl.GameOptions.ConfirmImpostor)
             {
-                breadText = UnityEngine.Object.Instantiate(
-                    __instance.ImpostorText,
-                    __instance.Text.transform);
-                if (PlayerControl.GameOptions.ConfirmImpostor)
-                {
-                    breadText.transform.localPosition += new UnityEngine.Vector3(0f, -0.4f, 0f);
-                }
-                else
-                {
-                    breadText.transform.localPosition += new UnityEngine.Vector3(0f, -0.2f, 0f);
-                }
-                breadText.gameObject.SetActive(true);
+                infoText.transform.localPosition += new UnityEngine.Vector3(0f, -0.4f, 0f);
             }
+            else
+            {
+                infoText.transform.localPosition += new UnityEngine.Vector3(0f, -0.2f, 0f);
+            }
+            infoText.gameObject.SetActive(true);
 
-            breadText.text = ExtremeRolesPlugin.GameDataStore.Union.GetBreadBakingCondition();
+            infoText.text = ExtremeRolesPlugin.GameDataStore.GetAditionalInfo();
 
             __instance.StartCoroutine(
-                Effects.Bloop(0.25f, breadText.transform, 1f, 0.5f));
+                Effects.Bloop(0.25f, infoText.transform, 1f, 0.5f));
         }
     }
 
@@ -156,8 +150,7 @@ namespace ExtremeRoles.Patches.Controller
         {
             ExtremeRolesPlugin.Info.BlockShow(false);
             ExtremeRolesPlugin.Info.HideBlackBG();
-            ExtremeRolesPlugin.GameDataStore.Union.ResetTimer();
-            ExtremeRolesPlugin.GameDataStore.ResetGhostAbilityReport();
+            ExtremeRolesPlugin.GameDataStore.ResetOnMeeting();
 
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 

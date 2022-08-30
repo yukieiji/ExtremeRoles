@@ -13,7 +13,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 
         public string GetGhostAbilityReport() => this.reporter.CreateReport();
 
-        public void ResetGhostAbilityReport()
+        public void resetGhostAbilityReport()
         {
             this.reporter.Clear();
         }
