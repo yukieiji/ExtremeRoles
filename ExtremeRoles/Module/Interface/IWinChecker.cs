@@ -1,4 +1,4 @@
-﻿namespace ExtremeRoles.Module.SpecialWinChecker
+﻿namespace ExtremeRoles.Module.Interface
 {
     public interface IWinChecker
     {

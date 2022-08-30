@@ -2,6 +2,7 @@
 
 using Hazel;
 
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo.Neutral;

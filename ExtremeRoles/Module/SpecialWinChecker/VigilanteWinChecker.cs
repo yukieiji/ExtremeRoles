@@ -1,6 +1,6 @@
-﻿using ExtremeRoles.Roles;
+﻿using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-
 
 namespace ExtremeRoles.Module.SpecialWinChecker
 {

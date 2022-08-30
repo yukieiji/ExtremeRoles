@@ -79,5 +79,15 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
         {
             this.deadPlayerInfo.Clear();
         }
+
+        public sealed class DeadInfo
+        {
+            public PlayerStatus Reason { get; set; }
+
+            public DateTime DeadTime { get; set; }
+
+            public PlayerControl Killer { get; set; }
+        }
+
     }
 }
