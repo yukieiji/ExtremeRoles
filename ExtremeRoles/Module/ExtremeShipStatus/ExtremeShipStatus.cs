@@ -38,7 +38,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             Disconnected,
         }
 
-        public List<PlayerSummary> FinalSummary = new List<PlayerSummary>();
         public Dictionary<int, Version> PlayerVersion = new Dictionary<int, Version>();
 
         public HashSet<byte> DeadedAssassin = new HashSet<byte>();
@@ -70,8 +69,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             DeadedAssassin.Clear();
             ShildPlayer.Clear();
 
-            FinalSummary.Clear();
-
             Union.Clear();
 
             History.Clear();
@@ -91,6 +88,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             // 以下リファクタ済み
             
             this.resetDeadPlayerInfo();
+            this.resetPlayerSummary();
             this.resetRoleAssign();
             this.resetVent();
             this.resetWins();
@@ -108,87 +106,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             this.status = new GameObject("ExtremeShipStatus");
 
             this.resetUpdateObject();
-        }
-
-        public void AddPlayerSummary(
-            GameData.PlayerInfo playerInfo)
-        {
-
-            var role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
-            var (completedTask, totalTask) = Helper.GameSystem.GetTaskInfo(playerInfo);
-            // IsImpostor
-            var finalStatus = PlayerStatus.Alive;
-            if (EndReason == GameOverReason.ImpostorBySabotage &&
-                !role.IsImpostor())
-            {
-                finalStatus = PlayerStatus.Dead;
-            }
-            else if (EndReason == (GameOverReason)RoleGameOverReason.AssassinationMarin)
-            {
-                if (playerInfo.PlayerId == IsMarinPlayerId)
-                {
-                    if (playerInfo.IsDead || playerInfo.Disconnected)
-                    {
-                        finalStatus = PlayerStatus.DeadAssassinate;
-                    }
-                    else
-                    {
-                        finalStatus = PlayerStatus.Assassinate;
-                    }
-                }
-                else if (playerInfo.PlayerId == ExiledAssassinId)
-                {
-                    if (deadPlayerInfo.TryGetValue(
-                        playerInfo.PlayerId, out DeadInfo info))
-                    {
-                        finalStatus = info.Reason;
-                    }
-                }
-                else if (!role.IsImpostor())
-                {
-                    finalStatus = PlayerStatus.Surrender;
-                }
-            }
-            else if (EndReason == (GameOverReason)RoleGameOverReason.UmbrerBiohazard)
-            {
-                if (role.Id != ExtremeRoleId.Umbrer &&
-                    !playerInfo.IsDead &&
-                    !playerInfo.Disconnected)
-                {
-                    finalStatus = PlayerStatus.Zombied;
-                }
-                else
-                {
-                    if (deadPlayerInfo.TryGetValue(
-                        playerInfo.PlayerId, out DeadInfo info))
-                    {
-                        finalStatus = info.Reason;
-                    }
-                }
-            }
-            else if (playerInfo.Disconnected)
-            {
-                finalStatus = PlayerStatus.Disconnected;
-            }
-            else
-            {
-                if (deadPlayerInfo.TryGetValue(
-                        playerInfo.PlayerId, out DeadInfo info))
-                {
-                    finalStatus = info.Reason;
-                }
-            }
-
-            FinalSummary.Add(
-                new PlayerSummary
-                {
-                    PlayerName = playerInfo.PlayerName,
-                    Role = role,
-                    StatusInfo = finalStatus,
-                    TotalTask = totalTask,
-                    CompletedTask = EndReason == GameOverReason.HumansByTask ? totalTask : completedTask,
-                });
-
         }
 
         public PlayerStatistics CreateStatistics()
@@ -457,14 +374,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 
             public Dictionary<(NeutralSeparateTeam, int), int> SeparatedNeutralAlive { get; set; }
 
-        }
-        public sealed class PlayerSummary
-        {
-            public string PlayerName { get; set; }
-            public SingleRoleBase Role { get; set; }
-            public int CompletedTask { get; set; }
-            public int TotalTask { get; set; }
-            public PlayerStatus StatusInfo { get; set; }
         }
 
         public sealed class ShieldPlayerContainer
