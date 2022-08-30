@@ -87,14 +87,6 @@ namespace ExtremeRoles.Patches.Manager
             if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return; }
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
-            if (AmongUsClient.Instance.AmHost)
-            {
-                for (int i = 0; i < ExtremeRolesPlugin.GameDataStore.UpdateObject.Count; ++i)
-                {
-                    ExtremeRolesPlugin.GameDataStore.UpdateObject[i].Update(i);
-                }
-            }
-
             SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
             GhostRoleBase ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
             CachedPlayerControl player = CachedPlayerControl.LocalPlayer;

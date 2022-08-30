@@ -183,7 +183,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             bool isMarlin = localPlayerRole.Id == ExtremeRoleId.Marlin;
 
-            ExtremeRolesPlugin.GameDataStore.UpdateObject.Add(
+            ExtremeRolesPlugin.GameDataStore.AddUpdateObject(
                 new Camp(
                     mery.ActiveNum,
                     mery.ActiveRange,
@@ -194,10 +194,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public static void ActivateVent(
             int activateVentIndex)
         {
-            Camp camp = (Camp)ExtremeRolesPlugin.GameDataStore.UpdateObject[
-                activateVentIndex];
-            ExtremeRolesPlugin.GameDataStore.UpdateObject.RemoveAt(
+            Camp camp = (Camp)ExtremeRolesPlugin.GameDataStore.GetUpdateObject(
                 activateVentIndex);
+            ExtremeRolesPlugin.GameDataStore.RemoveUpdateObjectAt(activateVentIndex);
 
             Vent newVent = camp.GetConvertedVent();
             var meryVent = ExtremeRolesPlugin.GameDataStore.GetCustomVent(

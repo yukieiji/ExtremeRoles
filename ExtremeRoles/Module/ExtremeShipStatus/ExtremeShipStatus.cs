@@ -45,7 +45,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
         public Dictionary<int, Version> PlayerVersion = new Dictionary<int, Version>();
 
         public HashSet<byte> DeadedAssassin = new HashSet<byte>();
-        public List<IUpdatableObject> UpdateObject = new List<IUpdatableObject>();
 
         public ShieldPlayerContainer ShildPlayer = new ShieldPlayerContainer();
         public PlayerHistory History = new PlayerHistory();
@@ -64,6 +63,8 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
         private List<IMeetingResetObject> resetObject = new List<IMeetingResetObject>();
         private bool isRoleSetUpEnd;
 
+        private GameObject status;
+
         public ExtremeShipStatus()
         {
             Initialize();
@@ -80,7 +81,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             Union.Clear();
 
             ClearMeetingResetObject();
-            clearUpdateObject();
 
             History.Clear();
 
@@ -98,9 +98,18 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 
             isRoleSetUpEnd = false;
 
+            if (this.status != null)
+            {
+                UnityEngine.Object.Destroy(this.status);
+                this.status = null;
+            }
+            this.status = new GameObject("ExtremeShipStatus");
+
             this.resetVent();
             this.resetWins();
             this.ResetVison();
+
+            this.resetUpdateObject();
         }
 
         public void AddDeadInfo(
@@ -492,17 +501,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
                     roleData.Add(gameControlId, addData);
                 }
             }
-        }
-
-        private void clearUpdateObject()
-        {
-            foreach (var updateObject in UpdateObject)
-            {
-                updateObject.Clear();
-            }
-
-            UpdateObject.Clear();
-
         }
 
         public sealed class DeadInfo
