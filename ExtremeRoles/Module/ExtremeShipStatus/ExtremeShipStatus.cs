@@ -4,40 +4,10 @@ using System.Linq;
 
 using UnityEngine;
 
-using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.SpecialWinChecker;
-using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Performance.Il2Cpp;
-
 namespace ExtremeRoles.Module.ExtremeShipStatus
 {
     public sealed partial class ExtremeShipStatus
     {
-        public enum PlayerStatus
-        {
-            Alive = 0,
-            Exiled,
-            Dead,
-            Killed,
-
-            Suicide,
-            MissShot,
-            Retaliate,
-            Departure,
-            Martyrdom,
-
-            Explosion,
-
-            Assassinate,
-            DeadAssassinate,
-            Surrender,
-            Zombied,
-
-            Disconnected,
-        }
-
         public Dictionary<int, Version> PlayerVersion = new Dictionary<int, Version>();
 
         public HashSet<byte> DeadedAssassin = new HashSet<byte>();

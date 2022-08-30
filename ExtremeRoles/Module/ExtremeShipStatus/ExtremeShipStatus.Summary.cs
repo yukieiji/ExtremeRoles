@@ -7,6 +7,29 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 {
     public sealed partial class ExtremeShipStatus
     {
+        public enum PlayerStatus
+        {
+            Alive = 0,
+            Exiled,
+            Dead,
+            Killed,
+
+            Suicide,
+            MissShot,
+            Retaliate,
+            Departure,
+            Martyrdom,
+
+            Explosion,
+
+            Assassinate,
+            DeadAssassinate,
+            Surrender,
+            Zombied,
+
+            Disconnected,
+        }
+
         public List<PlayerSummary> FinalSummary => this.finalSummary;
         private List<PlayerSummary> finalSummary = new List<PlayerSummary>();
 
