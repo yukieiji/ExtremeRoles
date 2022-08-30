@@ -38,8 +38,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             Disconnected,
         }
 
-        public bool IsRoleSetUpEnd => isRoleSetUpEnd;
-
         public List<PlayerSummary> FinalSummary = new List<PlayerSummary>();
         public Dictionary<byte, DeadInfo> DeadPlayerInfo = new Dictionary<byte, DeadInfo>();
         public Dictionary<int, Version> PlayerVersion = new Dictionary<int, Version>();
@@ -59,8 +57,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
         public bool AssassinateMarin = false;
         public byte ExiledAssassinId = byte.MaxValue;
         public byte IsMarinPlayerId = byte.MaxValue;
-
-        private bool isRoleSetUpEnd;
 
         private GameObject status;
 
@@ -100,6 +96,8 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             this.resetVent();
             this.resetWins();
             this.ResetVison();
+
+            this.resetRoleAssign();
 
             this.ClearMeetingResetObject();
 
@@ -235,10 +233,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
                     CompletedTask = EndReason == GameOverReason.HumansByTask ? totalTask : completedTask,
                 });
 
-        }
-        public void RoleSetUpEnd()
-        {
-            isRoleSetUpEnd = true;
         }
 
         public PlayerStatistics CreateStatistics()

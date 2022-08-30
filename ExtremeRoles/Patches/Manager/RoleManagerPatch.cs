@@ -89,7 +89,7 @@ namespace ExtremeRoles.Patches.Manager
             }
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCOperator.SetRoleToAllPlayer(roleList);
-            ExtremeRolesPlugin.GameDataStore.RoleSetUpEnd();
+            ExtremeRolesPlugin.GameDataStore.SwitchRoleAssignToEnd();
             roleList.Clear();
         }
 

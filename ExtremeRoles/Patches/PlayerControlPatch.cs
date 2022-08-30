@@ -477,7 +477,7 @@ namespace ExtremeRoles.Patches
                         }
                     }
                     RPCOperator.SetRoleToAllPlayer(assignData);
-                    ExtremeRolesPlugin.GameDataStore.RoleSetUpEnd();
+                    ExtremeRolesPlugin.GameDataStore.SwitchRoleAssignToEnd();
                     break;
                 case RPCOperator.Command.FixLightOff:
                     RPCOperator.FixLightOff();
