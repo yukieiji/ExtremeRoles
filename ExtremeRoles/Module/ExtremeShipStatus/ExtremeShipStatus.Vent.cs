@@ -2,6 +2,7 @@
 using System.Linq;
 
 using UnityEngine;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module.ExtremeShipStatus
@@ -64,8 +65,8 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
                 switch (type)
                 {
                     case CustomVentType.MeryVent:
-                        img = Resources.Loader.CreateSpriteFromResources(
-                            string.Format(Resources.Path.MeryCustomVentAnime, index), 125f);
+                        img = Loader.CreateSpriteFromResources(
+                            string.Format(Path.MeryCustomVentAnime, index), 125f);
                         break;
                     default:
                         return null;
