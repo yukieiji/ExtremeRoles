@@ -7,6 +7,7 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour
 {
+    [Il2CppRegister]
     public sealed class BakeryUnion : MonoBehaviour
     {
         private bool isChangeCooking = false;
