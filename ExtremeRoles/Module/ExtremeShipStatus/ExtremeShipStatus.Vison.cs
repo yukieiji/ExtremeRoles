@@ -1,17 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using UnityEngine;
-
-using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.SpecialWinChecker;
-using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Performance.Il2Cpp;
-
-namespace ExtremeRoles.Module.ExtremeShipStatus
+﻿namespace ExtremeRoles.Module.ExtremeShipStatus
 {
     public sealed partial class ExtremeShipStatus
     {
