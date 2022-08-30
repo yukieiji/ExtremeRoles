@@ -3,6 +3,7 @@
 using UnityEngine;
 
 using ExtremeRoles.Module.Interface;
+using UnhollowerBaseLib.Attributes;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour
 {
@@ -16,6 +17,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             updateObject.Clear();
         }
 
+        [HideFromIl2Cpp]
         public void AddObject(IUpdatableObject obj)
         {
             updateObject.Add(obj);
@@ -27,6 +29,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             updateObject.RemoveAt(index);
         }
 
+        [HideFromIl2Cpp]
         public void RemoveObject(IUpdatableObject obj)
         {
             obj.Clear();
