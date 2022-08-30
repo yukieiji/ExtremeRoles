@@ -60,7 +60,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
         public byte ExiledAssassinId = byte.MaxValue;
         public byte IsMarinPlayerId = byte.MaxValue;
 
-        private List<IMeetingResetObject> resetObject = new List<IMeetingResetObject>();
         private bool isRoleSetUpEnd;
 
         private GameObject status;
@@ -416,20 +415,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
         {
             if (!DeadPlayerInfo.ContainsKey(playerId)) { return; }
             DeadPlayerInfo[playerId].Reason = newReason;
-        }
-
-        public void AddMeetingResetObject(
-            IMeetingResetObject resetObject)
-        {
-            this.resetObject.Add(resetObject);
-        }
-        public void ClearMeetingResetObject()
-        {
-            foreach (var clerObject in resetObject)
-            {
-                clerObject.Clear();
-            }
-            resetObject.Clear();
         }
 
         private void checkMultiAssignedServant(
