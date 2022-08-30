@@ -184,10 +184,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     new List<byte>
                     {
                         player,
-                        (byte)GameDataContainer.PlayerStatus.Explosion
+                        (byte)ExtremeShipStatus.PlayerStatus.Explosion
                     });
                 ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
-                    player, GameDataContainer.PlayerStatus.Explosion);
+                    player, ExtremeShipStatus.PlayerStatus.Explosion);
 
                 if (this.isShowKillLog)
                 {

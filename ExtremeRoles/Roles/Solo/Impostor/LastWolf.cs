@@ -73,11 +73,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             if (lightOn)
             {
-                ExtremeRolesPlugin.GameDataStore.CurVison = GameDataContainer.ForceVisionType.None;
+                ExtremeRolesPlugin.GameDataStore.CurVison = ExtremeShipStatus.ForceVisionType.None;
             }
             else
             {
-                ExtremeRolesPlugin.GameDataStore.CurVison = GameDataContainer.ForceVisionType.LastWolfLightOff;
+                ExtremeRolesPlugin.GameDataStore.CurVison = ExtremeShipStatus.ForceVisionType.LastWolfLightOff;
             }
         }
 
@@ -96,7 +96,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool IsAbilityUse() => 
             this.IsCommonUse() &&
-            ExtremeRolesPlugin.GameDataStore.CurVison == GameDataContainer.ForceVisionType.None;
+            ExtremeRolesPlugin.GameDataStore.CurVison == ExtremeShipStatus.ForceVisionType.None;
 
         public void RoleAbilityResetOnMeetingStart()
         {

@@ -222,7 +222,7 @@ namespace ExtremeRoles
         public static void ReplaceDeadReason(byte playerId, byte reason)
         {
             ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
-                playerId, (Module.GameDataContainer.PlayerStatus)reason);
+                playerId, (Module.ExtremeShipStatus.PlayerStatus)reason);
         }
 
         public static void CustomVentUse(

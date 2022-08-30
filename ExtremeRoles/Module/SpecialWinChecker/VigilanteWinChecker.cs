@@ -16,7 +16,7 @@ namespace ExtremeRoles.Module.SpecialWinChecker
         { }
 
         public bool IsWin(
-            GameDataContainer.PlayerStatistics statistics)
+            ExtremeShipStatus.PlayerStatistics statistics)
         {
             int heroNum = 0;
             int villanNum = 0;

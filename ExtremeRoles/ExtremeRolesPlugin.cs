@@ -23,7 +23,7 @@ namespace ExtremeRoles
         public Harmony Harmony { get; } = new Harmony(Id);
 
         public static ExtremeRolesPlugin Instance;
-        public static GameDataContainer GameDataStore = new GameDataContainer();
+        public static ExtremeShipStatus GameDataStore = new ExtremeShipStatus();
 
         public static InfoOverlay Info = new InfoOverlay();
 

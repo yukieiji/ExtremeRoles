@@ -34,7 +34,7 @@ namespace ExtremeRoles.Patches
         {
             switch (ExtremeRolesPlugin.GameDataStore.CurVison)
             {
-                case GameDataContainer.ForceVisionType.LastWolfLightOff:
+                case ExtremeShipStatus.ForceVisionType.LastWolfLightOff:
                     if (ExtremeRoleManager.GetSafeCastedLocalPlayerRole<
                         Roles.Solo.Impostor.LastWolf>() == null)
                     {
@@ -206,7 +206,7 @@ namespace ExtremeRoles.Patches
 
         private static bool isCrewmateWin(
             ShipStatus __instance,
-            GameDataContainer.PlayerStatistics statistics)
+            ExtremeShipStatus.PlayerStatistics statistics)
         {
             if (statistics.TeamCrewmateAlive > 0 && 
                 statistics.TeamImpostorAlive == 0 && 
@@ -220,7 +220,7 @@ namespace ExtremeRoles.Patches
 
         private static bool isImpostorWin(
             ShipStatus __instance,
-            GameDataContainer.PlayerStatistics statistics)
+            ExtremeShipStatus.PlayerStatistics statistics)
         {
             bool isGameEnd = false;
             GameOverReason endReason = GameOverReason.HumansDisconnect;
@@ -269,7 +269,7 @@ namespace ExtremeRoles.Patches
 
         private static bool isNeutralAliveWin(
             ShipStatus __instance,
-            GameDataContainer.PlayerStatistics statistics)
+            ExtremeShipStatus.PlayerStatistics statistics)
         {
             if (statistics.SeparatedNeutralAlive.Count != 1) { return false; }
 
@@ -401,7 +401,7 @@ namespace ExtremeRoles.Patches
 
         private static bool isSpecialRoleWin(
             ShipStatus __instance,
-            GameDataContainer.PlayerStatistics statistics)
+            ExtremeShipStatus.PlayerStatistics statistics)
         {
             if (statistics.SpecialWinCheckRoleAlive.Count == 0) { return false; }
             foreach (var(id, checker) in statistics.SpecialWinCheckRoleAlive)

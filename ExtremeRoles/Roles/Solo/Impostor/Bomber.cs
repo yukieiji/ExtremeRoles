@@ -292,10 +292,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 new List<byte>
                 {
                     target.PlayerId,
-                    (byte)GameDataContainer.PlayerStatus.Explosion
+                    (byte)ExtremeShipStatus.PlayerStatus.Explosion
                 });
             ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
-                target.PlayerId, GameDataContainer.PlayerStatus.Explosion);
+                target.PlayerId, ExtremeShipStatus.PlayerStatus.Explosion);
         }
 
         private IEnumerator showText()

@@ -57,7 +57,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
                 rolePlayer.PlayerId,
-                GameDataContainer.PlayerStatus.Martyrdom);
+                ExtremeShipStatus.PlayerStatus.Martyrdom);
         }
 
         public void CreateAbility()

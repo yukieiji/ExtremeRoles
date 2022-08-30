@@ -695,10 +695,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     new List<byte>
                     {
                         rolePlayer.PlayerId,
-                        (byte)GameDataContainer.PlayerStatus.MissShot
+                        (byte)ExtremeShipStatus.PlayerStatus.MissShot
                     });
                 ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
-                    rolePlayer.PlayerId, GameDataContainer.PlayerStatus.MissShot);
+                    rolePlayer.PlayerId, ExtremeShipStatus.PlayerStatus.MissShot);
                 return false;
             }
             else if (targetPlayer.PlayerId == this.queenPlayerId)

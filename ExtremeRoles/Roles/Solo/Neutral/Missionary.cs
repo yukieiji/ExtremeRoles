@@ -183,10 +183,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 new List<byte>
                 {
                     targetPlayer.PlayerId,
-                    (byte)GameDataContainer.PlayerStatus.Departure
+                    (byte)ExtremeShipStatus.PlayerStatus.Departure
                 });
             ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
-                targetPlayer.PlayerId, GameDataContainer.PlayerStatus.Departure);
+                targetPlayer.PlayerId, ExtremeShipStatus.PlayerStatus.Departure);
             if (this.tellDeparture)
             {
                 rolePlayer.StartCoroutine(showText().WrapToIl2Cpp());

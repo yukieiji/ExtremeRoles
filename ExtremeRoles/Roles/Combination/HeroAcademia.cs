@@ -634,10 +634,10 @@ namespace ExtremeRoles.Roles.Combination
                     new List<byte>
                     {
                         rolePlayer.PlayerId,
-                        (byte)GameDataContainer.PlayerStatus.Retaliate
+                        (byte)ExtremeShipStatus.PlayerStatus.Retaliate
                     });
                 ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
-                    rolePlayer.PlayerId, GameDataContainer.PlayerStatus.Retaliate);
+                    rolePlayer.PlayerId, ExtremeShipStatus.PlayerStatus.Retaliate);
                 
                 return false;
             }

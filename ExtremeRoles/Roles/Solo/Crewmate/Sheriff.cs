@@ -60,7 +60,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 {
                     missShoot(
                         rolePlayer,
-                        GameDataContainer.PlayerStatus.Retaliate);
+                        ExtremeShipStatus.PlayerStatus.Retaliate);
                     return false;
                 }
                 else
@@ -74,7 +74,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
                 missShoot(
                     rolePlayer,
-                    GameDataContainer.PlayerStatus.MissShot);
+                    ExtremeShipStatus.PlayerStatus.MissShot);
                 return false;
             }
 
@@ -235,7 +235,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         private void missShoot(
             PlayerControl rolePlayer,
-            GameDataContainer.PlayerStatus replaceReson)
+            ExtremeShipStatus.PlayerStatus replaceReson)
         {
 
             RPCOperator.Call(

@@ -201,7 +201,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             Vent newVent = camp.GetConvertedVent();
             var meryVent = ExtremeRolesPlugin.GameDataStore.CustomVent.GetCustomVent(
-                GameDataContainer.CustomVentType.MeryVent);
+                ExtremeShipStatus.CustomVentType.MeryVent);
 
             int ventNum = meryVent.Count;
 
@@ -230,7 +230,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             newVent.Center = null;
 
             ExtremeRolesPlugin.GameDataStore.CustomVent.AddVent(
-                newVent, GameDataContainer.CustomVentType.MeryVent);
+                newVent, ExtremeShipStatus.CustomVentType.MeryVent);
 
             camp.Clear();
         }

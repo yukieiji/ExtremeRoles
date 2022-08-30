@@ -13,7 +13,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Module
 {
-    public sealed class GameDataContainer
+    public sealed class ExtremeShipStatus
     {
         public enum CustomVentType
         {
@@ -82,7 +82,7 @@ namespace ExtremeRoles.Module
 
         public ForceVisionType CurVison;
 
-        public GameDataContainer()
+        public ExtremeShipStatus()
         {
             this.Initialize();
         }

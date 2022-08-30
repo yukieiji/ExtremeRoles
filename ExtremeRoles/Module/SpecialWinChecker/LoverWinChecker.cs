@@ -42,7 +42,7 @@ namespace ExtremeRoles.Module.SpecialWinChecker
             this.aliveLover.Add(playerId);
         }
 
-        public bool IsWin(GameDataContainer.PlayerStatistics statistics)
+        public bool IsWin(ExtremeShipStatus.PlayerStatistics statistics)
         {
             int aliveNum = this.aliveLover.Count;
 
