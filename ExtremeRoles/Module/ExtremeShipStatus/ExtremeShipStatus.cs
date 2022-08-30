@@ -46,9 +46,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
         public PlayerHistory History = new PlayerHistory();
         public BakaryUnion Union = new BakaryUnion();
 
-
-        public int MeetingsCount = 0;
-
         public bool IsAssassinAssign = false;
         public bool AssassinMeetingTrigger = false;
         public bool AssassinateMarin = false;
@@ -72,12 +69,9 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 
             History.Clear();
 
-            MeetingsCount = 0;
-
             AssassinMeetingTrigger = false;
             AssassinateMarin = false;
             IsAssassinAssign = false;
-
 
             ExiledAssassinId = byte.MaxValue;
             IsMarinPlayerId = byte.MaxValue;
@@ -86,6 +80,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             
             this.resetDeadPlayerInfo();
             this.resetPlayerSummary();
+            this.resetMeetingCount();
             this.resetRoleAssign();
             this.resetVent();
             this.resetWins();

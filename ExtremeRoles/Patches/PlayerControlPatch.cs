@@ -110,7 +110,7 @@ namespace ExtremeRoles.Patches
             // Count meetings
             if (target == null)
             {
-                ++gameData.MeetingsCount;
+                gameData.IncreaseMeetingCount();
             }
         }
     }
