@@ -8,7 +8,7 @@ using HarmonyLib;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.InfoOverlay;
-
+using ExtremeRoles.Module.ExtremeShipStatus;
 
 namespace ExtremeRoles
 {

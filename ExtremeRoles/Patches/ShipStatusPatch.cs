@@ -4,12 +4,11 @@ using System.Runtime.CompilerServices;
 using Hazel;
 using HarmonyLib;
 using UnityEngine;
-
-using ExtremeRoles.Module;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.ExtremeShipStatus;
 
 namespace ExtremeRoles.Patches
 {

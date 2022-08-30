@@ -3,6 +3,7 @@ using System.Linq;
 using Hazel;
 
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.ExtremeShipStatus;
 
 namespace ExtremeRoles
 {
@@ -222,7 +223,7 @@ namespace ExtremeRoles
         public static void ReplaceDeadReason(byte playerId, byte reason)
         {
             ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
-                playerId, (Module.ExtremeShipStatus.PlayerStatus)reason);
+                playerId, (ExtremeShipStatus.PlayerStatus)reason);
         }
 
         public static void CustomVentUse(

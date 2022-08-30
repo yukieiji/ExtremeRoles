@@ -10,6 +10,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.ExtremeShipStatus;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {

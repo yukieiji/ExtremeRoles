@@ -10,7 +10,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-
+using ExtremeRoles.Module.ExtremeShipStatus;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {

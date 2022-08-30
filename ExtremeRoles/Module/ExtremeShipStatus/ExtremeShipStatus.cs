@@ -11,7 +11,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
-namespace ExtremeRoles.Module
+namespace ExtremeRoles.Module.ExtremeShipStatus
 {
     public sealed class ExtremeShipStatus
     {
@@ -25,7 +25,7 @@ namespace ExtremeRoles.Module
             Alive = 0,
             Exiled,
             Dead,
-            Killed, 
+            Killed,
 
             Suicide,
             MissShot,
@@ -49,7 +49,7 @@ namespace ExtremeRoles.Module
             LastWolfLightOff
         }
 
-        public bool IsRoleSetUpEnd => this.isRoleSetUpEnd;
+        public bool IsRoleSetUpEnd => isRoleSetUpEnd;
 
         public GameOverReason EndReason;
         public List<PlayerSummary> FinalSummary = new List<PlayerSummary>();
@@ -84,7 +84,7 @@ namespace ExtremeRoles.Module
 
         public ExtremeShipStatus()
         {
-            this.Initialize();
+            Initialize();
         }
 
         public void Initialize()
@@ -96,9 +96,9 @@ namespace ExtremeRoles.Module
             FinalSummary.Clear();
             DeadPlayerInfo.Clear();
             PlusWinner.Clear();
-            
+
             Union.Clear();
-            
+
             ClearMeetingResetObject();
             clearUpdateObject();
 
@@ -128,9 +128,9 @@ namespace ExtremeRoles.Module
             PlayerControl killer)
         {
 
-            if (this.DeadPlayerInfo.ContainsKey(
+            if (DeadPlayerInfo.ContainsKey(
                 deadPlayer.PlayerId)) { return; }
- 
+
             var newReson = PlayerStatus.Dead;
 
             switch (reason)
@@ -171,14 +171,14 @@ namespace ExtremeRoles.Module
             var (completedTask, totalTask) = Helper.GameSystem.GetTaskInfo(playerInfo);
             // IsImpostor
             var finalStatus = PlayerStatus.Alive;
-            if ((this.EndReason == GameOverReason.ImpostorBySabotage) &&
-                (!role.IsImpostor()))
+            if (EndReason == GameOverReason.ImpostorBySabotage &&
+                !role.IsImpostor())
             {
                 finalStatus = PlayerStatus.Dead;
             }
-            else if ((this.EndReason == (GameOverReason)RoleGameOverReason.AssassinationMarin))
+            else if (EndReason == (GameOverReason)RoleGameOverReason.AssassinationMarin)
             {
-                if (playerInfo.PlayerId == this.IsMarinPlayerId)
+                if (playerInfo.PlayerId == IsMarinPlayerId)
                 {
                     if (playerInfo.IsDead || playerInfo.Disconnected)
                     {
@@ -189,9 +189,9 @@ namespace ExtremeRoles.Module
                         finalStatus = PlayerStatus.Assassinate;
                     }
                 }
-                else if (playerInfo.PlayerId == this.ExiledAssassinId)
+                else if (playerInfo.PlayerId == ExiledAssassinId)
                 {
-                    if (this.DeadPlayerInfo.TryGetValue(
+                    if (DeadPlayerInfo.TryGetValue(
                         playerInfo.PlayerId, out DeadInfo info))
                     {
                         finalStatus = info.Reason;
@@ -202,7 +202,7 @@ namespace ExtremeRoles.Module
                     finalStatus = PlayerStatus.Surrender;
                 }
             }
-            else if ((this.EndReason == (GameOverReason)RoleGameOverReason.UmbrerBiohazard))
+            else if (EndReason == (GameOverReason)RoleGameOverReason.UmbrerBiohazard)
             {
                 if (role.Id != ExtremeRoleId.Umbrer &&
                     !playerInfo.IsDead &&
@@ -212,7 +212,7 @@ namespace ExtremeRoles.Module
                 }
                 else
                 {
-                    if (this.DeadPlayerInfo.TryGetValue(
+                    if (DeadPlayerInfo.TryGetValue(
                         playerInfo.PlayerId, out DeadInfo info))
                     {
                         finalStatus = info.Reason;
@@ -225,14 +225,14 @@ namespace ExtremeRoles.Module
             }
             else
             {
-                if (this.DeadPlayerInfo.TryGetValue(
+                if (DeadPlayerInfo.TryGetValue(
                         playerInfo.PlayerId, out DeadInfo info))
                 {
                     finalStatus = info.Reason;
                 }
             }
 
-            this.FinalSummary.Add(
+            FinalSummary.Add(
                 new PlayerSummary
                 {
                     PlayerName = playerInfo.PlayerName,
@@ -245,7 +245,7 @@ namespace ExtremeRoles.Module
         }
         public void RoleSetUpEnd()
         {
-            this.isRoleSetUpEnd = true;
+            isRoleSetUpEnd = true;
         }
 
         public PlayerStatistics CreateStatistics()
@@ -265,7 +265,7 @@ namespace ExtremeRoles.Module
             Dictionary<int, IWinChecker> specialWinCheckRoleAlive = new Dictionary<
                 int, IWinChecker>();
 
-            foreach (GameData.PlayerInfo playerInfo in 
+            foreach (GameData.PlayerInfo playerInfo in
                 GameData.Instance.AllPlayers.GetFastEnumerator())
             {
                 if (playerInfo.Disconnected) { continue; }
@@ -282,7 +282,7 @@ namespace ExtremeRoles.Module
 
                 int gameControlId = role.GameControlId;
 
-                if (role.Id == ExtremeRoleId.Assassin && 
+                if (role.Id == ExtremeRoleId.Assassin &&
                     role.IsImpostor())
                 {
                     var assassin = role as Roles.Combination.Assassin;
@@ -356,7 +356,7 @@ namespace ExtremeRoles.Module
                                     NeutralSeparateTeam.Yandere);
                                 break;
                             case ExtremeRoleId.Vigilante:
-                                if (((Roles.Combination.Vigilante)role).Condition == 
+                                if (((Roles.Combination.Vigilante)role).Condition ==
                                     Roles.Combination.Vigilante.VigilanteCondition.NewEnemyNeutralForTheShip)
                                 {
                                     addNeutralTeams(
@@ -421,8 +421,8 @@ namespace ExtremeRoles.Module
         public void ReplaceDeadReason(
             byte playerId, PlayerStatus newReason)
         {
-            if (!this.DeadPlayerInfo.ContainsKey(playerId)) { return; }
-            this.DeadPlayerInfo[playerId].Reason = newReason;
+            if (!DeadPlayerInfo.ContainsKey(playerId)) { return; }
+            DeadPlayerInfo[playerId].Reason = newReason;
         }
 
         public void AddMeetingResetObject(
@@ -432,11 +432,11 @@ namespace ExtremeRoles.Module
         }
         public void ClearMeetingResetObject()
         {
-            foreach (var clerObject in this.resetObject)
-            { 
+            foreach (var clerObject in resetObject)
+            {
                 clerObject.Clear();
             }
-            this.resetObject.Clear();
+            resetObject.Clear();
         }
 
         private void checkMultiAssignedServant(
@@ -515,12 +515,12 @@ namespace ExtremeRoles.Module
 
         private void clearUpdateObject()
         {
-            foreach(var updateObject in this.UpdateObject)
+            foreach (var updateObject in UpdateObject)
             {
                 updateObject.Clear();
             }
 
-            this.UpdateObject.Clear();
+            UpdateObject.Clear();
 
         }
 
@@ -563,7 +563,7 @@ namespace ExtremeRoles.Module
 
             public ShieldPlayerContainer()
             {
-                this.Clear();
+                Clear();
             }
 
             public void Clear()
@@ -575,18 +575,18 @@ namespace ExtremeRoles.Module
             {
                 shield.Add((rolePlayerId, targetPlayerId));
             }
-            
+
             public void Remove(byte removeRolePlayerId)
             {
                 List<(byte, byte)> remove = new List<(byte, byte)>();
 
-                foreach (var(rolePlayerId, targetPlayerId) in shield)
+                foreach (var (rolePlayerId, targetPlayerId) in shield)
                 {
                     if (rolePlayerId != removeRolePlayerId) { continue; }
                     remove.Add((rolePlayerId, targetPlayerId));
                 }
 
-                foreach(var val in remove)
+                foreach (var val in remove)
                 {
                     shield.Remove(val);
                 }
@@ -621,20 +621,20 @@ namespace ExtremeRoles.Module
 
             public PlayerHistory()
             {
-                this.Clear();
+                Clear();
             }
 
             public void Enqueue(PlayerControl player)
             {
-                if (!this.init || this.BlockAddHistory) { return; }
+                if (!init || BlockAddHistory) { return; }
 
-                int overflow = this.history.Count - this.size;
+                int overflow = history.Count - size;
                 for (int i = 0; i < overflow; ++i)
                 {
-                    this.history.Dequeue();
+                    history.Dequeue();
                 }
 
-                this.history.Enqueue(
+                history.Enqueue(
                     (
                         player.transform.position,
                         player.CanMove,
@@ -646,27 +646,27 @@ namespace ExtremeRoles.Module
 
             public void Clear()
             {
-                this.BlockAddHistory = false;
+                BlockAddHistory = false;
                 DataClear();
-                this.init = false;
-                this.size = 0;
+                init = false;
+                size = 0;
             }
 
             public void DataClear()
             {
-                this.history.Clear();
+                history.Clear();
             }
 
             public void Initialize(float historySecond)
             {
-                this.size = (int)Mathf.Round(historySecond / Time.fixedDeltaTime);
-                this.init = true;
+                size = (int)Mathf.Round(historySecond / Time.fixedDeltaTime);
+                init = true;
             }
 
             public IEnumerator<
-                (Vector3, bool, bool, bool)> GetAllHistory() => this.history.Reverse().GetEnumerator();
+                (Vector3, bool, bool, bool)> GetAllHistory() => history.Reverse().GetEnumerator();
 
-            public int GetSize() => this.size;
+            public int GetSize() => size;
         }
 
         public sealed class CustomVentContainer
@@ -677,7 +677,7 @@ namespace ExtremeRoles.Module
 
             public CustomVentContainer()
             {
-                this.Clear();
+                Clear();
             }
 
             public void Clear()
@@ -694,17 +694,17 @@ namespace ExtremeRoles.Module
                 var allVents = CachedShipStatus.Instance.AllVents.ToList();
                 allVents.Add(newVent);
                 CachedShipStatus.Instance.AllVents = allVents.ToArray();
-                if (this.addVent.ContainsKey(type))
+                if (addVent.ContainsKey(type))
                 {
-                    this.addVent[type].Add(newVent);
+                    addVent[type].Add(newVent);
                 }
                 else
                 {
                     var ventList = new List<Vent>();
                     ventList.Add(newVent);
-                    this.addVent.Add(type, ventList);
+                    addVent.Add(type, ventList);
                 }
-                if (!this.ventAnime.ContainsKey(type))
+                if (!ventAnime.ContainsKey(type))
                 {
                     ventAnime.Add(type, new Sprite[18]);
                 }
@@ -714,9 +714,9 @@ namespace ExtremeRoles.Module
 
             public List<Vent> GetCustomVent(CustomVentType type)
             {
-                if (this.addVent.ContainsKey(type))
+                if (addVent.ContainsKey(type))
                 {
-                    return this.addVent[type];
+                    return addVent[type];
                 }
                 return new List<Vent>();
             }
@@ -724,7 +724,7 @@ namespace ExtremeRoles.Module
             public Sprite GetVentSprite(int ventId, int index)
             {
 
-                if (!this.ventType.ContainsKey(ventId)) { return null; }
+                if (!ventType.ContainsKey(ventId)) { return null; }
 
                 CustomVentType type = ventType[ventId];
                 Sprite img = ventAnime[type][index];
@@ -750,7 +750,7 @@ namespace ExtremeRoles.Module
                 }
             }
 
-            public bool IsCustomVent(int ventId) => this.ventType.ContainsKey(ventId);
+            public bool IsCustomVent(int ventId) => ventType.ContainsKey(ventId);
         }
 
         public sealed class BakaryUnion
@@ -761,31 +761,31 @@ namespace ExtremeRoles.Module
             private float goodTime = 0.0f;
             private float badTime = 0.0f;
             private bool isUnion = false;
-            private HashSet<byte> aliveBakary = new HashSet<byte> ();
+            private HashSet<byte> aliveBakary = new HashSet<byte>();
 
             public BakaryUnion()
             {
-                this.Clear();
+                Clear();
             }
 
             public bool IsEstablish()
             {
-                this.updateBakaryAlive();
-                return this.aliveBakary.Count != 0;
+                updateBakaryAlive();
+                return aliveBakary.Count != 0;
             }
 
             public string GetBreadBakingCondition()
             {
-                if (!this.isChangeCooking)
+                if (!isChangeCooking)
                 {
                     return Helper.Translation.GetString("goodBread");
                 }
 
-                if (this.timer < this.goodTime)
+                if (timer < goodTime)
                 {
                     return Helper.Translation.GetString("rawBread");
                 }
-                else if (this.goodTime <= this.timer && this.timer < this.badTime)
+                else if (goodTime <= timer && timer < badTime)
                 {
                     return Helper.Translation.GetString("goodBread");
                 }
@@ -797,15 +797,15 @@ namespace ExtremeRoles.Module
 
             public void Clear()
             {
-                this.ResetTimer();
-                this.isUnion = false;
-                this.isChangeCooking = false;
-                this.aliveBakary.Clear();
+                ResetTimer();
+                isUnion = false;
+                isChangeCooking = false;
+                aliveBakary.Clear();
             }
 
             public void ResetTimer()
             {
-                this.timer = 0;
+                timer = 0;
             }
 
             public void SetCookingCondition(
@@ -813,31 +813,31 @@ namespace ExtremeRoles.Module
                 float badCookTime,
                 bool isChangeCooking)
             {
-                this.goodTime = goodCookTime;
-                this.badTime = badCookTime;
+                goodTime = goodCookTime;
+                badTime = badCookTime;
                 this.isChangeCooking = isChangeCooking;
             }
 
             public void Update()
             {
-                if (!this.isUnion) { this.organize(); }
-                if (this.aliveBakary.Count == 0) { return; }
+                if (!isUnion) { organize(); }
+                if (aliveBakary.Count == 0) { return; }
                 if (MeetingHud.Instance != null) { return; }
 
-                this.timer += Time.fixedDeltaTime;
+                timer += Time.fixedDeltaTime;
 
             }
 
             private void organize()
             {
-                this.isUnion = true;
+                isUnion = true;
                 foreach (var (playerId, role) in ExtremeRoleManager.GameRole)
                 {
                     if (role.Id == ExtremeRoleId.Bakary)
-                    { 
-                        this.aliveBakary.Add(playerId); 
+                    {
+                        aliveBakary.Add(playerId);
                     }
-                    
+
                     var multiAssignRole = role as MultiAssignRoleBase;
                     if (multiAssignRole != null)
                     {
@@ -845,7 +845,7 @@ namespace ExtremeRoles.Module
                         {
                             if (multiAssignRole.AnotherRole.Id == ExtremeRoleId.Bakary)
                             {
-                                this.aliveBakary.Add(playerId);
+                                aliveBakary.Add(playerId);
                             }
                         }
                     }
@@ -855,20 +855,20 @@ namespace ExtremeRoles.Module
 
             private void updateBakaryAlive()
             {
-                if (this.aliveBakary.Count == 0) { return; }
+                if (aliveBakary.Count == 0) { return; }
 
                 HashSet<byte> updatedBakary = new HashSet<byte>();
 
-                foreach (var playerId in this.aliveBakary)
+                foreach (var playerId in aliveBakary)
                 {
                     PlayerControl player = Helper.Player.GetPlayerControlById(playerId);
-                    if ((!player.Data.IsDead && !player.Data.Disconnected))
+                    if (!player.Data.IsDead && !player.Data.Disconnected)
                     {
                         updatedBakary.Add(playerId);
                     }
                 }
 
-                this.aliveBakary = updatedBakary;
+                aliveBakary = updatedBakary;
             }
         }
     }

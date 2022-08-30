@@ -12,6 +12,7 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 
 using BepInEx.IL2CPP.Utils.Collections;
+using ExtremeRoles.Module.ExtremeShipStatus;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {

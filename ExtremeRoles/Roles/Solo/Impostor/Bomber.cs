@@ -13,7 +13,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using BepInEx.IL2CPP.Utils.Collections;
-
+using ExtremeRoles.Module.ExtremeShipStatus;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
