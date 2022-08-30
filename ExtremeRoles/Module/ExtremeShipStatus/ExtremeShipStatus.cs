@@ -80,8 +80,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 
             Union.Clear();
 
-            ClearMeetingResetObject();
-
             History.Clear();
 
             AbilityManager.Clear();
@@ -98,9 +96,12 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 
             isRoleSetUpEnd = false;
 
+            // 以下リファクタ済み
             this.resetVent();
             this.resetWins();
             this.ResetVison();
+
+            this.ClearMeetingResetObject();
 
             if (!includeGameObject) { return; }
 
