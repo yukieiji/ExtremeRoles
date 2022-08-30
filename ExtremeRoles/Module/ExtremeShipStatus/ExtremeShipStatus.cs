@@ -67,10 +67,11 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 
         public ExtremeShipStatus()
         {
-            Initialize();
+            Initialize(false);
         }
 
-        public void Initialize()
+        public void Initialize(
+            bool includeGameObject = true)
         {
             DeadedAssassin.Clear();
             ShildPlayer.Clear();
@@ -98,16 +99,18 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 
             isRoleSetUpEnd = false;
 
+            this.resetVent();
+            this.resetWins();
+            this.ResetVison();
+
+            if (!includeGameObject) { return; }
+
             if (this.status != null)
             {
                 UnityEngine.Object.Destroy(this.status);
                 this.status = null;
             }
             this.status = new GameObject("ExtremeShipStatus");
-
-            this.resetVent();
-            this.resetWins();
-            this.ResetVison();
 
             this.resetUpdateObject();
         }
