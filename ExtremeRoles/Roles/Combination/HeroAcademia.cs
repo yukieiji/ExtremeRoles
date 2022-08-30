@@ -629,17 +629,10 @@ namespace ExtremeRoles.Roles.Combination
                     rolePlayer.PlayerId,
                     byte.MaxValue);
 
-                RPCOperator.Call(
-                    rolePlayer.NetId,
-                    RPCOperator.Command.ReplaceDeadReason,
-                    new List<byte>
-                    {
-                        rolePlayer.PlayerId,
-                        (byte)ExtremeShipStatus.PlayerStatus.Retaliate
-                    });
-                ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
-                    rolePlayer.PlayerId, ExtremeShipStatus.PlayerStatus.Retaliate);
-                
+                ExtremeRolesPlugin.GameDataStore.RpcReplaceDeadReason(
+                    rolePlayer.PlayerId,
+                    ExtremeShipStatus.PlayerStatus.Retaliate);
+
                 return false;
             }
 

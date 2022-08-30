@@ -39,7 +39,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
         }
 
         public List<PlayerSummary> FinalSummary = new List<PlayerSummary>();
-        public Dictionary<byte, DeadInfo> DeadPlayerInfo = new Dictionary<byte, DeadInfo>();
         public Dictionary<int, Version> PlayerVersion = new Dictionary<int, Version>();
 
         public HashSet<byte> DeadedAssassin = new HashSet<byte>();
@@ -72,7 +71,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             ShildPlayer.Clear();
 
             FinalSummary.Clear();
-            DeadPlayerInfo.Clear();
 
             Union.Clear();
 
@@ -90,16 +88,15 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             ExiledAssassinId = byte.MaxValue;
             IsMarinPlayerId = byte.MaxValue;
 
-            isRoleSetUpEnd = false;
-
             // 以下リファクタ済み
+            
+            this.resetDeadPlayerInfo();
+            this.resetRoleAssign();
             this.resetVent();
             this.resetWins();
-            this.ResetVison();
-
-            this.resetRoleAssign();
 
             this.ClearMeetingResetObject();
+            this.ResetVison();
 
             if (!includeGameObject) { return; }
 
@@ -111,47 +108,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             this.status = new GameObject("ExtremeShipStatus");
 
             this.resetUpdateObject();
-        }
-
-        public void AddDeadInfo(
-            PlayerControl deadPlayer,
-            DeathReason reason,
-            PlayerControl killer)
-        {
-
-            if (DeadPlayerInfo.ContainsKey(
-                deadPlayer.PlayerId)) { return; }
-
-            var newReson = PlayerStatus.Dead;
-
-            switch (reason)
-            {
-                case DeathReason.Exile:
-                    newReson = PlayerStatus.Exiled;
-                    break;
-                case DeathReason.Disconnect:
-                    newReson = PlayerStatus.Disconnected;
-                    break;
-                case DeathReason.Kill:
-                    newReson = PlayerStatus.Killed;
-                    if (killer.PlayerId == deadPlayer.PlayerId)
-                    {
-                        newReson = PlayerStatus.Suicide;
-                    }
-                    break;
-                default:
-                    break;
-
-            }
-
-            DeadPlayerInfo.Add(
-                deadPlayer.PlayerId,
-                new DeadInfo
-                {
-                    DeadTime = DateTime.UtcNow,
-                    Reason = newReson,
-                    Killer = killer
-                });
         }
 
         public void AddPlayerSummary(
@@ -182,7 +138,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
                 }
                 else if (playerInfo.PlayerId == ExiledAssassinId)
                 {
-                    if (DeadPlayerInfo.TryGetValue(
+                    if (deadPlayerInfo.TryGetValue(
                         playerInfo.PlayerId, out DeadInfo info))
                     {
                         finalStatus = info.Reason;
@@ -203,7 +159,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
                 }
                 else
                 {
-                    if (DeadPlayerInfo.TryGetValue(
+                    if (deadPlayerInfo.TryGetValue(
                         playerInfo.PlayerId, out DeadInfo info))
                     {
                         finalStatus = info.Reason;
@@ -216,7 +172,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             }
             else
             {
-                if (DeadPlayerInfo.TryGetValue(
+                if (deadPlayerInfo.TryGetValue(
                         playerInfo.PlayerId, out DeadInfo info))
                 {
                     finalStatus = info.Reason;
@@ -403,13 +359,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
                 SpecialWinCheckRoleAlive = specialWinCheckRoleAlive,
                 SeparatedNeutralAlive = neutralTeam,
             };
-        }
-
-        public void ReplaceDeadReason(
-            byte playerId, PlayerStatus newReason)
-        {
-            if (!DeadPlayerInfo.ContainsKey(playerId)) { return; }
-            DeadPlayerInfo[playerId].Reason = newReason;
         }
 
         private void checkMultiAssignedServant(

@@ -286,15 +286,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 target.PlayerId,
                 byte.MaxValue);
 
-            RPCOperator.Call(
-                rolePlayer.NetId,
-                RPCOperator.Command.ReplaceDeadReason,
-                new List<byte>
-                {
-                    target.PlayerId,
-                    (byte)ExtremeShipStatus.PlayerStatus.Explosion
-                });
-            ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
+            ExtremeRolesPlugin.GameDataStore.RpcReplaceDeadReason(
                 target.PlayerId, ExtremeShipStatus.PlayerStatus.Explosion);
         }
 

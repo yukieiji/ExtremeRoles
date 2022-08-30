@@ -179,15 +179,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 RPCOperator.UncheckedMurderPlayer(
                     rolePlayer.PlayerId, player, 0);
 
-                RPCOperator.Call(
-                    rolePlayer.NetId,
-                    RPCOperator.Command.ReplaceDeadReason,
-                    new List<byte>
-                    {
-                        player,
-                        (byte)ExtremeShipStatus.PlayerStatus.Explosion
-                    });
-                ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
+                ExtremeRolesPlugin.GameDataStore.RpcReplaceDeadReason(
                     player, ExtremeShipStatus.PlayerStatus.Explosion);
 
                 if (this.isShowKillLog)

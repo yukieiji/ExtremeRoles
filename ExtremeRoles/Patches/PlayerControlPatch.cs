@@ -1181,12 +1181,8 @@ namespace ExtremeRoles.Patches
     {
         public static void Postfix(PlayerControl __instance)
         {
-            if (ExtremeRolesPlugin.GameDataStore.DeadPlayerInfo.ContainsKey(
-                __instance.PlayerId))
-            {
-                ExtremeRolesPlugin.GameDataStore.DeadPlayerInfo.Remove(
-                    __instance.PlayerId);
-            }
+
+            ExtremeRolesPlugin.GameDataStore.RemoveDeadInfo(__instance.PlayerId);
 
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
             if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return; }

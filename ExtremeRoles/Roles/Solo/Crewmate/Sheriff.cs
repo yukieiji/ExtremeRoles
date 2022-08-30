@@ -253,19 +253,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 rolePlayer.PlayerId,
                 byte.MaxValue);
 
-            RPCOperator.Call(
-                rolePlayer.NetId,
-                RPCOperator.Command.ReplaceDeadReason,
-                new List<byte>
-                {
-                    rolePlayer.PlayerId,
-                    (byte)replaceReson
-                });
-
-            ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
-                rolePlayer.PlayerId, replaceReson);
+            ExtremeRolesPlugin.GameDataStore.RpcReplaceDeadReason(
+                rolePlayer.PlayerId,
+                replaceReson);
         }
-
 
         private void updateKillButton()
         {

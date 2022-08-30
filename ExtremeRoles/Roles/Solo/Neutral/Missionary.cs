@@ -178,16 +178,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 targetPlayer.PlayerId,
                 byte.MaxValue);
 
-            RPCOperator.Call(
-                rolePlayer.NetId,
-                RPCOperator.Command.ReplaceDeadReason,
-                new List<byte>
-                {
-                    targetPlayer.PlayerId,
-                    (byte)ExtremeShipStatus.PlayerStatus.Departure
-                });
-            ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
+            ExtremeRolesPlugin.GameDataStore.RpcReplaceDeadReason(
                 targetPlayer.PlayerId, ExtremeShipStatus.PlayerStatus.Departure);
+
             if (this.tellDeparture)
             {
                 rolePlayer.StartCoroutine(showText().WrapToIl2Cpp());

@@ -690,16 +690,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     rolePlayer.PlayerId,
                     byte.MaxValue);
 
-                RPCOperator.Call(
-                    rolePlayer.NetId,
-                    RPCOperator.Command.ReplaceDeadReason,
-                    new List<byte>
-                    {
-                        rolePlayer.PlayerId,
-                        (byte)ExtremeShipStatus.PlayerStatus.MissShot
-                    });
-                ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
+                ExtremeRolesPlugin.GameDataStore.RpcReplaceDeadReason(
                     rolePlayer.PlayerId, ExtremeShipStatus.PlayerStatus.MissShot);
+
                 return false;
             }
             else if (targetPlayer.PlayerId == this.queenPlayerId)
