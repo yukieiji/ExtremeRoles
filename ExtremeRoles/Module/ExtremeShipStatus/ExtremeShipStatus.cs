@@ -43,6 +43,8 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             {
                 UnityEngine.Object.Destroy(this.status);
                 this.status = null;
+                this.history = null;
+                this.union = null;
             }
             this.status = new GameObject("ExtremeShipStatus");
 
