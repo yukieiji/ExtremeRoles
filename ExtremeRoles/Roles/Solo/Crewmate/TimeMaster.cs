@@ -231,7 +231,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             // Screen Initialize
             if (rewindingTM.RewindScreen == null)
             {
-                rewindingTM.RewindScreen = UnityEngine.Object.Instantiate(
+                rewindingTM.RewindScreen = Object.Instantiate(
                      FastDestroyableSingleton<HudManager>.Instance.FullScreen,
                      FastDestroyableSingleton<HudManager>.Instance.transform);
                 rewindingTM.RewindScreen.transform.localPosition = new Vector3(0f, 0f, 20f);
@@ -268,9 +268,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 Patches.PlayerControlFixedUpdatePatch.PostionSetType.TimeMaster);
         }
 
-        private static void shieldOn(byte rolePlayerId)
+        private static void shieldOn(byte playerId)
         {
-            TimeMaster timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(rolePlayerId);
+            TimeMaster timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(playerId);
             
             if (timeMaster != null)
             {
@@ -278,18 +278,18 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
         }
 
-        private static void shieldOff(byte rolePlayerId)
+        private static void shieldOff(byte playerId)
         {
-            TimeMaster timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(rolePlayerId);
+            TimeMaster timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(playerId);
 
             if (timeMaster != null)
             {
                 timeMaster.IsShieldOn = false;
             }
         }
-        private static void resetMeeting(byte rolePlayerId)
+        private static void resetMeeting(byte playerId)
         {
-            TimeMaster timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(rolePlayerId);
+            TimeMaster timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(playerId);
 
             if (timeMaster == null) { return; }
             
@@ -300,7 +300,20 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 timeMaster.RewindScreen.enabled = false;
             }
 
+            CachedPlayerControl.LocalPlayer.PlayerControl.moveable = true;
+
+            rewindingTM = null;
+            skipFrame = 0;
+            historyFrame = 0;
+            frameCount = 0;
+            prevPos = Vector3.zero;
+            sefePos = Vector3.zero;
+            isNotSafePos = false;
+            rolePlayerId = byte.MinValue;
+            rewindingTrigger = false;
+
             ExtremeRolesPlugin.GameDataStore.History.BlockAddHistory = false;
+            Patches.PlayerControlFixedUpdatePatch.ResetPosionSetter();
         }
 
         public void CleanUp()
