@@ -151,7 +151,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (CachedShipStatus.Instance == null || 
                 GameData.Instance == null) { return; }
             if (!CachedShipStatus.Instance.enabled || 
-                ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
+                ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
 
             this.timer -= Time.deltaTime;
             if (this.timer > 0) { return; }
@@ -178,7 +178,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 targetPlayer.PlayerId,
                 byte.MaxValue);
 
-            ExtremeRolesPlugin.GameDataStore.RpcReplaceDeadReason(
+            ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
                 targetPlayer.PlayerId, ExtremeShipStatus.PlayerStatus.Departure);
 
             if (this.tellDeparture)

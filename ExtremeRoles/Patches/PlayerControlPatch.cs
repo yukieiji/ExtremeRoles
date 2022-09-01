@@ -103,14 +103,14 @@ namespace ExtremeRoles.Patches
             ExtremeRolesPlugin.Info.BlockShow(true);
             PlayerControlFixedUpdatePatch.ResetPosionSetter();
 
-            var gameData = ExtremeRolesPlugin.GameDataStore;
+            var state = ExtremeRolesPlugin.ShipState;
 
-            if (gameData.AssassinMeetingTrigger) { return; }
+            if (state.AssassinMeetingTrigger) { return; }
 
             // Count meetings
             if (target == null)
             {
-                gameData.IncreaseMeetingCount();
+                state.IncreaseMeetingCount();
             }
         }
     }
@@ -123,7 +123,7 @@ namespace ExtremeRoles.Patches
 
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
-            ExtremeRolesPlugin.GameDataStore.AddDeadInfo(
+            ExtremeRolesPlugin.ShipState.AddDeadInfo(
                 __instance, DeathReason.Exile, null);
 
             var role = ExtremeRoleManager.GameRole[__instance.PlayerId];
@@ -164,7 +164,7 @@ namespace ExtremeRoles.Patches
         public static void Postfix(PlayerControl __instance)
         {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) { return; }
-            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return; }
+            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
             if (CachedPlayerControl.LocalPlayer.PlayerId != __instance.PlayerId) { return; }
 
@@ -474,7 +474,7 @@ namespace ExtremeRoles.Patches
                         }
                     }
                     RPCOperator.SetRoleToAllPlayer(assignData);
-                    ExtremeRolesPlugin.GameDataStore.SwitchRoleAssignToEnd();
+                    ExtremeRolesPlugin.ShipState.SwitchRoleAssignToEnd();
                     break;
                 case RPCOperator.Command.FixLightOff:
                     RPCOperator.FixLightOff();
@@ -901,7 +901,7 @@ namespace ExtremeRoles.Patches
 
             if (!target.Data.IsDead) { return; }
 
-            ExtremeRolesPlugin.GameDataStore.AddDeadInfo(
+            ExtremeRolesPlugin.ShipState.AddDeadInfo(
                 target, DeathReason.Kill, __instance);
 
             byte targetPlayerId = target.PlayerId;
@@ -915,7 +915,7 @@ namespace ExtremeRoles.Patches
 
             if (ExtremeRoleManager.IsDisableWinCheckRole(role))
             {
-                ExtremeRolesPlugin.GameDataStore.SetDisableWinCheck(true);
+                ExtremeRolesPlugin.ShipState.SetDisableWinCheck(true);
             }
 
             var multiAssignRole = role as MultiAssignRoleBase;
@@ -931,7 +931,7 @@ namespace ExtremeRoles.Patches
                 }
             }
 
-            ExtremeRolesPlugin.GameDataStore.SetDisableWinCheck(false);
+            ExtremeRolesPlugin.ShipState.SetDisableWinCheck(false);
 
             var player = CachedPlayerControl.LocalPlayer;
 
@@ -1179,10 +1179,10 @@ namespace ExtremeRoles.Patches
         public static void Postfix(PlayerControl __instance)
         {
 
-            ExtremeRolesPlugin.GameDataStore.RemoveDeadInfo(__instance.PlayerId);
+            ExtremeRolesPlugin.ShipState.RemoveDeadInfo(__instance.PlayerId);
 
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
-            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return; }
+            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
 
             var ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
             if (ghostRole == null) { return; }

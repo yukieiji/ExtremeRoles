@@ -75,7 +75,7 @@ namespace ExtremeRoles.Patches.Button
                 }
 
 
-                var bodyGuard = ExtremeRolesPlugin.GameDataStore.ShildPlayer.GetBodyGuardPlayerId(
+                var bodyGuard = ExtremeRolesPlugin.ShipState.ShildPlayer.GetBodyGuardPlayerId(
                     target.PlayerId);
 
                 if (bodyGuard != byte.MaxValue)

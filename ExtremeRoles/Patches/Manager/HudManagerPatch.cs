@@ -60,7 +60,7 @@ namespace ExtremeRoles.Patches.Manager
             {
                 __instance.GameSettings.fontSize = 1.2f;
             }
-            if (ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
+            if (ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
             {
 
                 __instance.UseButton.ToggleVisible(false);
@@ -84,7 +84,7 @@ namespace ExtremeRoles.Patches.Manager
         public static void Postfix()
         {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) { return; }
-            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return; }
+            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
             SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
@@ -332,7 +332,7 @@ namespace ExtremeRoles.Patches.Manager
             }
             else if (role.IsImpostor())
             {
-                return ExtremeRolesPlugin.GameDataStore.IsAssassinAssign;
+                return ExtremeRolesPlugin.ShipState.IsAssassinAssign;
             }
 
             return false;

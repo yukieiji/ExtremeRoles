@@ -19,7 +19,7 @@ namespace ExtremeRoles.Patches.Controller
 			[HarmonyArgument(1)] ChatNoteTypes noteType)
 		{
 			
-			if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return true; }
+			if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
 			if (noteType == ChatNoteTypes.DidVote) { return false; }
 
 			return true;
@@ -47,7 +47,7 @@ namespace ExtremeRoles.Patches.Controller
 			var role = ExtremeRoleManager.GameRole[data.PlayerId];
 			var role2 = ExtremeRoleManager.GameRole[data2.PlayerId];
 
-			bool assassinMeeting = ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger;
+			bool assassinMeeting = ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger;
 
 			if (!assassinMeeting)
             {

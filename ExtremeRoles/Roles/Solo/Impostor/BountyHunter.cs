@@ -183,7 +183,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 return;
             }
             if (!CachedShipStatus.Instance.enabled ||
-                ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
+                ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
             {
                 return;
             }

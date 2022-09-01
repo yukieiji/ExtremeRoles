@@ -97,7 +97,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
 
 
-            var bodyGuard = ExtremeRolesPlugin.GameDataStore.ShildPlayer.GetBodyGuardPlayerId(
+            var bodyGuard = ExtremeRolesPlugin.ShipState.ShildPlayer.GetBodyGuardPlayerId(
                 prevTarget.PlayerId);
 
             PlayerControl newTarget = prevTarget;

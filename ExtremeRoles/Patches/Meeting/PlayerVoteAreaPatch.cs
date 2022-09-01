@@ -62,14 +62,14 @@ namespace ExtremeRoles.Patches.Meeting
 
 		public static bool Prefix(PlayerVoteArea __instance)
 		{
-			if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return true; }
+			if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return true; }
 			if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
-			var gameData = ExtremeRolesPlugin.GameDataStore;
+			var state = ExtremeRolesPlugin.ShipState;
 			var (buttonRole, anotherButtonRole) = ExtremeRoleManager.GetInterfaceCastedLocalRole<
 				IRoleMeetingButtonAbility>();
 
-			if (!gameData.AssassinMeetingTrigger)
+			if (!state.AssassinMeetingTrigger)
 			{
 				if (buttonRole != null && anotherButtonRole != null)
                 {
@@ -89,7 +89,7 @@ namespace ExtremeRoles.Patches.Meeting
 				}
 			}
 
-			if (CachedPlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.GameDataStore.ExiledAssassinId)
+			if (CachedPlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.ShipState.ExiledAssassinId)
 			{
 				return false;
 			}
@@ -307,7 +307,7 @@ namespace ExtremeRoles.Patches.Meeting
 			[HarmonyArgument(1)] bool isDead,
 			[HarmonyArgument(2)] bool isGuardian = false)
 		{
-			if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return true; }
+			if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
 
 
 			__instance.AmDead = false;

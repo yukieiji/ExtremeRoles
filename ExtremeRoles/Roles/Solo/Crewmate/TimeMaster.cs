@@ -170,7 +170,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             localPlayer.moveable = true;
 
-            ExtremeRolesPlugin.GameDataStore.History.ResetAfterRewind();
+            ExtremeRolesPlugin.ShipState.History.ResetAfterRewind();
 
             rewindState.Reset();
             rewindState = null;
@@ -267,7 +267,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         private static void startRewind(byte playerId)
         {
-            if (ExtremeRolesPlugin.GameDataStore.History.BlockAddHistory) { return; }
+            if (ExtremeRolesPlugin.ShipState.History.BlockAddHistory) { return; }
 
             PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
 
@@ -277,7 +277,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             timeMaster.isRewindTime = true;
 
-            ExtremeRolesPlugin.GameDataStore.History.SetAddHistoryBlock(true);
+            ExtremeRolesPlugin.ShipState.History.SetAddHistoryBlock(true);
 
             // Screen Initialize
             if (timeMaster.rewindScreen == null)
@@ -312,7 +312,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 $"History Size:{ExtremeRolesPlugin.GameDataStore.History.GetSize()}");
 
             Patches.PlayerControlFixedUpdatePatch.SetNewPosionSetter(
-                ExtremeRolesPlugin.GameDataStore.History.GetAllHistory(),
+                ExtremeRolesPlugin.ShipState.History.GetAllHistory(),
                 Patches.PlayerControlFixedUpdatePatch.PostionSetType.TimeMaster);
         }
 
@@ -454,7 +454,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         protected override void RoleSpecificInit()
         {
-            ExtremeRolesPlugin.GameDataStore.AddGlobalActionRole(this);
+            ExtremeRolesPlugin.ShipState.AddGlobalActionRole(this);
             this.RoleAbilityInit();
         }
     }

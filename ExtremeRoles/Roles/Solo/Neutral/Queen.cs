@@ -690,7 +690,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     rolePlayer.PlayerId,
                     byte.MaxValue);
 
-                ExtremeRolesPlugin.GameDataStore.RpcReplaceDeadReason(
+                ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
                     rolePlayer.PlayerId, ExtremeShipStatus.PlayerStatus.MissShot);
 
                 return false;

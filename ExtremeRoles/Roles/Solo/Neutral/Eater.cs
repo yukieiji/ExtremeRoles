@@ -367,7 +367,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 GameData.Instance == null ||
                 this.IsWin) { return; }
             if (!CachedShipStatus.Instance.enabled ||
-                ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
+                ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
 
             DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
             HashSet<byte> existDeadBodyPlayerId = new HashSet<byte>();

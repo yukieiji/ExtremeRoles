@@ -56,7 +56,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             if (rolePlayer.PlayerId == killerPlayer.PlayerId) { return; }
 
-            ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
+            ExtremeRolesPlugin.ShipState.ReplaceDeadReason(
                 rolePlayer.PlayerId,
                 ExtremeShipStatus.PlayerStatus.Martyrdom);
         }
@@ -103,7 +103,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 byte targetId = target.PlayerId;
 
-                if (!ExtremeRolesPlugin.GameDataStore.ShildPlayer.IsShielding(
+                if (!ExtremeRolesPlugin.ShipState.ShildPlayer.IsShielding(
                         CachedPlayerControl.LocalPlayer.PlayerId, targetId))
                 {
                     this.TargetPlayer = targetId;

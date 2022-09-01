@@ -124,7 +124,7 @@ namespace ExtremeRoles.Patches.MapModule
 
             bool isEnter = !CachedPlayerControl.LocalPlayer.PlayerControl.inVent;
 
-            if (ExtremeRolesPlugin.GameDataStore.IsCustomVent(
+            if (ExtremeRolesPlugin.ShipState.IsCustomVent(
                 __instance.Id))
             {
                 __instance.SetButtons(isEnter);

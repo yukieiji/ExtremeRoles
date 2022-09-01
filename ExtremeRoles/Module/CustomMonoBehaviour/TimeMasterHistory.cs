@@ -32,7 +32,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             { 
                 return; 
             }
-            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return; }
+            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
             if (!init || BlockAddHistory) { return; }
 
             PlayerControl player = CachedPlayerControl.LocalPlayer;

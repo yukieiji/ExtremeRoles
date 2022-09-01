@@ -310,7 +310,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             }
             else if (role.IsImpostor())
             {
-                return ExtremeRolesPlugin.GameDataStore.IsAssassinAssign;
+                return ExtremeRolesPlugin.ShipState.IsAssassinAssign;
             }
             return false;
         }

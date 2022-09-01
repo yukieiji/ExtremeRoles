@@ -86,7 +86,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
                     if (role.IsRemoveDeadBody)
                     {
-                        ExtremeRolesPlugin.GameDataStore.AddMeetingResetObject(
+                        ExtremeRolesPlugin.ShipState.AddMeetingResetObject(
                             new CrackTrace(array[i].gameObject.transform.position));
                         Object.Destroy(array[i].gameObject);
                     }

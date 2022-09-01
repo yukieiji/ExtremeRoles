@@ -253,7 +253,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 rolePlayer.PlayerId,
                 byte.MaxValue);
 
-            ExtremeRolesPlugin.GameDataStore.RpcReplaceDeadReason(
+            ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
                 rolePlayer.PlayerId,
                 replaceReson);
         }

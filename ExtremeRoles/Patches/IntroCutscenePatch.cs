@@ -151,7 +151,7 @@ namespace ExtremeRoles.Patches
             }
 
             // バニラの役職アサイン後すぐこの処理が走るので全員の役職が入るまで待機
-            while (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd)
+            while (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd)
             {
                 yield return null;
             }

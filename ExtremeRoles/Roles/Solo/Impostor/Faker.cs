@@ -72,7 +72,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             PlayerControl rolePlyaer = Player.GetPlayerControlById(rolePlayerId);
             PlayerControl targetPlyaer = Player.GetPlayerControlById(targetPlayerId);
 
-            ExtremeRolesPlugin.GameDataStore.AddMeetingResetObject(
+            ExtremeRolesPlugin.ShipState.AddMeetingResetObject(
                 new FakeDeadBody(
                     rolePlyaer,
                     targetPlyaer));            

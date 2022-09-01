@@ -149,7 +149,7 @@ namespace ExtremeRoles.Roles.Combination
 
         public override bool IsBlockShowMeetingRoleInfo()
         {
-            if (ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
+            if (ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
             { 
                 return true; 
             }
@@ -181,24 +181,24 @@ namespace ExtremeRoles.Roles.Combination
                 GetRoleOptionId(AssassinOption.CanSeeRoleBeforeFirstMeeting)].GetValue();
             this.IsFirstMeeting = true;
 
-            ExtremeRolesPlugin.GameDataStore.AddGlobalActionRole(this);
+            ExtremeRolesPlugin.ShipState.AddGlobalActionRole(this);
         }
 
         private void assassinMeetingTriggerOn(
             byte playerId)
         {
-            ExtremeRolesPlugin.GameDataStore.AssassinMeetingTriggerOn(
+            ExtremeRolesPlugin.ShipState.AssassinMeetingTriggerOn(
                 playerId);
         }
 
         public static void AddDead(byte playerId)
         {
-            ExtremeRolesPlugin.GameDataStore.AddDeadAssasin(playerId);
+            ExtremeRolesPlugin.ShipState.AddDeadAssasin(playerId);
         }
 
         public static void VoteFor(byte targetId)
         {
-            ExtremeRolesPlugin.GameDataStore.SetAssassnateTarget(targetId);
+            ExtremeRolesPlugin.ShipState.SetAssassnateTarget(targetId);
         }
         private bool isServant() => this.AnotherRole?.Id == ExtremeRoleId.Servant;
     }

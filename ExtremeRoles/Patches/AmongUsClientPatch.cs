@@ -60,7 +60,7 @@ namespace ExtremeRoles.Patches
         public static void Prefix([HarmonyArgument(0)] ref EndGameResult endGameResult)
         {
             ExtremeRolesPlugin.Info.HideInfoOverlay();
-            ExtremeRolesPlugin.GameDataStore.SetGameOverReason(endGameResult.GameOverReason);
+            ExtremeRolesPlugin.ShipState.SetGameOverReason(endGameResult.GameOverReason);
             if ((int)endGameResult.GameOverReason >= 10)
             {
                 endGameResult.GameOverReason = GameOverReason.ImpostorByKill;
@@ -73,7 +73,7 @@ namespace ExtremeRoles.Patches
                 (GameData.PlayerInfo, IRoleWinPlayerModifier)> ();
 
             var roleData = ExtremeRoleManager.GameRole;
-            var gameData = ExtremeRolesPlugin.GameDataStore;
+            var gameData = ExtremeRolesPlugin.ShipState;
 
             foreach (GameData.PlayerInfo playerInfo in GameData.Instance.AllPlayers.GetFastEnumerator())
             {
@@ -254,8 +254,7 @@ namespace ExtremeRoles.Patches
         {
             resetWinner();
 
-            var gameData = ExtremeRolesPlugin.GameDataStore;
-
+            int winGameControlId = ExtremeRolesPlugin.ShipState.WinGameControlId;
             foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
             {
 
@@ -265,8 +264,8 @@ namespace ExtremeRoles.Patches
 
                 if (role.Id == roleId)
                 {
-                    if ((gameData.WinGameControlId != int.MaxValue) &&
-                        (gameData.WinGameControlId == role.GameControlId))
+                    if ((winGameControlId != int.MaxValue) &&
+                        (winGameControlId == role.GameControlId))
                     {
                         addWinner(player);
                     }
@@ -277,8 +276,8 @@ namespace ExtremeRoles.Patches
                     {
                         if (role.Id == roleId)
                         {
-                            if ((gameData.WinGameControlId != int.MaxValue) &&
-                                (gameData.WinGameControlId == multiAssignRole.AnotherRole.GameControlId))
+                            if ((winGameControlId != int.MaxValue) &&
+                                (winGameControlId == multiAssignRole.AnotherRole.GameControlId))
                             {
                                 addWinner(player);
                             }
@@ -293,7 +292,7 @@ namespace ExtremeRoles.Patches
         {
             resetWinner();
 
-            var gameData = ExtremeRolesPlugin.GameDataStore;
+            int winGameControlId = ExtremeRolesPlugin.ShipState.WinGameControlId;
 
             foreach (var player in noWinner)
             {
@@ -309,8 +308,8 @@ namespace ExtremeRoles.Patches
                         addWinner(player);
                     }
                     else if (
-                        (gameData.WinGameControlId != int.MaxValue) &&
-                        (gameData.WinGameControlId == role.GameControlId))
+                        (winGameControlId != int.MaxValue) &&
+                        (winGameControlId == role.GameControlId))
                     {
                         addWinner(player);
                     }
@@ -326,8 +325,8 @@ namespace ExtremeRoles.Patches
                                 addWinner(player);
                             }
                             else if (
-                                (gameData.WinGameControlId != int.MaxValue) &&
-                                (gameData.WinGameControlId == multiAssignRole.AnotherRole.GameControlId))
+                                (winGameControlId != int.MaxValue) &&
+                                (winGameControlId == multiAssignRole.AnotherRole.GameControlId))
                             {
                                 addWinner(player);
                             }

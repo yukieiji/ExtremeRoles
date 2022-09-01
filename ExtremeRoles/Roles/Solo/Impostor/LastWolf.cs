@@ -73,11 +73,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             if (lightOn)
             {
-                ExtremeRolesPlugin.GameDataStore.ResetVison();
+                ExtremeRolesPlugin.ShipState.ResetVison();
             }
             else
             {
-                ExtremeRolesPlugin.GameDataStore.SetVison(
+                ExtremeRolesPlugin.ShipState.SetVison(
                     ExtremeShipStatus.ForceVisonType.LastWolfLightOff);
             }
         }
@@ -97,7 +97,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool IsAbilityUse() => 
             this.IsCommonUse() &&
-            !ExtremeRolesPlugin.GameDataStore.IsCustomVison();
+            !ExtremeRolesPlugin.ShipState.IsCustomVison();
 
         public void RoleAbilityResetOnMeetingStart()
         {

@@ -89,7 +89,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
 
 
-            var bodyGuard = ExtremeRolesPlugin.GameDataStore.ShildPlayer.GetBodyGuardPlayerId(
+            var bodyGuard = ExtremeRolesPlugin.ShipState.ShildPlayer.GetBodyGuardPlayerId(
                 targetId);
 
             PlayerControl prevTarget = target;

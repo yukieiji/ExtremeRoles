@@ -135,7 +135,7 @@ namespace ExtremeRoles
             Helper.Player.ResetTarget();
             Roles.ExtremeRoleManager.Initialize();
             GhostRoles.ExtremeGhostRoleManager.Initialize();
-            ExtremeRolesPlugin.GameDataStore.Initialize();
+            ExtremeRolesPlugin.ShipState.Initialize();
             ExtremeRolesPlugin.Info.ResetOverlays();
             
             // チェックポイントリセット
@@ -222,7 +222,7 @@ namespace ExtremeRoles
 
         public static void ReplaceDeadReason(byte playerId, byte reason)
         {
-            ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
+            ExtremeRolesPlugin.ShipState.ReplaceDeadReason(
                 playerId, (ExtremeShipStatus.PlayerStatus)reason);
         }
 
@@ -250,18 +250,18 @@ namespace ExtremeRoles
             Vent vent = CachedShipStatus.Instance.AllVents.FirstOrDefault(
                 (x) => x.Id == ventId);
 
-            var exShipStatus = ExtremeRolesPlugin.GameDataStore;
+            var state = ExtremeRolesPlugin.ShipState;
 
             hudManager.StartCoroutine(
                 Effects.Lerp(
                     0.6f, new System.Action<float>((p) => {
                         if (vent != null && vent.myRend != null)
                         {
-                            vent.myRend.sprite = exShipStatus.GetVentSprite(
+                            vent.myRend.sprite = state.GetVentSprite(
                                 ventId, (int)(p * 17));
                             if (p == 1f)
                             {
-                                vent.myRend.sprite = exShipStatus.GetVentSprite(
+                                vent.myRend.sprite = state.GetVentSprite(
                                     ventId, 0);
                             }
                         }
@@ -279,7 +279,7 @@ namespace ExtremeRoles
 
             HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
-            var exShipStatus = ExtremeRolesPlugin.GameDataStore;
+            var state = ExtremeRolesPlugin.ShipState;
 
             if (exShipStatus.IsCustomVent(ventId))
             {
@@ -290,11 +290,11 @@ namespace ExtremeRoles
                         0.6f, new System.Action<float>((p) => {
                             if (vent != null && vent.myRend != null)
                             {
-                                vent.myRend.sprite = exShipStatus.GetVentSprite(
+                                vent.myRend.sprite = state.GetVentSprite(
                                     ventId, (int)(p * 17));
                                 if (p == 1f)
                                 {
-                                    vent.myRend.sprite = exShipStatus.GetVentSprite(
+                                    vent.myRend.sprite = state.GetVentSprite(
                                         ventId, 0);
                                 }
                             }   
@@ -364,7 +364,7 @@ namespace ExtremeRoles
 
         public static void SetWinGameControlId(int id)
         {
-            ExtremeRolesPlugin.GameDataStore.SetWinControlId(id);
+            ExtremeRolesPlugin.ShipState.SetWinControlId(id);
         }
 
         public static void SetWinPlayer(List<byte> playerId)
@@ -373,7 +373,7 @@ namespace ExtremeRoles
             {
                 GameData.PlayerInfo player = GameData.Instance.GetPlayerById(id);
                 if (player == null) { continue; }
-                ExtremeRolesPlugin.GameDataStore.AddWinner(player);
+                ExtremeRolesPlugin.ShipState.AddWinner(player);
             }
         }
 
@@ -390,7 +390,7 @@ namespace ExtremeRoles
             int major, int minor,
             int build, int revision, int clientId)
         {
-            ExtremeRolesPlugin.GameDataStore.AddPlayerVersion(
+            ExtremeRolesPlugin.ShipState.AddPlayerVersion(
                 clientId, major, minor, build, revision);
         }
 
@@ -437,13 +437,13 @@ namespace ExtremeRoles
             byte playerId,
             byte targetPlayer)
         {
-            ExtremeRolesPlugin.GameDataStore.ShildPlayer.Add(
+            ExtremeRolesPlugin.ShipState.ShildPlayer.Add(
                 playerId, targetPlayer);
         }
 
         public static void BodyGuardResetShield(byte playerId)
         {
-            ExtremeRolesPlugin.GameDataStore.ShildPlayer.Remove(playerId);
+            ExtremeRolesPlugin.ShipState.ShildPlayer.Remove(playerId);
         }
 
         public static void TimeMasterAbility(ref MessageReader reader)

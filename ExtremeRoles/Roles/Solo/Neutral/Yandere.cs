@@ -229,7 +229,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
 
             if (!CachedShipStatus.Instance.enabled ||
-                ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
+                ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
             {
                 return;
             }

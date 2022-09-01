@@ -89,7 +89,7 @@ namespace ExtremeRoles.Patches.Manager
             }
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCOperator.SetRoleToAllPlayer(roleList);
-            ExtremeRolesPlugin.GameDataStore.SwitchRoleAssignToEnd();
+            ExtremeRolesPlugin.ShipState.SwitchRoleAssignToEnd();
             roleList.Clear();
         }
 
@@ -650,7 +650,7 @@ namespace ExtremeRoles.Patches.Manager
         public static bool Prefix([HarmonyArgument(0)] PlayerControl player)
         {
             if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
-            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return true; }
+            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return true; }
 
             var role = ExtremeRoleManager.GameRole[player.PlayerId];
 
@@ -669,7 +669,7 @@ namespace ExtremeRoles.Patches.Manager
         public static void Postfix([HarmonyArgument(0)] PlayerControl player)
         {
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
-            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return; }
+            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
             ExtremeGhostRoleManager.AssignGhostRoleToPlayer(player);
         }
     }

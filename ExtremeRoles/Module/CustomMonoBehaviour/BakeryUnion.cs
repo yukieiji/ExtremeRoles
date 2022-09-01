@@ -29,7 +29,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         {
             if (AmongUsClient.Instance.GameState != 
                 InnerNet.InnerNetClient.GameStates.Started) { return; }
-            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return; }
+            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
 
             if (!isUnion) { organize(); }
             if (aliveBakary.Count == 0) { return; }

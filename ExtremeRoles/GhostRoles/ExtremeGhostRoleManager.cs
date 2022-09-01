@@ -421,7 +421,7 @@ namespace ExtremeRoles.GhostRoles
 
             if (isReport)
             {
-                ExtremeRolesPlugin.GameDataStore.AddGhostRoleAbilityReport(
+                ExtremeRolesPlugin.ShipState.AddGhostRoleAbilityReport(
                     callAbility);
             }
         }

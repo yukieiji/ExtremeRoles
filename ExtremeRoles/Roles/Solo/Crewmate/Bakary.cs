@@ -41,7 +41,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         protected override void RoleSpecificInit()
         {
-            ExtremeRolesPlugin.GameDataStore.AddGlobalActionRole(this);
+            ExtremeRolesPlugin.ShipState.AddGlobalActionRole(this);
         }
     }
 }

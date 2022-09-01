@@ -174,7 +174,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 CachedShipStatus.Instance == null ||
                 GameData.Instance == null) { return; }
             if (!CachedShipStatus.Instance.enabled ||
-                ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
+                ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
 
             this.timer -= Time.deltaTime;
             if (this.timer > 0) { return; }
@@ -239,7 +239,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                                 truePosition, vector.normalized,
                                 magnitude, Constants.ShipAndObjectsMask))
                         {
-                            var bodyGuard = ExtremeRolesPlugin.GameDataStore.ShildPlayer.GetBodyGuardPlayerId(
+                            var bodyGuard = ExtremeRolesPlugin.ShipState.ShildPlayer.GetBodyGuardPlayerId(
                                 @object.PlayerId);
 
                             var target = @object;
@@ -286,7 +286,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 target.PlayerId,
                 byte.MaxValue);
 
-            ExtremeRolesPlugin.GameDataStore.RpcReplaceDeadReason(
+            ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
                 target.PlayerId, ExtremeShipStatus.PlayerStatus.Explosion);
         }
 

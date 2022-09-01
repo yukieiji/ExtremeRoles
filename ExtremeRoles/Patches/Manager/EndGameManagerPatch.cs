@@ -92,7 +92,7 @@ namespace ExtremeRoles.Patches.Manager
                     poolablePlayer.cosmetics.nameText.transform.localPosition.y, -15f);
                 poolablePlayer.cosmetics.nameText.text = winningPlayerData.PlayerName;
 
-                foreach (var data in ExtremeRolesPlugin.GameDataStore.FinalSummary)
+                foreach (var data in ExtremeRolesPlugin.ShipState.FinalSummary)
                 {
                     if (data.PlayerName != winningPlayerData.PlayerName) { continue; }
                     poolablePlayer.cosmetics.nameText.text +=
@@ -123,7 +123,7 @@ namespace ExtremeRoles.Patches.Manager
             summaryText.AppendLine(Translation.GetString("summaryText"));
             summaryText.AppendLine(Translation.GetString("summaryInfo"));
 
-            var summaryData = ExtremeRolesPlugin.GameDataStore.FinalSummary;
+            var summaryData = ExtremeRolesPlugin.ShipState.FinalSummary;
 
             summaryData.Sort((x, y) =>
             {
@@ -249,9 +249,9 @@ namespace ExtremeRoles.Patches.Manager
 
             string bonusText = string.Empty;
 
-            var gameData = ExtremeRolesPlugin.GameDataStore;
+            var state = ExtremeRolesPlugin.ShipState;
 
-            switch (gameData.EndReason)
+            switch (state.EndReason)
             {
                 case GameOverReason.HumansByTask:
                 case GameOverReason.HumansByVote:
@@ -369,7 +369,7 @@ namespace ExtremeRoles.Patches.Manager
 
             if (OptionHolder.Ship.DisableNeutralSpecialForceEnd && winNeutral.Count != 0)
             {
-                switch (gameData.EndReason)
+                switch (state.EndReason)
                 {
                     case GameOverReason.HumansByTask:
                     case GameOverReason.HumansByVote:
@@ -404,7 +404,7 @@ namespace ExtremeRoles.Patches.Manager
                 winNeutral.Clear();
             }
 
-            foreach (var player in gameData.GetPlusWinner())
+            foreach (var player in state.GetPlusWinner())
             {
 
                 var role = ExtremeRoleManager.GameRole[player.PlayerId];

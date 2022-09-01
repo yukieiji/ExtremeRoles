@@ -369,7 +369,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 this.container == null) { return; }
             if (!CachedShipStatus.Instance.enabled) { return; }
 
-            if (ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd && !isFetch)
+            if (ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd && !isFetch)
             {
                 this.isFetch = true;
                 this.container.Fetch(this);

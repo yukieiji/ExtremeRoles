@@ -70,7 +70,7 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
                 }
                 if (this.reportAbility)
                 {
-                    ExtremeRolesPlugin.GameDataStore.AddGhostRoleAbilityReport(
+                    ExtremeRolesPlugin.ShipState.AddGhostRoleAbilityReport(
                         this.abilityType);
                 }
                 return true;

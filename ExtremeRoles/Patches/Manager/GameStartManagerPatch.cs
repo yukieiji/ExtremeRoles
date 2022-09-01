@@ -49,7 +49,7 @@ namespace ExtremeRoles.Patches.Manager
                         continue;
                     }
 
-                    if (!ExtremeRolesPlugin.GameDataStore.TryGetPlayerVersion(
+                    if (!ExtremeRolesPlugin.ShipState.TryGetPlayerVersion(
                         client.Id, out Version clientVer))
                     {
                         continueStart = false;
@@ -150,12 +150,12 @@ namespace ExtremeRoles.Patches.Manager
             if (!GameData.Instance) { return; }
 
             var localGameVersion = Assembly.GetExecutingAssembly().GetName().Version;
-            var exShipStatus = ExtremeRolesPlugin.GameDataStore;
+            var state = ExtremeRolesPlugin.ShipState;
 
             // ホスト以外
             if (!AmongUsClient.Instance.AmHost)
             {
-                if (!exShipStatus.TryGetPlayerVersion(
+                if (!state.TryGetPlayerVersion(
                     AmongUsClient.Instance.HostId, out Version hostVersion) ||
                     localGameVersion.CompareTo(hostVersion) != 0)
                 {
@@ -199,7 +199,7 @@ namespace ExtremeRoles.Patches.Manager
                 {
                     continue;
                 }
-                else if (!exShipStatus.TryGetPlayerVersion(client.Id, out Version clientVer))
+                else if (!state.TryGetPlayerVersion(client.Id, out Version clientVer))
                 {
                     blockStart = true;
                     message += string.Format(

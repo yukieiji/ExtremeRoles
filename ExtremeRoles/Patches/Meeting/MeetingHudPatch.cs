@@ -81,7 +81,7 @@ namespace ExtremeRoles.Patches.Meeting
             }
             else if (role.IsImpostor() && role.Id != ExtremeRoleId.Assassin)
             {
-                return ExtremeRolesPlugin.GameDataStore.IsAssassinAssign;
+                return ExtremeRolesPlugin.ShipState.IsAssassinAssign;
             }
             return false;
         }
@@ -95,9 +95,9 @@ namespace ExtremeRoles.Patches.Meeting
             MeetingHud __instance,
             [HarmonyArgument(0)] byte suspectStateIdx)
         {
-            if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return true; }
+            if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
 
-            if (CachedPlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.GameDataStore.ExiledAssassinId)
+            if (CachedPlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.ShipState.ExiledAssassinId)
             {
                 return false;
             }
@@ -130,11 +130,11 @@ namespace ExtremeRoles.Patches.Meeting
         public static bool Prefix(
             MeetingHud __instance)
         {
-            var gameData = ExtremeRolesPlugin.GameDataStore;
+            var state = ExtremeRolesPlugin.ShipState;
 
-            if (!gameData.IsRoleSetUpEnd) { return true; }
+            if (!state.IsRoleSetUpEnd) { return true; }
 
-            if (!gameData.AssassinMeetingTrigger)
+            if (!state.AssassinMeetingTrigger)
             {
                 normalMeetingVote(__instance);
             }
@@ -183,7 +183,7 @@ namespace ExtremeRoles.Patches.Meeting
                 for (int i = 0; i < instance.playerStates.Length; i++)
                 {
                     PlayerVoteArea playerVoteArea = instance.playerStates[i];
-                    if (playerVoteArea.TargetPlayerId == ExtremeRolesPlugin.GameDataStore.ExiledAssassinId)
+                    if (playerVoteArea.TargetPlayerId == ExtremeRolesPlugin.ShipState.ExiledAssassinId)
                     {
                         playerVoteArea.VotedFor = voteFor;
                     }
@@ -211,7 +211,7 @@ namespace ExtremeRoles.Patches.Meeting
 
             foreach (PlayerVoteArea playerVoteArea in instance.playerStates)
             {
-                if (playerVoteArea.TargetPlayerId == ExtremeRolesPlugin.GameDataStore.ExiledAssassinId)
+                if (playerVoteArea.TargetPlayerId == ExtremeRolesPlugin.ShipState.ExiledAssassinId)
                 {
                     isVoteEnd = playerVoteArea.DidVote;
                     voteFor = playerVoteArea.VotedFor;
@@ -349,14 +349,14 @@ namespace ExtremeRoles.Patches.Meeting
                 return false;
             }
 
-            if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return true; }
+            if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
 
 
             if (__instance.discussionTimer < (float)PlayerControl.GameOptions.DiscussionTime)
             {
                 return __result;
             }
-            if (CachedPlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.GameDataStore.ExiledAssassinId)
+            if (CachedPlayerControl.LocalPlayer.PlayerId != ExtremeRolesPlugin.ShipState.ExiledAssassinId)
             {
                 return __result;
             }
@@ -388,7 +388,7 @@ namespace ExtremeRoles.Patches.Meeting
             MeetingHud __instance)
         {
 
-            if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return true; }
+            if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
 
             if (ExtremeRoleManager.GetLocalPlayerRole().Id != ExtremeRoleId.Assassin)
             { 
@@ -422,7 +422,7 @@ namespace ExtremeRoles.Patches.Meeting
         {
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
-            if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
+            if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
             {
                 var player = CachedPlayerControl.LocalPlayer;
                 var hockRole = ExtremeRoleManager.GetLocalPlayerRole() as IRoleReportHock;
@@ -476,7 +476,7 @@ namespace ExtremeRoles.Patches.Meeting
             MeetingHud __instance)
         {
             ExtremeRolesPlugin.Info.ShowBlackBG();
-            ExtremeRolesPlugin.GameDataStore.ClearMeetingResetObject();
+            ExtremeRolesPlugin.ShipState.ClearMeetingResetObject();
             Helper.Player.ResetTarget();
 
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
@@ -525,7 +525,7 @@ namespace ExtremeRoles.Patches.Meeting
                 ghostRole.ReseOnMeetingStart();
             }
 
-            if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
+            if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
 
             FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
         }
@@ -579,13 +579,13 @@ namespace ExtremeRoles.Patches.Meeting
                 __instance.SkipVoteButton.gameObject.SetActive(false);
             }
 
-            if (ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
+            if (ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
             {
                 __instance.TitleText.text = Helper.Translation.GetString(
                     "whoIsMarine");
                 __instance.SkipVoteButton.gameObject.SetActive(false);
 
-                if (CachedPlayerControl.LocalPlayer.PlayerId == ExtremeRolesPlugin.GameDataStore.ExiledAssassinId ||
+                if (CachedPlayerControl.LocalPlayer.PlayerId == ExtremeRolesPlugin.ShipState.ExiledAssassinId ||
                     ExtremeRoleManager.GetLocalPlayerRole().IsImpostor())
                 {
                     FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(true);
@@ -630,7 +630,7 @@ namespace ExtremeRoles.Patches.Meeting
 
         public static void Postfix(MeetingHud __instance)
         {
-            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return; }
+            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
 
             bool commActive = false;
 
@@ -680,7 +680,7 @@ namespace ExtremeRoles.Patches.Meeting
             [HarmonyArgument(0)] Il2CppStructArray<MeetingHud.VoterState> states)
         {
 
-            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return true; }
+            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return true; }
 
             __instance.TitleText.text = 
                 FastDestroyableSingleton<TranslationController>.Instance.GetString(
@@ -769,7 +769,7 @@ namespace ExtremeRoles.Patches.Meeting
     {
         public static bool Prefix(MeetingHud __instance)
         {
-            if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return true; }
+            if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
 
             if (AmongUsClient.Instance.AmHost)
             {

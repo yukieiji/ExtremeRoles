@@ -95,7 +95,7 @@ namespace ExtremeRoles.GhostRoles.Impostor
             foreach (Vent vent in CachedShipStatus.Instance.AllVents)
             {
                 if (vent == null) { continue; }
-                if (ExtremeRolesPlugin.GameDataStore.IsCustomVent(vent.Id) &&
+                if (ExtremeRolesPlugin.ShipState.IsCustomVent(vent.Id) &&
                     !vent.gameObject.active)
                 {
                     continue;

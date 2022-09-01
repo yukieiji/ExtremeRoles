@@ -76,7 +76,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     pulsWinner.Clear();
                     winner.Clear();
                     winner.Add(new WinningPlayerData(rolePlayerInfo));
-                    ExtremeRolesPlugin.GameDataStore.SetGameOverReason(
+                    ExtremeRolesPlugin.ShipState.SetGameOverReason(
                         (GameOverReason)RoleGameOverReason.YokoAllDeceive);
                     break;
             }
@@ -142,7 +142,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             
             if (!CachedShipStatus.Instance.enabled ||
                 MeetingHud.Instance != null ||
-                ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
+                ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
 
             if (Minigame.Instance) { return; }
 

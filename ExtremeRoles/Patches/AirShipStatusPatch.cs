@@ -7,7 +7,7 @@ namespace ExtremeRoles.Patches
     {
         public static bool Prefix(AirshipStatus __instance)
         {
-            return !ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger;
+            return !ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger;
         }
 	}
 }
