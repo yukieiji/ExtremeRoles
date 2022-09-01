@@ -363,6 +363,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public void Update(PlayerControl rolePlayer)
         {
             if (MeetingHud.Instance != null ||
+                ExileController.Instance != null ||
                 CachedShipStatus.Instance == null ||
                 this.IsWin ||
                 GameData.Instance == null ||
