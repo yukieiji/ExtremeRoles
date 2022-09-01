@@ -38,7 +38,7 @@ namespace ExtremeRoles.Patches.Controller
 
             string printStr;
 
-            if (gameData.AssassinateMarin)
+            if (gameData.IsAssassinateMarin)
             {
                 printStr = player?.PlayerName + Helper.Translation.GetString(
                     "assassinateMarinSucsess");
@@ -156,16 +156,9 @@ namespace ExtremeRoles.Patches.Controller
 
             var gameData = ExtremeRolesPlugin.GameDataStore;
 
-            var deadedAssassin = gameData.DeadedAssassin;
 
-            if (deadedAssassin.Count != 0)
+            if (gameData.TryGetDeadAssasin(out byte playerId))
             {
-
-                int callAssassin = UnityEngine.Random.RandomRange(0, deadedAssassin.Count);
-
-                byte playerId = deadedAssassin.ElementAt(callAssassin);
-                deadedAssassin.Remove(playerId);
-
                 var assasin = (Roles.Combination.Assassin)ExtremeRoleManager.GameRole[playerId];
                 assasin.ExiledAction(
                     Helper.Player.GetPlayerControlById(playerId).Data);
@@ -234,7 +227,7 @@ namespace ExtremeRoles.Patches.Controller
         {
             if (ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
             {
-                ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger = false;
+                ExtremeRolesPlugin.GameDataStore.AssassinMeetingTriggerOff();
             }
         }
         private static void tempWinCheckDisable(GameData.PlayerInfo exiled)

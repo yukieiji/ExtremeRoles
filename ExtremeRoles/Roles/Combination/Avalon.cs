@@ -181,29 +181,24 @@ namespace ExtremeRoles.Roles.Combination
                 GetRoleOptionId(AssassinOption.CanSeeRoleBeforeFirstMeeting)].GetValue();
             this.IsFirstMeeting = true;
 
-            ExtremeRolesPlugin.GameDataStore.IsAssassinAssign = true;
-
+            ExtremeRolesPlugin.GameDataStore.AddGlobalActionRole(this);
         }
 
         private void assassinMeetingTriggerOn(
             byte playerId)
         {
-            ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger = true;
-            ExtremeRolesPlugin.GameDataStore.ExiledAssassinId = playerId;
+            ExtremeRolesPlugin.GameDataStore.AssassinMeetingTriggerOn(
+                playerId);
         }
 
         public static void AddDead(byte playerId)
         {
-            ExtremeRolesPlugin.GameDataStore.DeadedAssassin.Add(
-                playerId);
+            ExtremeRolesPlugin.GameDataStore.AddDeadAssasin(playerId);
         }
 
         public static void VoteFor(byte targetId)
         {
-            ExtremeRolesPlugin.GameDataStore.AssassinateMarin = 
-                ExtremeRoleManager.GameRole[
-                    targetId].Id == ExtremeRoleId.Marlin;
-            ExtremeRolesPlugin.GameDataStore.IsMarinPlayerId = targetId;
+            ExtremeRolesPlugin.GameDataStore.SetAssassnateTarget(targetId);
         }
         private bool isServant() => this.AnotherRole?.Id == ExtremeRoleId.Servant;
     }

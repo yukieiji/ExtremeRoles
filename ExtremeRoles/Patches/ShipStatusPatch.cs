@@ -254,7 +254,7 @@ namespace ExtremeRoles.Patches
         private static bool isImpostorSpecialWin(
             ShipStatus __instance)
         {
-            if (ExtremeRolesPlugin.GameDataStore.AssassinateMarin)
+            if (ExtremeRolesPlugin.GameDataStore.IsAssassinateMarin)
             {
                 gameIsEnd(
                     ref __instance,

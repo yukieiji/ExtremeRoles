@@ -8,43 +8,29 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 {
     public sealed partial class ExtremeShipStatus
     {
-        public HashSet<byte> DeadedAssassin = new HashSet<byte>();
-
         public ShieldPlayerContainer ShildPlayer = new ShieldPlayerContainer();
         public PlayerHistory History = new PlayerHistory();
-
-        public bool IsAssassinAssign = false;
-        public bool AssassinMeetingTrigger = false;
-        public bool AssassinateMarin = false;
-        public byte ExiledAssassinId = byte.MaxValue;
-        public byte IsMarinPlayerId = byte.MaxValue;
 
         private GameObject status;
 
         public ExtremeShipStatus()
         {
             Initialize(false);
+            this.playerVersion.Clear();
         }
 
         public void Initialize(
             bool includeGameObject = true)
         {
-            DeadedAssassin.Clear();
             ShildPlayer.Clear();
 
             History.Clear();
-
-            AssassinMeetingTrigger = false;
-            AssassinateMarin = false;
-            IsAssassinAssign = false;
-
-            ExiledAssassinId = byte.MaxValue;
-            IsMarinPlayerId = byte.MaxValue;
 
             // 以下リファクタ済み
             
             this.resetDeadPlayerInfo();
             this.resetGhostAbilityReport();
+            this.resetGlobalAction();
             this.resetPlayerSummary();
             this.resetMeetingCount();
             this.resetRoleAssign();
