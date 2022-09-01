@@ -9,7 +9,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
     public sealed partial class ExtremeShipStatus
     {
         public ShieldPlayerContainer ShildPlayer = new ShieldPlayerContainer();
-        public PlayerHistory History = new PlayerHistory();
 
         private GameObject status;
 
@@ -23,8 +22,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             bool includeGameObject = true)
         {
             ShildPlayer.Clear();
-
-            History.Clear();
 
             // 以下リファクタ済み
             
@@ -103,66 +100,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
                 if (shield.Count == 0) { return false; }
                 return shield.Contains((rolePlayerId, targetPlayerId));
             }
-        }
-
-        public sealed class PlayerHistory
-        {
-            public bool BlockAddHistory;
-
-            // 座標、動けるか、ベント内か, 何か使ってるか
-            public Queue<(Vector3, bool, bool, bool)> history = new Queue<
-                (Vector3, bool, bool, bool)>();
-            private bool init = false;
-            private int size = 0;
-
-            public PlayerHistory()
-            {
-                Clear();
-            }
-
-            public void Enqueue(PlayerControl player)
-            {
-                if (!init || BlockAddHistory) { return; }
-
-                int overflow = history.Count - size;
-                for (int i = 0; i < overflow; ++i)
-                {
-                    history.Dequeue();
-                }
-
-                history.Enqueue(
-                    (
-                        player.transform.position,
-                        player.CanMove,
-                        player.inVent,
-                        !player.Collider.enabled && !player.NetTransform.enabled && !player.moveable
-                    )
-                );
-            }
-
-            public void Clear()
-            {
-                BlockAddHistory = false;
-                DataClear();
-                init = false;
-                size = 0;
-            }
-
-            public void DataClear()
-            {
-                history.Clear();
-            }
-
-            public void Initialize(float historySecond)
-            {
-                size = (int)Mathf.Round(historySecond / Time.fixedDeltaTime);
-                init = true;
-            }
-
-            public IEnumerator<
-                (Vector3, bool, bool, bool)> GetAllHistory() => history.Reverse().GetEnumerator();
-
-            public int GetSize() => size;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using UnityEngine;
 using Hazel;
@@ -171,8 +170,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             localPlayer.moveable = true;
 
-            ExtremeRolesPlugin.GameDataStore.History.DataClear();
-            ExtremeRolesPlugin.GameDataStore.History.BlockAddHistory = false;
+            ExtremeRolesPlugin.GameDataStore.History.ResetAfterRewind();
 
             rewindState.Reset();
             rewindState = null;
@@ -279,7 +277,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             timeMaster.isRewindTime = true;
 
-            ExtremeRolesPlugin.GameDataStore.History.BlockAddHistory = true;
+            ExtremeRolesPlugin.GameDataStore.History.SetAddHistoryBlock(true);
 
             // Screen Initialize
             if (timeMaster.rewindScreen == null)
@@ -358,7 +356,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 rewindState = null;
             }
 
-            ExtremeRolesPlugin.GameDataStore.History.BlockAddHistory = false;
+            ExtremeRolesPlugin.GameDataStore.History.SetAddHistoryBlock(false);
         }
 
         public void CleanUp()
@@ -456,9 +454,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         protected override void RoleSpecificInit()
         {
-            ExtremeRolesPlugin.GameDataStore.History.Initialize(
-                OptionHolder.AllOption[
-                    GetRoleOptionId(TimeMasterOption.RewindTime)].GetValue());
+            ExtremeRolesPlugin.GameDataStore.AddGlobalActionRole(this);
             this.RoleAbilityInit();
         }
     }

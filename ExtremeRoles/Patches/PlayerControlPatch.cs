@@ -173,8 +173,6 @@ namespace ExtremeRoles.Patches
 
             buttonUpdate(__instance, role, ghostRole);
             refreshRoleDescription(__instance, role, ghostRole);
-
-            ExtremeRolesPlugin.GameDataStore.History.Enqueue(__instance);
             setPlayerPostion();
         }
 
