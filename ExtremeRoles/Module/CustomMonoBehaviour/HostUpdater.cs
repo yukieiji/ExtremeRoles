@@ -36,6 +36,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             updateObject.Remove(obj);
         }
 
+        [HideFromIl2Cpp]
         public IUpdatableObject GetObject(int index) => updateObject[index];
 
         public void Update()

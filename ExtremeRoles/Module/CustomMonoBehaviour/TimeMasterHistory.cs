@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEngine;
 
 using ExtremeRoles.Performance;
+using UnhollowerBaseLib.Attributes;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour
 {
@@ -74,6 +75,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             this.init = true;
         }
 
+        [HideFromIl2Cpp]
         public IEnumerator<
             (Vector3, bool, bool, bool)> GetAllHistory() => history.Reverse().GetEnumerator();
 

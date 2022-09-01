@@ -12,15 +12,14 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 
         public void AddPlayerVersion(int clientId, Version version)
         {
-            playerVersion.Add(clientId, version);
+            playerVersion[clientId] = version;
         }
 
         public void AddPlayerVersion(
             int clientId, int major, int minor, int build, int rev)
         {
-            this.playerVersion.Add(
-                clientId,
-                new Version(major, minor, build, rev));
+            this.playerVersion[clientId] =
+                new Version(major, minor, build, rev);
         }
 
         public bool TryGetPlayerVersion(int clientId, out Version verResult)
