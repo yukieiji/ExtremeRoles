@@ -26,7 +26,9 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
         public void FixedUpdate()
         {
-            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) 
+            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started ||
+                MeetingHud.Instance ||
+                ExileController.Instance) 
             { 
                 return; 
             }
