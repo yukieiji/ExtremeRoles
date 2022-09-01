@@ -47,6 +47,9 @@ namespace ExtremeRoles.Compat.Mods
 
         private const string elevatorMover = "ElevatorMover";
 
+        private float crewVison;
+        private float impostorVison;
+
         public SubmergedMap(PluginInfo plugin) : base(Guid, plugin)
         {
             // カスタムサボのタスクタイプ取得
@@ -89,11 +92,19 @@ namespace ExtremeRoles.Compat.Mods
             Patches.HudManagerUpdatePatchPostfixPatch.ButtonTriggerReset();
             submarineStatus = map.GetComponent(
                 Il2CppType.From(submarineStatusType))?.TryCast(submarineStatusType) as MonoBehaviour;
+            
+            // 毎回毎回取得すると重いのでキャッシュ化
+            crewVison = PlayerControl.GameOptions.CrewLightMod;
+            impostorVison = PlayerControl.GameOptions.ImpostorLightMod;
         }
 
         public void Destroy()
         {
             submarineStatus = null;
+
+            // バグってるかもしれないのでもとに戻しとく
+            PlayerControl.GameOptions.CrewLightMod = crewVison;
+            PlayerControl.GameOptions.ImpostorLightMod = impostorVison;
         }
 
         public float CalculateLightRadius(GameData.PlayerInfo player, bool neutral, bool neutralImpostor)
@@ -105,11 +116,19 @@ namespace ExtremeRoles.Compat.Mods
         public float CalculateLightRadius(
             GameData.PlayerInfo player, float visonMod, bool applayVisonEffects = true)
         {
-            // this is hotFix;
-            float baseVision = PlayerControl.GameOptions.CrewLightMod;
+            // サブマージドの視界計算のロジックは「クルーだと停電効果受ける、インポスターだと受けないので」
+            // 1. まずはデフォルトの視界をMOD側で用意した視界の広さにリプレイス
+            // 2. 視界効果を受けるかをインポスターかどうかで渡して計算
+            // 3. 元の視界の広さに戻す
+
             PlayerControl.GameOptions.CrewLightMod = visonMod;
+            PlayerControl.GameOptions.ImpostorLightMod = visonMod;
+
             float result = CalculateLightRadius(player, true, !applayVisonEffects);
-            PlayerControl.GameOptions.CrewLightMod = baseVision;
+            
+            PlayerControl.GameOptions.CrewLightMod = crewVison;
+            PlayerControl.GameOptions.ImpostorLightMod = impostorVison;
+            
             return result;
         }
 

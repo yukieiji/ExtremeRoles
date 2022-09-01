@@ -69,8 +69,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             
             this.targetDoor = null;
 
-            foreach (var door in CachedShipStatus.Instance.AllDoors)
+            foreach (PlainDoor door in CachedShipStatus.Instance.AllDoors)
             {
+                DeconControl decon = door.GetComponentInChildren<DeconControl>();
+                if (decon != null) { continue; }
+
                 if (Vector3.Distance(
                         CachedPlayerControl.LocalPlayer.PlayerControl.transform.position,
                         door.transform.position) < this.range)
