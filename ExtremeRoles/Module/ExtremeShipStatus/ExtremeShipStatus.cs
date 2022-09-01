@@ -8,8 +8,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 {
     public sealed partial class ExtremeShipStatus
     {
-        public Dictionary<int, Version> PlayerVersion = new Dictionary<int, Version>();
-
         public HashSet<byte> DeadedAssassin = new HashSet<byte>();
 
         public ShieldPlayerContainer ShildPlayer = new ShieldPlayerContainer();

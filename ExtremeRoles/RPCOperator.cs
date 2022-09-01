@@ -390,9 +390,8 @@ namespace ExtremeRoles
             int major, int minor,
             int build, int revision, int clientId)
         {
-            ExtremeRolesPlugin.GameDataStore.PlayerVersion[
-                clientId] = new System.Version(
-                    major, minor, build, revision);
+            ExtremeRolesPlugin.GameDataStore.AddPlayerVersion(
+                clientId, major, minor, build, revision);
         }
 
         public static void PlaySound(byte soundType)

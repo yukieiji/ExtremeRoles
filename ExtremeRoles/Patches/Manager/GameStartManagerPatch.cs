@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Collections.Generic;
 using HarmonyLib;
 
@@ -39,8 +40,6 @@ namespace ExtremeRoles.Patches.Manager
 
             if (AmongUsClient.Instance.AmHost)
             {
-                var allPlayerVersion = ExtremeRolesPlugin.GameDataStore.PlayerVersion;
-
                 foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients.GetFastEnumerator())
                 {
                     if (client.Character == null) continue;
@@ -49,13 +48,15 @@ namespace ExtremeRoles.Patches.Manager
                     {
                         continue;
                     }
-                    if (!allPlayerVersion.ContainsKey(client.Id))
+
+                    if (!ExtremeRolesPlugin.GameDataStore.TryGetPlayerVersion(
+                        client.Id, out Version clientVer))
                     {
                         continueStart = false;
                         break;
                     }
                     int diff = Assembly.GetExecutingAssembly().GetName().Version.CompareTo(
-                        allPlayerVersion[client.Id]);
+                        clientVer);
                     if (diff != 0)
                     {
                         continueStart = false;
@@ -149,13 +150,14 @@ namespace ExtremeRoles.Patches.Manager
             if (!GameData.Instance) { return; }
 
             var localGameVersion = Assembly.GetExecutingAssembly().GetName().Version;
-            var allPlayerVersion = ExtremeRolesPlugin.GameDataStore.PlayerVersion;
+            var exShipStatus = ExtremeRolesPlugin.GameDataStore;
 
             // ホスト以外
             if (!AmongUsClient.Instance.AmHost)
             {
-                if (!allPlayerVersion.ContainsKey(AmongUsClient.Instance.HostId) ||
-                    localGameVersion.CompareTo(allPlayerVersion[AmongUsClient.Instance.HostId]) != 0)
+                if (!exShipStatus.TryGetPlayerVersion(
+                    AmongUsClient.Instance.HostId, out Version hostVersion) ||
+                    localGameVersion.CompareTo(hostVersion) != 0)
                 {
                     kickingTimer += Time.deltaTime;
                     if (kickingTimer > kickTime)
@@ -168,11 +170,13 @@ namespace ExtremeRoles.Patches.Manager
                     __instance.GameStartText.text = string.Format(
                         Translation.GetString("errorDiffHostVersion"),
                         Mathf.Round(kickTime - kickingTimer));
-                    __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition + Vector3.up * 2;
+                    __instance.GameStartText.transform.localPosition = 
+                        __instance.StartButton.transform.localPosition + Vector3.up * 2;
                 }
                 else
                 {
-                    __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition;
+                    __instance.GameStartText.transform.localPosition = 
+                        __instance.StartButton.transform.localPosition;
                     if (__instance.startState != GameStartManager.StartingStates.Countdown)
                     {
                         __instance.GameStartText.text = string.Empty;
@@ -185,7 +189,8 @@ namespace ExtremeRoles.Patches.Manager
             string message = string.Format(
                 errorColorPlaceHolder,
                 Translation.GetString("errorCannotGameStart"));
-            foreach (InnerNet.ClientData client in AmongUsClient.Instance.allClients.GetFastEnumerator())
+            foreach (InnerNet.ClientData client in 
+                AmongUsClient.Instance.allClients.GetFastEnumerator())
             {
                 if (client.Character == null) { continue; }
 
@@ -194,7 +199,7 @@ namespace ExtremeRoles.Patches.Manager
                 {
                     continue;
                 }
-                else if (!allPlayerVersion.ContainsKey(client.Id))
+                else if (!exShipStatus.TryGetPlayerVersion(client.Id, out Version clientVer))
                 {
                     blockStart = true;
                     message += string.Format(
@@ -203,8 +208,7 @@ namespace ExtremeRoles.Patches.Manager
                 }
                 else
                 {
-                    System.Version playerVersion = allPlayerVersion[client.Id];
-                    int diff = localGameVersion.CompareTo(playerVersion);
+                    int diff = localGameVersion.CompareTo(clientVer);
                     if (diff > 0)
                     {
                         message += string.Format(
@@ -224,15 +228,19 @@ namespace ExtremeRoles.Patches.Manager
 
             if (blockStart)
             {
-                __instance.StartButton.color = __instance.startLabelText.color = Palette.DisabledClear;
+                __instance.StartButton.color = 
+                    __instance.startLabelText.color = Palette.DisabledClear;
                 __instance.GameStartText.text = message;
-                __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition + Vector3.up * 2;
+                __instance.GameStartText.transform.localPosition = 
+                    __instance.StartButton.transform.localPosition + Vector3.up * 2;
             }
             else
             {
                 __instance.StartButton.color = __instance.startLabelText.color = (
-                    (__instance.LastPlayerCount >= __instance.MinPlayers) ? Palette.EnabledColor : Palette.DisabledClear);
-                __instance.GameStartText.transform.localPosition = __instance.StartButton.transform.localPosition;
+                    (__instance.LastPlayerCount >= __instance.MinPlayers) ? 
+                    Palette.EnabledColor : Palette.DisabledClear);
+                __instance.GameStartText.transform.localPosition = 
+                    __instance.StartButton.transform.localPosition;
             }
 
             if (AmongUsClient.Instance.GameMode == GameModes.OnlineGame && !isCustomServer)
@@ -264,7 +272,7 @@ namespace ExtremeRoles.Patches.Manager
 
             if (customShowText == null)
             {
-                customShowText = Object.Instantiate(
+                customShowText = UnityEngine.Object.Instantiate(
                     instance.GameStartText, button.transform);
                 customShowText.name = "StreamerModeCustomMessage";
                 customShowText.transform.localPosition = new Vector3(0.0f, -0.32f, 0.0f);
