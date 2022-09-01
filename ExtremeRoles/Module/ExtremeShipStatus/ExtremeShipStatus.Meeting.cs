@@ -13,7 +13,7 @@
         public void ResetOnMeeting()
         {
             resetGhostAbilityReport();
-            resetGlobalAction();
+            resetOnMeetingGlobalAction();
         }
 
         public string GetAditionalInfo()
