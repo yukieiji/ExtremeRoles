@@ -281,7 +281,7 @@ namespace ExtremeRoles
 
             var state = ExtremeRolesPlugin.ShipState;
 
-            if (exShipStatus.IsCustomVent(ventId))
+            if (state.IsCustomVent(ventId))
             {
                 if (hudManager == null) { return; }
 
