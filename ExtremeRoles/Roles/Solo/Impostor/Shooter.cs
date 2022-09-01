@@ -86,7 +86,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 if (instance.AmDead) { return; }
                 Shoot();
 
-                byte newTarget = ExtremeRolesPlugin.GameDataStore.ShildPlayer.GetBodyGuardPlayerId(
+                byte newTarget = ExtremeRolesPlugin.ShipState.ShildPlayer.GetBodyGuardPlayerId(
                     target);
 
                 if (newTarget == byte.MaxValue)

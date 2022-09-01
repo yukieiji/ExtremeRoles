@@ -85,13 +85,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
         private static void featShield(byte rolePlayerId, byte targetPlayer)
         {
-            ExtremeRolesPlugin.GameDataStore.ShildPlayer.Add(
+            ExtremeRolesPlugin.ShipState.ShildPlayer.Add(
                 rolePlayerId, targetPlayer);
         }
 
         private static void resetShield(byte playerId)
         {
-            ExtremeRolesPlugin.GameDataStore.ShildPlayer.Remove(playerId);
+            ExtremeRolesPlugin.ShipState.ShildPlayer.Remove(playerId);
         }
 
         public override void ExiledAction(GameData.PlayerInfo rolePlayer)
