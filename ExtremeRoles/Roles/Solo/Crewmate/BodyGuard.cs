@@ -415,6 +415,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                         this.TargetPlayer
                     });
                 featShield(player.PlayerId, targetPlayerId);
+                AbilityCountButton button = this.shieldButton as AbilityCountButton;
+                if (button != null)
+                {
+                    button.UpdateAbilityCount(button.CurAbilityNum - 1);
+                }
             }
             return meetingfeatShield;
         }
