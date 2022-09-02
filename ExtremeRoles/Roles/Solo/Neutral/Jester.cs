@@ -88,22 +88,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 }
             }
 
-            PlayerControl prevTarget = target;
-
-            if (Crewmate.BodyGuard.TryGetShiledPlayerId(
-                prevTarget.PlayerId, out byte bodyGuard))
-            {
-                target = Helper.Player.GetPlayerControlById(bodyGuard);
-                if (target == null)
-                {
-                    target = prevTarget;
-                }
-                else if (target.Data.IsDead || target.Data.Disconnected)
-                {
-                    target = prevTarget;
-                }
-            }
-
             if (AmongUsClient.Instance.IsGameOver) { return; }
             if (killer == null ||
                 killer.Data == null ||
@@ -114,21 +98,22 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 target.Data.IsDead ||
                 target.Data.Disconnected) { return; }
 
-            byte animate = byte.MaxValue;
-
-            if (target.PlayerId != prevTarget.PlayerId)
+            if (Crewmate.BodyGuard.TryGetShiledPlayerId(
+                    target.PlayerId, out byte bodyGuard) ||
+                Crewmate.BodyGuard.RpcTryKillBodyGuard(
+                    killer.PlayerId, bodyGuard))
             {
-                animate = 0;
+                return;
             }
 
             RPCOperator.Call(
                 killer.NetId,
                 RPCOperator.Command.UncheckedMurderPlayer,
-                new List<byte> { killerId, target.PlayerId, animate });
+                new List<byte> { killerId, target.PlayerId, byte.MaxValue });
             RPCOperator.UncheckedMurderPlayer(
                 killerId,
                 target.PlayerId,
-                animate);
+                byte.MaxValue);
         }
 
         public void CreateAbility()

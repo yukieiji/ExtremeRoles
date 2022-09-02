@@ -76,17 +76,10 @@ namespace ExtremeRoles.Patches.Button
                     }
                 }
 
-                if (BodyGuard.TryGetShiledPlayerId(target.PlayerId, out byte bodyGuard))
+                if (BodyGuard.TryGetShiledPlayerId(target.PlayerId, out byte bodyGuard) ||
+                    BodyGuard.RpcTryKillBodyGuard(killer.PlayerId, bodyGuard))
                 {
-                    target = Helper.Player.GetPlayerControlById(bodyGuard);
-                    if (target == null)
-                    {
-                        target = __instance.currentTarget;
-                    }
-                    else if (target.Data.IsDead || target.Data.Disconnected)
-                    {
-                        target = __instance.currentTarget;
-                    }
+                    return false;
                 }
 
                 // Use an unchecked kill command, to allow shorter kill cooldowns etc. without getting kicked

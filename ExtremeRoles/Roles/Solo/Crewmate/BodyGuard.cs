@@ -27,7 +27,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public enum BodyGuardRpcOps : byte
         {
             FeatShield,
-            ResetShield
+            ResetShield,
+            CoverDead,
         }
 
         public RoleAbilityButtonBase Button
@@ -144,6 +145,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     byte resetBodyGuardPlayerId = reader.ReadByte();
                     resetShield(resetBodyGuardPlayerId);
                     break;
+                case BodyGuardRpcOps.CoverDead:
+                    byte killerPlayerId = reader.ReadByte();
+                    byte targetBodyGuardPlayerId = reader.ReadByte();
+                    coverDead(killerPlayerId, targetBodyGuardPlayerId);
+                    break;
                 default:
                     break;
             }
@@ -156,6 +162,31 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             return shilded.TryGetBodyGuardPlayerId(targetPlayerId, out bodyGuardPlayerId);
         }
 
+        public static bool RpcTryKillBodyGuard(
+            byte killerPlayerId, byte targetBodyGuard)
+        {
+            PlayerControl bodyGuardPlayer = Player.GetPlayerControlById(targetBodyGuard);
+            if (bodyGuardPlayer == null ||
+                bodyGuardPlayer.Data == null ||
+                bodyGuardPlayer.Data.IsDead ||
+                bodyGuardPlayer.Data.Disconnected)
+            {
+                return false;
+            }
+
+            RPCOperator.Call(
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                RPCOperator.Command.BodyGuardAbility,
+                new List<byte>
+                {
+                    (byte)BodyGuardRpcOps.CoverDead,
+                    killerPlayerId,
+                    targetBodyGuard
+                });
+            coverDead(killerPlayerId, targetBodyGuard);
+            return true;
+        }
+
         private static void featShield(byte rolePlayerId, byte targetPlayer)
         {
             shilded.Add(rolePlayerId, targetPlayer);
@@ -164,6 +195,39 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private static void resetShield(byte playerId)
         {
             shilded.Remove(playerId);
+        }
+
+        private static void coverDead(
+            byte killerPlayerId, byte targetBodyGuard)
+        {
+            // 必ずテレポートしないキル
+            RPCOperator.UncheckedMurderPlayer(
+                killerPlayerId, targetBodyGuard, byte.MinValue);
+            
+            PlayerControl bodyGuardPlayer = Player.GetPlayerControlById(targetBodyGuard);
+            
+            if (bodyGuardPlayer == null ||
+                bodyGuardPlayer.Data == null ||
+                !bodyGuardPlayer.Data.IsDead || // 死んでないつまり守護天使に守られた
+                bodyGuardPlayer.Data.Disconnected)
+            {
+                return;
+            }
+
+            ExtremeRolesPlugin.ShipState.ReplaceDeadReason(
+                targetBodyGuard, ExtremeShipStatus.PlayerStatus.Martyrdom);
+
+            BodyGuard bodyGuard = ExtremeRoleManager.GetSafeCastedRole<BodyGuard>(
+                targetBodyGuard);
+
+            if (MeetingHud.Instance)
+            {
+                // 会議中だと即報告？
+            }
+            else
+            {
+                // 会議報告用のトリガーをオンにしておく
+            }
         }
 
         public override void ExiledAction(GameData.PlayerInfo rolePlayer)
@@ -175,12 +239,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             PlayerControl rolePlayer, PlayerControl killerPlayer)
         {
             resetShield(rolePlayer.PlayerId);
-
-            if (rolePlayer.PlayerId == killerPlayer.PlayerId) { return; }
-
-            ExtremeRolesPlugin.ShipState.ReplaceDeadReason(
-                rolePlayer.PlayerId,
-                ExtremeShipStatus.PlayerStatus.Martyrdom);
         }
 
         public void CreateAbility()
@@ -208,7 +266,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             if (this.TargetPlayer != byte.MaxValue)
             {
                 RPCOperator.Call(
-                   localPlayer.NetId,
+                    localPlayer.NetId,
                     RPCOperator.Command.BodyGuardAbility,
                     new List<byte>
                     {

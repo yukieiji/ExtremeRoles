@@ -239,22 +239,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                                 truePosition, vector.normalized,
                                 magnitude, Constants.ShipAndObjectsMask))
                         {
-                            var target = @object;
-
-                            if (Crewmate.BodyGuard.TryGetShiledPlayerId(
-                                target.PlayerId, out byte bodyGuard))
-                            {
-                                target = Player.GetPlayerControlById(bodyGuard);
-                                if (@object == null)
-                                {
-                                    target = @object;
-                                }
-                                else if (target.Data.IsDead || target.Data.Disconnected)
-                                {
-                                    target = @object;
-                                }
-                            }
-                            result.Add(target);
+                            result.Add(@object);
                         }
                     }
                 }
@@ -269,6 +254,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             PlayerControl bombPlayer,
             PlayerControl target)
         {
+
+            if (Crewmate.BodyGuard.TryGetShiledPlayerId(
+                    target.PlayerId, out byte bodyGuard) ||
+                Crewmate.BodyGuard.RpcTryKillBodyGuard(
+                    bombPlayer.PlayerId, bodyGuard))
+            {
+                return;
+            }
 
             RPCOperator.Call(
                 rolePlayer.NetId,

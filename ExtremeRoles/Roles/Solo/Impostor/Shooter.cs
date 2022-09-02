@@ -85,30 +85,37 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 if (instance.AmDead) { return; }
                 Shoot();
+                PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
 
                 if (Crewmate.BodyGuard.TryGetShiledPlayerId(
-                    target, out byte bodyGuard))
+                    target, out byte bodyGuard) ||
+                    Crewmate.BodyGuard.RpcTryKillBodyGuard(
+                        localPlayer.PlayerId, bodyGuard))
                 {
-                    target = bodyGuard;
+                    rpcPlayKillSound();
+                    return;
                 }
-
-                PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
 
                 RPCOperator.Call(
                     localPlayer.NetId,
                     RPCOperator.Command.UncheckedMurderPlayer,
                     new List<byte> { localPlayer.PlayerId, target, 0 });
                 RPCOperator.UncheckedMurderPlayer(
-                    CachedPlayerControl.LocalPlayer.PlayerId,
+                   localPlayer.PlayerId,
                     target, 0);
-                RPCOperator.Call(
-                    localPlayer.NetId,
-                    RPCOperator.Command.PlaySound,
-                    new List<byte> { (byte)RPCOperator.SoundType.Kill });
-                RPCOperator.PlaySound((byte)RPCOperator.SoundType.Kill);
+                rpcPlayKillSound();
             }
 
             return shooterKill;
+        }
+
+        private static void rpcPlayKillSound()
+        {
+            RPCOperator.Call(
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                RPCOperator.Command.PlaySound,
+                new List<byte> { (byte)RPCOperator.SoundType.Kill });
+            RPCOperator.PlaySound((byte)RPCOperator.SoundType.Kill);
         }
 
         public void SetSprite(SpriteRenderer render)
