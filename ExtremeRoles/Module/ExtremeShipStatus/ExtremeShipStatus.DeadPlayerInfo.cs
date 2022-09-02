@@ -7,7 +7,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 {
     public sealed partial class ExtremeShipStatus
     {
-        public Dictionary<byte, DeadInfo> deadPlayerInfo = new Dictionary<byte, DeadInfo>();
+        private Dictionary<byte, DeadInfo> deadPlayerInfo = new Dictionary<byte, DeadInfo>();
 
         public void AddDeadInfo(
             PlayerControl deadPlayer,
