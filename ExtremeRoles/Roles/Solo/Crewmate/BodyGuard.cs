@@ -56,6 +56,67 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private bool awakeMeetingReport;
         private float meetingReportTaskGage;
 
+        private static ShildFeatedPlayer shilded = new ShildFeatedPlayer();
+
+        private class ShildFeatedPlayer
+        {
+            private List<(byte, byte)> shield = new List<(byte, byte)>();
+
+            public ShildFeatedPlayer()
+            {
+                Clear();
+            }
+
+            public void Clear()
+            {
+                this.shield.Clear();
+            }
+
+            public void Add(byte rolePlayerId, byte targetPlayerId)
+            {
+                this.shield.Add((rolePlayerId, targetPlayerId));
+            }
+
+            public void Remove(byte removeRolePlayerId)
+            {
+                List<(byte, byte)> remove = new List<(byte, byte)>();
+
+                foreach (var (rolePlayerId, targetPlayerId) in shield)
+                {
+                    if (rolePlayerId != removeRolePlayerId) { continue; }
+                    remove.Add((rolePlayerId, targetPlayerId));
+                }
+
+                foreach (var val in remove)
+                {
+                    this.shield.Remove(val);
+                }
+
+            }
+            public bool TryGetBodyGuardPlayerId(
+                byte targetPlayerId, out byte bodyGuardPlayerId)
+            {
+
+                bodyGuardPlayerId = default(byte);
+                if (this.shield.Count == 0) { return false; }
+
+                foreach (var (rolePlayerId, shieldPlayerId) in this.shield)
+                {
+                    if (shieldPlayerId == targetPlayerId)
+                    {
+                        bodyGuardPlayerId = rolePlayerId;
+                        return true; 
+                    }
+                }
+                return false;
+            }
+            public bool IsShielding(byte rolePlayerId, byte targetPlayerId)
+            {
+                if (this.shield.Count == 0) { return false; }
+                return this.shield.Contains((rolePlayerId, targetPlayerId));
+            }
+        }
+
         public BodyGuard() : base(
             ExtremeRoleId.BodyGuard,
             ExtremeRoleType.Crewmate,
@@ -63,6 +124,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ColorPalette.BodyGuardOrange,
             false, true, false, false)
         { }
+
+        public static void ResetAllShild()
+        {
+            shilded.Clear();
+        }
 
         public static void Ability(ref MessageReader reader)
         {
@@ -83,15 +149,21 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
 
         }
+
+        public static bool TryGetShiledPlayerId(
+            byte targetPlayerId, out byte bodyGuardPlayerId)
+        {
+            return shilded.TryGetBodyGuardPlayerId(targetPlayerId, out bodyGuardPlayerId);
+        }
+
         private static void featShield(byte rolePlayerId, byte targetPlayer)
         {
-            ExtremeRolesPlugin.ShipState.ShildPlayer.Add(
-                rolePlayerId, targetPlayer);
+            shilded.Add(rolePlayerId, targetPlayer);
         }
 
         private static void resetShield(byte playerId)
         {
-            ExtremeRolesPlugin.ShipState.ShildPlayer.Remove(playerId);
+            shilded.Remove(playerId);
         }
 
         public override void ExiledAction(GameData.PlayerInfo rolePlayer)
@@ -182,8 +254,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 byte targetId = target.PlayerId;
 
-                if (!ExtremeRolesPlugin.ShipState.ShildPlayer.IsShielding(
-                        CachedPlayerControl.LocalPlayer.PlayerId, targetId))
+                if (!shilded.IsShielding(
+                    CachedPlayerControl.LocalPlayer.PlayerId, targetId))
                 {
                     this.TargetPlayer = targetId;
                 }

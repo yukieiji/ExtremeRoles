@@ -96,13 +96,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 }
             }
 
-
-            var bodyGuard = ExtremeRolesPlugin.ShipState.ShildPlayer.GetBodyGuardPlayerId(
-                prevTarget.PlayerId);
-
             PlayerControl newTarget = prevTarget;
 
-            if (bodyGuard != byte.MaxValue)
+            if (Crewmate.BodyGuard.TryGetShiledPlayerId(
+                prevTarget.PlayerId, out byte bodyGuard))
             {
                 newTarget = Player.GetPlayerControlById(bodyGuard);
                 if (newTarget == null)

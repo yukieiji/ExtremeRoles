@@ -88,13 +88,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 }
             }
 
-
-            var bodyGuard = ExtremeRolesPlugin.ShipState.ShildPlayer.GetBodyGuardPlayerId(
-                targetId);
-
             PlayerControl prevTarget = target;
 
-            if (bodyGuard != byte.MaxValue)
+            if (Crewmate.BodyGuard.TryGetShiledPlayerId(
+                prevTarget.PlayerId, out byte bodyGuard))
             {
                 target = Helper.Player.GetPlayerControlById(bodyGuard);
                 if (target == null)

@@ -86,12 +86,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 if (instance.AmDead) { return; }
                 Shoot();
 
-                byte newTarget = ExtremeRolesPlugin.ShipState.ShildPlayer.GetBodyGuardPlayerId(
-                    target);
-
-                if (newTarget == byte.MaxValue)
+                if (Crewmate.BodyGuard.TryGetShiledPlayerId(
+                    target, out byte bodyGuard))
                 {
-                    newTarget = target;
+                    target = bodyGuard;
                 }
 
                 PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
@@ -99,10 +97,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 RPCOperator.Call(
                     localPlayer.NetId,
                     RPCOperator.Command.UncheckedMurderPlayer,
-                    new List<byte> { localPlayer.PlayerId, newTarget, 0 });
+                    new List<byte> { localPlayer.PlayerId, target, 0 });
                 RPCOperator.UncheckedMurderPlayer(
                     CachedPlayerControl.LocalPlayer.PlayerId,
-                    newTarget, 0);
+                    target, 0);
                 RPCOperator.Call(
                     localPlayer.NetId,
                     RPCOperator.Command.PlaySound,

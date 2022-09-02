@@ -239,12 +239,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                                 truePosition, vector.normalized,
                                 magnitude, Constants.ShipAndObjectsMask))
                         {
-                            var bodyGuard = ExtremeRolesPlugin.ShipState.ShildPlayer.GetBodyGuardPlayerId(
-                                @object.PlayerId);
-
                             var target = @object;
 
-                            if (bodyGuard != byte.MaxValue)
+                            if (Crewmate.BodyGuard.TryGetShiledPlayerId(
+                                target.PlayerId, out byte bodyGuard))
                             {
                                 target = Player.GetPlayerControlById(bodyGuard);
                                 if (@object == null)

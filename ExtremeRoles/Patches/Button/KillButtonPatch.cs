@@ -6,6 +6,8 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.Combination;
+using ExtremeRoles.Roles.Solo.Crewmate;
+using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.Button
@@ -74,11 +76,7 @@ namespace ExtremeRoles.Patches.Button
                     }
                 }
 
-
-                var bodyGuard = ExtremeRolesPlugin.ShipState.ShildPlayer.GetBodyGuardPlayerId(
-                    target.PlayerId);
-
-                if (bodyGuard != byte.MaxValue)
+                if (BodyGuard.TryGetShiledPlayerId(target.PlayerId, out byte bodyGuard))
                 {
                     target = Helper.Player.GetPlayerControlById(bodyGuard);
                     if (target == null)
@@ -95,7 +93,7 @@ namespace ExtremeRoles.Patches.Button
                 MurderKillResult res = checkMuderKill(
                     __instance, killer, target);
 
-                var lastWolf = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Roles.Solo.Impostor.LastWolf>();
+                var lastWolf = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<LastWolf>();
                 if (lastWolf != null)
                 {
                     if (lastWolf.IsAwake)
