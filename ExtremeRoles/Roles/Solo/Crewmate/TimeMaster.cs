@@ -12,8 +12,6 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Performance;
 
-using BepInEx.IL2CPP.Utils.Collections;
-
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
     public sealed class TimeMaster : SingleRoleBase, IRoleAbility
@@ -40,20 +38,95 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
         }
 
-        public bool IsRewindTime = false;
-        public bool IsShieldOn = false;
-        public SpriteRenderer RewindScreen;
+        private bool isRewindTime = false;
+        private bool isShieldOn = false;
+        private SpriteRenderer rewindScreen;
         private RoleAbilityButtonBase timeShieldButton;
+        private static RewindStatus rewindState;
 
-        private static int skipFrame;
-        private static int historyFrame;
-        private static int frameCount;
-        private static Vector3 prevPos;
-        private static Vector3 sefePos;
-        private static bool isNotSafePos;
-        private static byte rolePlayerId;
-        private static TimeMaster rewindingTM;
-        private static bool rewindingTrigger;
+        private sealed class RewindStatus
+        {
+            public bool IsNotSafePos => this.isNotSafePos;
+            public Vector3 SafePos => this.safePos;
+            public Vector3 PrevPos => this.prevPos;
+            public byte RewindCallPlayerId => this.rolePlayerId;
+
+            public bool Enable => this.rewindingTrigger;
+
+            private int skipFrame;
+            private int historyFrame;
+            private int frameCount;
+            private int rewindFrame;
+            private Vector3 prevPos;
+            private Vector3 safePos;
+            private bool isNotSafePos;
+            private byte rolePlayerId;
+            private TimeMaster rewindingTM;
+            private bool rewindingTrigger;
+
+            public RewindStatus(
+                byte rolePlayerId,
+                TimeMaster tm,
+                Vector3 localPlayerPos)
+            {
+                this.rewindingTM = tm;
+                this.rolePlayerId = rolePlayerId;
+                this.skipFrame = 0;
+                this.historyFrame = ExtremeRolesPlugin.GameDataStore.History.GetSize();
+                this.frameCount = 0;
+                this.rewindFrame = 0;
+                this.prevPos = localPlayerPos;
+                this.safePos = prevPos;
+                this.isNotSafePos = false;
+                this.rewindingTrigger = false;
+            }
+
+            public void UpdatePrevPostion(Vector3 newPos, bool isSafe)
+            {
+                this.prevPos = newPos;
+                this.isNotSafePos = !isSafe;
+                if (isSafe)
+                {
+                    this.safePos = newPos;
+                }
+            }
+
+            public bool IsEndRewind()
+            {
+                ++this.frameCount;
+                return this.rewindFrame <= this.frameCount;
+            }
+
+            public void SkipThisFrame()
+            {
+                ++this.skipFrame;
+                this.prevPos = CachedPlayerControl.LocalPlayer.transform.position;
+                this.safePos = prevPos;
+                this.isNotSafePos = false;
+            }
+
+            public void SetActiveRewind()
+            {
+                this.rewindingTrigger = true;
+                this.rewindFrame = this.historyFrame - this.skipFrame;
+            }
+
+            public void Reset()
+            {
+                this.rewindingTM.isRewindTime = false;
+                this.rewindingTM.rewindScreen.enabled = false;
+                this.rewindingTM = null;
+                this.skipFrame = 0;
+                this.historyFrame = 0;
+                this.frameCount = 0;
+                this.rewindFrame = 0;
+                this.prevPos = Vector3.zero;
+                this.safePos = Vector3.zero;
+                this.isNotSafePos = false;
+                this.rolePlayerId = byte.MinValue;
+                this.rewindingTrigger = false;
+            }
+        }
 
         public TimeMaster() : base(
             ExtremeRoleId.TimeMaster,
@@ -91,63 +164,48 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
 
             // 最後の巻き戻しが壁抜けする座標だった場合、壁抜けしない安全な場所に飛ばす
-            if (isNotSafePos)
+            if (rewindState.IsNotSafePos)
             {
-                localPlayer.transform.position = sefePos;
+                localPlayer.transform.position = rewindState.SafePos;
             }
 
             localPlayer.moveable = true;
-            rewindingTM.IsRewindTime = false;
-            rewindingTM.RewindScreen.enabled = false;
 
             ExtremeRolesPlugin.GameDataStore.History.DataClear();
             ExtremeRolesPlugin.GameDataStore.History.BlockAddHistory = false;
 
-            rewindingTM = null;
-            skipFrame = 0;
-            historyFrame = 0;
-            frameCount = 0;
-            prevPos = Vector3.zero;
-            sefePos = Vector3.zero;
-            isNotSafePos = false;
-            rolePlayerId = byte.MinValue;
-            rewindingTrigger = false;
+            rewindState.Reset();
+            rewindState = null;
         }
 
         public static void RewindPostion((Vector3, bool, bool, bool) hist)
         {
             PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
 
-            // 梯子とか使っている最中に巻き戻すと色々とおかしくなる
-            // => その処理が終わるまで待機、巻き戻しはその後
-            //    ただし、処理が終わるまでの間の時間巻き戻し時間は短くなる
-            // この時巻き戻しの処理はまだ行ってないのでトリガーはオフっとく
-            if (!rewindingTrigger && 
-                !localPlayer.inVent && 
-                !localPlayer.moveable)
+            // 巻き戻しを開始する前に色々とチェック
+            if (!rewindState.Enable)
             {
-                ++skipFrame;
-                
-                prevPos = localPlayer.transform.position;
-                sefePos = prevPos;
-                isNotSafePos = false;
+                // 梯子とか使っている最中に巻き戻すと色々とおかしくなる
+                // => その処理が終わるまで待機、巻き戻しはその後
+                //    ただし、処理が終わるまでの間の時間巻き戻し時間は短くなる
+                // この時巻き戻しの処理はまだ行ってないのでトリガーはオフっとく
+                if (!localPlayer.inVent &&
+                    !localPlayer.moveable)
+                {
+                    rewindState.SkipThisFrame();
+                    return;
+                }
 
-                return;
+                // 問題がなければ巻き戻し自体の処理開始 => トリガーをオンにしておく
+                rewindState.SetActiveRewind();
             }
 
-            // 巻き戻し自体の処理開始 => トリガーをオンにしておく
-            rewindingTrigger = true;
-
-            ++frameCount;
-
-            int rewindFrame = historyFrame - skipFrame;
-
-            if (rewindFrame <= frameCount)
+            if (rewindState.IsEndRewind())
             {
                 return;
             }
 
-            if (localPlayer.PlayerId == rolePlayerId)
+            if (localPlayer.PlayerId == rewindState.RewindCallPlayerId)
             {
                 return;
             }
@@ -180,8 +238,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     newPos.y + offset.y,
                     newPos.z);
                 Vector3 prevTruePos = new Vector3(
-                    prevPos.x + offset.x,
-                    prevPos.y + offset.y,
+                    rewindState.PrevPos.x + offset.x,
+                    rewindState.PrevPos.y + offset.y,
                     newPos.z);
 
                 bool isAnythingBetween = PhysicsHelpers.AnythingBetween(
@@ -193,21 +251,18 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 if ((!isAnythingBetween && hist.Item2) || hist.Item3)
                 {
                     localPlayer.transform.position = newPos;
-                    prevPos = newPos;
-                    sefePos = newPos;
-                    isNotSafePos = false;
+                    rewindState.UpdatePrevPostion(newPos, true);
                 }
                 // 何か使っている時の座標(梯子、移動床等)
                 // => 巻き戻すが、安全ではない(壁抜けする)座標として記録
                 else if (hist.Item4)
                 {
                     localPlayer.transform.position = newPos;
-                    prevPos = newPos;
-                    isNotSafePos = true;
+                    rewindState.UpdatePrevPostion(newPos, false);
                 }
                 else
                 {
-                    localPlayer.transform.position = prevPos;
+                    localPlayer.transform.position = rewindState.PrevPos;
                 }
             }
         }
@@ -222,25 +277,23 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             var timeMaster = ExtremeRoleManager.GetSafeCastedRole<TimeMaster>(playerId);
             if (timeMaster == null) { return; }
 
-            rolePlayerId = playerId;
-            rewindingTM = timeMaster;
-            rewindingTM.IsRewindTime = true;
+            timeMaster.isRewindTime = true;
 
             ExtremeRolesPlugin.GameDataStore.History.BlockAddHistory = true;
 
             // Screen Initialize
-            if (rewindingTM.RewindScreen == null)
+            if (timeMaster.rewindScreen == null)
             {
-                rewindingTM.RewindScreen = Object.Instantiate(
+                timeMaster.rewindScreen = Object.Instantiate(
                      FastDestroyableSingleton<HudManager>.Instance.FullScreen,
                      FastDestroyableSingleton<HudManager>.Instance.transform);
-                rewindingTM.RewindScreen.transform.localPosition = new Vector3(0f, 0f, 20f);
-                rewindingTM.RewindScreen.gameObject.SetActive(true);
-                rewindingTM.RewindScreen.enabled = false;
-                rewindingTM.RewindScreen.color = new Color(0f, 0.5f, 0.8f, 0.3f);
+                timeMaster.rewindScreen.transform.localPosition = new Vector3(0f, 0f, 20f);
+                timeMaster.rewindScreen.gameObject.SetActive(true);
+                timeMaster.rewindScreen.enabled = false;
+                timeMaster.rewindScreen.color = new Color(0f, 0.5f, 0.8f, 0.3f);
             }
             // Screen On
-            rewindingTM.RewindScreen.enabled = true;
+            timeMaster.rewindScreen.enabled = true;
 
             // SetUp
             if (MapBehaviour.Instance)
@@ -252,16 +305,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 Minigame.Instance.ForceClose();
             }
 
-            skipFrame = 0;
-            historyFrame = ExtremeRolesPlugin.GameDataStore.History.GetSize();
-            frameCount = 0;
-            prevPos = localPlayer.transform.position;
-            sefePos = prevPos;
-            isNotSafePos = false;
-            rewindingTrigger = false;
+            rewindState = new RewindStatus(
+                playerId,
+                timeMaster,
+                localPlayer.transform.position);
 
             Logging.Debug(
-                $"History Size:{ExtremeRolesPlugin.GameDataStore.History.GetSize()}   SkipFrame:{skipFrame}");
+                $"History Size:{ExtremeRolesPlugin.GameDataStore.History.GetSize()}");
 
             Patches.PlayerControlFixedUpdatePatch.SetNewPosionSetter(
                 ExtremeRolesPlugin.GameDataStore.History.GetAllHistory(),
@@ -274,7 +324,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             
             if (timeMaster != null)
             {
-                timeMaster.IsShieldOn = true; 
+                timeMaster.isShieldOn = true; 
             }
         }
 
@@ -284,7 +334,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             if (timeMaster != null)
             {
-                timeMaster.IsShieldOn = false;
+                timeMaster.isShieldOn = false;
             }
         }
         private static void resetMeeting(byte playerId)
@@ -293,24 +343,20 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             if (timeMaster == null) { return; }
             
-            timeMaster.IsShieldOn = false;
-            timeMaster.IsRewindTime = false;
-            if (timeMaster.RewindScreen != null)
+            timeMaster.isShieldOn = false;
+            timeMaster.isRewindTime = false;
+            if (timeMaster.rewindScreen != null)
             {
-                timeMaster.RewindScreen.enabled = false;
+                timeMaster.rewindScreen.enabled = false;
             }
 
             CachedPlayerControl.LocalPlayer.PlayerControl.moveable = true;
 
-            rewindingTM = null;
-            skipFrame = 0;
-            historyFrame = 0;
-            frameCount = 0;
-            prevPos = Vector3.zero;
-            sefePos = Vector3.zero;
-            isNotSafePos = false;
-            rolePlayerId = byte.MinValue;
-            rewindingTrigger = false;
+            if (rewindState != null)
+            {
+                rewindState.Reset();
+                rewindState = null;
+            }
 
             ExtremeRolesPlugin.GameDataStore.History.BlockAddHistory = false;
         }
@@ -376,9 +422,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public override bool TryRolePlayerKilledFrom(
             PlayerControl rolePlayer, PlayerControl fromPlayer)
         {
-            if (this.IsRewindTime) { return false; }
+            if (this.isRewindTime) { return false; }
 
-            if (this.IsShieldOn)
+            if (this.isShieldOn)
             {
                 RPCOperator.Call(
                     CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
