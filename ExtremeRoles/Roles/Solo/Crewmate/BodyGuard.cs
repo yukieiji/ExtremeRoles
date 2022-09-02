@@ -246,6 +246,22 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 Translation.GetString("martyrdomReport"));
         }
 
+        public override string GetRolePlayerNameTag(
+            SingleRoleBase targetRole, byte targetPlayerId)
+        {
+            if (shilded.TryGetBodyGuardPlayerId(
+                targetPlayerId, out byte bodyGuardPlayerId)) { return string.Empty; }
+
+            if (bodyGuardPlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
+            {
+                return Design.ColoedString(
+                    this.NameColor, $" ■");
+            }
+
+            return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
+        }
+
+
         public override void ExiledAction(GameData.PlayerInfo rolePlayer)
         {
             resetShield(rolePlayer.PlayerId);
