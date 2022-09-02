@@ -94,7 +94,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             this.TargetPlayer = byte.MaxValue;
 
-            PlayerControl target = Player.GetPlayerTarget(
+            PlayerControl target = Player.GetClosestPlayerInRange(
                 CachedPlayerControl.LocalPlayer, this,
                 this.shieldRange);
 

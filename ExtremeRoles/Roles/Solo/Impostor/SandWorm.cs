@@ -155,7 +155,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool IsAbilityUse()
         {
-            this.targetPlayer = Player.GetPlayerTarget(
+            this.targetPlayer = Player.GetClosestPlayerInRange(
                 CachedPlayerControl.LocalPlayer,
                 this, this.range);
 

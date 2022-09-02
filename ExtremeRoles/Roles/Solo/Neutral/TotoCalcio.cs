@@ -76,7 +76,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public bool IsAbilityUse()
         {
-            this.tmpTarget = Helper.Player.GetPlayerTarget(
+            this.tmpTarget = Helper.Player.GetClosestPlayerInRange(
                 CachedPlayerControl.LocalPlayer, this,
                 this.range);
             return this.IsCommonUse() && this.tmpTarget != null;

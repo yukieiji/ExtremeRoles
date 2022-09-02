@@ -312,7 +312,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public bool IsAbilityCheck()
         {
-            PlayerControl checkPlayer = Helper.Player.GetPlayerTarget(
+            PlayerControl checkPlayer = Helper.Player.GetClosestPlayerInRange(
                 CachedPlayerControl.LocalPlayer, this, this.range);
 
             if (checkPlayer == null) { return false; }
@@ -340,7 +340,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public bool IsAbilityUse()
         {
-            this.tmpTarget = Helper.Player.GetPlayerTarget(
+            this.tmpTarget = Helper.Player.GetClosestPlayerInRange(
                 CachedPlayerControl.LocalPlayer, this, this.range);
             if (this.tmpTarget == null) { return false; }
 

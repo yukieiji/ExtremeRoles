@@ -37,7 +37,7 @@ namespace ExtremeRoles.Helper
             return null;
         }
 
-        public static PlayerControl GetClosestKillRangePlayer()
+        public static PlayerControl GetClosestPlayerInKillRange()
         {
             var playersInAbilityRangeSorted = 
                 CachedPlayerControl.LocalPlayer.Data.Role.GetPlayersInAbilityRangeSorted(
@@ -49,7 +49,7 @@ namespace ExtremeRoles.Helper
             return playersInAbilityRangeSorted[0];
         }
 
-        public static PlayerControl GetClosestKillRangePlayer(PlayerControl player)
+        public static PlayerControl GetClosestPlayerInKillRange(PlayerControl player)
         {
             var playersInAbilityRangeSorted =
                 player.Data.Role.GetPlayersInAbilityRangeSorted(
@@ -61,17 +61,35 @@ namespace ExtremeRoles.Helper
             return playersInAbilityRangeSorted[0];
         }
 
-        public static PlayerControl GetPlayerTarget(
+        public static PlayerControl GetClosestPlayerInRange(
             PlayerControl sourcePlayer,
             Roles.API.SingleRoleBase role,
             float range)
         {
-            PlayerControl result = null;
-            float num = range;
+
+            List<PlayerControl> allPlayer = GetAllPlayerInRange(
+                sourcePlayer, role, range);
+
+            if (allPlayer.Count <= 0) { return null; }
+
+            PlayerControl result = allPlayer[0];
+
+            SetPlayerOutLine(result, role.GetNameColor());
+
+            return result;
+        }
+
+        public static List<PlayerControl> GetAllPlayerInRange(
+            PlayerControl sourcePlayer,
+            Roles.API.SingleRoleBase role,
+            float range)
+        {
+
+            List<PlayerControl> result = new List<PlayerControl>();
 
             if (!ShipStatus.Instance)
             {
-                return null;
+                return result;
             }
 
             Vector2 truePosition = sourcePlayer.GetTruePosition();
@@ -83,34 +101,39 @@ namespace ExtremeRoles.Helper
                 if (!playerInfo.Disconnected &&
                     playerInfo.PlayerId != CachedPlayerControl.LocalPlayer.PlayerId &&
                     !playerInfo.IsDead &&
-                    !playerInfo.Object.inVent)
+                    !playerInfo.Object.inVent &&
+                    !role.IsSameTeam(Roles.ExtremeRoleManager.GameRole[playerInfo.PlayerId]))
                 {
                     PlayerControl @object = playerInfo.Object;
                     if (@object)
                     {
                         Vector2 vector = @object.GetTruePosition() - truePosition;
                         float magnitude = vector.magnitude;
-                        if (magnitude <= num &&
+                        if (magnitude <= range &&
                             !PhysicsHelpers.AnyNonTriggersBetween(
                                 truePosition, vector.normalized,
                                 magnitude, Constants.ShipAndObjectsMask))
                         {
-                            result = @object;
-                            num = magnitude;
+                            result.Add(@object);
                         }
                     }
                 }
             }
 
-            if (result)
+            result.Sort(delegate (PlayerControl a, PlayerControl b)
             {
-                if (role.IsSameTeam(Roles.ExtremeRoleManager.GameRole[result.PlayerId]))
+                float magnitude2 = (a.GetTruePosition() - truePosition).magnitude;
+                float magnitude3 = (b.GetTruePosition() - truePosition).magnitude;
+                if (magnitude2 > magnitude3)
                 {
-                    result = null;
+                    return 1;
                 }
-            }
-
-            SetPlayerOutLine(result, role.GetNameColor());
+                if (magnitude2 < magnitude3)
+                {
+                    return -1;
+                }
+                return 0;
+            });
 
             return result;
         }
