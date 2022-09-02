@@ -71,7 +71,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 this.rewindingTM = tm;
                 this.rolePlayerId = rolePlayerId;
                 this.skipFrame = 0;
-                this.historyFrame = ExtremeRolesPlugin.GameDataStore.History.GetSize();
+                this.historyFrame = ExtremeRolesPlugin.ShipState.History.GetSize();
                 this.frameCount = 0;
                 this.rewindFrame = 0;
                 this.prevPos = localPlayerPos;
@@ -309,7 +309,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 localPlayer.transform.position);
 
             Logging.Debug(
-                $"History Size:{ExtremeRolesPlugin.GameDataStore.History.GetSize()}");
+                $"History Size:{ExtremeRolesPlugin.ShipState.History.GetSize()}");
 
             Patches.PlayerControlFixedUpdatePatch.SetNewPosionSetter(
                 ExtremeRolesPlugin.ShipState.History.GetAllHistory(),
@@ -356,7 +356,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 rewindState = null;
             }
 
-            ExtremeRolesPlugin.GameDataStore.History.SetAddHistoryBlock(false);
+            ExtremeRolesPlugin.ShipState.History.SetAddHistoryBlock(false);
         }
 
         public void CleanUp()
