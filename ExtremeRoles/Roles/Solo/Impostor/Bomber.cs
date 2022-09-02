@@ -73,7 +73,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public bool IsAbilityUse()
         {
             this.setTargetPlayerId = byte.MaxValue;
-            var player = Player.GetClosestKillRangePlayer();
+            var player = Player.GetClosestPlayerInKillRange();
             if (player != null)
             {
                 this.setTargetPlayerId = player.PlayerId;
@@ -90,7 +90,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public bool CheckAbility()
         {
             byte targetPlayerId = byte.MaxValue;
-            var player = Player.GetClosestKillRangePlayer();
+            var player = Player.GetClosestPlayerInKillRange();
             if (player != null)
             {
                 targetPlayerId = player.PlayerId;

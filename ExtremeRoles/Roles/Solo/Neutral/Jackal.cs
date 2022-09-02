@@ -464,7 +464,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public bool IsAbilityUse()
         {
         
-            this.Target = Player.GetPlayerTarget(
+            this.Target = Player.GetClosestPlayerInRange(
                 CachedPlayerControl.LocalPlayer,
                 this, GameOptionsData.KillDistances[
                     Mathf.Clamp(this.createSidekickRange, 0, 2)]);

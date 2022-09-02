@@ -148,7 +148,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public bool IsAbilityUse()
         {
-            this.tmpTarget = Helper.Player.GetPlayerTarget(
+            this.tmpTarget = Helper.Player.GetClosestPlayerInRange(
                 PlayerControl.LocalPlayer, this,
                 this.outburstDistance);
             return this.IsCommonUse() && this.tmpTarget != null;
@@ -173,7 +173,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             var role = ExtremeRoleManager.GameRole[this.outburstTarget.PlayerId];
             if (!role.CanKill()) { return; }
 
-            PlayerControl killTarget = Helper.Player.GetClosestKillRangePlayer(this.outburstTarget);
+            PlayerControl killTarget = Helper.Player.GetClosestPlayerInKillRange(
+                this.outburstTarget);
 
             if (killTarget == null) { return; }
             if (killTarget.Data.IsDead || killTarget.Data.Disconnected) { return; }

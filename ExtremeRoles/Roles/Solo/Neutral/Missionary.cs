@@ -112,7 +112,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public bool IsAbilityUse()
         {
             this.TargetPlayer = byte.MaxValue;
-            PlayerControl target = Helper.Player.GetPlayerTarget(
+            PlayerControl target = Helper.Player.GetClosestPlayerInRange(
                 CachedPlayerControl.LocalPlayer, this,
                 this.propagateRange);
             

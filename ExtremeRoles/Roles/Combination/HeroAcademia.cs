@@ -954,7 +954,7 @@ namespace ExtremeRoles.Roles.Combination
         {
             this.target = byte.MaxValue;
 
-            PlayerControl player = Player.GetPlayerTarget(
+            PlayerControl player = Player.GetClosestPlayerInRange(
                 CachedPlayerControl.LocalPlayer, this, this.range);
 
             if (player == null) { return false; }

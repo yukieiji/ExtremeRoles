@@ -308,7 +308,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public bool IsAbilityUse()
         {
 
-            this.tmpTarget = Player.GetPlayerTarget(
+            this.tmpTarget = Player.GetClosestPlayerInRange(
                 CachedPlayerControl.LocalPlayer, this, this.range);
 
             this.targetDeadBody = Player.GetDeadBodyInfo(
@@ -458,7 +458,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             if (this.targetDeadBody != null) { return true; }
             
-            PlayerControl checkPlayer = Player.GetPlayerTarget(
+            PlayerControl checkPlayer = Player.GetClosestPlayerInRange(
                 CachedPlayerControl.LocalPlayer, this, this.range);
 
             if (checkPlayer == null) { return false; }
