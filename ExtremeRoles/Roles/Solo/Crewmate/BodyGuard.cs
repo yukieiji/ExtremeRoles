@@ -225,7 +225,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             BodyGuard bodyGuard = ExtremeRoleManager.GetSafeCastedRole<BodyGuard>(
                 targetBodyGuard);
 
-            if (!bodyGuard.awakeMeetingReport) { return; }
+            if (bodyGuard == null || 
+                !bodyGuard.awakeMeetingReport) { return; }
 
             if (MeetingHud.Instance)
             {
@@ -249,7 +250,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public override string GetRolePlayerNameTag(
             SingleRoleBase targetRole, byte targetPlayerId)
         {
-            if (shilded.TryGetBodyGuardPlayerId(
+            if (!shilded.TryGetBodyGuardPlayerId(
                 targetPlayerId, out byte bodyGuardPlayerId)) { return string.Empty; }
 
             if (bodyGuardPlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
@@ -389,6 +390,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
         {
+
+            bool isProtected = shilded.TryGetBodyGuardPlayerId(
+                instance.TargetPlayerId, out byte bodyGuardPlayerId);
+            if (CachedPlayerControl.LocalPlayer.PlayerId == bodyGuardPlayerId &&
+                isProtected)
+            { 
+                return false; 
+            }
 
             int abilityNum = 0;
 
