@@ -224,6 +224,8 @@ namespace ExtremeRoles.Patches.Meeting
 					passiveButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
 					passiveButton.OnClick.AddListener(
 						(UnityEngine.Events.UnityAction)role.CreateAbilityAction(instance));
+					passiveButton.OnClick.AddListener(
+						(UnityEngine.Events.UnityAction)instance.Cancel);
 
 					var render = newAbilitybutton.GetComponent<SpriteRenderer>();
 
