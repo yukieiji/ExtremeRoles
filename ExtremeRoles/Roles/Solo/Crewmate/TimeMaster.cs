@@ -313,7 +313,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             rewindingTrigger = false;
 
             ExtremeRolesPlugin.GameDataStore.History.BlockAddHistory = false;
-            Patches.PlayerControlFixedUpdatePatch.ResetPosionSetter();
         }
 
         public void CleanUp()

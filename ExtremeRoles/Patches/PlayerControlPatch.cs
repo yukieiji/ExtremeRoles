@@ -101,6 +101,7 @@ namespace ExtremeRoles.Patches
         public static void Prefix([HarmonyArgument(0)] GameData.PlayerInfo target)
         {
             ExtremeRolesPlugin.Info.BlockShow(true);
+            PlayerControlFixedUpdatePatch.ResetPosionSetter();
 
             var gameData = ExtremeRolesPlugin.GameDataStore;
 
