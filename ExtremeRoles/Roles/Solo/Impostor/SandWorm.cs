@@ -11,6 +11,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Extension.Ship;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -262,7 +263,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             if (!result || vent == null) { return false; }
 
-            if (ExtremeRolesPlugin.ShipState.IsCustomVent(vent.Id)) { return false; }
+            if (CachedShipStatus.Instance.IsCustomVent(vent.Id)) { return false; }
 
             return true;
         }

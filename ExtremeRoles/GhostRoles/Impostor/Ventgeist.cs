@@ -1,10 +1,10 @@
-﻿using ExtremeRoles.GhostRoles;
-using ExtremeRoles.GhostRoles.API;
+﻿using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.GhostRoles;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Extension.Ship;
 using Hazel;
 using System.Collections.Generic;
 using UnityEngine;
@@ -87,15 +87,17 @@ namespace ExtremeRoles.GhostRoles.Impostor
         {
             this.targetVent = null;
 
-            if (CachedShipStatus.Instance == null ||
-                !CachedShipStatus.Instance.enabled) { return false; }
+            ShipStatus ship = CachedShipStatus.Instance;
+
+            if (ship == null ||
+                !ship.enabled) { return false; }
 
             Vector2 truePosition = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
 
-            foreach (Vent vent in CachedShipStatus.Instance.AllVents)
+            foreach (Vent vent in ship.AllVents)
             {
                 if (vent == null) { continue; }
-                if (ExtremeRolesPlugin.ShipState.IsCustomVent(vent.Id) &&
+                if (ship.IsCustomVent(vent.Id) &&
                     !vent.gameObject.active)
                 {
                     continue;

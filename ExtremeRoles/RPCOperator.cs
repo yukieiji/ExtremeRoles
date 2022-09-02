@@ -4,6 +4,7 @@ using Hazel;
 
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.ExtremeShipStatus;
+using ExtremeRoles.Extension.Ship;
 
 namespace ExtremeRoles
 {
@@ -163,6 +164,9 @@ namespace ExtremeRoles
 
             // APIのステータスのリセット
             Roles.API.Extension.State.RoleState.Reset();
+
+            
+            VentExtension.ResetCustomVent();
         }
 
         public static void ForceEnd()
@@ -231,8 +235,9 @@ namespace ExtremeRoles
         {
 
             HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
+            ShipStatus ship = CachedShipStatus.Instance;
 
-            if (ShipStatus.Instance == null || hudManager == null) { return; }
+            if (ship == null || hudManager == null) { return; }
 
             PlayerControl player = Helper.Player.GetPlayerControlById(playerId);
             if (player == null) { return; }
@@ -247,21 +252,19 @@ namespace ExtremeRoles
             reader.Buffer = bytes;
             reader.Length = bytes.Length;
 
-            Vent vent = CachedShipStatus.Instance.AllVents.FirstOrDefault(
+            Vent vent = ship.AllVents.FirstOrDefault(
                 (x) => x.Id == ventId);
-
-            var state = ExtremeRolesPlugin.ShipState;
 
             hudManager.StartCoroutine(
                 Effects.Lerp(
                     0.6f, new System.Action<float>((p) => {
                         if (vent != null && vent.myRend != null)
                         {
-                            vent.myRend.sprite = state.GetVentSprite(
+                            vent.myRend.sprite = ship.GetCustomVentSprite(
                                 ventId, (int)(p * 17));
                             if (p == 1f)
                             {
-                                vent.myRend.sprite = state.GetVentSprite(
+                                vent.myRend.sprite = ship.GetCustomVentSprite(
                                     ventId, 0);
                             }
                         }
@@ -278,10 +281,9 @@ namespace ExtremeRoles
                 (x) => x.Id == ventId);
 
             HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
+            ShipStatus ship = CachedShipStatus.Instance;
 
-            var state = ExtremeRolesPlugin.ShipState;
-
-            if (state.IsCustomVent(ventId))
+            if (ship.IsCustomVent(ventId))
             {
                 if (hudManager == null) { return; }
 
@@ -290,11 +292,11 @@ namespace ExtremeRoles
                         0.6f, new System.Action<float>((p) => {
                             if (vent != null && vent.myRend != null)
                             {
-                                vent.myRend.sprite = state.GetVentSprite(
+                                vent.myRend.sprite = ship.GetCustomVentSprite(
                                     ventId, (int)(p * 17));
                                 if (p == 1f)
                                 {
-                                    vent.myRend.sprite = state.GetVentSprite(
+                                    vent.myRend.sprite = ship.GetCustomVentSprite(
                                         ventId, 0);
                                 }
                             }   

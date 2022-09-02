@@ -4,6 +4,7 @@ using UnityEngine;
 
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Extension.Ship;
 
 namespace ExtremeRoles.Patches.MapModule
 {
@@ -124,7 +125,7 @@ namespace ExtremeRoles.Patches.MapModule
 
             bool isEnter = !CachedPlayerControl.LocalPlayer.PlayerControl.inVent;
 
-            if (ExtremeRolesPlugin.ShipState.IsCustomVent(
+            if (CachedShipStatus.Instance.IsCustomVent(
                 __instance.Id))
             {
                 __instance.SetButtons(isEnter);

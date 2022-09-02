@@ -3,25 +3,25 @@ using System.Linq;
 
 using UnityEngine;
 using ExtremeRoles.Resources;
-using ExtremeRoles.Performance;
 
-namespace ExtremeRoles.Module.ExtremeShipStatus
+namespace ExtremeRoles.Extension.Ship
 {
-    public sealed partial class ExtremeShipStatus
+    public static class VentExtension
     {
         public enum CustomVentType
         {
             MeryVent,
         }
 
-        private VentContainer customVent = new VentContainer();
+        private static CustomVent customVent = new CustomVent();
 
-        public void AddVent(Vent newVent, CustomVentType type)
+        public static void AddVent(
+            this ShipStatus instance, Vent newVent, CustomVentType type)
         {
-            var allVents = CachedShipStatus.Instance.AllVents.ToList();
+            var allVents = instance.AllVents.ToList();
             allVents.Add(newVent);
-            CachedShipStatus.Instance.AllVents = allVents.ToArray();
-            if (this.customVent.Body.TryGetValue(type, out List<Vent> vents))
+            instance.AllVents = allVents.ToArray();
+            if (customVent.Body.TryGetValue(type, out List<Vent> vents))
             {
                 vents.Add(newVent);
             }
@@ -29,18 +29,19 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             {
                 var ventList = new List<Vent>();
                 ventList.Add(newVent);
-                this.customVent.Body.Add(type, ventList);
+                customVent.Body.Add(type, ventList);
             }
-            if (!this.customVent.Anime.ContainsKey(type))
+            if (!customVent.Anime.ContainsKey(type))
             {
-                this.customVent.Anime.Add(type, new Sprite[18]);
+                customVent.Anime.Add(type, new Sprite[18]);
             }
 
-            this.customVent.Type.Add(newVent.Id, type);
+            customVent.Type.Add(newVent.Id, type);
         }
-        public List<Vent> GetCustomVent(CustomVentType type)
+
+        public static List<Vent> GetCustomVent(this ShipStatus _, CustomVentType type)
         {
-            if (this.customVent.Body.TryGetValue(
+            if (customVent.Body.TryGetValue(
                 type, out List<Vent> vents))
             {
                 return vents;
@@ -48,13 +49,12 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             return new List<Vent>();
         }
 
-        public Sprite GetVentSprite(int ventId, int index)
+        public static Sprite GetCustomVentSprite(this ShipStatus _, int ventId, int index)
         {
+            if (!customVent.Type.ContainsKey(ventId)) { return null; }
 
-            if (!this.customVent.Type.ContainsKey(ventId)) { return null; }
-
-            CustomVentType type = this.customVent.Type[ventId];
-            Sprite img = this.customVent.Anime[type][index];
+            CustomVentType type = customVent.Type[ventId];
+            Sprite img = customVent.Anime[type][index];
 
             if (img != null)
             {
@@ -72,28 +72,29 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
                         return null;
                 }
 
-                this.customVent.Anime[type][index] = img;
+                customVent.Anime[type][index] = img;
                 return img;
             }
         }
 
-        public bool IsCustomVent(int ventId) => this.customVent.Type.ContainsKey(ventId);
+        public static bool IsCustomVent(
+            this ShipStatus _, int ventId) => customVent.Type.ContainsKey(ventId);
 
-        private void resetVent()
+        public static void ResetCustomVent()
         {
-            this.customVent.Clear();
+            customVent.Clear();
         }
 
-        public sealed class VentContainer
+        public sealed class CustomVent
         {
-            public Dictionary<int, CustomVentType> Type = 
+            public Dictionary<int, CustomVentType> Type =
                 new Dictionary<int, CustomVentType>();
-            public Dictionary<CustomVentType, List<Vent>> Body = 
+            public Dictionary<CustomVentType, List<Vent>> Body =
                 new Dictionary<CustomVentType, List<Vent>>();
-            public Dictionary<CustomVentType, Sprite[]> Anime = 
+            public Dictionary<CustomVentType, Sprite[]> Anime =
                 new Dictionary<CustomVentType, Sprite[]>();
 
-            public VentContainer()
+            public CustomVent()
             {
                 Clear();
             }
@@ -106,5 +107,4 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             }
         }
     }
-
 }

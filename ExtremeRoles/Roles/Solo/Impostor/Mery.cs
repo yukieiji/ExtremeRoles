@@ -14,7 +14,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Module.ExtremeShipStatus;
+using ExtremeRoles.Extension.Ship;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -199,8 +199,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             ExtremeRolesPlugin.ShipState.RemoveUpdateObjectAt(activateVentIndex);
 
             Vent newVent = camp.GetConvertedVent();
-            var meryVent = ExtremeRolesPlugin.ShipState.GetCustomVent(
-                ExtremeShipStatus.CustomVentType.MeryVent);
+            var meryVent = CachedShipStatus.Instance.GetCustomVent(
+                VentExtension.CustomVentType.MeryVent);
 
             int ventNum = meryVent.Count;
 
@@ -228,8 +228,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             newVent.Center = null;
 
-            ExtremeRolesPlugin.ShipState.AddVent(
-                newVent, ExtremeShipStatus.CustomVentType.MeryVent);
+            CachedShipStatus.Instance.AddVent(
+                newVent, VentExtension.CustomVentType.MeryVent);
 
             camp.Clear();
         }

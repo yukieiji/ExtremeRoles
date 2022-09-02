@@ -31,7 +31,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             this.resetPlayerSummary();
             this.resetMeetingCount();
             this.resetRoleAssign();
-            this.resetVent();
+            
             this.resetWins();
 
             this.ClearMeetingResetObject();
