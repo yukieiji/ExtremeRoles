@@ -29,6 +29,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             FeatShield,
             ResetShield,
             CoverDead,
+            ReportMeeting
         }
 
         public RoleAbilityButtonBase Button
@@ -56,6 +57,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private float meetingAbilityTaskGage;
         private bool awakeMeetingReport;
         private float meetingReportTaskGage;
+
+        private bool reportNextMeeting = false;
 
         private static ShildFeatedPlayer shilded = new ShildFeatedPlayer();
 
@@ -142,13 +145,15 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     featShield(featBodyGuardPlayerId, targetPlayerId);
                     break;
                 case BodyGuardRpcOps.ResetShield:
-                    byte resetBodyGuardPlayerId = reader.ReadByte();
-                    resetShield(resetBodyGuardPlayerId);
+                    resetShield(reader.ReadByte());
                     break;
                 case BodyGuardRpcOps.CoverDead:
                     byte killerPlayerId = reader.ReadByte();
                     byte targetBodyGuardPlayerId = reader.ReadByte();
                     coverDead(killerPlayerId, targetBodyGuardPlayerId);
+                    break;
+                case BodyGuardRpcOps.ReportMeeting:
+                    reportMeeting();
                     break;
                 default:
                     break;
@@ -220,14 +225,25 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             BodyGuard bodyGuard = ExtremeRoleManager.GetSafeCastedRole<BodyGuard>(
                 targetBodyGuard);
 
+            if (!bodyGuard.awakeMeetingReport) { return; }
+
             if (MeetingHud.Instance)
             {
-                // 会議中だと即報告？
+                reportMeeting();
             }
             else
             {
-                // 会議報告用のトリガーをオンにしておく
+                bodyGuard.reportNextMeeting = true;
             }
+        }
+
+        private static void reportMeeting()
+        {
+            if (CachedPlayerControl.LocalPlayer.Data.IsDead) { return; }
+
+            FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(
+                CachedPlayerControl.LocalPlayer,
+                Translation.GetString("martyrdomReport"));
         }
 
         public override void ExiledAction(GameData.PlayerInfo rolePlayer)
@@ -335,12 +351,24 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            return;
+            if (this.reportNextMeeting)
+            {
+                PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+                RPCOperator.Call(
+                    localPlayer.NetId,
+                    RPCOperator.Command.BodyGuardAbility,
+                    new List<byte>
+                    {
+                        (byte)BodyGuardRpcOps.ReportMeeting,
+                    });
+                reportMeeting();
+            }
+            this.reportNextMeeting = false;
         }
 
         public void RoleAbilityResetOnMeetingEnd()
         {
-            return;
+            this.reportNextMeeting = false;
         }
 
         public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
@@ -401,7 +429,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             if (!this.awakeMeetingAbility || !this.awakeMeetingReport)
             {
-                
                 float taskGage = Player.GetPlayerTaskGage(rolePlayer);
                 
                 if (taskGage >= this.meetingAbilityTaskGage && 
@@ -447,6 +474,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
 
             var allOpt = OptionHolder.AllOption;
+
+            this.reportNextMeeting = false;
 
             this.shieldRange = allOpt[
                 GetRoleOptionId(BodyGuardOption.ShieldRange)].GetValue();
