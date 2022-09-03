@@ -75,7 +75,8 @@ namespace ExtremeRoles.Module
                     string verInfo = csv.ReadLine(); // verHeader
                     string[] info = verInfo.Split(',');
 
-                    ExtremeRolesPlugin.Logger.LogInfo($"Loading from : {modName} {versionStr} {info[2]}    {info[3]}");
+                    ExtremeRolesPlugin.Logger.LogInfo(
+                        $"Loading from : {modName} {versionStr} {info[2]}    {info[3]}");
 
                     string line = csv.ReadLine(); // ヘッダー
                     while ((line = csv.ReadLine()) != null)
@@ -88,21 +89,26 @@ namespace ExtremeRoles.Module
                     }
 
                 }
-
-                foreach (IOption option in OptionHolder.AllOption.Values)
-                {
-
-                    if (option.Id == 0) { continue; }
-
-                    if (importedOption.TryGetValue(
-                        clean(option.Name),
-                        out int selection))
+                // オプションのインポートデモでネットワーク帯域とサーバーに負荷をかけて人が落ちたりするので共有を一時的に無効化して実行
+                OptionHolder.ExecuteWithBlockOptionShare(
+                    () =>
                     {
-                        ExtremeRolesPlugin.Logger.LogInfo($"Update Option : {option.Name} to Selection:{selection}");
-                        option.UpdateSelection(selection);
-                        option.SaveConfigValue();
-                    }
-                }
+                        foreach (IOption option in OptionHolder.AllOption.Values)
+                        {
+
+                            if (option.Id == 0) { continue; }
+
+                            if (importedOption.TryGetValue(
+                                clean(option.Name),
+                                out int selection))
+                            {
+                                ExtremeRolesPlugin.Logger.LogInfo(
+                                    $"Update Option : {option.Name} to Selection:{selection}");
+                                option.UpdateSelection(selection);
+                                option.SaveConfigValue();
+                            }
+                        }
+                    });
 
                 if (AmongUsClient.Instance?.AmHost == true && CachedPlayerControl.LocalPlayer)
                 {
@@ -116,8 +122,8 @@ namespace ExtremeRoles.Module
             }
             catch (Exception newE)
             {
-                
-                Helper.Logging.Error($"Newed csv load error:{newE}");
+
+                ExtremeRolesPlugin.Logger.LogInfo($"Newed csv load error:{newE}");
 
                 try
                 {
@@ -126,7 +132,7 @@ namespace ExtremeRoles.Module
                 }
                 catch (Exception prevE)
                 {
-                    Helper.Logging.Error($"prev csv load error:{prevE}");
+                    ExtremeRolesPlugin.Logger.LogInfo($"prev csv load error:{prevE}");
                 }
             }
             return false;
