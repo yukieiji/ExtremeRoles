@@ -439,7 +439,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     {
                         (byte)BodyGuardRpcOps.FeatShield,
                         player.PlayerId,
-                        this.TargetPlayer
+                        targetPlayerId
                     });
                 featShield(player.PlayerId, targetPlayerId);
                 AbilityCountButton button = this.shieldButton as AbilityCountButton;
