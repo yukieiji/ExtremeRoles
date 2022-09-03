@@ -99,7 +99,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             PlayerControl newTarget = prevTarget;
 
             if (Crewmate.BodyGuard.TryGetShiledPlayerId(
-                    prevTarget.PlayerId, out byte bodyGuard) ||
+                    prevTarget.PlayerId, out byte bodyGuard) &&
                 Crewmate.BodyGuard.RpcTryKillBodyGuard(
                     killer.PlayerId, bodyGuard))
             {

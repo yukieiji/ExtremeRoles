@@ -88,7 +88,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
 
                 if (Crewmate.BodyGuard.TryGetShiledPlayerId(
-                    target, out byte bodyGuard) ||
+                    target, out byte bodyGuard) &&
                     Crewmate.BodyGuard.RpcTryKillBodyGuard(
                         localPlayer.PlayerId, bodyGuard))
                 {
