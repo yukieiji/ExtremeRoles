@@ -391,14 +391,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
         {
             byte bodyGuardPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
-            if (instance.TargetPlayerId == bodyGuardPlayerId) { return false; }
+            if (instance.TargetPlayerId == bodyGuardPlayerId) { return true; }
 
             bool isProtected = shilded.TryGetBodyGuardPlayerId(
                 instance.TargetPlayerId, out byte featShildBodyGuardPlayerId);
             if (featShildBodyGuardPlayerId == bodyGuardPlayerId &&
                 isProtected)
-            { 
-                return false; 
+            {
+                return true;
             }
 
             int abilityNum = 0;
