@@ -88,7 +88,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
 
         public override void CreateAbility()
         {
-            this.Button = new ReusableAbilityButton(
+            this.Button = new AbilityCountButton(
                 AbilityType.PoltergeistMoveDeadbody,
                 this.UseAbility,
                 this.isPreCheck,
@@ -129,8 +129,8 @@ namespace ExtremeRoles.GhostRoles.Crewmate
                 Option.Range, 1.0f,
                 0.2f, 3.0f, 0.1f,
                 parentOps);
-            CreateButtonOption(
-                parentOps, 3.0f);
+            CreateCountButtonOption(
+                parentOps, 1, 5, 3.0f);
         }
 
         protected override void UseAbility(MessageWriter writer)
