@@ -226,6 +226,11 @@ namespace ExtremeRoles.Patches.Meeting
 						(UnityEngine.Events.UnityAction)role.CreateAbilityAction(instance));
 					passiveButton.OnClick.AddListener(
 						(UnityEngine.Events.UnityAction)instance.Cancel);
+					passiveButton.OnClick.AddListener(
+                        (UnityEngine.Events.UnityAction)(()=>
+						{
+							newAbilitybutton?.gameObject.SetActive(false);
+						}));
 
 					var render = newAbilitybutton.GetComponent<SpriteRenderer>();
 
