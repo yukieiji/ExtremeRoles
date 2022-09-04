@@ -29,6 +29,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             FeatShield,
             ResetShield,
             CoverDead,
+            AwakeMeetingReport,
             ReportMeeting
         }
 
@@ -152,6 +153,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     byte targetBodyGuardPlayerId = reader.ReadByte();
                     coverDead(killerPlayerId, targetBodyGuardPlayerId);
                     break;
+                case BodyGuardRpcOps.AwakeMeetingReport:
+                    awakeReportMeeting(reader.ReadByte());
+                    break;
                 case BodyGuardRpcOps.ReportMeeting:
                     reportMeeting();
                     break;
@@ -235,6 +239,16 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             else
             {
                 bodyGuard.reportNextMeeting = true;
+            }
+        }
+
+        private static void awakeReportMeeting(byte bodyGuardPlayerId)
+        {
+            BodyGuard bodyGuard = ExtremeRoleManager.GetSafeCastedRole<BodyGuard>(
+                bodyGuardPlayerId);
+            if (bodyGuard != null)
+            {
+                bodyGuard.awakeMeetingReport = true;
             }
         }
 
@@ -473,6 +487,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 if (taskGage >= this.meetingReportTaskGage &&
                     !this.awakeMeetingReport)
                 {
+                    RPCOperator.Call(
+                        CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                        RPCOperator.Command.BodyGuardAbility,
+                        new List<byte>
+                        {
+                            (byte)BodyGuardRpcOps.AwakeMeetingReport,
+                            rolePlayer.PlayerId,
+                        });
                     this.awakeMeetingReport = true;
                 }
                 
@@ -518,6 +540,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 GetRoleOptionId(BodyGuardOption.FeatMeetingAbilityTaskGage)].GetValue() / 100.0f;
             this.meetingReportTaskGage = (float)allOpt[
                 GetRoleOptionId(BodyGuardOption.FeatMeetingReportTaskGage)].GetValue() / 100.0f;
+            this.awakeMeetingAbility = this.meetingAbilityTaskGage <= 0.0f;
+            this.awakeMeetingReport = this.meetingReportTaskGage <= 0.0f;
 
             this.RoleAbilityInit();
             if (this.Button != null)
