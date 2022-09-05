@@ -58,36 +58,40 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     AmongUsClient.Instance.PlayerPrefab);
 
                 GameData.PlayerInfo playerInfo = new GameData.PlayerInfo(this.body);
-                playerInfo.Role = Object.Instantiate<RoleBehaviour>(
+                playerInfo.Role = Object.Instantiate(
                     GameData.Instance.DefaultRole);
                 playerInfo.Role.Initialize(this.body);
 
                 this.body._cachedData = playerInfo;
 
                 this.body.PlayerId = (byte)GameData.Instance.GetAvailableId();
-                this.body.transform.position = rolePlayer.transform.position;
                 this.body.GetComponent<DummyBehaviour>().enabled = true;
                 this.body.NetTransform.enabled = true;
+                this.body.transform.position = rolePlayer.transform.position;
                 this.body.NetTransform.Halt();
                 this.body.Visible = true;
                 this.body.Data.Tasks = new Il2CppSystem.Collections.Generic.List<GameData.TaskInfo>();
 
+                CachedPlayerControl.Remove(this.body);
+
                 GameData.PlayerOutfit playerOutfit = targetPlayer.Data.DefaultOutfit;
                 int colorId = playerOutfit.ColorId;
-
-                this.body.SetName("This is Fake");
-                this.body.SetHat(playerOutfit.HatId, colorId);
-                this.body.SetPet(playerOutfit.PetId, colorId);
-                this.body.SetVisor(playerOutfit.VisorId, colorId);
-                this.body.SetSkin(playerOutfit.SkinId, colorId);
-                this.body.SetColor(colorId);
-
+                
+                this.body.RawSetName("This is Fake");
+                this.body.RawSetHat(playerOutfit.HatId, colorId);
+                this.body.RawSetPet(playerOutfit.PetId, colorId);
+                this.body.RawSetVisor(playerOutfit.VisorId, colorId);
+                this.body.RawSetSkin(playerOutfit.SkinId, colorId);
+                this.body.RawSetColor(colorId);
+                
+                /*
                 if (ExtremeRolesPlugin.Compat.IsModMap)
                 {
                     ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
                         this.body.gameObject,
                         Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
                 }
+                */
             }
 
             public void Clear()
