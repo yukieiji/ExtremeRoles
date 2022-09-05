@@ -47,6 +47,62 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         }
 
+        public sealed class FakePlayer : IMeetingResetObject
+        {
+            private PlayerControl body;
+            public FakePlayer(
+                PlayerControl rolePlayer,
+                PlayerControl targetPlayer)
+            {
+                this.body = Object.Instantiate(
+                    AmongUsClient.Instance.PlayerPrefab);
+
+                GameData.PlayerInfo playerInfo = new GameData.PlayerInfo(this.body);
+                playerInfo.Role = Object.Instantiate<RoleBehaviour>(
+                    GameData.Instance.DefaultRole);
+                playerInfo.Role.Initialize(this.body);
+
+                this.body._cachedData = playerInfo;
+
+                this.body.PlayerId = (byte)GameData.Instance.GetAvailableId();
+                this.body.transform.position = rolePlayer.transform.position;
+                this.body.GetComponent<DummyBehaviour>().enabled = true;
+                this.body.NetTransform.enabled = true;
+                this.body.NetTransform.Halt();
+                this.body.Visible = true;
+                this.body.Data.Tasks = new Il2CppSystem.Collections.Generic.List<GameData.TaskInfo>();
+
+                GameData.PlayerOutfit playerOutfit = targetPlayer.Data.DefaultOutfit;
+                int colorId = playerOutfit.ColorId;
+
+                this.body.SetName("This is Fake");
+                this.body.SetHat(playerOutfit.HatId, colorId);
+                this.body.SetPet(playerOutfit.PetId, colorId);
+                this.body.SetVisor(playerOutfit.VisorId, colorId);
+                this.body.SetSkin(playerOutfit.SkinId, colorId);
+                this.body.SetColor(colorId);
+
+                if (ExtremeRolesPlugin.Compat.IsModMap)
+                {
+                    ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
+                        this.body.gameObject,
+                        Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
+                }
+            }
+
+            public void Clear()
+            {
+                Object.Destroy(this.body);
+            }
+
+        }
+
+        public enum FakerDummyOps : byte
+        {
+            DeadBody,
+            Player,
+        }
+
         public RoleAbilityButtonBase Button
         {
             get => this.createFake;
@@ -67,15 +123,27 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         { }
 
         public static void CreateDummy(
-            byte rolePlayerId, byte targetPlayerId)
+            byte rolePlayerId, byte targetPlayerId, byte ops)
         {
             PlayerControl rolePlyaer = Player.GetPlayerControlById(rolePlayerId);
             PlayerControl targetPlyaer = Player.GetPlayerControlById(targetPlayerId);
 
-            ExtremeRolesPlugin.ShipState.AddMeetingResetObject(
-                new FakeDeadBody(
-                    rolePlyaer,
-                    targetPlyaer));            
+            IMeetingResetObject fake;
+            switch((FakerDummyOps)ops)
+            {
+                case FakerDummyOps.DeadBody:
+                    fake = new FakeDeadBody(
+                        rolePlyaer,
+                        targetPlyaer);
+                    break;
+                case FakerDummyOps.Player:
+                    fake = new FakePlayer(rolePlyaer, targetPlyaer);
+                    break;
+                default:
+                    return;
+            }
+
+            ExtremeRolesPlugin.ShipState.AddMeetingResetObject(fake);            
         }
 
         public void CreateAbility()
@@ -103,6 +171,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             var allPlayer = GameData.Instance.AllPlayers;
 
+            bool isPlayerMode = Input.GetKey(KeyCode.LeftShift);
+
             bool contine;
             byte targetPlayerId;
 
@@ -115,17 +185,20 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             } while (contine);
 
+            byte ops = isPlayerMode ? (byte)FakerDummyOps.Player : (byte)FakerDummyOps.DeadBody;
+
             RPCOperator.Call(
                 CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.FakerCreateDummy,
                 new List<byte>
                 {
                     CachedPlayerControl.LocalPlayer.PlayerId,
-                    targetPlayerId
+                    targetPlayerId,
+                    ops
                 });
             CreateDummy(
                 CachedPlayerControl.LocalPlayer.PlayerId,
-                targetPlayerId);
+                targetPlayerId, ops);
             return true;
         }
 

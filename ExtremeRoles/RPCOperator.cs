@@ -514,10 +514,10 @@ namespace ExtremeRoles
                 callerId, targetId);
         }
         public static void FakerCreateDummy(
-            byte callerId, byte targetId)
+            byte callerId, byte targetId, byte ops)
         {
             Roles.Solo.Impostor.Faker.CreateDummy(
-                callerId, targetId);
+                callerId, targetId, ops);
         }
 
         public static void OverLoaderSwitchAbility(
