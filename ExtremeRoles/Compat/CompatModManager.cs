@@ -57,6 +57,8 @@ namespace ExtremeRoles.Compat
 
         internal void SetUpMap(ShipStatus shipStatus)
         {
+            this.map = null;
+
             foreach (var mod in LoadedMod.Values)
             {
                 IMapMod mapMod = mod as IMapMod;
