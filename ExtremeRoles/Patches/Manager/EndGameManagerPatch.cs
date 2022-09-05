@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 using UnityEngine;
 
@@ -8,6 +7,7 @@ using HarmonyLib;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Patches.Manager
@@ -112,132 +112,23 @@ namespace ExtremeRoles.Patches.Manager
             if (!OptionHolder.Client.ShowRoleSummary) { return; }
 
             var position = Camera.main.ViewportToWorldPoint(new Vector3(0f, 1f, Camera.main.nearClipPlane));
-            GameObject summary = UnityEngine.Object.Instantiate(
+            GameObject summaryObj = Object.Instantiate(
                 manager.WinText.gameObject);
-            summary.transform.position = new Vector3(
+            summaryObj.transform.position = new Vector3(
                 manager.Navigation.ExitButton.transform.position.x + 0.1f,
                 position.y - 0.1f, -14f);
-            summary.transform.localScale = new Vector3(1f, 1f, 1f);
+            summaryObj.transform.localScale = new Vector3(1f, 1f, 1f);
 
-            var summaryText = new StringBuilder();
-            summaryText.AppendLine(Translation.GetString("summaryText"));
-            summaryText.AppendLine(Translation.GetString("summaryInfo"));
-
-            var summaryData = ExtremeRolesPlugin.ShipState.FinalSummary;
-
-            summaryData.Sort((x, y) =>
-            {
-                if (x.StatusInfo != y.StatusInfo)
-                {
-                    return x.StatusInfo.CompareTo(y.StatusInfo);
-                }
-
-                if (x.Role.Id != y.Role.Id)
-                {
-                    return x.Role.Id.CompareTo(y.Role.Id);
-                }
-                if (x.Role.Id == ExtremeRoleId.VanillaRole)
-                {
-                    var xVanillaRole = (Roles.Solo.VanillaRoleWrapper)x.Role;
-                    var yVanillaRole = (Roles.Solo.VanillaRoleWrapper)y.Role;
-
-                    return xVanillaRole.VanilaRoleId.CompareTo(
-                        yVanillaRole.VanilaRoleId);
-                }
-
-                return x.PlayerName.CompareTo(y.PlayerName);
-
-            });
-
-            List<Color> tagColor = new List<Color>();
-
-            for (int i = 0; i < OptionHolder.VanillaMaxPlayerNum; ++i)
-            {
-                tagColor.Add(
-                    UnityEngine.Random.ColorHSV(0f, 1f, 0.5f, 1f, 0.8f, 1f, 1f, 1f));
-            }
-
-            List<string> randomTag = new List<string> {
-                    "γ", "ζ", "δ", "ε", "η",
-                    "θ", "λ", "μ", "π", "ρ",
-                    "σ", "φ", "ψ", "χ", "ω" }.OrderBy(
-                item => RandomGenerator.Instance.Next()).ToList();
-
-
-            foreach (var playerSummary in summaryData)
-            {
-                string taskInfo = playerSummary.TotalTask > 0 ? 
-                    $"<color=#FAD934FF>{playerSummary.CompletedTask}/{playerSummary.TotalTask}</color>" : "";
-                string aliveDead = Translation.GetString(
-                    playerSummary.StatusInfo.ToString());
-
-                string roleName = playerSummary.Role.GetColoredRoleName(true);
-                string tag = playerSummary.Role.GetRoleTag();
-                
-                int id = playerSummary.Role.GameControlId;
-                int index = id % OptionHolder.VanillaMaxPlayerNum;
-                if (tag != string.Empty)
-                {
-                    tag = Design.ColoedString(
-                        tagColor[index], tag);
-                }
-                else
-                {
-                    tag = Design.ColoedString(
-                        tagColor[index], randomTag[index]);
-                }
-
-                var mutiAssignRole = playerSummary.Role as Roles.API.MultiAssignRoleBase;
-                if (mutiAssignRole != null)
-                {
-                    if (mutiAssignRole.AnotherRole != null)
-                    {
-                        string anotherTag = mutiAssignRole.AnotherRole.GetRoleTag();
-                        id = mutiAssignRole.AnotherRole.GameControlId;
-                        index = id % OptionHolder.VanillaMaxPlayerNum;
-
-                        if (anotherTag != string.Empty)
-                        {
-                            anotherTag = Design.ColoedString(
-                                tagColor[index], anotherTag);
-                        }
-                        else
-                        {
-                            anotherTag = Design.ColoedString(
-                                tagColor[index], randomTag[index]);
-                        }
-
-                        tag = string.Concat(
-                            tag, " + ", anotherTag);
-
-                    }
-                }
-
-                summaryText.AppendLine(
-                    $"{playerSummary.PlayerName}<pos=18%>{taskInfo}<pos=27%>{aliveDead}<pos=35%>{tag}:{roleName}");
-            }
-
-
-            
-            TMPro.TMP_Text summaryTextMesh = summary.GetComponent<TMPro.TMP_Text>();
-            summaryTextMesh.alignment = TMPro.TextAlignmentOptions.TopLeft;
-            summaryTextMesh.color = Color.white;
-            summaryTextMesh.outlineWidth *= 1.2f;
-            summaryTextMesh.fontSizeMin = 1.25f;
-            summaryTextMesh.fontSizeMax = 1.25f;
-            summaryTextMesh.fontSize = 1.25f;
-
-            var roleSummaryTextMeshRectTransform = summaryTextMesh.GetComponent<RectTransform>();
-            roleSummaryTextMeshRectTransform.anchoredPosition = new Vector2(position.x + 3.5f, position.y - 0.1f);
-            summaryTextMesh.text = summaryText.ToString();
-
+            FinalSummary summary = summaryObj.AddComponent<FinalSummary>();
+            summary.SetAnchorPoint(position);
+            summary.Create();
         }
 
         private static void setWinBonusText(
             EndGameManager manager)
         {
 
-            GameObject bonusTextObject = UnityEngine.Object.Instantiate(manager.WinText.gameObject);
+            GameObject bonusTextObject = Object.Instantiate(manager.WinText.gameObject);
             bonusTextObject.transform.position = new Vector3(
                 manager.WinText.transform.position.x,
                 manager.WinText.transform.position.y - 0.8f,

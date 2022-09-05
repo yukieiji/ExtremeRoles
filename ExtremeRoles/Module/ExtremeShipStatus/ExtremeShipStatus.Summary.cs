@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+using ExtremeRoles.GhostRoles;
+using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
@@ -37,7 +39,9 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             GameData.PlayerInfo playerInfo)
         {
 
-            SingleRoleBase role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
+            byte playerId = playerInfo.PlayerId;
+
+            SingleRoleBase role = ExtremeRoleManager.GameRole[playerId];
             var (completedTask, totalTask) = Helper.GameSystem.GetTaskInfo(playerInfo);
             // IsImpostor
             PlayerStatus finalStatus = PlayerStatus.Alive;
@@ -49,7 +53,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             }
             else if (this.reason == (GameOverReason)RoleGameOverReason.AssassinationMarin)
             {
-                if (playerInfo.PlayerId == IsMarinPlayerId)
+                if (playerId == IsMarinPlayerId)
                 {
                     if (playerInfo.IsDead || playerInfo.Disconnected)
                     {
@@ -60,10 +64,10 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
                         finalStatus = PlayerStatus.Assassinate;
                     }
                 }
-                else if (playerInfo.PlayerId == ExiledAssassinId)
+                else if (playerId == ExiledAssassinId)
                 {
                     if (this.deadPlayerInfo.TryGetValue(
-                        playerInfo.PlayerId, out DeadInfo info))
+                        playerId, out DeadInfo info))
                     {
                         finalStatus = info.Reason;
                     }
@@ -84,7 +88,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
                 else
                 {
                     if (deadPlayerInfo.TryGetValue(
-                        playerInfo.PlayerId, out DeadInfo info))
+                        playerId, out DeadInfo info))
                     {
                         finalStatus = info.Reason;
                     }
@@ -97,17 +101,21 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             else
             {
                 if (this.deadPlayerInfo.TryGetValue(
-                    playerInfo.PlayerId, out DeadInfo info))
+                    playerId, out DeadInfo info))
                 {
                     finalStatus = info.Reason;
                 }
             }
+
+            GhostRoleBase ghostRole = null;
+            ExtremeGhostRoleManager.GameRole.TryGetValue(playerId, out ghostRole);
 
             this.finalSummary.Add(
                 new PlayerSummary
                 {
                     PlayerName = playerInfo.PlayerName,
                     Role = role,
+                    GhostRole = ghostRole,
                     StatusInfo = finalStatus,
                     TotalTask = totalTask,
                     CompletedTask = EndReason == GameOverReason.HumansByTask ? totalTask : completedTask,
@@ -123,6 +131,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
         {
             public string PlayerName { get; set; }
             public SingleRoleBase Role { get; set; }
+            public GhostRoleBase GhostRole { get; set; }
             public int CompletedTask { get; set; }
             public int TotalTask { get; set; }
             public PlayerStatus StatusInfo { get; set; }
