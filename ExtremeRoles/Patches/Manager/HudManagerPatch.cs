@@ -43,6 +43,7 @@ namespace ExtremeRoles.Patches.Manager
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Update))]
     public static class HudManagerUpdatePatch
     {
+        public const string RoleInfoObjectName = "Info";
         private static bool buttonCreated = false;
 
         private static Dictionary<byte, TextMeshPro> allPlayerInfo = new Dictionary<byte, TextMeshPro>();
@@ -299,7 +300,7 @@ namespace ExtremeRoles.Patches.Manager
                         player.cosmetics.nameText,
                         player.cosmetics.nameText.transform.parent);
                     playerInfo.fontSize *= 0.75f;
-                    playerInfo.gameObject.name = "Info";
+                    playerInfo.gameObject.name = RoleInfoObjectName;
                     allPlayerInfo[player.PlayerId] = playerInfo;
                 }
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using UnityEngine;
+using TMPro;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -50,39 +51,60 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public sealed class FakePlayer : IMeetingResetObject
         {
             private SpriteRenderer playerImage;
-
-            private HatParent hat;
-            private VisorLayer visor;
-            private SkinLayer skin;
-            private TMPro.TextMeshPro nameText;
             private GameObject colorBindText;
+            private const string defaultPetId = "0";
 
             public FakePlayer(
                 PlayerControl rolePlayer,
-                PlayerControl targetPlayer)
+                PlayerControl targetPlayer,
+                bool canSeeFake)
             {
                 this.playerImage = Object.Instantiate(
                     targetPlayer.cosmetics.currentBodySprite.BodySprite);
                 this.playerImage.transform.position = rolePlayer.transform.position;
 
-                this.hat = this.playerImage.GetComponentInChildren<HatParent>();
-                this.visor = this.playerImage.GetComponentInChildren<VisorLayer>();
-                this.skin = this.playerImage.GetComponentInChildren<SkinLayer>();
-                this.nameText = this.playerImage.transform.FindChild(
-                    "NameText_TMP").GetComponent<TMPro.TextMeshPro>();
+                HatParent hat = this.playerImage.GetComponentInChildren<HatParent>();
+                VisorLayer visor = this.playerImage.GetComponentInChildren<VisorLayer>();
+                SkinLayer skin = this.playerImage.GetComponentInChildren<SkinLayer>();
+                TextMeshPro nameText = this.playerImage.transform.FindChild(
+                    "NameText_TMP").GetComponent<TextMeshPro>();
                 this.colorBindText = this.playerImage.transform.FindChild(
                     "ColorblindName_TMP").gameObject;
+                Transform info = this.playerImage.transform.FindChild(
+                    Patches.Manager.HudManagerUpdatePatch.RoleInfoObjectName);
+                if (info != null)
+                {
+                    Object.Destroy(info.gameObject);
+                }
 
-                this.nameText.text = "This is fake";
+                GameData.PlayerOutfit playerOutfit = targetPlayer.Data.DefaultOutfit;
+
+                nameText.text = canSeeFake ? 
+                    Translation.GetString("DummyPlayerName") : playerOutfit.PlayerName;
+                nameText.color = canSeeFake ? Palette.ImpostorRed : Palette.White;
 
                 bool isLeft = rolePlayer.cosmetics.FlipX;
 
-                GameData.PlayerOutfit playerOutfit = targetPlayer.Data.DefaultOutfit;
                 int colorId = playerOutfit.ColorId;
+                hat.SetHat(playerOutfit.HatId, colorId);
+                visor.SetVisor(playerOutfit.VisorId, colorId);
+                if (skin != null)
+                {
+                    skin.SetSkin(playerOutfit.SkinId, colorId, isLeft);
+                }
+                string petId = playerOutfit.PetId;
+                if (petId != defaultPetId)
+                {
+                    PetBehaviour pet = Object.Instantiate(
+                        FastDestroyableSingleton<HatManager>.Instance.GetPetById(
+                            petId).viewData.viewData,
+                        this.playerImage.transform);
+                    pet.SetColor(colorId);
+                    Vector2 offset = isLeft ? Vector2.left * 0.1f : Vector2.right * 0.1f;
+                    pet.transform.localPosition = 
+                        Vector2.zero + rolePlayer.Collider.offset + offset;
+                }
 
-                this.hat.SetHat(playerOutfit.HatId, colorId);
-                this.visor.SetVisor(playerOutfit.VisorId, colorId);
-                this.skin.SetSkin(playerOutfit.SkinId, colorId, isLeft);
                 PlayerMaterial.SetColors(colorId, this.playerImage);
 
                 char[] array = FastDestroyableSingleton<TranslationController>.Instance.GetString(
@@ -97,7 +119,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     }
                 }
 
-                this.colorBindText.GetComponent<TMPro.TextMeshPro>().text = new string(array);
+                this.colorBindText.GetComponent<TextMeshPro>().text = new string(array);
 
                 if (ExtremeRolesPlugin.Compat.IsModMap)
                 {
@@ -105,8 +127,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                         this.playerImage.gameObject,
                         Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
                 }
-                this.playerImage.transform.localScale = rolePlayer.defaultPlayerScale;
-                this.skin.transform.localScale = rolePlayer.defaultPlayerScale;
+
+                this.playerImage.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
+                if (skin != null)
+                {
+                    skin.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
+                }
             }
 
             public void SwitchColorName()
@@ -161,7 +187,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                         targetPlyaer);
                     break;
                 case FakerDummyOps.Player:
-                    fake = new FakePlayer(rolePlyaer, targetPlyaer);
+                    SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
+                    fake = new FakePlayer(
+                        rolePlyaer, targetPlyaer,
+                        role.IsImpostor() || role.Id == ExtremeRoleId.Marlin);
                     break;
                 default:
                     return;
@@ -196,6 +225,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             var allPlayer = GameData.Instance.AllPlayers;
 
             bool isPlayerMode = Input.GetKey(KeyCode.LeftShift);
+            bool excludeImp = Input.GetKey(KeyCode.LeftControl);
+            bool excludeMe = Input.GetKey(KeyCode.LeftAlt);
 
             bool contine;
             byte targetPlayerId;
@@ -204,8 +235,17 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 int index = Random.RandomRange(0, allPlayer.Count);
                 var player = allPlayer[index];
-                contine = player.IsDead || player.Disconnected;
                 targetPlayerId = player.PlayerId;
+
+                contine = player.IsDead || player.Disconnected;
+                if (contine && excludeImp)
+                {
+                    contine = ExtremeRoleManager.GameRole[targetPlayerId].IsImpostor();
+                }
+                else if (contine && excludeMe)
+                {
+                    contine = CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId;
+                }
 
             } while (contine);
 
