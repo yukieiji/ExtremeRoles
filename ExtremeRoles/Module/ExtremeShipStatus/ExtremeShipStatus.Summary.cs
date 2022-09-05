@@ -107,8 +107,8 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
                 }
             }
 
-            GhostRoleBase ghostRole = null;
-            ExtremeGhostRoleManager.GameRole.TryGetValue(playerId, out ghostRole);
+            ExtremeGhostRoleManager.GameRole.TryGetValue(
+                playerId, out GhostRoleBase ghostRole);
 
             this.finalSummary.Add(
                 new PlayerSummary
