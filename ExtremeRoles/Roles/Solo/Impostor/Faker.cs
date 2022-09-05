@@ -49,54 +49,74 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public sealed class FakePlayer : IMeetingResetObject
         {
-            private PlayerControl body;
+            private SpriteRenderer playerImage;
+
+            private HatParent hat;
+            private VisorLayer visor;
+            private SkinLayer skin;
+            private TMPro.TextMeshPro nameText;
+            private GameObject colorBindText;
+
             public FakePlayer(
                 PlayerControl rolePlayer,
                 PlayerControl targetPlayer)
             {
-                this.body = Object.Instantiate(
-                    AmongUsClient.Instance.PlayerPrefab);
+                this.playerImage = Object.Instantiate(
+                    targetPlayer.cosmetics.currentBodySprite.BodySprite);
+                this.playerImage.transform.position = rolePlayer.transform.position;
 
-                GameData.PlayerInfo playerInfo = new GameData.PlayerInfo(this.body);
-                playerInfo.Role = Object.Instantiate(
-                    GameData.Instance.DefaultRole);
-                playerInfo.Role.Initialize(this.body);
+                this.hat = this.playerImage.GetComponentInChildren<HatParent>();
+                this.visor = this.playerImage.GetComponentInChildren<VisorLayer>();
+                this.skin = this.playerImage.GetComponentInChildren<SkinLayer>();
+                this.nameText = this.playerImage.transform.FindChild(
+                    "NameText_TMP").GetComponent<TMPro.TextMeshPro>();
+                this.colorBindText = this.playerImage.transform.FindChild(
+                    "ColorblindName_TMP").gameObject;
 
-                this.body._cachedData = playerInfo;
+                this.nameText.text = "This is fake";
 
-                this.body.PlayerId = (byte)GameData.Instance.GetAvailableId();
-                this.body.GetComponent<DummyBehaviour>().enabled = true;
-                this.body.NetTransform.enabled = true;
-                this.body.transform.position = rolePlayer.transform.position;
-                this.body.NetTransform.Halt();
-                this.body.Visible = true;
-                this.body.Data.Tasks = new Il2CppSystem.Collections.Generic.List<GameData.TaskInfo>();
-
-                CachedPlayerControl.Remove(this.body);
+                bool isLeft = rolePlayer.cosmetics.FlipX;
 
                 GameData.PlayerOutfit playerOutfit = targetPlayer.Data.DefaultOutfit;
                 int colorId = playerOutfit.ColorId;
-                
-                this.body.RawSetName("This is Fake");
-                this.body.RawSetHat(playerOutfit.HatId, colorId);
-                this.body.RawSetPet(playerOutfit.PetId, colorId);
-                this.body.RawSetVisor(playerOutfit.VisorId, colorId);
-                this.body.RawSetSkin(playerOutfit.SkinId, colorId);
-                this.body.RawSetColor(colorId);
-                
-                /*
+
+                this.hat.SetHat(playerOutfit.HatId, colorId);
+                this.visor.SetVisor(playerOutfit.VisorId, colorId);
+                this.skin.SetSkin(playerOutfit.SkinId, colorId, isLeft);
+                PlayerMaterial.SetColors(colorId, this.playerImage);
+
+                char[] array = FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                    Palette.ColorNames[colorId],
+                    System.Array.Empty<Il2CppSystem.Object>()).ToCharArray();
+                if (array.Length != 0)
+                {
+                    array[0] = char.ToUpper(array[0]);
+                    for (int i = 1; i < array.Length; i++)
+                    {
+                        array[i] = char.ToLower(array[i]);
+                    }
+                }
+
+                this.colorBindText.GetComponent<TMPro.TextMeshPro>().text = new string(array);
+
                 if (ExtremeRolesPlugin.Compat.IsModMap)
                 {
                     ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
-                        this.body.gameObject,
+                        this.playerImage.gameObject,
                         Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
                 }
-                */
+                this.playerImage.transform.localScale = rolePlayer.defaultPlayerScale;
+                this.skin.transform.localScale = rolePlayer.defaultPlayerScale;
+            }
+
+            public void SwitchColorName()
+            {
+                this.colorBindText.SetActive(SaveManager.ColorBlindMode);
             }
 
             public void Clear()
             {
-                Object.Destroy(this.body);
+                Object.Destroy(this.playerImage);
             }
 
         }
