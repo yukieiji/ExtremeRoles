@@ -65,6 +65,8 @@ namespace ExtremeRoles.Compat
                 if (mapMod != null && 
                     mapMod.MapType == shipStatus.Type)
                 {
+                    ExtremeRolesPlugin.Logger.LogInfo(
+                        $"Awake modmap:{mapMod}");
                     mapMod.Awake(shipStatus);
                     this.map = mapMod;
                     break;
