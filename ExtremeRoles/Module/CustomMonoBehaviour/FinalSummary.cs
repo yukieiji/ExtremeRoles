@@ -8,10 +8,13 @@ using UnhollowerBaseLib.Attributes;
 using TMPro;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo;
+
+using static ExtremeRoles.Module.ExtremeShipStatus.ExtremeShipStatus;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour
 {
@@ -41,6 +44,100 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         };
 
         public FinalSummary(IntPtr ptr) : base(ptr) { }
+
+        public static List<PlayerSummary> playerSummary = new List<PlayerSummary>();
+
+        public static void AddSummary(GameData.PlayerInfo playerInfo)
+        {
+            byte playerId = playerInfo.PlayerId;
+
+            SingleRoleBase role = ExtremeRoleManager.GameRole[playerId];
+            var (completedTask, totalTask) = GameSystem.GetTaskInfo(playerInfo);
+            // IsImpostor
+            PlayerStatus finalStatus = PlayerStatus.Alive;
+
+            GameOverReason reson = ExtremeRolesPlugin.ShipState.EndReason;
+            Dictionary<byte, DeadInfo> info = ExtremeRolesPlugin.ShipState.DeadPlayerInfo;
+
+            if (reson == GameOverReason.ImpostorBySabotage &&
+                !role.IsImpostor())
+            {
+                finalStatus = PlayerStatus.Dead;
+            }
+            else if (reson == (GameOverReason)RoleGameOverReason.AssassinationMarin)
+            {
+                if (ExtremeRolesPlugin.ShipState.isMarinPlayer(playerId))
+                {
+                    if (playerInfo.IsDead || playerInfo.Disconnected)
+                    {
+                        finalStatus = PlayerStatus.DeadAssassinate;
+                    }
+                    else
+                    {
+                        finalStatus = PlayerStatus.Assassinate;
+                    }
+                }
+                else if (playerId == ExtremeRolesPlugin.ShipState.ExiledAssassinId)
+                {
+                    if (info.TryGetValue(playerId, out DeadInfo deadInfo))
+                    {
+                        finalStatus = deadInfo.Reason;
+                    }
+                }
+                else if (!role.IsImpostor())
+                {
+                    finalStatus = PlayerStatus.Surrender;
+                }
+            }
+            else if (reson == (GameOverReason)RoleGameOverReason.UmbrerBiohazard)
+            {
+                if (role.Id != ExtremeRoleId.Umbrer &&
+                    !playerInfo.IsDead &&
+                    !playerInfo.Disconnected)
+                {
+                    finalStatus = PlayerStatus.Zombied;
+                }
+                else
+                {
+                    if (info.TryGetValue(playerId, out DeadInfo deadInfo))
+                    {
+                        finalStatus = deadInfo.Reason;
+                    }
+                }
+            }
+            else if (playerInfo.Disconnected)
+            {
+                finalStatus = PlayerStatus.Disconnected;
+            }
+            else
+            {
+                if (info.TryGetValue(playerId, out DeadInfo deadInfo))
+                {
+                    finalStatus = deadInfo.Reason;
+                }
+            }
+
+            ExtremeGhostRoleManager.GameRole.TryGetValue(
+                playerId, out GhostRoleBase ghostRole);
+
+            playerSummary.Add(
+                new PlayerSummary
+                {
+                    PlayerName = playerInfo.PlayerName,
+                    Role = role,
+                    GhostRole = ghostRole,
+                    StatusInfo = finalStatus,
+                    TotalTask = totalTask,
+                    CompletedTask = reson == GameOverReason.HumansByTask ? totalTask : completedTask,
+                });
+        }
+
+        public static List<PlayerSummary> GetSummary() => playerSummary;
+
+        public static void Reset()
+        {
+            playerSummary.Clear();
+        }
 
         public void Awake()
         {
@@ -88,7 +185,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         {
             List<Color> tagColor = new List<Color>();
 
-            Dictionary <SummaryType, StringBuilder> summary = createSummaryBase();
+            Dictionary <SummaryType, StringBuilder> finalSummary = createSummaryBase();
 
             for (int i = 0; i < OptionHolder.VanillaMaxPlayerNum; ++i)
             {
@@ -99,17 +196,19 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             List<string> randomTag = tags.OrderBy(
                 item => RandomGenerator.Instance.Next()).ToList();
 
-            foreach (var playerSummary in getSortedSummary())
+            sortedSummary();
+
+            foreach (PlayerSummary summary in playerSummary)
             {
-                string taskInfo = playerSummary.TotalTask > 0 ?
-                    $"<color=#FAD934FF>{playerSummary.CompletedTask}/{playerSummary.TotalTask}</color>" : "";
+                string taskInfo = summary.TotalTask > 0 ?
+                    $"<color=#FAD934FF>{summary.CompletedTask}/{summary.TotalTask}</color>" : "";
                 string aliveDead = Translation.GetString(
-                    playerSummary.StatusInfo.ToString());
+                    summary.StatusInfo.ToString());
 
-                string roleName = playerSummary.Role.GetColoredRoleName(true);
-                string tag = playerSummary.Role.GetRoleTag();
+                string roleName = summary.Role.GetColoredRoleName(true);
+                string tag = summary.Role.GetRoleTag();
 
-                int id = playerSummary.Role.GameControlId;
+                int id = summary.Role.GameControlId;
                 int index = id % OptionHolder.VanillaMaxPlayerNum;
                 if (tag != string.Empty)
                 {
@@ -122,7 +221,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                         tagColor[index], randomTag[index]);
                 }
 
-                var mutiAssignRole = playerSummary.Role as MultiAssignRoleBase;
+                var mutiAssignRole = summary.Role as MultiAssignRoleBase;
                 if (mutiAssignRole != null)
                 {
                     if (mutiAssignRole.AnotherRole != null)
@@ -148,23 +247,23 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                     }
                 }
 
-                summary[SummaryType.Role].AppendLine(
-                    $"{playerSummary.PlayerName}<pos=18%>{taskInfo}<pos=27%>{aliveDead}<pos=35%>{tag}:{roleName}");
+                finalSummary[SummaryType.Role].AppendLine(
+                    $"{summary.PlayerName}<pos=18%>{taskInfo}<pos=27%>{aliveDead}<pos=35%>{tag}:{roleName}");
 
 
-                GhostRoleBase ghostRole = playerSummary.GhostRole;
+                GhostRoleBase ghostRole = summary.GhostRole;
                 string ghostRoleName = ghostRole != null ?
                     ghostRole.GetColoredRoleName() :
                     Translation.GetString("noGhostRole");
 
-                summary[SummaryType.GhostRole].AppendLine(
-                    $"{playerSummary.PlayerName}<pos=18%>{taskInfo}<pos=27%>{aliveDead}<pos=35%>{tag}:{ghostRoleName}");
+                finalSummary[SummaryType.GhostRole].AppendLine(
+                    $"{summary.PlayerName}<pos=18%>{taskInfo}<pos=27%>{aliveDead}<pos=35%>{tag}:{ghostRoleName}");
             }
 
-            int allSummary = summary.Count;
+            int allSummary = finalSummary.Count;
             int page = 0;
 
-            foreach (StringBuilder builder in summary.Values)
+            foreach (StringBuilder builder in finalSummary.Values)
             {
                 ++page;
                 builder.AppendLine("");
@@ -184,12 +283,9 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                 position.x + 3.5f, position.y - 0.1f);
         }
 
-        [HideFromIl2Cpp]
-        private List<ExtremeShipStatus.ExtremeShipStatus.PlayerSummary> getSortedSummary()
+        private void sortedSummary()
         {
-            var summaryData = ExtremeRolesPlugin.ShipState.FinalSummary;
-
-            summaryData.Sort((x, y) =>
+            playerSummary.Sort((x, y) =>
             {
                 if (x.StatusInfo != y.StatusInfo)
                 {
@@ -212,8 +308,6 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                 return x.PlayerName.CompareTo(y.PlayerName);
 
             });
-
-            return summaryData;
         }
 
         [HideFromIl2Cpp]
@@ -248,6 +342,16 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         private void updateShowText()
         {
             this.showText.text = this.summaryText[this.curPage];
+        }
+
+        public sealed class PlayerSummary
+        {
+            public string PlayerName { get; set; }
+            public SingleRoleBase Role { get; set; }
+            public GhostRoleBase GhostRole { get; set; }
+            public int CompletedTask { get; set; }
+            public int TotalTask { get; set; }
+            public PlayerStatus StatusInfo { get; set; }
         }
     }
 }

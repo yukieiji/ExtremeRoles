@@ -92,6 +92,8 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             this.isTargetPlayerId = targetPlayerId;
         }
 
+        public bool isMarinPlayer(byte playerId) => playerId == this.isTargetPlayerId;
+
         private string getRoleAditionalInfo()
         {
             if (this.union == null) { return string.Empty; }

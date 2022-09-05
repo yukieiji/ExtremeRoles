@@ -92,7 +92,7 @@ namespace ExtremeRoles.Patches.Manager
                     poolablePlayer.cosmetics.nameText.transform.localPosition.y, -15f);
                 poolablePlayer.cosmetics.nameText.text = winningPlayerData.PlayerName;
 
-                foreach (var data in ExtremeRolesPlugin.ShipState.FinalSummary)
+                foreach (var data in FinalSummary.GetSummary())
                 {
                     if (data.PlayerName != winningPlayerData.PlayerName) { continue; }
                     poolablePlayer.cosmetics.nameText.text +=

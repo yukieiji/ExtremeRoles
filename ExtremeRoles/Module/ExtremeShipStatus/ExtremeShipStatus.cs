@@ -20,7 +20,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             this.resetDeadPlayerInfo();
             this.resetGhostAbilityReport();
             this.resetGlobalAction();
-            this.resetPlayerSummary();
+            // this.resetPlayerSummary();
             this.resetMeetingCount();
             this.resetRoleAssign();
             
