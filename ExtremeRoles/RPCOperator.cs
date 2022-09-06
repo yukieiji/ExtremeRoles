@@ -58,6 +58,7 @@ namespace ExtremeRoles
             CarpenterUseAbility,
             SurvivorDeadWin,
             CaptainAbility,
+            ResurrecterRpc,
 
             // インポスター
             AssasinVoteFor,
@@ -500,6 +501,11 @@ namespace ExtremeRoles
         public static void CaptainTargetVote(ref MessageReader reader)
         {
             Roles.Solo.Crewmate.Captain.UseAbility(ref reader);
+        }
+
+        public static void ResurrecterRpc(ref MessageReader reader)
+        {
+            Roles.Solo.Crewmate.Resurrecter.RpcAbility(ref reader);
         }
 
         public static void AssasinVoteFor(byte targetId)

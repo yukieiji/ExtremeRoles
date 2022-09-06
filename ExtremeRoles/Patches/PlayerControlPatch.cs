@@ -632,6 +632,9 @@ namespace ExtremeRoles.Patches
                 case RPCOperator.Command.CaptainAbility:
                     RPCOperator.CaptainTargetVote(ref reader);
                     break;
+                case RPCOperator.Command.ResurrecterRpc:
+                    RPCOperator.ResurrecterRpc(ref reader);
+                    break;
                 case RPCOperator.Command.AssasinVoteFor:
                     byte voteTargetId = reader.ReadByte();
                     RPCOperator.AssasinVoteFor(voteTargetId);

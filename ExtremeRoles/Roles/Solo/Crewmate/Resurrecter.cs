@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using UnityEngine;
 using Hazel;
@@ -11,7 +12,7 @@ using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public sealed class Resurrecter : SingleRoleBase, IRoleAwake<RoleTypes>
+    public sealed class Resurrecter : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleReportHock
     {
         public override bool IsAssignGhostRole
         {
@@ -33,7 +34,15 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             AwakeTaskGage,
             ResurrectTaskGage,
             ResurrectDelayTime,
-            CanResurrectOnExil
+            CanResurrectOnExil,
+            ResurrectTaskResetMeetingNum,
+            ResurrectTaskResetGage,
+        }
+
+        public enum ResurrecterRpcOps : byte
+        {
+            UseResurrect,
+            ReplaceTask,
         }
 
         private bool awakeRole;
@@ -46,8 +55,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private bool isResurrected;
         private bool isExild;
 
+        private bool isActiveMeetingCount;
+        private int meetingCounter;
+        private int maxMeetingCount;
+
         private bool activateResurrectTimer;
         private float resurrectTimer;
+
+        private float resetTaskGage;
 
         public Resurrecter() : base(
             ExtremeRoleId.Resurrecter,
@@ -57,12 +72,93 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             false, true, false, false)
         { }
 
-        public string GetFakeOptionString() => "";
+        public static void RpcAbility(ref MessageReader reader)
+        {
+            ResurrecterRpcOps ops = (ResurrecterRpcOps)reader.ReadByte();
+            byte resurrecterPlayerId = reader.ReadByte();
 
+            switch (ops)
+            {
+                case ResurrecterRpcOps.UseResurrect:
+                    Resurrecter resurrecter = ExtremeRoleManager.GetSafeCastedRole<Resurrecter>(
+                        resurrecterPlayerId);
+                    if (resurrecter == null) { return; }
+                    useResurrect(resurrecter);
+                    break;
+                case ResurrecterRpcOps.ReplaceTask:
+                    int index = reader.ReadInt32();
+                    int taskIndex = reader.ReadInt32();
+                    replaceToNewTask(resurrecterPlayerId, index, taskIndex);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private static void useResurrect(Resurrecter resurrecter)
+        {
+            resurrecter.isResurrected = true;
+            resurrecter.isActiveMeetingCount = true;
+        }
+
+        private static void replaceToNewTask(byte playerId, int index, int taskIndex)
+        {
+            var player = Player.GetPlayerControlById(playerId);
+
+            if (player == null) { return; }
+
+            byte taskId = (byte)taskIndex;
+
+            if (GameSystem.SetPlayerNewTask(
+                ref player, taskId, (uint)index))
+            {
+                player.Data.Tasks[index] = new GameData.TaskInfo(
+                    taskId, (uint)index);
+                player.Data.Tasks[index].Id = (uint)index;
+
+                GameData.Instance.SetDirtyBit(
+                    1U << (int)player.PlayerId);
+            }
+        }
+
+        public void HockReportButton(
+            PlayerControl rolePlayer, GameData.PlayerInfo reporter)
+        {
+            if (this.isActiveMeetingCount)
+            {
+                ++this.meetingCounter;
+            }
+        }
+
+        public void HockBodyReport(
+            PlayerControl rolePlayer, GameData.PlayerInfo reporter, GameData.PlayerInfo reportBody)
+        {
+            if (this.isActiveMeetingCount)
+            {
+                ++this.meetingCounter;
+            }
+        }
+
+        public string GetFakeOptionString() => "";
 
         public void Update(PlayerControl rolePlayer)
         {
-            if (!this.awakeRole || !this.canResurrect)
+            if (this.isActiveMeetingCount &&
+                this.meetingCounter >= this.maxMeetingCount)
+            {
+                this.isActiveMeetingCount = false;
+                this.meetingCounter = 0;
+                replaceTask(rolePlayer);
+                return;
+            }
+            
+            if (rolePlayer.Data.IsDead && this.infoBlock())
+            {
+                FastDestroyableSingleton<HudManager>.Instance.Chat.SetVisible(false);
+            }
+
+            if (!this.awakeRole || 
+                (!this.canResurrect && !this.isResurrected))
             {
                 float taskGage = Player.GetPlayerTaskGage(rolePlayer);
 
@@ -71,32 +167,34 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     this.awakeRole = true;
                     this.HasOtherVison = this.awakeHasOtherVision;
                 }
-                if (taskGage >= this.resurrectTaskGage && !this.canResurrect)
+                if (taskGage >= this.resurrectTaskGage && 
+                    !this.canResurrect)
                 {
-                    this.canResurrect = true;
+                    if (rolePlayer.Data.IsDead)
+                    {
+                        revive(rolePlayer);
+                    }
+                    else
+                    {
+                        this.canResurrect = true;
+                        this.isResurrected = false;
+                    }
                 }
             }
 
             if (this.isResurrected) { return; }
 
-            if (!this.activateResurrectTimer &&
+            if (rolePlayer.Data.IsDead &&
+                this.activateResurrectTimer &&
                 this.canResurrect &&
-                (!this.isExild || this.canResurrectOnExil) &&
-                rolePlayer.Data.IsDead)
-            {
-
-                return;
-            }
-
-            if (this.activateResurrectTimer &&
-                !this.isExild &&
                 MeetingHud.Instance != null &&
                 ExileController.Instance != null)
             {
                 this.resurrectTimer -= Time.fixedDeltaTime;
                 if (this.resurrectTimer <= 0.0f)
                 {
-
+                    this.activateResurrectTimer = false;
+                    revive(rolePlayer);
                 }
             }
         }
@@ -171,16 +269,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public override void ExiledAction(
             GameData.PlayerInfo rolePlayer)
         {
+            this.isExild = true;
+
             if (this.canResurrectOnExil &&
                 this.canResurrect && 
                 !this.isResurrected)
             {
                 this.activateResurrectTimer = true;
-                this.isExild = false;
-            }
-            else
-            {
-                this.isExild = true;
             }
         }
 
@@ -195,6 +290,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 this.activateResurrectTimer = true;
             }
         }
+
+        public override bool IsBlockShowMeetingRoleInfo() => this.infoBlock();
+
+        public override bool IsBlockShowPlayingRoleInfo() => this.infoBlock();
+             
 
         protected override void CreateSpecificOption(
             IOption parentOps)
@@ -215,6 +315,17 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 3.0f, 0.0f, 10.0f, 0.1f,
                 parentOps);
 
+            CreateIntOption(
+                ResurrecterOption.ResurrectTaskResetMeetingNum,
+                1, 1, 5, 1,
+                parentOps);
+
+            CreateIntOption(
+                ResurrecterOption.ResurrectTaskResetGage,
+                20, 10, 50, 5,
+                parentOps,
+                format: OptionUnit.Percentage);
+
             CreateBoolOption(
                 ResurrecterOption.CanResurrectOnExil,
                 false, parentOps);
@@ -222,10 +333,20 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         protected override void RoleSpecificInit()
         {
-            this.awakeTaskGage = (float)OptionHolder.AllOption[
+            var allOpt = OptionHolder.AllOption;
+
+            this.awakeTaskGage = (float)allOpt[
                 GetRoleOptionId(ResurrecterOption.AwakeTaskGage)].GetValue() / 100.0f;
-            this.resurrectTaskGage = (float)OptionHolder.AllOption[
+            this.resurrectTaskGage = (float)allOpt[
                 GetRoleOptionId(ResurrecterOption.ResurrectTaskGage)].GetValue() / 100.0f;
+            this.resetTaskGage = (float)allOpt[
+                GetRoleOptionId(ResurrecterOption.ResurrectTaskResetGage)].GetValue() / 100.0f;
+
+            this.resurrectTimer = allOpt[
+                GetRoleOptionId(ResurrecterOption.ResurrectDelayTime)].GetValue();
+
+            this.canResurrectOnExil = allOpt[
+                GetRoleOptionId(ResurrecterOption.CanResurrectOnExil)].GetValue();
 
             this.awakeHasOtherVision = this.HasOtherVison;
             this.canResurrect = false;
@@ -240,6 +361,18 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 this.awakeRole = false;
                 this.HasOtherVison = false;
+            }
+        }
+
+        private bool infoBlock()
+        {
+            if (this.isExild)
+            {
+                return this.canResurrectOnExil && !this.isResurrected;
+            }
+            else
+            {
+                return !this.isResurrected;
             }
         }
 
@@ -309,6 +442,71 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             writer.Write(teleportPos.y);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCOperator.UncheckedSnapTo(playerId, teleportPos);
+
+            RPCOperator.Call(
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                RPCOperator.Command.ResurrecterRpc,
+                new List<byte> { (byte)ResurrecterRpcOps.UseResurrect, playerId });
+            useResurrect(this);
+
+            FastDestroyableSingleton<HudManager>.Instance.Chat.chatBubPool.ReclaimAll();
+        }
+
+        private void replaceTask(PlayerControl rolePlayer)
+        {
+            GameData.PlayerInfo playerInfo = rolePlayer.Data;
+
+            var shuffleTaskIndex = Enumerable.Range(
+                0, playerInfo.Tasks.Count).ToList().OrderBy(
+                    item => RandomGenerator.Instance.Next()).ToList();
+
+            int replaceTaskNum = 1;
+            int maxReplaceTaskNum = Mathf.CeilToInt(playerInfo.Tasks.Count * this.resetTaskGage);
+
+            foreach (int i in shuffleTaskIndex)
+            {
+                if (replaceTaskNum >= maxReplaceTaskNum) { break; }
+
+                if (playerInfo.Tasks[i].Complete)
+                {
+                    
+                    int taskIndex;
+                    int replaceTaskId = playerInfo.Tasks[i].TypeId;
+
+                    if (CachedShipStatus.Instance.CommonTasks.FirstOrDefault(
+                    (NormalPlayerTask t) => t.Index == replaceTaskId) != null)
+                    {
+                        taskIndex = GameSystem.GetRandomCommonTaskId();
+                    }
+                    else if (CachedShipStatus.Instance.LongTasks.FirstOrDefault(
+                        (NormalPlayerTask t) => t.Index == replaceTaskId) != null)
+                    {
+                        taskIndex = GameSystem.GetRandomLongTask();
+                    }
+                    else if (CachedShipStatus.Instance.NormalTasks.FirstOrDefault(
+                        (NormalPlayerTask t) => t.Index == replaceTaskId) != null)
+                    {
+                        taskIndex = GameSystem.GetRandomNormalTaskId();
+                    }
+                    else
+                    {
+                        continue;
+                    }
+
+                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                        CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                        (byte)RPCOperator.Command.AgencySetNewTask,
+                        Hazel.SendOption.Reliable, -1);
+                    writer.Write((byte)ResurrecterRpcOps.ReplaceTask);
+                    writer.Write(rolePlayer.PlayerId);
+                    writer.Write(i);
+                    writer.Write(taskIndex);
+                    AmongUsClient.Instance.FinishRpcImmediately(writer);
+                    replaceToNewTask(rolePlayer.PlayerId, i, taskIndex);
+                    
+                    ++replaceTaskNum;
+                }
+            }
         }
     }
 }
