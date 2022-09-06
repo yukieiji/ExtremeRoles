@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using UnityEngine;
+using Hazel;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -240,6 +241,73 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 this.awakeRole = false;
                 this.HasOtherVison = false;
             }
+        }
+
+        private void revive(PlayerControl rolePlayer)
+        {
+            if (rolePlayer == null) { return; }
+
+            byte playerId = rolePlayer.PlayerId;
+
+            RPCOperator.Call(
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                RPCOperator.Command.UncheckedRevive,
+                new List<byte> { playerId });
+            RPCOperator.UncheckedRevive(playerId);
+
+            if (rolePlayer.Data == null ||
+                rolePlayer.Data.IsDead ||
+                rolePlayer.Data.Disconnected) { return; }
+
+            var allPlayer = GameData.Instance.AllPlayers;
+            ShipStatus ship = CachedShipStatus.Instance;
+
+            List<Vector2> randomPos = new List<Vector2>();
+
+            if (ExtremeRolesPlugin.Compat.IsModMap)
+            {
+                // MOD用のスポーン位置を持ってくる
+            }
+            else
+            {
+                switch (PlayerControl.GameOptions.MapId)
+                {
+                    case 0:
+                    case 1:
+                    case 2:
+                    case 3:
+                        Vector2 baseVec = Vector2.up;
+                        baseVec = baseVec.Rotate(
+                            (float)(playerId - 1) * (360f / (float)allPlayer.Count));
+                        Vector2 offset = baseVec * ship.SpawnRadius + new Vector2(0f, 0.3636f);
+                        randomPos.Add(ship.InitialSpawnCenter + offset);
+                        randomPos.Add(ship.MeetingSpawnCenter + offset);
+                        break;
+                    case 4:
+                        randomPos.Add(new Vector2(-0.7f, 8.5f));
+                        randomPos.Add(new Vector2(-0.7f, -1.0f));
+                        randomPos.Add(new Vector2(15.5f, 0.0f));
+                        randomPos.Add(new Vector2(-7.0f, -11.5f));
+                        randomPos.Add(new Vector2(20.0f, 10.5f));
+                        randomPos.Add(new Vector2(33.5f, -1.5f));
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            Vector2 teleportPos = randomPos[
+                RandomGenerator.Instance.Next(randomPos.Count)];
+
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                (byte)RPCOperator.Command.UncheckedSnapTo,
+                Hazel.SendOption.Reliable, -1);
+            writer.Write(playerId);
+            writer.Write(teleportPos.x);
+            writer.Write(teleportPos.y);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            RPCOperator.UncheckedSnapTo(playerId, teleportPos);
         }
     }
 }
