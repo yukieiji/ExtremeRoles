@@ -361,6 +361,14 @@ namespace ExtremeRoles
             if (target != null)
             {
                 target.Revive();
+
+                // なんか起きて失敗
+                if (target.Data == null || 
+                    target.Data.IsDead || 
+                    target.Data.Disconnected) { return; }
+
+                // 死体は消しておく
+                CleanDeadBody(target.PlayerId);
             }
         }
 
