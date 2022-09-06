@@ -1179,6 +1179,12 @@ namespace ExtremeRoles.Patches
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
             if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
 
+            var (onRevive, onReviveOther) = ExtremeRoleManager.GetInterfaceCastedRole<
+                IRoleOnRevive>(__instance.PlayerId);
+
+            onRevive?.ReviveAction(__instance);
+            onReviveOther?.ReviveAction(__instance);
+
             var ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
             if (ghostRole == null) { return; }
 

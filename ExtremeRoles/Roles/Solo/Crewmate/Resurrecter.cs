@@ -9,10 +9,11 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.API.Extension.State;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public sealed class Resurrecter : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleReportHock
+    public sealed class Resurrecter : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleResetMeeting, IRoleOnRevive
     {
         public override bool IsAssignGhostRole
         {
@@ -43,6 +44,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             UseResurrect,
             ReplaceTask,
+            ResetFlash,
         }
 
         private bool awakeRole;
@@ -63,6 +65,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private float resurrectTimer;
 
         private float resetTaskGage;
+
+        private static SpriteRenderer flash;
 
         public Resurrecter() : base(
             ExtremeRoleId.Resurrecter,
@@ -89,6 +93,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     int index = reader.ReadInt32();
                     int taskIndex = reader.ReadInt32();
                     replaceToNewTask(resurrecterPlayerId, index, taskIndex);
+                    break;
+                case ResurrecterRpcOps.ResetFlash:
+                    if (flash != null)
+                    {
+                        flash.enabled = false;
+                    }
                     break;
                 default:
                     break;
@@ -121,21 +131,72 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
         }
 
-        public void HockReportButton(
-            PlayerControl rolePlayer, GameData.PlayerInfo reporter)
+        public void ResetOnMeetingStart()
         {
             if (this.isActiveMeetingCount)
             {
                 ++this.meetingCounter;
             }
+            RPCOperator.Call(
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                RPCOperator.Command.ResurrecterRpc,
+                new List<byte>
+                { 
+                    (byte)ResurrecterRpcOps.ResetFlash,
+                    CachedPlayerControl.LocalPlayer.PlayerId
+                });
+
+            if (flash != null)
+            {
+                flash.enabled = false;
+            }
         }
 
-        public void HockBodyReport(
-            PlayerControl rolePlayer, GameData.PlayerInfo reporter, GameData.PlayerInfo reportBody)
+        public void ResetOnMeetingEnd()
         {
-            if (this.isActiveMeetingCount)
+            return;
+        }
+
+        public void ReviveAction(PlayerControl player)
+        {
+            var role = ExtremeRoleManager.GetLocalPlayerRole();
+            if (role.CanKill())
             {
-                ++this.meetingCounter;
+                var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+
+                if (flash == null)
+                {
+                    flash = Object.Instantiate(
+                         hudManager.FullScreen,
+                         hudManager.transform);
+                    flash.transform.localPosition = new Vector3(0f, 0f, 20f);
+                    flash.gameObject.SetActive(true);
+                }
+
+                hudManager.StartCoroutine(
+                    Effects.Lerp(1.0f, new System.Action<float>((p) =>
+                    {
+                        if (flash == null) { return; }
+                        
+                        if (p < 0.5)
+                        {
+                            flash.color = new Color(
+                                this.NameColor.r, this.NameColor.g,
+                                this.NameColor.b, Mathf.Clamp01(p * 2 * 0.75f));
+
+                        }
+                        else
+                        {
+                            flash.color = new Color(
+                                this.NameColor.r, this.NameColor.g,
+                                this.NameColor.b, Mathf.Clamp01((1 - p) * 2 * 0.75f));
+                        }
+                        if (p == 1f)
+                        {
+                            flash.enabled = false;
+                        }
+                    }))
+                );
             }
         }
 
