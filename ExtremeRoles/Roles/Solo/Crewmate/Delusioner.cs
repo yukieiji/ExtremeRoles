@@ -179,7 +179,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 
                 if (ExtremeRolesPlugin.Compat.IsModMap)
                 {
-                    // MOD用のスポーン位置を持ってくる
+                    randomPos = ExtremeRolesPlugin.Compat.ModMap.GetSpawnPos(
+                        teloportTarget);
                 }
                 else
                 {
@@ -191,7 +192,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                         case 3:
                             Vector2 baseVec = Vector2.up;
                             baseVec = baseVec.Rotate(
-                                (float)(this.targetPlayerId - 1) * (360f / (float)allPlayer.Count));
+                                (float)(teloportTarget - 1) * (360f / (float)allPlayer.Count));
                             Vector2 offset = baseVec * ship.SpawnRadius + new Vector2(0f, 0.3636f);
                             randomPos.Add(ship.InitialSpawnCenter + offset);
                             randomPos.Add(ship.MeetingSpawnCenter + offset);

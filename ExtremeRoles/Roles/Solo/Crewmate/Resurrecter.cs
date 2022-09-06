@@ -266,7 +266,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             if (ExtremeRolesPlugin.Compat.IsModMap)
             {
-                // MOD用のスポーン位置を持ってくる
+                randomPos = ExtremeRolesPlugin.Compat.ModMap.GetSpawnPos(
+                    playerId);
             }
             else
             {
