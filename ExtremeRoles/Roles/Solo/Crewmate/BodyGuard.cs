@@ -219,7 +219,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             get => this.shieldButton;
             set
             {
-                this.shieldButton = (BodyGuardShieldButton)value;
+                this.shieldButton = value;
+                this.castedShieldButton = (BodyGuardShieldButton)this.shieldButton;
             }
         }
 
@@ -227,7 +228,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         private int shildNum;
         private float shieldRange;
-        private BodyGuardShieldButton shieldButton;
+        private RoleAbilityButtonBase shieldButton;
+        private BodyGuardShieldButton castedShieldButton;
 
         private Sprite shildButtonImage;
 
@@ -491,7 +493,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             this.RoleAbilityInit();
 
-            this.shieldButton.UpdateAbilityCount(
+            this.castedShieldButton.UpdateAbilityCount(
                 OptionHolder.AllOption[GetRoleOptionId(
                     RoleAbilityCommonOption.AbilityCount)].GetValue());
             this.Button.SetLabelToCrewmate();
@@ -514,7 +516,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             if (this.shieldButton == null) { return; }
 
-            this.shieldButton.UpdateAbilityCount(this.shildNum);
+            this.castedShieldButton.UpdateAbilityCount(this.shildNum);
         }
 
         public bool UseAbility()
@@ -609,7 +611,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             return
                 !this.awakeMeetingAbility ||
-                this.shieldButton.CurAbilityNum <= 0 ||
+                this.castedShieldButton.CurAbilityNum <= 0 ||
                 instance.TargetPlayerId == 253;
         }
 
@@ -640,7 +642,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                         targetPlayerId
                     });
                 featShield(player.PlayerId, targetPlayerId);
-                this.shieldButton.UpdateAbilityCount(this.shieldButton.CurAbilityNum - 1);
+                this.castedShieldButton.UpdateAbilityCount(
+                    this.castedShieldButton.CurAbilityNum - 1);
             }
             return meetingfeatShield;
         }
@@ -693,7 +696,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
                 this.meetingText.text = string.Format(
                     Helper.Translation.GetString("meetingShieldState"),
-                    this.shieldButton.CurAbilityNum);
+                    this.castedShieldButton.CurAbilityNum);
                 this.meetingText.gameObject.SetActive(true);
             }
             else
@@ -748,7 +751,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.awakeMeetingReport = this.meetingReportTaskGage <= 0.0f;
 
             this.RoleAbilityInit();
-            this.shildNum = this.shieldButton.CurAbilityNum;
+            this.shildNum = this.castedShieldButton.CurAbilityNum;
         }
     }
 }
