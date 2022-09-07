@@ -88,11 +88,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 bool isReset = this.resetCheck();
                 if (isReset)
                 {
+                    this.abilityCountText.gameObject.SetActive(false);
                     this.ButtonSprite = this.resetSprite;
                     this.ButtonText = this.resetAbilityText;
                 }
                 else
                 {
+                    this.abilityCountText.gameObject.SetActive(true);
                     this.ButtonSprite = this.defaultSprite;
                     this.ButtonText = this.defaultAbilityText;
                 }
