@@ -217,6 +217,20 @@ namespace ExtremeRoles.Roles.API.Extension.State
             }
         }
 
+        public static bool IsAssignGhostRole(this SingleRoleBase role)
+        {
+            bool isAssignGhostRole = role.IsAssignGhostRole;
+
+            if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
+            {
+                return isAssignGhostRole;
+            }
+            else
+            {
+                return isAssignGhostRole && multiAssignRole.AnotherRole.IsAssignGhostRole;
+            }
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool isNotMultiAssign(SingleRoleBase role, out MultiAssignRoleBase multiAssignRole)
         {

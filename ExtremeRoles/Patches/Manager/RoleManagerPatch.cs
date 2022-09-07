@@ -10,6 +10,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Patches.Manager
@@ -654,7 +655,7 @@ namespace ExtremeRoles.Patches.Manager
 
             var role = ExtremeRoleManager.GameRole[player.PlayerId];
 
-            if (!role.IsAssignGhostRole) { return false; }
+            if (!role.IsAssignGhostRole()) { return false; }
             if (ExtremeGhostRoleManager.IsCombRole(role.Id)) { return false; }
 
             if (role.IsNeutral() &&
@@ -670,6 +671,9 @@ namespace ExtremeRoles.Patches.Manager
         {
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
             if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
+
+            if (!ExtremeRoleManager.GameRole[player.PlayerId].IsAssignGhostRole()) { return; }
+            
             ExtremeGhostRoleManager.AssignGhostRoleToPlayer(player);
         }
     }
