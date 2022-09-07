@@ -166,6 +166,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void ReviveAction(PlayerControl player)
         {
+            // リセット会議クールダウン
+            CachedShipStatus.Instance.EmergencyCooldown = (float)PlayerControl.GameOptions.EmergencyCooldown;
+
             var role = ExtremeRoleManager.GetLocalPlayerRole();
             if (role.CanKill())
             {
