@@ -751,7 +751,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.awakeMeetingReport = this.meetingReportTaskGage <= 0.0f;
 
             this.RoleAbilityInit();
-            this.shildNum = this.castedShieldButton.CurAbilityNum;
+            if (this.castedShieldButton != null)
+            {
+                this.shildNum = this.castedShieldButton.CurAbilityNum;
+                this.castedShieldButton.UpdateAbilityCount(
+                    allOpt[GetRoleOptionId(
+                        RoleAbilityCommonOption.AbilityCount)].GetValue());
+            }
         }
     }
 }
