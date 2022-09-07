@@ -34,6 +34,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             AwakeTaskGage,
             ResurrectTaskGage,
+            IsMeetingCoolResetOnResurrect,
             ResurrectDelayTime,
             CanResurrectOnExil,
             ResurrectTaskResetMeetingNum,
@@ -63,6 +64,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         private bool activateResurrectTimer;
         private float resurrectTimer;
+
+        private bool isMeetingCoolResetOnResurrect;
 
         private float resetTaskGage;
         private TMPro.TextMeshPro resurrectText;
@@ -167,7 +170,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public void ReviveAction(PlayerControl player)
         {
             // リセット会議クールダウン
-            CachedShipStatus.Instance.EmergencyCooldown = (float)PlayerControl.GameOptions.EmergencyCooldown;
+            if (this.isMeetingCoolResetOnResurrect)
+            {
+                CachedShipStatus.Instance.EmergencyCooldown = 
+                    (float)PlayerControl.GameOptions.EmergencyCooldown;
+            }
 
             var role = ExtremeRoleManager.GetLocalPlayerRole();
             if (role.CanKill())
@@ -394,6 +401,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 parentOps,
                 format: OptionUnit.Percentage);
 
+            CreateBoolOption(
+                ResurrecterOption.IsMeetingCoolResetOnResurrect,
+                true, parentOps);
+
             CreateFloatOption(
                 ResurrecterOption.ResurrectDelayTime,
                 3.0f, 0.0f, 10.0f, 0.1f,
@@ -432,6 +443,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 GetRoleOptionId(ResurrecterOption.CanResurrectOnExil)].GetValue();
             this.maxMeetingCount = allOpt[
                 GetRoleOptionId(ResurrecterOption.ResurrectTaskResetMeetingNum)].GetValue();
+            this.isMeetingCoolResetOnResurrect = allOpt[
+                GetRoleOptionId(ResurrecterOption.IsMeetingCoolResetOnResurrect)].GetValue();
 
             this.awakeHasOtherVision = this.HasOtherVison;
             this.canResurrect = false;
