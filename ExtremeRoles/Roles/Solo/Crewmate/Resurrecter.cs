@@ -76,7 +76,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ExtremeRoleId.Resurrecter,
             ExtremeRoleType.Crewmate,
             ExtremeRoleId.Resurrecter.ToString(),
-            ColorPalette.SurvivorYellow,
+            ColorPalette.ResurrecterBlue,
             false, true, false, false)
         { }
 
