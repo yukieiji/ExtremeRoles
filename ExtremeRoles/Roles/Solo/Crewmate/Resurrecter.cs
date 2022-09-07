@@ -65,6 +65,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private float resurrectTimer;
 
         private float resetTaskGage;
+        private TMPro.TextMeshPro resurrectText;
 
         private static SpriteRenderer flash;
 
@@ -137,6 +138,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 ++this.meetingCounter;
             }
+
+            if (this.resurrectText != null)
+            {
+                this.resurrectText.gameObject.SetActive(false);
+            }
+
             RPCOperator.Call(
                 CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.ResurrecterRpc,
@@ -251,7 +258,20 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 MeetingHud.Instance != null &&
                 ExileController.Instance != null)
             {
+                if (this.resurrectText == null)
+                {
+                    this.resurrectText = Object.Instantiate(
+                        FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+                        Camera.main.transform, false);
+                    this.resurrectText.transform.localPosition = new Vector3(0.0f, 0.0f, -250.0f);
+                    this.resurrectText.enableWordWrapping = false;
+                }
+
+                this.resurrectText.gameObject.SetActive(true);
                 this.resurrectTimer -= Time.fixedDeltaTime;
+                this.resurrectText.text = Translation.GetString(
+                    string.Format("resurrectText", this.resurrectTimer));
+
                 if (this.resurrectTimer <= 0.0f)
                 {
                     this.activateResurrectTimer = false;
@@ -405,9 +425,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             this.resurrectTimer = allOpt[
                 GetRoleOptionId(ResurrecterOption.ResurrectDelayTime)].GetValue();
-
             this.canResurrectOnExil = allOpt[
                 GetRoleOptionId(ResurrecterOption.CanResurrectOnExil)].GetValue();
+            this.maxMeetingCount = allOpt[
+                GetRoleOptionId(ResurrecterOption.ResurrectTaskResetMeetingNum)].GetValue();
 
             this.awakeHasOtherVision = this.HasOtherVison;
             this.canResurrect = false;
@@ -511,6 +532,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             useResurrect(this);
 
             FastDestroyableSingleton<HudManager>.Instance.Chat.chatBubPool.ReclaimAll();
+            if (this.resurrectText != null)
+            {
+                this.resurrectText.gameObject.SetActive(false);
+            }
         }
 
         private void replaceTask(PlayerControl rolePlayer)
