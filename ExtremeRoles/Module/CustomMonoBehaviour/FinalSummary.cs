@@ -76,7 +76,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             for (int i = 0; i < OptionHolder.VanillaMaxPlayerNum; ++i)
             {
                 tagColor.Add(
-                    Random.ColorHSV(0f, 1f, 0.5f, 1f, 0.8f, 1f, 1f, 1f));
+                    UnityEngine.Random.ColorHSV(0f, 1f, 0.5f, 1f, 0.8f, 1f, 1f, 1f));
             }
 
             List<string> randomTag = tags.OrderBy(
