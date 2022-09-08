@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+
+using UnityEngine;
 using TMPro;
 
 using ExtremeRoles.Helper;
@@ -7,37 +9,50 @@ using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.Interface;
 
 using UnhollowerBaseLib.Attributes;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour
 {
-    // 同じ処理だけど継承するとどうもおかしくなるのでしない
 
     [Il2CppRegister]
-    public sealed class LocalPlayerVoteAreaInfo : MonoBehaviour, IVoteAreaInfo
+    public abstract class VoteAreaInfo : MonoBehaviour
     {
-        private CachedPlayerControl localPlayer;
-        private TextMeshPro nameText;
-        private TextMeshPro meetingInfo;
+        protected CachedPlayerControl LocalPlayer;
+        protected TextMeshPro NameText;
+        protected TextMeshPro MeetingInfo;
 
-        private bool commActive;
-        
-        public void Init(PlayerVoteArea pva, bool commActive)
+        protected bool CommActive;
+
+        public VoteAreaInfo(IntPtr ptr) : base(ptr) { }
+
+        public virtual void Init(PlayerVoteArea pva, bool commActive)
         {
-            this.localPlayer = CachedPlayerControl.LocalPlayer;
-            this.nameText = pva.NameText;
+            this.LocalPlayer = CachedPlayerControl.LocalPlayer;
+            this.NameText = pva.NameText;
 
-            this.meetingInfo = Instantiate(
-                this.nameText, this.nameText.transform);
-            IVoteAreaInfo.InitializeText(this.meetingInfo);
-            this.commActive = commActive;
+            this.MeetingInfo = Instantiate(
+                this.NameText, this.NameText.transform);
+            this.MeetingInfo.transform.localPosition += Vector3.down * 0.20f + Vector3.left * 0.30f;
+            this.MeetingInfo.fontSize *= 0.63f;
+            this.MeetingInfo.autoSizeTextContainer = false;
+            this.MeetingInfo.gameObject.name = "VoteAreaInfo";
+            this.CommActive = commActive;
 
             base.gameObject.SetActive(true);
         }
 
-        public void FixedUpdate()
+        public abstract void FixedUpdate();
+    }
+
+
+
+    [Il2CppRegister]
+    public sealed class LocalPlayerVoteAreaInfo : VoteAreaInfo
+    {
+        public LocalPlayerVoteAreaInfo(IntPtr ptr) : base(ptr) { }
+
+        public override void FixedUpdate()
         {
             SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
             GhostRoleBase ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
@@ -50,15 +65,15 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
         private void resetInfo()
         {
-            this.nameText.text = this.localPlayer.Data.PlayerName;
+            this.NameText.text = this.LocalPlayer.Data.PlayerName;
 
-            if (this.localPlayer.Data.Role.IsImpostor)
+            if (this.LocalPlayer.Data.Role.IsImpostor)
             {
-                this.nameText.color = Palette.ImpostorRed;
+                this.NameText.color = Palette.ImpostorRed;
             }
             else
             {
-                this.nameText.color = Palette.White;
+                this.NameText.color = Palette.White;
             }
         }
 
@@ -68,7 +83,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             GhostRoleBase ghostRole)
         {
             Color paintColor = role.GetNameColor(
-                this.localPlayer.Data.IsDead);
+                this.LocalPlayer.Data.IsDead);
             if (ghostRole != null)
             {
                 Color ghostRoleColor = ghostRole.RoleColor;
@@ -76,7 +91,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             }
             if (paintColor == Palette.ClearWhite) { return; }
 
-            this.nameText.color = paintColor;
+            this.NameText.color = paintColor;
         }
 
         [HideFromIl2Cpp]
@@ -84,9 +99,9 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             SingleRoleBase role,
             GhostRoleBase ghostRole)
         {
-            this.meetingInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ?
+            this.MeetingInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ?
                 "" : getMeetingInfo(role, ghostRole);
-            this.meetingInfo.gameObject.SetActive(true);
+            this.MeetingInfo.gameObject.SetActive(true);
         }
 
         [HideFromIl2Cpp]
@@ -94,8 +109,8 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             SingleRoleBase role, GhostRoleBase ghostRole)
         {
             var (tasksCompleted, tasksTotal) = GameSystem.GetTaskInfo(
-                this.localPlayer.Data);
-            string roleNames = role.GetColoredRoleName(this.localPlayer.Data.IsDead);
+                this.LocalPlayer.Data);
+            string roleNames = role.GetColoredRoleName(this.LocalPlayer.Data.IsDead);
 
             if (ghostRole != null)
             {
@@ -103,7 +118,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                 roleNames = $"{ghostRoleName}({roleNames})";
             }
 
-            var completedStr = this.commActive ? "?" : tasksCompleted.ToString();
+            var completedStr = this.CommActive ? "?" : tasksCompleted.ToString();
             string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({completedStr}/{tasksTotal})</color>" : "";
 
             return $"{roleNames} {taskInfo}".Trim(); ;
@@ -113,37 +128,26 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         private void setTag(SingleRoleBase role)
         {
             string tag = role.GetRolePlayerNameTag(
-                role, this.localPlayer.PlayerId);
+                role, this.LocalPlayer.PlayerId);
             if (tag == string.Empty) { return; }
-            this.nameText.text += tag;
+            this.NameText.text += tag;
         }
     }
 
     [Il2CppRegister]
-    public sealed class OtherPlayerVoteAreaInfo : MonoBehaviour, IVoteAreaInfo
+    public sealed class OtherPlayerVoteAreaInfo : VoteAreaInfo
     {
-        private CachedPlayerControl localPlayer;
-        private TextMeshPro nameText;
-        private TextMeshPro meetingInfo;
-        private bool commActive;
-
         private GameData.PlayerInfo votePlayerInfo;
 
-        public void Init(PlayerVoteArea pva, bool commActive)
-        {
-            this.localPlayer = CachedPlayerControl.LocalPlayer;
-            this.nameText = pva.NameText;
+        public OtherPlayerVoteAreaInfo(IntPtr ptr) : base(ptr) { }
 
-            this.meetingInfo = Instantiate(
-                this.nameText, this.nameText.transform);
-            IVoteAreaInfo.InitializeText(this.meetingInfo);
-            this.commActive = commActive;
+        public override void Init(PlayerVoteArea pva, bool commActive)
+        {
+            base.Init(pva, commActive);
             this.votePlayerInfo = GameData.Instance.GetPlayerById(pva.TargetPlayerId);
-            
-            base.gameObject.SetActive(true);
         }
 
-        public void FixedUpdate()
+        public override void FixedUpdate()
         {
             resetInfo();
 
@@ -178,16 +182,16 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
         private void resetInfo()
         {
-            this.nameText.text = this.votePlayerInfo.PlayerName;
+            this.NameText.text = this.votePlayerInfo.PlayerName;
             
-            if (this.localPlayer.Data.Role.IsImpostor &&
+            if (this.LocalPlayer.Data.Role.IsImpostor &&
                 this.votePlayerInfo.Role.IsImpostor)
             {
-                this.nameText.color = Palette.ImpostorRed;
+                this.NameText.color = Palette.ImpostorRed;
             }
             else
             {
-                this.nameText.color = Palette.White;
+                this.NameText.color = Palette.White;
             }
         }
 
@@ -204,7 +208,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             byte targetPlayerId = this.votePlayerInfo.PlayerId;
 
             if (!OptionHolder.Client.GhostsSeeRole ||
-                !this.localPlayer.Data.IsDead ||
+                !this.LocalPlayer.Data.IsDead ||
                 blockCondition)
             {
                 Color paintColor = localRole.GetTargetRoleSeeColor(
@@ -222,7 +226,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
                 if (paintColor == Palette.ClearWhite) { return; }
 
-                this.nameText.color = paintColor;
+                this.NameText.color = paintColor;
 
             }
             else
@@ -231,7 +235,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                 if (!isMeetingInfoBlock || 
                     (targetRole.Team == localRole.Team))
                 {
-                    this.nameText.color = roleColor;
+                    this.NameText.color = roleColor;
                 }
             }
         }
@@ -243,15 +247,15 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             bool isMeetingInfoBlock,
             bool blockCondition)
         {
-            if (!this.localPlayer.Data.IsDead || blockCondition)
+            if (!this.LocalPlayer.Data.IsDead || blockCondition)
             {
-                this.meetingInfo.gameObject.SetActive(false);
+                this.MeetingInfo.gameObject.SetActive(false);
             }
             else
             {
-                this.meetingInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ? 
+                this.MeetingInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ? 
                     "" : getMeetingInfo(targetRole, targetGhostRole);
-                this.meetingInfo.gameObject.SetActive(!isMeetingInfoBlock);
+                this.MeetingInfo.gameObject.SetActive(!isMeetingInfoBlock);
             }
         }
 
@@ -261,7 +265,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             GhostRoleBase targetGhostRole)
         {
             var (tasksCompleted, tasksTotal) = GameSystem.GetTaskInfo(this.votePlayerInfo);
-            string roleNames = targetRole.GetColoredRoleName(this.localPlayer.Data.IsDead);
+            string roleNames = targetRole.GetColoredRoleName(this.LocalPlayer.Data.IsDead);
 
             if (targetGhostRole != null)
             {
@@ -269,7 +273,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                 roleNames = $"{ghostRoleName}({roleNames})";
             }
 
-            var completedStr = this.commActive ? "?" : tasksCompleted.ToString();
+            var completedStr = this.CommActive ? "?" : tasksCompleted.ToString();
             string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({completedStr}/{tasksTotal})</color>" : "";
 
             string meetingInfoText = "";
@@ -298,13 +302,13 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                 targetRole, this.votePlayerInfo.PlayerId);
             if (tag == string.Empty) { return; }
 
-            this.nameText.text += tag;
+            this.NameText.text += tag;
         }
 
         [HideFromIl2Cpp]
         private bool isBlockCondition(SingleRoleBase role)
         {
-            if (this.localPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
+            if (this.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel)
             {
                 return true;
             }

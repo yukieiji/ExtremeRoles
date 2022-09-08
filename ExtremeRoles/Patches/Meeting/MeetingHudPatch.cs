@@ -8,7 +8,6 @@ using UnityEngine;
 using UnhollowerBaseLib;
 
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -646,7 +645,7 @@ namespace ExtremeRoles.Patches.Meeting
             for (int i = 0; i < __instance.playerStates.Length; i++)
             {
                 PlayerVoteArea playerVoteArea = __instance.playerStates[i];
-                IVoteAreaInfo playerInfoUpdater;
+                VoteAreaInfo playerInfoUpdater;
                 if (playerVoteArea.TargetPlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
                 {
                     playerInfoUpdater = 
