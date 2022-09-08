@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -18,6 +19,8 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         private bool init = false;
         private int size = 0;
         private bool isBlockAdd;
+
+        public TimeMasterHistory(IntPtr ptr) : base(ptr) { }
 
         public void Awake()
         {

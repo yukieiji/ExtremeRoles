@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -37,6 +38,8 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             "θ", "λ", "μ", "π", "ρ",
             "σ", "φ", "ψ", "χ", "ω"
         };
+
+        public FinalSummary(IntPtr ptr) : base(ptr) { }
 
         public void Awake()
         {

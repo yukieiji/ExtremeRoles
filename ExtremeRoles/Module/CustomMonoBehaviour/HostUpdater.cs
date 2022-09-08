@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -11,6 +12,8 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
     public sealed class HostObjectUpdater : MonoBehaviour
     {
         private List<IUpdatableObject> updateObject = new List<IUpdatableObject>();
+
+        public HostObjectUpdater(IntPtr ptr) : base(ptr) { }
 
         public void Awake()
         {

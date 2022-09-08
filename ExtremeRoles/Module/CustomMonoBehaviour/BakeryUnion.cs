@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
@@ -17,6 +18,8 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         private float badTime = 0.0f;
         private bool isUnion = false;
         private HashSet<byte> aliveBakary = new HashSet<byte>();
+
+        public BakeryUnion(IntPtr ptr) : base(ptr) { }
 
         public void Awake()
         {
