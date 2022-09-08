@@ -50,22 +50,29 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public sealed class FakePlayer : IMeetingResetObject
         {
+            private GameObject body;
             private SpriteRenderer playerImage;
             private GameObject colorBindText;
             private const string defaultPetId = "0";
+            private const float petOffset = 0.72f;
 
             public FakePlayer(
                 PlayerControl rolePlayer,
                 PlayerControl targetPlayer,
                 bool canSeeFake)
             {
+                this.body = new GameObject("DummyPlayer");
                 this.playerImage = Object.Instantiate(
-                    targetPlayer.cosmetics.currentBodySprite.BodySprite);
-                this.playerImage.transform.position = rolePlayer.transform.position;
+                    targetPlayer.cosmetics.currentBodySprite.BodySprite,
+                    this.body.transform);
+                this.playerImage.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
+                this.body.transform.position = rolePlayer.transform.position;
+
+                Transform skinTransform = targetPlayer.transform.FindChild(
+                    "Skin");
 
                 HatParent hat = this.playerImage.GetComponentInChildren<HatParent>();
                 VisorLayer visor = this.playerImage.GetComponentInChildren<VisorLayer>();
-                SkinLayer skin = this.playerImage.GetComponentInChildren<SkinLayer>();
                 TextMeshPro nameText = this.playerImage.transform.FindChild(
                     "NameText_TMP").GetComponent<TextMeshPro>();
                 this.colorBindText = this.playerImage.transform.FindChild(
@@ -88,9 +95,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 int colorId = playerOutfit.ColorId;
                 hat.SetHat(playerOutfit.HatId, colorId);
                 visor.SetVisor(playerOutfit.VisorId, colorId);
-                if (skin != null)
+                if (skinTransform != null)
                 {
+                    GameObject skinObj = Object.Instantiate(
+                        skinTransform.gameObject, this.body.transform);
+                    SkinLayer skin = skinObj.GetComponent<SkinLayer>();
+
                     skin.SetSkin(playerOutfit.SkinId, colorId, isLeft);
+                    skinObj.transform.localScale = new Vector3(0.35f, 0.35f, 1.0f);
+                    skin.layer.flipX = isLeft;
                 }
                 string petId = playerOutfit.PetId;
                 if (petId != defaultPetId)
@@ -100,9 +113,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                             petId).viewData.viewData,
                         this.playerImage.transform);
                     pet.SetColor(colorId);
-                    Vector2 offset = isLeft ? Vector2.left * 0.1f : Vector2.right * 0.1f;
                     pet.transform.localPosition = 
-                        Vector2.zero + rolePlayer.Collider.offset + offset;
+                        Vector2.zero + (isLeft ? Vector2.right * petOffset : Vector2.left * petOffset);
+                    pet.transform.localScale = Vector3.one;
+                    pet.FlipX = isLeft;
                 }
 
                 PlayerMaterial.SetColors(colorId, this.playerImage);
@@ -126,12 +140,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
                         this.playerImage.gameObject,
                         Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
-                }
-
-                this.playerImage.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
-                if (skin != null)
-                {
-                    skin.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
                 }
             }
 
