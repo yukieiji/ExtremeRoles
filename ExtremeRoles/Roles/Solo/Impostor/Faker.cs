@@ -51,7 +51,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public sealed class FakePlayer : IMeetingResetObject
         {
             private GameObject body;
-            private SpriteRenderer playerImage;
             private GameObject colorBindText;
             private const string defaultPetId = "0";
             private const float petOffset = 0.72f;
@@ -61,23 +60,26 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 PlayerControl targetPlayer,
                 bool canSeeFake)
             {
+                bool flipX = rolePlayer.cosmetics.currentBodySprite.BodySprite.flipX;
+
                 this.body = new GameObject("DummyPlayer");
-                this.playerImage = Object.Instantiate(
+                SpriteRenderer playerImage = Object.Instantiate(
                     targetPlayer.cosmetics.currentBodySprite.BodySprite,
                     this.body.transform);
-                this.playerImage.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
+                playerImage.flipX = flipX;
+                playerImage.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
                 this.body.transform.position = rolePlayer.transform.position;
 
                 Transform skinTransform = targetPlayer.transform.FindChild(
                     "Skin");
 
-                HatParent hat = this.playerImage.GetComponentInChildren<HatParent>();
-                VisorLayer visor = this.playerImage.GetComponentInChildren<VisorLayer>();
-                TextMeshPro nameText = this.playerImage.transform.FindChild(
+                HatParent hat = playerImage.GetComponentInChildren<HatParent>();
+                VisorLayer visor = playerImage.GetComponentInChildren<VisorLayer>();
+                TextMeshPro nameText = playerImage.transform.FindChild(
                     "NameText_TMP").GetComponent<TextMeshPro>();
-                this.colorBindText = this.playerImage.transform.FindChild(
+                this.colorBindText = playerImage.transform.FindChild(
                     "ColorblindName_TMP").gameObject;
-                Transform info = this.playerImage.transform.FindChild(
+                Transform info = playerImage.transform.FindChild(
                     Patches.Manager.HudManagerUpdatePatch.RoleInfoObjectName);
                 if (info != null)
                 {
@@ -90,20 +92,27 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     Translation.GetString("DummyPlayerName") : playerOutfit.PlayerName;
                 nameText.color = canSeeFake ? Palette.ImpostorRed : Palette.White;
 
-                bool isLeft = rolePlayer.cosmetics.FlipX;
-
                 int colorId = playerOutfit.ColorId;
                 hat.SetHat(playerOutfit.HatId, colorId);
+                if (hat.FrontLayer)
+                {
+                    hat.FrontLayer.flipX = flipX;
+                }
+                if (hat.BackLayer)
+                {
+                    hat.BackLayer.flipX = flipX;
+                }
+
                 visor.SetVisor(playerOutfit.VisorId, colorId);
+                visor.SetFlipX(flipX);
                 if (skinTransform != null)
                 {
                     GameObject skinObj = Object.Instantiate(
                         skinTransform.gameObject, this.body.transform);
                     SkinLayer skin = skinObj.GetComponent<SkinLayer>();
 
-                    skin.SetSkin(playerOutfit.SkinId, colorId, isLeft);
+                    skin.SetSkin(playerOutfit.SkinId, colorId, flipX);
                     skinObj.transform.localScale = new Vector3(0.35f, 0.35f, 1.0f);
-                    skin.layer.flipX = isLeft;
                 }
                 string petId = playerOutfit.PetId;
                 if (petId != defaultPetId)
@@ -111,15 +120,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     PetBehaviour pet = Object.Instantiate(
                         FastDestroyableSingleton<HatManager>.Instance.GetPetById(
                             petId).viewData.viewData,
-                        this.playerImage.transform);
+                        playerImage.transform);
                     pet.SetColor(colorId);
                     pet.transform.localPosition = 
-                        Vector2.zero + (isLeft ? Vector2.right * petOffset : Vector2.left * petOffset);
+                        Vector2.zero + (flipX ? Vector2.right * petOffset : Vector2.left * petOffset);
                     pet.transform.localScale = Vector3.one;
-                    pet.FlipX = isLeft;
+                    pet.FlipX = flipX;
                 }
 
-                PlayerMaterial.SetColors(colorId, this.playerImage);
+                PlayerMaterial.SetColors(colorId, playerImage);
 
                 char[] array = FastDestroyableSingleton<TranslationController>.Instance.GetString(
                     Palette.ColorNames[colorId],
@@ -138,7 +147,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 if (ExtremeRolesPlugin.Compat.IsModMap)
                 {
                     ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
-                        this.playerImage.gameObject,
+                        playerImage.gameObject,
                         Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
                 }
             }
@@ -150,7 +159,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             public void Clear()
             {
-                Object.Destroy(this.playerImage);
+                Object.Destroy(this.body);
             }
 
         }
