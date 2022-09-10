@@ -31,6 +31,11 @@ namespace ExtremeRoles.Patches.MiniGame
                     FastDestroyableSingleton<TranslationController>.Instance.GetString(
                         survCamera.NewName, Array.Empty<Il2CppSystem.Object>()) : survCamera.CamName);
 
+            if (!PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(PlayerControl.LocalPlayer))
+            {
+                __instance.StartCoroutine(__instance.PulseStatic());
+            }
+
             return false;
         }
     }
