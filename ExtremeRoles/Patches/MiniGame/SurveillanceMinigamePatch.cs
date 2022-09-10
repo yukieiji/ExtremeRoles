@@ -147,6 +147,8 @@ namespace ExtremeRoles.Patches.MiniGame
             {
                 __instance.textures = __instance.textures.ToList().Concat(
                     new RenderTexture[CachedShipStatus.Instance.AllCameras.Length - 4]).ToArray();
+                __instance.ViewPorts = __instance.ViewPorts.ToList().Concat(
+                    new MeshRenderer[CachedShipStatus.Instance.AllCameras.Length - 4]).ToArray();
                 for (int i = 4; i < CachedShipStatus.Instance.AllCameras.Length; i++)
                 {
                     SurvCamera surv = CachedShipStatus.Instance.AllCameras[i];
@@ -159,6 +161,7 @@ namespace ExtremeRoles.Patches.MiniGame
                     RenderTexture temporary = RenderTexture.GetTemporary(256, 256, 16, (RenderTextureFormat)0);
                     __instance.textures[i] = temporary;
                     camera.targetTexture = temporary;
+                    __instance.ViewPorts[i].material.SetTexture("_MainTex", temporary);
                 }
             }
         }
