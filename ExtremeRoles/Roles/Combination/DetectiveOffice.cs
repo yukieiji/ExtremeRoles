@@ -513,7 +513,7 @@ namespace ExtremeRoles.Roles.Combination
         }
     }
 
-    public class DetectiveApprentice : SingleRoleBase, IRoleAbility, IRoleReportHock
+    public class DetectiveApprentice : MultiAssignRoleBase, IRoleAbility, IRoleReportHock
     {
 
         public struct DetectiveApprenticeOptionHolder
@@ -697,7 +697,9 @@ namespace ExtremeRoles.Roles.Combination
                 detectiveReset.ResetOnMeetingStart();
             }
 
-            if (prevRole.AnotherRole != null)
+            bool hasAnotherRole = prevRole.AnotherRole != null;
+
+            if (hasAnotherRole)
             {
                 if (playerId == CachedPlayerControl.LocalPlayer.PlayerId)
                 {
@@ -706,20 +708,13 @@ namespace ExtremeRoles.Roles.Combination
                     if (abilityRole != null)
                     {
                         abilityRole.ResetOnMeetingStart();
+                        abilityRole.ResetOnMeetingEnd();
                     }
                     var resetRole = prevRole.AnotherRole as IRoleResetMeeting;
                     if (resetRole != null)
                     {
                         resetRole.ResetOnMeetingStart();
-                    }
-                }
-                var targetPlayer = Player.GetPlayerControlById(playerId);
-                if (targetPlayer != null)
-                {
-                    var specialResetRole = prevRole.AnotherRole as IRoleSpecialReset;
-                    if (specialResetRole != null)
-                    {
-                        specialResetRole.AllReset(targetPlayer);
+                        resetRole.ResetOnMeetingEnd();
                     }
                 }
             }
@@ -732,8 +727,17 @@ namespace ExtremeRoles.Roles.Combination
             {
                 newRole.CreateAbility();
             }
+            if (hasAnotherRole)
+            {
+                newRole.AnotherRole = null;
+                newRole.CanHasAnotherRole = true;
+                newRole.SetAnotherRole(prevRole.AnotherRole);
+            }
 
-            ExtremeRoleManager.GameRole[playerId] = newRole;
+            lock (ExtremeRoleManager.GameRole)
+            {
+                ExtremeRoleManager.GameRole[playerId] = newRole;
+            }
         }
 
         public void CleanUp()
