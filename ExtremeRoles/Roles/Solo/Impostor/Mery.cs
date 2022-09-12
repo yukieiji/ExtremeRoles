@@ -112,7 +112,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 var referenceVent = Object.FindObjectOfType<Vent>();
                 var vent = Object.Instantiate<Vent>(referenceVent);
-                vent.transform.position = this.body.gameObject.transform.position;
+                vent.transform.position = this.body.transform.position;
                 vent.Left = null;
                 vent.Right = null;
                 vent.Center = null;
@@ -175,9 +175,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         { }
 
 
-        public static void SetCamp(byte callerId)
+        public static void SetCamp(byte callerId, Vector2 setPos)
         {
-            var rolePlayer = Player.GetPlayerControlById(callerId);
             var mery = ExtremeRoleManager.GetSafeCastedRole<Mery>(callerId);
             if (mery == null) { return; }
             var localPlayerRole = ExtremeRoleManager.GetLocalPlayerRole();
@@ -189,7 +188,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     mery.ActiveNum,
                     mery.ActiveRange,
                     localPlayerRole.IsImpostor() || isMarlin,
-                    rolePlayer.GetTruePosition()));
+                    setPos));
         }
 
         public static void ActivateVent(
@@ -252,15 +251,19 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool UseAbility()
         {
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.MerySetCamp,
-                new List<byte>
-                {
-                    CachedPlayerControl.LocalPlayer.PlayerId,
-                });
+            PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+            Vector2 setPos = localPlayer.GetTruePosition();
 
-            SetCamp(CachedPlayerControl.LocalPlayer.PlayerId);
+            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+                localPlayer.NetId,
+                (byte)RPCOperator.Command.MerySetCamp,
+                Hazel.SendOption.Reliable, -1);
+            writer.Write(localPlayer.PlayerId);
+            writer.Write(setPos.x);
+            writer.Write(setPos.y);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
+
+            SetCamp(localPlayer.PlayerId, setPos);
 
             return true;
         }
