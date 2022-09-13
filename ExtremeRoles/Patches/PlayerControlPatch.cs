@@ -673,7 +673,10 @@ namespace ExtremeRoles.Patches
                     break;
                 case RPCOperator.Command.MerySetCamp:
                     byte maryPlayerId = reader.ReadByte();
-                    RPCOperator.MarySetCamp(maryPlayerId);
+                    float maryCampX = reader.ReadSingle();
+                    float maryCampY = reader.ReadSingle();
+                    RPCOperator.MarySetCamp(
+                        maryPlayerId, maryCampX, maryCampY);
                     break;
                 case RPCOperator.Command.MeryAcivateVent:
                     int maryCampIndex = reader.ReadInt32();

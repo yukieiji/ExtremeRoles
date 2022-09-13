@@ -79,7 +79,21 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.tmpTarget = Helper.Player.GetClosestPlayerInRange(
                 CachedPlayerControl.LocalPlayer, this,
                 this.range);
-            return this.IsCommonUse() && this.tmpTarget != null;
+
+            if (this.tmpTarget == null ||
+                this.tmpTarget.Data == null) { return false; }
+
+            bool commonUse = this.IsCommonUse();
+
+            if (this.betPlayer != null)
+            {
+                return commonUse &&
+                    this.tmpTarget.Data.PlayerId != this.betPlayer.PlayerId;
+            }
+            else
+            {
+                return commonUse;
+            }
         }
 
         public void ModifiedWinPlayer(

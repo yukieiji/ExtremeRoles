@@ -507,9 +507,10 @@ namespace ExtremeRoles
                 callerId, targetId);
         }
 
-        public static void MarySetCamp(byte callerId)
+        public static void MarySetCamp(byte callerId, float x, float y)
         {
-            Roles.Solo.Impostor.Mery.SetCamp(callerId);
+            Roles.Solo.Impostor.Mery.SetCamp(
+                callerId, new UnityEngine.Vector2(x, y));
         }
         public static void MaryActiveVent(int index)
         {
