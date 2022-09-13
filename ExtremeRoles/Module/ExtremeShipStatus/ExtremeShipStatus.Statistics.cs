@@ -34,6 +34,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
                 if (playerInfo.Disconnected) { continue; }
                 SingleRoleBase role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
                 ExtremeRoleType team = role.Team;
+                ExtremeRoleId roleId = role.Id;
 
                 // クルーのカウントを数える
                 if (team == ExtremeRoleType.Crewmate) { ++numCrew; }
@@ -41,11 +42,24 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
                 // 死んでたら次のプレイヤーへ
                 if (playerInfo.IsDead) { continue; };
 
+                // マッドメイトの生存をカウントしないオプション
+                if (roleId == ExtremeRoleId.Madmate)
+                {
+                    Roles.Solo.Neutral.Madmate madmate = role as Roles.Solo.Neutral.Madmate;
+                    if (madmate != null)
+                    {
+                        if (madmate.IsDontCountAliveCrew)
+                        {
+                            continue;
+                        }
+                    }
+                }
+
                 ++numTotalAlive;
 
                 int gameControlId = role.GameControlId;
 
-                if (role.Id == ExtremeRoleId.Assassin &&
+                if (roleId == ExtremeRoleId.Assassin &&
                     role.IsImpostor())
                 {
                     Assassin assassin = role as Assassin;
@@ -58,12 +72,12 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
                     }
                 }
 
-                if (ExtremeRoleManager.SpecialWinCheckRole.Contains(role.Id))
+                if (ExtremeRoleManager.SpecialWinCheckRole.Contains(roleId))
                 {
                     addSpecialWinCheckRole(
                         ref specialWinCheckRoleAlive,
                         gameControlId,
-                        role.Id, role,
+                        roleId, role,
                         playerInfo.PlayerId);
                 }
 
@@ -85,7 +99,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 
                         ++numNeutralAlive;
 
-                        switch (role.Id)
+                        switch (roleId)
                         {
                             case ExtremeRoleId.Alice:
                                 addNeutralTeams(
