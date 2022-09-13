@@ -83,8 +83,17 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (this.tmpTarget == null ||
                 this.tmpTarget.Data == null) { return false; }
 
-            return this.IsCommonUse() && 
-                this.tmpTarget.Data.PlayerId != this.betPlayer.PlayerId;
+            bool commonUse = this.IsCommonUse();
+
+            if (this.betPlayer != null)
+            {
+                return commonUse &&
+                    this.tmpTarget.Data.PlayerId != this.betPlayer.PlayerId;
+            }
+            else
+            {
+                return commonUse;
+            }
         }
 
         public void ModifiedWinPlayer(
