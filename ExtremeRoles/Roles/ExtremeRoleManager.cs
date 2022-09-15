@@ -305,6 +305,18 @@ namespace ExtremeRoles.Roles
             {
                 role.Initialize();
             }
+
+            // 各種役職のリセット
+            // シオンのリセット
+            Xion.Purge();
+            // ボディーガードのリセット
+            BodyGuard.ResetAllShild();
+            // タイムマスターのリセット
+            TimeMaster.ResetHistory();
+
+            // APIのステータスのリセット
+            API.Extension.State.RoleState.Reset();
+
         }
 
         public static bool IsDisableWinCheckRole(SingleRoleBase role)

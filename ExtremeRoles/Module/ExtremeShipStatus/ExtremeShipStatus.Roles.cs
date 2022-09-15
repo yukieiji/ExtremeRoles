@@ -9,8 +9,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 {
     public sealed partial class ExtremeShipStatus
     {
-        public TimeMasterHistory History => this.history;
-
         public bool IsAssassinAssign => isAssignAssassin;
         public bool AssassinMeetingTrigger => this.assassinMeetingTrigger;
         public bool IsAssassinateMarin => this.isAssassinateMarin;
@@ -26,7 +24,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
         private Queue<byte> deadedAssassin = new Queue<byte>();
 
         private BakeryUnion union;
-        private TimeMasterHistory history;
 
         public void AddGlobalActionRole(SingleRoleBase role)
         {
@@ -44,13 +41,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
                         allOpt[role.GetRoleOptionId(Bakary.BakaryOption.GoodBakeTime)].GetValue(),
                         allOpt[role.GetRoleOptionId(Bakary.BakaryOption.BadBakeTime)].GetValue(),
                         allOpt[role.GetRoleOptionId(Bakary.BakaryOption.ChangeCooking)].GetValue());
-                    break;
-                case ExtremeRoleId.TimeMaster:
-                    if (this.history != null) { return; }
-                    this.history = this.status.AddComponent<TimeMasterHistory>();
-                    this.history.Initialize(
-                        allOpt[role.GetRoleOptionId(
-                            TimeMaster.TimeMasterOption.RewindTime)].GetValue());
                     break;
                 default:
                     break;

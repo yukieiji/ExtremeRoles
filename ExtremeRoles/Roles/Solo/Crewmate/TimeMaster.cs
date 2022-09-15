@@ -9,6 +9,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.AbilityButton.Roles;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
@@ -41,6 +42,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private bool isShieldOn = false;
         private SpriteRenderer rewindScreen;
         private RoleAbilityButtonBase timeShieldButton;
+        private static TimeMasterHistory history;
         private static RewindStatus rewindState;
 
         private sealed class RewindStatus
@@ -66,12 +68,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             public RewindStatus(
                 byte rolePlayerId,
                 TimeMaster tm,
+                int historySize,
                 Vector3 localPlayerPos)
             {
                 this.rewindingTM = tm;
                 this.rolePlayerId = rolePlayerId;
                 this.skipFrame = 0;
-                this.historyFrame = ExtremeRolesPlugin.ShipState.History.GetSize();
+                this.historyFrame = historySize;
                 this.frameCount = 0;
                 this.rewindFrame = 0;
                 this.prevPos = localPlayerPos;
@@ -158,6 +161,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
         }
 
+        public static void ResetHistory()
+        {
+            history = null;
+        }
+
         public static void RewindCleanUp()
         {
             PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
@@ -170,8 +178,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             localPlayer.moveable = true;
 
-            ExtremeRolesPlugin.ShipState.History.ResetAfterRewind();
-
+            history.ResetAfterRewind();
             rewindState.Reset();
             rewindState = null;
         }
@@ -267,7 +274,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         private static void startRewind(byte playerId)
         {
-            if (ExtremeRolesPlugin.ShipState.History.BlockAddHistory) { return; }
+            if (history.BlockAddHistory) { return; }
 
             PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
 
@@ -277,7 +284,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             timeMaster.isRewindTime = true;
 
-            ExtremeRolesPlugin.ShipState.History.SetAddHistoryBlock(true);
+            history.SetAddHistoryBlock(true);
 
             // Screen Initialize
             if (timeMaster.rewindScreen == null)
@@ -306,13 +313,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             rewindState = new RewindStatus(
                 playerId,
                 timeMaster,
+                history.GetSize(),
                 localPlayer.transform.position);
 
             Logging.Debug(
-                $"History Size:{ExtremeRolesPlugin.ShipState.History.GetSize()}");
+                $"History Size:{history.GetSize()}");
 
             Patches.PlayerControlFixedUpdatePatch.SetNewPosionSetter(
-                ExtremeRolesPlugin.ShipState.History.GetAllHistory(),
+                history.GetAllHistory(),
                 Patches.PlayerControlFixedUpdatePatch.PostionSetType.TimeMaster);
         }
 
@@ -356,7 +364,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 rewindState = null;
             }
 
-            ExtremeRolesPlugin.ShipState.History.SetAddHistoryBlock(false);
+            history.SetAddHistoryBlock(false);
         }
 
         public void CleanUp()
@@ -454,8 +462,15 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         protected override void RoleSpecificInit()
         {
-            ExtremeRolesPlugin.ShipState.AddGlobalActionRole(this);
             this.RoleAbilityInit();
+
+            if (history != null) { return; }
+
+            history = ExtremeRolesPlugin.ShipState.Status.AddComponent<
+                TimeMasterHistory>();
+            history.Initialize(
+                OptionHolder.AllOption[GetRoleOptionId(
+                    TimeMasterOption.RewindTime)].GetValue());
         }
     }
 }

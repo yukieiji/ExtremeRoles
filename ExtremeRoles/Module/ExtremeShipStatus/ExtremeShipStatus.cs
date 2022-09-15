@@ -4,6 +4,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 {
     public sealed partial class ExtremeShipStatus
     {
+        public GameObject Status => this.status;
         private GameObject status;
 
         public ExtremeShipStatus()
@@ -35,7 +36,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             {
                 Object.Destroy(this.status);
                 this.status = null;
-                this.history = null;
                 this.union = null;
             }
             this.status = new GameObject("ExtremeShipStatus");

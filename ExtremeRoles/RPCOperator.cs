@@ -159,15 +159,6 @@ namespace ExtremeRoles
             Patches.MiniGame.SecurityHelper.Initialize();
             Patches.MapOverlay.MapCountOverlayUpdatePatch.Initialize();
 
-            // 各種役職のリセット
-            // シオンのリセット
-            Roles.Solo.Host.Xion.Purge();
-            // ボディーガードのリセット
-            Roles.Solo.Crewmate.BodyGuard.ResetAllShild();
-
-            // APIのステータスのリセット
-            Roles.API.Extension.State.RoleState.Reset();
-
             // 最終結果リセット
             Module.CustomMonoBehaviour.FinalSummary.Reset();
 
