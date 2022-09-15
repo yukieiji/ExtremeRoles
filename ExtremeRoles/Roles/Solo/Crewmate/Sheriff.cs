@@ -22,7 +22,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             EnableTaskRelated,
             ReduceCurKillCool,
             IsPerm,
-            IsSyncTaskAndShootNum
+            IsSyncTaskAndShootNum,
+            IsEnableShootTaskGageOption,
+            SyncShootTaskGage
         }
 
         private int shootNum;
@@ -33,6 +35,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private bool enableTaskRelatedSetting;
         private float prevGage;
         private float reduceKillCool;
+        private float syncShootTaskGage;
         private bool isPerm;
         private bool isSyncTaskShootNum;
 
@@ -122,7 +125,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
                 float gage = Player.GetPlayerTaskGage(rolePlayer);
 
-                if (gage > this.prevGage)
+                if (gage > (this.prevGage + this.syncShootTaskGage))
                 {
 
                     rolePlayer.killTimer = Mathf.Clamp(
@@ -198,30 +201,52 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 SheriffOption.IsPerm,
                 false, enableTaskRelatedOps);
 
-            CreateBoolOption(
+            var syncOpt = CreateBoolOption(
                 SheriffOption.IsSyncTaskAndShootNum,
                 false, enableTaskRelatedOps);
-
+            var enableSysncOpt = CreateBoolOption(
+                SheriffOption.IsEnableShootTaskGageOption,
+                false, syncOpt);
+            CreateIntOption(
+                SheriffOption.SyncShootTaskGage,
+                20, 15, 100, 5,
+                enableSysncOpt,
+                format: OptionUnit.Percentage);
         }
 
         protected override void RoleSpecificInit()
         {
-            this.shootNum = OptionHolder.AllOption[
+
+            var allOpt = OptionHolder.AllOption;
+
+            this.shootNum = allOpt[
                 GetRoleOptionId(SheriffOption.ShootNum)].GetValue();
-            this.canShootNeutral = OptionHolder.AllOption[
+            this.canShootNeutral = allOpt[
                 GetRoleOptionId(SheriffOption.CanShootNeutral)].GetValue();
-            this.canShootAssassin = OptionHolder.AllOption[
+            this.canShootAssassin = allOpt[
                 GetRoleOptionId(SheriffOption.CanShootAssassin)].GetValue();
             this.killCountText = null;
 
-            this.enableTaskRelatedSetting = OptionHolder.AllOption[
+            this.enableTaskRelatedSetting = allOpt[
                 GetRoleOptionId(SheriffOption.EnableTaskRelated)].GetValue();
-            this.reduceKillCool = OptionHolder.AllOption[
+            this.reduceKillCool = allOpt[
                 GetRoleOptionId(SheriffOption.ReduceCurKillCool)].GetValue();
-            this.isPerm = OptionHolder.AllOption[
+            this.isPerm = allOpt[
                 GetRoleOptionId(SheriffOption.IsPerm)].GetValue();
-            this.isSyncTaskShootNum = OptionHolder.AllOption[
+            this.isSyncTaskShootNum = allOpt[
                 GetRoleOptionId(SheriffOption.IsSyncTaskAndShootNum)].GetValue();
+
+            if (allOpt[GetRoleOptionId(
+                SheriffOption.IsEnableShootTaskGageOption)].GetValue())
+            {
+                this.syncShootTaskGage = allOpt[
+                    GetRoleOptionId(SheriffOption.SyncShootTaskGage)].GetValue();
+            }
+            else
+            {
+                this.syncShootTaskGage = 0.0f;
+            }
+
             this.prevGage = 0.0f;
             
             this.maxShootNum = this.shootNum;
