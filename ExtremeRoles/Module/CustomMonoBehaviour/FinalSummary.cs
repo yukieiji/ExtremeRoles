@@ -31,6 +31,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         private TMP_Text showText;
         private RectTransform rect;
         private bool isCreated = false;
+        private bool isHide = false;
 
         private static List<string> tags = new List<string>()
         {
@@ -60,10 +61,26 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
         public void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Tab) && this.isCreated)
+
+            if (!this.isCreated) { return; }
+
+            if (Input.GetKeyDown(KeyCode.Tab))
             {
                 this.curPage = (this.curPage + 1) % this.maxPage;
                 updateShowText();
+            }
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                if (this.isHide)
+                {
+                    this.isHide = false;
+                    updateShowText();
+                }
+                else
+                {
+                    this.isHide = true;
+                    this.showText.text = Translation.GetString("liftShiftShowSummary");
+                }
             }
         }
 
@@ -150,8 +167,10 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             foreach (StringBuilder builder in summary.Values)
             {
                 ++page;
+                builder.AppendLine("");
                 builder.AppendLine(string.Format(
                     Translation.GetString("tabMoreSummary"), page, allSummary));
+                builder.AppendLine(Translation.GetString("liftShiftHideSummary"));
                 this.summaryText.Add(builder.ToString());
             }
             this.maxPage = page;
