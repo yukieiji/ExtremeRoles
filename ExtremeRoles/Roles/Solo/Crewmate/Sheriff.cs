@@ -151,9 +151,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                         this.CanKill = true;
                         updateKillCountText();
                     }
-
+                    this.prevGage = gage;
                 }
-                this.prevGage = gage;
             }
         }
 
@@ -203,15 +202,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             var syncOpt = CreateBoolOption(
                 SheriffOption.IsSyncTaskAndShootNum,
-                false, enableTaskRelatedOps);
-            var enableSysncOpt = CreateBoolOption(
-                SheriffOption.IsEnableShootTaskGageOption,
-                false, syncOpt);
+                false, enableTaskRelatedOps);;
             CreateIntOption(
                 SheriffOption.SyncShootTaskGage,
-                20, 15, 100, 5,
-                enableSysncOpt,
-                format: OptionUnit.Percentage);
+                10, 5, 100, 5,
+                syncOpt, format: OptionUnit.Percentage);
         }
 
         protected override void RoleSpecificInit()
@@ -235,17 +230,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 GetRoleOptionId(SheriffOption.IsPerm)].GetValue();
             this.isSyncTaskShootNum = allOpt[
                 GetRoleOptionId(SheriffOption.IsSyncTaskAndShootNum)].GetValue();
-
-            if (allOpt[GetRoleOptionId(
-                SheriffOption.IsEnableShootTaskGageOption)].GetValue())
-            {
-                this.syncShootTaskGage = allOpt[
-                    GetRoleOptionId(SheriffOption.SyncShootTaskGage)].GetValue();
-            }
-            else
-            {
-                this.syncShootTaskGage = 0.0f;
-            }
+            this.syncShootTaskGage = ((float)allOpt[
+                GetRoleOptionId(SheriffOption.SyncShootTaskGage)].GetValue()) / 100.0f;
 
             this.prevGage = 0.0f;
             
