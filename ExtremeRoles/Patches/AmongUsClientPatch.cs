@@ -80,7 +80,7 @@ namespace ExtremeRoles.Patches
 
                 var role = roleData[playerInfo.PlayerId];
 
-                Module.CustomMonoBehaviour.FinalSummary.AddSummary(playerInfo);
+                Module.CustomMonoBehaviour.FinalSummary.Add(playerInfo);
 
                 if (role.IsNeutral())
                 {

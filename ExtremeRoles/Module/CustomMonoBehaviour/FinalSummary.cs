@@ -45,9 +45,9 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
         public FinalSummary(IntPtr ptr) : base(ptr) { }
 
-        public static List<PlayerSummary> playerSummary = new List<PlayerSummary>();
+        private static List<PlayerSummary> playerSummary = new List<PlayerSummary>();
 
-        public static void AddSummary(GameData.PlayerInfo playerInfo)
+        public static void Add(GameData.PlayerInfo playerInfo)
         {
             byte playerId = playerInfo.PlayerId;
 
