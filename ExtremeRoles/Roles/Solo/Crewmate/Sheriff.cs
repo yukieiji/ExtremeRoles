@@ -127,10 +127,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
                 if (gage > (this.prevGage + this.syncShootTaskGage))
                 {
-
-                    rolePlayer.killTimer = Mathf.Clamp(
-                        rolePlayer.killTimer - this.reduceKillCool,
-                        0.01f, this.KillCoolTime);
+                    if (this.CanKill)
+                    {
+                        rolePlayer.killTimer = Mathf.Clamp(
+                            rolePlayer.killTimer - this.reduceKillCool,
+                            0.01f, this.KillCoolTime);
+                    }
 
                     if (this.isPerm)
                     {
