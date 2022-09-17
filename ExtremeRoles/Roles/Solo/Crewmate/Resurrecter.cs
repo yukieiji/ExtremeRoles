@@ -265,8 +265,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             if (rolePlayer.Data.IsDead &&
                 this.activateResurrectTimer &&
                 this.canResurrect &&
-                MeetingHud.Instance != null &&
-                ExileController.Instance != null)
+                MeetingHud.Instance == null &&
+                ExileController.Instance == null)
             {
                 if (this.resurrectText == null)
                 {
