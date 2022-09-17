@@ -408,7 +408,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             CreateFloatOption(
                 ResurrecterOption.ResurrectDelayTime,
                 5.0f, 5.0f, 15.0f, 0.1f,
-                parentOps);
+                parentOps, format: OptionUnit.Second);
 
             CreateIntOption(
                 ResurrecterOption.ResurrectTaskResetMeetingNum,
