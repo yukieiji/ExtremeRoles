@@ -16,7 +16,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 {
 
     [Il2CppRegister]
-    public abstract class VoteAreaInfo : MonoBehaviour
+    public class VoteAreaInfo : MonoBehaviour
     {
         protected CachedPlayerControl LocalPlayer;
         protected TextMeshPro NameText;
