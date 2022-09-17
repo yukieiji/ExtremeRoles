@@ -221,7 +221,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             set
             {
                 this.shieldButton = value;
-                this.castedShieldButton = (BodyGuardShieldButton)this.shieldButton;
             }
         }
 
@@ -230,7 +229,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private int shildNum;
         private float shieldRange;
         private RoleAbilityButtonBase shieldButton;
-        private BodyGuardShieldButton castedShieldButton;
 
         private Sprite shildButtonImage;
 
@@ -493,10 +491,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 false);
 
             this.RoleAbilityInit();
-
-            this.castedShieldButton.UpdateAbilityCount(
-                OptionHolder.AllOption[GetRoleOptionId(
-                    RoleAbilityCommonOption.AbilityCount)].GetValue());
+            if (this.shieldButton is BodyGuardShieldButton button)
+            {
+                button.UpdateAbilityCount(
+                    OptionHolder.AllOption[GetRoleOptionId(
+                        RoleAbilityCommonOption.AbilityCount)].GetValue());
+            }
             this.Button.SetLabelToCrewmate();
         }
 
@@ -515,9 +515,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 });
             resetShield(playerId);
 
-            if (this.shieldButton == null) { return; }
-
-            this.castedShieldButton.UpdateAbilityCount(this.shildNum);
+            if (this.shieldButton is BodyGuardShieldButton button)
+            {
+                button.UpdateAbilityCount(this.shildNum);
+            }
         }
 
         public bool UseAbility()
@@ -610,10 +611,17 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 return true;
             }
 
-            return
-                !this.awakeMeetingAbility ||
-                this.castedShieldButton.CurAbilityNum <= 0 ||
-                instance.TargetPlayerId == 253;
+            if (this.shieldButton is BodyGuardShieldButton button)
+            {
+                return
+                    !this.awakeMeetingAbility ||
+                    button.CurAbilityNum <= 0 ||
+                    instance.TargetPlayerId == 253;
+            }
+            else
+            {
+                return true;
+            }
         }
 
         public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
@@ -643,8 +651,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                         targetPlayerId
                     });
                 featShield(player.PlayerId, targetPlayerId);
-                this.castedShieldButton.UpdateAbilityCount(
-                    this.castedShieldButton.CurAbilityNum - 1);
+
+                if (this.shieldButton is BodyGuardShieldButton button)
+                {
+                    button.UpdateAbilityCount(button.CurAbilityNum - 1);
+                }
             }
             return meetingfeatShield;
         }
@@ -695,9 +706,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     this.meetingText.gameObject.SetActive(false);
                 }
 
-                this.meetingText.text = string.Format(
-                    Helper.Translation.GetString("meetingShieldState"),
-                    this.castedShieldButton.CurAbilityNum);
+                if (this.shieldButton is BodyGuardShieldButton button)
+                {
+                    this.meetingText.text = string.Format(
+                        Helper.Translation.GetString("meetingShieldState"),
+                        button.CurAbilityNum);
+                }
                 this.meetingText.gameObject.SetActive(true);
             }
             else
@@ -752,10 +766,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.awakeMeetingReport = this.meetingReportTaskGage <= 0.0f;
 
             this.RoleAbilityInit();
-            if (this.castedShieldButton != null)
+            if (this.shieldButton is BodyGuardShieldButton button)
             {
-                this.shildNum = this.castedShieldButton.CurAbilityNum;
-                this.castedShieldButton.UpdateAbilityCount(
+                this.shildNum = button.CurAbilityNum;
+                button.UpdateAbilityCount(
                     allOpt[GetRoleOptionId(
                         RoleAbilityCommonOption.AbilityCount)].GetValue());
             }
