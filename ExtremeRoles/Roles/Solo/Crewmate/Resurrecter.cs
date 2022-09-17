@@ -407,7 +407,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             CreateFloatOption(
                 ResurrecterOption.ResurrectDelayTime,
-                3.0f, 0.0f, 10.0f, 0.1f,
+                5.0f, 5.0f, 15.0f, 0.1f,
                 parentOps);
 
             CreateIntOption(
