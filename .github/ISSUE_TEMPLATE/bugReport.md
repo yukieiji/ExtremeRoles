@@ -12,7 +12,7 @@ assignees: ''
 Please provide information about the bug in each of the following fields -->
 <!-- 例の記載方法に書いてあるようなことを記載していただくと、とてもバグを調査しやすくて助かります(あくまで例なので実際にそのようなバグは存在しませんし報告は受けてないです) -->
 ### 期待される動作 / Your Expectation
-<!-- どのようなことをやろうとしたのか(バグの内容というよりかバグの再現手順です)、必要であれば画像等を添付してください(その動作を元に再現を行います、これがないと色々と困ります) / What did you try to do, and what did you expect to happen? Attach screenshots if needed. -->
+<!-- どのようなことをやろうとしたのか(バグの内容というよりかバグの再現手順です)、必要であれば画像と再現手順動画等を添付してください(その動作を元に再現を行います、これがないと色々と困ります) / What did you try to do, and what did you expect to happen? Attach screenshots if needed. -->
 <!-- 例： アリスがインポスターに切られた時にアリスの勝利画面が表示される -->
 
 ### 実際の動作 / The Reality
@@ -24,7 +24,7 @@ Please provide information about the bug in each of the following fields -->
 <!-- 例：アリスがインポスターに切られて正しく勝利画面が表示されることが正しいと思われる -->
 
 ### バグ発生時のログ / log when issue occur
-<!-- バグが発生した瞬間のF8で出力されるログ(バグにあった本人のログを添付して下さい) / Dumped log by F8 at the issue occurs -->
+<!-- バグが発生した瞬間のF8で出力されるログ(バグにあった本人のログを添付して下さい)、再起動すると消えるのであった当時のログを出力して下さい / Dumped log by F8 at the issue occurs -->
 
 ## バグが発生した環境/
 ### Among Usバージョン/ Among Us Version
