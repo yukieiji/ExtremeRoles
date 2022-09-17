@@ -24,7 +24,7 @@ Please provide information about the bug in each of the following fields -->
 <!-- 例：アリスがインポスターに切られて正しく勝利画面が表示されることが正しいと思われる -->
 
 ### バグ発生時のログ / log when issue occur
-<!-- バグが発生した瞬間のF8で出力されるログ / Dumped log by F8 at the issue occurs -->
+<!-- バグが発生した瞬間のF8で出力されるログ(バグにあった本人のログを添付して下さい) / Dumped log by F8 at the issue occurs -->
 
 ## バグが発生した環境/
 ### Among Usバージョン/ Among Us Version
@@ -60,3 +60,6 @@ Extreme Roles v
 
 ### 使用したオプション/Use Option
 <!-- バグが発生したときのオプション設定、設定よりエクスポートしたcsvを添付してください / Please attach the option settings when the bug occurs, exported from the settings  -->
+### 最終チェックリスト
+- [ ] : このバグは記載されている手順通りに操作し、ほぼ同じ条件下で再度発生することを確認した
+- [ ] : GitHubのチケットを検索し同様のIssuesが無いことを確認した
