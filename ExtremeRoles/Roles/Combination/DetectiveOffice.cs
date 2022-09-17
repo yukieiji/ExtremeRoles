@@ -732,6 +732,7 @@ namespace ExtremeRoles.Roles.Combination
                 newRole.AnotherRole = null;
                 newRole.CanHasAnotherRole = true;
                 newRole.SetAnotherRole(prevRole.AnotherRole);
+                newRole.Team = prevRole.AnotherRole.Team;
             }
 
             lock (ExtremeRoleManager.GameRole)
