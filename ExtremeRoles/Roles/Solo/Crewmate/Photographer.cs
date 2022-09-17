@@ -121,10 +121,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 photoInfoBuilder.AppendLine(
                     $"{Translation.GetString("photoName")} : {getRandomPhotoName()}");
                 photoInfoBuilder.AppendLine("");
-                if (this.player.Count == 0)
+                if (this.player.Count <= 1)
                 {
                     photoInfoBuilder.AppendLine(
-                        Translation.GetString("noPlayerInPhoto"));
+                        Translation.GetString("onlyMeOnPhoto"));
                 }
                 else
                 {
@@ -486,7 +486,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             CreateIntOption(
                 PhotographerOption.UpgradeAllSendChatTaskGage,
-                40, 0, 100, 10,
+                80, 0, 100, 10,
                 chatUpgradeOpt,
                 format: OptionUnit.Percentage);
 
