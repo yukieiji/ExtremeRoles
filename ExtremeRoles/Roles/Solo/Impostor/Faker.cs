@@ -255,11 +255,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 targetPlayerId = player.PlayerId;
 
                 contine = player.IsDead || player.Disconnected;
-                if (contine && excludeImp)
+                if (!contine && excludeImp)
                 {
                     contine = ExtremeRoleManager.GameRole[targetPlayerId].IsImpostor();
                 }
-                else if (contine && excludeMe)
+                else if (!contine && excludeMe)
                 {
                     contine = CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId;
                 }
