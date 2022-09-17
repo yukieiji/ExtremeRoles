@@ -171,9 +171,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             return true;
         }
 
-        public override bool IsSameTeam(SingleRoleBase targetRole) =>
-            this.IsNeutralSameTeam(targetRole);
-
         public override string GetFullDescription() => 
             string.Format(
                 base.GetFullDescription(),
