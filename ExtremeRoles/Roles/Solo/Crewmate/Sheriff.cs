@@ -125,7 +125,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
                 float gage = Player.GetPlayerTaskGage(rolePlayer);
 
-                if (gage > (this.prevGage + this.syncShootTaskGage))
+                if (gage >= (this.prevGage + this.syncShootTaskGage))
                 {
                     if (this.CanKill)
                     {
@@ -152,6 +152,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                             this.shootNum + 1, this.shootNum, this.maxShootNum);
                         this.CanKill = true;
                         updateKillCountText();
+                        if (this.shootNum > 0)
+                        {
+                            this.killCountText.gameObject.SetActive(true);
+                        }
                     }
                     this.prevGage = gage;
                 }
@@ -207,7 +211,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 false, enableTaskRelatedOps);;
             CreateIntOption(
                 SheriffOption.SyncShootTaskGage,
-                10, 5, 100, 5,
+                5, 5, 100, 5,
                 syncOpt, format: OptionUnit.Percentage);
         }
 
