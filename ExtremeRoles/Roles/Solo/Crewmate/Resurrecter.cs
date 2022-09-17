@@ -164,7 +164,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void ResetOnMeetingEnd()
         {
-            return;
+            if (this.isActiveMeetingCount &&
+                this.meetingCounter >= this.maxMeetingCount)
+            {
+                this.isActiveMeetingCount = false;
+                this.meetingCounter = 0;
+                replaceTask(CachedPlayerControl.LocalPlayer);
+            }
         }
 
         public void ReviveAction(PlayerControl player)
@@ -221,14 +227,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void Update(PlayerControl rolePlayer)
         {
-            if (this.isActiveMeetingCount &&
-                this.meetingCounter >= this.maxMeetingCount)
-            {
-                this.isActiveMeetingCount = false;
-                this.meetingCounter = 0;
-                replaceTask(rolePlayer);
-                return;
-            }
             
             if (rolePlayer.Data.IsDead && this.infoBlock())
             {
