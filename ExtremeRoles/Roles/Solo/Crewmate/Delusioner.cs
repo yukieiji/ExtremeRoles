@@ -69,8 +69,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         private float defaultCoolTime;
         private float curCoolTime;
-        private float voteCoolTimeReduceRate;
-        private float deflectDamagePenaltyRate;
+        
+        private int voteCoolTimeReduceRate;
+        private float deflectDamagePenaltyMod;
 
         public Delusioner() : base(
             ExtremeRoleId.Delusioner,
@@ -110,15 +111,27 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ref Dictionary<byte, byte> voteTarget,
             ref Dictionary<byte, int> voteResult)
         {
-            if (voteResult.TryGetValue(rolePlayerId, out int forRolePlayerVote))
+            return;
+        }
+
+        public void ModifiedVoteAnime(
+            MeetingHud instance,
+            GameData.PlayerInfo rolePlayer,
+            ref Dictionary<byte, int> voteIndex)
+        {
+            if (voteIndex.TryGetValue(
+                rolePlayer.PlayerId,
+                out int forRolePlayerVote))
             {
                 this.curVoteCount = this.curVoteCount + forRolePlayerVote;
                 this.isAwakeRole = this.curVoteCount >= this.awakeVoteCount;
                 if (this.Button != null &&
-                    this.voteCoolTimeReduceRate < 1.0f)
+                    this.voteCoolTimeReduceRate > 0)
                 {
+                    int curVoteCooltimeReduceRate = this.voteCoolTimeReduceRate * forRolePlayerVote;
+
                     this.Button.SetAbilityCoolTime(
-                        this.defaultCoolTime * (this.voteCoolTimeReduceRate * forRolePlayerVote));
+                        this.defaultCoolTime * ((100.0f - (float)curVoteCooltimeReduceRate) / 100.0f));
                 }
             }
 
@@ -127,14 +140,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 this.curVoteCount = 0;
             }
-        }
-
-        public void ModifiedVoteAnime(
-            MeetingHud instance,
-            GameData.PlayerInfo rolePlayer,
-            ref Dictionary<byte, int> voteIndex)
-        {
-            return;
         }
 
         public void ResetModifier()
@@ -248,9 +253,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             RPCOperator.UncheckedSnapTo(this.targetPlayerId, teleportPos);
 
             if (this.Button != null &&
-                this.deflectDamagePenaltyRate < 1.0f)
+                this.deflectDamagePenaltyMod < 1.0f)
             {
-                this.curCoolTime = this.curCoolTime * this.deflectDamagePenaltyRate;
+                this.curCoolTime = this.curCoolTime * this.deflectDamagePenaltyMod;
                 this.Button.SetAbilityCoolTime(this.curCoolTime);
             }
 
@@ -368,9 +373,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 GetRoleOptionId(DelusionerOption.AwakeVoteNum)].GetValue();
             this.isOneTimeAwake = allOpt[
                 GetRoleOptionId(DelusionerOption.IsOnetimeAwake)].GetValue();
-            this.voteCoolTimeReduceRate = ((100f - allOpt[
-                GetRoleOptionId(DelusionerOption.VoteCoolTimeReduceRate)].GetValue()) / 100f);
-            this.deflectDamagePenaltyRate = ((100f - allOpt[
+            this.voteCoolTimeReduceRate = allOpt[
+                GetRoleOptionId(DelusionerOption.VoteCoolTimeReduceRate)].GetValue();
+            this.deflectDamagePenaltyMod = ((100f - (float)allOpt[
                 GetRoleOptionId(DelusionerOption.DeflectDamagePenaltyRate)].GetValue()) / 100f);
             this.range = allOpt[
                 GetRoleOptionId(DelusionerOption.Range)].GetValue();
