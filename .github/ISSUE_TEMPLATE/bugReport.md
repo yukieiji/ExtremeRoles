@@ -6,7 +6,7 @@ labels: バグ/Bug, 未確認/Unconfirmed
 assignees: ''
 
 ---
-
+<!-- 「再現せず/Can't reproduced」のタグがつくと1週間後に自動クローズされます、早めの返信お願いします -->
 ## バグの情報 / Info of bug
 <!-- バグに関する情報を以下の各項目に記載してください / 
 Please provide information about the bug in each of the following fields -->
