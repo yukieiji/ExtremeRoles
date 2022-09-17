@@ -163,6 +163,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     if (this.abilityNum <= 0 || this.resetCheck())
                     {
                         this.resetAction();
+                        this.ResetCoolTimer();
                     }
                     else if (this.abilityNum > 0 && this.UseAbility())
                     {
