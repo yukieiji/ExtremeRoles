@@ -9,7 +9,7 @@ namespace ExtremeRoles.Roles.API.Interface
         {
             CaptainSpecialVote = 0,
 
-            DelusionerCheckVote = -(int.MaxValue - 1),
+            DelusionerCheckVote = 88659,
         }
 
         public int Order { get; }
