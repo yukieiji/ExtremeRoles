@@ -691,7 +691,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     this.awakeMeetingReport = true;
                 }
             }
-            if (this.awakeMeetingReport && MeetingHud.Instance)
+            if (this.awakeMeetingAbility && MeetingHud.Instance)
             {
                 if (this.meetingText == null)
                 {
