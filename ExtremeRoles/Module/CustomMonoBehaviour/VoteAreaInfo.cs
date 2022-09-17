@@ -41,8 +41,6 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
             base.gameObject.SetActive(true);
         }
-
-        public abstract void FixedUpdate();
     }
 
 
@@ -52,7 +50,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
     {
         public LocalPlayerVoteAreaInfo(IntPtr ptr) : base(ptr) { }
 
-        public override void FixedUpdate()
+        public void FixedUpdate()
         {
             SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
             GhostRoleBase ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
@@ -147,7 +145,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             this.votePlayerInfo = GameData.Instance.GetPlayerById(pva.TargetPlayerId);
         }
 
-        public override void FixedUpdate()
+        public void FixedUpdate()
         {
             resetInfo();
 
