@@ -71,7 +71,7 @@ namespace ExtremeRoles.Helper
             List<PlayerControl> allPlayer = GetAllPlayerInRange(
                 sourcePlayer, role, range);
 
-            ResetPlayerOutLine();
+            resetPlayerOutLine();
 
             if (allPlayer.Count <= 0) { return null; }
 

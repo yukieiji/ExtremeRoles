@@ -49,7 +49,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         private Dictionary<byte, float> progress;
 
-        public class KillTarget
+        public sealed class KillTarget
         {
             private bool isUseArrow;
 

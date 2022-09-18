@@ -82,7 +82,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             if (targetPlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
             {
-                Helper.Player.ResetTarget();
+                Player.ResetTarget();
                 servant.SelfKillAbility(queen.ServantSelfKillCool);
                 if (targetRole.Team != ExtremeRoleType.Neutral)
                 {

@@ -11,7 +11,7 @@ using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Compat.Excuter
 {
-    internal class Updater : ButtonExcuterBase
+    internal sealed class Updater : ButtonExcuterBase
     {
 
         private struct ReleaseData
