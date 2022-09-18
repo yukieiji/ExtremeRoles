@@ -258,6 +258,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             // プレイヤーのリセット処理
             if (CachedPlayerControl.LocalPlayer.PlayerId == targetId)
             {
+                Player.ResetTarget();
                 abilityReset(targetRole);
             }
 

@@ -13,6 +13,7 @@ namespace ExtremeRoles.Helper
 
         public static void ResetTarget()
         {
+            resetPlayerOutLine();
             prevTarget = null;
         }
 
@@ -70,7 +71,7 @@ namespace ExtremeRoles.Helper
             List<PlayerControl> allPlayer = GetAllPlayerInRange(
                 sourcePlayer, role, range);
 
-            resetPlayerOutLine();
+            ResetPlayerOutLine();
 
             if (allPlayer.Count <= 0) { return null; }
 
