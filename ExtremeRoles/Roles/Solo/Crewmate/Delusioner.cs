@@ -94,6 +94,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public bool IsAbilityUse()
         {
+            if (!this.IsAwake) { return false; }
+
             this.targetPlayerId = byte.MaxValue;
 
             PlayerControl target = Player.GetClosestPlayerInRange(
