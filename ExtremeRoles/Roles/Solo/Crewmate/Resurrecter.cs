@@ -263,6 +263,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             if (rolePlayer.Data.IsDead &&
                 this.activateResurrectTimer &&
                 this.canResurrect &&
+                rolePlayer.moveable &&
                 MeetingHud.Instance == null &&
                 ExileController.Instance == null)
             {
@@ -560,7 +561,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 0, playerInfo.Tasks.Count).ToList().OrderBy(
                     item => RandomGenerator.Instance.Next()).ToList();
 
-            int replaceTaskNum = 1;
+            int replaceTaskNum = 0;
             int maxReplaceTaskNum = Mathf.CeilToInt(playerInfo.Tasks.Count * this.resetTaskGage);
 
             foreach (int i in shuffleTaskIndex)
@@ -574,7 +575,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     int replaceTaskId = playerInfo.Tasks[i].TypeId;
 
                     if (CachedShipStatus.Instance.CommonTasks.FirstOrDefault(
-                    (NormalPlayerTask t) => t.Index == replaceTaskId) != null)
+                        (NormalPlayerTask t) => t.Index == replaceTaskId) != null)
                     {
                         taskIndex = GameSystem.GetRandomCommonTaskId();
                     }
