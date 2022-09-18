@@ -34,11 +34,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             AwakeTaskGage,
             ResurrectTaskGage,
-            IsMeetingCoolResetOnResurrect,
             ResurrectDelayTime,
-            CanResurrectOnExil,
+            IsMeetingCoolResetOnResurrect,
             ResurrectTaskResetMeetingNum,
             ResurrectTaskResetGage,
+            CanResurrectOnExil,
         }
 
         public enum ResurrecterRpcOps : byte
@@ -400,14 +400,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 parentOps,
                 format: OptionUnit.Percentage);
 
-            CreateBoolOption(
-                ResurrecterOption.IsMeetingCoolResetOnResurrect,
-                true, parentOps);
-
             CreateFloatOption(
                 ResurrecterOption.ResurrectDelayTime,
                 5.0f, 5.0f, 15.0f, 0.1f,
                 parentOps, format: OptionUnit.Second);
+
+            CreateBoolOption(
+                ResurrecterOption.IsMeetingCoolResetOnResurrect,
+                true, parentOps);
 
             CreateIntOption(
                 ResurrecterOption.ResurrectTaskResetMeetingNum,
