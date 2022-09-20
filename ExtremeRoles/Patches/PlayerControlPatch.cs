@@ -128,7 +128,7 @@ namespace ExtremeRoles.Patches
 
             var role = ExtremeRoleManager.GameRole[__instance.PlayerId];
 
-            if (!role.HasTask() || role.IsNeutral())
+            if (!role.HasTask())
             {
                 __instance.ClearTasks();
             }
@@ -894,7 +894,7 @@ namespace ExtremeRoles.Patches
 
             var role = ExtremeRoleManager.GameRole[targetPlayerId];
 
-            if (!role.HasTask() || role.IsNeutral())
+            if (!role.HasTask())
             {
                 target.ClearTasks();
             }

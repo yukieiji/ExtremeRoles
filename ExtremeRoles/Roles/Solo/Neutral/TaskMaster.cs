@@ -115,13 +115,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public override void ExiledAction(GameData.PlayerInfo rolePlayer)
         {
-            this.HasTask = false;
+            resetTask(rolePlayer.PlayerId);
         }
 
         public override void RolePlayerKilledAction(
             PlayerControl rolePlayer, PlayerControl killerPlayer)
         {
-            this.HasTask = false;
+            resetTask(rolePlayer.PlayerId);
         }
 
         protected override void CreateSpecificOption(
@@ -175,6 +175,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     1U << (int)player.PlayerId);
             }
         }
-
+        private void resetTask(byte playerId)
+        {
+            this.HasTask = false;
+            PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
+            if (rolePlayer.PlayerId == playerId)
+            {
+                rolePlayer.ClearTasks();
+            }
+        }
     }
 }
