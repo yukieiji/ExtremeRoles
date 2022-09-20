@@ -113,6 +113,17 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public override bool IsSameTeam(SingleRoleBase targetRole) =>
             this.IsNeutralSameTeam(targetRole);
 
+        public override void ExiledAction(GameData.PlayerInfo rolePlayer)
+        {
+            this.HasTask = false;
+        }
+
+        public override void RolePlayerKilledAction(
+            PlayerControl rolePlayer, PlayerControl killerPlayer)
+        {
+            this.HasTask = false;
+        }
+
         protected override void CreateSpecificOption(
             IOption parentOps)
         {
