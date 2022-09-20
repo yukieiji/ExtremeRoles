@@ -177,20 +177,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public override void ExiledAction(
             GameData.PlayerInfo rolePlayer)
         {
-            if (!this.isDeadWin)
-            {
-                this.HasTask = false;
-            }
+            updateTaskDo();
         }
 
         public override void RolePlayerKilledAction(
             PlayerControl rolePlayer,
             PlayerControl killerPlayer)
         {
-            if (!this.isDeadWin)
-            {
-                this.HasTask = false;
-            }
+            updateTaskDo();
         }
 
         protected override void CreateSpecificOption(
@@ -232,6 +226,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 this.awakeRole = false;
                 this.HasOtherVison = false;
+            }
+        }
+
+        private void updateTaskDo()
+        {
+            if (!this.isDeadWin)
+            {
+                this.HasTask = false;
             }
         }
     }
