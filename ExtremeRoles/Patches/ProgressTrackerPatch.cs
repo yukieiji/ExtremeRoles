@@ -15,27 +15,27 @@ namespace ExtremeRoles.Patches
         {
             Agency agency = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Agency>();
 
-            if (agency != null)
-            {
-                if (!__instance.TileParent.enabled)
-                {
-                    __instance.TileParent.enabled = true;
-                }
-                GameData instance = GameData.Instance;
-                if (instance && instance.TotalTasks > 0)
-                {
-                    __instance.gameObject.SetActive(true);
-                    int num = (DestroyableSingleton<TutorialManager>.InstanceExists ? 1 : 
-                        (instance.AllPlayers.Count - PlayerControl.GameOptions.NumImpostors));
-                    num -= instance.AllPlayers.ToArray().ToList().Count(
-                        (GameData.PlayerInfo p) => p.Disconnected);
+            if (agency == null) { return; }
 
-                    float curProgress = (float)instance.CompletedTasks / (float)instance.TotalTasks * (float)num;
-                    __instance.curValue = Mathf.Lerp(
-                        __instance.curValue, curProgress, Time.fixedDeltaTime * 2f);
-                    __instance.TileParent.material.SetFloat("_Buckets", (float)num);
-                    __instance.TileParent.material.SetFloat("_FullBuckets", __instance.curValue);
-                }
+            if (!__instance.TileParent.enabled)
+            {
+                __instance.TileParent.enabled = true;
+            }
+
+            GameData gameData = GameData.Instance;
+            if (gameData && gameData.TotalTasks > 0)
+            {
+                __instance.gameObject.SetActive(true);
+                int num = (DestroyableSingleton<TutorialManager>.InstanceExists ? 1 :
+                    (gameData.AllPlayers.Count - PlayerControl.GameOptions.NumImpostors));
+                num -= gameData.AllPlayers.ToArray().ToList().Count(
+                    (GameData.PlayerInfo p) => p.Disconnected);
+
+                float curProgress = (float)gameData.CompletedTasks / (float)gameData.TotalTasks * (float)num;
+                __instance.curValue = Mathf.Lerp(
+                    __instance.curValue, curProgress, Time.fixedDeltaTime * 2f);
+                __instance.TileParent.material.SetFloat("_Buckets", (float)num);
+                __instance.TileParent.material.SetFloat("_FullBuckets", __instance.curValue);
             }
         }
     }
