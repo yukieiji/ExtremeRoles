@@ -17,6 +17,10 @@ namespace ExtremeRoles.Patches
 
             if (agency != null)
             {
+                if (!__instance.TileParent.enabled)
+                {
+                    __instance.TileParent.enabled = true;
+                }
                 GameData instance = GameData.Instance;
                 if (instance && instance.TotalTasks > 0)
                 {
