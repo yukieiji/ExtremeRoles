@@ -225,10 +225,8 @@ namespace ExtremeSkins.SkinManager
             string dataSaveFolder)
         {
 
-            if (!Directory.Exists(dataSaveFolder))
-            {
-                Directory.CreateDirectory(dataSaveFolder);
-            }
+            Helper.FileUtility.DeleteDir(dataSaveFolder);
+            Directory.CreateDirectory(dataSaveFolder);
 
             getJsonData(visorRepoData).GetAwaiter().GetResult();
 
