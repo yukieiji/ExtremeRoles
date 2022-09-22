@@ -173,12 +173,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             // TODO : ドールの初期化処理
 
-
-
-            if (rolePlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
-            {
-                setAbilityPart();
-            }
         }
 
         private static void updateDoll(
@@ -272,13 +266,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             RPCOperator.Call(
                 rolePlayer.NetId,
-               RPCOperator.Command.HypnotistAbility,
-               new List<byte>
-               {
+                RPCOperator.Command.HypnotistAbility,
+                new List<byte>
+                {
                     (byte)RpcOps.TargetToDoll,
                     targetPlayerId,
-               });
+                });
             targetToDoll(this, rolePlayer.PlayerId, targetPlayerId);
+            setAbilityPart();
             this.target = null;
 
             return true;
@@ -524,6 +519,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private static void setAbilityPart()
         {
             // 能力のかけらの設置処理
+            // 青
+            // 設置箇所一覧をどっかからロード => それを元に設置
         }
     }
 
