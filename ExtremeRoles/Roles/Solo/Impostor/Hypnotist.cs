@@ -507,6 +507,29 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             this.killCount = 0;
 
+            this.doll = new HashSet<byte>();
+
+            this.isAwakedHasOtherVision = false;
+            this.isAwakedHasOtherKillCool = true;
+            this.isAwakedHasOtherKillRange = false;
+
+            if (this.HasOtherVison)
+            {
+                this.HasOtherVison = false;
+                this.isAwakedHasOtherVision = true;
+            }
+
+            if (this.HasOtherKillCool)
+            {
+                this.HasOtherKillCool = false;
+            }
+
+            if (this.HasOtherKillRange)
+            {
+                this.HasOtherKillRange = false;
+                this.isAwakedHasOtherKillRange = true;
+            }
+
             if (this.canAwakeNow && this.awakeKillCount <= 0)
             {
                 this.isAwake = true;
