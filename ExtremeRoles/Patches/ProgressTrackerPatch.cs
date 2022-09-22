@@ -13,6 +13,8 @@ namespace ExtremeRoles.Patches
     {
         public static void Postfix(ProgressTracker __instance)
         {
+            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
+
             Agency agency = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Agency>();
 
             if (agency == null) { return; }
