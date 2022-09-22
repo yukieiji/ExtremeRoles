@@ -22,14 +22,14 @@ namespace ExtremeSkins
         public static ExtremeSkinsPlugin Instance;
 
         internal static BepInEx.Logging.ManualLogSource Logger;
-        public static ConfigEntry<bool> DebugMode { get; private set; }
+
         public static ConfigEntry<bool> CreatorMode { get; private set; }
+
+        public const string SkinComitCategory = "SkinComit";
 
         public override void Load()
         {
             Logger = Log;
-
-            DebugMode = Config.Bind("DeBug", "DebugMode", false);
             CreatorMode = Config.Bind("CreateNewSkin", "CreatorMode", false);
             
             Instance = this;
