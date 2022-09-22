@@ -140,12 +140,17 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 		}
     }
 
-	public sealed class BuleAbilityPart : AbilityPartBase
+	public sealed class BlueAbilityPart : AbilityPartBase
 	{
 		private const AbilityModuleType partType = AbilityModuleType.Red;
 		private SystemConsoleType console;
 
-		public BuleAbilityPart(IntPtr ptr) : base(ptr) { }
+		public BlueAbilityPart(IntPtr ptr) : base(ptr) { }
+
+		public void SetConsoleType(SystemConsoleType console)
+		{
+			this.console = console;
+		}
 
 		protected override void Picup()
 		{
@@ -173,6 +178,11 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 		private SystemConsoleType console;
 
 		public GrayAbilityPart(IntPtr ptr) : base(ptr) { }
+
+		public void SetConsoleType(SystemConsoleType console)
+        {
+			this.console = console;
+        }
 
 		protected override void Picup()
 		{
