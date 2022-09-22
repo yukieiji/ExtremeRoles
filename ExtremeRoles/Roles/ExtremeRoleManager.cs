@@ -72,6 +72,7 @@ namespace ExtremeRoles.Roles
         Shooter,
         LastWolf,
         Commander,
+        Hypnotist,
 
         Alice,
         Jackal,
@@ -89,6 +90,7 @@ namespace ExtremeRoles.Roles
         Servant,
         Madmate,
         Umbrer,
+        Doll,
         
         Xion, 
     }

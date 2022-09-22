@@ -72,6 +72,7 @@ namespace ExtremeRoles
             SlaveDriverSetNewTask,
             LastWolfSwitchLight,
             CommanderAttackCommand,
+            HypnotistAbility,
 
             // ニュートラル
             AliceShipBroken,
@@ -567,6 +568,11 @@ namespace ExtremeRoles
         {
             Roles.Solo.Impostor.Commander.AttackCommad(
                 rolePlayerId);
+        }
+
+        public static void HypnotistAbility(ref MessageReader reader)
+        {
+            Roles.Solo.Impostor.Hypnotist.Ability(ref reader);
         }
 
         public static void AliceShipBroken(

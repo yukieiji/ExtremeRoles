@@ -703,6 +703,9 @@ namespace ExtremeRoles.Patches
                     byte commanderPlayerId = reader.ReadByte();
                     RPCOperator.CommanderAttackCommand(commanderPlayerId);
                     break;
+                case RPCOperator.Command.HypnotistAbility:
+                    RPCOperator.CommanderAttackCommand(ref reader);
+                    break;
                 case RPCOperator.Command.AliceShipBroken:
                     byte alicePlayerId = reader.ReadByte();
                     byte newTaskSetPlayerId = reader.ReadByte();

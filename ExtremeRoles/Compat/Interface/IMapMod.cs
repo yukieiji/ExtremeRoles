@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ExtremeRoles.Compat.Interface
 {
-	public enum SystemConsoleType
+	public enum SystemConsoleType : byte
 	{
 		Admin,
 		SecurityCamera,
