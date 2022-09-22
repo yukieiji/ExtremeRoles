@@ -213,6 +213,7 @@ namespace ExtremeRoles.Roles
                 {(int)ExtremeRoleId.Shooter        , new Shooter()},
                 {(int)ExtremeRoleId.LastWolf       , new LastWolf()},
                 {(int)ExtremeRoleId.Commander      , new Commander()},
+                {(int)ExtremeRoleId.Hypnotist      , new Hypnotist()},
 
                 {(int)ExtremeRoleId.Alice     , new Alice()},
                 {(int)ExtremeRoleId.Jackal    , new Jackal()},
