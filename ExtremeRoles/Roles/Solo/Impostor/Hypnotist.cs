@@ -99,9 +99,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private JObject position;
         private const string postionJson = "ExtremeRoles.Resources.Position.Hypnotist.json";
 
+        private const string adminKey = "Admin";
+        private const string securityKey = "Security";
+        private const string vitalKey = "Vital";
+
         private const string skeldKey = "Skeld";
 
-        private HashSet<Vector3> addedPos;
+        private List<Vector3> addedPos;
         private List<Vector3> addRedPos;
         private int addRedPosNum;
 
@@ -248,7 +252,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             stream.Read(byteArray, 0, (int)stream.Length);
             this.position = JObject.Parse(
                 Encoding.UTF8.GetString(byteArray));
-            this.addedPos = new HashSet<Vector3>();
         }
 
         public bool IsAbilityUse()
@@ -574,7 +577,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.HasOtherKillRange = this.isAwakedHasOtherKillRange;
             }
             this.doll = new HashSet<byte>();
-            this.addedPos = new HashSet<Vector3>();
+            this.addedPos = new List<Vector3>();
             this.addRedPos = new List<Vector3>();
             this.addRedPosNum = 0;
         }
@@ -621,7 +624,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             List<(Vector3, SystemConsoleType)> bluePos = new List<(Vector3, SystemConsoleType)>();
             JObject jsonBluePos = json["Blue"].TryCast<JObject>();
 
-            if (jsonBluePos.TryGetValue("Admin", out adminPos))
+            if (jsonBluePos.TryGetValue(adminKey, out adminPos))
             {
                 JArray pos = adminPos.TryCast<JArray>();
                 Vector3 vecPos = new Vector3(
@@ -631,7 +634,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     bluePos.Add((vecPos, SystemConsoleType.SecurityCamera));
                 }
             }
-            if (jsonBluePos.TryGetValue("Security", out securiPos))
+            if (jsonBluePos.TryGetValue(securityKey, out securiPos))
             {
                 JArray pos = securiPos.TryCast<JArray>();
                 Vector3 vecPos = new Vector3(
@@ -641,7 +644,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     bluePos.Add((vecPos, SystemConsoleType.SecurityCamera));
                 }
             }
-            if (jsonBluePos.TryGetValue("Vital", out vitalPos))
+            if (jsonBluePos.TryGetValue(vitalKey, out vitalPos))
             {
                 JArray pos = vitalPos.TryCast<JArray>();
                 Vector3 vecPos = new Vector3(
@@ -655,7 +658,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             List<(Vector3, SystemConsoleType)> grayPos = new List<(Vector3, SystemConsoleType)>();
             JObject jsonGrayPos = json["Gray"].TryCast<JObject>();
 
-            if (jsonGrayPos.TryGetValue("Admin", out adminPos))
+            if (jsonGrayPos.TryGetValue(adminKey, out adminPos))
             {
                 JArray pos = adminPos.TryCast<JArray>();
                 Vector3 vecPos = new Vector3(
@@ -665,7 +668,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     grayPos.Add((vecPos, SystemConsoleType.SecurityCamera));
                 }
             }
-            if (jsonGrayPos.TryGetValue("Security", out securiPos))
+            if (jsonGrayPos.TryGetValue(securityKey, out securiPos))
             {
                 JArray pos = securiPos.TryCast<JArray>();
                 Vector3 vecPos = new Vector3(
@@ -675,7 +678,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     grayPos.Add((vecPos, SystemConsoleType.SecurityCamera));
                 }
             }
-            if (jsonGrayPos.TryGetValue("Vital", out vitalPos))
+            if (jsonGrayPos.TryGetValue(vitalKey, out vitalPos))
             {
                 JArray pos = vitalPos.TryCast<JArray>();
                 Vector3 vecPos = new Vector3(
@@ -686,7 +689,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 }
             }
 
-            List<Vector3> noneSortedAddPos = new List<Vector3>(); 
+            List<Vector3> noneSortedAddPos = new List<Vector3>();
 
             for (int i = 0; i < redNum; ++i)
             {
@@ -718,16 +721,22 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private void setRedAbilityPart(int maxSetNum)
         {
             int setNum = Math.Min(this.addRedPosNum, maxSetNum);
+            int checkIndex = 0;
             for (int i = 0; i < setNum; ++i)
             {
-                Vector3 pos = this.addRedPos[0];
-                if (this.addedPos.Contains(pos)) { continue; }
+                Vector3 pos = this.addRedPos[checkIndex];
+
+                if (this.addedPos.Contains(pos))
+                {
+                    ++checkIndex;
+                    continue; 
+                }
 
                 GameObject obj = new GameObject("RedAbilityPart");
                 obj.transform.position = pos;
                 RedAbilityPart redAbilityPart = obj.AddComponent<RedAbilityPart>();
                 redAbilityPart.SetHideArrowDistance(this.hideDistance);
-                this.addRedPos.RemoveAt(0);
+                this.addRedPos.RemoveAt(checkIndex);
                 this.addedPos.Add(pos);
             }
         }
