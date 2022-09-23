@@ -20,6 +20,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using ExtremeRoles.Compat.Interface;
+using ExtremeRoles.Compat.Mods;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -637,7 +638,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             if (ExtremeRolesPlugin.Compat.IsModMap)
             {
-
+                if (ExtremeRolesPlugin.Compat.ModMap is SubmergedMap)
+                {
+                    setAbilityPartFromMapJsonInfo(
+                        this.position["Submerged"], redModuleNum);
+                }
             }
             else
             { 
