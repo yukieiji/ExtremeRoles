@@ -1,12 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Reflection;
 
 using UnityEngine;
 using Hazel;
 
+using Newtonsoft.Json.Linq;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.Roles;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
@@ -88,6 +95,17 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private float range;
 
         private PlayerControl target;
+
+        private JObject position;
+        private const string postionJson = "ExtremeRoles.Resources.Position.Hypnotist.json";
+
+        private const string skeldKey = "Skeld";
+
+        private HashSet<Vector3> addedPos;
+        private List<Vector3> addRedPos;
+        private int addRedPosNum;
+
+        private float hideDistance = 7.5f;
 
         public Hypnotist() : base(
             ExtremeRoleId.Hypnotist,
@@ -210,6 +228,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
+        public void RemoveAbilityPartPos(Vector3 pos)
+        {
+            this.addedPos.Remove(pos);
+        }
+
         public string GetFakeOptionString() => "";
 
         public void CreateAbility()
@@ -218,6 +241,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 Translation.GetString("liightOff"),
                 Resources.Loader.CreateSpriteFromResources(
                    Resources.Path.LastWolfLightOff));
+
+            Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(
+                postionJson);
+            var byteArray = new byte[stream.Length];
+            stream.Read(byteArray, 0, (int)stream.Length);
+            this.position = JObject.Parse(
+                Encoding.UTF8.GetString(byteArray));
+            this.addedPos = new HashSet<Vector3>();
         }
 
         public bool IsAbilityUse()
@@ -256,6 +287,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.HasOtherKillCool = this.isAwakedHasOtherKillCool;
                 this.HasOtherKillRange = this.isAwakedHasOtherKillRange;
             }
+            if (this.isAwake && this.addRedPos.Count > 0)
+            {
+                setRedAbilityPart(this.addRedPos.Count);
+            }
         }
 
         public bool UseAbility()
@@ -273,7 +308,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     targetPlayerId,
                 });
             targetToDoll(this, rolePlayer.PlayerId, targetPlayerId);
-            setAbilityPart();
+            setAbilityPart(10);
             this.target = null;
 
             return true;
@@ -537,13 +572,168 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.HasOtherKillCool = this.isAwakedHasOtherKillCool;
                 this.HasOtherKillRange = this.isAwakedHasOtherKillRange;
             }
+            this.doll = new HashSet<byte>();
+            this.addedPos = new HashSet<Vector3>();
+            this.addRedPos = new List<Vector3>();
+            this.addRedPosNum = 0;
         }
 
-        private static void setAbilityPart()
+        private void setAbilityPart(int redModuleNum)
         {
             // 能力のかけらの設置処理
             // 青
             // 設置箇所一覧をどっかからロード => それを元に設置
+            // AirShipのテストコード
+
+            byte mapId = PlayerControl.GameOptions.MapId;
+
+            if (ExtremeRolesPlugin.Compat.IsModMap)
+            {
+
+            }
+            else
+            { 
+                switch (mapId)
+                {
+                    case 0:
+                        setAbilityPartFromMapJsonInfo(
+                            this.position[skeldKey], redModuleNum);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        private void setAbilityPartFromMapJsonInfo(
+            JToken json, int redNum)
+        {
+            JArray jsonRedPos = json["Red"].TryCast<JArray>();
+            
+            List<Vector3> redPos = new List<Vector3>();
+            for (int i = 0; i < jsonRedPos.Count; ++i)
+            {
+               JArray pos = jsonRedPos[i].TryCast<JArray>();
+               redPos.Add(new Vector3((float)pos[0], (float)pos[1], (((float)pos[1]) / 1000.0f)));
+            }
+
+            this.addRedPosNum = jsonRedPos.Count;
+
+            JToken adminPos;
+            JToken securiPos;
+            JToken vitalPos;
+
+            List<(Vector3, SystemConsoleType)> bluePos = new List<(Vector3, SystemConsoleType)>();
+            JObject jsonBluePos = json["Blue"].TryCast<JObject>();
+
+            if (jsonBluePos.TryGetValue("Admin", out adminPos))
+            {
+                JArray pos = adminPos.TryCast<JArray>();
+                Vector3 vecPos = new Vector3(
+                    (float)pos[0], (float)pos[1], (((float)pos[1]) / 1000.0f));
+                if (!this.addedPos.Contains(vecPos))
+                {
+                    bluePos.Add((vecPos, SystemConsoleType.SecurityCamera));
+                }
+            }
+            if (jsonBluePos.TryGetValue("Security", out securiPos))
+            {
+                JArray pos = securiPos.TryCast<JArray>();
+                Vector3 vecPos = new Vector3(
+                    (float)pos[0], (float)pos[1], (((float)pos[1]) / 1000.0f));
+                if (!this.addedPos.Contains(vecPos))
+                {
+                    bluePos.Add((vecPos, SystemConsoleType.SecurityCamera));
+                }
+            }
+            if (jsonBluePos.TryGetValue("Vital", out vitalPos))
+            {
+                JArray pos = vitalPos.TryCast<JArray>();
+                Vector3 vecPos = new Vector3(
+                    (float)pos[0], (float)pos[1], (((float)pos[1]) / 1000.0f));
+                if (!this.addedPos.Contains(vecPos))
+                {
+                    bluePos.Add((vecPos, SystemConsoleType.SecurityCamera));
+                }
+            }
+
+            List<(Vector3, SystemConsoleType)> grayPos = new List<(Vector3, SystemConsoleType)>();
+            JObject jsonGrayPos = json["Gray"].TryCast<JObject>();
+
+            if (jsonGrayPos.TryGetValue("Admin", out adminPos))
+            {
+                JArray pos = adminPos.TryCast<JArray>();
+                Vector3 vecPos = new Vector3(
+                    (float)pos[0], (float)pos[1], (((float)pos[1]) / 1000.0f));
+                if (!this.addedPos.Contains(vecPos))
+                {
+                    grayPos.Add((vecPos, SystemConsoleType.SecurityCamera));
+                }
+            }
+            if (jsonGrayPos.TryGetValue("Security", out securiPos))
+            {
+                JArray pos = securiPos.TryCast<JArray>();
+                Vector3 vecPos = new Vector3(
+                    (float)pos[0], (float)pos[1], (((float)pos[1]) / 1000.0f));
+                if (!this.addedPos.Contains(vecPos))
+                {
+                    grayPos.Add((vecPos, SystemConsoleType.SecurityCamera));
+                }
+            }
+            if (jsonGrayPos.TryGetValue("Vital", out vitalPos))
+            {
+                JArray pos = vitalPos.TryCast<JArray>();
+                Vector3 vecPos = new Vector3(
+                     (float)pos[0], (float)pos[1], (((float)pos[1]) / 1000.0f));
+                if (!this.addedPos.Contains(vecPos))
+                {
+                    grayPos.Add((vecPos, SystemConsoleType.SecurityCamera));
+                }
+            }
+
+            List<Vector3> noneSortedAddPos = new List<Vector3>(); 
+
+            for (int i = 0; i < redNum; ++i)
+            {
+                int useIndex = i % redPos.Count;
+                noneSortedAddPos.Add(redPos[useIndex]);
+            }
+
+            this.addRedPos = noneSortedAddPos.OrderBy(
+                x => RandomGenerator.Instance.Next()).ToList();
+            setRedAbilityPart(redNum);
+
+            foreach (var (pos, console) in grayPos)
+            {
+                GameObject obj = new GameObject("GrayAbilityPart");
+                obj.transform.position = pos;
+                GrayAbilityPart grayAbilityPart = obj.AddComponent<GrayAbilityPart>();
+                grayAbilityPart.SetHideArrowDistance(this.hideDistance);
+                grayAbilityPart.SetConsoleType(console);
+            }
+            foreach (var (pos, console) in bluePos)
+            {
+                GameObject obj = new GameObject("BlueAbilityPart");
+                obj.transform.position = pos;
+                BlueAbilityPart blueAbilityPart = obj.AddComponent<BlueAbilityPart>();
+                blueAbilityPart.SetHideArrowDistance(this.hideDistance);
+                blueAbilityPart.SetConsoleType(console);
+            }
+        }
+        private void setRedAbilityPart(int maxSetNum)
+        {
+            int setNum = Math.Min(this.addRedPosNum, maxSetNum);
+            for (int i = 0; i < setNum; ++i)
+            {
+                Vector3 pos = this.addRedPos[0];
+                if (this.addedPos.Contains(pos)) { continue; }
+
+                GameObject obj = new GameObject("RedAbilityPart");
+                obj.transform.position = pos;
+                RedAbilityPart redAbilityPart = obj.AddComponent<RedAbilityPart>();
+                redAbilityPart.SetHideArrowDistance(this.hideDistance);
+                this.addRedPos.RemoveAt(0);
+                this.addedPos.Add(pos);
+            }
         }
     }
 

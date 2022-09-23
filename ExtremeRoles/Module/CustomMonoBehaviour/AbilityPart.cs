@@ -10,6 +10,8 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Impostor;
 using static ExtremeRoles.Roles.Solo.Impostor.Hypnotist;
 
+using UnhollowerBaseLib.Attributes;
+
 namespace ExtremeRoles.Module.CustomMonoBehaviour
 {
     [Il2CppRegister(
@@ -32,7 +34,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 		{
 			get
 			{
-				return 2.6f;
+				return 1.3f;
 			}
 		}
 
@@ -61,6 +63,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
 			this.collider.radius = 0.001f;
 			this.arrow = new Arrow(GetColor());
+			this.arrow.SetActive(false);
 			this.arrow.UpdateTarget(
 				this.gameObject.transform.position);
 			this.img.sprite = Loader.CreateSpriteFromResources(
@@ -93,8 +96,11 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
 		public void Use()
 		{
-			Picup();
+			Hypnotist hypnotist = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Hypnotist>();
+			Picup(hypnotist);
 			this.arrow.Clear();
+			hypnotist.RemoveAbilityPartPos(
+				base.gameObject.transform.position);
 			Destroy(base.gameObject);
 		}
 
@@ -110,7 +116,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 				!localPlayer.Data.IsDead);
 		}
 
-		protected virtual void Picup()
+		protected virtual void Picup(Hypnotist role)
         {
 
         }
@@ -123,7 +129,8 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
 		public RedAbilityPart(IntPtr ptr) : base(ptr) { }
 
-        protected override void Picup()
+		[HideFromIl2Cpp]
+		protected override void Picup(Hypnotist hypnotist)
         {
 			PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
 
@@ -135,8 +142,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 					(byte)RpcOps.PickUpAbilityModule,
 					(byte)partType,
 				});
-			UpdateAllDollKillButtonState(
-				ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Hypnotist>());
+			UpdateAllDollKillButtonState(hypnotist);
 		}
     }
 
@@ -152,7 +158,8 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 			this.console = console;
 		}
 
-		protected override void Picup()
+		[HideFromIl2Cpp]
+		protected override void Picup(Hypnotist hypnotist)
 		{
 			PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
 
@@ -165,9 +172,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 					(byte)partType,
 					(byte)this.console,
 				});
-			FeatAllDollMapModuleAccess(
-				ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Hypnotist>(),
-				this.console);
+			FeatAllDollMapModuleAccess(hypnotist, this.console);
 		}
 		protected override Color GetColor() => Palette.CrewmateBlue;
 	}
@@ -184,7 +189,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 			this.console = console;
         }
 
-		protected override void Picup()
+		protected override void Picup(Hypnotist hypnotist)
 		{
 			PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
 
@@ -197,9 +202,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 					(byte)partType,
 					(byte)this.console,
 				});
-			UnlockAllDollCrakingAbility(
-				ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Hypnotist>(),
-				this.console);
+			UnlockAllDollCrakingAbility(hypnotist, this.console);
 		}
 
 		protected override Color GetColor() => Palette.DisabledGrey;
