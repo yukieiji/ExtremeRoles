@@ -304,6 +304,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 RPCOperator.Command.HypnotistAbility,
                 new List<byte>
                 {
+                    rolePlayer.PlayerId,
                     (byte)RpcOps.TargetToDoll,
                     targetPlayerId,
                 });

@@ -139,6 +139,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 				RPCOperator.Command.HypnotistAbility,
 				new List<byte>
 				{
+					rolePlayer.PlayerId,
 					(byte)RpcOps.PickUpAbilityModule,
 					(byte)partType,
 				});
@@ -168,6 +169,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 				RPCOperator.Command.HypnotistAbility,
 				new List<byte>
 				{
+					rolePlayer.PlayerId,
 					(byte)RpcOps.PickUpAbilityModule,
 					(byte)partType,
 					(byte)this.console,
@@ -198,6 +200,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 				RPCOperator.Command.HypnotistAbility,
 				new List<byte>
 				{
+					rolePlayer.PlayerId,
 					(byte)RpcOps.PickUpAbilityModule,
 					(byte)partType,
 					(byte)this.console,
