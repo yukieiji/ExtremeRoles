@@ -1,5 +1,6 @@
 ﻿using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Roles.Solo;
 
 namespace ExtremeRoles.Roles.API.Interface
 {

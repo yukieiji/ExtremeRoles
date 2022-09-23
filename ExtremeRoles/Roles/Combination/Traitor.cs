@@ -69,31 +69,6 @@ namespace ExtremeRoles.Roles.Combination
 
     public sealed class Traitor : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialSetUp
     {
-        public class TraitorCrackButton : ChargableButton
-        {
-            public TraitorCrackButton(
-                string buttonText,
-                System.Func<bool> ability,
-                System.Func<bool> canUse,
-                Sprite sprite,
-                Vector3 positionOffset,
-                System.Action abilityCleanUp,
-                System.Func<bool> abilityCheck = null,
-                KeyCode hotkey = KeyCode.F,
-                bool mirror = false) : base(
-                    buttonText, ability,
-                    canUse, sprite,
-                    positionOffset,
-                    abilityCleanUp,
-                    abilityCheck,
-                    hotkey, mirror)
-            {  }
-            public void SetSprite(Sprite img)
-            {
-                this.ButtonSprite = img;
-            }
-        }
-
         public enum AbilityType : byte
         {
             Admin,
@@ -144,18 +119,11 @@ namespace ExtremeRoles.Roles.Combination
             this.vitalSprite = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[
                 ImageNames.VitalsButton].Image;
 
-            this.Button = new TraitorCrackButton(
+            this.CreateChargeAbilityButton(
                 Translation.GetString("traitorCracking"),
-                UseAbility,
-                IsAbilityUse,
                 this.adminSprite,
-                new Vector3(-1.8f, -0.06f, 0),
-                CleanUp,
-                CheckAbility,
-                KeyCode.F,
-                false);
-            
-            this.RoleAbilityInit();
+                checkAbility: CheckAbility,
+                abilityCleanUp: CleanUp);
         }
 
         public bool UseAbility()
@@ -528,7 +496,7 @@ namespace ExtremeRoles.Roles.Combination
         }
         private void updateButtonSprite()
         {
-            var traitorButton = this.Button as TraitorCrackButton;
+            var traitorButton = this.Button as ChargableButton;
 
             Sprite sprite = Resources.Loader.CreateSpriteFromResources(
                 Resources.Path.TestButton);
@@ -547,7 +515,7 @@ namespace ExtremeRoles.Roles.Combination
                 default:
                     break;
             }
-            traitorButton.SetSprite(sprite);
+            traitorButton.SetButtonImage(sprite);
         }
     }
 }

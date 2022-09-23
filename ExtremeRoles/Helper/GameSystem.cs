@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 using Hazel;
 using UnityEngine;
 
+using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
@@ -138,6 +140,67 @@ namespace ExtremeRoles.Helper
             return taskIndex[index];
         }
 
+        public static Sprite GetAdminButtonImage()
+        {
+            var imageDict = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
+            switch (PlayerControl.GameOptions.MapId)
+            {
+                case 0:
+                case 3:
+                    return imageDict[ImageNames.AdminMapButton].Image;
+                case 1:
+                    return imageDict[ImageNames.MIRAAdminButton].Image;
+                case 2:
+                    return imageDict[ImageNames.PolusAdminButton].Image;
+                default:
+                    return imageDict[ImageNames.AirshipAdminButton].Image;
+            }
+        }
+
+        public static Sprite GetSecurityImage()
+        {
+            var imageDict = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
+            switch (PlayerControl.GameOptions.MapId)
+            {
+                case 1:
+                    return imageDict[ImageNames.DoorLogsButton].Image;
+                default:
+                    return imageDict[ImageNames.CamsButton].Image;
+            }
+        }
+        public static Sprite GetVitalImage() => 
+            FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[
+                ImageNames.VitalsButton].Image;
+
+        public static SystemConsole GetSecuritySystemConsole()
+        {
+            SystemConsole watchConsole;
+            if (ExtremeRolesPlugin.Compat.IsModMap)
+            {
+                watchConsole = ExtremeRolesPlugin.Compat.ModMap.GetSystemConsole(
+                    SystemConsoleType.SecurityCamera);
+            }
+            else
+            {
+                watchConsole = getVanillaSecurityConsole();
+            }
+            return watchConsole;
+        }
+        public static SystemConsole GetVitalSystemConsole()
+        {
+            SystemConsole vitalConsole;
+            if (ExtremeRolesPlugin.Compat.IsModMap)
+            {
+                vitalConsole = ExtremeRolesPlugin.Compat.ModMap.GetSystemConsole(
+                    SystemConsoleType.Vital);
+            }
+            else
+            {
+                vitalConsole = getVanillaVitalConsole();
+            }
+            return vitalConsole;
+        }
+
         public static void SetTask(
             GameData.PlayerInfo playerInfo,
             int taskIndex)
@@ -244,5 +307,55 @@ namespace ExtremeRoles.Helper
             return index;
         }
 
+        private static SystemConsole getVanillaSecurityConsole()
+        {
+            // 0 = Skeld
+            // 1 = Mira HQ
+            // 2 = Polus
+            // 3 = Dleks - deactivated
+            // 4 = Airship
+            var systemConsoleArray = UnityEngine.Object.FindObjectsOfType<SystemConsole>();
+            switch (PlayerControl.GameOptions.MapId)
+            {
+                case 0:
+                case 3:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("SurvConsole"));
+                case 1:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("SurvLogConsole"));
+                case 2:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("Surv_Panel"));
+                case 4:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("task_cams"));
+                default:
+                    return null;
+            }
+        }
+
+        private static SystemConsole getVanillaVitalConsole()
+        {
+            // 0 = Skeld
+            // 1 = Mira HQ
+            // 2 = Polus
+            // 3 = Dleks - deactivated
+            // 4 = Airship
+            var systemConsoleArray = UnityEngine.Object.FindObjectsOfType<SystemConsole>();
+            switch (PlayerControl.GameOptions.MapId)
+            {
+                case 0:
+                case 1:
+                case 3:
+                    return null;
+                case 2:
+                case 4:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("panel_vitals"));
+                default:
+                    return null;
+            }
+        }
     }
 }
