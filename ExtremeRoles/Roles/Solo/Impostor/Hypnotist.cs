@@ -880,7 +880,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
     }
 
-    public sealed class Doll : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleHasParent
+    public sealed class Doll : 
+        SingleRoleBase,
+        IRoleAbility,
+        IRoleUpdate,
+        IRoleHasParent,
+        IRoleWinPlayerModifier
     {
         public enum AbilityType : byte
         {
@@ -978,6 +983,26 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void RemoveParent(byte rolePlayerId)
         {
             this.hypnotist.RemoveDoll(rolePlayerId);
+        }
+
+        public void ModifiedWinPlayer(
+            GameData.PlayerInfo rolePlayerInfo,
+            GameOverReason reason,
+            ref Il2CppSystem.Collections.Generic.List<WinningPlayerData> winner,
+            ref List<GameData.PlayerInfo> pulsWinner)
+        {
+            switch (reason)
+            {
+                case GameOverReason.ImpostorByVote:
+                case GameOverReason.ImpostorByKill:
+                case GameOverReason.ImpostorBySabotage:
+                case GameOverReason.ImpostorDisconnect:
+                case (GameOverReason)RoleGameOverReason.AssassinationMarin:
+                    this.AddWinner(rolePlayerInfo, winner, pulsWinner);
+                    break;
+                default:
+                    break;
+            }
         }
 
         public void CreateAbility()
