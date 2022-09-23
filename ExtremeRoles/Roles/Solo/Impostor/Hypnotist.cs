@@ -575,7 +575,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 parentOps,
                 format: OptionUnit.Second);
             CreateFloatOption(
-                HypnotistOption.DollKillCoolReduceRate,
+                HypnotistOption.DollCrakingActiveTime,
                 3.0f, 0.5f, 60.0f, 0.5f,
                 parentOps,
                 format: OptionUnit.Second);
