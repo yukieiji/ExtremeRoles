@@ -556,6 +556,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 2, 0, 5, 1, parentOps,
                 format: OptionUnit.Shot);
 
+            CreateFloatOption(
+                HypnotistOption.Range,
+                1.6f, 0.5f, 5.0f, 0.1f,
+                parentOps);
+
             this.CreateAbilityCountOption(parentOps, 1, 5);
 
             CreateFloatOption(
