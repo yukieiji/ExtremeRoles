@@ -569,8 +569,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             CreateBoolOption(
                 HypnotistOption.IsResetKillCoolWhenDollKill,
                 true, parentOps);
-            CreateFloatOption(
+            CreateIntOption(
                 HypnotistOption.DollKillCoolReduceRate,
+                10, 0, 75, 5,
+                parentOps,
+                format: OptionUnit.Percentage);
+            CreateFloatOption(
+                HypnotistOption.DollCrakingCoolTime,
                 30.0f, 0.5f, 120.0f, 0.5f,
                 parentOps,
                 format: OptionUnit.Second);
