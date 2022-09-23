@@ -38,9 +38,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             AwakeKillCount,
             Range,
             HideArrowRange,
+            DefaultRedAbilityPart,
             IsResetKillCoolWhenDollKill,
             DollKillCoolReduceRate,
-            DefaultRedAbilityPart,
+            DollCrakingCoolTime,
+            DollCrakingActiveTime
         }
 
         public enum RpcOps : byte
@@ -119,6 +121,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private int addRedPosNum;
 
         private float hideDistance = 7.5f;
+
+        public float DollCrakingCoolTime => this.dollCrakingCoolTime;
+        public float DollCrakingActiveTime => this.dollCrakingActiveTime;
+
+        private float dollCrakingCoolTime;
+        private float dollCrakingActiveTime;
 
         public Hypnotist() : base(
             ExtremeRoleId.Hypnotist,
@@ -202,8 +210,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             byte rolePlayerId,
             byte targetPlayerId)
         {
-            // TODO : ドールの初期化処理
-
+            IRoleSpecialReset.ResetRole(targetPlayerId);
+            Doll newDoll = new Doll(rolePlayerId, role);
+            if (targetPlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
+            {
+                newDoll.CreateAbility();
+            }
+            ExtremeRoleManager.SetNewRole(targetPlayerId, newDoll);
         }
 
         private static void updateDoll(
@@ -239,6 +252,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     doll.CanKill = false;
                 }
             }
+        }
+
+        public void RemoveDoll(byte playerId)
+        {
+            this.doll.Remove(playerId);
         }
 
         public void RemoveAbilityPartPos(Vector3 pos)
@@ -544,19 +562,24 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 HypnotistOption.HideArrowRange,
                 10.0f, 5.0f, 25.0f, 0.5f,
                 parentOps);
-
-            CreateBoolOption(
-                HypnotistOption.IsResetKillCoolWhenDollKill,
-                true, parentOps);
-            CreateIntOption(
-                HypnotistOption.DollKillCoolReduceRate,
-                20, 0, 75, 5,
-                parentOps,
-                format: OptionUnit.Percentage);
             CreateIntOption(
                 HypnotistOption.DefaultRedAbilityPart,
                 0, 0, 10, 1,
                 parentOps);
+            CreateBoolOption(
+                HypnotistOption.IsResetKillCoolWhenDollKill,
+                true, parentOps);
+            CreateFloatOption(
+                HypnotistOption.DollKillCoolReduceRate,
+                30.0f, 0.5f, 120.0f, 0.5f,
+                parentOps,
+                format: OptionUnit.Second);
+            CreateFloatOption(
+                HypnotistOption.DollKillCoolReduceRate,
+                3.0f, 0.5f, 60.0f, 0.5f,
+                parentOps,
+                format: OptionUnit.Second);
+
         }
 
         protected override void RoleSpecificInit()
@@ -589,6 +612,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 GetRoleOptionId(HypnotistOption.DollKillCoolReduceRate)].GetValue()) / 100.0f);
             this.defaultRedAbilityPartNum = allOpt[
                 GetRoleOptionId(HypnotistOption.DefaultRedAbilityPart)].GetValue();
+
+            this.dollCrakingActiveTime = allOpt[
+                GetRoleOptionId(HypnotistOption.DollCrakingActiveTime)].GetValue();
+            this.dollCrakingCoolTime = allOpt[
+                GetRoleOptionId(HypnotistOption.DollCrakingCoolTime)].GetValue();
 
             this.canAwakeNow =
                 this.awakeCheckImpNum >= PlayerControl.GameOptions.NumImpostors &&
@@ -854,22 +882,68 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
     public sealed class Doll : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleHasParent
     {
+        public sealed class DollCrackButton : ChargableButton
+        {
+            public DollCrackButton(
+                string buttonText,
+                Func<bool> ability,
+                Func<bool> canUse,
+                Sprite sprite,
+                Vector3 positionOffset,
+                Action abilityCleanUp,
+                Func<bool> abilityCheck = null,
+                KeyCode hotkey = KeyCode.F,
+                bool mirror = false) : base(
+                    buttonText, ability,
+                    canUse, sprite,
+                    positionOffset,
+                    abilityCleanUp,
+                    abilityCheck,
+                    hotkey, mirror)
+            { }
+            public void SetSprite(Sprite img)
+            {
+                this.ButtonSprite = img;
+            }
+        }
+
+        public enum AbilityType : byte
+        {
+            Admin,
+            Security,
+            Vital,
+        }
+
         public RoleAbilityButtonBase Button
         { 
-            get => throw new NotImplementedException();
-            set => throw new NotImplementedException();
+            get => this.crakingButton;
+            set
+            {
+                this.crakingButton = value;
+            }
         }
 
-        public byte Parent => throw new NotImplementedException();
+        public byte Parent => this.hypnotistPlayerId;
 
-        public enum LastWolfOption
-        {
-            AwakeImpostorNum,
-            DeadPlayerNumBonus,
-            KillPlayerNumBonus,
-            FinalLightOffCoolTime
-        }
-        public Doll() : base(
+        private byte hypnotistPlayerId;
+        private Hypnotist hypnotist;
+
+        private AbilityType curAbilityType;
+        private AbilityType nextUseAbilityType;
+        private TMPro.TextMeshPro chargeTime;
+
+        private Sprite adminSprite;
+        private Sprite securitySprite;
+        private Sprite vitalSprite;
+
+        private Minigame minigame;
+        private HashSet<AbilityType> canUseCrakingModule;
+
+        private RoleAbilityButtonBase crakingButton;
+
+        public Doll(
+            byte hypnotistPlayerId,
+            Hypnotist parent) : base(
             ExtremeRoleId.Doll,
             ExtremeRoleType.Impostor,
             ExtremeRoleId.Doll.ToString(),
@@ -877,7 +951,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             false, false, false,
             false, false, false,
             false, false, false)
-        { }
+        {
+            this.hypnotistPlayerId = hypnotistPlayerId;
+            this.hypnotist = parent;
+            this.FakeImposter = true;
+            this.canUseCrakingModule = new HashSet<AbilityType>();
+        }
 
         public void FeatMapModuleAccess(SystemConsoleType consoleType)
         {
@@ -892,9 +971,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 case SystemConsoleType.Vital:
                     this.CanUseVital = true;
                     break;
-                case SystemConsoleType.EmergencyButton:
-                    this.CanCallMeeting = true;
-                    break;
                 default:
                     break;
             }
@@ -902,66 +978,406 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void UnlockCrakingAbility(SystemConsoleType consoleType)
         {
+            AbilityType addType;
             switch (consoleType)
             {
                 case SystemConsoleType.Admin:
-                    this.CanUseAdmin = true;
+                    addType = AbilityType.Admin;
                     break;
                 case SystemConsoleType.SecurityCamera:
-                    
+                    addType = AbilityType.Security;
                     break;
                 case SystemConsoleType.Vital:
-                    
+                    addType = AbilityType.Vital;
+                    break;
+                default:
+                    return;
+            }
+            if (this.canUseCrakingModule.Count == 0)
+            {
+                this.nextUseAbilityType = addType;
+            }
+            this.canUseCrakingModule.Add(addType);
+        }
+
+        public void RemoveParent(byte rolePlayerId)
+        {
+            this.hypnotist.RemoveDoll(rolePlayerId);
+        }
+
+        public void CreateAbility()
+        {
+            this.adminSprite = getAdminButtonImage();
+            this.securitySprite = getSecurityImage();
+            this.vitalSprite = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[
+                ImageNames.VitalsButton].Image;
+
+            this.Button = new DollCrackButton(
+                Translation.GetString("traitorCracking"),
+                UseAbility,
+                IsAbilityUse,
+                this.adminSprite,
+                new Vector3(-1.8f, -0.06f, 0),
+                CleanUp,
+                CheckAbility,
+                KeyCode.F,
+                false);
+
+            this.Button.SetAbilityCoolTime(
+                hypnotist.DollCrakingCoolTime);
+            this.Button.SetAbilityActiveTime(
+                hypnotist.DollCrakingActiveTime);
+        }
+
+        public bool UseAbility()
+        {
+            switch (this.nextUseAbilityType)
+            {
+                case AbilityType.Admin:
+                    FastDestroyableSingleton<HudManager>.Instance.ShowMap(
+                        (Action<MapBehaviour>)(m => m.ShowCountOverlay()));
+                    break;
+                case AbilityType.Security:
+                    SystemConsole watchConsole;
+                    if (ExtremeRolesPlugin.Compat.IsModMap)
+                    {
+                        watchConsole = ExtremeRolesPlugin.Compat.ModMap.GetSystemConsole(
+                            SystemConsoleType.SecurityCamera);
+                    }
+                    else
+                    {
+                        watchConsole = getSecurityConsole();
+                    }
+
+                    if (watchConsole == null || Camera.main == null)
+                    {
+                        return false;
+                    }
+                    openConsole(watchConsole.MinigamePrefab);
+                    break;
+                case AbilityType.Vital:
+                    SystemConsole vitalConsole;
+                    if (ExtremeRolesPlugin.Compat.IsModMap)
+                    {
+                        vitalConsole = ExtremeRolesPlugin.Compat.ModMap.GetSystemConsole(
+                            SystemConsoleType.Vital);
+                    }
+                    else
+                    {
+                        vitalConsole = getVitalConsole();
+                    }
+
+                    if (vitalConsole == null || Camera.main == null)
+                    {
+                        return false;
+                    }
+                    openConsole(vitalConsole.MinigamePrefab);
+                    break;
+                default:
+                    return false;
+            }
+
+            this.curAbilityType = this.nextUseAbilityType;
+
+            updateAbility();
+            updateButtonSprite();
+
+            return true;
+        }
+
+        public bool CheckAbility()
+        {
+            switch (this.curAbilityType)
+            {
+                case AbilityType.Admin:
+                    return MapBehaviour.Instance.isActiveAndEnabled;
+                case AbilityType.Security:
+                case AbilityType.Vital:
+                    return Minigame.Instance != null;
+                default:
+                    return false;
+            }
+        }
+
+        public void CleanUp()
+        {
+            switch (this.curAbilityType)
+            {
+                case AbilityType.Admin:
+                    if (MapBehaviour.Instance)
+                    {
+                        MapBehaviour.Instance.Close();
+                    }
+                    break;
+                case AbilityType.Security:
+                case AbilityType.Vital:
+                    if (this.minigame != null)
+                    {
+                        this.minigame.Close();
+                        this.minigame = null;
+                    }
                     break;
                 default:
                     break;
             }
         }
 
-
-        public void CreateAbility()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool UseAbility()
-        {
-            throw new NotImplementedException();
-        }
-
         public bool IsAbilityUse()
         {
-            throw new NotImplementedException();
+
+            switch (this.nextUseAbilityType)
+            {
+                case AbilityType.Admin:
+                    return
+                        this.IsCommonUse() &&
+                        (
+                            MapBehaviour.Instance == null ||
+                            !MapBehaviour.Instance.isActiveAndEnabled
+                        );
+                case AbilityType.Security:
+                case AbilityType.Vital:
+                    return this.IsCommonUse() && Minigame.Instance == null;
+                default:
+                    return false;
+            }
         }
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            throw new NotImplementedException();
+            if (this.chargeTime != null)
+            {
+                this.chargeTime.gameObject.SetActive(false);
+            }
+            if (this.minigame != null)
+            {
+                this.minigame.Close();
+                this.minigame = null;
+            }
+            if (MapBehaviour.Instance)
+            {
+                MapBehaviour.Instance.Close();
+            }
         }
 
         public void RoleAbilityResetOnMeetingEnd()
         {
-            throw new NotImplementedException();
+            return;
         }
 
         public void Update(PlayerControl rolePlayer)
         {
-            throw new NotImplementedException();
+            PlayerControl hypnotistPlayer = Player.GetPlayerControlById(this.hypnotistPlayerId);
+            if (!rolePlayer.Data.IsDead &&
+                (hypnotistPlayer == null || hypnotistPlayer.Data.IsDead))
+            {
+                RPCOperator.Call(
+                    rolePlayer.NetId,
+                    RPCOperator.Command.UncheckedMurderPlayer,
+                    new List<byte> { rolePlayer.PlayerId, rolePlayer.PlayerId, 0 });
+                RPCOperator.UncheckedMurderPlayer(
+                    rolePlayer.PlayerId,
+                    rolePlayer.PlayerId, 0);
+            }
+
+            if (this.canUseCrakingModule.Count == 0 && 
+                this.Button != null)
+            {
+                this.Button.SetActive(false);
+            }
+
+            if (this.chargeTime == null)
+            {
+                this.chargeTime = UnityEngine.Object.Instantiate(
+                    FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+                    Camera.main.transform, false);
+                this.chargeTime.transform.localPosition = new Vector3(3.5f, 2.25f, -250.0f);
+            }
+
+            if (!this.Button.IsAbilityActive())
+            {
+                this.chargeTime.gameObject.SetActive(false);
+                return;
+            }
+
+            this.chargeTime.text = Mathf.CeilToInt(this.Button.GetCurTime()).ToString();
+            this.chargeTime.gameObject.SetActive(true);
         }
 
-        protected override void CreateSpecificOption(IOption parentOps)
+        public override Color GetTargetRoleSeeColor(
+            SingleRoleBase targetRole,
+            byte targetPlayerId)
         {
-            throw new NotImplementedException();
+
+            if (targetPlayerId == this.hypnotistPlayerId)
+            {
+                return Palette.ImpostorRed;
+            }
+            return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
+        }
+
+        public override string GetFullDescription()
+        {
+            return string.Format(
+                base.GetFullDescription(),
+                Player.GetPlayerControlById(
+                    this.hypnotistPlayerId)?.Data.PlayerName);
+        }
+
+        public override bool IsSameTeam(SingleRoleBase targetRole)
+        {
+            if (targetRole.Id == this.Id)
+            {
+                if (OptionHolder.Ship.IsSameNeutralSameWin)
+                {
+                    return true;
+                }
+                else
+                {
+                    return this.IsSameControlId(targetRole);
+                }
+            }
+            else
+            {
+                return targetRole.IsImpostor();
+            }
+        }
+
+        protected override void CreateSpecificOption(
+            IOption parentOps)
+        {
+            throw new Exception("Don't call this class method!!");
         }
 
         protected override void RoleSpecificInit()
         {
-            throw new NotImplementedException();
+            throw new Exception("Don't call this class method!!");
+        }
+        private Sprite getAdminButtonImage()
+        {
+            var imageDict = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
+            switch (PlayerControl.GameOptions.MapId)
+            {
+                case 0:
+                case 3:
+                    return imageDict[ImageNames.AdminMapButton].Image;
+                case 1:
+                    return imageDict[ImageNames.MIRAAdminButton].Image;
+                case 2:
+                    return imageDict[ImageNames.PolusAdminButton].Image;
+                default:
+                    return imageDict[ImageNames.AirshipAdminButton].Image;
+            }
+        }
+        private Sprite getSecurityImage()
+        {
+            var imageDict = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
+            switch (PlayerControl.GameOptions.MapId)
+            {
+                case 1:
+                    return imageDict[ImageNames.DoorLogsButton].Image;
+                default:
+                    return imageDict[ImageNames.CamsButton].Image;
+            }
+        }
+        private SystemConsole getSecurityConsole()
+        {
+            // 0 = Skeld
+            // 1 = Mira HQ
+            // 2 = Polus
+            // 3 = Dleks - deactivated
+            // 4 = Airship
+            var systemConsoleArray = UnityEngine.Object.FindObjectsOfType<SystemConsole>();
+            switch (PlayerControl.GameOptions.MapId)
+            {
+                case 0:
+                case 3:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("SurvConsole"));
+                case 1:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("SurvLogConsole"));
+                case 2:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("Surv_Panel"));
+                case 4:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("task_cams"));
+                default:
+                    return null;
+            }
+        }
+        private SystemConsole getVitalConsole()
+        {
+            // 0 = Skeld
+            // 1 = Mira HQ
+            // 2 = Polus
+            // 3 = Dleks - deactivated
+            // 4 = Airship
+            var systemConsoleArray = UnityEngine.Object.FindObjectsOfType<SystemConsole>();
+            switch (PlayerControl.GameOptions.MapId)
+            {
+                case 0:
+                case 1:
+                case 3:
+                    return null;
+                case 2:
+                case 4:
+                    return systemConsoleArray.FirstOrDefault(
+                        x => x.gameObject.name.Contains("panel_vitals"));
+                default:
+                    return null;
+            }
         }
 
-        public void RemoveParent(byte rolePlayerId)
+        private void openConsole(Minigame game)
         {
-            throw new NotImplementedException();
+            this.minigame = UnityEngine.Object.Instantiate(
+                game, Camera.main.transform, false);
+            this.minigame.transform.SetParent(Camera.main.transform, false);
+            this.minigame.transform.localPosition = new Vector3(0.0f, 0.0f, -50f);
+            this.minigame.Begin(null);
+        }
+
+        private void updateAbility()
+        {
+            do
+            {
+                ++this.nextUseAbilityType;
+                this.nextUseAbilityType = (AbilityType)((int)this.nextUseAbilityType % 3);
+                if (this.nextUseAbilityType == AbilityType.Vital &&
+                    (
+                        PlayerControl.GameOptions.MapId == 0 ||
+                        PlayerControl.GameOptions.MapId == 1 ||
+                        PlayerControl.GameOptions.MapId == 3
+                    ))
+                {
+                    this.nextUseAbilityType = AbilityType.Admin;
+                }
+            }
+            while (!this.canUseCrakingModule.Contains(this.nextUseAbilityType));
+        }
+        private void updateButtonSprite()
+        {
+            var button = this.Button as DollCrackButton;
+
+            Sprite sprite = Resources.Loader.CreateSpriteFromResources(
+                Resources.Path.TestButton);
+
+            switch (this.nextUseAbilityType)
+            {
+                case AbilityType.Admin:
+                    sprite = this.adminSprite;
+                    break;
+                case AbilityType.Security:
+                    sprite = this.securitySprite;
+                    break;
+                case AbilityType.Vital:
+                    sprite = this.vitalSprite;
+                    break;
+                default:
+                    break;
+            }
+            button.SetSprite(sprite);
         }
     }
 }

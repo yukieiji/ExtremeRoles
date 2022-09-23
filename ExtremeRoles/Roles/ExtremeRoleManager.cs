@@ -458,6 +458,14 @@ namespace ExtremeRoles.Roles
             }
         }
 
+        public static void SetNewRole(byte playerId, SingleRoleBase newRole)
+        {
+            lock (GameRole)
+            {
+                GameRole[playerId] =  newRole;
+            }
+        }
+
         private static void setPlyerIdToSingleRole(
             byte playerId, SingleRoleBase role)
         {

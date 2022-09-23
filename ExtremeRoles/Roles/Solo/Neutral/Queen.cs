@@ -100,19 +100,19 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     multiAssignRole.AnotherRole = null;
                     multiAssignRole.CanHasAnotherRole = true;
                     multiAssignRole.SetAnotherRole(servant);
-                    setNewRole(multiAssignRole, targetPlayerId);
+                    ExtremeRoleManager.SetNewRole(targetPlayerId, multiAssignRole);
                 }
                 else
                 {
                     targetRole.Team = ExtremeRoleType.Neutral;
                     servant.SetAnotherRole(targetRole);
-                    setNewRole(servant, targetPlayerId);
+                    ExtremeRoleManager.SetNewRole(targetPlayerId, servant);
                 }
             }
             else
             {
                 resetRole(targetRole, targetPlayerId, targetPlayer);
-                setNewRole(servant, targetPlayerId);
+                ExtremeRoleManager.SetNewRole(targetPlayerId, servant);
             }
             queen.AddServantPlayer(targetPlayerId);
         }
@@ -218,16 +218,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     abilityRole.ResetOnMeetingStart();
                     abilityRole.ResetOnMeetingEnd();
                 }
-            }
-        }
-
-        private static void setNewRole(
-            SingleRoleBase role,
-            byte targetPlayerId)
-        {
-            lock (ExtremeRoleManager.GameRole)
-            {
-                ExtremeRoleManager.GameRole[targetPlayerId] = role;
             }
         }
 
@@ -506,6 +496,17 @@ namespace ExtremeRoles.Roles.Solo.Neutral
     {
         public byte Parent => this.queenPlayerId;
 
+        public RoleAbilityButtonBase Button
+        {
+            get => this.selfKillButton;
+            set
+            {
+                this.selfKillButton = value;
+            }
+        }
+
+        private RoleAbilityButtonBase selfKillButton;
+
         private byte queenPlayerId;
         private SpriteRenderer killFlash;
         private Queen queen;
@@ -555,17 +556,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.HasOtherKillRange = baseRole.HasOtherKillRange;
             this.KillRange = baseRole.KillRange;
         }
-
-        public RoleAbilityButtonBase Button
-        { 
-            get => this.selfKillButton;
-            set
-            {
-                this.selfKillButton = value;
-            }
-        }
-         
-        private RoleAbilityButtonBase selfKillButton;
 
         public void SelfKillAbility(float coolTime)
         {
