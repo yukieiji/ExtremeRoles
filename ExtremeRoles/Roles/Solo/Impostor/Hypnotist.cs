@@ -217,6 +217,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 newDoll.CreateAbility();
             }
             ExtremeRoleManager.SetNewRole(targetPlayerId, newDoll);
+            role.doll.Add(targetPlayerId);
         }
 
         private static void updateDoll(
@@ -935,7 +936,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             byte hypnotistPlayerId,
             Hypnotist parent) : base(
             ExtremeRoleId.Doll,
-            ExtremeRoleType.Impostor,
+            ExtremeRoleType.Neutral,
             ExtremeRoleId.Doll.ToString(),
             Palette.ImpostorRed,
             false, false, false,
