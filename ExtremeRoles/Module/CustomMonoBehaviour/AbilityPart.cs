@@ -191,6 +191,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 			this.console = console;
         }
 
+		[HideFromIl2Cpp]
 		protected override void Picup(Hypnotist hypnotist)
 		{
 			PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
