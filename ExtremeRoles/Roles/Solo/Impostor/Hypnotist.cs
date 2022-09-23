@@ -36,6 +36,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             AwakeCheckTaskGage,
             AwakeKillCount,
             Range,
+            HideArrowRange,
+            IsResetKillCoolWhenDollKill,
+            DollKillCoolReduceRate,
+            DefaultRedAbilityPart,
         }
 
         public enum RpcOps : byte
@@ -78,6 +82,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private float dollKillCoolReduceRate;
 
         private bool isResetKillCoolWhenDollKill;
+        private int defaultRedAbilityPartNum;
 
         private int awakeCheckImpNum;
         private float awakeCheckTaskGage;
@@ -304,6 +309,25 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
             byte targetPlayerId = this.target.PlayerId;
 
+            SingleRoleBase role = ExtremeRoleManager.GameRole[targetPlayerId];
+            MultiAssignRoleBase multiAssignRole = role as MultiAssignRoleBase;
+
+            int redPartNum = this.defaultRedAbilityPartNum;
+            Type roleType = role.GetType();
+            Type[] interfaces = roleType.GetInterfaces();
+
+            redPartNum += computeRedPartNum(interfaces);
+
+            if (multiAssignRole != null)
+            {
+                if (multiAssignRole.AnotherRole != null)
+                {
+                    Type anotherRoleType = multiAssignRole.AnotherRole.GetType();
+                    Type[] anotherInterface = anotherRoleType.GetInterfaces();
+                    redPartNum += computeRedPartNum(anotherInterface);
+                }
+            }
+
 
             RPCOperator.Call(
                 rolePlayer.NetId,
@@ -315,7 +339,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     targetPlayerId,
                 });
             targetToDoll(this, rolePlayer.PlayerId, targetPlayerId);
-            setAbilityPart(10);
+            setAbilityPart(redPartNum);
             this.target = null;
 
             return true;
@@ -516,8 +540,21 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.CreateAbilityCountOption(parentOps, 1, 5);
 
             CreateFloatOption(
-                HypnotistOption.Range,
-                1.0f, 0.5f, 2.6f, 0.1f,
+                HypnotistOption.HideArrowRange,
+                10.0f, 5.0f, 25.0f, 0.5f,
+                parentOps);
+
+            CreateBoolOption(
+                HypnotistOption.IsResetKillCoolWhenDollKill,
+                true, parentOps);
+            CreateIntOption(
+                HypnotistOption.DollKillCoolReduceRate,
+                20, 0, 75, 5,
+                parentOps,
+                format: OptionUnit.Percentage);
+            CreateIntOption(
+                HypnotistOption.DefaultRedAbilityPart,
+                0, 0, 10, 1,
                 parentOps);
         }
 
@@ -542,6 +579,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             this.range = allOpt[
                 GetRoleOptionId(HypnotistOption.Range)].GetValue();
+
+            this.hideDistance = allOpt[
+                GetRoleOptionId(HypnotistOption.HideArrowRange)].GetValue();
+            this.isResetKillCoolWhenDollKill = allOpt[
+                GetRoleOptionId(HypnotistOption.IsResetKillCoolWhenDollKill)].GetValue();
+            this.dollKillCoolReduceRate = ((1.0f - (float)allOpt[
+                GetRoleOptionId(HypnotistOption.DollKillCoolReduceRate)].GetValue()) / 100.0f);
+            this.defaultRedAbilityPartNum = allOpt[
+                GetRoleOptionId(HypnotistOption.DefaultRedAbilityPart)].GetValue();
 
             this.canAwakeNow =
                 this.awakeCheckImpNum >= PlayerControl.GameOptions.NumImpostors &&
@@ -754,6 +800,50 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.addRedPos.RemoveAt(checkIndex);
                 this.addedPos.Add(pos);
             }
+        }
+        private static int computeRedPartNum(Type[] interfaces)
+        {
+            int num = 0;
+
+            foreach (Type @interface in interfaces)
+            {
+                int addNum;
+                string name = @interface.FullName;
+                name = name.Replace("ExtremeRoles.Roles.API.Interface.","");
+                switch (name)
+                {
+                    case "IRoleVoteModifier":
+                        addNum = 9;
+                        break;
+                    case "IRoleMeetingButtonAbility":
+                        addNum = 8;
+                        break;
+                    case "IRoleAwake":
+                        addNum = 7;
+                        break;
+                    case "IRoleOnRevive":
+                        addNum = 6;
+                        break;
+                    case "IRoleAbility":
+                        addNum = 5;
+                        break;
+                    case "IRoleMurderPlayerHock":
+                        addNum = 4;
+                        break;
+                    case "IRoleUpdate":
+                        addNum = 3;
+                        break;
+                    case "IRoleReportHock":
+                        addNum = 2;
+                        break;
+                    default:
+                        addNum = 1;
+                        break;
+                }
+                num += addNum;
+            }
+
+            return num;
         }
     }
 
