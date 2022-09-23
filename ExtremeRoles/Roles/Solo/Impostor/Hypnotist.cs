@@ -104,6 +104,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private const string vitalKey = "Vital";
 
         private const string skeldKey = "Skeld";
+        private const string miraHqKey = "MiraHQ";
+        private const string polusKey = "Polus";
+        private const string airShipKey = "AirShip";
 
         private List<Vector3> addedPos;
         private List<Vector3> addRedPos;
@@ -597,6 +600,18 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     case 0:
                         setAbilityPartFromMapJsonInfo(
                             this.position[skeldKey], redModuleNum);
+                        break;
+                    case 1:
+                        setAbilityPartFromMapJsonInfo(
+                            this.position[miraHqKey], redModuleNum);
+                        break;
+                    case 2:
+                        setAbilityPartFromMapJsonInfo(
+                            this.position[polusKey], redModuleNum);
+                        break;
+                    case 4:
+                        setAbilityPartFromMapJsonInfo(
+                            this.position[airShipKey], redModuleNum);
                         break;
                     default:
                         break;
