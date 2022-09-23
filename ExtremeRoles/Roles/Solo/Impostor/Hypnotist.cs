@@ -580,11 +580,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         private void setAbilityPart(int redModuleNum)
         {
-            // 能力のかけらの設置処理
-            // 青
-            // 設置箇所一覧をどっかからロード => それを元に設置
-            // AirShipのテストコード
-
             byte mapId = PlayerControl.GameOptions.MapId;
 
             if (ExtremeRolesPlugin.Compat.IsModMap)
