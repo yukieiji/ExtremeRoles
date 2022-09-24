@@ -39,6 +39,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             Range,
             HideArrowRange,
             DefaultRedAbilityPart,
+            HideKillButtonTime,
             IsResetKillCoolWhenDollKill,
             DollKillCoolReduceRate,
             DollCrakingCoolTime,
@@ -128,6 +129,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private float dollCrakingCoolTime;
         private float dollCrakingActiveTime;
 
+        private bool isActiveTimer;
+        private float timer;
+        private float defaultTimer;
+
         public Hypnotist() : base(
             ExtremeRoleId.Hypnotist,
             ExtremeRoleType.Impostor,
@@ -182,6 +187,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public static void FeatAllDollMapModuleAccess(
             Hypnotist role, SystemConsoleType console)
         {
+            Logging.Debug($"FeatAccess:{console}");
             foreach (byte dollPlayerId in role.doll)
             {
                 SingleRoleBase doll = ExtremeRoleManager.GameRole[dollPlayerId];
@@ -195,6 +201,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public static void UnlockAllDollCrakingAbility(
             Hypnotist role, SystemConsoleType unlockConsole)
         {
+            Logging.Debug($"unlock:{unlockConsole}");
             foreach (byte dollPlayerId in role.doll)
             {
                 SingleRoleBase doll = ExtremeRoleManager.GameRole[dollPlayerId];
@@ -255,6 +262,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
+        public void EnableKillTimer()
+        {
+            this.timer = this.defaultTimer;
+            this.isActiveTimer = true;
+        }
+
         public void RemoveDoll(byte playerId)
         {
             this.doll.Remove(playerId);
@@ -302,11 +315,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                    rolePlayer.NetId,
                    RPCOperator.Command.HypnotistAbility,
                    new List<byte>
-                   {
+                   {    
+                        rolePlayer.PlayerId,
                         (byte)RpcOps.ResetDollKillButton,
                    });
                 resetDollKillButton(this);
             }
+            this.isActiveTimer = false;
         }
 
         public void RoleAbilityResetOnMeetingEnd()
@@ -394,6 +409,25 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 if (this.Button != null)
                 {
                     this.Button.SetActive(false);
+                }
+            }
+
+            if (this.isActiveTimer)
+            {
+                this.timer -= Time.fixedDeltaTime;
+                if (this.timer <= 0.0f)
+                {
+                    Logging.Debug("ResetKillButton");
+                    this.isActiveTimer = false;
+                    RPCOperator.Call(
+                       rolePlayer.NetId,
+                       RPCOperator.Command.HypnotistAbility,
+                       new List<byte>
+                       {
+                           rolePlayer.PlayerId,
+                           (byte)RpcOps.ResetDollKillButton,
+                       });
+                    resetDollKillButton(this);
                 }
             }
         }
@@ -572,6 +606,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 HypnotistOption.DefaultRedAbilityPart,
                 0, 0, 10, 1,
                 parentOps);
+            CreateFloatOption(
+                HypnotistOption.HideKillButtonTime,
+                15.0f, 2.5f, 60.0f, 0.5f,
+                parentOps,
+                format: OptionUnit.Second);
             CreateBoolOption(
                 HypnotistOption.IsResetKillCoolWhenDollKill,
                 true, parentOps);
@@ -629,6 +668,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.dollCrakingCoolTime = allOpt[
                 GetRoleOptionId(HypnotistOption.DollCrakingCoolTime)].GetValue();
 
+            this.defaultTimer = allOpt[
+                GetRoleOptionId(HypnotistOption.HideKillButtonTime)].GetValue();
+
             this.canAwakeNow =
                 this.awakeCheckImpNum >= PlayerControl.GameOptions.NumImpostors &&
                 this.awakeCheckTaskGage <= 0.0f;
@@ -669,6 +711,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.addedPos = new List<Vector3>();
             this.addRedPos = new List<Vector3>();
             this.addRedPosNum = 0;
+
+            this.isActiveTimer = false;
         }
 
         private void setAbilityPart(int redModuleNum)

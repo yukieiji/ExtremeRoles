@@ -97,7 +97,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 		public void Use()
 		{
 			Hypnotist hypnotist = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Hypnotist>();
-			Picup(hypnotist);
+			Pickup(hypnotist);
 			this.arrow.Clear();
 			hypnotist.RemoveAbilityPartPos(
 				base.gameObject.transform.position);
@@ -116,7 +116,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 				!localPlayer.Data.IsDead);
 		}
 
-		protected virtual void Picup(Hypnotist role)
+		protected virtual void Pickup(Hypnotist role)
         {
 
         }
@@ -130,8 +130,11 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 		public RedAbilityPart(IntPtr ptr) : base(ptr) { }
 
 		[HideFromIl2Cpp]
-		protected override void Picup(Hypnotist hypnotist)
+		protected override void Pickup(Hypnotist hypnotist)
         {
+
+			Helper.Logging.Debug("pickUp:RedPart");
+
 			PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
 
 			RPCOperator.Call(
@@ -144,12 +147,13 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 					(byte)partType,
 				});
 			UpdateAllDollKillButtonState(hypnotist);
+			hypnotist.EnableKillTimer();
 		}
     }
 
 	public sealed class BlueAbilityPart : AbilityPartBase
 	{
-		private const AbilityModuleType partType = AbilityModuleType.Red;
+		private const AbilityModuleType partType = AbilityModuleType.Blue;
 		private SystemConsoleType console;
 
 		public BlueAbilityPart(IntPtr ptr) : base(ptr) { }
@@ -160,8 +164,11 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 		}
 
 		[HideFromIl2Cpp]
-		protected override void Picup(Hypnotist hypnotist)
+		protected override void Pickup(Hypnotist hypnotist)
 		{
+
+			Helper.Logging.Debug($"pickUp:BluePart {console}");
+
 			PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
 
 			RPCOperator.Call(
@@ -181,7 +188,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
 	public sealed class GrayAbilityPart : AbilityPartBase
 	{
-		private const AbilityModuleType partType = AbilityModuleType.Red;
+		private const AbilityModuleType partType = AbilityModuleType.Glay;
 		private SystemConsoleType console;
 
 		public GrayAbilityPart(IntPtr ptr) : base(ptr) { }
@@ -192,8 +199,10 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         }
 
 		[HideFromIl2Cpp]
-		protected override void Picup(Hypnotist hypnotist)
+		protected override void Pickup(Hypnotist hypnotist)
 		{
+			Helper.Logging.Debug($"pickUp:GrayPart {console}");
+
 			PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
 
 			RPCOperator.Call(
