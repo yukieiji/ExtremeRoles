@@ -13,7 +13,11 @@ using ExtremeRoles.Roles.API.Extension.State;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public sealed class Resurrecter : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleResetMeeting, IRoleOnRevive
+    public sealed class Resurrecter : 
+        SingleRoleBase,
+        IRoleAwake<RoleTypes>,
+        IRoleResetMeeting,
+        IRoleOnRevive
     {
         public override bool IsAssignGhostRole
         {
@@ -38,6 +42,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             IsMeetingCoolResetOnResurrect,
             ResurrectTaskResetMeetingNum,
             ResurrectTaskResetGage,
+            CanResurrectAfterDeath,
             CanResurrectOnExil,
         }
 
@@ -54,6 +59,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private float resurrectTaskGage;
 
         private bool canResurrect;
+        private bool canResurrectAfterDeath;
         private bool canResurrectOnExil;
         private bool isResurrected;
         private bool isExild;
@@ -246,7 +252,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 if (taskGage >= this.resurrectTaskGage && 
                     !this.canResurrect)
                 {
-                    if (rolePlayer.Data.IsDead)
+                    if (this.canResurrectAfterDeath &&
+                        rolePlayer.Data.IsDead)
                     {
                         revive(rolePlayer);
                     }
@@ -419,7 +426,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 20, 10, 50, 5,
                 parentOps,
                 format: OptionUnit.Percentage);
-
+            CreateBoolOption(
+                ResurrecterOption.CanResurrectAfterDeath,
+                false, parentOps);
             CreateBoolOption(
                 ResurrecterOption.CanResurrectOnExil,
                 false, parentOps);
@@ -438,6 +447,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             this.resurrectTimer = allOpt[
                 GetRoleOptionId(ResurrecterOption.ResurrectDelayTime)].GetValue();
+            this.canResurrectAfterDeath = allOpt[
+                GetRoleOptionId(ResurrecterOption.CanResurrectAfterDeath)].GetValue();
             this.canResurrectOnExil = allOpt[
                 GetRoleOptionId(ResurrecterOption.CanResurrectOnExil)].GetValue();
             this.maxMeetingCount = allOpt[
