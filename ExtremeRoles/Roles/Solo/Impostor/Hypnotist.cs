@@ -977,6 +977,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         private Minigame minigame;
         private HashSet<AbilityType> canUseCrakingModule;
+        private string accessModule = string.Empty;
+        private string crakingModule = string.Empty;
 
         private RoleAbilityButtonBase crakingButton;
 
@@ -1022,9 +1024,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
             if (CachedPlayerControl.LocalPlayer.PlayerId == this.dollPlayerId)
             {
+                string consoleName = Translation.GetString(consoleType.ToString());
+
                 showText(string.Format(
                     Translation.GetString("FeatAccess"),
-                    Translation.GetString(consoleType.ToString())));
+                    consoleName));
+                this.accessModule = 
+                    this.accessModule == string.Empty ? 
+                    consoleName : $"{this.accessModule}, {consoleName}";
             }
         }
 
@@ -1053,9 +1060,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             
             if (CachedPlayerControl.LocalPlayer.PlayerId == this.dollPlayerId)
             {
+                string consoleName = Translation.GetString(consoleType.ToString());
+
                 showText(string.Format(
                     Translation.GetString("unlockCraking"),
-                    Translation.GetString(consoleType.ToString())));
+                    consoleName));
+                this.crakingModule =
+                    this.crakingModule == string.Empty ?
+                    consoleName : $"{this.crakingModule}, {consoleName}";
             }
         }
 
@@ -1295,7 +1307,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             return string.Format(
                 base.GetFullDescription(),
                 Player.GetPlayerControlById(
-                    this.hypnotistPlayerId)?.Data.PlayerName);
+                    this.hypnotistPlayerId)?.Data.PlayerName,
+                this.accessModule,
+                this.crakingModule);
         }
 
         public override bool IsSameTeam(SingleRoleBase targetRole)
