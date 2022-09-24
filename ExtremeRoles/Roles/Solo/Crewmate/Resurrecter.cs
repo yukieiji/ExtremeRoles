@@ -366,13 +366,21 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public override void ExiledAction(
             GameData.PlayerInfo rolePlayer)
         {
+
+            if (this.isResurrected) { return; }
+
             this.isExild = true;
 
-            if (this.canResurrectOnExil &&
-                this.canResurrect && 
-                !this.isResurrected)
+            // 追放でオフ時は以下の処理を行わない
+            if (!this.canResurrectOnExil) { return; }
+
+            if (this.canResurrect)
             {
                 this.activateResurrectTimer = true;
+            }
+            else if (!this.canResurrectAfterDeath)
+            {
+                this.isResurrected = true;
             }
         }
 
@@ -380,11 +388,17 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             PlayerControl rolePlayer,
             PlayerControl killerPlayer)
         {
+            if (this.isResurrected) { return; }
+
             this.isExild = false;
-            if (this.canResurrect && 
-                !this.isResurrected)
+            
+            if (this.canResurrect)
             {
                 this.activateResurrectTimer = true;
+            }
+            else if (!this.canResurrectAfterDeath)
+            {
+                this.isResurrected = true;
             }
         }
 
