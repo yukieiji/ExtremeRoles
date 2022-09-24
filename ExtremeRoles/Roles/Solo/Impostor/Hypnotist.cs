@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,6 +10,8 @@ using UnityEngine;
 using Hazel;
 
 using Newtonsoft.Json.Linq;
+
+using BepInEx.IL2CPP.Utils.Collections;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -218,7 +221,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             byte targetPlayerId)
         {
             IRoleSpecialReset.ResetRole(targetPlayerId);
-            Doll newDoll = new Doll(rolePlayerId, role);
+            Doll newDoll = new Doll(targetPlayerId, rolePlayerId, role);
             if (targetPlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
             {
                 newDoll.CreateAbility();
@@ -962,6 +965,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         private byte hypnotistPlayerId;
         private Hypnotist hypnotist;
+        private byte dollPlayerId;
 
         private AbilityType curAbilityType;
         private AbilityType nextUseAbilityType;
@@ -976,7 +980,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         private RoleAbilityButtonBase crakingButton;
 
+        private TMPro.TextMeshPro tellText;
+
+        private bool prevKillState;
+
         public Doll(
+            byte dollPlayerId,
             byte hypnotistPlayerId,
             Hypnotist parent) : base(
             ExtremeRoleId.Doll,
@@ -987,10 +996,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             false, false, false,
             false, false, false)
         {
+            this.dollPlayerId = dollPlayerId;
             this.hypnotistPlayerId = hypnotistPlayerId;
             this.hypnotist = parent;
             this.FakeImposter = true;
             this.canUseCrakingModule = new HashSet<AbilityType>();
+            this.prevKillState = false;
         }
 
         public void FeatMapModuleAccess(SystemConsoleType consoleType)
@@ -1008,6 +1019,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     break;
                 default:
                     break;
+            }
+            if (CachedPlayerControl.LocalPlayer.PlayerId == this.dollPlayerId)
+            {
+                showText(string.Format(
+                    Translation.GetString("FeatAccess"),
+                    Translation.GetString(consoleType.ToString())));
             }
         }
 
@@ -1033,6 +1050,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.nextUseAbilityType = addType;
             }
             this.canUseCrakingModule.Add(addType);
+            
+            if (CachedPlayerControl.LocalPlayer.PlayerId == this.dollPlayerId)
+            {
+                showText(string.Format(
+                    Translation.GetString("unlockCrakking"),
+                    Translation.GetString(consoleType.ToString())));
+            }
         }
 
         public void RemoveParent(byte rolePlayerId)
@@ -1193,6 +1217,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 MapBehaviour.Instance.Close();
             }
+            if (this.tellText != null)
+            {
+                this.tellText.gameObject.SetActive(false);
+            }
         }
 
         public void RoleAbilityResetOnMeetingEnd()
@@ -1220,6 +1248,17 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 this.Button.SetActive(false);
             }
+
+            if (MeetingHud.Instance == null &&
+                this.prevKillState != this.CanKill)
+            {
+                showText(
+                    this.CanKill ?
+                    Translation.GetString("unlockKill") :
+                    Translation.GetString("lockKill"));
+            }
+
+            this.prevKillState = this.CanKill;
 
             if (this.chargeTime == null)
             {
@@ -1330,5 +1369,31 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
             button.SetButtonImage(sprite);
         }
+
+        private void showText(string text)
+        {
+            CachedPlayerControl.LocalPlayer.PlayerControl.StartCoroutine(
+                coShowText(text).WrapToIl2Cpp());
+        }
+
+        private IEnumerator coShowText(string text)
+        {
+            if (this.tellText == null)
+            {
+                this.tellText = UnityEngine.Object.Instantiate(
+                    FastDestroyableSingleton<HudManager>.Instance.TaskText,
+                    Camera.main.transform, false);
+                this.tellText.transform.localPosition = new Vector3(0.0f, -0.9f, -250.0f);
+                this.tellText.alignment = TMPro.TextAlignmentOptions.Center;
+                this.tellText.gameObject.layer = 5;
+            }
+            this.tellText.text = text;
+            this.tellText.gameObject.SetActive(true);
+
+            yield return new WaitForSeconds(3.5f);
+
+            this.tellText.gameObject.SetActive(false);
+        }
+
     }
 }
