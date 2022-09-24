@@ -23,7 +23,8 @@ namespace ExtremeRoles.Patches.MiniGame
 
         private static readonly HashSet<ExtremeRoleId> vitalUseRole = new HashSet<ExtremeRoleId>()
         {
-            ExtremeRoleId.Traitor
+            ExtremeRoleId.Traitor,
+            ExtremeRoleId.Doll
         };
 
         public static bool Prefix(VitalsMinigame __instance)

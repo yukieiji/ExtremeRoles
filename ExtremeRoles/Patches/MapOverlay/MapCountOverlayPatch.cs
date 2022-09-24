@@ -27,7 +27,8 @@ namespace ExtremeRoles.Patches.MapOverlay
         private static readonly HashSet<ExtremeRoleId> adminUseRole = new HashSet<ExtremeRoleId>()
         {
             ExtremeRoleId.Supervisor,
-            ExtremeRoleId.Traitor
+            ExtremeRoleId.Traitor,
+            ExtremeRoleId.Doll
         };
 
         public static bool Prefix(MapCountOverlay __instance)

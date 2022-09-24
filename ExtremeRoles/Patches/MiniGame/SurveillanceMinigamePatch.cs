@@ -24,6 +24,7 @@ namespace ExtremeRoles.Patches.MiniGame
         {
             ExtremeRoleId.Traitor,
             ExtremeRoleId.Watchdog,
+            ExtremeRoleId.Doll
         };
 
 
