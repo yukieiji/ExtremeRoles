@@ -114,10 +114,9 @@ namespace ExtremeRoles.Roles.Combination
         public void CreateAbility()
         {
 
-            this.adminSprite = getAdminButtonImage();
-            this.securitySprite = getSecurityImage();
-            this.vitalSprite = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings[
-                ImageNames.VitalsButton].Image;
+            this.adminSprite = GameSystem.GetAdminButtonImage();
+            this.securitySprite = GameSystem.GetSecurityImage();
+            this.vitalSprite = GameSystem.GetVitalImage();
 
             this.CreateChargeAbilityButton(
                 Translation.GetString("traitorCracking"),
@@ -135,17 +134,7 @@ namespace ExtremeRoles.Roles.Combination
                         (System.Action<MapBehaviour>)(m => m.ShowCountOverlay()));
                     break;
                 case AbilityType.Security:
-                    SystemConsole watchConsole;
-                    if (ExtremeRolesPlugin.Compat.IsModMap)
-                    {
-                        watchConsole = ExtremeRolesPlugin.Compat.ModMap.GetSystemConsole(
-                            Compat.Interface.SystemConsoleType.SecurityCamera);
-                    }
-                    else
-                    {
-                        watchConsole = getSecurityConsole();
-                    }
-
+                    SystemConsole watchConsole = GameSystem.GetSecuritySystemConsole();
                     if (watchConsole == null || Camera.main == null)
                     {
                         return false;
@@ -153,17 +142,7 @@ namespace ExtremeRoles.Roles.Combination
                     openConsole(watchConsole.MinigamePrefab);
                     break;
                 case AbilityType.Vital:
-                    SystemConsole vitalConsole;
-                    if (ExtremeRolesPlugin.Compat.IsModMap)
-                    {
-                        vitalConsole = ExtremeRolesPlugin.Compat.ModMap.GetSystemConsole(
-                            Compat.Interface.SystemConsoleType.Vital);
-                    }
-                    else
-                    {
-                        vitalConsole = getVitalConsole();
-                    }
-
+                    SystemConsole vitalConsole = GameSystem.GetVitalSystemConsole();
                     if (vitalConsole == null || Camera.main == null)
                     {
                         return false;
@@ -393,83 +372,6 @@ namespace ExtremeRoles.Roles.Combination
             this.canUseButton = false;
             this.nextUseAbilityType = AbilityType.Admin;
             this.RoleAbilityInit();
-        }
-
-        private Sprite getAdminButtonImage()
-        {
-            var imageDict = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
-            switch (PlayerControl.GameOptions.MapId)
-            {
-                case 0:
-                case 3:
-                    return imageDict[ImageNames.AdminMapButton].Image;
-                case 1:
-                    return imageDict[ImageNames.MIRAAdminButton].Image;
-                case 2:
-                    return imageDict[ImageNames.PolusAdminButton].Image;
-                default:
-                    return imageDict[ImageNames.AirshipAdminButton].Image;
-            }
-        }
-        private Sprite getSecurityImage()
-        {
-            var imageDict = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
-            switch (PlayerControl.GameOptions.MapId)
-            {
-                case 1:
-                    return imageDict[ImageNames.DoorLogsButton].Image;
-                default:
-                    return imageDict[ImageNames.CamsButton].Image;
-            }
-        }
-        private SystemConsole getSecurityConsole()
-        {
-            // 0 = Skeld
-            // 1 = Mira HQ
-            // 2 = Polus
-            // 3 = Dleks - deactivated
-            // 4 = Airship
-            var systemConsoleArray = Object.FindObjectsOfType<SystemConsole>();
-            switch (PlayerControl.GameOptions.MapId)
-            {
-                case 0:
-                case 3:
-                    return systemConsoleArray.FirstOrDefault(
-                        x => x.gameObject.name.Contains("SurvConsole"));
-                case 1:
-                    return systemConsoleArray.FirstOrDefault(
-                        x => x.gameObject.name.Contains("SurvLogConsole"));
-                case 2:
-                    return systemConsoleArray.FirstOrDefault(
-                        x => x.gameObject.name.Contains("Surv_Panel"));
-                case 4:
-                    return systemConsoleArray.FirstOrDefault(
-                        x => x.gameObject.name.Contains("task_cams"));
-                default:
-                    return null;
-            }
-        }
-        private SystemConsole getVitalConsole()
-        {
-            // 0 = Skeld
-            // 1 = Mira HQ
-            // 2 = Polus
-            // 3 = Dleks - deactivated
-            // 4 = Airship
-            var systemConsoleArray = Object.FindObjectsOfType<SystemConsole>();
-            switch (PlayerControl.GameOptions.MapId)
-            {
-                case 0:
-                case 1:
-                case 3:
-                    return null;
-                case 2:
-                case 4:
-                    return systemConsoleArray.FirstOrDefault(
-                        x => x.gameObject.name.Contains("panel_vitals"));
-                default:
-                    return null;
-            }
         }
 
         private void openConsole(Minigame game)
