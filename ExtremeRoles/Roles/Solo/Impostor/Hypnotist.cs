@@ -1054,7 +1054,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             if (CachedPlayerControl.LocalPlayer.PlayerId == this.dollPlayerId)
             {
                 showText(string.Format(
-                    Translation.GetString("unlockCrakking"),
+                    Translation.GetString("unlockCraking"),
                     Translation.GetString(consoleType.ToString())));
             }
         }
