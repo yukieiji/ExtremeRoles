@@ -58,8 +58,8 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 			this.collider = base.gameObject.AddComponent<CircleCollider2D>();
 			this.img = base.gameObject.AddComponent<SpriteRenderer>();
 
-			this.img.material = new Material("HighlightMat");
-			this.img.material.shader = Shader.Find("Sprite/Outline");
+			// this.img.material = new Material("HighlightMat");
+			// this.img.material.shader = Shader.Find("Sprite/Outline");
 
 			this.collider.radius = 0.001f;
 			this.arrow = new Arrow(GetColor());
@@ -88,10 +88,12 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
 		public void SetOutline(bool on, bool mainTarget)
 		{
+			/*
 			Color color = GetColor();
 			this.img.material.SetFloat("_Outline", (float)(on ? 1 : 0));
 			this.img.material.SetColor("_OutlineColor", color);
 			this.img.material.SetColor("_AddColor", mainTarget ? color : Color.clear);
+			*/
 		}
 
 		public void Use()
