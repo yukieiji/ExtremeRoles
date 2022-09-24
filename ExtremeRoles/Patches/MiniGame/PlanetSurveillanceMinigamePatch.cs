@@ -13,7 +13,8 @@ namespace ExtremeRoles.Patches.MiniGame
             [HarmonyArgument(0)] int direction)
         {
             if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
-            if (Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity()) { return true; }
+            if (Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity() ||
+                SecurityHelper.IsAbilityUse()) { return true; }
 
             if (direction != 0 && Constants.ShouldPlaySfx())
             {

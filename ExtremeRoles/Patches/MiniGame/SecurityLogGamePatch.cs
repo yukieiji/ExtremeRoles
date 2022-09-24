@@ -11,7 +11,8 @@ namespace ExtremeRoles.Patches.MiniGame
         {
             if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
-            if (Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity()) { return true; }
+            if (Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity() ||
+                SecurityHelper.IsAbilityUse()) { return true; }
 
             __instance.EntryPool.ReclaimAll();
             __instance.SabText.text = Helper.Translation.GetString("youDonotUse");

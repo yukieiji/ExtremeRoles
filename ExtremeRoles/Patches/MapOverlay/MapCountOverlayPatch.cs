@@ -149,26 +149,9 @@ namespace ExtremeRoles.Patches.MapOverlay
                 return;
             }
 
-            foreach (ExtremeRoleId roleId in adminUseRole)
+            if (IsAbilityUse())
             {
-
-                SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
-                MultiAssignRoleBase multiAssignRole = role as MultiAssignRoleBase;
-
-                if (role.Id == roleId)
-                {
-                    if (((IRoleAbility)role).Button.IsAbilityActive())
-                    {
-                        return;
-                    }
-                }
-                if (multiAssignRole?.AnotherRole?.Id == roleId)
-                {
-                    if (((IRoleAbility)multiAssignRole.AnotherRole).Button.IsAbilityActive())
-                    {
-                        return;
-                    }
-                }
+                return;
             }
 
             if (timerText == null)
@@ -206,6 +189,32 @@ namespace ExtremeRoles.Patches.MapOverlay
             Logging.Debug($"IsRemoveAdmin:{isRemoveAdmin}");
             Logging.Debug($"EnableAdminLimit:{enableAdminLimit}");
             Logging.Debug($"AdminTime:{adminTimer}");
+        }
+
+        public static bool IsAbilityUse()
+        {
+            SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
+            MultiAssignRoleBase multiAssignRole = role as MultiAssignRoleBase;
+
+            if (adminUseRole.Contains(role.Id))
+            {
+                if (((IRoleAbility)role).Button.IsAbilityActive())
+                {
+                    return true;
+                }
+            }
+            if (multiAssignRole?.AnotherRole != null)
+            {
+                if (adminUseRole.Contains(
+                    multiAssignRole.AnotherRole.Id))
+                {
+                    if (((IRoleAbility)multiAssignRole.AnotherRole).Button.IsAbilityActive())
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         private static void disableVital()
