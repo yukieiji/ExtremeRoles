@@ -780,7 +780,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     (float)pos[0], (float)pos[1], (((float)pos[1]) / 1000.0f));
                 if (!this.addedPos.Contains(vecPos))
                 {
-                    bluePos.Add((vecPos, SystemConsoleType.SecurityCamera));
+                    bluePos.Add((vecPos, SystemConsoleType.Admin));
                 }
             }
             if (jsonBluePos.TryGetValue(securityKey, out securiPos))
@@ -800,7 +800,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     (float)pos[0], (float)pos[1], (((float)pos[1]) / 1000.0f));
                 if (!this.addedPos.Contains(vecPos))
                 {
-                    bluePos.Add((vecPos, SystemConsoleType.SecurityCamera));
+                    bluePos.Add((vecPos, SystemConsoleType.Vital));
                 }
             }
 
@@ -814,7 +814,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     (float)pos[0], (float)pos[1], (((float)pos[1]) / 1000.0f));
                 if (!this.addedPos.Contains(vecPos))
                 {
-                    grayPos.Add((vecPos, SystemConsoleType.SecurityCamera));
+                    grayPos.Add((vecPos, SystemConsoleType.Admin));
                 }
             }
             if (jsonGrayPos.TryGetValue(securityKey, out securiPos))
@@ -834,7 +834,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                      (float)pos[0], (float)pos[1], (((float)pos[1]) / 1000.0f));
                 if (!this.addedPos.Contains(vecPos))
                 {
-                    grayPos.Add((vecPos, SystemConsoleType.SecurityCamera));
+                    grayPos.Add((vecPos, SystemConsoleType.Vital));
                 }
             }
 
