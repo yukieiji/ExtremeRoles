@@ -113,6 +113,17 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public override bool IsSameTeam(SingleRoleBase targetRole) =>
             this.IsNeutralSameTeam(targetRole);
 
+        public override void ExiledAction(GameData.PlayerInfo rolePlayer)
+        {
+            resetTask(rolePlayer.PlayerId);
+        }
+
+        public override void RolePlayerKilledAction(
+            PlayerControl rolePlayer, PlayerControl killerPlayer)
+        {
+            resetTask(rolePlayer.PlayerId);
+        }
+
         protected override void CreateSpecificOption(
             IOption parentOps)
         {
@@ -164,6 +175,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     1U << (int)player.PlayerId);
             }
         }
-
+        private void resetTask(byte playerId)
+        {
+            this.HasTask = this.IsWin;
+            PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
+            if (rolePlayer.PlayerId == playerId && !this.HasTask)
+            {
+                rolePlayer.ClearTasks();
+            }
+        }
     }
 }

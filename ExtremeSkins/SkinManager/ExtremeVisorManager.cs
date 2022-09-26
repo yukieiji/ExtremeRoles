@@ -7,6 +7,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
+using BepInEx.Configuration;
+
 using UnityEngine;
 
 using Newtonsoft.Json.Linq;
@@ -34,8 +36,15 @@ namespace ExtremeSkins.SkinManager
         private const string visorRepoData = "visorData.json";
         private const string visorTransData = "visorTransData.json";
 
+        private static ConfigEntry<string> curUpdateHash;
+        private const string updateComitKey = "ExVUpdateComitHash";
+        private const string jsonUpdateComitKey = "updateComitHash";
+
         public static void Initialize()
         {
+            curUpdateHash = ExtremeSkinsPlugin.Instance.Config.Bind(
+                ExtremeSkinsPlugin.SkinComitCategory,
+                updateComitKey, "NoHashData");
             VisorData.Clear();
             IsLoaded = false;
         }
@@ -64,8 +73,19 @@ namespace ExtremeSkins.SkinManager
 
                 string author = token.Name;
 
-                if (author == "updateComitHash" ||
-                    author == visorRepoData ||
+                if (author == jsonUpdateComitKey)
+                {
+                    if ((string)token.Value != curUpdateHash.Value)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+
+                if (author == visorRepoData ||
                     author == visorTransData) { continue; }
 
                 string checkVisorFolder = string.Concat(
@@ -102,9 +122,18 @@ namespace ExtremeSkins.SkinManager
                 string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
                     FolderPath, visorTransData));
-        
+
+            // UpdateComitHash
+            byte[] byteVisorArray = File.ReadAllBytes(
+                string.Concat(
+                    Path.GetDirectoryName(Application.dataPath),
+                    FolderPath, visorRepoData));
+            curUpdateHash.Value = (string)(JObject.Parse(
+                System.Text.Encoding.UTF8.GetString(byteVisorArray))[jsonUpdateComitKey]);
+
             string[] visorFolder = Directory.GetDirectories(
                 string.Concat(Path.GetDirectoryName(Application.dataPath), FolderPath));
+
 
             foreach (string authorPath in visorFolder)
             {
@@ -225,10 +254,8 @@ namespace ExtremeSkins.SkinManager
             string dataSaveFolder)
         {
 
-            if (!Directory.Exists(dataSaveFolder))
-            {
-                Directory.CreateDirectory(dataSaveFolder);
-            }
+            Helper.FileUtility.DeleteDir(dataSaveFolder);
+            Directory.CreateDirectory(dataSaveFolder);
 
             getJsonData(visorRepoData).GetAwaiter().GetResult();
 
@@ -246,7 +273,7 @@ namespace ExtremeSkins.SkinManager
 
                 string author = token.Name;
 
-                if (author == "updateComitHash") { continue; }
+                if (author == jsonUpdateComitKey) { continue; }
 
                 string checkVisorFolder = string.Concat(dataSaveFolder, author);
 
@@ -287,7 +314,7 @@ namespace ExtremeSkins.SkinManager
 
                 string author = token.Name;
 
-                if (author == "updateComitHash" ||
+                if (author == jsonUpdateComitKey ||
                     author == visorRepoData ||
                     author == visorTransData) { continue; }
 

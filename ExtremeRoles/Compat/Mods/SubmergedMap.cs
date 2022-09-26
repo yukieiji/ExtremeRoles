@@ -393,18 +393,6 @@ namespace ExtremeRoles.Compat.Mods
                 () => Patches.HudManagerUpdatePatchPostfixPatch.Postfix(
                     hudManagerUpdatePatchInstance));
 
-
-            Type exileControllerBeginPatch = ClassType.First(
-                t => t.Name == "ExileController_Begin_Patch");
-            MethodInfo exileControllerBeginPatchPrefix = AccessTools.Method(
-                exileControllerBeginPatch, "Prefix");
-            object exileControllerBeginPatchInstance = null;
-            Patches.ExileControllerBeginPrefixPatch.SetType(
-                exileControllerBeginPatch);
-            MethodInfo exileControllerBeginPatchPrefixPatch = SymbolExtensions.GetMethodInfo(
-                () => Patches.ExileControllerBeginPrefixPatch.Postfix(
-                    exileControllerBeginPatchInstance));
-
             this.submarineOxygenSystem = ClassType.First(
                 t => t.Name == "SubmarineOxygenSystem");
             MethodInfo submarineOxygenSystemDetoriorate = AccessTools.Method(
@@ -444,10 +432,6 @@ namespace ExtremeRoles.Compat.Mods
             // フロアの階層変更ボタンの位置を変えるパッチ
             harmony.Patch(hudManagerUpdatePatchPostfix,
                 postfix : new HarmonyMethod(hubManagerUpdatePatchPostfixPatch));
-
-            // アサシン会議終了後のテキスト表示を変えるパッチ
-            harmony.Patch(exileControllerBeginPatchPrefix,
-                postfix: new HarmonyMethod(exileControllerBeginPatchPrefixPatch));
 
             // 酸素枯渇発動時アサシンは常にマスクを持つパッチ
             harmony.Patch(submarineOxygenSystemDetoriorate,

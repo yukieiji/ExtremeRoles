@@ -113,9 +113,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
                 foreach (var (playerId, playerControl) in this.targetPlayer)
                 {
-                    if (playerControl.Data.Disconnected || playerControl.Data.IsDead)
+                    if (playerControl == null ||
+                        playerControl.Data.Disconnected || 
+                        playerControl.Data.IsDead)
                     {
                         remove.Add(playerId);
+                        continue;
                     }
 
                     if (this.targetArrow[playerId] != null && this.isUseArrow)

@@ -7,6 +7,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
+using BepInEx.Configuration;
+
 using UnityEngine;
 
 using Newtonsoft.Json.Linq;
@@ -35,8 +37,16 @@ namespace ExtremeSkins.SkinManager
         private const string hatRepoData = "hatData.json";
         private const string hatTransData = "hatTranData.json";
 
+        private static ConfigEntry<string> curUpdateHash;
+        private const string updateComitKey = "ExHUpdateComitHash";
+        private const string jsonUpdateComitKey = "updateComitHash";
+
         public static void Initialize()
         {
+            curUpdateHash = ExtremeSkinsPlugin.Instance.Config.Bind(
+                ExtremeSkinsPlugin.SkinComitCategory,
+                updateComitKey, "NoHashData");
+
             HatData.Clear();
             IsLoaded = false;
         }
@@ -57,7 +67,12 @@ namespace ExtremeSkins.SkinManager
                     FolderPath, hatRepoData));
             string hatJsonString = System.Text.Encoding.UTF8.GetString(byteHatArray);
 
-            JToken hatFolder = JObject.Parse(hatJsonString)["data"];
+            JObject hatJObject = JObject.Parse(hatJsonString);
+            JToken hatFolder = hatJObject["data"];
+            JToken newHash = hatJObject[jsonUpdateComitKey];
+
+            if ((string)newHash != curUpdateHash.Value) { return true; }
+
             JArray hatArray = hatFolder.TryCast<JArray>();
 
             for (int i = 0; i < hatArray.Count; ++i)
@@ -119,6 +134,14 @@ namespace ExtremeSkins.SkinManager
                 string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
                     FolderPath, @"\", hatTransData));
+
+            // UpdateComitHash
+            byte[] byteHatArray = File.ReadAllBytes(
+                string.Concat(
+                    Path.GetDirectoryName(Application.dataPath),
+                    FolderPath, hatRepoData));
+            curUpdateHash.Value = (string)(JObject.Parse(
+                System.Text.Encoding.UTF8.GetString(byteHatArray))[jsonUpdateComitKey]);
 
             string[] hatsFolder = Directory.GetDirectories(
                 string.Concat(Path.GetDirectoryName(Application.dataPath), FolderPath));
@@ -250,10 +273,8 @@ namespace ExtremeSkins.SkinManager
             string ausFolder, string dataSaveFolder)
         {
 
-            if (!Directory.Exists(dataSaveFolder))
-            {
-                Directory.CreateDirectory(dataSaveFolder);
-            }
+            Helper.FileUtility.DeleteDir(dataSaveFolder);
+            Directory.CreateDirectory(dataSaveFolder);
 
             getJsonData(hatRepoData).GetAwaiter().GetResult();
 

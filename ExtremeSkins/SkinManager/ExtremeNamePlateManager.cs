@@ -7,10 +7,11 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
+using BepInEx.Configuration;
+
 using UnityEngine;
 
 using Newtonsoft.Json.Linq;
-
 
 using ExtremeSkins.Module;
 
@@ -36,8 +37,15 @@ namespace ExtremeSkins.SkinManager
         private const string namePlateRepoData = "namePlateData.json";
         private const string namePlateTransData = "namePlateTransData.json";
 
+        private static ConfigEntry<string> curUpdateHash;
+        private const string updateComitKey = "ExNUpdateComitHash";
+        private const string jsonUpdateComitKey = "updateComitHash";
+
         public static void Initialize()
         {
+            curUpdateHash = ExtremeSkinsPlugin.Instance.Config.Bind(
+                ExtremeSkinsPlugin.SkinComitCategory,
+                updateComitKey, "NoHashData");
             NamePlateData.Clear();
             IsLoaded = false;
         }
@@ -66,8 +74,19 @@ namespace ExtremeSkins.SkinManager
 
                 string author = token.Name;
 
-                if (author == "updateComitHash" || 
-                    author == namePlateRepoData ||
+                if (author == jsonUpdateComitKey)
+                {
+                    if ((string)token.Value != curUpdateHash.Value)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+
+                if (author == namePlateRepoData ||
                     author == namePlateTransData) { continue; }
 
                 string checkNamePlateFolder = string.Concat(
@@ -104,6 +123,14 @@ namespace ExtremeSkins.SkinManager
                 string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
                     FolderPath, namePlateTransData));
+
+            // UpdateComitHash
+            byte[] byteNpArray = File.ReadAllBytes(
+                string.Concat(
+                    Path.GetDirectoryName(Application.dataPath),
+                    FolderPath, namePlateRepoData));
+            curUpdateHash.Value = (string)(JObject.Parse(
+                System.Text.Encoding.UTF8.GetString(byteNpArray))[jsonUpdateComitKey]);
 
             string[] namePlateFolder = Directory.GetDirectories(
                 string.Concat(Path.GetDirectoryName(Application.dataPath), FolderPath));
@@ -226,10 +253,8 @@ namespace ExtremeSkins.SkinManager
             string dataSaveFolder)
         {
 
-            if (!Directory.Exists(dataSaveFolder))
-            {
-                Directory.CreateDirectory(dataSaveFolder);
-            }
+            Helper.FileUtility.DeleteDir(dataSaveFolder);
+            Directory.CreateDirectory(dataSaveFolder);
 
             getJsonData(namePlateRepoData).GetAwaiter().GetResult();
 
@@ -247,7 +272,7 @@ namespace ExtremeSkins.SkinManager
 
                 string author = token.Name;
 
-                if (author == "updateComitHash" ||
+                if (author == jsonUpdateComitKey ||
                     author == namePlateRepoData ||
                     author == namePlateTransData) { continue; }
 
@@ -290,7 +315,7 @@ namespace ExtremeSkins.SkinManager
 
                 string author = token.Name;
 
-                if (author == "updateComitHash") { continue; }
+                if (author == jsonUpdateComitKey) { continue; }
 
                 string namePlateMoveToFolder = string.Concat(installFolder, @"\", author);
                 string namePlateSourceFolder = string.Concat(extractPath, namePlateDataPath, author);
