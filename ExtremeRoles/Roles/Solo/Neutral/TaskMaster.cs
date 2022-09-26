@@ -177,9 +177,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         }
         private void resetTask(byte playerId)
         {
-            this.HasTask = false;
+            this.HasTask = this.IsWin;
             PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
-            if (rolePlayer.PlayerId == playerId)
+            if (rolePlayer.PlayerId == playerId && !this.HasTask)
             {
                 rolePlayer.ClearTasks();
             }
