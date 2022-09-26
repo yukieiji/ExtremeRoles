@@ -28,19 +28,6 @@ jobs:
           days-before-close: 3
           operations-per-run: 50
           stale-issue-label: '凍結/Freeze'
-          any-of-labels: "バグ/Bug, 新役職/New Role, 提案/Suggestion, ビジュアル/Visual, 機能拡張/Enhancement, ExtremeRoles, ExtremeSkins, 開発版で修正済み/Fixed In Dev, 開発版で実装済み/Implemented in Dev"
-          exempt-issue-labels: "未確認/Unconfirmed, 優先度:最高/Priority:EXTREME, 優先度:高/Priority:High, 優先度:低/Priority:Low, 優先度:中/Priority:Medium, 優先度:最低/Priority:Very low, 実装したい/Want to implement"
-          ascending: true
-  reproduce:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/reproduce@v1
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          stale-issue-message: '自動:再現手順がない状態で1週間以上が経過しました。更新がない場合3日後に自動クローズされます。<br>Automate:One week has passed with no way of reproduction. If there is no update, it will be automatically closed after 3 days.'
-          days-before-stale: 7
-          days-before-close: 3
-          operations-per-run: 50
-          any-of-labels: "再現せず/Can't reproduced"
+          any-of-labels: "バグ/Bug, 新役職/New Role, 提案/Suggestion, ビジュアル/Visual, 機能拡張/Enhancement, ExtremeRoles, ExtremeSkins"
+          exempt-issue-labels: "未確認/Unconfirmed, 優先度:最高/Priority:EXTREME, 優先度:高/Priority:High, 優先度:低/Priority:Low, 優先度:中/Priority:Medium, 優先度:最低/Priority:Very low, 実装したい/Want to implement, 開発版で修正済み/Fixed In Dev, 開発版で実装済み/Implemented in Dev"
           ascending: true
