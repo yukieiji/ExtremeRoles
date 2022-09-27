@@ -935,22 +935,22 @@ namespace ExtremeRoles.Patches
 
             if (player.PlayerId != targetPlayerId)
             {
-                var hockRole = ExtremeRoleManager.GameRole[
-                    player.PlayerId] as IRoleMurderPlayerHock;
+                var hookRole = ExtremeRoleManager.GameRole[
+                    player.PlayerId] as IRoleMurderPlayerHook;
                 multiAssignRole = ExtremeRoleManager.GameRole[
                     player.PlayerId] as MultiAssignRoleBase;
 
-                if (hockRole != null)
+                if (hookRole != null)
                 {
-                    hockRole.HockMuderPlayer(
+                    hookRole.HookMuderPlayer(
                         __instance, target);
                 }
                 if (multiAssignRole != null)
                 {
-                    hockRole = multiAssignRole.AnotherRole as IRoleMurderPlayerHock;
-                    if (hockRole != null)
+                    hookRole = multiAssignRole.AnotherRole as IRoleMurderPlayerHook;
+                    if (hookRole != null)
                     {
-                        hockRole.HockMuderPlayer(
+                        hookRole.HookMuderPlayer(
                             __instance, target);
                     }
                 }

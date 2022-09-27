@@ -38,7 +38,7 @@ namespace ExtremeRoles.Roles.Combination
 
     }
 
-    public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHock, IRoleResetMeeting, IRoleReportHock, IRoleUpdate, IRoleSpecialReset
+    public sealed class Detective : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleResetMeeting, IRoleReportHook, IRoleUpdate, IRoleSpecialReset
     {
         public struct CrimeInfo
         {
@@ -175,7 +175,7 @@ namespace ExtremeRoles.Roles.Combination
             resetSearchCond();
         }
 
-        public void HockReportButton(
+        public void HookReportButton(
             PlayerControl rolePlayer,
             GameData.PlayerInfo reporter)
         {
@@ -183,7 +183,7 @@ namespace ExtremeRoles.Roles.Combination
             this.searchCrimeInfoTime = float.MaxValue;
         }
 
-        public void HockBodyReport(
+        public void HookBodyReport(
             PlayerControl rolePlayer,
             GameData.PlayerInfo reporter,
             GameData.PlayerInfo reportBody)
@@ -193,7 +193,7 @@ namespace ExtremeRoles.Roles.Combination
                 reporter.PlayerId].Id == ExtremeRoleId.Assistant ? this.searchAssistantTime : this.searchTime;
         }
 
-        public void HockMuderPlayer(
+        public void HookMuderPlayer(
             PlayerControl source, PlayerControl target)
         {
             this.info.AddDeadBody(source, target);
@@ -425,7 +425,7 @@ namespace ExtremeRoles.Roles.Combination
         }
     }
 
-    public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHock, IRoleReportHock, IRoleSpecialReset
+    public class Assistant : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleReportHook, IRoleSpecialReset
     {
         private Dictionary<byte, DateTime> deadBodyInfo;
         public Assistant() : base(
@@ -442,20 +442,20 @@ namespace ExtremeRoles.Roles.Combination
             downgradeDetective();
         }
 
-        public void HockMuderPlayer(
+        public void HookMuderPlayer(
             PlayerControl source, PlayerControl target)
         {
             this.deadBodyInfo.Add(target.PlayerId, DateTime.UtcNow);
         }
 
-        public void HockReportButton(
+        public void HookReportButton(
             PlayerControl rolePlayer,
             GameData.PlayerInfo reporter)
         {
             this.deadBodyInfo.Clear();
         }
 
-        public void HockBodyReport(
+        public void HookBodyReport(
             PlayerControl rolePlayer,
             GameData.PlayerInfo reporter,
             GameData.PlayerInfo reportBody)
@@ -513,7 +513,7 @@ namespace ExtremeRoles.Roles.Combination
         }
     }
 
-    public class DetectiveApprentice : MultiAssignRoleBase, IRoleAbility, IRoleReportHock
+    public class DetectiveApprentice : MultiAssignRoleBase, IRoleAbility, IRoleReportHook
     {
 
         public struct DetectiveApprenticeOptionHolder
@@ -843,7 +843,7 @@ namespace ExtremeRoles.Roles.Combination
 
         }
 
-        public void HockReportButton(
+        public void HookReportButton(
             PlayerControl rolePlayer,
             GameData.PlayerInfo reporter)
         {
@@ -858,7 +858,7 @@ namespace ExtremeRoles.Roles.Combination
             }
         }
 
-        public void HockBodyReport(
+        public void HookBodyReport(
             PlayerControl rolePlayer,
             GameData.PlayerInfo reporter,
             GameData.PlayerInfo reportBody)

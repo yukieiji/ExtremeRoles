@@ -8,7 +8,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public sealed class Shooter : SingleRoleBase, IRoleMeetingButtonAbility, IRoleReportHock, IRoleResetMeeting, IRoleUpdate
+    public sealed class Shooter : SingleRoleBase, IRoleMeetingButtonAbility, IRoleReportHook, IRoleResetMeeting, IRoleUpdate
     {
         public enum ShooterOption
         {
@@ -124,7 +124,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             render.transform.localScale *= new Vector2(0.75f, 0.75f);
         }
 
-        public void HockReportButton(
+        public void HookReportButton(
             PlayerControl rolePlayer, GameData.PlayerInfo reporter)
         {
             this.canShootThisMeeting = true;
@@ -134,7 +134,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        public void HockBodyReport(
+        public void HookBodyReport(
             PlayerControl rolePlayer, GameData.PlayerInfo reporter, GameData.PlayerInfo reportBody)
         {
             this.canShootThisMeeting = true;

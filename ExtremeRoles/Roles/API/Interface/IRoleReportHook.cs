@@ -1,11 +1,11 @@
 ﻿namespace ExtremeRoles.Roles.API.Interface
 {
-    public interface IRoleReportHock
+    public interface IRoleReportHook
     {
-        public void HockReportButton(
+        public void HookReportButton(
             PlayerControl rolePlayer,
             GameData.PlayerInfo reporter);
-        public void HockBodyReport(
+        public void HookBodyReport(
             PlayerControl rolePlayer,
             GameData.PlayerInfo reporter,
             GameData.PlayerInfo reportBody);

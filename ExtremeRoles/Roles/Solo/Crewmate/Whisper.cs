@@ -10,7 +10,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
     public sealed class Whisper : 
         SingleRoleBase, 
         IRoleUpdate, 
-        IRoleMurderPlayerHock, 
+        IRoleMurderPlayerHook, 
         IRoleResetMeeting
     {
 
@@ -57,7 +57,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
         }
 
-        public void HockMuderPlayer(
+        public void HookMuderPlayer(
             PlayerControl source,
             PlayerControl target)
         {

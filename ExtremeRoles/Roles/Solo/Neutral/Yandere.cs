@@ -14,7 +14,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
     public sealed class Yandere : 
         SingleRoleBase, 
         IRoleUpdate, 
-        IRoleMurderPlayerHock, 
+        IRoleMurderPlayerHook, 
         IRoleResetMeeting, 
         IRoleSpecialSetUp
     {
@@ -314,7 +314,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             checkRunawayNextMeeting();
         }
 
-        public void HockMuderPlayer(
+        public void HookMuderPlayer(
             PlayerControl source, PlayerControl target)
         {
             if (this.target.IsContain(target.PlayerId))

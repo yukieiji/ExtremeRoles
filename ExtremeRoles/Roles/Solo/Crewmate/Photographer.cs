@@ -20,7 +20,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         SingleRoleBase, 
         IRoleAbility, 
         IRoleAwake<RoleTypes>, 
-        IRoleReportHock
+        IRoleReportHook
     {
         private struct PlayerPosInfo
         {
@@ -341,13 +341,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public string GetFakeOptionString() => "";
 
-        public void HockReportButton(
+        public void HookReportButton(
             PlayerControl rolePlayer, GameData.PlayerInfo reporter)
         {
             sendPhotoInfo();
         }
 
-        public void HockBodyReport(
+        public void HookBodyReport(
             PlayerControl rolePlayer,
             GameData.PlayerInfo reporter,
             GameData.PlayerInfo reportBody)

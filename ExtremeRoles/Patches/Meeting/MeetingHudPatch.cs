@@ -424,36 +424,36 @@ namespace ExtremeRoles.Patches.Meeting
             if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
             {
                 var player = CachedPlayerControl.LocalPlayer;
-                var hockRole = ExtremeRoleManager.GetLocalPlayerRole() as IRoleReportHock;
+                var hookRole = ExtremeRoleManager.GetLocalPlayerRole() as IRoleReportHook;
                 var multiAssignRole = ExtremeRoleManager.GetLocalPlayerRole() as MultiAssignRoleBase;
 
-                if (hockRole != null)
+                if (hookRole != null)
                 {
                     if (reportedBody == null)
                     {
-                        hockRole.HockReportButton(
+                        hookRole.HookReportButton(
                             player, reporter);
                     }
                     else
                     {
-                        hockRole.HockBodyReport(
+                        hookRole.HookBodyReport(
                             player, reporter, reportedBody);
                     }
                 }
                 if (multiAssignRole != null)
                 {
-                    hockRole = multiAssignRole.AnotherRole as IRoleReportHock;
-                    if (hockRole != null)
+                    hookRole = multiAssignRole.AnotherRole as IRoleReportHook;
+                    if (hookRole != null)
                     {
 
                         if (reportedBody == null)
                         {
-                            hockRole.HockReportButton(
+                            hookRole.HookReportButton(
                                 player, reporter);
                         }
                         else
                         {
-                            hockRole.HockBodyReport(
+                            hookRole.HookBodyReport(
                                 player, reporter, reportedBody);
                         }
                     }

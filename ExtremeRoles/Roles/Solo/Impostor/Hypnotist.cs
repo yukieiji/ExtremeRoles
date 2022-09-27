@@ -31,7 +31,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         SingleRoleBase,
         IRoleAbility,
         IRoleAwake<RoleTypes>,
-        IRoleMurderPlayerHock,
+        IRoleMurderPlayerHook,
         IRoleSpecialReset
     {
         public enum HypnotistOption
@@ -435,7 +435,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        public void HockMuderPlayer(
+        public void HookMuderPlayer(
             PlayerControl source, PlayerControl target)
         {
             if (this.doll.Contains(source.PlayerId) &&

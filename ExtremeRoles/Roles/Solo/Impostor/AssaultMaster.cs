@@ -10,7 +10,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public sealed class AssaultMaster : SingleRoleBase, IRoleAbility, IRoleReportHock, IRoleUpdate
+    public sealed class AssaultMaster : SingleRoleBase, IRoleAbility, IRoleReportHook, IRoleUpdate
     {
         public enum AssaultMasterOption
         {
@@ -67,7 +67,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     Path.AssaultMasterReload));
         }
 
-        public void HockBodyReport(
+        public void HookBodyReport(
             PlayerControl rolePlayer,
             GameData.PlayerInfo reporter,
             GameData.PlayerInfo reportBody)
@@ -75,7 +75,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             addStock(this.addStockWhenReport);
         }
 
-        public void HockReportButton(
+        public void HookReportButton(
             PlayerControl rolePlayer, GameData.PlayerInfo reporter)
         {
             addStock(this.addStockWhenMeetingButton);

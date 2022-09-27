@@ -18,7 +18,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         SingleRoleBase, 
         IRoleAbility, 
         IRoleSpecialReset, 
-        IRoleMurderPlayerHock, 
+        IRoleMurderPlayerHook, 
         IRoleUpdate
     {
         public const string RoleShowTag = "<b>Ⓠ</b>";
@@ -231,7 +231,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.servantPlayerId.Remove(servantPlayerId);
         }
 
-        public void HockMuderPlayer(
+        public void HookMuderPlayer(
             PlayerControl source, PlayerControl target)
         {
             if (source.PlayerId != target.PlayerId &&
@@ -491,7 +491,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
     public sealed class Servant : 
         MultiAssignRoleBase, 
         IRoleAbility, 
-        IRoleMurderPlayerHock, 
+        IRoleMurderPlayerHook, 
         IRoleHasParent
     {
         public byte Parent => this.queenPlayerId;
@@ -572,7 +572,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.Button.ResetCoolTimer();
         }
 
-        public void HockMuderPlayer(
+        public void HookMuderPlayer(
             PlayerControl source, PlayerControl target)
         {
             

@@ -17,7 +17,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
     public sealed class CurseMaker : 
         SingleRoleBase, 
         IRoleAbility, 
-        IRoleMurderPlayerHock,
+        IRoleMurderPlayerHook,
         IRoleUpdate
     {
         public enum CurseMakerOption
@@ -407,7 +407,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             return;
         }
 
-        public void HockMuderPlayer(PlayerControl source, PlayerControl target)
+        public void HookMuderPlayer(PlayerControl source, PlayerControl target)
         {
             if (this.isDeadBodySearchUsed || !this.isDeadBodySearch) { return; }
 

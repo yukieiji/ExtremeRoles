@@ -18,7 +18,7 @@ using BepInEx.IL2CPP.Utils.Collections;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public sealed class Eater : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHock, IRoleUpdate
+    public sealed class Eater : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHook, IRoleUpdate
     {
         public sealed class EaterAbilityButton : RoleAbilityButtonBase
         {
@@ -284,7 +284,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             abilityInit();
         }
 
-        public void HockMuderPlayer(
+        public void HookMuderPlayer(
             PlayerControl source, PlayerControl target)
         {
             if (MeetingHud.Instance || 
