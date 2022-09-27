@@ -40,6 +40,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ResurrectTaskGage,
             ResurrectDelayTime,
             IsMeetingCoolResetOnResurrect,
+            ResurrectMeetingCooltime,
             ResurrectTaskResetMeetingNum,
             ResurrectTaskResetGage,
             CanResurrectAfterDeath,
@@ -72,6 +73,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private float resurrectTimer;
 
         private bool isMeetingCoolResetOnResurrect;
+        private float meetingCoolDown;
 
         private float resetTaskGage;
         private TMPro.TextMeshPro resurrectText;
@@ -184,8 +186,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             // リセット会議クールダウン
             if (this.isMeetingCoolResetOnResurrect)
             {
-                CachedShipStatus.Instance.EmergencyCooldown = 
-                    (float)PlayerControl.GameOptions.EmergencyCooldown;
+                CachedShipStatus.Instance.EmergencyCooldown = this.meetingCoolDown;
             }
 
             var role = ExtremeRoleManager.GetLocalPlayerRole();
@@ -426,9 +427,17 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 5.0f, 5.0f, 60.0f, 0.1f,
                 parentOps, format: OptionUnit.Second);
 
-            CreateBoolOption(
+            var meetingResetOpt = CreateBoolOption(
                 ResurrecterOption.IsMeetingCoolResetOnResurrect,
                 true, parentOps);
+             
+            CreateFloatOption(
+                ResurrecterOption.ResurrectMeetingCooltime,
+                20.0f, 5.0f, 60.0f, 0.25f,
+                meetingResetOpt,
+                format: OptionUnit.Second,
+                invert: true,
+                enableCheckOption: parentOps);
 
             CreateIntOption(
                 ResurrecterOption.ResurrectTaskResetMeetingNum,
@@ -469,6 +478,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 GetRoleOptionId(ResurrecterOption.ResurrectTaskResetMeetingNum)].GetValue();
             this.isMeetingCoolResetOnResurrect = allOpt[
                 GetRoleOptionId(ResurrecterOption.IsMeetingCoolResetOnResurrect)].GetValue();
+            this.meetingCoolDown = allOpt[
+                GetRoleOptionId(ResurrecterOption.ResurrectMeetingCooltime)].GetValue();
 
             this.awakeHasOtherVision = this.HasOtherVison;
             this.canResurrect = false;
