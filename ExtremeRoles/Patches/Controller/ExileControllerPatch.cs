@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using HarmonyLib;
+﻿using HarmonyLib;
 
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
