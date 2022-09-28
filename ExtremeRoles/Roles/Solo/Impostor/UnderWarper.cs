@@ -25,6 +25,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public enum UnderWarperOption
         {
             AwakeKillCount,
+            VentLinkKillCout,
+            NoVentAnimeKillCout,
+            Range,
         }
 
         public bool IsAwake
@@ -35,18 +38,28 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
+
+        public float VentUseRange => this.range;
+        public bool IsNoVentAnime => this.isNoVentAnime;
+
         public RoleTypes NoneAwakeRole => RoleTypes.Impostor;
 
-        private bool isAwake;
-        private bool isVentLink;
-        private bool isNoVentAnime;
         private int killCount;
+
+        private bool isAwake;
         private int awakeKillCount;
+
+        private bool isVentLink;
+        private int ventLinkKillCout;
+
+        private bool isNoVentAnime;
+        private int noVentAnimeKillCout;
+
+        private float range;
 
         private bool isAwakedHasOtherVision;
         private bool isAwakedHasOtherKillCool;
         private bool isAwakedHasOtherKillRange;
-
 
         private const string ventInfoJson =
             "ExtremeRoles.Resources.JsonData.UnderWarperVentInfo.json";
@@ -80,10 +93,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        public static void RpcUseVentWithNoAnimation(int ventId)
+        public static void RpcUseVentWithNoAnimation(
+            int ventId, bool isEnter)
         {
             PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
-            bool isEnter = !localPlayer.inVent;
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                 localPlayer.NetId,
@@ -184,7 +197,22 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void ResetOnMeetingEnd()
         {
-            
+            if (!this.isAwake && 
+                this.awakeKillCount >= this.killCount)
+            {
+                this.isAwake = true;
+            }
+            if (!this.isVentLink &&
+                this.ventLinkKillCout >= this.killCount)
+            {
+                this.isVentLink = true;
+                relinkMapVent();
+            }
+            if (!this.isNoVentAnime &&
+                this.noVentAnimeKillCout >= this.killCount)
+            {
+                this.isNoVentAnime = true;
+            }
         }
 
         public void ResetOnMeetingStart()
@@ -193,9 +221,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
         public void Update(PlayerControl rolePlayer)
-        {
-            
-        }
+        { }
 
         public override string GetColoredRoleName(bool isTruthColor = false)
         {
@@ -288,8 +314,19 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             CreateIntOption(
                 UnderWarperOption.AwakeKillCount,
+                1, 0, 5, 1, parentOps,
+                format: OptionUnit.Shot);
+            CreateIntOption(
+                UnderWarperOption.VentLinkKillCout,
                 2, 0, 5, 1, parentOps,
                 format: OptionUnit.Shot);
+            CreateIntOption(
+                UnderWarperOption.NoVentAnimeKillCout,
+                2, 0, 5, 1, parentOps,
+                format: OptionUnit.Shot);
+            CreateFloatOption(
+                UnderWarperOption.Range,
+                1.75f, 0.75f, 4.0f, 0.25f, parentOps);
         }
 
         protected override void RoleSpecificInit()
@@ -299,7 +336,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             this.awakeKillCount = allOpt[
                 GetRoleOptionId(UnderWarperOption.AwakeKillCount)].GetValue();
+            this.ventLinkKillCout = allOpt[
+                GetRoleOptionId(UnderWarperOption.VentLinkKillCout)].GetValue();
+            this.noVentAnimeKillCout = allOpt[
+                GetRoleOptionId(UnderWarperOption.NoVentAnimeKillCout)].GetValue();
 
+            this.range = allOpt[
+                GetRoleOptionId(UnderWarperOption.Range)].GetValue();
 
             this.isAwakedHasOtherVision = false;
             this.isAwakedHasOtherKillCool = true;
@@ -328,6 +371,16 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.HasOtherVison = this.isAwakedHasOtherVision;
                 this.HasOtherKillCool = this.isAwakedHasOtherKillCool;
                 this.HasOtherKillRange = this.isAwakedHasOtherKillRange;
+            }
+
+            if (this.ventLinkKillCout <= 0)
+            {
+                this.isVentLink = true;
+            }
+
+            if (this.noVentAnimeKillCout <= 0)
+            {
+                this.isNoVentAnime = true;
             }
         }
 
