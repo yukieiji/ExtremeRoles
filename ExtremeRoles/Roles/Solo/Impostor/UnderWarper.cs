@@ -7,6 +7,7 @@ using Hazel;
 
 using Newtonsoft.Json.Linq;
 
+using ExtremeRoles.Compat.Mods;
 using ExtremeRoles.Extension.Json;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -63,7 +64,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         private const string ventInfoJson =
             "ExtremeRoles.Resources.JsonData.UnderWarperVentInfo.json";
-        private const string ventKey = "linkInfo";
+
+        private const string skeldKey = "Skeld";
+        private const string polusKey = "Polus";
+        private const string airShipKey = "AirShip";
+        private const string submergedKey = "Submerged";
+
         private Dictionary<int, Vent> cachedVent;
 
         public UnderWarper() : base(
@@ -387,6 +393,39 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private void relinkMapVent()
         {
             JObject linkInfoJson = JsonParser.GetJObjectFromAssembly(ventInfoJson);
+
+            string ventKey;
+            byte mapId = PlayerControl.GameOptions.MapId;
+
+            if (ExtremeRolesPlugin.Compat.IsModMap)
+            {
+                if (ExtremeRolesPlugin.Compat.ModMap is SubmergedMap)
+                {
+                    ventKey = submergedKey;
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else
+            {
+                switch (mapId)
+                {
+                    case 0:
+                        ventKey = skeldKey;
+                        break;
+                    case 2:
+                        ventKey = polusKey;
+                        break;
+                    case 4:
+                        ventKey = airShipKey;
+                        break;
+                    default:
+                        return;
+                }
+            }
+
             JArray linkInfo = linkInfoJson.Get<JArray>(ventKey);
             
             for (int i = 0; i < linkInfo.Count; ++i )
