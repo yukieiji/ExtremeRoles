@@ -35,7 +35,7 @@
         <EmbeddedResource Include="Resources\*.png" />
         <EmbeddedResource Include="Resources\MeryVentAnimation\*.png" />
         <EmbeddedResource Include="Resources\*.json" />
-		<EmbeddedResource Include="Resources\Position\*.json" />
+		<EmbeddedResource Include="Resources\RoleData\*.json" />
     </ItemGroup>
 
     <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">

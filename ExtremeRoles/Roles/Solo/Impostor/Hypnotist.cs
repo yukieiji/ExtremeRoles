@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Reflection;
 
 using UnityEngine;
 using Hazel;
@@ -13,6 +10,7 @@ using Newtonsoft.Json.Linq;
 
 using BepInEx.IL2CPP.Utils.Collections;
 
+using ExtremeRoles.Extension.Json;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.Roles;
@@ -109,7 +107,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private PlayerControl target;
 
         private JObject position;
-        private const string postionJson = "ExtremeRoles.Resources.Position.Hypnotist.json";
+        private const string postionJson = "ExtremeRoles.Resources.RoleData.Hypnotist.json";
 
         private const string adminKey = "Admin";
         private const string securityKey = "Security";
@@ -290,12 +288,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 Resources.Loader.CreateSpriteFromResources(
                    Resources.Path.LastWolfLightOff));
 
-            Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(
-                postionJson);
-            var byteArray = new byte[stream.Length];
-            stream.Read(byteArray, 0, (int)stream.Length);
-            this.position = JObject.Parse(
-                Encoding.UTF8.GetString(byteArray));
+            this.position = JsonParser.GetJObjectFromAssembly(postionJson);
         }
 
         public bool IsAbilityUse()
@@ -758,12 +751,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private void setAbilityPartFromMapJsonInfo(
             JToken json, int redNum)
         {
-            JArray jsonRedPos = json["Red"].TryCast<JArray>();
+            JArray jsonRedPos = json.Get<JArray>("Red");
             
             List<Vector3> redPos = new List<Vector3>();
             for (int i = 0; i < jsonRedPos.Count; ++i)
             {
-               JArray pos = jsonRedPos[i].TryCast<JArray>();
+               JArray pos = jsonRedPos.Get<JArray>(i);
                redPos.Add(new Vector3((float)pos[0], (float)pos[1], (((float)pos[1]) / 1000.0f)));
             }
 
@@ -774,7 +767,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             JToken vitalPos;
 
             List<(Vector3, SystemConsoleType)> bluePos = new List<(Vector3, SystemConsoleType)>();
-            JObject jsonBluePos = json["Blue"].TryCast<JObject>();
+            JObject jsonBluePos = json.Get<JObject>("Blue");
 
             if (jsonBluePos.TryGetValue(adminKey, out adminPos))
             {
@@ -808,7 +801,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
 
             List<(Vector3, SystemConsoleType)> grayPos = new List<(Vector3, SystemConsoleType)>();
-            JObject jsonGrayPos = json["Gray"].TryCast<JObject>();
+            JObject jsonGrayPos = json.Get<JObject>("Gray");
 
             if (jsonGrayPos.TryGetValue(adminKey, out adminPos))
             {
