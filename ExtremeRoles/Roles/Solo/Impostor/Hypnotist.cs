@@ -107,7 +107,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private PlayerControl target;
 
         private JObject position;
-        private const string postionJson = "ExtremeRoles.Resources.RoleData.Hypnotist.json";
+        private const string postionJson =
+            "ExtremeRoles.Resources.JsonData.HypnotistAbilityPartPosition.json";
 
         private const string adminKey = "Admin";
         private const string securityKey = "Security";

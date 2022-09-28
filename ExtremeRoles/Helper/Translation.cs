@@ -10,7 +10,7 @@ namespace ExtremeRoles.Helper
         private static uint defaultLanguage = (uint)SupportedLangs.English;
         private static Dictionary<string, Dictionary<uint, string>> stringData = new Dictionary<string, Dictionary<uint, string>>();
 
-        private const string dataPath = "ExtremeRoles.Resources.LangData.stringData.json";
+        private const string dataPath = "ExtremeRoles.Resources.JsonData.Language.json";
 
         public static void Load()
         {

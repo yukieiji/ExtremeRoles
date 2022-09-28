@@ -31,11 +31,9 @@
         <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="1.1.1" PrivateAssets="all" />
 		
 	    <EmbeddedResource Include="Resources\Installer\ExtremeBepInExInstaller.exe" />
-        <EmbeddedResource Include="Resources\LangData\stringData.json" />
         <EmbeddedResource Include="Resources\*.png" />
         <EmbeddedResource Include="Resources\MeryVentAnimation\*.png" />
-        <EmbeddedResource Include="Resources\*.json" />
-		<EmbeddedResource Include="Resources\RoleData\*.json" />
+		<EmbeddedResource Include="Resources\JsonData\*.json" />
     </ItemGroup>
 
     <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">
