@@ -111,6 +111,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             writer.Write(isEnter);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
 
+            if (ExtremeRolesPlugin.Compat.IsModMap)
+            {
+                if (ExtremeRolesPlugin.Compat.ModMap is SubmergedMap)
+                {
+                    FastDestroyableSingleton<HudManager>.Instance.PlayerCam.Locked = false;
+                }
+            }
+
             UseVentWithNoAnimation(
                 localPlayer.PlayerId, ventId, isEnter);
         }
