@@ -137,30 +137,32 @@ namespace ExtremeRoles.Patches.MapModule
         {
             bool canUse;
             bool couldUse;
-            
+
+            PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+
             __instance.CanUse(
-                CachedPlayerControl.LocalPlayer.Data,
+                localPlayer.Data,
                 out canUse, out couldUse);
 
             if (!canUse) { return false; }; // No need to execute the native method as using is disallowed anyways
 
-            bool isEnter = !CachedPlayerControl.LocalPlayer.PlayerControl.inVent;
+            bool isEnter = !localPlayer.inVent;
 
             if (CachedShipStatus.Instance.IsCustomVent(
                 __instance.Id))
             {
                 __instance.SetButtons(isEnter);
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                    localPlayer.NetId,
                     (byte)RPCOperator.Command.CustomVentUse,
                     Hazel.SendOption.Reliable);
                 writer.WritePacked(__instance.Id);
-                writer.Write(CachedPlayerControl.LocalPlayer.PlayerId);
+                writer.Write(localPlayer.PlayerId);
                 writer.Write(isEnter ? byte.MaxValue : (byte)0);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCOperator.CustomVentUse(
                     __instance.Id,
-                    PlayerControl.LocalPlayer.PlayerId,
+                    localPlayer.PlayerId,
                     isEnter ? byte.MaxValue : (byte)0);
                 
                 __instance.SetButtons(isEnter);
@@ -174,18 +176,18 @@ namespace ExtremeRoles.Patches.MapModule
                 underWarper.IsNoVentAnime)
             {
                 UnderWarper.RpcUseVentWithNoAnimation(
-                    __instance.Id, isEnter);
+                    localPlayer, __instance.Id, isEnter);
                 __instance.SetButtons(isEnter);
                 return false;
             }
 
             if (isEnter)
             {
-                CachedPlayerControl.LocalPlayer.PlayerPhysics.RpcEnterVent(__instance.Id);
+                localPlayer.MyPhysics.RpcEnterVent(__instance.Id);
             }
             else
             {
-                CachedPlayerControl.LocalPlayer.PlayerPhysics.RpcExitVent(__instance.Id);
+                localPlayer.MyPhysics.RpcExitVent(__instance.Id);
             }
 
             __instance.SetButtons(isEnter);

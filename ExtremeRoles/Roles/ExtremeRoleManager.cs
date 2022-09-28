@@ -73,6 +73,7 @@ namespace ExtremeRoles.Roles
         LastWolf,
         Commander,
         Hypnotist,
+        UnderWarper,
 
         Alice,
         Jackal,
@@ -214,6 +215,7 @@ namespace ExtremeRoles.Roles
                 {(int)ExtremeRoleId.LastWolf       , new LastWolf()},
                 {(int)ExtremeRoleId.Commander      , new Commander()},
                 {(int)ExtremeRoleId.Hypnotist      , new Hypnotist()},
+                {(int)ExtremeRoleId.UnderWarper    , new UnderWarper()},
 
                 {(int)ExtremeRoleId.Alice     , new Alice()},
                 {(int)ExtremeRoleId.Jackal    , new Jackal()},

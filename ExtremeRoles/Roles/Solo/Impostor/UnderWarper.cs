@@ -73,9 +73,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private Dictionary<int, Vent> cachedVent;
 
         public UnderWarper() : base(
-            ExtremeRoleId.Hypnotist,
+            ExtremeRoleId.UnderWarper,
             ExtremeRoleType.Impostor,
-            ExtremeRoleId.Hypnotist.ToString(),
+            ExtremeRoleId.UnderWarper.ToString(),
             Palette.ImpostorRed,
             true, false, true, true)
         { }
@@ -100,10 +100,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
         public static void RpcUseVentWithNoAnimation(
-            int ventId, bool isEnter)
+            PlayerControl localPlayer, int ventId, bool isEnter)
         {
-            PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
-
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                 localPlayer.NetId,
                 (byte)RPCOperator.Command.UnderWarperUseVentWithNoAnime,
@@ -111,6 +109,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             writer.Write(localPlayer.PlayerId);
             writer.WritePacked(ventId);
             writer.Write(isEnter);
+            AmongUsClient.Instance.FinishRpcImmediately(writer);
 
             UseVentWithNoAnimation(
                 localPlayer.PlayerId, ventId, isEnter);
@@ -119,6 +118,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private static void enterVent(
             PlayerControl targetPlayer, Vent vent)
         {
+            targetPlayer.MyPhysics.StopAllCoroutines();
             if (targetPlayer.AmOwner)
             {
                 targetPlayer.MyPhysics.inputHandler.enabled = true;
