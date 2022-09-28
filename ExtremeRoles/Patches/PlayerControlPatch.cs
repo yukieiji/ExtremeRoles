@@ -706,6 +706,13 @@ namespace ExtremeRoles.Patches
                 case RPCOperator.Command.HypnotistAbility:
                     RPCOperator.HypnotistAbility(ref reader);
                     break;
+                case RPCOperator.Command.UnderWarperUseVentWithNoAnime:
+                    byte underWarperPlayerId = reader.ReadByte();
+                    int targetVentId = reader.ReadPackedInt32();
+                    bool isVentEnter = reader.ReadBoolean();
+                    RPCOperator.UnderWarperUseVentWithNoAnime(
+                        underWarperPlayerId, targetVentId, isVentEnter);
+                    break;
                 case RPCOperator.Command.AliceShipBroken:
                     byte alicePlayerId = reader.ReadByte();
                     byte newTaskSetPlayerId = reader.ReadByte();

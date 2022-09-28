@@ -73,6 +73,7 @@ namespace ExtremeRoles
             LastWolfSwitchLight,
             CommanderAttackCommand,
             HypnotistAbility,
+            UnderWarperUseVentWithNoAnime,
 
             // ニュートラル
             AliceShipBroken,
@@ -573,6 +574,13 @@ namespace ExtremeRoles
         public static void HypnotistAbility(ref MessageReader reader)
         {
             Roles.Solo.Impostor.Hypnotist.Ability(ref reader);
+        }
+
+        public static void UnderWarperUseVentWithNoAnime(
+            byte playerId, int ventId, bool isEnter)
+        {
+            Roles.Solo.Impostor.UnderWarper.UseVentWithNoAnimation(
+                playerId, ventId, isEnter);
         }
 
         public static void AliceShipBroken(
