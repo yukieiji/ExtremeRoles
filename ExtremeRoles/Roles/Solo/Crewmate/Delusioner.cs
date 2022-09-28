@@ -73,6 +73,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private int voteCoolTimeReduceRate;
         private float deflectDamagePenaltyMod;
 
+        private List<Vector2> airShipSpawn;
+
         public Delusioner() : base(
             ExtremeRoleId.Delusioner,
             ExtremeRoleType.Crewmate,
@@ -88,6 +90,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 Loader.CreateSpriteFromResources(
                     Path.AgencyTakeTask));
             this.Button.SetLabelToCrewmate();
+
+            this.airShipSpawn = GameSystem.GetAirShipRandomSpawn();
         }
 
         public string GetFakeOptionString() => "";
@@ -205,21 +209,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                             randomPos.Add(ship.MeetingSpawnCenter + offset);
                             break;
                         case 4:
-                            // Airshipランダムスポーンポイントを追加(v2022.8.23)
-                            /*
-                                [Info   :Extreme Roles] Name:Brig  Pos:(-0.7, 8.5, 0.0)
-                                [Info   :Extreme Roles] Name:Engine  Pos:(-0.7, -1.0, 0.0)
-                                [Info   :Extreme Roles] Name:MainHall  Pos:(15.5, 0.0, 0.0)
-                                [Info   :Extreme Roles] Name:Kitchen  Pos:(-7.0, -11.5, 0.0)
-                                [Info   :Extreme Roles] Name:Records  Pos:(20.0, 10.5, 0.0)
-                                [Info   :Extreme Roles] Name:CargoBay  Pos:(33.5, -1.5, 0.0)
-                             */
-                            randomPos.Add(new Vector2(-0.7f, 8.5f));
-                            randomPos.Add(new Vector2(-0.7f, -1.0f));
-                            randomPos.Add(new Vector2(15.5f, 0.0f));
-                            randomPos.Add(new Vector2(-7.0f, -11.5f));
-                            randomPos.Add(new Vector2(20.0f, 10.5f));
-                            randomPos.Add(new Vector2(33.5f, -1.5f));
+                            randomPos.AddRange(this.airShipSpawn);
                             break;
                         default:
                             break;

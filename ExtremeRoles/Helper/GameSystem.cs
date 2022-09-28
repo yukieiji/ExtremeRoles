@@ -6,6 +6,9 @@ using System.Reflection;
 using Hazel;
 using UnityEngine;
 
+using Newtonsoft.Json.Linq;
+
+using ExtremeRoles.Extension.Json;
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
@@ -30,6 +33,10 @@ namespace ExtremeRoles.Helper
         public const string AirShipVital = "Airship(Clone)/Medbay/panel_vitals";
         public const string AirShipArchiveAdmin = "Airship(Clone)/Records/records_admin_map";
         public const string AirShipCockpitAdmin = "Airship(Clone)/Cockpit/panel_cockpit_map";
+
+        private const string airShipSpawnJson =
+            "ExtremeRoles.Resources.JsonData.AirShipSpawnPoint.json";
+        private const string airShipKey = "VanillaRandomSpawn";
 
         public static HashSet<TaskTypes> SaboTask = new HashSet<TaskTypes>()
         {
@@ -260,10 +267,24 @@ namespace ExtremeRoles.Helper
             return false;
         }
 
+        public static List<Vector2> GetAirShipRandomSpawn()
+        {
+            JObject json = JsonParser.GetJObjectFromAssembly(airShipSpawnJson);
+            JArray airShipSpawn = json.Get<JArray>(airShipKey);
+
+            List<Vector2> result = new List<Vector2>();
+
+            for (int i = 0; i < airShipSpawn.Count; ++i)
+            {
+                JArray pos = airShipSpawn.Get<JArray>(i);
+                result.Add(new Vector2((float)pos[0], (float)pos[1]));
+            }
+
+            return result;
+        }
 
         public static void ShareVersion()
         {
-
             Version ver = Assembly.GetExecutingAssembly().GetName().Version;
 
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(

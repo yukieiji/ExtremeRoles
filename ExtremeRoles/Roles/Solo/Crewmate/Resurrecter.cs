@@ -551,12 +551,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                         randomPos.Add(ship.MeetingSpawnCenter + offset);
                         break;
                     case 4:
-                        randomPos.Add(new Vector2(-0.7f, 8.5f));
-                        randomPos.Add(new Vector2(-0.7f, -1.0f));
-                        randomPos.Add(new Vector2(15.5f, 0.0f));
-                        randomPos.Add(new Vector2(-7.0f, -11.5f));
-                        randomPos.Add(new Vector2(20.0f, 10.5f));
-                        randomPos.Add(new Vector2(33.5f, -1.5f));
+                        randomPos.AddRange(GameSystem.GetAirShipRandomSpawn());
                         break;
                     default:
                         break;
