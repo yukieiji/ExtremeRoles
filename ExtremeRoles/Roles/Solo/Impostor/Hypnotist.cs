@@ -41,8 +41,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             HideArrowRange,
             DefaultRedAbilityPart,
             HideKillButtonTime,
-            IsResetKillCoolWhenDollKill,
             DollKillCoolReduceRate,
+            IsResetKillCoolWhenDollKill,
             DollCrakingCoolTime,
             DollCrakingActiveTime
         }
@@ -285,7 +285,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
-                Translation.GetString("liightOff"),
+                Translation.GetString("Hypnosis"),
                 Resources.Loader.CreateSpriteFromResources(
                    Resources.Path.LastWolfLightOff));
 
@@ -608,14 +608,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 15.0f, 2.5f, 60.0f, 0.5f,
                 parentOps,
                 format: OptionUnit.Second);
-            CreateBoolOption(
-                HypnotistOption.IsResetKillCoolWhenDollKill,
-                true, parentOps);
             CreateIntOption(
                 HypnotistOption.DollKillCoolReduceRate,
                 10, 0, 75, 5,
                 parentOps,
                 format: OptionUnit.Percentage);
+
+            CreateBoolOption(
+                HypnotistOption.IsResetKillCoolWhenDollKill,
+                true, parentOps);
             CreateFloatOption(
                 HypnotistOption.DollCrakingCoolTime,
                 30.0f, 0.5f, 120.0f, 0.5f,
