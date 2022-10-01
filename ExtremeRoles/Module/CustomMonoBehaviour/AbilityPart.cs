@@ -226,6 +226,6 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 		protected override Color GetColor() => Palette.DisabledGrey;
 
 		protected override Sprite GetSprite() => Loader.CreateSpriteFromResources(
-			Path.HypnotistGreyAbilityPart);
+			Path.HypnotistGrayAbilityPart);
 	}
 }

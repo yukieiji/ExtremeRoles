@@ -64,8 +64,8 @@ namespace ExtremeRoles.Resources
             "ExtremeRoles.Resources.RedAbilityPart.png";
         public const string HypnotistBlueAbilityPart =
             "ExtremeRoles.Resources.BlueAbilityPart.png";
-        public const string HypnotistGreyAbilityPart =
-            "ExtremeRoles.Resources.GreyAbilityPart.png";
+        public const string HypnotistGrayAbilityPart =
+            "ExtremeRoles.Resources.GrayAbilityPart.png";
 
 
         public const string VigilanteEmergencyCall = "ExtremeRoles.Resources.EmergencyCall.png";
