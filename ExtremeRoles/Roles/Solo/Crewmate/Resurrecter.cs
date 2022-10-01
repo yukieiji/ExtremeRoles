@@ -286,9 +286,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
                 this.resurrectText.gameObject.SetActive(true);
                 this.resurrectTimer -= Time.fixedDeltaTime;
-                this.resurrectText.text = Translation.GetString(
-                    string.Format("resurrectText",
-                        Mathf.CeilToInt(this.resurrectTimer)));
+                this.resurrectText.text = string.Format(
+                    Translation.GetString("resurrectText"),
+                    Mathf.CeilToInt(this.resurrectTimer));
 
                 if (this.resurrectTimer <= 0.0f)
                 {
