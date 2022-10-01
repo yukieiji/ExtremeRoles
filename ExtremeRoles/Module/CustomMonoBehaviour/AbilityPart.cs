@@ -46,28 +46,24 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 			}
 		}
 
-		public AbilityPartBase(IntPtr ptr) : base(ptr) { }
-
-		protected SpriteRenderer img;
+		private SpriteRenderer img;
 		private CircleCollider2D collider;
 		private Arrow arrow;
 		private float hideDistance;
+
+		public AbilityPartBase(IntPtr ptr) : base(ptr) { }
 
 		public void Awake()
 		{
 			this.collider = base.gameObject.AddComponent<CircleCollider2D>();
 			this.img = base.gameObject.AddComponent<SpriteRenderer>();
 
-			// this.img.material = new Material("HighlightMat");
-			// this.img.material.shader = Shader.Find("Sprite/Outline");
-
 			this.collider.radius = 0.001f;
 			this.arrow = new Arrow(GetColor());
 			this.arrow.SetActive(false);
 			this.arrow.UpdateTarget(
 				this.gameObject.transform.position);
-			this.img.sprite = Loader.CreateSpriteFromResources(
-				Path.TestButton);
+			this.img.sprite = GetSprite();
 		}
 
 		public void SetHideArrowDistance(float newDistance)
@@ -87,14 +83,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 		}
 
 		public void SetOutline(bool on, bool mainTarget)
-		{
-			/*
-			Color color = GetColor();
-			this.img.material.SetFloat("_Outline", (float)(on ? 1 : 0));
-			this.img.material.SetColor("_OutlineColor", color);
-			this.img.material.SetColor("_AddColor", mainTarget ? color : Color.clear);
-			*/
-		}
+		{ }
 
 		public void Use()
 		{
@@ -113,17 +102,26 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 				localPlayer.GetTruePosition(),
 				base.transform.position);
 
-			this.arrow.SetActive(
+			bool isActive = 
 				distance <= this.hideDistance && 
-				!localPlayer.Data.IsDead);
-		}
+				!localPlayer.Data.IsDead &&
+				!MeetingHud.Instance &&
+				!ExileController.Instance;
 
+			this.arrow.SetActive(isActive);
+		}
+		
+		[HideFromIl2Cpp]
 		protected virtual void Pickup(Hypnotist role)
         {
 
         }
+
 		protected virtual Color GetColor() => Palette.ImpostorRed;
-    }
+
+		protected virtual Sprite GetSprite() => Loader.CreateSpriteFromResources(
+			Path.TestButton);
+	}
 
 	public sealed class RedAbilityPart : AbilityPartBase
     {
@@ -134,7 +132,6 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 		[HideFromIl2Cpp]
 		protected override void Pickup(Hypnotist hypnotist)
         {
-
 			Helper.Logging.Debug("pickUp:RedPart");
 
 			PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
@@ -151,7 +148,10 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 			UpdateAllDollKillButtonState(hypnotist);
 			hypnotist.EnableKillTimer();
 		}
-    }
+
+		protected override Sprite GetSprite() => Loader.CreateSpriteFromResources(
+			Path.HypnotistRedAbilityPart);
+	}
 
 	public sealed class BlueAbilityPart : AbilityPartBase
 	{
@@ -186,6 +186,9 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 			FeatAllDollMapModuleAccess(hypnotist, this.console);
 		}
 		protected override Color GetColor() => Palette.CrewmateBlue;
+
+		protected override Sprite GetSprite() => Loader.CreateSpriteFromResources(
+			Path.HypnotistBlueAbilityPart);
 	}
 
 	public sealed class GrayAbilityPart : AbilityPartBase
@@ -221,5 +224,8 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 		}
 
 		protected override Color GetColor() => Palette.DisabledGrey;
+
+		protected override Sprite GetSprite() => Loader.CreateSpriteFromResources(
+			Path.HypnotistGreyAbilityPart);
 	}
 }

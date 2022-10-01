@@ -55,10 +55,18 @@ namespace ExtremeRoles.Resources
         public const string CrackerCrackTrace = "ExtremeRoles.Resources.CrackTrace.png";
         public const string BomberSetBomb = "ExtremeRoles.Resources.SetBomb.png";
         public const string MeryNoneActiveVent = "ExtremeRoles.Resources.NoneActivateVent.png";
-        public const string MeryCustomVentAnime = "ExtremeRoles.Resources.MeryVentAnimation.{0}.png";
+        public const string MeryCustomVentAnime = 
+            "ExtremeRoles.Resources.MeryVentAnimation.{0}.png";
         public const string AssaultMasterReload = "ExtremeRoles.Resources.Reload.png";
         public const string LastWolfLightOff = "ExtremeRoles.Resources.LightOff.png";
         public const string CommanderAttackCommand = "ExtremeRoles.Resources.AttackCommand.png";
+        public const string HypnotistRedAbilityPart =
+            "ExtremeRoles.Resources.RedAbilityPart.png";
+        public const string HypnotistBlueAbilityPart =
+            "ExtremeRoles.Resources.BlueAbilityPart.png";
+        public const string HypnotistGreyAbilityPart =
+            "ExtremeRoles.Resources.GreyAbilityPart.png";
+
 
         public const string VigilanteEmergencyCall = "ExtremeRoles.Resources.EmergencyCall.png";
         public const string AliceShipBroken = "ExtremeRoles.Resources.ShipBroken.png";
