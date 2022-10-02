@@ -19,6 +19,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             Retaliate,
             Departure,
             Martyrdom,
+            Eatting,
 
             Explosion,
 

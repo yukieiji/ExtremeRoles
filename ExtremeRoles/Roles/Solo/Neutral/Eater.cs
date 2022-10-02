@@ -445,9 +445,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     CachedPlayerControl.LocalPlayer.PlayerId,
                     this.targetPlayer.PlayerId, 0);
 
+                ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
+                    this.targetPlayer.PlayerId,
+                    Module.ExtremeShipStatus.ExtremeShipStatus.PlayerStatus.Eatting);
+
                 if (!this.targetPlayer.Data.IsDead) { return; }
 
-                CachedPlayerControl.LocalPlayer.PlayerControl.StartCoroutine(
+                FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(
                     this.cleanDeadBodyOps(
                         this.targetPlayer.PlayerId).WrapToIl2Cpp());
             }
