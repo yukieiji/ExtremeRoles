@@ -1390,7 +1390,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             if (this.tellText == null)
             {
                 this.tellText = UnityEngine.Object.Instantiate(
-                    FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
+                    FastDestroyableSingleton<HudManager>.Instance.TaskText,
                     Camera.main.transform, false);
                 this.tellText.transform.localPosition = new Vector3(0.0f, -0.9f, -250.0f);
                 this.tellText.alignment = TMPro.TextAlignmentOptions.Center;
