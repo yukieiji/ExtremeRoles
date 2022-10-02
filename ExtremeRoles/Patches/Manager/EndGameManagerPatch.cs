@@ -163,94 +163,109 @@ namespace ExtremeRoles.Patches.Manager
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Alice.ToString());
                     textRenderer.color = ColorPalette.AliceGold;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.AliceGold);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.AliceGold);
                     break;
                 case (GameOverReason)RoleGameOverReason.JackalKillAllOther:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Jackal.ToString());
                     textRenderer.color = ColorPalette.JackalBlue;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.JackalBlue);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.JackalBlue);
                     break;
                 case (GameOverReason)RoleGameOverReason.TaskMasterGoHome:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.TaskMaster.ToString());
                     textRenderer.color = ColorPalette.NeutralColor;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.NeutralColor);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.NeutralColor);
                     break;
                 case (GameOverReason)RoleGameOverReason.MissionaryAllAgainstGod:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Missionary.ToString());
                     textRenderer.color = ColorPalette.MissionaryBlue;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.MissionaryBlue);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.MissionaryBlue);
                     break;
                 case (GameOverReason)RoleGameOverReason.JesterMeetingFavorite:
                     bonusText = Translation.GetString(
                        ExtremeRoleId.Jester.ToString());
                     textRenderer.color = ColorPalette.JesterPink;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.JesterPink);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.JesterPink);
                     break;
                 case (GameOverReason)RoleGameOverReason.LoverKillAllOther:
                 case (GameOverReason)RoleGameOverReason.ShipFallInLove:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Lover.ToString());
                     textRenderer.color = ColorPalette.LoverPink;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.LoverPink);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.LoverPink);
                     break;
                 case (GameOverReason)RoleGameOverReason.YandereKillAllOther:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Yandere.ToString());
                     textRenderer.color = ColorPalette.YandereVioletRed;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.YandereVioletRed);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.YandereVioletRed);
                     break;
                 case (GameOverReason)RoleGameOverReason.YandereShipJustForTwo:
                     bonusText = Translation.GetString(
                         RoleGameOverReason.YandereShipJustForTwo.ToString());
                     textRenderer.color = ColorPalette.YandereVioletRed;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.YandereVioletRed);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.YandereVioletRed);
                     break;
                 case (GameOverReason)RoleGameOverReason.VigilanteKillAllOther:
                 case (GameOverReason)RoleGameOverReason.VigilanteNewIdealWorld:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Vigilante.ToString());
                     textRenderer.color = ColorPalette.VigilanteFujiIro;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.VigilanteFujiIro);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.VigilanteFujiIro);
                     break;
                 case (GameOverReason)RoleGameOverReason.YokoAllDeceive:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Yoko.ToString());
                     textRenderer.color = ColorPalette.YokoShion;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.YokoShion);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.YokoShion);
                     break;
                 case (GameOverReason)RoleGameOverReason.MinerExplodeEverything:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Miner.ToString());
                     textRenderer.color = ColorPalette.MinerIvyGreen;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.MinerIvyGreen);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.MinerIvyGreen);
                     break;
                 case (GameOverReason)RoleGameOverReason.EaterAllEatInTheShip:
                 case (GameOverReason)RoleGameOverReason.EaterAliveAlone:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Eater.ToString());
                     textRenderer.color = ColorPalette.EaterMaroon;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.EaterMaroon);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.EaterMaroon);
                     break;
                 case (GameOverReason)RoleGameOverReason.TraitorKillAllOther:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Traitor.ToString());
                     textRenderer.color = ColorPalette.TraitorLightShikon;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.TraitorLightShikon);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.TraitorLightShikon);
                     break;
                 case (GameOverReason)RoleGameOverReason.QueenKillAllOther:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Queen.ToString());
                     textRenderer.color = ColorPalette.QueenWhite;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.QueenWhite);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.QueenWhite);
                     break;
                 case (GameOverReason)RoleGameOverReason.UmbrerBiohazard:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Umbrer.ToString());
                     textRenderer.color = ColorPalette.UmbrerRed;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.UmbrerRed);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.UmbrerRed);
                     break;
                 default:
                     break;
