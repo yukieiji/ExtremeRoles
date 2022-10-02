@@ -269,7 +269,7 @@ namespace ExtremeRoles.Roles.Combination
             }
             else if (targetRole.IsNeutral() && this.CanSeeNeutral)
             {
-                return Palette.DisabledGrey;
+                return ColorPalette.NeutralColor;
             }
 
             return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);

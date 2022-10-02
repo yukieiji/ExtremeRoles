@@ -223,7 +223,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 			UnlockAllDollCrakingAbility(hypnotist, this.console);
 		}
 
-		protected override Color GetColor() => Palette.DisabledGrey;
+		protected override Color GetColor() => ColorPalette.NeutralColor;
 
 		protected override Sprite GetSprite() => Loader.CreateSpriteFromResources(
 			Path.HypnotistGrayAbilityPart);
