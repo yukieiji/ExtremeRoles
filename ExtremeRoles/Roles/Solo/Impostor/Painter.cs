@@ -17,7 +17,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public enum PainterOption
         {
-            PaintColorIsRandom,
             CanPaintDistance,
         }
 
@@ -35,6 +34,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
 
         private RoleAbilityButtonBase paintButton;
+
+        private Sprite randomColorPaintImage;
+        private Sprite transColorPaintImage;
 
         public Painter() : base(
             ExtremeRoleId.Painter,
@@ -81,10 +83,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         
         public void CreateAbility()
         {
+
+            this.randomColorPaintImage = Loader.CreateSpriteFromResources(
+                Path.PainterPaint);
+            this.transColorPaintImage = Loader.CreateSpriteFromResources(
+                Path.PainterPaint);
+
             this.CreateNormalAbilityButton(
                 Translation.GetString("paint"),
-                Loader.CreateSpriteFromResources(
-                   Path.PainterPaint));
+                this.randomColorPaintImage);
         }
 
         public bool IsAbilityUse()
@@ -92,7 +99,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.targetDeadBodyId = byte.MaxValue;
             GameData.PlayerInfo info = Player.GetDeadBodyInfo(
                 this.paintDistance);
-            
+
+            this.Button.SetButtonImage(
+                Input.GetKey(KeyCode.LeftShift) ?
+                this.randomColorPaintImage : this.transColorPaintImage);
+
             if (info != null)
             {
                 this.targetDeadBodyId = info.PlayerId;
@@ -139,18 +150,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 PainterOption.CanPaintDistance,
                 1.0f, 1.0f, 5.0f, 0.5f,
                 parentOps);
-
-            CreateBoolOption(
-                PainterOption.PaintColorIsRandom,
-                false, parentOps);
         }
 
         protected override void RoleSpecificInit()
         {
             this.paintDistance = OptionHolder.AllOption[
                 GetRoleOptionId(PainterOption.CanPaintDistance)].GetValue();
-            this.PaintColorIsRandom = OptionHolder.AllOption[
-                GetRoleOptionId(PainterOption.PaintColorIsRandom)].GetValue();
             this.RoleAbilityInit();
         }
     }
