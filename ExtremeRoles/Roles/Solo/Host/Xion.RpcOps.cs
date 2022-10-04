@@ -358,7 +358,6 @@ namespace ExtremeRoles.Roles.Solo.Host
                         break;
                     }
                 }
-
                 if (targetPlayer == null)
                 {
                     ExtremeRolesPlugin.Logger.LogInfo("SetRole Missing!!");

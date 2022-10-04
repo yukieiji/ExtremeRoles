@@ -134,6 +134,5 @@ namespace ExtremeRoles.Roles.Solo.Host
             }
             return true;
         }
-
     }
 }

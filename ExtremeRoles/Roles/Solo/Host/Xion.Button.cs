@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -150,7 +149,8 @@ namespace ExtremeRoles.Roles.Solo.Host
         }
 
         private List<NoneCoolTimeButton> funcButton = new List<NoneCoolTimeButton>();
-        private Dictionary<byte, (PoolablePlayer, NoneCoolTimeButton)> acitonToPlayerButton = new Dictionary<byte, (PoolablePlayer, NoneCoolTimeButton)>();
+        private Dictionary<byte, (PoolablePlayer, NoneCoolTimeButton)> acitonToPlayerButton = 
+            new Dictionary<byte, (PoolablePlayer, NoneCoolTimeButton)>();
 
         private const float zoomOutFactor = 1.25f;
         private const float zoomInFactor = 0.8f;
@@ -167,7 +167,7 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         public void CreateButton()
         {
-            this.funcButton.Clear();
+            this.funcButton = new List<NoneCoolTimeButton>();
 
             // メンテナンスボタン
             this.funcButton.Add(
@@ -221,8 +221,10 @@ namespace ExtremeRoles.Roles.Solo.Host
                     Helper.Translation.GetString("speedDown")));
 
             // プレイヤーに関する能力周り
-            this.acitonToPlayerButton.Clear();
-            this.playerState.Clear();
+            this.acitonToPlayerButton = 
+                new Dictionary<byte, (PoolablePlayer, NoneCoolTimeButton)>();
+            this.playerState = new Dictionary<byte, PlayerState>();
+
             Dictionary<byte, PoolablePlayer> poolPlayer = Helper.Player.CreatePlayerIcon();
             foreach (var (playerId, pool) in poolPlayer)
             {
