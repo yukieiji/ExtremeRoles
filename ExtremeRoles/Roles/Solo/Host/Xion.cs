@@ -1,6 +1,8 @@
 ﻿using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 
+using ExtremeRoles.Performance;
+
 namespace ExtremeRoles.Roles.Solo.Host
 {
     public sealed partial class Xion : SingleRoleBase
@@ -25,5 +27,16 @@ namespace ExtremeRoles.Roles.Solo.Host
         protected override void CreateSpecificOption(
             IOption parentOps)
         { }
+
+        
+        public static void RemoveXionPlayerToAllPlayerControl()
+        {
+            bool isXion(PlayerControl x) => x.PlayerId == PlayerId;
+
+            PlayerControl.AllPlayerControls.RemoveAll(
+                (Il2CppSystem.Predicate<PlayerControl>)isXion);
+            CachedPlayerControl.AllPlayerControls.RemoveAll(
+                x => x.PlayerId == PlayerId);
+        }
     }
 }

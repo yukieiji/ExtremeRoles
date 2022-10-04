@@ -294,11 +294,11 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.OnDestroy))]
     public static class IntroCutsceneOnDestroyPatch
     {
-        public static void Prefix(IntroCutscene __instance)
+        public static void Prefix()
         {
             if (OptionHolder.AllOption[(int)OptionHolder.CommonOptionKey.UseXion].GetValue())
             {
-                removeXionPlayerToAllPlayerControl();
+                Roles.Solo.Host.Xion.RemoveXionPlayerToAllPlayerControl();
             }
 
             Module.InfoOverlay.Button.SetInfoButtonToInGamePositon();
@@ -436,16 +436,5 @@ namespace ExtremeRoles.Patches
                 GameSystem.DisableMapModule(objectName);
             }
         }
-
-        private static void removeXionPlayerToAllPlayerControl()
-        {
-            bool isXion(PlayerControl x) => x.PlayerId == Roles.Solo.Host.Xion.PlayerId;
-
-            PlayerControl.AllPlayerControls.RemoveAll(
-                (Il2CppSystem.Predicate<PlayerControl>)isXion);
-            CachedPlayerControl.AllPlayerControls.RemoveAll(
-                x => x.PlayerId == Roles.Solo.Host.Xion.PlayerId);
-        }
-        
     }
 }

@@ -41,7 +41,11 @@ namespace ExtremeRoles.Roles.Solo.Host
                 this.RpcForceEndGame();
                 return;
             }
-            FastDestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
+            var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+
+            hudManager.ShadowQuad.gameObject.SetActive(false);
+            hudManager.Chat.gameObject.SetActive(true);
+
             this.keyBind();
             this.disableButton();
             this.buttonUpdate();

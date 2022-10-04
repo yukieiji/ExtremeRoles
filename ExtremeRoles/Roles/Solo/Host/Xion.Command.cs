@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using ExtremeRoles.Helper;
+﻿using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -9,7 +6,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Host
 {
-    public sealed partial class Xion : SingleRoleBase
+    public sealed partial class Xion
     {
         private int noXionCount = 0;
 
@@ -24,7 +21,6 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         public static void ParseCommand(string chatStr)
         {
-
             if (chatStr[0] != commandStarChar) { return; }
 
             string[] args = chatStr.Substring(1).Split(" ");
@@ -98,7 +94,8 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         }
 
-        private static bool isLocalGame() => AmongUsClient.Instance.GameMode == GameModes.LocalGame;
+        private static bool isLocalGame() => 
+            AmongUsClient.Instance.GameMode == GameModes.LocalGame;
 
         private static bool isXion()
         {
@@ -149,9 +146,8 @@ namespace ExtremeRoles.Roles.Solo.Host
             }
         }
 
-        private static void resetRole(byte targetPlayerId)
+        private static void resetRole(PlayerControl targetPlayer, byte targetPlayerId)
         {
-            var targetPlayer = Player.GetPlayerControlById(targetPlayerId);
             var targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
             IRoleHasParent.PurgeParent(targetPlayerId);
 
@@ -260,6 +256,7 @@ namespace ExtremeRoles.Roles.Solo.Host
             ++this.noXionCount;
         }
       
-        private bool isNoXion() => this.noXionCount >= ((GameData.Instance.AllPlayers.Count - 1) * 2 / 3);
+        private bool isNoXion() => 
+            this.noXionCount >= ((GameData.Instance.AllPlayers.Count - 1) * 2 / 3);
     }
 }

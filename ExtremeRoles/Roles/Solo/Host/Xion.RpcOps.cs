@@ -277,6 +277,14 @@ namespace ExtremeRoles.Roles.Solo.Host
             writer.WritePacked(intedRoleId);
             finishWrite(writer);
             replaceToRole(targetPlayerId, intedRoleId);
+
+            addChat(
+                string.Format(
+                    Translation.GetString("SetRole"),
+                    Translation.GetString(
+                        Player.GetPlayerControlById(
+                            targetPlayerId).Data.DefaultOutfit.PlayerName),
+                    Translation.GetString(roleId.ToString())));
         }
 
         public static void RpcHostToXion()
@@ -287,14 +295,12 @@ namespace ExtremeRoles.Roles.Solo.Host
                 return;
             }
 
-            addChat(Translation.GetString("RevartXionStart"));
-
             byte xionPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
 
             finishWrite(createWriter(XionRpcOpsCode.BackXion));
             hostToXion(xionPlayerId);
 
-            addChat(Translation.GetString("RevartXionEnd"));
+            addChat(Translation.GetString("RevartXion"));
         }
         // RPC終了
 
@@ -318,8 +324,12 @@ namespace ExtremeRoles.Roles.Solo.Host
         private static void hostToXion(byte hostPlayerId)
         {
             xionPlayerToDead(hostPlayerId);
-            resetRole(hostPlayerId);
+            resetRole(
+                Player.GetPlayerControlById(hostPlayerId), hostPlayerId);
             setNewRole(hostPlayerId, xionBuffer);
+
+            RemoveXionPlayerToAllPlayerControl();
+            
             xionBuffer = null;
         }
 
@@ -328,15 +338,54 @@ namespace ExtremeRoles.Roles.Solo.Host
             SingleRoleBase baseRole = ExtremeRoleManager.GameRole[targetPlayerId];
             bool isXion = baseRole.Id == ExtremeRoleId.Xion;
 
+            ExtremeRolesPlugin.Logger.LogInfo(
+                $"targetPlayerId:{targetPlayerId}   roleId:{roleId}");
+
+            PlayerControl targetPlayer = Player.GetPlayerControlById(targetPlayerId);
+            
+            // 見つからなかったので探して追加
+            if (targetPlayer == null)
+            {
+                PlayerControl[] array = Object.FindObjectsOfType<PlayerControl>();
+                for (int i = 0; i < array.Length; ++i)
+                {
+                    if (array[i].PlayerId == targetPlayerId)
+                    {
+                        targetPlayer = array[i];
+
+                        PlayerControl.AllPlayerControls.Add(targetPlayer);
+                        new CachedPlayerControl(targetPlayer);
+                        break;
+                    }
+                }
+
+                if (targetPlayer == null)
+                {
+                    ExtremeRolesPlugin.Logger.LogInfo("SetRole Missing!!");
+                    return;
+                }
+            }
+
             if (isXion)
             {
                 RPCOperator.UncheckedRevive(targetPlayerId);
             }
 
-            resetRole(targetPlayerId);
+            resetRole(targetPlayer, targetPlayerId);
             
             SingleRoleBase role = ExtremeRoleManager.NormalRole[roleId];
             SingleRoleBase addRole = role.Clone();
+
+            var roleManager = FastDestroyableSingleton<RoleManager>.Instance;
+
+            if (addRole.IsImpostor())
+            {
+                roleManager.SetRole(targetPlayer, RoleTypes.Impostor);
+            }
+            else
+            {
+                roleManager.SetRole(targetPlayer, RoleTypes.Crewmate);
+            }
 
             IRoleAbility abilityRole = addRole as IRoleAbility;
 
