@@ -46,6 +46,8 @@ namespace ExtremeRoles.Patches.Manager
         public const string RoleInfoObjectName = "Info";
         private static bool buttonCreated = false;
 
+        public static Dictionary<byte, TextMeshPro> PlayerInfoText => allPlayerInfo;
+
         private static Dictionary<byte, TextMeshPro> allPlayerInfo = new Dictionary<byte, TextMeshPro>();
         private static TextMeshPro tabText;
 

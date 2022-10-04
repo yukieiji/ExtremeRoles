@@ -4,6 +4,8 @@ using Hazel;
 
 using UnityEngine;
 
+using TMPro;
+
 using ExtremeRoles.Roles.API;
 
 using ExtremeRoles.Roles.API.Interface;
@@ -328,6 +330,12 @@ namespace ExtremeRoles.Roles.Solo.Host
                 Player.GetPlayerControlById(hostPlayerId), hostPlayerId);
             setNewRole(hostPlayerId, xionBuffer);
 
+            if (Patches.Manager.HudManagerUpdatePatch.PlayerInfoText.TryGetValue(
+                hostPlayerId, out TextMeshPro info))
+            {
+                info.text = xionBuffer.GetColoredRoleName(true);
+            }
+
             RemoveXionPlayerToAllPlayerControl();
             
             xionBuffer = null;
@@ -398,10 +406,8 @@ namespace ExtremeRoles.Roles.Solo.Host
             addRole.Initialize();
             addRole.GameControlId = baseRole.GameControlId;
 
-            lock (ExtremeRoleManager.GameRole)
-            {
-                ExtremeRoleManager.GameRole[targetPlayerId] = addRole;
-            }
+            setNewRole(targetPlayerId, addRole);
+
             Logging.Debug($"PlayerId:{targetPlayerId}   AssignTo:{addRole.RoleName}");
             
             if (isXion)
