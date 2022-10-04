@@ -17,7 +17,8 @@ namespace ExtremeRoles.Roles.Solo.Host
         private const string setCombRole = "SetCombRole";
         private const string revartXion = "IamXion";
 
-        private static Xion xionBuffer; 
+        private static Xion xionBuffer;
+        private static bool voted;
 
         public static void ParseCommand(string chatStr)
         {
@@ -30,7 +31,7 @@ namespace ExtremeRoles.Roles.Solo.Host
                 case noXion:
                     if (!isXion())
                     {
-                        RpcNoXionVote();
+                        noXionVoteCmd();
                     }
                     break;
                 default:
@@ -249,6 +250,19 @@ namespace ExtremeRoles.Roles.Solo.Host
         private static void invalidArgs()
         {
             addChat(Translation.GetString("invalidArgs"));
+        }
+
+        private static void noXionVoteCmd()
+        {
+            if (voted)
+            {
+                addChat(Translation.GetString("alreadyVoted"));
+            }
+            else
+            {
+                voted = true;
+                RpcNoXionVote();
+            }
         }
 
         public void AddNoXionCount()

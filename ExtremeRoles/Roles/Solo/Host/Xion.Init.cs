@@ -5,6 +5,7 @@
         public static void Purge()
         {
             PlayerId = byte.MaxValue;
+            voted = false;
         }
 
         protected override void CommonInit()
