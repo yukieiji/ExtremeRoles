@@ -177,7 +177,21 @@ namespace ExtremeRoles.Patches.Manager
             if (localPlayer.Data.Role.IsImpostor)
             {
                 List<CachedPlayerControl> impostors = CachedPlayerControl.AllPlayerControls.ToArray().ToList();
-                impostors.RemoveAll(x => !(x.Data.Role.IsImpostor));
+                impostors.RemoveAll((CachedPlayerControl x) => 
+                {
+                    if (x == null || 
+                        x.Data == null ||
+                        x.Data.Role == null ||
+                        !x.Data.Role.IsImpostor)
+                    {
+                        return true; 
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                });
+
                 foreach (PlayerControl player in impostors)
                 {
                     player.cosmetics.SetNameColor(Palette.ImpostorRed);
