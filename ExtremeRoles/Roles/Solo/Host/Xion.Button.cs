@@ -399,8 +399,10 @@ namespace ExtremeRoles.Roles.Solo.Host
                     continue;
                 }
 
-                pool.gameObject.SetActive(true);
-                button.SetActive(true);
+                bool active = !this.isHideGUI;
+
+                pool.gameObject.SetActive(active);
+                button.SetActive(active);
                 bool isDead = player.IsDead;
                 PlayerState curState = isDead ? PlayerState.Dead : PlayerState.Alive;
 
