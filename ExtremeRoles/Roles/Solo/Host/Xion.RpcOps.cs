@@ -182,6 +182,9 @@ namespace ExtremeRoles.Roles.Solo.Host
 
             foreach (var door in CachedShipStatus.Instance.AllDoors)
             {
+                DeconControl decon = door.GetComponentInChildren<DeconControl>();
+                if (decon != null) { continue; }
+
                 CachedShipStatus.Instance.RpcRepairSystem(
                     SystemTypes.Doors, door.Id | 64);
                 door.SetDoorway(true);
