@@ -184,6 +184,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private Sprite deadBodyDummy;
         private Sprite playerDummy;
 
+        private string deadBodyDummyStr;
+        private string playerDummyStr;
+
         public Faker() : base(
             ExtremeRoleId.Faker,
             ExtremeRoleType.Impostor,
@@ -226,16 +229,23 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.playerDummy = Loader.CreateSpriteFromResources(
                 Path.FakerDummy, 115f);
 
+            this.deadBodyDummyStr = Translation.GetString("dummyDeadBody");
+            this.playerDummyStr = Translation.GetString("dummyPlayer");
+
             this.CreateNormalAbilityButton(
-                Translation.GetString("dummy"),
-                this.playerDummy);
+                this.deadBodyDummyStr,
+                this.deadBodyDummy);
         }
 
         public bool IsAbilityUse()
         {
+            bool isPlayerDummy = Input.GetKey(KeyCode.LeftShift);
+
             this.Button.SetButtonImage(
-                Input.GetKey(KeyCode.LeftShift) ? 
+                isPlayerDummy ? 
                 this.playerDummy : this.deadBodyDummy);
+            this.Button.SetButtonText(
+                isPlayerDummy ? this.playerDummyStr : this.deadBodyDummyStr);
 
             return this.IsCommonUse();
         }
