@@ -19,8 +19,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             CanPaintDistance,
         }
-
-        public bool PaintColorIsRandom;
         private float paintDistance;
         private byte targetDeadBodyId;
 
@@ -47,10 +45,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         { }
 
         public static void PaintDeadBody(
-            byte rolePlayerId, byte targetPlayerId)
+            byte targetPlayerId, byte isRandomModeMessage)
         {
-            var role = ExtremeRoleManager.GetSafeCastedRole<Painter>(rolePlayerId);
-            if (role == null) { return; }
+            bool isRandomColorMode = isRandomModeMessage == byte.MaxValue;
 
             DeadBody[] array = Object.FindObjectsOfType<DeadBody>();
             for (int i = 0; i < array.Length; ++i)
@@ -60,7 +57,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
                     Color oldColor = array[i].bodyRenderer.color;
 
-                    if (role.PaintColorIsRandom)
+                    if (isRandomColorMode)
                     {
                         Color newColor = new Color(
                             Random.value,
@@ -87,7 +84,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.randomColorPaintImage = Loader.CreateSpriteFromResources(
                 Path.PainterPaint);
             this.transColorPaintImage = Loader.CreateSpriteFromResources(
-                Path.PainterPaint);
+                Path.TestButton);
 
             this.CreateNormalAbilityButton(
                 Translation.GetString("paint"),
@@ -124,19 +121,20 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool UseAbility()
         {
+            byte message = Input.GetKey(KeyCode.LeftShift) ? byte.MaxValue : byte.MinValue;
 
             RPCOperator.Call(
                 CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.PainterPaintBody,
                 new List<byte>
                 {
-                    CachedPlayerControl.LocalPlayer.PlayerId,
-                    this.targetDeadBodyId
+                    this.targetDeadBodyId,
+                    message
                 });
 
             PaintDeadBody(
-                CachedPlayerControl.LocalPlayer.PlayerId,
-                this.targetDeadBodyId);
+                this.targetDeadBodyId,
+                message);
             return true;
         }
 

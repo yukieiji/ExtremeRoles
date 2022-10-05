@@ -227,7 +227,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.deadBodyDummy = Loader.CreateSpriteFromResources(
                 Path.FakerDummy, 115f);
             this.playerDummy = Loader.CreateSpriteFromResources(
-                Path.FakerDummy, 115f);
+                Path.TestButton, 115f);
 
             this.deadBodyDummyStr = Translation.GetString("dummyDeadBody");
             this.playerDummyStr = Translation.GetString("dummyPlayer");

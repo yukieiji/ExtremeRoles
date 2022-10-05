@@ -654,10 +654,10 @@ namespace ExtremeRoles.Patches
                     break;
                 case RPCOperator.Command.PainterPaintBody:
                     byte painterPlayerId = reader.ReadByte();
-                    byte paintDeadBodyPlayerId = reader.ReadByte();
+                    byte isRandomModeMessage = reader.ReadByte();
                     RPCOperator.PainterPaintBody(
                         painterPlayerId,
-                        paintDeadBodyPlayerId);
+                        isRandomModeMessage);
                     break;
                 case RPCOperator.Command.FakerCreateDummy:
                     byte fakerPlayerId = reader.ReadByte();
