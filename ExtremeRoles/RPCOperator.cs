@@ -518,10 +518,10 @@ namespace ExtremeRoles
         }
 
         public static void PainterPaintBody(
-            byte callerId, byte targetId)
+            byte targetId, byte isRandomModeMessage)
         {
             Roles.Solo.Impostor.Painter.PaintDeadBody(
-                callerId, targetId);
+                targetId, isRandomModeMessage);
         }
         public static void FakerCreateDummy(
             byte callerId, byte targetId, byte ops)

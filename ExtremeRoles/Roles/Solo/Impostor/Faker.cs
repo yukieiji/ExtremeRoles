@@ -181,6 +181,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         private RoleAbilityButtonBase createFake;
 
+        private Sprite deadBodyDummy;
+        private Sprite playerDummy;
+
+        private string deadBodyDummyStr;
+        private string playerDummyStr;
+
         public Faker() : base(
             ExtremeRoleId.Faker,
             ExtremeRoleType.Impostor,
@@ -218,13 +224,31 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void CreateAbility()
         {
+            this.deadBodyDummy = Loader.CreateSpriteFromResources(
+                Path.FakerDummy, 115f);
+            this.playerDummy = Loader.CreateSpriteFromResources(
+                Path.TestButton, 115f);
+
+            this.deadBodyDummyStr = Translation.GetString("dummyDeadBody");
+            this.playerDummyStr = Translation.GetString("dummyPlayer");
+
             this.CreateNormalAbilityButton(
-                Translation.GetString("dummy"),
-                Loader.CreateSpriteFromResources(
-                   Path.FakerDummy, 115f));
+                this.deadBodyDummyStr,
+                this.deadBodyDummy);
         }
 
-        public bool IsAbilityUse() => this.IsCommonUse();
+        public bool IsAbilityUse()
+        {
+            bool isPlayerDummy = Input.GetKey(KeyCode.LeftShift);
+
+            this.Button.SetButtonImage(
+                isPlayerDummy ? 
+                this.playerDummy : this.deadBodyDummy);
+            this.Button.SetButtonText(
+                isPlayerDummy ? this.playerDummyStr : this.deadBodyDummyStr);
+
+            return this.IsCommonUse();
+        }
 
         public void RoleAbilityResetOnMeetingEnd()
         {
