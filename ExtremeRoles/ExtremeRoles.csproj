@@ -5,7 +5,7 @@
         <DebugType>embedded</DebugType>
 		<Version>3.3.0.0</Version>
 		<!--<VersionPrefix>3.2.3</VersionPrefix>-->
-		<VersionSuffix>Awaking</VersionSuffix> 
+		<VersionSuffix>Awakening</VersionSuffix> 
         <Description>Extreme Roles for Advanced user</Description>
         <Authors>yukieiji</Authors>
         <Configurations>Debug;Release</Configurations>
