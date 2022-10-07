@@ -150,24 +150,19 @@ namespace ExtremeSkins.SkinManager
                 string json = System.Text.Encoding.UTF8.GetString(byteArray);
                 JObject parseJson = JObject.Parse(json);
 
-                string name = parseJson["Name"].ToString();
-                string productId = string.Concat("visor_", name);
+                CustomVisor customVisor = new CustomVisor(
+                    visor,
+                    parseJson["Author"].ToString(),  // Author
+                    parseJson["Name"].ToString(),  // Name
+                    (bool)parseJson["LeftIdle"],
+                    (bool)parseJson["Shader"], // Shader
+                    (bool)parseJson["BehindHat"]); // BehindHat
 
-                if (VisorData.ContainsKey(productId)) { continue; }
-
-                VisorData.Add(
-                    productId,  // Name
-                    new CustomVisor(
-                        productId,
-                        visor,
-                        parseJson["Author"].ToString(),  // Author
-                        name,  // Name
-                        (bool)parseJson["LeftIdle"],
-                        (bool)parseJson["Shader"], // Shader
-                        (bool)parseJson["BehindHat"])); // BehindHat
-
-                ExtremeSkinsPlugin.Logger.LogInfo(
-                    $"Visor Loaded:{name}, from:{visor}");
+                if (VisorData.TryAdd(customVisor.Id, customVisor))
+                {
+                    ExtremeSkinsPlugin.Logger.LogInfo(
+                        $"Visor Loaded:{customVisor.Name}, from:{visor}");
+                }
             }
 
             IsLoaded = true;
@@ -314,7 +309,6 @@ namespace ExtremeSkins.SkinManager
 
             for (int i = 0; i < visorArray.Count; ++i)
             {
-
                 string visorData = visorArray[i].ToString();
 
                 if (visorData == visorRepoData || visorData == visorTransData) { continue; }

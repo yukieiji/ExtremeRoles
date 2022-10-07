@@ -24,23 +24,20 @@ namespace ExtremeSkins.Module
 
         public string Id
         {
-            get => this.id;
+            get => $"namePlate_{this.name}";
         }
 
         private NamePlateData namePlate;
 
-        private string id;
         private string name;
         private string author;
         private string imgPath;
 
         public CustomNamePlate(
-            string id,
             string imgPath,
             string author,
             string name)
         {
-            this.id = id;
             this.imgPath = imgPath;
             this.author = author;
             this.name = name;
@@ -53,7 +50,7 @@ namespace ExtremeSkins.Module
             this.namePlate = ScriptableObject.CreateInstance<NamePlateData>();
             this.namePlate.name = Helper.Translation.GetString(this.Name);
             this.namePlate.displayOrder = 99;
-            this.namePlate.ProductId = this.id;
+            this.namePlate.ProductId = this.Id;
             this.namePlate.ChipOffset = new Vector2(0f, 0.2f);
             this.namePlate.Free = true;
             this.namePlate.NotInStore = true;

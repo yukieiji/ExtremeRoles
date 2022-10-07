@@ -25,12 +25,11 @@ namespace ExtremeSkins.Module
 
         public string Id
         {
-            get => this.id;
+            get => $"visor_{this.name}";
         }
 
         private VisorData visor;
 
-        private string id;
         private string name;
         private string author;
         private string folderPath;
@@ -40,7 +39,6 @@ namespace ExtremeSkins.Module
         private bool hasLeftImg;
 
         public CustomVisor(
-            string id,
             string folderPath,
             string author,
             string name,
@@ -48,7 +46,6 @@ namespace ExtremeSkins.Module
             bool hasShader,
             bool isBehindHat)
         {
-            this.id = id;
             this.folderPath = folderPath;
             this.author = author;
             this.name = name;
@@ -65,7 +62,7 @@ namespace ExtremeSkins.Module
             this.visor = ScriptableObject.CreateInstance<VisorData>();
             this.visor.name = Helper.Translation.GetString(this.Name);
             this.visor.displayOrder = 99;
-            this.visor.ProductId = this.id;
+            this.visor.ProductId = this.Id;
             this.visor.ChipOffset = new Vector2(0f, 0.2f);
             this.visor.Free = true;
             this.visor.NotInStore = true;
