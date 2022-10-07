@@ -25,6 +25,7 @@ namespace ExtremeSkins.SkinManager
 
         public const string FolderPath = @"\ExtremeVisor\";
         public const string LicenseFileName = "LICENSE.md";
+        public const string InfoFileName = "info.json";
 
         private const string repo = "https://raw.githubusercontent.com/yukieiji/ExtremeVisor/main"; // When using this repository with Fork, please follow the license of each hat
         private const string skinDlUrl = "https://github.com/yukieiji/ExtremeVisor/archive/refs/heads/main.zip";
@@ -64,51 +65,48 @@ namespace ExtremeSkins.SkinManager
                     Path.GetDirectoryName(Application.dataPath),
                     FolderPath, visorRepoData));
             string visorJsonString = System.Text.Encoding.UTF8.GetString(byteVisorArray);
-            JObject visorFolder = JObject.Parse(visorJsonString);
-            
-            for(int i = 0; i < visorFolder.Count; ++i)
+            JObject visorJObject = JObject.Parse(visorJsonString);
+
+            JToken visorFolder = visorJObject["data"];
+            JToken newHash = visorJObject[jsonUpdateComitKey];
+
+            if ((string)newHash != curUpdateHash.Value) { return true; }
+
+            JArray visorArray = visorFolder.TryCast<JArray>();
+
+            for (int i = 0; i < visorArray.Count; ++i)
             {
-                JProperty token = visorFolder.ChildrenTokens[i].TryCast<JProperty>();
-                if (token == null) { continue; }
+                string visorData = visorArray[i].ToString();
 
-                string author = token.Name;
+                if (visorData == visorRepoData || visorData == visorTransData) { continue; }
 
-                if (author == jsonUpdateComitKey)
-                {
-                    if ((string)token.Value != curUpdateHash.Value)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                }
-
-                if (author == visorRepoData ||
-                    author == visorTransData) { continue; }
-
-                string checkVisorFolder = string.Concat(
+                string checkHatFolder = string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
-                    FolderPath, author);
+                    FolderPath, @"\", visorData);
 
-                if (!Directory.Exists(checkVisorFolder)) { return true; }
+                if (!Directory.Exists(checkHatFolder)) { return true; }
 
                 if (!File.Exists(string.Concat(
-                    checkVisorFolder, @"\", LicenseFileName))) { return true; }
+                        checkHatFolder, @"\", LicenseFileName))) { return true; }
 
-                JArray visorImage = token.Value.TryCast<JArray>();
-                for (int j = 0; j < visorImage.Count; ++j)
+                if (!File.Exists(string.Concat(
+                        checkHatFolder, @"\", InfoFileName))) { return true; }
+                if (!File.Exists(string.Concat(
+                        checkHatFolder, @"\", CustomVisor.IdleName))) { return true; }
+
+                byte[] byteArray = File.ReadAllBytes(
+                   string.Concat(checkHatFolder, @"\", InfoFileName));
+                string json = System.Text.Encoding.UTF8.GetString(byteArray);
+                JObject parseJson = JObject.Parse(json);
+
+                if (((bool)parseJson["IdleFlip"]) &&
+                    !File.Exists(string.Concat(
+                        checkHatFolder, @"\", CustomVisor.FlipIdleName)))
                 {
-
-                    if (!File.Exists(string.Concat(
-                            checkVisorFolder, @"\",
-                            visorImage[j].TryCast<JValue>().Value.ToString(),
-                            ".png"))) { return true; }
+                    return true;
                 }
 
             }
-
             return false;
         }
 
@@ -135,35 +133,41 @@ namespace ExtremeSkins.SkinManager
                 string.Concat(Path.GetDirectoryName(Application.dataPath), FolderPath));
 
 
-            foreach (string authorPath in visorFolder)
+            foreach (string visor in visorFolder)
             {
-                if (string.IsNullOrEmpty(authorPath)) { continue; }
-                
-                string[] authorDirs = authorPath.Split(@"\");
-                string author = authorDirs[authorDirs.Length - 1];
+                if (string.IsNullOrEmpty(visor)) { continue; }
 
-                string[] visorImage = Directory.GetFiles(
-                    authorPath, "*.png");
+                string infoJsonFile = string.Concat(visor, @"\", InfoFileName);
 
-                foreach (string visor in visorImage)
+                if (!File.Exists(infoJsonFile))
                 {
-                    string[] visorDir = visor.Split(@"\");
-                    string imageName = visorDir[visorDir.Length - 1];
-                    string name = imageName.Substring(0, imageName.Length - 4);
-                    string productId = string.Concat("visor_", name);
-
-                    if (VisorData.ContainsKey(productId)) { continue; }
-
-                    VisorData.Add(
-                        productId,  // Name
-                        new CustomVisor(
-                            productId, visor,
-                            author, name));  // Name
-
                     ExtremeSkinsPlugin.Logger.LogInfo(
-                        $"Visor Loaded:{name}, from:{visor}");
+                        $"Error Detected!!:Can't load info.json for:{infoJsonFile}");
+                    continue;
                 }
-                
+
+                byte[] byteArray = File.ReadAllBytes(infoJsonFile);
+                string json = System.Text.Encoding.UTF8.GetString(byteArray);
+                JObject parseJson = JObject.Parse(json);
+
+                string name = parseJson["Name"].ToString();
+                string productId = string.Concat("visor_", name);
+
+                if (VisorData.ContainsKey(productId)) { continue; }
+
+                VisorData.Add(
+                    productId,  // Name
+                    new CustomVisor(
+                        productId,
+                        visor,
+                        parseJson["Author"].ToString(),  // Author
+                        name,  // Name
+                        (bool)parseJson["LeftIdle"],
+                        (bool)parseJson["Shader"], // Shader
+                        (bool)parseJson["BehindHat"])); // BehindHat
+
+                ExtremeSkinsPlugin.Logger.LogInfo(
+                    $"Visor Loaded:{name}, from:{visor}");
             }
 
             IsLoaded = true;
