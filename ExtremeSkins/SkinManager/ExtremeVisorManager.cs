@@ -32,7 +32,7 @@ namespace ExtremeSkins.SkinManager
 
         private const string workingFolder = @"\ExVWorking\";
         private const string dlZipName = "ExtremeVisor-main.zip";
-        private const string visorDataPath = @"\ExtremeVisor-main\visor\";
+        private const string visorDataPath = @"\ExtremeVisor-main\new_visor\";
 
         private const string visorRepoData = "visorData.json";
         private const string visorTransData = "visorTransData.json";
@@ -226,7 +226,7 @@ namespace ExtremeSkins.SkinManager
                 HttpClient http = new HttpClient();
                 http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true };
                 var response = await http.GetAsync(
-                    new System.Uri($"{repo}/visor/{fileName}"),
+                    new System.Uri($"{repo}/new_visor/{fileName}"),
                     HttpCompletionOption.ResponseContentRead);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
@@ -309,23 +309,22 @@ namespace ExtremeSkins.SkinManager
                     FolderPath, visorRepoData));
             string visorJsonString = System.Text.Encoding.UTF8.GetString(byteVisorArray);
 
-            JObject visorFolder = JObject.Parse(visorJsonString);
+            JToken visorFolder = JObject.Parse(visorJsonString)["data"];
+            JArray visorArray = visorFolder.TryCast<JArray>();
 
-            for (int i = 0; i < visorFolder.Count; ++i)
+            for (int i = 0; i < visorArray.Count; ++i)
             {
-                JProperty token = visorFolder.ChildrenTokens[i].TryCast<JProperty>();
-                if (token == null) { continue; }
 
-                string author = token.Name;
+                string visorData = visorArray[i].ToString();
 
-                if (author == jsonUpdateComitKey ||
-                    author == visorRepoData ||
-                    author == visorTransData) { continue; }
+                if (visorData == visorRepoData || visorData == visorTransData) { continue; }
 
-                string visorMoveToFolder = string.Concat(installFolder, @"\", author);
-                string visorSourceFolder = string.Concat(extractPath, visorDataPath, author);
+                string visorMoveToFolder = string.Concat(
+                    installFolder, @"\", visorData);
+                string visorSourceFolder = string.Concat(
+                    extractPath, visorDataPath, visorData);
 
-                ExtremeSkinsPlugin.Logger.LogInfo($"Installing Visor:{author} Visors");
+                ExtremeSkinsPlugin.Logger.LogInfo($"Installing Visor:{visorData}");
 
                 Directory.Move(visorSourceFolder, visorMoveToFolder);
             }
