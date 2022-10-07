@@ -285,7 +285,7 @@ namespace ExtremeRoles.Roles.Solo.Host
 
             addChat(
                 string.Format(
-                    Translation.GetString("SetRole"),
+                    Translation.GetString("setRole"),
                     Translation.GetString(
                         Player.GetPlayerControlById(
                             targetPlayerId).Data.DefaultOutfit.PlayerName),

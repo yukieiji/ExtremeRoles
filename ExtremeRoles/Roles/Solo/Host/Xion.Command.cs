@@ -89,7 +89,7 @@ namespace ExtremeRoles.Roles.Solo.Host
             }
             else
             {
-                addChat(Translation.GetString("CannotUseThisGameMode"));
+                addChat(Translation.GetString("cannotUseThisGameMode"));
                 return false;
             }
 
