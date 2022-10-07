@@ -32,22 +32,15 @@ namespace ExtremeSkins.Module
             get => this.id; 
         }
 
-        public bool HasFrontFlip { get; set; }
-        public bool HasBackFlip { get; set; }
-        private bool hasShader { get; set; }
-        
-        private bool hasBack { get; set; }
-        private bool hasClimb { get; set; }
+        private bool hasFrontFlip;
+        private bool hasBackFlip;
 
-        private bool isBounce { get; set; }
+        private bool hasShader;
+        private bool hasBack;
+        private bool hasClimb;
+        private bool isBounce;
 
         private string folderPath;
-
-        private Sprite frontImage;
-        private Sprite frontFlipImage;
-        private Sprite backImage;
-        private Sprite backFlipImage;
-        private Sprite climbImage;
 
         private string id;
         private string name;
@@ -72,9 +65,9 @@ namespace ExtremeSkins.Module
             this.author = author;
             this.name = name;
             
-            this.HasFrontFlip = hasFrontFlip;
+            this.hasFrontFlip = hasFrontFlip;
             this.hasBack = hasBack;
-            this.HasBackFlip = hasBackFlip;
+            this.hasBackFlip = hasBackFlip;
             this.hasClimb = hasClimb;
             this.hasShader = hasShader;
 
@@ -98,18 +91,32 @@ namespace ExtremeSkins.Module
 
             this.hat.hatViewData.viewData = ScriptableObject.CreateInstance<HatViewData>();
 
-            loadAllHatResources();
-
-            this.hat.hatViewData.viewData.MainImage = this.frontImage;
+            this.hat.hatViewData.viewData.MainImage = loadHatSprite(
+                string.Concat(this.folderPath, @"\", FrontImageName));
+            
+            if (this.hasFrontFlip)
+            {
+                this.hat.hatViewData.viewData.LeftMainImage = loadHatSprite(
+                    string.Concat(this.folderPath, @"\", FrontFlipImageName));
+            }
 
             if (this.hasBack)
             {
-                this.hat.hatViewData.viewData.BackImage = this.backImage;
+                this.hat.hatViewData.viewData.BackImage = loadHatSprite(
+                    string.Concat(this.folderPath, @"\", BackImageName));
             }
+            if (this.hasBackFlip)
+            {
+                this.hat.hatViewData.viewData.LeftBackImage = loadHatSprite(
+                    string.Concat(this.folderPath, @"\", BackFlipImageName));
+            }
+
             if (this.hasClimb)
             {
-                this.hat.hatViewData.viewData.ClimbImage = this.climbImage;
+                this.hat.hatViewData.viewData.ClimbImage = loadHatSprite(
+                    string.Concat(this.folderPath, @"\", ClimbImageName));
             }
+
             if (this.hasShader)
             {
                 Material altShader = new Material("PlayerMaterial");
@@ -120,39 +127,6 @@ namespace ExtremeSkins.Module
 
             return this.hat;
 
-        }
-
-        public Sprite GetFrontImage() => this.frontImage;
-        public Sprite GetFlipFrontImage() => this.frontFlipImage;
-        public Sprite GetBackImage() => this.backImage;
-        public Sprite GetBackFlipImage() => this.backFlipImage;
-
-        private void loadAllHatResources()
-        {
-
-            this.frontImage = loadHatSprite(
-                string.Concat(this.folderPath, @"\", FrontImageName));
-
-            if (this.HasFrontFlip)
-            {
-                this.frontFlipImage = loadHatSprite(
-                    string.Concat(this.folderPath, @"\", FrontFlipImageName));
-            }
-            if (this.hasBack)
-            {
-                this.backImage = loadHatSprite(
-                    string.Concat(this.folderPath, @"\", BackImageName));
-            }
-            if (this.HasBackFlip)
-            {
-                this.backFlipImage = loadHatSprite(
-                    string.Concat(this.folderPath, @"\", BackFlipImageName));
-            }
-            if (this.hasClimb)
-            {
-                this.climbImage = loadHatSprite(
-                    string.Concat(this.folderPath, @"\", ClimbImageName));
-            }
         }
 
         private Sprite loadHatSprite(
