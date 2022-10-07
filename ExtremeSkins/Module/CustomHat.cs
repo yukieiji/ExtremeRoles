@@ -149,7 +149,5 @@ namespace ExtremeSkins.Module
             return sprite;
         }
     }
-
 #endif
-
 }
