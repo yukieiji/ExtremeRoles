@@ -295,7 +295,7 @@ namespace ExtremeSkins.SkinManager
             string zipPath,
             string installFolder)
         {
-            string extractPath = string.Concat(workingDir, "visor");
+            string extractPath = string.Concat(workingDir, "new_visor");
             ZipFile.ExtractToDirectory(zipPath, extractPath);
 
             byte[] byteVisorArray = File.ReadAllBytes(
