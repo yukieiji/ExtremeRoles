@@ -80,28 +80,28 @@ namespace ExtremeSkins.SkinManager
 
                 if (visorData == visorRepoData || visorData == visorTransData) { continue; }
 
-                string checkHatFolder = string.Concat(
+                string checkVisorFolder = string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
                     FolderPath, @"\", visorData);
 
-                if (!Directory.Exists(checkHatFolder)) { return true; }
+                if (!Directory.Exists(checkVisorFolder)) { return true; }
 
                 if (!File.Exists(string.Concat(
-                        checkHatFolder, @"\", LicenseFileName))) { return true; }
+                        checkVisorFolder, @"\", LicenseFileName))) { return true; }
 
                 if (!File.Exists(string.Concat(
-                        checkHatFolder, @"\", InfoFileName))) { return true; }
+                        checkVisorFolder, @"\", InfoFileName))) { return true; }
                 if (!File.Exists(string.Concat(
-                        checkHatFolder, @"\", CustomVisor.IdleName))) { return true; }
+                        checkVisorFolder, @"\", CustomVisor.IdleName))) { return true; }
 
                 byte[] byteArray = File.ReadAllBytes(
-                   string.Concat(checkHatFolder, @"\", InfoFileName));
+                   string.Concat(checkVisorFolder, @"\", InfoFileName));
                 string json = System.Text.Encoding.UTF8.GetString(byteArray);
                 JObject parseJson = JObject.Parse(json);
 
                 if (((bool)parseJson["IdleFlip"]) &&
                     !File.Exists(string.Concat(
-                        checkHatFolder, @"\", CustomVisor.FlipIdleName)))
+                        checkVisorFolder, @"\", CustomVisor.FlipIdleName)))
                 {
                     return true;
                 }
