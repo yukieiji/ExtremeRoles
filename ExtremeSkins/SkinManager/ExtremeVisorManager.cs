@@ -41,6 +41,8 @@ namespace ExtremeSkins.SkinManager
         private const string updateComitKey = "ExVUpdateComitHash";
         private const string jsonUpdateComitKey = "updateComitHash";
 
+        private const string leftIdleKey = "LeftIdle";
+
         public static void Initialize()
         {
             curUpdateHash = ExtremeSkinsPlugin.Instance.Config.Bind(
@@ -99,7 +101,7 @@ namespace ExtremeSkins.SkinManager
                 string json = System.Text.Encoding.UTF8.GetString(byteArray);
                 JObject parseJson = JObject.Parse(json);
 
-                if (((bool)parseJson["IdleFlip"]) &&
+                if (((bool)parseJson[leftIdleKey]) &&
                     !File.Exists(string.Concat(
                         checkVisorFolder, @"\", CustomVisor.FlipIdleName)))
                 {
@@ -154,7 +156,7 @@ namespace ExtremeSkins.SkinManager
                     visor,
                     parseJson["Author"].ToString(),  // Author
                     parseJson["Name"].ToString(),  // Name
-                    (bool)parseJson["LeftIdle"],
+                    (bool)parseJson[leftIdleKey],
                     (bool)parseJson["Shader"], // Shader
                     (bool)parseJson["BehindHat"]); // BehindHat
 
