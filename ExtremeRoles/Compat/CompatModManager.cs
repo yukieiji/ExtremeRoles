@@ -39,20 +39,29 @@ namespace ExtremeRoles.Compat
         internal CompatModManager()
         {
             RemoveMap();
+
+            ExtremeRolesPlugin.Logger.LogInfo(
+                $"---------- CompatModManager Initialize Start with AmongUs ver.{UnityEngine.Application.version} ----------");
+
             foreach (var (guid, modType, mod) in compatMod)
             {
                 PluginInfo plugin;
 
                 if (IL2CPPChainloader.Instance.Plugins.TryGetValue(guid, out plugin))
                 {
+                    ExtremeRolesPlugin.Logger.LogInfo(
+                        $"---- CompatMod:{guid} integrater Start!! ----");
                     this.LoadedMod.Add(
                         modType,
                         (CompatModBase)Activator.CreateInstance(
                             mod, new object[] { plugin }));
 
-                    Helper.Logging.Debug($"CompatMod:{guid} loaded!!");
+                    ExtremeRolesPlugin.Logger.LogInfo(
+                        $"---- CompatMod:{guid} integrated!! ----");
                 }
             }
+            ExtremeRolesPlugin.Logger.LogInfo(
+                $"---------- CompatModManager Initialize End!! ----------");
         }
 
         internal void SetUpMap(ShipStatus shipStatus)
