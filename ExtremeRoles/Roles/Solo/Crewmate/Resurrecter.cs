@@ -234,7 +234,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void Update(PlayerControl rolePlayer)
         {
-            
+
+            if (!rolePlayer.moveable || 
+                MeetingHud.Instance || 
+                ExileController.Instance)
+            { 
+                return; 
+            }
+
             if (rolePlayer.Data.IsDead && this.infoBlock())
             {
                 FastDestroyableSingleton<HudManager>.Instance.Chat.SetVisible(false);
@@ -270,10 +277,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             if (rolePlayer.Data.IsDead &&
                 this.activateResurrectTimer &&
-                this.canResurrect &&
-                rolePlayer.moveable &&
-                MeetingHud.Instance == null &&
-                ExileController.Instance == null)
+                this.canResurrect)
             {
                 if (this.resurrectText == null)
                 {
