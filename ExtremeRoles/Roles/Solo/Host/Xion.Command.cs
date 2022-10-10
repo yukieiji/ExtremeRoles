@@ -22,7 +22,7 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         public static void ParseCommand(string chatStr)
         {
-            if (chatStr[0] != commandStarChar) { return; }
+            if (chatStr[0] != commandStarChar && GameSystem.IsLobby) { return; }
 
             string[] args = chatStr.Substring(1).Split(" ");
             string commandBody = args[0];
