@@ -292,7 +292,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.CreateAbilityCountButton(
                 Translation.GetString("takePhoto"),
                 Loader.CreateSpriteFromResources(
-                    Path.AgencyTakeTask));
+                    Path.PhotographerPhotoCamera));
             this.Button.SetLabelToCrewmate();
         }
 

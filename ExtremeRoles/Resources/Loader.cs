@@ -34,6 +34,7 @@ namespace ExtremeRoles.Resources
 
         public const string MaintainerRepair = "ExtremeRoles.Resources.Repair.png";
         public const string BodyGuardShield = "ExtremeRoles.Resources.Shield.png";
+        public const string BodyGuardResetShield = "ExtremeRoles.Resources.ResetShield.png";
         public const string TimeMasterTimeShield = "ExtremeRoles.Resources.TimeShield.png";
         public const string AgencyTakeTask = "ExtremeRoles.Resources.TakeTask.png";
         public const string FencerCounter = "ExtremeRoles.Resources.Counter.png";
@@ -44,13 +45,16 @@ namespace ExtremeRoles.Resources
         public const string CarpenterVentSeal = "ExtremeRoles.Resources.VentSeal.png";
         public const string CaptainSpecialVote = "ExtremeRoles.Resources.SpecialVote.png";
         public const string CaptainSpecialVoteCheck = "ExtremeRoles.Resources.SpecialVoteCheck.png";
+        public const string PhotographerPhotoCamera = "ExtremeRoles.Resources.PhotoCamera.png";
 
         public const string EvolverEvolved = "ExtremeRoles.Resources.Evolved.png";
         public const string CarrierCarry = "ExtremeRoles.Resources.Carry.png";
-        public const string PainterPaint = "ExtremeRoles.Resources.Paint.png";
+        public const string PainterPaintRandom = "ExtremeRoles.Resources.PaintRandom.png";
+        public const string PainterPaintTrans = "ExtremeRoles.Resources.PaintTrans.png";
         public const string OverLoaderOverLoad = "ExtremeRoles.Resources.OverLoad.png";
         public const string OverLoaderDownLoad = "ExtremeRoles.Resources.DownLoad.png";
-        public const string FakerDummy = "ExtremeRoles.Resources.Dummy.png";
+        public const string FakerDummyDeadBody = "ExtremeRoles.Resources.DummyDeadBody.png";
+        public const string FakerDummyPlayer = "ExtremeRoles.Resources.DummyPlayer.png";
         public const string CrackerCrack = "ExtremeRoles.Resources.Crack.png";
         public const string CrackerCrackTrace = "ExtremeRoles.Resources.CrackTrace.png";
         public const string BomberSetBomb = "ExtremeRoles.Resources.SetBomb.png";
@@ -81,6 +85,11 @@ namespace ExtremeRoles.Resources
         public const string SucideSprite = "ExtremeRoles.Resources.Suicide.png";
         public const string UmbrerFeatVirus = "ExtremeRoles.Resources.FeatVirus.png";
         public const string UmbrerUpgradeVirus = "ExtremeRoles.Resources.UpgradeVirus.png";
+
+        public const string XionMapZoomIn = "ExtremeRoles.Resources.ZoomIn.png";
+        public const string XionMapZoomOut = "ExtremeRoles.Resources.ZoomOut.png";
+        public const string XionSpeedUp = "ExtremeRoles.Resources.SpeedUp.png";
+        public const string XionSpeedDown = "ExtremeRoles.Resources.SpeedDown.png";
 
         public const string TestButton = "ExtremeRoles.Resources.TESTBUTTON.png";
     }

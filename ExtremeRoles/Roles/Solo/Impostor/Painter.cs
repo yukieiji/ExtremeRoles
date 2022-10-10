@@ -82,9 +82,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
 
             this.randomColorPaintImage = Loader.CreateSpriteFromResources(
-                Path.PainterPaint);
+                Path.PainterPaintRandom);
             this.transColorPaintImage = Loader.CreateSpriteFromResources(
-                Path.TestButton);
+                Path.PainterPaintTrans);
 
             this.CreateNormalAbilityButton(
                 Translation.GetString("paint"),

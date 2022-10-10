@@ -191,7 +191,7 @@ namespace ExtremeRoles.Roles.Solo.Host
             this.funcButton.Add(
                 new NoneCoolTimeButton(
                     Loader.CreateSpriteFromResources(
-                        Path.TestButton),
+                        Path.XionMapZoomOut),
                     this.cameraZoomOut,
                     new Vector3(-1.8f, 1.0f, 0),
                     Helper.Translation.GetString("zoomOut")));
@@ -199,7 +199,7 @@ namespace ExtremeRoles.Roles.Solo.Host
             this.funcButton.Add(
                 new NoneCoolTimeButton(
                     Loader.CreateSpriteFromResources(
-                        Path.TestButton),
+                        Path.XionMapZoomIn),
                     this.cameraZoomIn,
                    new Vector3(-1.8f, -0.06f, 0),
                     Helper.Translation.GetString("zoomIn")));
@@ -208,14 +208,14 @@ namespace ExtremeRoles.Roles.Solo.Host
             this.funcButton.Add(
                 new NoneCoolTimeButton(
                     Loader.CreateSpriteFromResources(
-                        Path.TestButton),
+                        Path.XionSpeedUp),
                     this.RpcSpeedUp,
                     new Vector3(-2.7f, 1.0f, 0),
                     Helper.Translation.GetString("speedUp")));
             this.funcButton.Add(
                 new NoneCoolTimeButton(
                     Loader.CreateSpriteFromResources(
-                        Path.TestButton),
+                        Path.XionSpeedDown),
                     this.RpcSpeedDown,
                     new Vector3(-2.7f, -0.06f, 0),
                     Helper.Translation.GetString("speedDown")));

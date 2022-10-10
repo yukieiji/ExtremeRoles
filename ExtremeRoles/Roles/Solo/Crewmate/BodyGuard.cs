@@ -483,7 +483,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 IsResetMode,
                 this.shildButtonImage,
                 Loader.CreateSpriteFromResources(
-                    Path.TestButton),
+                    Path.BodyGuardResetShield),
                 new Vector3(-1.8f, -0.06f, 0),
                 null,
                 null,
