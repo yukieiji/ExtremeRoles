@@ -81,8 +81,8 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         }
 
         [HideFromIl2Cpp]
-        public IEnumerator<
-            (Vector3, bool, bool, bool)> GetAllHistory() => history.Reverse().GetEnumerator();
+        public IEnumerable<
+            (Vector3, bool, bool, bool)> GetAllHistory() => history.Reverse();
 
         public int GetSize() => this.size;
     }

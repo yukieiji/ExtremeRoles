@@ -101,7 +101,6 @@ namespace ExtremeRoles.Patches
         public static void Prefix([HarmonyArgument(0)] GameData.PlayerInfo target)
         {
             ExtremeRolesPlugin.Info.BlockShow(true);
-            PlayerControlFixedUpdatePatch.ResetPosionSetter();
 
             var state = ExtremeRolesPlugin.ShipState;
 
@@ -139,31 +138,11 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
     public static class PlayerControlFixedUpdatePatch
     {
-        public enum PostionSetType
-        {
-            None,
-            TimeMaster,
-        }
-
-        private static IEnumerator<(Vector3, bool, bool, bool)> enumerator;
-        private static PostionSetType type;
-
-        public static void SetNewPosionSetter(
-            IEnumerator<(Vector3, bool, bool, bool)> postionSetter,
-            PostionSetType setType)
-        {
-            enumerator = postionSetter;
-            type = setType;
-        }
-        public static void ResetPosionSetter()
-        {
-            enumerator = null;
-            type = PostionSetType.None;
-        }
 
         public static void Postfix(PlayerControl __instance)
         {
-            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) { return; }
+            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) 
+            { return; }
             if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
             if (CachedPlayerControl.LocalPlayer.PlayerId != __instance.PlayerId) { return; }
@@ -173,7 +152,6 @@ namespace ExtremeRoles.Patches
 
             buttonUpdate(__instance, role, ghostRole);
             refreshRoleDescription(__instance, role, ghostRole);
-            setPlayerPostion();
         }
 
         private static void refreshRoleDescription(
@@ -387,38 +365,6 @@ namespace ExtremeRoles.Patches
                         break;
                 }
                 playerGhostRole.Button.Update();
-            }
-        }
-
-        private static void setPlayerPostion()
-        {
-            if (enumerator == null) { return; }
-
-            if (enumerator.MoveNext())
-            {
-
-                var item = enumerator.Current;
-
-                switch (type)
-                {
-                    case PostionSetType.TimeMaster:
-                        Roles.Solo.Crewmate.TimeMaster.RewindPostion(item);
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else
-            {
-                switch (type)
-                {
-                    case PostionSetType.TimeMaster:
-                        Roles.Solo.Crewmate.TimeMaster.RewindCleanUp();
-                        break;
-                    default:
-                        break;
-                }
-                ResetPosionSetter();
             }
         }
     }
