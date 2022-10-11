@@ -88,7 +88,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.CreateAbilityCountButton(
                 Translation.GetString("deflectDamage"),
                 Loader.CreateSpriteFromResources(
-                    Path.AgencyTakeTask));
+                    Path.DelusionerDeflectDamage));
             this.Button.SetLabelToCrewmate();
 
             this.airShipSpawn = GameSystem.GetAirShipRandomSpawn();

@@ -52,6 +52,7 @@ namespace ExtremeRoles.Resources
         public const string CaptainSpecialVoteCheck = 
             "ExtremeRoles.Resources.SpecialVoteCheck.png";
         public const string PhotographerPhotoCamera = "ExtremeRoles.Resources.PhotoCamera.png";
+        public const string DelusionerDeflectDamage = "ExtremeRoles.Resources.PhotoCamera.png";
 
         public const string EvolverEvolved = "ExtremeRoles.Resources.Evolved.png";
         public const string CarrierCarry = "ExtremeRoles.Resources.Carry.png";
@@ -69,6 +70,7 @@ namespace ExtremeRoles.Resources
             "ExtremeRoles.Resources.MeryVentAnimation.{0}.png";
         public const string AssaultMasterReload = "ExtremeRoles.Resources.Reload.png";
         public const string LastWolfLightOff = "ExtremeRoles.Resources.LightOff.png";
+        public const string HypnotistHypnosis = "ExtremeRoles.Resources.Hypnosis.png";
         public const string CommanderAttackCommand = 
             "ExtremeRoles.Resources.AttackCommand.png";
         public const string HypnotistRedAbilityPart =
@@ -77,7 +79,6 @@ namespace ExtremeRoles.Resources
             "ExtremeRoles.Resources.BlueAbilityPart.png";
         public const string HypnotistGrayAbilityPart =
             "ExtremeRoles.Resources.GrayAbilityPart.png";
-
 
         public const string VigilanteEmergencyCall = 
             "ExtremeRoles.Resources.EmergencyCall.png";

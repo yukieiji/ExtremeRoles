@@ -287,7 +287,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.CreateAbilityCountButton(
                 Translation.GetString("Hypnosis"),
                 Resources.Loader.CreateSpriteFromResources(
-                   Resources.Path.LastWolfLightOff));
+                   Resources.Path.HypnotistHypnosis));
 
             this.position = JsonParser.GetJObjectFromAssembly(postionJson);
         }
