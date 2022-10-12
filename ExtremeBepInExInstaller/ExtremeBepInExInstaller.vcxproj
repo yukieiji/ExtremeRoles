@@ -101,6 +101,9 @@
     <PostBuildEvent>
       <Command>xcopy $(TargetPath) "$(SolutionDir)ExtremeRoles\Resources\Installer" /y</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if not exist "$(SolutionDir)ExtremeRoles\Resources\Installer" mkdir "$(SolutionDir)ExtremeRoles\Resources\Installer"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -121,6 +124,9 @@
     <PostBuildEvent>
       <Command>xcopy $(TargetPath) "$(SolutionDir)ExtremeRoles\Resources\Installer" /y</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if not exist "$(SolutionDir)ExtremeRoles\Resources\Installer" mkdir "$(SolutionDir)ExtremeRoles\Resources\Installer"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -137,6 +143,9 @@
     <PostBuildEvent>
       <Command>xcopy $(TargetPath) "$(SolutionDir)ExtremeRoles\Resources\Installer" /y</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if not exist "$(SolutionDir)ExtremeRoles\Resources\Installer" mkdir "$(SolutionDir)ExtremeRoles\Resources\Installer"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -157,6 +166,9 @@
     <PostBuildEvent>
       <Command>xcopy $(TargetPath) "$(SolutionDir)ExtremeRoles\Resources\Installer" /y</Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if not exist "$(SolutionDir)ExtremeRoles\Resources\Installer" mkdir "$(SolutionDir)ExtremeRoles\Resources\Installer"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
