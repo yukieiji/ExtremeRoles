@@ -277,6 +277,12 @@ namespace ExtremeRoles.Roles.Solo.Host
             }
             int intedRoleId = (int)roleId;
 
+            if (!ExtremeRoleManager.NormalRole.ContainsKey(intedRoleId))
+            {
+                addChat(Translation.GetString("invalidRoleName"));
+                return;
+            }
+
             MessageWriter writer = createWriter(XionRpcOpsCode.RepcalePlayerRole);
             writer.Write(targetPlayerId);
             writer.WritePacked(intedRoleId);
