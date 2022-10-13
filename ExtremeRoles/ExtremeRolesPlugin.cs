@@ -61,7 +61,7 @@ namespace ExtremeRoles
 
             Il2CppRegisterAttribute.Registration(
                 System.Reflection.Assembly.GetAssembly(this.GetType()));
-        
+
         }
     }
 }
