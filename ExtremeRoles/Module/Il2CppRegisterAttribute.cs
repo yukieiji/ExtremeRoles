@@ -8,6 +8,17 @@ namespace ExtremeRoles.Module
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class Il2CppRegisterAttribute : Attribute
     {
+		public Type[] Interfaces { get; private set; }
+
+		public Il2CppRegisterAttribute()
+		{
+			this.Interfaces = Type.EmptyTypes;
+		}
+
+		public Il2CppRegisterAttribute(params Type[] interfaces)
+		{
+			this.Interfaces = interfaces;
+		}
 
 		public static void Registration(Assembly dll)
         {
@@ -20,7 +31,7 @@ namespace ExtremeRoles.Module
 					CustomAttributeExtensions.GetCustomAttribute<Il2CppRegisterAttribute>(type);
 				if (attribute != null)
 				{
-					registrationForTarget(type);
+					registrationForTarget(type, attribute.Interfaces);
 				}
 			}
 
@@ -29,7 +40,8 @@ namespace ExtremeRoles.Module
 
 		}
 
-		private static void registrationForTarget(Type targetType)
+		private static void registrationForTarget(
+			Type targetType, Type[] interfaces)
         {
 			Type targetBase = targetType.BaseType;
 
@@ -40,7 +52,7 @@ namespace ExtremeRoles.Module
 			
 			if (baseAttribute != null)
             {
-				registrationForTarget(targetType);
+				registrationForTarget(targetBase, baseAttribute.Interfaces);
             }
 
 			ExtremeRolesPlugin.Logger.LogInfo(
@@ -50,7 +62,13 @@ namespace ExtremeRoles.Module
 
 			try
             {
-				ClassInjector.RegisterTypeInIl2Cpp(targetType);
+				ClassInjector.RegisterTypeInIl2Cpp(
+					targetType, new RegisterTypeOptions
+					{
+						Interfaces = interfaces,
+						LogSuccess = true
+					}
+				);
 			}
 			catch (Exception e)
             {

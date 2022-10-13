@@ -155,9 +155,22 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(KeyboardJoystick), nameof(KeyboardJoystick.Update))]
     public static class KeyboardJoystickPatch
     {
-        public static void Postfix(KeyboardJoystick __instance)
+        private static Module.IOption UseXionOption => OptionHolder.AllOption[
+            (int)OptionHolder.CommonOptionKey.UseXion];
+
+        private static Module.IOption EngineerVentOption => OptionHolder.AllOption[
+            (int)OptionHolder.CommonOptionKey.EngineerUseImpostorVent];
+
+        public static void Postfix()
         {
-            if (AmongUsClient.Instance == null || CachedPlayerControl.LocalPlayer == null) { return; }
+            if (AmongUsClient.Instance == null || CachedPlayerControl.LocalPlayer == null) 
+            { return; }
+
+            if (UseXionOption.GetValue() && 
+                !ExtremeRolesPlugin.DebugMode.Value)
+            {
+                Roles.Solo.Host.Xion.SpecialKeyShortCut();
+            }
 
             if (Input.GetKeyDown(KeyCode.F8))
             {
@@ -210,37 +223,40 @@ namespace ExtremeRoles.Patches
                 ExtremeRolesPlugin.Info.ChangePage(-1);
             }
 
-
+           
             // キルとベントボタン
-            if (CachedPlayerControl.LocalPlayer.Data != null &&
-                CachedPlayerControl.LocalPlayer.Data.Role != null &&
-                ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd)
+            if (CachedPlayerControl.LocalPlayer.Data == null ||
+                CachedPlayerControl.LocalPlayer.Data.Role == null ||
+                !ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
+
+            var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
+
+            if (role.IsImpostor()) { return; }
+
+            var player = KeyboardJoystick.player;
+            var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+
+            if (player.GetButtonDown(8) && role.CanKill())
             {
-
-                var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
-
-                if (role.CanKill() && KeyboardJoystick.player.GetButtonDown(8))
-                {
-                    FastDestroyableSingleton<HudManager>.Instance.KillButton.DoClick();
-                }
-                if (role.CanUseVent() && KeyboardJoystick.player.GetButtonDown(50))
-                {
-                    if(role.IsVanillaRole())
-                    {
-                        if (!(((Roles.Solo.VanillaRoleWrapper)role).VanilaRoleId == RoleTypes.Engineer) ||
-                            OptionHolder.AllOption[
-                                (int)OptionHolder.CommonOptionKey.EngineerUseImpostorVent].GetValue())
-                        {
-                            FastDestroyableSingleton<HudManager>.Instance.ImpostorVentButton.DoClick();
-                        }
-                    }
-                    else
-                    {
-                        FastDestroyableSingleton<HudManager>.Instance.ImpostorVentButton.DoClick();
-                    }
-                }
+                hudManager.KillButton.DoClick();
             }
 
+            if (player.GetButtonDown(50) && role.CanUseVent())
+            {
+                if (role.IsVanillaRole())
+                {
+                    if (!(((Roles.Solo.VanillaRoleWrapper)role).VanilaRoleId ==
+                            RoleTypes.Engineer) ||
+                        EngineerVentOption.GetValue())
+                    {
+                        hudManager.ImpostorVentButton.DoClick();
+                    }
+                }
+                else
+                {
+                    hudManager.ImpostorVentButton.DoClick();
+                }
+            }
         }
     }
 }

@@ -14,7 +14,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public sealed class SlaveDriver : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IRoleMurderPlayerHock
+    public sealed class SlaveDriver : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IRoleMurderPlayerHook
     {
   
         private List<(byte, List<int>)> specialAttackResult;
@@ -241,7 +241,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.specialAttackResult = new List<(byte, List<int>)>();
         }
 
-        public void HockMuderPlayer(PlayerControl source, PlayerControl target)
+        public void HookMuderPlayer(PlayerControl source, PlayerControl target)
         {
             if (source.PlayerId == this.rolePlayerId &&
                 target.PlayerId == this.specialAttackPlayerId)

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ExtremeRoles.Compat.Interface
 {
-	public enum SystemConsoleType
+	public enum SystemConsoleType : byte
 	{
 		Admin,
 		SecurityCamera,
@@ -44,6 +44,7 @@ namespace ExtremeRoles.Compat.Interface
 		public Console GetConsole(TaskTypes task);
 		public HashSet<string> GetSystemObjectName(SystemConsoleType sysConsole);
 		public SystemConsole GetSystemConsole(SystemConsoleType sysConsole);
+		public List<Vector2> GetSpawnPos(byte playerId);
 		public void AddCustomComponent(
 			GameObject addObject, CustomMonoBehaviourType customMonoType);
 

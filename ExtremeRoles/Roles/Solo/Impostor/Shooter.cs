@@ -8,7 +8,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public sealed class Shooter : SingleRoleBase, IRoleMeetingButtonAbility, IRoleReportHock, IRoleResetMeeting, IRoleUpdate
+    public sealed class Shooter : SingleRoleBase, IRoleMeetingButtonAbility, IRoleReportHook, IRoleResetMeeting, IRoleUpdate
     {
         public enum ShooterOption
         {
@@ -85,21 +85,37 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 if (instance.AmDead) { return; }
                 Shoot();
+                PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+
+                if (Crewmate.BodyGuard.TryGetShiledPlayerId(
+                    target, out byte bodyGuard) &&
+                    Crewmate.BodyGuard.RpcTryKillBodyGuard(
+                        localPlayer.PlayerId, bodyGuard))
+                {
+                    rpcPlayKillSound();
+                    return;
+                }
+
                 RPCOperator.Call(
-                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                    localPlayer.NetId,
                     RPCOperator.Command.UncheckedMurderPlayer,
-                    new List<byte> { CachedPlayerControl.LocalPlayer.PlayerId, target, 0 });
+                    new List<byte> { localPlayer.PlayerId, target, 0 });
                 RPCOperator.UncheckedMurderPlayer(
-                    CachedPlayerControl.LocalPlayer.PlayerId,
+                   localPlayer.PlayerId,
                     target, 0);
-                RPCOperator.Call(
-                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                    RPCOperator.Command.PlaySound,
-                    new List<byte> { (byte)RPCOperator.SoundType.Kill });
-                RPCOperator.PlaySound((byte)RPCOperator.SoundType.Kill);
+                rpcPlayKillSound();
             }
 
             return shooterKill;
+        }
+
+        private static void rpcPlayKillSound()
+        {
+            RPCOperator.Call(
+                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                RPCOperator.Command.PlaySound,
+                new List<byte> { (byte)RPCOperator.SoundType.Kill });
+            RPCOperator.PlaySound((byte)RPCOperator.SoundType.Kill);
         }
 
         public void SetSprite(SpriteRenderer render)
@@ -108,7 +124,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             render.transform.localScale *= new Vector2(0.75f, 0.75f);
         }
 
-        public void HockReportButton(
+        public void HookReportButton(
             PlayerControl rolePlayer, GameData.PlayerInfo reporter)
         {
             this.canShootThisMeeting = true;
@@ -118,7 +134,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        public void HockBodyReport(
+        public void HookBodyReport(
             PlayerControl rolePlayer, GameData.PlayerInfo reporter, GameData.PlayerInfo reportBody)
         {
             this.canShootThisMeeting = true;

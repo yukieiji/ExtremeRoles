@@ -41,13 +41,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         protected override void RoleSpecificInit()
         {
-            ExtremeRolesPlugin.GameDataStore.Union.SetCookingCondition(
-                OptionHolder.AllOption[
-                    GetRoleOptionId(BakaryOption.GoodBakeTime)].GetValue(),
-                OptionHolder.AllOption[
-                    GetRoleOptionId(BakaryOption.BadBakeTime)].GetValue(),
-                OptionHolder.AllOption[
-                    GetRoleOptionId(BakaryOption.ChangeCooking)].GetValue());
+            ExtremeRolesPlugin.ShipState.AddGlobalActionRole(this);
         }
     }
 }

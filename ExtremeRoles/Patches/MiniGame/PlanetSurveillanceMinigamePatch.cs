@@ -13,7 +13,8 @@ namespace ExtremeRoles.Patches.MiniGame
             [HarmonyArgument(0)] int direction)
         {
             if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
-            if (Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity()) { return true; }
+            if (Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity() ||
+                SecurityHelper.IsAbilityUse()) { return true; }
 
             if (direction != 0 && Constants.ShouldPlaySfx())
             {
@@ -30,6 +31,11 @@ namespace ExtremeRoles.Patches.MiniGame
                 (survCamera.NewName > StringNames.ExitButton) ? 
                     FastDestroyableSingleton<TranslationController>.Instance.GetString(
                         survCamera.NewName, Array.Empty<Il2CppSystem.Object>()) : survCamera.CamName);
+
+            if (!PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(PlayerControl.LocalPlayer))
+            {
+                __instance.StartCoroutine(__instance.PulseStatic());
+            }
 
             return false;
         }

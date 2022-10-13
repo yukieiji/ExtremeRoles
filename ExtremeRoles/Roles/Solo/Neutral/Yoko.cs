@@ -16,7 +16,11 @@ using BepInEx.IL2CPP.Utils.Collections;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public sealed class Yoko : SingleRoleBase, IRoleUpdate, IRoleResetMeeting, IRoleWinPlayerModifier
+    public sealed class Yoko : 
+        SingleRoleBase, 
+        IRoleUpdate, 
+        IRoleResetMeeting, 
+        IRoleWinPlayerModifier
     {
         public enum YokoOption
         {
@@ -72,7 +76,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     pulsWinner.Clear();
                     winner.Clear();
                     winner.Add(new WinningPlayerData(rolePlayerInfo));
-                    ExtremeRolesPlugin.GameDataStore.EndReason = (GameOverReason)RoleGameOverReason.YokoAllDeceive;
+                    ExtremeRolesPlugin.ShipState.SetGameOverReason(
+                        (GameOverReason)RoleGameOverReason.YokoAllDeceive);
                     break;
             }
         }
@@ -137,7 +142,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             
             if (!CachedShipStatus.Instance.enabled ||
                 MeetingHud.Instance != null ||
-                ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
+                ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
 
             if (Minigame.Instance) { return; }
 

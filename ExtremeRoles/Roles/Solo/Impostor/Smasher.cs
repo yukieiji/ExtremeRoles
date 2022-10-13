@@ -96,23 +96,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 }
             }
 
-
-            var bodyGuard = ExtremeRolesPlugin.GameDataStore.ShildPlayer.GetBodyGuardPlayerId(
-                prevTarget.PlayerId);
-
             PlayerControl newTarget = prevTarget;
 
-            if (bodyGuard != byte.MaxValue)
+            if (Crewmate.BodyGuard.TryGetShiledPlayerId(
+                    prevTarget.PlayerId, out byte bodyGuard) &&
+                Crewmate.BodyGuard.RpcTryKillBodyGuard(
+                    killer.PlayerId, bodyGuard))
             {
-                newTarget = Player.GetPlayerControlById(bodyGuard);
-                if (newTarget == null)
-                {
-                    newTarget = prevTarget;
-                }
-                else if (newTarget.Data.IsDead || newTarget.Data.Disconnected)
-                {
-                    newTarget = prevTarget;
-                }
+                featKillPenalty(killer);
+                return true;
             }
 
             byte useAnimation = byte.MaxValue;
@@ -133,6 +125,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 newTarget.PlayerId,
                 useAnimation);
 
+            featKillPenalty(killer);
+            return true;
+        }
+
+        private void featKillPenalty(PlayerControl killer)
+        {
             if (this.penaltyKillCool > 0.0f)
             {
                 if (!this.HasOtherKillCool)
@@ -144,8 +142,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
 
             killer.killTimer = this.prevKillCool;
-
-            return true;
         }
 
         protected override void CreateSpecificOption(

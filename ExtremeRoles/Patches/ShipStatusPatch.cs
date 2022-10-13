@@ -4,12 +4,11 @@ using System.Runtime.CompilerServices;
 using Hazel;
 using HarmonyLib;
 using UnityEngine;
-
-using ExtremeRoles.Module;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.ExtremeShipStatus;
 
 namespace ExtremeRoles.Patches
 {
@@ -32,9 +31,9 @@ namespace ExtremeRoles.Patches
             ShipStatus __instance,
             [HarmonyArgument(0)] GameData.PlayerInfo playerInfo)
         {
-            switch (ExtremeRolesPlugin.GameDataStore.CurVison)
+            switch (ExtremeRolesPlugin.ShipState.CurVison)
             {
-                case GameDataContainer.ForceVisionType.LastWolfLightOff:
+                case ExtremeShipStatus.ForceVisonType.LastWolfLightOff:
                     if (ExtremeRoleManager.GetSafeCastedLocalPlayerRole<
                         Roles.Solo.Impostor.LastWolf>() == null)
                     {
@@ -46,7 +45,7 @@ namespace ExtremeRoles.Patches
                     break;
             }
 
-            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd)
+            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd)
             {
                 return checkNormalOrCustomCalculateLightRadius(playerInfo, ref __result);
             }
@@ -170,10 +169,10 @@ namespace ExtremeRoles.Patches
             if (DestroyableSingleton<TutorialManager>.InstanceExists) { return true; } // InstanceExists | Don't check Custom Criteria when in Tutorial
             if (FastDestroyableSingleton<HudManager>.Instance.IsIntroDisplayed){ return false; }
 
-            if (ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger ||
-                ExtremeRolesPlugin.GameDataStore.WinCheckDisable) { return false; }
+            if (ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger ||
+                ExtremeRolesPlugin.ShipState.IsDisableWinCheck) { return false; }
 
-            var statistics = ExtremeRolesPlugin.GameDataStore.CreateStatistics();
+            var statistics = ExtremeRolesPlugin.ShipState.CreateStatistics();
 
 
             if (isImpostorSpecialWin(__instance)) { return false; }
@@ -206,7 +205,7 @@ namespace ExtremeRoles.Patches
 
         private static bool isCrewmateWin(
             ShipStatus __instance,
-            GameDataContainer.PlayerStatistics statistics)
+            ExtremeShipStatus.PlayerStatistics statistics)
         {
             if (statistics.TeamCrewmateAlive > 0 && 
                 statistics.TeamImpostorAlive == 0 && 
@@ -220,7 +219,7 @@ namespace ExtremeRoles.Patches
 
         private static bool isImpostorWin(
             ShipStatus __instance,
-            GameDataContainer.PlayerStatistics statistics)
+            ExtremeShipStatus.PlayerStatistics statistics)
         {
             bool isGameEnd = false;
             GameOverReason endReason = GameOverReason.HumansDisconnect;
@@ -255,7 +254,7 @@ namespace ExtremeRoles.Patches
         private static bool isImpostorSpecialWin(
             ShipStatus __instance)
         {
-            if (ExtremeRolesPlugin.GameDataStore.AssassinateMarin)
+            if (ExtremeRolesPlugin.ShipState.IsAssassinateMarin)
             {
                 gameIsEnd(
                     ref __instance,
@@ -269,7 +268,7 @@ namespace ExtremeRoles.Patches
 
         private static bool isNeutralAliveWin(
             ShipStatus __instance,
-            GameDataContainer.PlayerStatistics statistics)
+            ExtremeShipStatus.PlayerStatistics statistics)
         {
             if (statistics.SeparatedNeutralAlive.Count != 1) { return false; }
 
@@ -401,7 +400,7 @@ namespace ExtremeRoles.Patches
 
         private static bool isSpecialRoleWin(
             ShipStatus __instance,
-            GameDataContainer.PlayerStatistics statistics)
+            ExtremeShipStatus.PlayerStatistics statistics)
         {
             if (statistics.SpecialWinCheckRoleAlive.Count == 0) { return false; }
             foreach (var(id, checker) in statistics.SpecialWinCheckRoleAlive)

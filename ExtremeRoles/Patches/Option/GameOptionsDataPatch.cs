@@ -47,6 +47,12 @@ namespace ExtremeRoles.Patches.Option
 
             allOptionStr.Add(createRoleSpawnNumOptions());
 
+            allOptionStr.Add(
+                Design.ColoedString(
+                    ColorPalette.XionBlue,
+                    CustomOption.OptionToString(
+                        allOption[(int)OptionHolder.CommonOptionKey.UseXion])));
+
             StringBuilder modOptionStrBuilder = new StringBuilder();
 
             foreach (OptionHolder.CommonOptionKey id in Enum.GetValues(typeof(OptionHolder.CommonOptionKey)))
@@ -68,6 +74,7 @@ namespace ExtremeRoles.Patches.Option
                     case OptionHolder.CommonOptionKey.MaxNeutralGhostRoles:
                     case OptionHolder.CommonOptionKey.MinImpostorGhostRoles:
                     case OptionHolder.CommonOptionKey.MaxImpostorGhostRoles:
+                    case OptionHolder.CommonOptionKey.UseXion:
                         continue;
                     default:
                         break;

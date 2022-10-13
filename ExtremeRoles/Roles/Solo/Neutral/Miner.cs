@@ -10,6 +10,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Module.AbilityButton.Roles;
+using ExtremeRoles.Module.ExtremeShipStatus;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
@@ -101,7 +102,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (CachedShipStatus.Instance == null ||
                 GameData.Instance == null) { return; }
             if (!CachedShipStatus.Instance.enabled ||
-                ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
+                ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
             if (MeetingHud.Instance || ExileController.Instance)
             {
                 this.timer = this.nonActiveTime;
@@ -178,16 +179,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 RPCOperator.UncheckedMurderPlayer(
                     rolePlayer.PlayerId, player, 0);
 
-                RPCOperator.Call(
-                    rolePlayer.NetId,
-                    RPCOperator.Command.ReplaceDeadReason,
-                    new List<byte>
-                    {
-                        player,
-                        (byte)GameDataContainer.PlayerStatus.Explosion
-                    });
-                ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
-                    player, GameDataContainer.PlayerStatus.Explosion);
+                ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
+                    player, ExtremeShipStatus.PlayerStatus.Explosion);
 
                 if (this.isShowKillLog)
                 {

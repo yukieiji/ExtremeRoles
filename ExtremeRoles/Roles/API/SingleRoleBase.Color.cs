@@ -16,6 +16,11 @@ namespace ExtremeRoles.Roles.API
             SingleRoleBase targetRole,
             byte targetPlayerId)
         {
+            if (targetRole.Id == ExtremeRoleId.Xion)
+            { 
+                return Module.ColorPalette.XionBlue; 
+            }
+
             Solo.Impostor.OverLoader overLoader = targetRole as Solo.Impostor.OverLoader;
 
             if (overLoader != null)

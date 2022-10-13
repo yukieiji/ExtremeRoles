@@ -26,9 +26,11 @@ namespace ExtremeRoles.Patches.MiniGame
             // Handle max number of meetings
             if (__instance.state == 1)
             {
-                int localRemaining = CachedPlayerControl.LocalPlayer.PlayerControl.RemainingEmergencies;
+                int localRemaining = 
+                    CachedPlayerControl.LocalPlayer.PlayerControl.RemainingEmergencies;
                 int teamRemaining = Mathf.Max(
-                    0, OptionHolder.Ship.MaxNumberOfMeeting - ExtremeRolesPlugin.GameDataStore.MeetingsCount);
+                    0, OptionHolder.Ship.MaxNumberOfMeeting -
+                        ExtremeRolesPlugin.ShipState.MeetingCount);
                 int remaining = Mathf.Min(localRemaining, teamRemaining);
 
                 __instance.StatusText.text = string.Concat(

@@ -60,7 +60,7 @@ namespace ExtremeRoles.Roles.API
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected  FloatCustomOption CreateFloatOption<T>(
+        protected FloatCustomOption CreateFloatOption<T>(
             T option,
             float defaultValue,
             float min, float max, float step,

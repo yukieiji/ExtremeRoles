@@ -6,6 +6,8 @@ namespace ExtremeSkins.Module
 #if WITHVISOR
     public sealed class CustomVisor : ICustomCosmicData<VisorData>
     {
+        public const string IdleName = "idle.png";
+        public const string FlipIdleName = "flip_idle.png";
 
         public VisorData Data
         {
@@ -23,26 +25,34 @@ namespace ExtremeSkins.Module
 
         public string Id
         {
-            get => this.id;
+            get => $"visor_{this.name}";
         }
 
         private VisorData visor;
 
-        private string id;
         private string name;
         private string author;
-        private string imgPath;
+        private string folderPath;
+
+        private bool isBehindHat;
+        private bool hasShader;
+        private bool hasLeftImg;
 
         public CustomVisor(
-            string id,
-            string imgPath,
+            string folderPath,
             string author,
-            string name)
+            string name,
+            bool hasLeftImg,
+            bool hasShader,
+            bool isBehindHat)
         {
-            this.id = id;
-            this.imgPath = imgPath;
+            this.folderPath = folderPath;
             this.author = author;
             this.name = name;
+
+            this.isBehindHat = isBehindHat;
+            this.hasLeftImg = hasLeftImg;
+            this.hasShader = hasShader;
         }
 
         public VisorData GetData()
@@ -52,14 +62,30 @@ namespace ExtremeSkins.Module
             this.visor = ScriptableObject.CreateInstance<VisorData>();
             this.visor.name = Helper.Translation.GetString(this.Name);
             this.visor.displayOrder = 99;
-            this.visor.ProductId = this.id;
+            this.visor.ProductId = this.Id;
             this.visor.ChipOffset = new Vector2(0f, 0.2f);
             this.visor.Free = true;
             this.visor.NotInStore = true;
 
             // 256×144の画像
             this.visor.viewData.viewData = ScriptableObject.CreateInstance<VisorViewData>();
-            this.visor.viewData.viewData.IdleFrame = loadVisorSprite(this.imgPath);
+            this.visor.viewData.viewData.IdleFrame = loadVisorSprite(
+                string.Concat(this.folderPath, @"\", IdleName));
+
+            if (this.hasLeftImg)
+            {
+                this.visor.viewData.viewData.LeftIdleFrame = loadVisorSprite(
+                    string.Concat(this.folderPath, @"\", FlipIdleName));
+            }
+            if (this.hasShader)
+            {
+                Material altShader = new Material("PlayerMaterial");
+                altShader.shader = Shader.Find("Unlit/PlayerShader");
+
+                this.visor.viewData.viewData.AltShader = altShader;
+            }
+
+            this.visor.viewData.viewData.BehindHats = this.isBehindHat;
 
             return this.visor;
 

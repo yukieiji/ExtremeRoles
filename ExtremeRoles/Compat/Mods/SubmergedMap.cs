@@ -179,6 +179,23 @@ namespace ExtremeRoles.Compat.Mods
                     return null;
             }
         }
+
+        public List<Vector2> GetSpawnPos(byte playerId)
+        {
+            ShipStatus ship = CachedShipStatus.Instance;
+            Vector2 baseVec = Vector2.up;
+            baseVec = baseVec.Rotate(
+                (float)(playerId - 1) * (360f / (float)GameData.Instance.AllPlayers.Count));
+            Vector2 defaultSpawn = ship.InitialSpawnCenter + 
+                baseVec * ship.SpawnRadius + new Vector2(0f, 0.3636f);
+
+            List<Vector2> spawnPos = new List<Vector2>();
+            spawnPos.Add(defaultSpawn);
+            spawnPos.Add(defaultSpawn + new Vector2(0.0f, 48.119f));
+
+            return spawnPos;
+        }
+
         public HashSet<string> GetSystemObjectName(SystemConsoleType sysConsole)
         {
             switch (sysConsole)

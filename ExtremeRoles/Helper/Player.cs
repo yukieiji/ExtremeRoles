@@ -13,6 +13,7 @@ namespace ExtremeRoles.Helper
 
         public static void ResetTarget()
         {
+            resetPlayerOutLine();
             prevTarget = null;
         }
 
@@ -24,7 +25,7 @@ namespace ExtremeRoles.Helper
                     !(MapBehaviour.Instance && MapBehaviour.Instance.IsOpen) &&
                     !MeetingHud.Instance &&
                     !ExileController.Instance &&
-                    !ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger);
+                    !ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger);
             }
         }
 
@@ -69,6 +70,8 @@ namespace ExtremeRoles.Helper
 
             List<PlayerControl> allPlayer = GetAllPlayerInRange(
                 sourcePlayer, role, range);
+
+            resetPlayerOutLine();
 
             if (allPlayer.Count <= 0) { return null; }
 
@@ -195,12 +198,7 @@ namespace ExtremeRoles.Helper
 
         public static void SetPlayerOutLine(PlayerControl target, Color color)
         {
-            if (prevTarget != null &&
-                prevTarget.cosmetics.currentBodySprite.BodySprite != null)
-            {
-                prevTarget.cosmetics.currentBodySprite.BodySprite.material.SetFloat("_Outline", 0f);
-            }
-
+            
             if (target == null || target.cosmetics.currentBodySprite.BodySprite == null) { return; }
 
             target.cosmetics.currentBodySprite.BodySprite.material.SetFloat("_Outline", 1f);
@@ -234,5 +232,13 @@ namespace ExtremeRoles.Helper
 
         }
 
+        private static void resetPlayerOutLine()
+        {
+            if (prevTarget != null &&
+                prevTarget.cosmetics.currentBodySprite.BodySprite != null)
+            {
+                prevTarget.cosmetics.currentBodySprite.BodySprite.material.SetFloat("_Outline", 0f);
+            }
+        }
     }
 }

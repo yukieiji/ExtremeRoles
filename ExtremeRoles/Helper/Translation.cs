@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
 using System.Text.RegularExpressions;
 
 using Newtonsoft.Json.Linq;
-
 
 namespace ExtremeRoles.Helper
 {
@@ -13,46 +10,39 @@ namespace ExtremeRoles.Helper
         private static uint defaultLanguage = (uint)SupportedLangs.English;
         private static Dictionary<string, Dictionary<uint, string>> stringData = new Dictionary<string, Dictionary<uint, string>>();
 
-        private const string dataPath = "ExtremeRoles.Resources.LangData.stringData.json";
+        private const string dataPath = "ExtremeRoles.Resources.JsonData.Language.json";
 
         public static void Load()
         {
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            Stream stream = assembly.GetManifestResourceStream(dataPath);
-            var byteArray = new byte[stream.Length];
-            stream.Read(byteArray, 0, (int)stream.Length);
-            string json = System.Text.Encoding.UTF8.GetString(byteArray);
-
             stringData.Clear();
-            JObject parsed = JObject.Parse(json);
+            JObject parsed = JsonParser.GetJObjectFromAssembly(dataPath);
 
             uint lastLang = (uint)SupportedLangs.Irish;
 
             for (int i = 0; i < parsed.Count; i++)
             {
-                JProperty token = parsed.ChildrenTokens[i].TryCast<JProperty>();
-                if (token == null) { continue; }
+                JProperty prop = parsed.ChildrenTokens[i].TryCast<JProperty>();
 
-                string stringName = token.Name;
-                var val = token.Value.TryCast<JObject>();
+                if (prop == null || !prop.HasValues) { continue; }
 
-                if (token.HasValues)
+                string stringName = prop.Name;
+                JObject val = prop.Value.TryCast<JObject>();
+
+                var strings = new Dictionary<uint, string>();
+
+                for (uint j = 0; j <= lastLang; j++)
                 {
-                    var strings = new Dictionary<uint, string>();
-
-                    for (uint j = 0; j <= lastLang; j++)
+                    if (val.TryGetValue(j.ToString(), out JToken token))
                     {
-                        string key = j.ToString();
-                        var text = val[key]?.TryCast<JValue>().Value.ToString();
-
-                        if (text != null && text.Length > 0)
+                        string text = token.TryCast<JValue>().Value.ToString();
+                        if (text.Length > 0)
                         {
-                            strings.Add(j,text);
+                            strings.Add(j, text);
                         }
                     }
-
-                    stringData.Add(stringName, strings);
                 }
+
+                stringData.Add(stringName, strings);
             }
         }
 

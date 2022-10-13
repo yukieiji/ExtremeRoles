@@ -25,42 +25,63 @@ namespace ExtremeRoles.Resources
         public const string TabCrewmate = "ExtremeRoles.Resources.TabCrewmateSetting.png";
         public const string TabImpostor = "ExtremeRoles.Resources.TabImpostorSetting.png";
         public const string TabNeutral = "ExtremeRoles.Resources.TabNeutralSetting.png";
-        public const string TabCombination = "ExtremeRoles.Resources.TabCombinationSetting.png";
-        public const string TabGhostCrewmate = "ExtremeRoles.Resources.TabGhostCrewmateSetting.png";
-        public const string TabGhostImpostor = "ExtremeRoles.Resources.TabGhostImpostorSetting.png";
-        public const string TabGhostNeutral = "ExtremeRoles.Resources.TabGhostNeutralSetting.png";
+        public const string TabCombination = 
+            "ExtremeRoles.Resources.TabCombinationSetting.png";
+        public const string TabGhostCrewmate = 
+            "ExtremeRoles.Resources.TabGhostCrewmateSetting.png";
+        public const string TabGhostImpostor = 
+            "ExtremeRoles.Resources.TabGhostImpostorSetting.png";
+        public const string TabGhostNeutral = 
+            "ExtremeRoles.Resources.TabGhostNeutralSetting.png";
 
         public const string HiroAcaSearch = "ExtremeRoles.Resources.Search.png";
 
         public const string MaintainerRepair = "ExtremeRoles.Resources.Repair.png";
         public const string BodyGuardShield = "ExtremeRoles.Resources.Shield.png";
+        public const string BodyGuardResetShield = "ExtremeRoles.Resources.ResetShield.png";
         public const string TimeMasterTimeShield = "ExtremeRoles.Resources.TimeShield.png";
         public const string AgencyTakeTask = "ExtremeRoles.Resources.TakeTask.png";
         public const string FencerCounter = "ExtremeRoles.Resources.Counter.png";
         public const string CurseMakerCurse = "ExtremeRoles.Resources.Curse.png";
         public const string OpenerOpenDoor = "ExtremeRoles.Resources.OpenDoor.png";
-        public const string DetectiveApprenticeEmergencyMeeting = "ExtremeRoles.Resources.EmergencyMeeting.png";
+        public const string DetectiveApprenticeEmergencyMeeting = 
+            "ExtremeRoles.Resources.EmergencyMeeting.png";
         public const string CarpenterSetCamera = "ExtremeRoles.Resources.SetCamera.png";
         public const string CarpenterVentSeal = "ExtremeRoles.Resources.VentSeal.png";
         public const string CaptainSpecialVote = "ExtremeRoles.Resources.SpecialVote.png";
-        public const string CaptainSpecialVoteCheck = "ExtremeRoles.Resources.SpecialVoteCheck.png";
+        public const string CaptainSpecialVoteCheck = 
+            "ExtremeRoles.Resources.SpecialVoteCheck.png";
+        public const string PhotographerPhotoCamera = "ExtremeRoles.Resources.PhotoCamera.png";
+        public const string DelusionerDeflectDamage = "ExtremeRoles.Resources.PhotoCamera.png";
 
         public const string EvolverEvolved = "ExtremeRoles.Resources.Evolved.png";
         public const string CarrierCarry = "ExtremeRoles.Resources.Carry.png";
-        public const string PainterPaint = "ExtremeRoles.Resources.Paint.png";
+        public const string PainterPaintRandom = "ExtremeRoles.Resources.PaintRandom.png";
+        public const string PainterPaintTrans = "ExtremeRoles.Resources.PaintTrans.png";
         public const string OverLoaderOverLoad = "ExtremeRoles.Resources.OverLoad.png";
         public const string OverLoaderDownLoad = "ExtremeRoles.Resources.DownLoad.png";
-        public const string FakerDummy = "ExtremeRoles.Resources.Dummy.png";
+        public const string FakerDummyDeadBody = "ExtremeRoles.Resources.DummyDeadBody.png";
+        public const string FakerDummyPlayer = "ExtremeRoles.Resources.DummyPlayer.png";
         public const string CrackerCrack = "ExtremeRoles.Resources.Crack.png";
         public const string CrackerCrackTrace = "ExtremeRoles.Resources.CrackTrace.png";
         public const string BomberSetBomb = "ExtremeRoles.Resources.SetBomb.png";
         public const string MeryNoneActiveVent = "ExtremeRoles.Resources.NoneActivateVent.png";
-        public const string MeryCustomVentAnime = "ExtremeRoles.Resources.MeryVentAnimation.{0}.png";
+        public const string MeryCustomVentAnime = 
+            "ExtremeRoles.Resources.MeryVentAnimation.{0}.png";
         public const string AssaultMasterReload = "ExtremeRoles.Resources.Reload.png";
         public const string LastWolfLightOff = "ExtremeRoles.Resources.LightOff.png";
-        public const string CommanderAttackCommand = "ExtremeRoles.Resources.AttackCommand.png";
+        public const string HypnotistHypnosis = "ExtremeRoles.Resources.Hypnosis.png";
+        public const string CommanderAttackCommand = 
+            "ExtremeRoles.Resources.AttackCommand.png";
+        public const string HypnotistRedAbilityPart =
+            "ExtremeRoles.Resources.RedAbilityPart.png";
+        public const string HypnotistBlueAbilityPart =
+            "ExtremeRoles.Resources.BlueAbilityPart.png";
+        public const string HypnotistGrayAbilityPart =
+            "ExtremeRoles.Resources.GrayAbilityPart.png";
 
-        public const string VigilanteEmergencyCall = "ExtremeRoles.Resources.EmergencyCall.png";
+        public const string VigilanteEmergencyCall = 
+            "ExtremeRoles.Resources.EmergencyCall.png";
         public const string AliceShipBroken = "ExtremeRoles.Resources.ShipBroken.png";
         public const string JackalSidekick = "ExtremeRoles.Resources.Sidekick.png";
         public const string MissionaryPropagate = "ExtremeRoles.Resources.Propagate.png";
@@ -73,6 +94,11 @@ namespace ExtremeRoles.Resources
         public const string SucideSprite = "ExtremeRoles.Resources.Suicide.png";
         public const string UmbrerFeatVirus = "ExtremeRoles.Resources.FeatVirus.png";
         public const string UmbrerUpgradeVirus = "ExtremeRoles.Resources.UpgradeVirus.png";
+
+        public const string XionMapZoomIn = "ExtremeRoles.Resources.ZoomIn.png";
+        public const string XionMapZoomOut = "ExtremeRoles.Resources.ZoomOut.png";
+        public const string XionSpeedUp = "ExtremeRoles.Resources.SpeedUp.png";
+        public const string XionSpeedDown = "ExtremeRoles.Resources.SpeedDown.png";
 
         public const string TestButton = "ExtremeRoles.Resources.TESTBUTTON.png";
     }

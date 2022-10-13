@@ -4,6 +4,13 @@ namespace ExtremeRoles.Roles.API.Extension.State
 {
     public static class RoleState
     {
+        public static float KillCoolOffset = 0.0f;
+
+        public static void Reset()
+        {
+            KillCoolOffset = 0.0f;
+        }
+
         public static bool TryGetVisonMod(this SingleRoleBase role,
             out float vison, out bool isApplyEnvironmentVision)
         {
@@ -31,12 +38,20 @@ namespace ExtremeRoles.Roles.API.Extension.State
 
             if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
             {
+                if (KillCoolOffset != 0.0f)
+                {
+                    killCoolTime = killCoolTime + KillCoolOffset;
+                }
                 return hasOtherKillCool;
             }
             else
             {
                 float otherKillCoolTime = multiAssignRole.AnotherRole.KillCoolTime;
                 killCoolTime = killCoolTime < otherKillCoolTime ? killCoolTime : otherKillCoolTime;
+                if (KillCoolOffset != 0.0f)
+                {
+                    killCoolTime = killCoolTime + KillCoolOffset;
+                }
                 return hasOtherKillCool || multiAssignRole.AnotherRole.HasOtherKillCool;
             }
         }
@@ -199,6 +214,20 @@ namespace ExtremeRoles.Roles.API.Extension.State
             else
             {
                 return canRepairSabotage || multiAssignRole.AnotherRole.CanRepairSabotage;
+            }
+        }
+
+        public static bool IsAssignGhostRole(this SingleRoleBase role)
+        {
+            bool isAssignGhostRole = role.IsAssignGhostRole;
+
+            if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
+            {
+                return isAssignGhostRole;
+            }
+            else
+            {
+                return isAssignGhostRole && multiAssignRole.AnotherRole.IsAssignGhostRole;
             }
         }
 

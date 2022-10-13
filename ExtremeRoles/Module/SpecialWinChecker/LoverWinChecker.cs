@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
@@ -42,7 +43,7 @@ namespace ExtremeRoles.Module.SpecialWinChecker
             this.aliveLover.Add(playerId);
         }
 
-        public bool IsWin(GameDataContainer.PlayerStatistics statistics)
+        public bool IsWin(ExtremeShipStatus.ExtremeShipStatus.PlayerStatistics statistics)
         {
             int aliveNum = this.aliveLover.Count;
 

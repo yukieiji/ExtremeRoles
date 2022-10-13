@@ -11,7 +11,7 @@ using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Compat.Excuter
 {
-    internal class Installer : ButtonExcuterBase
+    internal sealed class Installer : ButtonExcuterBase
     {
 
         private struct RepoData

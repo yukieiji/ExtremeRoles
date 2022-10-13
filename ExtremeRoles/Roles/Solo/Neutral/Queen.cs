@@ -10,10 +10,16 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.ExtremeShipStatus;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public sealed class Queen : SingleRoleBase, IRoleAbility, IRoleSpecialReset, IRoleMurderPlayerHock, IRoleUpdate
+    public sealed class Queen : 
+        SingleRoleBase, 
+        IRoleAbility, 
+        IRoleSpecialReset, 
+        IRoleMurderPlayerHook, 
+        IRoleUpdate
     {
         public const string RoleShowTag = "<b>Ⓠ</b>";
 
@@ -76,6 +82,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             if (targetPlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
             {
+                Player.ResetTarget();
                 servant.SelfKillAbility(queen.ServantSelfKillCool);
                 if (targetRole.Team != ExtremeRoleType.Neutral)
                 {
@@ -93,19 +100,19 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     multiAssignRole.AnotherRole = null;
                     multiAssignRole.CanHasAnotherRole = true;
                     multiAssignRole.SetAnotherRole(servant);
-                    setNewRole(multiAssignRole, targetPlayerId);
+                    ExtremeRoleManager.SetNewRole(targetPlayerId, multiAssignRole);
                 }
                 else
                 {
                     targetRole.Team = ExtremeRoleType.Neutral;
                     servant.SetAnotherRole(targetRole);
-                    setNewRole(servant, targetPlayerId);
+                    ExtremeRoleManager.SetNewRole(targetPlayerId, servant);
                 }
             }
             else
             {
                 resetRole(targetRole, targetPlayerId, targetPlayer);
-                setNewRole(servant, targetPlayerId);
+                ExtremeRoleManager.SetNewRole(targetPlayerId, servant);
             }
             queen.AddServantPlayer(targetPlayerId);
         }
@@ -214,16 +221,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
         }
 
-        private static void setNewRole(
-            SingleRoleBase role,
-            byte targetPlayerId)
-        {
-            lock (ExtremeRoleManager.GameRole)
-            {
-                ExtremeRoleManager.GameRole[targetPlayerId] = role;
-            }
-        }
-
         public void AddServantPlayer(byte servantPlayerId)
         {
             this.servantPlayerId.Add(servantPlayerId);
@@ -234,7 +231,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.servantPlayerId.Remove(servantPlayerId);
         }
 
-        public void HockMuderPlayer(
+        public void HookMuderPlayer(
             PlayerControl source, PlayerControl target)
         {
             if (source.PlayerId != target.PlayerId &&
@@ -491,9 +488,24 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         }
     }
 
-    public sealed class Servant : MultiAssignRoleBase, IRoleAbility, IRoleMurderPlayerHock, IRoleHasParent
+    public sealed class Servant : 
+        MultiAssignRoleBase, 
+        IRoleAbility, 
+        IRoleMurderPlayerHook, 
+        IRoleHasParent
     {
         public byte Parent => this.queenPlayerId;
+
+        public RoleAbilityButtonBase Button
+        {
+            get => this.selfKillButton;
+            set
+            {
+                this.selfKillButton = value;
+            }
+        }
+
+        private RoleAbilityButtonBase selfKillButton;
 
         private byte queenPlayerId;
         private SpriteRenderer killFlash;
@@ -545,17 +557,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.KillRange = baseRole.KillRange;
         }
 
-        public RoleAbilityButtonBase Button
-        { 
-            get => this.selfKillButton;
-            set
-            {
-                this.selfKillButton = value;
-            }
-        }
-         
-        private RoleAbilityButtonBase selfKillButton;
-
         public void SelfKillAbility(float coolTime)
         {
             this.Button = new ReusableAbilityButton(
@@ -571,7 +572,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.Button.ResetCoolTimer();
         }
 
-        public void HockMuderPlayer(
+        public void HookMuderPlayer(
             PlayerControl source, PlayerControl target)
         {
             
@@ -680,16 +681,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     rolePlayer.PlayerId,
                     byte.MaxValue);
 
-                RPCOperator.Call(
-                    rolePlayer.NetId,
-                    RPCOperator.Command.ReplaceDeadReason,
-                    new List<byte>
-                    {
-                        rolePlayer.PlayerId,
-                        (byte)GameDataContainer.PlayerStatus.MissShot
-                    });
-                ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
-                    rolePlayer.PlayerId, GameDataContainer.PlayerStatus.MissShot);
+                ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
+                    rolePlayer.PlayerId, ExtremeShipStatus.PlayerStatus.MissShot);
+
                 return false;
             }
             else if (targetPlayer.PlayerId == this.queenPlayerId)

@@ -31,6 +31,10 @@ namespace ExtremeRoles.Module
         public readonly static Color CarpenterBrown = new Color32(195, 178, 95, byte.MaxValue);
         public readonly static Color SurvivorYellow = new Color32(255, 255, 153, byte.MaxValue);
         public readonly static Color CaptainLightKonjou = new Color32(34, 85, 147, byte.MaxValue);
+        public readonly static Color PhotographerVerdeSiena = new Color32(
+            59, 129, 60, byte.MaxValue);
+        public readonly static Color DelusionerPink = new Color32(251, 218, 222, byte.MaxValue);
+        public readonly static Color ResurrecterBlue = new Color32(0, 105, 225, byte.MaxValue);
 
         public readonly static Color JackalBlue = new Color32(65, 105, 255, byte.MaxValue);
         public readonly static Color AliceGold = new Color32(255, 215, 0, byte.MaxValue);
@@ -46,9 +50,13 @@ namespace ExtremeRoles.Module
         public readonly static Color QueenWhite = new Color32(240, 240, 210, byte.MaxValue);
         public readonly static Color UmbrerRed = new Color32(200, 0, 21, byte.MaxValue);
 
-        public readonly static Color PoltergeistLightKenpou = new Color32(84, 82, 75, byte.MaxValue);
-        public readonly static Color FaunusAntiquewhite = new Color32(250, 235, 215, byte.MaxValue);
+        public readonly static Color PoltergeistLightKenpou = new Color32(
+            84, 82, 75, byte.MaxValue);
+        public readonly static Color FaunusAntiquewhite = new Color32(
+            250, 235, 215, byte.MaxValue);
 
         public readonly static Color NeutralColor = Color.gray;
+
+        public readonly static Color XionBlue = new Color32(109, 129, 255, byte.MaxValue);
     }
 }

@@ -1,9 +1,9 @@
-﻿namespace ExtremeRoles.Module.SpecialWinChecker
+﻿namespace ExtremeRoles.Module.Interface
 {
     public interface IWinChecker
     {
         public Roles.RoleGameOverReason Reason { get; }
-        public bool IsWin(GameDataContainer.PlayerStatistics statistics);
+        public bool IsWin(ExtremeShipStatus.ExtremeShipStatus.PlayerStatistics statistics);
         public void AddAliveRole(byte playerId, Roles.API.SingleRoleBase role);
     }
 }

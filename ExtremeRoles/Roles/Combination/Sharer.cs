@@ -19,7 +19,7 @@ namespace ExtremeRoles.Roles.Combination
 
     }
 
-    public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHock, IRoleResetMeeting, IRoleUpdate
+    public sealed class Sharer : MultiAssignRoleBase, IRoleMurderPlayerHook, IRoleResetMeeting, IRoleUpdate
     {
         public enum SharerOption
         {
@@ -90,7 +90,7 @@ namespace ExtremeRoles.Roles.Combination
             tab: OptionTab.Combination)
         { }
 
-        public void HockMuderPlayer(
+        public void HookMuderPlayer(
             PlayerControl source,
             PlayerControl target)
         {

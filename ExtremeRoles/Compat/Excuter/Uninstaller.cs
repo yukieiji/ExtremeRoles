@@ -6,7 +6,7 @@ using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Compat.Excuter
 {
-    internal class Uninstaller : ButtonExcuterBase
+    internal sealed class Uninstaller : ButtonExcuterBase
     {
         private const string uninstallName = ".uninstalled";
         private string modDllPath;

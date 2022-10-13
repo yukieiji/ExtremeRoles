@@ -19,7 +19,7 @@ namespace ExtremeRoles.Patches.Controller
 			[HarmonyArgument(1)] ChatNoteTypes noteType)
 		{
 			
-			if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return true; }
+			if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
 			if (noteType == ChatNoteTypes.DidVote) { return false; }
 
 			return true;
@@ -47,7 +47,7 @@ namespace ExtremeRoles.Patches.Controller
 			var role = ExtremeRoleManager.GameRole[data.PlayerId];
 			var role2 = ExtremeRoleManager.GameRole[data2.PlayerId];
 
-			bool assassinMeeting = ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger;
+			bool assassinMeeting = ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger;
 
 			if (!assassinMeeting)
             {
@@ -128,6 +128,23 @@ namespace ExtremeRoles.Patches.Controller
 
 		}
     }
+
+	[HarmonyPatch(typeof(ChatController), nameof(ChatController.SendChat))]
+	public static class ChatControllerSendChatPatch
+	{
+
+		private static Module.IOption UseXionOption = OptionHolder.AllOption[
+			(int)OptionHolder.CommonOptionKey.UseXion];
+
+		public static void Prefix(ChatController __instance)
+		{
+			if (UseXionOption.GetValue())
+            {
+				Roles.Solo.Host.Xion.ParseCommand(
+					__instance.TextArea.text);
+            }
+		}
+	}
 
 	[HarmonyPatch(typeof(ChatController), nameof(ChatController.Toggle))]
 	public static class ChatControllerTogglePatch

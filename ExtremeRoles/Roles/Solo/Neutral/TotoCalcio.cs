@@ -3,7 +3,6 @@
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
@@ -170,9 +169,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.tmpTarget = null;
             return true;
         }
-
-        public override bool IsSameTeam(SingleRoleBase targetRole) =>
-            this.IsNeutralSameTeam(targetRole);
 
         public override string GetFullDescription() => 
             string.Format(

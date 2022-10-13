@@ -9,6 +9,7 @@ using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Roles.Solo.Neutral;
 using ExtremeRoles.Roles.Solo.Impostor;
+using ExtremeRoles.Roles.Solo.Host;
 
 using ExtremeRoles.Performance;
 
@@ -49,6 +50,9 @@ namespace ExtremeRoles.Roles
         Carpenter,
         Survivor,
         Captain,
+        Photographer,
+        Delusioner,
+        Resurrecter,
 
         SpecialImpostor,
         Evolver,
@@ -68,6 +72,8 @@ namespace ExtremeRoles.Roles
         Shooter,
         LastWolf,
         Commander,
+        Hypnotist,
+        UnderWarper,
 
         Alice,
         Jackal,
@@ -85,6 +91,9 @@ namespace ExtremeRoles.Roles
         Servant,
         Madmate,
         Umbrer,
+        Doll,
+        
+        Xion, 
     }
 
     public enum CombinationRoleType
@@ -166,23 +175,26 @@ namespace ExtremeRoles.Roles
         public static readonly Dictionary<
             int, SingleRoleBase> NormalRole = new Dictionary<int, SingleRoleBase>()
             {
-                {(int)ExtremeRoleId.SpecialCrew, new SpecialCrew()},
-                {(int)ExtremeRoleId.Sheriff    , new Sheriff()},
-                {(int)ExtremeRoleId.Maintainer , new Maintainer()},
-                {(int)ExtremeRoleId.Neet       , new Neet()},
-                {(int)ExtremeRoleId.Watchdog   , new Watchdog()},
-                {(int)ExtremeRoleId.Supervisor , new Supervisor()},
-                {(int)ExtremeRoleId.BodyGuard  , new BodyGuard()},
-                {(int)ExtremeRoleId.Whisper    , new Whisper()},
-                {(int)ExtremeRoleId.TimeMaster , new TimeMaster()},
-                {(int)ExtremeRoleId.Agency     , new Agency()},
-                {(int)ExtremeRoleId.Bakary     , new Bakary()},
-                {(int)ExtremeRoleId.CurseMaker , new CurseMaker()},
-                {(int)ExtremeRoleId.Fencer     , new Fencer()},
-                {(int)ExtremeRoleId.Opener     , new Opener()},
-                {(int)ExtremeRoleId.Carpenter  , new Carpenter()},
-                {(int)ExtremeRoleId.Survivor   , new Survivor()},
-                {(int)ExtremeRoleId.Captain    , new Captain()},
+                {(int)ExtremeRoleId.SpecialCrew , new SpecialCrew()},
+                {(int)ExtremeRoleId.Sheriff     , new Sheriff()},
+                {(int)ExtremeRoleId.Maintainer  , new Maintainer()},
+                {(int)ExtremeRoleId.Neet        , new Neet()},
+                {(int)ExtremeRoleId.Watchdog    , new Watchdog()},
+                {(int)ExtremeRoleId.Supervisor  , new Supervisor()},
+                {(int)ExtremeRoleId.BodyGuard   , new BodyGuard()},
+                {(int)ExtremeRoleId.Whisper     , new Whisper()},
+                {(int)ExtremeRoleId.TimeMaster  , new TimeMaster()},
+                {(int)ExtremeRoleId.Agency      , new Agency()},
+                {(int)ExtremeRoleId.Bakary      , new Bakary()},
+                {(int)ExtremeRoleId.CurseMaker  , new CurseMaker()},
+                {(int)ExtremeRoleId.Fencer      , new Fencer()},
+                {(int)ExtremeRoleId.Opener      , new Opener()},
+                {(int)ExtremeRoleId.Carpenter   , new Carpenter()},
+                {(int)ExtremeRoleId.Survivor    , new Survivor()},
+                {(int)ExtremeRoleId.Captain     , new Captain()},
+                {(int)ExtremeRoleId.Photographer, new Photographer()},
+                {(int)ExtremeRoleId.Delusioner  , new Delusioner()},
+                {(int)ExtremeRoleId.Resurrecter , new Resurrecter()},
 
                 {(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
                 {(int)ExtremeRoleId.Evolver        , new Evolver()},
@@ -202,6 +214,8 @@ namespace ExtremeRoles.Roles
                 {(int)ExtremeRoleId.Shooter        , new Shooter()},
                 {(int)ExtremeRoleId.LastWolf       , new LastWolf()},
                 {(int)ExtremeRoleId.Commander      , new Commander()},
+                {(int)ExtremeRoleId.Hypnotist      , new Hypnotist()},
+                {(int)ExtremeRoleId.UnderWarper    , new UnderWarper()},
 
                 {(int)ExtremeRoleId.Alice     , new Alice()},
                 {(int)ExtremeRoleId.Jackal    , new Jackal()},
@@ -296,6 +310,18 @@ namespace ExtremeRoles.Roles
             {
                 role.Initialize();
             }
+
+            // 各種役職のリセット
+            // シオンのリセット
+            Xion.Purge();
+            // ボディーガードのリセット
+            BodyGuard.ResetAllShild();
+            // タイムマスターのリセット
+            TimeMaster.ResetHistory();
+
+            // APIのステータスのリセット
+            API.Extension.State.RoleState.Reset();
+
         }
 
         public static bool IsDisableWinCheckRole(SingleRoleBase role)
@@ -387,9 +413,20 @@ namespace ExtremeRoles.Roles
         public static void SetPlyerIdToSingleRoleId(
             int roleId, byte playerId)
         {
+
             if (!Enum.IsDefined(typeof(RoleTypes), Convert.ToUInt16(roleId)))
             {
-                setPlyerIdToSingleRole(playerId, NormalRole[roleId]);
+                SingleRoleBase role;
+                if (roleId != (int)ExtremeRoleId.Xion)
+                {
+                    role = NormalRole[roleId];
+                }
+                else
+                {
+                    role = new Xion(playerId);
+                }
+
+                setPlyerIdToSingleRole(playerId, role);
             }
             else
             {
@@ -420,6 +457,14 @@ namespace ExtremeRoles.Roles
                     break;
                 default:
                     break;
+            }
+        }
+
+        public static void SetNewRole(byte playerId, SingleRoleBase newRole)
+        {
+            lock (GameRole)
+            {
+                GameRole[playerId] =  newRole;
             }
         }
 

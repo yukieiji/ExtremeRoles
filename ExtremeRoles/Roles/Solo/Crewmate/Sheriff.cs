@@ -7,6 +7,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.ExtremeShipStatus;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
@@ -21,7 +22,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             EnableTaskRelated,
             ReduceCurKillCool,
             IsPerm,
-            IsSyncTaskAndShootNum
+            IsSyncTaskAndShootNum,
+            IsEnableShootTaskGageOption,
+            SyncShootTaskGage
         }
 
         private int shootNum;
@@ -32,6 +35,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private bool enableTaskRelatedSetting;
         private float prevGage;
         private float reduceKillCool;
+        private float syncShootTaskGage;
         private bool isPerm;
         private bool isSyncTaskShootNum;
 
@@ -60,7 +64,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 {
                     missShoot(
                         rolePlayer,
-                        GameDataContainer.PlayerStatus.Retaliate);
+                        ExtremeShipStatus.PlayerStatus.Retaliate);
                     return false;
                 }
                 else
@@ -74,7 +78,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
                 missShoot(
                     rolePlayer,
-                    GameDataContainer.PlayerStatus.MissShot);
+                    ExtremeShipStatus.PlayerStatus.MissShot);
                 return false;
             }
 
@@ -121,12 +125,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
                 float gage = Player.GetPlayerTaskGage(rolePlayer);
 
-                if (gage > this.prevGage)
+                if (gage >= (this.prevGage + this.syncShootTaskGage))
                 {
-
-                    rolePlayer.killTimer = Mathf.Clamp(
-                        rolePlayer.killTimer - this.reduceKillCool,
-                        0.01f, this.KillCoolTime);
+                    if (this.CanKill)
+                    {
+                        rolePlayer.killTimer = Mathf.Clamp(
+                            rolePlayer.killTimer - this.reduceKillCool,
+                            0.01f, this.KillCoolTime);
+                    }
 
                     if (this.isPerm)
                     {
@@ -146,10 +152,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                             this.shootNum + 1, this.shootNum, this.maxShootNum);
                         this.CanKill = true;
                         updateKillCountText();
+                        if (this.shootNum > 0)
+                        {
+                            this.killCountText.gameObject.SetActive(true);
+                        }
                     }
-
+                    this.prevGage = gage;
                 }
-                this.prevGage = gage;
             }
         }
 
@@ -197,30 +206,39 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 SheriffOption.IsPerm,
                 false, enableTaskRelatedOps);
 
-            CreateBoolOption(
+            var syncOpt = CreateBoolOption(
                 SheriffOption.IsSyncTaskAndShootNum,
-                false, enableTaskRelatedOps);
-
+                false, enableTaskRelatedOps);;
+            CreateIntOption(
+                SheriffOption.SyncShootTaskGage,
+                5, 5, 100, 5,
+                syncOpt, format: OptionUnit.Percentage);
         }
 
         protected override void RoleSpecificInit()
         {
-            this.shootNum = OptionHolder.AllOption[
+
+            var allOpt = OptionHolder.AllOption;
+
+            this.shootNum = allOpt[
                 GetRoleOptionId(SheriffOption.ShootNum)].GetValue();
-            this.canShootNeutral = OptionHolder.AllOption[
+            this.canShootNeutral = allOpt[
                 GetRoleOptionId(SheriffOption.CanShootNeutral)].GetValue();
-            this.canShootAssassin = OptionHolder.AllOption[
+            this.canShootAssassin = allOpt[
                 GetRoleOptionId(SheriffOption.CanShootAssassin)].GetValue();
             this.killCountText = null;
 
-            this.enableTaskRelatedSetting = OptionHolder.AllOption[
+            this.enableTaskRelatedSetting = allOpt[
                 GetRoleOptionId(SheriffOption.EnableTaskRelated)].GetValue();
-            this.reduceKillCool = OptionHolder.AllOption[
+            this.reduceKillCool = allOpt[
                 GetRoleOptionId(SheriffOption.ReduceCurKillCool)].GetValue();
-            this.isPerm = OptionHolder.AllOption[
+            this.isPerm = allOpt[
                 GetRoleOptionId(SheriffOption.IsPerm)].GetValue();
-            this.isSyncTaskShootNum = OptionHolder.AllOption[
+            this.isSyncTaskShootNum = allOpt[
                 GetRoleOptionId(SheriffOption.IsSyncTaskAndShootNum)].GetValue();
+            this.syncShootTaskGage = ((float)allOpt[
+                GetRoleOptionId(SheriffOption.SyncShootTaskGage)].GetValue()) / 100.0f;
+
             this.prevGage = 0.0f;
             
             this.maxShootNum = this.shootNum;
@@ -235,7 +253,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         private void missShoot(
             PlayerControl rolePlayer,
-            GameDataContainer.PlayerStatus replaceReson)
+            ExtremeShipStatus.PlayerStatus replaceReson)
         {
 
             RPCOperator.Call(
@@ -252,19 +270,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 rolePlayer.PlayerId,
                 byte.MaxValue);
 
-            RPCOperator.Call(
-                rolePlayer.NetId,
-                RPCOperator.Command.ReplaceDeadReason,
-                new List<byte>
-                {
-                    rolePlayer.PlayerId,
-                    (byte)replaceReson
-                });
-
-            ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
-                rolePlayer.PlayerId, replaceReson);
+            ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
+                rolePlayer.PlayerId,
+                replaceReson);
         }
-
 
         private void updateKillButton()
         {

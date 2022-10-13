@@ -3,8 +3,8 @@ using UnityEngine;
 
 using Hazel;
 
+using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Performance;
-
 
 namespace ExtremeRoles.Module.AbilityButton.GhostRoles
 {
@@ -20,7 +20,7 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
         private TMPro.TextMeshPro abilityCountText = null;
 
         public AbilityCountButton(
-            GhostRoleAbilityManager.AbilityType abilityType,
+            AbilityType abilityType,
             Action<MessageWriter> ability,
             Func<bool> abilityPreCheck,
             Func<bool> canUse,

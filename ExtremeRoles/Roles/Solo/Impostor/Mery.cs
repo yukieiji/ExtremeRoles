@@ -14,7 +14,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-
+using ExtremeRoles.Extension.Ship;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -183,7 +183,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             bool isMarlin = localPlayerRole.Id == ExtremeRoleId.Marlin;
 
-            ExtremeRolesPlugin.GameDataStore.UpdateObject.Add(
+            ExtremeRolesPlugin.ShipState.AddUpdateObject(
                 new Camp(
                     mery.ActiveNum,
                     mery.ActiveRange,
@@ -194,14 +194,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public static void ActivateVent(
             int activateVentIndex)
         {
-            Camp camp = (Camp)ExtremeRolesPlugin.GameDataStore.UpdateObject[
-                activateVentIndex];
-            ExtremeRolesPlugin.GameDataStore.UpdateObject.RemoveAt(
+            Camp camp = (Camp)ExtremeRolesPlugin.ShipState.GetUpdateObject(
                 activateVentIndex);
+            ExtremeRolesPlugin.ShipState.RemoveUpdateObjectAt(activateVentIndex);
 
             Vent newVent = camp.GetConvertedVent();
-            var meryVent = ExtremeRolesPlugin.GameDataStore.CustomVent.GetCustomVent(
-                GameDataContainer.CustomVentType.MeryVent);
+            var meryVent = CachedShipStatus.Instance.GetCustomVent(
+                VentExtension.CustomVentType.MeryVent);
 
             int ventNum = meryVent.Count;
 
@@ -229,8 +228,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             newVent.Center = null;
 
-            ExtremeRolesPlugin.GameDataStore.CustomVent.AddVent(
-                newVent, GameDataContainer.CustomVentType.MeryVent);
+            CachedShipStatus.Instance.AddVent(
+                newVent, VentExtension.CustomVentType.MeryVent);
 
             camp.Clear();
         }

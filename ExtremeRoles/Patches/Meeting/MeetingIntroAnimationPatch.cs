@@ -39,7 +39,7 @@ namespace ExtremeRoles.Patches.Meeting
 				gaAbilityText = text.text;
 			}
 
-			string exrAbiltyText = ExtremeRolesPlugin.GameDataStore.AbilityManager.CreateAbilityReport();
+			string exrAbiltyText = ExtremeRolesPlugin.ShipState.GetGhostAbilityReport();
 
 			if (gaAbilityText != string.Empty || exrAbiltyText != string.Empty)
             {

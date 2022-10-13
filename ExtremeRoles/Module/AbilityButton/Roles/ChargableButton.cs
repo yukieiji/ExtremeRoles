@@ -125,5 +125,15 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
             }
         }
 
+        public static Minigame OpenMinigame(Minigame prefab)
+        {
+            Minigame minigame = UnityEngine.Object.Instantiate(
+                prefab, Camera.main.transform, false);
+            minigame.transform.SetParent(Camera.main.transform, false);
+            minigame.transform.localPosition = new Vector3(0.0f, 0.0f, -50f);
+            minigame.Begin(null);
+
+            return minigame;
+        }
     }
 }

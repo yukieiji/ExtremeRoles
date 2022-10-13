@@ -11,6 +11,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Extension.Ship;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
@@ -579,15 +580,16 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             this.targetVent = null;
 
-            if (CachedShipStatus.Instance == null ||
-                !CachedShipStatus.Instance.enabled) { return false; }
+            ShipStatus ship = CachedShipStatus.Instance;
+
+            if (ship == null || !ship.enabled) { return false; }
 
             Vector2 truePosition = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
             
-            foreach (Vent vent in CachedShipStatus.Instance.AllVents)
+            foreach (Vent vent in ship.AllVents)
             {
                 if (vent == null) { continue; }
-                if (ExtremeRolesPlugin.GameDataStore.CustomVent.IsCustomVent(vent.Id) &&
+                if (ship.IsCustomVent(vent.Id) &&
                     !vent.gameObject.active)
                 {
                     continue;
