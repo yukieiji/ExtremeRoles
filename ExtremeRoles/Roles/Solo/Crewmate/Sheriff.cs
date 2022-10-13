@@ -211,7 +211,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 false, enableTaskRelatedOps);;
             CreateIntOption(
                 SheriffOption.SyncShootTaskGage,
-                5, 5, 100, 5,
+                5, 5, 100, 1,
                 syncOpt, format: OptionUnit.Percentage);
         }
 
