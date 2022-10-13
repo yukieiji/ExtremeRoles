@@ -133,12 +133,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             if (this.penaltyKillCool > 0.0f)
             {
-                if (!this.HasOtherKillCool)
-                {
-                    this.HasOtherKillCool = true;
-                    this.KillCoolTime = PlayerControl.GameOptions.KillCooldown;
-                }
-                this.KillCoolTime = this.KillCoolTime + this.penaltyKillCool;
+
+                this.HasOtherKillCool = true;
+                API.Extension.State.RoleState.AddKillCoolOffset(
+                    this.penaltyKillCool);
             }
 
             killer.killTimer = this.prevKillCool;

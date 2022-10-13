@@ -173,7 +173,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 }
             }
 
-            RoleState.KillCoolOffset = curseMaker.additionalKillCool;
+            RoleState.AddKillCoolOffset(curseMaker.additionalKillCool);
 
             if (role.TryGetKillCool(out float resetKillCool))
             {

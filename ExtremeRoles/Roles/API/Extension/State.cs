@@ -4,11 +4,16 @@ namespace ExtremeRoles.Roles.API.Extension.State
 {
     public static class RoleState
     {
-        public static float KillCoolOffset = 0.0f;
+        private static float killCoolOffset = 0.0f;
 
         public static void Reset()
         {
-            KillCoolOffset = 0.0f;
+            killCoolOffset = 0.0f;
+        }
+
+        public static void AddKillCoolOffset(float offset)
+        {
+            killCoolOffset = killCoolOffset + offset;
         }
 
         public static bool TryGetVisonMod(this SingleRoleBase role,
@@ -38,9 +43,9 @@ namespace ExtremeRoles.Roles.API.Extension.State
 
             if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
             {
-                if (KillCoolOffset != 0.0f)
+                if (killCoolOffset != 0.0f)
                 {
-                    killCoolTime = killCoolTime + KillCoolOffset;
+                    killCoolTime = killCoolTime + killCoolOffset;
                 }
                 return hasOtherKillCool;
             }
@@ -48,9 +53,9 @@ namespace ExtremeRoles.Roles.API.Extension.State
             {
                 float otherKillCoolTime = multiAssignRole.AnotherRole.KillCoolTime;
                 killCoolTime = killCoolTime < otherKillCoolTime ? killCoolTime : otherKillCoolTime;
-                if (KillCoolOffset != 0.0f)
+                if (killCoolOffset != 0.0f)
                 {
-                    killCoolTime = killCoolTime + KillCoolOffset;
+                    killCoolTime = killCoolTime + killCoolOffset;
                 }
                 return hasOtherKillCool || multiAssignRole.AnotherRole.HasOtherKillCool;
             }
