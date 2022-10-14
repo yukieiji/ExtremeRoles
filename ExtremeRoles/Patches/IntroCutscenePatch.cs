@@ -147,7 +147,9 @@ namespace ExtremeRoles.Patches
             {
                 // とりあえず5.0秒待機
                 // Ping300があっても5秒たっても役職アサイン待ちコードに到達しないのは中々のはず
-                yield return new WaitForSeconds(5.0f);
+                float waitTime = AmongUsClient.Instance.GameMode == GameModes.OnlineGame ?
+                    5.0f : 0.5f;
+                yield return new WaitForSeconds(waitTime);
            
                 Manager.RoleManagerSelectRolesPatch.AllPlayerAssignToExRole();
             }
