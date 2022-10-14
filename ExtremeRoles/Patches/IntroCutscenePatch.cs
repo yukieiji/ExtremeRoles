@@ -7,7 +7,9 @@ using UnityEngine;
 using BepInEx.IL2CPP.Utils.Collections;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
@@ -25,16 +27,16 @@ namespace ExtremeRoles.Patches
 
             if (role.IsNeutral())
             {
-                __instance.BackgroundBar.material.color = Module.ColorPalette.NeutralColor;
+                __instance.BackgroundBar.material.color = ColorPalette.NeutralColor;
                 __instance.TeamTitle.text = Translation.GetString("Neutral");
-                __instance.TeamTitle.color = Module.ColorPalette.NeutralColor;
+                __instance.TeamTitle.color = ColorPalette.NeutralColor;
                 __instance.ImpostorText.text = Translation.GetString("neutralIntro");
             }
             else if (role.Id == ExtremeRoleId.Xion)
             {
-                __instance.BackgroundBar.material.color = Module.ColorPalette.XionBlue;
+                __instance.BackgroundBar.material.color = ColorPalette.XionBlue;
                 __instance.TeamTitle.text = Translation.GetString("yourHost");
-                __instance.TeamTitle.color = Module.ColorPalette.XionBlue;
+                __instance.TeamTitle.color = ColorPalette.XionBlue;
                 __instance.ImpostorText.text = Translation.GetString("youAreNewRuleEditor");
             }
         }
@@ -57,11 +59,11 @@ namespace ExtremeRoles.Patches
 
         public static void SetupPlayerPrefab(IntroCutscene __instance)
         {
-            Module.Prefab.PlayerPrefab = UnityEngine.Object.Instantiate(
+            Prefab.PlayerPrefab = UnityEngine.Object.Instantiate(
                 __instance.PlayerPrefab);
-            UnityEngine.Object.DontDestroyOnLoad(Module.Prefab.PlayerPrefab);
-            Module.Prefab.PlayerPrefab.name = "poolablePlayerPrefab";
-            Module.Prefab.PlayerPrefab.gameObject.SetActive(false);
+            UnityEngine.Object.DontDestroyOnLoad(Prefab.PlayerPrefab);
+            Prefab.PlayerPrefab.name = "poolablePlayerPrefab";
+            Prefab.PlayerPrefab.gameObject.SetActive(false);
         }
 
         public static void SetupRole()
@@ -216,7 +218,7 @@ namespace ExtremeRoles.Patches
     public static class IntroCutsceneSetUpRoleTextPatch
     {
         private static IEnumerator showRoleText(
-            Roles.API.SingleRoleBase role,
+            SingleRoleBase role,
             IntroCutscene __instance)
         {
             __instance.YouAreText.color = role.GetNameColor();
@@ -227,9 +229,9 @@ namespace ExtremeRoles.Patches
 
             if (role.Id != ExtremeRoleId.Lover)
             {
-                if (role is Roles.API.MultiAssignRoleBase)
+                if (role is MultiAssignRoleBase)
                 {
-                    if (((Roles.API.MultiAssignRoleBase)role).AnotherRole != null)
+                    if (((MultiAssignRoleBase)role).AnotherRole != null)
                     {
                         __instance.RoleBlurbText.fontSize *= 0.45f;
                     }
@@ -299,6 +301,31 @@ namespace ExtremeRoles.Patches
             if (OptionHolder.AllOption[(int)OptionHolder.CommonOptionKey.UseXion].GetValue())
             {
                 Roles.Solo.Host.Xion.RemoveXionPlayerToAllPlayerControl();
+
+                if (AmongUsClient.Instance.GameMode == GameModes.LocalGame)
+                {
+                    foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
+                    {
+                        if (player == null) { continue; }
+
+                        if (!player.GetComponent<DummyBehaviour>().enabled) { continue; }
+
+                        var role = ExtremeRoleManager.GameRole[player.PlayerId];
+                        if (!role.HasTask())
+                        {
+                            continue;
+                        }
+
+                        GameData.PlayerInfo playerInfo = player.Data;
+
+                        var (_, totalTask) = GameSystem.GetTaskInfo(playerInfo);
+                        if (totalTask == 0)
+                        {
+                            GameSystem.SetTask(playerInfo, 
+                                GameSystem.GetRandomCommonTaskId());
+                        }
+                    }
+                }
             }
 
             Module.InfoOverlay.Button.SetInfoButtonToInGamePositon();
@@ -311,7 +338,7 @@ namespace ExtremeRoles.Patches
                 setUpRole.IntroEndSetUp();
             }
 
-            var multiAssignRole = localRole as Roles.API.MultiAssignRoleBase;
+            var multiAssignRole = localRole as MultiAssignRoleBase;
             if (multiAssignRole != null)
             {
                 setUpRole = multiAssignRole.AnotherRole as IRoleSpecialSetUp;
