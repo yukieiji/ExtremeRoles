@@ -383,15 +383,15 @@ namespace ExtremeRoles.Patches
 
             switch ((RPCOperator.Command)callId)
             {
-                case RPCOperator.Command.CleanDeadBody:
-                    byte deadBodyPlayerId = reader.ReadByte();
-                    RPCOperator.CleanDeadBody(deadBodyPlayerId);
-                    break;
                 case RPCOperator.Command.Initialize:
                     RPCOperator.Initialize();
                     break;
                 case RPCOperator.Command.ForceEnd:
                     RPCOperator.ForceEnd();
+                    break;
+                case RPCOperator.Command.SetUpReady:
+                    byte readyPlayerId = reader.ReadByte();
+                    RPCOperator.SetUpReady(readyPlayerId);
                     break;
                 case RPCOperator.Command.SetRoleToAllPlayer:
                     List<Module.IAssignedPlayer> assignData = new List<Module.IAssignedPlayer>();
@@ -421,6 +421,10 @@ namespace ExtremeRoles.Patches
                     }
                     RPCOperator.SetRoleToAllPlayer(assignData);
                     ExtremeRolesPlugin.ShipState.SwitchRoleAssignToEnd();
+                    break;
+                case RPCOperator.Command.CleanDeadBody:
+                    byte deadBodyPlayerId = reader.ReadByte();
+                    RPCOperator.CleanDeadBody(deadBodyPlayerId);
                     break;
                 case RPCOperator.Command.FixLightOff:
                     RPCOperator.FixLightOff();

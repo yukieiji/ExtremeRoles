@@ -143,21 +143,33 @@ namespace ExtremeRoles.Patches
 
             roleAssignText.gameObject.SetActive(true);
 
-            if (AmongUsClient.Instance.AmHost)
-            {
-                // とりあえず5.0秒待機
-                // Ping300があっても5秒たっても役職アサイン待ちコードに到達しないのは中々のはず
-                float waitTime = AmongUsClient.Instance.GameMode == GameModes.OnlineGame ?
-                    5.0f : 0.5f;
-                yield return new WaitForSeconds(waitTime);
-           
-                Manager.RoleManagerSelectRolesPatch.AllPlayerAssignToExRole();
-            }
+            AmongUsClient client = AmongUsClient.Instance;
 
-            // バニラの役職アサイン後すぐこの処理が走るので全員の役職が入るまで待機
-            while (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd)
+            if (!client.AmHost)
             {
-                yield return null;
+
+                Manager.RoleManagerSelectRolesPatch.SetLocalPlayerReady();
+
+                // バニラの役職アサイン後すぐこの処理が走るので全員の役職が入るまで待機
+                while (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd)
+                {
+                    yield return null;
+                }
+            }
+            else
+            {
+                if (client.GameMode == GameModes.OnlineGame)
+                {
+                    while (!Manager.RoleManagerSelectRolesPatch.IsReady)
+                    {
+                        yield return null;
+                    }
+                }
+                else
+                {
+                    yield return new WaitForSeconds(0.5f);
+                }
+                Manager.RoleManagerSelectRolesPatch.AllPlayerAssignToExRole();
             }
 
             SoundManager.Instance.PlaySound(instance.IntroStinger, false, 1f);
