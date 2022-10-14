@@ -1,8 +1,8 @@
 ﻿namespace ExtremeRoles.Roles.API.Interface
 {
-    public interface IRoleMurderPlayerHock
+    public interface IRoleMurderPlayerHook
     {
-        void HockMuderPlayer(
+        void HookMuderPlayer(
             PlayerControl source,
             PlayerControl target);
     }

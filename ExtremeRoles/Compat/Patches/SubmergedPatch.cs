@@ -14,7 +14,7 @@ namespace ExtremeRoles.Compat.Patches
     {
         public static bool Prefix(ref IEnumerator __result)
         {
-            if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return true; }
+            if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
             __result = assassinMeetingEnumerator();
             return false;
         }
@@ -49,7 +49,7 @@ namespace ExtremeRoles.Compat.Patches
             ExtremeRoles.Patches.Controller.ExileControllerWrapUpPatch.WrapUpPostfix(
                 __instance.exiled);
             
-            if (!ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
+            if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
             {
                 HudManagerUpdatePatchPostfixPatch.ButtonTriggerReset();
             }
@@ -97,7 +97,7 @@ namespace ExtremeRoles.Compat.Patches
             var submergedMod = ExtremeRolesPlugin.Compat.ModMap as Mods.SubmergedMap;
             if (submergedMod == null) { return; }
 
-            if (!ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd) { return; }
+            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
             if (Roles.ExtremeRoleManager.GetLocalPlayerRole().Id != Roles.ExtremeRoleId.Assassin) { return; }
 
             object instance = submarineOxygenSystemInstance.GetValue(null);

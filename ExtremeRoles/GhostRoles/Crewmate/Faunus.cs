@@ -1,4 +1,5 @@
 ﻿using Assets.CoreScripts;
+using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.GhostRoles;
@@ -40,7 +41,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
         public override void CreateAbility()
         {
             this.Button = new AbilityCountButton(
-                GhostRoleAbilityManager.AbilityType.FaunusOpenSaboConsole,
+                AbilityType.FaunusOpenSaboConsole,
                 this.UseAbility,
                 this.isPreCheck,
                 this.isAbilityUse,

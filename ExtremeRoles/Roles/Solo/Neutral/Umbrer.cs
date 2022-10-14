@@ -363,13 +363,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public void Update(PlayerControl rolePlayer)
         {
             if (MeetingHud.Instance != null ||
+                ExileController.Instance != null ||
                 CachedShipStatus.Instance == null ||
                 this.IsWin ||
                 GameData.Instance == null ||
                 this.container == null) { return; }
             if (!CachedShipStatus.Instance.enabled) { return; }
 
-            if (ExtremeRolesPlugin.GameDataStore.IsRoleSetUpEnd && !isFetch)
+            if (ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd && !isFetch)
             {
                 this.isFetch = true;
                 this.container.Fetch(this);

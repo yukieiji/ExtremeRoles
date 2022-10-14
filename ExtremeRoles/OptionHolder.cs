@@ -77,6 +77,8 @@ namespace ExtremeRoles
             MinImpostorGhostRoles,
             MaxImpostorGhostRoles,
 
+            UseXion,
+
             NumMeating,
             ChangeMeetingVoteAreaSort,
             FixedMeetingPlayerLevel,
@@ -145,18 +147,26 @@ namespace ExtremeRoles
                 optionPreset, null, true);
 
             var strongGen = new BoolCustomOption(
-               (int)CommonOptionKey.UseStrongRandomGen, Design.ColoedString(
+                (int)CommonOptionKey.UseStrongRandomGen, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.UseStrongRandomGen.ToString()), true);
             new SelectionCustomOption(
-               (int)CommonOptionKey.UsePrngAlgorithm, Design.ColoedString(
+                (int)CommonOptionKey.UsePrngAlgorithm, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.UsePrngAlgorithm.ToString()),
-               prngAlgorithm, strongGen,
-               invert: true);
+                prngAlgorithm, strongGen,
+                invert: true);
 
             createExtremeRoleGlobalSpawnOption();
             createExtremeGhostRoleGlobalSpawnOption();
+
+            new BoolCustomOption(
+                (int)CommonOptionKey.UseXion,
+                Design.ColoedString(
+                    ColorPalette.XionBlue,
+                    CommonOptionKey.UseXion.ToString()),
+                false, null, true);
+
             createShipGlobalOption();
 
             Roles.ExtremeRoleManager.CreateNormalRoleOptions(

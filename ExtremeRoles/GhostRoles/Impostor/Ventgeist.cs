@@ -4,6 +4,7 @@ using ExtremeRoles.Module.AbilityButton.GhostRoles;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Extension.Ship;
 using Hazel;
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,7 +37,7 @@ namespace ExtremeRoles.GhostRoles.Impostor
         public override void CreateAbility()
         {
             this.Button = new AbilityCountButton(
-                GhostRoleAbilityManager.AbilityType.VentgeistVentAnime,
+                AbilityType.VentgeistVentAnime,
                 this.UseAbility,
                 this.isPreCheck,
                 this.isAbilityUse,
@@ -86,15 +87,17 @@ namespace ExtremeRoles.GhostRoles.Impostor
         {
             this.targetVent = null;
 
-            if (CachedShipStatus.Instance == null ||
-                !CachedShipStatus.Instance.enabled) { return false; }
+            ShipStatus ship = CachedShipStatus.Instance;
+
+            if (ship == null ||
+                !ship.enabled) { return false; }
 
             Vector2 truePosition = CachedPlayerControl.LocalPlayer.PlayerControl.GetTruePosition();
 
-            foreach (Vent vent in CachedShipStatus.Instance.AllVents)
+            foreach (Vent vent in ship.AllVents)
             {
                 if (vent == null) { continue; }
-                if (ExtremeRolesPlugin.GameDataStore.CustomVent.IsCustomVent(vent.Id) &&
+                if (ship.IsCustomVent(vent.Id) &&
                     !vent.gameObject.active)
                 {
                     continue;

@@ -163,26 +163,22 @@ namespace ExtremeSkins.SkinManager
                     string json = System.Text.Encoding.UTF8.GetString(byteArray);
                     JObject parseJson = JObject.Parse(json);
 
-                    string name = parseJson["Name"].ToString();
-                    string productId = string.Concat("hat_", name);
+                    CustomHat customHat = new CustomHat(
+                        hat,
+                        parseJson["Author"].ToString(),  // Author
+                        parseJson["Name"].ToString(),  // Name
+                        (bool)parseJson["FrontFlip"],  // FrontFlip
+                        (bool)parseJson["Back"],  // Back
+                        (bool)parseJson["BackFlip"],  // BackFlip
+                        (bool)parseJson["Climb"],  // Climb
+                        (bool)parseJson["Bound"],  // Bound
+                        (bool)parseJson["Shader"]);
 
-                    if (HatData.ContainsKey(productId)) { continue; }
-
-                    HatData.Add(
-                        productId,  // Name
-                        new CustomHat(
-                            productId, hat,
-                            parseJson["Author"].ToString(),  // Author
-                            name,  // Name
-                            (bool)parseJson["FrontFlip"],  // FrontFlip
-                            (bool)parseJson["Back"],  // Back
-                            (bool)parseJson["BackFlip"],  // BackFlip
-                            (bool)parseJson["Climb"],  // Climb
-                            (bool)parseJson["Bound"],  // Bound
-                            (bool)parseJson["Shader"])); // Shader
-
-                    ExtremeSkinsPlugin.Logger.LogInfo(
-                        $"Hat Loaded:{parseJson.ChildrenTokens[1].TryCast<JProperty>().Value.ToString()}, from:{hat}");
+                    if (HatData.TryAdd(customHat.Id, customHat))
+                    {
+                        ExtremeSkinsPlugin.Logger.LogInfo(
+                            $"Hat Loaded:{customHat.Name}, from:{hat}");
+                    }
                 }
             }
 

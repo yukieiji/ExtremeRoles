@@ -11,10 +11,16 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public sealed class Madmate : SingleRoleBase, IRoleAbility, IRoleUpdate, IRoleSpecialSetUp, IRoleWinPlayerModifier
+    public sealed class Madmate : 
+        SingleRoleBase, 
+        IRoleAbility, 
+        IRoleUpdate, 
+        IRoleSpecialSetUp, 
+        IRoleWinPlayerModifier
     {
         public enum MadmateOption
         {
+            IsDontCountAliveCrew,
             CanFixSabotage,
             CanUseVent,
             CanMoveVentToVent,
@@ -26,6 +32,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         private bool canMoveVentToVent = false;
         private bool canSeeFromImpostor = false;
+        private bool isDontCountAliveCrew = false;
 
         private bool isSeeImpostorNow = false;
         private bool isUpdateMadmate = false;
@@ -40,6 +47,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 this.madmateAbilityButton = value;
             }
         }
+
+        public bool IsDontCountAliveCrew => this.isDontCountAliveCrew; 
 
         private RoleAbilityButtonBase madmateAbilityButton;
 
@@ -172,6 +181,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             IOption parentOps)
         {
             CreateBoolOption(
+                MadmateOption.IsDontCountAliveCrew,
+                false, parentOps);
+            CreateBoolOption(
                 MadmateOption.CanFixSabotage,
                 false, parentOps);
             var ventUseOpt = CreateBoolOption(
@@ -206,6 +218,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.isSeeImpostorNow = false;
             this.isUpdateMadmate = false;
             this.FakeImposter = false;
+
+            this.isDontCountAliveCrew = allOpt[
+                GetRoleOptionId(MadmateOption.IsDontCountAliveCrew)].GetValue();
 
             this.CanRepairSabotage = allOpt[
                 GetRoleOptionId(MadmateOption.CanFixSabotage)].GetValue();

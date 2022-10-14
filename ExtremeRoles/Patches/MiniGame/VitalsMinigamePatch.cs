@@ -23,7 +23,8 @@ namespace ExtremeRoles.Patches.MiniGame
 
         private static readonly HashSet<ExtremeRoleId> vitalUseRole = new HashSet<ExtremeRoleId>()
         {
-            ExtremeRoleId.Traitor
+            ExtremeRoleId.Traitor,
+            ExtremeRoleId.Doll
         };
 
         public static bool Prefix(VitalsMinigame __instance)
@@ -31,7 +32,8 @@ namespace ExtremeRoles.Patches.MiniGame
 
             if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
-            if (ExtremeRoleManager.GetLocalPlayerRole().CanUseVital()) { return true; }
+            if (ExtremeRoleManager.GetLocalPlayerRole().CanUseVital() ||
+                isUseAbility()) { return true; }
 
             __instance.SabText.text = Translation.GetString("youDonotUse");
 
@@ -56,26 +58,9 @@ namespace ExtremeRoles.Patches.MiniGame
                 return; 
             }
 
-            foreach (ExtremeRoleId roleId in vitalUseRole)
+            if (isUseAbility())
             {
-
-                SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
-                MultiAssignRoleBase multiAssignRole = role as MultiAssignRoleBase;
-
-                if (role.Id == roleId)
-                {
-                    if (((IRoleAbility)role).Button.IsAbilityActive())
-                    {
-                        return;
-                    }
-                }
-                if (multiAssignRole?.AnotherRole?.Id == roleId)
-                {
-                    if (((IRoleAbility)multiAssignRole.AnotherRole).Button.IsAbilityActive())
-                    {
-                        return;
-                    }
-                }
+                return;
             }
 
             if (timerText == null)
@@ -113,6 +98,32 @@ namespace ExtremeRoles.Patches.MiniGame
             Logging.Debug($"IsRemoveVital:{isRemoveVital}");
             Logging.Debug($"EnableVitalLimit:{enableVitalLimit}");
             Logging.Debug($"VitalTime:{vitalTimer}");
+        }
+
+        private static bool isUseAbility()
+        {
+            SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
+            MultiAssignRoleBase multiAssignRole = role as MultiAssignRoleBase;
+
+            if (vitalUseRole.Contains(role.Id))
+            {
+                if (((IRoleAbility)role).Button.IsAbilityActive())
+                {
+                    return true;
+                }
+            }
+            if (multiAssignRole?.AnotherRole != null)
+            {
+                if (vitalUseRole.Contains(
+                    multiAssignRole.AnotherRole.Id))
+                {
+                    if (((IRoleAbility)multiAssignRole.AnotherRole).Button.IsAbilityActive())
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         private static void disableVital()

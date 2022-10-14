@@ -13,6 +13,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Module.ExtremeShipStatus;
 
 namespace ExtremeRoles.Roles.Combination
 {
@@ -380,7 +381,7 @@ namespace ExtremeRoles.Roles.Combination
             if (heroPlayer != null && villanPlayer != null)
             {
 
-                ExtremeRolesPlugin.GameDataStore.WinCheckDisable = true;
+                ExtremeRolesPlugin.ShipState.SetDisableWinCheck(true);
 
                 if (heroPlayer.protectedByGuardian)
                 {
@@ -403,7 +404,7 @@ namespace ExtremeRoles.Roles.Combination
                     }
                 }
 
-                ExtremeRolesPlugin.GameDataStore.WinCheckDisable = false;
+                ExtremeRolesPlugin.ShipState.SetDisableWinCheck(false);
             }
         }
         private static void updateHero(
@@ -628,17 +629,10 @@ namespace ExtremeRoles.Roles.Combination
                     rolePlayer.PlayerId,
                     byte.MaxValue);
 
-                RPCOperator.Call(
-                    rolePlayer.NetId,
-                    RPCOperator.Command.ReplaceDeadReason,
-                    new List<byte>
-                    {
-                        rolePlayer.PlayerId,
-                        (byte)GameDataContainer.PlayerStatus.Retaliate
-                    });
-                ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
-                    rolePlayer.PlayerId, GameDataContainer.PlayerStatus.Retaliate);
-                
+                ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
+                    rolePlayer.PlayerId,
+                    ExtremeShipStatus.PlayerStatus.Retaliate);
+
                 return false;
             }
 

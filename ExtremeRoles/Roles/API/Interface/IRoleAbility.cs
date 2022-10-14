@@ -272,16 +272,16 @@ namespace ExtremeRoles.Roles.API.Interface
 
             if (self.Button == null) { return; }
 
-            var allOps = OptionHolder.AllOption;
+            var allOpt = OptionHolder.AllOption;
             self.Button.SetAbilityCoolTime(
-                allOps[self.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)].GetValue());
+                allOpt[self.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)].GetValue());
 
             int checkOptionId = self.GetRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime);
 
-            if (allOps.ContainsKey(checkOptionId))
+            if (allOpt.ContainsKey(checkOptionId))
             {
                 self.Button.SetAbilityActiveTime(
-                    allOps[checkOptionId].GetValue());
+                    allOpt[checkOptionId].GetValue());
             }
 
             var button = self.Button as AbilityCountButton;
@@ -289,7 +289,7 @@ namespace ExtremeRoles.Roles.API.Interface
             if (button != null)
             {
                 button.UpdateAbilityCount(
-                    allOps[self.GetRoleOptionId(
+                    allOpt[self.GetRoleOptionId(
                         RoleAbilityCommonOption.AbilityCount)].GetValue());
             }
 

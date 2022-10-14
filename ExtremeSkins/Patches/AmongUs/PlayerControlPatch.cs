@@ -54,11 +54,11 @@ namespace ExtremeSkins.Patches.AmongUs
 
             switch (callId)
             {
-                case byte.MaxValue:
-                    int major = reader.ReadInt32();
-                    int minor = reader.ReadInt32();
-                    int build = reader.ReadInt32();
-                    int revision = reader.ReadInt32();
+                case VersionManager.RpcCommand:
+                    int major = reader.ReadPackedInt32();
+                    int minor = reader.ReadPackedInt32();
+                    int build = reader.ReadPackedInt32();
+                    int revision = reader.ReadPackedInt32();
                     int clientId = reader.ReadPackedInt32();
                     VersionManager.AddVersionData(
                         major, minor, build,

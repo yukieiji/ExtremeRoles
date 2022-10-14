@@ -149,19 +149,16 @@ namespace ExtremeSkins.SkinManager
                 {
                     string[] namePlateDir = namePlate.Split(@"\");
                     string imageName = namePlateDir[namePlateDir.Length - 1];
-                    string name = imageName.Substring(0, imageName.Length - 4);
-                    string productId = string.Concat("namePlate_", name);
 
-                    if (NamePlateData.ContainsKey(productId)) { continue; }
-
-                    NamePlateData.Add(
-                        productId,  // Name
-                        new CustomNamePlate(
-                            productId, namePlate,
-                            author, name));  // Name
-
-                    ExtremeSkinsPlugin.Logger.LogInfo(
-                        $"NamePlate Loaded:{name}, from:{namePlate}");
+                    CustomNamePlate customNamePlate = new CustomNamePlate(
+                        namePlate, author,
+                        imageName.Substring(0, imageName.Length - 4));
+                    
+                    if (NamePlateData.TryAdd(customNamePlate.Id, customNamePlate))
+                    {
+                        ExtremeSkinsPlugin.Logger.LogInfo(
+                            $"NamePlate Loaded:{customNamePlate.Name}, from:{namePlate}");
+                    }
                 }
                 
             }

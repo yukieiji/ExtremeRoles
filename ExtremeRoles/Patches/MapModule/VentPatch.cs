@@ -3,10 +3,32 @@ using Hazel;
 using UnityEngine;
 
 using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Extension.Ship;
 
 namespace ExtremeRoles.Patches.MapModule
 {
+    [HarmonyPatch(typeof(Vent), "UsableDistance", MethodType.Getter)]
+    public static class VentUsableDistancePatch
+    {
+        public static bool Prefix(
+            ref float __result)
+        {
+            if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
+
+            var underWarper = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<UnderWarper>();
+
+            if (underWarper == null ||
+                !underWarper.IsAwake) { return true; }
+            
+            __result = underWarper.VentUseRange;
+
+            return false;
+        }
+    }
+
     [HarmonyPatch(typeof(Vent), nameof(Vent.CanUse))]
     public static class VentCanUsePatch
     {
@@ -36,7 +58,7 @@ namespace ExtremeRoles.Patches.MapModule
             bool isCustomMapVent = ExtremeRolesPlugin.Compat.IsModMap &&
                 ExtremeRolesPlugin.Compat.ModMap.IsCustomVentUse(__instance);
 
-            if (Roles.ExtremeRoleManager.GameRole.Count == 0)
+            if (ExtremeRoleManager.GameRole.Count == 0)
             {
                 if (isCustomMapVent)
                 {
@@ -48,7 +70,7 @@ namespace ExtremeRoles.Patches.MapModule
                 return true; 
             }
 
-            bool roleCouldUse = Roles.ExtremeRoleManager.GameRole[playerInfo.PlayerId].CanUseVent();
+            bool roleCouldUse = ExtremeRoleManager.GameRole[playerInfo.PlayerId].CanUseVent();
 
             if (isCustomMapVent)
             {
@@ -92,9 +114,9 @@ namespace ExtremeRoles.Patches.MapModule
             [HarmonyArgument(0)] bool on,
             [HarmonyArgument(1)] bool mainTarget)
         {
-            if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
+            if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
-            var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
+            var role = ExtremeRoleManager.GetLocalPlayerRole();
 
             if (role.IsVanillaRole() || role.IsImpostor()) { return true; }
 
@@ -115,45 +137,60 @@ namespace ExtremeRoles.Patches.MapModule
         {
             bool canUse;
             bool couldUse;
-            
+
+            PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+
             __instance.CanUse(
-                CachedPlayerControl.LocalPlayer.Data,
+                localPlayer.Data,
                 out canUse, out couldUse);
 
             if (!canUse) { return false; }; // No need to execute the native method as using is disallowed anyways
 
-            bool isEnter = !CachedPlayerControl.LocalPlayer.PlayerControl.inVent;
+            bool isEnter = !localPlayer.inVent;
 
-            if (ExtremeRolesPlugin.GameDataStore.CustomVent.IsCustomVent(
+            if (CachedShipStatus.Instance.IsCustomVent(
                 __instance.Id))
             {
                 __instance.SetButtons(isEnter);
                 MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                    localPlayer.NetId,
                     (byte)RPCOperator.Command.CustomVentUse,
                     Hazel.SendOption.Reliable);
                 writer.WritePacked(__instance.Id);
-                writer.Write(CachedPlayerControl.LocalPlayer.PlayerId);
+                writer.Write(localPlayer.PlayerId);
                 writer.Write(isEnter ? byte.MaxValue : (byte)0);
                 AmongUsClient.Instance.FinishRpcImmediately(writer);
                 RPCOperator.CustomVentUse(
                     __instance.Id,
-                    PlayerControl.LocalPlayer.PlayerId,
+                    localPlayer.PlayerId,
                     isEnter ? byte.MaxValue : (byte)0);
+                
+                __instance.SetButtons(isEnter);
+
+                return false;
+            }
+
+            var underWarper = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<UnderWarper>();
+            if (underWarper != null &&
+                underWarper.IsAwake &&
+                underWarper.IsNoVentAnime)
+            {
+                UnderWarper.RpcUseVentWithNoAnimation(
+                    localPlayer, __instance.Id, isEnter);
+                __instance.SetButtons(isEnter);
                 return false;
             }
 
             if (isEnter)
             {
-                CachedPlayerControl.LocalPlayer.PlayerPhysics.RpcEnterVent(__instance.Id);
+                localPlayer.MyPhysics.RpcEnterVent(__instance.Id);
             }
             else
             {
-                CachedPlayerControl.LocalPlayer.PlayerPhysics.RpcExitVent(__instance.Id);
+                localPlayer.MyPhysics.RpcExitVent(__instance.Id);
             }
 
             __instance.SetButtons(isEnter);
-
             return false;
         }
     }

@@ -13,7 +13,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using BepInEx.IL2CPP.Utils.Collections;
-
+using ExtremeRoles.Module.ExtremeShipStatus;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -154,7 +154,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            return;
+            if (this.tellText != null)
+            {
+                this.tellText.gameObject.SetActive(false);
+            }
         }
 
         public void RoleAbilityResetOnMeetingEnd()
@@ -171,7 +174,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 CachedShipStatus.Instance == null ||
                 GameData.Instance == null) { return; }
             if (!CachedShipStatus.Instance.enabled ||
-                ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
+                ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
 
             this.timer -= Time.deltaTime;
             if (this.timer > 0) { return; }
@@ -236,24 +239,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                                 truePosition, vector.normalized,
                                 magnitude, Constants.ShipAndObjectsMask))
                         {
-                            var bodyGuard = ExtremeRolesPlugin.GameDataStore.ShildPlayer.GetBodyGuardPlayerId(
-                                @object.PlayerId);
-
-                            var target = @object;
-
-                            if (bodyGuard != byte.MaxValue)
-                            {
-                                target = Player.GetPlayerControlById(bodyGuard);
-                                if (@object == null)
-                                {
-                                    target = @object;
-                                }
-                                else if (target.Data.IsDead || target.Data.Disconnected)
-                                {
-                                    target = @object;
-                                }
-                            }
-                            result.Add(target);
+                            result.Add(@object);
                         }
                     }
                 }
@@ -269,6 +255,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             PlayerControl target)
         {
 
+            if (Crewmate.BodyGuard.TryGetShiledPlayerId(
+                    target.PlayerId, out byte bodyGuard) &&
+                Crewmate.BodyGuard.RpcTryKillBodyGuard(
+                    bombPlayer.PlayerId, bodyGuard))
+            {
+                return;
+            }
+
             RPCOperator.Call(
                 rolePlayer.NetId,
                 RPCOperator.Command.UncheckedMurderPlayer,
@@ -283,16 +277,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 target.PlayerId,
                 byte.MaxValue);
 
-            RPCOperator.Call(
-                rolePlayer.NetId,
-                RPCOperator.Command.ReplaceDeadReason,
-                new List<byte>
-                {
-                    target.PlayerId,
-                    (byte)GameDataContainer.PlayerStatus.Explosion
-                });
-            ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
-                target.PlayerId, GameDataContainer.PlayerStatus.Explosion);
+            ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
+                target.PlayerId, ExtremeShipStatus.PlayerStatus.Explosion);
         }
 
         private IEnumerator showText()

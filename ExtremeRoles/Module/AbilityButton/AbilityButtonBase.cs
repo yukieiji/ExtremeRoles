@@ -8,7 +8,7 @@ namespace ExtremeRoles.Module.AbilityButton
     public abstract class AbilityButtonBase
     {
         public Vector3 PositionOffset;
-        public string ButtonText = null;
+        protected string ButtonText = null;
 
         protected ActionButton Button;
 
@@ -99,6 +99,16 @@ namespace ExtremeRoles.Module.AbilityButton
                 Button.gameObject.SetActive(false);
                 Button.graphic.enabled = false;
             }
+        }
+
+        public void SetButtonText(string newText)
+        {
+            this.ButtonText = newText;
+        }
+
+        public void SetButtonImage(Sprite newImage)
+        {
+            this.ButtonSprite = newImage;
         }
 
         public void SetLabelToCrewmate()

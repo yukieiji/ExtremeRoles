@@ -11,7 +11,12 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
-    public sealed class Yandere : SingleRoleBase, IRoleUpdate, IRoleMurderPlayerHock, IRoleResetMeeting, IRoleSpecialSetUp
+    public sealed class Yandere : 
+        SingleRoleBase, 
+        IRoleUpdate, 
+        IRoleMurderPlayerHook, 
+        IRoleResetMeeting, 
+        IRoleSpecialSetUp
     {
         public PlayerControl OneSidedLover = null;
 
@@ -44,7 +49,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         private Dictionary<byte, float> progress;
 
-        public class KillTarget
+        public sealed class KillTarget
         {
             private bool isUseArrow;
 
@@ -224,7 +229,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
 
             if (!CachedShipStatus.Instance.enabled ||
-                ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
+                ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
             {
                 return;
             }
@@ -309,7 +314,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             checkRunawayNextMeeting();
         }
 
-        public void HockMuderPlayer(
+        public void HookMuderPlayer(
             PlayerControl source, PlayerControl target)
         {
             if (this.target.IsContain(target.PlayerId))
@@ -331,7 +336,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 this.OneSidedLover = CachedPlayerControl.AllPlayerControls[playerIndex];
 
                 var role = ExtremeRoleManager.GameRole[this.OneSidedLover.PlayerId];
-                if (role.Id != ExtremeRoleId.Yandere) { break; }
+                if (role.Id != ExtremeRoleId.Yandere &&
+                    role.Id != ExtremeRoleId.Xion) { break; }
 
                 var multiAssignRole = role as MultiAssignRoleBase;
                 if (multiAssignRole != null)

@@ -2,6 +2,7 @@
 
 using Hazel;
 
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo.Neutral;
@@ -27,7 +28,7 @@ namespace ExtremeRoles.Module.SpecialWinChecker
         }
 
         public bool IsWin(
-            GameDataContainer.PlayerStatistics statistics)
+            ExtremeShipStatus.ExtremeShipStatus.PlayerStatistics statistics)
         {
             List<PlayerControl> aliveOneSideLover = new List<PlayerControl>();
 
@@ -83,7 +84,7 @@ namespace ExtremeRoles.Module.SpecialWinChecker
             foreach (var player in aliveOneSideLover)
             {
                 writer.Write(player.PlayerId);
-                ExtremeRolesPlugin.GameDataStore.PlusWinner.Add(player.Data);
+                ExtremeRolesPlugin.ShipState.AddWinner(player);
             }
             AmongUsClient.Instance.FinishRpcImmediately(writer);
 

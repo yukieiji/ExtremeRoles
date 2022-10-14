@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using HarmonyLib;
+﻿using HarmonyLib;
 
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
@@ -12,18 +10,15 @@ namespace ExtremeRoles.Patches.Controller
     [HarmonyPatch(typeof(ExileController), nameof(ExileController.Begin))]
     public static class ExileControllerBeginePatch
     {
-
-        private static TMPro.TextMeshPro breadText;
-
         public static bool Prefix(
             ExileController __instance,
             [HarmonyArgument(0)] GameData.PlayerInfo exiled,
             [HarmonyArgument(1)] bool tie)
         {
 
-            var gameData = ExtremeRolesPlugin.GameDataStore;
+            var state = ExtremeRolesPlugin.ShipState;
 
-            if (!gameData.AssassinMeetingTrigger) { return true; }
+            if (!state.AssassinMeetingTrigger) { return true; }
 
 			if (__instance.specialInputHandler != null)
 			{
@@ -37,11 +32,11 @@ namespace ExtremeRoles.Patches.Controller
             __instance.Text.text = string.Empty;
 
             GameData.PlayerInfo player = GameData.Instance.GetPlayerById(
-                gameData.IsMarinPlayerId);
+                state.IsMarinPlayerId);
 
             string printStr;
 
-            if (gameData.AssassinateMarin)
+            if (state.IsAssassinateMarin)
             {
                 printStr = player?.PlayerName + Helper.Translation.GetString(
                     "assassinateMarinSucsess");
@@ -63,27 +58,24 @@ namespace ExtremeRoles.Patches.Controller
             [HarmonyArgument(0)] GameData.PlayerInfo exiled,
             [HarmonyArgument(1)] bool tie)
         {
-            if (!ExtremeRolesPlugin.GameDataStore.Union.IsEstablish()) { return; }
-            if (breadText == null)
+            if (!ExtremeRolesPlugin.ShipState.IsShowAditionalInfo()) { return; }
+            TMPro.TextMeshPro infoText = UnityEngine.Object.Instantiate(
+                __instance.ImpostorText,
+                __instance.Text.transform);
+            if (PlayerControl.GameOptions.ConfirmImpostor)
             {
-                breadText = UnityEngine.Object.Instantiate(
-                    __instance.ImpostorText,
-                    __instance.Text.transform);
-                if (PlayerControl.GameOptions.ConfirmImpostor)
-                {
-                    breadText.transform.localPosition += new UnityEngine.Vector3(0f, -0.4f, 0f);
-                }
-                else
-                {
-                    breadText.transform.localPosition += new UnityEngine.Vector3(0f, -0.2f, 0f);
-                }
-                breadText.gameObject.SetActive(true);
+                infoText.transform.localPosition += new UnityEngine.Vector3(0f, -0.4f, 0f);
             }
+            else
+            {
+                infoText.transform.localPosition += new UnityEngine.Vector3(0f, -0.2f, 0f);
+            }
+            infoText.gameObject.SetActive(true);
 
-            breadText.text = ExtremeRolesPlugin.GameDataStore.Union.GetBreadBakingCondition();
+            infoText.text = ExtremeRolesPlugin.ShipState.GetAditionalInfo();
 
             __instance.StartCoroutine(
-                Effects.Bloop(0.25f, breadText.transform, 1f, 0.5f));
+                Effects.Bloop(0.25f, infoText.transform, 1f, 0.5f));
         }
     }
 
@@ -156,23 +148,15 @@ namespace ExtremeRoles.Patches.Controller
         {
             ExtremeRolesPlugin.Info.BlockShow(false);
             ExtremeRolesPlugin.Info.HideBlackBG();
-            ExtremeRolesPlugin.GameDataStore.Union.ResetTimer();
-            ExtremeRolesPlugin.GameDataStore.AbilityManager.Clear();
+            ExtremeRolesPlugin.ShipState.ResetOnMeeting();
 
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
-            var gameData = ExtremeRolesPlugin.GameDataStore;
+            var state = ExtremeRolesPlugin.ShipState;
 
-            var deadedAssassin = gameData.DeadedAssassin;
 
-            if (deadedAssassin.Count != 0)
+            if (state.TryGetDeadAssasin(out byte playerId))
             {
-
-                int callAssassin = UnityEngine.Random.RandomRange(0, deadedAssassin.Count);
-
-                byte playerId = deadedAssassin.ElementAt(callAssassin);
-                deadedAssassin.Remove(playerId);
-
                 var assasin = (Roles.Combination.Assassin)ExtremeRoleManager.GameRole[playerId];
                 assasin.ExiledAction(
                     Helper.Player.GetPlayerControlById(playerId).Data);
@@ -234,14 +218,14 @@ namespace ExtremeRoles.Patches.Controller
                 }
             }
 
-            ExtremeRolesPlugin.GameDataStore.WinCheckDisable = false;
+            ExtremeRolesPlugin.ShipState.SetDisableWinCheck(false);
         }
 
         private static void resetAssassinMeeting()
         {
-            if (ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
+            if (ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
             {
-                ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger = false;
+                ExtremeRolesPlugin.ShipState.AssassinMeetingTriggerOff();
             }
         }
         private static void tempWinCheckDisable(GameData.PlayerInfo exiled)
@@ -253,7 +237,7 @@ namespace ExtremeRoles.Patches.Controller
 
             if (ExtremeRoleManager.IsDisableWinCheckRole(role))
             {
-                ExtremeRolesPlugin.GameDataStore.WinCheckDisable = true;
+                ExtremeRolesPlugin.ShipState.SetDisableWinCheck(true);
             }
         }
 

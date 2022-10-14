@@ -7,7 +7,11 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public sealed class Whisper : SingleRoleBase, IRoleUpdate, IRoleMurderPlayerHock, IRoleResetMeeting
+    public sealed class Whisper : 
+        SingleRoleBase, 
+        IRoleUpdate, 
+        IRoleMurderPlayerHook, 
+        IRoleResetMeeting
     {
 
         public enum WhisperOption
@@ -53,7 +57,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
         }
 
-        public void HockMuderPlayer(
+        public void HookMuderPlayer(
             PlayerControl source,
             PlayerControl target)
         {
@@ -119,7 +123,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 return; 
             }
             if (!CachedShipStatus.Instance.enabled ||
-                ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger)
+                ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
             {
                 resetAbility(rolePlayer);
                 return; 

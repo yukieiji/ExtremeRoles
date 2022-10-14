@@ -20,10 +20,12 @@ namespace ExtremeRoles.Patches.MiniGame
         private static bool isRemoveSecurity = false;
         private static TMPro.TextMeshPro timerText;
 
-        private static readonly HashSet<ExtremeRoleId> securityUseRole = new HashSet<ExtremeRoleId>()
+        private static readonly HashSet<ExtremeRoleId> securityUseRole = 
+            new HashSet<ExtremeRoleId>()
         {
             ExtremeRoleId.Traitor,
             ExtremeRoleId.Watchdog,
+            ExtremeRoleId.Doll
         };
 
 
@@ -40,6 +42,32 @@ namespace ExtremeRoles.Patches.MiniGame
 
         }
 
+        public static bool IsAbilityUse()
+        {
+            SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
+            MultiAssignRoleBase multiAssignRole = role as MultiAssignRoleBase;
+
+            if (securityUseRole.Contains(role.Id))
+            {
+                if (((IRoleAbility)role).Button.IsAbilityActive())
+                {
+                    return true;
+                }
+            }
+            if (multiAssignRole?.AnotherRole != null)
+            {
+                if (securityUseRole.Contains(
+                    multiAssignRole.AnotherRole.Id))
+                {
+                    if (((IRoleAbility)multiAssignRole.AnotherRole).Button.IsAbilityActive())
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         public static void PostUpdate(Minigame instance)
         {
 
@@ -51,26 +79,9 @@ namespace ExtremeRoles.Patches.MiniGame
                 return;
             }
 
-            foreach (ExtremeRoleId roleId in securityUseRole)
+            if (IsAbilityUse())
             {
-
-                SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
-                MultiAssignRoleBase multiAssignRole = role as MultiAssignRoleBase;
-
-                if (role.Id == roleId)
-                {
-                    if (((IRoleAbility)role).Button.IsAbilityActive())
-                    {
-                        return;
-                    }
-                }
-                if (multiAssignRole?.AnotherRole?.Id == roleId)
-                {
-                    if (((IRoleAbility)multiAssignRole.AnotherRole).Button.IsAbilityActive())
-                    {
-                        return;
-                    }
-                }
+                return;
             }
 
             if (timerText == null)
@@ -178,7 +189,8 @@ namespace ExtremeRoles.Patches.MiniGame
         {
             if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
-            if (ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity())
+            if (ExtremeRoleManager.GetLocalPlayerRole().CanUseSecurity() || 
+                SecurityHelper.IsAbilityUse())
             {
                 updateCamera(__instance);
                 return false;

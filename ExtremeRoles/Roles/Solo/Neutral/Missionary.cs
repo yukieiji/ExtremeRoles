@@ -12,6 +12,7 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 
 using BepInEx.IL2CPP.Utils.Collections;
+using ExtremeRoles.Module.ExtremeShipStatus;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
@@ -150,7 +151,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (CachedShipStatus.Instance == null || 
                 GameData.Instance == null) { return; }
             if (!CachedShipStatus.Instance.enabled || 
-                ExtremeRolesPlugin.GameDataStore.AssassinMeetingTrigger) { return; }
+                ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
 
             this.timer -= Time.deltaTime;
             if (this.timer > 0) { return; }
@@ -177,16 +178,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 targetPlayer.PlayerId,
                 byte.MaxValue);
 
-            RPCOperator.Call(
-                rolePlayer.NetId,
-                RPCOperator.Command.ReplaceDeadReason,
-                new List<byte>
-                {
-                    targetPlayer.PlayerId,
-                    (byte)GameDataContainer.PlayerStatus.Departure
-                });
-            ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
-                targetPlayer.PlayerId, GameDataContainer.PlayerStatus.Departure);
+            ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
+                targetPlayer.PlayerId, ExtremeShipStatus.PlayerStatus.Departure);
+
             if (this.tellDeparture)
             {
                 rolePlayer.StartCoroutine(showText().WrapToIl2Cpp());

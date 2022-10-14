@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using HarmonyLib;
-using UnityEngine;
 
 using ExtremeSkins.SkinManager;
-using ExtremeRoles.Module;
 
 using BepInEx.IL2CPP.Utils.Collections;
 

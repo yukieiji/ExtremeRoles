@@ -8,7 +8,7 @@ using HarmonyLib;
 using ExtremeRoles.Compat;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.InfoOverlay;
-
+using ExtremeRoles.Module.ExtremeShipStatus;
 
 namespace ExtremeRoles
 {
@@ -23,7 +23,7 @@ namespace ExtremeRoles
         public Harmony Harmony { get; } = new Harmony(Id);
 
         public static ExtremeRolesPlugin Instance;
-        public static GameDataContainer GameDataStore = new GameDataContainer();
+        public static ExtremeShipStatus ShipState = new ExtremeShipStatus();
 
         public static InfoOverlay Info = new InfoOverlay();
 
@@ -61,7 +61,7 @@ namespace ExtremeRoles
 
             Il2CppRegisterAttribute.Registration(
                 System.Reflection.Assembly.GetAssembly(this.GetType()));
-        
+
         }
     }
 }

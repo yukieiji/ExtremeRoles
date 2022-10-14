@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 using UnityEngine;
 
@@ -8,6 +7,7 @@ using HarmonyLib;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Patches.Manager
@@ -92,7 +92,7 @@ namespace ExtremeRoles.Patches.Manager
                     poolablePlayer.cosmetics.nameText.transform.localPosition.y, -15f);
                 poolablePlayer.cosmetics.nameText.text = winningPlayerData.PlayerName;
 
-                foreach (var data in ExtremeRolesPlugin.GameDataStore.FinalSummary)
+                foreach (var data in FinalSummary.GetSummary())
                 {
                     if (data.PlayerName != winningPlayerData.PlayerName) { continue; }
                     poolablePlayer.cosmetics.nameText.text +=
@@ -112,132 +112,23 @@ namespace ExtremeRoles.Patches.Manager
             if (!OptionHolder.Client.ShowRoleSummary) { return; }
 
             var position = Camera.main.ViewportToWorldPoint(new Vector3(0f, 1f, Camera.main.nearClipPlane));
-            GameObject summary = UnityEngine.Object.Instantiate(
+            GameObject summaryObj = Object.Instantiate(
                 manager.WinText.gameObject);
-            summary.transform.position = new Vector3(
+            summaryObj.transform.position = new Vector3(
                 manager.Navigation.ExitButton.transform.position.x + 0.1f,
                 position.y - 0.1f, -14f);
-            summary.transform.localScale = new Vector3(1f, 1f, 1f);
+            summaryObj.transform.localScale = new Vector3(1f, 1f, 1f);
 
-            var summaryText = new StringBuilder();
-            summaryText.AppendLine(Translation.GetString("summaryText"));
-            summaryText.AppendLine(Translation.GetString("summaryInfo"));
-
-            var summaryData = ExtremeRolesPlugin.GameDataStore.FinalSummary;
-
-            summaryData.Sort((x, y) =>
-            {
-                if (x.StatusInfo != y.StatusInfo)
-                {
-                    return x.StatusInfo.CompareTo(y.StatusInfo);
-                }
-
-                if (x.Role.Id != y.Role.Id)
-                {
-                    return x.Role.Id.CompareTo(y.Role.Id);
-                }
-                if (x.Role.Id == ExtremeRoleId.VanillaRole)
-                {
-                    var xVanillaRole = (Roles.Solo.VanillaRoleWrapper)x.Role;
-                    var yVanillaRole = (Roles.Solo.VanillaRoleWrapper)y.Role;
-
-                    return xVanillaRole.VanilaRoleId.CompareTo(
-                        yVanillaRole.VanilaRoleId);
-                }
-
-                return x.PlayerName.CompareTo(y.PlayerName);
-
-            });
-
-            List<Color> tagColor = new List<Color>();
-
-            for (int i = 0; i < OptionHolder.VanillaMaxPlayerNum; ++i)
-            {
-                tagColor.Add(
-                    UnityEngine.Random.ColorHSV(0f, 1f, 0.5f, 1f, 0.8f, 1f, 1f, 1f));
-            }
-
-            List<string> randomTag = new List<string> {
-                    "γ", "ζ", "δ", "ε", "η",
-                    "θ", "λ", "μ", "π", "ρ",
-                    "σ", "φ", "ψ", "χ", "ω" }.OrderBy(
-                item => RandomGenerator.Instance.Next()).ToList();
-
-
-            foreach (var playerSummary in summaryData)
-            {
-                string taskInfo = playerSummary.TotalTask > 0 ? 
-                    $"<color=#FAD934FF>{playerSummary.CompletedTask}/{playerSummary.TotalTask}</color>" : "";
-                string aliveDead = Translation.GetString(
-                    playerSummary.StatusInfo.ToString());
-
-                string roleName = playerSummary.Role.GetColoredRoleName(true);
-                string tag = playerSummary.Role.GetRoleTag();
-                
-                int id = playerSummary.Role.GameControlId;
-                int index = id % OptionHolder.VanillaMaxPlayerNum;
-                if (tag != string.Empty)
-                {
-                    tag = Design.ColoedString(
-                        tagColor[index], tag);
-                }
-                else
-                {
-                    tag = Design.ColoedString(
-                        tagColor[index], randomTag[index]);
-                }
-
-                var mutiAssignRole = playerSummary.Role as Roles.API.MultiAssignRoleBase;
-                if (mutiAssignRole != null)
-                {
-                    if (mutiAssignRole.AnotherRole != null)
-                    {
-                        string anotherTag = mutiAssignRole.AnotherRole.GetRoleTag();
-                        id = mutiAssignRole.AnotherRole.GameControlId;
-                        index = id % OptionHolder.VanillaMaxPlayerNum;
-
-                        if (anotherTag != string.Empty)
-                        {
-                            anotherTag = Design.ColoedString(
-                                tagColor[index], anotherTag);
-                        }
-                        else
-                        {
-                            anotherTag = Design.ColoedString(
-                                tagColor[index], randomTag[index]);
-                        }
-
-                        tag = string.Concat(
-                            tag, " + ", anotherTag);
-
-                    }
-                }
-
-                summaryText.AppendLine(
-                    $"{playerSummary.PlayerName}<pos=18%>{taskInfo}<pos=27%>{aliveDead}<pos=35%>{tag}:{roleName}");
-            }
-
-
-            
-            TMPro.TMP_Text summaryTextMesh = summary.GetComponent<TMPro.TMP_Text>();
-            summaryTextMesh.alignment = TMPro.TextAlignmentOptions.TopLeft;
-            summaryTextMesh.color = Color.white;
-            summaryTextMesh.outlineWidth *= 1.2f;
-            summaryTextMesh.fontSizeMin = 1.25f;
-            summaryTextMesh.fontSizeMax = 1.25f;
-            summaryTextMesh.fontSize = 1.25f;
-
-            var roleSummaryTextMeshRectTransform = summaryTextMesh.GetComponent<RectTransform>();
-            roleSummaryTextMeshRectTransform.anchoredPosition = new Vector2(position.x + 3.5f, position.y - 0.1f);
-            summaryTextMesh.text = summaryText.ToString();
-
+            FinalSummary summary = summaryObj.AddComponent<FinalSummary>();
+            summary.SetAnchorPoint(position);
+            summary.Create();
         }
 
         private static void setWinBonusText(
             EndGameManager manager)
         {
 
-            GameObject bonusTextObject = UnityEngine.Object.Instantiate(manager.WinText.gameObject);
+            GameObject bonusTextObject = Object.Instantiate(manager.WinText.gameObject);
             bonusTextObject.transform.position = new Vector3(
                 manager.WinText.transform.position.x,
                 manager.WinText.transform.position.y - 0.8f,
@@ -249,9 +140,9 @@ namespace ExtremeRoles.Patches.Manager
 
             string bonusText = string.Empty;
 
-            var gameData = ExtremeRolesPlugin.GameDataStore;
+            var state = ExtremeRolesPlugin.ShipState;
 
-            switch (gameData.EndReason)
+            switch (state.EndReason)
             {
                 case GameOverReason.HumansByTask:
                 case GameOverReason.HumansByVote:
@@ -272,94 +163,109 @@ namespace ExtremeRoles.Patches.Manager
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Alice.ToString());
                     textRenderer.color = ColorPalette.AliceGold;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.AliceGold);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.AliceGold);
                     break;
                 case (GameOverReason)RoleGameOverReason.JackalKillAllOther:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Jackal.ToString());
                     textRenderer.color = ColorPalette.JackalBlue;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.JackalBlue);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.JackalBlue);
                     break;
                 case (GameOverReason)RoleGameOverReason.TaskMasterGoHome:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.TaskMaster.ToString());
                     textRenderer.color = ColorPalette.NeutralColor;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.NeutralColor);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.NeutralColor);
                     break;
                 case (GameOverReason)RoleGameOverReason.MissionaryAllAgainstGod:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Missionary.ToString());
                     textRenderer.color = ColorPalette.MissionaryBlue;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.MissionaryBlue);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.MissionaryBlue);
                     break;
                 case (GameOverReason)RoleGameOverReason.JesterMeetingFavorite:
                     bonusText = Translation.GetString(
                        ExtremeRoleId.Jester.ToString());
                     textRenderer.color = ColorPalette.JesterPink;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.JesterPink);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.JesterPink);
                     break;
                 case (GameOverReason)RoleGameOverReason.LoverKillAllOther:
                 case (GameOverReason)RoleGameOverReason.ShipFallInLove:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Lover.ToString());
                     textRenderer.color = ColorPalette.LoverPink;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.LoverPink);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.LoverPink);
                     break;
                 case (GameOverReason)RoleGameOverReason.YandereKillAllOther:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Yandere.ToString());
                     textRenderer.color = ColorPalette.YandereVioletRed;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.YandereVioletRed);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.YandereVioletRed);
                     break;
                 case (GameOverReason)RoleGameOverReason.YandereShipJustForTwo:
                     bonusText = Translation.GetString(
                         RoleGameOverReason.YandereShipJustForTwo.ToString());
                     textRenderer.color = ColorPalette.YandereVioletRed;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.YandereVioletRed);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.YandereVioletRed);
                     break;
                 case (GameOverReason)RoleGameOverReason.VigilanteKillAllOther:
                 case (GameOverReason)RoleGameOverReason.VigilanteNewIdealWorld:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Vigilante.ToString());
                     textRenderer.color = ColorPalette.VigilanteFujiIro;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.VigilanteFujiIro);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.VigilanteFujiIro);
                     break;
                 case (GameOverReason)RoleGameOverReason.YokoAllDeceive:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Yoko.ToString());
                     textRenderer.color = ColorPalette.YokoShion;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.YokoShion);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.YokoShion);
                     break;
                 case (GameOverReason)RoleGameOverReason.MinerExplodeEverything:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Miner.ToString());
                     textRenderer.color = ColorPalette.MinerIvyGreen;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.MinerIvyGreen);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.MinerIvyGreen);
                     break;
                 case (GameOverReason)RoleGameOverReason.EaterAllEatInTheShip:
                 case (GameOverReason)RoleGameOverReason.EaterAliveAlone:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Eater.ToString());
                     textRenderer.color = ColorPalette.EaterMaroon;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.EaterMaroon);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.EaterMaroon);
                     break;
                 case (GameOverReason)RoleGameOverReason.TraitorKillAllOther:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Traitor.ToString());
                     textRenderer.color = ColorPalette.TraitorLightShikon;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.TraitorLightShikon);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.TraitorLightShikon);
                     break;
                 case (GameOverReason)RoleGameOverReason.QueenKillAllOther:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Queen.ToString());
                     textRenderer.color = ColorPalette.QueenWhite;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.QueenWhite);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.QueenWhite);
                     break;
                 case (GameOverReason)RoleGameOverReason.UmbrerBiohazard:
                     bonusText = Translation.GetString(
                         ExtremeRoleId.Umbrer.ToString());
                     textRenderer.color = ColorPalette.UmbrerRed;
-                    manager.BackgroundBar.material.SetColor("_Color", ColorPalette.UmbrerRed);
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.UmbrerRed);
                     break;
                 default:
                     break;
@@ -369,7 +275,7 @@ namespace ExtremeRoles.Patches.Manager
 
             if (OptionHolder.Ship.DisableNeutralSpecialForceEnd && winNeutral.Count != 0)
             {
-                switch (gameData.EndReason)
+                switch (state.EndReason)
                 {
                     case GameOverReason.HumansByTask:
                     case GameOverReason.HumansByVote:
@@ -404,7 +310,7 @@ namespace ExtremeRoles.Patches.Manager
                 winNeutral.Clear();
             }
 
-            foreach (var player in gameData.PlusWinner)
+            foreach (var player in state.GetPlusWinner())
             {
 
                 var role = ExtremeRoleManager.GameRole[player.PlayerId];

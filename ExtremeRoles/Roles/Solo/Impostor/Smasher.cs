@@ -96,23 +96,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 }
             }
 
-
-            var bodyGuard = ExtremeRolesPlugin.GameDataStore.ShildPlayer.GetBodyGuardPlayerId(
-                prevTarget.PlayerId);
-
             PlayerControl newTarget = prevTarget;
 
-            if (bodyGuard != byte.MaxValue)
+            if (Crewmate.BodyGuard.TryGetShiledPlayerId(
+                    prevTarget.PlayerId, out byte bodyGuard) &&
+                Crewmate.BodyGuard.RpcTryKillBodyGuard(
+                    killer.PlayerId, bodyGuard))
             {
-                newTarget = Player.GetPlayerControlById(bodyGuard);
-                if (newTarget == null)
-                {
-                    newTarget = prevTarget;
-                }
-                else if (newTarget.Data.IsDead || newTarget.Data.Disconnected)
-                {
-                    newTarget = prevTarget;
-                }
+                featKillPenalty(killer);
+                return true;
             }
 
             byte useAnimation = byte.MaxValue;
@@ -133,19 +125,21 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 newTarget.PlayerId,
                 useAnimation);
 
+            featKillPenalty(killer);
+            return true;
+        }
+
+        private void featKillPenalty(PlayerControl killer)
+        {
             if (this.penaltyKillCool > 0.0f)
             {
-                if (!this.HasOtherKillCool)
-                {
-                    this.HasOtherKillCool = true;
-                    this.KillCoolTime = PlayerControl.GameOptions.KillCooldown;
-                }
-                this.KillCoolTime = this.KillCoolTime + this.penaltyKillCool;
+
+                this.HasOtherKillCool = true;
+                API.Extension.State.RoleState.AddKillCoolOffset(
+                    this.penaltyKillCool);
             }
 
             killer.killTimer = this.prevKillCool;
-
-            return true;
         }
 
         protected override void CreateSpecificOption(

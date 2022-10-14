@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour
 {
@@ -6,6 +7,8 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
     public sealed class Resizeer : MonoBehaviour
     {
         private Vector3 targetScale = Vector3.one;
+
+        public Resizeer(IntPtr ptr) : base(ptr) { }
 
         public void LateUpdate()
         {

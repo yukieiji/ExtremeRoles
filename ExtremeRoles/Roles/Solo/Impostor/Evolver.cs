@@ -101,7 +101,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.KillCoolTime = Mathf.Clamp(
                 this.KillCoolTime, 0.1f, this.defaultKillCoolTime);
 
-            this.Button.ButtonText = this.defaultButtonText;
+            this.Button.SetButtonText(this.defaultButtonText);
 
             if (!this.isEatingEndCleanBody) { return; }
 
@@ -129,7 +129,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 result = this.eatingBodyId == this.targetBody.PlayerId;
             }
             
-            this.Button.ButtonText = result ? this.eatingText : this.defaultButtonText;
+            this.Button.SetButtonText(
+                result ? this.eatingText : this.defaultButtonText);
 
             return result;
         }

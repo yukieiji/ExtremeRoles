@@ -3,6 +3,8 @@ using System.Linq;
 using Hazel;
 
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.ExtremeShipStatus;
+using ExtremeRoles.Extension.Ship;
 
 namespace ExtremeRoles
 {
@@ -22,8 +24,10 @@ namespace ExtremeRoles
             ShareOption,
             CustomVentUse,
             StartVentAnimation,
+            UncheckedSnapTo,
             UncheckedShapeShift,
             UncheckedMurderPlayer,
+            UncheckedRevive,
             CleanDeadBody,
             FixLightOff,
             ReplaceDeadReason,
@@ -43,8 +47,7 @@ namespace ExtremeRoles
             HeroHeroAcademia,
 
             // クルーメイト
-            BodyGuardFeatShield,
-            BodyGuardResetShield,
+            BodyGuardAbility,
             TimeMasterAbility,
             AgencyTakeTask,
             AgencySetNewTask,
@@ -55,6 +58,7 @@ namespace ExtremeRoles
             CarpenterUseAbility,
             SurvivorDeadWin,
             CaptainAbility,
+            ResurrecterRpc,
 
             // インポスター
             AssasinVoteFor,
@@ -68,6 +72,8 @@ namespace ExtremeRoles
             SlaveDriverSetNewTask,
             LastWolfSwitchLight,
             CommanderAttackCommand,
+            HypnotistAbility,
+            UnderWarperUseVentWithNoAnime,
 
             // ニュートラル
             AliceShipBroken,
@@ -80,6 +86,8 @@ namespace ExtremeRoles
             // 幽霊役職
             SetGhostRole,
             UseGhostRoleAbility,
+
+            XionAbility,
         }
 
         public static void Call(
@@ -130,12 +138,11 @@ namespace ExtremeRoles
             Helper.Player.ResetTarget();
             Roles.ExtremeRoleManager.Initialize();
             GhostRoles.ExtremeGhostRoleManager.Initialize();
-            ExtremeRolesPlugin.GameDataStore.Initialize();
+            ExtremeRolesPlugin.ShipState.Initialize();
             ExtremeRolesPlugin.Info.ResetOverlays();
+            
+            // チェックポイントリセット
             Helper.Logging.ResetCkpt();
-
-            // ポジションセッターリセット
-            Patches.PlayerControlFixedUpdatePatch.ResetPosionSetter();
 
             // キルアニメーションリセット
             Patches.KillAnimationCoPerformKillPatch.HideNextAnimation = false;
@@ -150,6 +157,11 @@ namespace ExtremeRoles
             Patches.MiniGame.VitalsMinigameUpdatePatch.Initialize();
             Patches.MiniGame.SecurityHelper.Initialize();
             Patches.MapOverlay.MapCountOverlayUpdatePatch.Initialize();
+
+            // 最終結果リセット
+            Module.CustomMonoBehaviour.FinalSummary.Reset();
+
+            VentExtension.ResetCustomVent();
         }
 
         public static void ForceEnd()
@@ -209,8 +221,8 @@ namespace ExtremeRoles
 
         public static void ReplaceDeadReason(byte playerId, byte reason)
         {
-            ExtremeRolesPlugin.GameDataStore.ReplaceDeadReason(
-                playerId, (Module.GameDataContainer.PlayerStatus)reason);
+            ExtremeRolesPlugin.ShipState.ReplaceDeadReason(
+                playerId, (ExtremeShipStatus.PlayerStatus)reason);
         }
 
         public static void CustomVentUse(
@@ -218,8 +230,9 @@ namespace ExtremeRoles
         {
 
             HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
+            ShipStatus ship = CachedShipStatus.Instance;
 
-            if (ShipStatus.Instance == null || hudManager == null) { return; }
+            if (ship == null || hudManager == null) { return; }
 
             PlayerControl player = Helper.Player.GetPlayerControlById(playerId);
             if (player == null) { return; }
@@ -234,21 +247,19 @@ namespace ExtremeRoles
             reader.Buffer = bytes;
             reader.Length = bytes.Length;
 
-            Vent vent = CachedShipStatus.Instance.AllVents.FirstOrDefault(
+            Vent vent = ship.AllVents.FirstOrDefault(
                 (x) => x.Id == ventId);
-
-            var ventContainer = ExtremeRolesPlugin.GameDataStore.CustomVent;
 
             hudManager.StartCoroutine(
                 Effects.Lerp(
                     0.6f, new System.Action<float>((p) => {
                         if (vent != null && vent.myRend != null)
                         {
-                            vent.myRend.sprite = ventContainer.GetVentSprite(
+                            vent.myRend.sprite = ship.GetCustomVentSprite(
                                 ventId, (int)(p * 17));
                             if (p == 1f)
                             {
-                                vent.myRend.sprite = ventContainer.GetVentSprite(
+                                vent.myRend.sprite = ship.GetCustomVentSprite(
                                     ventId, 0);
                             }
                         }
@@ -265,10 +276,9 @@ namespace ExtremeRoles
                 (x) => x.Id == ventId);
 
             HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
+            ShipStatus ship = CachedShipStatus.Instance;
 
-            var ventContainer = ExtremeRolesPlugin.GameDataStore.CustomVent;
-
-            if (ventContainer.IsCustomVent(ventId))
+            if (ship.IsCustomVent(ventId))
             {
                 if (hudManager == null) { return; }
 
@@ -277,11 +287,11 @@ namespace ExtremeRoles
                         0.6f, new System.Action<float>((p) => {
                             if (vent != null && vent.myRend != null)
                             {
-                                vent.myRend.sprite = ventContainer.GetVentSprite(
+                                vent.myRend.sprite = ship.GetCustomVentSprite(
                                     ventId, (int)(p * 17));
                                 if (p == 1f)
                                 {
-                                    vent.myRend.sprite = ventContainer.GetVentSprite(
+                                    vent.myRend.sprite = ship.GetCustomVentSprite(
                                         ventId, 0);
                                 }
                             }   
@@ -293,6 +303,16 @@ namespace ExtremeRoles
             {
                 vent?.GetComponent<PowerTools.SpriteAnim>()?.Play(
                     vent.ExitVentAnim, 1f);
+            }
+        }
+
+        public static void UncheckedSnapTo(
+            byte teleporterId, UnityEngine.Vector2 pos)
+        {
+            PlayerControl teleportPlayer = Helper.Player.GetPlayerControlById(teleporterId);
+            if (teleportPlayer != null)
+            {
+                teleportPlayer.NetTransform.SnapTo(pos);
             }
         }
 
@@ -328,9 +348,28 @@ namespace ExtremeRoles
             }
         }
 
+        public static void UncheckedRevive(byte targetId)
+        {
+            PlayerControl target = Helper.Player.GetPlayerControlById(targetId);
+
+            if (target != null)
+            {
+                target.Revive();
+
+                // なんか起きて失敗
+                if (target.Data == null || 
+                    target.Data.IsDead || 
+                    target.Data.Disconnected) { return; }
+
+                // 死体は消しておく
+                CleanDeadBody(target.PlayerId);
+            }
+        }
+
+
         public static void SetWinGameControlId(int id)
         {
-            ExtremeRolesPlugin.GameDataStore.WinGameControlId = id;
+            ExtremeRolesPlugin.ShipState.SetWinControlId(id);
         }
 
         public static void SetWinPlayer(List<byte> playerId)
@@ -339,7 +378,7 @@ namespace ExtremeRoles
             {
                 GameData.PlayerInfo player = GameData.Instance.GetPlayerById(id);
                 if (player == null) { continue; }
-                ExtremeRolesPlugin.GameDataStore.PlusWinner.Add(player);
+                ExtremeRolesPlugin.ShipState.AddWinner(player);
             }
         }
 
@@ -356,9 +395,8 @@ namespace ExtremeRoles
             int major, int minor,
             int build, int revision, int clientId)
         {
-            ExtremeRolesPlugin.GameDataStore.PlayerVersion[
-                clientId] = new System.Version(
-                    major, minor, build, revision);
+            ExtremeRolesPlugin.ShipState.AddPlayerVersion(
+                clientId, major, minor, build, revision);
         }
 
         public static void PlaySound(byte soundType)
@@ -400,17 +438,9 @@ namespace ExtremeRoles
                 ref reader);
         }
 
-        public static void BodyGuardFeatShield(
-            byte playerId,
-            byte targetPlayer)
+        public static void BodyGuardAbility(ref MessageReader reader)
         {
-            ExtremeRolesPlugin.GameDataStore.ShildPlayer.Add(
-                playerId, targetPlayer);
-        }
-
-        public static void BodyGuardResetShield(byte playerId)
-        {
-            ExtremeRolesPlugin.GameDataStore.ShildPlayer.Remove(playerId);
+            Roles.Solo.Crewmate.BodyGuard.Ability(ref reader);
         }
 
         public static void TimeMasterAbility(ref MessageReader reader)
@@ -466,6 +496,11 @@ namespace ExtremeRoles
             Roles.Solo.Crewmate.Captain.UseAbility(ref reader);
         }
 
+        public static void ResurrecterRpc(ref MessageReader reader)
+        {
+            Roles.Solo.Crewmate.Resurrecter.RpcAbility(ref reader);
+        }
+
         public static void AssasinVoteFor(byte targetId)
         {
             Roles.Combination.Assassin.VoteFor(
@@ -480,16 +515,16 @@ namespace ExtremeRoles
         }
 
         public static void PainterPaintBody(
-            byte callerId, byte targetId)
+            byte targetId, byte isRandomModeMessage)
         {
             Roles.Solo.Impostor.Painter.PaintDeadBody(
-                callerId, targetId);
+                targetId, isRandomModeMessage);
         }
         public static void FakerCreateDummy(
-            byte callerId, byte targetId)
+            byte callerId, byte targetId, byte ops)
         {
             Roles.Solo.Impostor.Faker.CreateDummy(
-                callerId, targetId);
+                callerId, targetId, ops);
         }
 
         public static void OverLoaderSwitchAbility(
@@ -531,6 +566,18 @@ namespace ExtremeRoles
         {
             Roles.Solo.Impostor.Commander.AttackCommad(
                 rolePlayerId);
+        }
+
+        public static void HypnotistAbility(ref MessageReader reader)
+        {
+            Roles.Solo.Impostor.Hypnotist.Ability(ref reader);
+        }
+
+        public static void UnderWarperUseVentWithNoAnime(
+            byte playerId, int ventId, bool isEnter)
+        {
+            Roles.Solo.Impostor.UnderWarper.UseVentWithNoAnimation(
+                playerId, ventId, isEnter);
         }
 
         public static void AliceShipBroken(
@@ -579,8 +626,13 @@ namespace ExtremeRoles
         public static void UseGhostRoleAbility(
             byte abilityType, bool isReport, ref MessageReader reader)
         {
-            ExtremeRolesPlugin.GameDataStore.AbilityManager.UseGhostAbility(
+            GhostRoles.ExtremeGhostRoleManager.UseAbility(
                 abilityType, isReport, ref reader);
+        }
+
+        public static void XionAbility(ref MessageReader reader)
+        {
+            Roles.Solo.Host.Xion.UseAbility(ref reader);
         }
 
     }

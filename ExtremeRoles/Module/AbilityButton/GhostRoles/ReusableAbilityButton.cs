@@ -3,6 +3,7 @@ using UnityEngine;
 
 using Hazel;
 
+using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Performance;
 
 
@@ -13,7 +14,7 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
     {
 
         public ReusableAbilityButton(
-            GhostRoleAbilityManager.AbilityType abilityType,
+            AbilityType abilityType,
             Action<MessageWriter> ability,
             Func<bool> abilityPreCheck,
             Func<bool> canUse,

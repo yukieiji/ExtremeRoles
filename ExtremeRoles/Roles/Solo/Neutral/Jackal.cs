@@ -250,22 +250,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public static void TargetToSideKick(byte callerId, byte targetId)
         {
-            var targetPlayer = Player.GetPlayerControlById(targetId);
-            var targetRole = ExtremeRoleManager.GameRole[targetId];
+            PlayerControl targetPlayer = Player.GetPlayerControlById(targetId);
+            SingleRoleBase targetRole = ExtremeRoleManager.GameRole[targetId];
 
-            IRoleHasParent.PurgeParent(targetId);
-
-            // プレイヤーのリセット処理
-            if (CachedPlayerControl.LocalPlayer.PlayerId == targetId)
-            {
-                abilityReset(targetRole);
-            }
-
-            // シェイプシフターのリセット処理
-            shapeshiftReset(targetPlayer, targetRole);
-
-            // スペシャルリセット処理
-            specialResetRoleReset(targetPlayer, targetRole);
+            IRoleSpecialReset.ResetRole(targetId);
 
             var sourceJackal = ExtremeRoleManager.GetSafeCastedRole<Jackal>(callerId);
             if (sourceJackal == null) { return; }
@@ -277,24 +265,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             sourceJackal.SidekickPlayerId.Add(targetId);
 
-            FastDestroyableSingleton<RoleManager>.Instance.SetRole(
-                Player.GetPlayerControlById(targetId), RoleTypes.Crewmate);
-
             if (targetRole.Id != ExtremeRoleId.Lover)
             {
-                lock (ExtremeRoleManager.GameRole)
-                {
-                    ExtremeRoleManager.GameRole[targetId] = newSidekick;
-                }
+                ExtremeRoleManager.SetNewRole(targetId, newSidekick);
             }
             else
             {
                 if (sourceJackal.ForceReplaceLover)
                 {
-                    lock (ExtremeRoleManager.GameRole)
-                    {
-                        ExtremeRoleManager.GameRole[targetId] = newSidekick;
-                    }
+                    ExtremeRoleManager.SetNewRole(targetId, newSidekick);
                     targetRole.RolePlayerKilledAction(targetPlayer, targetPlayer);
                 }
                 else
@@ -315,79 +294,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
 
         }
-
-        private static void abilityReset(
-            SingleRoleBase targetRole)
-        {
-            var meetingResetRole = targetRole as IRoleResetMeeting;
-            if (meetingResetRole != null)
-            {
-                meetingResetRole.ResetOnMeetingStart();
-            }
-            var abilityRole = targetRole as IRoleAbility;
-            if (abilityRole != null)
-            {
-                abilityRole.ResetOnMeetingStart();
-            }
-
-            var multiAssignRole = targetRole as MultiAssignRoleBase;
-            if (multiAssignRole != null)
-            {
-                if (multiAssignRole.AnotherRole != null)
-                {
-                    meetingResetRole = multiAssignRole.AnotherRole as IRoleResetMeeting;
-                    if (meetingResetRole != null)
-                    {
-                        meetingResetRole.ResetOnMeetingStart();
-                    }
-
-                    abilityRole = multiAssignRole.AnotherRole as IRoleAbility;
-                    if (abilityRole != null)
-                    {
-                        abilityRole.ResetOnMeetingStart();
-                    }
-                }
-            }
-        }
-
-        private static void shapeshiftReset(
-            PlayerControl targetPlayer,
-            SingleRoleBase targetRole)
-        {
-            // シェイプシフターのリセット処理
-            if (targetRole.IsVanillaRole())
-            {
-                if (((VanillaRoleWrapper)targetRole).VanilaRoleId == RoleTypes.Shapeshifter)
-                {
-                    targetPlayer.Shapeshift(targetPlayer, false);
-                }
-            }
-        }
-
-        private static void specialResetRoleReset(
-            PlayerControl targetPlayer,
-            SingleRoleBase targetRole)
-        {
-            var specialResetRole = targetRole as IRoleSpecialReset;
-            if (specialResetRole != null)
-            {
-                specialResetRole.AllReset(targetPlayer);
-            }
-
-            var multiAssignRole = targetRole as MultiAssignRoleBase;
-            if (multiAssignRole != null)
-            {
-                if (multiAssignRole.AnotherRole != null)
-                {
-                    specialResetRole = multiAssignRole.AnotherRole as IRoleSpecialReset;
-                    if (specialResetRole != null)
-                    {
-                        specialResetRole.AllReset(targetPlayer);
-                    }
-                }
-            }
-        }
-
 
         public void CreateAbility()
         {

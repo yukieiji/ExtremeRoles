@@ -9,7 +9,7 @@ namespace ExtremeSkins
     public static class VersionManager
     {
         public static Dictionary<int, Version> PlayerVersion = new Dictionary<int, Version>();
-        public const byte RpcCommand = byte.MaxValue;
+        public const byte RpcCommand = byte.MaxValue - 1;
 
         public static void ShareVersion()
         {
@@ -18,10 +18,10 @@ namespace ExtremeSkins
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                 PlayerControl.LocalPlayer.NetId,
                 RpcCommand, Hazel.SendOption.Reliable, -1);
-            writer.Write(ver.Major);
-            writer.Write(ver.Minor);
-            writer.Write(ver.Build);
-            writer.Write(ver.Revision);
+            writer.WritePacked(ver.Major);
+            writer.WritePacked(ver.Minor);
+            writer.WritePacked(ver.Build);
+            writer.WritePacked(ver.Revision);
             writer.WritePacked(AmongUsClient.Instance.ClientId);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
 

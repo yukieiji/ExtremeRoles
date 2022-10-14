@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 using TMPro;
 
@@ -18,6 +19,8 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         private const string comma = "・";
         private static readonly Color[] commaColor =
             { Palette.CrewmateBlue, Palette.ImpostorRed, ColorPalette.NeutralColor };
+
+        public LoadingText(IntPtr ptr) : base(ptr) { }
 
         public void Awake()
         {

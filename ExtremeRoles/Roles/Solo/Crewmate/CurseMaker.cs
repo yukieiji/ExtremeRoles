@@ -10,20 +10,28 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Roles.API.Extension.State;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public sealed class CurseMaker : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHock, IRoleUpdate
+    public sealed class CurseMaker : 
+        SingleRoleBase, 
+        IRoleAbility, 
+        IRoleMurderPlayerHook,
+        IRoleUpdate
     {
         public enum CurseMakerOption
         {
             CursingRange,
             AdditionalKillCool,
+            TaskCurseTimeReduceRate,
+            IsNotRemoveDeadBodyByTask,
+            NotRemoveDeadBodyTaskGage,
             IsDeadBodySearch,
             IsMultiDeadBodySearch,
             SearchDeadBodyTime,
-            IsBoostTask,
-            TaskGage,
+            IsReduceSearchForTask,
+            ReduceSearchTaskGage,
             ReduceSearchDeadBodyTime,
         }
 
@@ -105,10 +113,20 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         private string defaultButtonText;
         private string cursingText;
-        private bool isBoostTask;
-        private bool boosted;
-        private float taskGage;
-        private float boostTime;
+
+        private float prevTaskGage;
+
+        private bool isReduceSearchByTask;
+        private bool isReducedSearchTime;
+        private float reduceSearchtaskGage;
+        private float reduceTime;
+
+        private float curCurseTime;
+        private float curseTimeReduceRate;
+
+        private bool isNotRemoveDeadBodyByTask;
+        private bool isRemoveDeadBody = true;
+        private float notRemoveDeadBodyTaskGage;
 
         public RoleAbilityButtonBase Button
         {
@@ -131,6 +149,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public static void CurseKillCool(
             byte rolePlayerId, byte targetPlayerId)
         {
+
+            if (CachedPlayerControl.LocalPlayer.PlayerId != targetPlayerId) { return; }
+
             PlayerControl player = Player.GetPlayerControlById(targetPlayerId);
 
             if (player == null) { return; }
@@ -141,34 +162,27 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             if (curseMaker == null) { return; }
 
             var role = ExtremeRoleManager.GameRole[targetPlayerId];
-
-            float baseKillCool = PlayerControl.GameOptions.KillCooldown;
-
-            if (role.HasOtherKillCool)
-            {
-                baseKillCool = role.KillCoolTime;
-            }
             role.HasOtherKillCool = true;
-            role.KillCoolTime = baseKillCool + curseMaker.additionalKillCool;
 
             var multiAssignRole = role as MultiAssignRoleBase;
             if (multiAssignRole != null)
             {
                 if (multiAssignRole.AnotherRole != null)
                 {
-                    baseKillCool = PlayerControl.GameOptions.KillCooldown;
-
-                    if (multiAssignRole.AnotherRole.HasOtherKillCool)
-                    {
-                        baseKillCool = multiAssignRole.AnotherRole.KillCoolTime;
-                    }
                     multiAssignRole.AnotherRole.HasOtherKillCool = true;
-                    multiAssignRole.AnotherRole.KillCoolTime = baseKillCool + curseMaker.additionalKillCool;
                 }
             }
 
+            RoleState.AddKillCoolOffset(curseMaker.additionalKillCool);
 
-            player.killTimer = role.KillCoolTime;
+            if (role.TryGetKillCool(out float resetKillCool))
+            {
+                player.killTimer = resetKillCool;
+            }
+            else
+            {
+                player.killTimer = PlayerControl.GameOptions.KillCooldown;
+            }
         }
 
         public void CreateAbility()
@@ -196,11 +210,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
 
-            RPCOperator.Call(
-                rolePlayer.NetId,
-                RPCOperator.Command.CleanDeadBody,
-                new List<byte> { this.deadBodyId });
-            RPCOperator.CleanDeadBody(this.deadBodyId);
+            if (this.isRemoveDeadBody)
+            {
+                RPCOperator.Call(
+                    rolePlayer.NetId,
+                    RPCOperator.Command.CleanDeadBody,
+                    new List<byte> { this.deadBodyId });
+                RPCOperator.CleanDeadBody(this.deadBodyId);
+            }
 
             // 矢印消す
             if (this.deadBodyArrow.ContainsKey(this.deadBodyId))
@@ -248,7 +265,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 result = this.deadBodyId == this.targetBody.PlayerId;
             }
 
-            this.Button.ButtonText = result ? this.cursingText : this.defaultButtonText;
+            this.Button.SetButtonText(
+                result ? this.cursingText : this.defaultButtonText);
 
             return result;
         }
@@ -275,6 +293,20 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.CreateAbilityCountOption(
                 parentOps, 1, 3, 5.0f);
 
+            CreateIntOption(
+                CurseMakerOption.TaskCurseTimeReduceRate,
+                0, 0, 10, 1, parentOps,
+                format: OptionUnit.Percentage);
+
+            var removeDeadBodyOpt = CreateBoolOption(
+                CurseMakerOption.IsNotRemoveDeadBodyByTask,
+                false, parentOps);
+
+            CreateIntOption(
+                CurseMakerOption.NotRemoveDeadBodyTaskGage,
+                100, 0, 100, 5, removeDeadBodyOpt,
+                format: OptionUnit.Percentage);
+
             var searchDeadBodyOption = CreateBoolOption(
                 CurseMakerOption.IsDeadBodySearch,
                 true, parentOps);
@@ -293,18 +325,18 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 enableCheckOption: parentOps);
 
             var taskBoostOpt = CreateBoolOption(
-                CurseMakerOption.IsBoostTask,
+                CurseMakerOption.IsReduceSearchForTask,
                 false, searchDeadBodyOption,
                 invert: true,
                 enableCheckOption: parentOps);
 
             CreateIntOption(
-                 CurseMakerOption.TaskGage,
-                 100, 50, 100, 5,
-                 taskBoostOpt,
-                 format: OptionUnit.Percentage,
-                 invert: true,
-                 enableCheckOption: taskBoostOpt);
+                CurseMakerOption.ReduceSearchTaskGage,
+                100, 25, 100, 5,
+                taskBoostOpt,
+                format: OptionUnit.Percentage,
+                invert: true,
+                enableCheckOption: taskBoostOpt);
 
             var reduceTimeOpt = CreateFloatDynamicOption(
                 CurseMakerOption.ReduceSearchDeadBodyTime,
@@ -327,6 +359,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 GetRoleOptionId(CurseMakerOption.AdditionalKillCool)].GetValue();
             this.deadBodyCheckRange = allOption[
                 GetRoleOptionId(CurseMakerOption.CursingRange)].GetValue();
+            this.curseTimeReduceRate = 1.0f - ((float)allOption[
+                GetRoleOptionId(CurseMakerOption.TaskCurseTimeReduceRate)].GetValue() / 100.0f);
+            this.isNotRemoveDeadBodyByTask = allOption[
+                GetRoleOptionId(CurseMakerOption.IsNotRemoveDeadBodyByTask)].GetValue();
+            this.notRemoveDeadBodyTaskGage = (float)allOption[
+                GetRoleOptionId(CurseMakerOption.NotRemoveDeadBodyTaskGage)].GetValue() / 100.0f;
             this.isDeadBodySearch = allOption[
                 GetRoleOptionId(CurseMakerOption.IsDeadBodySearch)].GetValue();
             this.isMultiDeadBodySearch = allOption[
@@ -335,16 +373,22 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 GetRoleOptionId(CurseMakerOption.SearchDeadBodyTime)].GetValue();
 
             this.isDeadBodySearchUsed = false;
-            this.isBoostTask = allOption[
-                GetRoleOptionId(CurseMakerOption.IsBoostTask)].GetValue();
-            this.taskGage = allOption[
-                GetRoleOptionId(CurseMakerOption.TaskGage)].GetValue() / 100.0f;
-            this.boostTime = allOption[
+            this.isReduceSearchByTask = allOption[
+                GetRoleOptionId(CurseMakerOption.IsReduceSearchForTask)].GetValue();
+            this.reduceSearchtaskGage = (float)allOption[
+                GetRoleOptionId(CurseMakerOption.ReduceSearchTaskGage)].GetValue() / 100.0f;
+            this.reduceTime = allOption[
                 GetRoleOptionId(CurseMakerOption.ReduceSearchDeadBodyTime)].GetValue();
 
             this.cursingText = Translation.GetString("cursing");
             this.deadBodyData = new Dictionary<byte, DeadBodyInfo>();
             this.deadBodyArrow = new Dictionary<byte, Arrow>();
+
+            this.isRemoveDeadBody = 
+                this.isNotRemoveDeadBodyByTask && this.notRemoveDeadBodyTaskGage == 0.0f ? false : true;
+
+            this.curCurseTime = allOption[
+                GetRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime)].GetValue();
         }
 
         public void RoleAbilityResetOnMeetingStart()
@@ -363,7 +407,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             return;
         }
 
-        public void HockMuderPlayer(PlayerControl source, PlayerControl target)
+        public void HookMuderPlayer(PlayerControl source, PlayerControl target)
         {
             if (this.isDeadBodySearchUsed || !this.isDeadBodySearch) { return; }
 
@@ -391,16 +435,32 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 }
             }
 
-            if (this.isBoostTask && !this.boosted)
+            float taskGage = Player.GetPlayerTaskGage(rolePlayer);
+            if (taskGage > this.prevTaskGage)
             {
-                if (Player.GetPlayerTaskGage(rolePlayer) >= this.taskGage)
+                this.curCurseTime = this.curCurseTime * this.curseTimeReduceRate;
+                this.curseButton.SetAbilityActiveTime(this.curCurseTime);
+            }
+
+            if (this.isReduceSearchByTask && !this.isReducedSearchTime)
+            {
+                if (taskGage >= this.reduceSearchtaskGage)
                 {
-                    this.boosted = true;
+                    this.isReducedSearchTime = true;
                     this.searchDeadBodyTime = Mathf.Clamp(
-                        this.searchDeadBodyTime - this.boostTime, 0.01f, this.searchDeadBodyTime);
+                        this.searchDeadBodyTime - this.reduceTime, 0.01f, this.searchDeadBodyTime);
                 }
             }
 
+            if (this.isNotRemoveDeadBodyByTask && this.isRemoveDeadBody)
+            {
+                if (taskGage >= this.notRemoveDeadBodyTaskGage)
+                {
+                    this.isRemoveDeadBody = false;
+                }
+            }
+
+            this.prevTaskGage = taskGage;
 
             if (this.isDeadBodySearchUsed || !this.isDeadBodySearch) { return; }
 

@@ -11,7 +11,11 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public sealed class Captain : SingleRoleBase, IRoleAwake<RoleTypes>, IRoleMeetingButtonAbility, IRoleVoteModifier
+    public sealed class Captain : 
+        SingleRoleBase, 
+        IRoleAwake<RoleTypes>, 
+        IRoleMeetingButtonAbility, 
+        IRoleVoteModifier
     {
         public enum CaptainOption
         {
