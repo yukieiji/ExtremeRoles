@@ -27,17 +27,17 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
             this.aditionalInfoTitle = trans.Find(
                 "Anchor/AditionalInfo/Title").gameObject.GetComponent<TextMeshProUGUI>();
-            this.aditionalInfoTitle = trans.Find(
+            this.additionalInfoBody = trans.Find(
                 "Anchor/AditionalInfo/ScrollView/Viewport/BodyText").gameObject.GetComponent<TextMeshProUGUI>();
 
             this.basicInfoTitle = trans.Find(
-                "Anchor/BasicInfo/ScrollView/Viewport/BodyText").gameObject.GetComponent<TextMeshProUGUI>();
+                "Anchor/BasicInfo/Title").gameObject.GetComponent<TextMeshProUGUI>();
             this.basicInfoBody = trans.Find(
                 "Anchor/BasicInfo/ScrollView/Viewport/BodyText").gameObject.GetComponent<TextMeshProUGUI>();
 
-            this.basicInfoTitle = trans.Find(
-                "Anchor/GameOptionInfo/ScrollView/Viewport/BodyText").gameObject.GetComponent<TextMeshProUGUI>();
-            this.basicInfoBody = trans.Find(
+            this.gameOptionTitle = trans.Find(
+                "Anchor/GameOptionInfo/Title").gameObject.GetComponent<TextMeshProUGUI>();
+            this.gameOptionBody = trans.Find(
                 "Anchor/GameOptionInfo/ScrollView/Viewport/BodyText").gameObject.GetComponent<TextMeshProUGUI>();
         }
 
@@ -84,7 +84,14 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
         private static void setStyle(ref TextMeshProUGUI target, TextMeshPro style)
         {
+            
             target.font = Instantiate(style.font);
+
+            target.fontSize = target.fontSizeMin = target.fontSizeMax = 15.5f;
+            target.enableWordWrapping = false;
+            target.alignment = TextAlignmentOptions.TopLeft;
+            target.transform.localScale = Vector3.one;
+            target.color = Palette.White;
         }
     }
 }

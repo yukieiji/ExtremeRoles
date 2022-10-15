@@ -42,6 +42,9 @@ namespace ExtremeRoles.Module.InfoOverlay
         private ShowType curShow;
         private GameObject prefab;
 
+        private const string prefabName = "ExtremeRoles.Resources.Asset.infooverlay.asset";
+        private const string objName = "assets/infooverlay.prefab";
+
         private static readonly Vector3 infoAnchorFirstPos = new Vector3(-4.0f, 1.6f, -910f);
 
         public InfoOverlay()
@@ -49,6 +52,7 @@ namespace ExtremeRoles.Module.InfoOverlay
             pageClear();
             this.overlayShown = false;
             this.isBlock = false;
+            this.body = null;
         }
 
         public void BlockShow(bool isBlock)
@@ -97,7 +101,7 @@ namespace ExtremeRoles.Module.InfoOverlay
                 }
             })));
 
-            this.body.gameObject.transform.parent = hudManager.transform;
+            this.body.gameObject.transform.SetParent(hudManager.transform);
         }
 
         public void ResetOverlays()
@@ -106,7 +110,7 @@ namespace ExtremeRoles.Module.InfoOverlay
             pageClear();
 
             UnityEngine.Object.Destroy(this.body);
-            body = null;
+            this.body = null;
             this.overlayShown = false;
         }
 
@@ -136,7 +140,6 @@ namespace ExtremeRoles.Module.InfoOverlay
                 }
             }
 
-
             if (OverlayShown)
             {
                 if (this.curShow == showType)
@@ -160,9 +163,27 @@ namespace ExtremeRoles.Module.InfoOverlay
             HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
             if (hudManager == null) { return false; }
 
-            GameObject infoObj = UnityEngine.Object.Instantiate(
-                prefab, hudManager.transform);
-            this.body = infoObj.GetComponent<InfoOverlayBehaviour>();
+            if (this.prefab == null)
+            {
+                this.prefab = Asset.GetGameObjectFromAssetBundle(
+                    prefabName, objName);
+
+                if (this.prefab == null) { return false; }
+
+                this.prefab.SetActive(false);
+                UnityEngine.Object.DontDestroyOnLoad(this.prefab);
+            }
+            if (this.body == null)
+            {
+                GameObject infoObj = UnityEngine.Object.Instantiate(
+                    this.prefab, hudManager.transform);
+                this.body = infoObj.GetComponent<InfoOverlayBehaviour>();
+                this.body.gameObject.SetActive(true);
+                this.body.SetTextStyle(hudManager.TaskText);
+            }
+
+            // 一応消しておく
+            this.body.gameObject.SetActive(false);
 
             return true;
         }
@@ -202,8 +223,7 @@ namespace ExtremeRoles.Module.InfoOverlay
                 parent = hudManager.transform;
             }
 
-            this.body.transform.parent = parent;
-
+            this.body.transform.SetParent(parent);
             this.body.SetBkColor(new Color(0.1f, 0.1f, 0.1f, 0.88f));
 
             this.body.SetGameOption(
@@ -233,40 +253,6 @@ namespace ExtremeRoles.Module.InfoOverlay
 
             this.body.UpdateBasicInfo(title, roleText);
             this.body.UpdateAditionalInfo("", anotherRoleText);
-        }
-
-        private void initInfoText(
-            TMPro.TextMeshPro text)
-        {
-            text.fontSize = text.fontSizeMin = text.fontSizeMax = 1.15f;
-            text.autoSizeTextContainer = false;
-            text.enableWordWrapping = false;
-            text.alignment = TMPro.TextAlignmentOptions.TopLeft;
-            text.transform.position = Vector3.zero;
-            text.transform.localScale = Vector3.one;
-            text.color = Palette.White;
-            text.enabled = false;
-            text.gameObject.layer = 5;
-        }
-
-        private void infoLerp(
-            ScrollableText text,
-            float t, bool isEnable,
-            Color32 fromColor, Color32 toColor)
-        {
-            if (text.BodyText != null)
-            {
-                text.BodyText.color = Color.Lerp(fromColor, toColor, t);
-            }
-            if (text.Title != null)
-            {
-                text.Title.color = Color.Lerp(fromColor, toColor, t);
-            }
-
-            if (t >= 1.0f)
-            {
-                text.Enable(isEnable);
-            }
         }
 
         private void pageClear()
