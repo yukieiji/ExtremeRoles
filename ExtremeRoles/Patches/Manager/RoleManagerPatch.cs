@@ -23,7 +23,7 @@ namespace ExtremeRoles.Patches.Manager
         private static HashSet<byte> readyPlayer = new HashSet<byte>();
 
         // ホスト以外の準備ができてるか
-        public static bool IsReady => readyPlayer.Count > GameData.Instance.PlayerCount - 1;
+        public static bool IsReady => readyPlayer.Count == (GameData.Instance.PlayerCount - 1);
 
         public static void Prefix()
         {
@@ -83,6 +83,9 @@ namespace ExtremeRoles.Patches.Manager
         public static void AddReadyPlayer(byte playerId)
         {
             if (!AmongUsClient.Instance.AmHost) { return; }
+
+            Logging.Debug($"ReadyPlayer:{playerId}");
+
             readyPlayer.Add(playerId);
         }
 
