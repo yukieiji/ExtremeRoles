@@ -285,6 +285,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             CachedShipStatus.Instance.SpawnPlayer(
                 CachedPlayerControl.LocalPlayer,
                 GameData.Instance.PlayerCount, false);
+
+            CachedPlayerControl.LocalPlayer.PlayerControl.moveable = true;
         }
 
         public void CleanUp()
