@@ -5,8 +5,8 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Resources;
 using ExtremeRoles.Module.InfoOverlay.FullDec;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.Interface;
 
 namespace ExtremeRoles.Module.InfoOverlay
@@ -25,14 +25,8 @@ namespace ExtremeRoles.Module.InfoOverlay
         public bool IsBlock => this.isBlock;
         public bool OverlayShown => this.overlayShown;
         public ShowType CurShowInfo => this.curShow;
-        
-        private Sprite colorBackGround;
-        private SpriteRenderer meetingUnderlay;
-        private SpriteRenderer infoUnderlay;
-
-        private ScrollableText ruleInfo = new ScrollableText("ruleInfo", 50, 0.0001f, 0.1f);
-        private ScrollableText roleInfo = new ScrollableText("roleInfo", 50, 0.0001f, 0.1f);
-        private ScrollableText anotherRoleInfo = new ScrollableText("anotherRoleInfo", 50, 0.0001f, 0.1f);
+     
+        private InfoOverlayBehaviour body;
 
         private bool overlayShown = false;
         private bool isBlock = false;
@@ -46,6 +40,7 @@ namespace ExtremeRoles.Module.InfoOverlay
             { ShowType.AllGhostRole        , new AllGhostRoleShowTextBuilder()         },
         };
         private ShowType curShow;
+        private GameObject prefab;
 
         private static readonly Vector3 infoAnchorFirstPos = new Vector3(-4.0f, 1.6f, -910f);
 
@@ -76,17 +71,11 @@ namespace ExtremeRoles.Module.InfoOverlay
             this.updateShowText();
         }
 
-        public void HideBlackBG()
-        {
-            if (meetingUnderlay == null) { return; }
-            meetingUnderlay.enabled = false;
-        }
-
         public void HideInfoOverlay()
         {
-            if (infoUnderlay == null) { return; }
+            if (this.body == null) { return; }
 
-            if (!OverlayShown) { return; }
+            if (!this.OverlayShown) { return; }
 
             var hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
@@ -99,39 +88,25 @@ namespace ExtremeRoles.Module.InfoOverlay
 
             hudManager.StartCoroutine(Effects.Lerp(0.2f, new Action<float>(t =>
             {
-                infoUnderlay.color = Color.Lerp(underlayOpaque, underlayTransparent, t);
+                this.body.SetBkColor(
+                    Color.Lerp(underlayOpaque, underlayTransparent, t));
+                this.body.SetTextColor(Color.Lerp(Palette.White, Palette.ClearWhite, t));
                 if (t >= 1.0f)
                 {
-                    infoUnderlay.enabled = false;
+                    this.body.gameObject.SetActive(false);
                 }
-                infoLerp(ruleInfo, t, false, Palette.White, Palette.ClearWhite);
-                infoLerp(roleInfo, t, false, Palette.White, Palette.ClearWhite);
-                infoLerp(anotherRoleInfo, t, false, Palette.White, Palette.ClearWhite);
             })));
 
-            Transform parent = hudManager.transform;
-
-            ruleInfo.AnchorPoint.transform.parent = parent;
-            roleInfo.AnchorPoint.transform.parent = parent;
-            anotherRoleInfo.AnchorPoint.transform.parent = parent;
-
+            this.body.gameObject.transform.parent = hudManager.transform;
         }
 
         public void ResetOverlays()
         {
-            HideBlackBG();
             HideInfoOverlay();
-
-            UnityEngine.Object.Destroy(meetingUnderlay);
-            UnityEngine.Object.Destroy(infoUnderlay);
-            
-            ruleInfo.Clear();
-            roleInfo.Clear();
-            anotherRoleInfo.Clear();
-
             pageClear();
 
-            meetingUnderlay = infoUnderlay = null;
+            UnityEngine.Object.Destroy(this.body);
+            body = null;
             this.overlayShown = false;
         }
 
@@ -185,69 +160,11 @@ namespace ExtremeRoles.Module.InfoOverlay
             HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
             if (hudManager == null) { return false; }
 
-            if (colorBackGround == null)
-            {
-                colorBackGround = Loader.CreateSpriteFromResources(
-                    Path.BackGround, 100f);
-            }
-
-            if (meetingUnderlay == null)
-            {
-                meetingUnderlay = UnityEngine.Object.Instantiate(hudManager.FullScreen, hudManager.transform);
-                meetingUnderlay.transform.localPosition = new Vector3(0f, 0f, 20f);
-                meetingUnderlay.transform.localScale = new Vector3(20f, 20f, 1f);
-                meetingUnderlay.gameObject.SetActive(true);
-                meetingUnderlay.enabled = false;
-                meetingUnderlay.name = "meetingOverlay";
-            }
-            if (infoUnderlay == null)
-            {
-                infoUnderlay = UnityEngine.Object.Instantiate(meetingUnderlay, hudManager.transform);
-                infoUnderlay.transform.localPosition = new Vector3(0f, 0f, -900f);
-                infoUnderlay.transform.localScale = new Vector3(10.25f, 5.7f, 1f);
-                infoUnderlay.gameObject.SetActive(true);
-                infoUnderlay.enabled = false;
-                infoUnderlay.name = "infoOverlay";
-            }
-
-            ruleInfo.Initialize(
-                new Vector3(-4.0f, 1.6f, -910f),
-                new Vector3(0.0f, -0.325f, 0.0f),
-                hudManager.TaskText,
-                hudManager.transform,
-                initInfoText);
-            roleInfo.Initialize(
-                infoAnchorFirstPos + new Vector3(3.5f, 0.0f, 0.0f),
-                new Vector3(0.0f, -0.325f, 0.0f),
-                hudManager.TaskText,
-                hudManager.transform,
-                initInfoText);
-            anotherRoleInfo.Initialize(
-                infoAnchorFirstPos + new Vector3(7.0f, 0.0f, 0.0f),
-                new Vector3(0.0f, -0.325f, 0.0f),
-                hudManager.TaskText,
-                hudManager.transform,
-                initInfoText);
+            GameObject infoObj = UnityEngine.Object.Instantiate(
+                prefab, hudManager.transform);
+            this.body = infoObj.GetComponent<InfoOverlayBehaviour>();
 
             return true;
-        }
-
-        public void ShowBlackBG()
-        {
-
-            HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
-
-            if (hudManager == null) { return; }
-            if (!initializeOverlays()) { return; }
-
-            meetingUnderlay.sprite = colorBackGround;
-            meetingUnderlay.enabled = true;
-            var clearBlack = new Color32(0, 0, 0, 0);
-
-            hudManager.StartCoroutine(Effects.Lerp(0.2f, new Action<float>(t =>
-            {
-                meetingUnderlay.color = Color.Lerp(clearBlack, Palette.Black, t);
-            })));
         }
 
         private void showInfoOverlay(ShowType showType)
@@ -285,17 +202,13 @@ namespace ExtremeRoles.Module.InfoOverlay
                 parent = hudManager.transform;
             }
 
-            ruleInfo.AnchorPoint.transform.parent = parent;
-            roleInfo.AnchorPoint.transform.parent = parent;
-            anotherRoleInfo.AnchorPoint.transform.parent = parent;
+            this.body.transform.parent = parent;
 
-            infoUnderlay.color = new Color(0.1f, 0.1f, 0.1f, 0.88f);
-            infoUnderlay.enabled = true;
+            this.body.SetBkColor(new Color(0.1f, 0.1f, 0.1f, 0.88f));
 
-            ruleInfo.UpdateText(
+            this.body.SetGameOption(
                 $"<size=200%>{Translation.GetString("gameOption")}</size>",
                 CommonOption.GetGameOptionString());
-            ruleInfo.Enable(true);
 
             SetShowInfo(showType);
 
@@ -303,19 +216,23 @@ namespace ExtremeRoles.Module.InfoOverlay
             var underlayOpaque = new Color(0.1f, 0.1f, 0.1f, 0.88f);
             hudManager.StartCoroutine(Effects.Lerp(0.2f, new Action<float>(t =>
             {
-                infoLerp(ruleInfo, t, true, Palette.ClearWhite, Palette.White);
-                infoLerp(roleInfo, t, true, Palette.ClearWhite, Palette.White);
-                infoLerp(anotherRoleInfo, t, true, Palette.ClearWhite, Palette.White);
+                this.body.SetBkColor(
+                    Color.Lerp(underlayTransparent, underlayOpaque, t));
+                this.body.SetTextColor(Color.Lerp(Palette.ClearWhite, Palette.White, t));
 
-                infoUnderlay.color = Color.Lerp(underlayTransparent, underlayOpaque, t);
+                if (t >= 1.0f)
+                {
+                    this.body.gameObject.SetActive(true);
+                }
+
             })));
         }
         private void updateShowText()
         {
             var (title, roleText, anotherRoleText) = this.showText[this.curShow].GetShowText();
 
-            roleInfo.UpdateText(title, roleText);
-            anotherRoleInfo.UpdateText("", anotherRoleText);
+            this.body.UpdateBasicInfo(title, roleText);
+            this.body.UpdateAditionalInfo("", anotherRoleText);
         }
 
         private void initInfoText(
