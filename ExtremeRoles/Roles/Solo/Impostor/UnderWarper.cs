@@ -111,6 +111,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             writer.Write(isEnter);
             AmongUsClient.Instance.FinishRpcImmediately(writer);
 
+            UseVentWithNoAnimation(
+                localPlayer.PlayerId, ventId, isEnter);
+
             if (ExtremeRolesPlugin.Compat.IsModMap)
             {
                 if (ExtremeRolesPlugin.Compat.ModMap is SubmergedMap)
@@ -118,9 +121,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     FastDestroyableSingleton<HudManager>.Instance.PlayerCam.Locked = false;
                 }
             }
-
-            UseVentWithNoAnimation(
-                localPlayer.PlayerId, ventId, isEnter);
         }
 
         private static void enterVent(

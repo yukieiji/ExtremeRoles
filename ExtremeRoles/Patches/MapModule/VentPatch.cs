@@ -170,15 +170,18 @@ namespace ExtremeRoles.Patches.MapModule
                 return false;
             }
 
-            var underWarper = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<UnderWarper>();
-            if (underWarper != null &&
-                underWarper.IsAwake &&
-                underWarper.IsNoVentAnime)
+            if (ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd)
             {
-                UnderWarper.RpcUseVentWithNoAnimation(
-                    localPlayer, __instance.Id, isEnter);
-                __instance.SetButtons(isEnter);
-                return false;
+                var underWarper = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<UnderWarper>();
+                if (underWarper != null &&
+                    underWarper.IsAwake &&
+                    underWarper.IsNoVentAnime)
+                {
+                    UnderWarper.RpcUseVentWithNoAnimation(
+                        localPlayer, __instance.Id, isEnter);
+                    __instance.SetButtons(isEnter);
+                    return false;
+                }
             }
 
             if (isEnter)
