@@ -145,21 +145,12 @@ namespace ExtremeRoles.Patches
 
             AmongUsClient client = AmongUsClient.Instance;
 
-            if (!client.AmHost)
+            if (client.AmHost)
             {
-
-                Manager.RoleManagerSelectRolesPatch.SetLocalPlayerReady();
-
-                // バニラの役職アサイン後すぐこの処理が走るので全員の役職が入るまで待機
-                while (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd)
-                {
-                    yield return null;
-                }
-            }
-            else
-            {
+                // オンラインゲームの場合の処理
                 if (client.GameMode == GameModes.OnlineGame)
                 {
+                    // ホストは全員の処理が終わるまで待つ
                     while (!Manager.RoleManagerSelectRolesPatch.IsReady)
                     {
                         yield return null;
@@ -167,9 +158,21 @@ namespace ExtremeRoles.Patches
                 }
                 else
                 {
+                    // オフラインだととりあえず0.5秒待機
                     yield return new WaitForSeconds(0.5f);
                 }
                 Manager.RoleManagerSelectRolesPatch.AllPlayerAssignToExRole();
+            }
+            else
+            {
+                // ホスト以外はここまで処理済みである事を送信
+                Manager.RoleManagerSelectRolesPatch.SetLocalPlayerReady();
+            }
+
+            // バニラの役職アサイン後すぐこの処理が走るので全員の役職が入るまで待機
+            while (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd)
+            {
+                yield return null;
             }
 
             SoundManager.Instance.PlaySound(instance.IntroStinger, false, 1f);
