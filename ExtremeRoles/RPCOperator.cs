@@ -20,6 +20,7 @@ namespace ExtremeRoles
             // メインコントール
             Initialize = 60,
             ForceEnd,
+            SetUpReady,
             SetRoleToAllPlayer,
             ShareOption,
             CustomVentUse,
@@ -189,6 +190,11 @@ namespace ExtremeRoles
             SwitchSystem switchSystem = CachedShipStatus.Systems[
                 SystemTypes.Electrical].Cast<SwitchSystem>();
             switchSystem.ActualSwitches = switchSystem.ExpectedSwitches;
+        }
+
+        public static void SetUpReady(byte playerId)
+        {
+            Patches.Manager.RoleManagerSelectRolesPatch.AddReadyPlayer(playerId);
         }
 
         public static void SetRoleToAllPlayer(List<Module.IAssignedPlayer> assignData)
