@@ -136,5 +136,10 @@ namespace ExtremeSkins.Module
                 ShadowColor = new Color32(0, 65, 61, byte.MaxValue),
             },
         };
+
+        public static void AddCustomColor(ColorData data)
+        {
+            CustomColor.Add(data);
+        }
     }
 }
