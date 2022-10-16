@@ -52,7 +52,7 @@ namespace ExtremeRoles.Resources
         public const string CaptainSpecialVoteCheck = 
             "ExtremeRoles.Resources.SpecialVoteCheck.png";
         public const string PhotographerPhotoCamera = "ExtremeRoles.Resources.PhotoCamera.png";
-        public const string DelusionerDeflectDamage = "ExtremeRoles.Resources.PhotoCamera.png";
+        public const string DelusionerDeflectDamage = "ExtremeRoles.Resources.DeflectDamage.png";
 
         public const string EvolverEvolved = "ExtremeRoles.Resources.Evolved.png";
         public const string CarrierCarry = "ExtremeRoles.Resources.Carry.png";
