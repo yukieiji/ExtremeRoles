@@ -21,7 +21,7 @@ namespace ExtremeSkins
         private const string additionalTransCsv = "translation.csv";
         private const string additionalColorCsv = "color.csv";
 
-        private const string folder = "CreatorWorkingDir";
+        private const string folder = "CreatorMode";
         private const string slash = @"\";
 
         private const string comma = ",";
