@@ -23,7 +23,7 @@ namespace ExtremeSkins
             {
                 string creatorModePath = string.Concat(
                     Path.GetDirectoryName(Application.dataPath),
-                    folder);
+                    @"\", folder);
 
                 if (!Directory.Exists(creatorModePath))
                 {
