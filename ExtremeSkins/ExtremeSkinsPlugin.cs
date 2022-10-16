@@ -23,14 +23,11 @@ namespace ExtremeSkins
 
         internal static BepInEx.Logging.ManualLogSource Logger;
 
-        public static ConfigEntry<bool> CreatorMode { get; private set; }
-
         public const string SkinComitCategory = "SkinComit";
 
         public override void Load()
         {
             Logger = Log;
-            CreatorMode = Config.Bind("CreateNewSkin", "CreatorMode", false);
             
             Instance = this;
 
@@ -43,6 +40,8 @@ namespace ExtremeSkins
 #if WITHVISOR
             ExtremeVisorManager.Initialize();
 #endif
+
+            CreatorModeManager.Initialize();
 
             ExtremeColorManager.Initialize();
 

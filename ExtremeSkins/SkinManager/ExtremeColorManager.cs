@@ -63,7 +63,7 @@ namespace ExtremeSkins.SkinManager
             ConfigEntry<int> aShadowConfig = ExtremeSkinsPlugin.Instance.Config.Bind(
                 "CreateNewSkin", "NewShadowColorA", 0);
 
-            if (ExtremeSkinsPlugin.CreatorMode.Value)
+            if (CreatorModeManager.IsEnable)
             {
                 longlist.Add((StringNames)id);
                 colorlist.Add(
