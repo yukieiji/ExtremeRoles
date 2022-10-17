@@ -124,67 +124,8 @@ namespace ExtremeRoles.Module
             {
 
                 ExtremeRolesPlugin.Logger.LogInfo($"Newed csv load error:{newE}");
-
-                try
-                {
-                    // 後方互換性を維持するために残す、v3.3.0.0リリース時には消す
-                    return prevOptionCsvLoad();
-                }
-                catch (Exception prevE)
-                {
-                    ExtremeRolesPlugin.Logger.LogInfo($"prev csv load error:{prevE}");
-                }
             }
             return false;
-        }
-
-        // 後方互換性を維持するために残す、v3.3.0.0リリース時には消す
-        private static bool prevOptionCsvLoad()
-        {
-            using (var csv = new StreamReader(csvName, new UTF8Encoding(true)))
-            {
-                string line = csv.ReadLine(); // バージョン情報
-                string[] varsionHeader = line.Split(comma);
-
-                if (varsionHeader[0].Equals(modName) &&
-                    varsionHeader[1].Equals(versionStr) &&
-                    varsionHeader[2].Equals(
-                        Assembly.GetExecutingAssembly().GetName().Version.ToString()))
-                {
-
-                    csv.ReadLine(); // ヘッダー
-
-
-                    while ((line = csv.ReadLine()) != null)
-                    {
-                        string[] option = line.Split(',');
-
-                        int id = int.Parse(option[0]);
-                        int selection = int.Parse(option[3]);
-
-                        if (id == 0) { continue; }
-
-                        if (OptionHolder.AllOption.ContainsKey(id))
-                        {
-                            OptionHolder.AllOption[id].UpdateSelection(selection);
-                            OptionHolder.AllOption[id].SaveConfigValue();
-                        }
-                    }
-                }
-                else
-                {
-                    return false;
-                }
-
-            }
-
-            Helper.Logging.Debug("Import Comp!!!!!!");
-
-            if (AmongUsClient.Instance?.AmHost == true && CachedPlayerControl.LocalPlayer)
-            {
-                OptionHolder.ShareOptionSelections();// Share all selections
-            }
-            return true;
         }
 
         private static string clean(string value)
