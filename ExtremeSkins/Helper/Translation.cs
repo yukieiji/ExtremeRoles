@@ -15,11 +15,6 @@ namespace ExtremeSkins.Helper
         private const uint defaultLanguage = (uint)SupportedLangs.English;
         private const string dataPath = "ExtremeSkins.Resources.LangData.stringData.json";
 
-        public static void Initialize()
-        {
-            stringData.Clear();
-        }
-
         public static void CreateColorTransData()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
@@ -69,6 +64,11 @@ namespace ExtremeSkins.Helper
             return key;
         }
 
+        public static void AddKeyTransdata(string key, Dictionary<uint, string> newData)
+        {
+            stringData[key] = newData;
+        }
+
         private static void addJsonToTransData(JObject parsed)
         {
             for (int i = 0; i < parsed.Count; i++)
@@ -95,15 +95,7 @@ namespace ExtremeSkins.Helper
                             strings.Add(j, text);
                         }
                     }
-
-                    if (stringData.ContainsKey(stringName))
-                    {
-                        stringData[stringName] = strings;
-                    }
-                    else
-                    {
-                        stringData.Add(stringName, strings);
-                    }
+                    stringData[stringName] = strings;
                 }
             }
         }

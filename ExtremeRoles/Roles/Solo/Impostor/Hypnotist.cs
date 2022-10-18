@@ -610,7 +610,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 format: OptionUnit.Second);
             CreateIntOption(
                 HypnotistOption.DollKillCoolReduceRate,
-                10, 0, 75, 5,
+                10, 0, 75, 1,
                 parentOps,
                 format: OptionUnit.Percentage);
 
