@@ -222,16 +222,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 if (this.film.Count == 0) { return string.Empty; }
 
                 StringBuilder builder = new StringBuilder();
-                
-                builder.AppendLine(separateLine);
 
                 foreach (Photo photo in this.film)
                 {
+                    builder.AppendLine(separateLine);
                     builder.AppendLine(
                         photo.ToString(this.IsUpgraded));
+                    builder.AppendLine(separateLine);
                 }
-
-                builder.AppendLine(separateLine);
 
                 return builder.ToString().Trim('\r', '\n');
             }
