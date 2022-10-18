@@ -62,7 +62,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private byte targetPlayerId;
 
         private int awakeVoteCount;
-        private int curVoteCount;
+        private int curVoteCount = 0;
 
         private bool includeLocalPlayer;
         private bool includeSpawnPoint;
@@ -382,6 +382,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)].GetValue();
             this.curCoolTime = this.defaultCoolTime;
             this.isAwakeRole = this.awakeVoteCount == 0;
+            
+            this.curVoteCount = 0;
+
             if (this.isAwakeRole)
             {
                 this.isOneTimeAwake = false;
