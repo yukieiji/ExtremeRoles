@@ -235,16 +235,16 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public void Update(PlayerControl rolePlayer)
         {
 
-            if (!rolePlayer.moveable || 
-                MeetingHud.Instance || 
-                ExileController.Instance)
-            { 
-                return; 
-            }
-
             if (rolePlayer.Data.IsDead && this.infoBlock())
             {
-                FastDestroyableSingleton<HudManager>.Instance.Chat.SetVisible(false);
+                FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
+            }
+
+            if (!rolePlayer.moveable ||
+                MeetingHud.Instance ||
+                ExileController.Instance)
+            {
+                return;
             }
 
             if (!this.awakeRole || 
