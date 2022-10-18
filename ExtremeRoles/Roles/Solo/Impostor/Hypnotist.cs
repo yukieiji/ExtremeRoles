@@ -387,6 +387,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void Update(PlayerControl rolePlayer)
         {
+            if (rolePlayer == null) { return; }
+
             if (!this.canAwakeNow)
             {
                 int impNum = 0;
@@ -402,8 +404,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
                 GameData gameData = GameData.Instance;
 
-                if (this.awakeCheckImpNum >= impNum ||
-                    this.awakeCheckTaskGage >= (gameData.CompletedTasks / gameData.TotalTasks))
+                if (rolePlayer.Data.Tasks.Count != 0 &&
+                    (
+                        this.awakeCheckImpNum >= impNum ||
+                        this.awakeCheckTaskGage >= 
+                            (gameData.CompletedTasks / gameData.TotalTasks)
+                    ))
                 {
                     this.canAwakeNow = true;
                     this.killCount = 0;
