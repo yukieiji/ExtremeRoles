@@ -429,7 +429,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             CreateFloatOption(
                 ResurrecterOption.ResurrectDelayTime,
-                5.0f, 5.0f, 60.0f, 0.1f,
+                5.0f, 4.0f, 60.0f, 0.1f,
                 parentOps, format: OptionUnit.Second);
 
             var meetingResetOpt = CreateBoolOption(
@@ -510,7 +510,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
             else
             {
-                return !this.isResurrected;
+                return !this.isResurrected || this.activateResurrectTimer;
             }
         }
 
