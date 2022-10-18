@@ -173,15 +173,20 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 if (doll.Id == ExtremeRoleId.Doll)
                 {
                     float curKillCool = localPlayer.killTimer;
-                    if (localPlayer.PlayerId == dollPlayerId &&
-                        doll.CanKill &&
-                        curKillCool > 0.0f)
+                    if (localPlayer.PlayerId == dollPlayerId)
                     {
-                        localPlayer.killTimer = Mathf.Clamp(
-                            curKillCool * role.dollKillCoolReduceRate,
-                            0.001f, optionKillCool);
+                        if (!doll.CanKill)
+                        {
+                            doll.CanKill = true;
+                            localPlayer.killTimer = doll.KillCoolTime;
+                        }
+                        else if (curKillCool > 0.0f)
+                        {
+                            localPlayer.killTimer = Mathf.Clamp(
+                                curKillCool * role.dollKillCoolReduceRate,
+                                0.001f, optionKillCool);
+                        }
                     }
-                    doll.CanKill = true;
                 }
             }
         }
@@ -999,6 +1004,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.FakeImposter = true;
             this.canUseCrakingModule = new HashSet<AbilityType>();
             this.prevKillState = false;
+            this.KillCoolTime = PlayerControl.GameOptions.KillCooldown;
         }
 
         public void FeatMapModuleAccess(SystemConsoleType consoleType)
