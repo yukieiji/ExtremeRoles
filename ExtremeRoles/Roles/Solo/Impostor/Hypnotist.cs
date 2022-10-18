@@ -665,8 +665,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 GetRoleOptionId(HypnotistOption.HideArrowRange)].GetValue();
             this.isResetKillCoolWhenDollKill = allOpt[
                 GetRoleOptionId(HypnotistOption.IsResetKillCoolWhenDollKill)].GetValue();
-            this.dollKillCoolReduceRate = ((1.0f - (float)allOpt[
-                GetRoleOptionId(HypnotistOption.DollKillCoolReduceRate)].GetValue()) / 100.0f);
+            this.dollKillCoolReduceRate = (1.0f - ((float)allOpt[
+                GetRoleOptionId(HypnotistOption.DollKillCoolReduceRate)].GetValue() / 100.0f));
             this.defaultRedAbilityPartNum = allOpt[
                 GetRoleOptionId(HypnotistOption.DefaultRedAbilityPart)].GetValue();
 
