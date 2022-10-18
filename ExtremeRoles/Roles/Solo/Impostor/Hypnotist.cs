@@ -299,6 +299,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool IsAbilityUse()
         {
+
+            if (!this.IsAwake) { return false; }
+
             this.target = Player.GetClosestPlayerInRange(
                 CachedPlayerControl.LocalPlayer,
                 this, this.range);
