@@ -922,13 +922,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     case "IRoleAbility":
                         addNum = 5;
                         break;
-                    case "IRoleMurderPlayerHock":
+                    case "IRoleMurderPlayerHook":
                         addNum = 4;
                         break;
                     case "IRoleUpdate":
                         addNum = 3;
                         break;
-                    case "IRoleReportHock":
+                    case "IRoleReportHook":
                         addNum = 2;
                         break;
                     default:
