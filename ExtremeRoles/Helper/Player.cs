@@ -17,18 +17,6 @@ namespace ExtremeRoles.Helper
             prevTarget = null;
         }
 
-        public static bool ShowButtons
-        {
-            get
-            {
-                return (
-                    !(MapBehaviour.Instance && MapBehaviour.Instance.IsOpen) &&
-                    !MeetingHud.Instance &&
-                    !ExileController.Instance &&
-                    !ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger);
-            }
-        }
-
         public static PlayerControl GetPlayerControlById(byte id)
         {
             foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)

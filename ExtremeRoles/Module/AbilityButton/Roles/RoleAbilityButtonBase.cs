@@ -33,18 +33,21 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
         public sealed override void Update()
         {
             if (this.Button == null) { return; }
-            if (CachedPlayerControl.LocalPlayer.Data == null ||
+
+            PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+
+            if (localPlayer.Data == null ||
                 MeetingHud.Instance ||
                 ExileController.Instance ||
-                CachedPlayerControl.LocalPlayer.Data.IsDead)
+                localPlayer.Data.IsDead)
             {
                 SetActive(false);
                 return;
             }
 
-            var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+            SetActive(localPlayer.IsKillTimerEnabled);
 
-            SetActive(hudManager.UseButton.isActiveAndEnabled);
+            var hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
             this.Button.graphic.sprite = this.ButtonSprite;
             this.Button.OverrideText(ButtonText);
