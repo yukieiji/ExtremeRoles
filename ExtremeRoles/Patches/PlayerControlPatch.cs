@@ -223,7 +223,7 @@ namespace ExtremeRoles.Patches
                 if (enable)
                 {
 
-                    if (!isImposter && player.CanMove)
+                    if (!isImposter && player.IsKillTimerEnabled)
                     {
                         player.SetKillTimer(player.killTimer - Time.fixedDeltaTime);
                     }
