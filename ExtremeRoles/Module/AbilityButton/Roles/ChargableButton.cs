@@ -53,10 +53,12 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
                 this.Button.graphic.material.SetFloat("_Desat", 1f);
             }
 
+            PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+
             if (this.Timer >= 0)
             {
-                if (IsAbilityOn || 
-                    CachedPlayerControl.LocalPlayer.PlayerControl.IsKillTimerEnabled)
+                if (IsAbilityOn ||
+                    localPlayer.IsKillTimerEnabled)
                 {
                     this.Timer -= Time.deltaTime;
                 }
@@ -71,7 +73,7 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
                     }
                 }
             }
-            if (CachedPlayerControl.LocalPlayer.PlayerControl.AllTasksCompleted())
+            if (localPlayer.AllTasksCompleted())
             {
                 this.currentCharge = this.AbilityActiveTime;
             }
