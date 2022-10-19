@@ -200,7 +200,7 @@ namespace ExtremeRoles.Patches
 
             bool enable = Player.ShowButtons && !player.Data.IsDead;
 
-            killButtonUpdate(player, playerRole, enable);
+            killButtonUpdate(player, playerRole, player.IsKillTimerEnabled);
             ventButtonUpdate(playerRole, enable);
 
             sabotageButtonUpdate(playerRole);
@@ -222,8 +222,7 @@ namespace ExtremeRoles.Patches
             {
                 if (enable)
                 {
-
-                    if (!isImposter && player.IsKillTimerEnabled)
+                    if (!isImposter)
                     {
                         player.SetKillTimer(player.killTimer - Time.fixedDeltaTime);
                     }
