@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -95,7 +97,10 @@ namespace ExtremeRoles.Compat
             var buttonTemplate = GameObject.Find("ExitGameButton/ExtremeRolesUpdateButton");
             
             if (buttonTemplate == null) { return; }
-            
+
+            string pluginPath = string.Concat(
+                Path.GetDirectoryName(Application.dataPath),
+                @"\BepInEx\plugins\");
             int index = 0;
 
             foreach (CompatModType mod in System.Enum.GetValues(typeof(CompatModType)))
@@ -120,7 +125,8 @@ namespace ExtremeRoles.Compat
 
                 var (dllName, repoURI) = CompatModManager.ModInfo[mod];
 
-                if (ExtremeRolesPlugin.Compat.LoadedMod.ContainsKey(mod))
+                if (ExtremeRolesPlugin.Compat.LoadedMod.ContainsKey(mod) ||
+                    File.Exists($"{pluginPath}{dllName}.dll"))
                 {
                     var (uninstallButton, passiveUninstallButton) = createButton(buttonTemplate, modText);
                     uninstallButton.transform.localPosition = new Vector3(1.85f, 0.0f, -5.0f);
