@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using HarmonyLib;
 
 using ExtremeSkins.Module;
@@ -6,89 +8,59 @@ using ExtremeSkins.SkinManager;
 
 namespace ExtremeSkins.Patches.AmongUs.Manager
 {
-#if WITHHAT
-    [HarmonyPatch(typeof(HatManager), nameof(HatManager.GetHatById))]
-    public static class HatManagerGetHatByIdPatch
+    [HarmonyPatch(typeof(HatManager), nameof(HatManager.Initialize))]
+    public static class HatManagerInitializePatch
     {
-        private static bool isRunning = false;
-        private static bool isLoaded = false;
-        public static void Prefix(HatManager __instance)
+        public static void Postfix(HatManager __instance)
         {
-            if (isRunning || isLoaded) { return; }
-            isRunning = true; // prevent simultanious execution
-
+#if WITHHAT
             try
             {
+                List<HatData> hatData = __instance.allHats.ToList();
                 foreach (CustomHat hat in ExtremeHatManager.HatData.Values)
                 {
-                    __instance.allHats.Add(hat.GetData());
+                    hatData.Add(hat.GetData());
                 }
-                isRunning = false;
+                __instance.allHats = hatData.ToArray();
             }
             catch (Exception e)
             {
                 ExtremeSkinsPlugin.Logger.LogInfo(
                     $"Unable to add Custom Hats\n{e}");
             }
-            isLoaded = true;
-        }
-    }
 #endif
-
 #if WITHNAMEPLATE
-    [HarmonyPatch(typeof(HatManager), nameof(HatManager.GetNamePlateById))]
-    public static class HatManagerGetNamePlateByIdPatch
-    {
-        private static bool isRunning = false;
-        private static bool isLoaded = false;
-        public static void Prefix(HatManager __instance)
-        {
-            if (isRunning || isLoaded) { return; }
-            isRunning = true; // prevent simultanious execution
-            
             try
             {
+                List<NamePlateData> npData = __instance.allNamePlates.ToList();
                 foreach (CustomNamePlate np in ExtremeNamePlateManager.NamePlateData.Values)
                 {
-                    __instance.allNamePlates.Add(np.GetData());
+                    npData.Add(np.GetData());
                 }
-                isRunning = false;
+                __instance.allNamePlates = npData.ToArray();
             }
             catch (Exception e)
             {
                 ExtremeSkinsPlugin.Logger.LogInfo(
                     $"Unable to add Custom NamePlate\n{e}");
             }
-            isLoaded = true;
-        }
-    }
 #endif
 #if WITHVISOR
-    [HarmonyPatch(typeof(HatManager), nameof(HatManager.GetVisorById))]
-    public static class HatManagerGetVisorByIdPatch
-    {
-        private static bool isRunning = false;
-        private static bool isLoaded = false;
-        public static void Prefix(HatManager __instance)
-        {
-            if (isRunning || isLoaded) { return; }
-            isRunning = true; // prevent simultanious execution
-
             try
             {
+                List<VisorData> visorData = __instance.allVisors.ToList();
                 foreach (CustomVisor vi in ExtremeVisorManager.VisorData.Values)
                 {
-                    __instance.allVisors.Add(vi.GetData());
+                    visorData.Add(vi.GetData());
                 }
-                isRunning = false;
+                __instance.allVisors = visorData.ToArray();
             }
             catch (Exception e)
             {
                 ExtremeSkinsPlugin.Logger.LogInfo(
                     $"Unable to add Custom Visor\n{e}");
             }
-            isLoaded = true;
+#endif
         }
     }
-#endif
 }

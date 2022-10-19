@@ -1,6 +1,8 @@
 ﻿using ExtremeSkins.Module.Interface;
 using UnityEngine;
 
+using ExtremeRoles.Performance;
+
 namespace ExtremeSkins.Module
 {
 
@@ -116,7 +118,8 @@ namespace ExtremeSkins.Module
 
             if (this.hasShader)
             {
-                Material altShader = new Material("PlayerMaterial");
+                Material altShader = new Material(
+                    FastDestroyableSingleton<HatManager>.Instance.PlayerMaterial);
                 altShader.shader = Shader.Find("Unlit/PlayerShader");
 
                 this.hat.hatViewData.viewData.AltShader = altShader;
