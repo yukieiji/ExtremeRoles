@@ -326,7 +326,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void RoleAbilityResetOnMeetingEnd()
         {
-            if (this.killCount >= this.awakeKillCount)
+            if (this.canAwakeNow && 
+                this.killCount >= this.awakeKillCount)
             {
                 this.isAwake = true;
                 this.HasOtherVison = this.isAwakedHasOtherVision;
@@ -407,7 +408,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     ))
                 {
                     this.canAwakeNow = true;
-                    this.killCount = 0;
                 }
             }
             if (!this.isAwake)
@@ -542,7 +542,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public override bool TryRolePlayerKillTo(
             PlayerControl rolePlayer, PlayerControl targetPlayer)
         {
-            if (this.canAwakeNow && !this.isAwake)
+            if (!this.isAwake)
             {
                 ++this.killCount;
             }
