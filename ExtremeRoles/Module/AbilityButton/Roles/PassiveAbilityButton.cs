@@ -65,9 +65,8 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
 
             if (this.Timer >= 0)
             {
-                if (IsAbilityOn || (
-                        !CachedPlayerControl.LocalPlayer.PlayerControl.inVent &&
-                        CachedPlayerControl.LocalPlayer.PlayerControl.moveable))
+                if (IsAbilityOn || 
+                    CachedPlayerControl.LocalPlayer.PlayerControl.IsKillTimerEnabled)
                 {
                     this.Timer -= Time.deltaTime;
                 }

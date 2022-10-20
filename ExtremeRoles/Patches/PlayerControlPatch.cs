@@ -198,12 +198,12 @@ namespace ExtremeRoles.Patches
         {
             if (!player.AmOwner) { return; }
 
-            bool enable = Player.ShowButtons && !player.Data.IsDead;
+            bool enable = player.IsKillTimerEnabled;
 
             killButtonUpdate(player, playerRole, enable);
             ventButtonUpdate(playerRole, enable);
 
-            sabotageButtonUpdate(playerRole);
+            sabotageButtonUpdate(playerRole, enable);
             roleAbilityButtonUpdate(playerRole);
 
             ghostRoleButtonUpdate(playerGhostRole);
@@ -222,8 +222,7 @@ namespace ExtremeRoles.Patches
             {
                 if (enable)
                 {
-
-                    if (!isImposter && player.CanMove)
+                    if (!isImposter)
                     {
                         player.SetKillTimer(player.killTimer - Time.fixedDeltaTime);
                     }
@@ -271,11 +270,8 @@ namespace ExtremeRoles.Patches
         }
 
         private static void sabotageButtonUpdate(
-            SingleRoleBase role)
+            SingleRoleBase role, bool enable)
         {
-
-            bool enable = Player.ShowButtons;
-
             HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
             if (role.CanUseSabotage())

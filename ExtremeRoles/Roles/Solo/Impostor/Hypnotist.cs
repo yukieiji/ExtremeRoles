@@ -326,7 +326,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void RoleAbilityResetOnMeetingEnd()
         {
-            if (this.killCount >= this.awakeKillCount)
+            if (this.canAwakeNow && 
+                this.killCount >= this.awakeKillCount)
             {
                 this.isAwake = true;
                 this.HasOtherVison = this.isAwakedHasOtherVision;
@@ -407,7 +408,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     ))
                 {
                     this.canAwakeNow = true;
-                    this.killCount = 0;
                 }
             }
             if (!this.isAwake)
@@ -542,7 +542,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public override bool TryRolePlayerKillTo(
             PlayerControl rolePlayer, PlayerControl targetPlayer)
         {
-            if (this.canAwakeNow && !this.isAwake)
+            if (!this.isAwake)
             {
                 ++this.killCount;
             }
@@ -665,8 +665,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 GetRoleOptionId(HypnotistOption.HideArrowRange)].GetValue();
             this.isResetKillCoolWhenDollKill = allOpt[
                 GetRoleOptionId(HypnotistOption.IsResetKillCoolWhenDollKill)].GetValue();
-            this.dollKillCoolReduceRate = ((1.0f - (float)allOpt[
-                GetRoleOptionId(HypnotistOption.DollKillCoolReduceRate)].GetValue()) / 100.0f);
+            this.dollKillCoolReduceRate = (1.0f - ((float)allOpt[
+                GetRoleOptionId(HypnotistOption.DollKillCoolReduceRate)].GetValue() / 100.0f));
             this.defaultRedAbilityPartNum = allOpt[
                 GetRoleOptionId(HypnotistOption.DefaultRedAbilityPart)].GetValue();
 
@@ -922,13 +922,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     case "IRoleAbility":
                         addNum = 5;
                         break;
-                    case "IRoleMurderPlayerHock":
+                    case "IRoleMurderPlayerHook":
                         addNum = 4;
                         break;
                     case "IRoleUpdate":
                         addNum = 3;
                         break;
-                    case "IRoleReportHock":
+                    case "IRoleReportHook":
                         addNum = 2;
                         break;
                     default:

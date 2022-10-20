@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.IO;
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -95,51 +97,44 @@ namespace ExtremeRoles.Compat
             var buttonTemplate = GameObject.Find("ExitGameButton/ExtremeRolesUpdateButton");
             
             if (buttonTemplate == null) { return; }
-            
+
+            string pluginPath = string.Concat(
+                Path.GetDirectoryName(Application.dataPath),
+                @"\BepInEx\plugins\");
             int index = 0;
 
             foreach (CompatModType mod in System.Enum.GetValues(typeof(CompatModType)))
             {
+                string modName = mod.ToString();
+
+                if (mod == CompatModType.ExtremeSkins)
+                {
+                    createAddonButtons(index, pluginPath, mod, buttonTemplate);
+                    ++index;
+                }
+
                 if (!CompatModManager.ModInfo.ContainsKey(mod)) { continue; }
 
-                string modKey = mod.ToString();
+                TextMeshPro modText = createButtonText(modName, index);
 
-                TextMeshPro modText = Object.Instantiate(
-                    Module.Prefab.Text, menuBody.transform);
-                modText.name = modKey;
-
-                modText.transform.localPosition = new Vector3(0.25f, 1.9f - (index * 0.35f), 0f);
-                modText.fontSizeMin = modText.fontSizeMax = 3.0f;
-                modText.font = Object.Instantiate(Module.Prefab.Text.font);
-                modText.GetComponent<RectTransform>().sizeDelta = new Vector2(5.4f, 5.5f);
-                modText.text = $"{Helper.Translation.GetString(modKey)}";
-                modText.alignment = TextAlignmentOptions.Left;
-                modText.gameObject.SetActive(true);
-
-                Dictionary<ButtonType, GameObject> button = new Dictionary<ButtonType, GameObject>();
-
+                var button = new Dictionary<ButtonType, GameObject>();
                 var (dllName, repoURI) = CompatModManager.ModInfo[mod];
 
-                if (ExtremeRolesPlugin.Compat.LoadedMod.ContainsKey(mod))
+                if (ExtremeRolesPlugin.Compat.LoadedMod.ContainsKey(mod) ||
+                    File.Exists($"{pluginPath}{dllName}.dll"))
                 {
-                    var (uninstallButton, passiveUninstallButton) = createButton(buttonTemplate, modText);
+                    var (uninstallButton, passiveUninstallButton) = createButton(
+                        buttonTemplate, modText);
                     uninstallButton.transform.localPosition = new Vector3(1.85f, 0.0f, -5.0f);
-                    passiveUninstallButton.OnClick.AddListener((System.Action)(() =>
-                        {
-                            var uninstaller = new Excuter.Uninstaller(dllName);
-                            uninstaller.Excute();
-                        })
-                    );
+                    passiveUninstallButton.OnClick.AddListener(
+                        createUnInstallAction(dllName));
                     updateButtonTextAndName(ButtonType.UninstallButton, uninstallButton);
 
-                    var (updateButton, passiveUpdateButton) = createButton(buttonTemplate, modText);
+                    var (updateButton, passiveUpdateButton) = createButton(
+                        buttonTemplate, modText);
                     updateButton.transform.localPosition = new Vector3(0.35f, 0.0f, -5.0f);
-                    passiveUpdateButton.OnClick.AddListener((System.Action)(() =>
-                        {
-                            var updater = new Excuter.Updater(mod, dllName, repoURI);
-                            updater.Excute();
-                        })
-                    );
+                    passiveUpdateButton.OnClick.AddListener(
+                        createUpdateAction(mod, dllName, repoURI));
                     updateButtonTextAndName(ButtonType.UpdateButton, updateButton);
 
                     button.Add(ButtonType.UninstallButton, uninstallButton);
@@ -149,12 +144,8 @@ namespace ExtremeRoles.Compat
                 {
                     var (installButton, passiveInstallButton) = createButton(buttonTemplate, modText);
                     installButton.transform.localPosition = new Vector3(1.1f, 0.0f, -5.0f);
-                    passiveInstallButton.OnClick.AddListener((System.Action)(() =>
-                        {
-                            var installer = new Excuter.Installer(dllName, repoURI);
-                            installer.Excute();
-                        })
-                    );
+                    passiveInstallButton.OnClick.AddListener(
+                        createInstallAction(dllName, repoURI));
                     updateButtonTextAndName(ButtonType.InstallButton, installButton);
                     button.Add(ButtonType.InstallButton, installButton);
                 }
@@ -234,6 +225,97 @@ namespace ExtremeRoles.Compat
             })));
         }
 
+        private static void createAddonButtons(
+            int posIndex,
+            string pluginPath,
+            CompatModType modType,
+            GameObject buttonTemplate)
+        {
+
+            string addonName = modType.ToString();
+
+            TextMeshPro addonText = createButtonText(addonName, posIndex);
+
+            if (!File.Exists($"{pluginPath}{addonName}.dll"))
+            {
+                var (installButton, passiveInstallButton) = createButton(
+                    buttonTemplate, addonText);
+                installButton.transform.localPosition = new Vector3(
+                    1.1f, 0.0f, -5.0f);
+                passiveInstallButton.OnClick.AddListener(createInstallAction(
+                    addonName,
+                    "https://api.github.com/repos/yukieiji/ExtremeRoles/releases/latest"));
+                updateButtonTextAndName(ButtonType.InstallButton, installButton);
+
+                compatModMenuLine.Add(
+                    modType,
+                    (addonText, new Dictionary<ButtonType, GameObject>()
+                    { {ButtonType.UninstallButton, installButton}, }));
+
+            }
+            else
+            {
+                var (uninstallButton, passiveUninstallButton) = createButton(
+                    buttonTemplate, addonText);
+                uninstallButton.transform.localPosition = new Vector3(
+                    1.1f, 0.0f, -5.0f);
+                passiveUninstallButton.OnClick.AddListener(
+                    createUnInstallAction(addonName));
+                updateButtonTextAndName(ButtonType.UninstallButton, uninstallButton);
+
+                compatModMenuLine.Add(
+                    modType,
+                    (addonText, new Dictionary<ButtonType, GameObject>()
+                    { {ButtonType.UninstallButton, uninstallButton}, }));
+            }
+        }
+
+        private static TextMeshPro createButtonText(
+            string name, int posIndex)
+        {
+            TextMeshPro modText = Object.Instantiate(
+                    Module.Prefab.Text, menuBody.transform);
+            modText.name = name;
+
+            modText.transform.localPosition = new Vector3(0.25f, 1.9f - (posIndex * 0.5f), 0f);
+            modText.fontSizeMin = modText.fontSizeMax = 3.0f;
+            modText.font = Object.Instantiate(Module.Prefab.Text.font);
+            modText.GetComponent<RectTransform>().sizeDelta = new Vector2(5.4f, 5.5f);
+            modText.text = $"{Helper.Translation.GetString(name)}";
+            modText.alignment = TextAlignmentOptions.Left;
+            modText.gameObject.SetActive(true);
+
+            return modText;
+        }
+
+        private static System.Action createInstallAction(
+            string dllName, string url)
+        {
+            return () =>
+            {
+                var installer = new Excuter.Installer(dllName, url);
+                installer.Excute();
+            };
+        }
+
+        private static System.Action createUnInstallAction(string dllName)
+        {
+            return () =>
+            {
+                var uninstaller = new Excuter.Uninstaller(dllName);
+                uninstaller.Excute();
+            };
+        }
+
+        private static System.Action createUpdateAction(
+            CompatModType mod, string dllName, string url)
+        {
+            return () =>
+            {
+                var updater = new Excuter.Updater(mod, dllName, url);
+                updater.Excute();
+            };
+        }
 
     }
 }

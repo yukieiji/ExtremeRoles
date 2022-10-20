@@ -235,16 +235,16 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public void Update(PlayerControl rolePlayer)
         {
 
-            if (!rolePlayer.moveable || 
-                MeetingHud.Instance || 
-                ExileController.Instance)
-            { 
-                return; 
-            }
-
             if (rolePlayer.Data.IsDead && this.infoBlock())
             {
-                FastDestroyableSingleton<HudManager>.Instance.Chat.SetVisible(false);
+                FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
+            }
+
+            if (!rolePlayer.moveable ||
+                MeetingHud.Instance ||
+                ExileController.Instance)
+            {
+                return;
             }
 
             if (!this.awakeRole || 
@@ -429,7 +429,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             CreateFloatOption(
                 ResurrecterOption.ResurrectDelayTime,
-                5.0f, 5.0f, 60.0f, 0.1f,
+                5.0f, 4.0f, 60.0f, 0.1f,
                 parentOps, format: OptionUnit.Second);
 
             var meetingResetOpt = CreateBoolOption(
@@ -510,7 +510,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
             else
             {
-                return !this.isResurrected;
+                return !this.isResurrected || this.activateResurrectTimer;
             }
         }
 
@@ -632,7 +632,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
                     MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                         CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                        (byte)RPCOperator.Command.AgencySetNewTask,
+                        (byte)RPCOperator.Command.ResurrecterRpc,
                         Hazel.SendOption.Reliable, -1);
                     writer.Write((byte)ResurrecterRpcOps.ReplaceTask);
                     writer.Write(rolePlayer.PlayerId);

@@ -14,6 +14,7 @@ namespace ExtremeRoles.Compat
 
     internal enum CompatModType
     {
+        ExtremeSkins,
         Submerged,
     }
 

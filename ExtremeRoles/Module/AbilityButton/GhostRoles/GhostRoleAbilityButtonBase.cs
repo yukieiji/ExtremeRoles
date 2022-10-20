@@ -97,10 +97,13 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
         public sealed override void Update()
         {
             if (this.Button == null) { return; }
-            if (CachedPlayerControl.LocalPlayer.Data == null ||
+
+            PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+
+            if (localPlayer.Data == null ||
                 MeetingHud.Instance ||
                 ExileController.Instance ||
-                !CachedPlayerControl.LocalPlayer.Data.IsDead)
+                !localPlayer.Data.IsDead)
             {
                 SetActive(false);
                 return;
@@ -108,7 +111,9 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
 
             var hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
-            SetActive(hudManager.UseButton.isActiveAndEnabled);
+            SetActive(
+                localPlayer.IsKillTimerEnabled || 
+                hudManager.UseButton.isActiveAndEnabled);
 
             this.Button.graphic.sprite = this.ButtonSprite;
             this.Button.OverrideText(ButtonText);
