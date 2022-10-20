@@ -88,7 +88,6 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             target.font = Instantiate(style.font);
 
             target.fontSize = target.fontSizeMin = target.fontSizeMax = 16.5f;
-            target.enableWordWrapping = false;
             target.alignment = TextAlignmentOptions.TopLeft;
             target.transform.localScale = Vector3.one;
             target.color = Palette.White;
