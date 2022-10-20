@@ -111,7 +111,7 @@ namespace ExtremeRoles.Compat.Excuter
                     current["content_type"] != null)
                 {
                     if (current["content_type"].ToString().Equals("application/x-msdownload") &&
-                        browser_download_url.EndsWith(".dll"))
+                        browser_download_url.EndsWith(this.dllName))
                     {
                         downloadURI = browser_download_url;
                         break;
