@@ -106,11 +106,20 @@ namespace ExtremeRoles.Module.InfoOverlay
 
         public void ResetOverlays()
         {
+            bool? isCollected = this.body?.WasCollected;
+
+            if (isCollected.HasValue)
+            {
+                if (!isCollected.Value)
+                {
+                    UnityEngine.Object.Destroy(this.body.gameObject);
+                }
+                this.body = null;
+            }
+
             HideInfoOverlay();
             pageClear();
 
-            UnityEngine.Object.Destroy(this.body);
-            this.body = null;
             this.overlayShown = false;
         }
 
@@ -197,7 +206,10 @@ namespace ExtremeRoles.Module.InfoOverlay
             if (CachedPlayerControl.LocalPlayer == null ||
                 hudManager == null ||
                 hudManager.IsIntroDisplayed ||
-                (!CachedPlayerControl.LocalPlayer.PlayerControl.CanMove && MeetingHud.Instance == null))
+                (
+                    !CachedPlayerControl.LocalPlayer.PlayerControl.CanMove && 
+                    MeetingHud.Instance == null
+                ))
             {
                 return;
             }
@@ -208,8 +220,6 @@ namespace ExtremeRoles.Module.InfoOverlay
             {
                 MapBehaviour.Instance.Close();
             }
-
-            hudManager.SetHudActive(false);
 
             this.overlayShown = true;
 
