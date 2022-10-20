@@ -489,6 +489,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.awakeHasOtherVision = this.HasOtherVison;
             this.canResurrect = false;
             this.isResurrected = false;
+            this.activateResurrectTimer = false;
 
             if (this.awakeTaskGage <= 0.0f)
             {
