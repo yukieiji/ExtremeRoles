@@ -242,7 +242,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             if (!rolePlayer.moveable ||
                 MeetingHud.Instance ||
-                ExileController.Instance)
+                ExileController.Instance ||
+                CachedShipStatus.Instance == null ||
+                !CachedShipStatus.Instance.enabled)
             {
                 return;
             }
