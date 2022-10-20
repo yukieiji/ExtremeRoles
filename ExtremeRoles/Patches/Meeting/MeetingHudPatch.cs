@@ -406,7 +406,7 @@ namespace ExtremeRoles.Patches.Meeting
         public static void Prefix(
             MeetingHud __instance)
         {
-            ExtremeRolesPlugin.Info.HideInfoOverlay();
+            ExtremeRolesPlugin.Info.ResetOverlays();
         }
     }
 
@@ -793,8 +793,6 @@ namespace ExtremeRoles.Patches.Meeting
     {
         public static void Postfix()
         {
-            ExtremeRolesPlugin.Info.HideInfoOverlay();
-
             foreach (DeadBody b in UnityEngine.Object.FindObjectsOfType<DeadBody>())
             {
                 UnityEngine.Object.Destroy(b.gameObject);
