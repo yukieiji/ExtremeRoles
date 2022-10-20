@@ -400,10 +400,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
                 GameData gameData = GameData.Instance;
 
-                if (rolePlayer.Data.Tasks.Count != 0 &&
-                    (
+                if ((
                         this.awakeCheckImpNum >= impNum ||
-                        this.awakeCheckTaskGage >= 
+                        this.awakeCheckTaskGage <= 
                             (gameData.CompletedTasks / gameData.TotalTasks)
                     ))
                 {
