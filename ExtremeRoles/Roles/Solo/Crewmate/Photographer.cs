@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 using UnityEngine;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -34,8 +35,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 this.PlayerName = player.PlayerName;
                 this.Room = null;
 
-                UnhollowerBaseLib.Il2CppReferenceArray<Collider2D> buffer = 
-                    new UnhollowerBaseLib.Il2CppReferenceArray<Collider2D>(10);
+                Il2CppReferenceArray<Collider2D> buffer = 
+                    new Il2CppReferenceArray<Collider2D>(10);
                 Collider2D playerCollinder = player.Object.GetComponent<Collider2D>();
 
                 foreach (PlainShipRoom room in CachedShipStatus.Instance.AllRooms)

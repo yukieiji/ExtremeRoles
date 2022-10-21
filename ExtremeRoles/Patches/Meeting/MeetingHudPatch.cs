@@ -5,7 +5,7 @@ using System.Linq;
 using HarmonyLib;
 using UnityEngine;
 
-using UnhollowerBaseLib;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.GhostRoles;

@@ -2,7 +2,8 @@
 using System.Linq.Expressions;
 
 using UnityEngine;
-using UnhollowerBaseLib;
+
+using Il2CppInterop.Runtime;
 
 // from TOR : https://github.com/Eisbison/TheOtherRoles/blob/main/TheOtherRoles/Utilities/FastDestroyableSingleton.cs
 

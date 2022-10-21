@@ -6,7 +6,7 @@ using HarmonyLib;
 
 using ExtremeSkins.SkinManager;
 
-using BepInEx.IL2CPP.Utils.Collections;
+using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 namespace ExtremeSkins.Patches.AmongUs
 {

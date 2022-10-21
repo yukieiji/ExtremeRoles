@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
 using HarmonyLib;
 
@@ -293,7 +294,7 @@ namespace ExtremeRoles.Patches.Option
 
             // Adapt task count for main options
 
-            UnhollowerBaseLib.Il2CppReferenceArray<OptionBehaviour> child = __instance.Children;
+            Il2CppReferenceArray<OptionBehaviour> child = __instance.Children;
 
 
             if (AmongUsClient.Instance.GameMode == GameModes.LocalGame ||

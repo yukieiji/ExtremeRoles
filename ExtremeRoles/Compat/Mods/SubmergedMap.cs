@@ -9,9 +9,10 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using BepInEx;
+using Il2CppInterop.Runtime;
+using Il2CppInterop.Runtime.Injection;
 
 using HarmonyLib;
-using UnhollowerRuntimeLib;
 using Hazel;
 using UnityEngine;
 

@@ -14,7 +14,7 @@ using ExtremeRoles.Resources;
 
 using ExtremeRoles.Module.AbilityButton.Roles;
 
-using BepInEx.IL2CPP.Utils.Collections;
+using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {

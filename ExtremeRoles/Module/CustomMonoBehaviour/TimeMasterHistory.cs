@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 using ExtremeRoles.Performance;
-using UnhollowerBaseLib.Attributes;
+using Il2CppInterop.Runtime.Attributes;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour
 {
