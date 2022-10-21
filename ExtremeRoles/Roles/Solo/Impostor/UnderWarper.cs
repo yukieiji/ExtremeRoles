@@ -211,19 +211,19 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void ResetOnMeetingEnd()
         {
-            if (!this.isAwake && 
-                this.awakeKillCount >= this.killCount)
+            if (!this.isAwake &&
+                this.killCount >= this.awakeKillCount)
             {
                 this.isAwake = true;
             }
             if (!this.isVentLink &&
-                this.ventLinkKillCout >= this.killCount)
+                this.killCount >= this.ventLinkKillCout)
             {
                 this.isVentLink = true;
                 relinkMapVent();
             }
             if (!this.isNoVentAnime &&
-                this.noVentAnimeKillCout >= this.killCount)
+                this.killCount >= this.noVentAnimeKillCout)
             {
                 this.isNoVentAnime = true;
             }
