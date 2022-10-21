@@ -26,14 +26,14 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                 "Background").gameObject.GetComponent<Image>();
 
             this.aditionalInfoTitle = trans.Find(
-                "Anchor/AditionalInfo/Title").gameObject.GetComponent<TextMeshProUGUI>();
+                "Anchor/InfoAnchor/AditionalInfo/Title").gameObject.GetComponent<TextMeshProUGUI>();
             this.additionalInfoBody = trans.Find(
-                "Anchor/AditionalInfo/ScrollView/Viewport/BodyText").gameObject.GetComponent<TextMeshProUGUI>();
+                "Anchor/InfoAnchor/AditionalInfo/ScrollView/Viewport/BodyText").gameObject.GetComponent<TextMeshProUGUI>();
 
             this.basicInfoTitle = trans.Find(
-                "Anchor/BasicInfo/Title").gameObject.GetComponent<TextMeshProUGUI>();
+                "Anchor/InfoAnchor/BasicInfo/Title").gameObject.GetComponent<TextMeshProUGUI>();
             this.basicInfoBody = trans.Find(
-                "Anchor/BasicInfo/ScrollView/Viewport/BodyText").gameObject.GetComponent<TextMeshProUGUI>();
+                "Anchor/InfoAnchor/BasicInfo/ScrollView/Viewport/BodyText").gameObject.GetComponent<TextMeshProUGUI>();
 
             this.gameOptionTitle = trans.Find(
                 "Anchor/GameOptionInfo/Title").gameObject.GetComponent<TextMeshProUGUI>();
