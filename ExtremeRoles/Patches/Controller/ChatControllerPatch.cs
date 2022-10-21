@@ -103,11 +103,14 @@ namespace ExtremeRoles.Patches.Controller
 				__instance.SetChatBubbleName(
 					chatBubble, data2, data2.IsDead,
 					didVote, seeColor, null);
+
+				string addText = chatText;
+
 				if (DataManager.Settings.Multiplayer.CensorChat)
 				{
-					chatText = BlockedWords.CensorWords(chatText);
+					addText = BlockedWords.CensorWords(chatText);
 				}
-				chatBubble.SetText(chatText);
+				chatBubble.SetText(addText);
 				chatBubble.AlignChildren();
 				__instance.AlignAllBubbles();
 				if (!__instance.IsOpen && __instance.notificationRoutine == null)
