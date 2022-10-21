@@ -7,9 +7,9 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using BepInEx;
-using BepInEx.IL2CPP;
-using BepInEx.IL2CPP.Utils;
-using UnhollowerBaseLib.Attributes;
+using BepInEx.Unity.IL2CPP;
+using BepInEx.Unity.IL2CPP.Utils;
+using Il2CppInterop.Runtime.Attributes;
 using UnityEngine;
 using UnityEngine.Networking;
 

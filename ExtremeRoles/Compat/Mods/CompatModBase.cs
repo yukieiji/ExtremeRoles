@@ -2,7 +2,7 @@
 using System.Reflection;
 
 using BepInEx;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 
 namespace ExtremeRoles.Compat.Mods

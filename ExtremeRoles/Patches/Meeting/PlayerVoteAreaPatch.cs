@@ -10,6 +10,9 @@ using BepInEx.IL2CPP.Utils.Collections;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.RoleAssign;
+using BepInEx.Unity.IL2CPP.Utils.Collections;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Roles;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;

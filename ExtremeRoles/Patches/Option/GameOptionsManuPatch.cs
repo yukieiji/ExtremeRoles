@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 
 using UnityEngine;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+
 using HarmonyLib;
 
 

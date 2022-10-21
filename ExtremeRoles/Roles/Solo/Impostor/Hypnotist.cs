@@ -9,7 +9,7 @@ using AmongUs.GameOptions;
 
 using Newtonsoft.Json.Linq;
 
-using BepInEx.IL2CPP.Utils.Collections;
+using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 using ExtremeRoles.Extension.Json;
 using ExtremeRoles.Helper;

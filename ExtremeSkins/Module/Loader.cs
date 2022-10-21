@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
 using UnityEngine;
-using UnhollowerBaseLib;
+
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
 namespace ExtremeSkins.Module
 {
