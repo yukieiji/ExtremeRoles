@@ -203,7 +203,7 @@ namespace ExtremeRoles.Patches
             killButtonUpdate(player, playerRole, enable);
             ventButtonUpdate(playerRole, enable);
 
-            sabotageButtonUpdate(playerRole, enable);
+            sabotageButtonUpdate(player, playerRole, enable);
             roleAbilityButtonUpdate(playerRole);
 
             ghostRoleButtonUpdate(playerGhostRole);
@@ -220,7 +220,7 @@ namespace ExtremeRoles.Patches
 
             if (role.CanKill())
             {
-                if (enable)
+                if (enable && !player.Data.IsDead)
                 {
                     if (!isImposter)
                     {
@@ -270,6 +270,7 @@ namespace ExtremeRoles.Patches
         }
 
         private static void sabotageButtonUpdate(
+            PlayerControl player,
             SingleRoleBase role, bool enable)
         {
             HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
@@ -286,7 +287,7 @@ namespace ExtremeRoles.Patches
                     hudManager.SabotageButton.gameObject.SetActive(true);
                 }
                 // それ以外は死んでないときだけサボタージ使える
-                else if(enable && !CachedPlayerControl.LocalPlayer.Data.IsDead)
+                else if(enable && !player.Data.IsDead)
                 {
                     hudManager.SabotageButton.Show();
                     hudManager.SabotageButton.gameObject.SetActive(true);
