@@ -230,8 +230,10 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             else
             {
                 Color roleColor = targetRole.GetNameColor(true);
+
+                // インポスター同士は見える
                 if (!isMeetingInfoBlock || 
-                    (targetRole.Team == localRole.Team))
+                    (localRole.IsImpostor() && targetRole.IsImpostor()))
                 {
                     this.NameText.color = roleColor;
                 }
