@@ -2,6 +2,8 @@
 using UnityEngine.UI;
 using TMPro;
 
+using ExtremeRoles.Performance;
+
 namespace ExtremeRoles.Module.CustomMonoBehaviour
 {
     [Il2CppRegister]
@@ -39,6 +41,22 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                 "Anchor/GameOptionInfo/Title").gameObject.GetComponent<TextMeshProUGUI>();
             this.gameOptionBody = trans.Find(
                 "Anchor/GameOptionInfo/ScrollView/Viewport/BodyText").gameObject.GetComponent<TextMeshProUGUI>();
+        }
+
+        public void Update()
+        {
+            var hud = FastDestroyableSingleton<HudManager>.Instance;
+            var map = MapBehaviour.Instance;
+
+            if (hud == null || 
+                hud.Chat.IsOpen ||
+                hud.GameMenu.IsOpen ||
+                (map != null && map.IsOpen) ||
+                Minigame.Instance ||
+                GameSettingMenu.Instance)
+            {
+                base.gameObject.SetActive(false);
+            }
         }
 
         public void SetTextStyle(TextMeshPro baseText)
