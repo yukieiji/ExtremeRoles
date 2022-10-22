@@ -3,7 +3,7 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
-        <Version>3.3.2.2</Version>
+        <Version>3.3.2.3</Version>
         <!--<VersionPrefix>3.3.2</VersionPrefix>-->
         <VersionSuffix>ImproveCustomVisor</VersionSuffix>
         <Description>Extreme Skins for Extreme Roles</Description>
