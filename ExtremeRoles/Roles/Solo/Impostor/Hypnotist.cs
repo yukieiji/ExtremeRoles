@@ -1022,6 +1022,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             false, false, false,
             false, false, false)
         {
+            this.GameControlId = hypnotist.GameControlId;
             this.dollPlayerId = dollPlayerId;
             this.hypnotistPlayerId = hypnotistPlayerId;
             this.hypnotist = parent;
