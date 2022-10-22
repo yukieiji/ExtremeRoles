@@ -13,9 +13,9 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-        <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE; WITHVISOR</DefineConstants>
-    </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE; WITHVISOR</DefineConstants>
+  </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
         <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE; WITHVISOR</DefineConstants>
@@ -28,8 +28,8 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="BepInEx.Il2Cpp.TlsAdapter" Version="1.0.1" />
-        <PackageReference Include="BepInEx.Unity.Common" Version="6.0.0-be.660" />
-        <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.660" />
+        <PackageReference Include="BepInEx.Unity.Common" Version="6.0.0-be.663" />
+        <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.663" />
         <PackageReference Include="HarmonyX" Version="2.10.0" />
         <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
         <PackageReference Include="BepInEx.IL2CPP" Version="6.0.0-be.565" />
