@@ -30,9 +30,7 @@ namespace ExtremeRoles.Extension.Il2Cpp
     {
         private readonly Stream _stream;
 
-#pragma warning disable 8618
         public StreamWrapper(IntPtr ptr) : base(ptr) { }
-#pragma warning restore 8618
 
         public StreamWrapper(Stream stream) : base(ClassInjector.DerivedConstructorPointer<StreamWrapper>())
         {
