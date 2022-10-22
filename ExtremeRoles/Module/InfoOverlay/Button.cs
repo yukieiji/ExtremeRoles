@@ -63,7 +63,7 @@ namespace ExtremeRoles.Module.InfoOverlay
         {
             if (buttonShowType >= block + 1)
             {
-                ExtremeRolesPlugin.Info.HideInfoOverlay();
+                ExtremeRolesPlugin.Info.Close(true);
                 buttonShowType = 0;
             }
             else

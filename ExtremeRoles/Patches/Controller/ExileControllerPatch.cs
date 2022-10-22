@@ -147,7 +147,6 @@ namespace ExtremeRoles.Patches.Controller
         public static void WrapUpPostfix(GameData.PlayerInfo exiled)
         {
             ExtremeRolesPlugin.Info.BlockShow(false);
-            ExtremeRolesPlugin.Info.HideBlackBG();
             ExtremeRolesPlugin.ShipState.ResetOnMeeting();
 
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
