@@ -190,7 +190,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
 
             var role = ExtremeRoleManager.GetLocalPlayerRole();
-            if (role.CanKill())
+            if (role.CanKill() && !role.IsCrewmate())
             {
                 var hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
