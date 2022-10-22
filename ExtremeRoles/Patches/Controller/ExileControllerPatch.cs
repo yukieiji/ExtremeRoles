@@ -164,6 +164,12 @@ namespace ExtremeRoles.Patches.Controller
 
             var role = ExtremeRoleManager.GetLocalPlayerRole();
             var abilityRole = role as IRoleAbility;
+            var hookRole = role as IRoleExilHook;
+
+            if (hookRole != null)
+            {
+                hookRole.HookWrapUp(exiled);
+            }
 
             if (abilityRole != null)
             {
@@ -180,6 +186,12 @@ namespace ExtremeRoles.Patches.Controller
             {
                 if (multiAssignRole.AnotherRole != null)
                 {
+                    hookRole = multiAssignRole.AnotherRole as IRoleExilHook;
+                    if (hookRole != null)
+                    {
+                        hookRole.HookWrapUp(exiled);
+                    }
+
                     abilityRole = multiAssignRole.AnotherRole as IRoleAbility;
                     if (abilityRole != null)
                     {

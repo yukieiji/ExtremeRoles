@@ -29,6 +29,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         SingleRoleBase,
         IRoleAbility,
         IRoleAwake<RoleTypes>,
+        IRoleExilHook,
         IRoleMurderPlayerHook,
         IRoleSpecialReset
     {
@@ -324,9 +325,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.isActiveTimer = false;
         }
 
+        public void HookWrapUp(GameData.PlayerInfo exiledPlayer)
+        {
+            updateAwakeCheck(exiledPlayer);
+        }
+
         public void RoleAbilityResetOnMeetingEnd()
         {
-            if (this.canAwakeNow && 
+            if (!this.isAwake &&
+                this.canAwakeNow && 
                 this.killCount >= this.awakeKillCount)
             {
                 this.isAwake = true;
@@ -383,31 +390,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void Update(PlayerControl rolePlayer)
         {
-            if (rolePlayer == null) { return; }
+            // 追放中は処理をブロックする
+            if (rolePlayer == null || 
+                ExileController.Instance) { return; }
 
             if (!this.canAwakeNow)
             {
-                int impNum = 0;
-
-                foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
-                {
-                    if (ExtremeRoleManager.GameRole[player.PlayerId].IsImpostor() &&
-                        (!player.IsDead && !player.Disconnected))
-                    {
-                        ++impNum;
-                    }
-                }
-
-                GameData gameData = GameData.Instance;
-
-                if ((
-                        this.awakeCheckImpNum >= impNum ||
-                        this.awakeCheckTaskGage <= 
-                            (gameData.CompletedTasks / gameData.TotalTasks)
-                    ))
-                {
-                    this.canAwakeNow = true;
-                }
+                updateAwakeCheck(null);
             }
             if (!this.isAwake)
             {
@@ -895,6 +884,37 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.addedPos.Add(pos);
             }
         }
+
+        private void updateAwakeCheck(GameData.PlayerInfo ignorePlayer)
+        {
+            int impNum = 0;
+
+            foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
+            {
+                byte playerId = player.PlayerId;
+
+                if (ignorePlayer != null &&
+                    player.PlayerId == ignorePlayer.PlayerId) { continue; }
+
+                if (ExtremeRoleManager.GameRole[playerId].IsImpostor() &&
+                    (!player.IsDead && !player.Disconnected))
+                {
+                    ++impNum;
+                }
+            }
+
+            GameData gameData = GameData.Instance;
+
+            if ((
+                    this.awakeCheckImpNum >= impNum ||
+                    this.awakeCheckTaskGage <=
+                        (gameData.CompletedTasks / gameData.TotalTasks)
+                ))
+            {
+                this.canAwakeNow = true;
+            }
+        }
+
         private static int computeRedPartNum(Type[] interfaces)
         {
             int num = 0;
@@ -927,6 +947,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     case "IRoleUpdate":
                         addNum = 3;
                         break;
+                    case "IRoleExilHook":
                     case "IRoleReportHook":
                         addNum = 2;
                         break;
@@ -1411,6 +1432,5 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             this.tellText.gameObject.SetActive(false);
         }
-
     }
 }
