@@ -45,7 +45,9 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
                 return;
             }
 
-            SetActive(localPlayer.IsKillTimerEnabled);
+            SetActive(
+                localPlayer.IsKillTimerEnabled || 
+                localPlayer.ForceKillTimerContinue);
 
             var hudManager = FastDestroyableSingleton<HudManager>.Instance;
 

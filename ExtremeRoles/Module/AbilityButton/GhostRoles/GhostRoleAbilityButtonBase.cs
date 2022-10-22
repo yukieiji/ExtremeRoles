@@ -113,6 +113,7 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
 
             SetActive(
                 localPlayer.IsKillTimerEnabled || 
+                localPlayer.ForceKillTimerContinue ||
                 hudManager.UseButton.isActiveAndEnabled);
 
             this.Button.graphic.sprite = this.ButtonSprite;

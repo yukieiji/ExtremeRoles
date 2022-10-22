@@ -88,8 +88,11 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
             {
                 bool abilityOn = this.IsHasCleanUp() && IsAbilityOn;
 
-                if (abilityOn || 
-                    CachedPlayerControl.LocalPlayer.PlayerControl.IsKillTimerEnabled)
+                PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+
+                if (abilityOn ||
+                    localPlayer.IsKillTimerEnabled ||
+                    localPlayer.ForceKillTimerContinue)
                 {
                     this.Timer -= Time.deltaTime;
                 }

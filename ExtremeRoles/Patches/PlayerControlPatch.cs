@@ -198,7 +198,7 @@ namespace ExtremeRoles.Patches
         {
             if (!player.AmOwner) { return; }
 
-            bool enable = player.IsKillTimerEnabled;
+            bool enable = player.IsKillTimerEnabled || player.ForceKillTimerContinue;
 
             killButtonUpdate(player, playerRole, enable);
             ventButtonUpdate(playerRole, enable);

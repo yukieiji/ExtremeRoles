@@ -42,8 +42,11 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
 
             if (this.Timer >= 0)
             {
+                PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+
                 if (IsAbilityOn ||
-                    CachedPlayerControl.LocalPlayer.PlayerControl.IsKillTimerEnabled)
+                    localPlayer.IsKillTimerEnabled ||
+                    localPlayer.ForceKillTimerContinue)
                 {
                     this.Timer -= Time.deltaTime;
                 }
