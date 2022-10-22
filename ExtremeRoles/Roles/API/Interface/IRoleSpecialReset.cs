@@ -8,7 +8,7 @@ namespace ExtremeRoles.Roles.API.Interface
     {
         public void AllReset(PlayerControl rolePlayer);
 
-        public static void ResetRole(byte targetPlayerId)
+        public static void ResetRole(byte targetPlayerId, bool resetLover)
         {
             PlayerControl resetPlayer = Player.GetPlayerControlById(targetPlayerId);
             SingleRoleBase resetRole = ExtremeRoleManager.GameRole[targetPlayerId];
@@ -32,6 +32,11 @@ namespace ExtremeRoles.Roles.API.Interface
             FastDestroyableSingleton<RoleManager>.Instance.SetRole(
                 Player.GetPlayerControlById(targetPlayerId),
                 RoleTypes.Crewmate);
+
+            if (resetRole.Id == ExtremeRoleId.Lover && resetLover)
+            {
+                resetRole.RolePlayerKilledAction(resetPlayer, resetPlayer);
+            }
         }
 
         private static void abilityReset(

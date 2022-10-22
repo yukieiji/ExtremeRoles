@@ -250,13 +250,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public static void TargetToSideKick(byte callerId, byte targetId)
         {
-            PlayerControl targetPlayer = Player.GetPlayerControlById(targetId);
             SingleRoleBase targetRole = ExtremeRoleManager.GameRole[targetId];
-
-            IRoleSpecialReset.ResetRole(targetId);
 
             var sourceJackal = ExtremeRoleManager.GetSafeCastedRole<Jackal>(callerId);
             if (sourceJackal == null) { return; }
+
+            IRoleSpecialReset.ResetRole(
+                targetId, sourceJackal.ForceReplaceLover);
+
             var newSidekick = new Sidekick(
                 sourceJackal,
                 callerId,
@@ -265,32 +266,24 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             sourceJackal.SidekickPlayerId.Add(targetId);
 
-            if (targetRole.Id != ExtremeRoleId.Lover)
+            if (targetRole.Id != ExtremeRoleId.Lover || sourceJackal.ForceReplaceLover)
             {
                 ExtremeRoleManager.SetNewRole(targetId, newSidekick);
             }
             else
             {
-                if (sourceJackal.ForceReplaceLover)
-                {
-                    ExtremeRoleManager.SetNewRole(targetId, newSidekick);
-                    targetRole.RolePlayerKilledAction(targetPlayer, targetPlayer);
-                }
-                else
-                {
-                    var sidekickOption = sourceJackal.SidekickOption;
-                    var lover = (Combination.Lover)targetRole;
-                    lover.CanHasAnotherRole = true;
-                    lover.SetAnotherRole(newSidekick);
+                var sidekickOption = sourceJackal.SidekickOption;
+                var lover = (Combination.Lover)targetRole;
+                lover.CanHasAnotherRole = true;
+                lover.SetAnotherRole(newSidekick);
 
-                    lover.Team = ExtremeRoleType.Neutral;
-                    lover.HasTask = false;
-                    lover.HasOtherVison = sidekickOption.HasOtherVison;
-                    lover.IsApplyEnvironmentVision = sidekickOption.ApplyEnvironmentVisionEffect;
-                    lover.Vison = sidekickOption.Vison;
-                    lover.KillCoolTime = sidekickOption.KillCool;
-                    lover.KillRange = sidekickOption.KillRange;
-                }
+                lover.Team = ExtremeRoleType.Neutral;
+                lover.HasTask = false;
+                lover.HasOtherVison = sidekickOption.HasOtherVison;
+                lover.IsApplyEnvironmentVision = sidekickOption.ApplyEnvironmentVisionEffect;
+                lover.Vison = sidekickOption.Vison;
+                lover.KillCoolTime = sidekickOption.KillCool;
+                lover.KillRange = sidekickOption.KillRange;
             }
 
         }
