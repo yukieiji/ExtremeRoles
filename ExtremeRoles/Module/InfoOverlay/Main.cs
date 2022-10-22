@@ -45,8 +45,6 @@ namespace ExtremeRoles.Module.InfoOverlay
         private const string prefabName = "ExtremeRoles.Resources.Asset.infooverlay.asset";
         private const string objName = "assets/infooverlay.prefab";
 
-        private static readonly Vector3 infoAnchorFirstPos = new Vector3(-4.0f, 1.6f, -910f);
-
         public InfoOverlay()
         {
             pageClear();
@@ -60,7 +58,7 @@ namespace ExtremeRoles.Module.InfoOverlay
             this.isBlock = isBlock;
             if (this.isBlock)
             {
-                HideInfoOverlay();
+                Close();
             }
         }
 
@@ -75,11 +73,9 @@ namespace ExtremeRoles.Module.InfoOverlay
             this.updateShowText();
         }
 
-        public void HideInfoOverlay()
+        public void Close(bool isLerp = false)
         {
-            if (this.body == null) { return; }
-
-            if (!this.OverlayShown) { return; }
+            if (this.body == null || !this.OverlayShown) { return; }
 
             var hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
@@ -87,19 +83,26 @@ namespace ExtremeRoles.Module.InfoOverlay
             if (MeetingHud.Instance == null) { hudManager.SetHudActive(true); }
 
             this.overlayShown = false;
-            var underlayTransparent = new Color(0.1f, 0.1f, 0.1f, 0.0f);
-            var underlayOpaque = new Color(0.1f, 0.1f, 0.1f, 0.88f);
 
-            hudManager.StartCoroutine(Effects.Lerp(0.2f, new Action<float>(t =>
+            if (isLerp)
             {
-                this.body.SetBkColor(
-                    Color.Lerp(underlayOpaque, underlayTransparent, t));
-                this.body.SetTextColor(Color.Lerp(Palette.White, Palette.ClearWhite, t));
-                if (t >= 1.0f)
+                hudManager.StartCoroutine(Effects.Lerp(0.2f, new Action<float>(t =>
                 {
-                    this.body.gameObject.SetActive(false);
-                }
-            })));
+                    this.body.SetBkColor(
+                        Color.Lerp(
+                            new Color(0.1f, 0.1f, 0.1f, 0.88f),
+                            new Color(0.1f, 0.1f, 0.1f, 0.0f), t));
+                    this.body.SetTextColor(Color.Lerp(Palette.White, Palette.ClearWhite, t));
+                    if (t >= 1.0f)
+                    {
+                        this.body.gameObject.SetActive(false);
+                    }
+                })));
+            }
+            else
+            {
+                this.body.gameObject.SetActive(false);
+            }
 
             this.body.gameObject.transform.SetParent(hudManager.transform);
         }
@@ -117,7 +120,7 @@ namespace ExtremeRoles.Module.InfoOverlay
                 this.body = null;
             }
 
-            HideInfoOverlay();
+            Close();
             pageClear();
 
             this.overlayShown = false;
@@ -132,7 +135,9 @@ namespace ExtremeRoles.Module.InfoOverlay
 
         public void ToggleInfoOverlay(ShowType showType)
         {
-            if (FastDestroyableSingleton<HudManager>.Instance.Chat.IsOpen) { return; }
+            var hud = FastDestroyableSingleton<HudManager>.Instance;
+
+            if (hud.Chat.IsOpen || hud.GameMenu.IsOpen) { return; }
 
             if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd)
             {
@@ -153,7 +158,7 @@ namespace ExtremeRoles.Module.InfoOverlay
             {
                 if (this.curShow == showType)
                 {
-                    HideInfoOverlay();
+                    Close(true);
                 }
                 else
                 {

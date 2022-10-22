@@ -48,14 +48,15 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             var hud = FastDestroyableSingleton<HudManager>.Instance;
             var map = MapBehaviour.Instance;
 
-            if (hud == null || 
+            if (Input.GetKeyDown(KeyCode.Escape) ||
+                hud == null || 
                 hud.Chat.IsOpen ||
                 hud.GameMenu.IsOpen ||
                 (map != null && map.IsOpen) ||
                 Minigame.Instance ||
                 GameSettingMenu.Instance)
             {
-                base.gameObject.SetActive(false);
+                ExtremeRolesPlugin.Info.Close();
             }
         }
 

@@ -26,14 +26,6 @@ namespace ExtremeRoles.Patches.MapOverlay
         }
     }
 
-    [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.GenericShow))]
-    public static class MapBehaviourShowNormalMapPatch
-    {
-        static void Prefix(MapBehaviour __instance)
-        {
-            ExtremeRolesPlugin.Info.HideInfoOverlay();
-        }
-    }
     [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.ShowCountOverlay))]
     public static class MapBehaviourShowCountOverlayPatch
     {

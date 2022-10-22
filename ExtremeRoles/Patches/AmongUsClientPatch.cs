@@ -37,7 +37,7 @@ namespace ExtremeRoles.Patches
     {
         public static void Prefix(AmongUsClient __instance)
         {
-            ExtremeRolesPlugin.Info.HideInfoOverlay();
+            ExtremeRolesPlugin.Info.Close();
         }
     }
 
@@ -59,7 +59,7 @@ namespace ExtremeRoles.Patches
     {
         public static void Prefix([HarmonyArgument(0)] ref EndGameResult endGameResult)
         {
-            ExtremeRolesPlugin.Info.HideInfoOverlay();
+            ExtremeRolesPlugin.Info.Close();
             ExtremeRolesPlugin.ShipState.SetGameOverReason(endGameResult.GameOverReason);
             if ((int)endGameResult.GameOverReason >= 10)
             {
