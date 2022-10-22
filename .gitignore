@@ -367,4 +367,5 @@ ExtremeRoles/Resources/TOR_Resources
 ExtremeRoles/Resources/TESTBUTTON.png
 ExtremeRoles/Resources/Installer/ExtremeBepInExInstaller.exe
 ExtremeRoles/Resources/JsonData/Language.json
+ExtremeRoles/Resources/Assets/*.asset
 ExtremeSkins/Resources/LangData/stringData.json

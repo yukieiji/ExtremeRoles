@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 
 using ExtremeRoles.Compat.Interface;
-using ExtremeRoles.Helper;
+using ExtremeRoles.Extension.Il2Cpp;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 

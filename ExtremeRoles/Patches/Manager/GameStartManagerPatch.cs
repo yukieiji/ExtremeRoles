@@ -65,8 +65,6 @@ namespace ExtremeRoles.Patches.Manager
                 }
             }
 
-            ExtremeRolesPlugin.Info.HideInfoOverlay();
-
             if (OptionHolder.AllOption[(int)OptionHolder.CommonOptionKey.RandomMap].GetValue())
             {
                 // 0 = Skeld
