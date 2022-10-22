@@ -42,7 +42,7 @@ namespace ExtremeRoles.Module.InfoOverlay
         private ShowType curShow;
         private GameObject prefab;
 
-        private const string prefabName = "ExtremeRoles.Resources.Asset.infooverlay.asset";
+        private const string prefabName = "ExtremeRoles.Resources.Assets.infooverlay.asset";
         private const string objName = "assets/infooverlay.prefab";
 
         public InfoOverlay()
