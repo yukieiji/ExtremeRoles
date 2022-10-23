@@ -220,7 +220,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             byte rolePlayerId,
             byte targetPlayerId)
         {
-            IRoleSpecialReset.ResetRole(targetPlayerId, true);
+            IRoleSpecialReset.ResetRole(targetPlayerId);
             Doll newDoll = new Doll(targetPlayerId, rolePlayerId, role);
             if (targetPlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
             {
