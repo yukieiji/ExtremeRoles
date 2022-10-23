@@ -220,6 +220,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             byte rolePlayerId,
             byte targetPlayerId)
         {
+
+            PlayerControl targetPlayer = Player.GetPlayerControlById(targetPlayerId);
+            SingleRoleBase targetRole = ExtremeRoleManager.GameRole[targetPlayerId];
+
             IRoleSpecialReset.ResetRole(targetPlayerId);
             Doll newDoll = new Doll(targetPlayerId, rolePlayerId, role);
             if (targetPlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
@@ -227,6 +231,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 newDoll.CreateAbility();
             }
             ExtremeRoleManager.SetNewRole(targetPlayerId, newDoll);
+
+            if (targetRole.Id == ExtremeRoleId.Lover)
+            {
+                targetRole.RolePlayerKilledAction(targetPlayer, targetPlayer);
+            }
             role.doll.Add(targetPlayerId);
         }
 
@@ -1022,13 +1031,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             false, false, false,
             false, false, false)
         {
-            this.GameControlId = hypnotist.GameControlId;
             this.dollPlayerId = dollPlayerId;
             this.hypnotistPlayerId = hypnotistPlayerId;
             this.hypnotist = parent;
             this.FakeImposter = true;
             this.canUseCrakingModule = new HashSet<AbilityType>();
             this.prevKillState = false;
+
+            this.GameControlId = parent.GameControlId;
         }
 
         public void FeatMapModuleAccess(SystemConsoleType consoleType)
