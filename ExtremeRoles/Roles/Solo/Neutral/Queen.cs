@@ -9,6 +9,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.ExtremeShipStatus;
 
@@ -660,6 +661,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public void RemoveParent(byte rolePlayerId)
         {
             this.queen.RemoveServantPlayer(rolePlayerId);
+        }
+
+        public override void OverrideAnotherRoleSetting()
+        {
+            if (this.AnotherRole is Resurrecter resurrecter)
+            {
+                Resurrecter.UseResurrect(resurrecter);
+            }
         }
 
         public override bool TryRolePlayerKillTo(
