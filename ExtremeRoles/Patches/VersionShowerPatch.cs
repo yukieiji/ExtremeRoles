@@ -4,6 +4,8 @@ using UnityEngine;
 
 using HarmonyLib;
 
+using AmongUs.Data;
+
 namespace ExtremeRoles.Patches
 {
     [HarmonyPatch(typeof(VersionShower), nameof(VersionShower.Start))]
@@ -38,7 +40,7 @@ namespace ExtremeRoles.Patches
             translator.transform.localPosition = new Vector3(0, -0.35f, 0);
             translator.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
-            if ((SupportedLangs)SaveManager.LastLanguage != SupportedLangs.Japanese)
+            if (DataManager.Settings.Language.CurrentLanguage != SupportedLangs.Japanese)
             {
                 translator.gameObject.SetActive(true);
                 translator.SetText(

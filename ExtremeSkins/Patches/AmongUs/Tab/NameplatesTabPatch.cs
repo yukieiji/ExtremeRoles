@@ -3,9 +3,14 @@ using System.Linq;
 
 using HarmonyLib;
 
+using ExtremeRoles.Performance;
+
 using ExtremeSkins.Module;
 using ExtremeSkins.Helper;
 using ExtremeSkins.SkinManager;
+
+using AmongUs.Data;
+using AmongUs.Data.Player;
 
 
 namespace ExtremeSkins.Patches.AmongUs.Tab
@@ -110,6 +115,8 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
 
             int numHats = namePlates.Count;
 
+            PlayerCustomizationData playerSkinData = DataManager.Player.Customization;
+
             for (int i = 0; i < numHats; i++)
             {
                 NamePlateData np = namePlates[i];
@@ -126,8 +133,8 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                     colorChip.Button.OnMouseOut.AddListener(
                         (UnityEngine.Events.UnityAction)(
                             () => __instance.SelectNameplate(
-                                DestroyableSingleton<HatManager>.Instance.GetNamePlateById(
-                                    SaveManager.LastNamePlate))));
+                                FastDestroyableSingleton<HatManager>.Instance.GetNamePlateById(
+                                    playerSkinData.NamePlate))));
                     colorChip.Button.OnClick.AddListener(
                         (UnityEngine.Events.UnityAction)(() => __instance.ClickEquip()));
                 }

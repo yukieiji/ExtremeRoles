@@ -1,5 +1,7 @@
 ﻿using HarmonyLib;
 
+using AmongUs.Data;
+
 namespace ExtremeRoles.Patches
 {
 	[HarmonyPatch(typeof(TextBoxTMP), nameof(TextBoxTMP.SetText))]
@@ -7,8 +9,8 @@ namespace ExtremeRoles.Patches
 	{
 		public static void Postfix(TextBoxTMP __instance)
 		{
-			bool flag = 
-				SaveManager.StreamerMode && 
+			bool flag =
+				DataManager.Settings.Gameplay.StreamerMode && 
 				(__instance.name == "ipTextBox" || 
 					__instance.name == "portTextBox");
 			if (flag)

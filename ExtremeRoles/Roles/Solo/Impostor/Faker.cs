@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using TMPro;
+using AmongUs.Data;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -154,7 +155,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             public void SwitchColorName()
             {
-                this.colorBindText.SetActive(SaveManager.ColorBlindMode);
+                this.colorBindText.SetActive(
+                    DataManager.Settings.Accessibility.ColorBlindMode);
             }
 
             public void Clear()

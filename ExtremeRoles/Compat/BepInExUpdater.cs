@@ -5,7 +5,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using BepInEx;
 using BepInEx.IL2CPP;
@@ -13,6 +12,8 @@ using BepInEx.IL2CPP.Utils;
 using UnhollowerBaseLib.Attributes;
 using UnityEngine;
 using UnityEngine.Networking;
+
+using AmongUs.Data;
 
 
 namespace ExtremeRoles.Compat
@@ -78,7 +79,7 @@ namespace ExtremeRoles.Compat
 
             Process.Start(
                 Path.Combine(Paths.GameRootPath, "tmp", exeFileName),
-                $"{Paths.GameRootPath} {extractPath} {SaveManager.LastLanguage}");
+                $"{Paths.GameRootPath} {extractPath} {(uint)DataManager.Settings.Language.CurrentLanguage}");
 
             Application.Quit();
         }

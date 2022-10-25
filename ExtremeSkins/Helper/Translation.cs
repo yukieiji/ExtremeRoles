@@ -1,18 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
 using Newtonsoft.Json.Linq;
 
+using AmongUs.Data;
+
 
 namespace ExtremeSkins.Helper
 {
     public static class Translation
     {
-        private static Dictionary<string, Dictionary<uint, string>> stringData = new Dictionary<string, Dictionary<uint, string>>();
+        private static Dictionary<string, Dictionary<SupportedLangs, string>> stringData = 
+            new Dictionary<string, Dictionary<SupportedLangs, string>>();
 
-        private const uint defaultLanguage = (uint)SupportedLangs.English;
+        private const SupportedLangs defaultLanguage = SupportedLangs.Japanese;
         private const string dataPath = "ExtremeSkins.Resources.LangData.stringData.json";
 
         public static void CreateColorTransData()
@@ -52,7 +56,9 @@ namespace ExtremeSkins.Helper
                 return key;
             }
 
-            if (data.TryGetValue(SaveManager.LastLanguage, out string transStr))
+            if (data.TryGetValue(
+                    DataManager.Settings.Language.CurrentLanguage,
+                    out string transStr))
             {
                 return key.Replace(keyClean, transStr);
             }
@@ -64,7 +70,8 @@ namespace ExtremeSkins.Helper
             return key;
         }
 
-        public static void AddKeyTransdata(string key, Dictionary<uint, string> newData)
+        public static void AddKeyTransdata(
+            string key, Dictionary<SupportedLangs, string> newData)
         {
             stringData[key] = newData;
         }
@@ -73,30 +80,26 @@ namespace ExtremeSkins.Helper
         {
             for (int i = 0; i < parsed.Count; i++)
             {
-                JProperty token = parsed.ChildrenTokens[i].TryCast<JProperty>();
-                if (token == null) { continue; }
+                JProperty prop = parsed.ChildrenTokens[i].TryCast<JProperty>();
+                if (prop == null || !prop.HasValues) { continue; }
 
-                string stringName = token.Name;
-                var val = token.Value.TryCast<JObject>();
+                string stringName = prop.Name;
+                var val = prop.Value.TryCast<JObject>();
 
-                uint lastLang = (uint)SupportedLangs.Irish;
+                var strings = new Dictionary<SupportedLangs, string>();
 
-                if (token.HasValues)
+                foreach (SupportedLangs langs in Enum.GetValues(typeof(SupportedLangs)))
                 {
-                    var strings = new Dictionary<uint, string>();
-
-                    for (uint j = 0; j <= lastLang; j++)
+                    if (val.TryGetValue(((uint)langs).ToString(), out JToken token))
                     {
-                        string key = j.ToString();
-                        var text = val[key]?.TryCast<JValue>().Value.ToString();
-
-                        if (text != null && text.Length > 0)
+                        string text = token.TryCast<JValue>().Value.ToString();
+                        if (text.Length > 0)
                         {
-                            strings.Add(j, text);
+                            strings.Add(langs, text);
                         }
                     }
-                    stringData[stringName] = strings;
                 }
+                stringData[stringName] = strings;
             }
         }
 
