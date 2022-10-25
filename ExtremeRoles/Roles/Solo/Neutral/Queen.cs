@@ -665,7 +665,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public override void OverrideAnotherRoleSetting()
         {
-            if (this.AnotherRole is Resurrecter resurrecter)
+            var queenPlayer = GameData.Instance.GetPlayerById(Parent);
+
+            if (this.AnotherRole is Resurrecter resurrecter &&
+                (queenPlayer == null || queenPlayer.IsDead || queenPlayer.Disconnected))
             {
                 Resurrecter.UseResurrect(resurrecter);
             }

@@ -159,7 +159,15 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
             bool blockCondition = isBlockCondition(role) || targetPlyaerIsGhostRole;
             bool meetingInfoBlock = role.IsBlockShowMeetingRoleInfo() || targetPlyaerIsGhostRole;
-            
+
+            if (role is MultiAssignRoleBase multiRole &&
+                multiRole.AnotherRole != null)
+            {
+                blockCondition = blockCondition || isBlockCondition(multiRole.AnotherRole);
+                meetingInfoBlock = 
+                    meetingInfoBlock || multiRole.AnotherRole.IsBlockShowPlayingRoleInfo();
+            }
+
             setPlayerNameTag(role, targetRole);
 
             setMeetingInfo(

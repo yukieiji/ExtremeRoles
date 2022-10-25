@@ -596,7 +596,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.ResurrecterRpc,
                 new List<byte> { (byte)ResurrecterRpcOps.UseResurrect, playerId });
-            useResurrect(this);
+            UseResurrect(this);
 
             FastDestroyableSingleton<HudManager>.Instance.Chat.chatBubPool.ReclaimAll();
             if (this.resurrectText != null)
