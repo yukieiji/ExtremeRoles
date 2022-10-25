@@ -9,6 +9,8 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
+using AmongUs.Data;
+
 namespace ExtremeRoles.Patches.Manager
 {
     [HarmonyPatch]
@@ -101,7 +103,8 @@ namespace ExtremeRoles.Patches.Manager
             timer = timerMaxValue;
             kickingTimer = 0f;
             isCustomServer = FastDestroyableSingleton<ServerManager>.Instance.CurrentRegion.Name == "custom";
-            prevOptionValue = SaveManager.StreamerMode;
+
+            prevOptionValue = DataManager.Settings.Gameplay.StreamerMode;
 
             // 値リセット
             RPCOperator.Initialize();
@@ -115,7 +118,7 @@ namespace ExtremeRoles.Patches.Manager
             {
                 Module.Prefab.Arrow = __instance.StartButton.sprite;
             }
-            updateText(__instance, SaveManager.StreamerMode);
+            updateText(__instance, DataManager.Settings.Gameplay.StreamerMode);
         }
 
         [HarmonyPrefix]
@@ -138,7 +141,7 @@ namespace ExtremeRoles.Patches.Manager
 
             // ルームコード設定
 
-            bool isStreamerMode = SaveManager.StreamerMode;
+            bool isStreamerMode = DataManager.Settings.Gameplay.StreamerMode;
 
             if (isStreamerMode != prevOptionValue)
             {

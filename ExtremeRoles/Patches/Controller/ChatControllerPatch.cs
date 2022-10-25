@@ -4,6 +4,8 @@ using UnityEngine;
 
 using HarmonyLib;
 
+using AmongUs.Data;
+
 using ExtremeRoles.Roles;
 using ExtremeRoles.Performance;
 
@@ -101,7 +103,7 @@ namespace ExtremeRoles.Patches.Controller
 				__instance.SetChatBubbleName(
 					chatBubble, data2, data2.IsDead,
 					didVote, seeColor, null);
-				if (SaveManager.CensorChat)
+				if (DataManager.Settings.Multiplayer.CensorChat)
 				{
 					chatText = BlockedWords.CensorWords(chatText);
 				}

@@ -4,9 +4,14 @@ using System.Linq;
 using UnityEngine;
 using HarmonyLib;
 
+using ExtremeRoles.Performance;
+
 using ExtremeSkins.Module;
 using ExtremeSkins.Helper;
 using ExtremeSkins.SkinManager;
+
+using AmongUs.Data;
+using AmongUs.Data.Player;
 
 namespace ExtremeSkins.Patches.AmongUs.Tab
 {
@@ -109,13 +114,17 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
 
             int numHats = hats.Count;
 
+            PlayerCustomizationData playerSkinData = DataManager.Player.Customization;
+
             for (int i = 0; i < numHats; i++)
             {
                 HatData hat = hats[i];
 
                 ColorChip colorChip = SkinTab.SetColorChip(__instance, i, offset);
 
-                int color = __instance.HasLocalPlayer() ? PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId : SaveManager.BodyColor;
+                int color = __instance.HasLocalPlayer() ? 
+                    CachedPlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId : 
+                    playerSkinData.colorID;
 
                 if (ActiveInputManager.currentControlType == ActiveInputManager.InputType.Keyboard)
                 {
@@ -123,13 +132,19 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                         (UnityEngine.Events.UnityAction)(() => __instance.SelectHat(hat)));
                     colorChip.Button.OnMouseOut.AddListener(
                         (UnityEngine.Events.UnityAction)(
-                            () => __instance.SelectHat(DestroyableSingleton<HatManager>.Instance.GetHatById(SaveManager.LastHat))));
+                            () =>
+                            {
+                                __instance.SelectHat(
+                                    FastDestroyableSingleton<HatManager>.Instance.GetHatById(
+                                        playerSkinData.Hat));
+                            }));
                     colorChip.Button.OnClick.AddListener(
                         (UnityEngine.Events.UnityAction)(() => __instance.ClickEquip()));
                 }
                 else
                 {
-                    colorChip.Button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => __instance.SelectHat(hat)));
+                    colorChip.Button.OnClick.AddListener(
+                        (UnityEngine.Events.UnityAction)(() => __instance.SelectHat(hat)));
                 }
 
                 colorChip.Inner.SetMaskType(PlayerMaterial.MaskType.ScrollingUI);

@@ -3,10 +3,14 @@ using System.Linq;
 
 using HarmonyLib;
 
+using ExtremeRoles.Performance;
+
 using ExtremeSkins.Module;
 using ExtremeSkins.Helper;
 using ExtremeSkins.SkinManager;
 
+using AmongUs.Data;
+using AmongUs.Data.Player;
 
 namespace ExtremeSkins.Patches.AmongUs.Tab
 {
@@ -110,6 +114,8 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
 
             int numVisor = visores.Count;
 
+            PlayerCustomizationData playerSkinData = DataManager.Player.Customization;
+
             for (int i = 0; i < numVisor; i++)
             {
                 VisorData vi = visores[i];
@@ -124,7 +130,8 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                     colorChip.Button.OnMouseOut.AddListener(
                         (UnityEngine.Events.UnityAction)(
                             () => __instance.SelectVisor(
-                                DestroyableSingleton<HatManager>.Instance.GetVisorById(SaveManager.LastVisor))));
+                                DestroyableSingleton<HatManager>.Instance.GetVisorById(
+                                    playerSkinData.Visor))));
                     colorChip.Button.OnClick.AddListener(
                         (UnityEngine.Events.UnityAction)(() => __instance.ClickEquip()));
                 }
@@ -140,8 +147,9 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                 colorChip.Tag = vi.ProdId;
                 
                 int color = __instance.HasLocalPlayer() ? 
-                    PlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId : 
-                    ((int)SaveManager.BodyColor);
+                    CachedPlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId : 
+                    playerSkinData.colorID;
+
                 __instance.StartCoroutine(
                     vi.CoLoadViewData((Il2CppSystem.Action<VisorViewData>)((v) => {
                         colorChip.Inner.FrontLayer.sprite = v.IdleFrame;

@@ -1,23 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 using Newtonsoft.Json.Linq;
+
+using AmongUs.Data;
 
 namespace ExtremeRoles.Helper
 {
     public static class Translation
     {
-        private static uint defaultLanguage = (uint)SupportedLangs.English;
-        private static Dictionary<string, Dictionary<uint, string>> stringData = new Dictionary<string, Dictionary<uint, string>>();
+        private static Dictionary<string, Dictionary<SupportedLangs, string>> stringData = 
+            new Dictionary<string, Dictionary<SupportedLangs, string>>();
 
+        private const SupportedLangs defaultLanguage = SupportedLangs.Japanese;
         private const string dataPath = "ExtremeRoles.Resources.JsonData.Language.json";
 
         public static void Load()
         {
             stringData.Clear();
             JObject parsed = JsonParser.GetJObjectFromAssembly(dataPath);
-
-            uint lastLang = (uint)SupportedLangs.Irish;
 
             for (int i = 0; i < parsed.Count; i++)
             {
@@ -28,16 +30,16 @@ namespace ExtremeRoles.Helper
                 string stringName = prop.Name;
                 JObject val = prop.Value.TryCast<JObject>();
 
-                var strings = new Dictionary<uint, string>();
+                var strings = new Dictionary<SupportedLangs, string>();
 
-                for (uint j = 0; j <= lastLang; j++)
+                foreach (SupportedLangs langs in Enum.GetValues(typeof(SupportedLangs)))
                 {
-                    if (val.TryGetValue(j.ToString(), out JToken token))
+                    if (val.TryGetValue(((uint)langs).ToString(), out JToken token))
                     {
                         string text = token.TryCast<JValue>().Value.ToString();
                         if (text.Length > 0)
                         {
-                            strings.Add(j, text);
+                            strings.Add(langs, text);
                         }
                     }
                 }
@@ -63,7 +65,9 @@ namespace ExtremeRoles.Helper
                 return key;
             }
 
-            if (data.TryGetValue(SaveManager.LastLanguage, out string transData))
+            if (data.TryGetValue(
+                    DataManager.Settings.Language.CurrentLanguage,
+                    out string transData))
             {
                 return key.Replace(keyClean, transData);
             }

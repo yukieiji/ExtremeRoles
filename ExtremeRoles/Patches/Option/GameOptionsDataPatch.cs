@@ -14,6 +14,27 @@ using ExtremeRoles.Module;
 
 namespace ExtremeRoles.Patches.Option
 {
+
+    [HarmonyPatch(typeof(GameOptionsData), "GameHostOptions", MethodType.Getter)]
+    public static class SaveManagerGameHostOptionsPatch
+    {
+        private static int numImpostors;
+        public static void Prefix()
+        {
+            if (GameOptionsData.hostOptionsData == null)
+            {
+                GameOptionsData.hostOptionsData = GameOptionsData.LoadGameHostOptions();
+            }
+
+            numImpostors = GameOptionsData.hostOptionsData.NumImpostors;
+        }
+
+        public static void Postfix(ref GameOptionsData __result)
+        {
+            __result.NumImpostors = numImpostors;
+        }
+    }
+
     [HarmonyPatch]
     public static class GameOptionsDataPatch
     {

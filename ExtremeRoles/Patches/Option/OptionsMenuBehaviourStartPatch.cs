@@ -7,13 +7,13 @@ using HarmonyLib;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using AmongUs.Data;
 
 using ExtremeRoles.Performance;
 
 using static ExtremeRoles.OptionHolder;
 using static UnityEngine.UI.Button;
 using Object = UnityEngine.Object;
-
 
 
 namespace ExtremeRoles.Patches.Option
@@ -221,7 +221,7 @@ namespace ExtremeRoles.Patches.Option
             creditText.GetComponent<RectTransform>().sizeDelta = new Vector2(5.4f, 5.5f);
             creditText.gameObject.SetActive(true);
 
-            if ((SupportedLangs)SaveManager.LastLanguage != SupportedLangs.Japanese)
+            if (DataManager.Settings.Language.CurrentLanguage != SupportedLangs.Japanese)
             {
                 creditText.transform.localPosition = new Vector3(0.0f, -1.895f, -.5f);
                 showText = string.Concat(
