@@ -63,13 +63,14 @@ namespace ExtremeSkins
                 {
                     string[] transInfo = transInfoLine.Split(',');
 
-                    Dictionary<uint, string> transData = new Dictionary<uint, string>();
+                    Dictionary<SupportedLangs, string> transData = 
+                        new Dictionary<SupportedLangs, string>();
 
                     foreach (var (str, index) in transInfo.Select(
                         (str, index) => (str, index)))
                     {
                         if (index == 0 || str == string.Empty) { continue; }
-                        transData.Add((uint)index - 1, str);
+                        transData.Add((SupportedLangs)(index - 1), str);
                     }
 
                     Helper.Translation.AddKeyTransdata(
