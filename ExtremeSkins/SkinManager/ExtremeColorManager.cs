@@ -4,8 +4,6 @@ using System.Linq;
 
 using UnityEngine;
 
-using BepInEx.Configuration;
-
 using ExtremeSkins.Module;
 
 namespace ExtremeSkins.SkinManager
@@ -34,6 +32,13 @@ namespace ExtremeSkins.SkinManager
             List<Color32> shadowlist = Enumerable.ToList(Palette.ShadowColors);
 
             ColorNum += (uint)customColor.Count;
+
+            if (ColorNum > byte.MaxValue)
+            {
+                ExtremeSkinsPlugin.Logger.LogError(
+                    "Number of color is Overflow!!, Disable CustomColor Functions");
+                return;
+            }
 
             int id = 50000;
             foreach (var cc in customColor)
