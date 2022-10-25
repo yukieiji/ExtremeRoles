@@ -15,7 +15,12 @@ using ExtremeRoles.Module.ExtremeShipStatus;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
-    public sealed class BodyGuard : SingleRoleBase, IRoleAbility, IRoleMeetingButtonAbility, IRoleUpdate
+    public sealed class BodyGuard : 
+        SingleRoleBase,
+        IRoleAbility,
+        IRoleMeetingButtonAbility,
+        IRoleUpdate,
+        IRoleSpecialReset
     {
         public class BodyGuardShieldButton : RoleAbilityButtonBase
         {
@@ -658,6 +663,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 }
             }
             return meetingfeatShield;
+        }
+
+        public void AllReset(PlayerControl rolePlayer)
+        {
+            resetShield(rolePlayer.PlayerId);
         }
 
         public void SetSprite(SpriteRenderer render)
