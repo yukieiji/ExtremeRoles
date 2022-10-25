@@ -45,11 +45,12 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
                 return;
             }
 
+            var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+
             SetActive(
                 localPlayer.IsKillTimerEnabled || 
-                localPlayer.ForceKillTimerContinue);
-
-            var hudManager = FastDestroyableSingleton<HudManager>.Instance;
+                localPlayer.ForceKillTimerContinue ||
+                hudManager.UseButton.isActiveAndEnabled);
 
             this.Button.graphic.sprite = this.ButtonSprite;
             this.Button.OverrideText(ButtonText);
