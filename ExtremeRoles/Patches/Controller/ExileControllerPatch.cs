@@ -195,13 +195,13 @@ namespace ExtremeRoles.Patches.Controller
                     abilityRole = multiAssignRole.AnotherRole as IRoleAbility;
                     if (abilityRole != null)
                     {
-                        abilityRole.ResetOnMeetingStart();
+                        abilityRole.ResetOnMeetingEnd();
                     }
 
                     resetRole = multiAssignRole.AnotherRole as IRoleResetMeeting;
                     if (resetRole != null)
                     {
-                        resetRole.ResetOnMeetingStart();
+                        resetRole.ResetOnMeetingEnd();
                     }
                 }
             }
