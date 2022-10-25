@@ -16,7 +16,7 @@ AmongUsの上級者(初心者)向けのロール追加MOD、主な特徴とし�
 * MODオプションのインポート/エクスポート機能
 * MODの更新/バージョンチェック機能
 * 互換性のあるMODのインストール/アップデートチェック/アンインストール機能
-* 多言語対応(現在は英語と日本語/简体中文のみ/only English and Japanese / SChinese now!!)
+* 多言語対応(現在は英語と日本語、简体中文のみ/only English and Japanese, SChinese now!!)
 
 ## 追加役職一覧(Extreme Roles v4.0.0.0時点、今後も追加予定)
 #### ホスト役職
