@@ -22,8 +22,8 @@ namespace ExtremeRoles.Compat
     {
         public static bool UpdateRequired => typeof(IL2CPPChainloader).Assembly.GetName().Version < Version.Parse(minimumBepInExVersion);
 
-        private const string minimumBepInExVersion = "6.0.0.565";
-        private const string bepInExDownloadURL = "https://builds.bepinex.dev/projects/bepinex_be/565/BepInEx_UnityIL2CPP_x86_265107c_6.0.0-be.565.zip";
+        private const string minimumBepInExVersion = "6.0.0.662";
+        private const string bepInExDownloadURL = "https://builds.bepinex.dev/projects/bepinex_be/662/BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.662%2B3ad398a.zip";
         private const string exeFileName = "ExtremeBepInExInstaller.exe";
 
         public void Awake()
