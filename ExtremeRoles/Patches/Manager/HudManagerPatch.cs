@@ -99,6 +99,15 @@ namespace ExtremeRoles.Patches.Manager
             bool blockCondition = isBlockCondition(player, role) || ghostRole != null;
             bool playeringInfoBlock = role.IsBlockShowPlayingRoleInfo() || ghostRole != null;
 
+            if (role is MultiAssignRoleBase multiRole &&
+                multiRole.AnotherRole != null)
+            {
+                blockCondition = blockCondition || isBlockCondition(
+                    player, multiRole.AnotherRole);
+                playeringInfoBlock =
+                   playeringInfoBlock || multiRole.AnotherRole.IsBlockShowPlayingRoleInfo();
+            }
+
             playerInfoUpdate(
                 player,
                 blockCondition,

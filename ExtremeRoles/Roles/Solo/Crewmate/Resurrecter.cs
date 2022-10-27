@@ -99,7 +99,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     Resurrecter resurrecter = ExtremeRoleManager.GetSafeCastedRole<Resurrecter>(
                         resurrecterPlayerId);
                     if (resurrecter == null) { return; }
-                    useResurrect(resurrecter);
+                    UseResurrect(resurrecter);
                     break;
                 case ResurrecterRpcOps.ReplaceTask:
                     int index = reader.ReadInt32();
@@ -117,10 +117,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
         }
 
-        private static void useResurrect(Resurrecter resurrecter)
+        public static void UseResurrect(Resurrecter resurrecter)
         {
             resurrecter.isResurrected = true;
             resurrecter.isActiveMeetingCount = true;
+            resurrecter.activateResurrectTimer = false;
         }
 
         private static void replaceToNewTask(byte playerId, int index, int taskIndex)
@@ -595,7 +596,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.ResurrecterRpc,
                 new List<byte> { (byte)ResurrecterRpcOps.UseResurrect, playerId });
-            useResurrect(this);
+            UseResurrect(this);
 
             FastDestroyableSingleton<HudManager>.Instance.Chat.chatBubPool.ReclaimAll();
             if (this.resurrectText != null)

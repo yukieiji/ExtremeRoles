@@ -16,7 +16,7 @@ namespace ExtremeRoles.Patches.Option
 {
 
     [HarmonyPatch(typeof(GameOptionsData), "GameHostOptions", MethodType.Getter)]
-    public static class SaveManagerGameHostOptionsPatch
+    public static class GameOptionsDataGameHostOptionsPatch
     {
         private static int numImpostors;
         public static void Prefix()
