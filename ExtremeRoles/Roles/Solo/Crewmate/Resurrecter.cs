@@ -426,7 +426,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 format: OptionUnit.Percentage);
             CreateIntOption(
                 ResurrecterOption.ResurrectTaskGage,
-                100, 70, 100, 10,
+                100, 50, 100, 10,
                 parentOps,
                 format: OptionUnit.Percentage);
 
