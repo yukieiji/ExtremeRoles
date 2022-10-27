@@ -77,7 +77,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
                 parentOps, 1, 5, 3.0f);
         }
 
-        protected override void UseAbility(MessageWriter writer)
+        protected override void UseAbility(RPCOperator.RpcCaller caller)
         {
 
             Console console;

@@ -101,13 +101,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             PlayerControl player = CachedPlayerControl.LocalPlayer;
 
-            RPCOperator.Call(
-                player.NetId,
-                RPCOperator.Command.CommanderAttackCommand,
-                new List<byte>
-                {
-                    player.PlayerId,
-                });
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.CommanderAttackCommand))
+            {
+                caller.WriteByte(player.PlayerId);
+            }
             AttackCommad(player.PlayerId);
 
             return true;

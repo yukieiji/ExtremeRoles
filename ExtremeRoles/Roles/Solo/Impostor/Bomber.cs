@@ -263,16 +263,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 return;
             }
 
-            RPCOperator.Call(
-                rolePlayer.NetId,
-                RPCOperator.Command.UncheckedMurderPlayer,
-                new List<byte>
-                {
-                    bombPlayer.PlayerId,
-                    target.PlayerId,
-                    byte.MaxValue
-                });
-            RPCOperator.UncheckedMurderPlayer(
+            Player.RpcUncheckMurderPlayer(
                 bombPlayer.PlayerId,
                 target.PlayerId,
                 byte.MaxValue);

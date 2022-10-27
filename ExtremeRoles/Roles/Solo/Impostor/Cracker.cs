@@ -133,19 +133,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool UseAbility()
         {
+            byte localPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
 
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.CrackerCrackDeadBody,
-                new List<byte>
-                {
-                    CachedPlayerControl.LocalPlayer.PlayerId,
-                    this.targetDeadBodyId
-                });
-
-            CrackDeadBody(
-                CachedPlayerControl.LocalPlayer.PlayerId,
-                this.targetDeadBodyId);
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.CrackerCrackDeadBody))
+            {
+                caller.WriteByte(localPlayerId);
+                caller.WriteByte(this.targetDeadBodyId);
+            }
+            CrackDeadBody(localPlayerId, this.targetDeadBodyId);
             return true;
         }
 

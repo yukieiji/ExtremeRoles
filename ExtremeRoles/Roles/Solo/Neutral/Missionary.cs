@@ -164,16 +164,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (targetPlayer == null) { return; }
             if (targetPlayer.Data.IsDead || targetPlayer.Data.Disconnected) { return; }
 
-            RPCOperator.Call(
-                rolePlayer.NetId,
-                RPCOperator.Command.UncheckedMurderPlayer,
-                new List<byte>
-                {
-                    targetPlayer.PlayerId,
-                    targetPlayer.PlayerId,
-                    byte.MaxValue
-                });
-            RPCOperator.UncheckedMurderPlayer(
+            Helper.Player.RpcUncheckMurderPlayer(
                 targetPlayer.PlayerId,
                 targetPlayer.PlayerId,
                 byte.MaxValue);

@@ -80,28 +80,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 1U << (int)targetPlayer.PlayerId);
         }
 
-        public static void ReplaceToNewTask(byte playerId, int index, int taskIndex)
-        {
-
-            var player = Player.GetPlayerControlById(
-                playerId);
-
-            if (player == null) { return; }
-
-            byte taskId = (byte)taskIndex;
-
-            if (GameSystem.SetPlayerNewTask(
-                ref player, taskId, (uint)index))
-            {
-                player.Data.Tasks[index] = new GameData.TaskInfo(
-                    taskId, (uint)index);
-                player.Data.Tasks[index].Id = (uint)index;
-
-                GameData.Instance.SetDirtyBit(
-                    1U << (int)player.PlayerId);
-            }
-        }
-
 
         public void CreateAbility()
         {
@@ -182,20 +160,16 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             if (getTaskId.Count == 0) { return true; }
 
-
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                PlayerControl.LocalPlayer.NetId,
-                (byte)RPCOperator.Command.AgencyTakeTask,
-                Hazel.SendOption.Reliable, -1);
-            writer.Write(this.TargetPlayer);
-            writer.Write(getTaskId.Count);
-
-            foreach (int taskid in getTaskId)
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.AgencyTakeTask))
             {
-                writer.Write(taskid);
+                caller.WriteByte(this.TargetPlayer);
+                caller.WriteInt(getTaskId.Count);
+                foreach (int taskid in getTaskId)
+                {
+                    caller.WriteInt(taskid);
+                }
             }
-            
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
 
             TakeTargetPlayerTask(this.TargetPlayer, getTaskId);
             this.TargetPlayer = byte.MaxValue;
@@ -265,15 +239,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                             continue;
                     }
 
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                        CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                        (byte)RPCOperator.Command.AgencySetNewTask,
-                        Hazel.SendOption.Reliable, -1);
-                    writer.Write(rolePlayer.PlayerId);
-                    writer.Write(i);
-                    writer.Write(taskIndex);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    ReplaceToNewTask(rolePlayer.PlayerId, i, taskIndex);
+                    GameSystem.RpcReplaceNewTask(
+                        rolePlayer.PlayerId, i, taskIndex);
                     break;
                 }
             }

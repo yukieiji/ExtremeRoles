@@ -256,16 +256,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ExtremeShipStatus.PlayerStatus replaceReson)
         {
 
-            RPCOperator.Call(
-                rolePlayer.NetId,
-                RPCOperator.Command.UncheckedMurderPlayer,
-                new List<byte>
-                { 
-                    rolePlayer.PlayerId,
-                    rolePlayer.PlayerId,
-                    byte.MaxValue 
-                });
-            RPCOperator.UncheckedMurderPlayer(
+            Player.RpcUncheckMurderPlayer(
                 rolePlayer.PlayerId,
                 rolePlayer.PlayerId,
                 byte.MaxValue);

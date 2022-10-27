@@ -163,18 +163,17 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             PlayerControl player = CachedPlayerControl.LocalPlayer;
             Vector3 pos = player.transform.position;
 
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                player.NetId, (byte)RPCOperator.Command.CarrierAbility,
-                Hazel.SendOption.Reliable, -1);
-            writer.Write(player.PlayerId);
-            writer.Write(pos.x);
-            writer.Write(pos.y);
-            writer.Write(this.targetBody.PlayerId);
-            writer.Write(true);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
-
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.CarrierAbility))
+            {
+                caller.WriteByte(player.PlayerId);
+                caller.WriteFloat(pos.x);
+                caller.WriteFloat(pos.y);
+                caller.WriteByte(this.targetBody.PlayerId);
+                caller.WriteBoolean(true);
+            }
             carryDeadBody(
-                this, CachedPlayerControl.LocalPlayer,
+                this, player,
                 this.targetBody.PlayerId);
             return true;
         }
@@ -184,16 +183,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             PlayerControl player = CachedPlayerControl.LocalPlayer;
             Vector3 pos = player.transform.position;
 
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                player.NetId, (byte)RPCOperator.Command.CarrierAbility,
-                Hazel.SendOption.Reliable, -1);
-            writer.Write(player.PlayerId);
-            writer.Write(pos.x);
-            writer.Write(pos.y);
-            writer.Write(byte.MinValue);
-            writer.Write(false);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
-
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.CarrierAbility))
+            {
+                caller.WriteByte(player.PlayerId);
+                caller.WriteFloat(pos.x);
+                caller.WriteFloat(pos.y);
+                caller.WriteByte(byte.MinValue);
+                caller.WriteBoolean(false);
+            }
             player.StartCoroutine(
                 deadBodyToReportablePosition(
                     this, player).WrapToIl2Cpp());

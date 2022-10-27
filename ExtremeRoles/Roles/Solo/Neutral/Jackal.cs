@@ -385,16 +385,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (!isLoverAndSetTarget(targetPlayerId)) { return false; }
 
             PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
-
-            RPCOperator.Call(
-                rolePlayer.NetId,
-                RPCOperator.Command.ReplaceRole,
-                new List<byte>
-                {
-                    rolePlayer.PlayerId,
-                    this.Target.PlayerId,
-                    (byte)ExtremeRoleManager.ReplaceOperation.ForceReplaceToSidekick
-                });
+            
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.ReplaceRole))
+            {
+                caller.WriteByte(rolePlayer.PlayerId);
+                caller.WriteByte(this.Target.PlayerId);
+                caller.WriteByte((byte)ExtremeRoleManager.ReplaceOperation.ResetVanillaRole);
+            }
             TargetToSideKick(rolePlayer.PlayerId, targetPlayerId);
             return true;
         }
@@ -711,16 +709,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             {
                 this.jackal.SidekickPlayerId.Clear();
 
-                RPCOperator.Call(
-                    rolePlayer.NetId,
-                    RPCOperator.Command.ReplaceRole,
-                    new List<byte>
-                    {
-                        this.jackalPlayerId,
-                        rolePlayer.PlayerId,
-                        (byte)ExtremeRoleManager.ReplaceOperation.SidekickToJackal
-                    });
-
+                using (var caller = RPCOperator.CreateCaller(
+                    RPCOperator.Command.ReplaceRole))
+                {
+                    caller.WriteByte(this.jackalPlayerId);
+                    caller.WriteByte(rolePlayer.PlayerId);
+                    caller.WriteByte((byte)ExtremeRoleManager.ReplaceOperation.SidekickToJackal);
+                }
                 BecomeToJackal(this.jackalPlayerId, rolePlayer.PlayerId);
             }
         }

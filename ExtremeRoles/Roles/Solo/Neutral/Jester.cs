@@ -106,13 +106,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 return;
             }
 
-            RPCOperator.Call(
-                killer.NetId,
-                RPCOperator.Command.UncheckedMurderPlayer,
-                new List<byte> { killerId, target.PlayerId, byte.MaxValue });
-            RPCOperator.UncheckedMurderPlayer(
-                killerId,
-                target.PlayerId,
+            Helper.Player.RpcUncheckMurderPlayer(
+                killerId, target.PlayerId,
                 byte.MaxValue);
         }
 
@@ -162,10 +157,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (killTarget.Data.IsDead || killTarget.Data.Disconnected) { return; }
             if (killTarget.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId) { return; }
             
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.JesterOutburstKill,
-                new List<byte> { this.outburstTarget.PlayerId, killTarget.PlayerId });
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.JesterOutburstKill))
+            {
+                caller.WriteByte(this.outburstTarget.PlayerId);
+                caller.WriteByte(killTarget.PlayerId);
+            }
             OutburstKill(this.outburstTarget.PlayerId, killTarget.PlayerId);
         }
 

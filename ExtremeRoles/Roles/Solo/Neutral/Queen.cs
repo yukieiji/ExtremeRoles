@@ -315,16 +315,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             byte targetPlayerId = this.Target.PlayerId;
 
             PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
-
-            RPCOperator.Call(
-                rolePlayer.NetId,
-                RPCOperator.Command.ReplaceRole,
-                new List<byte>
-                {
-                    rolePlayer.PlayerId,
-                    this.Target.PlayerId,
-                    (byte)ExtremeRoleManager.ReplaceOperation.CreateServant
-                });
+            using (var caller = RPCOperator.CreateCaller(
+                    RPCOperator.Command.ReplaceRole))
+            {
+                caller.WriteByte(rolePlayer.PlayerId);
+                caller.WriteByte(this.Target.PlayerId);
+                caller.WriteByte((byte)ExtremeRoleManager.ReplaceOperation.CreateServant);
+            }
             TargetToServant(rolePlayer.PlayerId, targetPlayerId);
             return true;
         }
@@ -644,17 +641,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public bool UseAbility()
         {
-
             byte playerId = CachedPlayerControl.LocalPlayer.PlayerId;
+            Player.RpcUncheckMurderPlayer(
+                playerId, playerId, byte.MaxValue);
 
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.UncheckedMurderPlayer,
-                new List<byte> { playerId, playerId, byte.MaxValue });
-            RPCOperator.UncheckedMurderPlayer(
-                playerId,
-                playerId,
-                byte.MaxValue);
             return true;
         }
 
@@ -679,16 +669,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             if (this.AnotherRole?.Id == ExtremeRoleId.Sheriff)
             {
-                RPCOperator.Call(
-                   rolePlayer.NetId,
-                   RPCOperator.Command.UncheckedMurderPlayer,
-                   new List<byte>
-                   {
-                        rolePlayer.PlayerId,
-                        rolePlayer.PlayerId,
-                        byte.MaxValue
-                   });
-                RPCOperator.UncheckedMurderPlayer(
+
+                Player.RpcUncheckMurderPlayer(
                     rolePlayer.PlayerId,
                     rolePlayer.PlayerId,
                     byte.MaxValue);

@@ -259,19 +259,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             {
                 this.isOneSidedLoverShare = true;
 
-                RPCOperator.Call(
-                    rolePlayer.NetId,
-                    RPCOperator.Command.YandereSetOneSidedLover,
-                    new List<byte>
-                    {
-                        rolePlayer.PlayerId,
-                        this.OneSidedLover.PlayerId
-                    }
-                );
+                using (var caller = RPCOperator.CreateCaller(
+                    RPCOperator.Command.YandereSetOneSidedLover))
+                {
+                    caller.WriteByte(rolePlayer.PlayerId);
+                    caller.WriteByte(this.OneSidedLover.PlayerId);
+                }
                 SetOneSidedLover(
                     rolePlayer.PlayerId,
                     this.OneSidedLover.PlayerId);
-
             }
 
             // 不必要なデータを削除、役職の人と想い人

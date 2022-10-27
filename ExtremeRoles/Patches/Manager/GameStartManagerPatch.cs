@@ -82,10 +82,13 @@ namespace ExtremeRoles.Patches.Manager
                 List<byte> possibleMaps = new List<byte>() { 0, 1, 2, 4 };
                 byte mapId = possibleMaps[
                     rng.Next(possibleMaps.Count)];
-                RPCOperator.Call(
-                    PlayerControl.LocalPlayer.NetId,
-                    RPCOperator.Command.ShareMapId,
-                    new List<byte> { mapId });
+
+                using (var caller = RPCOperator.CreateCaller(
+                    RPCOperator.Command.ShareMapId))
+                {
+                    caller.WriteByte(possibleMaps[
+                        rng.Next(possibleMaps.Count)]);
+                }
                 RPCOperator.ShareMapId(mapId);
             }
             return continueStart;

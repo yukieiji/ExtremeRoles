@@ -22,7 +22,6 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         public enum XionRpcOpsCode : byte
         {
-            ForceEndGame,
             UpdateSpeed,
             Teleport,
             NoXionVote,
@@ -50,9 +49,6 @@ namespace ExtremeRoles.Roles.Solo.Host
 
             switch (ops)
             {
-                case XionRpcOpsCode.ForceEndGame:
-                    RPCOperator.ForceEnd();
-                    break;
                 case XionRpcOpsCode.UpdateSpeed:
                     SpeedOps speedOps = (SpeedOps)reader.ReadByte();
                     if (xion == null) { return; }
@@ -117,68 +113,12 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         public void RpcForceEndGame()
         {
-            MessageWriter writer = createWriter(XionRpcOpsCode.ForceEndGame);
-            finishWrite(writer);
-            RPCOperator.ForceEnd();
+            GameSystem.ForceEndGame();
         }
 
         public void RpcRepairSabotage()
         {
-            foreach (PlayerTask task in 
-                PlayerControl.LocalPlayer.myTasks.GetFastEnumerator())
-            {
-                if (task == null) { continue; }
-
-                TaskTypes taskType = task.TaskType;
-
-                if (ExtremeRolesPlugin.Compat.IsModMap)
-                {
-                    if (ExtremeRolesPlugin.Compat.ModMap.IsCustomSabotageTask(taskType))
-                    {
-                        ExtremeRolesPlugin.Compat.ModMap.RpcRepairCustomSabotage(
-                            taskType);
-                        continue;
-                    }
-                }
-                switch (taskType)
-                {
-                    case TaskTypes.FixLights:
-
-                        RPCOperator.Call(
-                            PlayerControl.LocalPlayer.NetId,
-                            RPCOperator.Command.FixLightOff);
-                        RPCOperator.FixLightOff();
-                        break;
-                    case TaskTypes.RestoreOxy:
-                        CachedShipStatus.Instance.RpcRepairSystem(
-                            SystemTypes.LifeSupp, 0 | 64);
-                        CachedShipStatus.Instance.RpcRepairSystem(
-                            SystemTypes.LifeSupp, 1 | 64);
-                        break;
-                    case TaskTypes.ResetReactor:
-                        CachedShipStatus.Instance.RpcRepairSystem(
-                            SystemTypes.Reactor, 16);
-                        break;
-                    case TaskTypes.ResetSeismic:
-                        CachedShipStatus.Instance.RpcRepairSystem(
-                            SystemTypes.Laboratory, 16);
-                        break;
-                    case TaskTypes.FixComms:
-                        CachedShipStatus.Instance.RpcRepairSystem(
-                            SystemTypes.Comms, 16 | 0);
-                        CachedShipStatus.Instance.RpcRepairSystem(
-                            SystemTypes.Comms, 16 | 1);
-                        break;
-                    case TaskTypes.StopCharles:
-                        CachedShipStatus.Instance.RpcRepairSystem(
-                            SystemTypes.Reactor, 0 | 16);
-                        CachedShipStatus.Instance.RpcRepairSystem(
-                            SystemTypes.Reactor, 1 | 16);
-                        break;
-                    default:
-                        break;
-                }
-            }
+            GameSystem.RpcRepairAllSabotage();
 
             foreach (var door in CachedShipStatus.Instance.AllDoors)
             {
@@ -225,24 +165,15 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         public void RpcKill(byte targetPlayerId)
         {
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.UncheckedMurderPlayer,
-                new List<byte> { targetPlayerId, targetPlayerId, byte.MinValue });
-            RPCOperator.UncheckedMurderPlayer(
+            Player.RpcUncheckMurderPlayer(
                 targetPlayerId,
                 targetPlayerId,
-                byte.MinValue);
+                byte.MaxValue);
         }
 
         public void RpcRevive(byte targetPlayerId)
         {
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.UncheckedRevive,
-                new List<byte> { targetPlayerId });
-            RPCOperator.UncheckedRevive(
-                targetPlayerId);
+            Player.RpcUncheckRevive(targetPlayerId);
         }
 
         public void RpcTeleport(PlayerControl targetPlayer)

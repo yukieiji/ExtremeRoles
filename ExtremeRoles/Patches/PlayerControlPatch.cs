@@ -544,27 +544,8 @@ namespace ExtremeRoles.Patches
                     RPCOperator.AgencyTakeTask(
                         agencyTargetPlayerId, getTaskId);
                     break;
-                case RPCOperator.Command.AgencySetNewTask:
-                    byte agencyCallerId = reader.ReadByte();
-                    int taskSetIndex = reader.ReadInt32();
-                    int newTaskId = reader.ReadInt32();
-                    RPCOperator.AgencySetNewTask(
-                        agencyCallerId, taskSetIndex, newTaskId);
-                    break;
-                case RPCOperator.Command.FencerCounterOn:
-                    byte counterOnTimeFencer = reader.ReadByte();
-                    RPCOperator.FencerCounterOn(
-                        counterOnTimeFencer);
-                    break;
-                case RPCOperator.Command.FencerCounterOff:
-                    byte counterOffTimeFencer = reader.ReadByte();
-                    RPCOperator.FencerCounterOff(
-                        counterOffTimeFencer);
-                    break;
-                case RPCOperator.Command.FencerEnableKillButton:
-                    byte fencerPlayerId = reader.ReadByte();
-                    RPCOperator.FencerEnableKillButton(
-                        fencerPlayerId);
+                case RPCOperator.Command.FencerAbility:
+                    RPCOperator.FencerAbility(ref reader);
                     break;
                 case RPCOperator.Command.CuresMakerCurseKillCool:
                     byte curesMakerPlayerId = reader.ReadByte();
@@ -627,23 +608,8 @@ namespace ExtremeRoles.Patches
                     byte crackTarget = reader.ReadByte();
                     RPCOperator.CrackerCrackDeadBody(crackerId, crackTarget);
                     break;
-                case RPCOperator.Command.MerySetCamp:
-                    byte maryPlayerId = reader.ReadByte();
-                    float maryCampX = reader.ReadSingle();
-                    float maryCampY = reader.ReadSingle();
-                    RPCOperator.MarySetCamp(
-                        maryPlayerId, maryCampX, maryCampY);
-                    break;
-                case RPCOperator.Command.MeryAcivateVent:
-                    int maryCampIndex = reader.ReadInt32();
-                    RPCOperator.MaryActiveVent(maryCampIndex);
-                    break;
-                case RPCOperator.Command.SlaveDriverSetNewTask:
-                    byte slaveDriverId = reader.ReadByte();
-                    int replaceTaskIndex = reader.ReadInt32();
-                    int setTaskId = reader.ReadInt32();
-                    RPCOperator.SlaveDriverSetNewTask(
-                        slaveDriverId, replaceTaskIndex, setTaskId);
+                case RPCOperator.Command.MeryAbility:
+                    RPCOperator.MaryAbility(ref reader);
                     break;
                 case RPCOperator.Command.LastWolfSwitchLight:
                     byte swichStatus = reader.ReadByte();
@@ -677,12 +643,12 @@ namespace ExtremeRoles.Patches
                     RPCOperator.AliceShipBroken(
                         alicePlayerId, newTaskSetPlayerId, task);
                     break;
-                case RPCOperator.Command.TaskMasterSetNewTask:
-                    byte taskMasterId = reader.ReadByte();
-                    int index = reader.ReadInt32();
+                case RPCOperator.Command.ReplaceTask:
+                    byte replaceTargetPlayerId = reader.ReadByte();
+                    int taskIndex = reader.ReadInt32();
                     int taskId = reader.ReadInt32();
-                    RPCOperator.TaskMasterSetNewTask(
-                        taskMasterId, index, taskId);
+                    RPCOperator.ReplaceTask(
+                        replaceTargetPlayerId, taskIndex, taskId);
                     break;
                 case RPCOperator.Command.JesterOutburstKill:
                     byte outburstKillerId = reader.ReadByte();

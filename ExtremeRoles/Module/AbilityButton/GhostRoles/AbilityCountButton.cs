@@ -21,7 +21,7 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
 
         public AbilityCountButton(
             AbilityType abilityType,
-            Action<MessageWriter> ability,
+            Action<RPCOperator.RpcCaller> ability,
             Func<bool> abilityPreCheck,
             Func<bool> canUse,
             Sprite sprite,

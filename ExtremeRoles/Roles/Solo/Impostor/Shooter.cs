@@ -96,13 +96,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     return;
                 }
 
-                RPCOperator.Call(
-                    localPlayer.NetId,
-                    RPCOperator.Command.UncheckedMurderPlayer,
-                    new List<byte> { localPlayer.PlayerId, target, 0 });
-                RPCOperator.UncheckedMurderPlayer(
-                   localPlayer.PlayerId,
-                    target, 0);
+                Helper.Player.RpcUncheckMurderPlayer(
+                    localPlayer.PlayerId,
+                    target, byte.MinValue);
+
                 rpcPlayKillSound();
             }
 

@@ -457,7 +457,7 @@ namespace ExtremeRoles.GhostRoles.API
 
         protected abstract void CreateSpecificOption(IOption parentOps);
 
-        protected abstract void UseAbility(MessageWriter writer);
+        protected abstract void UseAbility(RPCOperator.RpcCaller caller);
 
         protected static void EnumCheck<T>(T isEnum) where T : struct, IConvertible
         {

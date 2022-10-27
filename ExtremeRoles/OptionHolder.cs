@@ -285,18 +285,16 @@ namespace ExtremeRoles
 
             foreach (var chunkedOption in splitOption)
             {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                    PlayerControl.LocalPlayer.NetId,
-                    (byte)RPCOperator.Command.ShareOption,
-                    Hazel.SendOption.Reliable);
-
-                writer.Write((byte)chunkedOption.Count());
-                foreach (var (id, option) in chunkedOption)
+                using (var caller = RPCOperator.CreateCaller(
+                    RPCOperator.Command.ShareOption))
                 {
-                    writer.WritePacked(id);
-                    writer.WritePacked(option.CurSelection);
+                    caller.WriteByte((byte)chunkedOption.Count());
+                    foreach (var (id, option) in chunkedOption)
+                    {
+                        caller.WritePackedInt(id);
+                        caller.WritePackedInt(option.CurSelection);
+                    }
                 }
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
             }
         }
         public static void ShareOption(int numberOfOptions, MessageReader reader)

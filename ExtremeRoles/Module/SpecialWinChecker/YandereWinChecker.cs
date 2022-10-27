@@ -75,18 +75,16 @@ namespace ExtremeRoles.Module.SpecialWinChecker
             if (statistics.TeamImpostorAlive - statistics.AssassinAlive - oneSidedLoverImpNum > 0) { return false; }
             if (statistics.SeparatedNeutralAlive.Count - oneSidedLoverNeutralNum > 1) { return false; }
 
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                PlayerControl.LocalPlayer.NetId,
-                (byte)RPCOperator.Command.SetWinPlayer,
-                Hazel.SendOption.Reliable, -1);
-            writer.Write(aliveOneSideLover.Count);
-
-            foreach (var player in aliveOneSideLover)
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.SetWinPlayer))
             {
-                writer.Write(player.PlayerId);
-                ExtremeRolesPlugin.ShipState.AddWinner(player);
+                caller.WriteInt(aliveOneSideLover.Count);
+                foreach (var player in aliveOneSideLover)
+                {
+                    caller.WriteByte(player.PlayerId);
+                    ExtremeRolesPlugin.ShipState.AddWinner(player);
+                }
             }
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
 
             return true;
         }

@@ -134,17 +134,13 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         {
 			Helper.Logging.Debug("pickUp:RedPart");
 
-			PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
-
-			RPCOperator.Call(
-				rolePlayer.NetId,
-				RPCOperator.Command.HypnotistAbility,
-				new List<byte>
-				{
-					rolePlayer.PlayerId,
-					(byte)RpcOps.PickUpAbilityModule,
-					(byte)partType,
-				});
+			using (var caller = RPCOperator.CreateCaller(
+				RPCOperator.Command.HypnotistAbility))
+			{
+				caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
+				caller.WriteByte((byte)RpcOps.PickUpAbilityModule);
+				caller.WriteByte((byte)partType);
+			}
 			UpdateAllDollKillButtonState(hypnotist);
 			hypnotist.EnableKillTimer();
 		}
@@ -171,18 +167,14 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
 			Helper.Logging.Debug($"pickUp:BluePart {console}");
 
-			PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
-
-			RPCOperator.Call(
-				rolePlayer.NetId,
-				RPCOperator.Command.HypnotistAbility,
-				new List<byte>
-				{
-					rolePlayer.PlayerId,
-					(byte)RpcOps.PickUpAbilityModule,
-					(byte)partType,
-					(byte)this.console,
-				});
+			using (var caller = RPCOperator.CreateCaller(
+				RPCOperator.Command.HypnotistAbility))
+			{
+				caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
+				caller.WriteByte((byte)RpcOps.PickUpAbilityModule);
+				caller.WriteByte((byte)partType);
+				caller.WriteByte((byte)this.console);
+			}
 			FeatAllDollMapModuleAccess(hypnotist, this.console);
 		}
 		protected override Color GetColor() => Palette.CrewmateBlue;
@@ -208,18 +200,14 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 		{
 			Helper.Logging.Debug($"pickUp:GrayPart {console}");
 
-			PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
-
-			RPCOperator.Call(
-				rolePlayer.NetId,
-				RPCOperator.Command.HypnotistAbility,
-				new List<byte>
-				{
-					rolePlayer.PlayerId,
-					(byte)RpcOps.PickUpAbilityModule,
-					(byte)partType,
-					(byte)this.console,
-				});
+			using (var caller = RPCOperator.CreateCaller(
+				RPCOperator.Command.HypnotistAbility))
+			{
+				caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
+				caller.WriteByte((byte)RpcOps.PickUpAbilityModule);
+				caller.WriteByte((byte)partType);
+				caller.WriteByte((byte)this.console);
+			}
 			UnlockAllDollCrakingAbility(hypnotist, this.console);
 		}
 

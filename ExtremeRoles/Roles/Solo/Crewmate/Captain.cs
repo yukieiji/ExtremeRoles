@@ -112,14 +112,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     voteFor == 254 || 
                     voteFor == byte.MaxValue)
                 {
-                    RPCOperator.Call(
-                        CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                        RPCOperator.Command.CaptainAbility,
-                        new List<byte>
-                        {
-                            (byte)AbilityType.ChargeVote,
-                            rolePlayerId
-                        });
+                    using (var caller = RPCOperator.CreateCaller(
+                        RPCOperator.Command.CaptainAbility))
+                    {
+                        caller.WriteByte((byte)AbilityType.ChargeVote);
+                        caller.WriteByte(rolePlayerId);
+                    }
                     this.ChargeVote();
                 }
             }
@@ -186,15 +184,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             void setTarget()
             {
-                RPCOperator.Call(
-                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                    RPCOperator.Command.CaptainAbility,
-                    new List<byte>
-                    {
-                        (byte)AbilityType.SetVoteTarget,
-                        CachedPlayerControl.LocalPlayer.PlayerId,
-                        instance.TargetPlayerId
-                    });
+                using (var caller = RPCOperator.CreateCaller(
+                        RPCOperator.Command.CaptainAbility))
+                {
+                    caller.WriteByte((byte)AbilityType.SetVoteTarget);
+                    caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
+                    caller.WriteByte(instance.TargetPlayerId);
+                }
                 this.SetTargetVote(
                     instance.TargetPlayerId);
 

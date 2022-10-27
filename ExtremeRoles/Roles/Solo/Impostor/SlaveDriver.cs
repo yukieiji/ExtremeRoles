@@ -308,16 +308,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                         int taskIndex = newTask[0];
                         newTask.RemoveAt(0);
                         Helper.Logging.Debug($"SetTaskId:{taskIndex}");
-
-                        MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                            rolePlayer.NetId,
-                            (byte)RPCOperator.Command.SlaveDriverSetNewTask,
-                            Hazel.SendOption.Reliable, -1);
-                        writer.Write(playerId);
-                        writer.Write(i);
-                        writer.Write(taskIndex);
-                        AmongUsClient.Instance.FinishRpcImmediately(writer);
-                        ReplaceToNewTask(playerId, i, taskIndex);
+                        Helper.GameSystem.RpcReplaceNewTask(playerId, i, taskIndex);
 
                         if (newTask.Count == 0)
                         {
@@ -343,28 +334,5 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             this.KillCoolTime = this.defaultKillCoolTime * ((100f - this.specialAttackReduceRate) / 100f);
         }
-
-        public static void ReplaceToNewTask(byte playerId, int index, int taskIndex)
-        {
-
-            var player = Helper.Player.GetPlayerControlById(
-                playerId);
-
-            if (player == null) { return; }
-
-            byte taskId = (byte)taskIndex;
-
-            if (Helper.GameSystem.SetPlayerNewTask(
-                ref player, taskId, (uint)index))
-            {
-                player.Data.Tasks[index] = new GameData.TaskInfo(
-                    taskId, (uint)index);
-                player.Data.Tasks[index].Id = (uint)index;
-
-                GameData.Instance.SetDirtyBit(
-                    1U << (int)player.PlayerId);
-            }
-        }
-
     }
 }

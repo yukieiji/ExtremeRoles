@@ -63,12 +63,7 @@ namespace ExtremeRoles.Patches
             // Terminate round
             if (Input.GetKeyDown(KeyCode.L) && !GameSystem.IsLobby)
             {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                    PlayerControl.LocalPlayer.NetId,
-                    (byte)RPCOperator.Command.ForceEnd,
-                    Hazel.SendOption.Reliable, -1);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-                RPCOperator.ForceEnd();
+                GameSystem.ForceEndGame();
             }
 
             // See All roles

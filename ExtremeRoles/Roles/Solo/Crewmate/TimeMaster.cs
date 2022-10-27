@@ -293,14 +293,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
 
-            RPCOperator.Call(
-                localPlayer.NetId,
-                RPCOperator.Command.TimeMasterAbility,
-                new List<byte>
-                {
-                   localPlayer.PlayerId,
-                   (byte)TimeMasterOps.ShieldOff,
-                });
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.TimeMasterAbility))
+            {
+                caller.WriteByte(localPlayer.PlayerId);
+                caller.WriteByte((byte)TimeMasterOps.ShieldOff);
+            }
             shieldOff(localPlayer.PlayerId);
         }
 
@@ -318,14 +316,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
 
-            RPCOperator.Call(
-                localPlayer.NetId,
-                RPCOperator.Command.TimeMasterAbility,
-                new List<byte>
-                {
-                    localPlayer.PlayerId,
-                    (byte)TimeMasterOps.ShieldOn,
-                });
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.TimeMasterAbility))
+            {
+                caller.WriteByte(localPlayer.PlayerId);
+                caller.WriteByte((byte)TimeMasterOps.ShieldOn);
+            }
             shieldOn(localPlayer.PlayerId);
 
             return true;
@@ -337,15 +333,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
 
             PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
-
-            RPCOperator.Call(
-                localPlayer.NetId,
-                RPCOperator.Command.TimeMasterAbility,
-                new List<byte>
-                {
-                    localPlayer.PlayerId,
-                    (byte)TimeMasterOps.ResetMeeting,
-                });
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.TimeMasterAbility))
+            {
+                caller.WriteByte(localPlayer.PlayerId);
+                caller.WriteByte((byte)TimeMasterOps.ResetMeeting);
+            }
             resetMeeting(localPlayer.PlayerId);
         }
 
@@ -361,14 +354,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             if (this.isShieldOn)
             {
-                RPCOperator.Call(
-                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                    RPCOperator.Command.TimeMasterAbility,
-                    new List<byte>
-                    {
-                        rolePlayer.PlayerId,
-                        (byte)TimeMasterOps.RewindTime,
-                    });
+                using (var caller = RPCOperator.CreateCaller(
+                    RPCOperator.Command.TimeMasterAbility))
+                {
+                    caller.WriteByte(rolePlayer.PlayerId);
+                    caller.WriteByte((byte)TimeMasterOps.RewindTime);
+                }
                 startRewind(rolePlayer.PlayerId);
 
                 return false;

@@ -231,18 +231,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 }
             }
 
-            Vector2 teleportPos = randomPos[
-                RandomGenerator.Instance.Next(randomPos.Count)];
-
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                localPlayer.NetId,
-                (byte)RPCOperator.Command.UncheckedSnapTo,
-                Hazel.SendOption.Reliable, -1);
-            writer.Write(teloportTarget);
-            writer.Write(teleportPos.x);
-            writer.Write(teleportPos.y);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
-            RPCOperator.UncheckedSnapTo(this.targetPlayerId, teleportPos);
+            Player.RpcUncheckSnap(teloportTarget, randomPos[
+                RandomGenerator.Instance.Next(randomPos.Count)]);
 
             if (this.Button != null &&
                 this.deflectDamagePenaltyMod < 1.0f)

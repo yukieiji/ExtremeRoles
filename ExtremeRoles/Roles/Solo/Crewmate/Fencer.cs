@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using UnityEngine;
+using Hazel;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -17,6 +18,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public enum FencerOption
         {
             ResetTime
+        }
+
+        public enum FencerAbility : byte
+        {
+            CounterOn,
+            CounterOff,
+            ActivateKillButton
         }
 
         public RoleAbilityButtonBase Button
@@ -42,51 +50,62 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             false, true, false, false)
         { }
 
-
-        public static void CounterOn(byte rolePlayerId)
+        public static void Ability(ref MessageReader reader)
         {
-            var fencer = ExtremeRoleManager.GetSafeCastedRole<Fencer>(rolePlayerId);
-
-            if (fencer != null)
-            {
-                fencer.IsCounter = true;
-            }
-        }
-
-        public static void CounterOff(byte rolePlayerId)
-        {
-            var fencer = ExtremeRoleManager.GetSafeCastedRole<Fencer>(rolePlayerId);
-
-            if (fencer != null)
-            {
-                fencer.IsCounter = false;
-            }
-        }
-
-        public static void EnableKillButton(byte rolePlayerId)
-        {
-            if (PlayerControl.LocalPlayer.PlayerId != rolePlayerId) { return; }
+            byte rolePlayerId = reader.ReadByte();
+            FencerAbility abilityType = (FencerAbility)reader.ReadByte();
 
             var fencer = ExtremeRoleManager.GetSafeCastedRole<Fencer>(rolePlayerId);
+            if (fencer == null) { return; }
 
-            if (fencer != null)
+            switch (abilityType)
             {
-                if (MapBehaviour.Instance)
-                {
-                    MapBehaviour.Instance.Close();
-                }
-                if (Minigame.Instance)
-                {
-                    Minigame.Instance.ForceClose();
-                }
-
-                fencer.CanKill = true;
-                PlayerControl.LocalPlayer.killTimer = 0.1f;
-
-                fencer.Timer = fencer.MaxTime;
+                case FencerAbility.CounterOn:
+                    counterOn(fencer);
+                    break;
+                case FencerAbility.CounterOff:
+                    counterOff(fencer);
+                    break;
+                case FencerAbility.ActivateKillButton:
+                    enableKillButton(fencer, rolePlayerId);
+                    break;
+                default:
+                    break;
             }
+
         }
 
+        private static void counterOn(Fencer fencer)
+        {
+            fencer.IsCounter = true;
+        }
+
+        public static void counterOff(Fencer fencer)
+        {
+            fencer.IsCounter = false;
+        }
+
+        private static void enableKillButton(
+            Fencer fencer, byte rolePlayerId)
+        {
+            PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+
+            if (localPlayer.PlayerId != rolePlayerId) { return; }
+
+            if (MapBehaviour.Instance)
+            {
+                MapBehaviour.Instance.Close();
+            }
+            if (Minigame.Instance)
+            {
+                Minigame.Instance.ForceClose();
+            }
+
+            fencer.CanKill = true;
+            localPlayer.killTimer = 0.1f;
+
+            fencer.Timer = fencer.MaxTime;
+        }
 
         public void CreateAbility()
         {
@@ -99,26 +118,26 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
         public void CleanUp()
         {
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.FencerCounterOff,
-                new List<byte>
-                {
-                    CachedPlayerControl.LocalPlayer.PlayerId,
-                });
-            CounterOff(CachedPlayerControl.LocalPlayer.PlayerId);
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.FencerAbility))
+            {
+                caller.WriteByte(
+                    CachedPlayerControl.LocalPlayer.PlayerId);
+                caller.WriteByte((byte)FencerAbility.CounterOff);
+            }
+            counterOff(this);
         }
 
         public bool UseAbility()
         {
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.FencerCounterOn,
-                new List<byte>
-                {
-                    CachedPlayerControl.LocalPlayer.PlayerId,
-                });
-            CounterOn(CachedPlayerControl.LocalPlayer.PlayerId);
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.FencerAbility))
+            {
+                caller.WriteByte(
+                    CachedPlayerControl.LocalPlayer.PlayerId);
+                caller.WriteByte((byte)FencerAbility.CounterOn);
+            }
+            counterOn(this);
             return true;
         }
 
@@ -156,14 +175,15 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             if (this.IsCounter)
             {
-                RPCOperator.Call(
-                    PlayerControl.LocalPlayer.NetId,
-                    RPCOperator.Command.FencerEnableKillButton,
-                    new List<byte>
-                    {
-                        rolePlayer.PlayerId,
-                    });
-                EnableKillButton(rolePlayer.PlayerId);
+
+                using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.FencerAbility))
+                {
+                    caller.WriteByte(
+                        rolePlayer.PlayerId);
+                    caller.WriteByte((byte)FencerAbility.ActivateKillButton);
+                }
+                enableKillButton(this, rolePlayer.PlayerId);
 
                 return false;
             }

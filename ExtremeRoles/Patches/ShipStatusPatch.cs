@@ -471,13 +471,11 @@ namespace ExtremeRoles.Patches
 
         private static void setWinGameContorlId(int id)
         {
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                (byte)RPCOperator.Command.SetWinGameControlId,
-                Hazel.SendOption.Reliable, -1);
-            writer.Write(id);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
-
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.SetWinGameControlId))
+            {
+                caller.WriteInt(id);
+            }
             RPCOperator.SetWinGameControlId(id);
         }
     }

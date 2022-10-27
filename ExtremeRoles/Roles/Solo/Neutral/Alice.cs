@@ -78,8 +78,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
 
             RandomGenerator.Instance.Next();
+            byte localPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
 
-            foreach(var player in CachedPlayerControl.AllPlayerControls)
+            foreach (var player in CachedPlayerControl.AllPlayerControls)
             {
 
                 var role = ExtremeRoleManager.GameRole[player.PlayerId];
@@ -103,22 +104,18 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 var shuffled = addTaskId.OrderBy(
                     item => RandomGenerator.Instance.Next()).ToList();
 
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                    (byte)RPCOperator.Command.AliceShipBroken,
-                    Hazel.SendOption.Reliable, -1);
-                writer.Write(CachedPlayerControl.LocalPlayer.PlayerId);
-                writer.Write(player.PlayerId);
-                writer.Write(addTaskId.Count);
-                foreach (int taskId in shuffled)
+                using (var caller = RPCOperator.CreateCaller(
+                    RPCOperator.Command.AliceShipBroken))
                 {
-                    writer.Write(taskId);
+                    caller.WriteByte(localPlayerId);
+                    caller.WriteByte(player.PlayerId);
+                    caller.WriteInt(addTaskId.Count);
+                    foreach (int taskId in shuffled)
+                    {
+                        caller.WriteInt(taskId);
+                    }
                 }
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
-
-                ShipBroken(
-                    CachedPlayerControl.LocalPlayer.PlayerId,
-                    player.PlayerId, addTaskId);
+                ShipBroken(localPlayerId, player.PlayerId, addTaskId);
             }
 
             return true;

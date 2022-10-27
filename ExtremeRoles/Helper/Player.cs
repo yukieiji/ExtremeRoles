@@ -183,6 +183,53 @@ namespace ExtremeRoles.Helper
             return null;
         }
 
+        public static void RpcUncheckSnap(byte targetPlayerId, Vector2 pos)
+        {
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.UncheckedSnapTo))
+            {
+                caller.WriteByte(targetPlayerId);
+                caller.WriteFloat(pos.x);
+                caller.WriteFloat(pos.y);
+            }
+
+            RPCOperator.UncheckedSnapTo(targetPlayerId, pos);
+        }
+
+        public static void RpcUncheckMurderPlayer(
+            byte killerPlayerId, byte targetPlayerId, byte useAnimation)
+        {
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.UncheckedMurderPlayer))
+            {
+                caller.WriteByte(killerPlayerId);
+                caller.WriteByte(targetPlayerId);
+                caller.WriteByte(useAnimation);
+            }
+
+            RPCOperator.UncheckedMurderPlayer(
+                killerPlayerId, targetPlayerId, useAnimation);
+        }
+
+        public static void RpcUncheckRevive(byte targetPlayerId)
+        {
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.UncheckedRevive))
+            {
+                caller.WriteByte(targetPlayerId);
+            }
+            RPCOperator.UncheckedRevive(targetPlayerId);
+        }
+
+        public static void RpcCleanDeadBody(byte targetPlayerId)
+        {
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.CleanDeadBody))
+            {
+                caller.WriteByte(targetPlayerId);
+            }
+            RPCOperator.CleanDeadBody(targetPlayerId);
+        }
 
         public static void SetPlayerOutLine(PlayerControl target, Color color)
         {

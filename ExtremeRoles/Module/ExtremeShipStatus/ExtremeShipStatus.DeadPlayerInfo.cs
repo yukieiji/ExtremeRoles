@@ -83,14 +83,12 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
         public void RpcReplaceDeadReason(
             byte playerId, PlayerStatus newReason)
         {
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.ReplaceDeadReason,
-                new List<byte>
-                {
-                    playerId,
-                    (byte)newReason
-                });
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.ReplaceDeadReason))
+            {
+                caller.WriteByte(playerId);
+                caller.WriteByte((byte)newReason);
+            }
             ReplaceDeadReason(playerId, newReason);
         }
 

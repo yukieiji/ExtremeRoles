@@ -318,17 +318,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             if (this.isAwake && this.doll.Count > 0)
             {
-
-                PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
-
-                RPCOperator.Call(
-                   rolePlayer.NetId,
-                   RPCOperator.Command.HypnotistAbility,
-                   new List<byte>
-                   {    
-                        rolePlayer.PlayerId,
-                        (byte)RpcOps.ResetDollKillButton,
-                   });
+                using (var caller = RPCOperator.CreateCaller(
+                    RPCOperator.Command.HypnotistAbility))
+                {
+                    caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
+                    caller.WriteByte((byte)RpcOps.ResetDollKillButton);
+                }
                 resetDollKillButton(this);
             }
             this.isActiveTimer = false;
@@ -380,16 +375,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 }
             }
 
-
-            RPCOperator.Call(
-                rolePlayer.NetId,
-                RPCOperator.Command.HypnotistAbility,
-                new List<byte>
-                {
-                    rolePlayer.PlayerId,
-                    (byte)RpcOps.TargetToDoll,
-                    targetPlayerId,
-                });
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.HypnotistAbility))
+            {
+                caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
+                caller.WriteByte((byte)RpcOps.TargetToDoll);
+                caller.WriteByte(targetPlayerId);
+            }
             targetToDoll(this, rolePlayer.PlayerId, targetPlayerId);
             setAbilityPart(redPartNum);
             this.target = null;
@@ -422,14 +414,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 {
                     Logging.Debug("ResetKillButton");
                     this.isActiveTimer = false;
-                    RPCOperator.Call(
-                       rolePlayer.NetId,
-                       RPCOperator.Command.HypnotistAbility,
-                       new List<byte>
-                       {
-                           rolePlayer.PlayerId,
-                           (byte)RpcOps.ResetDollKillButton,
-                       });
+                    using (var caller = RPCOperator.CreateCaller(
+                        RPCOperator.Command.HypnotistAbility))
+                    {
+                        caller.WriteByte(rolePlayer.PlayerId);
+                        caller.WriteByte((byte)RpcOps.ResetDollKillButton);
+                    }
                     resetDollKillButton(this);
                 }
             }
@@ -1281,11 +1271,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             if (!rolePlayer.Data.IsDead &&
                 (hypnotistPlayer == null || hypnotistPlayer.Data.IsDead))
             {
-                RPCOperator.Call(
-                    rolePlayer.NetId,
-                    RPCOperator.Command.UncheckedMurderPlayer,
-                    new List<byte> { rolePlayer.PlayerId, rolePlayer.PlayerId, 0 });
-                RPCOperator.UncheckedMurderPlayer(
+                Player.RpcUncheckMurderPlayer(
                     rolePlayer.PlayerId,
                     rolePlayer.PlayerId, 0);
             }

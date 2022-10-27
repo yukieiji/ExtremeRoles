@@ -607,15 +607,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void CleanUp()
         {
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                (byte)RPCOperator.Command.CarpenterUseAbility,
-                Hazel.SendOption.Reliable, -1);
             if (this.targetVent != null)
             {
-                writer.Write((byte)AbilityType.RemoveVent);
-                writer.Write(this.targetVent.Id);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                using (var caller = RPCOperator.CreateCaller(
+                    RPCOperator.Command.CarpenterUseAbility))
+                {
+                    caller.WriteByte((byte)AbilityType.RemoveVent);
+                    caller.WriteInt(this.targetVent.Id);
+                }
                 removeVent(this.targetVent.Id);
             }
             else
@@ -630,11 +629,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 {
                     roomId = byte.MaxValue;
                 }
-                writer.Write((byte)AbilityType.SetCamera);
-                writer.Write(pos.x);
-                writer.Write(pos.y);
-                writer.Write(roomId);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                using (var caller = RPCOperator.CreateCaller(
+                    RPCOperator.Command.CarpenterUseAbility))
+                {
+                    caller.WriteByte((byte)AbilityType.SetCamera);
+                    caller.WriteFloat(pos.x);
+                    caller.WriteFloat(pos.y);
+                    caller.WriteByte(roomId);
+                }
                 setCamera(pos.x, pos.y, (SystemTypes)roomId);
             }
             this.targetVent = null;

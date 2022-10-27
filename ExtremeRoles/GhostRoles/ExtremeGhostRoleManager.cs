@@ -210,17 +210,16 @@ namespace ExtremeRoles.GhostRoles
             if (assignData.IsCombRole(roleId))
             {
                 CombinationRoleType combRoleId = assignData.GetCombRoleType(roleId);
-                
+
                 // 専用のコンビ役職を取ってくる
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                    (byte)RPCOperator.Command.SetGhostRole,
-                    Hazel.SendOption.Reliable, -1);
-                    writer.Write(false);
-                    writer.Write(player.PlayerId);
-                    writer.Write((byte)combRoleId);
-                    writer.Write((byte)roleId);
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                using (var caller = RPCOperator.CreateCaller(
+                    RPCOperator.Command.SetGhostRole))
+                {
+                    caller.WriteBoolean(false);
+                    caller.WriteByte(player.PlayerId);
+                    caller.WriteByte((byte)combRoleId);
+                    caller.WriteByte((byte)roleId);
+                }
                 setPlyaerToCombGhostRole(player.PlayerId, (byte)combRoleId, (byte)roleId);
                 assignData.ReduceGlobalSpawnLimit(team);
                 return;
@@ -443,17 +442,14 @@ namespace ExtremeRoles.GhostRoles
             RoleTypes baseVanillaRoleId,
             ExtremeGhostRoleId assignGhostRoleId)
         {
-
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                (byte)RPCOperator.Command.SetGhostRole,
-                Hazel.SendOption.Reliable, -1);
-            writer.Write(false);
-            writer.Write(player.PlayerId);
-            writer.Write((byte)baseVanillaRoleId);
-            writer.Write((byte)assignGhostRoleId);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
-
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.SetGhostRole))
+            {
+                caller.WriteBoolean(false);
+                caller.WriteByte(player.PlayerId);
+                caller.WriteByte((byte)baseVanillaRoleId);
+                caller.WriteByte((byte)assignGhostRoleId);
+            }
 
             setPlyaerToSingleGhostRole(
                 player.PlayerId,

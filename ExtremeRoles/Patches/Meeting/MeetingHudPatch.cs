@@ -173,10 +173,11 @@ namespace ExtremeRoles.Patches.Meeting
 
                 Helper.Logging.Debug($"IsSuccess?:{ExtremeRoleManager.GameRole[voteFor].Id == ExtremeRoleId.Marlin}");
 
-                RPCOperator.Call(
-                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                    RPCOperator.Command.AssasinVoteFor,
-                    new List<byte> { voteFor });
+                using (var caller = RPCOperator.CreateCaller(
+                    RPCOperator.Command.AssasinVoteFor))
+                {
+                    caller.WriteByte(voteFor);
+                }
                 RPCOperator.AssasinVoteFor(voteFor);
 
                 for (int i = 0; i < instance.playerStates.Length; i++)

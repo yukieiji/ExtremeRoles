@@ -14,14 +14,14 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
     {
 
         protected Func<bool> abilityPreCheck;
-        protected Action<MessageWriter> ability;
+        protected Action<RPCOperator.RpcCaller> ability;
         private AbilityType abilityType;
         private Action rpcHostCallAbility;
         private bool reportAbility;
 
         public GhostRoleAbilityButtonBase(
             AbilityType abilityType,
-            Action<MessageWriter> ability,
+            Action<RPCOperator.RpcCaller> ability,
             Func<bool> abilityPreCheck,
             Func<bool> canUse,
             Sprite sprite,
@@ -54,16 +54,14 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
         {
             if (this.abilityPreCheck())
             {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                    (byte)RPCOperator.Command.UseGhostRoleAbility,
-                    Hazel.SendOption.Reliable, -1);
-                writer.Write((byte)this.abilityType);
-                writer.Write(this.reportAbility);
-                
-                this.ability(writer);
 
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
+                using (var caller = RPCOperator.CreateCaller(
+                    RPCOperator.Command.UseGhostRoleAbility))
+                {
+                    caller.WriteByte((byte)this.abilityType);
+                    caller.WriteBoolean(this.reportAbility);
+                    this.ability.Invoke(caller);
+                }
                 if (this.rpcHostCallAbility != null)
                 {
                     this.rpcHostCallAbility();

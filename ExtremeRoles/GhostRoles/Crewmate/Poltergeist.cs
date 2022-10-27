@@ -133,16 +133,16 @@ namespace ExtremeRoles.GhostRoles.Crewmate
                 parentOps, 1, 5, 3.0f);
         }
 
-        protected override void UseAbility(MessageWriter writer)
+        protected override void UseAbility(RPCOperator.RpcCaller caller)
         {
             PlayerControl player = CachedPlayerControl.LocalPlayer;
             Vector3 pos = player.transform.position;
 
-            writer.Write(player.PlayerId);
-            writer.Write(this.targetBody.PlayerId);
-            writer.Write(pos.x);
-            writer.Write(pos.y);
-            writer.Write(true);
+            caller.WriteByte(player.PlayerId);
+            caller.WriteByte(this.targetBody.PlayerId);
+            caller.WriteFloat(pos.x);
+            caller.WriteFloat(pos.y);
+            caller.WriteBoolean(true);
         }
 
         private bool isPreCheck() => this.targetBody != null;
@@ -191,18 +191,18 @@ namespace ExtremeRoles.GhostRoles.Crewmate
             PlayerControl player = CachedPlayerControl.LocalPlayer;
             Vector3 pos = player.transform.position;
 
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                player.NetId,
-                (byte)RPCOperator.Command.UseGhostRoleAbility,
-                Hazel.SendOption.Reliable, -1);
-            writer.Write((byte)AbilityType.PoltergeistMoveDeadbody); // アビリティタイプ
-            writer.Write(this.isAbilityReport); // 報告できるかどうか
-            writer.Write(player.PlayerId);
-            writer.Write(byte.MinValue);
-            writer.Write(pos.x);
-            writer.Write(pos.y);
-            writer.Write(false);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.UseGhostRoleAbility))
+            {
+                caller.WriteByte((byte)AbilityType.PoltergeistMoveDeadbody); // アビリティタイプ
+                caller.WriteBoolean(this.isAbilityReport); // 報告できるかどうか
+                caller.WriteByte(player.PlayerId);
+                caller.WriteByte(byte.MinValue);
+                caller.WriteFloat(pos.x);
+                caller.WriteFloat(pos.y);
+                caller.WriteBoolean(false);
+            }
+
             setDeadBody(player, this);
         }
     }

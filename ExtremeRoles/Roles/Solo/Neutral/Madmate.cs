@@ -82,14 +82,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             byte playerId = CachedPlayerControl.LocalPlayer.PlayerId;
 
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.UncheckedMurderPlayer,
-                new List<byte> { playerId, playerId, byte.MaxValue });
-            RPCOperator.UncheckedMurderPlayer(
-                playerId,
-                playerId,
-                byte.MaxValue);
+            Helper.Player.RpcUncheckMurderPlayer(
+                playerId, playerId, byte.MaxValue);
             return true;
         }
 
@@ -157,10 +151,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 !this.isUpdateMadmate)
             {
                 this.isUpdateMadmate = true;
-                RPCOperator.Call(
-                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                    RPCOperator.Command.MadmateToFakeImpostor,
-                    new List<byte> { rolePlayer.PlayerId });
+
+                using (var caller = RPCOperator.CreateCaller(
+                    RPCOperator.Command.MadmateToFakeImpostor))
+                {
+                    caller.WriteByte(rolePlayer.PlayerId);
+                }
                 ToFakeImpostor(rolePlayer.PlayerId);
             }
         }
