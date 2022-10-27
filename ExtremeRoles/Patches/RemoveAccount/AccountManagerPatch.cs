@@ -6,7 +6,7 @@ using HarmonyLib;
 namespace ExtremeRoles.Patches.RemoveAccount
 {
     [HarmonyPatch(typeof(AccountManager), nameof(AccountManager.CanPlayOnline))]
-    public static class CanPlayOnlinePatch
+    public static class AccountManagerCanPlayOnlinePatch
     {
         public static bool Prefix(out bool __result)
         {
