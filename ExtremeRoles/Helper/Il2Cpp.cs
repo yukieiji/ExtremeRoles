@@ -2,10 +2,7 @@
 using System.IO;
 using System.Runtime.CompilerServices;
 using HarmonyLib;
-
-using UnhollowerBaseLib;
-using UnhollowerBaseLib.Attributes;
-using UnhollowerRuntimeLib;
+using Il2CppInterop.Runtime.InteropTypes;
 
 using ExtremeRoles.Module;
 
