@@ -44,7 +44,9 @@ namespace ExtremeRoles.Patches.Manager
     public static class HudManagerUpdatePatch
     {
         public const string RoleInfoObjectName = "Info";
+        
         private static bool buttonCreated = false;
+        private static bool isActiveUpdate = true;
 
         public static Dictionary<byte, TextMeshPro> PlayerInfoText => allPlayerInfo;
 
@@ -55,9 +57,15 @@ namespace ExtremeRoles.Patches.Manager
         {
             allPlayerInfo.Clear();
             tabText = null;
+            isActiveUpdate = true;
         }
 
-        public static void Prefix(HudManager __instance)
+        public static void SetBlockUpdate(bool isBlock)
+        {
+            isActiveUpdate = !isBlock;
+        }
+
+        public static bool Prefix(HudManager __instance)
         {
             if (__instance.GameSettings != null)
             {
@@ -65,7 +73,6 @@ namespace ExtremeRoles.Patches.Manager
             }
             if (ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
             {
-
                 __instance.UseButton.ToggleVisible(false);
                 __instance.AbilityButton.ToggleVisible(false);
                 __instance.ReportButton.ToggleVisible(false);
@@ -82,11 +89,13 @@ namespace ExtremeRoles.Patches.Manager
                     virtualJoystick.ToggleVisuals(false);
                 }
             }
-
+            return isActiveUpdate;
         }
+
         public static void Postfix()
         {
-            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) { return; }
+            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) 
+            { return; }
             if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
