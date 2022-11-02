@@ -5,32 +5,54 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
+
+using TMPro;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
-    public sealed class Shooter : SingleRoleBase, IRoleMeetingButtonAbility, IRoleReportHook, IRoleResetMeeting, IRoleUpdate
+    public sealed class Shooter : 
+        SingleRoleBase,
+        IRoleMeetingButtonAbility,
+        IRoleReportHook,
+        IRoleResetMeeting,
+        IRoleAwake<RoleTypes>
     {
         public enum ShooterOption
         {
+            AwakeKillNum,
+            AwakeImpNum,
+            IsInitAwake,
+            NoneAwakeWhenShoot,
+            ShootKillCoolPenalty,
             CanCallMeeting,
             CanShootSelfCallMeeting,
             MaxShootNum,
             InitShootNum,
             MaxMeetingShootNum,
             ShootChargeTime,
-            CurShootNumChargePenalty,
-            KillShootChargeTimeModd,
-            MaxChargeGiveNum,
-            ShootKillCoolPenalty,
-            ShootShootChargePenalty,
+            ShootKillNum
         }
 
-        private float defaultKillCool = 0.0f;
+        public bool IsAwake => this.isAwake;
+
+        public RoleTypes NoneAwakeRole => RoleTypes.Impostor;
+
+        private bool isAwake = false;
+
+        private int curKillCount = 0;
+        private int awakeKillCount = 0;
+        private int awakeImpNum = 0;
+
+        private bool isAwakedHasOtherVision;
+        private bool isAwakedHasOtherKillCool;
+        private bool isAwakedHasOtherKillRange;
+
         private float killCoolPenalty = 0.0f;
-        private float killShootChargeTimeModd = 0.0f;
+        
         private float chargeTime = 0.0f;
-        private float shootChargePenalty = 0.0f;
-        private float curShootNumPenalty = 0.0f;
+        private int chargeKillNum = 0;
+
         private float timer = float.MaxValue;
         private int maxShootNum = 0;
         private int curShootNum = 0;
@@ -40,12 +62,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private int chargeNum = 0;
         private int maxChargeNum = 0;
 
+        private bool isNoneAwakeWhenShoot = false;
         private bool canShootThisMeeting = false;
         private bool canShootSelfCallMeeting = false;
 
-        private TMPro.TextMeshPro chargeInfoText = null;
-        private TMPro.TextMeshPro chargeTimerText = null;
-        private TMPro.TextMeshPro meetingShootText = null;
+        private TextMeshPro chargeInfoText = null;
+        private TextMeshPro chargeTimerText = null;
+        private TextMeshPro meetingShootText = null;
 
         public Shooter(): base(
             ExtremeRoleId.Shooter,
@@ -53,7 +76,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             ExtremeRoleId.Shooter.ToString(),
             Palette.ImpostorRed,
             true, false, true, true)
-        {}
+        { }
+
+        public string GetFakeOptionString() => "";
+
 
         public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
         {
@@ -138,10 +164,18 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
         public void Shoot()
         {
+            API.Extension.State.RoleState.AddKillCoolOffset(
+                this.killCoolPenalty);
             this.curShootNum = this.curShootNum - 1;
-            this.KillCoolTime = this.KillCoolTime + killCoolPenalty;
             this.shootCounter  = this.shootCounter + 1;
-            this.timer = this.timer + this.shootChargePenalty;
+            if (this.isNoneAwakeWhenShoot)
+            {
+                this.isAwake = false;
+                this.curKillCount = 0;
+                this.HasOtherVison = false;
+                this.HasOtherKillCool = false;
+                this.HasOtherKillRange = false;
+            }
         }
 
         public void ResetOnMeetingEnd()
@@ -164,6 +198,31 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             if (CachedShipStatus.Instance == null ||
                 GameData.Instance == null) { return; }
+
+            if (!this.isAwake)
+            {
+                int impNum = 0;
+
+                foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
+                {
+                    if (ExtremeRoleManager.GameRole[player.PlayerId].IsImpostor() &&
+                        (!player.IsDead && !player.Disconnected))
+                    {
+                        ++impNum;
+                    }
+                }
+
+                if (this.awakeImpNum >= impNum &&
+                    this.curKillCount >= this.awakeKillCount)
+                {
+                    this.isAwake = true;
+                    this.HasOtherVison = this.isAwakedHasOtherVision;
+                    this.HasOtherKillCool = this.isAwakedHasOtherKillCool;
+                    this.HasOtherKillRange = this.isAwakedHasOtherKillRange;
+                    this.curKillCount = 0;
+                }
+                return;
+            }
             if (rolePlayer.Data.IsDead || rolePlayer.Data.Disconnected)
             {
                 this.curShootNum = 0;
@@ -204,18 +263,20 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             if (rolePlayer.CanMove)
             {
-                if (this.chargeNum < this.maxChargeNum &&
+                if (this.timer > 0.0f &&
+                    this.chargeNum < this.maxChargeNum &&
                     this.curShootNum < this.maxShootNum)
                 {
                     this.timer -= Time.deltaTime;
                 }
 
-                if (this.timer < 0.0f)
+                if (this.timer <= 0.0f && 
+                    this.curKillCount >= this.chargeKillNum)
                 {
-                    this.timer = this.chargeTime + (this.curShootNum * this.curShootNumPenalty);
                     this.curShootNum = System.Math.Clamp(
                         this.curShootNum + 1, 0, this.maxShootNum);
                     this.chargeNum = this.chargeNum + 1;
+                    this.curKillCount = 0;
                 }
             }
 
@@ -226,18 +287,32 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             updateText();
         }
 
-
         public override bool TryRolePlayerKillTo(
             PlayerControl rolePlayer, PlayerControl targetPlayer)
         {
-            this.KillCoolTime = this.defaultKillCool;
-            this.timer = this.timer + this.killShootChargeTimeModd;
+            this.curKillCount = this.curKillCount + 1;
             return true;
         }
 
         protected override void CreateSpecificOption(
             IOption parentOps)
         {
+            CreateBoolOption(
+                ShooterOption.IsInitAwake,
+                false, parentOps);
+            CreateIntOption(
+                ShooterOption.AwakeKillNum,
+                2, 0, 5, 1,
+                parentOps,
+                format: OptionUnit.Shot);
+            CreateIntOption(
+                ShooterOption.AwakeImpNum,
+                1, 1, OptionHolder.MaxImposterNum, 1,
+                parentOps);
+            CreateBoolOption(
+                ShooterOption.NoneAwakeWhenShoot,
+                true, parentOps);
+
             var meetingOps = CreateBoolOption(
                 ShooterOption.CanCallMeeting,
                 true, parentOps);
@@ -267,34 +342,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             CreateFloatOption(
                 ShooterOption.ShootChargeTime,
-                75.0f, 30.0f, 240.0f, 5.0f,
+                75.0f, 30.0f, 120.0f, 5.0f,
                 parentOps, format: OptionUnit.Second);
-
-            CreateFloatOption(
-               ShooterOption.CurShootNumChargePenalty,
-               0.0f, 0.0f, 20.0f, 0.5f,
-               parentOps, format: OptionUnit.Second);
-
-            CreateFloatOption(
-                ShooterOption.KillShootChargeTimeModd,
-                7.5f, -30.0f, 30.0f, 0.5f,
-                parentOps, format: OptionUnit.Second);
-
             CreateIntOption(
-               ShooterOption.MaxChargeGiveNum,
-               14, 1, 14, 1, parentOps,
-               format: OptionUnit.Shot);
-
-            CreateFloatOption(
-                ShooterOption.ShootKillCoolPenalty,
-                5.0f, 0.0f, 10.0f, 0.5f,
-                parentOps, format: OptionUnit.Second);
-
-            CreateFloatOption(
-               ShooterOption.ShootShootChargePenalty,
-               0.0f, 0.0f, 20.0f, 0.5f,
-               parentOps, format: OptionUnit.Second);
-
+                ShooterOption.ShootKillNum,
+                2, 0, 5, 1,
+                parentOps,
+                format: OptionUnit.Shot);
 
             maxShootOps.SetUpdateOption(initShootOps);
             maxShootOps.SetUpdateOption(maxMeetingShootOps);
@@ -304,6 +358,17 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         protected override void RoleSpecificInit()
         {
             var allOps = OptionHolder.AllOption;
+
+            this.isAwake = allOps[
+                GetRoleOptionId(ShooterOption.IsInitAwake)].GetValue();
+
+            this.awakeKillCount = allOps[
+                GetRoleOptionId(ShooterOption.AwakeKillNum)].GetValue();
+            this.awakeImpNum = allOps[
+                GetRoleOptionId(ShooterOption.AwakeImpNum)].GetValue();
+
+            this.isNoneAwakeWhenShoot = allOps[
+                GetRoleOptionId(ShooterOption.NoneAwakeWhenShoot)].GetValue();
 
             this.CanCallMeeting = allOps[
                 GetRoleOptionId(ShooterOption.CanCallMeeting)].GetValue();
@@ -318,25 +383,46 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 GetRoleOptionId(ShooterOption.MaxMeetingShootNum)].GetValue();
             this.chargeTime = allOps[
                 GetRoleOptionId(ShooterOption.ShootChargeTime)].GetValue();
-            this.curShootNumPenalty = allOps[
-                GetRoleOptionId(ShooterOption.CurShootNumChargePenalty)].GetValue();
-            this.maxChargeNum = allOps[
-                GetRoleOptionId(ShooterOption.MaxChargeGiveNum)].GetValue();
-            this.killShootChargeTimeModd = allOps[
-                GetRoleOptionId(ShooterOption.KillShootChargeTimeModd)].GetValue();
-            this.killCoolPenalty = allOps[
-                GetRoleOptionId(ShooterOption.ShootKillCoolPenalty)].GetValue();
-            this.shootChargePenalty = allOps[
-                GetRoleOptionId(ShooterOption.ShootShootChargePenalty)].GetValue();
+            this.chargeKillNum = allOps[
+                GetRoleOptionId(ShooterOption.ShootKillNum)].GetValue();
 
-            if (!this.HasOtherKillCool)
+            this.isNoneAwakeWhenShoot = 
+
+            this.isAwake = this.isAwake ||
+                (
+                    this.awakeKillCount <= 0 &&
+                    this.awakeImpNum >= PlayerControl.GameOptions.NumImpostors
+                );
+
+            this.isAwakedHasOtherVision = false;
+            this.isAwakedHasOtherKillCool = true;
+            this.isAwakedHasOtherKillRange = false;
+
+            if (this.HasOtherVison)
             {
-                this.HasOtherKillCool = true;
-                this.KillCoolTime = PlayerControl.GameOptions.KillCooldown;
+                this.HasOtherVison = false;
+                this.isAwakedHasOtherVision = true;
             }
 
-            this.defaultKillCool = this.KillCoolTime;
-            this.timer = this.chargeTime + (this.curShootNum * this.curShootNumPenalty);
+            if (this.HasOtherKillCool)
+            {
+                this.HasOtherKillCool = false;
+            }
+
+            if (this.HasOtherKillRange)
+            {
+                this.HasOtherKillRange = false;
+                this.isAwakedHasOtherKillRange = true;
+            }
+
+            if (this.isAwake)
+            {
+                this.HasOtherVison = this.isAwakedHasOtherVision;
+                this.HasOtherKillCool = this.isAwakedHasOtherKillCool;
+                this.HasOtherKillRange = this.isAwakedHasOtherKillRange;
+            }
+
+            this.timer = this.chargeTime;
             this.chargeNum = 0;
         }
 
