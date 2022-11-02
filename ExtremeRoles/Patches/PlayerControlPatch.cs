@@ -1126,6 +1126,20 @@ namespace ExtremeRoles.Patches
             OptionHolder.ShareOptionSelections();
         }
     }
+    
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.RemoveTask))]
+    public static class PlayerControlRemoveTaskPatch
+    {
+        public static void Prefix()
+        {
+            Manager.HudManagerUpdatePatch.SetBlockUpdate(true);
+            FastDestroyableSingleton<HudManager>.Instance.taskDirtyTimer = 0.0f;
+        }
+        public static void Postfix()
+        {
+            Manager.HudManagerUpdatePatch.SetBlockUpdate(false);
+        }
+    }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Revive))]
     public static class PlayerControlRevivePatch
