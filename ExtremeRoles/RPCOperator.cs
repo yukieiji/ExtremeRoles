@@ -10,11 +10,6 @@ namespace ExtremeRoles
 {
     public static class RPCOperator
     {
-        public enum SoundType : byte
-        {
-            Kill,
-        }
-
         public enum Command : byte
         {
             // メインコントール
@@ -405,22 +400,11 @@ namespace ExtremeRoles
                 clientId, major, minor, build, revision);
         }
 
-        public static void PlaySound(byte soundType)
+        public static void PlaySound(
+            byte soundType, float volume)
         {
-            UnityEngine.AudioClip clip;
-            switch ((SoundType)soundType)
-            {
-                case SoundType.Kill:
-                    clip = CachedPlayerControl.LocalPlayer.PlayerControl.KillSfx;
-                    break;
-                default:
-                    return;
-            }
-
-            if (Constants.ShouldPlaySfx() && clip != null)
-            {
-                SoundManager.Instance.PlaySound(clip, false, 0.8f);
-            }
+            Helper.Sound.PlaySound(
+                (Helper.Sound.SoundType)soundType, volume);
         }
 
         public static void IntegrateModCall(

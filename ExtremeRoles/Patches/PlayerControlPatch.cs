@@ -515,7 +515,8 @@ namespace ExtremeRoles.Patches
                     break;
                 case RPCOperator.Command.PlaySound:
                     byte soundType = reader.ReadByte();
-                    RPCOperator.PlaySound(soundType);
+                    float volume = reader.ReadSingle();
+                    RPCOperator.PlaySound(soundType, volume);
                     break;
                 case RPCOperator.Command.IntegrateModCall:
                     RPCOperator.IntegrateModCall(ref reader);
