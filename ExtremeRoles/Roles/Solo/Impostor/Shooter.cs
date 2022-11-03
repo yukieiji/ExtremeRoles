@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -102,7 +104,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        public System.Action CreateAbilityAction(PlayerVoteArea instance)
+        public Action CreateAbilityAction(PlayerVoteArea instance)
         {
 
             byte target = instance.TargetPlayerId;
@@ -137,8 +139,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         private static void rpcPlayKillSound()
         {
-            Helper.Sound.RpcPlaySound(
-                Helper.Sound.SoundType.Kill);
+            Sound.RpcPlaySound(Sound.SoundType.Kill);
         }
 
         public void SetSprite(SpriteRenderer render)
@@ -247,7 +248,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 }
 
                 meetingShootText.text = string.Format(
-                    Helper.Translation.GetString("shooterShootStatus"),
+                    Translation.GetString("shooterShootStatus"),
                     this.curShootNum, this.maxShootNum,
                     this.maxMeetingShootNum - this.shootCounter);
                 meetingShootText.gameObject.SetActive(true);
@@ -285,6 +286,80 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 createText();
             }
             updateText();
+        }
+
+        public override string GetColoredRoleName(bool isTruthColor = false)
+        {
+            if (isTruthColor || IsAwake)
+            {
+                return base.GetColoredRoleName();
+            }
+            else
+            {
+                return Design.ColoedString(
+                    Palette.ImpostorRed, Translation.GetString(RoleTypes.Impostor.ToString()));
+            }
+        }
+        public override string GetFullDescription()
+        {
+            if (IsAwake)
+            {
+                return Translation.GetString(
+                    $"{this.Id}FullDescription");
+            }
+            else
+            {
+                return Translation.GetString(
+                    $"{RoleTypes.Impostor}FullDescription");
+            }
+        }
+
+        public override string GetImportantText(bool isContainFakeTask = true)
+        {
+            if (IsAwake)
+            {
+                return base.GetImportantText(isContainFakeTask);
+
+            }
+            else
+            {
+                return string.Concat(new string[]
+                {
+                    FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                        StringNames.ImpostorTask, Array.Empty<Il2CppSystem.Object>()),
+                    "\r\n",
+                    Palette.ImpostorRed.ToTextColor(),
+                    FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                        StringNames.FakeTasks, Array.Empty<Il2CppSystem.Object>()),
+                    "</color>"
+                });
+            }
+        }
+
+        public override string GetIntroDescription()
+        {
+            if (IsAwake)
+            {
+                return base.GetIntroDescription();
+            }
+            else
+            {
+                return Design.ColoedString(
+                    Palette.ImpostorRed,
+                    CachedPlayerControl.LocalPlayer.Data.Role.Blurb);
+            }
+        }
+
+        public override Color GetNameColor(bool isTruthColor = false)
+        {
+            if (isTruthColor || IsAwake)
+            {
+                return base.GetNameColor(isTruthColor);
+            }
+            else
+            {
+                return Palette.ImpostorRed;
+            }
         }
 
         public override bool TryRolePlayerKillTo(
@@ -444,7 +519,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
-            this.chargeTimerText = Object.Instantiate(
+            this.chargeTimerText = UnityEngine.Object.Instantiate(
                 hudManager.KillButton.cooldownTimerText,
                 hudManager.KillButton.transform.parent);
 
@@ -453,7 +528,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 hudManager.UseButton.transform.localPosition + new Vector3(-2.0f, -0.125f, 0);
             this.chargeTimerText.gameObject.SetActive(true);
 
-            this.chargeInfoText = Object.Instantiate(
+            this.chargeInfoText = UnityEngine.Object.Instantiate(
                 hudManager.KillButton.cooldownTimerText,
                 this.chargeTimerText.transform);
             this.chargeInfoText.enableWordWrapping = false;
