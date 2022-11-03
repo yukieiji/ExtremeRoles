@@ -515,7 +515,8 @@ namespace ExtremeRoles.Patches
                     break;
                 case RPCOperator.Command.PlaySound:
                     byte soundType = reader.ReadByte();
-                    RPCOperator.PlaySound(soundType);
+                    float volume = reader.ReadSingle();
+                    RPCOperator.PlaySound(soundType, volume);
                     break;
                 case RPCOperator.Command.IntegrateModCall:
                     RPCOperator.IntegrateModCall(ref reader);
@@ -1124,6 +1125,20 @@ namespace ExtremeRoles.Patches
         public static void Postfix()
         {
             OptionHolder.ShareOptionSelections();
+        }
+    }
+    
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.RemoveTask))]
+    public static class PlayerControlRemoveTaskPatch
+    {
+        public static void Prefix()
+        {
+            Manager.HudManagerUpdatePatch.SetBlockUpdate(true);
+            FastDestroyableSingleton<HudManager>.Instance.taskDirtyTimer = 0.0f;
+        }
+        public static void Postfix()
+        {
+            Manager.HudManagerUpdatePatch.SetBlockUpdate(false);
         }
     }
 

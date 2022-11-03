@@ -149,23 +149,25 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         {
             resetInfo();
 
+            byte playerId = this.votePlayerInfo.PlayerId;
+
             SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
-            SingleRoleBase targetRole = ExtremeRoleManager.GameRole[this.votePlayerInfo.PlayerId];
+            SingleRoleBase targetRole = ExtremeRoleManager.GameRole[playerId];
 
             GhostRoleBase ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
-            bool targetPlyaerIsGhostRole = ExtremeGhostRoleManager.GameRole.TryGetValue(
-                this.votePlayerInfo.PlayerId,
-                out GhostRoleBase targetGhostRole);
+            ExtremeGhostRoleManager.GameRole.TryGetValue(
+                playerId, out GhostRoleBase targetGhostRole);
+            bool isLocalPlayerGhostRole = ghostRole != null;
 
-            bool blockCondition = isBlockCondition(role) || targetPlyaerIsGhostRole;
-            bool meetingInfoBlock = role.IsBlockShowMeetingRoleInfo() || targetPlyaerIsGhostRole;
+            bool blockCondition = isBlockCondition(role) || isLocalPlayerGhostRole;
+            bool meetingInfoBlock = role.IsBlockShowMeetingRoleInfo() || isLocalPlayerGhostRole;
 
             if (role is MultiAssignRoleBase multiRole &&
                 multiRole.AnotherRole != null)
             {
                 blockCondition = blockCondition || isBlockCondition(multiRole.AnotherRole);
                 meetingInfoBlock = 
-                    meetingInfoBlock || multiRole.AnotherRole.IsBlockShowPlayingRoleInfo();
+                    meetingInfoBlock || multiRole.AnotherRole.IsBlockShowMeetingRoleInfo();
             }
 
             setPlayerNameTag(role, targetRole);
@@ -261,7 +263,8 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             }
             else
             {
-                this.MeetingInfo.text = MeetingHud.Instance.state == MeetingHud.VoteStates.Results ? 
+                this.MeetingInfo.text = 
+                    MeetingHud.Instance.state == MeetingHud.VoteStates.Results ? 
                     "" : getMeetingInfo(targetRole, targetGhostRole);
                 this.MeetingInfo.gameObject.SetActive(!isMeetingInfoBlock);
             }

@@ -522,7 +522,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
             else if (!this.canResurrect || this.isExild)
             {
-                return this.canResurrectAfterDeath;
+                return this.canResurrectAfterDeath || this.activateResurrectTimer;
             }
             else
             {

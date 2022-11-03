@@ -111,11 +111,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         private static void rpcPlayKillSound()
         {
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.PlaySound,
-                new List<byte> { (byte)RPCOperator.SoundType.Kill });
-            RPCOperator.PlaySound((byte)RPCOperator.SoundType.Kill);
+            Helper.Sound.RpcPlaySound(
+                Helper.Sound.SoundType.Kill);
         }
 
         public void SetSprite(SpriteRenderer render)
