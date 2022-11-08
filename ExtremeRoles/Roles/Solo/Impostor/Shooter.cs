@@ -201,6 +201,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             if (!this.isAwake)
             {
+                meetingInfoSetActive(false);
+                chargeInfoSetActive(false);
+
                 int impNum = 0;
 
                 foreach (var player in GameData.Instance.AllPlayers.GetFastEnumerator())
@@ -251,15 +254,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     Translation.GetString("shooterShootStatus"),
                     this.curShootNum, this.maxShootNum,
                     this.maxMeetingShootNum - this.shootCounter);
-                meetingShootText.gameObject.SetActive(true);
+                meetingInfoSetActive(true);
                 chargeInfoSetActive(false);
             }
             else
             {
-                if (meetingShootText != null)
-                {
-                    meetingShootText.gameObject.SetActive(false);
-                }
+                meetingInfoSetActive(false);
             }
 
             if (rolePlayer.CanMove)
@@ -511,6 +511,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             if (this.chargeInfoText != null)
             {
                 this.chargeInfoText.gameObject.SetActive(active);
+            }
+        }
+
+        private void meetingInfoSetActive(bool active)
+        {
+            if (meetingShootText != null)
+            {
+                meetingShootText.gameObject.SetActive(active);
             }
         }
 
