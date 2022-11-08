@@ -88,6 +88,7 @@ namespace ExtremeRoles
             EngineerUseImpostorVent,
             CanKillVentInPlayer,
             ParallelMedBayScans,
+            IsAutoSelectRandomSpawn,
             
             IsRemoveAdmin,
             IsRemoveAirShipArchiveAdmin,
@@ -218,6 +219,9 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.IsRemoveAngleIcon].GetValue();
             Ship.IsBlockGAAbilityReport = AllOption[
                 (int)CommonOptionKey.IsBlockGAAbilityReport].GetValue();
+
+            Ship.IsAutoSelectRandomSpawn = AllOption[
+                (int)CommonOptionKey.IsAutoSelectRandomSpawn].GetValue();
 
             Ship.IsRemoveAdmin = AllOption[
                 (int)CommonOptionKey.IsRemoveAdmin].GetValue();
@@ -470,10 +474,13 @@ namespace ExtremeRoles
                 CommonOptionKey.EngineerUseImpostorVent.ToString(),
                 false, ventOption, invert: true);
 
-
             new BoolCustomOption(
                 (int)CommonOptionKey.ParallelMedBayScans,
                 CommonOptionKey.ParallelMedBayScans.ToString(), false);
+
+            new BoolCustomOption(
+                (int)CommonOptionKey.IsAutoSelectRandomSpawn,
+                CommonOptionKey.IsAutoSelectRandomSpawn.ToString(), false);
 
             var adminOpt = new BoolCustomOption(
                 (int)CommonOptionKey.IsRemoveAdmin,
@@ -613,6 +620,8 @@ namespace ExtremeRoles
             public static bool DisableVent = false;
             public static bool EngineerUseImpostorVent = false;
             public static bool CanKillVentInPlayer = false;
+
+            public static bool IsAutoSelectRandomSpawn = false;
 
             public static bool IsRemoveAdmin = false;
             public static bool IsRemoveAirShipCockpitAdmin = false;
