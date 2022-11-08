@@ -16,9 +16,9 @@ AmongUsの上級者(初心者)向けのロール追加MOD、主な特徴とし�
 * MODオプションのインポート/エクスポート機能
 * MODの更新/バージョンチェック機能
 * 互換性のあるMODのインストール/アップデートチェック/アンインストール機能
-* 多言語対応(現在は日本語と简体中文のみ/only Japanese and SChinese now!!)
+* 多言語対応(現在は英語と日本語、简体中文のみ/only English and Japanese, SChinese now!!)
 
-## 追加役職一覧(Extreme Roles v3.3.0.0時点、今後も追加予定)
+## 追加役職一覧(Extreme Roles v4.0.0.2時点、今後も追加予定)
 #### ホスト役職
 - シオン
 #### 通常役職
@@ -79,18 +79,27 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 
 ## リリーススケジュール
 
+- Extreme Roles v4.1.0.0
+  - Extreme Roles 1周年記念アップデート
+  - 感謝の気持ちを込めて要望の高い役職の実装を行う予定です
+
 ## 現在実装検討中の役職及び機能
 - ???(第三陣営)
    - マップ内の指定箇所に魔法陣を貼ることで勝利する。魔法陣内のプレイヤーの移動速度が減少する
    - 夏までに実装できたら良いなぁ(希望的観測)
    - 現在(2022/02/28)役職名とAmongUsとの兼ね合い、仕様検討中
 
-- 幽霊役職の最終結果表示
-   - ゲーム中の表示だと色々と被って表示されみやすさが悪いため別途仕様を検討中
+- 死亡時役職が持つ固有の情報を表示出来るようにする
+   - ラバーズ同士、ヤンデレの想い人、各SKやサーヴァントが誰所属なのかを表示出来るようにする
+   - 現在(2022/09/06)：計算量や表示方法的にスマートな方法を模索中
+
+- 最終結果表示の拡張
+   - 幽霊役職の表示や上記の役職の固有の情報を表示出来るようにしたい
+   - 今の最終結果表示だと色々と被って表示されみやすさが悪いため別途仕様を検討中
+   - 現在(2022/09/06)：幽霊役職の表示部分はv3.3.0.0で実装、それ以外は上の部分が完成しない限り出来ない
 
 - タスクマスターに第三陣営らしい能力追加
    - 第三陣営らしくクルーとインポスター両方に害がある能力を追加します
-- 死亡時役職が持つ固有の情報を表示出来るようにする
 
 
 ## 実装済み機能と役職
@@ -114,7 +123,11 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 
 |  AmongUs バージョン  |  Extreme Roles バージョン  |
 | ---- | ---- |
-|  v2022.06.21s/v2022.06.22e/v2022.07.12s/v2022.07.12e  |  v3.0.0.0 ～ v3.3.0.0 |
+|  v2022.10.25s/v2022.10.25e  |  v4.0.0.0 ～ v4.0.0.2 |
+|  v2022.10.18s/v2022.10.18e  |  v3.3.0.3 ～ v3.3.0.6 |
+|  v2022.08.23s/v2022.08.23e/v2022.08.24s/v2022.08.24e/v2022.09.20s/v2022.09.20e  |  v3.2.2.5 ～ v3.3.0.2 |
+|  v2022.08.23s/v2022.08.23e/v2022.08.24s/v2022.08.24e  |  v3.2.2.0 ～ v3.2.2.4 |
+|  v2022.06.21s/v2022.06.22e/v2022.07.12s/v2022.07.12e  |  v3.0.0.0 ～ v3.2.1.4 |
 |  v2022.03.29s/v2022.03.29e/v2022.04.19e  |  v2.0.5.0 ～ v2.2.0.2 |
 |  v2022.03.29s/v2022.03.29e  |  v1.99.90.0 ～ v2.0.4.0 |
 |  v2021.12.15s/v2022.02.08s/v2022.02.23s/v2022.02.24s/v2021.12.15e/v2022.02.24e  |  v1.18.2.0 ～ v1.19.0.0 |
@@ -123,11 +136,15 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 
 
 ## クレジット&Thanks
-- TheOtherRoles - 開発当時から[TOR](https://github.com/Eisbison/TheOtherRoles)及び[TOR-GM](https://github.com/yukinogatari/TheOtherRoles-GM)のコード(ロールに関するところ以外(オプションやパッチ等))を参考、引用、改変して開発しています。TORがなければ開発をこのMODを開発することは不可能でした。また、バウンティハンターのアイディア元
-- [Jackal and Sidekick](https://www.twitch.tv/dhalucard) - Dhalucard氏によって作成されたMOD、ジャッカルとサイドキックのアイディア元
-- [Sheriff-Mod](https://github.com/Woodi-dev/Among-Us-Sheriff-Mod) - Woodi-dev氏によって作成されたMOD、シェリフのアイディア元
-- [Among-Us-Love-Couple-Mod](https://www.curseforge.com/among-us/all-mods/love-couple-mod) - Woodi-dev氏によって作成されたMOD、ラバーズのアイディア元
-- [TooManyRolesMods](https://github.com/Hardel-DW/TooManyRolesMods) - Hardel-DW氏によって作成されたMOD、タイムマスターのアイディア元
+- TheOtherRoles - 開発当時から[TOR](https://github.com/Eisbison/TheOtherRoles)及び[TOR-GM](https://github.com/yukinogatari/TheOtherRoles-GM)のコード(ロールに関するところ以外(オプションやパッチ等))を参考、引用、改変して開発しています。TORがなければ開発をこのMODを開発することは不可能でした。また、バウンティハンター、カーペンター、シューター、キャプテンのアイディア元
+- [Jackal and Sidekick](https://www.twitch.tv/dhalucard) - **Dhalucard**氏によって作成されたMOD、ジャッカルとサイドキックのアイディア元
+- [Sheriff-Mod](https://github.com/Woodi-dev/Among-Us-Sheriff-Mod) - **Woodi-dev**氏によって作成されたMOD、シェリフのアイディア元
+- [Among-Us-Love-Couple-Mod](https://www.curseforge.com/among-us/all-mods/love-couple-mod) - **Woodi-dev**氏によって作成されたMOD、ラバーズのアイディア元
+- [TooManyRolesMods](https://github.com/Hardel-DW/TooManyRolesMods) - **Hardel-DW**氏によって作成されたMOD、タイムマスターのアイディア元
+- [TownOfUs](https://github.com/slushiegoose/Town-Of-Us) - **Slushiegoose**氏によって作成されたMOD、アンブレイヤーのアイディア元
+- [Jester](https://github.com/Maartii/Jester) - **Maartii**氏によって作成されたMOD、ジェスターのアイディア元
+- [Goose-Goose-Duck](https://store.steampowered.com/app/1568590/Goose_Goose_Duck) - **Slushygoose**氏によって作成されたMOD、イーターのアイディア元
+
 
 - レジスタンス:アヴァロン - マーリン、アサシンのアイディア元
 - シャドウハンターズ - アリス、オーバーローダーのアイディア元
@@ -147,5 +164,6 @@ EXRole can support multiple languages, but only Japanese is implemented because 
 
 |  言語名/Languages  |  対応状況/Status |
 | ---- | ---- |
+|  英語/English  | 部分的に翻訳済み/Mostly Translated |
 |  日本語/Japanese  |  完全翻訳済み/Fully Translated  |
-|  简体中文/SChinese  |  完全翻訳済み/Fully Translated  |
+|  简体中文/SChinese  |  部分的に翻訳済み/Mostly Translated  |
