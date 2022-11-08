@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
@@ -67,6 +66,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private bool isNoneAwakeWhenShoot = false;
         private bool canShootThisMeeting = false;
         private bool canShootSelfCallMeeting = false;
+
+        private bool awakedCallMeeting = false;
 
         private TextMeshPro chargeInfoText = null;
         private TextMeshPro chargeTimerText = null;
@@ -173,6 +174,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.HasOtherVison = false;
                 this.HasOtherKillCool = false;
                 this.HasOtherKillRange = false;
+                this.CanCallMeeting = true;
             }
         }
 
@@ -217,6 +219,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.HasOtherVison = this.isAwakedHasOtherVision;
                     this.HasOtherKillCool = this.isAwakedHasOtherKillCool;
                     this.HasOtherKillRange = this.isAwakedHasOtherKillRange;
+                    this.CanCallMeeting = this.awakedCallMeeting;
                     this.curKillCount = 0;
                 }
                 return;
@@ -442,7 +445,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.isNoneAwakeWhenShoot = allOps[
                 GetRoleOptionId(ShooterOption.NoneAwakeWhenShoot)].GetValue();
 
-            this.CanCallMeeting = allOps[
+            this.awakedCallMeeting = allOps[
                 GetRoleOptionId(ShooterOption.CanCallMeeting)].GetValue();
             this.canShootSelfCallMeeting = allOps[
                 GetRoleOptionId(ShooterOption.CanShootSelfCallMeeting)].GetValue();
@@ -492,6 +495,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.HasOtherVison = this.isAwakedHasOtherVision;
                 this.HasOtherKillCool = this.isAwakedHasOtherKillCool;
                 this.HasOtherKillRange = this.isAwakedHasOtherKillRange;
+                this.CanCallMeeting = this.awakedCallMeeting;
             }
 
             this.timer = this.chargeTime;
