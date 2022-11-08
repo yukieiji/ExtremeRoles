@@ -5,7 +5,7 @@
         <DebugType>embedded</DebugType>
       <!--<Version>4.0.0.2</Version>-->
         <VersionPrefix>4.0.1</VersionPrefix>
-      <VersionSuffix>Awakening Part2</VersionSuffix> 
+      <VersionSuffix>AwakeningPart2</VersionSuffix> 
         <Description>Extreme Roles for Advanced user</Description>
         <Authors>yukieiji</Authors>
         <Configurations>Debug;Release</Configurations>
