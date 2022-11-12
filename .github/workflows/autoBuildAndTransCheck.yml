@@ -1,0 +1,39 @@
+name: AutoBuildAndTransCheck
+
+on: pull_request
+
+jobs:
+  build_check:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: SetupNuget
+        uses: nuget/setup-nuget@v1
+      - name: RestoreNugetPackage
+        run: nuget restore ExtremeRoles.sln
+      - name: SetupPython
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+          architecture: 'x64'
+      - name: InstallPythonLibrary
+        run: pip install -r requirements.txt
+      - name: AddMsBuildToPATH
+        uses: microsoft/setup-msbuild@v1.0.2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.x
+      - name: RunBuild
+        id: build
+        continue-on-error: true
+        run: msbuild ExtremeRoles.sln -p:Configuration=Release
+      - name: PostComments
+        uses: peter-evans/create-or-update-comment@v1
+        with: 
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            Build Result：${{ steps.build.outcome }}
