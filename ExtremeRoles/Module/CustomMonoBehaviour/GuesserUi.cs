@@ -67,11 +67,19 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                     this.isActive = false;
                     base.gameObject.SetActive(false);
                 }));
+            this.closeButton.onClick.AddListener(
+                (UnityAction)(() =>
+                {
+                    this.isActive = false;
+                    this.confirmMenu.gameObject.SetActive(false);
+                    base.gameObject.SetActive(false);
+                }));
             this.confirmMenu.gameObject.SetActive(false);
         }
 
         public void OnEnable()
         {
+            this.isActive = true;
             setMeetingObjectActive(false);
         }
         public void OnDisable()
@@ -110,11 +118,9 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             this.confirmMenu.SetTextFontMaterial(baseText);
             this.buttonPrefab.SetTextFontMaterial(baseText);
 
-            Destroy(this.title.font);
             Destroy(this.title.fontMaterial);
             
-            this.title.font= Instantiate(
-                baseText.font, this.title.transform);
+            this.title.font = baseText.font;
             this.title.fontMaterial = Instantiate(
                 baseText.fontMaterial, this.title.transform);
             foreach (var button in this.buttons)

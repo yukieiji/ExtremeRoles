@@ -73,11 +73,9 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour.UIPart
 
         public void SetTextFontMaterial<T>(T baseText) where T : TMP_Text
         {
-            Destroy(this.text.font);
             Destroy(this.text.fontMaterial);
 
-            this.text.font = Instantiate(
-                baseText.font, this.text.transform);
+            this.text.font = baseText.font;
             this.text.fontMaterial = Instantiate(
                 baseText.fontMaterial, this.text.transform);
 
