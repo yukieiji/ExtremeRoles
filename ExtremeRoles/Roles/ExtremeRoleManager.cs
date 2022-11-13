@@ -32,6 +32,7 @@ namespace ExtremeRoles.Roles
         Assistant,
         DetectiveApprentice,
         Sharer,
+        Guesser,
 
         SpecialCrew,
         Sheriff,
@@ -105,6 +106,7 @@ namespace ExtremeRoles.Roles
         Supporter,
         Sharer,
         Traitor,
+        Guesser,
     }
 
     public enum RoleGameOverReason
@@ -242,6 +244,7 @@ namespace ExtremeRoles.Roles
                 {(byte)CombinationRoleType.Supporter      , new SupporterManager()},
                 {(byte)CombinationRoleType.Sharer         , new SharerManager()   },
                 {(byte)CombinationRoleType.Traitor        , new TraitorManager()  },
+                {(byte)CombinationRoleType.Guesser        , new GuesserManager()  },
             };
 
         public static Dictionary<
