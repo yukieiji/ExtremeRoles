@@ -391,7 +391,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             {
                 caller.WriteByte(rolePlayer.PlayerId);
                 caller.WriteByte(this.Target.PlayerId);
-                caller.WriteByte((byte)ExtremeRoleManager.ReplaceOperation.ResetVanillaRole);
+                caller.WriteByte(
+                    (byte)ExtremeRoleManager.ReplaceOperation.ForceReplaceToSidekick);
             }
             TargetToSideKick(rolePlayer.PlayerId, targetPlayerId);
             return true;
