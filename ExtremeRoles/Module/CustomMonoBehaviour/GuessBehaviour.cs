@@ -3,6 +3,7 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour
 {
@@ -13,6 +14,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         {
             public ExtremeRoleId Id;
             public ExtremeRoleId AnothorId;
+            public ExtremeRoleType Team;
         }
 
         private byte playerId;
