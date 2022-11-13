@@ -268,7 +268,9 @@ namespace ExtremeRoles.Roles.Combination
             {
                 missGuess();
             }
-            else if (roleInfo.Id == roleId || roleInfo.AnothorId == anotherRoleId)
+            else if (
+                roleInfo.Id == roleId && 
+                roleInfo.AnothorId == anotherRoleId)
             {
                 Player.RpcUncheckMurderPlayer(
                     CachedPlayerControl.LocalPlayer.PlayerId,
