@@ -72,7 +72,7 @@ namespace ExtremeRoles.Roles.Combination
             void Add(
                 ExtremeRoleId id,
                 ExtremeRoleType team,
-                ExtremeRoleId another=ExtremeRoleId.Null)
+                ExtremeRoleId another = ExtremeRoleId.Null)
             {
                 result.Add(
                     new GuessBehaviour.RoleInfo()
@@ -110,8 +110,8 @@ namespace ExtremeRoles.Roles.Combination
                     exId != ExtremeRoleId.Jackal)
                 {
                     Add(exId, team);
+                    separetedRoleId[team].Add(exId);
                 }
-                separetedRoleId[team].Add(exId);
                 switch (exId)
                 {
                     case ExtremeRoleId.Jackal:
@@ -204,7 +204,7 @@ namespace ExtremeRoles.Roles.Combination
                 {
                     continue;
                 }
-                if (multiAssign || id != (byte)CombinationRoleType.Traitor)
+                if (multiAssign && id != (byte)CombinationRoleType.Traitor)
                 {
                     foreach (var role in roleMng.Roles)
                     {
@@ -221,7 +221,19 @@ namespace ExtremeRoles.Roles.Combination
                 }
             }
 
-            return result.OrderBy(x => x.Team).ToList();
+            return result.OrderBy(
+                (GuessBehaviour.RoleInfo x) =>
+                {
+                    ExtremeRoleType team = x.Team;
+                    if (team == ExtremeRoleType.Neutral)
+                    {
+                        return 5000;
+                    }
+                    else
+                    {
+                        return (int)team;
+                    }
+                }).ToList();
         }
 
         private static void missGuess()
@@ -321,7 +333,7 @@ namespace ExtremeRoles.Roles.Combination
 
                     this.guesserUi.gameObject.SetActive(true);
                     this.guesserUi.SetTextFontMaterial(
-                        FastDestroyableSingleton<HudManager>.Instance.TaskText);
+                        instance.NameText);
                     this.guesserUi.SetTitle(
                         Translation.GetString("guesserUiTitle"));
                     this.guesserUi.InitButton(GuessAction, createRoleInfo());
