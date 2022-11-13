@@ -135,7 +135,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                         this.confirmMenu.SetOkButtonClickAction(
                             guess.GetGuessAction());
                     }));
-                button.SetButtonText(guess.GetButtonText());
+                button.SetButtonText(guess.GetRoleName());
                 this.infos.Add(guess);
             }
         }
