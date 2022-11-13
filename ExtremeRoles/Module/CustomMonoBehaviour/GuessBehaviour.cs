@@ -15,6 +15,61 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             public ExtremeRoleId Id;
             public ExtremeRoleId AnothorId;
             public ExtremeRoleType Team;
+
+            public string GetRoleName()
+            {
+                if (this.AnothorId == ExtremeRoleId.Null)
+                {
+                    return Design.ColoedString(
+                        getRoleColor(this.Id),
+                        Translation.GetString(this.Id.ToString()));
+                }
+                else
+                {
+                    return string.Concat(
+                        Design.ColoedString(
+                            getRoleColor(this.Id),
+                            Translation.GetString(this.Id.ToString())),
+                        Design.ColoedString(
+                            Palette.White,
+                            " + "),
+                        Design.ColoedString(
+                            getRoleColor(this.AnothorId),
+                            Translation.GetString(this.AnothorId.ToString())));
+                }
+            }
+            private static Color getRoleColor(ExtremeRoleId target)
+            {
+                switch (target)
+                {
+                    case ExtremeRoleId.Sidekick:
+                        return ColorPalette.JackalBlue;
+                    case ExtremeRoleId.Servant:
+                        return ColorPalette.QueenWhite;
+                    case ExtremeRoleId.Doll:
+                        return Palette.ImpostorRed;
+                    default:
+                        if (ExtremeRoleManager.NormalRole.TryGetValue(
+                            (int)target, out SingleRoleBase role))
+                        {
+                            return role.GetNameColor(true);
+                        }
+                        else
+                        {
+                            foreach(var roleMng in ExtremeRoleManager.CombRole.Values)
+                            {
+                                foreach(var combRole in roleMng.Roles)
+                                {
+                                    if (combRole.Id == target)
+                                    {
+                                        return combRole.GetNameColor(true);
+                                    }
+                                }
+                            }
+                            return Palette.White;
+                        }
+                }
+            }
         }
 
         private byte playerId;
@@ -39,9 +94,9 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             this.guessAction = guessAction;
         }
 
-        public string GetButtonText()
+        public string GetRoleName()
         {
-            return string.Empty;
+            return this.info.GetRoleName();
         }
 
         public string GetConfirmText()
