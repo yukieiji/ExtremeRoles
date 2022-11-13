@@ -56,13 +56,13 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             // IsImpostor
 
             PlayerStatus finalStatus = PlayerStatus.Alive;
+            GameOverReason reson = ExtremeRolesPlugin.ShipState.EndReason;
+            Dictionary<byte, DeadInfo> info = ExtremeRolesPlugin.ShipState.DeadPlayerInfo;
+
             if (info.TryGetValue(playerId, out DeadInfo deadInfo))
             {
                 finalStatus = deadInfo.Reason;
             }
-
-            GameOverReason reson = ExtremeRolesPlugin.ShipState.EndReason;
-            Dictionary<byte, DeadInfo> info = ExtremeRolesPlugin.ShipState.DeadPlayerInfo;
 
             if (reson == GameOverReason.ImpostorBySabotage &&
                 !role.IsImpostor())
