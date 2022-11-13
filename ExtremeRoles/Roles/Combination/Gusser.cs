@@ -337,8 +337,6 @@ namespace ExtremeRoles.Roles.Combination
 
                     this.guesserUi.gameObject.SetActive(true);
                     this.guesserUi.InitButton(GuessAction, createRoleInfo());
-                    this.guesserUi.SetTextFontMaterial(
-                        instance.NameText);
                     this.guesserUi.SetTitle(
                         Translation.GetString("guesserUiTitle"));
                 }

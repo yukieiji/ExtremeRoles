@@ -114,22 +114,6 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             this.backGround.sprite = sprite;
         }
 
-        public void SetTextFontMaterial<T>(T baseText) where T : TMP_Text
-        {
-            this.confirmMenu.SetTextFontMaterial(baseText);
-            this.buttonPrefab.SetTextFontMaterial(baseText);
-
-            Destroy(this.title.fontMaterial);
-            
-            this.title.font = baseText.font;
-            this.title.fontMaterial = Instantiate(
-                baseText.fontMaterial, this.title.transform);
-            foreach (var button in this.buttons)
-            {
-                button.SetTextFontMaterial(baseText);
-            }
-        }
-
         public void InitButton(
             Action<GuessBehaviour.RoleInfo, byte> gussAction,
             List<GuessBehaviour.RoleInfo> guessRoleInfos)

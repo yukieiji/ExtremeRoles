@@ -70,18 +70,5 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour.UIPart
         {
             this.cancelButton.SetButtonClickAction(act);
         }
-
-        public void SetTextFontMaterial<T>(T baseText) where T : TMP_Text
-        {
-            Destroy(this.text.fontMaterial);
-
-            this.text.font = baseText.font;
-            this.text.fontMaterial = Instantiate(
-                baseText.fontMaterial, this.text.transform);
-
-            this.okButton.SetTextFontMaterial(baseText);
-            this.cancelButton.SetTextFontMaterial(baseText);
-        }
-
     }
 }
