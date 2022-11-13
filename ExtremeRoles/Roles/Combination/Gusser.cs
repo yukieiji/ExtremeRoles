@@ -106,7 +106,7 @@ namespace ExtremeRoles.Roles.Combination
                 ExtremeRoleType team = role.Team;
 
                 // クイーンとサーヴァントとジャッカルとサイドキックはニュートラルの最後に追加する(役職のパターンがいくつかあるため)
-                if (exId != ExtremeRoleId.Queen ||
+                if (exId != ExtremeRoleId.Queen &&
                     exId != ExtremeRoleId.Jackal)
                 {
                     Add(exId, team);
@@ -211,6 +211,10 @@ namespace ExtremeRoles.Roles.Combination
                         ExtremeRoleType team = role.Team;
                         ListAdd(role.Id, team, separetedRoleId[team]);
                     }
+                }
+                else if (roleMng is FlexibleCombinationRoleManagerBase flexMng)
+                {
+                    Add(flexMng.BaseRole.Id, flexMng.BaseRole.Team);
                 }
                 else
                 {
