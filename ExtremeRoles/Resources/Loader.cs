@@ -107,6 +107,7 @@ namespace ExtremeRoles.Resources
     {
 
         private static Dictionary<string, Sprite> cachedSprite = new Dictionary<string, Sprite> ();
+        private static Dictionary<string, AssetBundle> cachedBundle = new Dictionary<string, AssetBundle>();
 
         public static Sprite CreateSpriteFromResources(
             string path, float pixelsPerUnit=115f)
@@ -133,6 +134,21 @@ namespace ExtremeRoles.Resources
                 Logging.Debug($"Error loading sprite from path: {path}");
             }
             return null;
+        }
+
+        public static GameObject GetGameObjectFromResources(
+            string bundleName, string objName)
+        {
+            if (!cachedBundle.TryGetValue(bundleName, out AssetBundle bundle))
+            {
+                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(
+                    bundleName))
+                {
+                    bundle = AssetBundle.LoadFromStream(stream.ToIl2Cpp());
+                    cachedBundle.Add(bundleName, bundle);
+                }
+            }
+            return bundle.LoadAsset(objName).Cast<GameObject>();
         }
 
         private static unsafe Texture2D createTextureFromResources(string path)
