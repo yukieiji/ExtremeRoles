@@ -26,6 +26,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
         private bool isActive = false;
         private List<GuessBehaviour> infos = new List<GuessBehaviour>();
+        private List<ButtonWrapper> buttons = new List<ButtonWrapper>();
 
         public GuesserUi(IntPtr ptr) : base(ptr) { }
 
@@ -112,6 +113,10 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             Destroy(this.title.fontMaterial);
             this.title.fontMaterial = Instantiate(
                 baseText.fontMaterial, this.title.transform);
+            foreach (var button in this.buttons)
+            {
+                button.SetTextFontMaterial(baseText);
+            }
         }
 
         public void InitButton(
@@ -119,6 +124,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             List<GuessBehaviour.RoleInfo> guessRoleInfos)
         {
             this.infos.Clear();
+            this.buttons.Clear();
             foreach (var roleInfo in guessRoleInfos)
             {
                 ButtonWrapper button = Instantiate(
@@ -138,6 +144,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                     }));
                 button.SetButtonText(guess.GetRoleName());
                 this.infos.Add(guess);
+                this.buttons.Add(button);
             }
         }
 

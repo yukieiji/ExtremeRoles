@@ -332,11 +332,11 @@ namespace ExtremeRoles.Roles.Combination
                     this.guesserUi = obj.GetComponent<GuesserUi>();
 
                     this.guesserUi.gameObject.SetActive(true);
+                    this.guesserUi.InitButton(GuessAction, createRoleInfo());
                     this.guesserUi.SetTextFontMaterial(
                         instance.NameText);
                     this.guesserUi.SetTitle(
                         Translation.GetString("guesserUiTitle"));
-                    this.guesserUi.InitButton(GuessAction, createRoleInfo());
                 }
                 this.guesserUi.SetTarget(instance.TargetPlayerId);
                 this.guesserUi.gameObject.SetActive(true);
