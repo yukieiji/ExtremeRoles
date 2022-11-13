@@ -59,14 +59,15 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                     this.isActive = true;
                     this.confirmMenu.gameObject.SetActive(false);
                 }));
-
-            this.closeButton.onClick.RemoveAllListeners();
-            this.closeButton.onClick.AddListener(
+            this.confirmMenu.SetOkButtonClickAction(
                 (UnityAction)(() =>
                 {
                     this.isActive = false;
+                    this.confirmMenu.gameObject.SetActive(false);
                     base.gameObject.SetActive(false);
                 }));
+
+            this.closeButton.onClick.RemoveAllListeners();
             this.closeButton.onClick.AddListener(
                 (UnityAction)(() =>
                 {
