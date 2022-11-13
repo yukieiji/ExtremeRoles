@@ -145,6 +145,7 @@ namespace ExtremeRoles.Resources
                     bundleName))
                 {
                     bundle = AssetBundle.LoadFromStream(stream.ToIl2Cpp());
+                    bundle.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
                     cachedBundle.Add(bundleName, bundle);
                 }
             }
