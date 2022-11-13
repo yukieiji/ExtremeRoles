@@ -110,7 +110,11 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             this.confirmMenu.SetTextFontMaterial(baseText);
             this.buttonPrefab.SetTextFontMaterial(baseText);
 
+            Destroy(this.title.font);
             Destroy(this.title.fontMaterial);
+            
+            this.title.font= Instantiate(
+                baseText.font, this.title.transform);
             this.title.fontMaterial = Instantiate(
                 baseText.fontMaterial, this.title.transform);
             foreach (var button in this.buttons)
