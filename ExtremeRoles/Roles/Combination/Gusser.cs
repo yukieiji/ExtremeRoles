@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -8,6 +9,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Combination
 {
@@ -31,6 +33,13 @@ namespace ExtremeRoles.Roles.Combination
         private GameObject uiPrefab;
         private GuesserUi guesserUi;
 
+        private static HashSet<ExtremeRoleId> alwaysMissRole = new HashSet<ExtremeRoleId>()
+        {
+            ExtremeRoleId.Assassin,
+            ExtremeRoleId.Marlin,
+            ExtremeRoleId.Villain
+        };
+
         public Guesser(
             ) : base(
                 ExtremeRoleId.Guesser,
@@ -40,6 +49,47 @@ namespace ExtremeRoles.Roles.Combination
                 false, true, false, false,
                 tab: OptionTab.Combination)
         { }
+
+        private static void missGuess()
+        {
+            Player.RpcUncheckMurderPlayer(
+                CachedPlayerControl.LocalPlayer.PlayerId,
+                CachedPlayerControl.LocalPlayer.PlayerId,
+                byte.MinValue);
+            Sound.RpcPlaySound(Sound.SoundType.Kill);
+        }
+
+        public void GuessAction(GuessBehaviour.RoleInfo roleInfo, byte playerId)
+        {
+            // まず弾をへらす
+            this.bulletNum = this.bulletNum - 1;
+
+            var targetRole = ExtremeRoleManager.GameRole[playerId];
+            ExtremeRoleId roleId = targetRole.Id;
+            ExtremeRoleId anotherRoleId = ExtremeRoleId.Null;
+            if (targetRole is MultiAssignRoleBase multiRole &&
+                multiRole.AnotherRole != null)
+            {
+                anotherRoleId = multiRole.AnotherRole.Id;
+            }
+            
+            if (Solo.Crewmate.BodyGuard.TryGetShiledPlayerId(playerId, out byte _) ||
+                alwaysMissRole.Contains(targetRole.Id))
+            {
+                missGuess();
+            }
+            else if (roleInfo.Id == roleId || roleInfo.AnothorId == anotherRoleId)
+            {
+                Player.RpcUncheckMurderPlayer(
+                    CachedPlayerControl.LocalPlayer.PlayerId,
+                    playerId, byte.MinValue);
+                Sound.RpcPlaySound(Sound.SoundType.Kill);
+            }
+            else
+            {
+                missGuess();
+            }
+        }
 
         public void IntroBeginSetUp()
         {
@@ -97,8 +147,9 @@ namespace ExtremeRoles.Roles.Combination
 
                     this.guesserUi.gameObject.SetActive(true);
 
-                    this.guesserUi.SetTitle("TestTitle");
-                    this.guesserUi.InitButton(instance.TargetPlayerId);
+                    this.guesserUi.SetTitle(
+                        Translation.GetString("guesserUiTitle"));
+                    this.guesserUi.InitButton(GuessAction, new List<GuessBehaviour.RoleInfo>());
                 }
                 this.guesserUi.SetTarget(instance.TargetPlayerId);
                 this.guesserUi.gameObject.SetActive(true);
