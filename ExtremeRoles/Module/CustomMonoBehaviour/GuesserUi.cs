@@ -49,6 +49,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             this.isActive = true;
 
             this.confirmMenu.Awake();
+            this.buttonPrefab.Awake();
             this.confirmMenu.ResetButtonAction();
 
             this.confirmMenu.SetCancelButtonClickAction(
