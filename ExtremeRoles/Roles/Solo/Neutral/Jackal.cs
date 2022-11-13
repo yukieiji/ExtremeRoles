@@ -308,9 +308,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             byte targetPlayerId)
         {
 
-            if (targetRole.Id == ExtremeRoleId.Sidekick &&
-                this.IsSameControlId(targetRole) &&
-                this.SidekickPlayerId.Contains(targetPlayerId))
+            if (((
+                    targetRole.Id == ExtremeRoleId.Sidekick &&
+                    this.SidekickPlayerId.Contains(targetPlayerId)) ||
+                (
+                    targetRole.Id == ExtremeRoleId.Jackal
+                )) && this.IsSameControlId(targetRole))
             {
                 return ColorPalette.JackalBlue;
             }
