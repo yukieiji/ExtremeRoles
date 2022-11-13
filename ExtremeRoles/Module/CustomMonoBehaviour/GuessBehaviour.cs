@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
@@ -16,28 +17,46 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             public ExtremeRoleId AnothorId;
             public ExtremeRoleType Team;
 
+            private static HashSet<RoleTypes> vanilaCrew = new HashSet<RoleTypes>()
+            {
+                RoleTypes.Crewmate,
+                RoleTypes.Scientist,
+                RoleTypes.Engineer,
+            };
+
             public string GetRoleName()
             {
+                string basicRoleName = convertIdToRoleName(this.Id);
+
                 if (this.AnothorId == ExtremeRoleId.Null)
                 {
-                    return Design.ColoedString(
-                        getRoleColor(this.Id),
-                        Translation.GetString(this.Id.ToString()));
+                    return basicRoleName;
                 }
                 else
                 {
                     return string.Concat(
-                        Design.ColoedString(
-                            getRoleColor(this.Id),
-                            Translation.GetString(this.Id.ToString())),
+                        basicRoleName,
                         Design.ColoedString(
                             Palette.White,
                             " + "),
-                        Design.ColoedString(
-                            getRoleColor(this.AnothorId),
-                            Translation.GetString(this.AnothorId.ToString())));
+                        convertIdToRoleName(this.AnothorId));
                 }
             }
+
+            private static string convertIdToRoleName(ExtremeRoleId id)
+            {
+                bool isVanila = Enum.IsDefined(typeof(RoleTypes), id);
+                string roleName = isVanila ?
+                    Design.ColoedString(
+                        vanilaCrew.Contains((RoleTypes)id) ?
+                        Palette.White : Palette.ImpostorRed,
+                        Translation.GetString(((RoleTypes)id).ToString())) :
+                    Design.ColoedString(
+                        getRoleColor(id),
+                        Translation.GetString(id.ToString()));
+                return roleName;
+            }
+
             private static Color getRoleColor(ExtremeRoleId target)
             {
                 switch (target)

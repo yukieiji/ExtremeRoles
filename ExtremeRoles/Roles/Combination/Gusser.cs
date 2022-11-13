@@ -90,6 +90,38 @@ namespace ExtremeRoles.Roles.Combination
                 }
             }
 
+            Add((ExtremeRoleId)RoleTypes.Crewmate, ExtremeRoleType.Crewmate);
+            Add((ExtremeRoleId)RoleTypes.Impostor, ExtremeRoleType.Impostor);
+            var roleOptions = PlayerControl.GameOptions.RoleOptions;
+
+            foreach (RoleTypes role in Enum.GetValues(typeof(RoleTypes)))
+            {
+                if (role == RoleTypes.Crewmate || 
+                    role == RoleTypes.Impostor ||
+                    role == RoleTypes.GuardianAngel)
+                {
+                    continue;
+                }
+                if (roleOptions.GetChancePerGame(role) > 0)
+                {
+                    ExtremeRoleType team = ExtremeRoleType.Null;
+                    switch (role)
+                    {
+                        case RoleTypes.Engineer:
+                        case RoleTypes.Scientist:
+                            team = ExtremeRoleType.Crewmate;
+                            break;
+                        case RoleTypes.Shapeshifter:
+                            team = ExtremeRoleType.Impostor;
+                            break;
+                        default:
+                            continue;
+                    }
+                    Add((ExtremeRoleId)role, team);
+                    separetedRoleId[team].Add((ExtremeRoleId)role);
+                }
+            }
+
             foreach (var (id, role) in ExtremeRoleManager.NormalRole)
             {
                 int spawnOptSel = allOption[
@@ -257,10 +289,21 @@ namespace ExtremeRoles.Roles.Combination
             var targetRole = ExtremeRoleManager.GameRole[playerId];
             ExtremeRoleId roleId = targetRole.Id;
             ExtremeRoleId anotherRoleId = ExtremeRoleId.Null;
+            if (targetRole is Solo.VanillaRoleWrapper vanillaRole)
+            {
+                roleId = (ExtremeRoleId)vanillaRole.VanilaRoleId;
+            }
             if (targetRole is MultiAssignRoleBase multiRole &&
                 multiRole.AnotherRole != null)
             {
-                anotherRoleId = multiRole.AnotherRole.Id;
+                if (multiRole.AnotherRole is Solo.VanillaRoleWrapper anothorVanillRole)
+                {
+                    anotherRoleId = (ExtremeRoleId)anothorVanillRole.VanilaRoleId;
+                }
+                else
+                {
+                    anotherRoleId = multiRole.AnotherRole.Id;
+                }
             }
             
             if (Solo.Crewmate.BodyGuard.TryGetShiledPlayerId(playerId, out byte _) ||
