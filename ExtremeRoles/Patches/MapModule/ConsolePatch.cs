@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 
+using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
 
 namespace ExtremeRoles.Patches.MapModule
@@ -15,10 +16,19 @@ namespace ExtremeRoles.Patches.MapModule
             canUse = couldUse = false;
             __result = float.MaxValue;
             if (__instance == null) { return true; }
-            if (__instance.AllowImpostor) { return true; }
-            if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
-            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return true; }
-            if (Roles.ExtremeRoleManager.GameRole[pc.PlayerId].HasTask()) { return true; }
+            if (ExtremeRoleManager.GameRole.Count == 0 ||
+                !ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return true; }
+
+            var role = ExtremeRoleManager.GameRole[pc.PlayerId];
+
+            if (role.HasTask())
+            {
+                if (role.IsImpostor())
+                {
+                    __instance.AllowImpostor = true;
+                }
+                return true;
+            }
 
             return false;
         }
@@ -31,7 +41,7 @@ namespace ExtremeRoles.Patches.MapModule
 
             if (__instance == null) { return true; }
             if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return true; }
-            if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
+            if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
             PlayerControl player = PlayerControl.LocalPlayer;
             PlayerTask task = __instance.FindTask(player);
@@ -46,7 +56,7 @@ namespace ExtremeRoles.Patches.MapModule
                 case TaskTypes.ResetSeismic:
                 case TaskTypes.ResetReactor:
                 case TaskTypes.RestoreOxy:
-                    return Roles.ExtremeRoleManager.GameRole[
+                    return ExtremeRoleManager.GameRole[
                         player.PlayerId].CanRepairSabotage();
                 default:
                     return true;
