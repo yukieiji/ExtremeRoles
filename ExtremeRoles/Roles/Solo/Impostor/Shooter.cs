@@ -384,9 +384,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 ShooterOption.AwakeImpNum,
                 1, 1, OptionHolder.MaxImposterNum, 1,
                 parentOps);
+
             CreateBoolOption(
                 ShooterOption.NoneAwakeWhenShoot,
                 true, parentOps);
+            CreateFloatOption(
+                ShooterOption.ShootKillCoolPenalty,
+                5.0f, 0.0f, 10.0f, 0.5f,
+                parentOps, format: OptionUnit.Second);
 
             var meetingOps = CreateBoolOption(
                 ShooterOption.CanCallMeeting,
@@ -460,6 +465,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 GetRoleOptionId(ShooterOption.ShootChargeTime)].GetValue();
             this.chargeKillNum = allOps[
                 GetRoleOptionId(ShooterOption.ShootKillNum)].GetValue();
+            this.killCoolPenalty = allOps[
+                GetRoleOptionId(ShooterOption.ShootKillCoolPenalty)].GetValue();
 
             this.isNoneAwakeWhenShoot = 
 
