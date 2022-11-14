@@ -283,7 +283,7 @@ namespace ExtremeRoles.Roles.Combination
 
         public void GuessAction(GuessBehaviour.RoleInfo roleInfo, byte playerId)
         {
-            ExtremeRolesPlugin.Logger.LogDebug($"GuessTo:{roleInfo}");
+            ExtremeRolesPlugin.Logger.LogDebug($"TargetPlayerId:{playerId}  GuessTo:{roleInfo}");
             
             // まず弾をへらす
             this.bulletNum = this.bulletNum - 1;
