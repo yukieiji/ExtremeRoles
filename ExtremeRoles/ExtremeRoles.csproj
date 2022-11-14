@@ -31,6 +31,7 @@
         <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="1.1.1" PrivateAssets="all" />
 		
 	    <EmbeddedResource Include="Resources\Installer\ExtremeBepInExInstaller.exe" />
+      <EmbeddedResource Include="Resources\Asset\*.asset" />
         <EmbeddedResource Include="Resources\*.png" />
         <EmbeddedResource Include="Resources\MeryVentAnimation\*.png" />
 		<EmbeddedResource Include="Resources\JsonData\*.json" />
@@ -45,6 +46,7 @@
     </Target>
 
     <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-        <Exec Command="python $(SolutionDir)\convertToJson.py" />
+      <Exec Command="python $(SolutionDir)\convertToJson.py" />
+      <Exec Command="xcopy $(SolutionDir)UnityAsset\ExtremeRoles $(SolutionDir)ExtremeRoles\Resources\Asset /y /i" />
     </Target>
 </Project>
