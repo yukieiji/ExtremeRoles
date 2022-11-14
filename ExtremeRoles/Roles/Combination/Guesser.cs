@@ -387,10 +387,15 @@ namespace ExtremeRoles.Roles.Combination
 
                     this.guesserUi.gameObject.SetActive(true);
                     this.guesserUi.InitButton(GuessAction, createRoleInfo());
-                    this.guesserUi.SetTitle(
-                        Translation.GetString("guesserUiTitle"));
                 }
-                this.guesserUi.SetTarget(instance.TargetPlayerId);
+
+                byte targetPlayerId = instance.TargetPlayerId;
+                this.guesserUi.SetTitle(
+                    string.Format(
+                        Translation.GetString("guesserUiTitle"),
+                        GameData.Instance.GetPlayerById(
+                            targetPlayerId)?.DefaultOutfit.PlayerName));
+                this.guesserUi.SetTarget(targetPlayerId);
                 this.guesserUi.gameObject.SetActive(true);
             }
             return openGusserUi;
