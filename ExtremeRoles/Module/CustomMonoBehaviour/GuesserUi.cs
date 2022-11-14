@@ -18,6 +18,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         private GridLayoutGroup layout;
 
         private TextMeshProUGUI title;
+        private TextMeshProUGUI info;
 
         private Image backGround;
         private Button closeButton;
@@ -42,6 +43,9 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                 "MenuBody/ButtonScroll/Viewport/Content").gameObject.GetComponent<GridLayoutGroup>();
             this.title = trans.Find(
                 "MenuBody/Title").gameObject.GetComponent<TextMeshProUGUI>();
+            this.info = trans.Find(
+                "MenuBody/GuesserInfo").gameObject.GetComponent<TextMeshProUGUI>();
+
             this.closeButton = trans.Find(
                 "MenuBody/CloseButton").gameObject.GetComponent<Button>();
 
@@ -100,6 +104,11 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         public void SetTitle(string title)
         {
             this.title.text = title;
+        }
+
+        public void SetInfo(string newInfo)
+        {
+            this.info.text = newInfo;
         }
 
         public void SetImage(Sprite sprite)
