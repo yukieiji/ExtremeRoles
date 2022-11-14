@@ -818,7 +818,7 @@ namespace ExtremeRoles.Patches.Meeting
 
             foreach (DeadBody b in UnityEngine.Object.FindObjectsOfType<DeadBody>())
             {
-                UnityEngine.Object.Destroy(b.gameObject);
+                UnityEngine.Object.Destroy(b?.gameObject);
             }
         }
     }
