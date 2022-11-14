@@ -39,8 +39,13 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour.UIPart
 
         public void ResetButtonAction()
         {
-            this.okButton.ResetButtonAction();
+            ResetOkButtonAction();
             this.cancelButton.ResetButtonAction();
+        }
+
+        public void ResetOkButtonAction()
+        {
+            this.okButton.ResetButtonAction();
         }
 
         public void Update()

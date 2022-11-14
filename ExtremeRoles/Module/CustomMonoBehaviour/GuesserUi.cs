@@ -51,20 +51,13 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
             this.confirmMenu.Awake();
             this.buttonPrefab.Awake();
-            this.confirmMenu.ResetButtonAction();
 
+            this.confirmMenu.ResetButtonAction();
             this.confirmMenu.SetCancelButtonClickAction(
                 (UnityAction)(() =>
                 {
                     this.isActive = true;
                     this.confirmMenu.gameObject.SetActive(false);
-                }));
-            this.confirmMenu.SetOkButtonClickAction(
-                (UnityAction)(() =>
-                {
-                    this.isActive = false;
-                    this.confirmMenu.gameObject.SetActive(false);
-                    base.gameObject.SetActive(false);
                 }));
 
             this.closeButton.onClick.RemoveAllListeners();
@@ -134,6 +127,16 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                         this.isActive = false;
                         this.confirmMenu.gameObject.SetActive(true);
                         this.confirmMenu.SetMenuText(guess.GetConfirmText());
+
+                        // Okボタンの処理は毎回変える
+                        this.confirmMenu.ResetOkButtonAction();
+                        this.confirmMenu.SetOkButtonClickAction(
+                            (UnityAction)(() =>
+                            {
+                                this.isActive = false;
+                                this.confirmMenu.gameObject.SetActive(false);
+                                base.gameObject.SetActive(false);
+                            }));
                         this.confirmMenu.SetOkButtonClickAction(
                             guess.GetGuessAction());
                     }));
