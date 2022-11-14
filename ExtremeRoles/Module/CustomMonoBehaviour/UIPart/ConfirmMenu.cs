@@ -31,7 +31,6 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour.UIPart
             this.okButton.Awake();
             this.cancelButton.Awake();
 
-            Logging.CheckPointDebugLog();
             this.okButton.SetButtonText(
                 Translation.GetString("ok"));
             this.cancelButton.SetButtonText(
