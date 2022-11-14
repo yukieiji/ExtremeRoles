@@ -573,13 +573,18 @@ namespace ExtremeRoles.Patches.Meeting
 
             foreach (DeadBody b in UnityEngine.Object.FindObjectsOfType<DeadBody>())
             {
+                if (b == null) { continue; }
+
                 foreach (PlayerVoteArea pva in __instance.playerStates)
                 {
-                    if (pva.TargetPlayerId == b.ParentId && !pva.AmDead)
+                    if (pva == null ||
+                        pva.TargetPlayerId != b.ParentId && 
+                        pva.AmDead)
                     {
-                        pva.SetDead(pva.DidReport, true);
-                        pva.Overlay.gameObject.SetActive(true);
+                        continue;
                     }
+                    pva.SetDead(pva.DidReport, true);
+                    pva.Overlay.gameObject.SetActive(true);
                 }
                 UnityEngine.Object.Destroy(b.gameObject);
             }
