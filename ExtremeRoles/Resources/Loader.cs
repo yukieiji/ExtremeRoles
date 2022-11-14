@@ -100,7 +100,7 @@ namespace ExtremeRoles.Resources
         public const string XionSpeedUp = "ExtremeRoles.Resources.SpeedUp.png";
         public const string XionSpeedDown = "ExtremeRoles.Resources.SpeedDown.png";
 
-        public const string GusserUiResources = "ExtremeRoles.Resources.guesserui.asset";
+        public const string GusserUiResources = "ExtremeRoles.Resources.Asset.guesserui.asset";
         public const string GusserUiPrefab = "assets/roles/guesserui.prefab";
 
         public const string TestButton = "ExtremeRoles.Resources.TESTBUTTON.png";
