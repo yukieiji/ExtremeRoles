@@ -45,12 +45,13 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
             private static string convertIdToRoleName(ExtremeRoleId id)
             {
-                bool isVanila = Enum.IsDefined(typeof(RoleTypes), id);
+                RoleTypes castedId = (RoleTypes)id;
+                bool isVanila = Enum.IsDefined(typeof(RoleTypes), castedId);
                 string roleName = isVanila ?
                     Design.ColoedString(
-                        vanilaCrew.Contains((RoleTypes)id) ?
+                        vanilaCrew.Contains(castedId) ?
                         Palette.White : Palette.ImpostorRed,
-                        Translation.GetString(((RoleTypes)id).ToString())) :
+                        Translation.GetString(castedId.ToString())) :
                     Design.ColoedString(
                         getRoleColor(id),
                         Translation.GetString(id.ToString()));
