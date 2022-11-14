@@ -42,6 +42,10 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                         convertIdToRoleName(this.AnothorId));
                 }
             }
+            public override string ToString()
+            {
+                return $"Team:{this.Team}  Role:{this.Id}＆{this.AnothorId}";
+            }
 
             private static string convertIdToRoleName(ExtremeRoleId id)
             {

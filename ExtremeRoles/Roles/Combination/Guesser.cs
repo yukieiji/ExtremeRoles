@@ -283,17 +283,22 @@ namespace ExtremeRoles.Roles.Combination
 
         public void GuessAction(GuessBehaviour.RoleInfo roleInfo, byte playerId)
         {
+            ExtremeRolesPlugin.Logger.LogDebug($"GuessTo:{roleInfo}");
+            
             // まず弾をへらす
             this.bulletNum = this.bulletNum - 1;
 
             var targetRole = ExtremeRoleManager.GameRole[playerId];
+            
             ExtremeRoleId roleId = targetRole.Id;
             ExtremeRoleId anotherRoleId = ExtremeRoleId.Null;
+
             if (targetRole is Solo.VanillaRoleWrapper vanillaRole)
             {
                 roleId = (ExtremeRoleId)vanillaRole.VanilaRoleId;
             }
-            if (targetRole is MultiAssignRoleBase multiRole &&
+            else if (
+                targetRole is MultiAssignRoleBase multiRole &&
                 multiRole.AnotherRole != null)
             {
                 if (multiRole.AnotherRole is Solo.VanillaRoleWrapper anothorVanillRole)
