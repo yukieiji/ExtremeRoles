@@ -68,8 +68,6 @@ def output_md_report(*check_xlsx_file):
     result = f'{result}\n - FileName:{os.path.basename(file)}\n\n'
     result = f'{result}{convert_md_table(get_trans_data_check(file))}\n'
 
-  print(result)
-
   echo_command = f'echo ("{TAG}={result}" >> $env:GITHUB_ENV'
   subprocess.call(echo_command, shell=True)
 

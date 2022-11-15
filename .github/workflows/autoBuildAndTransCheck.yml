@@ -29,6 +29,9 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 5.x
+      - uses: GuillaumeFalourd/setup-windows10-sdk-action@v1.9
+        with:
+          sdk-version: 18362
       - name: CheckTransData
         id: check
         continue-on-error: true
