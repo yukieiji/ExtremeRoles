@@ -46,3 +46,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BuildResult: ${{ steps.build.outcome }}
+          single_comment: false
