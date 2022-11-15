@@ -39,16 +39,10 @@ jobs:
         id: build
         continue-on-error: true
         run: msbuild ExtremeRoles.sln -p:Configuration=Release
-      - name: CreateComment
-        id: comment
-        uses: chuhlomin/render-template@v1.6
-        with:
-          template: comment.md
-          vars: |
-            BuildResult: ${{ steps.build.outcome }}
       - name: PostComment
-        uses: peter-evans/create-or-update-comment@v2
-        with: 
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            ${{ steps.comment.outputs.result }}
+        uses: NejcZdovc/comment-pr@v2
+        with:
+          file: "comment.md"
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          BuildResult: ${{ steps.build.outcome }}
