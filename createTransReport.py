@@ -68,7 +68,7 @@ def output_md_report(*check_xlsx_file):
     result = f'{result}\n - FileName:{os.path.basename(file)}\n\n'
     result = f'{result}{convert_md_table(get_trans_data_check(file))}\n'
 
-  with open('comment.md', 'w', encoding='UTF-8') as md:
+  with open(os.path.join(WORKING_DIR, '.github/workflows/comment.md'), 'w', encoding='UTF-8') as md:
       md.write(result)
 
 
