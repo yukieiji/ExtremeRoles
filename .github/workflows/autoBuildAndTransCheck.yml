@@ -38,7 +38,7 @@ jobs:
       - name: RunBuild
         id: build
         continue-on-error: true
-        run: msbuild ExtremeRoles.sln -p:Configuration=Release
+        run: msbuild ExtremeRoles.sln -t:restore,build -p:Configuration=Release -p:RestorePackagesConfig=true
       - name: PostComment
         uses: NejcZdovc/comment-pr@v2
         with:
