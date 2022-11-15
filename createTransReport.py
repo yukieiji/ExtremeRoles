@@ -48,28 +48,29 @@ def convert_md_table(data: Dict[str, List[str]]) -> str:
 
   for lang, miss_keys in data.items():
     if len(miss_keys) == 0:
-      result = f'{result}\n| {lang} | ☑ |'
       continue
     for index, key in enumerate(miss_keys):
       line = '\n'
       if index == 0:
         line = f'{line}| {lang} | {key} |'
       else:
-        line = f'{line}|>     | {key} |'
+        line = f'{line}| {lang} | {key} |'
       result = f'{result}{line}'
 
   return result
 
 def output_md_report(*check_xlsx_file):
-
-  result = '## Translation Checker Report\n'
+  
+  result = 'Build Result : {{ .BuildResult }}\n\n'
+  result = f'{result}### Translation Checker Report\n'
 
   for file in check_xlsx_file:
     result = f'{result}\n - FileName:{os.path.basename(file)}\n\n'
     result = f'{result}{convert_md_table(get_trans_data_check(file))}\n'
 
-  echo_command = f'echo ("{TAG}={result}" >> $env:GITHUB_ENV'
-  subprocess.call(echo_command, shell=True)
+  with open('comment.md', 'w', encoding='UTF-8') as md:
+      md.write(result)
+
 
 if __name__ == "__main__":
   output_md_report(EXTREMERORLS_IN_FILE, EXTREMESKIN_IN_FILE)
