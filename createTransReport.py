@@ -61,7 +61,7 @@ def convert_md_table(data: Dict[str, List[str]]) -> str:
 
 def output_md_report(*check_xlsx_file):
   
-  result = 'Build Result : {{ .BuildResult }}\n\n'
+  result = 'Build Result : {BuildResult}\n\n'
   result = f'{result}### Translation Checker Report\n'
 
   for file in check_xlsx_file:
