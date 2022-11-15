@@ -15,40 +15,24 @@ namespace ExtremeRoles.Patches.MapModule
         {
             canUse = couldUse = false;
             __result = float.MaxValue;
-            if (__instance == null) { return true; }
-            if (ExtremeRoleManager.GameRole.Count == 0 ||
-                !ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return true; }
-
-            var role = ExtremeRoleManager.GameRole[pc.PlayerId];
-
-            if (role.HasTask())
-            {
-                if (role.IsImpostor())
-                {
-                    __instance.AllowImpostor = true;
-                }
-                return true;
-            }
-
-            return false;
-        }
-    }
-    [HarmonyPatch(typeof(Console), nameof(Console.Use))]
-    public static class ConsoleUsePatch
-    {
-        public static bool Prefix(Console __instance)
-        {
-
-            if (__instance == null) { return true; }
-            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return true; }
-            if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
-
             PlayerControl player = PlayerControl.LocalPlayer;
             PlayerTask task = __instance.FindTask(player);
 
             if (task == null) { return true; }
+            if (__instance == null) { return true; }
+            if (ExtremeRoleManager.GameRole.Count == 0 ||
+                !ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return true; }
 
-            switch (task.TaskType)
+            TaskTypes taskType = task.TaskType;
+            var role = ExtremeRoleManager.GameRole[pc.PlayerId];
+
+            if (ExtremeRolesPlugin.Compat.IsModMap &&
+                ExtremeRolesPlugin.Compat.ModMap.IsCustomSabotageTask(taskType))
+            {
+                return role.CanRepairSabotage();
+            }
+
+            switch (taskType)
             {
                 case TaskTypes.FixLights:
                 case TaskTypes.FixComms:
@@ -56,10 +40,17 @@ namespace ExtremeRoles.Patches.MapModule
                 case TaskTypes.ResetSeismic:
                 case TaskTypes.ResetReactor:
                 case TaskTypes.RestoreOxy:
-                    return ExtremeRoleManager.GameRole[
-                        player.PlayerId].CanRepairSabotage();
+                    return role.CanRepairSabotage();
                 default:
-                    return true;
+                    if (role.HasTask())
+                    {
+                        if (role.IsImpostor())
+                        {
+                            __instance.AllowImpostor = true;
+                        }
+                        return true;
+                    }
+                    return false;
             }
         }
     }
