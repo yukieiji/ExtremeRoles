@@ -23,9 +23,7 @@ jobs:
           architecture: 'x64'
       - name: InstallPythonLibrary
         run: pip install openpyxl
-      - uses: GuillaumeFalourd/setup-windows10-sdk-action@v1.9
-        with:
-          sdk-version: 18362
+      - uses: fbactions/setup-winsdk@v1
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
