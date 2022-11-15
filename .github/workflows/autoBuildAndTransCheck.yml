@@ -1,6 +1,8 @@
 name: AutoBuildAndTransCheck
 
-on: pull_request
+on: 
+  pull_request:
+    types: [opened, edited]
 
 jobs:
   build_check:
@@ -20,13 +22,17 @@ jobs:
           python-version: '3.9'
           architecture: 'x64'
       - name: InstallPythonLibrary
-        run: pip install -r requirements.txt
+        run: pip install openpyxl
       - name: AddMsBuildToPATH
         uses: microsoft/setup-msbuild@v1.0.2
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 5.x
+      - name: CheckTransData
+        id: check
+        continue-on-error: true
+        run: python createTransReport.py
       - name: RunBuild
         id: build
         continue-on-error: true
@@ -37,3 +43,4 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
             Build Result：${{ steps.build.outcome }}
+            ${{ steps.check.report }}
