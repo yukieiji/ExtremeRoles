@@ -32,6 +32,9 @@ jobs:
           dotnet-version: 5.x
       - name: AddMsBuildToPATH
         uses: microsoft/setup-msbuild@v1.1
+      - uses: ilammy/msvc-dev-cmd@v1
+        with:
+          sdk: 10.0.18362.0
       - name: CheckTransData
         continue-on-error: true
         run: python createTransReport.py
