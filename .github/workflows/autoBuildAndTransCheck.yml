@@ -44,7 +44,7 @@ jobs:
         uses: NejcZdovc/comment-pr@v2
         with:
           file: "comment.md"
+          single_comment: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BuildResult: ${{ steps.build.outcome }}
-          single_comment: false
