@@ -3,9 +3,9 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
-      <Version>4.0.1.3</Version>
-      <!--<VersionPrefix>4.0.1</VersionPrefix>-->
-      <VersionSuffix>AwakeningPart2</VersionSuffix> 
+      <!--<Version>4.0.1.4</Version>-->
+        <VersionPrefix>4.1.0</VersionPrefix>
+      <VersionSuffix>1stAnniversary</VersionSuffix> 
         <Description>Extreme Roles for Advanced user</Description>
         <Authors>yukieiji</Authors>
         <Configurations>Debug;Release</Configurations>
