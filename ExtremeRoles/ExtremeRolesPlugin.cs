@@ -56,7 +56,7 @@ namespace ExtremeRoles
 
             if (BepInExUpdater.UpdateRequired)
             {
-                AddComponent<BepInExUpdater>();
+                // AddComponent<BepInExUpdater>();
             }
 
             Il2CppRegisterAttribute.Registration(
