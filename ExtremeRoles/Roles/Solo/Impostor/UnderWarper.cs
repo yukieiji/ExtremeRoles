@@ -102,15 +102,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public static void RpcUseVentWithNoAnimation(
             PlayerControl localPlayer, int ventId, bool isEnter)
         {
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                localPlayer.NetId,
-                (byte)RPCOperator.Command.UnderWarperUseVentWithNoAnime,
-                Hazel.SendOption.Reliable, -1);
-            writer.Write(localPlayer.PlayerId);
-            writer.WritePacked(ventId);
-            writer.Write(isEnter);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
-
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.UnderWarperUseVentWithNoAnime))
+            {
+                caller.WriteByte(localPlayer.PlayerId);
+                caller.WritePackedInt(ventId);
+                caller.WriteBoolean(isEnter);
+            }
             UseVentWithNoAnimation(
                 localPlayer.PlayerId, ventId, isEnter);
 

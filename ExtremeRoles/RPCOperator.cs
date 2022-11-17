@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Hazel;
 
@@ -33,6 +34,7 @@ namespace ExtremeRoles
             ShareMapId,
             ShareVersion,
             PlaySound,
+            ReplaceTask,
             IntegrateModCall,
 
             // 役職関連
@@ -46,10 +48,7 @@ namespace ExtremeRoles
             BodyGuardAbility,
             TimeMasterAbility,
             AgencyTakeTask,
-            AgencySetNewTask,
-            FencerCounterOn,
-            FencerCounterOff,
-            FencerEnableKillButton,
+            FencerAbility,
             CuresMakerCurseKillCool,
             CarpenterUseAbility,
             SurvivorDeadWin,
@@ -63,9 +62,7 @@ namespace ExtremeRoles
             FakerCreateDummy,
             OverLoaderSwitchAbility,
             CrackerCrackDeadBody,
-            MerySetCamp,
-            MeryAcivateVent,
-            SlaveDriverSetNewTask,
+            MeryAbility,
             LastWolfSwitchLight,
             CommanderAttackCommand,
             HypnotistAbility,
@@ -73,7 +70,6 @@ namespace ExtremeRoles
 
             // ニュートラル
             AliceShipBroken,
-            TaskMasterSetNewTask,
             JesterOutburstKill,
             YandereSetOneSidedLover,
             TotocalcioSetBetPlayer,
@@ -86,32 +82,94 @@ namespace ExtremeRoles
             XionAbility,
         }
 
-        public static void Call(
-            uint netId, Command ops)
+        public sealed class RpcCaller : IDisposable
         {
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                netId, (byte)ops,
-                Hazel.SendOption.Reliable, -1);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            private MessageWriter writer;
+
+            public RpcCaller(
+                uint netId, Command cmd,
+                SendOption sendOpt = SendOption.Reliable, int target = -1)
+            {
+                this.writer = AmongUsClient.Instance.StartRpcImmediately(
+                    netId, (byte)cmd, sendOpt, target);
+            }
+
+            public void WriteBoolean(bool value)
+            {
+                this.writer.Write(value);
+            }
+
+            public void WriteSByte(sbyte value)
+            {
+                this.writer.Write(value);
+            }
+
+            public void WriteByte(byte value)
+            {
+                this.writer.Write(value);
+            }
+            public void WriteUShot(ushort value)
+            {
+                this.writer.Write(value);
+            }
+
+            public void WriteUInt(uint value)
+            {
+                this.writer.Write(value);
+            }
+
+            public void WriteInt(int value)
+            {
+                this.writer.Write(value);
+            }
+
+            public void WriteUlong(ulong value)
+            {
+                this.writer.Write(value);
+            }
+
+            public void WriteFloat(float value)
+            {
+                this.writer.Write(value);
+            }
+
+            public void WriteStr(string value)
+            {
+                this.writer.Write(value);
+            }
+
+            public void WritePackedInt(int value)
+            {
+                this.writer.WritePacked(value);
+            }
+
+            public void Dispose()
+            {
+                AmongUsClient.Instance.FinishRpcImmediately(this.writer);
+            }
         }
 
-        public static void Call(
-            uint netId, Command ops, List<byte> value)
+        public static RpcCaller CreateCaller(Command ops)
+        {
+            return CreateCaller(CachedPlayerControl.LocalPlayer.PlayerControl.NetId, ops);
+        }
+
+        public static RpcCaller CreateCaller(uint netId, Command ops)
+        {
+            return new RpcCaller(netId, ops);
+        }
+
+        public static void Call(Command ops)
+        {
+            Call(CachedPlayerControl.LocalPlayer.PlayerControl.NetId, ops);
+        }
+
+        public static void Call(uint netId, Command ops)
         {
             MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
                 netId, (byte)ops,
                 Hazel.SendOption.Reliable, -1);
-            foreach (byte writeVale in value)
-            {
-                writer.Write(writeVale);
-            }
             AmongUsClient.Instance.FinishRpcImmediately(writer);
-        }
-        public static void RoleIsWin(byte playerId)
-        {
-            Call(CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                Command.SetRoleWin, new List<byte>{ playerId });
-            SetRoleWin(playerId);
         }
 
         public static void CleanDeadBody(byte targetId)
@@ -240,10 +298,10 @@ namespace ExtremeRoles
 
             MessageReader reader = new MessageReader();
             
-            byte[] bytes = System.BitConverter.GetBytes(ventId);
-            if (!System.BitConverter.IsLittleEndian)
+            byte[] bytes = BitConverter.GetBytes(ventId);
+            if (!BitConverter.IsLittleEndian)
             {
-                System.Array.Reverse(bytes);
+                Array.Reverse(bytes);
             }
             reader.Buffer = bytes;
             reader.Length = bytes.Length;
@@ -253,7 +311,7 @@ namespace ExtremeRoles
 
             hudManager.StartCoroutine(
                 Effects.Lerp(
-                    0.6f, new System.Action<float>((p) => {
+                    0.6f, new Action<float>((p) => {
                         if (vent != null && vent.myRend != null)
                         {
                             vent.myRend.sprite = ship.GetCustomVentSprite(
@@ -407,6 +465,13 @@ namespace ExtremeRoles
                 (Helper.Sound.SoundType)soundType, volume);
         }
 
+        public static void ReplaceTask(
+            byte callerId, int index, int taskIndex)
+        {
+            Helper.GameSystem.ReplaceToNewTask(
+                callerId, index, taskIndex);
+        }
+
         public static void IntegrateModCall(
             ref MessageReader readeer)
         {
@@ -444,24 +509,9 @@ namespace ExtremeRoles
             Roles.Solo.Crewmate.Agency.TakeTargetPlayerTask(
                 targetPlayerId, getTaskId);
         }
-        public static void AgencySetNewTask(
-            byte callerId, int index, int taskIndex)
+        public static void FencerAbility(ref MessageReader reader)
         {
-            Roles.Solo.Crewmate.Agency.ReplaceToNewTask(
-                callerId, index, taskIndex);
-        }
-        public static void FencerCounterOn(
-            byte playerId)
-        {
-            Roles.Solo.Crewmate.Fencer.CounterOn(playerId);
-        }
-        public static void FencerCounterOff(byte playerId)
-        {
-            Roles.Solo.Crewmate.Fencer.CounterOff(playerId);
-        }
-        public static void FencerEnableKillButton(byte playerId)
-        {
-            Roles.Solo.Crewmate.Fencer.EnableKillButton(playerId);
+            Roles.Solo.Crewmate.Fencer.Ability(ref reader);
         }
 
         public static void CuresMakerCurseKillCool(
@@ -516,7 +566,6 @@ namespace ExtremeRoles
             Roles.Solo.Impostor.Faker.CreateDummy(
                 callerId, targetId, ops);
         }
-
         public static void OverLoaderSwitchAbility(
             byte callerId, byte activate)
         {
@@ -524,28 +573,15 @@ namespace ExtremeRoles
             Roles.Solo.Impostor.OverLoader.SwitchAbility(
                 callerId, activate == byte.MaxValue);
         }
-
         public static void CrackerCrackDeadBody(
             byte callerId, byte targetId)
         {
             Roles.Solo.Impostor.Cracker.CrackDeadBody(
                 callerId, targetId);
         }
-
-        public static void MarySetCamp(byte callerId, float x, float y)
+        public static void MaryAbility(ref MessageReader reader)
         {
-            Roles.Solo.Impostor.Mery.SetCamp(
-                callerId, new UnityEngine.Vector2(x, y));
-        }
-        public static void MaryActiveVent(int index)
-        {
-            Roles.Solo.Impostor.Mery.ActivateVent(index);
-        }
-        public static void SlaveDriverSetNewTask(
-            byte callerId, int index, int taskIndex)
-        {
-            Roles.Solo.Impostor.SlaveDriver.ReplaceToNewTask(
-                callerId, index, taskIndex);
+            Roles.Solo.Impostor.Mery.Ability(ref reader);
         }
         public static void LastWolfSwitchLight(byte swichStatus)
         {
@@ -575,13 +611,6 @@ namespace ExtremeRoles
         {
             Roles.Solo.Neutral.Alice.ShipBroken(
                 callerId, targetPlayerId, taskId);
-        }
-
-        public static void TaskMasterSetNewTask(
-            byte callerId, int index, int taskIndex)
-        {
-            Roles.Solo.Neutral.TaskMaster.ReplaceToNewTask(
-                callerId, index, taskIndex);
         }
         public static void JesterOutburstKill(
             byte killerId, byte targetId)

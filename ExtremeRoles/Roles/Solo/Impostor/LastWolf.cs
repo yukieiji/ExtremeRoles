@@ -121,26 +121,22 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool UseAbility()
         {
-            RPCOperator.Call(
-               CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-               RPCOperator.Command.LastWolfSwitchLight,
-               new List<byte>
-               {
-                    byte.MaxValue,
-               });
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.LastWolfSwitchLight))
+            {
+                caller.WriteByte(byte.MaxValue);
+            }
             SwitchLight(false);
             return true;
         }
 
         public void CleanUp()
         {
-            RPCOperator.Call(
-               CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-               RPCOperator.Command.LastWolfSwitchLight,
-               new List<byte>
-               {
-                    byte.MinValue,
-               });
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.LastWolfSwitchLight))
+            {
+                caller.WriteByte(byte.MinValue);
+            }
             SwitchLight(true);
         }
 

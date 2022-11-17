@@ -362,6 +362,7 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
+.github/workflows/comment.md
 Strings_GM.xlsx
 ExtremeRoles/Resources/TOR_Resources
 ExtremeRoles/Resources/TESTBUTTON.png

@@ -50,7 +50,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public enum ResurrecterRpcOps : byte
         {
             UseResurrect,
-            ReplaceTask,
             ResetFlash,
         }
 
@@ -101,11 +100,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     if (resurrecter == null) { return; }
                     UseResurrect(resurrecter);
                     break;
-                case ResurrecterRpcOps.ReplaceTask:
-                    int index = reader.ReadInt32();
-                    int taskIndex = reader.ReadInt32();
-                    replaceToNewTask(resurrecterPlayerId, index, taskIndex);
-                    break;
                 case ResurrecterRpcOps.ResetFlash:
                     if (flash != null)
                     {
@@ -124,26 +118,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             resurrecter.activateResurrectTimer = false;
         }
 
-        private static void replaceToNewTask(byte playerId, int index, int taskIndex)
-        {
-            var player = Player.GetPlayerControlById(playerId);
-
-            if (player == null) { return; }
-
-            byte taskId = (byte)taskIndex;
-
-            if (GameSystem.SetPlayerNewTask(
-                ref player, taskId, (uint)index))
-            {
-                player.Data.Tasks[index] = new GameData.TaskInfo(
-                    taskId, (uint)index);
-                player.Data.Tasks[index].Id = (uint)index;
-
-                GameData.Instance.SetDirtyBit(
-                    1U << (int)player.PlayerId);
-            }
-        }
-
         public void ResetOnMeetingStart()
         {
             if (this.isActiveMeetingCount)
@@ -156,14 +130,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 this.resurrectText.gameObject.SetActive(false);
             }
 
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.ResurrecterRpc,
-                new List<byte>
-                { 
-                    (byte)ResurrecterRpcOps.ResetFlash,
-                    CachedPlayerControl.LocalPlayer.PlayerId
-                });
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.ResurrecterRpc))
+            {
+                caller.WriteByte((byte)ResurrecterRpcOps.ResetFlash);
+                caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
+            }
 
             if (flash != null)
             {
@@ -536,11 +508,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             byte playerId = rolePlayer.PlayerId;
 
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.UncheckedRevive,
-                new List<byte> { playerId });
-            RPCOperator.UncheckedRevive(playerId);
+            Player.RpcUncheckRevive(playerId);
 
             if (rolePlayer.Data == null ||
                 rolePlayer.Data.IsDead ||
@@ -579,23 +547,15 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 }
             }
 
-            Vector2 teleportPos = randomPos[
-                RandomGenerator.Instance.Next(randomPos.Count)];
+            Player.RpcUncheckSnap(playerId, randomPos[
+                RandomGenerator.Instance.Next(randomPos.Count)]);
 
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                (byte)RPCOperator.Command.UncheckedSnapTo,
-                Hazel.SendOption.Reliable, -1);
-            writer.Write(playerId);
-            writer.Write(teleportPos.x);
-            writer.Write(teleportPos.y);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
-            RPCOperator.UncheckedSnapTo(playerId, teleportPos);
-
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.ResurrecterRpc,
-                new List<byte> { (byte)ResurrecterRpcOps.UseResurrect, playerId });
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.ResurrecterRpc))
+            {
+                caller.WriteByte((byte)ResurrecterRpcOps.UseResurrect);
+                caller.WriteByte(playerId);
+            }
             UseResurrect(this);
 
             FastDestroyableSingleton<HudManager>.Instance.Chat.chatBubPool.ReclaimAll();
@@ -646,16 +606,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                         continue;
                     }
 
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                        CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                        (byte)RPCOperator.Command.ResurrecterRpc,
-                        Hazel.SendOption.Reliable, -1);
-                    writer.Write((byte)ResurrecterRpcOps.ReplaceTask);
-                    writer.Write(rolePlayer.PlayerId);
-                    writer.Write(i);
-                    writer.Write(taskIndex);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    replaceToNewTask(rolePlayer.PlayerId, i, taskIndex);
+                    GameSystem.RpcReplaceNewTask(
+                        rolePlayer.PlayerId, i, taskIndex);
                     
                     ++replaceTaskNum;
                 }

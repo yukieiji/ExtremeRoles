@@ -65,7 +65,7 @@ namespace ExtremeRoles.GhostRoles.Impostor
                 parentOps, 3, 20);
         }
 
-        protected override void UseAbility(MessageWriter writer)
+        protected override void UseAbility(RPCOperator.RpcCaller caller)
         { }
 
         private bool isPreCheck() => this.IsCommonUse();

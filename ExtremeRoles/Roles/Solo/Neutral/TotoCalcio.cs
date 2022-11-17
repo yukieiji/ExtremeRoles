@@ -155,18 +155,20 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             if (this.tmpTarget == null) { return false; }
 
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.TotocalcioSetBetPlayer,
-                new List<byte>
-                {
-                    CachedPlayerControl.LocalPlayer.PlayerId,
-                    this.tmpTarget.PlayerId,
-                });
+            byte localPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
+
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.TotocalcioSetBetPlayer))
+            {
+                caller.WriteByte(localPlayerId);
+                caller.WriteByte(this.tmpTarget.PlayerId);
+            }
             SetBetTarget(
-                CachedPlayerControl.LocalPlayer.PlayerId,
+                localPlayerId,
                 this.tmpTarget.PlayerId);
+
             this.tmpTarget = null;
+
             return true;
         }
 

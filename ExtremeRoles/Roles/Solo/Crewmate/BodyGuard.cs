@@ -368,15 +368,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 return false;
             }
 
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.BodyGuardAbility,
-                new List<byte>
-                {
-                    (byte)BodyGuardRpcOps.CoverDead,
-                    killerPlayerId,
-                    targetBodyGuard
-                });
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.BodyGuardAbility))
+            {
+                caller.WriteByte((byte)BodyGuardRpcOps.CoverDead);
+                caller.WriteByte(killerPlayerId);
+                caller.WriteByte(targetBodyGuard);
+            }
             coverDead(killerPlayerId, targetBodyGuard);
             return true;
         }
@@ -510,14 +508,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
             byte playerId = localPlayer.PlayerId;
 
-            RPCOperator.Call(
-                localPlayer.NetId,
-                RPCOperator.Command.BodyGuardAbility,
-                new List<byte>
-                {
-                    (byte)BodyGuardRpcOps.ResetShield,
-                    playerId
-                });
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.BodyGuardAbility))
+            {
+                caller.WriteByte((byte)BodyGuardRpcOps.ResetShield);
+                caller.WriteByte(playerId);
+            }
             resetShield(playerId);
 
             if (this.shieldButton is BodyGuardShieldButton button)
@@ -533,15 +529,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             if (this.TargetPlayer != byte.MaxValue)
             {
-                RPCOperator.Call(
-                    localPlayer.NetId,
-                    RPCOperator.Command.BodyGuardAbility,
-                    new List<byte>
-                    {
-                        (byte)BodyGuardRpcOps.FeatShield,
-                        playerId,
-                        this.TargetPlayer
-                    });
+                using (var caller = RPCOperator.CreateCaller(
+                    RPCOperator.Command.BodyGuardAbility))
+                {
+                    caller.WriteByte((byte)BodyGuardRpcOps.FeatShield);
+                    caller.WriteByte(playerId);
+                    caller.WriteByte(this.TargetPlayer);
+                }
                 featShield(playerId, this.TargetPlayer);
 
                 this.TargetPlayer = byte.MaxValue;
@@ -583,14 +577,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             if (this.reportNextMeeting)
             {
-                PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
-                RPCOperator.Call(
-                    localPlayer.NetId,
-                    RPCOperator.Command.BodyGuardAbility,
-                    new List<byte>
-                    {
-                        (byte)BodyGuardRpcOps.ReportMeeting,
-                    });
+                using (var caller = RPCOperator.CreateCaller(
+                    RPCOperator.Command.BodyGuardAbility))
+                {
+                    caller.WriteByte((byte)BodyGuardRpcOps.ReportMeeting);
+                }
                 reportMeeting();
             }
             this.reportNextMeeting = false;
@@ -646,15 +637,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             void meetingfeatShield()
             {
-                RPCOperator.Call(
-                    player.NetId,
-                    RPCOperator.Command.BodyGuardAbility,
-                    new List<byte>
-                    {
-                        (byte)BodyGuardRpcOps.FeatShield,
-                        player.PlayerId,
-                        targetPlayerId
-                    });
+                using (var caller = RPCOperator.CreateCaller(
+                    RPCOperator.Command.BodyGuardAbility))
+                {
+                    caller.WriteByte((byte)BodyGuardRpcOps.FeatShield);
+                    caller.WriteByte(player.PlayerId);
+                    caller.WriteByte(targetPlayerId);
+                }
                 featShield(player.PlayerId, targetPlayerId);
 
                 if (this.shieldButton is BodyGuardShieldButton button)
@@ -690,14 +679,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 if (taskGage >= this.meetingReportTaskGage &&
                     !this.awakeMeetingReport)
                 {
-                    RPCOperator.Call(
-                        CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                        RPCOperator.Command.BodyGuardAbility,
-                        new List<byte>
-                        {
-                            (byte)BodyGuardRpcOps.AwakeMeetingReport,
-                            rolePlayer.PlayerId,
-                        });
+                    using (var caller = RPCOperator.CreateCaller(
+                        RPCOperator.Command.BodyGuardAbility))
+                    {
+                        caller.WriteByte((byte)BodyGuardRpcOps.AwakeMeetingReport);
+                        caller.WriteByte(rolePlayer.PlayerId);
+                    }
                     this.awakeMeetingReport = true;
                 }
             }

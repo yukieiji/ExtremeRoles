@@ -75,10 +75,12 @@ namespace ExtremeRoles.Patches.Manager
 
         public static void SetLocalPlayerReady()
         {
-            RPCOperator.Call(
+            using (var caller = RPCOperator.CreateCaller(
                 PlayerControl.LocalPlayer.NetId,
-                RPCOperator.Command.SetUpReady,
-                new List<byte> { PlayerControl.LocalPlayer.PlayerId });
+                RPCOperator.Command.SetUpReady))
+            {
+                caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
+            }
         }
 
         public static void AddReadyPlayer(byte playerId)
@@ -92,27 +94,28 @@ namespace ExtremeRoles.Patches.Manager
 
         public static void AllPlayerAssignToExRole()
         {
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
+
+            using (var caller = RPCOperator.CreateCaller(
                 PlayerControl.LocalPlayer.NetId,
-                (byte)RPCOperator.Command.SetRoleToAllPlayer,
-                Hazel.SendOption.Reliable, -1);
-            writer.WritePacked(roleList.Count); // 何個あるか
-
-            foreach (IAssignedPlayer data in roleList)
+                RPCOperator.Command.SetRoleToAllPlayer))
             {
-                writer.Write(data.PlayerId); // PlayerId
-                writer.Write(data.RoleType); // RoleType : single or comb
-                writer.WritePacked(data.RoleId); // RoleId
+                caller.WritePackedInt(roleList.Count); // 何個あるか
 
-                if (data.RoleType == (byte)IAssignedPlayer.ExRoleType.Comb)
+                foreach (IAssignedPlayer data in roleList)
                 {
-                    var combData = (AssignedPlayerToCombRoleData)data;
-                    writer.Write(combData.CombTypeId); // combTypeId
-                    writer.Write(combData.GameContId); // byted GameContId
-                    writer.Write(combData.AmongUsRoleId); // byted AmongUsVanillaRoleId
+                    caller.WriteByte(data.PlayerId); // PlayerId
+                    caller.WriteByte(data.RoleType); // RoleType : single or comb
+                    caller.WritePackedInt(data.RoleId); // RoleId
+
+                    if (data.RoleType == (byte)IAssignedPlayer.ExRoleType.Comb)
+                    {
+                        var combData = (AssignedPlayerToCombRoleData)data;
+                        caller.WriteByte(combData.CombTypeId); // combTypeId
+                        caller.WriteByte(combData.GameContId); // byted GameContId
+                        caller.WriteByte(combData.AmongUsRoleId); // byted AmongUsVanillaRoleId
+                    }
                 }
             }
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
             RPCOperator.SetRoleToAllPlayer(roleList);
             ExtremeRolesPlugin.ShipState.SwitchRoleAssignToEnd();
             roleList.Clear();

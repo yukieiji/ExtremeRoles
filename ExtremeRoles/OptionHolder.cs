@@ -88,6 +88,7 @@ namespace ExtremeRoles
             EngineerUseImpostorVent,
             CanKillVentInPlayer,
             ParallelMedBayScans,
+            IsAutoSelectRandomSpawn,
             
             IsRemoveAdmin,
             IsRemoveAirShipArchiveAdmin,
@@ -219,6 +220,9 @@ namespace ExtremeRoles
             Ship.IsBlockGAAbilityReport = AllOption[
                 (int)CommonOptionKey.IsBlockGAAbilityReport].GetValue();
 
+            Ship.IsAutoSelectRandomSpawn = AllOption[
+                (int)CommonOptionKey.IsAutoSelectRandomSpawn].GetValue();
+
             Ship.IsRemoveAdmin = AllOption[
                 (int)CommonOptionKey.IsRemoveAdmin].GetValue();
             Ship.IsRemoveAirShipCockpitAdmin = AllOption[
@@ -285,18 +289,16 @@ namespace ExtremeRoles
 
             foreach (var chunkedOption in splitOption)
             {
-                MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                    PlayerControl.LocalPlayer.NetId,
-                    (byte)RPCOperator.Command.ShareOption,
-                    Hazel.SendOption.Reliable);
-
-                writer.Write((byte)chunkedOption.Count());
-                foreach (var (id, option) in chunkedOption)
+                using (var caller = RPCOperator.CreateCaller(
+                    RPCOperator.Command.ShareOption))
                 {
-                    writer.WritePacked(id);
-                    writer.WritePacked(option.CurSelection);
+                    caller.WriteByte((byte)chunkedOption.Count());
+                    foreach (var (id, option) in chunkedOption)
+                    {
+                        caller.WritePackedInt(id);
+                        caller.WritePackedInt(option.CurSelection);
+                    }
                 }
-                AmongUsClient.Instance.FinishRpcImmediately(writer);
             }
         }
         public static void ShareOption(int numberOfOptions, MessageReader reader)
@@ -472,10 +474,13 @@ namespace ExtremeRoles
                 CommonOptionKey.EngineerUseImpostorVent.ToString(),
                 false, ventOption, invert: true);
 
-
             new BoolCustomOption(
                 (int)CommonOptionKey.ParallelMedBayScans,
                 CommonOptionKey.ParallelMedBayScans.ToString(), false);
+
+            new BoolCustomOption(
+                (int)CommonOptionKey.IsAutoSelectRandomSpawn,
+                CommonOptionKey.IsAutoSelectRandomSpawn.ToString(), false);
 
             var adminOpt = new BoolCustomOption(
                 (int)CommonOptionKey.IsRemoveAdmin,
@@ -615,6 +620,8 @@ namespace ExtremeRoles
             public static bool DisableVent = false;
             public static bool EngineerUseImpostorVent = false;
             public static bool CanKillVentInPlayer = false;
+
+            public static bool IsAutoSelectRandomSpawn = false;
 
             public static bool IsRemoveAdmin = false;
             public static bool IsRemoveAirShipCockpitAdmin = false;

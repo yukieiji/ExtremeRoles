@@ -82,7 +82,7 @@ namespace ExtremeRoles.GhostRoles
         }
 
         protected override void UseAbility(
-            MessageWriter writer)
+            RPCOperator.RpcCaller caller)
         {
             throw new System.Exception("Don't call this class method!!");
         }

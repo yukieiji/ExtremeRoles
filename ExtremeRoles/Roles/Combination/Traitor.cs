@@ -230,15 +230,13 @@ namespace ExtremeRoles.Roles.Combination
 
             byte playerId = CachedPlayerControl.LocalPlayer.PlayerId;
 
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.ReplaceRole,
-                new System.Collections.Generic.List<byte>
-                {
-                    playerId,
-                    playerId,
-                    (byte)ExtremeRoleManager.ReplaceOperation.ResetVanillaRole
-                });
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.ReplaceRole))
+            {
+                caller.WriteByte(playerId);
+                caller.WriteByte(playerId);
+                caller.WriteByte((byte)ExtremeRoleManager.ReplaceOperation.ResetVanillaRole);
+            }
             RPCOperator.ReplaceRole(
                 playerId, playerId,
                 (byte)ExtremeRoleManager.ReplaceOperation.ResetVanillaRole);

@@ -179,26 +179,16 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             float prevTime = PlayerControl.LocalPlayer.killTimer;
             Helper.Logging.Debug($"PrevKillCool:{prevTime}");
 
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                PlayerControl.LocalPlayer.NetId,
-                (byte)RPCOperator.Command.StartVentAnimation,
-                Hazel.SendOption.Reliable, -1);
-            writer.WritePacked(Vent.currentVent.Id);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.StartVentAnimation))
+            {
+                caller.WritePackedInt(Vent.currentVent.Id);
+            }
+
             RPCOperator.StartVentAnimation(
                 Vent.currentVent.Id);
 
-
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.UncheckedMurderPlayer,
-                new List<byte>
-                {
-                    CachedPlayerControl.LocalPlayer.PlayerId,
-                    this.targetPlayer.PlayerId,
-                    byte.MinValue
-                });
-            RPCOperator.UncheckedMurderPlayer(
+            Player.RpcUncheckMurderPlayer(
                 CachedPlayerControl.LocalPlayer.PlayerId,
                 this.targetPlayer.PlayerId,
                 byte.MinValue);

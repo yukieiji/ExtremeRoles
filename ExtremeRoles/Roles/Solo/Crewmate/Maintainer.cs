@@ -42,60 +42,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public bool UseAbility()
         {
-            foreach (PlayerTask task in PlayerControl.LocalPlayer.myTasks.GetFastEnumerator())
-            {
-                if (task == null){ continue; }
-
-                TaskTypes taskType = task.TaskType;
-
-                if (ExtremeRolesPlugin.Compat.IsModMap)
-                {
-                    if (ExtremeRolesPlugin.Compat.ModMap.IsCustomSabotageTask(taskType))
-                    {
-                        ExtremeRolesPlugin.Compat.ModMap.RpcRepairCustomSabotage(
-                            taskType);
-                        continue;
-                    }
-                }
-                switch (taskType)
-                {
-                    case TaskTypes.FixLights:
-
-                        RPCOperator.Call(
-                            PlayerControl.LocalPlayer.NetId,
-                            RPCOperator.Command.FixLightOff);
-                        RPCOperator.FixLightOff();
-                        break;
-                    case TaskTypes.RestoreOxy:
-                        CachedShipStatus.Instance.RpcRepairSystem(
-                            SystemTypes.LifeSupp, 0 | 64);
-                        CachedShipStatus.Instance.RpcRepairSystem(
-                            SystemTypes.LifeSupp, 1 | 64);
-                        break;
-                    case TaskTypes.ResetReactor:
-                        CachedShipStatus.Instance.RpcRepairSystem(
-                            SystemTypes.Reactor, 16);
-                        break;
-                    case TaskTypes.ResetSeismic:
-                        CachedShipStatus.Instance.RpcRepairSystem(
-                            SystemTypes.Laboratory, 16);
-                        break;
-                    case TaskTypes.FixComms:
-                        CachedShipStatus.Instance.RpcRepairSystem(
-                            SystemTypes.Comms, 16 | 0);
-                        CachedShipStatus.Instance.RpcRepairSystem(
-                            SystemTypes.Comms, 16 | 1);
-                        break;
-                    case TaskTypes.StopCharles:
-                        CachedShipStatus.Instance.RpcRepairSystem(
-                            SystemTypes.Reactor, 0 | 16);
-                        CachedShipStatus.Instance.RpcRepairSystem(
-                            SystemTypes.Reactor, 1 | 16);
-                        break;
-                    default:
-                        break;
-                }
-            }
+            GameSystem.RpcRepairAllSabotage();
 
             foreach (PlainDoor door in CachedShipStatus.Instance.AllDoors)
             {

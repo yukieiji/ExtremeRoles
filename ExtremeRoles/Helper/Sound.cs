@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-using Hazel;
-
-using ExtremeRoles.Performance;
+﻿using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Helper
 {
@@ -17,14 +11,12 @@ namespace ExtremeRoles.Helper
 
         public static void RpcPlaySound(SoundType soundType, float volume=0.8f)
         {
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                (byte)RPCOperator.Command.PlaySound,
-                Hazel.SendOption.Reliable, -1);
-            writer.Write((byte)soundType);
-            writer.Write(volume);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
-
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.PlaySound))
+            {
+                caller.WriteByte((byte)soundType);
+                caller.WriteFloat(volume);
+            }
             PlaySound(soundType, volume);
         }
 

@@ -212,11 +212,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             if (this.isRemoveDeadBody)
             {
-                RPCOperator.Call(
-                    rolePlayer.NetId,
-                    RPCOperator.Command.CleanDeadBody,
-                    new List<byte> { this.deadBodyId });
-                RPCOperator.CleanDeadBody(this.deadBodyId);
+                Player.RpcCleanDeadBody(this.deadBodyId);
             }
 
             // 矢印消す
@@ -236,14 +232,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 return; 
             }
 
-            RPCOperator.Call(
-                rolePlayer.NetId,
-                RPCOperator.Command.CuresMakerCurseKillCool,
-                new List<byte>
-                {
-                    rolePlayer.PlayerId,
-                    killer, 
-                });
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.CuresMakerCurseKillCool))
+            {
+                caller.WriteByte(rolePlayer.PlayerId);
+                caller.WriteByte(killer);
+            }
             CurseKillCool(rolePlayer.PlayerId, killer);
             this.deadBodyId = byte.MaxValue;
 

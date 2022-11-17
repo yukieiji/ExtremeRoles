@@ -379,7 +379,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (this.container.IsAllPlayerInfected())
             {
                 this.IsWin = true;
-                RPCOperator.RoleIsWin(rolePlayer.PlayerId);
+                ExtremeRolesPlugin.ShipState.RpcRoleIsWin(rolePlayer.PlayerId);
                 return;
             }
 

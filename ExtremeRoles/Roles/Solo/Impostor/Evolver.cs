@@ -84,10 +84,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             if (this.isEvolvdAnimation)
             {
-                RPCOperator.Call(
-                    rolePlayer.NetId,
-                    RPCOperator.Command.UncheckedShapeShift,
-                    new List<byte> { rolePlayer.PlayerId, rolePlayer.PlayerId, byte.MaxValue });
+                using (var caller = RPCOperator.CreateCaller(
+                    RPCOperator.Command.UncheckedShapeShift))
+                {
+                    caller.WriteByte(rolePlayer.PlayerId);
+                    caller.WriteByte(rolePlayer.PlayerId);
+                    caller.WriteByte(byte.MaxValue);
+                }
                 RPCOperator.UncheckedShapeShift(
                     rolePlayer.PlayerId,
                     rolePlayer.PlayerId,
@@ -105,12 +108,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             if (!this.isEatingEndCleanBody) { return; }
 
-            RPCOperator.Call(
-                rolePlayer.NetId,
-                RPCOperator.Command.CleanDeadBody,
-                new List<byte> { this.eatingBodyId });
-
-            RPCOperator.CleanDeadBody(this.eatingBodyId);
+            Player.RpcCleanDeadBody(this.eatingBodyId);
         }
 
         public bool CheckAbility()

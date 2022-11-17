@@ -271,6 +271,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             bool excludeImp = Input.GetKey(KeyCode.LeftControl);
             bool excludeMe = Input.GetKey(KeyCode.LeftAlt);
 
+            byte localPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
+
             bool contine;
             byte targetPlayerId;
 
@@ -287,25 +289,22 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 }
                 else if (!contine && excludeMe)
                 {
-                    contine = CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId;
+                    contine = localPlayerId == targetPlayerId;
                 }
 
             } while (contine);
 
             byte ops = isPlayerMode ? (byte)FakerDummyOps.Player : (byte)FakerDummyOps.DeadBody;
 
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.FakerCreateDummy,
-                new List<byte>
-                {
-                    CachedPlayerControl.LocalPlayer.PlayerId,
-                    targetPlayerId,
-                    ops
-                });
-            CreateDummy(
-                CachedPlayerControl.LocalPlayer.PlayerId,
-                targetPlayerId, ops);
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.FakerCreateDummy))
+            {
+                caller.WriteByte(localPlayerId);
+                caller.WriteByte(targetPlayerId);
+                caller.WriteByte(ops);
+            }
+            CreateDummy(localPlayerId, targetPlayerId, ops);
+
             return true;
         }
 

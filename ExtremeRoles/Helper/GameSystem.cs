@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-using Hazel;
 using UnityEngine;
 
 using Newtonsoft.Json.Linq;
@@ -13,6 +12,7 @@ using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Helper
 {
@@ -208,6 +208,106 @@ namespace ExtremeRoles.Helper
             return vitalConsole;
         }
 
+        public static void ForceEndGame()
+        {
+            RPCOperator.Call(RPCOperator.Command.ForceEnd);
+            RPCOperator.ForceEnd();
+        }
+
+        public static void ReplaceToNewTask(byte playerId, int index, int taskIndex)
+        {
+            var player = Player.GetPlayerControlById(
+                playerId);
+
+            if (player == null) { return; }
+
+            byte taskId = (byte)taskIndex;
+
+            if (SetPlayerNewTask(ref player, taskId, (uint)index))
+            {
+                player.Data.Tasks[index] = new GameData.TaskInfo(
+                    taskId, (uint)index);
+                player.Data.Tasks[index].Id = (uint)index;
+
+                GameData.Instance.SetDirtyBit(
+                    1U << (int)player.PlayerId);
+            }
+        }
+
+        public static void RpcReplaceNewTask(
+            byte targetPlayerId, int replaceTaskIndex, int newTaskId)
+        {
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.ReplaceTask))
+            {
+                caller.WriteByte(targetPlayerId);
+                caller.WriteInt(replaceTaskIndex);
+                caller.WriteInt(newTaskId);
+            }
+            ReplaceToNewTask(
+                targetPlayerId,
+                replaceTaskIndex,
+                newTaskId);
+        }
+
+        public static void RpcRepairAllSabotage()
+        {
+            foreach (PlayerTask task in 
+                CachedPlayerControl.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
+            {
+                if (task == null) { continue; }
+
+                TaskTypes taskType = task.TaskType;
+
+                if (ExtremeRolesPlugin.Compat.IsModMap)
+                {
+                    if (ExtremeRolesPlugin.Compat.ModMap.IsCustomSabotageTask(taskType))
+                    {
+                        ExtremeRolesPlugin.Compat.ModMap.RpcRepairCustomSabotage(
+                            taskType);
+                        continue;
+                    }
+                }
+                switch (taskType)
+                {
+                    case TaskTypes.FixLights:
+                        RPCOperator.Call(
+                            CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
+                            RPCOperator.Command.FixLightOff);
+                        RPCOperator.FixLightOff();
+                        break;
+                    case TaskTypes.RestoreOxy:
+                        CachedShipStatus.Instance.RpcRepairSystem(
+                            SystemTypes.LifeSupp, 0 | 64);
+                        CachedShipStatus.Instance.RpcRepairSystem(
+                            SystemTypes.LifeSupp, 1 | 64);
+                        break;
+                    case TaskTypes.ResetReactor:
+                        CachedShipStatus.Instance.RpcRepairSystem(
+                            SystemTypes.Reactor, 16);
+                        break;
+                    case TaskTypes.ResetSeismic:
+                        CachedShipStatus.Instance.RpcRepairSystem(
+                            SystemTypes.Laboratory, 16);
+                        break;
+                    case TaskTypes.FixComms:
+                        CachedShipStatus.Instance.RpcRepairSystem(
+                            SystemTypes.Comms, 16 | 0);
+                        CachedShipStatus.Instance.RpcRepairSystem(
+                            SystemTypes.Comms, 16 | 1);
+                        break;
+                    case TaskTypes.StopCharles:
+                        CachedShipStatus.Instance.RpcRepairSystem(
+                            SystemTypes.Reactor, 0 | 16);
+                        CachedShipStatus.Instance.RpcRepairSystem(
+                            SystemTypes.Reactor, 1 | 16);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
         public static void SetTask(
             GameData.PlayerInfo playerInfo,
             int taskIndex)
@@ -287,16 +387,15 @@ namespace ExtremeRoles.Helper
         {
             Version ver = Assembly.GetExecutingAssembly().GetName().Version;
 
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                 CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                (byte)RPCOperator.Command.ShareVersion,
-                Hazel.SendOption.Reliable, -1);
-            writer.Write(ver.Major);
-            writer.Write(ver.Minor);
-            writer.Write(ver.Build);
-            writer.Write(ver.Revision);
-            writer.WritePacked(AmongUsClient.Instance.ClientId);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.ShareVersion))
+            {
+                caller.WriteInt(ver.Major);
+                caller.WriteInt(ver.Minor);
+                caller.WriteInt(ver.Build);
+                caller.WriteInt(ver.Revision);
+                caller.WritePackedInt(AmongUsClient.Instance.ClientId);
+            }
 
             RPCOperator.AddVersionData(
                 ver.Major, ver.Minor,

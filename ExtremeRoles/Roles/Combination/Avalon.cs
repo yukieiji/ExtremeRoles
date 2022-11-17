@@ -27,6 +27,7 @@ namespace ExtremeRoles.Roles.Combination
     {
         public enum AssassinOption
         {
+            HasTask,
             CanKilled,
             CanKilledFromCrew,
             CanKilledFromNeutral,
@@ -76,6 +77,9 @@ namespace ExtremeRoles.Roles.Combination
         protected override void CreateSpecificOption(
             IOption parentOps)
         {
+            CreateBoolOption(
+                AssassinOption.HasTask,
+                false, parentOps);
             var killedOps = CreateBoolOption(
                 AssassinOption.CanKilled,
                 false, parentOps);
@@ -165,7 +169,8 @@ namespace ExtremeRoles.Roles.Combination
         {
             var allOption = OptionHolder.AllOption;
 
-
+            this.HasTask = allOption[
+                GetRoleOptionId(AssassinOption.HasTask)].GetValue();
             this.CanKilled = allOption[
                 GetRoleOptionId(AssassinOption.CanKilled)].GetValue();
             this.CanKilledFromCrew = allOption[

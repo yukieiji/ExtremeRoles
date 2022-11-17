@@ -172,13 +172,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
             foreach (byte player in killedPlayer)
             {
-                RPCOperator.Call(
-                    rolePlayer.NetId,
-                    RPCOperator.Command.UncheckedMurderPlayer,
-                    new List<byte> { rolePlayer.PlayerId, player, 0 });
-                RPCOperator.UncheckedMurderPlayer(
-                    rolePlayer.PlayerId, player, 0);
-
+                Helper.Player.RpcUncheckMurderPlayer(
+                    rolePlayer.PlayerId,
+                    player, 0);
                 ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
                     player, ExtremeShipStatus.PlayerStatus.Explosion);
 

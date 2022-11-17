@@ -92,10 +92,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     taskGage >= this.deadWinTaskGage)
                 {
                     this.isDeadWin = true;
-                    RPCOperator.Call(
-                        rolePlayer.NetId,
-                        RPCOperator.Command.SurvivorDeadWin,
-                        new List<byte> { rolePlayer.PlayerId });
+
+                    using (var caller = RPCOperator.CreateCaller(
+                        RPCOperator.Command.SurvivorDeadWin))
+                    {
+                        caller.WriteByte(rolePlayer.PlayerId);
+                    }
                     DeadWin(rolePlayer.PlayerId);
                 }
 

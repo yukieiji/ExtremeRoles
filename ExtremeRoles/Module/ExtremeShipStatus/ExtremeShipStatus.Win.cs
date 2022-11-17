@@ -14,6 +14,16 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
         private int winGameControlId = int.MaxValue;
         private List<GameData.PlayerInfo> plusWinner = new List<GameData.PlayerInfo>();
 
+        public void RpcRoleIsWin(byte playerId)
+        {
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.SetRoleWin))
+            {
+                caller.WriteByte(playerId);
+            }
+            RPCOperator.SetRoleWin(playerId);
+        }
+
         public void AddWinner(PlayerControl player)
         {
             this.plusWinner.Add(player.Data);

@@ -123,15 +123,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             byte message = Input.GetKey(KeyCode.LeftShift) ? byte.MaxValue : byte.MinValue;
 
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.PainterPaintBody,
-                new List<byte>
-                {
-                    this.targetDeadBodyId,
-                    message
-                });
-
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.PainterPaintBody))
+            {
+                caller.WriteByte(this.targetDeadBodyId);
+                caller.WriteByte(message);
+            }
             PaintDeadBody(
                 this.targetDeadBodyId,
                 message);

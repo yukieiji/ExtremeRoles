@@ -94,34 +94,7 @@ namespace ExtremeRoles.Patches.Button
                         res = MurderKillResult.NoAnimatedKill;
                     }
                 }
-
-                switch (res)
-                {
-                    case MurderKillResult.NormalKill:
-
-                        RPCOperator.Call(
-                            CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                            RPCOperator.Command.UncheckedMurderPlayer,
-                            new List<byte> { killer.PlayerId, target.PlayerId, byte.MaxValue });
-                        RPCOperator.UncheckedMurderPlayer(
-                            killer.PlayerId,
-                            target.PlayerId,
-                            byte.MaxValue);
-                        break;
-                    case MurderKillResult.NoAnimatedKill:
-                        RPCOperator.Call(
-                            CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                            RPCOperator.Command.UncheckedMurderPlayer,
-                            new List<byte> { killer.PlayerId, target.PlayerId, 0 });
-                        RPCOperator.UncheckedMurderPlayer(
-                            killer.PlayerId,
-                            target.PlayerId, 0);
-                        break;
-                    default:
-                        break;
-                }
-
-                __instance.SetTarget(null);
+                excuteKill(__instance, res, killer, target);
             }
             return false;
         }
@@ -177,32 +150,29 @@ namespace ExtremeRoles.Patches.Button
             
             MurderKillResult res = checkMuderKill(
                 instance, killer, target);
+            excuteKill(instance, res, killer, target);
+        }
 
-            switch (res)
+        private static void excuteKill(
+            KillButton instance,
+            MurderKillResult result,
+            PlayerControl killer,
+            PlayerControl target)
+        {
+            switch (result)
             {
                 case MurderKillResult.NormalKill:
-
-                    RPCOperator.Call(
-                        CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                        RPCOperator.Command.UncheckedMurderPlayer,
-                        new List<byte> { killer.PlayerId, target.PlayerId, byte.MaxValue });
-                    RPCOperator.UncheckedMurderPlayer(
-                        killer.PlayerId,
-                        target.PlayerId,
-                        byte.MaxValue);
+                    Helper.Player.RpcUncheckMurderPlayer(
+                        killer.PlayerId, target.PlayerId, byte.MaxValue);
                     break;
                 case MurderKillResult.NoAnimatedKill:
-                    RPCOperator.Call(
-                        CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                        RPCOperator.Command.UncheckedMurderPlayer,
-                        new List<byte> { killer.PlayerId, target.PlayerId, 0 });
-                    RPCOperator.UncheckedMurderPlayer(
-                        killer.PlayerId,
-                        target.PlayerId, 0);
+                    Helper.Player.RpcUncheckMurderPlayer(
+                        killer.PlayerId, target.PlayerId, 0);
                     break;
                 default:
                     break;
             }
+
             instance.SetTarget(null);
         }
     }

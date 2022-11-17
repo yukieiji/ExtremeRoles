@@ -15,7 +15,7 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
 
         public ReusableAbilityButton(
             AbilityType abilityType,
-            Action<MessageWriter> ability,
+            Action<RPCOperator.RpcCaller> ability,
             Func<bool> abilityPreCheck,
             Func<bool> canUse,
             Sprite sprite,

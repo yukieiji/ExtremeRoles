@@ -116,11 +116,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             this.prevKillCool = PlayerControl.LocalPlayer.killTimer;
 
-            RPCOperator.Call(
-                killer.NetId,
-                RPCOperator.Command.UncheckedMurderPlayer,
-                new List<byte> { killer.PlayerId, newTarget.PlayerId, useAnimation });
-            RPCOperator.UncheckedMurderPlayer(
+            Player.RpcUncheckMurderPlayer(
                 killer.PlayerId,
                 newTarget.PlayerId,
                 useAnimation);

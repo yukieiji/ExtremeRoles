@@ -97,15 +97,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 if (this.player.Count >= this.activePlayerNum)
                 {
                     this.isActivate = true;
-                    MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                        CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                        (byte)RPCOperator.Command.MeryAcivateVent,
-                        Hazel.SendOption.Reliable, -1);
-                    writer.Write(index);
-                    AmongUsClient.Instance.FinishRpcImmediately(writer);
-                    ActivateVent(index);
-                }
 
+                    using (var caller = RPCOperator.CreateCaller(
+                        RPCOperator.Command.MeryAbility))
+                    {
+                        caller.WriteByte((byte)MeryAbility.ActiveCamp);
+                        caller.WriteInt(index);
+                    }
+                    activateVent(index);
+                }
             }
 
             public Vent GetConvertedVent()
@@ -152,6 +152,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             ActiveRange
         }
 
+        public enum MeryAbility : byte
+        {
+            SetCamp,
+            ActiveCamp
+        }
+
         public RoleAbilityButtonBase Button
         {
             get => this.bombButton;
@@ -174,8 +180,28 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             true, false, true, true)
         { }
 
+        public static void Ability(ref MessageReader reader)
+        {
+            MeryAbility abilityType = (MeryAbility)reader.ReadByte();
 
-        public static void SetCamp(byte callerId, Vector2 setPos)
+            switch (abilityType)
+            {
+                case MeryAbility.SetCamp:
+                    byte meryPlayerId = reader.ReadByte();
+                    float x = reader.ReadSingle();
+                    float y = reader.ReadSingle();
+                    setCamp(meryPlayerId, new Vector2(x, y));
+                    break;
+                case MeryAbility.ActiveCamp:
+                    int activateVentIndex = reader.ReadInt32();
+                    activateVent(activateVentIndex);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private static void setCamp(byte callerId, Vector2 setPos)
         {
             var mery = ExtremeRoleManager.GetSafeCastedRole<Mery>(callerId);
             if (mery == null) { return; }
@@ -191,7 +217,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     setPos));
         }
 
-        public static void ActivateVent(
+        private static void activateVent(
             int activateVentIndex)
         {
             Camp camp = (Camp)ExtremeRolesPlugin.ShipState.GetUpdateObject(
@@ -253,16 +279,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
             Vector2 setPos = localPlayer.GetTruePosition();
 
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                localPlayer.NetId,
-                (byte)RPCOperator.Command.MerySetCamp,
-                Hazel.SendOption.Reliable, -1);
-            writer.Write(localPlayer.PlayerId);
-            writer.Write(setPos.x);
-            writer.Write(setPos.y);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
-
-            SetCamp(localPlayer.PlayerId, setPos);
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.MeryAbility))
+            {
+                caller.WriteByte((byte)MeryAbility.SetCamp);
+                caller.WriteByte(localPlayer.PlayerId);
+                caller.WriteFloat(setPos.x);
+                caller.WriteFloat(setPos.y);
+            }
+            setCamp(localPlayer.PlayerId, setPos);
 
             return true;
         }

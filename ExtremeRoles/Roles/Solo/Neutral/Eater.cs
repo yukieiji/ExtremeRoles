@@ -402,7 +402,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             if (eaterButton.CurAbilityNum != 0) { return; }
 
-            RPCOperator.RoleIsWin(rolePlayer.PlayerId);
+            ExtremeRolesPlugin.ShipState.RpcRoleIsWin(rolePlayer.PlayerId);
             this.IsWin = true;
         }
 
@@ -410,11 +410,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             if (this.targetDeadBody != null)
             {
-                RPCOperator.Call(
-                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                    RPCOperator.Command.CleanDeadBody,
-                    new List<byte> { this.targetDeadBody.PlayerId });
-                RPCOperator.CleanDeadBody(this.targetDeadBody.PlayerId);
+                Player.RpcCleanDeadBody(this.targetDeadBody.PlayerId);
 
                 if (this.deadBodyArrow.ContainsKey(this.targetDeadBody.PlayerId))
                 {
@@ -432,16 +428,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
             else
             {
-                RPCOperator.Call(
-                    CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                    RPCOperator.Command.UncheckedMurderPlayer,
-                    new List<byte>
-                    { 
-                        CachedPlayerControl.LocalPlayer.PlayerId,
-                        this.targetPlayer.PlayerId,
-                        0,
-                    });
-                RPCOperator.UncheckedMurderPlayer(
+
+                Player.RpcUncheckMurderPlayer(
                     CachedPlayerControl.LocalPlayer.PlayerId,
                     this.targetPlayer.PlayerId, 0);
 
@@ -579,12 +567,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 yield return null;
             }
 
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.CleanDeadBody,
-                new List<byte> { targetPlayerId });
-            RPCOperator.CleanDeadBody(targetPlayerId);
-
+            Player.RpcCleanDeadBody(targetPlayerId);
+            
             this.targetPlayer = null;
 
             if (this.eatButton == null) { yield break; }

@@ -1,0 +1,50 @@
+name: AutoBuildAndTransCheck
+
+on: 
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  build_check:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - name: SetupNuget
+        uses: nuget/setup-nuget@v1
+      - name: RestoreNugetPackage
+        run: nuget restore ExtremeRoles.sln
+      - name: SetupPython
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+          architecture: 'x64'
+      - name: InstallPythonLibrary
+        run: pip install openpyxl
+      - uses: fbactions/setup-winsdk@v1
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.x
+      - name: AddMsBuildToPATH
+        uses: microsoft/setup-msbuild@v1.1
+      - uses: ilammy/msvc-dev-cmd@v1
+        with:
+          sdk: 10.0.18362.0
+      - name: CheckTransData
+        continue-on-error: true
+        run: python createTransReport.py
+      - name: RunBuild
+        id: build
+        continue-on-error: true
+        run: msbuild ExtremeRoles.sln -t:restore,build -p:Configuration=Release -p:RestorePackagesConfig=true
+      - name: PostComment
+        uses: NejcZdovc/comment-pr@v2
+        with:
+          file: "comment.md"
+          single_comment: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BuildResult: ${{ steps.build.outcome }}

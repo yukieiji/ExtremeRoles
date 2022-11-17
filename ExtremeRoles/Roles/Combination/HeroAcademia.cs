@@ -203,73 +203,63 @@ namespace ExtremeRoles.Roles.Combination
         }
         public static void RpcCleanUpEmergencyCall()
         {
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.HeroHeroAcademia,
-                new List<byte>
-                {
-                    (byte)Command.CleanUpEmergencyCall,
-                });
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.HeroHeroAcademia))
+            {
+                caller.WriteByte((byte)Command.CleanUpEmergencyCall);
+            }
             cleanUpEmergencyCall();
         }
 
         public static void RpcEmergencyCall(
             PlayerControl vigilante, byte targetPlayerId)
         {
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.HeroHeroAcademia,
-                new List<byte>
-                {
-                    (byte)Command.EmergencyCall,
-                    vigilante.PlayerId,
-                    targetPlayerId,
-                });
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.HeroHeroAcademia))
+            {
+                caller.WriteByte((byte)Command.EmergencyCall);
+                caller.WriteByte(vigilante.PlayerId);
+                caller.WriteByte(targetPlayerId);
+            }
             emergencyCall(vigilante.PlayerId, targetPlayerId);
         }
 
         public static void RpcDrawHeroAndVillan(
             PlayerControl hero, PlayerControl villan)
         {
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.HeroHeroAcademia,
-                new List<byte>
-                {
-                    (byte)Command.DrawHeroAndVillan,
-                    hero.PlayerId,
-                    villan.PlayerId,
-                });
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.HeroHeroAcademia))
+            {
+                caller.WriteByte((byte)Command.DrawHeroAndVillan);
+                caller.WriteByte(hero.PlayerId);
+                caller.WriteByte(villan.PlayerId);
+            }
             drawHeroAndVillan(hero.PlayerId, villan.PlayerId);
         }
         public static void RpcUpdateHero(
             PlayerControl hero,
             Hero.OneForAllCondition newCond)
         {
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.HeroHeroAcademia,
-                new List<byte>
-                {
-                    (byte)Command.UpdateHero,
-                    hero.PlayerId,
-                    (byte)newCond,
-                });
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.HeroHeroAcademia))
+            {
+                caller.WriteByte((byte)Command.UpdateHero);
+                caller.WriteByte(hero.PlayerId);
+                caller.WriteByte((byte)newCond);
+            }
             updateHero(hero.PlayerId, (byte)newCond);
        
         }
         public static void RpcUpdateVigilante(
             Condition cond, byte downPlayerId)
         {
-            RPCOperator.Call(
-                CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
-                RPCOperator.Command.HeroHeroAcademia,
-                new List<byte>
-                {
-                    (byte)Command.UpdateVigilante,
-                    (byte)cond,
-                    downPlayerId
-                });
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.HeroHeroAcademia))
+            {
+                caller.WriteByte((byte)Command.UpdateHero);
+                caller.WriteByte((byte)cond);
+                caller.WriteByte(downPlayerId);
+            }
             UpdateVigilante(cond, downPlayerId);
         }
 
@@ -614,17 +604,7 @@ namespace ExtremeRoles.Roles.Combination
 
             if (assassin != null && !assassin.CanKilledFromCrew)
             {
-
-                RPCOperator.Call(
-                    rolePlayer.NetId,
-                    RPCOperator.Command.UncheckedMurderPlayer,
-                    new List<byte>
-                    {
-                        rolePlayer.PlayerId,
-                        rolePlayer.PlayerId,
-                        byte.MaxValue
-                    });
-                RPCOperator.UncheckedMurderPlayer(
+                Player.RpcUncheckMurderPlayer(
                     rolePlayer.PlayerId,
                     rolePlayer.PlayerId,
                     byte.MaxValue);

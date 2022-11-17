@@ -301,26 +301,24 @@ namespace ExtremeRoles.Compat.Mods
 
         public void RpcRepairCustomSabotage()
         {
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                PlayerControl.LocalPlayer.NetId,
-                (byte)RPCOperator.Command.IntegrateModCall,
-                Hazel.SendOption.Reliable, -1);
-            writer.Write(IMapMod.RpcCallType);
-            writer.Write((byte)MapRpcCall.RepairAllSabo);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.IntegrateModCall))
+            {
+                caller.WriteByte(IMapMod.RpcCallType);
+                caller.WriteByte((byte)MapRpcCall.RepairAllSabo);
+            }
             RepairCustomSabotage();
         }
 
         public void RpcRepairCustomSabotage(TaskTypes saboTask)
         {
-            MessageWriter writer = AmongUsClient.Instance.StartRpcImmediately(
-                PlayerControl.LocalPlayer.NetId,
-                (byte)RPCOperator.Command.IntegrateModCall,
-                Hazel.SendOption.Reliable, -1);
-            writer.Write(IMapMod.RpcCallType);
-            writer.Write((byte)MapRpcCall.RepairAllSabo);
-            writer.Write((int)saboTask);
-            AmongUsClient.Instance.FinishRpcImmediately(writer);
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.IntegrateModCall))
+            {
+                caller.WriteByte(IMapMod.RpcCallType);
+                caller.WriteByte((byte)MapRpcCall.RepairCustomSaboType);
+                caller.WriteInt((int)saboTask);
+            }
             RepairCustomSabotage(saboTask);
         }
 
