@@ -179,6 +179,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
             var allPlayer = GameData.Instance.AllPlayers;
             ShipStatus ship = CachedShipStatus.Instance;
+            byte mapId = PlayerControl.GameOptions.MapId;
 
             if (this.includeLocalPlayer)
             {
@@ -195,7 +196,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 }
                 else
                 {
-                    switch (PlayerControl.GameOptions.MapId)
+                    switch (mapId)
                     {
                         case 0:
                         case 1:
@@ -225,10 +226,26 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     player.PlayerId != teloportTarget &&
                     !player.IsDead &&
                     player.Object != null &&
-                    !player.Object.inVent)
+                    !player.Object.inVent && // ベント入ってない
+                    player.Object.moveable) // 移動できる状態か
                 {
+                    Vector3 targetPos = player.Object.transform.position;
+
+                    // AirShipの初期スポーンは(new Vector2(-25f, 40f))で浮動小数点誤差を考慮してこうする
+                    if (mapId == 4 &&
+                        (-26f <= targetPos.x && targetPos.x <= -24f) &&
+                        ( 39f <= targetPos.y && targetPos.y <= 41f))
+                    {
+                        continue;
+                    }
+
                     randomPos.Add(player.Object.transform.position);
                 }
+            }
+
+            if (randomPos.Count == 0)
+            { 
+                return false; 
             }
 
             Player.RpcUncheckSnap(teloportTarget, randomPos[
