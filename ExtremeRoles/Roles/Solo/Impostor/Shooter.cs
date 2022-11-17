@@ -377,7 +377,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 false, parentOps);
             CreateIntOption(
                 ShooterOption.AwakeKillNum,
-                2, 0, 5, 1,
+                1, 0, 5, 1,
                 parentOps,
                 format: OptionUnit.Shot);
             CreateIntOption(
@@ -422,11 +422,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             CreateFloatOption(
                 ShooterOption.ShootChargeTime,
-                75.0f, 30.0f, 120.0f, 5.0f,
+                90.0f, 30.0f, 120.0f, 5.0f,
                 parentOps, format: OptionUnit.Second);
             CreateIntOption(
                 ShooterOption.ShootKillNum,
-                2, 0, 5, 1,
+                1, 0, 5, 1,
                 parentOps,
                 format: OptionUnit.Shot);
 
