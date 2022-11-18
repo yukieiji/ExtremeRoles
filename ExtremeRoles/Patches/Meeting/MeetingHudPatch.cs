@@ -240,6 +240,10 @@ namespace ExtremeRoles.Patches.Meeting
 
         private static Dictionary<byte, int> calculateVote(MeetingHud instance)
         {
+
+            RPCOperator.Call(RPCOperator.Command.CloseMeetingVoteButton);
+            RPCOperator.CloseMeetingButton();
+
             Dictionary<byte, int> voteResult = new Dictionary<byte, int>();
             Dictionary<byte, byte> voteTarget = new Dictionary<byte, byte>();
 
@@ -332,12 +336,21 @@ namespace ExtremeRoles.Patches.Meeting
     [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.Select))]
     public static class MeetingHudSelectPatch
     {
+        private static bool isBlock = false;
+
+        public static void SetSelectBlock(bool isBlockActive)
+        {
+            isBlock = isBlockActive;
+        }
+
         public static bool Prefix(
             MeetingHud __instance,
             ref bool __result,
             [HarmonyArgument(0)] int suspectStateIdx)
         {
             __result = false;
+
+            if (isBlock) { return false; }
 
             if (OptionHolder.Ship.DisableSelfVote &&
                 CachedPlayerControl.LocalPlayer.PlayerId == suspectStateIdx)
@@ -478,6 +491,7 @@ namespace ExtremeRoles.Patches.Meeting
             ExtremeRolesPlugin.Info.ShowBlackBG();
             ExtremeRolesPlugin.ShipState.ClearMeetingResetObject();
             Helper.Player.ResetTarget();
+            MeetingHudSelectPatch.SetSelectBlock(false);
 
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 

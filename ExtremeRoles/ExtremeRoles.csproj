@@ -3,8 +3,8 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
-      <!--<Version>4.0.0.2</Version>-->
-        <VersionPrefix>4.0.1</VersionPrefix>
+      <Version>4.0.1.1</Version>
+      <!--<VersionPrefix>4.0.1</VersionPrefix>-->
       <VersionSuffix>AwakeningPart2</VersionSuffix> 
         <Description>Extreme Roles for Advanced user</Description>
         <Authors>yukieiji</Authors>

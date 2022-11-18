@@ -149,6 +149,7 @@ namespace ExtremeRoles.Patches.Controller
             ExtremeRolesPlugin.Info.BlockShow(false);
             ExtremeRolesPlugin.Info.HideBlackBG();
             ExtremeRolesPlugin.ShipState.ResetOnMeeting();
+            Meeting.MeetingHudSelectPatch.SetSelectBlock(false);
 
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
