@@ -36,6 +36,7 @@ namespace ExtremeRoles
             PlaySound,
             ReplaceTask,
             IntegrateModCall,
+            CloseMeetingVoteButton,
 
             // 役職関連
             // 役職メインコントール
@@ -206,6 +207,7 @@ namespace ExtremeRoles
 
             // ミーティング能力リセット
             Patches.Meeting.PlayerVoteAreaSelectPatch.Reset();
+            Patches.Meeting.MeetingHudSelectPatch.SetSelectBlock(false);
 
             // 各種システムコンソールリセット
             Patches.MiniGame.VitalsMinigameUpdatePatch.Initialize();
@@ -476,6 +478,17 @@ namespace ExtremeRoles
             ref MessageReader readeer)
         {
             ExtremeRolesPlugin.Compat.IntegrateModCall(ref readeer);
+        }
+
+        public static void CloseMeetingButton()
+        {
+            if (MeetingHud.Instance == null) { return; }
+            Patches.Meeting.MeetingHudSelectPatch.SetSelectBlock(true);
+            foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)
+            {
+                if (pva == null) { continue; }
+                pva.Cancel();
+            }
         }
 
         public static void ReplaceRole(

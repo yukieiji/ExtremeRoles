@@ -521,6 +521,9 @@ namespace ExtremeRoles.Patches
                 case RPCOperator.Command.IntegrateModCall:
                     RPCOperator.IntegrateModCall(ref reader);
                     break;
+                case RPCOperator.Command.CloseMeetingVoteButton:
+                    RPCOperator.CloseMeetingButton();
+                    break;
                 case RPCOperator.Command.HeroHeroAcademia:
                     RPCOperator.HeroHeroAcademiaCommand(ref reader);
                     break;
