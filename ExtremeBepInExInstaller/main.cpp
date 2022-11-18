@@ -119,7 +119,9 @@ namespace
 
 int main(int argc, char* argv[])
 {
-    wcout << "--------------------  Extreme Roles - BepInEx Installer  --------------------" << endl;
+    wcout.imbue(std::locale(""));
+
+    wcout << L"--------------------  Extreme Roles - BepInEx Installer  --------------------" << endl;
 
     const string gameRootPath(argv[1]);
     const string extractPath(argv[2]);
