@@ -6,7 +6,6 @@
 #include <thread>
 #include <windows.h>
 #include <tlhelp32.h>
-#include <atlstr.h>
 #include <time.h>
 
 using namespace std;
@@ -17,40 +16,40 @@ namespace
     
     const string defaultLang = "0";
 
-    const map<string, map<string, string>> printString(
+    const map<string, map<string, wstring>> printString(
         {   
             {"11",
                 {
-                    {"dontClose"        , "!!!--作業が完了するまでこのウィンドウを閉じないで下さい--!!!"},
-                    {"waitAmongUs"      , "Among Usの終了を待っています"},
-                    {"removeBeplnEx"    , "古いバージョンのBeplnExを削除しています"},
-                    {"installBeplnEx"   , "BeplnExをインストール中です"},
-                    {"messageBoxSuccess", "BeplnExのインストールが完了しました。\nAmong Usを再起動して下さい"},
-                    {"messageBoxFail"   , "BeplnExのインストールが失敗しました。\nExtreme Rolesを手動で導入して下さい"}
+                    {"dontClose"        , L"!!!--作業が完了するまでこのウィンドウを閉じないで下さい--!!!"},
+                    {"waitAmongUs"      , L"Among Usの終了を待っています"},
+                    {"removeBeplnEx"    , L"古いバージョンのBeplnExを削除しています"},
+                    {"installBeplnEx"   , L"BeplnExをインストール中です"},
+                    {"messageBoxSuccess", L"BeplnExのインストールが完了しました。\nAmong Usを再起動して下さい"},
+                    {"messageBoxFail"   , L"BeplnExのインストールが失敗しました。\nExtreme Rolesを手動で導入して下さい"}
                 }
             }
         });
 
-    string GetTimeStmp()
+    wstring GetTimeStmp()
     {
         time_t t = time(nullptr);
         struct tm localTime;
         localtime_s(&localTime, &t);
 
-        std::stringstream s;
-        s << "[";
+        std::wstringstream s;
+        s << L"[";
         s << localTime.tm_year + 1900;
-        s << ":";
-        s << setw(2) << setfill('0') << localTime.tm_mon + 1;
-        s << ":";
-        s << setw(2) << setfill('0') << localTime.tm_mday;
-        s << "T";
-        s << setw(2) << setfill('0') << localTime.tm_hour;
-        s << ":";
-        s << setw(2) << setfill('0') << localTime.tm_min;
-        s << ":";
-        s << setw(2) << setfill('0') << localTime.tm_sec;
-        s << "]:";
+        s << L":";
+        s << setw(2) << setfill(L'0') << localTime.tm_mon + 1;
+        s << L":";
+        s << setw(2) << setfill(L'0') << localTime.tm_mday;
+        s << L"T";
+        s << setw(2) << setfill(L'0') << localTime.tm_hour;
+        s << L":";
+        s << setw(2) << setfill(L'0') << localTime.tm_min;
+        s << L":";
+        s << setw(2) << setfill(L'0') << localTime.tm_sec;
+        s << L"]:";
 
         return s.str();
     }
@@ -120,14 +119,14 @@ namespace
 
 int main(int argc, char* argv[])
 {
-    cout << "--------------------  Extreme Roles - BepInEx Installer  --------------------" << endl;
+    wcout << "--------------------  Extreme Roles - BepInEx Installer  --------------------" << endl;
 
     const string gameRootPath(argv[1]);
     const string extractPath(argv[2]);
     const string lang(argv[3]);
     const wstring processName(L"Among Us.exe");
 
-    map<string, string> useStringData;
+    map<string, wstring> useStringData;
 
     if (printString.contains(lang))
     {
@@ -137,8 +136,8 @@ int main(int argc, char* argv[])
     {
         useStringData = printString.at(defaultLang);
     }
-    cout << useStringData.at("dontClose") << endl;
-    cout << GetTimeStmp() << useStringData.at("waitAmongUs") << endl;
+    wcout << useStringData.at("dontClose") << endl;
+    wcout << GetTimeStmp() << useStringData.at("waitAmongUs") << endl;
 
     while (IsProcessRunning(processName.c_str()))
     {
@@ -146,16 +145,14 @@ int main(int argc, char* argv[])
             chrono::microseconds(20));
     }
     
-    cout << GetTimeStmp() << useStringData.at("removeBeplnEx") << endl;
+    wcout << GetTimeStmp() << useStringData.at("removeBeplnEx") << endl;
     RemoveOldBeplnEx(gameRootPath);
     
-    cout << GetTimeStmp() << useStringData.at("installBeplnEx") << endl;
+    wcout << GetTimeStmp() << useStringData.at("installBeplnEx") << endl;
     bool result = InstallBepInEx(extractPath, gameRootPath);
 
     string showTextKey = result ? "messageBoxSuccess" : "messageBoxFail";
 
-    CStringW cstringw(useStringData.at(showTextKey).c_str());
-
-    MessageBoxW(NULL, cstringw,
+    MessageBoxW(NULL, useStringData.at(showTextKey).c_str(),
         L"Extreme Roles - BepInEx Installer", MB_ICONINFORMATION | MB_OK);
 }
