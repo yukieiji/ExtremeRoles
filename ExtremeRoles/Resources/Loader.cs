@@ -152,7 +152,7 @@ namespace ExtremeRoles.Resources
         {
             if (!cachedBundle.TryGetValue(bundleName, out AssetBundle bundle))
             {
-                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(
+                using (var stream = Assembly.GetCallingAssembly().GetManifestResourceStream(
                     bundleName))
                 {
                     bundle = AssetBundle.LoadFromStream(stream.ToIl2Cpp());

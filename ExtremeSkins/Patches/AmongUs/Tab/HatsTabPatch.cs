@@ -13,6 +13,8 @@ using ExtremeSkins.SkinManager;
 using AmongUs.Data;
 using AmongUs.Data.Player;
 
+using ExRLoader = ExtremeRoles.Resources.Loader;
+
 namespace ExtremeSkins.Patches.AmongUs.Tab
 {
 #if WITHHAT
@@ -24,6 +26,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
         private static float inventoryTop = 1.5f;
         private static float inventoryBottom = -2.5f;
 
+        private static CreatorTab tab;
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(HatsTab), nameof(HatsTab.OnEnable))]
@@ -44,6 +47,16 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
             if (SkinTab.textTemplate == null)
             {
                 SkinTab.textTemplate = PlayerCustomizationMenu.Instance.itemName;
+            }
+            if (tab == null)
+            {
+                GameObject obj = Object.Instantiate(
+                    ExRLoader.GetGameObjectFromResources(
+                        "ExtremeSkins.Resources.skintab.asset",
+                        "assets/extremeskins/skintab.prefab"),
+                    __instance.transform);
+                tab = obj.GetComponent<CreatorTab>();
+                obj.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
             }
 
             foreach (HatData hatBehaviour in unlockedHats)
@@ -92,6 +105,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
             }
 
             __instance.scroller.ContentYBounds.max = -(yOffset + 3.0f + SkinTab.HeaderSize);
+            tab.gameObject.SetActive(true);
             return false;
         }
 
