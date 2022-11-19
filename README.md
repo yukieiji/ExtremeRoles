@@ -121,6 +121,16 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 |  v2021.12.15s/v2022.02.08s/v2021.12.15e  |  v1.17.0.0 ～ v1.18.1.0  |
 |  v2021.12.15s/v2021.12.15e  |  v1.11.1.1 ～ v1.16.1.0  |
 
+## ビルド方法
+- 要求環境
+  - VisualStudio 2022
+    - ワークロードで「C++によるデスクトップ開発」、「.NETデスクトップ開発」が必要
+  - Python
+    - Pythonのパスが通ってる必要があります(コマンドプロントでpythonと打って問題ない状態)
+- 環境構築
+  1. コマンドプロントで「pip install -r requirements.txt」と入力してエンター
+- ビルド
+  1. VisualStudio 2022でslnを開いてビルドする
 
 ## クレジット&Thanks
 - TheOtherRoles - 開発当時から[TOR](https://github.com/Eisbison/TheOtherRoles)及び[TOR-GM](https://github.com/yukinogatari/TheOtherRoles-GM)のコード(ロールに関するところ以外(オプションやパッチ等))を参考、引用、改変して開発しています。TORがなければ開発をこのMODを開発することは不可能でした。また、バウンティハンターのアイディア元
