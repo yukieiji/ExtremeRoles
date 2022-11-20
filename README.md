@@ -134,6 +134,7 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
   3. コマンドプロントで「pip install -r requirements.txt」と入力してエンター
 - ビルド
   1. VisualStudio 2022で「ExtremeRoles.sln」を開いてビルドする
+     - 初回のビルドはNugetパッケージの復元が入るので時間がかかります
 
 ## クレジット&Thanks
 - TheOtherRoles - 開発当時から[TOR](https://github.com/Eisbison/TheOtherRoles)及び[TOR-GM](https://github.com/yukinogatari/TheOtherRoles-GM)のコード(ロールに関するところ以外(オプションやパッチ等))を参考、引用、改変して開発しています。TORがなければ開発をこのMODを開発することは不可能でした。また、バウンティハンターのアイディア元
