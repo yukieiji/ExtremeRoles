@@ -16,6 +16,8 @@ namespace ExtremeRoles.Module
         private const string modName = "Extreme Roles";
         private const string versionStr = "Version";
 
+        private const string vanilaOptionKey = "BytedVanillaOptions";
+
         private const string comma = ",";
 
         public static bool Export()
@@ -51,6 +53,19 @@ namespace ExtremeRoles.Module
                                 clean(option.Name),
                                 option.CurSelection));
                     }
+
+                    csv.WriteLine(
+                        string.Format(
+                            "{1}{0}{1}",comma, string.Empty));
+
+                    foreach (byte bytedOption in PlayerControl.GameOptions.ToBytes(6))
+                    {
+                        csv.WriteLine(
+                            string.Format("{1}{0}{2}",
+                                comma,
+                                vanilaOptionKey,
+                                bytedOption));
+                    }
                 }
                 return true;
             }
@@ -69,6 +84,7 @@ namespace ExtremeRoles.Module
                 ExtremeRolesPlugin.Logger.LogInfo("---------- Option Import Start ----------");
 
                 Dictionary<string, int> importedOption = new Dictionary<string, int>();
+                List<byte> importedVanillaOptions = new List<byte>();
 
                 using (var csv = new StreamReader(csvName, new UTF8Encoding(true)))
                 {
@@ -83,12 +99,31 @@ namespace ExtremeRoles.Module
                     {
                         string[] option = line.Split(',');
 
-                        importedOption.Add(
-                            option[2], // cleanedName
-                            int.Parse(option[3])); // selection
+                        if (option[0] == string.Empty)
+                        { 
+                            continue; 
+                        }
+                        else if (option[0] == vanilaOptionKey)
+                        {
+                            importedVanillaOptions.Add(
+                                byte.Parse(option[1]));
+                        }
+                        else
+                        {
+                            importedOption.Add(
+                                option[2], // cleanedName
+                                int.Parse(option[3])); // selection
+                        }
                     }
 
                 }
+
+                if (importedVanillaOptions.Count > 0)
+                {
+                    PlayerControl.GameOptions = GameOptionsData.FromBytes(
+                        importedVanillaOptions.ToArray());
+                }
+
                 // オプションのインポートデモでネットワーク帯域とサーバーに負荷をかけて人が落ちたりするので共有を一時的に無効化して実行
                 OptionHolder.ExecuteWithBlockOptionShare(
                     () =>
