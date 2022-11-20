@@ -82,9 +82,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     "ColorblindName_TMP").gameObject;
                 Transform info = playerImage.transform.FindChild(
                     Patches.Manager.HudManagerUpdatePatch.RoleInfoObjectName);
+                Transform emptyPet = playerImage.transform.FindChild(
+                    "EmptyPet(Clone)");
                 if (info != null)
                 {
                     Object.Destroy(info.gameObject);
+                }
+                if (emptyPet != null)
+                {
+                    destroyAllColider(emptyPet.gameObject);
                 }
 
                 GameData.PlayerOutfit playerOutfit = targetPlayer.Data.DefaultOutfit;
@@ -127,6 +133,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                         Vector2.zero + (flipX ? Vector2.right * petOffset : Vector2.left * petOffset);
                     pet.transform.localScale = Vector3.one;
                     pet.FlipX = flipX;
+                    destroyAllColider(pet.gameObject);
                 }
 
                 PlayerMaterial.SetColors(colorId, playerImage);
@@ -164,6 +171,22 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 Object.Destroy(this.body);
             }
 
+            private static void destroyAllColider(GameObject obj)
+            {
+                destroyCollider<Collider2D>(obj);
+                destroyCollider<PolygonCollider2D>(obj);
+                destroyCollider<BoxCollider2D>(obj);
+                destroyCollider<CircleCollider2D>(obj);
+            }
+
+            private static void destroyCollider<T>(GameObject obj) where T : Collider2D
+            {
+                T component = obj.GetComponent<T>();
+                if (component != null)
+                {
+                    Object.Destroy(component);
+                }
+            }
         }
 
         public enum FakerDummyOps : byte
