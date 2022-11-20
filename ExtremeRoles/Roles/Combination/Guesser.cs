@@ -24,9 +24,20 @@ namespace ExtremeRoles.Roles.Combination
     public sealed class Guesser : 
         MultiAssignRoleBase, 
         IRoleSpecialSetUp,
+        IRoleResetMeeting,
         IRoleMeetingButtonAbility
     {
+        public enum GuesserOption
+        {
+            CanCallMeeting,
+            GuessNum,
+            MaxGuessNumWhenMeeting,
+            CanGuessNoneRole,
+        }
+
         private bool isEvil = false;
+        private bool canGuessNoneRole;
+
         private int bulletNum;
         private int maxGuessNum;
         private int curGuessNum;
@@ -51,7 +62,7 @@ namespace ExtremeRoles.Roles.Combination
                 tab: OptionTab.Combination)
         { }
 
-        private static List<GuessBehaviour.RoleInfo> createRoleInfo()
+        private static List<GuessBehaviour.RoleInfo> createRoleInfo(bool includeNoneRole)
         {
          
             List<GuessBehaviour.RoleInfo> result = new List<GuessBehaviour.RoleInfo>();
@@ -90,8 +101,12 @@ namespace ExtremeRoles.Roles.Combination
                 }
             }
 
-            Add((ExtremeRoleId)RoleTypes.Crewmate, ExtremeRoleType.Crewmate);
-            Add((ExtremeRoleId)RoleTypes.Impostor, ExtremeRoleType.Impostor);
+            if (includeNoneRole)
+            {
+                Add((ExtremeRoleId)RoleTypes.Crewmate, ExtremeRoleType.Crewmate);
+                Add((ExtremeRoleId)RoleTypes.Impostor, ExtremeRoleType.Impostor);
+            }
+
             var roleOptions = PlayerControl.GameOptions.RoleOptions;
 
             foreach (RoleTypes role in Enum.GetValues(typeof(RoleTypes)))
@@ -287,6 +302,7 @@ namespace ExtremeRoles.Roles.Combination
             
             // まず弾をへらす
             this.bulletNum = this.bulletNum - 1;
+            this.curGuessNum = this.curGuessNum + 1;
 
             var targetRole = ExtremeRoleManager.GameRole[playerId];
             
@@ -386,7 +402,8 @@ namespace ExtremeRoles.Roles.Combination
                     this.guesserUi = obj.GetComponent<GuesserUi>();
 
                     this.guesserUi.gameObject.SetActive(true);
-                    this.guesserUi.InitButton(GuessAction, createRoleInfo());
+                    this.guesserUi.InitButton(
+                        GuessAction, createRoleInfo(this.canGuessNoneRole));
                 }
 
                 byte targetPlayerId = instance.TargetPlayerId;
@@ -395,6 +412,10 @@ namespace ExtremeRoles.Roles.Combination
                         Translation.GetString("guesserUiTitle"),
                         GameData.Instance.GetPlayerById(
                             targetPlayerId)?.DefaultOutfit.PlayerName));
+                this.guesserUi.SetInfo(
+                    string.Format(
+                        Translation.GetString("guesserUiInfo"),
+                        this.curGuessNum, this.maxGuessNum));
                 this.guesserUi.SetTarget(targetPlayerId);
                 this.guesserUi.gameObject.SetActive(true);
             }
@@ -404,6 +425,16 @@ namespace ExtremeRoles.Roles.Combination
         public void SetSprite(SpriteRenderer render)
         {
             
+        }
+
+        public void ResetOnMeetingEnd()
+        {
+            return;
+        }
+
+        public void ResetOnMeetingStart()
+        {
+            this.curGuessNum = 0;
         }
 
         public override string GetFullDescription()
@@ -426,11 +457,38 @@ namespace ExtremeRoles.Roles.Combination
                 GetManagerOptionId(CombinationRoleCommonOption.IsAssignImposter)];
             CreateKillerOption(imposterSetting);
 
+            CreateBoolOption(
+                GuesserOption.CanCallMeeting,
+                false, parentOps);
+            CreateIntOption(
+                GuesserOption.GuessNum,
+                1, 1, OptionHolder.MaxImposterNum, 1,
+                parentOps);
+            CreateIntOption(
+                GuesserOption.MaxGuessNumWhenMeeting,
+                1, 1, OptionHolder.MaxImposterNum, 1,
+                parentOps);
+            CreateBoolOption(
+                GuesserOption.CanGuessNoneRole,
+                false, parentOps);
         }
 
         protected override void RoleSpecificInit()
         {
-            this.isEvil = false;
+            var allOption = OptionHolder.AllOption;
+
+            this.CanCallMeeting = allOption[
+                GetRoleOptionId(GuesserOption.CanCallMeeting)].GetValue();
+
+            this.canGuessNoneRole = allOption[
+                GetRoleOptionId(GuesserOption.CanGuessNoneRole)].GetValue();
+
+            this.bulletNum = allOption[
+                GetRoleOptionId(GuesserOption.GuessNum)].GetValue();
+            this.maxGuessNum = allOption[
+                GetRoleOptionId(GuesserOption.MaxGuessNumWhenMeeting)].GetValue();
+
+            this.curGuessNum = 0;
         }
     }
 }
