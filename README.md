@@ -131,7 +131,7 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 - 環境構築
   1. リポジトリをクローン
   2. ディレクトリをクローンしたディレクトリに移動
-  3. コマンドプロントで「pip install -r requirements.txt」と入力してエンター
+  3. 「MakeEnv.bat」を実行
 - ビルド
   1. VisualStudio 2022で「ExtremeRoles.sln」を開いてビルドする
      - 初回のビルドはNugetパッケージの復元が入るので時間がかかります
