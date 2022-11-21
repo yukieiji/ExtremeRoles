@@ -63,6 +63,7 @@ namespace ExtremeRoles.Helper
                         clip = Loader.GetUnityObjectFromResources<AudioClip>(
                             Path.SoundEffect, string.Format(
                                 soundPlaceHolder, soundType.ToString()));
+                        clip.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
                         break;
                     default:
                         return null;
