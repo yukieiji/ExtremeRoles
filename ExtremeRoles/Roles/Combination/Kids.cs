@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
+using ExtremeRoles.Module;
+using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Module;
-using System.Collections.Generic;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.AbilityButton.Roles;
 
 namespace ExtremeRoles.Roles.Combination
 {
