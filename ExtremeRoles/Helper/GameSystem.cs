@@ -364,7 +364,7 @@ namespace ExtremeRoles.Helper
                     if (player.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
                     {
                         Sound.PlaySound(
-                            Sound.SoundType.ReplaceNewTask, 1.0f);
+                            Sound.SoundType.ReplaceNewTask, 1.2f);
                     }
                     return true;
                 }

@@ -79,7 +79,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             if (targetPlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
             {
                 Sound.PlaySound(
-                    Sound.SoundType.AgencyTakeTask, 1.0f);
+                    Sound.SoundType.AgencyTakeTask, 1.2f);
             }
 
             GameData.Instance.SetDirtyBit(

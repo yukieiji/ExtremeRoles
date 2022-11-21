@@ -77,7 +77,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     newKillCool, 0.1f, killCool);
             }
             Sound.PlaySound(
-                Sound.SoundType.CommanderReduceKillCool, 1.0f);
+                Sound.SoundType.CommanderReduceKillCool, 1.2f);
         }
         public void CreateAbility()
         {
