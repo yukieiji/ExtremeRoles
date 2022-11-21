@@ -20,7 +20,9 @@ namespace ExtremeRoles.GhostRoles
         Faunus,
 
         Ventgeist,
-        SaboEvil
+        SaboEvil,
+
+        Wisp
     }
 
     public enum AbilityType : byte

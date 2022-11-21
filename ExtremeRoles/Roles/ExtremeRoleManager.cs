@@ -33,6 +33,7 @@ namespace ExtremeRoles.Roles
         DetectiveApprentice,
         Sharer,
         Guesser,
+        Delinquent,
 
         SpecialCrew,
         Sheriff,
@@ -102,6 +103,7 @@ namespace ExtremeRoles.Roles
         Avalon,
         HeroAca,
         DetectiveOffice,
+        Kids,
         Lover,
         Supporter,
         Sharer,
@@ -240,11 +242,12 @@ namespace ExtremeRoles.Roles
                 {(byte)CombinationRoleType.Avalon         , new Avalon()},
                 {(byte)CombinationRoleType.HeroAca        , new HeroAcademia()},
                 {(byte)CombinationRoleType.DetectiveOffice, new DetectiveOffice()},
+                {(byte)CombinationRoleType.Kids           , new Kids()},
                 {(byte)CombinationRoleType.Lover          , new LoverManager()},
                 {(byte)CombinationRoleType.Supporter      , new SupporterManager()},
-                {(byte)CombinationRoleType.Sharer         , new SharerManager()   },
-                {(byte)CombinationRoleType.Traitor        , new TraitorManager()  },
-                {(byte)CombinationRoleType.Guesser        , new GuesserManager()  },
+                {(byte)CombinationRoleType.Sharer         , new SharerManager()},
+                {(byte)CombinationRoleType.Traitor        , new TraitorManager()},
+                {(byte)CombinationRoleType.Guesser        , new GuesserManager()},
             };
 
         public static Dictionary<

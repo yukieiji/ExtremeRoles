@@ -20,7 +20,6 @@ namespace ExtremeRoles.Roles.Combination
             this.Roles.Add(new Assassin());
             this.Roles.Add(new Marlin());
         }
-
     }
 
     public sealed class Assassin : MultiAssignRoleBase
