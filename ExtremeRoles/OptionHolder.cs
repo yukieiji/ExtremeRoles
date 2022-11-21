@@ -91,8 +91,7 @@ namespace ExtremeRoles
             IsAutoSelectRandomSpawn,
             
             IsRemoveAdmin,
-            IsRemoveAirShipArchiveAdmin,
-            IsRemoveAirShipCockpitAdmin,
+            AirShipEnableAdmin,
             EnableAdminLimit,
             AdminLimitTime,
 
@@ -115,6 +114,13 @@ namespace ExtremeRoles
             IsAssignNeutralToVanillaCrewGhostRole,
             IsRemoveAngleIcon,
             IsBlockGAAbilityReport,
+        }
+
+        public enum AirShipAdminMode
+        {
+            ModeBoth,
+            ModeCockpitOnly,
+            ModeArchiveOnly
         }
 
         public static void ExecuteWithBlockOptionShare(Action func)
@@ -225,10 +231,8 @@ namespace ExtremeRoles
 
             Ship.IsRemoveAdmin = AllOption[
                 (int)CommonOptionKey.IsRemoveAdmin].GetValue();
-            Ship.IsRemoveAirShipCockpitAdmin = AllOption[
-                (int)CommonOptionKey.IsRemoveAirShipCockpitAdmin].GetValue();
-            Ship.IsRemoveAirShipArchiveAdmin = AllOption[
-                (int)CommonOptionKey.IsRemoveAirShipArchiveAdmin].GetValue();
+            Ship.AirShipEnable = (AirShipAdminMode)AllOption[
+                (int)CommonOptionKey.AirShipEnableAdmin].GetValue();
             Ship.EnableAdminLimit = AllOption[
                 (int)CommonOptionKey.EnableAdminLimit].GetValue();
             Ship.AdminLimitTime = AllOption[
@@ -486,14 +490,17 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.IsRemoveAdmin,
                 CommonOptionKey.IsRemoveAdmin.ToString(),
                 false);
-            new BoolCustomOption(
-                (int)CommonOptionKey.IsRemoveAirShipCockpitAdmin,
-                CommonOptionKey.IsRemoveAirShipCockpitAdmin.ToString(),
-                true, adminOpt);
-            new BoolCustomOption(
-                (int)CommonOptionKey.IsRemoveAirShipArchiveAdmin,
-                CommonOptionKey.IsRemoveAirShipArchiveAdmin.ToString(),
-                true, adminOpt);
+            new SelectionCustomOption(
+                (int)CommonOptionKey.AirShipEnableAdmin,
+                CommonOptionKey.AirShipEnableAdmin.ToString(),
+                new string[]
+                {
+                    AirShipAdminMode.ModeBoth.ToString(),
+                    AirShipAdminMode.ModeCockpitOnly.ToString(),
+                    AirShipAdminMode.ModeArchiveOnly.ToString(),
+                },
+                adminOpt,
+                invert: true);
             var adminLimitOpt = new BoolCustomOption(
                 (int)CommonOptionKey.EnableAdminLimit,
                 CommonOptionKey.EnableAdminLimit.ToString(),
@@ -624,8 +631,7 @@ namespace ExtremeRoles
             public static bool IsAutoSelectRandomSpawn = false;
 
             public static bool IsRemoveAdmin = false;
-            public static bool IsRemoveAirShipCockpitAdmin = false;
-            public static bool IsRemoveAirShipArchiveAdmin = false;
+            public static AirShipAdminMode AirShipEnable = AirShipAdminMode.ModeBoth;
             public static bool EnableAdminLimit = false;
             public static float AdminLimitTime = 0.0f;
 

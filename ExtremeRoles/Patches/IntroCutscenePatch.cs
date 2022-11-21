@@ -450,15 +450,25 @@ namespace ExtremeRoles.Patches
                     case 4:
                         if (isRemoveAdmin)
                         {
-                            if (OptionHolder.Ship.IsRemoveAirShipArchiveAdmin)
+                            disableObjectName.Add(
+                                GameSystem.AirShipArchiveAdmin);
+                            disableObjectName.Add(
+                                GameSystem.AirShipCockpitAdmin);
+                        }
+                        else
+                        {
+                            switch (OptionHolder.Ship.AirShipEnable)
                             {
-                                disableObjectName.Add(
-                                    GameSystem.AirShipArchiveAdmin);
-                            }
-                            if (OptionHolder.Ship.IsRemoveAirShipCockpitAdmin)
-                            {
-                                disableObjectName.Add(
-                                    GameSystem.AirShipCockpitAdmin);
+                                case OptionHolder.AirShipAdminMode.ModeCockpitOnly:
+                                    disableObjectName.Add(
+                                        GameSystem.AirShipArchiveAdmin);
+                                    break;
+                                case OptionHolder.AirShipAdminMode.ModeArchiveOnly:
+                                    disableObjectName.Add(
+                                        GameSystem.AirShipCockpitAdmin);
+                                    break;
+                                default:
+                                    break;
                             }
                         }
                         if (isRemoveSecurity)
