@@ -96,6 +96,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     string.Format(
                         Helper.Translation.GetString("killedText"),
                         direction, System.DateTime.Now));
+                Helper.Sound.PlaySound(
+                    Helper.Sound.SoundType.Kill, 0.5f);
             }
         }
 
