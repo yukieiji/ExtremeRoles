@@ -389,7 +389,7 @@ namespace ExtremeRoles.Roles.Combination
                 if (this.uiPrefab == null)
                 {
                     this.uiPrefab = UnityEngine.Object.Instantiate(
-                        Loader.GetGameObjectFromResources(
+                        Loader.GetUnityObjectFromResources<GameObject>(
                             Path.GusserUiResources,
                             Path.GusserUiPrefab));
 

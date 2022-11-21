@@ -76,6 +76,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 }
             }
 
+            if (targetPlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
+            {
+                Sound.PlaySound(
+                    Sound.SoundType.AgencyTakeTask, 1.0f);
+            }
+
             GameData.Instance.SetDirtyBit(
                 1U << (int)targetPlayer.PlayerId);
         }

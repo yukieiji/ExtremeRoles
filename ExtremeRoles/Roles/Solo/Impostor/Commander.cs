@@ -76,6 +76,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 CachedPlayerControl.LocalPlayer.PlayerControl.killTimer = Mathf.Clamp(
                     newKillCool, 0.1f, killCool);
             }
+            Sound.PlaySound(
+                Sound.SoundType.CommanderReduceKillCool, 1.0f);
         }
         public void CreateAbility()
         {

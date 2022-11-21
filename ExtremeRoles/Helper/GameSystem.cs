@@ -361,6 +361,11 @@ namespace ExtremeRoles.Helper
                     removeTask.OnRemove();
                     UnityEngine.Object.Destroy(
                         removeTask.gameObject);
+                    if (player.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
+                    {
+                        Sound.PlaySound(
+                            Sound.SoundType.ReplaceNewTask, 1.0f);
+                    }
                     return true;
                 }
             }

@@ -183,6 +183,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 player.killTimer = PlayerControl.GameOptions.KillCooldown;
             }
+            Sound.PlaySound(
+                Sound.SoundType.CurseMakerCurse, 1.0f);
         }
 
         public void CreateAbility()

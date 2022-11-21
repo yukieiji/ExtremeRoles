@@ -4,9 +4,12 @@ using System.IO;
 using System.Reflection;
 
 using UnhollowerBaseLib;
+using UnhollowerRuntimeLib;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
+
+using UnityObject = UnityEngine.Object;
 
 namespace ExtremeRoles.Resources
 {
@@ -103,6 +106,8 @@ namespace ExtremeRoles.Resources
         public const string GusserUiResources = "ExtremeRoles.Resources.Asset.guesserui.asset";
         public const string GusserUiPrefab = "assets/roles/guesserui.prefab";
 
+        public const string SoundEffect = "ExtremeRoles.Resources.Asset.soundeffect.asset";
+
         public const string TestButton = "ExtremeRoles.Resources.TESTBUTTON.png";
     }
 
@@ -139,8 +144,8 @@ namespace ExtremeRoles.Resources
             return null;
         }
 
-        public static GameObject GetGameObjectFromResources(
-            string bundleName, string objName)
+        public static T GetUnityObjectFromResources<T>(
+            string bundleName, string objName) where T : UnityObject
         {
             if (!cachedBundle.TryGetValue(bundleName, out AssetBundle bundle))
             {
@@ -152,7 +157,7 @@ namespace ExtremeRoles.Resources
                     cachedBundle.Add(bundleName, bundle);
                 }
             }
-            return bundle.LoadAsset(objName).Cast<GameObject>();
+            return bundle.LoadAsset(objName, Il2CppType.Of<T>())?.Cast<T>();
         }
 
         private static unsafe Texture2D createTextureFromResources(string path)
