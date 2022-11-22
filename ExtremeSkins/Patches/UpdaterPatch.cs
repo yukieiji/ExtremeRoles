@@ -23,6 +23,8 @@ namespace ExtremeSkins.Patches
         private static string skinUpdateUri = null;
         private static Task skinUpdateTask = null;
 
+        private const string contentType = "content_type";
+
         public static bool Prefix()
         {
             errorFlag = false;
@@ -123,9 +125,12 @@ namespace ExtremeSkins.Patches
                 for (JToken current = assets.First; current != null; current = current.Next)
                 {
                     string browser_download_url = current["browser_download_url"]?.ToString();
-                    if (browser_download_url != null && current["content_type"] != null)
+                    if (browser_download_url != null && 
+                        current[contentType] != null)
                     {
-                        if (current["content_type"].ToString().Equals("application/x-msdownload") &&
+                        string content = current[contentType].ToString();
+
+                        if (!content.Equals("application/x-zip-compressed") &&
                             browser_download_url.EndsWith("ExtremeSkins.dll"))
                         {
                             skinUpdateUri = browser_download_url;

@@ -3,7 +3,7 @@ using ExtremeSkins.SkinManager;
 
 using AmongUs.Data.Legacy;
 
-namespace ExtremeSkins.Patches.AmongUs
+namespace ExtremeSkins.Patches.AmongUs.Manager
 {
 
     [HarmonyPatch(typeof(LegacySaveManager), nameof(LegacySaveManager.LoadPlayerPrefs))]
@@ -11,7 +11,7 @@ namespace ExtremeSkins.Patches.AmongUs
     {
         // Fix Potential issues with broken colors
         private static bool needsPatch = false;
-        
+
         public static void Prefix([HarmonyArgument(0)] bool overrideLoad)
         {
             if (!LegacySaveManager.loaded || overrideLoad)
