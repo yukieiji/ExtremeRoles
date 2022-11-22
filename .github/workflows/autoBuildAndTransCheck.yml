@@ -22,17 +22,13 @@ jobs:
           python-version: '3.9'
           architecture: 'x64'
       - name: InstallPythonLibrary
-        run: pip install openpyxl
-      - uses: fbactions/setup-winsdk@v1
+        run: pip install -r requirements.txt
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 5.x
       - name: AddMsBuildToPATH
         uses: microsoft/setup-msbuild@v1.1
-      - uses: ilammy/msvc-dev-cmd@v1
-        with:
-          sdk: 10.0.18362.0
       - name: CheckTransData
         continue-on-error: true
         run: python createTransReport.py

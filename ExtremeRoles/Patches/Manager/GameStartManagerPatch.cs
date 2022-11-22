@@ -86,8 +86,7 @@ namespace ExtremeRoles.Patches.Manager
                 using (var caller = RPCOperator.CreateCaller(
                     RPCOperator.Command.ShareMapId))
                 {
-                    caller.WriteByte(possibleMaps[
-                        rng.Next(possibleMaps.Count)]);
+                    caller.WriteByte(mapId);
                 }
                 RPCOperator.ShareMapId(mapId);
             }
