@@ -1,18 +1,29 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Resources;
+using ExtremeRoles.Performance;
+using Hazel;
 
 namespace ExtremeRoles.Roles.Combination
 {
     public sealed class Kids : GhostAndAliveCombinationRoleManagerBase
     {
         public const string Name = "Kids";
+
+        public enum AbilityType : byte
+        {
+            Scribe,
+            SelfBomb
+        }
+
         public Kids() : base(
             Name, new Color(255f, 255f, 255f), 2,
             OptionHolder.MaxImposterNum)
@@ -21,6 +32,23 @@ namespace ExtremeRoles.Roles.Combination
 
             this.CombGhostRole.Add(
                 ExtremeRoleId.Delinquent, new Wisp());
+        }
+
+        public static void Ability(ref MessageReader reader)
+        {
+            byte playerId = reader.ReadByte();
+            AbilityType abilityType = (AbilityType)reader.ReadByte();
+            PlayerControl rolePlayer = Player.GetPlayerControlById(playerId);
+
+            switch (abilityType)
+            {
+                case AbilityType.Scribe:
+                case AbilityType.SelfBomb:
+                    Delinquent.Ability(abilityType, rolePlayer);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -32,6 +60,13 @@ namespace ExtremeRoles.Roles.Combination
             set => throw new System.NotImplementedException();
         }
 
+        public bool WinCheckEnable => this.isWinCheck;
+        public float Range => this.range;
+
+        private Kids.AbilityType curAbilityType;
+        private float range;
+        private bool isWinCheck;
+
         public Delinquent() : base(
             ExtremeRoleId.Delinquent,
             ExtremeRoleType.Neutral,
@@ -41,15 +76,49 @@ namespace ExtremeRoles.Roles.Combination
             tab: OptionTab.Combination)
         { }
 
-        public void CreateAbility()
+        public static void Ability(Kids.AbilityType abilityType, PlayerControl player)
         {
-            throw new System.NotImplementedException();
+            switch (abilityType)
+            {
+                case Kids.AbilityType.Scribe:
+                    GameObject obj = new GameObject("Scribe");
+                    obj.transform.position = player.transform.position;
+                    SpriteRenderer rend  = obj.AddComponent<SpriteRenderer>();
+                    rend.sprite = Loader.CreateSpriteFromResources(
+                        Path.TestButton);
+                    break;
+                case Kids.AbilityType.SelfBomb:
+                    if (AmongUsClient.Instance.AmHost)
+                    {
+                        var role = ExtremeRoleManager.GetSafeCastedRole<Delinquent>(player.PlayerId);
+                        role.isWinCheck = true;
+                    }
+                    break;
+            }
         }
 
-        public bool IsAbilityUse()
+        public void DisableWinCheck()
         {
-            throw new System.NotImplementedException();
+            this.isWinCheck = false;
         }
+
+        public void CreateAbility()
+        {
+            this.CreateAbilityCountButton(
+                Translation.GetString("scribble"),
+                Loader.CreateSpriteFromResources(
+                    Path.TestButton));
+        }
+
+        public bool IsAbilityUse() => this.curAbilityType switch
+        {
+            Kids.AbilityType.Scribe => 
+                this.IsCommonUse(),
+            Kids.AbilityType.SelfBomb => 
+                Player.GetClosestPlayerInRange(
+                    CachedPlayerControl.LocalPlayer, this, this.range) != null,
+            _ => true
+        };
 
         public void RoleAbilityResetOnMeetingEnd()
         {
@@ -63,6 +132,12 @@ namespace ExtremeRoles.Roles.Combination
 
         public bool UseAbility()
         {
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.KidsAbility))
+            {
+                caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
+                caller.WriteByte((byte)this.curAbilityType);
+            }
             return true;
         }
 
@@ -75,6 +150,7 @@ namespace ExtremeRoles.Roles.Combination
         {
             
         }
+        
     }
 
     public sealed class Wisp : GhostRoleBase

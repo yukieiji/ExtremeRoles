@@ -168,6 +168,10 @@ namespace ExtremeRoles.Patches
                         noWinner,
                         new ExtremeRoleId[] { ExtremeRoleId.Lover });
                     break;
+                case RoleGameOverReason.ShipFallInLove:
+                    replaceWinnerToSpecificRolePlayer(
+                        ExtremeRoleId.Lover);
+                    break;
                 case RoleGameOverReason.TaskMasterGoHome:
                     replaceWinnerToSpecificNeutralRolePlayer(
                         noWinner,
@@ -221,9 +225,10 @@ namespace ExtremeRoles.Patches
                         noWinner,
                         new ExtremeRoleId[] { ExtremeRoleId.Umbrer });
                     break;
-                case RoleGameOverReason.ShipFallInLove:
-                    replaceWinnerToSpecificRolePlayer(
-                        ExtremeRoleId.Lover);
+                case RoleGameOverReason.KidsTooBigHomeAlone:
+                    replaceWinnerToSpecificNeutralRolePlayer(
+                        noWinner,
+                        new ExtremeRoleId[] { ExtremeRoleId.Delinquent });
                     break;
                 default:
                     break;

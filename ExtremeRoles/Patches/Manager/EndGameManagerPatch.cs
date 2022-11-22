@@ -267,6 +267,13 @@ namespace ExtremeRoles.Patches.Manager
                     manager.BackgroundBar.material.SetColor(
                         "_Color", ColorPalette.UmbrerRed);
                     break;
+                case (GameOverReason)RoleGameOverReason.KidsTooBigHomeAlone:
+                    bonusText = Translation.GetString(
+                        ExtremeRoleId.Delinquent.ToString());
+                    textRenderer.color = ColorPalette.UmbrerRed;
+                    manager.BackgroundBar.material.SetColor(
+                        "_Color", ColorPalette.UmbrerRed);
+                    break;
                 default:
                     break;
             }

@@ -44,6 +44,7 @@ namespace ExtremeRoles
 
             // コンビロール全般
             HeroHeroAcademia,
+            KidsAbility,
 
             // クルーメイト
             BodyGuardAbility,

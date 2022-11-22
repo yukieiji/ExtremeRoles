@@ -148,6 +148,8 @@ namespace ExtremeRoles.Roles
 
         UmbrerBiohazard,
 
+        KidsTooBigHomeAlone,
+
         UnKnown = 100,
     }
 
@@ -163,6 +165,7 @@ namespace ExtremeRoles.Roles
         Eater,
         Traitor,
         Queen,
+        Kids
     }
 
     public static class ExtremeRoleManager
@@ -174,6 +177,7 @@ namespace ExtremeRoles.Roles
             ExtremeRoleId.Lover,
             ExtremeRoleId.Yandere,
             ExtremeRoleId.Vigilante,
+            ExtremeRoleId.Delinquent,
         };
 
         public static readonly Dictionary<
