@@ -13,6 +13,8 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.Interface;
 
 namespace ExtremeRoles.Roles.Combination
 {
@@ -313,6 +315,24 @@ namespace ExtremeRoles.Roles.Combination
 
     public sealed class Wisp : GhostRoleBase
     {
+        public sealed class Torch : IMeetingResetObject
+        {
+            private GameObject body;
+
+            public Torch(Vector3 pos)
+            {
+                this.body = new GameObject("Torch");
+                this.body.transform.position = pos;
+                this.body.AddComponent<TorchBehavior>();
+                this.body.SetActive(true);
+            }
+
+            public void Clear()
+            {
+                GameObject.Destroy(this.body);
+            }
+        }
+
         public Wisp() : base(
             false, ExtremeRoleType.Neutral,
             ExtremeGhostRoleId.Wisp,
@@ -326,29 +346,26 @@ namespace ExtremeRoles.Roles.Combination
             throw new System.NotImplementedException();
         }
 
-        public override HashSet<ExtremeRoleId> GetRoleFilter()
-        {
-            throw new System.NotImplementedException();
-        }
+        public override HashSet<ExtremeRoleId> GetRoleFilter() => new HashSet<ExtremeRoleId>();
 
         public override void Initialize()
         {
-            
+
         }
 
         public override void ReseOnMeetingEnd()
         {
-            throw new System.NotImplementedException();
+            return;
         }
 
         public override void ReseOnMeetingStart()
         {
-            throw new System.NotImplementedException();
+            return;
         }
 
         protected override void CreateSpecificOption(IOption parentOps)
         {
-            
+
         }
 
         protected override void UseAbility(RPCOperator.RpcCaller caller)
