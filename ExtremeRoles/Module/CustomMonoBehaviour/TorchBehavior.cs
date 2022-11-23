@@ -1,9 +1,9 @@
-﻿using ExtremeRoles.Performance;
-using ExtremeRoles.Roles.Solo.Impostor;
-using ExtremeRoles.Roles;
-using System;
+﻿using System;
 using UnityEngine;
+
+using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
+using ExtremeRoles.Roles.Combination;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour
 {
@@ -38,10 +38,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             }
         }
 
-        private float maxTime = 100f;
-        private float timer = 100f;
         private float distance = 1.3f;
-        private bool isAddOffsets = false;
 
         private CircleCollider2D collider;
         private SpriteRenderer img;
@@ -56,18 +53,13 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             this.collider.radius = 0.001f;
         }
 
-        public void OnDestroy()
-        {
-
-        }
-
         public float CanUse(
             GameData.PlayerInfo pc, out bool canUse, out bool couldUse)
         {
             float num = Vector2.Distance(
                 pc.Object.GetTruePosition(),
                 base.transform.position);
-            couldUse = pc.IsDead ? false : true;
+            couldUse = !pc.IsDead;
             canUse = (couldUse && num <= this.UsableDistance);
             return num;
         }
@@ -77,15 +69,14 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
         public void Use()
         {
-              
-        }
-
-        public void FixedUpdate()
-        {
-            PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
-            float distance = Vector2.Distance(
-                localPlayer.GetTruePosition(),
-                base.transform.position);
+            byte playerId = CachedPlayerControl.LocalPlayer.PlayerId;
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.KidsAbility))
+            {
+                caller.WriteByte((byte)Kids.AbilityType.PickUpTorch);
+                caller.WriteByte(playerId);
+            }
+            Wisp.PickUpTorch(playerId);
         }
     }
 }

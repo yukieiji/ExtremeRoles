@@ -5,7 +5,8 @@
         public enum ForceVisonType
         {
             None,
-            LastWolfLightOff
+            LastWolfLightOff,
+            WispLightOff,
         }
 
         public ForceVisonType CurVison => this.modVison;

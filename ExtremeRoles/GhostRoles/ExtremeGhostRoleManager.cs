@@ -27,6 +27,8 @@ namespace ExtremeRoles.GhostRoles
 
     public enum AbilityType : byte
     {
+        WispSetTorch,
+
         PoltergeistMoveDeadbody,
         FaunusOpenSaboConsole,
 

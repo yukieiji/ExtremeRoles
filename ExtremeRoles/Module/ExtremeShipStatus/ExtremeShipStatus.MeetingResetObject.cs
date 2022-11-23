@@ -15,7 +15,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
         {
             foreach (IMeetingResetObject clerObject in this.resetObject)
             {
-                clerObject.Clear();
+                clerObject?.Clear();
             }
             this.resetObject.Clear();
         }
