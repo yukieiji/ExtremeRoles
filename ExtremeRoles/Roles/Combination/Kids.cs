@@ -19,6 +19,7 @@ using ExtremeRoles.Module.ExtremeShipStatus;
 
 using GhostAbilityButton = ExtremeRoles.Module.AbilityButton.GhostRoles.ReusableAbilityButton;
 using RoleButtonBase = ExtremeRoles.Module.AbilityButton.Roles.RoleAbilityButtonBase;
+using Il2CppDumper;
 
 namespace ExtremeRoles.Roles.Combination
 {
@@ -291,7 +292,15 @@ namespace ExtremeRoles.Roles.Combination
                     Path.TestButton),
                 Loader.CreateSpriteFromResources(
                     Path.TestButton));
+
             this.RoleAbilityInit();
+
+            if (this.abilityButton != null)
+            {
+                ((DelinquentAbilityButton)this.abilityButton).UpdateAbilityCount(
+                    OptionHolder.AllOption[GetRoleOptionId(
+                        RoleAbilityCommonOption.AbilityCount)].GetValue());
+            }
         }
 
         public bool IsAbilityUse()
@@ -347,6 +356,7 @@ namespace ExtremeRoles.Roles.Combination
                 DelinqentOption.Range,
                 3.6f, 1.0f, 5.0f, 0.1f,
                 parentOps);
+            this.CreateAbilityCountOption(parentOps, 7, 20);
         }
 
         protected override void RoleSpecificInit()
@@ -354,7 +364,14 @@ namespace ExtremeRoles.Roles.Combination
             this.curAbilityType = Kids.AbilityType.Scribe;
             this.range = OptionHolder.AllOption[
                 GetRoleOptionId(DelinqentOption.Range)].GetValue();
+            
             this.RoleAbilityInit();
+            if (this.abilityButton != null)
+            {
+                ((DelinquentAbilityButton)this.abilityButton).UpdateAbilityCount(
+                    OptionHolder.AllOption[GetRoleOptionId(
+                        RoleAbilityCommonOption.AbilityCount)].GetValue());
+            }
         }
         
     }
@@ -634,6 +651,7 @@ namespace ExtremeRoles.Roles.Combination
             CreateFloatOption(
                 WispOption.BlackOutTime,
                 15.0f, 5.0f, 30.0f, 0.1f, parentOps);
+            this.CreateButtonOption(parentOps);
         }
 
         protected override void UseAbility(RPCOperator.RpcCaller caller)

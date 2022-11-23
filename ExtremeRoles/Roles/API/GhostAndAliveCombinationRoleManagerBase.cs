@@ -34,6 +34,8 @@ namespace ExtremeRoles.Roles.API
             IOption parentOps)
         {
 
+            base.CreateSpecificOption(parentOps);
+
             IEnumerable<GhostRoles.API.GhostRoleBase> collection = this.CombGhostRole.Values;
 
             foreach (var item in collection.Select(
