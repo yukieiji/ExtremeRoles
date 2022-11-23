@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 using AmongUs.Data;
 
@@ -56,119 +54,196 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             private const string defaultPetId = "0";
             private const float petOffset = 0.72f;
 
+            private struct PlayerCosmicInfo
+            {
+                public PlayerControl TargetPlayer;
+                public GameData.PlayerOutfit OutfitInfo;
+                public bool FlipX;
+                public int ColorInfo;
+            }
+
             public FakePlayer(
                 PlayerControl rolePlayer,
                 PlayerControl targetPlayer,
                 bool canSeeFake)
             {
-                bool flipX = rolePlayer.cosmetics.currentBodySprite.BodySprite.flipX;
+                GameData.PlayerOutfit playerOutfit = targetPlayer.Data.DefaultOutfit;
+                PlayerCosmicInfo cosmicInfo = new PlayerCosmicInfo()
+                {
+                    TargetPlayer = targetPlayer,
+                    FlipX = rolePlayer.cosmetics.currentBodySprite.BodySprite.flipX,
+                    OutfitInfo = playerOutfit,
+                    ColorInfo = playerOutfit.ColorId,
+                };
 
                 this.body = new GameObject("DummyPlayer");
-                SpriteRenderer playerImage = Object.Instantiate(
-                    targetPlayer.cosmetics.currentBodySprite.BodySprite,
-                    this.body.transform);
-                playerImage.flipX = flipX;
-                playerImage.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
                 this.body.transform.position = rolePlayer.transform.position;
+                SpriteRenderer baseImage = createBaseImage(cosmicInfo);
 
-                Transform skinTransform = targetPlayer.transform.FindChild(
-                    "Skin");
+                createDummyImageSkin(cosmicInfo);
+                createDummyImageHat(baseImage, cosmicInfo);
+                createDummyImageVisor(baseImage, cosmicInfo);
+                createDummyImagePet(baseImage, cosmicInfo);
 
-                HatParent hat = playerImage.GetComponentInChildren<HatParent>();
-                VisorLayer visor = playerImage.GetComponentInChildren<VisorLayer>();
-                TextMeshPro nameText = playerImage.transform.FindChild(
-                    "NameText_TMP").GetComponent<TextMeshPro>();
-                this.colorBindText = playerImage.transform.FindChild(
-                    "ColorblindName_TMP").gameObject;
-                Transform info = playerImage.transform.FindChild(
-                    Patches.Manager.HudManagerUpdatePatch.RoleInfoObjectName);
-                Transform emptyPet = playerImage.transform.FindChild(
-                    "EmptyPet(Clone)");
-                if (info != null)
-                {
-                    Object.Destroy(info.gameObject);
-                }
-                if (emptyPet != null)
-                {
-                    destroyAllColider(emptyPet.gameObject);
-                }
+                changeDummyName(baseImage, cosmicInfo, canSeeFake);
 
-                GameData.PlayerOutfit playerOutfit = targetPlayer.Data.DefaultOutfit;
+                updateColorName(baseImage, cosmicInfo.ColorInfo);
+                removeRoleInfo(baseImage);
 
-                nameText.text = canSeeFake ? 
-                    Translation.GetString("DummyPlayerName") : playerOutfit.PlayerName;
-                nameText.color = canSeeFake ? Palette.ImpostorRed : Palette.White;
-
-                int colorId = playerOutfit.ColorId;
-                hat.SetHat(playerOutfit.HatId, colorId);
-                if (hat.FrontLayer)
-                {
-                    hat.FrontLayer.flipX = flipX;
-                }
-                if (hat.BackLayer)
-                {
-                    hat.BackLayer.flipX = flipX;
-                }
-
-                visor.SetVisor(playerOutfit.VisorId, colorId);
-                visor.SetFlipX(flipX);
-                if (skinTransform != null)
-                {
-                    GameObject skinObj = Object.Instantiate(
-                        skinTransform.gameObject, this.body.transform);
-                    SkinLayer skin = skinObj.GetComponent<SkinLayer>();
-
-                    skin.SetSkin(playerOutfit.SkinId, colorId, flipX);
-                    skinObj.transform.localScale = new Vector3(0.35f, 0.35f, 1.0f);
-                }
-                string petId = playerOutfit.PetId;
-                if (petId != defaultPetId)
-                {
-                    PetBehaviour pet = Object.Instantiate(
-                        FastDestroyableSingleton<HatManager>.Instance.GetPetById(
-                            petId).viewData.viewData,
-                        playerImage.transform);
-                    pet.SetColor(colorId);
-                    pet.transform.localPosition = 
-                        Vector2.zero + (flipX ? Vector2.right * petOffset : Vector2.left * petOffset);
-                    pet.transform.localScale = Vector3.one;
-                    pet.FlipX = flipX;
-                    destroyAllColider(pet.gameObject);
-                }
-
-                PlayerMaterial.SetColors(colorId, playerImage);
-
-                char[] array = FastDestroyableSingleton<TranslationController>.Instance.GetString(
-                    Palette.ColorNames[colorId],
-                    System.Array.Empty<Il2CppSystem.Object>()).ToCharArray();
-                if (array.Length != 0)
-                {
-                    array[0] = char.ToUpper(array[0]);
-                    for (int i = 1; i < array.Length; i++)
-                    {
-                        array[i] = char.ToLower(array[i]);
-                    }
-                }
-
-                this.colorBindText.GetComponent<TextMeshPro>().text = new string(array);
+                PlayerMaterial.SetColors(cosmicInfo.ColorInfo, baseImage);
 
                 if (ExtremeRolesPlugin.Compat.IsModMap)
                 {
                     ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
-                        playerImage.gameObject,
+                        baseImage.gameObject,
                         Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
                 }
             }
 
             public void SwitchColorName()
             {
-                this.colorBindText.SetActive(
-                    DataManager.Settings.Accessibility.ColorBlindMode);
+                if (this.colorBindText != null)
+                {
+                    this.colorBindText.SetActive(
+                        DataManager.Settings.Accessibility.ColorBlindMode);
+                }
             }
 
             public void Clear()
             {
                 Object.Destroy(this.body);
+            }
+
+            private SpriteRenderer createBaseImage(PlayerCosmicInfo info)
+            {
+                SpriteRenderer playerImage = Object.Instantiate(
+                    info.TargetPlayer.cosmetics.currentBodySprite.BodySprite,
+                    this.body.transform);
+                playerImage.flipX = info.FlipX;
+                playerImage.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
+                return playerImage;
+            }
+
+            private void createDummyImageHat(
+                SpriteRenderer playerImage, PlayerCosmicInfo info)
+            {
+                HatParent hat = playerImage.GetComponentInChildren<HatParent>();
+                if (hat != null)
+                {
+                    hat.SetHat(info.OutfitInfo.HatId, info.ColorInfo);
+                    
+                    bool flip = info.FlipX;
+                    if (hat.FrontLayer)
+                    {
+                        hat.FrontLayer.flipX = flip;
+                    }
+                    if (hat.BackLayer)
+                    {
+                        hat.BackLayer.flipX = flip;
+                    }
+                }
+            }
+
+            private void createDummyImageVisor(
+                SpriteRenderer playerImage, PlayerCosmicInfo info)
+            {
+                VisorLayer visor = playerImage.GetComponentInChildren<VisorLayer>();
+                if (visor != null)
+                {
+                    visor.SetVisor(info.OutfitInfo.VisorId, info.ColorInfo);
+                    visor.SetFlipX(info.FlipX);
+                }
+            }
+
+            private void createDummyImageSkin(PlayerCosmicInfo info)
+            {
+                Transform skinTransform = info.TargetPlayer.transform.FindChild(
+                    "Skin");
+
+                if (skinTransform != null)
+                {
+                    GameObject skinObj = Object.Instantiate(
+                        skinTransform.gameObject, this.body.transform);
+                    SkinLayer skin = skinObj.GetComponent<SkinLayer>();
+
+                    skin.SetSkin(info.OutfitInfo.SkinId, info.ColorInfo, info.FlipX);
+                    skinObj.transform.localScale = new Vector3(0.35f, 0.35f, 1.0f);
+                }
+            }
+            private void createDummyImagePet(
+                SpriteRenderer playerImage, PlayerCosmicInfo info)
+            {
+                Transform emptyPet = playerImage.transform.FindChild(
+                    "EmptyPet(Clone)");
+                if (emptyPet != null)
+                {
+                    destroyAllColider(emptyPet.gameObject);
+                }
+                string petId = info.OutfitInfo.PetId;
+                if (petId != defaultPetId)
+                {
+                    PetBehaviour pet = Object.Instantiate(
+                        FastDestroyableSingleton<HatManager>.Instance.GetPetById(
+                            petId).viewData.viewData,
+                        playerImage.transform);
+                    pet.SetColor(info.ColorInfo);
+                    pet.transform.localPosition =
+                        Vector2.zero + (
+                            info.FlipX ? Vector2.right * petOffset : Vector2.left * petOffset);
+                    pet.transform.localScale = Vector3.one;
+                    pet.FlipX = info.FlipX;
+                    destroyAllColider(pet.gameObject);
+                }
+            }
+
+            private void changeDummyName(
+                SpriteRenderer playerImage, PlayerCosmicInfo info, bool canSeeFake)
+            {
+                TextMeshPro nameText = playerImage.transform.FindChild(
+                    "NameText_TMP").GetComponent<TextMeshPro>();
+                if (nameText != null)
+                {
+                    nameText.text = canSeeFake ?
+                        Translation.GetString("DummyPlayerName") : info.OutfitInfo.PlayerName;
+                    nameText.color = canSeeFake ? Palette.ImpostorRed : Palette.White;
+                }
+            }
+
+            private void removeRoleInfo(SpriteRenderer playerImage)
+            {
+                Transform info = playerImage.transform.FindChild(
+                    Patches.Manager.HudManagerUpdatePatch.RoleInfoObjectName);
+                if (info != null)
+                {
+                    Object.Destroy(info.gameObject);
+                }
+            }
+
+            private void updateColorName(
+                SpriteRenderer playerImage, int colorId)
+            {
+                this.colorBindText = playerImage.transform.FindChild(
+                    "ColorblindName_TMP").gameObject;
+
+                if (this.colorBindText == null) { return; }
+
+                TextMeshPro text = this.colorBindText.GetComponent<TextMeshPro>();
+
+                if (text != null)
+                {
+                    char[] array = FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                    Palette.ColorNames[colorId],
+                    System.Array.Empty<Il2CppSystem.Object>()).ToCharArray();
+                    if (array.Length != 0)
+                    {
+                        array[0] = char.ToUpper(array[0]);
+                        for (int i = 1; i < array.Length; i++)
+                        {
+                            array[i] = char.ToLower(array[i]);
+                        }
+                    }
+                    text.text = new string(array);
+                }
             }
 
             private static void destroyAllColider(GameObject obj)
