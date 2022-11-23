@@ -59,7 +59,8 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             GameOverReason reson = ExtremeRolesPlugin.ShipState.EndReason;
             Dictionary<byte, DeadInfo> info = ExtremeRolesPlugin.ShipState.DeadPlayerInfo;
 
-            if (info.TryGetValue(playerId, out DeadInfo deadInfo))
+            if (playerInfo.IsDead &&
+                info.TryGetValue(playerId, out DeadInfo deadInfo))
             {
                 finalStatus = deadInfo.Reason;
             }
