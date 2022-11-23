@@ -34,15 +34,14 @@ namespace ExtremeRoles.Roles.API
             IOption parentOps)
         {
 
-            base.CreateSpecificOption(parentOps);
-
             IEnumerable<GhostRoles.API.GhostRoleBase> collection = this.CombGhostRole.Values;
 
             foreach (var item in collection.Select(
                 (Value, Index) => new { Value, Index }))
             {
                 int optionOffset = this.OptionIdOffset + (
-                    ExtremeRoleManager.OptionOffsetPerRole * (item.Index + 1));
+                    ExtremeRoleManager.OptionOffsetPerRole * (
+                    item.Index + 1 + this.Roles.Count));
                 item.Value.CreateRoleSpecificOption(
                     parentOps, optionOffset);
             }
