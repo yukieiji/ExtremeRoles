@@ -219,7 +219,7 @@ namespace ExtremeRoles.GhostRoles
                 using (var caller = RPCOperator.CreateCaller(
                     RPCOperator.Command.SetGhostRole))
                 {
-                    caller.WriteBoolean(false);
+                    caller.WriteBoolean(true);
                     caller.WriteByte(player.PlayerId);
                     caller.WriteByte((byte)combRoleId);
                     caller.WriteByte((byte)roleId);
