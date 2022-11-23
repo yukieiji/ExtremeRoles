@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 
-using Hazel;
-
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Combination;
-
 
 namespace ExtremeRoles.Module.SpecialWinChecker
 {
@@ -51,9 +49,27 @@ namespace ExtremeRoles.Module.SpecialWinChecker
 
             List<PlayerControl> rangeInPlayer = Helper.Player.GetAllPlayerInRange(
                 player, checkRole, range);
-            // キル処理とチェック
-            
-            return true;
+            int teamAlive = statistics.SeparatedNeutralAlive[
+                (NeutralSeparateTeam.Kids, checkRole.GameControlId)];
+            int allAlive = statistics.TotalAlive;
+
+            bool isWin = (allAlive - rangeInPlayer.Count - teamAlive) <= 0;
+
+            foreach (PlayerControl target in rangeInPlayer)
+            {
+                byte targetId = target.PlayerId;
+                Player.RpcUncheckMurderPlayer(
+                    checkPlayerId, targetId, byte.MinValue);
+                ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
+                    targetId, ExtremeShipStatus.ExtremeShipStatus.PlayerStatus.Explosion);
+            }
+
+            Player.RpcUncheckMurderPlayer(
+                checkPlayerId, checkPlayerId, byte.MinValue);
+            ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
+                checkPlayerId, ExtremeShipStatus.ExtremeShipStatus.PlayerStatus.Explosion);
+
+            return isWin;
         }
     }
 }
