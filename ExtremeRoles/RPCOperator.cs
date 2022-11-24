@@ -507,6 +507,13 @@ namespace ExtremeRoles
                 ref reader);
         }
 
+        public static void KidsAbilityCommand(
+            ref MessageReader reader)
+        {
+            Roles.Combination.Kids.Ability(
+                ref reader);
+        }
+
         public static void BodyGuardAbility(ref MessageReader reader)
         {
             Roles.Solo.Crewmate.BodyGuard.Ability(ref reader);

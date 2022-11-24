@@ -527,6 +527,9 @@ namespace ExtremeRoles.Patches
                 case RPCOperator.Command.HeroHeroAcademia:
                     RPCOperator.HeroHeroAcademiaCommand(ref reader);
                     break;
+                case RPCOperator.Command.KidsAbility:
+                    RPCOperator.KidsAbilityCommand(ref reader);
+                    break;
                 case RPCOperator.Command.BodyGuardAbility:
                     RPCOperator.BodyGuardAbility(ref reader);
                     break;
