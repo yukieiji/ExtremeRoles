@@ -19,7 +19,6 @@ using ExtremeRoles.Module.ExtremeShipStatus;
 
 using GhostAbilityButton = ExtremeRoles.Module.AbilityButton.GhostRoles.ReusableAbilityButton;
 using RoleButtonBase = ExtremeRoles.Module.AbilityButton.Roles.RoleAbilityButtonBase;
-using Il2CppDumper;
 
 namespace ExtremeRoles.Roles.Combination
 {
@@ -611,7 +610,7 @@ namespace ExtremeRoles.Roles.Combination
                 AbilityType.WispSetTorch,
                 this.UseAbility,
                 null,
-                null,
+                () => true,
                 Loader.CreateSpriteFromResources(
                     Path.CarrierCarry),
                 this.DefaultButtonOffset,
