@@ -262,26 +262,27 @@ namespace ExtremeRoles.Roles.Combination
 
         public static void Ability(Kids.AbilityType abilityType, PlayerControl player)
         {
+            Delinquent delinquent = 
+                ExtremeRoleManager.GetSafeCastedRole<Delinquent>(player.PlayerId);
             switch (abilityType)
             {
                 case Kids.AbilityType.Scribe:
-                    setScibe(player);
+                    setScibe(player, delinquent);
                     break;
                 case Kids.AbilityType.SelfBomb:
-                    setBomb(
-                        ExtremeRoleManager.GetSafeCastedRole<Delinquent>(
-                            player.PlayerId));
+                    setBomb(delinquent);
                     break;
             }
         }
 
-        private static void setScibe(PlayerControl player)
+        private static void setScibe(PlayerControl player, Delinquent delinquent)
         {
             GameObject obj = new GameObject("Scribe");
             obj.transform.position = player.transform.position;
             SpriteRenderer rend = obj.AddComponent<SpriteRenderer>();
             rend.sprite = Loader.CreateSpriteFromResources(
                 Path.TestButton);
+            delinquent.abilityCount++;
         }
         private static void setBomb(Delinquent delinquent)
         {
@@ -353,7 +354,7 @@ namespace ExtremeRoles.Roles.Combination
             switch (this.curAbilityType)
             {
                 case Kids.AbilityType.Scribe:
-                    setScibe(CachedPlayerControl.LocalPlayer);
+                    setScibe(CachedPlayerControl.LocalPlayer, this);
                     break;
                 case Kids.AbilityType.SelfBomb:
                     setBomb(this);
