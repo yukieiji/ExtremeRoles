@@ -125,7 +125,7 @@ namespace ExtremeRoles.Roles.Combination
 
             public void UpdateAbilityCount(int newCount)
             {
-                this.abilityNum = newCount + 1;
+                this.abilityNum = newCount;
                 this.updateAbilityInfoText();
             }
 
@@ -196,9 +196,11 @@ namespace ExtremeRoles.Roles.Combination
             private void updateAbility()
             {
                 --this.abilityNum;
-                bool updateBomb = this.abilityNum <= 1;
-                if (updateBomb)
+                bool updateBomb = this.abilityNum <= 0;
+                if (updateBomb && 
+                    this.curAbility == Kids.AbilityType.Scribe)
                 {
+                    this.abilityNum = 1;
                     this.ButtonSprite = this.bombScribe;
                     this.curAbility = Kids.AbilityType.SelfBomb;
                 }
