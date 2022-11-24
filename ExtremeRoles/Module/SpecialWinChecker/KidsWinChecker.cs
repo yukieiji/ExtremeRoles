@@ -61,14 +61,18 @@ namespace ExtremeRoles.Module.SpecialWinChecker
             int allAlive = statistics.TotalAlive;
 
             bool isWin = (allAlive - rangeInPlayer.Count - teamAlive) <= 0;
-
+            HashSet<byte> deadPlayerId = new HashSet<byte>();
             foreach (PlayerControl target in rangeInPlayer)
             {
                 byte targetId = target.PlayerId;
+                
+                if (deadPlayerId.Contains(targetId)) { continue; }
+                
                 Player.RpcUncheckMurderPlayer(
                     checkPlayerId, targetId, byte.MinValue);
                 ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
                     targetId, ExtremeShipStatus.ExtremeShipStatus.PlayerStatus.Explosion);
+                deadPlayerId.Add(targetId);
             }
 
             Player.RpcUncheckMurderPlayer(
