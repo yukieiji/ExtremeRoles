@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using UnityEngine;
+using UnhollowerBaseLib.Attributes;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
@@ -112,6 +114,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             };
         }
 
+        [HideFromIl2Cpp]
         public void Create(RoleInfo info, Action<RoleInfo, byte> guessAction)
         {
             this.info = info;

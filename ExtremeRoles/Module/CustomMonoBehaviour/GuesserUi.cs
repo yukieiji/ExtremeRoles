@@ -8,6 +8,7 @@ using TMPro;
 
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
+using UnhollowerBaseLib.Attributes;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour
 {
@@ -116,6 +117,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             this.backGround.sprite = sprite;
         }
 
+        [HideFromIl2Cpp]
         public void InitButton(
             Action<GuessBehaviour.RoleInfo, byte> gussAction,
             List<GuessBehaviour.RoleInfo> guessRoleInfos)
