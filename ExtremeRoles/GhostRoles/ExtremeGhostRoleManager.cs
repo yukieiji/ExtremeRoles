@@ -439,7 +439,7 @@ namespace ExtremeRoles.GhostRoles
         }
 
         private static int computePercentage(Module.IOption self)
-            => (int)System.Decimal.Multiply(self.GetValue(), self.ValueCount);
+            => (int)decimal.Multiply(self.GetValue(), self.ValueCount);
 
         private static void rpcSetSingleGhostRoleToPlayerId(
             PlayerControl player,
@@ -482,7 +482,10 @@ namespace ExtremeRoles.GhostRoles
             GhostRoleBase role = AllGhostRole[ghostRoleId].Clone();
 
             role.Initialize();
-            role.CreateAbility();
+            if (playerId == CachedPlayerControl.LocalPlayer.PlayerId)
+            {
+                role.CreateAbility();
+            }
             lock (GameRole)
             {
                 GameRole.Add(playerId, role);
@@ -502,7 +505,12 @@ namespace ExtremeRoles.GhostRoles
             GhostRoleBase role = ghostCombManager.GetGhostRole((ExtremeRoleId)baseRoleId).Clone();
 
             role.Initialize();
-            role.CreateAbility();
+            if (playerId == CachedPlayerControl.LocalPlayer.PlayerId)
+            {
+                role.CreateAbility();
+            }
+            ghostCombManager.InitializeGhostRole(
+                role, ExtremeRoleManager.GameRole[playerId]);
 
             lock (GameRole)
             {

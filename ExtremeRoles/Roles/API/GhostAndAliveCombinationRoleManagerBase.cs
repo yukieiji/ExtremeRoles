@@ -3,14 +3,15 @@ using System.Linq;
 using UnityEngine;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.GhostRoles.API;
 
 namespace ExtremeRoles.Roles.API
 {
     public abstract class GhostAndAliveCombinationRoleManagerBase : 
         ConstCombinationRoleManagerBase
     {
-        public Dictionary<ExtremeRoleId, GhostRoles.API.GhostRoleBase> CombGhostRole = new 
-            Dictionary<ExtremeRoleId, GhostRoles.API.GhostRoleBase> ();
+        public Dictionary<ExtremeRoleId, GhostRoleBase> CombGhostRole = new 
+            Dictionary<ExtremeRoleId, GhostRoleBase> ();
 
         public GhostAndAliveCombinationRoleManagerBase(
             string roleName,
@@ -25,9 +26,12 @@ namespace ExtremeRoles.Roles.API
             this.CombGhostRole.Clear();
         }
 
+        public abstract void InitializeGhostRole(
+            byte rolePlayerId, GhostRoleBase role, SingleRoleBase aliveRole);
+
         public int GetOptionIdOffset() => this.OptionIdOffset;
 
-        public GhostRoles.API.GhostRoleBase GetGhostRole(ExtremeRoleId id) => 
+        public GhostRoleBase GetGhostRole(ExtremeRoleId id) => 
             this.CombGhostRole[id];
 
         protected override void CreateSpecificOption(
@@ -36,7 +40,7 @@ namespace ExtremeRoles.Roles.API
 
             base.CreateSpecificOption(parentOps);
 
-            IEnumerable<GhostRoles.API.GhostRoleBase> collection = this.CombGhostRole.Values;
+            IEnumerable<GhostRoleBase> collection = this.CombGhostRole.Values;
 
             foreach (var item in collection.Select(
                 (Value, Index) => new { Value, Index }))

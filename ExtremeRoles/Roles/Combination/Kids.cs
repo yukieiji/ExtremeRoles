@@ -17,7 +17,7 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.ExtremeShipStatus;
 
 
-using GhostAbilityButton = ExtremeRoles.Module.AbilityButton.GhostRoles.ReusableAbilityButton;
+using GhostAbilityButton = ExtremeRoles.Module.AbilityButton.GhostRoles.AbilityCountButton;
 using RoleButtonBase = ExtremeRoles.Module.AbilityButton.Roles.RoleAbilityButtonBase;
 
 namespace ExtremeRoles.Roles.Combination
@@ -44,6 +44,17 @@ namespace ExtremeRoles.Roles.Combination
 
             this.CombGhostRole.Add(
                 ExtremeRoleId.Delinquent, new Wisp());
+        }
+
+        public override void InitializeGhostRole(
+            byte rolePlayerId, GhostRoleBase role, SingleRoleBase aliveRole)
+        {
+            if (rolePlayerId == CachedPlayerControl.LocalPlayer.PlayerId &&
+                aliveRole is Delinquent delinquent &&
+                role is Wisp wisp)
+            {
+                wisp.SetAbilityNum(delinquent.WispAbilityNum);
+            }
         }
 
         public static void Ability(ref MessageReader reader)
@@ -230,9 +241,13 @@ namespace ExtremeRoles.Roles.Combination
             Range,
         }
 
+        public int WispAbilityNum => this.abilityCount;
+
         private Kids.AbilityType curAbilityType;
         private float range;
         private bool isWinCheck;
+
+        private int abilityCount = 0;
 
         private RoleButtonBase abilityButton;
 
@@ -361,6 +376,9 @@ namespace ExtremeRoles.Roles.Combination
         protected override void RoleSpecificInit()
         {
             this.curAbilityType = Kids.AbilityType.Scribe;
+
+            this.abilityCount = 0;
+
             this.range = OptionHolder.AllOption[
                 GetRoleOptionId(DelinqentOption.Range)].GetValue();
             
@@ -602,6 +620,11 @@ namespace ExtremeRoles.Roles.Combination
         public static void RemoveTorch(uint id, float blackOutTime)
         {
             state.RemoveTorch(id, blackOutTime);
+        }
+
+        public void SetAbilityNum(int abilityNum)
+        {
+            ((GhostAbilityButton)this.Button).UpdateAbilityCount(abilityNum);
         }
 
         public override void CreateAbility()
