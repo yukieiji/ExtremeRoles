@@ -510,7 +510,7 @@ namespace ExtremeRoles.GhostRoles
                 role.CreateAbility();
             }
             ghostCombManager.InitializeGhostRole(
-                role, ExtremeRoleManager.GameRole[playerId]);
+                playerId, role, ExtremeRoleManager.GameRole[playerId]);
 
             lock (GameRole)
             {

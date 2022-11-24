@@ -196,7 +196,7 @@ namespace ExtremeRoles.Roles.Combination
             private void updateAbility()
             {
                 --this.abilityNum;
-                bool updateBomb = this.abilityNum > 1;
+                bool updateBomb = this.abilityNum <= 1;
                 if (updateBomb)
                 {
                     this.ButtonSprite = this.bombScribe;
@@ -251,6 +251,8 @@ namespace ExtremeRoles.Roles.Combination
 
         private RoleButtonBase abilityButton;
 
+        private const int maxImageNum = 10;
+
         public Delinquent() : base(
             ExtremeRoleId.Delinquent,
             ExtremeRoleType.Neutral,
@@ -281,7 +283,9 @@ namespace ExtremeRoles.Roles.Combination
             obj.transform.position = player.transform.position;
             SpriteRenderer rend = obj.AddComponent<SpriteRenderer>();
             rend.sprite = Loader.CreateSpriteFromResources(
-                Path.TestButton);
+                string.Format(
+                    Path.DelinquentScribe,
+                    RandomGenerator.Instance.Next(0, maxImageNum)));
             delinquent.abilityCount++;
         }
         private static void setBomb(Delinquent delinquent)

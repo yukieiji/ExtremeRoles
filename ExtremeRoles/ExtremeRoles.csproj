@@ -34,6 +34,7 @@
       <EmbeddedResource Include="Resources\Asset\*.asset" />
         <EmbeddedResource Include="Resources\*.png" />
         <EmbeddedResource Include="Resources\MeryVentAnimation\*.png" />
+      <EmbeddedResource Include="Resources\DelinquentScribe\*.png" />
 		<EmbeddedResource Include="Resources\JsonData\*.json" />
     </ItemGroup>
 
