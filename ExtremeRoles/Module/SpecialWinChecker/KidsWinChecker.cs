@@ -44,13 +44,20 @@ namespace ExtremeRoles.Module.SpecialWinChecker
             
             if (checkPlayerId == byte.MaxValue) { return false; }
 
-            PlayerControl player = Helper.Player.GetPlayerControlById(checkPlayerId);
+            PlayerControl player = Player.GetPlayerControlById(checkPlayerId);
             if (player == null) { return false; }
 
-            List<PlayerControl> rangeInPlayer = Helper.Player.GetAllPlayerInRange(
+            List<PlayerControl> rangeInPlayer = Player.GetAllPlayerInRange(
                 player, checkRole, range);
+
+            int gameControlId = checkRole.GameControlId;
+            if (OptionHolder.Ship.IsSameNeutralSameWin)
+            {
+                gameControlId = int.MaxValue;
+            }
+
             int teamAlive = statistics.SeparatedNeutralAlive[
-                (NeutralSeparateTeam.Kids, checkRole.GameControlId)];
+                (NeutralSeparateTeam.Kids, gameControlId)];
             int allAlive = statistics.TotalAlive;
 
             bool isWin = (allAlive - rangeInPlayer.Count - teamAlive) <= 0;
