@@ -144,23 +144,12 @@ namespace ExtremeRoles.Patches
 
             roleAssignText.gameObject.SetActive(true);
 
-            AmongUsClient client = AmongUsClient.Instance;
-
-            if (client.AmHost)
+            if (AmongUsClient.Instance.AmHost)
             {
-                // オンラインゲームの場合の処理
-                if (client.GameMode == GameModes.OnlineGame)
+                // ホストは全員の処理が終わるまで待つ
+                while (!Manager.RoleManagerSelectRolesPatch.IsReady)
                 {
-                    // ホストは全員の処理が終わるまで待つ
-                    while (!Manager.RoleManagerSelectRolesPatch.IsReady)
-                    {
-                        yield return null;
-                    }
-                }
-                else
-                {
-                    // オフラインだととりあえず0.5秒待機
-                    yield return new WaitForSeconds(0.5f);
+                    yield return null;
                 }
                 Manager.RoleManagerSelectRolesPatch.AllPlayerAssignToExRole();
             }
