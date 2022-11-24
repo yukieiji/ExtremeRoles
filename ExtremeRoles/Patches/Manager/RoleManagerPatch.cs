@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using HarmonyLib;
-using Hazel;
 
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Helper;
@@ -631,7 +630,7 @@ namespace ExtremeRoles.Patches.Manager
                     case ExtremeRoleType.Null:
                         break;
                     default:
-                        throw new System.Exception("Unknown teamType detect!!");
+                        throw new Exception("Unknown teamType detect!!");
                 }
             }
 
@@ -657,19 +656,16 @@ namespace ExtremeRoles.Patches.Manager
             };
         }
 
-        private sealed class RoleAssignmentData
+        private struct RoleAssignmentData
         {
-            public List<SingleRoleBase> RolesForVanillaImposter = new List<SingleRoleBase>();
-            public List<SingleRoleBase> RolesForVanillaCrewmate = new List<SingleRoleBase>();
-            public List<((byte, CombinationRoleManagerBase), (int, int, bool))> CombinationRole = new List<
-                ((byte, CombinationRoleManagerBase), (int, int, bool))>();
+            public List<SingleRoleBase> RolesForVanillaImposter;
+            public List<SingleRoleBase> RolesForVanillaCrewmate;
+            public List<((byte, CombinationRoleManagerBase), (int, int, bool))> CombinationRole;
 
-            public Dictionary<
-                RoleTypes, Dictionary<int, (int, int)>> RoleSpawnSettings =
-                    new Dictionary<RoleTypes, Dictionary<int, (int, int)>>();
-            public int CrewmateRoles { get; set; }
-            public int NeutralRoles { get; set; }
-            public int ImpostorRoles { get; set; }
+            public Dictionary<RoleTypes, Dictionary<int, (int, int)>> RoleSpawnSettings;
+            public int CrewmateRoles;
+            public int NeutralRoles;
+            public int ImpostorRoles;
         }
     }
 
