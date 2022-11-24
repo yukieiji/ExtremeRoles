@@ -64,6 +64,7 @@ namespace ExtremeRoles.GhostRoles
             {
                 this.globalSpawnLimit.Clear();
                 this.useGhostRole.Clear();
+                this.CombRole.Clear();
             }
 
             public CombinationRoleType GetCombRoleType(ExtremeRoleId roleId) => CombRole[roleId];
