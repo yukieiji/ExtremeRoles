@@ -58,6 +58,12 @@ namespace ExtremeRoles.Roles.Combination
             }
         }
 
+        protected override void CommonInit()
+        {
+            base.CommonInit();
+            Wisp.StateInit();
+        }
+
         public static void Ability(ref MessageReader reader)
         {
             AbilityType abilityType = (AbilityType)reader.ReadByte();
@@ -636,6 +642,11 @@ namespace ExtremeRoles.Roles.Combination
             Palette.White,
             OptionTab.Combination)
         { }
+
+        public static void StateInit()
+        {
+            state.Initialize();
+        }
 
         public static void Ability(ref MessageReader reader, Kids.AbilityType abilityType)
         {
