@@ -9,6 +9,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
+using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Resources;
@@ -409,7 +410,7 @@ namespace ExtremeRoles.Roles.Combination
         
     }
 
-    public sealed class Wisp : GhostRoleBase
+    public sealed class Wisp : GhostRoleBase, IGhostRoleWinable
     {
         public sealed class Torch : IMeetingResetObject
         {
@@ -718,6 +719,13 @@ namespace ExtremeRoles.Roles.Combination
         private static void resetMeeting()
         {
             state.ResetMeeting();
+        }
+
+        public bool IsWin(
+            GameOverReason reason,
+            GameData.PlayerInfo ghostRolePlayer)
+        {
+
         }
 
         public override void CreateAbility()

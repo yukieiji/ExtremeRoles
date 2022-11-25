@@ -8,6 +8,9 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.GhostRoles;
+using ExtremeRoles.GhostRoles.API;
+using ExtremeRoles.GhostRoles.API.Interface;
 
 namespace ExtremeRoles.Patches
 {
@@ -72,6 +75,9 @@ namespace ExtremeRoles.Patches
             List<(GameData.PlayerInfo, IRoleWinPlayerModifier)> modRole = new List<
                 (GameData.PlayerInfo, IRoleWinPlayerModifier)> ();
 
+            List<(GameData.PlayerInfo, IGhostRoleWinable)> ghostWinCheckRole = new List<
+               (GameData.PlayerInfo, IGhostRoleWinable)>();
+
             var roleData = ExtremeRoleManager.GameRole;
             var gameData = ExtremeRolesPlugin.ShipState;
 
@@ -79,8 +85,11 @@ namespace ExtremeRoles.Patches
             {
 
                 var role = roleData[playerInfo.PlayerId];
+                bool hasGhostRole = ExtremeGhostRoleManager.GameRole.TryGetValue(
+                    playerInfo.PlayerId, out GhostRoleBase ghostRole);
 
-                Module.CustomMonoBehaviour.FinalSummary.Add(playerInfo);
+                Module.CustomMonoBehaviour.FinalSummary.Add(
+                    playerInfo, role, ghostRole);
 
                 if (role.IsNeutral())
                 {
@@ -117,6 +126,12 @@ namespace ExtremeRoles.Patches
                     }
                 }
 
+                if (hasGhostRole && 
+                    ghostRole.IsNeutral() &&
+                    ghostRole is IGhostRoleWinable winCheckGhostRole)
+                {
+                    ghostWinCheckRole.Add((playerInfo, winCheckGhostRole));
+                }
             }
 
             List<WinningPlayerData> winnersToRemove = new List<WinningPlayerData>();
@@ -140,7 +155,9 @@ namespace ExtremeRoles.Patches
                 addNeutralWinner();
             }
 
-            switch ((RoleGameOverReason)gameData.EndReason)
+            GameOverReason reason = gameData.EndReason;
+
+            switch ((RoleGameOverReason)reason)
             {
                 case RoleGameOverReason.AssassinationMarin:
                     resetWinner();
@@ -237,6 +254,15 @@ namespace ExtremeRoles.Patches
             foreach (var player in gameData.GetPlusWinner())
             {
                 addWinner(player);
+            }
+
+            foreach (var (playerInfo, winCheckRole) in ghostWinCheckRole)
+            {
+                if (winCheckRole.IsWin(reason, playerInfo))
+                {
+                    addWinner(playerInfo);
+                    plusWinner.Add(playerInfo);
+                }
             }
 
             Il2CppSystem.Collections.Generic.List<WinningPlayerData> winnerList = TempData.winners;

@@ -47,11 +47,11 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
         private static List<PlayerSummary> playerSummary = new List<PlayerSummary>();
 
-        public static void Add(GameData.PlayerInfo playerInfo)
+        public static void Add(
+            GameData.PlayerInfo playerInfo,
+            SingleRoleBase role, GhostRoleBase ghostRole)
         {
             byte playerId = playerInfo.PlayerId;
-
-            SingleRoleBase role = ExtremeRoleManager.GameRole[playerId];
             var (completedTask, totalTask) = GameSystem.GetTaskInfo(playerInfo);
             // IsImpostor
 
@@ -104,9 +104,6 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             {
                 finalStatus = PlayerStatus.Disconnected;
             }
-
-            ExtremeGhostRoleManager.GameRole.TryGetValue(
-                playerId, out GhostRoleBase ghostRole);
 
             playerSummary.Add(
                 new PlayerSummary
