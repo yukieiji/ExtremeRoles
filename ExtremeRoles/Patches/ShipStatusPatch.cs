@@ -1,12 +1,12 @@
 ﻿using System.Linq;
 using System.Runtime.CompilerServices;
 
-using Hazel;
 using HarmonyLib;
 using UnityEngine;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.ExtremeShipStatus;
 
@@ -38,6 +38,14 @@ namespace ExtremeRoles.Patches
                         Roles.Solo.Impostor.LastWolf>() == null)
                     {
                         __result = 0.3f;
+                        return false;
+                    }
+                    break;
+                case ExtremeShipStatus.ForceVisonType.WispLightOff:
+                    if (!Wisp.HasTorch(playerInfo.PlayerId))
+                    {
+                        __result = __instance.MinLightRadius * 
+                            PlayerControl.GameOptions.CrewLightMod;
                         return false;
                     }
                     break;

@@ -35,6 +35,7 @@ namespace ExtremeRoles.Roles.Combination
             PickUpTorch,
             RemoveTorch,
             RepairTorchVison,
+            ResetMeeting
         }
 
         public Kids() : base(
@@ -80,6 +81,7 @@ namespace ExtremeRoles.Roles.Combination
                 case AbilityType.PickUpTorch:
                 case AbilityType.RemoveTorch:
                 case AbilityType.RepairTorchVison:
+                case AbilityType.ResetMeeting:
                     Wisp.Ability(ref reader, abilityType);
                     break;
                 default:
@@ -615,6 +617,7 @@ namespace ExtremeRoles.Roles.Combination
             {
                 ExtremeRolesPlugin.ShipState.SetVison(
                     ExtremeShipStatus.ForceVisonType.None);
+                this.blackOuter = null;
             }
 
             public void ResetMeeting()
@@ -622,7 +625,7 @@ namespace ExtremeRoles.Roles.Combination
                 this.torchHavePlayer.Clear();
                 this.blackOuter?.Clear();
                 this.placedTorch.Clear();
-                this.blackOuter = null;
+                RepairVison();
             }
 
             public void Initialize()
@@ -674,6 +677,9 @@ namespace ExtremeRoles.Roles.Combination
                 case Kids.AbilityType.RepairTorchVison:
                     RepairVison();
                     break;
+                case Kids.AbilityType.ResetMeeting:
+                    resetMeeting();
+                    break;
                 default:
                     break;
             }
@@ -708,6 +714,10 @@ namespace ExtremeRoles.Roles.Combination
         public void SetAbilityNum(int abilityNum)
         {
             ((GhostAbilityButton)this.Button).UpdateAbilityCount(abilityNum);
+        }
+        private static void resetMeeting()
+        {
+            state.ResetMeeting();
         }
 
         public override void CreateAbility()
@@ -746,7 +756,11 @@ namespace ExtremeRoles.Roles.Combination
 
         public override void ReseOnMeetingStart()
         {
-            return;
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.KidsAbility))
+            {
+                caller.WriteByte((byte)Kids.AbilityType.ResetMeeting);
+            }
         }
 
         protected override void CreateSpecificOption(IOption parentOps)
