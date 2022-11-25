@@ -14,6 +14,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.ExtremeShipStatus;
@@ -435,22 +436,21 @@ namespace ExtremeRoles.Roles.Combination
         public sealed class TorchManager : IMeetingResetObject, IUpdatableObject
         {
             private uint id = 0;
+            private int placedControlId = 0;
             private float timer = float.MaxValue;
             private float blackOutTime = float.MinValue;
             private List<Torch> torch = new List<Torch>();
 
             public TorchManager(
                 uint id,
-                int num,
-                float range,
-                float activeTime,
-                float blackOutTime)
+                Wisp wisp)
             {
                 this.id = id;
-                this.timer = activeTime;
-                this.blackOutTime = blackOutTime;
+                this.placedControlId = wisp.GameControlId;
+                this.timer = wisp.torchActiveTime;
+                this.blackOutTime = wisp.torchBlackOutTime;
                 this.torch.Clear();
-                this.SetTorch(num, range);
+                this.SetTorch(wisp.torchNum, wisp.range);
             }
 
             public void Clear()
@@ -472,9 +472,10 @@ namespace ExtremeRoles.Roles.Combination
                     {
                         caller.WriteByte((byte)Kids.AbilityType.RemoveTorch);
                         caller.WriteUInt(this.id);
+                        caller.WriteInt(this.placedControlId);
                         caller.WriteFloat(this.blackOutTime);
                     }
-                    RemoveTorch(this.id, this.blackOutTime);
+                    RemoveTorch(this.id, this.placedControlId, this.blackOutTime);
                     ExtremeRolesPlugin.ShipState.RemoveUpdateObjectAt(index);
                 }
             }
@@ -574,6 +575,7 @@ namespace ExtremeRoles.Roles.Combination
             private Dictionary<uint, TorchManager> placedTorch = new Dictionary<uint, TorchManager>();
             private WispBlackOuter blackOuter = null;
             private HashSet<byte> torchHavePlayer = new HashSet<byte>();
+            private Dictionary<int, int> affectedPlayerNum = new Dictionary<int, int>();
 
             public WispState()
             {
@@ -581,10 +583,19 @@ namespace ExtremeRoles.Roles.Combination
                 this.blackOuter = null;
             }
 
-            public void SetTorch(int num, float range, float activeTime, float blackOutTime)
+            public bool IsWin(Wisp wisp)
             {
-                var torch = new TorchManager(
-                    this.torchId, num, range, activeTime, blackOutTime);
+                int gameControlId = wisp.GameControlId;
+                if (OptionHolder.Ship.IsSameNeutralSameWin)
+                {
+                    gameControlId = int.MaxValue;
+                }
+                return this.affectedPlayerNum[ gameControlId] >= wisp.winNum;
+            }
+
+            public void SetTorch(Wisp wisp)
+            {
+                var torch = new TorchManager(this.torchId, wisp);
                 ExtremeRolesPlugin.ShipState.AddUpdateObject(torch);
                 ExtremeRolesPlugin.ShipState.AddMeetingResetObject(torch);
                 this.placedTorch.Add(
@@ -599,11 +610,12 @@ namespace ExtremeRoles.Roles.Combination
                 this.torchHavePlayer.Add(playerId);
             }
 
-            public void RemoveTorch(uint id, float time)
+            public void RemoveTorch(uint id, int gameControlId, float time)
             {
                 if (this.placedTorch.TryGetValue(id, out TorchManager torch))
                 {
                     torch.Clear();
+                   
                     if (this.blackOuter == null)
                     {
                         this.blackOuter = new WispBlackOuter(time);
@@ -629,6 +641,27 @@ namespace ExtremeRoles.Roles.Combination
                 RepairVison();
             }
 
+            public void UpdateAffectedPlayerNum(int gameControlId)
+            {
+                int playerNum = 0;
+                foreach (GameData.PlayerInfo player in GameData.Instance.AllPlayers.GetFastEnumerator())
+                {
+                    if (player.IsDead || 
+                        player.Disconnected ||
+                        HasTorch(player.PlayerId)) { continue; }
+                    ++playerNum;
+                }
+
+                if (OptionHolder.Ship.IsSameNeutralSameWin)
+                {
+                    gameControlId = int.MaxValue;
+                }
+
+                this.affectedPlayerNum[gameControlId] = 
+                    this.affectedPlayerNum.TryGetValue(gameControlId, out int result) ? 
+                    result + playerNum : playerNum;
+            }
+
             public void Initialize()
             {
                 this.torchId = 0;
@@ -644,6 +677,7 @@ namespace ExtremeRoles.Roles.Combination
             BlackOutTime,
         }
 
+        private int winNum;
         private int torchNum;
         private float range;
         private float torchActiveTime;
@@ -672,8 +706,9 @@ namespace ExtremeRoles.Roles.Combination
                     break;
                 case Kids.AbilityType.RemoveTorch:
                     uint id = reader.ReadUInt32();
+                    int controlId = reader.ReadInt32();
                     float time = reader.ReadSingle();
-                    RemoveTorch(id, time);
+                    RemoveTorch(id, controlId, time);
                     break;
                 case Kids.AbilityType.RepairTorchVison:
                     RepairVison();
@@ -695,11 +730,7 @@ namespace ExtremeRoles.Roles.Combination
 
         public static void SetTorch(Wisp wisp)
         {
-            state.SetTorch(
-                wisp.torchNum,
-                wisp.range,
-                wisp.torchActiveTime,
-                wisp.torchBlackOutTime);
+            state.SetTorch(wisp);
         }
 
         public static void PickUpTorch(byte playerId)
@@ -707,9 +738,9 @@ namespace ExtremeRoles.Roles.Combination
             state.PickUpTorch(playerId);
         }
 
-        public static void RemoveTorch(uint id, float blackOutTime)
+        public static void RemoveTorch(uint id, int controlId, float blackOutTime)
         {
-            state.RemoveTorch(id, blackOutTime);
+            state.RemoveTorch(id, controlId, blackOutTime);
         }
 
         public void SetAbilityNum(int abilityNum)
@@ -723,10 +754,7 @@ namespace ExtremeRoles.Roles.Combination
 
         public bool IsWin(
             GameOverReason reason,
-            GameData.PlayerInfo ghostRolePlayer)
-        {
-
-        }
+            GameData.PlayerInfo ghostRolePlayer) => state.IsWin(this);
 
         public override void CreateAbility()
         {
