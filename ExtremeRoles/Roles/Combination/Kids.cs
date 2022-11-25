@@ -419,8 +419,8 @@ namespace ExtremeRoles.Roles.Combination
                 this.body.transform.position = new Vector3(
                     pos.x, pos.y, (pos.y / 1000f));
                 TorchBehavior torch = this.body.AddComponent<TorchBehavior>();
-                this.body.SetActive(true);
                 torch.SetRange(range);
+                this.body.SetActive(true);
             }
 
             public void Clear()

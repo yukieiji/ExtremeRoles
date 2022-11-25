@@ -34,7 +34,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         {
             get
             {
-                return 1.0f;
+                return 0.1f;
             }
         }
 
@@ -50,7 +50,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             this.img.sprite = Loader.CreateSpriteFromResources(
                 Path.WispTorch);
 
-            this.collider.radius = 0.001f;
+            this.collider.radius = 0.01f;
         }
 
         public float CanUse(
