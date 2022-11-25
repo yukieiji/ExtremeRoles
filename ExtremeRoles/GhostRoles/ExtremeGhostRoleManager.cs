@@ -40,6 +40,7 @@ namespace ExtremeRoles.GhostRoles
     public static class ExtremeGhostRoleManager
     {
         public const int GhostRoleOptionId = 25;
+        private const int idOffset = 128;
 
         public sealed class GhostRoleAssignData
         {
@@ -197,16 +198,16 @@ namespace ExtremeRoles.GhostRoles
         public static void AssignGhostRoleToPlayer(PlayerControl player)
         {
             RoleTypes roleType = player.Data.Role.Role;
+            SingleRoleBase baseRole = ExtremeRoleManager.GameRole[player.PlayerId];
+            int controlId = baseRole.GameControlId + idOffset;
 
             if (vanillaGhostRole.Contains(roleType))
             {
                 rpcSetSingleGhostRoleToPlayerId(
-                    player, roleType,
+                    player, controlId, roleType,
                     ExtremeGhostRoleId.VanillaRole);
                 return;
             }
-
-            SingleRoleBase baseRole = ExtremeRoleManager.GameRole[player.PlayerId];
 
             ExtremeRoleType team = baseRole.Team;
             ExtremeRoleId roleId = baseRole.Id;
@@ -222,11 +223,13 @@ namespace ExtremeRoles.GhostRoles
                     RPCOperator.Command.SetGhostRole))
                 {
                     caller.WriteBoolean(true);
+                    caller.WritePackedInt(controlId);
                     caller.WriteByte(player.PlayerId);
                     caller.WriteByte((byte)combRoleId);
                     caller.WriteByte((byte)roleId);
                 }
-                setPlyaerToCombGhostRole(player.PlayerId, (byte)combRoleId, (byte)roleId);
+                setPlyaerToCombGhostRole(
+                    player.PlayerId, controlId, (byte)combRoleId, (byte)roleId);
                 assignData.ReduceGlobalSpawnLimit(team);
                 return;
             }
@@ -240,7 +243,8 @@ namespace ExtremeRoles.GhostRoles
                 if (filter.Count != 0 && !filter.Contains(roleId)) { continue; }
                 if (!isRoleSpawn(num, spawnRate)) { continue; }
                 
-                rpcSetSingleGhostRoleToPlayerId(player, roleType, id);
+                rpcSetSingleGhostRoleToPlayerId(
+                    player, controlId, roleType, id);
                 
                 // その役職のスポーン数をへらす処理
                 assignData.ReduceRoleSpawnData(
@@ -377,18 +381,23 @@ namespace ExtremeRoles.GhostRoles
             ref MessageReader reader)
         {
             bool isComb = reader.ReadBoolean();
+            
             byte playerId = reader.ReadByte();
+            int controlId = reader.ReadInt32();
+
             if (isComb)
             {
                 byte combType = reader.ReadByte();
                 byte baseRoleId = reader.ReadByte();
-                setPlyaerToCombGhostRole(playerId, combType, baseRoleId);
+                setPlyaerToCombGhostRole(
+                    playerId, controlId, combType, baseRoleId);
             }
             else
             {
                 byte vanillaRoleId = reader.ReadByte();
                 byte ghostRoleId = reader.ReadByte();
-                setPlyaerToSingleGhostRole(playerId, vanillaRoleId, ghostRoleId);
+                setPlyaerToSingleGhostRole(
+                    playerId, controlId, vanillaRoleId, ghostRoleId);
             }
         }
 
@@ -450,6 +459,7 @@ namespace ExtremeRoles.GhostRoles
 
         private static void rpcSetSingleGhostRoleToPlayerId(
             PlayerControl player,
+            int gameControlId,
             RoleTypes baseVanillaRoleId,
             ExtremeGhostRoleId assignGhostRoleId)
         {
@@ -458,18 +468,20 @@ namespace ExtremeRoles.GhostRoles
             {
                 caller.WriteBoolean(false);
                 caller.WriteByte(player.PlayerId);
+                caller.WritePackedInt(gameControlId);
                 caller.WriteByte((byte)baseVanillaRoleId);
                 caller.WriteByte((byte)assignGhostRoleId);
             }
 
             setPlyaerToSingleGhostRole(
                 player.PlayerId,
+                gameControlId,
                 (byte)baseVanillaRoleId,
                 (byte)assignGhostRoleId);
         }
 
         private static void setPlyaerToSingleGhostRole(
-            byte playerId, byte vanillaRoleId, byte roleId)
+            byte playerId, int gameControlId, byte vanillaRoleId, byte roleId)
         {
             if (GameRole.ContainsKey(playerId)) { return; }
 
@@ -487,7 +499,8 @@ namespace ExtremeRoles.GhostRoles
             }
 
             GhostRoleBase role = AllGhostRole[ghostRoleId].Clone();
-
+            
+            role.SetGameControlId(gameControlId);
             role.Initialize();
             if (playerId == CachedPlayerControl.LocalPlayer.PlayerId)
             {
@@ -502,7 +515,7 @@ namespace ExtremeRoles.GhostRoles
 
 
         private static void setPlyaerToCombGhostRole(
-            byte playerId, byte combType, byte baseRoleId)
+            byte playerId, int gameControlId, byte combType, byte baseRoleId)
         {
             if (GameRole.ContainsKey(playerId)) { return; }
 
@@ -511,6 +524,7 @@ namespace ExtremeRoles.GhostRoles
 
             GhostRoleBase role = ghostCombManager.GetGhostRole((ExtremeRoleId)baseRoleId).Clone();
 
+            role.SetGameControlId(gameControlId);
             role.Initialize();
             if (playerId == CachedPlayerControl.LocalPlayer.PlayerId)
             {

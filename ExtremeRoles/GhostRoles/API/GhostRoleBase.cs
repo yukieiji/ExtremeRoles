@@ -48,6 +48,8 @@ namespace ExtremeRoles.GhostRoles.API
         public Color RoleColor => this.NameColor;
         public bool HasTask => this.Task;
 
+        public int GameControlId => this.controlId;
+
         protected ExtremeRoleType TeamType;
         protected ExtremeGhostRoleId RoleId;
         protected string RoleName;
@@ -60,6 +62,7 @@ namespace ExtremeRoles.GhostRoles.API
         protected readonly Vector3 DefaultButtonOffset = new Vector3(-1.8f, -0.06f, 0);
 
         private OptionTab tab = OptionTab.General;
+        private int controlId;
 
         public GhostRoleBase(
             bool hasTask,
@@ -182,6 +185,11 @@ namespace ExtremeRoles.GhostRoles.API
             }
 
             return Color.clear;
+        }
+
+        public void SetGameControlId(int newId)
+        {
+            this.controlId = newId;
         }
 
         protected void CreateButtonOption(
