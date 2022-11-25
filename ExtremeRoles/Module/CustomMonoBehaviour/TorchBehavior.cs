@@ -48,7 +48,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             this.collider = base.gameObject.AddComponent<CircleCollider2D>();
             this.img = base.gameObject.AddComponent<SpriteRenderer>();
             this.img.sprite = Loader.CreateSpriteFromResources(
-                Path.TestButton);
+                Path.WispTorch);
 
             this.collider.radius = 0.001f;
         }

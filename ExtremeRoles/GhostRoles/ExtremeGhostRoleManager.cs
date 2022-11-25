@@ -9,6 +9,7 @@ using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GhostRoles.Crewmate;
 using ExtremeRoles.GhostRoles.Impostor;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Roles.Combination;
 
 namespace ExtremeRoles.GhostRoles
 {
@@ -418,6 +419,11 @@ namespace ExtremeRoles.GhostRoles
                     break;
                 case AbilityType.SaboEvilResetSabotageCool:
                     SaboEvil.ResetCool();
+                    break;
+                case AbilityType.WispSetTorch:
+                    var wisp = GetSafeCastedGhostRole<Wisp>(
+                        reader.ReadByte());
+                    Wisp.SetTorch(wisp);
                     break;
                 default:
                     break;

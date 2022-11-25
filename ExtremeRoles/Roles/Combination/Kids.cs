@@ -620,7 +620,7 @@ namespace ExtremeRoles.Roles.Combination
             public void ResetMeeting()
             {
                 this.torchHavePlayer.Clear();
-                this.blackOuter.Clear();
+                this.blackOuter?.Clear();
                 this.placedTorch.Clear();
                 this.blackOuter = null;
             }
@@ -663,11 +663,6 @@ namespace ExtremeRoles.Roles.Combination
         {
             switch (abilityType)
             {
-                case Kids.AbilityType.SetTorch:
-                    var wisp = ExtremeGhostRoleManager.GetSafeCastedGhostRole<Wisp>(
-                        reader.ReadByte());
-                    SetTorch(wisp);
-                    break;
                 case Kids.AbilityType.PickUpTorch:
                     PickUpTorch(reader.ReadByte());
                     break;
@@ -720,7 +715,7 @@ namespace ExtremeRoles.Roles.Combination
             this.Button = new GhostAbilityButton(
                 AbilityType.WispSetTorch,
                 this.UseAbility,
-                null,
+                () => true,
                 () => true,
                 Loader.CreateSpriteFromResources(
                     Path.CarrierCarry),
@@ -773,7 +768,6 @@ namespace ExtremeRoles.Roles.Combination
 
         protected override void UseAbility(RPCOperator.RpcCaller caller)
         {
-            caller.WriteByte((byte)Kids.AbilityType.SetTorch);
             caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
         }
 

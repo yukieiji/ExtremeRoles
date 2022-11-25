@@ -99,6 +99,7 @@ namespace ExtremeRoles.Resources
         public const string UmbrerUpgradeVirus = "ExtremeRoles.Resources.UpgradeVirus.png";
         public const string DelinquentScribe =
             "ExtremeRoles.Resources.DelinquentScribe.{0}.png";
+        public const string WispTorch = "ExtremeRoles.Resources.torch.png";
 
         public const string XionMapZoomIn = "ExtremeRoles.Resources.ZoomIn.png";
         public const string XionMapZoomOut = "ExtremeRoles.Resources.ZoomOut.png";
