@@ -413,13 +413,14 @@ namespace ExtremeRoles.Roles.Combination
         {
             private GameObject body;
 
-            public Torch(Vector2 pos)
+            public Torch(float range, Vector2 pos)
             {
                 this.body = new GameObject("Torch");
                 this.body.transform.position = new Vector3(
                     pos.x, pos.y, (pos.y / 1000f));
-                this.body.AddComponent<TorchBehavior>();
+                TorchBehavior torch = this.body.AddComponent<TorchBehavior>();
                 this.body.SetActive(true);
+                torch.SetRange(range);
             }
 
             public void Clear()
@@ -435,13 +436,18 @@ namespace ExtremeRoles.Roles.Combination
             private float blackOutTime = float.MinValue;
             private List<Torch> torch = new List<Torch>();
 
-            public TorchManager(int num, uint id, float activeTime, float blackOutTime)
+            public TorchManager(
+                uint id,
+                int num,
+                float range,
+                float activeTime,
+                float blackOutTime)
             {
                 this.id = id;
                 this.timer = activeTime;
                 this.blackOutTime = blackOutTime;
                 this.torch.Clear();
-                this.SetTorch(num);
+                this.SetTorch(num, range);
             }
 
             public void Clear()
@@ -470,7 +476,7 @@ namespace ExtremeRoles.Roles.Combination
                 }
             }
 
-            public void SetTorch(int num)
+            public void SetTorch(int num, float range)
             {
                 byte mapId = PlayerControl.GameOptions.MapId;
                 int playerNum = CachedPlayerControl.AllPlayerControls.Count;
@@ -512,7 +518,7 @@ namespace ExtremeRoles.Roles.Combination
                                 break;
                         }
                     }
-                    var newTorch = new Torch(placePos[
+                    var newTorch = new Torch(range, placePos[
                         RandomGenerator.Instance.Next(0, placePos.Count)]);
                     ExtremeRolesPlugin.ShipState.AddMeetingResetObject(newTorch);
                     this.torch.Add(newTorch);
@@ -572,15 +578,18 @@ namespace ExtremeRoles.Roles.Combination
                 this.blackOuter = null;
             }
 
-            public void SetTorch(int num, float activeTime, float blackOutTime)
+            public void SetTorch(int num, float range, float activeTime, float blackOutTime)
             {
-                var torch = new TorchManager(num, this.torchId, activeTime, blackOutTime);
+                var torch = new TorchManager(
+                    this.torchId, num, range, activeTime, blackOutTime);
                 ExtremeRolesPlugin.ShipState.AddUpdateObject(torch);
                 ExtremeRolesPlugin.ShipState.AddMeetingResetObject(torch);
                 this.placedTorch.Add(
                     this.torchId, torch);
                 this.torchId++;
             }
+
+            public bool HasTorch(byte playerId) => this.torchHavePlayer.Contains(playerId);
 
             public void PickUpTorch(byte playerId)
             {
@@ -625,12 +634,14 @@ namespace ExtremeRoles.Roles.Combination
 
         public enum WispOption
         {
+            TorchNum,
             TorchRange,
             TorchActiveTime,
             BlackOutTime,
         }
 
         private int torchNum;
+        private float range;
         private float torchActiveTime;
         private float torchBlackOutTime;
         private static WispState state = new WispState();
@@ -673,6 +684,8 @@ namespace ExtremeRoles.Roles.Combination
             }
         }
 
+        public static bool HasTorch(byte playerId) => state.HasTorch(playerId);
+
         public static void RepairVison()
         {
             state.RepairVison();
@@ -682,6 +695,7 @@ namespace ExtremeRoles.Roles.Combination
         {
             state.SetTorch(
                 wisp.torchNum,
+                wisp.range,
                 wisp.torchActiveTime,
                 wisp.torchBlackOutTime);
         }
@@ -720,6 +734,10 @@ namespace ExtremeRoles.Roles.Combination
 
         public override void Initialize()
         {
+            this.torchNum = OptionHolder.AllOption[
+                GetRoleOptionId(WispOption.TorchNum)].GetValue();
+            this.range = OptionHolder.AllOption[
+                GetRoleOptionId(WispOption.TorchRange)].GetValue();
             this.torchActiveTime = OptionHolder.AllOption[
                 GetRoleOptionId(WispOption.TorchActiveTime)].GetValue();
             this.torchBlackOutTime = OptionHolder.AllOption[
@@ -738,6 +756,9 @@ namespace ExtremeRoles.Roles.Combination
 
         protected override void CreateSpecificOption(IOption parentOps)
         {
+            CreateIntOption(
+                WispOption.TorchNum,
+                2, 1, 5, 1, parentOps);
             CreateFloatOption(
                 WispOption.TorchRange,
                 1.6f, 1.0f, 5.0f, 0.1f, parentOps);

@@ -34,7 +34,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         {
             get
             {
-                return 0f;
+                return 1.0f;
             }
         }
 
@@ -59,7 +59,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             float num = Vector2.Distance(
                 pc.Object.GetTruePosition(),
                 base.transform.position);
-            couldUse = !pc.IsDead;
+            couldUse = !pc.IsDead && !Wisp.HasTorch(pc.PlayerId);
             canUse = (couldUse && num <= this.UsableDistance);
             return num;
         }
@@ -77,6 +77,10 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                 caller.WriteByte(playerId);
             }
             Wisp.PickUpTorch(playerId);
+        }
+        public void SetRange(float range)
+        {
+            this.distance = range;
         }
     }
 }
