@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Hazel;
 using UnityEngine;
@@ -406,10 +407,11 @@ namespace ExtremeRoles.Roles.Combination
         {
             private GameObject body;
 
-            public Torch(Vector3 pos)
+            public Torch(Vector2 pos)
             {
                 this.body = new GameObject("Torch");
-                this.body.transform.position = pos;
+                this.body.transform.position = new Vector3(
+                    pos.x, pos.y, (pos.y / 1000f));
                 this.body.AddComponent<TorchBehavior>();
                 this.body.SetActive(true);
             }
@@ -427,12 +429,13 @@ namespace ExtremeRoles.Roles.Combination
             private float blackOutTime = float.MinValue;
             private List<Torch> torch = new List<Torch>();
 
-            public TorchManager(uint id, float activeTime, float blackOutTime)
+            public TorchManager(int num, uint id, float activeTime, float blackOutTime)
             {
                 this.id = id;
                 this.timer = activeTime;
                 this.blackOutTime = blackOutTime;
                 this.torch.Clear();
+                this.SetTorch(num);
             }
 
             public void Clear()
@@ -458,6 +461,55 @@ namespace ExtremeRoles.Roles.Combination
                     }
                     RemoveTorch(this.id, this.blackOutTime);
                     ExtremeRolesPlugin.ShipState.RemoveUpdateObjectAt(index);
+                }
+            }
+
+            public void SetTorch(int num)
+            {
+                byte mapId = PlayerControl.GameOptions.MapId;
+                int playerNum = CachedPlayerControl.AllPlayerControls.Count;
+                int clampedNum = Math.Clamp(num, 0, playerNum);
+                ShipStatus ship = CachedShipStatus.Instance;
+                IEnumerable<CachedPlayerControl> target =   
+                    CachedPlayerControl.AllPlayerControls.OrderBy(
+                        x => RandomGenerator.Instance.Next()).Take(clampedNum);
+
+                foreach (CachedPlayerControl player in target)
+                {
+                    byte playerId = player.PlayerId;
+
+                    List<Vector2> placePos = new List<Vector2>();
+
+                    if (ExtremeRolesPlugin.Compat.IsModMap)
+                    {
+                        placePos = ExtremeRolesPlugin.Compat.ModMap.GetSpawnPos(
+                            playerId);
+                    }
+                    else
+                    {
+                        switch (mapId)
+                        {
+                            case 0:
+                            case 1:
+                            case 2:
+                            case 3:
+                                Vector2 baseVec = Vector2.up;
+                                baseVec = baseVec.Rotate(
+                                    (float)(playerId - 1) * (360f / (float)playerNum));
+                                Vector2 offset = baseVec * ship.SpawnRadius + new Vector2(
+                                    0f, 0.3636f);
+                                placePos.Add(ship.InitialSpawnCenter + offset);
+                                placePos.Add(ship.MeetingSpawnCenter + offset);
+                                break;
+                            case 4:
+                                placePos = GameSystem.GetAirShipRandomSpawn();
+                                break;
+                        }
+                    }
+                    var newTorch = new Torch(placePos[
+                        RandomGenerator.Instance.Next(0, placePos.Count)]);
+                    ExtremeRolesPlugin.ShipState.AddMeetingResetObject(newTorch);
+                    this.torch.Add(newTorch);
                 }
             }
         }
@@ -514,9 +566,9 @@ namespace ExtremeRoles.Roles.Combination
                 this.blackOuter = null;
             }
 
-            public void SetTorch(float activeTime, float blackOutTime)
+            public void SetTorch(int num, float activeTime, float blackOutTime)
             {
-                var torch = new TorchManager(this.torchId, activeTime, blackOutTime);
+                var torch = new TorchManager(num, this.torchId, activeTime, blackOutTime);
                 ExtremeRolesPlugin.ShipState.AddUpdateObject(torch);
                 ExtremeRolesPlugin.ShipState.AddMeetingResetObject(torch);
                 this.placedTorch.Add(
@@ -572,6 +624,7 @@ namespace ExtremeRoles.Roles.Combination
             BlackOutTime,
         }
 
+        private int torchNum;
         private float torchActiveTime;
         private float torchBlackOutTime;
         private static WispState state = new WispState();
@@ -616,7 +669,10 @@ namespace ExtremeRoles.Roles.Combination
 
         public static void SetTorch(Wisp wisp)
         {
-            state.SetTorch(wisp.torchActiveTime, wisp.torchBlackOutTime);
+            state.SetTorch(
+                wisp.torchNum,
+                wisp.torchActiveTime,
+                wisp.torchBlackOutTime);
         }
 
         public static void PickUpTorch(byte playerId)
