@@ -19,7 +19,7 @@ namespace ExtremeSkins.Module
             Transform trans = base.transform;
 
             this.button = trans.Find(
-                "Scroll View/Viewport/Content/Button").gameObject.GetComponent<ButtonWrapper>();
+                "Body/ScrollView/Viewport/Content/Button").gameObject.GetComponent<ButtonWrapper>();
             this.button.Awake();
         }
 
