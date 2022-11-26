@@ -1,6 +1,7 @@
-﻿using ExtremeRoles.Module;
-using ExtremeRoles.Roles.API;
+﻿using UnityEngine;
 
+using ExtremeRoles.Module;
+using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Host
@@ -28,6 +29,14 @@ namespace ExtremeRoles.Roles.Solo.Host
             IOption parentOps)
         { }
 
+        public static void XionPlayerToGhostLayer()
+        {
+            PlayerControl player = Helper.Player.GetPlayerControlById(PlayerId);
+            if (player != null)
+            {
+                player.gameObject.layer = LayerMask.NameToLayer("Ghost");
+            }
+        }
         
         public static void RemoveXionPlayerToAllPlayerControl()
         {
