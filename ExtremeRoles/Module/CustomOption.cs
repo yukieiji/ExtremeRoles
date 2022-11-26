@@ -238,9 +238,11 @@ namespace ExtremeRoles.Module
 
         public void UpdateSelection(int newSelection)
         {
+            int length = this.Selections.Length;
+
             this.curSelection = Mathf.Clamp(
-                (newSelection + this.Selections.Length) % this.Selections.Length,
-                0, this.Selections.Length - 1);
+                (newSelection + length) % length,
+                0, length - 1);
 
             if (this.behaviour != null && this.behaviour is StringOption stringOption)
             {
