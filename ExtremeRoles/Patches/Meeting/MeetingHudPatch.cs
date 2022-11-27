@@ -49,7 +49,8 @@ namespace ExtremeRoles.Patches.Meeting
 
 
             if (!PlayerControl.GameOptions.AnonymousVotes || canSeeVote ||
-                (CachedPlayerControl.LocalPlayer.Data.IsDead && OptionHolder.Client.GhostsSeeVote &&
+                (CachedPlayerControl.LocalPlayer.Data.IsDead && 
+                OptionHolder.Client.GhostsSeeVote &&
                  !isVoteSeeBlock(role)))
             {
                 PlayerMaterial.SetColors(voterPlayer.DefaultOutfit.ColorId, spriteRenderer);
@@ -82,7 +83,7 @@ namespace ExtremeRoles.Patches.Meeting
             {
                 return ExtremeRolesPlugin.ShipState.IsAssassinAssign;
             }
-            return false;
+            return role.IsBlockShowMeetingRoleInfo();
         }
 
     }
