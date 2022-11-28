@@ -9,6 +9,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API.Interface;
 
@@ -18,12 +19,12 @@ namespace ExtremeRoles.Patches.Manager
     [HarmonyPatch(typeof(EndGameManager), nameof(EndGameManager.SetEverythingUp))]
     public static class EndGameManagerSetUpPatch
     {
-        private static List<Roles.API.SingleRoleBase> winNeutral = new List<Roles.API.SingleRoleBase>();
+        private static List<(SingleRoleBase, byte)> winNeutral = new List<(SingleRoleBase, byte)>();
 
         public static void Postfix(EndGameManager __instance)
         {
             setPlayerNameAndRole(__instance);
-            setWinBonusText(__instance);
+            setWinDetailText(__instance);
             setRoleSummary(__instance);
             RPCOperator.Initialize();
         }
@@ -102,7 +103,7 @@ namespace ExtremeRoles.Patches.Manager
 
                     if(data.Role.IsNeutral())
                     {
-                        winNeutral.Add(data.Role);
+                        winNeutral.Add((data.Role, data.PlayerId));
                     }
 
                 }
@@ -126,7 +127,7 @@ namespace ExtremeRoles.Patches.Manager
             summary.Create();
         }
 
-        private static void setWinBonusText(
+        private static void setWinDetailText(
             EndGameManager manager)
         {
 
@@ -140,138 +141,139 @@ namespace ExtremeRoles.Patches.Manager
             TMPro.TMP_Text textRenderer = bonusTextObject.GetComponent<TMPro.TMP_Text>();
             textRenderer.text = string.Empty;
 
-            string bonusText = string.Empty;
+            List<string> winDetailText = new List<string>();
 
             var state = ExtremeRolesPlugin.ShipState;
 
+            // 背景とベースのテキスト追加
             switch (state.EndReason)
             {
                 case GameOverReason.HumansByTask:
                 case GameOverReason.HumansByVote:
-                    bonusText = Translation.GetString(
-                        RoleTypes.Crewmate.ToString());
+                    winDetailText.Add(Translation.GetString(
+                        RoleTypes.Crewmate.ToString()));
                     textRenderer.color = Palette.White;
                     break;
                 case GameOverReason.ImpostorByKill:
                 case GameOverReason.ImpostorByVote:
                 case GameOverReason.ImpostorBySabotage:
                 case (GameOverReason)RoleGameOverReason.AssassinationMarin:
-                    bonusText = Translation.GetString(
-                        RoleTypes.Impostor.ToString());
+                    winDetailText.Add(Translation.GetString(
+                        RoleTypes.Impostor.ToString()));
                     textRenderer.color = Palette.ImpostorRed;
                     break;
                 case (GameOverReason)RoleGameOverReason.AliceKilledByImposter:
                 case (GameOverReason)RoleGameOverReason.AliceKillAllOther:
-                    bonusText = Translation.GetString(
-                        ExtremeRoleId.Alice.ToString());
+                    winDetailText.Add(Translation.GetString(
+                        ExtremeRoleId.Alice.ToString()));
                     textRenderer.color = ColorPalette.AliceGold;
                     manager.BackgroundBar.material.SetColor(
                         "_Color", ColorPalette.AliceGold);
                     break;
                 case (GameOverReason)RoleGameOverReason.JackalKillAllOther:
-                    bonusText = Translation.GetString(
-                        ExtremeRoleId.Jackal.ToString());
+                    winDetailText.Add(Translation.GetString(
+                        ExtremeRoleId.Jackal.ToString()));
                     textRenderer.color = ColorPalette.JackalBlue;
                     manager.BackgroundBar.material.SetColor(
                         "_Color", ColorPalette.JackalBlue);
                     break;
                 case (GameOverReason)RoleGameOverReason.TaskMasterGoHome:
-                    bonusText = Translation.GetString(
-                        ExtremeRoleId.TaskMaster.ToString());
+                    winDetailText.Add(Translation.GetString(
+                        ExtremeRoleId.TaskMaster.ToString()));
                     textRenderer.color = ColorPalette.NeutralColor;
                     manager.BackgroundBar.material.SetColor(
                         "_Color", ColorPalette.NeutralColor);
                     break;
                 case (GameOverReason)RoleGameOverReason.MissionaryAllAgainstGod:
-                    bonusText = Translation.GetString(
-                        ExtremeRoleId.Missionary.ToString());
+                    winDetailText.Add(Translation.GetString(
+                        ExtremeRoleId.Missionary.ToString()));
                     textRenderer.color = ColorPalette.MissionaryBlue;
                     manager.BackgroundBar.material.SetColor(
                         "_Color", ColorPalette.MissionaryBlue);
                     break;
                 case (GameOverReason)RoleGameOverReason.JesterMeetingFavorite:
-                    bonusText = Translation.GetString(
-                       ExtremeRoleId.Jester.ToString());
+                    winDetailText.Add(Translation.GetString(
+                       ExtremeRoleId.Jester.ToString()));
                     textRenderer.color = ColorPalette.JesterPink;
                     manager.BackgroundBar.material.SetColor(
                         "_Color", ColorPalette.JesterPink);
                     break;
                 case (GameOverReason)RoleGameOverReason.LoverKillAllOther:
                 case (GameOverReason)RoleGameOverReason.ShipFallInLove:
-                    bonusText = Translation.GetString(
-                        ExtremeRoleId.Lover.ToString());
+                    winDetailText.Add(Translation.GetString(
+                        ExtremeRoleId.Lover.ToString()));
                     textRenderer.color = ColorPalette.LoverPink;
                     manager.BackgroundBar.material.SetColor(
                         "_Color", ColorPalette.LoverPink);
                     break;
                 case (GameOverReason)RoleGameOverReason.YandereKillAllOther:
-                    bonusText = Translation.GetString(
-                        ExtremeRoleId.Yandere.ToString());
+                    winDetailText.Add(Translation.GetString(
+                        ExtremeRoleId.Yandere.ToString()));
                     textRenderer.color = ColorPalette.YandereVioletRed;
                     manager.BackgroundBar.material.SetColor(
                         "_Color", ColorPalette.YandereVioletRed);
                     break;
                 case (GameOverReason)RoleGameOverReason.YandereShipJustForTwo:
-                    bonusText = Translation.GetString(
-                        RoleGameOverReason.YandereShipJustForTwo.ToString());
+                    winDetailText.Add(Translation.GetString(
+                        RoleGameOverReason.YandereShipJustForTwo.ToString()));
                     textRenderer.color = ColorPalette.YandereVioletRed;
                     manager.BackgroundBar.material.SetColor(
                         "_Color", ColorPalette.YandereVioletRed);
                     break;
                 case (GameOverReason)RoleGameOverReason.VigilanteKillAllOther:
                 case (GameOverReason)RoleGameOverReason.VigilanteNewIdealWorld:
-                    bonusText = Translation.GetString(
-                        ExtremeRoleId.Vigilante.ToString());
+                    winDetailText.Add(Translation.GetString(
+                        ExtremeRoleId.Vigilante.ToString()));
                     textRenderer.color = ColorPalette.VigilanteFujiIro;
                     manager.BackgroundBar.material.SetColor(
                         "_Color", ColorPalette.VigilanteFujiIro);
                     break;
                 case (GameOverReason)RoleGameOverReason.YokoAllDeceive:
-                    bonusText = Translation.GetString(
-                        ExtremeRoleId.Yoko.ToString());
+                    winDetailText.Add(Translation.GetString(
+                        ExtremeRoleId.Yoko.ToString()));
                     textRenderer.color = ColorPalette.YokoShion;
                     manager.BackgroundBar.material.SetColor(
                         "_Color", ColorPalette.YokoShion);
                     break;
                 case (GameOverReason)RoleGameOverReason.MinerExplodeEverything:
-                    bonusText = Translation.GetString(
-                        ExtremeRoleId.Miner.ToString());
+                    winDetailText.Add(Translation.GetString(
+                        ExtremeRoleId.Miner.ToString()));
                     textRenderer.color = ColorPalette.MinerIvyGreen;
                     manager.BackgroundBar.material.SetColor(
                         "_Color", ColorPalette.MinerIvyGreen);
                     break;
                 case (GameOverReason)RoleGameOverReason.EaterAllEatInTheShip:
                 case (GameOverReason)RoleGameOverReason.EaterAliveAlone:
-                    bonusText = Translation.GetString(
-                        ExtremeRoleId.Eater.ToString());
+                    winDetailText.Add(Translation.GetString(
+                        ExtremeRoleId.Eater.ToString()));
                     textRenderer.color = ColorPalette.EaterMaroon;
                     manager.BackgroundBar.material.SetColor(
                         "_Color", ColorPalette.EaterMaroon);
                     break;
                 case (GameOverReason)RoleGameOverReason.TraitorKillAllOther:
-                    bonusText = Translation.GetString(
-                        ExtremeRoleId.Traitor.ToString());
+                    winDetailText.Add(Translation.GetString(
+                        ExtremeRoleId.Traitor.ToString()));
                     textRenderer.color = ColorPalette.TraitorLightShikon;
                     manager.BackgroundBar.material.SetColor(
                         "_Color", ColorPalette.TraitorLightShikon);
                     break;
                 case (GameOverReason)RoleGameOverReason.QueenKillAllOther:
-                    bonusText = Translation.GetString(
-                        ExtremeRoleId.Queen.ToString());
+                    winDetailText.Add(Translation.GetString(
+                        ExtremeRoleId.Queen.ToString()));
                     textRenderer.color = ColorPalette.QueenWhite;
                     manager.BackgroundBar.material.SetColor(
                         "_Color", ColorPalette.QueenWhite);
                     break;
                 case (GameOverReason)RoleGameOverReason.UmbrerBiohazard:
-                    bonusText = Translation.GetString(
-                        ExtremeRoleId.Umbrer.ToString());
+                    winDetailText.Add(Translation.GetString(
+                        ExtremeRoleId.Umbrer.ToString()));
                     textRenderer.color = ColorPalette.UmbrerRed;
                     manager.BackgroundBar.material.SetColor(
                         "_Color", ColorPalette.UmbrerRed);
                     break;
                 case (GameOverReason)RoleGameOverReason.KidsTooBigHomeAlone:
-                    bonusText = Translation.GetString(
-                        ExtremeRoleId.Delinquent.ToString());
+                    winDetailText.Add(Translation.GetString(
+                        ExtremeRoleId.Delinquent.ToString()));
                     textRenderer.color = ColorPalette.UmbrerRed;
                     manager.BackgroundBar.material.SetColor(
                         "_Color", ColorPalette.UmbrerRed);
@@ -280,7 +282,30 @@ namespace ExtremeRoles.Patches.Manager
                     break;
             }
 
+            // 幽霊役職の勝者テキスト追加処理
             HashSet<ExtremeRoleId> textAddedRole = new HashSet<ExtremeRoleId>();
+            HashSet<ExtremeGhostRoleId> textAddedGhostRole = new HashSet<ExtremeGhostRoleId>();
+            HashSet<byte> winPlayer = new HashSet<byte>();
+
+            foreach (var player in state.GetPlusWinner())
+            {
+                var ghostRole = ExtremeGhostRoleManager.GameRole[player.PlayerId];
+
+                if (!ghostRole.IsNeutral() ||
+                    !(ghostRole is IGhostRoleWinable ghostWin)) { continue; }
+
+                winPlayer.Add(player.PlayerId);
+
+                if (textAddedGhostRole.Contains(ghostRole.Id)) { continue; }
+
+                AddPrefixs(
+                    ref winDetailText,
+                    textAddedRole.Count == 0 && textAddedGhostRole.Count == 0);
+
+                winDetailText.Add(Translation.GetString(
+                    ghostRole.GetColoredRoleName()));
+                textAddedGhostRole.Add(ghostRole.Id);
+            }
 
             if (OptionHolder.Ship.DisableNeutralSpecialForceEnd && winNeutral.Count != 0)
             {
@@ -292,25 +317,18 @@ namespace ExtremeRoles.Patches.Manager
                     case GameOverReason.ImpostorByVote:
                     case GameOverReason.ImpostorBySabotage:
 
-                        for (int i=0; i < winNeutral.Count; ++i)
+                        foreach (var (role, playerId) in winNeutral)
                         {
-                            if (textAddedRole.Contains(winNeutral[i].Id)) { continue; }
+                            ExtremeRoleId id = role.Id;
 
-                            if(textAddedRole.Count == 0)
-                            {
-                                bonusText = string.Concat(
-                                    bonusText, Translation.GetString("andFirst"));
-                            }
-                            else
-                            {
-                                bonusText = string.Concat(
-                                    bonusText, Translation.GetString("and"));
-                            }
+                            if (textAddedRole.Contains(id) ||
+                                winPlayer.Contains(playerId)) { continue; }
 
-                            bonusText = string.Concat(
-                                bonusText, Translation.GetString(
-                                    winNeutral[i].GetColoredRoleName(true)));
-                            textAddedRole.Add(winNeutral[i].Id);
+                            AddPrefixs(ref winDetailText, textAddedRole.Count == 0);
+
+                            winDetailText.Add(Translation.GetString(
+                                role.GetColoredRoleName(true)));
+                            textAddedRole.Add(id);
                         }
                         break;
                     default:
@@ -319,54 +337,35 @@ namespace ExtremeRoles.Patches.Manager
                 winNeutral.Clear();
             }
 
+            // ニュートラルの追加処理
             foreach (var player in state.GetPlusWinner())
             {
                 var role = ExtremeRoleManager.GameRole[player.PlayerId];
 
-                if (!role.IsNeutral()) { continue; }
+                if (!role.IsNeutral() || 
+                    textAddedRole.Contains(role.Id) ||
+                    winPlayer.Contains(player.PlayerId)) { continue; }
 
-                if (textAddedRole.Contains(role.Id)) { continue; }
+                winPlayer.Add(player.PlayerId);
 
-                if (textAddedRole.Count == 0)
-                {
-                    bonusText = string.Concat(bonusText, Translation.GetString("andFirst"));
-                }
-                else
-                {
-                    bonusText = string.Concat(bonusText, Translation.GetString("and"));
-                }
+                AddPrefixs(
+                    ref winDetailText,
+                    textAddedRole.Count == 0);
 
-                bonusText = string.Concat(bonusText, Translation.GetString(
+                winDetailText.Add(Translation.GetString(
                     role.GetColoredRoleName(true)));
                 textAddedRole.Add(role.Id);
             }
 
-            HashSet<ExtremeGhostRoleId> textAddedGhostRole = new HashSet<ExtremeGhostRoleId>();
+            winDetailText.Add(Translation.GetString("win"));
 
-            foreach (var player in state.GetPlusWinner())
-            {
-                var ghostRole = ExtremeGhostRoleManager.GameRole[player.PlayerId];
+            textRenderer.text = string.Concat(winDetailText);
+        }
 
-                if (!ghostRole.IsNeutral() || 
-                    !(ghostRole is IGhostRoleWinable ghostWin)) { continue; }
-
-                if (textAddedGhostRole.Contains(ghostRole.Id)) { continue; }
-
-                if (textAddedRole.Count == 0 && textAddedGhostRole.Count == 0)
-                {
-                    bonusText = string.Concat(bonusText, Translation.GetString("andFirst"));
-                }
-                else
-                {
-                    bonusText = string.Concat(bonusText, Translation.GetString("and"));
-                }
-
-                bonusText = string.Concat(bonusText, Translation.GetString(
-                    ghostRole.GetColoredRoleName()));
-                textAddedGhostRole.Add(ghostRole.Id);
-            }
-
-            textRenderer.text = string.Concat(bonusText, Translation.GetString("win"));
+        private static void AddPrefixs(ref List<string> baseStrings, bool condition)
+        {
+            baseStrings.Add(
+                condition ? Translation.GetString("andFirst") : Translation.GetString("and"));
         }
     }
 }

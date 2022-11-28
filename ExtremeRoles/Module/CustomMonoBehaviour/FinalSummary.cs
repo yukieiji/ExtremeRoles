@@ -108,6 +108,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             playerSummary.Add(
                 new PlayerSummary
                 {
+                    PlayerId = playerId,
                     PlayerName = playerInfo.PlayerName,
                     Role = role,
                     GhostRole = ghostRole,
@@ -329,8 +330,9 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             this.showText.text = this.summaryText[this.curPage];
         }
 
-        public sealed class PlayerSummary
+        public struct PlayerSummary
         {
+            public byte PlayerId { get; set; }
             public string PlayerName { get; set; }
             public SingleRoleBase Role { get; set; }
             public GhostRoleBase GhostRole { get; set; }
