@@ -42,6 +42,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
         private CircleCollider2D collider;
         private SpriteRenderer img;
+        private Arrow arrow;
 
         public void Awake()
         {
@@ -50,7 +51,16 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             this.img.sprite = Loader.CreateSpriteFromResources(
                 Path.WispTorch);
 
+            this.arrow = new Arrow(Color.white);
+            this.arrow.SetActive(false);
+            this.arrow.UpdateTarget(
+                this.gameObject.transform.position);
+
             this.collider.radius = 0.01f;
+        }
+        public void OnDestroy()
+        {
+            this.arrow.Clear();
         }
 
         public float CanUse(
