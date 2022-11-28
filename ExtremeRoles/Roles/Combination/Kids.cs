@@ -41,7 +41,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         public Kids() : base(
-            Name, new Color(255f, 255f, 255f), 2,
+            Name, ColorPalette.KidsGreen, 2,
             OptionHolder.MaxImposterNum)
         {
             this.Roles.Add(new Delinquent());
@@ -277,7 +277,7 @@ namespace ExtremeRoles.Roles.Combination
             ExtremeRoleId.Delinquent,
             ExtremeRoleType.Neutral,
             ExtremeRoleId.Delinquent.ToString(),
-            Palette.White,
+            ColorPalette.KidsGreen,
             false, false, false, false,
             tab: OptionTab.Combination)
         { }
@@ -699,7 +699,7 @@ namespace ExtremeRoles.Roles.Combination
             false, ExtremeRoleType.Neutral,
             ExtremeGhostRoleId.Wisp,
             ExtremeGhostRoleId.Wisp.ToString(),
-            Palette.White,
+            ColorPalette.KidsGreen,
             OptionTab.Combination)
         { }
 
