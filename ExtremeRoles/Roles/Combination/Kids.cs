@@ -53,11 +53,14 @@ namespace ExtremeRoles.Roles.Combination
         public override void InitializeGhostRole(
             byte rolePlayerId, GhostRoleBase role, SingleRoleBase aliveRole)
         {
-            if (rolePlayerId == CachedPlayerControl.LocalPlayer.PlayerId &&
-                aliveRole is Delinquent delinquent &&
+            if (aliveRole is Delinquent delinquent &&
                 role is Wisp wisp)
             {
-                wisp.SetAbilityNum(delinquent.WispAbilityNum);
+                if (rolePlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
+                {
+                    wisp.SetAbilityNum(delinquent.WispAbilityNum);
+                }
+                wisp.SetWinPlayerNum(rolePlayerId);
             }
         }
 
@@ -590,7 +593,7 @@ namespace ExtremeRoles.Roles.Combination
                 {
                     gameControlId = int.MaxValue;
                 }
-                return this.affectedPlayerNum[ gameControlId] >= wisp.winNum;
+                return this.affectedPlayerNum[gameControlId] >= wisp.winNum;
             }
 
             public void SetTorch(Wisp wisp)
@@ -623,6 +626,7 @@ namespace ExtremeRoles.Roles.Combination
                         ExtremeRolesPlugin.ShipState.AddMeetingResetObject(this.blackOuter);
                     }
                     this.blackOuter.ResetTimer();
+                    UpdateAffectedPlayerNum(gameControlId);
                 }
             }
 
@@ -671,6 +675,7 @@ namespace ExtremeRoles.Roles.Combination
 
         public enum WispOption
         {
+            WinNum,
             TorchNum,
             TorchRange,
             TorchActiveTime,
@@ -728,9 +733,13 @@ namespace ExtremeRoles.Roles.Combination
             state.RepairVison();
         }
 
-        public static void SetTorch(Wisp wisp)
+        public static void SetTorch(byte playerId)
         {
-            state.SetTorch(wisp);
+            Wisp wisp = ExtremeGhostRoleManager.GetSafeCastedGhostRole<Wisp>(playerId);
+            if (wisp != null)
+            {
+                state.SetTorch(wisp);
+            }
         }
 
         public static void PickUpTorch(byte playerId)
@@ -756,6 +765,20 @@ namespace ExtremeRoles.Roles.Combination
             GameOverReason reason,
             GameData.PlayerInfo ghostRolePlayer) => state.IsWin(this);
 
+        public void SetWinPlayerNum(byte rolePlayerId)
+        {
+            foreach (GameData.PlayerInfo player in 
+                GameData.Instance.AllPlayers.GetFastEnumerator())
+            {
+                if (player == null ||
+                    player.IsDead ||
+                    player.Disconnected ||
+                    player.PlayerId == rolePlayerId) { continue; }
+
+                this.winNum++;
+            }
+        }
+
         public override void CreateAbility()
         {
             this.Button = new GhostAbilityButton(
@@ -775,6 +798,8 @@ namespace ExtremeRoles.Roles.Combination
 
         public override void Initialize()
         {
+            this.winNum = OptionHolder.AllOption[
+                GetRoleOptionId(WispOption.WinNum)].GetValue();
             this.torchNum = OptionHolder.AllOption[
                 GetRoleOptionId(WispOption.TorchNum)].GetValue();
             this.range = OptionHolder.AllOption[
@@ -802,17 +827,20 @@ namespace ExtremeRoles.Roles.Combination
         protected override void CreateSpecificOption(IOption parentOps)
         {
             CreateIntOption(
+                WispOption.WinNum,
+                0, -5, 5, 1, parentOps);
+            CreateIntOption(
                 WispOption.TorchNum,
-                2, 1, 5, 1, parentOps);
+                1, 1, 5, 1, parentOps);
             CreateFloatOption(
                 WispOption.TorchRange,
                 1.6f, 1.0f, 5.0f, 0.1f, parentOps);
             CreateFloatOption(
                 WispOption.TorchActiveTime,
-                15.0f, 5.0f, 60.0f, 0.1f, parentOps);
+                10.0f, 5.0f, 60.0f, 0.1f, parentOps);
             CreateFloatOption(
                 WispOption.BlackOutTime,
-                15.0f, 5.0f, 30.0f, 0.1f, parentOps);
+                10.0f, 2.5f, 30.0f, 0.1f, parentOps);
             this.CreateButtonOption(parentOps);
         }
 
@@ -823,7 +851,7 @@ namespace ExtremeRoles.Roles.Combination
 
         private void abilityCall()
         {
-            SetTorch(this);
+            state.SetTorch(this);
         }
     }
 }
