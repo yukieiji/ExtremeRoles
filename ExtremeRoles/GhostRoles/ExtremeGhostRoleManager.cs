@@ -223,13 +223,13 @@ namespace ExtremeRoles.GhostRoles
                     RPCOperator.Command.SetGhostRole))
                 {
                     caller.WriteBoolean(true);
-                    caller.WritePackedInt(controlId);
                     caller.WriteByte(player.PlayerId);
+                    caller.WritePackedInt(controlId);
                     caller.WriteByte((byte)combRoleId);
-                    caller.WriteByte((byte)roleId);
+                    caller.WritePackedInt((int)roleId);
                 }
                 setPlyaerToCombGhostRole(
-                    player.PlayerId, controlId, (byte)combRoleId, (byte)roleId);
+                    player.PlayerId, controlId, (byte)combRoleId, (int)roleId);
                 assignData.ReduceGlobalSpawnLimit(team);
                 return;
             }
@@ -383,12 +383,12 @@ namespace ExtremeRoles.GhostRoles
             bool isComb = reader.ReadBoolean();
             
             byte playerId = reader.ReadByte();
-            int controlId = reader.ReadInt32();
+            int controlId = reader.ReadPackedInt32();
 
             if (isComb)
             {
                 byte combType = reader.ReadByte();
-                byte baseRoleId = reader.ReadByte();
+                int baseRoleId = reader.ReadPackedInt32();
                 setPlyaerToCombGhostRole(
                     playerId, controlId, combType, baseRoleId);
             }
@@ -430,9 +430,7 @@ namespace ExtremeRoles.GhostRoles
                     SaboEvil.ResetCool();
                     break;
                 case AbilityType.WispSetTorch:
-                    var wisp = GetSafeCastedGhostRole<Wisp>(
-                        reader.ReadByte());
-                    Wisp.SetTorch(wisp);
+                    Wisp.SetTorch(reader.ReadByte());
                     break;
                 default:
                     break;
@@ -515,7 +513,7 @@ namespace ExtremeRoles.GhostRoles
 
 
         private static void setPlyaerToCombGhostRole(
-            byte playerId, int gameControlId, byte combType, byte baseRoleId)
+            byte playerId, int gameControlId, byte combType, int baseRoleId)
         {
             if (GameRole.ContainsKey(playerId)) { return; }
 
