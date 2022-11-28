@@ -57,7 +57,7 @@ namespace ExtremeRoles.Roles.Combination
                 ExtremeRoleId.Guesser,
                 ExtremeRoleType.Crewmate,
                 ExtremeRoleId.Guesser.ToString(),
-                ColorPalette.SupporterGreen,
+                ColorPalette.GuesserRedYellow,
                 false, true, false, false,
                 tab: OptionTab.Combination)
         { }
