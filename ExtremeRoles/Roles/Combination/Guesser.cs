@@ -33,6 +33,14 @@ namespace ExtremeRoles.Roles.Combination
             GuessNum,
             MaxGuessNumWhenMeeting,
             CanGuessNoneRole,
+            GuessNoneRoleMode,
+        }
+
+        public enum GuessMode
+        {
+            Both,
+            NiceOnly,
+            EvilOnly,
         }
 
         private bool isEvil = false;
@@ -468,9 +476,17 @@ namespace ExtremeRoles.Roles.Combination
                 GuesserOption.MaxGuessNumWhenMeeting,
                 1, 1, OptionHolder.MaxImposterNum, 1,
                 parentOps);
-            CreateBoolOption(
+            var noneGuessRoleOpt = CreateBoolOption(
                 GuesserOption.CanGuessNoneRole,
                 false, parentOps);
+            CreateSelectionOption(
+                GuesserOption.GuessNoneRoleMode,
+                new string[]
+                {
+                    GuessMode.Both.ToString(),
+                    GuessMode.NiceOnly.ToString(),
+                    GuessMode.EvilOnly.ToString(),
+                }, noneGuessRoleOpt);
         }
 
         protected override void RoleSpecificInit()
@@ -480,8 +496,23 @@ namespace ExtremeRoles.Roles.Combination
             this.CanCallMeeting = allOption[
                 GetRoleOptionId(GuesserOption.CanCallMeeting)].GetValue();
 
-            this.canGuessNoneRole = allOption[
+            bool canGuessNoneRole = allOption[
                 GetRoleOptionId(GuesserOption.CanGuessNoneRole)].GetValue();
+            GuessMode guessMode = (GuessMode)allOption[
+                GetRoleOptionId(GuesserOption.GuessNoneRoleMode)].GetValue();
+
+            this.canGuessNoneRole = canGuessNoneRole ||
+                (
+                    guessMode == GuessMode.Both
+                )
+                ||
+                (
+                    guessMode == GuessMode.NiceOnly && this.IsCrewmate()
+                )
+                ||
+                (
+                    guessMode == GuessMode.EvilOnly && this.IsImpostor()
+                );
 
             this.bulletNum = allOption[
                 GetRoleOptionId(GuesserOption.GuessNum)].GetValue();
