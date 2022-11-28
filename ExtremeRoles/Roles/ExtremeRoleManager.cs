@@ -34,6 +34,7 @@ namespace ExtremeRoles.Roles
         Sharer,
         Guesser,
         Delinquent,
+        Buddy,
 
         SpecialCrew,
         Sheriff,
