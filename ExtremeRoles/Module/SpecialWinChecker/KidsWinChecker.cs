@@ -61,6 +61,10 @@ namespace ExtremeRoles.Module.SpecialWinChecker
             int allAlive = statistics.TotalAlive;
 
             bool isWin = (allAlive - rangeInPlayer.Count - teamAlive) <= 0;
+            if (isWin)
+            {
+                checkRole.BlockWispAssign();
+            }
             HashSet<byte> deadPlayerId = new HashSet<byte>();
             foreach (PlayerControl target in rangeInPlayer)
             {

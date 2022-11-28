@@ -97,6 +97,8 @@ namespace ExtremeRoles.Roles.Combination
 
     public sealed class Delinquent : MultiAssignRoleBase, IRoleAbility
     {
+        public override bool IsAssignGhostRole => this.canAssignWisp;
+
         public sealed class DelinquentAbilityButton : RoleButtonBase
         {
             public int CurAbilityNum
@@ -269,6 +271,8 @@ namespace ExtremeRoles.Roles.Combination
 
         private const int maxImageNum = 10;
 
+        private bool canAssignWisp = true;
+
         public Delinquent() : base(
             ExtremeRoleId.Delinquent,
             ExtremeRoleType.Neutral,
@@ -312,9 +316,9 @@ namespace ExtremeRoles.Roles.Combination
             }
         }
 
-        public void DisableWinCheck()
+        public void BlockWispAssign()
         {
-            this.isWinCheck = false;
+            this.canAssignWisp = false;
         }
 
         public void CreateAbility()
@@ -410,6 +414,8 @@ namespace ExtremeRoles.Roles.Combination
                     OptionHolder.AllOption[GetRoleOptionId(
                         RoleAbilityCommonOption.AbilityCount)].GetValue());
             }
+
+            this.canAssignWisp = true;
         }
         
     }
