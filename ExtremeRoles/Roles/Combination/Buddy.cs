@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -26,10 +25,37 @@ namespace ExtremeRoles.Roles.Combination
 
         public enum BuddyOption
         {
-            
+            AwakeTaskGage,
         }
 
+        public sealed class BuddyContainer
+        {
+            private HashSet<GameData.PlayerInfo> buddy = new HashSet<GameData.PlayerInfo>();
+            private HashSet<byte> bytedBuddy = new HashSet<byte>();
+
+            public HashSet<GameData.PlayerInfo> PlayerInfo => this.buddy;
+
+            public BuddyContainer()
+            {
+                this.buddy.Clear();
+                this.bytedBuddy.Clear();
+            }
+
+            public bool Contains(GameData.PlayerInfo player) => this.buddy.Contains(player);
+
+            public bool Contains(byte playerId) => this.bytedBuddy.Contains(playerId);
+
+            public void Add(GameData.PlayerInfo player)
+            {
+                this.buddy.Add(player);
+                this.bytedBuddy.Add(player.PlayerId);
+            }
+        }
+
+        private float awakeTaskGage;
         private bool awake;
+        private bool awakeHasOtherVision;
+        private BuddyContainer buddy;
 
         public Buddy() : base(
             ExtremeRoleId.Buddy,
@@ -45,7 +71,28 @@ namespace ExtremeRoles.Roles.Combination
 
         public void Update(PlayerControl rolePlayer)
         {
-            throw new NotImplementedException();
+            if (!this.awake)
+            {
+                foreach (GameData.PlayerInfo playerId in this.buddy.PlayerInfo)
+                {
+                    if (Player.GetPlayerTaskGage(playerId) < this.awakeTaskGage)
+                    {
+                        return;
+                    }
+                }
+                this.awake = true;
+                this.HasOtherVison = this.awakeHasOtherVision;
+            }
+        }
+
+        public override Color GetTargetRoleSeeColor(
+            SingleRoleBase targetRole, byte targetPlayerId)
+        {
+            if (IsAwake && this.buddy.Contains(targetPlayerId))
+            {
+                return ColorPalette.LoverPink;
+            }
+            return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
         }
 
         public override string GetColoredRoleName(bool isTruthColor = false)
@@ -95,42 +142,11 @@ namespace ExtremeRoles.Roles.Combination
             if (IsAwake)
             {
                 string baseString = base.GetIntroDescription();
-                baseString += Design.ColoedString(
-                    ColorPalette.LoverPink, "\n♥ ");
 
-                List<byte> lover = getAliveSameLover();
-
-                lover.Remove(CachedPlayerControl.LocalPlayer.PlayerId);
-
-                byte firstLover = lover[0];
-                lover.RemoveAt(0);
-
-                baseString += Player.GetPlayerControlById(
-                    firstLover).Data.PlayerName;
-                if (lover.Count != 0)
-                {
-                    for (int i = 0; i < lover.Count; ++i)
-                    {
-
-                        if (i == 0)
-                        {
-                            baseString += Translation.GetString("andFirst");
-                        }
-                        else
-                        {
-                            baseString += Translation.GetString("and");
-                        }
-                        baseString += Player.GetPlayerControlById(
-                            lover[i]).Data.PlayerName;
-
-                    }
-                }
+                this.buddy = this.getSameBuddy();
 
                 return string.Concat(
-                    baseString,
-                    Translation.GetString("LoverIntoPlus"),
-                    Design.ColoedString(
-                        ColorPalette.LoverPink, " ♥"));
+                    baseString, this.buddy);
             }
             else
             {
@@ -156,30 +172,49 @@ namespace ExtremeRoles.Roles.Combination
 
         protected override void CreateSpecificOption(IOption parentOps)
         {
-            throw new NotImplementedException();
+            CreateIntOption(
+                BuddyOption.AwakeTaskGage,
+                50, 0, 100, 10,
+                parentOps,
+                format: OptionUnit.Percentage);
         }
 
         protected override void RoleSpecificInit()
         {
-            throw new NotImplementedException();
+            this.buddy = new BuddyContainer();
+            this.awakeTaskGage = (float)OptionHolder.AllOption[
+               GetRoleOptionId(BuddyOption.AwakeTaskGage)].GetValue() / 100.0f;
+
+            this.awakeHasOtherVision = this.HasOtherVison;
+
+            if (this.awakeTaskGage <= 0.0f)
+            {
+                this.awake = true;
+                this.HasOtherVison = this.awakeHasOtherVision;
+            }
+            else
+            {
+                this.awake = false;
+                this.HasOtherVison = false;
+            }
         }
 
-        private List<byte> getAliveSameLover()
+        private BuddyContainer getSameBuddy()
         {
 
-            List<byte> alive = new List<byte>();
+            BuddyContainer buddy = new BuddyContainer();
 
-            foreach (var item in ExtremeRoleManager.GameRole)
+            foreach (var (playerId, role) in ExtremeRoleManager.GameRole)
             {
-                var player = GameData.Instance.GetPlayerById(item.Key);
-                if (this.IsSameControlId(item.Value) &&
+                var player = GameData.Instance.GetPlayerById(playerId);
+                if (this.IsSameControlId(role) &&
                     (!player.IsDead || !player.Disconnected))
                 {
-                    alive.Add(item.Key);
+                    buddy.Add(player);
                 }
             }
 
-            return alive;
+            return buddy;
 
         }
     }
