@@ -9,6 +9,8 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles;
+using ExtremeRoles.GhostRoles;
+using ExtremeRoles.GhostRoles.API.Interface;
 
 namespace ExtremeRoles.Patches.Manager
 {
@@ -278,7 +280,7 @@ namespace ExtremeRoles.Patches.Manager
                     break;
             }
 
-            HashSet<ExtremeRoleId> added = new HashSet<ExtremeRoleId>();
+            HashSet<ExtremeRoleId> textAddedRole = new HashSet<ExtremeRoleId>();
 
             if (OptionHolder.Ship.DisableNeutralSpecialForceEnd && winNeutral.Count != 0)
             {
@@ -292,9 +294,9 @@ namespace ExtremeRoles.Patches.Manager
 
                         for (int i=0; i < winNeutral.Count; ++i)
                         {
-                            if (added.Contains(winNeutral[i].Id)) { continue; }
+                            if (textAddedRole.Contains(winNeutral[i].Id)) { continue; }
 
-                            if(added.Count == 0)
+                            if(textAddedRole.Count == 0)
                             {
                                 bonusText = string.Concat(
                                     bonusText, Translation.GetString("andFirst"));
@@ -308,7 +310,7 @@ namespace ExtremeRoles.Patches.Manager
                             bonusText = string.Concat(
                                 bonusText, Translation.GetString(
                                     winNeutral[i].GetColoredRoleName(true)));
-                            added.Add(winNeutral[i].Id);
+                            textAddedRole.Add(winNeutral[i].Id);
                         }
                         break;
                     default:
@@ -319,14 +321,13 @@ namespace ExtremeRoles.Patches.Manager
 
             foreach (var player in state.GetPlusWinner())
             {
-
                 var role = ExtremeRoleManager.GameRole[player.PlayerId];
 
                 if (!role.IsNeutral()) { continue; }
 
-                if (added.Contains(role.Id)) { continue; }
+                if (textAddedRole.Contains(role.Id)) { continue; }
 
-                if (added.Count == 0)
+                if (textAddedRole.Count == 0)
                 {
                     bonusText = string.Concat(bonusText, Translation.GetString("andFirst"));
                 }
@@ -337,11 +338,35 @@ namespace ExtremeRoles.Patches.Manager
 
                 bonusText = string.Concat(bonusText, Translation.GetString(
                     role.GetColoredRoleName(true)));
-                added.Add(role.Id);
+                textAddedRole.Add(role.Id);
+            }
+
+            HashSet<ExtremeGhostRoleId> textAddedGhostRole = new HashSet<ExtremeGhostRoleId>();
+
+            foreach (var player in state.GetPlusWinner())
+            {
+                var ghostRole = ExtremeGhostRoleManager.GameRole[player.PlayerId];
+
+                if (!ghostRole.IsNeutral() || 
+                    !(ghostRole is IGhostRoleWinable ghostWin)) { continue; }
+
+                if (textAddedGhostRole.Contains(ghostRole.Id)) { continue; }
+
+                if (textAddedRole.Count == 0 && textAddedGhostRole.Count == 0)
+                {
+                    bonusText = string.Concat(bonusText, Translation.GetString("andFirst"));
+                }
+                else
+                {
+                    bonusText = string.Concat(bonusText, Translation.GetString("and"));
+                }
+
+                bonusText = string.Concat(bonusText, Translation.GetString(
+                    ghostRole.GetColoredRoleName()));
+                textAddedGhostRole.Add(ghostRole.Id);
             }
 
             textRenderer.text = string.Concat(bonusText, Translation.GetString("win"));
         }
-
     }
 }
