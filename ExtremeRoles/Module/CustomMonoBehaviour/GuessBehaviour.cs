@@ -106,6 +106,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
         public GuessBehaviour(IntPtr ptr) : base(ptr) { }
 
+        [HideFromIl2Cpp]
         public Action GetGuessAction()
         {
             return () =>
