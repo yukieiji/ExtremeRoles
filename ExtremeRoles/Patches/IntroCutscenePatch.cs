@@ -133,6 +133,20 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CoBegin))]
     public static class IntroCutsceneCoBeginPatch
     {
+        private static bool isAllPlyerDummy()
+        {
+            foreach (var player in PlayerControl.AllPlayerControls)
+            {
+                if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId) { continue; }
+
+                if (!player.GetComponent<DummyBehaviour>().enabled)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         private static IEnumerator coBeginPatch(
             IntroCutscene instance)
         {
@@ -146,10 +160,18 @@ namespace ExtremeRoles.Patches
 
             if (AmongUsClient.Instance.AmHost)
             {
-                // ホストは全員の処理が終わるまで待つ
-                while (!Manager.RoleManagerSelectRolesPatch.IsReady)
+                if (AmongUsClient.Instance.GameMode != GameModes.LocalGame ||
+                    !isAllPlyerDummy())
                 {
-                    yield return null;
+                    // ホストは全員の処理が終わるまで待つ
+                    while (!Manager.RoleManagerSelectRolesPatch.IsReady)
+                    {
+                        yield return null;
+                    }
+                }
+                else
+                {
+                    yield return new WaitForSeconds(0.5f);
                 }
                 Manager.RoleManagerSelectRolesPatch.AllPlayerAssignToExRole();
             }
