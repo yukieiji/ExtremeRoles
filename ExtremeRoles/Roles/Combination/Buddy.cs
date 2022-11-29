@@ -12,7 +12,10 @@ namespace ExtremeRoles.Roles.Combination
 {
     public sealed class BuddyManager : FlexibleCombinationRoleManagerBase
     {
-        public BuddyManager() : base(new Buddy(), canAssignImposter: false)
+        public BuddyManager() : base(
+            new Buddy(),
+            canAssignImposter: false,
+            canMultiAssign: false)
         { }
 
     }
@@ -141,12 +144,30 @@ namespace ExtremeRoles.Roles.Combination
         {
             if (IsAwake)
             {
-                string baseString = base.GetIntroDescription();
-
                 this.buddy = this.getSameBuddy();
 
-                return string.Concat(
-                    baseString, this.buddy);
+                List<string> intro = new List<string>();
+
+                foreach (GameData.PlayerInfo player in this.buddy.PlayerInfo)
+                {
+                    if (player.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
+                    {
+                        continue;
+                    }
+                    if (intro.Count == 0)
+                    {
+                        intro.Add(Translation.GetString("andFirst"));
+                    }
+                    else
+                    {
+                        intro.Add(Translation.GetString("and"));
+                    }
+                    intro.Add(player.PlayerName);
+                }
+
+                return string.Format(
+                    base.GetFullDescription(),
+                    string.Concat(intro));
             }
             else
             {
@@ -156,7 +177,7 @@ namespace ExtremeRoles.Roles.Combination
             }
         }
 
-        public override string GetRoleTag() => IsAwake ? "♥" : string.Empty;
+        public override string GetRoleTag() => IsAwake ? "●" : string.Empty;
 
         public override Color GetNameColor(bool isTruthColor = false)
         {
