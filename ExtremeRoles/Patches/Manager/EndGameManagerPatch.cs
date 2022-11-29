@@ -274,9 +274,9 @@ namespace ExtremeRoles.Patches.Manager
                 case (GameOverReason)RoleGameOverReason.KidsTooBigHomeAlone:
                     winDetailText.Add(Translation.GetString(
                         ExtremeRoleId.Delinquent.ToString()));
-                    textRenderer.color = ColorPalette.UmbrerRed;
+                    textRenderer.color = ColorPalette.KidsYellowGreen;
                     manager.BackgroundBar.material.SetColor(
-                        "_Color", ColorPalette.UmbrerRed);
+                        "_Color", ColorPalette.KidsYellowGreen);
                     break;
                 default:
                     break;

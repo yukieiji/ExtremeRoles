@@ -51,7 +51,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             this.img.sprite = Loader.CreateSpriteFromResources(
                 Path.WispTorch);
 
-            this.arrow = new Arrow(ColorPalette.KidsGreen);
+            this.arrow = new Arrow(ColorPalette.KidsYellowGreen);
             this.arrow.SetActive(false);
             this.arrow.UpdateTarget(
                 this.gameObject.transform.position);
