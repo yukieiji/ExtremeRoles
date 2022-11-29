@@ -599,7 +599,14 @@ namespace ExtremeRoles.Roles.Combination
                 {
                     gameControlId = int.MaxValue;
                 }
-                return this.affectedPlayerNum[gameControlId] >= wisp.winNum;
+                if (this.affectedPlayerNum.TryGetValue(gameControlId, out int playerNum))
+                {
+                    return playerNum >= wisp.winNum;
+                }
+                else
+                {
+                    return false;
+                }
             }
 
             public void SetTorch(Wisp wisp)
