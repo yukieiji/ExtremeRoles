@@ -79,7 +79,7 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
                     var role = ((FlexibleCombinationRoleManagerBase)combRole).BaseRole;
 
                     optionId = role.GetManagerOptionOffset();
-                    colorRoleName = role.GetColoredRoleName();
+                    colorRoleName = role.GetColoredRoleName(true);
 
                     roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
                     roleFullDesc = Design.CleanPlaceHolder(roleFullDesc);

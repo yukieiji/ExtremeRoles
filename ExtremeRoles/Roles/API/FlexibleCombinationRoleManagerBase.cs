@@ -11,16 +11,19 @@ namespace ExtremeRoles.Roles.API
         public MultiAssignRoleBase BaseRole;
         private int minimumRoleNum = 0;
         private bool canAssignImposter = true;
+        private bool canMultiAssign = true;
 
         public FlexibleCombinationRoleManagerBase(
             MultiAssignRoleBase role,
             int minimumRoleNum = 2,
-            bool canAssignImposter = true) : 
+            bool canAssignImposter = true,
+            bool canMultiAssign = true) : 
                 base(role.Id.ToString(), role.GetNameColor(true))
         {
             this.BaseRole = role;
             this.minimumRoleNum = minimumRoleNum;
             this.canAssignImposter = canAssignImposter;
+            this.canMultiAssign = canMultiAssign;
         }
         public override void AssignSetUpInit(int curImpNum)
         {
@@ -164,7 +167,8 @@ namespace ExtremeRoles.Roles.API
                 string.Concat(
                     this.roleName,
                     CombinationRoleCommonOption.IsMultiAssign.ToString()),
-                false, roleSetOption, isHidden: this.minimumRoleNum <= 1,
+                false, roleSetOption,
+                isHidden: this.minimumRoleNum <= 1 && this.canMultiAssign,
                 tab: OptionTab.Combination);
 
             return roleSetOption;
