@@ -20,7 +20,7 @@ namespace ExtremeRoles.Roles.Combination
 
     }
 
-    public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>
+    public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpecialSetUp
     {
         public bool IsAwake => this.awake;
 
@@ -72,9 +72,23 @@ namespace ExtremeRoles.Roles.Combination
 
         public string GetFakeOptionString() => "";
 
+        public void IntroBeginSetUp()
+        {
+            this.buddy = this.getSameBuddy();
+        }
+
+        public void IntroEndSetUp()
+        {
+            return;
+        }
+
         public void Update(PlayerControl rolePlayer)
         {
-            if (!this.awake)
+            if (!this.awake &&
+                this.buddy != null &&
+                rolePlayer != null &&
+                rolePlayer.Data != null &&
+                rolePlayer.Data.Tasks.Count != 0)
             {
                 foreach (GameData.PlayerInfo playerId in this.buddy.PlayerInfo)
                 {
@@ -111,12 +125,33 @@ namespace ExtremeRoles.Roles.Combination
                     Translation.GetString(RoleTypes.Crewmate.ToString()));
             }
         }
+
         public override string GetFullDescription()
         {
             if (IsAwake)
             {
-                return Translation.GetString(
-                    $"{this.Id}FullDescription");
+                List<string> fullDec = new List<string>();
+
+                foreach (GameData.PlayerInfo player in this.buddy?.PlayerInfo)
+                {
+                    if (player.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
+                    {
+                        continue;
+                    }
+                    if (fullDec.Count == 0)
+                    {
+                        fullDec.Add(Translation.GetString("andFirst"));
+                    }
+                    else
+                    {
+                        fullDec.Add(Translation.GetString("and"));
+                    }
+                    fullDec.Add(player.PlayerName);
+                }
+                return string.Format(
+                    Translation.GetString(
+                        $"{this.Id}FullDescription"),
+                    string.Concat(fullDec));
             }
             else
             {
@@ -144,8 +179,6 @@ namespace ExtremeRoles.Roles.Combination
         {
             if (IsAwake)
             {
-                this.buddy = this.getSameBuddy();
-
                 List<string> intro = new List<string>();
 
                 foreach (GameData.PlayerInfo player in this.buddy.PlayerInfo)
@@ -177,7 +210,7 @@ namespace ExtremeRoles.Roles.Combination
             }
         }
 
-        public override string GetRoleTag() => IsAwake ? "●" : string.Empty;
+        public override string GetRoleTag() => "●";
 
         public override Color GetNameColor(bool isTruthColor = false)
         {
@@ -189,6 +222,20 @@ namespace ExtremeRoles.Roles.Combination
             {
                 return Palette.White;
             }
+        }
+
+        public override string GetRolePlayerNameTag(
+            SingleRoleBase targetRole, byte targetPlayerId)
+        {
+            if (IsAwake &&
+                this.buddy.Contains(targetPlayerId))
+            {
+                return Design.ColoedString(
+                    ColorPalette.LoverPink,
+                    $" {GetRoleTag()}");
+            }
+
+            return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
         }
 
         protected override void CreateSpecificOption(IOption parentOps)

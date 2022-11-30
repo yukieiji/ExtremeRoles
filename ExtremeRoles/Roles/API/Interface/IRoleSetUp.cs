@@ -1,6 +1,6 @@
 ﻿namespace ExtremeRoles.Roles.API.Interface
 {
-    interface IRoleSpecialSetUp
+    public interface IRoleSpecialSetUp
     {
         public void IntroBeginSetUp();
         public void IntroEndSetUp();
