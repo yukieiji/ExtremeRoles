@@ -64,7 +64,7 @@ namespace ExtremeRoles.Roles.Combination
             ExtremeRoleId.Buddy,
             ExtremeRoleType.Crewmate,
             ExtremeRoleId.Buddy.ToString(),
-            ColorPalette.LoverPink,
+            ColorPalette.BuddyOrange,
             false, true,
             false, false,
             tab: OptionTab.Combination)
@@ -107,7 +107,7 @@ namespace ExtremeRoles.Roles.Combination
         {
             if (IsAwake && this.buddy.Contains(targetPlayerId))
             {
-                return ColorPalette.LoverPink;
+                return ColorPalette.BuddyOrange;
             }
             return base.GetTargetRoleSeeColor(targetRole, targetPlayerId);
         }
@@ -231,7 +231,7 @@ namespace ExtremeRoles.Roles.Combination
                 this.buddy.Contains(targetPlayerId))
             {
                 return Design.ColoedString(
-                    ColorPalette.LoverPink,
+                    ColorPalette.BuddyOrange,
                     $" {GetRoleTag()}");
             }
 
