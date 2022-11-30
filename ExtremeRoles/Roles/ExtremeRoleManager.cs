@@ -99,17 +99,22 @@ namespace ExtremeRoles.Roles
         Xion, 
     }
 
-    public enum CombinationRoleType
+    public enum CombinationRoleType : byte
     {
         Avalon,
         HeroAca,
         DetectiveOffice,
         Kids,
+        
+        Buddy,
         Lover,
-        Supporter,
+
         Sharer,
-        Traitor,
+        
+        Supporter,
         Guesser,
+
+        Traitor,
     }
 
     public enum RoleGameOverReason
@@ -248,11 +253,12 @@ namespace ExtremeRoles.Roles
                 {(byte)CombinationRoleType.HeroAca        , new HeroAcademia()},
                 {(byte)CombinationRoleType.DetectiveOffice, new DetectiveOffice()},
                 {(byte)CombinationRoleType.Kids           , new Kids()},
+                {(byte)CombinationRoleType.Buddy          , new BuddyManager()},
                 {(byte)CombinationRoleType.Lover          , new LoverManager()},
-                {(byte)CombinationRoleType.Supporter      , new SupporterManager()},
                 {(byte)CombinationRoleType.Sharer         , new SharerManager()},
-                {(byte)CombinationRoleType.Traitor        , new TraitorManager()},
+                {(byte)CombinationRoleType.Supporter      , new SupporterManager()},
                 {(byte)CombinationRoleType.Guesser        , new GuesserManager()},
+                {(byte)CombinationRoleType.Traitor        , new TraitorManager()},
             };
 
         public static Dictionary<
