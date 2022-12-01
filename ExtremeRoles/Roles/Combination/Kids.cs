@@ -114,12 +114,11 @@ namespace ExtremeRoles.Roles.Combination
             private Sprite bombScribe;
 
             public DelinquentAbilityButton(
-                string buttonText,
                 Func<bool> ability,
                 Func<bool> canUse,
                 Sprite scribeSprite,
                 Sprite bombSprite) : base(
-                    buttonText,
+                    Translation.GetString("scribble"),
                     ability,
                     canUse,
                     scribeSprite,
@@ -219,6 +218,7 @@ namespace ExtremeRoles.Roles.Combination
                     this.abilityNum = 1;
                     this.ButtonSprite = this.bombScribe;
                     this.curAbility = Kids.AbilityType.SelfBomb;
+                    this.ButtonText = Translation.GetString("selfBomb");
                 }
                 if (this.abilityCountText != null)
                 {
@@ -323,7 +323,6 @@ namespace ExtremeRoles.Roles.Combination
         public void CreateAbility()
         {
             this.Button = new DelinquentAbilityButton(
-                Translation.GetString("scribble"),
                 this.UseAbility,
                 this.IsAbilityUse,
                 Loader.CreateSpriteFromResources(
@@ -608,6 +607,24 @@ namespace ExtremeRoles.Roles.Combination
                 }
             }
 
+            public int CurAffectedPlayerNum(Wisp wisp)
+            {
+                int gameControlId = wisp.GameControlId;
+                if (OptionHolder.Ship.IsSameNeutralSameWin)
+                {
+                    gameControlId = int.MaxValue;
+                }
+
+                if (this.affectedPlayerNum.TryGetValue(gameControlId, out int playerNum))
+                {
+                    return playerNum;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+
             public void SetTorch(Wisp wisp)
             {
                 var torch = new TorchManager(this.torchId, wisp);
@@ -688,12 +705,14 @@ namespace ExtremeRoles.Roles.Combination
         public enum WispOption
         {
             WinNum,
+            TorchAbilityNum,
             TorchNum,
             TorchRange,
             TorchActiveTime,
             BlackOutTime,
         }
 
+        private int abilityNum;
         private int winNum;
         private int torchNum;
         private float range;
@@ -766,7 +785,7 @@ namespace ExtremeRoles.Roles.Combination
 
         public void SetAbilityNum(int abilityNum)
         {
-            ((GhostAbilityButton)this.Button).UpdateAbilityCount(abilityNum);
+            ((GhostAbilityButton)this.Button).UpdateAbilityCount(abilityNum + this.abilityNum);
         }
         private static void resetMeeting()
         {
@@ -791,6 +810,14 @@ namespace ExtremeRoles.Roles.Combination
             }
         }
 
+        public override string GetFullDescription()
+        {
+            return string.Format(
+                base.GetFullDescription(),
+                this.winNum,
+                state.CurAffectedPlayerNum(this));
+        }
+
         public override void CreateAbility()
         {
             this.Button = new GhostAbilityButton(
@@ -810,6 +837,8 @@ namespace ExtremeRoles.Roles.Combination
 
         public override void Initialize()
         {
+            this.abilityNum = OptionHolder.AllOption[
+                GetRoleOptionId(WispOption.TorchAbilityNum)].GetValue();
             this.winNum = OptionHolder.AllOption[
                 GetRoleOptionId(WispOption.WinNum)].GetValue();
             this.torchNum = OptionHolder.AllOption[
@@ -841,6 +870,9 @@ namespace ExtremeRoles.Roles.Combination
             CreateIntOption(
                 WispOption.WinNum,
                 0, -5, 5, 1, parentOps);
+            CreateIntOption(
+                WispOption.TorchAbilityNum,
+                1, 0, 5, 1, parentOps);
             CreateIntOption(
                 WispOption.TorchNum,
                 1, 1, 5, 1, parentOps);
