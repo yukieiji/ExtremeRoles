@@ -256,7 +256,9 @@ namespace ExtremeRoles.Patches
             __instance.RoleBlurbText.text = role.GetIntroDescription();
             __instance.RoleBlurbText.color = role.GetNameColor();
 
-            if (role.Id != ExtremeRoleId.Lover)
+            if (role.Id != ExtremeRoleId.Lover ||
+                role.Id != ExtremeRoleId.Sharer ||
+                role.Id != ExtremeRoleId.Buddy)
             {
                 if (role is MultiAssignRoleBase)
                 {

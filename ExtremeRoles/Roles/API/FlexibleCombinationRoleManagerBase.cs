@@ -168,7 +168,7 @@ namespace ExtremeRoles.Roles.API
                     this.roleName,
                     CombinationRoleCommonOption.IsMultiAssign.ToString()),
                 false, roleSetOption,
-                isHidden: this.minimumRoleNum <= 1 && this.canMultiAssign,
+                isHidden: this.minimumRoleNum <= 1 || !this.canMultiAssign,
                 tab: OptionTab.Combination);
 
             return roleSetOption;

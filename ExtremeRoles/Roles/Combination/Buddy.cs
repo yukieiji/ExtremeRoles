@@ -149,8 +149,7 @@ namespace ExtremeRoles.Roles.Combination
                     fullDec.Add(player.PlayerName);
                 }
                 return string.Format(
-                    Translation.GetString(
-                        $"{this.Id}FullDescription"),
+                    base.GetFullDescription(),
                     string.Concat(fullDec));
             }
             else
