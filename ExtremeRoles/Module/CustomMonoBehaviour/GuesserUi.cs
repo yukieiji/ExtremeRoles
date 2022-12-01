@@ -137,7 +137,11 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                     {
                         this.isActive = false;
                         this.confirmMenu.gameObject.SetActive(true);
-                        this.confirmMenu.SetMenuText(guess.GetConfirmText());
+                        this.confirmMenu.SetMenuText(
+                            string.Format(
+                                Helper.Translation.GetString("guesserConfirmMenu"),
+                                guess.GetPlayerName(),
+                                guess.GetRoleName()));
 
                         // Okボタンの処理は毎回変える
                         this.confirmMenu.ResetOkButtonAction();

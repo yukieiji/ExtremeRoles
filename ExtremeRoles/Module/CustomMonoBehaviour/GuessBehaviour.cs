@@ -127,12 +127,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             return this.info.GetRoleName();
         }
 
-        public string GetConfirmText()
-        {
-            return string.Format(
-                Translation.GetString("guessCheck"),
-                this.playerName);
-        }
+        public string GetPlayerName() => this.playerName;
 
         public void SetTarget(byte playerId)
         {

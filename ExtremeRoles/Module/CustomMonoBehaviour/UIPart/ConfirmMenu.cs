@@ -32,9 +32,9 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour.UIPart
             this.cancelButton.Awake();
 
             this.okButton.SetButtonText(
-                Translation.GetString("ok"));
+                TranslationController.Instance.GetString(StringNames.OK));
             this.cancelButton.SetButtonText(
-                Translation.GetString("cancel"));
+                TranslationController.Instance.GetString(StringNames.Cancel));
         }
 
         public void ResetButtonAction()

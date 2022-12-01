@@ -38,9 +38,9 @@ namespace ExtremeRoles.Roles.Combination
 
         public enum GuessMode
         {
-            Both,
-            NiceOnly,
-            EvilOnly,
+            BothGuesser,
+            NiceGuesserOnly,
+            EvilGuesserOnly,
         }
 
         private bool isEvil = false;
@@ -357,11 +357,9 @@ namespace ExtremeRoles.Roles.Combination
 
         public void IntroBeginSetUp()
         {
-            this.isEvil = false;
             if (this.IsImpostor())
             {
                 this.RoleName = string.Concat("Evil", this.RoleName);
-                this.isEvil = true;
             }
             else
             {
@@ -447,19 +445,6 @@ namespace ExtremeRoles.Roles.Combination
             this.curGuessNum = 0;
         }
 
-        public override string GetFullDescription()
-        {
-            if (this.isEvil)
-            {
-                return Translation.GetString(
-                    $"{this.Id}ImposterFullDescription");
-            }
-            else
-            {
-                return base.GetFullDescription();
-            }
-        }
-
         protected override void CreateSpecificOption(
             IOption parentOps)
         {
@@ -485,9 +470,9 @@ namespace ExtremeRoles.Roles.Combination
                 GuesserOption.GuessNoneRoleMode,
                 new string[]
                 {
-                    GuessMode.Both.ToString(),
-                    GuessMode.NiceOnly.ToString(),
-                    GuessMode.EvilOnly.ToString(),
+                    GuessMode.BothGuesser.ToString(),
+                    GuessMode.NiceGuesserOnly.ToString(),
+                    GuessMode.EvilGuesserOnly.ToString(),
                 }, noneGuessRoleOpt);
         }
 
@@ -505,15 +490,15 @@ namespace ExtremeRoles.Roles.Combination
 
             this.canGuessNoneRole = canGuessNoneRole ||
                 (
-                    guessMode == GuessMode.Both
+                    guessMode == GuessMode.BothGuesser
                 )
                 ||
                 (
-                    guessMode == GuessMode.NiceOnly && this.IsCrewmate()
+                    guessMode == GuessMode.NiceGuesserOnly && this.IsCrewmate()
                 )
                 ||
                 (
-                    guessMode == GuessMode.EvilOnly && this.IsImpostor()
+                    guessMode == GuessMode.EvilGuesserOnly && this.IsImpostor()
                 );
 
             this.bulletNum = allOption[
