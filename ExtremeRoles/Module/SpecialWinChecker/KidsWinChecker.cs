@@ -60,17 +60,24 @@ namespace ExtremeRoles.Module.SpecialWinChecker
                 (NeutralSeparateTeam.Kids, gameControlId)];
             int allAlive = statistics.TotalAlive;
 
-            bool isWin = (allAlive - rangeInPlayer.Count - teamAlive) <= 0;
+            // 全生存者からアサシンと範囲内にいるプレイヤー、同じチームの人を除く
+            bool isWin = (allAlive - statistics.AssassinAlive - rangeInPlayer.Count - teamAlive) <= 0;
             if (isWin)
             {
                 checkRole.BlockWispAssign();
             }
+
             HashSet<byte> deadPlayerId = new HashSet<byte>();
             foreach (PlayerControl target in rangeInPlayer)
             {
                 byte targetId = target.PlayerId;
                 
-                if (deadPlayerId.Contains(targetId)) { continue; }
+                // アサシンと既にキルした人は除く
+                if (deadPlayerId.Contains(targetId) ||
+                    ExtremeRoleManager.GameRole[targetId].Id == ExtremeRoleId.Assassin)
+                { 
+                    continue; 
+                }
                 
                 Player.RpcUncheckMurderPlayer(
                     checkPlayerId, targetId, byte.MinValue);
