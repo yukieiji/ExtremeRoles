@@ -106,8 +106,8 @@ namespace ExtremeRoles.Roles
         DetectiveOffice,
         Kids,
         
-        Buddy,
         Lover,
+        Buddy,
 
         Sharer,
         

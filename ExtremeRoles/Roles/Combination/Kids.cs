@@ -235,9 +235,8 @@ namespace ExtremeRoles.Roles.Combination
 
             private void updateAbilityInfoText()
             {
-                this.abilityCountText.text = Translation.GetString("scribeText") + 
-                    string.Format(
-                        Translation.GetString(OptionUnit.Shot.ToString()), this.abilityNum);
+                this.abilityCountText.text = string.Format(
+                    Translation.GetString("scribeText"), this.abilityNum);
             }
 
         }
@@ -391,11 +390,11 @@ namespace ExtremeRoles.Roles.Combination
 
         protected override void CreateSpecificOption(IOption parentOps)
         {
+            this.CreateAbilityCountOption(parentOps, 7, 20);
             CreateFloatOption(
                 DelinqentOption.Range,
                 3.6f, 1.0f, 5.0f, 0.1f,
                 parentOps);
-            this.CreateAbilityCountOption(parentOps, 7, 20);
         }
 
         protected override void RoleSpecificInit()
