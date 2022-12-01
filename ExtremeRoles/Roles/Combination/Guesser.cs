@@ -43,7 +43,6 @@ namespace ExtremeRoles.Roles.Combination
             EvilGuesserOnly,
         }
 
-        private bool isEvil = false;
         private bool canGuessNoneRole;
 
         private int bulletNum;
