@@ -243,6 +243,7 @@ namespace ExtremeRoles.Patches
                         new ExtremeRoleId[] { ExtremeRoleId.Umbrer });
                     break;
                 case RoleGameOverReason.KidsTooBigHomeAlone:
+                case RoleGameOverReason.KidsAliveAlone:
                     replaceWinnerToSpecificNeutralRolePlayer(
                         noWinner,
                         new ExtremeRoleId[] { ExtremeRoleId.Delinquent });

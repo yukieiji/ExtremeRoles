@@ -272,6 +272,7 @@ namespace ExtremeRoles.Patches.Manager
                         "_Color", ColorPalette.UmbrerRed);
                     break;
                 case (GameOverReason)RoleGameOverReason.KidsTooBigHomeAlone:
+                case (GameOverReason)RoleGameOverReason.KidsAliveAlone:
                     winDetailText.Add(Translation.GetString(
                         ExtremeRoleId.Delinquent.ToString()));
                     textRenderer.color = ColorPalette.KidsYellowGreen;

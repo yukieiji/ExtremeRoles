@@ -155,6 +155,7 @@ namespace ExtremeRoles.Roles
         UmbrerBiohazard,
 
         KidsTooBigHomeAlone,
+        KidsAliveAlone,
 
         UnKnown = 100,
     }

@@ -350,6 +350,12 @@ namespace ExtremeRoles.Patches
                         setWinGameContorlId(id);
                         endReason = (GameOverReason)RoleGameOverReason.QueenKillAllOther;
                         break;
+                    case NeutralSeparateTeam.Kids:
+                        if (statistics.TeamImpostorAlive > 0 &&
+                            statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
+                        setWinGameContorlId(id);
+                        endReason = (GameOverReason)RoleGameOverReason.KidsAliveAlone;
+                        break;
                     default:
                         break;
                 }
