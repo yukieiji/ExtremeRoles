@@ -14,7 +14,7 @@ using UnhollowerBaseLib.Attributes;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour
 {
-
+    [Il2CppRegister]
     public class VoteAreaInfo : MonoBehaviour
     {
         protected CachedPlayerControl LocalPlayer;
