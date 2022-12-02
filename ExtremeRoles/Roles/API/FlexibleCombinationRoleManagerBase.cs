@@ -51,7 +51,7 @@ namespace ExtremeRoles.Roles.API
                 var spawnOption = allOptions[
                         GetRoleOptionId(CombinationRoleCommonOption.ImposterSelectedRate)];
                 isEvil = isEvil && 
-                    (UnityEngine.Random.RandomRange(0, 110) < (int)Decimal.Multiply(
+                    (UnityEngine.Random.RandomRange(0, 110) < (int)decimal.Multiply(
                         spawnOption.GetValue(), spawnOption.ValueCount)) &&
                     curImpNum < PlayerControl.GameOptions.NumImpostors;
 
@@ -200,10 +200,11 @@ namespace ExtremeRoles.Roles.API
             this.BaseRole.CanHasAnotherRole = allOptions[
                 GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign)].GetValue();
 
-            if (allOptions.ContainsKey(GetRoleOptionId(CombinationRoleCommonOption.AssignsNum)))
+            if (allOptions.TryGetValue(
+                    GetRoleOptionId(CombinationRoleCommonOption.AssignsNum),
+                    out IOption opt))
             {
-                roleAssignNum = allOptions[
-                    GetRoleOptionId(CombinationRoleCommonOption.AssignsNum)].GetValue();
+                roleAssignNum = opt.GetValue();
             }
 
             for (int i = 0; i < roleAssignNum; ++i)

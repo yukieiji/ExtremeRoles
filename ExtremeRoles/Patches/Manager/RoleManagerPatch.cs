@@ -148,7 +148,7 @@ namespace ExtremeRoles.Patches.Manager
         }
 
         private static int computePercentage(Module.IOption self)
-            => (int)Decimal.Multiply(
+            => (int)decimal.Multiply(
                 self.GetValue(), self.ValueCount);
 
         private static void createCombinationExtremeRoleAssign(
@@ -180,7 +180,8 @@ namespace ExtremeRoles.Patches.Manager
                     {
                         player = PlayerControl.AllPlayerControls[playerIndex];
 
-                        Logging.Debug($"-------------------AssignToPlayer:{player.Data.PlayerName}-------------------");
+                        Logging.Debug(
+                            $"-------------------AssignToPlayer:{player.Data.PlayerName}-------------------");
                         Logging.Debug($"---AssignRole:{role.Id}---");
                         
                         assign = isAssignedToMultiRole(
@@ -303,8 +304,7 @@ namespace ExtremeRoles.Patches.Manager
                             default:
                                 break;
                         }
-                        var ghostComb = roleManager as GhostAndAliveCombinationRoleManagerBase;
-                        if (ghostComb != null)
+                        if (roleManager is GhostAndAliveCombinationRoleManagerBase)
                         {
                             isSpawn = !ExtremeGhostRoleManager.IsGlobalSpawnLimit(role.Team);
                         }
@@ -444,7 +444,8 @@ namespace ExtremeRoles.Patches.Manager
                 PlayerControl player = PlayerControl.AllPlayerControls[index];
                 RoleBehaviour roleData = player.Data.Role;
                 
-                Logging.Debug($"-------------------AssignToPlayer:{player.Data.PlayerName}-------------------");
+                Logging.Debug(
+                    $"-------------------AssignToPlayer:{player.Data.PlayerName}-------------------");
                 
                 // Modules.Helpers.DebugLog($"ShufflePlayerIndex:{shuffledArange.Count()}");
 
