@@ -49,8 +49,8 @@ namespace ExtremeRoles.Roles.Combination
         private int maxGuessNum;
         private int curGuessNum;
 
-        private GameObject uiPrefab;
-        private GuesserUi guesserUi;
+        private GameObject uiPrefab = null;
+        private GuesserUi guesserUi = null;
 
         private static HashSet<ExtremeRoleId> alwaysMissRole = new HashSet<ExtremeRoleId>()
         {
