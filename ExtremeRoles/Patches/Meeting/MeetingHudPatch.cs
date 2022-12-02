@@ -579,7 +579,7 @@ namespace ExtremeRoles.Patches.Meeting
                 foreach (PlayerVoteArea pva in __instance.playerStates)
                 {
                     if (pva == null ||
-                        pva.TargetPlayerId != b.ParentId && 
+                        pva.TargetPlayerId != b.ParentId || 
                         pva.AmDead)
                     {
                         continue;
