@@ -479,6 +479,8 @@ namespace ExtremeRoles.Roles.Combination
 
         protected override void RoleSpecificInit()
         {
+            this.uiPrefab = null;
+            this.guesserUi = null;
             var allOption = OptionHolder.AllOption;
 
             this.CanCallMeeting = allOption[
