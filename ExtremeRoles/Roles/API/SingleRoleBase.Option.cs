@@ -209,14 +209,14 @@ namespace ExtremeRoles.Roles.API
             if (!colored)
             {
                 return string.Concat(
-                    this.RoleName, option.ToString());
+                    this.RawRoleName, option.ToString());
             }
             else
             {
                 return Design.ColoedString(
                     this.NameColor,
                     string.Concat(
-                        this.RoleName,
+                        this.RawRoleName,
                         RoleCommonOption.SpawnRate.ToString()));
             }
         }
