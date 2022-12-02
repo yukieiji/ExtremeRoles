@@ -80,20 +80,23 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                         {
                             return role.GetNameColor(true);
                         }
-                        else
+
+                        foreach (var roleMng in ExtremeRoleManager.CombRole.Values)
                         {
-                            foreach(var roleMng in ExtremeRoleManager.CombRole.Values)
+                            if (roleMng is FlexibleCombinationRoleManagerBase flexRoleMng &&
+                                flexRoleMng.BaseRole.Id == target)
                             {
-                                foreach(var combRole in roleMng.Roles)
+                                return flexRoleMng.BaseRole.GetNameColor(true);
+                            }
+                            foreach (var combRole in roleMng.Roles)
+                            {
+                                if (combRole.Id == target)
                                 {
-                                    if (combRole.Id == target)
-                                    {
-                                        return combRole.GetNameColor(true);
-                                    }
+                                    return combRole.GetNameColor(true);
                                 }
                             }
-                            return Palette.White;
                         }
+                        return Palette.White;
                 }
             }
         }
