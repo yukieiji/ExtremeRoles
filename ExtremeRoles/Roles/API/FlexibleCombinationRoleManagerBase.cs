@@ -1,6 +1,4 @@
-﻿using System;
-
-using ExtremeRoles.Helper;
+﻿using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 
 namespace ExtremeRoles.Roles.API

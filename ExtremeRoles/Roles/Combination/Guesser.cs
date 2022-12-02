@@ -386,7 +386,8 @@ namespace ExtremeRoles.Roles.Combination
                     this.uiPrefab = UnityEngine.Object.Instantiate(
                         Loader.GetUnityObjectFromResources<GameObject>(
                             Path.GusserUiResources,
-                            Path.GusserUiPrefab));
+                            Path.GusserUiPrefab),
+                        CachedShipStatus.Instance.transform);
 
                     this.uiPrefab.SetActive(false);
                 }
