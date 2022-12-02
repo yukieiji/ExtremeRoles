@@ -48,6 +48,7 @@
 
     <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
       <Exec Command="python $(SolutionDir)\convertToJson.py" />
+      <Exec Command="if not exist $(SolutionDir)ExtremeRoles\Resources\Asset mkdir $(SolutionDir)ExtremeRoles\Resources\Asset" />
       <Exec Command="xcopy $(SolutionDir)UnityAsset\ExtremeRoles $(SolutionDir)ExtremeRoles\Resources\Asset /y /i" />
     </Target>
 </Project>
