@@ -491,8 +491,8 @@ namespace ExtremeRoles.Roles.Combination
             GuessMode guessMode = (GuessMode)allOption[
                 GetRoleOptionId(GuesserOption.GuessNoneRoleMode)].GetValue();
 
-            this.canGuessNoneRole = canGuessNoneRole ||
-                (
+            this.canGuessNoneRole = canGuessNoneRole &&
+                ((
                     guessMode == GuessMode.BothGuesser
                 )
                 ||
@@ -502,7 +502,7 @@ namespace ExtremeRoles.Roles.Combination
                 ||
                 (
                     guessMode == GuessMode.EvilGuesserOnly && this.IsImpostor()
-                );
+                ));
 
             this.bulletNum = allOption[
                 GetRoleOptionId(GuesserOption.GuessNum)].GetValue();
