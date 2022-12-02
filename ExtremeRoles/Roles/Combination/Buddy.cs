@@ -14,8 +14,7 @@ namespace ExtremeRoles.Roles.Combination
     {
         public BuddyManager() : base(
             new Buddy(),
-            canAssignImposter: false,
-            canMultiAssign: false)
+            canAssignImposter: false)
         { }
 
     }
@@ -59,6 +58,7 @@ namespace ExtremeRoles.Roles.Combination
         private bool awake;
         private bool awakeHasOtherVision;
         private BuddyContainer buddy;
+        private SingleRoleBase hiddeRole = null;
 
         public Buddy() : base(
             ExtremeRoleId.Buddy,
@@ -75,6 +75,12 @@ namespace ExtremeRoles.Roles.Combination
         public void IntroBeginSetUp()
         {
             this.buddy = this.getSameBuddy();
+
+            if (IsAwake || !this.CanHasAnotherRole) { return; }
+
+            this.hiddeRole = this.AnotherRole;
+            this.CanHasAnotherRole = false;
+            this.AnotherRole = null;
         }
 
         public void IntroEndSetUp()
@@ -94,11 +100,25 @@ namespace ExtremeRoles.Roles.Combination
                 {
                     if (Player.GetPlayerTaskGage(playerId) < this.awakeTaskGage)
                     {
+                        if (this.hiddeRole is IRoleAbility abilityRole)
+                        {
+                            abilityRole.Button.SetActive(false);
+                        }
                         return;
                     }
                 }
                 this.awake = true;
                 this.HasOtherVison = this.awakeHasOtherVision;
+                if (this.hiddeRole != null)
+                {
+                    this.AnotherRole = this.hiddeRole;
+                    this.CanHasAnotherRole = true;
+                    if (this.AnotherRole is IRoleAbility abilityRole)
+                    {
+                        abilityRole.Button.SetActive(false);
+                    }
+                    this.hiddeRole = null;
+                }
             }
         }
 
@@ -248,7 +268,6 @@ namespace ExtremeRoles.Roles.Combination
 
         protected override void RoleSpecificInit()
         {
-            this.buddy = new BuddyContainer();
             this.awakeTaskGage = (float)OptionHolder.AllOption[
                GetRoleOptionId(BuddyOption.AwakeTaskGage)].GetValue() / 100.0f;
 
