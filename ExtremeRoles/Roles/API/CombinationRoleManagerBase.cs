@@ -18,14 +18,14 @@ namespace ExtremeRoles.Roles.API
     {
         public List<MultiAssignRoleBase> Roles = new List<MultiAssignRoleBase>();
 
-        protected Color optionColor;
-        protected string roleName = "";
+        protected Color OptionColor;
+        protected string RoleName = "";
         internal CombinationRoleManagerBase(
             string roleName,
             Color optionColor)
         {
-            this.optionColor = optionColor;
-            this.roleName = roleName;
+            this.OptionColor = optionColor;
+            this.RoleName = roleName;
         }
 
         public abstract void AssignSetUpInit(int curImpNum);

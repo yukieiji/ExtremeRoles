@@ -22,6 +22,15 @@ namespace ExtremeRoles.Roles.API
             this.minimumRoleNum = minimumRoleNum;
             this.canAssignImposter = canAssignImposter;
         }
+
+        public string GetColoredBaseRoleName() => Design.ColoedString(
+            this.OptionColor, Translation.GetString(this.RoleName));
+
+        public int GetOptionIdOffset() => this.OptionIdOffset;
+
+        public string GetBaseRoleFullDescription() => 
+            Translation.GetString($"{BaseRole.Id}FullDescription");
+
         public override void AssignSetUpInit(int curImpNum)
         {
 
@@ -105,9 +114,9 @@ namespace ExtremeRoles.Roles.API
             var roleSetOption = new SelectionCustomOption(
                 GetRoleOptionId(RoleCommonOption.SpawnRate),
                 Design.ColoedString(
-                    this.optionColor,
+                    this.OptionColor,
                     string.Concat(
-                        this.roleName,
+                        this.RoleName,
                         RoleCommonOption.SpawnRate.ToString())),
                 OptionHolder.SpawnRate, null, true,
                 tab: OptionTab.Combination);
@@ -117,7 +126,7 @@ namespace ExtremeRoles.Roles.API
             var roleAssignNumOption = new IntCustomOption(
                 GetRoleOptionId(CombinationRoleCommonOption.AssignsNum),
                 string.Concat(
-                    this.roleName,
+                    this.RoleName,
                     CombinationRoleCommonOption.AssignsNum.ToString()),
                 this.minimumRoleNum, this.minimumRoleNum,
                 roleAssignNum, 1,
@@ -132,7 +141,7 @@ namespace ExtremeRoles.Roles.API
             var roleSetNumOption = new IntCustomOption(
                 GetRoleOptionId(RoleCommonOption.RoleNum),
                 string.Concat(
-                    this.roleName,
+                    this.RoleName,
                     RoleCommonOption.RoleNum.ToString()),
                 1, 1, maxSetNum, 1,
                 roleSetOption,
@@ -145,7 +154,7 @@ namespace ExtremeRoles.Roles.API
                 var isImposterAssignOps = new BoolCustomOption(
                     GetRoleOptionId(CombinationRoleCommonOption.IsAssignImposter),
                     string.Concat(
-                        this.roleName,
+                        this.RoleName,
                         CombinationRoleCommonOption.IsAssignImposter.ToString()),
                     false, roleSetOption,
                 tab: OptionTab.Combination);
@@ -153,7 +162,7 @@ namespace ExtremeRoles.Roles.API
                 new SelectionCustomOption(
                     GetRoleOptionId(CombinationRoleCommonOption.ImposterSelectedRate),
                     string.Concat(
-                        this.roleName,
+                        this.RoleName,
                         CombinationRoleCommonOption.ImposterSelectedRate.ToString()),
                     OptionHolder.SpawnRate, isImposterAssignOps,
                 tab: OptionTab.Combination);
@@ -162,7 +171,7 @@ namespace ExtremeRoles.Roles.API
             new BoolCustomOption(
                 GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign),
                 string.Concat(
-                    this.roleName,
+                    this.RoleName,
                     CombinationRoleCommonOption.IsMultiAssign.ToString()),
                 false, roleSetOption,
                 isHidden: this.minimumRoleNum <= 1,

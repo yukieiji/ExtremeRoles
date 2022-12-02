@@ -72,9 +72,9 @@ namespace ExtremeRoles.Roles.API
             var roleSetOption = new SelectionCustomOption(
                 GetRoleOptionId(RoleCommonOption.SpawnRate),
                 Design.ColoedString(
-                    this.optionColor,
+                    this.OptionColor,
                     string.Concat(
-                        this.roleName,
+                        this.RoleName,
                         RoleCommonOption.SpawnRate.ToString())),
                 OptionHolder.SpawnRate, null, true,
                 tab: OptionTab.Combination);
@@ -86,7 +86,7 @@ namespace ExtremeRoles.Roles.API
             new IntCustomOption(
                 GetRoleOptionId(RoleCommonOption.RoleNum),
                 string.Concat(
-                    this.roleName,
+                    this.RoleName,
                     RoleCommonOption.RoleNum.ToString()),
                 1, 1, thisMaxRoleNum, 1,
                 roleSetOption,
@@ -94,7 +94,7 @@ namespace ExtremeRoles.Roles.API
             new BoolCustomOption(
                 GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign),
                 string.Concat(
-                    this.roleName,
+                    this.RoleName,
                     CombinationRoleCommonOption.IsMultiAssign.ToString()),
                 false, roleSetOption,
                 tab: OptionTab.Combination);

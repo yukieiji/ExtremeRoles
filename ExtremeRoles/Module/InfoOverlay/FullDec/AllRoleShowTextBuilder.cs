@@ -73,15 +73,12 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
                         this.AllPage.Add(((string)roleText.Clone(), optionId));
                     }
                 }
-                else if (combRole is FlexibleCombinationRoleManagerBase)
+                else if (combRole is FlexibleCombinationRoleManagerBase flexCombRole)
                 {
+                    optionId = flexCombRole.GetOptionIdOffset();
+                    colorRoleName = flexCombRole.GetColoredBaseRoleName();
 
-                    var role = ((FlexibleCombinationRoleManagerBase)combRole).BaseRole;
-
-                    optionId = role.GetManagerOptionOffset();
-                    colorRoleName = role.GetColoredRoleName(true);
-
-                    roleFullDesc = Translation.GetString($"{role.Id}FullDescription");
+                    roleFullDesc = flexCombRole.GetBaseRoleFullDescription();
                     roleFullDesc = Design.CleanPlaceHolder(roleFullDesc);
 
                     roleText = string.Concat(
