@@ -9,12 +9,13 @@ namespace ExtremeRoles.Roles.Solo
     public sealed class VanillaRoleWrapper : SingleRoleBase
     {
         public RoleTypes VanilaRoleId;
+
         public VanillaRoleWrapper(
             RoleTypes id) : base()
         {
             this.VanilaRoleId = id;
             this.Id = ExtremeRoleId.VanillaRole;
-            this.RoleName = id.ToString();
+            this.RawRoleName = this.VanilaRoleId.ToString();
 
             switch (id)
             {

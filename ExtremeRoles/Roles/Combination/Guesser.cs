@@ -23,7 +23,6 @@ namespace ExtremeRoles.Roles.Combination
 
     public sealed class Guesser : 
         MultiAssignRoleBase, 
-        IRoleSpecialSetUp,
         IRoleResetMeeting,
         IRoleMeetingButtonAbility
     {
@@ -42,6 +41,9 @@ namespace ExtremeRoles.Roles.Combination
             NiceGuesserOnly,
             EvilGuesserOnly,
         }
+
+        public override string RoleName => 
+            string.Concat(this.IsImpostor() ? "Evil" : "Nice", this.RawRoleName);
 
         private bool canGuessNoneRole;
 
@@ -351,18 +353,6 @@ namespace ExtremeRoles.Roles.Combination
             else
             {
                 missGuess();
-            }
-        }
-
-        public void IntroBeginSetUp()
-        {
-            if (this.IsImpostor())
-            {
-                this.RoleName = string.Concat("Evil", this.RoleName);
-            }
-            else
-            {
-                this.RoleName = string.Concat("Nice", this.RoleName);
             }
         }
 
