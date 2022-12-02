@@ -174,6 +174,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             if (MeetingHud.Instance == null) { return; }
 
             FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(active);
+            MeetingHud.Instance.SkipVoteButton.gameObject.SetActive(active);
 
             foreach (PlayerVoteArea pva in MeetingHud.Instance.playerStates)
             {
