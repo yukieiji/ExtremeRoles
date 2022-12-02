@@ -457,11 +457,13 @@ namespace ExtremeRoles.Roles.Combination
             CreateIntOption(
                 GuesserOption.GuessNum,
                 1, 1, OptionHolder.MaxImposterNum, 1,
-                parentOps);
+                parentOps,
+                format: OptionUnit.Shot);
             CreateIntOption(
                 GuesserOption.MaxGuessNumWhenMeeting,
                 1, 1, OptionHolder.MaxImposterNum, 1,
-                parentOps);
+                parentOps,
+                format: OptionUnit.Shot);
             var noneGuessRoleOpt = CreateBoolOption(
                 GuesserOption.CanGuessNoneRole,
                 false, parentOps);
