@@ -121,7 +121,9 @@ namespace ExtremeRoles.Roles.API
                 OptionHolder.SpawnRate, null, true,
                 tab: OptionTab.Combination);
 
-            int roleAssignNum = this.BaseRole.IsImpostor() ? OptionHolder.MaxImposterNum : OptionHolder.VanillaMaxPlayerNum - 1;
+            int roleAssignNum = this.BaseRole.IsImpostor() ? 
+                OptionHolder.MaxImposterNum : 
+                OptionHolder.VanillaMaxPlayerNum - 1;
 
             var roleAssignNumOption = new IntCustomOption(
                 GetRoleOptionId(CombinationRoleCommonOption.AssignsNum),
