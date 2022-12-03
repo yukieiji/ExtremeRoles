@@ -248,7 +248,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.PlayerIcon[this.targetId].transform.localScale = Vector3.one * 0.4f;
                 this.PlayerIcon[this.targetId].transform.localPosition = bottomLeft;
 
-                this.targetTimerText.transform.parent = this.PlayerIcon[this.targetId].transform;
+                this.targetTimerText.transform.SetParent(this.PlayerIcon[this.targetId].transform);
                 this.targetTimerText.transform.localPosition = new Vector3(0.0f, 0.0f, -100.0f);
                 this.targetTimerText.transform.localScale = new Vector3(1.5f, 1.5f, 1.0f);
                 this.targetTimerText.gameObject.SetActive(true);

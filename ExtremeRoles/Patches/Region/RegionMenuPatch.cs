@@ -89,7 +89,7 @@ namespace ExtremeRoles.Patches.Region
                 ipText.text =  Helper.Translation.GetString(
                     "customServerIp");
                 ipText.font = ipTextBox.outputText.font;
-                ipText.transform.parent = ipField.transform;
+                ipText.transform.SetParent(ipField.transform);
                 ipText.transform.localPosition = new Vector3(-0.2f, 0.425f, -100f);
                 ipText.gameObject.SetActive(true);
 
@@ -134,7 +134,7 @@ namespace ExtremeRoles.Patches.Region
                 portText.text = Helper.Translation.GetString(
                     "customServerPort");
                 portText.font = portTextBox.outputText.font;
-                portText.transform.parent = portField.transform;
+                portText.transform.SetParent(portField.transform);
                 portText.transform.localPosition = new Vector3(-0.2f, 0.425f, -100f);
                 portText.gameObject.SetActive(true);
 

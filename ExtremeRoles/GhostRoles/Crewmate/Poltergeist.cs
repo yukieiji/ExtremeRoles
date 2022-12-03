@@ -81,7 +81,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
             if (role.CarringBody.transform.parent != rolePlayer.transform) { return; }
 
             Vector2 pos = rolePlayer.GetTruePosition();
-            role.CarringBody.transform.parent = null;
+            role.CarringBody.transform.SetParent(null);
             role.CarringBody.transform.position = new Vector3(pos.x, pos.y, (pos.y / 1000f));
             role.CarringBody = null;
         }
