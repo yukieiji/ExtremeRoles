@@ -52,12 +52,19 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                 Path.WispTorch);
 
             this.arrow = new Arrow(ColorPalette.KidsYellowGreen);
-            this.arrow.SetActive(false);
+            this.arrow.SetActive(true);
             this.arrow.UpdateTarget(
                 this.gameObject.transform.position);
 
             this.collider.radius = 0.01f;
         }
+
+        public void FixedUpdate()
+        {
+            this.arrow.SetActive(
+                !MeetingHud.Instance && !ExileController.Instance);
+        }
+
         public void OnDestroy()
         {
             this.arrow.Clear();
