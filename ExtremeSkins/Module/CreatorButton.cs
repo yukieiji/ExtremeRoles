@@ -25,7 +25,7 @@ namespace ExtremeSkins.Module
         [HideFromIl2Cpp]
         public Action GetClickAction()
         {
-            return (() =>
+            return () =>
             {
                 Vector3 curScrollPos = this.tabScroller.Inner.transform.localPosition;
                 Vector3 textPos = this.creatorText.transform.position;
@@ -35,7 +35,7 @@ namespace ExtremeSkins.Module
                     curScrollPos.y - textPos.y + 1.0f, // オフセット値
                     curScrollPos.z);
                 this.tabScroller.UpdateScrollBars();
-            });
+            };
         }
     }
 }
