@@ -40,7 +40,7 @@
         <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="1.1.1" PrivateAssets="all" />
 		
         <EmbeddedResource Include="Resources\LangData\stringData.json" />
-      <EmbeddedResource Include="Resources\Asset\skintab.asset" />
+      <EmbeddedResource Include="Resources\Asset\*.asset" />
         <EmbeddedResource Include="Resources\*.png" />
 		
         <ProjectReference Include="..\ExtremeRoles\ExtremeRoles.csproj" />

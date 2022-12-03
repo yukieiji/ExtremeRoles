@@ -14,8 +14,8 @@ namespace ExtremeSkins.Helper
 
         public const string InnerslothPackageName = "innerslothMake";
 
-        public const string CreatorTabAssetBundle = "ExtremeSkins.Resources.Asset.skintab.asset";
-        public const string CreatorTabAssetPrefab = "assets/extremeskins/skintab.prefab";
+        public const string CreatorTabAssetBundle = "ExtremeSkins.Resources.Asset.creatortab.asset";
+        public const string CreatorTabAssetPrefab = "assets/extremeskins/creatortab.prefab";
 
         public const float HeaderSize = 0.8f;
         private const float headerX = 0.8f;
