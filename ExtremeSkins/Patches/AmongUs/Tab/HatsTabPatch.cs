@@ -26,7 +26,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
         private static float inventoryTop = 1.5f;
         private static float inventoryBottom = -2.5f;
 
-        private static CreatorTab tab;
+        public static CreatorTab Tab = null;
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(HatsTab), nameof(HatsTab.OnEnable))]
@@ -38,24 +38,25 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
             HatData[] unlockedHats = DestroyableSingleton<HatManager>.Instance.GetUnlockedHats();
             Dictionary<string, List<HatData>> hatPackage = new Dictionary<string, List<HatData>>();
 
-            SkinTab.DestoryList(hatsTabCustomText);
-            SkinTab.DestoryList(__instance.ColorChips.ToArray().ToList());
+            CustomCosmicTab.DestoryList(hatsTabCustomText);
+            CustomCosmicTab.DestoryList(__instance.ColorChips.ToArray().ToList());
+            CustomCosmicTab.RemoveAllTabs();
 
             hatsTabCustomText.Clear();
             __instance.ColorChips.Clear();
 
-            if (SkinTab.textTemplate == null)
+            if (CustomCosmicTab.textTemplate == null)
             {
-                SkinTab.textTemplate = PlayerCustomizationMenu.Instance.itemName;
+                CustomCosmicTab.textTemplate = PlayerCustomizationMenu.Instance.itemName;
             }
-            if (tab == null)
+            if (Tab == null)
             {
                 GameObject obj = Object.Instantiate(
-                    ExRLoader.GetGameObjectFromResources(
+                    ExRLoader.GetUnityObjectFromResources<GameObject>(
                         "ExtremeSkins.Resources.skintab.asset",
                         "assets/extremeskins/skintab.prefab"),
                     __instance.transform);
-                tab = obj.GetComponent<CreatorTab>();
+                Tab = obj.GetComponent<CreatorTab>();
                 obj.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
             }
 
@@ -74,20 +75,21 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                 }
                 else
                 {
-                    if (!hatPackage.ContainsKey(SkinTab.InnerslothPackageName))
+                    if (!hatPackage.ContainsKey(CustomCosmicTab.InnerslothPackageName))
                     {
                         hatPackage.Add(
-                            SkinTab.InnerslothPackageName,
+                            CustomCosmicTab.InnerslothPackageName,
                             new List<HatData>());
                     }
-                    hatPackage[SkinTab.InnerslothPackageName].Add(hatBehaviour);
+                    hatPackage[CustomCosmicTab.InnerslothPackageName].Add(hatBehaviour);
                 }
             }
 
             float yOffset = __instance.YStart;
 
-            var orderedKeys = hatPackage.Keys.OrderBy((string x) => {
-                if (x == SkinTab.InnerslothPackageName)
+            var orderedKeys = hatPackage.Keys.OrderBy((string x) =>
+            {
+                if (x == CustomCosmicTab.InnerslothPackageName)
                 {
                     return 0;
                 }
@@ -100,20 +102,21 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
             foreach (string key in orderedKeys)
             {
                 createHatTab(hatPackage[key], key, yOffset, __instance);
-                yOffset = (yOffset - (SkinTab.HeaderSize * __instance.YOffset)) - (
-                    (hatPackage[key].Count - 1) / __instance.NumPerRow) * __instance.YOffset - SkinTab.HeaderSize;
+                yOffset = (yOffset - (CustomCosmicTab.HeaderSize * __instance.YOffset)) - (
+                    (hatPackage[key].Count - 1) / __instance.NumPerRow) * __instance.YOffset - CustomCosmicTab.HeaderSize;
             }
 
-            __instance.scroller.ContentYBounds.max = -(yOffset + 3.0f + SkinTab.HeaderSize);
-            tab.gameObject.SetActive(true);
+            __instance.scroller.ContentYBounds.max = -(yOffset + 3.0f + CustomCosmicTab.HeaderSize);
+            Tab.gameObject.SetActive(true);
+            Tab.SetUpButtons(__instance.scroller, hatsTabCustomText);
             return false;
         }
 
         [HarmonyPostfix]
         [HarmonyPatch(typeof(HatsTab), nameof(HatsTab.Update))]
-        public static void HatsTabUpdatePostfix(HatsTab __instance)
+        public static void HatsTabUpdatePostfix()
         {
-            SkinTab.HideTmpTextPackage(
+            CustomCosmicTab.HideTmpTextPackage(
                 hatsTabCustomText, inventoryTop, inventoryBottom);
         }
 
@@ -122,7 +125,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
         {
             float offset = yStart;
 
-            SkinTab.AddTmpTextPackageName(
+            CustomCosmicTab.AddTmpTextPackageName(
                 __instance, yStart, packageName,
                 ref hatsTabCustomText, ref offset);
 
@@ -134,10 +137,10 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
             {
                 HatData hat = hats[i];
 
-                ColorChip colorChip = SkinTab.SetColorChip(__instance, i, offset);
+                ColorChip colorChip = CustomCosmicTab.SetColorChip(__instance, i, offset);
 
-                int color = __instance.HasLocalPlayer() ? 
-                    CachedPlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId : 
+                int color = __instance.HasLocalPlayer() ?
+                    CachedPlayerControl.LocalPlayer.Data.DefaultOutfit.ColorId :
                     playerSkinData.colorID;
 
                 if (ActiveInputManager.currentControlType == ActiveInputManager.InputType.Keyboard)

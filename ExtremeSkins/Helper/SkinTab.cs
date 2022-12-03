@@ -4,9 +4,11 @@ using TMPro;
 
 using UnityEngine;
 
+using ExtremeSkins.Patches.AmongUs.Tab;
+
 namespace ExtremeSkins.Helper
 {
-    public static class SkinTab
+    public static class CustomCosmicTab
     {
         public static TMP_Text textTemplate;
 
@@ -25,22 +27,41 @@ namespace ExtremeSkins.Helper
         {
             if (textTemplate != null)
             {
-                TMP_Text title = UnityEngine.Object.Instantiate<TMP_Text>(
+                TMP_Text title = Object.Instantiate<TMP_Text>(
                     textTemplate, instance.scroller.Inner);
                 title.transform.parent = instance.scroller.Inner;
                 title.transform.localPosition = new Vector3(headerX, yPos, inventoryZ);
-                title.alignment = TMPro.TextAlignmentOptions.Center;
+                title.alignment = TextAlignmentOptions.Center;
                 title.fontSize *= 1.25f;
-                title.fontWeight = TMPro.FontWeight.Thin;
+                title.fontWeight = FontWeight.Thin;
                 title.enableAutoSizing = false;
                 title.autoSizeTextContainer = true;
-                title.text = Helper.Translation.GetString(packageName);
+                title.text = Translation.GetString(packageName);
                 offset -= HeaderSize * instance.YOffset;
                 textList.Add(title);
             }
         }
 
-        public static void DestoryList<T>(List<T> items) where T : UnityEngine.Object
+        public static void RemoveAllTabs()
+        {
+            if (HatsTabPatch.Tab != null)
+            {
+                Object.Destroy(HatsTabPatch.Tab.gameObject);
+                HatsTabPatch.Tab = null;
+            }
+            if (NameplatesTabPatch.Tab != null)
+            {
+                Object.Destroy(NameplatesTabPatch.Tab.gameObject);
+                NameplatesTabPatch.Tab = null;
+            }
+            if (VisorsTabPatch.Tab != null)
+            {
+                Object.Destroy(VisorsTabPatch.Tab.gameObject);
+                VisorsTabPatch.Tab = null;
+            }
+        }
+
+        public static void DestoryList<T>(List<T> items) where T : Object
         {
             if (items == null) { return; }
             foreach (T item in items)
