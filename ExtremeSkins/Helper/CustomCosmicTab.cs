@@ -30,7 +30,7 @@ namespace ExtremeSkins.Helper
         {
             if (textTemplate != null)
             {
-                TMP_Text title = Object.Instantiate<TMP_Text>(
+                TMP_Text title = Object.Instantiate(
                     textTemplate, instance.scroller.Inner);
                 title.transform.SetParent(instance.scroller.Inner);
                 title.transform.localPosition = new Vector3(headerX, yPos, inventoryZ);
@@ -40,6 +40,7 @@ namespace ExtremeSkins.Helper
                 title.enableAutoSizing = false;
                 title.autoSizeTextContainer = true;
                 title.text = Translation.GetString(packageName);
+                title.gameObject.SetActive(true);
                 offset -= HeaderSize * instance.YOffset;
                 textList.Add(title);
             }
@@ -81,9 +82,13 @@ namespace ExtremeSkins.Helper
             // Manually hide all custom TMPro.TMP_Text objects that are outside the ScrollRect
             foreach (TMP_Text customText in packageText)
             {
-                if (customText != null && customText.transform != null && customText.gameObject != null)
+                if (customText != null && 
+                    customText.transform != null && 
+                    customText.gameObject != null)
                 {
-                    bool active = customText.transform.position.y <= inventoryTop && customText.transform.position.y >= inventoryBottom;
+                    bool active = 
+                        customText.transform.position.y <= inventoryTop && 
+                        customText.transform.position.y >= inventoryBottom;
                     float epsilon = Mathf.Min(
                         Mathf.Abs(customText.transform.position.y - inventoryTop),
                         Mathf.Abs(customText.transform.position.y - inventoryBottom));
