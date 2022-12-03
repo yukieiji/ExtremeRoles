@@ -29,7 +29,7 @@ namespace ExtremeSkins.Module
                 "ScrollView/Viewport/Content").gameObject.GetComponent<VerticalLayoutGroup>();
             this.buttonPrefab.Awake();
 
-            selectButton.Clear();
+            this.selectButton.Clear();
         }
 
         [HideFromIl2Cpp]
@@ -48,7 +48,7 @@ namespace ExtremeSkins.Module
 
                 newButton.SetButtonClickAction(
                     (UnityAction)creator.GetClickAction());
-                selectButton.Add(newButton);
+                this.selectButton.Add(newButton);
             }
         }
     }
