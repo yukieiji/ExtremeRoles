@@ -32,7 +32,7 @@ namespace ExtremeSkins.Helper
             {
                 TMP_Text title = Object.Instantiate<TMP_Text>(
                     textTemplate, instance.scroller.Inner);
-                title.transform.parent = instance.scroller.Inner;
+                title.transform.SetParent(instance.scroller.Inner);
                 title.transform.localPosition = new Vector3(headerX, yPos, inventoryZ);
                 title.alignment = TextAlignmentOptions.Center;
                 title.fontSize *= 1.25f;
