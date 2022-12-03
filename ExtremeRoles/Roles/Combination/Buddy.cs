@@ -76,7 +76,9 @@ namespace ExtremeRoles.Roles.Combination
         {
             this.buddy = this.getSameBuddy();
 
-            if (IsAwake || !this.CanHasAnotherRole) { return; }
+            if (IsAwake || 
+                !this.CanHasAnotherRole || 
+                this.AnotherRole == null) { return; }
 
             this.hiddeRole = this.AnotherRole;
             this.CanHasAnotherRole = false;
