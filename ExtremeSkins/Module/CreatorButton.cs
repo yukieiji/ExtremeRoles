@@ -30,9 +30,16 @@ namespace ExtremeSkins.Module
                 Vector3 curScrollPos = this.tabScroller.Inner.transform.localPosition;
                 Vector3 textPos = this.creatorText.transform.position;
                 ExtremeSkinsPlugin.Logger.LogInfo($"Scroll from:{curScrollPos} to:{textPos}");
+
+                float scrollerMin = this.tabScroller.ContentYBounds.min;
+                float scrollerMax = this.tabScroller.ContentYBounds.max;
+
                 this.tabScroller.Inner.transform.localPosition = new Vector3(
                     curScrollPos.x,
-                    curScrollPos.y - textPos.y + 1.0f, // オフセット値
+                    Mathf.Clamp(
+                        curScrollPos.y - textPos.y + 1.0f, // オフセット値
+                        scrollerMin,
+                        Mathf.Max(scrollerMin, scrollerMax)),
                     curScrollPos.z);
                 this.tabScroller.UpdateScrollBars();
             };
