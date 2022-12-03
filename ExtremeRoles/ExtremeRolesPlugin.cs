@@ -9,6 +9,7 @@ using ExtremeRoles.Compat;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.InfoOverlay;
 using ExtremeRoles.Module.ExtremeShipStatus;
+using ExtremeRoles.Resources;
 
 namespace ExtremeRoles
 {
@@ -62,6 +63,7 @@ namespace ExtremeRoles
             Il2CppRegisterAttribute.Registration(
                 System.Reflection.Assembly.GetAssembly(this.GetType()));
 
+            Loader.LoadCommonAsset();
         }
     }
 }

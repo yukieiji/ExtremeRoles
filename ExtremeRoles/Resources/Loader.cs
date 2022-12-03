@@ -150,9 +150,31 @@ namespace ExtremeRoles.Resources
         public static T GetUnityObjectFromResources<T>(
             string bundleName, string objName) where T : UnityObject
         {
+            return getAssetBundleFromAssembly(
+                bundleName, Assembly.GetCallingAssembly()).LoadAsset(
+                    objName, Il2CppType.Of<T>())?.Cast<T>();
+        }
+
+        public static void LoadCommonAsset()
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            foreach (string path in new string[]
+            {
+                "ExtremeRoles.Resources.Asset.closebutton.asset",
+                "ExtremeRoles.Resources.Asset.confirmmenu.asset",
+                "ExtremeRoles.Resources.Asset.fonts.asset",
+            })
+            {
+                getAssetBundleFromAssembly(path, assembly);
+            }
+        }
+
+        private static AssetBundle getAssetBundleFromAssembly(
+            string bundleName, Assembly assembly)
+        {
             if (!cachedBundle.TryGetValue(bundleName, out AssetBundle bundle))
             {
-                using (var stream = Assembly.GetCallingAssembly().GetManifestResourceStream(
+                using (var stream = assembly.GetManifestResourceStream(
                     bundleName))
                 {
                     bundle = AssetBundle.LoadFromStream(stream.ToIl2Cpp());
@@ -160,7 +182,7 @@ namespace ExtremeRoles.Resources
                     cachedBundle.Add(bundleName, bundle);
                 }
             }
-            return bundle.LoadAsset(objName, Il2CppType.Of<T>())?.Cast<T>();
+            return bundle;
         }
 
         private static unsafe Texture2D createTextureFromResources(string path)
