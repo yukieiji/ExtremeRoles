@@ -53,8 +53,8 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
             {
                 GameObject obj = Object.Instantiate(
                     ExRLoader.GetUnityObjectFromResources<GameObject>(
-                        "ExtremeSkins.Resources.skintab.asset",
-                        "assets/extremeskins/skintab.prefab"),
+                        CustomCosmicTab.CreatorTabAssetBundle,
+                        CustomCosmicTab.CreatorTabAssetPrefab),
                     __instance.transform);
                 Tab = obj.GetComponent<CreatorTab>();
                 obj.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
