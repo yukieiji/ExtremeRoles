@@ -44,7 +44,7 @@ namespace ExtremeSkins
             this.creatorModeConfig = ExtremeSkinsPlugin.Instance.Config.Bind(
                 "CreateNewSkin", "CreatorMode", false);
 
-            this.mode = this.creatorModeConfig.Value ? Mode.Enable : Mode.Disable;
+            this.mode = this.IsEnable ? Mode.Enable : Mode.Disable;
             updateStatusString();
         }
 

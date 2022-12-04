@@ -15,7 +15,6 @@ namespace ExtremeSkins.SkinManager
 
         public static void Initialize()
         {
-            Helper.Translation.CreateColorTransData();
             ColorNum = (uint)Palette.ColorNames.Length;
             LangData.Clear();
             load();

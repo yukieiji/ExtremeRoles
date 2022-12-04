@@ -28,6 +28,8 @@ namespace ExtremeSkins
 
         public override void Load()
         {
+            Helper.Translation.LoadTransData();
+
             Logger = Log;
             
             Instance = this;
