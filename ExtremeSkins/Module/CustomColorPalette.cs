@@ -135,6 +135,36 @@ namespace ExtremeSkins.Module
                 MainColor = new Color32(0, 109, 102, byte.MaxValue),
                 ShadowColor = new Color32(0, 65, 61, byte.MaxValue),
             },
+            new ColorData()
+            {
+                Name = "dominantRed",
+                MainColor = new Color32(227, 126, 126, byte.MaxValue),
+                ShadowColor = new Color32(174, 254, 255, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "dominantGreen",
+                MainColor = new Color32(174, 254, 173, byte.MaxValue),
+                ShadowColor = new Color32(227, 125, 208, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "dominantBlue",
+                MainColor = new Color32(255, 210, 253, byte.MaxValue),
+                ShadowColor = new Color32(234, 168, 128, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "chaos",
+                MainColor = new Color32(238, 239, 241, byte.MaxValue),
+                ShadowColor = new Color32(47, 49, 49, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "inverted",
+                MainColor = new Color32(47, 49, 49, byte.MaxValue),
+                ShadowColor = new Color32(238, 239, 241, byte.MaxValue),
+            },
         };
 
         public static void AddCustomColor(ColorData data)
