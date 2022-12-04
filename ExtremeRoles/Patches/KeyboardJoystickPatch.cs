@@ -167,11 +167,6 @@ namespace ExtremeRoles.Patches
                 Roles.Solo.Host.Xion.SpecialKeyShortCut();
             }
 
-            if (Input.GetKeyDown(KeyCode.F8))
-            {
-                Logging.Dump();
-            }
-
             if (GameSystem.IsLobby)
             {
                 if (Input.GetKeyDown(KeyCode.Tab))
