@@ -135,21 +135,22 @@ namespace ExtremeSkins.Module
                 MainColor = new Color32(0, 109, 102, byte.MaxValue),
                 ShadowColor = new Color32(0, 65, 61, byte.MaxValue),
             },
+
             new ColorData()
             {
-                Name = "dominantRed",
+                Name = "diardRed",
                 MainColor = new Color32(227, 126, 126, byte.MaxValue),
                 ShadowColor = new Color32(174, 254, 255, byte.MaxValue),
             },
             new ColorData()
             {
-                Name = "dominantGreen",
+                Name = "diardGreen",
                 MainColor = new Color32(174, 254, 173, byte.MaxValue),
                 ShadowColor = new Color32(227, 125, 208, byte.MaxValue),
             },
             new ColorData()
             {
-                Name = "dominantBlue",
+                Name = "diardBlue",
                 MainColor = new Color32(255, 210, 253, byte.MaxValue),
                 ShadowColor = new Color32(234, 168, 128, byte.MaxValue),
             },
