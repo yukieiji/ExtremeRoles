@@ -19,7 +19,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
             // Replace instead
             Il2CppArrayBase<ColorChip> chips = __instance.ColorChips.ToArray();
 
-            int cols = 7;
+            int cols = 8;
 
             for (int i = 0; i < chips.Count; i++)
             {

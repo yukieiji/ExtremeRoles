@@ -135,6 +135,36 @@ namespace ExtremeSkins.Module
                 MainColor = new Color32(0, 109, 102, byte.MaxValue),
                 ShadowColor = new Color32(0, 65, 61, byte.MaxValue),
             },
+            new ColorData()
+            {
+                Name = "Shiraaiiro",
+                MainColor = new Color32(247, 228, 245, byte.MaxValue),
+                ShadowColor = new Color32(184, 170, 182, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "whitePink",
+                MainColor = new Color32(235, 176, 226, byte.MaxValue),
+                ShadowColor = new Color32(175, 131, 169, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "thinPurple",
+                MainColor = new Color32(208, 202, 253, byte.MaxValue),
+                ShadowColor = new Color32(155, 151, 188, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "sienna",
+                MainColor = new Color32(157, 89, 49, byte.MaxValue),
+                ShadowColor = new Color32(154, 64, 14, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "lightAvocado",
+                MainColor = new Color32(224, 254, 205, byte.MaxValue),
+                ShadowColor = new Color32(167, 189, 153, byte.MaxValue),
+            },
 
             new ColorData()
             {
@@ -165,6 +195,18 @@ namespace ExtremeSkins.Module
                 Name = "inverted",
                 MainColor = new Color32(47, 49, 49, byte.MaxValue),
                 ShadowColor = new Color32(238, 239, 241, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "oddGreen",
+                MainColor = new Color32(71, 126, 29, byte.MaxValue),
+                ShadowColor = new Color32(108, 0, 124, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "tigr",
+                MainColor = new Color32(190, 190, 190, byte.MaxValue),
+                ShadowColor = new Color32(244, 213, 49, byte.MaxValue),
             },
         };
 
