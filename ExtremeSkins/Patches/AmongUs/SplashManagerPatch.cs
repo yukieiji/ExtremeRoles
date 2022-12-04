@@ -18,7 +18,7 @@ namespace ExtremeSkins.Patches.AmongUs
 
             if (ExtremeRoles.Compat.BepInExUpdater.UpdateRequired) { return; }
 
-            bool creatorMode = CreatorModeManager.IsEnable;
+            bool creatorMode = CreatorModeManager.Instance.IsEnable;
 
             List<IEnumerator> dlTask = new List<IEnumerator>();
 
