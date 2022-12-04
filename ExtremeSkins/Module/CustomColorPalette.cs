@@ -165,6 +165,12 @@ namespace ExtremeSkins.Module
                 MainColor = new Color32(224, 254, 205, byte.MaxValue),
                 ShadowColor = new Color32(167, 189, 153, byte.MaxValue),
             },
+            new ColorData()
+            {
+                Name = "lightIwaitya",
+                MainColor = new Color32(123, 126, 116, byte.MaxValue),
+                ShadowColor = new Color32(120, 135, 121, byte.MaxValue),
+            },
 
             new ColorData()
             {
@@ -207,6 +213,12 @@ namespace ExtremeSkins.Module
                 Name = "tigr",
                 MainColor = new Color32(190, 190, 190, byte.MaxValue),
                 ShadowColor = new Color32(244, 213, 49, byte.MaxValue),
+            },
+            new ColorData()
+            {
+                Name = "kigi",
+                MainColor = new Color32(87, 87, 87, byte.MaxValue),
+                ShadowColor = new Color32(243, 212, 175, byte.MaxValue),
             },
         };
 
