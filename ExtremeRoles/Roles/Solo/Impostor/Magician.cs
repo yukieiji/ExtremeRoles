@@ -27,6 +27,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
+        public enum MagicianOption
+        {
+            TeleportTargetRate,
+            DupeTeleportTargetTo,
+            IncludeRolePlayer,
+            IncludeSpawnPoint
+        }
+
         private float teleportRate = 1.0f;
         private bool dupeTeleportTarget = true;
         private bool includeRolePlayer = true;
@@ -168,10 +176,34 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         protected override void CreateSpecificOption(IOption parentOps)
         {
             this.CreateCommonAbilityOption(parentOps);
+
+            CreateIntOption(
+                MagicianOption.TeleportTargetRate,
+                100, 10, 100, 10, parentOps,
+                format: OptionUnit.Percentage);
+            CreateBoolOption(
+                MagicianOption.DupeTeleportTargetTo,
+                true, parentOps);
+            CreateBoolOption(
+                MagicianOption.IncludeSpawnPoint,
+                false, parentOps);
+            CreateBoolOption(
+                MagicianOption.IncludeRolePlayer,
+                false, parentOps);
         }
 
         protected override void RoleSpecificInit()
         {
+            var allOption = OptionHolder.AllOption;
+            this.teleportRate = allOption[
+                GetRoleOptionId(MagicianOption.TeleportTargetRate)].GetValue();
+            this.dupeTeleportTarget = allOption[
+                GetRoleOptionId(MagicianOption.DupeTeleportTargetTo)].GetValue();
+            this.includeRolePlayer = allOption[
+                GetRoleOptionId(MagicianOption.IncludeSpawnPoint)].GetValue();
+            this.includeSpawnPoint = allOption[
+                GetRoleOptionId(MagicianOption.IncludeRolePlayer)].GetValue();
+
             this.RoleAbilityInit();
         }
     }
