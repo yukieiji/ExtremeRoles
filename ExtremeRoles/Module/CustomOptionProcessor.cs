@@ -13,9 +13,6 @@ namespace ExtremeRoles.Module
     {
         private const string csvName = "option.csv";
 
-        private const string modName = "Extreme Roles";
-        private const string versionStr = "Version";
-
         private const string vanilaOptionKey = "BytedVanillaOptions";
 
         private const string comma = ",";
@@ -30,10 +27,10 @@ namespace ExtremeRoles.Module
                     csv.WriteLine(
                        string.Format("{1}{0}{2}{0}{3}{0}{4}",
                            comma,
-                           modName,
-                           versionStr,
-                           Assembly.GetExecutingAssembly().GetName().Version,
-                           $"{DateTime.UtcNow}"));
+                           "Game Infos",
+                           $"AmongUs ver.{UnityEngine.Application.version}",
+                           $"ExtremeRoles ver.{Assembly.GetExecutingAssembly().GetName().Version}",
+                           $"Exported on:{DateTime.UtcNow}"));
 
                     csv.WriteLine(
                         string.Format("{1}{0}{2}{0}{3}{0}{4}",
@@ -88,11 +85,11 @@ namespace ExtremeRoles.Module
 
                 using (var csv = new StreamReader(csvName, new UTF8Encoding(true)))
                 {
-                    string verInfo = csv.ReadLine(); // verHeader
-                    string[] info = verInfo.Split(',');
+                    string infoData = csv.ReadLine(); // verHeader
+                    string[] info = infoData.Split(',');
 
                     ExtremeRolesPlugin.Logger.LogInfo(
-                        $"Loading from : {modName} {versionStr} {info[2]}    {info[3]}");
+                        $"Loading from {info[1]} with {info[2]} {info[3]} Data");
 
                     string line = csv.ReadLine(); // ヘッダー
                     while ((line = csv.ReadLine()) != null)
