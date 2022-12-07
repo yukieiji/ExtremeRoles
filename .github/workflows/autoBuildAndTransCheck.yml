@@ -7,6 +7,9 @@ permissions:
 on: 
   pull_request:
     types: [opened, edited]
+  push:
+    paths:
+      - .github/workflows/autoBuildAndTransCheck.yml
 
 jobs:
   build_check:
