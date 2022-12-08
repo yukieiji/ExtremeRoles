@@ -37,7 +37,7 @@ namespace ExtremeRoles.Patches
                     if (ExtremeRoleManager.GetSafeCastedLocalPlayerRole<
                         Roles.Solo.Impostor.LastWolf>() == null)
                     {
-                        __result = 0.3f;
+                        __result = 0.15f;
                         return false;
                     }
                     break;
