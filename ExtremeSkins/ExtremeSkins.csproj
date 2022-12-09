@@ -48,7 +48,7 @@
 	
 
     <ItemGroup>
-      <PackageReference Update="AmongUs.GameLibs.Steam" Version="2022.10.25" />
+      <PackageReference Update="AmongUs.GameLibs.Steam" Version="2022.12.8" />
     </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="if not exist $(SolutionDir)ExtremeSkins\Resources\Asset mkdir $(SolutionDir)ExtremeSkins\Resources\Asset" />
