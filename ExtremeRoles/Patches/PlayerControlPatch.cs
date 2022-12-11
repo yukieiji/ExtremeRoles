@@ -359,6 +359,8 @@ namespace ExtremeRoles.Patches
                     case RoleTypes.Engineer:
                     case RoleTypes.Scientist:
                     case RoleTypes.Shapeshifter:
+                    case RoleTypes.CrewmateGhost:
+                    case RoleTypes.ImpostorGhost:
                         FastDestroyableSingleton<HudManager>.Instance.AbilityButton.Hide();
                         break;
                     default:
