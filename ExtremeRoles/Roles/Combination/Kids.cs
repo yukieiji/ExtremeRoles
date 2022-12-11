@@ -123,10 +123,9 @@ namespace ExtremeRoles.Roles.Combination
                     ability,
                     canUse,
                     scribeSprite,
-                    new Vector3(-1.8f, -0.06f, 0),
                     null,
                     null,
-                    KeyCode.F, false)
+                    KeyCode.F)
             {
                 this.curAbility = Kids.AbilityType.Scribe;
                 this.bombScribe = bombSprite;
@@ -829,7 +828,6 @@ namespace ExtremeRoles.Roles.Combination
                 () => true,
                 Loader.CreateSpriteFromResources(
                     Path.CarrierCarry),
-                this.DefaultButtonOffset,
                 rpcHostCallAbility: abilityCall);
             this.ButtonInit();
             this.Button.SetLabelToCrewmate();

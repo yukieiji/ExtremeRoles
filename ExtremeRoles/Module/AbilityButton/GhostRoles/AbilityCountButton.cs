@@ -25,17 +25,15 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
             Func<bool> abilityPreCheck,
             Func<bool> canUse,
             Sprite sprite,
-            Vector3 positionOffset,
             Action rpcHostCallAbility = null,
             Action abilityCleanUp = null,
             Func<bool> abilityCheck = null,
-            KeyCode hotkey = KeyCode.F,
-            bool mirror = false) : base(
+            KeyCode hotkey = KeyCode.F) : base(
                 abilityType,
                 ability, abilityPreCheck,
-                canUse, sprite, positionOffset,
+                canUse, sprite,
                 rpcHostCallAbility, abilityCleanUp,
-                abilityCheck, hotkey, mirror)
+                abilityCheck, hotkey)
         {
             this.abilityCountText = GameObject.Instantiate(
                 this.Button.cooldownTimerText,

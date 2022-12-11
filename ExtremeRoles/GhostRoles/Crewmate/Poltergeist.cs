@@ -95,7 +95,6 @@ namespace ExtremeRoles.GhostRoles.Crewmate
                 this.isAbilityUse,
                 Resources.Loader.CreateSpriteFromResources(
                     Resources.Path.CarrierCarry),
-                this.DefaultButtonOffset,
                 rpcHostCallAbility: abilityCall,
                 abilityCleanUp: cleanUp);
             this.ButtonInit();

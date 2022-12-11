@@ -49,19 +49,17 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 Func<bool> resetCheckFunc,
                 Sprite sprite,
                 Sprite resetSprite,
-                Vector3 positionOffset,
                 Action abilityCleanUp = null,
                 Func<bool> abilityCheck = null,
-                KeyCode hotkey = KeyCode.F,
-                bool mirror = false) : base(
+                KeyCode hotkey = KeyCode.F
+                ) : base(
                     shieldAbilityText,
                     shieldAbility,
                     canUse,
                     sprite,
-                    positionOffset,
                     abilityCleanUp,
                     abilityCheck,
-                    hotkey, mirror)
+                    hotkey)
             {
                 this.abilityCountText = GameObject.Instantiate(
                     this.Button.cooldownTimerText,
@@ -487,11 +485,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 this.shildButtonImage,
                 Loader.CreateSpriteFromResources(
                     Path.BodyGuardResetShield),
-                new Vector3(-1.8f, -0.06f, 0),
                 null,
                 null,
-                KeyCode.F,
-                false);
+                KeyCode.F);
 
             this.RoleAbilityInit();
             if (this.shieldButton is BodyGuardShieldButton button)

@@ -43,7 +43,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 Func<bool> canUse,
                 Sprite cameraSetSprite,
                 Sprite ventRemoveSprite,
-                Vector3 positionOffset,
                 Action abilityCleanUp,
                 Func<bool> abilityCheck,
                 Func<bool> isVentMode,
@@ -51,16 +50,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 int cameraSetScrewNum,
                 float ventRemoveStopTime,
                 float cameraRemoveStopTime,
-                KeyCode hotkey = KeyCode.F,
-                bool mirror = false) : base(
+                KeyCode hotkey = KeyCode.F
+                ) : base(
                     "",
                     ability,
                     canUse,
                     cameraSetSprite,
-                    positionOffset,
-                    abilityCleanUp,
-                    abilityCheck,
-                    hotkey, mirror)
+                    abilityCleanUp, abilityCheck, hotkey)
             {
                 this.abilityCountText = GameObject.Instantiate(
                     this.Button.cooldownTimerText,
@@ -538,7 +534,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     Resources.Path.CarpenterSetCamera),
                 Resources.Loader.CreateSpriteFromResources(
                     Resources.Path.CarpenterVentSeal),
-                new Vector3(-1.8f, -0.06f, 0),
                 CleanUp,
                 IsAbilityCheck,
                 IsVentMode,

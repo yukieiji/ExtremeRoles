@@ -565,9 +565,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 this.IsAbilityUse,
                 Loader.CreateSpriteFromResources(
                     Path.SucideSprite),
-                new Vector3(-1.8f, -0.06f, 0),
                 null, null,
-                KeyCode.F, false);
+                KeyCode.F);
             this.Button.SetAbilityCoolTime(coolTime);
             this.Button.ResetCoolTimer();
         }

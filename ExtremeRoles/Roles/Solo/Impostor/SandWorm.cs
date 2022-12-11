@@ -28,9 +28,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     ability,
                     canUse,
                     sprite,
-                    new Vector3(-1.8f, -0.06f, 0),
                     null, null,
-                    KeyCode.F, false)
+                    KeyCode.F)
             { }
 
             protected override void AbilityButtonUpdate()

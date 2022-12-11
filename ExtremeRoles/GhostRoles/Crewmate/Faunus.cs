@@ -48,7 +48,6 @@ namespace ExtremeRoles.GhostRoles.Crewmate
                 this.isAbilityUse,
                 Resources.Loader.CreateSpriteFromResources(
                     Resources.Path.MaintainerRepair),
-                this.DefaultButtonOffset,
                 abilityCleanUp: cleanUp);
             this.ButtonInit();
             this.Button.SetLabelToCrewmate();

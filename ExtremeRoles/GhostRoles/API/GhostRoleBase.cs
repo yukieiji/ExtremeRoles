@@ -59,8 +59,6 @@ namespace ExtremeRoles.GhostRoles.API
 
         protected bool Task;
 
-        protected readonly Vector3 DefaultButtonOffset = new Vector3(-1.8f, -0.06f, 0);
-
         private OptionTab tab = OptionTab.General;
         private int controlId;
 

@@ -123,18 +123,16 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 Func<bool> upgradeVirusModeCheck,
                 Func<bool> ability,
                 Func<bool> canUse,
-                Vector3 positionOffset,
                 Action abilityCleanUp = null,
                 Func<bool> abilityCheck = null,
-                KeyCode hotkey = KeyCode.F,
-                bool mirror = false) : base(
+                KeyCode hotkey = KeyCode.F
+                ) : base(
                     setVirusButtonText,
                     ability, canUse,
                     setVirusSprite,
-                    positionOffset,
                     abilityCleanUp,
                     abilityCheck,
-                    hotkey, mirror)
+                    hotkey)
             {
 
                 this.setVirusSprite = setVirusSprite;
@@ -287,7 +285,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 IsUpgrade,
                 UseAbility,
                 IsAbilityUse,
-                new Vector3(-1.8f, -0.06f, 0),
                 CleanUp,
                 IsAbilityCheck);
             abilityInit();

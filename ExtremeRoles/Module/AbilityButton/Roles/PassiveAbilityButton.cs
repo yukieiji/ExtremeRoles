@@ -21,19 +21,17 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
             Func<bool> canUse,
             Sprite activateSprite,
             Sprite deactivateSprite,
-            Vector3 positionOffset,
             Action abilityCleanUp = null,
             Func<bool> abilityCheck = null,
-            KeyCode hotkey = KeyCode.F,
-            bool mirror = false) : base(
+            KeyCode hotkey = KeyCode.F
+            ) : base(
                 activateButtonText,
                 ability,
                 canUse,
                 activateSprite,
-                positionOffset,
                 abilityCleanUp,
                 abilityCheck,
-                hotkey, mirror)
+                hotkey)
         {
             this.activateButtonText = activateButtonText;
             this.deactivateButtonText = deactivateButtonText;

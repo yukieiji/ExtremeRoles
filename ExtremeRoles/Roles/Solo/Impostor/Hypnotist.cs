@@ -1137,11 +1137,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 UseAbility,
                 IsAbilityUse,
                 this.adminSprite,
-                new Vector3(-1.8f, -0.06f, 0),
                 CleanUp,
                 CheckAbility,
-                KeyCode.F,
-                false);
+                KeyCode.F);
 
             this.Button.SetAbilityCoolTime(
                 hypnotist.DollCrakingCoolTime);

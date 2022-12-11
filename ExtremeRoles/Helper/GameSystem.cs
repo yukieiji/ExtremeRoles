@@ -55,6 +55,8 @@ namespace ExtremeRoles.Helper
             TaskTypes.VentCleaning,
         };
 
+        private static GridArrange cachedArrange = null;
+
         public static bool IsLobby
         {
             get
@@ -71,6 +73,18 @@ namespace ExtremeRoles.Helper
             {
                 return AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay;
             }
+        }
+
+        public static void ReGridButtons()
+        {
+            if (!FastDestroyableSingleton<HudManager>.Instance) { return; }
+
+            if (cachedArrange == null)
+            {
+                var useButton = FastDestroyableSingleton<HudManager>.Instance.UseButton;
+                cachedArrange = useButton.transform.parent.gameObject.GetComponent<GridArrange>();
+            }
+            cachedArrange.ArrangeChilds();
         }
 
         public static void DisableMapModule(string mapModuleName)
