@@ -6,7 +6,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.Events;
-using UnhollowerBaseLib.Attributes;
+using Il2CppInterop.Runtime.Attributes;
 
 namespace ExtremeSkins.Module
 {
