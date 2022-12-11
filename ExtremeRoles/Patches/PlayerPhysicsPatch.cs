@@ -1,4 +1,7 @@
 ﻿using HarmonyLib;
+
+using AmongUs.GameOptions;
+
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
 
@@ -12,13 +15,16 @@ namespace ExtremeRoles.Patches
         // 2022/08/14:Xionは最大20倍速で動けるのでとりあえず100を突っ込んどく
         private const float maxModSpeed = 100.0f;
 
+        private static float playerBaseSpeed = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
+            FloatOptionNames.PlayerSpeedMod);
+
         public static bool Prefix(
             PlayerPhysics __instance,
             ref float __result)
         {
             // オバロとかでも以下が最大速度なのでそれを返す
             // 最大速度 = 基本速度 * PlayerControl.GameOptions.PlayerSpeedMod * 3.0f;
-            __result = __instance.Speed * maxModSpeed * PlayerControl.GameOptions.PlayerSpeedMod;
+            __result = __instance.Speed * maxModSpeed * playerBaseSpeed;
             return false;
         }
     }

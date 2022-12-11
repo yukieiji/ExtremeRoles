@@ -8,13 +8,15 @@ using HarmonyLib;
 
 using UnityEngine;
 
+using AmongUs.GameOptions;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-
 
 namespace ExtremeRoles.Patches.Option
 {
 
+    /*
     [HarmonyPatch(typeof(GameOptionsData), "GameHostOptions", MethodType.Getter)]
     public static class GameOptionsDataGameHostOptionsPatch
     {
@@ -285,4 +287,5 @@ namespace ExtremeRoles.Patches.Option
             return false;
         }
     }
+    */
 }

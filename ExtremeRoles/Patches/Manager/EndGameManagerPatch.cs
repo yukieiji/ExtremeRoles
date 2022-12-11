@@ -2,6 +2,7 @@
 using System.Linq;
 
 using UnityEngine;
+using AmongUs.GameOptions;
 
 using HarmonyLib;
 

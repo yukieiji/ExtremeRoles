@@ -1,6 +1,5 @@
-﻿using System.Linq;
-
-using UnityEngine;
+﻿using UnityEngine;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -130,8 +129,14 @@ namespace ExtremeRoles.Roles.Combination
             switch (this.nextUseAbilityType)
             {
                 case AbilityType.Admin:
-                    FastDestroyableSingleton<HudManager>.Instance.ShowMap(
-                        (System.Action<MapBehaviour>)(m => m.ShowCountOverlay()));
+                    FastDestroyableSingleton<HudManager>.Instance.ToggleMapVisible(
+                        new MapOptions
+                        {
+                            Mode = MapOptions.Modes.CountOverlay,
+                            AllowMovementWhileMapOpen = true,
+                            ShowLivePlayerPosition = true,
+                            IncludeDeadBodies = false,
+                        });
                     break;
                 case AbilityType.Security:
                     SystemConsole watchConsole = GameSystem.GetSecuritySystemConsole();
@@ -384,11 +389,15 @@ namespace ExtremeRoles.Roles.Combination
         {
             ++this.nextUseAbilityType;
             this.nextUseAbilityType = (AbilityType)((int)this.nextUseAbilityType % 3);
+
+            byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                ByteOptionNames.MapId);
+
             if (this.nextUseAbilityType == AbilityType.Vital &&
                 (
-                    PlayerControl.GameOptions.MapId == 0 ||
-                    PlayerControl.GameOptions.MapId == 1 ||
-                    PlayerControl.GameOptions.MapId == 3
+                    mapId == 0 ||
+                    mapId == 1 ||
+                    mapId == 3
                 ))
             {
                 this.nextUseAbilityType = AbilityType.Admin;

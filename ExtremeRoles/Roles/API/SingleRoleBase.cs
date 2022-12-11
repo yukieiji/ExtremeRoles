@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 using ExtremeRoles.Module;
+using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Roles.API
 {
@@ -121,13 +122,15 @@ namespace ExtremeRoles.Roles.API
 
         protected override void CommonInit()
         {
-            var baseOption = PlayerControl.GameOptions;
+            var baseOption = GameOptionsManager.Instance.CurrentGameOptions;
             var allOption = OptionHolder.AllOption;
 
-            this.Vison = this.IsImpostor() ? baseOption.ImpostorLightMod : baseOption.CrewLightMod;
+            this.Vison = this.IsImpostor() ? 
+                baseOption.GetFloat(FloatOptionNames.ImpostorLightMod) : 
+                baseOption.GetFloat(FloatOptionNames.CrewLightMod);
             
-            this.KillCoolTime = baseOption.KillCooldown;
-            this.KillRange = baseOption.KillDistance;
+            this.KillCoolTime = baseOption.GetFloat(FloatOptionNames.KillCooldown);
+            this.KillRange = baseOption.GetInt(Int32OptionNames.KillDistance);
 
             this.IsApplyEnvironmentVision = !this.IsImpostor();
 

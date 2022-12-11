@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -116,7 +117,7 @@ namespace ExtremeRoles.Roles.Combination
                 Add((ExtremeRoleId)RoleTypes.Impostor, ExtremeRoleType.Impostor);
             }
 
-            var roleOptions = PlayerControl.GameOptions.RoleOptions;
+            var roleOptions = GameOptionsManager.Instance.CurrentGameOptions.RoleOptions;
 
             foreach (RoleTypes role in Enum.GetValues(typeof(RoleTypes)))
             {

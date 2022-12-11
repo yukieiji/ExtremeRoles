@@ -1,4 +1,4 @@
-﻿using System;
+﻿using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;

@@ -5,6 +5,8 @@ using HarmonyLib;
 using UnityEngine;
 using TMPro;
 
+using AmongUs.GameOptions;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
@@ -79,7 +81,7 @@ namespace ExtremeRoles.Patches.Manager
                 __instance.KillButton.ToggleVisible(false);
                 __instance.SabotageButton.ToggleVisible(false);
                 __instance.ImpostorVentButton.ToggleVisible(false);
-                __instance.TaskText.transform.parent.gameObject.SetActive(false);
+                __instance.TaskPanel.gameObject.SetActive(false);
                 __instance.roomTracker.gameObject.SetActive(false);
                 
                 IVirtualJoystick virtualJoystick = __instance.joystick;

@@ -15,12 +15,13 @@ namespace ExtremeRoles.Module.InfoOverlay
             return 
 				(
 					$"<size=200%>{Helper.Translation.GetString("vanilaOptions")}</size>\n",
-					settings.ToString(),
+					GameOptionsManager.Instance.CurrentGameOptions.ToString(),
 					""
 				);
         }
         private void setVanillaOptions()
         {
+			/*
 			var gameOption = PlayerControl.GameOptions;
 			var trans = FastDestroyableSingleton<TranslationController>.Instance;
 
@@ -135,6 +136,7 @@ namespace ExtremeRoles.Module.InfoOverlay
 					}
 				}
 			}
+			*/
 		}
     }
 }

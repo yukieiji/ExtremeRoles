@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using HarmonyLib;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Helper;
@@ -272,8 +273,8 @@ namespace ExtremeRoles.Patches.Manager
             int gameControlId = 0;
             int curImpNum = 0;
             int curCrewNum = 0;
-            int maxImpNum = PlayerControl.GameOptions.NumImpostors;
-
+            int maxImpNum = GameOptionsManager.Instance.CurrentGameOptions.GetInt(
+                Int32OptionNames.NumImpostors);
             foreach (var oneRole in roleDataLoop)
             {
                 var ((combType, roleManager), (num, spawnRate, isMultiAssign)) = oneRole;
@@ -670,7 +671,7 @@ namespace ExtremeRoles.Patches.Manager
         }
     }
 
-    [HarmonyPatch(typeof(RoleManager), nameof(RoleManager.TryAssignRoleOnDeath))]
+    [HarmonyPatch(typeof(RoleManager), nameof(RoleManager.TryAssignSpecialGhostRoles))]
     class RoleManagerTryAssignRoleOnDeathPatch
     {
         public static bool Prefix([HarmonyArgument(0)] PlayerControl player)

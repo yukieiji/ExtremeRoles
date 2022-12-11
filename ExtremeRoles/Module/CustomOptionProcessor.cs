@@ -54,7 +54,7 @@ namespace ExtremeRoles.Module
                     csv.WriteLine(
                         string.Format(
                             "{1}{0}{1}",comma, string.Empty));
-
+                    /*
                     foreach (byte bytedOption in PlayerControl.GameOptions.ToBytes(6))
                     {
                         csv.WriteLine(
@@ -63,6 +63,7 @@ namespace ExtremeRoles.Module
                                 vanilaOptionKey,
                                 bytedOption));
                     }
+                    */
                 }
                 return true;
             }
@@ -114,12 +115,13 @@ namespace ExtremeRoles.Module
                     }
 
                 }
-
+                /*
                 if (importedVanillaOptions.Count > 0)
                 {
                     PlayerControl.GameOptions = GameOptionsData.FromBytes(
                         importedVanillaOptions.ToArray());
                 }
+                */
 
                 // オプションのインポートデモでネットワーク帯域とサーバーに負荷をかけて人が落ちたりするので共有を一時的に無効化して実行
                 OptionHolder.ExecuteWithBlockOptionShare(

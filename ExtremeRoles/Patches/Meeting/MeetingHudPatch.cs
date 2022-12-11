@@ -13,6 +13,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Patches.Meeting
 {
@@ -48,7 +49,8 @@ namespace ExtremeRoles.Patches.Meeting
             }
 
 
-            if (!PlayerControl.GameOptions.AnonymousVotes || canSeeVote ||
+            if (!GameOptionsManager.Instance.CurrentGameOptions.GetBool(BoolOptionNames.AnonymousVotes) || 
+                canSeeVote ||
                 (CachedPlayerControl.LocalPlayer.Data.IsDead && 
                 OptionHolder.Client.GhostsSeeVote &&
                  !isVoteSeeBlock(role)))
@@ -366,7 +368,8 @@ namespace ExtremeRoles.Patches.Meeting
             if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
 
 
-            if (__instance.discussionTimer < (float)PlayerControl.GameOptions.DiscussionTime)
+            if (__instance.discussionTimer < (float)GameOptionsManager.Instance.CurrentGameOptions.GetInt(
+                    Int32OptionNames.DiscussionTime))
             {
                 return __result;
             }

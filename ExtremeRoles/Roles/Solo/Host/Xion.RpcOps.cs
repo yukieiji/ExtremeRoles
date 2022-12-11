@@ -12,6 +12,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Roles.Solo.Host
 {
@@ -373,7 +374,8 @@ namespace ExtremeRoles.Roles.Solo.Host
                     break;
                 case SpeedOps.Reset:
                     xion.IsBoost = false;
-                    xion.MoveSpeed = PlayerControl.GameOptions.PlayerSpeedMod;
+                    xion.MoveSpeed = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
+                        FloatOptionNames.PlayerSpeedMod);
                     break;
                 default:
                     break;

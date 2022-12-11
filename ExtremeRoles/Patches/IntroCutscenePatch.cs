@@ -14,6 +14,7 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Performance;
+using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Patches
 {
@@ -160,7 +161,7 @@ namespace ExtremeRoles.Patches
 
             if (AmongUsClient.Instance.AmHost)
             {
-                if (AmongUsClient.Instance.GameMode != GameModes.LocalGame ||
+                if (AmongUsClient.Instance.NetworkMode != NetworkModes.LocalGame ||
                     !isAllPlyerDummy())
                 {
                     // ホストは全員の処理が終わるまで待つ
@@ -188,7 +189,7 @@ namespace ExtremeRoles.Patches
             }
 
             SoundManager.Instance.PlaySound(instance.IntroStinger, false, 1f);
-            if (PlayerControl.GameOptions.gameType == GameType.Normal)
+            if (GameOptionsManager.Instance.CurrentGameOptions.GameMode == GameModes.Normal)
             {
 
                 bool roleFillter(GameData.PlayerInfo pcd)
@@ -206,7 +207,7 @@ namespace ExtremeRoles.Patches
                 }
                 else
                 {
-                    int adjustedNumImpostors = PlayerControl.GameOptions.GetAdjustedNumImpostors(
+                    int adjustedNumImpostors = GameOptionsManager.Instance.CurrentGameOptions.GetAdjustedNumImpostors(
                         GameData.Instance.PlayerCount);
                     if (adjustedNumImpostors == 1)
                     {
@@ -229,7 +230,7 @@ namespace ExtremeRoles.Patches
                 Object.Destroy(roleAssignText);
                 roleAssignText = null;
 
-                yield return instance.ShowTeam(teamToShow);
+                yield return instance.ShowTeam(teamToShow, 1.5f);
                 yield return instance.ShowRole();
             }
             Object.Destroy(instance.gameObject);
@@ -238,6 +239,10 @@ namespace ExtremeRoles.Patches
         public static bool Prefix(
             IntroCutscene __instance, ref Il2CppSystem.Collections.IEnumerator __result)
         {
+            if (GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal)
+            { 
+                return true; 
+            }
             __result = coBeginPatch(__instance).WrapToIl2Cpp();
             return false;
         }
@@ -334,7 +339,7 @@ namespace ExtremeRoles.Patches
                 Xion.XionPlayerToGhostLayer();
                 Xion.RemoveXionPlayerToAllPlayerControl();
 
-                if (AmongUsClient.Instance.GameMode == GameModes.LocalGame)
+                if (AmongUsClient.Instance.NetworkMode == NetworkModes.LocalGame)
                 {
                     foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
                     {
@@ -415,7 +420,8 @@ namespace ExtremeRoles.Patches
             }
             else
             {
-                switch (PlayerControl.GameOptions.MapId)
+                switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                    ByteOptionNames.MapId))
                 {
                     case 0:
                         if (isRemoveAdmin)

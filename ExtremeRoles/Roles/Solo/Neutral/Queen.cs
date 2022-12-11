@@ -12,6 +12,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.ExtremeShipStatus;
+using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
@@ -275,7 +276,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                         this.taskCompServant.Add(playerId);
                         if (!this.HasOtherKillCool)
                         {
-                            this.KillCoolTime = PlayerControl.GameOptions.KillCooldown;
+                            this.KillCoolTime = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
+                                FloatOptionNames.KillCooldown);
                         }
                         this.HasOtherKillCool = true;
                         this.KillCoolTime = this.KillCoolTime * this.taskCompKillCoolReduceRate;

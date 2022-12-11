@@ -2,6 +2,7 @@
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Patches
 {
@@ -37,6 +38,9 @@ namespace ExtremeRoles.Patches
 	{
 		public static bool Prefix(GameData __instance)
 		{
+			var curOptions = GameOptionsManager.Instance.CurrentGameOptions;
+
+			if (curOptions.GameMode != GameModes.Normal) { return true; }
 
 			var roles = Roles.ExtremeRoleManager.GameRole;
 			if (roles.Count == 0 || 
@@ -56,7 +60,10 @@ namespace ExtremeRoles.Patches
 				if (!playerInfo.Disconnected &&
 					playerInfo.Tasks != null &&
 					playerInfo.Object &&
-					(PlayerControl.GameOptions.GhostsDoTasks || !playerInfo.IsDead) &&
+					(
+                        curOptions.GetBool(BoolOptionNames.GhostsDoTasks) || 
+						!playerInfo.IsDead
+					) &&
 					playerInfo.Role && 
 					playerInfo.Role.TasksCountTowardProgress &&
 					roles.ContainsKey(playerInfo.PlayerId))

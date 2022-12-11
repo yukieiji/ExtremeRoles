@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 
+/*
 namespace ExtremeRoles.Patches.Manager
 {
     [HarmonyPatch(typeof(StatsManager), nameof(StatsManager.AmBanned), MethodType.Getter)]
@@ -11,3 +12,4 @@ namespace ExtremeRoles.Patches.Manager
         }
     }
 }
+*/

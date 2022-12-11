@@ -18,6 +18,7 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Patches
 {
@@ -784,7 +785,8 @@ namespace ExtremeRoles.Patches
 		        ImportantTextTask importantTextTask = new GameObject("_Player").AddComponent<ImportantTextTask>();
 		        importantTextTask.transform.SetParent(
                     __instance.transform, false);
-		        if (!PlayerControl.GameOptions.GhostsDoTasks)
+		        if (!GameOptionsManager.Instance.CurrentGameOptions.GetBool(
+                        BoolOptionNames.GhostsDoTasks))
 		        {
 			        target.ClearTasks();
 			        importantTextTask.Text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
@@ -798,7 +800,7 @@ namespace ExtremeRoles.Patches
 		        target.myTasks.Insert(0, importantTextTask);
 	        }
             FastDestroyableSingleton<AchievementManager>.Instance.OnMurder(
-                __instance.AmOwner, target.AmOwner);
+                __instance.AmOwner, target.AmOwner, false);
                 
             var killAnimation = __instance.KillAnimations.ToList();
 
@@ -932,7 +934,8 @@ namespace ExtremeRoles.Patches
                 ImportantTextTask importantTextTask = new GameObject("_Player").AddComponent<ImportantTextTask>();
                 importantTextTask.transform.SetParent(
                     instance.transform, false);
-                if (!PlayerControl.GameOptions.GhostsDoTasks)
+                if (!GameOptionsManager.Instance.CurrentGameOptions.GetBool(
+                        BoolOptionNames.GhostsDoTasks))
                 {
                     target.ClearTasks();
                     importantTextTask.Text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
@@ -946,7 +949,7 @@ namespace ExtremeRoles.Patches
                 target.myTasks.Insert(0, importantTextTask);
             }
             FastDestroyableSingleton<AchievementManager>.Instance.OnMurder(
-                instance.AmOwner, target.AmOwner);
+                instance.AmOwner, target.AmOwner, false);
 
             var killAnimation = instance.KillAnimations.ToList();
 
@@ -975,7 +978,8 @@ namespace ExtremeRoles.Patches
 
             var role = roles[__instance.PlayerId];
 
-            var killCool = PlayerControl.GameOptions.KillCooldown;
+            var killCool = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
+                FloatOptionNames.KillCooldown);
             if (killCool <= 0f) { return false; }
             float maxTime = killCool;
 

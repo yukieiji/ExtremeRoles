@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 using UnityEngine;
-using Hazel;
+using AmongUs.GameOptions;
 
 using Newtonsoft.Json.Linq;
 
@@ -401,7 +401,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             JObject linkInfoJson = JsonParser.GetJObjectFromAssembly(ventInfoJson);
 
             string ventKey;
-            byte mapId = PlayerControl.GameOptions.MapId;
+            byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(ByteOptionNames.MapId);
 
             if (ExtremeRolesPlugin.Compat.IsModMap)
             {

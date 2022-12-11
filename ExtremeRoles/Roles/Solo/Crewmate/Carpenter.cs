@@ -2,8 +2,8 @@
 using System.Linq;
 
 using UnityEngine;
-
 using Hazel;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Helper;
@@ -474,8 +474,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     break;
             }
             camera.NewName = newName;
-            
-            if (PlayerControl.GameOptions.MapId == 2 || PlayerControl.GameOptions.MapId == 4)
+
+            byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                ByteOptionNames.MapId);
+
+            if (mapId == 2 || mapId == 4)
             {
                 camera.transform.localRotation = new Quaternion(0, 0, 1, 1);
             }
@@ -568,7 +571,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public bool IsAbilityUse() => 
             this.IsCommonUse() && 
-            !(PlayerControl.GameOptions.MapId == 1 && this.targetVent == null) &&
+            !(GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                ByteOptionNames.MapId) == 1 && this.targetVent == null) &&
             !(this.targetVent == null && 
                 ExtremeRolesPlugin.Compat.IsModMap && 
                 !ExtremeRolesPlugin.Compat.ModMap.CanPlaceCamera);

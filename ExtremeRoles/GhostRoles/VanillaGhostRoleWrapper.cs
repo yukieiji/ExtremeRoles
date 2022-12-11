@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
-using Hazel;
 using UnityEngine;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;

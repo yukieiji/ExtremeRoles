@@ -28,7 +28,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
             var hudManager = FastDestroyableSingleton<HudManager>.Instance;
             this.text = Instantiate(
-                hudManager.TaskText,
+                hudManager.TaskPanel.taskText,
                 hudManager.transform.parent);
             this.text.transform.localPosition = new Vector3(0.0f, 0.0f, -910f);
             this.text.alignment = TMPro.TextAlignmentOptions.Center;

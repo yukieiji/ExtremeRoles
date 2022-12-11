@@ -6,6 +6,8 @@ using UnityEngine;
 
 using HarmonyLib;
 
+using AmongUs.GameOptions;
+
 using ExtremeRoles.Module;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
@@ -28,6 +30,9 @@ namespace ExtremeRoles.Patches.Option
 
         public static void Postfix(GameOptionsMenu __instance)
         {
+
+            if (GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal) { return; }
+
             if (isFindAndTrans(GeneralSetting, "ERGlobalSetting")) { return; }
             if (isFindAndTrans(CrewmateSetting, "ERCrewmateRoleSetting")) { return; }
             if (isFindAndTrans(ImpostorSetting, "ERImpostorRoleSetting")) { return; }
@@ -296,7 +301,7 @@ namespace ExtremeRoles.Patches.Option
             UnhollowerBaseLib.Il2CppReferenceArray<OptionBehaviour> child = __instance.Children;
 
 
-            if (AmongUsClient.Instance.GameMode == GameModes.LocalGame ||
+            if (AmongUsClient.Instance.NetworkMode == NetworkModes.LocalGame ||
                 FastDestroyableSingleton<ServerManager>.Instance.CurrentRegion.Name == "custom")
             {
                 NumberOption numImpostorsOption = child.FirstOrDefault(

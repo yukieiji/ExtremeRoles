@@ -213,19 +213,19 @@ namespace ExtremeRoles.Module.InfoOverlay
             ruleInfo.Initialize(
                 new Vector3(-4.0f, 1.6f, -910f),
                 new Vector3(0.0f, -0.325f, 0.0f),
-                hudManager.TaskText,
+                hudManager.TaskPanel.taskText,
                 hudManager.transform,
                 initInfoText);
             roleInfo.Initialize(
                 infoAnchorFirstPos + new Vector3(3.5f, 0.0f, 0.0f),
                 new Vector3(0.0f, -0.325f, 0.0f),
-                hudManager.TaskText,
+                hudManager.TaskPanel.taskText,
                 hudManager.transform,
                 initInfoText);
             anotherRoleInfo.Initialize(
                 infoAnchorFirstPos + new Vector3(7.0f, 0.0f, 0.0f),
                 new Vector3(0.0f, -0.325f, 0.0f),
-                hudManager.TaskText,
+                hudManager.TaskPanel.taskText,
                 hudManager.transform,
                 initInfoText);
 

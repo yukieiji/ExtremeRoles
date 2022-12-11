@@ -3,6 +3,7 @@
 using UnityEngine;
 
 using HarmonyLib;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
@@ -227,7 +228,8 @@ namespace ExtremeRoles.Patches.MapOverlay
             }
             else
             {
-                switch (PlayerControl.GameOptions.MapId)
+                switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                    ByteOptionNames.MapId))
                 {
                     case 0:
                         vitalObj.Add(GameSystem.SkeldAdmin);

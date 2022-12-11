@@ -9,6 +9,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -137,7 +138,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             if (!this.HasOtherKillCool)
             {
                 this.HasOtherKillCool = true;
-                this.KillCoolTime = PlayerControl.GameOptions.KillCooldown;
+                this.KillCoolTime = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
+                    FloatOptionNames.KillCooldown);
             }
 
             this.defaultKillCool = this.KillCoolTime;

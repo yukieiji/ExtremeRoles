@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 
+/*
 namespace ExtremeRoles.Patches
 {
     [HarmonyPatch(typeof(Constants), nameof(Constants.ShouldHorseAround))]
@@ -19,3 +20,4 @@ namespace ExtremeRoles.Patches
     }
 
 }
+*/
