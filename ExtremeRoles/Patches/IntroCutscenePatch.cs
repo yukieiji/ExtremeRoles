@@ -230,6 +230,7 @@ namespace ExtremeRoles.Patches
                 Object.Destroy(roleAssignText);
                 roleAssignText = null;
 
+                // This is temp values
                 yield return instance.ShowTeam(teamToShow, 1.5f);
                 yield return instance.ShowRole();
             }
