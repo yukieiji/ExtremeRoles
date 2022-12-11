@@ -46,6 +46,7 @@ namespace ExtremeRoles.Patches.Manager
     public static class HudManagerUpdatePatch
     {
         public const string RoleInfoObjectName = "Info";
+        private const float infoScale = 0.25f;
         
         private static bool buttonCreated = false;
         private static bool isActiveUpdate = true;
@@ -341,7 +342,7 @@ namespace ExtremeRoles.Patches.Manager
                 }
 
                 playerInfo.transform.localPosition = 
-                    player.cosmetics.nameText.transform.localPosition + Vector3.up * 0.5f;
+                    player.cosmetics.nameText.transform.localPosition + Vector3.up * infoScale;
                 string playerInfoText = getRoleInfo(localPlayer, player, commsActive);
                 playerInfo.text = playerInfoText;
 
