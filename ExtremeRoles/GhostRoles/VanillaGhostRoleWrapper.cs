@@ -24,9 +24,15 @@ namespace ExtremeRoles.GhostRoles
             switch (vanillaRoleId)
             {
                 case RoleTypes.GuardianAngel:
+                case RoleTypes.CrewmateGhost:
                     this.Task = true;
                     this.TeamType = Roles.API.ExtremeRoleType.Crewmate;
                     this.NameColor = Palette.White;
+                    break;
+                case RoleTypes.ImpostorGhost:
+                    this.Task = false;
+                    this.TeamType = Roles.API.ExtremeRoleType.Impostor;
+                    this.NameColor = Palette.ImpostorRed;
                     break;
                 default:
                     break;
@@ -35,15 +41,17 @@ namespace ExtremeRoles.GhostRoles
 
         public override string GetImportantText()
         {
-            switch (this.vanillaRoleId)
+            string addText = this.vanillaRoleId switch
             {
-                case RoleTypes.GuardianAngel:
-                    return Helper.Design.ColoedString(
-                        this.NameColor,
-                        $"{this.GetColoredRoleName()}: {Helper.Translation.GetString("crewImportantText")}");
-                default:
-                    return string.Empty;
-            }
+                RoleTypes.GuardianAngel or RoleTypes.CrewmateGhost => 
+                    Helper.Translation.GetString("crewImportantText"),
+                RoleTypes.ImpostorGhost =>
+                    Helper.Translation.GetString("impImportantText"),
+                _ => string.Empty,
+            };
+            return Helper.Design.ColoedString(
+                this.NameColor,
+                $"{this.GetColoredRoleName()}: {addText}");
         }
 
         public override string GetFullDescription()

@@ -181,7 +181,9 @@ namespace ExtremeRoles.GhostRoles
 
         private static readonly HashSet<RoleTypes> vanillaGhostRole = new HashSet<RoleTypes>()
         { 
-            RoleTypes.GuardianAngel
+            RoleTypes.GuardianAngel,
+            RoleTypes.CrewmateGhost,
+            RoleTypes.ImpostorGhost,
         };
 
         private static GhostRoleAssignData assignData;

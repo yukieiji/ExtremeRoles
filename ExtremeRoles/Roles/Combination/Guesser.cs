@@ -123,7 +123,9 @@ namespace ExtremeRoles.Roles.Combination
             {
                 if (role == RoleTypes.Crewmate || 
                     role == RoleTypes.Impostor ||
-                    role == RoleTypes.GuardianAngel)
+                    role == RoleTypes.GuardianAngel ||
+                    role == RoleTypes.CrewmateGhost ||
+                    role == RoleTypes.ImpostorGhost)
                 {
                     continue;
                 }
