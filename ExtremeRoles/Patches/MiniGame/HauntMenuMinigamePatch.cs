@@ -23,7 +23,7 @@ namespace ExtremeRoles.Patches.MiniGame
                     role.IsImpostor() &&
                     ExtremeRolesPlugin.ShipState.IsAssassinAssign
                 ) ? 
-                    Helper.Translation.GetString("???") : 
+                    "？？？" : 
                     Helper.Translation.GetString(targetRoleTeam.ToString());
 
             return false;
