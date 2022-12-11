@@ -30,15 +30,17 @@ namespace ExtremeRoles.Patches.Manager
         {
             roleList.Clear();
             readyPlayer.Clear();
+
             useXion = OptionHolder.AllOption[(int)OptionHolder.CommonOptionKey.UseXion].GetValue();
-            if (useXion)
-            {
-                PlayerControl loaclPlayer = PlayerControl.LocalPlayer;
-                roleList.Add(new AssignedPlayerToSingleRoleData(
-                    loaclPlayer.PlayerId, (int)ExtremeRoleId.Xion));
-                loaclPlayer.RpcSetRole(RoleTypes.Crewmate);
-                loaclPlayer.Data.IsDead = true;
-            }
+            
+            if (!useXion || 
+                GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal) { return; }
+
+            PlayerControl loaclPlayer = PlayerControl.LocalPlayer;
+            roleList.Add(new AssignedPlayerToSingleRoleData(
+                loaclPlayer.PlayerId, (int)ExtremeRoleId.Xion));
+            loaclPlayer.RpcSetRole(RoleTypes.Crewmate);
+            loaclPlayer.Data.IsDead = true;
         }
         public static void Postfix()
         {
@@ -49,7 +51,20 @@ namespace ExtremeRoles.Patches.Manager
             RPCOperator.Initialize();
 
             PlayerControl[] playeres = PlayerControl.AllPlayerControls.ToArray();
+            
+            if (GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal)
+            {
+                foreach (var player in playeres)
+                {
+                    roleList.Add(
+                        new AssignedPlayerToSingleRoleData(
+                            player.PlayerId, (byte)player.Data.Role.Role));
+                }
+                return;
+            }
+
             var playerIndexList = Enumerable.Range(0, playeres.Count()).ToList();
+
             if (useXion)
             {
                 playerIndexList.RemoveAll(i => playeres[i].PlayerId == PlayerControl.LocalPlayer.PlayerId);
@@ -678,6 +693,10 @@ namespace ExtremeRoles.Patches.Manager
         {
             if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
             if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return true; }
+            if (GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal)
+            { 
+                return true;
+            }
 
             var role = ExtremeRoleManager.GameRole[player.PlayerId];
 
