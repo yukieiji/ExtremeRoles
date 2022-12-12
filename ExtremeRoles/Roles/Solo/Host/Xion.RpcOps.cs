@@ -164,29 +164,6 @@ namespace ExtremeRoles.Roles.Solo.Host
             // 必要な関数書く
         }
 
-        public void RpcKill(byte targetPlayerId)
-        {
-            Player.RpcUncheckMurderPlayer(
-                targetPlayerId,
-                targetPlayerId,
-                byte.MaxValue);
-        }
-
-        public void RpcRevive(byte targetPlayerId)
-        {
-            Player.RpcUncheckRevive(targetPlayerId);
-        }
-
-        public void RpcTeleport(PlayerControl targetPlayer)
-        {
-            if (targetPlayer == null) { return; }
-            Vector2 targetPos = targetPlayer.transform.position;
-            MessageWriter writer = createWriter(XionRpcOpsCode.UpdateSpeed);
-            writer.Write(targetPos.x);
-            writer.Write(targetPos.y);
-            finishWrite(writer);
-            teleport(CachedPlayerControl.LocalPlayer, targetPos);
-        }
 
         public static void RpcNoXionVote()
         {
@@ -245,6 +222,18 @@ namespace ExtremeRoles.Roles.Solo.Host
 
             addChat(Translation.GetString("RevartXion"));
         }
+
+        private static void rpcTeleport(PlayerControl targetPlayer)
+        {
+            if (targetPlayer == null) { return; }
+            Vector2 targetPos = targetPlayer.transform.position;
+            MessageWriter writer = createWriter(XionRpcOpsCode.Teleport);
+            writer.Write(targetPos.x);
+            writer.Write(targetPos.y);
+            finishWrite(writer);
+            teleport(CachedPlayerControl.LocalPlayer, targetPos);
+        }
+
         // RPC終了
 
         private static MessageWriter createWriter(XionRpcOpsCode opsCode)
