@@ -4,6 +4,7 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches
 {
@@ -33,6 +34,13 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(PlayerPhysics), nameof(PlayerPhysics.FixedUpdate))]
     public static class PlayerPhysicsFixedUpdatePatch
     {
+        public static bool Prefix(PlayerPhysics __instance)
+        {
+            return 
+                DestroyableSingleton<HudManager>.InstanceExists && 
+                FastDestroyableSingleton<HudManager>.Instance.joystick != null;
+        }
+
         public static void Postfix(PlayerPhysics __instance)
         {
             if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
