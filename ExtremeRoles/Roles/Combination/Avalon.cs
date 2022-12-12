@@ -223,6 +223,7 @@ namespace ExtremeRoles.Roles.Combination
         public bool CanSeeVote = false;
         public bool CanSeeNeutral = false;
         private bool canSeeAssassin = false;
+        private GridArrange grid;
 
         private Dictionary<byte, PoolablePlayer> PlayerIcon;
         public Marlin(
@@ -242,13 +243,29 @@ namespace ExtremeRoles.Roles.Combination
 
         public void IntroEndSetUp()
         {
-            this.PlayerIcon = Player.CreatePlayerIcon();
-            this.showIcon();
+            GameObject bottomLeft = new GameObject("BottomLeft");
+            bottomLeft.transform.SetParent(
+                FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.parent.parent);
+            AspectPosition aspectPosition = bottomLeft.AddComponent<AspectPosition>();
+            aspectPosition.Alignment = AspectPosition.EdgeAlignments.LeftBottom;
+            aspectPosition.anchorPoint = new Vector2(0.5f, 0.5f);
+            aspectPosition.DistanceFromEdge = new Vector3(0.375f, 0.35f);
+            aspectPosition.AdjustPosition();
+
+            this.grid = bottomLeft.AddComponent<GridArrange>();
+            this.grid.CellSize = new Vector2(0.625f, 0.75f);
+            this.grid.MaxColumns = 10;
+            this.grid.Alignment = GridArrange.StartAlign.Right;
+            this.grid.cells = new();
+
+            this.PlayerIcon = Player.CreatePlayerIcon(
+                bottomLeft.transform, Vector3.one * 0.275f);
+            this.updateShowIcon();
         }
 
         public void ResetOnMeetingEnd()
         {
-            this.showIcon();
+            this.updateShowIcon();
         }
 
         public void ResetOnMeetingStart()
@@ -321,20 +338,12 @@ namespace ExtremeRoles.Roles.Combination
             this.PlayerIcon = new Dictionary<byte, PoolablePlayer>();
         }
 
-        private void showIcon()
+        private void updateShowIcon()
         {
-            int visibleCounter = 0;
-            Vector3 bottomLeft = FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition;
-            bottomLeft.x *= -1;
-            bottomLeft += new Vector3(-0.25f, -0.25f, 0);
-
-            foreach (KeyValuePair<byte, PoolablePlayer> item in this.PlayerIcon)
+            foreach (var(playerId, poolPlayer) in this.PlayerIcon)
             {
-                byte playerId = item.Key;
-                var poolPlayer = item.Value;
                 if (playerId == CachedPlayerControl.LocalPlayer.PlayerId) { continue; }
 
-                PlayerControl player = Player.GetPlayerControlById(playerId);
                 SingleRoleBase role = ExtremeRoleManager.GameRole[playerId];
                 if (role.IsCrewmate() ||
                     (role.IsNeutral() && !this.CanSeeNeutral) ||
@@ -344,12 +353,11 @@ namespace ExtremeRoles.Roles.Combination
                 }
                 else
                 {
-                    poolPlayer.gameObject.SetActive(true);
                     poolPlayer.transform.localScale = Vector3.one * 0.275f;
-                    poolPlayer.transform.localPosition = bottomLeft + Vector3.right * visibleCounter * 0.45f;
-                    ++visibleCounter;
+                    poolPlayer.gameObject.SetActive(true);
                 }
             }
+            this.grid.ArrangeChilds();
         }
     }
 }

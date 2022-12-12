@@ -172,7 +172,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void IntroEndSetUp()
         {
-            this.PlayerIcon = Player.CreatePlayerIcon();
+            this.PlayerIcon = Player.CreatePlayerIcon(
+                scale: new Vector3(0.35f, 0.35f, 1.0f));
         }
 
         public void Update(PlayerControl rolePlayer)
@@ -223,9 +224,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private void setNewTarget()
         {
             this.targetTimer = this.changeTargetTime;
-            if (this.targetId != byte.MaxValue)
+            if (this.PlayerIcon.TryGetValue(this.targetId, out PoolablePlayer prevTarget))
             {
-                this.PlayerIcon[this.targetId].gameObject.SetActive(false);
+                prevTarget.gameObject.SetActive(false);
             }
 
             List<CachedPlayerControl> allPlayer = CachedPlayerControl.AllPlayerControls;
@@ -233,26 +234,31 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             allPlayer = allPlayer.OrderBy(
                 item => RandomGenerator.Instance.Next()).ToList();
 
-            Vector3 bottomLeft = FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition;
-            bottomLeft.x *= -1;
-            bottomLeft += new Vector3(-0.375f, -0.25f, 0);
-
             foreach (var player in allPlayer)
             {
                 if (player.Data.IsDead || player.Data.Disconnected) { continue; }
                 
                 SingleRoleBase role = ExtremeRoleManager.GameRole[player.PlayerId];
                 
-                if (role.IsImpostor() || role.FakeImposter || this.targetId == player.PlayerId) { continue; }
+                if (role.IsImpostor() || 
+                    role.FakeImposter || 
+                    this.targetId == player.PlayerId) { continue; }
 
                 this.targetId = player.PlayerId;
                 this.PlayerIcon[this.targetId].gameObject.SetActive(true);
-                this.PlayerIcon[this.targetId].transform.localScale = Vector3.one * 0.4f;
-                this.PlayerIcon[this.targetId].transform.localPosition = bottomLeft;
+                AspectPosition aspectPosition = this.PlayerIcon[this.targetId].GetComponent<AspectPosition>();
+                if (aspectPosition == null)
+                {
+                    aspectPosition = this.PlayerIcon[this.targetId].gameObject.AddComponent<AspectPosition>();
+                    aspectPosition.Alignment = AspectPosition.EdgeAlignments.LeftBottom;
+                    aspectPosition.anchorPoint = new Vector2(0.5f, 0.5f);
+                    aspectPosition.DistanceFromEdge = new Vector3(0.45f, 0.35f);
+                }
+                aspectPosition.AdjustPosition();
 
                 this.targetTimerText.transform.SetParent(this.PlayerIcon[this.targetId].transform);
                 this.targetTimerText.transform.localPosition = new Vector3(0.0f, 0.0f, -100.0f);
-                this.targetTimerText.transform.localScale = new Vector3(1.5f, 1.5f, 1.0f);
+                this.targetTimerText.transform.localScale = new Vector3(2.25f, 2.25f, 1.0f);
                 this.targetTimerText.gameObject.SetActive(true);
 
                 break;
