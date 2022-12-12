@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
+using AmongUs.GameOptions;
 
 using Hazel;
 using BepInEx.Configuration;
@@ -191,67 +192,49 @@ namespace ExtremeRoles
             // 不具合等が発生しないようにブロック機能を有効化する
             isBlockShare = false;
 
-            Ship.MaxNumberOfMeeting = AllOption[
-                (int)CommonOptionKey.NumMeating].GetValue();
-            Ship.ChangeMeetingVoteAreaSort = AllOption[
-                (int)CommonOptionKey.ChangeMeetingVoteAreaSort].GetValue();
-            Ship.FixedMeetingPlayerLevel = AllOption[
-                (int)CommonOptionKey.FixedMeetingPlayerLevel].GetValue();
+            // This is HotFix for HideNSeekMode
+            bool isClassic = GameOptionsManager.Instance.CurrentGameOptions.GameMode == GameModes.Normal;
+            dynamic GetValue(CommonOptionKey key)
+            {
+                IOption option = AllOption[(int)key];
+                return isClassic ? option.GetValue() : option.GetDefault();
+            }
 
-            Ship.AllowParallelMedBayScan = AllOption[
-                (int)CommonOptionKey.ParallelMedBayScans].GetValue();
-            Ship.BlockSkippingInEmergencyMeeting = AllOption[
-                (int)CommonOptionKey.DisableSkipInEmergencyMeeting].GetValue();
-            Ship.DisableVent = AllOption[
-                (int)CommonOptionKey.DesableVent].GetValue();
-            Ship.CanKillVentInPlayer = AllOption[
-                (int)CommonOptionKey.CanKillVentInPlayer].GetValue();
-            Ship.EngineerUseImpostorVent = AllOption[
-                (int)CommonOptionKey.EngineerUseImpostorVent].GetValue();
-            Ship.DisableSelfVote = AllOption[
-                (int)CommonOptionKey.DisableSelfVote].GetValue();
-            Ship.DisableTaskWinWhenNoneTaskCrew = AllOption[
-                (int)CommonOptionKey.DisableTaskWinWhenNoneTaskCrew].GetValue();
-            Ship.DisableTaskWin = AllOption[
-                (int)CommonOptionKey.DisableTaskWin].GetValue();
-            Ship.IsSameNeutralSameWin = AllOption[
-                (int)CommonOptionKey.IsSameNeutralSameWin].GetValue();
-            Ship.DisableNeutralSpecialForceEnd = AllOption[
-                (int)CommonOptionKey.DisableNeutralSpecialForceEnd].GetValue();
+            Ship.MaxNumberOfMeeting = GetValue(CommonOptionKey.NumMeating);
+            Ship.ChangeMeetingVoteAreaSort = GetValue(CommonOptionKey.ChangeMeetingVoteAreaSort);
+            Ship.FixedMeetingPlayerLevel = GetValue(CommonOptionKey.FixedMeetingPlayerLevel);
 
-            Ship.IsAssignNeutralToVanillaCrewGhostRole = AllOption[
-                (int)CommonOptionKey.IsAssignNeutralToVanillaCrewGhostRole].GetValue();
-            Ship.IsRemoveAngleIcon = AllOption[
-                (int)CommonOptionKey.IsRemoveAngleIcon].GetValue();
-            Ship.IsBlockGAAbilityReport = AllOption[
-                (int)CommonOptionKey.IsBlockGAAbilityReport].GetValue();
+            Ship.AllowParallelMedBayScan = GetValue(CommonOptionKey.ParallelMedBayScans);
+            Ship.BlockSkippingInEmergencyMeeting = GetValue(CommonOptionKey.DisableSkipInEmergencyMeeting);
+            Ship.DisableVent = GetValue(CommonOptionKey.DesableVent);
+            Ship.CanKillVentInPlayer = GetValue(CommonOptionKey.CanKillVentInPlayer);
+            Ship.EngineerUseImpostorVent = GetValue(CommonOptionKey.EngineerUseImpostorVent);
+            Ship.DisableSelfVote = GetValue(CommonOptionKey.DisableSelfVote);
+            Ship.DisableTaskWinWhenNoneTaskCrew = GetValue(CommonOptionKey.DisableTaskWinWhenNoneTaskCrew);
+            Ship.DisableTaskWin = GetValue(CommonOptionKey.DisableTaskWin);
+            Ship.IsSameNeutralSameWin = GetValue(CommonOptionKey.IsSameNeutralSameWin);
+            Ship.DisableNeutralSpecialForceEnd = GetValue(CommonOptionKey.DisableNeutralSpecialForceEnd);
 
-            Ship.IsAutoSelectRandomSpawn = AllOption[
-                (int)CommonOptionKey.IsAutoSelectRandomSpawn].GetValue();
+            Ship.IsAssignNeutralToVanillaCrewGhostRole = GetValue(
+                CommonOptionKey.IsAssignNeutralToVanillaCrewGhostRole);
+            Ship.IsRemoveAngleIcon = GetValue(CommonOptionKey.IsRemoveAngleIcon);
+            Ship.IsBlockGAAbilityReport = GetValue(CommonOptionKey.IsBlockGAAbilityReport);
 
-            Ship.IsRemoveAdmin = AllOption[
-                (int)CommonOptionKey.IsRemoveAdmin].GetValue();
-            Ship.AirShipEnable = (AirShipAdminMode)AllOption[
-                (int)CommonOptionKey.AirShipEnableAdmin].GetValue();
-            Ship.EnableAdminLimit = AllOption[
-                (int)CommonOptionKey.EnableAdminLimit].GetValue();
-            Ship.AdminLimitTime = AllOption[
-                (int)CommonOptionKey.AdminLimitTime].GetValue();
+            Ship.IsAutoSelectRandomSpawn = GetValue(CommonOptionKey.IsAutoSelectRandomSpawn);
+
+            Ship.IsRemoveAdmin = GetValue(CommonOptionKey.IsRemoveAdmin);
+            Ship.AirShipEnable = (AirShipAdminMode)GetValue(CommonOptionKey.AirShipEnableAdmin);
+            Ship.EnableAdminLimit = GetValue(CommonOptionKey.EnableAdminLimit);
+            Ship.AdminLimitTime = GetValue(CommonOptionKey.AdminLimitTime);
 
 
-            Ship.IsRemoveSecurity = AllOption[
-                (int)CommonOptionKey.IsRemoveSecurity].GetValue();
-            Ship.EnableSecurityLimit = AllOption[
-                (int)CommonOptionKey.EnableSecurityLimit].GetValue();
-            Ship.SecurityLimitTime = AllOption[
-                (int)CommonOptionKey.SecurityLimitTime].GetValue();
+            Ship.IsRemoveSecurity = GetValue(CommonOptionKey.IsRemoveSecurity);
+            Ship.EnableSecurityLimit = GetValue(CommonOptionKey.EnableSecurityLimit);
+            Ship.SecurityLimitTime = GetValue(CommonOptionKey.SecurityLimitTime);
 
-            Ship.IsRemoveVital = AllOption[
-                (int)CommonOptionKey.IsRemoveVital].GetValue();
-            Ship.EnableVitalLimit = AllOption[
-                (int)CommonOptionKey.EnableVitalLimit].GetValue();
-            Ship.VitalLimitTime = AllOption[
-                (int)CommonOptionKey.VitalLimitTime].GetValue();
+            Ship.IsRemoveVital = GetValue(CommonOptionKey.IsRemoveVital);
+            Ship.EnableVitalLimit = GetValue(CommonOptionKey.EnableVitalLimit);
+            Ship.VitalLimitTime = GetValue(CommonOptionKey.VitalLimitTime);
 
             Client.GhostsSeeRole = ConfigParser.GhostsSeeRoles.Value;
             Client.GhostsSeeTask = ConfigParser.GhostsSeeTasks.Value;
