@@ -164,6 +164,8 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 - Microsoft.CSharp: dynamic型を使用するために使用
 - GAHAG : https://gahag.net/ ボタンを作る際に使用
 - Google Font Icons : https://fonts.google.com/icons ApacheLicenceV2、いくつかのアイコンを作るためにいくつか改変を加えて使用
+- 効果音ラボ：https://soundeffect-lab.info/、いくつかの役職のSEを使用
+- 無料効果音で遊ぼう：https://taira-komori.jpn.org/welcome.html、いくつかの役職のSEを使用
 
 ### ボタンのアイコンについて
 ボタンのアイコン画像はパブリックドメインの著作権が放棄された素材を元に作成しています。気に食わなくて差し替えたい場合は連絡を下さい
