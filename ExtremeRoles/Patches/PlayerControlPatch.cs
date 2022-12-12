@@ -20,6 +20,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using AmongUs.GameOptions;
 
+
 namespace ExtremeRoles.Patches
 {
     [HarmonyPatch]
@@ -724,10 +725,8 @@ namespace ExtremeRoles.Patches
             __instance.logger.Debug(
                 $"{__instance.PlayerId} trying to murder {target.PlayerId}", null);
 
-            GameData.PlayerInfo data = target.Data;
             if (target.protectedByGuardian)
             {
-
                 target.protectedByGuardianThisRound = true;
                 bool flag = CachedPlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel;
                 if (__instance.AmOwner || flag)
@@ -750,76 +749,7 @@ namespace ExtremeRoles.Patches
                 return false;
             }
 
-            if (__instance.AmOwner)
-            {
-                StatsManager.Instance.IncrementStat(StringNames.StatsImpostorKills);
-                if (__instance.CurrentOutfitType == PlayerOutfitType.Shapeshifted)
-                {
-                    StatsManager.Instance.IncrementStat(StringNames.StatsShapeshifterShiftedKills);
-                }
-                if (Constants.ShouldPlaySfx())
-                {
-                    SoundManager.Instance.PlaySound(
-                        __instance.KillSfx, false, 0.8f);
-                }
-                __instance.SetKillTimer(killCool);
-            }
-            FastDestroyableSingleton<Telemetry>.Instance.WriteMurder();
-	        target.gameObject.layer = LayerMask.NameToLayer("Ghost");
-	        if (target.AmOwner)
-	        {
-		        StatsManager.Instance.IncrementStat(StringNames.StatsTimesMurdered);
-		        if (Minigame.Instance)
-		        {
-			        try
-			        {
-				        Minigame.Instance.Close();
-				        Minigame.Instance.Close();
-			        }
-			        catch
-			        { }
-		        }
-                FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(
-                    __instance.Data, data);
-                FastDestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
-		        target.cosmetics.SetNameMask(false);
-		        target.RpcSetScanner(false);
-		        ImportantTextTask importantTextTask = new GameObject("_Player").AddComponent<ImportantTextTask>();
-		        importantTextTask.transform.SetParent(
-                    __instance.transform, false);
-		        if (!GameOptionsManager.Instance.CurrentGameOptions.GetBool(
-                        BoolOptionNames.GhostsDoTasks))
-		        {
-			        target.ClearTasks();
-			        importantTextTask.Text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
-                        StringNames.GhostIgnoreTasks, Array.Empty<Il2CppSystem.Object>());
-		        }
-		        else
-		        {
-			        importantTextTask.Text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
-                        StringNames.GhostDoTasks, Array.Empty<Il2CppSystem.Object>());
-		        }
-		        target.myTasks.Insert(0, importantTextTask);
-	        }
-            FastDestroyableSingleton<AchievementManager>.Instance.OnMurder(
-                __instance.AmOwner, target.AmOwner, false);
-                
-            var killAnimation = __instance.KillAnimations.ToList();
-
-            var useKillAnimation = default(KillAnimation);
-
-            if (killAnimation.Count > 0)
-            {
-                useKillAnimation = killAnimation[UnityEngine.Random.Range(
-                    0, killAnimation.Count)];
-            }
-
-            __instance.MyPhysics.StartCoroutine(
-                useKillAnimation.CoPerformKill(__instance, target));
-
-            __instance.logger.Debug(
-                $"{__instance.PlayerId} succeeded in murdering {target.PlayerId}", null);
-
+            murderPlayerBody(__instance, target, killCool);
             return false;
         }
 
@@ -898,10 +828,25 @@ namespace ExtremeRoles.Patches
             {
                 target.RemoveProtection();
             }
+            murderPlayerBody(instance, target, killCool);
+        }
 
+        private static void murderPlayerBody(
+            PlayerControl instance,
+            PlayerControl target,
+            float killCool)
+        {
             if (instance.AmOwner)
             {
-                StatsManager.Instance.IncrementStat(StringNames.StatsImpostorKills);
+                if (GameManager.Instance.IsHideAndSeek())
+                {
+                    StatsManager.Instance.IncrementStat(
+                        StringNames.StatsImpostorKills_HideAndSeek);
+                }
+                else
+                {
+                    StatsManager.Instance.IncrementStat(StringNames.StatsImpostorKills);
+                }
                 if (instance.CurrentOutfitType == PlayerOutfitType.Shapeshifted)
                 {
                     StatsManager.Instance.IncrementStat(StringNames.StatsShapeshifterShiftedKills);
@@ -909,11 +854,13 @@ namespace ExtremeRoles.Patches
                 if (Constants.ShouldPlaySfx())
                 {
                     SoundManager.Instance.PlaySound(
-                        instance.KillSfx, false, 0.8f);
+                        instance.KillSfx, false, 0.8f, null);
                 }
                 instance.SetKillTimer(killCool);
             }
+            
             FastDestroyableSingleton<Telemetry>.Instance.WriteMurder();
+
             target.gameObject.layer = LayerMask.NameToLayer("Ghost");
             if (target.AmOwner)
             {
@@ -926,35 +873,20 @@ namespace ExtremeRoles.Patches
                         Minigame.Instance.Close();
                     }
                     catch
-                    { }
+                    {
+                    }
                 }
                 FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(
                     instance.Data, target.Data);
                 FastDestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
                 target.cosmetics.SetNameMask(false);
                 target.RpcSetScanner(false);
-                ImportantTextTask importantTextTask = new GameObject("_Player").AddComponent<ImportantTextTask>();
-                importantTextTask.transform.SetParent(
-                    instance.transform, false);
-                if (!GameOptionsManager.Instance.CurrentGameOptions.GetBool(
-                        BoolOptionNames.GhostsDoTasks))
-                {
-                    target.ClearTasks();
-                    importantTextTask.Text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
-                        StringNames.GhostIgnoreTasks, Array.Empty<Il2CppSystem.Object>());
-                }
-                else
-                {
-                    importantTextTask.Text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
-                        StringNames.GhostDoTasks, Array.Empty<Il2CppSystem.Object>());
-                }
-                target.myTasks.Insert(0, importantTextTask);
             }
             FastDestroyableSingleton<AchievementManager>.Instance.OnMurder(
-                instance.AmOwner, target.AmOwner, false);
+                instance.AmOwner, target.AmOwner,
+                instance.CurrentOutfitType == PlayerOutfitType.Shapeshifted);
 
-            var killAnimation = instance.KillAnimations.ToList();
-
+            var killAnimation = instance.KillAnimations;
             var useKillAnimation = default(KillAnimation);
 
             if (killAnimation.Count > 0)
@@ -963,11 +895,12 @@ namespace ExtremeRoles.Patches
                     0, killAnimation.Count)];
             }
 
-            instance.MyPhysics.StartCoroutine(
-                useKillAnimation.CoPerformKill(instance, target));
+            instance.MyPhysics.StartCoroutine(useKillAnimation.CoPerformKill(instance, target));
+
+            instance.logger.Debug(
+                string.Format("{0} succeeded in murdering {1}", instance.PlayerId, target.PlayerId), null);
         }
     }
-
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetKillTimer))]
     public static class PlayerControlSetCoolDownPatch
@@ -1070,15 +1003,9 @@ namespace ExtremeRoles.Patches
                 };
 
                 roleEffectAnimation.MidAnimCB = changeAction;
-                
-                if (Constants.ShouldHorseAround())
-                {
-                    __instance.StartCoroutine(__instance.ScalePlayer(0.3f, 0.25f));
-                }
-                else
-                {
-                    __instance.StartCoroutine(__instance.ScalePlayer(0.7f, 0.25f));
-                }
+
+                __instance.StartCoroutine(__instance.ScalePlayer(
+                    __instance.MyPhysics.Animations.ShapeshiftScale, 0.25f));
 
                 Action roleAnimation = () =>
                 {
