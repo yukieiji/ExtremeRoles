@@ -151,6 +151,7 @@ namespace ExtremeRoles.Patches.Manager
             {
                 case GameOverReason.HumansByTask:
                 case GameOverReason.HumansByVote:
+                case GameOverReason.HideAndSeek_ByTimer:
                     winDetailText.Add(Translation.GetString(
                         RoleTypes.Crewmate.ToString()));
                     textRenderer.color = Palette.White;
@@ -158,6 +159,7 @@ namespace ExtremeRoles.Patches.Manager
                 case GameOverReason.ImpostorByKill:
                 case GameOverReason.ImpostorByVote:
                 case GameOverReason.ImpostorBySabotage:
+                case GameOverReason.HideAndSeek_ByKills:
                 case (GameOverReason)RoleGameOverReason.AssassinationMarin:
                     winDetailText.Add(Translation.GetString(
                         RoleTypes.Impostor.ToString()));
