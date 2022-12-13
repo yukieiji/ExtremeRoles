@@ -262,6 +262,10 @@ namespace ExtremeRoles.Helper
                     player.Data, PlayerOutfitType.Default,
                     PlayerMaterial.MaskType.None, true);
                 poolPlayer.cosmetics.SetName(player.Data.DefaultOutfit.PlayerName);
+                poolPlayer.cosmetics.nameText.transform.localPosition = new Vector3(
+                    poolPlayer.cosmetics.nameText.transform.localPosition.x,
+                    poolPlayer.cosmetics.nameText.transform.localPosition.y - 1.0f,
+                    poolPlayer.cosmetics.nameText.transform.localPosition.z);
                 poolPlayer.name = $"poolable_{player.PlayerId}";
                 poolPlayer.SetFlipX(true);
                 poolPlayer.gameObject.SetActive(false);

@@ -90,10 +90,11 @@ namespace ExtremeRoles.Patches.Manager
 
                 poolablePlayer.cosmetics.nameText.color = Color.white;
                 poolablePlayer.cosmetics.nameText.lineSpacing *= 0.7f;
-                poolablePlayer.cosmetics.nameText.transform.localScale = new Vector3(1f / vector.x, 1f / vector.y, 1f / vector.z);
+                poolablePlayer.cosmetics.nameText.transform.localScale = new Vector3(
+                    1f / vector.x, 1f / vector.y, 1f / vector.z);
                 poolablePlayer.cosmetics.nameText.transform.localPosition = new Vector3(
                     poolablePlayer.cosmetics.nameText.transform.localPosition.x,
-                    poolablePlayer.cosmetics.nameText.transform.localPosition.y, -15f);
+                    poolablePlayer.cosmetics.nameText.transform.localPosition.y - 1.0f, -15f);
                 poolablePlayer.cosmetics.nameText.text = winningPlayerData.PlayerName;
 
                 foreach (var data in FinalSummary.GetSummary())
