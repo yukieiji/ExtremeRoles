@@ -50,17 +50,17 @@ namespace ExtremeSkins.Helper
         {
             if (HatsTabPatch.Tab != null)
             {
-                Object.Destroy(HatsTabPatch.Tab.gameObject);
+                Object.DestroyImmediate(HatsTabPatch.Tab.gameObject);
                 HatsTabPatch.Tab = null;
             }
             if (NameplatesTabPatch.Tab != null)
             {
-                Object.Destroy(NameplatesTabPatch.Tab.gameObject);
+                Object.DestroyImmediate(NameplatesTabPatch.Tab.gameObject);
                 NameplatesTabPatch.Tab = null;
             }
             if (VisorsTabPatch.Tab != null)
             {
-                Object.Destroy(VisorsTabPatch.Tab.gameObject);
+                Object.DestroyImmediate(VisorsTabPatch.Tab.gameObject);
                 VisorsTabPatch.Tab = null;
             }
         }
@@ -70,7 +70,7 @@ namespace ExtremeSkins.Helper
             if (items == null) { return; }
             foreach (T item in items)
             {
-                Object.Destroy(item);
+                Object.DestroyImmediate(item);
             }
         }
 
