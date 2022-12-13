@@ -25,6 +25,8 @@ namespace ExtremeRoles.Roles.Solo.Host
         public static void SpecialKeyShortCut()
         {
             if (!AmongUsClient.Instance.AmHost) { return; }
+            // HotFix : BlackOut AmongUs
+            /*
             if (Input.GetKeyDown(functionCall) &&
                 isLocalGame() &&
                 Helper.GameSystem.IsLobby &&
@@ -32,6 +34,7 @@ namespace ExtremeRoles.Roles.Solo.Host
             {
                 spawnDummy();
             }
+            */
         }
 
         private void keyBind()
