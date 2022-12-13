@@ -19,8 +19,11 @@ namespace ExtremeRoles.Patches.Option
     {
         public static bool Prefix(ref int __result)
         {
-            __result = GameOptionsManager.Instance.CurrentGameOptions.GetInt(
-                Int32OptionNames.NumImpostors);
+            var currentGameOptions = GameOptionsManager.Instance.CurrentGameOptions;
+
+            if (currentGameOptions.GameMode != GameModes.Normal) { return true; }
+
+            __result = currentGameOptions.GetInt(Int32OptionNames.NumImpostors);
             return false;
         }
     }
