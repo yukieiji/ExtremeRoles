@@ -24,8 +24,6 @@ namespace ExtremeRoles.Patches.Button
                 {
                     Mode = MapOptions.Modes.Sabotage,
                     AllowMovementWhileMapOpen = true,
-                    ShowLivePlayerPosition = true,
-                    IncludeDeadBodies = false,
                 });
             return false;
         }

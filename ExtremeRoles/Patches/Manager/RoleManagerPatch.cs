@@ -12,6 +12,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.Manager
 {
@@ -686,8 +687,8 @@ namespace ExtremeRoles.Patches.Manager
         }
     }
 
-    [HarmonyPatch(typeof(RoleManager), nameof(RoleManager.TryAssignSpecialGhostRoles))]
-    class RoleManagerTryAssignRoleOnDeathPatch
+    [HarmonyPatch(typeof(RoleManager), nameof(RoleManager.AssignRoleOnDeath))]
+    public static class RoleManagerAssignRoleOnDeathPatch
     {
         public static bool Prefix([HarmonyArgument(0)] PlayerControl player)
         {
@@ -699,27 +700,69 @@ namespace ExtremeRoles.Patches.Manager
             }
 
             var role = ExtremeRoleManager.GameRole[player.PlayerId];
-
             if (!role.IsAssignGhostRole()) { return false; }
             if (ExtremeGhostRoleManager.IsCombRole(role.Id)) { return false; }
 
-            if (role.IsNeutral() &&
-                !OptionHolder.Ship.IsAssignNeutralToVanillaCrewGhostRole)
-            {
-                return false;
-            }
-           
             return true;
         }
 
         public static void Postfix([HarmonyArgument(0)] PlayerControl player)
         {
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
-            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
-
-            if (!ExtremeRoleManager.GameRole[player.PlayerId].IsAssignGhostRole()) { return; }
+            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd ||
+                !ExtremeRoleManager.GameRole[player.PlayerId].IsAssignGhostRole()) { return; }
             
             ExtremeGhostRoleManager.AssignGhostRoleToPlayer(player);
+        }
+    }
+
+    [HarmonyPatch(typeof(RoleManager), nameof(RoleManager.TryAssignSpecialGhostRoles))]
+    public static class RoleManagerTryAssignRoleOnDeathPatch
+    {
+        // クルーの幽霊役職の処理（インポスターの時はここに来ない）
+        public static bool Prefix([HarmonyArgument(0)] PlayerControl player)
+        {
+            if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
+            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return true; }
+            // バニラ幽霊クルー役職にニュートラルがアサインされる時やゲームモードがクラッシクではない時は常にTrueを返す
+            if (OptionHolder.Ship.IsAssignNeutralToVanillaCrewGhostRole ||
+                GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal)
+            {
+                return true;
+            }
+
+            var role = ExtremeRoleManager.GameRole[player.PlayerId];
+
+            if (role.IsNeutral()) { return false; }
+
+            // デフォルトのメソッドではニュートラルもクルー陣営の死亡者数にカウントされてアサインされなくなるため
+            RoleTypes roleTypes = RoleTypes.GuardianAngel;
+
+            int num = CachedPlayerControl.AllPlayerControls.Count(
+                (CachedPlayerControl pc) => 
+                    pc.Data.IsDead && 
+                    !pc.Data.Role.IsImpostor &&
+                    ExtremeRoleManager.GameRole[pc.PlayerId].IsCrewmate());
+
+            IRoleOptionsCollection roleOptions = GameOptionsManager.Instance.CurrentGameOptions.RoleOptions;
+            if (AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay)
+            {
+                player.RpcSetRole(roleTypes);
+                return false;
+            }
+            if (num > roleOptions.GetNumPerGame(roleTypes))
+            {
+                return false;
+            }
+            
+            int chancePerGame = roleOptions.GetChancePerGame(roleTypes);
+            
+            if (HashRandom.Next(101) < chancePerGame)
+            {
+                player.RpcSetRole(roleTypes);
+            }
+
+            return false;
         }
     }
 }
