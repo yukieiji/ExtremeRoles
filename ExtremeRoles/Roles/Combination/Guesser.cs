@@ -424,7 +424,7 @@ namespace ExtremeRoles.Roles.Combination
         public void SetSprite(SpriteRenderer render)
         {
             render.sprite = Loader.CreateSpriteFromResources(
-                Path.TestButton);
+                Path.GuesserGuess);
             render.transform.localScale *= new Vector2(0.625f, 0.625f);
         }
 

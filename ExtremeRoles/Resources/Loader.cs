@@ -38,6 +38,7 @@ namespace ExtremeRoles.Resources
             "ExtremeRoles.Resources.TabGhostNeutralSetting.png";
 
         public const string HiroAcaSearch = "ExtremeRoles.Resources.Search.png";
+        public const string GuesserGuess = "ExtremeRoles.Resources.GuesserGuess.png";
 
         public const string MaintainerRepair = "ExtremeRoles.Resources.Repair.png";
         public const string BodyGuardShield = "ExtremeRoles.Resources.Shield.png";
