@@ -6,9 +6,12 @@ namespace ExtremeRoles.Roles.Solo.Host
     {
         public static void Purge()
         {
-            var useButton = FastDestroyableSingleton<HudManager>.Instance.UseButton;
-            GridArrange grid = useButton.transform.parent.gameObject.GetComponent<GridArrange>();
-            grid.MaxColumns = 3;
+            if (DestroyableSingleton<HudManager>.InstanceExists)
+            {
+                var useButton = FastDestroyableSingleton<HudManager>.Instance.UseButton;
+                GridArrange grid = useButton.transform.parent.gameObject.GetComponent<GridArrange>();
+                grid.MaxColumns = 3;
+            }
 
             PlayerId = byte.MaxValue;
             voted = false;
