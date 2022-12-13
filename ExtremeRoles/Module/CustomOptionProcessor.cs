@@ -19,6 +19,8 @@ namespace ExtremeRoles.Module
 
         private const string comma = ",";
 
+        private const int curVersion = 7;
+
         public static bool Export()
         {
             Helper.Logging.Debug("Export Start!!!!!!");
@@ -64,9 +66,9 @@ namespace ExtremeRoles.Module
                         IGameOptions option = gameMode switch
                         {
                             GameModes.Normal => 
-                                gameOptionManager.normalGameSearchOptions.Cast<IGameOptions>(),
+                                gameOptionManager.normalGameHostOptions.Cast<IGameOptions>(),
                             GameModes.HideNSeek =>
-                                gameOptionManager.normalGameSearchOptions.Cast<IGameOptions>(),
+                                gameOptionManager.hideNSeekGameHostOptions.Cast<IGameOptions>(),
                             _ => null,
                         };
                         if (option == null) { continue; }
@@ -121,7 +123,7 @@ namespace ExtremeRoles.Module
                                 importedVanillaOptions.Add(mode, modeOption);
                             }
 
-                            modeOption.Add(byte.Parse(option[1]));
+                            modeOption.Add(byte.Parse(option[2]));
                         }
                         else
                         {
@@ -140,14 +142,36 @@ namespace ExtremeRoles.Module
                     IGameOptions option = gameOptionManager.gameOptionsFactory.FromBytes(
                         bytedOptions.ToArray());
 
+                    if (option == null) { continue; }
+                    
                     switch (mode)
                     {
                         case GameModes.Normal:
-                            gameOptionManager.normalGameSearchOptions = option.Cast<NormalGameOptionsV07>();
+
+                            NormalGameOptionsV07 normalOption = option.Cast<NormalGameOptionsV07>();
+
+                            if (option.Version < curVersion)
+                            {
+                                normalOption = gameOptionManager.MigrateNormalGameOptions(option);
+                            }
+                            
+                            if (normalOption == null) { continue; }
+
+                            gameOptionManager.normalGameHostOptions = normalOption;
+                            gameOptionManager.SaveNormalHostOptions();
                             break;
                         case GameModes.HideNSeek:
-                            gameOptionManager.hideNSeekGameSearchOptions = 
-                                option.Cast<HideNSeekGameOptionsV07>();
+                            HideNSeekGameOptionsV07 hideNSeekOption = option.Cast<HideNSeekGameOptionsV07>();
+
+                            if (option.Version < curVersion)
+                            {
+                                hideNSeekOption = gameOptionManager.MigrateHideNSeekGameOptions(option);
+                            }
+
+                            if (hideNSeekOption == null) { continue; }
+
+                            gameOptionManager.hideNSeekGameHostOptions = hideNSeekOption;
+                            gameOptionManager.SaveHideNSeekHostOptions();
                             break;
                         default:
                             break;
