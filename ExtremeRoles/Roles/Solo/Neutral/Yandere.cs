@@ -8,6 +8,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
@@ -477,7 +478,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
             else
             {
-                this.defaultKillCool = PlayerControl.GameOptions.KillCooldown;
+                this.defaultKillCool = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
+                    FloatOptionNames.KillCooldown);
                 this.HasOtherKillCool = true;
             }
 

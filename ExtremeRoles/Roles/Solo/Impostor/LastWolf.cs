@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using UnityEngine;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -345,7 +345,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.isAwakedHasOtherKillRange = true;
             }
 
-            if (this.awakeImpNum >= PlayerControl.GameOptions.NumImpostors)
+            if (this.awakeImpNum >= GameOptionsManager.Instance.CurrentGameOptions.GetInt(
+                    Int32OptionNames.NumImpostors))
             {
                 this.isAwake = true;
                 this.HasOtherVison = this.isAwakedHasOtherVision;

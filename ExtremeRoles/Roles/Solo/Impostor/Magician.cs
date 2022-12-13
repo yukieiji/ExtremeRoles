@@ -12,6 +12,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
+using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -100,7 +101,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 new Vector2(x.transform.position.x, x.transform.position.y)
             ));
 
-            byte mapId = PlayerControl.GameOptions.MapId;
+            byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                ByteOptionNames.MapId);
 
             List<Vector2> additionalPos = new List<Vector2>();
 

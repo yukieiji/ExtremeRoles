@@ -3,6 +3,8 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
+using AmongUs.GameOptions;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
@@ -250,7 +252,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 if (meetingVoteText == null)
                 {
                     meetingVoteText = UnityEngine.Object.Instantiate(
-                        FastDestroyableSingleton<HudManager>.Instance.TaskText,
+                        FastDestroyableSingleton<HudManager>.Instance.TaskPanel.taskText,
                         MeetingHud.Instance.transform);
                     meetingVoteText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
                     meetingVoteText.transform.position = Vector3.zero;

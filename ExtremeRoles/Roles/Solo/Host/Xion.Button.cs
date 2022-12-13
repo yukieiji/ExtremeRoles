@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
-
 using ExtremeRoles.Performance;
-
+using ExtremeRoles.Roles.Solo.Host.Button;
 
 namespace ExtremeRoles.Roles.Solo.Host
 {
@@ -148,9 +148,9 @@ namespace ExtremeRoles.Roles.Solo.Host
             }
         }
 
+
         private List<NoneCoolTimeButton> funcButton = new List<NoneCoolTimeButton>();
-        private Dictionary<byte, (PoolablePlayer, NoneCoolTimeButton)> acitonToPlayerButton = 
-            new Dictionary<byte, (PoolablePlayer, NoneCoolTimeButton)>();
+        private XionActionToPlayerButton playerActionButton = null;
 
         private const float zoomOutFactor = 1.25f;
         private const float zoomInFactor = 0.8f;
@@ -162,8 +162,6 @@ namespace ExtremeRoles.Roles.Solo.Host
             Alive,
             Dead
         }
-
-        private Dictionary<byte, PlayerState> playerState = new Dictionary<byte, PlayerState>();
 
         public void CreateButton()
         {
@@ -221,35 +219,7 @@ namespace ExtremeRoles.Roles.Solo.Host
                     Helper.Translation.GetString("speedDown")));
 
             // プレイヤーに関する能力周り
-            this.acitonToPlayerButton = 
-                new Dictionary<byte, (PoolablePlayer, NoneCoolTimeButton)>();
-            this.playerState = new Dictionary<byte, PlayerState>();
-
-            Dictionary<byte, PoolablePlayer> poolPlayer = Helper.Player.CreatePlayerIcon();
-            foreach (var (playerId, pool) in poolPlayer)
-            {
-
-                if (playerId == PlayerId) { continue; }
-                GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
-                if (player == null || player.Disconnected)
-                {
-                    continue;
-                }
-
-                this.playerState[playerId] = player.IsDead ? PlayerState.Dead : PlayerState.Alive;
-                pool.transform.localScale = Vector3.one * 0.275f;
-                this.acitonToPlayerButton.Add(
-                    playerId,
-                    (
-                        pool,
-                        new NoneCoolTimeButton(
-                            null,
-                            this.createPlayerButtonAction(playerId), // 座標設定
-                            new Vector3(0.4f, 0.25f, 1.0f),
-                            "", true)
-                    ));
-            }
-            this.replacePlayerButtonPos();
+            this.playerActionButton = new XionActionToPlayerButton(PlayerId);
         }
 
         private void disableButton()
@@ -275,17 +245,12 @@ namespace ExtremeRoles.Roles.Solo.Host
 
         private void buttonUpdate()
         {
-            foreach(NoneCoolTimeButton button in this.funcButton)
+            foreach (NoneCoolTimeButton button in this.funcButton)
             {
                 button.Update();
             }
-            
-            this.replacePlayerButtonPos();
 
-            foreach (var (playerId, (playerIcon, button)) in this.acitonToPlayerButton)
-            {
-                button.Update();
-            }
+            this.playerActionButton?.Update(this.isHideGUI);
         }
 
         private void resetCoolTime()
@@ -294,10 +259,7 @@ namespace ExtremeRoles.Roles.Solo.Host
             {
                 button.ResetCoolTimer();
             }
-            foreach (var (_, button) in this.acitonToPlayerButton.Values)
-            {
-                button.ResetCoolTimer();
-            }
+            this.playerActionButton?.ResetCoolTime();
         }
 
         private void setButtonActive(bool active)
@@ -311,11 +273,7 @@ namespace ExtremeRoles.Roles.Solo.Host
             {
                 button.SetActive(active);
             }
-            foreach (var(pool, button) in this.acitonToPlayerButton.Values)
-            {
-                pool.gameObject.SetActive(active);
-                button.SetActive(active);
-            }
+            this.playerActionButton?.SetActive(active);
         }
 
         private void cameraZoomOut()
@@ -350,81 +308,30 @@ namespace ExtremeRoles.Roles.Solo.Host
             // This will move button positions to the correct position.
         }
 
-        private Action createPlayerButtonAction(byte playerId)
+        public static Action GetPlayerButtonAction(byte playerId)
         {
-            GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
-
             return () =>
             {
+                GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
                 if (player == null || player.Disconnected) { return; }
 
                 if (Input.GetKey(ops))
                 {
                     if (player.IsDead)
                     {
-                        this.RpcRevive(playerId);
+                        Player.RpcUncheckRevive(playerId);
                     }
                     else
                     {
-                        this.RpcKill(playerId);
+                        Player.RpcUncheckMurderPlayer(
+                            playerId, playerId, byte.MaxValue);
                     }
                 }
                 else
                 {
-                    this.RpcTeleport(player.Object);
+                    rpcTeleport(player.Object);
                 }
             };
-        }
-
-        private void replacePlayerButtonPos()
-        {
-            
-            if (MeetingHud.Instance) { return; }
-
-            Vector3 iconBase = FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition;
-            iconBase.x *= -1;
-            int index = 0;
-
-            List<byte> remove = new List<byte>();
-
-            foreach (var (playerId,(pool, button)) in this.acitonToPlayerButton)
-            {
-
-                GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
-                if (player == null || player.Disconnected)
-                {
-                    button.SetActive(false);
-                    pool.gameObject.SetActive(false);
-                    remove.Add(playerId);
-                    continue;
-                }
-
-                bool active = !this.isHideGUI;
-
-                pool.gameObject.SetActive(active);
-                button.SetActive(active);
-                bool isDead = player.IsDead;
-                PlayerState curState = isDead ? PlayerState.Dead : PlayerState.Alive;
-
-                if (this.playerState[playerId] != curState)
-                {
-                    pool.UpdateFromPlayerData(
-                        player, PlayerOutfitType.Default,
-                        PlayerMaterial.MaskType.None, isDead);
-                }
-                Vector3 pos = new Vector3(-0.35f, -0.25f, 1.0f) + Vector3.right * index * 0.55f;
-                button.SetOffset(pos);
-                pool.transform.localPosition = iconBase + pos;
-
-                this.playerState[playerId] = curState;
-                
-                ++index;
-            }
-
-            foreach (byte playerId in remove)
-            {
-                this.acitonToPlayerButton.Remove(playerId);
-            }
         }
     }
 }

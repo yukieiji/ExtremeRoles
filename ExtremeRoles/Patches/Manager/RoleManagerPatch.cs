@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using HarmonyLib;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Helper;
@@ -11,6 +12,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.Manager
 {
@@ -29,15 +31,17 @@ namespace ExtremeRoles.Patches.Manager
         {
             roleList.Clear();
             readyPlayer.Clear();
+
             useXion = OptionHolder.AllOption[(int)OptionHolder.CommonOptionKey.UseXion].GetValue();
-            if (useXion)
-            {
-                PlayerControl loaclPlayer = PlayerControl.LocalPlayer;
-                roleList.Add(new AssignedPlayerToSingleRoleData(
-                    loaclPlayer.PlayerId, (int)ExtremeRoleId.Xion));
-                loaclPlayer.RpcSetRole(RoleTypes.Crewmate);
-                loaclPlayer.Data.IsDead = true;
-            }
+            
+            if (!useXion || 
+                GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal) { return; }
+
+            PlayerControl loaclPlayer = PlayerControl.LocalPlayer;
+            roleList.Add(new AssignedPlayerToSingleRoleData(
+                loaclPlayer.PlayerId, (int)ExtremeRoleId.Xion));
+            loaclPlayer.RpcSetRole(RoleTypes.Crewmate);
+            loaclPlayer.Data.IsDead = true;
         }
         public static void Postfix()
         {
@@ -48,7 +52,20 @@ namespace ExtremeRoles.Patches.Manager
             RPCOperator.Initialize();
 
             PlayerControl[] playeres = PlayerControl.AllPlayerControls.ToArray();
+            
+            if (GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal)
+            {
+                foreach (var player in playeres)
+                {
+                    roleList.Add(
+                        new AssignedPlayerToSingleRoleData(
+                            player.PlayerId, (byte)player.Data.Role.Role));
+                }
+                return;
+            }
+
             var playerIndexList = Enumerable.Range(0, playeres.Count()).ToList();
+
             if (useXion)
             {
                 playerIndexList.RemoveAll(i => playeres[i].PlayerId == PlayerControl.LocalPlayer.PlayerId);
@@ -272,8 +289,8 @@ namespace ExtremeRoles.Patches.Manager
             int gameControlId = 0;
             int curImpNum = 0;
             int curCrewNum = 0;
-            int maxImpNum = PlayerControl.GameOptions.NumImpostors;
-
+            int maxImpNum = GameOptionsManager.Instance.CurrentGameOptions.GetInt(
+                Int32OptionNames.NumImpostors);
             foreach (var oneRole in roleDataLoop)
             {
                 var ((combType, roleManager), (num, spawnRate, isMultiAssign)) = oneRole;
@@ -670,36 +687,82 @@ namespace ExtremeRoles.Patches.Manager
         }
     }
 
-    [HarmonyPatch(typeof(RoleManager), nameof(RoleManager.TryAssignRoleOnDeath))]
-    class RoleManagerTryAssignRoleOnDeathPatch
+    [HarmonyPatch(typeof(RoleManager), nameof(RoleManager.AssignRoleOnDeath))]
+    public static class RoleManagerAssignRoleOnDeathPatch
     {
         public static bool Prefix([HarmonyArgument(0)] PlayerControl player)
         {
             if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
             if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return true; }
+            if (GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal)
+            { 
+                return true;
+            }
 
             var role = ExtremeRoleManager.GameRole[player.PlayerId];
-
             if (!role.IsAssignGhostRole()) { return false; }
             if (ExtremeGhostRoleManager.IsCombRole(role.Id)) { return false; }
 
-            if (role.IsNeutral() &&
-                !OptionHolder.Ship.IsAssignNeutralToVanillaCrewGhostRole)
-            {
-                return false;
-            }
-           
             return true;
         }
 
         public static void Postfix([HarmonyArgument(0)] PlayerControl player)
         {
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
-            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
-
-            if (!ExtremeRoleManager.GameRole[player.PlayerId].IsAssignGhostRole()) { return; }
+            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd ||
+                !ExtremeRoleManager.GameRole[player.PlayerId].IsAssignGhostRole()) { return; }
             
             ExtremeGhostRoleManager.AssignGhostRoleToPlayer(player);
+        }
+    }
+
+    [HarmonyPatch(typeof(RoleManager), nameof(RoleManager.TryAssignSpecialGhostRoles))]
+    public static class RoleManagerTryAssignRoleOnDeathPatch
+    {
+        // クルーの幽霊役職の処理（インポスターの時はここに来ない）
+        public static bool Prefix([HarmonyArgument(0)] PlayerControl player)
+        {
+            if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
+            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return true; }
+            // バニラ幽霊クルー役職にニュートラルがアサインされる時やゲームモードがクラッシクではない時は常にTrueを返す
+            if (OptionHolder.Ship.IsAssignNeutralToVanillaCrewGhostRole ||
+                GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal)
+            {
+                return true;
+            }
+
+            var role = ExtremeRoleManager.GameRole[player.PlayerId];
+
+            if (role.IsNeutral()) { return false; }
+
+            // デフォルトのメソッドではニュートラルもクルー陣営の死亡者数にカウントされてアサインされなくなるため
+            RoleTypes roleTypes = RoleTypes.GuardianAngel;
+
+            int num = CachedPlayerControl.AllPlayerControls.Count(
+                (CachedPlayerControl pc) => 
+                    pc.Data.IsDead && 
+                    !pc.Data.Role.IsImpostor &&
+                    ExtremeRoleManager.GameRole[pc.PlayerId].IsCrewmate());
+
+            IRoleOptionsCollection roleOptions = GameOptionsManager.Instance.CurrentGameOptions.RoleOptions;
+            if (AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay)
+            {
+                player.RpcSetRole(roleTypes);
+                return false;
+            }
+            if (num > roleOptions.GetNumPerGame(roleTypes))
+            {
+                return false;
+            }
+            
+            int chancePerGame = roleOptions.GetChancePerGame(roleTypes);
+            
+            if (HashRandom.Next(101) < chancePerGame)
+            {
+                player.RpcSetRole(roleTypes);
+            }
+
+            return false;
         }
     }
 }

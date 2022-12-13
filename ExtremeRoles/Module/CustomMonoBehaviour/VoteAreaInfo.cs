@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using TMPro;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.GhostRoles;

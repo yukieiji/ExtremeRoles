@@ -1,4 +1,6 @@
-﻿using ExtremeRoles.Helper;
+﻿using AmongUs.GameOptions;
+
+using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.Solo;
 

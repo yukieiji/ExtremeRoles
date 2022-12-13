@@ -5,6 +5,7 @@ using System.Linq;
 
 using UnityEngine;
 using Hazel;
+using AmongUs.GameOptions;
 
 using Newtonsoft.Json.Linq;
 
@@ -167,7 +168,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public static void UpdateAllDollKillButtonState(Hypnotist role)
         {
             PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
-            float optionKillCool = PlayerControl.GameOptions.KillCooldown;
+            float optionKillCool = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
+                FloatOptionNames.KillCooldown);
             foreach (byte dollPlayerId in role.doll)
             {
                 SingleRoleBase doll = ExtremeRoleManager.GameRole[dollPlayerId];
@@ -630,7 +632,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             this.RoleAbilityInit();
 
-            this.defaultKillCool = PlayerControl.GameOptions.KillCooldown;
+            var curOption = GameOptionsManager.Instance.CurrentGameOptions;
+
+            this.defaultKillCool = curOption.GetFloat(FloatOptionNames.KillCooldown);
 
             if (this.HasOtherKillCool)
             {
@@ -666,7 +670,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 GetRoleOptionId(HypnotistOption.HideKillButtonTime)].GetValue();
 
             this.canAwakeNow =
-                this.awakeCheckImpNum >= PlayerControl.GameOptions.NumImpostors &&
+                this.awakeCheckImpNum >= curOption.GetInt(Int32OptionNames.NumImpostors) &&
                 this.awakeCheckTaskGage <= 0.0f;
 
             this.killCount = 0;
@@ -711,7 +715,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         private void setAbilityPart(int redModuleNum)
         {
-            byte mapId = PlayerControl.GameOptions.MapId;
+            byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                ByteOptionNames.MapId);
 
             if (ExtremeRolesPlugin.Compat.IsModMap)
             {
@@ -1149,8 +1154,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             switch (this.nextUseAbilityType)
             {
                 case AbilityType.Admin:
-                    FastDestroyableSingleton<HudManager>.Instance.ShowMap(
-                        (Action<MapBehaviour>)(m => m.ShowCountOverlay()));
+                    FastDestroyableSingleton<HudManager>.Instance.ToggleMapVisible(
+                        new MapOptions
+                        {
+                            Mode = MapOptions.Modes.CountOverlay,
+                            AllowMovementWhileMapOpen = true,
+                            ShowLivePlayerPosition = true,
+                            IncludeDeadBodies = true,
+                        });
                     break;
                 case AbilityType.Security:
                     SystemConsole watchConsole = GameSystem.GetSecuritySystemConsole();
@@ -1369,11 +1380,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 ++this.nextUseAbilityType;
                 this.nextUseAbilityType = (AbilityType)((int)this.nextUseAbilityType % 3);
+
+                byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                    ByteOptionNames.MapId);
+
                 if (this.nextUseAbilityType == AbilityType.Vital &&
                     (
-                        PlayerControl.GameOptions.MapId == 0 ||
-                        PlayerControl.GameOptions.MapId == 1 ||
-                        PlayerControl.GameOptions.MapId == 3
+                        mapId == 0 ||
+                        mapId == 1 ||
+                        mapId == 3
                     ))
                 {
                     this.nextUseAbilityType = AbilityType.Admin;
@@ -1416,7 +1431,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             if (this.tellText == null)
             {
                 this.tellText = UnityEngine.Object.Instantiate(
-                    FastDestroyableSingleton<HudManager>.Instance.TaskText,
+                    FastDestroyableSingleton<HudManager>.Instance.TaskPanel.taskText,
                     Camera.main.transform, false);
                 this.tellText.transform.localPosition = new Vector3(0.0f, -0.9f, -250.0f);
                 this.tellText.alignment = TMPro.TextAlignmentOptions.Center;

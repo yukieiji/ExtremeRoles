@@ -4,6 +4,7 @@ using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Patches.Controller
 {
@@ -62,7 +63,8 @@ namespace ExtremeRoles.Patches.Controller
             TMPro.TextMeshPro infoText = UnityEngine.Object.Instantiate(
                 __instance.ImpostorText,
                 __instance.Text.transform);
-            if (PlayerControl.GameOptions.ConfirmImpostor)
+            if (GameOptionsManager.Instance.CurrentGameOptions.GetBool(
+                    BoolOptionNames.ConfirmImpostor))
             {
                 infoText.transform.localPosition += new UnityEngine.Vector3(0f, -0.4f, 0f);
             }

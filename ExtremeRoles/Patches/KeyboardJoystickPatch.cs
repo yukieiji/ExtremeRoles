@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
 
 using HarmonyLib;
+using AmongUs.GameOptions;
 
-using Hazel;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;

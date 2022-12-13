@@ -11,6 +11,7 @@ using Hazel;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using AmongUs.GameOptions;
 
 namespace ExtremeRoles.GhostRoles.Crewmate
 {
@@ -173,7 +174,8 @@ namespace ExtremeRoles.GhostRoles.Crewmate
         private Console getLightConsole()
         {
             var console = Object.FindObjectsOfType<Console>();
-            switch (PlayerControl.GameOptions.MapId)
+            switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                ByteOptionNames.MapId))
             {
                 // 0 = Skeld
                 // 1 = Mira HQ
@@ -199,7 +201,8 @@ namespace ExtremeRoles.GhostRoles.Crewmate
         private List<Console> getOxyConsole()
         {
             var console = Object.FindObjectsOfType<Console>().ToList();
-            switch (PlayerControl.GameOptions.MapId)
+            switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                ByteOptionNames.MapId))
             {
                 // 0 = Skeld
                 // 1 = Mira HQ
@@ -234,7 +237,8 @@ namespace ExtremeRoles.GhostRoles.Crewmate
         private List<Console> getHandConsole()
         {
             var console = Object.FindObjectsOfType<Console>().ToList();
-            switch (PlayerControl.GameOptions.MapId)
+            switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                ByteOptionNames.MapId))
             {
                 // 0 = Skeld
                 // 1 = Mira HQ

@@ -2,6 +2,7 @@
 using System.Linq;
 
 using Hazel;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -180,7 +181,7 @@ namespace ExtremeRoles.GhostRoles
 
         private static readonly HashSet<RoleTypes> vanillaGhostRole = new HashSet<RoleTypes>()
         { 
-            RoleTypes.GuardianAngel
+            RoleTypes.GuardianAngel,
         };
 
         private static GhostRoleAssignData assignData;

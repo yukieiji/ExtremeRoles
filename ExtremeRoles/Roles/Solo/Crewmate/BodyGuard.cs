@@ -693,7 +693,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 if (this.meetingText == null)
                 {
                     this.meetingText = UnityEngine.Object.Instantiate(
-                        FastDestroyableSingleton<HudManager>.Instance.TaskText,
+                        FastDestroyableSingleton<HudManager>.Instance.TaskPanel.taskText,
                         MeetingHud.Instance.transform);
                     this.meetingText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
                     this.meetingText.transform.position = Vector3.zero;

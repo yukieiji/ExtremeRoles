@@ -8,7 +8,7 @@ namespace ExtremeRoles.Patches
         public static bool Prefix(ref bool __result)
         {
             if (AmongUsClient.Instance != null && 
-                AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started && 
+                AmongUsClient.Instance.GameState == InnerNet.InnerNetClient.GameStates.Started &&
                 OptionHolder.AllOption[(int)OptionHolder.CommonOptionKey.EnableHorseMode].GetValue())
             {
                 __result = true;
@@ -17,5 +17,4 @@ namespace ExtremeRoles.Patches
             return true;
         }
     }
-
 }

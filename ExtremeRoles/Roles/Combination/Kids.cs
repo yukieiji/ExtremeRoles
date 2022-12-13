@@ -22,6 +22,7 @@ using ExtremeRoles.Module.ExtremeShipStatus;
 
 using GhostAbilityButton = ExtremeRoles.Module.AbilityButton.GhostRoles.AbilityCountButton;
 using RoleButtonBase = ExtremeRoles.Module.AbilityButton.Roles.RoleAbilityButtonBase;
+using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Roles.Combination
 {
@@ -489,7 +490,8 @@ namespace ExtremeRoles.Roles.Combination
 
             public void SetTorch(int num, float range)
             {
-                byte mapId = PlayerControl.GameOptions.MapId;
+                byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                    ByteOptionNames.MapId);
                 int playerNum = CachedPlayerControl.AllPlayerControls.Count;
                 int clampedNum = Math.Clamp(num, 0, playerNum);
                 ShipStatus ship = CachedShipStatus.Instance;

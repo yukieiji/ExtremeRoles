@@ -10,6 +10,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Patches.MiniGame
 {
@@ -120,7 +121,8 @@ namespace ExtremeRoles.Patches.MiniGame
             }
             else
             {
-                switch (PlayerControl.GameOptions.MapId)
+                switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                    ByteOptionNames.MapId))
                 {
                     case 0:
                         vitalObj.Add(GameSystem.SkeldSecurity);

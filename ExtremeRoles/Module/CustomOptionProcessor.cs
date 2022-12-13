@@ -5,6 +5,8 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
+using AmongUs.GameOptions;
+
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module
@@ -16,6 +18,8 @@ namespace ExtremeRoles.Module
         private const string vanilaOptionKey = "BytedVanillaOptions";
 
         private const string comma = ",";
+
+        private const int curVersion = 7;
 
         public static bool Export()
         {
@@ -55,13 +59,20 @@ namespace ExtremeRoles.Module
                         string.Format(
                             "{1}{0}{1}",comma, string.Empty));
 
-                    foreach (byte bytedOption in PlayerControl.GameOptions.ToBytes(6))
+                    var gameOptionManager = GameOptionsManager.Instance;
+
+                    foreach (GameModes gameMode in Enum.GetValues(typeof(GameModes)))
                     {
-                        csv.WriteLine(
-                            string.Format("{1}{0}{2}",
-                                comma,
-                                vanilaOptionKey,
-                                bytedOption));
+                        IGameOptions option = gameMode switch
+                        {
+                            GameModes.Normal => 
+                                gameOptionManager.normalGameHostOptions.Cast<IGameOptions>(),
+                            GameModes.HideNSeek =>
+                                gameOptionManager.hideNSeekGameHostOptions.Cast<IGameOptions>(),
+                            _ => null,
+                        };
+                        if (option == null) { continue; }
+                        exportIGameOptions(csv, gameOptionManager.gameOptionsFactory, option, gameMode);
                     }
                 }
                 return true;
@@ -81,7 +92,8 @@ namespace ExtremeRoles.Module
                 ExtremeRolesPlugin.Logger.LogInfo("---------- Option Import Start ----------");
 
                 Dictionary<string, int> importedOption = new Dictionary<string, int>();
-                List<byte> importedVanillaOptions = new List<byte>();
+                Dictionary<GameModes, List<byte>> importedVanillaOptions = 
+                    new Dictionary<GameModes, List<byte>>();
 
                 using (var csv = new StreamReader(csvName, new UTF8Encoding(true)))
                 {
@@ -102,8 +114,16 @@ namespace ExtremeRoles.Module
                         }
                         else if (option[0] == vanilaOptionKey)
                         {
-                            importedVanillaOptions.Add(
-                                byte.Parse(option[1]));
+                            GameModes mode = (GameModes)Enum.Parse(typeof(GameModes), option[1]);
+
+                            if (!importedVanillaOptions.TryGetValue(
+                                    mode, out List<byte> modeOption))
+                            {
+                                modeOption = new List<byte>();
+                                importedVanillaOptions.Add(mode, modeOption);
+                            }
+
+                            modeOption.Add(byte.Parse(option[2]));
                         }
                         else
                         {
@@ -115,10 +135,47 @@ namespace ExtremeRoles.Module
 
                 }
 
-                if (importedVanillaOptions.Count > 0)
+                var gameOptionManager = GameOptionsManager.Instance;
+
+                foreach (var (mode, bytedOptions) in importedVanillaOptions)
                 {
-                    PlayerControl.GameOptions = GameOptionsData.FromBytes(
-                        importedVanillaOptions.ToArray());
+                    IGameOptions option = gameOptionManager.gameOptionsFactory.FromBytes(
+                        bytedOptions.ToArray());
+
+                    if (option == null) { continue; }
+                    
+                    switch (mode)
+                    {
+                        case GameModes.Normal:
+
+                            NormalGameOptionsV07 normalOption = option.Cast<NormalGameOptionsV07>();
+
+                            if (option.Version < curVersion)
+                            {
+                                normalOption = gameOptionManager.MigrateNormalGameOptions(option);
+                            }
+                            
+                            if (normalOption == null) { continue; }
+
+                            gameOptionManager.normalGameHostOptions = normalOption;
+                            gameOptionManager.SaveNormalHostOptions();
+                            break;
+                        case GameModes.HideNSeek:
+                            HideNSeekGameOptionsV07 hideNSeekOption = option.Cast<HideNSeekGameOptionsV07>();
+
+                            if (option.Version < curVersion)
+                            {
+                                hideNSeekOption = gameOptionManager.MigrateHideNSeekGameOptions(option);
+                            }
+
+                            if (hideNSeekOption == null) { continue; }
+
+                            gameOptionManager.hideNSeekGameHostOptions = hideNSeekOption;
+                            gameOptionManager.SaveHideNSeekHostOptions();
+                            break;
+                        default:
+                            break;
+                    }
                 }
 
                 // オプションのインポートデモでネットワーク帯域とサーバーに負荷をかけて人が落ちたりするので共有を一時的に無効化して実行
@@ -158,6 +215,22 @@ namespace ExtremeRoles.Module
                 ExtremeRolesPlugin.Logger.LogInfo($"Newed csv load error:{newE}");
             }
             return false;
+        }
+
+        private static void exportIGameOptions(
+            StreamWriter writer,
+            GameOptionsFactory factory,
+            IGameOptions option, GameModes mode)
+        {
+            foreach (byte bytedOption in factory.ToBytes(option))
+            {
+                writer.WriteLine(
+                    string.Format("{1}{0}{2}{0}{3}",
+                        comma,
+                        vanilaOptionKey,
+                        mode.ToString(),
+                        bytedOption));
+            }
         }
 
         private static string clean(string value)

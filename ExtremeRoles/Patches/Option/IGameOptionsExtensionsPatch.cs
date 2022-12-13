@@ -1,57 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 
+using AmongUs.GameOptions;
+using UnityEngine;
 using HarmonyLib;
 
-using UnityEngine;
-
-using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-
+using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Patches.Option
 {
-
-    [HarmonyPatch(typeof(GameOptionsData), "GameHostOptions", MethodType.Getter)]
-    public static class GameOptionsDataGameHostOptionsPatch
+    [HarmonyPatch(
+        typeof(IGameOptionsExtensions),
+        nameof(IGameOptionsExtensions.GetAdjustedNumImpostors))]
+    public static class IGameOptionsExtensionsNumImpostorsPatch
     {
-        private static int numImpostors;
-        public static void Prefix()
+        public static bool Prefix(ref int __result)
         {
-            if (GameOptionsData.hostOptionsData == null)
-            {
-                GameOptionsData.hostOptionsData = GameOptionsData.LoadGameHostOptions();
-            }
+            var currentGameOptions = GameOptionsManager.Instance.CurrentGameOptions;
 
-            numImpostors = GameOptionsData.hostOptionsData.NumImpostors;
-        }
+            if (currentGameOptions.GameMode != GameModes.Normal) { return true; }
 
-        public static void Postfix(ref GameOptionsData __result)
-        {
-            __result.NumImpostors = numImpostors;
+            __result = currentGameOptions.GetInt(Int32OptionNames.NumImpostors);
+            return false;
         }
     }
 
-    [HarmonyPatch]
-    public static class GameOptionsDataPatch
+    [HarmonyPatch(
+        typeof(IGameOptionsExtensions),
+        nameof(IGameOptionsExtensions.ToHudString))]
+    public static class IGameOptionsExtensionsToHudStringPatch
     {
-        private static IEnumerable<MethodBase> TargetMethods()
-        {
-            return typeof(GameOptionsData).GetMethods().Where(
-                x => x.ReturnType == typeof(string) &&
-                x.GetParameters().Length == 1 &&
-                x.GetParameters()[0].ParameterType == typeof(int));
-        }
-
         private static void Postfix(ref string __result)
         {
+            if (GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal) { return; }
 
-            List<string> pages = new List<string>();
-            pages.Add(__result);
-        
+            List<string> pages = new List<string>()
+            {
+                __result
+            };
+
             List<string> allOptionStr = new List<string>();
 
             var allOption = OptionHolder.AllOption;
@@ -78,7 +68,7 @@ namespace ExtremeRoles.Patches.Option
 
             foreach (OptionHolder.CommonOptionKey id in Enum.GetValues(typeof(OptionHolder.CommonOptionKey)))
             {
-                switch(id)
+                switch (id)
                 {
                     case OptionHolder.CommonOptionKey.PresetSelection:
                     case OptionHolder.CommonOptionKey.UseStrongRandomGen:
@@ -272,17 +262,6 @@ namespace ExtremeRoles.Patches.Option
         private static string translate(string key)
         {
             return Translation.GetString(key);
-        }
-
-    }
-
-    [HarmonyPatch(typeof(GameOptionsData), nameof(GameOptionsData.GetAdjustedNumImpostors))]
-    public static class GameOptionsGetAdjustedNumImpostorsPatch
-    {
-        public static bool Prefix(GameOptionsData __instance, ref int __result)
-        {
-            __result = PlayerControl.GameOptions.NumImpostors;
-            return false;
         }
     }
 }

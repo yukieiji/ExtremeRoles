@@ -1,4 +1,6 @@
-﻿using ExtremeRoles.Helper;
+﻿using AmongUs.GameOptions;
+
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 
 namespace ExtremeRoles.Roles.API
@@ -51,7 +53,8 @@ namespace ExtremeRoles.Roles.API
                 isEvil = isEvil && 
                     (UnityEngine.Random.RandomRange(0, 110) < (int)decimal.Multiply(
                         spawnOption.GetValue(), spawnOption.ValueCount)) &&
-                    curImpNum < PlayerControl.GameOptions.NumImpostors;
+                    curImpNum < GameOptionsManager.Instance.CurrentGameOptions.GetInt(
+                        Int32OptionNames.NumImpostors);
 
                 if (isEvil)
                 {

@@ -11,6 +11,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API.Extension.State;
+using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
@@ -181,7 +182,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
             else
             {
-                player.killTimer = PlayerControl.GameOptions.KillCooldown;
+                player.killTimer = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
+                    FloatOptionNames.KillCooldown);
             }
             Sound.PlaySound(
                 Sound.SoundType.CurseMakerCurse, 1.2f);

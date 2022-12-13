@@ -14,6 +14,8 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Performance;
+using AmongUs.GameOptions;
+using PowerTools;
 
 namespace ExtremeRoles.Patches
 {
@@ -160,7 +162,7 @@ namespace ExtremeRoles.Patches
 
             if (AmongUsClient.Instance.AmHost)
             {
-                if (AmongUsClient.Instance.GameMode != GameModes.LocalGame ||
+                if (AmongUsClient.Instance.NetworkMode != NetworkModes.LocalGame ||
                     !isAllPlyerDummy())
                 {
                     // ホストは全員の処理が終わるまで待つ
@@ -188,25 +190,31 @@ namespace ExtremeRoles.Patches
             }
 
             SoundManager.Instance.PlaySound(instance.IntroStinger, false, 1f);
-            if (PlayerControl.GameOptions.gameType == GameType.Normal)
-            {
 
-                bool roleFillter(GameData.PlayerInfo pcd)
-                {
-                    return !CachedPlayerControl.LocalPlayer.Data.Role.IsImpostor ||
-                        pcd.Role.TeamType == CachedPlayerControl.LocalPlayer.Data.Role.TeamType;
-                }
+            var localPlayer = CachedPlayerControl.LocalPlayer;
+
+            if (GameManager.Instance.IsNormal())
+            {
+                instance.HideAndSeekPanels.SetActive(false);
+                instance.CrewmateRules.SetActive(false);
+                instance.ImpostorRules.SetActive(false);
+                instance.ImpostorName.gameObject.SetActive(false);
+                instance.ImpostorTitle.gameObject.SetActive(false);
 
                 Il2CppSystem.Collections.Generic.List<PlayerControl> teamToShow = IntroCutscene.SelectTeamToShow(
-                    (Il2CppSystem.Func<GameData.PlayerInfo, bool>)roleFillter);
+                    (Il2CppSystem.Func<GameData.PlayerInfo, bool>)(
+                        (GameData.PlayerInfo pcd) =>
+                            !localPlayer.Data.Role.IsImpostor ||
+                            pcd.Role.TeamType == localPlayer.Data.Role.TeamType
+                    ));
                 
-                if (CachedPlayerControl.LocalPlayer.Data.Role.IsImpostor)
+                if (localPlayer.Data.Role.IsImpostor)
                 {
                     instance.ImpostorText.gameObject.SetActive(false);
                 }
                 else
                 {
-                    int adjustedNumImpostors = PlayerControl.GameOptions.GetAdjustedNumImpostors(
+                    int adjustedNumImpostors = GameOptionsManager.Instance.CurrentGameOptions.GetAdjustedNumImpostors(
                         GameData.Instance.PlayerCount);
                     if (adjustedNumImpostors == 1)
                     {
@@ -229,8 +237,95 @@ namespace ExtremeRoles.Patches
                 Object.Destroy(roleAssignText);
                 roleAssignText = null;
 
-                yield return instance.ShowTeam(teamToShow);
+                yield return instance.ShowTeam(teamToShow, 3.0f);
                 yield return instance.ShowRole();
+            }
+            else
+            {
+                roleAssignText.gameObject.SetActive(false);
+                Object.Destroy(roleAssignText);
+                roleAssignText = null;
+
+                instance.HideAndSeekPanels.SetActive(true);
+                if (localPlayer.Data.Role.IsImpostor)
+                {
+                    instance.CrewmateRules.SetActive(false);
+                    instance.ImpostorRules.SetActive(true);
+                }
+                else
+                {
+                    instance.CrewmateRules.SetActive(true);
+                    instance.ImpostorRules.SetActive(false);
+                }
+
+                IntroCutscene.SelectTeamToShow(
+                    (Il2CppSystem.Func<GameData.PlayerInfo, bool>)(
+                        (GameData.PlayerInfo pcd) =>
+                            localPlayer.Data.Role.IsImpostor != pcd.Role.IsImpostor
+                    ));
+
+                PlayerControl impostor = 
+                    CachedPlayerControl.AllPlayerControls.Find(
+                        (CachedPlayerControl pc) => pc.Data.Role.IsImpostor);
+
+                instance.ImpostorName.gameObject.SetActive(true);
+                instance.ImpostorTitle.gameObject.SetActive(true);
+                instance.BackgroundBar.enabled = false;
+                instance.TeamTitle.gameObject.SetActive(false);
+                instance.ImpostorName.text = impostor.Data.PlayerName;
+
+                PoolablePlayer playerSlot = instance.CreatePlayer(0, 1, impostor.Data, false);
+                playerSlot.transform.localPosition = instance.impostorPos;
+                playerSlot.transform.localScale = Vector3.one * instance.impostorScale;
+
+                yield return CachedShipStatus.Instance.CosmeticsCache.PopulateFromPlayers();
+                yield return new WaitForSecondsRealtime(6f);
+
+                playerSlot.gameObject.SetActive(false);
+                instance.HideAndSeekPanels.SetActive(false);
+                instance.CrewmateRules.SetActive(false);
+                instance.ImpostorRules.SetActive(false);
+
+                LogicOptionsHnS logicOptionsHnS = GameManager.Instance.LogicOptions.Cast<LogicOptionsHnS>();
+                LogicHnSMusic logicHnSMusic = 
+                    GameManager.Instance.GetLogicComponent<LogicHnSMusic>() as LogicHnSMusic;
+
+                if (logicHnSMusic != null)
+                {
+                    logicHnSMusic.StartMusicWithIntro();
+                }
+
+                float crewmateLeadTime = (float)logicOptionsHnS.GetCrewmateLeadTime();
+
+                if (localPlayer.Data.Role.IsImpostor)
+                {
+                    instance.HideAndSeekTimerText.gameObject.SetActive(true);
+                    instance.HideAndSeekPlayerVisual.gameObject.SetActive(true);
+                    instance.HideAndSeekPlayerVisual.SetBodyType(PlayerBodyTypes.Seeker);
+                    SpriteAnim component = instance.HideAndSeekPlayerVisual.GetComponent<SpriteAnim>();
+                    instance.HideAndSeekPlayerVisual.UpdateFromPlayerData(
+                        localPlayer.Data,
+                        localPlayer.PlayerControl.CurrentOutfitType,
+                        PlayerMaterial.MaskType.None, false);
+                    component.Play(instance.HnSSeekerSpawnAnim, 1f);
+                    instance.HideAndSeekPlayerVisual.SetBodyCosmeticsVisible(false);
+                    instance.HideAndSeekPlayerVisual.ToggleName(false);
+
+                    while (crewmateLeadTime > 0f)
+                    {
+                        instance.HideAndSeekTimerText.text = Mathf.RoundToInt(crewmateLeadTime).ToString();
+                        crewmateLeadTime -= Time.deltaTime;
+                        yield return null;
+                    }
+                }
+                else
+                {
+                    CachedShipStatus.Instance.HideCountdown = crewmateLeadTime;
+                    impostor.AnimateCustom(instance.HnSSeekerSpawnAnim);
+                    impostor.cosmetics.SetBodyCosmeticsVisible(false);
+                }
+                impostor = null;
+                playerSlot = null;
             }
             Object.Destroy(instance.gameObject);
             yield break;
@@ -334,7 +429,7 @@ namespace ExtremeRoles.Patches
                 Xion.XionPlayerToGhostLayer();
                 Xion.RemoveXionPlayerToAllPlayerControl();
 
-                if (AmongUsClient.Instance.GameMode == GameModes.LocalGame)
+                if (AmongUsClient.Instance.NetworkMode == NetworkModes.LocalGame)
                 {
                     foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
                     {
@@ -415,7 +510,8 @@ namespace ExtremeRoles.Patches
             }
             else
             {
-                switch (PlayerControl.GameOptions.MapId)
+                switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                    ByteOptionNames.MapId))
                 {
                     case 0:
                         if (isRemoveAdmin)

@@ -41,11 +41,6 @@ namespace ExtremeRoles
 
             DebugMode = Config.Bind("DeBug", "DebugMode", false);
 
-            GameOptionsData.RecommendedImpostors = GameOptionsData.MaxImpostors = Enumerable.Repeat(
-                3, OptionHolder.VanillaMaxPlayerNum).ToArray(); // 最大インポスター数 = 推奨3人
-            GameOptionsData.MinPlayers = Enumerable.Repeat(
-                4, OptionHolder.VanillaMaxPlayerNum).ToArray(); // 最小プレイヤー数 = 4人
-
             Instance = this;
 
             OptionHolder.Create();

@@ -1,4 +1,6 @@
-﻿using ExtremeRoles.Helper;
+﻿using AmongUs.GameOptions;
+
+using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -96,7 +98,7 @@ namespace ExtremeRoles.Roles.Solo.Host
         }
 
         private static bool isLocalGame() => 
-            AmongUsClient.Instance.GameMode == GameModes.LocalGame;
+            AmongUsClient.Instance.NetworkMode == NetworkModes.LocalGame;
 
         private static bool isXion()
         {

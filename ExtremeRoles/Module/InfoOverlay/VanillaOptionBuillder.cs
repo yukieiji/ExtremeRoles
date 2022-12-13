@@ -1,7 +1,6 @@
-﻿using System;
-using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Performance;
+﻿
 
+using ExtremeRoles.Module.Interface;
 namespace ExtremeRoles.Module.InfoOverlay
 {
     public sealed class VanillaOptionBuillder : IShowTextBuilder
@@ -11,130 +10,12 @@ namespace ExtremeRoles.Module.InfoOverlay
         { }
         public (string, string, string) GetShowText()
         {
-			if (settings.Length == 0) { setVanillaOptions(); }
-            return 
-				(
-					$"<size=200%>{Helper.Translation.GetString("vanilaOptions")}</size>\n",
-					settings.ToString(),
+            return
+                (
+                    $"<size=200%>{Helper.Translation.GetString("vanilaOptions")}</size>\n",
+                    IGameOptionsExtensions.SettingsStringBuilder.ToString(),
 					""
 				);
         }
-        private void setVanillaOptions()
-        {
-			var gameOption = PlayerControl.GameOptions;
-			var trans = FastDestroyableSingleton<TranslationController>.Instance;
-
-			this.settings.AppendLine(
-				trans.GetString(
-					gameOption.isDefaults ? StringNames.GameRecommendedSettings : StringNames.GameCustomSettings,
-					Array.Empty<Il2CppSystem.Object>()));
-			int num2 = (int)((gameOption.MapId == 0 && Constants.ShouldFlipSkeld()) ? 3 : gameOption.MapId);
-			string value = Constants.MapNames[num2];
-			
-			gameOption.AppendItem(this.settings, StringNames.GameMapName, value);
-			
-			this.settings.Append(
-				string.Format(
-					"{0}: {1}",
-					trans.GetString(
-						StringNames.GameNumImpostors,
-						Array.Empty<Il2CppSystem.Object>()),
-					gameOption.NumImpostors));
-			
-			this.settings.AppendLine();
-			
-			if (gameOption.gameType == GameType.Normal)
-			{
-				gameOption.AppendItem(
-					this.settings, StringNames.GameConfirmImpostor, gameOption.ConfirmImpostor);
-				gameOption.AppendItem(
-					this.settings, StringNames.GameNumMeetings, gameOption.NumEmergencyMeetings);
-				gameOption.AppendItem(
-					this.settings, StringNames.GameAnonymousVotes, gameOption.AnonymousVotes);
-				gameOption.AppendItem(
-					this.settings, StringNames.GameEmergencyCooldown,
-					trans.GetString(
-						StringNames.GameSecondsAbbrev, new Il2CppSystem.Object[]
-						{
-							gameOption.EmergencyCooldown.ToString()
-						}));
-				gameOption.AppendItem(
-					this.settings, StringNames.GameDiscussTime,
-					trans.GetString(
-						StringNames.GameSecondsAbbrev, new Il2CppSystem.Object[]
-						{
-							gameOption.DiscussionTime.ToString()
-						}));
-				if (gameOption.VotingTime > 0)
-				{
-					gameOption.AppendItem(
-						this.settings, StringNames.GameVotingTime,
-						trans.GetString(
-							StringNames.GameSecondsAbbrev, new Il2CppSystem.Object[]
-							{
-								gameOption.VotingTime.ToString()
-							}));
-				}
-				else
-				{
-					gameOption.AppendItem(
-						this.settings,
-						StringNames.GameVotingTime,
-						trans.GetString(
-							StringNames.GameSecondsAbbrev, new Il2CppSystem.Object[]
-							{
-								"∞"
-							}));
-				}
-				gameOption.AppendItem(this.settings, StringNames.GamePlayerSpeed, gameOption.PlayerSpeedMod, "x");
-				gameOption.AppendItem(this.settings, StringNames.GameCrewLight, gameOption.CrewLightMod, "x");
-				gameOption.AppendItem(this.settings, StringNames.GameImpostorLight, gameOption.ImpostorLightMod, "x");
-			}
-			gameOption.AppendItem(
-				this.settings, StringNames.GameKillCooldown,
-				trans.GetString(
-					StringNames.GameSecondsAbbrev, new Il2CppSystem.Object[]
-					{
-						gameOption.KillCooldown.ToString()
-					}));
-			gameOption.AppendItem(
-				this.settings, StringNames.GameKillDistance,
-				trans.GetString(
-					StringNames.SettingShort + gameOption.KillDistance,
-					Array.Empty<Il2CppSystem.Object>()));
-			gameOption.AppendItem(
-				this.settings, StringNames.GameTaskBarMode,
-				trans.GetString(
-					StringNames.SettingNormalTaskMode + (int)gameOption.TaskBarMode,
-					Array.Empty<Il2CppSystem.Object>()));
-			gameOption.AppendItem(this.settings, StringNames.GameVisualTasks, gameOption.VisualTasks);
-			gameOption.AppendItem(this.settings, StringNames.GameCommonTasks, gameOption.NumCommonTasks);
-			gameOption.AppendItem(this.settings, StringNames.GameLongTasks, gameOption.NumLongTasks);
-			gameOption.AppendItem(this.settings, StringNames.GameShortTasks, gameOption.NumShortTasks);
-			if (gameOption.gameType == GameType.Normal)
-			{
-				foreach (RoleBehaviour roleBehaviour in FastDestroyableSingleton<RoleManager>.Instance.AllRoles)
-				{
-					if (roleBehaviour.Role != RoleTypes.Crewmate && 
-						roleBehaviour.Role != RoleTypes.Impostor)
-					{
-						gameOption.AppendItem(
-							this.settings,
-							string.Concat(
-								trans.GetString(
-									roleBehaviour.StringName,
-									Array.Empty<Il2CppSystem.Object>()),
-								": ",
-								trans.GetString(
-									StringNames.RoleChanceAndQuantity,
-									new Il2CppSystem.Object[]
-									{
-										gameOption.RoleOptions.GetNumPerGame(roleBehaviour.Role).ToString(),
-										gameOption.RoleOptions.GetChancePerGame(roleBehaviour.Role).ToString()
-									})));
-					}
-				}
-			}
-		}
     }
 }

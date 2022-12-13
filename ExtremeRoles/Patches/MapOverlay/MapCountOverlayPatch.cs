@@ -3,6 +3,7 @@
 using UnityEngine;
 
 using HarmonyLib;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
@@ -95,10 +96,14 @@ namespace ExtremeRoles.Patches.MapOverlay
 						for (int j = 0; j < num; j++)
 						{
 							Collider2D collider2D = __instance.buffer[j];
-							if (!(collider2D.tag == "DeadBody"))
+							if (!collider2D.CompareTag("DeadBody") || !__instance.includeDeadBodies)
 							{
 								PlayerControl component = collider2D.GetComponent<PlayerControl>();
-								if (!component || component.Data == null || component.Data.Disconnected || component.Data.IsDead)
+								if (!component || 
+                                    component.Data == null || 
+                                    component.Data.Disconnected || 
+                                    component.Data.IsDead || 
+                                    (!__instance.showLivePlayerPosition && component.AmOwner))
 								{
 									num2--;
 								}
@@ -112,10 +117,12 @@ namespace ExtremeRoles.Patches.MapOverlay
 								DeadBody component = collider2D.GetComponent<DeadBody>();
 								if (component)
 								{
-									GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(component.ParentId);
+									GameData.PlayerInfo playerInfo = GameData.Instance.GetPlayerById(
+                                        component.ParentId);
 									if (playerInfo != null)
 									{
-										addColor = Palette.PlayerColors[playerInfo.Object.CurrentOutfit.ColorId];
+										addColor = Palette.PlayerColors[
+                                            playerInfo.Object.CurrentOutfit.ColorId];
 									}
 								}
 							}
@@ -227,7 +234,8 @@ namespace ExtremeRoles.Patches.MapOverlay
             }
             else
             {
-                switch (PlayerControl.GameOptions.MapId)
+                switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                    ByteOptionNames.MapId))
                 {
                     case 0:
                         vitalObj.Add(GameSystem.SkeldAdmin);

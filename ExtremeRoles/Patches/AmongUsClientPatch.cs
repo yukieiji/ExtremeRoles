@@ -14,6 +14,15 @@ using ExtremeRoles.GhostRoles.API.Interface;
 
 namespace ExtremeRoles.Patches
 {
+    [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.CreatePlayer))]
+    [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerLeft))]
+    public static class SyncSettingPatch
+    {
+        public static void Postfix()
+        {
+            GameManager.Instance?.LogicOptions.SyncOptions();
+        }
+    }
 
     // from Reactor : https://github.com/NuclearPowered/Reactor/commit/0a03a9d90d41b3bb158fa95bb23186f6769e0f9f
     [HarmonyPatch(typeof(AmongUsClient._CoJoinOnlinePublicGame_d__1),

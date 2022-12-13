@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using UnityEngine;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.Roles;
@@ -183,7 +184,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             public void ApplyOption()
             {
-
+                var curOption = GameOptionsManager.Instance.CurrentGameOptions;
                 var allOption = OptionHolder.AllOption;
 
                 this.UseSabotage = allOption[
@@ -196,7 +197,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
                 this.HasOtherKillCool = allOption[
                     GetRoleOptionId(SidekickOption.HasOtherKillCool)].GetValue();
-                this.KillCool = PlayerControl.GameOptions.KillCooldown;
+                this.KillCool = curOption.GetFloat(FloatOptionNames.KillCooldown);
                 if (this.HasOtherKillCool)
                 {
                     this.KillCool = allOption[
@@ -205,7 +206,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
                 this.HasOtherKillRange = allOption[
                     GetRoleOptionId(SidekickOption.HasOtherKillRange)].GetValue();
-                this.KillRange = PlayerControl.GameOptions.KillDistance;
+                this.KillRange = curOption.GetInt(Int32OptionNames.KillDistance);
                 if (this.HasOtherKillRange)
                 {
                     this.KillRange = allOption[
@@ -214,7 +215,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
                 this.HasOtherVison = allOption[
                     GetRoleOptionId(SidekickOption.HasOtherVison)].GetValue();
-                this.Vison = PlayerControl.GameOptions.CrewLightMod;
+                this.Vison = curOption.GetFloat(FloatOptionNames.CrewLightMod);
                 this.ApplyEnvironmentVisionEffect = false;
                 if (this.HasOtherVison)
                 {
