@@ -135,7 +135,7 @@ namespace ExtremeRoles.Roles.Combination
                             Mode = MapOptions.Modes.CountOverlay,
                             AllowMovementWhileMapOpen = true,
                             ShowLivePlayerPosition = true,
-                            IncludeDeadBodies = false,
+                            IncludeDeadBodies = true,
                         });
                     break;
                 case AbilityType.Security:
