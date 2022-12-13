@@ -2,12 +2,7 @@
 
 using HarmonyLib;
 
-using UnityEngine;
-
 using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.ExtremeShipStatus;
 
