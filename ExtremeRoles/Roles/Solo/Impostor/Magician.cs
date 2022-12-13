@@ -58,7 +58,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.CreateNormalAbilityButton(
                 Helper.Translation.GetString("juggling"),
                 Loader.CreateSpriteFromResources(
-                    Path.TestButton));
+                    Path.MagicianJuggling));
 
             this.airShipSpawn = GameSystem.GetAirShipRandomSpawn();
         }
