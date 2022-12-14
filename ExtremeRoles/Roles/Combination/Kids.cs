@@ -809,6 +809,8 @@ namespace ExtremeRoles.Roles.Combination
 
                 this.winNum++;
             }
+            // 負の値にならないようにする
+            this.winNum = Math.Clamp(this.winNum, 1, int.MaxValue);
         }
 
         public override string GetFullDescription()
