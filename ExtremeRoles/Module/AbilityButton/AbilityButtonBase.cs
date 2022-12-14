@@ -2,6 +2,7 @@
 using UnityEngine;
 
 using ExtremeRoles.Performance;
+using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Module.AbilityButton
 {
@@ -22,7 +23,6 @@ namespace ExtremeRoles.Module.AbilityButton
         protected Func<bool> AbilityCheck = null;
         protected Sprite ButtonSprite;
 
-        protected bool Mirror;
         protected KeyCode Hotkey;
 
         protected readonly Color DisableColor = new Color(1f, 1f, 1f, 0.3f);
@@ -32,25 +32,21 @@ namespace ExtremeRoles.Module.AbilityButton
             string buttonText,
             Func<bool> canUse,
             Sprite sprite,
-            Vector3 positionOffset,
             Action abilityCleanUp = null,
             Func<bool> abilityCheck = null,
-            KeyCode hotkey = KeyCode.F,
-            bool mirror = false)
+            KeyCode hotkey = KeyCode.F)
         {
 
             this.ButtonText = buttonText;
 
             this.CanUse = canUse;
 
-            this.Mirror = mirror;
-
             this.ButtonSprite = sprite;
-            this.PositionOffset = positionOffset;
+
+            var killButton = FastDestroyableSingleton<HudManager>.Instance.KillButton;
 
             this.Button = UnityEngine.Object.Instantiate(
-                FastDestroyableSingleton<HudManager>.Instance.KillButton,
-                FastDestroyableSingleton<HudManager>.Instance.KillButton.transform.parent);
+                killButton, killButton.transform.parent);
             PassiveButton button = Button.GetComponent<PassiveButton>();
             button.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
             button.OnClick.AddListener(
@@ -65,6 +61,7 @@ namespace ExtremeRoles.Module.AbilityButton
             }
 
             SetActive(false);
+            GameSystem.ReGridButtons();
 
             this.Hotkey = hotkey;
 

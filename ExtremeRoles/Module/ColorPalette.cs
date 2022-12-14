@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using static Il2CppSystem.Linq.Expressions.Interpreter.NullableMethodCallInstruction;
 
 namespace ExtremeRoles.Module
 {
@@ -35,6 +36,8 @@ namespace ExtremeRoles.Module
             59, 129, 60, byte.MaxValue);
         public readonly static Color DelusionerPink = new Color32(251, 218, 222, byte.MaxValue);
         public readonly static Color ResurrecterBlue = new Color32(0, 105, 225, byte.MaxValue);
+        public readonly static Color GuesserRedYellow = new Color32(255, 255, 0, byte.MaxValue);
+        public readonly static Color BuddyOrange = new Color32(232, 192, 78, byte.MaxValue);
 
         public readonly static Color JackalBlue = new Color32(65, 105, 255, byte.MaxValue);
         public readonly static Color AliceGold = new Color32(255, 215, 0, byte.MaxValue);
@@ -49,6 +52,7 @@ namespace ExtremeRoles.Module
         public readonly static Color TraitorLightShikon = new Color32(76, 16, 80, byte.MaxValue);
         public readonly static Color QueenWhite = new Color32(240, 240, 210, byte.MaxValue);
         public readonly static Color UmbrerRed = new Color32(200, 0, 21, byte.MaxValue);
+        public readonly static Color KidsYellowGreen = new Color32(140, 170, 0, byte.MaxValue);
 
         public readonly static Color PoltergeistLightKenpou = new Color32(
             84, 82, 75, byte.MaxValue);

@@ -4,9 +4,12 @@ using System.IO;
 using System.Reflection;
 
 using UnhollowerBaseLib;
+using UnhollowerRuntimeLib;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
+
+using UnityObject = UnityEngine.Object;
 
 namespace ExtremeRoles.Resources
 {
@@ -35,6 +38,7 @@ namespace ExtremeRoles.Resources
             "ExtremeRoles.Resources.TabGhostNeutralSetting.png";
 
         public const string HiroAcaSearch = "ExtremeRoles.Resources.Search.png";
+        public const string GuesserGuess = "ExtremeRoles.Resources.GuesserGuess.png";
 
         public const string MaintainerRepair = "ExtremeRoles.Resources.Repair.png";
         public const string BodyGuardShield = "ExtremeRoles.Resources.Shield.png";
@@ -79,6 +83,7 @@ namespace ExtremeRoles.Resources
             "ExtremeRoles.Resources.BlueAbilityPart.png";
         public const string HypnotistGrayAbilityPart =
             "ExtremeRoles.Resources.GrayAbilityPart.png";
+        public const string MagicianJuggling = "ExtremeRoles.Resources.MagicianJuggling.png";
 
         public const string VigilanteEmergencyCall = 
             "ExtremeRoles.Resources.EmergencyCall.png";
@@ -94,11 +99,19 @@ namespace ExtremeRoles.Resources
         public const string SucideSprite = "ExtremeRoles.Resources.Suicide.png";
         public const string UmbrerFeatVirus = "ExtremeRoles.Resources.FeatVirus.png";
         public const string UmbrerUpgradeVirus = "ExtremeRoles.Resources.UpgradeVirus.png";
+        public const string DelinquentScribe =
+            "ExtremeRoles.Resources.DelinquentScribe.{0}.png";
+        public const string WispTorch = "ExtremeRoles.Resources.torch.png";
 
         public const string XionMapZoomIn = "ExtremeRoles.Resources.ZoomIn.png";
         public const string XionMapZoomOut = "ExtremeRoles.Resources.ZoomOut.png";
         public const string XionSpeedUp = "ExtremeRoles.Resources.SpeedUp.png";
         public const string XionSpeedDown = "ExtremeRoles.Resources.SpeedDown.png";
+
+        public const string GusserUiResources = "ExtremeRoles.Resources.Asset.guesserui.asset";
+        public const string GusserUiPrefab = "assets/roles/guesserui.prefab";
+
+        public const string SoundEffect = "ExtremeRoles.Resources.Asset.soundeffect.asset";
 
         public const string TestButton = "ExtremeRoles.Resources.TESTBUTTON.png";
     }
@@ -107,6 +120,7 @@ namespace ExtremeRoles.Resources
     {
 
         private static Dictionary<string, Sprite> cachedSprite = new Dictionary<string, Sprite> ();
+        private static Dictionary<string, AssetBundle> cachedBundle = new Dictionary<string, AssetBundle>();
 
         public static Sprite CreateSpriteFromResources(
             string path, float pixelsPerUnit=115f)
@@ -133,6 +147,44 @@ namespace ExtremeRoles.Resources
                 Logging.Debug($"Error loading sprite from path: {path}");
             }
             return null;
+        }
+
+        public static T GetUnityObjectFromResources<T>(
+            string bundleName, string objName) where T : UnityObject
+        {
+            return getAssetBundleFromAssembly(
+                bundleName, Assembly.GetCallingAssembly()).LoadAsset(
+                    objName, Il2CppType.Of<T>())?.Cast<T>();
+        }
+
+        public static void LoadCommonAsset()
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            foreach (string path in new string[]
+            {
+                "ExtremeRoles.Resources.Asset.closebutton.asset",
+                "ExtremeRoles.Resources.Asset.confirmmenu.asset",
+                "ExtremeRoles.Resources.Asset.fonts.asset",
+            })
+            {
+                getAssetBundleFromAssembly(path, assembly);
+            }
+        }
+
+        private static AssetBundle getAssetBundleFromAssembly(
+            string bundleName, Assembly assembly)
+        {
+            if (!cachedBundle.TryGetValue(bundleName, out AssetBundle bundle))
+            {
+                using (var stream = assembly.GetManifestResourceStream(
+                    bundleName))
+                {
+                    bundle = AssetBundle.LoadFromStream(stream.ToIl2Cpp());
+                    bundle.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
+                    cachedBundle.Add(bundleName, bundle);
+                }
+            }
+            return bundle;
         }
 
         private static unsafe Texture2D createTextureFromResources(string path)

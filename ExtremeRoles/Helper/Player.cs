@@ -241,25 +241,35 @@ namespace ExtremeRoles.Helper
             prevTarget = target;
         }
 
-        public static Dictionary<byte, PoolablePlayer> CreatePlayerIcon()
+        public static Dictionary<byte, PoolablePlayer> CreatePlayerIcon(
+            Transform parent = null, Vector3? scale = null)
         {
+            if (parent == null)
+            {
+                parent = FastDestroyableSingleton<HudManager>.Instance.transform;
+            }
+            Vector3 newScale = scale.HasValue ? scale.Value : Vector3.one;
 
             Dictionary<byte, PoolablePlayer> playerIcon = new Dictionary<byte, PoolablePlayer>();
 
             foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
             {
                 PoolablePlayer poolPlayer = UnityEngine.Object.Instantiate<PoolablePlayer>(
-                    Module.Prefab.PlayerPrefab,
-                    FastDestroyableSingleton<HudManager>.Instance.transform);
+                    Module.Prefab.PlayerPrefab, parent);
 
                 poolPlayer.gameObject.SetActive(true);
                 poolPlayer.UpdateFromPlayerData(
                     player.Data, PlayerOutfitType.Default,
                     PlayerMaterial.MaskType.None, true);
                 poolPlayer.cosmetics.SetName(player.Data.DefaultOutfit.PlayerName);
+                poolPlayer.cosmetics.nameText.transform.localPosition = new Vector3(
+                    poolPlayer.cosmetics.nameText.transform.localPosition.x,
+                    poolPlayer.cosmetics.nameText.transform.localPosition.y - 1.0f,
+                    poolPlayer.cosmetics.nameText.transform.localPosition.z);
                 poolPlayer.name = $"poolable_{player.PlayerId}";
                 poolPlayer.SetFlipX(true);
                 poolPlayer.gameObject.SetActive(false);
+                poolPlayer.transform.localScale = newScale;
                 playerIcon.Add(player.PlayerId, poolPlayer);
             }
 

@@ -19,7 +19,7 @@ namespace ExtremeSkins.Helper
         private const SupportedLangs defaultLanguage = SupportedLangs.Japanese;
         private const string dataPath = "ExtremeSkins.Resources.LangData.stringData.json";
 
-        public static void CreateColorTransData()
+        public static void LoadTransData()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
             Stream stream = assembly.GetManifestResourceStream(dataPath);

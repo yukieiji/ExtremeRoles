@@ -5,6 +5,8 @@ using HarmonyLib;
 using UnityEngine;
 using TMPro;
 
+using AmongUs.GameOptions;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
@@ -44,6 +46,7 @@ namespace ExtremeRoles.Patches.Manager
     public static class HudManagerUpdatePatch
     {
         public const string RoleInfoObjectName = "Info";
+        private const float infoScale = 0.25f;
         
         private static bool buttonCreated = false;
         private static bool isActiveUpdate = true;
@@ -79,7 +82,7 @@ namespace ExtremeRoles.Patches.Manager
                 __instance.KillButton.ToggleVisible(false);
                 __instance.SabotageButton.ToggleVisible(false);
                 __instance.ImpostorVentButton.ToggleVisible(false);
-                __instance.TaskText.transform.parent.gameObject.SetActive(false);
+                __instance.TaskPanel.gameObject.SetActive(false);
                 __instance.roomTracker.gameObject.SetActive(false);
                 
                 IVirtualJoystick virtualJoystick = __instance.joystick;
@@ -339,7 +342,7 @@ namespace ExtremeRoles.Patches.Manager
                 }
 
                 playerInfo.transform.localPosition = 
-                    player.cosmetics.nameText.transform.localPosition + Vector3.up * 0.5f;
+                    player.cosmetics.nameText.transform.localPosition + Vector3.up * infoScale;
                 string playerInfoText = getRoleInfo(localPlayer, player, commsActive);
                 playerInfo.text = playerInfoText;
 

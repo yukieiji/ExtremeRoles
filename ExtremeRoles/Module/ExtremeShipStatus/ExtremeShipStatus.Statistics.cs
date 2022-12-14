@@ -167,6 +167,12 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
                                     gameControlId,
                                     NeutralSeparateTeam.Queen);
                                 break;
+                            case ExtremeRoleId.Delinquent:
+                                addNeutralTeams(
+                                    ref neutralTeam,
+                                    gameControlId,
+                                    NeutralSeparateTeam.Kids);
+                                break;
                             default:
                                 checkMultiAssignedServant(
                                     ref neutralTeam,
@@ -258,6 +264,10 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
                         break;
                     case ExtremeRoleId.Vigilante:
                         addData = new VigilanteWinChecker();
+                        break;
+                    case ExtremeRoleId.Delinquent:
+                        addData = new KidsWinChecker();
+                        addData.AddAliveRole(playerId, role);
                         break;
                     default:
                         break;

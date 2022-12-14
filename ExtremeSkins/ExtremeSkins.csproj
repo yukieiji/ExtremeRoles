@@ -3,9 +3,9 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
-      <Version>4.0.0.7</Version>
-      <!--<VersionPrefix>4.0.0</VersionPrefix>-->
-        <VersionSuffix>AmongUsv20221025</VersionSuffix>
+      <!--<Version>4.0.0.6</Version>-->
+        <VersionPrefix>5.0.0</VersionPrefix>
+        <VersionSuffix>1stAnniversary</VersionSuffix>
         <Description>Extreme Skins for Extreme Roles</Description>
         <Authors>yukieiji</Authors>
         <Configurations>Debug;Release</Configurations>
@@ -40,6 +40,7 @@
         <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="1.1.1" PrivateAssets="all" />
 		
         <EmbeddedResource Include="Resources\LangData\stringData.json" />
+      <EmbeddedResource Include="Resources\Asset\*.asset" />
         <EmbeddedResource Include="Resources\*.png" />
 		
         <ProjectReference Include="..\ExtremeRoles\ExtremeRoles.csproj" />
@@ -47,10 +48,13 @@
 	
 
     <ItemGroup>
-      <PackageReference Update="AmongUs.GameLibs.Steam" Version="2022.10.25" />
+      <PackageReference Update="AmongUs.GameLibs.Steam" Version="2022.12.8" />
     </ItemGroup>
-
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="if not exist $(SolutionDir)ExtremeSkins\Resources\Asset mkdir $(SolutionDir)ExtremeSkins\Resources\Asset" />
+    <Exec Command="xcopy $(SolutionDir)UnityAsset\ExtremeSkins $(SolutionDir)ExtremeSkins\Resources\Asset /y /i" />
+  </Target>
     <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">
-        <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AmongUs)/BepInEx/plugins/" UseSymboliclinksIfPossible="true" />
+      <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AmongUs)/BepInEx/plugins/" UseSymboliclinksIfPossible="true" />
     </Target>
 </Project>

@@ -19,7 +19,8 @@ namespace ExtremeRoles.Roles.Solo.Host
             false, false, false, true,
             true, true, true, true, true)
         {
-            this.MoveSpeed = PlayerControl.GameOptions.PlayerSpeedMod;
+            this.MoveSpeed = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
+                AmongUs.GameOptions.FloatOptionNames.PlayerSpeedMod);
             this.defaultCameraZoom = UnityEngine.Camera.main.orthographicSize;
             this.dummyDeadBody.Clear();
             PlayerId = xionPlayerId;

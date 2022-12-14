@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using AmongUs.GameOptions;
 
 using HarmonyLib;
 
@@ -9,10 +10,10 @@ namespace ExtremeRoles.Patches
     {
         public static void Postfix(KeyValueOption __instance)
         {
-            GameOptionsData gameOptions = PlayerControl.GameOptions;
             if (__instance.Title == StringNames.GameMapName)
             {
-                __instance.Selected = gameOptions.MapId;
+                __instance.Selected = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                    ByteOptionNames.MapId);
             }
             try
             {

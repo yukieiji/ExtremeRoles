@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using AmongUs.GameOptions;
+
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -32,6 +34,9 @@ namespace ExtremeRoles.Roles
         Assistant,
         DetectiveApprentice,
         Sharer,
+        Guesser,
+        Delinquent,
+        Buddy,
 
         SpecialCrew,
         Sheriff,
@@ -74,6 +79,7 @@ namespace ExtremeRoles.Roles
         Commander,
         Hypnotist,
         UnderWarper,
+        Magician,
 
         Alice,
         Jackal,
@@ -96,14 +102,21 @@ namespace ExtremeRoles.Roles
         Xion, 
     }
 
-    public enum CombinationRoleType
+    public enum CombinationRoleType : byte
     {
         Avalon,
         HeroAca,
         DetectiveOffice,
+        Kids,
+        
         Lover,
-        Supporter,
+        Buddy,
+
         Sharer,
+        
+        Supporter,
+        Guesser,
+
         Traitor,
     }
 
@@ -144,6 +157,9 @@ namespace ExtremeRoles.Roles
 
         UmbrerBiohazard,
 
+        KidsTooBigHomeAlone,
+        KidsAliveAlone,
+
         UnKnown = 100,
     }
 
@@ -159,6 +175,7 @@ namespace ExtremeRoles.Roles
         Eater,
         Traitor,
         Queen,
+        Kids
     }
 
     public static class ExtremeRoleManager
@@ -170,6 +187,7 @@ namespace ExtremeRoles.Roles
             ExtremeRoleId.Lover,
             ExtremeRoleId.Yandere,
             ExtremeRoleId.Vigilante,
+            ExtremeRoleId.Delinquent,
         };
 
         public static readonly Dictionary<
@@ -216,6 +234,7 @@ namespace ExtremeRoles.Roles
                 {(int)ExtremeRoleId.Commander      , new Commander()},
                 {(int)ExtremeRoleId.Hypnotist      , new Hypnotist()},
                 {(int)ExtremeRoleId.UnderWarper    , new UnderWarper()},
+                {(int)ExtremeRoleId.Magician       , new Magician()},
 
                 {(int)ExtremeRoleId.Alice     , new Alice()},
                 {(int)ExtremeRoleId.Jackal    , new Jackal()},
@@ -238,10 +257,13 @@ namespace ExtremeRoles.Roles
                 {(byte)CombinationRoleType.Avalon         , new Avalon()},
                 {(byte)CombinationRoleType.HeroAca        , new HeroAcademia()},
                 {(byte)CombinationRoleType.DetectiveOffice, new DetectiveOffice()},
+                {(byte)CombinationRoleType.Kids           , new Kids()},
+                {(byte)CombinationRoleType.Buddy          , new BuddyManager()},
                 {(byte)CombinationRoleType.Lover          , new LoverManager()},
+                {(byte)CombinationRoleType.Sharer         , new SharerManager()},
                 {(byte)CombinationRoleType.Supporter      , new SupporterManager()},
-                {(byte)CombinationRoleType.Sharer         , new SharerManager()   },
-                {(byte)CombinationRoleType.Traitor        , new TraitorManager()  },
+                {(byte)CombinationRoleType.Guesser        , new GuesserManager()},
+                {(byte)CombinationRoleType.Traitor        , new TraitorManager()},
             };
 
         public static Dictionary<

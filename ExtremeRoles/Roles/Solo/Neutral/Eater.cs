@@ -52,21 +52,19 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 Func<bool> canUse,
                 Sprite deadBodyEatSprite,
                 Sprite killEatSprite,
-                Vector3 positionOffset,
                 Action abilityCleanUp,
                 Func<bool> abilityCheck,
                 int winAbilityNum,
                 float killEatTime,
-                KeyCode hotkey = KeyCode.F,
-                bool mirror = false) : base(
+                KeyCode hotkey = KeyCode.F
+                ) : base(
                     "",
                     ability,
                     canUse,
                     deadBodyEatSprite,
-                    positionOffset,
                     abilityCleanUp,
                     abilityCheck,
-                    hotkey, mirror)
+                    hotkey)
             {
                 this.abilityCountText = GameObject.Instantiate(
                     this.Button.cooldownTimerText,
@@ -274,7 +272,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     Path.EaterDeadBodyEat),
                 Loader.CreateSpriteFromResources(
                     Path.EaterEatKill),
-                new Vector3(-1.8f, -0.06f, 0),
                 CleanUp,
                 IsAbilityCheck,
                 halfPlayerNum < abilityNum ? halfPlayerNum : abilityNum,

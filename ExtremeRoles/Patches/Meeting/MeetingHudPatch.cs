@@ -13,6 +13,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Patches.Meeting
 {
@@ -48,9 +49,13 @@ namespace ExtremeRoles.Patches.Meeting
             }
 
 
-            if (!PlayerControl.GameOptions.AnonymousVotes || canSeeVote ||
-                (CachedPlayerControl.LocalPlayer.Data.IsDead && OptionHolder.Client.GhostsSeeVote &&
-                 !isVoteSeeBlock(role)))
+            if (!GameManager.Instance.LogicOptions.GetAnonymousVotes() || 
+                canSeeVote ||
+                (
+                    CachedPlayerControl.LocalPlayer.Data.IsDead && 
+                    OptionHolder.Client.GhostsSeeVote &&
+                    !isVoteSeeBlock(role)
+                ))
             {
                 PlayerMaterial.SetColors(voterPlayer.DefaultOutfit.ColorId, spriteRenderer);
             }
@@ -82,7 +87,7 @@ namespace ExtremeRoles.Patches.Meeting
             {
                 return ExtremeRolesPlugin.ShipState.IsAssassinAssign;
             }
-            return false;
+            return role.IsBlockShowMeetingRoleInfo();
         }
 
     }
@@ -204,7 +209,7 @@ namespace ExtremeRoles.Patches.Meeting
             }
         }
 
-        private static Tuple<bool, byte> assassinVoteState(MeetingHud instance)
+        private static (bool, byte) assassinVoteState(MeetingHud instance)
         {
             bool isVoteEnd = false;
             byte voteFor = byte.MaxValue;
@@ -219,7 +224,7 @@ namespace ExtremeRoles.Patches.Meeting
                 }
             }
 
-            return Tuple.Create(isVoteEnd, voteFor);
+            return (isVoteEnd, voteFor);
         }
 
         private static void addVoteModRole(
@@ -299,7 +304,8 @@ namespace ExtremeRoles.Patches.Meeting
 
                 bool isExiled = true;
                 
-                KeyValuePair<byte, int> exiledResult = new KeyValuePair<byte, int>(byte.MaxValue, int.MinValue);
+                KeyValuePair<byte, int> exiledResult = new KeyValuePair<byte, int>(
+                    byte.MaxValue, int.MinValue);
                 foreach (KeyValuePair<byte, int> item in result)
                 {
                     if (item.Value > exiledResult.Value)
@@ -364,8 +370,9 @@ namespace ExtremeRoles.Patches.Meeting
 
             if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
 
+            LogicOptionsNormal logicOptionsNormal = GameManager.Instance.LogicOptions as LogicOptionsNormal;
 
-            if (__instance.discussionTimer < (float)PlayerControl.GameOptions.DiscussionTime)
+            if (__instance.discussionTimer < (float)logicOptionsNormal.GetDiscussionTime())
             {
                 return __result;
             }
@@ -373,6 +380,7 @@ namespace ExtremeRoles.Patches.Meeting
             {
                 return __result;
             }
+
             SoundManager.Instance.PlaySound(
                 __instance.VoteSound, false, 1f, null).volume = 0.8f;
             for (int i = 0; i < __instance.playerStates.Length; i++)
@@ -573,13 +581,18 @@ namespace ExtremeRoles.Patches.Meeting
 
             foreach (DeadBody b in UnityEngine.Object.FindObjectsOfType<DeadBody>())
             {
+                if (b == null) { continue; }
+
                 foreach (PlayerVoteArea pva in __instance.playerStates)
                 {
-                    if (pva.TargetPlayerId == b.ParentId && !pva.AmDead)
+                    if (pva == null ||
+                        pva.TargetPlayerId != b.ParentId || 
+                        pva.AmDead)
                     {
-                        pva.SetDead(pva.DidReport, true);
-                        pva.Overlay.gameObject.SetActive(true);
+                        continue;
                     }
+                    pva.SetDead(pva.DidReport, true);
+                    pva.Overlay.gameObject.SetActive(true);
                 }
                 UnityEngine.Object.Destroy(b.gameObject);
             }
@@ -813,7 +826,7 @@ namespace ExtremeRoles.Patches.Meeting
 
             foreach (DeadBody b in UnityEngine.Object.FindObjectsOfType<DeadBody>())
             {
-                UnityEngine.Object.Destroy(b.gameObject);
+                UnityEngine.Object.Destroy(b?.gameObject);
             }
         }
     }

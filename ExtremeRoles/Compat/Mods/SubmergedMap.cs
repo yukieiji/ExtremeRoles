@@ -14,6 +14,7 @@ using HarmonyLib;
 using UnhollowerRuntimeLib;
 using Hazel;
 using UnityEngine;
+using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Compat.Mods
 {
@@ -94,8 +95,9 @@ namespace ExtremeRoles.Compat.Mods
                 Il2CppType.From(submarineStatusType))?.TryCast(submarineStatusType) as MonoBehaviour;
             
             // 毎回毎回取得すると重いのでキャッシュ化
-            crewVison = PlayerControl.GameOptions.CrewLightMod;
-            impostorVison = PlayerControl.GameOptions.ImpostorLightMod;
+            var curOption = GameOptionsManager.Instance.CurrentGameOptions;
+            crewVison = curOption.GetFloat(FloatOptionNames.CrewLightMod);
+            impostorVison = curOption.GetFloat(FloatOptionNames.ImpostorLightMod);
         }
 
         public void Destroy()
@@ -103,8 +105,9 @@ namespace ExtremeRoles.Compat.Mods
             submarineStatus = null;
 
             // バグってるかもしれないのでもとに戻しとく
-            PlayerControl.GameOptions.CrewLightMod = crewVison;
-            PlayerControl.GameOptions.ImpostorLightMod = impostorVison;
+            var curOption = GameOptionsManager.Instance.CurrentGameOptions;
+            curOption.SetFloat(FloatOptionNames.CrewLightMod, crewVison);
+            curOption.SetFloat(FloatOptionNames.ImpostorLightMod, impostorVison);
         }
 
         public float CalculateLightRadius(GameData.PlayerInfo player, bool neutral, bool neutralImpostor)
@@ -121,14 +124,15 @@ namespace ExtremeRoles.Compat.Mods
             // 2. 視界効果を受けるかをインポスターかどうかで渡して計算
             // 3. 元の視界の広さに戻す
 
-            PlayerControl.GameOptions.CrewLightMod = visonMod;
-            PlayerControl.GameOptions.ImpostorLightMod = visonMod;
+            var curOption = GameOptionsManager.Instance.CurrentGameOptions;
+            curOption.SetFloat(FloatOptionNames.CrewLightMod, visonMod);
+            curOption.SetFloat(FloatOptionNames.ImpostorLightMod, visonMod);
 
             float result = CalculateLightRadius(player, true, !applayVisonEffects);
-            
-            PlayerControl.GameOptions.CrewLightMod = crewVison;
-            PlayerControl.GameOptions.ImpostorLightMod = impostorVison;
-            
+
+            curOption.SetFloat(FloatOptionNames.CrewLightMod, crewVison);
+            curOption.SetFloat(FloatOptionNames.ImpostorLightMod, impostorVison);
+
             return result;
         }
 

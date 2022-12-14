@@ -47,17 +47,23 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
         private static List<PlayerSummary> playerSummary = new List<PlayerSummary>();
 
-        public static void Add(GameData.PlayerInfo playerInfo)
+        public static void Add(
+            GameData.PlayerInfo playerInfo,
+            SingleRoleBase role, GhostRoleBase ghostRole)
         {
             byte playerId = playerInfo.PlayerId;
-
-            SingleRoleBase role = ExtremeRoleManager.GameRole[playerId];
             var (completedTask, totalTask) = GameSystem.GetTaskInfo(playerInfo);
             // IsImpostor
-            PlayerStatus finalStatus = PlayerStatus.Alive;
 
+            PlayerStatus finalStatus = PlayerStatus.Alive;
             GameOverReason reson = ExtremeRolesPlugin.ShipState.EndReason;
             Dictionary<byte, DeadInfo> info = ExtremeRolesPlugin.ShipState.DeadPlayerInfo;
+
+            if (playerInfo.IsDead &&
+                info.TryGetValue(playerId, out DeadInfo deadInfo))
+            {
+                finalStatus = deadInfo.Reason;
+            }
 
             if (reson == GameOverReason.ImpostorBySabotage &&
                 !role.IsImpostor())
@@ -77,14 +83,10 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                         finalStatus = PlayerStatus.Assassinate;
                     }
                 }
-                else if (playerId == ExtremeRolesPlugin.ShipState.ExiledAssassinId)
-                {
-                    if (info.TryGetValue(playerId, out DeadInfo deadInfo))
-                    {
-                        finalStatus = deadInfo.Reason;
-                    }
-                }
-                else if (!role.IsImpostor())
+                else if (
+                    !role.IsImpostor() &&
+                    !playerInfo.IsDead &&
+                    !playerInfo.Disconnected)
                 {
                     finalStatus = PlayerStatus.Surrender;
                 }
@@ -97,32 +99,16 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                 {
                     finalStatus = PlayerStatus.Zombied;
                 }
-                else
-                {
-                    if (info.TryGetValue(playerId, out DeadInfo deadInfo))
-                    {
-                        finalStatus = deadInfo.Reason;
-                    }
-                }
             }
             else if (playerInfo.Disconnected)
             {
                 finalStatus = PlayerStatus.Disconnected;
             }
-            else
-            {
-                if (info.TryGetValue(playerId, out DeadInfo deadInfo))
-                {
-                    finalStatus = deadInfo.Reason;
-                }
-            }
-
-            ExtremeGhostRoleManager.GameRole.TryGetValue(
-                playerId, out GhostRoleBase ghostRole);
 
             playerSummary.Add(
                 new PlayerSummary
                 {
+                    PlayerId = playerId,
                     PlayerName = playerInfo.PlayerName,
                     Role = role,
                     GhostRole = ghostRole,
@@ -344,8 +330,9 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             this.showText.text = this.summaryText[this.curPage];
         }
 
-        public sealed class PlayerSummary
+        public struct PlayerSummary
         {
+            public byte PlayerId { get; set; }
             public string PlayerName { get; set; }
             public SingleRoleBase Role { get; set; }
             public GhostRoleBase GhostRole { get; set; }

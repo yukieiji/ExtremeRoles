@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
-using Hazel;
+
 using UnityEngine;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles;

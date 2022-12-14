@@ -1,4 +1,5 @@
 ﻿using System;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
@@ -9,12 +10,13 @@ namespace ExtremeRoles.Roles.Solo
     public sealed class VanillaRoleWrapper : SingleRoleBase
     {
         public RoleTypes VanilaRoleId;
+
         public VanillaRoleWrapper(
             RoleTypes id) : base()
         {
             this.VanilaRoleId = id;
             this.Id = ExtremeRoleId.VanillaRole;
-            this.RoleName = id.ToString();
+            this.RawRoleName = this.VanilaRoleId.ToString();
 
             switch (id)
             {
@@ -26,8 +28,10 @@ namespace ExtremeRoles.Roles.Solo
                     this.UseVent = true;
                     this.UseSabotage = true;
                     this.HasTask = false;
-                    this.KillCoolTime = PlayerControl.GameOptions.KillCooldown;
-                    this.KillRange = PlayerControl.GameOptions.KillDistance;
+                    this.KillCoolTime = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
+                        FloatOptionNames.KillCooldown);
+                    this.KillRange = GameOptionsManager.Instance.CurrentGameOptions.GetInt(
+                        Int32OptionNames.KillDistance);
                     break;
                 case RoleTypes.Engineer:
                     this.Team = ExtremeRoleType.Crewmate;

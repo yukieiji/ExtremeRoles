@@ -2,8 +2,8 @@
 using System.Linq;
 
 using UnityEngine;
-
 using Hazel;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Helper;
@@ -43,7 +43,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 Func<bool> canUse,
                 Sprite cameraSetSprite,
                 Sprite ventRemoveSprite,
-                Vector3 positionOffset,
                 Action abilityCleanUp,
                 Func<bool> abilityCheck,
                 Func<bool> isVentMode,
@@ -51,16 +50,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 int cameraSetScrewNum,
                 float ventRemoveStopTime,
                 float cameraRemoveStopTime,
-                KeyCode hotkey = KeyCode.F,
-                bool mirror = false) : base(
+                KeyCode hotkey = KeyCode.F
+                ) : base(
                     "",
                     ability,
                     canUse,
                     cameraSetSprite,
-                    positionOffset,
-                    abilityCleanUp,
-                    abilityCheck,
-                    hotkey, mirror)
+                    abilityCleanUp, abilityCheck, hotkey)
             {
                 this.abilityCountText = GameObject.Instantiate(
                     this.Button.cooldownTimerText,
@@ -474,8 +470,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     break;
             }
             camera.NewName = newName;
-            
-            if (PlayerControl.GameOptions.MapId == 2 || PlayerControl.GameOptions.MapId == 4)
+
+            byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                ByteOptionNames.MapId);
+
+            if (mapId == 2 || mapId == 4)
             {
                 camera.transform.localRotation = new Quaternion(0, 0, 1, 1);
             }
@@ -535,7 +534,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     Resources.Path.CarpenterSetCamera),
                 Resources.Loader.CreateSpriteFromResources(
                     Resources.Path.CarpenterVentSeal),
-                new Vector3(-1.8f, -0.06f, 0),
                 CleanUp,
                 IsAbilityCheck,
                 IsVentMode,
@@ -568,7 +566,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public bool IsAbilityUse() => 
             this.IsCommonUse() && 
-            !(PlayerControl.GameOptions.MapId == 1 && this.targetVent == null) &&
+            !(GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                ByteOptionNames.MapId) == 1 && this.targetVent == null) &&
             !(this.targetVent == null && 
                 ExtremeRolesPlugin.Compat.IsModMap && 
                 !ExtremeRolesPlugin.Compat.ModMap.CanPlaceCamera);

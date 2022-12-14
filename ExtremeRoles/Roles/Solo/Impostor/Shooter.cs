@@ -1,5 +1,7 @@
 ﻿using System;
+
 using UnityEngine;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -240,7 +242,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 if (meetingShootText == null)
                 {
                     meetingShootText = UnityEngine.Object.Instantiate(
-                        FastDestroyableSingleton<HudManager>.Instance.TaskText,
+                        FastDestroyableSingleton<HudManager>.Instance.TaskPanel.taskText,
                         MeetingHud.Instance.transform);
                     meetingShootText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
                     meetingShootText.transform.position = Vector3.zero;
@@ -473,7 +475,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.isAwake = this.isAwake ||
                 (
                     this.awakeKillCount <= 0 &&
-                    this.awakeImpNum >= PlayerControl.GameOptions.NumImpostors
+                    this.awakeImpNum >= GameOptionsManager.Instance.CurrentGameOptions.GetInt(
+                        Int32OptionNames.NumImpostors)
                 );
 
             this.isAwakedHasOtherVision = false;

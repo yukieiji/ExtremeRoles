@@ -107,7 +107,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             Carrier role,
             PlayerControl rolePlayer)
         {
-            role.CarringBody.transform.parent = null;
+            role.CarringBody.transform.SetParent(null);
 
             if (!rolePlayer.inVent && !rolePlayer.moveable)
             {
@@ -226,7 +226,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             if (this.CarringBody != null)
             {
-                this.CarringBody.transform.parent = null;
+                this.CarringBody.transform.SetParent(null);
                 this.CarringBody.transform.position = rolePlayer.GetTruePosition() + new Vector2(0.15f, 0.15f);
                 this.CarringBody.transform.position -= new Vector3(0.0f, 0.0f, 0.01f);
 

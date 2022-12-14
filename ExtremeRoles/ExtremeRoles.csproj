@@ -3,9 +3,9 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
-      <Version>4.0.1.4</Version>
-      <!--<VersionPrefix>4.0.1</VersionPrefix>-->
-      <VersionSuffix>AwakeningPart2</VersionSuffix> 
+      <!--<Version>4.0.1.4</Version>-->
+        <VersionPrefix>5.0.0</VersionPrefix>
+      <VersionSuffix>1stAnniversary</VersionSuffix> 
         <Description>Extreme Roles for Advanced user</Description>
         <Authors>yukieiji</Authors>
         <Configurations>Debug;Release</Configurations>
@@ -31,13 +31,15 @@
         <PackageReference Include="BepInEx.IL2CPP.MSBuild" Version="1.1.1" PrivateAssets="all" />
 		
 	    <EmbeddedResource Include="Resources\Installer\ExtremeBepInExInstaller.exe" />
+      <EmbeddedResource Include="Resources\Asset\*.asset" />
         <EmbeddedResource Include="Resources\*.png" />
         <EmbeddedResource Include="Resources\MeryVentAnimation\*.png" />
+      <EmbeddedResource Include="Resources\DelinquentScribe\*.png" />
 		<EmbeddedResource Include="Resources\JsonData\*.json" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Update="AmongUs.GameLibs.Steam" Version="2022.10.25" />
+      <PackageReference Update="AmongUs.GameLibs.Steam" Version="2022.12.8" />
     </ItemGroup>
 
     <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">
@@ -45,6 +47,8 @@
     </Target>
 
     <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-        <Exec Command="python $(SolutionDir)\convertToJson.py" />
+      <Exec Command="python $(SolutionDir)\convertToJson.py" />
+      <Exec Command="if not exist $(SolutionDir)ExtremeRoles\Resources\Asset mkdir $(SolutionDir)ExtremeRoles\Resources\Asset" />
+      <Exec Command="xcopy $(SolutionDir)UnityAsset\ExtremeRoles $(SolutionDir)ExtremeRoles\Resources\Asset /y /i" />
     </Target>
 </Project>

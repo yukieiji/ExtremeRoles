@@ -12,11 +12,24 @@ using ExtremeSkins.Module;
 
 namespace ExtremeSkins
 {
-    public static class CreatorModeManager
+    public class CreatorModeManager
     {
-        public static bool IsEnable => creatorModeConfig.Value;
+        public enum Mode
+        {
+            Enable,
+            Disable,
+            EnableReady,
+            DisableReady
+        }
 
-        private static ConfigEntry<bool> creatorModeConfig;
+        public static CreatorModeManager Instance;
+
+        public bool IsEnable => this.creatorModeConfig.Value;
+        public string StatusString => this.statusString;
+
+        private ConfigEntry<bool> creatorModeConfig;
+        private Mode mode;
+        private string statusString = string.Empty;
 
         private const string additionalTransCsv = "translation.csv";
         private const string additionalColorCsv = "color.csv";
@@ -26,12 +39,39 @@ namespace ExtremeSkins
 
         private const string comma = ",";
 
-        public static void Initialize()
+        public CreatorModeManager()
         {
-            creatorModeConfig = ExtremeSkinsPlugin.Instance.Config.Bind(
+            this.creatorModeConfig = ExtremeSkinsPlugin.Instance.Config.Bind(
                 "CreateNewSkin", "CreatorMode", false);
 
-            if (IsEnable)
+            this.mode = this.IsEnable ? Mode.Enable : Mode.Disable;
+            updateStatusString();
+        }
+
+        public void SwitchMode()
+        {
+            this.mode = this.IsEnable ? Mode.DisableReady : Mode.EnableReady;
+            this.creatorModeConfig.Value = !this.IsEnable;
+            ExtremeSkinsPlugin.Logger.LogInfo($"Switch Mode: {this.mode}");
+            updateStatusString();
+        }
+
+        private void updateStatusString()
+        {
+            this.statusString = this.mode switch
+            {
+                Mode.Enable       => Helper.Translation.GetString("enableCreatorMode"),
+                Mode.DisableReady => Helper.Translation.GetString("disableReadyCreatorMode"),
+                Mode.EnableReady  => Helper.Translation.GetString("enableReadyCreatorMode"),
+                _ => string.Empty
+            };
+        }
+
+        public static void Initialize()
+        {
+            Instance = new CreatorModeManager();
+
+            if (Instance.IsEnable)
             {
                 string creatorModePath = string.Concat(
                     Path.GetDirectoryName(Application.dataPath),

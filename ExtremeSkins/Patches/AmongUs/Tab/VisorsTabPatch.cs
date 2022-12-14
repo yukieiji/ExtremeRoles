@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+using UnityEngine;
 using HarmonyLib;
 
 using ExtremeRoles.Performance;
@@ -11,6 +12,8 @@ using ExtremeSkins.SkinManager;
 
 using AmongUs.Data;
 using AmongUs.Data.Player;
+
+using ExRLoader = ExtremeRoles.Resources.Loader;
 
 namespace ExtremeSkins.Patches.AmongUs.Tab
 {
@@ -23,6 +26,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
         private static float inventoryTop = 1.5f;
         private static float inventoryBottom = -2.5f;
 
+        public static CreatorTab Tab = null;
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(VisorsTab), nameof(VisorsTab.OnEnable))]
@@ -34,16 +38,31 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
             VisorData[] unlockedVisor = DestroyableSingleton<HatManager>.Instance.GetUnlockedVisors();
             Dictionary<string, List<VisorData>> visorPackage = new Dictionary<string, List<VisorData>>();
 
-            SkinTab.DestoryList(visorsTabCustomText);
-            SkinTab.DestoryList(__instance.ColorChips.ToArray().ToList());
+            CustomCosmicTab.DestoryList(visorsTabCustomText);
+            CustomCosmicTab.DestoryList(__instance.ColorChips.ToArray().ToList());
+            CustomCosmicTab.RemoveAllTabs();
 
             visorsTabCustomText.Clear();
             __instance.ColorChips.Clear();
 
-            if (SkinTab.textTemplate == null)
+            if (CustomCosmicTab.textTemplate == null)
             {
-                SkinTab.textTemplate = PlayerCustomizationMenu.Instance.itemName;
+                CustomCosmicTab.textTemplate = Object.Instantiate(
+                    PlayerCustomizationMenu.Instance.itemName);
+                CustomCosmicTab.textTemplate.gameObject.SetActive(false);
             }
+
+            if (Tab == null)
+            {
+                GameObject obj = Object.Instantiate(
+                    ExRLoader.GetUnityObjectFromResources<GameObject>(
+                        CustomCosmicTab.CreatorTabAssetBundle,
+                        CustomCosmicTab.CreatorTabAssetPrefab),
+                    __instance.transform);
+                Tab = obj.GetComponent<CreatorTab>();
+                obj.hideFlags |= HideFlags.HideAndDontSave | HideFlags.DontSaveInEditor;
+            }
+
 
             foreach (VisorData viData in unlockedVisor)
             {
@@ -60,20 +79,20 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
                 }
                 else
                 {
-                    if (!visorPackage.ContainsKey(SkinTab.InnerslothPackageName))
+                    if (!visorPackage.ContainsKey(CustomCosmicTab.InnerslothPackageName))
                     {
                         visorPackage.Add(
-                            SkinTab.InnerslothPackageName,
+                            CustomCosmicTab.InnerslothPackageName,
                             new List<VisorData>());
                     }
-                    visorPackage[SkinTab.InnerslothPackageName].Add(viData);
+                    visorPackage[CustomCosmicTab.InnerslothPackageName].Add(viData);
                 }
             }
 
             float yOffset = __instance.YStart;
 
             var orderedKeys = visorPackage.Keys.OrderBy((string x) => {
-                if (x == SkinTab.InnerslothPackageName)
+                if (x == CustomCosmicTab.InnerslothPackageName)
                 {
                     return 0;
                 }
@@ -86,11 +105,15 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
             foreach (string key in orderedKeys)
             {
                 createVisorTab(visorPackage[key], key, yOffset, __instance);
-                yOffset = (yOffset - (SkinTab.HeaderSize * __instance.YOffset)) - (
-                    (visorPackage[key].Count - 1) / __instance.NumPerRow) * __instance.YOffset - SkinTab.HeaderSize;
+                yOffset = (yOffset - (CustomCosmicTab.HeaderSize * __instance.YOffset)) - (
+                    (visorPackage[key].Count - 1) / __instance.NumPerRow) * __instance.YOffset - CustomCosmicTab.HeaderSize;
             }
 
-            __instance.scroller.ContentYBounds.max = -(yOffset + 3.0f + SkinTab.HeaderSize);          
+            __instance.scroller.ContentYBounds.max = -(yOffset + 3.0f + CustomCosmicTab.HeaderSize);
+            
+            Tab.gameObject.SetActive(true);
+            Tab.SetUpButtons(__instance.scroller, visorsTabCustomText);
+
             return false;
         }
 
@@ -98,7 +121,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
         [HarmonyPatch(typeof(VisorsTab), nameof(VisorsTab.Update))]
         public static void VisorsTabUpdatePostfix(VisorsTab __instance)
         {
-            SkinTab.HideTmpTextPackage(
+            CustomCosmicTab.HideTmpTextPackage(
                 visorsTabCustomText, inventoryTop, inventoryBottom);
         }
 
@@ -108,7 +131,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
             float offset = yStart;
 
 
-            SkinTab.AddTmpTextPackageName(
+            CustomCosmicTab.AddTmpTextPackageName(
                 __instance, yStart, packageName,
                 ref visorsTabCustomText, ref offset);
 
@@ -120,7 +143,7 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
             {
                 VisorData vi = visores[i];
 
-                ColorChip colorChip = SkinTab.SetColorChip(
+                ColorChip colorChip = CustomCosmicTab.SetColorChip(
                     __instance, i, offset);
 
                 if (ActiveInputManager.currentControlType == ActiveInputManager.InputType.Keyboard)

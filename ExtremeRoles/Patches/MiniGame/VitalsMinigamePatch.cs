@@ -2,6 +2,7 @@
 using HarmonyLib;
 
 using UnityEngine;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
@@ -136,7 +137,8 @@ namespace ExtremeRoles.Patches.MiniGame
             }
             else
             {
-                switch (PlayerControl.GameOptions.MapId)
+                switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                    ByteOptionNames.MapId))
                 {
                     case 0:
                     case 1:

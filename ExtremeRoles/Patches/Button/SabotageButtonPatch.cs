@@ -19,8 +19,12 @@ namespace ExtremeRoles.Patches.Button
                 role.IsImpostor()) { return true; }
             if (!role.CanUseSabotage()) { return true; }
 
-            FastDestroyableSingleton<HudManager>.Instance.ShowMap(
-                (Il2CppSystem.Action<MapBehaviour>)((m) => { m.ShowSabotageMap(); }));
+            FastDestroyableSingleton<HudManager>.Instance.ToggleMapVisible(
+                new MapOptions
+                {
+                    Mode = MapOptions.Modes.Sabotage,
+                    AllowMovementWhileMapOpen = true,
+                });
             return false;
         }
     }

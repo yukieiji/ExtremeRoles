@@ -1,8 +1,12 @@
 name: AutoBuildAndTransCheck
 
+permissions:
+  pull-requests: write
+  contents: read
+
 on: 
   pull_request:
-    types: [opened, edited]
+    types: [opened, synchronize, edited]
 
 jobs:
   build_check:

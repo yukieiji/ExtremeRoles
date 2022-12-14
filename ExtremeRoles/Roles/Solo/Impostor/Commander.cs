@@ -8,6 +8,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -50,8 +51,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             if (role == null || !role.IsImpostor()) { return; }
 
             Commander commander = ExtremeRoleManager.GetSafeCastedRole<Commander>(rolePlayerId);
-
-            int deadImpNum = PlayerControl.GameOptions.NumImpostors;
+            int maxImpNum = GameOptionsManager.Instance.CurrentGameOptions.GetInt(
+                Int32OptionNames.NumImpostors);
+            int deadImpNum = maxImpNum;
             foreach (var (playerId, checkRole) in ExtremeRoleManager.GameRole)
             {
                 if (!checkRole.IsImpostor()) { continue; }
@@ -63,8 +65,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 --deadImpNum;
             }
 
-            deadImpNum = Mathf.Clamp(
-                deadImpNum, 0, PlayerControl.GameOptions.NumImpostors);
+            deadImpNum = Mathf.Clamp(deadImpNum, 0, maxImpNum);
 
             float killCool = CachedPlayerControl.LocalPlayer.PlayerControl.killTimer;
             if (killCool > 0.1f)
@@ -76,6 +77,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 CachedPlayerControl.LocalPlayer.PlayerControl.killTimer = Mathf.Clamp(
                     newKillCool, 0.1f, killCool);
             }
+            Sound.PlaySound(
+                Sound.SoundType.CommanderReduceKillCool, 1.2f);
         }
         public void CreateAbility()
         {

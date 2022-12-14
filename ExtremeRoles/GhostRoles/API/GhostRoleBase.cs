@@ -48,6 +48,8 @@ namespace ExtremeRoles.GhostRoles.API
         public Color RoleColor => this.NameColor;
         public bool HasTask => this.Task;
 
+        public int GameControlId => this.controlId;
+
         protected ExtremeRoleType TeamType;
         protected ExtremeGhostRoleId RoleId;
         protected string RoleName;
@@ -57,9 +59,8 @@ namespace ExtremeRoles.GhostRoles.API
 
         protected bool Task;
 
-        protected readonly Vector3 DefaultButtonOffset = new Vector3(-1.8f, -0.06f, 0);
-
         private OptionTab tab = OptionTab.General;
+        private int controlId;
 
         public GhostRoleBase(
             bool hasTask,
@@ -184,6 +185,11 @@ namespace ExtremeRoles.GhostRoles.API
             return Color.clear;
         }
 
+        public void SetGameControlId(int newId)
+        {
+            this.controlId = newId;
+        }
+
         protected void CreateButtonOption(
             IOption parentOps,
             float defaultActiveTime = float.MaxValue)
@@ -235,21 +241,23 @@ namespace ExtremeRoles.GhostRoles.API
             this.Button.SetAbilityCoolTime(
                 allOps[this.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)].GetValue());
 
-            int checkOptionId = this.GetRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime);
+            IOption option;
 
-            if (allOps.ContainsKey(checkOptionId))
+            if (allOps.TryGetValue(
+                    this.GetRoleOptionId(
+                        RoleAbilityCommonOption.AbilityActiveTime), out option))
             {
-                this.Button.SetAbilityActiveTime(
-                    allOps[checkOptionId].GetValue());
+                this.Button.SetAbilityActiveTime(option.GetValue());
             }
 
-            checkOptionId = this.GetRoleOptionId(RoleAbilityCommonOption.AbilityCount);
             var abilityCountButton = this.Button as AbilityCountButton;
 
-            if (allOps.ContainsKey(checkOptionId) && abilityCountButton != null)
+            if (allOps.TryGetValue(
+                    this.GetRoleOptionId(
+                        RoleAbilityCommonOption.AbilityCount),
+                    out option) && abilityCountButton != null)
             {
-                abilityCountButton.UpdateAbilityCount(
-                    allOps[checkOptionId].GetValue());
+                abilityCountButton.UpdateAbilityCount(option.GetValue());
             }
 
             this.Button.SetReportAbility(

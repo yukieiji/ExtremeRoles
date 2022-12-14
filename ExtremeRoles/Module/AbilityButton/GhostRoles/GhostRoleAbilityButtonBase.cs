@@ -1,8 +1,6 @@
 ﻿using System;
 using UnityEngine;
 
-using Hazel;
-
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
@@ -25,17 +23,16 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
             Func<bool> abilityPreCheck,
             Func<bool> canUse,
             Sprite sprite,
-            Vector3 positionOffset,
             Action rpcHostCallAbility = null,
             Action abilityCleanUp = null,
             Func<bool> abilityCheck = null,
-            KeyCode hotkey = KeyCode.F,
-            bool mirror = false) : base(
+            KeyCode hotkey = KeyCode.F
+            ) : base(
                 Helper.Translation.GetString(
                     string.Concat(abilityType.ToString(), "Button")),
-                canUse, sprite, positionOffset,
+                canUse, sprite,
                 abilityCleanUp, abilityCheck,
-                hotkey, mirror)
+                hotkey)
         {
             this.ability = ability;
             this.abilityPreCheck = abilityPreCheck;
@@ -54,7 +51,6 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
         {
             if (this.abilityPreCheck())
             {
-
                 using (var caller = RPCOperator.CreateCaller(
                     RPCOperator.Command.UseGhostRoleAbility))
                 {
@@ -116,16 +112,6 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
 
             this.Button.graphic.sprite = this.ButtonSprite;
             this.Button.OverrideText(ButtonText);
-
-            if (hudManager.UseButton != null)
-            {
-                Vector3 pos = hudManager.UseButton.transform.localPosition;
-                if (this.Mirror)
-                {
-                    pos = new Vector3(-pos.x, pos.y, pos.z);
-                }
-                this.Button.transform.localPosition = pos + PositionOffset;
-            }
 
             AbilityButtonUpdate();
 
