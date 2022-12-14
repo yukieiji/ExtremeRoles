@@ -16,7 +16,7 @@ AmongUsの上級者(初心者)向けのロール追加MOD、主な特徴とし�
 * MODオプションのインポート/エクスポート機能
 * MODの更新/バージョンチェック機能
 * 互換性のあるMODのインストール/アップデートチェック/アンインストール機能
-* 多言語対応(現在は日本語と简体中文のみ/only Japanese and SChinese now!!)
+* 多言語対応(現在は英語と日本語、简体中文のみ/only English and Japanese, SChinese now!!)
 
 ## 追加役職一覧(Extreme Roles v5.0.0.0時点、今後も追加予定)
 #### ホスト役職
@@ -57,7 +57,7 @@ AmongUsの上級者(初心者)向けのロール追加MOD、主な特徴とし�
 #### 幽霊役職
 |  クルー  |  インポスター  | ニュートラル |
 | ---- | ---- | ---- |
-|  ファウヌス  |  サボり魔  |  |
+|  ファウヌス  |  サボり魔  | ウィスプ |
 |  ポルターガイスト  |  ベントガイスト  |  |
 
 * 「ニート」と「ラバーズ」はオプション設定によりニュートラルにもなります。(デフォルトはクルー)
@@ -81,7 +81,9 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 
 ## リリーススケジュール
 
-- No planning・・・
+- Extreme Roles v5.1.0.0
+  - Extreme Roles HideNSeekアップデート
+  - 公式のHideNSeekにオプションや役職を使用できるようにします
 
 ## 現在実装検討中の役職及び機能
 - ???(第三陣営)
@@ -116,7 +118,7 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 |  ベントガイスト  |  ベントを動かせるインポスター幽霊役職 |  ふにちかさん |  v2.2.0.0 |
 |  サバイバー  |  タスクをやらないと死亡時確定敗北してしまうクルー |  のえぞうさん |  v3.0.0.0 |
 |  会議終了後のランダムスポーン  |  会議終了後のスポーン位置選択を自動選択にする |  Nanoさん |  v4.0.1.0 |
-
+|  マジシャン  |  プレイヤーの位置をバラバラにできるインポスター |  なりすさん |  v5.0.0.0 |
 
 ## AmongUsとの対応バージョンと最新版のダウンロード
 - 最新版のダウンロードは[こちら](https://github.com/yukieiji/ExtremeRoles/releases/latest)から出来ます
@@ -124,7 +126,8 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 
 |  AmongUs バージョン  |  Extreme Roles バージョン  |
 | ---- | ---- |
-|  v2022.10.25s/v2022.10.25e  |  v4.0.0.0 ～ v4.1.0.0 |
+|  v2022.12.08s/vv2022.12.08e  |  v5.0.0.0 |
+|  v2022.10.25s/v2022.10.25e  |  v4.0.0.0 ～ v4.0.1.4 |
 |  v2022.10.18s/v2022.10.18e  |  v3.3.0.3 ～ v3.3.0.6 |
 |  v2022.08.23s/v2022.08.23e/v2022.08.24s/v2022.08.24e/v2022.09.20s/v2022.09.20e  |  v3.2.2.5 ～ v3.3.0.2 |
 |  v2022.08.23s/v2022.08.23e/v2022.08.24s/v2022.08.24e  |  v3.2.2.0 ～ v3.2.2.4 |
@@ -152,11 +155,14 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
      - 初回のビルドはNugetパッケージの復元が入るので時間がかかります
 
 ## クレジット&Thanks
-- TheOtherRoles - 開発当時から[TOR](https://github.com/Eisbison/TheOtherRoles)及び[TOR-GM](https://github.com/yukinogatari/TheOtherRoles-GM)のコード(ロールに関するところ以外(オプションやパッチ等))を参考、引用、改変して開発しています。TORがなければ開発をこのMODを開発することは不可能でした。また、バウンティハンターのアイディア元
-- [Jackal and Sidekick](https://www.twitch.tv/dhalucard) - Dhalucard氏によって作成されたMOD、ジャッカルとサイドキックのアイディア元
-- [Sheriff-Mod](https://github.com/Woodi-dev/Among-Us-Sheriff-Mod) - Woodi-dev氏によって作成されたMOD、シェリフのアイディア元
-- [Among-Us-Love-Couple-Mod](https://www.curseforge.com/among-us/all-mods/love-couple-mod) - Woodi-dev氏によって作成されたMOD、ラバーズのアイディア元
-- [TooManyRolesMods](https://github.com/Hardel-DW/TooManyRolesMods) - Hardel-DW氏によって作成されたMOD、タイムマスターのアイディア元
+- TheOtherRoles - 開発当時から[TOR](https://github.com/Eisbison/TheOtherRoles)及び[TOR-GM](https://github.com/yukinogatari/TheOtherRoles-GM)のコード(ロールに関するところ以外(オプションやパッチ等))を参考、引用、改変して開発しています。TORがなければ開発をこのMODを開発することは不可能でした。また、バウンティハンター、カーペンター、シューター、キャプテンのアイディア元
+- [Jackal and Sidekick](https://www.twitch.tv/dhalucard) - **Dhalucard**氏によって作成されたMOD、ジャッカルとサイドキックのアイディア元
+- [Sheriff-Mod](https://github.com/Woodi-dev/Among-Us-Sheriff-Mod) - **Woodi-dev**氏によって作成されたMOD、シェリフのアイディア元
+- [Among-Us-Love-Couple-Mod](https://www.curseforge.com/among-us/all-mods/love-couple-mod) - **Woodi-dev**氏によって作成されたMOD、ラバーズのアイディア元
+- [TooManyRolesMods](https://github.com/Hardel-DW/TooManyRolesMods) - **Hardel-DW**氏によって作成されたMOD、タイムマスターのアイディア元
+- [TownOfUs](https://github.com/slushiegoose/Town-Of-Us) - **Slushiegoose**氏によって作成されたMOD、アンブレイヤーのアイディア元
+- [Jester](https://github.com/Maartii/Jester) - **Maartii**氏によって作成されたMOD、ジェスターのアイディア元
+- [Goose-Goose-Duck](https://store.steampowered.com/app/1568590/Goose_Goose_Duck) - **Slushygoose**氏によって作成されたMOD、イーターのアイディア元
 
 - レジスタンス:アヴァロン - マーリン、アサシンのアイディア元
 - シャドウハンターズ - アリス、オーバーローダーのアイディア元
@@ -178,5 +184,6 @@ EXRole can support multiple languages, but only Japanese is implemented because 
 
 |  言語名/Languages  |  対応状況/Status |
 | ---- | ---- |
+|  英語/English  |  部分的に翻訳済み/Mostly Translated  |
 |  日本語/Japanese  |  完全翻訳済み/Fully Translated  |
-|  简体中文/SChinese  |  完全翻訳済み/Fully Translated  |
+|  简体中文/SChinese  |  部分的に翻訳済み/Mostly Translated  |
