@@ -414,7 +414,7 @@ namespace ExtremeRoles.Roles.Combination
                 this.guesserUi.SetInfo(
                     string.Format(
                         Translation.GetString("guesserUiInfo"),
-                        this.curGuessNum, this.maxGuessNum));
+                        this.bulletNum, this.maxGuessNum));
                 this.guesserUi.SetTarget(targetPlayerId);
                 this.guesserUi.gameObject.SetActive(true);
             }
@@ -430,7 +430,7 @@ namespace ExtremeRoles.Roles.Combination
 
         public void ResetOnMeetingEnd()
         {
-            return;
+            this.guesserUi = null;
         }
 
         public void ResetOnMeetingStart()

@@ -165,6 +165,7 @@ namespace ExtremeRoles.Resources
                 "ExtremeRoles.Resources.Asset.closebutton.asset",
                 "ExtremeRoles.Resources.Asset.confirmmenu.asset",
                 "ExtremeRoles.Resources.Asset.fonts.asset",
+                "ExtremeRoles.Resources.Asset.eventsystem.asset",
             })
             {
                 getAssetBundleFromAssembly(path, assembly);
