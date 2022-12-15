@@ -45,24 +45,19 @@ namespace ExtremeRoles.Roles.API.Interface
             this IRoleAbility self,
             string buttonName,
             Sprite sprite,
-            Vector3? positionOffset = null,
             Action abilityCleanUp = null,
             Func<bool> checkAbility = null,
-            KeyCode hotkey = KeyCode.F,
-            bool mirror = false)
+            KeyCode hotkey = KeyCode.F)
         {
-            Vector3 offset = positionOffset ?? new Vector3(-1.8f, -0.06f, 0);
 
             self.Button = new ReusableAbilityButton(
                 buttonName,
                 self.UseAbility,
                 self.IsAbilityUse,
                 sprite,
-                offset,
                 abilityCleanUp,
                 checkAbility,
-                hotkey,
-                mirror);
+                hotkey);
 
             self.RoleAbilityInit();
         }
@@ -71,24 +66,16 @@ namespace ExtremeRoles.Roles.API.Interface
             this IRoleAbility self,
             string buttonName,
             Sprite sprite,
-            Vector3? positionOffset = null,
             Action abilityCleanUp = null,
             Func<bool> checkAbility = null,
-            KeyCode hotkey = KeyCode.F,
-            bool mirror = false)
+            KeyCode hotkey = KeyCode.F)
         {   
-            Vector3 offset = positionOffset ?? new Vector3(-1.8f, -0.06f, 0);
-
             self.Button = new AbilityCountButton(
                 buttonName,
                 self.UseAbility,
                 self.IsAbilityUse,
-                sprite,
-                offset,
-                abilityCleanUp,
-                checkAbility,
-                hotkey,
-                mirror);
+                sprite, abilityCleanUp,
+                checkAbility, hotkey);
 
             self.RoleAbilityInit();
 
@@ -100,23 +87,15 @@ namespace ExtremeRoles.Roles.API.Interface
             string buttonName,
             Sprite sprite,
             Action abilityCleanUp,
-            Vector3? positionOffset = null,
             Func<bool> checkAbility = null,
-            KeyCode hotkey = KeyCode.F,
-            bool mirror = false)
+            KeyCode hotkey = KeyCode.F)
         {
-            Vector3 offset = positionOffset ?? new Vector3(-1.8f, -0.06f, 0);
-
             self.Button = new ReclickableButton(
                 buttonName,
                 self.UseAbility,
                 self.IsAbilityUse,
-                sprite,
-                offset,
-                abilityCleanUp,
-                checkAbility,
-                hotkey,
-                mirror);
+                sprite, abilityCleanUp,
+                checkAbility, hotkey);
 
             self.RoleAbilityInit();
         }
@@ -126,23 +105,18 @@ namespace ExtremeRoles.Roles.API.Interface
             string buttonName,
             Sprite sprite,
             Action abilityCleanUp,
-            Vector3? positionOffset = null,
             Func<bool> checkAbility = null,
-            KeyCode hotkey = KeyCode.F,
-            bool mirror = false)
+            KeyCode hotkey = KeyCode.F)
         {
-            Vector3 offset = positionOffset ?? new Vector3(-1.8f, -0.06f, 0);
 
             self.Button = new ChargableButton(
                 buttonName,
                 self.UseAbility,
                 self.IsAbilityUse,
                 sprite,
-                offset,
                 abilityCleanUp,
                 checkAbility,
-                hotkey,
-                mirror);
+                hotkey);
 
             self.RoleAbilityInit();
         }
@@ -154,13 +128,9 @@ namespace ExtremeRoles.Roles.API.Interface
             Sprite activateSprite,
             Sprite deactivateSprite,
             Action abilityCleanUp,
-            Vector3? positionOffset = null,
             Func<bool> checkAbility = null,
-            KeyCode hotkey = KeyCode.F,
-            bool mirror = false)
+            KeyCode hotkey = KeyCode.F)
         {
-            Vector3 offset = positionOffset ?? new Vector3(-1.8f, -0.06f, 0);
-
             self.Button = new PassiveAbilityButton(
                 activateButtonName,
                 deactivateButtonName,
@@ -168,11 +138,9 @@ namespace ExtremeRoles.Roles.API.Interface
                 self.IsAbilityUse,
                 activateSprite,
                 deactivateSprite,
-                offset,
                 abilityCleanUp,
                 checkAbility,
-                hotkey,
-                mirror);
+                hotkey);
 
             self.RoleAbilityInit();
         }

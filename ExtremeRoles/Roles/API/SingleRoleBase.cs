@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 
 using ExtremeRoles.Module;
+using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Roles.API
 {
@@ -34,7 +35,7 @@ namespace ExtremeRoles.Roles.API
         public float KillCoolTime = 0f;
         public int KillRange = 1;
 
-        public string RoleName;
+        public virtual string RoleName => this.RawRoleName;
 
         public ExtremeRoleId Id;
         public ExtremeRoleType Team;
@@ -42,6 +43,8 @@ namespace ExtremeRoles.Roles.API
         protected Color NameColor;
 
         private OptionTab tab = OptionTab.General;
+
+        protected string RawRoleName;
 
         public SingleRoleBase()
         { }
@@ -63,7 +66,7 @@ namespace ExtremeRoles.Roles.API
         {
             this.Id = id;
             this.Team = team;
-            this.RoleName = roleName;
+            this.RawRoleName = roleName;
             this.NameColor = roleColor;
             this.CanKill = canKill;
             this.HasTask = hasTask;
@@ -119,13 +122,15 @@ namespace ExtremeRoles.Roles.API
 
         protected override void CommonInit()
         {
-            var baseOption = PlayerControl.GameOptions;
+            var baseOption = GameOptionsManager.Instance.CurrentGameOptions;
             var allOption = OptionHolder.AllOption;
 
-            this.Vison = this.IsImpostor() ? baseOption.ImpostorLightMod : baseOption.CrewLightMod;
+            this.Vison = this.IsImpostor() ? 
+                baseOption.GetFloat(FloatOptionNames.ImpostorLightMod) : 
+                baseOption.GetFloat(FloatOptionNames.CrewLightMod);
             
-            this.KillCoolTime = baseOption.KillCooldown;
-            this.KillRange = baseOption.KillDistance;
+            this.KillCoolTime = baseOption.GetFloat(FloatOptionNames.KillCooldown);
+            this.KillRange = baseOption.GetInt(Int32OptionNames.KillDistance);
 
             this.IsApplyEnvironmentVision = !this.IsImpostor();
 

@@ -10,9 +10,7 @@ namespace ExtremeRoles.Patches.MiniGame
         {
             if (OptionHolder.Ship.IsAutoSelectRandomSpawn)
             {
-                __instance.LocationButtons[
-                    RandomGenerator.Instance.Next(
-                        __instance.LocationButtons.Length)].ReceiveClickUp();
+                __instance.Close();
             }
         }
     }

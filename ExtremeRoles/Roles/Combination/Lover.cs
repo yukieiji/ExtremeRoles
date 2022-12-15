@@ -7,6 +7,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
+using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Roles.Combination
 {
@@ -266,7 +267,7 @@ namespace ExtremeRoles.Roles.Combination
             }
             if (this.becomeKiller)
             {
-                var baseOption = PlayerControl.GameOptions;
+                var baseOption = GameOptionsManager.Instance.CurrentGameOptions;
 
                 this.HasOtherKillCool = allOption[
                     GetRoleOptionId(KillerCommonOption.HasOtherKillCool)].GetValue();
@@ -277,7 +278,7 @@ namespace ExtremeRoles.Roles.Combination
                 }
                 else
                 {
-                    this.KillCoolTime = baseOption.KillCooldown;
+                    this.KillCoolTime = baseOption.GetFloat(FloatOptionNames.KillCooldown);
                 }
 
                 this.HasOtherKillRange = allOption[
@@ -290,7 +291,7 @@ namespace ExtremeRoles.Roles.Combination
                 }
                 else
                 {
-                    this.KillRange = baseOption.KillDistance;
+                    this.KillRange = baseOption.GetInt(Int32OptionNames.KillDistance);
                 }
 
                 this.killerLoverHasOtherVison = allOption[

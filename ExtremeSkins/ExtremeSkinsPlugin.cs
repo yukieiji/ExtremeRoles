@@ -5,6 +5,7 @@ using BepInEx.IL2CPP;
 using HarmonyLib;
 
 using ExtremeSkins.SkinManager;
+using ExtremeRoles.Module;
 
 
 namespace ExtremeSkins
@@ -27,6 +28,8 @@ namespace ExtremeSkins
 
         public override void Load()
         {
+            Helper.Translation.LoadTransData();
+
             Logger = Log;
             
             Instance = this;
@@ -48,7 +51,9 @@ namespace ExtremeSkins
             VersionManager.PlayerVersion.Clear();
 
             Harmony.PatchAll();
-        }
 
+            Il2CppRegisterAttribute.Registration(
+                System.Reflection.Assembly.GetAssembly(this.GetType()));
+        }
     }
 }

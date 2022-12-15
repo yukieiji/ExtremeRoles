@@ -8,9 +8,21 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.GhostRoles;
+using ExtremeRoles.GhostRoles.API;
+using ExtremeRoles.GhostRoles.API.Interface;
 
 namespace ExtremeRoles.Patches
 {
+    [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.CreatePlayer))]
+    [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerLeft))]
+    public static class SyncSettingPatch
+    {
+        public static void Postfix()
+        {
+            GameManager.Instance?.LogicOptions.SyncOptions();
+        }
+    }
 
     // from Reactor : https://github.com/NuclearPowered/Reactor/commit/0a03a9d90d41b3bb158fa95bb23186f6769e0f9f
     [HarmonyPatch(typeof(AmongUsClient._CoJoinOnlinePublicGame_d__1),
@@ -72,6 +84,9 @@ namespace ExtremeRoles.Patches
             List<(GameData.PlayerInfo, IRoleWinPlayerModifier)> modRole = new List<
                 (GameData.PlayerInfo, IRoleWinPlayerModifier)> ();
 
+            List<(GameData.PlayerInfo, IGhostRoleWinable)> ghostWinCheckRole = new List<
+               (GameData.PlayerInfo, IGhostRoleWinable)>();
+
             var roleData = ExtremeRoleManager.GameRole;
             var gameData = ExtremeRolesPlugin.ShipState;
 
@@ -79,8 +94,11 @@ namespace ExtremeRoles.Patches
             {
 
                 var role = roleData[playerInfo.PlayerId];
+                bool hasGhostRole = ExtremeGhostRoleManager.GameRole.TryGetValue(
+                    playerInfo.PlayerId, out GhostRoleBase ghostRole);
 
-                Module.CustomMonoBehaviour.FinalSummary.Add(playerInfo);
+                Module.CustomMonoBehaviour.FinalSummary.Add(
+                    playerInfo, role, ghostRole);
 
                 if (role.IsNeutral())
                 {
@@ -117,6 +135,12 @@ namespace ExtremeRoles.Patches
                     }
                 }
 
+                if (hasGhostRole && 
+                    ghostRole.IsNeutral() &&
+                    ghostRole is IGhostRoleWinable winCheckGhostRole)
+                {
+                    ghostWinCheckRole.Add((playerInfo, winCheckGhostRole));
+                }
             }
 
             List<WinningPlayerData> winnersToRemove = new List<WinningPlayerData>();
@@ -140,7 +164,9 @@ namespace ExtremeRoles.Patches
                 addNeutralWinner();
             }
 
-            switch ((RoleGameOverReason)gameData.EndReason)
+            GameOverReason reason = gameData.EndReason;
+
+            switch ((RoleGameOverReason)reason)
             {
                 case RoleGameOverReason.AssassinationMarin:
                     resetWinner();
@@ -167,6 +193,10 @@ namespace ExtremeRoles.Patches
                     replaceWinnerToSpecificNeutralRolePlayer(
                         noWinner,
                         new ExtremeRoleId[] { ExtremeRoleId.Lover });
+                    break;
+                case RoleGameOverReason.ShipFallInLove:
+                    replaceWinnerToSpecificRolePlayer(
+                        ExtremeRoleId.Lover);
                     break;
                 case RoleGameOverReason.TaskMasterGoHome:
                     replaceWinnerToSpecificNeutralRolePlayer(
@@ -221,9 +251,11 @@ namespace ExtremeRoles.Patches
                         noWinner,
                         new ExtremeRoleId[] { ExtremeRoleId.Umbrer });
                     break;
-                case RoleGameOverReason.ShipFallInLove:
-                    replaceWinnerToSpecificRolePlayer(
-                        ExtremeRoleId.Lover);
+                case RoleGameOverReason.KidsTooBigHomeAlone:
+                case RoleGameOverReason.KidsAliveAlone:
+                    replaceWinnerToSpecificNeutralRolePlayer(
+                        noWinner,
+                        new ExtremeRoleId[] { ExtremeRoleId.Delinquent });
                     break;
                 default:
                     break;
@@ -232,6 +264,15 @@ namespace ExtremeRoles.Patches
             foreach (var player in gameData.GetPlusWinner())
             {
                 addWinner(player);
+            }
+
+            foreach (var (playerInfo, winCheckRole) in ghostWinCheckRole)
+            {
+                if (winCheckRole.IsWin(reason, playerInfo))
+                {
+                    addWinner(playerInfo);
+                    plusWinner.Add(playerInfo);
+                }
             }
 
             Il2CppSystem.Collections.Generic.List<WinningPlayerData> winnerList = TempData.winners;

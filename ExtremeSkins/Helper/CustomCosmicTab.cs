@@ -4,13 +4,18 @@ using TMPro;
 
 using UnityEngine;
 
+using ExtremeSkins.Patches.AmongUs.Tab;
+
 namespace ExtremeSkins.Helper
 {
-    public static class SkinTab
+    public static class CustomCosmicTab
     {
         public static TMP_Text textTemplate;
 
         public const string InnerslothPackageName = "innerslothMake";
+
+        public const string CreatorTabAssetBundle = "ExtremeSkins.Resources.Asset.creatortab.asset";
+        public const string CreatorTabAssetPrefab = "assets/extremeskins/creatortab.prefab";
 
         public const float HeaderSize = 0.8f;
         private const float headerX = 0.8f;
@@ -25,27 +30,47 @@ namespace ExtremeSkins.Helper
         {
             if (textTemplate != null)
             {
-                TMP_Text title = UnityEngine.Object.Instantiate<TMP_Text>(
+                TMP_Text title = Object.Instantiate(
                     textTemplate, instance.scroller.Inner);
-                title.transform.parent = instance.scroller.Inner;
+                title.transform.SetParent(instance.scroller.Inner);
                 title.transform.localPosition = new Vector3(headerX, yPos, inventoryZ);
-                title.alignment = TMPro.TextAlignmentOptions.Center;
+                title.alignment = TextAlignmentOptions.Center;
                 title.fontSize *= 1.25f;
-                title.fontWeight = TMPro.FontWeight.Thin;
+                title.fontWeight = FontWeight.Thin;
                 title.enableAutoSizing = false;
                 title.autoSizeTextContainer = true;
-                title.text = Helper.Translation.GetString(packageName);
+                title.text = Translation.GetString(packageName);
+                title.gameObject.SetActive(true);
                 offset -= HeaderSize * instance.YOffset;
                 textList.Add(title);
             }
         }
 
-        public static void DestoryList<T>(List<T> items) where T : UnityEngine.Object
+        public static void RemoveAllTabs()
+        {
+            if (HatsTabPatch.Tab != null)
+            {
+                Object.DestroyImmediate(HatsTabPatch.Tab.gameObject);
+                HatsTabPatch.Tab = null;
+            }
+            if (NameplatesTabPatch.Tab != null)
+            {
+                Object.DestroyImmediate(NameplatesTabPatch.Tab.gameObject);
+                NameplatesTabPatch.Tab = null;
+            }
+            if (VisorsTabPatch.Tab != null)
+            {
+                Object.DestroyImmediate(VisorsTabPatch.Tab.gameObject);
+                VisorsTabPatch.Tab = null;
+            }
+        }
+
+        public static void DestoryList<T>(List<T> items) where T : Object
         {
             if (items == null) { return; }
             foreach (T item in items)
             {
-                Object.Destroy(item);
+                Object.DestroyImmediate(item);
             }
         }
 
@@ -57,9 +82,13 @@ namespace ExtremeSkins.Helper
             // Manually hide all custom TMPro.TMP_Text objects that are outside the ScrollRect
             foreach (TMP_Text customText in packageText)
             {
-                if (customText != null && customText.transform != null && customText.gameObject != null)
+                if (customText != null && 
+                    customText.transform != null && 
+                    customText.gameObject != null)
                 {
-                    bool active = customText.transform.position.y <= inventoryTop && customText.transform.position.y >= inventoryBottom;
+                    bool active = 
+                        customText.transform.position.y <= inventoryTop && 
+                        customText.transform.position.y >= inventoryBottom;
                     float epsilon = Mathf.Min(
                         Mathf.Abs(customText.transform.position.y - inventoryTop),
                         Mathf.Abs(customText.transform.position.y - inventoryBottom));

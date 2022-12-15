@@ -7,6 +7,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -266,7 +267,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             if (!this.HasOtherKillCool)
             {
                 this.HasOtherKillCool = true;
-                this.defaultKillCool = PlayerControl.GameOptions.KillCooldown;
+                this.defaultKillCool = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
+                    FloatOptionNames.KillCooldown);
             }
             else
             {

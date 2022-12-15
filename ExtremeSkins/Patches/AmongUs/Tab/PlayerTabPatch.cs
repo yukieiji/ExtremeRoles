@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using ExtremeSkins.Helper;
+using HarmonyLib;
 using UnhollowerBaseLib;
 
 using UnityEngine;
@@ -8,12 +9,17 @@ namespace ExtremeSkins.Patches.AmongUs.Tab
     [HarmonyPatch(typeof(PlayerTab), nameof(PlayerTab.OnEnable))]
     public static class PlayerTabEnablePatch
     {
+        public static void Prefix()
+        {
+            CustomCosmicTab.RemoveAllTabs();
+        }
+
         public static void Postfix(PlayerTab __instance)
         {   
             // Replace instead
             Il2CppArrayBase<ColorChip> chips = __instance.ColorChips.ToArray();
 
-            int cols = 7;
+            int cols = 8;
 
             for (int i = 0; i < chips.Count; i++)
             {

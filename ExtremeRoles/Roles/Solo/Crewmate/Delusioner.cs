@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using Hazel;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -179,7 +180,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
             var allPlayer = GameData.Instance.AllPlayers;
             ShipStatus ship = CachedShipStatus.Instance;
-            byte mapId = PlayerControl.GameOptions.MapId;
+            byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                ByteOptionNames.MapId);
 
             if (this.includeLocalPlayer)
             {
@@ -405,7 +407,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
     {
         public static void Postfix(SpawnInMinigame __instance)
         {
-            if (AmongUsClient.Instance.GameMode == GameModes.FreePlay)
+            if (AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay)
             {
                 foreach (SpawnInMinigame.SpawnLocation pos in __instance.Locations)
                 {

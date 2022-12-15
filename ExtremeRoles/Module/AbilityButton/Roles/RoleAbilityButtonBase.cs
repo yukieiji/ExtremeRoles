@@ -14,15 +14,13 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
             Func<bool> ability,
             Func<bool> canUse,
             Sprite sprite,
-            Vector3 positionOffset,
             Action abilityCleanUp = null,
             Func<bool> abilityCheck = null,
-            KeyCode hotkey = KeyCode.F,
-            bool mirror = false) : base(
+            KeyCode hotkey = KeyCode.F) : base(
                 buttonText, canUse,
-                sprite, positionOffset,
-                abilityCleanUp, abilityCheck,
-                hotkey, mirror)
+                sprite, abilityCleanUp,
+                abilityCheck,
+                hotkey)
         {
             this.UseAbility = ability;
         }
@@ -54,16 +52,6 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
 
             this.Button.graphic.sprite = this.ButtonSprite;
             this.Button.OverrideText(ButtonText);
-
-            if (hudManager.UseButton != null)
-            {
-                Vector3 pos = hudManager.UseButton.transform.localPosition;
-                if (this.Mirror)
-                {
-                    pos = new Vector3(-pos.x, pos.y, pos.z);
-                }
-                this.Button.transform.localPosition = pos + PositionOffset;
-            }
 
             AbilityButtonUpdate();
 

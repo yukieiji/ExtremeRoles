@@ -19,6 +19,9 @@ namespace ExtremeRoles.Roles.Combination
 
     public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
     {
+        public override string RoleName =>
+            string.Concat(this.IsImpostor() ? "Evil" : "Nice", this.RawRoleName);
+
         private byte supportTargetId;
         private string supportPlayerName;
         private string supportRoleName;
@@ -36,16 +39,6 @@ namespace ExtremeRoles.Roles.Combination
 
         public void IntroBeginSetUp()
         {
-            if (this.IsImpostor())
-            {
-                this.RoleName = "Evil" + this.RoleName;
-            }
-            else if (this.IsCrewmate())
-            {
-                this.RoleName = "Nice" + this.RoleName;
-            }
-
-
             List<byte> target = new List<byte>();
 
             foreach (var item in ExtremeRoleManager.GameRole)

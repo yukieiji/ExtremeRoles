@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 
 using UnityEngine;
+using AmongUs.GameOptions;
 
 using Newtonsoft.Json.Linq;
 
@@ -54,6 +55,8 @@ namespace ExtremeRoles.Helper
             TaskTypes.VentCleaning,
         };
 
+        private static GridArrange cachedArrange = null;
+
         public static bool IsLobby
         {
             get
@@ -68,8 +71,20 @@ namespace ExtremeRoles.Helper
         {
             get
             {
-                return AmongUsClient.Instance.GameMode == GameModes.FreePlay;
+                return AmongUsClient.Instance.NetworkMode == NetworkModes.FreePlay;
             }
+        }
+
+        public static void ReGridButtons()
+        {
+            if (!FastDestroyableSingleton<HudManager>.Instance) { return; }
+
+            if (cachedArrange == null)
+            {
+                var useButton = FastDestroyableSingleton<HudManager>.Instance.UseButton;
+                cachedArrange = useButton.transform.parent.gameObject.GetComponent<GridArrange>();
+            }
+            cachedArrange.ArrangeChilds();
         }
 
         public static void DisableMapModule(string mapModuleName)
@@ -94,7 +109,10 @@ namespace ExtremeRoles.Helper
                  (playerInfo.Object) &&
                  (playerInfo.Role) &&
                  (playerInfo.Role.TasksCountTowardProgress) &&
-                 (PlayerControl.GameOptions.GhostsDoTasks || !playerInfo.IsDead) &&
+                 (
+                    GameOptionsManager.Instance.CurrentGameOptions.GetBool(BoolOptionNames.GhostsDoTasks) || 
+                    !playerInfo.IsDead
+                ) &&
                   ExtremeRoleManager.GameRole[playerInfo.PlayerId].HasTask()
                 )
             {
@@ -150,7 +168,8 @@ namespace ExtremeRoles.Helper
         public static Sprite GetAdminButtonImage()
         {
             var imageDict = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
-            switch (PlayerControl.GameOptions.MapId)
+            switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                ByteOptionNames.MapId))
             {
                 case 0:
                 case 3:
@@ -167,7 +186,8 @@ namespace ExtremeRoles.Helper
         public static Sprite GetSecurityImage()
         {
             var imageDict = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
-            switch (PlayerControl.GameOptions.MapId)
+            switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                ByteOptionNames.MapId))
             {
                 case 1:
                     return imageDict[ImageNames.DoorLogsButton].Image;
@@ -361,6 +381,11 @@ namespace ExtremeRoles.Helper
                     removeTask.OnRemove();
                     UnityEngine.Object.Destroy(
                         removeTask.gameObject);
+                    if (player.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
+                    {
+                        Sound.PlaySound(
+                            Sound.SoundType.ReplaceNewTask, 1.2f);
+                    }
                     return true;
                 }
             }
@@ -435,7 +460,8 @@ namespace ExtremeRoles.Helper
             // 3 = Dleks - deactivated
             // 4 = Airship
             var systemConsoleArray = UnityEngine.Object.FindObjectsOfType<SystemConsole>();
-            switch (PlayerControl.GameOptions.MapId)
+            switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                ByteOptionNames.MapId))
             {
                 case 0:
                 case 3:
@@ -463,7 +489,8 @@ namespace ExtremeRoles.Helper
             // 3 = Dleks - deactivated
             // 4 = Airship
             var systemConsoleArray = UnityEngine.Object.FindObjectsOfType<SystemConsole>();
-            switch (PlayerControl.GameOptions.MapId)
+            switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                ByteOptionNames.MapId))
             {
                 case 0:
                 case 1:

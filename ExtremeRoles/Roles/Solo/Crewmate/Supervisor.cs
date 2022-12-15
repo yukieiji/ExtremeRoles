@@ -6,7 +6,7 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-
+using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
@@ -92,8 +92,14 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public bool UseAbility()
         {
-            FastDestroyableSingleton<HudManager>.Instance.ShowMap(
-                (System.Action<MapBehaviour>)(m => m.ShowCountOverlay()));
+            FastDestroyableSingleton<HudManager>.Instance.ToggleMapVisible(
+                new MapOptions
+                {
+                    Mode = MapOptions.Modes.CountOverlay,
+                    AllowMovementWhileMapOpen = true,
+                    ShowLivePlayerPosition = true,
+                    IncludeDeadBodies = true,
+                });
 
             return true;
         }
@@ -153,7 +159,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private Sprite getAdminButtonImage()
         {
             var imageDict = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
-            switch (PlayerControl.GameOptions.MapId)
+            switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                ByteOptionNames.MapId))
             {
                 case 0:
                 case 3:

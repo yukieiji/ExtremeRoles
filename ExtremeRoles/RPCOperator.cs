@@ -6,6 +6,7 @@ using Hazel;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Extension.Ship;
+using AmongUs.GameOptions;
 
 namespace ExtremeRoles
 {
@@ -44,6 +45,7 @@ namespace ExtremeRoles
 
             // コンビロール全般
             HeroHeroAcademia,
+            KidsAbility,
 
             // クルーメイト
             BodyGuardAbility,
@@ -226,7 +228,7 @@ namespace ExtremeRoles
             {
                 if (!player.Data.Role.IsImpostor)
                 {
-                    player.RemoveInfected();
+                    player.RemoveProtection();
                     player.MurderPlayer(player);
                     player.Data.IsDead = true;
                 }
@@ -449,7 +451,8 @@ namespace ExtremeRoles
         }
         public static void ShareMapId(byte mapId)
         {
-            PlayerControl.GameOptions.MapId = mapId;
+            GameOptionsManager.Instance.CurrentGameOptions.SetByte(
+                ByteOptionNames.MapId, mapId);
         }
 
         public static void AddVersionData(
@@ -503,6 +506,13 @@ namespace ExtremeRoles
             ref MessageReader reader)
         {
             Roles.Combination.HeroAcademia.RpcCommand(
+                ref reader);
+        }
+
+        public static void KidsAbilityCommand(
+            ref MessageReader reader)
+        {
+            Roles.Combination.Kids.Ability(
                 ref reader);
         }
 

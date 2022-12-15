@@ -248,7 +248,7 @@ namespace ExtremeRoles.Patches.Manager
                     __instance.StartButton.transform.localPosition;
             }
 
-            if (AmongUsClient.Instance.GameMode == GameModes.OnlineGame && !isCustomServer)
+            if (AmongUsClient.Instance.NetworkMode == NetworkModes.OnlineGame && !isCustomServer)
             {
                 // プレイヤーカウントアップデート
                 if (update)

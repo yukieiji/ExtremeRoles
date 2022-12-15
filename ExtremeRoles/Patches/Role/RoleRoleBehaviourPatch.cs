@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
+using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Patches.Role
 {

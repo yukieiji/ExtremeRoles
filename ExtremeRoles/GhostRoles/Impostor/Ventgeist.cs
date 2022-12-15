@@ -42,7 +42,6 @@ namespace ExtremeRoles.GhostRoles.Impostor
                 this.isPreCheck,
                 this.isAbilityUse,
                 FastDestroyableSingleton<HudManager>.Instance.ImpostorVentButton.graphic.sprite,
-                this.DefaultButtonOffset,
                 rpcHostCallAbility: abilityCall);
             this.ButtonInit();
         }

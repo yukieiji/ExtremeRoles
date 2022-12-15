@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using TMPro;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.GhostRoles;
@@ -14,7 +15,6 @@ using UnhollowerBaseLib.Attributes;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour
 {
-
     [Il2CppRegister]
     public class VoteAreaInfo : MonoBehaviour
     {

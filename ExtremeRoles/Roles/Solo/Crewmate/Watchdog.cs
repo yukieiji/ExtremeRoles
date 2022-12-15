@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 
 using UnityEngine;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -50,7 +51,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             string buttonText;
             Sprite buttonImage;
             var imageDict = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
-            switch (PlayerControl.GameOptions.MapId)
+            switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                ByteOptionNames.MapId))
             {
                 case 1:
                     buttonText = Translation.GetString("doorLog");
@@ -171,7 +173,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             // 3 = Dleks - deactivated
             // 4 = Airship
             var systemConsoleArray = Object.FindObjectsOfType<SystemConsole>();
-            switch (PlayerControl.GameOptions.MapId)
+            switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                ByteOptionNames.MapId))
             {
                 case 0:
                 case 3:

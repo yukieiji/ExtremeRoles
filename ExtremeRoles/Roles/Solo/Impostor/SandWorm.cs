@@ -12,6 +12,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Extension.Ship;
+using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -27,9 +28,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     ability,
                     canUse,
                     sprite,
-                    new Vector3(-1.8f, -0.06f, 0),
                     null, null,
-                    KeyCode.F, false)
+                    KeyCode.F)
             { }
 
             protected override void AbilityButtonUpdate()
@@ -240,7 +240,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             if (!this.HasOtherKillCool)
             {
                 this.HasOtherKillCool = true;
-                this.KillCoolTime = PlayerControl.GameOptions.KillCooldown;
+                this.KillCoolTime = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
+                    FloatOptionNames.KillCooldown);
             }
 
             this.RoleAbilityInit();

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 using UnityEngine;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -677,7 +678,8 @@ namespace ExtremeRoles.Roles.Combination
             }
             else
             {
-                this.Vison = PlayerControl.GameOptions.CrewLightMod;
+                this.Vison = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
+                    FloatOptionNames.CrewLightMod);
             }
             this.hasOtherButton = option.HasOtherButton;
             this.buttonNum = option.HasOtherButtonNum;
@@ -803,7 +805,8 @@ namespace ExtremeRoles.Roles.Combination
                     // 3 = Dleks - deactivated
                     // 4 = Airship
                     var systemConsoleArray = UnityEngine.Object.FindObjectsOfType<SystemConsole>();
-                    switch (PlayerControl.GameOptions.MapId)
+                    switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                        ByteOptionNames.MapId))
                     {
                         case 0:
                         case 1:

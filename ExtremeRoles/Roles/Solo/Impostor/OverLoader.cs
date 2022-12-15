@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using UnityEngine;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -274,15 +274,17 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         protected override void RoleSpecificInit()
         {
+            var curOption = GameOptionsManager.Instance.CurrentGameOptions;
+
             if (!this.HasOtherKillCool)
             {
                 this.HasOtherKillCool = true;
-                this.KillCoolTime = PlayerControl.GameOptions.KillCooldown;
+                this.KillCoolTime = curOption.GetFloat(FloatOptionNames.KillCooldown);
             }
             if (!this.HasOtherKillRange)
             {
                 this.HasOtherKillRange = true;
-                this.KillRange = PlayerControl.GameOptions.KillDistance;
+                this.KillRange = curOption.GetInt(Int32OptionNames.KillDistance);
             }
 
             this.defaultKillCool = this.KillCoolTime;
@@ -326,7 +328,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.isAwakedHasOtherKillRange = true;
             }
 
-            if (this.awakeImpNum >= PlayerControl.GameOptions.NumImpostors && 
+            if (this.awakeImpNum >= curOption.GetInt(Int32OptionNames.NumImpostors) && 
                 this.awakeKillCount == 0)
             {
                 this.isAwake = true;

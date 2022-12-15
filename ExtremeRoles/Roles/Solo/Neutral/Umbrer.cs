@@ -123,18 +123,16 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 Func<bool> upgradeVirusModeCheck,
                 Func<bool> ability,
                 Func<bool> canUse,
-                Vector3 positionOffset,
                 Action abilityCleanUp = null,
                 Func<bool> abilityCheck = null,
-                KeyCode hotkey = KeyCode.F,
-                bool mirror = false) : base(
+                KeyCode hotkey = KeyCode.F
+                ) : base(
                     setVirusButtonText,
                     ability, canUse,
                     setVirusSprite,
-                    positionOffset,
                     abilityCleanUp,
                     abilityCheck,
-                    hotkey, mirror)
+                    hotkey)
             {
 
                 this.setVirusSprite = setVirusSprite;
@@ -260,6 +258,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private bool isFetch = false;
         private Dictionary<byte, float> timer;
         private Dictionary<byte, PoolablePlayer> playerIcon;
+        private GridArrange grid;
 
 
         public Umbrer() : base(
@@ -286,7 +285,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 IsUpgrade,
                 UseAbility,
                 IsAbilityUse,
-                new Vector3(-1.8f, -0.06f, 0),
                 CleanUp,
                 IsAbilityCheck);
             abilityInit();
@@ -305,8 +303,24 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void IntroEndSetUp()
         {
-            this.playerIcon = Helper.Player.CreatePlayerIcon();
-            this.showIcon();
+            GameObject bottomLeft = new GameObject("BottomLeft");
+            bottomLeft.transform.SetParent(
+                FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.parent.parent);
+            AspectPosition aspectPosition = bottomLeft.AddComponent<AspectPosition>();
+            aspectPosition.Alignment = AspectPosition.EdgeAlignments.LeftBottom;
+            aspectPosition.anchorPoint = new Vector2(0.5f, 0.5f);
+            aspectPosition.DistanceFromEdge = new Vector3(0.375f, 0.35f);
+            aspectPosition.AdjustPosition();
+
+            this.grid = bottomLeft.AddComponent<GridArrange>();
+            this.grid.CellSize = new Vector2(0.625f, 0.75f);
+            this.grid.MaxColumns = 14;
+            this.grid.Alignment = GridArrange.StartAlign.Right;
+            this.grid.cells = new();
+
+            this.playerIcon = Helper.Player.CreatePlayerIcon(
+                bottomLeft.transform, Vector3.one * 0.275f);
+            this.updateShowIcon(true);
         }
 
 
@@ -402,7 +416,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
 
             this.container.Update();
-            this.showIcon();
+            this.updateShowIcon();
         }
 
         public override bool IsSameTeam(SingleRoleBase targetRole)
@@ -518,13 +532,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.Button.ResetCoolTimer();
         }
 
-        private void showIcon()
+        private void updateShowIcon(bool update = false)
         {
-            int visibleCounter = 0;
-            Vector3 bottomLeft = FastDestroyableSingleton<HudManager>.Instance.UseButton.transform.localPosition;
-            bottomLeft.x *= -1;
-            bottomLeft += new Vector3(-0.25f, -0.25f, 0);
-
             foreach (var (playerId, poolPlayer) in this.playerIcon)
             {
                 GameData.PlayerInfo player = GameData.Instance.GetPlayerById(playerId);
@@ -535,14 +544,16 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     player.Disconnected)
                 {
                     poolPlayer.gameObject.SetActive(false);
+                    update = true;
                 }
                 else
                 {
                     poolPlayer.gameObject.SetActive(true);
-                    poolPlayer.transform.localScale = Vector3.one * 0.275f;
-                    poolPlayer.transform.localPosition = bottomLeft + Vector3.right * visibleCounter * 0.45f;
-                    ++visibleCounter;
                 }
+            }
+            if (update)
+            {
+                this.grid.ArrangeChilds();
             }
         }
     }
