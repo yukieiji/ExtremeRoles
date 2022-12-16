@@ -183,10 +183,8 @@ namespace ExtremeRoles.Patches.Manager
 
             foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
             {
-                if (player.CurrentOutfitType != PlayerOutfitType.Shapeshifted)
-                {
-                    player.cosmetics.SetName(player.Data.PlayerName);
-                }
+                player.cosmetics.SetName(player.CurrentOutfit.PlayerName);
+
                 if (localPlayer.Data.Role.IsImpostor && player.Data.Role.IsImpostor)
                 {
                     player.cosmetics.SetNameColor(Palette.ImpostorRed);

@@ -24,9 +24,9 @@ namespace ExtremeSkins.Module
             Transform trans = base.transform;
 
             this.buttonPrefab = trans.Find(
-                "Button").gameObject.GetComponent<ButtonWrapper>();
+                "Body/Button").gameObject.GetComponent<ButtonWrapper>();
             this.layout = trans.Find(
-                "ScrollView/Viewport/Content").gameObject.GetComponent<VerticalLayoutGroup>();
+                "Body/ScrollView/Viewport/Content").gameObject.GetComponent<VerticalLayoutGroup>();
             this.buttonPrefab.Awake();
 
             this.selectButton.Clear();

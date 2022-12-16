@@ -14,10 +14,11 @@ using ExtremeRoles.GhostRoles.API.Interface;
 
 namespace ExtremeRoles.Patches
 {
-    [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.CreatePlayer))]
-    [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerLeft))]
+    [HarmonyPatch]
     public static class SyncSettingPatch
     {
+        [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.CreatePlayer))]
+        [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerLeft))]
         public static void Postfix()
         {
             GameManager.Instance?.LogicOptions.SyncOptions();
@@ -73,7 +74,7 @@ namespace ExtremeRoles.Patches
         {
             ExtremeRolesPlugin.Info.HideInfoOverlay();
             ExtremeRolesPlugin.ShipState.SetGameOverReason(endGameResult.GameOverReason);
-            if ((int)endGameResult.GameOverReason >= 10)
+            if ((int)endGameResult.GameOverReason >= 20)
             {
                 endGameResult.GameOverReason = GameOverReason.ImpostorByKill;
             }

@@ -13,6 +13,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API.Interface;
+using ExtremeRoles.GhostRoles.API;
 
 namespace ExtremeRoles.Patches.Manager
 {
@@ -294,9 +295,11 @@ namespace ExtremeRoles.Patches.Manager
 
             foreach (var player in state.GetPlusWinner())
             {
-                var ghostRole = ExtremeGhostRoleManager.GameRole[player.PlayerId];
+                bool isGhost = ExtremeGhostRoleManager.GameRole.TryGetValue(
+                    player.PlayerId, out GhostRoleBase ghostRole);
 
-                if (!ghostRole.IsNeutral() ||
+                if (!isGhost ||
+                    !ghostRole.IsNeutral() ||
                     !(ghostRole is IGhostRoleWinable ghostWin)) { continue; }
 
                 winPlayer.Add(player.PlayerId);
