@@ -122,7 +122,7 @@ namespace ExtremeRoles.Roles
 
     public enum RoleGameOverReason
     {
-        AssassinationMarin = 10,
+        AssassinationMarin = 20,
         
         AliceKilledByImposter,
         AliceKillAllOther,

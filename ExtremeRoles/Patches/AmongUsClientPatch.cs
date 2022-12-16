@@ -74,7 +74,7 @@ namespace ExtremeRoles.Patches
         {
             ExtremeRolesPlugin.Info.HideInfoOverlay();
             ExtremeRolesPlugin.ShipState.SetGameOverReason(endGameResult.GameOverReason);
-            if ((int)endGameResult.GameOverReason >= 10)
+            if ((int)endGameResult.GameOverReason >= 20)
             {
                 endGameResult.GameOverReason = GameOverReason.ImpostorByKill;
             }
