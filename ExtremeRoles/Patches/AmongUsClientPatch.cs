@@ -14,10 +14,11 @@ using ExtremeRoles.GhostRoles.API.Interface;
 
 namespace ExtremeRoles.Patches
 {
-    [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.CreatePlayer))]
-    [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerLeft))]
+    [HarmonyPatch]
     public static class SyncSettingPatch
     {
+        [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.CreatePlayer))]
+        [HarmonyPatch(typeof(AmongUsClient), nameof(AmongUsClient.OnPlayerLeft))]
         public static void Postfix()
         {
             GameManager.Instance?.LogicOptions.SyncOptions();
