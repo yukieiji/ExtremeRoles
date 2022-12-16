@@ -90,7 +90,7 @@ namespace ExtremeRoles.Helper
             {
 
                 if (!playerInfo.Disconnected &&
-                    playerInfo.PlayerId != CachedPlayerControl.LocalPlayer.PlayerId &&
+                    playerInfo.PlayerId != sourcePlayer.PlayerId &&
                     !playerInfo.IsDead &&
                     !playerInfo.Object.inVent &&
                     !role.IsSameTeam(Roles.ExtremeRoleManager.GameRole[playerInfo.PlayerId]))
