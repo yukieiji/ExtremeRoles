@@ -195,7 +195,12 @@ namespace ExtremeRoles.Patches.Meeting
 		{
 			byte target = instance.TargetPlayerId;
 
-			if (instance.AmDead)
+            if (meetingAbilityButton.TryGetValue(target, out UiElement button))
+            {
+				button?.gameObject.SetActive(false);
+            }
+
+            if (instance.AmDead)
 			{
 				return true;
 			}
@@ -238,6 +243,7 @@ namespace ExtremeRoles.Patches.Meeting
 
 				if (abilitybutton == null) { return true; }
 
+				abilitybutton.gameObject.SetActive(true);
 				instance.Buttons.SetActive(true);
 
 				float startPos = instance.AnimateButtonsFromLeft ? 0.2f : 1.95f;
