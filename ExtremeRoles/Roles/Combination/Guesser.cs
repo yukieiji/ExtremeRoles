@@ -119,6 +119,9 @@ namespace ExtremeRoles.Roles.Combination
             {
                 Add((ExtremeRoleId)RoleTypes.Crewmate, ExtremeRoleType.Crewmate);
                 Add((ExtremeRoleId)RoleTypes.Impostor, ExtremeRoleType.Impostor);
+
+                separetedRoleId[ExtremeRoleType.Crewmate].Add((ExtremeRoleId)RoleTypes.Crewmate);
+                separetedRoleId[ExtremeRoleType.Impostor].Add((ExtremeRoleId)RoleTypes.Impostor);
             }
 
             var roleOptions = GameOptionsManager.Instance.CurrentGameOptions.RoleOptions;
