@@ -4,6 +4,7 @@ using System.Linq;
 
 using UnityEngine;
 using AmongUs.GameOptions;
+using TMPro;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -25,7 +26,8 @@ namespace ExtremeRoles.Roles.Combination
     public sealed class Guesser : 
         MultiAssignRoleBase, 
         IRoleResetMeeting,
-        IRoleMeetingButtonAbility
+        IRoleMeetingButtonAbility,
+        IRoleUpdate
     {
         public enum GuesserOption
         {
@@ -54,6 +56,8 @@ namespace ExtremeRoles.Roles.Combination
 
         private GameObject uiPrefab = null;
         private GuesserUi guesserUi = null;
+
+        private TextMeshPro meetingGuessText = null;
 
         private static HashSet<ExtremeRoleId> alwaysMissRole = new HashSet<ExtremeRoleId>()
         {
@@ -438,6 +442,34 @@ namespace ExtremeRoles.Roles.Combination
             this.curGuessNum = 0;
         }
 
+        public void Update(PlayerControl rolePlayer)
+        {
+            if (MeetingHud.Instance)
+            {
+                if (this.meetingGuessText == null)
+                {
+                    this.meetingGuessText = UnityEngine.Object.Instantiate(
+                        FastDestroyableSingleton<HudManager>.Instance.TaskPanel.taskText,
+                        MeetingHud.Instance.transform);
+                    this.meetingGuessText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
+                    this.meetingGuessText.transform.position = Vector3.zero;
+                    this.meetingGuessText.transform.localPosition = new Vector3(-2.85f, 3.15f, -20f);
+                    this.meetingGuessText.transform.localScale *= 0.9f;
+                    this.meetingGuessText.color = Palette.White;
+                    this.meetingGuessText.gameObject.SetActive(false);
+                }
+
+                this.meetingGuessText.text = string.Format(
+                    Translation.GetString("guesserUiInfo"),
+                    this.bulletNum, this.maxGuessNum);
+                meetingInfoSetActive(true);
+            }
+            else
+            {
+                meetingInfoSetActive(false);
+            }
+        }
+
         protected override void CreateSpecificOption(
             IOption parentOps)
         {
@@ -504,6 +536,14 @@ namespace ExtremeRoles.Roles.Combination
                 GetRoleOptionId(GuesserOption.MaxGuessNumWhenMeeting)].GetValue();
 
             this.curGuessNum = 0;
+        }
+
+        private void meetingInfoSetActive(bool active)
+        {
+            if (this.meetingGuessText != null)
+            {
+                this.meetingGuessText.gameObject.SetActive(active);
+            }
         }
     }
 }
