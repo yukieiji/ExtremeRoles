@@ -40,6 +40,12 @@ namespace ExtremeRoles.Patches.MapModule
             [HarmonyArgument(1)] out bool canUse,
             [HarmonyArgument(2)] out bool couldUse)
         {
+
+            if (GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal)
+            {
+                return true;
+            }
+
             float num = float.MaxValue;
             PlayerControl player = playerInfo.Object;
 
