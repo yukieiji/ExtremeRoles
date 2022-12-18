@@ -811,6 +811,12 @@ namespace ExtremeRoles.Patches.Meeting
                     {
                         playerVoteArea.SetDisabled();
                     }
+                    else
+                    {
+                        playerVoteArea.SetDead(
+                            __instance.reporterId == playerById.PlayerId, false, false);
+                        __instance.SetDirtyBit(1U);
+                    }
                 }
             }
 
