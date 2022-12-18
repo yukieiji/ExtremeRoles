@@ -20,6 +20,8 @@ namespace ExtremeRoles.Patches.Meeting
 			bool someoneWasProtected = false;
 			foreach(PlayerControl pc in CachedPlayerControl.AllPlayerControls)
 			{
+				if (pc == null) { continue; }
+
 				if (pc.protectedByGuardianThisRound)
 				{
 					pc.protectedByGuardianThisRound = false;

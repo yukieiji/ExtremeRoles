@@ -18,6 +18,8 @@ namespace ExtremeRoles.Roles.Solo
             this.Id = ExtremeRoleId.VanillaRole;
             this.RawRoleName = this.VanilaRoleId.ToString();
 
+            var curOption = GameOptionsManager.Instance.CurrentGameOptions;
+
             switch (id)
             {
                 case RoleTypes.Shapeshifter:
@@ -25,12 +27,12 @@ namespace ExtremeRoles.Roles.Solo
                     this.Team = ExtremeRoleType.Impostor;
                     this.NameColor = Palette.ImpostorRed;
                     this.CanKill = true;
-                    this.UseVent = true;
-                    this.UseSabotage = true;
+                    this.UseVent = curOption.GameMode == GameModes.Normal;
+                    this.UseSabotage = curOption.GameMode == GameModes.Normal;
                     this.HasTask = false;
-                    this.KillCoolTime = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
+                    this.KillCoolTime = curOption.GetFloat(
                         FloatOptionNames.KillCooldown);
-                    this.KillRange = GameOptionsManager.Instance.CurrentGameOptions.GetInt(
+                    this.KillRange = curOption.GetInt(
                         Int32OptionNames.KillDistance);
                     break;
                 case RoleTypes.Engineer:

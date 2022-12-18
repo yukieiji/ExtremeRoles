@@ -19,7 +19,6 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.ExtremeShipStatus;
 
-
 using GhostAbilityButton = ExtremeRoles.Module.AbilityButton.GhostRoles.AbilityCountButton;
 using RoleButtonBase = ExtremeRoles.Module.AbilityButton.Roles.RoleAbilityButtonBase;
 using AmongUs.GameOptions;
@@ -326,9 +325,11 @@ namespace ExtremeRoles.Roles.Combination
                 this.UseAbility,
                 this.IsAbilityUse,
                 Loader.CreateSpriteFromResources(
-                    Path.TestButton),
+                    Path.BomberSetBomb),
                 Loader.CreateSpriteFromResources(
-                    Path.TestButton));
+                    string.Format(
+                        Path.DelinquentScribe,
+                        RandomGenerator.Instance.Next(0, maxImageNum))));
 
             this.RoleAbilityInit();
 
@@ -829,7 +830,7 @@ namespace ExtremeRoles.Roles.Combination
                 () => true,
                 () => true,
                 Loader.CreateSpriteFromResources(
-                    Path.CarrierCarry),
+                    Path.WispTorch),
                 rpcHostCallAbility: abilityCall);
             this.ButtonInit();
             this.Button.SetLabelToCrewmate();

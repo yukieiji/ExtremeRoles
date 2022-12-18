@@ -574,6 +574,8 @@ namespace ExtremeRoles.Patches.Meeting
                 NamePlateHelper.NameplateChange = false;
             }
 
+            if (__instance.state == MeetingHud.VoteStates.Animating) { return; }
+
             // From TOR
             // This fixes a bug with the original game where pressing the button and a kill happens simultaneously
             // results in bodies sometimes being created *after* the meeting starts, marking them as dead and
@@ -586,7 +588,7 @@ namespace ExtremeRoles.Patches.Meeting
                 foreach (PlayerVoteArea pva in __instance.playerStates)
                 {
                     if (pva == null ||
-                        pva.TargetPlayerId != b.ParentId || 
+                        pva.TargetPlayerId != b.ParentId ||
                         pva.AmDead)
                     {
                         continue;
@@ -596,9 +598,6 @@ namespace ExtremeRoles.Patches.Meeting
                 }
                 UnityEngine.Object.Destroy(b.gameObject);
             }
-
-
-            if (__instance.state == MeetingHud.VoteStates.Animating) { return; }
 
             // Deactivate skip Button if skipping on emergency meetings is disabled
             if (OptionHolder.Ship.BlockSkippingInEmergencyMeeting)

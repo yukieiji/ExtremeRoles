@@ -74,7 +74,8 @@ namespace ExtremeRoles.Module.SpecialWinChecker
                 
                 // アサシンと既にキルした人は除く
                 if (deadPlayerId.Contains(targetId) ||
-                    ExtremeRoleManager.GameRole[targetId].Id == ExtremeRoleId.Assassin)
+                    ExtremeRoleManager.GameRole[targetId].Id == ExtremeRoleId.Assassin ||
+                    targetId == checkPlayerId)
                 { 
                     continue; 
                 }

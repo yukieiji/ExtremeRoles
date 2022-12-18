@@ -102,16 +102,10 @@ namespace ExtremeRoles.GhostRoles
 
             public bool IsGlobalSpawnLimit(ExtremeRoleType team)
             {
-                try
-                {
-                    return this.globalSpawnLimit[team] <= 0;
-                }
-                catch (System.Exception e)
-                {
-                    ExtremeRolesPlugin.Logger.LogInfo(
-                        $"Unknown teamType detect!!    tema:{team}  exception:{e}");
-                    return false;
-                }
+                bool isGhostRoleArrive = this.globalSpawnLimit.TryGetValue(
+                    team, out int globalSpawnLimit);
+
+                return isGhostRoleArrive && globalSpawnLimit <= 0;
             }
 
             public void SetGlobalSpawnLimit(int crewNum, int impNum, int neutralNum)
