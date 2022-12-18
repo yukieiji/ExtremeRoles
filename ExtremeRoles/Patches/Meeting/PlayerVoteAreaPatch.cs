@@ -195,11 +195,6 @@ namespace ExtremeRoles.Patches.Meeting
 		{
 			byte target = instance.TargetPlayerId;
 
-            if (meetingAbilityButton.TryGetValue(target, out UiElement button))
-            {
-				button?.gameObject.SetActive(false);
-            }
-
             if (instance.AmDead)
 			{
 				return true;
@@ -231,8 +226,11 @@ namespace ExtremeRoles.Patches.Meeting
 						(UnityEngine.Events.UnityAction)role.CreateAbilityAction(instance));
 					passiveButton.OnClick.AddListener(
 						(UnityEngine.Events.UnityAction)instance.Cancel);
+                    passiveButton.OnClick.AddListener(
+                        (UnityEngine.Events.UnityAction)(
+                            () => { newAbilitybutton.gameObject.SetActive(false); }));
 
-					var render = newAbilitybutton.GetComponent<SpriteRenderer>();
+                    var render = newAbilitybutton.GetComponent<SpriteRenderer>();
 
 					role.ButtonMod(instance, newAbilitybutton);
 					role.SetSprite(render);
