@@ -370,7 +370,8 @@ namespace ExtremeRoles.Patches.Meeting
 
             if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
 
-            LogicOptionsNormal logicOptionsNormal = GameManager.Instance.LogicOptions as LogicOptionsNormal;
+            LogicOptionsNormal logicOptionsNormal = GameManager.Instance.LogicOptions.Cast<
+                LogicOptionsNormal>();
 
             if (__instance.discussionTimer < (float)logicOptionsNormal.GetDiscussionTime())
             {
@@ -411,12 +412,14 @@ namespace ExtremeRoles.Patches.Meeting
 
             if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return true; }
 
-            if (ExtremeRoleManager.GetLocalPlayerRole().Id != ExtremeRoleId.Assassin)
+            if (CachedPlayerControl.LocalPlayer.PlayerId != 
+                ExtremeRolesPlugin.ShipState.ExiledAssassinId)
             { 
                 return true; 
             }
             else
             {
+                __instance.amDead = false;
                 return false;
             }
         }
