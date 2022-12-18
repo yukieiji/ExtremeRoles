@@ -40,16 +40,15 @@ namespace ExtremeRoles.Patches.MapModule
             [HarmonyArgument(1)] out bool canUse,
             [HarmonyArgument(2)] out bool couldUse)
         {
+            float num = float.MaxValue;
+            PlayerControl player = playerInfo.Object;
+
+            canUse = couldUse = false;
 
             if (GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal)
             {
                 return true;
             }
-
-            float num = float.MaxValue;
-            PlayerControl player = playerInfo.Object;
-
-            canUse = couldUse = false;
 
             if (OptionHolder.Ship.DisableVent)
             {
