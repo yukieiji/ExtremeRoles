@@ -69,7 +69,8 @@ namespace ExtremeRoles.Patches.Manager
 
             ExtremeRolesPlugin.Info.HideInfoOverlay();
 
-            if (OptionHolder.AllOption[(int)OptionHolder.CommonOptionKey.RandomMap].GetValue())
+            if (GameOptionsManager.Instance.currentGameMode == AmongUs.GameOptions.GameModes.Normal &&
+                OptionHolder.AllOption[(int)OptionHolder.CommonOptionKey.RandomMap].GetValue())
             {
                 // 0 = Skeld
                 // 1 = Mira HQ
