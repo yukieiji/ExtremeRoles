@@ -249,7 +249,7 @@ namespace ExtremeRoles.Patches.LogicGame
 
             if (systems == null) { return false; };
 
-            var gameOverReason = GameOverReason.ImpostorBySabotage;
+            const GameOverReason gameOverReason = GameOverReason.ImpostorBySabotage;
 
             ISystemType systemType;
             if (systems.TryGetValue(SystemTypes.LifeSupp, out systemType))
