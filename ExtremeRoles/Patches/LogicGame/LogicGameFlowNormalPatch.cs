@@ -248,31 +248,30 @@ namespace ExtremeRoles.Patches.LogicGame
             var systems = CachedShipStatus.Systems;
 
             if (systems == null) { return false; };
-            ISystemType systemType = systems.ContainsKey(
-                SystemTypes.LifeSupp) ? systems[SystemTypes.LifeSupp] : null;
-            if (systemType != null)
+
+            var gameOverReason = GameOverReason.ImpostorBySabotage;
+
+            ISystemType systemType;
+            if (systems.TryGetValue(SystemTypes.LifeSupp, out systemType))
             {
                 LifeSuppSystemType lifeSuppSystemType = systemType.TryCast<LifeSuppSystemType>();
                 if (lifeSuppSystemType != null && lifeSuppSystemType.Countdown < 0f)
                 {
-                    gameIsEnd(GameOverReason.ImpostorBySabotage);
+                    gameIsEnd(gameOverReason);
                     lifeSuppSystemType.Countdown = 10000f;
                     return true;
                 }
             }
-            ISystemType systemType2 = systems.ContainsKey(
-                SystemTypes.Reactor) ? systems[SystemTypes.Reactor] : null;
-            if (systemType2 == null)
+
+            if (systems.TryGetValue(SystemTypes.Reactor, out systemType) || 
+                systems.TryGetValue(SystemTypes.Laboratory, out systemType))
             {
-                systemType2 = systems.ContainsKey(
-                    SystemTypes.Laboratory) ? systems[SystemTypes.Laboratory] : null;
-            }
-            if (systemType2 != null)
-            {
-                ICriticalSabotage criticalSystem = systemType2.TryCast<ICriticalSabotage>();
-                if (criticalSystem != null && criticalSystem.Countdown < 0f)
+                ICriticalSabotage criticalSystem = systemType.TryCast<ICriticalSabotage>();
+
+                if (criticalSystem != null && 
+                    criticalSystem.Countdown < 0f)
                 {
-                    gameIsEnd(GameOverReason.ImpostorBySabotage);
+                    gameIsEnd(gameOverReason);
                     criticalSystem.ClearSabotage();
                     return true;
                 }
