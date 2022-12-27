@@ -109,89 +109,69 @@ namespace ExtremeRoles.Patches.LogicGame
 
             var ((team, id), num) = statistics.SeparatedNeutralAlive.ElementAt(0);
 
-            if (num >= (statistics.TotalAlive - num))
-            {
+            if (num < (statistics.TotalAlive - num)) { return false; }
 
-                GameOverReason endReason = (GameOverReason)RoleGameOverReason.UnKnown;
+            GameOverReason endReason = (GameOverReason)RoleGameOverReason.UnKnown;
+
+            if (team == NeutralSeparateTeam.Alice)
+            {
+                endReason = (GameOverReason)RoleGameOverReason.AliceKillAllOther;
+            }
+            else if (
+                statistics.TeamImpostorAlive > 0 &&
+                statistics.TeamImpostorAlive != statistics.AssassinAlive)
+            {
+                // 以下は全てインポスターと勝負しても問題ないのでインポスターが生きていると勝利できない
+                // アサシンがキルできないオプションのとき、ニュートラルの勝ち目が少なくなるので、勝利とする
                 switch (team)
                 {
-                    // アリス vs インポスターは絶対にインポスターが勝てないので
-                    // 別の殺人鬼が存在しないかつ、生存者数がアリスの生存者以下になれば勝利
-                    case NeutralSeparateTeam.Alice:
-                        setWinGameContorlId(id);
-                        endReason = (GameOverReason)RoleGameOverReason.AliceKillAllOther;
-                        break;
-                    // 以下は全てインポスターと勝負しても問題ないのでインポスターが生きていると勝利できない
-                    // アサシンがキルできないオプションのとき、ニュートラルの勝ち目が少なくなるので、勝利とする
                     case NeutralSeparateTeam.Jackal:
-                        if (statistics.TeamImpostorAlive > 0 &&
-                            statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
-                        setWinGameContorlId(id);
                         endReason = (GameOverReason)RoleGameOverReason.JackalKillAllOther;
                         break;
                     case NeutralSeparateTeam.Lover:
-                        if (statistics.TeamImpostorAlive > 0 &&
-                            statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
-                        setWinGameContorlId(id);
                         endReason = (GameOverReason)RoleGameOverReason.LoverKillAllOther;
                         break;
                     case NeutralSeparateTeam.Missionary:
-                        if (statistics.TeamImpostorAlive > 0 &&
-                            statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
-                        setWinGameContorlId(id);
                         endReason = (GameOverReason)RoleGameOverReason.MissionaryAllAgainstGod;
                         break;
                     case NeutralSeparateTeam.Yandere:
-                        if (statistics.TeamImpostorAlive > 0 &&
-                            statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
-                        setWinGameContorlId(id);
                         endReason = (GameOverReason)RoleGameOverReason.YandereKillAllOther;
                         break;
                     case NeutralSeparateTeam.Vigilante:
-                        if (statistics.TeamImpostorAlive > 0 &&
-                            statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
-                        setWinGameContorlId(id);
                         endReason = (GameOverReason)RoleGameOverReason.VigilanteKillAllOther;
                         break;
                     case NeutralSeparateTeam.Miner:
-                        if (statistics.TeamImpostorAlive > 0 &&
-                            statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
-                        setWinGameContorlId(id);
                         endReason = (GameOverReason)RoleGameOverReason.MinerExplodeEverything;
                         break;
                     case NeutralSeparateTeam.Eater:
-                        if (statistics.TeamImpostorAlive > 0 &&
-                            statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
-                        setWinGameContorlId(id);
                         endReason = (GameOverReason)RoleGameOverReason.EaterAliveAlone;
                         break;
                     case NeutralSeparateTeam.Traitor:
-                        if (statistics.TeamImpostorAlive > 0 &&
-                            statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
-                        setWinGameContorlId(id);
                         endReason = (GameOverReason)RoleGameOverReason.TraitorKillAllOther;
                         break;
                     case NeutralSeparateTeam.Queen:
-                        if (statistics.TeamImpostorAlive > 0 &&
-                            statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
-                        setWinGameContorlId(id);
                         endReason = (GameOverReason)RoleGameOverReason.QueenKillAllOther;
                         break;
                     case NeutralSeparateTeam.Kids:
-                        if (statistics.TeamImpostorAlive > 0 &&
-                            statistics.TeamImpostorAlive != statistics.AssassinAlive) { return false; }
-                        setWinGameContorlId(id);
                         endReason = (GameOverReason)RoleGameOverReason.KidsAliveAlone;
                         break;
                     default:
                         break;
                 }
-                if (endReason != (GameOverReason)RoleGameOverReason.UnKnown)
-                {
-                    gameIsEnd(endReason);
-                    return true;
-                }
             }
+            else
+            {
+                return false;
+            }
+
+            setWinGameContorlId(id);
+
+            if (endReason != (GameOverReason)RoleGameOverReason.UnKnown)
+            {
+                gameIsEnd(endReason);
+                return true;
+            }
+
             return false;
         }
 
@@ -219,7 +199,6 @@ namespace ExtremeRoles.Patches.LogicGame
                     });
                     gameIsEnd(endReason);
                     return true;
-
                 }
             }
 
