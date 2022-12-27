@@ -83,7 +83,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 
                 if (OptionHolder.Ship.IsSameNeutralSameWin && role.IsNeutral())
                 {
-                    gameControlId = int.MaxValue;
+                    gameControlId = OptionHolder.Ship.SameNeutralGameControlId;
                 }
 
                 // 生きてる

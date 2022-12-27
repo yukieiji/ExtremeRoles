@@ -53,7 +53,7 @@ namespace ExtremeRoles.Module.SpecialWinChecker
             int gameControlId = checkRole.GameControlId;
             if (OptionHolder.Ship.IsSameNeutralSameWin)
             {
-                gameControlId = int.MaxValue;
+                gameControlId = OptionHolder.Ship.SameNeutralGameControlId;
             }
 
             int teamAlive = statistics.SeparatedNeutralAlive[

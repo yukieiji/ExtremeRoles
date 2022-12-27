@@ -600,6 +600,8 @@ namespace ExtremeRoles
 
         public static class Ship
         {
+            public const int SameNeutralGameControlId = int.MaxValue;
+
             public static int MaxNumberOfMeeting = 100;
 
             public static bool ChangeMeetingVoteAreaSort = true;
