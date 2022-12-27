@@ -1,8 +1,5 @@
 name: AutoBuildAndTransCheck
 
-permissions:
-  pull-requests: write
-  contents: read
 
 on: 
   pull_request:
@@ -41,10 +38,6 @@ jobs:
         continue-on-error: true
         run: msbuild ExtremeRoles.sln -t:restore,build -p:Configuration=Release -p:RestorePackagesConfig=true
       - name: PostComment
-        uses: NejcZdovc/comment-pr@v2
+        uses: thollander/actions-comment-pull-request@v2
         with:
-          file: "comment.md"
-          single_comment: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BuildResult: ${{ steps.build.outcome }}
+            filePath: .github/workflows/comment.md
