@@ -111,64 +111,37 @@ namespace ExtremeRoles.Patches.LogicGame
 
             if (num < (statistics.TotalAlive - num)) { return false; }
 
-            GameOverReason endReason = (GameOverReason)RoleGameOverReason.UnKnown;
-
-            if (team == NeutralSeparateTeam.Alice)
-            {
-                endReason = (GameOverReason)RoleGameOverReason.AliceKillAllOther;
-            }
-            else if (
-                statistics.TeamImpostorAlive > 0 &&
+            // アリスなら問答無用で勝利
+            // それ以外なら全てインポスターと勝負しても問題ないのでインポスターが生きていると勝利できない
+            // アサシンがキルできないオプションのとき、ニュートラルの勝ち目が少なくなるので、勝利とする
+            if (team != NeutralSeparateTeam.Alice &&
+                statistics.TeamImpostorAlive > 0 && 
                 statistics.TeamImpostorAlive != statistics.AssassinAlive)
-            {
-                // 以下は全てインポスターと勝負しても問題ないのでインポスターが生きていると勝利できない
-                // アサシンがキルできないオプションのとき、ニュートラルの勝ち目が少なくなるので、勝利とする
-                switch (team)
-                {
-                    case NeutralSeparateTeam.Jackal:
-                        endReason = (GameOverReason)RoleGameOverReason.JackalKillAllOther;
-                        break;
-                    case NeutralSeparateTeam.Lover:
-                        endReason = (GameOverReason)RoleGameOverReason.LoverKillAllOther;
-                        break;
-                    case NeutralSeparateTeam.Missionary:
-                        endReason = (GameOverReason)RoleGameOverReason.MissionaryAllAgainstGod;
-                        break;
-                    case NeutralSeparateTeam.Yandere:
-                        endReason = (GameOverReason)RoleGameOverReason.YandereKillAllOther;
-                        break;
-                    case NeutralSeparateTeam.Vigilante:
-                        endReason = (GameOverReason)RoleGameOverReason.VigilanteKillAllOther;
-                        break;
-                    case NeutralSeparateTeam.Miner:
-                        endReason = (GameOverReason)RoleGameOverReason.MinerExplodeEverything;
-                        break;
-                    case NeutralSeparateTeam.Eater:
-                        endReason = (GameOverReason)RoleGameOverReason.EaterAliveAlone;
-                        break;
-                    case NeutralSeparateTeam.Traitor:
-                        endReason = (GameOverReason)RoleGameOverReason.TraitorKillAllOther;
-                        break;
-                    case NeutralSeparateTeam.Queen:
-                        endReason = (GameOverReason)RoleGameOverReason.QueenKillAllOther;
-                        break;
-                    case NeutralSeparateTeam.Kids:
-                        endReason = (GameOverReason)RoleGameOverReason.KidsAliveAlone;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else
             {
                 return false;
             }
 
+            RoleGameOverReason endReason = team switch
+            {
+                NeutralSeparateTeam.Alice      => RoleGameOverReason.AliceKillAllOther,
+                NeutralSeparateTeam.Jackal     => RoleGameOverReason.JackalKillAllOther,
+                NeutralSeparateTeam.Lover      => RoleGameOverReason.LoverKillAllOther,
+                NeutralSeparateTeam.Missionary => RoleGameOverReason.MissionaryAllAgainstGod,
+                NeutralSeparateTeam.Yandere    => RoleGameOverReason.YandereKillAllOther,
+                NeutralSeparateTeam.Vigilante  => RoleGameOverReason.VigilanteKillAllOther,
+                NeutralSeparateTeam.Miner      => RoleGameOverReason.MinerExplodeEverything,
+                NeutralSeparateTeam.Eater      => RoleGameOverReason.EaterAliveAlone,
+                NeutralSeparateTeam.Traitor    => RoleGameOverReason.TraitorKillAllOther,
+                NeutralSeparateTeam.Queen      => RoleGameOverReason.QueenKillAllOther,
+                NeutralSeparateTeam.Kids       => RoleGameOverReason.KidsAliveAlone,
+                _                              => RoleGameOverReason.UnKnown,
+            };
+
             setWinGameContorlId(id);
 
-            if (endReason != (GameOverReason)RoleGameOverReason.UnKnown)
+            if (endReason != RoleGameOverReason.UnKnown)
             {
-                gameIsEnd(endReason);
+                gameIsEnd((GameOverReason)endReason);
                 return true;
             }
 
