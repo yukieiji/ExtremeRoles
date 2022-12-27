@@ -43,81 +43,13 @@ namespace ExtremeRoles.Patches.MapOverlay
             ExtremeRoleId.Doll
         };
 
-        // Dont Copy Other MODS!!
-        public static void FixedDefaultCountOverlay(MapCountOverlay instance, bool isHudOverrideTaskActive)
-        {
-            instance.timer += Time.deltaTime;
-            if (instance.timer < 0.1f)
-            {
-                return;
-            }
-
-            instance.timer = 0f;
-
-            if (!instance.isSab && isHudOverrideTaskActive)
-            {
-                instance.isSab = true;
-                instance.BackgroundColor.SetColor(Palette.DisabledGrey);
-                instance.SabotageText.gameObject.SetActive(true);
-                return;
-            }
-            if (instance.isSab && !isHudOverrideTaskActive)
-            {
-                instance.isSab = false;
-                instance.BackgroundColor.SetColor(Color.green);
-                instance.SabotageText.gameObject.SetActive(false);
-            }
-            for (int i = 0; i < instance.CountAreas.Length; i++)
-            {
-                CounterArea counterArea = instance.CountAreas[i];
-                if (!isHudOverrideTaskActive)
-                {
-                    if (CachedShipStatus.FastRoom.TryGetValue(
-                            counterArea.RoomType, out PlainShipRoom plainShipRoom) && 
-                        plainShipRoom.roomArea)
-                    {
-                        int hitNum = plainShipRoom.roomArea.OverlapCollider(
-                            instance.filter, instance.buffer);
-                        int showCount = hitNum;
-                        for (int j = 0; j < hitNum; j++)
-                        {
-                            Collider2D collider2D = instance.buffer[j];
-                           
-                            if (!collider2D.CompareTag("DeadBody") || !instance.includeDeadBodies)
-                            {
-                                PlayerControl component = collider2D.GetComponent<PlayerControl>();
-                                if (!component || 
-                                    component.Data == null || 
-                                    component.Data.Disconnected || 
-                                    component.Data.IsDead || 
-                                    (!instance.showLivePlayerPosition && component.AmOwner) ||
-                                    (!collider2D.isTrigger && !component.AmOwner))
-                                {
-                                    showCount--;
-                                }
-                            }
-                        }
-                        counterArea.UpdateCount(showCount);
-                    }
-                    else
-                    {
-                        Debug.LogWarning($"Couldn't find counter for:{counterArea.RoomType}");
-                    }
-                }
-                else
-                {
-                    counterArea.UpdateCount(0);
-                }
-            }
-        }
-
         public static bool Prefix(MapCountOverlay __instance)
         {
             bool isHudOverrideTaskActive = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(
                 CachedPlayerControl.LocalPlayer);
             if (ExtremeRoleManager.GameRole.Count == 0)
             {
-                FixedDefaultCountOverlay(__instance, isHudOverrideTaskActive);
+                fixedDefaultCountOverlayUpdate(__instance, isHudOverrideTaskActive);
                 return false;
             }
 
@@ -128,7 +60,7 @@ namespace ExtremeRoles.Patches.MapOverlay
 
 			if (admin == null || !admin.Boosted || !admin.IsAbilityActive)
             {
-                FixedDefaultCountOverlay(__instance, isHudOverrideTaskActive);
+                fixedDefaultCountOverlayUpdate(__instance, isHudOverrideTaskActive);
                 return false;
             }
 
@@ -302,6 +234,75 @@ namespace ExtremeRoles.Patches.MapOverlay
                 }
             }
             return false;
+        }
+
+        // Dont Copy Other MODS!!
+        private static void fixedDefaultCountOverlayUpdate(
+            MapCountOverlay instance, bool isHudOverrideTaskActive)
+        {
+            instance.timer += Time.deltaTime;
+            if (instance.timer < 0.1f)
+            {
+                return;
+            }
+
+            instance.timer = 0f;
+
+            if (!instance.isSab && isHudOverrideTaskActive)
+            {
+                instance.isSab = true;
+                instance.BackgroundColor.SetColor(Palette.DisabledGrey);
+                instance.SabotageText.gameObject.SetActive(true);
+                return;
+            }
+            if (instance.isSab && !isHudOverrideTaskActive)
+            {
+                instance.isSab = false;
+                instance.BackgroundColor.SetColor(Color.green);
+                instance.SabotageText.gameObject.SetActive(false);
+            }
+            for (int i = 0; i < instance.CountAreas.Length; i++)
+            {
+                CounterArea counterArea = instance.CountAreas[i];
+                if (!isHudOverrideTaskActive)
+                {
+                    if (CachedShipStatus.FastRoom.TryGetValue(
+                            counterArea.RoomType, out PlainShipRoom plainShipRoom) &&
+                        plainShipRoom.roomArea)
+                    {
+                        int hitNum = plainShipRoom.roomArea.OverlapCollider(
+                            instance.filter, instance.buffer);
+                        int showCount = hitNum;
+                        for (int j = 0; j < hitNum; j++)
+                        {
+                            Collider2D collider2D = instance.buffer[j];
+
+                            if (!collider2D.CompareTag("DeadBody") || !instance.includeDeadBodies)
+                            {
+                                PlayerControl component = collider2D.GetComponent<PlayerControl>();
+                                if (!component ||
+                                    component.Data == null ||
+                                    component.Data.Disconnected ||
+                                    component.Data.IsDead ||
+                                    (!instance.showLivePlayerPosition && component.AmOwner) ||
+                                    (!collider2D.isTrigger && !component.AmOwner))
+                                {
+                                    showCount--;
+                                }
+                            }
+                        }
+                        counterArea.UpdateCount(showCount);
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"Couldn't find counter for:{counterArea.RoomType}");
+                    }
+                }
+                else
+                {
+                    counterArea.UpdateCount(0);
+                }
+            }
         }
 
         private static void disableVital()
