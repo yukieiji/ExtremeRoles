@@ -50,18 +50,10 @@ namespace ExtremeRoles.Patches.MapOverlay
 			}
 			__instance.timer = 0f;
 
-			bool commsActive = false;
+			bool isHudOverrideTaskActive = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(
+                CachedPlayerControl.LocalPlayer);
 
-			foreach (PlayerTask task in 
-				CachedPlayerControl.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
-            {
-				if (task.TaskType == TaskTypes.FixComms)
-				{
-					commsActive = true;
-				}
-			}
-
-			if (!__instance.isSab && commsActive)
+			if (!__instance.isSab && isHudOverrideTaskActive)
 			{
 				__instance.isSab = true;
 				__instance.BackgroundColor.SetColor(Palette.DisabledGrey);
@@ -69,7 +61,7 @@ namespace ExtremeRoles.Patches.MapOverlay
 				return false;
 			}
 
-			if (__instance.isSab && !commsActive)
+			if (__instance.isSab && !isHudOverrideTaskActive)
 			{
 				__instance.isSab = false;
 				__instance.BackgroundColor.SetColor(Color.green);
@@ -82,11 +74,11 @@ namespace ExtremeRoles.Patches.MapOverlay
 				List<Color> roomPlayerColor = new List<Color>();
 				PlayerColor.Add(counterArea.RoomType, roomPlayerColor);
 
-				if (!commsActive)
+				if (!isHudOverrideTaskActive)
 				{
-
-					PlainShipRoom plainShipRoom = CachedShipStatus.Instance.FastRooms[counterArea.RoomType];
-					if (plainShipRoom != null && plainShipRoom.roomArea)
+					if (CachedShipStatus.FastRoom.TryGetValue(
+                        counterArea.RoomType, out PlainShipRoom plainShipRoom)
+                        && plainShipRoom.roomArea)
 					{
 						int num = plainShipRoom.roomArea.OverlapCollider(__instance.filter, __instance.buffer);
 						int num2 = num;

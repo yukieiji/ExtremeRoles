@@ -2,7 +2,6 @@
 
 using UnityEngine;
 
-using UnhollowerBaseLib;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
@@ -16,23 +15,6 @@ namespace ExtremeRoles.Helper
         {
             resetPlayerOutLine();
             prevTarget = null;
-        }
-
-        public static bool HasTaskOfType<T>(PlayerControl player) where T : Il2CppObjectBase
-        {
-            if (!player)
-            {
-                return true;
-            }
-            foreach (var task in player.myTasks.GetFastEnumerator())
-            {
-                T castedTask = task.TryCast<T>();
-                if (castedTask != null)
-                {
-                    return true;
-                }
-            }
-            return false;
         }
 
         public static PlayerControl GetPlayerControlById(byte id)

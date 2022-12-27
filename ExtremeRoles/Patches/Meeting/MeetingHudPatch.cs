@@ -661,16 +661,8 @@ namespace ExtremeRoles.Patches.Meeting
         {
             if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
 
-            bool commActive = false;
-
-            foreach (PlayerTask t in CachedPlayerControl.LocalPlayer.PlayerControl.myTasks)
-            {
-                if (t.TaskType == TaskTypes.FixComms)
-                {
-                    commActive = true;
-                    break;
-                }
-            }
+            bool isHudOverrideTaskActive = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(
+                CachedPlayerControl.LocalPlayer);
 
             for (int i = 0; i < __instance.playerStates.Length; i++)
             {
@@ -686,7 +678,7 @@ namespace ExtremeRoles.Patches.Meeting
                     playerInfoUpdater = 
                         __instance.gameObject.AddComponent<OtherPlayerVoteAreaInfo>();
                 }
-                playerInfoUpdater.Init(playerVoteArea, commActive);
+                playerInfoUpdater.Init(playerVoteArea, isHudOverrideTaskActive);
             }
         }
 
