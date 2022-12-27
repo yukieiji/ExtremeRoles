@@ -104,7 +104,7 @@ namespace ExtremeRoles.Patches.Manager
                     poolablePlayer.cosmetics.nameText.text +=
                         $"\n\n<size=80%>{string.Join("\n", data.Role.GetColoredRoleName(true))}</size>";
 
-                    if(data.Role.IsNeutral())
+                    if (data.Role.IsNeutral())
                     {
                         winNeutral.Add((data.Role, data.PlayerId));
                     }
@@ -133,7 +133,6 @@ namespace ExtremeRoles.Patches.Manager
         private static void setWinDetailText(
             EndGameManager manager)
         {
-
             GameObject bonusTextObject = Object.Instantiate(manager.WinText.gameObject);
             bonusTextObject.transform.position = new Vector3(
                 manager.WinText.transform.position.x,
@@ -149,143 +148,15 @@ namespace ExtremeRoles.Patches.Manager
             var state = ExtremeRolesPlugin.ShipState;
 
             // 背景とベースのテキスト追加
-            switch (state.EndReason)
+            var info = CreateWinTextInfo((RoleGameOverReason)state.EndReason);
+
+            winDetailText.Add(info.Text);
+
+            textRenderer.color = info.Color;
+
+            if (info.IsChangeBk)
             {
-                case GameOverReason.HumansByTask:
-                case GameOverReason.HumansByVote:
-                case GameOverReason.HideAndSeek_ByTimer:
-                    winDetailText.Add(Translation.GetString(
-                        RoleTypes.Crewmate.ToString()));
-                    textRenderer.color = Palette.White;
-                    break;
-                case GameOverReason.ImpostorByKill:
-                case GameOverReason.ImpostorByVote:
-                case GameOverReason.ImpostorBySabotage:
-                case GameOverReason.HideAndSeek_ByKills:
-                case (GameOverReason)RoleGameOverReason.AssassinationMarin:
-                    winDetailText.Add(Translation.GetString(
-                        RoleTypes.Impostor.ToString()));
-                    textRenderer.color = Palette.ImpostorRed;
-                    break;
-                case (GameOverReason)RoleGameOverReason.AliceKilledByImposter:
-                case (GameOverReason)RoleGameOverReason.AliceKillAllOther:
-                    winDetailText.Add(Translation.GetString(
-                        ExtremeRoleId.Alice.ToString()));
-                    textRenderer.color = ColorPalette.AliceGold;
-                    manager.BackgroundBar.material.SetColor(
-                        "_Color", ColorPalette.AliceGold);
-                    break;
-                case (GameOverReason)RoleGameOverReason.JackalKillAllOther:
-                    winDetailText.Add(Translation.GetString(
-                        ExtremeRoleId.Jackal.ToString()));
-                    textRenderer.color = ColorPalette.JackalBlue;
-                    manager.BackgroundBar.material.SetColor(
-                        "_Color", ColorPalette.JackalBlue);
-                    break;
-                case (GameOverReason)RoleGameOverReason.TaskMasterGoHome:
-                    winDetailText.Add(Translation.GetString(
-                        ExtremeRoleId.TaskMaster.ToString()));
-                    textRenderer.color = ColorPalette.NeutralColor;
-                    manager.BackgroundBar.material.SetColor(
-                        "_Color", ColorPalette.NeutralColor);
-                    break;
-                case (GameOverReason)RoleGameOverReason.MissionaryAllAgainstGod:
-                    winDetailText.Add(Translation.GetString(
-                        ExtremeRoleId.Missionary.ToString()));
-                    textRenderer.color = ColorPalette.MissionaryBlue;
-                    manager.BackgroundBar.material.SetColor(
-                        "_Color", ColorPalette.MissionaryBlue);
-                    break;
-                case (GameOverReason)RoleGameOverReason.JesterMeetingFavorite:
-                    winDetailText.Add(Translation.GetString(
-                       ExtremeRoleId.Jester.ToString()));
-                    textRenderer.color = ColorPalette.JesterPink;
-                    manager.BackgroundBar.material.SetColor(
-                        "_Color", ColorPalette.JesterPink);
-                    break;
-                case (GameOverReason)RoleGameOverReason.LoverKillAllOther:
-                case (GameOverReason)RoleGameOverReason.ShipFallInLove:
-                    winDetailText.Add(Translation.GetString(
-                        ExtremeRoleId.Lover.ToString()));
-                    textRenderer.color = ColorPalette.LoverPink;
-                    manager.BackgroundBar.material.SetColor(
-                        "_Color", ColorPalette.LoverPink);
-                    break;
-                case (GameOverReason)RoleGameOverReason.YandereKillAllOther:
-                    winDetailText.Add(Translation.GetString(
-                        ExtremeRoleId.Yandere.ToString()));
-                    textRenderer.color = ColorPalette.YandereVioletRed;
-                    manager.BackgroundBar.material.SetColor(
-                        "_Color", ColorPalette.YandereVioletRed);
-                    break;
-                case (GameOverReason)RoleGameOverReason.YandereShipJustForTwo:
-                    winDetailText.Add(Translation.GetString(
-                        RoleGameOverReason.YandereShipJustForTwo.ToString()));
-                    textRenderer.color = ColorPalette.YandereVioletRed;
-                    manager.BackgroundBar.material.SetColor(
-                        "_Color", ColorPalette.YandereVioletRed);
-                    break;
-                case (GameOverReason)RoleGameOverReason.VigilanteKillAllOther:
-                case (GameOverReason)RoleGameOverReason.VigilanteNewIdealWorld:
-                    winDetailText.Add(Translation.GetString(
-                        ExtremeRoleId.Vigilante.ToString()));
-                    textRenderer.color = ColorPalette.VigilanteFujiIro;
-                    manager.BackgroundBar.material.SetColor(
-                        "_Color", ColorPalette.VigilanteFujiIro);
-                    break;
-                case (GameOverReason)RoleGameOverReason.YokoAllDeceive:
-                    winDetailText.Add(Translation.GetString(
-                        ExtremeRoleId.Yoko.ToString()));
-                    textRenderer.color = ColorPalette.YokoShion;
-                    manager.BackgroundBar.material.SetColor(
-                        "_Color", ColorPalette.YokoShion);
-                    break;
-                case (GameOverReason)RoleGameOverReason.MinerExplodeEverything:
-                    winDetailText.Add(Translation.GetString(
-                        ExtremeRoleId.Miner.ToString()));
-                    textRenderer.color = ColorPalette.MinerIvyGreen;
-                    manager.BackgroundBar.material.SetColor(
-                        "_Color", ColorPalette.MinerIvyGreen);
-                    break;
-                case (GameOverReason)RoleGameOverReason.EaterAllEatInTheShip:
-                case (GameOverReason)RoleGameOverReason.EaterAliveAlone:
-                    winDetailText.Add(Translation.GetString(
-                        ExtremeRoleId.Eater.ToString()));
-                    textRenderer.color = ColorPalette.EaterMaroon;
-                    manager.BackgroundBar.material.SetColor(
-                        "_Color", ColorPalette.EaterMaroon);
-                    break;
-                case (GameOverReason)RoleGameOverReason.TraitorKillAllOther:
-                    winDetailText.Add(Translation.GetString(
-                        ExtremeRoleId.Traitor.ToString()));
-                    textRenderer.color = ColorPalette.TraitorLightShikon;
-                    manager.BackgroundBar.material.SetColor(
-                        "_Color", ColorPalette.TraitorLightShikon);
-                    break;
-                case (GameOverReason)RoleGameOverReason.QueenKillAllOther:
-                    winDetailText.Add(Translation.GetString(
-                        ExtremeRoleId.Queen.ToString()));
-                    textRenderer.color = ColorPalette.QueenWhite;
-                    manager.BackgroundBar.material.SetColor(
-                        "_Color", ColorPalette.QueenWhite);
-                    break;
-                case (GameOverReason)RoleGameOverReason.UmbrerBiohazard:
-                    winDetailText.Add(Translation.GetString(
-                        ExtremeRoleId.Umbrer.ToString()));
-                    textRenderer.color = ColorPalette.UmbrerRed;
-                    manager.BackgroundBar.material.SetColor(
-                        "_Color", ColorPalette.UmbrerRed);
-                    break;
-                case (GameOverReason)RoleGameOverReason.KidsTooBigHomeAlone:
-                case (GameOverReason)RoleGameOverReason.KidsAliveAlone:
-                    winDetailText.Add(Translation.GetString(
-                        ExtremeRoleId.Delinquent.ToString()));
-                    textRenderer.color = ColorPalette.KidsYellowGreen;
-                    manager.BackgroundBar.material.SetColor(
-                        "_Color", ColorPalette.KidsYellowGreen);
-                    break;
-                default:
-                    break;
+                manager.BackgroundBar.material.SetColor("_Color", info.Color);
             }
 
             // 幽霊役職の勝者テキスト追加処理
@@ -350,7 +221,7 @@ namespace ExtremeRoles.Patches.Manager
             {
                 var role = ExtremeRoleManager.GameRole[player.PlayerId];
 
-                if (!role.IsNeutral() || 
+                if (!role.IsNeutral() ||
                     textAddedRole.Contains(role.Id) ||
                     winPlayer.Contains(player.PlayerId)) { continue; }
 
@@ -374,6 +245,109 @@ namespace ExtremeRoles.Patches.Manager
         {
             baseStrings.Add(
                 condition ? Translation.GetString("andFirst") : Translation.GetString("and"));
+        }
+
+        private static WinTextInfo CreateWinTextInfo(RoleGameOverReason reason)
+        {
+            return reason switch
+            {
+                (RoleGameOverReason)GameOverReason.HumansByTask or
+                (RoleGameOverReason)GameOverReason.HumansByVote or
+                (RoleGameOverReason)GameOverReason.HideAndSeek_ByTimer =>
+                    WinTextInfo.Create(RoleTypes.Crewmate, Palette.White, false),
+
+                (RoleGameOverReason)GameOverReason.ImpostorByKill or
+                (RoleGameOverReason)GameOverReason.ImpostorByVote or
+                (RoleGameOverReason)GameOverReason.ImpostorBySabotage or
+                (RoleGameOverReason)GameOverReason.HideAndSeek_ByKills or
+                RoleGameOverReason.AssassinationMarin =>
+                    WinTextInfo.Create(RoleTypes.Impostor, Palette.ImpostorRed, false),
+
+                RoleGameOverReason.AliceKilledByImposter or
+                RoleGameOverReason.AliceKillAllOther =>
+                    WinTextInfo.Create(ExtremeRoleId.Alice, ColorPalette.AliceGold),
+
+                RoleGameOverReason.JackalKillAllOther =>
+                    WinTextInfo.Create(ExtremeRoleId.Jackal, ColorPalette.JackalBlue),
+
+                RoleGameOverReason.TaskMasterGoHome =>
+                    WinTextInfo.Create(ExtremeRoleId.TaskMaster, ColorPalette.NeutralColor),
+
+                RoleGameOverReason.MissionaryAllAgainstGod =>
+                    WinTextInfo.Create(ExtremeRoleId.Missionary, ColorPalette.MissionaryBlue),
+
+                RoleGameOverReason.JesterMeetingFavorite =>
+                    WinTextInfo.Create(ExtremeRoleId.Jester, ColorPalette.JesterPink),
+
+                RoleGameOverReason.LoverKillAllOther or
+                RoleGameOverReason.ShipFallInLove =>
+                    WinTextInfo.Create(ExtremeRoleId.Lover, ColorPalette.LoverPink),
+
+                RoleGameOverReason.YandereKillAllOther =>
+                    WinTextInfo.Create(
+                        ExtremeRoleId.Yandere, ColorPalette.YandereVioletRed),
+                RoleGameOverReason.YandereShipJustForTwo =>
+                    WinTextInfo.Create(
+                        RoleGameOverReason.YandereShipJustForTwo, ColorPalette.YandereVioletRed),
+
+                RoleGameOverReason.VigilanteKillAllOther or
+                RoleGameOverReason.VigilanteNewIdealWorld =>
+                    WinTextInfo.Create(ExtremeRoleId.Vigilante, ColorPalette.VigilanteFujiIro),
+
+                RoleGameOverReason.YokoAllDeceive =>
+                    WinTextInfo.Create(ExtremeRoleId.Yoko, ColorPalette.YokoShion),
+
+                RoleGameOverReason.MinerExplodeEverything =>
+                    WinTextInfo.Create(ExtremeRoleId.Miner, ColorPalette.MinerIvyGreen),
+
+                RoleGameOverReason.EaterAllEatInTheShip or
+                RoleGameOverReason.EaterAliveAlone =>
+                    WinTextInfo.Create(ExtremeRoleId.Eater, ColorPalette.EaterMaroon),
+
+                RoleGameOverReason.TraitorKillAllOther =>
+                    WinTextInfo.Create(ExtremeRoleId.Traitor, ColorPalette.TraitorLightShikon),
+
+                RoleGameOverReason.QueenKillAllOther =>
+                    WinTextInfo.Create(ExtremeRoleId.Queen, ColorPalette.QueenWhite),
+
+                RoleGameOverReason.UmbrerBiohazard =>
+                    WinTextInfo.Create(ExtremeRoleId.Umbrer, ColorPalette.UmbrerRed),
+
+                RoleGameOverReason.KidsTooBigHomeAlone or
+                RoleGameOverReason.KidsAliveAlone =>
+                    WinTextInfo.Create(ExtremeRoleId.Delinquent, ColorPalette.KidsYellowGreen),
+
+                _ => WinTextInfo.Create(RoleGameOverReason.UnKnown, Color.black)
+            };
+        }
+
+        private struct WinTextInfo
+        {
+            public string Text;
+            public Color Color;
+            public bool IsChangeBk;
+
+            internal static WinTextInfo Create(
+                System.Enum textEnum, Color color)
+            {
+                return new WinTextInfo
+                {
+                    Text = Translation.GetString(textEnum.ToString()),
+                    Color = color,
+                    IsChangeBk = true,
+                };
+            }
+
+            internal static WinTextInfo Create(
+                System.Enum textEnum, Color color, bool isChangeBk)
+            {
+                return new WinTextInfo
+                {
+                    Text = Translation.GetString(textEnum.ToString()),
+                    Color = color,
+                    IsChangeBk = isChangeBk,
+                };
+            }
         }
     }
 }
