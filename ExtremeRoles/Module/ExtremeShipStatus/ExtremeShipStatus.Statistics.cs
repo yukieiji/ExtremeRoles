@@ -291,6 +291,34 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             public Dictionary<int, IWinChecker> SpecialWinCheckRoleAlive { get; set; }
 
             public Dictionary<(NeutralSeparateTeam, int), int> SeparatedNeutralAlive { get; set; }
+
+            public override string ToString()
+            {
+                var builder = new System.Text.StringBuilder();
+
+                builder.AppendLine("------------ Current Player Statistics ------------");
+                builder.AppendLine($"Total Player Alive : {this.TotalAlive}");
+                builder.AppendLine($"Crewmate Alive : {this.TeamCrewmateAlive} / {this.AllTeamCrewmate}");
+                builder.AppendLine($"Impostor Alive :{this.TeamImpostorAlive}");
+                builder.AppendLine($"Assassin Alive : {this.AssassinAlive}");
+                builder.AppendLine($"Neutral Alive : {this.TeamNeutralAlive}");
+
+                builder.AppendLine("------ Neutral Win Special Checker ------");
+                foreach (var (id, winChecker) in this.SpecialWinCheckRoleAlive)
+                {
+                    builder.AppendLine(
+                        $"{winChecker} --- GameControlId:{id} --- IsWin:{winChecker.IsWin(this)}");
+                }
+
+                builder.AppendLine(
+                    $"------ Neutral Separate Teams --- CurrentAliveTeams:{this.SeparatedNeutralAlive.Count} ------");
+                foreach (var ((team, id), aliveNum) in this.SeparatedNeutralAlive)
+                {
+                    builder.AppendLine(
+                        $"{team} --- GameControlId:{id} --- AliveNum: {aliveNum}");
+                }
+                return builder.ToString();
+            }
         }
     }
 }
