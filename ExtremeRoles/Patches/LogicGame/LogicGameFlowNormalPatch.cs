@@ -74,29 +74,15 @@ namespace ExtremeRoles.Patches.LogicGame
         private static bool isImpostorWin(
             ExtremeShipStatus.PlayerStatistics statistics)
         {
-            bool isGameEnd = false;
-            GameOverReason endReason = GameOverReason.HumansDisconnect;
-
             if (statistics.TeamImpostorAlive >= (statistics.TotalAlive - statistics.TeamImpostorAlive) &&
                 statistics.SeparatedNeutralAlive.Count == 0)
             {
-                isGameEnd = true;
-                switch (TempData.LastDeathReason)
+                GameOverReason endReason = TempData.LastDeathReason switch
                 {
-                    case DeathReason.Exile:
-                        endReason = GameOverReason.ImpostorByVote;
-                        break;
-                    case DeathReason.Kill:
-                        endReason = GameOverReason.ImpostorByKill;
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            if (isGameEnd)
-            {
-
+                    DeathReason.Exile => GameOverReason.ImpostorByVote,
+                    DeathReason.Kill  => GameOverReason.ImpostorByKill,
+                    _                 => GameOverReason.HumansDisconnect,
+                };
                 gameIsEnd(endReason);
                 return true;
             }
@@ -222,28 +208,15 @@ namespace ExtremeRoles.Patches.LogicGame
                 {
                     setWinGameContorlId(role.GameControlId);
 
-                    GameOverReason endReason = (GameOverReason)RoleGameOverReason.UnKnown;
-
-                    switch (role.Id)
+                    GameOverReason endReason = (GameOverReason)(role.Id switch
                     {
-                        case ExtremeRoleId.Alice:
-                            endReason = (GameOverReason)RoleGameOverReason.AliceKilledByImposter;
-                            break;
-                        case ExtremeRoleId.TaskMaster:
-                            endReason = (GameOverReason)RoleGameOverReason.TaskMasterGoHome;
-                            break;
-                        case ExtremeRoleId.Jester:
-                            endReason = (GameOverReason)RoleGameOverReason.JesterMeetingFavorite;
-                            break;
-                        case ExtremeRoleId.Eater:
-                            endReason = (GameOverReason)RoleGameOverReason.EaterAllEatInTheShip;
-                            break;
-                        case ExtremeRoleId.Umbrer:
-                            endReason = (GameOverReason)RoleGameOverReason.UmbrerBiohazard;
-                            break;
-                        default:
-                            break;
-                    }
+                        ExtremeRoleId.Alice      => RoleGameOverReason.AliceKilledByImposter,
+                        ExtremeRoleId.TaskMaster => RoleGameOverReason.TaskMasterGoHome,
+                        ExtremeRoleId.Jester     => RoleGameOverReason.JesterMeetingFavorite,
+                        ExtremeRoleId.Eater      => RoleGameOverReason.EaterAllEatInTheShip,
+                        ExtremeRoleId.Umbrer     => RoleGameOverReason.UmbrerBiohazard,
+                        _ => RoleGameOverReason.UnKnown,
+                    });
                     gameIsEnd(endReason);
                     return true;
 
