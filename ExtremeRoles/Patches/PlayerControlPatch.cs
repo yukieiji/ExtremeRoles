@@ -326,8 +326,7 @@ namespace ExtremeRoles.Patches
                     {
                         if (enable)
                         {
-                            if (!OptionHolder.AllOption[
-                                    (int)OptionHolder.CommonOptionKey.EngineerUseImpostorVent].GetValue())
+                            if (!OptionHolder.Ship.EngineerUseImpostorVent)
                             {
                                 hudManager.AbilityButton.Show();
                             }

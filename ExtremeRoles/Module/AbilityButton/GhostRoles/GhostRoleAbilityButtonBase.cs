@@ -77,15 +77,8 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
 
         protected bool IsComSabNow()
         {
-            foreach (PlayerTask t in 
-                CachedPlayerControl.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
-            {
-                if (t?.TaskType == TaskTypes.FixComms)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(
+                CachedPlayerControl.LocalPlayer);
         }
 
         public sealed override void Update()

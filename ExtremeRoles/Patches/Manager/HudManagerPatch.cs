@@ -309,15 +309,7 @@ namespace ExtremeRoles.Patches.Manager
             bool playeringInfoBlock)
         {
 
-            bool commsActive = false;
-            foreach (PlayerTask t in localPlayer.PlayerControl.myTasks.GetFastEnumerator())
-            {
-                if (t.TaskType == TaskTypes.FixComms)
-                {
-                    commsActive = true;
-                    break;
-                }
-            }
+            bool commsActive = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(localPlayer);
 
             foreach (PlayerControl player in CachedPlayerControl.AllPlayerControls)
             {

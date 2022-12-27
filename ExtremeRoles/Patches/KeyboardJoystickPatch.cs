@@ -152,9 +152,6 @@ namespace ExtremeRoles.Patches
         private static Module.IOption UseXionOption => OptionHolder.AllOption[
             (int)OptionHolder.CommonOptionKey.UseXion];
 
-        private static Module.IOption EngineerVentOption => OptionHolder.AllOption[
-            (int)OptionHolder.CommonOptionKey.EngineerUseImpostorVent];
-
         public static void Postfix()
         {
             if (AmongUsClient.Instance == null || CachedPlayerControl.LocalPlayer == null) 
@@ -236,7 +233,7 @@ namespace ExtremeRoles.Patches
                 {
                     if (!(((Roles.Solo.VanillaRoleWrapper)role).VanilaRoleId ==
                             RoleTypes.Engineer) ||
-                        EngineerVentOption.GetValue())
+                        OptionHolder.Ship.EngineerUseImpostorVent)
                     {
                         hudManager.ImpostorVentButton.DoClick();
                     }

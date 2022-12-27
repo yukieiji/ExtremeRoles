@@ -74,29 +74,15 @@ namespace ExtremeRoles.Patches.LogicGame
         private static bool isImpostorWin(
             ExtremeShipStatus.PlayerStatistics statistics)
         {
-            bool isGameEnd = false;
-            GameOverReason endReason = GameOverReason.HumansDisconnect;
-
             if (statistics.TeamImpostorAlive >= (statistics.TotalAlive - statistics.TeamImpostorAlive) &&
                 statistics.SeparatedNeutralAlive.Count == 0)
             {
-                isGameEnd = true;
-                switch (TempData.LastDeathReason)
+                GameOverReason endReason = TempData.LastDeathReason switch
                 {
-                    case DeathReason.Exile:
-                        endReason = GameOverReason.ImpostorByVote;
-                        break;
-                    case DeathReason.Kill:
-                        endReason = GameOverReason.ImpostorByKill;
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            if (isGameEnd)
-            {
-
+                    DeathReason.Exile => GameOverReason.ImpostorByVote,
+                    DeathReason.Kill  => GameOverReason.ImpostorByKill,
+                    _                 => GameOverReason.HumansDisconnect,
+                };
                 gameIsEnd(endReason);
                 return true;
             }
@@ -222,28 +208,15 @@ namespace ExtremeRoles.Patches.LogicGame
                 {
                     setWinGameContorlId(role.GameControlId);
 
-                    GameOverReason endReason = (GameOverReason)RoleGameOverReason.UnKnown;
-
-                    switch (role.Id)
+                    GameOverReason endReason = (GameOverReason)(role.Id switch
                     {
-                        case ExtremeRoleId.Alice:
-                            endReason = (GameOverReason)RoleGameOverReason.AliceKilledByImposter;
-                            break;
-                        case ExtremeRoleId.TaskMaster:
-                            endReason = (GameOverReason)RoleGameOverReason.TaskMasterGoHome;
-                            break;
-                        case ExtremeRoleId.Jester:
-                            endReason = (GameOverReason)RoleGameOverReason.JesterMeetingFavorite;
-                            break;
-                        case ExtremeRoleId.Eater:
-                            endReason = (GameOverReason)RoleGameOverReason.EaterAllEatInTheShip;
-                            break;
-                        case ExtremeRoleId.Umbrer:
-                            endReason = (GameOverReason)RoleGameOverReason.UmbrerBiohazard;
-                            break;
-                        default:
-                            break;
-                    }
+                        ExtremeRoleId.Alice      => RoleGameOverReason.AliceKilledByImposter,
+                        ExtremeRoleId.TaskMaster => RoleGameOverReason.TaskMasterGoHome,
+                        ExtremeRoleId.Jester     => RoleGameOverReason.JesterMeetingFavorite,
+                        ExtremeRoleId.Eater      => RoleGameOverReason.EaterAllEatInTheShip,
+                        ExtremeRoleId.Umbrer     => RoleGameOverReason.UmbrerBiohazard,
+                        _ => RoleGameOverReason.UnKnown,
+                    });
                     gameIsEnd(endReason);
                     return true;
 
@@ -275,31 +248,30 @@ namespace ExtremeRoles.Patches.LogicGame
             var systems = CachedShipStatus.Systems;
 
             if (systems == null) { return false; };
-            ISystemType systemType = systems.ContainsKey(
-                SystemTypes.LifeSupp) ? systems[SystemTypes.LifeSupp] : null;
-            if (systemType != null)
+
+            const GameOverReason gameOverReason = GameOverReason.ImpostorBySabotage;
+
+            ISystemType systemType;
+            if (systems.TryGetValue(SystemTypes.LifeSupp, out systemType))
             {
                 LifeSuppSystemType lifeSuppSystemType = systemType.TryCast<LifeSuppSystemType>();
                 if (lifeSuppSystemType != null && lifeSuppSystemType.Countdown < 0f)
                 {
-                    gameIsEnd(GameOverReason.ImpostorBySabotage);
+                    gameIsEnd(gameOverReason);
                     lifeSuppSystemType.Countdown = 10000f;
                     return true;
                 }
             }
-            ISystemType systemType2 = systems.ContainsKey(
-                SystemTypes.Reactor) ? systems[SystemTypes.Reactor] : null;
-            if (systemType2 == null)
+
+            if (systems.TryGetValue(SystemTypes.Reactor, out systemType) || 
+                systems.TryGetValue(SystemTypes.Laboratory, out systemType))
             {
-                systemType2 = systems.ContainsKey(
-                    SystemTypes.Laboratory) ? systems[SystemTypes.Laboratory] : null;
-            }
-            if (systemType2 != null)
-            {
-                ICriticalSabotage criticalSystem = systemType2.TryCast<ICriticalSabotage>();
-                if (criticalSystem != null && criticalSystem.Countdown < 0f)
+                ICriticalSabotage criticalSystem = systemType.TryCast<ICriticalSabotage>();
+
+                if (criticalSystem != null && 
+                    criticalSystem.Countdown < 0f)
                 {
-                    gameIsEnd(GameOverReason.ImpostorBySabotage);
+                    gameIsEnd(gameOverReason);
                     criticalSystem.ClearSabotage();
                     return true;
                 }

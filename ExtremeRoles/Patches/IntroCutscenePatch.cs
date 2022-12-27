@@ -424,7 +424,8 @@ namespace ExtremeRoles.Patches
     {
         public static void Prefix()
         {
-            if (OptionHolder.AllOption[(int)OptionHolder.CommonOptionKey.UseXion].GetValue())
+            if (GameOptionsManager.Instance.CurrentGameOptions.GameMode == GameModes.Normal &&
+                OptionHolder.AllOption[(int)OptionHolder.CommonOptionKey.UseXion].GetValue())
             {
                 Xion.XionPlayerToGhostLayer();
                 Xion.RemoveXionPlayerToAllPlayerControl();

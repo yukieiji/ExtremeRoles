@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 // from TOR : https://github.com/Eisbison/TheOtherRoles/blob/main/TheOtherRoles/Utilities/MapUtilities.cs
 
@@ -15,16 +16,23 @@ namespace ExtremeRoles.Performance
                 return allSystems;
             }
         }
+        
+        public static Dictionary<SystemTypes, PlainShipRoom> FastRoom { get; private set; }
+
         private static readonly Dictionary<SystemTypes, ISystemType> allSystems = new Dictionary<SystemTypes, ISystemType>();
         
         public static void SetUp(ShipStatus instance)
         {
             Instance = instance;
+            FastRoom = instance.AllRooms.Where(
+                (PlainShipRoom p) => p.RoomId > SystemTypes.Hallway
+                    ).ToDictionary((PlainShipRoom r) => r.RoomId);
         }
 
         public static void Destroy()
         {
             Instance = null;
+            FastRoom.Clear();
             allSystems.Clear();
         }
 

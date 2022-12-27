@@ -1,5 +1,5 @@
 import os
-import subprocess
+import sys
 from typing import Dict, List
 from openpyxl import load_workbook
 
@@ -59,9 +59,9 @@ def convert_md_table(data: Dict[str, List[str]]) -> str:
 
   return result
 
-def output_md_report(*check_xlsx_file):
+def output_md_report(build_result, *check_xlsx_file):
   
-  result = '### GitHub Actions MSBuilds\n\n - Build Result : {BuildResult}\n\n'
+  result = f'### GitHub Actions MSBuilds\n\n - Build Result : {build_result}\n\n'
   result = f'{result}### Translation Checker Report\n'
 
   for file in check_xlsx_file:
@@ -73,4 +73,4 @@ def output_md_report(*check_xlsx_file):
 
 
 if __name__ == "__main__":
-  output_md_report(EXTREMERORLS_IN_FILE, EXTREMESKIN_IN_FILE)
+  output_md_report(sys.argv[1], EXTREMERORLS_IN_FILE, EXTREMESKIN_IN_FILE)

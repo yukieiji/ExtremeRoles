@@ -1,8 +1,5 @@
 name: AutoBuildAndTransCheck
 
-permissions:
-  pull-requests: write
-  contents: read
 
 on: 
   pull_request:
@@ -33,18 +30,14 @@ jobs:
           dotnet-version: 5.x
       - name: AddMsBuildToPATH
         uses: microsoft/setup-msbuild@v1.1
-      - name: CheckTransData
-        continue-on-error: true
-        run: python createTransReport.py
       - name: RunBuild
         id: build
         continue-on-error: true
         run: msbuild ExtremeRoles.sln -t:restore,build -p:Configuration=Release -p:RestorePackagesConfig=true
+      - name: CheckTransData
+        continue-on-error: true
+        run: python createTransReport.py ${{ steps.build.outcome }}
       - name: PostComment
-        uses: NejcZdovc/comment-pr@v2
+        uses: thollander/actions-comment-pull-request@v2
         with:
-          file: "comment.md"
-          single_comment: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BuildResult: ${{ steps.build.outcome }}
+            filePath: .github/workflows/comment.md
