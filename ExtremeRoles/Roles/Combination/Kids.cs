@@ -325,11 +325,11 @@ namespace ExtremeRoles.Roles.Combination
                 this.UseAbility,
                 this.IsAbilityUse,
                 Loader.CreateSpriteFromResources(
-                    Path.BomberSetBomb),
-                Loader.CreateSpriteFromResources(
                     string.Format(
                         Path.DelinquentScribe,
-                        RandomGenerator.Instance.Next(0, maxImageNum))));
+                        RandomGenerator.Instance.Next(0, maxImageNum))),
+                Loader.CreateSpriteFromResources(
+                    Path.BomberSetBomb));
 
             this.RoleAbilityInit();
 
