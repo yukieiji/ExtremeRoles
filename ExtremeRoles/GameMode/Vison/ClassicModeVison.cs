@@ -18,6 +18,8 @@ namespace ExtremeRoles.GameMode.Vison
         private static float impLightVison => GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
             FloatOptionNames.ImpostorLightMod);
 
+        private const SystemTypes electrical = SystemTypes.Electrical;
+
         public VisonType Current => modifier;
         private VisonType modifier = VisonType.None;
 
@@ -59,9 +61,8 @@ namespace ExtremeRoles.GameMode.Vison
             {
                 return checkNormalOrCustomCalculateLightRadius(playerInfo, ref vison);
             }
-
-            ISystemType systemType = shipStatus.Systems.ContainsKey(
-                SystemTypes.Electrical) ? shipStatus.Systems[SystemTypes.Electrical] : null;
+            var systems = shipStatus.Systems;
+            ISystemType systemType = systems.ContainsKey(electrical) ? systems[electrical] : null;
             if (systemType == null)
             {
                 return checkNormalOrCustomCalculateLightRadius(playerInfo, ref vison);
