@@ -110,7 +110,6 @@ namespace ExtremeRoles
             DisableTaskWin,
             IsSameNeutralSameWin,
             DisableNeutralSpecialForceEnd,
-            EnableHorseMode,
 
             IsAssignNeutralToVanillaCrewGhostRole,
             IsRemoveAngleIcon,
@@ -553,12 +552,6 @@ namespace ExtremeRoles
             new BoolCustomOption(
                 (int)CommonOptionKey.DisableNeutralSpecialForceEnd,
                 CommonOptionKey.DisableNeutralSpecialForceEnd.ToString(),
-                false);
-
-
-            new BoolCustomOption(
-                (int)CommonOptionKey.EnableHorseMode,
-                CommonOptionKey.EnableHorseMode.ToString(),
                 false);
 
 
