@@ -1,16 +1,10 @@
-﻿using ExtremeRoles.GameMode.Option;
-using ExtremeRoles.GameMode.Option.MapModuleOption;
+﻿using ExtremeRoles.GameMode.Option.MapModuleOption;
 
 namespace ExtremeRoles.GameMode.Factory
 {
-    public static class ClassicGameModeFactory
+    public class ClassicGameModeOptionFactory : IModeFactory
     {
-        public static void Assemble(ExtremeGameManager mng)
-        {
-            mng.ShipOption = createGlobalOption();
-        }
-
-        private static ShipGlobalOption createGlobalOption()
+        public ShipGlobalOption CreateGlobalOption()
         {
             return new ShipGlobalOption()
             {

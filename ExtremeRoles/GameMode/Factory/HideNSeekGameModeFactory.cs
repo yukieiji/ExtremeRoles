@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ExtremeRoles.GameMode.Factory
+﻿namespace ExtremeRoles.GameMode.Factory
 {
-    public static class HideNSeekGameModeFactory
+    public class HideNSeekGameModeFactory : IModeFactory
     {
-        public static void Assemble(ExtremeGameManager mng)
-        {
-            mng.ShipOption = new ShipGlobalOption();
-        }
+        public ShipGlobalOption CreateGlobalOption() => new ShipGlobalOption();
     }
 }
