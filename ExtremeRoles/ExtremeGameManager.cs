@@ -1,6 +1,7 @@
 ﻿using AmongUs.GameOptions;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.Factory;
+using ExtremeRoles.GameMode.Vison;
 
 // TODO: setプロパティ => initにする 
 
@@ -14,6 +15,8 @@ namespace ExtremeRoles
 
         public ShipGlobalOption ShipOption { get; private set; }
 
+        public IVisonModifier Vison { get; private set; }
+
         public static void Create()
         {
             Instance = new ExtremeGameManager();
@@ -26,6 +29,7 @@ namespace ExtremeRoles
             };
 
             Instance.ShipOption = factory.CreateGlobalOption();
+            Instance.Vison = factory.CreateVisonModifier();
         }
     }
 }
