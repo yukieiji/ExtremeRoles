@@ -75,7 +75,7 @@ namespace ExtremeRoles
             FixedMeetingPlayerLevel,
             DisableSkipInEmergencyMeeting,
             DisableSelfVote,
-            DesableVent,
+            DisableVent,
             EngineerUseImpostorVent,
             CanKillVentInPlayer,
             ParallelMedBayScans,
@@ -203,7 +203,7 @@ namespace ExtremeRoles
 
             Ship.AllowParallelMedBayScan = GetValue(CommonOptionKey.ParallelMedBayScans);
             Ship.BlockSkippingInEmergencyMeeting = GetValue(CommonOptionKey.DisableSkipInEmergencyMeeting);
-            Ship.DisableVent = GetValue(CommonOptionKey.DesableVent);
+            Ship.DisableVent = GetValue(CommonOptionKey.DisableVent);
             Ship.CanKillVentInPlayer = GetValue(CommonOptionKey.CanKillVentInPlayer);
             Ship.EngineerUseImpostorVent = GetValue(CommonOptionKey.EngineerUseImpostorVent);
             Ship.DisableSelfVote = GetValue(CommonOptionKey.DisableSelfVote);
@@ -446,8 +446,8 @@ namespace ExtremeRoles
 
 
             var ventOption = new BoolCustomOption(
-               (int)CommonOptionKey.DesableVent,
-               CommonOptionKey.DesableVent.ToString(),
+               (int)CommonOptionKey.DisableVent,
+               CommonOptionKey.DisableVent.ToString(),
                false);
             new BoolCustomOption(
                 (int)CommonOptionKey.CanKillVentInPlayer,
