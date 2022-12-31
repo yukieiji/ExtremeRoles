@@ -56,28 +56,30 @@ namespace ExtremeRoles.GameMode.Vison
                 default:
                     break;
             }
+            bool isRequireCustomVison = requireCustomCustomCalculateLightRadius();
 
             if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd)
             {
-                return checkNormalOrCustomCalculateLightRadius(playerInfo, ref vison);
+                return checkNormalOrCustomCalculateLightRadius(isRequireCustomVison, playerInfo, ref vison);
             }
             var systems = shipStatus.Systems;
             ISystemType systemType = systems.ContainsKey(electrical) ? systems[electrical] : null;
             if (systemType == null)
             {
-                return checkNormalOrCustomCalculateLightRadius(playerInfo, ref vison);
+                return checkNormalOrCustomCalculateLightRadius(isRequireCustomVison, playerInfo, ref vison);
             }
 
             SwitchSystem switchSystem = systemType.TryCast<SwitchSystem>();
             if (switchSystem == null)
             {
-                return checkNormalOrCustomCalculateLightRadius(playerInfo, ref vison);
+                return checkNormalOrCustomCalculateLightRadius(isRequireCustomVison, playerInfo, ref vison);
             }
 
             var allRole = ExtremeRoleManager.GameRole;
+
             if (allRole.Count == 0)
             {
-                if (requireCustomCustomCalculateLightRadius())
+                if (isRequireCustomVison)
                 {
                     vison = ExtremeRolesPlugin.Compat.ModMap.CalculateLightRadius(
                         playerInfo, false, playerInfo.Role.IsImpostor);
@@ -88,7 +90,7 @@ namespace ExtremeRoles.GameMode.Vison
 
             SingleRoleBase role = allRole[playerInfo.PlayerId];
 
-            if (requireCustomCustomCalculateLightRadius())
+            if (isRequireCustomVison)
             {
                 float visonMulti;
                 bool applayVisonEffects = !role.IsImpostor();
@@ -148,9 +150,9 @@ namespace ExtremeRoles.GameMode.Vison
             ExtremeRolesPlugin.Compat.ModMap.IsCustomCalculateLightRadius;
 
         private static bool checkNormalOrCustomCalculateLightRadius(
-            GameData.PlayerInfo player, ref float result)
+            bool isRequireCustomVison, GameData.PlayerInfo player, ref float result)
         {
-            if (requireCustomCustomCalculateLightRadius())
+            if (isRequireCustomVison)
             {
                 result = ExtremeRolesPlugin.Compat.ModMap.CalculateLightRadius(
                     player, false, player.Role.IsImpostor);
