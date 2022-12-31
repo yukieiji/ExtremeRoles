@@ -16,6 +16,7 @@ using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Performance;
 using AmongUs.GameOptions;
 using PowerTools;
+using ExtremeRoles.GameMode.Option.MapModuleOption;
 
 namespace ExtremeRoles.Patches
 {
@@ -482,9 +483,11 @@ namespace ExtremeRoles.Patches
         {
             HashSet<string> disableObjectName = new HashSet<string>();
 
-            bool isRemoveAdmin = OptionHolder.Ship.IsRemoveAdmin;
-            bool isRemoveSecurity = OptionHolder.Ship.IsRemoveSecurity;
-            bool isRemoveVital = OptionHolder.Ship.IsRemoveVital;
+            var shipOpt = ExtremeGameManager.Instance.ShipOption;
+
+            bool isRemoveAdmin = shipOpt.Admin.DisableAdmin;
+            bool isRemoveSecurity = shipOpt.Security.DisableSecurity;
+            bool isRemoveVital = shipOpt.Vital.DisableVital;
 
             if (ExtremeRolesPlugin.Compat.IsModMap)
             {
@@ -567,13 +570,13 @@ namespace ExtremeRoles.Patches
                         }
                         else
                         {
-                            switch (OptionHolder.Ship.AirShipEnable)
+                            switch (shipOpt.Admin.AirShipEnable)
                             {
-                                case OptionHolder.AirShipAdminMode.ModeCockpitOnly:
+                                case AirShipAdminMode.ModeCockpitOnly:
                                     disableObjectName.Add(
                                         GameSystem.AirShipArchiveAdmin);
                                     break;
-                                case OptionHolder.AirShipAdminMode.ModeArchiveOnly:
+                                case AirShipAdminMode.ModeArchiveOnly:
                                     disableObjectName.Add(
                                         GameSystem.AirShipCockpitAdmin);
                                     break;

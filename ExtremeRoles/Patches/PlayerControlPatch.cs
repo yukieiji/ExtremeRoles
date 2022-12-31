@@ -332,7 +332,7 @@ namespace ExtremeRoles.Patches
                     {
                         if (enable)
                         {
-                            if (!OptionHolder.Ship.EngineerUseImpostorVent)
+                            if (!ExtremeGameManager.Instance.ShipOption.EngineerUseImpostorVent)
                             {
                                 hudManager.AbilityButton.Show();
                             }

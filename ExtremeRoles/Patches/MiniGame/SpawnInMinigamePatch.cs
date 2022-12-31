@@ -8,7 +8,7 @@ namespace ExtremeRoles.Patches.MiniGame
     {
         public static void Postfix(SpawnInMinigame __instance)
         {
-            if (OptionHolder.Ship.IsAutoSelectRandomSpawn)
+            if (ExtremeGameManager.Instance.ShipOption.IsAutoSelectRandomSpawn)
             {
                 __instance.Close();
             }

@@ -200,9 +200,12 @@ namespace ExtremeRoles.Patches.MapOverlay
         public static void Initialize()
         {
             Object.Destroy(timerText);
-            adminTimer = OptionHolder.Ship.AdminLimitTime;
-            isRemoveAdmin = OptionHolder.Ship.IsRemoveAdmin;
-            enableAdminLimit = OptionHolder.Ship.EnableAdminLimit;
+
+            var adminOpt = ExtremeGameManager.Instance.ShipOption.Admin;
+
+            adminTimer = adminOpt.AdminLimitTime;
+            isRemoveAdmin = adminOpt.DisableAdmin;
+            enableAdminLimit = adminOpt.EnableAdminLimit;
 
             Logging.Debug("---- AdminCondition ----");
             Logging.Debug($"IsRemoveAdmin:{isRemoveAdmin}");

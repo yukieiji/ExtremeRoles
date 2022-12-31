@@ -8,7 +8,7 @@
         {
             if (self.Id == targetRole.Id)
             {
-                if (OptionHolder.Ship.IsSameNeutralSameWin)
+                if (ExtremeGameManager.Instance.ShipOption.IsSameNeutralSameWin)
                 {
                     return true;
                 }

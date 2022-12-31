@@ -1346,7 +1346,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             if (targetRole.Id == this.Id)
             {
-                if (OptionHolder.Ship.IsSameNeutralSameWin)
+                if (ExtremeGameManager.Instance.ShipOption.IsSameNeutralSameWin)
                 {
                     return true;
                 }

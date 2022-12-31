@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
@@ -51,9 +50,9 @@ namespace ExtremeRoles.Module.SpecialWinChecker
                 player, checkRole, range);
 
             int gameControlId = checkRole.GameControlId;
-            if (OptionHolder.Ship.IsSameNeutralSameWin)
+            if (ExtremeGameManager.Instance.ShipOption.IsSameNeutralSameWin)
             {
-                gameControlId = OptionHolder.Ship.SameNeutralGameControlId;
+                gameControlId = ExtremeGameManager.SameNeutralGameControlId;
             }
 
             int teamAlive = statistics.SeparatedNeutralAlive[

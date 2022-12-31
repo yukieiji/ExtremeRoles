@@ -7,7 +7,7 @@ namespace ExtremeRoles.Patches.Role
     {
         public static bool Prefix(EngineerRole __instance)
         {
-            return !OptionHolder.Ship.EngineerUseImpostorVent;
+            return !ExtremeGameManager.Instance.ShipOption.EngineerUseImpostorVent;
         }
     }
 }

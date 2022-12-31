@@ -8,7 +8,7 @@ namespace ExtremeRoles.Patches.MiniGame
     {
         public static void Prefix(MedScanMinigame __instance)
         {
-            if (OptionHolder.Ship.AllowParallelMedBayScan)
+            if (ExtremeGameManager.Instance.ShipOption.IsAllowParallelMedbayScan)
             {
                 __instance.medscan.CurrentUser = CachedPlayerControl.LocalPlayer.PlayerId;
                 __instance.medscan.UsersList.Clear();

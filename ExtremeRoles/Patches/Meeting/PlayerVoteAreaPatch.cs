@@ -296,7 +296,7 @@ namespace ExtremeRoles.Patches.Meeting
 	{
 		public static void Postfix(PlayerVoteArea __instance)
 		{
-			if (OptionHolder.Ship.FixedMeetingPlayerLevel)
+			if (ExtremeGameManager.Instance.ShipOption.IsFixedVoteAreaPlayerLevel)
             {
 				__instance.LevelNumberText.text = "99";
 			}
@@ -331,7 +331,7 @@ namespace ExtremeRoles.Patches.Meeting
 			[HarmonyArgument(1)] bool isDead,
 			[HarmonyArgument(2)] bool isGuardian = false)
         {
-			if (OptionHolder.Ship.IsRemoveAngleIcon)
+			if (ExtremeGameManager.Instance.ShipOption.IsRemoveAngleIcon)
 			{
 				__instance.GAIcon.gameObject.SetActive(false);
 			}

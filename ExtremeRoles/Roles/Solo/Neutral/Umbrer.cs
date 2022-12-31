@@ -423,7 +423,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             if (this.Id == targetRole.Id)
             {
-                if (OptionHolder.Ship.IsSameNeutralSameWin)
+                if (ExtremeGameManager.Instance.ShipOption.IsSameNeutralSameWin)
                 {
                     return true;
                 }

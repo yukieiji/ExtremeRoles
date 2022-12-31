@@ -36,7 +36,7 @@ namespace ExtremeRoles.Patches.Meeting
 
 			string gaAbilityText = string.Empty;
 
-			if (someoneWasProtected && !OptionHolder.Ship.IsBlockGAAbilityReport)
+			if (someoneWasProtected && !ExtremeGameManager.Instance.ShipOption.IsBlockGAAbilityReport)
 			{
 				gaAbilityText = text.text;
 			}

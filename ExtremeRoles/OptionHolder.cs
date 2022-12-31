@@ -189,49 +189,7 @@ namespace ExtremeRoles
             // 不具合等が発生しないようにブロック機能を有効化する
             isBlockShare = false;
 
-            // This is HotFix for HideNSeekMode
-            bool isClassic = GameOptionsManager.Instance.CurrentGameOptions.GameMode == GameModes.Normal;
-            dynamic GetValue(CommonOptionKey key)
-            {
-                IOption option = AllOption[(int)key];
-                return isClassic ? option.GetValue() : option.GetDefault();
-            }
-
-            Ship.MaxNumberOfMeeting = GetValue(CommonOptionKey.NumMeating);
-            Ship.ChangeMeetingVoteAreaSort = GetValue(CommonOptionKey.ChangeMeetingVoteAreaSort);
-            Ship.FixedMeetingPlayerLevel = GetValue(CommonOptionKey.FixedMeetingPlayerLevel);
-
-            Ship.AllowParallelMedBayScan = GetValue(CommonOptionKey.ParallelMedBayScans);
-            Ship.BlockSkippingInEmergencyMeeting = GetValue(CommonOptionKey.DisableSkipInEmergencyMeeting);
-            Ship.DisableVent = GetValue(CommonOptionKey.DisableVent);
-            Ship.CanKillVentInPlayer = GetValue(CommonOptionKey.CanKillVentInPlayer);
-            Ship.EngineerUseImpostorVent = GetValue(CommonOptionKey.EngineerUseImpostorVent);
-            Ship.DisableSelfVote = GetValue(CommonOptionKey.DisableSelfVote);
-            Ship.DisableTaskWinWhenNoneTaskCrew = GetValue(CommonOptionKey.DisableTaskWinWhenNoneTaskCrew);
-            Ship.DisableTaskWin = GetValue(CommonOptionKey.DisableTaskWin);
-            Ship.IsSameNeutralSameWin = GetValue(CommonOptionKey.IsSameNeutralSameWin);
-            Ship.DisableNeutralSpecialForceEnd = GetValue(CommonOptionKey.DisableNeutralSpecialForceEnd);
-
-            Ship.IsAssignNeutralToVanillaCrewGhostRole = GetValue(
-                CommonOptionKey.IsAssignNeutralToVanillaCrewGhostRole);
-            Ship.IsRemoveAngleIcon = GetValue(CommonOptionKey.IsRemoveAngleIcon);
-            Ship.IsBlockGAAbilityReport = GetValue(CommonOptionKey.IsBlockGAAbilityReport);
-
-            Ship.IsAutoSelectRandomSpawn = GetValue(CommonOptionKey.IsAutoSelectRandomSpawn);
-
-            Ship.IsRemoveAdmin = GetValue(CommonOptionKey.IsRemoveAdmin);
-            Ship.AirShipEnable = (AirShipAdminMode)GetValue(CommonOptionKey.AirShipEnableAdmin);
-            Ship.EnableAdminLimit = GetValue(CommonOptionKey.EnableAdminLimit);
-            Ship.AdminLimitTime = GetValue(CommonOptionKey.AdminLimitTime);
-
-
-            Ship.IsRemoveSecurity = GetValue(CommonOptionKey.IsRemoveSecurity);
-            Ship.EnableSecurityLimit = GetValue(CommonOptionKey.EnableSecurityLimit);
-            Ship.SecurityLimitTime = GetValue(CommonOptionKey.SecurityLimitTime);
-
-            Ship.IsRemoveVital = GetValue(CommonOptionKey.IsRemoveVital);
-            Ship.EnableVitalLimit = GetValue(CommonOptionKey.EnableVitalLimit);
-            Ship.VitalLimitTime = GetValue(CommonOptionKey.VitalLimitTime);
+            ExtremeGameManager.Create();
 
             Client.GhostsSeeRole = ConfigParser.GhostsSeeRoles.Value;
             Client.GhostsSeeTask = ConfigParser.GhostsSeeTasks.Value;
@@ -587,48 +545,6 @@ namespace ExtremeRoles
             public static bool GhostsSeeVote = true;
             public static bool ShowRoleSummary = true;
             public static bool HideNamePlate = false;
-        }
-
-        public static class Ship
-        {
-            public const int SameNeutralGameControlId = int.MaxValue;
-
-            public static int MaxNumberOfMeeting = 100;
-
-            public static bool ChangeMeetingVoteAreaSort = true;
-            public static bool FixedMeetingPlayerLevel = false;
-            public static bool AllowParallelMedBayScan = false;
-            public static bool BlockSkippingInEmergencyMeeting = false;
-            
-            public static bool DisableVent = false;
-            public static bool EngineerUseImpostorVent = false;
-            public static bool CanKillVentInPlayer = false;
-
-            public static bool IsAutoSelectRandomSpawn = false;
-
-            public static bool IsRemoveAdmin = false;
-            public static AirShipAdminMode AirShipEnable = AirShipAdminMode.ModeBoth;
-            public static bool EnableAdminLimit = false;
-            public static float AdminLimitTime = 0.0f;
-
-            public static bool IsRemoveSecurity = false;
-            public static bool EnableSecurityLimit = false;
-            public static float SecurityLimitTime = 0.0f;
-
-            public static bool IsRemoveVital = false;
-            public static bool EnableVitalLimit = false;
-            public static float VitalLimitTime = 0.0f;
-
-            public static bool DisableSelfVote = false;
-
-            public static bool DisableTaskWinWhenNoneTaskCrew = false;
-            public static bool DisableTaskWin = false;
-            public static bool IsSameNeutralSameWin = true;
-            public static bool DisableNeutralSpecialForceEnd = false;
-
-            public static bool IsAssignNeutralToVanillaCrewGhostRole = true;
-            public static bool IsRemoveAngleIcon = false;
-            public static bool IsBlockGAAbilityReport = false;
         }
     }
 }

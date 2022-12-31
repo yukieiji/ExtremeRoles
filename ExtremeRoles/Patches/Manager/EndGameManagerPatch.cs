@@ -186,7 +186,7 @@ namespace ExtremeRoles.Patches.Manager
                 textAddedGhostRole.Add(ghostRole.Id);
             }
 
-            if (OptionHolder.Ship.DisableNeutralSpecialForceEnd && winNeutral.Count != 0)
+            if (ExtremeGameManager.Instance.ShipOption.DisableNeutralSpecialForceEnd && winNeutral.Count != 0)
             {
                 switch (state.EndReason)
                 {

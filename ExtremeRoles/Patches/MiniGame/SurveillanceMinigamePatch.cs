@@ -11,6 +11,7 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using AmongUs.GameOptions;
+using ExtremeRoles.GameMode.Option.MapModuleOption;
 
 namespace ExtremeRoles.Patches.MiniGame
 {
@@ -32,9 +33,11 @@ namespace ExtremeRoles.Patches.MiniGame
 
         public static void Initialize()
         {
-            cameraTimer = OptionHolder.Ship.SecurityLimitTime;
-            isRemoveSecurity = OptionHolder.Ship.IsRemoveSecurity;
-            enableCameraLimit = OptionHolder.Ship.EnableSecurityLimit;
+            var securityOption = ExtremeGameManager.Instance.ShipOption.Security;
+
+            cameraTimer = securityOption.SecurityLimitTime;
+            isRemoveSecurity = securityOption.DisableSecurity;
+            enableCameraLimit = securityOption.EnableSecurityLimit;
 
             Logging.Debug("---- SecurityCondition ----");
             Logging.Debug($"IsRemoveSecurity:{enableCameraLimit}");

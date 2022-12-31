@@ -1,12 +1,15 @@
 ﻿using AmongUs.GameOptions;
+using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.Factory;
 
 // TODO: setプロパティ => initにする 
 
-namespace ExtremeRoles.GameMode
+namespace ExtremeRoles
 {
     public class ExtremeGameManager
     {
+        public const int SameNeutralGameControlId = int.MaxValue;
+
         public static ExtremeGameManager Instance { get; private set; }
 
         public ShipGlobalOption ShipOption { get; private set; }
@@ -15,9 +18,9 @@ namespace ExtremeRoles.GameMode
         {
             Instance = new ExtremeGameManager();
 
-            IModeFactory factory = (GameOptionsManager.Instance.currentGameMode) switch
+            IModeFactory factory = GameOptionsManager.Instance.currentGameMode switch
             {
-                GameModes.Normal    => new ClassicGameModeOptionFactory(),
+                GameModes.Normal => new ClassicGameModeOptionFactory(),
                 GameModes.HideNSeek => new HideNSeekGameModeFactory(),
                 _ => null,
             };

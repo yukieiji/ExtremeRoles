@@ -59,7 +59,7 @@ namespace ExtremeRoles.GameMode.Factory
             {
                 DisableAdmin = ShipGlobalOption.GetCommonOptionValue(
                     OptionHolder.CommonOptionKey.IsRemoveAdmin),
-                AirShipEnable = ShipGlobalOption.GetCommonOptionValue(
+                AirShipEnable = (AirShipAdminMode)ShipGlobalOption.GetCommonOptionValue(
                     OptionHolder.CommonOptionKey.AirShipEnableAdmin),
                 EnableAdminLimit = ShipGlobalOption.GetCommonOptionValue(
                     OptionHolder.CommonOptionKey.EnableAdminLimit),

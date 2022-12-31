@@ -43,8 +43,10 @@ namespace ExtremeRoles.Patches
 			if (curOptions.GameMode != GameModes.Normal) { return true; }
 
 			var roles = Roles.ExtremeRoleManager.GameRole;
-			if (roles.Count == 0 || 
-				(OptionHolder.Ship.DisableTaskWin && OptionHolder.Ship.DisableTaskWinWhenNoneTaskCrew))
+			var shipOpt = ExtremeGameManager.Instance.ShipOption;
+
+            if (roles.Count == 0 || 
+				(shipOpt.DisableTaskWin && shipOpt.DisableTaskWinWhenNoneTaskCrew))
 			{
 				__instance.TotalTasks = 88659;
 				__instance.CompletedTasks = 0;
@@ -92,7 +94,7 @@ namespace ExtremeRoles.Patches
 				}
 			}
 
-			if (doTaskCrew == 0 && OptionHolder.Ship.DisableTaskWinWhenNoneTaskCrew)
+			if (doTaskCrew == 0 && ExtremeGameManager.Instance.ShipOption.DisableTaskWinWhenNoneTaskCrew)
             {
 				totalTask = 88659;
 				completedTask = 0;	

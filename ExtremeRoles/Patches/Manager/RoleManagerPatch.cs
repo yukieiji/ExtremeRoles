@@ -725,7 +725,7 @@ namespace ExtremeRoles.Patches.Manager
             if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
             if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return true; }
             // バニラ幽霊クルー役職にニュートラルがアサインされる時やゲームモードがクラッシクではない時は常にTrueを返す
-            if (OptionHolder.Ship.IsAssignNeutralToVanillaCrewGhostRole ||
+            if (ExtremeGameManager.Instance.ShipOption.IsAssignNeutralToVanillaCrewGhostRole ||
                 GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal)
             {
                 return true;

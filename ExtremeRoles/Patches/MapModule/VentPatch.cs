@@ -50,7 +50,7 @@ namespace ExtremeRoles.Patches.MapModule
                 return true;
             }
 
-            if (OptionHolder.Ship.DisableVent)
+            if (ExtremeGameManager.Instance.ShipOption.DisableVent)
             {
                 __result = num;
                 return false;

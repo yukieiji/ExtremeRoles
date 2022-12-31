@@ -595,9 +595,9 @@ namespace ExtremeRoles.Roles.Combination
             public bool IsWin(Wisp wisp)
             {
                 int gameControlId = wisp.GameControlId;
-                if (OptionHolder.Ship.IsSameNeutralSameWin)
+                if (ExtremeGameManager.Instance.ShipOption.IsSameNeutralSameWin)
                 {
-                    gameControlId = OptionHolder.Ship.SameNeutralGameControlId;
+                    gameControlId = ExtremeGameManager.SameNeutralGameControlId;
                 }
                 if (this.affectedPlayerNum.TryGetValue(gameControlId, out int playerNum))
                 {
@@ -612,9 +612,9 @@ namespace ExtremeRoles.Roles.Combination
             public int CurAffectedPlayerNum(Wisp wisp)
             {
                 int gameControlId = wisp.GameControlId;
-                if (OptionHolder.Ship.IsSameNeutralSameWin)
+                if (ExtremeGameManager.Instance.ShipOption.IsSameNeutralSameWin)
                 {
-                    gameControlId = OptionHolder.Ship.SameNeutralGameControlId;
+                    gameControlId = ExtremeGameManager.SameNeutralGameControlId;
                 }
 
                 if (this.affectedPlayerNum.TryGetValue(gameControlId, out int playerNum))
@@ -687,9 +687,9 @@ namespace ExtremeRoles.Roles.Combination
                     ++playerNum;
                 }
 
-                if (OptionHolder.Ship.IsSameNeutralSameWin)
+                if (ExtremeGameManager.Instance.ShipOption.IsSameNeutralSameWin)
                 {
-                    gameControlId = OptionHolder.Ship.SameNeutralGameControlId;
+                    gameControlId = ExtremeGameManager.SameNeutralGameControlId;
                 }
 
                 this.affectedPlayerNum[gameControlId] = 

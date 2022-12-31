@@ -225,7 +225,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 if (!playerInfo.Disconnected &&
                     !playerInfo.IsDead &&
                     (playerInfo.PlayerId != sourcePlayer.PlayerId) &&
-                    (!playerInfo.Object.inVent || OptionHolder.Ship.CanKillVentInPlayer) &&
+                    (!playerInfo.Object.inVent || ExtremeGameManager.Instance.ShipOption.CanKillVentInPlayer) &&
                     (!ExtremeRoleManager.GameRole[playerInfo.PlayerId].IsImpostor() ||
                      playerInfo.PlayerId == rolePlayer.PlayerId))
                 {

@@ -46,7 +46,7 @@ namespace ExtremeRoles.Patches.Role
                 target.PlayerId !=  __instance.Player.PlayerId && 
                 !(target.Role == null) && 
                 !(target.Object == null) && 
-                (!target.Object.inVent || OptionHolder.Ship.CanKillVentInPlayer) &&
+                (!target.Object.inVent || ExtremeGameManager.Instance.ShipOption.CanKillVentInPlayer) &&
                 !role.IsSameTeam(gameRoles[target.PlayerId]);
 
             return false;

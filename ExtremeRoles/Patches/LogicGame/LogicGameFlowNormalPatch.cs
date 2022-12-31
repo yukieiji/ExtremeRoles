@@ -198,7 +198,7 @@ namespace ExtremeRoles.Patches.LogicGame
         private static bool isNeutralSpecialWin()
         {
 
-            if (OptionHolder.Ship.DisableNeutralSpecialForceEnd) { return false; }
+            if (ExtremeGameManager.Instance.ShipOption.DisableNeutralSpecialForceEnd) { return false; }
 
             foreach (var role in ExtremeRoleManager.GameRole.Values)
             {

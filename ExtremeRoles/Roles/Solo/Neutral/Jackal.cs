@@ -344,7 +344,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             if (this.isSameJackalTeam(targetRole))
             {
-                if (OptionHolder.Ship.IsSameNeutralSameWin)
+                if (ExtremeGameManager.Instance.ShipOption.IsSameNeutralSameWin)
                 {
                     return true;
                 }
@@ -607,7 +607,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             if (this.isSameJackalTeam(targetRole))
             {
-                if (OptionHolder.Ship.IsSameNeutralSameWin)
+                if (ExtremeGameManager.Instance.ShipOption.IsSameNeutralSameWin)
                 {
                     return true;
                 }

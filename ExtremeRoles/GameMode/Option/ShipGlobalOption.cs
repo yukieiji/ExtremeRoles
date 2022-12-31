@@ -4,8 +4,6 @@ namespace ExtremeRoles.GameMode
 {
     public class ShipGlobalOption
     {
-        public const int SameNeutralGameControlId = int.MaxValue;
-
         public int MaxMeetingCount                        { get; set; } = 100;
 
         public bool IsChangeVoteAreaButtonSortArg         { get; set; } = true;

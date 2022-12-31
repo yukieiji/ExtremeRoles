@@ -91,9 +91,12 @@ namespace ExtremeRoles.Patches.MiniGame
         public static void Initialize()
         {
             Object.Destroy(timerText);
-            vitalTimer = OptionHolder.Ship.VitalLimitTime;
-            isRemoveVital = OptionHolder.Ship.IsRemoveVital;
-            enableVitalLimit = OptionHolder.Ship.EnableVitalLimit;
+
+            var vitalOption = ExtremeGameManager.Instance.ShipOption.Vital;
+
+            vitalTimer = vitalOption.VitalLimitTime;
+            isRemoveVital = vitalOption.DisableVital;
+            enableVitalLimit = vitalOption.EnableVitalLimit;
 
             Logging.Debug("---- VitalCondition ----");
             Logging.Debug($"IsRemoveVital:{isRemoveVital}");

@@ -81,9 +81,9 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
                         playerInfo.PlayerId);
                 }
 
-                if (OptionHolder.Ship.IsSameNeutralSameWin && role.IsNeutral())
+                if (ExtremeGameManager.Instance.ShipOption.IsSameNeutralSameWin && role.IsNeutral())
                 {
-                    gameControlId = OptionHolder.Ship.SameNeutralGameControlId;
+                    gameControlId = ExtremeGameManager.SameNeutralGameControlId;
                 }
 
                 // 生きてる
