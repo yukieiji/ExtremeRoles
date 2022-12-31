@@ -10,7 +10,7 @@ using AmongUs.GameOptions;
 
 namespace ExtremeRoles.GameMode.Vison
 {
-    public class ClassicVisonModifier : IVisonModifier
+    public class ClassicModeVison : IVisonModifier
     {
         private static float crewLightVison => GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
             FloatOptionNames.CrewLightMod);
@@ -33,6 +33,8 @@ namespace ExtremeRoles.GameMode.Vison
 
         public bool TryComputeVison(ShipStatus shipStatus, GameData.PlayerInfo playerInfo, out float vison)
         {
+            vison = shipStatus.MaxLightRadius;
+
             switch (this.modifier)
             {
                 case VisonType.LastWolfLightOff:
@@ -80,11 +82,7 @@ namespace ExtremeRoles.GameMode.Vison
                         playerInfo, false, playerInfo.Role.IsImpostor);
                     return false;
                 }
-                else
-                {
-                    vison = shipStatus.MaxLightRadius;
-                    return true;
-                }
+                return true;
             }
 
             SingleRoleBase role = allRole[playerInfo.PlayerId];

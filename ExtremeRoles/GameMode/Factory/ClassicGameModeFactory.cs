@@ -1,4 +1,5 @@
 ﻿using ExtremeRoles.GameMode.Option.MapModuleOption;
+using ExtremeRoles.GameMode.Vison;
 
 namespace ExtremeRoles.GameMode.Factory
 {
@@ -52,6 +53,8 @@ namespace ExtremeRoles.GameMode.Factory
                     OptionHolder.CommonOptionKey.IsBlockGAAbilityReport),
             };   
         }
+
+        public IVisonModifier CreateVisonModifier() => new ClassicModeVison();
 
         private static AdminOption createAdminOpt()
         {
