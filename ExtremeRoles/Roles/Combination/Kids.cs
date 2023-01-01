@@ -700,6 +700,7 @@ namespace ExtremeRoles.Roles.Combination
             public void Initialize()
             {
                 this.torchId = 0;
+                this.affectedPlayerNum.Clear();
                 ResetMeeting();
             }
         }
