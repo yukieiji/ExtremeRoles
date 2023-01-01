@@ -97,6 +97,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                         baseImage.gameObject,
                         Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
                 }
+
+                DataManager.Settings.Accessibility.OnChangedEvent += 
+                    (Il2CppSystem.Action)SwitchColorName;
+
             }
 
             public void SwitchColorName()
@@ -111,6 +115,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             public void Clear()
             {
                 Object.Destroy(this.body);
+                DataManager.Settings.Accessibility.OnChangedEvent -=
+                    (Il2CppSystem.Action)SwitchColorName;
             }
 
             private SpriteRenderer createBaseImage(PlayerCosmicInfo info)
