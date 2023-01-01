@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 using AmongUs.Data;
+using PowerTools;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -51,15 +52,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             private GameObject body;
             private GameObject colorBindText;
-            private const string defaultPetId = "0";
-            private const float petOffset = 0.72f;
 
             private const string nameTextObjName = "NameText_TMP";
             private const string colorBindTextName = "ColorblindName_TMP";
 
             private struct PlayerCosmicInfo
             {
-                public PlayerControl TargetPlayer;
+                public CosmeticsLayer Cosmetics;
                 public GameData.PlayerOutfit OutfitInfo;
                 public bool FlipX;
                 public int ColorInfo;
@@ -73,7 +72,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 GameData.PlayerOutfit playerOutfit = targetPlayer.Data.DefaultOutfit;
                 PlayerCosmicInfo cosmicInfo = new PlayerCosmicInfo()
                 {
-                    TargetPlayer = targetPlayer,
+                    Cosmetics = targetPlayer.cosmetics,
                     FlipX = rolePlayer.cosmetics.currentBodySprite.BodySprite.flipX,
                     OutfitInfo = playerOutfit,
                     ColorInfo = playerOutfit.ColorId,
@@ -82,25 +81,36 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.body = new GameObject("DummyPlayer");
                 this.body.transform.position = rolePlayer.transform.position;
                 createNameTextParentObj(targetPlayer, this.body, cosmicInfo, canSeeFake);
-                SpriteRenderer baseImage = createBaseImage(cosmicInfo);
-
-                createDummyImageSkin(cosmicInfo);
-                createDummyImageHat(baseImage, cosmicInfo);
-                createDummyImageVisor(baseImage, cosmicInfo);
-                createDummyImagePet(baseImage, cosmicInfo);
-                
-                PlayerMaterial.SetColors(cosmicInfo.ColorInfo, baseImage);
-
+                SpriteRenderer baseImage = createBodyImage(cosmicInfo);
+                CosmeticsLayer cosmetics = createCosmetics(baseImage, cosmicInfo);
                 if (ExtremeRolesPlugin.Compat.IsModMap)
                 {
                     ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
-                        baseImage.gameObject,
-                        Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
+                        this.body, Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
                 }
 
                 DataManager.Settings.Accessibility.OnChangedEvent += 
                     (Il2CppSystem.Action)SwitchColorName;
 
+                cosmetics.SetHat(cosmicInfo.OutfitInfo.HatId, cosmicInfo.ColorInfo);
+                cosmetics.SetVisor(cosmicInfo.OutfitInfo.VisorId, cosmicInfo.ColorInfo);
+                cosmetics.SetSkin(cosmicInfo.OutfitInfo.SkinId, cosmicInfo.ColorInfo);
+                cosmetics.SetPetIdle(cosmicInfo.OutfitInfo.PetId, cosmicInfo.ColorInfo);
+                cosmetics.SetFlipX(cosmicInfo.FlipX);
+                if (cosmetics.currentPet != null)
+                {
+                    destroyAllColider(cosmetics.currentPet.gameObject);
+                }
+
+                SpriteAnimNodeSync[] syncs = this.body.GetComponentsInChildren<SpriteAnimNodeSync>(true);
+                for (int i = 0; i < syncs.Length; ++i)
+                {
+                    SpriteAnimNodeSync sync = syncs[i];
+                    if (sync != null)
+                    {
+                        Object.Destroy(sync);
+                    }
+                }
             }
 
             public void SwitchColorName()
@@ -119,86 +129,35 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     (Il2CppSystem.Action)SwitchColorName;
             }
 
-            private SpriteRenderer createBaseImage(PlayerCosmicInfo info)
+            private SpriteRenderer createBodyImage(PlayerCosmicInfo info)
             {
                 SpriteRenderer playerImage = Object.Instantiate(
-                    info.TargetPlayer.cosmetics.currentBodySprite.BodySprite,
+                    info.Cosmetics.currentBodySprite.BodySprite,
                     this.body.transform);
                 playerImage.flipX = info.FlipX;
                 playerImage.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
                 return playerImage;
             }
-
-            private void createDummyImageHat(
+            private CosmeticsLayer createCosmetics(
                 SpriteRenderer playerImage, PlayerCosmicInfo info)
             {
-                HatParent hat = playerImage.GetComponentInChildren<HatParent>();
-                if (hat != null)
-                {
-                    hat.SetHat(info.OutfitInfo.HatId, info.ColorInfo);
-                    
-                    bool flip = info.FlipX;
-                    if (hat.FrontLayer)
-                    {
-                        hat.FrontLayer.flipX = flip;
-                    }
-                    if (hat.BackLayer)
-                    {
-                        hat.BackLayer.flipX = flip;
-                    }
-                }
-            }
+                CosmeticsLayer cosmetic = Object.Instantiate(
+                    info.Cosmetics,
+                    this.body.transform);
 
-            private void createDummyImageVisor(
-                SpriteRenderer playerImage, PlayerCosmicInfo info)
-            {
-                VisorLayer visor = playerImage.GetComponentInChildren<VisorLayer>();
-                if (visor != null)
+                PlayerBodySprite basePayerBodySprite = info.Cosmetics.currentBodySprite;
+                PlayerBodySprite playerBodySprite = new PlayerBodySprite()
                 {
-                    visor.SetVisor(info.OutfitInfo.VisorId, info.ColorInfo);
-                    visor.SetFlipX(info.FlipX);
-                }
-            }
+                    BodySprite = playerImage,
+                    Type = basePayerBodySprite.Type,
+                    flippedCosmeticOffset = basePayerBodySprite.flippedCosmeticOffset,
+                };
+                cosmetic.currentBodySprite = playerBodySprite;
+                cosmetic.hat.Parent = playerImage;
+                cosmetic.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
+                cosmetic.ResetCosmetics();
 
-            private void createDummyImageSkin(PlayerCosmicInfo info)
-            {
-                Transform skinTransform = info.TargetPlayer.transform.FindChild(
-                    "Skin");
-
-                if (skinTransform != null)
-                {
-                    GameObject skinObj = Object.Instantiate(
-                        skinTransform.gameObject, this.body.transform);
-                    SkinLayer skin = skinObj.GetComponent<SkinLayer>();
-
-                    skin.SetSkin(info.OutfitInfo.SkinId, info.ColorInfo, info.FlipX);
-                    skinObj.transform.localScale = new Vector3(0.35f, 0.35f, 1.0f);
-                }
-            }
-            private void createDummyImagePet(
-                SpriteRenderer playerImage, PlayerCosmicInfo info)
-            {
-                Transform emptyPet = playerImage.transform.FindChild(
-                    "EmptyPet(Clone)");
-                if (emptyPet != null)
-                {
-                    destroyAllColider(emptyPet.gameObject);
-                }
-                string petId = info.OutfitInfo.PetId;
-                if (petId != defaultPetId)
-                {
-                    PetBehaviour pet = Object.Instantiate(
-                        FastDestroyableSingleton<HatManager>.Instance.GetPetById(
-                            petId).viewData.viewData,
-                        playerImage.transform);
-                    pet.SetColor(info.ColorInfo);
-                    pet.transform.localPosition =
-                        Vector2.zero + (
-                            info.FlipX ? Vector2.right * petOffset : Vector2.left * petOffset);
-                    pet.transform.localScale = Vector3.one;
-                    pet.FlipX = info.FlipX;
-                    destroyAllColider(pet.gameObject);
-                }
+                return cosmetic;
             }
 
             private void removeRoleInfo(GameObject nameTextObjct)
