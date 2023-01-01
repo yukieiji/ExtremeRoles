@@ -154,6 +154,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 };
                 cosmetic.currentBodySprite = playerBodySprite;
                 cosmetic.hat.Parent = playerImage;
+                cosmetic.hat.transform.localPosition = new Vector3(-0.04f, 0.575f, 0.0f);
                 cosmetic.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
                 cosmetic.ResetCosmetics();
 
