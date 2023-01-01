@@ -1,4 +1,4 @@
-﻿using ExtremeRoles.GameMode.Option.MapModuleOption;
+﻿using ExtremeRoles.GameMode.Option.MapModule;
 
 namespace ExtremeRoles.GameMode
 {
