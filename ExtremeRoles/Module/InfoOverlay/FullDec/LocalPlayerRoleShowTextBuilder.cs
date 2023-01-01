@@ -29,7 +29,7 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
                 roleOptionString =
                     CustomOption.AllOptionToString(
                         allOption[multiAssignRole.GetManagerOptionId(
-                            RoleCommonOption.SpawnRate)]);
+                            IShowTextBuilder.SpawnOptionKey)]);
                 colorRoleName = Design.ColoedString(
                     multiAssignRole.GetNameColor(),
                     Translation.GetString(multiAssignRole.RoleName));

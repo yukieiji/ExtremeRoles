@@ -2,11 +2,16 @@
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Roles;
+using ExtremeRoles.GhostRoles;
 
 namespace ExtremeRoles.Module.InfoOverlay.FullDec
 {
     internal sealed class LocalPlayerGhostRoleShowTextBuilder : IShowTextBuilder
     {
+
+        
+
         public LocalPlayerGhostRoleShowTextBuilder()
         { }
 
@@ -26,19 +31,18 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
             var allOption = OptionHolder.AllOption;
 
             string roleOptionString = "";
-            string colorRoleName;
+            string colorRoleName = role.GetColoredRoleName();
 
-            if (role.IsVanillaRole())
+            if (!role.IsVanillaRole())
             {
-                colorRoleName = role.GetColoredRoleName();
-            }
-            else
-            {
-                roleOptionString =
-                    CustomOption.AllOptionToString(
-                        allOption[role.GetRoleOptionId(
-                            RoleCommonOption.SpawnRate)]);
-                colorRoleName = role.GetColoredRoleName();
+                if (!allOption.TryGetValue(
+                        role.GetRoleOptionId(
+                            IShowTextBuilder.SpawnOptionKey), out IOption spawnOption))
+                {
+                    var aliveRole = (MultiAssignRoleBase)ExtremeRoleManager.GetLocalPlayerRole();
+                    spawnOption = allOption[aliveRole.GetManagerOptionId(IShowTextBuilder.SpawnOptionKey)];
+                }
+                roleOptionString = CustomOption.AllOptionToString(spawnOption);
             }
 
             string roleFullDesc = role.GetFullDescription();
