@@ -53,6 +53,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             private GameObject body;
             private GameObject colorBindText;
 
+            private const float petOffset = 0.72f;
+
+            private const string defaultPetId = "0";
+            private const string defaultPetName = "EmptyPet(Clone)";
             private const string nameTextObjName = "NameText_TMP";
             private const string colorBindTextName = "ColorblindName_TMP";
 
@@ -79,10 +83,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 };
 
                 this.body = new GameObject("DummyPlayer");
-                this.body.transform.position = rolePlayer.transform.position;
                 createNameTextParentObj(targetPlayer, this.body, cosmicInfo, canSeeFake);
                 SpriteRenderer baseImage = createBodyImage(cosmicInfo);
                 CosmeticsLayer cosmetics = createCosmetics(baseImage, cosmicInfo);
+
                 if (ExtremeRolesPlugin.Compat.IsModMap)
                 {
                     ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
@@ -92,15 +96,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 DataManager.Settings.Accessibility.OnChangedEvent += 
                     (Il2CppSystem.Action)SwitchColorName;
 
-                cosmetics.SetHat(cosmicInfo.OutfitInfo.HatId, cosmicInfo.ColorInfo);
-                cosmetics.SetVisor(cosmicInfo.OutfitInfo.VisorId, cosmicInfo.ColorInfo);
-                cosmetics.SetSkin(cosmicInfo.OutfitInfo.SkinId, cosmicInfo.ColorInfo);
-                cosmetics.SetPetIdle(cosmicInfo.OutfitInfo.PetId, cosmicInfo.ColorInfo);
-                cosmetics.SetFlipX(cosmicInfo.FlipX);
-                if (cosmetics.currentPet != null)
-                {
-                    destroyAllColider(cosmetics.currentPet.gameObject);
-                }
+                decorateDummy(cosmetics, cosmicInfo);
 
                 SpriteAnimNodeSync[] syncs = this.body.GetComponentsInChildren<SpriteAnimNodeSync>(true);
                 for (int i = 0; i < syncs.Length; ++i)
@@ -111,6 +107,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                         Object.Destroy(sync);
                     }
                 }
+                this.body.transform.position = rolePlayer.transform.position;
             }
 
             public void SwitchColorName()
@@ -138,6 +135,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 playerImage.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
                 return playerImage;
             }
+
             private CosmeticsLayer createCosmetics(
                 SpriteRenderer playerImage, PlayerCosmicInfo info)
             {
@@ -155,10 +153,46 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 cosmetic.currentBodySprite = playerBodySprite;
                 cosmetic.hat.Parent = playerImage;
                 cosmetic.hat.transform.localPosition = new Vector3(-0.04f, 0.575f, 0.0f);
+                cosmetic.visor.transform.localPosition = new Vector3(-0.04f, 0.575f, 0.0f);
+                cosmetic.petParent = this.body.transform;
                 cosmetic.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
                 cosmetic.ResetCosmetics();
 
                 return cosmetic;
+            }
+
+            private void decorateDummy(
+                CosmeticsLayer cosmetics, PlayerCosmicInfo cosmicInfo)
+            {
+                int colorId = cosmicInfo.ColorInfo;
+                bool flipX = cosmicInfo.FlipX;
+
+                cosmetics.SetHat(cosmicInfo.OutfitInfo.HatId, colorId);
+                cosmetics.SetVisor(cosmicInfo.OutfitInfo.VisorId, colorId);
+                cosmetics.SetSkin(cosmicInfo.OutfitInfo.SkinId, colorId);
+                cosmetics.SetFlipX(flipX);
+
+                Transform emptyPet = this.body.transform.Find(defaultPetName);
+
+                if (emptyPet != null)
+                {
+                    Object.Destroy(emptyPet.gameObject);
+                }
+                string petId = cosmicInfo.OutfitInfo.PetId;
+                if (cosmicInfo.OutfitInfo.PetId != defaultPetId)
+                {
+                    PetBehaviour pet = Object.Instantiate(
+                        FastDestroyableSingleton<HatManager>.Instance.GetPetById(
+                            petId).viewData.viewData,
+                        this.body.transform);
+                    pet.SetColor(colorId);
+                    pet.transform.localPosition =
+                        Vector2.zero + (
+                            flipX ? Vector2.right * petOffset : Vector2.left * petOffset);
+                    pet.transform.localScale = Vector3.one;
+                    pet.FlipX = flipX;
+                    destroyAllColider(pet.gameObject);
+                }
             }
 
             private void removeRoleInfo(GameObject nameTextObjct)
