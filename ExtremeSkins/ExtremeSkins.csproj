@@ -3,7 +3,7 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
-      <Version>5.0.0.4</Version>
+      <Version>5.0.0.5</Version>
       <!--<VersionPrefix>5.0.0</VersionPrefix>-->
         <VersionSuffix>1stAnniversary</VersionSuffix>
         <Description>Extreme Skins for Extreme Roles</Description>
