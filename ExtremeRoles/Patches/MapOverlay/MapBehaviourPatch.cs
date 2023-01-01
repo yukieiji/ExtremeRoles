@@ -1,8 +1,6 @@
 ﻿using HarmonyLib;
 
-using UnityEngine;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.MapOverlay
 {
@@ -17,13 +15,15 @@ namespace ExtremeRoles.Patches.MapOverlay
     [HarmonyPatch(typeof(MapBehaviour), nameof(MapBehaviour.ShowCountOverlay))]
     public static class MapBehaviourShowCountOverlayPatch
     {
-        public static bool Prefix()
+        public static bool Prefix(MapBehaviour __instance)
         {
             if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return true; }
+            if (Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseAdmin() ||
+                MapCountOverlayUpdatePatch.IsAbilityUse()) { return true; }
 
-            return 
-                Roles.ExtremeRoleManager.GetLocalPlayerRole().CanUseAdmin() ||
-                MapCountOverlayUpdatePatch.IsAbilityUse();
+            __instance.ShowNormalMap();
+
+            return false;
         }
     }
 }
