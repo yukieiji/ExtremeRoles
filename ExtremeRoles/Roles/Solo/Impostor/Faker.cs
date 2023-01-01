@@ -54,6 +54,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             private const string defaultPetId = "0";
             private const float petOffset = 0.72f;
 
+            private const string nameTextObjName = "NameText_TMP";
+            private const string colorBindTextName = "ColorblindName_TMP";
+
             private struct PlayerCosmicInfo
             {
                 public PlayerControl TargetPlayer;
@@ -78,18 +81,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
                 this.body = new GameObject("DummyPlayer");
                 this.body.transform.position = rolePlayer.transform.position;
+                createNameTextParentObj(targetPlayer, this.body, cosmicInfo, canSeeFake);
                 SpriteRenderer baseImage = createBaseImage(cosmicInfo);
 
                 createDummyImageSkin(cosmicInfo);
                 createDummyImageHat(baseImage, cosmicInfo);
                 createDummyImageVisor(baseImage, cosmicInfo);
                 createDummyImagePet(baseImage, cosmicInfo);
-
-                changeDummyName(baseImage, cosmicInfo, canSeeFake);
-
-                updateColorName(baseImage, cosmicInfo.ColorInfo);
-                removeRoleInfo(baseImage);
-
+                
                 PlayerMaterial.SetColors(cosmicInfo.ColorInfo, baseImage);
 
                 if (ExtremeRolesPlugin.Compat.IsModMap)
@@ -196,22 +195,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 }
             }
 
-            private void changeDummyName(
-                SpriteRenderer playerImage, PlayerCosmicInfo info, bool canSeeFake)
+            private void removeRoleInfo(GameObject nameTextObjct)
             {
-                TextMeshPro nameText = playerImage.transform.FindChild(
-                    "NameText_TMP").GetComponent<TextMeshPro>();
-                if (nameText != null)
-                {
-                    nameText.text = canSeeFake ?
-                        Translation.GetString("DummyPlayerName") : info.OutfitInfo.PlayerName;
-                    nameText.color = canSeeFake ? Palette.ImpostorRed : Palette.White;
-                }
-            }
-
-            private void removeRoleInfo(SpriteRenderer playerImage)
-            {
-                Transform info = playerImage.transform.FindChild(
+                Transform info = nameTextObjct.transform.FindChild(
                     Patches.Manager.HudManagerUpdatePatch.RoleInfoObjectName);
                 if (info != null)
                 {
@@ -220,31 +206,75 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
 
             private void updateColorName(
-                SpriteRenderer playerImage, int colorId)
+                TextMeshPro colorText, TextMeshPro baseColorText, int colorId)
             {
-                this.colorBindText = playerImage.transform.FindChild(
-                    "ColorblindName_TMP").gameObject;
-
-                if (this.colorBindText == null) { return; }
-
-                TextMeshPro text = this.colorBindText.GetComponent<TextMeshPro>();
-
-                if (text != null)
+                char[] array = FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                        Palette.ColorNames[colorId],
+                        System.Array.Empty<Il2CppSystem.Object>()).ToCharArray();
+                if (array.Length != 0)
                 {
-                    char[] array = FastDestroyableSingleton<TranslationController>.Instance.GetString(
-                    Palette.ColorNames[colorId],
-                    System.Array.Empty<Il2CppSystem.Object>()).ToCharArray();
-                    if (array.Length != 0)
+                    array[0] = char.ToUpper(array[0]);
+                    for (int i = 1; i < array.Length; i++)
                     {
-                        array[0] = char.ToUpper(array[0]);
-                        for (int i = 1; i < array.Length; i++)
-                        {
-                            array[i] = char.ToLower(array[i]);
-                        }
+                        array[i] = char.ToLower(array[i]);
                     }
-                    text.text = new string(array);
                 }
+
+                fitTextMeshPro(colorText, baseColorText);
+
+                colorText.text = new string(array);
             }
+            private void createNameTextParentObj(
+                PlayerControl player, GameObject parent, PlayerCosmicInfo info, bool canSeeFake)
+            {
+                Transform baseParentTrans = player.gameObject.transform.FindChild("Names");
+
+                if (baseParentTrans == null) { return; }
+
+                GameObject baseObject = baseParentTrans.gameObject;
+                GameObject nameObj = Object.Instantiate(
+                    baseObject, parent.transform);
+
+                nameObj.transform.localScale = player.gameObject.transform.localScale;
+                nameObj.transform.localPosition = baseObject.transform.localPosition;
+                nameObj.transform.localPosition -= new Vector3(0.0f, 0.3f, 0.0f); 
+
+                TextMeshPro nameText = nameObj.transform.FindChild(
+                    nameTextObjName).GetComponent<TextMeshPro>();
+                TextMeshPro baseNameText = baseObject.transform.FindChild(
+                    nameTextObjName).GetComponent<TextMeshPro>();
+
+                this.colorBindText = nameObj.transform.FindChild(
+                    colorBindTextName).gameObject;
+                TextMeshPro baseColorBindText = baseObject.transform.FindChild(
+                    colorBindTextName).GetComponent<TextMeshPro>();
+
+                if (nameText != null && baseNameText != null)
+                {
+                    changeDummyName(nameText, baseNameText, info, canSeeFake);
+                }
+                if (this.colorBindText != null && baseColorBindText != null)
+                {
+                    updateColorName(
+                        this.colorBindText.GetComponent<TextMeshPro>(),
+                        baseColorBindText, info.ColorInfo);
+                }
+                removeRoleInfo(nameObj);
+
+            }
+
+            private void changeDummyName(
+                TextMeshPro nameText,
+                TextMeshPro baseNameText,
+                PlayerCosmicInfo info,
+                bool canSeeFake)
+            {
+                fitTextMeshPro(nameText, baseNameText);
+                nameText.text = canSeeFake ?
+                        Translation.GetString("DummyPlayerName") : info.OutfitInfo.PlayerName;
+                nameText.color = canSeeFake ? Palette.ImpostorRed : Palette.White;
+            }
+
 
             private static void destroyAllColider(GameObject obj)
             {
@@ -261,6 +291,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 {
                     Object.Destroy(component);
                 }
+            }
+            private static void fitTextMeshPro(TextMeshPro a, TextMeshPro b)
+            {
+                a.transform.localPosition = b.transform.localPosition;
+                a.transform.localScale = b.transform.localScale;
+                a.fontSize = a.fontSizeMax = a.fontSizeMin =
+                    b.fontSizeMax = b.fontSizeMin = b.fontSize;
             }
         }
 
