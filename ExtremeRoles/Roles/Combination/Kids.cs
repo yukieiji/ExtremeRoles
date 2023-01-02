@@ -325,11 +325,11 @@ namespace ExtremeRoles.Roles.Combination
                 this.UseAbility,
                 this.IsAbilityUse,
                 Loader.CreateSpriteFromResources(
-                    Path.BomberSetBomb),
-                Loader.CreateSpriteFromResources(
                     string.Format(
                         Path.DelinquentScribe,
-                        RandomGenerator.Instance.Next(0, maxImageNum))));
+                        RandomGenerator.Instance.Next(0, maxImageNum))),
+                Loader.CreateSpriteFromResources(
+                    Path.BomberSetBomb));
 
             this.RoleAbilityInit();
 
@@ -597,7 +597,7 @@ namespace ExtremeRoles.Roles.Combination
                 int gameControlId = wisp.GameControlId;
                 if (OptionHolder.Ship.IsSameNeutralSameWin)
                 {
-                    gameControlId = int.MaxValue;
+                    gameControlId = OptionHolder.Ship.SameNeutralGameControlId;
                 }
                 if (this.affectedPlayerNum.TryGetValue(gameControlId, out int playerNum))
                 {
@@ -614,7 +614,7 @@ namespace ExtremeRoles.Roles.Combination
                 int gameControlId = wisp.GameControlId;
                 if (OptionHolder.Ship.IsSameNeutralSameWin)
                 {
-                    gameControlId = int.MaxValue;
+                    gameControlId = OptionHolder.Ship.SameNeutralGameControlId;
                 }
 
                 if (this.affectedPlayerNum.TryGetValue(gameControlId, out int playerNum))
@@ -689,7 +689,7 @@ namespace ExtremeRoles.Roles.Combination
 
                 if (OptionHolder.Ship.IsSameNeutralSameWin)
                 {
-                    gameControlId = int.MaxValue;
+                    gameControlId = OptionHolder.Ship.SameNeutralGameControlId;
                 }
 
                 this.affectedPlayerNum[gameControlId] = 
@@ -700,6 +700,7 @@ namespace ExtremeRoles.Roles.Combination
             public void Initialize()
             {
                 this.torchId = 0;
+                this.affectedPlayerNum.Clear();
                 ResetMeeting();
             }
         }

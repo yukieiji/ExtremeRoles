@@ -1,6 +1,7 @@
 ﻿using System;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module.InfoOverlay.FullDec
@@ -17,7 +18,7 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
             var (roleTextBase, optionId) = this.AllPage[this.Page];
 
             string roleOption = CustomOption.AllOptionToString(
-                OptionHolder.AllOption[optionId + (int)RoleCommonOption.SpawnRate]);
+                OptionHolder.AllOption[optionId + (int)IShowTextBuilder.SpawnOptionKey]);
 
             string title = string.Concat(
                 $"<size=200%>{Translation.GetString("ghostRoleDesc")}</size>",

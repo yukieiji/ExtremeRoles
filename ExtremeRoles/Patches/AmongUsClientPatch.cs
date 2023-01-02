@@ -412,7 +412,7 @@ namespace ExtremeRoles.Patches
 
             if (OptionHolder.Ship.IsSameNeutralSameWin)
             {
-                gameControlId = int.MaxValue;
+                gameControlId = OptionHolder.Ship.SameNeutralGameControlId;
             }
 
 

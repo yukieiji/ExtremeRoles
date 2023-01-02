@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using ExtremeRoles.Helper;
+using UnityEngine;
 
 namespace ExtremeRoles
 {
@@ -8,8 +9,16 @@ namespace ExtremeRoles
         {
             if (Input.GetKeyDown(KeyCode.F8))
             {
-                Helper.Logging.Dump();
+                Logging.Dump();
             }
+#if DEBUG
+            if (Input.GetKeyDown(KeyCode.F9) &&
+                ExtremeRolesPlugin.DebugMode.Value &&
+                ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd)
+            {
+                Logging.Debug($"{ExtremeRolesPlugin.ShipState.CreateStatistics()}");
+            }
+#endif
         }
     }
 }

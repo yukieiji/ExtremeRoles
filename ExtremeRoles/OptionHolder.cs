@@ -110,7 +110,6 @@ namespace ExtremeRoles
             DisableTaskWin,
             IsSameNeutralSameWin,
             DisableNeutralSpecialForceEnd,
-            EnableHorseMode,
 
             IsAssignNeutralToVanillaCrewGhostRole,
             IsRemoveAngleIcon,
@@ -557,12 +556,6 @@ namespace ExtremeRoles
 
 
             new BoolCustomOption(
-                (int)CommonOptionKey.EnableHorseMode,
-                CommonOptionKey.EnableHorseMode.ToString(),
-                false);
-
-
-            new BoolCustomOption(
                 (int)CommonOptionKey.IsAssignNeutralToVanillaCrewGhostRole,
                 CommonOptionKey.IsAssignNeutralToVanillaCrewGhostRole.ToString(),
                 true);
@@ -600,6 +593,8 @@ namespace ExtremeRoles
 
         public static class Ship
         {
+            public const int SameNeutralGameControlId = int.MaxValue;
+
             public static int MaxNumberOfMeeting = 100;
 
             public static bool ChangeMeetingVoteAreaSort = true;
