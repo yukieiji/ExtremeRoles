@@ -1,4 +1,4 @@
-﻿namespace ExtremeRoles.GameMode.Option.MapModuleOption
+﻿namespace ExtremeRoles.GameMode.Option.MapModule
 {
     public class SecurityOption
     {
