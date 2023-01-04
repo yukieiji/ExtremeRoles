@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 
 using ExtremeRoles.Roles;
-
+using ExtremeRoles.GhostRoles;
 
 namespace ExtremeRoles.Patches.MiniGame
 {
@@ -13,7 +13,14 @@ namespace ExtremeRoles.Patches.MiniGame
             if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
             var role = ExtremeRoleManager.GetLocalPlayerRole();
-            var isBlocked = role.IsBlockShowPlayingRoleInfo();
+            var ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
+            
+            bool isBlocked = role.IsBlockShowPlayingRoleInfo();
+            if (ghostRole != null)
+            {
+                isBlocked = true;
+            }
+
 
             var targetRoleTeam = ExtremeRoleManager.GameRole[__instance.HauntTarget.PlayerId].Team;
 
