@@ -55,8 +55,8 @@ namespace ExtremeRoles.Module
 
         public bool IsActive();
         public void SetOptionBehaviour(OptionBehaviour newBehaviour);
-        public string GetString();
-        public string GetTranedName();
+        public string GetTranslatedValue();
+        public string GetTranslatedName();
         public void UpdateSelection(int newSelection);
         public void SaveConfigValue();
         public void SwitchPreset();
@@ -179,9 +179,9 @@ namespace ExtremeRoles.Module
             return;
         }
 
-        public string GetTranedName() => Translation.GetString(this.name);
+        public string GetTranslatedName() => Translation.GetString(this.name);
 
-        public string GetString()
+        public string GetTranslatedValue()
         {
             string sel = this.Selections[this.curSelection].ToString();
             if (this.stringFormat != OptionUnit.None)
@@ -251,7 +251,7 @@ namespace ExtremeRoles.Module
             if (this.behaviour != null && this.behaviour is StringOption stringOption)
             {
                 stringOption.oldValue = stringOption.Value = this.curSelection;
-                stringOption.ValueText.text = this.GetString();
+                stringOption.ValueText.text = this.GetTranslatedValue();
                 if (this.withUpdateOption.Count != 0)
                 {
                     foreach (IWithUpdatableOption<OutType> option in this.withUpdateOption)
@@ -302,7 +302,7 @@ namespace ExtremeRoles.Module
         }
 
         public string ToHudString() =>
-            this.IsActive() ? $"{this.GetTranedName()}: {this.GetString()}" : string.Empty;
+            this.IsActive() ? $"{this.GetTranslatedName()}: {this.GetTranslatedValue()}" : string.Empty;
 
         private void bindConfig()
         {

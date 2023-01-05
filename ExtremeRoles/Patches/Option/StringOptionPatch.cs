@@ -63,9 +63,9 @@ namespace ExtremeRoles.Patches.Option
             if (option == null) { return true; };
 
             __instance.OnValueChanged = new Action<OptionBehaviour>((o) => { });
-            __instance.TitleText.text = option.GetTranedName();
+            __instance.TitleText.text = option.GetTranslatedName();
             __instance.Value = __instance.oldValue = option.CurSelection;
-            __instance.ValueText.text = option.GetString();
+            __instance.ValueText.text = option.GetTranslatedValue();
 
             return false;
         }

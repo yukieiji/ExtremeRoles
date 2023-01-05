@@ -232,9 +232,9 @@ namespace ExtremeRoles.Patches.Option
                 {
                     StringOption stringOption = UnityEngine.Object.Instantiate(template, menu[intedTab]);
                     stringOption.OnValueChanged = new Action<OptionBehaviour>((o) => { });
-                    stringOption.TitleText.text = option.GetTranedName();
+                    stringOption.TitleText.text = option.GetTranslatedName();
                     stringOption.Value = stringOption.oldValue = option.CurSelection;
-                    stringOption.ValueText.text = option.GetString();
+                    stringOption.ValueText.text = option.GetTranslatedValue();
 
                     option.SetOptionBehaviour(stringOption);
                     switch (intedTab)
