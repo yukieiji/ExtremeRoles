@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using static Il2CppSystem.Linq.Expressions.Interpreter.NullableMethodCallInstruction;
 
 namespace ExtremeRoles.Module
 {

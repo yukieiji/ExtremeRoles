@@ -28,7 +28,7 @@ namespace ExtremeRoles.Module.InfoOverlay
 
                 if (!option.IsHidden)
                 {
-                    string optStr = option.ToString();
+                    string optStr = option.ToHudString();
                     if (optStr != string.Empty)
                     {
                         printOption.AppendLine(optStr);

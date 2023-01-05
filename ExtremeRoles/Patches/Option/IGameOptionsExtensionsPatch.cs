@@ -47,13 +47,13 @@ namespace ExtremeRoles.Patches.Option
             var allOption = OptionHolder.AllOption;
 
             allOptionStr.Add(
-                allOption[(int)OptionHolder.CommonOptionKey.PresetSelection].ToString());
+                allOption[(int)OptionHolder.CommonOptionKey.PresetSelection].ToHudString());
 
             StringBuilder rngOptBuilder = new StringBuilder();
             rngOptBuilder.AppendLine(
-                allOption[(int)OptionHolder.CommonOptionKey.UseStrongRandomGen].ToString());
+                allOption[(int)OptionHolder.CommonOptionKey.UseStrongRandomGen].ToHudString());
             rngOptBuilder.AppendLine(
-                allOption[(int)OptionHolder.CommonOptionKey.UsePrngAlgorithm].ToString());
+                allOption[(int)OptionHolder.CommonOptionKey.UsePrngAlgorithm].ToHudString());
             allOptionStr.Add(rngOptBuilder.ToString().Trim('\r', '\n'));
 
             allOptionStr.Add(createRoleSpawnNumOptions());
@@ -61,7 +61,7 @@ namespace ExtremeRoles.Patches.Option
             allOptionStr.Add(
                 Design.ColoedString(
                     ColorPalette.XionBlue,
-                    allOption[(int)OptionHolder.CommonOptionKey.UseXion].ToString()));
+                    allOption[(int)OptionHolder.CommonOptionKey.UseXion].ToHudString()));
 
             StringBuilder modOptionStrBuilder = new StringBuilder();
 
@@ -89,7 +89,7 @@ namespace ExtremeRoles.Patches.Option
                     default:
                         break;
                 }
-                string optionStr = allOption[(int)id].ToString();
+                string optionStr = allOption[(int)id].ToHudString();
                 if (optionStr != string.Empty) { modOptionStrBuilder.AppendLine(optionStr); }
             }
 
@@ -113,7 +113,7 @@ namespace ExtremeRoles.Patches.Option
                     StringBuilder optionStrBuilder = new StringBuilder();
                     if (!option.IsHidden)
                     {
-                        optionStrBuilder.AppendLine(option.ToString());
+                        optionStrBuilder.AppendLine(option.ToHudString());
                     }
 
                     addChildren(option, ref optionStrBuilder, option.IsHidden ? 0 : 1);
@@ -170,7 +170,7 @@ namespace ExtremeRoles.Patches.Option
             foreach (var child in option.Children)
             {
 
-                string optionString = child.ToString();
+                string optionString = child.ToHudString();
                 if (optionString != string.Empty)
                 {
                     entry.AppendLine(
