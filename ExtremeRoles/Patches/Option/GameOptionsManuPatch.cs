@@ -436,7 +436,6 @@ namespace ExtremeRoles.Patches.Option
                 if (option?.Body != null && option.Body.gameObject != null)
                 {
                     bool enabled = true;
-                    var parent = option.Parent;
 
                     if (AmongUsClient.Instance?.AmHost == false)
                     {
