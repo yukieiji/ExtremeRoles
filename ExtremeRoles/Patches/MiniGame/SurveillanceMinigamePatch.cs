@@ -11,7 +11,7 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using AmongUs.GameOptions;
-using ExtremeRoles.GameMode.Option.MapModuleOption;
+using ExtremeRoles.GameMode.Option.MapModule;
 
 namespace ExtremeRoles.Patches.MiniGame
 {

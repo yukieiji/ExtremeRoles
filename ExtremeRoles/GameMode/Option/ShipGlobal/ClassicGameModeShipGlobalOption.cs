@@ -55,14 +55,5 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
         public bool IsRemoveAngleIcon => throw new System.NotImplementedException();
 
         public bool IsBlockGAAbilityReport => throw new System.NotImplementedException();
-
-        private static T getOrInsert<T>(ref T? value, OptionHolder.CommonOptionKey optKey)
-        {
-            if (!value.HasValue)
-            {
-                value = IShipGlobalOption.GetCommonOptionValue(optKey);
-            }
-            return value.Value;
-        }
     }
 }

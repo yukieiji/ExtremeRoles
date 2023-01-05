@@ -16,7 +16,7 @@ using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Performance;
 using AmongUs.GameOptions;
 using PowerTools;
-using ExtremeRoles.GameMode.Option.MapModuleOption;
+using ExtremeRoles.GameMode.Option.MapModule;
 
 namespace ExtremeRoles.Patches
 {
