@@ -26,10 +26,9 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
             var multiAssignRole = role as MultiAssignRoleBase;
             if (multiAssignRole != null)
             {
-                roleOptionString =
-                    CustomOption.AllOptionToString(
-                        allOption[multiAssignRole.GetManagerOptionId(
-                            IShowTextBuilder.SpawnOptionKey)]);
+                roleOptionString = allOption[
+                    multiAssignRole.GetManagerOptionId(
+                        RoleCommonOption.SpawnRate)].ToHudStringWithChildren();
                 colorRoleName = Design.ColoedString(
                     multiAssignRole.GetNameColor(),
                     Translation.GetString(multiAssignRole.RoleName));
@@ -41,9 +40,8 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
             else
             {
                 roleOptionString =
-                    CustomOption.AllOptionToString(
-                        allOption[role.GetRoleOptionId(
-                            RoleCommonOption.SpawnRate)]);
+                    allOption[role.GetRoleOptionId(
+                        RoleCommonOption.SpawnRate)].ToHudStringWithChildren();
                 colorRoleName = role.GetColoredRoleName();
             }
 
@@ -75,9 +73,9 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
                     if (!multiAssignRole.AnotherRole.IsVanillaRole())
                     {
                         anotherRoleOptionString =
-                            CustomOption.AllOptionToString(
-                                allOption[multiAssignRole.AnotherRole.GetRoleOptionId(
-                                    RoleCommonOption.SpawnRate)]);
+                            allOption[
+                                multiAssignRole.AnotherRole.GetRoleOptionId(
+                                    RoleCommonOption.SpawnRate)].ToHudStringWithChildren();
                     }
                     string anotherRoleFullDesc = multiAssignRole.AnotherRole.GetFullDescription();
 

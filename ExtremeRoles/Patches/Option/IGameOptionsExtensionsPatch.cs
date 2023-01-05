@@ -110,14 +110,8 @@ namespace ExtremeRoles.Patches.Option
                         continue;
                     }
 
-                    StringBuilder optionStrBuilder = new StringBuilder();
-                    if (!option.IsHidden)
-                    {
-                        optionStrBuilder.AppendLine(option.ToHudString());
-                    }
-
-                    addChildren(option, ref optionStrBuilder, option.IsHidden ? 0 : 1);
-                    allOptionStr.Add(optionStrBuilder.ToString().Trim('\r', '\n'));
+                    string optionStr = option.ToHudStringWithChildren(option.IsHidden ? 0 : 1);
+                    allOptionStr.Add(optionStr.Trim('\r', '\n'));
                 }
             }
 
@@ -154,39 +148,6 @@ namespace ExtremeRoles.Patches.Option
                 translate("pressTabForMore"),
                 $" ({counter + 1}/{numPages})");
 
-        }
-
-        private static void addChildren(IOption option, ref StringBuilder entry, int indentCount = 0)
-        {
-
-            string indent = "";
-
-            if (indentCount != 0)
-            {
-                indent = string.Concat(
-                    Enumerable.Repeat("    ", indentCount));
-            }
-
-            foreach (var child in option.Children)
-            {
-
-                string optionString = child.ToHudString();
-                if (optionString != string.Empty)
-                {
-                    entry.AppendLine(
-                        string.Concat(
-                            indent,
-                            optionString));
-                }
-                if (indentCount == 0)
-                {
-                    addChildren(child, ref entry, 0);
-                }
-                else
-                {
-                    addChildren(child, ref entry, indentCount + 1);
-                }
-            }
         }
 
         private static string createRoleSpawnNumOptions()

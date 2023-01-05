@@ -61,6 +61,7 @@ namespace ExtremeRoles.Module
         public void SaveConfigValue();
         public void SwitchPreset();
         public string ToHudString();
+        public string ToHudStringWithChildren(int indent=0);
 
         // This is HotFix for HideNSeek
         public dynamic GetDefault();
@@ -123,6 +124,8 @@ namespace ExtremeRoles.Module
         private ConfigEntry<int> entry;
 
         private OptionBehaviour behaviour;
+
+        private const string IndentStr = "    ";
 
         public CustomOptionBase(
             int id,
@@ -304,6 +307,18 @@ namespace ExtremeRoles.Module
         public string ToHudString() =>
             this.IsActive() ? $"{this.GetTranslatedName()}: {this.GetTranslatedValue()}" : string.Empty;
 
+        public string ToHudStringWithChildren(int indent = 0)
+        {
+            StringBuilder builder = new StringBuilder();
+            string optStr = this.ToHudString();
+            if (!this.IsHidden && optStr != string.Empty)
+            {
+                builder.AppendLine(optStr);
+            }
+            addChildrenOptionHudString(ref builder, this, indent);
+            return builder.ToString();
+        }
+
         private void bindConfig()
         {
             this.entry = ExtremeRolesPlugin.Instance.Config.Bind(
@@ -317,6 +332,29 @@ namespace ExtremeRoles.Module
             string nameClean = Regex.Replace(this.name, "<.*?>", "");
             nameClean = Regex.Replace(nameClean, "^-\\s*", "");
             return nameClean.Trim();
+        }
+
+        private static void addChildrenOptionHudString(
+            ref StringBuilder builder,
+            IOption parentOption,
+            int prefixIndentCount)
+        {
+            string prefixIndent = prefixIndentCount != 0 ? 
+                string.Concat(Enumerable.Repeat(IndentStr, prefixIndentCount)) : 
+                string.Empty;
+
+            foreach (var child in parentOption.Children)
+            {
+                string childOptionStr = child.ToHudString();
+
+                if (childOptionStr != string.Empty)
+                {
+                    builder.AppendLine(
+                        string.Concat(prefixIndent, childOptionStr));
+                }
+
+                addChildrenOptionHudString(ref builder, child, prefixIndentCount + 1);
+            }
         }
 
         public abstract dynamic GetDefault();
@@ -616,51 +654,4 @@ namespace ExtremeRoles.Module
         public override dynamic GetDefault() => this.DefaultSelection;
         public override dynamic GetValue() => CurSelection;
     }
-
-    public static class CustomOption
-    {
-        public static string AllOptionToString(
-            IOption option, bool skipFirst = false)
-        {
-            if (option == null) { return ""; }
-
-            StringBuilder options = new StringBuilder();
-            if (!option.IsHidden && !skipFirst)
-            {
-                options.AppendLine(option.ToHudString());
-            }
-            if (option.Enabled)
-            {
-                childrenOptionToString(option, ref options);
-            }
-            return options.ToString();
-        }
-
-        private static void childrenOptionToString(
-            IOption option, ref StringBuilder options, int indentCount = 0)
-        {
-            foreach (IOption op in option.Children)
-            {
-                string str = op.ToHudString();
-
-                if (str != string.Empty)
-                {
-                    if (indentCount != 0)
-                    {
-                        str = string.Concat(
-                            string.Concat(
-                                Enumerable.Repeat("    ", indentCount)),
-                            str);
-                    }
-
-                    options.AppendLine(str);
-                }
-                childrenOptionToString(
-                    op, ref options,
-                    indentCount + 1);
-            }
-        }
-
-    }
-
 }
