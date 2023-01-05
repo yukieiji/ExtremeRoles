@@ -60,6 +60,8 @@ namespace ExtremeRoles.Module
         public void UpdateSelection(int newSelection);
         public void SaveConfigValue();
         public void SwitchPreset();
+        public string ToString();
+
         // This is HotFix for HideNSeek
         public dynamic GetDefault();
         public dynamic GetValue();
@@ -298,6 +300,9 @@ namespace ExtremeRoles.Module
         {
             this.stringFormat = unit;
         }
+
+        public override string ToString() =>
+            this.IsActive() ? $"{this.GetTranedName()}: {this.GetString()}" : string.Empty;
 
         private void bindConfig()
         {
@@ -614,13 +619,6 @@ namespace ExtremeRoles.Module
 
     public static class CustomOption
     {
-        public static string OptionToString(IOption option)
-        {
-            if (option == null) { return string.Empty; }
-            if (!option.IsActive()) { return string.Empty; }
-            return $"{option.GetTranedName()}: {option.GetString()}";
-        }
-
         public static string AllOptionToString(
             IOption option, bool skipFirst = false)
         {
@@ -629,7 +627,7 @@ namespace ExtremeRoles.Module
             StringBuilder options = new StringBuilder();
             if (!option.IsHidden && !skipFirst)
             {
-                options.AppendLine(OptionToString(option));
+                options.AppendLine(option.ToString());
             }
             if (option.Enabled)
             {
@@ -643,7 +641,7 @@ namespace ExtremeRoles.Module
         {
             foreach (IOption op in option.Children)
             {
-                string str = OptionToString(op);
+                string str = op.ToString();
 
                 if (str != string.Empty)
                 {

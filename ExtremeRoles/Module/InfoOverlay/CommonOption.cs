@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace ExtremeRoles.Module.InfoOverlay
@@ -29,7 +28,7 @@ namespace ExtremeRoles.Module.InfoOverlay
 
                 if (!option.IsHidden)
                 {
-                    string optStr = CustomOption.OptionToString(option);
+                    string optStr = option.ToString();
                     if (optStr != string.Empty)
                     {
                         printOption.AppendLine(optStr);
