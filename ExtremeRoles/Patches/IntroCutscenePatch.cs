@@ -17,6 +17,7 @@ using ExtremeRoles.Performance;
 using AmongUs.GameOptions;
 using PowerTools;
 using ExtremeRoles.GameMode.Option.MapModule;
+using ExtremeRoles.GameMode.IntroRunner;
 
 namespace ExtremeRoles.Patches
 {
@@ -136,205 +137,13 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(IntroCutscene), nameof(IntroCutscene.CoBegin))]
     public static class IntroCutsceneCoBeginPatch
     {
-        private static bool isAllPlyerDummy()
-        {
-            foreach (var player in PlayerControl.AllPlayerControls)
-            {
-                if (player.PlayerId == PlayerControl.LocalPlayer.PlayerId) { continue; }
-
-                if (!player.GetComponent<DummyBehaviour>().enabled)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        private static IEnumerator coBeginPatch(
-            IntroCutscene instance)
-        {
-
-            GameObject roleAssignText = new GameObject("roleAssignText");
-            var text = roleAssignText.AddComponent<Module.CustomMonoBehaviour.LoadingText>();
-            text.SetFontSize(3.0f);
-            text.SetMessage(Translation.GetString("roleAssignNow"));
-
-            roleAssignText.gameObject.SetActive(true);
-
-            if (AmongUsClient.Instance.AmHost)
-            {
-                if (AmongUsClient.Instance.NetworkMode != NetworkModes.LocalGame ||
-                    !isAllPlyerDummy())
-                {
-                    // ホストは全員の処理が終わるまで待つ
-                    while (!Manager.RoleManagerSelectRolesPatch.IsReady)
-                    {
-                        yield return null;
-                    }
-                }
-                else
-                {
-                    yield return new WaitForSeconds(0.5f);
-                }
-                Manager.RoleManagerSelectRolesPatch.AllPlayerAssignToExRole();
-            }
-            else
-            {
-                // ホスト以外はここまで処理済みである事を送信
-                Manager.RoleManagerSelectRolesPatch.SetLocalPlayerReady();
-            }
-
-            // バニラの役職アサイン後すぐこの処理が走るので全員の役職が入るまで待機
-            while (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd)
-            {
-                yield return null;
-            }
-
-            SoundManager.Instance.PlaySound(instance.IntroStinger, false, 1f);
-
-            var localPlayer = CachedPlayerControl.LocalPlayer;
-
-            if (GameManager.Instance.IsNormal())
-            {
-                instance.HideAndSeekPanels.SetActive(false);
-                instance.CrewmateRules.SetActive(false);
-                instance.ImpostorRules.SetActive(false);
-                instance.ImpostorName.gameObject.SetActive(false);
-                instance.ImpostorTitle.gameObject.SetActive(false);
-
-                Il2CppSystem.Collections.Generic.List<PlayerControl> teamToShow = IntroCutscene.SelectTeamToShow(
-                    (Il2CppSystem.Func<GameData.PlayerInfo, bool>)(
-                        (GameData.PlayerInfo pcd) =>
-                            !localPlayer.Data.Role.IsImpostor ||
-                            pcd.Role.TeamType == localPlayer.Data.Role.TeamType
-                    ));
-                
-                if (localPlayer.Data.Role.IsImpostor)
-                {
-                    instance.ImpostorText.gameObject.SetActive(false);
-                }
-                else
-                {
-                    int adjustedNumImpostors = GameOptionsManager.Instance.CurrentGameOptions.GetAdjustedNumImpostors(
-                        GameData.Instance.PlayerCount);
-                    if (adjustedNumImpostors == 1)
-                    {
-                        instance.ImpostorText.text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
-                            StringNames.NumImpostorsS, System.Array.Empty<Il2CppSystem.Object>());
-                    }
-                    else
-                    {
-                        instance.ImpostorText.text = FastDestroyableSingleton<TranslationController>.Instance.GetString(
-                            StringNames.NumImpostorsP, new Il2CppSystem.Object[]
-                            {
-                                adjustedNumImpostors.ToString()
-                            });
-                    }
-                    instance.ImpostorText.text = instance.ImpostorText.text.Replace("[FF1919FF]", "<color=#FF1919FF>");
-                    instance.ImpostorText.text = instance.ImpostorText.text.Replace("[]", "</color>");
-                }
-                
-                roleAssignText.gameObject.SetActive(false);
-                Object.Destroy(roleAssignText);
-                roleAssignText = null;
-
-                yield return instance.ShowTeam(teamToShow, 3.0f);
-                yield return instance.ShowRole();
-            }
-            else
-            {
-                roleAssignText.gameObject.SetActive(false);
-                Object.Destroy(roleAssignText);
-                roleAssignText = null;
-
-                instance.HideAndSeekPanels.SetActive(true);
-                if (localPlayer.Data.Role.IsImpostor)
-                {
-                    instance.CrewmateRules.SetActive(false);
-                    instance.ImpostorRules.SetActive(true);
-                }
-                else
-                {
-                    instance.CrewmateRules.SetActive(true);
-                    instance.ImpostorRules.SetActive(false);
-                }
-
-                IntroCutscene.SelectTeamToShow(
-                    (Il2CppSystem.Func<GameData.PlayerInfo, bool>)(
-                        (GameData.PlayerInfo pcd) =>
-                            localPlayer.Data.Role.IsImpostor != pcd.Role.IsImpostor
-                    ));
-
-                PlayerControl impostor = 
-                    CachedPlayerControl.AllPlayerControls.Find(
-                        (CachedPlayerControl pc) => pc.Data.Role.IsImpostor);
-
-                instance.ImpostorName.gameObject.SetActive(true);
-                instance.ImpostorTitle.gameObject.SetActive(true);
-                instance.BackgroundBar.enabled = false;
-                instance.TeamTitle.gameObject.SetActive(false);
-                instance.ImpostorName.text = impostor.Data.PlayerName;
-
-                PoolablePlayer playerSlot = instance.CreatePlayer(0, 1, impostor.Data, false);
-                playerSlot.transform.localPosition = instance.impostorPos;
-                playerSlot.transform.localScale = Vector3.one * instance.impostorScale;
-
-                yield return CachedShipStatus.Instance.CosmeticsCache.PopulateFromPlayers();
-                yield return new WaitForSecondsRealtime(6f);
-
-                playerSlot.gameObject.SetActive(false);
-                instance.HideAndSeekPanels.SetActive(false);
-                instance.CrewmateRules.SetActive(false);
-                instance.ImpostorRules.SetActive(false);
-
-                LogicOptionsHnS logicOptionsHnS = GameManager.Instance.LogicOptions.Cast<LogicOptionsHnS>();
-                LogicHnSMusic logicHnSMusic = 
-                    GameManager.Instance.GetLogicComponent<LogicHnSMusic>() as LogicHnSMusic;
-
-                if (logicHnSMusic != null)
-                {
-                    logicHnSMusic.StartMusicWithIntro();
-                }
-
-                float crewmateLeadTime = (float)logicOptionsHnS.GetCrewmateLeadTime();
-
-                if (localPlayer.Data.Role.IsImpostor)
-                {
-                    instance.HideAndSeekTimerText.gameObject.SetActive(true);
-                    instance.HideAndSeekPlayerVisual.gameObject.SetActive(true);
-                    instance.HideAndSeekPlayerVisual.SetBodyType(PlayerBodyTypes.Seeker);
-                    SpriteAnim component = instance.HideAndSeekPlayerVisual.GetComponent<SpriteAnim>();
-                    instance.HideAndSeekPlayerVisual.UpdateFromPlayerData(
-                        localPlayer.Data,
-                        localPlayer.PlayerControl.CurrentOutfitType,
-                        PlayerMaterial.MaskType.None, false);
-                    component.Play(instance.HnSSeekerSpawnAnim, 1f);
-                    instance.HideAndSeekPlayerVisual.SetBodyCosmeticsVisible(false);
-                    instance.HideAndSeekPlayerVisual.ToggleName(false);
-
-                    while (crewmateLeadTime > 0f)
-                    {
-                        instance.HideAndSeekTimerText.text = Mathf.RoundToInt(crewmateLeadTime).ToString();
-                        crewmateLeadTime -= Time.deltaTime;
-                        yield return null;
-                    }
-                }
-                else
-                {
-                    CachedShipStatus.Instance.HideCountdown = crewmateLeadTime;
-                    impostor.AnimateCustom(instance.HnSSeekerSpawnAnim);
-                    impostor.cosmetics.SetBodyCosmeticsVisible(false);
-                }
-                impostor = null;
-                playerSlot = null;
-            }
-            Object.Destroy(instance.gameObject);
-            yield break;
-        }
         public static bool Prefix(
             IntroCutscene __instance, ref Il2CppSystem.Collections.IEnumerator __result)
         {
-            __result = coBeginPatch(__instance).WrapToIl2Cpp();
+            IIntroRunner runnner = ExtremeGameManager.Instance.GetIntroRunner();
+            if (runnner == null) { return true; }
+
+            __result = runnner.CoRunIntro(__instance).WrapToIl2Cpp();
             return false;
         }
     }

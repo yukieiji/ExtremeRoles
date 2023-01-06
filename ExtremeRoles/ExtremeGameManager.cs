@@ -1,5 +1,6 @@
 ﻿using AmongUs.GameOptions;
 using ExtremeRoles.GameMode.Factory;
+using ExtremeRoles.GameMode.IntroRunner;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector.Ghost;
 using ExtremeRoles.GameMode.RoleSelector.Normal;
@@ -41,5 +42,13 @@ namespace ExtremeRoles
         {
             Instance.ShipOption.Load();
         }
+
+        public IIntroRunner GetIntroRunner()
+            => (GameOptionsManager.Instance.currentGameMode) switch
+            {
+                GameModes.Normal => new ClassicIntroRunner(),
+                GameModes.HideNSeek => new HideNSeekIntroRunner(),
+                _ => null
+            };
     }
 }
