@@ -31,5 +31,10 @@ namespace ExtremeRoles
             Instance.ShipOption = factory.CreateGlobalOption();
             Instance.Vison = factory.CreateVisonModifier();
         }
+
+        public void Load()
+        {
+            
+        }
     }
 }
