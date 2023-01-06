@@ -4,31 +4,33 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
 {
     public interface IShipGlobalOption
     {
-        public int MaxMeetingCount { get; }
+        public int MaxMeetingCount { get; protected set; }
 
-        public bool IsChangeVoteAreaButtonSortArg { get; }
-        public bool IsFixedVoteAreaPlayerLevel { get; }
-        public bool IsBlockSkipInMeeting { get; }
-        public bool DisableSelfVote { get; }
+        public bool IsChangeVoteAreaButtonSortArg { get; protected set; }
+        public bool IsFixedVoteAreaPlayerLevel { get; protected set; }
+        public bool IsBlockSkipInMeeting { get; protected set; }
+        public bool DisableSelfVote { get; protected set; }
 
-        public bool DisableVent { get; }
-        public bool EngineerUseImpostorVent { get; }
-        public bool CanKillVentInPlayer { get; }
-        public bool IsAllowParallelMedbayScan { get; }
-        public bool IsAutoSelectRandomSpawn { get; }
+        public bool DisableVent { get; protected set; }
+        public bool EngineerUseImpostorVent { get; protected set; }
+        public bool CanKillVentInPlayer { get; protected set; }
+        public bool IsAllowParallelMedbayScan { get; protected set; }
+        public bool IsAutoSelectRandomSpawn { get; protected set; }
 
-        public AdminOption Admin { get; }
-        public SecurityOption Security { get; }
-        public VitalOption Vital { get; }
+        public AdminOption Admin { get; protected set; }
+        public SecurityOption Security { get; protected set; }
+        public VitalOption Vital { get; protected set; }
 
-        public bool DisableTaskWinWhenNoneTaskCrew { get; }
-        public bool DisableTaskWin { get; }
-        public bool IsSameNeutralSameWin { get; }
-        public bool DisableNeutralSpecialForceEnd { get; }
+        public bool DisableTaskWinWhenNoneTaskCrew { get; protected set; }
+        public bool DisableTaskWin { get; protected set; }
+        public bool IsSameNeutralSameWin { get; protected set; }
+        public bool DisableNeutralSpecialForceEnd { get; protected set; }
 
-        public bool IsAssignNeutralToVanillaCrewGhostRole { get; }
-        public bool IsRemoveAngleIcon { get; }
-        public bool IsBlockGAAbilityReport { get; }
+        public bool IsAssignNeutralToVanillaCrewGhostRole { get; protected set; }
+        public bool IsRemoveAngleIcon { get; protected set; }
+        public bool IsBlockGAAbilityReport { get; protected set; }
+
+        public void Load();
 
         public static dynamic GetCommonOptionValue(OptionHolder.CommonOptionKey optionKey)
         {
