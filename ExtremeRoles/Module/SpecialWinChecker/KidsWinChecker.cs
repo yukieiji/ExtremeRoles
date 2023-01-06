@@ -24,8 +24,7 @@ namespace ExtremeRoles.Module.SpecialWinChecker
             aliveDelinquent.Add(playerId, (Delinquent)role);
         }
 
-        public bool IsWin(
-            ExtremeShipStatus.ExtremeShipStatus.PlayerStatistics statistics)
+        public bool IsWin(PlayerStatistics statistics)
         {
             byte checkPlayerId = byte.MaxValue;
             float range = float.MinValue;

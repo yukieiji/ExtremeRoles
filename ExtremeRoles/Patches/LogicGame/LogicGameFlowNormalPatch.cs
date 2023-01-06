@@ -1,10 +1,12 @@
 ﻿using System.Linq;
+using System.Collections.Generic;
 
 using HarmonyLib;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.ExtremeShipStatus;
+using ExtremeRoles.Module;
 
 namespace ExtremeRoles.Patches.LogicGame
 {
@@ -29,7 +31,7 @@ namespace ExtremeRoles.Patches.LogicGame
             if (ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger ||
                 ExtremeRolesPlugin.ShipState.IsDisableWinCheck) { return false; }
 
-            var statistics = ExtremeRolesPlugin.ShipState.CreateStatistics();
+            var statistics = PlayerStatistics.Create();
 
 
             if (isImpostorSpecialWin()) { return false; }
@@ -58,8 +60,7 @@ namespace ExtremeRoles.Patches.LogicGame
             GameManager.Instance.RpcEndGame(reason, trigger);
         }
 
-        private static bool isCrewmateWin(
-            ExtremeShipStatus.PlayerStatistics statistics)
+        private static bool isCrewmateWin(PlayerStatistics statistics)
         {
             if (statistics.TeamCrewmateAlive > 0 &&
                 statistics.TeamImpostorAlive == 0 &&
@@ -72,7 +73,7 @@ namespace ExtremeRoles.Patches.LogicGame
         }
 
         private static bool isImpostorWin(
-            ExtremeShipStatus.PlayerStatistics statistics)
+            PlayerStatistics statistics)
         {
             if (statistics.TeamImpostorAlive >= (statistics.TotalAlive - statistics.TeamImpostorAlive) &&
                 statistics.SeparatedNeutralAlive.Count == 0)
@@ -103,7 +104,7 @@ namespace ExtremeRoles.Patches.LogicGame
         }
 
         private static bool isNeutralAliveWin(
-            ExtremeShipStatus.PlayerStatistics statistics)
+            PlayerStatistics statistics)
         {
             if (statistics.SeparatedNeutralAlive.Count != 1) { return false; }
 
@@ -227,7 +228,7 @@ namespace ExtremeRoles.Patches.LogicGame
         }
 
         private static bool isSpecialRoleWin(
-            ExtremeShipStatus.PlayerStatistics statistics)
+            PlayerStatistics statistics)
         {
             if (statistics.SpecialWinCheckRoleAlive.Count == 0) { return false; }
             foreach (var (id, checker) in statistics.SpecialWinCheckRoleAlive)
