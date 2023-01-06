@@ -10,7 +10,7 @@ using AmongUs.GameOptions;
 
 namespace ExtremeRoles.GameMode.Vison
 {
-    public class ClassicModeVison : IVisonModifier
+    public sealed class ClassicModeVison : IVisonModifier
     {
         private static float crewLightVison => GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
             FloatOptionNames.CrewLightMod);

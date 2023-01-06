@@ -1,6 +1,6 @@
 ﻿namespace ExtremeRoles.GameMode.Option.MapModule
 {
-    public class SecurityOption
+    public sealed class SecurityOption
     {
         public bool DisableSecurity     { get; set; } = false;
         public bool EnableSecurityLimit { get; set; } = false;

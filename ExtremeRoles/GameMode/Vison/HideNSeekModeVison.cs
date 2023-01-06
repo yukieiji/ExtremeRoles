@@ -1,6 +1,6 @@
 ﻿namespace ExtremeRoles.GameMode.Vison
 {
-    public class HideNSeekModeVison : IVisonModifier
+    public sealed class HideNSeekModeVison : IVisonModifier
     {
         public VisonType Current => VisonType.None;
 

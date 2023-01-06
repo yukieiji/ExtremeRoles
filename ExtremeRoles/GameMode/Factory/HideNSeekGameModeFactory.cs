@@ -2,7 +2,7 @@
 
 namespace ExtremeRoles.GameMode.Factory
 {
-    public class HideNSeekGameModeFactory : IModeFactory
+    public sealed class HideNSeekGameModeFactory : IModeFactory
     {
         public ShipGlobalOption CreateGlobalOption() => new ShipGlobalOption();
 

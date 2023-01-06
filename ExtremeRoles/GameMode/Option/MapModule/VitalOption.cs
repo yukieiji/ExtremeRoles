@@ -1,6 +1,6 @@
 ﻿namespace ExtremeRoles.GameMode.Option.MapModule
 {
-    public class VitalOption
+    public sealed class VitalOption
     {
         public bool DisableVital     { get; set; } = false;
         public bool EnableVitalLimit { get; set; } = false;

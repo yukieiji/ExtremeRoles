@@ -7,7 +7,7 @@
         ModeArchiveOnly
     }
 
-    public class AdminOption
+    public sealed class AdminOption
     {
         public bool DisableAdmin            { get; set; } = false;
         public AirShipAdminMode AirShipEnable { get; set; } = AirShipAdminMode.ModeBoth;

@@ -2,33 +2,33 @@
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal
 {
-    public class ClassicGameModeShipGlobalOption : IShipGlobalOption
+    public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
     {
-        public int MaxMeetingCount { get; protected set; }
+        public int MaxMeetingCount { get; private set; }
 
-        public bool IsChangeVoteAreaButtonSortArg { get; protected set; }
-        public bool IsFixedVoteAreaPlayerLevel { get; protected set; }
-        public bool IsBlockSkipInMeeting { get; protected set; }
-        public bool DisableSelfVote { get; protected set; }
+        public bool IsChangeVoteAreaButtonSortArg { get; private set; }
+        public bool IsFixedVoteAreaPlayerLevel { get; private set; }
+        public bool IsBlockSkipInMeeting { get; private set; }
+        public bool DisableSelfVote { get; private set; }
 
-        public bool DisableVent { get; protected set; }
-        public bool EngineerUseImpostorVent { get; protected set; }
-        public bool CanKillVentInPlayer { get; protected set; }
-        public bool IsAllowParallelMedbayScan { get; protected set; }
-        public bool IsAutoSelectRandomSpawn { get; protected set; }
+        public bool DisableVent { get; private set; }
+        public bool EngineerUseImpostorVent { get; private set; }
+        public bool CanKillVentInPlayer { get; private set; }
+        public bool IsAllowParallelMedbayScan { get; private set; }
+        public bool IsAutoSelectRandomSpawn { get; private set; }
 
-        public AdminOption Admin { get; protected set; }
-        public SecurityOption Security { get; protected set; }
-        public VitalOption Vital { get; protected set; }
+        public AdminOption Admin { get; private set; }
+        public SecurityOption Security { get; private set; }
+        public VitalOption Vital { get; private set; }
 
-        public bool DisableTaskWinWhenNoneTaskCrew { get; protected set; }
-        public bool DisableTaskWin { get; protected set; }
-        public bool IsSameNeutralSameWin { get; protected set; }
-        public bool DisableNeutralSpecialForceEnd { get; protected set; }
+        public bool DisableTaskWinWhenNoneTaskCrew { get; private set; }
+        public bool DisableTaskWin { get; private set; }
+        public bool IsSameNeutralSameWin { get; private set; }
+        public bool DisableNeutralSpecialForceEnd { get; private set; }
 
-        public bool IsAssignNeutralToVanillaCrewGhostRole { get; protected set; }
-        public bool IsRemoveAngleIcon { get; protected set; }
-        public bool IsBlockGAAbilityReport { get; protected set; }
+        public bool IsAssignNeutralToVanillaCrewGhostRole { get; private set; }
+        public bool IsRemoveAngleIcon { get; private set; }
+        public bool IsBlockGAAbilityReport { get; private set; }
 
         public void Load()
         {

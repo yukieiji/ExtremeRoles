@@ -3,7 +3,7 @@ using ExtremeRoles.GameMode.Vison;
 
 namespace ExtremeRoles.GameMode.Factory
 {
-    public class ClassicGameModeOptionFactory : IModeFactory
+    public sealed class ClassicGameModeOptionFactory : IModeFactory
     {
         public ShipGlobalOption CreateGlobalOption()
         {
