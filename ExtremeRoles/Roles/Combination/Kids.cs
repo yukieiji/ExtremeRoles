@@ -547,8 +547,8 @@ namespace ExtremeRoles.Roles.Combination
             public WispBlackOuter(float time)
             {
                 // ここは全員呼ばれる
-                ExtremeRolesPlugin.ShipState.SetVison(
-                    ExtremeShipStatus.ForceVisonType.WispLightOff);
+                ExtremeGameManager.Instance.Vison.SetModifier(
+                    GameMode.Vison.VisonType.WispLightOff);
                 this.maxTime = time;
                 this.timer = time;
             }
@@ -663,8 +663,7 @@ namespace ExtremeRoles.Roles.Combination
 
             public void RepairVison()
             {
-                ExtremeRolesPlugin.ShipState.SetVison(
-                    ExtremeShipStatus.ForceVisonType.None);
+                ExtremeGameManager.Instance.Vison.ResetModifier();
                 this.blackOuter = null;
             }
 

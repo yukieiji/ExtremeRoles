@@ -28,7 +28,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             this.resetWins();
 
             this.ClearMeetingResetObject();
-            this.ResetVison();
 
             if (!includeGameObject) { return; }
 
