@@ -10,7 +10,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches.MapOverlay
 {
@@ -201,7 +201,7 @@ namespace ExtremeRoles.Patches.MapOverlay
         {
             Object.Destroy(timerText);
 
-            var adminOpt = ExtremeGameManager.Instance.ShipOption.Admin;
+            var adminOpt = ExtremeGameModeManager.Instance.ShipOption.Admin;
             if (adminOpt == null) { return; }
 
             adminTimer = adminOpt.AdminLimitTime;

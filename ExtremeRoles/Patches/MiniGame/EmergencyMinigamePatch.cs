@@ -3,6 +3,7 @@
 using UnityEngine;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches.MiniGame
 {
@@ -29,7 +30,7 @@ namespace ExtremeRoles.Patches.MiniGame
                 int localRemaining = 
                     CachedPlayerControl.LocalPlayer.PlayerControl.RemainingEmergencies;
                 int teamRemaining = Mathf.Max(
-                    0, ExtremeGameManager.Instance.ShipOption.MaxMeetingCount -
+                    0, ExtremeGameModeManager.Instance.ShipOption.MaxMeetingCount -
                         ExtremeRolesPlugin.ShipState.MeetingCount);
                 int remaining = Mathf.Min(localRemaining, teamRemaining);
 

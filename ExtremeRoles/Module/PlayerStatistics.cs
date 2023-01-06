@@ -9,11 +9,14 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Combination;
 
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Module
 {
     public sealed class PlayerStatistics
     {
+        public const int SameNeutralGameControlId = int.MaxValue;
+
         public int AllTeamCrewmate { get; set; }
         public int TeamImpostorAlive { get; set; }
         public int TeamCrewmateAlive { get; set; }
@@ -123,9 +126,9 @@ namespace ExtremeRoles.Module
                         playerInfo.PlayerId);
                 }
 
-                if (ExtremeGameManager.Instance.ShipOption.IsSameNeutralSameWin && role.IsNeutral())
+                if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin && role.IsNeutral())
                 {
-                    gameControlId = ExtremeGameManager.SameNeutralGameControlId;
+                    gameControlId = SameNeutralGameControlId;
                 }
 
                 // 生きてる

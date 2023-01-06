@@ -11,6 +11,7 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
@@ -344,7 +345,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             if (this.isSameJackalTeam(targetRole))
             {
-                if (ExtremeGameManager.Instance.ShipOption.IsSameNeutralSameWin)
+                if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
                 {
                     return true;
                 }
@@ -607,7 +608,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             if (this.isSameJackalTeam(targetRole))
             {
-                if (ExtremeGameManager.Instance.ShipOption.IsSameNeutralSameWin)
+                if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
                 {
                     return true;
                 }

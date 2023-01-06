@@ -8,6 +8,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Impostor;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Extension.Ship;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches.MapModule
 {
@@ -50,7 +51,7 @@ namespace ExtremeRoles.Patches.MapModule
                 return true;
             }
 
-            if (ExtremeGameManager.Instance.ShipOption.DisableVent)
+            if (ExtremeGameModeManager.Instance.ShipOption.DisableVent)
             {
                 __result = num;
                 return false;

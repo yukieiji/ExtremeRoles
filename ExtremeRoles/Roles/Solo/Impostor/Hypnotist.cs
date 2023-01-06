@@ -23,6 +23,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.Mods;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -1346,7 +1347,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             if (targetRole.Id == this.Id)
             {
-                if (ExtremeGameManager.Instance.ShipOption.IsSameNeutralSameWin)
+                if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
                 {
                     return true;
                 }

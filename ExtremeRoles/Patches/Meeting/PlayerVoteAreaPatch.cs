@@ -11,10 +11,11 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches.Meeting
 {
-	public static class NamePlateHelper
+    public static class NamePlateHelper
 	{
 		public static bool NameplateChange = true;
 		private static Sprite blankNameplate = null;
@@ -296,7 +297,7 @@ namespace ExtremeRoles.Patches.Meeting
 	{
 		public static void Postfix(PlayerVoteArea __instance)
 		{
-			if (ExtremeGameManager.Instance.ShipOption.IsFixedVoteAreaPlayerLevel)
+			if (ExtremeGameModeManager.Instance.ShipOption.IsFixedVoteAreaPlayerLevel)
             {
 				__instance.LevelNumberText.text = "99";
 			}
@@ -331,7 +332,7 @@ namespace ExtremeRoles.Patches.Meeting
 			[HarmonyArgument(1)] bool isDead,
 			[HarmonyArgument(2)] bool isGuardian = false)
         {
-			if (ExtremeGameManager.Instance.ShipOption.IsRemoveAngleIcon)
+			if (ExtremeGameModeManager.Instance.ShipOption.IsRemoveAngleIcon)
 			{
 				__instance.GAIcon.gameObject.SetActive(false);
 			}

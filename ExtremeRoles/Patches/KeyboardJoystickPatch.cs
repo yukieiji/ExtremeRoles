@@ -11,6 +11,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches
 {
@@ -232,7 +233,7 @@ namespace ExtremeRoles.Patches
                 if (role.TryGetVanillaRoleId(out RoleTypes roleId))
                 {
                     if (roleId != RoleTypes.Engineer || 
-                        ExtremeGameManager.Instance.ShipOption.EngineerUseImpostorVent)
+                        ExtremeGameModeManager.Instance.ShipOption.EngineerUseImpostorVent)
                     {
                         hudManager.ImpostorVentButton.DoClick();
                     }

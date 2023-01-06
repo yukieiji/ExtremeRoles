@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using ExtremeRoles.GameMode;
+using HarmonyLib;
 
 namespace ExtremeRoles.Patches.Role
 {
@@ -7,7 +8,7 @@ namespace ExtremeRoles.Patches.Role
     {
         public static bool Prefix(EngineerRole __instance)
         {
-            return !ExtremeGameManager.Instance.ShipOption.EngineerUseImpostorVent;
+            return !ExtremeGameModeManager.Instance.ShipOption.EngineerUseImpostorVent;
         }
     }
 }

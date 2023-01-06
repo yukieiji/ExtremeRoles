@@ -11,6 +11,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.ExtremeShipStatus;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -71,7 +72,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public static void SwitchLight(bool lightOn)
         {
-            var vison = ExtremeGameManager.Instance.Vison;
+            var vison = ExtremeGameModeManager.Instance.Vison;
 
             if (lightOn)
             {
@@ -99,7 +100,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool IsAbilityUse() => 
             this.IsCommonUse() &&
-            ExtremeGameManager.Instance.Vison.IsModifierResetted();
+            ExtremeGameModeManager.Instance.Vison.IsModifierResetted();
 
         public void RoleAbilityResetOnMeetingStart()
         {

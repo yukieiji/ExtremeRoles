@@ -14,6 +14,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API.Interface;
 using ExtremeRoles.GhostRoles.API;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches.Manager
 {
@@ -186,7 +187,7 @@ namespace ExtremeRoles.Patches.Manager
                 textAddedGhostRole.Add(ghostRole.Id);
             }
 
-            if (ExtremeGameManager.Instance.ShipOption.DisableNeutralSpecialForceEnd && winNeutral.Count != 0)
+            if (ExtremeGameModeManager.Instance.ShipOption.DisableNeutralSpecialForceEnd && winNeutral.Count != 0)
             {
                 switch (state.EndReason)
                 {

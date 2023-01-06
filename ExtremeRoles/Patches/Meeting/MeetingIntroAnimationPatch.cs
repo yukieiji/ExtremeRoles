@@ -3,6 +3,7 @@
 using TMPro;
 
 using ExtremeRoles.Performance;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches.Meeting
 {
@@ -36,7 +37,7 @@ namespace ExtremeRoles.Patches.Meeting
 
 			string gaAbilityText = string.Empty;
 
-			if (someoneWasProtected && !ExtremeGameManager.Instance.ShipOption.IsBlockGAAbilityReport)
+			if (someoneWasProtected && !ExtremeGameModeManager.Instance.ShipOption.IsBlockGAAbilityReport)
 			{
 				gaAbilityText = text.text;
 			}

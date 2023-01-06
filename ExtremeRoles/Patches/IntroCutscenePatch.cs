@@ -18,6 +18,7 @@ using AmongUs.GameOptions;
 using PowerTools;
 using ExtremeRoles.GameMode.Option.MapModule;
 using ExtremeRoles.GameMode.IntroRunner;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches
 {
@@ -140,7 +141,7 @@ namespace ExtremeRoles.Patches
         public static bool Prefix(
             IntroCutscene __instance, ref Il2CppSystem.Collections.IEnumerator __result)
         {
-            IIntroRunner runnner = ExtremeGameManager.Instance.GetIntroRunner();
+            IIntroRunner runnner = ExtremeGameModeManager.Instance.GetIntroRunner();
             if (runnner == null) { return true; }
 
             __result = runnner.CoRunIntro(__instance).WrapToIl2Cpp();
@@ -292,7 +293,7 @@ namespace ExtremeRoles.Patches
         {
             HashSet<string> disableObjectName = new HashSet<string>();
 
-            var shipOpt = ExtremeGameManager.Instance.ShipOption;
+            var shipOpt = ExtremeGameModeManager.Instance.ShipOption;
 
             bool isRemoveAdmin = shipOpt.Admin.DisableAdmin;
             bool isRemoveSecurity = shipOpt.Security.DisableSecurity;

@@ -14,6 +14,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using AmongUs.GameOptions;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches.Meeting
 {
@@ -358,7 +359,7 @@ namespace ExtremeRoles.Patches.Meeting
 
             if (isBlock) { return false; }
 
-            var shipOpt = ExtremeGameManager.Instance.ShipOption;
+            var shipOpt = ExtremeGameModeManager.Instance.ShipOption;
 
             if (shipOpt.DisableSelfVote &&
                 CachedPlayerControl.LocalPlayer.PlayerId == suspectStateIdx)
@@ -605,7 +606,7 @@ namespace ExtremeRoles.Patches.Meeting
             }
 
             // Deactivate skip Button if skipping on emergency meetings is disabled
-            if (ExtremeGameManager.Instance.ShipOption.IsBlockSkipInMeeting)
+            if (ExtremeGameModeManager.Instance.ShipOption.IsBlockSkipInMeeting)
             {
                 __instance.SkipVoteButton.gameObject.SetActive(false);
             }
@@ -635,7 +636,7 @@ namespace ExtremeRoles.Patches.Meeting
     {
         public static bool Prefix(MeetingHud __instance)
         {
-            if (!ExtremeGameManager.Instance.ShipOption.IsChangeVoteAreaButtonSortArg) { return true; }
+            if (!ExtremeGameModeManager.Instance.ShipOption.IsChangeVoteAreaButtonSortArg) { return true; }
             if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
             PlayerVoteArea[] array = __instance.playerStates.OrderBy(delegate (PlayerVoteArea p)

@@ -22,6 +22,7 @@ using ExtremeRoles.Module.ExtremeShipStatus;
 using GhostAbilityButton = ExtremeRoles.Module.AbilityButton.GhostRoles.AbilityCountButton;
 using RoleButtonBase = ExtremeRoles.Module.AbilityButton.Roles.RoleAbilityButtonBase;
 using AmongUs.GameOptions;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Roles.Combination
 {
@@ -547,7 +548,7 @@ namespace ExtremeRoles.Roles.Combination
             public WispBlackOuter(float time)
             {
                 // ここは全員呼ばれる
-                ExtremeGameManager.Instance.Vison.SetModifier(
+                ExtremeGameModeManager.Instance.Vison.SetModifier(
                     GameMode.Vison.VisonType.WispLightOff);
                 this.maxTime = time;
                 this.timer = time;
@@ -595,9 +596,9 @@ namespace ExtremeRoles.Roles.Combination
             public bool IsWin(Wisp wisp)
             {
                 int gameControlId = wisp.GameControlId;
-                if (ExtremeGameManager.Instance.ShipOption.IsSameNeutralSameWin)
+                if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
                 {
-                    gameControlId = ExtremeGameManager.SameNeutralGameControlId;
+                    gameControlId = PlayerStatistics.SameNeutralGameControlId;
                 }
                 if (this.affectedPlayerNum.TryGetValue(gameControlId, out int playerNum))
                 {
@@ -612,9 +613,9 @@ namespace ExtremeRoles.Roles.Combination
             public int CurAffectedPlayerNum(Wisp wisp)
             {
                 int gameControlId = wisp.GameControlId;
-                if (ExtremeGameManager.Instance.ShipOption.IsSameNeutralSameWin)
+                if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
                 {
-                    gameControlId = ExtremeGameManager.SameNeutralGameControlId;
+                    gameControlId = PlayerStatistics.SameNeutralGameControlId;
                 }
 
                 if (this.affectedPlayerNum.TryGetValue(gameControlId, out int playerNum))
@@ -663,7 +664,7 @@ namespace ExtremeRoles.Roles.Combination
 
             public void RepairVison()
             {
-                ExtremeGameManager.Instance.Vison.ResetModifier();
+                ExtremeGameModeManager.Instance.Vison.ResetModifier();
                 this.blackOuter = null;
             }
 
@@ -686,9 +687,9 @@ namespace ExtremeRoles.Roles.Combination
                     ++playerNum;
                 }
 
-                if (ExtremeGameManager.Instance.ShipOption.IsSameNeutralSameWin)
+                if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
                 {
-                    gameControlId = ExtremeGameManager.SameNeutralGameControlId;
+                    gameControlId = PlayerStatistics.SameNeutralGameControlId;
                 }
 
                 this.affectedPlayerNum[gameControlId] = 

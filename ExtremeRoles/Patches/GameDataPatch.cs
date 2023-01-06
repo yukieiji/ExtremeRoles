@@ -3,10 +3,11 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using AmongUs.GameOptions;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches
 {
-	[HarmonyPatch(typeof(GameData), nameof(GameData.AddPlayer))]
+    [HarmonyPatch(typeof(GameData), nameof(GameData.AddPlayer))]
 	public static class GameDataAddPlayerPatch
 	{
 		public static void Postfix()
@@ -43,7 +44,7 @@ namespace ExtremeRoles.Patches
 			if (curOptions.GameMode != GameModes.Normal) { return true; }
 
 			var roles = Roles.ExtremeRoleManager.GameRole;
-			var shipOpt = ExtremeGameManager.Instance.ShipOption;
+			var shipOpt = ExtremeGameModeManager.Instance.ShipOption;
 
             if (roles.Count == 0 || 
 				(shipOpt.DisableTaskWin && shipOpt.DisableTaskWinWhenNoneTaskCrew))
@@ -94,7 +95,7 @@ namespace ExtremeRoles.Patches
 				}
 			}
 
-			if (doTaskCrew == 0 && ExtremeGameManager.Instance.ShipOption.DisableTaskWinWhenNoneTaskCrew)
+			if (doTaskCrew == 0 && ExtremeGameModeManager.Instance.ShipOption.DisableTaskWinWhenNoneTaskCrew)
             {
 				totalTask = 88659;
 				completedTask = 0;	

@@ -11,6 +11,8 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GhostRoles.API.Interface;
+using ExtremeRoles.GameMode;
+using ExtremeRoles.Module;
 
 namespace ExtremeRoles.Patches
 {
@@ -160,7 +162,7 @@ namespace ExtremeRoles.Patches
                 TempData.winners.Remove(winner);
             }
 
-            if (ExtremeGameManager.Instance.ShipOption.DisableNeutralSpecialForceEnd)
+            if (ExtremeGameModeManager.Instance.ShipOption.DisableNeutralSpecialForceEnd)
             {
                 addNeutralWinner();
             }
@@ -345,7 +347,7 @@ namespace ExtremeRoles.Patches
 
                 if (roles.Contains(role.Id))
                 {
-                    if (ExtremeGameManager.Instance.ShipOption.IsSameNeutralSameWin)
+                    if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
                     {
                         addWinner(player);
                     }
@@ -362,7 +364,7 @@ namespace ExtremeRoles.Patches
                     {
                         if (roles.Contains(multiAssignRole.AnotherRole.Id))
                         {
-                            if (ExtremeGameManager.Instance.ShipOption.IsSameNeutralSameWin)
+                            if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
                             {
                                 addWinner(player);
                             }
@@ -410,9 +412,9 @@ namespace ExtremeRoles.Patches
         {
             int gameControlId = role.GameControlId;
 
-            if (ExtremeGameManager.Instance.ShipOption.IsSameNeutralSameWin)
+            if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
             {
-                gameControlId = ExtremeGameManager.SameNeutralGameControlId;
+                gameControlId = PlayerStatistics.SameNeutralGameControlId;
             }
 
 

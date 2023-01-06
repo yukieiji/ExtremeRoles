@@ -2,6 +2,7 @@
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
 using AmongUs.GameOptions;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches.Role
 {
@@ -46,7 +47,7 @@ namespace ExtremeRoles.Patches.Role
                 target.PlayerId !=  __instance.Player.PlayerId && 
                 !(target.Role == null) && 
                 !(target.Object == null) && 
-                (!target.Object.inVent || ExtremeGameManager.Instance.ShipOption.CanKillVentInPlayer) &&
+                (!target.Object.inVent || ExtremeGameModeManager.Instance.ShipOption.CanKillVentInPlayer) &&
                 !role.IsSameTeam(gameRoles[target.PlayerId]);
 
             return false;

@@ -12,6 +12,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using AmongUs.GameOptions;
 using ExtremeRoles.GameMode.Option.MapModule;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches.MiniGame
 {
@@ -33,7 +34,7 @@ namespace ExtremeRoles.Patches.MiniGame
 
         public static void Initialize()
         {
-            var securityOption = ExtremeGameManager.Instance.ShipOption.Security;
+            var securityOption = ExtremeGameModeManager.Instance.ShipOption.Security;
             if (securityOption == null) { return; }
 
             cameraTimer = securityOption.SecurityLimitTime;

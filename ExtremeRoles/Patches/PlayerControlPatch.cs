@@ -19,7 +19,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using AmongUs.GameOptions;
-
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches
 {
@@ -332,7 +332,7 @@ namespace ExtremeRoles.Patches
                     {
                         if (enable)
                         {
-                            if (!ExtremeGameManager.Instance.ShipOption.EngineerUseImpostorVent)
+                            if (!ExtremeGameModeManager.Instance.ShipOption.EngineerUseImpostorVent)
                             {
                                 hudManager.AbilityButton.Show();
                             }

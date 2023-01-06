@@ -10,6 +10,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
@@ -423,7 +424,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             if (this.Id == targetRole.Id)
             {
-                if (ExtremeGameManager.Instance.ShipOption.IsSameNeutralSameWin)
+                if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
                 {
                     return true;
                 }

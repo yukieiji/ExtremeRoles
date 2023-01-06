@@ -8,13 +8,11 @@ using ExtremeRoles.GameMode.Vison;
 
 // TODO: setプロパティ => initにする 
 
-namespace ExtremeRoles
+namespace ExtremeRoles.GameMode
 {
-    public class ExtremeGameManager
+    public class ExtremeGameModeManager
     {
-        public const int SameNeutralGameControlId = int.MaxValue;
-
-        public static ExtremeGameManager Instance { get; private set; }
+        public static ExtremeGameModeManager Instance { get; private set; }
 
         public IShipGlobalOption ShipOption { get; private set; }
 
@@ -25,7 +23,7 @@ namespace ExtremeRoles
 
         public static void Create(GameModes mode)
         {
-            Instance = new ExtremeGameManager();
+            Instance = new ExtremeGameModeManager();
 
             IModeFactory factory = mode switch
             {
@@ -44,7 +42,7 @@ namespace ExtremeRoles
         }
 
         public IIntroRunner GetIntroRunner()
-            => (GameOptionsManager.Instance.currentGameMode) switch
+            => GameOptionsManager.Instance.currentGameMode switch
             {
                 GameModes.Normal => new ClassicIntroRunner(),
                 GameModes.HideNSeek => new HideNSeekIntroRunner(),

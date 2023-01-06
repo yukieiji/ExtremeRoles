@@ -9,6 +9,7 @@ using HarmonyLib;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Helper;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches.Option
 {
@@ -36,7 +37,7 @@ namespace ExtremeRoles.Patches.Option
         private static void Postfix(ref string __result)
         {
 
-            if (ExtremeGameManager.Instance == null) { return; }
+            if (ExtremeGameModeManager.Instance == null) { return; }
 
             List<string> pages = new List<string>()
             {
@@ -65,7 +66,7 @@ namespace ExtremeRoles.Patches.Option
                     ColorPalette.XionBlue,
                     allOption[(int)OptionHolder.CommonOptionKey.UseXion].ToHudString()));
 
-            allOptionStr.Add(ExtremeGameManager.Instance.ShipOption.ToHudString());
+            allOptionStr.Add(ExtremeGameModeManager.Instance.ShipOption.ToHudString());
 
 
             // TODO：以下より下役職のオプション設定のHudstring周り、01/06未対応

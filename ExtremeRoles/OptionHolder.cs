@@ -10,6 +10,7 @@ using BepInEx.Configuration;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles
 {
@@ -189,7 +190,7 @@ namespace ExtremeRoles
             // 不具合等が発生しないようにブロック機能を有効化する
             isBlockShare = false;
 
-            ExtremeGameManager.Instance.Load();
+            ExtremeGameModeManager.Instance.Load();
 
             Client.GhostsSeeRole = ConfigParser.GhostsSeeRoles.Value;
             Client.GhostsSeeTask = ConfigParser.GhostsSeeTasks.Value;

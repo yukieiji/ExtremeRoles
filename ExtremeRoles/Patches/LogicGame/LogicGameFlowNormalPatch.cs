@@ -7,6 +7,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches.LogicGame
 {
@@ -199,7 +200,7 @@ namespace ExtremeRoles.Patches.LogicGame
         private static bool isNeutralSpecialWin()
         {
 
-            if (ExtremeGameManager.Instance.ShipOption.DisableNeutralSpecialForceEnd) { return false; }
+            if (ExtremeGameModeManager.Instance.ShipOption.DisableNeutralSpecialForceEnd) { return false; }
 
             foreach (var role in ExtremeRoleManager.GameRole.Values)
             {

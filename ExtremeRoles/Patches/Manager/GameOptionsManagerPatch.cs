@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 
 using AmongUs.GameOptions;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches.Manager
 {
@@ -9,7 +10,7 @@ namespace ExtremeRoles.Patches.Manager
     {
         public static void Postfix([HarmonyArgument(0)] GameModes gameMode)
         {
-            ExtremeGameManager.Create(gameMode);
+            ExtremeGameModeManager.Create(gameMode);
         }
     }
 }
