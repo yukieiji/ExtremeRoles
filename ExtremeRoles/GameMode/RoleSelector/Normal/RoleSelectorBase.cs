@@ -6,19 +6,21 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
-namespace ExtremeRoles.GameMode.RoleSelector
+namespace ExtremeRoles.GameMode.RoleSelector.Normal
 {
     public abstract class RoleSelectorBase
     {
         public bool IsRoleSetUpEnd { get; private set; }
+        public bool IsUseXion => OptionHolder.AllOption[
+            (int)OptionHolder.CommonOptionKey.UseXion].GetValue();
 
-        public abstract bool IsXionUse { get; }
+        public abstract bool CanAssignXion { get; }
 
         private List<IAssignedPlayer> assignData = new List<IAssignedPlayer>();
         private HashSet<byte> readyPlayer = new HashSet<byte>();
 
-        public bool IsAssignReady() => readyPlayer.Count ==
-            (CachedPlayerControl.AllPlayerControls.Count - 1);
+        public bool IsAssignReady() => this.readyPlayer.Count ==
+            CachedPlayerControl.AllPlayerControls.Count - 1;
 
         public void AddReadyPlayer(byte playerId)
         {
@@ -35,9 +37,9 @@ namespace ExtremeRoles.GameMode.RoleSelector
                 CachedPlayerControl.LocalPlayer.PlayerControl.NetId,
                 RPCOperator.Command.SetRoleToAllPlayer))
             {
-                caller.WritePackedInt(this.assignData.Count); // 何個あるか
+                caller.WritePackedInt(assignData.Count); // 何個あるか
 
-                foreach (IAssignedPlayer data in this.assignData)
+                foreach (IAssignedPlayer data in assignData)
                 {
                     caller.WriteByte(data.PlayerId); // PlayerId
                     caller.WriteByte(data.RoleType); // RoleType : single or comb
@@ -52,7 +54,7 @@ namespace ExtremeRoles.GameMode.RoleSelector
                     }
                 }
             }
-            RPCOperator.SetRoleToAllPlayer(this.assignData);
+            RPCOperator.SetRoleToAllPlayer(assignData);
 
             this.assignData.Clear();
             this.readyPlayer.Clear();
@@ -88,7 +90,7 @@ namespace ExtremeRoles.GameMode.RoleSelector
 
         public void SetUpXion()
         {
-            if (!IsXionUse) { return; }
+            if (!CanAssignXion || !IsUseXion) { return; }
 
             PlayerControl loaclPlayer = PlayerControl.LocalPlayer;
             this.assignData.Add(new AssignedPlayerToSingleRoleData(
@@ -97,10 +99,11 @@ namespace ExtremeRoles.GameMode.RoleSelector
             loaclPlayer.Data.IsDead = true;
         }
 
-        public abstract bool IsAssignGhostRole();
-        public abstract bool RpcTryAssignGhostRole();
+        // この2ついる？
         public abstract SingleRoleBase GetSingleRole(ExtremeRoleId id);
         public abstract CombinationRoleManagerBase GetCombinationRoleManager(CombinationRoleType id);
+        
+        // このメソッドが上の設計に依存してる説ない？ありそうだね？なぜ？
         public abstract List<string> GetRoleSelectorOptionList();
         public abstract void CreateRoleSelectorOptionMenu();
 
