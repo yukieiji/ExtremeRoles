@@ -5,7 +5,6 @@ using HarmonyLib;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module;
 using ExtremeRoles.GameMode;
 
