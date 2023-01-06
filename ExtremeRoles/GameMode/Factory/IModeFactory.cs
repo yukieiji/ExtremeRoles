@@ -1,10 +1,11 @@
-﻿using ExtremeRoles.GameMode.Vison;
+﻿using ExtremeRoles.GameMode.Option.ShipGlobal;
+using ExtremeRoles.GameMode.Vison;
 
 namespace ExtremeRoles.GameMode.Factory
 {
     public interface IModeFactory
     {
-        public ShipGlobalOption CreateGlobalOption();
+        public IShipGlobalOption CreateGlobalOption();
 
         public IVisonModifier CreateVisonModifier();
     }

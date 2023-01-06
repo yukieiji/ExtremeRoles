@@ -1,4 +1,5 @@
-﻿using ExtremeRoles.GameMode.Option.MapModule;
+﻿using System.Text;
+using ExtremeRoles.GameMode.Option.MapModule;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal
 {
@@ -70,6 +71,37 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
                 OptionHolder.CommonOptionKey.IsSameNeutralSameWin);
             DisableNeutralSpecialForceEnd = IShipGlobalOption.GetCommonOptionValue(
                 OptionHolder.CommonOptionKey.DisableNeutralSpecialForceEnd);
+        }
+
+        public void BuildHudString(ref StringBuilder builder)
+        {
+            foreach (OptionHolder.CommonOptionKey id in new OptionHolder.CommonOptionKey[]
+            {
+                OptionHolder.CommonOptionKey.DisableVent,
+                
+                OptionHolder.CommonOptionKey.IsRemoveAdmin,
+                OptionHolder.CommonOptionKey.AirShipEnableAdmin,
+                OptionHolder.CommonOptionKey.EnableAdminLimit,
+                OptionHolder.CommonOptionKey.AdminLimitTime,
+                
+                OptionHolder.CommonOptionKey.IsRemoveVital,
+                OptionHolder.CommonOptionKey.EnableVitalLimit,
+                OptionHolder.CommonOptionKey.VitalLimitTime,
+
+                OptionHolder.CommonOptionKey.IsRemoveSecurity,
+                OptionHolder.CommonOptionKey.EnableSecurityLimit,
+                OptionHolder.CommonOptionKey.SecurityLimitTime,
+
+                OptionHolder.CommonOptionKey.IsSameNeutralSameWin,
+                OptionHolder.CommonOptionKey.DisableNeutralSpecialForceEnd,
+            })
+            {
+                string optionStr = OptionHolder.AllOption[(int)id].ToHudString();
+                if (optionStr != string.Empty)
+                {
+                    builder.AppendLine(optionStr);
+                }
+            }
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using ExtremeRoles.GameMode.Option.MapModule;
+﻿using System;
+using System.Text;
+using ExtremeRoles.GameMode.Option.MapModule;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal
 {
@@ -100,6 +102,41 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
                 OptionHolder.CommonOptionKey.IsRemoveAngleIcon);
             IsBlockGAAbilityReport = IShipGlobalOption.GetCommonOptionValue(
                 OptionHolder.CommonOptionKey.IsBlockGAAbilityReport);
+        }
+
+        public void BuildHudString(ref StringBuilder builder)
+        {
+            foreach (OptionHolder.CommonOptionKey id in Enum.GetValues(
+                typeof(OptionHolder.CommonOptionKey)))
+            {
+                switch (id)
+                {
+                    case OptionHolder.CommonOptionKey.PresetSelection:
+                    case OptionHolder.CommonOptionKey.UseStrongRandomGen:
+                    case OptionHolder.CommonOptionKey.UsePrngAlgorithm:
+                    case OptionHolder.CommonOptionKey.MinCrewmateRoles:
+                    case OptionHolder.CommonOptionKey.MaxCrewmateRoles:
+                    case OptionHolder.CommonOptionKey.MinNeutralRoles:
+                    case OptionHolder.CommonOptionKey.MaxNeutralRoles:
+                    case OptionHolder.CommonOptionKey.MinImpostorRoles:
+                    case OptionHolder.CommonOptionKey.MaxImpostorRoles:
+                    case OptionHolder.CommonOptionKey.MinCrewmateGhostRoles:
+                    case OptionHolder.CommonOptionKey.MaxCrewmateGhostRoles:
+                    case OptionHolder.CommonOptionKey.MinNeutralGhostRoles:
+                    case OptionHolder.CommonOptionKey.MaxNeutralGhostRoles:
+                    case OptionHolder.CommonOptionKey.MinImpostorGhostRoles:
+                    case OptionHolder.CommonOptionKey.MaxImpostorGhostRoles:
+                    case OptionHolder.CommonOptionKey.UseXion:
+                        continue;
+                    default:
+                        break;
+                }
+                string optionStr = OptionHolder.AllOption[(int)id].ToHudString();
+                if (optionStr != string.Empty)
+                {
+                    builder.AppendLine(optionStr);
+                }
+            }
         }
     }
 }

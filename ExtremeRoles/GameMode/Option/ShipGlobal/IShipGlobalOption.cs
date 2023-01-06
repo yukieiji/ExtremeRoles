@@ -1,4 +1,5 @@
-﻿using ExtremeRoles.GameMode.Option.MapModule;
+﻿using System.Text;
+using ExtremeRoles.GameMode.Option.MapModule;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal
 {
@@ -31,6 +32,14 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
         public bool IsBlockGAAbilityReport { get; }
 
         public void Load();
+        public void BuildHudString(ref StringBuilder builder);
+
+        public string ToHudString()
+        {
+            StringBuilder strBuilder = new StringBuilder();
+            BuildHudString(ref strBuilder);
+            return strBuilder.ToString().Trim('\r', '\n');
+        }
 
         public static dynamic GetCommonOptionValue(OptionHolder.CommonOptionKey optionKey)
         {
