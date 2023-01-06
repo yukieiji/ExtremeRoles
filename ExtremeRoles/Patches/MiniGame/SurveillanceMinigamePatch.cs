@@ -34,6 +34,7 @@ namespace ExtremeRoles.Patches.MiniGame
         public static void Initialize()
         {
             var securityOption = ExtremeGameManager.Instance.ShipOption.Security;
+            if (securityOption == null) { return; }
 
             cameraTimer = securityOption.SecurityLimitTime;
             isRemoveSecurity = securityOption.DisableSecurity;

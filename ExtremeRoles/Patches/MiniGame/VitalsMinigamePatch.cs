@@ -93,6 +93,7 @@ namespace ExtremeRoles.Patches.MiniGame
             Object.Destroy(timerText);
 
             var vitalOption = ExtremeGameManager.Instance.ShipOption.Vital;
+            if (vitalOption == null) { return; }
 
             vitalTimer = vitalOption.VitalLimitTime;
             isRemoveVital = vitalOption.DisableVital;

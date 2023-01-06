@@ -202,6 +202,7 @@ namespace ExtremeRoles.Patches.MapOverlay
             Object.Destroy(timerText);
 
             var adminOpt = ExtremeGameManager.Instance.ShipOption.Admin;
+            if (adminOpt == null) { return; }
 
             adminTimer = adminOpt.AdminLimitTime;
             isRemoveAdmin = adminOpt.DisableAdmin;
