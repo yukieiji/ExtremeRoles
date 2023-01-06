@@ -35,7 +35,8 @@ namespace ExtremeRoles.Patches.Option
     {
         private static void Postfix(ref string __result)
         {
-            if (GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal) { return; }
+
+            if (ExtremeGameManager.Instance == null) { return; }
 
             List<string> pages = new List<string>()
             {
@@ -58,43 +59,16 @@ namespace ExtremeRoles.Patches.Option
 
             allOptionStr.Add(createRoleSpawnNumOptions());
 
+            // Xionが使えるかはIRoleSelectorで定義されてるのでそれから
             allOptionStr.Add(
                 Design.ColoedString(
                     ColorPalette.XionBlue,
                     allOption[(int)OptionHolder.CommonOptionKey.UseXion].ToHudString()));
 
-            StringBuilder modOptionStrBuilder = new StringBuilder();
+            allOptionStr.Add(ExtremeGameManager.Instance.ShipOption.ToHudString());
 
-            foreach (OptionHolder.CommonOptionKey id in Enum.GetValues(typeof(OptionHolder.CommonOptionKey)))
-            {
-                switch (id)
-                {
-                    case OptionHolder.CommonOptionKey.PresetSelection:
-                    case OptionHolder.CommonOptionKey.UseStrongRandomGen:
-                    case OptionHolder.CommonOptionKey.UsePrngAlgorithm:
-                    case OptionHolder.CommonOptionKey.MinCrewmateRoles:
-                    case OptionHolder.CommonOptionKey.MaxCrewmateRoles:
-                    case OptionHolder.CommonOptionKey.MinNeutralRoles:
-                    case OptionHolder.CommonOptionKey.MaxNeutralRoles:
-                    case OptionHolder.CommonOptionKey.MinImpostorRoles:
-                    case OptionHolder.CommonOptionKey.MaxImpostorRoles:
-                    case OptionHolder.CommonOptionKey.MinCrewmateGhostRoles:
-                    case OptionHolder.CommonOptionKey.MaxCrewmateGhostRoles:
-                    case OptionHolder.CommonOptionKey.MinNeutralGhostRoles:
-                    case OptionHolder.CommonOptionKey.MaxNeutralGhostRoles:
-                    case OptionHolder.CommonOptionKey.MinImpostorGhostRoles:
-                    case OptionHolder.CommonOptionKey.MaxImpostorGhostRoles:
-                    case OptionHolder.CommonOptionKey.UseXion:
-                        continue;
-                    default:
-                        break;
-                }
-                string optionStr = allOption[(int)id].ToHudString();
-                if (optionStr != string.Empty) { modOptionStrBuilder.AppendLine(optionStr); }
-            }
 
-            allOptionStr.Add(modOptionStrBuilder.ToString().Trim('\r', '\n'));
-
+            // TODO：以下より下役職のオプション設定のHudstring周り、01/06未対応
             foreach (IOption option in OptionHolder.AllOption.Values)
             {
                 if (Enum.IsDefined(typeof(OptionHolder.CommonOptionKey), option.Id))

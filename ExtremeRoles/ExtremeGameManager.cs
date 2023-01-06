@@ -18,11 +18,11 @@ namespace ExtremeRoles
 
         public IVisonModifier Vison { get; private set; }
 
-        public static void Create()
+        public static void Create(GameModes mode)
         {
             Instance = new ExtremeGameManager();
 
-            IModeFactory factory = GameOptionsManager.Instance.currentGameMode switch
+            IModeFactory factory = mode switch
             {
                 GameModes.Normal => new ClassicGameModeOptionFactory(),
                 GameModes.HideNSeek => new HideNSeekGameModeFactory(),
@@ -35,7 +35,7 @@ namespace ExtremeRoles
 
         public void Load()
         {
-            
+            Instance.ShipOption.Load();
         }
     }
 }

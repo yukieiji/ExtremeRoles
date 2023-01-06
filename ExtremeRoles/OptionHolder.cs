@@ -189,7 +189,7 @@ namespace ExtremeRoles
             // 不具合等が発生しないようにブロック機能を有効化する
             isBlockShare = false;
 
-            ExtremeGameManager.Create();
+            ExtremeGameManager.Instance.Load();
 
             Client.GhostsSeeRole = ConfigParser.GhostsSeeRoles.Value;
             Client.GhostsSeeTask = ConfigParser.GhostsSeeTasks.Value;
