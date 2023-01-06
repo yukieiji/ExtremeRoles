@@ -19,6 +19,7 @@ namespace ExtremeRoles.GameMode
         public RoleSelectorBase NormalRoleSelector { get; private set; }
         public GhostRoleSelectorBase GhostRoleSelector { get; private set; }
 
+        // TODO：このクラスに含める必要があるか検証する必要あり
         public IVisonModifier Vison { get; private set; }
 
         public static void Create(GameModes mode)
