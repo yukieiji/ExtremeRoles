@@ -3,9 +3,13 @@ using System.Collections.Generic;
 
 using HarmonyLib;
 using UnityEngine;
+using AmongUs.GameOptions;
 
 using BepInEx.IL2CPP.Utils.Collections;
 
+using ExtremeRoles.GameMode;
+using ExtremeRoles.GameMode.IntroRunner;
+using ExtremeRoles.GameMode.Option.MapModule;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles;
@@ -14,11 +18,6 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Performance;
-using AmongUs.GameOptions;
-using PowerTools;
-using ExtremeRoles.GameMode.Option.MapModule;
-using ExtremeRoles.GameMode.IntroRunner;
-using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches
 {
@@ -65,9 +64,9 @@ namespace ExtremeRoles.Patches
 
         public static void SetupPlayerPrefab(IntroCutscene __instance)
         {
-            Prefab.PlayerPrefab = UnityEngine.Object.Instantiate(
+            Prefab.PlayerPrefab = Object.Instantiate(
                 __instance.PlayerPrefab);
-            UnityEngine.Object.DontDestroyOnLoad(Prefab.PlayerPrefab);
+            Object.DontDestroyOnLoad(Prefab.PlayerPrefab);
             Prefab.PlayerPrefab.name = "poolablePlayerPrefab";
             Prefab.PlayerPrefab.gameObject.SetActive(false);
         }
