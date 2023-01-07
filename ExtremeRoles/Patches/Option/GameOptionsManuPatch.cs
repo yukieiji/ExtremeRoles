@@ -33,14 +33,10 @@ namespace ExtremeRoles.Patches.Option
 
             if (GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal) { return; }
 
-            if (isFindAndTrans(GeneralSetting, "ERGlobalSetting")) { return; }
-            if (isFindAndTrans(CrewmateSetting, "ERCrewmateRoleSetting")) { return; }
-            if (isFindAndTrans(ImpostorSetting, "ERImpostorRoleSetting")) { return; }
-            if (isFindAndTrans(NeutralSetting, "ERNeutralRoleSetting")) { return; }
-            if (isFindAndTrans(CombinationSetting, "ERCombinationRoleSetting")) { return; }
-            if (isFindAndTrans(GhostCrewSetting, "ERGhostCrewmateRoleSetting")) { return; }
-            if (isFindAndTrans(GhostImpSetting, "ERGhostImpostorRoleSetting")) { return; }
-            if (isFindAndTrans(GhostNeutSetting, "ERGhostNeutralRoleSetting")) { return; }
+            if (IsInitialized()) { return; }
+
+            // Adapt task count for main options
+            modifiedDefaultGameOptions(__instance);
 
             var template = UnityEngine.Object.FindObjectsOfType<StringOption>().FirstOrDefault();
             if (template == null) { return; }
@@ -295,35 +291,6 @@ namespace ExtremeRoles.Patches.Option
 
             ghostNeutralMenu.Children = ghostNeutralOptions.ToArray();
             ghostNeutralSettings.gameObject.SetActive(false);
-
-            // Adapt task count for main options
-
-            UnhollowerBaseLib.Il2CppReferenceArray<OptionBehaviour> child = __instance.Children;
-
-
-            if (AmongUsClient.Instance.NetworkMode == NetworkModes.LocalGame ||
-                FastDestroyableSingleton<ServerManager>.Instance.CurrentRegion.Name == "custom")
-            {
-                NumberOption numImpostorsOption = child.FirstOrDefault(
-                    x => x.name == "NumImpostors").TryCast<NumberOption>();
-                if (numImpostorsOption != null)
-                {
-                    numImpostorsOption.ValidRange = new FloatRange(0f, OptionHolder.MaxImposterNum);
-                }
-            }
-
-            NumberOption commonTasksOption = child.FirstOrDefault(
-                x => x.name == "NumCommonTasks").TryCast<NumberOption>();
-            if (commonTasksOption != null) { commonTasksOption.ValidRange = new FloatRange(0f, 4f); }
-
-            NumberOption shortTasksOption = child.FirstOrDefault(
-                x => x.name == "NumShortTasks").TryCast<NumberOption>();
-            if (shortTasksOption != null){ shortTasksOption.ValidRange = new FloatRange(0f, 23f); }
-
-            NumberOption longTasksOption = child.FirstOrDefault(
-                x => x.name == "NumLongTasks").TryCast<NumberOption>();
-            if (longTasksOption != null) { longTasksOption.ValidRange = new FloatRange(0f, 15f); }
-
         }
 
         private static (GameObject, GameOptionsMenu) createOptionSettingAndMenu(
@@ -370,7 +337,45 @@ namespace ExtremeRoles.Patches.Option
             return true;
         }
 
+
+        private static bool IsInitialized() =>
+            isFindAndTrans(GeneralSetting, "ERGlobalSetting") ||
+            isFindAndTrans(CrewmateSetting, "ERCrewmateRoleSetting") ||
+            isFindAndTrans(ImpostorSetting, "ERImpostorRoleSetting") ||
+            isFindAndTrans(NeutralSetting, "ERNeutralRoleSetting") ||
+            isFindAndTrans(CombinationSetting, "ERCombinationRoleSetting") ||
+            isFindAndTrans(GhostCrewSetting, "ERGhostCrewmateRoleSetting") ||
+            isFindAndTrans(GhostImpSetting, "ERGhostImpostorRoleSetting") ||
+            isFindAndTrans(GhostNeutSetting, "ERGhostNeutralRoleSetting");
+
+        private static void modifiedDefaultGameOptions(GameOptionsMenu instance)
+        {
+            UnhollowerBaseLib.Il2CppReferenceArray<OptionBehaviour> child = instance.Children;
+
+            if (AmongUsClient.Instance.NetworkMode == NetworkModes.LocalGame ||
+                FastDestroyableSingleton<ServerManager>.Instance.CurrentRegion.Name == "custom")
+            {
+                changeValueRange(child, "NumImpostors", 0f, OptionHolder.MaxImposterNum);
+            }
+
+            changeValueRange(child, "NumCommonTasks", 0f, 4f );
+            changeValueRange(child, "NumShortTasks" , 0f, 23f);
+            changeValueRange(child, "NumLongTasks"  , 0f, 15f);
+        }
+
+        private static void changeValueRange(
+            UnhollowerBaseLib.Il2CppReferenceArray<OptionBehaviour> child,
+            string name, float minValue, float maxValue)
+        {
+            NumberOption numOpt = child.FirstOrDefault(x => x.name == name).TryCast<NumberOption>();
+            if (numOpt != null)
+            {
+                numOpt.ValidRange = new FloatRange(minValue, maxValue);
+            }
+        }
     }
+
+
 
     [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Update))]
     public static class GameOptionsMenuUpdatePatch
