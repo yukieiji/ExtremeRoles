@@ -33,7 +33,7 @@ namespace ExtremeRoles.Patches.Option
 
             if (GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal) { return; }
 
-            if (IsInitialized()) { return; }
+            if (isInitialized()) { return; }
 
             // Adapt task count for main options
             modifiedDefaultGameOptions(__instance);
@@ -338,7 +338,7 @@ namespace ExtremeRoles.Patches.Option
         }
 
 
-        private static bool IsInitialized() =>
+        private static bool isInitialized() =>
             isFindAndTrans(GeneralSetting, "ERGlobalSetting") ||
             isFindAndTrans(CrewmateSetting, "ERCrewmateRoleSetting") ||
             isFindAndTrans(ImpostorSetting, "ERImpostorRoleSetting") ||
