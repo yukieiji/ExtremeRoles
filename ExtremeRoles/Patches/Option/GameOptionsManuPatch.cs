@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 using UnityEngine;
 
@@ -9,13 +7,12 @@ using HarmonyLib;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Module;
-using ExtremeRoles.Resources;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Performance;
 
 
 namespace ExtremeRoles.Patches.Option
 {
-
     [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Start))]
     public static class GameOptionsMenuStartPatch
     {
@@ -38,165 +35,14 @@ namespace ExtremeRoles.Patches.Option
             // Adapt task count for main options
             modifiedDefaultGameOptions(__instance);
 
-            var template = UnityEngine.Object.FindObjectsOfType<StringOption>().FirstOrDefault();
+            // SliderInnner => GameGroup => Game Settings => PlayerOptionsMenu
+            Transform playerOptMenuTrans = __instance.transform.parent.parent.parent;
+            ExtremeOptionMenu exMenu = playerOptMenuTrans.gameObject.AddComponent<ExtremeOptionMenu>();
+
+            var template = Object.FindObjectsOfType<StringOption>().FirstOrDefault();
             if (template == null) { return; }
 
-            // Setup ExtreamRole tab
-            GameObject roleTab = GameObject.Find("RoleTab");
-            GameObject gameTab = GameObject.Find("GameTab");
-            GameObject gameSettings = GameObject.Find("Game Settings"); 
-
-            var (erSettings, erMenu) = createOptionSettingAndMenu(gameSettings, GeneralSetting);
-            var (erTab, tabHighlight) = createTab(roleTab, roleTab.transform.parent, "ExtremeGlobalTab", Path.TabGlobal);
-
-            // 生きてる役職
-            var (crewSettings, crewMenu) = createOptionSettingAndMenu(
-                gameSettings, CrewmateSetting);
-            var (crewTab, crewTabHighlight) = createTab(
-                roleTab, erTab.transform, "ExtremeCrewTab", Path.TabCrewmate);
-            var (impostorSettings, impostorMenu) = createOptionSettingAndMenu(
-                gameSettings, ImpostorSetting);
-            var (impostorTab, impostorTabHighlight) = createTab(
-                roleTab, crewTab.transform, "ExtremeImpostorTab", Path.TabImpostor);
-            var (neutralSettings, neutralMenu) = createOptionSettingAndMenu(
-                gameSettings, NeutralSetting);
-            var (neutralTab, neutralTabHighlight) = createTab(
-                roleTab, impostorTab.transform, "ExtremeNeutralTab", Path.TabNeutral);
-            var (combinationSettings, combinationMenu) = createOptionSettingAndMenu(
-                gameSettings, CombinationSetting);
-            var (combinationTab, combinationTabHighlight) = createTab(
-                roleTab, neutralTab.transform, "ExtremeCombTab", Path.TabCombination);
-
-            // 幽霊役職
-            var (ghostCrewSettings, ghostCrewMenu) = createOptionSettingAndMenu(
-                gameSettings, GhostCrewSetting);
-            var (ghostCrewTab, ghostCrewTabHighlight) = createTab(
-                roleTab, combinationTab.transform, "ExtremeGhostCrewTab", Path.TabGhostCrewmate);
-            var (ghostImpostorSettings, ghostImpostorMenu) = createOptionSettingAndMenu(
-                gameSettings, GhostImpSetting);
-            var (ghostImpostorTab, ghostImpostorTabHighlight) = createTab(
-                roleTab, ghostCrewTab.transform, "ExtremeGhostImpTab", Path.TabGhostImpostor);
-            var (ghostNeutralSettings, ghostNeutralMenu) = createOptionSettingAndMenu(
-                gameSettings, GhostNeutSetting);
-            var (ghostNeutralTab, ghostNeutralTabHighlight) = createTab(
-                roleTab, ghostImpostorTab.transform, "ExtremeGhostNeutTab", Path.TabGhostNeutral);
-
-            gameTab.transform.position += Vector3.left * 3.75f;
-            roleTab.transform.position += Vector3.left * 4.0f;
-            erTab.transform.position += Vector3.left * 3.05f;
-            crewTab.transform.localPosition = Vector3.right * 0.85f;
-            impostorTab.transform.localPosition = Vector3.right * 0.85f;
-            neutralTab.transform.localPosition = Vector3.right * 0.85f;
-            combinationTab.transform.localPosition = Vector3.right * 0.85f;
-            ghostCrewTab.transform.localPosition = Vector3.right * 0.85f;
-            ghostImpostorTab.transform.localPosition = Vector3.right * 0.85f;
-            ghostNeutralTab.transform.localPosition = Vector3.right * 0.85f;
-
-            GameSettingMenu gameSettingMenu = 
-                UnityEngine.Object.FindObjectsOfType<GameSettingMenu>().FirstOrDefault();
-
-            GameObject[] tabs = new GameObject[]
-            { 
-                gameTab,
-                roleTab,
-                erTab,
-                crewTab,
-                impostorTab,
-                neutralTab,
-                combinationTab,
-                ghostCrewTab,
-                ghostImpostorTab,
-                ghostNeutralTab,
-            };
-            for (int i = 0; i < tabs.Length; i++)
-            {
-                PassiveButton button = tabs[i].GetComponentInChildren<PassiveButton>();
-                if (button == null) { continue; }
-                int copiedIndex = i;
-                button.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
-                button.OnClick.AddListener((UnityEngine.Events.UnityAction)(() => {
-
-                    gameSettingMenu.RegularGameSettings.SetActive(false);
-                    gameSettingMenu.RolesSettings.gameObject.SetActive(false);
-                    
-                    erSettings.gameObject.SetActive(false);
-                    crewSettings.gameObject.SetActive(false);
-                    impostorSettings.gameObject.SetActive(false);
-                    neutralSettings.gameObject.SetActive(false);
-                    combinationSettings.gameObject.SetActive(false);
-                    ghostCrewSettings.gameObject.SetActive(false);
-                    ghostImpostorSettings.gameObject.SetActive(false);
-                    ghostNeutralSettings.gameObject.SetActive(false);
-
-                    gameSettingMenu.GameSettingsHightlight.enabled = false;
-                    gameSettingMenu.RolesSettingsHightlight.enabled = false;
-
-                    tabHighlight.enabled = false;
-                    crewTabHighlight.enabled = false;
-                    impostorTabHighlight.enabled = false;
-                    neutralTabHighlight.enabled = false;
-                    combinationTabHighlight.enabled = false;
-                    ghostCrewTabHighlight.enabled = false;
-                    ghostImpostorTabHighlight.enabled = false;
-                    ghostNeutralTabHighlight.enabled = false;
-
-                    switch (copiedIndex)
-                    {
-                        case 0:
-                            gameSettingMenu.RegularGameSettings.SetActive(true);
-                            gameSettingMenu.GameSettingsHightlight.enabled = true;
-                            break;
-                        case 1:
-                            gameSettingMenu.RolesSettings.gameObject.SetActive(true);
-                            gameSettingMenu.RolesSettingsHightlight.enabled = true;
-                            break;
-                        case 2:
-                            erSettings.gameObject.SetActive(true);
-                            tabHighlight.enabled = true;
-                            break;
-                        case 3:
-                            crewSettings.gameObject.SetActive(true);
-                            crewTabHighlight.enabled = true;
-                            break;
-                        case 4:
-                            impostorSettings.gameObject.SetActive(true);
-                            impostorTabHighlight.enabled = true;
-                            break;
-                        case 5:
-                            neutralSettings.gameObject.SetActive(true);
-                            neutralTabHighlight.enabled = true;
-                            break;
-                        case 6:
-                            combinationSettings.gameObject.SetActive(true);
-                            combinationTabHighlight.enabled = true;
-                            break;
-                        case 7:
-                            ghostCrewSettings.gameObject.SetActive(true);
-                            ghostCrewTabHighlight.enabled = true;
-                            break;
-                        case 8:
-                            ghostImpostorSettings.gameObject.SetActive(true);
-                            ghostImpostorTabHighlight.enabled = true;
-                            break;
-                        case 9:
-                            ghostNeutralSettings.gameObject.SetActive(true);
-                            ghostNeutralTabHighlight.enabled = true;
-                            break;
-                        default:
-                            break;
-                    }
-                }));
-            }
-
-            removeAllOption(erMenu);
-            removeAllOption(crewMenu);
-            removeAllOption(impostorMenu);
-            removeAllOption(neutralMenu);
-            removeAllOption(combinationMenu);
-            removeAllOption(ghostCrewMenu);
-            removeAllOption(ghostImpostorMenu);
-            removeAllOption(ghostNeutralMenu);
-
+            /*
             List<OptionBehaviour> erOptions = new List<OptionBehaviour>();
             List<OptionBehaviour> crewOptions = new List<OptionBehaviour>();
             List<OptionBehaviour> impostorOptions = new List<OptionBehaviour>();
@@ -267,77 +113,51 @@ namespace ExtremeRoles.Patches.Option
                 }
                 option.Body.gameObject.SetActive(true);
             }
-
-            erMenu.Children = erOptions.ToArray();
-            erSettings.gameObject.SetActive(false);
-
-            crewMenu.Children = crewOptions.ToArray();
-            crewSettings.gameObject.SetActive(false);
-
-            impostorMenu.Children = impostorOptions.ToArray();
-            impostorSettings.gameObject.SetActive(false);
-
-            neutralMenu.Children = neutralOptions.ToArray();
-            neutralSettings.gameObject.SetActive(false);
-
-            combinationMenu.Children = combinationOptions.ToArray();
-            combinationSettings.gameObject.SetActive(false);
-
-            ghostCrewMenu.Children = ghostCrewOptions.ToArray();
-            ghostCrewSettings.gameObject.SetActive(false);
-
-            ghostImpostorMenu.Children = ghostImpostorOptions.ToArray();
-            ghostImpostorSettings.gameObject.SetActive(false);
-
-            ghostNeutralMenu.Children = ghostNeutralOptions.ToArray();
-            ghostNeutralSettings.gameObject.SetActive(false);
-        }
-
-        private static (GameObject, GameOptionsMenu) createOptionSettingAndMenu(
-            GameObject template, string name)
-        {
-            GameObject setting = UnityEngine.Object.Instantiate(template, template.transform.parent);
-            GameOptionsMenu menu = setting.transform.FindChild("GameGroup").FindChild("SliderInner").GetComponent<GameOptionsMenu>();
-            setting.name = name;
-            menu.name = $"{name}_menu";
-
-            return (setting, menu);
-        }
-
-        private static (GameObject, SpriteRenderer) createTab(
-            GameObject template, Transform parent, string name, string imgPath)
-        {
-            GameObject tab = UnityEngine.Object.Instantiate(template, parent);
-            SpriteRenderer tabHighlight = tab.transform.FindChild(
-                "Hat Button").FindChild("Tab Background").GetComponent<SpriteRenderer>();
-            tab.name = name;
-            tab.transform.FindChild("Hat Button").FindChild(
-                "Icon").GetComponent<SpriteRenderer>().sprite = 
-                    Loader.CreateSpriteFromResources(imgPath, 100f);
-
-            return (tab, tabHighlight);
-        }
-
-        private static void removeAllOption(GameOptionsMenu menu)
-        {
-            // まずは元々入っているオプションを消す
-            foreach (OptionBehaviour option in menu.GetComponentsInChildren<OptionBehaviour>())
-            {
-                UnityEngine.Object.Destroy(option.gameObject);
-            }
+            */
         }
 
         private static bool isFindAndTrans(string name, string transKey)
         {
-            if (GameObject.Find(name) == null) { return false; }
+            GameObject tab = GameObject.Find(name);
+
+            if (tab == null) { return false; }
 
             // Settings setup has already been performed, fixing the title of the tab and returning
-            GameObject.Find(name).transform.FindChild("GameGroup").FindChild(
+            tab.transform.FindChild("GameGroup").FindChild(
                 "Text").GetComponent<TMPro.TextMeshPro>().SetText(Helper.Translation.GetString(transKey));
             return true;
         }
 
 
+        // 以下リファクタ済み
+        private static void changeValueRange(
+            UnhollowerBaseLib.Il2CppReferenceArray<OptionBehaviour> child,
+            string name, float minValue, float maxValue)
+        {
+            NumberOption numOpt = child.FirstOrDefault(x => x.name == name).TryCast<NumberOption>();
+            if (numOpt != null)
+            {
+                numOpt.ValidRange = new FloatRange(minValue, maxValue);
+            }
+        }
+
+        private static bool isInitialized()
+        {
+            foreach (OptionTab tab in System.Enum.GetValues(typeof(OptionTab)))
+            {
+                if (isFindAndTrans(
+                        string.Format(
+                            ExtremeOptionMenu.MenuNameTemplate, tab.ToString()),
+                        string.Empty)
+                    )
+                { 
+                    return true; 
+                }
+            }
+
+            return false;
+        }
+        /*
         private static bool isInitialized() =>
             isFindAndTrans(GeneralSetting, "ERGlobalSetting") ||
             isFindAndTrans(CrewmateSetting, "ERCrewmateRoleSetting") ||
@@ -347,7 +167,7 @@ namespace ExtremeRoles.Patches.Option
             isFindAndTrans(GhostCrewSetting, "ERGhostCrewmateRoleSetting") ||
             isFindAndTrans(GhostImpSetting, "ERGhostImpostorRoleSetting") ||
             isFindAndTrans(GhostNeutSetting, "ERGhostNeutralRoleSetting");
-
+        */
         private static void modifiedDefaultGameOptions(GameOptionsMenu instance)
         {
             UnhollowerBaseLib.Il2CppReferenceArray<OptionBehaviour> child = instance.Children;
@@ -362,17 +182,6 @@ namespace ExtremeRoles.Patches.Option
             changeValueRange(child, "NumShortTasks" , 0f, 23f);
             changeValueRange(child, "NumLongTasks"  , 0f, 15f);
         }
-
-        private static void changeValueRange(
-            UnhollowerBaseLib.Il2CppReferenceArray<OptionBehaviour> child,
-            string name, float minValue, float maxValue)
-        {
-            NumberOption numOpt = child.FirstOrDefault(x => x.name == name).TryCast<NumberOption>();
-            if (numOpt != null)
-            {
-                numOpt.ValidRange = new FloatRange(minValue, maxValue);
-            }
-        }
     }
 
 
@@ -385,7 +194,9 @@ namespace ExtremeRoles.Patches.Option
         public static void Postfix(GameOptionsMenu __instance)
         {
             var gameSettingMenu = UnityEngine.Object.FindObjectsOfType<GameSettingMenu>().FirstOrDefault();
-            if (gameSettingMenu.RegularGameSettings.active || gameSettingMenu.RolesSettings.gameObject.active) { return; }
+            
+            if (gameSettingMenu.RegularGameSettings.active || 
+                gameSettingMenu.RolesSettings.gameObject.active) { return; }
 
             timer += Time.deltaTime;
             if (timer < 0.1f) { return; }
@@ -395,47 +206,12 @@ namespace ExtremeRoles.Patches.Option
 
             float offset = 2.75f;
 
-            bool isGeneralSetting = __instance.name == $"{GameOptionsMenuStartPatch.GeneralSetting}_menu";
-            bool isCrewSetting = __instance.name == $"{GameOptionsMenuStartPatch.CrewmateSetting}_menu";
-            bool isImpostorSetting = __instance.name == $"{GameOptionsMenuStartPatch.ImpostorSetting}_menu";
-            bool isNeutralSetting = __instance.name == $"{GameOptionsMenuStartPatch.NeutralSetting}_menu";
-            bool isCombinationSetting = __instance.name == $"{GameOptionsMenuStartPatch.CombinationSetting}_menu";
-            bool isGhostCrewSetting = __instance.name == $"{GameOptionsMenuStartPatch.GhostCrewSetting}_menu";
-            bool isGhostImpSetting = __instance.name == $"{GameOptionsMenuStartPatch.GhostImpSetting}_menu";
-            bool isGhostNeutSetting = __instance.name == $"{GameOptionsMenuStartPatch.GhostNeutSetting}_menu";
+            string name = __instance.name;
 
             foreach (IOption option in OptionHolder.AllOption.Values)
             {
-                switch (option.Tab)
-                {
-                    case OptionTab.General:
-                        if (isGeneralSetting) { break; }
-                        continue;
-                    case OptionTab.Crewmate:
-                        if (isCrewSetting) { break; }
-                        continue;
-                    case OptionTab.Impostor:
-                        if (isImpostorSetting) { break; }
-                        continue;
-                    case OptionTab.Neutral:
-                        if (isNeutralSetting) { break; }
-                        continue;
-                    case OptionTab.Combination:
-                        if (isCombinationSetting) { break; }
-                        continue;
-                    case OptionTab.GhostCrewmate:
-                        if (isGhostCrewSetting) { break; }
-                        continue;
-                    case OptionTab.GhostImpostor:
-                        if (isGhostImpSetting) { break; }
-                        continue;
-                    case OptionTab.GhostNeutral:
-                        if (isGhostNeutSetting) { break; }
-                        continue;
-                    default:
-                        if (isGeneralSetting) { break; }
-                        continue;
-                }
+                if (!name.Equals($"{string.Format(
+                        ExtremeOptionMenu.MenuNameTemplate, option.Tab.ToString())}_menu")) { continue; }
 
 
                 if (option?.Body != null && option.Body.gameObject != null)
