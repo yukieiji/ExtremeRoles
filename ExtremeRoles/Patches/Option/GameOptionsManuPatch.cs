@@ -37,83 +37,7 @@ namespace ExtremeRoles.Patches.Option
 
             // SliderInnner => GameGroup => Game Settings => PlayerOptionsMenu
             Transform playerOptMenuTrans = __instance.transform.parent.parent.parent;
-            ExtremeOptionMenu exMenu = playerOptMenuTrans.gameObject.AddComponent<ExtremeOptionMenu>();
-
-            var template = Object.FindObjectsOfType<StringOption>().FirstOrDefault();
-            if (template == null) { return; }
-
-            /*
-            List<OptionBehaviour> erOptions = new List<OptionBehaviour>();
-            List<OptionBehaviour> crewOptions = new List<OptionBehaviour>();
-            List<OptionBehaviour> impostorOptions = new List<OptionBehaviour>();
-            List<OptionBehaviour> neutralOptions = new List<OptionBehaviour>();
-            List<OptionBehaviour> combinationOptions = new List<OptionBehaviour>();
-            List<OptionBehaviour> ghostCrewOptions = new List<OptionBehaviour>();
-            List<OptionBehaviour> ghostImpostorOptions = new List<OptionBehaviour>();
-            List<OptionBehaviour> ghostNeutralOptions = new List<OptionBehaviour>();
-
-            List<Transform> menu = new List<Transform>()
-            { 
-                erMenu.transform,
-                crewMenu.transform,
-                impostorMenu.transform,
-                neutralMenu.transform,
-                combinationMenu.transform,
-                ghostCrewMenu.transform,
-                ghostImpostorMenu.transform,
-                ghostNeutralMenu.transform,
-            };
-
-            var optionsList = OptionHolder.AllOption.Values.ToList();
-
-            for (int i = 0; i < optionsList.Count; ++i)
-            {
-                IOption option = optionsList[i];
-                int intedTab = (int)option.Tab;
-                if (option.Body == null)
-                {
-                    StringOption stringOption = UnityEngine.Object.Instantiate(template, menu[intedTab]);
-                    stringOption.OnValueChanged = new Action<OptionBehaviour>((o) => { });
-                    stringOption.TitleText.text = option.GetTranslatedName();
-                    stringOption.Value = stringOption.oldValue = option.CurSelection;
-                    stringOption.ValueText.text = option.GetTranslatedValue();
-
-                    option.SetOptionBehaviour(stringOption);
-                    switch (intedTab)
-                    {
-                        case 0:
-                            erOptions.Add(stringOption);
-                            break;
-                        case 1:
-                            crewOptions.Add(stringOption);
-                            break;
-                        case 2:
-                            impostorOptions.Add(stringOption);
-                            break;
-                        case 3:
-                            neutralOptions.Add(stringOption);
-                            break;
-                        case 4:
-                            combinationOptions.Add(stringOption);
-                            break;
-                        case 5:
-                            ghostCrewOptions.Add(stringOption);
-                            break;
-                        case 6:
-                            ghostImpostorOptions.Add(stringOption);
-                            break;
-                        case 7:
-                            ghostNeutralOptions.Add(stringOption);
-                            break;
-                        default:
-                            erOptions.Add(stringOption);
-                            break;
-                    }
-                    
-                }
-                option.Body.gameObject.SetActive(true);
-            }
-            */
+            playerOptMenuTrans.gameObject.AddComponent<ExtremeOptionMenu>();
         }
 
         private static bool isFindAndTrans(string name, string transKey)
@@ -157,17 +81,7 @@ namespace ExtremeRoles.Patches.Option
 
             return false;
         }
-        /*
-        private static bool isInitialized() =>
-            isFindAndTrans(GeneralSetting, "ERGlobalSetting") ||
-            isFindAndTrans(CrewmateSetting, "ERCrewmateRoleSetting") ||
-            isFindAndTrans(ImpostorSetting, "ERImpostorRoleSetting") ||
-            isFindAndTrans(NeutralSetting, "ERNeutralRoleSetting") ||
-            isFindAndTrans(CombinationSetting, "ERCombinationRoleSetting") ||
-            isFindAndTrans(GhostCrewSetting, "ERGhostCrewmateRoleSetting") ||
-            isFindAndTrans(GhostImpSetting, "ERGhostImpostorRoleSetting") ||
-            isFindAndTrans(GhostNeutSetting, "ERGhostNeutralRoleSetting");
-        */
+
         private static void modifiedDefaultGameOptions(GameOptionsMenu instance)
         {
             UnhollowerBaseLib.Il2CppReferenceArray<OptionBehaviour> child = instance.Children;
@@ -193,7 +107,7 @@ namespace ExtremeRoles.Patches.Option
 
         public static void Postfix(GameOptionsMenu __instance)
         {
-            var gameSettingMenu = UnityEngine.Object.FindObjectsOfType<GameSettingMenu>().FirstOrDefault();
+            var gameSettingMenu = Object.FindObjectsOfType<GameSettingMenu>().FirstOrDefault();
             
             if (gameSettingMenu.RegularGameSettings.active || 
                 gameSettingMenu.RolesSettings.gameObject.active) { return; }

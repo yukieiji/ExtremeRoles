@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using UnityEngine;
 using UnityEngine.Events;
@@ -34,10 +35,11 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             retransformTabButton();
         }
 
-        private OptionMenuTab createMenu(OptionTab tab)
+        private OptionMenuTab createMenu(OptionTab tab, StringOption optionTemplate)
         {
             OptionMenuTab menu = OptionMenuTab.Create(tab, this.settingMenuTemplate);
             menu.CreateTabButton(this.tabTemplate, this.menu.Tabs);
+            menu.SetOptionTemplate(optionTemplate);
             
             return menu;
         }
@@ -109,9 +111,16 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
         private void setupOptionMenu()
         {
+            var stringOptionTemplate = FindObjectsOfType<StringOption>().FirstOrDefault();
+
             foreach (OptionTab tab in Enum.GetValues(typeof(OptionTab)))
             {
-                this.allMenu.Add(tab, createMenu(tab));
+                this.allMenu.Add(tab, createMenu(tab, stringOptionTemplate));
+            }
+
+            foreach (var (id, option) in OptionHolder.AllOption)
+            {
+                this.allMenu[option.Tab].AddOptionId(id);
             }
         }
 
@@ -128,6 +137,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             }
 
             menu.Children = new OptionBehaviour[] { };
+
             template.name = TemplateName;
             template.SetActive(false);
 
