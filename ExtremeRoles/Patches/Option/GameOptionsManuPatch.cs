@@ -16,18 +16,8 @@ namespace ExtremeRoles.Patches.Option
     [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Start))]
     public static class GameOptionsMenuStartPatch
     {
-        public const string GeneralSetting = "ExtremeRoleSettings";
-        public const string CrewmateSetting = "ExtremeCrewmateSettings";
-        public const string ImpostorSetting = "ExtremeImpostorSettings";
-        public const string NeutralSetting = "ExtremeNeutralSettings";
-        public const string CombinationSetting = "ExtremeCombinationSettings";
-        public const string GhostCrewSetting = "ExtremeGhostCrewSettings";
-        public const string GhostImpSetting = "ExtremeGhostImpSettings";
-        public const string GhostNeutSetting = "ExtremeGhostNeutSettings";
-
         public static void Postfix(GameOptionsMenu __instance)
         {
-
             if (GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal) { return; }
 
             if (isInitialized()) { return; }
