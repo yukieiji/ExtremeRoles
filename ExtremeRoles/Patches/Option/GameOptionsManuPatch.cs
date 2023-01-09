@@ -20,30 +20,17 @@ namespace ExtremeRoles.Patches.Option
         {
             if (GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal) { return; }
 
-            if (isInitialized()) { return; }
+            // SliderInnner => GameGroup => Game Settings => PlayerOptionsMenu
+            GameObject playerOptMenuObj = __instance.transform.parent.parent.parent.gameObject;
+
+            if (playerOptMenuObj.GetComponent<ExtremeOptionMenu>() != null) { return; }
 
             // Adapt task count for main options
             modifiedDefaultGameOptions(__instance);
 
-            // SliderInnner => GameGroup => Game Settings => PlayerOptionsMenu
-            Transform playerOptMenuTrans = __instance.transform.parent.parent.parent;
-            playerOptMenuTrans.gameObject.AddComponent<ExtremeOptionMenu>();
+            playerOptMenuObj.AddComponent<ExtremeOptionMenu>();
         }
 
-        private static bool isFindAndTrans(string name, string transKey)
-        {
-            GameObject tab = GameObject.Find(name);
-
-            if (tab == null) { return false; }
-
-            // Settings setup has already been performed, fixing the title of the tab and returning
-            tab.transform.FindChild("GameGroup").FindChild(
-                "Text").GetComponent<TMPro.TextMeshPro>().SetText(Helper.Translation.GetString(transKey));
-            return true;
-        }
-
-
-        // 以下リファクタ済み
         private static void changeValueRange(
             UnhollowerBaseLib.Il2CppReferenceArray<OptionBehaviour> child,
             string name, float minValue, float maxValue)
@@ -53,23 +40,6 @@ namespace ExtremeRoles.Patches.Option
             {
                 numOpt.ValidRange = new FloatRange(minValue, maxValue);
             }
-        }
-
-        private static bool isInitialized()
-        {
-            foreach (OptionTab tab in System.Enum.GetValues(typeof(OptionTab)))
-            {
-                if (isFindAndTrans(
-                        string.Format(
-                            ExtremeOptionMenu.MenuNameTemplate, tab.ToString()),
-                        string.Empty)
-                    )
-                { 
-                    return true; 
-                }
-            }
-
-            return false;
         }
 
         private static void modifiedDefaultGameOptions(GameOptionsMenu instance)
@@ -87,8 +57,6 @@ namespace ExtremeRoles.Patches.Option
             changeValueRange(child, "NumLongTasks"  , 0f, 15f);
         }
     }
-
-
 
     [HarmonyPatch(typeof(GameOptionsMenu), nameof(GameOptionsMenu.Update))]
     public static class GameOptionsMenuUpdatePatch

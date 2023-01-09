@@ -4,6 +4,7 @@ using UnityEngine;
 
 using ExtremeRoles.Resources;
 using System.Collections.Generic;
+using TMPro;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour
 {
@@ -14,6 +15,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
         private SpriteRenderer tabHighLight;
         private GameOptionsMenu menuBody;
+        private TextMeshPro tabName;
 
         private StringOption template;
         private OptionTab tabType;
@@ -27,14 +29,15 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                 template, template.transform.parent);
 
             OptionMenuTab menu = obj.AddComponent<OptionMenuTab>();
-            menu.menuBody = obj.gameObject.transform.FindChild("GameGroup").FindChild(
-                "SliderInner").GetComponent<GameOptionsMenu>();
+            Transform gameGroupTrans = obj.transform.FindChild("GameGroup");
 
+            menu.menuBody = gameGroupTrans.FindChild("SliderInner").GetComponent<GameOptionsMenu>();
             menu.tabType = tab;
             menu.useOptionId.Clear();
+            menu.tabName = gameGroupTrans.FindChild("Text").GetComponent<TextMeshPro>();
 
             string name = string.Format(ExtremeOptionMenu.MenuNameTemplate, tab.ToString());
-
+            
             obj.gameObject.name = name;
             menu.menuBody.name = $"{name}_menu";
 
@@ -73,6 +76,12 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             }
 
             this.menuBody.Children = menuOption.ToArray();
+        }
+
+        public void Start()
+        {
+            this.tabName.SetText(
+                Helper.Translation.GetString(this.gameObject.name));
         }
 
         public void AddOptionId(int newId)
