@@ -251,31 +251,31 @@ namespace ExtremeRoles.Module
                 (newSelection + length) % length,
                 0, length - 1);
 
-            if (this.behaviour != null && this.behaviour is StringOption stringOption)
+            if (this.behaviour is StringOption stringOption)
             {
                 stringOption.oldValue = stringOption.Value = this.curSelection;
                 stringOption.ValueText.text = this.GetTranslatedValue();
-                if (this.withUpdateOption.Count != 0)
-                {
-                    foreach (IWithUpdatableOption<OutType> option in this.withUpdateOption)
-                    {
-                        option.Update(this.GetValue());
-                    }
-                }
+            }
 
-                if (AmongUsClient.Instance?.AmHost == true && CachedPlayerControl.LocalPlayer)
+            if (this.withUpdateOption.Count != 0)
+            {
+                foreach (IWithUpdatableOption<OutType> option in this.withUpdateOption)
                 {
-                    if (this.id == 0)
-                    {
-                        OptionHolder.SwitchPreset(this.curSelection); // Switch presets
-                    }
-                    else if (this.entry != null)
-                    {
-                        this.entry.Value = this.curSelection; // Save selection to config
-                    }
-
-                    OptionHolder.ShareOptionSelections();// Share all selections
+                    option.Update(this.GetValue());
                 }
+            }
+
+            if (AmongUsClient.Instance?.AmHost == true && CachedPlayerControl.LocalPlayer)
+            {
+                if (this.id == 0)
+                {
+                    OptionHolder.SwitchPreset(this.curSelection); // Switch presets
+                }
+                else if (this.entry != null)
+                {
+                    this.entry.Value = this.curSelection; // Save selection to config
+                }
+                OptionHolder.ShareOptionSelections();// Share all selections
             }
         }
 
