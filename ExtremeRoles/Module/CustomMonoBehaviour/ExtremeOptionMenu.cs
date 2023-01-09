@@ -4,87 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-using ExtremeRoles.Resources;
-
 namespace ExtremeRoles.Module.CustomMonoBehaviour
 {
     [Il2CppRegister]
     public sealed class ExtremeOptionMenu : MonoBehaviour
     {
-        private class Menu
-        {
-            public GameObject Obj { get; private set; }
-            public GameOptionsMenu Component { get; private set; }
-
-            public GameObject Tab { get; private set; }
-            public SpriteRenderer TabHighLight { get; private set; }
-
-            private OptionTab tabType;
-
-            public Menu(OptionTab tab)
-            {
-                this.tabType = tab;
-            }
-
-            public void CreateTabButton(GameObject template, GameObject parent)
-            {
-                GameObject tabParent = Instantiate(template, parent.transform);
-                tabParent.name = $"{this.tabType}_Tab";
-
-                // Tabの構造はGameTab => ColorButton（こいつだけ）なので一個だけ取得
-                Transform colorButtonTrans = tabParent.transform.GetChild(0);
-                
-                this.Tab = colorButtonTrans.gameObject;
-                this.TabHighLight = colorButtonTrans.FindChild(
-                    "Tab Background").GetComponentInChildren<SpriteRenderer>();
-                
-                string imgPath = this.tabType switch
-                {
-                    OptionTab.General  => Path.TabGlobal,
-
-                    OptionTab.Crewmate => Path.TabCrewmate,
-                    OptionTab.Impostor => Path.TabImpostor,
-                    OptionTab.Neutral  => Path.TabNeutral,
-
-                    OptionTab.Combination => Path.TabCombination,
-                    
-                    OptionTab.GhostCrewmate => Path.TabGhostCrewmate,
-                    OptionTab.GhostImpostor => Path.TabGhostImpostor,
-                    OptionTab.GhostNeutral  => Path.TabGhostNeutral,
-
-                    _ => Path.TestButton,
-                };
-
-
-                colorButtonTrans.FindChild("Icon").GetComponent<SpriteRenderer>().sprite =
-                    Loader.CreateSpriteFromResources(imgPath, 150f);
-                this.TabHighLight.enabled = false;
-            }
-
-            public void CreateMenuBody(GameObject template)
-            {
-                this.Obj = Instantiate(
-                    template, template.transform.parent);
-                this.Component = this.Obj.transform.FindChild("GameGroup").FindChild(
-                    "SliderInner").GetComponent<GameOptionsMenu>();
-
-                string name = string.Format(MenuNameTemplate, this.tabType.ToString());
-
-                this.Obj.name = string.Format(MenuNameTemplate, this.tabType.ToString());
-                this.Component.name = $"{name}_menu";
-            }
-
-            public void SetActive(bool activate)
-            {
-                this.Obj.gameObject.SetActive(activate);
-                this.TabHighLight.enabled = activate;
-            }
-        }
-
         public const string MenuNameTemplate = "ExtremeRoles_{0}Settings";
         public const string TemplateName = "menuTemplate";
 
-        private Dictionary<OptionTab, Menu> allMenu = new Dictionary<OptionTab, Menu>();
+        private Dictionary<OptionTab, OptionMenuTab> allMenu = new Dictionary<OptionTab, OptionMenuTab>();
 
         private GameSettingMenu menu;
         private GameObject settingMenuTemplate;
@@ -106,11 +34,10 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             retransformTabButton();
         }
 
-        private Menu createMenu(OptionTab tab)
+        private OptionMenuTab createMenu(OptionTab tab)
         {
-            Menu menu = new Menu(tab);
+            OptionMenuTab menu = OptionMenuTab.Create(tab, this.settingMenuTemplate);
             menu.CreateTabButton(this.tabTemplate, this.menu.Tabs);
-            menu.CreateMenuBody(this.settingMenuTemplate);
             
             return menu;
         }
@@ -130,7 +57,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                     this.menu.GameSettingsHightlight.enabled = false;
                     this.menu.RolesSettingsHightlight.enabled = false;
 
-                    foreach (Menu menu in this.allMenu.Values)
+                    foreach (OptionMenuTab menu in this.allMenu.Values)
                     {
                         menu.SetActive(false);
                     }
@@ -149,13 +76,13 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                 }));
 
             reconstructButton(
-                this.tabTemplate,
+                this.menu.Tabs.transform.FindChild("RoleTab").gameObject,
                 (UnityAction)(() => {
                     this.menu.RolesSettings.gameObject.SetActive(true);
                     this.menu.RolesSettingsHightlight.enabled = true;
                 }));
 
-            foreach (Menu menu in this.allMenu.Values)
+            foreach (OptionMenuTab menu in this.allMenu.Values)
             {
                 reconstructButton(
                     menu.Tab,
