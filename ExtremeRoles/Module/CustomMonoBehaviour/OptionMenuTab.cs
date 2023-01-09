@@ -101,26 +101,9 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             this.tabHighLight = colorButtonTrans.FindChild(
                 "Tab Background").GetComponentInChildren<SpriteRenderer>();
 
-            string imgPath = this.tabType switch
-            {
-                OptionTab.General => Path.TabGlobal,
-
-                OptionTab.Crewmate => Path.TabCrewmate,
-                OptionTab.Impostor => Path.TabImpostor,
-                OptionTab.Neutral => Path.TabNeutral,
-
-                OptionTab.Combination => Path.TabCombination,
-
-                OptionTab.GhostCrewmate => Path.TabGhostCrewmate,
-                OptionTab.GhostImpostor => Path.TabGhostImpostor,
-                OptionTab.GhostNeutral => Path.TabGhostNeutral,
-
-                _ => Path.TestButton,
-            };
-
-
             colorButtonTrans.FindChild("Icon").GetComponent<SpriteRenderer>().sprite =
-                Loader.CreateSpriteFromResources(imgPath, 150f);
+                Loader.CreateSpriteFromResources(
+                    string.Format(Path.TabImagePathFormat, this.tabType), 150f);
             this.tabHighLight.enabled = false;
         }
 
