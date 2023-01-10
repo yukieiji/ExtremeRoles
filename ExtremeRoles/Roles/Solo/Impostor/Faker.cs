@@ -179,7 +179,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     Object.Destroy(emptyPet.gameObject);
                 }
                 string petId = cosmicInfo.OutfitInfo.PetId;
-                if (cosmicInfo.OutfitInfo.PetId != defaultPetId)
+                if (petId != PetData.EmptyId)
                 {
                     PetBehaviour pet = Object.Instantiate(
                         FastDestroyableSingleton<HatManager>.Instance.GetPetById(
