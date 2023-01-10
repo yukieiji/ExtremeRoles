@@ -10,6 +10,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using AmongUs.Data;
+using ExtremeRoles.GameMode.Option.ShipGlobal;
 
 namespace ExtremeRoles.Patches.Manager
 {
@@ -70,7 +71,7 @@ namespace ExtremeRoles.Patches.Manager
             ExtremeRolesPlugin.Info.HideInfoOverlay();
 
             if (GameOptionsManager.Instance.currentGameMode == AmongUs.GameOptions.GameModes.Normal &&
-                OptionHolder.AllOption[(int)OptionHolder.CommonOptionKey.RandomMap].GetValue())
+                OptionHolder.AllOption[(int)GlobalOption.RandomMap].GetValue())
             {
                 // 0 = Skeld
                 // 1 = Mira HQ

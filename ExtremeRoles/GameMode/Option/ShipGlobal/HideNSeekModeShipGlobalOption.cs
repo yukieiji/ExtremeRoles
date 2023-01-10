@@ -35,65 +35,65 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
         public void Load()
         {
             DisableVent = IShipGlobalOption.GetCommonOptionValue(
-                OptionHolder.CommonOptionKey.DisableVent);
+                GlobalOption.DisableVent);
 
             Admin = new AdminOption()
             {
                 DisableAdmin = IShipGlobalOption.GetCommonOptionValue(
-                    OptionHolder.CommonOptionKey.IsRemoveAdmin),
+                    GlobalOption.IsRemoveAdmin),
                 AirShipEnable = (AirShipAdminMode)IShipGlobalOption.GetCommonOptionValue(
-                    OptionHolder.CommonOptionKey.AirShipEnableAdmin),
+                    GlobalOption.AirShipEnableAdmin),
                 EnableAdminLimit = IShipGlobalOption.GetCommonOptionValue(
-                    OptionHolder.CommonOptionKey.EnableAdminLimit),
+                    GlobalOption.EnableAdminLimit),
                 AdminLimitTime = IShipGlobalOption.GetCommonOptionValue(
-                    OptionHolder.CommonOptionKey.AdminLimitTime),
+                    GlobalOption.AdminLimitTime),
             };
             Vital = new VitalOption()
             {
                 DisableVital = IShipGlobalOption.GetCommonOptionValue(
-                    OptionHolder.CommonOptionKey.IsRemoveVital),
+                    GlobalOption.IsRemoveVital),
                 EnableVitalLimit = IShipGlobalOption.GetCommonOptionValue(
-                    OptionHolder.CommonOptionKey.EnableVitalLimit),
+                    GlobalOption.EnableVitalLimit),
                 VitalLimitTime = IShipGlobalOption.GetCommonOptionValue(
-                    OptionHolder.CommonOptionKey.VitalLimitTime),
+                    GlobalOption.VitalLimitTime),
             };
             Security = new SecurityOption()
             {
                 DisableSecurity = IShipGlobalOption.GetCommonOptionValue(
-                    OptionHolder.CommonOptionKey.IsRemoveSecurity),
+                    GlobalOption.IsRemoveSecurity),
                 EnableSecurityLimit = IShipGlobalOption.GetCommonOptionValue(
-                    OptionHolder.CommonOptionKey.EnableSecurityLimit),
+                    GlobalOption.EnableSecurityLimit),
                 SecurityLimitTime = IShipGlobalOption.GetCommonOptionValue(
-                    OptionHolder.CommonOptionKey.SecurityLimitTime),
+                    GlobalOption.SecurityLimitTime),
             };
 
             IsSameNeutralSameWin = IShipGlobalOption.GetCommonOptionValue(
-                OptionHolder.CommonOptionKey.IsSameNeutralSameWin);
+                GlobalOption.IsSameNeutralSameWin);
             DisableNeutralSpecialForceEnd = IShipGlobalOption.GetCommonOptionValue(
-                OptionHolder.CommonOptionKey.DisableNeutralSpecialForceEnd);
+                GlobalOption.DisableNeutralSpecialForceEnd);
         }
 
         public void BuildHudString(ref StringBuilder builder)
         {
-            foreach (OptionHolder.CommonOptionKey id in new OptionHolder.CommonOptionKey[]
+            foreach (GlobalOption id in new GlobalOption[]
             {
-                OptionHolder.CommonOptionKey.DisableVent,
+                GlobalOption.DisableVent,
                 
-                OptionHolder.CommonOptionKey.IsRemoveAdmin,
-                OptionHolder.CommonOptionKey.AirShipEnableAdmin,
-                OptionHolder.CommonOptionKey.EnableAdminLimit,
-                OptionHolder.CommonOptionKey.AdminLimitTime,
+                GlobalOption.IsRemoveAdmin,
+                GlobalOption.AirShipEnableAdmin,
+                GlobalOption.EnableAdminLimit,
+                GlobalOption.AdminLimitTime,
                 
-                OptionHolder.CommonOptionKey.IsRemoveVital,
-                OptionHolder.CommonOptionKey.EnableVitalLimit,
-                OptionHolder.CommonOptionKey.VitalLimitTime,
+                GlobalOption.IsRemoveVital,
+                GlobalOption.EnableVitalLimit,
+                GlobalOption.VitalLimitTime,
 
-                OptionHolder.CommonOptionKey.IsRemoveSecurity,
-                OptionHolder.CommonOptionKey.EnableSecurityLimit,
-                OptionHolder.CommonOptionKey.SecurityLimitTime,
+                GlobalOption.IsRemoveSecurity,
+                GlobalOption.EnableSecurityLimit,
+                GlobalOption.SecurityLimitTime,
 
-                OptionHolder.CommonOptionKey.IsSameNeutralSameWin,
-                OptionHolder.CommonOptionKey.DisableNeutralSpecialForceEnd,
+                GlobalOption.IsSameNeutralSameWin,
+                GlobalOption.DisableNeutralSpecialForceEnd,
             })
             {
                 string optionStr = OptionHolder.AllOption[(int)id].ToHudString();

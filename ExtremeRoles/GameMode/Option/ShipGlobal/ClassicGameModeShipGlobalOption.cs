@@ -35,102 +35,79 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
         public void Load()
         {
             MaxMeetingCount = IShipGlobalOption.GetCommonOptionValue(
-                OptionHolder.CommonOptionKey.NumMeating);
+                GlobalOption.NumMeating);
 
             IsChangeVoteAreaButtonSortArg = IShipGlobalOption.GetCommonOptionValue(
-                OptionHolder.CommonOptionKey.ChangeMeetingVoteAreaSort);
+                GlobalOption.ChangeMeetingVoteAreaSort);
             IsFixedVoteAreaPlayerLevel = IShipGlobalOption.GetCommonOptionValue(
-                OptionHolder.CommonOptionKey.FixedMeetingPlayerLevel);
+                GlobalOption.FixedMeetingPlayerLevel);
             IsBlockSkipInMeeting = IShipGlobalOption.GetCommonOptionValue(
-                OptionHolder.CommonOptionKey.DisableSkipInEmergencyMeeting);
+                GlobalOption.DisableSkipInEmergencyMeeting);
             DisableSelfVote = IShipGlobalOption.GetCommonOptionValue(
-                OptionHolder.CommonOptionKey.DisableSelfVote);
+                GlobalOption.DisableSelfVote);
 
             DisableVent = IShipGlobalOption.GetCommonOptionValue(
-                OptionHolder.CommonOptionKey.DisableVent);
+                GlobalOption.DisableVent);
             EngineerUseImpostorVent = IShipGlobalOption.GetCommonOptionValue(
-                OptionHolder.CommonOptionKey.EngineerUseImpostorVent);
+                GlobalOption.EngineerUseImpostorVent);
             CanKillVentInPlayer = IShipGlobalOption.GetCommonOptionValue(
-                OptionHolder.CommonOptionKey.CanKillVentInPlayer);
+                GlobalOption.CanKillVentInPlayer);
             IsAllowParallelMedbayScan = IShipGlobalOption.GetCommonOptionValue(
-                OptionHolder.CommonOptionKey.ParallelMedBayScans);
+                GlobalOption.ParallelMedBayScans);
             IsAutoSelectRandomSpawn = IShipGlobalOption.GetCommonOptionValue(
-                OptionHolder.CommonOptionKey.IsAutoSelectRandomSpawn);
+                GlobalOption.IsAutoSelectRandomSpawn);
 
             Admin = new AdminOption()
             {
                 DisableAdmin = IShipGlobalOption.GetCommonOptionValue(
-                    OptionHolder.CommonOptionKey.IsRemoveAdmin),
+                    GlobalOption.IsRemoveAdmin),
                 AirShipEnable = (AirShipAdminMode)IShipGlobalOption.GetCommonOptionValue(
-                    OptionHolder.CommonOptionKey.AirShipEnableAdmin),
+                    GlobalOption.AirShipEnableAdmin),
                 EnableAdminLimit = IShipGlobalOption.GetCommonOptionValue(
-                    OptionHolder.CommonOptionKey.EnableAdminLimit),
+                    GlobalOption.EnableAdminLimit),
                 AdminLimitTime = IShipGlobalOption.GetCommonOptionValue(
-                    OptionHolder.CommonOptionKey.AdminLimitTime),
+                    GlobalOption.AdminLimitTime),
             };
             Vital = new VitalOption()
             {
                 DisableVital = IShipGlobalOption.GetCommonOptionValue(
-                    OptionHolder.CommonOptionKey.IsRemoveVital),
+                    GlobalOption.IsRemoveVital),
                 EnableVitalLimit = IShipGlobalOption.GetCommonOptionValue(
-                    OptionHolder.CommonOptionKey.EnableVitalLimit),
+                    GlobalOption.EnableVitalLimit),
                 VitalLimitTime = IShipGlobalOption.GetCommonOptionValue(
-                    OptionHolder.CommonOptionKey.VitalLimitTime),
+                    GlobalOption.VitalLimitTime),
             };
             Security = new SecurityOption()
             {
                 DisableSecurity = IShipGlobalOption.GetCommonOptionValue(
-                    OptionHolder.CommonOptionKey.IsRemoveSecurity),
+                    GlobalOption.IsRemoveSecurity),
                 EnableSecurityLimit = IShipGlobalOption.GetCommonOptionValue(
-                    OptionHolder.CommonOptionKey.EnableSecurityLimit),
+                    GlobalOption.EnableSecurityLimit),
                 SecurityLimitTime = IShipGlobalOption.GetCommonOptionValue(
-                    OptionHolder.CommonOptionKey.SecurityLimitTime),
+                    GlobalOption.SecurityLimitTime),
             };
 
             DisableTaskWinWhenNoneTaskCrew = IShipGlobalOption.GetCommonOptionValue(
-                OptionHolder.CommonOptionKey.DisableTaskWinWhenNoneTaskCrew);
+                GlobalOption.DisableTaskWinWhenNoneTaskCrew);
             DisableTaskWin = IShipGlobalOption.GetCommonOptionValue(
-                OptionHolder.CommonOptionKey.DisableTaskWin);
+                GlobalOption.DisableTaskWin);
             IsSameNeutralSameWin = IShipGlobalOption.GetCommonOptionValue(
-                OptionHolder.CommonOptionKey.IsSameNeutralSameWin);
+                GlobalOption.IsSameNeutralSameWin);
             DisableNeutralSpecialForceEnd = IShipGlobalOption.GetCommonOptionValue(
-                OptionHolder.CommonOptionKey.DisableNeutralSpecialForceEnd);
+                GlobalOption.DisableNeutralSpecialForceEnd);
 
             IsAssignNeutralToVanillaCrewGhostRole = IShipGlobalOption.GetCommonOptionValue(
-                OptionHolder.CommonOptionKey.IsAssignNeutralToVanillaCrewGhostRole);
+                GlobalOption.IsAssignNeutralToVanillaCrewGhostRole);
             IsRemoveAngleIcon = IShipGlobalOption.GetCommonOptionValue(
-                OptionHolder.CommonOptionKey.IsRemoveAngleIcon);
+                GlobalOption.IsRemoveAngleIcon);
             IsBlockGAAbilityReport = IShipGlobalOption.GetCommonOptionValue(
-                OptionHolder.CommonOptionKey.IsBlockGAAbilityReport);
+                GlobalOption.IsBlockGAAbilityReport);
         }
 
         public void BuildHudString(ref StringBuilder builder)
         {
-            foreach (OptionHolder.CommonOptionKey id in Enum.GetValues(
-                typeof(OptionHolder.CommonOptionKey)))
+            foreach (GlobalOption id in Enum.GetValues(typeof(GlobalOption)))
             {
-                switch (id)
-                {
-                    case OptionHolder.CommonOptionKey.PresetSelection:
-                    case OptionHolder.CommonOptionKey.UseStrongRandomGen:
-                    case OptionHolder.CommonOptionKey.UsePrngAlgorithm:
-                    case OptionHolder.CommonOptionKey.MinCrewmateRoles:
-                    case OptionHolder.CommonOptionKey.MaxCrewmateRoles:
-                    case OptionHolder.CommonOptionKey.MinNeutralRoles:
-                    case OptionHolder.CommonOptionKey.MaxNeutralRoles:
-                    case OptionHolder.CommonOptionKey.MinImpostorRoles:
-                    case OptionHolder.CommonOptionKey.MaxImpostorRoles:
-                    case OptionHolder.CommonOptionKey.MinCrewmateGhostRoles:
-                    case OptionHolder.CommonOptionKey.MaxCrewmateGhostRoles:
-                    case OptionHolder.CommonOptionKey.MinNeutralGhostRoles:
-                    case OptionHolder.CommonOptionKey.MaxNeutralGhostRoles:
-                    case OptionHolder.CommonOptionKey.MinImpostorGhostRoles:
-                    case OptionHolder.CommonOptionKey.MaxImpostorGhostRoles:
-                    case OptionHolder.CommonOptionKey.UseXion:
-                        continue;
-                    default:
-                        break;
-                }
                 string optionStr = OptionHolder.AllOption[(int)id].ToHudString();
                 if (optionStr != string.Empty)
                 {

@@ -11,6 +11,7 @@ using BepInEx.Configuration;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.GameMode.Option.ShipGlobal;
 
 namespace ExtremeRoles
 {
@@ -19,7 +20,7 @@ namespace ExtremeRoles
         public const int VanillaMaxPlayerNum = 15;
         public const int MaxImposterNum = 14;
 
-        private const int singleRoleOptionStartOffset = 100;
+        private const int singleRoleOptionStartOffset = 256;
         private const int combRoleOptionStartOffset = 5000;
         private const int ghostRoleOptionStartOffset = 10000;
         private const int chunkSize = 50;
@@ -28,7 +29,7 @@ namespace ExtremeRoles
             "0%", "10%", "20%", "30%", "40%",
             "50%", "60%", "70%", "80%", "90%", "100%" };
 
-        public static readonly string[] Range = new string[] { "short", "middle", "long"};
+        public static readonly string[] Range = new string[] { "short", "middle", "long" };
 
         public static string ConfigPreset
         {
@@ -38,7 +39,7 @@ namespace ExtremeRoles
         public static int OptionsPage = 1;
 
         public static Dictionary<int, IOption> AllOption = new Dictionary<int, IOption>();
-        
+
         private static readonly string[] optionPreset = new string[] {
             "preset1", "preset2", "preset3", "preset4", "preset5",
             "preset6", "preset7", "preset8", "preset9", "preset10" };
@@ -48,7 +49,7 @@ namespace ExtremeRoles
 
         private static IRegionInfo[] defaultRegion;
 
-        public enum CommonOptionKey
+        public enum CommonOptionKey : int
         {
             PresetSelection = 0,
 
@@ -70,48 +71,6 @@ namespace ExtremeRoles
             MaxImpostorGhostRoles,
 
             UseXion,
-
-            NumMeating,
-            ChangeMeetingVoteAreaSort,
-            FixedMeetingPlayerLevel,
-            DisableSkipInEmergencyMeeting,
-            DisableSelfVote,
-            DisableVent,
-            EngineerUseImpostorVent,
-            CanKillVentInPlayer,
-            ParallelMedBayScans,
-            IsAutoSelectRandomSpawn,
-            
-            IsRemoveAdmin,
-            AirShipEnableAdmin,
-            EnableAdminLimit,
-            AdminLimitTime,
-
-            IsRemoveSecurity,
-            EnableSecurityLimit,
-            SecurityLimitTime,
-
-            IsRemoveVital,
-            EnableVitalLimit,
-            VitalLimitTime,
-
-            RandomMap,
-            
-            DisableTaskWinWhenNoneTaskCrew,
-            DisableTaskWin,
-            IsSameNeutralSameWin,
-            DisableNeutralSpecialForceEnd,
-
-            IsAssignNeutralToVanillaCrewGhostRole,
-            IsRemoveAngleIcon,
-            IsBlockGAAbilityReport,
-        }
-
-        public enum AirShipAdminMode
-        {
-            ModeBoth,
-            ModeCockpitOnly,
-            ModeArchiveOnly
         }
 
         public static void ExecuteWithBlockOptionShare(Action func)
@@ -173,7 +132,7 @@ namespace ExtremeRoles
                     CommonOptionKey.UseXion.ToString()),
                 false, null, true);
 
-            createShipGlobalOption();
+            IShipGlobalOption.Create();
 
             Roles.ExtremeRoleManager.CreateNormalRoleOptions(
                 singleRoleOptionStartOffset);
@@ -377,153 +336,6 @@ namespace ExtremeRoles
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.MaxImpostorGhostRoles.ToString()),
                 0, 0, MaxImposterNum, 1);
-        }
-
-
-        private static void createShipGlobalOption()
-        {
-            new IntCustomOption(
-                (int)CommonOptionKey.NumMeating,
-                CommonOptionKey.NumMeating.ToString(),
-                10, 0, 100, 1, null, true);
-            new BoolCustomOption(
-              (int)CommonOptionKey.ChangeMeetingVoteAreaSort,
-              CommonOptionKey.ChangeMeetingVoteAreaSort.ToString(),
-              false);
-            new BoolCustomOption(
-               (int)CommonOptionKey.FixedMeetingPlayerLevel,
-               CommonOptionKey.FixedMeetingPlayerLevel.ToString(),
-               false);
-            new BoolCustomOption(
-                (int)CommonOptionKey.DisableSkipInEmergencyMeeting,
-                CommonOptionKey.DisableSkipInEmergencyMeeting.ToString(),
-                false);
-            new BoolCustomOption(
-                (int)CommonOptionKey.DisableSelfVote,
-                CommonOptionKey.DisableSelfVote.ToString(),
-                false);
-
-
-            var ventOption = new BoolCustomOption(
-               (int)CommonOptionKey.DisableVent,
-               CommonOptionKey.DisableVent.ToString(),
-               false);
-            new BoolCustomOption(
-                (int)CommonOptionKey.CanKillVentInPlayer,
-                CommonOptionKey.CanKillVentInPlayer.ToString(),
-                false, ventOption, invert: true);
-            new BoolCustomOption(
-                (int)CommonOptionKey.EngineerUseImpostorVent,
-                CommonOptionKey.EngineerUseImpostorVent.ToString(),
-                false, ventOption, invert: true);
-
-            new BoolCustomOption(
-                (int)CommonOptionKey.ParallelMedBayScans,
-                CommonOptionKey.ParallelMedBayScans.ToString(), false);
-
-            new BoolCustomOption(
-                (int)CommonOptionKey.IsAutoSelectRandomSpawn,
-                CommonOptionKey.IsAutoSelectRandomSpawn.ToString(), false);
-
-            var adminOpt = new BoolCustomOption(
-                (int)CommonOptionKey.IsRemoveAdmin,
-                CommonOptionKey.IsRemoveAdmin.ToString(),
-                false);
-            new SelectionCustomOption(
-                (int)CommonOptionKey.AirShipEnableAdmin,
-                CommonOptionKey.AirShipEnableAdmin.ToString(),
-                new string[]
-                {
-                    AirShipAdminMode.ModeBoth.ToString(),
-                    AirShipAdminMode.ModeCockpitOnly.ToString(),
-                    AirShipAdminMode.ModeArchiveOnly.ToString(),
-                },
-                adminOpt,
-                invert: true);
-            var adminLimitOpt = new BoolCustomOption(
-                (int)CommonOptionKey.EnableAdminLimit,
-                CommonOptionKey.EnableAdminLimit.ToString(),
-                false, adminOpt,
-                invert: true);
-            new FloatCustomOption(
-                (int)CommonOptionKey.AdminLimitTime,
-                CommonOptionKey.AdminLimitTime.ToString(),
-                30.0f, 5.0f, 120.0f, 0.5f, adminLimitOpt,
-                format: OptionUnit.Second,
-                invert: true,
-                enableCheckOption: adminLimitOpt);
-
-            var secOpt = new BoolCustomOption(
-                (int)CommonOptionKey.IsRemoveSecurity,
-                CommonOptionKey.IsRemoveSecurity.ToString(),
-                false);
-            var secLimitOpt = new BoolCustomOption(
-                (int)CommonOptionKey.EnableSecurityLimit,
-                CommonOptionKey.EnableSecurityLimit.ToString(),
-                false, secOpt,
-                invert: true);
-            new FloatCustomOption(
-                (int)CommonOptionKey.SecurityLimitTime,
-                CommonOptionKey.SecurityLimitTime.ToString(),
-                30.0f, 5.0f, 120.0f, 0.5f, secLimitOpt,
-                format: OptionUnit.Second,
-                invert: true,
-                enableCheckOption: secLimitOpt);
-
-            var vitalOpt = new BoolCustomOption(
-                (int)CommonOptionKey.IsRemoveVital,
-                CommonOptionKey.IsRemoveVital.ToString(),
-                false);
-            var vitalLimitOpt = new BoolCustomOption(
-                (int)CommonOptionKey.EnableVitalLimit,
-                CommonOptionKey.EnableVitalLimit.ToString(),
-                false, vitalOpt,
-                invert: true);
-            new FloatCustomOption(
-                (int)CommonOptionKey.VitalLimitTime,
-                CommonOptionKey.VitalLimitTime.ToString(),
-                30.0f, 5.0f, 120.0f, 0.5f, vitalLimitOpt,
-                format: OptionUnit.Second,
-                invert: true,
-                enableCheckOption: vitalLimitOpt);
-
-
-            new BoolCustomOption(
-                (int)CommonOptionKey.RandomMap,
-                CommonOptionKey.RandomMap.ToString(), false);
-
-            var taskDisableOpt = new BoolCustomOption(
-                (int)CommonOptionKey.DisableTaskWinWhenNoneTaskCrew,
-                CommonOptionKey.DisableTaskWinWhenNoneTaskCrew.ToString(),
-                false);
-            new BoolCustomOption(
-                (int)CommonOptionKey.DisableTaskWin,
-                CommonOptionKey.DisableTaskWin.ToString(),
-                false, taskDisableOpt);
-
-
-            new BoolCustomOption(
-                (int)CommonOptionKey.IsSameNeutralSameWin,
-                CommonOptionKey.IsSameNeutralSameWin.ToString(),
-                true);
-            new BoolCustomOption(
-                (int)CommonOptionKey.DisableNeutralSpecialForceEnd,
-                CommonOptionKey.DisableNeutralSpecialForceEnd.ToString(),
-                false);
-
-
-            new BoolCustomOption(
-                (int)CommonOptionKey.IsAssignNeutralToVanillaCrewGhostRole,
-                CommonOptionKey.IsAssignNeutralToVanillaCrewGhostRole.ToString(),
-                true);
-            new BoolCustomOption(
-                (int)CommonOptionKey.IsRemoveAngleIcon,
-                CommonOptionKey.IsRemoveAngleIcon.ToString(),
-                false);
-            new BoolCustomOption(
-                (int)CommonOptionKey.IsBlockGAAbilityReport,
-                CommonOptionKey.IsBlockGAAbilityReport.ToString(),
-                false);
         }
 
 
