@@ -1,4 +1,5 @@
 ﻿using ExtremeRoles.Helper;
+using ExtremeRoles.Performance;
 using UnityEngine;
 
 namespace ExtremeRoles
@@ -17,6 +18,14 @@ namespace ExtremeRoles
                 ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd)
             {
                 Logging.Debug($"{ExtremeRolesPlugin.ShipState.CreateStatistics()}");
+            }
+            if (Input.GetKeyDown(KeyCode.F10) &&
+                ExtremeRolesPlugin.DebugMode.Value)
+            {
+                foreach(PetData pet in FastDestroyableSingleton<HatManager>.Instance.allPets)
+                {
+                    Logging.Debug($"Cosmic Id:{pet.ProdId}");
+                }
             }
 #endif
         }
