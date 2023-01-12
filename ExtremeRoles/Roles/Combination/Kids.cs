@@ -885,10 +885,12 @@ namespace ExtremeRoles.Roles.Combination
                 1.6f, 1.0f, 5.0f, 0.1f, parentOps);
             CreateFloatOption(
                 WispOption.TorchActiveTime,
-                10.0f, 5.0f, 60.0f, 0.1f, parentOps);
+                10.0f, 5.0f, 60.0f, 0.1f, parentOps,
+                format: OptionUnit.Second);
             CreateFloatOption(
                 WispOption.BlackOutTime,
-                10.0f, 2.5f, 30.0f, 0.1f, parentOps);
+                10.0f, 2.5f, 30.0f, 0.1f, parentOps,
+                format: OptionUnit.Second);
             this.CreateButtonOption(parentOps);
         }
 
