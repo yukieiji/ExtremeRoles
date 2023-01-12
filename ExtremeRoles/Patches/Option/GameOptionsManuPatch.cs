@@ -101,12 +101,13 @@ namespace ExtremeRoles.Patches.Option
                     option.Body.gameObject.SetActive(enabled);
                     if (enabled)
                     {
-                        offset -= option.IsHeader ? 0.75f : 0.5f;
+                        bool isHeader = option.IsHeader;
+                        offset -= isHeader ? 0.75f : 0.5f;
                         option.Body.transform.localPosition = new Vector3(
                             option.Body.transform.localPosition.x, offset,
                             option.Body.transform.localPosition.z);
 
-                        if (option.IsHeader)
+                        if (isHeader)
                         {
                             numItems += 0.5f;
                         }
