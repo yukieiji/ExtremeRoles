@@ -179,7 +179,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     Object.Destroy(emptyPet.gameObject);
                 }
                 string petId = cosmicInfo.OutfitInfo.PetId;
-                if (cosmicInfo.OutfitInfo.PetId != defaultPetId)
+                if (petId != PetData.EmptyId)
                 {
                     PetBehaviour pet = Object.Instantiate(
                         FastDestroyableSingleton<HatManager>.Instance.GetPetById(
@@ -189,7 +189,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     pet.transform.localPosition =
                         Vector2.zero + (
                             flipX ? Vector2.right * petOffset : Vector2.left * petOffset);
-                    pet.transform.localScale = Vector3.one;
+                    pet.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
                     pet.FlipX = flipX;
                     destroyAllColider(pet.gameObject);
                 }

@@ -313,7 +313,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             aspectPosition.AdjustPosition();
 
             this.grid = bottomLeft.AddComponent<GridArrange>();
-            this.grid.CellSize = new Vector2(0.625f, 0.75f);
+            this.grid.CellSize = new Vector2(0.575f, 0.75f);
             this.grid.MaxColumns = 14;
             this.grid.Alignment = GridArrange.StartAlign.Right;
             this.grid.cells = new();

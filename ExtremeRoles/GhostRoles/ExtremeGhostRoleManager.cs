@@ -310,20 +310,20 @@ namespace ExtremeRoles.GhostRoles
         {
             byte playerId = CachedPlayerControl.LocalPlayer.PlayerId;
 
-            if (!GameRole.ContainsKey(playerId))
+            if (GameRole.TryGetValue(playerId, out GhostRoleBase ghostRole))
             {
-                return null;
+                return ghostRole;
             }
             else
             {
-                return GameRole[playerId];
+                return null;
             }
         }
         public static T GetSafeCastedGhostRole<T>(byte playerId) where T : GhostRoleBase
         {
-            if (!GameRole.ContainsKey(playerId)) { return null; }
+            if (!GameRole.TryGetValue(playerId, out GhostRoleBase ghostRole)) { return null; }
 
-            var role = GameRole[playerId] as T;
+            var role = ghostRole as T;
 
             if (role != null)
             {
@@ -339,9 +339,9 @@ namespace ExtremeRoles.GhostRoles
 
             byte playerId = CachedPlayerControl.LocalPlayer.PlayerId;
 
-            if (!GameRole.ContainsKey(playerId)) { return null; }
+            if (!GameRole.TryGetValue(playerId, out GhostRoleBase ghostRole)) { return null; }
 
-            var role = GameRole[playerId] as T;
+            var role = ghostRole as T;
 
             if (role != null)
             {

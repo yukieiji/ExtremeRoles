@@ -392,11 +392,12 @@ namespace ExtremeRoles.Patches.Manager
             if (targetPlayer.PlayerId == localPlayer.PlayerId)
             {
                 playerInfoText = $"{roleNames}";
-                if (DestroyableSingleton<TaskPanelBehaviour>.InstanceExists)
+
+                if (DestroyableSingleton<HudManager>.InstanceExists)
                 {
                     if (tabText == null)
                     {
-                        tabText = FastDestroyableSingleton<TaskPanelBehaviour>.Instance.tab.transform.FindChild(
+                        tabText = FastDestroyableSingleton<HudManager>.Instance.TaskPanel.tab.transform.FindChild(
                             "TabText_TMP").GetComponent<TextMeshPro>();
                     }
                     tabText.SetText(
