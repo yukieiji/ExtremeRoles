@@ -66,9 +66,11 @@ namespace ExtremeRoles.Patches.Option
         public static void Postfix(GameOptionsMenu __instance)
         {
             var gameSettingMenu = Object.FindObjectsOfType<GameSettingMenu>().FirstOrDefault();
-            
+            AmongUsClient client = AmongUsClient.Instance;
+
             if (gameSettingMenu.RegularGameSettings.active || 
-                gameSettingMenu.RolesSettings.gameObject.active) { return; }
+                gameSettingMenu.RolesSettings.gameObject.active ||
+                !client) { return; }
 
             timer += Time.deltaTime;
             if (timer < 0.1f) { return; }
@@ -79,6 +81,7 @@ namespace ExtremeRoles.Patches.Option
             float offset = 2.75f;
 
             string name = __instance.name;
+            bool isHost = client.AmHost;
 
             foreach (IOption option in OptionHolder.AllOption.Values)
             {
@@ -88,15 +91,7 @@ namespace ExtremeRoles.Patches.Option
 
                 if (option?.Body != null && option.Body.gameObject != null)
                 {
-                    bool enabled = true;
-
-                    if (AmongUsClient.Instance?.AmHost == false)
-                    {
-                        enabled = false;
-                    }
-
-                    enabled = option.IsActive();
-
+                    bool enabled = option.IsActive() && isHost;
 
                     option.Body.gameObject.SetActive(enabled);
                     if (enabled)
