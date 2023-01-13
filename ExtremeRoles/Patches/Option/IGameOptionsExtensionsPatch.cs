@@ -10,6 +10,7 @@ using HarmonyLib;
 using ExtremeRoles.Module;
 using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.GameMode.Option.ShipGlobal;
 
 namespace ExtremeRoles.Patches.Option
 {
@@ -75,7 +76,10 @@ namespace ExtremeRoles.Patches.Option
             // TODO：以下より下役職のオプション設定のHudstring周り、01/06未対応
             foreach (IOption option in OptionHolder.AllOption.Values)
             {
-                if (Enum.IsDefined(typeof(OptionHolder.CommonOptionKey), option.Id))
+                int optionId = option.Id;
+
+                if (Enum.IsDefined(typeof(OptionHolder.CommonOptionKey), optionId) ||
+                    Enum.IsDefined(typeof(GlobalOption), optionId))
                 {
                     continue;
                 }
