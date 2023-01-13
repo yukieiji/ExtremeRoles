@@ -34,6 +34,9 @@ namespace ExtremeRoles.Patches.Option
         nameof(IGameOptionsExtensions.ToHudString))]
     public static class IGameOptionsExtensionsToHudStringPatch
     {
+
+        private const int maxLines = 28;
+
         private static void Postfix(ref string __result)
         {
 
@@ -90,7 +93,7 @@ namespace ExtremeRoles.Patches.Option
                 }
             }
 
-            int maxLines = 28;
+            
             int lineCount = 0;
             string page = "";
             foreach (string optionStr in allOptionStr)
