@@ -11,7 +11,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
     [Il2CppRegister]
     public sealed class OptionMenuTab : MonoBehaviour
     {
-        public const string StringOptionName = "ExROption Id:";
+        public const string StringOptionName = "ExROptionId_";
         public GameObject Tab { get; private set; }
 
         private SpriteRenderer tabHighLight;
