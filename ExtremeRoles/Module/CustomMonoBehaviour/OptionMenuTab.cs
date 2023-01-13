@@ -25,7 +25,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         private OptionTab tabType;
         private List<IOption> useOption = new List<IOption>();
 
-        private ValueTuple<IOption, OptionBehaviour>[] childrenBody;
+        private Memory<ValueTuple<IOption, OptionBehaviour>> childrenBody;
 
         private float timer = -10.0f;
         private const float posOffsetInit = 2.75f;
@@ -109,7 +109,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             float itemOffset = (float)itemLength;
             float posOffset = posOffsetInit;
 
-            foreach (var (option, optionBody) in this.childrenBody)
+            foreach (var (option, optionBody) in this.childrenBody.Span)
             {
                 if (optionBody == null) { continue; }
 
