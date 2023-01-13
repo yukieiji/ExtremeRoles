@@ -17,7 +17,7 @@ Please provide information about the bug in each of the following fields -->
 <!-- 期待する動作に対して、実際の動作はどうなのか。バグを再現しただけの動画(数分程度)のURLや画像があるとわかりやすいです / How does the actual behavior compare to the expected behavior? (A video URL or image would be helpful for clarification -->
 
 ### このバグに対するあなたの意見 / Your Proposal
-<!-- このバグや仕様に対してのあなたの意見 / Your opinion on this bug or specification -->
+<!-- このバグや仕様に対してのあなたの意見をお願いします、バグを修正してほしいのかそれとも別の挙動にしてほしいのか / Your opinion on this bug or specification -->
 
 ### バグ発生時のログ / log when issue occur
 <!-- バグが発生した瞬間のF8で出力されるログ / Dumped log by F8 at the issue occurs -->
