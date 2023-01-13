@@ -39,7 +39,6 @@ namespace ExtremeRoles.Module
     public interface IOption
     {
         public int CurSelection { get; }
-        public int DefaultSelection { get; }
         public bool Enabled { get; }
         public int Id { get; }
         public string Name { get; }
@@ -48,10 +47,13 @@ namespace ExtremeRoles.Module
         public int ValueCount { get; }
         public OptionTab Tab { get; }
         public IOption Parent { get; }
-        public IOption ForceEnableCheckOption { get; }
-        public List<IOption> Children { get; }
 
+        // インターフェースとして要らなくなった奴ら
+        // TODO:こいつらも消す
+        public List<IOption> Children { get; }
         public OptionBehaviour Body { get; }
+        public IOption ForceEnableCheckOption { get; }
+        public int DefaultSelection { get; }
 
         public bool IsActive();
         public void SetOptionBehaviour(OptionBehaviour newBehaviour);
