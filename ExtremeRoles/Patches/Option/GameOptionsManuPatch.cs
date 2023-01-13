@@ -33,9 +33,9 @@ namespace ExtremeRoles.Patches.Option
 
         private static void changeValueRange(
             UnhollowerBaseLib.Il2CppReferenceArray<OptionBehaviour> child,
-            string name, float minValue, float maxValue)
+            StringNames name, float minValue, float maxValue)
         {
-            NumberOption numOpt = child.FirstOrDefault(x => x.name == name).TryCast<NumberOption>();
+            NumberOption numOpt = child.FirstOrDefault(x => x.Title == name).TryCast<NumberOption>();
             if (numOpt != null)
             {
                 numOpt.ValidRange = new FloatRange(minValue, maxValue);
@@ -49,12 +49,12 @@ namespace ExtremeRoles.Patches.Option
             if (AmongUsClient.Instance.NetworkMode == NetworkModes.LocalGame ||
                 FastDestroyableSingleton<ServerManager>.Instance.CurrentRegion.Name == "custom")
             {
-                changeValueRange(child, "NumImpostors", 0f, OptionHolder.MaxImposterNum);
+                changeValueRange(child, StringNames.GameNumImpostors, 0f, OptionHolder.MaxImposterNum);
             }
 
-            changeValueRange(child, "NumCommonTasks", 0f, 4f );
-            changeValueRange(child, "NumShortTasks" , 0f, 23f);
-            changeValueRange(child, "NumLongTasks"  , 0f, 15f);
+            changeValueRange(child, StringNames.GameCommonTasks, 0f, 4f );
+            changeValueRange(child, StringNames.GameShortTasks , 0f, 23f);
+            changeValueRange(child, StringNames.GameLongTasks  , 0f, 15f);
         }
     }
 
