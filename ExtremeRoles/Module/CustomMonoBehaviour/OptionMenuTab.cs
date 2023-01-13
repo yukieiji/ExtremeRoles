@@ -11,6 +11,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
     [Il2CppRegister]
     public sealed class OptionMenuTab : MonoBehaviour
     {
+        public const string StringOptionName = "ExROption Id:";
         public GameObject Tab { get; private set; }
 
         private SpriteRenderer tabHighLight;
@@ -69,6 +70,8 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                 stringOption.TitleText.text = option.GetTranslatedName();
                 stringOption.Value = stringOption.oldValue = option.CurSelection;
                 stringOption.ValueText.text = option.GetTranslatedValue();
+                stringOption.gameObject.name = string.Concat(
+                    StringOptionName, id);
                 stringOption.gameObject.SetActive(true);
 
                 menuOption.Add(stringOption);
