@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 
 using UnityEngine;
 
 using ExtremeRoles.Resources;
 using System.Collections.Generic;
+
 using TMPro;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour
@@ -17,10 +19,16 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         private SpriteRenderer tabHighLight;
         private GameOptionsMenu menuBody;
         private TextMeshPro tabName;
+        private Scroller scroller;
 
         private StringOption template;
         private OptionTab tabType;
-        private List<int> useOptionId = new List<int>();
+        private List<IOption> useOption = new List<IOption>();
+
+        private ValueTuple<IOption, OptionBehaviour>[] childrenBody;
+
+        private float timer = -10.0f;
+        private const float posOffsetInit = 2.75f;
 
         public OptionMenuTab(IntPtr ptr) : base(ptr) { }
 
@@ -33,8 +41,9 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             Transform gameGroupTrans = obj.transform.FindChild("GameGroup");
 
             menu.menuBody = gameGroupTrans.FindChild("SliderInner").GetComponent<GameOptionsMenu>();
+            menu.scroller = gameGroupTrans.GetComponent<Scroller>();
             menu.tabType = tab;
-            menu.useOptionId.Clear();
+            menu.useOption.Clear();
             menu.tabName = gameGroupTrans.FindChild("Text").GetComponent<TextMeshPro>();
 
             string name = string.Format(ExtremeOptionMenu.MenuNameTemplate, tab.ToString());
@@ -56,12 +65,11 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         {
             if (this.menuBody.Children.Length != 0) { return; }
 
-            this.menuBody.Children = new OptionBehaviour[this.useOptionId.Count];
+            this.menuBody.Children = new OptionBehaviour[this.useOption.Count];
 
             for (int index = 0; index < this.menuBody.Children.Length; ++index)
             {
-                int id = this.useOptionId[index];
-                IOption option = OptionHolder.AllOption[id];
+                IOption option = this.useOption[index];
 
                 if (option.Body != null) { continue; }
                 
@@ -72,12 +80,16 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                 stringOption.Value = stringOption.oldValue = option.CurSelection;
                 stringOption.ValueText.text = option.GetTranslatedValue();
                 stringOption.gameObject.name = string.Concat(
-                    StringOptionName, id);
+                    StringOptionName, option.Id);
                 stringOption.gameObject.SetActive(true);
 
                 this.menuBody.Children[index] = stringOption;
                 option.SetOptionBehaviour(stringOption);
+                
+                this.timer = 1.0f;
             }
+
+            this.childrenBody = this.useOption.Zip(this.menuBody.Children, ValueTuple.Create).ToArray();
         }
 
         public void Start()
@@ -86,9 +98,50 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                 Helper.Translation.GetString(this.gameObject.name));
         }
 
-        public void AddOptionId(int newId)
+        public void FixedUpdate()
         {
-            this.useOptionId.Add(newId);
+
+            this.timer += Time.fixedDeltaTime;
+            int itemLength = this.menuBody.Children.Length;
+
+            if (itemLength == 0 || this.timer < 0.1f) { return; }
+
+            float itemOffset = (float)itemLength;
+            float posOffset = posOffsetInit;
+
+            foreach (var (option, optionBody) in this.childrenBody)
+            {
+                if (optionBody == null) { continue; }
+
+                bool enabled = option.IsActive();
+
+                optionBody.gameObject.SetActive(enabled);
+
+                if (enabled)
+                {
+                    bool isHeader = option.IsHeader;
+                    posOffset -= isHeader ? 0.75f : 0.5f;
+                    optionBody.transform.localPosition = new Vector3(
+                        optionBody.transform.localPosition.x, posOffset,
+                        optionBody.transform.localPosition.z);
+
+                    if (isHeader)
+                    {
+                        itemOffset += 0.5f;
+                    }
+                }
+                else
+                {
+                    itemOffset--;
+                }
+            }
+
+            this.scroller.ContentYBounds.max = -4.0f + itemOffset * 0.5f;
+        }
+
+        public void AddOption(IOption option)
+        {
+            this.useOption.Add(option);
         }
 
         public void CreateTabButton(GameObject template, GameObject parent)

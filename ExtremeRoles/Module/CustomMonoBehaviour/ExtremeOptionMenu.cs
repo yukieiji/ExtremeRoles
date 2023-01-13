@@ -118,9 +118,9 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                 this.allMenu.Add(tab, createMenu(tab, stringOptionTemplate));
             }
 
-            foreach (var (id, option) in OptionHolder.AllOption)
+            foreach (var option in OptionHolder.AllOption.Values)
             {
-                this.allMenu[option.Tab].AddOptionId(id);
+                this.allMenu[option.Tab].AddOption(option);
             }
         }
 
