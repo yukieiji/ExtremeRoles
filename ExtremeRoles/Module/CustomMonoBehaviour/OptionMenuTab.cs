@@ -56,10 +56,11 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         {
             if (this.menuBody.Children.Length != 0) { return; }
 
-            List<OptionBehaviour> menuOption = new List<OptionBehaviour>();
+            this.menuBody.Children = new OptionBehaviour[this.useOptionId.Count];
 
-            foreach (int id in this.useOptionId)
+            for (int index = 0; index < this.menuBody.Children.Length; ++index)
             {
+                int id = this.useOptionId[index];
                 IOption option = OptionHolder.AllOption[id];
 
                 if (option.Body != null) { continue; }
@@ -74,11 +75,9 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                     StringOptionName, id);
                 stringOption.gameObject.SetActive(true);
 
-                menuOption.Add(stringOption);
+                this.menuBody.Children[index] = stringOption;
                 option.SetOptionBehaviour(stringOption);
             }
-
-            this.menuBody.Children = menuOption.ToArray();
         }
 
         public void Start()
