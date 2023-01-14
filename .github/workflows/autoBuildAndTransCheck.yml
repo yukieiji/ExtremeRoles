@@ -38,6 +38,7 @@ jobs:
         continue-on-error: true
         run: python createTransReport.py ${{ steps.build.outcome }}
       - name: PostComment
-        uses: thollander/actions-comment-pull-request@v2
+        uses: thollander/actions-comment-pull-request@v2.3.1
         with:
+            pr_number: ${{ github.event.number }}
             filePath: .github/workflows/comment.md
