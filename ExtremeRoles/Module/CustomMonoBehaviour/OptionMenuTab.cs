@@ -20,15 +20,17 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         private GameOptionsMenu menuBody;
         private TextMeshPro tabName;
         private Scroller scroller;
-
         private StringOption template;
+
         private OptionTab tabType;
         private List<IOption> useOption = new List<IOption>();
 
         private Memory<ValueTuple<IOption, OptionBehaviour>> childrenBody;
+        
+        private float blockTimer = -10.0f;
 
-        private float timer = -10.0f;
         private const float posOffsetInit = 2.75f;
+        private const string menuNameTemplate = "ExtremeRoles_{0}Settings";
 
         public OptionMenuTab(IntPtr ptr) : base(ptr) { }
 
@@ -46,7 +48,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             menu.useOption.Clear();
             menu.tabName = gameGroupTrans.FindChild("Text").GetComponent<TextMeshPro>();
 
-            string name = string.Format(ExtremeOptionMenu.MenuNameTemplate, tab.ToString());
+            string name = string.Format(menuNameTemplate, tab.ToString());
             
             obj.gameObject.name = name;
             menu.menuBody.name = $"{name}_menu";
@@ -86,7 +88,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                 this.menuBody.Children[index] = stringOption;
                 option.SetOptionBehaviour(stringOption);
                 
-                this.timer = 1.0f;
+                this.blockTimer = 1.0f;
             }
 
             this.childrenBody = this.useOption.Zip(this.menuBody.Children, ValueTuple.Create).ToArray();
@@ -101,10 +103,10 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         public void FixedUpdate()
         {
 
-            this.timer += Time.fixedDeltaTime;
+            this.blockTimer += Time.fixedDeltaTime;
             int itemLength = this.menuBody.Children.Length;
 
-            if (itemLength == 0 || this.timer < 0.1f) { return; }
+            if (itemLength == 0 || this.blockTimer < 0.1f) { return; }
 
             float itemOffset = (float)itemLength;
             float posOffset = posOffsetInit;

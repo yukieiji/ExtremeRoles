@@ -10,15 +10,14 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
     [Il2CppRegister]
     public sealed class ExtremeOptionMenu : MonoBehaviour
     {
-        public const string MenuNameTemplate = "ExtremeRoles_{0}Settings";
-        public const string TemplateName = "menuTemplate";
-
         private Dictionary<OptionTab, OptionMenuTab> allMenu = new Dictionary<OptionTab, OptionMenuTab>();
 
         private GameSettingMenu menu;
         private GameObject settingMenuTemplate;
 
         private GameObject tabTemplate;
+
+        private const string templateName = "menuTemplate";
 
         public ExtremeOptionMenu(IntPtr ptr) : base(ptr) { }
 
@@ -138,7 +137,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
             menu.Children = new OptionBehaviour[] { };
 
-            template.name = TemplateName;
+            template.name = templateName;
             template.SetActive(false);
 
             return template;
