@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 
 using UnityEngine;
@@ -42,8 +43,7 @@ namespace ExtremeRoles.Helper
 
         public static void BackupCurrentLog()
         {
-            string logBackupPath = string.Concat(
-                Path.GetDirectoryName(Application.dataPath), @"\BepInEx/BackupLog");
+            string logBackupPath = getLogBackupPath();
 
             if (Directory.Exists(logBackupPath))
             {
@@ -51,7 +51,7 @@ namespace ExtremeRoles.Helper
                     //logのバックアップディレクトリ内の全ファイルを取得
                     .GetFiles(logBackupPath)
                     //.logだけサーチ
-                    .Where(filePath => Path.GetFileName(filePath) == ".log")
+                    .Where(filePath => Path.GetExtension(filePath) == ".log")
                     //日付順に降順でソート
                     .OrderBy(filePath => File.GetLastWriteTime(filePath).Date)
                     //同じ日付内で時刻順に降順でソート
@@ -74,15 +74,48 @@ namespace ExtremeRoles.Helper
 
         public static void Dump()
         {
-            string copyPath = string.Concat(
+
+            string dumpFilePath = string.Concat(
                 Environment.GetFolderPath(
                     Environment.SpecialFolder.DesktopDirectory), @"\",
-                $"ExtremeRolesDumpedLog {getTimeStmp()}.log");
-            
-            File.Copy(getLogPath(), copyPath);
+                $"ExtremeRolesDumpedLogs {getTimeStmp()}.zip");
+
+            string tmpLogFile = string.Concat(
+                Path.GetDirectoryName(Application.dataPath), @"\BepInEx/tmp.log");
+
+            File.Copy(getLogPath(), tmpLogFile, true);
+
+            using (var dumpedZipFile = ZipFile.Open(
+                dumpFilePath, ZipArchiveMode.Update))
+            {
+                dumpedZipFile.CreateEntryFromFile(
+                    tmpLogFile, $"ExtremeRolesDumpedLog {getTimeStmp()}.log");
+
+                string logBackupPath = getLogBackupPath();
+
+                if (Directory.Exists(logBackupPath))
+                {
+                    dumpedZipFile.CreateEntry("BackupLog/");
+                    
+                    string[] logFile = Directory
+                        //logのバックアップディレクトリ内の全ファイルを取得
+                        .GetFiles(logBackupPath)
+                        //.logだけサーチ
+                        .Where(filePath => Path.GetExtension(filePath) == ".log")
+                        .ToArray();
+
+                    foreach (string logPath in logFile)
+                    {
+                        dumpedZipFile.CreateEntryFromFile(
+                            logPath, $"BackupLog/{Path.GetFileName(logPath)}");
+                    }
+                }
+            }
+
+            File.Delete(tmpLogFile);
 
             System.Diagnostics.Process.Start(
-                "EXPLORER.EXE", $@"/select, ""{copyPath}""");
+                "EXPLORER.EXE", $@"/select, ""{dumpFilePath}""");
         }
 
         public static void ResetCkpt()
@@ -94,5 +127,8 @@ namespace ExtremeRoles.Helper
 
         private static string getLogPath() => string.Concat(
             Path.GetDirectoryName(Application.dataPath), @"\BepInEx/LogOutput.log");
+
+        private static string getLogBackupPath() => string.Concat(
+            Path.GetDirectoryName(Application.dataPath), @"\BepInEx/BackupLog");
     }
 }
