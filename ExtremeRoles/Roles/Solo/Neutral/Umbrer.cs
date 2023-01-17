@@ -459,12 +459,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             CreateFloatOption(
                 UmbrerOption.InfectRange,
-                0.8f, 0.1f, 3.0f, 0.1f,
+                1.4f, 0.1f, 3.6f, 0.1f,
                 parentOps);
 
             CreateFloatOption(
                 UmbrerOption.KeepUpgradedVirus,
-                10.0f, 2.5f, 30.0f, 0.1f,
+                10.0f, 2.5f, 360.0f, 0.5f,
                 parentOps,
                 format: OptionUnit.Second);
         }
