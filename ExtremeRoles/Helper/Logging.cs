@@ -2,6 +2,7 @@
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Text;
 
 using UnityEngine;
 
@@ -68,8 +69,11 @@ namespace ExtremeRoles.Helper
                 Directory.CreateDirectory(logBackupPath);
             }
 
-            File.Copy(getLogPath(), string.Concat(
-                logBackupPath, @$"\ExtremeRolesBackupLog {getTimeStmp()}.log"));
+            string movedLog = string.Concat(
+                logBackupPath, @$"\ExtremeRolesBackupLog {getTimeStmp()}.log");
+
+            File.Copy(getLogPath(), movedLog);
+            replaceLogCustomServerIpAndPort(movedLog);
         }
 
         public static void Dump()
@@ -84,6 +88,7 @@ namespace ExtremeRoles.Helper
                 Path.GetDirectoryName(Application.dataPath), @"\BepInEx/tmp.log");
 
             File.Copy(getLogPath(), tmpLogFile, true);
+            replaceLogCustomServerIpAndPort(tmpLogFile);
 
             using (var dumpedZipFile = ZipFile.Open(
                 dumpFilePath, ZipArchiveMode.Update))
@@ -121,6 +126,20 @@ namespace ExtremeRoles.Helper
         public static void ResetCkpt()
         {
             ckpt = 0;
+        }
+
+        private static void replaceLogCustomServerIpAndPort(string targetFileName)
+        {
+            string losStr;
+            using (StreamReader prevLog = new StreamReader(targetFileName))
+            {
+                losStr = prevLog.ReadToEnd();
+            }
+
+            losStr = losStr.Replace(OptionHolder.ConfigParser.Ip.Value, "***.***.***.***");
+
+            using StreamWriter newLog = new StreamWriter(targetFileName, true, Encoding.UTF8);
+            newLog.Write(losStr);
         }
 
         private static string getTimeStmp() => DateTime.Now.ToString("yyyy-MM-ddTHH-mm-ss");
