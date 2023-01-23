@@ -16,8 +16,6 @@ namespace ExtremeRoles.Patches.Option
     {
         public static void Postfix(GameOptionsMenu __instance)
         {
-            if (GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal) { return; }
-
             // SliderInnner => GameGroup => Game Settings => PlayerOptionsMenu
             GameObject playerOptMenuObj = __instance.transform.parent.parent.parent.gameObject;
 
@@ -33,7 +31,7 @@ namespace ExtremeRoles.Patches.Option
             UnhollowerBaseLib.Il2CppReferenceArray<OptionBehaviour> child,
             StringNames name, float minValue, float maxValue)
         {
-            NumberOption numOpt = child.FirstOrDefault(x => x.Title == name).TryCast<NumberOption>();
+            NumberOption numOpt = child.FirstOrDefault(x => x.Title == name)?.TryCast<NumberOption>();
             if (numOpt != null)
             {
                 numOpt.ValidRange = new FloatRange(minValue, maxValue);
