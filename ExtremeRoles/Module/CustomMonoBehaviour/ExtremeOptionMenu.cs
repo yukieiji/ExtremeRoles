@@ -113,7 +113,15 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
         private void setupOptionMenu()
         {
-            var stringOptionTemplate = FindObjectsOfType<StringOption>().FirstOrDefault();
+            var stringOptionTemplate = this.menu.AllItems.FirstOrDefault(
+                x =>
+                {
+                    StringOption strOption = x.GetComponent<StringOption>();
+                    return strOption != null;
+
+                })?.GetComponent<StringOption>();
+
+            if (stringOptionTemplate == null) { return; }
 
             foreach (OptionTab tab in Enum.GetValues(typeof(OptionTab)))
             {
