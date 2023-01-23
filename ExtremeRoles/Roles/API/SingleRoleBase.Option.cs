@@ -56,7 +56,7 @@ namespace ExtremeRoles.Roles.API
 
             CreateBoolOption(
                 RoleCommonOption.ApplyEnvironmentVisionEffect,
-               this.IsCrewmate(), visonOption);
+                this.IsCrewmate(), visonOption);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
