@@ -27,6 +27,9 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
             this.menu = base.gameObject.GetComponent<GameSettingMenu>();
 
+            // ForceEnable Tabs for fixing HideNSeekOptions turnoff tabs
+            this.menu.Tabs.gameObject.SetActive(true);
+
             setupTemplate();
             setupOptionMenu();
 
