@@ -14,6 +14,8 @@ namespace ExtremeRoles.GameMode
     {
         public static ExtremeGameModeManager Instance { get; private set; }
 
+        public GameModes CurrentGameMode { get; }
+
         public IShipGlobalOption ShipOption { get; private set; }
 
         public RoleSelectorBase NormalRoleSelector { get; private set; }
@@ -22,9 +24,18 @@ namespace ExtremeRoles.GameMode
         // TODO：このクラスに含める必要があるか検証する必要あり
         public IVisonModifier Vison { get; private set; }
 
+        public ExtremeGameModeManager(GameModes mode)
+        {
+            CurrentGameMode = mode;
+        }
+
         public static void Create(GameModes mode)
         {
-            Instance = new ExtremeGameModeManager();
+            GameModes currentMode = Instance?.CurrentGameMode ?? GameModes.None;
+
+            if (currentMode == mode) { return; }
+
+            Instance = new ExtremeGameModeManager(mode);
 
             IModeFactory factory = mode switch
             {
@@ -43,7 +54,7 @@ namespace ExtremeRoles.GameMode
         }
 
         public IIntroRunner GetIntroRunner()
-            => GameOptionsManager.Instance.currentGameMode switch
+            => CurrentGameMode switch
             {
                 GameModes.Normal => new ClassicIntroRunner(),
                 GameModes.HideNSeek => new HideNSeekIntroRunner(),

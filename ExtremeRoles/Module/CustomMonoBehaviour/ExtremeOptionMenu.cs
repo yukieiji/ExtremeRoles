@@ -1,6 +1,9 @@
-﻿using System;
+﻿using ExtremeRoles.GameMode;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+
+using AmongUs.GameOptions;
 
 using UnityEngine;
 using UnityEngine.Events;
@@ -72,19 +75,38 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         public void recreateTabButtonFunction()
         {
             // 基本ゲーム設定
-            reconstructButton(
-                this.tabTemplate,
-                (UnityAction)(() => {
-                    this.menu.RegularGameSettings.SetActive(true);
-                    this.menu.GameSettingsHightlight.enabled = true;
-                }));
+            switch (ExtremeGameModeManager.Instance.CurrentGameMode)
+            {
+                case GameModes.Normal:
+                    reconstructButton(
+                        this.tabTemplate,
+                        (UnityAction)(() =>
+                        {
+                            this.menu.RegularGameSettings.SetActive(true);
+                            this.menu.GameSettingsHightlight.enabled = true;
+                        }));
 
-            reconstructButton(
-                this.menu.Tabs.transform.FindChild("RoleTab").gameObject,
-                (UnityAction)(() => {
-                    this.menu.RolesSettings.gameObject.SetActive(true);
-                    this.menu.RolesSettingsHightlight.enabled = true;
-                }));
+                    reconstructButton(
+                        this.menu.Tabs.transform.FindChild("RoleTab").gameObject,
+                        (UnityAction)(() =>
+                        {
+                            this.menu.RolesSettings.gameObject.SetActive(true);
+                            this.menu.RolesSettingsHightlight.enabled = true;
+                        }));
+                    break;
+                case GameModes.HideNSeek:
+                    reconstructButton(
+                        this.tabTemplate,
+                        (UnityAction)(() =>
+                        {
+                            this.menu.HideNSeekSettings.SetActive(true);
+                            this.menu.GameSettingsHightlight.enabled = true;
+                        }));
+                    this.menu.Tabs.transform.FindChild("RoleTab").gameObject.SetActive(false);
+                    break;
+                default:
+                    break;
+            };
 
             foreach (OptionMenuTab menu in this.allMenu.Values)
             {
