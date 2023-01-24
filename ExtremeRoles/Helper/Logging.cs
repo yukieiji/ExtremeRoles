@@ -73,7 +73,7 @@ namespace ExtremeRoles.Helper
                 logBackupPath, @$"\ExtremeRolesBackupLog {getTimeStmp()}.log");
 
             File.Copy(getLogPath(), movedLog);
-            replaceLogCustomServerIpAndPort(movedLog);
+            replaceLogCustomServerIp(movedLog);
         }
 
         public static void Dump()
@@ -88,7 +88,7 @@ namespace ExtremeRoles.Helper
                 Path.GetDirectoryName(Application.dataPath), @"\BepInEx/tmp.log");
 
             File.Copy(getLogPath(), tmpLogFile, true);
-            replaceLogCustomServerIpAndPort(tmpLogFile);
+            replaceLogCustomServerIp(tmpLogFile);
 
             using (var dumpedZipFile = ZipFile.Open(
                 dumpFilePath, ZipArchiveMode.Update))
@@ -128,7 +128,7 @@ namespace ExtremeRoles.Helper
             ckpt = 0;
         }
 
-        private static void replaceLogCustomServerIpAndPort(string targetFileName)
+        private static void replaceLogCustomServerIp(string targetFileName)
         {
             string losStr;
             using (StreamReader prevLog = new StreamReader(targetFileName))
