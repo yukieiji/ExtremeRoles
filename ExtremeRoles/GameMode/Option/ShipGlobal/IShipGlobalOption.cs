@@ -72,6 +72,8 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
         public bool IsBlockGAAbilityReport { get; }
 
         public void Load();
+
+        public bool IsValidOption(int id);
         public void BuildHudString(ref StringBuilder builder);
 
         public string ToHudString()

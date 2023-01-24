@@ -115,5 +115,7 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
                 }
             }
         }
+
+        public bool IsValidOption(int id) => Enum.IsDefined(typeof(GlobalOption), id);
     }
 }

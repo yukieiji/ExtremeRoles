@@ -150,9 +150,21 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                 this.allMenu.Add(tab, createMenu(tab, stringOptionTemplate));
             }
 
-            foreach (var option in OptionHolder.AllOption.Values)
+            var exGmM = ExtremeGameModeManager.Instance;
+
+            foreach (var (id, option) in OptionHolder.AllOption)
             {
-                this.allMenu[option.Tab].AddOption(option);
+                OptionTab tab = option.Tab;
+
+                if (Enum.IsDefined(typeof(OptionHolder.CommonOptionKey), id) ||
+                    tab switch
+                    {
+                        OptionTab.General => exGmM.ShipOption.IsValidOption(id),
+                        _ => true
+                    })
+                {
+                    this.allMenu[tab].AddOption(option);
+                }
             }
         }
 

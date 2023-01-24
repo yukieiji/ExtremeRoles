@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Collections.Generic;
 using ExtremeRoles.GameMode.Option.MapModule;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal
@@ -31,6 +32,27 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
         public bool IsAssignNeutralToVanillaCrewGhostRole => false;
         public bool IsRemoveAngleIcon => false;
         public bool IsBlockGAAbilityReport => false;
+
+        private HashSet<GlobalOption> useOption = new HashSet<GlobalOption>()
+        {
+            GlobalOption.DisableVent,
+
+            GlobalOption.IsRemoveAdmin,
+            GlobalOption.AirShipEnableAdmin,
+            GlobalOption.EnableAdminLimit,
+            GlobalOption.AdminLimitTime,
+
+            GlobalOption.IsRemoveVital,
+            GlobalOption.EnableVitalLimit,
+            GlobalOption.VitalLimitTime,
+
+            GlobalOption.IsRemoveSecurity,
+            GlobalOption.EnableSecurityLimit,
+            GlobalOption.SecurityLimitTime,
+
+            GlobalOption.IsSameNeutralSameWin,
+            GlobalOption.DisableNeutralSpecialForceEnd,
+        };
 
         public void Load()
         {
@@ -75,26 +97,7 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
 
         public void BuildHudString(ref StringBuilder builder)
         {
-            foreach (GlobalOption id in new GlobalOption[]
-            {
-                GlobalOption.DisableVent,
-                
-                GlobalOption.IsRemoveAdmin,
-                GlobalOption.AirShipEnableAdmin,
-                GlobalOption.EnableAdminLimit,
-                GlobalOption.AdminLimitTime,
-                
-                GlobalOption.IsRemoveVital,
-                GlobalOption.EnableVitalLimit,
-                GlobalOption.VitalLimitTime,
-
-                GlobalOption.IsRemoveSecurity,
-                GlobalOption.EnableSecurityLimit,
-                GlobalOption.SecurityLimitTime,
-
-                GlobalOption.IsSameNeutralSameWin,
-                GlobalOption.DisableNeutralSpecialForceEnd,
-            })
+            foreach (GlobalOption id in this.useOption)
             {
                 string optionStr = OptionHolder.AllOption[(int)id].ToHudString();
                 if (optionStr != string.Empty)
@@ -103,5 +106,7 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
                 }
             }
         }
+
+        public bool IsValidOption(int id) => this.useOption.Contains((GlobalOption)id);
     }
 }
