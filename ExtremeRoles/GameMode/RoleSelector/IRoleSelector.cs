@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-
-using AmongUs.GameOptions;
 
 using ExtremeRoles.Module;
-using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.GameMode.RoleSelector
 {

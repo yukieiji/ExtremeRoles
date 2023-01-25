@@ -2,6 +2,7 @@
 using ExtremeRoles.GameMode.Factory;
 using ExtremeRoles.GameMode.IntroRunner;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
+using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.GameMode.RoleSelector.Ghost;
 using ExtremeRoles.GameMode.RoleSelector.Normal;
 using ExtremeRoles.GameMode.Vison;
@@ -17,9 +18,7 @@ namespace ExtremeRoles.GameMode
         public GameModes CurrentGameMode { get; }
 
         public IShipGlobalOption ShipOption { get; private set; }
-
-        public RoleSelectorBase NormalRoleSelector { get; private set; }
-        public GhostRoleSelectorBase GhostRoleSelector { get; private set; }
+        public IRoleSelector RoleSelector { get; private set; }
 
         // TODO：このクラスに含める必要があるか検証する必要あり
         public IVisonModifier Vison { get; private set; }
