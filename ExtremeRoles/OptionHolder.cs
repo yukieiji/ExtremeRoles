@@ -42,16 +42,6 @@ namespace ExtremeRoles
             "preset1", "preset2", "preset3", "preset4", "preset5",
             "preset6", "preset7", "preset8", "preset9", "preset10" };
 
-        private static readonly string[] prngAlgorithm = new string[]
-        {
-            "Pcg32XshRr", "Pcg64RxsMXs",
-            "Xorshift64", "Xorshift128",
-            "Xorshiro256StarStar",
-            "Xorshiro512StarStar",
-            "RomuMono", "RomuTrio", "RomuQuad",
-            "Seiran128", "Shioi128", "JFT32",
-        };
-
         private static int selectedPreset = 0;
         private static bool isBlockShare = false;
 
@@ -161,8 +151,16 @@ namespace ExtremeRoles
                 (int)CommonOptionKey.UsePrngAlgorithm, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.UsePrngAlgorithm.ToString()),
-                prngAlgorithm, strongGen,
-                invert: true);
+                new string[]
+                {
+                    "Pcg32XshRr", "Pcg64RxsMXs",
+                    "Xorshift64", "Xorshift128",
+                    "Xorshiro256StarStar",
+                    "Xorshiro512StarStar",
+                    "RomuMono", "RomuTrio", "RomuQuad",
+                    "Seiran128", "Shioi128", "JFT32",
+                },
+                strongGen, invert: true);
 
             createExtremeRoleGlobalSpawnOption();
             createExtremeGhostRoleGlobalSpawnOption();
