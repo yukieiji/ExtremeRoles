@@ -3,8 +3,6 @@ using ExtremeRoles.GameMode.Factory;
 using ExtremeRoles.GameMode.IntroRunner;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
-using ExtremeRoles.GameMode.RoleSelector.Ghost;
-using ExtremeRoles.GameMode.RoleSelector.Normal;
 using ExtremeRoles.GameMode.Vison;
 
 // TODO: setプロパティ => initにする 
@@ -44,6 +42,7 @@ namespace ExtremeRoles.GameMode
             };
 
             Instance.ShipOption = factory.CreateGlobalOption();
+            Instance.RoleSelector = factory.CreateRoleSelector();
             Instance.Vison = factory.CreateVisonModifier();
         }
 

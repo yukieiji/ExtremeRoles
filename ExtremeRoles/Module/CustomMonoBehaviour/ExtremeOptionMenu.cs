@@ -160,7 +160,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                     tab switch
                     {
                         OptionTab.General => exGmM.ShipOption.IsValidOption(id),
-                        _ => true
+                        _ => exGmM.RoleSelector.IsValidRoleOption(option),
                     })
                 {
                     this.allMenu[tab].AddOption(option);

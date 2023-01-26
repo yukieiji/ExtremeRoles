@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using ExtremeRoles.Module;
 
@@ -10,9 +9,9 @@ namespace ExtremeRoles.GameMode.RoleSelector
         public bool CanUseXion { get; }
         public bool IsVanillaRoleToMultiAssign { get; }
 
-        public IReadOnlyList<int> UseNormalRoleOptionId { get; }
-        public IReadOnlyList<int> UseCombRoleOptionId { get; }
-        public IReadOnlyList<int> UseGhostRoleOptionId { get; }
+        public IEnumerable<int> NormalRoleSpawnOptionId { get; }
+        public IEnumerable<int> CombRoleSpawnOptionId { get; }
+        public IEnumerable<int> GhostRoleSpawnOptionId { get; }
 
         public bool IsValidRoleOption(IOption option);
     }
