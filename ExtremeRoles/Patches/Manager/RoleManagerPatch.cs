@@ -23,17 +23,10 @@ namespace ExtremeRoles.Patches.Manager
     {
         private static List<IAssignedPlayer> roleList = new List<IAssignedPlayer>();
         private static bool useXion = false;
-        private static HashSet<byte> readyPlayer = new HashSet<byte>();
-
-        // ホスト以外の準備ができてるか
-        public static bool IsReady => readyPlayer.Count == 
-            (PlayerControl.AllPlayerControls.Count - 1);
 
         public static void Prefix()
         {
             roleList.Clear();
-            readyPlayer.Clear();
-
             useXion = OptionHolder.AllOption[(int)OptionHolder.CommonOptionKey.UseXion].GetValue();
             
             if (useXion && ExtremeGameModeManager.Instance.RoleSelector.CanUseXion)
@@ -80,28 +73,8 @@ namespace ExtremeRoles.Patches.Manager
             roleList = assignedPlayerData;
         }
 
-        public static void SetLocalPlayerReady()
-        {
-            using (var caller = RPCOperator.CreateCaller(
-                PlayerControl.LocalPlayer.NetId,
-                RPCOperator.Command.SetUpReady))
-            {
-                caller.WriteByte(PlayerControl.LocalPlayer.PlayerId);
-            }
-        }
-
-        public static void AddReadyPlayer(byte playerId)
-        {
-            if (!AmongUsClient.Instance.AmHost) { return; }
-
-            Logging.Debug($"ReadyPlayer:{playerId}");
-
-            readyPlayer.Add(playerId);
-        }
-
         public static void AllPlayerAssignToExRole()
         {
-
             using (var caller = RPCOperator.CreateCaller(
                 PlayerControl.LocalPlayer.NetId,
                 RPCOperator.Command.SetRoleToAllPlayer))
@@ -126,7 +99,6 @@ namespace ExtremeRoles.Patches.Manager
             RPCOperator.SetRoleToAllPlayer(roleList);
             RoleAssignState.Instance.SwitchRoleAssignToEnd();
             roleList.Clear();
-            readyPlayer.Clear();
         }
 
         private static bool checkLimitRoleSpawnNum(

@@ -38,7 +38,7 @@ namespace ExtremeRoles.GameMode.IntroRunner
                     !isAllPlyerDummy())
                 {
                     // ホストは全員の処理が終わるまで待つ
-                    while (!Patches.Manager.RoleManagerSelectRolesPatch.IsReady)
+                    while (!RoleAssignState.Instance.IsReady)
                     {
                         yield return null;
                     }
@@ -52,7 +52,7 @@ namespace ExtremeRoles.GameMode.IntroRunner
             else
             {
                 // ホスト以外はここまで処理済みである事を送信
-                Patches.Manager.RoleManagerSelectRolesPatch.SetLocalPlayerReady();
+                RoleAssignState.SetLocalPlayerReady();
             }
 
             // バニラの役職アサイン後すぐこの処理が走るので全員の役職が入るまで待機

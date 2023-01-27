@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Hazel;
 
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module.ExtremeShipStatus;
-using ExtremeRoles.Extension.Ship;
+using Hazel;
 using AmongUs.GameOptions;
+
+using ExtremeRoles.Module.ExtremeShipStatus;
+using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Extension.Ship;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles
 {
@@ -251,7 +253,7 @@ namespace ExtremeRoles
 
         public static void SetUpReady(byte playerId)
         {
-            Patches.Manager.RoleManagerSelectRolesPatch.AddReadyPlayer(playerId);
+            RoleAssignState.Instance.AddReadyPlayer(playerId);
         }
 
         public static void SetRoleToAllPlayer(List<Module.IAssignedPlayer> assignData)

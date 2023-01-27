@@ -10,15 +10,18 @@ namespace ExtremeRoles.Module.RoleAssign
         private static RoleAssignState instance = new RoleAssignState();
 
         public bool IsRoleSetUpEnd => isRoleSetUpEnd;
+
+        // ホスト以外の準備ができてるか
         public bool IsReady => this.readyPlayer.Count ==
             (PlayerControl.AllPlayerControls.Count - 1);
 
         private HashSet<byte> readyPlayer = new HashSet<byte>();
-        private bool isRoleSetUpEnd;
+        private bool isRoleSetUpEnd = false;
 
         public void SwitchRoleAssignToEnd()
         {
             isRoleSetUpEnd = true;
+            this.readyPlayer.Clear();
         }
 
         public void Reset()
@@ -36,7 +39,7 @@ namespace ExtremeRoles.Module.RoleAssign
             this.readyPlayer.Add(playerId);
         }
 
-        internal static void SetLocalPlayerReady()
+        public static void SetLocalPlayerReady()
         {
             using (var caller = RPCOperator.CreateCaller(
                 PlayerControl.LocalPlayer.NetId,
