@@ -7,14 +7,17 @@ using UnityEngine;
 
 using UnhollowerBaseLib;
 
+using AmongUs.GameOptions;
+
+using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-using AmongUs.GameOptions;
-using ExtremeRoles.GameMode;
+
 
 namespace ExtremeRoles.Patches.Meeting
 {
@@ -135,11 +138,9 @@ namespace ExtremeRoles.Patches.Meeting
         public static bool Prefix(
             MeetingHud __instance)
         {
-            var state = ExtremeRolesPlugin.ShipState;
+            if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 
-            if (!state.IsRoleSetUpEnd) { return true; }
-
-            if (!state.AssassinMeetingTrigger)
+            if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
             {
                 normalMeetingVote(__instance);
             }
@@ -662,7 +663,7 @@ namespace ExtremeRoles.Patches.Meeting
 
         public static void Postfix(MeetingHud __instance)
         {
-            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
+            if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
 
             bool isHudOverrideTaskActive = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(
                 CachedPlayerControl.LocalPlayer);
@@ -704,7 +705,7 @@ namespace ExtremeRoles.Patches.Meeting
             [HarmonyArgument(0)] Il2CppStructArray<MeetingHud.VoterState> states)
         {
 
-            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return true; }
+            if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 
             __instance.TitleText.text = 
                 FastDestroyableSingleton<TranslationController>.Instance.GetString(

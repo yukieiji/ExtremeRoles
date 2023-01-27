@@ -7,11 +7,12 @@ using HarmonyLib;
 using AmongUs.GameOptions;
 
 
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
-using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches
 {
@@ -214,7 +215,7 @@ namespace ExtremeRoles.Patches
             // キルとベントボタン
             if (CachedPlayerControl.LocalPlayer.Data == null ||
                 CachedPlayerControl.LocalPlayer.Data.Role == null ||
-                !ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
+                !RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
 
             var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
 

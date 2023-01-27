@@ -5,15 +5,16 @@ using System.Linq;
 using HarmonyLib;
 using AmongUs.GameOptions;
 
+using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Performance;
-using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches.Manager
 {
@@ -123,7 +124,7 @@ namespace ExtremeRoles.Patches.Manager
                 }
             }
             RPCOperator.SetRoleToAllPlayer(roleList);
-            ExtremeRolesPlugin.ShipState.SwitchRoleAssignToEnd();
+            RoleAssignState.Instance.SwitchRoleAssignToEnd();
             roleList.Clear();
             readyPlayer.Clear();
         }
@@ -694,7 +695,7 @@ namespace ExtremeRoles.Patches.Manager
         public static bool Prefix([HarmonyArgument(0)] PlayerControl player)
         {
             if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
-            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return true; }
+            if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
             if (GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal)
             { 
                 return true;
@@ -710,7 +711,7 @@ namespace ExtremeRoles.Patches.Manager
         public static void Postfix([HarmonyArgument(0)] PlayerControl player)
         {
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
-            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd ||
+            if (!RoleAssignState.Instance.IsRoleSetUpEnd ||
                 !ExtremeRoleManager.GameRole[player.PlayerId].IsAssignGhostRole()) { return; }
             
             ExtremeGhostRoleManager.AssignGhostRoleToPlayer(player);
@@ -724,7 +725,7 @@ namespace ExtremeRoles.Patches.Manager
         public static bool Prefix([HarmonyArgument(0)] PlayerControl player)
         {
             if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
-            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return true; }
+            if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
             // バニラ幽霊クルー役職にニュートラルがアサインされる時やゲームモードがクラッシクではない時は常にTrueを返す
             if (ExtremeGameModeManager.Instance.ShipOption.IsAssignNeutralToVanillaCrewGhostRole ||
                 GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal)

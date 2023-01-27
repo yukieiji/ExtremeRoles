@@ -7,11 +7,13 @@ using HarmonyLib;
 using UnityEngine;
 
 using BepInEx.IL2CPP.Utils.Collections;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Roles;
-using ExtremeRoles.GhostRoles;
-using ExtremeRoles.Roles.API.Interface;
+
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.GhostRoles;
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.Meeting
 {
@@ -63,7 +65,7 @@ namespace ExtremeRoles.Patches.Meeting
 
 		public static bool Prefix(PlayerVoteArea __instance)
 		{
-			if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return true; }
+			if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 			if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
 			var state = ExtremeRolesPlugin.ShipState;

@@ -2,6 +2,7 @@
 using UnityEngine;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.RoleAssign;
 
 namespace ExtremeRoles.GameMode.IntroRunner
 {
@@ -55,7 +56,7 @@ namespace ExtremeRoles.GameMode.IntroRunner
             }
 
             // バニラの役職アサイン後すぐこの処理が走るので全員の役職が入るまで待機
-            while (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd)
+            while (!RoleAssignState.Instance.IsRoleSetUpEnd)
             {
                 yield return null;
             }

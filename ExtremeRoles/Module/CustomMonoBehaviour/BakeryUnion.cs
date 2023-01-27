@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
@@ -32,7 +33,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         {
             if (AmongUsClient.Instance.GameState != 
                 InnerNet.InnerNetClient.GameStates.Started) { return; }
-            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
+            if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
 
             if (!isUnion) { organize(); }
             if (aliveBakary.Count == 0) { return; }

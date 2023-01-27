@@ -3,14 +3,15 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.Roles;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
@@ -385,7 +386,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 this.container == null) { return; }
             if (!CachedShipStatus.Instance.enabled) { return; }
 
-            if (ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd && !isFetch)
+            if (RoleAssignState.Instance.IsRoleSetUpEnd && !isFetch)
             {
                 this.isFetch = true;
                 this.container.Fetch(this);

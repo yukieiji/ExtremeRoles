@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Resources;
 
 namespace ExtremeRoles.Module.InfoOverlay
@@ -49,7 +50,7 @@ namespace ExtremeRoles.Module.InfoOverlay
 
         private static void toggleInfoOverlay()
         {
-            if (ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd)
+            if (RoleAssignState.Instance.IsRoleSetUpEnd)
             {
                 show(InfoOverlay.ShowType.AllGhostRole);
             }

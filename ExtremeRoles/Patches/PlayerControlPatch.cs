@@ -8,18 +8,19 @@ using HarmonyLib;
 using Hazel;
 
 using UnityEngine;
+using AmongUs.GameOptions;
 
+using ExtremeRoles.Helper;
+using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
-using ExtremeRoles.Helper;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using AmongUs.GameOptions;
-using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches
 {
@@ -145,7 +146,7 @@ namespace ExtremeRoles.Patches
         {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) 
             { return; }
-            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
+            if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
             if (CachedPlayerControl.LocalPlayer.PlayerId != __instance.PlayerId) { return; }
 
@@ -428,7 +429,7 @@ namespace ExtremeRoles.Patches
                         }
                     }
                     RPCOperator.SetRoleToAllPlayer(assignData);
-                    ExtremeRolesPlugin.ShipState.SwitchRoleAssignToEnd();
+                    RoleAssignState.Instance.SwitchRoleAssignToEnd();
                     break;
                 case RPCOperator.Command.CleanDeadBody:
                     byte deadBodyPlayerId = reader.ReadByte();
@@ -1062,7 +1063,7 @@ namespace ExtremeRoles.Patches
             ExtremeRolesPlugin.ShipState.RemoveDeadInfo(__instance.PlayerId);
 
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
-            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
+            if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
 
             var (onRevive, onReviveOther) = ExtremeRoleManager.GetInterfaceCastedRole<
                 IRoleOnRevive>(__instance.PlayerId);

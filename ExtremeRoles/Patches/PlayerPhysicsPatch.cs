@@ -2,6 +2,7 @@
 
 using AmongUs.GameOptions;
 
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
@@ -43,7 +44,7 @@ namespace ExtremeRoles.Patches
 
         public static void Postfix(PlayerPhysics __instance)
         {
-            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
+            if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
             if (__instance.AmOwner && 

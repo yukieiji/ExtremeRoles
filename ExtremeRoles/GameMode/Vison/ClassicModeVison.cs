@@ -1,12 +1,15 @@
-﻿using UnityEngine;
+﻿using System.Runtime.CompilerServices;
 
+using UnityEngine;
+
+using AmongUs.GameOptions;
+
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.Solo.Impostor;
-using System.Runtime.CompilerServices;
-using AmongUs.GameOptions;
 
 namespace ExtremeRoles.GameMode.Vison
 {
@@ -58,7 +61,7 @@ namespace ExtremeRoles.GameMode.Vison
             }
             bool isRequireCustomVison = requireCustomCustomCalculateLightRadius();
 
-            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd)
+            if (!RoleAssignState.Instance.IsRoleSetUpEnd)
             {
                 return checkNormalOrCustomCalculateLightRadius(isRequireCustomVison, playerInfo, ref vison);
             }

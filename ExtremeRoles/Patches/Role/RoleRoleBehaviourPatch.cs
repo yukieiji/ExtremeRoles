@@ -1,8 +1,10 @@
 ﻿using HarmonyLib;
+using AmongUs.GameOptions;
+
+using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
-using AmongUs.GameOptions;
-using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches.Role
 {
@@ -13,7 +15,7 @@ namespace ExtremeRoles.Patches.Role
             RoleBehaviour __instance,
             ref float __result)
         {
-            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return true; }
+            if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 
             var role = ExtremeRoleManager.GameRole[__instance.Player.PlayerId];
 
@@ -33,7 +35,7 @@ namespace ExtremeRoles.Patches.Role
             ref bool __result,
             [HarmonyArgument(0)] GameData.PlayerInfo target)
         {
-            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return true; }
+            if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 
             var gameRoles = ExtremeRoleManager.GameRole;
             var role = ExtremeRoleManager.GameRole[__instance.Player.PlayerId];

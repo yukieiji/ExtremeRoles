@@ -6,18 +6,8 @@ namespace ExtremeRoles.Module.RoleAssign
 {
     public sealed class RoleAssignState
     {
-        public static RoleAssignState Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new RoleAssignState();
-                }
-                return instance;
-            }
-        }
-        private static RoleAssignState instance = null;
+        public static RoleAssignState Instance => instance;
+        private static RoleAssignState instance = new RoleAssignState();
 
         public bool IsRoleSetUpEnd => isRoleSetUpEnd;
         public bool IsReady => this.readyPlayer.Count ==
