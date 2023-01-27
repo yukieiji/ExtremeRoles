@@ -315,14 +315,20 @@ namespace ExtremeRoles.Patches
 
             if (role.CanUseVent())
             {
-                if (!role.IsVanillaRole())
+                if (!role.TryGetVanillaRoleId(out RoleTypes roleId))
                 {
-                    if (enable) { hudManager.ImpostorVentButton.Show(); }
-                    else { hudManager.ImpostorVentButton.SetDisabled(); }
+                    if (enable)
+                    { 
+                        hudManager.ImpostorVentButton.Show();
+                    }
+                    else
+                    { 
+                        hudManager.ImpostorVentButton.SetDisabled();
+                    }
                 }
                 else
                 {
-                    if (((Roles.Solo.VanillaRoleWrapper)role).VanilaRoleId == RoleTypes.Engineer)
+                    if (roleId == RoleTypes.Engineer)
                     {
                         if (enable)
                         {
@@ -946,7 +952,8 @@ namespace ExtremeRoles.Patches
             if (roles.Count == 0 || !roles.ContainsKey(__instance.PlayerId)) { return true; }
 
             var role = roles[__instance.PlayerId];
-            if (role.IsVanillaRole()) { return true; }
+            if (role.TryGetVanillaRoleId(out RoleTypes roleId) &&
+                roleId == RoleTypes.Shapeshifter) { return true; }
 
 
             GameData.PlayerInfo targetPlayerInfo = targetPlayer.Data;

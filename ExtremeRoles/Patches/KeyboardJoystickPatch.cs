@@ -229,11 +229,9 @@ namespace ExtremeRoles.Patches
 
             if (player.GetButtonDown(50) && role.CanUseVent())
             {
-                if (role.IsVanillaRole())
+                if (role.TryGetVanillaRoleId(out RoleTypes roleId))
                 {
-                    if (!(((Roles.Solo.VanillaRoleWrapper)role).VanilaRoleId ==
-                            RoleTypes.Engineer) ||
-                        OptionHolder.Ship.EngineerUseImpostorVent)
+                    if (roleId != RoleTypes.Engineer || OptionHolder.Ship.EngineerUseImpostorVent)
                     {
                         hudManager.ImpostorVentButton.DoClick();
                     }

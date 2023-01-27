@@ -2,6 +2,7 @@
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.Solo;
 
 namespace ExtremeRoles.Roles.API.Interface
@@ -75,9 +76,9 @@ namespace ExtremeRoles.Roles.API.Interface
             SingleRoleBase targetRole)
         {
             // シェイプシフターのリセット処理
-            if (targetRole.IsVanillaRole())
+            if (targetRole.TryGetVanillaRoleId(out RoleTypes roleId))
             {
-                if (((VanillaRoleWrapper)targetRole).VanilaRoleId == RoleTypes.Shapeshifter)
+                if (roleId == RoleTypes.Shapeshifter)
                 {
                     targetPlayer.Shapeshift(targetPlayer, false);
                 }

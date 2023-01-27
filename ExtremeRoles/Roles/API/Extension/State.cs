@@ -1,4 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+﻿using AmongUs.GameOptions;
+using ExtremeRoles.Roles.Solo;
+using System.Runtime.CompilerServices;
 
 namespace ExtremeRoles.Roles.API.Extension.State
 {
@@ -236,14 +238,50 @@ namespace ExtremeRoles.Roles.API.Extension.State
             }
         }
 
+        public static bool IsContainVanillaRole(this SingleRoleBase role)
+        {
+            if (role.IsVanillaRole())
+            {
+                return true;
+            }
+            else if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
+            {
+                return false;
+            }
+            else
+            {
+                return multiAssignRole.AnotherRole.IsVanillaRole();
+            }
+        }
+
+        public static bool TryGetVanillaRoleId(this SingleRoleBase role, out RoleTypes roleId)
+        {
+            if (role is VanillaRoleWrapper vanillaRole)
+            {
+                roleId = vanillaRole.VanilaRoleId;
+                return true;
+            }
+            else if (
+                role is MultiAssignRoleBase multiAssignRole &&
+                multiAssignRole.AnotherRole is VanillaRoleWrapper anotherVanillaRole)
+            {
+                roleId = anotherVanillaRole.VanilaRoleId;
+                return true;
+            }
+            else
+            {
+                roleId = RoleTypes.Crewmate;
+                return false;
+            }
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool isNotMultiAssign(SingleRoleBase role, out MultiAssignRoleBase multiAssignRole)
         {
             multiAssignRole = role as MultiAssignRoleBase;
-            return 
-                multiAssignRole == null || 
-                multiAssignRole.AnotherRole == null ||
-                multiAssignRole.AnotherRole.Id == ExtremeRoleId.VanillaRole;
+            return
+                multiAssignRole == null ||
+                multiAssignRole.AnotherRole == null;
         }
     }
 }
