@@ -221,7 +221,7 @@ namespace ExtremeRoles.Roles.Combination
                 }
 
                 return string.Format(
-                    base.GetFullDescription(),
+                    base.GetIntroDescription(),
                     string.Concat(intro));
             }
             else
