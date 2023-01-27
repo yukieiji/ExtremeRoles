@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
+using ExtremeRoles.Roles.Combination;
 
 namespace ExtremeRoles.GameMode.RoleSelector
 {
@@ -13,21 +14,21 @@ namespace ExtremeRoles.GameMode.RoleSelector
         public bool CanUseXion => true;
         public bool IsVanillaRoleToMultiAssign => false;
 
-        public IEnumerable<int> NormalRoleSpawnOptionId
+        public IEnumerable<ExtremeRoleId> UseNormalRoleId
         {
             get
             {
-                foreach (int id in this.useNormalRoleSpawnOption)
+                foreach (ExtremeRoleId id in getUseNormalRoleId())
                 {
                     yield return id;
                 }
             }
         }
-        public IEnumerable<int> CombRoleSpawnOptionId
+        public IEnumerable<CombinationRoleType> UseCombRoleType
         {
             get
             {
-                foreach (int id in this.useCombRoleSpawnOption)
+                foreach (CombinationRoleType id in getUseCombRoleType())
                 {
                     yield return id;
                 }
@@ -50,13 +51,15 @@ namespace ExtremeRoles.GameMode.RoleSelector
 
         public ClassicGameModeRoleSelector()
         {
-            foreach (SingleRoleBase role in ExtremeRoleManager.NormalRole.Values)
+            foreach (ExtremeRoleId roleId in getUseNormalRoleId())
             {
+                var role = ExtremeRoleManager.NormalRole[(int)roleId];
                 this.useNormalRoleSpawnOption.Add(
                     role.GetRoleOptionId(RoleCommonOption.SpawnRate));
             }
-            foreach (CombinationRoleManagerBase role in ExtremeRoleManager.CombRole.Values)
+            foreach (CombinationRoleType roleId in getUseCombRoleType())
             {
+                var role = ExtremeRoleManager.CombRole[(byte)roleId];
                 this.useCombRoleSpawnOption.Add(
                     role.GetRoleOptionId(RoleCommonOption.SpawnRate));
             }
@@ -81,5 +84,84 @@ namespace ExtremeRoles.GameMode.RoleSelector
                 this.useCombRoleSpawnOption.Contains(id) ||
                 this.useGhostRoleSpawnOption.Contains(id);
         }
+
+        private static ExtremeRoleId[] getUseNormalRoleId() =>
+            new ExtremeRoleId[]
+            {
+                ExtremeRoleId.SpecialCrew,
+                ExtremeRoleId.Sheriff,
+                ExtremeRoleId.Maintainer,
+                ExtremeRoleId.Neet,
+                ExtremeRoleId.Watchdog,
+                ExtremeRoleId.Supervisor,
+                ExtremeRoleId.BodyGuard,
+                ExtremeRoleId.Whisper,
+                ExtremeRoleId.TimeMaster,
+                ExtremeRoleId.Agency,
+                ExtremeRoleId.Bakary,
+                ExtremeRoleId.CurseMaker,
+                ExtremeRoleId.Fencer,
+                ExtremeRoleId.Opener,
+                ExtremeRoleId.Carpenter,
+                ExtremeRoleId.Survivor,
+                ExtremeRoleId.Captain,
+                ExtremeRoleId.Photographer,
+                ExtremeRoleId.Delusioner,
+                ExtremeRoleId.Resurrecter,
+
+                ExtremeRoleId.SpecialImpostor,
+                ExtremeRoleId.Evolver,
+                ExtremeRoleId.Carrier,
+                ExtremeRoleId.PsychoKiller,
+                ExtremeRoleId.BountyHunter,
+                ExtremeRoleId.Painter,
+                ExtremeRoleId.Faker,
+                ExtremeRoleId.OverLoader,
+                ExtremeRoleId.Cracker,
+                ExtremeRoleId.Bomber,
+                ExtremeRoleId.Mery,
+                ExtremeRoleId.SlaveDriver,
+                ExtremeRoleId.SandWorm,
+                ExtremeRoleId.Smasher,
+                ExtremeRoleId.AssaultMaster,
+                ExtremeRoleId.Shooter,
+                ExtremeRoleId.LastWolf,
+                ExtremeRoleId.Commander,
+                ExtremeRoleId.Hypnotist,
+                ExtremeRoleId.UnderWarper,
+                ExtremeRoleId.Magician,
+
+                ExtremeRoleId.Alice,
+                ExtremeRoleId.Jackal,
+                ExtremeRoleId.TaskMaster,
+                ExtremeRoleId.Missionary,
+                ExtremeRoleId.Jester,
+                ExtremeRoleId.Yandere,
+                ExtremeRoleId.Yoko,
+                ExtremeRoleId.Totocalcio,
+                ExtremeRoleId.Miner,
+                ExtremeRoleId.Eater,
+                ExtremeRoleId.Queen,
+                ExtremeRoleId.Madmate,
+                ExtremeRoleId.Umbrer,
+            };
+        private CombinationRoleType[] getUseCombRoleType() =>
+            new CombinationRoleType[]
+            {
+                CombinationRoleType.Avalon,
+                CombinationRoleType.HeroAca,
+                CombinationRoleType.DetectiveOffice,
+                CombinationRoleType.Kids,
+
+                CombinationRoleType.Lover,
+                CombinationRoleType.Buddy,
+
+                CombinationRoleType.Sharer,
+
+                CombinationRoleType.Supporter,
+                CombinationRoleType.Guesser,
+
+                CombinationRoleType.Traitor,
+            };
     }
 }

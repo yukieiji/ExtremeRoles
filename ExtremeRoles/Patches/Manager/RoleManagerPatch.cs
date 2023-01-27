@@ -35,14 +35,14 @@ namespace ExtremeRoles.Patches.Manager
 
             useXion = OptionHolder.AllOption[(int)OptionHolder.CommonOptionKey.UseXion].GetValue();
             
-            if (!useXion || 
-                GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal) { return; }
-
-            PlayerControl loaclPlayer = PlayerControl.LocalPlayer;
-            roleList.Add(new AssignedPlayerToSingleRoleData(
-                loaclPlayer.PlayerId, (int)ExtremeRoleId.Xion));
-            loaclPlayer.RpcSetRole(RoleTypes.Crewmate);
-            loaclPlayer.Data.IsDead = true;
+            if (useXion && ExtremeGameModeManager.Instance.RoleSelector.CanUseXion)
+            {
+                PlayerControl loaclPlayer = PlayerControl.LocalPlayer;
+                roleList.Add(new AssignedPlayerToSingleRoleData(
+                    loaclPlayer.PlayerId, (int)ExtremeRoleId.Xion));
+                loaclPlayer.RpcSetRole(RoleTypes.Crewmate);
+                loaclPlayer.Data.IsDead = true;
+            }
         }
         public static void Postfix()
         {
@@ -53,21 +53,10 @@ namespace ExtremeRoles.Patches.Manager
             RPCOperator.Initialize();
 
             PlayerControl[] playeres = PlayerControl.AllPlayerControls.ToArray();
-            
-            if (GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal)
-            {
-                foreach (var player in playeres)
-                {
-                    roleList.Add(
-                        new AssignedPlayerToSingleRoleData(
-                            player.PlayerId, (byte)player.Data.Role.Role));
-                }
-                return;
-            }
 
             var playerIndexList = Enumerable.Range(0, playeres.Count()).ToList();
 
-            if (useXion)
+            if (useXion && ExtremeGameModeManager.Instance.RoleSelector.CanUseXion)
             {
                 playerIndexList.RemoveAll(i => playeres[i].PlayerId == PlayerControl.LocalPlayer.PlayerId);
             }
@@ -202,8 +191,7 @@ namespace ExtremeRoles.Patches.Manager
                             $"-------------------AssignToPlayer:{player.Data.PlayerName}-------------------");
                         Logging.Debug($"---AssignRole:{role.Id}---");
                         
-                        assign = isAssignedToMultiRole(
-                            role, player);
+                        assign = isAssignedToMultiRole(role, player);
 
                         Logging.Debug($"AssignResult:{assign}");
 
@@ -381,15 +369,6 @@ namespace ExtremeRoles.Patches.Manager
             MultiAssignRoleBase role,
             PlayerControl player)
         {
-
-            if (ExtremeRoleManager.GameRole.ContainsKey(player.PlayerId))
-            {
-                if (ExtremeRoleManager.GameRole[player.PlayerId].Id == role.Id)
-                {
-                    return false;
-                }
-            }
-
             switch (player.Data.Role.Role)
             {
                 case RoleTypes.Impostor:
@@ -464,26 +443,42 @@ namespace ExtremeRoles.Patches.Manager
                 
                 Logging.Debug(
                     $"-------------------AssignToPlayer:{player.Data.PlayerName}-------------------");
-                
+
                 // Modules.Helpers.DebugLog($"ShufflePlayerIndex:{shuffledArange.Count()}");
 
-                switch (roleData.Role)
-                {
+                RoleTypes roleType = roleData.Role;
 
-                    case RoleTypes.Impostor:
-                        shuffledRoles = shuffleRolesForImpostor.OrderBy(
-                            item => RandomGenerator.Instance.Next()).ToList();
-                        break;
-                    case RoleTypes.Crewmate:
-                        shuffledRoles = shuffleRolesForCrewmate.OrderBy(
-                            item => RandomGenerator.Instance.Next()).ToList();
-                        break;
-                    default:
-                        assignedPlayer.Add(new AssignedPlayerToSingleRoleData(
+                // Classicが優先されるので上に上げて速度を上げる
+                if (!ExtremeGameModeManager.Instance.RoleSelector.IsVanillaRoleToMultiAssign)
+                {
+                    switch (roleData.Role)
+                    {
+                        case RoleTypes.Impostor:
+                            shuffledRoles = shuffleRolesForImpostor.OrderBy(
+                                item => RandomGenerator.Instance.Next()).ToList();
+                            break;
+                        case RoleTypes.Crewmate:
+                            shuffledRoles = shuffleRolesForCrewmate.OrderBy(
+                                item => RandomGenerator.Instance.Next()).ToList();
+                            break;
+                        default:
+                            assignedPlayer.Add(new AssignedPlayerToSingleRoleData(
                             player.PlayerId, (int)roleData.Role));
-                        shuffledArange.Remove(index);
-                        assigned = true;
-                        break;
+                            shuffledArange.Remove(index);
+                            assigned = true;
+                            break;
+                    }
+                }
+                else
+                {
+                    shuffledRoles = roleType switch
+                    {
+                        RoleTypes.Impostor or RoleTypes.Shapeshifter
+                            => shuffleRolesForImpostor.OrderBy(
+                                item => RandomGenerator.Instance.Next()).ToList(),
+                        _ => shuffleRolesForCrewmate.OrderBy(
+                                item => RandomGenerator.Instance.Next()).ToList()
+                    };
                 }
 
                 if (assigned)
@@ -589,8 +584,10 @@ namespace ExtremeRoles.Patches.Manager
                 allOption[(int)OptionHolder.CommonOptionKey.MaxImpostorRoles].GetValue());
 
 
-            foreach (var (combType, role) in ExtremeRoleManager.CombRole)
+            foreach (var roleId in ExtremeGameModeManager.Instance.RoleSelector.UseCombRoleType)
             {
+                byte combType = (byte)roleId;
+                var role = ExtremeRoleManager.CombRole[combType];
                 int spawnRate = computePercentage(allOption[
                     role.GetRoleOptionId(RoleCommonOption.SpawnRate)]);
                 int roleSet = allOption[
@@ -616,8 +613,11 @@ namespace ExtremeRoles.Patches.Manager
                 }
             }
 
-            foreach (var (roleId, role) in ExtremeRoleManager.NormalRole)
+            foreach (var roleId in ExtremeGameModeManager.Instance.RoleSelector.UseNormalRoleId)
             {
+                int intedRoleId = (int)roleId;
+                SingleRoleBase role = ExtremeRoleManager.NormalRole[intedRoleId];
+
                 int spawnRate = computePercentage(allOption[
                     role.GetRoleOptionId(RoleCommonOption.SpawnRate)]);
                 int roleNum = allOption[
@@ -639,12 +639,12 @@ namespace ExtremeRoles.Patches.Manager
                 {
                     case ExtremeRoleType.Impostor:
                         RolesForVanillaImposter.Add(role);
-                        RoleSpawnSettingsForImposter[roleId] = addData;
+                        RoleSpawnSettingsForImposter[intedRoleId] = addData;
                         break;
                     case ExtremeRoleType.Crewmate:
                     case ExtremeRoleType.Neutral:
                         RolesForVanillaCrewmate.Add(role);
-                        RoleSpawnSettingsForCrewmate[roleId] = addData;
+                        RoleSpawnSettingsForCrewmate[intedRoleId] = addData;
                         break;
                     case ExtremeRoleType.Null:
                         break;

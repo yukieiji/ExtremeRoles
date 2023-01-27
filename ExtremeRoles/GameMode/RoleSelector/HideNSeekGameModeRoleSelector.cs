@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using ExtremeRoles.GhostRoles;
-using ExtremeRoles.GhostRoles.API;
+﻿using System.Collections.Generic;
+
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -13,50 +11,36 @@ namespace ExtremeRoles.GameMode.RoleSelector
         public bool CanUseXion => false;
         public bool IsVanillaRoleToMultiAssign => true;
 
-        public IEnumerable<int> NormalRoleSpawnOptionId
+        public IEnumerable<ExtremeRoleId> UseNormalRoleId
         {
             get
             {
-                foreach (int id in this.useNormalRoleSpawnOption)
+                foreach (ExtremeRoleId id in getUseNormalId())
                 {
                     yield return id;
                 }
             }
         }
-        public IEnumerable<int> CombRoleSpawnOptionId
+        public IEnumerable<CombinationRoleType> UseCombRoleType
         {
             get
             {
-                foreach (int id in this.useCombRoleSpawnOption)
-                {
-                    yield return id;
-                }
+                yield break;
             }
         }
         public IEnumerable<int> GhostRoleSpawnOptionId
         {
             get
             {
-                foreach (int id in this.useGhostRoleSpawnOption)
-                {
-                    yield return id;
-                }
+                yield break;
             }
         }
 
         private readonly HashSet<int> useNormalRoleSpawnOption = new HashSet<int>();
-        private readonly HashSet<int> useCombRoleSpawnOption = new HashSet<int>();
-        private readonly HashSet<int> useGhostRoleSpawnOption = new HashSet<int>();
 
         public HideNSeekGameModeRoleSelector()
         {
-            foreach (ExtremeRoleId id in new ExtremeRoleId[]
-            {
-                ExtremeRoleId.SpecialCrew,
-                ExtremeRoleId.Watchdog,
-                ExtremeRoleId.Supervisor,
-                ExtremeRoleId.Survivor,
-            })
+            foreach (ExtremeRoleId id in getUseNormalId())
             {
                 this.useNormalRoleSpawnOption.Add(
                     ExtremeRoleManager.NormalRole[(int)id].GetRoleOptionId(RoleCommonOption.SpawnRate));
@@ -72,8 +56,16 @@ namespace ExtremeRoles.GameMode.RoleSelector
 
             int id = option.Id;
 
-            return
-                this.useNormalRoleSpawnOption.Contains(id);
+            return this.useNormalRoleSpawnOption.Contains(id);
         }
+
+        private static ExtremeRoleId[] getUseNormalId() => 
+            new ExtremeRoleId[]
+            {
+                ExtremeRoleId.SpecialCrew,
+                ExtremeRoleId.Watchdog,
+                ExtremeRoleId.Supervisor,
+                ExtremeRoleId.Survivor,
+            };
     }
 }
