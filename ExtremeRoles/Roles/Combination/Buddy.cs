@@ -286,6 +286,8 @@ namespace ExtremeRoles.Roles.Combination
                 this.awake = false;
                 this.HasOtherVison = false;
             }
+
+            this.buddy = new BuddyContainer();
         }
 
         private BuddyContainer getSameBuddy()
