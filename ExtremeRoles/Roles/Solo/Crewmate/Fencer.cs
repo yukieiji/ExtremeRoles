@@ -175,16 +175,15 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             if (this.IsCounter)
             {
-
                 using (var caller = RPCOperator.CreateCaller(
-                RPCOperator.Command.FencerAbility))
+                    RPCOperator.Command.FencerAbility))
                 {
                     caller.WriteByte(
                         rolePlayer.PlayerId);
                     caller.WriteByte((byte)FencerAbility.ActivateKillButton);
                 }
                 enableKillButton(this, rolePlayer.PlayerId);
-
+                Sound.PlaySound(Sound.SoundType.GuardianAngleGuard, 0.85f);
                 return false;
             }
 
