@@ -72,8 +72,6 @@ namespace ExtremeRoles.Patches.Option
 
             allOptionStr.Add(ExtremeGameModeManager.Instance.ShipOption.ToHudString());
 
-
-            // TODO：以下より下役職のオプション設定のHudstring周り、01/06未対応
             foreach (IOption option in OptionHolder.AllOption.Values)
             {
                 int optionId = option.Id;
@@ -85,13 +83,10 @@ namespace ExtremeRoles.Patches.Option
                 }
 
 
-                if (option.Parent == null)
+                if (option.Parent == null &&
+                    option.Enabled &&
+                    ExtremeGameModeManager.Instance.RoleSelector.IsValidRoleOption(option))
                 {
-                    if (!option.Enabled)
-                    {
-                        continue;
-                    }
-
                     string optionStr = option.ToHudStringWithChildren(option.IsHidden ? 0 : 1);
                     allOptionStr.Add(optionStr.Trim('\r', '\n'));
                 }
