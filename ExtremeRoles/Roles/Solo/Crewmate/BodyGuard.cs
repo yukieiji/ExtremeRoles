@@ -390,6 +390,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private static void coverDead(
             byte killerPlayerId, byte targetBodyGuard)
         {
+            if (targetBodyGuard == CachedPlayerControl.LocalPlayer.PlayerId)
+            {
+                Sound.PlaySound(Sound.SoundType.GuardianAngleGuard, 0.6f);
+            }
+
             // 必ずテレポートしないキル
             RPCOperator.UncheckedMurderPlayer(
                 killerPlayerId, targetBodyGuard, byte.MinValue);
