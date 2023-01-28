@@ -11,17 +11,15 @@ namespace ExtremeRoles.Module.RoleAssign
 {
     public sealed class RoleSpawnData
     {
-        public int CrewmateExRoleMaxNum { get; private set; }
-        public int NeutralExRoleMaxNum { get; private set; }
-        public int ImpostorExRoleMaxNum { get; private set; }
-
+        public Dictionary<ExtremeRoleType, int> MaxRoleNum { get; private set; }
+        
         public Dictionary<ExtremeRoleType, Dictionary<int, SingleRoleSpawnSetting>> ExNormalRoleSpawnSetting
         { get; private set; }
         public Dictionary<byte, CombinationRoleSpawnSetting> ExCombRoleSpawnSetting { get; private set; }
 
         public RoleSpawnData()
         {
-            ExNormalRoleSpawnSetting = new Dictionary<ExtremeRoleType, Dictionary<int, SingleRoleSpawnSetting>>()
+            ExNormalRoleSpawnSetting = new Dictionary<ExtremeRoleType, Dictionary<int, SingleRoleSpawnSetting>>
             {
                 { ExtremeRoleType.Crewmate, new Dictionary<int, SingleRoleSpawnSetting>() },
                 { ExtremeRoleType.Impostor, new Dictionary<int, SingleRoleSpawnSetting>() },
@@ -29,18 +27,29 @@ namespace ExtremeRoles.Module.RoleAssign
             };
             ExCombRoleSpawnSetting = new Dictionary<byte, CombinationRoleSpawnSetting>();
 
+            MaxRoleNum = new Dictionary<ExtremeRoleType, int>
+            { 
+                {
+                    ExtremeRoleType.Crewmate,
+                    computeSpawnNum(
+                        OptionHolder.CommonOptionKey.MinCrewmateRoles,
+                        OptionHolder.CommonOptionKey.MaxCrewmateRoles)
+                },
+                {
+                    ExtremeRoleType.Neutral,
+                    computeSpawnNum(
+                        OptionHolder.CommonOptionKey.MinNeutralRoles,
+                        OptionHolder.CommonOptionKey.MaxNeutralRoles)
+                },
+                {
+                    ExtremeRoleType.Impostor,
+                    computeSpawnNum(
+                        OptionHolder.CommonOptionKey.MinImpostorRoles,
+                        OptionHolder.CommonOptionKey.MaxImpostorRoles)
+                },
+            };
+
             var allOption = OptionHolder.AllOption;
-
-            CrewmateExRoleMaxNum = computeSpawnNum(
-                OptionHolder.CommonOptionKey.MinCrewmateRoles,
-                OptionHolder.CommonOptionKey.MaxCrewmateRoles);
-            NeutralExRoleMaxNum = computeSpawnNum(
-                OptionHolder.CommonOptionKey.MinNeutralRoles,
-                OptionHolder.CommonOptionKey.MaxNeutralRoles);
-            ImpostorExRoleMaxNum = computeSpawnNum(
-                OptionHolder.CommonOptionKey.MinImpostorRoles,
-                OptionHolder.CommonOptionKey.MaxImpostorRoles);
-
 
             foreach (var roleId in ExtremeGameModeManager.Instance.RoleSelector.UseCombRoleType)
             {
@@ -99,6 +108,13 @@ namespace ExtremeRoles.Module.RoleAssign
             }
 
             ExtremeGhostRoleManager.CreateGhostRoleAssignData();
+        }
+
+        public bool IsSpawnRole(ExtremeRoleType roleType, int reduceNum = 1)
+        {
+            return 
+                this.MaxRoleNum.TryGetValue(roleType, out int maxNum) && 
+                maxNum - reduceNum >= 0;
         }
 
         private static int computeSpawnNum(
