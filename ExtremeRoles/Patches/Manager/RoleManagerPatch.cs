@@ -24,42 +24,115 @@ namespace ExtremeRoles.Patches.Manager
         {
             public byte CombType { get; private set; }
             public List<MultiAssignRoleBase> RoleList { get; private set; }
+            public int GameControlId { get; private set; }
 
-            public CombinationRoleListData(byte combType, List<MultiAssignRoleBase> roleList)
+            public CombinationRoleListData(
+                int controlId, byte combType,
+                List<MultiAssignRoleBase> roleList)
             {
                 CombType = combType;
                 RoleList = roleList;
+                GameControlId = controlId;
             }
         }
 
-        public static void createCombinationExtremeRoleAssign(
-            ref RoleSpawnDataManager spawnData)
+        public static void Prefix()
+        {
+            if (OptionHolder.AllOption[(int)OptionHolder.CommonOptionKey.UseXion].GetValue() &&
+                ExtremeGameModeManager.Instance.RoleSelector.CanUseXion)
+            {
+                PlayerControl loaclPlayer = PlayerControl.LocalPlayer;
+                
+                PlayerRoleAssignData assignData = PlayerRoleAssignData.Instance;
+                assignData.AddAssignData(
+                    new PlayerToSingleRoleAssignData(
+                        loaclPlayer.PlayerId,
+                        (int)ExtremeRoleId.Xion));
+                assignData.RemvePlayer(loaclPlayer);
+
+                loaclPlayer.RpcSetRole(RoleTypes.Crewmate);
+                loaclPlayer.Data.IsDead = true;
+            }
+        }
+
+        public static void Postfix()
+        {
+            uint netId = PlayerControl.LocalPlayer.NetId;
+
+            RPCOperator.Call(netId, RPCOperator.Command.Initialize);
+            RPCOperator.Initialize();
+
+            RoleSpawnDataManager spawnData = new RoleSpawnDataManager();
+            PlayerRoleAssignData assignData = PlayerRoleAssignData.Instance;
+
+            addCombinationExtremeRoleAssignData(
+                ref spawnData, ref assignData);
+        }
+
+        private static void addCombinationExtremeRoleAssignData(
+            ref RoleSpawnDataManager spawnData,
+            ref PlayerRoleAssignData assignData)
         {
             if (!spawnData.CurrentCombRoleSpawnData.Any()) { return; }
 
             List<CombinationRoleListData> combRoleListData = createCombinationRoleListData(
                 ref spawnData);
             var shuffleRoleListData = combRoleListData.OrderBy(x => RandomGenerator.Instance.Next());
+            assignData.Shuffle();
+
+            List<PlayerControl> anotherRoleAssignPlayer = new List<PlayerControl>();
 
             foreach (var roleListData in combRoleListData)
             {
                 foreach (var role in roleListData.RoleList)
                 {
-                    // ここのプレイヤーはシャッフルして取得
-                    var player = new PlayerControl();
+                    PlayerControl removePlayer = null;
 
-                    Logging.Debug(
-                            $"-------------------AssignToPlayer:{player.Data.PlayerName}-------------------");
-                    Logging.Debug($"---AssignRole:{role.Id}---");
+                    foreach (PlayerControl player in assignData.AllNotAssignPlayer)
+                    {
+                        Logging.Debug(
+                            $"------------------- AssignToPlayer:{player.Data.PlayerName} -------------------");
+                        Logging.Debug($"---AssignRole:{role.Id}---");
 
-                    bool assign = isCanMulitAssignRoleToPlayer(role, player);
+                        bool assign = isCanMulitAssignRoleToPlayer(role, player);
 
-                    Logging.Debug($"AssignResult:{assign}");
+                        Logging.Debug($"AssignResult:{assign}");
 
-                    if (!assign) { continue; }
+                        if (!assign)
+                        {
+                            Logging.Debug($"Assign missing!!");
+                            continue;
+                        }
+                        if (role.CanHasAnotherRole)
+                        {
+                            anotherRoleAssignPlayer.Add(player);
+                        }
+                        removePlayer = player;
 
+                        assignData.AddAssignData(
+                            new PlayerToCombRoleAssignData(
+                                player.PlayerId, (int)role.Id,
+                                roleListData.CombType,
+                                (byte)roleListData.GameControlId,
+                                (byte)player.Data.Role.Role));
 
+                        Logging.Debug($"------------------- Assign End -------------------");
 
+                        break;
+                    }
+
+                    if (removePlayer != null)
+                    {
+                        assignData.RemvePlayer(removePlayer);
+                    }
+                }
+            }
+
+            foreach (PlayerControl player in anotherRoleAssignPlayer)
+            {
+                if (player != null)
+                {
+                    assignData.AddPlayer(player);
                 }
             }
         }
@@ -73,6 +146,7 @@ namespace ExtremeRoles.Patches.Manager
             int curCrewNum = 0;
             int maxImpNum = GameOptionsManager.Instance.CurrentGameOptions.GetInt(
                 Int32OptionNames.NumImpostors);
+            int gameControlId = 0;
 
             NotAssignPlayerData notAssignPlayer = new NotAssignPlayerData();
 
@@ -135,7 +209,9 @@ namespace ExtremeRoles.Patches.Manager
 
                     notAssignPlayer.ReduceImpostorAssignNum(reduceImpostorRole);
                     roleListData.Add(
-                        new CombinationRoleListData(combType, spawnRoles));
+                        new CombinationRoleListData(
+                            gameControlId, combType, spawnRoles));
+                    ++gameControlId;
                 }
             }
 
