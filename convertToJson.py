@@ -1,6 +1,5 @@
 import os
 import json
-import tempfile
 from openpyxl import load_workbook
 
 WORKING_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -11,23 +10,16 @@ EXTREMERORLS_OUT_FILE = os.path.join(WORKING_DIR, "ExtremeRoles", "Resources", "
 EXTREMESKIN_IN_FILE = os.path.join(WORKING_DIR, "ExtremeSkinsTransData.xlsx")
 EXTREMESKIN_OUT_FILE = os.path.join(WORKING_DIR, "ExtremeSkins", "Resources", "LangData", "stringData.json")
 
-def writeJsonIfNeed(stringData, outputFile, **kwargs):
-  with tempfile.TemporaryFile("w+") as f:
-    json.dump(stringData, f, **kwargs)
-    f.seek(0)
-    currentdata=f.read()
+def isRequireUpdate(newJson, outputFile):
   try:
     with open(outputFile, "r") as f:
-      olddata=f.read()
+      oldJson = json.load(f)
+    oldJsonStr = json.dumps(oldJson)
   except Exception:
-    need = True
+    return True
   else:
-    need = currentdata!=olddata
-
-  if need:
-    os.makedirs(os.path.dirname(outputFile), exist_ok=True)
-    with open(outputFile, "w") as f:
-      f.write(currentdata)
+    newJsonStr = json.dumps(newJson)
+    return oldJsonStr != newJsonStr
 
 
 def stringToJson(filename, outputFile):
@@ -57,7 +49,11 @@ def stringToJson(filename, outputFile):
       if data:
         stringData[name] = data
 
-  writeJsonIfNeed(stringData, outputFile, indent=4)
+  if isRequireUpdate(stringData, outputFile):
+    os.makedirs(os.path.dirname(outputFile), exist_ok=True)
+    with open(outputFile, "w") as f:
+      json.dump(stringData, f, indent=4)
+      print(outputFile)
 
 if __name__ == "__main__":
   stringToJson(EXTREMERORLS_IN_FILE, EXTREMERORLS_OUT_FILE)
