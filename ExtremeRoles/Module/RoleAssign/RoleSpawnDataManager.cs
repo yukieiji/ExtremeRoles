@@ -117,6 +117,11 @@ namespace ExtremeRoles.Module.RoleAssign
                 maxNum - reduceNum >= 0;
         }
 
+        public void ReduceSpawnLimit(ExtremeRoleType roleType, int reduceNum = 1)
+        {
+            this.MaxRoleNum[roleType] = this.MaxRoleNum[roleType] - reduceNum;
+        }
+
         private static int computeSpawnNum(
             OptionHolder.CommonOptionKey minSpawnKey,
             OptionHolder.CommonOptionKey maxSpawnKey)

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API;
-using ExtremeRoles.GhostRoles;
-using ExtremeRoles.GameMode;
-using ExtremeRoles.Helper;
+﻿using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module.RoleAssign
 {
