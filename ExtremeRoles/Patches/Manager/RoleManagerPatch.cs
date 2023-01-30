@@ -217,6 +217,8 @@ namespace ExtremeRoles.Patches.Manager
 
             foreach (PlayerControl player in targetPlayer)
             {
+                Logging.Debug(
+                    $"-------------------AssignToPlayer:{player.Data.PlayerName}-------------------");
                 PlayerControl removePlayer = null;
 
                 RoleTypes vanillaRoleId = player.Data.Role.Role;
@@ -231,6 +233,7 @@ namespace ExtremeRoles.Patches.Manager
                     assignData.AddAssignData(
                         new PlayerToSingleRoleAssignData(
                             player.PlayerId, (int)vanillaRoleId));
+                    Logging.Debug($"---AssignRole:{vanillaRoleId}---");
                 }
 
                 // 上限に入ってるやつはとりあえず消す
@@ -244,11 +247,13 @@ namespace ExtremeRoles.Patches.Manager
                     int intedRoleId = shuffledSpawnCheckRoleId[0];
                     shuffledSpawnCheckRoleId.RemoveAt(0);
 
+                    Logging.Debug($"---AssignRole:{intedRoleId}---");
+
                     spawnData.ReduceSpawnLimit(team);
                     assignData.AddAssignData(
                         new PlayerToSingleRoleAssignData(player.PlayerId, intedRoleId));
                 }
-
+                Logging.Debug($"-------------------AssignEnd-------------------");
                 assignData.RemvePlayer(removePlayer);
             }
         }
