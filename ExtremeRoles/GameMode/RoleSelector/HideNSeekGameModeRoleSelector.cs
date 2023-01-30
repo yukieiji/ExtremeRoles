@@ -66,6 +66,9 @@ namespace ExtremeRoles.GameMode.RoleSelector
                 ExtremeRoleId.Watchdog,
                 ExtremeRoleId.Supervisor,
                 ExtremeRoleId.Survivor,
+
+                ExtremeRoleId.BountyHunter,
+                ExtremeRoleId.Hypnotist,
             };
     }
 }
