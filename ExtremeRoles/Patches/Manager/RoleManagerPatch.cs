@@ -499,6 +499,8 @@ namespace ExtremeRoles.Patches.Manager
 
         public static void Prefix()
         {
+            NewRoleManagerFunction.Prefix();
+            /*
             roleList.Clear();
             useXion = OptionHolder.AllOption[(int)OptionHolder.CommonOptionKey.UseXion].GetValue();
             
@@ -510,10 +512,12 @@ namespace ExtremeRoles.Patches.Manager
                 loaclPlayer.RpcSetRole(RoleTypes.Crewmate);
                 loaclPlayer.Data.IsDead = true;
             }
+            */
         }
         public static void Postfix()
         {
-
+            NewRoleManagerFunction.Postfix();
+            /*
             uint netId = PlayerControl.LocalPlayer.NetId;
 
             RPCOperator.Call(netId, RPCOperator.Command.Initialize);
@@ -544,6 +548,7 @@ namespace ExtremeRoles.Patches.Manager
                 ref assignedPlayerData,
                 combRoleAssignedPlayerId);
             roleList = assignedPlayerData;
+            */
         }
 
         public static void AllPlayerAssignToExRole()

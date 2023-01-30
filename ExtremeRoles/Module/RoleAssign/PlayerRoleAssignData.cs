@@ -44,15 +44,15 @@ namespace ExtremeRoles.Module.RoleAssign
             {
                 caller.WritePackedInt(this.assignData.Count); // 何個あるか
 
-                foreach (IAssignedPlayer data in this.assignData)
+                foreach (IPlayerToExRoleAssignData data in this.assignData)
                 {
                     caller.WriteByte(data.PlayerId); // PlayerId
                     caller.WriteByte(data.RoleType); // RoleType : single or comb
                     caller.WritePackedInt(data.RoleId); // RoleId
 
-                    if (data.RoleType == (byte)IAssignedPlayer.ExRoleType.Comb)
+                    if (data.RoleType == (byte)IPlayerToExRoleAssignData.ExRoleType.Comb)
                     {
-                        var combData = (AssignedPlayerToCombRoleData)data;
+                        var combData = (PlayerToCombRoleAssignData)data;
                         caller.WriteByte(combData.CombTypeId); // combTypeId
                         caller.WriteByte(combData.GameContId); // byted GameContId
                         caller.WriteByte(combData.AmongUsRoleId); // byted AmongUsVanillaRoleId
@@ -61,7 +61,7 @@ namespace ExtremeRoles.Module.RoleAssign
             }
             RPCOperator.SetRoleToAllPlayer(this.assignData);
             RoleAssignState.Instance.SwitchRoleAssignToEnd();
-            instance = null;
+            // instance = null;
         }
 
         public List<PlayerControl> GetCanImpostorAssignPlayer()
