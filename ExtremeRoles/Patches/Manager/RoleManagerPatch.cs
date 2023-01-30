@@ -8,7 +8,6 @@ using AmongUs.GameOptions;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -257,7 +256,7 @@ namespace ExtremeRoles.Patches.Manager
                     // マルチアサインでコンビ役職にアサインされてないプレイヤーは追加でアサインが必要
                     removePlayer =
                         ExtremeGameModeManager.Instance.RoleSelector.IsVanillaRoleToMultiAssign
-                        &&
+                        ||
                         (
                             assignData.TryGetCombRoleAssign(player.PlayerId, out ExtremeRoleType combTeam) &&
                             combTeam == team
