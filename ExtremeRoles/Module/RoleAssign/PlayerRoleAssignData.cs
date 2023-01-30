@@ -4,6 +4,7 @@ using System.Linq;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module.RoleAssign
 {
@@ -25,18 +26,47 @@ namespace ExtremeRoles.Module.RoleAssign
         public List<PlayerControl> NeedRoleAssignPlayer { get; private set; }
 
         private List<IPlayerToExRoleAssignData> assignData = new List<IPlayerToExRoleAssignData>();
+        private Dictionary<byte, ExtremeRoleType> combRoleAssignPlayerId = new Dictionary<byte, ExtremeRoleType>();
 
         public PlayerRoleAssignData()
         {
             this.assignData.Clear();
 
-            NeedRoleAssignPlayer = new List<PlayerControl>(
+            this.NeedRoleAssignPlayer = new List<PlayerControl>(
                 PlayerControl.AllPlayerControls.ToArray());
+        }
+
+        public void AllPlayerAssignToExRole()
+        {
+            using (var caller = RPCOperator.CreateCaller(
+                PlayerControl.LocalPlayer.NetId,
+                RPCOperator.Command.SetRoleToAllPlayer))
+            {
+                caller.WritePackedInt(this.assignData.Count); // 何個あるか
+
+                foreach (IAssignedPlayer data in this.assignData)
+                {
+                    caller.WriteByte(data.PlayerId); // PlayerId
+                    caller.WriteByte(data.RoleType); // RoleType : single or comb
+                    caller.WritePackedInt(data.RoleId); // RoleId
+
+                    if (data.RoleType == (byte)IAssignedPlayer.ExRoleType.Comb)
+                    {
+                        var combData = (AssignedPlayerToCombRoleData)data;
+                        caller.WriteByte(combData.CombTypeId); // combTypeId
+                        caller.WriteByte(combData.GameContId); // byted GameContId
+                        caller.WriteByte(combData.AmongUsRoleId); // byted AmongUsVanillaRoleId
+                    }
+                }
+            }
+            RPCOperator.SetRoleToAllPlayer(this.assignData);
+            RoleAssignState.Instance.SwitchRoleAssignToEnd();
+            instance = null;
         }
 
         public List<PlayerControl> GetCanImpostorAssignPlayer()
         {
-            return NeedRoleAssignPlayer.FindAll(
+            return this.NeedRoleAssignPlayer.FindAll(
                 x =>
                 {
                     return x.Data.Role.Role switch
@@ -46,9 +76,10 @@ namespace ExtremeRoles.Module.RoleAssign
                     };
                 });
         }
+        
         public List<PlayerControl> GetCanCrewmateAssignPlayer()
         {
-            return NeedRoleAssignPlayer.FindAll(
+            return this.NeedRoleAssignPlayer.FindAll(
                 x =>
                 {
                     return x.Data.Role.Role switch
@@ -62,6 +93,18 @@ namespace ExtremeRoles.Module.RoleAssign
                 });
         }
 
+        public bool TryGetCombRoleAssign(byte playerId, out ExtremeRoleType team)
+        {
+            return this.combRoleAssignPlayerId.TryGetValue(playerId, out team);
+        }
+
+        public void AddCombRoleAssignData(
+            PlayerToCombRoleAssignData data, ExtremeRoleType team)
+        {
+            this.combRoleAssignPlayerId.Add(data.PlayerId, team);
+            this.AddAssignData(data);
+        }
+
         public void AddAssignData(IPlayerToExRoleAssignData data)
         {
             this.assignData.Add(data);
@@ -69,17 +112,17 @@ namespace ExtremeRoles.Module.RoleAssign
 
         public void AddPlayer(PlayerControl player)
         {
-            NeedRoleAssignPlayer.Add(player);
+            this.NeedRoleAssignPlayer.Add(player);
         }
 
         public void RemvePlayer(PlayerControl player)
         {
-            NeedRoleAssignPlayer.RemoveAll(x => x.PlayerId == player.PlayerId);
+            this.NeedRoleAssignPlayer.RemoveAll(x => x.PlayerId == player.PlayerId);
         }
 
         public void Shuffle()
         {
-            NeedRoleAssignPlayer = NeedRoleAssignPlayer.OrderBy(
+            this.NeedRoleAssignPlayer = this.NeedRoleAssignPlayer.OrderBy(
                 x => RandomGenerator.Instance.Next()).ToList();
         }
     }

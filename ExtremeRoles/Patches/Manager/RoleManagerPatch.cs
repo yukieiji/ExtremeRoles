@@ -81,8 +81,21 @@ namespace ExtremeRoles.Patches.Manager
                 ref spawnData, ref assignData);
             addSingleExtremeRoleAssignData(
                 ref spawnData, ref assignData);
+            addNotAssignPlayerToVanillaRoleAssign(ref assignData);
+        }
 
-            // 最後に一回もアサインされてないプレイヤーにアサインをおこなう
+        private static void addNotAssignPlayerToVanillaRoleAssign(
+            ref PlayerRoleAssignData assignData)
+        {
+            foreach (PlayerControl player in assignData.NeedRoleAssignPlayer)
+            {
+                var roleId = player.Data.Role.Role;
+                Logging.Debug(
+                            $"------------------- AssignToPlayer:{player.Data.PlayerName} -------------------");
+                Logging.Debug($"---AssignRole:{roleId}---");
+                assignData.AddAssignData(new PlayerToSingleRoleAssignData(
+                    player.PlayerId, (byte)roleId));
+            }
         }
 
         private static void addCombinationExtremeRoleAssignData(
@@ -125,12 +138,13 @@ namespace ExtremeRoles.Patches.Manager
                         }
                         removePlayer = player;
 
-                        assignData.AddAssignData(
+                        assignData.AddCombRoleAssignData(
                             new PlayerToCombRoleAssignData(
                                 player.PlayerId, (int)role.Id,
                                 roleListData.CombType,
                                 (byte)roleListData.GameControlId,
-                                (byte)player.Data.Role.Role));
+                                (byte)player.Data.Role.Role),
+                            role.Team);
 
                         Logging.Debug($"------------------- Assign End -------------------");
 
@@ -187,7 +201,13 @@ namespace ExtremeRoles.Patches.Manager
 
                 RoleTypes vanillaRoleId = player.Data.Role.Role;
 
-                if (!ExtremeGameModeManager.Instance.RoleSelector.IsVanillaRoleToMultiAssign &&
+                if (!ExtremeGameModeManager.Instance.RoleSelector.IsVanillaRoleToMultiAssign 
+                    &&
+                    (
+                        assignData.TryGetCombRoleAssign(player.PlayerId, out ExtremeRoleType team) &&
+                        team == ExtremeRoleType.Neutral
+                    ) 
+                    &&
                     (
                         vanillaRoleId == RoleTypes.Engineer ||
                         vanillaRoleId == RoleTypes.Scientist
@@ -252,8 +272,13 @@ namespace ExtremeRoles.Patches.Manager
                 {
                     // マルチアサインでコンビ役職にアサインされてないプレイヤーは追加でアサインが必要
                     removePlayer =
-                        ExtremeGameModeManager.Instance.RoleSelector.IsVanillaRoleToMultiAssign ?
-                        null : player;
+                        ExtremeGameModeManager.Instance.RoleSelector.IsVanillaRoleToMultiAssign
+                        &&
+                        (
+                            assignData.TryGetCombRoleAssign(player.PlayerId, out ExtremeRoleType combTeam) &&
+                            combTeam == team
+                        ) 
+                        ? null : player;
 
                     assignData.AddAssignData(
                         new PlayerToSingleRoleAssignData(
@@ -525,7 +550,7 @@ namespace ExtremeRoles.Patches.Manager
         {
             using (var caller = RPCOperator.CreateCaller(
                 PlayerControl.LocalPlayer.NetId,
-                RPCOperator.Command.SetRoleToAllPlayer))
+                RPCOperator.Command.SetRoleToAllPlayerOld))
             {
                 caller.WritePackedInt(roleList.Count); // 何個あるか
 
@@ -544,7 +569,7 @@ namespace ExtremeRoles.Patches.Manager
                     }
                 }
             }
-            RPCOperator.SetRoleToAllPlayer(roleList);
+            RPCOperator.SetRoleToAllPlayerOldFunc(roleList);
             RoleAssignState.Instance.SwitchRoleAssignToEnd();
             roleList.Clear();
         }

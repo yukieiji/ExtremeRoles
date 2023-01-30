@@ -403,7 +403,8 @@ namespace ExtremeRoles.Patches
                     RPCOperator.SetUpReady(readyPlayerId);
                     break;
                 case RPCOperator.Command.SetRoleToAllPlayer:
-                    List<Module.IAssignedPlayer> assignData = new List<Module.IAssignedPlayer>();
+                    List<Module.Interface.IPlayerToExRoleAssignData> assignData = 
+                        new List<Module.Interface.IPlayerToExRoleAssignData>();
                     int assignDataNum = reader.ReadPackedInt32();
                     for (int i = 0; i < assignDataNum; ++i)
                     {
@@ -414,7 +415,7 @@ namespace ExtremeRoles.Patches
                         {
                             case (byte)Module.IAssignedPlayer.ExRoleType.Single:
                                 assignData.Add(new
-                                    Module.AssignedPlayerToSingleRoleData(
+                                    PlayerToSingleRoleAssignData(
                                         assignedPlayerId, exRoleId));
                                 break;
                             case (byte)Module.IAssignedPlayer.ExRoleType.Comb:
@@ -422,13 +423,42 @@ namespace ExtremeRoles.Patches
                                 byte bytedGameContId = reader.ReadByte(); // byted GameContId
                                 byte bytedAmongUsVanillaRoleId = reader.ReadByte(); // byted AmongUsVanillaRoleId
                                 assignData.Add(new
-                                    Module.AssignedPlayerToCombRoleData(
+                                    PlayerToCombRoleAssignData(
                                         assignedPlayerId, exRoleId, assignCombType,
                                         bytedGameContId, bytedAmongUsVanillaRoleId));
                                 break;
                         }
                     }
                     RPCOperator.SetRoleToAllPlayer(assignData);
+                    RoleAssignState.Instance.SwitchRoleAssignToEnd();
+                    break;
+                case RPCOperator.Command.SetRoleToAllPlayerOld:
+                    List<Module.IAssignedPlayer> a = new List<Module.IAssignedPlayer>();
+                    int b = reader.ReadPackedInt32();
+                    for (int i = 0; i < b; ++i)
+                    {
+                        byte assignedPlayerId = reader.ReadByte();
+                        byte assignRoleType = reader.ReadByte();
+                        int exRoleId = reader.ReadPackedInt32();
+                        switch (assignRoleType)
+                        {
+                            case (byte)Module.IAssignedPlayer.ExRoleType.Single:
+                                a.Add(new
+                                    Module.AssignedPlayerToSingleRoleData(
+                                        assignedPlayerId, exRoleId));
+                                break;
+                            case (byte)Module.IAssignedPlayer.ExRoleType.Comb:
+                                byte assignCombType = reader.ReadByte(); // combTypeId
+                                byte bytedGameContId = reader.ReadByte(); // byted GameContId
+                                byte bytedAmongUsVanillaRoleId = reader.ReadByte(); // byted AmongUsVanillaRoleId
+                                a.Add(new
+                                    Module.AssignedPlayerToCombRoleData(
+                                        assignedPlayerId, exRoleId, assignCombType,
+                                        bytedGameContId, bytedAmongUsVanillaRoleId));
+                                break;
+                        }
+                    }
+                    RPCOperator.SetRoleToAllPlayerOldFunc(a);
                     RoleAssignState.Instance.SwitchRoleAssignToEnd();
                     break;
                 case RPCOperator.Command.CleanDeadBody:
