@@ -288,7 +288,7 @@ namespace ExtremeRoles.Patches.Manager
 
                 // 上限に入ってるやつはとりあえず消す
                 removePlayer =
-                    spawnData.IsCanSpawnTeam(team) || !shuffledSpawnCheckRoleId.Any() ? 
+                    spawnData.IsCanSpawnTeam(team) && shuffledSpawnCheckRoleId.Any() ? 
                     null : player;
 
                 if (removePlayer == null)
