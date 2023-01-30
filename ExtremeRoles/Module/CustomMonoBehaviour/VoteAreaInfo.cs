@@ -323,7 +323,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             {
                 return true;
             }
-            else if (role.IsImpostor())
+            else if (role.IsImpostor() || role.Id == ExtremeRoleId.Madmate)
             {
                 return ExtremeRolesPlugin.ShipState.IsAssassinAssign;
             }
