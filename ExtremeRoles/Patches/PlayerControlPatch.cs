@@ -431,6 +431,10 @@ namespace ExtremeRoles.Patches
                     }
                     RPCOperator.SetRoleToAllPlayer(assignData);
                     RoleAssignState.Instance.SwitchRoleAssignToEnd();
+                    if (PlayerRoleAssignData.IsExist)
+                    {
+                        PlayerRoleAssignData.Instance.Destroy();
+                    }
                     break;
                 case RPCOperator.Command.SetRoleToAllPlayerOld:
                     List<Module.IAssignedPlayer> a = new List<Module.IAssignedPlayer>();

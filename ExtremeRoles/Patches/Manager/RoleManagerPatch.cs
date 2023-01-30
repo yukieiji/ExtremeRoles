@@ -56,6 +56,7 @@ namespace ExtremeRoles.Patches.Manager
                 PlayerControl loaclPlayer = PlayerControl.LocalPlayer;
                 
                 PlayerRoleAssignData assignData = PlayerRoleAssignData.Instance;
+
                 assignData.AddAssignData(
                     new PlayerToSingleRoleAssignData(
                         loaclPlayer.PlayerId,
@@ -165,6 +166,7 @@ namespace ExtremeRoles.Patches.Manager
             {
                 if (player != null)
                 {
+                    Logging.Debug($"------------------- AditionalPlayer -------------------");
                     assignData.AddPlayer(player);
                 }
             }
@@ -296,12 +298,9 @@ namespace ExtremeRoles.Patches.Manager
                     Logging.Debug($"---AssignRole:{vanillaRoleId}---");
                 }
 
-                // 上限に入ってるやつはとりあえず消す
-                removePlayer =
-                    spawnData.IsCanSpawnTeam(team) && shuffledSpawnCheckRoleId.Any() ? 
-                    null : player;
-
-                if (removePlayer == null)
+                if (spawnData.IsCanSpawnTeam(team) && 
+                    shuffledSpawnCheckRoleId.Any() &&
+                    removePlayer == null)
                 {
                     removePlayer = player;
                     int intedRoleId = shuffledSpawnCheckRoleId[0];

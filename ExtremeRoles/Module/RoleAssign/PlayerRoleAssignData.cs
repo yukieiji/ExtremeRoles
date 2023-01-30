@@ -21,6 +21,8 @@ namespace ExtremeRoles.Module.RoleAssign
                 return instance;
             }
         }
+        public static bool IsExist => instance != null;
+
         private static PlayerRoleAssignData instance = null;
 
         public List<PlayerControl> NeedRoleAssignPlayer { get; private set; }
@@ -61,7 +63,7 @@ namespace ExtremeRoles.Module.RoleAssign
             }
             RPCOperator.SetRoleToAllPlayer(this.assignData);
             RoleAssignState.Instance.SwitchRoleAssignToEnd();
-            // instance = null;
+            Destroy();
         }
 
         public List<PlayerControl> GetCanImpostorAssignPlayer()
@@ -124,6 +126,10 @@ namespace ExtremeRoles.Module.RoleAssign
         {
             this.NeedRoleAssignPlayer = this.NeedRoleAssignPlayer.OrderBy(
                 x => RandomGenerator.Instance.Next()).ToList();
+        }
+        public void Destroy()
+        {
+            instance = null;
         }
     }
 }
