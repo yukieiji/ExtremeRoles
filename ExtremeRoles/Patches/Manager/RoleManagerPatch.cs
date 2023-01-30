@@ -102,6 +102,9 @@ namespace ExtremeRoles.Patches.Manager
             ref RoleSpawnDataManager spawnData,
             ref PlayerRoleAssignData assignData)
         {
+            Logging.Debug(
+                $"----------------------------- CombinationRoleAssign Start!! -----------------------------");
+
             if (!spawnData.CurrentCombRoleSpawnData.Any()) { return; }
 
             List<CombinationRoleListData> combRoleListData = createCombinationRoleListData(
@@ -165,18 +168,24 @@ namespace ExtremeRoles.Patches.Manager
                     assignData.AddPlayer(player);
                 }
             }
+            Logging.Debug(
+                $"----------------------------- CombinationRoleAssign End!! -----------------------------");
         }
 
         private static void addSingleExtremeRoleAssignData(
             ref RoleSpawnDataManager spawnData,
             ref PlayerRoleAssignData assignData)
         {
+            Logging.Debug(
+                $"----------------------------- SingleRoleAssign Start!! -----------------------------");
             addImpostorSingleExtremeRoleAssignData(
                 ref spawnData, ref assignData);
             addNeutralSingleExtremeRoleAssignData(
                 ref spawnData, ref assignData);
             addCrewmateSingleExtremeRoleAssignData(
                 ref spawnData, ref assignData);
+            Logging.Debug(
+                $"----------------------------- SingleRoleAssign End!! -----------------------------");
         }
 
         private static void addImpostorSingleExtremeRoleAssignData(
@@ -201,16 +210,14 @@ namespace ExtremeRoles.Patches.Manager
 
                 RoleTypes vanillaRoleId = player.Data.Role.Role;
 
-                if (!ExtremeGameModeManager.Instance.RoleSelector.IsVanillaRoleToMultiAssign 
-                    &&
-                    (
+                if ((
                         assignData.TryGetCombRoleAssign(player.PlayerId, out ExtremeRoleType team) &&
-                        team == ExtremeRoleType.Neutral
+                        team != ExtremeRoleType.Neutral
                     ) 
-                    &&
+                    ||
                     (
-                        vanillaRoleId == RoleTypes.Engineer ||
-                        vanillaRoleId == RoleTypes.Scientist
+                        !ExtremeGameModeManager.Instance.RoleSelector.IsVanillaRoleToMultiAssign &&
+                        vanillaRoleId != RoleTypes.Crewmate
                     ))
                 {
                     continue;
@@ -231,7 +238,7 @@ namespace ExtremeRoles.Patches.Manager
                 ref spawnData, ref assignData,
                 ExtremeRoleType.Neutral,
                 neutralAssignTargetPlayer,
-                new HashSet<RoleTypes> { RoleTypes.Crewmate, RoleTypes.Engineer, RoleTypes.Scientist });
+                new HashSet<RoleTypes> { RoleTypes.Engineer, RoleTypes.Scientist });
         }
 
         private static void addCrewmateSingleExtremeRoleAssignData(
@@ -242,7 +249,7 @@ namespace ExtremeRoles.Patches.Manager
                 ref spawnData, ref assignData,
                 ExtremeRoleType.Crewmate,
                 assignData.GetCanCrewmateAssignPlayer(),
-                new HashSet<RoleTypes> { RoleTypes.Crewmate, RoleTypes.Engineer, RoleTypes.Scientist });
+                new HashSet<RoleTypes> { RoleTypes.Engineer, RoleTypes.Scientist });
         }
 
         private static void addSingleExtremeRoleAssignDataFromTeamAndPlayer(
@@ -258,6 +265,9 @@ namespace ExtremeRoles.Patches.Manager
             if (!targetPlayer.Any() || !targetPlayer.Any()) { return; }
 
             List<int> spawnCheckRoleId = createSingleRoleIdData(teamSpawnData);
+            
+            if (!spawnCheckRoleId.Any()) { return; }
+
             var shuffledSpawnCheckRoleId = spawnCheckRoleId.OrderBy(x => RandomGenerator.Instance.Next()).ToList();
 
             foreach (PlayerControl player in targetPlayer)
@@ -303,8 +313,12 @@ namespace ExtremeRoles.Patches.Manager
                     assignData.AddAssignData(
                         new PlayerToSingleRoleAssignData(player.PlayerId, intedRoleId));
                 }
+
                 Logging.Debug($"-------------------AssignEnd-------------------");
-                assignData.RemvePlayer(removePlayer);
+                if (removePlayer != null)
+                {
+                    assignData.RemvePlayer(removePlayer);
+                }
             }
         }
 
@@ -398,7 +412,7 @@ namespace ExtremeRoles.Patches.Manager
             {
                 for (int i = 0; i < data.SpawnSetNum; ++i)
                 {
-                    if (data.IsSpawn()) { continue; }
+                    if (!data.IsSpawn()) { continue; }
 
                     result.Add(intedRoleId);
                 }
