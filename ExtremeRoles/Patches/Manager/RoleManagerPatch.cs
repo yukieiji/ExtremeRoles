@@ -180,24 +180,49 @@ namespace ExtremeRoles.Patches.Manager
             ref RoleSpawnDataManager spawnData,
             ref PlayerRoleAssignData assignData)
         {
-            // ここにニュートラルのプレイヤー取得コードを書く
+            List<PlayerControl> neutralAssignTargetPlayer = new List<PlayerControl>();
+            
+            foreach(PlayerControl player in assignData.GetCanCrewmateAssignPlayer())
+            {
+
+                RoleTypes vanillaRoleId = player.Data.Role.Role;
+
+                if (!ExtremeGameModeManager.Instance.RoleSelector.IsVanillaRoleToMultiAssign &&
+                    (
+                        vanillaRoleId == RoleTypes.Engineer ||
+                        vanillaRoleId == RoleTypes.Scientist
+                    ))
+                {
+                    continue;
+                }
+                neutralAssignTargetPlayer.Add(player);
+            }
+
+            int assignNum = Math.Clamp(
+                spawnData.MaxRoleNum[ExtremeRoleType.Neutral],
+                0, Math.Min(
+                    neutralAssignTargetPlayer.Count,
+                    spawnData.CurrentSingleRoleSpawnData[ExtremeRoleType.Neutral].Count));
+
+            neutralAssignTargetPlayer = neutralAssignTargetPlayer.OrderBy(
+                x => RandomGenerator.Instance.Next()).Take(assignNum).ToList();
+
             addSingleExtremeRoleAssignDataFromTeamAndPlayer(
                 ref spawnData, ref assignData,
                 ExtremeRoleType.Neutral,
-                assignData.GetCanImpostorAssignPlayer(),
-                new HashSet<RoleTypes> { RoleTypes.Crewmate, RoleTypes.Engineer });
+                neutralAssignTargetPlayer,
+                new HashSet<RoleTypes> { RoleTypes.Crewmate, RoleTypes.Engineer, RoleTypes.Scientist });
         }
 
         private static void addCrewmateSingleExtremeRoleAssignData(
             ref RoleSpawnDataManager spawnData,
             ref PlayerRoleAssignData assignData)
         {
-            // ここにクルーのプレイヤー取得コードを書く
             addSingleExtremeRoleAssignDataFromTeamAndPlayer(
                 ref spawnData, ref assignData,
                 ExtremeRoleType.Crewmate,
-                assignData.GetCanImpostorAssignPlayer(),
-                new HashSet<RoleTypes> { RoleTypes.Crewmate, RoleTypes.Engineer });
+                assignData.GetCanCrewmateAssignPlayer(),
+                new HashSet<RoleTypes> { RoleTypes.Crewmate, RoleTypes.Engineer, RoleTypes.Scientist });
         }
 
         private static void addSingleExtremeRoleAssignDataFromTeamAndPlayer(

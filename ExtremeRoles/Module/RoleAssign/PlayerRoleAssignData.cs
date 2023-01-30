@@ -46,6 +46,21 @@ namespace ExtremeRoles.Module.RoleAssign
                     };
                 });
         }
+        public List<PlayerControl> GetCanCrewmateAssignPlayer()
+        {
+            return NeedRoleAssignPlayer.FindAll(
+                x =>
+                {
+                    return x.Data.Role.Role switch
+                    {
+                        RoleTypes.Crewmate or 
+                        RoleTypes.Engineer or
+                        RoleTypes.Scientist => true,
+                        
+                        _ => false
+                    };
+                });
+        }
 
         public void AddAssignData(IPlayerToExRoleAssignData data)
         {
