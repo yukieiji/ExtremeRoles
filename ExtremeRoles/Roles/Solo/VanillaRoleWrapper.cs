@@ -1,6 +1,7 @@
 ﻿using System;
 using AmongUs.GameOptions;
 
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
@@ -36,13 +37,23 @@ namespace ExtremeRoles.Roles.Solo
                 default:
                     break;
             }
+            this.CanHasAnotherRole = ExtremeGameModeManager.Instance.RoleSelector.IsVanillaRoleToMultiAssign;
         }
-
 
         public VanillaRoleWrapper(
             RoleTypes id) : 
             this(id, id == RoleTypes.Impostor || id == RoleTypes.Shapeshifter)
         { }
+
+        public override void OverrideAnotherRoleSetting()
+        {
+            if (this.AnotherRole is VanillaRoleWrapper vanillaRole &&
+                vanillaRole.VanilaRoleId == this.VanilaRoleId)
+            {
+                this.AnotherRole = null;
+                this.CanHasAnotherRole = false;
+            }
+        }
 
         public override string GetFullDescription()
         {
@@ -52,7 +63,6 @@ namespace ExtremeRoles.Roles.Solo
 
         public override string GetImportantText(bool isContainFakeTask = true)
         {
-
             if (this.AnotherRole == null)
             {
                 return getVanilaImportantText();
@@ -109,7 +119,8 @@ namespace ExtremeRoles.Roles.Solo
 
             return Design.ColoedString(
                 this.NameColor,
-                $"{this.GetColoredRoleName()}: {Translation.GetString("crewImportantText")}");
+                $"{Design.ColoedString(
+                    this.NameColor, Translation.GetString(this.RoleName))}: {Translation.GetString("crewImportantText")}");
         }
     }
 }
