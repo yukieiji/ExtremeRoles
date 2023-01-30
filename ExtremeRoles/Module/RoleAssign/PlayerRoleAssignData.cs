@@ -1,6 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+
+using AmongUs.GameOptions;
+
 using ExtremeRoles.Module.Interface;
 
 namespace ExtremeRoles.Module.RoleAssign
@@ -20,7 +22,7 @@ namespace ExtremeRoles.Module.RoleAssign
         }
         private static PlayerRoleAssignData instance = null;
 
-        public List<PlayerControl> AllNotAssignPlayer { get; private set; }
+        public List<PlayerControl> NeedRoleAssignPlayer { get; private set; }
 
         private List<IPlayerToExRoleAssignData> assignData = new List<IPlayerToExRoleAssignData>();
 
@@ -28,8 +30,21 @@ namespace ExtremeRoles.Module.RoleAssign
         {
             this.assignData.Clear();
 
-            AllNotAssignPlayer = new List<PlayerControl>(
+            NeedRoleAssignPlayer = new List<PlayerControl>(
                 PlayerControl.AllPlayerControls.ToArray());
+        }
+
+        public List<PlayerControl> GetCanImpostorAssignPlayer()
+        {
+            return NeedRoleAssignPlayer.FindAll(
+                x =>
+                {
+                    return x.Data.Role.Role switch
+                    {
+                        RoleTypes.Impostor or RoleTypes.Shapeshifter => true,
+                        _ => false
+                    };
+                });
         }
 
         public void AddAssignData(IPlayerToExRoleAssignData data)
@@ -39,17 +54,17 @@ namespace ExtremeRoles.Module.RoleAssign
 
         public void AddPlayer(PlayerControl player)
         {
-            AllNotAssignPlayer.Add(player);
+            NeedRoleAssignPlayer.Add(player);
         }
 
         public void RemvePlayer(PlayerControl player)
         {
-            AllNotAssignPlayer.RemoveAll(x => x.PlayerId == player.PlayerId);
+            NeedRoleAssignPlayer.RemoveAll(x => x.PlayerId == player.PlayerId);
         }
 
         public void Shuffle()
         {
-            AllNotAssignPlayer = AllNotAssignPlayer.OrderBy(
+            NeedRoleAssignPlayer = NeedRoleAssignPlayer.OrderBy(
                 x => RandomGenerator.Instance.Next()).ToList();
         }
     }

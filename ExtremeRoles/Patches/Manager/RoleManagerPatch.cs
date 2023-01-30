@@ -36,6 +36,18 @@ namespace ExtremeRoles.Patches.Manager
             }
         }
 
+        private struct SingleRoleData
+        {
+            public int IntedRoleId { get; private set; }
+            public SingleRoleBase Role { get; private set; }
+
+            public SingleRoleData(int intedRoleId, SingleRoleBase role)
+            {
+                IntedRoleId = intedRoleId;
+                Role = role;
+            }
+        }
+
         public static void Prefix()
         {
             if (OptionHolder.AllOption[(int)OptionHolder.CommonOptionKey.UseXion].GetValue() &&
@@ -67,6 +79,10 @@ namespace ExtremeRoles.Patches.Manager
 
             addCombinationExtremeRoleAssignData(
                 ref spawnData, ref assignData);
+            addSingleExtremeRoleAssignData(
+                ref spawnData, ref assignData);
+
+            // 最後に一回もアサインされてないプレイヤーにアサインをおこなう
         }
 
         private static void addCombinationExtremeRoleAssignData(
@@ -77,18 +93,18 @@ namespace ExtremeRoles.Patches.Manager
 
             List<CombinationRoleListData> combRoleListData = createCombinationRoleListData(
                 ref spawnData);
-            var shuffleRoleListData = combRoleListData.OrderBy(x => RandomGenerator.Instance.Next());
+            var shuffledRoleListData = combRoleListData.OrderBy(x => RandomGenerator.Instance.Next());
             assignData.Shuffle();
 
             List<PlayerControl> anotherRoleAssignPlayer = new List<PlayerControl>();
 
-            foreach (var roleListData in combRoleListData)
+            foreach (var roleListData in shuffledRoleListData)
             {
                 foreach (var role in roleListData.RoleList)
                 {
                     PlayerControl removePlayer = null;
 
-                    foreach (PlayerControl player in assignData.AllNotAssignPlayer)
+                    foreach (PlayerControl player in assignData.NeedRoleAssignPlayer)
                     {
                         Logging.Debug(
                             $"------------------- AssignToPlayer:{player.Data.PlayerName} -------------------");
@@ -134,6 +150,106 @@ namespace ExtremeRoles.Patches.Manager
                 {
                     assignData.AddPlayer(player);
                 }
+            }
+        }
+
+        private static void addSingleExtremeRoleAssignData(
+            ref RoleSpawnDataManager spawnData,
+            ref PlayerRoleAssignData assignData)
+        {
+            addImpostorSingleExtremeRoleAssignData(
+                ref spawnData, ref assignData);
+            addNeutralSingleExtremeRoleAssignData(
+                ref spawnData, ref assignData);
+            addCrewmateSingleExtremeRoleAssignData(
+                ref spawnData, ref assignData);
+        }
+
+        private static void addImpostorSingleExtremeRoleAssignData(
+            ref RoleSpawnDataManager spawnData,
+            ref PlayerRoleAssignData assignData)
+        {
+            addSingleExtremeRoleAssignDataFromTeamAndPlayer(
+                ref spawnData, ref assignData,
+                ExtremeRoleType.Impostor,
+                assignData.GetCanImpostorAssignPlayer(),
+                new HashSet<RoleTypes> { RoleTypes.Shapeshifter });
+        }
+
+        private static void addNeutralSingleExtremeRoleAssignData(
+            ref RoleSpawnDataManager spawnData,
+            ref PlayerRoleAssignData assignData)
+        {
+            // ここにニュートラルのプレイヤー取得コードを書く
+            addSingleExtremeRoleAssignDataFromTeamAndPlayer(
+                ref spawnData, ref assignData,
+                ExtremeRoleType.Neutral,
+                assignData.GetCanImpostorAssignPlayer(),
+                new HashSet<RoleTypes> { RoleTypes.Crewmate, RoleTypes.Engineer });
+        }
+
+        private static void addCrewmateSingleExtremeRoleAssignData(
+            ref RoleSpawnDataManager spawnData,
+            ref PlayerRoleAssignData assignData)
+        {
+            // ここにクルーのプレイヤー取得コードを書く
+            addSingleExtremeRoleAssignDataFromTeamAndPlayer(
+                ref spawnData, ref assignData,
+                ExtremeRoleType.Crewmate,
+                assignData.GetCanImpostorAssignPlayer(),
+                new HashSet<RoleTypes> { RoleTypes.Crewmate, RoleTypes.Engineer });
+        }
+
+        private static void addSingleExtremeRoleAssignDataFromTeamAndPlayer(
+            ref RoleSpawnDataManager spawnData,
+            ref PlayerRoleAssignData assignData,
+            ExtremeRoleType team,
+            List<PlayerControl> targetPlayer,
+            HashSet<RoleTypes> vanilaTeams)
+        {
+
+            Dictionary<int, SingleRoleSpawnData> teamSpawnData = spawnData.CurrentSingleRoleSpawnData[team];
+
+            if (!targetPlayer.Any() || !targetPlayer.Any()) { return; }
+
+            List<int> spawnCheckRoleId = createSingleRoleIdData(teamSpawnData);
+            var shuffledSpawnCheckRoleId = spawnCheckRoleId.OrderBy(x => RandomGenerator.Instance.Next()).ToList();
+
+            foreach (PlayerControl player in targetPlayer)
+            {
+                PlayerControl removePlayer = null;
+
+                RoleTypes vanillaRoleId = player.Data.Role.Role;
+
+                if (vanilaTeams.Contains(vanillaRoleId))
+                {
+                    // マルチアサインでコンビ役職にアサインされてないプレイヤーは追加でアサインが必要
+                    removePlayer =
+                        ExtremeGameModeManager.Instance.RoleSelector.IsVanillaRoleToMultiAssign ?
+                        null : player;
+
+                    assignData.AddAssignData(
+                        new PlayerToSingleRoleAssignData(
+                            player.PlayerId, (int)vanillaRoleId));
+                }
+
+                // 上限に入ってるやつはとりあえず消す
+                removePlayer =
+                    spawnData.IsCanSpawnTeam(team) || !shuffledSpawnCheckRoleId.Any() ? 
+                    null : player;
+
+                if (removePlayer == null)
+                {
+                    removePlayer = player;
+                    int intedRoleId = shuffledSpawnCheckRoleId[0];
+                    shuffledSpawnCheckRoleId.RemoveAt(0);
+
+                    spawnData.ReduceSpawnLimit(team);
+                    assignData.AddAssignData(
+                        new PlayerToSingleRoleAssignData(player.PlayerId, intedRoleId));
+                }
+
+                assignData.RemvePlayer(removePlayer);
             }
         }
 
@@ -217,6 +333,25 @@ namespace ExtremeRoles.Patches.Manager
 
             return roleListData;
         }
+
+        private static List<int> createSingleRoleIdData(
+            Dictionary<int, SingleRoleSpawnData> spawnData)
+        {
+            List<int> result = new List<int>();
+
+            foreach (var (intedRoleId, data) in spawnData)
+            {
+                for (int i = 0; i < data.SpawnSetNum; ++i)
+                {
+                    if (data.IsSpawn()) { continue; }
+
+                    result.Add(intedRoleId);
+                }
+            }
+
+            return result;
+        }
+
         private static bool isCombinationLimit(
             NotAssignPlayerData notAssignPlayer,
             RoleSpawnDataManager spawnData,
@@ -249,19 +384,19 @@ namespace ExtremeRoles.Patches.Manager
                 // クルーのスポーン上限チェック
                 &&
                 (
-                    spawnData.IsSpawnLimitTeam(ExtremeRoleType.Crewmate, reduceCrewmateRoleNum) &&
+                    spawnData.IsCanSpawnTeam(ExtremeRoleType.Crewmate, reduceCrewmateRoleNum) &&
                     isLimitCrewAssignNum
                 )
                 // ニュートラルのスポーン上限チェック
                 &&
                 (
-                    spawnData.IsSpawnLimitTeam(ExtremeRoleType.Neutral, reduceNeutralRoleNum) &&
+                    spawnData.IsCanSpawnTeam(ExtremeRoleType.Neutral, reduceNeutralRoleNum) &&
                     isLimitCrewAssignNum
                 )
                 // インポスターのスポーン上限チェック
                 &&
                 (
-                    spawnData.IsSpawnLimitTeam(ExtremeRoleType.Impostor, reduceImpostorRoleNum) &&
+                    spawnData.IsCanSpawnTeam(ExtremeRoleType.Impostor, reduceImpostorRoleNum) &&
                     isLimitImpAssignNum
                 );
         }

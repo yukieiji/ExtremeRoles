@@ -110,7 +110,7 @@ namespace ExtremeRoles.Module.RoleAssign
             ExtremeGhostRoleManager.CreateGhostRoleAssignData();
         }
 
-        public bool IsSpawnLimitTeam(ExtremeRoleType roleType, int reduceNum = 1)
+        public bool IsCanSpawnTeam(ExtremeRoleType roleType, int reduceNum = 1)
         {
             return
                 this.MaxRoleNum.TryGetValue(roleType, out int maxNum) &&
