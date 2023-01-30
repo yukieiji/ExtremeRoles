@@ -48,7 +48,6 @@ namespace ExtremeRoles.GameMode.IntroRunner
                     yield return new WaitForSeconds(0.5f);
                 }
                 PlayerRoleAssignData.Instance.AllPlayerAssignToExRole();
-                // Patches.Manager.RoleManagerSelectRolesPatch.AllPlayerAssignToExRole();
             }
             else
             {

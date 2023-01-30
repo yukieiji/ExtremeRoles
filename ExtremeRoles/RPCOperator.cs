@@ -21,7 +21,6 @@ namespace ExtremeRoles
             ForceEnd,
             SetUpReady,
             SetRoleToAllPlayer,
-            SetRoleToAllPlayerOld,
             ShareOption,
             CustomVentUse,
             StartVentAnimation,
@@ -270,29 +269,6 @@ namespace ExtremeRoles
                         break;
                     case (byte)Module.Interface.IPlayerToExRoleAssignData.ExRoleType.Comb:
                         var combData = (PlayerToCombRoleAssignData)data;
-                        Roles.ExtremeRoleManager.SetPlayerIdToMultiRoleId(
-                            combData.CombTypeId,
-                            combData.RoleId,
-                            combData.PlayerId,
-                            combData.GameContId,
-                            combData.AmongUsRoleId);
-                        break;
-                }
-            }
-        }
-
-        public static void SetRoleToAllPlayerOldFunc(List<Module.IAssignedPlayer> assignData)
-        {
-            foreach (var data in assignData)
-            {
-                switch (data.RoleType)
-                {
-                    case (byte)Module.IAssignedPlayer.ExRoleType.Single:
-                        Roles.ExtremeRoleManager.SetPlyerIdToSingleRoleId(
-                            data.RoleId, data.PlayerId);
-                        break;
-                    case (byte)Module.IAssignedPlayer.ExRoleType.Comb:
-                        var combData = (Module.AssignedPlayerToCombRoleData)data;
                         Roles.ExtremeRoleManager.SetPlayerIdToMultiRoleId(
                             combData.CombTypeId,
                             combData.RoleId,
