@@ -39,10 +39,6 @@ namespace ExtremeRoles.Patches
 	{
 		public static bool Prefix(GameData __instance)
 		{
-			var curOptions = GameOptionsManager.Instance.CurrentGameOptions;
-
-			if (curOptions.GameMode != GameModes.Normal) { return true; }
-
 			var roles = Roles.ExtremeRoleManager.GameRole;
 			var shipOpt = ExtremeGameModeManager.Instance.ShipOption;
 
@@ -64,7 +60,7 @@ namespace ExtremeRoles.Patches
 					playerInfo.Tasks != null &&
 					playerInfo.Object &&
 					(
-                        curOptions.GetBool(BoolOptionNames.GhostsDoTasks) || 
+                        GameManager.Instance.LogicOptions.GetGhostsDoTasks() || 
 						!playerInfo.IsDead
 					) &&
 					playerInfo.Role && 
