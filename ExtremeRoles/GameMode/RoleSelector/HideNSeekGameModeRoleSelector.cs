@@ -63,11 +63,13 @@ namespace ExtremeRoles.GameMode.RoleSelector
             new ExtremeRoleId[]
             {
                 ExtremeRoleId.SpecialCrew,
+                ExtremeRoleId.Neet,
                 ExtremeRoleId.Watchdog,
                 ExtremeRoleId.Supervisor,
                 ExtremeRoleId.Survivor,
 
                 ExtremeRoleId.BountyHunter,
+                ExtremeRoleId.Bomber,
                 ExtremeRoleId.Hypnotist,
             };
     }
