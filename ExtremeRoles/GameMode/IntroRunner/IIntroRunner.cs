@@ -51,6 +51,9 @@ namespace ExtremeRoles.GameMode.IntroRunner
             }
             else
             {
+                // クライアントはここでオプション値を読み込むことで待ち時間を短く見せるトリック
+                OptionHolder.Load();
+                
                 // ホスト以外はここまで処理済みである事を送信
                 RoleAssignState.SetLocalPlayerReady();
             }

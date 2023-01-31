@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
-using AmongUs.GameOptions;
 
 using Hazel;
 using BepInEx.Configuration;
@@ -148,8 +147,21 @@ namespace ExtremeRoles
         {
             // 不具合等が発生しないようにブロック機能を有効化する
             isBlockShare = false;
+            
+            // ランダム生成機を設定を読み込んで作成
+            RandomGenerator.Initialize();
 
+            // ゲームモードのオプションロード
             ExtremeGameModeManager.Instance.Load();
+
+            // 各役職を設定を読み込んで初期化する
+            Roles.ExtremeRoleManager.Initialize();
+            GhostRoles.ExtremeGhostRoleManager.Initialize();
+
+            // 各種マップモジュール等のオプション値を読み込む
+            Patches.MiniGame.VitalsMinigameUpdatePatch.LoadOptionValue();
+            Patches.MiniGame.SecurityHelper.LoadOptionValue();
+            Patches.MapOverlay.MapCountOverlayUpdatePatch.LoadOptionValue();
 
             Client.GhostsSeeRole = ConfigParser.GhostsSeeRoles.Value;
             Client.GhostsSeeTask = ConfigParser.GhostsSeeTasks.Value;

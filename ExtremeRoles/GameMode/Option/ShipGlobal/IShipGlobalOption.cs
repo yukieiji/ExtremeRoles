@@ -48,6 +48,8 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
         public bool IsEnableSabtage { get; }
         public bool IsEnableImpostorVent { get; }
 
+        public bool IsRandomMap { get; }
+        
         public int MaxMeetingCount { get; }
 
         public bool IsChangeVoteAreaButtonSortArg { get; }

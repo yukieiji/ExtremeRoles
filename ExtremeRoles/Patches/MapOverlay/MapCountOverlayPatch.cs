@@ -200,7 +200,9 @@ namespace ExtremeRoles.Patches.MapOverlay
         public static void Initialize()
         {
             Object.Destroy(timerText);
-
+        }
+        public static void LoadOptionValue()
+        {
             var adminOpt = ExtremeGameModeManager.Instance.ShipOption.Admin;
             if (adminOpt == null) { return; }
 

@@ -192,11 +192,7 @@ namespace ExtremeRoles
 
         public static void Initialize()
         {
-            OptionHolder.Load();
-            RandomGenerator.Initialize();
             Helper.Player.ResetTarget();
-            Roles.ExtremeRoleManager.Initialize();
-            GhostRoles.ExtremeGhostRoleManager.Initialize();
             ExtremeRolesPlugin.ShipState.Initialize();
             ExtremeRolesPlugin.Info.ResetOverlays();
             
@@ -215,7 +211,6 @@ namespace ExtremeRoles
 
             // 各種システムコンソールリセット
             Patches.MiniGame.VitalsMinigameUpdatePatch.Initialize();
-            Patches.MiniGame.SecurityHelper.Initialize();
             Patches.MapOverlay.MapCountOverlayUpdatePatch.Initialize();
 
             // 最終結果リセット

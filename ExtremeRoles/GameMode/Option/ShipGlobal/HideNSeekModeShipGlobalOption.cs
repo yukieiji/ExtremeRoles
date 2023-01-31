@@ -9,6 +9,8 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
         public bool IsEnableSabtage => false;
         public bool IsEnableImpostorVent => false;
 
+        public bool IsRandomMap { get; private set; }
+
         public bool DisableVent { get; private set; }
         public bool IsAllowParallelMedbayScan { get; private set; }
         public bool IsSameNeutralSameWin { get; private set; }
@@ -53,6 +55,8 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
             GlobalOption.EnableSecurityLimit,
             GlobalOption.SecurityLimitTime,
 
+            GlobalOption.RandomMap,
+
             GlobalOption.IsSameNeutralSameWin,
             GlobalOption.DisableNeutralSpecialForceEnd,
         };
@@ -61,6 +65,9 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
         {
             DisableVent = IShipGlobalOption.GetCommonOptionValue(
                 GlobalOption.DisableVent);
+
+            IsRandomMap = IShipGlobalOption.GetCommonOptionValue(
+                GlobalOption.RandomMap);
 
             Admin = new AdminOption()
             {

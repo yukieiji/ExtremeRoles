@@ -91,7 +91,10 @@ namespace ExtremeRoles.Patches.MiniGame
         public static void Initialize()
         {
             Object.Destroy(timerText);
+        }
 
+        public static void LoadOptionValue()
+        {
             var vitalOption = ExtremeGameModeManager.Instance.ShipOption.Vital;
             if (vitalOption == null) { return; }
 

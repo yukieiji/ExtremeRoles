@@ -9,6 +9,8 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
         public bool IsEnableSabtage => true;
         public bool IsEnableImpostorVent => true;
 
+        public bool IsRandomMap { get; private set; }
+
         public int MaxMeetingCount { get; private set; }
 
         public bool IsChangeVoteAreaButtonSortArg { get; private set; }
@@ -39,6 +41,9 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
         {
             MaxMeetingCount = IShipGlobalOption.GetCommonOptionValue(
                 GlobalOption.NumMeating);
+
+            IsRandomMap = IShipGlobalOption.GetCommonOptionValue(
+                GlobalOption.RandomMap);
 
             IsChangeVoteAreaButtonSortArg = IShipGlobalOption.GetCommonOptionValue(
                 GlobalOption.ChangeMeetingVoteAreaSort);

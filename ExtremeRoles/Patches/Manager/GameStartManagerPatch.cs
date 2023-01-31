@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using HarmonyLib;
 
 using UnityEngine;
+using AmongUs.Data;
 
+
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-
-using AmongUs.Data;
-using ExtremeRoles.GameMode.Option.ShipGlobal;
 
 namespace ExtremeRoles.Patches.Manager
 {
@@ -69,9 +69,10 @@ namespace ExtremeRoles.Patches.Manager
             }
 
             ExtremeRolesPlugin.Info.HideInfoOverlay();
+            // ホストはここでオプションを読み込み
+            OptionHolder.Load();
 
-            if (GameOptionsManager.Instance.currentGameMode == AmongUs.GameOptions.GameModes.Normal &&
-                OptionHolder.AllOption[(int)GlobalOption.RandomMap].GetValue())
+            if (ExtremeGameModeManager.Instance.ShipOption.IsRandomMap)
             {
                 // 0 = Skeld
                 // 1 = Mira HQ
