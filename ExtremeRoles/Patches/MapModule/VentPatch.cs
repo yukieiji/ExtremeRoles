@@ -47,11 +47,6 @@ namespace ExtremeRoles.Patches.MapModule
 
             canUse = couldUse = false;
 
-            if (GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal)
-            {
-                return true;
-            }
-
             if (ExtremeGameModeManager.Instance.ShipOption.DisableVent)
             {
                 __result = num;
