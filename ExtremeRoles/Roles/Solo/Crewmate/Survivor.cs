@@ -84,7 +84,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
         public void Update(PlayerControl rolePlayer)
         {
-            if (!this.awakeRole || !this.isDeadWin)
+            if ((!this.awakeRole || !this.isDeadWin) && 
+                rolePlayer.myTasks.Count != 0)
             {
                 float taskGage = Player.GetPlayerTaskGage(rolePlayer);
                 
