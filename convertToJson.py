@@ -53,7 +53,6 @@ def stringToJson(filename, outputFile):
     os.makedirs(os.path.dirname(outputFile), exist_ok=True)
     with open(outputFile, "w") as f:
       json.dump(stringData, f, indent=4)
-      print(outputFile)
 
 if __name__ == "__main__":
   stringToJson(EXTREMERORLS_IN_FILE, EXTREMERORLS_OUT_FILE)
