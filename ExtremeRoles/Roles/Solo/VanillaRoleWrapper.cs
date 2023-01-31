@@ -61,6 +61,40 @@ namespace ExtremeRoles.Roles.Solo
                 $"{this.VanilaRoleId}FullDescription");
         }
 
+        public override string GetIntroDescription()
+        {
+            string baseIntro = Design.ColoedString(
+                this.IsImpostor() ? Palette.ImpostorRed : Palette.CrewmateBlue,
+                CachedPlayerControl.LocalPlayer.Data.Role.Blurb);
+
+            if (this.AnotherRole == null)
+            {
+                return baseIntro;
+            }
+
+            string anotherIntro;
+
+            if (this.AnotherRole.IsVanillaRole())
+            {
+                RoleBehaviour role = CachedPlayerControl.LocalPlayer.Data.Role;
+                anotherIntro = role.Blurb;
+            }
+            else
+            {
+                anotherIntro = this.AnotherRole.GetIntroDescription();
+            }
+
+            string concat = Design.ColoedString(
+                Palette.White,
+                string.Concat(
+                    "\n ", Translation.GetString("introAnd")));
+
+            return string.Concat(baseIntro, concat, Design.ColoedString(
+                this.AnotherRole.GetNameColor(),
+                anotherIntro));
+
+        }
+
         public override string GetImportantText(bool isContainFakeTask = true)
         {
             if (this.AnotherRole == null)

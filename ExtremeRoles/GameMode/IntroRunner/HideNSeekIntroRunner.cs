@@ -1,9 +1,13 @@
 ﻿using System.Collections;
 
 using UnityEngine;
-
-using ExtremeRoles.Performance;
 using PowerTools;
+using TMPro;
+
+using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
+using ExtremeRoles.Performance;
+using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.GameMode.IntroRunner
 {
@@ -46,6 +50,21 @@ namespace ExtremeRoles.GameMode.IntroRunner
             instance.TeamTitle.gameObject.SetActive(false);
             instance.ImpostorName.text = impostor.Data.PlayerName;
 
+            SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
+            TextMeshPro roleText = Object.Instantiate(
+                instance.ImpostorName,
+                instance.ImpostorName.gameObject.transform);
+            roleText.gameObject.SetActive(
+                !role.IsImpostor() && role.IsVanillaRole());
+
+            if (roleText.isActiveAndEnabled)
+            {
+                roleText.color = role.GetNameColor();
+                roleText.text = $"{Translation.GetString("youAreRoleIntro")}\n{role.GetColoredRoleName()}\n{role.GetIntroDescription()}";
+                roleText.gameObject.transform.localPosition = 
+                    new Vector3(-4.0f, 2.5f, roleText.gameObject.transform.localPosition.z);
+            }
+
             PoolablePlayer playerSlot = instance.CreatePlayer(0, 1, impostor.Data, false);
             playerSlot.transform.localPosition = instance.impostorPos;
             playerSlot.transform.localScale = Vector3.one * instance.impostorScale;
@@ -57,6 +76,7 @@ namespace ExtremeRoles.GameMode.IntroRunner
             instance.HideAndSeekPanels.SetActive(false);
             instance.CrewmateRules.SetActive(false);
             instance.ImpostorRules.SetActive(false);
+            roleText.gameObject.SetActive(false);
 
             LogicOptionsHnS logicOptionsHnS = GameManager.Instance.LogicOptions.Cast<LogicOptionsHnS>();
             LogicHnSMusic logicHnSMusic =
