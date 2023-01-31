@@ -280,19 +280,21 @@ namespace ExtremeRoles.Patches
         {
             HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
-            if (role.CanUseSabotage())
+            if (role.CanUseSabotage() && enable &&
+                ExtremeGameModeManager.Instance.ShipOption.IsEnableSabtage)
             {
                 // インポスターとヴィジランテ、シオンは死んでもサボタージ使える
-                if (enable && 
-                    (role.IsImpostor() || (
+                if (role.IsImpostor() || 
+                    (
                         role.Id == ExtremeRoleId.Vigilante ||
-                        role.Id == ExtremeRoleId.Xion)))
+                        role.Id == ExtremeRoleId.Xion
+                    ))
                 {
                     hudManager.SabotageButton.Show();
                     hudManager.SabotageButton.gameObject.SetActive(true);
                 }
                 // それ以外は死んでないときだけサボタージ使える
-                else if(enable && !player.Data.IsDead)
+                else if(!player.Data.IsDead)
                 {
                     hudManager.SabotageButton.Show();
                     hudManager.SabotageButton.gameObject.SetActive(true);
@@ -314,46 +316,45 @@ namespace ExtremeRoles.Patches
 
             HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
-            if (role.CanUseVent())
+            if (!role.CanUseVent())
+            { 
+                hudManager.ImpostorVentButton.SetDisabled();
+                return;
+            }
+
+            if (!role.TryGetVanillaRoleId(out RoleTypes roleId))
             {
-                if (!role.TryGetVanillaRoleId(out RoleTypes roleId))
+                if (enable && 
+                    ExtremeGameModeManager.Instance.ShipOption.IsEnableImpostorVent)
                 {
-                    if (enable)
-                    { 
-                        hudManager.ImpostorVentButton.Show();
-                    }
-                    else
-                    { 
-                        hudManager.ImpostorVentButton.SetDisabled();
-                    }
+                    hudManager.ImpostorVentButton.Show();
                 }
                 else
                 {
-                    if (roleId == RoleTypes.Engineer)
-                    {
-                        if (enable)
-                        {
-                            if (!ExtremeGameModeManager.Instance.ShipOption.EngineerUseImpostorVent)
-                            {
-                                hudManager.AbilityButton.Show();
-                            }
-                            else
-                            {
-                                hudManager.ImpostorVentButton.Show();
-                                hudManager.AbilityButton.gameObject.SetActive(false);
-                            }
-                        }
-                        else
-                        {
-                            hudManager.ImpostorVentButton.SetDisabled();
-                            hudManager.AbilityButton.SetDisabled(); 
-                        }
-                    }
+                    hudManager.ImpostorVentButton.SetDisabled();
                 }
             }
             else
             {
-                hudManager.ImpostorVentButton.SetDisabled();
+                if (roleId != RoleTypes.Engineer) { return; }
+
+                if (enable)
+                {
+                    if (!ExtremeGameModeManager.Instance.ShipOption.EngineerUseImpostorVent)
+                    {
+                        hudManager.AbilityButton.Show();
+                    }
+                    else
+                    {
+                        hudManager.ImpostorVentButton.Show();
+                        hudManager.AbilityButton.gameObject.SetActive(false);
+                    }
+                }
+                else
+                {
+                    hudManager.ImpostorVentButton.SetDisabled();
+                    hudManager.AbilityButton.SetDisabled();
+                }
             }
         }
 

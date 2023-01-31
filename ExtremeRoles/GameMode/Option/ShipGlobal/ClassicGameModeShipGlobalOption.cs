@@ -6,6 +6,9 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
 {
     public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
     {
+        public bool IsEnableSabtage => true;
+        public bool IsEnableImpostorVent => true;
+
         public int MaxMeetingCount { get; private set; }
 
         public bool IsChangeVoteAreaButtonSortArg { get; private set; }

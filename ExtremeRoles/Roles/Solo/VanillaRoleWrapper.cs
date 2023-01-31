@@ -14,12 +14,14 @@ namespace ExtremeRoles.Roles.Solo
         public RoleTypes VanilaRoleId;
 
         private VanillaRoleWrapper(RoleTypes id, bool isImpostor) : base(
-            ExtremeRoleId.VanillaRole,
-            isImpostor ? ExtremeRoleType.Impostor : ExtremeRoleType.Crewmate,
-            id.ToString(),
-            isImpostor ? Palette.ImpostorRed : Palette.White,
-            isImpostor, !isImpostor,
-            isImpostor, isImpostor)
+            id: ExtremeRoleId.VanillaRole,
+            team: isImpostor ? ExtremeRoleType.Impostor : ExtremeRoleType.Crewmate,
+            roleName: id.ToString(),
+            roleColor: isImpostor ? Palette.ImpostorRed : Palette.White,
+            canKill: isImpostor,
+            hasTask: !isImpostor,
+            useVent: isImpostor,
+            useSabotage: isImpostor)
         {
             this.VanilaRoleId = id;
 

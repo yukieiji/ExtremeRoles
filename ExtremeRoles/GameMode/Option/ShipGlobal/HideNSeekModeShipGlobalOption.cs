@@ -6,6 +6,9 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
 {
     public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
     {
+        public bool IsEnableSabtage => false;
+        public bool IsEnableImpostorVent => false;
+
         public bool DisableVent { get; private set; }
         public bool IsAllowParallelMedbayScan { get; private set; }
         public bool IsSameNeutralSameWin { get; private set; }
