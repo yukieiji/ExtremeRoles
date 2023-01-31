@@ -11,7 +11,7 @@ namespace ExtremeRoles.GameMode
 {
     public class ExtremeGameModeManager
     {
-        public static ExtremeGameModeManager Instance { get; private set; }
+        public static ExtremeGameModeManager Instance { get; private set; } = null;
 
         public GameModes CurrentGameMode { get; }
 
