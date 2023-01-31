@@ -59,6 +59,7 @@ namespace ExtremeRoles.GameMode.RoleSelector
             return this.useNormalRoleSpawnOption.Contains(id);
         }
 
+        // TODO: リザレクターとラストウルフ
         private static ExtremeRoleId[] getUseNormalId() => 
             new ExtremeRoleId[]
             {
