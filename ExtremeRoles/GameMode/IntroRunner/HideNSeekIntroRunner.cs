@@ -54,16 +54,13 @@ namespace ExtremeRoles.GameMode.IntroRunner
             TextMeshPro roleText = Object.Instantiate(
                 instance.ImpostorName,
                 instance.ImpostorName.gameObject.transform);
-            roleText.gameObject.SetActive(
-                !role.IsImpostor() && role.IsVanillaRole());
 
-            if (roleText.isActiveAndEnabled)
-            {
-                roleText.color = role.GetNameColor();
-                roleText.text = $"{Translation.GetString("youAreRoleIntro")}\n{role.GetColoredRoleName()}\n{role.GetIntroDescription()}";
-                roleText.gameObject.transform.localPosition = 
-                    new Vector3(-4.0f, 2.5f, roleText.gameObject.transform.localPosition.z);
-            }
+            roleText.gameObject.SetActive(true);
+            roleText.color = role.GetNameColor();
+            roleText.text = 
+                $"{Translation.GetString("youAreRoleIntro")}\n{role.GetColoredRoleName()}\n{role.GetIntroDescription()}";
+            roleText.gameObject.transform.localPosition =
+                new Vector3(-2.5f, -5.0f, 0.0f);
 
             PoolablePlayer playerSlot = instance.CreatePlayer(0, 1, impostor.Data, false);
             playerSlot.transform.localPosition = instance.impostorPos;
