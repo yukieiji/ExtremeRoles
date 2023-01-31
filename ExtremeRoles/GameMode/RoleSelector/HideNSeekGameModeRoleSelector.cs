@@ -59,7 +59,7 @@ namespace ExtremeRoles.GameMode.RoleSelector
             return this.useNormalRoleSpawnOption.Contains(id);
         }
 
-        // TODO: リザレクターとラストウルフ
+        // TODO: ラストウルフ
         private static ExtremeRoleId[] getUseNormalId() => 
             new ExtremeRoleId[]
             {
@@ -68,6 +68,7 @@ namespace ExtremeRoles.GameMode.RoleSelector
                 ExtremeRoleId.Watchdog,
                 ExtremeRoleId.Supervisor,
                 ExtremeRoleId.Survivor,
+                ExtremeRoleId.Resurrecter,
 
                 ExtremeRoleId.BountyHunter,
                 ExtremeRoleId.Bomber,
