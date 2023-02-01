@@ -126,18 +126,6 @@ namespace ExtremeRoles.Roles.API
                 return baseIntro;
             }
 
-            string anotherIntro;
-
-            if (this.AnotherRole.IsVanillaRole())
-            {
-                RoleBehaviour role = CachedPlayerControl.LocalPlayer.Data.Role;
-                anotherIntro = role.Blurb;
-            }
-            else
-            {
-                anotherIntro = this.AnotherRole.GetIntroDescription();
-            }
-
             string concat = Design.ColoedString(
                 Palette.White,
                 string.Concat(
@@ -146,7 +134,7 @@ namespace ExtremeRoles.Roles.API
 
             return string.Concat(baseIntro, concat, Design.ColoedString(
                 this.AnotherRole.GetNameColor(),
-                anotherIntro));
+                this.AnotherRole.GetIntroDescription()));
 
         }
         public override string GetColoredRoleName(bool isTruthColor = false)

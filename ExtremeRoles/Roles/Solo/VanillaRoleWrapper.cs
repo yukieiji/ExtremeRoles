@@ -71,27 +71,30 @@ namespace ExtremeRoles.Roles.Solo
                 $"{this.VanilaRoleId}FullDescription");
         }
 
+        public override string GetColoredRoleName(bool isTruthColor = false)
+        {
+            if (!isTruthColor && 
+                (this.AnotherRole is IRoleAwake<RoleTypes> awakeRole && !awakeRole.IsAwake))
+            {
+                return Design.ColoedString(
+                    this.NameColor,
+                    Translation.GetString(this.RoleName));
+            }
+
+            return base.GetColoredRoleName(isTruthColor);
+        }
+
         public override string GetIntroDescription()
         {
             string baseIntro = Design.ColoedString(
                 this.IsImpostor() ? Palette.ImpostorRed : Palette.CrewmateBlue,
                 CachedPlayerControl.LocalPlayer.Data.Role.Blurb);
 
-            if (this.AnotherRole == null)
+            if (this.AnotherRole == null ||
+                (this.AnotherRole is IRoleAwake<RoleTypes> awakeRole &&
+                 !awakeRole.IsAwake))
             {
                 return baseIntro;
-            }
-
-            string anotherIntro;
-
-            if (this.AnotherRole.IsVanillaRole())
-            {
-                RoleBehaviour role = CachedPlayerControl.LocalPlayer.Data.Role;
-                anotherIntro = role.Blurb;
-            }
-            else
-            {
-                anotherIntro = this.AnotherRole.GetIntroDescription();
             }
 
             string concat = Design.ColoedString(
@@ -101,13 +104,15 @@ namespace ExtremeRoles.Roles.Solo
 
             return string.Concat(baseIntro, concat, Design.ColoedString(
                 this.AnotherRole.GetNameColor(),
-                anotherIntro));
+                this.AnotherRole.GetIntroDescription()));
 
         }
 
         public override string GetImportantText(bool isContainFakeTask = true)
         {
-            if (this.AnotherRole == null)
+            if (this.AnotherRole == null ||
+                (this.AnotherRole is IRoleAwake<RoleTypes> awakeRole &&
+                 !awakeRole.IsAwake))
             {
                 return getVanilaImportantText();
             }
