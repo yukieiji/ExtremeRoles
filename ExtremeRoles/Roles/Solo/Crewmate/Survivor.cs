@@ -54,7 +54,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public static void DeadWin(byte rolePlayerId)
         {
-            Helper.Logging.Debug($"DeadWinCalled!!");
             Survivor survivor = ExtremeRoleManager.GetSafeCastedRole<Survivor>(rolePlayerId);
             if (survivor != null)
             {
