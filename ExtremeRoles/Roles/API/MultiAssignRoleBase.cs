@@ -155,7 +155,9 @@ namespace ExtremeRoles.Roles.API
         }
         public override string GetColoredRoleName(bool isTruthColor = false)
         {
-            if (this.AnotherRole == null)
+            if (this.AnotherRole == null ||
+                (this.AnotherRole is IRoleAwake<RoleTypes> awakeRole &&
+                 !awakeRole.IsAwake))
             {
                 return base.GetColoredRoleName(isTruthColor);
             }
