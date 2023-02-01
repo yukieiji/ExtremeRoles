@@ -54,6 +54,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public static void DeadWin(byte rolePlayerId)
         {
+            Helper.Logging.Debug($"DeadWinCalled!!");
             Survivor survivor = ExtremeRoleManager.GetSafeCastedRole<Survivor>(rolePlayerId);
             if (survivor != null)
             {
@@ -69,6 +70,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ref Il2CppSystem.Collections.Generic.List<WinningPlayerData> winner,
             ref List<GameData.PlayerInfo> pulsWinner)
         {
+
             if (!rolePlayerInfo.IsDead || this.isDeadWin) { return; }
 
             switch (reason)
@@ -76,6 +78,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 case GameOverReason.HumansByTask:
                 case GameOverReason.HumansByVote:
                 case GameOverReason.HumansDisconnect:
+                case GameOverReason.HideAndSeek_ByTimer:
                     this.RemoveWinner(rolePlayerInfo, winner, pulsWinner);
                     break;
                 default:
