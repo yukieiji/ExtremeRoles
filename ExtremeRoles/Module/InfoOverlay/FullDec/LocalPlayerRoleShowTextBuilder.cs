@@ -25,11 +25,7 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
 
             var multiAssignRole = role as MultiAssignRoleBase;
             bool isVanillaRole = role.IsVanillaRole();
-            if (isVanillaRole)
-            {
-                colorRoleName = role.GetColoredRoleName();
-            }
-            else if (multiAssignRole != null)
+            if (multiAssignRole != null)
             {
                 if (!role.IsVanillaRole())
                 {
