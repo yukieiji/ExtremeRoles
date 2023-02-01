@@ -1,6 +1,6 @@
 ---
 name: 幽霊役職追加要求/New GhostRole Request
-about: 新しい幽霊役職追加用のテンプレート/Template of New GhostRole Request
+about: 新しい幽霊役職追加用のテンプレート/Template of New GhostRole Request(English-only descriptions are acceptable)
 title: "[陣営/Team] : 幽霊役職名/RoleName (このカッコ内に任意で役職の説明を1文で)"
 labels: 新幽霊役職/New Ghost Role, 提案/Suggestion, 未確認/Unconfirmed
 assignees: ''
