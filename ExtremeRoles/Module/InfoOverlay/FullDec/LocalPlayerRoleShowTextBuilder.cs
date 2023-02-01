@@ -16,7 +16,7 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
         public (string, string, string) GetShowText()
         {
             string title = $"<size=200%>{Translation.GetString("yourRole")}</size>";
-            string anotherRoleText = "<size=200%> </size>\n";
+            string anotherRoleText = "";
             var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
             var allOption = OptionHolder.AllOption;
 
@@ -79,8 +79,8 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
 
                     if (!isVanillaRole || anotherRoleOptionString != "")
                     {
-                        anotherRoleText +=
-                            $"\n<size=150%>・{multiAssignRole.AnotherRole.GetColoredRoleName()}</size>" +
+                        anotherRoleText =
+                            $"<size=150%>・{multiAssignRole.AnotherRole.GetColoredRoleName()}</size>" +
                             (anotherRoleFullDesc != "" ? $"\n{anotherRoleFullDesc}\n" : "") +
                             $"・{Translation.GetString(multiAssignRole.AnotherRole.GetColoredRoleName())}{Translation.GetString("roleOption")}\n" +
                             (anotherRoleOptionString != "" ? $"{anotherRoleOptionString}" : "");
