@@ -5,6 +5,7 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
 
@@ -92,7 +93,9 @@ namespace ExtremeRoles.Roles.API
         public override string GetImportantText(bool isContainFakeTask = true)
         {
 
-            if (this.AnotherRole == null)
+            if (this.AnotherRole == null ||
+                (this.AnotherRole is IRoleAwake<RoleTypes> awakeRole &&
+                 !awakeRole.IsAwake))
             {
                 return base.GetImportantText();
             }
@@ -120,7 +123,9 @@ namespace ExtremeRoles.Roles.API
             string baseIntro = Translation.GetString(
                 $"{this.Id}IntroDescription");
 
-            if (this.AnotherRole == null)
+            if (this.AnotherRole == null ||
+                (this.AnotherRole is IRoleAwake<RoleTypes> awakeRole &&
+                 !awakeRole.IsAwake))
             {
                 return baseIntro;
             }

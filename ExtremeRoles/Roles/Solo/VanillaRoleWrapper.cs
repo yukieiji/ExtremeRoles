@@ -6,6 +6,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Roles.API.Interface;
 
 namespace ExtremeRoles.Roles.Solo
 {
@@ -69,7 +70,9 @@ namespace ExtremeRoles.Roles.Solo
                 this.IsImpostor() ? Palette.ImpostorRed : Palette.CrewmateBlue,
                 CachedPlayerControl.LocalPlayer.Data.Role.Blurb);
 
-            if (this.AnotherRole == null)
+            if (this.AnotherRole == null ||
+                (this.AnotherRole is IRoleAwake<RoleTypes> awakeRole &&
+                 !awakeRole.IsAwake))
             {
                 return baseIntro;
             }
@@ -99,7 +102,9 @@ namespace ExtremeRoles.Roles.Solo
 
         public override string GetImportantText(bool isContainFakeTask = true)
         {
-            if (this.AnotherRole == null)
+            if (this.AnotherRole == null ||
+                (this.AnotherRole is IRoleAwake<RoleTypes> awakeRole &&
+                 !awakeRole.IsAwake))
             {
                 return getVanilaImportantText();
             }
