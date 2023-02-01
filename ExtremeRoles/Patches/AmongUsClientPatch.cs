@@ -121,20 +121,15 @@ namespace ExtremeRoles.Patches
 
                 var multiAssignRole = role as MultiAssignRoleBase;
 
-                var winModRole = role as IRoleWinPlayerModifier;
-                if (winModRole != null)
+                if (role is IRoleWinPlayerModifier winModRole)
                 {
                     modRole.Add((playerInfo, winModRole));
                 }
                 if (multiAssignRole != null)
                 {
-                    if (multiAssignRole.AnotherRole != null)
+                    if (multiAssignRole.AnotherRole is IRoleWinPlayerModifier multiWinModRole)
                     {
-                        winModRole = multiAssignRole.AnotherRole as IRoleWinPlayerModifier;
-                        if (winModRole != null)
-                        {
-                            modRole.Add((playerInfo, winModRole));
-                        }
+                        modRole.Add((playerInfo, multiWinModRole));
                     }
                 }
 
