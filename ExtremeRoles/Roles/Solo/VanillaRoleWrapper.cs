@@ -56,6 +56,13 @@ namespace ExtremeRoles.Roles.Solo
                 this.AnotherRole = null;
                 this.CanHasAnotherRole = false;
             }
+            else
+            {
+                this.CanCallMeeting = this.AnotherRole.CanCallMeeting;
+                this.CanUseAdmin    = this.AnotherRole.CanUseAdmin   ;
+                this.CanUseSecurity = this.AnotherRole.CanUseSecurity;
+                this.CanUseVital    = this.AnotherRole.CanUseVital;
+            }
         }
 
         public override string GetFullDescription()
