@@ -1,6 +1,6 @@
 ---
 name: バグレポート/Bug Report
-about: MODのバグ報告用テンプレート/Template of mod bugs
+about: MODのバグ報告用テンプレート/Template of mod bugs(English-only descriptions are acceptable)
 title: 'バグの内容を一言で/The bug in a nutshell'
 labels: バグ/Bug, 未確認/Unconfirmed
 assignees: ''
