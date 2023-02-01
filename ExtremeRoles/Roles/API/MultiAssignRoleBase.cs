@@ -93,9 +93,7 @@ namespace ExtremeRoles.Roles.API
         public override string GetImportantText(bool isContainFakeTask = true)
         {
 
-            if (this.AnotherRole == null ||
-                (this.AnotherRole is IRoleAwake<RoleTypes> awakeRole &&
-                 !awakeRole.IsAwake))
+            if (this.AnotherRole == null)
             {
                 return base.GetImportantText();
             }
@@ -123,9 +121,7 @@ namespace ExtremeRoles.Roles.API
             string baseIntro = Translation.GetString(
                 $"{this.Id}IntroDescription");
 
-            if (this.AnotherRole == null ||
-                (this.AnotherRole is IRoleAwake<RoleTypes> awakeRole &&
-                 !awakeRole.IsAwake))
+            if (this.AnotherRole == null)
             {
                 return baseIntro;
             }
@@ -155,9 +151,7 @@ namespace ExtremeRoles.Roles.API
         }
         public override string GetColoredRoleName(bool isTruthColor = false)
         {
-            if (this.AnotherRole == null ||
-                (this.AnotherRole is IRoleAwake<RoleTypes> awakeRole &&
-                 !awakeRole.IsAwake))
+            if (this.AnotherRole == null)
             {
                 return base.GetColoredRoleName(isTruthColor);
             }

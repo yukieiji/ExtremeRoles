@@ -77,9 +77,7 @@ namespace ExtremeRoles.Roles.Solo
                 this.IsImpostor() ? Palette.ImpostorRed : Palette.CrewmateBlue,
                 CachedPlayerControl.LocalPlayer.Data.Role.Blurb);
 
-            if (this.AnotherRole == null ||
-                (this.AnotherRole is IRoleAwake<RoleTypes> awakeRole &&
-                 !awakeRole.IsAwake))
+            if (this.AnotherRole == null)
             {
                 return baseIntro;
             }
@@ -109,9 +107,7 @@ namespace ExtremeRoles.Roles.Solo
 
         public override string GetImportantText(bool isContainFakeTask = true)
         {
-            if (this.AnotherRole == null ||
-                (this.AnotherRole is IRoleAwake<RoleTypes> awakeRole &&
-                 !awakeRole.IsAwake))
+            if (this.AnotherRole == null)
             {
                 return getVanilaImportantText();
             }
