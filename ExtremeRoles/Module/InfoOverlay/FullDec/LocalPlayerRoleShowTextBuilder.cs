@@ -25,9 +25,13 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
 
             var multiAssignRole = role as MultiAssignRoleBase;
             bool isVanillaRole = role.IsVanillaRole();
-            if (multiAssignRole != null)
+            if (isVanillaRole)
             {
-                if (!isVanillaRole)
+                colorRoleName = role.GetColoredRoleName();
+            }
+            else if (multiAssignRole != null)
+            {
+                if (!role.IsVanillaRole())
                 {
                     roleOptionString = allOption[
                         multiAssignRole.GetManagerOptionId(
@@ -70,10 +74,10 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
                                     RoleCommonOption.SpawnRate)].ToHudStringWithChildren();
                     }
                     string anotherRoleFullDesc = anotherRole.GetFullDescription();
-                    bool isReplace = replaceAwakeRoleOptionString(
+                    replaceAwakeRoleOptionString(
                         ref anotherRoleOptionString, anotherRole);
 
-                    if (!isVanillaRole || !isReplace)
+                    if (!isVanillaRole || anotherRoleOptionString != "")
                     {
                         anotherRoleText +=
                             $"\n<size=150%>・{multiAssignRole.AnotherRole.GetColoredRoleName()}</size>" +
@@ -87,23 +91,20 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
             return (title, roleText, anotherRoleText);
         }
 
-        private static bool replaceAwakeRoleOptionString(
+        private static void replaceAwakeRoleOptionString(
             ref string roleOptionString, SingleRoleBase role)
         {
             if (role is IRoleAwake<RoleTypes> awakeFromVaniraRole && 
                 !awakeFromVaniraRole.IsAwake)
             {
                 roleOptionString = "";
-                return true;
             }
             else if (
                 role is IRoleAwake<Roles.ExtremeRoleId> awakeFromExRole && 
                 !awakeFromExRole.IsAwake)
             {
                 roleOptionString = awakeFromExRole.GetFakeOptionString();
-                return true;
             }
-            return false;
         }
     }
 }
