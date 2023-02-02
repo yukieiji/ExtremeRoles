@@ -358,7 +358,10 @@ namespace ExtremeRoles.Patches.Manager
             {
                 return true;
             }
-            else if (role.IsImpostor() || role.Id == ExtremeRoleId.Madmate)
+            else if (
+                role.IsImpostor() || 
+                role.Id == ExtremeRoleId.Madmate ||
+                role.Id == ExtremeRoleId.Doll)
             {
                 return ExtremeRolesPlugin.ShipState.IsAssassinAssign;
             }

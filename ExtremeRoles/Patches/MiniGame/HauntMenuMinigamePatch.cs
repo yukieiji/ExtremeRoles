@@ -28,7 +28,11 @@ namespace ExtremeRoles.Patches.MiniGame
                 isBlocked ||
                 (
                     ExtremeRolesPlugin.ShipState.IsAssassinAssign &&
-                    (role.IsImpostor() || role.Id == ExtremeRoleId.Madmate)
+                    (   
+                        role.IsImpostor() || 
+                        role.Id == ExtremeRoleId.Madmate ||
+                        role.Id == ExtremeRoleId.Doll
+                    )
                 ) ? 
                     "？？？" : 
                     Helper.Translation.GetString(targetRoleTeam.ToString());
