@@ -8,23 +8,8 @@ using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module.RoleAssign
 {
-    public sealed class PlayerRoleAssignData
+    public sealed class PlayerRoleAssignData : NullableSingleton<PlayerRoleAssignData>
     {
-        public static PlayerRoleAssignData Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new PlayerRoleAssignData();
-                }
-                return instance;
-            }
-        }
-        public static bool IsExist => instance != null;
-
-        private static PlayerRoleAssignData instance = null;
-
         public List<PlayerControl> NeedRoleAssignPlayer { get; private set; }
 
         private List<IPlayerToExRoleAssignData> assignData = new List<IPlayerToExRoleAssignData>();
@@ -126,10 +111,6 @@ namespace ExtremeRoles.Module.RoleAssign
         {
             this.NeedRoleAssignPlayer = this.NeedRoleAssignPlayer.OrderBy(
                 x => RandomGenerator.Instance.Next()).ToList();
-        }
-        public void Destroy()
-        {
-            instance = null;
         }
     }
 }
