@@ -39,9 +39,9 @@ namespace ExtremeRoles.Module.RoleAssign
 
         public int GetGlobalSpawnLimit(ExtremeRoleType team)
         {
-            if (this.globalSpawnLimit.ContainsKey(team))
+            if (this.globalSpawnLimit.TryGetValue(team, out int limit))
             {
-                return this.globalSpawnLimit[team];
+                return limit;
             }
             else
             {
@@ -52,10 +52,9 @@ namespace ExtremeRoles.Module.RoleAssign
         public List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> GetUseGhostRole(
             ExtremeRoleType team)
         {
-            if (this.useGhostRole.ContainsKey(team))
+            if (this.useGhostRole.TryGetValue(team, out var data))
             {
-                return this.useGhostRole[team].OrderBy(
-                    item => RandomGenerator.Instance.Next()).ToList();
+                return data.OrderBy(item => RandomGenerator.Instance.Next()).ToList();
             }
             else
             {
