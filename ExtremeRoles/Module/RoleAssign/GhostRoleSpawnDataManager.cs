@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
 namespace ExtremeRoles.Module.RoleAssign
 {
-    public sealed class GhostRoleSpawnDataManager : NullableSingleton<GhostRoleSpawnDataManager>
+    public sealed class GhostRoleSpawnDataManager : 
+        NullableSingleton<GhostRoleSpawnDataManager>,
+        ISpawnDataManager
     {
         private Dictionary<ExtremeRoleType, int> globalSpawnLimit = new Dictionary<ExtremeRoleType, int>();
 
@@ -40,19 +42,19 @@ namespace ExtremeRoles.Module.RoleAssign
             {
                 {
                     ExtremeRoleType.Crewmate,
-                    computeSpawnNum(
+                    ISpawnDataManager.ComputeSpawnNum(
                         OptionHolder.CommonOptionKey.MinCrewmateGhostRoles,
                         OptionHolder.CommonOptionKey.MaxCrewmateGhostRoles)
                 },
                 {
                     ExtremeRoleType.Neutral,
-                    computeSpawnNum(
+                    ISpawnDataManager.ComputeSpawnNum(
                         OptionHolder.CommonOptionKey.MinNeutralGhostRoles,
                         OptionHolder.CommonOptionKey.MaxNeutralGhostRoles)
                 },
                 {
                     ExtremeRoleType.Impostor,
-                    computeSpawnNum(
+                    ISpawnDataManager.ComputeSpawnNum(
                         OptionHolder.CommonOptionKey.MinImpostorGhostRoles,
                         OptionHolder.CommonOptionKey.MaxImpostorGhostRoles)
                 },
@@ -65,8 +67,8 @@ namespace ExtremeRoles.Module.RoleAssign
             {
                 var role = ExtremeGhostRoleManager.AllGhostRole[roleId];
 
-                int spawnRate = computePercentage(allOption[
-                    role.GetRoleOptionId(RoleCommonOption.SpawnRate)]);
+                int spawnRate = ISpawnDataManager.ComputePercentage(
+                    allOption[role.GetRoleOptionId(RoleCommonOption.SpawnRate)]);
                 int roleNum = allOption[
                     role.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue();
 
@@ -143,23 +145,5 @@ namespace ExtremeRoles.Module.RoleAssign
             this.useGhostRole.Clear();
             this.combRole.Clear();
         }
-
-        private static int computeSpawnNum(
-            OptionHolder.CommonOptionKey minSpawnKey,
-            OptionHolder.CommonOptionKey maxSpawnKey)
-        {
-            var allOption = OptionHolder.AllOption;
-
-            int minSpawnNum = allOption[(int)minSpawnKey].GetValue();
-            int maxSpawnNum = allOption[(int)maxSpawnKey].GetValue();
-
-            // 最大値が最小値より小さくならないように
-            maxSpawnNum = Math.Clamp(maxSpawnNum, minSpawnNum, int.MaxValue);
-
-            return RandomGenerator.Instance.Next(minSpawnNum, maxSpawnNum + 1);
-        }
-
-        private static int computePercentage(IOption self)
-            => (int)decimal.Multiply(self.GetValue(), self.ValueCount);
     }
 }

@@ -6,10 +6,11 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.Interface;
 
 namespace ExtremeRoles.Module.RoleAssign
 {
-    public sealed class RoleSpawnDataManager
+    public sealed class RoleSpawnDataManager : ISpawnDataManager
     {
         public Dictionary<ExtremeRoleType, int> MaxRoleNum { get; private set; }
 
@@ -36,19 +37,19 @@ namespace ExtremeRoles.Module.RoleAssign
             {
                 {
                     ExtremeRoleType.Crewmate,
-                    computeSpawnNum(
+                    ISpawnDataManager.ComputeSpawnNum(
                         OptionHolder.CommonOptionKey.MinCrewmateRoles,
                         OptionHolder.CommonOptionKey.MaxCrewmateRoles)
                 },
                 {
                     ExtremeRoleType.Neutral,
-                    computeSpawnNum(
+                    ISpawnDataManager.ComputeSpawnNum(
                         OptionHolder.CommonOptionKey.MinNeutralRoles,
                         OptionHolder.CommonOptionKey.MaxNeutralRoles)
                 },
                 {
                     ExtremeRoleType.Impostor,
-                    computeSpawnNum(
+                    ISpawnDataManager.ComputeSpawnNum(
                         OptionHolder.CommonOptionKey.MinImpostorRoles,
                         OptionHolder.CommonOptionKey.MaxImpostorRoles)
                 },
@@ -60,7 +61,7 @@ namespace ExtremeRoles.Module.RoleAssign
             {
                 byte combType = (byte)roleId;
                 var role = ExtremeRoleManager.CombRole[combType];
-                int spawnRate = computePercentage(allOption[
+                int spawnRate = ISpawnDataManager.ComputePercentage(allOption[
                     role.GetRoleOptionId(RoleCommonOption.SpawnRate)]);
                 int roleSet = allOption[
                     role.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue();
@@ -93,8 +94,8 @@ namespace ExtremeRoles.Module.RoleAssign
                 int intedRoleId = (int)roleId;
                 SingleRoleBase role = ExtremeRoleManager.NormalRole[intedRoleId];
 
-                int spawnRate = computePercentage(allOption[
-                    role.GetRoleOptionId(RoleCommonOption.SpawnRate)]);
+                int spawnRate = ISpawnDataManager.ComputePercentage(
+                    allOption[role.GetRoleOptionId(RoleCommonOption.SpawnRate)]);
                 int roleNum = allOption[
                     role.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue();
 
@@ -122,23 +123,5 @@ namespace ExtremeRoles.Module.RoleAssign
         {
             this.MaxRoleNum[roleType] = this.MaxRoleNum[roleType] - reduceNum;
         }
-
-        private static int computeSpawnNum(
-            OptionHolder.CommonOptionKey minSpawnKey,
-            OptionHolder.CommonOptionKey maxSpawnKey)
-        {
-            var allOption = OptionHolder.AllOption;
-
-            int minSpawnNum = allOption[(int)minSpawnKey].GetValue();
-            int maxSpawnNum = allOption[(int)maxSpawnKey].GetValue();
-
-            // 最大値が最小値より小さくならないように
-            maxSpawnNum = Math.Clamp(maxSpawnNum, minSpawnNum, int.MaxValue);
-
-            return RandomGenerator.Instance.Next(minSpawnNum, maxSpawnNum + 1);
-        }
-
-        private static int computePercentage(IOption self)
-            => (int)decimal.Multiply(self.GetValue(), self.ValueCount);
     }
 }
