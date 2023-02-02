@@ -41,7 +41,7 @@ namespace ExtremeRoles.GhostRoles
 
     public static class ExtremeGhostRoleManager
     {
-        public const int GhostRoleOptionId = 25;
+        private const int ghostRoleOptionId = 25;
         private const int idOffset = 128;
 
         public static Dictionary<byte, GhostRoleBase> GameRole = new Dictionary<byte, GhostRoleBase>();
@@ -145,7 +145,7 @@ namespace ExtremeRoles.GhostRoles
             foreach (var item in roles.Select(
                 (Value, Index) => new { Value, Index }))
             {
-                roleOptionOffset = optionIdOffset + (GhostRoleOptionId * item.Index);
+                roleOptionOffset = optionIdOffset + (ghostRoleOptionId * item.Index);
                 item.Value.CreateRoleAllOption(roleOptionOffset);
             }
 
