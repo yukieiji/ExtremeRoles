@@ -335,7 +335,7 @@ namespace ExtremeRoles.Patches.Manager
                         }
                         if (roleManager is GhostAndAliveCombinationRoleManagerBase)
                         {
-                            isSpawn = !ExtremeGhostRoleManager.IsGlobalSpawnLimit(role.Team);
+                            isSpawn = !GhostRoleSpawnDataManager.Instance.IsGlobalSpawnLimit(role.Team);
                         }
                     }
 
@@ -489,7 +489,8 @@ namespace ExtremeRoles.Patches.Manager
 
             var role = ExtremeRoleManager.GameRole[player.PlayerId];
             if (!role.IsAssignGhostRole()) { return false; }
-            if (ExtremeGhostRoleManager.IsCombRole(role.Id)) { return false; }
+            if (GhostRoleSpawnDataManager.IsExist &&
+                GhostRoleSpawnDataManager.Instance.IsCombRole(role.Id)) { return false; }
 
             return true;
         }
