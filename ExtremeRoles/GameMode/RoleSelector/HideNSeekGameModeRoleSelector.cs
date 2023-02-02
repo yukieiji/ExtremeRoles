@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 
+using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -28,7 +29,7 @@ namespace ExtremeRoles.GameMode.RoleSelector
                 yield break;
             }
         }
-        public IEnumerable<int> GhostRoleSpawnOptionId
+        public IEnumerable<ExtremeGhostRoleId> UseGhostRoleId
         {
             get
             {

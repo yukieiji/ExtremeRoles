@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 
 using ExtremeRoles.GhostRoles;
-using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.Roles.Combination;
 
 namespace ExtremeRoles.GameMode.RoleSelector
 {
@@ -34,11 +32,11 @@ namespace ExtremeRoles.GameMode.RoleSelector
                 }
             }
         }
-        public IEnumerable<int> GhostRoleSpawnOptionId
+        public IEnumerable<ExtremeGhostRoleId> UseGhostRoleId
         {
             get
             {
-                foreach (int id in this.useGhostRoleSpawnOption)
+                foreach (ExtremeGhostRoleId id in getUseGhostRoleId())
                 {
                     yield return id;
                 }
@@ -63,8 +61,9 @@ namespace ExtremeRoles.GameMode.RoleSelector
                 this.useCombRoleSpawnOption.Add(
                     role.GetRoleOptionId(RoleCommonOption.SpawnRate));
             }
-            foreach (GhostRoleBase role in ExtremeGhostRoleManager.AllGhostRole.Values)
+            foreach (ExtremeGhostRoleId roleId in getUseGhostRoleId())
             {
+                var role = ExtremeGhostRoleManager.AllGhostRole[roleId];
                 this.useGhostRoleSpawnOption.Add(
                     role.GetRoleOptionId(RoleCommonOption.SpawnRate));
             }
@@ -145,6 +144,7 @@ namespace ExtremeRoles.GameMode.RoleSelector
                 ExtremeRoleId.Madmate,
                 ExtremeRoleId.Umbrer,
             };
+
         private CombinationRoleType[] getUseCombRoleType() =>
             new CombinationRoleType[]
             {
@@ -162,6 +162,16 @@ namespace ExtremeRoles.GameMode.RoleSelector
                 CombinationRoleType.Guesser,
 
                 CombinationRoleType.Traitor,
+            };
+
+        private ExtremeGhostRoleId[] getUseGhostRoleId() =>
+            new ExtremeGhostRoleId[]
+            {
+                ExtremeGhostRoleId.Poltergeist,
+                ExtremeGhostRoleId.Faunus,
+
+                ExtremeGhostRoleId.Ventgeist,
+                ExtremeGhostRoleId.SaboEvil,
             };
     }
 }

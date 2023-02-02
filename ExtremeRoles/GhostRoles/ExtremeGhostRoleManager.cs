@@ -12,6 +12,7 @@ using ExtremeRoles.GhostRoles.Impostor;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.GhostRoles
 {
@@ -61,16 +62,6 @@ namespace ExtremeRoles.GhostRoles
             RoleTypes.GuardianAngel,
         };
 
-        public static void AddCombGhostRole(
-            CombinationRoleType type,
-            GhostAndAliveCombinationRoleManagerBase roleManager)
-        {
-            foreach (var baseRoleId in roleManager.CombGhostRole.Keys)
-            {
-                GhostRoleSpawnDataManager.Instance.AddCombRoleAssignData(baseRoleId, type);
-            }
-        }
-
         public static void AssignGhostRoleToPlayer(PlayerControl player)
         {
             RoleTypes roleType = player.Data.Role.Role;
@@ -88,13 +79,13 @@ namespace ExtremeRoles.GhostRoles
             ExtremeRoleType team = baseRole.Team;
             ExtremeRoleId roleId = baseRole.Id;
 
-            GhostRoleSpawnDataManager spawnData = GhostRoleSpawnDataManager.Instance;
+            GhostRoleSpawnDataManager spawnDataMng = GhostRoleSpawnDataManager.Instance;
 
-            if (spawnData.IsGlobalSpawnLimit(team)) { return; };
+            if (spawnDataMng.IsGlobalSpawnLimit(team)) { return; };
 
-            if (spawnData.IsCombRole(roleId))
+            if (spawnDataMng.IsCombRole(roleId))
             {
-                CombinationRoleType combRoleId = spawnData.GetCombRoleType(roleId);
+                CombinationRoleType combRoleId = spawnDataMng.GetCombRoleType(roleId);
 
                 // 専用のコンビ役職を取ってくる
                 using (var caller = RPCOperator.CreateCaller(
@@ -108,27 +99,25 @@ namespace ExtremeRoles.GhostRoles
                 }
                 setPlyaerToCombGhostRole(
                     player.PlayerId, controlId, (byte)combRoleId, (int)roleId);
-                spawnData.ReduceGlobalSpawnLimit(team);
+                spawnDataMng.ReduceGlobalSpawnLimit(team);
                 return;
             }
 
             // 各陣営の役職データを取得する
-            List<(HashSet<ExtremeRoleId>, int, int, ExtremeGhostRoleId)> sameTeamRoleAssignData = spawnData.GetUseGhostRole(
-                team);
+            List<GhostRoleSpawnData> sameTeamRoleAssignData = spawnDataMng.GetUseGhostRole(team);
 
-            foreach (var(filter, num, spawnRate, id) in sameTeamRoleAssignData)
+            foreach (var spawnData in sameTeamRoleAssignData)
             {
-                if (filter.Count != 0 && !filter.Contains(roleId)) { continue; }
-                if (!isRoleSpawn(num, spawnRate)) { continue; }
+                if (spawnData.IsBlockAliveRole(roleId) || 
+                    !spawnData.IsSpawn()) { continue; }
                 
                 rpcSetSingleGhostRoleToPlayerId(
-                    player, controlId, roleType, id);
-                
+                    player, controlId, roleType, spawnData.Id);
+
                 // その役職のスポーン数をへらす処理
-                spawnData.ReduceRoleSpawnData(
-                    team, filter, num, spawnRate, id);
+                spawnData.ReduceSpawnNum();
                 // 全体の役職減少処理
-                spawnData.ReduceGlobalSpawnLimit(team);
+                spawnDataMng.ReduceGlobalSpawnLimit(team);
      
                 return;
             }
@@ -150,46 +139,6 @@ namespace ExtremeRoles.GhostRoles
             }
 
         }
-
-        public static void CreateGhostRoleAssignData()
-        {
-            var allOption = OptionHolder.AllOption;
-
-            GhostRoleSpawnDataManager spawnData = GhostRoleSpawnDataManager.Instance;
-
-            spawnData.SetGlobalSpawnLimit(
-                UnityEngine.Random.RandomRange(
-                    allOption[(int)OptionHolder.CommonOptionKey.MinCrewmateGhostRoles].GetValue(),
-                    allOption[(int)OptionHolder.CommonOptionKey.MaxCrewmateGhostRoles].GetValue()),
-                UnityEngine.Random.RandomRange(
-                    allOption[(int)OptionHolder.CommonOptionKey.MinImpostorGhostRoles].GetValue(),
-                    allOption[(int)OptionHolder.CommonOptionKey.MaxImpostorGhostRoles].GetValue()),
-                UnityEngine.Random.RandomRange(
-                    allOption[(int)OptionHolder.CommonOptionKey.MinNeutralGhostRoles].GetValue(),
-                    allOption[(int)OptionHolder.CommonOptionKey.MaxNeutralGhostRoles].GetValue()));
-
-            foreach (var role in AllGhostRole.Values)
-            {
-                int spawnRate = computePercentage(allOption[
-                    role.GetRoleOptionId(RoleCommonOption.SpawnRate)]);
-                int roleNum = allOption[
-                    role.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue();
-
-                Helper.Logging.Debug(
-                    $"GhostRole Name:{role.Name}  SpawnRate:{spawnRate}   RoleNum:{roleNum}");
-
-                if (roleNum <= 0 || spawnRate <= 0.0)
-                {
-                    continue;
-                }
-
-                spawnData.SetNormalRoleAssignData(
-                    role.Team,
-                    role.GetRoleFilter(),
-                    roleNum, spawnRate, role.Id);
-            }
-        }
-
 
         public static GhostRoleBase GetLocalPlayerGhostRole()
         {

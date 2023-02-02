@@ -17,15 +17,20 @@ namespace ExtremeRoles.Module.RoleAssign
         { get; private set; }
         public Dictionary<byte, CombinationRoleSpawnData> CurrentCombRoleSpawnData { get; private set; }
 
+        public List<(CombinationRoleType, GhostAndAliveCombinationRoleManagerBase)> UseGhostCombRole 
+        { get; private set; }
+
         public RoleSpawnDataManager()
         {
+            UseGhostCombRole = new List<(CombinationRoleType, GhostAndAliveCombinationRoleManagerBase)>();
+            CurrentCombRoleSpawnData = new Dictionary<byte, CombinationRoleSpawnData>();
+
             CurrentSingleRoleSpawnData = new Dictionary<ExtremeRoleType, Dictionary<int, SingleRoleSpawnData>>
             {
                 { ExtremeRoleType.Crewmate, new Dictionary<int, SingleRoleSpawnData>() },
                 { ExtremeRoleType.Impostor, new Dictionary<int, SingleRoleSpawnData>() },
                 { ExtremeRoleType.Neutral , new Dictionary<int, SingleRoleSpawnData>() },
             };
-            CurrentCombRoleSpawnData = new Dictionary<byte, CombinationRoleSpawnData>();
 
             MaxRoleNum = new Dictionary<ExtremeRoleType, int>
             {
@@ -77,11 +82,9 @@ namespace ExtremeRoles.Module.RoleAssign
                         spawnRate: spawnRate,
                         isMultiAssign: isMultiAssign));
 
-                var ghostComb = role as GhostAndAliveCombinationRoleManagerBase;
-                if (ghostComb != null)
+                if (role is GhostAndAliveCombinationRoleManagerBase ghostComb)
                 {
-                    ExtremeGhostRoleManager.AddCombGhostRole(
-                        (CombinationRoleType)combType, ghostComb);
+                    this.UseGhostCombRole.Add(((CombinationRoleType)combType, ghostComb));
                 }
             }
 
@@ -106,8 +109,6 @@ namespace ExtremeRoles.Module.RoleAssign
                 CurrentSingleRoleSpawnData[role.Team].Add(
                     intedRoleId, new SingleRoleSpawnData(roleNum, spawnRate));
             }
-
-            ExtremeGhostRoleManager.CreateGhostRoleAssignData();
         }
 
         public bool IsCanSpawnTeam(ExtremeRoleType roleType, int reduceNum = 1)

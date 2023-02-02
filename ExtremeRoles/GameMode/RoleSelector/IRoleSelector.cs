@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles;
 
@@ -12,7 +12,7 @@ namespace ExtremeRoles.GameMode.RoleSelector
 
         public IEnumerable<ExtremeRoleId> UseNormalRoleId { get; }
         public IEnumerable<CombinationRoleType> UseCombRoleType { get; }
-        public IEnumerable<int> GhostRoleSpawnOptionId { get; }
+        public IEnumerable<ExtremeGhostRoleId> UseGhostRoleId { get; }
 
         public bool IsValidRoleOption(IOption option);
     }

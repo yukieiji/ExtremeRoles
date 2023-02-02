@@ -46,7 +46,10 @@ namespace ExtremeRoles.Patches.Manager
             RPCOperator.Call(netId, RPCOperator.Command.Initialize);
             RPCOperator.Initialize();
 
+            // スポーンデータ作成
             RoleSpawnDataManager spawnData = new RoleSpawnDataManager();
+            GhostRoleSpawnDataManager.Instance.Create(spawnData.UseGhostCombRole);
+
             PlayerRoleAssignData assignData = PlayerRoleAssignData.Instance;
 
             addCombinationExtremeRoleAssignData(
@@ -489,8 +492,7 @@ namespace ExtremeRoles.Patches.Manager
 
             var role = ExtremeRoleManager.GameRole[player.PlayerId];
             if (!role.IsAssignGhostRole()) { return false; }
-            if (GhostRoleSpawnDataManager.IsExist &&
-                GhostRoleSpawnDataManager.Instance.IsCombRole(role.Id)) { return false; }
+            if (GhostRoleSpawnDataManager.Instance.IsCombRole(role.Id)) { return false; }
 
             return true;
         }
