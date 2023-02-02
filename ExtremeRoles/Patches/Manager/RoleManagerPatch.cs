@@ -487,7 +487,16 @@ namespace ExtremeRoles.Patches.Manager
             if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 
             var role = ExtremeRoleManager.GameRole[player.PlayerId];
-            if (!role.IsAssignGhostRole()) { return false; }
+            if (!role.IsAssignGhostRole())
+            {
+                var roleBehavior = player.Data.Role;
+
+                if (!RoleManager.IsGhostRole(roleBehavior.Role))
+                {
+                    player.RpcSetRole(roleBehavior.DefaultGhostRole);
+                }
+                return false;
+            }
             if (GhostRoleSpawnDataManager.Instance.IsCombRole(role.Id)) { return false; }
 
             return true;
@@ -511,7 +520,7 @@ namespace ExtremeRoles.Patches.Manager
         {
             if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
             if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
-            // バニラ幽霊クルー役職にニュートラルがアサインされる時やゲームモードがクラッシクではない時は常にTrueを返す
+            // バニラ幽霊クルー役職にニュートラルがアサインされる時はTrueを返す
             if (ExtremeGameModeManager.Instance.ShipOption.IsAssignNeutralToVanillaCrewGhostRole)
             {
                 return true;
