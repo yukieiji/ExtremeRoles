@@ -3,8 +3,6 @@
 using AmongUs.GameOptions;
 using UnityEngine;
 
-
-using ExtremeRoles.GameMode.Vison;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -17,6 +15,13 @@ namespace ExtremeRoles.Module
 {
     public class VisonComputer
     {
+        public enum Modifier
+        {
+            None,
+            LastWolfLightOff,
+            WispLightOff,
+        }
+
         public static VisonComputer Instance => instance;
         private static VisonComputer instance = new VisonComputer();
 
@@ -28,34 +33,34 @@ namespace ExtremeRoles.Module
 
         private const SystemTypes electrical = SystemTypes.Electrical;
 
-        public VisonType Current => modifier;
-        private VisonType modifier = VisonType.None;
+        public Modifier CurrentModifier => modifier;
+        private Modifier modifier = Modifier.None;
 
-        public void SetModifier(VisonType newVison)
+        public void SetModifier(Modifier newVison)
         {
             this.modifier = newVison;
         }
         public void ResetModifier()
         {
-            this.modifier = VisonType.None;
+            this.modifier = Modifier.None;
         }
-        public bool IsModifierResetted() => this.modifier != VisonType.None;
+        public bool IsModifierResetted() => this.modifier != Modifier.None;
 
-        public bool IsVanillaVisonAndModComputeVison(
+        public bool IsVanillaVisonAndGetVison(
             ShipStatus shipStatus, GameData.PlayerInfo playerInfo, out float vison)
         {
             vison = shipStatus.MaxLightRadius;
 
             switch (this.modifier)
             {
-                case VisonType.LastWolfLightOff:
+                case Modifier.LastWolfLightOff:
                     if (ExtremeRoleManager.GetSafeCastedLocalPlayerRole<LastWolf>() == null)
                     {
                         vison = 0.15f;
                         return false;
                     }
                     break;
-                case VisonType.WispLightOff:
+                case Modifier.WispLightOff:
                     if (!Wisp.HasTorch(playerInfo.PlayerId))
                     {
                         vison = shipStatus.MinLightRadius * crewLightVison;

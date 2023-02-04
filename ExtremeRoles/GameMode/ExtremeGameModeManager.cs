@@ -3,7 +3,6 @@ using ExtremeRoles.GameMode.Factory;
 using ExtremeRoles.GameMode.IntroRunner;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
-using ExtremeRoles.GameMode.Vison;
 
 // TODO: setプロパティ => initにする 
 
