@@ -1,6 +1,5 @@
 ﻿using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
-using ExtremeRoles.GameMode.Vison;
 
 namespace ExtremeRoles.GameMode.Factory
 {
@@ -9,7 +8,5 @@ namespace ExtremeRoles.GameMode.Factory
         public IShipGlobalOption CreateGlobalOption();
 
         public IRoleSelector CreateRoleSelector();
-
-        public IVisonModifier CreateVisonModifier();
     }
 }

@@ -18,9 +18,6 @@ namespace ExtremeRoles.GameMode
         public IShipGlobalOption ShipOption { get; private set; }
         public IRoleSelector RoleSelector { get; private set; }
 
-        // TODO：このクラスに含める必要があるか検証する必要あり
-        public IVisonModifier Vison { get; private set; }
-
         public ExtremeGameModeManager(GameModes mode)
         {
             CurrentGameMode = mode;
@@ -43,7 +40,6 @@ namespace ExtremeRoles.GameMode
 
             Instance.ShipOption = factory.CreateGlobalOption();
             Instance.RoleSelector = factory.CreateRoleSelector();
-            Instance.Vison = factory.CreateVisonModifier();
         }
 
         public void Load()
