@@ -48,6 +48,8 @@ namespace ExtremeRoles
 
         private static IRegionInfo[] defaultRegion;
 
+        private static Color defaultOptionColor => new Color(204f / 255f, 204f / 255f, 0, 1f);
+
         public enum CommonOptionKey : int
         {
             PresetSelection = 0,
@@ -98,17 +100,17 @@ namespace ExtremeRoles
 
             new SelectionCustomOption(
                 (int)CommonOptionKey.PresetSelection, Design.ColoedString(
-                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    defaultOptionColor,
                     CommonOptionKey.PresetSelection.ToString()),
                 optionPreset, null, true);
 
             var strongGen = new BoolCustomOption(
                 (int)CommonOptionKey.UseStrongRandomGen, Design.ColoedString(
-                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    defaultOptionColor,
                     CommonOptionKey.UseStrongRandomGen.ToString()), true);
             new SelectionCustomOption(
                 (int)CommonOptionKey.UsePrngAlgorithm, Design.ColoedString(
-                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    defaultOptionColor,
                     CommonOptionKey.UsePrngAlgorithm.ToString()),
                 new string[]
                 {
@@ -282,34 +284,34 @@ namespace ExtremeRoles
         {
             new IntCustomOption(
                 (int)CommonOptionKey.MinCrewmateRoles, Design.ColoedString(
-                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    defaultOptionColor,
                     CommonOptionKey.MinCrewmateRoles.ToString()),
                 0, 0, (VanillaMaxPlayerNum - 1) * 2, 1, null, true);
             new IntCustomOption(
                 (int)CommonOptionKey.MaxCrewmateRoles, Design.ColoedString(
-                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    defaultOptionColor,
                     CommonOptionKey.MaxCrewmateRoles.ToString()),
                 0, 0, (VanillaMaxPlayerNum - 1) * 2, 1);
 
             new IntCustomOption(
                 (int)CommonOptionKey.MinNeutralRoles, Design.ColoedString(
-                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    defaultOptionColor,
                     CommonOptionKey.MinNeutralRoles.ToString()),
                 0, 0, (VanillaMaxPlayerNum - 2) * 2, 1);
             new IntCustomOption(
                 (int)CommonOptionKey.MaxNeutralRoles, Design.ColoedString(
-                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    defaultOptionColor,
                     CommonOptionKey.MaxNeutralRoles.ToString()),
                 0, 0, (VanillaMaxPlayerNum - 2) * 2, 1);
 
             new IntCustomOption(
                 (int)CommonOptionKey.MinImpostorRoles, Design.ColoedString(
-                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    defaultOptionColor,
                     CommonOptionKey.MinImpostorRoles.ToString()),
                 0, 0, MaxImposterNum * 2, 1);
             new IntCustomOption(
                 (int)CommonOptionKey.MaxImpostorRoles, Design.ColoedString(
-                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    defaultOptionColor,
                     CommonOptionKey.MaxImpostorRoles.ToString()),
                 0, 0, MaxImposterNum * 2, 1);
         }
@@ -318,34 +320,34 @@ namespace ExtremeRoles
         {
             new IntCustomOption(
                 (int)CommonOptionKey.MinCrewmateGhostRoles, Design.ColoedString(
-                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    defaultOptionColor,
                     CommonOptionKey.MinCrewmateGhostRoles.ToString()),
                 0, 0, VanillaMaxPlayerNum - 1, 1, null, true);
             new IntCustomOption(
                 (int)CommonOptionKey.MaxCrewmateGhostRoles, Design.ColoedString(
-                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    defaultOptionColor,
                     CommonOptionKey.MaxCrewmateGhostRoles.ToString()),
                 0, 0, VanillaMaxPlayerNum - 1, 1);
 
             new IntCustomOption(
                 (int)CommonOptionKey.MinNeutralGhostRoles, Design.ColoedString(
-                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    defaultOptionColor,
                     CommonOptionKey.MinNeutralGhostRoles.ToString()),
                 0, 0, VanillaMaxPlayerNum - 2, 1);
             new IntCustomOption(
                 (int)CommonOptionKey.MaxNeutralGhostRoles, Design.ColoedString(
-                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    defaultOptionColor,
                     CommonOptionKey.MaxNeutralGhostRoles.ToString()),
                 0, 0, VanillaMaxPlayerNum - 2, 1);
 
             new IntCustomOption(
                 (int)CommonOptionKey.MinImpostorGhostRoles, Design.ColoedString(
-                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    defaultOptionColor,
                     CommonOptionKey.MinImpostorGhostRoles.ToString()),
                 0, 0, MaxImposterNum, 1);
             new IntCustomOption(
                 (int)CommonOptionKey.MaxImpostorGhostRoles, Design.ColoedString(
-                    new Color(204f / 255f, 204f / 255f, 0, 1f),
+                    defaultOptionColor,
                     CommonOptionKey.MaxImpostorGhostRoles.ToString()),
                 0, 0, MaxImposterNum, 1);
         }
