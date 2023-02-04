@@ -22,6 +22,7 @@ namespace ExtremeRoles
         private const int combRoleOptionStartOffset = 5000;
         private const int ghostRoleOptionStartOffset = 10000;
         private const int chunkSize = 50;
+        private const int maxPresetNum = 20;
 
         public static readonly string[] SpawnRate = new string[] {
             "0%", "10%", "20%", "30%", "40%",
@@ -38,9 +39,6 @@ namespace ExtremeRoles
 
         public static Dictionary<int, IOption> AllOption = new Dictionary<int, IOption>();
         
-        private static readonly string[] optionPreset = new string[] {
-            "preset1", "preset2", "preset3", "preset4", "preset5",
-            "preset6", "preset7", "preset8", "preset9", "preset10" };
 
         private static int selectedPreset = 0;
         private static bool isBlockShare = false;
@@ -137,11 +135,12 @@ namespace ExtremeRoles
             Roles.ExtremeRoleManager.GameRole.Clear();
             AllOption.Clear();
 
-            new SelectionCustomOption(
+            new IntCustomOption(
                 (int)CommonOptionKey.PresetSelection, Design.ColoedString(
                     new Color(204f / 255f, 204f / 255f, 0, 1f),
                     CommonOptionKey.PresetSelection.ToString()),
-                optionPreset, null, true);
+                1, 1, maxPresetNum, 1, null, true,
+                format: OptionUnit.Preset);
 
             var strongGen = new BoolCustomOption(
                 (int)CommonOptionKey.UseStrongRandomGen, Design.ColoedString(

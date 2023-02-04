@@ -27,6 +27,7 @@ namespace ExtremeRoles.Module
     public enum OptionUnit : byte
     {
         None,
+        Preset,
         Second,
         Minute,
         Shot,
