@@ -204,6 +204,7 @@ namespace ExtremeRoles
 
             // 各種表示系リセット
             Patches.Manager.HudManagerUpdatePatch.Reset();
+            Module.VisonComputer.Instance.ResetModifier();
 
             // ミーティング能力リセット
             Patches.Meeting.PlayerVoteAreaSelectPatch.Reset();
