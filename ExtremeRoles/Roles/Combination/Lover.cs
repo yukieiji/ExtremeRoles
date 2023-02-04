@@ -420,13 +420,14 @@ namespace ExtremeRoles.Roles.Combination
 
             List<byte> alive = new List<byte>();
 
-            foreach(var item in ExtremeRoleManager.GameRole)
+            foreach(var (playerId, role) in ExtremeRoleManager.GameRole)
             {
-                var player = GameData.Instance.GetPlayerById(item.Key);
-                if (this.IsSameControlId(item.Value) && 
-                    (!player.IsDead || !player.Disconnected))
+                var player = GameData.Instance.GetPlayerById(playerId);
+                if (this.IsSameControlId(role) && 
+                    !player.IsDead && 
+                    !player.Disconnected)
                 {
-                    alive.Add(item.Key);
+                    alive.Add(playerId);
                 }
             }
 
