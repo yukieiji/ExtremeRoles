@@ -44,21 +44,25 @@ namespace ExtremeRoles.Patches
                 GameData.Instance.AddPlayer(playerControl);
                 AmongUsClient.Instance.Spawn(playerControl, -2, InnerNet.SpawnFlags.None);
 
-                int hat = RandomGenerator.Instance.Next(HatManager.Instance.allHats.Count);
-                int pet = RandomGenerator.Instance.Next(HatManager.Instance.allPets.Count);
-                int skin = RandomGenerator.Instance.Next(HatManager.Instance.allSkins.Count);
-                int visor = RandomGenerator.Instance.Next(HatManager.Instance.allVisors.Count);
-                int color = RandomGenerator.Instance.Next(Palette.PlayerColors.Length);
+                var hatMng = FastDestroyableSingleton<HatManager>.Instance;
+                var rng = RandomGenerator.GetTempGenerator();
+
+                int hat = rng.Next(hatMng.allHats.Count);
+                int pet = rng.Next(hatMng.allPets.Count);
+                int skin = rng.Next(hatMng.allSkins.Count);
+                int visor = rng.Next(hatMng.allVisors.Count);
+                int color = rng.Next(Palette.PlayerColors.Length);
 
                 playerControl.transform.position = PlayerControl.LocalPlayer.transform.position;
                 playerControl.GetComponent<DummyBehaviour>().enabled = true;
                 playerControl.NetTransform.enabled = false;
-                playerControl.SetName(RandomString(10));
+                playerControl.SetName(new string(Enumerable.Repeat(chars, 10)
+                    .Select(s => s[rng.Next(s.Length)]).ToArray()));
                 playerControl.SetColor(color);
-                playerControl.SetHat(HatManager.Instance.allHats[hat].ProdId, color);
-                playerControl.SetPet(HatManager.Instance.allPets[pet].ProdId, color);
-                playerControl.SetVisor(HatManager.Instance.allVisors[visor].ProdId, color);
-                playerControl.SetSkin(HatManager.Instance.allSkins[skin].ProdId, color);
+                playerControl.SetHat(hatMng.allHats[hat].ProdId, color);
+                playerControl.SetPet(hatMng.allPets[pet].ProdId, color);
+                playerControl.SetVisor(hatMng.allVisors[visor].ProdId, color);
+                playerControl.SetSkin(hatMng.allSkins[skin].ProdId, color);
                 GameData.Instance.RpcSetTasks(playerControl.PlayerId, new byte[0]);
             }
 
@@ -140,11 +144,6 @@ namespace ExtremeRoles.Patches
                 body.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
             }
 
-        }
-        private static string RandomString(int length)
-        {
-            return new string(Enumerable.Repeat(chars, length)
-                .Select(s => s[RandomGenerator.Instance.Next(s.Length)]).ToArray());
         }
     }
 #endif
