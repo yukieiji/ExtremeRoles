@@ -250,8 +250,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             CreateIntOption(
                 OverLoaderOption.AwakeImpostorNum,
-                OptionHolder.MaxImposterNum, 1,
-                OptionHolder.MaxImposterNum, 1,
+                GameSystem.MaxImposterNum, 1,
+                GameSystem.MaxImposterNum, 1,
                 parentOps);
 
             CreateIntOption(

@@ -8,13 +8,13 @@ using TMPro;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Performance.Il2Cpp;
 
 
 namespace ExtremeRoles.Patches.Manager
@@ -99,7 +99,7 @@ namespace ExtremeRoles.Patches.Manager
         {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) 
             { return; }
-            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
+            if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
             SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();

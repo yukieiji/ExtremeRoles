@@ -10,6 +10,18 @@ EXTREMERORLS_OUT_FILE = os.path.join(WORKING_DIR, "ExtremeRoles", "Resources", "
 EXTREMESKIN_IN_FILE = os.path.join(WORKING_DIR, "ExtremeSkinsTransData.xlsx")
 EXTREMESKIN_OUT_FILE = os.path.join(WORKING_DIR, "ExtremeSkins", "Resources", "LangData", "stringData.json")
 
+def isRequireUpdate(newJson, outputFile):
+  try:
+    with open(outputFile, "r") as f:
+      oldJson = json.load(f)
+    oldJsonStr = json.dumps(oldJson)
+  except Exception:
+    return True
+  else:
+    newJsonStr = json.dumps(newJson)
+    return oldJsonStr != newJsonStr
+
+
 def stringToJson(filename, outputFile):
   wb = load_workbook(filename, read_only = True)
 
@@ -32,15 +44,15 @@ def stringToJson(filename, outputFile):
       for i, string in enumerate(row[1:]):
         if string.value:
           # I hate excel why did I do this to myself
-          data[i] = string.value.replace("\r", "").replace("_x000D_", "").replace("\\n", "\n")
+          data[str(i)] = string.value.replace("\r", "").replace("_x000D_", "").replace("\\n", "\n")
 
       if data:
         stringData[name] = data
 
-  os.makedirs(os.path.dirname(outputFile), exist_ok=True)
-
-  with open(outputFile, "w") as f:
-    json.dump(stringData, f, indent=4)
+  if isRequireUpdate(stringData, outputFile):
+    os.makedirs(os.path.dirname(outputFile), exist_ok=True)
+    with open(outputFile, "w") as f:
+      json.dump(stringData, f, indent=4)
 
 if __name__ == "__main__":
   stringToJson(EXTREMERORLS_IN_FILE, EXTREMERORLS_OUT_FILE)

@@ -485,12 +485,12 @@ namespace ExtremeRoles.Roles.Combination
                 false, parentOps);
             CreateIntOption(
                 GuesserOption.GuessNum,
-                1, 1, OptionHolder.MaxImposterNum, 1,
+                1, 1, GameSystem.MaxImposterNum, 1,
                 parentOps,
                 format: OptionUnit.Shot);
             CreateIntOption(
                 GuesserOption.MaxGuessNumWhenMeeting,
-                1, 1, OptionHolder.MaxImposterNum, 1,
+                1, 1, GameSystem.MaxImposterNum, 1,
                 parentOps,
                 format: OptionUnit.Shot);
             var noneGuessRoleOpt = CreateBoolOption(

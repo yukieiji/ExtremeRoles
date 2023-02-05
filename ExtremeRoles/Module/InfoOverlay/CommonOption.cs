@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using ExtremeRoles.GameMode.Option.ShipGlobal;
+using System;
 using System.Text;
 
 namespace ExtremeRoles.Module.InfoOverlay
@@ -8,9 +8,6 @@ namespace ExtremeRoles.Module.InfoOverlay
     {
         public static string GetGameOptionString()
         {
-
-            var allOption = OptionHolder.AllOption;
-
             StringBuilder printOption = new StringBuilder();
 
             foreach (OptionHolder.CommonOptionKey key in Enum.GetValues(
@@ -18,27 +15,31 @@ namespace ExtremeRoles.Module.InfoOverlay
             {
                 if (key == OptionHolder.CommonOptionKey.PresetSelection) { continue; }
 
-                if (key == OptionHolder.CommonOptionKey.NumMeating)
-                {
-                    printOption.AppendLine("");
-                }
+                addOptionString(ref printOption, key);
+            }
 
-                var option = allOption[(int)key];
-
-                if (option == null) { continue; }
-
-                if (!option.IsHidden)
-                {
-                    string optStr = CustomOption.OptionToString(option);
-                    if (optStr != string.Empty)
-                    {
-                        printOption.AppendLine(optStr);
-                    }
-                }
+            foreach (GlobalOption key in Enum.GetValues(typeof(GlobalOption)))
+            {
+                addOptionString(ref printOption, key);
             }
 
             return printOption.ToString();
+        }
 
+        private static void addOptionString<T>(
+            ref StringBuilder builder, T optionKey) where T : struct, IConvertible
+        {
+            if (!OptionHolder.AllOption.TryGetValue(Convert.ToInt32(optionKey), out IOption option) ||
+                option.IsHidden)
+            {
+                return;
+            }
+
+            string optStr = option.ToHudString();
+            if (optStr != string.Empty)
+            {
+                builder.AppendLine(optStr);
+            }
         }
     }
 }

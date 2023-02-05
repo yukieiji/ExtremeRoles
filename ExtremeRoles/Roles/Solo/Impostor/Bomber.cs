@@ -14,6 +14,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 using BepInEx.IL2CPP.Utils.Collections;
 using ExtremeRoles.Module.ExtremeShipStatus;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -225,7 +226,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 if (!playerInfo.Disconnected &&
                     !playerInfo.IsDead &&
                     (playerInfo.PlayerId != sourcePlayer.PlayerId) &&
-                    (!playerInfo.Object.inVent || OptionHolder.Ship.CanKillVentInPlayer) &&
+                    (!playerInfo.Object.inVent || ExtremeGameModeManager.Instance.ShipOption.CanKillVentInPlayer) &&
                     (!ExtremeRoleManager.GameRole[playerInfo.PlayerId].IsImpostor() ||
                      playerInfo.PlayerId == rolePlayer.PlayerId))
                 {

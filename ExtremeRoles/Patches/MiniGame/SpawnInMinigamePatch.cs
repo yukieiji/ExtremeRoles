@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using ExtremeRoles.GameMode;
+using HarmonyLib;
 
 namespace ExtremeRoles.Patches.MiniGame
 {
@@ -8,7 +9,7 @@ namespace ExtremeRoles.Patches.MiniGame
     {
         public static void Postfix(SpawnInMinigame __instance)
         {
-            if (OptionHolder.Ship.IsAutoSelectRandomSpawn)
+            if (ExtremeGameModeManager.Instance.ShipOption.IsAutoSelectRandomSpawn)
             {
                 __instance.Close();
             }

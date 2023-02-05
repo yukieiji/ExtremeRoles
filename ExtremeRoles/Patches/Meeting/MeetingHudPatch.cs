@@ -7,13 +7,17 @@ using UnityEngine;
 
 using UnhollowerBaseLib;
 
+using AmongUs.GameOptions;
+
+using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-using AmongUs.GameOptions;
+
 
 namespace ExtremeRoles.Patches.Meeting
 {
@@ -137,11 +141,9 @@ namespace ExtremeRoles.Patches.Meeting
         public static bool Prefix(
             MeetingHud __instance)
         {
-            var state = ExtremeRolesPlugin.ShipState;
+            if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 
-            if (!state.IsRoleSetUpEnd) { return true; }
-
-            if (!state.AssassinMeetingTrigger)
+            if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
             {
                 normalMeetingVote(__instance);
             }
@@ -361,12 +363,14 @@ namespace ExtremeRoles.Patches.Meeting
 
             if (isBlock) { return false; }
 
-            if (OptionHolder.Ship.DisableSelfVote &&
+            var shipOpt = ExtremeGameModeManager.Instance.ShipOption;
+
+            if (shipOpt.DisableSelfVote &&
                 CachedPlayerControl.LocalPlayer.PlayerId == suspectStateIdx)
             {
                 return false;
             }
-            if (OptionHolder.Ship.BlockSkippingInEmergencyMeeting && suspectStateIdx == -1)
+            if (shipOpt.IsBlockSkipInMeeting && suspectStateIdx == -1)
             {
                 return false;
             }
@@ -606,7 +610,7 @@ namespace ExtremeRoles.Patches.Meeting
             }
 
             // Deactivate skip Button if skipping on emergency meetings is disabled
-            if (OptionHolder.Ship.BlockSkippingInEmergencyMeeting)
+            if (ExtremeGameModeManager.Instance.ShipOption.IsBlockSkipInMeeting)
             {
                 __instance.SkipVoteButton.gameObject.SetActive(false);
             }
@@ -636,7 +640,7 @@ namespace ExtremeRoles.Patches.Meeting
     {
         public static bool Prefix(MeetingHud __instance)
         {
-            if (!OptionHolder.Ship.ChangeMeetingVoteAreaSort) { return true; }
+            if (!ExtremeGameModeManager.Instance.ShipOption.IsChangeVoteAreaButtonSortArg) { return true; }
             if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
             PlayerVoteArea[] array = __instance.playerStates.OrderBy(delegate (PlayerVoteArea p)
@@ -662,7 +666,7 @@ namespace ExtremeRoles.Patches.Meeting
 
         public static void Postfix(MeetingHud __instance)
         {
-            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
+            if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
 
             bool isHudOverrideTaskActive = PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(
                 CachedPlayerControl.LocalPlayer);
@@ -704,7 +708,7 @@ namespace ExtremeRoles.Patches.Meeting
             [HarmonyArgument(0)] Il2CppStructArray<MeetingHud.VoterState> states)
         {
 
-            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return true; }
+            if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 
             __instance.TitleText.text = 
                 FastDestroyableSingleton<TranslationController>.Instance.GetString(

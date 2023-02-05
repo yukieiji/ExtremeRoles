@@ -444,7 +444,7 @@ namespace ExtremeRoles.GhostRoles.API
                 OptionHolder.SpawnRate, null, true,
                 colored: true);
 
-            int spawnNum = this.IsImpostor() ? OptionHolder.MaxImposterNum : OptionHolder.VanillaMaxPlayerNum - 1;
+            int spawnNum = this.IsImpostor() ? GameSystem.MaxImposterNum : GameSystem.VanillaMaxPlayerNum - 1;
 
             CreateIntOption(
                 RoleCommonOption.RoleNum,

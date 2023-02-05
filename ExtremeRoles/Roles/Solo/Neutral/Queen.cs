@@ -13,6 +13,7 @@ using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using AmongUs.GameOptions;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
@@ -412,7 +413,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             if (this.isSameQueenTeam(targetRole))
             {
-                if (OptionHolder.Ship.IsSameNeutralSameWin)
+                if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
                 {
                     return true;
                 }

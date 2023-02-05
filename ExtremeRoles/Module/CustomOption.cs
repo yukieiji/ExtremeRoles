@@ -40,7 +40,6 @@ namespace ExtremeRoles.Module
     public interface IOption
     {
         public int CurSelection { get; }
-        public int DefaultSelection { get; }
         public bool Enabled { get; }
         public int Id { get; }
         public string Name { get; }
@@ -49,18 +48,25 @@ namespace ExtremeRoles.Module
         public int ValueCount { get; }
         public OptionTab Tab { get; }
         public IOption Parent { get; }
-        public IOption ForceEnableCheckOption { get; }
-        public List<IOption> Children { get; }
 
+        // インターフェースとして要らなくなった奴ら
+        // TODO:こいつらも消す
+        public List<IOption> Children { get; }
         public OptionBehaviour Body { get; }
+        public IOption ForceEnableCheckOption { get; }
+        public int DefaultSelection { get; }
 
         public bool IsActive();
+        public void SetHeaderTo(bool enable);
         public void SetOptionBehaviour(OptionBehaviour newBehaviour);
-        public string GetString();
-        public string GetTranedName();
+        public string GetTranslatedValue();
+        public string GetTranslatedName();
         public void UpdateSelection(int newSelection);
         public void SaveConfigValue();
         public void SwitchPreset();
+        public string ToHudString();
+        public string ToHudStringWithChildren(int indent=0);
+
         // This is HotFix for HideNSeek
         public dynamic GetDefault();
         public dynamic GetValue();
@@ -123,6 +129,8 @@ namespace ExtremeRoles.Module
 
         private OptionBehaviour behaviour;
 
+        private const string IndentStr = "    ";
+
         public CustomOptionBase(
             int id,
             string name,
@@ -178,9 +186,9 @@ namespace ExtremeRoles.Module
             return;
         }
 
-        public string GetTranedName() => Translation.GetString(this.name);
+        public string GetTranslatedName() => Translation.GetString(this.name);
 
-        public string GetString()
+        public string GetTranslatedValue()
         {
             string sel = this.Selections[this.curSelection].ToString();
             if (this.stringFormat != OptionUnit.None)
@@ -247,31 +255,31 @@ namespace ExtremeRoles.Module
                 (newSelection + length) % length,
                 0, length - 1);
 
-            if (this.behaviour != null && this.behaviour is StringOption stringOption)
+            if (this.behaviour is StringOption stringOption)
             {
                 stringOption.oldValue = stringOption.Value = this.curSelection;
-                stringOption.ValueText.text = this.GetString();
-                if (this.withUpdateOption.Count != 0)
-                {
-                    foreach (IWithUpdatableOption<OutType> option in this.withUpdateOption)
-                    {
-                        option.Update(this.GetValue());
-                    }
-                }
+                stringOption.ValueText.text = this.GetTranslatedValue();
+            }
 
-                if (AmongUsClient.Instance?.AmHost == true && CachedPlayerControl.LocalPlayer)
+            if (this.withUpdateOption.Count != 0)
+            {
+                foreach (IWithUpdatableOption<OutType> option in this.withUpdateOption)
                 {
-                    if (this.id == 0)
-                    {
-                        OptionHolder.SwitchPreset(this.curSelection); // Switch presets
-                    }
-                    else if (this.entry != null)
-                    {
-                        this.entry.Value = this.curSelection; // Save selection to config
-                    }
-
-                    OptionHolder.ShareOptionSelections();// Share all selections
+                    option.Update(this.GetValue());
                 }
+            }
+
+            if (AmongUsClient.Instance?.AmHost == true && CachedPlayerControl.LocalPlayer)
+            {
+                if (this.id == 0)
+                {
+                    OptionHolder.SwitchPreset(this.curSelection); // Switch presets
+                }
+                else if (this.entry != null)
+                {
+                    this.entry.Value = this.curSelection; // Save selection to config
+                }
+                OptionHolder.ShareOptionSelections();// Share all selections
             }
         }
 
@@ -290,6 +298,12 @@ namespace ExtremeRoles.Module
                 this.entry.Value, 0,
                 this.ValueCount - 1));
         }
+
+        public void SetHeaderTo(bool enable)
+        {
+            this.isHeader = enable;
+        }
+
         public void SetOptionBehaviour(OptionBehaviour newBehaviour)
         {
             this.behaviour = newBehaviour;
@@ -298,6 +312,21 @@ namespace ExtremeRoles.Module
         public void SetOptionUnit(OptionUnit unit)
         {
             this.stringFormat = unit;
+        }
+
+        public string ToHudString() =>
+            this.IsActive() ? $"{this.GetTranslatedName()}: {this.GetTranslatedValue()}" : string.Empty;
+
+        public string ToHudStringWithChildren(int indent = 0)
+        {
+            StringBuilder builder = new StringBuilder();
+            string optStr = this.ToHudString();
+            if (!this.IsHidden && optStr != string.Empty)
+            {
+                builder.AppendLine(optStr);
+            }
+            addChildrenOptionHudString(ref builder, this, indent);
+            return builder.ToString();
         }
 
         private void bindConfig()
@@ -313,6 +342,29 @@ namespace ExtremeRoles.Module
             string nameClean = Regex.Replace(this.name, "<.*?>", "");
             nameClean = Regex.Replace(nameClean, "^-\\s*", "");
             return nameClean.Trim();
+        }
+
+        private static void addChildrenOptionHudString(
+            ref StringBuilder builder,
+            IOption parentOption,
+            int prefixIndentCount)
+        {
+            string prefixIndent = prefixIndentCount != 0 ? 
+                string.Concat(Enumerable.Repeat(IndentStr, prefixIndentCount)) : 
+                string.Empty;
+
+            foreach (var child in parentOption.Children)
+            {
+                string childOptionStr = child.ToHudString();
+
+                if (childOptionStr != string.Empty)
+                {
+                    builder.AppendLine(
+                        string.Concat(prefixIndent, childOptionStr));
+                }
+
+                addChildrenOptionHudString(ref builder, child, prefixIndentCount + 1);
+            }
         }
 
         public abstract dynamic GetDefault();
@@ -612,58 +664,4 @@ namespace ExtremeRoles.Module
         public override dynamic GetDefault() => this.DefaultSelection;
         public override dynamic GetValue() => CurSelection;
     }
-
-    public static class CustomOption
-    {
-        public static string OptionToString(IOption option)
-        {
-            if (option == null) { return string.Empty; }
-            if (!option.IsActive()) { return string.Empty; }
-            return $"{option.GetTranedName()}: {option.GetString()}";
-        }
-
-        public static string AllOptionToString(
-            IOption option, bool skipFirst = false)
-        {
-            if (option == null) { return ""; }
-
-            StringBuilder options = new StringBuilder();
-            if (!option.IsHidden && !skipFirst)
-            {
-                options.AppendLine(OptionToString(option));
-            }
-            if (option.Enabled)
-            {
-                childrenOptionToString(option, ref options);
-            }
-            return options.ToString();
-        }
-
-        private static void childrenOptionToString(
-            IOption option, ref StringBuilder options, int indentCount = 0)
-        {
-            foreach (IOption op in option.Children)
-            {
-                string str = OptionToString(op);
-
-                if (str != string.Empty)
-                {
-                    if (indentCount != 0)
-                    {
-                        str = string.Concat(
-                            string.Concat(
-                                Enumerable.Repeat("    ", indentCount)),
-                            str);
-                    }
-
-                    options.AppendLine(str);
-                }
-                childrenOptionToString(
-                    op, ref options,
-                    indentCount + 1);
-            }
-        }
-
-    }
-
 }

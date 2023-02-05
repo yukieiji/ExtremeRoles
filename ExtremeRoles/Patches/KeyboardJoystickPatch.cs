@@ -7,10 +7,13 @@ using HarmonyLib;
 using AmongUs.GameOptions;
 
 
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
+using ExtremeRoles.GameMode.RoleSelector;
 
 namespace ExtremeRoles.Patches
 {
@@ -149,15 +152,13 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(KeyboardJoystick), nameof(KeyboardJoystick.Update))]
     public static class KeyboardJoystickPatch
     {
-        private static Module.IOption UseXionOption => OptionHolder.AllOption[
-            (int)OptionHolder.CommonOptionKey.UseXion];
-
         public static void Postfix()
         {
             if (AmongUsClient.Instance == null || CachedPlayerControl.LocalPlayer == null) 
             { return; }
 
-            if (UseXionOption.GetValue() && 
+            if (ExtremeGameModeManager.Instance.RoleSelector.CanUseXion &&
+                OptionHolder.AllOption[(int)RoleGlobalOption.UseXion].GetValue() &&
                 !ExtremeRolesPlugin.DebugMode.Value)
             {
                 Roles.Solo.Host.Xion.SpecialKeyShortCut();
@@ -213,7 +214,7 @@ namespace ExtremeRoles.Patches
             // キルとベントボタン
             if (CachedPlayerControl.LocalPlayer.Data == null ||
                 CachedPlayerControl.LocalPlayer.Data.Role == null ||
-                !ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
+                !RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
 
             var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
 
@@ -231,7 +232,8 @@ namespace ExtremeRoles.Patches
             {
                 if (role.TryGetVanillaRoleId(out RoleTypes roleId))
                 {
-                    if (roleId != RoleTypes.Engineer || OptionHolder.Ship.EngineerUseImpostorVent)
+                    if (roleId != RoleTypes.Engineer || 
+                        ExtremeGameModeManager.Instance.ShipOption.EngineerUseImpostorVent)
                     {
                         hudManager.ImpostorVentButton.DoClick();
                     }

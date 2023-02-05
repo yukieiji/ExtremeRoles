@@ -3,11 +3,12 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using ExtremeRoles.Module.InfoOverlay.FullDec;
+using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
-using ExtremeRoles.Module.InfoOverlay.FullDec;
-using ExtremeRoles.Module.Interface;
 
 namespace ExtremeRoles.Module.InfoOverlay
 {
@@ -146,7 +147,7 @@ namespace ExtremeRoles.Module.InfoOverlay
         {
             if (FastDestroyableSingleton<HudManager>.Instance.Chat.IsOpen) { return; }
 
-            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd)
+            if (!RoleAssignState.Instance.IsRoleSetUpEnd)
             {
                 switch (showType)
                 {

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using ExtremeRoles.Module.RoleAssign;
+using UnityEngine;
 
 namespace ExtremeRoles.Module.ExtremeShipStatus
 {
@@ -23,12 +24,11 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             this.resetGlobalAction();
             // this.resetPlayerSummary();
             this.resetMeetingCount();
-            this.resetRoleAssign();
+            RoleAssignState.Instance.Reset();
             
             this.resetWins();
 
             this.ClearMeetingResetObject();
-            this.ResetVison();
 
             if (!includeGameObject) { return; }
 

@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using UnityEngine;
+using UnhollowerBaseLib.Attributes;
+
+
+using ExtremeRoles.Module.RoleAssign;
 
 using ExtremeRoles.Performance;
-using UnhollowerBaseLib.Attributes;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour
 {
@@ -35,7 +39,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             { 
                 return; 
             }
-            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
+            if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
             if (!init || BlockAddHistory) { return; }
 
             PlayerControl player = CachedPlayerControl.LocalPlayer;
