@@ -32,7 +32,7 @@ namespace ExtremeRoles.GameMode
 
             IModeFactory factory = mode switch
             {
-                GameModes.Normal => new ClassicGameModeOptionFactory(),
+                GameModes.Normal => new ClassicGameModeFactory(),
                 GameModes.HideNSeek => new HideNSeekGameModeFactory(),
                 _ => null,
             };

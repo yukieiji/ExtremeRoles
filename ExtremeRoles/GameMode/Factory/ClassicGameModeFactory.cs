@@ -3,7 +3,7 @@ using ExtremeRoles.GameMode.RoleSelector;
 
 namespace ExtremeRoles.GameMode.Factory
 {
-    public sealed class ClassicGameModeOptionFactory : IModeFactory
+    public sealed class ClassicGameModeFactory : IModeFactory
     {
         public IShipGlobalOption CreateGlobalOption() => new ClassicGameModeShipGlobalOption();
 
