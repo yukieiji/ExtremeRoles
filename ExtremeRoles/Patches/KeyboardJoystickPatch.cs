@@ -86,7 +86,7 @@ namespace ExtremeRoles.Patches
             {
                 var dict = Roles.ExtremeRoleManager.GameRole;
                 if (dict.Count == 0) { return; }
-                for (int i = 0; i < GameData.Instance.AllPlayers.Count; i++)
+                for (int i = 0; i < GameData.Instance.PlayerCount; i++)
                 {
                     GameData.PlayerInfo playerInfo = GameData.Instance.AllPlayers[i];
                     var role = dict[playerInfo.PlayerId];
@@ -104,7 +104,7 @@ namespace ExtremeRoles.Patches
             {
                 var dict = Roles.ExtremeRoleManager.GameRole;
                 if (dict.Count == 0) { return; }
-                for (int i = 0; i < GameData.Instance.AllPlayers.Count; i++)
+                for (int i = 0; i < GameData.Instance.PlayerCount; i++)
                 {
                     GameData.PlayerInfo playerInfo = GameData.Instance.AllPlayers[i];
                     var role = dict[playerInfo.PlayerId];

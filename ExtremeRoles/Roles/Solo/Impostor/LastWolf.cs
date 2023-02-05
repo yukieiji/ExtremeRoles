@@ -361,7 +361,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             if (this.Button != null)
             {
                 float curCool = (this.finalCooltime - this.firstCooltime) *
-                    (1.0f - ((float)computeAlivePlayerNum() / (float)GameData.Instance.AllPlayers.Count)) + this.firstCooltime;
+                    (1.0f - ((float)computeAlivePlayerNum() / (float)GameData.Instance.PlayerCount)) + this.firstCooltime;
                 this.Button.SetAbilityCoolTime(curCool);
             }
         }

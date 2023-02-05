@@ -32,7 +32,7 @@ namespace ExtremeRoles.Patches
             {
                 __instance.gameObject.SetActive(true);
                 int num = (DestroyableSingleton<TutorialManager>.InstanceExists ? 
-                    1 : (gameData.AllPlayers.Count - GameOptionsManager.Instance.CurrentGameOptions.GetInt(
+                    1 : (gameData.PlayerCount - GameOptionsManager.Instance.CurrentGameOptions.GetInt(
                             Int32OptionNames.NumImpostors)));
                 num -= gameData.AllPlayers.ToArray().ToList().Count(
                     (GameData.PlayerInfo p) => p.Disconnected);

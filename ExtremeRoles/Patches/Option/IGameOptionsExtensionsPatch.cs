@@ -26,7 +26,7 @@ namespace ExtremeRoles.Patches.Option
 
             __result = Math.Clamp(
                 GameOptionsManager.Instance.CurrentGameOptions.NumImpostors,
-                0, GameData.Instance.AllPlayers.Count);
+                0, GameData.Instance.PlayerCount);
             return false;
         }
     }
