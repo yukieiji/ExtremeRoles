@@ -94,26 +94,26 @@ namespace ExtremeRoles.Patches.Option
 
             
             int lineCount = 0;
-            string page = "";
+            StringBuilder pageBuilder = new StringBuilder();
             foreach (string optionStr in allOptionStr)
             {
                 int lines = optionStr.Count(c => c == '\n') + 1;
 
                 if (lineCount + lines > maxLines)
                 {
-                    pages.Add(page);
-                    page = "";
+                    pages.Add(pageBuilder.ToString());
+                    pageBuilder.Clear();
                     lineCount = 0;
                 }
 
-                page = string.Concat(page, optionStr, "\n\n");
+                pageBuilder.Append(optionStr).Append("\n\n");
                 lineCount += lines + 1;
             }
 
-            page = page.Trim('\r', '\n');
-            if (page != "")
+            string pageStr = pageBuilder.ToString().Trim('\r', '\n');
+            if (pageStr != string.Empty)
             {
-                pages.Add(page);
+                pages.Add(pageStr);
             }
 
             int numPages = pages.Count;
