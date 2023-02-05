@@ -203,5 +203,7 @@ namespace ExtremeRoles.Roles.API
         }
 
         public int GetManagerOptionOffset() => this.ManagerOptionOffset;
+
+        protected string CreateImpCrewPrefix() => this.IsImpostor() ? "Evil" : "Nice";
     }
 }

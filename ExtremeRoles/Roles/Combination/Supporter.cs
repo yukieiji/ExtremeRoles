@@ -20,12 +20,14 @@ namespace ExtremeRoles.Roles.Combination
     public sealed class Supporter : MultiAssignRoleBase, IRoleSpecialSetUp
     {
         public override string RoleName =>
-            string.Concat(this.IsImpostor() ? "Evil" : "Nice", this.RawRoleName);
+            string.Concat(this.roleNamePrefix, this.RawRoleName);
 
         private byte supportTargetId;
         private string supportPlayerName;
         private string supportRoleName;
         private Color supportColor;
+
+        private string roleNamePrefix;
 
         public Supporter(
             ) : base(
@@ -159,6 +161,7 @@ namespace ExtremeRoles.Roles.Combination
 
         protected override void RoleSpecificInit()
         {
+            this.roleNamePrefix = this.CreateImpCrewPrefix();
             this.supportTargetId = byte.MaxValue;
         }
     }
