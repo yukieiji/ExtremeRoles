@@ -97,7 +97,7 @@ namespace ExtremeRoles.Module.RoleAssign
                 else
                 {
                     this.useGhostRole[team].Add(addData);
-                };
+                }
             }
 
         }
