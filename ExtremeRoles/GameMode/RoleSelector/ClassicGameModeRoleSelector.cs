@@ -10,6 +10,8 @@ namespace ExtremeRoles.GameMode.RoleSelector
     public sealed class ClassicGameModeRoleSelector : IRoleSelector
     {
         public bool CanUseXion => true;
+        public bool EnableXion { get; private set; }
+
         public bool IsVanillaRoleToMultiAssign => false;
 
         public IEnumerable<ExtremeRoleId> UseNormalRoleId
@@ -67,6 +69,17 @@ namespace ExtremeRoles.GameMode.RoleSelector
                 this.useGhostRoleSpawnOption.Add(
                     role.GetRoleOptionId(RoleCommonOption.SpawnRate));
             }
+        }
+
+        public void Load()
+        {
+            EnableXion = OptionHolder.AllOption[
+                (int)RoleGlobalOption.UseXion].GetValue();
+        }
+
+        public bool IsValidGlobalRoleOptionId(RoleGlobalOption optionId)
+        {
+            return System.Enum.IsDefined(typeof(RoleGlobalOption), optionId);
         }
 
         public bool IsValidRoleOption(IOption option)

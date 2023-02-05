@@ -13,7 +13,6 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
-using ExtremeRoles.GameMode.RoleSelector;
 
 namespace ExtremeRoles.Patches.Manager
 {
@@ -23,8 +22,7 @@ namespace ExtremeRoles.Patches.Manager
     {
         public static void Prefix()
         {
-            if (OptionHolder.AllOption[(int)RoleGlobalOption.UseXion].GetValue() &&
-                ExtremeGameModeManager.Instance.RoleSelector.CanUseXion)
+            if (ExtremeGameModeManager.Instance.RoleSelector.IsCanUseAndEnableXion())
             {
                 PlayerControl loaclPlayer = PlayerControl.LocalPlayer;
 

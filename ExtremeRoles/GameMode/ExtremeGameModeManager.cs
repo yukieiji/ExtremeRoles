@@ -44,6 +44,7 @@ namespace ExtremeRoles.GameMode
         public void Load()
         {
             Instance.ShipOption.Load();
+            Instance.RoleSelector.Load();
         }
 
         public IIntroRunner GetIntroRunner()

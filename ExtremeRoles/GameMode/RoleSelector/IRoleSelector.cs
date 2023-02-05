@@ -31,6 +31,7 @@ namespace ExtremeRoles.GameMode.RoleSelector
     public interface IRoleSelector
     {
         public bool CanUseXion { get; }
+        public bool EnableXion { get; }
         public bool IsVanillaRoleToMultiAssign { get; }
 
         public IEnumerable<ExtremeRoleId> UseNormalRoleId { get; }
@@ -38,6 +39,12 @@ namespace ExtremeRoles.GameMode.RoleSelector
         public IEnumerable<ExtremeGhostRoleId> UseGhostRoleId { get; }
 
         private static Color defaultOptionColor => new Color(204f / 255f, 204f / 255f, 0, 1f);
+
+        public void Load();
+
+        public bool IsCanUseAndEnableXion() => CanUseXion && EnableXion;
+
+        public bool IsValidGlobalRoleOptionId(RoleGlobalOption optionId);
 
         public bool IsValidRoleOption(IOption option);
 

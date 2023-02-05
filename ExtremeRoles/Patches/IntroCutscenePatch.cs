@@ -235,8 +235,7 @@ namespace ExtremeRoles.Patches
     {
         public static void Prefix()
         {
-            if (GameOptionsManager.Instance.CurrentGameOptions.GameMode == GameModes.Normal &&
-                OptionHolder.AllOption[(int)RoleGlobalOption.UseXion].GetValue())
+            if (ExtremeGameModeManager.Instance.RoleSelector.IsCanUseAndEnableXion())
             {
                 Xion.XionPlayerToGhostLayer();
                 Xion.RemoveXionPlayerToAllPlayerControl();

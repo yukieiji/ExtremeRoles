@@ -10,6 +10,8 @@ namespace ExtremeRoles.GameMode.RoleSelector
     public sealed class HideNSeekGameModeRoleSelector : IRoleSelector
     {
         public bool CanUseXion => false;
+        public bool EnableXion => false;
+        
         public bool IsVanillaRoleToMultiAssign => true;
 
         public IEnumerable<ExtremeRoleId> UseNormalRoleId
@@ -46,6 +48,19 @@ namespace ExtremeRoles.GameMode.RoleSelector
                 this.useNormalRoleSpawnOption.Add(
                     ExtremeRoleManager.NormalRole[(int)id].GetRoleOptionId(RoleCommonOption.SpawnRate));
             }
+        }
+
+        public void Load() { }
+
+        public bool IsValidGlobalRoleOptionId(RoleGlobalOption optionId)
+        {
+            return
+                System.Enum.IsDefined(typeof(RoleGlobalOption), optionId) &&
+                optionId switch
+                {
+                    RoleGlobalOption.UseXion => false,
+                    _ => true,
+                };
         }
 
         public bool IsValidRoleOption(IOption option)

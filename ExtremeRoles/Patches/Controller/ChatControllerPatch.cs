@@ -6,10 +6,9 @@ using HarmonyLib;
 
 using AmongUs.Data;
 
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Performance;
-using ExtremeRoles.GameMode.RoleSelector;
-
 
 namespace ExtremeRoles.Patches.Controller
 {
@@ -135,13 +134,9 @@ namespace ExtremeRoles.Patches.Controller
 	[HarmonyPatch(typeof(ChatController), nameof(ChatController.SendChat))]
 	public static class ChatControllerSendChatPatch
 	{
-
-		private static Module.IOption UseXionOption = OptionHolder.AllOption[
-			(int)RoleGlobalOption.UseXion];
-
 		public static void Prefix(ChatController __instance)
 		{
-			if (UseXionOption.GetValue())
+            if (ExtremeGameModeManager.Instance.RoleSelector.IsCanUseAndEnableXion())
             {
 				Roles.Solo.Host.Xion.ParseCommand(
 					__instance.TextArea.text);

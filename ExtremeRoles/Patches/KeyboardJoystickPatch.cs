@@ -152,15 +152,13 @@ namespace ExtremeRoles.Patches
     [HarmonyPatch(typeof(KeyboardJoystick), nameof(KeyboardJoystick.Update))]
     public static class KeyboardJoystickPatch
     {
-        private static Module.IOption UseXionOption => OptionHolder.AllOption[
-            (int)RoleGlobalOption.UseXion];
-
         public static void Postfix()
         {
             if (AmongUsClient.Instance == null || CachedPlayerControl.LocalPlayer == null) 
             { return; }
 
-            if (UseXionOption.GetValue() && 
+            if (ExtremeGameModeManager.Instance.RoleSelector.CanUseXion &&
+                OptionHolder.AllOption[(int)RoleGlobalOption.UseXion].GetValue() &&
                 !ExtremeRolesPlugin.DebugMode.Value)
             {
                 Roles.Solo.Host.Xion.SpecialKeyShortCut();

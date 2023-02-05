@@ -7,6 +7,7 @@ using AmongUs.GameOptions;
 
 using UnityEngine;
 using UnityEngine.Events;
+using ExtremeRoles.GameMode.RoleSelector;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour
 {
@@ -151,16 +152,19 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             }
 
             var exGmM = ExtremeGameModeManager.Instance;
+            var shipOption = exGmM.ShipOption;
+            var roleSelector = exGmM.RoleSelector;
 
             foreach (var (id, option) in OptionHolder.AllOption)
             {
                 OptionTab tab = option.Tab;
-
+                
                 if (Enum.IsDefined(typeof(OptionHolder.CommonOptionKey), id) ||
+                    roleSelector.IsValidGlobalRoleOptionId((RoleGlobalOption)id) ||
                     tab switch
                     {
-                        OptionTab.General => exGmM.ShipOption.IsValidOption(id),
-                        _ => exGmM.RoleSelector.IsValidRoleOption(option),
+                        OptionTab.General => shipOption.IsValidOption(id),
+                        _ => roleSelector.IsValidRoleOption(option),
                     })
                 {
                     this.allMenu[tab].AddOption(option);
