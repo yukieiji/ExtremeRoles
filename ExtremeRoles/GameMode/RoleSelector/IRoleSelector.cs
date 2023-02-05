@@ -30,6 +30,8 @@ namespace ExtremeRoles.GameMode.RoleSelector
 
     public interface IRoleSelector
     {
+        public bool IsAdjustImpostorNum { get; }
+
         public bool CanUseXion { get; }
         public bool EnableXion { get; }
         public bool IsVanillaRoleToMultiAssign { get; }

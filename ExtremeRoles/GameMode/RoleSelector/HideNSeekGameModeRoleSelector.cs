@@ -9,6 +9,8 @@ namespace ExtremeRoles.GameMode.RoleSelector
 {
     public sealed class HideNSeekGameModeRoleSelector : IRoleSelector
     {
+        public bool IsAdjustImpostorNum => false;
+
         public bool CanUseXion => false;
         public bool EnableXion => false;
         

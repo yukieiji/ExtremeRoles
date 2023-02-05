@@ -22,11 +22,11 @@ namespace ExtremeRoles.Patches.Option
     {
         public static bool Prefix(ref int __result)
         {
-            var currentGameOptions = GameOptionsManager.Instance.CurrentGameOptions;
+            if (ExtremeGameModeManager.Instance.RoleSelector.IsAdjustImpostorNum) { return true; }
 
-            if (currentGameOptions.GameMode != GameModes.Normal) { return true; }
-
-            __result = currentGameOptions.GetInt(Int32OptionNames.NumImpostors);
+            __result = Math.Clamp(
+                GameOptionsManager.Instance.CurrentGameOptions.NumImpostors,
+                0, GameData.Instance.AllPlayers.Count);
             return false;
         }
     }
