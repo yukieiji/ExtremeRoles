@@ -90,15 +90,16 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
             if (localPlayer.Data == null ||
                 MeetingHud.Instance ||
                 ExileController.Instance ||
-                !localPlayer.Data.IsDead)
+                !localPlayer.Data.IsDead ||
+                !this.IsButtonActive)
             {
-                SetActive(false);
+                ButtonObjectSetActive(false);
                 return;
             }
 
             var hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
-            SetActive(
+            ButtonObjectSetActive(
                 localPlayer.IsKillTimerEnabled || 
                 localPlayer.ForceKillTimerContinue ||
                 hudManager.UseButton.isActiveAndEnabled);
