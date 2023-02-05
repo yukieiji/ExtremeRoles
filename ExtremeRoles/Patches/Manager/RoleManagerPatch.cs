@@ -13,6 +13,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Roles.Solo.Host;
 
 namespace ExtremeRoles.Patches.Manager
 {
@@ -22,11 +23,11 @@ namespace ExtremeRoles.Patches.Manager
     {
         public static void Prefix()
         {
-            if (ExtremeGameModeManager.Instance.RoleSelector.IsCanUseAndEnableXion())
-            {
-                PlayerControl loaclPlayer = PlayerControl.LocalPlayer;
+            if (!ExtremeGameModeManager.Instance.RoleSelector.IsCanUseAndEnableXion()) { return; }
 
-                PlayerRoleAssignData assignData = PlayerRoleAssignData.Instance;
+            PlayerControl loaclPlayer = PlayerControl.LocalPlayer;
+
+            PlayerRoleAssignData assignData = PlayerRoleAssignData.Instance;
 
                 assignData.AddAssignData(
                     new PlayerToSingleRoleAssignData(
@@ -35,8 +36,30 @@ namespace ExtremeRoles.Patches.Manager
                         assignData.GetControlId()));
                 assignData.RemvePlayer(loaclPlayer);
 
-                loaclPlayer.RpcSetRole(RoleTypes.Crewmate);
-                loaclPlayer.Data.IsDead = true;
+            loaclPlayer.RpcSetRole(RoleTypes.Crewmate);
+            loaclPlayer.Data.IsDead = true;
+
+            if (Xion.IsAllPlyerDummy())
+            {
+                List<PlayerControl> allPlayer = assignData.NeedRoleAssignPlayer;
+
+                var gameOption = GameOptionsManager.Instance;
+                var currentOption = gameOption.CurrentGameOptions;
+
+                int adjustedNumImpostors = currentOption.GetAdjustedNumImpostors(allPlayer.Count);
+
+                var il2CppListPlayer = new Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo>();
+
+                foreach (PlayerControl player in allPlayer )
+                {
+                    il2CppListPlayer.Add(player.Data);
+                }
+
+                // ThisIsObjectInstanceNullError
+                GameManager.Instance.LogicRoleSelection.AssignRolesForTeam(
+                    il2CppListPlayer, currentOption, RoleTeamTypes.Impostor,
+                    adjustedNumImpostors,
+                    new Il2CppSystem.Nullable<RoleTypes>(RoleTypes.Impostor));
             }
         }
         public static void Postfix()

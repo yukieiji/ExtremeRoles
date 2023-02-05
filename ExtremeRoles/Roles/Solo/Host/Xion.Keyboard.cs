@@ -26,15 +26,13 @@ namespace ExtremeRoles.Roles.Solo.Host
         {
             if (!AmongUsClient.Instance.AmHost) { return; }
             // HotFix : BlackOut AmongUs
-            /*
             if (Input.GetKeyDown(functionCall) &&
                 isLocalGame() &&
                 Helper.GameSystem.IsLobby &&
-                isAllPlyerDummy())
+                IsAllPlyerDummy())
             {
                 spawnDummy();
             }
-            */
         }
 
         private void keyBind()
@@ -124,7 +122,7 @@ namespace ExtremeRoles.Roles.Solo.Host
 #endif
         }
 
-        private static bool isAllPlyerDummy()
+        public static bool IsAllPlyerDummy()
         {
             foreach (var player in PlayerControl.AllPlayerControls)
             {
