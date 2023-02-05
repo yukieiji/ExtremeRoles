@@ -41,7 +41,9 @@ namespace ExtremeRoles.Patches.Option
         private static void Postfix(ref string __result)
         {
 
-            if (ExtremeGameModeManager.Instance == null) { return; }
+            ExtremeGameModeManager egmm = ExtremeGameModeManager.Instance;
+
+            if (egmm == null) { return; }
 
             List<string> hudOptionPage = new List<string>()
             {
@@ -55,13 +57,15 @@ namespace ExtremeRoles.Patches.Option
                 createRoleSpawnNumOptions()
             };
 
-            // Xionが使えるかはIRoleSelectorで定義されてるのでそれから
-            allOptionStr.Add(
-                Design.ColoedString(
-                    ColorPalette.XionBlue,
-                    getOption(OptionHolder.CommonOptionKey.UseXion).ToHudString()));
+            if (egmm.RoleSelector.CanUseXion)
+            {
+                allOptionStr.Add(
+                    Design.ColoedString(
+                        ColorPalette.XionBlue,
+                        getOption(OptionHolder.CommonOptionKey.UseXion).ToHudString()));
+            }
 
-            allOptionStr.Add(ExtremeGameModeManager.Instance.ShipOption.ToHudString());
+            allOptionStr.Add(egmm.ShipOption.ToHudString());
 
             foreach (IOption option in OptionHolder.AllOption.Values)
             {
@@ -76,7 +80,7 @@ namespace ExtremeRoles.Patches.Option
 
                 if (option.Parent == null &&
                     option.Enabled &&
-                    ExtremeGameModeManager.Instance.RoleSelector.IsValidRoleOption(option))
+                    egmm.RoleSelector.IsValidRoleOption(option))
                 {
                     string optionStr = option.ToHudStringWithChildren(option.IsHidden ? 0 : 1);
                     allOptionStr.Add(optionStr.Trim('\r', '\n'));
