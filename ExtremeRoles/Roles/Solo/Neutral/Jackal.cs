@@ -493,7 +493,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
 
             this.CreateAbilityCountOption(
-                parentOps, 1, OptionHolder.VanillaMaxPlayerNum - 1);
+                parentOps, 1, GameSystem.VanillaMaxPlayerNum - 1);
 
             CreateSelectionOption(
                 JackalOption.RangeSidekickTarget,
@@ -511,7 +511,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             CreateIntOption(
                 JackalOption.UpgradeSidekickNum,
-                1, 1, OptionHolder.VanillaMaxPlayerNum - 1, 1,
+                1, 1, GameSystem.VanillaMaxPlayerNum - 1, 1,
                 parentOps);
 
             var sidekickMakeSidekickOps = CreateBoolOption(
@@ -520,7 +520,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             CreateIntOption(
                 JackalOption.SidekickLimitNum,
-                1, 1, OptionHolder.VanillaMaxPlayerNum / 2, 1,
+                1, 1, GameSystem.VanillaMaxPlayerNum / 2, 1,
                 sidekickMakeSidekickOps);
 
             CreateBoolOption(

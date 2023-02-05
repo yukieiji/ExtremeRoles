@@ -11,14 +11,12 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
+using ExtremeRoles.GameMode.RoleSelector;
 
 namespace ExtremeRoles
 {
     public static class OptionHolder
     {
-        public const int VanillaMaxPlayerNum = 15;
-        public const int MaxImposterNum = 14;
-
         private const int singleRoleOptionStartOffset = 256;
         private const int combRoleOptionStartOffset = 5000;
         private const int ghostRoleOptionStartOffset = 10000;
@@ -123,16 +121,7 @@ namespace ExtremeRoles
                 },
                 strongGen, invert: true);
 
-            createExtremeRoleGlobalSpawnOption();
-            createExtremeGhostRoleGlobalSpawnOption();
-
-            new BoolCustomOption(
-                (int)CommonOptionKey.UseXion,
-                Design.ColoedString(
-                    ColorPalette.XionBlue,
-                    CommonOptionKey.UseXion.ToString()),
-                false, null, true);
-
+            IRoleSelector.CreateRoleGlobalOption();
             IShipGlobalOption.Create();
 
             Roles.ExtremeRoleManager.CreateNormalRoleOptions(
@@ -279,79 +268,6 @@ namespace ExtremeRoles
             ConfigParser.Port = config.Bind(
                 "ClientOption", "CustomServerPort", (ushort)22023);
         }
-
-        private static void createExtremeRoleGlobalSpawnOption()
-        {
-            new IntCustomOption(
-                (int)CommonOptionKey.MinCrewmateRoles, Design.ColoedString(
-                    defaultOptionColor,
-                    CommonOptionKey.MinCrewmateRoles.ToString()),
-                0, 0, (VanillaMaxPlayerNum - 1) * 2, 1, null, true);
-            new IntCustomOption(
-                (int)CommonOptionKey.MaxCrewmateRoles, Design.ColoedString(
-                    defaultOptionColor,
-                    CommonOptionKey.MaxCrewmateRoles.ToString()),
-                0, 0, (VanillaMaxPlayerNum - 1) * 2, 1);
-
-            new IntCustomOption(
-                (int)CommonOptionKey.MinNeutralRoles, Design.ColoedString(
-                    defaultOptionColor,
-                    CommonOptionKey.MinNeutralRoles.ToString()),
-                0, 0, (VanillaMaxPlayerNum - 2) * 2, 1);
-            new IntCustomOption(
-                (int)CommonOptionKey.MaxNeutralRoles, Design.ColoedString(
-                    defaultOptionColor,
-                    CommonOptionKey.MaxNeutralRoles.ToString()),
-                0, 0, (VanillaMaxPlayerNum - 2) * 2, 1);
-
-            new IntCustomOption(
-                (int)CommonOptionKey.MinImpostorRoles, Design.ColoedString(
-                    defaultOptionColor,
-                    CommonOptionKey.MinImpostorRoles.ToString()),
-                0, 0, MaxImposterNum * 2, 1);
-            new IntCustomOption(
-                (int)CommonOptionKey.MaxImpostorRoles, Design.ColoedString(
-                    defaultOptionColor,
-                    CommonOptionKey.MaxImpostorRoles.ToString()),
-                0, 0, MaxImposterNum * 2, 1);
-        }
-
-        private static void createExtremeGhostRoleGlobalSpawnOption()
-        {
-            new IntCustomOption(
-                (int)CommonOptionKey.MinCrewmateGhostRoles, Design.ColoedString(
-                    defaultOptionColor,
-                    CommonOptionKey.MinCrewmateGhostRoles.ToString()),
-                0, 0, VanillaMaxPlayerNum - 1, 1, null, true);
-            new IntCustomOption(
-                (int)CommonOptionKey.MaxCrewmateGhostRoles, Design.ColoedString(
-                    defaultOptionColor,
-                    CommonOptionKey.MaxCrewmateGhostRoles.ToString()),
-                0, 0, VanillaMaxPlayerNum - 1, 1);
-
-            new IntCustomOption(
-                (int)CommonOptionKey.MinNeutralGhostRoles, Design.ColoedString(
-                    defaultOptionColor,
-                    CommonOptionKey.MinNeutralGhostRoles.ToString()),
-                0, 0, VanillaMaxPlayerNum - 2, 1);
-            new IntCustomOption(
-                (int)CommonOptionKey.MaxNeutralGhostRoles, Design.ColoedString(
-                    defaultOptionColor,
-                    CommonOptionKey.MaxNeutralGhostRoles.ToString()),
-                0, 0, VanillaMaxPlayerNum - 2, 1);
-
-            new IntCustomOption(
-                (int)CommonOptionKey.MinImpostorGhostRoles, Design.ColoedString(
-                    defaultOptionColor,
-                    CommonOptionKey.MinImpostorGhostRoles.ToString()),
-                0, 0, MaxImposterNum, 1);
-            new IntCustomOption(
-                (int)CommonOptionKey.MaxImpostorGhostRoles, Design.ColoedString(
-                    defaultOptionColor,
-                    CommonOptionKey.MaxImpostorGhostRoles.ToString()),
-                0, 0, MaxImposterNum, 1);
-        }
-
 
         public static class ConfigParser
         {

@@ -42,7 +42,7 @@ namespace ExtremeRoles.Roles.Combination
 
         public Kids() : base(
             Name, ColorPalette.KidsYellowGreen, 2,
-            OptionHolder.MaxImposterNum)
+            GameSystem.MaxImposterNum)
         {
             this.Roles.Add(new Delinquent());
 

@@ -384,7 +384,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 format: OptionUnit.Shot);
             CreateIntOption(
                 ShooterOption.AwakeImpNum,
-                1, 1, OptionHolder.MaxImposterNum, 1,
+                1, 1, GameSystem.MaxImposterNum, 1,
                 parentOps);
 
             CreateBoolOption(

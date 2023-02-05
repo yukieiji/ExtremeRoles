@@ -61,39 +61,39 @@ namespace ExtremeRoles.GameMode.RoleSelector
                 Design.ColoedString(
                     defaultOptionColor,
                     RoleGlobalOption.MinCrewmateRoles.ToString()),
-                0, 0, (OptionHolder.VanillaMaxPlayerNum - 1) * 2, 1, null, true);
+                0, 0, (GameSystem.VanillaMaxPlayerNum - 1) * 2, 1, null, true);
             new IntCustomOption(
                 (int)RoleGlobalOption.MaxCrewmateRoles,
                 Design.ColoedString(
                     defaultOptionColor,
                     RoleGlobalOption.MaxCrewmateRoles.ToString()),
-                0, 0, (OptionHolder.VanillaMaxPlayerNum - 1) * 2, 1);
+                0, 0, (GameSystem.VanillaMaxPlayerNum - 1) * 2, 1);
 
             new IntCustomOption(
                 (int)RoleGlobalOption.MinNeutralRoles,
                 Design.ColoedString(
                     defaultOptionColor,
                     RoleGlobalOption.MinNeutralRoles.ToString()),
-                0, 0, (OptionHolder.VanillaMaxPlayerNum - 2) * 2, 1);
+                0, 0, (GameSystem.VanillaMaxPlayerNum - 2) * 2, 1);
             new IntCustomOption(
                 (int)RoleGlobalOption.MaxNeutralRoles,
                 Design.ColoedString(
                     defaultOptionColor,
                     RoleGlobalOption.MaxNeutralRoles.ToString()),
-                0, 0, (OptionHolder.VanillaMaxPlayerNum - 2) * 2, 1);
+                0, 0, (GameSystem.VanillaMaxPlayerNum - 2) * 2, 1);
 
             new IntCustomOption(
                 (int)RoleGlobalOption.MinImpostorRoles,
                 Design.ColoedString(
                     defaultOptionColor,
                     RoleGlobalOption.MinImpostorRoles.ToString()),
-                0, 0, OptionHolder.MaxImposterNum * 2, 1);
+                0, 0, GameSystem.MaxImposterNum * 2, 1);
             new IntCustomOption(
                 (int)RoleGlobalOption.MaxImpostorRoles,
                 Design.ColoedString(
                     defaultOptionColor,
                     RoleGlobalOption.MaxImpostorRoles.ToString()),
-                0, 0, OptionHolder.MaxImposterNum * 2, 1);
+                0, 0, GameSystem.MaxImposterNum * 2, 1);
         }
 
         private static void createExtremeGhostRoleGlobalSpawnOption()
@@ -103,39 +103,39 @@ namespace ExtremeRoles.GameMode.RoleSelector
                 Design.ColoedString(
                     defaultOptionColor,
                     RoleGlobalOption.MinCrewmateGhostRoles.ToString()),
-                0, 0, OptionHolder.VanillaMaxPlayerNum - 1, 1, null, true);
+                0, 0, GameSystem.VanillaMaxPlayerNum - 1, 1, null, true);
             new IntCustomOption(
                 (int)RoleGlobalOption.MaxCrewmateGhostRoles,
                 Design.ColoedString(
                     defaultOptionColor,
                     RoleGlobalOption.MaxCrewmateGhostRoles.ToString()),
-                0, 0, OptionHolder.VanillaMaxPlayerNum - 1, 1);
+                0, 0, GameSystem.VanillaMaxPlayerNum - 1, 1);
 
             new IntCustomOption(
                 (int)RoleGlobalOption.MinNeutralGhostRoles,
                 Design.ColoedString(
                     defaultOptionColor,
                     RoleGlobalOption.MinNeutralGhostRoles.ToString()),
-                0, 0, OptionHolder.VanillaMaxPlayerNum - 2, 1);
+                0, 0, GameSystem.VanillaMaxPlayerNum - 2, 1);
             new IntCustomOption(
                 (int)RoleGlobalOption.MaxNeutralGhostRoles,
                 Design.ColoedString(
                     defaultOptionColor,
                     RoleGlobalOption.MaxNeutralGhostRoles.ToString()),
-                0, 0, OptionHolder.VanillaMaxPlayerNum - 2, 1);
+                0, 0, GameSystem.VanillaMaxPlayerNum - 2, 1);
 
             new IntCustomOption(
                 (int)RoleGlobalOption.MinImpostorGhostRoles,
                 Design.ColoedString(
                     defaultOptionColor,
                     RoleGlobalOption.MinImpostorGhostRoles.ToString()),
-                0, 0, OptionHolder.MaxImposterNum, 1);
+                0, 0, GameSystem.MaxImposterNum, 1);
             new IntCustomOption(
                 (int)RoleGlobalOption.MaxImpostorGhostRoles,
                 Design.ColoedString(
                     defaultOptionColor,
                     RoleGlobalOption.MaxImpostorGhostRoles.ToString()),
-                0, 0, OptionHolder.MaxImposterNum, 1);
+                0, 0, GameSystem.MaxImposterNum, 1);
         }
 
     }

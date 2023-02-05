@@ -575,7 +575,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             CreateIntOption(
                 HypnotistOption.AwakeCheckImpostorNum,
-                1, 1, OptionHolder.MaxImposterNum, 1,
+                1, 1, GameSystem.MaxImposterNum, 1,
                 parentOps);
             CreateIntOption(
                 HypnotistOption.AwakeCheckTaskGage,

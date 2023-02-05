@@ -83,7 +83,7 @@ namespace ExtremeRoles.Roles.API
 
             int thisMaxRoleNum =
                 this.maxSetNum == int.MaxValue ? 
-                (int)Math.Floor((decimal)OptionHolder.VanillaMaxPlayerNum / this.setPlayerNum) : this.maxSetNum;
+                (int)Math.Floor((decimal)GameSystem.VanillaMaxPlayerNum / this.setPlayerNum) : this.maxSetNum;
 
             new IntCustomOption(
                 GetRoleOptionId(RoleCommonOption.RoleNum),

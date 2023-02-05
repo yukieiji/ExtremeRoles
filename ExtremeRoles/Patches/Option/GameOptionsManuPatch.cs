@@ -3,8 +3,8 @@
 using UnityEngine;
 using HarmonyLib;
 
-using AmongUs.GameOptions;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Performance;
 
@@ -45,7 +45,7 @@ namespace ExtremeRoles.Patches.Option
             if (AmongUsClient.Instance.NetworkMode == NetworkModes.LocalGame ||
                 FastDestroyableSingleton<ServerManager>.Instance.CurrentRegion.Name == "custom")
             {
-                changeValueRange(child, StringNames.GameNumImpostors, 0f, OptionHolder.MaxImposterNum);
+                changeValueRange(child, StringNames.GameNumImpostors, 0f, GameSystem.MaxImposterNum);
             }
 
             changeValueRange(child, StringNames.GameCommonTasks, 0f, 4f );
