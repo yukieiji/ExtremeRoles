@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
-using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 
@@ -38,20 +37,20 @@ namespace ExtremeRoles.Module.RoleAssign
                 {
                     ExtremeRoleType.Crewmate,
                     ISpawnDataManager.ComputeSpawnNum(
-                        OptionHolder.CommonOptionKey.MinCrewmateRoles,
-                        OptionHolder.CommonOptionKey.MaxCrewmateRoles)
+                        RoleGlobalOption.MinCrewmateRoles,
+                        RoleGlobalOption.MaxCrewmateRoles)
                 },
                 {
                     ExtremeRoleType.Neutral,
                     ISpawnDataManager.ComputeSpawnNum(
-                        OptionHolder.CommonOptionKey.MinNeutralRoles,
-                        OptionHolder.CommonOptionKey.MaxNeutralRoles)
+                        RoleGlobalOption.MinNeutralRoles,
+                        RoleGlobalOption.MaxNeutralRoles)
                 },
                 {
                     ExtremeRoleType.Impostor,
                     ISpawnDataManager.ComputeSpawnNum(
-                        OptionHolder.CommonOptionKey.MinImpostorRoles,
-                        OptionHolder.CommonOptionKey.MaxImpostorRoles)
+                        RoleGlobalOption.MinImpostorRoles,
+                        RoleGlobalOption.MaxImpostorRoles)
                 },
             };
 

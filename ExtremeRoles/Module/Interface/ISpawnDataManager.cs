@@ -1,12 +1,14 @@
 ﻿using System;
 
+using ExtremeRoles.GameMode.RoleSelector;
+
 namespace ExtremeRoles.Module.Interface
 {
     public interface ISpawnDataManager
     {
         protected static int ComputeSpawnNum(
-            OptionHolder.CommonOptionKey minSpawnKey,
-            OptionHolder.CommonOptionKey maxSpawnKey)
+            RoleGlobalOption minSpawnKey,
+            RoleGlobalOption maxSpawnKey)
         {
             var allOption = OptionHolder.AllOption;
 

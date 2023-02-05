@@ -13,6 +13,7 @@ using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
+using ExtremeRoles.GameMode.RoleSelector;
 
 namespace ExtremeRoles.Patches
 {
@@ -152,7 +153,7 @@ namespace ExtremeRoles.Patches
     public static class KeyboardJoystickPatch
     {
         private static Module.IOption UseXionOption => OptionHolder.AllOption[
-            (int)OptionHolder.CommonOptionKey.UseXion];
+            (int)RoleGlobalOption.UseXion];
 
         public static void Postfix()
         {

@@ -10,6 +10,7 @@ using HarmonyLib;
 using ExtremeRoles.Module;
 using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 
 namespace ExtremeRoles.Patches.Option
@@ -62,7 +63,7 @@ namespace ExtremeRoles.Patches.Option
                 allOptionStr.Add(
                     Design.ColoedString(
                         ColorPalette.XionBlue,
-                        getOption(OptionHolder.CommonOptionKey.UseXion).ToHudString()));
+                        getOption(RoleGlobalOption.UseXion).ToHudString()));
             }
 
             allOptionStr.Add(egmm.ShipOption.ToHudString());
@@ -72,6 +73,7 @@ namespace ExtremeRoles.Patches.Option
                 int optionId = option.Id;
 
                 if (Enum.IsDefined(typeof(OptionHolder.CommonOptionKey), optionId) ||
+                    Enum.IsDefined(typeof(RoleGlobalOption), optionId) ||
                     Enum.IsDefined(typeof(GlobalOption), optionId))
                 {
                     continue;
@@ -132,8 +134,8 @@ namespace ExtremeRoles.Patches.Option
             string optionName = Design.ColoedString(
                 new Color(204f / 255f, 204f / 255f, 0, 1f),
                 translate("crewmateRoles"));
-            int min = getOption(OptionHolder.CommonOptionKey.MinCrewmateRoles).GetValue();
-            int max = getOption(OptionHolder.CommonOptionKey.MaxCrewmateRoles).GetValue();
+            int min = getOption(RoleGlobalOption.MinCrewmateRoles).GetValue();
+            int max = getOption(RoleGlobalOption.MaxCrewmateRoles).GetValue();
             if (min > max) { min = max; }
             string optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
             entry.AppendLine($"{optionName}: {optionValue}");
@@ -141,8 +143,8 @@ namespace ExtremeRoles.Patches.Option
             optionName = Design.ColoedString(
                 new Color(204f / 255f, 204f / 255f, 0, 1f),
                 translate("neutralRoles"));
-            min = getOption(OptionHolder.CommonOptionKey.MinNeutralRoles).GetValue();
-            max = getOption(OptionHolder.CommonOptionKey.MaxNeutralRoles).GetValue();
+            min = getOption(RoleGlobalOption.MinNeutralRoles).GetValue();
+            max = getOption(RoleGlobalOption.MaxNeutralRoles).GetValue();
             if (min > max) { min = max; }
             optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
             entry.AppendLine($"{optionName}: {optionValue}");
@@ -150,8 +152,8 @@ namespace ExtremeRoles.Patches.Option
             optionName = Design.ColoedString(
                 new Color(204f / 255f, 204f / 255f, 0, 1f),
                 translate("impostorRoles"));
-            min = getOption(OptionHolder.CommonOptionKey.MinImpostorRoles).GetValue();
-            max = getOption(OptionHolder.CommonOptionKey.MaxImpostorRoles).GetValue();
+            min = getOption(RoleGlobalOption.MinImpostorRoles).GetValue();
+            max = getOption(RoleGlobalOption.MaxImpostorRoles).GetValue();
 
             if (min > max) { min = max; }
             optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
@@ -163,8 +165,8 @@ namespace ExtremeRoles.Patches.Option
             optionName = Design.ColoedString(
                 new Color(204f / 255f, 204f / 255f, 0, 1f),
                 translate("crewmateGhostRoles"));
-            min = getOption(OptionHolder.CommonOptionKey.MinCrewmateGhostRoles).GetValue();
-            max = getOption(OptionHolder.CommonOptionKey.MaxCrewmateGhostRoles).GetValue();
+            min = getOption(RoleGlobalOption.MinCrewmateGhostRoles).GetValue();
+            max = getOption(RoleGlobalOption.MaxCrewmateGhostRoles).GetValue();
             if (min > max) { min = max; }
             optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
             entry.AppendLine($"{optionName}: {optionValue}");
@@ -172,8 +174,8 @@ namespace ExtremeRoles.Patches.Option
             optionName = Design.ColoedString(
                 new Color(204f / 255f, 204f / 255f, 0, 1f),
                 translate("neutralGhostRoles"));
-            min = getOption(OptionHolder.CommonOptionKey.MinNeutralGhostRoles).GetValue();
-            max = getOption(OptionHolder.CommonOptionKey.MaxNeutralGhostRoles).GetValue();
+            min = getOption(RoleGlobalOption.MinNeutralGhostRoles).GetValue();
+            max = getOption(RoleGlobalOption.MaxNeutralGhostRoles).GetValue();
             if (min > max) { min = max; }
             optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
             entry.AppendLine($"{optionName}: {optionValue}");
@@ -181,8 +183,8 @@ namespace ExtremeRoles.Patches.Option
             optionName = Design.ColoedString(
                 new Color(204f / 255f, 204f / 255f, 0, 1f),
                 translate("impostorGhostRoles"));
-            min = getOption(OptionHolder.CommonOptionKey.MinImpostorGhostRoles).GetValue();
-            max = getOption(OptionHolder.CommonOptionKey.MaxImpostorGhostRoles).GetValue();
+            min = getOption(RoleGlobalOption.MinImpostorGhostRoles).GetValue();
+            max = getOption(RoleGlobalOption.MaxImpostorGhostRoles).GetValue();
 
             if (min > max) { min = max; }
             optionValue = (min == max) ? $"{max}" : $"{min} - {max}";
@@ -207,7 +209,7 @@ namespace ExtremeRoles.Patches.Option
             return Translation.GetString(key);
         }
 
-        private static IOption getOption(OptionHolder.CommonOptionKey optionKey)
-            => OptionHolder.AllOption[(int)optionKey];
+        private static IOption getOption<T>(T optionKey) where T : struct, IConvertible
+            => OptionHolder.AllOption[Convert.ToInt32(optionKey)];
     }
 }

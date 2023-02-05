@@ -18,6 +18,7 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Host;
 using ExtremeRoles.Performance;
+using ExtremeRoles.GameMode.RoleSelector;
 
 namespace ExtremeRoles.Patches
 {
@@ -235,7 +236,7 @@ namespace ExtremeRoles.Patches
         public static void Prefix()
         {
             if (GameOptionsManager.Instance.CurrentGameOptions.GameMode == GameModes.Normal &&
-                OptionHolder.AllOption[(int)OptionHolder.CommonOptionKey.UseXion].GetValue())
+                OptionHolder.AllOption[(int)RoleGlobalOption.UseXion].GetValue())
             {
                 Xion.XionPlayerToGhostLayer();
                 Xion.RemoveXionPlayerToAllPlayerControl();

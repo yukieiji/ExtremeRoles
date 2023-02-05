@@ -54,22 +54,6 @@ namespace ExtremeRoles
 
             UseStrongRandomGen,
             UsePrngAlgorithm,
-
-            MinCrewmateRoles,
-            MaxCrewmateRoles,
-            MinNeutralRoles,
-            MaxNeutralRoles,
-            MinImpostorRoles,
-            MaxImpostorRoles,
-
-            MinCrewmateGhostRoles,
-            MaxCrewmateGhostRoles,
-            MinNeutralGhostRoles,
-            MaxNeutralGhostRoles,
-            MinImpostorGhostRoles,
-            MaxImpostorGhostRoles,
-
-            UseXion,
         }
 
         public static void ExecuteWithBlockOptionShare(Action func)

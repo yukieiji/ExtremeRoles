@@ -8,6 +8,7 @@ using AmongUs.Data;
 
 using ExtremeRoles.Roles;
 using ExtremeRoles.Performance;
+using ExtremeRoles.GameMode.RoleSelector;
 
 
 namespace ExtremeRoles.Patches.Controller
@@ -136,7 +137,7 @@ namespace ExtremeRoles.Patches.Controller
 	{
 
 		private static Module.IOption UseXionOption = OptionHolder.AllOption[
-			(int)OptionHolder.CommonOptionKey.UseXion];
+			(int)RoleGlobalOption.UseXion];
 
 		public static void Prefix(ChatController __instance)
 		{
