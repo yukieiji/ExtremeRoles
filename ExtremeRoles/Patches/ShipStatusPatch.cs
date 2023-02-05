@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
+
 using ExtremeRoles.Performance;
-using ExtremeRoles.GameMode;
+using ExtremeRoles.Module;
 
 namespace ExtremeRoles.Patches
 {
@@ -23,7 +24,7 @@ namespace ExtremeRoles.Patches
             ShipStatus __instance,
             [HarmonyArgument(0)] GameData.PlayerInfo playerInfo)
         {
-            return ExtremeGameModeManager.Instance.Vison.TryComputeVison(
+            return VisonComputer.Instance.IsVanillaVisonAndGetVison(
                 __instance, playerInfo, out __result);
         }
 

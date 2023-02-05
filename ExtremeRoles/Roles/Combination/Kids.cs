@@ -17,7 +17,6 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.ExtremeShipStatus;
 
 using GhostAbilityButton = ExtremeRoles.Module.AbilityButton.GhostRoles.AbilityCountButton;
 using RoleButtonBase = ExtremeRoles.Module.AbilityButton.Roles.RoleAbilityButtonBase;
@@ -548,8 +547,8 @@ namespace ExtremeRoles.Roles.Combination
             public WispBlackOuter(float time)
             {
                 // ここは全員呼ばれる
-                ExtremeGameModeManager.Instance.Vison.SetModifier(
-                    GameMode.Vison.VisonType.WispLightOff);
+                VisonComputer.Instance.SetModifier(
+                    VisonComputer.Modifier.WispLightOff);
                 this.maxTime = time;
                 this.timer = time;
             }
@@ -664,7 +663,7 @@ namespace ExtremeRoles.Roles.Combination
 
             public void RepairVison()
             {
-                ExtremeGameModeManager.Instance.Vison.ResetModifier();
+                VisonComputer.Instance.ResetModifier();
                 this.blackOuter = null;
             }
 
