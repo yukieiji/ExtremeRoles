@@ -6,6 +6,8 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
 {
     public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
     {
+        public int HeadOptionId => (int)GlobalOption.NumMeating; 
+
         public bool IsEnableSabtage => true;
         public bool IsEnableImpostorVent => true;
 

@@ -158,7 +158,13 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             foreach (var (id, option) in OptionHolder.AllOption)
             {
                 OptionTab tab = option.Tab;
-                
+
+                if (tab == OptionTab.General &&
+                    id == shipOption.HeadOptionId)
+                {
+                    option.SetHeaderTo(true);
+                }
+
                 if (Enum.IsDefined(typeof(OptionHolder.CommonOptionKey), id) ||
                     roleSelector.IsValidGlobalRoleOptionId((RoleGlobalOption)id) ||
                     tab switch

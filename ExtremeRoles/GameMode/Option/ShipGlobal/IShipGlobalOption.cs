@@ -45,6 +45,8 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
 
     public interface IShipGlobalOption
     {
+        public int HeadOptionId { get; }
+
         public bool IsEnableSabtage { get; }
         public bool IsEnableImpostorVent { get; }
 
@@ -93,7 +95,7 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
             new IntCustomOption(
                 (int)GlobalOption.NumMeating,
                 GlobalOption.NumMeating.ToString(),
-                10, 0, 100, 1, null, true);
+                10, 0, 100, 1, null);
             new BoolCustomOption(
               (int)GlobalOption.ChangeMeetingVoteAreaSort,
               GlobalOption.ChangeMeetingVoteAreaSort.ToString(),
@@ -112,9 +114,9 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
                 false);
 
             var ventOption = new BoolCustomOption(
-               (int)GlobalOption.DisableVent,
-               GlobalOption.DisableVent.ToString(),
-               false);
+                (int)GlobalOption.DisableVent,
+                GlobalOption.DisableVent.ToString(),
+                false);
             new BoolCustomOption(
                 (int)GlobalOption.CanKillVentInPlayer,
                 GlobalOption.CanKillVentInPlayer.ToString(),

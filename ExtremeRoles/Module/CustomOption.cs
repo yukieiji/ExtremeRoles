@@ -56,6 +56,7 @@ namespace ExtremeRoles.Module
         public int DefaultSelection { get; }
 
         public bool IsActive();
+        public void SetHeaderTo(bool enable);
         public void SetOptionBehaviour(OptionBehaviour newBehaviour);
         public string GetTranslatedValue();
         public string GetTranslatedName();
@@ -296,6 +297,12 @@ namespace ExtremeRoles.Module
                 this.entry.Value, 0,
                 this.ValueCount - 1));
         }
+
+        public void SetHeaderTo(bool enable)
+        {
+            this.isHeader = enable;
+        }
+
         public void SetOptionBehaviour(OptionBehaviour newBehaviour)
         {
             this.behaviour = newBehaviour;
