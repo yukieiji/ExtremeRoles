@@ -97,7 +97,9 @@ namespace ExtremeRoles.Patches.Option
                     lineCount = 0;
                 }
 
-                pageBuilder.Append(optionStr).Append("\n\n");
+                pageBuilder
+                    .Append(optionStr)
+                    .AppendLine("\n");
                 lineCount += lines + 1;
             }
 
