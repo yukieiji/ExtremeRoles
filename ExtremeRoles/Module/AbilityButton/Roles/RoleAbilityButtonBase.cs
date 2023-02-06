@@ -27,6 +27,7 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
 
         protected abstract void AbilityButtonUpdate();
 
+
         public sealed override void Update()
         {
             if (this.Button == null) { return; }
@@ -36,16 +37,15 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
             if (localPlayer.Data == null ||
                 MeetingHud.Instance ||
                 ExileController.Instance ||
-                localPlayer.Data.IsDead ||
-                !this.IsButtonActive)
+                localPlayer.Data.IsDead)
             {
-                ButtonObjectSetActive(false);
+                SetActive(false);
                 return;
             }
 
             var hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
-            ButtonObjectSetActive(
+            SetActive(
                 localPlayer.IsKillTimerEnabled || 
                 localPlayer.ForceKillTimerContinue ||
                 hudManager.UseButton.isActiveAndEnabled);

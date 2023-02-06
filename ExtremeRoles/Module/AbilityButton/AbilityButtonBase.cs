@@ -12,7 +12,6 @@ namespace ExtremeRoles.Module.AbilityButton
         protected string ButtonText = null;
 
         protected ActionButton Button;
-        protected bool IsButtonActive = true;
 
         protected bool IsAbilityOn = false;
         protected float Timer = 10.0f;
@@ -61,9 +60,7 @@ namespace ExtremeRoles.Module.AbilityButton
                 this.AbilityCheck = allTrue;
             }
 
-            this.IsButtonActive = true;
-
-            ButtonObjectSetActive(false);
+            SetActive(false);
             GameSystem.ReGridButtons();
 
             this.Hotkey = hotkey;
@@ -89,7 +86,16 @@ namespace ExtremeRoles.Module.AbilityButton
 
         public void SetActive(bool isActive)
         {
-            this.IsButtonActive = isActive;
+            if (isActive)
+            {
+                Button.gameObject.SetActive(true);
+                Button.graphic.enabled = true;
+            }
+            else
+            {
+                Button.gameObject.SetActive(false);
+                Button.graphic.enabled = false;
+            }
         }
 
         public void SetButtonText(string newText)
@@ -115,12 +121,6 @@ namespace ExtremeRoles.Module.AbilityButton
         }
 
         protected bool IsHasCleanUp() => this.CleanUp != null;
-
-        protected void ButtonObjectSetActive(bool isActive)
-        {
-            this.Button.gameObject.SetActive(isActive);
-            this.Button.graphic.enabled = isActive;
-        }
 
         public virtual void ForceAbilityOff()
         {
