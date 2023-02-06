@@ -1119,6 +1119,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 case GameOverReason.ImpostorByKill:
                 case GameOverReason.ImpostorBySabotage:
                 case GameOverReason.ImpostorDisconnect:
+                case GameOverReason.HideAndSeek_ByKills:
                 case (GameOverReason)RoleGameOverReason.AssassinationMarin:
                     this.AddWinner(rolePlayerInfo, winner, pulsWinner);
                     break;
