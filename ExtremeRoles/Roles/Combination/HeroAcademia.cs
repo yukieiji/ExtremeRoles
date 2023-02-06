@@ -467,7 +467,9 @@ namespace ExtremeRoles.Roles.Combination
             this.Button.SetLabelToCrewmate();
         }
 
-        public bool IsAbilityUse() => this.IsCommonUse();
+        public bool IsAbilityUse() => 
+            this.cond == OneForAllCondition.FeatButtonAbility && 
+            this.IsCommonUse();
 
         public void RoleAbilityResetOnMeetingEnd()
         {
