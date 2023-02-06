@@ -9,7 +9,7 @@ namespace ExtremeRoles.GameMode.RoleSelector
 {
     public sealed class ClassicGameModeRoleSelector : IRoleSelector
     {
-        public bool IsAdjustImpostorNum => true;
+        public bool IsAdjustImpostorNum => false;
 
         public bool CanUseXion => true;
         public bool EnableXion { get; private set; }
