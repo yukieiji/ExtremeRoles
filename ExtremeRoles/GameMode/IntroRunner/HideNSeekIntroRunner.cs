@@ -60,7 +60,7 @@ namespace ExtremeRoles.GameMode.IntroRunner
             roleText.text = 
                 $"{Translation.GetString("youAreRoleIntro")}\n{role.GetColoredRoleName()}\n{role.GetIntroDescription()}";
             roleText.gameObject.transform.localPosition =
-                new Vector3(-2.5f, -5.0f, 0.0f);
+                new Vector3(-2.5f, -5.15f, 0.0f);
 
             PoolablePlayer playerSlot = instance.CreatePlayer(0, 1, impostor.Data, false);
             playerSlot.transform.localPosition = instance.impostorPos;
