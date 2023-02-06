@@ -44,7 +44,7 @@ namespace ExtremeRoles.Module
         {
             this.modifier = Modifier.None;
         }
-        public bool IsModifierResetted() => this.modifier != Modifier.None;
+        public bool IsModifierResetted() => this.modifier == Modifier.None;
 
         public bool IsVanillaVisonAndGetVison(
             ShipStatus shipStatus, GameData.PlayerInfo playerInfo, out float vison)
