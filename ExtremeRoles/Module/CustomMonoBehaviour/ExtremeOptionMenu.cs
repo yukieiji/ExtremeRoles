@@ -7,6 +7,7 @@ using AmongUs.GameOptions;
 
 using UnityEngine;
 using UnityEngine.Events;
+
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 
