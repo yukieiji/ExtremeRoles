@@ -96,7 +96,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             setCurCooltime();
         }
 
-        public bool IsAbilityUse() => 
+        public bool IsAbilityUse() =>
+            this.IsAwake &&
             this.IsCommonUse() &&
             VisonComputer.Instance.IsModifierResetted();
 

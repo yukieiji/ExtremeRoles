@@ -336,7 +336,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             return true;
         }
 
-        public bool IsAbilityUse() => this.IsCommonUse();
+        public bool IsAbilityUse()
+            => this.IsAwake && this.IsCommonUse();
 
         public string GetFakeOptionString() => "";
 

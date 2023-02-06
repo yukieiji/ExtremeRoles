@@ -307,7 +307,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool IsAbilityUse()
         {
-
             if (!this.IsAwake) { return false; }
 
             this.target = Player.GetClosestPlayerInRange(
@@ -1232,7 +1231,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool IsAbilityUse()
         {
-
             switch (this.nextUseAbilityType)
             {
                 case AbilityType.Admin:

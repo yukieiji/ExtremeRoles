@@ -96,8 +96,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.CleanUp);
         }
 
-        public bool IsAbilityUse() => this.IsCommonUse();
-
+        public bool IsAbilityUse() => 
+            this.IsAwake && this.IsCommonUse();
 
         public void RoleAbilityResetOnMeetingEnd()
         {
