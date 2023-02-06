@@ -1231,6 +1231,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool IsAbilityUse()
         {
+            if (this.canUseCrakingModule.Count == 0) { return false; }
+
             switch (this.nextUseAbilityType)
             {
                 case AbilityType.Admin:

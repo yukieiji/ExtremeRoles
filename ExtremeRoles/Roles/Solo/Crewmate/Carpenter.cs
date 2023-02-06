@@ -565,6 +565,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
 
         public bool IsAbilityUse() => 
+            this.IsAwake &&
             this.IsCommonUse() && 
             !(GameOptionsManager.Instance.CurrentGameOptions.GetByte(
                 ByteOptionNames.MapId) == 1 && this.targetVent == null) &&
