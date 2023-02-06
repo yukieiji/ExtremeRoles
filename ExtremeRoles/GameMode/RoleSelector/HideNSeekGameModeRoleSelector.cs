@@ -77,7 +77,6 @@ namespace ExtremeRoles.GameMode.RoleSelector
             return this.useNormalRoleSpawnOption.Contains(id);
         }
         
-        // TODO: リザレク復活がHideNSeekでちゃんと計算されてないので要調査
         private static ExtremeRoleId[] getUseNormalId() => 
             new ExtremeRoleId[]
             {
@@ -86,6 +85,7 @@ namespace ExtremeRoles.GameMode.RoleSelector
                 ExtremeRoleId.Watchdog,
                 ExtremeRoleId.Supervisor,
                 ExtremeRoleId.Survivor,
+                ExtremeRoleId.Resurrecter,
 
                 ExtremeRoleId.BountyHunter,
                 ExtremeRoleId.Bomber,
