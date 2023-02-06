@@ -8,6 +8,7 @@ using AmongUs.GameOptions;
 using UnityEngine;
 using UnityEngine.Events;
 using ExtremeRoles.GameMode.RoleSelector;
+using ExtremeRoles.GameMode.Option.ShipGlobal;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour
 {
@@ -160,9 +161,9 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                 OptionTab tab = option.Tab;
 
                 if (tab == OptionTab.General &&
-                    id == shipOption.HeadOptionId)
+                    Enum.IsDefined(typeof(GlobalOption), id))
                 {
-                    option.SetHeaderTo(true);
+                    option.SetHeaderTo(id == shipOption.HeadOptionId);
                 }
 
                 if (Enum.IsDefined(typeof(OptionHolder.CommonOptionKey), id) ||
