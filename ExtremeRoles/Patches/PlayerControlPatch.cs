@@ -1077,6 +1077,17 @@ namespace ExtremeRoles.Patches
             onRevive?.ReviveAction(__instance);
             onReviveOther?.ReviveAction(__instance);
 
+            SingleRoleBase role = ExtremeRoleManager.GameRole[__instance.PlayerId];
+
+            if (!role.TryGetVanillaRoleId(out RoleTypes roleId) &&
+                role.IsImpostor())
+            {
+                roleId = RoleTypes.Impostor;
+            }
+
+            FastDestroyableSingleton<RoleManager>.Instance.SetRole(
+                __instance, roleId);
+
             var ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
             if (ghostRole == null) { return; }
 
@@ -1091,7 +1102,7 @@ namespace ExtremeRoles.Patches
                 ghostRole.ReseOnMeetingStart();
             }
 
-            lock(ExtremeGhostRoleManager.GameRole)
+            lock (ExtremeGhostRoleManager.GameRole)
             {
                 ExtremeGhostRoleManager.GameRole.Remove(__instance.PlayerId);
             }
