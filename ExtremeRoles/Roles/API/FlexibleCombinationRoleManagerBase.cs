@@ -123,8 +123,8 @@ namespace ExtremeRoles.Roles.API
                 tab: OptionTab.Combination);
 
             int roleAssignNum = this.BaseRole.IsImpostor() ? 
-                OptionHolder.MaxImposterNum : 
-                OptionHolder.VanillaMaxPlayerNum - 1;
+                GameSystem.MaxImposterNum : 
+                GameSystem.VanillaMaxPlayerNum - 1;
 
             var roleAssignNumOption = new IntCustomOption(
                 GetRoleOptionId(CombinationRoleCommonOption.AssignsNum),
@@ -138,8 +138,8 @@ namespace ExtremeRoles.Roles.API
 
 
             int maxSetNum = this.BaseRole.IsImpostor() ?
-                OptionHolder.MaxImposterNum:
-                (OptionHolder.VanillaMaxPlayerNum - 1);
+                GameSystem.MaxImposterNum:
+                (GameSystem.VanillaMaxPlayerNum - 1);
 
             var roleSetNumOption = new IntCustomOption(
                 GetRoleOptionId(RoleCommonOption.RoleNum),

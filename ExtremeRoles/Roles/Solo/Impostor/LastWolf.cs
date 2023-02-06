@@ -10,7 +10,6 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Module.ExtremeShipStatus;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -71,14 +70,16 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public static void SwitchLight(bool lightOn)
         {
+            var vison = VisonComputer.Instance;
+
             if (lightOn)
             {
-                ExtremeRolesPlugin.ShipState.ResetVison();
+                vison.ResetModifier();
             }
             else
             {
-                ExtremeRolesPlugin.ShipState.SetVison(
-                    ExtremeShipStatus.ForceVisonType.LastWolfLightOff);
+                vison.SetModifier(
+                   VisonComputer.Modifier.LastWolfLightOff);
             }
         }
 
@@ -97,7 +98,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool IsAbilityUse() => 
             this.IsCommonUse() &&
-            !ExtremeRolesPlugin.ShipState.IsCustomVison();
+            VisonComputer.Instance.IsModifierResetted();
 
         public void RoleAbilityResetOnMeetingStart()
         {
@@ -265,7 +266,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             CreateIntOption(
                 LastWolfOption.AwakeImpostorNum,
-                1, 1, OptionHolder.MaxImposterNum, 1,
+                1, 1, GameSystem.MaxImposterNum, 1,
                 parentOps);
 
             CreateFloatOption(
@@ -360,7 +361,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             if (this.Button != null)
             {
                 float curCool = (this.finalCooltime - this.firstCooltime) *
-                    (1.0f - ((float)computeAlivePlayerNum() / (float)GameData.Instance.AllPlayers.Count)) + this.firstCooltime;
+                    (1.0f - ((float)computeAlivePlayerNum() / (float)GameData.Instance.PlayerCount)) + this.firstCooltime;
                 this.Button.SetAbilityCoolTime(curCool);
             }
         }

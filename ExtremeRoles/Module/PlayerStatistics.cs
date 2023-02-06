@@ -1,17 +1,62 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Module.SpecialWinChecker;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Combination;
-using ExtremeRoles.Performance.Il2Cpp;
 
-namespace ExtremeRoles.Module.ExtremeShipStatus
+using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.GameMode;
+
+namespace ExtremeRoles.Module
 {
-    public sealed partial class ExtremeShipStatus
+    public sealed class PlayerStatistics
     {
-        public PlayerStatistics CreateStatistics()
+        public const int SameNeutralGameControlId = int.MaxValue;
+
+        public int AllTeamCrewmate { get; set; }
+        public int TeamImpostorAlive { get; set; }
+        public int TeamCrewmateAlive { get; set; }
+        public int TeamNeutralAlive { get; set; }
+        public int TotalAlive { get; set; }
+        public int AssassinAlive { get; set; }
+
+        public Dictionary<int, IWinChecker> SpecialWinCheckRoleAlive { get; set; }
+
+        public Dictionary<(NeutralSeparateTeam, int), int> SeparatedNeutralAlive { get; set; }
+
+        public override string ToString()
+        {
+            var builder = new StringBuilder();
+
+            builder.AppendLine("------------ Current Player Statistics ------------");
+            builder.AppendLine($"Total Player Alive : {this.TotalAlive}");
+            builder.AppendLine($"Crewmate Alive : {this.TeamCrewmateAlive} / {this.AllTeamCrewmate}");
+            builder.AppendLine($"Impostor Alive :{this.TeamImpostorAlive}");
+            builder.AppendLine($"Assassin Alive : {this.AssassinAlive}");
+            builder.AppendLine($"Neutral Alive : {this.TeamNeutralAlive}");
+
+            builder.AppendLine("------ Neutral Win Special Checker ------");
+            foreach (var (id, winChecker) in this.SpecialWinCheckRoleAlive)
+            {
+                builder.AppendLine(
+                    $"{winChecker} --- GameControlId:{id} --- IsWin:{winChecker.IsWin(this)}");
+            }
+
+            builder.AppendLine(
+                $"------ Neutral Separate Teams --- CurrentAliveTeams:{this.SeparatedNeutralAlive.Count} ------");
+            foreach (var ((team, id), aliveNum) in this.SeparatedNeutralAlive)
+            {
+                builder.AppendLine(
+                    $"{team} --- GameControlId:{id} --- AliveNum: {aliveNum}");
+            }
+            return builder.ToString();
+        }
+
+        public static PlayerStatistics Create()
         {
             int numTotalAlive = 0;
 
@@ -81,9 +126,9 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
                         playerInfo.PlayerId);
                 }
 
-                if (OptionHolder.Ship.IsSameNeutralSameWin && role.IsNeutral())
+                if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin && role.IsNeutral())
                 {
-                    gameControlId = OptionHolder.Ship.SameNeutralGameControlId;
+                    gameControlId = SameNeutralGameControlId;
                 }
 
                 // 生きてる
@@ -201,7 +246,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             };
         }
 
-        private void checkMultiAssignedServant(
+        private static void checkMultiAssignedServant(
             ref Dictionary<(NeutralSeparateTeam, int), int> neutralTeam,
             int gameControlId,
             SingleRoleBase role)
@@ -219,7 +264,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             }
         }
 
-        private void addNeutralTeams(
+        private static void addNeutralTeams(
             ref Dictionary<(NeutralSeparateTeam, int), int> neutralTeam,
             int gameControlId,
             NeutralSeparateTeam team)
@@ -236,7 +281,7 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             }
         }
 
-        private void addSpecialWinCheckRole(
+        private static void addSpecialWinCheckRole(
             ref Dictionary<int, IWinChecker> roleData,
             int gameControlId,
             ExtremeRoleId roleId,
@@ -276,48 +321,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
                 {
                     roleData.Add(gameControlId, addData);
                 }
-            }
-        }
-
-        public sealed class PlayerStatistics
-        {
-            public int AllTeamCrewmate { get; set; }
-            public int TeamImpostorAlive { get; set; }
-            public int TeamCrewmateAlive { get; set; }
-            public int TeamNeutralAlive { get; set; }
-            public int TotalAlive { get; set; }
-            public int AssassinAlive { get; set; }
-
-            public Dictionary<int, IWinChecker> SpecialWinCheckRoleAlive { get; set; }
-
-            public Dictionary<(NeutralSeparateTeam, int), int> SeparatedNeutralAlive { get; set; }
-
-            public override string ToString()
-            {
-                var builder = new System.Text.StringBuilder();
-
-                builder.AppendLine("------------ Current Player Statistics ------------");
-                builder.AppendLine($"Total Player Alive : {this.TotalAlive}");
-                builder.AppendLine($"Crewmate Alive : {this.TeamCrewmateAlive} / {this.AllTeamCrewmate}");
-                builder.AppendLine($"Impostor Alive :{this.TeamImpostorAlive}");
-                builder.AppendLine($"Assassin Alive : {this.AssassinAlive}");
-                builder.AppendLine($"Neutral Alive : {this.TeamNeutralAlive}");
-
-                builder.AppendLine("------ Neutral Win Special Checker ------");
-                foreach (var (id, winChecker) in this.SpecialWinCheckRoleAlive)
-                {
-                    builder.AppendLine(
-                        $"{winChecker} --- GameControlId:{id} --- IsWin:{winChecker.IsWin(this)}");
-                }
-
-                builder.AppendLine(
-                    $"------ Neutral Separate Teams --- CurrentAliveTeams:{this.SeparatedNeutralAlive.Count} ------");
-                foreach (var ((team, id), aliveNum) in this.SeparatedNeutralAlive)
-                {
-                    builder.AppendLine(
-                        $"{team} --- GameControlId:{id} --- AliveNum: {aliveNum}");
-                }
-                return builder.ToString();
             }
         }
     }

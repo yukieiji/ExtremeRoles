@@ -23,6 +23,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.Mods;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -574,7 +575,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             CreateIntOption(
                 HypnotistOption.AwakeCheckImpostorNum,
-                1, 1, OptionHolder.MaxImposterNum, 1,
+                1, 1, GameSystem.MaxImposterNum, 1,
                 parentOps);
             CreateIntOption(
                 HypnotistOption.AwakeCheckTaskGage,
@@ -1346,7 +1347,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             if (targetRole.Id == this.Id)
             {
-                if (OptionHolder.Ship.IsSameNeutralSameWin)
+                if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
                 {
                     return true;
                 }

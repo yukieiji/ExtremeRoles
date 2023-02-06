@@ -147,7 +147,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             this.Button.SetAbilityCoolTime(
                 this.defaultCoolTime + (
-                    (this.finalCoolTime - this.defaultCoolTime) * ((float)deadNum / (float)GameData.Instance.AllPlayers.Count)));
+                    (this.finalCoolTime - this.defaultCoolTime) * ((float)deadNum / (float)GameData.Instance.PlayerCount)));
             this.Button.ResetCoolTimer();
         }
 

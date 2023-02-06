@@ -236,7 +236,7 @@ namespace ExtremeRoles.Roles.Combination
                 1, 1, 1, killerSetting,
                 invert: true,
                 enableCheckOption: parentOps,
-                tempMaxValue: OptionHolder.VanillaMaxPlayerNum - 1);
+                tempMaxValue: GameSystem.VanillaMaxPlayerNum - 1);
 
             CreateKillerOption(killerSetting);
             killerVisionSetting(killerSetting);

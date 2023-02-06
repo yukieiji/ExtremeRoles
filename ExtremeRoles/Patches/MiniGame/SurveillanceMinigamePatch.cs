@@ -2,15 +2,16 @@
 using System.Linq;
 using UnityEngine;
 
+using AmongUs.GameOptions;
 using HarmonyLib;
 
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Patches.MiniGame
 {
@@ -29,18 +30,19 @@ namespace ExtremeRoles.Patches.MiniGame
             ExtremeRoleId.Doll
         };
 
-
-        public static void Initialize()
+        public static void LoadOptionValue()
         {
-            cameraTimer = OptionHolder.Ship.SecurityLimitTime;
-            isRemoveSecurity = OptionHolder.Ship.IsRemoveSecurity;
-            enableCameraLimit = OptionHolder.Ship.EnableSecurityLimit;
+            var securityOption = ExtremeGameModeManager.Instance.ShipOption.Security;
+            if (securityOption == null) { return; }
+
+            cameraTimer = securityOption.SecurityLimitTime;
+            isRemoveSecurity = securityOption.DisableSecurity;
+            enableCameraLimit = securityOption.EnableSecurityLimit;
 
             Logging.Debug("---- SecurityCondition ----");
             Logging.Debug($"IsRemoveSecurity:{enableCameraLimit}");
             Logging.Debug($"EnableSecurityLimit:{isRemoveSecurity}");
             Logging.Debug($"SecurityTime:{cameraTimer}");
-
         }
 
         public static bool IsAbilityUse()

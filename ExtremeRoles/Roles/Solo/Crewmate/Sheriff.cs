@@ -191,7 +191,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             CreateIntOption(
                 SheriffOption.ShootNum,
-                1, 1, OptionHolder.VanillaMaxPlayerNum - 1, 1,
+                1, 1, GameSystem.VanillaMaxPlayerNum - 1, 1,
                 parentOps, format: OptionUnit.Shot);
 
             var enableTaskRelatedOps = CreateBoolOption(

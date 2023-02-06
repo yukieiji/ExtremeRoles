@@ -8,18 +8,19 @@ using HarmonyLib;
 using Hazel;
 
 using UnityEngine;
+using AmongUs.GameOptions;
 
+using ExtremeRoles.Helper;
+using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
-using ExtremeRoles.Helper;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using AmongUs.GameOptions;
-
 
 namespace ExtremeRoles.Patches
 {
@@ -145,7 +146,7 @@ namespace ExtremeRoles.Patches
         {
             if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) 
             { return; }
-            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
+            if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
             if (CachedPlayerControl.LocalPlayer.PlayerId != __instance.PlayerId) { return; }
 
@@ -279,19 +280,21 @@ namespace ExtremeRoles.Patches
         {
             HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
-            if (role.CanUseSabotage())
+            if (role.CanUseSabotage() && enable &&
+                ExtremeGameModeManager.Instance.ShipOption.IsEnableSabtage)
             {
                 // インポスターとヴィジランテ、シオンは死んでもサボタージ使える
-                if (enable && 
-                    (role.IsImpostor() || (
+                if (role.IsImpostor() || 
+                    (
                         role.Id == ExtremeRoleId.Vigilante ||
-                        role.Id == ExtremeRoleId.Xion)))
+                        role.Id == ExtremeRoleId.Xion
+                    ))
                 {
                     hudManager.SabotageButton.Show();
                     hudManager.SabotageButton.gameObject.SetActive(true);
                 }
                 // それ以外は死んでないときだけサボタージ使える
-                else if(enable && !player.Data.IsDead)
+                else if(!player.Data.IsDead)
                 {
                     hudManager.SabotageButton.Show();
                     hudManager.SabotageButton.gameObject.SetActive(true);
@@ -313,46 +316,45 @@ namespace ExtremeRoles.Patches
 
             HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
-            if (role.CanUseVent())
+            if (!role.CanUseVent())
+            { 
+                hudManager.ImpostorVentButton.SetDisabled();
+                return;
+            }
+
+            if (!role.TryGetVanillaRoleId(out RoleTypes roleId))
             {
-                if (!role.TryGetVanillaRoleId(out RoleTypes roleId))
+                if (enable && 
+                    ExtremeGameModeManager.Instance.ShipOption.IsEnableImpostorVent)
                 {
-                    if (enable)
-                    { 
-                        hudManager.ImpostorVentButton.Show();
-                    }
-                    else
-                    { 
-                        hudManager.ImpostorVentButton.SetDisabled();
-                    }
+                    hudManager.ImpostorVentButton.Show();
                 }
                 else
                 {
-                    if (roleId == RoleTypes.Engineer)
-                    {
-                        if (enable)
-                        {
-                            if (!OptionHolder.Ship.EngineerUseImpostorVent)
-                            {
-                                hudManager.AbilityButton.Show();
-                            }
-                            else
-                            {
-                                hudManager.ImpostorVentButton.Show();
-                                hudManager.AbilityButton.gameObject.SetActive(false);
-                            }
-                        }
-                        else
-                        {
-                            hudManager.ImpostorVentButton.SetDisabled();
-                            hudManager.AbilityButton.SetDisabled(); 
-                        }
-                    }
+                    hudManager.ImpostorVentButton.SetDisabled();
                 }
             }
             else
             {
-                hudManager.ImpostorVentButton.SetDisabled();
+                if (roleId != RoleTypes.Engineer) { return; }
+
+                if (enable)
+                {
+                    if (!ExtremeGameModeManager.Instance.ShipOption.EngineerUseImpostorVent)
+                    {
+                        hudManager.AbilityButton.Show();
+                    }
+                    else
+                    {
+                        hudManager.ImpostorVentButton.Show();
+                        hudManager.AbilityButton.gameObject.SetActive(false);
+                    }
+                }
+                else
+                {
+                    hudManager.ImpostorVentButton.SetDisabled();
+                    hudManager.AbilityButton.SetDisabled();
+                }
             }
         }
 
@@ -402,7 +404,8 @@ namespace ExtremeRoles.Patches
                     RPCOperator.SetUpReady(readyPlayerId);
                     break;
                 case RPCOperator.Command.SetRoleToAllPlayer:
-                    List<Module.IAssignedPlayer> assignData = new List<Module.IAssignedPlayer>();
+                    List<Module.Interface.IPlayerToExRoleAssignData> assignData = 
+                        new List<Module.Interface.IPlayerToExRoleAssignData>();
                     int assignDataNum = reader.ReadPackedInt32();
                     for (int i = 0; i < assignDataNum; ++i)
                     {
@@ -413,7 +416,7 @@ namespace ExtremeRoles.Patches
                         {
                             case (byte)Module.IAssignedPlayer.ExRoleType.Single:
                                 assignData.Add(new
-                                    Module.AssignedPlayerToSingleRoleData(
+                                    PlayerToSingleRoleAssignData(
                                         assignedPlayerId, exRoleId));
                                 break;
                             case (byte)Module.IAssignedPlayer.ExRoleType.Comb:
@@ -421,14 +424,18 @@ namespace ExtremeRoles.Patches
                                 byte bytedGameContId = reader.ReadByte(); // byted GameContId
                                 byte bytedAmongUsVanillaRoleId = reader.ReadByte(); // byted AmongUsVanillaRoleId
                                 assignData.Add(new
-                                    Module.AssignedPlayerToCombRoleData(
+                                    PlayerToCombRoleAssignData(
                                         assignedPlayerId, exRoleId, assignCombType,
                                         bytedGameContId, bytedAmongUsVanillaRoleId));
                                 break;
                         }
                     }
                     RPCOperator.SetRoleToAllPlayer(assignData);
-                    ExtremeRolesPlugin.ShipState.SwitchRoleAssignToEnd();
+                    RoleAssignState.Instance.SwitchRoleAssignToEnd();
+                    if (PlayerRoleAssignData.IsExist)
+                    {
+                        PlayerRoleAssignData.Instance.Destroy();
+                    }
                     break;
                 case RPCOperator.Command.CleanDeadBody:
                     byte deadBodyPlayerId = reader.ReadByte();
@@ -1062,13 +1069,24 @@ namespace ExtremeRoles.Patches
             ExtremeRolesPlugin.ShipState.RemoveDeadInfo(__instance.PlayerId);
 
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
-            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
+            if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
 
             var (onRevive, onReviveOther) = ExtremeRoleManager.GetInterfaceCastedRole<
                 IRoleOnRevive>(__instance.PlayerId);
 
             onRevive?.ReviveAction(__instance);
             onReviveOther?.ReviveAction(__instance);
+
+            SingleRoleBase role = ExtremeRoleManager.GameRole[__instance.PlayerId];
+
+            if (!role.TryGetVanillaRoleId(out RoleTypes roleId) &&
+                role.IsImpostor())
+            {
+                roleId = RoleTypes.Impostor;
+            }
+
+            FastDestroyableSingleton<RoleManager>.Instance.SetRole(
+                __instance, roleId);
 
             var ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
             if (ghostRole == null) { return; }
@@ -1084,7 +1102,7 @@ namespace ExtremeRoles.Patches
                 ghostRole.ReseOnMeetingStart();
             }
 
-            lock(ExtremeGhostRoleManager.GameRole)
+            lock (ExtremeGhostRoleManager.GameRole)
             {
                 ExtremeGhostRoleManager.GameRole.Remove(__instance.PlayerId);
             }

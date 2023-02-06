@@ -23,7 +23,7 @@ namespace ExtremeRoles.Roles.Combination
 
         public DetectiveOffice() : base(
             Name, new Color(255f, 255f, 255f), 2,
-            (OptionHolder.VanillaMaxPlayerNum - 1) / 2)
+            (GameSystem.VanillaMaxPlayerNum - 1) / 2)
         {
             this.Roles.Add(new Detective());
             this.Roles.Add(new Assistant());

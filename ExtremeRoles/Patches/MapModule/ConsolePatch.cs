@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
 
@@ -21,7 +22,7 @@ namespace ExtremeRoles.Patches.MapModule
             if (task == null) { return true; }
             if (__instance == null) { return true; }
             if (ExtremeRoleManager.GameRole.Count == 0 ||
-                !ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return true; }
+                !RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 
             TaskTypes taskType = task.TaskType;
             var role = ExtremeRoleManager.GameRole[pc.PlayerId];

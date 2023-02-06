@@ -28,7 +28,7 @@ namespace ExtremeRoles.Module.SpecialWinChecker
         }
 
         public bool IsWin(
-            ExtremeShipStatus.ExtremeShipStatus.PlayerStatistics statistics)
+            PlayerStatistics statistics)
         {
             List<PlayerControl> aliveOneSideLover = new List<PlayerControl>();
 

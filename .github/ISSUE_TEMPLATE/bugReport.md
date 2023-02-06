@@ -20,7 +20,7 @@ Please provide information about the bug in each of the following fields -->
 <!-- このバグや仕様に対してのあなたの意見 / Your opinion on this bug or specification -->
 
 ### バグ発生時のログ / log when issue occur
-<!-- バグが発生した瞬間のF8で出力されるログ / Dumped log by F8 at the issue occurs -->
+<!-- バグが発生した瞬間のF8で出力されるログ(log形式かZip形式のファイル) / Dumped log by F8 at the issue occurs(log or zip) -->
 
 ## バグが発生した環境/
 ### Among Usバージョン/ Among Us Version

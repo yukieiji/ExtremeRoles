@@ -1,4 +1,6 @@
-﻿namespace ExtremeRoles.Roles.API.Extension.Neutral
+﻿using ExtremeRoles.GameMode;
+
+namespace ExtremeRoles.Roles.API.Extension.Neutral
 {
     public static class NeutralRoleExtension
     {
@@ -8,7 +10,7 @@
         {
             if (self.Id == targetRole.Id)
             {
-                if (OptionHolder.Ship.IsSameNeutralSameWin)
+                if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
                 {
                     return true;
                 }

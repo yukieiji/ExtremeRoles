@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Hazel;
 
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module.ExtremeShipStatus;
-using ExtremeRoles.Extension.Ship;
+using Hazel;
 using AmongUs.GameOptions;
+
+using ExtremeRoles.Module.ExtremeShipStatus;
+using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Extension.Ship;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles
 {
@@ -190,11 +192,7 @@ namespace ExtremeRoles
 
         public static void Initialize()
         {
-            OptionHolder.Load();
-            RandomGenerator.Initialize();
             Helper.Player.ResetTarget();
-            Roles.ExtremeRoleManager.Initialize();
-            GhostRoles.ExtremeGhostRoleManager.Initialize();
             ExtremeRolesPlugin.ShipState.Initialize();
             ExtremeRolesPlugin.Info.ResetOverlays();
             
@@ -206,6 +204,7 @@ namespace ExtremeRoles
 
             // 各種表示系リセット
             Patches.Manager.HudManagerUpdatePatch.Reset();
+            Module.VisonComputer.Instance.ResetModifier();
 
             // ミーティング能力リセット
             Patches.Meeting.PlayerVoteAreaSelectPatch.Reset();
@@ -213,7 +212,6 @@ namespace ExtremeRoles
 
             // 各種システムコンソールリセット
             Patches.MiniGame.VitalsMinigameUpdatePatch.Initialize();
-            Patches.MiniGame.SecurityHelper.Initialize();
             Patches.MapOverlay.MapCountOverlayUpdatePatch.Initialize();
 
             // 最終結果リセット
@@ -251,21 +249,22 @@ namespace ExtremeRoles
 
         public static void SetUpReady(byte playerId)
         {
-            Patches.Manager.RoleManagerSelectRolesPatch.AddReadyPlayer(playerId);
+            RoleAssignState.Instance.AddReadyPlayer(playerId);
         }
 
-        public static void SetRoleToAllPlayer(List<Module.IAssignedPlayer> assignData)
+        public static void SetRoleToAllPlayer(
+            List<Module.Interface.IPlayerToExRoleAssignData> assignData)
         {
             foreach (var data in assignData)
             {
                 switch (data.RoleType)
                 {
-                    case (byte)Module.IAssignedPlayer.ExRoleType.Single:
+                    case (byte)Module.Interface.IPlayerToExRoleAssignData.ExRoleType.Single:
                         Roles.ExtremeRoleManager.SetPlyerIdToSingleRoleId(
                             data.RoleId, data.PlayerId);
                         break;
-                    case (byte)Module.IAssignedPlayer.ExRoleType.Comb:
-                        var combData = (Module.AssignedPlayerToCombRoleData)data;
+                    case (byte)Module.Interface.IPlayerToExRoleAssignData.ExRoleType.Comb:
+                        var combData = (PlayerToCombRoleAssignData)data;
                         Roles.ExtremeRoleManager.SetPlayerIdToMultiRoleId(
                             combData.CombTypeId,
                             combData.RoleId,

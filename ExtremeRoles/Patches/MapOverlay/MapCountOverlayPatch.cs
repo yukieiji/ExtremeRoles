@@ -10,7 +10,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches.MapOverlay
 {
@@ -200,9 +200,15 @@ namespace ExtremeRoles.Patches.MapOverlay
         public static void Initialize()
         {
             Object.Destroy(timerText);
-            adminTimer = OptionHolder.Ship.AdminLimitTime;
-            isRemoveAdmin = OptionHolder.Ship.IsRemoveAdmin;
-            enableAdminLimit = OptionHolder.Ship.EnableAdminLimit;
+        }
+        public static void LoadOptionValue()
+        {
+            var adminOpt = ExtremeGameModeManager.Instance.ShipOption.Admin;
+            if (adminOpt == null) { return; }
+
+            adminTimer = adminOpt.AdminLimitTime;
+            isRemoveAdmin = adminOpt.DisableAdmin;
+            enableAdminLimit = adminOpt.EnableAdminLimit;
 
             Logging.Debug("---- AdminCondition ----");
             Logging.Debug($"IsRemoveAdmin:{isRemoveAdmin}");

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
@@ -25,8 +25,7 @@ namespace ExtremeRoles.Module.SpecialWinChecker
             aliveDelinquent.Add(playerId, (Delinquent)role);
         }
 
-        public bool IsWin(
-            ExtremeShipStatus.ExtremeShipStatus.PlayerStatistics statistics)
+        public bool IsWin(PlayerStatistics statistics)
         {
             byte checkPlayerId = byte.MaxValue;
             float range = float.MinValue;
@@ -51,9 +50,9 @@ namespace ExtremeRoles.Module.SpecialWinChecker
                 player, checkRole, range);
 
             int gameControlId = checkRole.GameControlId;
-            if (OptionHolder.Ship.IsSameNeutralSameWin)
+            if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
             {
-                gameControlId = OptionHolder.Ship.SameNeutralGameControlId;
+                gameControlId = PlayerStatistics.SameNeutralGameControlId;
             }
 
             int teamAlive = statistics.SeparatedNeutralAlive[

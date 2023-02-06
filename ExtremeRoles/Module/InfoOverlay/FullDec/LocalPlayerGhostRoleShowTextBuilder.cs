@@ -9,9 +9,6 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
 {
     internal sealed class LocalPlayerGhostRoleShowTextBuilder : IShowTextBuilder
     {
-
-        
-
         public LocalPlayerGhostRoleShowTextBuilder()
         { }
 
@@ -21,7 +18,7 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
             {
                 return ($"<size=200%>{Translation.GetString("yourAliveNow")}</size>\n", "", "");
             }
-            var role = GhostRoles.ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
+            var role = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
             if (role == null)
             {
                 return ($"<size=200%>{Translation.GetString("yourNoAssignGhostRole")}</size>\n", "", "");
@@ -36,13 +33,12 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
             if (!role.IsVanillaRole())
             {
                 if (!allOption.TryGetValue(
-                        role.GetRoleOptionId(
-                            IShowTextBuilder.SpawnOptionKey), out IOption spawnOption))
+                        role.GetRoleOptionId(RoleCommonOption.SpawnRate), out IOption spawnOption))
                 {
                     var aliveRole = (MultiAssignRoleBase)ExtremeRoleManager.GetLocalPlayerRole();
-                    spawnOption = allOption[aliveRole.GetManagerOptionId(IShowTextBuilder.SpawnOptionKey)];
+                    spawnOption = allOption[aliveRole.GetManagerOptionId(RoleCommonOption.SpawnRate)];
                 }
-                roleOptionString = CustomOption.AllOptionToString(spawnOption);
+                roleOptionString = spawnOption.ToHudStringWithChildren();
             }
 
             string roleFullDesc = role.GetFullDescription();

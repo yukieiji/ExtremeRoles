@@ -1,6 +1,8 @@
 ﻿using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module;
 using UnityEngine;
+using ExtremeRoles.Module.RoleAssign;
 
 namespace ExtremeRoles
 {
@@ -15,9 +17,9 @@ namespace ExtremeRoles
 #if DEBUG
             if (Input.GetKeyDown(KeyCode.F9) &&
                 ExtremeRolesPlugin.DebugMode.Value &&
-                ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd)
+                RoleAssignState.Instance.IsRoleSetUpEnd)
             {
-                Logging.Debug($"{ExtremeRolesPlugin.ShipState.CreateStatistics()}");
+                Logging.Debug($"{PlayerStatistics.Create()}");
             }
             if (Input.GetKeyDown(KeyCode.F10) &&
                 ExtremeRolesPlugin.DebugMode.Value)
