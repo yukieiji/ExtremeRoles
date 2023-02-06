@@ -39,6 +39,9 @@ namespace ExtremeRoles.Patches
 	{
 		public static bool Prefix(GameData __instance)
 		{
+			if (ExtremeGameModeManager.Instance == null ||
+				ExtremeGameModeManager.Instance.ShipOption == null) { return true; }
+
 			var roles = Roles.ExtremeRoleManager.GameRole;
 			var shipOpt = ExtremeGameModeManager.Instance.ShipOption;
 
