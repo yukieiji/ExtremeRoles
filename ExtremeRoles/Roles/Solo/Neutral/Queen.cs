@@ -3,7 +3,11 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using AmongUs.GameOptions;
+
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
@@ -11,9 +15,6 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.ExtremeShipStatus;
-using AmongUs.GameOptions;
-using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
