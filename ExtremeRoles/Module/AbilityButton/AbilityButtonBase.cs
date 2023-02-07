@@ -8,6 +8,8 @@ namespace ExtremeRoles.Module.AbilityButton
 {
     public abstract class AbilityButtonBase
     {
+        public const string AditionalInfoName = "ExRKillButtonAditionalInfo";
+
         public Vector3 PositionOffset;
         protected string ButtonText = null;
 
@@ -51,6 +53,12 @@ namespace ExtremeRoles.Module.AbilityButton
             button.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
             button.OnClick.AddListener(
                 (UnityEngine.Events.UnityAction)OnClickEvent);
+
+            Transform info = this.Button.transform.FindChild(AditionalInfoName);
+            if (info != null)
+            {
+                info.gameObject.SetActive(false);
+            }
 
             this.CleanUp = abilityCleanUp;
 
