@@ -669,21 +669,19 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public override bool TryRolePlayerKillTo(
             PlayerControl rolePlayer, PlayerControl targetPlayer)
         {
-            if (this.AnotherRole?.Id == ExtremeRoleId.Sheriff)
+            if (targetPlayer.PlayerId == this.queenPlayerId)
             {
+                if (this.AnotherRole?.Id == ExtremeRoleId.Sheriff)
+                {
 
-                Player.RpcUncheckMurderPlayer(
-                    rolePlayer.PlayerId,
-                    rolePlayer.PlayerId,
-                    byte.MaxValue);
+                    Player.RpcUncheckMurderPlayer(
+                        rolePlayer.PlayerId,
+                        rolePlayer.PlayerId,
+                        byte.MaxValue);
 
-                ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
-                    rolePlayer.PlayerId, ExtremeShipStatus.PlayerStatus.MissShot);
-
-                return false;
-            }
-            else if (targetPlayer.PlayerId == this.queenPlayerId)
-            {
+                    ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
+                        rolePlayer.PlayerId, ExtremeShipStatus.PlayerStatus.MissShot);
+                }
                 return false;
             }
 
