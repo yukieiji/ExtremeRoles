@@ -40,5 +40,6 @@ jobs:
       - name: PostComment
         uses: thollander/actions-comment-pull-request@v2.3.1
         with:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             pr_number: ${{ github.event.number }}
             filePath: .github/workflows/comment.md
