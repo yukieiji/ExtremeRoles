@@ -9,7 +9,7 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 # Extreme Roles
 AmongUsの上級者(初心者)向けのロール追加MOD、主な特徴として以下があります<br>
 * 第三陣営「ニュートラル」と幽霊役職の追加
-* AmongUs公式役職とMODの役職の併用可能
+* AmongUs公式役職とMODの役職の併用可能(HideNSeekにも完全対応)
 * すべてのMOD役職が複数人アサイン可能
 * すべての役職に対して、細かい設定(視界、視界効果、キルクールなど)が可能
 * 多彩なゲームオプション(シャッフルの強度、エンジニアのベント調整など)
@@ -18,7 +18,7 @@ AmongUsの上級者(初心者)向けのロール追加MOD、主な特徴とし�
 * 互換性のあるMODのインストール/アップデートチェック/アンインストール機能
 * 多言語対応(現在は英語と日本語、简体中文のみ/only English and Japanese, SChinese now!!)
 
-## 追加役職一覧(Extreme Roles v5.0.0.6時点、今後も追加予定)
+## 追加役職一覧(Extreme Roles v5.1.0.0時点、今後も追加予定)
 #### ホスト役職
 - シオン
 #### 通常役職
@@ -83,9 +83,7 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 
 ## リリーススケジュール
 
-- Extreme Roles v5.1.0.0
-  - Extreme Roles HideNSeekアップデート
-  - 公式のHideNSeekにオプションや役職を使用できるようにします
+- 特になし
 
 ## 現在実装検討中の役職及び機能
 - ???(第三陣営)
@@ -128,7 +126,7 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 
 |  AmongUs バージョン  |  Extreme Roles バージョン  |
 | ---- | ---- |
-|  v2022.12.08s/v2022.12.08e/v2022.12.14s/v2022.12.14e  |  v5.0.0.0 ～ v5.0.0.6 |
+|  v2022.12.08s/v2022.12.08e/v2022.12.14s/v2022.12.14e  |  v5.0.0.0 ～ v5.1.0.0 |
 |  v2022.10.25s/v2022.10.25e  |  v4.0.0.0 ～ v4.0.1.4 |
 |  v2022.10.18s/v2022.10.18e  |  v3.3.0.3 ～ v3.3.0.6 |
 |  v2022.08.23s/v2022.08.23e/v2022.08.24s/v2022.08.24e/v2022.09.20s/v2022.09.20e  |  v3.2.2.5 ～ v3.3.0.2 |
@@ -186,6 +184,6 @@ EXRole can support multiple languages, but only Japanese is implemented because 
 
 |  言語名/Languages  |  対応状況/Status |
 | ---- | ---- |
-|  英語/English  |  部分的に翻訳済み/Mostly Translated  |
+|  英語/English  |  完全翻訳済み/Fully Translated  |
 |  日本語/Japanese  |  完全翻訳済み/Fully Translated  |
 |  简体中文/SChinese  |  部分的に翻訳済み/Mostly Translated  |
