@@ -273,6 +273,6 @@ namespace ExtremeRoles.Roles.Solo.Host
         }
       
         private bool isNoXion() => 
-            this.noXionCount >= ((GameData.Instance.AllPlayers.Count - 1) * 2 / 3);
+            this.noXionCount >= ((GameData.Instance.PlayerCount - 1) * 2 / 3);
     }
 }

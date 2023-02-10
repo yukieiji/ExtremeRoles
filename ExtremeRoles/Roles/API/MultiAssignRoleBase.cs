@@ -5,6 +5,7 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
 
@@ -125,18 +126,6 @@ namespace ExtremeRoles.Roles.API
                 return baseIntro;
             }
 
-            string anotherIntro;
-
-            if (this.AnotherRole.IsVanillaRole())
-            {
-                RoleBehaviour role = CachedPlayerControl.LocalPlayer.Data.Role;
-                anotherIntro = role.Blurb;
-            }
-            else
-            {
-                anotherIntro = this.AnotherRole.GetIntroDescription();
-            }
-
             string concat = Design.ColoedString(
                 Palette.White,
                 string.Concat(
@@ -145,7 +134,7 @@ namespace ExtremeRoles.Roles.API
 
             return string.Concat(baseIntro, concat, Design.ColoedString(
                 this.AnotherRole.GetNameColor(),
-                anotherIntro));
+                this.AnotherRole.GetIntroDescription()));
 
         }
         public override string GetColoredRoleName(bool isTruthColor = false)
@@ -203,5 +192,7 @@ namespace ExtremeRoles.Roles.API
         }
 
         public int GetManagerOptionOffset() => this.ManagerOptionOffset;
+
+        protected string CreateImpCrewPrefix() => this.IsImpostor() ? "Evil" : "Nice";
     }
 }

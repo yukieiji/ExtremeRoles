@@ -4,7 +4,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
 {
     public sealed partial class ExtremeShipStatus
     {
-
         public GameOverReason EndReason => this.reason;
         public int WinGameControlId => this.winGameControlId;
         public bool IsDisableWinCheck => this.disableWinCheck;

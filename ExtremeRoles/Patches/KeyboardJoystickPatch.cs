@@ -7,10 +7,13 @@ using HarmonyLib;
 using AmongUs.GameOptions;
 
 
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
+using ExtremeRoles.GameMode.RoleSelector;
 
 namespace ExtremeRoles.Patches
 {
@@ -41,21 +44,25 @@ namespace ExtremeRoles.Patches
                 GameData.Instance.AddPlayer(playerControl);
                 AmongUsClient.Instance.Spawn(playerControl, -2, InnerNet.SpawnFlags.None);
 
-                int hat = RandomGenerator.Instance.Next(HatManager.Instance.allHats.Count);
-                int pet = RandomGenerator.Instance.Next(HatManager.Instance.allPets.Count);
-                int skin = RandomGenerator.Instance.Next(HatManager.Instance.allSkins.Count);
-                int visor = RandomGenerator.Instance.Next(HatManager.Instance.allVisors.Count);
-                int color = RandomGenerator.Instance.Next(Palette.PlayerColors.Length);
+                var hatMng = FastDestroyableSingleton<HatManager>.Instance;
+                var rng = RandomGenerator.GetTempGenerator();
+
+                int hat = rng.Next(hatMng.allHats.Count);
+                int pet = rng.Next(hatMng.allPets.Count);
+                int skin = rng.Next(hatMng.allSkins.Count);
+                int visor = rng.Next(hatMng.allVisors.Count);
+                int color = rng.Next(Palette.PlayerColors.Length);
 
                 playerControl.transform.position = PlayerControl.LocalPlayer.transform.position;
                 playerControl.GetComponent<DummyBehaviour>().enabled = true;
                 playerControl.NetTransform.enabled = false;
-                playerControl.SetName(RandomString(10));
+                playerControl.SetName(new string(Enumerable.Repeat(chars, 10)
+                    .Select(s => s[rng.Next(s.Length)]).ToArray()));
                 playerControl.SetColor(color);
-                playerControl.SetHat(HatManager.Instance.allHats[hat].ProdId, color);
-                playerControl.SetPet(HatManager.Instance.allPets[pet].ProdId, color);
-                playerControl.SetVisor(HatManager.Instance.allVisors[visor].ProdId, color);
-                playerControl.SetSkin(HatManager.Instance.allSkins[skin].ProdId, color);
+                playerControl.SetHat(hatMng.allHats[hat].ProdId, color);
+                playerControl.SetPet(hatMng.allPets[pet].ProdId, color);
+                playerControl.SetVisor(hatMng.allVisors[visor].ProdId, color);
+                playerControl.SetSkin(hatMng.allSkins[skin].ProdId, color);
                 GameData.Instance.RpcSetTasks(playerControl.PlayerId, new byte[0]);
             }
 
@@ -83,7 +90,7 @@ namespace ExtremeRoles.Patches
             {
                 var dict = Roles.ExtremeRoleManager.GameRole;
                 if (dict.Count == 0) { return; }
-                for (int i = 0; i < GameData.Instance.AllPlayers.Count; i++)
+                for (int i = 0; i < GameData.Instance.PlayerCount; i++)
                 {
                     GameData.PlayerInfo playerInfo = GameData.Instance.AllPlayers[i];
                     var role = dict[playerInfo.PlayerId];
@@ -101,7 +108,7 @@ namespace ExtremeRoles.Patches
             {
                 var dict = Roles.ExtremeRoleManager.GameRole;
                 if (dict.Count == 0) { return; }
-                for (int i = 0; i < GameData.Instance.AllPlayers.Count; i++)
+                for (int i = 0; i < GameData.Instance.PlayerCount; i++)
                 {
                     GameData.PlayerInfo playerInfo = GameData.Instance.AllPlayers[i];
                     var role = dict[playerInfo.PlayerId];
@@ -138,26 +145,19 @@ namespace ExtremeRoles.Patches
             }
 
         }
-        private static string RandomString(int length)
-        {
-            return new string(Enumerable.Repeat(chars, length)
-                .Select(s => s[RandomGenerator.Instance.Next(s.Length)]).ToArray());
-        }
     }
 #endif
 
     [HarmonyPatch(typeof(KeyboardJoystick), nameof(KeyboardJoystick.Update))]
     public static class KeyboardJoystickPatch
     {
-        private static Module.IOption UseXionOption => OptionHolder.AllOption[
-            (int)OptionHolder.CommonOptionKey.UseXion];
-
         public static void Postfix()
         {
             if (AmongUsClient.Instance == null || CachedPlayerControl.LocalPlayer == null) 
             { return; }
 
-            if (UseXionOption.GetValue() && 
+            if (ExtremeGameModeManager.Instance.RoleSelector.CanUseXion &&
+                OptionHolder.AllOption[(int)RoleGlobalOption.UseXion].GetValue() &&
                 !ExtremeRolesPlugin.DebugMode.Value)
             {
                 Roles.Solo.Host.Xion.SpecialKeyShortCut();
@@ -213,7 +213,7 @@ namespace ExtremeRoles.Patches
             // キルとベントボタン
             if (CachedPlayerControl.LocalPlayer.Data == null ||
                 CachedPlayerControl.LocalPlayer.Data.Role == null ||
-                !ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
+                !RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
 
             var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
 
@@ -229,11 +229,10 @@ namespace ExtremeRoles.Patches
 
             if (player.GetButtonDown(50) && role.CanUseVent())
             {
-                if (role.IsVanillaRole())
+                if (role.TryGetVanillaRoleId(out RoleTypes roleId))
                 {
-                    if (!(((Roles.Solo.VanillaRoleWrapper)role).VanilaRoleId ==
-                            RoleTypes.Engineer) ||
-                        OptionHolder.Ship.EngineerUseImpostorVent)
+                    if (roleId != RoleTypes.Engineer || 
+                        ExtremeGameModeManager.Instance.ShipOption.EngineerUseImpostorVent)
                     {
                         hudManager.ImpostorVentButton.DoClick();
                     }

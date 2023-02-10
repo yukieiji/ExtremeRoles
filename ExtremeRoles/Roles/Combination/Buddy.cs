@@ -221,7 +221,7 @@ namespace ExtremeRoles.Roles.Combination
                 }
 
                 return string.Format(
-                    base.GetFullDescription(),
+                    base.GetIntroDescription(),
                     string.Concat(intro));
             }
             else
@@ -286,6 +286,8 @@ namespace ExtremeRoles.Roles.Combination
                 this.awake = false;
                 this.HasOtherVison = false;
             }
+
+            this.buddy = new BuddyContainer();
         }
 
         private BuddyContainer getSameBuddy()

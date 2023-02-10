@@ -3,7 +3,7 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
-      <Version>5.0.0.6</Version>
+      <Version>5.0.0.7</Version>
       <!--<VersionPrefix>5.0.0</VersionPrefix>-->
         <VersionSuffix>1stAnniversary</VersionSuffix>
         <Description>Extreme Skins for Extreme Roles</Description>
@@ -52,7 +52,7 @@
     </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="if not exist $(SolutionDir)ExtremeSkins\Resources\Asset mkdir $(SolutionDir)ExtremeSkins\Resources\Asset" />
-    <Exec Command="xcopy $(SolutionDir)UnityAsset\ExtremeSkins $(SolutionDir)ExtremeSkins\Resources\Asset /y /i" />
+    <Exec Command="robocopy /mir $(SolutionDir)UnityAsset\ExtremeSkins $(SolutionDir)ExtremeSkins\Resources\Asset &amp; if errorlevel 8 (exit 1) else (exit 0)" />
   </Target>
     <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">
       <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AmongUs)/BepInEx/plugins/" UseSymboliclinksIfPossible="true" />

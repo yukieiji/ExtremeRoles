@@ -23,6 +23,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 
 using ExtremeRoles.Compat.Interface;
 using ExtremeRoles.Compat.Mods;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -306,7 +307,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool IsAbilityUse()
         {
-
             if (!this.IsAwake) { return false; }
 
             this.target = Player.GetClosestPlayerInRange(
@@ -574,7 +574,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             CreateIntOption(
                 HypnotistOption.AwakeCheckImpostorNum,
-                1, 1, OptionHolder.MaxImposterNum, 1,
+                1, 1, GameSystem.MaxImposterNum, 1,
                 parentOps);
             CreateIntOption(
                 HypnotistOption.AwakeCheckTaskGage,
@@ -1118,6 +1118,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 case GameOverReason.ImpostorByKill:
                 case GameOverReason.ImpostorBySabotage:
                 case GameOverReason.ImpostorDisconnect:
+                case GameOverReason.HideAndSeek_ByKills:
                 case (GameOverReason)RoleGameOverReason.AssassinationMarin:
                     this.AddWinner(rolePlayerInfo, winner, pulsWinner);
                     break;
@@ -1230,6 +1231,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool IsAbilityUse()
         {
+            if (this.canUseCrakingModule.Count == 0) { return false; }
 
             switch (this.nextUseAbilityType)
             {
@@ -1346,7 +1348,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             if (targetRole.Id == this.Id)
             {
-                if (OptionHolder.Ship.IsSameNeutralSameWin)
+                if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
                 {
                     return true;
                 }

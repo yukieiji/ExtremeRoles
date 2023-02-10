@@ -1,11 +1,13 @@
 ﻿using System.Linq;
 
 using UnityEngine;
+using HarmonyLib;
+using AmongUs.GameOptions;
+
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Crewmate;
 
-using HarmonyLib;
-using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Patches
 {
@@ -14,7 +16,7 @@ namespace ExtremeRoles.Patches
     {
         public static void Postfix(ProgressTracker __instance)
         {
-            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return; }
+            if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
 
             Agency agency = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Agency>();
 
@@ -30,7 +32,7 @@ namespace ExtremeRoles.Patches
             {
                 __instance.gameObject.SetActive(true);
                 int num = (DestroyableSingleton<TutorialManager>.InstanceExists ? 
-                    1 : (gameData.AllPlayers.Count - GameOptionsManager.Instance.CurrentGameOptions.GetInt(
+                    1 : (gameData.PlayerCount - GameOptionsManager.Instance.CurrentGameOptions.GetInt(
                             Int32OptionNames.NumImpostors)));
                 num -= gameData.AllPlayers.ToArray().ToList().Count(
                     (GameData.PlayerInfo p) => p.Disconnected);

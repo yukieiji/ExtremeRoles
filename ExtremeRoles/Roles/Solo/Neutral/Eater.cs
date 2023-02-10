@@ -263,7 +263,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             int abilityNum = (int)allOpt[GetRoleOptionId(
                 RoleAbilityCommonOption.AbilityCount)].GetValue();
-            int halfPlayerNum = GameData.Instance.AllPlayers.Count / 2;
+            int halfPlayerNum = GameData.Instance.PlayerCount / 2;
 
             this.Button = new EaterAbilityButton(
                 UseAbility,

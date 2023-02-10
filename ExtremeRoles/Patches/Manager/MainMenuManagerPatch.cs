@@ -34,6 +34,11 @@ namespace ExtremeRoles.Patches.Manager
             var template = GameObject.Find("ExitGameButton");
             if (template == null) { return; }
 
+            // Mod ExitButton
+            PassiveButton passiveExitButton = template.GetComponent<PassiveButton>();
+            passiveExitButton.OnClick.AddListener(
+                (UnityEngine.Events.UnityAction)(() => Logging.BackupCurrentLog()));
+
             // UpdateButton
             GameObject updateButton = UnityEngine.Object.Instantiate(template, template.transform);
             updateButton.name = "ExtremeRolesUpdateButton";

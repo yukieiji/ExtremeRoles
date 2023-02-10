@@ -11,6 +11,7 @@ namespace ExtremeRoles.Helper
         public enum SoundType : byte
         {
             Kill,
+            GuardianAngleGuard,
             AgencyTakeTask,
             CommanderReduceKillCool,
             CurseMakerCurse,
@@ -55,6 +56,9 @@ namespace ExtremeRoles.Helper
                 {
                     case SoundType.Kill:
                         clip = CachedPlayerControl.LocalPlayer.PlayerControl.KillSfx;
+                        break;
+                    case SoundType.GuardianAngleGuard:
+                        clip = FastDestroyableSingleton<RoleManager>.Instance.protectAnim.UseSound;
                         break;
                     case SoundType.AgencyTakeTask:
                     case SoundType.CommanderReduceKillCool:

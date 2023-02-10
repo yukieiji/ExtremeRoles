@@ -1,18 +1,18 @@
 ﻿using System;
-using System.Linq;
 
 using HarmonyLib;
+using UnityEngine;
 
 using ExtremeRoles.Module;
-using UnityEngine;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 
 namespace ExtremeRoles.Patches.Option
 {
     [HarmonyPatch]
     public static class StringOptionSelectionUpdatePatch
     {
-        private const KeyCode MaxSelectionKey = KeyCode.LeftControl;
-        private const KeyCode SkipSelectionKey = KeyCode.LeftShift;
+        private const KeyCode maxSelectionKey = KeyCode.LeftControl;
+        private const KeyCode skipSelectionKey = KeyCode.LeftShift;
         
         private const int defaultStep = 1;
         private const int skipStep = 10;
@@ -22,12 +22,16 @@ namespace ExtremeRoles.Patches.Option
         {
             public static bool Prefix(StringOption __instance)
             {
-                IOption option = OptionHolder.AllOption.Values.FirstOrDefault(
-                    option => option.Body == __instance);
-                if (option == null) { return true; };
 
-                int step = Input.GetKey(SkipSelectionKey) ? skipStep : defaultStep;
-                int newSelection = Input.GetKey(MaxSelectionKey) ? 0 : option.CurSelection - step;
+                string idStr = __instance.gameObject.name.Replace(
+                    OptionMenuTab.StringOptionName, string.Empty);
+
+                if (!int.TryParse(idStr, out int id)) { return true; };
+
+                IOption option = OptionHolder.AllOption[id];
+
+                int step = Input.GetKey(skipSelectionKey) ? skipStep : defaultStep;
+                int newSelection = Input.GetKey(maxSelectionKey) ? 0 : option.CurSelection - step;
                 option.UpdateSelection(newSelection);
                 
                 return false;
@@ -39,12 +43,15 @@ namespace ExtremeRoles.Patches.Option
         {
             public static bool Prefix(StringOption __instance)
             {
-                IOption option = OptionHolder.AllOption.Values.FirstOrDefault(
-                    option => option.Body == __instance);
-                if (option == null) { return true; };
+                string idStr = __instance.gameObject.name.Replace(
+                    OptionMenuTab.StringOptionName, string.Empty);
 
-                int step = Input.GetKey(SkipSelectionKey) ? skipStep : defaultStep;
-                int newSelection = Input.GetKey(MaxSelectionKey) ? 
+                if (!int.TryParse(idStr, out int id)) { return true; };
+
+                IOption option = OptionHolder.AllOption[id];
+
+                int step = Input.GetKey(skipSelectionKey) ? skipStep : defaultStep;
+                int newSelection = Input.GetKey(maxSelectionKey) ? 
                     option.ValueCount - 1 : option.CurSelection + step;
                 option.UpdateSelection(newSelection);
 
@@ -58,14 +65,17 @@ namespace ExtremeRoles.Patches.Option
     {
         public static bool Prefix(StringOption __instance)
         {
-            IOption option = OptionHolder.AllOption.Values.FirstOrDefault(
-                option => option.Body == __instance);
-            if (option == null) { return true; };
+            string idStr = __instance.gameObject.name.Replace(
+                OptionMenuTab.StringOptionName, string.Empty);
+
+            if (!int.TryParse(idStr, out int id)) { return true; };
+
+            IOption option = OptionHolder.AllOption[id];
 
             __instance.OnValueChanged = new Action<OptionBehaviour>((o) => { });
-            __instance.TitleText.text = option.GetTranedName();
+            __instance.TitleText.text = option.GetTranslatedName();
             __instance.Value = __instance.oldValue = option.CurSelection;
-            __instance.ValueText.text = option.GetString();
+            __instance.ValueText.text = option.GetTranslatedValue();
 
             return false;
         }

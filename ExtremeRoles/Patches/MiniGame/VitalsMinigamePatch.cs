@@ -10,7 +10,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches.MiniGame
 {
@@ -91,9 +91,16 @@ namespace ExtremeRoles.Patches.MiniGame
         public static void Initialize()
         {
             Object.Destroy(timerText);
-            vitalTimer = OptionHolder.Ship.VitalLimitTime;
-            isRemoveVital = OptionHolder.Ship.IsRemoveVital;
-            enableVitalLimit = OptionHolder.Ship.EnableVitalLimit;
+        }
+
+        public static void LoadOptionValue()
+        {
+            var vitalOption = ExtremeGameModeManager.Instance.ShipOption.Vital;
+            if (vitalOption == null) { return; }
+
+            vitalTimer = vitalOption.VitalLimitTime;
+            isRemoveVital = vitalOption.DisableVital;
+            enableVitalLimit = vitalOption.EnableVitalLimit;
 
             Logging.Debug("---- VitalCondition ----");
             Logging.Debug($"IsRemoveVital:{isRemoveVital}");

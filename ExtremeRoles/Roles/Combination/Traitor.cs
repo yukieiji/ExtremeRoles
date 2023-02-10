@@ -205,6 +205,7 @@ namespace ExtremeRoles.Roles.Combination
 
         public bool IsAbilityUse()
         {
+            if (!this.canUseButton) { return false; }
          
             switch (this.nextUseAbilityType)
             {

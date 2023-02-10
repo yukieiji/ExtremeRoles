@@ -3,6 +3,8 @@
 using UnityEngine;
 using AmongUs.GameOptions;
 
+using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.Solo.Impostor;
@@ -45,12 +47,7 @@ namespace ExtremeRoles.Patches.MapModule
 
             canUse = couldUse = false;
 
-            if (GameOptionsManager.Instance.CurrentGameOptions.GameMode != GameModes.Normal)
-            {
-                return true;
-            }
-
-            if (OptionHolder.Ship.DisableVent)
+            if (ExtremeGameModeManager.Instance.ShipOption.DisableVent)
             {
                 __result = num;
                 return false;
@@ -176,7 +173,7 @@ namespace ExtremeRoles.Patches.MapModule
                 return false;
             }
 
-            if (ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd)
+            if (RoleAssignState.Instance.IsRoleSetUpEnd)
             {
                 var underWarper = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<UnderWarper>();
                 if (underWarper != null &&

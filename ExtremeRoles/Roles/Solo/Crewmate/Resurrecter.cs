@@ -223,8 +223,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 return;
             }
 
-            if (!this.awakeRole || 
-                (!this.canResurrect && !this.isResurrected))
+            if ((!this.awakeRole || 
+                (!this.canResurrect && !this.isResurrected)) &&
+                rolePlayer.myTasks.Count != 0)
             {
                 float taskGage = Player.GetPlayerTaskGage(rolePlayer);
 

@@ -3,10 +3,11 @@ using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using AmongUs.GameOptions;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches
 {
-	[HarmonyPatch(typeof(GameData), nameof(GameData.AddPlayer))]
+    [HarmonyPatch(typeof(GameData), nameof(GameData.AddPlayer))]
 	public static class GameDataAddPlayerPatch
 	{
 		public static void Postfix()
@@ -38,13 +39,14 @@ namespace ExtremeRoles.Patches
 	{
 		public static bool Prefix(GameData __instance)
 		{
-			var curOptions = GameOptionsManager.Instance.CurrentGameOptions;
-
-			if (curOptions.GameMode != GameModes.Normal) { return true; }
+			if (ExtremeGameModeManager.Instance == null ||
+				ExtremeGameModeManager.Instance.ShipOption == null) { return true; }
 
 			var roles = Roles.ExtremeRoleManager.GameRole;
-			if (roles.Count == 0 || 
-				(OptionHolder.Ship.DisableTaskWin && OptionHolder.Ship.DisableTaskWinWhenNoneTaskCrew))
+			var shipOpt = ExtremeGameModeManager.Instance.ShipOption;
+
+            if (roles.Count == 0 || 
+				(shipOpt.DisableTaskWin && shipOpt.DisableTaskWinWhenNoneTaskCrew))
 			{
 				__instance.TotalTasks = 88659;
 				__instance.CompletedTasks = 0;
@@ -61,7 +63,7 @@ namespace ExtremeRoles.Patches
 					playerInfo.Tasks != null &&
 					playerInfo.Object &&
 					(
-                        curOptions.GetBool(BoolOptionNames.GhostsDoTasks) || 
+                        GameManager.Instance.LogicOptions.GetGhostsDoTasks() || 
 						!playerInfo.IsDead
 					) &&
 					playerInfo.Role && 
@@ -92,7 +94,7 @@ namespace ExtremeRoles.Patches
 				}
 			}
 
-			if (doTaskCrew == 0 && OptionHolder.Ship.DisableTaskWinWhenNoneTaskCrew)
+			if (doTaskCrew == 0 && ExtremeGameModeManager.Instance.ShipOption.DisableTaskWinWhenNoneTaskCrew)
             {
 				totalTask = 88659;
 				completedTask = 0;	

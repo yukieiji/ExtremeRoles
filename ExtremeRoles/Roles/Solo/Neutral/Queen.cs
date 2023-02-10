@@ -3,7 +3,11 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using AmongUs.GameOptions;
+
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
@@ -11,8 +15,6 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.ExtremeShipStatus;
-using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
@@ -412,7 +414,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             if (this.isSameQueenTeam(targetRole))
             {
-                if (OptionHolder.Ship.IsSameNeutralSameWin)
+                if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
                 {
                     return true;
                 }
@@ -668,21 +670,19 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public override bool TryRolePlayerKillTo(
             PlayerControl rolePlayer, PlayerControl targetPlayer)
         {
-            if (this.AnotherRole?.Id == ExtremeRoleId.Sheriff)
+            if (targetPlayer.PlayerId == this.queenPlayerId)
             {
+                if (this.AnotherRole?.Id == ExtremeRoleId.Sheriff)
+                {
 
-                Player.RpcUncheckMurderPlayer(
-                    rolePlayer.PlayerId,
-                    rolePlayer.PlayerId,
-                    byte.MaxValue);
+                    Player.RpcUncheckMurderPlayer(
+                        rolePlayer.PlayerId,
+                        rolePlayer.PlayerId,
+                        byte.MaxValue);
 
-                ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
-                    rolePlayer.PlayerId, ExtremeShipStatus.PlayerStatus.MissShot);
-
-                return false;
-            }
-            else if (targetPlayer.PlayerId == this.queenPlayerId)
-            {
+                    ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
+                        rolePlayer.PlayerId, ExtremeShipStatus.PlayerStatus.MissShot);
+                }
                 return false;
             }
 

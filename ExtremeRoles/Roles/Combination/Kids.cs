@@ -17,11 +17,11 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.ExtremeShipStatus;
 
 using GhostAbilityButton = ExtremeRoles.Module.AbilityButton.GhostRoles.AbilityCountButton;
 using RoleButtonBase = ExtremeRoles.Module.AbilityButton.Roles.RoleAbilityButtonBase;
 using AmongUs.GameOptions;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Roles.Combination
 {
@@ -42,7 +42,7 @@ namespace ExtremeRoles.Roles.Combination
 
         public Kids() : base(
             Name, ColorPalette.KidsYellowGreen, 2,
-            OptionHolder.MaxImposterNum)
+            GameSystem.MaxImposterNum)
         {
             this.Roles.Add(new Delinquent());
 
@@ -547,8 +547,8 @@ namespace ExtremeRoles.Roles.Combination
             public WispBlackOuter(float time)
             {
                 // ここは全員呼ばれる
-                ExtremeRolesPlugin.ShipState.SetVison(
-                    ExtremeShipStatus.ForceVisonType.WispLightOff);
+                VisonComputer.Instance.SetModifier(
+                    VisonComputer.Modifier.WispLightOff);
                 this.maxTime = time;
                 this.timer = time;
             }
@@ -595,9 +595,9 @@ namespace ExtremeRoles.Roles.Combination
             public bool IsWin(Wisp wisp)
             {
                 int gameControlId = wisp.GameControlId;
-                if (OptionHolder.Ship.IsSameNeutralSameWin)
+                if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
                 {
-                    gameControlId = OptionHolder.Ship.SameNeutralGameControlId;
+                    gameControlId = PlayerStatistics.SameNeutralGameControlId;
                 }
                 if (this.affectedPlayerNum.TryGetValue(gameControlId, out int playerNum))
                 {
@@ -612,9 +612,9 @@ namespace ExtremeRoles.Roles.Combination
             public int CurAffectedPlayerNum(Wisp wisp)
             {
                 int gameControlId = wisp.GameControlId;
-                if (OptionHolder.Ship.IsSameNeutralSameWin)
+                if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
                 {
-                    gameControlId = OptionHolder.Ship.SameNeutralGameControlId;
+                    gameControlId = PlayerStatistics.SameNeutralGameControlId;
                 }
 
                 if (this.affectedPlayerNum.TryGetValue(gameControlId, out int playerNum))
@@ -663,8 +663,7 @@ namespace ExtremeRoles.Roles.Combination
 
             public void RepairVison()
             {
-                ExtremeRolesPlugin.ShipState.SetVison(
-                    ExtremeShipStatus.ForceVisonType.None);
+                VisonComputer.Instance.ResetModifier();
                 this.blackOuter = null;
             }
 
@@ -687,9 +686,9 @@ namespace ExtremeRoles.Roles.Combination
                     ++playerNum;
                 }
 
-                if (OptionHolder.Ship.IsSameNeutralSameWin)
+                if (ExtremeGameModeManager.Instance.ShipOption.IsSameNeutralSameWin)
                 {
-                    gameControlId = OptionHolder.Ship.SameNeutralGameControlId;
+                    gameControlId = PlayerStatistics.SameNeutralGameControlId;
                 }
 
                 this.affectedPlayerNum[gameControlId] = 
@@ -885,10 +884,12 @@ namespace ExtremeRoles.Roles.Combination
                 1.6f, 1.0f, 5.0f, 0.1f, parentOps);
             CreateFloatOption(
                 WispOption.TorchActiveTime,
-                10.0f, 5.0f, 60.0f, 0.1f, parentOps);
+                10.0f, 5.0f, 60.0f, 0.1f, parentOps,
+                format: OptionUnit.Second);
             CreateFloatOption(
                 WispOption.BlackOutTime,
-                10.0f, 2.5f, 30.0f, 0.1f, parentOps);
+                10.0f, 2.5f, 30.0f, 0.1f, parentOps,
+                format: OptionUnit.Second);
             this.CreateButtonOption(parentOps);
         }
 

@@ -158,7 +158,7 @@ namespace ExtremeRoles.Roles.Combination
         public const string Name = "HeroAca";
         public HeroAcademia() : base(
             Name, new Color(255f, 255f, 255f), 3,
-            OptionHolder.MaxImposterNum)
+            GameSystem.MaxImposterNum)
         {
             this.Roles.Add(new Hero());
             this.Roles.Add(new Villain());
@@ -467,7 +467,9 @@ namespace ExtremeRoles.Roles.Combination
             this.Button.SetLabelToCrewmate();
         }
 
-        public bool IsAbilityUse() => this.IsCommonUse();
+        public bool IsAbilityUse() => 
+            this.cond == OneForAllCondition.FeatButtonAbility && 
+            this.IsCommonUse();
 
         public void RoleAbilityResetOnMeetingEnd()
         {

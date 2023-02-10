@@ -1,7 +1,10 @@
 ﻿using HarmonyLib;
+using AmongUs.GameOptions;
+
+using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Extension.State;
-using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Patches.Role
 {
@@ -12,7 +15,7 @@ namespace ExtremeRoles.Patches.Role
             RoleBehaviour __instance,
             ref float __result)
         {
-            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return true; }
+            if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 
             var role = ExtremeRoleManager.GameRole[__instance.Player.PlayerId];
 
@@ -32,7 +35,7 @@ namespace ExtremeRoles.Patches.Role
             ref bool __result,
             [HarmonyArgument(0)] GameData.PlayerInfo target)
         {
-            if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return true; }
+            if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 
             var gameRoles = ExtremeRoleManager.GameRole;
             var role = ExtremeRoleManager.GameRole[__instance.Player.PlayerId];
@@ -46,7 +49,7 @@ namespace ExtremeRoles.Patches.Role
                 target.PlayerId !=  __instance.Player.PlayerId && 
                 !(target.Role == null) && 
                 !(target.Object == null) && 
-                (!target.Object.inVent || OptionHolder.Ship.CanKillVentInPlayer) &&
+                (!target.Object.inVent || ExtremeGameModeManager.Instance.ShipOption.CanKillVentInPlayer) &&
                 !role.IsSameTeam(gameRoles[target.PlayerId]);
 
             return false;

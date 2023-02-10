@@ -46,7 +46,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         public override string RoleName => 
-            string.Concat(this.IsImpostor() ? "Evil" : "Nice", this.RawRoleName);
+            string.Concat(this.roleNamePrefix, this.RawRoleName);
 
         private bool canGuessNoneRole;
 
@@ -58,6 +58,7 @@ namespace ExtremeRoles.Roles.Combination
         private GuesserUi guesserUi = null;
 
         private TextMeshPro meetingGuessText = null;
+        private string roleNamePrefix;
 
         private static HashSet<ExtremeRoleId> alwaysMissRole = new HashSet<ExtremeRoleId>()
         {
@@ -485,12 +486,12 @@ namespace ExtremeRoles.Roles.Combination
                 false, parentOps);
             CreateIntOption(
                 GuesserOption.GuessNum,
-                1, 1, OptionHolder.MaxImposterNum, 1,
+                1, 1, GameSystem.MaxImposterNum, 1,
                 parentOps,
                 format: OptionUnit.Shot);
             CreateIntOption(
                 GuesserOption.MaxGuessNumWhenMeeting,
-                1, 1, OptionHolder.MaxImposterNum, 1,
+                1, 1, GameSystem.MaxImposterNum, 1,
                 parentOps,
                 format: OptionUnit.Shot);
             var noneGuessRoleOpt = CreateBoolOption(
@@ -539,6 +540,7 @@ namespace ExtremeRoles.Roles.Combination
                 GetRoleOptionId(GuesserOption.MaxGuessNumWhenMeeting)].GetValue();
 
             this.curGuessNum = 0;
+            this.roleNamePrefix = this.CreateImpCrewPrefix();
         }
 
         private void meetingInfoSetActive(bool active)

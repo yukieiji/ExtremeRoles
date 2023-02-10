@@ -69,6 +69,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ref Il2CppSystem.Collections.Generic.List<WinningPlayerData> winner,
             ref List<GameData.PlayerInfo> pulsWinner)
         {
+
             if (!rolePlayerInfo.IsDead || this.isDeadWin) { return; }
 
             switch (reason)
@@ -76,6 +77,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 case GameOverReason.HumansByTask:
                 case GameOverReason.HumansByVote:
                 case GameOverReason.HumansDisconnect:
+                case GameOverReason.HideAndSeek_ByTimer:
                     this.RemoveWinner(rolePlayerInfo, winner, pulsWinner);
                     break;
                 default:
@@ -84,7 +86,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
         public void Update(PlayerControl rolePlayer)
         {
-            if (!this.awakeRole || !this.isDeadWin)
+            if ((!this.awakeRole || !this.isDeadWin) && 
+                rolePlayer.myTasks.Count != 0)
             {
                 float taskGage = Player.GetPlayerTaskGage(rolePlayer);
                 

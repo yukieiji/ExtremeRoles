@@ -173,7 +173,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
             Dictionary <SummaryType, StringBuilder> finalSummary = createSummaryBase();
 
-            for (int i = 0; i < OptionHolder.VanillaMaxPlayerNum; ++i)
+            for (int i = 0; i < GameSystem.VanillaMaxPlayerNum; ++i)
             {
                 tagColor.Add(
                     UnityEngine.Random.ColorHSV(0f, 1f, 0.5f, 1f, 0.8f, 1f, 1f, 1f));
@@ -195,7 +195,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                 string tag = summary.Role.GetRoleTag();
 
                 int id = summary.Role.GameControlId;
-                int index = id % OptionHolder.VanillaMaxPlayerNum;
+                int index = id % GameSystem.VanillaMaxPlayerNum;
                 if (tag != string.Empty)
                 {
                     tag = Design.ColoedString(
@@ -214,7 +214,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
                     {
                         string anotherTag = mutiAssignRole.AnotherRole.GetRoleTag();
                         id = mutiAssignRole.AnotherRole.GameControlId;
-                        index = id % OptionHolder.VanillaMaxPlayerNum;
+                        index = id % GameSystem.VanillaMaxPlayerNum;
 
                         if (anotherTag != string.Empty)
                         {

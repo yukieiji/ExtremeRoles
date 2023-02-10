@@ -96,8 +96,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.CleanUp);
         }
 
-        public bool IsAbilityUse() => this.IsCommonUse();
-
+        public bool IsAbilityUse() => 
+            this.IsAwake && this.IsCommonUse();
 
         public void RoleAbilityResetOnMeetingEnd()
         {
@@ -250,8 +250,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             CreateIntOption(
                 OverLoaderOption.AwakeImpostorNum,
-                OptionHolder.MaxImposterNum, 1,
-                OptionHolder.MaxImposterNum, 1,
+                GameSystem.MaxImposterNum, 1,
+                GameSystem.MaxImposterNum, 1,
                 parentOps);
 
             CreateIntOption(

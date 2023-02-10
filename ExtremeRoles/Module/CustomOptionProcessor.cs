@@ -49,8 +49,8 @@ namespace ExtremeRoles.Module
                         csv.WriteLine(
                             string.Format("{1}{0}{2}{0}{3}{0}{4}",
                                 comma,
-                                clean(option.GetTranedName()),
-                                clean(option.GetString()),
+                                clean(option.GetTranslatedName()),
+                                clean(option.GetTranslatedValue()),
                                 clean(option.Name),
                                 option.CurSelection));
                     }

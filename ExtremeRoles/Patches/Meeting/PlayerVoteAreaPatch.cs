@@ -7,14 +7,17 @@ using HarmonyLib;
 using UnityEngine;
 
 using BepInEx.IL2CPP.Utils.Collections;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Roles;
+
+using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.GhostRoles;
+using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Patches.Meeting
 {
-	public static class NamePlateHelper
+    public static class NamePlateHelper
 	{
 		public static bool NameplateChange = true;
 		private static Sprite blankNameplate = null;
@@ -62,7 +65,7 @@ namespace ExtremeRoles.Patches.Meeting
 
 		public static bool Prefix(PlayerVoteArea __instance)
 		{
-			if (!ExtremeRolesPlugin.ShipState.IsRoleSetUpEnd) { return true; }
+			if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 			if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
 
 			var state = ExtremeRolesPlugin.ShipState;
@@ -296,7 +299,7 @@ namespace ExtremeRoles.Patches.Meeting
 	{
 		public static void Postfix(PlayerVoteArea __instance)
 		{
-			if (OptionHolder.Ship.FixedMeetingPlayerLevel)
+			if (ExtremeGameModeManager.Instance.ShipOption.IsFixedVoteAreaPlayerLevel)
             {
 				__instance.LevelNumberText.text = "99";
 			}
@@ -331,7 +334,7 @@ namespace ExtremeRoles.Patches.Meeting
 			[HarmonyArgument(1)] bool isDead,
 			[HarmonyArgument(2)] bool isGuardian = false)
         {
-			if (OptionHolder.Ship.IsRemoveAngleIcon)
+			if (ExtremeGameModeManager.Instance.ShipOption.IsRemoveAngleIcon)
 			{
 				__instance.GAIcon.gameObject.SetActive(false);
 			}
