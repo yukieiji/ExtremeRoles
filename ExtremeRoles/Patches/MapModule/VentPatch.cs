@@ -73,7 +73,9 @@ namespace ExtremeRoles.Patches.MapModule
                 return true; 
             }
 
-            bool roleCouldUse = ExtremeRoleManager.GameRole[playerInfo.PlayerId].CanUseVent();
+            var role = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
+
+            bool roleCouldUse = role.CanUseVent();
 
             if (isCustomMapVent)
             {
@@ -87,8 +89,17 @@ namespace ExtremeRoles.Patches.MapModule
             couldUse = (
                 !playerInfo.IsDead &&
                 (player.inVent || roleCouldUse) && 
-                (player.CanMove || player.inVent));
-            
+                ExtremeGameModeManager.Instance.Usable.CanUseVent(role) &&
+                (player.CanMove || player.inVent)
+            );
+
+            if (role.TryGetVanillaRoleId(out _))
+            {
+                couldUse = 
+                    couldUse && 
+                    playerInfo.Role.CanUse(__instance.Cast<IUsable>());
+            }
+         
             canUse = couldUse;
             if (canUse)
             {
