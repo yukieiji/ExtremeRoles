@@ -1,6 +1,7 @@
 ﻿using AmongUs.GameOptions;
 using ExtremeRoles.GameMode.Factory;
 using ExtremeRoles.GameMode.IntroRunner;
+using ExtremeRoles.GameMode.Logic.Usable;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
 
@@ -16,6 +17,8 @@ namespace ExtremeRoles.GameMode
 
         public IShipGlobalOption ShipOption { get; private set; }
         public IRoleSelector RoleSelector { get; private set; }
+
+        public ILogicUsable Usable { get; private set; }
 
         public ExtremeGameModeManager(GameModes mode)
         {
@@ -39,6 +42,7 @@ namespace ExtremeRoles.GameMode
 
             Instance.ShipOption = factory.CreateGlobalOption();
             Instance.RoleSelector = factory.CreateRoleSelector();
+            Instance.Usable = factory.CreateLogicUsable();
         }
 
         public void Load()

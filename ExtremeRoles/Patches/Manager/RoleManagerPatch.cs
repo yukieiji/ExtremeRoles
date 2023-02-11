@@ -244,8 +244,9 @@ namespace ExtremeRoles.Patches.Manager
             if (!spawnCheckRoleId.Any()) { return; }
 
             var shuffledSpawnCheckRoleId = spawnCheckRoleId.OrderBy(x => RandomGenerator.Instance.Next()).ToList();
+            var shuffledTargetPlayer = targetPlayer.OrderBy(x => RandomGenerator.Instance.Next());
 
-            foreach (PlayerControl player in targetPlayer)
+            foreach (PlayerControl player in shuffledTargetPlayer)
             {
                 Logging.Debug(
                     $"-------------------AssignToPlayer:{player.Data.PlayerName}-------------------");
