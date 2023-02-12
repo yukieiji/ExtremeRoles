@@ -77,6 +77,47 @@ namespace ExtremeRoles.Patches
 #endif
         }
     }
+    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Exiled))]
+    public static class PlayerControlExiledPatch
+    {
+        public static void Postfix(
+            PlayerControl __instance)
+        {
+            if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+
+            ExtremeRolesPlugin.ShipState.AddDeadInfo(
+                __instance, DeathReason.Exile, null);
+
+            var role = ExtremeRoleManager.GetLocalPlayerRole();
+
+            if (role is IRoleExilHook hookRole)
+            {
+                hookRole.HookExil(__instance);
+            }
+            if (role is MultiAssignRoleBase multiAssignRole)
+            {
+                if (multiAssignRole.AnotherRole is IRoleExilHook multiHookRole)
+                {
+                    multiHookRole.HookExil(__instance);
+                }
+            }
+
+            var exiledPlayerRole = ExtremeRoleManager.GameRole[__instance.PlayerId];
+
+            exiledPlayerRole.ExiledAction(__instance);
+            if (exiledPlayerRole is MultiAssignRoleBase multiAssignExiledPlayerRole)
+            {
+                multiAssignExiledPlayerRole.AnotherRole?.ExiledAction(__instance);
+            }
+
+            if (!exiledPlayerRole.HasTask())
+            {
+                __instance.ClearTasks();
+            }
+
+            ExtremeRolesPlugin.ShipState.SetDisableWinCheck(false);
+        }
+    }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Deserialize))]
     public static class PlayerControlDeserializePatch
@@ -115,27 +156,6 @@ namespace ExtremeRoles.Patches
                 state.IncreaseMeetingCount();
             }
         }
-    }
-
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Exiled))]
-    public static class PlayerControlExiledPatch
-    {
-        public static void Postfix(PlayerControl __instance)
-        {
-
-            if (ExtremeRoleManager.GameRole.Count == 0) { return; }
-
-            ExtremeRolesPlugin.ShipState.AddDeadInfo(
-                __instance, DeathReason.Exile, null);
-
-            var role = ExtremeRoleManager.GameRole[__instance.PlayerId];
-
-            if (!role.HasTask())
-            {
-                __instance.ClearTasks();
-            }
-        }
-
     }
 
     [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]

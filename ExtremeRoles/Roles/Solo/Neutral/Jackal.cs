@@ -362,9 +362,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         }
 
         public override void ExiledAction(
-            GameData.PlayerInfo rolePlayer)
+            PlayerControl rolePlayer)
         {
-            SidekickToJackal(rolePlayer.Object);
+            SidekickToJackal(rolePlayer);
         }
 
         public override void RolePlayerKilledAction(
