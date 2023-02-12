@@ -4,6 +4,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using AmongUs.GameOptions;
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.RoleAssign;
 
 namespace ExtremeRoles.Patches
 {
@@ -39,8 +40,7 @@ namespace ExtremeRoles.Patches
 	{
 		public static bool Prefix(GameData __instance)
 		{
-			if (ExtremeGameModeManager.Instance == null ||
-				ExtremeGameModeManager.Instance.ShipOption == null) { return true; }
+			if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 
 			var roles = Roles.ExtremeRoleManager.GameRole;
 			var shipOpt = ExtremeGameModeManager.Instance.ShipOption;
