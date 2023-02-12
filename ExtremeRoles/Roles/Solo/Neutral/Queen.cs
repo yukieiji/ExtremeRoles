@@ -348,7 +348,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             return;
         }
 
-        public override void ExiledAction(GameData.PlayerInfo rolePlayer)
+        public override void ExiledAction(PlayerControl rolePlayer)
         {
             foreach (byte playerId in this.servantPlayerId)
             {

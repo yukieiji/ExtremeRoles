@@ -640,7 +640,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         public override void ExiledAction(
-            GameData.PlayerInfo rolePlayer)
+            PlayerControl rolePlayer)
         {
             HeroAcademia.UpdateVigilante(
                 HeroAcademia.Condition.HeroDown,
@@ -830,7 +830,7 @@ namespace ExtremeRoles.Roles.Combination
             return true;
         }
         public override void ExiledAction(
-            GameData.PlayerInfo rolePlayer)
+            PlayerControl rolePlayer)
         {
             HeroAcademia.UpdateVigilante(
                 HeroAcademia.Condition.VillainDown,

@@ -181,7 +181,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
 
         public override void ExiledAction(
-            GameData.PlayerInfo rolePlayer)
+            PlayerControl rolePlayer)
         {
             updateTaskDo();
         }

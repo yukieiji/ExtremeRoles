@@ -269,7 +269,7 @@ namespace ExtremeRoles.Roles.Combination
             upgradeAssistant();
         }
 
-        public override void ExiledAction(GameData.PlayerInfo rolePlayer)
+        public override void ExiledAction(PlayerControl rolePlayer)
         {
             upgradeAssistant();
         }
@@ -484,7 +484,7 @@ namespace ExtremeRoles.Roles.Combination
             downgradeDetective();
         }
 
-        public override void ExiledAction(GameData.PlayerInfo rolePlayer)
+        public override void ExiledAction(PlayerControl rolePlayer)
         {
             downgradeDetective();
         }

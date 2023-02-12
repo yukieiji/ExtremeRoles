@@ -331,7 +331,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.isActiveTimer = false;
         }
 
-        public void HookWrapUp(GameData.PlayerInfo exiledPlayer)
+        public void HookExil(PlayerControl exiledPlayer)
         {
             updateAwakeCheck(exiledPlayer);
         }
@@ -538,7 +538,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             return true;
         }
 
-        public override void ExiledAction(GameData.PlayerInfo rolePlayer)
+        public override void ExiledAction(PlayerControl rolePlayer)
         {
             foreach (byte playerId in this.doll)
             {
@@ -889,7 +889,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        private void updateAwakeCheck(GameData.PlayerInfo ignorePlayer)
+        private void updateAwakeCheck(PlayerControl ignorePlayer)
         {
             int impNum = 0;
 

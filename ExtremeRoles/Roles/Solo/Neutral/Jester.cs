@@ -131,7 +131,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             return this.IsCommonUse() && this.tmpTarget != null;
         }
 
-        public override void ExiledAction(GameData.PlayerInfo rolePlayer)
+        public override void ExiledAction(PlayerControl rolePlayer)
         {
             this.IsWin = true;
         }

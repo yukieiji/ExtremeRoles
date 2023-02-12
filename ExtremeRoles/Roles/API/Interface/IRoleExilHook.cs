@@ -2,6 +2,6 @@
 {
     public interface IRoleExilHook
     {
-        public void HookWrapUp(GameData.PlayerInfo exiledPlayer);
+        public void HookExil(PlayerControl exiledPlayer);
     }
 }

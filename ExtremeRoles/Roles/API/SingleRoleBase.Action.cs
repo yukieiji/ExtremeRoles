@@ -3,7 +3,7 @@
     public abstract partial class SingleRoleBase
     {
         public virtual void ExiledAction(
-            GameData.PlayerInfo rolePlayer)
+            PlayerControl rolePlayer)
         {
             return;
         }

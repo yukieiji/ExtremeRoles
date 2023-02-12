@@ -104,7 +104,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public override bool IsSameTeam(SingleRoleBase targetRole) =>
             this.IsNeutralSameTeam(targetRole);
 
-        public override void ExiledAction(GameData.PlayerInfo rolePlayer)
+        public override void ExiledAction(PlayerControl rolePlayer)
         {
             resetTask(rolePlayer.PlayerId);
         }
