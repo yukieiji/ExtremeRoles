@@ -283,7 +283,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     var sidekickOption = sourceJackal.SidekickOption;
                     var lover = (Combination.Lover)targetRole;
                     lover.CanHasAnotherRole = true;
-                    lover.SetAnotherRole(newSidekick);
+
+                    ExtremeRoleManager.SetNewAnothorRole(targetId, newSidekick);
 
                     lover.Team = ExtremeRoleType.Neutral;
                     lover.HasTask = false;
@@ -688,12 +689,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 multiAssignRole.HasTask = false;
                 multiAssignRole.UseSabotage = false;
                 multiAssignRole.UseVent = false;
-                multiAssignRole.SetAnotherRole(newJackal);
-                ExtremeRoleManager.GameRole[targetId] = multiAssignRole;
+
+                ExtremeRoleManager.SetNewAnothorRole(targetId, newJackal);
             }
             else
             {
-                ExtremeRoleManager.GameRole[targetId] = newJackal;
+                ExtremeRoleManager.SetNewRole(targetId, newJackal);
             }
 
         }

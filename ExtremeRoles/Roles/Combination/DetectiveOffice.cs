@@ -737,10 +737,7 @@ namespace ExtremeRoles.Roles.Combination
                 newRole.Team = prevRole.AnotherRole.Team;
             }
 
-            lock (ExtremeRoleManager.GameRole)
-            {
-                ExtremeRoleManager.GameRole[playerId] = newRole;
-            }
+            ExtremeRoleManager.SetNewRole(playerId, newRole);
         }
 
         public void CleanUp()

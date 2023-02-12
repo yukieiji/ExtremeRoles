@@ -418,16 +418,12 @@ namespace ExtremeRoles.Roles
                 addRole.Initialize();
                 addRole.GameControlId = id;
                 roleControlId = id + 1;
-                lock (GameRole)
-                {
-                    GameRole.Add(playerId, addRole);
-                }
+
+                SetNewRole(playerId, addRole);
 
                 if (hasVanilaRole)
                 {
-                    ((MultiAssignRoleBase)GameRole[
-                        playerId]).SetAnotherRole(
-                            new Solo.VanillaRoleWrapper(roleType));
+                    SetNewAnothorRole(playerId, new Solo.VanillaRoleWrapper(roleType));
                 }
                 Helper.Logging.Debug($"PlayerId:{playerId}   AssignTo:{addRole.RoleName}");
             }
@@ -487,7 +483,14 @@ namespace ExtremeRoles.Roles
             lock (GameRole)
             {
                 GameRole[playerId] =  newRole;
+                ExtremeRolesPlugin.ShipState.AddGlobalActionRole(newRole);
             }
+        }
+
+        public static void SetNewAnothorRole(byte playerId, SingleRoleBase newRole)
+        {
+            ((MultiAssignRoleBase)GameRole[playerId]).SetAnotherRole(newRole);
+            ExtremeRolesPlugin.ShipState.AddGlobalActionRole(newRole);
         }
 
         private static void setPlyerIdToSingleRole(
@@ -510,16 +513,12 @@ namespace ExtremeRoles.Roles
 
             if (!GameRole.ContainsKey(playerId))
             {
-                lock (GameRole)
-                {
-                    GameRole.Add(playerId, addRole);
-                }
+                SetNewRole(playerId, addRole);
             }
             else
             {
-                ((MultiAssignRoleBase)GameRole[
-                    playerId]).SetAnotherRole(addRole);
-                
+                SetNewAnothorRole(playerId, addRole);
+
                 IRoleAbility multiAssignAbilityRole = ((MultiAssignRoleBase)GameRole[
                     playerId]) as IRoleAbility;
 

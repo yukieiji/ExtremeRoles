@@ -184,8 +184,6 @@ namespace ExtremeRoles.Roles.Combination
             this.CanSeeRoleBeforeFirstMeeting = allOption[
                 GetRoleOptionId(AssassinOption.CanSeeRoleBeforeFirstMeeting)].GetValue();
             this.IsFirstMeeting = true;
-
-            ExtremeRolesPlugin.ShipState.AddGlobalActionRole(this);
         }
 
         private void assassinMeetingTriggerOn(
