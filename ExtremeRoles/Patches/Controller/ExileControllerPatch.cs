@@ -158,13 +158,14 @@ namespace ExtremeRoles.Patches.Controller
 
             var state = ExtremeRolesPlugin.ShipState;
 
-
             if (state.TryGetDeadAssasin(out byte playerId))
             {
                 var assasin = (Roles.Combination.Assassin)ExtremeRoleManager.GameRole[playerId];
                 assasin.ExiledAction(
                     Helper.Player.GetPlayerControlById(playerId));
             }
+
+
             var role = ExtremeRoleManager.GetLocalPlayerRole();
             if (role is IRoleAbility abilityRole)
             {
@@ -174,7 +175,6 @@ namespace ExtremeRoles.Patches.Controller
             {
                 resetRole.ResetOnMeetingEnd();
             }
-
             if (role is MultiAssignRoleBase multiAssignRole)
             {
                 if (multiAssignRole.AnotherRole is IRoleAbility abilityMultiAssignRole)
