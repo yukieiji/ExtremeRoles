@@ -1,10 +1,10 @@
 ﻿using HarmonyLib;
+
+using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using AmongUs.GameOptions;
-using ExtremeRoles.GameMode;
-using ExtremeRoles.Module.RoleAssign;
 
 namespace ExtremeRoles.Patches
 {
