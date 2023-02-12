@@ -113,10 +113,9 @@ namespace ExtremeRoles.Patches.Controller
         [HarmonyPatch(typeof(ExileController), nameof(ExileController.WrapUp))]
         public static class BaseExileControllerPatch
         {
-            public static bool Prefix(ExileController __instance)
+            public static void Prefix(ExileController __instance)
             {
-                WrapUpPrefix(__instance);
-                return true;
+                WrapUpPrefix();
             }
             public static void Postfix(ExileController __instance)
             {
@@ -127,23 +126,13 @@ namespace ExtremeRoles.Patches.Controller
         [HarmonyPatch(typeof(AirshipExileController), nameof(AirshipExileController.WrapUpAndSpawn))]
         class AirshipExileControllerPatch
         {
-            public static bool Prefix(AirshipExileController __instance)
+            public static void Prefix(AirshipExileController __instance)
             {
-                WrapUpPrefix(__instance);
-                return true;
+                WrapUpPrefix();
             }
             public static void Postfix(AirshipExileController __instance)
             {
                 WrapUpPostfix(__instance.exiled);
-            }
-        }
-
-        public static void WrapUpPrefix(ExileController __instance)
-        {
-            resetAssassinMeeting();
-            if (__instance.exiled != null)
-            {
-                tempWinCheckDisable(__instance.exiled);
             }
         }
 
@@ -198,25 +187,12 @@ namespace ExtremeRoles.Patches.Controller
             }
         }
 
-        private static void resetAssassinMeeting()
+        public static void WrapUpPrefix()
         {
             if (ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
             {
                 ExtremeRolesPlugin.ShipState.AssassinMeetingTriggerOff();
             }
         }
-        private static void tempWinCheckDisable(GameData.PlayerInfo exiled)
-        {
-
-            if (ExtremeRoleManager.GameRole.Count == 0) { return; }
-
-            var role = ExtremeRoleManager.GameRole[exiled.PlayerId];
-
-            if (ExtremeRoleManager.IsDisableWinCheckRole(role))
-            {
-                ExtremeRolesPlugin.ShipState.SetDisableWinCheck(true);
-            }
-        }
-
     }
 }

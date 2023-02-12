@@ -85,10 +85,16 @@ namespace ExtremeRoles.Patches
         {
             if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
+            var role = ExtremeRoleManager.GetLocalPlayerRole();
+            var exiledPlayerRole = ExtremeRoleManager.GameRole[__instance.PlayerId];
+
+            if (ExtremeRoleManager.IsDisableWinCheckRole(exiledPlayerRole))
+            {
+                ExtremeRolesPlugin.ShipState.SetDisableWinCheck(true);
+            }
+
             ExtremeRolesPlugin.ShipState.AddDeadInfo(
                 __instance, DeathReason.Exile, null);
-
-            var role = ExtremeRoleManager.GetLocalPlayerRole();
 
             if (role is IRoleExilHook hookRole)
             {
@@ -101,8 +107,6 @@ namespace ExtremeRoles.Patches
                     multiHookRole.HookExil(__instance);
                 }
             }
-
-            var exiledPlayerRole = ExtremeRoleManager.GameRole[__instance.PlayerId];
 
             exiledPlayerRole.ExiledAction(__instance);
             if (exiledPlayerRole is MultiAssignRoleBase multiAssignExiledPlayerRole)
