@@ -3,7 +3,7 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>latest</LangVersion>
         <DebugType>embedded</DebugType>
-      <Version>5.1.0.1</Version>
+      <Version>5.1.0.2</Version>
       <!--<VersionPrefix>5.1.0</VersionPrefix>-->
       <VersionSuffix>HideNSeek</VersionSuffix> 
         <Description>Extreme Roles for Advanced user</Description>
