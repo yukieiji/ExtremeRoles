@@ -159,7 +159,6 @@ namespace ExtremeRoles
                         option.SwitchPreset();
                     }
                 });
-            ShareOptionSelections();
         }
 
         public static void ShareOptionSelections()
