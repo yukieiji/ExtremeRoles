@@ -463,7 +463,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
 
 
-        public override void ExiledAction(GameData.PlayerInfo rolePlayer)
+        public override void ExiledAction(PlayerControl rolePlayer)
         {
             resetShield(rolePlayer.PlayerId);
         }

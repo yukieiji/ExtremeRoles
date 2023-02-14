@@ -2,6 +2,7 @@
 
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
+using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using AmongUs.GameOptions;
@@ -112,10 +113,9 @@ namespace ExtremeRoles.Patches.Controller
         [HarmonyPatch(typeof(ExileController), nameof(ExileController.WrapUp))]
         public static class BaseExileControllerPatch
         {
-            public static bool Prefix(ExileController __instance)
+            public static void Prefix(ExileController __instance)
             {
-                WrapUpPrefix(__instance);
-                return true;
+                WrapUpPrefix();
             }
             public static void Postfix(ExileController __instance)
             {
@@ -126,23 +126,13 @@ namespace ExtremeRoles.Patches.Controller
         [HarmonyPatch(typeof(AirshipExileController), nameof(AirshipExileController.WrapUpAndSpawn))]
         class AirshipExileControllerPatch
         {
-            public static bool Prefix(AirshipExileController __instance)
+            public static void Prefix(AirshipExileController __instance)
             {
-                WrapUpPrefix(__instance);
-                return true;
+                WrapUpPrefix();
             }
             public static void Postfix(AirshipExileController __instance)
             {
                 WrapUpPostfix(__instance.exiled);
-            }
-        }
-
-        public static void WrapUpPrefix(ExileController __instance)
-        {
-            resetAssassinMeeting();
-            if (__instance.exiled != null)
-            {
-                tempWinCheckDisable(__instance.exiled);
             }
         }
 
@@ -157,55 +147,32 @@ namespace ExtremeRoles.Patches.Controller
 
             var state = ExtremeRolesPlugin.ShipState;
 
-
             if (state.TryGetDeadAssasin(out byte playerId))
             {
                 var assasin = (Roles.Combination.Assassin)ExtremeRoleManager.GameRole[playerId];
                 assasin.ExiledAction(
-                    Helper.Player.GetPlayerControlById(playerId).Data);
+                    Helper.Player.GetPlayerControlById(playerId));
             }
+
 
             var role = ExtremeRoleManager.GetLocalPlayerRole();
-            var abilityRole = role as IRoleAbility;
-            var hookRole = role as IRoleExilHook;
-
-            if (hookRole != null)
-            {
-                hookRole.HookWrapUp(exiled);
-            }
-
-            if (abilityRole != null)
+            if (role is IRoleAbility abilityRole)
             {
                 abilityRole.ResetOnMeetingEnd();
             }
-            var resetRole = role as IRoleResetMeeting;
-            if (resetRole != null)
+            if (role is IRoleResetMeeting resetRole)
             {
                 resetRole.ResetOnMeetingEnd();
             }
-
-            var multiAssignRole = role as Roles.API.MultiAssignRoleBase;
-            if (multiAssignRole != null)
+            if (role is MultiAssignRoleBase multiAssignRole)
             {
-                if (multiAssignRole.AnotherRole != null)
+                if (multiAssignRole.AnotherRole is IRoleAbility abilityMultiAssignRole)
                 {
-                    hookRole = multiAssignRole.AnotherRole as IRoleExilHook;
-                    if (hookRole != null)
-                    {
-                        hookRole.HookWrapUp(exiled);
-                    }
-
-                    abilityRole = multiAssignRole.AnotherRole as IRoleAbility;
-                    if (abilityRole != null)
-                    {
-                        abilityRole.ResetOnMeetingEnd();
-                    }
-
-                    resetRole = multiAssignRole.AnotherRole as IRoleResetMeeting;
-                    if (resetRole != null)
-                    {
-                        resetRole.ResetOnMeetingEnd();
-                    }
+                    abilityMultiAssignRole.ResetOnMeetingEnd();
+                }
+                if (multiAssignRole.AnotherRole is IRoleResetMeeting resetMultiAssignRole)
+                {
+                    resetMultiAssignRole.ResetOnMeetingEnd();
                 }
             }
 
@@ -218,43 +185,14 @@ namespace ExtremeRoles.Patches.Controller
                 }
                 ghostRole.ReseOnMeetingEnd();
             }
-
-            if (exiled == null) { return; };
-
-            var exiledPlayerRole = ExtremeRoleManager.GameRole[exiled.PlayerId];
-            var multiAssignExiledPlayerRole = exiledPlayerRole as Roles.API.MultiAssignRoleBase;
-
-            exiledPlayerRole.ExiledAction(exiled);
-            if (multiAssignExiledPlayerRole != null)
-            {
-                if (multiAssignExiledPlayerRole.AnotherRole != null)
-                {
-                    multiAssignExiledPlayerRole.AnotherRole.ExiledAction(exiled);
-                }
-            }
-
-            ExtremeRolesPlugin.ShipState.SetDisableWinCheck(false);
         }
 
-        private static void resetAssassinMeeting()
+        public static void WrapUpPrefix()
         {
             if (ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
             {
                 ExtremeRolesPlugin.ShipState.AssassinMeetingTriggerOff();
             }
         }
-        private static void tempWinCheckDisable(GameData.PlayerInfo exiled)
-        {
-
-            if (ExtremeRoleManager.GameRole.Count == 0) { return; }
-
-            var role = ExtremeRoleManager.GameRole[exiled.PlayerId];
-
-            if (ExtremeRoleManager.IsDisableWinCheckRole(role))
-            {
-                ExtremeRolesPlugin.ShipState.SetDisableWinCheck(true);
-            }
-        }
-
     }
 }

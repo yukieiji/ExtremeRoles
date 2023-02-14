@@ -384,7 +384,7 @@ namespace ExtremeRoles.Compat.Mods
                 exileCont, "WrapUpAndSpawn");
             ExileController cont = null;
             MethodInfo wrapUpAndSpawnPrefix = SymbolExtensions.GetMethodInfo(
-                () => Patches.SubmergedExileControllerWrapUpAndSpawnPatch.Prefix(cont));
+                () => Patches.SubmergedExileControllerWrapUpAndSpawnPatch.Prefix());
             MethodInfo wrapUpAndSpawnPostfix = SymbolExtensions.GetMethodInfo(
                 () => Patches.SubmergedExileControllerWrapUpAndSpawnPatch.Postfix(cont));
 

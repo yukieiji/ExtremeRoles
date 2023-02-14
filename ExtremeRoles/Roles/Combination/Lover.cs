@@ -94,7 +94,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         public override void ExiledAction(
-            GameData.PlayerInfo rolePlayer)
+            PlayerControl rolePlayer)
         {
             exiledUpdate(rolePlayer);
         }
@@ -335,7 +335,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         private void exiledUpdate(
-            GameData.PlayerInfo exiledPlayer)
+            PlayerControl exiledPlayer)
         {
             List<byte> alive = getAliveSameLover();
             alive.Remove(exiledPlayer.PlayerId);

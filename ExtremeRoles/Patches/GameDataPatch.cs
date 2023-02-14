@@ -1,9 +1,10 @@
 ﻿using HarmonyLib;
+
+using ExtremeRoles.GameMode;
+using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using AmongUs.GameOptions;
-using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Patches
 {
@@ -39,8 +40,7 @@ namespace ExtremeRoles.Patches
 	{
 		public static bool Prefix(GameData __instance)
 		{
-			if (ExtremeGameModeManager.Instance == null ||
-				ExtremeGameModeManager.Instance.ShipOption == null) { return true; }
+			if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 
 			var roles = Roles.ExtremeRoleManager.GameRole;
 			var shipOpt = ExtremeGameModeManager.Instance.ShipOption;

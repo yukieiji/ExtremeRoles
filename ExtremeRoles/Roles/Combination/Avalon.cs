@@ -101,7 +101,7 @@ namespace ExtremeRoles.Roles.Combination
         }
 
         public override void ExiledAction(
-            GameData.PlayerInfo rolePlayer)
+            PlayerControl rolePlayer)
         {
             
             if (isServant()) { return; }
@@ -109,9 +109,9 @@ namespace ExtremeRoles.Roles.Combination
             assassinMeetingTriggerOn(rolePlayer.PlayerId);
             if (AmongUsClient.Instance.AmHost)
             {
-                MeetingRoomManager.Instance.AssignSelf(rolePlayer.Object, null);
-                FastDestroyableSingleton<HudManager>.Instance.OpenMeetingRoom(rolePlayer.Object);
-                rolePlayer.Object.RpcStartMeeting(null);
+                MeetingRoomManager.Instance.AssignSelf(rolePlayer, null);
+                FastDestroyableSingleton<HudManager>.Instance.OpenMeetingRoom(rolePlayer);
+                rolePlayer.RpcStartMeeting(null);
             }
 
             this.IsFirstMeeting = false;
@@ -184,8 +184,6 @@ namespace ExtremeRoles.Roles.Combination
             this.CanSeeRoleBeforeFirstMeeting = allOption[
                 GetRoleOptionId(AssassinOption.CanSeeRoleBeforeFirstMeeting)].GetValue();
             this.IsFirstMeeting = true;
-
-            ExtremeRolesPlugin.ShipState.AddGlobalActionRole(this);
         }
 
         private void assassinMeetingTriggerOn(

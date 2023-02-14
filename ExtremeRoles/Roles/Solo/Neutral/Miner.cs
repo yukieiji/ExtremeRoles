@@ -196,7 +196,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         }
 
-        public override void ExiledAction(GameData.PlayerInfo rolePlayer)
+        public override void ExiledAction(PlayerControl rolePlayer)
         {
             this.mines.Clear();
         }

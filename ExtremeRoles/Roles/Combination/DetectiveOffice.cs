@@ -269,7 +269,7 @@ namespace ExtremeRoles.Roles.Combination
             upgradeAssistant();
         }
 
-        public override void ExiledAction(GameData.PlayerInfo rolePlayer)
+        public override void ExiledAction(PlayerControl rolePlayer)
         {
             upgradeAssistant();
         }
@@ -484,7 +484,7 @@ namespace ExtremeRoles.Roles.Combination
             downgradeDetective();
         }
 
-        public override void ExiledAction(GameData.PlayerInfo rolePlayer)
+        public override void ExiledAction(PlayerControl rolePlayer)
         {
             downgradeDetective();
         }
@@ -737,10 +737,7 @@ namespace ExtremeRoles.Roles.Combination
                 newRole.Team = prevRole.AnotherRole.Team;
             }
 
-            lock (ExtremeRoleManager.GameRole)
-            {
-                ExtremeRoleManager.GameRole[playerId] = newRole;
-            }
+            ExtremeRoleManager.SetNewRole(playerId, newRole);
         }
 
         public void CleanUp()

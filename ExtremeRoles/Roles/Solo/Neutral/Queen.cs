@@ -103,8 +103,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     multiAssignRole.Team = ExtremeRoleType.Neutral;
                     multiAssignRole.AnotherRole = null;
                     multiAssignRole.CanHasAnotherRole = true;
-                    multiAssignRole.SetAnotherRole(servant);
-                    ExtremeRoleManager.SetNewRole(targetPlayerId, multiAssignRole);
+                    ExtremeRoleManager.SetNewAnothorRole(targetPlayerId, servant);
                 }
                 else
                 {
@@ -349,7 +348,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             return;
         }
 
-        public override void ExiledAction(GameData.PlayerInfo rolePlayer)
+        public override void ExiledAction(PlayerControl rolePlayer)
         {
             foreach (byte playerId in this.servantPlayerId)
             {
