@@ -413,7 +413,7 @@ namespace ExtremeRoles.Roles
                 }
 
                 addRole.Initialize();
-                addRole.GameControlId = id;
+                addRole.SetControlId(id);
 
                 SetNewRole(playerId, addRole);
 
@@ -505,7 +505,7 @@ namespace ExtremeRoles.Roles
             }
 
             addRole.Initialize();
-            addRole.GameControlId = controlId;
+            addRole.SetControlId(controlId);
 
             if (!GameRole.ContainsKey(playerId))
             {

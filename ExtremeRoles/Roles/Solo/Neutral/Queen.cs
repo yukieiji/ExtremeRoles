@@ -536,7 +536,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             {
                 this.CanHasAnotherRole = true;
             }
-            this.GameControlId = queen.GameControlId;
+            this.SetControlId(queen.GameControlId);
             this.queenPlayerId = queenPlayerId;
             this.queen = queen;
             this.FakeImposter = baseRole.Team == ExtremeRoleType.Impostor;
