@@ -15,12 +15,15 @@ namespace ExtremeRoles.Module.RoleAssign
         private List<IPlayerToExRoleAssignData> assignData = new List<IPlayerToExRoleAssignData>();
         private Dictionary<byte, ExtremeRoleType> combRoleAssignPlayerId = new Dictionary<byte, ExtremeRoleType>();
 
+        private int gameControlId = 0;
+
         public PlayerRoleAssignData()
         {
             this.assignData.Clear();
 
             this.NeedRoleAssignPlayer = new List<PlayerControl>(
                 PlayerControl.AllPlayerControls.ToArray());
+            this.gameControlId = 0;
         }
 
         public void AllPlayerAssignToExRole()
@@ -36,12 +39,12 @@ namespace ExtremeRoles.Module.RoleAssign
                     caller.WriteByte(data.PlayerId); // PlayerId
                     caller.WriteByte(data.RoleType); // RoleType : single or comb
                     caller.WritePackedInt(data.RoleId); // RoleId
+                    caller.WritePackedInt(data.ControlId); // int GameContId
 
                     if (data.RoleType == (byte)IPlayerToExRoleAssignData.ExRoleType.Comb)
                     {
                         var combData = (PlayerToCombRoleAssignData)data;
                         caller.WriteByte(combData.CombTypeId); // combTypeId
-                        caller.WriteByte(combData.GameContId); // byted GameContId
                         caller.WriteByte(combData.AmongUsRoleId); // byted AmongUsVanillaRoleId
                     }
                 }
@@ -78,6 +81,15 @@ namespace ExtremeRoles.Module.RoleAssign
                         _ => false
                     };
                 });
+        }
+
+        public int GetControlId()
+        {
+            int result = this.gameControlId;
+            
+            ++this.gameControlId;
+
+            return result;
         }
 
         public bool TryGetCombRoleAssign(byte playerId, out ExtremeRoleType team)

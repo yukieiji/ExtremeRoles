@@ -277,8 +277,6 @@ namespace ExtremeRoles.Roles
             ExtremeRoleId.Villain
         };
 
-        private static int roleControlId = 0;
-
         public enum ReplaceOperation : byte
         {
             ResetVanillaRole = 0,
@@ -326,7 +324,6 @@ namespace ExtremeRoles.Roles
 
         public static void Initialize()
         {
-            roleControlId = 0;
             GameRole.Clear();
             foreach (var role in CombRole.Values)
             {
@@ -382,7 +379,7 @@ namespace ExtremeRoles.Roles
         }
 
         public static void SetPlayerIdToMultiRoleId(
-            byte combType, int roleId, byte playerId, byte id, byte bytedRoleType)
+            byte combType, int roleId, byte playerId, int id, byte bytedRoleType)
         {
             RoleTypes roleType = (RoleTypes)bytedRoleType;
 
@@ -417,7 +414,6 @@ namespace ExtremeRoles.Roles
 
                 addRole.Initialize();
                 addRole.GameControlId = id;
-                roleControlId = id + 1;
 
                 SetNewRole(playerId, addRole);
 
@@ -429,7 +425,7 @@ namespace ExtremeRoles.Roles
             }
         }
         public static void SetPlyerIdToSingleRoleId(
-            int roleId, byte playerId)
+            int roleId, byte playerId, int controlId)
         {
 
             if (!Enum.IsDefined(typeof(RoleTypes), Convert.ToUInt16(roleId)))
@@ -444,13 +440,14 @@ namespace ExtremeRoles.Roles
                     role = new Xion(playerId);
                 }
 
-                setPlyerIdToSingleRole(playerId, role);
+                setPlyerIdToSingleRole(playerId, role, controlId);
             }
             else
             {
                 setPlyerIdToSingleRole(
                     playerId,
-                    new Solo.VanillaRoleWrapper((RoleTypes)roleId));
+                    new Solo.VanillaRoleWrapper((RoleTypes)roleId),
+                    controlId);
             }
         }
 
@@ -494,7 +491,7 @@ namespace ExtremeRoles.Roles
         }
 
         private static void setPlyerIdToSingleRole(
-            byte playerId, SingleRoleBase role)
+            byte playerId, SingleRoleBase role, int controlId)
         {
 
             SingleRoleBase addRole = role.Clone();
@@ -508,8 +505,7 @@ namespace ExtremeRoles.Roles
             }
 
             addRole.Initialize();
-            addRole.GameControlId = roleControlId;
-            roleControlId = roleControlId + 1;
+            addRole.GameControlId = controlId;
 
             if (!GameRole.ContainsKey(playerId))
             {

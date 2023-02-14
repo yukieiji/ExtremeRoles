@@ -12,18 +12,24 @@ namespace ExtremeRoles.Module.RoleAssign
         {
             get => roleId;
         }
+        public int ControlId
+        {
+            get => controlId;
+        }
+
         public byte RoleType { get => (byte)IPlayerToExRoleAssignData.ExRoleType.Single; }
 
         private byte playerId;
         private int roleId;
+        private int controlId;
 
         public PlayerToSingleRoleAssignData(
-            byte playerId, int roleId)
+            byte playerId, int roleId, int controlId)
         {
             this.playerId = playerId;
             this.roleId = roleId;
+            this.controlId = controlId;
         }
-
     }
 
     public struct PlayerToCombRoleAssignData : IPlayerToExRoleAssignData
@@ -36,22 +42,26 @@ namespace ExtremeRoles.Module.RoleAssign
         {
             get => roleId;
         }
+        public int ControlId
+        {
+            get => gameContId;
+        }
+
         public byte RoleType { get => (byte)IPlayerToExRoleAssignData.ExRoleType.Comb; }
 
         public byte CombTypeId => combTypeId;
-
-        public byte GameContId => gameContId;
         public byte AmongUsRoleId => amongUsRoleId;
 
-        private byte playerId;
         private int roleId;
+        private int gameContId;
+
+        private byte playerId;
         private byte combTypeId;
-        private byte gameContId;
         private byte amongUsRoleId;
 
         public PlayerToCombRoleAssignData(
             byte playerId, int roleId,
-            byte combType, byte gameContId,
+            byte combType, int gameContId,
             byte amongUsRoleId)
         {
             this.playerId = playerId;
