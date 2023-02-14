@@ -66,7 +66,7 @@ namespace ExtremeRoles.Module.RoleAssign
         {
             this.playerId = playerId;
             this.roleId = roleId;
-            combTypeId = combType;
+            this.combTypeId = combType;
             this.gameContId = gameContId;
             this.amongUsRoleId = amongUsRoleId;
         }
