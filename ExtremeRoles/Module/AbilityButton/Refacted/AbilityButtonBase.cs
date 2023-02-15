@@ -22,11 +22,12 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
         public AbilityState State { get; private set; } = AbilityState.CoolDown;
         public Transform Transform => this.button.transform;
 
-        private bool isShow = true;
-        private float coolTime = float.MaxValue;
-        private float activeTime = float.MinValue;
+        public float CoolTime { get; private set; } = float.MaxValue;
+        public float ActiveTime { get; private set; } = float.MaxValue;
 
-        private Action abilityCleanUp = null;
+        private bool isShow = true;
+
+        protected Action AbilityCleanUp = null;
         private ActionButton button;
 
         private KeyCode hotKey = KeyCode.F;
@@ -56,7 +57,7 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
             passiveButton.OnClick.AddListener(
                 (UnityEngine.Events.UnityAction)DoClick);
 
-            this.abilityCleanUp = cleanUp;
+            this.AbilityCleanUp = cleanUp;
             this.buttonText = buttonText;
             this.buttonImg = img;
             this.hotKey = hotKey;
@@ -142,7 +143,7 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
             switch (this.State)
             {
                 case AbilityState.None:
-                    this.button.SetCoolDown(0, this.coolTime);
+                    this.button.SetCoolDown(0, this.CoolTime);
                     return;
                 case AbilityState.CoolDown:
                     // 白色でタイマーをすすめる
@@ -152,7 +153,7 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
                     // クールダウンが明けた
                     if (this.Timer <= 0.0f)
                     {
-                        SetStatus(AbilityState.Ready);
+                        this.SetStatus(AbilityState.Ready);
                     }
                     break;
                 case AbilityState.Activating:
@@ -163,7 +164,7 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
                     // 能力がアクティブが時間切れなので能力のリセット等を行う
                     if (this.Timer <= 0.0f)
                     {
-                        this.abilityCleanUp?.Invoke();
+                        this.AbilityCleanUp?.Invoke();
                         this.ResetCoolTimer();
                     }
                     break;
@@ -181,33 +182,37 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
             this.button.SetCoolDown(
                 this.Timer,
                 this.State != AbilityState.Activating ? 
-                this.coolTime : this.activeTime);
+                this.CoolTime : this.ActiveTime);
         }
 
         public virtual void ResetCoolTimer()
         {
-            this.State = AbilityState.CoolDown;
-            this.Timer = this.coolTime;
+            this.SetStatus(AbilityState.CoolDown);
         }
 
         public virtual void SetAbilityActiveTime(float time)
         {
-            this.activeTime = time;
+            this.ActiveTime = time;
         }
 
         protected void SetStatus(AbilityState newState)
         {
+            this.State = newState;
             switch (newState)
             {
+                case AbilityState.None:
+                case AbilityState.Ready:
+                    this.Timer = 0;
+                    break;
                 case AbilityState.CoolDown:
-                    ResetCoolTimer();
+                    this.Timer = this.CoolTime;
                     break;
                 case AbilityState.Activating:
-                    this.Timer = this.activeTime;
+                    this.Timer = this.ActiveTime;
+                    break;
+                default:
                     break;
             }
-            
-            this.State = newState;
         }
 
         private void setActive(bool active)
@@ -216,7 +221,7 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
             this.button.graphic.enabled = isShow;
         }
 
-        protected bool HasCleanUp() => this.abilityCleanUp != null;
+        protected bool HasCleanUp() => this.AbilityCleanUp != null;
 
         protected abstract bool GetActivate();
         protected abstract void UpdateAbility();

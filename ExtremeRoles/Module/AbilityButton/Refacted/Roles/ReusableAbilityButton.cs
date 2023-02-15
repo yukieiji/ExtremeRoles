@@ -1,8 +1,6 @@
 ﻿using System;
 using UnityEngine;
 
-using ExtremeRoles.Performance;
-
 namespace ExtremeRoles.Module.AbilityButton.Refacted.Roles
 {
     public class ReusableAbilityButton : RoleAbilityButtonBase
@@ -26,12 +24,11 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted.Roles
 
         protected override void UpdateAbility()
         {
-            if (this.State == AbilityState.Activating)
+            if (this.State == AbilityState.Activating &&
+                !this.AbilityCheck.Invoke())
             {
-                if (!this.AbilityCheck.Invoke())
-                {
-                    this.SetStatus(AbilityState.Ready);
-                }
+                this.AbilityCleanUp?.Invoke();
+                this.SetStatus(AbilityState.Ready);
             }
         }
 
@@ -44,7 +41,7 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted.Roles
                 this.State == AbilityState.Ready &&
                 this.UseAbility.Invoke())
             {
-                SetStatus(
+                this.SetStatus(
                     this.HasCleanUp() ?
                     AbilityState.Activating :
                     AbilityState.CoolDown);
