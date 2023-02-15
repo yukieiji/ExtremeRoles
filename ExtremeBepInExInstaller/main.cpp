@@ -110,6 +110,13 @@ namespace
 
         remove_all(rootPath / "mono");
 
+        path dotNetPath = rootPath / "dotnet";
+
+        if (exists(dotNetPath))
+        {
+            remove_all(dotNetPath);
+        }
+
         remove(rootPath / "changelog.txt");
         remove(rootPath / "doorstop_config.ini");
         remove(rootPath / "winhttp.dll");
