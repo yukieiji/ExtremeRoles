@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ExtremeRoles.Module.AbilityButton.Refacted.Roles
 {
-    public class ReusableAbilityButton : RoleAbilityButtonBase
+    public sealed class ReusableAbilityButton : RoleAbilityButtonBase
     {
         public ReusableAbilityButton(
             string buttonText,
@@ -24,12 +24,7 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted.Roles
 
         protected override void UpdateAbility()
         {
-            if (this.State == AbilityState.Activating &&
-                !this.AbilityCheck.Invoke())
-            {
-                this.AbilityCleanUp?.Invoke();
-                this.SetStatus(AbilityState.Ready);
-            }
+            return;
         }
 
         protected override bool IsEnable() => this.CanUse.Invoke();

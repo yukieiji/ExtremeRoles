@@ -5,7 +5,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module.AbilityButton.Refacted.Roles
 {
-    public class ChargableButton : RoleAbilityButtonBase
+    public sealed class ChargableButton : RoleAbilityButtonBase
     {
         private float currentCharge;
 
@@ -59,16 +59,15 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted.Roles
             base.ResetCoolTimer();
         }
 
+        public override void ForceAbilityOff()
+        {
+            this.currentCharge = Mathf.Clamp(
+                this.Timer, 0.0f, this.ActiveTime);
+            base.ForceAbilityOff();
+        }
+
         protected override void UpdateAbility()
         {
-            if (this.State == AbilityState.Activating &&
-                !this.AbilityCheck.Invoke())
-            {
-                this.currentCharge = Mathf.Clamp(
-                    this.Timer, 0.0f, this.ActiveTime);
-                this.AbilityCleanUp.Invoke();
-                this.SetStatus(AbilityState.Ready);
-            }
             if (CachedPlayerControl.LocalPlayer.PlayerControl.AllTasksCompleted())
             {
                 this.currentCharge = this.ActiveTime;

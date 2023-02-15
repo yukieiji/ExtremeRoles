@@ -10,7 +10,6 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted.Roles
     {
         protected Func<bool> UseAbility;
         protected Func<bool> CanUse = () => true;
-        protected Func<bool> AbilityCheck = () => true;
 
         public RoleAbilityButtonBase(
             string buttonText,
@@ -20,12 +19,11 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted.Roles
             Action abilityCleanUp = null,
             Func<bool> abilityCheck = null,
             KeyCode hotkey = KeyCode.F) : base(
-                sprite, buttonText, abilityCleanUp, hotkey)
+                sprite, buttonText, abilityCleanUp, abilityCheck, hotkey)
         {
             this.UseAbility = ability;
 
             this.CanUse = canUse ?? this.CanUse;
-            this.AbilityCheck = abilityCheck ?? this.AbilityCheck;
         }
 
         protected sealed override bool GetActivate()

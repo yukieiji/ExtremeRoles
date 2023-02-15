@@ -27,6 +27,7 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
 
         private bool isShow = true;
 
+        protected Func<bool> AbilityCheck = () => true;
         protected Action AbilityCleanUp = null;
         private ActionButton button;
 
@@ -44,6 +45,7 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
             Sprite img,
             string buttonText,
             Action cleanUp,
+            Func<bool> abilityCheck,
             KeyCode hotKey)
         {
             this.State = AbilityState.CoolDown;
@@ -60,6 +62,7 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
             this.AbilityCleanUp = cleanUp;
             this.buttonText = buttonText;
             this.buttonImg = img;
+            this.AbilityCheck = abilityCheck ?? this.AbilityCheck;
             this.hotKey = hotKey;
 
             Transform info = this.button.transform.FindChild(AditionalInfoName);
@@ -160,7 +163,12 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
                     // 緑色でタイマーをすすめる
                     this.Timer -= Time.deltaTime;
                     this.button.cooldownTimerText.color = TimerOnColor;
-   
+                    
+                    if (!this.AbilityCheck.Invoke())
+                    {
+                        this.ForceAbilityOff();
+                        return;
+                    }
                     // 能力がアクティブが時間切れなので能力のリセット等を行う
                     if (this.Timer <= 0.0f)
                     {
@@ -193,6 +201,12 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
         public virtual void SetAbilityActiveTime(float time)
         {
             this.ActiveTime = time;
+        }
+
+        public virtual void ForceAbilityOff()
+        {
+            this.SetStatus(AbilityState.Ready);
+            this.AbilityCleanUp?.Invoke();
         }
 
         protected void SetStatus(AbilityState newState)
