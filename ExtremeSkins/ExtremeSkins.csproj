@@ -46,7 +46,7 @@
     <Exec Command="if not exist $(SolutionDir)ExtremeSkins\Resources\Asset mkdir $(SolutionDir)ExtremeSkins\Resources\Asset" />
     <Exec Command="robocopy /mir $(SolutionDir)UnityAsset\ExtremeSkins $(SolutionDir)ExtremeSkins\Resources\Asset &amp; if errorlevel 8 (exit 1) else (exit 0)" />
   </Target>
-    <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">
-      <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AmongUs)/BepInEx/plugins/" UseSymboliclinksIfPossible="true" />
+    <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs_Be622)' != ''">
+      <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AmongUs_Be622)/BepInEx/plugins/" UseSymboliclinksIfPossible="true" />
     </Target>
 </Project>
