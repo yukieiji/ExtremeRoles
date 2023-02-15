@@ -25,6 +25,7 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
         private bool isShow = true;
         private float coolTime = float.MaxValue;
         private float activeTime = float.MinValue;
+
         private Action abilityCleanUp = null;
         private ActionButton button;
 
@@ -41,7 +42,8 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
         public AbilityButtonBase(
             Sprite img,
             string buttonText,
-            Action cleanUp)
+            Action cleanUp,
+            KeyCode hotKey)
         {
             this.State = AbilityState.CoolDown;
 
@@ -57,6 +59,7 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
             this.abilityCleanUp = cleanUp;
             this.buttonText = buttonText;
             this.buttonImg = img;
+            this.hotKey = hotKey;
 
             Transform info = this.button.transform.FindChild(AditionalInfoName);
             if (info != null)
@@ -115,7 +118,7 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
 
         public void Update()
         {
-            if (this.isShow) { return; }
+            if (this.isShow || this.button == null) { return; }
             
             setActive(GetActivate());
             if (!this.button.isActiveAndEnabled) { return; }
@@ -205,7 +208,6 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
 
         protected abstract bool GetActivate();
         protected abstract void UpdateAbility();
-        protected abstract bool CanUse();
         protected abstract bool IsEnable();
 
         protected abstract void DoClick();
