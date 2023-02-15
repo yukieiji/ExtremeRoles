@@ -236,6 +236,7 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
         }
 
         protected bool HasCleanUp() => this.AbilityCleanUp != null;
+        protected TMPro.TextMeshPro GetCoolDownText() => this.button.cooldownTimerText;
 
         protected abstract bool GetActivate();
         protected abstract void UpdateAbility();
