@@ -28,6 +28,7 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
         private bool isShow = true;
 
         protected Func<bool> AbilityCheck = () => true;
+        protected Func<bool> CanUse = () => true;
         protected Action AbilityCleanUp = null;
         private ActionButton button;
 
@@ -45,6 +46,7 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
             Sprite img,
             string buttonText,
             Action cleanUp,
+            Func<bool> canUse,
             Func<bool> abilityCheck,
             KeyCode hotKey)
         {
@@ -62,6 +64,7 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
             this.AbilityCleanUp = cleanUp;
             this.buttonText = buttonText;
             this.buttonImg = img;
+            this.CanUse = canUse ?? this.CanUse;
             this.AbilityCheck = abilityCheck ?? this.AbilityCheck;
             this.hotKey = hotKey;
 
