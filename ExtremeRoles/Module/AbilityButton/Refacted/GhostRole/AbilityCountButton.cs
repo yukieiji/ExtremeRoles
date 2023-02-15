@@ -1,9 +1,12 @@
 ﻿using System;
 using UnityEngine;
 
-namespace ExtremeRoles.Module.AbilityButton.Refacted.Roles
+using ExtremeRoles.GhostRoles;
+
+namespace ExtremeRoles.Module.AbilityButton.Refacted.GhostRoles
 {
-    public sealed class AbilityCountButton : RoleAbilityButtonBase
+
+    public sealed class AbilityCountButton : GhostRoleAbilityButtonBase
     {
         public int CurAbilityNum
         {
@@ -12,30 +15,31 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted.Roles
 
         private int abilityNum = 0;
         private TMPro.TextMeshPro abilityCountText = null;
+
         private Action baseCleanUp;
         private Action reduceCountAction;
 
         public AbilityCountButton(
-            string buttonText,
-            Func<bool> ability,
+            AbilityType abilityType,
+            Action<RPCOperator.RpcCaller> ability,
+            Func<bool> abilityPreCheck,
             Func<bool> canUse,
             Sprite sprite,
+            Action rpcHostCallAbility = null,
             Action abilityCleanUp = null,
             Func<bool> abilityCheck = null,
             KeyCode hotkey = KeyCode.F) : base(
-                buttonText,
-                ability,
-                canUse,
-                sprite,
-                abilityCleanUp,
-                abilityCheck,
-                hotkey)
+                abilityType,
+                ability, abilityPreCheck,
+                canUse, sprite,
+                rpcHostCallAbility, abilityCleanUp,
+                abilityCheck, hotkey)
         {
 
-            var coolTimerText = this.GetCoolDownText();
+            var cooldownText = GetCoolDownText();
 
-            this.abilityCountText = UnityEngine.Object.Instantiate(
-                coolTimerText, coolTimerText.transform.parent);
+            this.abilityCountText = GameObject.Instantiate(
+                cooldownText, cooldownText.transform.parent);
             updateAbilityCountText();
             this.abilityCountText.enableWordWrapping = false;
             this.abilityCountText.transform.localScale = Vector3.one * 0.5f;
@@ -65,41 +69,10 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted.Roles
             }
         }
 
-        public override void ForceAbilityOff()
+        private void updateAbilityCountText()
         {
-            this.SetStatus(AbilityState.Ready);
-            this.baseCleanUp?.Invoke();
-        }
-
-        protected override bool IsEnable() =>
-            this.CanUse.Invoke() && this.abilityNum > 0;
-
-        protected override void DoClick()
-        {
-            if (this.CanUse.Invoke() &&
-                this.Timer < 0f &&
-                this.abilityNum > 0 &&
-                this.State == AbilityState.Ready &&
-                this.UseAbility.Invoke())
-            {
-                if (this.HasCleanUp())
-                {
-                    this.SetStatus(AbilityState.Activating);
-                }
-                else
-                {
-                    this.reduceCountAction.Invoke();
-                    this.ResetCoolTimer();
-                }
-            }
-        }
-
-        protected override void UpdateAbility()
-        {
-            if (this.abilityNum <= 0)
-            {
-                this.SetStatus(AbilityState.None);
-            }
+            this.abilityCountText.text = Helper.Translation.GetString("buttonCountText") + string.Format(
+                Helper.Translation.GetString(OptionUnit.Shot.ToString()), this.abilityNum);
         }
 
         private Action reduceAbilityCountAction()
@@ -114,10 +87,42 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted.Roles
             };
         }
 
-        private void updateAbilityCountText()
+        public override void ForceAbilityOff()
         {
-            this.abilityCountText.text = Helper.Translation.GetString("buttonCountText") + string.Format(
-                Helper.Translation.GetString(OptionUnit.Shot.ToString()), this.abilityNum);
+            this.SetStatus(AbilityState.Ready);
+            this.baseCleanUp?.Invoke();
+        }
+
+        protected override void DoClick()
+        {
+            if (!this.IsComSabNow() &&
+                this.CanUse() &&
+                this.Timer < 0f &&
+                this.abilityNum > 0 &&
+                this.State == AbilityState.Ready &&
+                this.UseAbility())
+            {
+                if (this.HasCleanUp())
+                {
+                    this.SetStatus(AbilityState.Activating);
+                }
+                else
+                {
+                    this.reduceCountAction.Invoke();
+                    this.ResetCoolTimer();
+                }
+            }
+        }
+
+        protected override bool IsEnable() =>
+            this.CanUse.Invoke() && this.abilityNum > 0 && !this.IsComSabNow();
+
+        protected override void UpdateAbility()
+        {
+            if (this.abilityNum <= 0)
+            {
+                this.SetStatus(AbilityState.None);
+            }
         }
     }
 }
