@@ -1,17 +1,18 @@
-﻿using Assets.CoreScripts;
-using ExtremeRoles.GhostRoles;
-using ExtremeRoles.GhostRoles.API;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using Assets.CoreScripts;
+
+using UnityEngine;
+using AmongUs.GameOptions;
+
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.GhostRoles;
+using ExtremeRoles.Module.AbilityButton.Refacted.GhostRoles;
+using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using Hazel;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
-using AmongUs.GameOptions;
 
 namespace ExtremeRoles.GhostRoles.Crewmate
 {
@@ -60,12 +61,12 @@ namespace ExtremeRoles.GhostRoles.Crewmate
             this.saboActive = false;
         }
 
-        public override void ReseOnMeetingEnd()
+        protected override void OnMeetingEndHook()
         {
             return;
         }
 
-        public override void ReseOnMeetingStart()
+        protected override void OnMeetingStartHook()
         {
             this.saboGame = null;
         }

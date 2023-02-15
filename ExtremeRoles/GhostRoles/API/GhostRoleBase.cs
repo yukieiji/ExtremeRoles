@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-using Hazel;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.GhostRoles;
+using ExtremeRoles.Module.AbilityButton.Refacted.GhostRoles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -190,6 +189,24 @@ namespace ExtremeRoles.GhostRoles.API
             this.controlId = newId;
         }
 
+        public void ResetOnMeetingEnd()
+        {
+            if (this.Button != null)
+            {
+                this.Button.ResetCoolTimer();
+                this.Button.SetButtonShow(true);
+            }
+        }
+
+        public void ResetOnMeetingStart()
+        {
+            if (this.Button != null)
+            {
+                this.Button.ForceAbilityOff();
+                this.Button.SetButtonShow(false);
+            }
+        }
+
         protected void CreateButtonOption(
             IOption parentOps,
             float defaultActiveTime = float.MaxValue)
@@ -238,7 +255,7 @@ namespace ExtremeRoles.GhostRoles.API
             if (this.Button == null) { return; }
 
             var allOps = OptionHolder.AllOption;
-            this.Button.SetAbilityCoolTime(
+            this.Button.SetCoolTime(
                 allOps[this.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)].GetValue());
 
             IOption option;
@@ -459,9 +476,9 @@ namespace ExtremeRoles.GhostRoles.API
 
         public abstract void Initialize();
 
-        public abstract void ReseOnMeetingEnd();
+        protected abstract void OnMeetingEndHook();
 
-        public abstract void ReseOnMeetingStart();
+        protected abstract void OnMeetingStartHook();
 
         protected abstract void CreateSpecificOption(IOption parentOps);
 

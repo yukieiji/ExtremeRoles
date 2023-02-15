@@ -106,6 +106,11 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
             this.buttonText = newText;
         }
 
+        public void SetCoolTime(float time)
+        {
+            this.CoolTime = time;
+        }
+
         public void SetHotKey(KeyCode newKey)
         {
             this.hotKey = newKey;
