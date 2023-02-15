@@ -197,6 +197,16 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
 
         protected void SetStatus(AbilityState newState)
         {
+            switch (newState)
+            {
+                case AbilityState.CoolDown:
+                    ResetCoolTimer();
+                    break;
+                case AbilityState.Activating:
+                    this.Timer = this.activeTime;
+                    break;
+            }
+            
             this.State = newState;
         }
 
@@ -205,6 +215,8 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
             this.button.gameObject.SetActive(active);
             this.button.graphic.enabled = isShow;
         }
+
+        protected bool HasCleanUp() => this.abilityCleanUp != null;
 
         protected abstract bool GetActivate();
         protected abstract void UpdateAbility();

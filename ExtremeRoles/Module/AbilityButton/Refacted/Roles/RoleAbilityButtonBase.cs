@@ -2,7 +2,6 @@
 using UnityEngine;
 
 using ExtremeRoles.Performance;
-using static Il2CppSystem.Threading.ThreadLocal<T>;
 
 namespace ExtremeRoles.Module.AbilityButton.Refacted.Roles
 {
@@ -10,8 +9,8 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted.Roles
     public abstract class RoleAbilityButtonBase : AbilityButtonBase
     {
         protected Func<bool> UseAbility;
-        protected Func<bool> canUse = () => true;
-        protected Func<bool> abilityCheck = () => true;
+        protected Func<bool> CanUse = () => true;
+        protected Func<bool> AbilityCheck = () => true;
 
         public RoleAbilityButtonBase(
             string buttonText,
@@ -25,8 +24,8 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted.Roles
         {
             this.UseAbility = ability;
 
-            this.canUse = canUse ?? this.canUse;
-            this.abilityCheck = abilityCheck ?? this.abilityCheck;
+            this.CanUse = canUse ?? this.CanUse;
+            this.AbilityCheck = abilityCheck ?? this.AbilityCheck;
         }
 
         protected sealed override bool GetActivate()
