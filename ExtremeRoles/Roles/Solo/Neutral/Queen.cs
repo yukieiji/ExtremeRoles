@@ -90,9 +90,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 servant.SelfKillAbility(queen.ServantSelfKillCool);
                 if (targetRole.Team != ExtremeRoleType.Neutral)
                 {
-                    servant.Button.PositionOffset = new Vector3(0, 2.0f, 0);
-                    servant.Button.ReplaceHotKey(KeyCode.C);
+                    servant.Button.SetHotKey(KeyCode.C);
                 }
+                RoleAbilityButtonBase.ReGridButtons();
             }
 
             if (targetRole.Team != ExtremeRoleType.Neutral)
@@ -578,7 +578,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     Path.SucideSprite),
                 null, null,
                 KeyCode.F);
-            this.Button.SetAbilityCoolTime(coolTime);
+            this.Button.SetCoolTime(coolTime);
             this.Button.ResetCoolTimer();
         }
 
