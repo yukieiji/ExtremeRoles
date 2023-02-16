@@ -130,7 +130,7 @@ namespace ExtremeRoles.Roles.Combination
                     {
                         if (this.hiddeRole is IRoleAbility abilityRole)
                         {
-                            abilityRole.Button.SetActive(false);
+                            abilityRole.Button.SetButtonShow(false);
                         }
                         return;
                     }
@@ -143,7 +143,7 @@ namespace ExtremeRoles.Roles.Combination
                     this.CanHasAnotherRole = true;
                     if (this.AnotherRole is IRoleAbility abilityRole)
                     {
-                        abilityRole.Button.SetActive(false);
+                        abilityRole.Button.SetButtonShow(true);
                     }
                     this.hiddeRole = null;
                 }
