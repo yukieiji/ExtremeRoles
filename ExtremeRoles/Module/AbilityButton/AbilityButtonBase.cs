@@ -11,6 +11,7 @@ namespace ExtremeRoles.Module.AbilityButton
         public enum AbilityState : byte
         {
             None = 0,
+            Stop,
             CoolDown,
             Ready,
             Activating,
@@ -224,7 +225,6 @@ namespace ExtremeRoles.Module.AbilityButton
 
         protected void SetStatus(AbilityState newState)
         {
-            this.State = newState;
             switch (newState)
             {
                 case AbilityState.None:
@@ -232,7 +232,10 @@ namespace ExtremeRoles.Module.AbilityButton
                     this.Timer = 0;
                     break;
                 case AbilityState.CoolDown:
-                    this.Timer = this.CoolTime;
+                    if (this.State != AbilityState.Stop)
+                    {
+                        this.Timer = this.CoolTime;
+                    }
                     break;
                 case AbilityState.Activating:
                     this.Timer = this.ActiveTime;
@@ -240,6 +243,7 @@ namespace ExtremeRoles.Module.AbilityButton
                 default:
                     break;
             }
+            this.State = newState;
         }
 
         private void setActive(bool active)

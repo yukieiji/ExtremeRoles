@@ -32,53 +32,42 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     KeyCode.F)
             { }
 
-            protected override void AbilityButtonUpdate()
+            protected override bool IsEnable() => this.CanUse.Invoke();
+
+            protected override void DoClick()
             {
-                bool isLightOff = false;
-                foreach (PlayerTask task in 
+                if (this.IsEnable() &&
+                    this.Timer <= 0f &&
+                    this.IsAbilityReady() &&
+                    this.UseAbility.Invoke())
+                {
+                    this.SetStatus(
+                        this.HasCleanUp() ?
+                        AbilityState.Activating :
+                        AbilityState.CoolDown);
+                }
+            }
+
+            protected override void UpdateAbility()
+            {
+                if (this.Timer > 0.0f)
+                {
+                    this.SetStatus(
+                        isVentIn() || isLightOff() ? 
+                        AbilityState.CoolDown : AbilityState.Stop);
+                }
+            }
+            private static bool isLightOff()
+            {
+                foreach (PlayerTask task in
                     CachedPlayerControl.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
                 {
                     if (task.TaskType == TaskTypes.FixLights)
                     {
-                        isLightOff = true;
-                        break;
+                        return true;
                     }
                 }
-
-                if (this.CanUse())
-                {
-                    this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.EnabledColor;
-                    this.Button.graphic.material.SetFloat("_Desat", 0f);
-                }
-                else
-                {
-                    this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.DisabledClear;
-                    this.Button.graphic.material.SetFloat("_Desat", 1f);
-                }
-
-                if (this.Timer >= 0 && (isVentIn() || isLightOff))
-                {
-                    this.Timer -= Time.deltaTime;
-                }
-
-                Button.SetCoolDown(
-                    this.Timer,
-                    (this.IsHasCleanUp() && this.IsAbilityOn) ? this.AbilityActiveTime : this.CoolTime);
-            }
-
-            protected override void OnClickEvent()
-            {
-                if (this.CanUse() &&
-                    this.Timer < 0f &&
-                    !this.IsAbilityOn)
-                {
-                    Button.graphic.color = this.DisableColor;
-
-                    if (this.UseAbility())
-                    {
-                        this.ResetCoolTimer();
-                    }
-                }
+                return false;
             }
         }
 
