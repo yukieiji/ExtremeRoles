@@ -120,7 +120,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             float rate = 1.0f - ((float)this.reduceRate / 100f);
 
-            this.Button.SetAbilityCoolTime(
+            this.Button.SetCoolTime(
                 OptionHolder.AllOption[
                     GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)].GetValue() * rate);
             var button = (AbilityCountButton)this.Button;
