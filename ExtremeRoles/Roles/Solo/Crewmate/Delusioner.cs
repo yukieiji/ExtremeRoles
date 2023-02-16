@@ -137,7 +137,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 {
                     int curVoteCooltimeReduceRate = this.voteCoolTimeReduceRate * forRolePlayerVote;
 
-                    this.Button.SetAbilityCoolTime(
+                    this.Button.SetButtonShow(true);
+                    this.Button.SetCoolTime(
                         this.defaultCoolTime * ((100.0f - (float)curVoteCooltimeReduceRate) / 100.0f));
                 }
             }
@@ -168,7 +169,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             if (!this.isAwakeRole)
             {
-                this.Button?.SetActive(false);
+                this.Button?.SetButtonShow(false);
             }
         }
 
@@ -257,7 +258,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 this.deflectDamagePenaltyMod < 1.0f)
             {
                 this.curCoolTime = this.curCoolTime * this.deflectDamagePenaltyMod;
-                this.Button.SetAbilityCoolTime(this.curCoolTime);
+                this.Button.SetCoolTime(this.curCoolTime);
             }
 
             return true;

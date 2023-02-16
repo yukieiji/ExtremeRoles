@@ -1,8 +1,6 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 
-using Hazel;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.Roles;
