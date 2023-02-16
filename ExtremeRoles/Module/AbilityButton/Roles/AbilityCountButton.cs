@@ -14,6 +14,7 @@ namespace ExtremeRoles.Module.AbilityButton.Roles.Roles
         private TMPro.TextMeshPro abilityCountText = null;
         private Action baseCleanUp;
         private Action reduceCountAction;
+        private string buttonTextFormat = "buttonCountText";
 
         public AbilityCountButton(
             string buttonText,
@@ -53,6 +54,11 @@ namespace ExtremeRoles.Module.AbilityButton.Roles.Roles
                 this.baseCleanUp = null;
                 this.AbilityCleanUp = this.reduceCountAction;
             }
+        }
+
+        public void SetTextFormat(string newStr)
+        {
+            this.buttonTextFormat = newStr;
         }
 
         public void UpdateAbilityCount(int newCount)
@@ -116,8 +122,8 @@ namespace ExtremeRoles.Module.AbilityButton.Roles.Roles
 
         private void updateAbilityCountText()
         {
-            this.abilityCountText.text = Helper.Translation.GetString("buttonCountText") + string.Format(
-                Helper.Translation.GetString(OptionUnit.Shot.ToString()), this.abilityNum);
+            this.abilityCountText.text = string.Format(
+                this.buttonTextFormat, this.abilityNum);
         }
     }
 }
