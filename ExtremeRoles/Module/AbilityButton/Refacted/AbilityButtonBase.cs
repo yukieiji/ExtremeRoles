@@ -160,7 +160,7 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
                 case AbilityState.CoolDown:
                     // 白色でタイマーをすすめる
                     this.Timer -= Time.deltaTime;
-                    this.button.cooldownTimerText.color = DisableColor;
+                    this.button.cooldownTimerText.color = Palette.EnabledColor;
                     
                     // クールダウンが明けた
                     if (this.Timer <= 0.0f)
