@@ -38,6 +38,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             private TMPro.TextMeshPro abilityCountText = null;
 
+            private Action baseCleanUp;
+            private Action reduceCountAction;
+
             public CarpenterAbilityButton(
                 Func<bool> ability,
                 Func<bool> canUse,
@@ -58,9 +61,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     cameraSetSprite,
                     abilityCleanUp, abilityCheck, hotkey)
             {
+
+                var cooldownTimerText = this.GetCoolDownText();
+
                 this.abilityCountText = GameObject.Instantiate(
-                    this.Button.cooldownTimerText,
-                    this.Button.cooldownTimerText.transform.parent);
+                    cooldownTimerText, cooldownTimerText.transform.parent);
                 updateAbilityCountText();
                 this.abilityCountText.enableWordWrapping = false;
                 this.abilityCountText.transform.localScale = Vector3.one * 0.5f;
@@ -70,7 +75,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
                 this.ventRemoveString = Translation.GetString("ventSeal");
                 this.cameraSetString = Translation.GetString("cameraSet");
-                this.ButtonText = this.cameraSetString;
+                this.SetButtonText(this.cameraSetString);
 
                 this.ventRemoveScrewNum = ventRemoveScrewNum;
                 this.cameraSetScrewNum = cameraSetScrewNum;
@@ -82,117 +87,84 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 this.ventRemoveSprite = ventRemoveSprite;
                 
                 this.isVentRemove = false;
+
+                this.reduceCountAction = this.reduceAbilityCount();
+
+                if (HasCleanUp())
+                {
+                    this.baseCleanUp = new Action(this.AbilityCleanUp);
+                    this.AbilityCleanUp += this.reduceCountAction;
+                }
+                else
+                {
+                    this.baseCleanUp = null;
+                    this.AbilityCleanUp = this.reduceCountAction;
+                }
             }
 
             public void UpdateAbilityCount(int newCount)
             {
                 this.abilityNum = newCount;
                 this.updateAbilityCountText();
+                if (this.State == AbilityState.None)
+                {
+                    this.SetStatus(AbilityState.CoolDown);
+                }
             }
 
-            protected override void AbilityButtonUpdate()
+            public override void ForceAbilityOff()
             {
+                this.SetStatus(AbilityState.Ready);
+                this.baseCleanUp?.Invoke();
+            }
 
+            protected override bool IsEnable() =>
+                this.CanUse.Invoke() && this.abilityNum > 0 && screwCheck();
+
+            protected override void UpdateAbility()
+            {
                 this.isVentRemove = this.ventModeCheck();
                 if (this.isVentRemove)
                 {
-                    this.ButtonSprite = this.ventRemoveSprite;
-                    this.ButtonText = this.ventRemoveString;
-                    this.AbilityActiveTime = this.ventRemoveStopTime;
+                    this.SetButtonImg(this.ventRemoveSprite);
+                    this.SetButtonText(this.ventRemoveString);
+                    this.SetAbilityActiveTime(this.ventRemoveStopTime);
                 }
                 else
                 {
-                    this.ButtonSprite = this.cameraSetSprite;
-                    this.ButtonText = this.cameraSetString;
-                    this.AbilityActiveTime = this.cameraRemoveStopTime;
-                }
-
-                if (this.CanUse() && this.abilityNum > 0 && screwCheck())
-                {
-                    this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.EnabledColor;
-                    this.Button.graphic.material.SetFloat("_Desat", 0f);
-                }
-                else
-                {
-                    this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.DisabledClear;
-                    this.Button.graphic.material.SetFloat("_Desat", 1f);
-                }
-                if (this.abilityNum == 0)
-                {
-                    Button.SetCoolDown(0, this.CoolTime);
-                    return;
-                }
-
-                if (this.Timer >= 0)
-                {
-                    bool abilityOn = this.IsHasCleanUp() && IsAbilityOn;
-
-                    if (abilityOn || (
-                            !CachedPlayerControl.LocalPlayer.PlayerControl.inVent &&
-                            CachedPlayerControl.LocalPlayer.PlayerControl.moveable))
-                    {
-                        this.Timer -= Time.deltaTime;
-                    }
-                    if (abilityOn)
-                    {
-                        if (!this.AbilityCheck())
-                        {
-                            this.Timer = 0;
-                            this.IsAbilityOn = false;
-                        }
-                    }
-                }
-
-                if (this.Timer <= 0 && this.IsHasCleanUp() && IsAbilityOn)
-                {
-                    this.IsAbilityOn = false;
-                    this.Button.cooldownTimerText.color = Palette.EnabledColor;
-                    this.CleanUp();
-                    this.reduceAbilityCount();
-                    this.ResetCoolTimer();
-                }
-
-                if (this.abilityNum > 0)
-                {
-                    Button.SetCoolDown(
-                        this.Timer,
-                        (this.IsHasCleanUp() && this.IsAbilityOn) ? this.AbilityActiveTime : this.CoolTime);
-                    this.updateAbilityCountText();
+                    this.SetButtonImg(this.cameraSetSprite);
+                    this.SetButtonText(this.cameraSetString);
+                    this.SetAbilityActiveTime(this.cameraRemoveStopTime);
                 }
             }
 
-            protected override void OnClickEvent()
+            protected override void DoClick()
             {
-                if (this.CanUse() &&
-                    this.Timer < 0f &&
-                    this.abilityNum > 0 &&
-                    !this.IsAbilityOn &&
-                    screwCheck())
+                if (this.IsEnable() &&
+                    this.Timer <= 0f &&
+                    this.IsAbilityReady() &&
+                    this.UseAbility.Invoke())
                 {
-                    Button.graphic.color = this.DisableColor;
-
-                    if (this.UseAbility())
+                    if (this.HasCleanUp())
                     {
-                        if (this.IsHasCleanUp())
-                        {
-                            this.Timer = this.AbilityActiveTime;
-                            Button.cooldownTimerText.color = this.TimerOnColor;
-                            this.IsAbilityOn = true;
-                        }
-                        else
-                        {
-                            this.reduceAbilityCount();
-                            this.ResetCoolTimer();
-                        }
+                        this.SetStatus(AbilityState.Activating);
+                    }
+                    else
+                    {
+                        this.reduceCountAction.Invoke();
+                        this.ResetCoolTimer();
                     }
                 }
             }
 
-            private void reduceAbilityCount()
+            private Action reduceAbilityCount()
             {
-                this.abilityNum = this.isVentRemove ? 
+                return () =>
+                {
+                    this.abilityNum = this.isVentRemove ?
                     this.abilityNum - this.ventRemoveScrewNum : this.abilityNum - this.cameraSetScrewNum;
-                updateAbilityCountText();
+                    updateAbilityCountText();
+                };
             }
 
             private void updateAbilityCountText()
@@ -513,12 +485,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 if (this.Button != null)
                 {
-                    this.Button.SetActive(false);
+                    this.Button.SetButtonShow(false);
                 }
                 if (Player.GetPlayerTaskGage(rolePlayer) >= this.awakeTaskGage)
                 {
                     this.awakeRole = true;
-                    this.HasOtherVision = this.awakeHasOtherVision;
+                    this.HasOtherVison = this.awakeHasOtherVision;
+                    this.Button.SetButtonShow(true);
                 }
             }
         }
@@ -788,7 +761,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             if (this.Button == null) { return; }
 
             var allOps = OptionHolder.AllOption;
-            this.Button.SetAbilityCoolTime(
+            this.Button.SetCoolTime(
                 allOps[GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)].GetValue());
             this.Button.SetAbilityActiveTime(1.0f);
 

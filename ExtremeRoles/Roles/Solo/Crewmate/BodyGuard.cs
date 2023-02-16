@@ -120,7 +120,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     this.Timer <= 0f &&
                     this.IsAbilityReady())
                 {
-                    if (this.abilityNum <= 0 || this.resetCheck.Invoke())
+                    if (this.abilityNum <= 0 || this.isReset)
                     {
                         this.resetAction.Invoke();
                         this.ResetCoolTimer();
