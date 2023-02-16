@@ -144,7 +144,7 @@ namespace ExtremeRoles.Roles.Combination
                     {
                         return false;
                     }
-                    this.minigame = ChargableButton.OpenMinigame(
+                    this.minigame = GameSystem.OpenMinigame(
                         watchConsole.MinigamePrefab);
                     break;
                 case AbilityType.Vital:
@@ -153,7 +153,7 @@ namespace ExtremeRoles.Roles.Combination
                     {
                         return false;
                     }
-                    this.minigame = ChargableButton.OpenMinigame(
+                    this.minigame = GameSystem.OpenMinigame(
                         vitalConsole.MinigamePrefab);
                     break;
                 default:

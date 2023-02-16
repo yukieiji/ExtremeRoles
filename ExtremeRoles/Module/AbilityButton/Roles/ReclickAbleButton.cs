@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace ExtremeRoles.Module.AbilityButton.Roles.Roles
+namespace ExtremeRoles.Module.AbilityButton.Roles
 {
     public sealed class ReclickableButton : RoleAbilityButtonBase
     {

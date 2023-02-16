@@ -3,7 +3,7 @@ using UnityEngine;
 
 using ExtremeRoles.Performance;
 
-namespace ExtremeRoles.Module.AbilityButton.Roles.Roles
+namespace ExtremeRoles.Module.AbilityButton.Roles
 {
     public sealed class ChargableButton : RoleAbilityButtonBase
     {
