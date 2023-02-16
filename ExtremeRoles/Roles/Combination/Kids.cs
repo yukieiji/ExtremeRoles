@@ -102,6 +102,7 @@ namespace ExtremeRoles.Roles.Combination
     {
         public override bool IsAssignGhostRole => this.canAssignWisp;
 
+        // TODO : Replace AbilityCountButton
         public sealed class DelinquentAbilityButton : RoleButtonBase
         {
             public int CurAbilityNum
