@@ -230,7 +230,7 @@ namespace ExtremeRoles.Patches
                 (MeetingHud.Instance == null && ExileController.Instance == null);
 
             killButtonUpdate(player, playerRole, enable);
-            ventButtonUpdate(playerRole, enable);
+            ventButtonUpdate(player, playerRole, enable);
 
             sabotageButtonUpdate(player, playerRole, enable);
             roleAbilityButtonUpdate(playerRole);
@@ -335,10 +335,12 @@ namespace ExtremeRoles.Patches
         }
 
         private static void ventButtonUpdate(
-            SingleRoleBase role, bool enable)
+            PlayerControl player, SingleRoleBase role, bool enable)
         {
 
             HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
+
+            bool ventEnable = enable && !player.Data.IsDead;
 
             if (!role.CanUseVent())
             { 
@@ -348,7 +350,7 @@ namespace ExtremeRoles.Patches
 
             if (!role.TryGetVanillaRoleId(out RoleTypes roleId))
             {
-                if (enable && 
+                if (ventEnable &&
                     ExtremeGameModeManager.Instance.ShipOption.IsEnableImpostorVent)
                 {
                     hudManager.ImpostorVentButton.Show();
@@ -358,11 +360,9 @@ namespace ExtremeRoles.Patches
                     hudManager.ImpostorVentButton.SetDisabled();
                 }
             }
-            else
+            else if (roleId == RoleTypes.Engineer)
             {
-                if (roleId != RoleTypes.Engineer) { return; }
-
-                if (enable)
+                if (ventEnable)
                 {
                     if (!ExtremeGameModeManager.Instance.ShipOption.EngineerUseImpostorVent)
                     {
