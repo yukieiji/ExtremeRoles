@@ -22,8 +22,8 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
         public AbilityState State { get; private set; } = AbilityState.CoolDown;
         public Transform Transform => this.button.transform;
 
-        public float CoolTime { get; private set; } = float.MaxValue;
-        public float ActiveTime { get; private set; } = float.MaxValue;
+        public float CoolTime { get; private set; } = 10.0f;
+        public float ActiveTime { get; private set; } = 0.0f;
 
         private bool isShow = true;
 
