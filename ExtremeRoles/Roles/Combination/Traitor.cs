@@ -144,7 +144,8 @@ namespace ExtremeRoles.Roles.Combination
                     {
                         return false;
                     }
-                    openConsole(watchConsole.MinigamePrefab);
+                    this.minigame = ChargableButton.OpenMinigame(
+                        watchConsole.MinigamePrefab);
                     break;
                 case AbilityType.Vital:
                     SystemConsole vitalConsole = GameSystem.GetVitalSystemConsole();
@@ -152,7 +153,8 @@ namespace ExtremeRoles.Roles.Combination
                     {
                         return false;
                     }
-                    openConsole(vitalConsole.MinigamePrefab);
+                    this.minigame = ChargableButton.OpenMinigame(
+                        vitalConsole.MinigamePrefab);
                     break;
                 default:
                     return false;
@@ -231,8 +233,7 @@ namespace ExtremeRoles.Roles.Combination
 
         public void IntroEndSetUp()
         {
-            this.Button.PositionOffset = new Vector3(-1.8f, -0.06f, 0);
-            this.Button.ReplaceHotKey(KeyCode.F);
+            this.Button.SetHotKey(KeyCode.F);
 
             byte playerId = CachedPlayerControl.LocalPlayer.PlayerId;
 
@@ -274,7 +275,7 @@ namespace ExtremeRoles.Roles.Combination
         {
             if (!this.canUseButton && this.Button != null)
             {
-                this.Button.SetActive(false);
+                this.Button.SetButtonShow(false);
             }
 
             if (this.chargeTime == null)
@@ -291,7 +292,7 @@ namespace ExtremeRoles.Roles.Combination
                 return;
             }
 
-            this.chargeTime.text = Mathf.CeilToInt(this.Button.GetCurTime()).ToString();
+            this.chargeTime.text = Mathf.CeilToInt(this.Button.Timer).ToString();
             this.chargeTime.gameObject.SetActive(true);
         }
 
@@ -301,6 +302,10 @@ namespace ExtremeRoles.Roles.Combination
         public override bool TryRolePlayerKillTo(PlayerControl rolePlayer, PlayerControl targetPlayer)
         {
             this.canUseButton = true;
+            if (this.Button != null)
+            {
+                this.Button.SetButtonShow(true);
+            }
             return true;
         }
 
@@ -378,14 +383,6 @@ namespace ExtremeRoles.Roles.Combination
             this.RoleAbilityInit();
         }
 
-        private void openConsole(Minigame game)
-        {
-            this.minigame = Object.Instantiate(game, Camera.main.transform, false);
-            this.minigame.transform.SetParent(Camera.main.transform, false);
-            this.minigame.transform.localPosition = new Vector3(0.0f, 0.0f, -50f);
-            this.minigame.Begin(null);
-        }
-
         private void updateAbility()
         {
             ++this.nextUseAbilityType;
@@ -425,7 +422,7 @@ namespace ExtremeRoles.Roles.Combination
                 default:
                     break;
             }
-            traitorButton.SetButtonImage(sprite);
+            traitorButton.SetButtonImg(sprite);
         }
     }
 }
