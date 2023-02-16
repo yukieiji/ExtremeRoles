@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-
+﻿using AmongUs.GameOptions;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
@@ -9,7 +8,6 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {

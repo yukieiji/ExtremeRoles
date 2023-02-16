@@ -378,7 +378,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             bool isPlayerDummy = Input.GetKey(KeyCode.LeftShift);
 
-            this.Button.SetButtonImage(
+            this.Button.SetButtonImg(
                 isPlayerDummy ? 
                 this.playerDummy : this.deadBodyDummy);
             this.Button.SetButtonText(
