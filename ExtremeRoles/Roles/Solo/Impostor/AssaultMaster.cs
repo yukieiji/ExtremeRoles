@@ -99,7 +99,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.curReloadCoolTime = Mathf.Clamp(
                     newCoolTime, 0.01f, this.defaultReloadCoolTime);
 
-                this.reloadButton.SetAbilityCoolTime(
+                this.reloadButton.SetCoolTime(
                     this.curReloadCoolTime);
                 
                 this.reloadButton.ResetCoolTimer();
@@ -117,7 +117,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool UseAbility()
         {
-            this.reloadButton.SetAbilityCoolTime(
+            this.reloadButton.SetCoolTime(
                 this.defaultReloadCoolTime);
 
             this.curReloadCoolTime = this.defaultReloadCoolTime;
@@ -154,7 +154,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 this.reduceKillCoolText = GameObject.Instantiate(
                     FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
-                    this.Button.GetTransform());
+                    this.Button.Transform);
                 this.reduceKillCoolText.enableWordWrapping = false;
                 this.reduceKillCoolText.transform.localScale = Vector3.one * 0.5f;
                 this.reduceKillCoolText.transform.localPosition += new Vector3(-0.05f, 0.60f, 0);
