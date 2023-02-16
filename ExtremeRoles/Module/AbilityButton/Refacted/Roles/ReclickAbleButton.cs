@@ -39,12 +39,12 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted.Roles
 
         protected override void DoClick()
         {
+            if (!this.IsEnable()) { return; }
 
             switch (this.State)
             {
                 case AbilityState.Ready:
-                    if (this.CanUse.Invoke() &&
-                        this.Timer <= 0.0f &&
+                    if (this.Timer <= 0.0f &&
                         this.UseAbility.Invoke())
                     {
                         this.SetStatus(AbilityState.Activating);

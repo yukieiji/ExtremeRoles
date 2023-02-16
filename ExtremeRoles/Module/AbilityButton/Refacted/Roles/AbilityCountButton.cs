@@ -76,8 +76,8 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted.Roles
 
         protected override void DoClick()
         {
-            if (this.CanUse.Invoke() &&
-                this.Timer < 0f &&
+            if (this.IsEnable() &&
+                this.Timer <= 0f &&
                 this.abilityNum > 0 &&
                 this.State == AbilityState.Ready &&
                 this.UseAbility.Invoke())

@@ -51,23 +51,21 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted.Roles
 
         protected override void DoClick()
         {
-            if (this.CanUse.Invoke() &&
-                this.Timer < 0.0f)
+            if (!this.IsEnable()) { return; }
+
+            switch (this.State)
             {
-                switch (this.State)
-                {
-                    case AbilityState.Ready:
-                        if (this.UseAbility.Invoke())
-                        {
-                            passiveAbilityOn();
-                        }
-                        break;
-                    case AbilityState.Activating:
-                        this.AbilityCleanUp.Invoke();
-                        break;
-                    default:
-                        break;
-                }
+                case AbilityState.Ready:
+                    if (this.UseAbility.Invoke())
+                    {
+                        passiveAbilityOn();
+                    }
+                    break;
+                case AbilityState.Activating:
+                    this.AbilityCleanUp.Invoke();
+                    break;
+                default:
+                    break;
             }
         }
 

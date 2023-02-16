@@ -31,10 +31,10 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted.Roles
 
         protected override void DoClick()
         {
-            if(this.CanUse.Invoke() &&
-                this.Timer <= 0f &&
-                this.State == AbilityState.Ready &&
-                this.UseAbility.Invoke())
+            if(this.IsEnable() &&
+               this.Timer <= 0f &&
+               this.State == AbilityState.Ready &&
+               this.UseAbility.Invoke())
             {
                 this.SetStatus(
                     this.HasCleanUp() ?

@@ -75,18 +75,20 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted.Roles
         }
 
         protected override bool IsEnable() => 
-            (this.CanUse() || this.State == AbilityState.Activating) && 
+            (this.CanUse.Invoke() || this.State == AbilityState.Activating) && 
             this.currentCharge > 0f;
 
         protected override void DoClick()
         {
+
+            if (!this.IsEnable()) { return; }
+
             if (this.State == AbilityState.Activating)
             {
                 this.AbilityCleanUp.Invoke();
                 this.SetStatus(AbilityState.Ready);
             }
             else if (
-                this.CanUse.Invoke() &&
                 this.Timer <= 0f &&
                 this.State == AbilityState.Ready &&
                 this.UseAbility.Invoke())
