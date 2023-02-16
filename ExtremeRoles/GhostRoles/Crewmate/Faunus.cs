@@ -7,7 +7,7 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Refacted.GhostRoles;
+using ExtremeRoles.Module.AbilityButton.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;

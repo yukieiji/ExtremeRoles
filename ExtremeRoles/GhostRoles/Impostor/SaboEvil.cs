@@ -2,7 +2,7 @@
 
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Refacted.GhostRoles;
+using ExtremeRoles.Module.AbilityButton.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;

@@ -6,10 +6,9 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Refacted.GhostRoles;
+using ExtremeRoles.Module.AbilityButton.GhostRoles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-
 
 namespace ExtremeRoles.GhostRoles.API
 {

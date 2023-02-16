@@ -21,7 +21,7 @@ using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Module.Interface;
 
-using GhostAbilityButton = ExtremeRoles.Module.AbilityButton.Refacted.GhostRoles.AbilityCountButton;
+using GhostAbilityButton = ExtremeRoles.Module.AbilityButton.GhostRoles.AbilityCountButton;
 using RoleButtonBase = ExtremeRoles.Module.AbilityButton.Roles.RoleAbilityButtonBase;
 
 namespace ExtremeRoles.Roles.Combination

@@ -1,15 +1,12 @@
 ﻿using System;
 using UnityEngine;
 
-using Hazel;
-
 using ExtremeRoles.GhostRoles;
-using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module.AbilityButton.GhostRoles
 {
 
-    public class AbilityCountButton : GhostRoleAbilityButtonBase
+    public sealed class AbilityCountButton : GhostRoleAbilityButtonBase
     {
         public int CurAbilityNum
         {
@@ -18,6 +15,9 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
 
         private int abilityNum = 0;
         private TMPro.TextMeshPro abilityCountText = null;
+
+        private Action baseCleanUp;
+        private Action reduceCountAction;
 
         public AbilityCountButton(
             AbilityType abilityType,
@@ -35,116 +35,92 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
                 rpcHostCallAbility, abilityCleanUp,
                 abilityCheck, hotkey)
         {
-            this.abilityCountText = GameObject.Instantiate(
-                this.Button.cooldownTimerText,
-                this.Button.cooldownTimerText.transform.parent);
+
+            var cooldownText = GetCoolDownText();
+
+            abilityCountText = UnityEngine.Object.Instantiate(
+                cooldownText, cooldownText.transform.parent);
             updateAbilityCountText();
-            this.abilityCountText.enableWordWrapping = false;
-            this.abilityCountText.transform.localScale = Vector3.one * 0.5f;
-            this.abilityCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
+            abilityCountText.enableWordWrapping = false;
+            abilityCountText.transform.localScale = Vector3.one * 0.5f;
+            abilityCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
+
+            reduceCountAction = reduceAbilityCountAction();
+
+            if (HasCleanUp())
+            {
+                baseCleanUp = new Action(AbilityCleanUp);
+                AbilityCleanUp += reduceCountAction;
+            }
+            else
+            {
+                baseCleanUp = null;
+                AbilityCleanUp = reduceCountAction;
+            }
         }
 
         public void UpdateAbilityCount(int newCount)
         {
-            this.abilityNum = newCount;
-            this.updateAbilityCountText();
+            abilityNum = newCount;
+            updateAbilityCountText();
+            if (State == AbilityState.None)
+            {
+                SetStatus(AbilityState.CoolDown);
+            }
         }
-
 
         private void updateAbilityCountText()
         {
-            this.abilityCountText.text = Helper.Translation.GetString("buttonCountText") + string.Format(
-                Helper.Translation.GetString(OptionUnit.Shot.ToString()), this.abilityNum);
-        }
-        private void reduceAbilityCount()
-        {
-            --this.abilityNum;
-            if (this.abilityCountText != null)
-            {
-                updateAbilityCountText();
-            }
+            abilityCountText.text = Helper.Translation.GetString("buttonCountText") + string.Format(
+                Helper.Translation.GetString(OptionUnit.Shot.ToString()), abilityNum);
         }
 
-        protected override void AbilityButtonUpdate()
+        private Action reduceAbilityCountAction()
         {
-            if (this.CanUse() && this.abilityNum > 0 && !this.IsComSabNow())
+            return () =>
             {
-                this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.EnabledColor;
-                this.Button.graphic.material.SetFloat("_Desat", 0f);
-            }
-            else
-            {
-                this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.DisabledClear;
-                this.Button.graphic.material.SetFloat("_Desat", 1f);
-            }
-            if (this.abilityNum == 0)
-            {
-                Button.SetCoolDown(0, this.CoolTime);
-                return;
-            }
-            if (this.Timer >= 0)
-            {
-                bool abilityOn = this.IsHasCleanUp() && IsAbilityOn;
-
-                PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
-
-                if (abilityOn ||
-                    localPlayer.IsKillTimerEnabled ||
-                    localPlayer.ForceKillTimerContinue)
+                --abilityNum;
+                if (abilityCountText != null)
                 {
-                    this.Timer -= Time.deltaTime;
+                    updateAbilityCountText();
                 }
-                if (abilityOn)
+            };
+        }
+
+        public override void ForceAbilityOff()
+        {
+            SetStatus(AbilityState.Ready);
+            baseCleanUp?.Invoke();
+        }
+
+        protected override void DoClick()
+        {
+            if (IsEnable() &&
+                Timer <= 0f &&
+                abilityNum > 0 &&
+                State == AbilityState.Ready &&
+                UseAbility())
+            {
+                if (HasCleanUp())
                 {
-                    if (!this.AbilityCheck())
-                    {
-                        this.Timer = 0;
-                        this.IsAbilityOn = false;
-                    }
+                    SetStatus(AbilityState.Activating);
                 }
-            }
-
-            if (this.Timer <= 0 && this.IsHasCleanUp() && IsAbilityOn)
-            {
-                this.IsAbilityOn = false;
-                this.Button.cooldownTimerText.color = Palette.EnabledColor;
-                this.CleanUp();
-                this.reduceAbilityCount();
-                this.ResetCoolTimer();
-            }
-
-            if (this.abilityNum > 0)
-            {
-                Button.SetCoolDown(
-                    this.Timer,
-                    (this.IsHasCleanUp() && this.IsAbilityOn) ? this.AbilityActiveTime : this.CoolTime);
+                else
+                {
+                    reduceCountAction.Invoke();
+                    ResetCoolTimer();
+                }
             }
         }
 
-        protected override void OnClickEvent()
-        {
-            if (!this.IsComSabNow() &&
-                this.CanUse() &&
-                this.Timer < 0f &&
-                this.abilityNum > 0 &&
-                !this.IsAbilityOn)
-            {
-                Button.graphic.color = this.DisableColor;
+        protected override bool IsEnable() =>
+            CanUse.Invoke() && abilityNum > 0 && !IsComSabNow();
 
-                if (this.UseAbility())
-                {
-                    if (this.IsHasCleanUp())
-                    {
-                        this.Timer = this.AbilityActiveTime;
-                        Button.cooldownTimerText.color = this.TimerOnColor;
-                        this.IsAbilityOn = true;
-                    }
-                    else
-                    {
-                        this.reduceAbilityCount();
-                        this.ResetCoolTimer();
-                    }
-                }
+        protected override void UpdateAbility()
+        {
+            if (abilityNum <= 0)
+            {
+                SetStatus(AbilityState.None);
             }
         }
     }
