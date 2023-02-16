@@ -1,11 +1,9 @@
 ﻿using System;
 using UnityEngine;
 
-using ExtremeRoles.Performance;
-
-namespace ExtremeRoles.Module.AbilityButton.Roles
+namespace ExtremeRoles.Module.AbilityButton.Roles.Roles
 {
-    public class ReclickableButton : RoleAbilityButtonBase
+    public sealed class ReclickableButton : RoleAbilityButtonBase
     {
         public ReclickableButton(
             string buttonText,
@@ -22,79 +20,45 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
                 abilityCleanUp,
                 abilityCheck,
                 hotkey)
-        {}
-
-        protected override void AbilityButtonUpdate()
         {
-            if (this.CanUse() || this.IsAbilityOn)
+
+            var addCleanUpFunc = () => ResetCoolTimer();
+
+            if (HasCleanUp())
             {
-                this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.EnabledColor;
-                this.Button.graphic.material.SetFloat("_Desat", 0f);
+                this.AbilityCleanUp += addCleanUpFunc;
             }
             else
             {
-                this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.DisabledClear;
-                this.Button.graphic.material.SetFloat("_Desat", 1f);
+                this.AbilityCleanUp = addCleanUpFunc;
             }
+        }
 
-            if (this.Timer >= 0)
+        protected override bool IsEnable() =>
+            this.CanUse.Invoke() || this.State == AbilityState.Activating;
+
+        protected override void DoClick()
+        {
+            if (!this.IsEnable()) { return; }
+
+            switch (this.State)
             {
-                PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
-
-                if (IsAbilityOn ||
-                    localPlayer.IsKillTimerEnabled ||
-                    localPlayer.ForceKillTimerContinue)
-                {
-                    this.Timer -= Time.deltaTime;
-                }
-                if (IsAbilityOn)
-                {
-                    if (!this.AbilityCheck())
+                case AbilityState.Ready:
+                    if (this.Timer <= 0.0f &&
+                        this.UseAbility.Invoke())
                     {
-                        this.Timer = 0;
-                        this.IsAbilityOn = false;
+                        this.SetStatus(AbilityState.Activating);
                     }
-                }
-            }
-
-            if (this.Timer <= 0 && IsAbilityOn)
-            {
-                this.abilityOff();
-            }
-
-            Button.SetCoolDown(
-                this.Timer,
-                (this.IsAbilityOn) ? this.AbilityActiveTime : this.CoolTime);
-        }
-
-        protected override void OnClickEvent()
-        {
-            if (this.IsAbilityOn)
-            {
-                this.abilityOff();
-            }
-
-            else if (
-                this.CanUse() &&
-                this.Timer < 0f &&
-                !this.IsAbilityOn)
-            {
-
-                if (this.UseAbility())
-                {
-                    this.Timer = this.AbilityActiveTime;
-                    Button.cooldownTimerText.color = this.TimerOnColor;
-                    this.IsAbilityOn = true;
-                }
+                    break;
+                case AbilityState.Activating:
+                    this.AbilityCleanUp.Invoke();
+                    break;
+                default:
+                    break;
             }
         }
 
-        private void abilityOff()
-        {
-            this.IsAbilityOn = false;
-            this.Button.cooldownTimerText.color = Palette.EnabledColor;
-            this.CleanUp();
-            this.ResetCoolTimer();
-        }
+        protected override void UpdateAbility()
+        { }
     }
 }

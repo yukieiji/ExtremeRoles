@@ -3,12 +3,13 @@ using UnityEngine;
 
 using ExtremeRoles.Performance;
 
-namespace ExtremeRoles.Module.AbilityButton.Roles
+namespace ExtremeRoles.Module.AbilityButton.Roles.Roles
 {
 
     public abstract class RoleAbilityButtonBase : AbilityButtonBase
     {
         protected Func<bool> UseAbility;
+
         public RoleAbilityButtonBase(
             string buttonText,
             Func<bool> ability,
@@ -17,49 +18,26 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
             Action abilityCleanUp = null,
             Func<bool> abilityCheck = null,
             KeyCode hotkey = KeyCode.F) : base(
-                buttonText, canUse,
-                sprite, abilityCleanUp,
-                abilityCheck,
-                hotkey)
+                sprite, buttonText, abilityCleanUp,
+                canUse, abilityCheck, hotkey)
         {
             this.UseAbility = ability;
         }
 
-        protected abstract void AbilityButtonUpdate();
-
-
-        public sealed override void Update()
+        protected sealed override bool GetActivate()
         {
-            if (this.Button == null) { return; }
-
             PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
 
-            if (localPlayer.Data == null ||
-                MeetingHud.Instance ||
-                ExileController.Instance ||
-                localPlayer.Data.IsDead)
-            {
-                SetActive(false);
-                return;
-            }
-
-            var hudManager = FastDestroyableSingleton<HudManager>.Instance;
-
-            SetActive(
-                localPlayer.IsKillTimerEnabled || 
-                localPlayer.ForceKillTimerContinue ||
-                hudManager.UseButton.isActiveAndEnabled);
-
-            this.Button.graphic.sprite = this.ButtonSprite;
-            this.Button.OverrideText(ButtonText);
-
-            AbilityButtonUpdate();
-
-            if (Input.GetKeyDown(this.Hotkey))
-            {
-                OnClickEvent();
-            }
-
+            return
+                (
+                    localPlayer.IsKillTimerEnabled ||
+                    localPlayer.ForceKillTimerContinue ||
+                    FastDestroyableSingleton<HudManager>.Instance.UseButton.isActiveAndEnabled
+                ) &&
+                localPlayer.Data != null &&
+                MeetingHud.Instance == null &&
+                ExileController.Instance == null &&
+                !localPlayer.Data.IsDead;
         }
     }
 }

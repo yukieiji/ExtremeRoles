@@ -3,9 +3,9 @@ using UnityEngine;
 
 using ExtremeRoles.Performance;
 
-namespace ExtremeRoles.Module.AbilityButton.Roles
+namespace ExtremeRoles.Module.AbilityButton.Roles.Roles
 {
-    public class ChargableButton : RoleAbilityButtonBase
+    public sealed class ChargableButton : RoleAbilityButtonBase
     {
         private float currentCharge;
 
@@ -25,115 +25,84 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
                 abilityCleanUp,
                 abilityCheck,
                 hotkey)
-        { }
+        {
+            if (HasCleanUp())
+            {
+                this.AbilityCleanUp += addCleanUpFunction();
+            }
+            else
+            {
+                this.AbilityCleanUp = addCleanUpFunction();
+            }
+        }
 
         public override void SetAbilityActiveTime(float time)
         {
             this.currentCharge = time;
             base.SetAbilityActiveTime(time);
         }
+
         public override void ResetCoolTimer()
         {
-            this.currentCharge = this.AbilityActiveTime;
+            this.currentCharge = this.ActiveTime;
             base.ResetCoolTimer();
         }
 
-        protected override void AbilityButtonUpdate()
+        public override void ForceAbilityOff()
         {
-            if ((this.CanUse() || this.IsAbilityOn) && this.currentCharge > 0f)
-            {
-                this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.EnabledColor;
-                this.Button.graphic.material.SetFloat("_Desat", 0f);
-            }
-            else
-            {
-                this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.DisabledClear;
-                this.Button.graphic.material.SetFloat("_Desat", 1f);
-            }
-
-            PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
-
-            if (this.Timer >= 0)
-            {
-                if (IsAbilityOn ||
-                    localPlayer.IsKillTimerEnabled ||
-                    localPlayer.ForceKillTimerContinue)
-                {
-                    this.Timer -= Time.deltaTime;
-                }
-                if (IsAbilityOn)
-                {
-                    if (!this.AbilityCheck())
-                    {
-                        this.currentCharge = Mathf.Clamp(
-                            this.Timer, 0.0f, this.AbilityActiveTime);
-                        this.Timer = 0;
-                        this.IsAbilityOn = false;
-                    }
-                }
-            }
-            if (localPlayer.AllTasksCompleted())
-            {
-                this.currentCharge = this.AbilityActiveTime;
-            }
-
-            if (this.Timer <= 0 && IsAbilityOn)
-            {
-                this.abilityOff();
-            }
-
-            Button.SetCoolDown(
-                this.Timer,
-                (this.IsAbilityOn) ? this.AbilityActiveTime : this.CoolTime);
+            this.currentCharge = Mathf.Clamp(
+                Timer, 0.0f, this.ActiveTime);
+            base.ForceAbilityOff();
         }
 
-        protected override void OnClickEvent()
+        protected override void UpdateAbility()
         {
-            if (this.IsAbilityOn)
+            if (CachedPlayerControl.LocalPlayer.PlayerControl.AllTasksCompleted())
             {
-                this.abilityOff();
+                this.currentCharge = this.ActiveTime;
             }
+        }
 
+        protected override bool IsEnable() =>
+            (this.CanUse.Invoke() || this.State == AbilityState.Activating) &&
+            this.currentCharge > 0f;
+
+        protected override void DoClick()
+        {
+
+            if (!IsEnable()) { return; }
+
+            if (this.State == AbilityState.Activating)
+            {
+                this.AbilityCleanUp.Invoke();
+                this.SetStatus(AbilityState.Ready);
+            }
             else if (
-                this.CanUse() &&
-                this.Timer < 0f &&
-                !this.IsAbilityOn)
+                this.Timer <= 0f &&
+                this.State == AbilityState.Ready &&
+                this.UseAbility.Invoke())
             {
+                this.SetStatus(
+                    this.HasCleanUp() ?
+                    AbilityState.Activating :
+                    AbilityState.CoolDown);
+            }
+        }
 
-                if (this.UseAbility())
+        private Action addCleanUpFunction()
+        {
+            return () =>
+            {
+                this.currentCharge = this.Timer;
+                if (this.currentCharge > 0.0f)
                 {
-                    this.Timer = this.currentCharge;
-                    Button.cooldownTimerText.color = this.TimerOnColor;
-                    this.IsAbilityOn = true;
+                    this.SetStatus(AbilityState.Ready);
                 }
-            }
-        }
-
-        private void abilityOff()
-        {
-            this.currentCharge = this.Timer;
-            this.Button.cooldownTimerText.color = Palette.EnabledColor;
-            this.CleanUp();
-            this.IsAbilityOn = false;
-            if (this.currentCharge > 0.0f)
-            {
-                this.Timer = 0.0f;
-            }
-            else
-            {
-                this.ResetCoolTimer();
-            }
-        }
-
-        public static Minigame OpenMinigame(Minigame prefab)
-        {
-            Minigame minigame = UnityEngine.Object.Instantiate(
-                prefab, Camera.main.transform, false);
-            minigame.transform.SetParent(Camera.main.transform, false);
-            minigame.transform.localPosition = new Vector3(0.0f, 0.0f, -50f);
-            minigame.Begin(null);
-
-            return minigame;
+                else
+                {
+                    ResetCoolTimer();
+                }
+            };
         }
     }
 }

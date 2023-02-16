@@ -4,12 +4,10 @@ using UnityEngine;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Performance;
 
-using NewAbilityButtonBase = ExtremeRoles.Module.AbilityButton.Refacted.AbilityButtonBase;
-
 namespace ExtremeRoles.Module.AbilityButton.GhostRoles
 {
 
-    public abstract class GhostRoleAbilityButtonBase : NewAbilityButtonBase
+    public abstract class GhostRoleAbilityButtonBase : AbilityButtonBase
     {
         protected Func<bool> abilityPreCheck;
         protected Action<RPCOperator.RpcCaller> ability;
