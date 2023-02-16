@@ -29,7 +29,7 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted.GhostRoles
 
         protected override void DoClick()
         {
-            if (this.CanUse.Invoke() &&
+            if (this.IsEnable() &&
                 this.Timer <= 0f &&
                 this.State == AbilityState.Ready &&
                 this.UseAbility())

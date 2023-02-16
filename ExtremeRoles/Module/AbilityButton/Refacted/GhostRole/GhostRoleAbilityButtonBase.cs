@@ -45,30 +45,29 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted.GhostRoles
 
         protected bool UseAbility()
         {
-            if (this.abilityPreCheck.Invoke())
-            {
-                using (var caller = RPCOperator.CreateCaller(
-                    RPCOperator.Command.UseGhostRoleAbility))
-                {
-                    caller.WriteByte((byte)this.abilityType);
-                    caller.WriteBoolean(this.reportAbility);
-                    this.ability.Invoke(caller);
-                }
-                if (this.rpcHostCallAbility != null)
-                {
-                    this.rpcHostCallAbility.Invoke();
-                }
-                if (this.reportAbility)
-                {
-                    ExtremeRolesPlugin.ShipState.AddGhostRoleAbilityReport(
-                        this.abilityType);
-                }
-                return true;
-            }
-            else
+            if (!this.abilityPreCheck.Invoke())
             {
                 return false;
             }
+
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.UseGhostRoleAbility))
+            {
+                caller.WriteByte((byte)this.abilityType);
+                caller.WriteBoolean(this.reportAbility);
+                this.ability.Invoke(caller);
+            }
+            if (this.rpcHostCallAbility != null)
+            {
+                this.rpcHostCallAbility.Invoke();
+            }
+            if (this.reportAbility)
+            {
+                ExtremeRolesPlugin.ShipState.AddGhostRoleAbilityReport(
+                    this.abilityType);
+            }
+            return true;
+
         }
 
         protected bool IsComSabNow()

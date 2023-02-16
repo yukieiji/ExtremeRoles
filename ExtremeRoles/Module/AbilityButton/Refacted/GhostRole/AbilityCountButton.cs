@@ -95,9 +95,8 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted.GhostRoles
 
         protected override void DoClick()
         {
-            if (!this.IsComSabNow() &&
-                this.CanUse() &&
-                this.Timer < 0f &&
+            if (this.IsEnable() &&
+                this.Timer <= 0f &&
                 this.abilityNum > 0 &&
                 this.State == AbilityState.Ready &&
                 this.UseAbility())
