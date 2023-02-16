@@ -90,6 +90,9 @@ namespace ExtremeRoles.Module.AbilityButton
             cachedArrange.ArrangeChilds();
         }
 
+        public bool IsAbilityActive() =>
+            this.State == AbilityState.Activating;
+
         public void SetButtonShow(bool isShow)
         {
             this.isShow = isShow;

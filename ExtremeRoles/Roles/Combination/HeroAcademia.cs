@@ -517,7 +517,8 @@ namespace ExtremeRoles.Roles.Combination
                     this.CanKill = true;
                     if (this.Button != null)
                     {
-                        if (this.Button.IsAbilityActive() && this.arrow != null)
+                        if (this.Button.IsAbilityActive() && 
+                            this.arrow != null)
                         {
                             this.arrow.Update(rolePlayer.GetTruePosition());
                         }
@@ -683,7 +684,7 @@ namespace ExtremeRoles.Roles.Combination
         {
             if (this.Button != null)
             {
-                this.Button.SetActive(active);
+                this.Button.SetButtonShow(active);
             }
         }
     }
