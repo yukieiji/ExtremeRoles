@@ -38,89 +38,89 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
 
             var cooldownText = GetCoolDownText();
 
-            abilityCountText = UnityEngine.Object.Instantiate(
+            this.abilityCountText = UnityEngine.Object.Instantiate(
                 cooldownText, cooldownText.transform.parent);
             updateAbilityCountText();
-            abilityCountText.enableWordWrapping = false;
-            abilityCountText.transform.localScale = Vector3.one * 0.5f;
-            abilityCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
+            this.abilityCountText.enableWordWrapping = false;
+            this.abilityCountText.transform.localScale = Vector3.one * 0.5f;
+            this.abilityCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
 
-            reduceCountAction = reduceAbilityCountAction();
+            this.reduceCountAction = this.reduceAbilityCountAction();
 
-            if (HasCleanUp())
+            if (this.HasCleanUp())
             {
-                baseCleanUp = new Action(AbilityCleanUp);
-                AbilityCleanUp += reduceCountAction;
+                this.baseCleanUp = new Action(this.AbilityCleanUp);
+                this.AbilityCleanUp += this.reduceCountAction;
             }
             else
             {
-                baseCleanUp = null;
-                AbilityCleanUp = reduceCountAction;
+                this.baseCleanUp = null;
+                this.AbilityCleanUp = this.reduceCountAction;
             }
         }
 
         public void UpdateAbilityCount(int newCount)
         {
-            abilityNum = newCount;
-            updateAbilityCountText();
-            if (State == AbilityState.None)
+            this.abilityNum = newCount;
+            this.updateAbilityCountText();
+            if (this.State == AbilityState.None)
             {
-                SetStatus(AbilityState.CoolDown);
+                this.SetStatus(AbilityState.CoolDown);
             }
         }
 
         private void updateAbilityCountText()
         {
-            abilityCountText.text = Helper.Translation.GetString("buttonCountText") + string.Format(
-                Helper.Translation.GetString(OptionUnit.Shot.ToString()), abilityNum);
+            this.abilityCountText.text = Helper.Translation.GetString("buttonCountText") + string.Format(
+                Helper.Translation.GetString(OptionUnit.Shot.ToString()), this.abilityNum);
         }
 
         private Action reduceAbilityCountAction()
         {
             return () =>
             {
-                --abilityNum;
-                if (abilityCountText != null)
+                --this.abilityNum;
+                if (this.abilityCountText != null)
                 {
-                    updateAbilityCountText();
+                    this.updateAbilityCountText();
                 }
             };
         }
 
         public override void ForceAbilityOff()
         {
-            SetStatus(AbilityState.Ready);
-            baseCleanUp?.Invoke();
+            this.SetStatus(AbilityState.Ready);
+            this.baseCleanUp?.Invoke();
         }
 
         protected override void DoClick()
         {
             if (IsEnable() &&
-                Timer <= 0f &&
-                abilityNum > 0 &&
-                State == AbilityState.Ready &&
+                this.Timer <= 0f &&
+                this.abilityNum > 0 &&
+                this.State == AbilityState.Ready &&
                 UseAbility())
             {
-                if (HasCleanUp())
+                if (this.HasCleanUp())
                 {
-                    SetStatus(AbilityState.Activating);
+                    this.SetStatus(AbilityState.Activating);
                 }
                 else
                 {
-                    reduceCountAction.Invoke();
-                    ResetCoolTimer();
+                    this.reduceCountAction.Invoke();
+                    this.ResetCoolTimer();
                 }
             }
         }
 
         protected override bool IsEnable() =>
-            CanUse.Invoke() && abilityNum > 0 && !IsComSabNow();
+            this.CanUse.Invoke() && this.abilityNum > 0 && !this.IsComSabNow();
 
         protected override void UpdateAbility()
         {
-            if (abilityNum <= 0)
+            if (this.abilityNum <= 0)
             {
-                SetStatus(AbilityState.None);
+                this.SetStatus(AbilityState.None);
             }
         }
     }

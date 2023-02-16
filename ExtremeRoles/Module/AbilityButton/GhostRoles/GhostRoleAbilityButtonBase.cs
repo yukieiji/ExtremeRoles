@@ -55,8 +55,8 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
             using (var caller = RPCOperator.CreateCaller(
                 RPCOperator.Command.UseGhostRoleAbility))
             {
-                caller.WriteByte((byte)abilityType);
-                caller.WriteBoolean(reportAbility);
+                caller.WriteByte((byte)this.abilityType);
+                caller.WriteBoolean(this.reportAbility);
                 this.ability.Invoke(caller);
             }
             if (this.rpcHostCallAbility != null)

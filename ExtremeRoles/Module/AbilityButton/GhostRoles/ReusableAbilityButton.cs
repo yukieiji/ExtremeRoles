@@ -29,10 +29,10 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
 
         protected override void DoClick()
         {
-            if (IsEnable() &&
-                Timer <= 0f &&
+            if (this.IsEnable() &&
+                this.Timer <= 0f &&
                 this.State == AbilityState.Ready &&
-                UseAbility())
+                this.UseAbility())
             {
                 this.SetStatus(
                     this.HasCleanUp() ?
@@ -42,7 +42,7 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
         }
 
         protected override bool IsEnable() =>
-            CanUse.Invoke() && !IsComSabNow();
+            this.CanUse.Invoke() && !this.IsComSabNow();
 
         protected override void UpdateAbility()
         { }
