@@ -194,7 +194,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
                 RPCOperator.Command.UseGhostRoleAbility))
             {
                 caller.WriteByte((byte)AbilityType.PoltergeistMoveDeadbody); // アビリティタイプ
-                caller.WriteBoolean(this.isAbilityReport); // 報告できるかどうか
+                caller.WriteBoolean(false); // 報告できるかどうか
                 caller.WriteByte(player.PlayerId);
                 caller.WriteByte(byte.MinValue);
                 caller.WriteFloat(pos.x);
