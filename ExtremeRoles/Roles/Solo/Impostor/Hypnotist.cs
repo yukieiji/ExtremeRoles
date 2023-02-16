@@ -343,6 +343,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.HasOtherVision = this.isAwakedHasOtherVision;
                 this.HasOtherKillCool = this.isAwakedHasOtherKillCool;
                 this.HasOtherKillRange = this.isAwakedHasOtherKillRange;
+                this.Button?.SetButtonShow(true);
             }
             if (this.isAwake && this.addRedPos.Count > 0)
             {
@@ -403,12 +404,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 updateAwakeCheck(null);
             }
-            if (!this.isAwake)
+            if (!this.isAwake &&
+                this.Button != null)
             {
-                if (this.Button != null)
-                {
-                    this.Button.SetActive(false);
-                }
+                this.Button.SetButtonShow(false);
             }
 
             if (this.isActiveTimer)
@@ -1101,6 +1100,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.crakingModule == string.Empty ?
                     consoleName : $"{this.crakingModule}, {consoleName}";
             }
+            this.Button?.SetButtonShow(true);
         }
 
         public void RemoveParent(byte rolePlayerId)
@@ -1144,7 +1144,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 CheckAbility,
                 KeyCode.F);
 
-            this.Button.SetAbilityCoolTime(
+            this.Button.SetCoolTime(
                 hypnotist.DollCrakingCoolTime);
             this.Button.SetAbilityActiveTime(
                 hypnotist.DollCrakingActiveTime);
@@ -1292,7 +1292,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             if (this.canUseCrakingModule.Count == 0 && 
                 this.Button != null)
             {
-                this.Button.SetActive(false);
+                this.Button.SetButtonShow(false);
             }
 
             if (MeetingHud.Instance == null &&
@@ -1320,7 +1320,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 return;
             }
 
-            this.chargeTime.text = Mathf.CeilToInt(this.Button.GetCurTime()).ToString();
+            this.chargeTime.text = Mathf.CeilToInt(this.Button.Timer).ToString();
             this.chargeTime.gameObject.SetActive(true);
         }
 
@@ -1419,7 +1419,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 default:
                     break;
             }
-            button.SetButtonImage(sprite);
+            button.SetButtonImg(sprite);
         }
 
         private void showText(string text)
