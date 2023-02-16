@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 
-using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.AbilityButton.Roles;
+using ExtremeRoles.Module.AbilityButton.Mode;
+
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
-
-using ExtremeRoles.Module.AbilityButton.Roles;
 
 using BepInEx.IL2CPP.Utils.Collections;
 
@@ -20,199 +19,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 {
     public sealed class Eater : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHook, IRoleUpdate
     {
-        public sealed class EaterAbilityButton : RoleAbilityButtonBase
-        {
-            public int CurAbilityNum
-            {
-                get => this.abilityNum;
-            }
-
-            public float KillEatTime
-            {
-                get => this.killEatTime;
-            }
-            public float CurButtonCoolTime
-            {
-                get => this.CoolTime;
-            }
-
-            private int abilityNum = 0;
-            private bool isKillEatMode;
-            private float killEatTime;
-
-            private string deadBodyEatString;
-            private string killEatString;
-            private Sprite deadBodyEatSprite;
-            private Sprite killEatSprite;
-
-            private TMPro.TextMeshPro abilityCountText = null;
-
-            public EaterAbilityButton(
-                Func<bool> ability,
-                Func<bool> canUse,
-                Sprite deadBodyEatSprite,
-                Sprite killEatSprite,
-                Action abilityCleanUp,
-                Func<bool> abilityCheck,
-                int winAbilityNum,
-                float killEatTime,
-                KeyCode hotkey = KeyCode.F
-                ) : base(
-                    "",
-                    ability,
-                    canUse,
-                    deadBodyEatSprite,
-                    abilityCleanUp,
-                    abilityCheck,
-                    hotkey)
-            {
-                this.abilityCountText = GameObject.Instantiate(
-                    this.Button.cooldownTimerText,
-                    this.Button.cooldownTimerText.transform.parent);
-                updateAbilityCountText();
-                this.abilityCountText.enableWordWrapping = false;
-                this.abilityCountText.transform.localScale = Vector3.one * 0.5f;
-                this.abilityCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
-
-                this.deadBodyEatString = Translation.GetString("deadBodyEat");
-                this.killEatString = Translation.GetString("eatKill");
-                this.ButtonText = this.deadBodyEatString;
-
-                this.deadBodyEatSprite = deadBodyEatSprite;
-                this.killEatSprite = killEatSprite;
-
-                this.killEatTime = killEatTime;
-
-                this.isKillEatMode = false;
-                this.abilityNum = winAbilityNum;
-            }
-
-            public void UpdateAbilityCount(int newCount)
-            {
-                this.abilityNum = newCount;
-                this.updateAbilityCountText();
-            }
-
-            public void SetKillEatMode(bool isActive)
-            {
-                this.isKillEatMode = isActive;
-                if (this.isKillEatMode)
-                {
-                    this.ButtonSprite = this.killEatSprite;
-                    this.ButtonText = this.killEatString;
-                    this.AbilityActiveTime = this.killEatTime;
-                }
-                else
-                {
-                    this.ButtonSprite = this.deadBodyEatSprite;
-                    this.ButtonText = this.deadBodyEatString;
-                    this.AbilityActiveTime = 0.1f;
-                }
-            }
-
-            public void SetKillEatTime(float newTime)
-            {
-                this.killEatTime = newTime;
-            }
-
-            protected override void AbilityButtonUpdate()
-            {
-                if (this.CanUse() && this.abilityNum > 0)
-                {
-                    this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.EnabledColor;
-                    this.Button.graphic.material.SetFloat("_Desat", 0f);
-                }
-                else
-                {
-                    this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.DisabledClear;
-                    this.Button.graphic.material.SetFloat("_Desat", 1f);
-                }
-                if (this.abilityNum == 0)
-                {
-                    Button.SetCoolDown(0, this.CoolTime);
-                    return;
-                }
-
-                if (this.Timer >= 0)
-                {
-                    bool abilityOn = this.IsHasCleanUp() && IsAbilityOn;
-
-                    if (abilityOn || (
-                            !CachedPlayerControl.LocalPlayer.PlayerControl.inVent &&
-                            CachedPlayerControl.LocalPlayer.PlayerControl.moveable))
-                    {
-                        this.Timer -= Time.deltaTime;
-                    }
-                    if (abilityOn)
-                    {
-                        if (!this.AbilityCheck())
-                        {
-                            this.Timer = 0;
-                            this.IsAbilityOn = false;
-                        }
-                    }
-                }
-
-                if (this.Timer <= 0 && this.IsHasCleanUp() && IsAbilityOn)
-                {
-                    this.IsAbilityOn = false;
-                    this.Button.cooldownTimerText.color = Palette.EnabledColor;
-                    this.CleanUp();
-                    this.reduceAbilityCount();
-                    this.ResetCoolTimer();
-                }
-
-                if (this.abilityNum > 0)
-                {
-                    Button.SetCoolDown(
-                        this.Timer,
-                        (this.IsHasCleanUp() && this.IsAbilityOn) ? this.AbilityActiveTime : this.CoolTime);
-                    this.updateAbilityCountText();
-                }
-            }
-
-            protected override void OnClickEvent()
-            {
-                if (this.CanUse() &&
-                    this.Timer < 0f &&
-                    this.abilityNum > 0 &&
-                    !this.IsAbilityOn)
-                {
-                    Button.graphic.color = this.DisableColor;
-
-                    if (this.UseAbility())
-                    {
-                        if (this.IsHasCleanUp())
-                        {
-                            this.Timer = this.AbilityActiveTime;
-                            Button.cooldownTimerText.color = this.TimerOnColor;
-                            this.IsAbilityOn = true;
-                        }
-                        else
-                        {
-                            this.reduceAbilityCount();
-                            this.ResetCoolTimer();
-                        }
-                    }
-                }
-            }
-
-            private void reduceAbilityCount()
-            {
-                this.abilityNum = this.abilityNum - 1;
-                updateAbilityCountText();
-            }
-
-            private void updateAbilityCountText()
-            {
-                if (this.abilityCountText == null) { return; }
-
-                this.abilityCountText.text = string.Format(
-                    Translation.GetString("eaterWinNum"),
-                        this.abilityNum);
-            }
-        }
-
         public enum EaterOption
         {
             CanUseVent,
@@ -222,6 +28,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             KillEatActiveCoolTimeReduceRate,
             IsResetCoolTimeWhenMeeting,
             IsShowArrowForDeadBody
+        }
+
+        public enum EaterAbilityMode : byte
+        {
+            Kill,
+            DeadBody
         }
 
         public RoleAbilityButtonBase Button
@@ -249,6 +61,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private bool isActivated;
         private Dictionary<byte, Arrow> deadBodyArrow;
 
+        private AbilityCountButtonMode<EaterAbilityMode> modeFactory;
+
         public Eater() : base(
            ExtremeRoleId.Eater,
            ExtremeRoleType.Neutral,
@@ -261,24 +75,41 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             var allOpt = OptionHolder.AllOption;
 
-            int abilityNum = (int)allOpt[GetRoleOptionId(
-                RoleAbilityCommonOption.AbilityCount)].GetValue();
-            int halfPlayerNum = GameData.Instance.PlayerCount / 2;
-
-            this.Button = new EaterAbilityButton(
-                UseAbility,
-                IsAbilityUse,
-                Loader.CreateSpriteFromResources(
+            AbilityCountButtonMode deadBodyMode = new AbilityCountButtonMode()
+            {
+                Text = Translation.GetString("deadBodyEat"),
+                Img = Loader.CreateSpriteFromResources(
                     Path.EaterDeadBodyEat),
-                Loader.CreateSpriteFromResources(
-                    Path.EaterEatKill),
-                CleanUp,
-                IsAbilityCheck,
-                halfPlayerNum < abilityNum ? halfPlayerNum : abilityNum,
-                (float)allOpt[GetRoleOptionId(
-                    RoleAbilityCommonOption.AbilityActiveTime)].GetValue());
+                ActiveTime = 0.1f,
+            };
 
-            abilityInit();
+            this.CreateAbilityCountButton(
+                deadBodyMode.Text, deadBodyMode.Img,
+                CleanUp, IsAbilityCheck);
+            
+            if (this.Button is AbilityCountButton button)
+            {
+                int abilityNum = (int)allOpt[GetRoleOptionId(
+                RoleAbilityCommonOption.AbilityCount)].GetValue();
+                int halfPlayerNum = GameData.Instance.PlayerCount / 2;
+
+                button.UpdateAbilityCount(
+                    halfPlayerNum < abilityNum ? halfPlayerNum : abilityNum);
+
+                this.modeFactory = new AbilityCountButtonMode<EaterAbilityMode>(button);
+                this.modeFactory.AddMode(EaterAbilityMode.DeadBody, deadBodyMode);
+                this.modeFactory.AddMode(
+                    EaterAbilityMode.Kill,
+                    new AbilityCountButtonMode()
+                    {
+                        Text = Translation.GetString("eatKill"),
+                        Img = Loader.CreateSpriteFromResources(
+                            Path.EaterEatKill),
+                        ActiveTime = button.ActiveTime,
+                    }
+                );
+
+            }
         }
 
         public void HookMuderPlayer(
@@ -305,19 +136,21 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public bool IsAbilityUse()
         {
 
+            if (this.eatButton == null ||
+                this.modeFactory == null) { return false; }
+
             this.tmpTarget = Player.GetClosestPlayerInRange(
                 CachedPlayerControl.LocalPlayer, this, this.range);
 
             this.targetDeadBody = Player.GetDeadBodyInfo(
                 this.range);
 
-            if (this.eatButton == null) { return false; }
-
             bool hasPlayerTarget = this.tmpTarget != null;
             bool hasDedBodyTarget = this.targetDeadBody != null;
 
-            ((EaterAbilityButton)this.eatButton).SetKillEatMode(
-                !hasDedBodyTarget && hasPlayerTarget);
+            this.modeFactory.SwithMode(
+                !hasDedBodyTarget && hasPlayerTarget ? 
+                EaterAbilityMode.Kill : EaterAbilityMode.DeadBody);
 
             return this.IsCommonUse() && 
                 (hasPlayerTarget || hasDedBodyTarget);
@@ -329,14 +162,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             {
                 if (isResetCoolTimeWhenMeeting)
                 {
-                    this.eatButton.SetAbilityCoolTime(this.defaultCoolTime);
+                    this.eatButton.SetCoolTime(this.defaultCoolTime);
                     this.eatButton.ResetCoolTimer();
                 }
                 if (!this.isActivated)
                 {
-                    EaterAbilityButton eaterButton = (EaterAbilityButton)this.eatButton;
-                    eaterButton.SetKillEatTime(
-                        eaterButton.KillEatTime * this.killEatActiveCoolTimeReduceRate);
+                    var mode = this.modeFactory.GetMode(EaterAbilityMode.Kill);
+                    mode.ActiveTime *= this.killEatActiveCoolTimeReduceRate;
+                    this.modeFactory.AddMode(EaterAbilityMode.Kill, mode);
                 }
             }
             this.isActivated = false;
@@ -394,10 +227,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 this.deadBodyArrow.Remove(playerId);
             }
 
-
-            EaterAbilityButton eaterButton = (EaterAbilityButton)this.eatButton;
-
-            if (eaterButton.CurAbilityNum != 0) { return; }
+            if (this.Button is AbilityCountButton button &&
+                button.CurAbilityNum != 0) { return; }
 
             ExtremeRolesPlugin.ShipState.RpcRoleIsWin(rolePlayer.PlayerId);
             this.IsWin = true;
@@ -419,11 +250,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
                 if (this.eatButton == null) { return; }
 
-                EaterAbilityButton eaterButton = (EaterAbilityButton)this.eatButton;
-                eaterButton.SetKillEatTime(
-                    eaterButton.KillEatTime * this.deadBodyEatActiveCoolTimePenalty);
-
-                this.isActivated = true;
+                var mode = this.modeFactory.GetMode(EaterAbilityMode.Kill);
+                mode.ActiveTime *= this.deadBodyEatActiveCoolTimePenalty;
+                this.modeFactory.AddMode(EaterAbilityMode.Kill, mode);
             }
             else if (this.targetPlayer != null)
             {
@@ -465,18 +294,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             CreateBoolOption(
                 EaterOption.CanUseVent,
                 true, parentOps);
-            CreateFloatOption(
-                RoleAbilityCommonOption.AbilityCoolTime,
-                25.0f, 2.0f, 60.0f, 0.5f,
-                parentOps, format: OptionUnit.Second);
-            CreateFloatOption(
-                RoleAbilityCommonOption.AbilityActiveTime,
-                7.5f, 2.5f, 15.0f, 0.5f,
-                parentOps, format: OptionUnit.Second);
-            CreateIntOption(
-                RoleAbilityCommonOption.AbilityCount,
-                5, 1, 7, 1, parentOps,
-                format: OptionUnit.Shot);
+            this.CreateAbilityCountOption(
+                parentOps, 5, 7, 7.5f);
             CreateFloatOption(
                 EaterOption.EatRange,
                 1.0f, 0.0f, 2.0f, 0.1f,
@@ -526,20 +345,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.deadBodyArrow = new Dictionary<byte, Arrow>();
             this.isActivated = false;
 
-            this.abilityInit();
-        }
-
-        private void abilityInit()
-        {
-            if (this.Button == null) { return; }
-
-            var allOps = OptionHolder.AllOption;
-
-            this.defaultCoolTime = allOps[
-                GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)].GetValue();
-            
-            this.Button.SetAbilityCoolTime(this.defaultCoolTime);
-            this.Button.ResetCoolTimer();
+            this.RoleAbilityInit();
         }
 
         private IEnumerator cleanDeadBodyOps(byte targetPlayerId)
@@ -570,12 +376,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             
             this.targetPlayer = null;
 
-            if (this.eatButton == null) { yield break; }
+            if (this.Button == null) { yield break; }
 
-            EaterAbilityButton eaterButton = (EaterAbilityButton)this.eatButton;
-
-            eaterButton.SetAbilityCoolTime(
-                eaterButton.CurButtonCoolTime * this.killEatCoolTimePenalty);
+            this.Button.SetCoolTime(this.Button.CoolTime * this.killEatCoolTimePenalty);
         }
 
     }
