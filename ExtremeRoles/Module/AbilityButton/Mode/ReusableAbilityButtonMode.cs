@@ -5,19 +5,16 @@ using ExtremeRoles.Module.AbilityButton.Roles;
 
 namespace ExtremeRoles.Module.AbilityButton.Mode
 {
-    public sealed class AbilityCountButtonMode : NormalAbilityButtonMode
-    { }
-
-    public sealed class AbilityCountButtonMode<T> :
-        AbilityButtonModeBase<AbilityCountButton, T, AbilityCountButtonMode>
+    public sealed class ReusableAbilityButtonMode<T> :
+        AbilityButtonModeBase<ReusableAbilityButton, T, NormalAbilityButtonMode>
         where T : struct, Enum
     {
-        public AbilityCountButtonMode(AbilityCountButton button) : base(button)
+        public ReusableAbilityButtonMode(ReusableAbilityButton button) : base(button)
         { }
 
         public override void SwithMode(T modeValue)
         {
-            AbilityCountButtonMode mode = this.Mode[modeValue];
+            NormalAbilityButtonMode mode = this.Mode[modeValue];
 
             this.Button.SetButtonText(mode.Text);
             this.Button.SetButtonImg(mode.Img);
