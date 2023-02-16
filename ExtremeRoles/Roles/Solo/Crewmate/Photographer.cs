@@ -377,11 +377,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 if (taskGage >= this.awakeTaskGage && !this.awakeRole)
                 {
                     this.awakeRole = true;
-                    this.HasOtherVision = this.awakeHasOtherVision;
+                    this.HasOtherVison = this.awakeHasOtherVision;
+                    this.takePhotoButton.SetButtonShow(true);
                 }
                 else
                 {
-                    this.takePhotoButton.SetActive(false);
+                    this.takePhotoButton.SetButtonShow(false);
                 }
             }
 
