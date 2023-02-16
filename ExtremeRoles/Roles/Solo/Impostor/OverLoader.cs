@@ -135,7 +135,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 if (this.Button != null)
                 {
-                    this.Button.SetActive(false);
+                    this.Button.SetButtonShow(false);
                 }
 
                 int impNum = 0;
@@ -152,6 +152,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 if (this.awakeImpNum >= impNum && 
                     this.killCount >= this.awakeKillCount)
                 {
+                    this.Button.SetButtonShow(true);
                     this.isAwake = true;
                     this.HasOtherVision = this.isAwakedHasOtherVision;
                     this.HasOtherKillCool = this.isAwakedHasOtherKillCool;

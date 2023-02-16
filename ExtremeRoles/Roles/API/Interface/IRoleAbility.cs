@@ -220,6 +220,7 @@ namespace ExtremeRoles.Roles.API.Interface
             if (self.Button != null)
             {
                 self.Button.ResetCoolTimer();
+                self.Button.SetButtonShow(true);
             }
             self.RoleAbilityResetOnMeetingEnd();
         }
@@ -228,8 +229,8 @@ namespace ExtremeRoles.Roles.API.Interface
         {
             if (self.Button != null)
             {
-                self.Button.SetActive(false);
                 self.Button.ForceAbilityOff();
+                self.Button.SetButtonShow(false);
             }
             self.RoleAbilityResetOnMeetingStart();
         }
@@ -241,7 +242,7 @@ namespace ExtremeRoles.Roles.API.Interface
             if (self.Button == null) { return; }
 
             var allOpt = OptionHolder.AllOption;
-            self.Button.SetAbilityCoolTime(
+            self.Button.SetCoolTime(
                 allOpt[self.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)].GetValue());
 
             int checkOptionId = self.GetRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime);

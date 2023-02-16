@@ -97,7 +97,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             GameData.PlayerInfo info = Player.GetDeadBodyInfo(
                 this.paintDistance);
 
-            this.Button.SetButtonImage(
+            this.Button.SetButtonImg(
                 Input.GetKey(KeyCode.LeftShift) ?
                 this.randomColorPaintImage : this.transColorPaintImage);
 

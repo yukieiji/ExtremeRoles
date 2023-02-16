@@ -523,8 +523,7 @@ namespace ExtremeRoles.Roles
                 {
                     if (multiAssignAbilityRole.Button != null)
                     {
-                        multiAssignAbilityRole.Button.PositionOffset = new UnityEngine.Vector3(0, 2.0f, 0);
-                        multiAssignAbilityRole.Button.ReplaceHotKey(UnityEngine.KeyCode.C);
+                        multiAssignAbilityRole.Button.SetHotKey(UnityEngine.KeyCode.C);
                     }
                 }
             }

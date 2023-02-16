@@ -342,6 +342,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.isShowArrow = allOps[
                GetRoleOptionId(EaterOption.IsShowArrowForDeadBody)].GetValue();
 
+            this.defaultCoolTime = allOps[GetRoleOptionId(
+                RoleAbilityCommonOption.AbilityCoolTime)].GetValue();
+
             this.deadBodyArrow = new Dictionary<byte, Arrow>();
             this.isActivated = false;
 

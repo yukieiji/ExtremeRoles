@@ -149,7 +149,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
 
 
-            this.chargeTime.text = Mathf.CeilToInt(this.Button.GetCurTime()).ToString();
+            this.chargeTime.text = Mathf.CeilToInt(this.Button.Timer).ToString();
             this.chargeTime.gameObject.SetActive(true);
         }
 
