@@ -67,6 +67,7 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
             this.CanUse = canUse ?? this.CanUse;
             this.AbilityCheck = abilityCheck ?? this.AbilityCheck;
             this.hotKey = hotKey;
+            this.button.graphic.sprite = this.buttonImg;
 
             Transform info = this.button.transform.FindChild(AditionalInfoName);
             if (info != null)
@@ -130,7 +131,7 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
 
         public void Update()
         {
-            if (this.isShow || this.button == null) { return; }
+            if (!this.isShow || this.button == null) { return; }
             
             setActive(GetActivate());
             if (!this.button.isActiveAndEnabled) { return; }
@@ -240,7 +241,7 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted
         private void setActive(bool active)
         {
             this.button.gameObject.SetActive(active);
-            this.button.graphic.enabled = isShow;
+            this.button.graphic.enabled = active;
         }
 
         protected bool HasCleanUp() => this.AbilityCleanUp != null;
