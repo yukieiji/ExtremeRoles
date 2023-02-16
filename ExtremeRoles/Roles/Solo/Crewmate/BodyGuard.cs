@@ -40,6 +40,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             private string defaultAbilityText;
             private Sprite defaultSprite;
 
+            private bool isReset;
+
+            private Action baseCleanUp;
+            private Action reduceCountAction;
+
             public BodyGuardShieldButton(
                 string shieldAbilityText,
                 string resetAbilityText,
@@ -61,9 +66,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     abilityCheck,
                     hotkey)
             {
+                var coolTimeText = this.GetCoolDownText();
+
                 this.abilityCountText = GameObject.Instantiate(
-                    this.Button.cooldownTimerText,
-                    this.Button.cooldownTimerText.transform.parent);
+                    coolTimeText, coolTimeText.transform.parent);
                 updateAbilityCountText();
                 this.abilityCountText.enableWordWrapping = false;
                 this.abilityCountText.transform.localScale = Vector3.one * 0.5f;
@@ -77,121 +83,100 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
                 this.defaultAbilityText = shieldAbilityText;
                 this.defaultSprite = sprite;
+
+                this.reduceCountAction = this.reduceAbilityCountAction();
+
+                if (HasCleanUp())
+                {
+                    this.baseCleanUp = new Action(this.AbilityCleanUp);
+                    this.AbilityCleanUp += this.reduceCountAction;
+                }
+                else
+                {
+                    this.baseCleanUp = null;
+                    this.AbilityCleanUp = this.reduceCountAction;
+                }
             }
 
             public void UpdateAbilityCount(int newCount)
             {
                 this.abilityNum = newCount;
                 this.updateAbilityCountText();
-            }
-
-            protected override void AbilityButtonUpdate()
-            {
-
-                bool isReset = this.resetCheck();
-                if (isReset)
+                if (this.State == AbilityState.None)
                 {
-                    this.abilityCountText.gameObject.SetActive(false);
-                    this.ButtonSprite = this.resetSprite;
-                    this.ButtonText = this.resetAbilityText;
-                }
-                else
-                {
-                    this.abilityCountText.gameObject.SetActive(true);
-                    this.ButtonSprite = this.defaultSprite;
-                    this.ButtonText = this.defaultAbilityText;
-                }
-
-                if (this.CanUse() && 
-                    (this.abilityNum > 0 || isReset))
-                {
-                    this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.EnabledColor;
-                    this.Button.graphic.material.SetFloat("_Desat", 0f);
-                }
-                else
-                {
-                    this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.DisabledClear;
-                    this.Button.graphic.material.SetFloat("_Desat", 1f);
-                }
-                if (this.abilityNum == 0 && !isReset)
-                {
-                    Button.SetCoolDown(this.Timer, this.CoolTime);
-                    return;
-                }
-                if (this.Timer >= 0)
-                {
-                    bool abilityOn = this.IsHasCleanUp() && IsAbilityOn;
-
-                    if (abilityOn || (
-                            !CachedPlayerControl.LocalPlayer.PlayerControl.inVent &&
-                            CachedPlayerControl.LocalPlayer.PlayerControl.moveable))
-                    {
-                        this.Timer -= Time.deltaTime;
-                    }
-                    if (abilityOn)
-                    {
-                        if (!this.AbilityCheck())
-                        {
-                            this.Timer = 0;
-                            this.IsAbilityOn = false;
-                        }
-                    }
-                }
-
-                if (this.Timer <= 0 && this.IsHasCleanUp() && IsAbilityOn)
-                {
-                    this.IsAbilityOn = false;
-                    this.Button.cooldownTimerText.color = Palette.EnabledColor;
-                    this.CleanUp();
-                    this.reduceAbilityCount();
-                    this.ResetCoolTimer();
-                }
-
-                if (this.abilityNum > 0 || isReset)
-                {
-                    Button.SetCoolDown(
-                        this.Timer,
-                        (this.IsHasCleanUp() && this.IsAbilityOn) ? this.AbilityActiveTime : this.CoolTime);
+                    this.SetStatus(AbilityState.CoolDown);
                 }
             }
 
-            protected override void OnClickEvent()
+            public override void ForceAbilityOff()
             {
-                if (this.CanUse() &&
-                    this.Timer < 0f &&
-                    !this.IsAbilityOn)
-                {
-                    Button.graphic.color = this.DisableColor;
+                this.SetStatus(AbilityState.Ready);
+                this.baseCleanUp?.Invoke();
+            }
 
-                    if (this.abilityNum <= 0 || this.resetCheck())
+            protected override void DoClick()
+            {
+                if (this.IsEnable() &&
+                    this.Timer <= 0f &&
+                    this.IsAbilityReady())
+                {
+                    if (this.abilityNum <= 0 || this.resetCheck.Invoke())
                     {
-                        this.resetAction();
+                        this.resetAction.Invoke();
                         this.ResetCoolTimer();
                     }
-                    else if (this.abilityNum > 0 && this.UseAbility())
+                    else if (
+                        this.abilityNum > 0 && 
+                        this.UseAbility.Invoke())
                     {
-                        if (this.IsHasCleanUp())
+                        if (this.HasCleanUp())
                         {
-                            this.Timer = this.AbilityActiveTime;
-                            Button.cooldownTimerText.color = this.TimerOnColor;
-                            this.IsAbilityOn = true;
+                            this.SetStatus(AbilityState.Activating);
                         }
                         else
                         {
-                            this.reduceAbilityCount();
+                            this.reduceCountAction.Invoke();
                             this.ResetCoolTimer();
                         }
                     }
                 }
             }
 
-            private void reduceAbilityCount()
+            protected override bool IsEnable() =>
+                this.CanUse.Invoke() && (this.abilityNum > 0 || this.isReset);
+
+            protected override void UpdateAbility()
             {
-                --this.abilityNum;
-                if (this.abilityCountText != null)
+                this.isReset = this.resetCheck.Invoke();
+                if (this.isReset)
                 {
-                    updateAbilityCountText();
+                    this.abilityCountText.gameObject.SetActive(false);
+                    this.SetButtonImg(this.resetSprite);
+                    this.SetButtonText(this.resetAbilityText);
                 }
+                else
+                {
+                    this.abilityCountText.gameObject.SetActive(true);
+                    this.SetButtonImg(this.defaultSprite);
+                    this.SetButtonText(this.defaultAbilityText);
+                }
+
+                if (this.abilityNum <= 0 && !this.isReset)
+                {
+                    this.SetStatus(AbilityState.None);
+                }
+            }
+
+            private Action reduceAbilityCountAction()
+            {
+                return () =>
+                {
+                    --this.abilityNum;
+                    if (this.abilityCountText != null)
+                    {
+                        updateAbilityCountText();
+                    }
+                };
             }
 
             private void updateAbilityCountText()
