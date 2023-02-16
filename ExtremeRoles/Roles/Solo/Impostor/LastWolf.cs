@@ -144,7 +144,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 if (this.Button != null)
                 {
-                    this.Button.SetActive(false);
+                    this.Button.SetButtonShow(false);
                 }
 
                 int impNum = 0;
@@ -164,6 +164,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.HasOtherVision = this.isAwakedHasOtherVision;
                     this.HasOtherKillCool = this.isAwakedHasOtherKillCool;
                     this.HasOtherKillRange = this.isAwakedHasOtherKillRange;
+                    this.Button.SetButtonShow(true);
                 }
 
             }
