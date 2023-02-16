@@ -116,6 +116,9 @@ namespace ExtremeRoles.Roles.Combination
             private TMPro.TextMeshPro abilityCountText = null;
             private Sprite bombScribe;
 
+            private Action baseCleanUp;
+            private Action reduceCountAction;
+
             public DelinquentAbilityButton(
                 Func<bool> ability,
                 Func<bool> canUse,
@@ -131,13 +134,34 @@ namespace ExtremeRoles.Roles.Combination
             {
                 this.curAbility = Kids.AbilityType.Scribe;
                 this.bombScribe = bombSprite;
+
+                var coolTimerText = this.GetCoolDownText();
+
                 this.abilityCountText = GameObject.Instantiate(
-                    this.Button.cooldownTimerText,
-                    this.Button.cooldownTimerText.transform.parent);
+                    coolTimerText, coolTimerText.transform.parent);
                 updateAbilityInfoText();
                 this.abilityCountText.enableWordWrapping = false;
                 this.abilityCountText.transform.localScale = Vector3.one * 0.5f;
                 this.abilityCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
+
+                this.reduceCountAction = this.createUbilityUpdateAction();
+
+                if (HasCleanUp())
+                {
+                    this.baseCleanUp = new Action(this.AbilityCleanUp);
+                    this.AbilityCleanUp += this.reduceCountAction;
+                }
+                else
+                {
+                    this.baseCleanUp = null;
+                    this.AbilityCleanUp = this.reduceCountAction;
+                }
+            }
+
+            public override void ForceAbilityOff()
+            {
+                this.SetStatus(AbilityState.Ready);
+                this.baseCleanUp?.Invoke();
             }
 
             public void UpdateAbilityCount(int newCount)
@@ -146,93 +170,56 @@ namespace ExtremeRoles.Roles.Combination
                 this.updateAbilityInfoText();
             }
 
-            protected override void AbilityButtonUpdate()
+            protected override bool IsEnable()
+                => this.CanUse() && this.abilityNum > 0;
+
+            protected override void DoClick()
             {
-                if (this.CanUse() && this.abilityNum > 0)
+                if (this.IsEnable()&&
+                    this.Timer <= 0f &&
+                    this.abilityNum > 0 &&
+                    this.IsAbilityReady() &&
+                    this.UseAbility.Invoke())
                 {
-                    this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.EnabledColor;
-                    this.Button.graphic.material.SetFloat("_Desat", 0f);
+                    this.reduceCountAction.Invoke();
+                    this.ResetCoolTimer();
                 }
-                else
-                {
-                    this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.DisabledClear;
-                    this.Button.graphic.material.SetFloat("_Desat", 1f);
-                }
-                if (this.abilityNum == 0)
-                {
-                    Button.SetCoolDown(0, this.CoolTime);
-                    return;
-                }
-                if (this.Timer >= 0)
-                {
-                    bool abilityOn = this.IsHasCleanUp() && IsAbilityOn;
+            }
 
-                    PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+            protected override void UpdateAbility()
+            {
+                if (this.abilityNum <= 0)
+                {
+                    this.SetStatus(AbilityState.None);
+                }
+            }
 
-                    if (abilityOn ||
-                        localPlayer.IsKillTimerEnabled ||
-                        localPlayer.ForceKillTimerContinue)
+            private Action createUbilityUpdateAction()
+            {
+                return () =>
+                {
+                    --this.abilityNum;
+                    bool updateBomb = this.abilityNum <= 0;
+                    if (updateBomb &&
+                        this.curAbility == Kids.AbilityType.Scribe)
                     {
-                        this.Timer -= Time.deltaTime;
+                        this.abilityNum = 1;
+                        this.SetButtonImg(this.bombScribe);
+                        this.curAbility = Kids.AbilityType.SelfBomb;
+                        this.SetButtonText(Translation.GetString("selfBomb"));
                     }
-                    if (abilityOn)
+                    if (this.abilityCountText != null)
                     {
-                        if (!this.AbilityCheck())
+                        if (!updateBomb)
                         {
-                            this.Timer = 0;
-                            this.IsAbilityOn = false;
+                            updateAbilityInfoText();
+                        }
+                        else
+                        {
+                            this.abilityCountText.gameObject.SetActive(false);
                         }
                     }
-                }
-
-                if (this.abilityNum > 0)
-                {
-                    Button.SetCoolDown(
-                        this.Timer,
-                        (this.IsHasCleanUp() && this.IsAbilityOn) ? this.AbilityActiveTime : this.CoolTime);
-                }
-            }
-
-            protected override void OnClickEvent()
-            {
-                if (this.CanUse() &&
-                    this.Timer < 0f &&
-                    this.abilityNum > 0 &&
-                    !this.IsAbilityOn)
-                {
-                    Button.graphic.color = this.DisableColor;
-
-                    if (this.UseAbility())
-                    {
-                        this.updateAbility();
-                        this.ResetCoolTimer();
-                    }
-                }
-            }
-
-            private void updateAbility()
-            {
-                --this.abilityNum;
-                bool updateBomb = this.abilityNum <= 0;
-                if (updateBomb && 
-                    this.curAbility == Kids.AbilityType.Scribe)
-                {
-                    this.abilityNum = 1;
-                    this.ButtonSprite = this.bombScribe;
-                    this.curAbility = Kids.AbilityType.SelfBomb;
-                    this.ButtonText = Translation.GetString("selfBomb");
-                }
-                if (this.abilityCountText != null)
-                {
-                    if (!updateBomb)
-                    {
-                        updateAbilityInfoText();
-                    }
-                    else
-                    {
-                        this.abilityCountText.gameObject.SetActive(false);
-                    }
-                }
+                };
             }
 
             private void updateAbilityInfoText()

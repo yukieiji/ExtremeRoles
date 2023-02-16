@@ -79,7 +79,7 @@ namespace ExtremeRoles.Module.AbilityButton.Roles.Roles
             }
             else if (
                 this.Timer <= 0f &&
-                this.State == AbilityState.Ready &&
+                this.IsAbilityReady() &&
                 this.UseAbility.Invoke())
             {
                 this.SetStatus(

@@ -92,6 +92,8 @@ namespace ExtremeRoles.Module.AbilityButton
 
         public bool IsAbilityActive() =>
             this.State == AbilityState.Activating;
+        public bool IsAbilityReady() =>
+            this.State == AbilityState.Ready;
 
         public void SetButtonShow(bool isShow)
         {

@@ -98,8 +98,8 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
             if (IsEnable() &&
                 this.Timer <= 0f &&
                 this.abilityNum > 0 &&
-                this.State == AbilityState.Ready &&
-                UseAbility())
+                this.IsAbilityReady() &&
+                this.UseAbility())
             {
                 if (this.HasCleanUp())
                 {

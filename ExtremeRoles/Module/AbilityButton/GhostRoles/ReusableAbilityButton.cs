@@ -31,7 +31,7 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
         {
             if (this.IsEnable() &&
                 this.Timer <= 0f &&
-                this.State == AbilityState.Ready &&
+                this.IsAbilityReady() &&
                 this.UseAbility())
             {
                 this.SetStatus(
