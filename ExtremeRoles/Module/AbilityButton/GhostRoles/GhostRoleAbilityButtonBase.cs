@@ -34,8 +34,6 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
             this.abilityPreCheck = abilityPreCheck;
             this.abilityType = abilityType;
             this.rpcHostCallAbility = rpcHostCallAbility;
-
-            this.SetButtonShow(true);
         }
 
         public void SetReportAbility(bool active)

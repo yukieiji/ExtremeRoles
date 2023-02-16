@@ -75,7 +75,7 @@ namespace ExtremeRoles.Module.AbilityButton
                 info.gameObject.SetActive(false);
             }
 
-            SetButtonShow(false);
+            this.SetButtonShow(true);
             ReGridButtons();
         }
 
