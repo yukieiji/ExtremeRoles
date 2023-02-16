@@ -97,17 +97,28 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             if (targetRole.Team != ExtremeRoleType.Neutral)
             {
-                var multiAssignRole = targetRole as MultiAssignRoleBase;
-                if (multiAssignRole != null)
+                targetRole.Team = ExtremeRoleType.Neutral;
+
+                if (targetRole is VanillaRoleWrapper vanillaRole)
                 {
-                    multiAssignRole.Team = ExtremeRoleType.Neutral;
+                    vanillaRole.AnotherRole = null;
+                    vanillaRole.CanHasAnotherRole = false;
+                    vanillaRole.CanCallMeeting = true;
+                    vanillaRole.CanUseAdmin = true;
+                    vanillaRole.CanUseSecurity = true;
+                    vanillaRole.CanUseVital = true;
+
+                    servant.SetAnotherRole(vanillaRole);
+                    ExtremeRoleManager.SetNewRole(targetPlayerId, vanillaRole);
+                }
+                else if (targetRole is MultiAssignRoleBase multiAssignRole)
+                {
                     multiAssignRole.AnotherRole = null;
                     multiAssignRole.CanHasAnotherRole = true;
                     ExtremeRoleManager.SetNewAnothorRole(targetPlayerId, servant);
                 }
                 else
                 {
-                    targetRole.Team = ExtremeRoleType.Neutral;
                     servant.SetAnotherRole(targetRole);
                     ExtremeRoleManager.SetNewRole(targetPlayerId, servant);
                 }
