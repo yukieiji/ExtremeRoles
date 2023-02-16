@@ -35,8 +35,8 @@ namespace ExtremeRoles.Module.AbilityButton.Refacted.Roles
                     FastDestroyableSingleton<HudManager>.Instance.UseButton.isActiveAndEnabled
                 ) &&
                 localPlayer.Data != null &&
-                MeetingHud.Instance != null &&
-                ExileController.Instance != null &&
+                MeetingHud.Instance == null &&
+                ExileController.Instance == null &&
                 !localPlayer.Data.IsDead;
         }
     }
