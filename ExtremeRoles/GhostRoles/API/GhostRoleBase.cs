@@ -195,6 +195,7 @@ namespace ExtremeRoles.GhostRoles.API
                 this.Button.ResetCoolTimer();
                 this.Button.SetButtonShow(true);
             }
+            this.OnMeetingEndHook();
         }
 
         public void ResetOnMeetingStart()
@@ -204,6 +205,7 @@ namespace ExtremeRoles.GhostRoles.API
                 this.Button.ForceAbilityOff();
                 this.Button.SetButtonShow(false);
             }
+            this.OnMeetingStartHook();
         }
 
         protected void CreateButtonOption(
