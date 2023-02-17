@@ -436,21 +436,21 @@ namespace ExtremeRoles.Patches
                         byte assignedPlayerId = reader.ReadByte();
                         byte assignRoleType = reader.ReadByte();
                         int exRoleId = reader.ReadPackedInt32();
+                        int controlId = reader.ReadPackedInt32();
                         switch (assignRoleType)
                         {
                             case (byte)Module.IAssignedPlayer.ExRoleType.Single:
                                 assignData.Add(new
                                     PlayerToSingleRoleAssignData(
-                                        assignedPlayerId, exRoleId));
+                                        assignedPlayerId, exRoleId, controlId));
                                 break;
                             case (byte)Module.IAssignedPlayer.ExRoleType.Comb:
                                 byte assignCombType = reader.ReadByte(); // combTypeId
-                                byte bytedGameContId = reader.ReadByte(); // byted GameContId
                                 byte bytedAmongUsVanillaRoleId = reader.ReadByte(); // byted AmongUsVanillaRoleId
                                 assignData.Add(new
                                     PlayerToCombRoleAssignData(
                                         assignedPlayerId, exRoleId, assignCombType,
-                                        bytedGameContId, bytedAmongUsVanillaRoleId));
+                                        controlId, bytedAmongUsVanillaRoleId));
                                 break;
                         }
                     }

@@ -261,7 +261,7 @@ namespace ExtremeRoles
                 {
                     case (byte)Module.Interface.IPlayerToExRoleAssignData.ExRoleType.Single:
                         Roles.ExtremeRoleManager.SetPlyerIdToSingleRoleId(
-                            data.RoleId, data.PlayerId);
+                            data.RoleId, data.PlayerId, data.ControlId);
                         break;
                     case (byte)Module.Interface.IPlayerToExRoleAssignData.ExRoleType.Comb:
                         var combData = (PlayerToCombRoleAssignData)data;
@@ -269,7 +269,7 @@ namespace ExtremeRoles
                             combData.CombTypeId,
                             combData.RoleId,
                             combData.PlayerId,
-                            combData.GameContId,
+                            combData.ControlId,
                             combData.AmongUsRoleId);
                         break;
                 }

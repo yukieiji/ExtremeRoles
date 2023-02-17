@@ -583,7 +583,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.jackal = jackal;
             this.OptionIdOffset = option.OptionIdOffset;
             this.jackalPlayerId = jackalPlayerId;
-            this.GameControlId = jackal.GameControlId;
+            this.SetControlId(jackal.GameControlId);
 
             this.HasOtherKillCool = option.HasOtherKillCool;
             this.KillCoolTime = option.KillCool;
@@ -672,7 +672,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             newJackal.CurRecursion = curSideKick.recursion + 1;
             newJackal.SidekickPlayerId = new List<byte> (curJackal.SidekickPlayerId);
-            newJackal.GameControlId = curSideKick.GameControlId;
+            newJackal.SetControlId(curSideKick.GameControlId);
 
 
             if (newJackal.SidekickPlayerId.Contains(targetId))

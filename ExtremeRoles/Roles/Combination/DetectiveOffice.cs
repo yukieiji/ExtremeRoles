@@ -669,7 +669,7 @@ namespace ExtremeRoles.Roles.Combination
                 false, true, false, false)
         {
             this.OptionIdOffset = option.OptionOffset;
-            this.GameControlId = gameControlId;
+            this.SetControlId(gameControlId);
             this.HasOtherVison = option.HasOtherVison;
             if (this.HasOtherVison)
             {
