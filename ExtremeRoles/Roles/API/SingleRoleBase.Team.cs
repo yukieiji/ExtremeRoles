@@ -3,7 +3,7 @@
     public abstract partial class SingleRoleBase
     {
 
-        public int GameControlId { get; private set; }
+        public int GameControlId { get; private set; } = 0;
 
         public bool IsVanillaRole() => this.Id == ExtremeRoleId.VanillaRole;
 
