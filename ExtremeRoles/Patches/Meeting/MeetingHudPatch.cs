@@ -549,12 +549,7 @@ namespace ExtremeRoles.Patches.Meeting
             var ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
             if (ghostRole != null)
             {
-                if (ghostRole.Button != null)
-                {
-                    ghostRole.Button.SetActive(false);
-                    ghostRole.Button.ForceAbilityOff();
-                }
-                ghostRole.ReseOnMeetingStart();
+                ghostRole.ResetOnMeetingStart();
             }
 
             if (!ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }

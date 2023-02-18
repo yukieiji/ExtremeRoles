@@ -3,16 +3,17 @@ using UnityEngine;
 
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Performance.Il2Cpp;
+
+using NewAbilityButtonBase = ExtremeRoles.Module.AbilityButton.Refacted.AbilityButtonBase;
 
 namespace ExtremeRoles.Module.AbilityButton.GhostRoles
 {
 
-    public abstract class GhostRoleAbilityButtonBase : AbilityButtonBase
+    public abstract class GhostRoleAbilityButtonBase : NewAbilityButtonBase
     {
-
         protected Func<bool> abilityPreCheck;
         protected Action<RPCOperator.RpcCaller> ability;
+
         private AbilityType abilityType;
         private Action rpcHostCallAbility;
         private bool reportAbility;
@@ -26,18 +27,17 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
             Action rpcHostCallAbility = null,
             Action abilityCleanUp = null,
             Func<bool> abilityCheck = null,
-            KeyCode hotkey = KeyCode.F
-            ) : base(
-                Helper.Translation.GetString(
+            KeyCode hotkey = KeyCode.F) : base(
+                sprite, Helper.Translation.GetString(
                     string.Concat(abilityType.ToString(), "Button")),
-                canUse, sprite,
-                abilityCleanUp, abilityCheck,
-                hotkey)
+                abilityCleanUp, canUse, abilityCheck, hotkey)
         {
             this.ability = ability;
             this.abilityPreCheck = abilityPreCheck;
             this.abilityType = abilityType;
             this.rpcHostCallAbility = rpcHostCallAbility;
+
+            this.SetButtonShow(true);
         }
 
         public void SetReportAbility(bool active)
@@ -45,34 +45,31 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
             this.reportAbility = active;
         }
 
-        protected abstract void AbilityButtonUpdate();
-
         protected bool UseAbility()
         {
-            if (this.abilityPreCheck())
-            {
-                using (var caller = RPCOperator.CreateCaller(
-                    RPCOperator.Command.UseGhostRoleAbility))
-                {
-                    caller.WriteByte((byte)this.abilityType);
-                    caller.WriteBoolean(this.reportAbility);
-                    this.ability.Invoke(caller);
-                }
-                if (this.rpcHostCallAbility != null)
-                {
-                    this.rpcHostCallAbility();
-                }
-                if (this.reportAbility)
-                {
-                    ExtremeRolesPlugin.ShipState.AddGhostRoleAbilityReport(
-                        this.abilityType);
-                }
-                return true;
-            }
-            else
+            if (!this.abilityPreCheck.Invoke())
             {
                 return false;
             }
+
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.UseGhostRoleAbility))
+            {
+                caller.WriteByte((byte)this.abilityType);
+                caller.WriteBoolean(this.reportAbility);
+                this.ability.Invoke(caller);
+            }
+            if (this.rpcHostCallAbility != null)
+            {
+                this.rpcHostCallAbility.Invoke();
+            }
+            if (this.reportAbility)
+            {
+                ExtremeRolesPlugin.ShipState.AddGhostRoleAbilityReport(
+                    this.abilityType);
+            }
+            return true;
+
         }
 
         protected bool IsComSabNow()
@@ -81,38 +78,20 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
                 CachedPlayerControl.LocalPlayer);
         }
 
-        public sealed override void Update()
+        protected sealed override bool GetActivate()
         {
-            if (this.Button == null) { return; }
-
             PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
 
-            if (localPlayer.Data == null ||
-                MeetingHud.Instance ||
-                ExileController.Instance ||
-                !localPlayer.Data.IsDead)
-            {
-                SetActive(false);
-                return;
-            }
-
-            var hudManager = FastDestroyableSingleton<HudManager>.Instance;
-
-            SetActive(
-                localPlayer.IsKillTimerEnabled || 
-                localPlayer.ForceKillTimerContinue ||
-                hudManager.UseButton.isActiveAndEnabled);
-
-            this.Button.graphic.sprite = this.ButtonSprite;
-            this.Button.OverrideText(ButtonText);
-
-            AbilityButtonUpdate();
-
-            if (Input.GetKeyDown(this.Hotkey))
-            {
-                OnClickEvent();
-            }
-
+            return
+                (
+                    localPlayer.IsKillTimerEnabled ||
+                    localPlayer.ForceKillTimerContinue ||
+                    FastDestroyableSingleton<HudManager>.Instance.UseButton.isActiveAndEnabled
+                ) &&
+                localPlayer.Data != null &&
+                MeetingHud.Instance == null &&
+                ExileController.Instance == null &&
+                localPlayer.Data.IsDead;
         }
     }
 }

@@ -1,16 +1,13 @@
 ﻿using System;
 using UnityEngine;
 
-using Hazel;
-
 using ExtremeRoles.GhostRoles;
-using ExtremeRoles.Performance;
 
 
 namespace ExtremeRoles.Module.AbilityButton.GhostRoles
 {
 
-    public class ReusableAbilityButton : GhostRoleAbilityButtonBase
+    public sealed class ReusableAbilityButton : GhostRoleAbilityButtonBase
     {
 
         public ReusableAbilityButton(
@@ -30,77 +27,24 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
                 abilityCheck, hotkey)
         { }
 
-        protected override void AbilityButtonUpdate()
+        protected override void DoClick()
         {
-            if (this.CanUse() && !this.IsComSabNow())
+            if (this.IsEnable() &&
+                this.Timer <= 0f &&
+                this.State == AbilityState.Ready &&
+                this.UseAbility())
             {
-                this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.EnabledColor;
-                this.Button.graphic.material.SetFloat("_Desat", 0f);
+                this.SetStatus(
+                    this.HasCleanUp() ?
+                    AbilityState.Activating :
+                    AbilityState.CoolDown);
             }
-            else
-            {
-                this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.DisabledClear;
-                this.Button.graphic.material.SetFloat("_Desat", 1f);
-            }
-            
-            if (this.Timer >= 0)
-            {
-                bool abilityOn = this.IsHasCleanUp() && IsAbilityOn;
-
-                PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
-
-                if (abilityOn ||
-                    localPlayer.IsKillTimerEnabled ||
-                    localPlayer.ForceKillTimerContinue)
-                {
-                    this.Timer -= Time.deltaTime;
-                }
-                if (abilityOn)
-                {
-                    if (!this.AbilityCheck())
-                    {
-                        this.Timer = 0;
-                        this.IsAbilityOn = false;
-                    }
-                }
-            }
-
-            if (this.Timer <= 0 && this.IsHasCleanUp() && IsAbilityOn)
-            {
-                this.IsAbilityOn = false;
-                this.Button.cooldownTimerText.color = Palette.EnabledColor;
-                this.CleanUp();
-                this.ResetCoolTimer();
-            }
-
-            Button.SetCoolDown(
-                this.Timer,
-                (this.IsHasCleanUp() && this.IsAbilityOn) ? this.AbilityActiveTime : this.CoolTime);
         }
 
-        protected override void OnClickEvent()
-        {
-            if (!this.IsComSabNow() &&
-                this.CanUse() &&
-                this.Timer < 0f &&
-                !this.IsAbilityOn)
-            {
-                Button.graphic.color = this.DisableColor;
+        protected override bool IsEnable() =>
+            this.CanUse.Invoke() && !this.IsComSabNow();
 
-                if (this.UseAbility())
-                {
-                    if (this.IsHasCleanUp())
-                    {
-                        this.Timer = this.AbilityActiveTime;
-                        Button.cooldownTimerText.color = this.TimerOnColor;
-                        this.IsAbilityOn = true;
-                    }
-                    else
-                    {
-                        this.ResetCoolTimer();
-                    }
-                }
-            }
-        }
+        protected override void UpdateAbility()
+        { }
     }
 }

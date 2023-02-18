@@ -3,7 +3,7 @@
     public abstract partial class SingleRoleBase
     {
 
-        public int GameControlId = 0;
+        public int GameControlId { get; private set; } = 0;
 
         public bool IsVanillaRole() => this.Id == ExtremeRoleId.VanillaRole;
 
@@ -33,6 +33,12 @@
 
             return false;
         }
+
+        public void SetControlId(int id)
+        {
+            this.GameControlId = id;
+        }
+
         protected bool IsSameControlId(SingleRoleBase tarrgetRole)
         {
             return this.GameControlId == tarrgetRole.GameControlId;

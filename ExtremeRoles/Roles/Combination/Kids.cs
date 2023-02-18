@@ -5,7 +5,10 @@ using System.Linq;
 using Hazel;
 using UnityEngine;
 
+using AmongUs.GameOptions;
+
 using ExtremeRoles.Helper;
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
@@ -20,8 +23,6 @@ using ExtremeRoles.Module.Interface;
 
 using GhostAbilityButton = ExtremeRoles.Module.AbilityButton.GhostRoles.AbilityCountButton;
 using RoleButtonBase = ExtremeRoles.Module.AbilityButton.Roles.RoleAbilityButtonBase;
-using AmongUs.GameOptions;
-using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Roles.Combination
 {
@@ -854,12 +855,12 @@ namespace ExtremeRoles.Roles.Combination
                 GetRoleOptionId(WispOption.BlackOutTime)].GetValue();
         }
 
-        public override void ReseOnMeetingEnd()
+        protected override void OnMeetingEndHook()
         {
             return;
         }
 
-        public override void ReseOnMeetingStart()
+        protected override void OnMeetingStartHook()
         {
             using (var caller = RPCOperator.CreateCaller(
                 RPCOperator.Command.KidsAbility))

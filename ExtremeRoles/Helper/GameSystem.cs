@@ -237,6 +237,24 @@ namespace ExtremeRoles.Helper
             RPCOperator.ForceEnd();
         }
 
+        public static Minigame OpenMinigame(
+            Minigame prefab,
+            PlayerTask task = null,
+            Console console = null)
+        {
+            Minigame minigame = UnityEngine.Object.Instantiate(
+                prefab, Camera.main.transform, false);
+            minigame.transform.SetParent(Camera.main.transform, false);
+            minigame.transform.localPosition = new Vector3(0.0f, 0.0f, -50f);
+            if (console != null)
+            {
+                minigame.Console = console;
+            }
+            minigame.Begin(task);
+
+            return minigame;
+        }
+
         public static void ReplaceToNewTask(byte playerId, int index, int taskIndex)
         {
             var player = Player.GetPlayerControlById(

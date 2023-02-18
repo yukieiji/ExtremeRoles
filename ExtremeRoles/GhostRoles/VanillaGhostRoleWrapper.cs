@@ -63,12 +63,12 @@ namespace ExtremeRoles.GhostRoles
 
         public override HashSet<Roles.ExtremeRoleId> GetRoleFilter() => new HashSet<Roles.ExtremeRoleId> ();
 
-        public override void ReseOnMeetingEnd()
+        protected override void OnMeetingEndHook()
         {
             return;
         }
 
-        public override void ReseOnMeetingStart()
+        protected override void OnMeetingStartHook()
         {
             return;
         }

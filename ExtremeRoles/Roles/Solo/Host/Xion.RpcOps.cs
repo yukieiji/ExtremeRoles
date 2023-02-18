@@ -334,7 +334,7 @@ namespace ExtremeRoles.Roles.Solo.Host
             }
 
             addRole.Initialize();
-            addRole.GameControlId = baseRole.GameControlId;
+            addRole.SetControlId(baseRole.GameControlId);
 
             setNewRole(targetPlayerId, addRole);
 

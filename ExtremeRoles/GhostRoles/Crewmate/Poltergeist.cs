@@ -1,15 +1,15 @@
-﻿using ExtremeRoles.GhostRoles;
+﻿using System.Collections.Generic;
+
+using UnityEngine;
+
+
+using ExtremeRoles.Helper;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
-using Hazel;
-using System.Collections.Generic;
-using UnityEngine;
-
-using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.GhostRoles.Crewmate
 {
@@ -111,12 +111,12 @@ namespace ExtremeRoles.GhostRoles.Crewmate
                 this.GetRoleOptionId(GhostRoleOption.IsReportAbility)].GetValue();
         }
 
-        public override void ReseOnMeetingEnd()
+        protected override void OnMeetingEndHook()
         {
             return;
         }
 
-        public override void ReseOnMeetingStart()
+        protected override void OnMeetingStartHook()
         {
             this.targetBody = null;
         }
@@ -194,7 +194,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
                 RPCOperator.Command.UseGhostRoleAbility))
             {
                 caller.WriteByte((byte)AbilityType.PoltergeistMoveDeadbody); // アビリティタイプ
-                caller.WriteBoolean(this.isAbilityReport); // 報告できるかどうか
+                caller.WriteBoolean(false); // 報告できるかどうか
                 caller.WriteByte(player.PlayerId);
                 caller.WriteByte(byte.MinValue);
                 caller.WriteFloat(pos.x);

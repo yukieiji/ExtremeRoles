@@ -179,11 +179,7 @@ namespace ExtremeRoles.Patches.Controller
             var ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
             if (ghostRole != null)
             {
-                if (ghostRole.Button != null)
-                {
-                    ghostRole.Button.ResetCoolTimer();
-                }
-                ghostRole.ReseOnMeetingEnd();
+                ghostRole.ResetOnMeetingEnd();
             }
         }
 

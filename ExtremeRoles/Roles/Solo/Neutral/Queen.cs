@@ -97,23 +97,43 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             if (targetRole.Team != ExtremeRoleType.Neutral)
             {
-                var multiAssignRole = targetRole as MultiAssignRoleBase;
-                if (multiAssignRole != null)
+                targetRole.Team = ExtremeRoleType.Neutral;
+
+                if (targetRole is VanillaRoleWrapper vanillaRole)
                 {
-                    multiAssignRole.Team = ExtremeRoleType.Neutral;
+                    vanillaRole.AnotherRole = null;
+                    vanillaRole.CanHasAnotherRole = false;
+                    vanillaRole.CanCallMeeting = true;
+                    vanillaRole.CanUseAdmin = true;
+                    vanillaRole.CanUseSecurity = true;
+                    vanillaRole.CanUseVital = true;
+
+                    servant.CanHasAnotherRole = true;
+                    servant.SetAnotherRole(vanillaRole);
+
+                    ExtremeRoleManager.SetNewRole(targetPlayerId, servant);
+                }
+                else if (targetRole is MultiAssignRoleBase multiAssignRole)
+                {
                     multiAssignRole.AnotherRole = null;
+
                     multiAssignRole.CanHasAnotherRole = true;
+                    servant.CanHasAnotherRole = false;
+                    
                     ExtremeRoleManager.SetNewAnothorRole(targetPlayerId, servant);
                 }
                 else
                 {
-                    targetRole.Team = ExtremeRoleType.Neutral;
+
+                    servant.CanHasAnotherRole = true;
                     servant.SetAnotherRole(targetRole);
+
                     ExtremeRoleManager.SetNewRole(targetPlayerId, servant);
                 }
             }
             else
             {
+                servant.CanHasAnotherRole = false;
                 resetRole(targetRole, targetPlayerId, targetPlayer);
                 ExtremeRoleManager.SetNewRole(targetPlayerId, servant);
             }
@@ -522,21 +542,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 ExtremeRoleId.Servant.ToString(),
                 ColorPalette.QueenWhite,
                 baseRole.CanKill,
-                baseRole.Team != ExtremeRoleType.Impostor ? true : baseRole.HasTask,
+                !baseRole.IsImpostor() ? true : baseRole.HasTask,
                 baseRole.UseVent,
                 baseRole.UseSabotage)
         {
-            var multiAssignRole = baseRole as MultiAssignRoleBase;
-            if (multiAssignRole != null || 
-                baseRole.Team == ExtremeRoleType.Neutral)
-            {
-                this.CanHasAnotherRole = false;
-            }
-            else
-            {
-                this.CanHasAnotherRole = true;
-            }
-            this.GameControlId = queen.GameControlId;
+            this.SetControlId(queen.GameControlId);
             this.queenPlayerId = queenPlayerId;
             this.queen = queen;
             this.FakeImposter = baseRole.Team == ExtremeRoleType.Impostor;

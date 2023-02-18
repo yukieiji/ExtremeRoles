@@ -1033,7 +1033,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.canUseCrakingModule = new HashSet<AbilityType>();
             this.prevKillState = false;
 
-            this.GameControlId = parent.GameControlId;
+            this.SetControlId(parent.GameControlId);
         }
 
         public void FeatMapModuleAccess(SystemConsoleType consoleType)

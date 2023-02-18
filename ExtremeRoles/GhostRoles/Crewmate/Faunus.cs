@@ -1,17 +1,19 @@
-﻿using Assets.CoreScripts;
-using ExtremeRoles.GhostRoles;
-using ExtremeRoles.GhostRoles.API;
+﻿using System.Collections.Generic;
+using System.Linq;
+
+using Assets.CoreScripts;
+
+using UnityEngine;
+using AmongUs.GameOptions;
+
+using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityButton.GhostRoles;
+using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using Hazel;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
-using AmongUs.GameOptions;
 
 namespace ExtremeRoles.GhostRoles.Crewmate
 {
@@ -30,6 +32,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
         private TaskTypes saboTask;
         private bool saboActive;
         private Minigame saboGame;
+        private bool isOpen = false;
 
         public Faunus() : base(
             true,
@@ -48,7 +51,8 @@ namespace ExtremeRoles.GhostRoles.Crewmate
                 this.isAbilityUse,
                 Resources.Loader.CreateSpriteFromResources(
                     Resources.Path.MaintainerRepair),
-                abilityCleanUp: cleanUp);
+                abilityCleanUp: cleanUp,
+                abilityCheck: isAbilityActive);
             this.ButtonInit();
             this.Button.SetLabelToCrewmate();
         }
@@ -58,14 +62,15 @@ namespace ExtremeRoles.GhostRoles.Crewmate
         public override void Initialize()
         {
             this.saboActive = false;
+            this.isOpen = false;
         }
 
-        public override void ReseOnMeetingEnd()
+        protected override void OnMeetingEndHook()
         {
-            return;
+            this.isOpen = false;
         }
 
-        public override void ReseOnMeetingStart()
+        protected override void OnMeetingStartHook()
         {
             this.saboGame = null;
         }
@@ -79,7 +84,7 @@ namespace ExtremeRoles.GhostRoles.Crewmate
 
         protected override void UseAbility(RPCOperator.RpcCaller caller)
         {
-
+            this.isOpen = false;
             Console console;
             if (ExtremeRolesPlugin.Compat.IsModMap)
             {
@@ -120,21 +125,15 @@ namespace ExtremeRoles.GhostRoles.Crewmate
 
             PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
             PlayerTask playerTask = console.FindTask(localPlayer);
+            this.saboGame = GameSystem.OpenMinigame(
+                playerTask.GetMinigamePrefab(), playerTask, console);
 
-            this.saboGame = Object.Instantiate(
-                playerTask.GetMinigamePrefab(),
-                Camera.main.transform, false);
-            this.saboGame.transform.SetParent(Camera.main.transform, false);
-            this.saboGame.transform.localPosition = new Vector3(0f, 0f, -50f);
-            this.saboGame.Console = console;
-            this.saboGame.Begin(playerTask);
             FastDestroyableSingleton<Telemetry>.Instance.WriteUse(
                 localPlayer.PlayerId,
                 playerTask.TaskType,
                 console.transform.position);
-
-            var abilityCountButton = this.Button as AbilityCountButton;
-            if (abilityCountButton != null)
+            this.isOpen = true;
+            if (this.Button is AbilityCountButton abilityCountButton)
             {
                 abilityCountButton.UpdateAbilityCount(
                     abilityCountButton.CurAbilityNum - 1);
@@ -143,6 +142,11 @@ namespace ExtremeRoles.GhostRoles.Crewmate
 
         private bool isPreCheck() => this.saboActive;
 
+        private bool isAbilityActive()
+        {
+            this.isOpen = this.saboGame != null;
+            return this.isOpen;
+        }
         private bool isAbilityUse()
         {
             this.saboActive = false;
@@ -297,18 +301,15 @@ namespace ExtremeRoles.GhostRoles.Crewmate
         }
         private void cleanUp()
         {
-            var abilityCountButton = this.Button as AbilityCountButton;
-            if (abilityCountButton != null)
+            if (this.isOpen &&
+                this.Button is AbilityCountButton abilityCountButton &&
+                this.saboGame != null)
             {
+                this.isOpen = false;
+                this.saboGame.Close();
                 abilityCountButton.UpdateAbilityCount(
                     abilityCountButton.CurAbilityNum + 1);
             }
-
-            if (this.saboGame != null)
-            {
-                this.saboGame.Close();
-            }
-
         }
 
     }
