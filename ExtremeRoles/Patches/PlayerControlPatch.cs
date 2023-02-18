@@ -386,21 +386,32 @@ namespace ExtremeRoles.Patches
 
         private static void ghostRoleButtonUpdate(GhostRoleBase playerGhostRole)
         {
-            if (playerGhostRole != null && playerGhostRole.Button != null)
+            if (playerGhostRole != null)
             {
-                switch(CachedPlayerControl.LocalPlayer.Data.Role.Role)
+                var abilityButton = FastDestroyableSingleton<HudManager>.Instance.AbilityButton;
+
+                switch (CachedPlayerControl.LocalPlayer.Data.Role.Role)
                 {
                     case RoleTypes.Engineer:
                     case RoleTypes.Scientist:
                     case RoleTypes.Shapeshifter:
+                        abilityButton.Hide();
+                        break;
                     case RoleTypes.CrewmateGhost:
                     case RoleTypes.ImpostorGhost:
-                        FastDestroyableSingleton<HudManager>.Instance.AbilityButton.Hide();
+                        if (playerGhostRole is VanillaGhostRoleWrapper)
+                        {
+                            abilityButton.Show();
+                        }
+                        else
+                        {
+                            abilityButton.Hide();
+                        }
                         break;
                     default:
                         break;
                 }
-                playerGhostRole.Button.Update();
+                playerGhostRole.Button?.Update();
             }
         }
     }
