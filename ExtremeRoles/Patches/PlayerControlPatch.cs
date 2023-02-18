@@ -360,7 +360,9 @@ namespace ExtremeRoles.Patches
                     hudManager.ImpostorVentButton.SetDisabled();
                 }
             }
-            else if (roleId == RoleTypes.Engineer)
+            else if (
+                roleId == RoleTypes.Engineer &&
+                player.Data.Role.Role == RoleTypes.Engineer)
             {
                 if (ventEnable)
                 {
