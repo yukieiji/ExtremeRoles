@@ -160,6 +160,7 @@ namespace ExtremeRoles.Module.AbilityButton
             switch (this.State)
             {
                 case AbilityState.None:
+                    this.button.cooldownTimerText.color = Palette.EnabledColor;
                     this.button.SetCoolDown(0, this.CoolTime);
                     return;
                 case AbilityState.CoolDown:
