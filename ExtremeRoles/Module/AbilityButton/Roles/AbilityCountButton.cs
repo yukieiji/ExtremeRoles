@@ -89,7 +89,8 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
                 this.IsAbilityReady() &&
                 this.UseAbility.Invoke())
             {
-                if (this.HasCleanUp())
+                if (this.HasCleanUp() && 
+                    this.baseCleanUp != null)
                 {
                     this.SetStatus(AbilityState.Activating);
                 }
