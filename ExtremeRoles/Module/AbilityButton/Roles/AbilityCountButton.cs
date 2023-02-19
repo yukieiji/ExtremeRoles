@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExtremeRoles.Helper;
+using System;
 using UnityEngine;
 
 namespace ExtremeRoles.Module.AbilityButton.Roles
@@ -123,7 +124,8 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
         private void updateAbilityCountText()
         {
             this.abilityCountText.text = string.Format(
-                this.buttonTextFormat, this.abilityNum);
+                Translation.GetString(this.buttonTextFormat),
+                this.abilityNum);
         }
     }
 }

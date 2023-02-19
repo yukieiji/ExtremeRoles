@@ -171,11 +171,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 if (this.abilityCountText == null) { return; }
 
-                this.abilityCountText.text = string.Concat(
-                    Translation.GetString("buttonCountText"),
-                    string.Format(Translation.GetString("carpenterScrewNum"),
+                this.abilityCountText.text = string.Format(
+                    Translation.GetString("carpenterScrewNum"),
                         this.abilityNum,
-                        this.isVentRemove ? this.ventRemoveScrewNum : this.cameraSetScrewNum));
+                        this.isVentRemove ? this.ventRemoveScrewNum : this.cameraSetScrewNum);
             }
 
             private bool screwCheck()
