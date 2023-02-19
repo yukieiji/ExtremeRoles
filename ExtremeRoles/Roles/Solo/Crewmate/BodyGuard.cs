@@ -120,7 +120,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     this.Timer <= 0f &&
                     this.IsAbilityReady())
                 {
-                    if (this.abilityNum <= 0 || this.isReset)
+                    if (this.abilityNum <= 0 && this.isReset)
                     {
                         this.resetAction.Invoke();
                         this.ResetCoolTimer();
@@ -149,7 +149,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             protected override void UpdateAbility()
             {
                 this.isReset = this.resetCheck.Invoke();
-                if (this.isReset)
+                if (this.isReset && this.abilityNum <= 0)
                 {
                     this.abilityCountText.gameObject.SetActive(false);
                     this.SetButtonImg(this.resetSprite);
