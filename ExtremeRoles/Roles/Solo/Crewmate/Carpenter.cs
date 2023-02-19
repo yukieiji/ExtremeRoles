@@ -136,6 +136,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     this.SetButtonText(this.cameraSetString);
                     this.SetAbilityActiveTime(this.cameraRemoveStopTime);
                 }
+                if (this.abilityNum <= 0)
+                {
+                    this.SetStatus(AbilityState.None);
+                }
             }
 
             protected override void DoClick()
