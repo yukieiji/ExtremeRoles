@@ -101,7 +101,7 @@ namespace ExtremeRoles.Module.AbilityButton.GhostRoles
                 this.IsAbilityReady() &&
                 this.UseAbility())
             {
-                if (this.HasCleanUp())
+                if (this.HasCleanUp() && this.baseCleanUp != null)
                 {
                     this.SetStatus(AbilityState.Activating);
                 }
