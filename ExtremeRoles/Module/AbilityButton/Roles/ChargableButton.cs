@@ -8,6 +8,7 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
     public sealed class ChargableButton : RoleAbilityButtonBase
     {
         private float currentCharge;
+        private bool hasBaseCleanUp = false;
 
         public ChargableButton(
             string buttonText,
@@ -26,7 +27,10 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
                 abilityCheck,
                 hotkey)
         {
-            if (HasCleanUp())
+
+            this.hasBaseCleanUp = HasCleanUp();
+
+            if (this.hasBaseCleanUp)
             {
                 this.AbilityCleanUp += addCleanUpFunction();
             }
@@ -83,7 +87,7 @@ namespace ExtremeRoles.Module.AbilityButton.Roles
                 this.UseAbility.Invoke())
             {
                 this.SetStatus(
-                    this.HasCleanUp() ?
+                    this.HasCleanUp() && this.hasBaseCleanUp ?
                     AbilityState.Activating :
                     AbilityState.CoolDown);
             }

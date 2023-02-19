@@ -129,7 +129,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                         this.abilityNum > 0 && 
                         this.UseAbility.Invoke())
                     {
-                        if (this.HasCleanUp())
+                        if (this.HasCleanUp() && 
+                            this.baseCleanUp != null)
                         {
                             this.SetStatus(AbilityState.Activating);
                         }
