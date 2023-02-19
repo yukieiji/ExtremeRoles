@@ -82,6 +82,7 @@ public enum ExtremeRoleId : int
     UnderWarper,
     Magician,
     Slime,
+    Zombie,
 
     Alice,
     Jackal,
