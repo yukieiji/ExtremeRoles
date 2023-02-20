@@ -3,10 +3,17 @@
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
 
-using static ExtremeRoles.Module.AbilityButton.AbilityButtonBase;
-
 namespace ExtremeRoles.Module
 {
+    public enum AbilityState : byte
+    {
+        None = 0,
+        Stop,
+        CoolDown,
+        Ready,
+        Activating,
+    }
+
     public sealed class ExtremeAbilityButton
     {
         public IAbilityBehavior Behavior { get; private set; }
@@ -194,6 +201,10 @@ namespace ExtremeRoles.Module
             if (this.Behavior.IsUse() &&
                 this.Behavior.TryUseAbility(this.Timer, this.State, out AbilityState newState))
             {
+                if (newState == AbilityState.CoolDown)
+                {
+                    this.Behavior.AbilityOff();
+                }
                 this.setStatus(newState);
             }
         }

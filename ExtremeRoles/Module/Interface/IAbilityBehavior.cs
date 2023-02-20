@@ -1,18 +1,18 @@
 ﻿using UnityEngine;
 
-using static ExtremeRoles.Module.AbilityButton.AbilityButtonBase;
-
 namespace ExtremeRoles.Module.Interface
 {
     public interface IAbilityBehavior
     {
-        public float CoolTime { get; protected set; }
+        public float CoolTime { get; }
 
-        public float ActiveTime { get; protected set; }
+        public float ActiveTime { get; }
 
-        public Sprite AbilityImg { get; protected set; }
+        public Sprite AbilityImg { get; }
 
-        public string AbilityText { get; protected set; }
+        public string AbilityText { get; }
+
+        public void Initialize(ActionButton button);
 
         public void SetCoolTime(float newTime);
 
