@@ -7,7 +7,7 @@ using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Module.AbilityBehavior
 {
-    public class AbilityCountBehavior : IAbilityBehavior
+    public sealed class AbilityCountBehavior : IAbilityBehavior
     {
         public float CoolTime => this.coolTime;
 
@@ -141,6 +141,11 @@ namespace ExtremeRoles.Module.AbilityBehavior
         {
             this.AbilityCount = newAbilityNum;
             this.isUpdate = true;
+        }
+
+        public void SetButtonTextFormat(string newTextFormat)
+        {
+            this.buttonTextFormat = newTextFormat;
         }
 
         private void reduceAbilityCount()
