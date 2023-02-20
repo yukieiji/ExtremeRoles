@@ -65,6 +65,7 @@ namespace ExtremeRoles.Module
             }
 
             this.SetButtonShow(true);
+            this.Behavior.Initialize(this.button);
             ReGridButtons();
         }
 

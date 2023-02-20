@@ -77,8 +77,8 @@ namespace ExtremeRoles.Module.AbilityFactory
         {
             return () => 
                 isUse.Invoke() && 
-                PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(
-                CachedPlayerControl.LocalPlayer);
+                !PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(
+                    CachedPlayerControl.LocalPlayer);
         }
 
         private static Func<bool> createGhostRoleAbility(
