@@ -3,11 +3,11 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.AbilityButton.Roles;
 
 namespace ExtremeRoles.Roles.Combination
 {
@@ -86,7 +86,7 @@ namespace ExtremeRoles.Roles.Combination
         private Sprite securitySprite;
         private Sprite vitalSprite;
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         { 
             get => this.crackButton;
             set
@@ -95,7 +95,7 @@ namespace ExtremeRoles.Roles.Combination
             }
         }
 
-        private RoleAbilityButtonBase crackButton;
+        private ExtremeAbilityButton crackButton;
         private Minigame minigame;
 
         public Traitor(
@@ -118,10 +118,10 @@ namespace ExtremeRoles.Roles.Combination
             this.vitalSprite = GameSystem.GetVitalImage();
 
             this.CreateChargeAbilityButton(
-                Translation.GetString("traitorCracking"),
+                "traitorCracking",
                 this.adminSprite,
                 checkAbility: CheckAbility,
-                abilityCleanUp: CleanUp);
+                abilityOff: CleanUp);
         }
 
         public bool UseAbility()
@@ -403,7 +403,10 @@ namespace ExtremeRoles.Roles.Combination
         }
         private void updateButtonSprite()
         {
-            var traitorButton = this.Button as ChargableButton;
+            if (this.Button.Behavior is not ChargableAbilityBehavior chargableAbility)
+            {
+                return;
+            }
 
             Sprite sprite = Resources.Loader.CreateSpriteFromResources(
                 Resources.Path.TestButton);
@@ -422,7 +425,7 @@ namespace ExtremeRoles.Roles.Combination
                 default:
                     break;
             }
-            traitorButton.SetButtonImg(sprite);
+            chargableAbility.SetButtonImage(sprite);
         }
     }
 }
