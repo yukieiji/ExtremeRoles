@@ -47,7 +47,7 @@ namespace ExtremeRoles.Module.AbilityBehavior
 
         public override bool IsCanAbilityActiving() => this.canActivating.Invoke();
 
-        public override bool IsUse() => this.canUse.Invoke() && this.isActive;
+        public override bool IsUse() => this.canUse.Invoke() || this.isActive;
 
         public override bool TryUseAbility(
             float timer, AbilityState curState, out AbilityState newState)
