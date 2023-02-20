@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
@@ -18,7 +17,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             TaskGage,
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.adminButton;
             set
@@ -41,7 +40,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private bool isBoostTask;
         private float taskGage;
 
-        private RoleAbilityButtonBase adminButton;
+        private ExtremeAbilityButton adminButton;
         private TMPro.TextMeshPro chargeTime;
 
         public Supervisor() : base(
@@ -60,10 +59,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public void CreateAbility()
         {
             this.CreateChargeAbilityButton(
-                Translation.GetString("admin"),
+                "admin",
                 getAdminButtonImage(),
-                CleanUp,
-                checkAbility: IsOpen);
+                IsOpen, CleanUp);
             this.Button.SetLabelToCrewmate();
         }
 
