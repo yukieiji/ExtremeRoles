@@ -28,7 +28,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             Common
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.takeTaskButton;
             set
@@ -42,7 +42,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         private int maxTakeTask;
         private float takeTaskRange;
-        private RoleAbilityButtonBase takeTaskButton;
+        private ExtremeAbilityButton takeTaskButton;
 
         public Agency() : base(
             ExtremeRoleId.Agency,
@@ -88,7 +88,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
-                Translation.GetString("takeTask"),
+                "takeTask",
                 Loader.CreateSpriteFromResources(
                     Path.AgencyTakeTask));
             this.Button.SetLabelToCrewmate();
