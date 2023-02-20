@@ -17,7 +17,7 @@ namespace ExtremeRoles.Module.AbilityFactory
             Func<bool> canUse,
             Func<bool> ability,
             Func<bool> canActivating = null,
-            Action abilityCleanUp = null,
+            Action abilityOff = null,
             Action forceAbilityOff = null,
             KeyCode hotKey = KeyCode.F)
         {
@@ -28,7 +28,7 @@ namespace ExtremeRoles.Module.AbilityFactory
                     canUse: canUse,
                     ability: ability,
                     canActivating: canActivating,
-                    abilityOff: abilityCleanUp,
+                    abilityOff: abilityOff,
                     forceAbilityOff: forceAbilityOff),
                 new RoleButtonActivator(),
                 hotKey
@@ -41,7 +41,7 @@ namespace ExtremeRoles.Module.AbilityFactory
             Func<bool> canUse,
             Func<bool> ability,
             Func<bool> canActivating = null,
-            Action abilityCleanUp = null,
+            Action abilityOff = null,
             Action forceAbilityOff = null,
             bool isReduceOnActive = false,
             KeyCode hotKey = KeyCode.F)
@@ -53,7 +53,7 @@ namespace ExtremeRoles.Module.AbilityFactory
                     canUse: canUse,
                     ability: ability,
                     canActivating: canActivating,
-                    abilityOff: abilityCleanUp,
+                    abilityOff: abilityOff,
                     forceAbilityOff: forceAbilityOff,
                     isReduceOnActive: isReduceOnActive),
                 new RoleButtonActivator(),
@@ -62,22 +62,32 @@ namespace ExtremeRoles.Module.AbilityFactory
         }
 
         public static ExtremeAbilityButton CreatePassiveAbility(
-            string textKey,
-            Sprite img,
+            string activateTextKey,
+            Sprite activateImg,
+            string deactivateTextKey,
+            Sprite deactivateImg,
             Func<bool> canUse,
             Func<bool> ability,
             Func<bool> canActivating = null,
-            Action abilityCleanUp = null,
+            Action abilityOff = null,
             KeyCode hotKey = KeyCode.F)
         {
             return new ExtremeAbilityButton(
                 new PassiveAbilityBehavior(
-                    text: Helper.Translation.GetString(textKey),
-                    img: img,
+                    new ButtonGraphic
+                    {
+                        Text = Helper.Translation.GetString(activateTextKey),
+                        Img = activateImg,
+                    },
+                    new ButtonGraphic
+                    {
+                        Text = Helper.Translation.GetString(deactivateTextKey),
+                        Img = deactivateImg,
+                    },
                     canUse: canUse,
                     ability: ability,
                     canActivating: canActivating,
-                    abilityOff: abilityCleanUp),
+                    abilityOff: abilityOff),
                 new RoleButtonActivator(),
                 hotKey
             );
@@ -89,7 +99,7 @@ namespace ExtremeRoles.Module.AbilityFactory
             Func<bool> canUse,
             Func<bool> ability,
             Func<bool> canActivating = null,
-            Action abilityCleanUp = null,
+            Action abilityOff = null,
             KeyCode hotKey = KeyCode.F)
         {
             return new ExtremeAbilityButton(
@@ -99,7 +109,7 @@ namespace ExtremeRoles.Module.AbilityFactory
                     canUse: canUse,
                     ability: ability,
                     canActivating: canActivating,
-                    abilityOff: abilityCleanUp),
+                    abilityOff: abilityOff),
                 new RoleButtonActivator(),
                 hotKey
             );
@@ -111,7 +121,7 @@ namespace ExtremeRoles.Module.AbilityFactory
             Func<bool> canUse,
             Func<bool> ability,
             Func<bool> canActivating = null,
-            Action abilityCleanUp = null,
+            Action abilityOff = null,
             Action forceAbilityOff = null,
             KeyCode hotKey = KeyCode.F)
         {
@@ -122,7 +132,7 @@ namespace ExtremeRoles.Module.AbilityFactory
                     canUse: canUse,
                     ability: ability,
                     canActivating: canActivating,
-                    abilityOff: abilityCleanUp,
+                    abilityOff: abilityOff,
                     forceAbilityOff: forceAbilityOff),
                 new RoleButtonActivator(),
                 hotKey

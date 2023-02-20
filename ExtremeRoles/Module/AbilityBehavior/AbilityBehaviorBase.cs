@@ -21,6 +21,11 @@ namespace ExtremeRoles.Module.AbilityBehavior
             SetGraphic(text, img);
         }
 
+        public AbilityBehaviorBase(ButtonGraphic graphic)
+        {
+            SetGraphic(graphic);
+        }
+
         public virtual void SetActiveTime(float newTime)
         {
             this.ActiveTime = newTime;

@@ -16,13 +16,20 @@ namespace ExtremeRoles.Module.AbilityBehavior
         private float baseCoolTime;
         private float baseActiveTime;
 
+        private ButtonGraphic activeGraphic;
+        private ButtonGraphic deactiveGraphic;
+
         public PassiveAbilityBehavior(
-            string text, Sprite img,
+            ButtonGraphic activeGraphic,
+            ButtonGraphic deactiveGraphic,
             Func<bool> canUse,
             Func<bool> ability,
             Func<bool> canActivating = null,
-            Action abilityOff = null) : base(text, img)
+            Action abilityOff = null) : base(activeGraphic)
         {
+            this.activeGraphic = activeGraphic;
+            this.deactiveGraphic = deactiveGraphic;
+
             this.ability =  ability;
             this.canUse = canUse;
 
@@ -52,6 +59,7 @@ namespace ExtremeRoles.Module.AbilityBehavior
         public override void AbilityOff()
         {
             this.abilityOff?.Invoke();
+            this.SetGraphic(this.activeGraphic);
         }
 
         public override void ForceAbilityOff()
@@ -83,6 +91,7 @@ namespace ExtremeRoles.Module.AbilityBehavior
                 {
                     return false;
                 }
+                this.SetGraphic(this.deactiveGraphic);
             }
 
             this.isActive = !this.isActive;
