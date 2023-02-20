@@ -66,7 +66,10 @@ namespace ExtremeRoles.Module
             }
 
             this.SetButtonShow(true);
+
             this.Behavior.Initialize(this.button);
+            this.button.graphic.sprite = this.Behavior.Graphic.Img;
+
             ReGridButtons();
         }
 
