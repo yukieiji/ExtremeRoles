@@ -40,6 +40,11 @@ namespace ExtremeRoles.Module.AbilityBehavior
             this.canActivating = canActivating ?? new Func<bool>(() => { return true; });
         }
 
+        public void SetCountText(string text)
+        {
+            this.buttonTextFormat = text;
+        }
+
         public override void Initialize(ActionButton button)
         {
             var coolTimerText = button.cooldownTimerText;

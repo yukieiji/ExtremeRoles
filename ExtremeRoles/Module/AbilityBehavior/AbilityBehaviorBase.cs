@@ -4,8 +4,8 @@ namespace ExtremeRoles.Module.AbilityBehavior
 {
     public struct ButtonGraphic
     {
-        public Sprite Img { get; set; }
         public string Text { get; set; }
+        public Sprite Img { get; set; }
     }
 
     public abstract class AbilityBehaviorBase
@@ -18,11 +18,7 @@ namespace ExtremeRoles.Module.AbilityBehavior
 
         public AbilityBehaviorBase(string text, Sprite img)
         {
-            this.graphic = new ButtonGraphic
-            {
-                Img = img,
-                Text = text,
-            };
+            SetGraphic(text, img);
         }
 
         public void SetActiveTime(float newTime)
@@ -43,6 +39,22 @@ namespace ExtremeRoles.Module.AbilityBehavior
         public void SetButtonText(string text)
         {
             this.graphic.Text = text;
+        }
+
+        public void SetGraphic(string text, Sprite image)
+        {
+            SetGraphic(
+                new ButtonGraphic
+                {
+                    Text = text,
+                    Img = image,
+                }
+            );
+        }
+
+        public void SetGraphic(ButtonGraphic graphic)
+        {
+            this.graphic = graphic;
         }
 
         public abstract void Initialize(ActionButton button);
