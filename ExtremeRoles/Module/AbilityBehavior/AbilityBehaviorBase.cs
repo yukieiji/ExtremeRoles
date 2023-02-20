@@ -21,12 +21,12 @@ namespace ExtremeRoles.Module.AbilityBehavior
             SetGraphic(text, img);
         }
 
-        public void SetActiveTime(float newTime)
+        public virtual void SetActiveTime(float newTime)
         {
             this.ActiveTime = newTime;
         }
 
-        public void SetCoolTime(float newTime)
+        public virtual void SetCoolTime(float newTime)
         {
             this.CoolTime = newTime;
         }

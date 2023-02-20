@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ExtremeRoles.Module.AbilityBehavior
 {
-    public sealed class PassiveAbilityBehavior : AbilityBehaviorBase
+    public sealed class ReclickAbilityBehavior : AbilityBehaviorBase
     {
         private Func<bool> ability;
         private Func<bool> canUse;
@@ -12,11 +12,9 @@ namespace ExtremeRoles.Module.AbilityBehavior
         private Action abilityOff;
 
         private bool isActive;
+        private float chargeTime = 0.0f;
 
-        private float baseCoolTime;
-        private float baseActiveTime;
-
-        public PassiveAbilityBehavior(
+        public ReclickAbilityBehavior(
             string text, Sprite img,
             Func<bool> canUse,
             Func<bool> ability,
@@ -35,13 +33,7 @@ namespace ExtremeRoles.Module.AbilityBehavior
         public override void SetActiveTime(float newTime)
         {
             base.SetActiveTime(newTime);
-            this.baseActiveTime = newTime;
-        }
-
-        public override void SetCoolTime(float newTime)
-        {
-            base.SetCoolTime(newTime);
-            this.baseCoolTime = newTime;
+            this.chargeTime = newTime;
         }
 
         public override void Initialize(ActionButton button)
@@ -51,46 +43,54 @@ namespace ExtremeRoles.Module.AbilityBehavior
 
         public override void AbilityOff()
         {
+            this.isActive = false;
             this.abilityOff?.Invoke();
         }
 
         public override void ForceAbilityOff()
         {
+            this.isActive = false;
             this.AbilityOff();
         }
 
         public override bool IsCanAbilityActiving() => this.canActivating.Invoke();
 
-        public override bool IsUse()  => this.canUse.Invoke();
+        public override bool IsUse() => this.canUse.Invoke() && this.isActive;
 
         public override bool TryUseAbility(
             float timer, AbilityState curState, out AbilityState newState)
         {
             newState = curState;
 
-            if (timer > 0 || curState != AbilityState.Ready)
+            switch (curState)
             {
-                return false;
-            }
-
-            if (this.isActive)
-            {
-                this.AbilityOff();
-            }
-            else
-            {
-                if (!this.ability.Invoke())
-                {
+                case AbilityState.Ready:
+                    if (timer <= 0.0f &&
+                        this.ability.Invoke())
+                    {
+                        newState = AbilityState.Activating;
+                        this.isActive = true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                    break;
+                case AbilityState.Activating:
+                    if (this.isActive)
+                    {
+                        this.AbilityOff();
+                        this.isActive = false;
+                        newState = AbilityState.CoolDown;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                    break;
+                default:
                     return false;
-                }
             }
-
-            this.isActive = !this.isActive;
-
-            base.SetCoolTime(this.isActive ? this.baseActiveTime : this.baseCoolTime);
-            
-            newState = AbilityState.CoolDown;
-
             return true;
         }
 
