@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-
-using ExtremeRoles.Helper;
+﻿using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
@@ -17,7 +14,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             SmashPenaltyKillCool,
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.smashButton;
             set
@@ -26,7 +23,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        private RoleAbilityButtonBase smashButton;
+        private ExtremeAbilityButton smashButton;
         private byte targetPlayerId;
         private float prevKillCool;
         private float penaltyKillCool;
@@ -42,8 +39,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
-                Translation.GetString("smash"),
-                FastDestroyableSingleton<HudManager>.Instance.KillButton.graphic.sprite);
+                "smash", FastDestroyableSingleton<HudManager>.Instance.KillButton.graphic.sprite);
         }
 
         public bool IsAbilityUse()
