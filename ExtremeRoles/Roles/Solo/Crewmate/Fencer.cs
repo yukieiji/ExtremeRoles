@@ -25,7 +25,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ActivateKillButton
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.takeTaskButton;
             set
@@ -38,7 +38,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public float Timer = 0.0f;
         public float MaxTime = 120f;
 
-        private RoleAbilityButtonBase takeTaskButton;
+        private ExtremeAbilityButton takeTaskButton;
 
         public Fencer() : base(
             ExtremeRoleId.Fencer,
@@ -108,10 +108,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
-                Translation.GetString("counter"),
+                "counter",
                 Loader.CreateSpriteFromResources(
                     Path.FencerCounter),
-                abilityCleanUp: this.CleanUp);
+                abilityOff: this.CleanUp,
+                isReduceOnActive: true);
             this.Button.SetLabelToCrewmate();
         }
         public void CleanUp()
