@@ -8,7 +8,6 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -245,7 +244,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             PhotoRange,
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.takePhotoButton;
             set
@@ -263,7 +262,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public RoleTypes NoneAwakeRole => RoleTypes.Crewmate;
 
-        private RoleAbilityButtonBase takePhotoButton;
+        private ExtremeAbilityButton takePhotoButton;
 
         private bool awakeRole;
         private float awakeTaskGage;
@@ -289,7 +288,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
-                Translation.GetString("takePhoto"),
+                "takePhoto",
                 Loader.CreateSpriteFromResources(
                     Path.PhotographerPhotoCamera));
             this.Button.SetLabelToCrewmate();
