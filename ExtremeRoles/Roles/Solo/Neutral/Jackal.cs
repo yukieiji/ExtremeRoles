@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using AmongUs.GameOptions;
 
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
+using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
@@ -33,7 +33,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public List<byte> SidekickPlayerId;
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.createSidekick;
             set
@@ -55,7 +55,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public PlayerControl Target;
 
-        private RoleAbilityButtonBase createSidekick;
+        private ExtremeAbilityButton createSidekick;
 
         private bool canLoverSidekick;
         private int numUpgradeSidekick = 0;
@@ -301,7 +301,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
-                Translation.GetString("Sidekick"),
+                "Sidekick",
                 Loader.CreateSpriteFromResources(
                     Path.JackalSidekick));
         }
@@ -664,9 +664,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             newJackal.Initialize();
             newJackal.CreateAbility();
 
-            if (!curSideKick.sidekickJackalCanMakeSidekick || curSideKick.recursion >= newJackal.SidekickRecursionLimit)
+            if ((
+                    !curSideKick.sidekickJackalCanMakeSidekick || 
+                    curSideKick.recursion >= newJackal.SidekickRecursionLimit
+                ) && newJackal.Button.Behavior is AbilityCountBehavior countBehavior)
             {
-                ((AbilityCountButton)newJackal.Button).UpdateAbilityCount(0);
+                countBehavior.SetAbilityCount(0);
             }
 
 
