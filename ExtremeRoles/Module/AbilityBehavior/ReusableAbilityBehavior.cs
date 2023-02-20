@@ -2,25 +2,10 @@
 
 using UnityEngine;
 
-using ExtremeRoles.Module.Interface;
-
 namespace ExtremeRoles.Module.AbilityBehavior
 {
-    public sealed class ReusableAbilityBehavior : IAbilityBehavior
+    public sealed class ReusableAbilityBehavior : AbilityBehaviorBase
     {
-        public float CoolTime => this.coolTime;
-
-        public float ActiveTime => this.activeTime;
-
-        public Sprite AbilityImg => this.img;
-
-        public string AbilityText => this.text;
-
-        private float coolTime = 10.0f;
-        private float activeTime = 0.0f;
-        private Sprite img;
-        private string text;
-
         private Func<bool> ability;
         private Func<bool> canUse;
         private Func<bool> canActivating;
@@ -35,8 +20,8 @@ namespace ExtremeRoles.Module.AbilityBehavior
             Action abilityCleanUp = null,
             Action forceAbilityOff = null)
         {
-            this.img = img;
-            this.text = text;
+            this.SetButtonImage(img);
+            this.SetButtonText(text);
 
             this.ability =  ability;
             this.canUse = canUse;
@@ -47,36 +32,26 @@ namespace ExtremeRoles.Module.AbilityBehavior
             this.canActivating = canActivating ?? new Func<bool>(() => { return true; });
         }
 
-        public void Initialize(ActionButton button)
+        public override void Initialize(ActionButton button)
         {
             return;
         }
 
-        public void AbilityOff()
+        public override void AbilityOff()
         {
             this.abilityCleanUp?.Invoke();
         }
 
-        public void ForceAbilityOff()
+        public override void ForceAbilityOff()
         {
             this.forceAbilityOff?.Invoke();
         }
 
-        public bool IsCanAbilityActiving() => this.canActivating.Invoke();
+        public override bool IsCanAbilityActiving() => this.canActivating.Invoke();
 
-        public bool IsUse() => this.canUse.Invoke();
+        public override bool IsUse() => this.canUse.Invoke();
 
-        public void SetActiveTime(float newTime)
-        {
-            this.activeTime = newTime;
-        }
-
-        public void SetCoolTime(float newTime)
-        {
-            this.coolTime = newTime;
-        }
-
-        public bool TryUseAbility(
+        public override bool TryUseAbility(
             float timer, AbilityState curState, out AbilityState newState)
         {
             newState = curState;
@@ -91,13 +66,13 @@ namespace ExtremeRoles.Module.AbilityBehavior
                 return false;
             }
 
-            newState = this.activeTime <= 0.0f ? 
+            newState = this.ActiveTime <= 0.0f ? 
                 AbilityState.CoolDown : AbilityState.Activating;
 
             return true;
         }
 
-        public AbilityState Update(AbilityState curState)
+        public override AbilityState Update(AbilityState curState)
         {
             return curState;
         }

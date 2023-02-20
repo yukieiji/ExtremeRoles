@@ -1,28 +1,14 @@
 ﻿using System;
 
 using UnityEngine;
-
-using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Module.AbilityBehavior
 {
-    public sealed class AbilityCountBehavior : IAbilityBehavior
+    public sealed class AbilityCountBehavior : AbilityBehaviorBase
     {
-        public float CoolTime => this.coolTime;
-
-        public float ActiveTime => this.activeTime;
-
-        public Sprite AbilityImg => this.img;
-
-        public string AbilityText => this.text;
-
         public int AbilityCount { get; private set; }
 
-        private float coolTime = 10.0f;
-        private float activeTime = 0.0f;
-        private Sprite img;
-        private string text;
         private bool isReduceOnActive;
 
         private bool isUpdate = false;
@@ -44,8 +30,8 @@ namespace ExtremeRoles.Module.AbilityBehavior
             Action forceAbilityOff = null,
             bool isReduceOnActive = false)
         {
-            this.img = img;
-            this.text = text;
+            this.SetButtonImage(img);
+            this.SetButtonText(text);
 
             this.ability =  ability;
             this.canUse = canUse;
@@ -57,7 +43,7 @@ namespace ExtremeRoles.Module.AbilityBehavior
             this.canActivating = canActivating ?? new Func<bool>(() => { return true; });
         }
 
-        public void Initialize(ActionButton button)
+        public override void Initialize(ActionButton button)
         {
             var coolTimerText = button.cooldownTimerText;
 
@@ -69,7 +55,7 @@ namespace ExtremeRoles.Module.AbilityBehavior
             updateAbilityCountText();
         }
 
-        public void AbilityOff()
+        public override void AbilityOff()
         {
             if (!this.isReduceOnActive)
             {
@@ -78,27 +64,17 @@ namespace ExtremeRoles.Module.AbilityBehavior
             this.abilityCleanUp?.Invoke();
         }
 
-        public void ForceAbilityOff()
+        public override void ForceAbilityOff()
         {
             this.forceAbilityOff?.Invoke();
         }
 
-        public bool IsCanAbilityActiving() => this.canActivating.Invoke();
+        public override bool IsCanAbilityActiving() => this.canActivating.Invoke();
 
-        public bool IsUse()
+        public override bool IsUse()
             => this.canUse.Invoke() && this.AbilityCount > 0;
 
-        public void SetActiveTime(float newTime)
-        {
-            this.activeTime = newTime;
-        }
-
-        public void SetCoolTime(float newTime)
-        {
-            this.coolTime = newTime;
-        }
-
-        public bool TryUseAbility(
+        public override bool TryUseAbility(
             float timer, AbilityState curState, out AbilityState newState)
         {
             newState = curState;
@@ -120,13 +96,13 @@ namespace ExtremeRoles.Module.AbilityBehavior
                 this.reduceAbilityCount();
             }
 
-            newState = this.activeTime <= 0.0f ? 
+            newState = this.ActiveTime <= 0.0f ? 
                 AbilityState.CoolDown : AbilityState.Activating;
 
             return true;
         }
 
-        public AbilityState Update(AbilityState curState)
+        public override AbilityState Update(AbilityState curState)
         {
             if (this.isUpdate)
             {

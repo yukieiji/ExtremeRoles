@@ -2,6 +2,7 @@
 
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.AbilityBehavior;
 
 namespace ExtremeRoles.Module
 {
@@ -19,7 +20,7 @@ namespace ExtremeRoles.Module
 
         public const string AditionalInfoName = "ExRKillButtonAditionalInfo";
 
-        public IAbilityBehavior Behavior { get; private set; }
+        public AbilityBehaviorBase Behavior { get; private set; }
 
         public AbilityState State { get; private set; }
 
@@ -35,12 +36,12 @@ namespace ExtremeRoles.Module
 
         private IButtonAutoActivator activator;
 
-        private readonly Color TimerOnColor = new Color(0F, 0.8F, 0F);
+        private readonly Color TimerOnColor = new Color(0f, 0.8f, 0f);
 
         private static GridArrange cachedArrange = null;
 
         public ExtremeAbilityButton(
-            IAbilityBehavior behavior,
+            AbilityBehaviorBase behavior,
             IButtonAutoActivator activator,
             KeyCode hotKey)
         {
@@ -225,7 +226,7 @@ namespace ExtremeRoles.Module
             {
                 case AbilityState.None:
                 case AbilityState.Ready:
-                    this.Timer = 0;
+                    this.Timer = 0.0f;
                     break;
                 case AbilityState.CoolDown:
                     if (this.State != AbilityState.Stop)
