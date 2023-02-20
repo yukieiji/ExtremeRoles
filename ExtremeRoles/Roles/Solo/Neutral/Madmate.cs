@@ -3,7 +3,6 @@
 using UnityEngine;
 
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -39,7 +38,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private float seeImpostorTaskGage;
         private float seeFromImpostorTaskGage;
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.madmateAbilityButton;
             set
@@ -50,7 +49,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public bool IsDontCountAliveCrew => this.isDontCountAliveCrew; 
 
-        private RoleAbilityButtonBase madmateAbilityButton;
+        private ExtremeAbilityButton madmateAbilityButton;
 
         public Madmate() : base(
             ExtremeRoleId.Madmate,
@@ -72,8 +71,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public void CreateAbility()
         {
             this.CreateNormalAbilityButton(
-                Helper.Translation.GetString("selfKill"),
-                Loader.CreateSpriteFromResources(
+                "selfKill", Loader.CreateSpriteFromResources(
                     Path.SucideSprite));
         }
 
