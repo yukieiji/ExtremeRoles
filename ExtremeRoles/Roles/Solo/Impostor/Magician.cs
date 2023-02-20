@@ -4,22 +4,21 @@ using System.Linq;
 using System.Data;
 
 using UnityEngine;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
-using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
     public sealed class Magician : SingleRoleBase, IRoleAbility
     {
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         { 
             get => this.jugglingButton;
             set
@@ -41,7 +40,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private bool includeRolePlayer = true;
         private bool includeSpawnPoint = true;
 
-        private RoleAbilityButtonBase jugglingButton;
+        private ExtremeAbilityButton jugglingButton;
 
         private List<Vector2> airShipSpawn;
 
@@ -56,7 +55,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void CreateAbility()
         {
             this.CreateNormalAbilityButton(
-                Helper.Translation.GetString("juggling"),
+                "juggling",
                 Loader.CreateSpriteFromResources(
                     Path.MagicianJuggling));
 
