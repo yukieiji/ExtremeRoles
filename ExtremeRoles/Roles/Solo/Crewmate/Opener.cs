@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 
-using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
+using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -19,7 +18,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             PlusAbility,
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.open;
             set
@@ -28,7 +27,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
         }
 
-        private RoleAbilityButtonBase open;
+        private ExtremeAbilityButton open;
         private PlainDoor targetDoor;
         private bool isUpgraded = false;
         private float range;
@@ -46,7 +45,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
-                Translation.GetString("openDoor"),
+                "openDoor",
                 Loader.CreateSpriteFromResources(
                     Path.OpenerOpenDoor));
             this.Button.SetLabelToCrewmate();
@@ -120,11 +119,15 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             float rate = 1.0f - ((float)this.reduceRate / 100f);
 
-            this.Button.SetCoolTime(
+            this.Button.Behavior.SetCoolTime(
                 OptionHolder.AllOption[
                     GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)].GetValue() * rate);
-            var button = (AbilityCountButton)this.Button;
-            button.UpdateAbilityCount(button.CurAbilityNum + plusAbilityNum);
+
+            if (this.Button.Behavior is AbilityCountBehavior countBehavior)
+            {
+                countBehavior.SetAbilityCount(
+                    countBehavior.AbilityCount + plusAbilityNum);
+            }
         }
 
         protected override void CreateSpecificOption(
