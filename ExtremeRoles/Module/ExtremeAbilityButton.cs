@@ -16,6 +16,9 @@ namespace ExtremeRoles.Module
 
     public sealed class ExtremeAbilityButton
     {
+
+        public const string AditionalInfoName = "ExRKillButtonAditionalInfo";
+
         public IAbilityBehavior Behavior { get; private set; }
 
         public AbilityState State { get; private set; }
