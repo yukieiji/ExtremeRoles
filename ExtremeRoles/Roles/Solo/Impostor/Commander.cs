@@ -1,19 +1,19 @@
 ﻿using UnityEngine;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
+using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
     public sealed class Commander : SingleRoleBase, IRoleAbility
     {
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         { 
             get => this.commandAttackButton;
             set
@@ -29,7 +29,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             IncreaseKillNum
         }
 
-        private RoleAbilityButtonBase commandAttackButton;
+        private ExtremeAbilityButton commandAttackButton;
         private float killCoolReduceTime;
         private float killCoolImpNumBonus;
         private int increaseKillNum;
@@ -118,10 +118,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             ++this.killCount;
             this.killCount = this.killCount % this.increaseKillNum;
-            if (this.killCount == 0)
+            if (this.killCount == 0 && 
+                this.Button.Behavior is AbilityCountBehavior countBehavior)
             {
-                var button = ((AbilityCountButton)this.commandAttackButton);
-                button.UpdateAbilityCount(button.CurAbilityNum + 1);
+                countBehavior.SetAbilityCount(countBehavior.AbilityCount + 1);
             }
             return true;
         }
