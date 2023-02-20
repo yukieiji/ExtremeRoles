@@ -1,6 +1,5 @@
 ﻿using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -12,7 +11,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 {
     public sealed class Maintainer : SingleRoleBase, IRoleAbility
     {
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.maintenanceButton;
             set
@@ -21,7 +20,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
         }
 
-        private RoleAbilityButtonBase maintenanceButton;
+        private ExtremeAbilityButton maintenanceButton;
 
         public Maintainer() : base(
             ExtremeRoleId.Maintainer,
@@ -34,7 +33,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
-                Translation.GetString("maintenance"),
+                "maintenance",
                 Loader.CreateSpriteFromResources(
                     Path.MaintainerRepair));
             this.Button.SetLabelToCrewmate();
