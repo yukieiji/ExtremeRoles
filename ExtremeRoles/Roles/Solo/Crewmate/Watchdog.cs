@@ -5,7 +5,6 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
@@ -15,7 +14,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 {
     public sealed class Watchdog : SingleRoleBase, IRoleAbility, IRoleUpdate
     {
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.securityButton;
             set
@@ -24,7 +23,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
         }
 
-        private RoleAbilityButtonBase securityButton;
+        private ExtremeAbilityButton securityButton;
         private Minigame monitoring;
         private TMPro.TextMeshPro chargeTime;
 
@@ -55,11 +54,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 ByteOptionNames.MapId))
             {
                 case 1:
-                    buttonText = Translation.GetString("doorLog");
+                    buttonText = "doorLog";
                     buttonImage = imageDict[ImageNames.DoorLogsButton].Image;
                     break;
                 default:
-                    buttonText = Translation.GetString("securityCamera");
+                    buttonText = "securityCamera";
                     buttonImage = imageDict[ImageNames.CamsButton].Image;
                     break;
             }
@@ -67,8 +66,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.CreateChargeAbilityButton(
                 buttonText,
                 buttonImage,
-                CleanUp,
-                checkAbility: IsOpen);
+                IsOpen,
+                CleanUp);
             this.Button.SetLabelToCrewmate();
         }
 
@@ -101,22 +100,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             if (this.monitoring == null)
             {
-                // 0 = Skeld
-                // 1 = Mira HQ
-                // 2 = Polus
-                // 3 = Dleks - deactivated
-                // 4 = Airship
-                SystemConsole watchConsole;
-                if (ExtremeRolesPlugin.Compat.IsModMap)
-                {
-                    watchConsole = ExtremeRolesPlugin.Compat.ModMap.GetSystemConsole(
-                        Compat.Interface.SystemConsoleType.SecurityCamera);
-                }
-                else
-                {
-                    watchConsole = getSecurityConsole();
-                }
-
+                SystemConsole watchConsole = GameSystem.GetSecuritySystemConsole();
                 if (watchConsole == null || Camera.main == null)
                 {
                     return false;
@@ -164,35 +148,5 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             this.RoleAbilityInit();
         }
-
-        private SystemConsole getSecurityConsole()
-        {
-            // 0 = Skeld
-            // 1 = Mira HQ
-            // 2 = Polus
-            // 3 = Dleks - deactivated
-            // 4 = Airship
-            var systemConsoleArray = Object.FindObjectsOfType<SystemConsole>();
-            switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-                ByteOptionNames.MapId))
-            {
-                case 0:
-                case 3:
-                    return systemConsoleArray.FirstOrDefault(
-                        x => x.gameObject.name.Contains("SurvConsole"));
-                case 1:
-                    return systemConsoleArray.FirstOrDefault(
-                        x => x.gameObject.name.Contains("SurvLogConsole"));
-                case 2:
-                    return systemConsoleArray.FirstOrDefault(
-                        x => x.gameObject.name.Contains("Surv_Panel"));
-                case 4:
-                    return systemConsoleArray.FirstOrDefault(
-                        x => x.gameObject.name.Contains("task_cams"));
-                default:
-                    return null;
-            }
-        }
-
     }
 }
