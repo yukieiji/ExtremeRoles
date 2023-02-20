@@ -1,20 +1,15 @@
-﻿using System.Collections.Generic;
-
-using UnityEngine;
+﻿using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
     public sealed class Painter : SingleRoleBase, IRoleAbility
     {
-
         public enum PainterOption
         {
             CanPaintDistance,
@@ -22,7 +17,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private float paintDistance;
         private byte targetDeadBodyId;
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.paintButton;
             set
@@ -31,7 +26,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        private RoleAbilityButtonBase paintButton;
+        private ExtremeAbilityButton paintButton;
 
         private Sprite randomColorPaintImage;
         private Sprite transColorPaintImage;
@@ -87,8 +82,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 Path.PainterPaintTrans);
 
             this.CreateNormalAbilityButton(
-                Translation.GetString("paint"),
-                this.randomColorPaintImage);
+                "paint", this.randomColorPaintImage);
         }
 
         public bool IsAbilityUse()
@@ -97,7 +91,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             GameData.PlayerInfo info = Player.GetDeadBodyInfo(
                 this.paintDistance);
 
-            this.Button.SetButtonImg(
+            this.Button.Behavior.SetButtonImage(
                 Input.GetKey(KeyCode.LeftShift) ?
                 this.randomColorPaintImage : this.transColorPaintImage);
 
