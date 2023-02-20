@@ -4,7 +4,6 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -52,7 +51,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private float crackDistance;
         private byte targetDeadBodyId;
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.crackButton;
             set
@@ -61,7 +60,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        private RoleAbilityButtonBase crackButton;
+        private ExtremeAbilityButton crackButton;
 
         public Cracker() : base(
             ExtremeRoleId.Cracker,
@@ -101,7 +100,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
-                Translation.GetString("crack"),
+                "crack",
                 Loader.CreateSpriteFromResources(
                    Path.CrackerCrack));
         }
