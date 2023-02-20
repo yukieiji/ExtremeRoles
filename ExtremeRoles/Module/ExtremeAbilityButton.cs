@@ -136,8 +136,8 @@ namespace ExtremeRoles.Module
                 setStatus(newState);
             }
 
-            this.button.graphic.sprite = this.Behavior.AbilityImg;
-            this.button.OverrideText(this.Behavior.AbilityText);
+            this.button.graphic.sprite = this.Behavior.Graphic.Img;
+            this.button.OverrideText(this.Behavior.Graphic.Text);
 
             if (this.Behavior.IsUse())
             {
@@ -175,6 +175,7 @@ namespace ExtremeRoles.Module
                     if (!this.Behavior.IsCanAbilityActiving())
                     {
                         this.Behavior.ForceAbilityOff();
+                        this.setStatus(AbilityState.Ready);
                         return;
                     }
                     // 能力がアクティブが時間切れなので能力のリセット等を行う

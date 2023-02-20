@@ -18,7 +18,7 @@ namespace ExtremeRoles.Module.AbilityBehavior
 
         public AbilityBehaviorBase(string text, Sprite img)
         {
-            this.graphic = new ButtonGraphic()
+            this.graphic = new ButtonGraphic
             {
                 Img = img,
                 Text = text,
