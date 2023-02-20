@@ -10,6 +10,8 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.AbilityFactory;
+using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GhostRoles.API.Interface;
@@ -788,7 +790,7 @@ namespace ExtremeRoles.Roles.Combination
 
         public void SetAbilityNum(int abilityNum)
         {
-            ((GhostAbilityButton)this.Button).UpdateAbilityCount(abilityNum + this.abilityNum);
+            ((AbilityCountBehavior)this.Button.Behavior).SetAbilityCount(abilityNum + this.abilityNum);
         }
         private static void resetMeeting()
         {
@@ -825,14 +827,15 @@ namespace ExtremeRoles.Roles.Combination
 
         public override void CreateAbility()
         {
-            this.Button = new GhostAbilityButton(
-                AbilityType.WispSetTorch,
-                this.UseAbility,
-                () => true,
-                () => true,
+            this.Button = GhostRoleAbilityFactory.CreateCountAbility(
+                AbilityType.FaunusOpenSaboConsole,
                 Loader.CreateSpriteFromResources(
                     Path.WispTorch),
-                rpcHostCallAbility: abilityCall);
+                this.isReportAbility(),
+                () => true,
+                () => true,
+                this.UseAbility,
+                abilityCall, true);
             this.ButtonInit();
             this.Button.SetLabelToCrewmate();
         }

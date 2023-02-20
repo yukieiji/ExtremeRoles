@@ -8,7 +8,7 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.GhostRoles;
+using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -44,15 +44,18 @@ namespace ExtremeRoles.GhostRoles.Crewmate
 
         public override void CreateAbility()
         {
-            this.Button = new AbilityCountButton(
+            this.Button = GhostRoleAbilityFactory.CreateCountAbility(
                 AbilityType.FaunusOpenSaboConsole,
-                this.UseAbility,
-                this.isPreCheck,
-                this.isAbilityUse,
                 Resources.Loader.CreateSpriteFromResources(
                     Resources.Path.MaintainerRepair),
-                abilityCleanUp: cleanUp,
-                abilityCheck: isAbilityActive);
+                this.isReportAbility(),
+                this.isPreCheck,
+                this.isAbilityUse,
+                this.UseAbility,
+                null, true,
+                isAbilityActive,
+                cleanUp, cleanUp,
+                KeyCode.F);
             this.ButtonInit();
             this.Button.SetLabelToCrewmate();
         }
@@ -133,11 +136,6 @@ namespace ExtremeRoles.GhostRoles.Crewmate
                 playerTask.TaskType,
                 console.transform.position);
             this.isOpen = true;
-            if (this.Button is AbilityCountButton abilityCountButton)
-            {
-                abilityCountButton.UpdateAbilityCount(
-                    abilityCountButton.CurAbilityNum - 1);
-            }
         }
 
         private bool isPreCheck() => this.saboActive;
@@ -301,14 +299,10 @@ namespace ExtremeRoles.GhostRoles.Crewmate
         }
         private void cleanUp()
         {
-            if (this.isOpen &&
-                this.Button is AbilityCountButton abilityCountButton &&
-                this.saboGame != null)
+            if (this.isOpen && this.saboGame != null)
             {
                 this.isOpen = false;
                 this.saboGame.Close();
-                abilityCountButton.UpdateAbilityCount(
-                    abilityCountButton.CurAbilityNum + 1);
             }
         }
 

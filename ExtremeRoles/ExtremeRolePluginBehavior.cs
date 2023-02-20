@@ -35,8 +35,8 @@ namespace ExtremeRoles
                 if (ghostRole != null)
                 {
                     Logging.Debug("---- Ghost Role Button Info ----");
-                    Logging.Debug($"Cool Time:{ghostRole.Button.CoolTime}");
-                    Logging.Debug($"Active Time:{ghostRole.Button.ActiveTime}");
+                    Logging.Debug($"Cool Time:{ghostRole.Button.Behavior.CoolTime}");
+                    Logging.Debug($"Active Time:{ghostRole.Button.Behavior.ActiveTime}");
                     Logging.Debug($"Button State:{ghostRole.Button.State}");
                 }
             }
