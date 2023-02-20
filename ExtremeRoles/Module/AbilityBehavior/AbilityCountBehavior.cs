@@ -34,8 +34,8 @@ namespace ExtremeRoles.Module.AbilityBehavior
             this.canUse = canUse;
             this.isReduceOnActive = isReduceOnActive;
 
-            this.forceAbilityOff = forceAbilityOff;
             this.abilityOff = abilityOff;
+            this.forceAbilityOff = forceAbilityOff ?? abilityOff;
 
             this.canActivating = canActivating ?? new Func<bool>(() => { return true; });
         }

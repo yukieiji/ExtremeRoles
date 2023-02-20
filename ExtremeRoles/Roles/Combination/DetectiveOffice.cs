@@ -9,7 +9,6 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 
@@ -642,7 +641,7 @@ namespace ExtremeRoles.Roles.Combination
 
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         { 
             get => this.meetingButton;
             set
@@ -655,7 +654,7 @@ namespace ExtremeRoles.Roles.Combination
         private bool hasOtherButton;
         private bool callAnotherButton;
         private int buttonNum;
-        private RoleAbilityButtonBase meetingButton;
+        private ExtremeAbilityButton meetingButton;
         private Minigame meeting;
 
         public DetectiveApprentice(
@@ -754,23 +753,23 @@ namespace ExtremeRoles.Roles.Combination
         {
 
             this.CreateAbilityCountButton(
-                Translation.GetString("emergencyMeeting"),
+                "emergencyMeeting",
                 Loader.CreateSpriteFromResources(
                     Path.DetectiveApprenticeEmergencyMeeting),
-                abilityCleanUp: CleanUp,
-                checkAbility: IsOpen);
+                abilityOff: CleanUp,
+                checkAbility: IsOpen,
+                isReduceOnActive: true);
             this.Button.SetLabelToCrewmate();
         }
 
-        public bool IsAbilityUse()
-        {
-            return this.IsCommonUse() && Minigame.Instance == null;
-        }
+        public bool IsAbilityUse() => 
+            this.IsCommonUse() && Minigame.Instance == null;
 
         public bool IsOpen() => Minigame.Instance != null;
 
         public void RoleAbilityResetOnMeetingEnd()
         {
+            this.meeting = null;
             this.callAnotherButton = false;
         }
 
@@ -785,58 +784,50 @@ namespace ExtremeRoles.Roles.Combination
 
         public bool UseAbility()
         {
-
-            if (this.meeting == null)
+            this.useAbility = false;
+            SystemConsole emergencyConsole;
+            if (ExtremeRolesPlugin.Compat.IsModMap)
             {
-                SystemConsole emergencyConsole;
-                if (ExtremeRolesPlugin.Compat.IsModMap)
+                emergencyConsole = ExtremeRolesPlugin.Compat.ModMap.GetSystemConsole(
+                    Compat.Interface.SystemConsoleType.EmergencyButton);
+            }
+            else
+            {
+                // 0 = Skeld
+                // 1 = Mira HQ
+                // 2 = Polus
+                // 3 = Dleks - deactivated
+                // 4 = Airship
+                var systemConsoleArray = UnityEngine.Object.FindObjectsOfType<SystemConsole>();
+                switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                    ByteOptionNames.MapId))
                 {
-                    emergencyConsole = ExtremeRolesPlugin.Compat.ModMap.GetSystemConsole(
-                        Compat.Interface.SystemConsoleType.EmergencyButton);
+                    case 0:
+                    case 1:
+                    case 3:
+                        emergencyConsole = systemConsoleArray.FirstOrDefault(
+                            x => x.gameObject.name.Contains("EmergencyConsole"));
+                        break;
+                    case 2:
+                        emergencyConsole = systemConsoleArray.FirstOrDefault(
+                            x => x.gameObject.name.Contains("EmergencyButton"));
+                        break;
+                    case 4:
+                        emergencyConsole = systemConsoleArray.FirstOrDefault(
+                            x => x.gameObject.name.Contains("task_emergency"));
+                        break;
+                    default:
+                        return false;
                 }
-                else
-                {
-                    // 0 = Skeld
-                    // 1 = Mira HQ
-                    // 2 = Polus
-                    // 3 = Dleks - deactivated
-                    // 4 = Airship
-                    var systemConsoleArray = UnityEngine.Object.FindObjectsOfType<SystemConsole>();
-                    switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-                        ByteOptionNames.MapId))
-                    {
-                        case 0:
-                        case 1:
-                        case 3:
-                            emergencyConsole = systemConsoleArray.FirstOrDefault(
-                                x => x.gameObject.name.Contains("EmergencyConsole"));
-                            break;
-                        case 2:
-                            emergencyConsole = systemConsoleArray.FirstOrDefault(
-                                x => x.gameObject.name.Contains("EmergencyButton"));
-                            break;
-                        case 4:
-                            emergencyConsole = systemConsoleArray.FirstOrDefault(
-                                x => x.gameObject.name.Contains("task_emergency"));
-                            break;
-                        default:
-                            return false;
-                    }
-                }
-                
-                if (emergencyConsole == null || Camera.main == null)
-                {
-                    return false;
-                }
-                
-                this.meeting = UnityEngine.Object.Instantiate(
-                    emergencyConsole.MinigamePrefab,
-                    Camera.main.transform, false);
             }
 
-            this.meeting.transform.SetParent(Camera.main.transform, false);
-            this.meeting.transform.localPosition = new Vector3(0.0f, 0.0f, -50f);
-            this.meeting.Begin(null);
+            if (emergencyConsole == null || Camera.main == null)
+            {
+                return false;
+            }
+
+            this.meeting = GameSystem.OpenMinigame(
+                emergencyConsole.MinigamePrefab);
             this.useAbility = true;
 
             return true;
