@@ -12,7 +12,6 @@ namespace ExtremeRoles.Module.AbilityBehavior
         private Action abilityOff;
 
         private bool isActive;
-        private float chargeTime = 0.0f;
 
         public ReclickAbilityBehavior(
             string text, Sprite img,
@@ -30,12 +29,6 @@ namespace ExtremeRoles.Module.AbilityBehavior
             this.isActive = false;
         }
 
-        public override void SetActiveTime(float newTime)
-        {
-            base.SetActiveTime(newTime);
-            this.chargeTime = newTime;
-        }
-
         public override void Initialize(ActionButton button)
         {
             return;
@@ -49,7 +42,6 @@ namespace ExtremeRoles.Module.AbilityBehavior
 
         public override void ForceAbilityOff()
         {
-            this.isActive = false;
             this.AbilityOff();
         }
 
