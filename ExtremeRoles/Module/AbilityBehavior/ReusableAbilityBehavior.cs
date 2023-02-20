@@ -10,21 +10,21 @@ namespace ExtremeRoles.Module.AbilityBehavior
         private Func<bool> canUse;
         private Func<bool> canActivating;
         private Action forceAbilityOff;
-        private Action abilityCleanUp;
+        private Action abilityOff;
 
         public ReusableAbilityBehavior(
             string text, Sprite img,
             Func<bool> canUse,
             Func<bool> ability,
             Func<bool> canActivating = null,
-            Action abilityCleanUp = null,
+            Action abilityOff = null,
             Action forceAbilityOff = null) : base(text, img)
         {
             this.ability =  ability;
             this.canUse = canUse;
 
             this.forceAbilityOff = forceAbilityOff;
-            this.abilityCleanUp = abilityCleanUp;
+            this.abilityOff = abilityOff;
 
             this.canActivating = canActivating ?? new Func<bool>(() => { return true; });
         }
@@ -36,7 +36,7 @@ namespace ExtremeRoles.Module.AbilityBehavior
 
         public override void AbilityOff()
         {
-            this.abilityCleanUp?.Invoke();
+            this.abilityOff?.Invoke();
         }
 
         public override void ForceAbilityOff()

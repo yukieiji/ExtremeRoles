@@ -20,22 +20,23 @@ namespace ExtremeRoles.Module.AbilityFactory
             Action<RPCOperator.RpcCaller> ability,
             Action rpcHostCallAbility,
             Func<bool> canActivating = null,
-            Action abilityCleanUp = null,
+            Action abilityOff = null,
             Action forceAbilityOff = null,
             KeyCode hotKey = KeyCode.F)
         {
 
             return new ExtremeAbilityButton(
                 new ReusableAbilityBehavior(
-                    Helper.Translation.GetString(
+                    text: Helper.Translation.GetString(
                         string.Concat(type.ToString(), "Button")),
-                    img, createGhostRoleUseFunc(canUse),
-                    createGhostRoleAbility(
+                    img: img,
+                    canUse: createGhostRoleUseFunc(canUse),
+                    ability: createGhostRoleAbility(
                         type, isReport, abilityPreCheck,
                         ability, rpcHostCallAbility),
-                    canActivating,
-                    abilityCleanUp,
-                    forceAbilityOff),
+                    canActivating: canActivating,
+                    abilityOff: abilityOff,
+                    forceAbilityOff: forceAbilityOff),
                 new GhostRoleButtonActivator(),
                 hotKey
             );
@@ -51,23 +52,24 @@ namespace ExtremeRoles.Module.AbilityFactory
             Action rpcHostCallAbility,
             bool isReduceOnActive = false,
             Func<bool> canActivating = null,
-            Action abilityCleanUp = null,
+            Action abilityOff = null,
             Action forceAbilityOff = null,
             KeyCode hotKey = KeyCode.F)
         {
 
             return new ExtremeAbilityButton(
                 new AbilityCountBehavior(
-                    Helper.Translation.GetString(
+                    text: Helper.Translation.GetString(
                         string.Concat(type.ToString(), "Button")),
-                    img, createGhostRoleUseFunc(canUse),
-                    createGhostRoleAbility(
+                    img: img,
+                    canUse: createGhostRoleUseFunc(canUse),
+                    ability: createGhostRoleAbility(
                         type, isReport, abilityPreCheck,
                         ability, rpcHostCallAbility),
-                    canActivating,
-                    abilityCleanUp,
-                    forceAbilityOff,
-                    isReduceOnActive),
+                    canActivating: canActivating,
+                    abilityOff: abilityOff,
+                    forceAbilityOff: forceAbilityOff,
+                    isReduceOnActive: isReduceOnActive),
                 new GhostRoleButtonActivator(),
                 hotKey
             );

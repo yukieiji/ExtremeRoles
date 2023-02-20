@@ -16,7 +16,7 @@ namespace ExtremeRoles.Module.AbilityBehavior
         private Func<bool> canUse;
         private Func<bool> canActivating;
         private Action forceAbilityOff;
-        private Action abilityCleanUp;
+        private Action abilityOff;
 
         private TMPro.TextMeshPro abilityCountText = null;
         private string buttonTextFormat = "buttonCountText";
@@ -26,7 +26,7 @@ namespace ExtremeRoles.Module.AbilityBehavior
             Func<bool> canUse,
             Func<bool> ability,
             Func<bool> canActivating = null,
-            Action abilityCleanUp = null,
+            Action abilityOff = null,
             Action forceAbilityOff = null,
             bool isReduceOnActive = false) : base(text, img)
         {
@@ -35,7 +35,7 @@ namespace ExtremeRoles.Module.AbilityBehavior
             this.isReduceOnActive = isReduceOnActive;
 
             this.forceAbilityOff = forceAbilityOff;
-            this.abilityCleanUp = abilityCleanUp;
+            this.abilityOff = abilityOff;
 
             this.canActivating = canActivating ?? new Func<bool>(() => { return true; });
         }
@@ -63,7 +63,7 @@ namespace ExtremeRoles.Module.AbilityBehavior
             {
                 this.reduceAbilityCount();
             }
-            this.abilityCleanUp?.Invoke();
+            this.abilityOff?.Invoke();
         }
 
         public override void ForceAbilityOff()
