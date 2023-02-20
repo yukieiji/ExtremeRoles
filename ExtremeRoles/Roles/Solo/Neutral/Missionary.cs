@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
+using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -12,7 +12,6 @@ using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 
 using BepInEx.IL2CPP.Utils.Collections;
-using ExtremeRoles.Module.ExtremeShipStatus;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
@@ -27,7 +26,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             PropagateRange
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.propagate;
             set
@@ -48,7 +47,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         private TMPro.TextMeshPro tellText;
 
-        private RoleAbilityButtonBase propagate;
+        private ExtremeAbilityButton propagate;
 
         public Missionary() : base(
             ExtremeRoleId.Missionary,
@@ -105,8 +104,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public void CreateAbility()
         {
             this.CreateNormalAbilityButton(
-                Helper.Translation.GetString("propagate"),
-                Loader.CreateSpriteFromResources(
+                "propagate", Loader.CreateSpriteFromResources(
                     Path.MissionaryPropagate));
         }
 
