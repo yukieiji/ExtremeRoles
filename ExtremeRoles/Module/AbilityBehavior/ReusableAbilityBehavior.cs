@@ -18,11 +18,8 @@ namespace ExtremeRoles.Module.AbilityBehavior
             Func<bool> ability,
             Func<bool> canActivating = null,
             Action abilityCleanUp = null,
-            Action forceAbilityOff = null)
+            Action forceAbilityOff = null) : base(text, img)
         {
-            this.SetButtonImage(img);
-            this.SetButtonText(text);
-
             this.ability =  ability;
             this.canUse = canUse;
 

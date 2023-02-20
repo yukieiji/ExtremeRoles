@@ -28,11 +28,8 @@ namespace ExtremeRoles.Module.AbilityBehavior
             Func<bool> canActivating = null,
             Action abilityCleanUp = null,
             Action forceAbilityOff = null,
-            bool isReduceOnActive = false)
+            bool isReduceOnActive = false) : base(text, img)
         {
-            this.SetButtonImage(img);
-            this.SetButtonText(text);
-
             this.ability =  ability;
             this.canUse = canUse;
             this.isReduceOnActive = isReduceOnActive;

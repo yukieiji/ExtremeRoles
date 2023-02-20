@@ -2,13 +2,28 @@
 
 namespace ExtremeRoles.Module.AbilityBehavior
 {
+    public struct ButtonGraphic
+    {
+        public Sprite Img { get; set; }
+        public string Text { get; set; }
+    }
+
     public abstract class AbilityBehaviorBase
     {
         public float CoolTime { get; private set; }
         public float ActiveTime { get; private set; }
 
-        public Sprite AbilityImg { get; private set; }
-        public string AbilityText { get; private set; }
+        public ButtonGraphic Graphic => this.graphic;
+        private ButtonGraphic graphic;
+
+        public AbilityBehaviorBase(string text, Sprite img)
+        {
+            this.graphic = new ButtonGraphic()
+            {
+                Img = img,
+                Text = text,
+            };
+        }
 
         public void SetActiveTime(float newTime)
         {
@@ -22,12 +37,12 @@ namespace ExtremeRoles.Module.AbilityBehavior
 
         public void SetButtonImage(Sprite image)
         {
-            this.AbilityImg = image;
+            this.graphic.Img = image;
         }
 
         public void SetButtonText(string text)
         {
-            this.AbilityText = text;
+            this.graphic.Text = text;
         }
 
         public abstract void Initialize(ActionButton button);
