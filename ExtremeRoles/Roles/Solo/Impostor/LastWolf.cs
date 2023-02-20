@@ -5,7 +5,6 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
@@ -25,7 +24,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             LightOffVision
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.lightOffButton;
             set
@@ -44,7 +43,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public RoleTypes NoneAwakeRole => RoleTypes.Impostor;
 
-        private RoleAbilityButtonBase lightOffButton;
+        private ExtremeAbilityButton lightOffButton;
 
         private float noneAwakeKillBonus;
         private float deadPlayerKillBonus;
@@ -87,10 +86,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void CreateAbility()
         {
             this.CreateNormalAbilityButton(
-                Translation.GetString("liightOff"),
+                "liightOff",
                 Resources.Loader.CreateSpriteFromResources(
                    Resources.Path.LastWolfLightOff),
-                abilityCleanUp:CleanUp);
+                abilityOff: CleanUp);
         }
 
         public bool IsAbilityUse() =>
