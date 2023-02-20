@@ -5,12 +5,6 @@ namespace ExtremeRoles.Module.ButtonAutoActivator
 {
     public sealed class GhostRoleButtonActivator : IButtonAutoActivator
     {
-        public static bool IsComSabNow()
-        {
-            return PlayerTask.PlayerHasTaskOfType<IHudOverrideTask>(
-                CachedPlayerControl.LocalPlayer);
-        }
-
         public bool IsActive()
         {
             PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
