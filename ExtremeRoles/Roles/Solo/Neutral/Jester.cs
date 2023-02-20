@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-
-using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
+﻿using ExtremeRoles.Module;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
@@ -20,7 +17,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             OutburstDistance
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         { 
             get => this.outburstButton;
             set
@@ -32,7 +29,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private float outburstDistance;
         private PlayerControl tmpTarget;
         private PlayerControl outburstTarget;
-        private RoleAbilityButtonBase outburstButton;
+        private ExtremeAbilityButton outburstButton;
 
         public Jester(): base(
             ExtremeRoleId.Jester,
@@ -112,10 +109,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
-                Helper.Translation.GetString("outburst"),
+                "outburst",
                 Loader.CreateSpriteFromResources(
                     Path.JesterOutburst),
-                abilityCleanUp:CleanUp);
+                abilityOff: CleanUp,
+                forceAbilityOff: () => { });
         }
 
         public override bool IsSameTeam(SingleRoleBase targetRole) =>
