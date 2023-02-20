@@ -5,7 +5,6 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -52,7 +51,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private bool isAwakedHasOtherKillRange;
 
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.overLoadButton;
             set
@@ -61,7 +60,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        private RoleAbilityButtonBase overLoadButton;
+        private ExtremeAbilityButton overLoadButton;
 
 
         public OverLoader() : base(
@@ -87,8 +86,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void CreateAbility()
         {
             this.CreatePassiveAbilityButton(
-                Translation.GetString("overLoad"),
-                Translation.GetString("downLoad"),
+                "overLoad", "downLoad",
                 Loader.CreateSpriteFromResources(
                    Path.OverLoaderOverLoad),
                 Loader.CreateSpriteFromResources(
