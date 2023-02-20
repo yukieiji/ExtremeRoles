@@ -307,7 +307,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             Player,
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.createFake;
             set
@@ -316,7 +316,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        private RoleAbilityButtonBase createFake;
+        private ExtremeAbilityButton createFake;
 
         private Sprite deadBodyDummy;
         private Sprite playerDummy;
@@ -370,7 +370,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.playerDummyStr = Translation.GetString("dummyPlayer");
 
             this.CreateNormalAbilityButton(
-                this.deadBodyDummyStr,
+                "dummyDeadBody",
                 this.deadBodyDummy);
         }
 
@@ -378,11 +378,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             bool isPlayerDummy = Input.GetKey(KeyCode.LeftShift);
 
-            this.Button.SetButtonImg(
-                isPlayerDummy ? 
-                this.playerDummy : this.deadBodyDummy);
-            this.Button.SetButtonText(
-                isPlayerDummy ? this.playerDummyStr : this.deadBodyDummyStr);
+            this.Button.Behavior.SetGraphic(
+                isPlayerDummy ? this.playerDummyStr : this.deadBodyDummyStr,
+                isPlayerDummy ? this.playerDummy : this.deadBodyDummy);
 
             return this.IsCommonUse();
         }
