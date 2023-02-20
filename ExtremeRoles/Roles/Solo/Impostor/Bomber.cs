@@ -3,9 +3,10 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
+using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -13,8 +14,6 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using BepInEx.IL2CPP.Utils.Collections;
-using ExtremeRoles.Module.ExtremeShipStatus;
-using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -41,7 +40,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private Queue<byte> bombPlayerId;
         private TMPro.TextMeshPro tellText;
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.bombButton;
             set
@@ -49,7 +48,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.bombButton = value;
             }
         }
-        private RoleAbilityButtonBase bombButton;
+        private ExtremeAbilityButton bombButton;
 
 
         public Bomber() : base(
@@ -64,11 +63,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
 
             this.CreateAbilityCountButton(
-                Translation.GetString("setBomb"),
+                "setBomb",
                 Loader.CreateSpriteFromResources(
                     Path.BomberSetBomb),
-                checkAbility: CheckAbility,
-                abilityCleanUp: CleanUp);
+                CheckAbility, CleanUp);
         }
 
         public bool IsAbilityUse()
