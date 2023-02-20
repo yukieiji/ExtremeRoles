@@ -7,8 +7,8 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Module.ExtremeShipStatus;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -37,7 +37,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             ServantSelfKillCool
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.createServant;
             set
@@ -48,7 +48,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public PlayerControl Target;
         public float ServantSelfKillCool;
-        private RoleAbilityButtonBase createServant;
+        private ExtremeAbilityButton createServant;
         private float range;
         private float killKillCoolReduceRate;
         private float taskKillCoolReduceRate;
@@ -92,7 +92,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 {
                     servant.Button.SetHotKey(KeyCode.C);
                 }
-                RoleAbilityButtonBase.ReGridButtons();
+                ExtremeAbilityButton.ReGridButtons();
             }
 
             if (targetRole.Team != ExtremeRoleType.Neutral)
@@ -328,8 +328,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
-                Translation.GetString("queenCharm"),
-                Loader.CreateSpriteFromResources(
+                "queenCharm", Loader.CreateSpriteFromResources(
                     Path.QueenCharm));
         }
 
@@ -517,7 +516,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
     {
         public byte Parent => this.queenPlayerId;
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.selfKillButton;
             set
@@ -526,7 +525,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
         }
 
-        private RoleAbilityButtonBase selfKillButton;
+        private ExtremeAbilityButton selfKillButton;
 
         private byte queenPlayerId;
         private SpriteRenderer killFlash;
@@ -570,16 +569,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void SelfKillAbility(float coolTime)
         {
-            this.Button = new ReusableAbilityButton(
-                Translation.GetString("selfKill"),
-                this.UseAbility,
-                this.IsAbilityUse,
+            this.Button = RoleAbilityFactory.CreateReusableAbility(
+                "selfKill",
                 Loader.CreateSpriteFromResources(
                     Path.SucideSprite),
-                null, null,
-                KeyCode.F);
-            this.Button.SetCoolTime(coolTime);
-            this.Button.ResetCoolTimer();
+                this.IsAbilityUse,
+                this.UseAbility);
+            this.Button.Behavior.SetCoolTime(coolTime);
+            this.Button.OnMeetingEnd();
         }
 
         public void HookMuderPlayer(
