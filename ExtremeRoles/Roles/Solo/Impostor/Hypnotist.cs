@@ -14,7 +14,7 @@ using BepInEx.IL2CPP.Utils.Collections;
 using ExtremeRoles.Extension.Json;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
+using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -64,7 +64,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             Glay
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.lightOffButton;
             set
@@ -83,7 +83,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public RoleTypes NoneAwakeRole => RoleTypes.Impostor;
 
-        private RoleAbilityButtonBase lightOffButton;
+        private ExtremeAbilityButton lightOffButton;
 
         private HashSet<byte> doll;
 
@@ -298,7 +298,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
-                Translation.GetString("Hypnosis"),
+                "Hypnosis",
                 Resources.Loader.CreateSpriteFromResources(
                    Resources.Path.HypnotistHypnosis));
 
@@ -981,7 +981,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             Vital,
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         { 
             get => this.crakingButton;
             set
@@ -1009,7 +1009,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private string accessModule = string.Empty;
         private string crakingModule = string.Empty;
 
-        private RoleAbilityButtonBase crakingButton;
+        private ExtremeAbilityButton crakingButton;
 
         private TMPro.TextMeshPro tellText;
 
@@ -1135,18 +1135,17 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.securitySprite = GameSystem.GetSecurityImage();
             this.vitalSprite = GameSystem.GetVitalImage();
 
-            this.Button = new ChargableButton(
-                Translation.GetString("traitorCracking"),
-                UseAbility,
-                IsAbilityUse,
+            this.Button = RoleAbilityFactory.CreateChargableAbility(
+                "traitorCracking",
                 this.adminSprite,
-                CleanUp,
+                IsAbilityUse,
+                UseAbility,
                 CheckAbility,
-                KeyCode.F);
+                CleanUp);
 
-            this.Button.SetCoolTime(
+            this.Button.Behavior.SetCoolTime(
                 hypnotist.DollCrakingCoolTime);
-            this.Button.SetAbilityActiveTime(
+            this.Button.Behavior.SetActiveTime(
                 hypnotist.DollCrakingActiveTime);
         }
 
@@ -1400,8 +1399,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         }
         private void updateButtonSprite()
         {
-            var button = this.Button as ChargableButton;
-
             Sprite sprite = Resources.Loader.CreateSpriteFromResources(
                 Resources.Path.TestButton);
 
@@ -1419,7 +1416,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 default:
                     break;
             }
-            button.SetButtonImg(sprite);
+ 
+            this.Button.Behavior.SetButtonImage(sprite);
         }
 
         private void showText(string text)
