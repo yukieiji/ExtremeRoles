@@ -340,17 +340,15 @@ namespace ExtremeRoles.Patches
 
             HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
-            bool ventEnable = enable && !player.Data.IsDead;
-
-            if (!role.CanUseVent())
+            if (!role.CanUseVent() || player.Data.IsDead)
             { 
-                hudManager.ImpostorVentButton.SetDisabled();
+                hudManager.ImpostorVentButton.Hide();
                 return;
             }
 
             if (!role.TryGetVanillaRoleId(out RoleTypes roleId))
             {
-                if (ventEnable &&
+                if (enable &&
                     ExtremeGameModeManager.Instance.ShipOption.IsEnableImpostorVent)
                 {
                     hudManager.ImpostorVentButton.Show();
@@ -360,9 +358,11 @@ namespace ExtremeRoles.Patches
                     hudManager.ImpostorVentButton.SetDisabled();
                 }
             }
-            else if (roleId == RoleTypes.Engineer)
+            else if (
+                roleId == RoleTypes.Engineer &&
+                player.Data.Role.Role == RoleTypes.Engineer)
             {
-                if (ventEnable)
+                if (enable)
                 {
                     if (!ExtremeGameModeManager.Instance.ShipOption.EngineerUseImpostorVent)
                     {
@@ -384,22 +384,34 @@ namespace ExtremeRoles.Patches
 
         private static void ghostRoleButtonUpdate(GhostRoleBase playerGhostRole)
         {
-            if (playerGhostRole != null && playerGhostRole.Button != null)
+            if (playerGhostRole == null) { return; }
+
+            var abilityButton = FastDestroyableSingleton<HudManager>.Instance.AbilityButton;
+
+            switch (CachedPlayerControl.LocalPlayer.Data.Role.Role)
             {
-                switch(CachedPlayerControl.LocalPlayer.Data.Role.Role)
-                {
-                    case RoleTypes.Engineer:
-                    case RoleTypes.Scientist:
-                    case RoleTypes.Shapeshifter:
-                    case RoleTypes.CrewmateGhost:
-                    case RoleTypes.ImpostorGhost:
-                        FastDestroyableSingleton<HudManager>.Instance.AbilityButton.Hide();
-                        break;
-                    default:
-                        break;
-                }
-                playerGhostRole.Button.Update();
+                case RoleTypes.Engineer:
+                case RoleTypes.Scientist:
+                case RoleTypes.Shapeshifter:
+                    abilityButton.Hide();
+                    break;
+                case RoleTypes.CrewmateGhost:
+                case RoleTypes.ImpostorGhost:
+                    if (playerGhostRole.IsVanillaRole() &&
+                        MeetingHud.Instance == null && 
+                        ExileController.Instance == null)
+                    {
+                        abilityButton.Show();
+                    }
+                    else
+                    {
+                        abilityButton.Hide();
+                    }
+                    break;
+                default:
+                    break;
             }
+            playerGhostRole.Button?.Update();
         }
     }
 

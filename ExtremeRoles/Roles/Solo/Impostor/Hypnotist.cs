@@ -334,12 +334,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void HookExil(PlayerControl exiledPlayer)
         {
             updateAwakeCheck(exiledPlayer);
-        }
 
-        public void RoleAbilityResetOnMeetingEnd()
-        {
             if (!this.isAwake &&
-                this.canAwakeNow && 
+                this.canAwakeNow &&
                 this.killCount >= this.awakeKillCount)
             {
                 this.isAwake = true;
@@ -351,6 +348,11 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 setRedAbilityPart(this.addRedPos.Count);
             }
+        }
+
+        public void RoleAbilityResetOnMeetingEnd()
+        {
+            return;
         }
 
         public bool UseAbility()
