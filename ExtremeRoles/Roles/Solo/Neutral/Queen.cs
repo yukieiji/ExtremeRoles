@@ -463,7 +463,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 parentOps);
             CreateIntOption(
                 QueenOption.ServantKillKillCoolReduceRate,
-                30, 0, 75, 1,
+                40, 0, 85, 1,
                 parentOps,
                 format:OptionUnit.Percentage);
             CreateIntOption(
