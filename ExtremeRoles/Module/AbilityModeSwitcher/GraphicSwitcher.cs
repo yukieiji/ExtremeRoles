@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Module.Interface;
 
@@ -26,6 +27,9 @@ namespace ExtremeRoles.Module.AbilityModeSwitcher
         {
             this.Mode[type] = mode;
         }
+
+        public ModeStruct Get(SwithEnum type) => this.Mode[type];
+
         public virtual void Switch(SwithEnum type)
         {
             ModeStruct mode = this.Mode[type];
