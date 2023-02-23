@@ -35,8 +35,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private int explosionKillChance;
         private float explosionRange;
         private bool tellExplosion;
-        private byte setTargetPlayerId;
-        private byte bombSettingPlayerId;
+        private PlayerControl setTargetPlayer;
+        private PlayerControl bombSettingPlayer;
 
         private Queue<byte> bombPlayerId;
         private TMPro.TextMeshPro tellText;
@@ -73,35 +73,24 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool IsAbilityUse()
         {
-            this.setTargetPlayerId = byte.MaxValue;
-            var player = Player.GetClosestPlayerInKillRange();
-            if (player != null)
-            {
-                this.setTargetPlayerId = player.PlayerId;
-            }
-            return this.IsCommonUse() && this.setTargetPlayerId != byte.MaxValue;
+            this.setTargetPlayer = Player.GetClosestPlayerInKillRange();
+            return this.IsCommonUse() && this.setTargetPlayer != null;
         }
 
         public void CleanUp()
         {
-            bombPlayerId.Enqueue(this.bombSettingPlayerId);
-            bombSettingPlayerId = byte.MaxValue;
+            this.bombPlayerId.Enqueue(this.bombSettingPlayer.PlayerId);
+            this.bombSettingPlayer = null;
         }
 
         public bool CheckAbility()
-        {
-            byte targetPlayerId = byte.MaxValue;
-            var player = Player.GetClosestPlayerInKillRange();
-            if (player != null)
-            {
-                targetPlayerId = player.PlayerId;
-            }
-            return this.bombSettingPlayerId == targetPlayerId;
-        }
+            => Player.IsPlayerInRangeAndDrawOutLine(
+                CachedPlayerControl.LocalPlayer,
+                this.bombSettingPlayer, this, this.KillRange);
 
         public bool UseAbility()
         {
-            this.bombSettingPlayerId = this.setTargetPlayerId;
+            this.bombSettingPlayer = this.setTargetPlayer;
             return true;
         }
 
@@ -194,10 +183,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 if (explosionKillChance > Random.RandomRange(0, 100))
                 {
-                    explosionKill(rolePlayer, bombPlayer, player);
+                    explosionKill(bombPlayer, player);
                 }
             }
-            explosionKill(rolePlayer, bombPlayer, bombPlayer);
+            explosionKill(bombPlayer, bombPlayer);
             if (this.tellExplosion)
             {
                 rolePlayer.StartCoroutine(
@@ -250,8 +239,26 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         }
 
-        private void explosionKill(
-            PlayerControl rolePlayer,
+        private IEnumerator showText()
+        {
+            if (this.tellText == null)
+            {
+                this.tellText = Object.Instantiate(
+                    Prefab.Text, Camera.main.transform, false);
+                this.tellText.transform.localPosition = new Vector3(-4.0f, -2.75f, -250.0f);
+                this.tellText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
+                this.tellText.gameObject.layer = 5;
+                this.tellText.text = Helper.Translation.GetString("explosionText");
+            }
+            this.tellText.gameObject.SetActive(true);
+
+            yield return new WaitForSeconds(3.5f);
+
+            this.tellText.gameObject.SetActive(false);
+
+        }
+
+        private static void explosionKill(
             PlayerControl bombPlayer,
             PlayerControl target)
         {
@@ -272,25 +279,5 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             ExtremeRolesPlugin.ShipState.RpcReplaceDeadReason(
                 target.PlayerId, ExtremeShipStatus.PlayerStatus.Explosion);
         }
-
-        private IEnumerator showText()
-        {
-            if (this.tellText == null)
-            {
-                this.tellText = Object.Instantiate(
-                    Prefab.Text, Camera.main.transform, false);
-                this.tellText.transform.localPosition = new Vector3(-4.0f, -2.75f, -250.0f);
-                this.tellText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
-                this.tellText.gameObject.layer = 5;
-                this.tellText.text = Helper.Translation.GetString("explosionText");
-            }
-            this.tellText.gameObject.SetActive(true);
-
-            yield return new WaitForSeconds(3.5f);
-
-            this.tellText.gameObject.SetActive(false);
-
-        }
-
     }
 }

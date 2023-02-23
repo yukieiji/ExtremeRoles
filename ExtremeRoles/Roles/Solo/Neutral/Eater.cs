@@ -446,13 +446,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public bool IsAbilityCheck()
         {
             if (this.targetDeadBody != null) { return true; }
-            
-            PlayerControl checkPlayer = Player.GetClosestPlayerInRange(
-                CachedPlayerControl.LocalPlayer, this, this.range);
 
-            if (checkPlayer == null) { return false; }
-
-            return checkPlayer.PlayerId == this.targetPlayer.PlayerId;
+            return Player.IsPlayerInRangeAndDrawOutLine(
+                CachedPlayerControl.LocalPlayer,
+                this.targetDeadBody, this, this.range);
         }
 
         public override bool IsSameTeam(SingleRoleBase targetRole) =>

@@ -327,14 +327,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
 
         public bool IsAbilityCheck()
-        {
-            PlayerControl checkPlayer = Helper.Player.GetClosestPlayerInRange(
-                CachedPlayerControl.LocalPlayer, this, this.range);
-
-            if (checkPlayer == null) { return false; }
-
-            return checkPlayer.PlayerId == this.target.PlayerId;
-        }
+            => Helper.Player.IsPlayerInRangeAndDrawOutLine(
+                CachedPlayerControl.LocalPlayer,
+                this.target, this, this.range);
 
         public void CleanUp()
         {

@@ -2,6 +2,7 @@
 
 using UnityEngine;
 
+using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
@@ -52,7 +53,7 @@ namespace ExtremeRoles.Helper
 
         public static PlayerControl GetClosestPlayerInRange(
             PlayerControl sourcePlayer,
-            Roles.API.SingleRoleBase role,
+            SingleRoleBase role,
             float range)
         {
 
@@ -70,10 +71,33 @@ namespace ExtremeRoles.Helper
             return result;
         }
 
+        public static bool IsPlayerInRangeAndDrawOutLine(
+            PlayerControl sourcePlayer, GameData.PlayerInfo targetPlayer,
+            SingleRoleBase role, float range) 
+            => IsPlayerInRangeAndDrawOutLine(sourcePlayer, targetPlayer.Object, role, range);
+
+        public static bool IsPlayerInRangeAndDrawOutLine(
+            PlayerControl sourcePlayer,
+            PlayerControl targetPlayer,
+            SingleRoleBase role,
+            float range)
+        {
+            bool result = isPlayerInRange(sourcePlayer, targetPlayer, role, range);
+
+            if (result)
+            {
+                SetPlayerOutLine(targetPlayer, role.GetNameColor());
+            }
+            else
+            {
+                resetPlayerOutLine();
+            }
+            return result;
+        }
+
         public static List<PlayerControl> GetAllPlayerInRange(
             PlayerControl sourcePlayer,
-            Roles.API.SingleRoleBase role,
-            float range)
+            SingleRoleBase role, float range)
         {
 
             List<PlayerControl> result = new List<PlayerControl>();
@@ -88,25 +112,18 @@ namespace ExtremeRoles.Helper
             foreach (GameData.PlayerInfo playerInfo in 
                 GameData.Instance.AllPlayers.GetFastEnumerator())
             {
-
-                if (!playerInfo.Disconnected &&
-                    playerInfo.PlayerId != sourcePlayer.PlayerId &&
-                    !playerInfo.IsDead &&
-                    !playerInfo.Object.inVent &&
-                    !role.IsSameTeam(Roles.ExtremeRoleManager.GameRole[playerInfo.PlayerId]))
+                if (isValidPlayer(role, sourcePlayer, playerInfo))
                 {
-                    PlayerControl @object = playerInfo.Object;
-                    if (@object)
+                    PlayerControl target = playerInfo.Object;
+
+                    Vector2 vector = target.GetTruePosition() - truePosition;
+                    float magnitude = vector.magnitude;
+                    if (magnitude <= range &&
+                        !PhysicsHelpers.AnyNonTriggersBetween(
+                            truePosition, vector.normalized,
+                            magnitude, Constants.ShipAndObjectsMask))
                     {
-                        Vector2 vector = @object.GetTruePosition() - truePosition;
-                        float magnitude = vector.magnitude;
-                        if (magnitude <= range &&
-                            !PhysicsHelpers.AnyNonTriggersBetween(
-                                truePosition, vector.normalized,
-                                magnitude, Constants.ShipAndObjectsMask))
-                        {
-                            result.Add(@object);
-                        }
+                        result.Add(target);
                     }
                 }
             }
@@ -277,6 +294,34 @@ namespace ExtremeRoles.Helper
 
         }
 
+        public static bool isPlayerInRange(
+            PlayerControl sourcePlayer,
+            PlayerControl targetPlayer,
+            SingleRoleBase role, float range)
+        {
+            if (!ShipStatus.Instance)
+            {
+                return false;
+            }
+
+            Vector2 truePosition = sourcePlayer.GetTruePosition();
+
+            if (!isValidPlayer(role, sourcePlayer, targetPlayer.Data))
+            {
+                return false;
+            }
+
+            Vector2 vector = targetPlayer.GetTruePosition() - truePosition;
+            float magnitude = vector.magnitude;
+
+            return
+                magnitude <= range &&
+                !PhysicsHelpers.AnyNonTriggersBetween(
+                    truePosition, vector.normalized,
+                    magnitude, Constants.ShipAndObjectsMask);
+
+        }
+
         private static void resetPlayerOutLine()
         {
             if (prevTarget != null &&
@@ -284,6 +329,22 @@ namespace ExtremeRoles.Helper
             {
                 prevTarget.cosmetics.currentBodySprite.BodySprite.material.SetFloat("_Outline", 0f);
             }
+        }
+
+        private static bool isValidPlayer(
+            SingleRoleBase role,
+            PlayerControl sourcePlayer,
+            GameData.PlayerInfo targetPlayer)
+        {
+            return (
+                targetPlayer != null &&
+                !targetPlayer.Disconnected &&
+                targetPlayer.PlayerId != sourcePlayer.PlayerId &&
+                !targetPlayer.IsDead &&
+                targetPlayer.Object &&
+                !targetPlayer.Object.inVent &&
+                !role.IsSameTeam(Roles.ExtremeRoleManager.GameRole[targetPlayer.PlayerId])
+            );
         }
     }
 }
