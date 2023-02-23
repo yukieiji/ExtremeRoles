@@ -13,7 +13,7 @@ namespace ExtremeRoles.Roles.API.Interface
         AbilityCount,
         AbilityActiveTime,
     }
-    public interface IRoleAbility
+    public interface IRoleAbility : IRoleResetMeeting
     {
         public ExtremeAbilityButton Button
         {
@@ -26,11 +26,6 @@ namespace ExtremeRoles.Roles.API.Interface
         public bool UseAbility();
 
         public bool IsAbilityUse();
-
-        public void RoleAbilityResetOnMeetingStart(); // サイドキック作成時に呼ばれるためnullエラーを考慮すること
-
-        public void RoleAbilityResetOnMeetingEnd();
-
     }
 
     public static class IRoleAbilityMixin
@@ -227,25 +222,6 @@ namespace ExtremeRoles.Roles.API.Interface
         {
             return PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer.CanMove;
         }
-
-        public static void ResetOnMeetingEnd(this IRoleAbility self)
-        {
-            if (self.Button != null)
-            {
-                self.Button.OnMeetingEnd();
-            }
-            self.RoleAbilityResetOnMeetingEnd();
-        }
-
-        public static void ResetOnMeetingStart(this IRoleAbility self)
-        {
-            if (self.Button != null)
-            {
-                self.Button.OnMeetingStart();
-            }
-            self.RoleAbilityResetOnMeetingStart();
-        }
-
 
         public static void RoleAbilityInit(this IRoleAbility self)
         {

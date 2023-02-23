@@ -158,21 +158,21 @@ namespace ExtremeRoles.Patches.Controller
             var role = ExtremeRoleManager.GetLocalPlayerRole();
             if (role is IRoleAbility abilityRole)
             {
-                abilityRole.ResetOnMeetingEnd();
+                abilityRole.Button.OnMeetingEnd();
             }
             if (role is IRoleResetMeeting resetRole)
             {
-                resetRole.ResetOnMeetingEnd();
+                resetRole.ResetOnMeetingEnd(exiled);
             }
             if (role is MultiAssignRoleBase multiAssignRole)
             {
                 if (multiAssignRole.AnotherRole is IRoleAbility abilityMultiAssignRole)
                 {
-                    abilityMultiAssignRole.ResetOnMeetingEnd();
+                    abilityMultiAssignRole.Button.OnMeetingEnd();
                 }
                 if (multiAssignRole.AnotherRole is IRoleResetMeeting resetMultiAssignRole)
                 {
-                    resetMultiAssignRole.ResetOnMeetingEnd();
+                    resetMultiAssignRole.ResetOnMeetingEnd(exiled);
                 }
             }
 
