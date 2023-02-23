@@ -1,73 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-
-using UnityEngine;
-using Hazel;
+﻿using UnityEngine;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
+using ExtremeRoles.Module.AbilityBehavior;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Extension.Ship;
-using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
     public sealed class SandWorm : SingleRoleBase, IRoleAbility
     {
-        public sealed class AssaultButton : RoleAbilityButtonBase
+        public sealed class AssaultButtonAutoActivator : IButtonAutoActivator
         {
-            public AssaultButton(
-                Func<bool> ability,
-                Func<bool> canUse,
-                Sprite sprite) : base(
-                    Translation.GetString("assault"),
-                    ability,
-                    canUse,
-                    sprite,
-                    null, null,
-                    KeyCode.F)
-            { }
-
-            protected override bool IsEnable() => this.CanUse.Invoke();
-
-            protected override void DoClick()
+            public bool IsActive()
             {
-                if (this.IsEnable() &&
-                    this.Timer <= 0f &&
-                    this.IsAbilityReady() &&
-                    this.UseAbility.Invoke())
-                {
-                    this.SetStatus(
-                        this.HasCleanUp() ?
-                        AbilityState.Activating :
-                        AbilityState.CoolDown);
-                }
-            }
+                PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
 
-            protected override void UpdateAbility()
-            {
-                if (this.Timer > 0.0f)
-                {
-                    this.SetStatus(
-                        isVentIn() || isLightOff() ? 
-                        AbilityState.CoolDown : AbilityState.Stop);
-                }
-            }
-            private static bool isLightOff()
-            {
-                foreach (PlayerTask task in
-                    CachedPlayerControl.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
-                {
-                    if (task.TaskType == TaskTypes.FixLights)
-                    {
-                        return true;
-                    }
-                }
-                return false;
+                return
+                    (
+                        isVentIn() ||
+                        isLightOff()
+                    ) &&
+                    localPlayer.Data != null &&
+                    MeetingHud.Instance == null &&
+                    ExileController.Instance == null &&
+                    !localPlayer.Data.IsDead;
             }
         }
 
@@ -78,7 +40,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             AssaultRange,
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.assaultButton;
             set
@@ -92,7 +54,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         private float range;
 
-        private RoleAbilityButtonBase assaultButton;
+        private ExtremeAbilityButton assaultButton;
         private PlayerControl targetPlayer = null;
 
         public SandWorm() : base(
@@ -135,10 +97,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void CreateAbility()
         {
-            this.Button = new AssaultButton(
-                UseAbility,
-                IsAbilityUse,
-                FastDestroyableSingleton<HudManager>.Instance.KillButton.graphic.sprite);
+            this.Button = new ExtremeAbilityButton(
+                new ReusableAbilityBehavior(
+                    Translation.GetString("assault"),
+                    FastDestroyableSingleton<HudManager>.Instance.KillButton.graphic.sprite,
+                    IsAbilityUse, UseAbility),
+                new AssaultButtonAutoActivator(),
+                KeyCode.F);
 
             this.RoleAbilityInit();
         }
@@ -246,6 +211,19 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             if (CachedShipStatus.Instance.IsCustomVent(vent.Id)) { return false; }
 
             return true;
+        }
+
+        private static bool isLightOff()
+        {
+            foreach (PlayerTask task in
+                CachedPlayerControl.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
+            {
+                if (task.TaskType == TaskTypes.FixLights)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
