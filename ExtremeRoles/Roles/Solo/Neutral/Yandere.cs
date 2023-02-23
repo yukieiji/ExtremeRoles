@@ -400,7 +400,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             CreateIntOption(
                 YandereOption.TargetKilledKillCoolReduceRate,
-                85, 50, 99, 1,
+                85, 25, 99, 1,
                 parentOps, format: OptionUnit.Percentage);
 
             CreateFloatOption(
