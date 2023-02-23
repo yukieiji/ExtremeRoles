@@ -463,17 +463,17 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 parentOps);
             CreateIntOption(
                 QueenOption.ServantKillKillCoolReduceRate,
-                25, 0, 75, 1,
+                30, 0, 75, 1,
                 parentOps,
                 format:OptionUnit.Percentage);
             CreateIntOption(
                 QueenOption.ServantTaskKillCoolReduceRate,
-                50, 0, 75, 1,
+                75, 0, 99, 1,
                 parentOps,
                 format: OptionUnit.Percentage);
             CreateIntOption(
                 QueenOption.ServantTaskCompKillCoolReduceRate,
-                0, 15, 50, 1,
+                30, 0, 75, 1,
                 parentOps,
                 format: OptionUnit.Percentage);
             CreateFloatOption(
