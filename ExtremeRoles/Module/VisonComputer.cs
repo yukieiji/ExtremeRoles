@@ -56,7 +56,7 @@ namespace ExtremeRoles.Module
                 case Modifier.LastWolfLightOff:
                     if (ExtremeRoleManager.GetSafeCastedLocalPlayerRole<LastWolf>() == null)
                     {
-                        vison = 0.15f;
+                        vison = LastWolf.LightOffVison;
                         return false;
                     }
                     break;

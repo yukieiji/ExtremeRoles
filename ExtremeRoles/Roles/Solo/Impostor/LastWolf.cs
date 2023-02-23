@@ -15,12 +15,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 {
     public sealed class LastWolf : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTypes>
     {
+        public static float LightOffVison { get; private set; } = 0.1f;
+
         public enum LastWolfOption
         {
             AwakeImpostorNum,
             DeadPlayerNumBonus,
             KillPlayerNumBonus,
-            FinalLightOffCoolTime
+            LightOffVison
         }
 
         public RoleAbilityButtonBase Button
@@ -43,9 +45,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public RoleTypes NoneAwakeRole => RoleTypes.Impostor;
 
         private RoleAbilityButtonBase lightOffButton;
-
-        private float finalCooltime;
-        private float firstCooltime;
 
         private float noneAwakeKillBonus;
         private float deadPlayerKillBonus;
@@ -92,8 +91,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 Resources.Loader.CreateSpriteFromResources(
                    Resources.Path.LastWolfLightOff),
                 abilityCleanUp:CleanUp);
-
-            setCurCooltime();
         }
 
         public bool IsAbilityUse() =>
@@ -104,7 +101,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void RoleAbilityResetOnMeetingStart()
         {
             CleanUp();
-            setCurCooltime();
             if (this.isAwake)
             {
                 this.HasOtherKillCool = true;
@@ -282,24 +278,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 parentOps,
                 format: OptionUnit.Percentage);
 
-            var cooltimeOpt = CreateFloatDynamicOption(
-                RoleAbilityCommonOption.AbilityCoolTime,
-                5.0f, 0.5f, 0.5f,
-                parentOps, format: OptionUnit.Second,
-                tempMaxValue: 120.0f);
-
-            var lastLightOffOption = CreateFloatOption(
-               LastWolfOption.FinalLightOffCoolTime,
-               60.0f, 30.0f, 120.0f, 0.5f,
-               parentOps,
-               format: OptionUnit.Second);
+            this.CreateCommonAbilityOption(
+                parentOps, 10.0f);
 
             CreateFloatOption(
-                RoleAbilityCommonOption.AbilityActiveTime,
-                5.0f, 1.0f, 60.0f, 0.5f,
-                parentOps, format: OptionUnit.Second);
-
-            lastLightOffOption.SetUpdateOption(cooltimeOpt);
+                LastWolfOption.LightOffVison,
+                0.1f, 0.0f, 1.0f, 0.1f,
+                parentOps);
         }
 
         protected override void RoleSpecificInit()
@@ -310,17 +295,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             this.awakeImpNum = allOpt[
                 GetRoleOptionId(LastWolfOption.AwakeImpostorNum)].GetValue();
-            this.finalCooltime = allOpt[
-                GetRoleOptionId(LastWolfOption.FinalLightOffCoolTime)].GetValue();
-            this.firstCooltime = allOpt[
-                GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)].GetValue();
 
             this.noneAwakeKillBonus = allOpt[
                 GetRoleOptionId(LastWolfOption.KillPlayerNumBonus)].GetValue();
             this.deadPlayerKillBonus = allOpt[
                 GetRoleOptionId(LastWolfOption.DeadPlayerNumBonus)].GetValue();
 
-            setCurCooltime();
+            LightOffVison = allOpt[
+                GetRoleOptionId(LastWolfOption.LightOffVison)].GetValue();
 
             this.noneAwakeKillCount = 0;
 
@@ -354,16 +336,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.HasOtherVison = this.isAwakedHasOtherVision;
                 this.HasOtherKillCool = this.isAwakedHasOtherKillCool;
                 this.HasOtherKillRange = this.isAwakedHasOtherKillRange;
-            }
-        }
-
-        private void setCurCooltime()
-        {
-            if (this.Button != null)
-            {
-                float curCool = (this.finalCooltime - this.firstCooltime) *
-                    (1.0f - ((float)computeAlivePlayerNum() / (float)GameData.Instance.PlayerCount)) + this.firstCooltime;
-                this.Button.SetAbilityCoolTime(curCool);
             }
         }
 
