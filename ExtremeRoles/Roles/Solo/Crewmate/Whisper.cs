@@ -167,7 +167,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             CreateFloatOption(
                 WhisperOption.AbilityOffTime,
-                3.0f, 1.0f, 5.0f, 0.5f,
+                2.0f, 1.0f, 5.0f, 0.5f,
                 parentOps, format: OptionUnit.Second);
 
             CreateFloatOption(
