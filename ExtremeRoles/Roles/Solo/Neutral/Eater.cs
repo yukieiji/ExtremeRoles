@@ -422,10 +422,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 EaterAbilityButton eaterButton = (EaterAbilityButton)this.eatButton;
                 eaterButton.SetKillEatTime(
                     eaterButton.KillEatTime * this.deadBodyEatActiveCoolTimePenalty);
-            }
-            else
-            {
 
+                this.isActivated = true;
+            }
+            else if (this.targetPlayer != null)
+            {
                 Player.RpcUncheckMurderPlayer(
                     CachedPlayerControl.LocalPlayer.PlayerId,
                     this.targetPlayer.PlayerId, 0);
@@ -439,8 +440,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 FastDestroyableSingleton<HudManager>.Instance.StartCoroutine(
                     this.cleanDeadBodyOps(
                         this.targetPlayer.PlayerId).WrapToIl2Cpp());
+                
+                this.isActivated = true;
             }
-            this.isActivated = true;
+            
         }
 
         public bool IsAbilityCheck()
@@ -449,7 +452,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             return Player.IsPlayerInRangeAndDrawOutLine(
                 CachedPlayerControl.LocalPlayer,
-                this.targetDeadBody, this, this.range);
+                this.targetPlayer, this, this.range);
         }
 
         public override bool IsSameTeam(SingleRoleBase targetRole) =>
@@ -560,6 +563,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             {
                 yield return null;
             }
+
+            yield return null;
 
             Player.RpcCleanDeadBody(targetPlayerId);
             

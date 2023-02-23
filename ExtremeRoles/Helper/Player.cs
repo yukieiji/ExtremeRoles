@@ -72,11 +72,6 @@ namespace ExtremeRoles.Helper
         }
 
         public static bool IsPlayerInRangeAndDrawOutLine(
-            PlayerControl sourcePlayer, GameData.PlayerInfo targetPlayer,
-            SingleRoleBase role, float range) 
-            => IsPlayerInRangeAndDrawOutLine(sourcePlayer, targetPlayer.Object, role, range);
-
-        public static bool IsPlayerInRangeAndDrawOutLine(
             PlayerControl sourcePlayer,
             PlayerControl targetPlayer,
             SingleRoleBase role,
