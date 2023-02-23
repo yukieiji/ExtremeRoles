@@ -197,12 +197,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             return this.IsCommonUse() && this.TargetPlayer != byte.MaxValue;
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             return;
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }

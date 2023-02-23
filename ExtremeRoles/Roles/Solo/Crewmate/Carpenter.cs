@@ -616,12 +616,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
 
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             return;     
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             this.targetVent = null;
         }

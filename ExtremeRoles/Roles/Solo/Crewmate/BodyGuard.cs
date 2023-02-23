@@ -588,7 +588,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             return this.IsCommonUse();
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             if (!string.IsNullOrEmpty(this.reportStr))
             {
@@ -603,7 +603,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.reportStr = string.Empty;
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             this.reportStr = string.Empty;
         }

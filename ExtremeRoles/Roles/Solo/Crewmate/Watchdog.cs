@@ -78,12 +78,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public bool IsOpen() => Minigame.Instance != null;
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             if (this.monitoring != null)
             {

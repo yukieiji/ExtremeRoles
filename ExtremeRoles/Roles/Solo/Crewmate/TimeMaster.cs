@@ -327,7 +327,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public bool IsAbilityUse() => this.IsCommonUse();
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
 
             PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
@@ -340,7 +340,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             resetMeeting(localPlayer.PlayerId);
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }

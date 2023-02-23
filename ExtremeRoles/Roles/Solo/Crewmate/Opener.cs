@@ -90,12 +90,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             return this.IsCommonUse() && !this.targetDoor.Open;
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             return;
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             this.targetDoor = null;
             return;

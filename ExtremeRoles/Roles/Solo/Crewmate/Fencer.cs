@@ -144,13 +144,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             return this.IsCommonUse();
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             this.CleanUp();
             this.CanKill = false;
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }

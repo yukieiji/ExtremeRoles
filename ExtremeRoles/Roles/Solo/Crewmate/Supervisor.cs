@@ -75,12 +75,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public bool IsOpen() => MapBehaviour.Instance.isActiveAndEnabled;
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             if (this.chargeTime != null)
             {

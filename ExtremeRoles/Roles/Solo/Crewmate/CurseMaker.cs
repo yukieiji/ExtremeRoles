@@ -389,7 +389,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 GetRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime)].GetValue();
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             foreach (var arrow in deadBodyArrow.Values)
             {
@@ -400,7 +400,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             deadBodyData.Clear();
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }
