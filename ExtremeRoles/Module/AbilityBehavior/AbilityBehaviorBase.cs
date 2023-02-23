@@ -6,6 +6,12 @@ namespace ExtremeRoles.Module.AbilityBehavior
     {
         public string Text { get; set; }
         public Sprite Img { get; set; }
+
+        public ButtonGraphic(string text, Sprite img)
+        {
+            Text = text;
+            Img = img;
+        }
     }
 
     public abstract class AbilityBehaviorBase

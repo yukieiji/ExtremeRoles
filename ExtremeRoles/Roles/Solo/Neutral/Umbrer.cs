@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using UnityEngine;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
-using ExtremeRoles.Module.AbilityButton.Mode;
+using ExtremeRoles.Module.AbilityModeSwitcher;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -116,7 +114,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             KeepUpgradedVirus
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.madmateAbilityButton;
             set
@@ -125,7 +123,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
         }
 
-        private RoleAbilityButtonBase madmateAbilityButton;
+        private ExtremeAbilityButton madmateAbilityButton;
         private InfectedContainer container;
         private PlayerControl tmpTarget;
         private PlayerControl target;
@@ -138,7 +136,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private GridArrange grid;
 
         public bool isUpgradeVirus;
-        private ReusableAbilityButtonMode<UmbrerMode> mode;
+        private GraphicAndActiveTimeSwitcher<UmbrerMode> mode;
 
         public Umbrer() : base(
             ExtremeRoleId.Umbrer,
@@ -152,32 +150,32 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             var allOpt = OptionHolder.AllOption;
 
-            NormalAbilityButtonMode featVirusMode = new NormalAbilityButtonMode()
+            GraphicAndActiveTimeMode featVirusMode = new GraphicAndActiveTimeMode()
             {
-                Text = Translation.GetString("featVirus"),
-                Img = Loader.CreateSpriteFromResources(
-                    Path.UmbrerFeatVirus),
-                ActiveTime = (float)allOpt[GetRoleOptionId(
+                Graphic = new Module.AbilityBehavior.ButtonGraphic(
+                    Translation.GetString("featVirus"),
+                    Loader.CreateSpriteFromResources(
+                        Path.UmbrerFeatVirus)),
+                Time = (float)allOpt[GetRoleOptionId(
                     RoleAbilityCommonOption.AbilityActiveTime)].GetValue(),
             };
-            NormalAbilityButtonMode upgradeVirusMode = new NormalAbilityButtonMode()
+            GraphicAndActiveTimeMode upgradeVirusMode = new GraphicAndActiveTimeMode()
             {
-                Text = Translation.GetString("upgradeVirus"),
-                Img = Loader.CreateSpriteFromResources(
-                    Path.UmbrerUpgradeVirus),
-                ActiveTime = (float)allOpt[GetRoleOptionId(
+                Graphic = new Module.AbilityBehavior.ButtonGraphic(
+                    Translation.GetString("upgradeVirus"),
+                    Loader.CreateSpriteFromResources(
+                    Path.UmbrerUpgradeVirus)),
+                Time = (float)allOpt[GetRoleOptionId(
                     UmbrerOption.UpgradeVirusTime)].GetValue(),
             };
 
             this.CreateNormalAbilityButton(
-                featVirusMode.Text, featVirusMode.Img,
-                CleanUp, IsAbilityCheck);
-            if (this.Button is ReusableAbilityButton button)
-            {
-                this.mode = new ReusableAbilityButtonMode<UmbrerMode>(button);
-                this.mode.AddMode(UmbrerMode.Feat, featVirusMode);
-                this.mode.AddMode(UmbrerMode.Upgrage, upgradeVirusMode);
-            }
+                featVirusMode.Graphic.Text, featVirusMode.Graphic.Img,
+                IsAbilityCheck, CleanUp, ForceCleanUp);
+
+            this.mode = new GraphicAndActiveTimeSwitcher<UmbrerMode>(this.Button.Behavior);
+            this.mode.Add(UmbrerMode.Feat, featVirusMode);
+            this.mode.Add(UmbrerMode.Upgrage, upgradeVirusMode);
         }
 
         public bool UseAbility()
@@ -233,6 +231,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.target = null;
         }
 
+        public void ForceCleanUp()
+        {
+            this.target = null;
+        }
 
         public bool IsUpgrade() => this.container.IsFirstStage(
             this.tmpTarget == null ? byte.MaxValue : this.tmpTarget.PlayerId);
@@ -244,7 +246,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 CachedPlayerControl.LocalPlayer, this, this.range);
             if (this.tmpTarget == null) { return false; }
 
-            this.mode.SwithMode(
+            this.mode.Switch(
                 this.isUpgradeVirus ? 
                 UmbrerMode.Upgrage : UmbrerMode.Feat);
 
