@@ -37,7 +37,7 @@ namespace ExtremeRoles.Roles.Combination
             SetTorch,
             PickUpTorch,
             RemoveTorch,
-            RepairTorchVison,
+            RepairTorchVision,
             ResetMeeting
         }
 
@@ -86,7 +86,7 @@ namespace ExtremeRoles.Roles.Combination
                 case AbilityType.SetTorch:
                 case AbilityType.PickUpTorch:
                 case AbilityType.RemoveTorch:
-                case AbilityType.RepairTorchVison:
+                case AbilityType.RepairTorchVision:
                 case AbilityType.ResetMeeting:
                     Wisp.Ability(ref reader, abilityType);
                     break;
@@ -548,8 +548,8 @@ namespace ExtremeRoles.Roles.Combination
             public WispBlackOuter(float time)
             {
                 // ここは全員呼ばれる
-                VisonComputer.Instance.SetModifier(
-                    VisonComputer.Modifier.WispLightOff);
+                VisionComputer.Instance.SetModifier(
+                    VisionComputer.Modifier.WispLightOff);
                 this.maxTime = time;
                 this.timer = time;
             }
@@ -564,9 +564,9 @@ namespace ExtremeRoles.Roles.Combination
                 using (var caller = RPCOperator.CreateCaller(
                     RPCOperator.Command.KidsAbility))
                 {
-                    caller.WriteByte((byte)Kids.AbilityType.RepairTorchVison);
+                    caller.WriteByte((byte)Kids.AbilityType.RepairTorchVision);
                 }
-                RepairVison();
+                RepairVision();
             }
 
             public void Update(int index)
@@ -662,9 +662,9 @@ namespace ExtremeRoles.Roles.Combination
                 }
             }
 
-            public void RepairVison()
+            public void RepairVision()
             {
-                VisonComputer.Instance.ResetModifier();
+                VisionComputer.Instance.ResetModifier();
                 this.blackOuter = null;
             }
 
@@ -673,7 +673,7 @@ namespace ExtremeRoles.Roles.Combination
                 this.torchHavePlayer.Clear();
                 this.blackOuter?.Clear();
                 this.placedTorch.Clear();
-                RepairVison();
+                RepairVision();
             }
 
             public void UpdateAffectedPlayerNum(int gameControlId)
@@ -749,8 +749,8 @@ namespace ExtremeRoles.Roles.Combination
                     float time = reader.ReadSingle();
                     RemoveTorch(id, controlId, time);
                     break;
-                case Kids.AbilityType.RepairTorchVison:
-                    RepairVison();
+                case Kids.AbilityType.RepairTorchVision:
+                    RepairVision();
                     break;
                 case Kids.AbilityType.ResetMeeting:
                     resetMeeting();
@@ -762,9 +762,9 @@ namespace ExtremeRoles.Roles.Combination
 
         public static bool HasTorch(byte playerId) => state.HasTorch(playerId);
 
-        public static void RepairVison()
+        public static void RepairVision()
         {
-            state.RepairVison();
+            state.RepairVision();
         }
 
         public static void SetTorch(byte playerId)

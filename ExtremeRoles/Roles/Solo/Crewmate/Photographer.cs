@@ -377,7 +377,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 if (taskGage >= this.awakeTaskGage && !this.awakeRole)
                 {
                     this.awakeRole = true;
-                    this.HasOtherVison = this.awakeHasOtherVision;
+                    this.HasOtherVision = this.awakeHasOtherVision;
                 }
                 else
                 {
@@ -512,17 +512,17 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.upgradeAllSendChatTaskGage = allOpt[
                 GetRoleOptionId(PhotographerOption.UpgradeAllSendChatTaskGage)].GetValue() / 100.0f;
 
-            this.awakeHasOtherVision = this.HasOtherVison;
+            this.awakeHasOtherVision = this.HasOtherVision;
 
             if (this.awakeTaskGage <= 0.0f)
             {
                 this.awakeRole = true;
-                this.HasOtherVison = this.awakeHasOtherVision;
+                this.HasOtherVision = this.awakeHasOtherVision;
             }
             else
             {
                 this.awakeRole = false;
-                this.HasOtherVison = false;
+                this.HasOtherVision = false;
             }
 
             this.isUpgradeChat = this.enableAllSend && 

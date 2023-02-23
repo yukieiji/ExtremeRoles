@@ -173,7 +173,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 this.isAwake = false;
                 this.curKillCount = 0;
-                this.HasOtherVison = false;
+                this.HasOtherVision = false;
                 this.HasOtherKillCool = false;
                 this.HasOtherKillRange = false;
                 this.CanCallMeeting = true;
@@ -221,7 +221,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.curKillCount >= this.awakeKillCount)
                 {
                     this.isAwake = true;
-                    this.HasOtherVison = this.isAwakedHasOtherVision;
+                    this.HasOtherVision = this.isAwakedHasOtherVision;
                     this.HasOtherKillCool = this.isAwakedHasOtherKillCool;
                     this.HasOtherKillRange = this.isAwakedHasOtherKillRange;
                     this.CanCallMeeting = this.awakedCallMeeting;
@@ -483,9 +483,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.isAwakedHasOtherKillCool = true;
             this.isAwakedHasOtherKillRange = false;
 
-            if (this.HasOtherVison)
+            if (this.HasOtherVision)
             {
-                this.HasOtherVison = false;
+                this.HasOtherVision = false;
                 this.isAwakedHasOtherVision = true;
             }
 
@@ -502,7 +502,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             if (this.isAwake)
             {
-                this.HasOtherVison = this.isAwakedHasOtherVision;
+                this.HasOtherVision = this.isAwakedHasOtherVision;
                 this.HasOtherKillCool = this.isAwakedHasOtherKillCool;
                 this.HasOtherKillRange = this.isAwakedHasOtherKillRange;
                 this.CanCallMeeting = this.awakedCallMeeting;

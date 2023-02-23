@@ -518,7 +518,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 if (Player.GetPlayerTaskGage(rolePlayer) >= this.awakeTaskGage)
                 {
                     this.awakeRole = true;
-                    this.HasOtherVison = this.awakeHasOtherVision;
+                    this.HasOtherVision = this.awakeHasOtherVision;
                 }
             }
         }
@@ -737,17 +737,17 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.awakeTaskGage = (float)OptionHolder.AllOption[
                 GetRoleOptionId(CarpenterOption.AwakeTaskGage)].GetValue() / 100.0f;
             
-            this.awakeHasOtherVision = this.HasOtherVison;
+            this.awakeHasOtherVision = this.HasOtherVision;
             
             if (this.awakeTaskGage <= 0.0f)
             {
                 this.awakeRole = true;
-                this.HasOtherVison = this.awakeHasOtherVision;
+                this.HasOtherVision = this.awakeHasOtherVision;
             }
             else
             {
                 this.awakeRole = false;
-                this.HasOtherVison = false;
+                this.HasOtherVision = false;
             }
             abilityInit();
         }

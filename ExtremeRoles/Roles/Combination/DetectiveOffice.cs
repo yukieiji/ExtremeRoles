@@ -520,16 +520,16 @@ namespace ExtremeRoles.Roles.Combination
         public struct DetectiveApprenticeOptionHolder
         {
             public int OptionOffset;
-            public bool HasOtherVison;
-            public float Vison;
+            public bool HasOtherVision;
+            public float Vision;
             public bool ApplyEnvironmentVisionEffect;
             public bool HasOtherButton;
             public int HasOtherButtonNum;
 
             public enum DetectiveApprenticeOption
             {
-                HasOtherVison,
-                Vison,
+                HasOtherVision,
+                Vision,
                 ApplyEnvironmentVisionEffect,
                 HasOtherButton,
                 HasOtherButtonNum,
@@ -546,28 +546,28 @@ namespace ExtremeRoles.Roles.Combination
 
                 string roleName = ExtremeRoleId.DetectiveApprentice.ToString();
 
-                var visonOption = new BoolCustomOption(
-                    getRoleOptionId(DetectiveApprenticeOption.HasOtherVison),
+                var visionOption = new BoolCustomOption(
+                    getRoleOptionId(DetectiveApprenticeOption.HasOtherVision),
                     string.Concat(
                         roleName,
-                        DetectiveApprenticeOption.HasOtherVison.ToString()),
+                        DetectiveApprenticeOption.HasOtherVision.ToString()),
                     false, parentOps,
                     tab: OptionTab.Combination);
 
                 new FloatCustomOption(
-                    getRoleOptionId(DetectiveApprenticeOption.Vison),
+                    getRoleOptionId(DetectiveApprenticeOption.Vision),
                     string.Concat(
                         roleName,
-                        DetectiveApprenticeOption.Vison.ToString()),
+                        DetectiveApprenticeOption.Vision.ToString()),
                     2f, 0.25f, 5f, 0.25f,
-                    visonOption, format: OptionUnit.Multiplier,
+                    visionOption, format: OptionUnit.Multiplier,
                     tab: OptionTab.Combination);
                 new BoolCustomOption(
                     getRoleOptionId(DetectiveApprenticeOption.ApplyEnvironmentVisionEffect),
                     string.Concat(
                         roleName,
                         DetectiveApprenticeOption.ApplyEnvironmentVisionEffect.ToString()),
-                    false, visonOption,
+                    false, visionOption,
                     tab: OptionTab.Combination);
 
                 new IntCustomOption(
@@ -627,10 +627,10 @@ namespace ExtremeRoles.Roles.Combination
                 return new DetectiveApprenticeOptionHolder()
                 {
                     OptionOffset = optionId,
-                    HasOtherVison = allOption[
-                        getRoleOptionId(DetectiveApprenticeOption.HasOtherVison)].GetValue(),
-                    Vison = allOption[
-                        getRoleOptionId(DetectiveApprenticeOption.Vison)].GetValue(),
+                    HasOtherVision = allOption[
+                        getRoleOptionId(DetectiveApprenticeOption.HasOtherVision)].GetValue(),
+                    Vision = allOption[
+                        getRoleOptionId(DetectiveApprenticeOption.Vision)].GetValue(),
                     ApplyEnvironmentVisionEffect = allOption[
                         getRoleOptionId(DetectiveApprenticeOption.ApplyEnvironmentVisionEffect)].GetValue(),
                     HasOtherButton = allOption[
@@ -670,15 +670,15 @@ namespace ExtremeRoles.Roles.Combination
         {
             this.OptionIdOffset = option.OptionOffset;
             this.SetControlId(gameControlId);
-            this.HasOtherVison = option.HasOtherVison;
-            if (this.HasOtherVison)
+            this.HasOtherVision = option.HasOtherVision;
+            if (this.HasOtherVision)
             {
-                this.Vison = option.Vison;
+                this.Vision = option.Vision;
                 this.IsApplyEnvironmentVision = option.ApplyEnvironmentVisionEffect;
             }
             else
             {
-                this.Vison = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
+                this.Vision = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
                     FloatOptionNames.CrewLightMod);
             }
             this.hasOtherButton = option.HasOtherButton;

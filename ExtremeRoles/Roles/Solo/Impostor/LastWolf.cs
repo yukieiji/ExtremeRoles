@@ -15,14 +15,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 {
     public sealed class LastWolf : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTypes>
     {
-        public static float LightOffVison { get; private set; } = 0.1f;
+        public static float LightOffVision { get; private set; } = 0.1f;
 
         public enum LastWolfOption
         {
             AwakeImpostorNum,
             DeadPlayerNumBonus,
             KillPlayerNumBonus,
-            LightOffVison
+            LightOffVision
         }
 
         public RoleAbilityButtonBase Button
@@ -69,16 +69,16 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public static void SwitchLight(bool lightOn)
         {
-            var vison = VisonComputer.Instance;
+            var vision = VisionComputer.Instance;
 
             if (lightOn)
             {
-                vison.ResetModifier();
+                vision.ResetModifier();
             }
             else
             {
-                vison.SetModifier(
-                   VisonComputer.Modifier.LastWolfLightOff);
+                vision.SetModifier(
+                   VisionComputer.Modifier.LastWolfLightOff);
             }
         }
 
@@ -96,7 +96,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public bool IsAbilityUse() =>
             this.IsAwake &&
             this.IsCommonUse() &&
-            VisonComputer.Instance.IsModifierResetted();
+            VisionComputer.Instance.IsModifierResetted();
 
         public void RoleAbilityResetOnMeetingStart()
         {
@@ -161,7 +161,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 if (this.awakeImpNum >= impNum)
                 {
                     this.isAwake = true;
-                    this.HasOtherVison = this.isAwakedHasOtherVision;
+                    this.HasOtherVision = this.isAwakedHasOtherVision;
                     this.HasOtherKillCool = this.isAwakedHasOtherKillCool;
                     this.HasOtherKillRange = this.isAwakedHasOtherKillRange;
                 }
@@ -282,7 +282,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 parentOps, 10.0f);
 
             CreateFloatOption(
-                LastWolfOption.LightOffVison,
+                LastWolfOption.LightOffVision,
                 0.1f, 0.0f, 1.0f, 0.1f,
                 parentOps);
         }
@@ -301,8 +301,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.deadPlayerKillBonus = allOpt[
                 GetRoleOptionId(LastWolfOption.DeadPlayerNumBonus)].GetValue();
 
-            LightOffVison = allOpt[
-                GetRoleOptionId(LastWolfOption.LightOffVison)].GetValue();
+            LightOffVision = allOpt[
+                GetRoleOptionId(LastWolfOption.LightOffVision)].GetValue();
 
             this.noneAwakeKillCount = 0;
 
@@ -310,9 +310,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.isAwakedHasOtherKillCool = true;
             this.isAwakedHasOtherKillRange = false;
 
-            if (this.HasOtherVison)
+            if (this.HasOtherVision)
             {
-                this.HasOtherVison = false;
+                this.HasOtherVision = false;
                 this.isAwakedHasOtherVision = true;
             }
 
@@ -333,7 +333,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     Int32OptionNames.NumImpostors))
             {
                 this.isAwake = true;
-                this.HasOtherVison = this.isAwakedHasOtherVision;
+                this.HasOtherVision = this.isAwakedHasOtherVision;
                 this.HasOtherKillCool = this.isAwakedHasOtherKillCool;
                 this.HasOtherKillRange = this.isAwakedHasOtherKillRange;
             }

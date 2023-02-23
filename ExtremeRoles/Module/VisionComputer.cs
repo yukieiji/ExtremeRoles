@@ -13,7 +13,7 @@ using ExtremeRoles.Roles.Solo.Impostor;
 
 namespace ExtremeRoles.Module
 {
-    public class VisonComputer
+    public class VisionComputer
     {
         public enum Modifier
         {
@@ -22,13 +22,13 @@ namespace ExtremeRoles.Module
             WispLightOff,
         }
 
-        public static VisonComputer Instance => instance;
-        private static VisonComputer instance = new VisonComputer();
+        public static VisionComputer Instance => instance;
+        private static VisionComputer instance = new VisionComputer();
 
-        private static float crewLightVison => GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
+        private static float crewLightVision => GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
             FloatOptionNames.CrewLightMod);
 
-        private static float impLightVison => GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
+        private static float impLightVision => GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
             FloatOptionNames.ImpostorLightMod);
 
         private const SystemTypes electrical = SystemTypes.Electrical;
@@ -36,9 +36,9 @@ namespace ExtremeRoles.Module
         public Modifier CurrentModifier => modifier;
         private Modifier modifier = Modifier.None;
 
-        public void SetModifier(Modifier newVison)
+        public void SetModifier(Modifier newVision)
         {
-            this.modifier = newVison;
+            this.modifier = newVision;
         }
         public void ResetModifier()
         {
@@ -46,56 +46,56 @@ namespace ExtremeRoles.Module
         }
         public bool IsModifierResetted() => this.modifier == Modifier.None;
 
-        public bool IsVanillaVisonAndGetVison(
-            ShipStatus shipStatus, GameData.PlayerInfo playerInfo, out float vison)
+        public bool IsVanillaVisionAndGetVision(
+            ShipStatus shipStatus, GameData.PlayerInfo playerInfo, out float vision)
         {
-            vison = shipStatus.MaxLightRadius;
+            vision = shipStatus.MaxLightRadius;
 
             switch (this.modifier)
             {
                 case Modifier.LastWolfLightOff:
                     if (ExtremeRoleManager.GetSafeCastedLocalPlayerRole<LastWolf>() == null)
                     {
-                        vison = LastWolf.LightOffVison;
+                        vision = LastWolf.LightOffVision;
                         return false;
                     }
                     break;
                 case Modifier.WispLightOff:
                     if (!Wisp.HasTorch(playerInfo.PlayerId))
                     {
-                        vison = shipStatus.MinLightRadius * crewLightVison;
+                        vision = shipStatus.MinLightRadius * crewLightVision;
                         return false;
                     }
                     break;
                 default:
                     break;
             }
-            bool isRequireCustomVison = requireCustomCustomCalculateLightRadius();
+            bool isRequireCustomVision = requireCustomCustomCalculateLightRadius();
 
             if (!RoleAssignState.Instance.IsRoleSetUpEnd)
             {
-                return checkNormalOrCustomCalculateLightRadius(isRequireCustomVison, playerInfo, ref vison);
+                return checkNormalOrCustomCalculateLightRadius(isRequireCustomVision, playerInfo, ref vision);
             }
             var systems = shipStatus.Systems;
             ISystemType systemType = systems.ContainsKey(electrical) ? systems[electrical] : null;
             if (systemType == null)
             {
-                return checkNormalOrCustomCalculateLightRadius(isRequireCustomVison, playerInfo, ref vison);
+                return checkNormalOrCustomCalculateLightRadius(isRequireCustomVision, playerInfo, ref vision);
             }
 
             SwitchSystem switchSystem = systemType.TryCast<SwitchSystem>();
             if (switchSystem == null)
             {
-                return checkNormalOrCustomCalculateLightRadius(isRequireCustomVison, playerInfo, ref vison);
+                return checkNormalOrCustomCalculateLightRadius(isRequireCustomVision, playerInfo, ref vision);
             }
 
             var allRole = ExtremeRoleManager.GameRole;
 
             if (allRole.Count == 0)
             {
-                if (isRequireCustomVison)
+                if (isRequireCustomVision)
                 {
-                    vison = ExtremeRolesPlugin.Compat.ModMap.CalculateLightRadius(
+                    vision = ExtremeRolesPlugin.Compat.ModMap.CalculateLightRadius(
                         playerInfo, false, playerInfo.Role.IsImpostor);
                     return false;
                 }
@@ -104,56 +104,56 @@ namespace ExtremeRoles.Module
 
             SingleRoleBase role = allRole[playerInfo.PlayerId];
 
-            if (isRequireCustomVison)
+            if (isRequireCustomVision)
             {
-                float visonMulti;
-                bool applayVisonEffects = !role.IsImpostor();
+                float visionMulti;
+                bool applayVisionEffects = !role.IsImpostor();
 
-                if (role.TryGetVisonMod(out visonMulti, out bool isApplyEnvironmentVision))
+                if (role.TryGetVisionMod(out visionMulti, out bool isApplyEnvironmentVision))
                 {
-                    applayVisonEffects = isApplyEnvironmentVision;
+                    applayVisionEffects = isApplyEnvironmentVision;
                 }
                 else if (playerInfo.Role.IsImpostor)
                 {
-                    visonMulti = impLightVison;
+                    visionMulti = impLightVision;
                 }
                 else
                 {
-                    visonMulti = crewLightVison;
+                    visionMulti = crewLightVision;
                 }
 
-                vison = ExtremeRolesPlugin.Compat.ModMap.CalculateLightRadius(
-                    playerInfo, visonMulti, applayVisonEffects);
+                vision = ExtremeRolesPlugin.Compat.ModMap.CalculateLightRadius(
+                    playerInfo, visionMulti, applayVisionEffects);
 
                 return false;
             }
 
             float num = (float)switchSystem.Value / 255f;
-            float switchVisonMulti = Mathf.Lerp(
+            float switchVisionMulti = Mathf.Lerp(
                 shipStatus.MinLightRadius,
                 shipStatus.MaxLightRadius, num);
 
-            float baseVison = shipStatus.MaxLightRadius;
+            float baseVision = shipStatus.MaxLightRadius;
 
             if (playerInfo == null || playerInfo.IsDead) // IsDead
             {
-                vison = baseVison;
+                vision = baseVision;
             }
-            else if (role.TryGetVisonMod(out float visonMulti, out bool isApplyEnvironmentVision))
+            else if (role.TryGetVisionMod(out float visionMulti, out bool isApplyEnvironmentVision))
             {
                 if (isApplyEnvironmentVision)
                 {
-                    baseVison = switchVisonMulti;
+                    baseVision = switchVisionMulti;
                 }
-                vison = baseVison * visonMulti;
+                vision = baseVision * visionMulti;
             }
             else if (playerInfo.Role.IsImpostor)
             {
-                vison = baseVison * impLightVison;
+                vision = baseVision * impLightVision;
             }
             else
             {
-                vison = switchVisonMulti * crewLightVison;
+                vision = switchVisionMulti * crewLightVision;
             }
             return false;
         }
@@ -164,9 +164,9 @@ namespace ExtremeRoles.Module
             ExtremeRolesPlugin.Compat.ModMap.IsCustomCalculateLightRadius;
 
         private static bool checkNormalOrCustomCalculateLightRadius(
-            bool isRequireCustomVison, GameData.PlayerInfo player, ref float result)
+            bool isRequireCustomVision, GameData.PlayerInfo player, ref float result)
         {
-            if (isRequireCustomVison)
+            if (isRequireCustomVision)
             {
                 result = ExtremeRolesPlugin.Compat.ModMap.CalculateLightRadius(
                     player, false, player.Role.IsImpostor);

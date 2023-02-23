@@ -553,13 +553,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             if (baseRole.IsImpostor())
             {
-                this.HasOtherVison = true;
+                this.HasOtherVision = true;
             }
             else
             {
-                this.HasOtherVison = baseRole.HasOtherVison;
+                this.HasOtherVision = baseRole.HasOtherVision;
             }
-            this.Vison = baseRole.Vison;
+            this.Vision = baseRole.Vision;
             this.IsApplyEnvironmentVision = baseRole.IsApplyEnvironmentVision;
 
             this.HasOtherKillCool = baseRole.HasOtherKillCool;

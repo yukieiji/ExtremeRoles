@@ -15,8 +15,8 @@ namespace ExtremeRoles.Roles.API
     {
         RoleNum = 20,
         SpawnRate,
-        HasOtherVison,
-        Vison,
+        HasOtherVision,
+        Vision,
         ApplyEnvironmentVisionEffect,
     }
     public enum KillerCommonOption
@@ -54,7 +54,7 @@ namespace ExtremeRoles.Roles.API
         {
             this.OptionIdOffset = optionIdOffset;
             var parentOps = CreateSpawnOption();
-            CreateVisonOption(parentOps);
+            CreateVisionOption(parentOps);
             
             if (this.CanKill)
             {
@@ -68,7 +68,7 @@ namespace ExtremeRoles.Roles.API
             int optionIdOffset)
         {
             this.OptionIdOffset = optionIdOffset;
-            CreateVisonOption(parentOps);
+            CreateVisionOption(parentOps);
             
             if (this.CanKill)
             {
@@ -83,7 +83,7 @@ namespace ExtremeRoles.Roles.API
 
         protected abstract void CreateSpecificOption(
             IOption parentOps);
-        protected abstract void CreateVisonOption(
+        protected abstract void CreateVisionOption(
             IOption parentOps);
 
         protected abstract void CommonInit();

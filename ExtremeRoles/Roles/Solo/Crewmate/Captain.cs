@@ -244,7 +244,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 if (Player.GetPlayerTaskGage(rolePlayer) >= this.awakeTaskGage)
                 {
                     this.awakeRole = true;
-                    this.HasOtherVison = this.awakeHasOtherVision;
+                    this.HasOtherVision = this.awakeHasOtherVision;
                 }
             }
             if (this.IsAwake && MeetingHud.Instance)
@@ -366,18 +366,18 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.awakeTaskGage = (float)OptionHolder.AllOption[
                GetRoleOptionId(CaptainOption.AwakeTaskGage)].GetValue() / 100.0f;
 
-            this.awakeHasOtherVision = this.HasOtherVison;
+            this.awakeHasOtherVision = this.HasOtherVision;
             this.curChargedVote = this.defaultVote;
 
             if (this.awakeTaskGage <= 0.0f)
             {
                 this.awakeRole = true;
-                this.HasOtherVison = this.awakeHasOtherVision;
+                this.HasOtherVision = this.awakeHasOtherVision;
             }
             else
             {
                 this.awakeRole = false;
-                this.HasOtherVison = false;
+                this.HasOtherVision = false;
             }
 
             this.voteTarget = byte.MaxValue;
