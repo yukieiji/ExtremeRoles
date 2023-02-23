@@ -470,12 +470,12 @@ namespace ExtremeRoles.Roles.Combination
             this.cond == OneForAllCondition.FeatButtonAbility && 
             this.IsCommonUse();
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd()
         {
             return;
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             if (this.arrow != null)
             {
@@ -730,12 +730,12 @@ namespace ExtremeRoles.Roles.Combination
 
         public bool IsAbilityUse() => this.IsCommonUse();
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             if (this.arrow != null)
             {
@@ -979,12 +979,12 @@ namespace ExtremeRoles.Roles.Combination
             }
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             return;
         }

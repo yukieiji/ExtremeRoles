@@ -704,15 +704,12 @@ namespace ExtremeRoles.Roles.Combination
             {
                 if (playerId == CachedPlayerControl.LocalPlayer.PlayerId)
                 {
-
-                    var abilityRole = prevRole.AnotherRole as IRoleAbility;
-                    if (abilityRole != null)
+                    if (prevRole.AnotherRole is IRoleAbility abilityRole)
                     {
-                        abilityRole.ResetOnMeetingStart();
-                        abilityRole.ResetOnMeetingEnd();
+                        abilityRole.Button.OnMeetingStart();
+                        abilityRole.Button.OnMeetingEnd();
                     }
-                    var resetRole = prevRole.AnotherRole as IRoleResetMeeting;
-                    if (resetRole != null)
+                    if (prevRole.AnotherRole is IRoleResetMeeting resetRole)
                     {
                         resetRole.ResetOnMeetingStart();
                         resetRole.ResetOnMeetingEnd();
@@ -767,13 +764,13 @@ namespace ExtremeRoles.Roles.Combination
 
         public bool IsOpen() => Minigame.Instance != null;
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             this.meeting = null;
             this.callAnotherButton = false;
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             if (this.useAbility)
             {
