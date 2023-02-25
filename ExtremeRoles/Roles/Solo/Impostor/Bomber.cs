@@ -263,10 +263,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             PlayerControl target)
         {
 
-            if (Crewmate.BodyGuard.TryGetShiledPlayerId(
-                    target.PlayerId, out byte bodyGuard) &&
-                Crewmate.BodyGuard.RpcTryKillBodyGuard(
-                    bombPlayer.PlayerId, bodyGuard))
+            if (Crewmate.BodyGuard.TryRpcKillGuardedBodyGuard(
+                    bombPlayer.PlayerId, target.PlayerId))
             {
                 return;
             }

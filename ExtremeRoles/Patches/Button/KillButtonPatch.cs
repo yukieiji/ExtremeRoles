@@ -76,8 +76,7 @@ namespace ExtremeRoles.Patches.Button
                     }
                 }
 
-                if (BodyGuard.TryGetShiledPlayerId(target.PlayerId, out byte bodyGuard) &&
-                    BodyGuard.RpcTryKillBodyGuard(killer.PlayerId, bodyGuard))
+                if (BodyGuard.TryRpcKillGuardedBodyGuard(killer.PlayerId, target.PlayerId))
                 {
                     return false;
                 }

@@ -207,6 +207,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ShieldRange,
             FeatMeetingAbilityTaskGage,
             FeatMeetingReportTaskGage,
+            IsReportPlayerName,
+            ReportPlayerMode,
         }
 
         public enum BodyGuardRpcOps : byte
@@ -216,6 +218,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             CoverDead,
             AwakeMeetingReport,
             ReportMeeting
+        }
+
+        public enum BodyGuardReportPlayerNameMode
+        {
+            BodyGuardPlayerOnly,
+            GuardedPlayerOnly,
+            Both,
         }
 
         public RoleAbilityButtonBase Button
@@ -240,7 +249,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private bool awakeMeetingReport;
         private float meetingReportTaskGage;
 
-        private bool reportNextMeeting = false;
+        private bool isReportWithPlayerName;
+        private BodyGuardReportPlayerNameMode reportMode;
+        private string reportStr = string.Empty;
 
         private TMPro.TextMeshPro meetingText;
 
@@ -333,19 +344,30 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     break;
                 case BodyGuardRpcOps.CoverDead:
                     byte killerPlayerId = reader.ReadByte();
+                    byte prevTargetPlayerId = reader.ReadByte();
                     byte targetBodyGuardPlayerId = reader.ReadByte();
-                    coverDead(killerPlayerId, targetBodyGuardPlayerId);
+                    coverDead(killerPlayerId, prevTargetPlayerId, targetBodyGuardPlayerId);
                     break;
                 case BodyGuardRpcOps.AwakeMeetingReport:
                     awakeReportMeeting(reader.ReadByte());
                     break;
                 case BodyGuardRpcOps.ReportMeeting:
-                    reportMeeting();
+                    reportMeeting(reader.ReadString());
                     break;
                 default:
                     break;
             }
 
+        }
+
+        public static bool TryRpcKillGuardedBodyGuard(byte killerPlayerId, byte targetPlayerId)
+        {
+            if (!TryGetShiledPlayerId(targetPlayerId, out byte bodyGuardPlayerId))
+            {
+                return false;
+            }
+
+            return rpcTryKillBodyGuard(killerPlayerId, targetPlayerId, bodyGuardPlayerId);
         }
 
         public static bool TryGetShiledPlayerId(
@@ -354,8 +376,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             return shilded.TryGetBodyGuardPlayerId(targetPlayerId, out bodyGuardPlayerId);
         }
 
-        public static bool RpcTryKillBodyGuard(
-            byte killerPlayerId, byte targetBodyGuard)
+        private static bool rpcTryKillBodyGuard(
+            byte killerPlayerId, byte prevTargetPlayerId, byte targetBodyGuard)
         {
             PlayerControl bodyGuardPlayer = Player.GetPlayerControlById(targetBodyGuard);
             if (bodyGuardPlayer == null ||
@@ -371,9 +393,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 caller.WriteByte((byte)BodyGuardRpcOps.CoverDead);
                 caller.WriteByte(killerPlayerId);
+                caller.WriteByte(prevTargetPlayerId);
                 caller.WriteByte(targetBodyGuard);
             }
-            coverDead(killerPlayerId, targetBodyGuard);
+            coverDead(killerPlayerId, prevTargetPlayerId, targetBodyGuard);
             return true;
         }
 
@@ -388,7 +411,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
 
         private static void coverDead(
-            byte killerPlayerId, byte targetBodyGuard)
+            byte killerPlayerId, byte prevTargetPlayerId, byte targetBodyGuard)
         {
             if (targetBodyGuard == CachedPlayerControl.LocalPlayer.PlayerId)
             {
@@ -418,13 +441,33 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             if (bodyGuard == null || 
                 !bodyGuard.awakeMeetingReport) { return; }
 
+            string reportStr = bodyGuard.isReportWithPlayerName ? 
+               bodyGuard.reportMode switch
+               {
+                   BodyGuardReportPlayerNameMode.BodyGuardPlayerOnly => 
+                        string.Format(
+                            bodyGuardPlayer.Data.DefaultOutfit.PlayerName,
+                            Translation.GetString("martyrdomReportWithBodyGurdPlayer")),
+                   BodyGuardReportPlayerNameMode.GuardedPlayerOnly =>
+                       string.Format(
+                           bodyGuardPlayer.Data.DefaultOutfit.PlayerName,
+                           Translation.GetString("martyrdomReportWithGurdedPlayer")),
+                   BodyGuardReportPlayerNameMode.Both =>
+                       string.Format(
+                           bodyGuardPlayer.Data.DefaultOutfit.PlayerName,
+                           Player.GetPlayerControlById(prevTargetPlayerId)?.Data.DefaultOutfit.PlayerName,
+                           Translation.GetString("martyrdomReportWithBoth")),
+                   _ => Translation.GetString("martyrdomReport")
+               } : 
+               Translation.GetString("martyrdomReport");
+
             if (MeetingHud.Instance)
             {
-                reportMeeting();
+                reportMeeting(reportStr);
             }
             else
             {
-                bodyGuard.reportNextMeeting = true;
+                bodyGuard.reportStr = reportStr;
             }
         }
 
@@ -438,13 +481,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
         }
 
-        private static void reportMeeting()
+        private static void reportMeeting(string text)
         {
-            if (CachedPlayerControl.LocalPlayer.Data.IsDead) { return; }
-
             FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(
-                CachedPlayerControl.LocalPlayer,
-                Translation.GetString("martyrdomReport"));
+                CachedPlayerControl.LocalPlayer, text);
         }
 
         public override string GetRolePlayerNameTag(
@@ -576,21 +616,22 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void RoleAbilityResetOnMeetingStart()
         {
-            if (this.reportNextMeeting)
+            if (!string.IsNullOrEmpty(this.reportStr))
             {
                 using (var caller = RPCOperator.CreateCaller(
                     RPCOperator.Command.BodyGuardAbility))
                 {
                     caller.WriteByte((byte)BodyGuardRpcOps.ReportMeeting);
+                    caller.WriteStr(this.reportStr);
                 }
-                reportMeeting();
+                reportMeeting(this.reportStr);
             }
-            this.reportNextMeeting = false;
+            this.reportStr = string.Empty;
         }
 
         public void RoleAbilityResetOnMeetingEnd()
         {
-            this.reportNextMeeting = false;
+            this.reportStr = string.Empty;
         }
 
         public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
@@ -743,7 +784,17 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 60, 0, 100, 10,
                 parentOps,
                 format: OptionUnit.Percentage);
-
+            CreateBoolOption(
+                BodyGuardOption.IsReportPlayerName,
+                false, parentOps);
+            CreateSelectionOption(
+                BodyGuardOption.ReportPlayerMode,
+                new string[]
+                {
+                    BodyGuardReportPlayerNameMode.BodyGuardPlayerOnly.ToString(),
+                    BodyGuardReportPlayerNameMode.GuardedPlayerOnly.ToString(),
+                    BodyGuardReportPlayerNameMode.Both.ToString(),
+                });
         }
 
         protected override void RoleSpecificInit()
@@ -751,7 +802,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             var allOpt = OptionHolder.AllOption;
 
-            this.reportNextMeeting = false;
+            this.reportStr = string.Empty;
 
             this.shieldRange = allOpt[
                 GetRoleOptionId(BodyGuardOption.ShieldRange)].GetValue();
@@ -760,6 +811,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 GetRoleOptionId(BodyGuardOption.FeatMeetingAbilityTaskGage)].GetValue() / 100.0f;
             this.meetingReportTaskGage = (float)allOpt[
                 GetRoleOptionId(BodyGuardOption.FeatMeetingReportTaskGage)].GetValue() / 100.0f;
+
+            this.isReportWithPlayerName = allOpt[
+                GetRoleOptionId(BodyGuardOption.IsReportPlayerName)].GetValue();
+            this.reportMode = (BodyGuardReportPlayerNameMode)allOpt[
+                GetRoleOptionId(BodyGuardOption.ReportPlayerMode)].GetValue();
+
             this.awakeMeetingAbility = this.meetingAbilityTaskGage <= 0.0f;
             this.awakeMeetingReport = this.meetingReportTaskGage <= 0.0f;
 

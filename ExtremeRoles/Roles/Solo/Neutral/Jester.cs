@@ -98,10 +98,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 target.Data.IsDead ||
                 target.Data.Disconnected) { return; }
 
-            if (Crewmate.BodyGuard.TryGetShiledPlayerId(
-                    target.PlayerId, out byte bodyGuard) &&
-                Crewmate.BodyGuard.RpcTryKillBodyGuard(
-                    killer.PlayerId, bodyGuard))
+            if (Crewmate.BodyGuard.TryRpcKillGuardedBodyGuard(
+                    killer.PlayerId, target.PlayerId))
             {
                 return;
             }

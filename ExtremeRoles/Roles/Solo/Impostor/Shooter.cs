@@ -118,10 +118,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 Shoot();
                 PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
 
-                if (Crewmate.BodyGuard.TryGetShiledPlayerId(
-                    target, out byte bodyGuard) &&
-                    Crewmate.BodyGuard.RpcTryKillBodyGuard(
-                        localPlayer.PlayerId, bodyGuard))
+                if (Crewmate.BodyGuard.TryRpcKillGuardedBodyGuard(
+                        localPlayer.PlayerId, target))
                 {
                     rpcPlayKillSound();
                     return;
