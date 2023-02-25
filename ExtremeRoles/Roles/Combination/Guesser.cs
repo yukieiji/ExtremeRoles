@@ -12,6 +12,8 @@ using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.Solo;
+using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Combination
@@ -329,7 +331,7 @@ namespace ExtremeRoles.Roles.Combination
             ExtremeRoleId roleId = targetRole.Id;
             ExtremeRoleId anotherRoleId = ExtremeRoleId.Null;
 
-            if (targetRole is Solo.VanillaRoleWrapper vanillaRole)
+            if (targetRole is VanillaRoleWrapper vanillaRole)
             {
                 roleId = (ExtremeRoleId)vanillaRole.VanilaRoleId;
             }
@@ -337,7 +339,7 @@ namespace ExtremeRoles.Roles.Combination
                 targetRole is MultiAssignRoleBase multiRole &&
                 multiRole.AnotherRole != null)
             {
-                if (multiRole.AnotherRole is Solo.VanillaRoleWrapper anothorVanillRole)
+                if (multiRole.AnotherRole is VanillaRoleWrapper anothorVanillRole)
                 {
                     anotherRoleId = (ExtremeRoleId)anothorVanillRole.VanilaRoleId;
                 }
@@ -347,8 +349,10 @@ namespace ExtremeRoles.Roles.Combination
                 }
             }
             
-            if (Solo.Crewmate.BodyGuard.TryGetShiledPlayerId(playerId, out byte _) ||
-                alwaysMissRole.Contains(targetRole.Id))
+            if ((
+                    BodyGuard.IsBlockMeetingKill && 
+                    BodyGuard.TryGetShiledPlayerId(playerId, out byte _)
+                ) || alwaysMissRole.Contains(targetRole.Id))
             {
                 missGuess();
             }

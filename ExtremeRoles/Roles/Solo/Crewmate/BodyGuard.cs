@@ -209,6 +209,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             FeatMeetingReportTaskGage,
             IsReportPlayerName,
             ReportPlayerMode,
+            IsBlockMeetingKill,
         }
 
         public enum BodyGuardRpcOps : byte
@@ -236,7 +237,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
         }
 
-        public byte TargetPlayer = byte.MaxValue;
+        public static bool IsBlockMeetingKill { get; private set; } = true;
+
+        private byte targetPlayer = byte.MaxValue;
 
         private int shildNum;
         private float shieldRange;
@@ -568,18 +571,18 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
             byte playerId = localPlayer.PlayerId;
 
-            if (this.TargetPlayer != byte.MaxValue)
+            if (this.targetPlayer != byte.MaxValue)
             {
                 using (var caller = RPCOperator.CreateCaller(
                     RPCOperator.Command.BodyGuardAbility))
                 {
                     caller.WriteByte((byte)BodyGuardRpcOps.FeatShield);
                     caller.WriteByte(playerId);
-                    caller.WriteByte(this.TargetPlayer);
+                    caller.WriteByte(this.targetPlayer);
                 }
-                featShield(playerId, this.TargetPlayer);
+                featShield(playerId, this.targetPlayer);
 
-                this.TargetPlayer = byte.MaxValue;
+                this.targetPlayer = byte.MaxValue;
 
                 return true;
             }
@@ -589,12 +592,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
         }
 
-        public bool IsResetMode() => this.TargetPlayer == byte.MaxValue;
+        public bool IsResetMode() => this.targetPlayer == byte.MaxValue;
 
         public bool IsAbilityUse()
         {
 
-            this.TargetPlayer = byte.MaxValue;
+            this.targetPlayer = byte.MaxValue;
 
             PlayerControl target = Player.GetClosestPlayerInRange(
                 CachedPlayerControl.LocalPlayer, this,
@@ -607,7 +610,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 if (!shilded.IsShielding(
                     CachedPlayerControl.LocalPlayer.PlayerId, targetId))
                 {
-                    this.TargetPlayer = targetId;
+                    this.targetPlayer = targetId;
                 }
             }
 
@@ -795,6 +798,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     BodyGuardReportPlayerNameMode.GuardedPlayerOnly.ToString(),
                     BodyGuardReportPlayerNameMode.Both.ToString(),
                 }, reportPlayerNameOpt);
+            CreateBoolOption(
+                BodyGuardOption.IsBlockMeetingKill,
+                true, parentOps);
         }
 
         protected override void RoleSpecificInit()
@@ -803,6 +809,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             var allOpt = OptionHolder.AllOption;
 
             this.reportStr = string.Empty;
+
+            IsBlockMeetingKill = allOpt[
+                GetRoleOptionId(BodyGuardOption.IsBlockMeetingKill)].GetValue();
 
             this.shieldRange = allOpt[
                 GetRoleOptionId(BodyGuardOption.ShieldRange)].GetValue();

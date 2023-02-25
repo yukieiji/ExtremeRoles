@@ -7,6 +7,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
@@ -118,7 +119,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 Shoot();
                 PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
 
-                if (Crewmate.BodyGuard.TryRpcKillGuardedBodyGuard(
+                if (BodyGuard.IsBlockMeetingKill &&
+                    BodyGuard.TryRpcKillGuardedBodyGuard(
                         localPlayer.PlayerId, target))
                 {
                     rpcPlayKillSound();
