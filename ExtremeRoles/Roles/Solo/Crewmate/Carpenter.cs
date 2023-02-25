@@ -3,194 +3,170 @@ using System.Linq;
 
 using UnityEngine;
 using Hazel;
+using TMPro;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.AbilityModeSwitcher;
+using ExtremeRoles.Module.ButtonAutoActivator;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Extension.Ship;
+using ExtremeRoles.Module.AbilityBehavior;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
     public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTypes>
     {
-        public sealed class CarpenterAbilityButton : RoleAbilityButtonBase
+        public enum CarpenterAbilityMode
         {
-            public int CurAbilityNum
-            {
-                get => this.abilityNum;
-            }
+            RemoveVent,
+            SetCamera
+        }
 
-            private int abilityNum = 0;
-            private bool isVentRemove;
+        public sealed class CarpenterAbilityBehavior : AbilityBehaviorBase
+        {
+            public int AbilityCount { get; private set; }
+
+            private bool isUpdate;
+
+            private TextMeshPro abilityCountText;
+            private bool isVentRemoveMode = true;
+
+            private Func<bool> setCountStart;
+            private Func<bool> canUse;
+            private Func<bool> abilityCheck;
+            private Action updateMapObj;
+            private Func<bool> ventRemoveModeCheck;
+            
             private int ventRemoveScrewNum;
             private int cameraSetScrewNum;
-            private float ventRemoveStopTime;
-            private float cameraRemoveStopTime;
-            private string cameraSetString;
-            private string ventRemoveString;
-            private Sprite cameraSetSprite;
-            private Sprite ventRemoveSprite;
-            private Func<bool> ventModeCheck;
 
-            private TMPro.TextMeshPro abilityCountText = null;
+            private GraphicAndActiveTimeSwitcher<CarpenterAbilityMode> switcher;
 
-            private Action baseCleanUp;
-            private Action reduceCountAction;
-
-            public CarpenterAbilityButton(
-                Func<bool> ability,
-                Func<bool> canUse,
-                Sprite cameraSetSprite,
-                Sprite ventRemoveSprite,
-                Action abilityCleanUp,
-                Func<bool> abilityCheck,
-                Func<bool> isVentMode,
+            public CarpenterAbilityBehavior(
+                GraphicAndActiveTimeMode ventMode,
+                GraphicAndActiveTimeMode cameraMode,
                 int ventRemoveScrewNum,
                 int cameraSetScrewNum,
-                float ventRemoveStopTime,
-                float cameraRemoveStopTime,
-                KeyCode hotkey = KeyCode.F
-                ) : base(
-                    "",
-                    ability,
-                    canUse,
-                    cameraSetSprite,
-                    abilityCleanUp, abilityCheck, hotkey)
+                Func<bool> setCountStart,
+                Func<bool> canUse,
+                Func<bool> abilityCheck,
+                Action updateMapObj,
+                Func<bool> ventRemoveModeCheck) : base(
+                    ventMode.Graphic.Text,
+                    ventMode.Graphic.Img)
             {
-
-                var cooldownTimerText = this.GetCoolDownText();
-
-                this.abilityCountText = GameObject.Instantiate(
-                    cooldownTimerText, cooldownTimerText.transform.parent);
-                updateAbilityCountText();
-                this.abilityCountText.enableWordWrapping = false;
-                this.abilityCountText.transform.localScale = Vector3.one * 0.5f;
-                this.abilityCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
-
-                this.ventModeCheck = isVentMode;
-
-                this.ventRemoveString = Translation.GetString("ventSeal");
-                this.cameraSetString = Translation.GetString("cameraSet");
-                this.SetButtonText(this.cameraSetString);
-
                 this.ventRemoveScrewNum = ventRemoveScrewNum;
                 this.cameraSetScrewNum = cameraSetScrewNum;
-                
-                this.ventRemoveStopTime = ventRemoveStopTime;
-                this.cameraRemoveStopTime = cameraRemoveStopTime;
 
-                this.cameraSetSprite = cameraSetSprite;
-                this.ventRemoveSprite = ventRemoveSprite;
-                
-                this.isVentRemove = false;
+                this.setCountStart = setCountStart;
+                this.canUse = canUse;
+                this.abilityCheck = abilityCheck;
+                this.updateMapObj = updateMapObj;
+                this.ventRemoveModeCheck = ventRemoveModeCheck;
 
-                this.reduceCountAction = this.reduceAbilityCount();
-
-                if (HasCleanUp())
-                {
-                    this.baseCleanUp = new Action(this.AbilityCleanUp);
-                    this.AbilityCleanUp += this.reduceCountAction;
-                }
-                else
-                {
-                    this.baseCleanUp = null;
-                    this.AbilityCleanUp = this.reduceCountAction;
-                }
+                this.switcher = new GraphicAndActiveTimeSwitcher<CarpenterAbilityMode>(this);
+                this.switcher.Add(CarpenterAbilityMode.RemoveVent, ventMode);
+                this.switcher.Add(CarpenterAbilityMode.SetCamera, cameraMode);
             }
 
-            public void UpdateAbilityCount(int newCount)
+            public void SetAbilityCount(int newAbilityNum)
             {
-                this.abilityNum = newCount;
-                this.updateAbilityCountText();
-                if (this.State == AbilityState.None)
-                {
-                    this.SetStatus(AbilityState.CoolDown);
-                }
+                this.AbilityCount = newAbilityNum;
+                this.isUpdate = true;
+            }
+
+            public override void AbilityOff()
+            {
+                this.AbilityCount = this.isVentRemoveMode ?
+                    this.AbilityCount - this.ventRemoveScrewNum : 
+                    this.AbilityCount - this.cameraSetScrewNum;
+                updateAbilityCountText();
+                this.updateMapObj.Invoke();
             }
 
             public override void ForceAbilityOff()
+            { }
+
+            public override void Initialize(ActionButton button)
             {
-                this.SetStatus(AbilityState.Ready);
-                this.baseCleanUp?.Invoke();
+                var coolTimerText = button.cooldownTimerText;
+
+                this.abilityCountText = UnityEngine.Object.Instantiate(
+                    coolTimerText, coolTimerText.transform.parent);
+                this.abilityCountText.enableWordWrapping = false;
+                this.abilityCountText.transform.localScale = Vector3.one * 0.5f;
+                this.abilityCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
+                updateAbilityCountText();
             }
 
-            protected override bool IsEnable() =>
-                this.CanUse.Invoke() && this.abilityNum > 0 && screwCheck();
+            public override bool IsCanAbilityActiving() => this.abilityCheck.Invoke();
 
-            protected override void UpdateAbility()
+            public override bool IsUse() =>
+                this.canUse.Invoke() && 
+                this.AbilityCount > 0 && screwCheck();
+
+            public override bool TryUseAbility(
+                float timer, AbilityState curState, out AbilityState newState)
             {
-                this.isVentRemove = this.ventModeCheck();
-                if (this.isVentRemove)
+                newState = curState;
+
+                if (timer > 0 ||
+                    curState != AbilityState.Ready ||
+                    (this.AbilityCount <= 0 || !screwCheck()))
                 {
-                    this.SetButtonImg(this.ventRemoveSprite);
-                    this.SetButtonText(this.ventRemoveString);
-                    this.SetAbilityActiveTime(this.ventRemoveStopTime);
+                    return false;
                 }
-                else
+
+                if (!this.setCountStart.Invoke())
                 {
-                    this.SetButtonImg(this.cameraSetSprite);
-                    this.SetButtonText(this.cameraSetString);
-                    this.SetAbilityActiveTime(this.cameraRemoveStopTime);
+                    return false;
                 }
-                if (this.abilityNum <= 0)
-                {
-                    this.SetStatus(AbilityState.None);
-                }
+
+                newState = this.ActiveTime <= 0.0f ?
+                    AbilityState.CoolDown : AbilityState.Activating;
+
+                return true;
             }
 
-            protected override void DoClick()
+            public override AbilityState Update(AbilityState curState)
             {
-                if (this.IsEnable() &&
-                    this.Timer <= 0f &&
-                    this.IsAbilityReady() &&
-                    this.UseAbility.Invoke())
+                if (curState != AbilityState.Activating)
                 {
-                    if (this.HasCleanUp() &&
-                        this.baseCleanUp != null)
-                    {
-                        this.SetStatus(AbilityState.Activating);
-                    }
-                    else
-                    {
-                        this.reduceCountAction.Invoke();
-                        this.ResetCoolTimer();
-                    }
-                }
-            }
+                    this.isVentRemoveMode = this.ventRemoveModeCheck.Invoke();
 
-            private Action reduceAbilityCount()
-            {
-                return () =>
+                    this.switcher.Switch(this.isVentRemoveMode ?
+                        CarpenterAbilityMode.RemoveVent : CarpenterAbilityMode.SetCamera);
+                }
+
+                if (this.isUpdate)
                 {
-                    this.abilityNum = this.isVentRemove ?
-                    this.abilityNum - this.ventRemoveScrewNum : this.abilityNum - this.cameraSetScrewNum;
-                    updateAbilityCountText();
-                };
+                    this.isUpdate = false;
+                    return AbilityState.CoolDown;
+                }
+
+                return this.AbilityCount > 0 ? curState : AbilityState.None;
             }
 
             private void updateAbilityCountText()
             {
-                if (this.abilityCountText == null) { return; }
-
                 this.abilityCountText.text = string.Format(
                     Translation.GetString("carpenterScrewNum"),
-                        this.abilityNum,
-                        this.isVentRemove ? this.ventRemoveScrewNum : this.cameraSetScrewNum);
+                    this.AbilityCount);
             }
 
             private bool screwCheck()
             {
                 return
                 (
-                    (this.abilityNum - this.ventRemoveScrewNum >= 0 && this.isVentRemove) ||
-                    (this.abilityNum - this.cameraSetScrewNum >= 0 && !this.isVentRemove)
+                    (this.AbilityCount - this.ventRemoveScrewNum >= 0 && this.isVentRemoveMode) ||
+                    (this.AbilityCount - this.cameraSetScrewNum >= 0 && !this.isVentRemoveMode)
                 );
             }
-
         }
 
         public bool IsAwake
@@ -203,7 +179,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public RoleTypes NoneAwakeRole => RoleTypes.Crewmate;
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         { 
             get => this.abilityButton;
             set
@@ -231,7 +207,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private float awakeTaskGage;
         private Vent targetVent;
         private Vector2 prevPos;
-        private RoleAbilityButtonBase abilityButton;
+        private ExtremeAbilityButton abilityButton;
 
         private bool awakeHasOtherVision;
 
@@ -504,20 +480,37 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             var allOpt = OptionHolder.AllOption;
 
-            this.Button = new CarpenterAbilityButton(
-                UseAbility,
-                IsAbilityUse,
-                Resources.Loader.CreateSpriteFromResources(
-                    Resources.Path.CarpenterSetCamera),
-                Resources.Loader.CreateSpriteFromResources(
-                    Resources.Path.CarpenterVentSeal),
-                CleanUp,
-                IsAbilityCheck,
-                IsVentMode,
-                (int)allOpt[GetRoleOptionId(CarpenterOption.RemoveVentScrew)].GetValue(),
-                (int)allOpt[GetRoleOptionId(CarpenterOption.SetCameraScrew)].GetValue(),
-                (float)allOpt[GetRoleOptionId(CarpenterOption.RemoveVentStopTime)].GetValue(),
-                (float)allOpt[GetRoleOptionId(CarpenterOption.SetCameraStopTime)].GetValue());
+            this.Button = new ExtremeAbilityButton(
+                new CarpenterAbilityBehavior(
+                    ventMode: new GraphicAndActiveTimeMode()
+                    {
+                        Graphic = new ButtonGraphic(
+                            Translation.GetString("ventSeal"),
+                            Loader.CreateSpriteFromResources(
+                                Path.CarpenterVentSeal)),
+                        Time = (float)allOpt[
+                            GetRoleOptionId(CarpenterOption.RemoveVentStopTime)].GetValue()
+                    },
+                    cameraMode: new GraphicAndActiveTimeMode()
+                    {
+                        Graphic = new ButtonGraphic(
+                            Translation.GetString("cameraSet"),
+                            Loader.CreateSpriteFromResources(
+                                Path.CarpenterSetCamera)),
+                        Time = (float)allOpt[
+                            GetRoleOptionId(CarpenterOption.SetCameraStopTime)].GetValue()
+                    },
+                    ventRemoveScrewNum: (int)allOpt[
+                        GetRoleOptionId(CarpenterOption.RemoveVentScrew)].GetValue(),
+                    cameraSetScrewNum: (int)allOpt[
+                        GetRoleOptionId(CarpenterOption.SetCameraScrew)].GetValue(),
+                    setCountStart: UseAbility,
+                    canUse: IsAbilityUse,
+                    abilityCheck: IsAbilityCheck,
+                    updateMapObj: CleanUp,
+                    ventRemoveModeCheck: IsVentMode),
+                new RoleButtonActivator(),
+                KeyCode.F);
             abilityInit();
             this.Button.SetLabelToCrewmate();
         }
@@ -765,20 +758,15 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             if (this.Button == null) { return; }
 
             var allOps = OptionHolder.AllOption;
-            this.Button.SetCoolTime(
+            this.Button.Behavior.SetCoolTime(
                 allOps[GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)].GetValue());
-            this.Button.SetAbilityActiveTime(1.0f);
 
-            var button = this.Button as CarpenterAbilityButton;
-
-            if (button != null)
+            if (this.Button.Behavior is CarpenterAbilityBehavior behavior)
             {
-                button.UpdateAbilityCount(
-                    allOps[GetRoleOptionId(RoleAbilityCommonOption.AbilityCount)].GetValue());
+                behavior.SetAbilityCount(
+                    allOps[GetRoleOptionId(RoleAbilityCommonOption.AbilityCount)].GetValue()); ;
             }
-
-            this.Button.ResetCoolTimer();
+            this.Button.OnMeetingEnd();
         }
-
     }
 }
