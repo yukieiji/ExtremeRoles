@@ -223,9 +223,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public enum BodyGuardReportPlayerNameMode
         {
-            BodyGuardPlayerOnly,
-            GuardedPlayerOnly,
-            Both,
+            GuardedPlayerNameOnly,
+            BodyGuardPlayerNameOnly,
+            BothPlayerName,
         }
 
         public RoleAbilityButtonBase Button
@@ -447,15 +447,15 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             string reportStr = bodyGuard.isReportWithPlayerName ? 
                bodyGuard.reportMode switch
                {
-                   BodyGuardReportPlayerNameMode.BodyGuardPlayerOnly => 
-                        string.Format(
-                            Translation.GetString("martyrdomReportWithBodyGurdPlayer"),
-                            bodyGuardPlayer.Data.DefaultOutfit.PlayerName),
-                   BodyGuardReportPlayerNameMode.GuardedPlayerOnly =>
+                   BodyGuardReportPlayerNameMode.GuardedPlayerNameOnly =>
                        string.Format(
                            Translation.GetString("martyrdomReportWithGurdedPlayer"),
                            bodyGuardPlayer.Data.DefaultOutfit.PlayerName),
-                   BodyGuardReportPlayerNameMode.Both =>
+                   BodyGuardReportPlayerNameMode.BodyGuardPlayerNameOnly =>
+                        string.Format(
+                            Translation.GetString("martyrdomReportWithBodyGurdPlayer"),
+                            bodyGuardPlayer.Data.DefaultOutfit.PlayerName),
+                   BodyGuardReportPlayerNameMode.BothPlayerName =>
                        string.Format(
                            Translation.GetString("martyrdomReportWithBoth"),
                            bodyGuardPlayer.Data.DefaultOutfit.PlayerName,
@@ -794,9 +794,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 BodyGuardOption.ReportPlayerMode,
                 new string[]
                 {
-                    BodyGuardReportPlayerNameMode.BodyGuardPlayerOnly.ToString(),
-                    BodyGuardReportPlayerNameMode.GuardedPlayerOnly.ToString(),
-                    BodyGuardReportPlayerNameMode.Both.ToString(),
+                    BodyGuardReportPlayerNameMode.GuardedPlayerNameOnly.ToString(),
+                    BodyGuardReportPlayerNameMode.BodyGuardPlayerNameOnly.ToString(),
+                    BodyGuardReportPlayerNameMode.BothPlayerName.ToString(),
                 }, reportPlayerNameOpt);
             CreateBoolOption(
                 BodyGuardOption.IsBlockMeetingKill,
