@@ -446,17 +446,17 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                {
                    BodyGuardReportPlayerNameMode.BodyGuardPlayerOnly => 
                         string.Format(
-                            bodyGuardPlayer.Data.DefaultOutfit.PlayerName,
-                            Translation.GetString("martyrdomReportWithBodyGurdPlayer")),
+                            Translation.GetString("martyrdomReportWithBodyGurdPlayer"),
+                            bodyGuardPlayer.Data.DefaultOutfit.PlayerName),
                    BodyGuardReportPlayerNameMode.GuardedPlayerOnly =>
                        string.Format(
-                           bodyGuardPlayer.Data.DefaultOutfit.PlayerName,
-                           Translation.GetString("martyrdomReportWithGurdedPlayer")),
+                           Translation.GetString("martyrdomReportWithGurdedPlayer"),
+                           bodyGuardPlayer.Data.DefaultOutfit.PlayerName),
                    BodyGuardReportPlayerNameMode.Both =>
                        string.Format(
+                           Translation.GetString("martyrdomReportWithBoth"),
                            bodyGuardPlayer.Data.DefaultOutfit.PlayerName,
-                           Player.GetPlayerControlById(prevTargetPlayerId)?.Data.DefaultOutfit.PlayerName,
-                           Translation.GetString("martyrdomReportWithBoth")),
+                           Player.GetPlayerControlById(prevTargetPlayerId)?.Data.DefaultOutfit.PlayerName),
                    _ => Translation.GetString("martyrdomReport")
                } : 
                Translation.GetString("martyrdomReport");
@@ -784,7 +784,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 60, 0, 100, 10,
                 parentOps,
                 format: OptionUnit.Percentage);
-            CreateBoolOption(
+            var reportPlayerNameOpt = CreateBoolOption(
                 BodyGuardOption.IsReportPlayerName,
                 false, parentOps);
             CreateSelectionOption(
@@ -794,7 +794,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     BodyGuardReportPlayerNameMode.BodyGuardPlayerOnly.ToString(),
                     BodyGuardReportPlayerNameMode.GuardedPlayerOnly.ToString(),
                     BodyGuardReportPlayerNameMode.Both.ToString(),
-                });
+                }, reportPlayerNameOpt);
         }
 
         protected override void RoleSpecificInit()
