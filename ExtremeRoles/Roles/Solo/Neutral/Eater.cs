@@ -95,6 +95,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
                 behaviour.SetAbilityCount(
                     halfPlayerNum < abilityNum ? halfPlayerNum : abilityNum);
+                behaviour.SetCountText("eaterWinNum");
 
                 this.modeFactory = new GraphicAndActiveTimeSwitcher<EaterAbilityMode>(behaviour);
                 this.modeFactory.Add(EaterAbilityMode.DeadBody, deadBodyMode);
