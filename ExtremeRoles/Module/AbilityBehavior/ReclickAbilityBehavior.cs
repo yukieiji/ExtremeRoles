@@ -71,8 +71,6 @@ namespace ExtremeRoles.Module.AbilityBehavior
                 case AbilityState.Activating:
                     if (this.isActive)
                     {
-                        this.AbilityOff();
-                        this.isActive = false;
                         newState = AbilityState.CoolDown;
                     }
                     else
