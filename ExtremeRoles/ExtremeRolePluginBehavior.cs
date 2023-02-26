@@ -31,6 +31,15 @@ namespace ExtremeRoles
             }
             if (Input.GetKeyDown(KeyCode.F12))
             {
+                var role = Roles.ExtremeRoleManager.GetLocalPlayerRole();
+                if (role != null && role is Roles.API.Interface.IRoleAbility abilityRole)
+                {
+                    Logging.Debug("---- Role Button Info ----");
+                    Logging.Debug($"Cool Time:{abilityRole.Button.Behavior.CoolTime}");
+                    Logging.Debug($"Active Time:{abilityRole.Button.Behavior.ActiveTime}");
+                    Logging.Debug($"Button State:{abilityRole.Button.State}");
+                }
+
                 var ghostRole = GhostRoles.ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
                 if (ghostRole != null)
                 {
