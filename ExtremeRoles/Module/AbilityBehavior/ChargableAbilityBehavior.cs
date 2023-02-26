@@ -15,6 +15,7 @@ namespace ExtremeRoles.Module.AbilityBehavior
 
         private bool isActive;
 
+        private float maxCharge;
         private float chargeTimer;
         private float currentCharge;
 
@@ -43,6 +44,7 @@ namespace ExtremeRoles.Module.AbilityBehavior
 
         public override void SetActiveTime(float time)
         {
+            this.maxCharge = time;
             this.currentCharge = time;
             base.SetActiveTime(time);
         }
@@ -50,7 +52,7 @@ namespace ExtremeRoles.Module.AbilityBehavior
         public override void AbilityOff()
         {
             this.isActive = false;
-            this.currentCharge = this.ActiveTime;
+            this.currentCharge = this.maxCharge;
             this.abilityOff?.Invoke();
         }
 
@@ -86,6 +88,7 @@ namespace ExtremeRoles.Module.AbilityBehavior
             {
                 this.chargeTimer = this.currentCharge;
                 this.isActive = true;
+                base.SetActiveTime(this.chargeTimer);
                 newState = this.ActiveTime <= 0.0f ?
                     AbilityState.CoolDown : AbilityState.Activating;
                 result = true;
