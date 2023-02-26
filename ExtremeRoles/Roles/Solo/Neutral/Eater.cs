@@ -86,32 +86,21 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.CreateAbilityCountButton(
                 deadBodyMode.Graphic.Text, deadBodyMode.Graphic.Img,
                 IsAbilityCheck, CleanUp, ForceCleanUp);
-            
-            if (this.Button.Behavior is AbilityCountBehavior behaviour)
-            {
-                int abilityNum = (int)allOpt[GetRoleOptionId(
-                    RoleAbilityCommonOption.AbilityCount)].GetValue();
-                int halfPlayerNum = GameData.Instance.PlayerCount / 2;
 
-                behaviour.SetCountText("eaterWinNum");
-                behaviour.SetAbilityCount(
-                    halfPlayerNum < abilityNum ? halfPlayerNum : abilityNum);
-
-                this.modeFactory = new GraphicAndActiveTimeSwitcher<EaterAbilityMode>(behaviour);
-                this.modeFactory.Add(EaterAbilityMode.DeadBody, deadBodyMode);
-                this.modeFactory.Add(
-                    EaterAbilityMode.Kill,
-                    new GraphicAndActiveTimeMode()
-                    {
-                        Graphic = new ButtonGraphic(
-                            Translation.GetString("eatKill"),
-                            Loader.CreateSpriteFromResources(
-                                Path.EaterEatKill)),
-                        Time = behaviour.ActiveTime,
-                    }
-                );
-                this.Button.OnMeetingEnd();
-            }
+            this.modeFactory = new GraphicAndActiveTimeSwitcher<EaterAbilityMode>(
+                this.Button.Behavior);
+            this.modeFactory.Add(EaterAbilityMode.DeadBody, deadBodyMode);
+            this.modeFactory.Add(
+                EaterAbilityMode.Kill,
+                new GraphicAndActiveTimeMode()
+                {
+                    Graphic = new ButtonGraphic(
+                        Translation.GetString("eatKill"),
+                        Loader.CreateSpriteFromResources(
+                            Path.EaterEatKill)),
+                    Time = this.Button.Behavior.ActiveTime,
+                }
+            );
         }
 
         public void HookMuderPlayer(
@@ -356,6 +345,17 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.isActivated = false;
 
             this.RoleAbilityInit();
+
+            if (this.Button?.Behavior is AbilityCountBehavior behaviour)
+            {
+                int abilityNum = (int)allOps[GetRoleOptionId(
+                    RoleAbilityCommonOption.AbilityCount)].GetValue();
+                int halfPlayerNum = GameData.Instance.PlayerCount / 2;
+
+                behaviour.SetCountText("eaterWinNum");
+                behaviour.SetAbilityCount(
+                     abilityNum > halfPlayerNum ? halfPlayerNum : abilityNum);
+            }
         }
 
         private IEnumerator cleanDeadBodyOps(byte targetPlayerId)
