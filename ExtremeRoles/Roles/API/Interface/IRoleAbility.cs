@@ -271,7 +271,7 @@ namespace ExtremeRoles.Roles.API.Interface
                         RoleAbilityCommonOption.AbilityCount)].GetValue());
             }
 
-            self.Button.OnMeetingStart();
+            self.Button.OnMeetingEnd();
         }
     }
 
