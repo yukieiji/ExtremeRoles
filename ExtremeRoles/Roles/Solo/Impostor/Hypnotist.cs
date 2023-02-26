@@ -31,7 +31,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         SingleRoleBase,
         IRoleAbility,
         IRoleAwake<RoleTypes>,
-        IRoleExilHook,
         IRoleMurderPlayerHook,
         IRoleSpecialReset
     {
@@ -316,7 +315,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             return this.target != null && this.IsCommonUse();
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             if (this.isAwake && this.doll.Count > 0)
             {
@@ -331,7 +330,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.isActiveTimer = false;
         }
 
-        public void HookExil(PlayerControl exiledPlayer)
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             updateAwakeCheck(exiledPlayer);
 
@@ -349,11 +348,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 setRedAbilityPart(this.addRedPos.Count);
             }
-        }
-
-        public void RoleAbilityResetOnMeetingEnd()
-        {
-            return;
         }
 
         public bool UseAbility()
@@ -890,7 +884,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        private void updateAwakeCheck(PlayerControl ignorePlayer)
+        private void updateAwakeCheck(GameData.PlayerInfo ignorePlayer)
         {
             int impNum = 0;
 

@@ -119,12 +119,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             return this.IsCommonUse() && this.targetDeadBodyId != byte.MaxValue;
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             return;
         }

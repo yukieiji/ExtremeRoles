@@ -87,7 +87,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.stock > 0 &&
             PlayerControl.LocalPlayer.killTimer > 0;
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             if (this.reloadButton != null && this.timerStock > 0)
             {
@@ -106,7 +106,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             this.KillCoolTime = this.defaultKillCool;
             if (this.reduceKillCoolText != null)

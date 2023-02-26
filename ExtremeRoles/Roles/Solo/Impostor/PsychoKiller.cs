@@ -32,7 +32,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             true, false, true, true)
         {}
 
-        public void ResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }

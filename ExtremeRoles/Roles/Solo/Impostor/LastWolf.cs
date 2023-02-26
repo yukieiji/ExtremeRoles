@@ -97,7 +97,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.IsCommonUse() &&
             VisionComputer.Instance.IsModifierResetted();
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             CleanUp();
             if (this.isAwake)
@@ -110,7 +110,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }

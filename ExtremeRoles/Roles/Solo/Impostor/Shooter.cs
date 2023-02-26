@@ -180,7 +180,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        public void ResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             chargeInfoSetActive(true);
             this.canShootThisMeeting = true;

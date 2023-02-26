@@ -176,12 +176,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             return isVentIn() && this.targetPlayer != null;
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             this.targetPlayer = null;
         }

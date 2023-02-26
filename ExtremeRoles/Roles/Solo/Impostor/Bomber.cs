@@ -140,7 +140,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart(GameData.PlayerInfo exiledPlayer = null)
         {
             if (this.tellText != null)
             {
@@ -148,7 +148,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd()
         {
             return;
         }
