@@ -376,7 +376,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 if (taskGage >= this.awakeTaskGage && !this.awakeRole)
                 {
                     this.awakeRole = true;
-                    this.HasOtherVison = this.awakeHasOtherVision;
+                    this.HasOtherVision = this.awakeHasOtherVision;
                     this.takePhotoButton.SetButtonShow(true);
                 }
                 else
