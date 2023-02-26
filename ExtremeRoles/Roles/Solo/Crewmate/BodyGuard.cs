@@ -128,7 +128,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             public override AbilityState Update(AbilityState curState)
             {
                 this.isReset = this.resetModeCheck.Invoke();
-                if (this.isReset && this.AbilityCount <= 0)
+                if (this.isReset || this.AbilityCount <= 0)
                 {
                     this.abilityCountText.gameObject.SetActive(false);
                     this.switcher.Switch(BodyGuardAbilityMode.Reset);
@@ -568,7 +568,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public bool IsAbilityUse()
         {
-
             this.targetPlayer = byte.MaxValue;
 
             PlayerControl target = Player.GetClosestPlayerInRange(
