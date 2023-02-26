@@ -25,12 +25,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         IRoleUpdate,
         IRoleSpecialReset
     {
-        public enum BodyGuardAbilityMode
-        {
-            FeatShield,
-            Reset
-        }
-
         public sealed class BodyGuardAbilityBehavior : AbilityBehaviorBase
         {
             public int AbilityCount { get; private set; }
@@ -190,6 +184,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             GuardedPlayerNameOnly,
             BodyGuardPlayerNameOnly,
             BothPlayerName,
+        }
+
+        public enum BodyGuardAbilityMode
+        {
+            FeatShield,
+            Reset
         }
 
         public ExtremeAbilityButton Button
