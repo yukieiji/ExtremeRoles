@@ -825,7 +825,7 @@ namespace ExtremeRoles.Roles.Combination
         public override void CreateAbility()
         {
             this.Button = GhostRoleAbilityFactory.CreateCountAbility(
-                AbilityType.FaunusOpenSaboConsole,
+                AbilityType.WispSetTorch,
                 Loader.CreateSpriteFromResources(
                     Path.WispTorch),
                 this.isReportAbility(),
