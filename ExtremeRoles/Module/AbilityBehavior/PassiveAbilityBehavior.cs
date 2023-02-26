@@ -57,14 +57,12 @@ namespace ExtremeRoles.Module.AbilityBehavior
         }
 
         public override void AbilityOff()
-        {
-            this.abilityOff?.Invoke();
-            this.SetGraphic(this.activeGraphic);
-        }
+        { }
 
         public override void ForceAbilityOff()
         {
-            this.AbilityOff();
+            this.abilityOff?.Invoke();
+            this.SetGraphic(this.activeGraphic);
         }
 
         public override bool IsCanAbilityActiving() => this.canActivating.Invoke();
@@ -83,7 +81,7 @@ namespace ExtremeRoles.Module.AbilityBehavior
 
             if (this.isActive)
             {
-                this.AbilityOff();
+                this.ForceAbilityOff();
             }
             else
             {
