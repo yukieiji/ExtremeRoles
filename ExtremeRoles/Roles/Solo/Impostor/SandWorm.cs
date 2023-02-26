@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+
+using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
@@ -23,13 +25,82 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
                 return
                     (
-                        isVentIn() ||
-                        isLightOff()
+                        localPlayer.IsKillTimerEnabled ||
+                        localPlayer.ForceKillTimerContinue ||
+                        FastDestroyableSingleton<HudManager>.Instance.UseButton.isActiveAndEnabled ||
+                        isVentIn()
                     ) &&
                     localPlayer.Data != null &&
                     MeetingHud.Instance == null &&
                     ExileController.Instance == null &&
                     !localPlayer.Data.IsDead;
+            }
+        }
+
+        public sealed class SandWormAbilityBehavior : AbilityBehaviorBase
+        {
+            private Func<bool> ability;
+            private Func<bool> canUse;
+
+            private AbilityState prevState = AbilityState.None;
+
+            public SandWormAbilityBehavior(
+                string text, Sprite img,
+                Func<bool> canUse,
+                Func<bool> ability) : base(text, img)
+            {
+                this.ability = ability;
+                this.canUse = canUse;
+            }
+
+            public override void Initialize(ActionButton button)
+            {
+                return;
+            }
+
+            public override void AbilityOff()
+            { }
+
+            public override void ForceAbilityOff()
+            { }
+
+            public override bool IsCanAbilityActiving() => true;
+
+            public override bool IsUse() => 
+                this.canUse.Invoke();
+
+            public override bool TryUseAbility(
+                float timer, AbilityState curState, out AbilityState newState)
+            {
+                newState = curState;
+
+                if (timer > 0 || curState != AbilityState.Ready)
+                {
+                    return false;
+                }
+
+                if (!this.ability.Invoke())
+                {
+                    return false;
+                }
+
+                newState = AbilityState.CoolDown;
+
+                return true;
+            }
+
+            public override AbilityState Update(AbilityState curState)
+            {
+                if (!isVentIn() && !isLightOff())
+                {
+                    if (curState != AbilityState.Stop)
+                    {
+                        this.prevState = curState;
+                    }
+                    return AbilityState.Stop;
+                }
+
+                return curState == AbilityState.Stop ? this.prevState : curState;
             }
         }
 
@@ -68,19 +139,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public override bool TryRolePlayerKillTo(
             PlayerControl rolePlayer, PlayerControl targetPlayer)
         {
-            
-            bool isLightOff = false;
-
-            foreach (PlayerTask task in targetPlayer.myTasks.GetFastEnumerator())
-            {
-                if (task.TaskType == TaskTypes.FixLights)
-                {
-                    isLightOff = true;
-                    break;
-                }
-            }
-
-            if (isLightOff)
+            if (isLightOff())
             {
                 this.KillCoolTime = this.KillCoolTime - this.killBonus;
             }
@@ -98,7 +157,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void CreateAbility()
         {
             this.Button = new ExtremeAbilityButton(
-                new ReusableAbilityBehavior(
+                new SandWormAbilityBehavior(
                     Translation.GetString("assault"),
                     FastDestroyableSingleton<HudManager>.Instance.KillButton.graphic.sprite,
                     IsAbilityUse, UseAbility),
