@@ -7,6 +7,7 @@ namespace ExtremeRoles.Module.AbilityBehavior
 {
     public sealed class AbilityCountBehavior : AbilityBehaviorBase
     {
+        public const string DefaultButtonCountText = "buttonCountText";
         public int AbilityCount { get; private set; }
 
         private bool isReduceOnActive;
@@ -19,7 +20,7 @@ namespace ExtremeRoles.Module.AbilityBehavior
         private Action abilityOff;
 
         private TMPro.TextMeshPro abilityCountText = null;
-        private string buttonTextFormat = "buttonCountText";
+        private string buttonTextFormat = DefaultButtonCountText;
 
         public AbilityCountBehavior(
             string text, Sprite img,

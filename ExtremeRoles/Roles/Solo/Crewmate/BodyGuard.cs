@@ -3,15 +3,18 @@ using System.Collections.Generic;
 
 using UnityEngine;
 using Hazel;
+using TMPro;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
+using ExtremeRoles.Module.AbilityBehavior;
+using ExtremeRoles.Module.AbilityModeSwitcher;
+using ExtremeRoles.Module.ButtonAutoActivator;
+using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.ExtremeShipStatus;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
@@ -22,168 +25,142 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         IRoleUpdate,
         IRoleSpecialReset
     {
-        public class BodyGuardShieldButton : RoleAbilityButtonBase
+        public enum BodyGuardAbilityMode
         {
-            public int CurAbilityNum
-            {
-                get => this.abilityNum;
-            }
+            FeatShield,
+            Reset
+        }
 
-            private int abilityNum = 0;
-            private TMPro.TextMeshPro abilityCountText = null;
+        public sealed class BodyGuardAbilityBehavior : AbilityBehaviorBase
+        {
+            public int AbilityCount { get; private set; }
 
-            private Func<bool> resetCheck;
-            private Action resetAction;
-            private string resetAbilityText;
-            private Sprite resetSprite;
+            private bool isUpdate;
 
-            private string defaultAbilityText;
-            private Sprite defaultSprite;
+            private TextMeshPro abilityCountText;
+
+            private Func<bool> featShield;
+            private Func<bool> canUse;
+            private Action resetShield;
+            private Func<bool> resetModeCheck;
 
             private bool isReset;
 
-            private Action baseCleanUp;
-            private Action reduceCountAction;
+            private GraphicSwitcher<BodyGuardAbilityMode, GraphicMode> switcher;
 
-            public BodyGuardShieldButton(
-                string shieldAbilityText,
-                string resetAbilityText,
-                Func<bool> shieldAbility,
-                Action resetAbility,
+            public BodyGuardAbilityBehavior(
+                GraphicMode featShieldMode,
+                GraphicMode resetMode,
+                Func<bool> featShield,
+                Action resetShield,
                 Func<bool> canUse,
-                Func<bool> resetCheckFunc,
-                Sprite sprite,
-                Sprite resetSprite,
-                Action abilityCleanUp = null,
-                Func<bool> abilityCheck = null,
-                KeyCode hotkey = KeyCode.F
-                ) : base(
-                    shieldAbilityText,
-                    shieldAbility,
-                    canUse,
-                    sprite,
-                    abilityCleanUp,
-                    abilityCheck,
-                    hotkey)
+                Func<bool> resetModeCheck) : base(
+                    resetMode.Graphic.Text,
+                    resetMode.Graphic.Img)
             {
-                var coolTimeText = this.GetCoolDownText();
+                this.resetShield = resetShield;
+                this.featShield = featShield;
+                this.canUse = canUse;
+                this.resetModeCheck = resetModeCheck;
 
-                this.abilityCountText = GameObject.Instantiate(
-                    coolTimeText, coolTimeText.transform.parent);
-                updateAbilityCountText();
+                this.switcher = new GraphicSwitcher<BodyGuardAbilityMode, GraphicMode>(this);
+                this.switcher.Add(BodyGuardAbilityMode.Reset, resetMode);
+                this.switcher.Add(BodyGuardAbilityMode.FeatShield, featShieldMode);
+            }
+
+            public void SetAbilityCount(int newAbilityNum)
+            {
+                this.AbilityCount = newAbilityNum;
+                this.isUpdate = true;
+            }
+
+            public override void AbilityOff()
+            { }
+
+            public override void ForceAbilityOff()
+            { }
+
+            public override void Initialize(ActionButton button)
+            {
+                var coolTimerText = button.cooldownTimerText;
+
+                this.abilityCountText = UnityEngine.Object.Instantiate(
+                    coolTimerText, coolTimerText.transform.parent);
                 this.abilityCountText.enableWordWrapping = false;
                 this.abilityCountText.transform.localScale = Vector3.one * 0.5f;
                 this.abilityCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
-
-                this.resetAction = resetAbility;
-                
-                this.resetCheck = resetCheckFunc;
-                this.resetAbilityText = resetAbilityText;
-                this.resetSprite = resetSprite;
-
-                this.defaultAbilityText = shieldAbilityText;
-                this.defaultSprite = sprite;
-
-                this.reduceCountAction = this.reduceAbilityCountAction();
-
-                if (HasCleanUp())
-                {
-                    this.baseCleanUp = new Action(this.AbilityCleanUp);
-                    this.AbilityCleanUp += this.reduceCountAction;
-                }
-                else
-                {
-                    this.baseCleanUp = null;
-                    this.AbilityCleanUp = this.reduceCountAction;
-                }
+                updateAbilityCountText();
             }
 
-            public void UpdateAbilityCount(int newCount)
+            public override bool IsCanAbilityActiving() => true;
+
+            public override bool IsUse() =>
+                this.canUse.Invoke() && (this.AbilityCount > 0 || this.isReset);
+
+            public override bool TryUseAbility(
+                float timer, AbilityState curState, out AbilityState newState)
             {
-                this.abilityNum = newCount;
-                this.updateAbilityCountText();
-                if (this.State == AbilityState.None)
+                newState = curState;
+
+                if (timer > 0 ||
+                    curState != AbilityState.Ready)
                 {
-                    this.SetStatus(AbilityState.CoolDown);
+                    return false;
                 }
-            }
 
-            public override void ForceAbilityOff()
-            {
-                this.SetStatus(AbilityState.Ready);
-                this.baseCleanUp?.Invoke();
-            }
-
-            protected override void DoClick()
-            {
-                if (this.IsEnable() &&
-                    this.Timer <= 0f &&
-                    this.IsAbilityReady())
+                if (this.AbilityCount <= 0 && this.isReset)
                 {
-                    if (this.abilityNum <= 0 && this.isReset)
-                    {
-                        this.resetAction.Invoke();
-                        this.ResetCoolTimer();
-                    }
-                    else if (
-                        this.abilityNum > 0 && 
-                        this.UseAbility.Invoke())
-                    {
-                        if (this.HasCleanUp() && 
-                            this.baseCleanUp != null)
-                        {
-                            this.SetStatus(AbilityState.Activating);
-                        }
-                        else
-                        {
-                            this.reduceCountAction.Invoke();
-                            this.ResetCoolTimer();
-                        }
-                    }
+                    this.resetShield.Invoke();
+                    newState = AbilityState.CoolDown;
                 }
+                else if (
+                    this.AbilityCount > 0 &&
+                    this.featShield.Invoke())
+                {
+                    newState = AbilityState.CoolDown;
+                    reduceAbilityCount();
+                }
+
+                return true;
             }
 
-            protected override bool IsEnable() =>
-                this.CanUse.Invoke() && (this.abilityNum > 0 || this.isReset);
-
-            protected override void UpdateAbility()
+            public override AbilityState Update(AbilityState curState)
             {
-                this.isReset = this.resetCheck.Invoke();
-                if (this.isReset && this.abilityNum <= 0)
+                this.isReset = this.resetModeCheck.Invoke();
+                if (this.isReset && this.AbilityCount <= 0)
                 {
                     this.abilityCountText.gameObject.SetActive(false);
-                    this.SetButtonImg(this.resetSprite);
-                    this.SetButtonText(this.resetAbilityText);
+                    this.switcher.Switch(BodyGuardAbilityMode.Reset);
                 }
                 else
                 {
                     this.abilityCountText.gameObject.SetActive(true);
-                    this.SetButtonImg(this.defaultSprite);
-                    this.SetButtonText(this.defaultAbilityText);
+                    this.switcher.Switch(BodyGuardAbilityMode.FeatShield);
                 }
 
-                if (this.abilityNum <= 0 && !this.isReset)
+                if (this.isUpdate)
                 {
-                    this.SetStatus(AbilityState.None);
+                    this.isUpdate = false;
+                    return AbilityState.CoolDown;
                 }
-            }
 
-            private Action reduceAbilityCountAction()
-            {
-                return () =>
-                {
-                    --this.abilityNum;
-                    if (this.abilityCountText != null)
-                    {
-                        updateAbilityCountText();
-                    }
-                };
+                return this.AbilityCount <= 0 && !this.isReset ? AbilityState.None : curState;
             }
 
             private void updateAbilityCountText()
             {
-                this.abilityCountText.text = Translation.GetString("buttonCountText") + string.Format(
-                    Translation.GetString(OptionUnit.Shot.ToString()), this.abilityNum);
+                this.abilityCountText.text = string.Format(
+                    Translation.GetString(AbilityCountBehavior.DefaultButtonCountText),
+                    this.AbilityCount);
+            }
+
+            private void reduceAbilityCount()
+            {
+                --this.AbilityCount;
+                if (this.abilityCountText != null)
+                {
+                    updateAbilityCountText();
+                }
             }
 
         }
@@ -214,7 +191,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             BothPlayerName,
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.shieldButton;
             set
@@ -229,7 +206,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         private int shildNum;
         private float shieldRange;
-        private RoleAbilityButtonBase shieldButton;
+        private ExtremeAbilityButton shieldButton;
 
         private Sprite shildButtonImage;
 
@@ -509,24 +486,32 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.shildButtonImage = Loader.CreateSpriteFromResources(
                     Path.BodyGuardShield);
 
-            this.Button = new BodyGuardShieldButton(
-                Translation.GetString("shield"),
-                Translation.GetString("resetShield"),
-                UseAbility,
-                Reset,
-                IsAbilityUse,
-                IsResetMode,
-                this.shildButtonImage,
-                Loader.CreateSpriteFromResources(
-                    Path.BodyGuardResetShield),
-                null,
-                null,
+            this.Button = new ExtremeAbilityButton(
+                new BodyGuardAbilityBehavior(
+                    featShieldMode: new GraphicMode()
+                    {
+                        Graphic = new ButtonGraphic(
+                            Translation.GetString("shield"),
+                            this.shildButtonImage)
+                    },
+                    resetMode: new GraphicMode()
+                    {
+                        Graphic = new ButtonGraphic(
+                            Translation.GetString("resetShield"),
+                            Loader.CreateSpriteFromResources(
+                                Path.BodyGuardResetShield))
+                    },
+                    featShield: UseAbility,
+                    resetShield: Reset,
+                    canUse: IsAbilityUse,
+                    resetModeCheck: IsResetMode),
+                new RoleButtonActivator(),
                 KeyCode.F);
 
             this.RoleAbilityInit();
-            if (this.shieldButton is BodyGuardShieldButton button)
+            if (this.shieldButton.Behavior is BodyGuardAbilityBehavior behavior)
             {
-                button.UpdateAbilityCount(
+                behavior.SetAbilityCount(
                     OptionHolder.AllOption[GetRoleOptionId(
                         RoleAbilityCommonOption.AbilityCount)].GetValue());
             }
@@ -546,9 +531,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
             resetShield(playerId);
 
-            if (this.shieldButton is BodyGuardShieldButton button)
+            if (this.shieldButton.Behavior is BodyGuardAbilityBehavior behavior)
             {
-                button.UpdateAbilityCount(this.shildNum);
+                behavior.SetAbilityCount(this.shildNum);
             }
         }
 
@@ -638,11 +623,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 return true;
             }
 
-            if (this.shieldButton is BodyGuardShieldButton button)
+            if (this.shieldButton.Behavior is BodyGuardAbilityBehavior behavior)
             {
                 return
                     !this.awakeMeetingAbility ||
-                    button.CurAbilityNum <= 0 ||
+                    behavior.AbilityCount <= 0 ||
                     instance.TargetPlayerId == 253;
             }
             else
@@ -677,9 +662,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 }
                 featShield(player.PlayerId, targetPlayerId);
 
-                if (this.shieldButton is BodyGuardShieldButton button)
+                if (this.shieldButton.Behavior is BodyGuardAbilityBehavior behavior)
                 {
-                    button.UpdateAbilityCount(button.CurAbilityNum - 1);
+                    behavior.SetAbilityCount(behavior.AbilityCount - 1);
                 }
             }
             return meetingfeatShield;
@@ -734,11 +719,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     this.meetingText.gameObject.SetActive(false);
                 }
 
-                if (this.shieldButton is BodyGuardShieldButton button)
+                if (this.shieldButton.Behavior is BodyGuardAbilityBehavior behavior)
                 {
                     this.meetingText.text = string.Format(
                         Helper.Translation.GetString("meetingShieldState"),
-                        button.CurAbilityNum);
+                        behavior.AbilityCount);
                 }
                 this.meetingText.gameObject.SetActive(true);
             }
@@ -816,10 +801,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.awakeMeetingReport = this.meetingReportTaskGage <= 0.0f;
 
             this.RoleAbilityInit();
-            if (this.shieldButton is BodyGuardShieldButton button)
+            if (this.shieldButton?.Behavior is BodyGuardAbilityBehavior behavior)
             {
-                this.shildNum = button.CurAbilityNum;
-                button.UpdateAbilityCount(
+                this.shildNum = behavior.AbilityCount;
+                behavior.SetAbilityCount(
                     allOpt[GetRoleOptionId(
                         RoleAbilityCommonOption.AbilityCount)].GetValue());
             }
