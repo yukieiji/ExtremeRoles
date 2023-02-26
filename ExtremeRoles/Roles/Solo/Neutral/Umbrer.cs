@@ -236,19 +236,18 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.target = null;
         }
 
-        public bool IsUpgrade() => this.container.IsFirstStage(
-            this.tmpTarget == null ? byte.MaxValue : this.tmpTarget.PlayerId);
-
         public bool IsAbilityUse()
         {
-            this.isUpgradeVirus = this.IsUpgrade();
             this.tmpTarget = Helper.Player.GetClosestPlayerInRange(
                 CachedPlayerControl.LocalPlayer, this, this.range);
-            if (this.tmpTarget == null) { return false; }
+
+            bool isUpgrade = this.container.IsFirstStage(
+                this.tmpTarget == null ? byte.MaxValue : this.tmpTarget.PlayerId);
 
             this.mode.Switch(
-                this.isUpgradeVirus ? 
-                UmbrerMode.Upgrage : UmbrerMode.Feat);
+                isUpgrade ? UmbrerMode.Upgrage : UmbrerMode.Feat);
+
+            if (this.tmpTarget == null) { return false; }
 
             return this.IsCommonUse() && !this.container.IsFinalStage(this.tmpTarget.PlayerId);
         }
