@@ -126,7 +126,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             return this.IsCommonUse() && this.TargetPlayer != byte.MaxValue;
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             if (this.tellText != null)
             {
@@ -134,7 +134,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             if (this.tellText != null)
             {

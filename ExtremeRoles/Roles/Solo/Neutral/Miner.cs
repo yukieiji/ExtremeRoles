@@ -82,7 +82,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.mines.Clear();
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             if (this.killLogger != null)
             {
@@ -90,7 +90,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }

@@ -150,21 +150,17 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             if (CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
             {
-                IRoleResetMeeting meetingResetRole = multiAssignRole.AnotherRole as IRoleResetMeeting;
-                if (meetingResetRole != null)
+                if (multiAssignRole.AnotherRole is IRoleResetMeeting meetingResetRole)
                 {
                     meetingResetRole.ResetOnMeetingStart();
                 }
-
-                IRoleAbility abilityRole = multiAssignRole.AnotherRole as IRoleAbility;
-                if (abilityRole != null)
+                if (multiAssignRole.AnotherRole is IRoleAbility abilityRole)
                 {
-                    abilityRole.ResetOnMeetingStart();
+                    abilityRole.Button.OnMeetingStart();
                 }
             }
 
-            IRoleSpecialReset specialResetRole = multiAssignRole.AnotherRole as IRoleSpecialReset;
-            if (specialResetRole != null)
+            if (multiAssignRole.AnotherRole is IRoleSpecialReset specialResetRole)
             {
                 specialResetRole.AllReset(targetPlayer);
             }
@@ -203,15 +199,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             if (CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
             {
-                var meetingResetRole = targetRole as IRoleResetMeeting;
-                if (meetingResetRole != null)
+                if (targetRole is IRoleResetMeeting meetingResetRole)
                 {
                     meetingResetRole.ResetOnMeetingStart();
                 }
-                var abilityRole = targetRole as IRoleAbility;
-                if (abilityRole != null)
+                if (targetRole is IRoleAbility abilityRole)
                 {
-                    abilityRole.ResetOnMeetingStart();
+                    abilityRole.Button.OnMeetingStart();
                 }
             }
 
@@ -229,17 +223,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             // 会議開始と終了の処理を呼び出すことで能力を使用可能な状態でリセット
             if (CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
             {
-                var meetingResetRole = targetRole as IRoleResetMeeting;
-                if (meetingResetRole != null)
+                if (targetRole is IRoleResetMeeting meetingResetRole)
                 {
                     meetingResetRole.ResetOnMeetingStart();
                     meetingResetRole.ResetOnMeetingEnd();
                 }
-                var abilityRole = targetRole as IRoleAbility;
-                if (abilityRole != null)
+                if (targetRole is IRoleAbility abilityRole)
                 {
-                    abilityRole.ResetOnMeetingStart();
-                    abilityRole.ResetOnMeetingEnd();
+                    abilityRole.Button.OnMeetingStart();
+                    abilityRole.Button.OnMeetingEnd();
                 }
             }
         }
@@ -357,12 +349,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             return this.Target != null && this.IsCommonUse();
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             return;
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }
@@ -635,12 +627,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public bool IsAbilityUse() => this.IsCommonUse();
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             if (this.killFlash != null)
             {

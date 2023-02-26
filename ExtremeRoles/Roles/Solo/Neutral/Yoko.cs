@@ -122,7 +122,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 GetRoleOptionId(YokoOption.TrueInfoRate)].GetValue();
             this.timer = this.searchTime;
         }
-        public void ResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }

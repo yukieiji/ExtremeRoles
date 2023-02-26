@@ -147,7 +147,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 (hasPlayerTarget || hasDedBodyTarget);
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             if (this.eatButton != null)
             {
@@ -166,7 +166,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.isActivated = false;
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             foreach (Arrow arrow in this.deadBodyArrow.Values)
             {

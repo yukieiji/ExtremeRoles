@@ -363,7 +363,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
         }
 
-        public void ResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             if (this.isRunawayNextMeetingEnd)
             {

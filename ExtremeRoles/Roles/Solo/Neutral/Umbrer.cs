@@ -252,7 +252,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             return this.IsCommonUse() && !this.container.IsFinalStage(this.tmpTarget.PlayerId);
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             foreach (var (_, poolPlayer) in this.playerIcon)
             {
@@ -260,7 +260,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }
