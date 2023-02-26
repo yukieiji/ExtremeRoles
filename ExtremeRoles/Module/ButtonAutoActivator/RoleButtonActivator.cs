@@ -16,9 +16,10 @@ namespace ExtremeRoles.Module.ButtonAutoActivator
                     FastDestroyableSingleton<HudManager>.Instance.UseButton.isActiveAndEnabled
                 ) &&
                 localPlayer.Data != null &&
+                !localPlayer.Data.IsDead &&
                 MeetingHud.Instance == null &&
                 ExileController.Instance == null &&
-                !localPlayer.Data.IsDead;
+                IntroCutscene.Instance == null;
         }
     }
 }
