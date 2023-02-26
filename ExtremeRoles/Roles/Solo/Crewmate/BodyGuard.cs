@@ -46,7 +46,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             private bool isReset;
 
-            private GraphicSwitcher<BodyGuardAbilityMode, GraphicMode> switcher;
+            private GraphicSwitcher<BodyGuardAbilityMode> switcher;
 
             public BodyGuardAbilityBehavior(
                 GraphicMode featShieldMode,
@@ -63,7 +63,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 this.canUse = canUse;
                 this.resetModeCheck = resetModeCheck;
 
-                this.switcher = new GraphicSwitcher<BodyGuardAbilityMode, GraphicMode>(this);
+                this.switcher = new GraphicSwitcher<BodyGuardAbilityMode>(this);
                 this.switcher.Add(BodyGuardAbilityMode.Reset, resetMode);
                 this.switcher.Add(BodyGuardAbilityMode.FeatShield, featShieldMode);
             }

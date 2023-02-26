@@ -11,7 +11,7 @@ namespace ExtremeRoles.Module.AbilityModeSwitcher
     }
 
     public class GraphicAndActiveTimeSwitcher<SwithEnum> : 
-        GraphicSwitcher<SwithEnum, GraphicAndActiveTimeMode>
+        ModeSwitcherBase<SwithEnum, GraphicAndActiveTimeMode>
         where SwithEnum : struct, Enum
     {
         public GraphicAndActiveTimeSwitcher(AbilityBehaviorBase behavior) : base(behavior)
