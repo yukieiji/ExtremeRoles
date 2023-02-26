@@ -324,9 +324,7 @@ namespace ExtremeRoles.Roles.Solo.Host
                 roleManager.SetRole(targetPlayer, RoleTypes.Crewmate);
             }
 
-            IRoleAbility abilityRole = addRole as IRoleAbility;
-
-            if (abilityRole != null && 
+            if (addRole is IRoleAbility abilityRole && 
                 CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
             {
                 Logging.Debug("Try Create Ability NOW!!!");

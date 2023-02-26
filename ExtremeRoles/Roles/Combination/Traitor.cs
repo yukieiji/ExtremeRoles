@@ -335,13 +335,11 @@ namespace ExtremeRoles.Roles.Combination
 
             if (CachedPlayerControl.LocalPlayer.PlayerId == rolePlayerId)
             {
-                var abilityRole = this.AnotherRole as IRoleAbility;
-                if (abilityRole != null)
+                if (this.AnotherRole is IRoleAbility abilityRole)
                 {
-                    abilityRole.ResetOnMeetingStart();
+                    abilityRole.Button.OnMeetingStart();
                 }
-                var meetingResetRole = this.AnotherRole as IRoleResetMeeting;
-                if (meetingResetRole != null)
+                if (this.AnotherRole is IRoleResetMeeting meetingResetRole)
                 {
                     meetingResetRole.ResetOnMeetingStart();
                 }

@@ -404,9 +404,8 @@ namespace ExtremeRoles.Roles
 
                 SingleRoleBase addRole = role.Clone();
 
-                IRoleAbility abilityRole = addRole as IRoleAbility;
-
-                if (abilityRole != null && CachedPlayerControl.LocalPlayer.PlayerId == playerId)
+                if (addRole is IRoleAbility abilityRole && 
+                    CachedPlayerControl.LocalPlayer.PlayerId == playerId)
                 {
                     Helper.Logging.Debug("Try Create Ability NOW!!!");
                     abilityRole.CreateAbility();
@@ -496,9 +495,8 @@ namespace ExtremeRoles.Roles
 
             SingleRoleBase addRole = role.Clone();
 
-            IRoleAbility abilityRole = addRole as IRoleAbility;
-
-            if (abilityRole != null && CachedPlayerControl.LocalPlayer.PlayerId == playerId)
+            if (addRole is IRoleAbility abilityRole && 
+                CachedPlayerControl.LocalPlayer.PlayerId == playerId)
             {
                 Helper.Logging.Debug("Try Create Ability NOW!!!");
                 abilityRole.CreateAbility();
@@ -515,10 +513,7 @@ namespace ExtremeRoles.Roles
             {
                 SetNewAnothorRole(playerId, addRole);
 
-                IRoleAbility multiAssignAbilityRole = ((MultiAssignRoleBase)GameRole[
-                    playerId]) as IRoleAbility;
-
-                if (multiAssignAbilityRole != null &&
+                if (GameRole[playerId] is IRoleAbility multiAssignAbilityRole &&
                     CachedPlayerControl.LocalPlayer.PlayerId == playerId)
                 {
                     if (multiAssignAbilityRole.Button != null)

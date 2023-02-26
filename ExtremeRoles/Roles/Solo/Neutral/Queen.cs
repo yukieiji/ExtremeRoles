@@ -150,13 +150,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             if (CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
             {
-                if (multiAssignRole.AnotherRole is IRoleResetMeeting meetingResetRole)
-                {
-                    meetingResetRole.ResetOnMeetingStart();
-                }
                 if (multiAssignRole.AnotherRole is IRoleAbility abilityRole)
                 {
                     abilityRole.Button.OnMeetingStart();
+                }
+                if (multiAssignRole.AnotherRole is IRoleResetMeeting meetingResetRole)
+                {
+                    meetingResetRole.ResetOnMeetingStart();
                 }
             }
 
@@ -199,18 +199,17 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             if (CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
             {
-                if (targetRole is IRoleResetMeeting meetingResetRole)
-                {
-                    meetingResetRole.ResetOnMeetingStart();
-                }
                 if (targetRole is IRoleAbility abilityRole)
                 {
                     abilityRole.Button.OnMeetingStart();
                 }
+                if (targetRole is IRoleResetMeeting meetingResetRole)
+                {
+                    meetingResetRole.ResetOnMeetingStart();
+                }
             }
 
-            var specialResetRole = targetRole as IRoleSpecialReset;
-            if (specialResetRole != null)
+            if (targetRole is IRoleSpecialReset specialResetRole)
             {
                 specialResetRole.AllReset(targetPlayer);
             }
@@ -223,15 +222,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             // 会議開始と終了の処理を呼び出すことで能力を使用可能な状態でリセット
             if (CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
             {
-                if (targetRole is IRoleResetMeeting meetingResetRole)
-                {
-                    meetingResetRole.ResetOnMeetingStart();
-                    meetingResetRole.ResetOnMeetingEnd();
-                }
                 if (targetRole is IRoleAbility abilityRole)
                 {
                     abilityRole.Button.OnMeetingStart();
                     abilityRole.Button.OnMeetingEnd();
+                }
+                if (targetRole is IRoleResetMeeting meetingResetRole)
+                {
+                    meetingResetRole.ResetOnMeetingStart();
+                    meetingResetRole.ResetOnMeetingEnd();
                 }
             }
         }
