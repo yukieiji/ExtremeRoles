@@ -142,6 +142,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
                     this.switcher.Switch(this.isVentRemoveMode ?
                         CarpenterAbilityMode.RemoveVent : CarpenterAbilityMode.SetCamera);
+                    updateAbilityCountText();
                 }
 
                 if (this.isUpdate)
@@ -157,7 +158,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 this.abilityCountText.text = string.Format(
                     Translation.GetString("carpenterScrewNum"),
-                    this.AbilityCount);
+                    this.AbilityCount,
+                    this.isVentRemoveMode ? this.ventRemoveScrewNum : this.cameraSetScrewNum);
             }
 
             private bool screwCheck()
