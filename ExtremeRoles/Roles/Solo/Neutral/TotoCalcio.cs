@@ -7,8 +7,6 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
 
-using ExtremeRoles.Module.AbilityButton.Roles;
-
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
     public sealed class Totocalcio : SingleRoleBase, IRoleAbility, IRoleWinPlayerModifier
