@@ -15,7 +15,7 @@ namespace ExtremeRoles.Roles.Solo.Host
             CreateButton();
         }
 
-        public void ResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             this.resetCoolTime();
         }

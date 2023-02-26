@@ -1245,7 +1245,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             if (this.chargeTime != null)
             {
@@ -1266,7 +1266,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }

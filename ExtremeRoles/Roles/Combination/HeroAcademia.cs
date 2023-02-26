@@ -470,7 +470,7 @@ namespace ExtremeRoles.Roles.Combination
             this.cond == OneForAllCondition.FeatButtonAbility && 
             this.IsCommonUse();
 
-        public void ResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }

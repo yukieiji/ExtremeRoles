@@ -121,7 +121,7 @@ namespace ExtremeRoles.Roles.Combination
             }
         }
 
-        public void ResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             if (this.sameSharer != null)
             {

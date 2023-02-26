@@ -440,7 +440,7 @@ namespace ExtremeRoles.Roles.Combination
             render.transform.localScale *= new Vector2(0.625f, 0.625f);
         }
 
-        public void ResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             this.guesserUi = null;
         }

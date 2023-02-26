@@ -161,7 +161,7 @@ namespace ExtremeRoles.Roles.Combination
             upgradeAssistant();
         }
 
-        public void ResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             this.info.Clear();
         }

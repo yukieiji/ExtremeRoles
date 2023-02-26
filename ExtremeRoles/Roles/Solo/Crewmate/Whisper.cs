@@ -40,7 +40,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             false, true, false, false)
         { }
 
-        public void ResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }

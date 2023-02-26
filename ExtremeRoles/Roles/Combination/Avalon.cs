@@ -261,7 +261,7 @@ namespace ExtremeRoles.Roles.Combination
             this.updateShowIcon();
         }
 
-        public void ResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             this.updateShowIcon();
         }

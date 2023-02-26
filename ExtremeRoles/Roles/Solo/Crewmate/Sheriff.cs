@@ -287,7 +287,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 Translation.GetString(OptionUnit.Shot.ToString()), this.shootNum);
         }
 
-        public void ResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             if (this.killCountText != null)
             {

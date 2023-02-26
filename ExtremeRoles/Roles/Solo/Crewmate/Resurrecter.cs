@@ -144,7 +144,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
         }
 
-        public void ResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             if (this.isActiveMeetingCount &&
                 this.meetingCounter >= this.maxMeetingCount)

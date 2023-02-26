@@ -140,7 +140,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         }
 
-        public void ResetOnMeetingStart(GameData.PlayerInfo exiledPlayer = null)
+        public void ResetOnMeetingStart()
         {
             if (this.tellText != null)
             {
@@ -148,7 +148,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        public void ResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }
