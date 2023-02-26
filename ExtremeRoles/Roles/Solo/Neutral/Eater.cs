@@ -90,12 +90,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (this.Button.Behavior is AbilityCountBehavior behaviour)
             {
                 int abilityNum = (int)allOpt[GetRoleOptionId(
-                RoleAbilityCommonOption.AbilityCount)].GetValue();
+                    RoleAbilityCommonOption.AbilityCount)].GetValue();
                 int halfPlayerNum = GameData.Instance.PlayerCount / 2;
 
+                behaviour.SetCountText("eaterWinNum");
                 behaviour.SetAbilityCount(
                     halfPlayerNum < abilityNum ? halfPlayerNum : abilityNum);
-                behaviour.SetCountText("eaterWinNum");
 
                 this.modeFactory = new GraphicAndActiveTimeSwitcher<EaterAbilityMode>(behaviour);
                 this.modeFactory.Add(EaterAbilityMode.DeadBody, deadBodyMode);
@@ -110,7 +110,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                         Time = behaviour.ActiveTime,
                     }
                 );
-
+                this.Button.OnMeetingEnd();
             }
         }
 
