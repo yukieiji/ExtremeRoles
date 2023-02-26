@@ -72,6 +72,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 this.AbilityCount = newAbilityNum;
                 this.isUpdate = true;
+                updateAbilityCountText();
             }
 
             public override void AbilityOff()

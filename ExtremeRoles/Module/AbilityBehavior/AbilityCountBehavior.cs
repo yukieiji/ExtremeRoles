@@ -120,6 +120,7 @@ namespace ExtremeRoles.Module.AbilityBehavior
         {
             this.AbilityCount = newAbilityNum;
             this.isUpdate = true;
+            updateAbilityCountText();
         }
 
         public void SetButtonTextFormat(string newTextFormat)
