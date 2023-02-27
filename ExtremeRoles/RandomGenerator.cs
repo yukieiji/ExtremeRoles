@@ -7,15 +7,28 @@ namespace ExtremeRoles
 {
     public static class RandomGenerator
     {
-        public static RNGBase Instance;
+        public static RNGBase Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    createGlobalRandomGenerator(OptionHolder.AllOption[
+                        (int)OptionHolder.CommonOptionKey.UseStrongRandomGen].GetValue());
+                }
+                return instance;
+            }
+        }
         private static bool prevValue = false;
         private static int prevSelection = 0;
+
+        private static RNGBase instance;
 
         public static void Initialize()
         {
             bool useStrongGen = OptionHolder.AllOption[
                 (int)OptionHolder.CommonOptionKey.UseStrongRandomGen].GetValue();
-            if (Instance != null)
+            if (instance != null)
             {
                 if (useStrongGen != prevValue)
                 {
@@ -27,7 +40,7 @@ namespace ExtremeRoles
                         (int)OptionHolder.CommonOptionKey.UsePrngAlgorithm].GetValue();
                     if (prevSelection != selection)
                     {
-                        Instance = getAditionalPrng(selection);
+                        instance = getAditionalPrng(selection);
                         UnityEngine.Random.InitState(CreateStrongRandomSeed());
                         prevSelection = selection;
                     }
@@ -51,13 +64,13 @@ namespace ExtremeRoles
             {
                 int selection = OptionHolder.AllOption[
                     (int)OptionHolder.CommonOptionKey.UsePrngAlgorithm].GetValue();
-                Instance = getAditionalPrng(selection);
+                instance = getAditionalPrng(selection);
                 UnityEngine.Random.InitState(CreateStrongRandomSeed());
                 prevSelection = selection;
             }
             else
             {
-                Instance = new SystemRandomWrapper(0, 0);
+                instance = new SystemRandomWrapper(0, 0);
                 UnityEngine.Random.InitState(createNormalRandomSeed());
                 prevSelection = -1;
             }

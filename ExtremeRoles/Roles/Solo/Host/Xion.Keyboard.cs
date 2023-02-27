@@ -1,4 +1,7 @@
 ﻿using UnityEngine;
+using System.Linq;
+
+using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Roles.Solo.Host
 {
@@ -28,10 +31,10 @@ namespace ExtremeRoles.Roles.Solo.Host
             // HotFix : BlackOut AmongUs
             if (Input.GetKeyDown(functionCall) &&
                 isLocalGame() &&
-                Helper.GameSystem.IsLobby &&
+                GameSystem.IsLobby &&
                 IsAllPlyerDummy())
             {
-                spawnDummy();
+                GameSystem.SpawnDummyPlayer($"XionDummy_{randomString(10)}");
             }
         }
 
@@ -134,6 +137,12 @@ namespace ExtremeRoles.Roles.Solo.Host
                 }
             }
             return true;
+        }
+
+        private static string randomString(int length)
+        {
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[RandomGenerator.Instance.Next(s.Length)]).ToArray());
         }
     }
 }

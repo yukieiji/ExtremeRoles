@@ -36,34 +36,7 @@ namespace ExtremeRoles.Patches
             // Spawn dummys
             if ((Input.GetKeyDown(KeyCode.F)) && GameSystem.IsLobby)
             {
-                PlayerControl playerControl = UnityEngine.Object.Instantiate(
-                    AmongUsClient.Instance.PlayerPrefab);
-                playerControl.PlayerId = (byte)GameData.Instance.GetAvailableId();
-
-                bots.Add(playerControl);
-                GameData.Instance.AddPlayer(playerControl);
-                AmongUsClient.Instance.Spawn(playerControl, -2, InnerNet.SpawnFlags.None);
-
-                var hatMng = FastDestroyableSingleton<HatManager>.Instance;
-                var rng = RandomGenerator.GetTempGenerator();
-
-                int hat = rng.Next(hatMng.allHats.Count);
-                int pet = rng.Next(hatMng.allPets.Count);
-                int skin = rng.Next(hatMng.allSkins.Count);
-                int visor = rng.Next(hatMng.allVisors.Count);
-                int color = rng.Next(Palette.PlayerColors.Length);
-
-                playerControl.transform.position = PlayerControl.LocalPlayer.transform.position;
-                playerControl.GetComponent<DummyBehaviour>().enabled = true;
-                playerControl.NetTransform.enabled = false;
-                playerControl.SetName(new string(Enumerable.Repeat(chars, 10)
-                    .Select(s => s[rng.Next(s.Length)]).ToArray()));
-                playerControl.SetColor(color);
-                playerControl.SetHat(hatMng.allHats[hat].ProdId, color);
-                playerControl.SetPet(hatMng.allPets[pet].ProdId, color);
-                playerControl.SetVisor(hatMng.allVisors[visor].ProdId, color);
-                playerControl.SetSkin(hatMng.allSkins[skin].ProdId, color);
-                GameData.Instance.RpcSetTasks(playerControl.PlayerId, new byte[0]);
+                GameSystem.SpawnDummyPlayer();
             }
 
             // Terminate round
