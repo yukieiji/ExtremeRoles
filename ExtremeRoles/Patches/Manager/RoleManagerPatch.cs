@@ -55,11 +55,14 @@ namespace ExtremeRoles.Patches.Manager
                     il2CppListPlayer.Add(player.Data);
                 }
 
-                // ThisIsObjectInstanceNullError
                 GameManager.Instance.LogicRoleSelection.AssignRolesForTeam(
                     il2CppListPlayer, currentOption, RoleTeamTypes.Impostor,
                     adjustedNumImpostors,
-                    new Il2CppSystem.Nullable<RoleTypes>(RoleTypes.Impostor));
+                    new Il2CppSystem.Nullable<RoleTypes>()
+                    { 
+                        value = RoleTypes.Impostor,
+                        has_value = true
+                    });
             }
         }
         public static void Postfix()
