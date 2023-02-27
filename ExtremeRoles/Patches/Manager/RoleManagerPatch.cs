@@ -36,11 +36,9 @@ namespace ExtremeRoles.Patches.Manager
                         assignData.GetControlId()));
                 assignData.RemvePlayer(loaclPlayer);
 
-            loaclPlayer.RpcSetRole(RoleTypes.Crewmate);
-            loaclPlayer.Data.IsDead = true;
-
             if (Xion.IsAllPlyerDummy())
             {
+                // ダミープレイヤーは役職がアサインされてないので無理やりアサインする
                 List<PlayerControl> allPlayer = assignData.NeedRoleAssignPlayer;
 
                 var gameOption = GameOptionsManager.Instance;
@@ -50,7 +48,7 @@ namespace ExtremeRoles.Patches.Manager
 
                 var il2CppListPlayer = new Il2CppSystem.Collections.Generic.List<GameData.PlayerInfo>();
 
-                foreach (PlayerControl player in allPlayer )
+                foreach (PlayerControl player in allPlayer)
                 {
                     il2CppListPlayer.Add(player.Data);
                 }
@@ -63,7 +61,24 @@ namespace ExtremeRoles.Patches.Manager
                         value = RoleTypes.Impostor,
                         has_value = true
                     });
+                GameManager.Instance.LogicRoleSelection.AssignRolesForTeam(
+                    il2CppListPlayer, currentOption, RoleTeamTypes.Crewmate,
+                    int.MaxValue,
+                    new Il2CppSystem.Nullable<RoleTypes>()
+                    {
+                        value = RoleTypes.Crewmate,
+                        has_value = true
+                    });
+
+                // アサイン済みにする
+                foreach (PlayerControl player in allPlayer)
+                {
+                    player.roleAssigned = true;
+                }
             }
+
+            loaclPlayer.RpcSetRole(RoleTypes.Crewmate);
+            loaclPlayer.Data.IsDead = true;
         }
         public static void Postfix()
         {
