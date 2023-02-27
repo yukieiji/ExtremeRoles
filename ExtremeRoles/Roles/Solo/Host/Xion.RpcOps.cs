@@ -384,12 +384,13 @@ namespace ExtremeRoles.Roles.Solo.Host
             AmongUsClient.Instance.Spawn(playerControl, -2, InnerNet.SpawnFlags.None);
 
             var hatManager = FastDestroyableSingleton<HatManager>.Instance;
+            var rng = RandomGenerator.GetTempGenerator();
 
-            int hat = RandomGenerator.Instance.Next(hatManager.allHats.Count);
-            int pet = RandomGenerator.Instance.Next(hatManager.allPets.Count);
-            int skin = RandomGenerator.Instance.Next(hatManager.allSkins.Count);
-            int visor = RandomGenerator.Instance.Next(hatManager.allVisors.Count);
-            int color = RandomGenerator.Instance.Next(Palette.PlayerColors.Length);
+            int hat = rng.Next(hatManager.allHats.Count);
+            int pet = rng.Next(hatManager.allPets.Count);
+            int skin = rng.Next(hatManager.allSkins.Count);
+            int visor = rng.Next(hatManager.allVisors.Count);
+            int color = rng.Next(Palette.PlayerColors.Length);
 
             playerControl.transform.position = CachedPlayerControl.LocalPlayer.transform.position;
             playerControl.GetComponent<DummyBehaviour>().enabled = true;
