@@ -192,7 +192,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             IOption parentOps)
         {
             this.CreateAbilityCountOption(
-                parentOps, 2, 5, 3.0f);
+                parentOps, 2, 7, 3.0f);
             CreateFloatOption(
                 FencerOption.ResetTime,
                 5.0f, 2.5f, 30.0f, 0.5f,
