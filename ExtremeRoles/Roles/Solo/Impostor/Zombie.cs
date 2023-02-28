@@ -11,7 +11,6 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.State;
-using ExtremeRoles.Module.AbilityButton.Roles;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -36,7 +35,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public RoleTypes NoneAwakeRole => RoleTypes.Impostor;
 
-        public RoleAbilityButtonBase Button { get; set; }
+        public ExtremeAbilityButton Button { get; set; }
 
         public enum ZombieOption
         {
@@ -113,7 +112,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             if (this.resurrectText != null)
             {
@@ -121,7 +120,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd()
         {
             return;
         }
