@@ -12,7 +12,7 @@ using ExtremeSkins.Module;
 
 namespace ExtremeSkins
 {
-    public class CreatorModeManager
+    public sealed class CreatorModeManager
     {
         public enum Mode
         {
@@ -22,7 +22,7 @@ namespace ExtremeSkins
             DisableReady
         }
 
-        public static CreatorModeManager Instance;
+        public static CreatorModeManager Instance { get; private set; }
 
         public bool IsEnable => this.creatorModeConfig.Value;
         public string StatusString => this.statusString;

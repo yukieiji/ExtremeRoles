@@ -29,7 +29,7 @@ namespace ExtremeRoles
                     Logging.Debug($"Cosmic Id:{pet.ProdId}");
                 }
             }
-            if (Input.GetKeyDown(KeyCode.F12))
+            if (Input.GetKeyDown(KeyCode.F11))
             {
                 if (Roles.ExtremeRoleManager.GetLocalPlayerRole() is Roles.API.Interface.IRoleAbility abilityRole)
                 {
