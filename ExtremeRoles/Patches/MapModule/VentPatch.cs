@@ -169,7 +169,8 @@ namespace ExtremeRoles.Patches.MapModule
                 localPlayer.Data,
                 out canUse, out couldUse);
 
-            if (!canUse) { return false; }; // No need to execute the native method as using is disallowed anyways
+            // No need to execute the native method as using is disallowed anyways
+            if (!canUse || localPlayer.walkingToVent) { return false; }; 
 
             bool isEnter = !localPlayer.inVent;
 
