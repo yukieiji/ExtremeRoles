@@ -88,7 +88,8 @@ namespace ExtremeRoles.Patches.MapModule
 
             couldUse = (
                 !playerInfo.IsDead &&
-                (player.inVent || roleCouldUse) && 
+                roleCouldUse &&
+                (!(player.MustCleanVent(__instance.Id)) || (player.inVent && Vent.currentVent)) && 
                 ExtremeGameModeManager.Instance.Usable.CanUseVent(role) &&
                 (player.CanMove || player.inVent)
             );
@@ -99,19 +100,29 @@ namespace ExtremeRoles.Patches.MapModule
                     couldUse && 
                     playerInfo.Role.CanUse(__instance.Cast<IUsable>());
             }
-         
+
+            if (CachedShipStatus.Instance.Systems.TryGetValue(
+                    SystemTypes.Ventilation, out ISystemType systemType))
+            {
+                VentilationSystem ventilationSystem = systemType.TryCast<VentilationSystem>();
+                if (ventilationSystem != null && 
+                    ventilationSystem.IsVentCurrentlyBeingCleaned(__instance.Id))
+                {
+                    couldUse = false;
+                }
+            }
+
             canUse = couldUse;
             if (canUse)
             {
-                Vector2 truePosition = player.GetTruePosition();
+                Vector2 playerPos = player.Collider.bounds.center;
                 Vector3 position = __instance.transform.position;
-                num = Vector2.Distance(truePosition, position);
+                num = Vector2.Distance(playerPos, position);
 
                 canUse &= (
                     num <= usableDistance &&
                     !PhysicsHelpers.AnythingBetween(
-                        truePosition,
-                        position,
+                        player.Collider, playerPos, position,
                         Constants.ShipOnlyMask, false));
             }
 
