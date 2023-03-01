@@ -109,6 +109,7 @@ namespace
         remove(bepInExPath / "config" / "BepInEx.cfg");
 
         remove_all(rootPath / "mono");
+        remove_all(rootPath / "dotnet");
 
         remove(rootPath / "changelog.txt");
         remove(rootPath / "doorstop_config.ini");
