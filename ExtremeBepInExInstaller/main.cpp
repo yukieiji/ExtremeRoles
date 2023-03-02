@@ -14,7 +14,7 @@ using namespace std::filesystem;
 namespace
 {
     
-    constexpr string defaultLang = "0";
+    const string defaultLang = "0";
 
     const map<string, map<string, wstring>> printString(
         {   
@@ -103,7 +103,7 @@ namespace
         path bepInExPath = rootPath / "BepInEx";
 
         remove_all(bepInExPath / "core");
-        remove_all(bepInExPath / "unhollowed");
+        remove_all(bepInExPath / "interop");
         remove_all(bepInExPath / "unity-libs");
 
         remove(bepInExPath / "config" / "BepInEx.cfg");
