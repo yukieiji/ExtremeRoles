@@ -52,7 +52,7 @@ namespace ExtremeRoles
 
             AddComponent<ExtremeRolePluginBehavior>();
 
-            if (BepInExUpdater.UpdateRequired)
+            if (BepInExUpdater.IsUpdateRquire())
             {
                 AddComponent<BepInExUpdater>();
             }

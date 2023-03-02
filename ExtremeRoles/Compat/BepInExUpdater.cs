@@ -15,17 +15,26 @@ using UnityEngine.Networking;
 
 using AmongUs.Data;
 
+using SemanticVersion = SemanticVersioning.Version;
+
 
 namespace ExtremeRoles.Compat
 {
     public sealed class BepInExUpdater : MonoBehaviour
     {
-        public static bool UpdateRequired => false;
-            // Paths.BepInExVersion < SemanticVersioning.Version.Parse(minimumBepInExVersion);
-
         private const string minimumBepInExVersion = "6.0.0-be.667";
         private const string bepInExDownloadURL = "https://builds.bepinex.dev/projects/bepinex_be/667/BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.667%2B6b500b3.zip";
         private const string exeFileName = "ExtremeBepInExInstaller.exe";
+
+        public static bool IsUpdateRquire()
+        {
+            string rawBepInExVersionStr = MetadataHelper.GetAttributes<
+                AssemblyInformationalVersionAttribute>(typeof(Paths).Assembly)[0].InformationalVersion;
+            int suffixIndex = rawBepInExVersionStr.IndexOf('+');
+            return 
+                SemanticVersion.Parse(rawBepInExVersionStr.Substring(0, suffixIndex)) <
+                SemanticVersion.Parse(minimumBepInExVersion);
+        }
 
         public void Awake()
         {
