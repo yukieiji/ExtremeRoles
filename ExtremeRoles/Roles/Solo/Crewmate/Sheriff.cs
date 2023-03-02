@@ -283,8 +283,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
         private void updateKillCountText()
         {
-            this.killCountText.text = Translation.GetString("buttonCountText") + string.Format(
-                Translation.GetString(OptionUnit.Shot.ToString()), this.shootNum);
+            this.killCountText.text = string.Format(
+                Translation.GetString("buttonCountText"), this.shootNum);
         }
 
         public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
