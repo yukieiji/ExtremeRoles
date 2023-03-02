@@ -14,7 +14,7 @@ using namespace std::filesystem;
 namespace
 {
     
-    const string defaultLang = "0";
+    constexpr string defaultLang = "0";
 
     const map<string, map<string, wstring>> printString(
         {   
@@ -30,7 +30,7 @@ namespace
             }
         });
 
-    wstring GetTimeStmp()
+    const wstring GetTimeStmp()
     {
         time_t t = time(nullptr);
         struct tm localTime;
@@ -109,6 +109,7 @@ namespace
         remove(bepInExPath / "config" / "BepInEx.cfg");
 
         remove_all(rootPath / "mono");
+        remove_all(rootPath / "dotnet");
 
         remove(rootPath / "changelog.txt");
         remove(rootPath / "doorstop_config.ini");

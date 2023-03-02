@@ -17,7 +17,7 @@ namespace ExtremeRoles.Patches
         // 2022/08/14:Xionは最大20倍速で動けるのでとりあえず100を突っ込んどく
         private const float maxModSpeed = 100.0f;
 
-        private static float playerBaseSpeed = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
+        private static float playerBaseSpeed => GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
             FloatOptionNames.PlayerSpeedMod);
 
         public static bool Prefix(
