@@ -3,6 +3,7 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -284,7 +285,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private void updateKillCountText()
         {
             this.killCountText.text = string.Format(
-                Translation.GetString("buttonCountText"), this.shootNum);
+                Translation.GetString(
+                    AbilityCountBehavior.DefaultButtonCountText), this.shootNum);
         }
 
         public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
