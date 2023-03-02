@@ -20,8 +20,8 @@ namespace ExtremeRoles.Compat
 {
     public sealed class BepInExUpdater : MonoBehaviour
     {
-        public static bool UpdateRequired => 
-            Paths.BepInExVersion < SemanticVersioning.Version.Parse(minimumBepInExVersion);
+        public static bool UpdateRequired => false;
+            // Paths.BepInExVersion < SemanticVersioning.Version.Parse(minimumBepInExVersion);
 
         private const string minimumBepInExVersion = "6.0.0-be.665";
         private const string bepInExDownloadURL = "https://builds.bepinex.dev/projects/bepinex_be/665/BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.665%2B6aabdb5.zip";
