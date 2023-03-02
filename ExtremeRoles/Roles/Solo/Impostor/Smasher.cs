@@ -60,14 +60,16 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             var role = ExtremeRoleManager.GetLocalPlayerRole();
             var targetPlayerRole = ExtremeRoleManager.GameRole[this.targetPlayerId];
-            var prevTarget = Player.GetPlayerControlById(this.targetPlayerId);
+            var target = Player.GetPlayerControlById(this.targetPlayerId);
+
+            if (target == null) { return false; }
 
             bool canKill = role.TryRolePlayerKillTo(
-                killer, prevTarget);
+                killer, target);
             if (!canKill) { return false; }
 
             canKill = targetPlayerRole.TryRolePlayerKilledFrom(
-                prevTarget, killer);
+                target, killer);
             if (!canKill) { return false; }
 
             var multiAssignRole = role as MultiAssignRoleBase;
@@ -76,7 +78,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 if (multiAssignRole.AnotherRole != null)
                 {
                     canKill = multiAssignRole.AnotherRole.TryRolePlayerKillTo(
-                        killer, prevTarget);
+                        killer, target);
                     if (!canKill) { return false; }
                 }
             }
@@ -87,33 +89,29 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 if (multiAssignRole.AnotherRole != null)
                 {
                     canKill = multiAssignRole.AnotherRole.TryRolePlayerKilledFrom(
-                        prevTarget, killer);
+                        target, killer);
                     if (!canKill) { return false; }
                 }
             }
 
-            PlayerControl newTarget = prevTarget;
-
             if (Crewmate.BodyGuard.TryRpcKillGuardedBodyGuard(
-                    killer.PlayerId, prevTarget.PlayerId))
+                    killer.PlayerId, target.PlayerId))
             {
                 featKillPenalty(killer);
                 return true;
             }
-
-            byte useAnimation = byte.MaxValue;
-
-            if (newTarget.PlayerId != prevTarget.PlayerId)
+            else if (Patches.Button.KillButtonDoClickPatch.IsMissMuderKill(
+                killer, target))
             {
-                useAnimation = byte.MinValue;
+                return false;
             }
 
             this.prevKillCool = PlayerControl.LocalPlayer.killTimer;
 
             Player.RpcUncheckMurderPlayer(
                 killer.PlayerId,
-                newTarget.PlayerId,
-                useAnimation);
+                target.PlayerId,
+                byte.MaxValue);
 
             featKillPenalty(killer);
             return true;

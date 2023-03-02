@@ -47,6 +47,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             PlayerControl killer = Helper.Player.GetPlayerControlById(outburstTargetPlayerId);
             PlayerControl target = Helper.Player.GetPlayerControlById(killTargetPlayerId);
 
+            if (killer is null || target is null) { return; }
+
             byte killerId = killer.PlayerId;
             byte targetId = target.PlayerId;
 
@@ -85,18 +87,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 }
             }
 
-            if (AmongUsClient.Instance.IsGameOver) { return; }
-            if (killer == null ||
-                killer.Data == null ||
-                killer.Data.IsDead ||
-                killer.Data.Disconnected) { return; }
-            if (target == null ||
-                target.Data == null ||
-                target.Data.IsDead ||
-                target.Data.Disconnected) { return; }
-
             if (Crewmate.BodyGuard.TryRpcKillGuardedBodyGuard(
-                    killer.PlayerId, target.PlayerId))
+                    killer.PlayerId, target.PlayerId) ||
+                Patches.Button.KillButtonDoClickPatch.IsMissMuderKill(
+                    killer, target))
             {
                 return;
             }
