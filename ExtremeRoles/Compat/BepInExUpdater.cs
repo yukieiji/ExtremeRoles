@@ -7,9 +7,9 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using BepInEx;
-using BepInEx.IL2CPP;
-using BepInEx.IL2CPP.Utils;
-using UnhollowerBaseLib.Attributes;
+using BepInEx.Unity.IL2CPP;
+using BepInEx.Unity.IL2CPP.Utils;
+using Il2CppInterop.Runtime.Attributes;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -20,10 +20,11 @@ namespace ExtremeRoles.Compat
 {
     public sealed class BepInExUpdater : MonoBehaviour
     {
-        public static bool UpdateRequired => typeof(IL2CPPChainloader).Assembly.GetName().Version < Version.Parse(minimumBepInExVersion);
+        public static bool UpdateRequired => 
+            Paths.BepInExVersion < SemanticVersioning.Version.Parse(minimumBepInExVersion);
 
-        private const string minimumBepInExVersion = "6.0.0.565";
-        private const string bepInExDownloadURL = "https://builds.bepinex.dev/projects/bepinex_be/565/BepInEx_UnityIL2CPP_x86_265107c_6.0.0-be.565.zip";
+        private const string minimumBepInExVersion = "6.0.0-be.665";
+        private const string bepInExDownloadURL = "https://builds.bepinex.dev/projects/bepinex_be/665/BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.665%2B6aabdb5.zip";
         private const string exeFileName = "ExtremeBepInExInstaller.exe";
 
         public void Awake()

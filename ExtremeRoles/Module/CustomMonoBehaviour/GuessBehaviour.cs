@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 using UnityEngine;
-using UnhollowerBaseLib.Attributes;
+using Il2CppInterop.Runtime.Attributes;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;

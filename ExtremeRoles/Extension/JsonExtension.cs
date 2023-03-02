@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 
-using UnhollowerBaseLib;
+using Il2CppInterop.Runtime.InteropTypes;
 
 namespace ExtremeRoles.Extension.Json
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
-using UnhollowerBaseLib.Attributes;
+using Il2CppInterop.Runtime.Attributes;
 
 
 using ExtremeRoles.Module.RoleAssign;

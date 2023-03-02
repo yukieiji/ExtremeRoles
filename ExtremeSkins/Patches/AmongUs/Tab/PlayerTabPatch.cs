@@ -1,6 +1,6 @@
 ﻿using ExtremeSkins.Helper;
 using HarmonyLib;
-using UnhollowerBaseLib;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
 using UnityEngine;
 
