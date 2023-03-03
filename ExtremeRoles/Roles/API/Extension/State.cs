@@ -18,23 +18,23 @@ namespace ExtremeRoles.Roles.API.Extension.State
             killCoolOffset = killCoolOffset + offset;
         }
 
-        public static bool TryGetVisonMod(this SingleRoleBase role,
-            out float vison, out bool isApplyEnvironmentVision)
+        public static bool TryGetVisionMod(this SingleRoleBase role,
+            out float vision, out bool isApplyEnvironmentVision)
         {
-            vison = role.Vison;
+            vision = role.Vision;
             isApplyEnvironmentVision = role.IsApplyEnvironmentVision;
-            bool isHasOterVison = role.HasOtherVison;
+            bool isHasOterVision = role.HasOtherVision;
 
             if (isNotMultiAssign(role, out MultiAssignRoleBase multiAssignRole))
             {
-                return isHasOterVison; 
+                return isHasOterVision; 
             }
             else
             {
-                float otherVison = multiAssignRole.AnotherRole.Vison;
-                vison = vison > otherVison ? vison : otherVison;
+                float otherVision = multiAssignRole.AnotherRole.Vision;
+                vision = vision > otherVision ? vision : otherVision;
                 isApplyEnvironmentVision = role.IsApplyEnvironmentVision || multiAssignRole.AnotherRole.IsApplyEnvironmentVision;
-                return isHasOterVison || multiAssignRole.AnotherRole.HasOtherVison;
+                return isHasOterVision || multiAssignRole.AnotherRole.HasOtherVision;
             }
         }
 

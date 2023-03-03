@@ -130,20 +130,20 @@ namespace ExtremeRoles.Roles.Combination
                     {
                         if (this.hiddeRole is IRoleAbility abilityRole)
                         {
-                            abilityRole.Button.SetActive(false);
+                            abilityRole.Button.SetButtonShow(false);
                         }
                         return;
                     }
                 }
                 this.awake = true;
-                this.HasOtherVison = this.awakeHasOtherVision;
+                this.HasOtherVision = this.awakeHasOtherVision;
                 if (this.hiddeRole != null)
                 {
                     this.AnotherRole = this.hiddeRole;
                     this.CanHasAnotherRole = true;
                     if (this.AnotherRole is IRoleAbility abilityRole)
                     {
-                        abilityRole.Button.SetActive(false);
+                        abilityRole.Button.SetButtonShow(true);
                     }
                     this.hiddeRole = null;
                 }
@@ -262,17 +262,17 @@ namespace ExtremeRoles.Roles.Combination
             this.awakeTaskGage = (float)OptionHolder.AllOption[
                GetRoleOptionId(BuddyOption.AwakeTaskGage)].GetValue() / 100.0f;
 
-            this.awakeHasOtherVision = this.HasOtherVison;
+            this.awakeHasOtherVision = this.HasOtherVision;
 
             if (this.awakeTaskGage <= 0.0f)
             {
                 this.awake = true;
-                this.HasOtherVison = this.awakeHasOtherVision;
+                this.HasOtherVision = this.awakeHasOtherVision;
             }
             else
             {
                 this.awake = false;
-                this.HasOtherVison = false;
+                this.HasOtherVision = false;
             }
         }
 

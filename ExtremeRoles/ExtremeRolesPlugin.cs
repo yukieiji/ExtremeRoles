@@ -2,7 +2,7 @@
 
 using BepInEx;
 using BepInEx.Configuration;
-using BepInEx.IL2CPP;
+using BepInEx.Unity.IL2CPP;
 
 using HarmonyLib;
 using ExtremeRoles.Compat;
@@ -52,7 +52,7 @@ namespace ExtremeRoles
 
             AddComponent<ExtremeRolePluginBehavior>();
 
-            if (BepInExUpdater.UpdateRequired)
+            if (BepInExUpdater.IsUpdateRquire())
             {
                 AddComponent<BepInExUpdater>();
             }

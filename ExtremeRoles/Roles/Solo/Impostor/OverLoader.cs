@@ -5,7 +5,6 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -52,7 +51,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         private bool isAwakedHasOtherKillRange;
 
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.overLoadButton;
             set
@@ -61,7 +60,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        private RoleAbilityButtonBase overLoadButton;
+        private ExtremeAbilityButton overLoadButton;
 
 
         public OverLoader() : base(
@@ -87,8 +86,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void CreateAbility()
         {
             this.CreatePassiveAbilityButton(
-                Translation.GetString("overLoad"),
-                Translation.GetString("downLoad"),
+                "overLoad", "downLoad",
                 Loader.CreateSpriteFromResources(
                    Path.OverLoaderOverLoad),
                 Loader.CreateSpriteFromResources(
@@ -99,12 +97,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public bool IsAbilityUse() => 
             this.IsAwake && this.IsCommonUse();
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             if (IsAwake)
             {
@@ -135,7 +133,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 if (this.Button != null)
                 {
-                    this.Button.SetActive(false);
+                    this.Button.SetButtonShow(false);
                 }
 
                 int impNum = 0;
@@ -152,8 +150,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 if (this.awakeImpNum >= impNum && 
                     this.killCount >= this.awakeKillCount)
                 {
+                    this.Button.SetButtonShow(true);
                     this.isAwake = true;
-                    this.HasOtherVison = this.isAwakedHasOtherVision;
+                    this.HasOtherVision = this.isAwakedHasOtherVision;
                     this.HasOtherKillCool = this.isAwakedHasOtherKillCool;
                     this.HasOtherKillRange = this.isAwakedHasOtherKillRange;
                 }
@@ -309,9 +308,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.isAwakedHasOtherKillCool = true;
             this.isAwakedHasOtherKillRange = false;
 
-            if (this.HasOtherVison)
+            if (this.HasOtherVision)
             {
-                this.HasOtherVison = false;
+                this.HasOtherVision = false;
                 this.isAwakedHasOtherVision = true;
             }
 
@@ -332,7 +331,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.awakeKillCount == 0)
             {
                 this.isAwake = true;
-                this.HasOtherVison = this.isAwakedHasOtherVision;
+                this.HasOtherVision = this.isAwakedHasOtherVision;
                 this.HasOtherKillCool = this.isAwakedHasOtherKillCool;
                 this.HasOtherKillRange = this.isAwakedHasOtherKillRange;
             }

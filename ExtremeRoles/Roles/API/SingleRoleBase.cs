@@ -21,7 +21,7 @@ namespace ExtremeRoles.Roles.API
         public bool HasTask = true;
         public bool UseVent = false;
         public bool UseSabotage = false;
-        public bool HasOtherVison = false;
+        public bool HasOtherVision = false;
         public bool HasOtherKillCool = false;
         public bool HasOtherKillRange = false;
         public bool IsApplyEnvironmentVision = true;
@@ -31,7 +31,7 @@ namespace ExtremeRoles.Roles.API
         public bool IsBoost = false;
         public float MoveSpeed = 1.0f;
 
-        public float Vison = 0f;
+        public float Vision = 0f;
         public float KillCoolTime = 0f;
         public int KillRange = 1;
 
@@ -125,7 +125,7 @@ namespace ExtremeRoles.Roles.API
             var baseOption = GameOptionsManager.Instance.CurrentGameOptions;
             var allOption = OptionHolder.AllOption;
 
-            this.Vison = this.IsImpostor() ? 
+            this.Vision = this.IsImpostor() ? 
                 baseOption.GetFloat(FloatOptionNames.ImpostorLightMod) : 
                 baseOption.GetFloat(FloatOptionNames.CrewLightMod);
             
@@ -135,12 +135,12 @@ namespace ExtremeRoles.Roles.API
             this.IsApplyEnvironmentVision = !this.IsImpostor();
 
 
-            this.HasOtherVison = allOption[
-                GetRoleOptionId(RoleCommonOption.HasOtherVison)].GetValue();
-            if (this.HasOtherVison)
+            this.HasOtherVision = allOption[
+                GetRoleOptionId(RoleCommonOption.HasOtherVision)].GetValue();
+            if (this.HasOtherVision)
             {
-                this.Vison = allOption[
-                    GetRoleOptionId(RoleCommonOption.Vison)].GetValue();
+                this.Vision = allOption[
+                    GetRoleOptionId(RoleCommonOption.Vision)].GetValue();
                 this.IsApplyEnvironmentVision = allOption[
                     GetRoleOptionId(RoleCommonOption.ApplyEnvironmentVisionEffect)].GetValue();
             }

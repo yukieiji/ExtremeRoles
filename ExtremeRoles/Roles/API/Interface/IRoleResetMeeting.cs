@@ -2,7 +2,7 @@
 {
     public interface IRoleResetMeeting
     {
-        public void ResetOnMeetingEnd();
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null);
 
         public void ResetOnMeetingStart();
     }

@@ -83,14 +83,21 @@ namespace ExtremeRoles.Patches.MapModule
                     __instance, playerInfo, roleCouldUse);
                 return false;
             }
-
-            var usableDistance = __instance.UsableDistance;
+            
+            bool inVent = player.inVent;
 
             couldUse = (
                 !playerInfo.IsDead &&
-                (player.inVent || roleCouldUse) && 
+                roleCouldUse &&
+                (
+                    !role.HasTask() && !(player.MustCleanVent(__instance.Id)
+                ) 
+                || 
+                (
+                    inVent && Vent.currentVent == __instance
+                )) && 
                 ExtremeGameModeManager.Instance.Usable.CanUseVent(role) &&
-                (player.CanMove || player.inVent)
+                (player.CanMove || inVent)
             );
 
             if (role.TryGetVanillaRoleId(out _))
@@ -99,19 +106,29 @@ namespace ExtremeRoles.Patches.MapModule
                     couldUse && 
                     playerInfo.Role.CanUse(__instance.Cast<IUsable>());
             }
-         
+
+            if (CachedShipStatus.Instance.Systems.TryGetValue(
+                    SystemTypes.Ventilation, out ISystemType systemType))
+            {
+                VentilationSystem ventilationSystem = systemType.TryCast<VentilationSystem>();
+                if (ventilationSystem != null && 
+                    ventilationSystem.IsVentCurrentlyBeingCleaned(__instance.Id))
+                {
+                    couldUse = false;
+                }
+            }
+
             canUse = couldUse;
             if (canUse)
             {
-                Vector2 truePosition = player.GetTruePosition();
+                Vector2 playerPos = player.Collider.bounds.center;
                 Vector3 position = __instance.transform.position;
-                num = Vector2.Distance(truePosition, position);
+                num = Vector2.Distance(playerPos, position);
 
                 canUse &= (
-                    num <= usableDistance &&
+                    num <= __instance.UsableDistance &&
                     !PhysicsHelpers.AnythingBetween(
-                        truePosition,
-                        position,
+                        player.Collider, playerPos, position,
                         Constants.ShipOnlyMask, false));
             }
 
@@ -158,7 +175,8 @@ namespace ExtremeRoles.Patches.MapModule
                 localPlayer.Data,
                 out canUse, out couldUse);
 
-            if (!canUse) { return false; }; // No need to execute the native method as using is disallowed anyways
+            // No need to execute the native method as using is disallowed anyways
+            if (!canUse || localPlayer.walkingToVent) { return false; }; 
 
             bool isEnter = !localPlayer.inVent;
 

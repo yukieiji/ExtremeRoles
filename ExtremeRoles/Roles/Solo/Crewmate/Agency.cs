@@ -1,11 +1,8 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 
-using Hazel;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
@@ -30,7 +27,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             Common
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.takeTaskButton;
             set
@@ -44,7 +41,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         private int maxTakeTask;
         private float takeTaskRange;
-        private RoleAbilityButtonBase takeTaskButton;
+        private ExtremeAbilityButton takeTaskButton;
 
         public Agency() : base(
             ExtremeRoleId.Agency,
@@ -90,7 +87,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
-                Translation.GetString("takeTask"),
+                "takeTask",
                 Loader.CreateSpriteFromResources(
                     Path.AgencyTakeTask));
             this.Button.SetLabelToCrewmate();
@@ -200,12 +197,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             return this.IsCommonUse() && this.TargetPlayer != byte.MaxValue;
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             return;
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }

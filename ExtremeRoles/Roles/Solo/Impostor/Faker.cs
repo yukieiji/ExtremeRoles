@@ -6,7 +6,6 @@ using PowerTools;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -307,7 +306,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             Player,
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.createFake;
             set
@@ -316,7 +315,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        private RoleAbilityButtonBase createFake;
+        private ExtremeAbilityButton createFake;
 
         private Sprite deadBodyDummy;
         private Sprite playerDummy;
@@ -370,7 +369,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.playerDummyStr = Translation.GetString("dummyPlayer");
 
             this.CreateNormalAbilityButton(
-                this.deadBodyDummyStr,
+                "dummyDeadBody",
                 this.deadBodyDummy);
         }
 
@@ -378,21 +377,19 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
             bool isPlayerDummy = Input.GetKey(KeyCode.LeftShift);
 
-            this.Button.SetButtonImage(
-                isPlayerDummy ? 
-                this.playerDummy : this.deadBodyDummy);
-            this.Button.SetButtonText(
-                isPlayerDummy ? this.playerDummyStr : this.deadBodyDummyStr);
+            this.Button.Behavior.SetGraphic(
+                isPlayerDummy ? this.playerDummyStr : this.deadBodyDummyStr,
+                isPlayerDummy ? this.playerDummy : this.deadBodyDummy);
 
             return this.IsCommonUse();
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             return;
         }

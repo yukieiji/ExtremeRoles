@@ -6,7 +6,7 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.GhostRoles;
+using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Performance;
@@ -23,7 +23,6 @@ namespace ExtremeRoles.GhostRoles.Crewmate
         public DeadBody CarringBody;
 
         private float range;
-        private bool isAbilityReport;
         private GameData.PlayerInfo targetBody;
 
         public Poltergeist() : base(
@@ -88,15 +87,17 @@ namespace ExtremeRoles.GhostRoles.Crewmate
 
         public override void CreateAbility()
         {
-            this.Button = new AbilityCountButton(
+            this.Button = GhostRoleAbilityFactory.CreateCountAbility(
                 AbilityType.PoltergeistMoveDeadbody,
-                this.UseAbility,
-                this.isPreCheck,
-                this.isAbilityUse,
                 Resources.Loader.CreateSpriteFromResources(
                     Resources.Path.CarrierCarry),
-                rpcHostCallAbility: abilityCall,
-                abilityCleanUp: cleanUp);
+                this.isReportAbility(),
+                this.isPreCheck,
+                this.isAbilityUse,
+                this.UseAbility,
+                abilityCall, true,
+                null, cleanUp,
+                cleanUp, KeyCode.F);
             this.ButtonInit();
             this.Button.SetLabelToCrewmate();
         }
@@ -107,8 +108,6 @@ namespace ExtremeRoles.GhostRoles.Crewmate
         {
             this.range = OptionHolder.AllOption[
                 GetRoleOptionId(Option.Range)].GetValue();
-            this.isAbilityReport = OptionHolder.AllOption[
-                this.GetRoleOptionId(GhostRoleOption.IsReportAbility)].GetValue();
         }
 
         protected override void OnMeetingEndHook()

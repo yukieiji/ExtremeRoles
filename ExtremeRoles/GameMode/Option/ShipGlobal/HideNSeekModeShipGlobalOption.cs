@@ -8,7 +8,6 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
     {
         public int HeadOptionId => (int)GlobalOption.DisableVent;
 
-        public bool IsEnableSabtage => false;
         public bool IsEnableImpostorVent => false;
 
         public bool IsRandomMap { get; private set; }

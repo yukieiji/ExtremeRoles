@@ -24,7 +24,7 @@ namespace ExtremeRoles.Patches
             ShipStatus __instance,
             [HarmonyArgument(0)] GameData.PlayerInfo playerInfo)
         {
-            return VisonComputer.Instance.IsVanillaVisonAndGetVison(
+            return VisionComputer.Instance.IsVanillaVisionAndGetVision(
                 __instance, playerInfo, out __result);
         }
 

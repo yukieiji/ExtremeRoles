@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using UnityEngine;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
+using ExtremeRoles.Module.AbilityModeSwitcher;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
@@ -100,139 +100,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         }
 
-        private sealed class UmbrerVirusAbility : RoleAbilityButtonBase
+        public enum UmbrerMode : byte
         {
-            public bool IsUpgradeMode => this.isUpgradeVirus;
-
-            private Sprite setVirusSprite;
-            private string setVirusButtonText;
-            private float setVirusTime;
-
-            private Sprite upgradeVirusSprite;
-            private string upgradeVirusButtonText;
-            private float upgradeVirusTime;
-
-            private bool isUpgradeVirus;
-            private Func<bool> upgradeVirusFunc;
-
-            public UmbrerVirusAbility(
-                string setVirusButtonText,
-                string upgradeVirusButtonText,
-                Sprite setVirusSprite,
-                Sprite upgradeVirusSprite,
-                float setVirusTime,
-                float upgradeVirusTime,
-                Func<bool> upgradeVirusModeCheck,
-                Func<bool> ability,
-                Func<bool> canUse,
-                Action abilityCleanUp = null,
-                Func<bool> abilityCheck = null,
-                KeyCode hotkey = KeyCode.F
-                ) : base(
-                    setVirusButtonText,
-                    ability, canUse,
-                    setVirusSprite,
-                    abilityCleanUp,
-                    abilityCheck,
-                    hotkey)
-            {
-
-                this.setVirusSprite = setVirusSprite;
-                this.setVirusButtonText = setVirusButtonText;
-                this.setVirusTime = setVirusTime;
-
-                this.upgradeVirusSprite = upgradeVirusSprite;
-                this.upgradeVirusButtonText = upgradeVirusButtonText;
-                this.upgradeVirusTime = upgradeVirusTime;
-
-                this.isUpgradeVirus = false;
-                this.upgradeVirusFunc = upgradeVirusModeCheck;
-            }
-
-            protected override void AbilityButtonUpdate()
-            {
-                this.isUpgradeVirus = this.upgradeVirusFunc();
-                if (this.isUpgradeVirus)
-                {
-                    this.ButtonSprite = this.upgradeVirusSprite;
-                    this.ButtonText = this.upgradeVirusButtonText;
-                    this.AbilityActiveTime = this.upgradeVirusTime;
-                }
-                else
-                {
-                    this.ButtonSprite = this.setVirusSprite;
-                    this.ButtonText = this.setVirusButtonText;
-                    this.AbilityActiveTime = this.setVirusTime;
-                }
-
-                if (this.CanUse())
-                {
-                    this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.EnabledColor;
-                    this.Button.graphic.material.SetFloat("_Desat", 0f);
-                }
-                else
-                {
-                    this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.DisabledClear;
-                    this.Button.graphic.material.SetFloat("_Desat", 1f);
-                }
-
-                if (this.Timer >= 0)
-                {
-                    bool abilityOn = this.IsHasCleanUp() && IsAbilityOn;
-
-                    if (abilityOn || (
-                            !CachedPlayerControl.LocalPlayer.PlayerControl.inVent &&
-                            CachedPlayerControl.LocalPlayer.PlayerControl.moveable))
-                    {
-                        this.Timer -= Time.deltaTime;
-                    }
-                    if (abilityOn)
-                    {
-                        if (!this.AbilityCheck())
-                        {
-                            this.Timer = 0;
-                            this.IsAbilityOn = false;
-                        }
-                    }
-                }
-
-                if (this.Timer <= 0 && this.IsHasCleanUp() && IsAbilityOn)
-                {
-                    this.IsAbilityOn = false;
-                    this.Button.cooldownTimerText.color = Palette.EnabledColor;
-                    this.CleanUp();
-                    this.ResetCoolTimer();
-                }
-
-                Button.SetCoolDown(
-                    this.Timer,
-                    (this.IsHasCleanUp() && this.IsAbilityOn) ? this.AbilityActiveTime : this.CoolTime);
-            }
-
-            protected override void OnClickEvent()
-            {
-                if (this.CanUse() &&
-                    this.Timer < 0f &&
-                    !this.IsAbilityOn)
-                {
-                    Button.graphic.color = this.DisableColor;
-
-                    if (this.UseAbility())
-                    {
-                        if (this.IsHasCleanUp())
-                        {
-                            this.Timer = this.AbilityActiveTime;
-                            Button.cooldownTimerText.color = this.TimerOnColor;
-                            this.IsAbilityOn = true;
-                        }
-                        else
-                        {
-                            this.ResetCoolTimer();
-                        }
-                    }
-                }
-            }
+            Feat,
+            Upgrage,
         }
+
         public enum UmbrerOption
         {
             Range,
@@ -241,7 +114,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             KeepUpgradedVirus
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.madmateAbilityButton;
             set
@@ -250,7 +123,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
         }
 
-        private RoleAbilityButtonBase madmateAbilityButton;
+        private ExtremeAbilityButton madmateAbilityButton;
         private InfectedContainer container;
         private PlayerControl tmpTarget;
         private PlayerControl target;
@@ -262,6 +135,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private Dictionary<byte, PoolablePlayer> playerIcon;
         private GridArrange grid;
 
+        public bool isUpgradeVirus;
+        private GraphicAndActiveTimeSwitcher<UmbrerMode> mode;
 
         public Umbrer() : base(
             ExtremeRoleId.Umbrer,
@@ -275,21 +150,32 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             var allOpt = OptionHolder.AllOption;
 
-            this.Button = new UmbrerVirusAbility(
-                Helper.Translation.GetString("featVirus"),
-                Helper.Translation.GetString("upgradeVirus"),
-                Loader.CreateSpriteFromResources(
-                    Path.UmbrerFeatVirus),
-                Loader.CreateSpriteFromResources(
-                    Path.UmbrerUpgradeVirus),
-                (float)allOpt[GetRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime)].GetValue(),
-                (float)allOpt[GetRoleOptionId(UmbrerOption.UpgradeVirusTime)].GetValue(),
-                IsUpgrade,
-                UseAbility,
-                IsAbilityUse,
-                CleanUp,
-                IsAbilityCheck);
-            abilityInit();
+            GraphicAndActiveTimeMode featVirusMode = new GraphicAndActiveTimeMode()
+            {
+                Graphic = new Module.AbilityBehavior.ButtonGraphic(
+                    Translation.GetString("featVirus"),
+                    Loader.CreateSpriteFromResources(
+                        Path.UmbrerFeatVirus)),
+                Time = (float)allOpt[GetRoleOptionId(
+                    RoleAbilityCommonOption.AbilityActiveTime)].GetValue(),
+            };
+            GraphicAndActiveTimeMode upgradeVirusMode = new GraphicAndActiveTimeMode()
+            {
+                Graphic = new Module.AbilityBehavior.ButtonGraphic(
+                    Translation.GetString("upgradeVirus"),
+                    Loader.CreateSpriteFromResources(
+                    Path.UmbrerUpgradeVirus)),
+                Time = (float)allOpt[GetRoleOptionId(
+                    UmbrerOption.UpgradeVirusTime)].GetValue(),
+            };
+
+            this.CreateNormalAbilityButton(
+                featVirusMode.Graphic.Text, featVirusMode.Graphic.Img,
+                IsAbilityCheck, CleanUp, ForceCleanUp);
+
+            this.mode = new GraphicAndActiveTimeSwitcher<UmbrerMode>(this.Button.Behavior);
+            this.mode.Add(UmbrerMode.Feat, featVirusMode);
+            this.mode.Add(UmbrerMode.Upgrage, upgradeVirusMode);
         }
 
         public bool UseAbility()
@@ -327,14 +213,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
 
         public bool IsAbilityCheck()
-        {
-            PlayerControl checkPlayer = Helper.Player.GetClosestPlayerInRange(
-                CachedPlayerControl.LocalPlayer, this, this.range);
-
-            if (checkPlayer == null) { return false; }
-
-            return checkPlayer.PlayerId == this.target.PlayerId;
-        }
+            => Helper.Player.IsPlayerInRangeAndDrawOutLine(
+                CachedPlayerControl.LocalPlayer,
+                this.target, this, this.range);
 
         public void CleanUp()
         {
@@ -350,20 +231,28 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.target = null;
         }
 
-
-        public bool IsUpgrade() => this.container.IsFirstStage(
-            this.tmpTarget == null ? byte.MaxValue : this.tmpTarget.PlayerId);
+        public void ForceCleanUp()
+        {
+            this.target = null;
+        }
 
         public bool IsAbilityUse()
         {
             this.tmpTarget = Helper.Player.GetClosestPlayerInRange(
                 CachedPlayerControl.LocalPlayer, this, this.range);
+
+            bool isUpgrade = this.container.IsFirstStage(
+                this.tmpTarget == null ? byte.MaxValue : this.tmpTarget.PlayerId);
+
+            this.mode.Switch(
+                isUpgrade ? UmbrerMode.Upgrage : UmbrerMode.Feat);
+
             if (this.tmpTarget == null) { return false; }
 
             return this.IsCommonUse() && !this.container.IsFinalStage(this.tmpTarget.PlayerId);
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             foreach (var (_, poolPlayer) in this.playerIcon)
             {
@@ -371,7 +260,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }
@@ -459,12 +348,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             CreateFloatOption(
                 UmbrerOption.InfectRange,
-                0.8f, 0.1f, 3.0f, 0.1f,
+                1.4f, 0.1f, 3.6f, 0.1f,
                 parentOps);
 
             CreateFloatOption(
                 UmbrerOption.KeepUpgradedVirus,
-                10.0f, 2.5f, 30.0f, 0.1f,
+                10.0f, 2.5f, 360.0f, 0.5f,
                 parentOps,
                 format: OptionUnit.Second);
         }
@@ -484,7 +373,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             this.isFetch = false;
 
-            abilityInit();
+            this.RoleAbilityInit();
         }
         private bool isInfectOtherPlayer(PlayerControl sourcePlayer)
         {
@@ -521,17 +410,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 }
             }
             return false;
-        }
-
-        private void abilityInit()
-        {
-            if (this.Button == null) { return; }
-
-            var allOps = OptionHolder.AllOption;
-            this.Button.SetAbilityCoolTime(
-                allOps[GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)].GetValue());
-            this.Button.SetAbilityActiveTime(1.0f);
-            this.Button.ResetCoolTimer();
         }
 
         private void updateShowIcon(bool update = false)

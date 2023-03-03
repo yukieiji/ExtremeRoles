@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 
+using AmongUs.GameOptions;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -24,7 +24,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             ReloadCoolTimeReduceRatePerHideStock,
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         { 
             get => this.reloadButton;
             set
@@ -33,7 +33,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        private RoleAbilityButtonBase reloadButton;
+        private ExtremeAbilityButton reloadButton;
         private TMPro.TextMeshPro reduceKillCoolText;
         
         private int stock;
@@ -63,7 +63,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void CreateAbility()
         {
             this.CreateNormalAbilityButton(
-                Translation.GetString("reload"),
+                "reload",
                 Loader.CreateSpriteFromResources(
                     Path.AssaultMasterReload));
         }
@@ -87,7 +87,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.stock > 0 &&
             PlayerControl.LocalPlayer.killTimer > 0;
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             if (this.reloadButton != null && this.timerStock > 0)
             {
@@ -99,14 +99,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.curReloadCoolTime = Mathf.Clamp(
                     newCoolTime, 0.01f, this.defaultReloadCoolTime);
 
-                this.reloadButton.SetAbilityCoolTime(
+                this.reloadButton.Behavior.SetCoolTime(
                     this.curReloadCoolTime);
-                
-                this.reloadButton.ResetCoolTimer();
+
+                this.reloadButton.OnMeetingEnd();
             }
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             this.KillCoolTime = this.defaultKillCool;
             if (this.reduceKillCoolText != null)
@@ -117,7 +117,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public bool UseAbility()
         {
-            this.reloadButton.SetAbilityCoolTime(
+            this.reloadButton.Behavior.SetCoolTime(
                 this.defaultReloadCoolTime);
 
             this.curReloadCoolTime = this.defaultReloadCoolTime;
@@ -154,7 +154,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 this.reduceKillCoolText = GameObject.Instantiate(
                     FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
-                    this.Button.GetTransform());
+                    this.Button.Transform);
                 this.reduceKillCoolText.enableWordWrapping = false;
                 this.reduceKillCoolText.transform.localScale = Vector3.one * 0.5f;
                 this.reduceKillCoolText.transform.localPosition += new Vector3(-0.05f, 0.60f, 0);
@@ -194,7 +194,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             
             if (this.isResetCoolTimeWhenKill && this.Button != null)
             {
-                this.Button.ResetCoolTimer();
+                this.Button.OnMeetingEnd();
             }
 
             return true;

@@ -3,15 +3,18 @@ using System.Collections.Generic;
 
 using UnityEngine;
 using Hazel;
+using TMPro;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
+using ExtremeRoles.Module.AbilityBehavior;
+using ExtremeRoles.Module.AbilityModeSwitcher;
+using ExtremeRoles.Module.ButtonAutoActivator;
+using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.ExtremeShipStatus;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
@@ -22,182 +25,137 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         IRoleUpdate,
         IRoleSpecialReset
     {
-        public class BodyGuardShieldButton : RoleAbilityButtonBase
+        public sealed class BodyGuardAbilityBehavior : AbilityBehaviorBase
         {
-            public int CurAbilityNum
+            public int AbilityCount { get; private set; }
+
+            private bool isUpdate;
+
+            private TextMeshPro abilityCountText;
+
+            private Func<bool> featShield;
+            private Func<bool> canUse;
+            private Action resetShield;
+            private Func<bool> resetModeCheck;
+
+            private bool isReset;
+
+            private GraphicSwitcher<BodyGuardAbilityMode> switcher;
+
+            public BodyGuardAbilityBehavior(
+                GraphicMode featShieldMode,
+                GraphicMode resetMode,
+                Func<bool> featShield,
+                Action resetShield,
+                Func<bool> canUse,
+                Func<bool> resetModeCheck) : base(
+                    resetMode.Graphic.Text,
+                    resetMode.Graphic.Img)
             {
-                get => this.abilityNum;
+                this.resetShield = resetShield;
+                this.featShield = featShield;
+                this.canUse = canUse;
+                this.resetModeCheck = resetModeCheck;
+
+                this.switcher = new GraphicSwitcher<BodyGuardAbilityMode>(this);
+                this.switcher.Add(BodyGuardAbilityMode.Reset, resetMode);
+                this.switcher.Add(BodyGuardAbilityMode.FeatShield, featShieldMode);
             }
 
-            private int abilityNum = 0;
-            private TMPro.TextMeshPro abilityCountText = null;
-
-            private Func<bool> resetCheck;
-            private Action resetAction;
-            private string resetAbilityText;
-            private Sprite resetSprite;
-
-            private string defaultAbilityText;
-            private Sprite defaultSprite;
-
-            public BodyGuardShieldButton(
-                string shieldAbilityText,
-                string resetAbilityText,
-                Func<bool> shieldAbility,
-                Action resetAbility,
-                Func<bool> canUse,
-                Func<bool> resetCheckFunc,
-                Sprite sprite,
-                Sprite resetSprite,
-                Action abilityCleanUp = null,
-                Func<bool> abilityCheck = null,
-                KeyCode hotkey = KeyCode.F
-                ) : base(
-                    shieldAbilityText,
-                    shieldAbility,
-                    canUse,
-                    sprite,
-                    abilityCleanUp,
-                    abilityCheck,
-                    hotkey)
+            public void SetAbilityCount(int newAbilityNum)
             {
-                this.abilityCountText = GameObject.Instantiate(
-                    this.Button.cooldownTimerText,
-                    this.Button.cooldownTimerText.transform.parent);
+                this.AbilityCount = newAbilityNum;
+                this.isUpdate = true;
                 updateAbilityCountText();
+            }
+
+            public override void AbilityOff()
+            { }
+
+            public override void ForceAbilityOff()
+            { }
+
+            public override void Initialize(ActionButton button)
+            {
+                var coolTimerText = button.cooldownTimerText;
+
+                this.abilityCountText = UnityEngine.Object.Instantiate(
+                    coolTimerText, coolTimerText.transform.parent);
                 this.abilityCountText.enableWordWrapping = false;
                 this.abilityCountText.transform.localScale = Vector3.one * 0.5f;
                 this.abilityCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
-
-                this.resetAction = resetAbility;
-                
-                this.resetCheck = resetCheckFunc;
-                this.resetAbilityText = resetAbilityText;
-                this.resetSprite = resetSprite;
-
-                this.defaultAbilityText = shieldAbilityText;
-                this.defaultSprite = sprite;
+                updateAbilityCountText();
             }
 
-            public void UpdateAbilityCount(int newCount)
+            public override bool IsCanAbilityActiving() => true;
+
+            public override bool IsUse() =>
+                this.canUse.Invoke() && (this.AbilityCount > 0 || this.isReset);
+
+            public override bool TryUseAbility(
+                float timer, AbilityState curState, out AbilityState newState)
             {
-                this.abilityNum = newCount;
-                this.updateAbilityCountText();
+                newState = curState;
+
+                if (timer > 0 ||
+                    curState != AbilityState.Ready)
+                {
+                    return false;
+                }
+
+                if (this.AbilityCount <= 0 && this.isReset)
+                {
+                    this.resetShield.Invoke();
+                    newState = AbilityState.CoolDown;
+                }
+                else if (
+                    this.AbilityCount > 0 &&
+                    this.featShield.Invoke())
+                {
+                    newState = AbilityState.CoolDown;
+                    reduceAbilityCount();
+                }
+
+                return true;
             }
 
-            protected override void AbilityButtonUpdate()
+            public override AbilityState Update(AbilityState curState)
             {
-
-                bool isReset = this.resetCheck();
-                if (isReset)
+                this.isReset = this.resetModeCheck.Invoke();
+                if (this.isReset || this.AbilityCount <= 0)
                 {
                     this.abilityCountText.gameObject.SetActive(false);
-                    this.ButtonSprite = this.resetSprite;
-                    this.ButtonText = this.resetAbilityText;
+                    this.switcher.Switch(BodyGuardAbilityMode.Reset);
                 }
                 else
                 {
                     this.abilityCountText.gameObject.SetActive(true);
-                    this.ButtonSprite = this.defaultSprite;
-                    this.ButtonText = this.defaultAbilityText;
+                    this.switcher.Switch(BodyGuardAbilityMode.FeatShield);
                 }
 
-                if (this.CanUse() && 
-                    (this.abilityNum > 0 || isReset))
+                if (this.isUpdate)
                 {
-                    this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.EnabledColor;
-                    this.Button.graphic.material.SetFloat("_Desat", 0f);
-                }
-                else
-                {
-                    this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.DisabledClear;
-                    this.Button.graphic.material.SetFloat("_Desat", 1f);
-                }
-                if (this.abilityNum == 0 && !isReset)
-                {
-                    Button.SetCoolDown(this.Timer, this.CoolTime);
-                    return;
-                }
-                if (this.Timer >= 0)
-                {
-                    bool abilityOn = this.IsHasCleanUp() && IsAbilityOn;
-
-                    if (abilityOn || (
-                            !CachedPlayerControl.LocalPlayer.PlayerControl.inVent &&
-                            CachedPlayerControl.LocalPlayer.PlayerControl.moveable))
-                    {
-                        this.Timer -= Time.deltaTime;
-                    }
-                    if (abilityOn)
-                    {
-                        if (!this.AbilityCheck())
-                        {
-                            this.Timer = 0;
-                            this.IsAbilityOn = false;
-                        }
-                    }
+                    this.isUpdate = false;
+                    return AbilityState.CoolDown;
                 }
 
-                if (this.Timer <= 0 && this.IsHasCleanUp() && IsAbilityOn)
-                {
-                    this.IsAbilityOn = false;
-                    this.Button.cooldownTimerText.color = Palette.EnabledColor;
-                    this.CleanUp();
-                    this.reduceAbilityCount();
-                    this.ResetCoolTimer();
-                }
-
-                if (this.abilityNum > 0 || isReset)
-                {
-                    Button.SetCoolDown(
-                        this.Timer,
-                        (this.IsHasCleanUp() && this.IsAbilityOn) ? this.AbilityActiveTime : this.CoolTime);
-                }
-            }
-
-            protected override void OnClickEvent()
-            {
-                if (this.CanUse() &&
-                    this.Timer < 0f &&
-                    !this.IsAbilityOn)
-                {
-                    Button.graphic.color = this.DisableColor;
-
-                    if (this.abilityNum <= 0 || this.resetCheck())
-                    {
-                        this.resetAction();
-                        this.ResetCoolTimer();
-                    }
-                    else if (this.abilityNum > 0 && this.UseAbility())
-                    {
-                        if (this.IsHasCleanUp())
-                        {
-                            this.Timer = this.AbilityActiveTime;
-                            Button.cooldownTimerText.color = this.TimerOnColor;
-                            this.IsAbilityOn = true;
-                        }
-                        else
-                        {
-                            this.reduceAbilityCount();
-                            this.ResetCoolTimer();
-                        }
-                    }
-                }
-            }
-
-            private void reduceAbilityCount()
-            {
-                --this.abilityNum;
-                if (this.abilityCountText != null)
-                {
-                    updateAbilityCountText();
-                }
+                return this.AbilityCount <= 0 && !this.isReset ? AbilityState.None : curState;
             }
 
             private void updateAbilityCountText()
             {
-                this.abilityCountText.text = Translation.GetString("buttonCountText") + string.Format(
-                    Translation.GetString(OptionUnit.Shot.ToString()), this.abilityNum);
+                this.abilityCountText.text = string.Format(
+                    Translation.GetString(AbilityCountBehavior.DefaultButtonCountText),
+                    this.AbilityCount);
+            }
+
+            private void reduceAbilityCount()
+            {
+                --this.AbilityCount;
+                if (this.abilityCountText != null)
+                {
+                    updateAbilityCountText();
+                }
             }
 
         }
@@ -207,6 +165,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ShieldRange,
             FeatMeetingAbilityTaskGage,
             FeatMeetingReportTaskGage,
+            IsReportPlayerName,
+            ReportPlayerMode,
+            IsBlockMeetingKill,
         }
 
         public enum BodyGuardRpcOps : byte
@@ -218,7 +179,20 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ReportMeeting
         }
 
-        public RoleAbilityButtonBase Button
+        public enum BodyGuardReportPlayerNameMode
+        {
+            GuardedPlayerNameOnly,
+            BodyGuardPlayerNameOnly,
+            BothPlayerName,
+        }
+
+        public enum BodyGuardAbilityMode
+        {
+            FeatShield,
+            Reset
+        }
+
+        public ExtremeAbilityButton Button
         {
             get => this.shieldButton;
             set
@@ -227,11 +201,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
         }
 
-        public byte TargetPlayer = byte.MaxValue;
+        public static bool IsBlockMeetingKill { get; private set; } = true;
+
+        private byte targetPlayer = byte.MaxValue;
 
         private int shildNum;
         private float shieldRange;
-        private RoleAbilityButtonBase shieldButton;
+        private ExtremeAbilityButton shieldButton;
 
         private Sprite shildButtonImage;
 
@@ -240,7 +216,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private bool awakeMeetingReport;
         private float meetingReportTaskGage;
 
-        private bool reportNextMeeting = false;
+        private bool isReportWithPlayerName;
+        private BodyGuardReportPlayerNameMode reportMode;
+        private string reportStr = string.Empty;
 
         private TMPro.TextMeshPro meetingText;
 
@@ -333,19 +311,30 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     break;
                 case BodyGuardRpcOps.CoverDead:
                     byte killerPlayerId = reader.ReadByte();
+                    byte prevTargetPlayerId = reader.ReadByte();
                     byte targetBodyGuardPlayerId = reader.ReadByte();
-                    coverDead(killerPlayerId, targetBodyGuardPlayerId);
+                    coverDead(killerPlayerId, prevTargetPlayerId, targetBodyGuardPlayerId);
                     break;
                 case BodyGuardRpcOps.AwakeMeetingReport:
                     awakeReportMeeting(reader.ReadByte());
                     break;
                 case BodyGuardRpcOps.ReportMeeting:
-                    reportMeeting();
+                    reportMeeting(reader.ReadString());
                     break;
                 default:
                     break;
             }
 
+        }
+
+        public static bool TryRpcKillGuardedBodyGuard(byte killerPlayerId, byte targetPlayerId)
+        {
+            if (!TryGetShiledPlayerId(targetPlayerId, out byte bodyGuardPlayerId))
+            {
+                return false;
+            }
+
+            return rpcTryKillBodyGuard(killerPlayerId, targetPlayerId, bodyGuardPlayerId);
         }
 
         public static bool TryGetShiledPlayerId(
@@ -354,8 +343,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             return shilded.TryGetBodyGuardPlayerId(targetPlayerId, out bodyGuardPlayerId);
         }
 
-        public static bool RpcTryKillBodyGuard(
-            byte killerPlayerId, byte targetBodyGuard)
+        private static bool rpcTryKillBodyGuard(
+            byte killerPlayerId, byte prevTargetPlayerId, byte targetBodyGuard)
         {
             PlayerControl bodyGuardPlayer = Player.GetPlayerControlById(targetBodyGuard);
             if (bodyGuardPlayer == null ||
@@ -371,9 +360,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             {
                 caller.WriteByte((byte)BodyGuardRpcOps.CoverDead);
                 caller.WriteByte(killerPlayerId);
+                caller.WriteByte(prevTargetPlayerId);
                 caller.WriteByte(targetBodyGuard);
             }
-            coverDead(killerPlayerId, targetBodyGuard);
+            coverDead(killerPlayerId, prevTargetPlayerId, targetBodyGuard);
             return true;
         }
 
@@ -388,7 +378,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
 
         private static void coverDead(
-            byte killerPlayerId, byte targetBodyGuard)
+            byte killerPlayerId, byte prevTargetPlayerId, byte targetBodyGuard)
         {
             if (targetBodyGuard == CachedPlayerControl.LocalPlayer.PlayerId)
             {
@@ -418,13 +408,33 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             if (bodyGuard == null || 
                 !bodyGuard.awakeMeetingReport) { return; }
 
+            string reportStr = bodyGuard.isReportWithPlayerName ? 
+               bodyGuard.reportMode switch
+               {
+                   BodyGuardReportPlayerNameMode.GuardedPlayerNameOnly =>
+                       string.Format(
+                           Translation.GetString("martyrdomReportWithGurdedPlayer"),
+                           bodyGuardPlayer.Data.DefaultOutfit.PlayerName),
+                   BodyGuardReportPlayerNameMode.BodyGuardPlayerNameOnly =>
+                        string.Format(
+                            Translation.GetString("martyrdomReportWithBodyGurdPlayer"),
+                            bodyGuardPlayer.Data.DefaultOutfit.PlayerName),
+                   BodyGuardReportPlayerNameMode.BothPlayerName =>
+                       string.Format(
+                           Translation.GetString("martyrdomReportWithBoth"),
+                           bodyGuardPlayer.Data.DefaultOutfit.PlayerName,
+                           Player.GetPlayerControlById(prevTargetPlayerId)?.Data.DefaultOutfit.PlayerName),
+                   _ => Translation.GetString("martyrdomReport")
+               } : 
+               Translation.GetString("martyrdomReport");
+
             if (MeetingHud.Instance)
             {
-                reportMeeting();
+                reportMeeting(reportStr);
             }
             else
             {
-                bodyGuard.reportNextMeeting = true;
+                bodyGuard.reportStr = reportStr;
             }
         }
 
@@ -438,13 +448,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
         }
 
-        private static void reportMeeting()
+        private static void reportMeeting(string text)
         {
-            if (CachedPlayerControl.LocalPlayer.Data.IsDead) { return; }
-
             FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(
-                CachedPlayerControl.LocalPlayer,
-                Translation.GetString("martyrdomReport"));
+                CachedPlayerControl.LocalPlayer, text);
         }
 
         public override string GetRolePlayerNameTag(
@@ -480,24 +487,32 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.shildButtonImage = Loader.CreateSpriteFromResources(
                     Path.BodyGuardShield);
 
-            this.Button = new BodyGuardShieldButton(
-                Translation.GetString("shield"),
-                Translation.GetString("resetShield"),
-                UseAbility,
-                Reset,
-                IsAbilityUse,
-                IsResetMode,
-                this.shildButtonImage,
-                Loader.CreateSpriteFromResources(
-                    Path.BodyGuardResetShield),
-                null,
-                null,
+            this.Button = new ExtremeAbilityButton(
+                new BodyGuardAbilityBehavior(
+                    featShieldMode: new GraphicMode()
+                    {
+                        Graphic = new ButtonGraphic(
+                            Translation.GetString("shield"),
+                            this.shildButtonImage)
+                    },
+                    resetMode: new GraphicMode()
+                    {
+                        Graphic = new ButtonGraphic(
+                            Translation.GetString("resetShield"),
+                            Loader.CreateSpriteFromResources(
+                                Path.BodyGuardResetShield))
+                    },
+                    featShield: UseAbility,
+                    resetShield: Reset,
+                    canUse: IsAbilityUse,
+                    resetModeCheck: IsResetMode),
+                new RoleButtonActivator(),
                 KeyCode.F);
 
             this.RoleAbilityInit();
-            if (this.shieldButton is BodyGuardShieldButton button)
+            if (this.shieldButton.Behavior is BodyGuardAbilityBehavior behavior)
             {
-                button.UpdateAbilityCount(
+                behavior.SetAbilityCount(
                     OptionHolder.AllOption[GetRoleOptionId(
                         RoleAbilityCommonOption.AbilityCount)].GetValue());
             }
@@ -517,9 +532,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
             resetShield(playerId);
 
-            if (this.shieldButton is BodyGuardShieldButton button)
+            if (this.shieldButton.Behavior is BodyGuardAbilityBehavior behavior)
             {
-                button.UpdateAbilityCount(this.shildNum);
+                behavior.SetAbilityCount(this.shildNum);
             }
         }
 
@@ -528,18 +543,18 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
             byte playerId = localPlayer.PlayerId;
 
-            if (this.TargetPlayer != byte.MaxValue)
+            if (this.targetPlayer != byte.MaxValue)
             {
                 using (var caller = RPCOperator.CreateCaller(
                     RPCOperator.Command.BodyGuardAbility))
                 {
                     caller.WriteByte((byte)BodyGuardRpcOps.FeatShield);
                     caller.WriteByte(playerId);
-                    caller.WriteByte(this.TargetPlayer);
+                    caller.WriteByte(this.targetPlayer);
                 }
-                featShield(playerId, this.TargetPlayer);
+                featShield(playerId, this.targetPlayer);
 
-                this.TargetPlayer = byte.MaxValue;
+                this.targetPlayer = byte.MaxValue;
 
                 return true;
             }
@@ -549,12 +564,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
         }
 
-        public bool IsResetMode() => this.TargetPlayer == byte.MaxValue;
+        public bool IsResetMode() => this.targetPlayer == byte.MaxValue;
 
         public bool IsAbilityUse()
         {
-
-            this.TargetPlayer = byte.MaxValue;
+            this.targetPlayer = byte.MaxValue;
 
             PlayerControl target = Player.GetClosestPlayerInRange(
                 CachedPlayerControl.LocalPlayer, this,
@@ -567,30 +581,31 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 if (!shilded.IsShielding(
                     CachedPlayerControl.LocalPlayer.PlayerId, targetId))
                 {
-                    this.TargetPlayer = targetId;
+                    this.targetPlayer = targetId;
                 }
             }
 
             return this.IsCommonUse();
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
-            if (this.reportNextMeeting)
+            if (!string.IsNullOrEmpty(this.reportStr))
             {
                 using (var caller = RPCOperator.CreateCaller(
                     RPCOperator.Command.BodyGuardAbility))
                 {
                     caller.WriteByte((byte)BodyGuardRpcOps.ReportMeeting);
+                    caller.WriteStr(this.reportStr);
                 }
-                reportMeeting();
+                reportMeeting(this.reportStr);
             }
-            this.reportNextMeeting = false;
+            this.reportStr = string.Empty;
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
-            this.reportNextMeeting = false;
+            this.reportStr = string.Empty;
         }
 
         public bool IsBlockMeetingButtonAbility(PlayerVoteArea instance)
@@ -608,11 +623,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 return true;
             }
 
-            if (this.shieldButton is BodyGuardShieldButton button)
+            if (this.shieldButton.Behavior is BodyGuardAbilityBehavior behavior)
             {
                 return
                     !this.awakeMeetingAbility ||
-                    button.CurAbilityNum <= 0 ||
+                    behavior.AbilityCount <= 0 ||
                     instance.TargetPlayerId == 253;
             }
             else
@@ -647,9 +662,9 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 }
                 featShield(player.PlayerId, targetPlayerId);
 
-                if (this.shieldButton is BodyGuardShieldButton button)
+                if (this.shieldButton.Behavior is BodyGuardAbilityBehavior behavior)
                 {
-                    button.UpdateAbilityCount(button.CurAbilityNum - 1);
+                    behavior.SetAbilityCount(behavior.AbilityCount - 1);
                 }
             }
             return meetingfeatShield;
@@ -704,11 +719,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                     this.meetingText.gameObject.SetActive(false);
                 }
 
-                if (this.shieldButton is BodyGuardShieldButton button)
+                if (this.shieldButton.Behavior is BodyGuardAbilityBehavior behavior)
                 {
                     this.meetingText.text = string.Format(
                         Helper.Translation.GetString("meetingShieldState"),
-                        button.CurAbilityNum);
+                        behavior.AbilityCount);
                 }
                 this.meetingText.gameObject.SetActive(true);
             }
@@ -743,7 +758,20 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 60, 0, 100, 10,
                 parentOps,
                 format: OptionUnit.Percentage);
-
+            var reportPlayerNameOpt = CreateBoolOption(
+                BodyGuardOption.IsReportPlayerName,
+                false, parentOps);
+            CreateSelectionOption(
+                BodyGuardOption.ReportPlayerMode,
+                new string[]
+                {
+                    BodyGuardReportPlayerNameMode.GuardedPlayerNameOnly.ToString(),
+                    BodyGuardReportPlayerNameMode.BodyGuardPlayerNameOnly.ToString(),
+                    BodyGuardReportPlayerNameMode.BothPlayerName.ToString(),
+                }, reportPlayerNameOpt);
+            CreateBoolOption(
+                BodyGuardOption.IsBlockMeetingKill,
+                true, parentOps);
         }
 
         protected override void RoleSpecificInit()
@@ -751,7 +779,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             var allOpt = OptionHolder.AllOption;
 
-            this.reportNextMeeting = false;
+            this.reportStr = string.Empty;
+
+            IsBlockMeetingKill = allOpt[
+                GetRoleOptionId(BodyGuardOption.IsBlockMeetingKill)].GetValue();
 
             this.shieldRange = allOpt[
                 GetRoleOptionId(BodyGuardOption.ShieldRange)].GetValue();
@@ -760,14 +791,20 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 GetRoleOptionId(BodyGuardOption.FeatMeetingAbilityTaskGage)].GetValue() / 100.0f;
             this.meetingReportTaskGage = (float)allOpt[
                 GetRoleOptionId(BodyGuardOption.FeatMeetingReportTaskGage)].GetValue() / 100.0f;
+
+            this.isReportWithPlayerName = allOpt[
+                GetRoleOptionId(BodyGuardOption.IsReportPlayerName)].GetValue();
+            this.reportMode = (BodyGuardReportPlayerNameMode)allOpt[
+                GetRoleOptionId(BodyGuardOption.ReportPlayerMode)].GetValue();
+
             this.awakeMeetingAbility = this.meetingAbilityTaskGage <= 0.0f;
             this.awakeMeetingReport = this.meetingReportTaskGage <= 0.0f;
 
             this.RoleAbilityInit();
-            if (this.shieldButton is BodyGuardShieldButton button)
+            if (this.shieldButton?.Behavior is BodyGuardAbilityBehavior behavior)
             {
-                this.shildNum = button.CurAbilityNum;
-                button.UpdateAbilityCount(
+                this.shildNum = behavior.AbilityCount;
+                behavior.SetAbilityCount(
                     allOpt[GetRoleOptionId(
                         RoleAbilityCommonOption.AbilityCount)].GetValue());
             }

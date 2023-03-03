@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 
 using UnityEngine;
 using Hazel;
@@ -9,11 +8,10 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Performance;
 
-using BepInEx.IL2CPP.Utils.Collections;
+using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
@@ -32,7 +30,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ResetMeeting,
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         { 
             get => this.timeShieldButton;
             set
@@ -40,7 +38,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 this.timeShieldButton = value;
             }
         }
-        private RoleAbilityButtonBase timeShieldButton;
+        private ExtremeAbilityButton timeShieldButton;
 
         private bool isRewindTime = false;
         private bool isShieldOn = false;
@@ -305,10 +303,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public void CreateAbility()
         {
             this.CreateNormalAbilityButton(
-                Translation.GetString("timeShield"),
+                "timeShield",
                 Loader.CreateSpriteFromResources(
                    Path.TimeMasterTimeShield),
-                abilityCleanUp: this.CleanUp);
+                abilityOff: this.CleanUp);
             this.Button.SetLabelToCrewmate();
         }
 
@@ -329,7 +327,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public bool IsAbilityUse() => this.IsCommonUse();
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
 
             PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
@@ -342,7 +340,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             resetMeeting(localPlayer.PlayerId);
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }

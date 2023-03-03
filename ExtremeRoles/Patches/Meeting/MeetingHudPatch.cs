@@ -5,7 +5,7 @@ using System.Linq;
 using HarmonyLib;
 using UnityEngine;
 
-using UnhollowerBaseLib;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
 using AmongUs.GameOptions;
 
@@ -515,14 +515,11 @@ namespace ExtremeRoles.Patches.Meeting
 
             var role = ExtremeRoleManager.GetLocalPlayerRole();
 
-            var abilityRole = role as IRoleAbility;
-            if (abilityRole != null)
+            if (role is IRoleAbility abilityRole)
             {
-                abilityRole.ResetOnMeetingStart();
+                abilityRole.Button.OnMeetingStart();
             }
-
-            var resetRole = role as IRoleResetMeeting;
-            if (resetRole != null)
+            if (role is IRoleResetMeeting resetRole)
             {
                 resetRole.ResetOnMeetingStart();
             }
@@ -530,19 +527,13 @@ namespace ExtremeRoles.Patches.Meeting
             var multiAssignRole = role as MultiAssignRoleBase;
             if (multiAssignRole != null)
             {
-                if (multiAssignRole.AnotherRole != null)
+                if (multiAssignRole.AnotherRole is IRoleAbility multiAssignAbilityRole)
                 {
-                    abilityRole = multiAssignRole.AnotherRole as IRoleAbility;
-                    if (abilityRole != null)
-                    {
-                        abilityRole.ResetOnMeetingStart();
-                    }
-
-                    resetRole = multiAssignRole.AnotherRole as IRoleResetMeeting;
-                    if (resetRole != null)
-                    {
-                        resetRole.ResetOnMeetingStart();
-                    }
+                    multiAssignAbilityRole.Button.OnMeetingStart();
+                }
+                if (multiAssignRole.AnotherRole is IRoleResetMeeting multiAssignResetRole)
+                {
+                    multiAssignResetRole.ResetOnMeetingStart();
                 }
             }
 

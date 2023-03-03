@@ -29,14 +29,22 @@ namespace ExtremeRoles
                     Logging.Debug($"Cosmic Id:{pet.ProdId}");
                 }
             }
-            if (Input.GetKeyDown(KeyCode.F12))
+            if (Input.GetKeyDown(KeyCode.F11))
             {
+                if (Roles.ExtremeRoleManager.GetLocalPlayerRole() is Roles.API.Interface.IRoleAbility abilityRole)
+                {
+                    Logging.Debug("---- Role Button Info ----");
+                    Logging.Debug($"Cool Time:{abilityRole.Button.Behavior.CoolTime}");
+                    Logging.Debug($"Active Time:{abilityRole.Button.Behavior.ActiveTime}");
+                    Logging.Debug($"Button State:{abilityRole.Button.State}");
+                }
+
                 var ghostRole = GhostRoles.ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
                 if (ghostRole != null)
                 {
                     Logging.Debug("---- Ghost Role Button Info ----");
-                    Logging.Debug($"Cool Time:{ghostRole.Button.CoolTime}");
-                    Logging.Debug($"Active Time:{ghostRole.Button.ActiveTime}");
+                    Logging.Debug($"Cool Time:{ghostRole.Button.Behavior.CoolTime}");
+                    Logging.Debug($"Active Time:{ghostRole.Button.Behavior.ActiveTime}");
                     Logging.Debug($"Button State:{ghostRole.Button.State}");
                 }
             }

@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-using Hazel;
-
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
@@ -16,7 +13,6 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 {
     public sealed class Alice : SingleRoleBase, IRoleAbility
     {
-
         public enum AliceOption
         {
             CanUseSabotage,
@@ -25,7 +21,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             RevartNormalTaskNum,
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         { 
             get => this.aliceShipBroken;
             set
@@ -38,7 +34,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public int RevartNormalTask = 0;
         public int RevartCommonTask = 0;
 
-        private RoleAbilityButtonBase aliceShipBroken;
+        private ExtremeAbilityButton aliceShipBroken;
 
         public Alice(): base(
             ExtremeRoleId.Alice,
@@ -51,8 +47,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
-                Helper.Translation.GetString("shipBroken"),
-                Loader.CreateSpriteFromResources(
+                "shipBroken", Loader.CreateSpriteFromResources(
                     Path.AliceShipBroken));
         }
 
@@ -189,12 +184,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.RoleAbilityInit();
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             return;
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }

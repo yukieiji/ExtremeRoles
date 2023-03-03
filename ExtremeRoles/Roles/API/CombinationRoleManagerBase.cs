@@ -42,7 +42,7 @@ namespace ExtremeRoles.Roles.API
             return;
         }
 
-        protected override void CreateVisonOption(
+        protected override void CreateVisionOption(
             IOption parentOps)
         {
             // 複数のロールがまとまっているため、管理ロールで視界の設定はしない

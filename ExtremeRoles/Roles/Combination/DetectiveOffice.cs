@@ -9,7 +9,6 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 
@@ -147,6 +146,7 @@ namespace ExtremeRoles.Roles.Combination
         private TMPro.TextMeshPro searchText;
         private TextPopUpper textPopUp;
         private Vector2 prevPlayerPos;
+        private static readonly Vector2 defaultPos = new Vector2(100.0f, 100.0f);
 
         public Detective() : base(
             ExtremeRoleId.Detective,
@@ -162,7 +162,7 @@ namespace ExtremeRoles.Roles.Combination
             upgradeAssistant();
         }
 
-        public void ResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             this.info.Clear();
         }
@@ -203,7 +203,7 @@ namespace ExtremeRoles.Roles.Combination
         public void Update(PlayerControl rolePlayer)
         {
 
-            if (this.prevPlayerPos == null)
+            if (this.prevPlayerPos == defaultPos)
             { 
                 this.prevPlayerPos = rolePlayer.GetTruePosition();
             }
@@ -317,6 +317,7 @@ namespace ExtremeRoles.Roles.Combination
                 new Vector3(-4.0f, -2.75f, -250.0f),
                 TMPro.TextAlignmentOptions.BottomLeft);
             this.searchCrimeInfoTime = float.MaxValue;
+            this.prevPlayerPos = defaultPos;
         }
 
         private void updateSearchCond(CrimeInfo info)
@@ -520,16 +521,16 @@ namespace ExtremeRoles.Roles.Combination
         public struct DetectiveApprenticeOptionHolder
         {
             public int OptionOffset;
-            public bool HasOtherVison;
-            public float Vison;
+            public bool HasOtherVision;
+            public float Vision;
             public bool ApplyEnvironmentVisionEffect;
             public bool HasOtherButton;
             public int HasOtherButtonNum;
 
             public enum DetectiveApprenticeOption
             {
-                HasOtherVison,
-                Vison,
+                HasOtherVision,
+                Vision,
                 ApplyEnvironmentVisionEffect,
                 HasOtherButton,
                 HasOtherButtonNum,
@@ -546,28 +547,28 @@ namespace ExtremeRoles.Roles.Combination
 
                 string roleName = ExtremeRoleId.DetectiveApprentice.ToString();
 
-                var visonOption = new BoolCustomOption(
-                    getRoleOptionId(DetectiveApprenticeOption.HasOtherVison),
+                var visionOption = new BoolCustomOption(
+                    getRoleOptionId(DetectiveApprenticeOption.HasOtherVision),
                     string.Concat(
                         roleName,
-                        DetectiveApprenticeOption.HasOtherVison.ToString()),
+                        DetectiveApprenticeOption.HasOtherVision.ToString()),
                     false, parentOps,
                     tab: OptionTab.Combination);
 
                 new FloatCustomOption(
-                    getRoleOptionId(DetectiveApprenticeOption.Vison),
+                    getRoleOptionId(DetectiveApprenticeOption.Vision),
                     string.Concat(
                         roleName,
-                        DetectiveApprenticeOption.Vison.ToString()),
+                        DetectiveApprenticeOption.Vision.ToString()),
                     2f, 0.25f, 5f, 0.25f,
-                    visonOption, format: OptionUnit.Multiplier,
+                    visionOption, format: OptionUnit.Multiplier,
                     tab: OptionTab.Combination);
                 new BoolCustomOption(
                     getRoleOptionId(DetectiveApprenticeOption.ApplyEnvironmentVisionEffect),
                     string.Concat(
                         roleName,
                         DetectiveApprenticeOption.ApplyEnvironmentVisionEffect.ToString()),
-                    false, visonOption,
+                    false, visionOption,
                     tab: OptionTab.Combination);
 
                 new IntCustomOption(
@@ -627,10 +628,10 @@ namespace ExtremeRoles.Roles.Combination
                 return new DetectiveApprenticeOptionHolder()
                 {
                     OptionOffset = optionId,
-                    HasOtherVison = allOption[
-                        getRoleOptionId(DetectiveApprenticeOption.HasOtherVison)].GetValue(),
-                    Vison = allOption[
-                        getRoleOptionId(DetectiveApprenticeOption.Vison)].GetValue(),
+                    HasOtherVision = allOption[
+                        getRoleOptionId(DetectiveApprenticeOption.HasOtherVision)].GetValue(),
+                    Vision = allOption[
+                        getRoleOptionId(DetectiveApprenticeOption.Vision)].GetValue(),
                     ApplyEnvironmentVisionEffect = allOption[
                         getRoleOptionId(DetectiveApprenticeOption.ApplyEnvironmentVisionEffect)].GetValue(),
                     HasOtherButton = allOption[
@@ -642,7 +643,7 @@ namespace ExtremeRoles.Roles.Combination
 
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         { 
             get => this.meetingButton;
             set
@@ -655,7 +656,7 @@ namespace ExtremeRoles.Roles.Combination
         private bool hasOtherButton;
         private bool callAnotherButton;
         private int buttonNum;
-        private RoleAbilityButtonBase meetingButton;
+        private ExtremeAbilityButton meetingButton;
         private Minigame meeting;
 
         public DetectiveApprentice(
@@ -670,15 +671,15 @@ namespace ExtremeRoles.Roles.Combination
         {
             this.OptionIdOffset = option.OptionOffset;
             this.SetControlId(gameControlId);
-            this.HasOtherVison = option.HasOtherVison;
-            if (this.HasOtherVison)
+            this.HasOtherVision = option.HasOtherVision;
+            if (this.HasOtherVision)
             {
-                this.Vison = option.Vison;
+                this.Vision = option.Vision;
                 this.IsApplyEnvironmentVision = option.ApplyEnvironmentVisionEffect;
             }
             else
             {
-                this.Vison = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
+                this.Vision = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
                     FloatOptionNames.CrewLightMod);
             }
             this.hasOtherButton = option.HasOtherButton;
@@ -705,15 +706,12 @@ namespace ExtremeRoles.Roles.Combination
             {
                 if (playerId == CachedPlayerControl.LocalPlayer.PlayerId)
                 {
-
-                    var abilityRole = prevRole.AnotherRole as IRoleAbility;
-                    if (abilityRole != null)
+                    if (prevRole.AnotherRole is IRoleAbility abilityRole)
                     {
-                        abilityRole.ResetOnMeetingStart();
-                        abilityRole.ResetOnMeetingEnd();
+                        abilityRole.Button.OnMeetingStart();
+                        abilityRole.Button.OnMeetingEnd();
                     }
-                    var resetRole = prevRole.AnotherRole as IRoleResetMeeting;
-                    if (resetRole != null)
+                    if (prevRole.AnotherRole is IRoleResetMeeting resetRole)
                     {
                         resetRole.ResetOnMeetingStart();
                         resetRole.ResetOnMeetingEnd();
@@ -754,27 +752,27 @@ namespace ExtremeRoles.Roles.Combination
         {
 
             this.CreateAbilityCountButton(
-                Translation.GetString("emergencyMeeting"),
+                "emergencyMeeting",
                 Loader.CreateSpriteFromResources(
                     Path.DetectiveApprenticeEmergencyMeeting),
-                abilityCleanUp: CleanUp,
-                checkAbility: IsOpen);
+                abilityOff: CleanUp,
+                checkAbility: IsOpen,
+                isReduceOnActive: true);
             this.Button.SetLabelToCrewmate();
         }
 
-        public bool IsAbilityUse()
-        {
-            return this.IsCommonUse() && Minigame.Instance == null;
-        }
+        public bool IsAbilityUse() => 
+            this.IsCommonUse() && Minigame.Instance == null;
 
         public bool IsOpen() => Minigame.Instance != null;
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
+            this.meeting = null;
             this.callAnotherButton = false;
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             if (this.useAbility)
             {
@@ -785,58 +783,50 @@ namespace ExtremeRoles.Roles.Combination
 
         public bool UseAbility()
         {
-
-            if (this.meeting == null)
+            this.useAbility = false;
+            SystemConsole emergencyConsole;
+            if (ExtremeRolesPlugin.Compat.IsModMap)
             {
-                SystemConsole emergencyConsole;
-                if (ExtremeRolesPlugin.Compat.IsModMap)
+                emergencyConsole = ExtremeRolesPlugin.Compat.ModMap.GetSystemConsole(
+                    Compat.Interface.SystemConsoleType.EmergencyButton);
+            }
+            else
+            {
+                // 0 = Skeld
+                // 1 = Mira HQ
+                // 2 = Polus
+                // 3 = Dleks - deactivated
+                // 4 = Airship
+                var systemConsoleArray = UnityEngine.Object.FindObjectsOfType<SystemConsole>();
+                switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                    ByteOptionNames.MapId))
                 {
-                    emergencyConsole = ExtremeRolesPlugin.Compat.ModMap.GetSystemConsole(
-                        Compat.Interface.SystemConsoleType.EmergencyButton);
+                    case 0:
+                    case 1:
+                    case 3:
+                        emergencyConsole = systemConsoleArray.FirstOrDefault(
+                            x => x.gameObject.name.Contains("EmergencyConsole"));
+                        break;
+                    case 2:
+                        emergencyConsole = systemConsoleArray.FirstOrDefault(
+                            x => x.gameObject.name.Contains("EmergencyButton"));
+                        break;
+                    case 4:
+                        emergencyConsole = systemConsoleArray.FirstOrDefault(
+                            x => x.gameObject.name.Contains("task_emergency"));
+                        break;
+                    default:
+                        return false;
                 }
-                else
-                {
-                    // 0 = Skeld
-                    // 1 = Mira HQ
-                    // 2 = Polus
-                    // 3 = Dleks - deactivated
-                    // 4 = Airship
-                    var systemConsoleArray = UnityEngine.Object.FindObjectsOfType<SystemConsole>();
-                    switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-                        ByteOptionNames.MapId))
-                    {
-                        case 0:
-                        case 1:
-                        case 3:
-                            emergencyConsole = systemConsoleArray.FirstOrDefault(
-                                x => x.gameObject.name.Contains("EmergencyConsole"));
-                            break;
-                        case 2:
-                            emergencyConsole = systemConsoleArray.FirstOrDefault(
-                                x => x.gameObject.name.Contains("EmergencyButton"));
-                            break;
-                        case 4:
-                            emergencyConsole = systemConsoleArray.FirstOrDefault(
-                                x => x.gameObject.name.Contains("task_emergency"));
-                            break;
-                        default:
-                            return false;
-                    }
-                }
-                
-                if (emergencyConsole == null || Camera.main == null)
-                {
-                    return false;
-                }
-                
-                this.meeting = UnityEngine.Object.Instantiate(
-                    emergencyConsole.MinigamePrefab,
-                    Camera.main.transform, false);
             }
 
-            this.meeting.transform.SetParent(Camera.main.transform, false);
-            this.meeting.transform.localPosition = new Vector3(0.0f, 0.0f, -50f);
-            this.meeting.Begin(null);
+            if (emergencyConsole == null || Camera.main == null)
+            {
+                return false;
+            }
+
+            this.meeting = GameSystem.OpenMinigame(
+                emergencyConsole.MinigamePrefab);
             this.useAbility = true;
 
             return true;

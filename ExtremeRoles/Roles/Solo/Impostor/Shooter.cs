@@ -7,6 +7,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
@@ -118,10 +119,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 Shoot();
                 PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
 
-                if (Crewmate.BodyGuard.TryGetShiledPlayerId(
-                    target, out byte bodyGuard) &&
-                    Crewmate.BodyGuard.RpcTryKillBodyGuard(
-                        localPlayer.PlayerId, bodyGuard))
+                if (BodyGuard.IsBlockMeetingKill &&
+                    BodyGuard.TryRpcKillGuardedBodyGuard(
+                        localPlayer.PlayerId, target))
                 {
                     rpcPlayKillSound();
                     return;
@@ -173,14 +173,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 this.isAwake = false;
                 this.curKillCount = 0;
-                this.HasOtherVison = false;
+                this.HasOtherVision = false;
                 this.HasOtherKillCool = false;
                 this.HasOtherKillRange = false;
                 this.CanCallMeeting = true;
             }
         }
 
-        public void ResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             chargeInfoSetActive(true);
             this.canShootThisMeeting = true;
@@ -221,7 +221,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     this.curKillCount >= this.awakeKillCount)
                 {
                     this.isAwake = true;
-                    this.HasOtherVison = this.isAwakedHasOtherVision;
+                    this.HasOtherVision = this.isAwakedHasOtherVision;
                     this.HasOtherKillCool = this.isAwakedHasOtherKillCool;
                     this.HasOtherKillRange = this.isAwakedHasOtherKillRange;
                     this.CanCallMeeting = this.awakedCallMeeting;
@@ -483,9 +483,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.isAwakedHasOtherKillCool = true;
             this.isAwakedHasOtherKillRange = false;
 
-            if (this.HasOtherVison)
+            if (this.HasOtherVision)
             {
-                this.HasOtherVison = false;
+                this.HasOtherVision = false;
                 this.isAwakedHasOtherVision = true;
             }
 
@@ -502,7 +502,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             if (this.isAwake)
             {
-                this.HasOtherVison = this.isAwakedHasOtherVision;
+                this.HasOtherVision = this.isAwakedHasOtherVision;
                 this.HasOtherKillCool = this.isAwakedHasOtherKillCool;
                 this.HasOtherKillRange = this.isAwakedHasOtherKillRange;
                 this.CanCallMeeting = this.awakedCallMeeting;

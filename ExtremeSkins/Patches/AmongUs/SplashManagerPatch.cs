@@ -6,7 +6,7 @@ using HarmonyLib;
 
 using ExtremeSkins.SkinManager;
 
-using BepInEx.IL2CPP.Utils.Collections;
+using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 namespace ExtremeSkins.Patches.AmongUs
 {
@@ -16,7 +16,7 @@ namespace ExtremeSkins.Patches.AmongUs
         public static void Postfix(SplashManager __instance)
         {
 
-            if (ExtremeRoles.Compat.BepInExUpdater.UpdateRequired) { return; }
+            if (ExtremeRoles.Compat.BepInExUpdater.IsUpdateRquire()) { return; }
 
             bool creatorMode = CreatorModeManager.Instance.IsEnable;
 

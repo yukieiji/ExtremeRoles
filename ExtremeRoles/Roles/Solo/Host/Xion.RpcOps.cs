@@ -324,9 +324,7 @@ namespace ExtremeRoles.Roles.Solo.Host
                 roleManager.SetRole(targetPlayer, RoleTypes.Crewmate);
             }
 
-            IRoleAbility abilityRole = addRole as IRoleAbility;
-
-            if (abilityRole != null && 
+            if (addRole is IRoleAbility abilityRole && 
                 CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
             {
                 Logging.Debug("Try Create Ability NOW!!!");
@@ -375,48 +373,10 @@ namespace ExtremeRoles.Roles.Solo.Host
         {
             xionPlayer.NetTransform.SnapTo(targetPos);
         }
-
-
-        private static void spawnDummy()
-        {
-            var playerControl = Object.Instantiate(AmongUsClient.Instance.PlayerPrefab);
-            playerControl.PlayerId = (byte)GameData.Instance.GetAvailableId();
-
-            GameData.Instance.AddPlayer(playerControl);
-            AmongUsClient.Instance.Spawn(playerControl, -2, InnerNet.SpawnFlags.None);
-
-            var hatManager = FastDestroyableSingleton<HatManager>.Instance;
-
-            int hat = RandomGenerator.Instance.Next(hatManager.allHats.Count);
-            int pet = RandomGenerator.Instance.Next(hatManager.allPets.Count);
-            int skin = RandomGenerator.Instance.Next(hatManager.allSkins.Count);
-            int visor = RandomGenerator.Instance.Next(hatManager.allVisors.Count);
-            int color = RandomGenerator.Instance.Next(Palette.PlayerColors.Length);
-
-            playerControl.transform.position = CachedPlayerControl.LocalPlayer.transform.position;
-            playerControl.GetComponent<DummyBehaviour>().enabled = true;
-            playerControl.NetTransform.enabled = false;
-            playerControl.SetName($"XionDummy_{randomString(10)}");
-            playerControl.SetColor(color);
-            playerControl.SetHat(hatManager.allHats[hat].ProdId, color);
-            playerControl.SetPet(hatManager.allPets[pet].ProdId, color);
-            playerControl.SetVisor(hatManager.allVisors[visor].ProdId, color);
-            playerControl.SetSkin(hatManager.allSkins[skin].ProdId, color);
-            GameData.Instance.RpcSetTasks(
-                playerControl.PlayerId,
-                new byte[0]);
-        }
         private static void NoXionVote(
             Xion xion)
         {
             xion.AddNoXionCount();
         }
-
-        private static string randomString(int length)
-        {
-            return new string(Enumerable.Repeat(chars, length)
-                .Select(s => s[RandomGenerator.Instance.Next(s.Length)]).ToArray());
-        }
-
     }
 }

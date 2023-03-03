@@ -31,7 +31,7 @@ namespace ExtremeRoles.Compat.Interface
 		public void Awake(ShipStatus map);
 		public void Destroy();
 		public float CalculateLightRadius(GameData.PlayerInfo player, bool neutral, bool neutralImpostor);
-		public float CalculateLightRadius(GameData.PlayerInfo player, float visonMod, bool applayVisonEffects = true);
+		public float CalculateLightRadius(GameData.PlayerInfo player, float visionMod, bool applayVisionEffects = true);
 		public bool IsCustomSabotageNow();
 		public bool IsCustomSabotageTask(TaskTypes saboTask);
 		public bool IsCustomVentUse(Vent vent);

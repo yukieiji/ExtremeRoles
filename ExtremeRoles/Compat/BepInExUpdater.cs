@@ -7,24 +7,34 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using BepInEx;
-using BepInEx.IL2CPP;
-using BepInEx.IL2CPP.Utils;
-using UnhollowerBaseLib.Attributes;
+using BepInEx.Unity.IL2CPP;
+using BepInEx.Unity.IL2CPP.Utils;
+using Il2CppInterop.Runtime.Attributes;
 using UnityEngine;
 using UnityEngine.Networking;
 
 using AmongUs.Data;
+
+using SemanticVersion = SemanticVersioning.Version;
 
 
 namespace ExtremeRoles.Compat
 {
     public sealed class BepInExUpdater : MonoBehaviour
     {
-        public static bool UpdateRequired => typeof(IL2CPPChainloader).Assembly.GetName().Version < Version.Parse(minimumBepInExVersion);
-
-        private const string minimumBepInExVersion = "6.0.0.565";
-        private const string bepInExDownloadURL = "https://builds.bepinex.dev/projects/bepinex_be/565/BepInEx_UnityIL2CPP_x86_265107c_6.0.0-be.565.zip";
+        private const string minimumBepInExVersion = "6.0.0-be.667";
+        private const string bepInExDownloadURL = "https://builds.bepinex.dev/projects/bepinex_be/667/BepInEx-Unity.IL2CPP-win-x86-6.0.0-be.667%2B6b500b3.zip";
         private const string exeFileName = "ExtremeBepInExInstaller.exe";
+
+        public static bool IsUpdateRquire()
+        {
+            string rawBepInExVersionStr = MetadataHelper.GetAttributes<
+                AssemblyInformationalVersionAttribute>(typeof(Paths).Assembly)[0].InformationalVersion;
+            int suffixIndex = rawBepInExVersionStr.IndexOf('+');
+            return 
+                SemanticVersion.Parse(rawBepInExVersionStr.Substring(0, suffixIndex)) <
+                SemanticVersion.Parse(minimumBepInExVersion);
+        }
 
         public void Awake()
         {

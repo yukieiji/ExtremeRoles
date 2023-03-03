@@ -3,7 +3,7 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton;
+using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -169,7 +169,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText,
                 FastDestroyableSingleton<HudManager>.Instance.KillButton.cooldownTimerText.transform.parent);
             updateKillCountText();
-            this.killCountText.name = AbilityButtonBase.AditionalInfoName;
+            this.killCountText.name = ExtremeAbilityButton.AditionalInfoName;
             this.killCountText.enableWordWrapping = false;
             this.killCountText.transform.localScale = Vector3.one * 0.5f;
             this.killCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
@@ -284,11 +284,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         }
         private void updateKillCountText()
         {
-            this.killCountText.text = Translation.GetString("buttonCountText") + string.Format(
-                Translation.GetString(OptionUnit.Shot.ToString()), this.shootNum);
+            this.killCountText.text = string.Format(
+                Translation.GetString(
+                    AbilityCountBehavior.DefaultButtonCountText), this.shootNum);
         }
 
-        public void ResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             if (this.killCountText != null)
             {

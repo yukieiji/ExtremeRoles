@@ -3,11 +3,11 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.AbilityButton.Roles;
 
 namespace ExtremeRoles.Roles.Combination
 {
@@ -86,7 +86,7 @@ namespace ExtremeRoles.Roles.Combination
         private Sprite securitySprite;
         private Sprite vitalSprite;
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         { 
             get => this.crackButton;
             set
@@ -95,7 +95,7 @@ namespace ExtremeRoles.Roles.Combination
             }
         }
 
-        private RoleAbilityButtonBase crackButton;
+        private ExtremeAbilityButton crackButton;
         private Minigame minigame;
 
         public Traitor(
@@ -118,10 +118,10 @@ namespace ExtremeRoles.Roles.Combination
             this.vitalSprite = GameSystem.GetVitalImage();
 
             this.CreateChargeAbilityButton(
-                Translation.GetString("traitorCracking"),
+                "traitorCracking",
                 this.adminSprite,
                 checkAbility: CheckAbility,
-                abilityCleanUp: CleanUp);
+                abilityOff: CleanUp);
         }
 
         public bool UseAbility()
@@ -144,7 +144,8 @@ namespace ExtremeRoles.Roles.Combination
                     {
                         return false;
                     }
-                    openConsole(watchConsole.MinigamePrefab);
+                    this.minigame = GameSystem.OpenMinigame(
+                        watchConsole.MinigamePrefab);
                     break;
                 case AbilityType.Vital:
                     SystemConsole vitalConsole = GameSystem.GetVitalSystemConsole();
@@ -152,7 +153,8 @@ namespace ExtremeRoles.Roles.Combination
                     {
                         return false;
                     }
-                    openConsole(vitalConsole.MinigamePrefab);
+                    this.minigame = GameSystem.OpenMinigame(
+                        vitalConsole.MinigamePrefab);
                     break;
                 default:
                     return false;
@@ -231,8 +233,7 @@ namespace ExtremeRoles.Roles.Combination
 
         public void IntroEndSetUp()
         {
-            this.Button.PositionOffset = new Vector3(-1.8f, -0.06f, 0);
-            this.Button.ReplaceHotKey(KeyCode.F);
+            this.Button.SetHotKey(KeyCode.F);
 
             byte playerId = CachedPlayerControl.LocalPlayer.PlayerId;
 
@@ -248,7 +249,7 @@ namespace ExtremeRoles.Roles.Combination
                 (byte)ExtremeRoleManager.ReplaceOperation.ResetVanillaRole);
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             if (this.chargeTime != null)
             {
@@ -265,7 +266,7 @@ namespace ExtremeRoles.Roles.Combination
             }
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }
@@ -274,7 +275,7 @@ namespace ExtremeRoles.Roles.Combination
         {
             if (!this.canUseButton && this.Button != null)
             {
-                this.Button.SetActive(false);
+                this.Button.SetButtonShow(false);
             }
 
             if (this.chargeTime == null)
@@ -291,7 +292,7 @@ namespace ExtremeRoles.Roles.Combination
                 return;
             }
 
-            this.chargeTime.text = Mathf.CeilToInt(this.Button.GetCurTime()).ToString();
+            this.chargeTime.text = Mathf.CeilToInt(this.Button.Timer).ToString();
             this.chargeTime.gameObject.SetActive(true);
         }
 
@@ -301,6 +302,10 @@ namespace ExtremeRoles.Roles.Combination
         public override bool TryRolePlayerKillTo(PlayerControl rolePlayer, PlayerControl targetPlayer)
         {
             this.canUseButton = true;
+            if (this.Button != null)
+            {
+                this.Button.SetButtonShow(true);
+            }
             return true;
         }
 
@@ -330,13 +335,11 @@ namespace ExtremeRoles.Roles.Combination
 
             if (CachedPlayerControl.LocalPlayer.PlayerId == rolePlayerId)
             {
-                var abilityRole = this.AnotherRole as IRoleAbility;
-                if (abilityRole != null)
+                if (this.AnotherRole is IRoleAbility abilityRole)
                 {
-                    abilityRole.ResetOnMeetingStart();
+                    abilityRole.Button.OnMeetingStart();
                 }
-                var meetingResetRole = this.AnotherRole as IRoleResetMeeting;
-                if (meetingResetRole != null)
+                if (this.AnotherRole is IRoleResetMeeting meetingResetRole)
                 {
                     meetingResetRole.ResetOnMeetingStart();
                 }
@@ -378,14 +381,6 @@ namespace ExtremeRoles.Roles.Combination
             this.RoleAbilityInit();
         }
 
-        private void openConsole(Minigame game)
-        {
-            this.minigame = Object.Instantiate(game, Camera.main.transform, false);
-            this.minigame.transform.SetParent(Camera.main.transform, false);
-            this.minigame.transform.localPosition = new Vector3(0.0f, 0.0f, -50f);
-            this.minigame.Begin(null);
-        }
-
         private void updateAbility()
         {
             ++this.nextUseAbilityType;
@@ -406,7 +401,10 @@ namespace ExtremeRoles.Roles.Combination
         }
         private void updateButtonSprite()
         {
-            var traitorButton = this.Button as ChargableButton;
+            if (this.Button.Behavior is not ChargableAbilityBehavior chargableAbility)
+            {
+                return;
+            }
 
             Sprite sprite = Resources.Loader.CreateSpriteFromResources(
                 Resources.Path.TestButton);
@@ -425,7 +423,7 @@ namespace ExtremeRoles.Roles.Combination
                 default:
                     break;
             }
-            traitorButton.SetButtonImage(sprite);
+            chargableAbility.SetButtonImage(sprite);
         }
     }
 }

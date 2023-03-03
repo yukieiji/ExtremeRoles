@@ -108,7 +108,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 if (taskGage >= this.awakeTaskGage && !this.awakeRole)
                 {
                     this.awakeRole = true;
-                    this.HasOtherVison = this.awakeHasOtherVision;
+                    this.HasOtherVision = this.awakeHasOtherVision;
                 }
             }
         }
@@ -220,18 +220,18 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.isNoWinSurvivorAssignGhostRole = OptionHolder.AllOption[
                 GetRoleOptionId(SurvivorOption.NoWinSurvivorAssignGhostRole)].GetValue();
 
-            this.awakeHasOtherVision = this.HasOtherVison;
+            this.awakeHasOtherVision = this.HasOtherVision;
             this.isDeadWin = false;
 
             if (this.awakeTaskGage <= 0.0f)
             {
                 this.awakeRole = true;
-                this.HasOtherVison = this.awakeHasOtherVision;
+                this.HasOtherVision = this.awakeHasOtherVision;
             }
             else
             {
                 this.awakeRole = false;
-                this.HasOtherVison = false;
+                this.HasOtherVision = false;
             }
         }
 

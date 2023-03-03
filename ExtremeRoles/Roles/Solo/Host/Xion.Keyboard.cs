@@ -1,4 +1,7 @@
 ﻿using UnityEngine;
+using System.Linq;
+
+using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Roles.Solo.Host
 {
@@ -26,15 +29,13 @@ namespace ExtremeRoles.Roles.Solo.Host
         {
             if (!AmongUsClient.Instance.AmHost) { return; }
             // HotFix : BlackOut AmongUs
-            /*
             if (Input.GetKeyDown(functionCall) &&
                 isLocalGame() &&
-                Helper.GameSystem.IsLobby &&
-                isAllPlyerDummy())
+                GameSystem.IsLobby &&
+                IsAllPlyerDummy())
             {
-                spawnDummy();
+                GameSystem.SpawnDummyPlayer($"XionDummy_{randomString(10)}");
             }
-            */
         }
 
         private void keyBind()
@@ -124,7 +125,7 @@ namespace ExtremeRoles.Roles.Solo.Host
 #endif
         }
 
-        private static bool isAllPlyerDummy()
+        public static bool IsAllPlyerDummy()
         {
             foreach (var player in PlayerControl.AllPlayerControls)
             {
@@ -136,6 +137,12 @@ namespace ExtremeRoles.Roles.Solo.Host
                 }
             }
             return true;
+        }
+
+        private static string randomString(int length)
+        {
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[RandomGenerator.Instance.Next(s.Length)]).ToArray());
         }
     }
 }

@@ -1,19 +1,15 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 
 using UnityEngine;
 
-using Hazel;
-
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
-using BepInEx.IL2CPP.Utils.Collections;
+using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -32,7 +28,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         private float carryDistance;
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.carryButton;
             set
@@ -41,7 +37,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        private RoleAbilityButtonBase carryButton;
+        private ExtremeAbilityButton carryButton;
 
         public Carrier() : base(
             ExtremeRoleId.Carrier,
@@ -136,10 +132,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void CreateAbility()
         {
             this.CreateReclickableAbilityButton(
-                Translation.GetString("carry"),
+                "carry",
                 Loader.CreateSpriteFromResources(
                    Path.CarrierCarry),
-                this.CleanUp);
+                abilityOff: this.CleanUp);
         }
 
         public bool IsAbilityUse()
@@ -148,12 +144,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             return this.IsCommonUse() && this.targetBody != null;
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             return;
         }

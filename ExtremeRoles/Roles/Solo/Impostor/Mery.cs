@@ -5,10 +5,8 @@ using UnityEngine;
 
 using Hazel;
 
-using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.Interface;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -158,7 +156,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             ActiveCamp
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.bombButton;
             set
@@ -170,7 +168,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public int ActiveNum;
         public float ActiveRange;
 
-        private RoleAbilityButtonBase bombButton;
+        private ExtremeAbilityButton bombButton;
 
         public Mery() : base(
             ExtremeRoleId.Mery,
@@ -264,7 +262,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         {
 
             this.CreateAbilityCountButton(
-                Translation.GetString("setCamp"),
+                "setCamp",
                 Loader.CreateSpriteFromResources(
                     string.Format(Path.MeryCustomVentAnime, "0")));
         }
@@ -320,12 +318,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             return;
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }

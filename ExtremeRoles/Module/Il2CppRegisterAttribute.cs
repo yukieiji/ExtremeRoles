@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Reflection;
 using HarmonyLib;
-using UnhollowerRuntimeLib;
+
+using Il2CppInterop.Runtime.Injection;
 
 namespace ExtremeRoles.Module
 {

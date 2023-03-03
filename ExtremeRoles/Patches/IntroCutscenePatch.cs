@@ -5,7 +5,7 @@ using HarmonyLib;
 using UnityEngine;
 using AmongUs.GameOptions;
 
-using BepInEx.IL2CPP.Utils.Collections;
+using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.IntroRunner;

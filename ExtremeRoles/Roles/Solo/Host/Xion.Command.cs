@@ -170,33 +170,24 @@ namespace ExtremeRoles.Roles.Solo.Host
         private static void abilityReset(
             SingleRoleBase targetRole)
         {
-            var meetingResetRole = targetRole as IRoleResetMeeting;
-            if (meetingResetRole != null)
+            if (targetRole is IRoleAbility abilityRole)
+            {
+                abilityRole.Button.OnMeetingStart();
+            }
+            if (targetRole is IRoleResetMeeting meetingResetRole)
             {
                 meetingResetRole.ResetOnMeetingStart();
             }
-            var abilityRole = targetRole as IRoleAbility;
-            if (abilityRole != null)
-            {
-                abilityRole.ResetOnMeetingStart();
-            }
 
-            var multiAssignRole = targetRole as MultiAssignRoleBase;
-            if (multiAssignRole != null)
+            if (targetRole is MultiAssignRoleBase multiAssignRole)
             {
-                if (multiAssignRole.AnotherRole != null)
+                if (multiAssignRole.AnotherRole is IRoleAbility multiAssignAbilityRole)
                 {
-                    meetingResetRole = multiAssignRole.AnotherRole as IRoleResetMeeting;
-                    if (meetingResetRole != null)
-                    {
-                        meetingResetRole.ResetOnMeetingStart();
-                    }
-
-                    abilityRole = multiAssignRole.AnotherRole as IRoleAbility;
-                    if (abilityRole != null)
-                    {
-                        abilityRole.ResetOnMeetingStart();
-                    }
+                    multiAssignAbilityRole.Button.OnMeetingStart();
+                }
+                if (multiAssignRole.AnotherRole is IRoleResetMeeting multiAssignResetRole)
+                {
+                    multiAssignResetRole.ResetOnMeetingStart();
                 }
             }
         }

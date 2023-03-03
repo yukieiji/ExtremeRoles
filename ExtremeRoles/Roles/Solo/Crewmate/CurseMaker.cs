@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 
 using UnityEngine;
+using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API.Extension.State;
-using AmongUs.GameOptions;
+using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate
 {
@@ -129,7 +128,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private bool isRemoveDeadBody = true;
         private float notRemoveDeadBodyTaskGage;
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.curseButton;
             set
@@ -137,7 +136,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 this.curseButton = value;
             }
         }
-        private RoleAbilityButtonBase curseButton;
+        private ExtremeAbilityButton curseButton;
 
         public CurseMaker() : base(
             ExtremeRoleId.CurseMaker,
@@ -194,11 +193,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.defaultButtonText = Translation.GetString("curse");
 
             this.CreateAbilityCountButton(
-                this.defaultButtonText,
+                "curse",
                 Loader.CreateSpriteFromResources(
                     Path.CurseMakerCurse),
                 checkAbility: CheckAbility,
-                abilityCleanUp: CleanUp);
+                abilityOff: CleanUp,
+                forceAbilityOff: () => { });
             this.Button.SetLabelToCrewmate();
         }
 
@@ -263,7 +263,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 result = this.deadBodyId == this.targetBody.PlayerId;
             }
 
-            this.Button.SetButtonText(
+            this.Button.Behavior.SetButtonText(
                 result ? this.cursingText : this.defaultButtonText);
 
             return result;
@@ -389,7 +389,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 GetRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime)].GetValue();
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             foreach (var arrow in deadBodyArrow.Values)
             {
@@ -400,7 +400,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             deadBodyData.Clear();
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }
@@ -437,7 +437,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             if (taskGage > this.prevTaskGage)
             {
                 this.curCurseTime = this.curCurseTime * this.curseTimeReduceRate;
-                this.curseButton.SetAbilityActiveTime(this.curCurseTime);
+                this.curseButton.Behavior.SetActiveTime(this.curCurseTime);
             }
 
             if (this.isReduceSearchByTask && !this.isReducedSearchTime)

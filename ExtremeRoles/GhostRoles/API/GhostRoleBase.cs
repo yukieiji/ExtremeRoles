@@ -6,7 +6,7 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.GhostRoles;
+using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -34,14 +34,7 @@ namespace ExtremeRoles.GhostRoles.API
 
         public string Name => this.RoleName;
 
-        public GhostRoleAbilityButtonBase Button
-        {
-            get => this.AbilityButton;
-            set
-            {
-                this.AbilityButton = value;
-            }
-        }
+        public ExtremeAbilityButton Button { get; protected set; }
 
         public Color RoleColor => this.NameColor;
         public bool HasTask => this.Task;
@@ -53,7 +46,6 @@ namespace ExtremeRoles.GhostRoles.API
         protected string RoleName;
         protected Color NameColor;
         protected int OptionIdOffset;
-        protected GhostRoleAbilityButtonBase AbilityButton;
 
         protected bool Task;
 
@@ -192,8 +184,7 @@ namespace ExtremeRoles.GhostRoles.API
         {
             if (this.Button != null)
             {
-                this.Button.ResetCoolTimer();
-                this.Button.SetButtonShow(true);
+                this.Button.OnMeetingEnd();
             }
             this.OnMeetingEndHook();
         }
@@ -202,8 +193,7 @@ namespace ExtremeRoles.GhostRoles.API
         {
             if (this.Button != null)
             {
-                this.Button.ForceAbilityOff();
-                this.Button.SetButtonShow(false);
+                this.Button.OnMeetingStart();
             }
             this.OnMeetingStartHook();
         }
@@ -256,7 +246,7 @@ namespace ExtremeRoles.GhostRoles.API
             if (this.Button == null) { return; }
 
             var allOps = OptionHolder.AllOption;
-            this.Button.SetCoolTime(
+            this.Button.Behavior.SetCoolTime(
                 allOps[this.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)].GetValue());
 
             IOption option;
@@ -265,24 +255,22 @@ namespace ExtremeRoles.GhostRoles.API
                     this.GetRoleOptionId(
                         RoleAbilityCommonOption.AbilityActiveTime), out option))
             {
-                this.Button.SetAbilityActiveTime(option.GetValue());
+                this.Button.Behavior.SetActiveTime(option.GetValue());
             }
 
-            var abilityCountButton = this.Button as AbilityCountButton;
-
-            if (allOps.TryGetValue(
+            if (this.Button.Behavior is AbilityCountBehavior behavior &&
+                allOps.TryGetValue(
                     this.GetRoleOptionId(
                         RoleAbilityCommonOption.AbilityCount),
-                    out option) && abilityCountButton != null)
+                    out option))
             {
-                abilityCountButton.UpdateAbilityCount(option.GetValue());
+                behavior.SetAbilityCount(option.GetValue());
             }
-
-            this.Button.SetReportAbility(
-                allOps[this.GetRoleOptionId(GhostRoleOption.IsReportAbility)].GetValue());
-
-            this.Button.ResetCoolTimer();
+            this.Button.OnMeetingEnd();
         }
+
+        protected bool isReportAbility() => OptionHolder.AllOption[
+            this.GetRoleOptionId(GhostRoleOption.IsReportAbility)].GetValue();
 
         protected bool IsCommonUse() => 
             PlayerControl.LocalPlayer && 

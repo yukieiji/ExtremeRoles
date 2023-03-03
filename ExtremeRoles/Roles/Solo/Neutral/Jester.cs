@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-
-using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
+﻿using ExtremeRoles.Module;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
@@ -20,7 +17,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             OutburstDistance
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         { 
             get => this.outburstButton;
             set
@@ -32,7 +29,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         private float outburstDistance;
         private PlayerControl tmpTarget;
         private PlayerControl outburstTarget;
-        private RoleAbilityButtonBase outburstButton;
+        private ExtremeAbilityButton outburstButton;
 
         public Jester(): base(
             ExtremeRoleId.Jester,
@@ -49,6 +46,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             PlayerControl killer = Helper.Player.GetPlayerControlById(outburstTargetPlayerId);
             PlayerControl target = Helper.Player.GetPlayerControlById(killTargetPlayerId);
+
+            if (killer is null || target is null) { return; }
 
             byte killerId = killer.PlayerId;
             byte targetId = target.PlayerId;
@@ -88,20 +87,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 }
             }
 
-            if (AmongUsClient.Instance.IsGameOver) { return; }
-            if (killer == null ||
-                killer.Data == null ||
-                killer.Data.IsDead ||
-                killer.Data.Disconnected) { return; }
-            if (target == null ||
-                target.Data == null ||
-                target.Data.IsDead ||
-                target.Data.Disconnected) { return; }
-
-            if (Crewmate.BodyGuard.TryGetShiledPlayerId(
-                    target.PlayerId, out byte bodyGuard) &&
-                Crewmate.BodyGuard.RpcTryKillBodyGuard(
-                    killer.PlayerId, bodyGuard))
+            if (Crewmate.BodyGuard.TryRpcKillGuardedBodyGuard(
+                    killer.PlayerId, target.PlayerId) ||
+                Patches.Button.KillButtonDoClickPatch.IsMissMuderKill(
+                    killer, target))
             {
                 return;
             }
@@ -114,10 +103,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
-                Helper.Translation.GetString("outburst"),
+                "outburst",
                 Loader.CreateSpriteFromResources(
                     Path.JesterOutburst),
-                abilityCleanUp:CleanUp);
+                abilityOff: CleanUp,
+                forceAbilityOff: () => { });
         }
 
         public override bool IsSameTeam(SingleRoleBase targetRole) =>
@@ -191,12 +181,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.RoleAbilityInit();
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             return;
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }

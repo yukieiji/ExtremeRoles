@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 
 using UnityEngine;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+
 using HarmonyLib;
 
 
@@ -28,7 +30,7 @@ namespace ExtremeRoles.Patches.Option
         }
 
         private static void changeValueRange(
-            UnhollowerBaseLib.Il2CppReferenceArray<OptionBehaviour> child,
+            Il2CppReferenceArray<OptionBehaviour> child,
             StringNames name, float minValue, float maxValue)
         {
             NumberOption numOpt = child.FirstOrDefault(x => x.Title == name)?.TryCast<NumberOption>();
@@ -40,7 +42,7 @@ namespace ExtremeRoles.Patches.Option
 
         private static void modifiedDefaultGameOptions(GameOptionsMenu instance)
         {
-            UnhollowerBaseLib.Il2CppReferenceArray<OptionBehaviour> child = instance.Children;
+            Il2CppReferenceArray<OptionBehaviour> child = instance.Children;
 
             if (AmongUsClient.Instance.NetworkMode == NetworkModes.LocalGame ||
                 FastDestroyableSingleton<ServerManager>.Instance.CurrentRegion.Name == "custom")

@@ -30,7 +30,7 @@ namespace
             }
         });
 
-    wstring GetTimeStmp()
+    const wstring GetTimeStmp()
     {
         time_t t = time(nullptr);
         struct tm localTime;
@@ -103,12 +103,17 @@ namespace
         path bepInExPath = rootPath / "BepInEx";
 
         remove_all(bepInExPath / "core");
-        remove_all(bepInExPath / "unhollowed");
+        remove_all(bepInExPath / "interop");
         remove_all(bepInExPath / "unity-libs");
 
         remove(bepInExPath / "config" / "BepInEx.cfg");
 
-        remove_all(rootPath / "mono");
+        path dotNetPath = rootPath / "dotnet";
+
+        if (exists(dotNetPath))
+        {
+            remove_all(dotNetPath);
+        }
 
         remove(rootPath / "changelog.txt");
         remove(rootPath / "doorstop_config.ini");

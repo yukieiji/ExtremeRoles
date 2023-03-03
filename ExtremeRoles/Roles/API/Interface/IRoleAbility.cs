@@ -2,7 +2,8 @@
 using UnityEngine;
 
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
+using ExtremeRoles.Module.AbilityFactory;
+using ExtremeRoles.Module.AbilityBehavior;
 
 namespace ExtremeRoles.Roles.API.Interface
 {
@@ -12,9 +13,9 @@ namespace ExtremeRoles.Roles.API.Interface
         AbilityCount,
         AbilityActiveTime,
     }
-    public interface IRoleAbility
+    public interface IRoleAbility : IRoleResetMeeting
     {
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get;
             set;
@@ -25,11 +26,6 @@ namespace ExtremeRoles.Roles.API.Interface
         public bool UseAbility();
 
         public bool IsAbilityUse();
-
-        public void RoleAbilityResetOnMeetingStart(); // サイドキック作成時に呼ばれるためnullエラーを考慮すること
-
-        public void RoleAbilityResetOnMeetingEnd();
-
     }
 
     public static class IRoleAbilityMixin
@@ -43,39 +39,47 @@ namespace ExtremeRoles.Roles.API.Interface
 
         public static void CreateNormalAbilityButton(
             this IRoleAbility self,
-            string buttonName,
+            string textKey,
             Sprite sprite,
-            Action abilityCleanUp = null,
             Func<bool> checkAbility = null,
+            Action abilityOff = null,
+            Action forceAbilityOff = null,
             KeyCode hotkey = KeyCode.F)
         {
 
-            self.Button = new ReusableAbilityButton(
-                buttonName,
-                self.UseAbility,
-                self.IsAbilityUse,
-                sprite,
-                abilityCleanUp,
-                checkAbility,
-                hotkey);
+            self.Button = RoleAbilityFactory.CreateReusableAbility(
+                textKey: textKey,
+                img: sprite,
+                canUse: self.IsAbilityUse,
+                ability: self.UseAbility,
+                canActivating: checkAbility,
+                abilityOff: abilityOff,
+                forceAbilityOff: forceAbilityOff,
+                hotKey: hotkey);
 
             self.RoleAbilityInit();
         }
 
         public static void CreateAbilityCountButton(
             this IRoleAbility self,
-            string buttonName,
+            string textKey,
             Sprite sprite,
-            Action abilityCleanUp = null,
             Func<bool> checkAbility = null,
+            Action abilityOff = null,
+            Action forceAbilityOff = null,
+            bool isReduceOnActive = false,
             KeyCode hotkey = KeyCode.F)
         {   
-            self.Button = new AbilityCountButton(
-                buttonName,
-                self.UseAbility,
-                self.IsAbilityUse,
-                sprite, abilityCleanUp,
-                checkAbility, hotkey);
+            self.Button = RoleAbilityFactory.CreateCountAbility(
+                textKey: textKey,
+                img: sprite,
+                canUse: self.IsAbilityUse,
+                ability: self.UseAbility,
+                canActivating: checkAbility,
+                abilityOff: abilityOff,
+                forceAbilityOff: forceAbilityOff,
+                isReduceOnActive: isReduceOnActive,
+                hotKey: hotkey);
 
             self.RoleAbilityInit();
 
@@ -84,39 +88,43 @@ namespace ExtremeRoles.Roles.API.Interface
 
         public static void CreateReclickableAbilityButton(
             this IRoleAbility self,
-            string buttonName,
+            string textKey,
             Sprite sprite,
-            Action abilityCleanUp,
             Func<bool> checkAbility = null,
+            Action abilityOff = null,
             KeyCode hotkey = KeyCode.F)
         {
-            self.Button = new ReclickableButton(
-                buttonName,
-                self.UseAbility,
-                self.IsAbilityUse,
-                sprite, abilityCleanUp,
-                checkAbility, hotkey);
+            self.Button = RoleAbilityFactory.CreateReclickAbility(
+                textKey: textKey,
+                img: sprite,
+                canUse: self.IsAbilityUse,
+                ability: self.UseAbility,
+                canActivating: checkAbility,
+                abilityOff: abilityOff,
+                hotKey: hotkey);
 
             self.RoleAbilityInit();
         }
 
         public static void CreateChargeAbilityButton(
             this IRoleAbility self,
-            string buttonName,
+            string textKey,
             Sprite sprite,
-            Action abilityCleanUp,
             Func<bool> checkAbility = null,
+            Action abilityOff = null,
+            Action forceAbilityOff = null,
             KeyCode hotkey = KeyCode.F)
         {
 
-            self.Button = new ChargableButton(
-                buttonName,
-                self.UseAbility,
-                self.IsAbilityUse,
-                sprite,
-                abilityCleanUp,
-                checkAbility,
-                hotkey);
+            self.Button = RoleAbilityFactory.CreateChargableAbility(
+                textKey: textKey,
+                img: sprite,
+                canUse: self.IsAbilityUse,
+                ability: self.UseAbility,
+                canActivating: checkAbility,
+                abilityOff: abilityOff,
+                forceAbilityOff: forceAbilityOff,
+                hotKey: hotkey);
 
             self.RoleAbilityInit();
         }
@@ -131,16 +139,16 @@ namespace ExtremeRoles.Roles.API.Interface
             Func<bool> checkAbility = null,
             KeyCode hotkey = KeyCode.F)
         {
-            self.Button = new PassiveAbilityButton(
-                activateButtonName,
-                deactivateButtonName,
-                self.UseAbility,
-                self.IsAbilityUse,
-                activateSprite,
-                deactivateSprite,
-                abilityCleanUp,
-                checkAbility,
-                hotkey);
+            self.Button = RoleAbilityFactory.CreatePassiveAbility(
+                activateTextKey: activateButtonName,
+                activateImg: activateSprite,
+                deactivateTextKey: deactivateButtonName,
+                deactivateImg: deactivateSprite,
+                canUse: self.IsAbilityUse,
+                ability: self.UseAbility,
+                canActivating: checkAbility,
+                abilityOff: abilityCleanUp,
+                hotKey: hotkey);
 
             self.RoleAbilityInit();
         }
@@ -215,53 +223,31 @@ namespace ExtremeRoles.Roles.API.Interface
             return PlayerControl.LocalPlayer && !PlayerControl.LocalPlayer.Data.IsDead && PlayerControl.LocalPlayer.CanMove;
         }
 
-        public static void ResetOnMeetingEnd(this IRoleAbility self)
-        {
-            if (self.Button != null)
-            {
-                self.Button.ResetCoolTimer();
-            }
-            self.RoleAbilityResetOnMeetingEnd();
-        }
-
-        public static void ResetOnMeetingStart(this IRoleAbility self)
-        {
-            if (self.Button != null)
-            {
-                self.Button.SetActive(false);
-                self.Button.ForceAbilityOff();
-            }
-            self.RoleAbilityResetOnMeetingStart();
-        }
-
-
         public static void RoleAbilityInit(this IRoleAbility self)
         {
 
             if (self.Button == null) { return; }
 
             var allOpt = OptionHolder.AllOption;
-            self.Button.SetAbilityCoolTime(
+            self.Button.Behavior.SetCoolTime(
                 allOpt[self.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)].GetValue());
 
             int checkOptionId = self.GetRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime);
 
             if (allOpt.ContainsKey(checkOptionId))
             {
-                self.Button.SetAbilityActiveTime(
+                self.Button.Behavior.SetActiveTime(
                     allOpt[checkOptionId].GetValue());
             }
 
-            var button = self.Button as AbilityCountButton;
-
-            if (button != null)
+            if (self.Button.Behavior is AbilityCountBehavior countBehavior)
             {
-                button.UpdateAbilityCount(
+                countBehavior.SetAbilityCount(
                     allOpt[self.GetRoleOptionId(
                         RoleAbilityCommonOption.AbilityCount)].GetValue());
             }
 
-            self.Button.ResetCoolTimer();
+            self.Button.OnMeetingEnd();
         }
     }
 

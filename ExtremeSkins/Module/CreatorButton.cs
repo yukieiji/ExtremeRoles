@@ -3,7 +3,7 @@
 using TMPro;
 using UnityEngine;
 
-using UnhollowerBaseLib.Attributes;
+using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Module;
 

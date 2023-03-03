@@ -105,17 +105,7 @@ namespace ExtremeRoles.Patches.Manager
             renderer.sprite = Loader.CreateSpriteFromResources(
                 Resources.Path.TitleBurner, 300f);
 
-            var tmp = __instance.Announcement.transform.Find(
-                "Title_Text").gameObject.GetComponent<TextMeshPro>();
-            tmp.alignment = TextAlignmentOptions.Center;
-            tmp.transform.localPosition += Vector3.left * 0.2f;
-            Module.Prefab.Text = UnityEngine.Object.Instantiate(tmp);
-            UnityEngine.Object.Destroy(Module.Prefab.Text.GetComponent<
-                TextTranslatorTMP>());
-            Module.Prefab.Text.gameObject.SetActive(false);
-            UnityEngine.Object.DontDestroyOnLoad(Module.Prefab.Text);
-
-            if (Module.Prefab.Prop == null)
+            if (Module.Prefab.Prop == null || Module.Prefab.Text == null)
             {
                 TwitchManager man = DestroyableSingleton<TwitchManager>.Instance;
                 Module.Prefab.Prop = UnityEngine.Object.Instantiate(man.TwitchPopup);
@@ -123,6 +113,15 @@ namespace ExtremeRoles.Patches.Manager
                     Module.Prefab.Prop);
                 Module.Prefab.Prop.name = "propForInEx";
                 Module.Prefab.Prop.gameObject.SetActive(false);
+
+                Module.Prefab.Text = UnityEngine.Object.Instantiate(man.TwitchPopup.TextAreaTMP);
+                Module.Prefab.Text.alignment = TextAlignmentOptions.Center;
+                UnityEngine.Object.DontDestroyOnLoad(Module.Prefab.Text);
+                UnityEngine.Object.Destroy(Module.Prefab.Text.GetComponent<
+                    TextTranslatorTMP>());
+                Module.Prefab.Text.gameObject.SetActive(false);
+                UnityEngine.Object.DontDestroyOnLoad(Module.Prefab.Text);
+
             }
             Compat.CompatModMenu.CreateMenuButton();
         }
@@ -267,7 +266,7 @@ namespace ExtremeRoles.Patches.Manager
                         Logging.Error("Server returned no data: " + response.StatusCode.ToString());
                         return false;
                     }
-                    string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+                    string codeBase = Assembly.GetExecutingAssembly().Location;
                     UriBuilder uri = new UriBuilder(codeBase);
                     string fullname = Uri.UnescapeDataString(uri.Path);
                     if (File.Exists(fullname + ".old")) // Clear old file in case it wasnt;

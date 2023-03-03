@@ -29,6 +29,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         private float timer = 0f;
         private TMPro.TextMeshPro abilityText;
         private Vector2 prevPlayerPos;
+        private static readonly Vector2 defaultPos = new Vector2(100.0f, 100.0f);
 
         private TextPopUpper textPopUp;
 
@@ -40,7 +41,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             false, true, false, false)
         { }
 
-        public void ResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }
@@ -131,7 +132,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 return; 
             }
 
-            if (prevPlayerPos == null) { this.prevPlayerPos = rolePlayer.GetTruePosition(); }
+            if (this.prevPlayerPos == defaultPos)
+            { 
+                this.prevPlayerPos = rolePlayer.GetTruePosition();
+            }
 
             if (this.prevPlayerPos != rolePlayer.GetTruePosition())
             {
@@ -167,7 +171,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             CreateFloatOption(
                 WhisperOption.AbilityOffTime,
-                3.0f, 1.0f, 5.0f, 0.5f,
+                2.0f, 1.0f, 5.0f, 0.5f,
                 parentOps, format: OptionUnit.Second);
 
             CreateFloatOption(
@@ -196,9 +200,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 new Vector3(-4.0f, -2.75f, -250.0f),
                 TMPro.TextAlignmentOptions.BottomLeft);
 
-            this.abilityOffTime = allOption[GetRoleOptionId(WhisperOption.AbilityOffTime)].GetValue();
+            this.abilityOffTime = allOption[
+                GetRoleOptionId(WhisperOption.AbilityOffTime)].GetValue();
             this.abilityOnTime = allOption[GetRoleOptionId(WhisperOption.AbilityOnTime)].GetValue();
 
+            this.prevPlayerPos = defaultPos;
         }
 
         private void resetAbility(PlayerControl rolePlayer)

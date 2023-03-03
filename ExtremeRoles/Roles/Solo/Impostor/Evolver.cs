@@ -1,15 +1,12 @@
-﻿using System.Collections.Generic;
-
+﻿using AmongUs.GameOptions;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-using AmongUs.GameOptions;
 
 namespace ExtremeRoles.Roles.Solo.Impostor
 {
@@ -39,7 +36,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         private float defaultKillCoolTime;
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.evolveButton;
             set
@@ -47,7 +44,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 this.evolveButton = value;
             }
         }
-        private RoleAbilityButtonBase evolveButton;
+        private ExtremeAbilityButton evolveButton;
 
         public Evolver() : base(
             ExtremeRoleId.Evolver,
@@ -64,11 +61,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.defaultButtonText = Translation.GetString("evolve");
 
             this.CreateAbilityCountButton(
-                this.defaultButtonText,
+                "evolve",
                 Loader.CreateSpriteFromResources(
                     Path.EvolverEvolved),
                 checkAbility: CheckAbility,
-                abilityCleanUp: CleanUp);
+                abilityOff: CleanUp,
+                forceAbilityOff: () => { });
         }
 
         public bool IsAbilityUse()
@@ -105,7 +103,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.KillCoolTime = Mathf.Clamp(
                 this.KillCoolTime, 0.1f, this.defaultKillCoolTime);
 
-            this.Button.SetButtonText(this.defaultButtonText);
+            this.Button.Behavior.SetButtonText(this.defaultButtonText);
 
             if (!this.isEatingEndCleanBody) { return; }
 
@@ -128,7 +126,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 result = this.eatingBodyId == this.targetBody.PlayerId;
             }
             
-            this.Button.SetButtonText(
+            this.Button.Behavior.SetButtonText(
                 result ? this.eatingText : this.defaultButtonText);
 
             return result;
@@ -200,12 +198,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             return;
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }

@@ -3,14 +3,13 @@
 using UnityEngine;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
-using ExtremeRoles.Module.AbilityButton.Roles;
-using ExtremeRoles.Module.ExtremeShipStatus;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
@@ -23,7 +22,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             ShowKillLog
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         { 
             get => this.setMine;
             set
@@ -32,7 +31,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
         }
 
-        private RoleAbilityButtonBase setMine;
+        private ExtremeAbilityButton setMine;
 
         private List<Vector2> mines;
         private float killRange;
@@ -53,10 +52,11 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public void CreateAbility()
         {
             this.CreateNormalAbilityButton(
-                Helper.Translation.GetString("setMine"),
+                "setMine",
                 Loader.CreateSpriteFromResources(
                     Path.MinerSetMine),
-                abilityCleanUp: CleanUp);
+                abilityOff: CleanUp,
+                forceAbilityOff: () => { });
         }
 
         public bool UseAbility()
@@ -82,7 +82,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.mines.Clear();
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             if (this.killLogger != null)
             {
@@ -90,7 +90,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }

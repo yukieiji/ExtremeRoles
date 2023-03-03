@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-
-using ExtremeRoles.Helper;
+﻿using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
@@ -17,7 +14,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             SmashPenaltyKillCool,
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.smashButton;
             set
@@ -26,7 +23,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        private RoleAbilityButtonBase smashButton;
+        private ExtremeAbilityButton smashButton;
         private byte targetPlayerId;
         private float prevKillCool;
         private float penaltyKillCool;
@@ -42,8 +39,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
-                Translation.GetString("smash"),
-                FastDestroyableSingleton<HudManager>.Instance.KillButton.graphic.sprite);
+                "smash", FastDestroyableSingleton<HudManager>.Instance.KillButton.graphic.sprite);
         }
 
         public bool IsAbilityUse()
@@ -64,14 +60,16 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             var role = ExtremeRoleManager.GetLocalPlayerRole();
             var targetPlayerRole = ExtremeRoleManager.GameRole[this.targetPlayerId];
-            var prevTarget = Player.GetPlayerControlById(this.targetPlayerId);
+            var target = Player.GetPlayerControlById(this.targetPlayerId);
+
+            if (target == null) { return false; }
 
             bool canKill = role.TryRolePlayerKillTo(
-                killer, prevTarget);
+                killer, target);
             if (!canKill) { return false; }
 
             canKill = targetPlayerRole.TryRolePlayerKilledFrom(
-                prevTarget, killer);
+                target, killer);
             if (!canKill) { return false; }
 
             var multiAssignRole = role as MultiAssignRoleBase;
@@ -80,7 +78,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 if (multiAssignRole.AnotherRole != null)
                 {
                     canKill = multiAssignRole.AnotherRole.TryRolePlayerKillTo(
-                        killer, prevTarget);
+                        killer, target);
                     if (!canKill) { return false; }
                 }
             }
@@ -91,35 +89,29 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 if (multiAssignRole.AnotherRole != null)
                 {
                     canKill = multiAssignRole.AnotherRole.TryRolePlayerKilledFrom(
-                        prevTarget, killer);
+                        target, killer);
                     if (!canKill) { return false; }
                 }
             }
 
-            PlayerControl newTarget = prevTarget;
-
-            if (Crewmate.BodyGuard.TryGetShiledPlayerId(
-                    prevTarget.PlayerId, out byte bodyGuard) &&
-                Crewmate.BodyGuard.RpcTryKillBodyGuard(
-                    killer.PlayerId, bodyGuard))
+            if (Crewmate.BodyGuard.TryRpcKillGuardedBodyGuard(
+                    killer.PlayerId, target.PlayerId))
             {
                 featKillPenalty(killer);
                 return true;
             }
-
-            byte useAnimation = byte.MaxValue;
-
-            if (newTarget.PlayerId != prevTarget.PlayerId)
+            else if (Patches.Button.KillButtonDoClickPatch.IsMissMuderKill(
+                killer, target))
             {
-                useAnimation = byte.MinValue;
+                return false;
             }
 
             this.prevKillCool = PlayerControl.LocalPlayer.killTimer;
 
             Player.RpcUncheckMurderPlayer(
                 killer.PlayerId,
-                newTarget.PlayerId,
-                useAnimation);
+                target.PlayerId,
+                byte.MaxValue);
 
             featKillPenalty(killer);
             return true;
@@ -158,12 +150,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 GetRoleOptionId(SmasherOption.SmashPenaltyKillCool)].GetValue();
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             return;
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }

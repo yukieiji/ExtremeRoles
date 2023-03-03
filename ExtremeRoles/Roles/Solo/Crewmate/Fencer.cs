@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
-
-using UnityEngine;
+﻿using UnityEngine;
 using Hazel;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -27,7 +24,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             ActivateKillButton
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.takeTaskButton;
             set
@@ -40,7 +37,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public float Timer = 0.0f;
         public float MaxTime = 120f;
 
-        private RoleAbilityButtonBase takeTaskButton;
+        private ExtremeAbilityButton takeTaskButton;
 
         public Fencer() : base(
             ExtremeRoleId.Fencer,
@@ -110,10 +107,11 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
-                Translation.GetString("counter"),
+                "counter",
                 Loader.CreateSpriteFromResources(
                     Path.FencerCounter),
-                abilityCleanUp: this.CleanUp);
+                abilityOff: this.CleanUp,
+                isReduceOnActive: true);
             this.Button.SetLabelToCrewmate();
         }
         public void CleanUp()
@@ -146,13 +144,13 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             return this.IsCommonUse();
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             this.CleanUp();
             this.CanKill = false;
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }
@@ -194,7 +192,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             IOption parentOps)
         {
             this.CreateAbilityCountOption(
-                parentOps, 2, 5, 3.0f);
+                parentOps, 2, 7, 3.0f);
             CreateFloatOption(
                 FencerOption.ResetTime,
                 5.0f, 2.5f, 30.0f, 0.5f,

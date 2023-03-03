@@ -7,8 +7,6 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Resources;
 
-using ExtremeRoles.Module.AbilityButton.Roles;
-
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
     public sealed class Totocalcio : SingleRoleBase, IRoleAbility, IRoleWinPlayerModifier
@@ -26,7 +24,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             ExtremeRoleId.Totocalcio,
         };
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         { 
             get => this.betButton;
             set
@@ -35,7 +33,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
         }
 
-        private RoleAbilityButtonBase betButton;
+        private ExtremeAbilityButton betButton;
         
         private float range;
         private GameData.PlayerInfo betPlayer;
@@ -67,8 +65,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
-                Helper.Translation.GetString("betPlayer"),
-                Loader.CreateSpriteFromResources(
+                "betPlayer",Loader.CreateSpriteFromResources(
                     Path.TotocalcioBetPlayer));
             this.Button.SetLabelToCrewmate();
         }
@@ -126,12 +123,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             if (this.Button == null) { return; }
 
@@ -145,10 +142,10 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             if (deadNum == 0) { return; }
 
-            this.Button.SetAbilityCoolTime(
+            this.Button.Behavior.SetCoolTime(
                 this.defaultCoolTime + (
                     (this.finalCoolTime - this.defaultCoolTime) * ((float)deadNum / (float)GameData.Instance.PlayerCount)));
-            this.Button.ResetCoolTimer();
+            this.Button.OnMeetingEnd();
         }
 
         public bool UseAbility()

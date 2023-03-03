@@ -6,10 +6,16 @@ using Hazel;
 using UnityEngine;
 
 using AmongUs.GameOptions;
+using TMPro;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.AbilityFactory;
+using ExtremeRoles.Module.AbilityBehavior;
+using ExtremeRoles.Module.AbilityModeSwitcher;
+using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.Interface;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GhostRoles.API.Interface;
@@ -18,11 +24,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
-using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Module.Interface;
-
-using GhostAbilityButton = ExtremeRoles.Module.AbilityButton.GhostRoles.AbilityCountButton;
-using RoleButtonBase = ExtremeRoles.Module.AbilityButton.Roles.RoleAbilityButtonBase;
+using ExtremeRoles.Module.ButtonAutoActivator;
 
 namespace ExtremeRoles.Roles.Combination
 {
@@ -37,7 +39,7 @@ namespace ExtremeRoles.Roles.Combination
             SetTorch,
             PickUpTorch,
             RemoveTorch,
-            RepairTorchVison,
+            RepairTorchVision,
             ResetMeeting
         }
 
@@ -86,7 +88,7 @@ namespace ExtremeRoles.Roles.Combination
                 case AbilityType.SetTorch:
                 case AbilityType.PickUpTorch:
                 case AbilityType.RemoveTorch:
-                case AbilityType.RepairTorchVison:
+                case AbilityType.RepairTorchVision:
                 case AbilityType.ResetMeeting:
                     Wisp.Ability(ref reader, abilityType);
                     break;
@@ -100,125 +102,89 @@ namespace ExtremeRoles.Roles.Combination
     {
         public override bool IsAssignGhostRole => this.canAssignWisp;
 
-        public sealed class DelinquentAbilityButton : RoleButtonBase
+
+        public sealed class DelinquentAbilityBehavior : AbilityBehaviorBase
         {
-            public int CurAbilityNum
-            {
-                get => this.abilityNum;
-            }
-            public Kids.AbilityType CurAbility => this.curAbility;
+            public int AbilityCount { get; private set; }
+            public Kids.AbilityType CurAbility { get; private set; }
 
-            public Kids.AbilityType curAbility;
+            private bool isUpdate;
 
-            private int abilityNum = 0;
-            private TMPro.TextMeshPro abilityCountText = null;
-            private Sprite bombScribe;
+            private TextMeshPro abilityCountText;
+            private Func<bool> useAbility;
+            private Func<bool> canUse;
 
-            public DelinquentAbilityButton(
-                Func<bool> ability,
+            private GraphicSwitcher<Kids.AbilityType> switcher;
+
+            public DelinquentAbilityBehavior(
+                GraphicMode scribeMode,
+                GraphicMode bombMode,
                 Func<bool> canUse,
-                Sprite scribeSprite,
-                Sprite bombSprite) : base(
-                    Translation.GetString("scribble"),
-                    ability,
-                    canUse,
-                    scribeSprite,
-                    null,
-                    null,
-                    KeyCode.F)
+                Func<bool> useAbility) : base(
+                    scribeMode.Graphic.Text,
+                    scribeMode.Graphic.Img)
             {
-                this.curAbility = Kids.AbilityType.Scribe;
-                this.bombScribe = bombSprite;
-                this.abilityCountText = GameObject.Instantiate(
-                    this.Button.cooldownTimerText,
-                    this.Button.cooldownTimerText.transform.parent);
+                this.useAbility = useAbility;
+                this.canUse = canUse;
+
+                this.switcher = new GraphicSwitcher<Kids.AbilityType>(this);
+                this.switcher.Add(Kids.AbilityType.Scribe, scribeMode);
+                this.switcher.Add(Kids.AbilityType.SelfBomb, bombMode);
+            }
+
+            public void SetAbilityCount(int newAbilityNum)
+            {
+                this.AbilityCount = newAbilityNum;
+                this.isUpdate = true;
                 updateAbilityInfoText();
+            }
+
+            public override void AbilityOff()
+            { }
+
+            public override void ForceAbilityOff()
+            { }
+
+            public override void Initialize(ActionButton button)
+            {
+                var coolTimerText = button.cooldownTimerText;
+
+                this.abilityCountText = UnityEngine.Object.Instantiate(
+                    coolTimerText, coolTimerText.transform.parent);
                 this.abilityCountText.enableWordWrapping = false;
                 this.abilityCountText.transform.localScale = Vector3.one * 0.5f;
                 this.abilityCountText.transform.localPosition += new Vector3(-0.05f, 0.65f, 0);
+                updateAbilityInfoText();
             }
 
-            public void UpdateAbilityCount(int newCount)
+            public override bool IsCanAbilityActiving() => true;
+
+            public override bool IsUse() =>
+                this.canUse.Invoke() && this.AbilityCount > 0;
+
+            public override bool TryUseAbility(
+                float timer, AbilityState curState, out AbilityState newState)
             {
-                this.abilityNum = newCount;
-                this.updateAbilityInfoText();
-            }
+                newState = curState;
 
-            protected override void AbilityButtonUpdate()
-            {
-                if (this.CanUse() && this.abilityNum > 0)
+                if (timer > 0 ||
+                    curState != AbilityState.Ready ||
+                    this.AbilityCount <= 0)
                 {
-                    this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.EnabledColor;
-                    this.Button.graphic.material.SetFloat("_Desat", 0f);
-                }
-                else
-                {
-                    this.Button.graphic.color = this.Button.buttonLabelText.color = Palette.DisabledClear;
-                    this.Button.graphic.material.SetFloat("_Desat", 1f);
-                }
-                if (this.abilityNum == 0)
-                {
-                    Button.SetCoolDown(0, this.CoolTime);
-                    return;
-                }
-                if (this.Timer >= 0)
-                {
-                    bool abilityOn = this.IsHasCleanUp() && IsAbilityOn;
-
-                    PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
-
-                    if (abilityOn ||
-                        localPlayer.IsKillTimerEnabled ||
-                        localPlayer.ForceKillTimerContinue)
-                    {
-                        this.Timer -= Time.deltaTime;
-                    }
-                    if (abilityOn)
-                    {
-                        if (!this.AbilityCheck())
-                        {
-                            this.Timer = 0;
-                            this.IsAbilityOn = false;
-                        }
-                    }
+                    return false;
                 }
 
-                if (this.abilityNum > 0)
+                if (!this.useAbility.Invoke())
                 {
-                    Button.SetCoolDown(
-                        this.Timer,
-                        (this.IsHasCleanUp() && this.IsAbilityOn) ? this.AbilityActiveTime : this.CoolTime);
+                    return false;
                 }
-            }
 
-            protected override void OnClickEvent()
-            {
-                if (this.CanUse() &&
-                    this.Timer < 0f &&
-                    this.abilityNum > 0 &&
-                    !this.IsAbilityOn)
+                --this.AbilityCount;
+                bool updateBomb = this.AbilityCount <= 0;
+                if (updateBomb && this.CurAbility == Kids.AbilityType.Scribe)
                 {
-                    Button.graphic.color = this.DisableColor;
-
-                    if (this.UseAbility())
-                    {
-                        this.updateAbility();
-                        this.ResetCoolTimer();
-                    }
-                }
-            }
-
-            private void updateAbility()
-            {
-                --this.abilityNum;
-                bool updateBomb = this.abilityNum <= 0;
-                if (updateBomb && 
-                    this.curAbility == Kids.AbilityType.Scribe)
-                {
-                    this.abilityNum = 1;
-                    this.ButtonSprite = this.bombScribe;
-                    this.curAbility = Kids.AbilityType.SelfBomb;
-                    this.ButtonText = Translation.GetString("selfBomb");
+                    this.AbilityCount = 1;
+                    this.CurAbility = Kids.AbilityType.SelfBomb;
                 }
                 if (this.abilityCountText != null)
                 {
@@ -231,17 +197,32 @@ namespace ExtremeRoles.Roles.Combination
                         this.abilityCountText.gameObject.SetActive(false);
                     }
                 }
+
+                this.switcher.Switch(this.CurAbility);
+                newState = AbilityState.CoolDown;
+
+                return true;
+            }
+
+            public override AbilityState Update(AbilityState curState)
+            {
+                if (this.isUpdate)
+                {
+                    this.isUpdate = false;
+                    return AbilityState.CoolDown;
+                }
+
+                return this.AbilityCount > 0 ? curState : AbilityState.None;
             }
 
             private void updateAbilityInfoText()
             {
                 this.abilityCountText.text = string.Format(
-                    Translation.GetString("scribeText"), this.abilityNum);
+                    Translation.GetString("scribeText"), this.AbilityCount);
             }
-
         }
 
-        public RoleButtonBase Button
+        public ExtremeAbilityButton Button
         { 
             get => this.abilityButton; 
             set
@@ -266,7 +247,7 @@ namespace ExtremeRoles.Roles.Combination
 
         private int abilityCount = 0;
 
-        private RoleButtonBase abilityButton;
+        private ExtremeAbilityButton abilityButton;
 
         private const int maxImageNum = 10;
 
@@ -322,21 +303,34 @@ namespace ExtremeRoles.Roles.Combination
 
         public void CreateAbility()
         {
-            this.Button = new DelinquentAbilityButton(
-                this.UseAbility,
-                this.IsAbilityUse,
-                Loader.CreateSpriteFromResources(
-                    string.Format(
-                        Path.DelinquentScribe,
-                        RandomGenerator.Instance.Next(0, maxImageNum))),
-                Loader.CreateSpriteFromResources(
-                    Path.BomberSetBomb));
+            this.Button = new ExtremeAbilityButton(
+                new DelinquentAbilityBehavior(
+                    new GraphicMode()
+                    {
+                        Graphic = new ButtonGraphic(
+                            Translation.GetString("scribble"),
+                            Loader.CreateSpriteFromResources(
+                                string.Format(
+                                    Path.DelinquentScribe,
+                                    RandomGenerator.Instance.Next(0, maxImageNum))))
+                    },
+                    new GraphicMode()
+                    {
+                        Graphic = new ButtonGraphic(
+                            Translation.GetString("selfBomb"),
+                            Loader.CreateSpriteFromResources(
+                                Path.BomberSetBomb))
+                    },
+                    this.IsAbilityUse,
+                    this.UseAbility),
+                new RoleButtonActivator(),
+                KeyCode.F);
 
             this.RoleAbilityInit();
 
-            if (this.abilityButton != null)
+            if (this.abilityButton?.Behavior is DelinquentAbilityBehavior behavior)
             {
-                ((DelinquentAbilityButton)this.abilityButton).UpdateAbilityCount(
+                behavior.SetAbilityCount(
                     OptionHolder.AllOption[GetRoleOptionId(
                         RoleAbilityCommonOption.AbilityCount)].GetValue());
             }
@@ -344,7 +338,12 @@ namespace ExtremeRoles.Roles.Combination
 
         public bool IsAbilityUse()
         {
-            this.curAbilityType = ((DelinquentAbilityButton)this.abilityButton).CurAbility;
+            if (!(this.abilityButton?.Behavior is DelinquentAbilityBehavior behavior))
+            {
+                return false;
+            }
+
+            this.curAbilityType = behavior.CurAbility;
 
             return this.curAbilityType switch
             {
@@ -357,12 +356,12 @@ namespace ExtremeRoles.Roles.Combination
             };
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             return;
         }
@@ -408,9 +407,9 @@ namespace ExtremeRoles.Roles.Combination
                 GetRoleOptionId(DelinqentOption.Range)].GetValue();
             
             this.RoleAbilityInit();
-            if (this.abilityButton != null)
+            if (this.abilityButton?.Behavior is DelinquentAbilityBehavior behavior)
             {
-                ((DelinquentAbilityButton)this.abilityButton).UpdateAbilityCount(
+                behavior.SetAbilityCount(
                     OptionHolder.AllOption[GetRoleOptionId(
                         RoleAbilityCommonOption.AbilityCount)].GetValue());
             }
@@ -548,8 +547,8 @@ namespace ExtremeRoles.Roles.Combination
             public WispBlackOuter(float time)
             {
                 // ここは全員呼ばれる
-                VisonComputer.Instance.SetModifier(
-                    VisonComputer.Modifier.WispLightOff);
+                VisionComputer.Instance.SetModifier(
+                    VisionComputer.Modifier.WispLightOff);
                 this.maxTime = time;
                 this.timer = time;
             }
@@ -564,9 +563,9 @@ namespace ExtremeRoles.Roles.Combination
                 using (var caller = RPCOperator.CreateCaller(
                     RPCOperator.Command.KidsAbility))
                 {
-                    caller.WriteByte((byte)Kids.AbilityType.RepairTorchVison);
+                    caller.WriteByte((byte)Kids.AbilityType.RepairTorchVision);
                 }
-                RepairVison();
+                RepairVision();
             }
 
             public void Update(int index)
@@ -662,9 +661,9 @@ namespace ExtremeRoles.Roles.Combination
                 }
             }
 
-            public void RepairVison()
+            public void RepairVision()
             {
-                VisonComputer.Instance.ResetModifier();
+                VisionComputer.Instance.ResetModifier();
                 this.blackOuter = null;
             }
 
@@ -673,7 +672,7 @@ namespace ExtremeRoles.Roles.Combination
                 this.torchHavePlayer.Clear();
                 this.blackOuter?.Clear();
                 this.placedTorch.Clear();
-                RepairVison();
+                RepairVision();
             }
 
             public void UpdateAffectedPlayerNum(int gameControlId)
@@ -749,8 +748,8 @@ namespace ExtremeRoles.Roles.Combination
                     float time = reader.ReadSingle();
                     RemoveTorch(id, controlId, time);
                     break;
-                case Kids.AbilityType.RepairTorchVison:
-                    RepairVison();
+                case Kids.AbilityType.RepairTorchVision:
+                    RepairVision();
                     break;
                 case Kids.AbilityType.ResetMeeting:
                     resetMeeting();
@@ -762,9 +761,9 @@ namespace ExtremeRoles.Roles.Combination
 
         public static bool HasTorch(byte playerId) => state.HasTorch(playerId);
 
-        public static void RepairVison()
+        public static void RepairVision()
         {
-            state.RepairVison();
+            state.RepairVision();
         }
 
         public static void SetTorch(byte playerId)
@@ -788,7 +787,7 @@ namespace ExtremeRoles.Roles.Combination
 
         public void SetAbilityNum(int abilityNum)
         {
-            ((GhostAbilityButton)this.Button).UpdateAbilityCount(abilityNum + this.abilityNum);
+            ((AbilityCountBehavior)this.Button.Behavior).SetAbilityCount(abilityNum + this.abilityNum);
         }
         private static void resetMeeting()
         {
@@ -825,14 +824,15 @@ namespace ExtremeRoles.Roles.Combination
 
         public override void CreateAbility()
         {
-            this.Button = new GhostAbilityButton(
+            this.Button = GhostRoleAbilityFactory.CreateCountAbility(
                 AbilityType.WispSetTorch,
-                this.UseAbility,
-                () => true,
-                () => true,
                 Loader.CreateSpriteFromResources(
                     Path.WispTorch),
-                rpcHostCallAbility: abilityCall);
+                this.isReportAbility(),
+                () => true,
+                () => true,
+                this.UseAbility,
+                abilityCall, true);
             this.ButtonInit();
             this.Button.SetLabelToCrewmate();
         }

@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using AmongUs.GameOptions;
 
+using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
+using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Roles.Solo.Neutral
 {
@@ -33,7 +33,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public List<byte> SidekickPlayerId;
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.createSidekick;
             set
@@ -55,7 +55,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public PlayerControl Target;
 
-        private RoleAbilityButtonBase createSidekick;
+        private ExtremeAbilityButton createSidekick;
 
         private bool canLoverSidekick;
         private int numUpgradeSidekick = 0;
@@ -67,8 +67,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             public bool UseSabotage = false;
             public bool UseVent = false;
 
-            public bool HasOtherVison = false;
-            public float Vison = 0f;
+            public bool HasOtherVision = false;
+            public float Vision = 0f;
             public bool ApplyEnvironmentVisionEffect = false;
 
             public bool HasOtherKillCool = false;
@@ -90,8 +90,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 HasOtherKillRange,
                 KillRange,
 
-                HasOtherVison,
-                Vison,
+                HasOtherVision,
+                Vision,
                 ApplyEnvironmentVisionEffect,
             }
 
@@ -158,28 +158,28 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     killRangeOption,
                     tab: tab);
 
-                var visonOption = new BoolCustomOption(
-                    GetRoleOptionId(SidekickOption.HasOtherVison),
+                var visionOption = new BoolCustomOption(
+                    GetRoleOptionId(SidekickOption.HasOtherVision),
                     string.Concat(
                         roleName,
-                        SidekickOption.HasOtherVison.ToString()),
+                        SidekickOption.HasOtherVision.ToString()),
                     false, parentOps,
                     tab: tab);
 
                 new FloatCustomOption(
-                    GetRoleOptionId(SidekickOption.Vison),
+                    GetRoleOptionId(SidekickOption.Vision),
                     string.Concat(
                         roleName,
-                        SidekickOption.Vison.ToString()),
+                        SidekickOption.Vision.ToString()),
                     2f, 0.25f, 5f, 0.25f,
-                    visonOption, format: OptionUnit.Multiplier,
+                    visionOption, format: OptionUnit.Multiplier,
                     tab: tab);
                 new BoolCustomOption(
                     GetRoleOptionId(SidekickOption.ApplyEnvironmentVisionEffect),
                     string.Concat(
                         roleName,
                         SidekickOption.ApplyEnvironmentVisionEffect.ToString()),
-                    false, visonOption,
+                    false, visionOption,
                     tab: tab);
             }
 
@@ -214,14 +214,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                         GetRoleOptionId(SidekickOption.KillRange)].GetValue();
                 }
 
-                this.HasOtherVison = allOption[
-                    GetRoleOptionId(SidekickOption.HasOtherVison)].GetValue();
-                this.Vison = curOption.GetFloat(FloatOptionNames.CrewLightMod);
+                this.HasOtherVision = allOption[
+                    GetRoleOptionId(SidekickOption.HasOtherVision)].GetValue();
+                this.Vision = curOption.GetFloat(FloatOptionNames.CrewLightMod);
                 this.ApplyEnvironmentVisionEffect = false;
-                if (this.HasOtherVison)
+                if (this.HasOtherVision)
                 {
-                    this.Vison = allOption[
-                        GetRoleOptionId(SidekickOption.Vison)].GetValue();
+                    this.Vision = allOption[
+                        GetRoleOptionId(SidekickOption.Vision)].GetValue();
                     this.ApplyEnvironmentVisionEffect = allOption[
                         GetRoleOptionId(SidekickOption.ApplyEnvironmentVisionEffect)].GetValue();
                 }
@@ -288,9 +288,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
                     lover.Team = ExtremeRoleType.Neutral;
                     lover.HasTask = false;
-                    lover.HasOtherVison = sidekickOption.HasOtherVison;
+                    lover.HasOtherVision = sidekickOption.HasOtherVision;
                     lover.IsApplyEnvironmentVision = sidekickOption.ApplyEnvironmentVisionEffect;
-                    lover.Vison = sidekickOption.Vison;
+                    lover.Vision = sidekickOption.Vision;
                     lover.KillCoolTime = sidekickOption.KillCool;
                     lover.KillRange = sidekickOption.KillRange;
                 }
@@ -301,7 +301,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
-                Translation.GetString("Sidekick"),
+                "Sidekick",
                 Loader.CreateSpriteFromResources(
                     Path.JackalSidekick));
         }
@@ -404,12 +404,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             return true;
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             return;
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }
@@ -590,8 +590,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.HasOtherKillRange = option.HasOtherKillRange;
             this.KillRange = option.KillRange;
 
-            this.HasOtherVison = option.HasOtherVison;
-            this.Vison = option.Vison;
+            this.HasOtherVision = option.HasOtherVision;
+            this.Vision = option.Vision;
             this.IsApplyEnvironmentVision = option.ApplyEnvironmentVisionEffect;
 
             this.FakeImposter = jackal.CanSeeImpostorToSidekickImpostor && isImpostor;
@@ -664,9 +664,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             newJackal.Initialize();
             newJackal.CreateAbility();
 
-            if (!curSideKick.sidekickJackalCanMakeSidekick || curSideKick.recursion >= newJackal.SidekickRecursionLimit)
+            if ((
+                    !curSideKick.sidekickJackalCanMakeSidekick || 
+                    curSideKick.recursion >= newJackal.SidekickRecursionLimit
+                ) && newJackal.Button.Behavior is AbilityCountBehavior countBehavior)
             {
-                ((AbilityCountButton)newJackal.Button).UpdateAbilityCount(0);
+                countBehavior.SetAbilityCount(0);
             }
 
 

@@ -5,7 +5,6 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
@@ -15,15 +14,17 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 {
     public sealed class LastWolf : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTypes>
     {
+        public static float LightOffVision { get; private set; } = 0.1f;
+
         public enum LastWolfOption
         {
             AwakeImpostorNum,
             DeadPlayerNumBonus,
             KillPlayerNumBonus,
-            FinalLightOffCoolTime
+            LightOffVision
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.lightOffButton;
             set
@@ -42,10 +43,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public RoleTypes NoneAwakeRole => RoleTypes.Impostor;
 
-        private RoleAbilityButtonBase lightOffButton;
-
-        private float finalCooltime;
-        private float firstCooltime;
+        private ExtremeAbilityButton lightOffButton;
 
         private float noneAwakeKillBonus;
         private float deadPlayerKillBonus;
@@ -70,16 +68,16 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public static void SwitchLight(bool lightOn)
         {
-            var vison = VisonComputer.Instance;
+            var vision = VisionComputer.Instance;
 
             if (lightOn)
             {
-                vison.ResetModifier();
+                vision.ResetModifier();
             }
             else
             {
-                vison.SetModifier(
-                   VisonComputer.Modifier.LastWolfLightOff);
+                vision.SetModifier(
+                   VisionComputer.Modifier.LastWolfLightOff);
             }
         }
 
@@ -88,23 +86,20 @@ namespace ExtremeRoles.Roles.Solo.Impostor
         public void CreateAbility()
         {
             this.CreateNormalAbilityButton(
-                Translation.GetString("liightOff"),
+                "liightOff",
                 Resources.Loader.CreateSpriteFromResources(
                    Resources.Path.LastWolfLightOff),
-                abilityCleanUp:CleanUp);
-
-            setCurCooltime();
+                abilityOff: CleanUp);
         }
 
         public bool IsAbilityUse() =>
             this.IsAwake &&
             this.IsCommonUse() &&
-            VisonComputer.Instance.IsModifierResetted();
+            VisionComputer.Instance.IsModifierResetted();
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             CleanUp();
-            setCurCooltime();
             if (this.isAwake)
             {
                 this.HasOtherKillCool = true;
@@ -115,7 +110,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             }
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }
@@ -148,7 +143,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             {
                 if (this.Button != null)
                 {
-                    this.Button.SetActive(false);
+                    this.Button.SetButtonShow(false);
                 }
 
                 int impNum = 0;
@@ -165,9 +160,10 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 if (this.awakeImpNum >= impNum)
                 {
                     this.isAwake = true;
-                    this.HasOtherVison = this.isAwakedHasOtherVision;
+                    this.HasOtherVision = this.isAwakedHasOtherVision;
                     this.HasOtherKillCool = this.isAwakedHasOtherKillCool;
                     this.HasOtherKillRange = this.isAwakedHasOtherKillRange;
+                    this.Button.SetButtonShow(true);
                 }
 
             }
@@ -282,24 +278,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 parentOps,
                 format: OptionUnit.Percentage);
 
-            var cooltimeOpt = CreateFloatDynamicOption(
-                RoleAbilityCommonOption.AbilityCoolTime,
-                5.0f, 0.5f, 0.5f,
-                parentOps, format: OptionUnit.Second,
-                tempMaxValue: 120.0f);
-
-            var lastLightOffOption = CreateFloatOption(
-               LastWolfOption.FinalLightOffCoolTime,
-               60.0f, 30.0f, 120.0f, 0.5f,
-               parentOps,
-               format: OptionUnit.Second);
+            this.CreateCommonAbilityOption(
+                parentOps, 10.0f);
 
             CreateFloatOption(
-                RoleAbilityCommonOption.AbilityActiveTime,
-                5.0f, 1.0f, 60.0f, 0.5f,
-                parentOps, format: OptionUnit.Second);
-
-            lastLightOffOption.SetUpdateOption(cooltimeOpt);
+                LastWolfOption.LightOffVision,
+                0.1f, 0.0f, 1.0f, 0.1f,
+                parentOps);
         }
 
         protected override void RoleSpecificInit()
@@ -310,17 +295,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             this.awakeImpNum = allOpt[
                 GetRoleOptionId(LastWolfOption.AwakeImpostorNum)].GetValue();
-            this.finalCooltime = allOpt[
-                GetRoleOptionId(LastWolfOption.FinalLightOffCoolTime)].GetValue();
-            this.firstCooltime = allOpt[
-                GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)].GetValue();
 
             this.noneAwakeKillBonus = allOpt[
                 GetRoleOptionId(LastWolfOption.KillPlayerNumBonus)].GetValue();
             this.deadPlayerKillBonus = allOpt[
                 GetRoleOptionId(LastWolfOption.DeadPlayerNumBonus)].GetValue();
 
-            setCurCooltime();
+            LightOffVision = allOpt[
+                GetRoleOptionId(LastWolfOption.LightOffVision)].GetValue();
 
             this.noneAwakeKillCount = 0;
 
@@ -328,9 +310,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             this.isAwakedHasOtherKillCool = true;
             this.isAwakedHasOtherKillRange = false;
 
-            if (this.HasOtherVison)
+            if (this.HasOtherVision)
             {
-                this.HasOtherVison = false;
+                this.HasOtherVision = false;
                 this.isAwakedHasOtherVision = true;
             }
 
@@ -351,19 +333,9 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     Int32OptionNames.NumImpostors))
             {
                 this.isAwake = true;
-                this.HasOtherVison = this.isAwakedHasOtherVision;
+                this.HasOtherVision = this.isAwakedHasOtherVision;
                 this.HasOtherKillCool = this.isAwakedHasOtherKillCool;
                 this.HasOtherKillRange = this.isAwakedHasOtherKillRange;
-            }
-        }
-
-        private void setCurCooltime()
-        {
-            if (this.Button != null)
-            {
-                float curCool = (this.finalCooltime - this.firstCooltime) *
-                    (1.0f - ((float)computeAlivePlayerNum() / (float)GameData.Instance.PlayerCount)) + this.firstCooltime;
-                this.Button.SetAbilityCoolTime(curCool);
             }
         }
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using HarmonyLib;
-using UnhollowerBaseLib;
 
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
 namespace ExtremeRoles.Patches.Controller
 {

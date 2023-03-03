@@ -3,9 +3,10 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using HarmonyLib;
 
-using UnhollowerBaseLib;
-using UnhollowerBaseLib.Attributes;
-using UnhollowerRuntimeLib;
+using Il2CppInterop.Runtime.Attributes;
+using Il2CppInterop.Runtime.Injection;
+using Il2CppInterop.Runtime.InteropTypes;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
 using ExtremeRoles.Module;
 

@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 
 using UnityEngine;
-using Hazel;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -33,7 +31,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public RoleTypes NoneAwakeRole => RoleTypes.Crewmate;
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         { 
             get => this.deflectDamageButton; 
             set
@@ -53,7 +51,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             IsIncludeSpawnPoint
         }
 
-        private RoleAbilityButtonBase deflectDamageButton;
+        private ExtremeAbilityButton deflectDamageButton;
 
         private bool isAwakeRole;
         private bool isOneTimeAwake;
@@ -87,7 +85,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
-                Translation.GetString("deflectDamage"),
+                "deflectDamage",
                 Loader.CreateSpriteFromResources(
                     Path.DelusionerDeflectDamage));
             this.Button.SetLabelToCrewmate();
@@ -137,7 +135,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 {
                     int curVoteCooltimeReduceRate = this.voteCoolTimeReduceRate * forRolePlayerVote;
 
-                    this.Button.SetAbilityCoolTime(
+                    this.Button.SetButtonShow(true);
+                    this.Button.Behavior.SetCoolTime(
                         this.defaultCoolTime * ((100.0f - (float)curVoteCooltimeReduceRate) / 100.0f));
                 }
             }
@@ -154,12 +153,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             return;
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             this.curCoolTime = this.defaultCoolTime;
         }
@@ -168,7 +167,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             if (!this.isAwakeRole)
             {
-                this.Button?.SetActive(false);
+                this.Button?.SetButtonShow(false);
             }
         }
 
@@ -257,7 +256,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 this.deflectDamagePenaltyMod < 1.0f)
             {
                 this.curCoolTime = this.curCoolTime * this.deflectDamagePenaltyMod;
-                this.Button.SetAbilityCoolTime(this.curCoolTime);
+                this.Button.Behavior.SetCoolTime(this.curCoolTime);
             }
 
             return true;

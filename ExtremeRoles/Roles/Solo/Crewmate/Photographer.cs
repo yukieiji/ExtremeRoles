@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 
 using UnityEngine;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -35,8 +35,8 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 this.PlayerName = player.PlayerName;
                 this.Room = null;
 
-                UnhollowerBaseLib.Il2CppReferenceArray<Collider2D> buffer = 
-                    new UnhollowerBaseLib.Il2CppReferenceArray<Collider2D>(10);
+                Il2CppReferenceArray<Collider2D> buffer = 
+                    new Il2CppReferenceArray<Collider2D>(10);
                 Collider2D playerCollinder = player.Object.GetComponent<Collider2D>();
 
                 foreach (PlainShipRoom room in CachedShipStatus.Instance.AllRooms)
@@ -245,7 +245,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             PhotoRange,
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.takePhotoButton;
             set
@@ -263,7 +263,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public RoleTypes NoneAwakeRole => RoleTypes.Crewmate;
 
-        private RoleAbilityButtonBase takePhotoButton;
+        private ExtremeAbilityButton takePhotoButton;
 
         private bool awakeRole;
         private float awakeTaskGage;
@@ -289,7 +289,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
-                Translation.GetString("takePhoto"),
+                "takePhoto",
                 Loader.CreateSpriteFromResources(
                     Path.PhotographerPhotoCamera));
             this.Button.SetLabelToCrewmate();
@@ -355,7 +355,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             sendPhotoInfo();
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             if (this.flash != null)
             {
@@ -363,7 +363,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             }
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             this.photoCreater.Reset();
         }
@@ -377,11 +377,12 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
                 if (taskGage >= this.awakeTaskGage && !this.awakeRole)
                 {
                     this.awakeRole = true;
-                    this.HasOtherVison = this.awakeHasOtherVision;
+                    this.HasOtherVision = this.awakeHasOtherVision;
+                    this.takePhotoButton.SetButtonShow(true);
                 }
                 else
                 {
-                    this.takePhotoButton.SetActive(false);
+                    this.takePhotoButton.SetButtonShow(false);
                 }
             }
 
@@ -512,17 +513,17 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.upgradeAllSendChatTaskGage = allOpt[
                 GetRoleOptionId(PhotographerOption.UpgradeAllSendChatTaskGage)].GetValue() / 100.0f;
 
-            this.awakeHasOtherVision = this.HasOtherVison;
+            this.awakeHasOtherVision = this.HasOtherVision;
 
             if (this.awakeTaskGage <= 0.0f)
             {
                 this.awakeRole = true;
-                this.HasOtherVison = this.awakeHasOtherVision;
+                this.HasOtherVision = this.awakeHasOtherVision;
             }
             else
             {
                 this.awakeRole = false;
-                this.HasOtherVison = false;
+                this.HasOtherVision = false;
             }
 
             this.isUpgradeChat = this.enableAllSend && 

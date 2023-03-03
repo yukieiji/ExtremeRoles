@@ -7,8 +7,8 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Module.ExtremeShipStatus;
-using ExtremeRoles.Module.AbilityButton.Roles;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -37,7 +37,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             ServantSelfKillCool
         }
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.createServant;
             set
@@ -48,7 +48,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public PlayerControl Target;
         public float ServantSelfKillCool;
-        private RoleAbilityButtonBase createServant;
+        private ExtremeAbilityButton createServant;
         private float range;
         private float killKillCoolReduceRate;
         private float taskKillCoolReduceRate;
@@ -90,9 +90,9 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 servant.SelfKillAbility(queen.ServantSelfKillCool);
                 if (targetRole.Team != ExtremeRoleType.Neutral)
                 {
-                    servant.Button.PositionOffset = new Vector3(0, 2.0f, 0);
-                    servant.Button.ReplaceHotKey(KeyCode.C);
+                    servant.Button.SetHotKey(KeyCode.C);
                 }
+                ExtremeAbilityButton.ReGridButtons();
             }
 
             if (targetRole.Team != ExtremeRoleType.Neutral)
@@ -150,21 +150,17 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             if (CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
             {
-                IRoleResetMeeting meetingResetRole = multiAssignRole.AnotherRole as IRoleResetMeeting;
-                if (meetingResetRole != null)
+                if (multiAssignRole.AnotherRole is IRoleAbility abilityRole)
+                {
+                    abilityRole.Button.OnMeetingStart();
+                }
+                if (multiAssignRole.AnotherRole is IRoleResetMeeting meetingResetRole)
                 {
                     meetingResetRole.ResetOnMeetingStart();
                 }
-
-                IRoleAbility abilityRole = multiAssignRole.AnotherRole as IRoleAbility;
-                if (abilityRole != null)
-                {
-                    abilityRole.ResetOnMeetingStart();
-                }
             }
 
-            IRoleSpecialReset specialResetRole = multiAssignRole.AnotherRole as IRoleSpecialReset;
-            if (specialResetRole != null)
+            if (multiAssignRole.AnotherRole is IRoleSpecialReset specialResetRole)
             {
                 specialResetRole.AllReset(targetPlayer);
             }
@@ -203,20 +199,17 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         {
             if (CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
             {
-                var meetingResetRole = targetRole as IRoleResetMeeting;
-                if (meetingResetRole != null)
+                if (targetRole is IRoleAbility abilityRole)
+                {
+                    abilityRole.Button.OnMeetingStart();
+                }
+                if (targetRole is IRoleResetMeeting meetingResetRole)
                 {
                     meetingResetRole.ResetOnMeetingStart();
                 }
-                var abilityRole = targetRole as IRoleAbility;
-                if (abilityRole != null)
-                {
-                    abilityRole.ResetOnMeetingStart();
-                }
             }
 
-            var specialResetRole = targetRole as IRoleSpecialReset;
-            if (specialResetRole != null)
+            if (targetRole is IRoleSpecialReset specialResetRole)
             {
                 specialResetRole.AllReset(targetPlayer);
             }
@@ -229,17 +222,15 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             // 会議開始と終了の処理を呼び出すことで能力を使用可能な状態でリセット
             if (CachedPlayerControl.LocalPlayer.PlayerId == targetPlayerId)
             {
-                var meetingResetRole = targetRole as IRoleResetMeeting;
-                if (meetingResetRole != null)
+                if (targetRole is IRoleAbility abilityRole)
+                {
+                    abilityRole.Button.OnMeetingStart();
+                    abilityRole.Button.OnMeetingEnd();
+                }
+                if (targetRole is IRoleResetMeeting meetingResetRole)
                 {
                     meetingResetRole.ResetOnMeetingStart();
                     meetingResetRole.ResetOnMeetingEnd();
-                }
-                var abilityRole = targetRole as IRoleAbility;
-                if (abilityRole != null)
-                {
-                    abilityRole.ResetOnMeetingStart();
-                    abilityRole.ResetOnMeetingEnd();
                 }
             }
         }
@@ -328,8 +319,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public void CreateAbility()
         {
             this.CreateAbilityCountButton(
-                Translation.GetString("queenCharm"),
-                Loader.CreateSpriteFromResources(
+                "queenCharm", Loader.CreateSpriteFromResources(
                     Path.QueenCharm));
         }
 
@@ -358,12 +348,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             return this.Target != null && this.IsCommonUse();
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             return;
         }
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }
@@ -463,17 +453,17 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                 parentOps);
             CreateIntOption(
                 QueenOption.ServantKillKillCoolReduceRate,
-                25, 0, 75, 1,
+                40, 0, 85, 1,
                 parentOps,
                 format:OptionUnit.Percentage);
             CreateIntOption(
                 QueenOption.ServantTaskKillCoolReduceRate,
-                50, 0, 75, 1,
+                75, 0, 99, 1,
                 parentOps,
                 format: OptionUnit.Percentage);
             CreateIntOption(
                 QueenOption.ServantTaskCompKillCoolReduceRate,
-                0, 15, 50, 1,
+                30, 0, 75, 1,
                 parentOps,
                 format: OptionUnit.Percentage);
             CreateFloatOption(
@@ -517,7 +507,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
     {
         public byte Parent => this.queenPlayerId;
 
-        public RoleAbilityButtonBase Button
+        public ExtremeAbilityButton Button
         {
             get => this.selfKillButton;
             set
@@ -526,7 +516,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
         }
 
-        private RoleAbilityButtonBase selfKillButton;
+        private ExtremeAbilityButton selfKillButton;
 
         private byte queenPlayerId;
         private SpriteRenderer killFlash;
@@ -553,13 +543,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             if (baseRole.IsImpostor())
             {
-                this.HasOtherVison = true;
+                this.HasOtherVision = true;
             }
             else
             {
-                this.HasOtherVison = baseRole.HasOtherVison;
+                this.HasOtherVision = baseRole.HasOtherVision;
             }
-            this.Vison = baseRole.Vison;
+            this.Vision = baseRole.Vision;
             this.IsApplyEnvironmentVision = baseRole.IsApplyEnvironmentVision;
 
             this.HasOtherKillCool = baseRole.HasOtherKillCool;
@@ -570,16 +560,14 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void SelfKillAbility(float coolTime)
         {
-            this.Button = new ReusableAbilityButton(
-                Translation.GetString("selfKill"),
-                this.UseAbility,
-                this.IsAbilityUse,
+            this.Button = RoleAbilityFactory.CreateReusableAbility(
+                "selfKill",
                 Loader.CreateSpriteFromResources(
                     Path.SucideSprite),
-                null, null,
-                KeyCode.F);
-            this.Button.SetAbilityCoolTime(coolTime);
-            this.Button.ResetCoolTimer();
+                this.IsAbilityUse,
+                this.UseAbility);
+            this.Button.Behavior.SetCoolTime(coolTime);
+            this.Button.OnMeetingEnd();
         }
 
         public void HookMuderPlayer(
@@ -638,12 +626,12 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public bool IsAbilityUse() => this.IsCommonUse();
 
-        public void RoleAbilityResetOnMeetingEnd()
+        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
         {
             return;
         }
 
-        public void RoleAbilityResetOnMeetingStart()
+        public void ResetOnMeetingStart()
         {
             if (this.killFlash != null)
             {

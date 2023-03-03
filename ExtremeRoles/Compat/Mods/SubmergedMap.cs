@@ -9,9 +9,10 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
 using BepInEx;
+using Il2CppInterop.Runtime;
+using Il2CppInterop.Runtime.Injection;
 
 using HarmonyLib;
-using UnhollowerRuntimeLib;
 using Hazel;
 using UnityEngine;
 using AmongUs.GameOptions;
@@ -48,8 +49,8 @@ namespace ExtremeRoles.Compat.Mods
 
         private const string elevatorMover = "ElevatorMover";
 
-        private float crewVison;
-        private float impostorVison;
+        private float crewVision;
+        private float impostorVision;
 
         public SubmergedMap(PluginInfo plugin) : base(Guid, plugin)
         {
@@ -96,8 +97,8 @@ namespace ExtremeRoles.Compat.Mods
             
             // 毎回毎回取得すると重いのでキャッシュ化
             var curOption = GameOptionsManager.Instance.CurrentGameOptions;
-            crewVison = curOption.GetFloat(FloatOptionNames.CrewLightMod);
-            impostorVison = curOption.GetFloat(FloatOptionNames.ImpostorLightMod);
+            crewVision = curOption.GetFloat(FloatOptionNames.CrewLightMod);
+            impostorVision = curOption.GetFloat(FloatOptionNames.ImpostorLightMod);
         }
 
         public void Destroy()
@@ -106,8 +107,8 @@ namespace ExtremeRoles.Compat.Mods
 
             // バグってるかもしれないのでもとに戻しとく
             var curOption = GameOptionsManager.Instance.CurrentGameOptions;
-            curOption.SetFloat(FloatOptionNames.CrewLightMod, crewVison);
-            curOption.SetFloat(FloatOptionNames.ImpostorLightMod, impostorVison);
+            curOption.SetFloat(FloatOptionNames.CrewLightMod, crewVision);
+            curOption.SetFloat(FloatOptionNames.ImpostorLightMod, impostorVision);
         }
 
         public float CalculateLightRadius(GameData.PlayerInfo player, bool neutral, bool neutralImpostor)
@@ -117,7 +118,7 @@ namespace ExtremeRoles.Compat.Mods
         }
 
         public float CalculateLightRadius(
-            GameData.PlayerInfo player, float visonMod, bool applayVisonEffects = true)
+            GameData.PlayerInfo player, float visionMod, bool applayVisionEffects = true)
         {
             // サブマージドの視界計算のロジックは「クルーだと停電効果受ける、インポスターだと受けないので」
             // 1. まずはデフォルトの視界をMOD側で用意した視界の広さにリプレイス
@@ -125,13 +126,13 @@ namespace ExtremeRoles.Compat.Mods
             // 3. 元の視界の広さに戻す
 
             var curOption = GameOptionsManager.Instance.CurrentGameOptions;
-            curOption.SetFloat(FloatOptionNames.CrewLightMod, visonMod);
-            curOption.SetFloat(FloatOptionNames.ImpostorLightMod, visonMod);
+            curOption.SetFloat(FloatOptionNames.CrewLightMod, visionMod);
+            curOption.SetFloat(FloatOptionNames.ImpostorLightMod, visionMod);
 
-            float result = CalculateLightRadius(player, true, !applayVisonEffects);
+            float result = CalculateLightRadius(player, true, !applayVisionEffects);
 
-            curOption.SetFloat(FloatOptionNames.CrewLightMod, crewVison);
-            curOption.SetFloat(FloatOptionNames.ImpostorLightMod, impostorVison);
+            curOption.SetFloat(FloatOptionNames.CrewLightMod, crewVision);
+            curOption.SetFloat(FloatOptionNames.ImpostorLightMod, impostorVision);
 
             return result;
         }

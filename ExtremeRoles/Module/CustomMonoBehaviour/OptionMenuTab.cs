@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
+using TMPro;
+
+using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Resources;
-using System.Collections.Generic;
-
-using TMPro;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour
 {
@@ -141,6 +142,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             this.scroller.ContentYBounds.max = -4.0f + itemOffset * 0.5f;
         }
 
+        [HideFromIl2Cpp]
         public void AddOption(IOption option)
         {
             this.useOption.Add(option);
