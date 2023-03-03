@@ -9,24 +9,23 @@ namespace ExtremeRoles.Module.RoleAssign
         public static RoleAssignState Instance => instance;
         private static RoleAssignState instance = new RoleAssignState();
 
-        public bool IsRoleSetUpEnd => isRoleSetUpEnd;
+        public bool IsRoleSetUpEnd { get; private set; } = false;
 
         // ホスト以外の準備ができてるか
         public bool IsReady => this.readyPlayer.Count ==
             (PlayerControl.AllPlayerControls.Count - 1);
 
         private HashSet<byte> readyPlayer = new HashSet<byte>();
-        private bool isRoleSetUpEnd = false;
 
         public void SwitchRoleAssignToEnd()
         {
-            isRoleSetUpEnd = true;
+            this.IsRoleSetUpEnd = true;
             this.readyPlayer.Clear();
         }
 
         public void Reset()
         {
-            isRoleSetUpEnd = false;
+            this.IsRoleSetUpEnd = false;
             this.readyPlayer.Clear();
         }
 
