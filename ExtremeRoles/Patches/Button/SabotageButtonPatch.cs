@@ -2,10 +2,10 @@
 
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Patches.Button
 {
-
     [HarmonyPatch(typeof(SabotageButton), nameof(SabotageButton.DoClick))]
     public static class SabotageButtonDoClickPatch
     {
@@ -25,6 +25,46 @@ namespace ExtremeRoles.Patches.Button
                     Mode = MapOptions.Modes.Sabotage,
                     AllowMovementWhileMapOpen = true,
                 });
+            return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(SabotageButton), nameof(SabotageButton.Refresh))]
+    public static class SabotageButtonRefreshPatch
+    {
+        public static bool Prefix(SabotageButton __instance)
+        {
+            if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
+
+            var role = ExtremeRoleManager.GetLocalPlayerRole();
+
+            PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+
+            if (MeetingHud.Instance ||
+                ExileController.Instance ||
+                !GameManager.Instance || 
+                !GameManager.Instance.SabotagesEnabled() || 
+                !role.CanUseSabotage() ||
+                (
+                    !role.IsImpostor() &&
+                    role.Id is not ExtremeRoleId.Vigilante or ExtremeRoleId.Xion &&
+                    localPlayer.Data.IsDead
+                ))
+            {
+                __instance.ToggleVisible(false);
+                __instance.SetDisabled();
+                return false;
+            }
+
+            if (localPlayer.inVent || localPlayer.petting)
+            {
+                __instance.SetDisabled();
+            }
+            else
+            {
+                __instance.SetEnabled();
+            }
+            
             return false;
         }
     }

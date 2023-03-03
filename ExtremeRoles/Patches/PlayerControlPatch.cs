@@ -230,7 +230,6 @@ namespace ExtremeRoles.Patches
                 (MeetingHud.Instance == null && ExileController.Instance == null);
 
             killButtonUpdate(player, playerRole, enable);
-            ventButtonUpdate(player, playerRole, enable);
 
             sabotageButtonUpdate(player, playerRole, enable);
             roleAbilityButtonUpdate(playerRole);
@@ -295,43 +294,6 @@ namespace ExtremeRoles.Patches
                 abilityRole.Button != null)
             {
                 abilityRole.Button.Update();
-            }
-        }
-
-        // TODO: Move SabotageButton.Refresh()メソッド
-        private static void sabotageButtonUpdate(
-            PlayerControl player,
-            SingleRoleBase role, bool enable)
-        {
-            HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
-
-            if (role.CanUseSabotage() && (enable || player.inVent) &&
-                ExtremeGameModeManager.Instance.ShipOption.IsEnableSabtage)
-            {
-                // インポスターとヴィジランテ、シオンは死んでもサボタージ使える
-                if (role.IsImpostor() || 
-                    (
-                        role.Id == ExtremeRoleId.Vigilante ||
-                        role.Id == ExtremeRoleId.Xion
-                    ))
-                {
-                    hudManager.SabotageButton.Show();
-                    hudManager.SabotageButton.gameObject.SetActive(true);
-                }
-                // それ以外は死んでないときだけサボタージ使える
-                else if(!player.Data.IsDead)
-                {
-                    hudManager.SabotageButton.Show();
-                    hudManager.SabotageButton.gameObject.SetActive(true);
-                }
-                else
-                {
-                    hudManager.SabotageButton.SetDisabled();
-                }
-            }
-            else
-            {
-                hudManager.SabotageButton.SetDisabled();
             }
         }
 
