@@ -304,7 +304,7 @@ namespace ExtremeRoles.Patches
         {
             HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
 
-            if (role.CanUseSabotage() && enable &&
+            if (role.CanUseSabotage() && (enable || player.inVent) &&
                 ExtremeGameModeManager.Instance.ShipOption.IsEnableSabtage)
             {
                 // インポスターとヴィジランテ、シオンは死んでもサボタージ使える
@@ -346,9 +346,12 @@ namespace ExtremeRoles.Patches
                 return;
             }
 
-            if (!role.TryGetVanillaRoleId(out RoleTypes roleId))
+            bool ventButtonShow = enable || player.inVent;
+
+            if (!role.TryGetVanillaRoleId(out RoleTypes roleId) ||
+                roleId is RoleTypes.Shapeshifter or RoleTypes.Impostor)
             {
-                if (enable &&
+                if (ventButtonShow &&
                     ExtremeGameModeManager.Instance.ShipOption.IsEnableImpostorVent)
                 {
                     hudManager.ImpostorVentButton.Show();
@@ -362,7 +365,7 @@ namespace ExtremeRoles.Patches
                 roleId == RoleTypes.Engineer &&
                 player.Data.Role.Role == RoleTypes.Engineer)
             {
-                if (enable)
+                if (ventButtonShow)
                 {
                     if (!ExtremeGameModeManager.Instance.ShipOption.EngineerUseImpostorVent)
                     {
