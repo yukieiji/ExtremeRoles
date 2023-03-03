@@ -298,6 +298,7 @@ namespace ExtremeRoles.Patches
             }
         }
 
+        // TODO: Move SabotageButton.Refresh()メソッド
         private static void sabotageButtonUpdate(
             PlayerControl player,
             SingleRoleBase role, bool enable)
