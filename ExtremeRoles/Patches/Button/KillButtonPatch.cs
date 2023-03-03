@@ -69,13 +69,11 @@ namespace ExtremeRoles.Patches.Button
                     }
                 }
 
-                if (BodyGuard.TryRpcKillGuardedBodyGuard(killer.PlayerId, target.PlayerId))
+                if (BodyGuard.TryRpcKillGuardedBodyGuard(killer.PlayerId, target.PlayerId) ||
+                    IsMissMuderKill(killer, target))
                 {
                     return false;
                 }
-
-                // Use an unchecked kill command, to allow shorter kill cooldowns etc. without getting kicked
-                if (IsMissMuderKill(killer, target)) {  return false; }
 
                 var lastWolf = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<LastWolf>();
                 
