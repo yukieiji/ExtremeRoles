@@ -83,18 +83,21 @@ namespace ExtremeRoles.Patches.MapModule
                     __instance, playerInfo, roleCouldUse);
                 return false;
             }
-
-            var usableDistance = __instance.UsableDistance;
+            
+            bool inVent = player.inVent;
 
             couldUse = (
                 !playerInfo.IsDead &&
                 roleCouldUse &&
-                (!(player.MustCleanVent(__instance.Id)) || 
                 (
-                    player.inVent && Vent.currentVent == __instance
+                    !role.HasTask() && !(player.MustCleanVent(__instance.Id)
+                ) 
+                || 
+                (
+                    inVent && Vent.currentVent == __instance
                 )) && 
                 ExtremeGameModeManager.Instance.Usable.CanUseVent(role) &&
-                (player.CanMove || player.inVent)
+                (player.CanMove || inVent)
             );
 
             if (role.TryGetVanillaRoleId(out _))
@@ -123,7 +126,7 @@ namespace ExtremeRoles.Patches.MapModule
                 num = Vector2.Distance(playerPos, position);
 
                 canUse &= (
-                    num <= usableDistance &&
+                    num <= __instance.UsableDistance &&
                     !PhysicsHelpers.AnythingBetween(
                         player.Collider, playerPos, position,
                         Constants.ShipOnlyMask, false));
