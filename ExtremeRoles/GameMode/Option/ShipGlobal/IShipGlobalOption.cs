@@ -47,7 +47,6 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
     {
         public int HeadOptionId { get; }
 
-        public bool IsEnableSabtage { get; }
         public bool IsEnableImpostorVent { get; }
 
         public bool IsRandomMap { get; }
