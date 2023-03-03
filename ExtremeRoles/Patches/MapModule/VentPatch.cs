@@ -89,7 +89,10 @@ namespace ExtremeRoles.Patches.MapModule
             couldUse = (
                 !playerInfo.IsDead &&
                 roleCouldUse &&
-                (!(player.MustCleanVent(__instance.Id)) || (player.inVent && Vent.currentVent)) && 
+                (!(player.MustCleanVent(__instance.Id)) || 
+                (
+                    player.inVent && Vent.currentVent == __instance
+                )) && 
                 ExtremeGameModeManager.Instance.Usable.CanUseVent(role) &&
                 (player.CanMove || player.inVent)
             );
