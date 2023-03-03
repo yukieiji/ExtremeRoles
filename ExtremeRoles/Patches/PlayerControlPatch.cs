@@ -22,1085 +22,1084 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 
-namespace ExtremeRoles.Patches
+namespace ExtremeRoles.Patches;
+
+[HarmonyPatch]
+public static class CacheLocalPlayerPatch
 {
-    [HarmonyPatch]
-    public static class CacheLocalPlayerPatch
+    [HarmonyTargetMethod]
+    public static MethodBase TargetMethod()
     {
-        [HarmonyTargetMethod]
-        public static MethodBase TargetMethod()
-        {
-            var type = typeof(PlayerControl).GetNestedTypes(AccessTools.all).FirstOrDefault(t => t.Name.Contains("Start"));
-            return AccessTools.Method(type, nameof(Il2CppSystem.Collections.IEnumerator.MoveNext));
-        }
-
-        [HarmonyPostfix]
-        public static void SetLocalPlayer()
-        {
-            PlayerControl localPlayer = PlayerControl.LocalPlayer;
-            if (!localPlayer)
-            {
-                CachedPlayerControl.LocalPlayer = null;
-                return;
-            }
-
-            CachedPlayerControl cached = CachedPlayerControl.AllPlayerControls.FirstOrDefault(
-                p => p.PlayerControl.Pointer == localPlayer.Pointer);
-            if (cached != null)
-            {
-                CachedPlayerControl.LocalPlayer = cached;
-                return;
-            }
-        }
+        var type = typeof(PlayerControl).GetNestedTypes(AccessTools.all).FirstOrDefault(t => t.Name.Contains("Start"));
+        return AccessTools.Method(type, nameof(Il2CppSystem.Collections.IEnumerator.MoveNext));
     }
 
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Awake))]
-    public static class PlayerControlAwakePatch
+    [HarmonyPostfix]
+    public static void SetLocalPlayer()
     {
-        public static void Postfix(PlayerControl __instance)
+        PlayerControl localPlayer = PlayerControl.LocalPlayer;
+        if (!localPlayer)
         {
-            if (__instance.notRealPlayer) { return; }
+            CachedPlayerControl.LocalPlayer = null;
+            return;
+        }
 
-            new CachedPlayerControl(__instance);
+        CachedPlayerControl cached = CachedPlayerControl.AllPlayerControls.FirstOrDefault(
+            p => p.PlayerControl.Pointer == localPlayer.Pointer);
+        if (cached != null)
+        {
+            CachedPlayerControl.LocalPlayer = cached;
+            return;
+        }
+    }
+}
+
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Awake))]
+public static class PlayerControlAwakePatch
+{
+    public static void Postfix(PlayerControl __instance)
+    {
+        if (__instance.notRealPlayer) { return; }
+
+        new CachedPlayerControl(__instance);
 
 #if DEBUG
-            foreach (var cachedPlayer in CachedPlayerControl.AllPlayerControls)
+        foreach (var cachedPlayer in CachedPlayerControl.AllPlayerControls)
+        {
+            if (!cachedPlayer.PlayerControl || 
+                !cachedPlayer.PlayerPhysics || 
+                !cachedPlayer.NetTransform || 
+                !cachedPlayer.transform)
             {
-                if (!cachedPlayer.PlayerControl || 
-                    !cachedPlayer.PlayerPhysics || 
-                    !cachedPlayer.NetTransform || 
-                    !cachedPlayer.transform)
-                {
-                    Logging.Debug($"CachedPlayer {cachedPlayer.PlayerControl.name} has null fields");
-                }
+                Logging.Debug($"CachedPlayer {cachedPlayer.PlayerControl.name} has null fields");
             }
+        }
 #endif
+    }
+}
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Exiled))]
+public static class PlayerControlExiledPatch
+{
+    public static void Postfix(
+        PlayerControl __instance)
+    {
+        if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+
+        var role = ExtremeRoleManager.GetLocalPlayerRole();
+        var exiledPlayerRole = ExtremeRoleManager.GameRole[__instance.PlayerId];
+
+        if (ExtremeRoleManager.IsDisableWinCheckRole(exiledPlayerRole))
+        {
+            ExtremeRolesPlugin.ShipState.SetDisableWinCheck(true);
+        }
+
+        ExtremeRolesPlugin.ShipState.AddDeadInfo(
+            __instance, DeathReason.Exile, null);
+
+        if (role is IRoleExilHook hookRole)
+        {
+            hookRole.HookExil(__instance);
+        }
+        if (role is MultiAssignRoleBase multiAssignRole)
+        {
+            if (multiAssignRole.AnotherRole is IRoleExilHook multiHookRole)
+            {
+                multiHookRole.HookExil(__instance);
+            }
+        }
+
+        exiledPlayerRole.ExiledAction(__instance);
+        if (exiledPlayerRole is MultiAssignRoleBase multiAssignExiledPlayerRole)
+        {
+            multiAssignExiledPlayerRole.AnotherRole?.ExiledAction(__instance);
+        }
+
+        if (!exiledPlayerRole.HasTask())
+        {
+            __instance.ClearTasks();
+        }
+
+        ExtremeRolesPlugin.ShipState.SetDisableWinCheck(false);
+    }
+}
+
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Deserialize))]
+public static class PlayerControlDeserializePatch
+{
+    public static void Postfix(PlayerControl __instance)
+    {
+        CachedPlayerControl.PlayerPtrs[__instance.Pointer].PlayerId = __instance.PlayerId;
+    }
+}
+
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.OnDestroy))]
+public static class PlayerControlOnDestroyPatch
+{
+    public static void Postfix(PlayerControl __instance)
+    {
+        if (__instance.notRealPlayer) { return; }
+        CachedPlayerControl.Remove(__instance);
+    }
+}
+
+
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.StartMeeting))]
+public static class PlayerControlCoStartMeetingPatch
+{
+    public static void Prefix([HarmonyArgument(0)] GameData.PlayerInfo target)
+    {
+        ExtremeRolesPlugin.Info.BlockShow(true);
+
+        var state = ExtremeRolesPlugin.ShipState;
+
+        if (state.AssassinMeetingTrigger) { return; }
+
+        // Count meetings
+        if (target == null)
+        {
+            state.IncreaseMeetingCount();
         }
     }
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Exiled))]
-    public static class PlayerControlExiledPatch
+}
+
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
+public static class PlayerControlFixedUpdatePatch
+{
+
+    public static void Postfix(PlayerControl __instance)
     {
-        public static void Postfix(
-            PlayerControl __instance)
+        if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) 
+        { return; }
+        if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
+        if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+        if (CachedPlayerControl.LocalPlayer.PlayerId != __instance.PlayerId) { return; }
+
+        SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
+        GhostRoleBase ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
+
+        buttonUpdate(__instance, role, ghostRole);
+        refreshRoleDescription(__instance, role, ghostRole);
+    }
+
+    private static void refreshRoleDescription(
+        PlayerControl player,
+        SingleRoleBase playerRole,
+        GhostRoleBase playerGhostRole)
+    {
+
+        var removedTask = new List<PlayerTask>();
+        foreach (PlayerTask task in player.myTasks.GetFastEnumerator())
         {
-            if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+            if (task == null) { return; }
 
-            var role = ExtremeRoleManager.GetLocalPlayerRole();
-            var exiledPlayerRole = ExtremeRoleManager.GameRole[__instance.PlayerId];
-
-            if (ExtremeRoleManager.IsDisableWinCheckRole(exiledPlayerRole))
+            var textTask = task.gameObject.GetComponent<ImportantTextTask>();
+            if (textTask != null)
             {
-                ExtremeRolesPlugin.ShipState.SetDisableWinCheck(true);
+                removedTask.Add(task); // TextTask does not have a corresponding RoleInfo and will hence be deleted
             }
+        }
 
-            ExtremeRolesPlugin.ShipState.AddDeadInfo(
-                __instance, DeathReason.Exile, null);
+        foreach (PlayerTask task in removedTask)
+        {
+            task.OnRemove();
+            player.myTasks.Remove(task);
+            UnityEngine.Object.Destroy(task.gameObject);
+        }
 
-            if (role is IRoleExilHook hookRole)
+        var importantTextTask = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
+        importantTextTask.transform.SetParent(player.transform, false);
+
+        string addText = playerRole.GetImportantText();
+        if (playerGhostRole != null)
+        {
+            addText =$"{addText}\n{playerGhostRole.GetImportantText()}";
+        }
+        importantTextTask.Text = addText;
+        player.myTasks.Insert(0, importantTextTask);
+
+    }
+    private static void buttonUpdate(
+        PlayerControl player,
+        SingleRoleBase playerRole,
+        GhostRoleBase playerGhostRole)
+    {
+        if (!player.AmOwner) { return; }
+
+        bool enable = 
+            (player.IsKillTimerEnabled || player.ForceKillTimerContinue) &&
+            (MeetingHud.Instance == null && ExileController.Instance == null);
+
+        killButtonUpdate(player, playerRole, enable);
+        ventButtonUpdate(player, playerRole, enable);
+
+        roleAbilityButtonUpdate(playerRole);
+        ghostRoleButtonUpdate(playerGhostRole);
+    }
+
+    private static void killButtonUpdate(
+        PlayerControl player,
+        SingleRoleBase role, bool enable)
+    {
+
+        bool isImposter = role.IsImpostor();
+
+        HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
+
+        if (role.CanKill())
+        {
+            if (enable && !player.Data.IsDead)
             {
-                hookRole.HookExil(__instance);
-            }
-            if (role is MultiAssignRoleBase multiAssignRole)
-            {
-                if (multiAssignRole.AnotherRole is IRoleExilHook multiHookRole)
+                if (!isImposter)
                 {
-                    multiHookRole.HookExil(__instance);
+                    player.SetKillTimer(player.killTimer - Time.fixedDeltaTime);
                 }
+
+                PlayerControl target = Player.GetClosestPlayerInKillRange();
+
+                // Logging.Debug($"TargetAlive?:{target}");
+
+                hudManager.KillButton.SetTarget(target);
+                Player.SetPlayerOutLine(target, role.GetNameColor());
+                hudManager.KillButton.Show();
+                hudManager.KillButton.gameObject.SetActive(true);
             }
-
-            exiledPlayerRole.ExiledAction(__instance);
-            if (exiledPlayerRole is MultiAssignRoleBase multiAssignExiledPlayerRole)
-            {
-                multiAssignExiledPlayerRole.AnotherRole?.ExiledAction(__instance);
-            }
-
-            if (!exiledPlayerRole.HasTask())
-            {
-                __instance.ClearTasks();
-            }
-
-            ExtremeRolesPlugin.ShipState.SetDisableWinCheck(false);
-        }
-    }
-
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Deserialize))]
-    public static class PlayerControlDeserializePatch
-    {
-        public static void Postfix(PlayerControl __instance)
-        {
-            CachedPlayerControl.PlayerPtrs[__instance.Pointer].PlayerId = __instance.PlayerId;
-        }
-    }
-
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.OnDestroy))]
-    public static class PlayerControlOnDestroyPatch
-    {
-        public static void Postfix(PlayerControl __instance)
-        {
-            if (__instance.notRealPlayer) { return; }
-            CachedPlayerControl.Remove(__instance);
-        }
-    }
-
-
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.StartMeeting))]
-    public static class PlayerControlCoStartMeetingPatch
-    {
-        public static void Prefix([HarmonyArgument(0)] GameData.PlayerInfo target)
-        {
-            ExtremeRolesPlugin.Info.BlockShow(true);
-
-            var state = ExtremeRolesPlugin.ShipState;
-
-            if (state.AssassinMeetingTrigger) { return; }
-
-            // Count meetings
-            if (target == null)
-            {
-                state.IncreaseMeetingCount();
-            }
-        }
-    }
-
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.FixedUpdate))]
-    public static class PlayerControlFixedUpdatePatch
-    {
-
-        public static void Postfix(PlayerControl __instance)
-        {
-            if (AmongUsClient.Instance.GameState != InnerNet.InnerNetClient.GameStates.Started) 
-            { return; }
-            if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
-            if (ExtremeRoleManager.GameRole.Count == 0) { return; }
-            if (CachedPlayerControl.LocalPlayer.PlayerId != __instance.PlayerId) { return; }
-
-            SingleRoleBase role = ExtremeRoleManager.GetLocalPlayerRole();
-            GhostRoleBase ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
-
-            buttonUpdate(__instance, role, ghostRole);
-            refreshRoleDescription(__instance, role, ghostRole);
-        }
-
-        private static void refreshRoleDescription(
-            PlayerControl player,
-            SingleRoleBase playerRole,
-            GhostRoleBase playerGhostRole)
-        {
-
-            var removedTask = new List<PlayerTask>();
-            foreach (PlayerTask task in player.myTasks.GetFastEnumerator())
-            {
-                if (task == null) { return; }
-
-                var textTask = task.gameObject.GetComponent<ImportantTextTask>();
-                if (textTask != null)
-                {
-                    removedTask.Add(task); // TextTask does not have a corresponding RoleInfo and will hence be deleted
-                }
-            }
-
-            foreach (PlayerTask task in removedTask)
-            {
-                task.OnRemove();
-                player.myTasks.Remove(task);
-                UnityEngine.Object.Destroy(task.gameObject);
-            }
-
-            var importantTextTask = new GameObject("RoleTask").AddComponent<ImportantTextTask>();
-            importantTextTask.transform.SetParent(player.transform, false);
-
-            string addText = playerRole.GetImportantText();
-            if (playerGhostRole != null)
-            {
-                addText =$"{addText}\n{playerGhostRole.GetImportantText()}";
-            }
-            importantTextTask.Text = addText;
-            player.myTasks.Insert(0, importantTextTask);
-
-        }
-        private static void buttonUpdate(
-            PlayerControl player,
-            SingleRoleBase playerRole,
-            GhostRoleBase playerGhostRole)
-        {
-            if (!player.AmOwner) { return; }
-
-            bool enable = 
-                (player.IsKillTimerEnabled || player.ForceKillTimerContinue) &&
-                (MeetingHud.Instance == null && ExileController.Instance == null);
-
-            killButtonUpdate(player, playerRole, enable);
-            ventButtonUpdate(player, playerRole, enable);
-
-            roleAbilityButtonUpdate(playerRole);
-            ghostRoleButtonUpdate(playerGhostRole);
-        }
-
-        private static void killButtonUpdate(
-            PlayerControl player,
-            SingleRoleBase role, bool enable)
-        {
-
-            bool isImposter = role.IsImpostor();
-
-            HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
-
-            if (role.CanKill())
-            {
-                if (enable && !player.Data.IsDead)
-                {
-                    if (!isImposter)
-                    {
-                        player.SetKillTimer(player.killTimer - Time.fixedDeltaTime);
-                    }
-
-                    PlayerControl target = Player.GetClosestPlayerInKillRange();
-
-                    // Logging.Debug($"TargetAlive?:{target}");
-
-                    hudManager.KillButton.SetTarget(target);
-                    Player.SetPlayerOutLine(target, role.GetNameColor());
-                    hudManager.KillButton.Show();
-                    hudManager.KillButton.gameObject.SetActive(true);
-                }
-                else
-                {
-                    hudManager.KillButton.SetDisabled();
-                }
-            }
-            else if (isImposter)
+            else
             {
                 hudManager.KillButton.SetDisabled();
             }
         }
-
-        private static void roleAbilityButtonUpdate(
-            SingleRoleBase role)
+        else if (isImposter)
         {
-            abilityButtonUpdate(role as IRoleAbility);
+            hudManager.KillButton.SetDisabled();
+        }
+    }
 
-            var multiAssignRole = role as MultiAssignRoleBase;
-            if (multiAssignRole != null)
-            {
-                abilityButtonUpdate(
-                    multiAssignRole.AnotherRole as IRoleAbility);
-            }
+    private static void roleAbilityButtonUpdate(
+        SingleRoleBase role)
+    {
+        abilityButtonUpdate(role as IRoleAbility);
+
+        var multiAssignRole = role as MultiAssignRoleBase;
+        if (multiAssignRole != null)
+        {
+            abilityButtonUpdate(
+                multiAssignRole.AnotherRole as IRoleAbility);
+        }
+    }
+
+    private static void abilityButtonUpdate(IRoleAbility abilityRole)
+    {
+        if (abilityRole != null &&
+            abilityRole.Button != null)
+        {
+            abilityRole.Button.Update();
+        }
+    }
+
+    private static void ventButtonUpdate(
+        PlayerControl player, SingleRoleBase role, bool enable)
+    {
+
+        HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
+
+        if (!role.CanUseVent() || player.Data.IsDead)
+        { 
+            hudManager.ImpostorVentButton.Hide();
+            return;
         }
 
-        private static void abilityButtonUpdate(IRoleAbility abilityRole)
+        bool ventButtonShow = enable || player.inVent;
+
+        if (!role.TryGetVanillaRoleId(out RoleTypes roleId) ||
+            roleId is RoleTypes.Shapeshifter or RoleTypes.Impostor)
         {
-            if (abilityRole != null &&
-                abilityRole.Button != null)
+            if (ventButtonShow &&
+                ExtremeGameModeManager.Instance.ShipOption.IsEnableImpostorVent)
             {
-                abilityRole.Button.Update();
+                hudManager.ImpostorVentButton.Show();
+            }
+            else
+            {
+                hudManager.ImpostorVentButton.SetDisabled();
             }
         }
-
-        private static void ventButtonUpdate(
-            PlayerControl player, SingleRoleBase role, bool enable)
+        else if (
+            roleId == RoleTypes.Engineer &&
+            player.Data.Role.Role == RoleTypes.Engineer)
         {
-
-            HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
-
-            if (!role.CanUseVent() || player.Data.IsDead)
-            { 
-                hudManager.ImpostorVentButton.Hide();
-                return;
-            }
-
-            bool ventButtonShow = enable || player.inVent;
-
-            if (!role.TryGetVanillaRoleId(out RoleTypes roleId) ||
-                roleId is RoleTypes.Shapeshifter or RoleTypes.Impostor)
+            if (ventButtonShow)
             {
-                if (ventButtonShow &&
-                    ExtremeGameModeManager.Instance.ShipOption.IsEnableImpostorVent)
+                if (!ExtremeGameModeManager.Instance.ShipOption.EngineerUseImpostorVent)
+                {
+                    hudManager.AbilityButton.Show();
+                }
+                else
                 {
                     hudManager.ImpostorVentButton.Show();
-                }
-                else
-                {
-                    hudManager.ImpostorVentButton.SetDisabled();
+                    hudManager.AbilityButton.gameObject.SetActive(false);
                 }
             }
-            else if (
-                roleId == RoleTypes.Engineer &&
-                player.Data.Role.Role == RoleTypes.Engineer)
+            else
             {
-                if (ventButtonShow)
-                {
-                    if (!ExtremeGameModeManager.Instance.ShipOption.EngineerUseImpostorVent)
-                    {
-                        hudManager.AbilityButton.Show();
-                    }
-                    else
-                    {
-                        hudManager.ImpostorVentButton.Show();
-                        hudManager.AbilityButton.gameObject.SetActive(false);
-                    }
-                }
-                else
-                {
-                    hudManager.ImpostorVentButton.SetDisabled();
-                    hudManager.AbilityButton.SetDisabled();
-                }
+                hudManager.ImpostorVentButton.SetDisabled();
+                hudManager.AbilityButton.SetDisabled();
             }
         }
+    }
 
-        private static void ghostRoleButtonUpdate(GhostRoleBase playerGhostRole)
+    private static void ghostRoleButtonUpdate(GhostRoleBase playerGhostRole)
+    {
+        if (playerGhostRole == null) { return; }
+
+        var abilityButton = FastDestroyableSingleton<HudManager>.Instance.AbilityButton;
+
+        switch (CachedPlayerControl.LocalPlayer.Data.Role.Role)
         {
-            if (playerGhostRole == null) { return; }
-
-            var abilityButton = FastDestroyableSingleton<HudManager>.Instance.AbilityButton;
-
-            switch (CachedPlayerControl.LocalPlayer.Data.Role.Role)
-            {
-                case RoleTypes.Engineer:
-                case RoleTypes.Scientist:
-                case RoleTypes.Shapeshifter:
+            case RoleTypes.Engineer:
+            case RoleTypes.Scientist:
+            case RoleTypes.Shapeshifter:
+                abilityButton.Hide();
+                break;
+            case RoleTypes.CrewmateGhost:
+            case RoleTypes.ImpostorGhost:
+                if (playerGhostRole.IsVanillaRole() &&
+                    MeetingHud.Instance == null && 
+                    ExileController.Instance == null)
+                {
+                    abilityButton.Show();
+                }
+                else
+                {
                     abilityButton.Hide();
-                    break;
-                case RoleTypes.CrewmateGhost:
-                case RoleTypes.ImpostorGhost:
-                    if (playerGhostRole.IsVanillaRole() &&
-                        MeetingHud.Instance == null && 
-                        ExileController.Instance == null)
+                }
+                break;
+            default:
+                break;
+        }
+        playerGhostRole.Button?.Update();
+    }
+}
+
+
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
+public static class PlayerControlHandleRpcPatch
+{
+    public static void Postfix(
+        PlayerControl __instance,
+        [HarmonyArgument(0)] byte callId,
+        [HarmonyArgument(1)] MessageReader reader)
+    {
+
+        if (__instance == null || reader == null) { return; }
+
+        switch ((RPCOperator.Command)callId)
+        {
+            case RPCOperator.Command.Initialize:
+                RPCOperator.Initialize();
+                break;
+            case RPCOperator.Command.ForceEnd:
+                RPCOperator.ForceEnd();
+                break;
+            case RPCOperator.Command.SetUpReady:
+                byte readyPlayerId = reader.ReadByte();
+                RPCOperator.SetUpReady(readyPlayerId);
+                break;
+            case RPCOperator.Command.SetRoleToAllPlayer:
+                List<Module.Interface.IPlayerToExRoleAssignData> assignData = 
+                    new List<Module.Interface.IPlayerToExRoleAssignData>();
+                int assignDataNum = reader.ReadPackedInt32();
+                for (int i = 0; i < assignDataNum; ++i)
+                {
+                    byte assignedPlayerId = reader.ReadByte();
+                    byte assignRoleType = reader.ReadByte();
+                    int exRoleId = reader.ReadPackedInt32();
+                    int controlId = reader.ReadPackedInt32();
+                    switch (assignRoleType)
                     {
-                        abilityButton.Show();
+                        case (byte)Module.IAssignedPlayer.ExRoleType.Single:
+                            assignData.Add(new
+                                PlayerToSingleRoleAssignData(
+                                    assignedPlayerId, exRoleId, controlId));
+                            break;
+                        case (byte)Module.IAssignedPlayer.ExRoleType.Comb:
+                            byte assignCombType = reader.ReadByte(); // combTypeId
+                            byte bytedAmongUsVanillaRoleId = reader.ReadByte(); // byted AmongUsVanillaRoleId
+                            assignData.Add(new
+                                PlayerToCombRoleAssignData(
+                                    assignedPlayerId, exRoleId, assignCombType,
+                                    controlId, bytedAmongUsVanillaRoleId));
+                            break;
                     }
-                    else
-                    {
-                        abilityButton.Hide();
-                    }
-                    break;
-                default:
-                    break;
-            }
-            playerGhostRole.Button?.Update();
+                }
+                RPCOperator.SetRoleToAllPlayer(assignData);
+                RoleAssignState.Instance.SwitchRoleAssignToEnd();
+                if (PlayerRoleAssignData.IsExist)
+                {
+                    PlayerRoleAssignData.Instance.Destroy();
+                }
+                break;
+            case RPCOperator.Command.CleanDeadBody:
+                byte deadBodyPlayerId = reader.ReadByte();
+                RPCOperator.CleanDeadBody(deadBodyPlayerId);
+                break;
+            case RPCOperator.Command.FixLightOff:
+                RPCOperator.FixLightOff();
+                break;
+            case RPCOperator.Command.ShareOption:
+                int numOptions = (int)reader.ReadByte();
+                RPCOperator.ShareOption(numOptions, reader);
+                break;
+            case RPCOperator.Command.ReplaceRole:
+                byte targetPlayerId = reader.ReadByte();
+                byte replaceTarget = reader.ReadByte();
+                byte ops = reader.ReadByte();
+                RPCOperator.ReplaceRole(
+                    targetPlayerId, replaceTarget, ops);
+                break;
+            case RPCOperator.Command.CustomVentUse:
+                int ventId = reader.ReadPackedInt32();
+                byte ventingPlayer = reader.ReadByte();
+                byte isEnter = reader.ReadByte();
+                RPCOperator.CustomVentUse(ventId, ventingPlayer, isEnter);
+                break;
+            case RPCOperator.Command.StartVentAnimation:
+                int animationVentId = reader.ReadPackedInt32();
+                RPCOperator.StartVentAnimation(animationVentId);
+                break;
+            case RPCOperator.Command.UncheckedSnapTo:
+                byte snapPlayerId = reader.ReadByte();
+                float snapX = reader.ReadSingle();
+                float snapY = reader.ReadSingle();
+                RPCOperator.UncheckedSnapTo(
+                    snapPlayerId, new Vector2(snapX, snapY));
+                break;
+            case RPCOperator.Command.UncheckedShapeShift:
+                byte shapeShiftPlayerId = reader.ReadByte();
+                byte shapeShiftTargetPlayerId = reader.ReadByte();
+                byte shapeShiftAnimationTrigger = reader.ReadByte();
+                RPCOperator.UncheckedShapeShift(
+                    shapeShiftPlayerId,
+                    shapeShiftTargetPlayerId,
+                    shapeShiftAnimationTrigger);
+                break;
+            case RPCOperator.Command.UncheckedMurderPlayer:
+                byte sourceId = reader.ReadByte();
+                byte targetId = reader.ReadByte();
+                byte killAnimationTrigger = reader.ReadByte();
+                RPCOperator.UncheckedMurderPlayer(
+                    sourceId, targetId, killAnimationTrigger);
+                break;
+            case RPCOperator.Command.UncheckedRevive:
+                byte reviveTargetId = reader.ReadByte();
+                RPCOperator.UncheckedRevive(reviveTargetId);
+                break;
+            case RPCOperator.Command.ReplaceDeadReason:
+                byte changePlayerId = reader.ReadByte();
+                byte reason = reader.ReadByte();
+                RPCOperator.ReplaceDeadReason(
+                    changePlayerId, reason);
+                break;
+            case RPCOperator.Command.SetWinGameControlId:
+                int id = reader.ReadInt32();
+                RPCOperator.SetWinGameControlId(id);
+                break;
+            case RPCOperator.Command.SetWinPlayer:
+                int playerNum = reader.ReadInt32();
+                List<byte> winPlayerId = new List<byte>();
+                for (int i= 0; i < playerNum; ++i)
+                {
+                    winPlayerId.Add(reader.ReadByte());
+                }
+                RPCOperator.SetWinPlayer(winPlayerId);
+                break;
+            case RPCOperator.Command.SetRoleWin:
+                byte rolePlayerId = reader.ReadByte();
+                RPCOperator.SetRoleWin(rolePlayerId);
+                break;
+            case RPCOperator.Command.ShareMapId:
+                byte mapId = reader.ReadByte();
+                RPCOperator.ShareMapId(mapId);
+                break;
+            case RPCOperator.Command.ShareVersion:
+                int major = reader.ReadInt32();
+                int minor = reader.ReadInt32();
+                int build = reader.ReadInt32();
+                int revision = reader.ReadInt32();
+                int clientId = reader.ReadPackedInt32();
+                RPCOperator.AddVersionData(
+                    major, minor, build,
+                    revision, clientId);
+                break;
+            case RPCOperator.Command.PlaySound:
+                byte soundType = reader.ReadByte();
+                float volume = reader.ReadSingle();
+                RPCOperator.PlaySound(soundType, volume);
+                break;
+            case RPCOperator.Command.IntegrateModCall:
+                RPCOperator.IntegrateModCall(ref reader);
+                break;
+            case RPCOperator.Command.CloseMeetingVoteButton:
+                RPCOperator.CloseMeetingButton();
+                break;
+            case RPCOperator.Command.HeroHeroAcademia:
+                RPCOperator.HeroHeroAcademiaCommand(ref reader);
+                break;
+            case RPCOperator.Command.KidsAbility:
+                RPCOperator.KidsAbilityCommand(ref reader);
+                break;
+            case RPCOperator.Command.BodyGuardAbility:
+                RPCOperator.BodyGuardAbility(ref reader);
+                break;
+            case RPCOperator.Command.TimeMasterAbility:
+                RPCOperator.TimeMasterAbility(ref reader);
+                break;
+            case RPCOperator.Command.AgencyTakeTask:
+                byte agencyTargetPlayerId = reader.ReadByte();
+                int getTaskNum = reader.ReadInt32();
+
+                List<int> getTaskId = new List<int> ();
+                
+                for (int i = 0; i < getTaskNum; ++i)
+                {
+                    getTaskId.Add(reader.ReadInt32());
+                }
+
+                RPCOperator.AgencyTakeTask(
+                    agencyTargetPlayerId, getTaskId);
+                break;
+            case RPCOperator.Command.FencerAbility:
+                RPCOperator.FencerAbility(ref reader);
+                break;
+            case RPCOperator.Command.CuresMakerCurseKillCool:
+                byte curesMakerPlayerId = reader.ReadByte();
+                byte curesPlayerId = reader.ReadByte();
+                RPCOperator.CuresMakerCurseKillCool(
+                    curesMakerPlayerId, curesPlayerId);
+                break;
+            case RPCOperator.Command.CarpenterUseAbility:
+                RPCOperator.CarpenterUseAbility(ref reader);
+                break;
+            case RPCOperator.Command.SurvivorDeadWin:
+                byte survivorPlayerId = reader.ReadByte();
+                RPCOperator.SurvivorDeadWin(survivorPlayerId);
+                break;
+            case RPCOperator.Command.CaptainAbility:
+                RPCOperator.CaptainTargetVote(ref reader);
+                break;
+            case RPCOperator.Command.ResurrecterRpc:
+                RPCOperator.ResurrecterRpc(ref reader);
+                break;
+            case RPCOperator.Command.AssasinVoteFor:
+                byte voteTargetId = reader.ReadByte();
+                RPCOperator.AssasinVoteFor(voteTargetId);
+                break;
+            case RPCOperator.Command.CarrierAbility:
+                byte carrierCarryOpCallPlayerId = reader.ReadByte();
+                float carrierPlayerPosX = reader.ReadSingle();
+                float carrierPlayerPosY = reader.ReadSingle();
+                byte carryDeadBodyPlayerId = reader.ReadByte();
+                bool isCarryDeadBody = reader.ReadBoolean();
+                RPCOperator.CarrierAbility(
+                    carrierCarryOpCallPlayerId,
+                    carrierPlayerPosX,
+                    carrierPlayerPosY,
+                    carryDeadBodyPlayerId,
+                    isCarryDeadBody);
+                break;
+            case RPCOperator.Command.PainterPaintBody:
+                byte painterPlayerId = reader.ReadByte();
+                byte isRandomModeMessage = reader.ReadByte();
+                RPCOperator.PainterPaintBody(
+                    painterPlayerId,
+                    isRandomModeMessage);
+                break;
+            case RPCOperator.Command.FakerCreateDummy:
+                byte fakerPlayerId = reader.ReadByte();
+                byte dummyTargetId = reader.ReadByte();
+                byte fakerOps = reader.ReadByte();
+                RPCOperator.FakerCreateDummy(
+                    fakerPlayerId, dummyTargetId, fakerOps);
+                break;
+            case RPCOperator.Command.OverLoaderSwitchAbility:
+                byte overLoaderPlayerId = reader.ReadByte();
+                byte activate  = reader.ReadByte();
+                RPCOperator.OverLoaderSwitchAbility(
+                    overLoaderPlayerId, activate);
+                break;
+            case RPCOperator.Command.CrackerCrackDeadBody:
+                byte crackerId = reader.ReadByte();
+                byte crackTarget = reader.ReadByte();
+                RPCOperator.CrackerCrackDeadBody(crackerId, crackTarget);
+                break;
+            case RPCOperator.Command.MeryAbility:
+                RPCOperator.MaryAbility(ref reader);
+                break;
+            case RPCOperator.Command.LastWolfSwitchLight:
+                byte swichStatus = reader.ReadByte();
+                RPCOperator.LastWolfSwitchLight(swichStatus);
+                break;
+            case RPCOperator.Command.CommanderAttackCommand:
+                byte commanderPlayerId = reader.ReadByte();
+                RPCOperator.CommanderAttackCommand(commanderPlayerId);
+                break;
+            case RPCOperator.Command.HypnotistAbility:
+                RPCOperator.HypnotistAbility(ref reader);
+                break;
+            case RPCOperator.Command.UnderWarperUseVentWithNoAnime:
+                byte underWarperPlayerId = reader.ReadByte();
+                int targetVentId = reader.ReadPackedInt32();
+                bool isVentEnter = reader.ReadBoolean();
+                RPCOperator.UnderWarperUseVentWithNoAnime(
+                    underWarperPlayerId, targetVentId, isVentEnter);
+                break;
+            case RPCOperator.Command.AliceShipBroken:
+                byte alicePlayerId = reader.ReadByte();
+                byte newTaskSetPlayerId = reader.ReadByte();
+                int newTaskNum = reader.ReadInt32();
+
+                List<int> task = new List<int>();
+
+                for (int i = 0; i < newTaskNum; ++i)
+                {
+                    task.Add(reader.ReadInt32());
+                }
+                RPCOperator.AliceShipBroken(
+                    alicePlayerId, newTaskSetPlayerId, task);
+                break;
+            case RPCOperator.Command.ReplaceTask:
+                byte replaceTargetPlayerId = reader.ReadByte();
+                int taskIndex = reader.ReadInt32();
+                int taskId = reader.ReadInt32();
+                RPCOperator.ReplaceTask(
+                    replaceTargetPlayerId, taskIndex, taskId);
+                break;
+            case RPCOperator.Command.JesterOutburstKill:
+                byte outburstKillerId = reader.ReadByte();
+                byte killTargetId = reader.ReadByte();
+                RPCOperator.JesterOutburstKill(
+                    outburstKillerId, killTargetId);
+                break;
+            case RPCOperator.Command.YandereSetOneSidedLover:
+                byte yanderePlayerId = reader.ReadByte();
+                byte loverPlayerId = reader.ReadByte();
+                RPCOperator.YandereSetOneSidedLover(
+                    yanderePlayerId, loverPlayerId);
+                break;
+            case RPCOperator.Command.TotocalcioSetBetPlayer:
+                byte totocalcioPlayerId = reader.ReadByte();
+                byte betPlayerId = reader.ReadByte();
+                RPCOperator.TotocalcioSetBetPlayer(
+                    totocalcioPlayerId, betPlayerId);
+                break;
+            case RPCOperator.Command.MadmateToFakeImpostor:
+                byte madmatePlayerId = reader.ReadByte();
+                RPCOperator.MadmateToFakeImpostor(
+                    madmatePlayerId);
+                break;
+            case RPCOperator.Command.SetGhostRole:
+                RPCOperator.SetGhostRole(
+                    ref reader);
+                break;
+            case RPCOperator.Command.UseGhostRoleAbility:
+                byte useGhostRoleType = reader.ReadByte();
+                bool isReport = reader.ReadBoolean();
+                RPCOperator.UseGhostRoleAbility(
+                    useGhostRoleType, isReport, ref reader);
+                break;
+            case RPCOperator.Command.XionAbility:
+                RPCOperator.XionAbility(ref reader);
+                break;
+            default:
+                break;
         }
     }
+}
 
-
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.HandleRpc))]
-    public static class PlayerControlHandleRpcPatch
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
+public static class PlayerControlMurderPlayerPatch
+{
+    public static bool Prefix(
+        PlayerControl __instance,
+        [HarmonyArgument(0)] PlayerControl target)
     {
-        public static void Postfix(
-            PlayerControl __instance,
-            [HarmonyArgument(0)] byte callId,
-            [HarmonyArgument(1)] MessageReader reader)
+        if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
+
+        var role = ExtremeRoleManager.GameRole[__instance.PlayerId];
+
+        bool hasOtherKillCool = role.TryGetKillCool(out float killCool);
+
+        if (role.Id == ExtremeRoleId.Villain)
         {
-
-            if (__instance == null || reader == null) { return; }
-
-            switch ((RPCOperator.Command)callId)
-            {
-                case RPCOperator.Command.Initialize:
-                    RPCOperator.Initialize();
-                    break;
-                case RPCOperator.Command.ForceEnd:
-                    RPCOperator.ForceEnd();
-                    break;
-                case RPCOperator.Command.SetUpReady:
-                    byte readyPlayerId = reader.ReadByte();
-                    RPCOperator.SetUpReady(readyPlayerId);
-                    break;
-                case RPCOperator.Command.SetRoleToAllPlayer:
-                    List<Module.Interface.IPlayerToExRoleAssignData> assignData = 
-                        new List<Module.Interface.IPlayerToExRoleAssignData>();
-                    int assignDataNum = reader.ReadPackedInt32();
-                    for (int i = 0; i < assignDataNum; ++i)
-                    {
-                        byte assignedPlayerId = reader.ReadByte();
-                        byte assignRoleType = reader.ReadByte();
-                        int exRoleId = reader.ReadPackedInt32();
-                        int controlId = reader.ReadPackedInt32();
-                        switch (assignRoleType)
-                        {
-                            case (byte)Module.IAssignedPlayer.ExRoleType.Single:
-                                assignData.Add(new
-                                    PlayerToSingleRoleAssignData(
-                                        assignedPlayerId, exRoleId, controlId));
-                                break;
-                            case (byte)Module.IAssignedPlayer.ExRoleType.Comb:
-                                byte assignCombType = reader.ReadByte(); // combTypeId
-                                byte bytedAmongUsVanillaRoleId = reader.ReadByte(); // byted AmongUsVanillaRoleId
-                                assignData.Add(new
-                                    PlayerToCombRoleAssignData(
-                                        assignedPlayerId, exRoleId, assignCombType,
-                                        controlId, bytedAmongUsVanillaRoleId));
-                                break;
-                        }
-                    }
-                    RPCOperator.SetRoleToAllPlayer(assignData);
-                    RoleAssignState.Instance.SwitchRoleAssignToEnd();
-                    if (PlayerRoleAssignData.IsExist)
-                    {
-                        PlayerRoleAssignData.Instance.Destroy();
-                    }
-                    break;
-                case RPCOperator.Command.CleanDeadBody:
-                    byte deadBodyPlayerId = reader.ReadByte();
-                    RPCOperator.CleanDeadBody(deadBodyPlayerId);
-                    break;
-                case RPCOperator.Command.FixLightOff:
-                    RPCOperator.FixLightOff();
-                    break;
-                case RPCOperator.Command.ShareOption:
-                    int numOptions = (int)reader.ReadByte();
-                    RPCOperator.ShareOption(numOptions, reader);
-                    break;
-                case RPCOperator.Command.ReplaceRole:
-                    byte targetPlayerId = reader.ReadByte();
-                    byte replaceTarget = reader.ReadByte();
-                    byte ops = reader.ReadByte();
-                    RPCOperator.ReplaceRole(
-                        targetPlayerId, replaceTarget, ops);
-                    break;
-                case RPCOperator.Command.CustomVentUse:
-                    int ventId = reader.ReadPackedInt32();
-                    byte ventingPlayer = reader.ReadByte();
-                    byte isEnter = reader.ReadByte();
-                    RPCOperator.CustomVentUse(ventId, ventingPlayer, isEnter);
-                    break;
-                case RPCOperator.Command.StartVentAnimation:
-                    int animationVentId = reader.ReadPackedInt32();
-                    RPCOperator.StartVentAnimation(animationVentId);
-                    break;
-                case RPCOperator.Command.UncheckedSnapTo:
-                    byte snapPlayerId = reader.ReadByte();
-                    float snapX = reader.ReadSingle();
-                    float snapY = reader.ReadSingle();
-                    RPCOperator.UncheckedSnapTo(
-                        snapPlayerId, new Vector2(snapX, snapY));
-                    break;
-                case RPCOperator.Command.UncheckedShapeShift:
-                    byte shapeShiftPlayerId = reader.ReadByte();
-                    byte shapeShiftTargetPlayerId = reader.ReadByte();
-                    byte shapeShiftAnimationTrigger = reader.ReadByte();
-                    RPCOperator.UncheckedShapeShift(
-                        shapeShiftPlayerId,
-                        shapeShiftTargetPlayerId,
-                        shapeShiftAnimationTrigger);
-                    break;
-                case RPCOperator.Command.UncheckedMurderPlayer:
-                    byte sourceId = reader.ReadByte();
-                    byte targetId = reader.ReadByte();
-                    byte killAnimationTrigger = reader.ReadByte();
-                    RPCOperator.UncheckedMurderPlayer(
-                        sourceId, targetId, killAnimationTrigger);
-                    break;
-                case RPCOperator.Command.UncheckedRevive:
-                    byte reviveTargetId = reader.ReadByte();
-                    RPCOperator.UncheckedRevive(reviveTargetId);
-                    break;
-                case RPCOperator.Command.ReplaceDeadReason:
-                    byte changePlayerId = reader.ReadByte();
-                    byte reason = reader.ReadByte();
-                    RPCOperator.ReplaceDeadReason(
-                        changePlayerId, reason);
-                    break;
-                case RPCOperator.Command.SetWinGameControlId:
-                    int id = reader.ReadInt32();
-                    RPCOperator.SetWinGameControlId(id);
-                    break;
-                case RPCOperator.Command.SetWinPlayer:
-                    int playerNum = reader.ReadInt32();
-                    List<byte> winPlayerId = new List<byte>();
-                    for (int i= 0; i < playerNum; ++i)
-                    {
-                        winPlayerId.Add(reader.ReadByte());
-                    }
-                    RPCOperator.SetWinPlayer(winPlayerId);
-                    break;
-                case RPCOperator.Command.SetRoleWin:
-                    byte rolePlayerId = reader.ReadByte();
-                    RPCOperator.SetRoleWin(rolePlayerId);
-                    break;
-                case RPCOperator.Command.ShareMapId:
-                    byte mapId = reader.ReadByte();
-                    RPCOperator.ShareMapId(mapId);
-                    break;
-                case RPCOperator.Command.ShareVersion:
-                    int major = reader.ReadInt32();
-                    int minor = reader.ReadInt32();
-                    int build = reader.ReadInt32();
-                    int revision = reader.ReadInt32();
-                    int clientId = reader.ReadPackedInt32();
-                    RPCOperator.AddVersionData(
-                        major, minor, build,
-                        revision, clientId);
-                    break;
-                case RPCOperator.Command.PlaySound:
-                    byte soundType = reader.ReadByte();
-                    float volume = reader.ReadSingle();
-                    RPCOperator.PlaySound(soundType, volume);
-                    break;
-                case RPCOperator.Command.IntegrateModCall:
-                    RPCOperator.IntegrateModCall(ref reader);
-                    break;
-                case RPCOperator.Command.CloseMeetingVoteButton:
-                    RPCOperator.CloseMeetingButton();
-                    break;
-                case RPCOperator.Command.HeroHeroAcademia:
-                    RPCOperator.HeroHeroAcademiaCommand(ref reader);
-                    break;
-                case RPCOperator.Command.KidsAbility:
-                    RPCOperator.KidsAbilityCommand(ref reader);
-                    break;
-                case RPCOperator.Command.BodyGuardAbility:
-                    RPCOperator.BodyGuardAbility(ref reader);
-                    break;
-                case RPCOperator.Command.TimeMasterAbility:
-                    RPCOperator.TimeMasterAbility(ref reader);
-                    break;
-                case RPCOperator.Command.AgencyTakeTask:
-                    byte agencyTargetPlayerId = reader.ReadByte();
-                    int getTaskNum = reader.ReadInt32();
-
-                    List<int> getTaskId = new List<int> ();
-                    
-                    for (int i = 0; i < getTaskNum; ++i)
-                    {
-                        getTaskId.Add(reader.ReadInt32());
-                    }
-
-                    RPCOperator.AgencyTakeTask(
-                        agencyTargetPlayerId, getTaskId);
-                    break;
-                case RPCOperator.Command.FencerAbility:
-                    RPCOperator.FencerAbility(ref reader);
-                    break;
-                case RPCOperator.Command.CuresMakerCurseKillCool:
-                    byte curesMakerPlayerId = reader.ReadByte();
-                    byte curesPlayerId = reader.ReadByte();
-                    RPCOperator.CuresMakerCurseKillCool(
-                        curesMakerPlayerId, curesPlayerId);
-                    break;
-                case RPCOperator.Command.CarpenterUseAbility:
-                    RPCOperator.CarpenterUseAbility(ref reader);
-                    break;
-                case RPCOperator.Command.SurvivorDeadWin:
-                    byte survivorPlayerId = reader.ReadByte();
-                    RPCOperator.SurvivorDeadWin(survivorPlayerId);
-                    break;
-                case RPCOperator.Command.CaptainAbility:
-                    RPCOperator.CaptainTargetVote(ref reader);
-                    break;
-                case RPCOperator.Command.ResurrecterRpc:
-                    RPCOperator.ResurrecterRpc(ref reader);
-                    break;
-                case RPCOperator.Command.AssasinVoteFor:
-                    byte voteTargetId = reader.ReadByte();
-                    RPCOperator.AssasinVoteFor(voteTargetId);
-                    break;
-                case RPCOperator.Command.CarrierAbility:
-                    byte carrierCarryOpCallPlayerId = reader.ReadByte();
-                    float carrierPlayerPosX = reader.ReadSingle();
-                    float carrierPlayerPosY = reader.ReadSingle();
-                    byte carryDeadBodyPlayerId = reader.ReadByte();
-                    bool isCarryDeadBody = reader.ReadBoolean();
-                    RPCOperator.CarrierAbility(
-                        carrierCarryOpCallPlayerId,
-                        carrierPlayerPosX,
-                        carrierPlayerPosY,
-                        carryDeadBodyPlayerId,
-                        isCarryDeadBody);
-                    break;
-                case RPCOperator.Command.PainterPaintBody:
-                    byte painterPlayerId = reader.ReadByte();
-                    byte isRandomModeMessage = reader.ReadByte();
-                    RPCOperator.PainterPaintBody(
-                        painterPlayerId,
-                        isRandomModeMessage);
-                    break;
-                case RPCOperator.Command.FakerCreateDummy:
-                    byte fakerPlayerId = reader.ReadByte();
-                    byte dummyTargetId = reader.ReadByte();
-                    byte fakerOps = reader.ReadByte();
-                    RPCOperator.FakerCreateDummy(
-                        fakerPlayerId, dummyTargetId, fakerOps);
-                    break;
-                case RPCOperator.Command.OverLoaderSwitchAbility:
-                    byte overLoaderPlayerId = reader.ReadByte();
-                    byte activate  = reader.ReadByte();
-                    RPCOperator.OverLoaderSwitchAbility(
-                        overLoaderPlayerId, activate);
-                    break;
-                case RPCOperator.Command.CrackerCrackDeadBody:
-                    byte crackerId = reader.ReadByte();
-                    byte crackTarget = reader.ReadByte();
-                    RPCOperator.CrackerCrackDeadBody(crackerId, crackTarget);
-                    break;
-                case RPCOperator.Command.MeryAbility:
-                    RPCOperator.MaryAbility(ref reader);
-                    break;
-                case RPCOperator.Command.LastWolfSwitchLight:
-                    byte swichStatus = reader.ReadByte();
-                    RPCOperator.LastWolfSwitchLight(swichStatus);
-                    break;
-                case RPCOperator.Command.CommanderAttackCommand:
-                    byte commanderPlayerId = reader.ReadByte();
-                    RPCOperator.CommanderAttackCommand(commanderPlayerId);
-                    break;
-                case RPCOperator.Command.HypnotistAbility:
-                    RPCOperator.HypnotistAbility(ref reader);
-                    break;
-                case RPCOperator.Command.UnderWarperUseVentWithNoAnime:
-                    byte underWarperPlayerId = reader.ReadByte();
-                    int targetVentId = reader.ReadPackedInt32();
-                    bool isVentEnter = reader.ReadBoolean();
-                    RPCOperator.UnderWarperUseVentWithNoAnime(
-                        underWarperPlayerId, targetVentId, isVentEnter);
-                    break;
-                case RPCOperator.Command.AliceShipBroken:
-                    byte alicePlayerId = reader.ReadByte();
-                    byte newTaskSetPlayerId = reader.ReadByte();
-                    int newTaskNum = reader.ReadInt32();
-
-                    List<int> task = new List<int>();
-
-                    for (int i = 0; i < newTaskNum; ++i)
-                    {
-                        task.Add(reader.ReadInt32());
-                    }
-                    RPCOperator.AliceShipBroken(
-                        alicePlayerId, newTaskSetPlayerId, task);
-                    break;
-                case RPCOperator.Command.ReplaceTask:
-                    byte replaceTargetPlayerId = reader.ReadByte();
-                    int taskIndex = reader.ReadInt32();
-                    int taskId = reader.ReadInt32();
-                    RPCOperator.ReplaceTask(
-                        replaceTargetPlayerId, taskIndex, taskId);
-                    break;
-                case RPCOperator.Command.JesterOutburstKill:
-                    byte outburstKillerId = reader.ReadByte();
-                    byte killTargetId = reader.ReadByte();
-                    RPCOperator.JesterOutburstKill(
-                        outburstKillerId, killTargetId);
-                    break;
-                case RPCOperator.Command.YandereSetOneSidedLover:
-                    byte yanderePlayerId = reader.ReadByte();
-                    byte loverPlayerId = reader.ReadByte();
-                    RPCOperator.YandereSetOneSidedLover(
-                        yanderePlayerId, loverPlayerId);
-                    break;
-                case RPCOperator.Command.TotocalcioSetBetPlayer:
-                    byte totocalcioPlayerId = reader.ReadByte();
-                    byte betPlayerId = reader.ReadByte();
-                    RPCOperator.TotocalcioSetBetPlayer(
-                        totocalcioPlayerId, betPlayerId);
-                    break;
-                case RPCOperator.Command.MadmateToFakeImpostor:
-                    byte madmatePlayerId = reader.ReadByte();
-                    RPCOperator.MadmateToFakeImpostor(
-                        madmatePlayerId);
-                    break;
-                case RPCOperator.Command.SetGhostRole:
-                    RPCOperator.SetGhostRole(
-                        ref reader);
-                    break;
-                case RPCOperator.Command.UseGhostRoleAbility:
-                    byte useGhostRoleType = reader.ReadByte();
-                    bool isReport = reader.ReadBoolean();
-                    RPCOperator.UseGhostRoleAbility(
-                        useGhostRoleType, isReport, ref reader);
-                    break;
-                case RPCOperator.Command.XionAbility:
-                    RPCOperator.XionAbility(ref reader);
-                    break;
-                default:
-                    break;
-            }
+            guardBreakKill(__instance, target, killCool);
+            return false; 
         }
-    }
+        if (!hasOtherKillCool) { return true; }
 
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.MurderPlayer))]
-    public static class PlayerControlMurderPlayerPatch
-    {
-        public static bool Prefix(
-            PlayerControl __instance,
-            [HarmonyArgument(0)] PlayerControl target)
+        __instance.logger.Debug(
+            $"{__instance.PlayerId} trying to murder {target.PlayerId}", null);
+
+        if (target.protectedByGuardian)
         {
-            if (ExtremeRoleManager.GameRole.Count == 0) { return true; }
-
-            var role = ExtremeRoleManager.GameRole[__instance.PlayerId];
-
-            bool hasOtherKillCool = role.TryGetKillCool(out float killCool);
-
-            if (role.Id == ExtremeRoleId.Villain)
+            target.protectedByGuardianThisRound = true;
+            bool flag = CachedPlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel;
+            if (__instance.AmOwner || flag)
             {
-                guardBreakKill(__instance, target, killCool);
-                return false; 
+                target.ShowFailedMurder();
+                __instance.SetKillTimer(killCool / 2f);
             }
-            if (!hasOtherKillCool) { return true; }
-
+            else
+            {
+                target.RemoveProtection();
+            }
+            if (flag)
+            {
+                StatsManager.Instance.IncrementStat(
+                    StringNames.StatsGuardianAngelCrewmatesProtected);
+            }
             __instance.logger.Debug(
-                $"{__instance.PlayerId} trying to murder {target.PlayerId}", null);
-
-            if (target.protectedByGuardian)
-            {
-                target.protectedByGuardianThisRound = true;
-                bool flag = CachedPlayerControl.LocalPlayer.Data.Role.Role == RoleTypes.GuardianAngel;
-                if (__instance.AmOwner || flag)
-                {
-                    target.ShowFailedMurder();
-                    __instance.SetKillTimer(killCool / 2f);
-                }
-                else
-                {
-                    target.RemoveProtection();
-                }
-                if (flag)
-                {
-                    StatsManager.Instance.IncrementStat(
-                        StringNames.StatsGuardianAngelCrewmatesProtected);
-                }
-                __instance.logger.Debug(
-                    $"{__instance.PlayerId} failed to murder {target.PlayerId} due to guardian angel protection",
-                    null);
-                return false;
-            }
-
-            murderPlayerBody(__instance, target, killCool);
+                $"{__instance.PlayerId} failed to murder {target.PlayerId} due to guardian angel protection",
+                null);
             return false;
         }
 
-        public static void Postfix(
-            PlayerControl __instance,
-            [HarmonyArgument(0)] PlayerControl target)
+        murderPlayerBody(__instance, target, killCool);
+        return false;
+    }
+
+    public static void Postfix(
+        PlayerControl __instance,
+        [HarmonyArgument(0)] PlayerControl target)
+    {
+
+        if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+
+        if (!target.Data.IsDead) { return; }
+
+        ExtremeRolesPlugin.ShipState.AddDeadInfo(
+            target, DeathReason.Kill, __instance);
+
+        byte targetPlayerId = target.PlayerId;
+
+        var role = ExtremeRoleManager.GameRole[targetPlayerId];
+
+        if (!role.HasTask())
         {
+            target.ClearTasks();
+        }
 
-            if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+        if (ExtremeRoleManager.IsDisableWinCheckRole(role))
+        {
+            ExtremeRolesPlugin.ShipState.SetDisableWinCheck(true);
+        }
 
-            if (!target.Data.IsDead) { return; }
+        var multiAssignRole = role as MultiAssignRoleBase;
 
-            ExtremeRolesPlugin.ShipState.AddDeadInfo(
-                target, DeathReason.Kill, __instance);
-
-            byte targetPlayerId = target.PlayerId;
-
-            var role = ExtremeRoleManager.GameRole[targetPlayerId];
-
-            if (!role.HasTask())
+        role.RolePlayerKilledAction(
+            target, __instance);
+        if (multiAssignRole != null)
+        {
+            if (multiAssignRole.AnotherRole != null)
             {
-                target.ClearTasks();
+                multiAssignRole.AnotherRole.RolePlayerKilledAction(
+                    target, __instance);
             }
+        }
 
-            if (ExtremeRoleManager.IsDisableWinCheckRole(role))
+        ExtremeRolesPlugin.ShipState.SetDisableWinCheck(false);
+
+        var player = CachedPlayerControl.LocalPlayer;
+
+        if (player.PlayerId != targetPlayerId)
+        {
+            var hookRole = ExtremeRoleManager.GameRole[
+                player.PlayerId] as IRoleMurderPlayerHook;
+            multiAssignRole = ExtremeRoleManager.GameRole[
+                player.PlayerId] as MultiAssignRoleBase;
+
+            if (hookRole != null)
             {
-                ExtremeRolesPlugin.ShipState.SetDisableWinCheck(true);
+                hookRole.HookMuderPlayer(
+                    __instance, target);
             }
-
-            var multiAssignRole = role as MultiAssignRoleBase;
-
-            role.RolePlayerKilledAction(
-                target, __instance);
             if (multiAssignRole != null)
             {
-                if (multiAssignRole.AnotherRole != null)
-                {
-                    multiAssignRole.AnotherRole.RolePlayerKilledAction(
-                        target, __instance);
-                }
-            }
-
-            ExtremeRolesPlugin.ShipState.SetDisableWinCheck(false);
-
-            var player = CachedPlayerControl.LocalPlayer;
-
-            if (player.PlayerId != targetPlayerId)
-            {
-                var hookRole = ExtremeRoleManager.GameRole[
-                    player.PlayerId] as IRoleMurderPlayerHook;
-                multiAssignRole = ExtremeRoleManager.GameRole[
-                    player.PlayerId] as MultiAssignRoleBase;
-
+                hookRole = multiAssignRole.AnotherRole as IRoleMurderPlayerHook;
                 if (hookRole != null)
                 {
                     hookRole.HookMuderPlayer(
                         __instance, target);
                 }
-                if (multiAssignRole != null)
-                {
-                    hookRole = multiAssignRole.AnotherRole as IRoleMurderPlayerHook;
-                    if (hookRole != null)
-                    {
-                        hookRole.HookMuderPlayer(
-                            __instance, target);
-                    }
-                }
             }
-        }
-        private static void guardBreakKill(
-            PlayerControl instance,
-            PlayerControl target,
-            float killCool)
-        {
-            if (target.protectedByGuardian)
-            {
-                target.RemoveProtection();
-            }
-            murderPlayerBody(instance, target, killCool);
-        }
-
-        private static void murderPlayerBody(
-            PlayerControl instance,
-            PlayerControl target,
-            float killCool)
-        {
-            if (instance.AmOwner)
-            {
-                if (GameManager.Instance.IsHideAndSeek())
-                {
-                    StatsManager.Instance.IncrementStat(
-                        StringNames.StatsImpostorKills_HideAndSeek);
-                }
-                else
-                {
-                    StatsManager.Instance.IncrementStat(StringNames.StatsImpostorKills);
-                }
-                if (instance.CurrentOutfitType == PlayerOutfitType.Shapeshifted)
-                {
-                    StatsManager.Instance.IncrementStat(StringNames.StatsShapeshifterShiftedKills);
-                }
-                if (Constants.ShouldPlaySfx())
-                {
-                    SoundManager.Instance.PlaySound(
-                        instance.KillSfx, false, 0.8f, null);
-                }
-                instance.SetKillTimer(killCool);
-            }
-            
-            FastDestroyableSingleton<Telemetry>.Instance.WriteMurder();
-
-            target.gameObject.layer = LayerMask.NameToLayer("Ghost");
-            if (target.AmOwner)
-            {
-                StatsManager.Instance.IncrementStat(StringNames.StatsTimesMurdered);
-                if (Minigame.Instance)
-                {
-                    try
-                    {
-                        Minigame.Instance.Close();
-                        Minigame.Instance.Close();
-                    }
-                    catch
-                    {
-                    }
-                }
-                FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(
-                    instance.Data, target.Data);
-                FastDestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
-                target.cosmetics.SetNameMask(false);
-                target.RpcSetScanner(false);
-            }
-            FastDestroyableSingleton<AchievementManager>.Instance.OnMurder(
-                instance.AmOwner, target.AmOwner,
-                instance.CurrentOutfitType == PlayerOutfitType.Shapeshifted);
-
-            var killAnimation = instance.KillAnimations;
-            var useKillAnimation = default(KillAnimation);
-
-            if (killAnimation.Count > 0)
-            {
-                useKillAnimation = killAnimation[UnityEngine.Random.Range(
-                    0, killAnimation.Count)];
-            }
-
-            instance.MyPhysics.StartCoroutine(useKillAnimation.CoPerformKill(instance, target));
-
-            instance.logger.Debug(
-                string.Format("{0} succeeded in murdering {1}", instance.PlayerId, target.PlayerId), null);
         }
     }
-
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetKillTimer))]
-    public static class PlayerControlSetCoolDownPatch
+    private static void guardBreakKill(
+        PlayerControl instance,
+        PlayerControl target,
+        float killCool)
     {
-        public static bool Prefix(
-            PlayerControl __instance, [HarmonyArgument(0)] float time)
+        if (target.protectedByGuardian)
         {
-            var roles = ExtremeRoleManager.GameRole;
-            if (roles.Count == 0 || !roles.ContainsKey(__instance.PlayerId)) { return true; }
-
-            var role = roles[__instance.PlayerId];
-
-            var killCool = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
-                FloatOptionNames.KillCooldown);
-            if (killCool <= 0f) { return false; }
-            float maxTime = killCool;
-
-            if (!role.CanKill()) { return false; }
-
-            if (role.TryGetKillCool(out float otherKillCool))
-            {
-                maxTime = otherKillCool;
-            }
-
-            __instance.killTimer = Mathf.Clamp(
-                time, 0f, maxTime);
-            FastDestroyableSingleton<HudManager>.Instance.KillButton.SetCoolDown(
-                __instance.killTimer, maxTime);
-
-            return false;
-
+            target.RemoveProtection();
         }
+        murderPlayerBody(instance, target, killCool);
     }
 
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Shapeshift))]
-    public static class PlayerControlShapeshiftPatch
+    private static void murderPlayerBody(
+        PlayerControl instance,
+        PlayerControl target,
+        float killCool)
     {
-        public static bool Prefix(
-            PlayerControl __instance,
-            [HarmonyArgument(0)] PlayerControl targetPlayer,
-            [HarmonyArgument(1)] bool animate)
+        if (instance.AmOwner)
         {
-            var roles = ExtremeRoleManager.GameRole;
-            if (roles.Count == 0 || !roles.ContainsKey(__instance.PlayerId)) { return true; }
-
-            var role = roles[__instance.PlayerId];
-            if (role.TryGetVanillaRoleId(out RoleTypes roleId) &&
-                roleId == RoleTypes.Shapeshifter) { return true; }
-
-
-            GameData.PlayerInfo targetPlayerInfo = targetPlayer.Data;
-            GameData.PlayerOutfit newOutfit;
-            if (targetPlayerInfo.PlayerId == __instance.Data.PlayerId)
+            if (GameManager.Instance.IsHideAndSeek())
             {
-                newOutfit = __instance.Data.Outfits[PlayerOutfitType.Default];
+                StatsManager.Instance.IncrementStat(
+                    StringNames.StatsImpostorKills_HideAndSeek);
             }
             else
             {
-                newOutfit = targetPlayer.Data.Outfits[PlayerOutfitType.Default];
+                StatsManager.Instance.IncrementStat(StringNames.StatsImpostorKills);
             }
-            Action changeOutfit = delegate ()
+            if (instance.CurrentOutfitType == PlayerOutfitType.Shapeshifted)
             {
-                __instance.RawSetName(newOutfit.PlayerName);
-                __instance.RawSetColor(newOutfit.ColorId);
-                __instance.RawSetHat(newOutfit.HatId, newOutfit.ColorId);
-                __instance.RawSetSkin(newOutfit.SkinId, newOutfit.ColorId);
-                __instance.RawSetVisor(newOutfit.VisorId, newOutfit.ColorId);
-                __instance.RawSetPet(newOutfit.PetId, newOutfit.ColorId);
-                __instance.Visible = __instance.Visible;
-                if (targetPlayerInfo.PlayerId == __instance.Data.PlayerId)
+                StatsManager.Instance.IncrementStat(StringNames.StatsShapeshifterShiftedKills);
+            }
+            if (Constants.ShouldPlaySfx())
+            {
+                SoundManager.Instance.PlaySound(
+                    instance.KillSfx, false, 0.8f, null);
+            }
+            instance.SetKillTimer(killCool);
+        }
+        
+        FastDestroyableSingleton<Telemetry>.Instance.WriteMurder();
+
+        target.gameObject.layer = LayerMask.NameToLayer("Ghost");
+        if (target.AmOwner)
+        {
+            StatsManager.Instance.IncrementStat(StringNames.StatsTimesMurdered);
+            if (Minigame.Instance)
+            {
+                try
                 {
-                    __instance.CurrentOutfitType = PlayerOutfitType.Default;
-                    __instance.Data.Outfits.Remove(PlayerOutfitType.Shapeshifted);
+                    Minigame.Instance.Close();
+                    Minigame.Instance.Close();
                 }
-                else
+                catch
                 {
-                    __instance.CurrentOutfitType = PlayerOutfitType.Shapeshifted;
-                    __instance.Data.SetOutfit(__instance.CurrentOutfitType, newOutfit);
                 }
+            }
+            FastDestroyableSingleton<HudManager>.Instance.KillOverlay.ShowKillAnimation(
+                instance.Data, target.Data);
+            FastDestroyableSingleton<HudManager>.Instance.ShadowQuad.gameObject.SetActive(false);
+            target.cosmetics.SetNameMask(false);
+            target.RpcSetScanner(false);
+        }
+        FastDestroyableSingleton<AchievementManager>.Instance.OnMurder(
+            instance.AmOwner, target.AmOwner,
+            instance.CurrentOutfitType == PlayerOutfitType.Shapeshifted);
+
+        var killAnimation = instance.KillAnimations;
+        var useKillAnimation = default(KillAnimation);
+
+        if (killAnimation.Count > 0)
+        {
+            useKillAnimation = killAnimation[UnityEngine.Random.Range(
+                0, killAnimation.Count)];
+        }
+
+        instance.MyPhysics.StartCoroutine(useKillAnimation.CoPerformKill(instance, target));
+
+        instance.logger.Debug(
+            string.Format("{0} succeeded in murdering {1}", instance.PlayerId, target.PlayerId), null);
+    }
+}
+
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.SetKillTimer))]
+public static class PlayerControlSetCoolDownPatch
+{
+    public static bool Prefix(
+        PlayerControl __instance, [HarmonyArgument(0)] float time)
+    {
+        var roles = ExtremeRoleManager.GameRole;
+        if (roles.Count == 0 || !roles.ContainsKey(__instance.PlayerId)) { return true; }
+
+        var role = roles[__instance.PlayerId];
+
+        var killCool = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
+            FloatOptionNames.KillCooldown);
+        if (killCool <= 0f) { return false; }
+        float maxTime = killCool;
+
+        if (!role.CanKill()) { return false; }
+
+        if (role.TryGetKillCool(out float otherKillCool))
+        {
+            maxTime = otherKillCool;
+        }
+
+        __instance.killTimer = Mathf.Clamp(
+            time, 0f, maxTime);
+        FastDestroyableSingleton<HudManager>.Instance.KillButton.SetCoolDown(
+            __instance.killTimer, maxTime);
+
+        return false;
+
+    }
+}
+
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Shapeshift))]
+public static class PlayerControlShapeshiftPatch
+{
+    public static bool Prefix(
+        PlayerControl __instance,
+        [HarmonyArgument(0)] PlayerControl targetPlayer,
+        [HarmonyArgument(1)] bool animate)
+    {
+        var roles = ExtremeRoleManager.GameRole;
+        if (roles.Count == 0 || !roles.ContainsKey(__instance.PlayerId)) { return true; }
+
+        var role = roles[__instance.PlayerId];
+        if (role.TryGetVanillaRoleId(out RoleTypes roleId) &&
+            roleId == RoleTypes.Shapeshifter) { return true; }
+
+
+        GameData.PlayerInfo targetPlayerInfo = targetPlayer.Data;
+        GameData.PlayerOutfit newOutfit;
+        if (targetPlayerInfo.PlayerId == __instance.Data.PlayerId)
+        {
+            newOutfit = __instance.Data.Outfits[PlayerOutfitType.Default];
+        }
+        else
+        {
+            newOutfit = targetPlayer.Data.Outfits[PlayerOutfitType.Default];
+        }
+        Action changeOutfit = delegate ()
+        {
+            __instance.RawSetName(newOutfit.PlayerName);
+            __instance.RawSetColor(newOutfit.ColorId);
+            __instance.RawSetHat(newOutfit.HatId, newOutfit.ColorId);
+            __instance.RawSetSkin(newOutfit.SkinId, newOutfit.ColorId);
+            __instance.RawSetVisor(newOutfit.VisorId, newOutfit.ColorId);
+            __instance.RawSetPet(newOutfit.PetId, newOutfit.ColorId);
+            __instance.Visible = __instance.Visible;
+            if (targetPlayerInfo.PlayerId == __instance.Data.PlayerId)
+            {
+                __instance.CurrentOutfitType = PlayerOutfitType.Default;
+                __instance.Data.Outfits.Remove(PlayerOutfitType.Shapeshifted);
+            }
+            else
+            {
+                __instance.CurrentOutfitType = PlayerOutfitType.Shapeshifted;
+                __instance.Data.SetOutfit(__instance.CurrentOutfitType, newOutfit);
+            }
+        };
+        if (animate)
+        {
+            __instance.shapeshifting = true;
+            if (__instance.AmOwner)
+            {
+                PlayerControl.HideCursorTemporarily();
+            }
+            RoleEffectAnimation roleEffectAnimation = UnityEngine.Object.Instantiate<RoleEffectAnimation>(
+                FastDestroyableSingleton<RoleManager>.Instance.shapeshiftAnim, __instance.gameObject.transform);
+            roleEffectAnimation.SetMaterialColor(
+                __instance.Data.Outfits[PlayerOutfitType.Default].ColorId);
+            if (__instance.cosmetics.FlipX)
+            {
+                roleEffectAnimation.transform.position -= new Vector3(0.14f, 0f, 0f);
+            }
+
+            Action changeAction = () =>
+            {
+                changeOutfit();
+                __instance.cosmetics.SetScale(__instance.defaultPlayerScale);
             };
-            if (animate)
+
+            roleEffectAnimation.MidAnimCB = changeAction;
+
+            __instance.StartCoroutine(__instance.ScalePlayer(
+                __instance.MyPhysics.Animations.ShapeshiftScale, 0.25f));
+
+            Action roleAnimation = () =>
             {
-                __instance.shapeshifting = true;
-                if (__instance.AmOwner)
-                {
-                    PlayerControl.HideCursorTemporarily();
-                }
-                RoleEffectAnimation roleEffectAnimation = UnityEngine.Object.Instantiate<RoleEffectAnimation>(
-                    FastDestroyableSingleton<RoleManager>.Instance.shapeshiftAnim, __instance.gameObject.transform);
-                roleEffectAnimation.SetMaterialColor(
-                    __instance.Data.Outfits[PlayerOutfitType.Default].ColorId);
-                if (__instance.cosmetics.FlipX)
-                {
-                    roleEffectAnimation.transform.position -= new Vector3(0.14f, 0f, 0f);
-                }
+                __instance.shapeshifting = false;
+            };
 
-                Action changeAction = () =>
-                {
-                    changeOutfit();
-                    __instance.cosmetics.SetScale(__instance.defaultPlayerScale);
-                };
-
-                roleEffectAnimation.MidAnimCB = changeAction;
-
-                __instance.StartCoroutine(__instance.ScalePlayer(
-                    __instance.MyPhysics.Animations.ShapeshiftScale, 0.25f));
-
-                Action roleAnimation = () =>
-                {
-                    __instance.shapeshifting = false;
-                };
-
-                roleEffectAnimation.Play(
-                    __instance, roleAnimation,
-                    CachedPlayerControl.LocalPlayer.PlayerControl.cosmetics.FlipX,
-                    RoleEffectAnimation.SoundType.Local, 0f);
-                return false;
-            }
-            changeOutfit();
+            roleEffectAnimation.Play(
+                __instance, roleAnimation,
+                CachedPlayerControl.LocalPlayer.PlayerControl.cosmetics.FlipX,
+                RoleEffectAnimation.SoundType.Local, 0f);
             return false;
-
         }
+        changeOutfit();
+        return false;
+
     }
+}
 
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.RpcSyncSettings))]
-    public static class PlayerControlRpcSyncSettingsPatch
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.RpcSyncSettings))]
+public static class PlayerControlRpcSyncSettingsPatch
+{
+    public static void Postfix()
     {
-        public static void Postfix()
-        {
-            OptionHolder.ShareOptionSelections();
-        }
+        OptionHolder.ShareOptionSelections();
     }
-    
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.RemoveTask))]
-    public static class PlayerControlRemoveTaskPatch
+}
+
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.RemoveTask))]
+public static class PlayerControlRemoveTaskPatch
+{
+    public static void Prefix()
     {
-        public static void Prefix()
-        {
-            Manager.HudManagerUpdatePatch.SetBlockUpdate(true);
-            FastDestroyableSingleton<HudManager>.Instance.taskDirtyTimer = 0.0f;
-        }
-        public static void Postfix()
-        {
-            Manager.HudManagerUpdatePatch.SetBlockUpdate(false);
-        }
+        Manager.HudManagerUpdatePatch.SetBlockUpdate(true);
+        FastDestroyableSingleton<HudManager>.Instance.taskDirtyTimer = 0.0f;
     }
-
-    [HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Revive))]
-    public static class PlayerControlRevivePatch
+    public static void Postfix()
     {
-        public static void Postfix(PlayerControl __instance)
+        Manager.HudManagerUpdatePatch.SetBlockUpdate(false);
+    }
+}
+
+[HarmonyPatch(typeof(PlayerControl), nameof(PlayerControl.Revive))]
+public static class PlayerControlRevivePatch
+{
+    public static void Postfix(PlayerControl __instance)
+    {
+
+        ExtremeRolesPlugin.ShipState.RemoveDeadInfo(__instance.PlayerId);
+
+        if (ExtremeRoleManager.GameRole.Count == 0) { return; }
+        if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
+
+        var (onRevive, onReviveOther) = ExtremeRoleManager.GetInterfaceCastedRole<
+            IRoleOnRevive>(__instance.PlayerId);
+
+        onRevive?.ReviveAction(__instance);
+        onReviveOther?.ReviveAction(__instance);
+
+        SingleRoleBase role = ExtremeRoleManager.GameRole[__instance.PlayerId];
+
+        if (!role.TryGetVanillaRoleId(out RoleTypes roleId) &&
+            role.IsImpostor())
         {
+            roleId = RoleTypes.Impostor;
+        }
 
-            ExtremeRolesPlugin.ShipState.RemoveDeadInfo(__instance.PlayerId);
+        FastDestroyableSingleton<RoleManager>.Instance.SetRole(
+            __instance, roleId);
 
-            if (ExtremeRoleManager.GameRole.Count == 0) { return; }
-            if (!RoleAssignState.Instance.IsRoleSetUpEnd) { return; }
+        var ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
+        if (ghostRole == null) { return; }
 
-            var (onRevive, onReviveOther) = ExtremeRoleManager.GetInterfaceCastedRole<
-                IRoleOnRevive>(__instance.PlayerId);
+        if (__instance.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
+        {
+            ghostRole.ResetOnMeetingStart();
+        }
 
-            onRevive?.ReviveAction(__instance);
-            onReviveOther?.ReviveAction(__instance);
-
-            SingleRoleBase role = ExtremeRoleManager.GameRole[__instance.PlayerId];
-
-            if (!role.TryGetVanillaRoleId(out RoleTypes roleId) &&
-                role.IsImpostor())
-            {
-                roleId = RoleTypes.Impostor;
-            }
-
-            FastDestroyableSingleton<RoleManager>.Instance.SetRole(
-                __instance, roleId);
-
-            var ghostRole = ExtremeGhostRoleManager.GetLocalPlayerGhostRole();
-            if (ghostRole == null) { return; }
-
-            if (__instance.PlayerId == CachedPlayerControl.LocalPlayer.PlayerId)
-            {
-                ghostRole.ResetOnMeetingStart();
-            }
-
-            lock (ExtremeGhostRoleManager.GameRole)
-            {
-                ExtremeGhostRoleManager.GameRole.Remove(__instance.PlayerId);
-            }
+        lock (ExtremeGhostRoleManager.GameRole)
+        {
+            ExtremeGhostRoleManager.GameRole.Remove(__instance.PlayerId);
         }
     }
 }
