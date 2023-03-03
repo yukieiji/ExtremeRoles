@@ -230,10 +230,9 @@ namespace ExtremeRoles.Patches
                 (MeetingHud.Instance == null && ExileController.Instance == null);
 
             killButtonUpdate(player, playerRole, enable);
+            ventButtonUpdate(player, playerRole, enable);
 
-            sabotageButtonUpdate(player, playerRole, enable);
             roleAbilityButtonUpdate(playerRole);
-
             ghostRoleButtonUpdate(playerGhostRole);
         }
 
