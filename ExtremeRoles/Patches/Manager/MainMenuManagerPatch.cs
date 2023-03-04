@@ -113,8 +113,9 @@ namespace ExtremeRoles.Patches.Manager
                     Module.Prefab.Prop);
                 Module.Prefab.Prop.name = "propForInEx";
                 Module.Prefab.Prop.gameObject.SetActive(false);
-
-                Module.Prefab.Text = UnityEngine.Object.Instantiate(man.TwitchPopup.TextAreaTMP);
+                
+                Module.Prefab.Text = UnityEngine.Object.Instantiate(
+                    __instance.Announcement.Title);
                 Module.Prefab.Text.alignment = TextAlignmentOptions.Center;
                 UnityEngine.Object.DontDestroyOnLoad(Module.Prefab.Text);
                 UnityEngine.Object.Destroy(Module.Prefab.Text.GetComponent<
