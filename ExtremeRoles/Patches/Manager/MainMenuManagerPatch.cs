@@ -13,6 +13,7 @@ using HarmonyLib;
 using TMPro;
 using Twitch;
 
+using BepInEx;
 using UnityEngine;
 
 using ExtremeRoles.Helper;
@@ -91,6 +92,15 @@ namespace ExtremeRoles.Patches.Manager
         public static void Postfix(MainMenuManager __instance)
         {
             FastDestroyableSingleton<ModManager>.Instance.ShowModStamp();
+
+#if RELEASE
+            if (ConsoleManager.ConfigConsoleEnabled.Value)
+            {
+                ConsoleManager.ConfigConsoleEnabled.Value = false;
+                Application.Quit();
+                return;
+            }
+#endif
 
             var amongUsLogo = GameObject.Find("bannerLogo_AmongUs");
             if (amongUsLogo != null)
