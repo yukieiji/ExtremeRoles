@@ -106,7 +106,8 @@ namespace
         remove_all(bepInExPath / "interop");
         remove_all(bepInExPath / "unity-libs");
 
-        remove(bepInExPath / "config" / "BepInEx.cfg");
+        // TODO: BepInExのコンフィグをどっかにアップして落としてくるようにする
+        // remove(bepInExPath / "config" / "BepInEx.cfg");
 
         path dotNetPath = rootPath / "dotnet";
 
