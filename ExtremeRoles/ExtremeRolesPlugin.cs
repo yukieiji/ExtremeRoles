@@ -30,7 +30,9 @@ namespace ExtremeRoles
 
         internal static BepInEx.Logging.ManualLogSource Logger;
         internal static CompatModManager Compat;
+
         public static ConfigEntry<bool> DebugMode { get; private set; }
+        public static ConfigEntry<bool> IgnoreOverrideConsoleDisable { get; private set; }
 
         public override void Load()
         {
@@ -40,6 +42,9 @@ namespace ExtremeRoles
             Logger = Log;
 
             DebugMode = Config.Bind("DeBug", "DebugMode", false);
+            IgnoreOverrideConsoleDisable = Config.Bind(
+                "DeBug", "IgnoreOverrideConsoleDisable", false,
+                "If enabled, will ignore force disabling BepInEx.Console");
 
             Instance = this;
 

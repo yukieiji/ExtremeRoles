@@ -94,7 +94,8 @@ namespace ExtremeRoles.Patches.Manager
             FastDestroyableSingleton<ModManager>.Instance.ShowModStamp();
 
 #if RELEASE
-            if (ConsoleManager.ConfigConsoleEnabled.Value)
+            if (!ExtremeRolesPlugin.IgnoreOverrideConsoleDisable.Value &&
+                ConsoleManager.ConfigConsoleEnabled.Value)
             {
                 ConsoleManager.ConfigConsoleEnabled.Value = false;
                 Application.Quit();
