@@ -104,10 +104,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public void ResetOnMeetingStart()
         {
-            if (IsAwake)
-            {
-                CleanUp();
-            }
+            return;
         }
 
         public bool UseAbility()

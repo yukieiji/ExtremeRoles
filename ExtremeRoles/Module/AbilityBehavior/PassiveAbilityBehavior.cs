@@ -61,6 +61,7 @@ namespace ExtremeRoles.Module.AbilityBehavior
 
         public override void ForceAbilityOff()
         {
+            this.isActive = false;
             this.abilityOff?.Invoke();
             this.SetGraphic(this.activeGraphic);
         }
@@ -90,9 +91,8 @@ namespace ExtremeRoles.Module.AbilityBehavior
                     return false;
                 }
                 this.SetGraphic(this.deactiveGraphic);
+                this.isActive = true;
             }
-
-            this.isActive = !this.isActive;
 
             base.SetCoolTime(this.isActive ? this.baseActiveTime : this.baseCoolTime);
             
