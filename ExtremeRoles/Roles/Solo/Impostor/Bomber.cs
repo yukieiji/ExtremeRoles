@@ -66,7 +66,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 "setBomb",
                 Loader.CreateSpriteFromResources(
                     Path.BomberSetBomb),
-                CheckAbility, CleanUp);
+                CheckAbility, CleanUp, ForceCleanUp);
         }
 
         public bool IsAbilityUse()
@@ -75,10 +75,18 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             return this.IsCommonUse() && this.setTargetPlayer != null;
         }
 
+        public void ForceCleanUp()
+        {
+            this.bombSettingPlayer = null;
+        }
+
         public void CleanUp()
         {
-            this.bombPlayerId.Enqueue(this.bombSettingPlayer.PlayerId);
-            this.bombSettingPlayer = null;
+            if (this.bombSettingPlayer is not null)
+            {
+                this.bombPlayerId.Enqueue(this.bombSettingPlayer.PlayerId);
+                this.bombSettingPlayer = null;
+            }
         }
 
         public bool CheckAbility()
