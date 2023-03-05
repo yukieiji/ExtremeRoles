@@ -36,6 +36,7 @@
     <EmbeddedResource Include="Resources\DelinquentScribe\*.png" />
     <EmbeddedResource Include="Resources\SettingTab\*.png" />
 	  <EmbeddedResource Include="Resources\JsonData\*.json" />
+    <EmbeddedResource Include="Resources\Config\*.cfg" />
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
