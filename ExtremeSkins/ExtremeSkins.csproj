@@ -11,16 +11,19 @@
     <Configurations>Debug;Release</Configurations>
     <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE; WITHVISOR</DefineConstants>
     <WarningLevel>7</WarningLevel>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
       <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE; WITHVISOR</DefineConstants>
       <WarningLevel>7</WarningLevel>
+      <DebugType>none</DebugType>
   </PropertyGroup>
 	
 
