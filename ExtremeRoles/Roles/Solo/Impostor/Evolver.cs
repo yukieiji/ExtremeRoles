@@ -8,204 +8,208 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
-namespace ExtremeRoles.Roles.Solo.Impostor
+namespace ExtremeRoles.Roles.Solo.Impostor;
+
+public sealed class Evolver : SingleRoleBase, IRoleAbility
 {
-    public sealed class Evolver : SingleRoleBase, IRoleAbility
+    public enum EvolverOption
     {
-        public enum EvolverOption
+        IsEvolvedAnimation,
+        IsEatingEndCleanBody,
+        EatingRange,
+        KillCoolReduceRate,
+        KillCoolResuceRateMulti,
+    }
+
+
+    public GameData.PlayerInfo targetBody;
+    public byte eatingBodyId;
+
+    private float eatingRange = 1.0f;
+    private float reduceRate = 1.0f;
+    private float reruceMulti = 1.0f;
+    private bool isEvolvdAnimation;
+    private bool isEatingEndCleanBody;
+
+    private string defaultButtonText;
+    private string eatingText;
+
+    private float defaultKillCoolTime;
+
+    public ExtremeAbilityButton Button
+    {
+        get => this.evolveButton;
+        set
         {
-            IsEvolvedAnimation,
-            IsEatingEndCleanBody,
-            EatingRange,
-            KillCoolReduceRate,
-            KillCoolResuceRateMulti,
+            this.evolveButton = value;
         }
+    }
+    private ExtremeAbilityButton evolveButton;
 
+    public Evolver() : base(
+        ExtremeRoleId.Evolver,
+        ExtremeRoleType.Impostor,
+        ExtremeRoleId.Evolver.ToString(),
+        Palette.ImpostorRed,
+        true, false, true, true)
+    {
+        this.isEatingEndCleanBody = false;
+    }
 
-        public GameData.PlayerInfo targetBody;
-        public byte eatingBodyId;
+    public void CreateAbility()
+    {
+        this.defaultButtonText = Translation.GetString("evolve");
 
-        private float eatingRange = 1.0f;
-        private float reduceRate = 1.0f;
-        private float reruceMulti = 1.0f;
-        private bool isEvolvdAnimation;
-        private bool isEatingEndCleanBody;
+        this.CreateAbilityCountButton(
+            "evolve",
+            Loader.CreateSpriteFromResources(
+                Path.EvolverEvolved),
+            checkAbility: CheckAbility,
+            abilityOff: CleanUp,
+            forceAbilityOff: ForceCleanUp);
+    }
 
-        private string defaultButtonText;
-        private string eatingText;
+    public bool IsAbilityUse()
+    {
+        this.targetBody = Player.GetDeadBodyInfo(
+            this.eatingRange);
+        return this.IsCommonUse() && this.targetBody != null;
+    }
 
-        private float defaultKillCoolTime;
+    public void ForceCleanUp()
+    {
+        this.targetBody = null;
+    }
 
-        public ExtremeAbilityButton Button
+    public void CleanUp()
+    {
+
+        PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
+
+        if (this.isEvolvdAnimation)
         {
-            get => this.evolveButton;
-            set
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.UncheckedShapeShift))
             {
-                this.evolveButton = value;
+                caller.WriteByte(rolePlayer.PlayerId);
+                caller.WriteByte(rolePlayer.PlayerId);
+                caller.WriteByte(byte.MaxValue);
             }
+            RPCOperator.UncheckedShapeShift(
+                rolePlayer.PlayerId,
+                rolePlayer.PlayerId,
+                byte.MaxValue);
         }
-        private ExtremeAbilityButton evolveButton;
 
-        public Evolver() : base(
-            ExtremeRoleId.Evolver,
-            ExtremeRoleType.Impostor,
-            ExtremeRoleId.Evolver.ToString(),
-            Palette.ImpostorRed,
-            true, false, true, true)
+        this.KillCoolTime = this.KillCoolTime * ((100f - this.reduceRate) / 100f);
+        this.reduceRate = this.reduceRate * this.reruceMulti;
+        
+        this.CanKill = true;
+        this.KillCoolTime = Mathf.Clamp(
+            this.KillCoolTime, 0.1f, this.defaultKillCoolTime);
+
+        this.Button.Behavior.SetButtonText(this.defaultButtonText);
+
+        if (!this.isEatingEndCleanBody) { return; }
+
+        Player.RpcCleanDeadBody(this.eatingBodyId);
+    }
+
+    public bool CheckAbility()
+    {
+        this.targetBody = Player.GetDeadBodyInfo(
+            this.eatingRange);
+
+        bool result;
+
+        if (this.targetBody == null)
         {
-            this.isEatingEndCleanBody = false;
+            result = false;
         }
-
-        public void CreateAbility()
+        else
         {
-            this.defaultButtonText = Translation.GetString("evolve");
-
-            this.CreateAbilityCountButton(
-                "evolve",
-                Loader.CreateSpriteFromResources(
-                    Path.EvolverEvolved),
-                checkAbility: CheckAbility,
-                abilityOff: CleanUp,
-                forceAbilityOff: () => { });
+            result = this.eatingBodyId == this.targetBody.PlayerId;
         }
+        
+        this.Button.Behavior.SetButtonText(
+            result ? this.eatingText : this.defaultButtonText);
 
-        public bool IsAbilityUse()
+        return result;
+    }
+
+    public bool UseAbility()
+    {
+        this.eatingBodyId = this.targetBody.PlayerId;
+        return true;
+    }
+
+    protected override void CreateSpecificOption(
+        IOption parentOps)
+    {
+        CreateBoolOption(
+            EvolverOption.IsEvolvedAnimation,
+            true, parentOps);
+
+        CreateBoolOption(
+            EvolverOption.IsEatingEndCleanBody,
+            true, parentOps);
+
+        CreateFloatOption(
+            EvolverOption.EatingRange,
+            2.5f, 0.5f, 5.0f, 0.5f,
+            parentOps);
+
+        CreateIntOption(
+            EvolverOption.KillCoolReduceRate,
+            10, 1, 50, 1, parentOps,
+            format: OptionUnit.Percentage);
+
+        CreateFloatOption(
+            EvolverOption.KillCoolResuceRateMulti,
+            1.0f, 1.0f, 5.0f, 0.1f,
+            parentOps, format: OptionUnit.Multiplier);
+
+        this.CreateAbilityCountOption(
+            parentOps, 5, 10, 5.0f);
+    }
+
+    protected override void RoleSpecificInit()
+    {
+        this.RoleAbilityInit();
+
+        if(!this.HasOtherKillCool)
         {
-            this.targetBody = Player.GetDeadBodyInfo(
-                this.eatingRange);
-            return this.IsCommonUse() && this.targetBody != null;
+            this.HasOtherKillCool = true;
+            this.KillCoolTime = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
+                FloatOptionNames.KillCooldown);
         }
 
-        public void CleanUp()
-        {
+        this.defaultKillCoolTime = this.KillCoolTime;
+        
+        var allOption = OptionHolder.AllOption;
 
-            PlayerControl rolePlayer = CachedPlayerControl.LocalPlayer;
+        this.isEvolvdAnimation = allOption[
+            GetRoleOptionId(EvolverOption.IsEvolvedAnimation)].GetValue();
+        this.isEatingEndCleanBody = allOption[
+            GetRoleOptionId(EvolverOption.IsEatingEndCleanBody)].GetValue();
+        this.eatingRange = allOption[
+            GetRoleOptionId(EvolverOption.EatingRange)].GetValue();
+        this.reduceRate = allOption[
+            GetRoleOptionId(EvolverOption.KillCoolReduceRate)].GetValue();
+        this.reruceMulti = (float)allOption[
+            GetRoleOptionId(EvolverOption.KillCoolResuceRateMulti)].GetValue();
 
-            if (this.isEvolvdAnimation)
-            {
-                using (var caller = RPCOperator.CreateCaller(
-                    RPCOperator.Command.UncheckedShapeShift))
-                {
-                    caller.WriteByte(rolePlayer.PlayerId);
-                    caller.WriteByte(rolePlayer.PlayerId);
-                    caller.WriteByte(byte.MaxValue);
-                }
-                RPCOperator.UncheckedShapeShift(
-                    rolePlayer.PlayerId,
-                    rolePlayer.PlayerId,
-                    byte.MaxValue);
-            }
+        this.eatingText = Translation.GetString("eating");
 
-            this.KillCoolTime = this.KillCoolTime * ((100f - this.reduceRate) / 100f);
-            this.reduceRate = this.reduceRate * this.reruceMulti;
-            
-            this.CanKill = true;
-            this.KillCoolTime = Mathf.Clamp(
-                this.KillCoolTime, 0.1f, this.defaultKillCoolTime);
+    }
 
-            this.Button.Behavior.SetButtonText(this.defaultButtonText);
+    public void ResetOnMeetingStart()
+    {
+        return;
+    }
 
-            if (!this.isEatingEndCleanBody) { return; }
-
-            Player.RpcCleanDeadBody(this.eatingBodyId);
-        }
-
-        public bool CheckAbility()
-        {
-            this.targetBody = Player.GetDeadBodyInfo(
-                this.eatingRange);
-
-            bool result;
-
-            if (this.targetBody == null)
-            {
-                result = false;
-            }
-            else
-            {
-                result = this.eatingBodyId == this.targetBody.PlayerId;
-            }
-            
-            this.Button.Behavior.SetButtonText(
-                result ? this.eatingText : this.defaultButtonText);
-
-            return result;
-        }
-
-        public bool UseAbility()
-        {
-            this.eatingBodyId = this.targetBody.PlayerId;
-            return true;
-        }
-
-        protected override void CreateSpecificOption(
-            IOption parentOps)
-        {
-            CreateBoolOption(
-                EvolverOption.IsEvolvedAnimation,
-                true, parentOps);
-
-            CreateBoolOption(
-                EvolverOption.IsEatingEndCleanBody,
-                true, parentOps);
-
-            CreateFloatOption(
-                EvolverOption.EatingRange,
-                2.5f, 0.5f, 5.0f, 0.5f,
-                parentOps);
-
-            CreateIntOption(
-                EvolverOption.KillCoolReduceRate,
-                10, 1, 50, 1, parentOps,
-                format: OptionUnit.Percentage);
-
-            CreateFloatOption(
-                EvolverOption.KillCoolResuceRateMulti,
-                1.0f, 1.0f, 5.0f, 0.1f,
-                parentOps, format: OptionUnit.Multiplier);
-
-            this.CreateAbilityCountOption(
-                parentOps, 5, 10, 5.0f);
-        }
-
-        protected override void RoleSpecificInit()
-        {
-            this.RoleAbilityInit();
-
-            if(!this.HasOtherKillCool)
-            {
-                this.HasOtherKillCool = true;
-                this.KillCoolTime = GameOptionsManager.Instance.CurrentGameOptions.GetFloat(
-                    FloatOptionNames.KillCooldown);
-            }
-
-            this.defaultKillCoolTime = this.KillCoolTime;
-            
-            var allOption = OptionHolder.AllOption;
-
-            this.isEvolvdAnimation = allOption[
-                GetRoleOptionId(EvolverOption.IsEvolvedAnimation)].GetValue();
-            this.isEatingEndCleanBody = allOption[
-                GetRoleOptionId(EvolverOption.IsEatingEndCleanBody)].GetValue();
-            this.eatingRange = allOption[
-                GetRoleOptionId(EvolverOption.EatingRange)].GetValue();
-            this.reduceRate = allOption[
-                GetRoleOptionId(EvolverOption.KillCoolReduceRate)].GetValue();
-            this.reruceMulti = (float)allOption[
-                GetRoleOptionId(EvolverOption.KillCoolResuceRateMulti)].GetValue();
-
-            this.eatingText = Translation.GetString("eating");
-
-        }
-
-        public void ResetOnMeetingStart()
-        {
-            return;
-        }
-
-        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
-        {
-            return;
-        }
+    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    {
+        return;
     }
 }
