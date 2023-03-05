@@ -116,6 +116,7 @@ namespace
             remove_all(dotNetPath);
         }
 
+        remove(rootPath / ".doorstop_version");
         remove(rootPath / "changelog.txt");
         remove(rootPath / "doorstop_config.ini");
         remove(rootPath / "winhttp.dll");
