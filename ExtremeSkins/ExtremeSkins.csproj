@@ -21,9 +21,9 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-      <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE; WITHVISOR</DefineConstants>
-      <WarningLevel>7</WarningLevel>
-      <DebugType>none</DebugType>
+    <DefineConstants>$(DefineConstants)TRACE; WITHHAT; WITHNAMEPLATE; WITHVISOR</DefineConstants>
+    <WarningLevel>7</WarningLevel>
+    <DebugType>none</DebugType>
   </PropertyGroup>
 	
 
