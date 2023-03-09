@@ -103,7 +103,7 @@ public sealed class Carrier : SingleRoleBase, IRoleAbility, IRoleSpecialReset
         Carrier role,
         PlayerControl rolePlayer)
     {
-        role.carringBody.transform.SetParent(null);
+        if (role.carringBody == null) { yield break; }
 
         if (!rolePlayer.inVent && !rolePlayer.moveable)
         {
@@ -114,7 +114,7 @@ public sealed class Carrier : SingleRoleBase, IRoleAbility, IRoleSpecialReset
             while (!rolePlayer.moveable);
         }
 
-        if (role.carringBody == null) { yield break; }
+        role.carringBody.transform.SetParent(null);
 
         Vector2 pos = rolePlayer.GetTruePosition();
         role.carringBody.transform.position = new Vector3(pos.x, pos.y, (pos.y / 1000f));
@@ -222,21 +222,19 @@ public sealed class Carrier : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 
     public void AllReset(PlayerControl rolePlayer)
     {
-        if (this.carringBody != null)
+        if (this.carringBody == null) { return; }
+
+        this.carringBody.transform.SetParent(null);
+        this.carringBody.transform.position = rolePlayer.GetTruePosition() + new Vector2(0.15f, 0.15f);
+        this.carringBody.transform.position -= new Vector3(0.0f, 0.0f, 0.01f);
+
+        Color color = this.carringBody.bodyRenderer.color;
+        this.carringBody.bodyRenderer.color = new Color(
+            color.r, color.g, color.b, this.alphaValue);
+        if (!this.canReportOnCarry)
         {
-            this.carringBody.transform.SetParent(null);
-            this.carringBody.transform.position = rolePlayer.GetTruePosition() + new Vector2(0.15f, 0.15f);
-            this.carringBody.transform.position -= new Vector3(0.0f, 0.0f, 0.01f);
-
-
-            Color color = this.carringBody.bodyRenderer.color;
-            this.carringBody.bodyRenderer.color = new Color(
-                color.r, color.g, color.b, this.alphaValue);
-            if (!this.canReportOnCarry)
-            {
-                this.carringBody.GetComponentInChildren<BoxCollider2D>().enabled = true;
-            }
-            this.carringBody = null;
+            this.carringBody.GetComponentInChildren<BoxCollider2D>().enabled = true;
         }
+        this.carringBody = null;
     }
 }
