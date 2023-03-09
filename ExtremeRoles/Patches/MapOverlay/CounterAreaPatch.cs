@@ -20,56 +20,53 @@ namespace ExtremeRoles.Patches.MapOverlay
             var admin = Roles.ExtremeRoleManager.GetSafeCastedLocalPlayerRole<
                 Roles.Solo.Crewmate.Supervisor>();
 
-            if (admin == null || !admin.Boosted || !admin.IsAbilityActive)
+            if (admin is null) { return; }
+
+            PoolableBehavior pool = __instance.pool.Get<PoolableBehavior>();
+            SpriteRenderer defaultRenderer = pool.GetComponent<SpriteRenderer>();
+            Material defaultMat = Object.Instantiate(defaultRenderer.material);
+            pool.OwnerPool.Reclaim(pool);
+
+            if (!admin.Boosted || !admin.IsAbilityActive)
             {
                 foreach (PoolableBehavior icon in __instance.myIcons.GetFastEnumerator())
                 {
                     SpriteRenderer renderer = icon.GetComponent<SpriteRenderer>();
 
-                    if (renderer != null)
+                    if (renderer is not null)
                     {
-                        if (defaultMat == null)
-                        {
-                            defaultMat = renderer.material;
-                        }
                         renderer.material = defaultMat;
                     }
                 }
                 return; 
             }
 
-            if (MapCountOverlayUpdatePatch.PlayerColor.ContainsKey(__instance.RoomType))
+            if (!MapCountOverlayUpdatePatch.PlayerColor.TryGetValue(
+                    __instance.RoomType, out List<Color> colors))
             {
-                List<Color> colors = MapCountOverlayUpdatePatch.PlayerColor[__instance.RoomType];
-              
-                for (int i = 0; i < __instance.myIcons.Count; i++)
-                {
-                    PoolableBehavior icon = __instance.myIcons[i];
-                    SpriteRenderer renderer = icon.GetComponent<SpriteRenderer>();
+                return;
+            }
 
-                    if (renderer != null)
+            for (int i = 0; i < __instance.myIcons.Count; i++)
+            {
+                PoolableBehavior icon = __instance.myIcons[i];
+                SpriteRenderer renderer = icon.GetComponent<SpriteRenderer>();
+
+                if (renderer is not null && colors.Count > i)
+                {
+                    renderer.material = Object.Instantiate(defaultMat);
+                    var color = colors[i];
+                    renderer.material.SetColor("_BodyColor", color);
+                    var id = Palette.PlayerColors.IndexOf(color);
+                    if (id < 0)
                     {
-                        if (newMat == null)
-                        {
-                            newMat = Object.Instantiate(defaultMat);
-                        }
-                        if (colors.Count > i)
-                        {
-                            renderer.material = newMat;
-                            var color = colors[i];
-                            renderer.material.SetColor("_BodyColor", color);
-                            var id = Palette.PlayerColors.IndexOf(color);
-                            if (id < 0)
-                            {
-                                renderer.material.SetColor("_BackColor", color);
-                            }
-                            else
-                            {
-                                renderer.material.SetColor("_BackColor", Palette.ShadowColors[id]);
-                            }
-                            renderer.material.SetColor("_VisorColor", Palette.VisorColor);
-                        }
+                        renderer.material.SetColor("_BackColor", color);
                     }
+                    else
+                    {
+                        renderer.material.SetColor("_BackColor", Palette.ShadowColors[id]);
+                    }
+                    renderer.material.SetColor("_VisorColor", Palette.VisorColor);
                 }
             }
         }
