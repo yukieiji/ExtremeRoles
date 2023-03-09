@@ -89,8 +89,8 @@ namespace ExtremeRoles.Module
 
         public int ValueCount => this.Selections.Length;
 
-        public OptionTab Tab => this.tab;
-        public IOption Parent => this.parent;
+        public OptionTab Tab { get; }
+        public IOption Parent { get; }
         public IOption ForceEnableCheckOption => this.forceEnableCheckOption;
         public List<IOption> Children => this.children;
 
@@ -111,8 +111,6 @@ namespace ExtremeRoles.Module
         private OptionUnit stringFormat;
         private List<IWithUpdatableOption<OutType>> withUpdateOption = new List<IWithUpdatableOption<OutType>>();
 
-        private OptionTab tab;
-        private IOption parent;
         private IOption forceEnableCheckOption;
         private List<IOption> children = new List<IOption>();
 
@@ -143,7 +141,8 @@ namespace ExtremeRoles.Module
             OptionTab tab = OptionTab.General)
         {
 
-            this.tab = tab;
+            this.Tab = tab;
+            this.Parent = parent;
 
             int index = Array.IndexOf(selections, defaultValue);
 
@@ -152,7 +151,7 @@ namespace ExtremeRoles.Module
             this.stringFormat = format;
             this.Selections = selections;
             this.defaultSelection = index >= 0 ? index : 0;
-            this.parent = parent;
+
             this.isHeader = isHeader;
             this.isHidden = isHidden;
             this.enableInvert = false;
@@ -205,12 +204,12 @@ namespace ExtremeRoles.Module
                 return false;
             }
 
-            if (this.isHeader || this.parent == null)
+            if (this.isHeader || this.Parent == null)
             {
                 return true;
             }
 
-            IOption parent = this.parent;
+            IOption parent = this.Parent;
             bool active = true;
 
             while (parent != null && active)
