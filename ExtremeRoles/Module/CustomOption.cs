@@ -67,8 +67,6 @@ namespace ExtremeRoles.Module
         public string ToHudString();
         public string ToHudStringWithChildren(int indent=0);
 
-        // This is HotFix for HideNSeek
-        public dynamic GetDefault();
         public dynamic GetValue();
     }
 
@@ -366,8 +364,6 @@ namespace ExtremeRoles.Module
                 addChildrenOptionHudString(ref builder, child, prefixIndentCount + 1);
             }
         }
-
-        public abstract dynamic GetDefault();
         public abstract dynamic GetValue();
     }
 
@@ -391,7 +387,6 @@ namespace ExtremeRoles.Module
                 enableCheckOption, tab)
         { }
 
-        public override dynamic GetDefault() => this.DefaultSelection > 0;
         public override dynamic GetValue() => CurSelection > 0;
     }
 
@@ -416,7 +411,6 @@ namespace ExtremeRoles.Module
                 enableCheckOption, tab)
         { }
 
-        public override dynamic GetDefault() => Selections[this.DefaultSelection];
         public override dynamic GetValue() => Selections[CurSelection];
 
         private static List<float> createSelection(float min, float max, float step)
@@ -464,8 +458,7 @@ namespace ExtremeRoles.Module
             this.minValue = this.Selections[0];
             this.maxValue = this.Selections[this.ValueCount - 1];
         }
-
-        public override dynamic GetDefault() => Selections[this.DefaultSelection];
+        
         public override dynamic GetValue() => Selections[CurSelection];
 
         public override void Update(int newValue)
@@ -520,8 +513,7 @@ namespace ExtremeRoles.Module
         {
             this.step = step;
         }
-
-        public override dynamic GetDefault() => Selections[this.DefaultSelection];
+        
         public override dynamic GetValue() => Selections[CurSelection];
 
         public override void Update(int newValue)
@@ -581,7 +573,6 @@ namespace ExtremeRoles.Module
             this.step = step;
         }
 
-        public override dynamic GetDefault() => Selections[this.DefaultSelection];
         public override dynamic GetValue() => Selections[CurSelection];
 
         public override void Update(float newValue)
@@ -661,7 +652,6 @@ namespace ExtremeRoles.Module
                 format, invert, enableCheckOption)
         { }
 
-        public override dynamic GetDefault() => this.DefaultSelection;
         public override dynamic GetValue() => CurSelection;
     }
 }
