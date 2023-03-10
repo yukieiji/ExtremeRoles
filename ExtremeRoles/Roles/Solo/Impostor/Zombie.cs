@@ -116,7 +116,6 @@ public sealed class Zombie :
     private static void setMagicCircle(Vector2 pos, float activeTime)
     {
         GameObject circle = new GameObject("MagicCircle");
-        circle.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
         circle.SetActive(true);
         
         var player = circle.AddComponent<DlayableVideoPlayer>();
@@ -125,6 +124,8 @@ public sealed class Zombie :
             "ExtremeRoles.Resources.ZombieMagicCircle.png"));
         player.SetVideo("ExtremeRoles.Resources.ZombieMagicCircle.webm");
         player.SetTimer(activeTime);
+
+        circle.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
     }
 
     public void CreateAbility()
