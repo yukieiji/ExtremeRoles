@@ -658,6 +658,9 @@ public static class PlayerControlHandleRpcPatch
             case RPCOperator.Command.SlimeAbility:
                 RPCOperator.SlimeAbility(ref reader);
                 break;
+            case RPCOperator.Command.ZombieRpc:
+                RPCOperator.ZombieRpc(ref reader);
+                break;
             case RPCOperator.Command.AliceShipBroken:
                 byte alicePlayerId = reader.ReadByte();
                 byte newTaskSetPlayerId = reader.ReadByte();

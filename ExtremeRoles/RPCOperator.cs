@@ -74,6 +74,7 @@ public static class RPCOperator
         HypnotistAbility,
         UnderWarperUseVentWithNoAnime,
         SlimeAbility,
+        ZombieRpc,
 
         // ニュートラル
         AliceShipBroken,
@@ -639,6 +640,11 @@ public static class RPCOperator
     public static void SlimeAbility(ref MessageReader reader)
     {
         Roles.Solo.Impostor.Slime.Ability(ref reader);
+    }
+
+    public static void ZombieRpc(ref MessageReader reader)
+    {
+        Roles.Solo.Impostor.Zombie.RpcAbility(ref reader);
     }
 
     public static void AliceShipBroken(

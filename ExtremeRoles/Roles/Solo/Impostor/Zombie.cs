@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using UnityEngine;
 using Hazel;
@@ -10,6 +11,7 @@ using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -40,6 +42,7 @@ public sealed class Zombie :
     {
         AwakeKillCount,
         ResurrectKillCount,
+        ShowMagicCircleTime,
         ResurrectDelayTime,
         CanResurrectOnExil,
     }
@@ -47,7 +50,7 @@ public sealed class Zombie :
     public enum ZombieRpcOps : byte
     {
         UseResurrect,
-        ResetFlash,
+        SetMagicCircle
     }
 
     private bool awakeRole;
@@ -63,11 +66,13 @@ public sealed class Zombie :
 
     private bool activateResurrectTimer;
     private float resurrectTimer;
-
+    private float showMagicCircleTime;
 
     private Vector3 curPos;
 
     private TMPro.TextMeshPro resurrectText;
+    private Dictionary<SystemTypes, Arrow> setRooms;
+    private SystemTypes targetRoom;
 
     public Zombie() : base(
         ExtremeRoleId.Zombie,
@@ -90,6 +95,12 @@ public sealed class Zombie :
                 if (zombie == null) { return; }
                 UseResurrect(zombie);
                 break;
+            case ZombieRpcOps.SetMagicCircle:
+                float x = reader.ReadSingle();
+                float y = reader.ReadSingle();
+                float timer = reader.ReadSingle();
+                setMagicCircle(new Vector2(x, y), timer);
+                break;
             default:
                 break;
         }
@@ -99,6 +110,14 @@ public sealed class Zombie :
     {
         zombie.isResurrected = true;
         zombie.activateResurrectTimer = false;
+    }
+    private static void setMagicCircle(Vector2 pos, float activeTime)
+    {
+        GameObject circle = new GameObject("MagicCircle");
+        circle.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
+        
+        var player = circle.AddComponent<DlayableVideoPlayer>();
+        player.SetTimer(activeTime);
     }
 
     public void CreateAbility()
@@ -110,6 +129,28 @@ public sealed class Zombie :
             IsActivate,
             SetMagicCircle,
              () => { });
+
+        if (this.Button?.Behavior is not AbilityCountBehavior countBehavior)
+        {
+            return;
+        }
+
+        PlainShipRoom[] allRooms = CachedShipStatus.Instance.AllRooms;
+        var useRoom = (
+            from room in allRooms
+            where room is not null && room.RoomId != SystemTypes.Hallway
+            orderby RandomGenerator.Instance.Next()
+            select (room.RoomId, room)
+        ).Take(countBehavior.AbilityCount);
+
+        this.setRooms = new Dictionary<SystemTypes, Arrow>();
+        foreach (var(roomId, room) in useRoom)
+        {
+            var arrow = new Arrow(Palette.ImpostorRed * 0.5f);
+            arrow.UpdateTarget(room.transform.position);
+            this.setRooms.Add(roomId, arrow);
+        }
+
     }
 
     public bool IsActivate()
@@ -118,24 +159,45 @@ public sealed class Zombie :
     public bool UseAbility()
     {
         this.curPos = CachedPlayerControl.LocalPlayer.PlayerControl.transform.position;
+        var room = FastDestroyableSingleton<HudManager>.Instance.roomTracker.LastRoom;
+        
+        if (room is null)
+        {
+            return false;
+        }
+
+        this.targetRoom = room.RoomId; 
         return true;
     }
 
     public bool IsAbilityUse()
     {
-        return this.IsCommonUse();
+        var room = FastDestroyableSingleton<HudManager>.Instance.roomTracker.LastRoom;
+        
+        return this.IsCommonUse() && 
+            room is not null &&
+            this.setRooms.ContainsKey(room.RoomId);
     }
 
     public void SetMagicCircle()
     {
-        if (this.killCount >= this.resurrectKillCount &&
-            this.Button.Behavior is AbilityCountBehavior behavior &&
-            behavior.AbilityCount <= 0 &&
-            !this.canResurrect)
+        var arrow = this.setRooms[this.targetRoom];
+
+        Vector2 pos = arrow.Target;
+
+        using (var caller = RPCOperator.CreateCaller(
+            RPCOperator.Command.ZombieRpc))
         {
-            this.canResurrect = true;
-            this.isResurrected = false;
+            caller.WriteByte((byte)ZombieRpcOps.SetMagicCircle);
+            caller.WriteFloat(pos.x);
+            caller.WriteFloat(pos.y);
+            caller.WriteFloat(this.showMagicCircleTime);
         }
+        setMagicCircle(pos, this.showMagicCircleTime);
+
+        arrow.Clear();
+        this.setRooms.Remove(this.targetRoom);
+        updateReviveState();
     }
 
     public void ResetOnMeetingStart()
@@ -160,17 +222,27 @@ public sealed class Zombie :
 
     public void Update(PlayerControl rolePlayer)
     {
+        bool isDead = rolePlayer.Data.IsDead;
+        bool isNotTaskPhase =
+            MeetingHud.Instance ||
+            ExileController.Instance ||
+            CachedShipStatus.Instance is null ||
+            !CachedShipStatus.Instance.enabled;
 
-        if (rolePlayer.Data.IsDead && this.infoBlock())
+        bool isDeActivateArrow = isDead || isNotTaskPhase;
+
+        foreach (var arrow in this.setRooms.Values)
+        {
+            arrow.SetActive(!isDeActivateArrow);
+            arrow.Update();
+        }
+
+        if (isDead && this.infoBlock())
         {
             FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
         }
 
-        if (!rolePlayer.moveable ||
-            MeetingHud.Instance ||
-            ExileController.Instance ||
-            CachedShipStatus.Instance == null ||
-            !CachedShipStatus.Instance.enabled)
+        if (!rolePlayer.moveable || isNotTaskPhase)
         {
             return;
         }
@@ -217,14 +289,8 @@ public sealed class Zombie :
                 this.awakeRole = true;
                 this.HasOtherVision = this.awakeHasOtherVision;
             }
-            if (this.killCount >= this.resurrectKillCount &&
-                this.Button.Behavior is AbilityCountBehavior behavior &&
-                behavior.AbilityCount <= 0 &&
-                !this.canResurrect)
-            {
-                this.canResurrect = true;
-                this.isResurrected = false;
-            }
+
+            updateReviveState();
         }
         return true;
     }
@@ -339,6 +405,12 @@ public sealed class Zombie :
 
         this.CreateAbilityCountOption(parentOps, 1, 3, 3f);
 
+        CreateFloatOption(
+            ZombieOption.ShowMagicCircleTime,
+            10.0f, 0.0f, 30.0f, 0.5f,
+            parentOps,
+            format: OptionUnit.Second);
+
         CreateIntOption(
             ZombieOption.ResurrectKillCount,
             2, 0, 3, 1,
@@ -363,6 +435,8 @@ public sealed class Zombie :
         this.resurrectKillCount = allOpt[
             GetRoleOptionId(ZombieOption.ResurrectKillCount)].GetValue();
 
+        this.showMagicCircleTime = allOpt[
+            GetRoleOptionId(ZombieOption.ShowMagicCircleTime)].GetValue();
         this.resurrectTimer = allOpt[
             GetRoleOptionId(ZombieOption.ResurrectDelayTime)].GetValue();
         this.canResurrectOnExil = allOpt[
@@ -455,7 +529,7 @@ public sealed class Zombie :
             RandomGenerator.Instance.Next(randomPos.Count)]);
 
         using (var caller = RPCOperator.CreateCaller(
-            RPCOperator.Command.ResurrecterRpc))
+            RPCOperator.Command.ZombieRpc))
         {
             caller.WriteByte((byte)ZombieRpcOps.UseResurrect);
             caller.WriteByte(playerId);
@@ -466,6 +540,18 @@ public sealed class Zombie :
         if (this.resurrectText != null)
         {
             this.resurrectText.gameObject.SetActive(false);
+        }
+    }
+
+    private void updateReviveState()
+    {
+        if (this.killCount >= this.resurrectKillCount &&
+                this.Button.Behavior is AbilityCountBehavior behavior &&
+                behavior.AbilityCount <= 0 &&
+                !this.canResurrect)
+        {
+            this.canResurrect = true;
+            this.isResurrected = false;
         }
     }
 }
