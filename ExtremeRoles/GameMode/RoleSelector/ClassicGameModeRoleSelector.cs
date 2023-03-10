@@ -145,6 +145,7 @@ namespace ExtremeRoles.GameMode.RoleSelector
                 ExtremeRoleId.UnderWarper,
                 ExtremeRoleId.Magician,
                 ExtremeRoleId.Slime,
+                ExtremeRoleId.Zombie,
 
                 ExtremeRoleId.Alice,
                 ExtremeRoleId.Jackal,

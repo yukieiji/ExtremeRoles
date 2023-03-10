@@ -2,6 +2,7 @@
 using System.Linq;
 
 using UnityEngine;
+using UnityEngine.Video;
 using Hazel;
 using AmongUs.GameOptions;
 
@@ -9,6 +10,7 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
@@ -79,7 +81,7 @@ public sealed class Zombie :
         ExtremeRoleType.Impostor,
         ExtremeRoleId.Zombie.ToString(),
         Palette.ImpostorRed,
-        false, true, false, false)
+        true, false, true, true)
     { }
 
     public static void RpcAbility(ref MessageReader reader)
@@ -115,8 +117,13 @@ public sealed class Zombie :
     {
         GameObject circle = new GameObject("MagicCircle");
         circle.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
+        circle.SetActive(true);
         
         var player = circle.AddComponent<DlayableVideoPlayer>();
+
+        player.SetThum(Loader.CreateSpriteFromResources(
+            "ExtremeRoles.Resources.ZombieMagicCircle.png"));
+        player.SetVideo("ExtremeRoles.Resources.ZombieMagicCircle.webm");
         player.SetTimer(activeTime);
     }
 
@@ -124,8 +131,8 @@ public sealed class Zombie :
     {
         this.CreateAbilityCountButton(
             "featMagicCircle",
-            Resources.Loader.CreateSpriteFromResources(
-                Resources.Path.TestButton),
+            Loader.CreateSpriteFromResources(
+                Path.TestButton),
             IsActivate,
             SetMagicCircle,
              () => { });
@@ -400,8 +407,7 @@ public sealed class Zombie :
         CreateIntOption(
             ZombieOption.AwakeKillCount,
             1, 0, 3, 1,
-            parentOps,
-            format: OptionUnit.Percentage);
+            parentOps);
 
         this.CreateAbilityCountOption(parentOps, 1, 3, 3f);
 
@@ -430,7 +436,9 @@ public sealed class Zombie :
     {
         var allOpt = OptionHolder.AllOption;
 
-        this.killCount = allOpt[
+        this.killCount = 0;
+
+        this.awakeKillCount = allOpt[
             GetRoleOptionId(ZombieOption.AwakeKillCount)].GetValue();
         this.resurrectKillCount = allOpt[
             GetRoleOptionId(ZombieOption.ResurrectKillCount)].GetValue();
@@ -447,7 +455,7 @@ public sealed class Zombie :
         this.isResurrected = false;
         this.activateResurrectTimer = false;
 
-        if (this.killCount <= 0)
+        if (this.awakeKillCount <= 0)
         {
             this.awakeRole = true;
             this.HasOtherVision = this.awakeHasOtherVision;

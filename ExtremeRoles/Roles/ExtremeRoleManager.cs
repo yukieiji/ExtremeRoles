@@ -240,6 +240,7 @@ public static class ExtremeRoleManager
             {(int)ExtremeRoleId.UnderWarper    , new UnderWarper()},
             {(int)ExtremeRoleId.Magician       , new Magician()},
             {(int)ExtremeRoleId.Slime          , new Slime()},
+            {(int)ExtremeRoleId.Zombie         , new Zombie()},
 
             {(int)ExtremeRoleId.Alice     , new Alice()},
             {(int)ExtremeRoleId.Jackal    , new Jackal()},

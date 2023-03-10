@@ -17,17 +17,29 @@ public sealed class DlayableVideoPlayer : MonoBehaviour
 
     public void Awake()
     {
+        this.isPlayed = false;
         this.thumbnail = this.gameObject.AddComponent<SpriteRenderer>();
         this.player = this.gameObject.AddComponent<VideoPlayer>();
 
-        this.player.source = VideoSource.Url;
         this.player.renderMode = VideoRenderMode.MaterialOverride;
         this.player.isLooping = true;
     }
 
-    public void SetVideoPath(string path)
+    public void SetThum(Sprite sprite)
     {
+        this.thumbnail.sprite = sprite;
+    }
+
+    public void SetVideo(string path)
+    {
+        this.player.source = VideoSource.Url;
         this.player.url = path;
+    }
+
+    public void SetVideo(VideoClip video)
+    {
+        this.player.source = VideoSource.VideoClip;
+        this.player.clip = video;
     }
 
     public void SetTimer(float time)
@@ -50,6 +62,8 @@ public sealed class DlayableVideoPlayer : MonoBehaviour
     private void checkAndPlay()
     {
         if (this.delayTimer > 0.0f) { return; }
+
         this.player.Play();
+        this.isPlayed = true;
     }
 }
