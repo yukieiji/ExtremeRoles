@@ -28,6 +28,10 @@ public sealed class DlayableVideoPlayer : MonoBehaviour
     public void SetThum(Sprite sprite)
     {
         this.thumbnail.sprite = sprite;
+        if (!this.isPlayed)
+        {
+            this.thumbnail.enabled = false;
+        }
     }
 
     public void SetVideo(string path)
@@ -54,7 +58,7 @@ public sealed class DlayableVideoPlayer : MonoBehaviour
             MeetingHud.Instance ||
             ExileController.Instance) { return; }
 
-        this.delayTimer -= Time.fixedTime;
+        this.delayTimer -= Time.fixedDeltaTime;
 
         checkAndPlay();
     }
@@ -65,5 +69,6 @@ public sealed class DlayableVideoPlayer : MonoBehaviour
 
         this.player.Play();
         this.isPlayed = true;
+        this.thumbnail.enabled = true;
     }
 }
