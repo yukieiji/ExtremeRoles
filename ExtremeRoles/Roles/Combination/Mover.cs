@@ -4,14 +4,10 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
-using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Roles.Solo;
-using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Roles.Solo.Impostor;
 using Hazel;
 
 namespace ExtremeRoles.Roles.Combination;
@@ -26,7 +22,8 @@ public sealed class MoverManager : FlexibleCombinationRoleManagerBase
 public sealed class Mover : 
     MultiAssignRoleBase,
     IRoleAbility,
-    IRoleSpecialReset
+    IRoleSpecialReset,
+    IRoleUsableOverride
 {
     public enum MoverRpc : byte
     {
@@ -35,6 +32,10 @@ public sealed class Mover :
     }
 
     public ExtremeAbilityButton Button { get; set; }
+
+    public bool EnableUseButton { get; private set; } = true;
+
+    public bool EnableVentButton { get; private set; } = true;
 
     private Console targetConsole;
     private Console hasConsole;
@@ -65,7 +66,7 @@ public sealed class Mover :
         {
             case MoverRpc.Move:
                 int id = reader.ReadPackedInt32();
-                setPlayerSpriteToConsole(role, rolePlayer, id);
+                pickUpConsole(role, rolePlayer, id);
                 break;
             case MoverRpc.Reset:
                 removeConsole(role);
@@ -75,12 +76,15 @@ public sealed class Mover :
         }
     }
 
-    private static void setPlayerSpriteToConsole(Mover mover, PlayerControl player, int id)
+    private static void pickUpConsole(Mover mover, PlayerControl player, int id)
     {
         Console console = CachedShipStatus.Instance.AllConsoles.ToList().Find(
             x => x.ConsoleId == id);
 
         if (console is null) { return; }
+
+        mover.EnableVentButton = false;
+        mover.EnableUseButton = false;
 
         mover.hasConsole = console;
         mover.hasConsole.Image.enabled = false;
@@ -90,6 +94,9 @@ public sealed class Mover :
 
     private static void removeConsole(Mover mover)
     {
+        mover.EnableVentButton = true;
+        mover.EnableUseButton = true;
+
         if (mover.hasConsole is null) { return; }
 
         mover.hasConsole.transform.SetParent(null);
@@ -144,7 +151,7 @@ public sealed class Mover :
             caller.WriteFloat(player.transform.position.y);
             caller.WritePackedInt(id);
         }
-        setPlayerSpriteToConsole(this, player, id);
+        pickUpConsole(this, player, id);
         return true;
     }
 
@@ -179,6 +186,9 @@ public sealed class Mover :
     protected override void RoleSpecificInit()
     {
         this.RoleAbilityInit();
+
+        this.EnableVentButton = true;
+        this.EnableUseButton = true;
     }
 
     public void AllReset(PlayerControl rolePlayer)
