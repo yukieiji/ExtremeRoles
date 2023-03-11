@@ -16,6 +16,9 @@ namespace ExtremeRoles.Resources;
 
 public static class Path
 {
+    public const string VideoAsset = "ExtremeRoles.Resources.Asset.video.asset";
+    public const string VideoAssetPlaceHolder = "assets/video/{0}.webm";
+
     public const string LangData = "ExtremeRoles.Resources.LangData.stringData.json";
 
         public const string HelpImage = "ExtremeRoles.Resources.Help.png";
@@ -27,6 +30,9 @@ public static class Path
 
     public const string HiroAcaSearch = "ExtremeRoles.Resources.Search.png";
     public const string GuesserGuess = "ExtremeRoles.Resources.GuesserGuess.png";
+    public const string DelinquentScribe =
+        "ExtremeRoles.Resources.DelinquentScribe.{0}.png";
+    public const string WispTorch = "ExtremeRoles.Resources.torch.png";
 
     public const string MaintainerRepair = "ExtremeRoles.Resources.Repair.png";
     public const string BodyGuardShield = "ExtremeRoles.Resources.Shield.png";
@@ -72,6 +78,7 @@ public static class Path
     public const string HypnotistGrayAbilityPart =
         "ExtremeRoles.Resources.GrayAbilityPart.png";
     public const string MagicianJuggling = "ExtremeRoles.Resources.MagicianJuggling.png";
+    public const string ZombieMagicCircle = "ExtremeRoles.Resources.ZombieMagicCircle.png";
 
     public const string VigilanteEmergencyCall = 
         "ExtremeRoles.Resources.EmergencyCall.png";
@@ -87,9 +94,6 @@ public static class Path
     public const string SucideSprite = "ExtremeRoles.Resources.Suicide.png";
     public const string UmbrerFeatVirus = "ExtremeRoles.Resources.FeatVirus.png";
     public const string UmbrerUpgradeVirus = "ExtremeRoles.Resources.UpgradeVirus.png";
-    public const string DelinquentScribe =
-        "ExtremeRoles.Resources.DelinquentScribe.{0}.png";
-    public const string WispTorch = "ExtremeRoles.Resources.torch.png";
 
     public const string XionMapZoomIn = "ExtremeRoles.Resources.ZoomIn.png";
     public const string XionMapZoomOut = "ExtremeRoles.Resources.ZoomOut.png";

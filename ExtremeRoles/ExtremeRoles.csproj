@@ -44,7 +44,6 @@
     <EmbeddedResource Include="Resources\Installer\ExtremeBepInExInstaller.exe" />
     <EmbeddedResource Include="Resources\Asset\*.asset" />
     <EmbeddedResource Include="Resources\*.png" />
-    <EmbeddedResource Include="Resources\*.webm" />
     <EmbeddedResource Include="Resources\MeryVentAnimation\*.png" />
     <EmbeddedResource Include="Resources\DelinquentScribe\*.png" />
     <EmbeddedResource Include="Resources\SettingTab\*.png" />
