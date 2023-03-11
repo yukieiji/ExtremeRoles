@@ -506,7 +506,6 @@ namespace ExtremeRoles.Patches.Meeting
         public static void Postfix(
             MeetingHud __instance)
         {
-            ExtremeRolesPlugin.Info.ShowBlackBG();
             ExtremeRolesPlugin.ShipState.ClearMeetingResetObject();
             Helper.Player.ResetTarget();
             MeetingHudSelectPatch.SetSelectBlock(false);
