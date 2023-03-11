@@ -67,8 +67,12 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
         slime.consoleObj.transform.SetParent(player.transform);
 
         SpriteRenderer rend = slime.consoleObj.AddComponent<SpriteRenderer>();
-        rend.sprite = console.GetComponent<SpriteRenderer>().sprite;
-        slime.consoleObj.transform.localScale = console.transform.lossyScale;
+        rend.sprite = console.Image.sprite;
+
+        Vector3 scale = player.transform.localScale;
+        slime.consoleObj.transform.position = player.transform.position;
+        slime.consoleObj.transform.localScale =
+            console.transform.lossyScale * (1.0f / scale.x);
 
         setPlayerObjActive(player, false);
     }
@@ -80,8 +84,9 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
     }
     private static void setPlayerObjActive(PlayerControl player, bool active)
     {
-        player.GetComponent<SpriteRenderer>().enabled = active;
-
+        player.cosmetics.currentBodySprite.BodySprite.enabled = active;
+        player.cosmetics.hat.gameObject.SetActive(active);
+        player.cosmetics.visor.gameObject.SetActive(active);
         player.cosmetics.currentPet?.gameObject.SetActive(active);
         player.cosmetics.nameText.gameObject.SetActive(active);
     }
@@ -144,6 +149,12 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
         removeMorphConsole(this, player);
     }
 
+    public override void RolePlayerKilledAction(
+        PlayerControl rolePlayer, PlayerControl killerPlayer)
+    {
+        removeMorphConsole(this, rolePlayer);
+    }
+
     protected override void CreateSpecificOption(
         IOption parentOps)
     {
@@ -165,17 +176,23 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
     {
         Console closestConsole = null;
         float closestConsoleDist = 9999;
+        Vector3 pos = origin.transform.position;
         foreach (Collider2D collider in Physics2D.OverlapCircleAll(
-            origin.transform.position, radius))
+            pos, radius, Constants.Usables))
         {
 
             Console checkConsole = collider.GetComponent<Console>();
             if (checkConsole is null) { continue; }
+
+            Vector3 targetPos = collider.transform.position;
+
+            float checkDist = Vector2.Distance(pos, targetPos);
             
-            float checkDist = Vector2.Distance(
-                origin.transform.position, collider.transform.position);
-            
-            if (checkDist < closestConsoleDist)
+            if (!PhysicsHelpers.AnythingBetween(
+                    pos, targetPos,
+                    Constants.ShipAndObjectsMask, false) &&
+                checkDist <= radius &&
+                checkDist < closestConsoleDist)
             {
                 closestConsole = checkConsole;
                 closestConsoleDist = checkDist;
