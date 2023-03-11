@@ -30,6 +30,38 @@ public static class Player
         return null;
     }
 
+    public static Console GetClosestConsole(PlayerControl player, float radius)
+    {
+        Console closestConsole = null;
+        float closestConsoleDist = 9999;
+        Vector2 pos = player.GetTruePosition();
+
+        Collider2D[] result = new Collider2D[60];
+        int num = Physics2D.OverlapCircleNonAlloc(pos, radius, result, Constants.Usables);
+        for (int i = 0; i < num; ++i)
+        {
+            Collider2D collider = result[i];
+
+            Console checkConsole = collider.GetComponent<Console>();
+            if (checkConsole is null) { continue; }
+
+            Vector3 targetPos = collider.transform.position;
+
+            float checkDist = Vector2.Distance(pos, targetPos);
+
+            if (!PhysicsHelpers.AnythingBetween(
+                    pos, targetPos,
+                    Constants.ShipAndObjectsMask, false) &&
+                checkDist <= radius &&
+                checkDist < closestConsoleDist)
+            {
+                closestConsole = checkConsole;
+                closestConsoleDist = checkDist;
+            }
+        }
+        return closestConsole;
+    }
+
     public static PlayerControl GetClosestPlayerInKillRange()
     {
         var playersInAbilityRangeSorted = 

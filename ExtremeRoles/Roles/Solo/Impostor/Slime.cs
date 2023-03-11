@@ -108,8 +108,8 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
     {
         PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
 
-        this.targetConsole = findClosestConsole(
-            localPlayer.gameObject, localPlayer.MaxReportDistance);
+        this.targetConsole = Player.GetClosestConsole(
+            localPlayer, localPlayer.MaxReportDistance);
 
         return this.IsCommonUse() && this.targetConsole is not null;
     }
@@ -174,34 +174,5 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
     public void AllReset(PlayerControl rolePlayer)
     {
         removeMorphConsole(this, rolePlayer);
-    }
-
-    private static Console findClosestConsole(GameObject origin, float radius)
-    {
-        Console closestConsole = null;
-        float closestConsoleDist = 9999;
-        Vector3 pos = origin.transform.position;
-        foreach (Collider2D collider in Physics2D.OverlapCircleAll(
-            pos, radius, Constants.Usables))
-        {
-
-            Console checkConsole = collider.GetComponent<Console>();
-            if (checkConsole is null) { continue; }
-
-            Vector3 targetPos = collider.transform.position;
-
-            float checkDist = Vector2.Distance(pos, targetPos);
-            
-            if (!PhysicsHelpers.AnythingBetween(
-                    pos, targetPos,
-                    Constants.ShipAndObjectsMask, false) &&
-                checkDist <= radius &&
-                checkDist < closestConsoleDist)
-            {
-                closestConsole = checkConsole;
-                closestConsoleDist = checkDist;
-            }
-        }
-        return closestConsole;
     }
 }
