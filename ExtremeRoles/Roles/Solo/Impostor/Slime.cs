@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 using UnityEngine;
+using Hazel;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -13,45 +15,16 @@ namespace ExtremeRoles.Roles.Solo.Impostor;
 
 public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 {
-    private DeadBody carringBody;
-    private float alphaValue;
-    private bool canReportOnCarry;
-    private GameData.PlayerInfo targetBody;
-
-    public enum CarrierOption
+    public enum SlimeRpc : byte
     {
-        CarryDistance,
-        CanReportOnCarry,
+        Morph,
+        Reset,
     }
 
-    private float carryDistance;
+    public ExtremeAbilityButton Button { get; set; }
 
-    public ExtremeAbilityButton Button
-    {
-        get => this.carryButton;
-        set
-        {
-            this.carryButton = value;
-        }
-    }
-
-    private ExtremeAbilityButton carryButton;
-
-    private Dictionary<Collider2D, IUsable[]> cache;
-    private Collider2D[] hitBuffer;
-
-    public sealed class ColliderComparer : IEqualityComparer<Collider2D>
-    {
-        public bool Equals(Collider2D x, Collider2D y)
-        {
-            return x == y;
-        }
-
-        public int GetHashCode(Collider2D obj)
-        {
-            return obj.GetInstanceID();
-        }
-    }
+    private Console targetConsole;
+    private GameObject consoleObj;
 
     public Slime() : base(
         ExtremeRoleId.Slime,
@@ -59,28 +32,60 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
         ExtremeRoleId.Slime.ToString(),
         Palette.ImpostorRed,
         true, false, true, true)
-    {
-        this.canReportOnCarry = false;
-    }
+    { }
 
-    public static void Ability(
-        byte rolePlayerId, float x, float y,
-        byte targetPlayerId, bool isCarry)
+    public static void Ability(ref MessageReader reader)
     {
+        SlimeRpc rpcId = (SlimeRpc)reader.ReadByte();
+        byte rolePlayerId = reader.ReadByte();
+
         var rolePlayer = Player.GetPlayerControlById(rolePlayerId);
-        var role = ExtremeRoleManager.GetSafeCastedRole<Carrier>(rolePlayerId);
+        var role = ExtremeRoleManager.GetSafeCastedRole<Slime>(rolePlayerId);
         if (role == null || rolePlayer == null) { return; }
-
-        rolePlayer.NetTransform.SnapTo(new Vector2(x, y));
-
-        if (isCarry)
+        switch (rpcId)
         {
-        }
-        else
-        {
+            case SlimeRpc.Morph:
+                int id = reader.ReadPackedInt32();
+                setPlayerSpriteToConsole(role, rolePlayer, id);
+                break;
+            case SlimeRpc.Reset:
+                removeMorphConsole(role, rolePlayer);
+                break;
+            default:
+                break;
         }
     }
-    
+
+    private static void setPlayerSpriteToConsole(Slime slime, PlayerControl player, int id)
+    {
+        Console console = CachedShipStatus.Instance.AllConsoles.ToList().Find(
+            x => x.ConsoleId == id);
+        
+        if (console is null) { return; }
+
+        slime.consoleObj = new GameObject("MorphConsole");
+        slime.consoleObj.transform.SetParent(player.transform);
+
+        SpriteRenderer rend = slime.consoleObj.AddComponent<SpriteRenderer>();
+        rend.sprite = console.GetComponent<SpriteRenderer>().sprite;
+        slime.consoleObj.transform.localScale = console.transform.lossyScale;
+
+        setPlayerObjActive(player, false);
+    }
+
+    private static void removeMorphConsole(Slime slime, PlayerControl player)
+    {
+        Object.Destroy(slime.consoleObj);
+        setPlayerObjActive(player, true);
+    }
+    private static void setPlayerObjActive(PlayerControl player, bool active)
+    {
+        player.GetComponent<SpriteRenderer>().enabled = active;
+
+        player.cosmetics.currentPet?.gameObject.SetActive(active);
+        player.cosmetics.nameText.gameObject.SetActive(active);
+    }
+
     public void CreateAbility()
     {
         this.CreateReclickableAbilityButton(
@@ -88,17 +93,16 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
             Loader.CreateSpriteFromResources(
                Path.CarrierCarry),
             abilityOff: this.CleanUp);
-
-        this.hitBuffer = new Collider2D[60];
-        this.cache = new Dictionary<Collider2D, IUsable[]>(new ColliderComparer());
     }
 
     public bool IsAbilityUse()
     {
-        
+        PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
 
+        this.targetConsole = findClosestConsole(
+            localPlayer.gameObject, localPlayer.MaxReportDistance);
 
-        return this.IsCommonUse() && this.targetBody != null;
+        return this.IsCommonUse() && this.targetConsole is not null;
     }
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
@@ -114,17 +118,16 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
     public bool UseAbility()
     {
         PlayerControl player = CachedPlayerControl.LocalPlayer;
-        Vector3 pos = player.transform.position;
+        int id = this.targetConsole.ConsoleId;
 
         using (var caller = RPCOperator.CreateCaller(
-            RPCOperator.Command.CarrierAbility))
+            RPCOperator.Command.SlimeAbility))
         {
+            caller.WriteByte((byte)SlimeRpc.Morph);
             caller.WriteByte(player.PlayerId);
-            caller.WriteFloat(pos.x);
-            caller.WriteFloat(pos.y);
-            caller.WriteByte(this.targetBody.PlayerId);
-            caller.WriteBoolean(true);
+            caller.WritePackedInt(id);
         }
+        setPlayerSpriteToConsole(this, player, id);
         return true;
     }
 
@@ -135,50 +138,49 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.SlimeAbility))
         {
+            caller.WriteByte((byte)SlimeRpc.Reset);
             caller.WriteByte(player.PlayerId);
         }
+        removeMorphConsole(this, player);
     }
 
     protected override void CreateSpecificOption(
         IOption parentOps)
     {
         this.CreateCommonAbilityOption(
-            parentOps, 5.0f);
-
-        CreateFloatOption(
-            CarrierOption.CarryDistance,
-            1.0f, 1.0f, 5.0f, 0.5f,
-            parentOps);
-
-        CreateBoolOption(
-            CarrierOption.CanReportOnCarry,
-            true, parentOps);
+            parentOps, 30.0f);
     }
 
     protected override void RoleSpecificInit()
     {
-        this.carryDistance = OptionHolder.AllOption[
-            GetRoleOptionId(CarrierOption.CarryDistance)].GetValue();
-        this.canReportOnCarry = OptionHolder.AllOption[
-            GetRoleOptionId(CarrierOption.CanReportOnCarry)].GetValue();
         this.RoleAbilityInit();
     }
 
     public void AllReset(PlayerControl rolePlayer)
     {
-        if (this.carringBody == null) { return; }
+        removeMorphConsole(this, rolePlayer);
+    }
 
-        this.carringBody.transform.SetParent(null);
-        this.carringBody.transform.position = rolePlayer.GetTruePosition() + new Vector2(0.15f, 0.15f);
-        this.carringBody.transform.position -= new Vector3(0.0f, 0.0f, 0.01f);
-
-        Color color = this.carringBody.bodyRenderer.color;
-        this.carringBody.bodyRenderer.color = new Color(
-            color.r, color.g, color.b, this.alphaValue);
-        if (!this.canReportOnCarry)
+    private static Console findClosestConsole(GameObject origin, float radius)
+    {
+        Console closestConsole = null;
+        float closestConsoleDist = 9999;
+        foreach (Collider2D collider in Physics2D.OverlapCircleAll(
+            origin.transform.position, radius))
         {
-            this.carringBody.GetComponentInChildren<BoxCollider2D>().enabled = true;
+
+            Console checkConsole = collider.GetComponent<Console>();
+            if (checkConsole is null) { continue; }
+            
+            float checkDist = Vector2.Distance(
+                origin.transform.position, collider.transform.position);
+            
+            if (checkDist < closestConsoleDist)
+            {
+                closestConsole = checkConsole;
+                closestConsoleDist = checkDist;
+            }
         }
-        this.carringBody = null;
+        return closestConsole;
     }
 }

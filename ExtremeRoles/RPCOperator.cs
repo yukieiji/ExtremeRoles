@@ -630,6 +630,11 @@ public static class RPCOperator
             playerId, ventId, isEnter);
     }
 
+    public static void SlimeAbility(ref MessageReader reader)
+    {
+        Roles.Solo.Impostor.Slime.Ability(ref reader);
+    }
+
     public static void AliceShipBroken(
         byte callerId, byte targetPlayerId, List<int> taskId)
     {

@@ -652,6 +652,9 @@ public static class PlayerControlHandleRpcPatch
                 RPCOperator.UnderWarperUseVentWithNoAnime(
                     underWarperPlayerId, targetVentId, isVentEnter);
                 break;
+            case RPCOperator.Command.SlimeAbility:
+                RPCOperator.SlimeAbility(ref reader);
+                break;
             case RPCOperator.Command.AliceShipBroken:
                 byte alicePlayerId = reader.ReadByte();
                 byte newTaskSetPlayerId = reader.ReadByte();
