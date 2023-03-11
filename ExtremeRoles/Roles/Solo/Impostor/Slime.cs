@@ -90,7 +90,7 @@ public sealed class Slime :
         player.cosmetics.lockVisible = false;
         player.cosmetics.Visible = true;
     }
-    
+
     public void CreateAbility()
     {
         this.CreateReclickableAbilityButton(
