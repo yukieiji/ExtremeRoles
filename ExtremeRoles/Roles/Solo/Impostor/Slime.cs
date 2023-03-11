@@ -97,8 +97,12 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
             "carry",
             Loader.CreateSpriteFromResources(
                Path.CarrierCarry),
+            checkAbility: IsAbilityActive,
             abilityOff: this.CleanUp);
     }
+
+    public bool IsAbilityActive() => 
+        CachedPlayerControl.LocalPlayer.PlayerControl.moveable;
 
     public bool IsAbilityUse()
     {
