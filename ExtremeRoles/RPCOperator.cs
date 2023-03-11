@@ -72,6 +72,7 @@ public static class RPCOperator
         CommanderAttackCommand,
         HypnotistAbility,
         UnderWarperUseVentWithNoAnime,
+        SlimeAbility,
 
         // ニュートラル
         AliceShipBroken,

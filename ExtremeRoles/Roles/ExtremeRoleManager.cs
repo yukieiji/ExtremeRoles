@@ -80,6 +80,7 @@ namespace ExtremeRoles.Roles
         Hypnotist,
         UnderWarper,
         Magician,
+        Slime,
 
         Alice,
         Jackal,
