@@ -26,6 +26,24 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
     private Console targetConsole;
     private GameObject consoleObj;
 
+    private ExtremeAbilityButton carryButton;
+
+    private Dictionary<Collider2D, IUsable[]> cache;
+    private Collider2D[] hitBuffer;
+
+    public sealed class ColliderComparer : IEqualityComparer<Collider2D>
+    {
+        public bool Equals(Collider2D x, Collider2D y)
+        {
+            return x == y;
+        }
+
+        public int GetHashCode(Collider2D obj)
+        {
+            return obj.GetInstanceID();
+        }
+    }
+
     public Slime() : base(
         ExtremeRoleId.Slime,
         ExtremeRoleType.Impostor,
@@ -77,19 +95,19 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
     }
 
     private static void removeMorphConsole(Slime slime, PlayerControl player)
-    {
+        {
         Object.Destroy(slime.consoleObj);
         setPlayerObjActive(player, true);
-    }
+        }
     private static void setPlayerObjActive(PlayerControl player, bool active)
-    {
+        {
         player.cosmetics.currentBodySprite.BodySprite.enabled = active;
         player.cosmetics.hat.gameObject.SetActive(active);
         player.cosmetics.visor.gameObject.SetActive(active);
         player.cosmetics.currentPet?.gameObject.SetActive(active);
         player.cosmetics.nameText.gameObject.SetActive(active);
     }
-
+    
     public void CreateAbility()
     {
         this.CreateReclickableAbilityButton(
@@ -106,7 +124,7 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
     public bool IsAbilityUse()
     {
         PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
-
+        
         this.targetConsole = Player.GetClosestConsole(
             localPlayer, localPlayer.MaxReportDistance);
 
@@ -136,17 +154,17 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
             Console console = CachedShipStatus.Instance.AllConsoles[i];
             if (console != this.targetConsole) { continue; }
 
-            using (var caller = RPCOperator.CreateCaller(
+        using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.SlimeAbility))
-            {
+        {
                 caller.WriteByte((byte)SlimeRpc.Morph);
-                caller.WriteByte(player.PlayerId);
+            caller.WriteByte(player.PlayerId);
                 caller.WritePackedInt(i);
-            }
+        }
             setPlayerSpriteToConsole(this, player, i);
             
-            return true;
-        }
+        return true;
+    }
         return false;
     }
 
@@ -178,6 +196,10 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 
     protected override void RoleSpecificInit()
     {
+        this.carryDistance = OptionHolder.AllOption[
+            GetRoleOptionId(CarrierOption.CarryDistance)].GetValue();
+        this.canReportOnCarry = OptionHolder.AllOption[
+            GetRoleOptionId(CarrierOption.CanReportOnCarry)].GetValue();
         this.RoleAbilityInit();
     }
 
