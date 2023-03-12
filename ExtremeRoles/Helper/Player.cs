@@ -46,11 +46,7 @@ public static class Player
 
             float checkDist = Vector2.Distance(pos, targetPos);
 
-            if (!PhysicsHelpers.AnythingBetween(
-                    pos, targetPos,
-                    Constants.ShipAndObjectsMask, false) &&
-                checkDist <= radius &&
-                checkDist < closestConsoleDist)
+            if (checkDist < closestConsoleDist)
             {
                 closestConsole = checkConsole;
                 closestConsoleDist = checkDist;

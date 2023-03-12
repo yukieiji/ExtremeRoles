@@ -269,6 +269,27 @@ public static class GameSystem
         RPCOperator.ForceEnd();
     }
 
+    public static bool IsValidConsole(PlayerControl player, Console console)
+    {
+        if (player is null || console is null) { return false; }
+
+        Vector2 playerPos = player.GetTruePosition();
+        Vector2 consolePos = console.transform.position;
+
+        bool isCheckWall = console.checkWalls;
+
+        return
+            player.CanMove &&
+            (!console.onlySameRoom || console.InRoom(playerPos)) &&
+            (!console.onlyFromBelow || playerPos.y < consolePos.y) &&
+            Vector2.Distance(playerPos, consolePos) <= console.UsableDistance &&
+            (
+                !isCheckWall ||
+                !PhysicsHelpers.AnythingBetween(
+                        playerPos, consolePos, Constants.ShadowMask, false)
+            );
+    }
+
     public static Minigame OpenMinigame(
         Minigame prefab,
         PlayerTask task = null,

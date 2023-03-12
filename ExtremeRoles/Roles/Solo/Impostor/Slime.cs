@@ -60,7 +60,7 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
     {
         Console console = CachedShipStatus.Instance.AllConsoles[index];
         
-        if (console is null) { return; }
+        if (console is null || console.Image is null) { return; }
 
         slime.consoleObj = new GameObject("MorphConsole");
         slime.consoleObj.transform.SetParent(player.transform);
@@ -110,7 +110,12 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
         this.targetConsole = Player.GetClosestConsole(
             localPlayer, localPlayer.MaxReportDistance);
 
-        return this.IsCommonUse() && this.targetConsole is not null;
+        if (this.targetConsole is null) { return false; }
+
+        return
+            this.IsCommonUse() &&
+            this.targetConsole.Image is not null &&
+            GameSystem.IsValidConsole(localPlayer, this.targetConsole);
     }
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
