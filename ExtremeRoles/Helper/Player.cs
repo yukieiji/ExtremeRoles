@@ -36,12 +36,9 @@ public static class Player
         float closestConsoleDist = 9999;
         Vector2 pos = player.GetTruePosition();
 
-        Collider2D[] result = new Collider2D[60];
-        int num = Physics2D.OverlapCircleNonAlloc(pos, radius, result, Constants.Usables);
-        for (int i = 0; i < num; ++i)
+        foreach (Collider2D collider in Physics2D.OverlapCircleAll(
+            pos, radius, Constants.Usables))
         {
-            Collider2D collider = result[i];
-
             Console checkConsole = collider.GetComponent<Console>();
             if (checkConsole is null) { continue; }
 
