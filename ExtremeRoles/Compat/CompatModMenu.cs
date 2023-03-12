@@ -84,7 +84,7 @@ namespace ExtremeRoles.Compat
             title.name = "title";
             title.text = Helper.Translation.GetString(titleName);
             title.autoSizeTextContainer = false;
-            title.fontSizeMin = title.fontSizeMax = 4.0f;
+            title.fontSizeMin = title.fontSizeMax = 3.25f;
             title.transform.localPosition = new Vector3(0.0f, 2.45f, 0f);
 
             removeUnnecessaryComponent();
@@ -274,11 +274,11 @@ namespace ExtremeRoles.Compat
             string name, int posIndex)
         {
             TextMeshPro modText = Object.Instantiate(
-                    Module.Prefab.Text, menuBody.transform);
+                Module.Prefab.Text, menuBody.transform);
             modText.name = name;
 
             modText.transform.localPosition = new Vector3(0.25f, 1.9f - (posIndex * 0.5f), 0f);
-            modText.fontSizeMin = modText.fontSizeMax = 3.0f;
+            modText.fontSizeMin = modText.fontSizeMax = 2.0f;
             modText.font = Object.Instantiate(Module.Prefab.Text.font);
             modText.GetComponent<RectTransform>().sizeDelta = new Vector2(5.4f, 5.5f);
             modText.text = $"{Helper.Translation.GetString(name)}";
