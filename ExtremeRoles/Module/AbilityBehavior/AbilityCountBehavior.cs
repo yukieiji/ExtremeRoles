@@ -107,13 +107,19 @@ public sealed class AbilityCountBehavior : AbilityBehaviorBase
 
     public override AbilityState Update(AbilityState curState)
     {
+        if (curState == AbilityState.Activating)
+        {
+            return curState;
+        }
+
         if (this.isUpdate)
         {
             this.isUpdate = false;
             return AbilityState.CoolDown;
         }
         
-        return this.AbilityCount > 0 ? curState : AbilityState.None;
+        return 
+            this.AbilityCount > 0  ? curState : AbilityState.None;
     }
 
     public void SetAbilityCount(int newAbilityNum)
