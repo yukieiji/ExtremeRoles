@@ -45,8 +45,8 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
         switch (rpcId)
         {
             case SlimeRpc.Morph:
-                int id = reader.ReadPackedInt32();
-                setPlayerSpriteToConsole(role, rolePlayer, id);
+                int index = reader.ReadPackedInt32();
+                setPlayerSpriteToConsole(role, rolePlayer, index);
                 break;
             case SlimeRpc.Reset:
                 removeMorphConsole(role, rolePlayer);
@@ -56,10 +56,9 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
         }
     }
 
-    private static void setPlayerSpriteToConsole(Slime slime, PlayerControl player, int id)
+    private static void setPlayerSpriteToConsole(Slime slime, PlayerControl player, int index)
     {
-        Console console = CachedShipStatus.Instance.AllConsoles.ToList().Find(
-            x => x.ConsoleId == id);
+        Console console = CachedShipStatus.Instance.AllConsoles[index];
         
         if (console is null) { return; }
 
@@ -127,17 +126,23 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
     public bool UseAbility()
     {
         PlayerControl player = CachedPlayerControl.LocalPlayer;
-        int id = this.targetConsole.ConsoleId;
-
-        using (var caller = RPCOperator.CreateCaller(
-            RPCOperator.Command.SlimeAbility))
+        for (int i = 0; i < CachedShipStatus.Instance.AllConsoles.Length; ++i)
         {
-            caller.WriteByte((byte)SlimeRpc.Morph);
-            caller.WriteByte(player.PlayerId);
-            caller.WritePackedInt(id);
+            Console console = CachedShipStatus.Instance.AllConsoles[i];
+            if (console != this.targetConsole) { continue; }
+
+            using (var caller = RPCOperator.CreateCaller(
+            RPCOperator.Command.SlimeAbility))
+            {
+                caller.WriteByte((byte)SlimeRpc.Morph);
+                caller.WriteByte(player.PlayerId);
+                caller.WritePackedInt(i);
+            }
+            setPlayerSpriteToConsole(this, player, i);
+            
+            return true;
         }
-        setPlayerSpriteToConsole(this, player, id);
-        return true;
+        return false;
     }
 
     public void CleanUp()
