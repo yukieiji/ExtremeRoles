@@ -154,7 +154,7 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
             Console console = CachedShipStatus.Instance.AllConsoles[i];
             if (console != this.targetConsole) { continue; }
 
-        using (var caller = RPCOperator.CreateCaller(
+            using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.SlimeAbility))
         {
                 caller.WriteByte((byte)SlimeRpc.Morph);
