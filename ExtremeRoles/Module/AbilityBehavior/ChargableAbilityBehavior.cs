@@ -46,6 +46,7 @@ public sealed class ChargableAbilityBehavior : AbilityBehaviorBase
     {
         this.maxCharge = time;
         this.currentCharge = time;
+        this.chargeTimer = time;
         base.SetActiveTime(time);
     }
 

@@ -67,8 +67,6 @@ namespace ExtremeRoles.Module
         public string ToHudString();
         public string ToHudStringWithChildren(int indent=0);
 
-        // This is HotFix for HideNSeek
-        public dynamic GetDefault();
         public dynamic GetValue();
     }
 
@@ -91,8 +89,8 @@ namespace ExtremeRoles.Module
 
         public int ValueCount => this.Selections.Length;
 
-        public OptionTab Tab => this.tab;
-        public IOption Parent => this.parent;
+        public OptionTab Tab { get; }
+        public IOption Parent { get; }
         public IOption ForceEnableCheckOption => this.forceEnableCheckOption;
         public List<IOption> Children => this.children;
 
@@ -113,8 +111,6 @@ namespace ExtremeRoles.Module
         private OptionUnit stringFormat;
         private List<IWithUpdatableOption<OutType>> withUpdateOption = new List<IWithUpdatableOption<OutType>>();
 
-        private OptionTab tab;
-        private IOption parent;
         private IOption forceEnableCheckOption;
         private List<IOption> children = new List<IOption>();
 
@@ -145,7 +141,8 @@ namespace ExtremeRoles.Module
             OptionTab tab = OptionTab.General)
         {
 
-            this.tab = tab;
+            this.Tab = tab;
+            this.Parent = parent;
 
             int index = Array.IndexOf(selections, defaultValue);
 
@@ -154,7 +151,7 @@ namespace ExtremeRoles.Module
             this.stringFormat = format;
             this.Selections = selections;
             this.defaultSelection = index >= 0 ? index : 0;
-            this.parent = parent;
+
             this.isHeader = isHeader;
             this.isHidden = isHidden;
             this.enableInvert = false;
@@ -207,12 +204,12 @@ namespace ExtremeRoles.Module
                 return false;
             }
 
-            if (this.isHeader || this.parent == null)
+            if (this.isHeader || this.Parent == null)
             {
                 return true;
             }
 
-            IOption parent = this.parent;
+            IOption parent = this.Parent;
             bool active = true;
 
             while (parent != null && active)
@@ -366,8 +363,6 @@ namespace ExtremeRoles.Module
                 addChildrenOptionHudString(ref builder, child, prefixIndentCount + 1);
             }
         }
-
-        public abstract dynamic GetDefault();
         public abstract dynamic GetValue();
     }
 
@@ -391,7 +386,6 @@ namespace ExtremeRoles.Module
                 enableCheckOption, tab)
         { }
 
-        public override dynamic GetDefault() => this.DefaultSelection > 0;
         public override dynamic GetValue() => CurSelection > 0;
     }
 
@@ -416,7 +410,6 @@ namespace ExtremeRoles.Module
                 enableCheckOption, tab)
         { }
 
-        public override dynamic GetDefault() => Selections[this.DefaultSelection];
         public override dynamic GetValue() => Selections[CurSelection];
 
         private static List<float> createSelection(float min, float max, float step)
@@ -464,8 +457,7 @@ namespace ExtremeRoles.Module
             this.minValue = this.Selections[0];
             this.maxValue = this.Selections[this.ValueCount - 1];
         }
-
-        public override dynamic GetDefault() => Selections[this.DefaultSelection];
+        
         public override dynamic GetValue() => Selections[CurSelection];
 
         public override void Update(int newValue)
@@ -520,8 +512,7 @@ namespace ExtremeRoles.Module
         {
             this.step = step;
         }
-
-        public override dynamic GetDefault() => Selections[this.DefaultSelection];
+        
         public override dynamic GetValue() => Selections[CurSelection];
 
         public override void Update(int newValue)
@@ -581,7 +572,6 @@ namespace ExtremeRoles.Module
             this.step = step;
         }
 
-        public override dynamic GetDefault() => Selections[this.DefaultSelection];
         public override dynamic GetValue() => Selections[CurSelection];
 
         public override void Update(float newValue)
@@ -661,7 +651,6 @@ namespace ExtremeRoles.Module
                 format, invert, enableCheckOption)
         { }
 
-        public override dynamic GetDefault() => this.DefaultSelection;
         public override dynamic GetValue() => CurSelection;
     }
 }

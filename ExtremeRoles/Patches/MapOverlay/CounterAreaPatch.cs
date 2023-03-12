@@ -5,72 +5,65 @@ using UnityEngine;
 using HarmonyLib;
 using ExtremeRoles.Performance.Il2Cpp;
 
-namespace ExtremeRoles.Patches.MapOverlay
+namespace ExtremeRoles.Patches.MapOverlay;
+
+[HarmonyPatch(typeof(CounterArea), nameof(CounterArea.UpdateCount))]
+public static class CounterAreaUpdateCountPatch
 {
-    [HarmonyPatch(typeof(CounterArea), nameof(CounterArea.UpdateCount))]
-    public static class CounterAreaUpdateCountPatch
+    public static void Postfix(CounterArea __instance)
     {
-        private static Material defaultMat;
-        private static Material newMat;
+        if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return; }
 
-        public static void Postfix(CounterArea __instance)
+        var admin = Roles.ExtremeRoleManager.GetSafeCastedLocalPlayerRole<
+            Roles.Solo.Crewmate.Supervisor>();
+
+        if (admin is null) { return; }
+
+        PoolableBehavior pool = __instance.pool.Get<PoolableBehavior>();
+        SpriteRenderer defaultRenderer = pool.GetComponent<SpriteRenderer>();
+        Material defaultMat = Object.Instantiate(defaultRenderer.material);
+        pool.OwnerPool.Reclaim(pool);
+
+        if (!admin.Boosted || !admin.IsAbilityActive)
         {
-            if (Roles.ExtremeRoleManager.GameRole.Count == 0) { return; }
-
-            var admin = Roles.ExtremeRoleManager.GetSafeCastedLocalPlayerRole<
-                Roles.Solo.Crewmate.Supervisor>();
-
-            if (admin == null || !admin.Boosted || !admin.IsAbilityActive)
+            foreach (PoolableBehavior icon in __instance.myIcons.GetFastEnumerator())
             {
-                foreach (PoolableBehavior icon in __instance.myIcons.GetFastEnumerator())
-                {
-                    SpriteRenderer renderer = icon.GetComponent<SpriteRenderer>();
+                SpriteRenderer renderer = icon.GetComponent<SpriteRenderer>();
 
-                    if (renderer != null)
-                    {
-                        if (defaultMat == null)
-                        {
-                            defaultMat = renderer.material;
-                        }
-                        renderer.material = defaultMat;
-                    }
+                if (renderer is not null)
+                {
+                    renderer.material = defaultMat;
                 }
-                return; 
             }
+            return; 
+        }
 
-            if (MapCountOverlayUpdatePatch.PlayerColor.ContainsKey(__instance.RoomType))
+        if (!MapCountOverlayUpdatePatch.PlayerColor.TryGetValue(
+                __instance.RoomType, out List<Color> colors))
+        {
+            return;
+        }
+
+        for (int i = 0; i < __instance.myIcons.Count; i++)
+        {
+            PoolableBehavior icon = __instance.myIcons[i];
+            SpriteRenderer renderer = icon.GetComponent<SpriteRenderer>();
+
+            if (renderer is not null && colors.Count > i)
             {
-                List<Color> colors = MapCountOverlayUpdatePatch.PlayerColor[__instance.RoomType];
-              
-                for (int i = 0; i < __instance.myIcons.Count; i++)
+                renderer.material = Object.Instantiate(defaultMat);
+                var color = colors[i];
+                renderer.material.SetColor("_BodyColor", color);
+                var id = Palette.PlayerColors.IndexOf(color);
+                if (id < 0)
                 {
-                    PoolableBehavior icon = __instance.myIcons[i];
-                    SpriteRenderer renderer = icon.GetComponent<SpriteRenderer>();
-
-                    if (renderer != null)
-                    {
-                        if (newMat == null)
-                        {
-                            newMat = Object.Instantiate(defaultMat);
-                        }
-                        if (colors.Count > i)
-                        {
-                            renderer.material = newMat;
-                            var color = colors[i];
-                            renderer.material.SetColor("_BodyColor", color);
-                            var id = Palette.PlayerColors.IndexOf(color);
-                            if (id < 0)
-                            {
-                                renderer.material.SetColor("_BackColor", color);
-                            }
-                            else
-                            {
-                                renderer.material.SetColor("_BackColor", Palette.ShadowColors[id]);
-                            }
-                            renderer.material.SetColor("_VisorColor", Palette.VisorColor);
-                        }
-                    }
+                    renderer.material.SetColor("_BackColor", color);
                 }
+                else
+                {
+                    renderer.material.SetColor("_BackColor", Palette.ShadowColors[id]);
+                }
+                renderer.material.SetColor("_VisorColor", Palette.VisorColor);
             }
         }
     }

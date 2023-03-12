@@ -5,54 +5,60 @@ using TMPro;
 using ExtremeRoles.Performance;
 using ExtremeRoles.GameMode;
 
-namespace ExtremeRoles.Patches.Meeting
+namespace ExtremeRoles.Patches.Meeting;
+
+
+[HarmonyPatch(typeof(MeetingIntroAnimation), nameof(MeetingIntroAnimation.Init))]
+public static class MeetingIntroAnimationInitPatch
 {
-
-    [HarmonyPatch(typeof(MeetingIntroAnimation), nameof(MeetingIntroAnimation.Init))]
-    public static class MeetingIntroAnimationInitPatch
+    public static void Postfix(
+        MeetingIntroAnimation __instance)
     {
-        public static void Postfix(
-            MeetingIntroAnimation __instance)
-        {
 
-			__instance.ProtectedRecently.SetActive(false);
-			SoundManager.Instance.StopSound(__instance.ProtectedRecentlySound);
+		__instance.ProtectedRecently.SetActive(false);
+		SoundManager.Instance.StopSound(__instance.ProtectedRecentlySound);
 
-			bool someoneWasProtected = false;
-			foreach(PlayerControl pc in CachedPlayerControl.AllPlayerControls)
+		bool someoneWasProtected = false;
+		foreach(PlayerControl pc in CachedPlayerControl.AllPlayerControls)
+		{
+			if (pc == null) { continue; }
+
+			if (pc.protectedByGuardianThisRound)
 			{
-				if (pc == null) { continue; }
-
-				if (pc.protectedByGuardianThisRound)
+				pc.protectedByGuardianThisRound = false;
+				if (pc.Data != null && !pc.Data.IsDead)
 				{
-					pc.protectedByGuardianThisRound = false;
-					if (pc.Data != null && !pc.Data.IsDead)
-					{
-						someoneWasProtected = true;
-					}
+					someoneWasProtected = true;
 				}
 			}
-
-			TMP_Text text = __instance.ProtectedRecently.GetComponentInChildren<TMP_SubMesh>().textComponent;
-
-			string gaAbilityText = string.Empty;
-
-			if (someoneWasProtected && !ExtremeGameModeManager.Instance.ShipOption.IsBlockGAAbilityReport)
-			{
-				gaAbilityText = text.text;
-			}
-
-			string exrAbiltyText = ExtremeRolesPlugin.ShipState.GetGhostAbilityReport();
-
-			if (gaAbilityText != string.Empty || exrAbiltyText != string.Empty)
-            {
-				string showText = gaAbilityText == string.Empty ? gaAbilityText : string.Empty;
-				showText = showText == string.Empty ? exrAbiltyText : string.Concat(showText, "\n", exrAbiltyText);
-
-				text.text = showText;
-				SoundManager.Instance.PlaySound(__instance.ProtectedRecentlySound, false, 1f);
-				__instance.ProtectedRecently.SetActive(true);
-			}
 		}
+
+		TMP_SubMesh textSubMesh = __instance.ProtectedRecently.GetComponentInChildren<TMP_SubMesh>();
+
+		if (textSubMesh is null) { return; }
+
+		TMP_Text text = textSubMesh.textComponent;
+
+		string gaProtectText = string.Empty;
+
+		if (someoneWasProtected && !ExtremeGameModeManager.Instance.ShipOption.IsBlockGAAbilityReport)
+		{
+			gaProtectText = text.text;
+		}
+
+		string exrAbiltyText = ExtremeRolesPlugin.ShipState.GetGhostAbilityReport();
+
+		bool isGaAbilityTextEmpty = string.IsNullOrEmpty(gaProtectText);
+		bool isExrAbilityTextEmpty = string.IsNullOrEmpty(exrAbiltyText);
+
+		if (isGaAbilityTextEmpty && isExrAbilityTextEmpty)
+		{
+			return;
+		}
+
+		text.text = isGaAbilityTextEmpty ?
+			exrAbiltyText : string.Concat(gaProtectText, "\n", exrAbiltyText);
+		SoundManager.Instance.PlaySound(__instance.ProtectedRecentlySound, false, 1f);
+		__instance.ProtectedRecently.SetActive(true);
     }
 }

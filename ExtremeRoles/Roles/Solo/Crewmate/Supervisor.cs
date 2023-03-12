@@ -60,7 +60,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
         {
             this.CreateChargeAbilityButton(
                 "admin",
-                getAdminButtonImage(),
+                GameSystem.GetAdminButtonImage(),
                 IsOpen, CleanUp);
             this.Button.SetLabelToCrewmate();
         }
@@ -153,23 +153,6 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
             this.taskGage = (float)OptionHolder.AllOption[
                 GetRoleOptionId(SuperviosrOption.TaskGage)].GetValue() / 100.0f;
             this.RoleAbilityInit();
-        }
-        private Sprite getAdminButtonImage()
-        {
-            var imageDict = FastDestroyableSingleton<HudManager>.Instance.UseButton.fastUseSettings;
-            switch (GameOptionsManager.Instance.CurrentGameOptions.GetByte(
-                ByteOptionNames.MapId))
-            {
-                case 0:
-                case 3:
-                    return imageDict[ImageNames.AdminMapButton].Image;
-                case 1:
-                    return imageDict[ImageNames.MIRAAdminButton].Image;
-                case 2:
-                    return imageDict[ImageNames.PolusAdminButton].Image;
-                default:
-                    return imageDict[ImageNames.AirshipAdminButton].Image;
-            }
         }
     }
 }
