@@ -10,6 +10,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using Hazel;
 
+
 namespace ExtremeRoles.Roles.Combination;
 
 public sealed class MoverManager : FlexibleCombinationRoleManagerBase
@@ -65,8 +66,8 @@ public sealed class Mover :
         switch (rpcId)
         {
             case MoverRpc.Move:
-                int id = reader.ReadPackedInt32();
-                pickUpConsole(role, rolePlayer, id);
+                int index = reader.ReadPackedInt32();
+                pickUpConsole(role, rolePlayer, index);
                 break;
             case MoverRpc.Reset:
                 removeConsole(role);
@@ -76,10 +77,9 @@ public sealed class Mover :
         }
     }
 
-    private static void pickUpConsole(Mover mover, PlayerControl player, int id)
+    private static void pickUpConsole(Mover mover, PlayerControl player, int index)
     {
-        Console console = CachedShipStatus.Instance.AllConsoles.ToList().Find(
-            x => x.ConsoleId == id);
+        Console console = CachedShipStatus.Instance.AllConsoles[index];
 
         if (console is null) { return; }
 
@@ -124,7 +124,12 @@ public sealed class Mover :
         this.targetConsole = Player.GetClosestConsole(
             localPlayer, localPlayer.MaxReportDistance);
 
-        return this.IsCommonUse() && this.targetConsole is not null;
+        if (this.targetConsole is null) { return false; }
+
+        return 
+            this.IsCommonUse() && 
+            this.targetConsole.Image is not null &&
+            GameSystem.IsValidConsole(localPlayer, this.targetConsole);
     }
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
@@ -140,19 +145,26 @@ public sealed class Mover :
     public bool UseAbility()
     {
         PlayerControl player = CachedPlayerControl.LocalPlayer;
-        int id = this.targetConsole.ConsoleId;
 
-        using (var caller = RPCOperator.CreateCaller(
-            RPCOperator.Command.SlimeAbility))
+        for (int i = 0; i < CachedShipStatus.Instance.AllConsoles.Length; ++i)
         {
-            caller.WriteByte((byte)MoverRpc.Move);
-            caller.WriteByte(player.PlayerId);
-            caller.WriteFloat(player.transform.position.x);
-            caller.WriteFloat(player.transform.position.y);
-            caller.WritePackedInt(id);
+            Console console = CachedShipStatus.Instance.AllConsoles[i];
+            if (console != this.targetConsole) { continue; }
+
+            using (var caller = RPCOperator.CreateCaller(
+            RPCOperator.Command.SlimeAbility))
+            {
+                caller.WriteByte((byte)MoverRpc.Move);
+                caller.WriteByte(player.PlayerId);
+                caller.WriteFloat(player.transform.position.x);
+                caller.WriteFloat(player.transform.position.y);
+                caller.WritePackedInt(i);
+            }
+            pickUpConsole(this, player, i);
+
+            return true;
         }
-        pickUpConsole(this, player, id);
-        return true;
+        return false;
     }
 
     public void CleanUp()
