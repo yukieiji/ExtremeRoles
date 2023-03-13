@@ -251,7 +251,7 @@ public sealed class Bomber : SingleRoleBase, IRoleAbility, IRoleUpdate
         {
             this.tellText = Object.Instantiate(
                 Prefab.Text, Camera.main.transform, false);
-            this.tellText.transform.localPosition = new Vector3(-4.0f, -2.75f, -250.0f);
+            this.tellText.transform.localPosition = new Vector3(-4.5f, -2.5f, -250.0f);
             this.tellText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
             this.tellText.gameObject.layer = 5;
             this.tellText.text = Helper.Translation.GetString("explosionText");
