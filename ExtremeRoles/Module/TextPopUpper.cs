@@ -14,10 +14,15 @@ namespace ExtremeRoles.Module
                 string printString,
                 float disapearTime,
                 Vector3 pos,
-                TextAlignmentOptions offset)
+                TextAlignmentOptions offset,
+                bool isWrap = true)
             {
                 this.body = Object.Instantiate(
                     Prefab.Text, Camera.main.transform, false);
+
+                this.body.enableWordWrapping = isWrap;
+                this.body.GetComponent<RectTransform>().sizeDelta = new Vector2(3.0f, 0.75f);
+
                 this.body.transform.localPosition = pos;
                 this.body.alignment = offset;
                 this.body.gameObject.layer = 5;
@@ -45,12 +50,14 @@ namespace ExtremeRoles.Module
         private float disapearTime;
         private Vector3 showPos;
         private TextAlignmentOptions textOffest;
+        private bool isWrap;
 
         public TextPopUpper(
             int size,
             float disapearTime,
             Vector3 firstPos,
-            TextAlignmentOptions offset)
+            TextAlignmentOptions offset,
+            bool isWrap = true)
         {
             this.showText = new List<Text>(size);
             for (int i = 0; i < this.showText.Capacity; ++i)
@@ -61,6 +68,7 @@ namespace ExtremeRoles.Module
             this.disapearTime = disapearTime;
             this.showPos = firstPos;
             this.textOffest = offset;
+            this.isWrap = isWrap;
 
             this.indexer = 0;
         }
@@ -82,7 +90,8 @@ namespace ExtremeRoles.Module
                 printString,
                 this.disapearTime,
                 this.showPos,
-                this.textOffest);
+                this.textOffest,
+                this.isWrap);
 
             ++this.indexer;
             this.indexer = this.indexer % this.showText.Count;
