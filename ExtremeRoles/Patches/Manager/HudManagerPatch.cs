@@ -15,10 +15,25 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Patches.MapOverlay;
+using ExtremeRoles.Roles.API.Extension.State;
+
+namespace ExtremeRoles.Patches.Manager;
 
 
-namespace ExtremeRoles.Patches.Manager
+[HarmonyPatch(typeof(HudManager), nameof(HudManager.ToggleMapVisible))]
+public static class HudManagerToggleMapVisibletPatch
 {
+    public static void Prefix([HarmonyArgument(0)] ref MapOptions options)
+    {
+        if(options.Mode != MapOptions.Modes.CountOverlay ||
+           ExtremeRoleManager.GameRole.Count == 0 ||
+           ExtremeRoleManager.GetLocalPlayerRole().CanUseAdmin() ||
+           MapCountOverlayUpdatePatch.IsAbilityUse()) { return; }
+        
+        options.Mode = MapOptions.Modes.Normal;
+    }
+}
 
     // コレを消すと動かなくなる
     [HarmonyPatch(typeof(HudManager), nameof(HudManager.Start))]
