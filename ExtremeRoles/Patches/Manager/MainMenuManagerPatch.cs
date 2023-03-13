@@ -126,6 +126,9 @@ public static class MainMenuManagerStartPatch
             
             Module.Prefab.Text = UnityEngine.Object.Instantiate(
                 man.TwitchPopup.TextAreaTMP);
+            Module.Prefab.Text.fontSize =
+                Module.Prefab.Text.fontSizeMax =
+                Module.Prefab.Text.fontSizeMin = 2.25f;
             Module.Prefab.Text.alignment = TextAlignmentOptions.Center;
             UnityEngine.Object.DontDestroyOnLoad(Module.Prefab.Text);
             UnityEngine.Object.Destroy(Module.Prefab.Text.GetComponent<
