@@ -47,9 +47,9 @@ namespace ExtremeRoles.Patches.Region
         {
 
             var gameIdTextBox = GameObject.Find("NormalMenu/JoinGameButton/JoinGameMenu/GameIdText");
-            if (gameIdTextBox == null) { return; }
+            if (gameIdTextBox is null) { return; }
 
-            if (ipField == null || ipField.gameObject == null || ipText == null)
+            if (ipField is null || ipField.gameObject is null || ipText is null)
             {
                 ipField = UnityEngine.Object.Instantiate(
                     gameIdTextBox.gameObject, __instance.transform);
@@ -58,6 +58,7 @@ namespace ExtremeRoles.Patches.Region
 
                 ipField.gameObject.name = "ipTextBox";
                 ipText.gameObject.name = "ipText";
+                ipText.fontSize = ipText.fontSizeMin = ipText.fontSizeMax = 2.0f;
 
                 var arrow = ipField.transform.FindChild("arrowEnter");
                 if (arrow == null || arrow.gameObject == null) { return; }
@@ -95,7 +96,7 @@ namespace ExtremeRoles.Patches.Region
 
             }
 
-            if (portField == null || portField.gameObject == null)
+            if (portField is null || portField.gameObject is null)
             {
                 portField = UnityEngine.Object.Instantiate(
                     gameIdTextBox.gameObject, __instance.transform);
@@ -104,9 +105,10 @@ namespace ExtremeRoles.Patches.Region
 
                 portField.gameObject.name = "portTextBox";
                 portText.gameObject.name = "portText";
+                portText.fontSize = portText.fontSizeMin = portText.fontSizeMax = 2.0f;
 
                 var arrow = portField.transform.FindChild("arrowEnter");
-                if (arrow == null || arrow.gameObject == null) { return; }
+                if (arrow is null || arrow.gameObject is null) { return; }
                 UnityEngine.Object.DestroyImmediate(arrow.gameObject);
 
                 portField.transform.localPosition = new Vector3(0.2f, -2.0f, -100f);
