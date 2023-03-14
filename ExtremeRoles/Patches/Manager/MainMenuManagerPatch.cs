@@ -9,6 +9,7 @@ using System.Net.Http;
 using Newtonsoft.Json.Linq;
 
 using HarmonyLib;
+using BepInEx;
 
 using TMPro;
 using Twitch;
