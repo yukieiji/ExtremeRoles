@@ -45,7 +45,8 @@ namespace ExtremeRoles.Patches.Region
 
         public static void Postfix(RegionMenu __instance)
         {
-            __instance.transform.localPosition = new Vector3(-2.0f, 0.0f, -30.0f);
+            // Hotfix Button Conflicts
+            // __instance.transform.localPosition = new Vector3(-2.0f, 0.0f, -30.0f);
             var gameIdTextBox = GameObject.Find("NormalMenu/JoinGameButton/JoinGameMenu/GameIdText");
             if (gameIdTextBox is null) { return; }
 
