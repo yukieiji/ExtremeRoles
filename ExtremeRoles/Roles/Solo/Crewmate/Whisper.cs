@@ -196,7 +196,7 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
             this.textPopUp = new TextPopUpper(
                 allOption[GetRoleOptionId(WhisperOption.MaxTellText)].GetValue(),
-                allOption[GetRoleOptionId(WhisperOption.MaxTellText)].GetValue(),
+                allOption[GetRoleOptionId(WhisperOption.TellTextTime)].GetValue(),
                 new Vector3(-3.75f, -2.5f, -250.0f),
                 TMPro.TextAlignmentOptions.BottomLeft);
 
