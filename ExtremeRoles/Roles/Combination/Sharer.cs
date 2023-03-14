@@ -261,7 +261,7 @@ namespace ExtremeRoles.Roles.Combination
             {
                 this.textPopUp = new TextPopUpper(
                     3, 10.0f,
-                    new Vector3(-4.5f, -2.5f, -250.0f),
+                    new Vector3(-3.75f, -2.5f, -250.0f),
                     TMPro.TextAlignmentOptions.BottomLeft);
             }
             if (this.sameSharer != null)
