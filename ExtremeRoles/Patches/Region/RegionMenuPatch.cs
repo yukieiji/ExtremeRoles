@@ -45,7 +45,7 @@ namespace ExtremeRoles.Patches.Region
 
         public static void Postfix(RegionMenu __instance)
         {
-
+            __instance.transform.localPosition = new Vector3(-2.0f, 0.0f, -30.0f);
             var gameIdTextBox = GameObject.Find("NormalMenu/JoinGameButton/JoinGameMenu/GameIdText");
             if (gameIdTextBox is null) { return; }
 
@@ -64,7 +64,7 @@ namespace ExtremeRoles.Patches.Region
                 if (arrow == null || arrow.gameObject == null) { return; }
                 UnityEngine.Object.DestroyImmediate(arrow.gameObject);
 
-                ipField.transform.localPosition = new Vector3(0.2f, -1f, -100f);
+                ipField.transform.localPosition = new Vector3(4.0f, 1.0f, -100f);
 
                 var ipTextBox = ipField.GetComponent<TextBoxTMP>();
 
@@ -111,7 +111,7 @@ namespace ExtremeRoles.Patches.Region
                 if (arrow is null || arrow.gameObject is null) { return; }
                 UnityEngine.Object.DestroyImmediate(arrow.gameObject);
 
-                portField.transform.localPosition = new Vector3(0.2f, -2.0f, -100f);
+                portField.transform.localPosition = new Vector3(4.0f, 0.0f, -100f);
 
                 var portTextBox = portField.GetComponent<TextBoxTMP>();
 
