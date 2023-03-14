@@ -53,7 +53,10 @@ namespace ExtremeRoles.Roles.Solo.Crewmate
 
         public void CleanUp()
         {
-            MapBehaviour.Instance?.Close();
+            if (MapBehaviour.Instance)
+            {
+                MapBehaviour.Instance.Close();
+            }
         }
 
         public void CreateAbility()

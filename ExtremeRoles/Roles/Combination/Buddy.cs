@@ -153,7 +153,9 @@ namespace ExtremeRoles.Roles.Combination
         public override Color GetTargetRoleSeeColor(
             SingleRoleBase targetRole, byte targetPlayerId)
         {
-            if (IsAwake && this.buddy.Contains(targetPlayerId))
+            if (IsAwake && 
+                this.buddy is not null &&
+                this.buddy.Contains(targetPlayerId))
             {
                 return ColorPalette.BuddyOrange;
             }
