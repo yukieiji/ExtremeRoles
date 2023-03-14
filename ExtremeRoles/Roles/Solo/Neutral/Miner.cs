@@ -243,7 +243,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             this.setPos = null;
             this.killLogger = new TextPopUpper(
                 2, 3.5f, new Vector3(0, -1.2f, 0.0f),
-                TMPro.TextAlignmentOptions.Center);
+                TMPro.TextAlignmentOptions.Center, false);
         }
     }
 }
