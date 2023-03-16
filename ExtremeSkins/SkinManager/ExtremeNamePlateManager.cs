@@ -140,7 +140,7 @@ namespace ExtremeSkins.SkinManager
                 if (string.IsNullOrEmpty(authorPath)) { continue; }
                 
                 string[] authorDirs = authorPath.Split(@"\");
-                string author = authorDirs[authorDirs.Length - 1];
+                string author = authorDirs[^1];
 
                 string[] namePlateImage = Directory.GetFiles(
                     authorPath, "*.png");
@@ -148,7 +148,7 @@ namespace ExtremeSkins.SkinManager
                 foreach (string namePlate in namePlateImage)
                 {
                     string[] namePlateDir = namePlate.Split(@"\");
-                    string imageName = namePlateDir[namePlateDir.Length - 1];
+                    string imageName = namePlateDir[^1];
 
                     CustomNamePlate customNamePlate = new CustomNamePlate(
                         namePlate, author,

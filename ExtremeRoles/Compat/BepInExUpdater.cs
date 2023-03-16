@@ -120,8 +120,8 @@ public sealed class BepInExUpdater : MonoBehaviour
             using (var resource = assembly.GetManifestResourceStream(filePath))
             {
                 string[] splitedFilePath = filePath.Split('.');
-                string fileName = splitedFilePath[splitedFilePath.Length - 2];
-                string extention = splitedFilePath[splitedFilePath.Length - 1];
+                string fileName = splitedFilePath[^2];
+                string extention = splitedFilePath[^1];
 
                 using (var file = new FileStream(
                     Path.Combine(configFolder, $"{fileName}.{extention}"),
