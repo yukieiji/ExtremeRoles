@@ -69,6 +69,282 @@ namespace ExtremeRoles.Roles.Combination
             ExtremeRoleId.Villain
         };
 
+        private class GuesserRoleInfoCreater
+        {
+            public List<GuessBehaviour.RoleInfo> Result { get; } = new List<GuessBehaviour.RoleInfo>();
+
+            Dictionary<ExtremeRoleType, List<ExtremeRoleId>> separetedRoleId;
+
+            private class NormalExRAssignState
+            {
+                public bool IsJackalOn { get; set; } = false;
+                public bool IsJackalForceReplaceLover { get; set; } = false;
+                public bool IsQueenOn { get; set; } = false;
+            };
+
+            public void Create(bool includeNoneRole)
+            {
+                this.separetedRoleId = new Dictionary<ExtremeRoleType, List<ExtremeRoleId>>()
+                {
+                    {ExtremeRoleType.Crewmate, new List<ExtremeRoleId>() },
+                    {ExtremeRoleType.Impostor, new List<ExtremeRoleId>() },
+                    {ExtremeRoleType.Neutral , new List<ExtremeRoleId>() },
+                };
+
+                addVanillaRole(includeNoneRole);
+
+                this.separetedRoleId[ExtremeRoleType.Crewmate].Add((ExtremeRoleId)RoleTypes.Crewmate);
+                this.separetedRoleId[ExtremeRoleType.Impostor].Add((ExtremeRoleId)RoleTypes.Impostor);
+
+                addAmongUsRole();
+                addExRNormalRole(out NormalExRAssignState assignState);
+                addExRCombRole(assignState);
+            }
+
+            private void add(
+                ExtremeRoleId id,
+                ExtremeRoleType team,
+                ExtremeRoleId another = ExtremeRoleId.Null)
+            {
+                this.Result.Add(
+                    new GuessBehaviour.RoleInfo()
+                    {
+                        Id = id,
+                        AnothorId = another,
+                        Team = team,
+                    });
+            }
+
+            private void addAmongUsRole()
+            {
+                var roleOptions = GameOptionsManager.Instance.CurrentGameOptions.RoleOptions;
+
+                foreach (RoleTypes role in Enum.GetValues(typeof(RoleTypes)))
+                {
+                    if (role == RoleTypes.Crewmate ||
+                        role == RoleTypes.Impostor ||
+                        role == RoleTypes.GuardianAngel ||
+                        role == RoleTypes.CrewmateGhost ||
+                        role == RoleTypes.ImpostorGhost)
+                    {
+                        continue;
+                    }
+                    if (roleOptions.GetChancePerGame(role) > 0)
+                    {
+                        ExtremeRoleType team = ExtremeRoleType.Null;
+                        switch (role)
+                        {
+                            case RoleTypes.Engineer:
+                            case RoleTypes.Scientist:
+                                team = ExtremeRoleType.Crewmate;
+                                break;
+                            case RoleTypes.Shapeshifter:
+                                team = ExtremeRoleType.Impostor;
+                                break;
+                            default:
+                                continue;
+                        }
+                        add((ExtremeRoleId)role, team);
+                        this.separetedRoleId[team].Add((ExtremeRoleId)role);
+                    }
+                }
+            }
+
+            private void addExRNormalRole(out NormalExRAssignState assignState)
+            {
+                assignState = new NormalExRAssignState();
+
+                var allOption = OptionHolder.AllOption;
+
+                foreach (var (id, role) in ExtremeRoleManager.NormalRole)
+                {
+                    int spawnOptSel = allOption[
+                        role.GetRoleOptionId(RoleCommonOption.SpawnRate)].GetValue();
+                    int roleNum = allOption[
+                        role.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue();
+
+                    if (spawnOptSel < 1 || roleNum <= 0)
+                    {
+                        continue;
+                    }
+
+                    ExtremeRoleId exId = (ExtremeRoleId)id;
+                    ExtremeRoleType team = role.Team;
+
+                    // クイーンとサーヴァントとジャッカルとサイドキックはニュートラルの最後に追加する(役職のパターンがいくつかあるため)
+                    if (exId != ExtremeRoleId.Queen &&
+                        exId != ExtremeRoleId.Jackal)
+                    {
+                        add(exId, team);
+                        separetedRoleId[team].Add(exId);
+                    }
+                    switch (exId)
+                    {
+                        case ExtremeRoleId.Jackal:
+                            assignState.IsJackalOn = true;
+                            assignState.IsJackalForceReplaceLover = allOption[role.GetRoleOptionId(
+                                Solo.Neutral.Jackal.JackalOption.ForceReplaceLover)].GetValue();
+                            break;
+                        case ExtremeRoleId.Queen:
+                            assignState.IsQueenOn = true;
+                            break;
+                        case ExtremeRoleId.Hypnotist:
+                            // 本来はニュートラルであるがソート用にインポスターとして突っ込む
+                            add(ExtremeRoleId.Doll, ExtremeRoleType.Impostor);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                // ジャッカルとサイドキック、サイドキック + ラバーズの追加
+                if (assignState.IsJackalOn)
+                {
+                    add(ExtremeRoleId.Jackal, ExtremeRoleType.Neutral);
+                    add(ExtremeRoleId.Sidekick, ExtremeRoleType.Neutral);
+                    foreach (var (id, roleMng) in ExtremeRoleManager.CombRole)
+                    {
+                        int spawnOptSel = allOption[
+                            roleMng.GetRoleOptionId(RoleCommonOption.SpawnRate)].GetValue();
+                        int roleNum = allOption[
+                            roleMng.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue();
+
+                        if (spawnOptSel < 1 || roleNum <= 0 ||
+                            id != (byte)CombinationRoleType.Lover)
+                        {
+                            continue;
+                        }
+                        add(ExtremeRoleId.Lover, ExtremeRoleType.Neutral, ExtremeRoleId.Sidekick);
+                    }
+                }
+
+                // クイーンとサーヴァント、サーヴァント + 〇〇、〇〇 + サーヴァントの追加
+                if (assignState.IsQueenOn)
+                {
+                    ExtremeRoleType queenTeam = ExtremeRoleType.Neutral;
+                    add(ExtremeRoleId.Queen, queenTeam);
+                    ExtremeRoleId servantId = ExtremeRoleId.Servant;
+
+                    if (this.separetedRoleId[queenTeam].Count > 1)
+                    {
+                        add(servantId, queenTeam);
+                    }
+
+                    listAddImpostorAndCrewmate(servantId);
+
+                    foreach (var (id, roleMng) in ExtremeRoleManager.CombRole)
+                    {
+                        int spawnOptSel = allOption[
+                            roleMng.GetRoleOptionId(RoleCommonOption.SpawnRate)].GetValue();
+                        int roleNum = allOption[
+                            roleMng.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue();
+
+                        if (spawnOptSel < 1 || roleNum <= 0)
+                        {
+                            continue;
+                        }
+                        foreach (var role in roleMng.Roles)
+                        {
+                            add(role.Id, queenTeam, servantId);
+                        }
+                    }
+                }
+            }
+
+            private void addExRCombRole(NormalExRAssignState assignState)
+            {
+                var allOption = OptionHolder.AllOption;
+
+                foreach (var (id, roleMng) in ExtremeRoleManager.CombRole)
+                {
+                    int spawnOptSel = allOption[
+                        roleMng.GetRoleOptionId(RoleCommonOption.SpawnRate)].GetValue();
+                    int roleNum = allOption[
+                        roleMng.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue();
+
+                    bool multiAssign = allOption[
+                        roleMng.GetRoleOptionId(
+                            CombinationRoleCommonOption.IsMultiAssign)].GetValue();
+
+                    if (spawnOptSel < 1 || roleNum <= 0)
+                    {
+                        continue;
+                    }
+                    if (multiAssign && id != (byte)CombinationRoleType.Traitor)
+                    {
+                        foreach (var role in roleMng.Roles)
+                        {
+                            ExtremeRoleType team = role.Team;
+                            listAdd(role.Id, team, separetedRoleId[team]);
+                        }
+                    }
+                    else if (roleMng is FlexibleCombinationRoleManagerBase flexMng)
+                    {
+                        ExtremeRoleType team = flexMng.BaseRole.Team;
+                        ExtremeRoleId baseRoleId = flexMng.BaseRole.Id;
+
+                        add(baseRoleId, team);
+                        if (multiAssign)
+                        {
+                            if (allOption.TryGetValue(
+                                    flexMng.GetRoleOptionId(
+                                        CombinationRoleCommonOption.IsAssignImposter),
+                                    out IOption option) &&
+                                (bool)option.GetValue())
+                            {
+                                listAddImpostorAndCrewmate(baseRoleId);
+                            }
+                            else
+                            {
+                                listAddTargetTeam(baseRoleId, team, team);
+                            }
+                        }
+                        if (assignState.IsJackalOn &&
+                            !assignState.IsJackalForceReplaceLover &&
+                            baseRoleId == ExtremeRoleId.Lover)
+                        {
+                            add(baseRoleId, ExtremeRoleType.Neutral, ExtremeRoleId.Sidekick);
+                        }
+                    }
+                    else
+                    {
+                        foreach (var role in roleMng.Roles)
+                        {
+                            add(role.Id, role.Team);
+                        }
+                    }
+                }
+            }
+
+            private void addVanillaRole(bool includeNoneRole)
+            {
+                if (includeNoneRole)
+                {
+                    add((ExtremeRoleId)RoleTypes.Crewmate, ExtremeRoleType.Crewmate);
+                    add((ExtremeRoleId)RoleTypes.Impostor, ExtremeRoleType.Impostor);
+                }
+            }
+
+            private void listAdd(ExtremeRoleId baseId, ExtremeRoleType team, List<ExtremeRoleId> list)
+            {
+                foreach (var roleId in list)
+                {
+                    add(baseId, team, roleId);
+                }
+            }
+            private void listAddTargetTeam(
+                ExtremeRoleId baseId, ExtremeRoleType team, ExtremeRoleType targetType)
+            {
+                listAdd(baseId, team, this.separetedRoleId[targetType]);
+            }
+            private void listAddImpostorAndCrewmate(ExtremeRoleId id)
+            {
+                listAddTargetTeam(id, ExtremeRoleType.Crewmate, ExtremeRoleType.Crewmate);
+                listAddTargetTeam(id, ExtremeRoleType.Impostor, ExtremeRoleType.Impostor);
+            }
+        }
+
+
         public Guesser(
             ) : base(
                 ExtremeRoleId.Guesser,
@@ -78,236 +354,6 @@ namespace ExtremeRoles.Roles.Combination
                 false, true, false, false,
                 tab: OptionTab.Combination)
         { }
-
-        private static List<GuessBehaviour.RoleInfo> createRoleInfo(bool includeNoneRole)
-        {
-         
-            List<GuessBehaviour.RoleInfo> result = new List<GuessBehaviour.RoleInfo>();
-
-            Dictionary<ExtremeRoleType, List<ExtremeRoleId>> separetedRoleId = new Dictionary<ExtremeRoleType, List<ExtremeRoleId>>()
-            {
-                {ExtremeRoleType.Crewmate, new List<ExtremeRoleId>() },
-                {ExtremeRoleType.Impostor, new List<ExtremeRoleId>() },
-                {ExtremeRoleType.Neutral , new List<ExtremeRoleId>() },
-            };
-
-            bool queenOn = false;
-            bool jackalOn = false;
-            bool jackalForceReplaceLover = false;
-
-            var allOption = OptionHolder.AllOption;
-
-            void Add(
-                ExtremeRoleId id,
-                ExtremeRoleType team,
-                ExtremeRoleId another = ExtremeRoleId.Null)
-            {
-                result.Add(
-                    new GuessBehaviour.RoleInfo()
-                    {
-                        Id = id,
-                        AnothorId = another,
-                        Team = team,
-                    });
-            }
-            void ListAdd(ExtremeRoleId baseId, ExtremeRoleType team, List<ExtremeRoleId> list)
-            {
-                foreach (var roleId in list)
-                {
-                    Add(baseId, team, roleId);
-                }
-            }
-
-            if (includeNoneRole)
-            {
-                Add((ExtremeRoleId)RoleTypes.Crewmate, ExtremeRoleType.Crewmate);
-                Add((ExtremeRoleId)RoleTypes.Impostor, ExtremeRoleType.Impostor);
-            }
-
-            separetedRoleId[ExtremeRoleType.Crewmate].Add((ExtremeRoleId)RoleTypes.Crewmate);
-            separetedRoleId[ExtremeRoleType.Impostor].Add((ExtremeRoleId)RoleTypes.Impostor);
-
-            var roleOptions = GameOptionsManager.Instance.CurrentGameOptions.RoleOptions;
-
-            foreach (RoleTypes role in Enum.GetValues(typeof(RoleTypes)))
-            {
-                if (role == RoleTypes.Crewmate || 
-                    role == RoleTypes.Impostor ||
-                    role == RoleTypes.GuardianAngel ||
-                    role == RoleTypes.CrewmateGhost ||
-                    role == RoleTypes.ImpostorGhost)
-                {
-                    continue;
-                }
-                if (roleOptions.GetChancePerGame(role) > 0)
-                {
-                    ExtremeRoleType team = ExtremeRoleType.Null;
-                    switch (role)
-                    {
-                        case RoleTypes.Engineer:
-                        case RoleTypes.Scientist:
-                            team = ExtremeRoleType.Crewmate;
-                            break;
-                        case RoleTypes.Shapeshifter:
-                            team = ExtremeRoleType.Impostor;
-                            break;
-                        default:
-                            continue;
-                    }
-                    Add((ExtremeRoleId)role, team);
-                    separetedRoleId[team].Add((ExtremeRoleId)role);
-                }
-            }
-
-            foreach (var (id, role) in ExtremeRoleManager.NormalRole)
-            {
-                int spawnOptSel = allOption[
-                    role.GetRoleOptionId(RoleCommonOption.SpawnRate)].GetValue();
-                int roleNum = allOption[
-                    role.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue();
-
-                if (spawnOptSel < 1 || roleNum <= 0)
-                {
-                    continue;
-                }
-
-                ExtremeRoleId exId = (ExtremeRoleId)id;
-                ExtremeRoleType team = role.Team;
-
-                // クイーンとサーヴァントとジャッカルとサイドキックはニュートラルの最後に追加する(役職のパターンがいくつかあるため)
-                if (exId != ExtremeRoleId.Queen &&
-                    exId != ExtremeRoleId.Jackal)
-                {
-                    Add(exId, team);
-                    separetedRoleId[team].Add(exId);
-                }
-                switch (exId)
-                {
-                    case ExtremeRoleId.Jackal:
-                        jackalOn = true;
-                        jackalForceReplaceLover = allOption[role.GetRoleOptionId(
-                            Solo.Neutral.Jackal.JackalOption.ForceReplaceLover)].GetValue();
-                        break;
-                    case ExtremeRoleId.Queen:
-                        queenOn = true;
-                        break;
-                    case ExtremeRoleId.Hypnotist:
-                        // 本来はニュートラルであるがソート用にインポスターとして突っ込む
-                        Add(ExtremeRoleId.Doll, ExtremeRoleType.Impostor);
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            // ジャッカルとサイドキック、サイドキック + ラバーズの追加
-            if (jackalOn)
-            {
-                Add(ExtremeRoleId.Jackal, ExtremeRoleType.Neutral);
-                Add(ExtremeRoleId.Sidekick, ExtremeRoleType.Neutral);
-                foreach (var (id, roleMng) in ExtremeRoleManager.CombRole)
-                {
-                    int spawnOptSel = allOption[
-                        roleMng.GetRoleOptionId(RoleCommonOption.SpawnRate)].GetValue();
-                    int roleNum = allOption[
-                        roleMng.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue();
-
-                    if (spawnOptSel < 1 || roleNum <= 0 ||
-                        id != (byte)CombinationRoleType.Lover)
-                    {
-                        continue;
-                    }
-                    Add(ExtremeRoleId.Lover, ExtremeRoleType.Neutral, ExtremeRoleId.Sidekick);
-                }
-            }
-
-            // クイーンとサーヴァント、サーヴァント + 〇〇、〇〇 + サーヴァントの追加
-            if (queenOn)
-            {
-                ExtremeRoleType queenTeam = ExtremeRoleType.Neutral;
-                Add(ExtremeRoleId.Queen, queenTeam);
-                ExtremeRoleId servantId = ExtremeRoleId.Servant;
-
-                if (separetedRoleId[queenTeam].Count > 1)
-                {
-                    Add(servantId, queenTeam);
-                }
-                foreach (var roleList in new List<ExtremeRoleId>[]
-                    { 
-                        separetedRoleId[ExtremeRoleType.Crewmate],
-                        separetedRoleId[ExtremeRoleType.Impostor],
-                    })
-                {
-                    ListAdd(servantId, queenTeam, roleList);
-                }
-                foreach (var (id, roleMng) in ExtremeRoleManager.CombRole)
-                {
-                    int spawnOptSel = allOption[
-                        roleMng.GetRoleOptionId(RoleCommonOption.SpawnRate)].GetValue();
-                    int roleNum = allOption[
-                        roleMng.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue();
-
-                    if (spawnOptSel < 1 || roleNum <= 0)
-                    {
-                        continue;
-                    }
-                    foreach (var role in roleMng.Roles)
-                    {
-                        Add(role.Id, queenTeam, servantId);
-                    }
-                }
-            }
-
-            foreach (var (id, roleMng) in ExtremeRoleManager.CombRole)
-            {
-                int spawnOptSel = allOption[
-                    roleMng.GetRoleOptionId(RoleCommonOption.SpawnRate)].GetValue();
-                int roleNum = allOption[
-                    roleMng.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue();
-
-                bool multiAssign = allOption[
-                    roleMng.GetRoleOptionId(
-                        CombinationRoleCommonOption.IsMultiAssign)].GetValue();
-
-                if (spawnOptSel < 1 || roleNum <= 0)
-                {
-                    continue;
-                }
-                if (multiAssign && id != (byte)CombinationRoleType.Traitor)
-                {
-                    foreach (var role in roleMng.Roles)
-                    {
-                        ExtremeRoleType team = role.Team;
-                        ListAdd(role.Id, team, separetedRoleId[team]);
-                    }
-                }
-                else if (roleMng is FlexibleCombinationRoleManagerBase flexMng)
-                {
-                    Add(flexMng.BaseRole.Id, flexMng.BaseRole.Team);
-                }
-                else
-                {
-                    foreach (var role in roleMng.Roles)
-                    {
-                        Add(role.Id, role.Team);
-                    }
-                }
-            }
-
-            return result.OrderBy(
-                (GuessBehaviour.RoleInfo x) =>
-                {
-                    ExtremeRoleType team = x.Team;
-                    if (team == ExtremeRoleType.Neutral)
-                    {
-                        return 5000;
-                    }
-                    else
-                    {
-                        return (int)team;
-                    }
-                }).ToList();
-        }
 
         private static void missGuess()
         {
@@ -412,9 +458,26 @@ namespace ExtremeRoles.Roles.Combination
                         this.uiPrefab, MeetingHud.Instance.transform);
                     this.guesserUi = obj.GetComponent<GuesserUi>();
 
+                    GuesserRoleInfoCreater creator = new GuesserRoleInfoCreater();
+                    creator.Create(this.canGuessNoneRole);
+
                     this.guesserUi.gameObject.SetActive(true);
                     this.guesserUi.InitButton(
-                        GuessAction, createRoleInfo(this.canGuessNoneRole));
+                        GuessAction,
+                        creator.Result.OrderBy(
+                            (GuessBehaviour.RoleInfo x) =>
+                            {
+                                ExtremeRoleType team = x.Team;
+                                if (team == ExtremeRoleType.Neutral)
+                                {
+                                    return 5000;
+                                }
+                                else
+                                {
+                                    return (int)team;
+                                }
+                            })
+                    );
                 }
 
                 byte targetPlayerId = instance.TargetPlayerId;
