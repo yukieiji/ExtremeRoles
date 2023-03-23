@@ -220,7 +220,8 @@ namespace ExtremeRoles.Roles.Combination
                         add(servantId, queenTeam);
                     }
 
-                    listAddImpostorAndCrewmate(servantId);
+                    listAddTargetTeam(servantId, queenTeam, ExtremeRoleType.Crewmate);
+                    listAddTargetTeam(servantId, queenTeam, ExtremeRoleType.Impostor);
 
                     foreach (var (id, roleMng) in ExtremeRoleManager.CombRole)
                     {
@@ -287,7 +288,14 @@ namespace ExtremeRoles.Roles.Combination
                                     out IOption option) &&
                                 (bool)option.GetValue())
                             {
-                                listAddImpostorAndCrewmate(baseRoleId);
+                                listAddTargetTeam(
+                                    baseRoleId,
+                                    ExtremeRoleType.Crewmate,
+                                    ExtremeRoleType.Crewmate);
+                                listAddTargetTeam(
+                                    baseRoleId,
+                                    ExtremeRoleType.Impostor,
+                                    ExtremeRoleType.Impostor);
                             }
                             else
                             {
@@ -343,11 +351,6 @@ namespace ExtremeRoles.Roles.Combination
                 ExtremeRoleId baseId, ExtremeRoleType team, ExtremeRoleType targetType)
             {
                 listAdd(baseId, team, this.separetedRoleId[targetType]);
-            }
-            private void listAddImpostorAndCrewmate(ExtremeRoleId id)
-            {
-                listAddTargetTeam(id, ExtremeRoleType.Crewmate, ExtremeRoleType.Crewmate);
-                listAddTargetTeam(id, ExtremeRoleType.Impostor, ExtremeRoleType.Impostor);
             }
         }
 
