@@ -120,7 +120,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         [HideFromIl2Cpp]
         public void InitButton(
             Action<GuessBehaviour.RoleInfo, byte> gussAction,
-            List<GuessBehaviour.RoleInfo> guessRoleInfos)
+            IEnumerable<GuessBehaviour.RoleInfo> guessRoleInfos)
         {
             this.infos.Clear();
             this.buttons.Clear();
