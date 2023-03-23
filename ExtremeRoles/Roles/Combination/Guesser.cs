@@ -202,20 +202,6 @@ namespace ExtremeRoles.Roles.Combination
                 {
                     add(ExtremeRoleId.Jackal, ExtremeRoleType.Neutral);
                     add(ExtremeRoleId.Sidekick, ExtremeRoleType.Neutral);
-                    foreach (var (id, roleMng) in ExtremeRoleManager.CombRole)
-                    {
-                        int spawnOptSel = allOption[
-                            roleMng.GetRoleOptionId(RoleCommonOption.SpawnRate)].GetValue();
-                        int roleNum = allOption[
-                            roleMng.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue();
-
-                        if (spawnOptSel < 1 || roleNum <= 0 ||
-                            id != (byte)CombinationRoleType.Lover)
-                        {
-                            continue;
-                        }
-                        add(ExtremeRoleId.Lover, ExtremeRoleType.Neutral, ExtremeRoleId.Sidekick);
-                    }
                 }
 
                 // クイーンとサーヴァント、サーヴァント + 〇〇、〇〇 + サーヴァントの追加
@@ -270,20 +256,15 @@ namespace ExtremeRoles.Roles.Combination
                     {
                         continue;
                     }
-                    if (multiAssign && id != (byte)CombinationRoleType.Traitor)
-                    {
-                        foreach (var role in roleMng.Roles)
-                        {
-                            ExtremeRoleType team = role.Team;
-                            listAdd(role.Id, team, separetedRoleId[team]);
-                        }
-                    }
-                    else if (roleMng is FlexibleCombinationRoleManagerBase flexMng)
+
+                    bool isNotTraitor = id != (byte)CombinationRoleType.Traitor;
+
+                    if (roleMng is FlexibleCombinationRoleManagerBase flexMng &&
+                        isNotTraitor)
                     {
                         ExtremeRoleType team = flexMng.BaseRole.Team;
                         ExtremeRoleId baseRoleId = flexMng.BaseRole.Id;
 
-                        add(baseRoleId, team);
                         if (multiAssign)
                         {
                             if (allOption.TryGetValue(
@@ -299,11 +280,23 @@ namespace ExtremeRoles.Roles.Combination
                                 listAddTargetTeam(baseRoleId, team, team);
                             }
                         }
+                        else
+                        {
+                            add(baseRoleId, team);
+                        }
                         if (assignState.IsJackalOn &&
                             !assignState.IsJackalForceReplaceLover &&
                             baseRoleId == ExtremeRoleId.Lover)
                         {
                             add(baseRoleId, ExtremeRoleType.Neutral, ExtremeRoleId.Sidekick);
+                        }
+                    }
+                    else if (multiAssign && isNotTraitor)
+                    {
+                        foreach (var role in roleMng.Roles)
+                        {
+                            ExtremeRoleType team = role.Team;
+                            listAdd(role.Id, team, separetedRoleId[team]);
                         }
                     }
                     else
