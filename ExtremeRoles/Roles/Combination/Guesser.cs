@@ -191,6 +191,7 @@ namespace ExtremeRoles.Roles.Combination
                         case ExtremeRoleId.Hypnotist:
                             // 本来はニュートラルであるがソート用にインポスターとして突っ込む
                             add(ExtremeRoleId.Doll, ExtremeRoleType.Impostor);
+                            this.separetedRoleId[ExtremeRoleType.Neutral].Add(ExtremeRoleId.Doll);
                             break;
                         default:
                             break;
@@ -202,6 +203,9 @@ namespace ExtremeRoles.Roles.Combination
                 {
                     add(ExtremeRoleId.Jackal, ExtremeRoleType.Neutral);
                     add(ExtremeRoleId.Sidekick, ExtremeRoleType.Neutral);
+                    
+                    this.separetedRoleId[ExtremeRoleType.Neutral].Add(ExtremeRoleId.Jackal);
+                    this.separetedRoleId[ExtremeRoleType.Neutral].Add(ExtremeRoleId.Sidekick);
                 }
 
                 // クイーンとサーヴァント、サーヴァント + 〇〇、〇〇 + サーヴァントの追加
@@ -209,8 +213,8 @@ namespace ExtremeRoles.Roles.Combination
                 {
                     ExtremeRoleType queenTeam = ExtremeRoleType.Neutral;
                     add(ExtremeRoleId.Queen, queenTeam);
+                    
                     ExtremeRoleId servantId = ExtremeRoleId.Servant;
-
                     if (this.separetedRoleId[queenTeam].Count > 1)
                     {
                         add(servantId, queenTeam);
@@ -229,11 +233,21 @@ namespace ExtremeRoles.Roles.Combination
                         {
                             continue;
                         }
-                        foreach (var role in roleMng.Roles)
+                        if (roleMng is FlexibleCombinationRoleManagerBase flexMng)
                         {
-                            add(role.Id, queenTeam, servantId);
+                            add(flexMng.BaseRole.Id, queenTeam, servantId);
+                        }
+                        else
+                        {
+                            foreach (var role in roleMng.Roles)
+                            {
+                                add(role.Id, queenTeam, servantId);
+                            }
                         }
                     }
+
+                    this.separetedRoleId[queenTeam].Add(ExtremeRoleId.Queen);
+                    this.separetedRoleId[queenTeam].Add(servantId);
                 }
             }
 
@@ -296,7 +310,7 @@ namespace ExtremeRoles.Roles.Combination
                         foreach (var role in roleMng.Roles)
                         {
                             ExtremeRoleType team = role.Team;
-                            listAdd(role.Id, team, separetedRoleId[team]);
+                            listAdd(role.Id, team, this.separetedRoleId[team]);
                         }
                     }
                     else
