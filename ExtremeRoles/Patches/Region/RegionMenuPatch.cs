@@ -46,6 +46,9 @@ public static class RegionMenuOpenPatch
     public static void Postfix(RegionMenu __instance)
     {
         var allButton = __instance.controllerSelectable;
+        
+        if (allButton is null) { return; }
+
         for (int i = 0; i < allButton.Count; ++i)
         {
             allButton[i].transform.localPosition = 
