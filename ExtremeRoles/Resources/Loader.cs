@@ -18,7 +18,6 @@ namespace ExtremeRoles.Resources
     {
         public const string LangData = "ExtremeRoles.Resources.LangData.stringData.json";
 
-        public const string BackGround = "ExtremeRoles.Resources.white.png";
         public const string HelpImage = "ExtremeRoles.Resources.Help.png";
         public const string CompatModMenuImage = "ExtremeRoles.Resources.CompatModMenu.png";
 
