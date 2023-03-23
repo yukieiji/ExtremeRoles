@@ -176,7 +176,6 @@ public sealed class InfoOverlay
             this.infoUnderlay = UnityEngine.Object.Instantiate(
                 hudManager.FullScreen, hudManager.transform);
             this.infoUnderlay.transform.localPosition = new Vector3(0f, 0f, -900f);
-            this.infoUnderlay.transform.localScale = new Vector3(10.25f, 5.7f, 1f);
             this.infoUnderlay.gameObject.SetActive(true);
             this.infoUnderlay.enabled = false;
             this.infoUnderlay.name = "infoOverlay";
@@ -245,6 +244,7 @@ public sealed class InfoOverlay
         this.roleInfo.AnchorPoint.transform.parent = parent;
         this.anotherRoleInfo.AnchorPoint.transform.parent = parent;
 
+        this.infoUnderlay.transform.localScale = new Vector3(10.25f, 5.7f, 1f);
         this.infoUnderlay.color = new Color(0.1f, 0.1f, 0.1f, 0.88f);
         this.infoUnderlay.enabled = true;
 
