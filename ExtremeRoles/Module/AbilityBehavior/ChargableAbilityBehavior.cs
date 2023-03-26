@@ -54,13 +54,15 @@ public sealed class ChargableAbilityBehavior : AbilityBehaviorBase
     {
         this.isActive = false;
         this.currentCharge = this.maxCharge;
+        this.chargeTimer = this.maxCharge;
         this.abilityOff?.Invoke();
+        base.SetActiveTime(this.maxCharge);
     }
 
     public override void ForceAbilityOff()
     {
         this.currentCharge = Mathf.Clamp(
-            this.chargeTimer, 0.0f, this.ActiveTime);
+            this.chargeTimer, 0.1f, this.ActiveTime);
         this.isActive = false;
         this.forceAbilityOff?.Invoke();
     }
@@ -68,7 +70,7 @@ public sealed class ChargableAbilityBehavior : AbilityBehaviorBase
     public override bool IsCanAbilityActiving() => this.canActivating.Invoke();
 
     public override bool IsUse() =>
-        (this.canUse.Invoke() || this.isActive) && this.currentCharge > 0f;
+        (this.canUse.Invoke() || this.isActive) && this.currentCharge > 0.0f;
 
     public override bool TryUseAbility(
         float timer, AbilityState curState, out AbilityState newState)
@@ -105,7 +107,7 @@ public sealed class ChargableAbilityBehavior : AbilityBehaviorBase
         }
         if (CachedPlayerControl.LocalPlayer.PlayerControl.AllTasksCompleted())
         {
-            this.currentCharge = this.ActiveTime;
+            this.currentCharge = this.maxCharge;
         }
         return curState;
     }

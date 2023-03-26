@@ -31,147 +31,155 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace ExtremeRoles.Patches.Region
+namespace ExtremeRoles.Patches.Region;
+
+[HarmonyPatch(typeof(RegionMenu), nameof(RegionMenu.Open))]
+public static class RegionMenuOpenPatch
 {
-    [HarmonyPatch(typeof(RegionMenu), nameof(RegionMenu.Open))]
-    public static class RegionMenuOpenPatch
+
+    private static GameObject ipField;
+    private static GameObject portField;
+
+    private static TextMeshPro ipText;
+    private static TextMeshPro portText;
+
+    public static void Postfix(RegionMenu __instance)
     {
+        var allButton = __instance.controllerSelectable;
+        
+        if (allButton is null) { return; }
 
-        private static GameObject ipField;
-        private static GameObject portField;
-
-        private static TextMeshPro ipText;
-        private static TextMeshPro portText;
-
-        public static void Postfix(RegionMenu __instance)
+        for (int i = 0; i < allButton.Count; ++i)
         {
-            // Hotfix Button Conflicts
-            // __instance.transform.localPosition = new Vector3(-2.0f, 0.0f, -30.0f);
-            var gameIdTextBox = GameObject.Find("NormalMenu/JoinGameButton/JoinGameMenu/GameIdText");
-            if (gameIdTextBox is null) { return; }
+            allButton[i].transform.localPosition = 
+                new Vector3(-2.0f, 2f - 0.5f * (float)i, 0f);
+        }
 
-            if (ipField is null || ipField.gameObject is null || ipText is null)
-            {
-                ipField = UnityEngine.Object.Instantiate(
-                    gameIdTextBox.gameObject, __instance.transform);
-                ipText = UnityEngine.Object.Instantiate(
-                    Module.Prefab.Text);
+        var gameIdTextBox = GameObject.Find(
+            "NormalMenu/JoinGameButton/JoinGameMenu/GameIdText");
+        if (gameIdTextBox is null) { return; }
 
-                ipField.gameObject.name = "ipTextBox";
-                ipText.gameObject.name = "ipText";
-                ipText.fontSize = ipText.fontSizeMin = ipText.fontSizeMax = 2.0f;
+        if (ipField is null || ipField.gameObject is null || ipText is null)
+        {
+            ipField = UnityEngine.Object.Instantiate(
+                gameIdTextBox.gameObject, __instance.transform);
+            ipText = UnityEngine.Object.Instantiate(
+                Module.Prefab.Text);
 
-                var arrow = ipField.transform.FindChild("arrowEnter");
-                if (arrow == null || arrow.gameObject == null) { return; }
-                UnityEngine.Object.DestroyImmediate(arrow.gameObject);
+            ipField.gameObject.name = "ipTextBox";
+            ipText.gameObject.name = "ipText";
+            ipText.fontSize = ipText.fontSizeMin = ipText.fontSizeMax = 2.0f;
 
-                ipField.transform.localPosition = new Vector3(4.0f, 1.0f, -100f);
+            var arrow = ipField.transform.FindChild("arrowEnter");
+            if (arrow == null || arrow.gameObject == null) { return; }
+            UnityEngine.Object.DestroyImmediate(arrow.gameObject);
 
-                var ipTextBox = ipField.GetComponent<TextBoxTMP>();
+            ipField.transform.localPosition = new Vector3(2.0f, 1.0f, -100f);
 
-                ipTextBox.characterLimit = 30;
-                ipTextBox.AllowSymbols = true;
-                ipTextBox.ForceUppercase = false;
-                ipTextBox.SetText(
-                    OptionHolder.ConfigParser.Ip.Value);
-                __instance.StartCoroutine(
-                    Effects.Lerp(0.1f, new Action<float>(
-                        (p) =>
-                        {
-                            ipTextBox.outputText.SetText(OptionHolder.ConfigParser.Ip.Value);
-                            ipTextBox.SetText(OptionHolder.ConfigParser.Ip.Value);
-                        })));
+            var ipTextBox = ipField.GetComponent<TextBoxTMP>();
 
-                ipTextBox.ClearOnFocus = false;
-                ipTextBox.OnEnter = ipTextBox.OnChange = new UnityEngine.UI.Button.ButtonClickedEvent();
-                ipTextBox.OnFocusLost = new UnityEngine.UI.Button.ButtonClickedEvent();
-                ipTextBox.OnChange.AddListener((UnityAction)onEnterOrIpChange);
-                ipTextBox.OnFocusLost.AddListener((UnityAction)onFocusLost);
+            ipTextBox.characterLimit = 30;
+            ipTextBox.AllowSymbols = true;
+            ipTextBox.ForceUppercase = false;
+            ipTextBox.SetText(
+                OptionHolder.ConfigParser.Ip.Value);
+            __instance.StartCoroutine(
+                Effects.Lerp(0.1f, new Action<float>(
+                    (p) =>
+                    {
+                        ipTextBox.outputText.SetText(OptionHolder.ConfigParser.Ip.Value);
+                        ipTextBox.SetText(OptionHolder.ConfigParser.Ip.Value);
+                    })));
 
-                ipText.text =  Helper.Translation.GetString(
-                    "customServerIp");
-                ipText.font = ipTextBox.outputText.font;
-                ipText.transform.SetParent(ipField.transform);
-                ipText.transform.localPosition = new Vector3(-0.2f, 0.425f, -100f);
-                ipText.gameObject.SetActive(true);
+            ipTextBox.ClearOnFocus = false;
+            ipTextBox.OnEnter = ipTextBox.OnChange = new UnityEngine.UI.Button.ButtonClickedEvent();
+            ipTextBox.OnFocusLost = new UnityEngine.UI.Button.ButtonClickedEvent();
+            ipTextBox.OnChange.AddListener((UnityAction)onEnterOrIpChange);
+            ipTextBox.OnFocusLost.AddListener((UnityAction)onFocusLost);
 
-            }
-
-            if (portField is null || portField.gameObject is null)
-            {
-                portField = UnityEngine.Object.Instantiate(
-                    gameIdTextBox.gameObject, __instance.transform);
-                portText = UnityEngine.Object.Instantiate(
-                    Module.Prefab.Text);
-
-                portField.gameObject.name = "portTextBox";
-                portText.gameObject.name = "portText";
-                portText.fontSize = portText.fontSizeMin = portText.fontSizeMax = 2.0f;
-
-                var arrow = portField.transform.FindChild("arrowEnter");
-                if (arrow is null || arrow.gameObject is null) { return; }
-                UnityEngine.Object.DestroyImmediate(arrow.gameObject);
-
-                portField.transform.localPosition = new Vector3(4.0f, 0.0f, -100f);
-
-                var portTextBox = portField.GetComponent<TextBoxTMP>();
-
-                portTextBox.characterLimit = 5;
-                portTextBox.SetText(
-                    OptionHolder.ConfigParser.Port.Value.ToString());
-                __instance.StartCoroutine(
-                    Effects.Lerp(0.1f, new Action<float>(
-                        (p) =>
-                        {
-                            portTextBox.outputText.SetText(OptionHolder.ConfigParser.Port.Value.ToString());
-                            portTextBox.SetText(OptionHolder.ConfigParser.Port.Value.ToString()); 
-                        })));
-
-
-                portTextBox.ClearOnFocus = false;
-                portTextBox.OnEnter = portTextBox.OnChange = new UnityEngine.UI.Button.ButtonClickedEvent();
-                portTextBox.OnFocusLost = new UnityEngine.UI.Button.ButtonClickedEvent();
-                portTextBox.OnChange.AddListener((UnityAction)onEnterOrPortFieldChange);
-                portTextBox.OnFocusLost.AddListener((UnityAction)onFocusLost);
-
-                portText.text = Helper.Translation.GetString(
-                    "customServerPort");
-                portText.font = portTextBox.outputText.font;
-                portText.transform.SetParent(portField.transform);
-                portText.transform.localPosition = new Vector3(-0.2f, 0.425f, -100f);
-                portText.gameObject.SetActive(true);
-
-            }
-
-            void onEnterOrIpChange()
-            {
-                OptionHolder.ConfigParser.Ip.Value = ipField.GetComponent<TextBoxTMP>().text;
-            }
-
-            void onFocusLost()
-            {
-                OptionHolder.UpdateRegion();
-                __instance.ChooseOption(
-                    ServerManager.DefaultRegions[ServerManager.DefaultRegions.Length - 1]);
-            }
-
-            void onEnterOrPortFieldChange()
-            {
-                ushort port = 0;
-
-                var portTextBox = portField.GetComponent<TextBoxTMP>();
-
-                if (ushort.TryParse(portTextBox.text, out port))
-                {
-                    OptionHolder.ConfigParser.Port.Value = port;
-                    portTextBox.outputText.color = Color.white;
-                }
-                else
-                {
-                    portTextBox.outputText.color = Color.red;
-                }
-            }
+            ipText.text =  Helper.Translation.GetString(
+                "customServerIp");
+            ipText.font = ipTextBox.outputText.font;
+            ipText.transform.SetParent(ipField.transform);
+            ipText.transform.localPosition = new Vector3(-0.2f, 0.425f, -100f);
+            ipText.gameObject.SetActive(true);
 
         }
+
+        if (portField is null || portField.gameObject is null)
+        {
+            portField = UnityEngine.Object.Instantiate(
+                gameIdTextBox.gameObject, __instance.transform);
+            portText = UnityEngine.Object.Instantiate(
+                Module.Prefab.Text);
+
+            portField.gameObject.name = "portTextBox";
+            portText.gameObject.name = "portText";
+            portText.fontSize = portText.fontSizeMin = portText.fontSizeMax = 2.0f;
+
+            var arrow = portField.transform.FindChild("arrowEnter");
+            if (arrow is null || arrow.gameObject is null) { return; }
+            UnityEngine.Object.DestroyImmediate(arrow.gameObject);
+
+            portField.transform.localPosition = new Vector3(2.0f, 0.0f, -100f);
+
+            var portTextBox = portField.GetComponent<TextBoxTMP>();
+
+            portTextBox.characterLimit = 5;
+            portTextBox.SetText(
+                OptionHolder.ConfigParser.Port.Value.ToString());
+            __instance.StartCoroutine(
+                Effects.Lerp(0.1f, new Action<float>(
+                    (p) =>
+                    {
+                        portTextBox.outputText.SetText(OptionHolder.ConfigParser.Port.Value.ToString());
+                        portTextBox.SetText(OptionHolder.ConfigParser.Port.Value.ToString()); 
+                    })));
+
+
+            portTextBox.ClearOnFocus = false;
+            portTextBox.OnEnter = portTextBox.OnChange = new UnityEngine.UI.Button.ButtonClickedEvent();
+            portTextBox.OnFocusLost = new UnityEngine.UI.Button.ButtonClickedEvent();
+            portTextBox.OnChange.AddListener((UnityAction)onEnterOrPortFieldChange);
+            portTextBox.OnFocusLost.AddListener((UnityAction)onFocusLost);
+
+            portText.text = Helper.Translation.GetString(
+                "customServerPort");
+            portText.font = portTextBox.outputText.font;
+            portText.transform.SetParent(portField.transform);
+            portText.transform.localPosition = new Vector3(-0.2f, 0.425f, -100f);
+            portText.gameObject.SetActive(true);
+
+        }
+
+        void onEnterOrIpChange()
+        {
+            OptionHolder.ConfigParser.Ip.Value = ipField.GetComponent<TextBoxTMP>().text;
+        }
+
+        void onFocusLost()
+        {
+            OptionHolder.UpdateRegion();
+            __instance.ChooseOption(
+                ServerManager.DefaultRegions[ServerManager.DefaultRegions.Length - 1]);
+        }
+
+        void onEnterOrPortFieldChange()
+        {
+            ushort port = 0;
+
+            var portTextBox = portField.GetComponent<TextBoxTMP>();
+
+            if (ushort.TryParse(portTextBox.text, out port))
+            {
+                OptionHolder.ConfigParser.Port.Value = port;
+                portTextBox.outputText.color = Color.white;
+            }
+            else
+            {
+                portTextBox.outputText.color = Color.red;
+            }
+        }
+
     }
 }

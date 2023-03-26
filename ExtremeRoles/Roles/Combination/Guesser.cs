@@ -16,122 +16,112 @@ using ExtremeRoles.Roles.Solo;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Performance;
 
-namespace ExtremeRoles.Roles.Combination
-{
-    public sealed class GuesserManager : FlexibleCombinationRoleManagerBase
-    {
-        public GuesserManager() : base(new Guesser(), 1)
-        { }
+namespace ExtremeRoles.Roles.Combination;
 
+public sealed class GuesserManager : FlexibleCombinationRoleManagerBase
+{
+    public GuesserManager() : base(new Guesser(), 1)
+    { }
+
+}
+
+public sealed class Guesser : 
+    MultiAssignRoleBase, 
+    IRoleResetMeeting,
+    IRoleMeetingButtonAbility,
+    IRoleUpdate
+{
+    public enum GuesserOption
+    {
+        CanCallMeeting,
+        GuessNum,
+        MaxGuessNumWhenMeeting,
+        CanGuessNoneRole,
+        GuessNoneRoleMode,
     }
 
-    public sealed class Guesser : 
-        MultiAssignRoleBase, 
-        IRoleResetMeeting,
-        IRoleMeetingButtonAbility,
-        IRoleUpdate
+    public enum GuessMode
     {
-        public enum GuesserOption
+        BothGuesser,
+        NiceGuesserOnly,
+        EvilGuesserOnly,
+    }
+
+    public override string RoleName => 
+        string.Concat(this.roleNamePrefix, this.RawRoleName);
+
+    private bool canGuessNoneRole;
+
+    private int bulletNum;
+    private int maxGuessNum;
+    private int curGuessNum;
+
+    private GameObject uiPrefab = null;
+    private GuesserUi guesserUi = null;
+
+    private TextMeshPro meetingGuessText = null;
+    private string roleNamePrefix;
+
+    private static HashSet<ExtremeRoleId> alwaysMissRole = new HashSet<ExtremeRoleId>()
+    {
+        ExtremeRoleId.Assassin,
+        ExtremeRoleId.Marlin,
+        ExtremeRoleId.Villain
+    };
+
+    private class GuesserRoleInfoCreater
+    {
+        public List<GuessBehaviour.RoleInfo> Result { get; } = new List<GuessBehaviour.RoleInfo>();
+
+        Dictionary<ExtremeRoleType, List<ExtremeRoleId>> separetedRoleId;
+
+        private class NormalExRAssignState
         {
-            CanCallMeeting,
-            GuessNum,
-            MaxGuessNumWhenMeeting,
-            CanGuessNoneRole,
-            GuessNoneRoleMode,
-        }
-
-        public enum GuessMode
-        {
-            BothGuesser,
-            NiceGuesserOnly,
-            EvilGuesserOnly,
-        }
-
-        public override string RoleName => 
-            string.Concat(this.roleNamePrefix, this.RawRoleName);
-
-        private bool canGuessNoneRole;
-
-        private int bulletNum;
-        private int maxGuessNum;
-        private int curGuessNum;
-
-        private GameObject uiPrefab = null;
-        private GuesserUi guesserUi = null;
-
-        private TextMeshPro meetingGuessText = null;
-        private string roleNamePrefix;
-
-        private static HashSet<ExtremeRoleId> alwaysMissRole = new HashSet<ExtremeRoleId>()
-        {
-            ExtremeRoleId.Assassin,
-            ExtremeRoleId.Marlin,
-            ExtremeRoleId.Villain
+            public bool IsJackalOn { get; set; } = false;
+            public bool IsJackalForceReplaceLover { get; set; } = false;
+            public bool IsQueenOn { get; set; } = false;
         };
 
-        public Guesser(
-            ) : base(
-                ExtremeRoleId.Guesser,
-                ExtremeRoleType.Crewmate,
-                ExtremeRoleId.Guesser.ToString(),
-                ColorPalette.GuesserRedYellow,
-                false, true, false, false,
-                tab: OptionTab.Combination)
-        { }
-
-        private static List<GuessBehaviour.RoleInfo> createRoleInfo(bool includeNoneRole)
+        public void Create(bool includeNoneRole)
         {
-         
-            List<GuessBehaviour.RoleInfo> result = new List<GuessBehaviour.RoleInfo>();
-
-            Dictionary<ExtremeRoleType, List<ExtremeRoleId>> separetedRoleId = new Dictionary<ExtremeRoleType, List<ExtremeRoleId>>()
+            this.separetedRoleId = new Dictionary<ExtremeRoleType, List<ExtremeRoleId>>()
             {
                 {ExtremeRoleType.Crewmate, new List<ExtremeRoleId>() },
                 {ExtremeRoleType.Impostor, new List<ExtremeRoleId>() },
                 {ExtremeRoleType.Neutral , new List<ExtremeRoleId>() },
             };
 
-            bool queenOn = false;
-            bool jackalOn = false;
-            bool jackalForceReplaceLover = false;
+            addVanillaRole(includeNoneRole);
 
-            var allOption = OptionHolder.AllOption;
+            this.separetedRoleId[ExtremeRoleType.Crewmate].Add((ExtremeRoleId)RoleTypes.Crewmate);
+            this.separetedRoleId[ExtremeRoleType.Impostor].Add((ExtremeRoleId)RoleTypes.Impostor);
 
-            void Add(
-                ExtremeRoleId id,
-                ExtremeRoleType team,
-                ExtremeRoleId another = ExtremeRoleId.Null)
-            {
-                result.Add(
-                    new GuessBehaviour.RoleInfo()
-                    {
-                        Id = id,
-                        AnothorId = another,
-                        Team = team,
-                    });
-            }
-            void ListAdd(ExtremeRoleId baseId, ExtremeRoleType team, List<ExtremeRoleId> list)
-            {
-                foreach (var roleId in list)
+            addAmongUsRole();
+            addExRNormalRole(out NormalExRAssignState assignState);
+            addExRCombRole(assignState);
+        }
+
+        private void add(
+            ExtremeRoleId id,
+            ExtremeRoleType team,
+            ExtremeRoleId another = ExtremeRoleId.Null)
+        {
+            this.Result.Add(
+                new GuessBehaviour.RoleInfo()
                 {
-                    Add(baseId, team, roleId);
-                }
-            }
+                    Id = id,
+                    AnothorId = another,
+                    Team = team,
+                });
+        }
 
-            if (includeNoneRole)
-            {
-                Add((ExtremeRoleId)RoleTypes.Crewmate, ExtremeRoleType.Crewmate);
-                Add((ExtremeRoleId)RoleTypes.Impostor, ExtremeRoleType.Impostor);
-            }
-
-            separetedRoleId[ExtremeRoleType.Crewmate].Add((ExtremeRoleId)RoleTypes.Crewmate);
-            separetedRoleId[ExtremeRoleType.Impostor].Add((ExtremeRoleId)RoleTypes.Impostor);
-
+        private void addAmongUsRole()
+        {
             var roleOptions = GameOptionsManager.Instance.CurrentGameOptions.RoleOptions;
 
             foreach (RoleTypes role in Enum.GetValues(typeof(RoleTypes)))
             {
-                if (role == RoleTypes.Crewmate || 
+                if (role == RoleTypes.Crewmate ||
                     role == RoleTypes.Impostor ||
                     role == RoleTypes.GuardianAngel ||
                     role == RoleTypes.CrewmateGhost ||
@@ -154,10 +144,17 @@ namespace ExtremeRoles.Roles.Combination
                         default:
                             continue;
                     }
-                    Add((ExtremeRoleId)role, team);
-                    separetedRoleId[team].Add((ExtremeRoleId)role);
+                    add((ExtremeRoleId)role, team);
+                    this.separetedRoleId[team].Add((ExtremeRoleId)role);
                 }
             }
+        }
+
+        private void addExRNormalRole(out NormalExRAssignState assignState)
+        {
+            assignState = new NormalExRAssignState();
+
+            var allOption = OptionHolder.AllOption;
 
             foreach (var (id, role) in ExtremeRoleManager.NormalRole)
             {
@@ -178,22 +175,23 @@ namespace ExtremeRoles.Roles.Combination
                 if (exId != ExtremeRoleId.Queen &&
                     exId != ExtremeRoleId.Jackal)
                 {
-                    Add(exId, team);
+                    add(exId, team);
                     separetedRoleId[team].Add(exId);
                 }
                 switch (exId)
                 {
                     case ExtremeRoleId.Jackal:
-                        jackalOn = true;
-                        jackalForceReplaceLover = allOption[role.GetRoleOptionId(
+                        assignState.IsJackalOn = true;
+                        assignState.IsJackalForceReplaceLover = allOption[role.GetRoleOptionId(
                             Solo.Neutral.Jackal.JackalOption.ForceReplaceLover)].GetValue();
                         break;
                     case ExtremeRoleId.Queen:
-                        queenOn = true;
+                        assignState.IsQueenOn = true;
                         break;
                     case ExtremeRoleId.Hypnotist:
                         // 本来はニュートラルであるがソート用にインポスターとして突っ込む
-                        Add(ExtremeRoleId.Doll, ExtremeRoleType.Impostor);
+                        add(ExtremeRoleId.Doll, ExtremeRoleType.Impostor);
+                        this.separetedRoleId[ExtremeRoleType.Neutral].Add(ExtremeRoleId.Doll);
                         break;
                     default:
                         break;
@@ -201,45 +199,30 @@ namespace ExtremeRoles.Roles.Combination
             }
 
             // ジャッカルとサイドキック、サイドキック + ラバーズの追加
-            if (jackalOn)
+            if (assignState.IsJackalOn)
             {
-                Add(ExtremeRoleId.Jackal, ExtremeRoleType.Neutral);
-                Add(ExtremeRoleId.Sidekick, ExtremeRoleType.Neutral);
-                foreach (var (id, roleMng) in ExtremeRoleManager.CombRole)
-                {
-                    int spawnOptSel = allOption[
-                        roleMng.GetRoleOptionId(RoleCommonOption.SpawnRate)].GetValue();
-                    int roleNum = allOption[
-                        roleMng.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue();
-
-                    if (spawnOptSel < 1 || roleNum <= 0 ||
-                        id != (byte)CombinationRoleType.Lover)
-                    {
-                        continue;
-                    }
-                    Add(ExtremeRoleId.Lover, ExtremeRoleType.Neutral, ExtremeRoleId.Sidekick);
-                }
+                add(ExtremeRoleId.Jackal, ExtremeRoleType.Neutral);
+                add(ExtremeRoleId.Sidekick, ExtremeRoleType.Neutral);
+                
+                this.separetedRoleId[ExtremeRoleType.Neutral].Add(ExtremeRoleId.Jackal);
+                this.separetedRoleId[ExtremeRoleType.Neutral].Add(ExtremeRoleId.Sidekick);
             }
 
             // クイーンとサーヴァント、サーヴァント + 〇〇、〇〇 + サーヴァントの追加
-            if (queenOn)
+            if (assignState.IsQueenOn)
             {
                 ExtremeRoleType queenTeam = ExtremeRoleType.Neutral;
-                Add(ExtremeRoleId.Queen, queenTeam);
+                add(ExtremeRoleId.Queen, queenTeam);
+                
                 ExtremeRoleId servantId = ExtremeRoleId.Servant;
+                if (this.separetedRoleId[queenTeam].Count > 1)
+                {
+                    add(servantId, queenTeam);
+                }
 
-                if (separetedRoleId[queenTeam].Count > 1)
-                {
-                    Add(servantId, queenTeam);
-                }
-                foreach (var roleList in new List<ExtremeRoleId>[]
-                    { 
-                        separetedRoleId[ExtremeRoleType.Crewmate],
-                        separetedRoleId[ExtremeRoleType.Impostor],
-                    })
-                {
-                    ListAdd(servantId, queenTeam, roleList);
-                }
+                listAddTargetTeam(servantId, queenTeam, ExtremeRoleType.Crewmate);
+                listAddTargetTeam(servantId, queenTeam, ExtremeRoleType.Impostor);
+
                 foreach (var (id, roleMng) in ExtremeRoleManager.CombRole)
                 {
                     int spawnOptSel = allOption[
@@ -251,12 +234,27 @@ namespace ExtremeRoles.Roles.Combination
                     {
                         continue;
                     }
-                    foreach (var role in roleMng.Roles)
+                    if (roleMng is FlexibleCombinationRoleManagerBase flexMng)
                     {
-                        Add(role.Id, queenTeam, servantId);
+                        add(flexMng.BaseRole.Id, queenTeam, servantId);
+                    }
+                    else
+                    {
+                        foreach (var role in roleMng.Roles)
+                        {
+                            add(role.Id, queenTeam, servantId);
+                        }
                     }
                 }
+
+                this.separetedRoleId[queenTeam].Add(ExtremeRoleId.Queen);
+                this.separetedRoleId[queenTeam].Add(servantId);
             }
+        }
+
+        private void addExRCombRole(NormalExRAssignState assignState)
+        {
+            var allOption = OptionHolder.AllOption;
 
             foreach (var (id, roleMng) in ExtremeRoleManager.CombRole)
             {
@@ -273,286 +271,360 @@ namespace ExtremeRoles.Roles.Combination
                 {
                     continue;
                 }
-                if (multiAssign && id != (byte)CombinationRoleType.Traitor)
+
+                bool isNotTraitor = id != (byte)CombinationRoleType.Traitor;
+
+                if (roleMng is FlexibleCombinationRoleManagerBase flexMng &&
+                    isNotTraitor)
+                {
+                    ExtremeRoleType team = flexMng.BaseRole.Team;
+                    ExtremeRoleId baseRoleId = flexMng.BaseRole.Id;
+
+                    if (multiAssign)
+                    {
+                        if (allOption.TryGetValue(
+                                flexMng.GetRoleOptionId(
+                                    CombinationRoleCommonOption.IsAssignImposter),
+                                out IOption option) &&
+                            (bool)option.GetValue())
+                        {
+                            listAddTargetTeam(
+                                baseRoleId,
+                                ExtremeRoleType.Crewmate,
+                                ExtremeRoleType.Crewmate);
+                            listAddTargetTeam(
+                                baseRoleId,
+                                ExtremeRoleType.Impostor,
+                                ExtremeRoleType.Impostor);
+                        }
+                        else
+                        {
+                            listAddTargetTeam(baseRoleId, team, team);
+                        }
+                    }
+                    else
+                    {
+                        add(baseRoleId, team);
+                    }
+                    if (assignState.IsJackalOn &&
+                        !assignState.IsJackalForceReplaceLover &&
+                        baseRoleId == ExtremeRoleId.Lover)
+                    {
+                        add(baseRoleId, ExtremeRoleType.Neutral, ExtremeRoleId.Sidekick);
+                    }
+                }
+                else if (multiAssign && isNotTraitor)
                 {
                     foreach (var role in roleMng.Roles)
                     {
                         ExtremeRoleType team = role.Team;
-                        ListAdd(role.Id, team, separetedRoleId[team]);
+                        listAdd(role.Id, team, this.separetedRoleId[team]);
                     }
-                }
-                else if (roleMng is FlexibleCombinationRoleManagerBase flexMng)
-                {
-                    Add(flexMng.BaseRole.Id, flexMng.BaseRole.Team);
                 }
                 else
                 {
                     foreach (var role in roleMng.Roles)
                     {
-                        Add(role.Id, role.Team);
+                        add(role.Id, role.Team);
                     }
                 }
             }
-
-            return result.OrderBy(
-                (GuessBehaviour.RoleInfo x) =>
-                {
-                    ExtremeRoleType team = x.Team;
-                    if (team == ExtremeRoleType.Neutral)
-                    {
-                        return 5000;
-                    }
-                    else
-                    {
-                        return (int)team;
-                    }
-                }).ToList();
         }
 
-        private static void missGuess()
+        private void addVanillaRole(bool includeNoneRole)
+        {
+            if (includeNoneRole)
+            {
+                add((ExtremeRoleId)RoleTypes.Crewmate, ExtremeRoleType.Crewmate);
+                add((ExtremeRoleId)RoleTypes.Impostor, ExtremeRoleType.Impostor);
+            }
+        }
+
+        private void listAdd(ExtremeRoleId baseId, ExtremeRoleType team, List<ExtremeRoleId> list)
+        {
+            foreach (var roleId in list)
+            {
+                add(baseId, team, roleId);
+            }
+        }
+        private void listAddTargetTeam(
+            ExtremeRoleId baseId, ExtremeRoleType team, ExtremeRoleType targetType)
+        {
+            listAdd(baseId, team, this.separetedRoleId[targetType]);
+        }
+    }
+
+
+    public Guesser(
+        ) : base(
+            ExtremeRoleId.Guesser,
+            ExtremeRoleType.Crewmate,
+            ExtremeRoleId.Guesser.ToString(),
+            ColorPalette.GuesserRedYellow,
+            false, true, false, false,
+            tab: OptionTab.Combination)
+    { }
+
+    private static void missGuess()
+    {
+        Player.RpcUncheckMurderPlayer(
+            CachedPlayerControl.LocalPlayer.PlayerId,
+            CachedPlayerControl.LocalPlayer.PlayerId,
+            byte.MinValue);
+        Sound.RpcPlaySound(Sound.SoundType.Kill);
+    }
+
+    public void GuessAction(GuessBehaviour.RoleInfo roleInfo, byte playerId)
+    {
+        ExtremeRolesPlugin.Logger.LogDebug($"TargetPlayerId:{playerId}  GuessTo:{roleInfo}");
+        
+        // まず弾をへらす
+        this.bulletNum = this.bulletNum - 1;
+        this.curGuessNum = this.curGuessNum + 1;
+
+        var targetRole = ExtremeRoleManager.GameRole[playerId];
+        
+        ExtremeRoleId roleId = targetRole.Id;
+        ExtremeRoleId anotherRoleId = ExtremeRoleId.Null;
+
+        if (targetRole is VanillaRoleWrapper vanillaRole)
+        {
+            roleId = (ExtremeRoleId)vanillaRole.VanilaRoleId;
+        }
+        else if (
+            targetRole is MultiAssignRoleBase multiRole &&
+            multiRole.AnotherRole != null)
+        {
+            if (multiRole.AnotherRole is VanillaRoleWrapper anothorVanillRole)
+            {
+                anotherRoleId = (ExtremeRoleId)anothorVanillRole.VanilaRoleId;
+            }
+            else
+            {
+                anotherRoleId = multiRole.AnotherRole.Id;
+            }
+        }
+        
+        if ((
+                BodyGuard.IsBlockMeetingKill && 
+                BodyGuard.TryGetShiledPlayerId(playerId, out byte _)
+            ) || alwaysMissRole.Contains(targetRole.Id))
+        {
+            missGuess();
+        }
+        else if (
+            roleInfo.Id == roleId && 
+            roleInfo.AnothorId == anotherRoleId)
         {
             Player.RpcUncheckMurderPlayer(
                 CachedPlayerControl.LocalPlayer.PlayerId,
-                CachedPlayerControl.LocalPlayer.PlayerId,
-                byte.MinValue);
+                playerId, byte.MinValue);
             Sound.RpcPlaySound(Sound.SoundType.Kill);
         }
-
-        public void GuessAction(GuessBehaviour.RoleInfo roleInfo, byte playerId)
+        else
         {
-            ExtremeRolesPlugin.Logger.LogDebug($"TargetPlayerId:{playerId}  GuessTo:{roleInfo}");
-            
-            // まず弾をへらす
-            this.bulletNum = this.bulletNum - 1;
-            this.curGuessNum = this.curGuessNum + 1;
-
-            var targetRole = ExtremeRoleManager.GameRole[playerId];
-            
-            ExtremeRoleId roleId = targetRole.Id;
-            ExtremeRoleId anotherRoleId = ExtremeRoleId.Null;
-
-            if (targetRole is VanillaRoleWrapper vanillaRole)
-            {
-                roleId = (ExtremeRoleId)vanillaRole.VanilaRoleId;
-            }
-            else if (
-                targetRole is MultiAssignRoleBase multiRole &&
-                multiRole.AnotherRole != null)
-            {
-                if (multiRole.AnotherRole is VanillaRoleWrapper anothorVanillRole)
-                {
-                    anotherRoleId = (ExtremeRoleId)anothorVanillRole.VanilaRoleId;
-                }
-                else
-                {
-                    anotherRoleId = multiRole.AnotherRole.Id;
-                }
-            }
-            
-            if ((
-                    BodyGuard.IsBlockMeetingKill && 
-                    BodyGuard.TryGetShiledPlayerId(playerId, out byte _)
-                ) || alwaysMissRole.Contains(targetRole.Id))
-            {
-                missGuess();
-            }
-            else if (
-                roleInfo.Id == roleId && 
-                roleInfo.AnothorId == anotherRoleId)
-            {
-                Player.RpcUncheckMurderPlayer(
-                    CachedPlayerControl.LocalPlayer.PlayerId,
-                    playerId, byte.MinValue);
-                Sound.RpcPlaySound(Sound.SoundType.Kill);
-            }
-            else
-            {
-                missGuess();
-            }
+            missGuess();
         }
+    }
 
-        public void IntroEndSetUp()
+    public void IntroEndSetUp()
+    {
+        return;
+    }
+
+    public bool IsBlockMeetingButtonAbility(
+        PlayerVoteArea instance)
+    {
+        byte target = instance.TargetPlayerId;
+
+        return
+            this.bulletNum <= 0 ||
+            this.curGuessNum >= this.maxGuessNum ||
+            target == 253;
+    }
+
+    public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
+    {
+        
+    }
+
+    public Action CreateAbilityAction(PlayerVoteArea instance)
+    {
+        void openGusserUi()
         {
-            return;
-        }
-
-        public bool IsBlockMeetingButtonAbility(
-            PlayerVoteArea instance)
-        {
-            byte target = instance.TargetPlayerId;
-
-            return
-                this.bulletNum <= 0 ||
-                this.curGuessNum >= this.maxGuessNum ||
-                target == 253;
-        }
-
-        public void ButtonMod(PlayerVoteArea instance, UiElement abilityButton)
-        {
-            
-        }
-
-        public Action CreateAbilityAction(PlayerVoteArea instance)
-        {
-            void openGusserUi()
+            if (this.uiPrefab == null)
             {
-                if (this.uiPrefab == null)
-                {
-                    this.uiPrefab = UnityEngine.Object.Instantiate(
-                        Loader.GetUnityObjectFromResources<GameObject>(
-                            Path.GusserUiResources,
-                            Path.GusserUiPrefab),
-                        CachedShipStatus.Instance.transform);
+                this.uiPrefab = UnityEngine.Object.Instantiate(
+                    Loader.GetUnityObjectFromResources<GameObject>(
+                        Path.GusserUiResources,
+                        Path.GusserUiPrefab),
+                    CachedShipStatus.Instance.transform);
 
-                    this.uiPrefab.SetActive(false);
-                }
-                if (this.guesserUi == null)
-                {
-                    GameObject obj = UnityEngine.Object.Instantiate(
-                        this.uiPrefab, MeetingHud.Instance.transform);
-                    this.guesserUi = obj.GetComponent<GuesserUi>();
+                this.uiPrefab.SetActive(false);
+            }
+            if (this.guesserUi == null)
+            {
+                GameObject obj = UnityEngine.Object.Instantiate(
+                    this.uiPrefab, MeetingHud.Instance.transform);
+                this.guesserUi = obj.GetComponent<GuesserUi>();
 
-                    this.guesserUi.gameObject.SetActive(true);
-                    this.guesserUi.InitButton(
-                        GuessAction, createRoleInfo(this.canGuessNoneRole));
-                }
+                GuesserRoleInfoCreater creator = new GuesserRoleInfoCreater();
+                creator.Create(this.canGuessNoneRole);
 
-                byte targetPlayerId = instance.TargetPlayerId;
-                this.guesserUi.SetTitle(
-                    string.Format(
-                        Translation.GetString("guesserUiTitle"),
-                        GameData.Instance.GetPlayerById(
-                            targetPlayerId)?.DefaultOutfit.PlayerName));
-                this.guesserUi.SetInfo(
-                    string.Format(
-                        Translation.GetString("guesserUiInfo"),
-                        this.bulletNum, this.maxGuessNum));
-                this.guesserUi.SetTarget(targetPlayerId);
                 this.guesserUi.gameObject.SetActive(true);
+                this.guesserUi.InitButton(
+                    GuessAction,
+                    creator.Result.OrderBy(
+                        (GuessBehaviour.RoleInfo x) =>
+                        {
+                            ExtremeRoleType team = x.Team;
+                            if (team == ExtremeRoleType.Neutral)
+                            {
+                                return 5000;
+                            }
+                            else
+                            {
+                                return (int)team;
+                            }
+                        })
+                );
             }
-            return openGusserUi;
-        }
 
-        public void SetSprite(SpriteRenderer render)
-        {
-            render.sprite = Loader.CreateSpriteFromResources(
-                Path.GuesserGuess);
-            render.transform.localScale *= new Vector2(0.625f, 0.625f);
-        }
-
-        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
-        {
-            this.guesserUi = null;
-        }
-
-        public void ResetOnMeetingStart()
-        {
-            this.curGuessNum = 0;
-        }
-
-        public void Update(PlayerControl rolePlayer)
-        {
-            if (MeetingHud.Instance)
-            {
-                if (this.meetingGuessText == null)
-                {
-                    this.meetingGuessText = UnityEngine.Object.Instantiate(
-                        FastDestroyableSingleton<HudManager>.Instance.TaskPanel.taskText,
-                        MeetingHud.Instance.transform);
-                    this.meetingGuessText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
-                    this.meetingGuessText.transform.position = Vector3.zero;
-                    this.meetingGuessText.transform.localPosition = new Vector3(-2.85f, 3.15f, -20f);
-                    this.meetingGuessText.transform.localScale *= 0.9f;
-                    this.meetingGuessText.color = Palette.White;
-                    this.meetingGuessText.gameObject.SetActive(false);
-                }
-
-                this.meetingGuessText.text = string.Format(
+            byte targetPlayerId = instance.TargetPlayerId;
+            this.guesserUi.SetTitle(
+                string.Format(
+                    Translation.GetString("guesserUiTitle"),
+                    GameData.Instance.GetPlayerById(
+                        targetPlayerId)?.DefaultOutfit.PlayerName));
+            this.guesserUi.SetInfo(
+                string.Format(
                     Translation.GetString("guesserUiInfo"),
-                    this.bulletNum, this.maxGuessNum);
-                meetingInfoSetActive(true);
-            }
-            else
+                    this.bulletNum, this.maxGuessNum));
+            this.guesserUi.SetTarget(targetPlayerId);
+            this.guesserUi.gameObject.SetActive(true);
+        }
+        return openGusserUi;
+    }
+
+    public void SetSprite(SpriteRenderer render)
+    {
+        render.sprite = Loader.CreateSpriteFromResources(
+            Path.GuesserGuess);
+        render.transform.localScale *= new Vector2(0.625f, 0.625f);
+    }
+
+    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    {
+        this.guesserUi = null;
+    }
+
+    public void ResetOnMeetingStart()
+    {
+        this.curGuessNum = 0;
+    }
+
+    public void Update(PlayerControl rolePlayer)
+    {
+        if (MeetingHud.Instance)
+        {
+            if (this.meetingGuessText == null)
             {
-                meetingInfoSetActive(false);
+                this.meetingGuessText = UnityEngine.Object.Instantiate(
+                    FastDestroyableSingleton<HudManager>.Instance.TaskPanel.taskText,
+                    MeetingHud.Instance.transform);
+                this.meetingGuessText.alignment = TMPro.TextAlignmentOptions.BottomLeft;
+                this.meetingGuessText.transform.position = Vector3.zero;
+                this.meetingGuessText.transform.localPosition = new Vector3(-2.85f, 3.15f, -20f);
+                this.meetingGuessText.transform.localScale *= 0.9f;
+                this.meetingGuessText.color = Palette.White;
+                this.meetingGuessText.gameObject.SetActive(false);
             }
+
+            this.meetingGuessText.text = string.Format(
+                Translation.GetString("guesserUiInfo"),
+                this.bulletNum, this.maxGuessNum);
+            meetingInfoSetActive(true);
         }
-
-        protected override void CreateSpecificOption(
-            IOption parentOps)
+        else
         {
-            var imposterSetting = OptionHolder.AllOption[
-                GetManagerOptionId(CombinationRoleCommonOption.IsAssignImposter)];
-            CreateKillerOption(imposterSetting);
-
-            CreateBoolOption(
-                GuesserOption.CanCallMeeting,
-                false, parentOps);
-            CreateIntOption(
-                GuesserOption.GuessNum,
-                1, 1, GameSystem.MaxImposterNum, 1,
-                parentOps,
-                format: OptionUnit.Shot);
-            CreateIntOption(
-                GuesserOption.MaxGuessNumWhenMeeting,
-                1, 1, GameSystem.MaxImposterNum, 1,
-                parentOps,
-                format: OptionUnit.Shot);
-            var noneGuessRoleOpt = CreateBoolOption(
-                GuesserOption.CanGuessNoneRole,
-                false, parentOps);
-            CreateSelectionOption(
-                GuesserOption.GuessNoneRoleMode,
-                new string[]
-                {
-                    GuessMode.BothGuesser.ToString(),
-                    GuessMode.NiceGuesserOnly.ToString(),
-                    GuessMode.EvilGuesserOnly.ToString(),
-                }, noneGuessRoleOpt);
+            meetingInfoSetActive(false);
         }
+    }
 
-        protected override void RoleSpecificInit()
-        {
-            this.uiPrefab = null;
-            this.guesserUi = null;
-            var allOption = OptionHolder.AllOption;
+    protected override void CreateSpecificOption(
+        IOption parentOps)
+    {
+        var imposterSetting = OptionHolder.AllOption[
+            GetManagerOptionId(CombinationRoleCommonOption.IsAssignImposter)];
+        CreateKillerOption(imposterSetting);
 
-            this.CanCallMeeting = allOption[
-                GetRoleOptionId(GuesserOption.CanCallMeeting)].GetValue();
-
-            bool canGuessNoneRole = allOption[
-                GetRoleOptionId(GuesserOption.CanGuessNoneRole)].GetValue();
-            GuessMode guessMode = (GuessMode)allOption[
-                GetRoleOptionId(GuesserOption.GuessNoneRoleMode)].GetValue();
-
-            this.canGuessNoneRole = canGuessNoneRole &&
-                ((
-                    guessMode == GuessMode.BothGuesser
-                )
-                ||
-                (
-                    guessMode == GuessMode.NiceGuesserOnly && this.IsCrewmate()
-                )
-                ||
-                (
-                    guessMode == GuessMode.EvilGuesserOnly && this.IsImpostor()
-                ));
-
-            this.bulletNum = allOption[
-                GetRoleOptionId(GuesserOption.GuessNum)].GetValue();
-            this.maxGuessNum = allOption[
-                GetRoleOptionId(GuesserOption.MaxGuessNumWhenMeeting)].GetValue();
-
-            this.curGuessNum = 0;
-            this.roleNamePrefix = this.CreateImpCrewPrefix();
-        }
-
-        private void meetingInfoSetActive(bool active)
-        {
-            if (this.meetingGuessText != null)
+        CreateBoolOption(
+            GuesserOption.CanCallMeeting,
+            false, parentOps);
+        CreateIntOption(
+            GuesserOption.GuessNum,
+            1, 1, GameSystem.MaxImposterNum, 1,
+            parentOps,
+            format: OptionUnit.Shot);
+        CreateIntOption(
+            GuesserOption.MaxGuessNumWhenMeeting,
+            1, 1, GameSystem.MaxImposterNum, 1,
+            parentOps,
+            format: OptionUnit.Shot);
+        var noneGuessRoleOpt = CreateBoolOption(
+            GuesserOption.CanGuessNoneRole,
+            false, parentOps);
+        CreateSelectionOption(
+            GuesserOption.GuessNoneRoleMode,
+            new string[]
             {
-                this.meetingGuessText.gameObject.SetActive(active);
-            }
+                GuessMode.BothGuesser.ToString(),
+                GuessMode.NiceGuesserOnly.ToString(),
+                GuessMode.EvilGuesserOnly.ToString(),
+            }, noneGuessRoleOpt);
+    }
+
+    protected override void RoleSpecificInit()
+    {
+        this.uiPrefab = null;
+        this.guesserUi = null;
+        var allOption = OptionHolder.AllOption;
+
+        this.CanCallMeeting = allOption[
+            GetRoleOptionId(GuesserOption.CanCallMeeting)].GetValue();
+
+        bool canGuessNoneRole = allOption[
+            GetRoleOptionId(GuesserOption.CanGuessNoneRole)].GetValue();
+        GuessMode guessMode = (GuessMode)allOption[
+            GetRoleOptionId(GuesserOption.GuessNoneRoleMode)].GetValue();
+
+        this.canGuessNoneRole = canGuessNoneRole &&
+            ((
+                guessMode == GuessMode.BothGuesser
+            )
+            ||
+            (
+                guessMode == GuessMode.NiceGuesserOnly && this.IsCrewmate()
+            )
+            ||
+            (
+                guessMode == GuessMode.EvilGuesserOnly && this.IsImpostor()
+            ));
+
+        this.bulletNum = allOption[
+            GetRoleOptionId(GuesserOption.GuessNum)].GetValue();
+        this.maxGuessNum = allOption[
+            GetRoleOptionId(GuesserOption.MaxGuessNumWhenMeeting)].GetValue();
+
+        this.curGuessNum = 0;
+        this.roleNamePrefix = this.CreateImpCrewPrefix();
+    }
+
+    private void meetingInfoSetActive(bool active)
+    {
+        if (this.meetingGuessText != null)
+        {
+            this.meetingGuessText.gameObject.SetActive(active);
         }
     }
 }
