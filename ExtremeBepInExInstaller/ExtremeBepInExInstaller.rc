@@ -71,7 +71,7 @@ BEGIN
             VALUE "FileDescription", "BepInEx Installer for Extreme Roles"
             VALUE "FileVersion", "1.0.0.0"
             VALUE "InternalName", "ExtremeBepInExInstaller.exe"
-            VALUE "LegalCopyright", "Copyright (C) 2022"
+            VALUE "LegalCopyright", "Copyright (C) 2023"
             VALUE "OriginalFilename", "ExtremeBepInExInstaller.exe"
             VALUE "ProductName", "Extreme Roles - BepInEx Installer"
             VALUE "ProductVersion", "1.0.0.0"
