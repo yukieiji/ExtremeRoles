@@ -95,8 +95,11 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
     }
 
     private static void removeMorphConsole(Slime slime, PlayerControl player)
+    {
+        if (slime.consoleObj is not null)
         {
-        Object.Destroy(slime.consoleObj);
+            Object.Destroy(slime.consoleObj);
+        }
         setPlayerObjActive(player, true);
         }
     private static void setPlayerObjActive(PlayerControl player, bool active)
