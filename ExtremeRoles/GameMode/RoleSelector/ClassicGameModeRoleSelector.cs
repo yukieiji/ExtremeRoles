@@ -176,6 +176,7 @@ namespace ExtremeRoles.GameMode.RoleSelector
 
                 CombinationRoleType.Supporter,
                 CombinationRoleType.Guesser,
+                CombinationRoleType.Mover,
 
                 CombinationRoleType.Traitor,
             };

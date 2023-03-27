@@ -267,6 +267,7 @@ public static class ExtremeRoleManager
             {(byte)CombinationRoleType.Sharer         , new SharerManager()},
             {(byte)CombinationRoleType.Supporter      , new SupporterManager()},
             {(byte)CombinationRoleType.Guesser        , new GuesserManager()},
+            {(byte)CombinationRoleType.Mover          , new MoverManager()},
             {(byte)CombinationRoleType.Traitor        , new TraitorManager()},
         };
 

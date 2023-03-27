@@ -91,6 +91,7 @@ namespace ExtremeRoles.GameMode.RoleSelector
                 ExtremeRoleId.Bomber,
                 ExtremeRoleId.LastWolf,
                 ExtremeRoleId.Hypnotist,
+                ExtremeRoleId.Slime
             };
     }
 }
