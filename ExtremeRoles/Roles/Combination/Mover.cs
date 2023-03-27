@@ -70,7 +70,7 @@ public sealed class Mover :
                 pickUpConsole(role, rolePlayer, index);
                 break;
             case MoverRpc.Reset:
-                removeConsole(role);
+                removeConsole(role, rolePlayer);
                 break;
             default:
                 break;
@@ -83,7 +83,6 @@ public sealed class Mover :
 
         if (console is null) { return; }
 
-        mover.EnableVentButton = false;
         mover.EnableUseButton = false;
 
         mover.hasConsole = console;
@@ -92,15 +91,15 @@ public sealed class Mover :
         mover.hasConsole.transform.SetParent(player.transform);
     }
 
-    private static void removeConsole(Mover mover)
+    private static void removeConsole(Mover mover, PlayerControl player)
     {
-        mover.EnableVentButton = true;
         mover.EnableUseButton = true;
 
         if (mover.hasConsole is null) { return; }
 
         mover.hasConsole.transform.SetParent(null);
         mover.hasConsole.Image.enabled = true;
+        mover.hasConsole.transform.position = player.GetTruePosition();
         mover.hasConsole = null;
     }
 
@@ -179,13 +178,13 @@ public sealed class Mover :
             caller.WriteFloat(player.transform.position.x);
             caller.WriteFloat(player.transform.position.y);
         }
-        removeConsole(this);
+        removeConsole(this, player);
     }
 
     public override void RolePlayerKilledAction(
         PlayerControl rolePlayer, PlayerControl killerPlayer)
     {
-        removeConsole(this);
+        removeConsole(this, rolePlayer);
     }
 
     protected override void CreateSpecificOption(
@@ -205,6 +204,6 @@ public sealed class Mover :
 
     public void AllReset(PlayerControl rolePlayer)
     {
-        removeConsole(this);
+        removeConsole(this, rolePlayer);
     }
 }
