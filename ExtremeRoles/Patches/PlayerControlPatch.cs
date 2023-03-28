@@ -897,7 +897,8 @@ public static class PlayerControlMurderPlayerPatch
         }
         FastDestroyableSingleton<AchievementManager>.Instance.OnMurder(
             instance.AmOwner, target.AmOwner,
-            instance.CurrentOutfitType == PlayerOutfitType.Shapeshifted);
+            instance.CurrentOutfitType == PlayerOutfitType.Shapeshifted,
+            instance.shapeshiftTargetPlayerId, (int)target.PlayerId);
 
         var killAnimation = instance.KillAnimations;
         var useKillAnimation = default(KillAnimation);
