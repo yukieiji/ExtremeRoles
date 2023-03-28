@@ -41,6 +41,8 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
         IsAssignNeutralToVanillaCrewGhostRole,
         IsRemoveAngleIcon,
         IsBlockGAAbilityReport,
+
+        EnableHorseMode
     }
 
     public interface IShipGlobalOption
@@ -76,6 +78,8 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
         public bool IsAssignNeutralToVanillaCrewGhostRole { get; }
         public bool IsRemoveAngleIcon { get; }
         public bool IsBlockGAAbilityReport { get; }
+
+        public bool EnableHorseMode { get; }
 
         public void Load();
 
@@ -228,6 +232,13 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
                 (int)GlobalOption.IsBlockGAAbilityReport,
                 GlobalOption.IsBlockGAAbilityReport.ToString(),
                 false);
+
+            // エイプリルフール用のやつ(まだ隠しておく)
+            new BoolCustomOption(
+                (int)GlobalOption.EnableHorseMode,
+                GlobalOption.EnableHorseMode.ToString(),
+                false,
+                isHidden: !Patches.ConstantsShouldHorseAroundPatch.IsAprilFoolEnd);
         }
 
         public static dynamic GetCommonOptionValue(GlobalOption optionKey)
