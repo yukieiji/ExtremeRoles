@@ -47,10 +47,16 @@ namespace ExtremeRoles.Roles.Solo.Impostor
             DeadBody[] array = Object.FindObjectsOfType<DeadBody>();
             for (int i = 0; i < array.Length; ++i)
             {
-                if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == targetPlayerId)
+                if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId != targetPlayerId)
                 {
+                    continue;
+                }
 
-                    Color oldColor = array[i].bodyRenderer.color;
+                DeadBody body = array[i];
+
+                foreach (var rend in body.bodyRenderers)
+                {
+                    Color oldColor = rend.color;
 
                     if (isRandomColorMode)
                     {
@@ -60,16 +66,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                             Random.value,
                             oldColor.a);
 
-                        array[i].bodyRenderer.material.SetColor("_BackColor", newColor);
-                        array[i].bodyRenderer.material.SetColor("_BodyColor", newColor);
+                        rend.material.SetColor("_BackColor", newColor);
+                        rend.material.SetColor("_BodyColor", newColor);
                     }
                     else
                     {
-                        array[i].bodyRenderer.color = new Color(
-                            oldColor.r, oldColor.g, oldColor.b, 0);
+                        rend.color = new Color(oldColor.r, oldColor.g, oldColor.b, 0);
                     }
-                    break;
                 }
+                break;
             }
         }
         
