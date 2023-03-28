@@ -90,7 +90,7 @@ public sealed class CustomVisor : ICustomCosmicData<VisorData>
             this.visor.viewData.viewData.AltShader = altShader;
         }
 
-        this.visor.viewData.viewData.BehindHats = this.isBehindHat;
+        this.visor.behindHats = this.isBehindHat;
 
         return this.visor;
 
