@@ -44,7 +44,8 @@ public sealed class Mover :
         ExtremeRoleType.Crewmate,
         ExtremeRoleId.Mover.ToString(),
         Palette.CrewmateBlue,
-        false, true, false, false)
+        false, true, false, false,
+        tab: OptionTab.Combination)
     { }
 
     public static void Ability(ref MessageReader reader)
