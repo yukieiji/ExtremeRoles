@@ -40,7 +40,7 @@ namespace ExtremeRoles.Patches
             }
 
             // Terminate round
-            if (Input.GetKeyDown(KeyCode.L) && !GameSystem.IsLobby)
+            if (Input.GetKeyDown(KeyCode.F1) && !GameSystem.IsLobby)
             {
                 GameSystem.ForceEndGame();
             }
