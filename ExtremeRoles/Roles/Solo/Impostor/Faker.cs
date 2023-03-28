@@ -41,18 +41,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 }
                 deadbody.enabled = true;
 
-                Collider2D collider = deadbody.GetComponent<Collider2D>();
-                if (collider is not null)
-                {
-                    Object.Destroy(collider);
-                }
+                destroyComponent<Collider2D>(deadbody);
+                destroyComponent<PassiveButton>(deadbody);
+
                 Object.Destroy(deadbody);
 
                 Vector3 vector = rolePlayer.transform.position + killAnimation.BodyOffset;
                 vector.z = vector.y / 1000f;
                 this.body = deadbody.gameObject;
                 this.body.transform.position = vector;
-                this.body.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
             }
 
             public void Clear()
@@ -60,6 +57,14 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 Object.Destroy(this.body);
             }
 
+            private static void destroyComponent<T>(DeadBody obj) where T : Behaviour
+            {
+                T collider = obj.GetComponent<T>();
+                if (collider is not null)
+                {
+                    Object.Destroy(collider);
+                }
+            }
         }
 
         public sealed class FakePlayer : IMeetingResetObject
