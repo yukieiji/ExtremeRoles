@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 
 using UnityEngine;
 
@@ -16,7 +17,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor;
 public sealed class Carrier : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 {
     private DeadBody carringBody;
-    private float alphaValue;
+    private float[] alphaValue;
     private bool canReportOnCarry;
     private GameData.PlayerInfo targetBody;
 
@@ -77,25 +78,30 @@ public sealed class Carrier : SingleRoleBase, IRoleAbility, IRoleSpecialReset
         DeadBody[] array = UnityEngine.Object.FindObjectsOfType<DeadBody>();
         for (int i = 0; i < array.Length; ++i)
         {
-            if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId == targetPlayerId)
-            {
-                Color oldColor = array[i].bodyRenderer.color;
+            if (GameData.Instance.GetPlayerById(array[i].ParentId).PlayerId != targetPlayerId)
+            { continue; }
 
-                role.carringBody = array[i];
-                role.carringBody.transform.position = rolePlayer.transform.position;
-                role.carringBody.transform.SetParent(rolePlayer.transform);
-                
-                role.alphaValue = oldColor.a;
-                role.carringBody.bodyRenderer.color = new Color(
+
+            role.carringBody = array[i];
+            role.carringBody.transform.position = rolePlayer.transform.position;
+            role.carringBody.transform.SetParent(rolePlayer.transform);
+            role.alphaValue = new float[role.carringBody.bodyRenderers.Length];
+            foreach (var (index, rend) in role.carringBody.bodyRenderers.Select(
+                (value, index) => (index, value)))
+            {
+                Color oldColor = rend.color;
+                role.alphaValue[index] = oldColor.a;
+                rend.color = new Color(
                     oldColor.r, oldColor.g, oldColor.b, 0);
-                
-                if (!role.canReportOnCarry)
-                {
-                    role.carringBody.GetComponentInChildren<BoxCollider2D>().enabled = false;
-                }
-                
-                break;
             }
+
+            if (!role.canReportOnCarry)
+            {
+                role.carringBody.GetComponentInChildren<BoxCollider2D>().enabled = false;
+            }
+
+            break;
+
         }
     }
 
@@ -119,9 +125,15 @@ public sealed class Carrier : SingleRoleBase, IRoleAbility, IRoleSpecialReset
         Vector2 pos = rolePlayer.GetTruePosition();
         role.carringBody.transform.position = new Vector3(pos.x, pos.y, (pos.y / 1000f));
 
-        Color color = role.carringBody.bodyRenderer.color;
-        role.carringBody.bodyRenderer.color = new Color(
-            color.r, color.g, color.b, role.alphaValue);
+        foreach (var (index, rend) in role.carringBody.bodyRenderers.Select(
+                (value, index) => (index, value)))
+        {
+            Color color = rend.color;
+            float alphaValue = role.alphaValue[index];
+
+            rend.color = new Color(color.r, color.g, color.b, alphaValue);
+        }
+
         if (!role.canReportOnCarry)
         {
             role.carringBody.GetComponentInChildren<BoxCollider2D>().enabled = true;
@@ -228,9 +240,15 @@ public sealed class Carrier : SingleRoleBase, IRoleAbility, IRoleSpecialReset
         this.carringBody.transform.position = rolePlayer.GetTruePosition() + new Vector2(0.15f, 0.15f);
         this.carringBody.transform.position -= new Vector3(0.0f, 0.0f, 0.01f);
 
-        Color color = this.carringBody.bodyRenderer.color;
-        this.carringBody.bodyRenderer.color = new Color(
-            color.r, color.g, color.b, this.alphaValue);
+        foreach (var (index, rend) in this.carringBody.bodyRenderers.Select(
+                (value, index) => (index, value)))
+        {
+            Color color = rend.color;
+            float alphaValue = this.alphaValue[index];
+
+            rend.color = new Color(color.r, color.g, color.b, alphaValue);
+        }
+
         if (!this.canReportOnCarry)
         {
             this.carringBody.GetComponentInChildren<BoxCollider2D>().enabled = true;
