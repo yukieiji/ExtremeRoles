@@ -8,6 +8,7 @@ using TMPro;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityBehavior;
+using ExtremeRoles.Module.AbilityBehavior.Interface;
 using ExtremeRoles.Module.AbilityModeSwitcher;
 using ExtremeRoles.Module.ButtonAutoActivator;
 using ExtremeRoles.Module.ExtremeShipStatus;
@@ -145,7 +146,7 @@ public sealed class BodyGuard :
         private void updateAbilityCountText()
         {
             this.abilityCountText.text = string.Format(
-                Translation.GetString(AbilityCountBehavior.DefaultButtonCountText),
+                Translation.GetString(ICountBehavior.DefaultButtonCountText),
                 this.AbilityCount);
         }
 
@@ -389,8 +390,7 @@ public sealed class BodyGuard :
         RPCOperator.UncheckedMurderPlayer(
             killerPlayerId, targetBodyGuard, byte.MinValue);
         
-        PlayerControl bodyGuardPlayer = Player.GetPlayerControlById(
-            targetBodyGuard);
+        PlayerControl bodyGuardPlayer = Player.GetPlayerControlById(targetBodyGuard);
         
         if (bodyGuardPlayer == null ||
             bodyGuardPlayer.Data == null ||

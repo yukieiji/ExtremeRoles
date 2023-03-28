@@ -1,13 +1,14 @@
 ﻿using System;
 
 using UnityEngine;
+
+using ExtremeRoles.Module.AbilityBehavior.Interface;
 using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Module.AbilityBehavior;
 
-public sealed class AbilityCountBehavior : AbilityBehaviorBase
+public sealed class AbilityCountBehavior : AbilityBehaviorBase, ICountBehavior
 {
-    public const string DefaultButtonCountText = "buttonCountText";
     public int AbilityCount { get; private set; }
 
     private bool isReduceOnActive;
@@ -20,7 +21,7 @@ public sealed class AbilityCountBehavior : AbilityBehaviorBase
     private Action abilityOff;
 
     private TMPro.TextMeshPro abilityCountText = null;
-    private string buttonTextFormat = DefaultButtonCountText;
+    private string buttonTextFormat = ICountBehavior.DefaultButtonCountText;
 
     public AbilityCountBehavior(
         string text, Sprite img,
