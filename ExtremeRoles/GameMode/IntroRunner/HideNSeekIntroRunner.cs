@@ -18,7 +18,10 @@ public sealed class HideNSeekIntroRunner : IIntroRunner
     {
         PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
 
+        Logger.GlobalInstance.Info(
+            "IntroCutscene :: CoBegin() :: Game Mode: Hide and Seek", null);
         instance.LogPlayerRoleData();
+
         roleAssignText.gameObject.SetActive(false);
         Object.Destroy(roleAssignText);
         roleAssignText = null;
