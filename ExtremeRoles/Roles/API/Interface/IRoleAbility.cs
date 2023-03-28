@@ -106,6 +106,26 @@ public static class IRoleAbilityMixin
         self.RoleAbilityInit();
     }
 
+    public static void CreateReclickableCountAbilityButton(
+        this IRoleAbility self,
+        string textKey,
+        Sprite sprite,
+        Func<bool> checkAbility = null,
+        Action abilityOff = null,
+        KeyCode hotkey = KeyCode.F)
+    {
+        self.Button = RoleAbilityFactory.CreateReclickCountAbility(
+            textKey: textKey,
+            img: sprite,
+            canUse: self.IsAbilityUse,
+            ability: self.UseAbility,
+            canActivating: checkAbility,
+            abilityOff: abilityOff,
+            hotKey: hotkey);
+
+        self.RoleAbilityInit();
+    }
+
     public static void CreateChargeAbilityButton(
         this IRoleAbility self,
         string textKey,
