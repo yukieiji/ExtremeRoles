@@ -33,11 +33,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                 }
                 targetPlayer.SetPlayerMaterialColors(deadbody.bloodSplatter);
 
-                Vector3 vector = rolePlayer.transform.position + killAnimation.BodyOffset;
-                vector.z = vector.y / 1000f;
-                this.body.transform.position = vector;
-                this.body.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
-
                 if (ExtremeRolesPlugin.Compat.IsModMap)
                 {
                     ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
@@ -45,7 +40,6 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                         Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
                 }
                 deadbody.enabled = true;
-                this.body = deadbody.gameObject;
 
                 Collider2D collider = deadbody.GetComponent<Collider2D>();
                 if (collider is not null)
@@ -53,6 +47,12 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                     Object.Destroy(collider);
                 }
                 Object.Destroy(deadbody);
+
+                Vector3 vector = rolePlayer.transform.position + killAnimation.BodyOffset;
+                vector.z = vector.y / 1000f;
+                this.body = deadbody.gameObject;
+                this.body.transform.position = vector;
+                this.body.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
             }
 
             public void Clear()
