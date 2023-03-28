@@ -17,15 +17,21 @@ namespace ExtremeRoles.Roles.Solo.Impostor
     {
         public sealed class FakeDeadBody : IMeetingResetObject
         {
-            private SpriteRenderer body;
+            private GameObject body;
             public FakeDeadBody(
                 PlayerControl rolePlayer,
                 PlayerControl targetPlayer)
             {
                 var killAnimation = rolePlayer.KillAnimations[0];
-                this.body = Object.Instantiate(
-                    killAnimation.bodyPrefab.bodyRenderer);
-                targetPlayer.SetPlayerMaterialColors(this.body);
+                DeadBody deadbody = Object.Instantiate(
+                    GameManager.Instance.DeadBodyPrefab);
+                deadbody.enabled = false;
+
+                foreach (var rend in deadbody.bodyRenderers)
+                {
+                    targetPlayer.SetPlayerMaterialColors(rend);
+                }
+                targetPlayer.SetPlayerMaterialColors(deadbody.bloodSplatter);
 
                 Vector3 vector = rolePlayer.transform.position + killAnimation.BodyOffset;
                 vector.z = vector.y / 1000f;
@@ -38,6 +44,15 @@ namespace ExtremeRoles.Roles.Solo.Impostor
                         this.body.gameObject,
                         Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
                 }
+                deadbody.enabled = true;
+                this.body = deadbody.gameObject;
+
+                Collider2D collider = deadbody.GetComponent<Collider2D>();
+                if (collider is not null)
+                {
+                    Object.Destroy(collider);
+                }
+                Object.Destroy(deadbody);
             }
 
             public void Clear()

@@ -104,7 +104,7 @@ namespace ExtremeRoles.Patches
             if (Input.GetKeyDown(KeyCode.J))
             {
                 var player = PlayerControl.LocalPlayer;
-
+                /*
                 var killAnimation = player.KillAnimations[0];
                 SpriteRenderer body = UnityEngine.Object.Instantiate(
                     killAnimation.bodyPrefab.bodyRenderer);
@@ -115,6 +115,7 @@ namespace ExtremeRoles.Patches
                 vector.z = vector.y / 1000f;
                 body.transform.position = vector;
                 body.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
+                */
             }
 
         }

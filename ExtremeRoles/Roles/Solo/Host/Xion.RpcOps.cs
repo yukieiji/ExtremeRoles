@@ -89,7 +89,8 @@ namespace ExtremeRoles.Roles.Solo.Host
             Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(
                 Input.mousePosition);
             mouseWorldPos.z = mouseWorldPos.y / 1000f;
-
+            
+            /*
             var killAnimation = player.KillAnimations[0];
             SpriteRenderer body = UnityEngine.Object.Instantiate(
                 killAnimation.bodyPrefab.bodyRenderer);
@@ -101,6 +102,7 @@ namespace ExtremeRoles.Roles.Solo.Host
             body.transform.position = vector;
             body.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
             this.dummyDeadBody.Add(body);
+            */
         }
 
         // RPC周り
