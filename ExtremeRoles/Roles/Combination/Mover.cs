@@ -1,6 +1,6 @@
-﻿using System.Linq;
+﻿using UnityEngine;
 
-using UnityEngine;
+using Hazel;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
@@ -8,8 +8,6 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-using Hazel;
-
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -105,7 +103,7 @@ public sealed class Mover :
 
     public void CreateAbility()
     {
-        this.CreateReclickableAbilityButton(
+        this.CreateReclickableCountAbilityButton(
             "carry",
             Loader.CreateSpriteFromResources(
                Path.CarrierCarry),
@@ -190,8 +188,8 @@ public sealed class Mover :
     protected override void CreateSpecificOption(
         IOption parentOps)
     {
-        this.CreateCommonAbilityOption(
-            parentOps, 30.0f);
+        this.CreateAbilityCountOption(
+            parentOps, 3, 10, 30.0f);
     }
 
     protected override void RoleSpecificInit()
