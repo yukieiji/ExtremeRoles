@@ -26,24 +26,6 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
     private Console targetConsole;
     private GameObject consoleObj;
 
-    private ExtremeAbilityButton carryButton;
-
-    private Dictionary<Collider2D, IUsable[]> cache;
-    private Collider2D[] hitBuffer;
-
-    public sealed class ColliderComparer : IEqualityComparer<Collider2D>
-    {
-        public bool Equals(Collider2D x, Collider2D y)
-        {
-            return x == y;
-        }
-
-        public int GetHashCode(Collider2D obj)
-        {
-            return obj.GetInstanceID();
-        }
-    }
-
     public Slime() : base(
         ExtremeRoleId.Slime,
         ExtremeRoleType.Impostor,
@@ -199,10 +181,6 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 
     protected override void RoleSpecificInit()
     {
-        this.carryDistance = OptionHolder.AllOption[
-            GetRoleOptionId(CarrierOption.CarryDistance)].GetValue();
-        this.canReportOnCarry = OptionHolder.AllOption[
-            GetRoleOptionId(CarrierOption.CanReportOnCarry)].GetValue();
         this.RoleAbilityInit();
     }
 
