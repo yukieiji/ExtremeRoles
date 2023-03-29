@@ -150,7 +150,7 @@ public sealed class Mover :
             if (console != this.targetConsole) { continue; }
 
             using (var caller = RPCOperator.CreateCaller(
-            RPCOperator.Command.SlimeAbility))
+                RPCOperator.Command.MoverAbility))
             {
                 caller.WriteByte((byte)MoverRpc.Move);
                 caller.WriteByte(player.PlayerId);
@@ -170,7 +170,7 @@ public sealed class Mover :
         PlayerControl player = CachedPlayerControl.LocalPlayer;
 
         using (var caller = RPCOperator.CreateCaller(
-            RPCOperator.Command.SlimeAbility))
+            RPCOperator.Command.MoverAbility))
         {
             caller.WriteByte((byte)MoverRpc.Reset);
             caller.WriteByte(player.PlayerId);

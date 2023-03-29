@@ -48,6 +48,7 @@ public static class RPCOperator
         // コンビロール全般
         HeroHeroAcademia,
         KidsAbility,
+        MoverAbility,
 
         // クルーメイト
         BodyGuardAbility,
@@ -515,6 +516,11 @@ public static class RPCOperator
     {
         Roles.Combination.Kids.Ability(
             ref reader);
+    }
+
+    public static void MoverAbility(ref MessageReader reader)
+    {
+        Roles.Solo.Impostor.Mover.Ability(ref reader);
     }
 
     public static void BodyGuardAbility(ref MessageReader reader)

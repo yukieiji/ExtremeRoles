@@ -547,6 +547,9 @@ public static class PlayerControlHandleRpcPatch
             case RPCOperator.Command.KidsAbility:
                 RPCOperator.KidsAbilityCommand(ref reader);
                 break;
+            case RPCOperator.Command.MoverAbility:
+                RPCOperator.MoverAbility(ref reader);
+                break;
             case RPCOperator.Command.BodyGuardAbility:
                 RPCOperator.BodyGuardAbility(ref reader);
                 break;
