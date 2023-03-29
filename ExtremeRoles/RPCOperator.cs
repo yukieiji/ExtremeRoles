@@ -520,7 +520,7 @@ public static class RPCOperator
 
     public static void MoverAbility(ref MessageReader reader)
     {
-        Roles.Solo.Impostor.Mover.Ability(ref reader);
+        Roles.Combination.Mover.Ability(ref reader);
     }
 
     public static void BodyGuardAbility(ref MessageReader reader)
