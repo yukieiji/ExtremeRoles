@@ -21,6 +21,9 @@ namespace ExtremeRoles.GameMode.IntroRunner
 
             yield return waitRoleAssign();
 
+            Logger.GlobalInstance.Info(
+                "IntroCutscene :: CoBegin() :: Starting intro cutscene", null);
+
             SoundManager.Instance.PlaySound(instance.IntroStinger, false, 1f);
 
             yield return CoRunModeIntro(instance, roleAssignText);

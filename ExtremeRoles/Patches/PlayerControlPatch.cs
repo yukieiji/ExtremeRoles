@@ -897,7 +897,8 @@ public static class PlayerControlMurderPlayerPatch
         }
         FastDestroyableSingleton<AchievementManager>.Instance.OnMurder(
             instance.AmOwner, target.AmOwner,
-            instance.CurrentOutfitType == PlayerOutfitType.Shapeshifted);
+            instance.CurrentOutfitType == PlayerOutfitType.Shapeshifted,
+            instance.shapeshiftTargetPlayerId, (int)target.PlayerId);
 
         var killAnimation = instance.KillAnimations;
         var useKillAnimation = default(KillAnimation);
@@ -976,22 +977,21 @@ public static class PlayerControlShapeshiftPatch
         }
         Action changeOutfit = delegate ()
         {
-            __instance.RawSetName(newOutfit.PlayerName);
-            __instance.RawSetColor(newOutfit.ColorId);
-            __instance.RawSetHat(newOutfit.HatId, newOutfit.ColorId);
-            __instance.RawSetSkin(newOutfit.SkinId, newOutfit.ColorId);
-            __instance.RawSetVisor(newOutfit.VisorId, newOutfit.ColorId);
-            __instance.RawSetPet(newOutfit.PetId, newOutfit.ColorId);
-            __instance.Visible = __instance.Visible;
             if (targetPlayerInfo.PlayerId == __instance.Data.PlayerId)
             {
-                __instance.CurrentOutfitType = PlayerOutfitType.Default;
-                __instance.Data.Outfits.Remove(PlayerOutfitType.Shapeshifted);
+                __instance.RawSetOutfit(newOutfit, PlayerOutfitType.Default);
+                __instance.logger.Info(
+                    string.Format("Player {0} Shapeshift is reverting",
+                        __instance.PlayerId), null);
+                __instance.shapeshiftTargetPlayerId = -1;
             }
             else
             {
-                __instance.CurrentOutfitType = PlayerOutfitType.Shapeshifted;
-                __instance.Data.SetOutfit(__instance.CurrentOutfitType, newOutfit);
+                __instance.RawSetOutfit(newOutfit, PlayerOutfitType.Shapeshifted);
+                __instance.logger.Info(
+                    string.Format("Player {0} is shapeshifting into {1}",
+                        __instance.PlayerId, targetPlayer.PlayerId), null);
+                __instance.shapeshiftTargetPlayerId = (int)targetPlayer.PlayerId;
             }
         };
         if (animate)
@@ -1012,8 +1012,10 @@ public static class PlayerControlShapeshiftPatch
 
             Action changeAction = () =>
             {
-                changeOutfit();
-                __instance.cosmetics.SetScale(__instance.defaultPlayerScale);
+                changeOutfit.Invoke();
+                __instance.cosmetics.SetScale(
+                    __instance.MyPhysics.Animations.DefaultPlayerScale,
+                    __instance.defaultCosmeticsScale);
             };
 
             roleEffectAnimation.MidAnimCB = changeAction;
@@ -1032,7 +1034,7 @@ public static class PlayerControlShapeshiftPatch
                 RoleEffectAnimation.SoundType.Local, 0f);
             return false;
         }
-        changeOutfit();
+        changeOutfit.Invoke();
         return false;
 
     }
