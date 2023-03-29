@@ -19,7 +19,7 @@ public static class UseButtonReceiveClickDownPatch
 
         return 
             (useRole is null && anotherUseRole is null) ||
-            (useRole.EnableVentButton && anotherUseRole is null) ||
+            (useRole.EnableUseButton && anotherUseRole is null) ||
             (useRole is null && anotherUseRole.EnableUseButton) ||
             (useRole.EnableUseButton && anotherUseRole.EnableUseButton);
     }
