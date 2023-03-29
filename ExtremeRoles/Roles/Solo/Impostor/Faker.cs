@@ -22,48 +22,20 @@ public sealed class Faker : SingleRoleBase, IRoleAbility
             PlayerControl rolePlayer,
             PlayerControl targetPlayer)
         {
-            var killAnimation = rolePlayer.KillAnimations[0];
-            DeadBody deadbody = Object.Instantiate(
-                GameManager.Instance.DeadBodyPrefab);
-            deadbody.enabled = false;
-
-            foreach (var rend in deadbody.bodyRenderers)
-            {
-                targetPlayer.SetPlayerMaterialColors(rend);
-            }
-            targetPlayer.SetPlayerMaterialColors(deadbody.bloodSplatter);
+            this.body = GameSystem.CreateNoneReportableDeadbody(
+                targetPlayer, rolePlayer.transform.position);
 
             if (ExtremeRolesPlugin.Compat.IsModMap)
             {
                 ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
-                    this.body.gameObject,
+                    this.body,
                     Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
             }
-            deadbody.enabled = true;
-
-            destroyComponent<Collider2D>(deadbody);
-            destroyComponent<PassiveButton>(deadbody);
-
-            Object.Destroy(deadbody);
-
-            Vector3 vector = rolePlayer.transform.position + killAnimation.BodyOffset;
-            vector.z = vector.y / 1000f;
-            this.body = deadbody.gameObject;
-            this.body.transform.position = vector;
         }
 
         public void Clear()
         {
             Object.Destroy(this.body);
-        }
-
-        private static void destroyComponent<T>(DeadBody obj) where T : Behaviour
-        {
-            T collider = obj.GetComponent<T>();
-            if (collider is not null)
-            {
-                Object.Destroy(collider);
-            }
         }
     }
 
