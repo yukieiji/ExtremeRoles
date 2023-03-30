@@ -18,7 +18,7 @@ public sealed class MoverManager : FlexibleCombinationRoleManagerBase
 
 }
 
-public sealed class Mover : 
+public sealed class Mover :
     MultiAssignRoleBase,
     IRoleAbility,
     IRoleSpecialReset,
@@ -86,8 +86,9 @@ public sealed class Mover :
         mover.EnableUseButton = false;
         mover.hasConsole = console;
         mover.hasConsole.Image.enabled = false;
-        
+
         GameSystem.SetColliderActive(mover.hasConsole.gameObject, false);
+        setColliderTriggerOn(mover.hasConsole.gameObject);
 
         mover.hasConsole.transform.position = player.transform.position;
         mover.hasConsole.transform.SetParent(player.transform);
@@ -99,11 +100,11 @@ public sealed class Mover :
 
         if (mover.hasConsole is null) { return; }
 
-        GameSystem.SetColliderActive(mover.hasConsole.gameObject, true);
-        
         mover.hasConsole.transform.SetParent(null);
         mover.hasConsole.Image.enabled = true;
         mover.hasConsole.transform.position = player.GetTruePosition();
+        GameSystem.SetColliderActive(mover.hasConsole.gameObject, true);
+
         mover.hasConsole = null;
     }
 
@@ -130,8 +131,8 @@ public sealed class Mover :
 
         if (this.targetConsole is null) { return false; }
 
-        return 
-            this.IsCommonUse() && 
+        return
+            this.IsCommonUse() &&
             this.targetConsole.Image is not null &&
             GameSystem.IsValidConsole(localPlayer, this.targetConsole);
     }
@@ -211,5 +212,22 @@ public sealed class Mover :
     public void AllReset(PlayerControl rolePlayer)
     {
         removeConsole(this, rolePlayer);
+    }
+
+    public static void setColliderTriggerOn(GameObject obj)
+    {
+        colliderTriggerOn<Collider2D>(obj);
+        colliderTriggerOn<PolygonCollider2D>(obj);
+        colliderTriggerOn<BoxCollider2D>(obj);
+        colliderTriggerOn<CircleCollider2D>(obj);
+    }
+
+    private static void colliderTriggerOn<T>(GameObject obj) where T : Collider2D
+    {
+        T comp = obj.GetComponent<T>();
+        if (comp is not null)
+        {
+            comp.isTrigger = true;
+        }
     }
 }
