@@ -163,7 +163,7 @@ namespace ExtremeSkins.SkinManager
                 if (VisorData.TryAdd(customVisor.Id, customVisor))
                 {
                     ExtremeSkinsPlugin.Logger.LogInfo(
-                        $"Visor Loaded:{customVisor.Name}, from:{visor}");
+                        $"Visor Loaded :\n{customVisor}");
                 }
             }
 

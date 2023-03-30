@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text;
 
 using UnityEngine;
 
@@ -57,6 +58,18 @@ public sealed class CustomVisor : ICustomCosmicData<VisorData>
         this.isBehindHat = isBehindHat;
         this.hasLeftImg = hasLeftImg;
         this.hasShader = hasShader;
+    }
+
+    public override string ToString()
+    {
+        StringBuilder builder = new StringBuilder();
+        builder
+            .AppendLine($" - Name      : {this.name}")
+            .AppendLine($" - Author    : {this.author}")
+            .AppendLine($" - Load from : {this.folderPath}")
+            .Append    ($" - Id        : {this.Id}");
+
+        return builder.ToString();
     }
 
     public VisorData GetData()

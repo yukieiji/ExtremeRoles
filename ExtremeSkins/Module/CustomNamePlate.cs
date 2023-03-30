@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Text;
+
+using UnityEngine;
 
 using ExtremeSkins.Module.Interface;
 
@@ -42,6 +44,18 @@ public sealed class CustomNamePlate : ICustomCosmicData<NamePlateData>
         this.imgPath = imgPath;
         this.author = author;
         this.name = name;
+    }
+
+    public override string ToString()
+    {
+        StringBuilder builder = new StringBuilder();
+        builder
+            .AppendLine($" - Name       : {this.name}")
+            .AppendLine($" - Author     : {this.author}")
+            .AppendLine($" - Image Path : {this.imgPath}")
+            .Append    ($" - Id         : {this.Id}");
+
+        return builder.ToString();
     }
 
     public NamePlateData GetData()
