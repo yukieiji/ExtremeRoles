@@ -78,7 +78,8 @@ public sealed class Slime :
         slime.consoleObj.transform.localScale =
             console.transform.lossyScale * (1.0f / scale.x);
 
-        setPlayerObjActive(player, false);
+        player.cosmetics.Visible = false;
+        player.cosmetics.lockVisible = true;
     }
 
     private static void removeMorphConsole(Slime slime, PlayerControl player)
@@ -87,12 +88,9 @@ public sealed class Slime :
         {
             Object.Destroy(slime.consoleObj);
         }
-        setPlayerObjActive(player, true);
-    }
-    private static void setPlayerObjActive(PlayerControl player, bool active)
-    {
-        player.cosmetics.Visible = active;
-        player.cosmetics.lockVisible = !active;
+
+        player.cosmetics.lockVisible = false;
+        player.cosmetics.Visible = true;
     }
     
     public void CreateAbility()
