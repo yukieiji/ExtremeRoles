@@ -92,12 +92,8 @@ public sealed class Slime :
     }
     private static void setPlayerObjActive(PlayerControl player, bool active)
     {
-        player.cosmetics.currentBodySprite.BodySprite.enabled = active;
-        player.cosmetics.hat?.gameObject.SetActive(active);
-        player.cosmetics.visor?.gameObject.SetActive(active);
-        player.cosmetics.skin?.gameObject.SetActive(active);
-        player.cosmetics.currentPet?.gameObject.SetActive(active);
-        player.cosmetics.nameText.gameObject.SetActive(active);
+        player.cosmetics.Visible = active;
+        player.cosmetics.lockVisible = !active;
     }
     
     public void CreateAbility()
