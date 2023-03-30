@@ -60,7 +60,8 @@ public static class ExtremeHatManager
     public static bool IsUpdate()
     {
 
-        ExtremeSkinsPlugin.Logger.LogInfo("Extreme Hat Manager : Checking Update....");
+        ExtremeSkinsPlugin.Logger.LogInfo(
+            "Extreme Hat Manager : Checking Update....");
 
         if (!Directory.Exists(Path.Combine(
                 Path.GetDirectoryName(Application.dataPath),
@@ -92,19 +93,19 @@ public static class ExtremeHatManager
             if (hatData == hatRepoData || hatData == hatTransData) { continue; }
 
             string checkHatFolder = Path.Combine(exhFolder, hatData);
-
-            if (!Directory.Exists(checkHatFolder)) { return true; }
-
             string jsonPath = Path.Combine(checkHatFolder, InfoBase.JsonName);
+            string licenceFile = Path.Combine(checkHatFolder, LicenseFileName);
 
-            if (!File.Exists(string.Concat(
-                    checkHatFolder, @"\", LicenseFileName))) { return true; }
+            if (!Directory.Exists(checkHatFolder) ||
+                !File.Exists(licenceFile) ||
+                !File.Exists(jsonPath) ||
+                !File.Exists(Path.Combine(
+                    checkHatFolder, DataStructure.FrontImageName)))
+            { 
+                return true; 
+            }
 
-            if (!File.Exists(jsonPath)) { return true; }
-            if (!File.Exists(string.Concat(
-                    checkHatFolder, @"\", DataStructure.FrontImageName))) { return true; }
-
-            var jsonReader = new Il2CppSystem.IO.StreamReader(jsonPath);
+            var jsonReader = new Il2CppStreamReader(jsonPath);
             JsonSerializer se = new JsonSerializer();
             HatInfo info = se.Deserialize<HatInfo>(new JsonTextReader(jsonReader));
                 
