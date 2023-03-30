@@ -31,11 +31,10 @@ public static class ExtremeHatManager
     private const string repo = "https://raw.githubusercontent.com/yukieiji/ExtremeHats/main"; // When using this repository with Fork, please follow the license of each hat
     private const string skinDlUrl = "https://github.com/yukieiji/ExtremeHats/archive/refs/heads/main.zip";
 
-    public const string LicenseFileName = "LICENSE.md";
-
     private const string workingFolder = "ExHWorking";
     private const string dlZipName = "ExtremeHats-main.zip";
-    private const string hatDataPath = @"ExtremeHats-main\hat";
+    private const string hatDataPath = "ExtremeHats-main";
+    private const string hatDataFolderPath = "hat";
     
     private const string hatRepoData = "hatData.json";
     private const string hatTransData = "hatTranData.json";
@@ -91,7 +90,7 @@ public static class ExtremeHatManager
 
             string checkHatFolder = Path.Combine(exhFolder, hatData);
             string jsonPath = Path.Combine(checkHatFolder, InfoBase.JsonName);
-            string licenceFile = Path.Combine(checkHatFolder, LicenseFileName);
+            string licenceFile = Path.Combine(checkHatFolder, License.FileName);
 
             if (!Directory.Exists(checkHatFolder) ||
                 !File.Exists(licenceFile) ||
@@ -240,7 +239,7 @@ public static class ExtremeHatManager
             };
 
             var response = await http.GetAsync(
-                new System.Uri($"{repo}/hat/{fileName}"),
+                new System.Uri($"{repo}/{hatDataFolderPath}/{fileName}"),
                 HttpCompletionOption.ResponseContentRead);
             if (response.StatusCode != HttpStatusCode.OK)
             {
@@ -309,7 +308,7 @@ public static class ExtremeHatManager
         string zipPath,
         string installFolder)
     {
-        string extractPath = Path.Combine(workingDir, "hats");
+        string extractPath = Path.Combine(workingDir, hatDataFolderPath);
         ZipFile.ExtractToDirectory(zipPath, extractPath);
 
         byte[] byteHatArray = File.ReadAllBytes(
@@ -326,7 +325,8 @@ public static class ExtremeHatManager
             if (hatData == hatRepoData || hatData == hatTransData) { continue; }
 
             string hatMoveToFolder = Path.Combine(installFolder, hatData);
-            string hatSourceFolder = Path.Combine(extractPath, hatDataPath, hatData);
+            string hatSourceFolder = Path.Combine(
+                extractPath, hatDataPath, hatDataFolderPath, hatData);
             
             ExtremeSkinsPlugin.Logger.LogInfo($"Installing Hat:{hatData}");
 

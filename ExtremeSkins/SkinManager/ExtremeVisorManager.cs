@@ -32,7 +32,8 @@ public static class ExtremeVisorManager
 
     private const string workingFolder = "ExVWorking";
     private const string dlZipName = "ExtremeVisor-main.zip";
-    private const string visorDataPath = @"ExtremeVisor-main\new_visor";
+    private const string visorDataPath = "ExtremeVisor-main";
+    private const string visorDataFolderPath = "new_visor";
 
     private const string visorRepoData = "visorData.json";
     private const string visorTransData = "visorTransData.json";
@@ -183,13 +184,15 @@ public static class ExtremeVisorManager
 
         yield return Helper.FileUtility.DlToZip(skinDlUrl, zipPath);
 
-        ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Visor Manager : VisorData Download Complete!! ---------- ");
+        ExtremeSkinsPlugin.Logger.LogInfo(
+            "---------- Extreme Visor Manager : VisorData Download Complete!! ---------- ");
 
         ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Visor Manager : VisorData Install Start!! ---------- ");
 
         installVisorData(dlFolder, zipPath, dataSaveFolder);
 
-        ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Visor Manager : VisorData Install Complete!! ---------- ");
+        ExtremeSkinsPlugin.Logger.LogInfo(
+            "---------- Extreme Visor Manager : VisorData Install Complete!! ---------- ");
 #if RELEASE
         Helper.FileUtility.DeleteDir(dlFolder);
 # endif
@@ -217,7 +220,7 @@ public static class ExtremeVisorManager
                 NoCache = true 
             };
             var response = await http.GetAsync(
-                new System.Uri($"{repo}/new_visor/{fileName}"),
+                new System.Uri($"{repo}/{visorDataFolderPath}/{fileName}"),
                 HttpCompletionOption.ResponseContentRead);
             if (response.StatusCode != HttpStatusCode.OK)
             {
@@ -292,7 +295,7 @@ public static class ExtremeVisorManager
         string zipPath,
         string installFolder)
     {
-        string extractPath = Path.Combine(workingDir, "new_visor");
+        string extractPath = Path.Combine(workingDir, visorDataFolderPath);
         ZipFile.ExtractToDirectory(zipPath, extractPath);
 
         byte[] byteVisorArray = File.ReadAllBytes(
@@ -314,7 +317,7 @@ public static class ExtremeVisorManager
             string visorMoveToFolder = Path.Combine(
                 installFolder, visorData);
             string visorSourceFolder = Path.Combine(
-                extractPath, visorDataPath, visorData);
+                extractPath, visorDataPath, visorDataFolderPath, visorData);
 
             ExtremeSkinsPlugin.Logger.LogInfo($"Installing Visor:{visorData}");
 
