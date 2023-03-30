@@ -22,6 +22,8 @@ public static class GameSystem
     public const int VanillaMaxPlayerNum = 15;
     public const int MaxImposterNum = 14;
 
+    public const string BottomRightButtonGroupObjectName = "BottomRight";
+
     public const string SkeldAdmin = "SkeldShip(Clone)/Admin/Ground/admin_bridge/MapRoomConsole";
     public const string SkeldSecurity = "SkeldShip(Clone)/Security/Ground/map_surveillance/SurvConsole";
 
