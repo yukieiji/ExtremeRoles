@@ -87,10 +87,11 @@ public sealed class Mover :
         mover.EnableUseButton = false;
         mover.hasConsole = console;
         mover.hasConsole.Image.enabled = false;
+        
+        GameSystem.SetColliderActive(mover.hasConsole.gameObject, false);
+
         mover.hasConsole.transform.position = player.transform.position;
         mover.hasConsole.transform.SetParent(player.transform);
-
-        GameSystem.SetColliderActive(mover.hasConsole.gameObject, false);
     }
 
     private static void removeConsole(Mover mover, PlayerControl player)
