@@ -34,7 +34,7 @@ public sealed class CustomHat : ICustomCosmicData<HatData>
 
     public string Id
     { 
-        get => $"hat_{Path.GetDirectoryName(this.folderPath)}_{this.author}_{this.name}"; 
+        get => $"hat_{this.author}_{this.name}"; 
     }
 
     private bool hasFrontFlip;

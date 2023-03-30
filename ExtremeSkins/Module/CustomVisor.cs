@@ -29,7 +29,7 @@ public sealed class CustomVisor : ICustomCosmicData<VisorData>
 
     public string Id
     {
-        get => $"visor_{Path.GetDirectoryName(this.folderPath)}_{this.author}_{this.name}";
+        get => $"visor_{this.author}_{this.name}";
     }
 
     private VisorData visor;
