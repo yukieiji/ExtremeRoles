@@ -36,10 +36,47 @@ public sealed class Mover :
     public bool EnableUseButton { get; private set; } = true;
 
     public bool EnableVentButton { get; private set; } = true;
-    public bool IsKillAnimating { get; set; } = false;
+
+    private struct ConsoleData
+    {
+        public Console Console = null;
+        public GameObject Object => this.Console.gameObject;
+        private Transform parent;
+
+        public ConsoleData()
+        {
+            this.Console = null;
+            this.parent = null;
+        }
+
+        public ConsoleData(Console console)
+        {
+            this.Console = console;
+            this.parent = this.Console.transform.parent;
+        }
+        public void PickUp(Transform trans)
+        {
+            this.Console.Image.enabled = false;
+            this.Console.transform.position = trans.position;
+            this.Console.transform.SetParent(trans);
+        }
+        public void Put(Vector2 pos)
+        {
+            this.Console.transform.SetParent(this.parent);
+            this.Console.Image.enabled = true;
+            this.Console.transform.position = 
+                new Vector3(pos.x, pos.y, pos.y / 1000.0f);
+
+            this.Console = null;
+            this.parent = null;
+        }
+        
+        public bool IsValid() => this.Console is not null;
+    }
 
     private Console targetConsole;
-    private Console hasConsole;
+    
+    private ConsoleData hasConsole;
 
     public Mover() : base(
         ExtremeRoleId.Mover,
@@ -85,42 +122,34 @@ public sealed class Mover :
         if (console is null) { return; }
 
         mover.EnableUseButton = false;
-        mover.hasConsole = console;
-        mover.hasConsole.Image.enabled = false;
 
-        GameSystem.SetColliderActive(mover.hasConsole.gameObject, false);
-        setColliderTriggerOn(mover.hasConsole.gameObject);
+        GameSystem.SetColliderActive(console.gameObject, false);
+        setColliderTriggerOn(console.gameObject);
 
-        mover.hasConsole.transform.position = player.transform.position;
-        mover.hasConsole.transform.SetParent(player.transform);
-        
-        if (mover.hasConsole.GetComponent<Vent>() is not null)
+        mover.hasConsole = new ConsoleData(console);
+
+        if (mover.hasConsole.Console.GetComponent<Vent>() is not null)
         {
-            mover.hasConsole.gameObject.AddComponent<VentInPlayerPosSyncer>();
+            mover.hasConsole.Object.AddComponent<VentInPlayerPosSyncer>();
         }
+
+        mover.hasConsole.PickUp(player.transform);
     }
 
     private static void removeConsole(Mover mover, PlayerControl player)
     {
         mover.EnableUseButton = true;
 
-        if (mover.hasConsole is null) { return; }
+        if (!mover.hasConsole.IsValid()) { return; }
 
-        mover.hasConsole.transform.SetParent(null);
-        mover.hasConsole.Image.enabled = true;
-
-        Vector2 pos = player.GetTruePosition();
-        mover.hasConsole.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
-        
-        var syncer = mover.hasConsole.GetComponent<VentInPlayerPosSyncer>();
+        var syncer = mover.hasConsole.Console.GetComponent<VentInPlayerPosSyncer>();
         if (syncer is not null)
         {
             Object.Destroy(syncer);
         }
-
-        GameSystem.SetColliderActive(mover.hasConsole.gameObject, true);
-
-        mover.hasConsole = null;
+        GameSystem.SetColliderActive(mover.hasConsole.Object, true);
+        
+        mover.hasConsole.Put(player.GetTruePosition());
     }
 
     public void CreateAbility()
@@ -134,8 +163,7 @@ public sealed class Mover :
     }
 
     public bool IsAbilityActive() =>
-        CachedPlayerControl.LocalPlayer.PlayerControl.moveable ||
-        this.IsKillAnimating;
+        CachedPlayerControl.LocalPlayer.PlayerControl.moveable;
 
     public bool IsAbilityUse()
     {
@@ -154,12 +182,12 @@ public sealed class Mover :
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
     {
-        this.IsKillAnimating = false;
+        return;
     }
 
     public void ResetOnMeetingStart()
     {
-        this.IsKillAnimating = false;
+        return;
     }
 
     public bool UseAbility()
@@ -181,7 +209,6 @@ public sealed class Mover :
                 caller.WritePackedInt(i);
             }
             pickUpConsole(this, player, i);
-            this.IsKillAnimating = false;
             return true;
         }
         return false;
@@ -219,7 +246,8 @@ public sealed class Mover :
     {
         this.RoleAbilityInit();
 
-        this.IsKillAnimating = false;
+        this.hasConsole = new ConsoleData();
+        
         this.EnableVentButton = true;
         this.EnableUseButton = true;
     }

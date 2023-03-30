@@ -18,6 +18,8 @@ public sealed class VentInPlayerPosSyncer : MonoBehaviour
 
     public void Awake()
     {
+        this.timer = 0.0f;
+
         this.vent = base.gameObject.GetComponent<Vent>();
         this.localPlayer = CachedPlayerControl.LocalPlayer;
         setSystem();
@@ -29,19 +31,14 @@ public sealed class VentInPlayerPosSyncer : MonoBehaviour
 
         if (this.timer < 0.15f ||
             AmongUsClient.Instance.IsGameOver ||
-            !this.ventilationSystem.PlayersCleaningVents.TryGetValue(
+            !this.ventilationSystem.PlayersInsideVents.TryGetValue(
                 this.localPlayer.PlayerId, out byte ventId) ||
             this.vent.Id != ventId) { return; }
 
-        this.timer = 0.0f;
-
         Vector2 pos = this.vent.transform.position;
         pos -= this.localPlayer.Collider.offset;
+
         this.localPlayer.transform.position = pos;
-
-        var camera = FastDestroyableSingleton<HudManager>.Instance.PlayerCam;
-        camera.transform.position = pos + camera.Offset;
-
         this.vent.SetButtons(true);
     }
 
