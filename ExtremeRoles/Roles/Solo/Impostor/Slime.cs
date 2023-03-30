@@ -26,8 +26,6 @@ public sealed class Slime :
 
     public ExtremeAbilityButton Button { get; set; }
 
-    public bool IsKillAnimating { get; set; } = false;
-
     private Console targetConsole;
     private GameObject consoleObj;
 
@@ -104,8 +102,7 @@ public sealed class Slime :
     }
 
     public bool IsAbilityActive() => 
-        CachedPlayerControl.LocalPlayer.PlayerControl.moveable ||
-        this.IsKillAnimating;
+        CachedPlayerControl.LocalPlayer.PlayerControl.moveable;
 
     public bool IsAbilityUse()
     {
@@ -124,12 +121,12 @@ public sealed class Slime :
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
     {
-        this.IsKillAnimating = false;
+        return;
     }
 
     public void ResetOnMeetingStart()
     {
-        this.IsKillAnimating = false;
+        return;
     }
 
     public bool UseAbility()
@@ -147,8 +144,9 @@ public sealed class Slime :
                 caller.WriteByte(player.PlayerId);
                 caller.WritePackedInt(i);
             }
+
             setPlayerSpriteToConsole(this, player, i);
-            this.IsKillAnimating = false;
+            
             return true;
         }
         return false;
@@ -183,8 +181,6 @@ public sealed class Slime :
     protected override void RoleSpecificInit()
     {
         this.RoleAbilityInit();
-
-        this.IsKillAnimating = false;
     }
 
     public void AllReset(PlayerControl rolePlayer)
