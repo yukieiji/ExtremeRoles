@@ -27,11 +27,13 @@ public sealed class VentInPlayerPosSyncer : MonoBehaviour
     {
         this.timer += Time.fixedDeltaTime;
 
-        if (this.timer < 0.1f ||
+        if (this.timer < 0.15f ||
             AmongUsClient.Instance.IsGameOver ||
             !this.ventilationSystem.PlayersCleaningVents.TryGetValue(
                 this.localPlayer.PlayerId, out byte ventId) ||
             this.vent.Id != ventId) { return; }
+
+        this.timer = 0.0f;
 
         Vector2 pos = this.vent.transform.position;
         pos -= this.localPlayer.Collider.offset;
@@ -39,6 +41,8 @@ public sealed class VentInPlayerPosSyncer : MonoBehaviour
 
         var camera = FastDestroyableSingleton<HudManager>.Instance.PlayerCam;
         camera.transform.position = pos + camera.Offset;
+
+        this.vent.SetButtons(true);
     }
 
     private void setSystem()
