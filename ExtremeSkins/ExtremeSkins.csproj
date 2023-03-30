@@ -47,6 +47,12 @@
     <EmbeddedResource Include="Resources\Asset\*.asset" />
     <EmbeddedResource Include="Resources\*.png" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="..\ExtremeSkins.Core\ExtremeSkins.Core\CreatorMode.cs" Link="Core\CreatorMode.cs" />
+    <Compile Include="..\ExtremeSkins.Core\ExtremeSkins.Core\Config.cs" Link="Core\Config.cs" />
+    <Compile Include="..\ExtremeSkins.Core\ExtremeSkins.Core\InfoBase.cs" Link="Core\InfoBase.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ExtremeRoles\ExtremeRoles.csproj" />
