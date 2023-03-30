@@ -33,7 +33,7 @@ public static class ExtremeHatManager
 
     public const string LicenseFileName = "LICENSE.md";
 
-    private const string workingFolder = @"ExHWorking";
+    private const string workingFolder = "ExHWorking";
     private const string dlZipName = "ExtremeHats-main.zip";
     private const string hatDataPath = @"ExtremeHats-main\hat";
     
