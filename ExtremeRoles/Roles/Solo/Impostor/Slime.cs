@@ -13,7 +13,11 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
-public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
+public sealed class Slime : 
+    SingleRoleBase,
+    IRoleAbility,
+    IRoleSpecialReset,
+    IRoleKillAnimationChecker
 {
     public enum SlimeRpc : byte
     {
@@ -22,6 +26,8 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
     }
 
     public ExtremeAbilityButton Button { get; set; }
+
+    public bool IsKillAnimating { get; set; } = false;
 
     private Console targetConsole;
     private GameObject consoleObj;
@@ -105,7 +111,8 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
     }
 
     public bool IsAbilityActive() => 
-        CachedPlayerControl.LocalPlayer.PlayerControl.moveable;
+        CachedPlayerControl.LocalPlayer.PlayerControl.moveable ||
+        this.IsKillAnimating;
 
     public bool IsAbilityUse()
     {
@@ -124,12 +131,12 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
     {
-        return;
+        this.IsKillAnimating = false;
     }
 
     public void ResetOnMeetingStart()
     {
-        return;
+        this.IsKillAnimating = false;
     }
 
     public bool UseAbility()
@@ -142,15 +149,15 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 
             using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.SlimeAbility))
-        {
+            {
                 caller.WriteByte((byte)SlimeRpc.Morph);
-            caller.WriteByte(player.PlayerId);
+                caller.WriteByte(player.PlayerId);
                 caller.WritePackedInt(i);
-        }
+            }
             setPlayerSpriteToConsole(this, player, i);
-            
-        return true;
-    }
+            this.IsKillAnimating = false;
+            return true;
+        }
         return false;
     }
 
@@ -183,6 +190,8 @@ public sealed class Slime : SingleRoleBase, IRoleAbility, IRoleSpecialReset
     protected override void RoleSpecificInit()
     {
         this.RoleAbilityInit();
+
+        this.IsKillAnimating = false;
     }
 
     public void AllReset(PlayerControl rolePlayer)

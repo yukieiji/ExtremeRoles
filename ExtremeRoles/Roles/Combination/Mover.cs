@@ -22,7 +22,8 @@ public sealed class Mover :
     MultiAssignRoleBase,
     IRoleAbility,
     IRoleSpecialReset,
-    IRoleUsableOverride
+    IRoleUsableOverride,
+    IRoleKillAnimationChecker
 {
     public enum MoverRpc : byte
     {
@@ -35,6 +36,7 @@ public sealed class Mover :
     public bool EnableUseButton { get; private set; } = true;
 
     public bool EnableVentButton { get; private set; } = true;
+    public bool IsKillAnimating { get; set; } = false;
 
     private Console targetConsole;
     private Console hasConsole;
@@ -113,7 +115,8 @@ public sealed class Mover :
     }
 
     public bool IsAbilityActive() =>
-        CachedPlayerControl.LocalPlayer.PlayerControl.moveable;
+        CachedPlayerControl.LocalPlayer.PlayerControl.moveable &&
+        this.IsKillAnimating;
 
     public bool IsAbilityUse()
     {
@@ -132,12 +135,12 @@ public sealed class Mover :
 
     public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
     {
-        return;
+        this.IsKillAnimating = false;
     }
 
     public void ResetOnMeetingStart()
     {
-        return;
+        this.IsKillAnimating = false;
     }
 
     public bool UseAbility()
@@ -159,7 +162,7 @@ public sealed class Mover :
                 caller.WritePackedInt(i);
             }
             pickUpConsole(this, player, i);
-
+            this.IsKillAnimating = false;
             return true;
         }
         return false;
@@ -197,6 +200,7 @@ public sealed class Mover :
     {
         this.RoleAbilityInit();
 
+        this.IsKillAnimating = false;
         this.EnableVentButton = true;
         this.EnableUseButton = true;
     }
