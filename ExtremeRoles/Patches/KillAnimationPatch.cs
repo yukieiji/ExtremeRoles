@@ -1,10 +1,5 @@
 ﻿using HarmonyLib;
 
-using ExtremeRoles.Roles;
-using ExtremeRoles.Roles.API.Interface;
-using ExtremeRoles.Performance;
-using ExtremeRoles.Module.RoleAssign;
-
 namespace ExtremeRoles.Patches;
 
 [HarmonyPatch(typeof(KillAnimation), nameof(KillAnimation.CoPerformKill))]
@@ -21,25 +16,5 @@ public static class KillAnimationCoPerformKillPatch
             source = target;
         }
         HideNextAnimation = false;
-    }
-}
-
-[HarmonyPatch(typeof(KillAnimation), nameof(KillAnimation.SetMovement))]
-public static class KillAnimationSetMovementKillPatch
-{
-    public static void Prefix(
-        KillAnimation __instance,
-        [HarmonyArgument(0)] PlayerControl source,
-        [HarmonyArgument(1)] bool canMove)
-    {
-        if (ExtremeRoleManager.GameRole.Count == 0 ||
-            !RoleAssignState.Instance.IsRoleSetUpEnd ||
-            source.PlayerId != CachedPlayerControl.LocalPlayer.PlayerId) { return; }
-        
-        var (killCheckerRole, anotherKillChekerRole) = 
-            ExtremeRoleManager.GetInterfaceCastedLocalRole<IRoleKillAnimationChecker>();
-
-        IRoleKillAnimationChecker.SetKillAnimating(killCheckerRole, !canMove);
-        IRoleKillAnimationChecker.SetKillAnimating(anotherKillChekerRole, !canMove);
     }
 }

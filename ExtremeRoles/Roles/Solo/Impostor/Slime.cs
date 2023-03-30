@@ -16,8 +16,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor;
 public sealed class Slime : 
     SingleRoleBase,
     IRoleAbility,
-    IRoleSpecialReset,
-    IRoleKillAnimationChecker
+    IRoleSpecialReset
 {
     public enum SlimeRpc : byte
     {

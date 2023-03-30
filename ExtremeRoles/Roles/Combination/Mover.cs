@@ -22,8 +22,7 @@ public sealed class Mover :
     MultiAssignRoleBase,
     IRoleAbility,
     IRoleSpecialReset,
-    IRoleUsableOverride,
-    IRoleKillAnimationChecker
+    IRoleUsableOverride
 {
     public enum MoverRpc : byte
     {
