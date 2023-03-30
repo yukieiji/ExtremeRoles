@@ -17,7 +17,7 @@ public enum AbilityState : byte
 
 public sealed class ExtremeAbilityButton
 {
-
+    public const string Name = "ExRAbilityButton";
     public const string AditionalInfoName = "ExRKillButtonAditionalInfo";
 
     public AbilityBehaviorBase Behavior { get; private set; }
@@ -58,6 +58,7 @@ public sealed class ExtremeAbilityButton
         passiveButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
         passiveButton.OnClick.AddListener(
             (UnityEngine.Events.UnityAction)onClick);
+        passiveButton.name = Name;
 
         Transform info = this.button.transform.FindChild(AditionalInfoName);
         if (info != null)

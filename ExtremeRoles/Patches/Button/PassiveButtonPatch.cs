@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 
+using ExtremeRoles.Module;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API.Interface;
@@ -9,9 +10,10 @@ namespace ExtremeRoles.Patches.Button;
 [HarmonyPatch(typeof(PassiveButton), nameof(PassiveButton.ReceiveClickDown))]
 public static class PassiveButtonReceiveClickDownPatch
 {
-    public static bool Prefix()
+    public static bool Prefix(PassiveButton __instance)
     {
-        if (ExtremeRoleManager.GameRole.Count == 0 ||
+        if (__instance.name == ExtremeAbilityButton.Name ||
+            ExtremeRoleManager.GameRole.Count == 0 ||
             !RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
 
         var (useRole, anotherUseRole) =
