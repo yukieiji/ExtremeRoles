@@ -119,7 +119,7 @@ public sealed class Mover :
     }
 
     public bool IsAbilityActive() =>
-        CachedPlayerControl.LocalPlayer.PlayerControl.moveable &&
+        CachedPlayerControl.LocalPlayer.PlayerControl.moveable ||
         this.IsKillAnimating;
 
     public bool IsAbilityUse()
