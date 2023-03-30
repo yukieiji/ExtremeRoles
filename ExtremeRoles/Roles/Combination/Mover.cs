@@ -4,6 +4,7 @@ using Hazel;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -92,6 +93,11 @@ public sealed class Mover :
 
         mover.hasConsole.transform.position = player.transform.position;
         mover.hasConsole.transform.SetParent(player.transform);
+        
+        if (mover.hasConsole.GetComponent<Vent>() is not null)
+        {
+            mover.hasConsole.gameObject.AddComponent<VentInPlayerPosSyncer>();
+        }
     }
 
     private static void removeConsole(Mover mover, PlayerControl player)
@@ -102,7 +108,16 @@ public sealed class Mover :
 
         mover.hasConsole.transform.SetParent(null);
         mover.hasConsole.Image.enabled = true;
-        mover.hasConsole.transform.position = player.GetTruePosition();
+
+        Vector2 pos = player.GetTruePosition();
+        mover.hasConsole.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
+        
+        var syncer = mover.hasConsole.GetComponent<VentInPlayerPosSyncer>();
+        if (syncer is not null)
+        {
+            Object.Destroy(syncer);
+        }
+
         GameSystem.SetColliderActive(mover.hasConsole.gameObject, true);
 
         mover.hasConsole = null;
