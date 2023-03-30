@@ -33,11 +33,12 @@ public sealed class VentInPlayerPosSyncer : MonoBehaviour
                 this.localPlayer.PlayerId, out byte ventId) ||
             this.vent.Id != ventId) { return; }
 
-        Vector2 vector = this.vent.transform.position;
-        vector -= this.localPlayer.Collider.offset;
+        Vector2 pos = this.vent.transform.position;
+        pos -= this.localPlayer.Collider.offset;
+        this.localPlayer.transform.position = pos;
 
-        this.localPlayer.transform.position = vector;
-        FastDestroyableSingleton<HudManager>.Instance.PlayerCam.SnapToTarget();
+        var camera = FastDestroyableSingleton<HudManager>.Instance.PlayerCam;
+        camera.transform.position = pos + camera.Offset;
     }
 
     private void setSystem()
