@@ -85,11 +85,12 @@ public sealed class Mover :
         if (console is null) { return; }
 
         mover.EnableUseButton = false;
-
         mover.hasConsole = console;
         mover.hasConsole.Image.enabled = false;
         mover.hasConsole.transform.position = player.transform.position;
         mover.hasConsole.transform.SetParent(player.transform);
+
+        GameSystem.SetColliderActive(mover.hasConsole.gameObject, false);
     }
 
     private static void removeConsole(Mover mover, PlayerControl player)
@@ -98,6 +99,8 @@ public sealed class Mover :
 
         if (mover.hasConsole is null) { return; }
 
+        GameSystem.SetColliderActive(mover.hasConsole.gameObject, true);
+        
         mover.hasConsole.transform.SetParent(null);
         mover.hasConsole.Image.enabled = true;
         mover.hasConsole.transform.position = player.GetTruePosition();

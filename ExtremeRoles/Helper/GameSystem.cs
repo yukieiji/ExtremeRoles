@@ -127,11 +127,16 @@ public static class GameSystem
         GameObject obj = GameObject.Find(mapModuleName);
         if (obj != null)
         {
-            disableCollider<Collider2D>(obj);
-            disableCollider<PolygonCollider2D>(obj);
-            disableCollider<BoxCollider2D>(obj);
-            disableCollider<CircleCollider2D>(obj);
+            SetColliderActive(obj, false);
         }
+    }
+
+    public static void SetColliderActive(GameObject obj, bool active)
+    {
+        setColliderEnable<Collider2D>(obj, active);
+        setColliderEnable<PolygonCollider2D>(obj, active);
+        setColliderEnable<BoxCollider2D>(obj, active);
+        setColliderEnable<CircleCollider2D>(obj, active);
     }
 
     public static (int, int) GetTaskInfo(
@@ -536,12 +541,12 @@ public static class GameSystem
     }
 
 
-    private static void disableCollider<T>(GameObject obj) where T : Collider2D
+    private static void setColliderEnable<T>(GameObject obj, bool active) where T : Collider2D
     {
         T comp = obj.GetComponent<T>();
         if (comp != null)
         {
-            comp.enabled = false;
+            comp.enabled = active;
         }
     }
 
