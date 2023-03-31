@@ -438,23 +438,9 @@ public static class PlayerControlHandleRpcPatch
                     PlayerRoleAssignData.Instance.Destroy();
                 }
                 break;
-            case RPCOperator.Command.CleanDeadBody:
-                byte deadBodyPlayerId = reader.ReadByte();
-                RPCOperator.CleanDeadBody(deadBodyPlayerId);
-                break;
-            case RPCOperator.Command.FixLightOff:
-                RPCOperator.FixLightOff();
-                break;
             case RPCOperator.Command.ShareOption:
                 int numOptions = (int)reader.ReadByte();
                 RPCOperator.ShareOption(numOptions, reader);
-                break;
-            case RPCOperator.Command.ReplaceRole:
-                byte targetPlayerId = reader.ReadByte();
-                byte replaceTarget = reader.ReadByte();
-                byte ops = reader.ReadByte();
-                RPCOperator.ReplaceRole(
-                    targetPlayerId, replaceTarget, ops);
                 break;
             case RPCOperator.Command.CustomVentUse:
                 int ventId = reader.ReadPackedInt32();
@@ -493,11 +479,22 @@ public static class PlayerControlHandleRpcPatch
                 byte reviveTargetId = reader.ReadByte();
                 RPCOperator.UncheckedRevive(reviveTargetId);
                 break;
+            case RPCOperator.Command.CleanDeadBody:
+                byte deadBodyPlayerId = reader.ReadByte();
+                RPCOperator.CleanDeadBody(deadBodyPlayerId);
+                break;
+            case RPCOperator.Command.FixLightOff:
+                RPCOperator.FixLightOff();
+                break;
             case RPCOperator.Command.ReplaceDeadReason:
                 byte changePlayerId = reader.ReadByte();
                 byte reason = reader.ReadByte();
                 RPCOperator.ReplaceDeadReason(
                     changePlayerId, reason);
+                break;
+            case RPCOperator.Command.SetRoleWin:
+                byte rolePlayerId = reader.ReadByte();
+                RPCOperator.SetRoleWin(rolePlayerId);
                 break;
             case RPCOperator.Command.SetWinGameControlId:
                 int id = reader.ReadInt32();
@@ -511,10 +508,6 @@ public static class PlayerControlHandleRpcPatch
                     winPlayerId.Add(reader.ReadByte());
                 }
                 RPCOperator.SetWinPlayer(winPlayerId);
-                break;
-            case RPCOperator.Command.SetRoleWin:
-                byte rolePlayerId = reader.ReadByte();
-                RPCOperator.SetRoleWin(rolePlayerId);
                 break;
             case RPCOperator.Command.ShareMapId:
                 byte mapId = reader.ReadByte();
@@ -535,6 +528,13 @@ public static class PlayerControlHandleRpcPatch
                 float volume = reader.ReadSingle();
                 RPCOperator.PlaySound(soundType, volume);
                 break;
+            case RPCOperator.Command.ReplaceTask:
+                byte replaceTargetPlayerId = reader.ReadByte();
+                int taskIndex = reader.ReadInt32();
+                int taskId = reader.ReadInt32();
+                RPCOperator.ReplaceTask(
+                    replaceTargetPlayerId, taskIndex, taskId);
+                break;
             case RPCOperator.Command.IntegrateModCall:
                 RPCOperator.IntegrateModCall(ref reader);
                 break;
@@ -543,6 +543,13 @@ public static class PlayerControlHandleRpcPatch
                 break;
             case RPCOperator.Command.MeetingReporterRpc:
                 RPCOperator.MeetingReporterRpcOp(ref reader);
+                break;
+            case RPCOperator.Command.ReplaceRole:
+                byte targetPlayerId = reader.ReadByte();
+                byte replaceTarget = reader.ReadByte();
+                byte ops = reader.ReadByte();
+                RPCOperator.ReplaceRole(
+                    targetPlayerId, replaceTarget, ops);
                 break;
             case RPCOperator.Command.HeroHeroAcademia:
                 RPCOperator.HeroHeroAcademiaCommand(ref reader);
@@ -677,13 +684,6 @@ public static class PlayerControlHandleRpcPatch
                 }
                 RPCOperator.AliceShipBroken(
                     alicePlayerId, newTaskSetPlayerId, task);
-                break;
-            case RPCOperator.Command.ReplaceTask:
-                byte replaceTargetPlayerId = reader.ReadByte();
-                int taskIndex = reader.ReadInt32();
-                int taskId = reader.ReadInt32();
-                RPCOperator.ReplaceTask(
-                    replaceTargetPlayerId, taskIndex, taskId);
                 break;
             case RPCOperator.Command.JesterOutburstKill:
                 byte outburstKillerId = reader.ReadByte();
