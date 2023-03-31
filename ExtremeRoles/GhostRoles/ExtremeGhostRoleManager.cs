@@ -56,6 +56,7 @@ public static class ExtremeGhostRoleManager
         {
             { ExtremeGhostRoleId.Poltergeist, new Poltergeist() },
             { ExtremeGhostRoleId.Faunus,      new Faunus()      },
+            { ExtremeGhostRoleId.Shutter,     new Shutter()     },
 
             { ExtremeGhostRoleId.Ventgeist, new Ventgeist() },
             { ExtremeGhostRoleId.SaboEvil , new SaboEvil()  },
