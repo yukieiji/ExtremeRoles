@@ -11,8 +11,8 @@ using ExtremeRoles.GhostRoles.Crewmate;
 using ExtremeRoles.GhostRoles.Impostor;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.Combination;
+using ExtremeRoles.Module;
 using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.GhostRoles;
 
@@ -271,8 +271,8 @@ public static class ExtremeGhostRoleManager
 
         if (isReport)
         {
-            ExtremeRolesPlugin.ShipState.AddGhostRoleAbilityReport(
-                callAbility);
+            MeetingReporter.Instance.AddMeetingStartReport(
+                Helper.Translation.GetString(abilityType.ToString()));
         }
     }
 
