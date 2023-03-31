@@ -36,6 +36,7 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
             caller.WriteByte((byte)RpcOpType.ChatReport);
             caller.WriteStr(report);
         }
+        Instance.AddMeetingChatReport(report);
     }
 
     public static void RpcOp(ref MessageReader reader)

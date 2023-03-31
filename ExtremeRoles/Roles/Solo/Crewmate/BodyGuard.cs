@@ -176,8 +176,7 @@ public sealed class BodyGuard :
         FeatShield,
         ResetShield,
         CoverDead,
-        AwakeMeetingReport,
-        ReportMeeting
+        AwakeMeetingReport
     }
 
     public enum BodyGuardReportPlayerNameMode
@@ -319,9 +318,6 @@ public sealed class BodyGuard :
             case BodyGuardRpcOps.AwakeMeetingReport:
                 awakeReportMeeting(reader.ReadByte());
                 break;
-            case BodyGuardRpcOps.ReportMeeting:
-                reportMeeting(reader.ReadString());
-                break;
             default:
                 break;
         }
@@ -419,7 +415,7 @@ public sealed class BodyGuard :
 
         if (MeetingHud.Instance)
         {
-            reportMeeting(reportStr);
+            MeetingReporter.Instance.AddMeetingChatReport(reportStr);
         }
         else
         {
@@ -611,13 +607,7 @@ public sealed class BodyGuard :
     {
         if (!string.IsNullOrEmpty(this.reportStr))
         {
-            using (var caller = RPCOperator.CreateCaller(
-                RPCOperator.Command.BodyGuardAbility))
-            {
-                caller.WriteByte((byte)BodyGuardRpcOps.ReportMeeting);
-                caller.WriteStr(this.reportStr);
-            }
-            reportMeeting(this.reportStr);
+            MeetingReporter.RpcAddMeetingChatReport(this.reportStr);
         }
         this.reportStr = string.Empty;
     }
