@@ -556,17 +556,7 @@ public sealed class Photographer :
             Translation.GetString("photoChat"),
             photoInfo);
 
-        PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
-
-        if (this.enableAllSend &&
-            this.isUpgradeChat)
-        {
-            localPlayer.RpcSendChat(chatText);
-        }
-        else
-        {
-            hud.Chat.AddChat(
-                localPlayer, chatText);
-        }
+        MeetingReporter.Instance.AddMeetingChatReport(
+            chatText, this.enableAllSend && this.isUpgradeChat);
     }
 }
