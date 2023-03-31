@@ -106,6 +106,8 @@ public static class ExtremeGhostRoleManager
         // 各陣営の役職データを取得する
         List<GhostRoleSpawnData> sameTeamRoleAssignData = spawnDataMng.GetUseGhostRole(team);
 
+        if (sameTeamRoleAssignData is null) { return; }
+
         foreach (var spawnData in sameTeamRoleAssignData)
         {
             if (spawnData.IsBlockAliveRole(roleId) || 

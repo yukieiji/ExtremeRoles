@@ -177,7 +177,7 @@ namespace ExtremeSkins.SkinManager
                     if (HatData.TryAdd(customHat.Id, customHat))
                     {
                         ExtremeSkinsPlugin.Logger.LogInfo(
-                            $"Hat Loaded:{customHat.Name}, from:{hat}");
+                            $"Hat Loaded :\n{customHat}");
                     }
                 }
             }

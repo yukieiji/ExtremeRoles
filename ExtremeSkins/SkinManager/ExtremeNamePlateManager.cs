@@ -157,7 +157,7 @@ namespace ExtremeSkins.SkinManager
                     if (NamePlateData.TryAdd(customNamePlate.Id, customNamePlate))
                     {
                         ExtremeSkinsPlugin.Logger.LogInfo(
-                            $"NamePlate Loaded:{customNamePlate.Name}, from:{namePlate}");
+                            $"NamePlate Loaded:\n{customNamePlate}");
                     }
                 }
                 
