@@ -541,6 +541,9 @@ public static class PlayerControlHandleRpcPatch
             case RPCOperator.Command.CloseMeetingVoteButton:
                 RPCOperator.CloseMeetingButton();
                 break;
+            case RPCOperator.Command.MeetingReporterRpc:
+                RPCOperator.MeetingReporterRpcOp(ref reader);
+                break;
             case RPCOperator.Command.HeroHeroAcademia:
                 RPCOperator.HeroHeroAcademiaCommand(ref reader);
                 break;

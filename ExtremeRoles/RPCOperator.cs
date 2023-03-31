@@ -40,6 +40,7 @@ public static class RPCOperator
         ReplaceTask,
         IntegrateModCall,
         CloseMeetingVoteButton,
+        MeetingReporterRpc,
 
         // 役職関連
         // 役職メインコントール
@@ -503,6 +504,11 @@ public static class RPCOperator
         Roles.ExtremeRoleManager.RoleReplace(
             callerId, targetId,
             (Roles.ExtremeRoleManager.ReplaceOperation)operation);
+    }
+
+    public static void MeetingReporterRpcOp(ref MessageReader reader)
+    {
+        Module.MeetingReporter.RpcOp(ref reader);
     }
 
     public static void HeroHeroAcademiaCommand(

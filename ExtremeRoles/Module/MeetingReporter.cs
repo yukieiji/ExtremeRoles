@@ -16,7 +16,7 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 
     private List<(string, bool)> chatReport = new List<(string, bool)>();
 
-    public enum RpcOpType
+    public enum RpcOpType : byte
     {
         ChatReport
     }
@@ -30,7 +30,12 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 
     public static void RpcAddMeetingChatReport(string report)
     {
-        
+        using (var caller = RPCOperator.CreateCaller(
+            RPCOperator.Command.MeetingReporterRpc))
+        {
+            caller.WriteByte((byte)RpcOpType.ChatReport);
+            caller.WriteStr(report);
+        }
     }
 
     public static void RpcOp(ref MessageReader reader)
