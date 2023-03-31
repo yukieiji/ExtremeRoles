@@ -22,6 +22,7 @@ public enum ExtremeGhostRoleId : byte
 
     Poltergeist,
     Faunus,
+    Shutter,
 
     Ventgeist,
     SaboEvil,
@@ -36,6 +37,7 @@ public enum AbilityType : byte
 
     PoltergeistMoveDeadbody,
     FaunusOpenSaboConsole,
+    ShutterTakePhoto,
 
     VentgeistVentAnime,
     SaboEvilResetSabotageCool,
