@@ -31,6 +31,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
+using UnityObject = UnityEngine.Object;
+using UIButton = UnityEngine.UI.Button;
+using Config = ExtremeRoles.OptionHolder.ConfigParser;
+
 namespace ExtremeRoles.Patches.Region;
 
 [HarmonyPatch(typeof(RegionMenu), nameof(RegionMenu.Open))]
@@ -59,11 +63,11 @@ public static class RegionMenuOpenPatch
             "NormalMenu/JoinGameButton/JoinGameMenu/GameIdText");
         if (gameIdTextBox is null) { return; }
 
-        if (ipField is null || ipField.gameObject is null || ipText is null)
+        if (ipField is null || ipText is null)
         {
-            ipField = UnityEngine.Object.Instantiate(
+            ipField = UnityObject.Instantiate(
                 gameIdTextBox.gameObject, __instance.transform);
-            ipText = UnityEngine.Object.Instantiate(
+            ipText = UnityObject.Instantiate(
                 Module.Prefab.Text);
 
             ipField.gameObject.name = "ipTextBox";
@@ -72,7 +76,7 @@ public static class RegionMenuOpenPatch
 
             var arrow = ipField.transform.FindChild("arrowEnter");
             if (arrow == null || arrow.gameObject == null) { return; }
-            UnityEngine.Object.DestroyImmediate(arrow.gameObject);
+            UnityObject.DestroyImmediate(arrow.gameObject);
 
             ipField.transform.localPosition = new Vector3(2.0f, 1.0f, -100f);
 
@@ -81,19 +85,19 @@ public static class RegionMenuOpenPatch
             ipTextBox.characterLimit = 30;
             ipTextBox.AllowSymbols = true;
             ipTextBox.ForceUppercase = false;
-            ipTextBox.SetText(
-                OptionHolder.ConfigParser.Ip.Value);
+            ipTextBox.SetText(Config.Ip.Value);
             __instance.StartCoroutine(
                 Effects.Lerp(0.1f, new Action<float>(
                     (p) =>
                     {
-                        ipTextBox.outputText.SetText(OptionHolder.ConfigParser.Ip.Value);
-                        ipTextBox.SetText(OptionHolder.ConfigParser.Ip.Value);
+                        ipTextBox.outputText.SetText(Config.Ip.Value);
+                        ipTextBox.SetText(Config.Ip.Value);
                     })));
 
             ipTextBox.ClearOnFocus = false;
-            ipTextBox.OnEnter = ipTextBox.OnChange = new UnityEngine.UI.Button.ButtonClickedEvent();
-            ipTextBox.OnFocusLost = new UnityEngine.UI.Button.ButtonClickedEvent();
+
+            ipTextBox.OnEnter = ipTextBox.OnChange = ipTextBox.OnFocusLost = 
+                new UIButton.ButtonClickedEvent();
             ipTextBox.OnChange.AddListener((UnityAction)onEnterOrIpChange);
             ipTextBox.OnFocusLost.AddListener((UnityAction)onFocusLost);
 
@@ -103,14 +107,13 @@ public static class RegionMenuOpenPatch
             ipText.transform.SetParent(ipField.transform);
             ipText.transform.localPosition = new Vector3(-0.2f, 0.425f, -100f);
             ipText.gameObject.SetActive(true);
-
         }
 
-        if (portField is null || portField.gameObject is null)
+        if (portField is null || portText is null)
         {
-            portField = UnityEngine.Object.Instantiate(
+            portField = UnityObject.Instantiate(
                 gameIdTextBox.gameObject, __instance.transform);
-            portText = UnityEngine.Object.Instantiate(
+            portText = UnityObject.Instantiate(
                 Module.Prefab.Text);
 
             portField.gameObject.name = "portTextBox";
@@ -119,27 +122,26 @@ public static class RegionMenuOpenPatch
 
             var arrow = portField.transform.FindChild("arrowEnter");
             if (arrow is null || arrow.gameObject is null) { return; }
-            UnityEngine.Object.DestroyImmediate(arrow.gameObject);
+            UnityObject.DestroyImmediate(arrow.gameObject);
 
             portField.transform.localPosition = new Vector3(2.0f, 0.0f, -100f);
 
             var portTextBox = portField.GetComponent<TextBoxTMP>();
 
             portTextBox.characterLimit = 5;
-            portTextBox.SetText(
-                OptionHolder.ConfigParser.Port.Value.ToString());
+            portTextBox.SetText(Config.Port.Value.ToString());
             __instance.StartCoroutine(
                 Effects.Lerp(0.1f, new Action<float>(
                     (p) =>
                     {
-                        portTextBox.outputText.SetText(OptionHolder.ConfigParser.Port.Value.ToString());
-                        portTextBox.SetText(OptionHolder.ConfigParser.Port.Value.ToString()); 
+                        portTextBox.outputText.SetText(Config.Port.Value.ToString());
+                        portTextBox.SetText(Config.Port.Value.ToString()); 
                     })));
 
 
             portTextBox.ClearOnFocus = false;
-            portTextBox.OnEnter = portTextBox.OnChange = new UnityEngine.UI.Button.ButtonClickedEvent();
-            portTextBox.OnFocusLost = new UnityEngine.UI.Button.ButtonClickedEvent();
+            portTextBox.OnEnter = portTextBox.OnChange = portTextBox.OnFocusLost = 
+                new UIButton.ButtonClickedEvent();
             portTextBox.OnChange.AddListener((UnityAction)onEnterOrPortFieldChange);
             portTextBox.OnFocusLost.AddListener((UnityAction)onFocusLost);
 
@@ -154,7 +156,7 @@ public static class RegionMenuOpenPatch
 
         void onEnterOrIpChange()
         {
-            OptionHolder.ConfigParser.Ip.Value = ipField.GetComponent<TextBoxTMP>().text;
+            Config.Ip.Value = ipField.GetComponent<TextBoxTMP>().text;
         }
 
         void onFocusLost()
@@ -172,7 +174,7 @@ public static class RegionMenuOpenPatch
 
             if (ushort.TryParse(portTextBox.text, out port))
             {
-                OptionHolder.ConfigParser.Port.Value = port;
+                Config.Port.Value = port;
                 portTextBox.outputText.color = Color.white;
             }
             else
