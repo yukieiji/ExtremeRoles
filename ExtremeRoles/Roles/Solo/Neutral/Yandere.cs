@@ -274,14 +274,8 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             }
 
             // 不必要なデータを削除、役職の人と想い人
-            if (this.progress.ContainsKey(rolePlayer.PlayerId))
-            {
-                this.progress.Remove(rolePlayer.PlayerId);
-            }
-            if (this.progress.ContainsKey(this.OneSidedLover.PlayerId))
-            {
-                this.progress.Remove(this.OneSidedLover.PlayerId);
-            }
+            this.progress.Remove(rolePlayer.PlayerId);
+            this.progress.Remove(this.OneSidedLover.PlayerId);
 
 
             Vector2 oneSideLoverPos = this.OneSidedLover.GetTruePosition();
