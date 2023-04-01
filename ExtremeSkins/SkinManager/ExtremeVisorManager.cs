@@ -180,7 +180,7 @@ public static class ExtremeVisorManager
         Helper.FileUtility.DeleteDir(dlFolder);
         Directory.CreateDirectory(dlFolder);
 
-        string zipPath = string.Concat(dlFolder, dlZipName);
+        string zipPath = Path.Combine(dlFolder, dlZipName);
 
         yield return Helper.FileUtility.DlToZip(skinDlUrl, zipPath);
 
