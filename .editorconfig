@@ -94,6 +94,7 @@ csharp_style_allow_blank_line_after_colon_in_constructor_initializer_experimenta
 dotnet_diagnostic.UNT0007.severity = error
 dotnet_diagnostic.UNT0008.severity = error
 dotnet_diagnostic.UNT0023.severity = error
+dotnet_diagnostic.UNT0004.severity = warning
 
 [*.vb]
 #### �����X�^�C�� ####
@@ -145,10 +146,10 @@ dotnet_naming_style.�p�X�J��_�P�[�X.capitalization = pascal_case
 
 [*.{cs,vb}]
 dotnet_style_qualification_for_field = false:suggestion
-dotnet_style_qualification_for_property = false:silent
+dotnet_style_qualification_for_property = false:suggestion
 dotnet_style_qualification_for_method = false:suggestion
 dotnet_style_qualification_for_event = false:silent
-dotnet_style_parentheses_in_arithmetic_binary_operators = always_for_clarity:silent
+dotnet_style_parentheses_in_arithmetic_binary_operators = always_for_clarity:suggestion
 dotnet_style_parentheses_in_other_binary_operators = always_for_clarity:silent
 dotnet_style_parentheses_in_relational_binary_operators = always_for_clarity:silent
 dotnet_style_parentheses_in_other_operators = never_if_unnecessary:silent
