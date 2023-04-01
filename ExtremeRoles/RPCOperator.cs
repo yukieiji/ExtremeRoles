@@ -234,7 +234,7 @@ public static class RPCOperator
     }
     public static void FixLightOff()
     {
-        if (Minigame.Instance.TryCast<SwitchMinigame>() is not null)
+        if (Minigame.Instance.TryCast<SwitchMinigame>() != null)
         {
             Minigame.Instance.ForceClose();
         }

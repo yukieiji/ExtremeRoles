@@ -30,7 +30,7 @@ public static class CounterAreaUpdateCountPatch
             {
                 SpriteRenderer renderer = icon.GetComponent<SpriteRenderer>();
 
-                if (renderer is not null)
+                if (renderer != null)
                 {
                     renderer.material = defaultMat;
                 }
@@ -49,7 +49,7 @@ public static class CounterAreaUpdateCountPatch
             PoolableBehavior icon = __instance.myIcons[i];
             SpriteRenderer renderer = icon.GetComponent<SpriteRenderer>();
 
-            if (renderer is not null && colors.Count > i)
+            if (renderer != null && colors.Count > i)
             {
                 renderer.material = Object.Instantiate(defaultMat);
                 var color = colors[i];

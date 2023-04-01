@@ -111,7 +111,7 @@ public static class Player
             (Il2CppSystem.Predicate<PlayerTask>)isTaskType)?.TryCast<
                 NormalPlayerTask>();
 
-        return task is not null && !task.IsComplete;
+        return task != null && !task.IsComplete;
     }
 
     public static List<PlayerControl> GetAllPlayerInRange(
