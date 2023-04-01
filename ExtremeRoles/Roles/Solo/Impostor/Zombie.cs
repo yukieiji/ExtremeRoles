@@ -169,7 +169,7 @@ public sealed class Zombie :
     }
 
     public bool IsActivate()
-        => this.curPos != CachedPlayerControl.LocalPlayer.PlayerControl.transform.position;
+        => this.curPos == CachedPlayerControl.LocalPlayer.PlayerControl.transform.position;
 
     public bool UseAbility()
     {
