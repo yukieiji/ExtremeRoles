@@ -25,6 +25,7 @@ public enum ExtremeGhostRoleId : byte
 
     Ventgeist,
     SaboEvil,
+    Igniter,
 
     Wisp
 }
@@ -37,7 +38,8 @@ public enum AbilityType : byte
     FaunusOpenSaboConsole,
 
     VentgeistVentAnime,
-    SaboEvilResetSabotageCool
+    SaboEvilResetSabotageCool,
+    IgniterLightOff
 }
 
 public static class ExtremeGhostRoleManager
@@ -256,6 +258,9 @@ public static class ExtremeGhostRoleManager
                 break;
             case AbilityType.WispSetTorch:
                 Wisp.SetTorch(reader.ReadByte());
+                break;
+            case AbilityType.IgniterLightOff:
+                Igniter.SetVison(reader.ReadBoolean());
                 break;
             default:
                 break;
