@@ -51,6 +51,10 @@
   <ItemGroup>
     <ProjectReference Include="..\ExtremeRoles\ExtremeRoles.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove="..\.editorconfig" />
+  </ItemGroup>
   
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="if not exist $(SolutionDir)ExtremeSkins\Resources\Asset mkdir $(SolutionDir)ExtremeSkins\Resources\Asset" />

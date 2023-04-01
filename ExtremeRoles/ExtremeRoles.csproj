@@ -50,6 +50,10 @@
 	  <EmbeddedResource Include="Resources\JsonData\*.json" />
     <EmbeddedResource Include="Resources\Config\*.cfg" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <EditorConfigFiles Remove="..\.editorconfig" />
+  </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="python $(SolutionDir)\makelanguagejson.py" />
@@ -60,12 +64,4 @@
   <Target Name="Copy" AfterTargets="Build" Condition="'$(AmongUs)' != ''">
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(AmongUs)/BepInEx/plugins/" UseSymboliclinksIfPossible="true" />
   </Target>
-
-  <ItemGroup>
-    <EditorConfigFiles Remove="F:\Documents\VisualStudioProject\AmongUs\ExtremeRoles\ExtremeRoles\.editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="F:\Documents\VisualStudioProject\AmongUs\ExtremeRoles\ExtremeRoles\.editorconfig" />
-  </ItemGroup>
 </Project>
