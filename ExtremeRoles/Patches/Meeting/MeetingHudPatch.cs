@@ -617,13 +617,15 @@ public static class MeetingHudUpdatePatch
                 FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
             }
 
-        if (MeetingReporter.IsExist &&
-            MeetingReporter.Instance.HasChatReport)
-        {
-            MeetingReporter.Instance.ReportMeetingChat();
+            if (MeetingReporter.IsExist &&
+                MeetingReporter.Instance.HasChatReport)
+            {
+                MeetingReporter.Instance.ReportMeetingChat();
+            }
         }
     }
 }
+
 [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.SortButtons))]
 public static class MeetingHudSortButtonsPatch
 {

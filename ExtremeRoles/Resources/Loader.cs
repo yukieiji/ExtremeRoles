@@ -187,26 +187,26 @@ public static class Loader
         return bundle;
     }
 
-        private static unsafe Texture2D createTextureFromResources(string path)
+    private static unsafe Texture2D createTextureFromResources(string path)
+    {
+        try
         {
-            try
-            {
-                Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
-                Assembly assembly = Assembly.GetExecutingAssembly();
-                Stream stream = assembly.GetManifestResourceStream(path);
-                long length = stream.Length;
-                var byteTexture = new Il2CppStructArray<byte>(length);
-                int read = stream.Read(new Span<byte>(
-                    IntPtr.Add(byteTexture.Pointer, IntPtr.Size * 4).ToPointer(),
-                    (int)length));
-                ImageConversion.LoadImage(texture, byteTexture, false);
-                return texture;
-            }
-            catch
-            {
-                Logging.Debug($"Error loading texture from resources: {path}");
-            }
-            return null;
+            Texture2D texture = new Texture2D(2, 2, TextureFormat.ARGB32, true);
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Stream stream = assembly.GetManifestResourceStream(path);
+            long length = stream.Length;
+            var byteTexture = new Il2CppStructArray<byte>(length);
+            int read = stream.Read(new Span<byte>(
+                IntPtr.Add(byteTexture.Pointer, IntPtr.Size * 4).ToPointer(),
+                (int)length));
+            ImageConversion.LoadImage(texture, byteTexture, false);
+            return texture;
         }
+        catch
+        {
+            Logging.Debug($"Error loading texture from resources: {path}");
+        }
+        return null;
     }
 }
+
