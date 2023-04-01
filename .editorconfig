@@ -97,6 +97,7 @@ dotnet_diagnostic.UNT0023.severity = error
 dotnet_diagnostic.UNT0004.severity = warning
 dotnet_diagnostic.BepInEx001.severity = silent
 dotnet_diagnostic.BepInEx002.severity = silent
+dotnet_diagnostic.UNT0029.severity = error
 
 [*.vb]
 #### �����X�^�C�� ####
