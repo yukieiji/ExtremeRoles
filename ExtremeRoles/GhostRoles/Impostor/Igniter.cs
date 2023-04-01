@@ -36,7 +36,7 @@ public sealed class Igniter : GhostRoleBase
         SingleRoleBase role = ExtremeRoleManager.GameRole[player.PlayerId];
         bool hasOtherVison = role.TryGetVisionMod(
             out float modVison, out bool isApplyVisonMod);
-        ShipStatus ship = CachedShipStatus.Instance;
+        float minVison = CachedShipStatus.Instance.MinLightRadius;
         
         if ((hasOtherVison && !isApplyVisonMod) || 
             (role.IsImpostor() && !isEffectImp) ||
@@ -46,17 +46,17 @@ public sealed class Igniter : GhostRoleBase
         }
         else if (hasOtherVison)
         {
-            vison = modVison * ship.MinLightRadius;
+            vison = modVison * minVison;
             return true;
         }
         else if (role.IsImpostor())
         {
-            vison = VisionComputer.ImpostorLightVision * ship.MinLightRadius;
+            vison = VisionComputer.ImpostorLightVision * minVison;
             return true;
         }
         else
         {
-            vison = VisionComputer.CrewmateLightVision * ship.MinLightRadius;
+            vison = VisionComputer.CrewmateLightVision * minVison;
             return true;
         }
     }
