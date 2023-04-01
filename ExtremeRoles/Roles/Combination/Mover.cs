@@ -71,7 +71,7 @@ public sealed class Mover :
             this.parent = null;
         }
         
-        public bool IsValid() => this.Console is not null;
+        public bool IsValid() => this.Console != null;
     }
 
     private Console targetConsole;
@@ -119,7 +119,7 @@ public sealed class Mover :
     {
         Console console = CachedShipStatus.Instance.AllConsoles[index];
 
-        if (console is null) { return; }
+        if (console == null) { return; }
 
         mover.EnableUseButton = false;
 
@@ -128,7 +128,7 @@ public sealed class Mover :
 
         mover.hasConsole = new ConsoleData(console);
 
-        if (mover.hasConsole.Console.GetComponent<Vent>() is not null)
+        if (mover.hasConsole.Console.GetComponent<Vent>() != null)
         {
             mover.hasConsole.Object.AddComponent<VentInPlayerPosSyncer>();
         }
@@ -143,7 +143,7 @@ public sealed class Mover :
         if (!mover.hasConsole.IsValid()) { return; }
 
         var syncer = mover.hasConsole.Console.GetComponent<VentInPlayerPosSyncer>();
-        if (syncer is not null)
+        if (syncer != null)
         {
             Object.Destroy(syncer);
         }
@@ -172,11 +172,11 @@ public sealed class Mover :
         this.targetConsole = Player.GetClosestConsole(
             localPlayer, localPlayer.MaxReportDistance);
 
-        if (this.targetConsole is null) { return false; }
+        if (this.targetConsole == null) { return false; }
 
         return
             this.IsCommonUse() &&
-            this.targetConsole.Image is not null &&
+            this.targetConsole.Image != null &&
             GameSystem.IsValidConsole(localPlayer, this.targetConsole);
     }
 
@@ -268,7 +268,7 @@ public sealed class Mover :
     private static void colliderTriggerOn<T>(GameObject obj) where T : Collider2D
     {
         T comp = obj.GetComponent<T>();
-        if (comp is not null)
+        if (comp != null)
         {
             comp.isTrigger = true;
         }

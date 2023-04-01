@@ -40,7 +40,7 @@ public static class Player
             pos, radius, Constants.Usables))
         {
             Console checkConsole = collider.GetComponent<Console>();
-            if (checkConsole is null) { continue; }
+            if (checkConsole == null) { continue; }
 
             Vector3 targetPos = collider.transform.position;
 

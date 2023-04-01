@@ -278,7 +278,7 @@ public static class GameSystem
 
     public static bool IsValidConsole(PlayerControl player, Console console)
     {
-        if (player is null || console is null) { return false; }
+        if (player == null || console == null) { return false; }
 
         Vector2 playerPos = player.GetTruePosition();
         Vector2 consolePos = console.transform.position;

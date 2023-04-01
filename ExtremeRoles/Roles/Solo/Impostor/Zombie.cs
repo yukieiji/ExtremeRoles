@@ -153,7 +153,7 @@ public sealed class Zombie :
         PlainShipRoom[] allRooms = CachedShipStatus.Instance.AllRooms;
         var useRoom = (
             from room in allRooms
-            where room is not null && room.RoomId != SystemTypes.Hallway
+            where room != null && room.RoomId != SystemTypes.Hallway
             orderby RandomGenerator.Instance.Next()
             select (room.RoomId, room)
         ).Take(countBehavior.AbilityCount);
@@ -236,7 +236,7 @@ public sealed class Zombie :
         bool isNotTaskPhase =
             MeetingHud.Instance ||
             ExileController.Instance ||
-            CachedShipStatus.Instance is null ||
+            CachedShipStatus.Instance == null ||
             !CachedShipStatus.Instance.enabled;
         bool isNotAwake = !this.IsAwake;
         bool isDeActivateArrow = isDead || isNotTaskPhase || isNotAwake;
@@ -580,18 +580,18 @@ public sealed class Zombie :
     {
         playerRoom = SystemTypes.Hallway;
 
-        if (this.cachedColider is null)
+        if (this.cachedColider == null)
         {
             this.cachedColider = CachedPlayerControl.LocalPlayer.PlayerControl.GetComponent<Collider2D>();
         }
-        if (this.buffer is null)
+        if (this.buffer == null)
         {
             this.buffer = new Il2CppReferenceArray<Collider2D>(10);
         }
 
         foreach (PlainShipRoom room in CachedShipStatus.Instance.AllRooms)
         {
-            if (room is null || !room.roomArea) { continue; }
+            if (room == null || !room.roomArea) { continue; }
 
             int hitCount = room.roomArea.OverlapCollider(this.filter, this.buffer);
             if (isHit(this.cachedColider, buffer, hitCount))

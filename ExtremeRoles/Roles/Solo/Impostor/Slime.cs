@@ -63,7 +63,7 @@ public sealed class Slime :
     {
         Console console = CachedShipStatus.Instance.AllConsoles[index];
         
-        if (console is null || console.Image is null) { return; }
+        if (console == null || console.Image == null) { return; }
 
         slime.consoleObj = new GameObject("MorphConsole");
         slime.consoleObj.transform.SetParent(player.transform);
@@ -82,7 +82,7 @@ public sealed class Slime :
 
     private static void removeMorphConsole(Slime slime, PlayerControl player)
     {
-        if (slime.consoleObj is not null)
+        if (slime.consoleObj != null)
         {
             Object.Destroy(slime.consoleObj);
         }
@@ -111,11 +111,11 @@ public sealed class Slime :
         this.targetConsole = Player.GetClosestConsole(
             localPlayer, localPlayer.MaxReportDistance);
 
-        if (this.targetConsole is null) { return false; }
+        if (this.targetConsole == null) { return false; }
 
         return
             this.IsCommonUse() &&
-            this.targetConsole.Image is not null &&
+            this.targetConsole.Image != null &&
             GameSystem.IsValidConsole(localPlayer, this.targetConsole);
     }
 

@@ -16,8 +16,8 @@ public static class PassiveButtonReceiveClickDownPatch
     {
         GameObject obj = __instance.gameObject;
 
-        if (obj is null ||
-            obj.transform.parent is null ||
+        if (obj == null ||
+            obj.transform.parent == null ||
             obj.transform.parent.name == GameSystem.BottomRightButtonGroupObjectName ||
             ExtremeRoleManager.GameRole.Count == 0 ||
             !RoleAssignState.Instance.IsRoleSetUpEnd) { return true; }
