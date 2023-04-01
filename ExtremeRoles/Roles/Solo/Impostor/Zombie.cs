@@ -176,7 +176,8 @@ public sealed class Zombie :
     {
         this.curPos = CachedPlayerControl.LocalPlayer.PlayerControl.transform.position;
 
-        if (!tryGetPlayerInRoom(out SystemTypes room)) { return false; }
+        if (!tryGetPlayerInRoom(out SystemTypes room) ||
+            !this.setRooms.ContainsKey(room)) { return false; }
 
         this.targetRoom = room; 
         return true;
@@ -197,6 +198,7 @@ public sealed class Zombie :
             RPCOperator.Command.ZombieRpc))
         {
             caller.WriteByte((byte)ZombieRpcOps.SetMagicCircle);
+            caller.WriteByte(CachedPlayerControl.LocalPlayer.PlayerId);
             caller.WriteFloat(pos.x);
             caller.WriteFloat(pos.y);
             caller.WriteFloat(this.showMagicCircleTime);
@@ -230,6 +232,11 @@ public sealed class Zombie :
 
     public void Update(PlayerControl rolePlayer)
     {
+        if (!this.IsAwake)
+        {
+            this.Button?.SetButtonShow(false);
+        }
+
         bool isDead = rolePlayer.Data.IsDead;
         bool isNotTaskPhase =
             MeetingHud.Instance ||
@@ -296,6 +303,7 @@ public sealed class Zombie :
             {
                 this.awakeRole = true;
                 this.HasOtherVision = this.awakeHasOtherVision;
+                this.Button?.SetButtonShow(true);
             }
 
             updateReviveState();
