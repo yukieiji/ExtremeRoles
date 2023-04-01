@@ -140,9 +140,15 @@ namespace ExtremeRoles.Resources
         public static T GetUnityObjectFromResources<T>(
             string bundleName, string objName) where T : UnityObject
         {
-            return getAssetBundleFromAssembly(
-                bundleName, Assembly.GetCallingAssembly()).LoadAsset(
-                    objName, Il2CppType.Of<T>())?.Cast<T>();
+            AssetBundle bundle = getAssetBundleFromAssembly(
+                bundleName, Assembly.GetCallingAssembly());
+
+            var obj = bundle.LoadAsset(objName, Il2CppType.Of<T>());
+            if (!obj)
+            {
+                return null;
+            }
+            return obj.TryCast<T>();
         }
 
         public static void LoadCommonAsset()
@@ -185,8 +191,9 @@ namespace ExtremeRoles.Resources
                 Stream stream = assembly.GetManifestResourceStream(path);
                 long length = stream.Length;
                 var byteTexture = new Il2CppStructArray<byte>(length);
-                var read = stream.Read(new Span<byte>(
-                    IntPtr.Add(byteTexture.Pointer, IntPtr.Size * 4).ToPointer(), (int)length));
+                int read = stream.Read(new Span<byte>(
+                    IntPtr.Add(byteTexture.Pointer, IntPtr.Size * 4).ToPointer(),
+                    (int)length));
                 ImageConversion.LoadImage(texture, byteTexture, false);
                 return texture;
             }

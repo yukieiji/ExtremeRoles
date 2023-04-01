@@ -301,7 +301,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public void AllReset(PlayerControl rolePlayer)
         {
-            foreach (var playerId in this.servantPlayerId)
+            foreach (byte playerId in this.servantPlayerId)
             {
                 var player = Player.GetPlayerControlById(playerId);
 
@@ -688,10 +688,13 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
         public override string GetFullDescription()
         {
+            var queen = Player.GetPlayerControlById(this.queenPlayerId);
+            string fullDesc = base.GetFullDescription();
+
+            if (!queen) { return fullDesc; }
+
             return string.Format(
-                base.GetFullDescription(),
-                Player.GetPlayerControlById(
-                    this.queenPlayerId)?.Data.PlayerName);
+                fullDesc, queen.Data?.PlayerName);
         }
 
         public override Color GetTargetRoleSeeColor(

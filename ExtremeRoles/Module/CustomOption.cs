@@ -266,7 +266,9 @@ namespace ExtremeRoles.Module
                 }
             }
 
-            if (AmongUsClient.Instance?.AmHost == true && CachedPlayerControl.LocalPlayer)
+            if (AmongUsClient.Instance &&
+                AmongUsClient.Instance.AmHost && 
+                CachedPlayerControl.LocalPlayer)
             {
                 if (this.id == 0)
                 {

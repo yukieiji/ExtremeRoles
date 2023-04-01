@@ -47,8 +47,12 @@ namespace ExtremeRoles.Patches.Controller
             {
                 printStr = player?.PlayerName + Helper.Translation.GetString(
                     "assassinateMarinFail");
-            }            
-            __instance.Player?.gameObject.SetActive(false);
+            }       
+            
+            if (__instance.Player)
+            {
+                __instance.Player.gameObject.SetActive(false);
+            }
             __instance.completeString = printStr;
 			__instance.ImpostorText.text = string.Empty;
 			__instance.StartCoroutine(__instance.Animate());

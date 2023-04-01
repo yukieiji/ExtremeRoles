@@ -829,9 +829,11 @@ public static class MeetingHudVotingCompletedPatch
     {
         ExtremeRolesPlugin.Info.HideInfoOverlay();
 
-        foreach (DeadBody b in UnityEngine.Object.FindObjectsOfType<DeadBody>())
+        foreach (DeadBody body in UnityEngine.Object.FindObjectsOfType<DeadBody>())
         {
-            UnityEngine.Object.Destroy(b?.gameObject);
+            if (!body) { continue; }
+
+            UnityEngine.Object.Destroy(body.gameObject);
         }
     }
 }

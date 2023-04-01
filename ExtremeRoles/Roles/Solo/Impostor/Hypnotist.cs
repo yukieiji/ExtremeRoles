@@ -1331,12 +1331,13 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
         public override string GetFullDescription()
         {
+            var hypno = Player.GetPlayerControlById(this.hypnotistPlayerId);
+            string fullDesc = base.GetFullDescription();
+
+            if (!hypno) { return fullDesc; }
+
             return string.Format(
-                base.GetFullDescription(),
-                Player.GetPlayerControlById(
-                    this.hypnotistPlayerId)?.Data.PlayerName,
-                this.accessModule,
-                this.crakingModule);
+                fullDesc, hypno.Data?.PlayerName);
         }
 
         public override bool IsSameTeam(SingleRoleBase targetRole)
