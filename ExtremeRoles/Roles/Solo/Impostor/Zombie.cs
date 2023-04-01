@@ -232,10 +232,6 @@ public sealed class Zombie :
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (!this.IsAwake)
-        {
-            this.Button?.SetButtonShow(false);
-        }
 
         bool isDead = rolePlayer.Data.IsDead;
         bool isNotTaskPhase =
@@ -243,13 +239,19 @@ public sealed class Zombie :
             ExileController.Instance ||
             CachedShipStatus.Instance is null ||
             !CachedShipStatus.Instance.enabled;
-
-        bool isDeActivateArrow = isDead || isNotTaskPhase;
+        bool isNotAwake = !this.IsAwake;
+        bool isDeActivateArrow = isDead || isNotTaskPhase || isNotAwake;
 
         foreach (var arrow in this.setRooms.Values)
         {
             arrow.SetActive(!isDeActivateArrow);
             arrow.Update();
+        }
+
+        if (isNotAwake)
+        {
+            this.Button?.SetButtonShow(false);
+            return;
         }
 
         if (isDead && this.infoBlock())
