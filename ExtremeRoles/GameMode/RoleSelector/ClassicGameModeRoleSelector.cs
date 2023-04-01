@@ -190,6 +190,7 @@ namespace ExtremeRoles.GameMode.RoleSelector
 
                 ExtremeGhostRoleId.Ventgeist,
                 ExtremeGhostRoleId.SaboEvil,
+                ExtremeGhostRoleId.Igniter
             };
     }
 }

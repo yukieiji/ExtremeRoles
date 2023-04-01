@@ -56,7 +56,8 @@ public static class ExtremeGhostRoleManager
             { ExtremeGhostRoleId.Faunus,      new Faunus()      },
 
             { ExtremeGhostRoleId.Ventgeist, new Ventgeist() },
-            { ExtremeGhostRoleId.SaboEvil,  new SaboEvil()  },
+            { ExtremeGhostRoleId.SaboEvil , new SaboEvil()  },
+            { ExtremeGhostRoleId.Igniter  , new Igniter()   },
         };
 
     private static readonly HashSet<RoleTypes> vanillaGhostRole = new HashSet<RoleTypes>()

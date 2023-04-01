@@ -141,7 +141,7 @@ public sealed class Igniter : GhostRoleBase
         using (var caller = RPCOperator.CreateCaller(
             RPCOperator.Command.UseGhostRoleAbility))
         {
-            caller.WriteByte((byte)AbilityType.IgniterLightOff); // アビリティタイプ
+            caller.WriteByte((byte)AbilityType.IgniterSwitchLight); // アビリティタイプ
             caller.WriteBoolean(false); // 報告できるかどうか
             caller.WriteBoolean(false);
         }
