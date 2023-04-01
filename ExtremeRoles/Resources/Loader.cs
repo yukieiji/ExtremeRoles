@@ -79,6 +79,7 @@ public static class Path
         "ExtremeRoles.Resources.GrayAbilityPart.png";
     public const string MagicianJuggling = "ExtremeRoles.Resources.MagicianJuggling.png";
     public const string ZombieMagicCircle = "ExtremeRoles.Resources.ZombieMagicCircle.png";
+    public const string ZombieMagicCircleVideo = "zombiemagiccircle";
 
     public const string VigilanteEmergencyCall = 
         "ExtremeRoles.Resources.EmergencyCall.png";

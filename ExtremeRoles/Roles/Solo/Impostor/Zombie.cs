@@ -123,17 +123,16 @@ public sealed class Zombie :
     {
         GameObject circle = new GameObject("MagicCircle");
         circle.SetActive(true);
-        
+        circle.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
+
         var player = circle.AddComponent<DlayableVideoPlayer>();
 
         player.SetThum(Loader.CreateSpriteFromResources(
             Path.ZombieMagicCircle));
         player.SetVideo(Loader.GetUnityObjectFromResources<VideoClip>(
             Path.VideoAsset, string.Format(
-                Path.VideoAssetPlaceHolder, "zombiemagiccircle")));
+                Path.VideoAssetPlaceHolder, Path.ZombieMagicCircleVideo)));
         player.SetTimer(activeTime);
-
-        circle.transform.position = new Vector3(pos.x, pos.y, pos.y / 1000.0f);
     }
 
     public void CreateAbility()
