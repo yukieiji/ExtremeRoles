@@ -136,7 +136,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
                     }
                 }
 
-                foreach (var playerId in remove)
+                foreach (byte playerId in remove)
                 {
                     this.Remove(playerId);
                 }
