@@ -273,7 +273,7 @@ public static class ExtremeGhostRoleManager
         if (isReport)
         {
             MeetingReporter.Instance.AddMeetingStartReport(
-                Helper.Translation.GetString(abilityType.ToString()));
+                Helper.Translation.GetString(callAbility.ToString()));
         }
     }
 
