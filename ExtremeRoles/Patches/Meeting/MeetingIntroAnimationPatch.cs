@@ -35,7 +35,7 @@ public static class MeetingIntroAnimationInitPatch
 
 		TMP_SubMesh textSubMesh = __instance.ProtectedRecently.GetComponentInChildren<TMP_SubMesh>();
 
-		if (textSubMesh is null) { return; }
+		if (textSubMesh == null) { return; }
 
 		TMP_Text text = textSubMesh.textComponent;
 

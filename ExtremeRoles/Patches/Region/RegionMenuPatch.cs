@@ -40,7 +40,6 @@ namespace ExtremeRoles.Patches.Region;
 [HarmonyPatch(typeof(RegionMenu), nameof(RegionMenu.Open))]
 public static class RegionMenuOpenPatch
 {
-
     private static GameObject ipField;
     private static GameObject portField;
 
@@ -49,21 +48,21 @@ public static class RegionMenuOpenPatch
 
     public static void Postfix(RegionMenu __instance)
     {
+        var gameIdTextBox = GameObject.Find(
+            "NormalMenu/JoinGameButton/JoinGameMenu/GameIdText");
+        if (gameIdTextBox == null) { return; }
+
         var allButton = __instance.controllerSelectable;
-        
-        if (allButton is null) { return; }
+
+        if (allButton == null) { return; }
 
         for (int i = 0; i < allButton.Count; ++i)
         {
-            allButton[i].transform.localPosition = 
+            allButton[i].transform.localPosition =
                 new Vector3(-2.0f, 2f - 0.5f * (float)i, 0f);
         }
 
-        var gameIdTextBox = GameObject.Find(
-            "NormalMenu/JoinGameButton/JoinGameMenu/GameIdText");
-        if (gameIdTextBox is null) { return; }
-
-        if (ipField is null || ipText is null)
+        if (ipField == null || ipText == null)
         {
             ipField = UnityObject.Instantiate(
                 gameIdTextBox.gameObject, __instance.transform);
@@ -109,7 +108,7 @@ public static class RegionMenuOpenPatch
             ipText.gameObject.SetActive(true);
         }
 
-        if (portField is null || portText is null)
+        if (portField == null || portText == null)
         {
             portField = UnityObject.Instantiate(
                 gameIdTextBox.gameObject, __instance.transform);
@@ -121,7 +120,7 @@ public static class RegionMenuOpenPatch
             portText.fontSize = portText.fontSizeMin = portText.fontSizeMax = 2.0f;
 
             var arrow = portField.transform.FindChild("arrowEnter");
-            if (arrow is null || arrow.gameObject is null) { return; }
+            if (arrow == null || arrow.gameObject == null) { return; }
             UnityObject.DestroyImmediate(arrow.gameObject);
 
             portField.transform.localPosition = new Vector3(2.0f, 0.0f, -100f);

@@ -197,7 +197,7 @@ public sealed class Yoko :
 
     private IEnumerator showText(string text)
     {
-        if (this.tellText is null)
+        if (this.tellText == null)
         {
             this.tellText = Object.Instantiate(
                 Prefab.Text, Camera.main.transform, false);

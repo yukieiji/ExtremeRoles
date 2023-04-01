@@ -47,7 +47,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             PlayerControl killer = Helper.Player.GetPlayerControlById(outburstTargetPlayerId);
             PlayerControl target = Helper.Player.GetPlayerControlById(killTargetPlayerId);
 
-            if (killer is null || target is null) { return; }
+            if (killer == null || target == null) { return; }
 
             byte killerId = killer.PlayerId;
             byte targetId = target.PlayerId;
