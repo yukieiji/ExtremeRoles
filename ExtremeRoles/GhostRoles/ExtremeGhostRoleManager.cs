@@ -39,7 +39,7 @@ public enum AbilityType : byte
 
     VentgeistVentAnime,
     SaboEvilResetSabotageCool,
-    IgniterLightOff
+    IgniterSwitchLight
 }
 
 public static class ExtremeGhostRoleManager
@@ -259,7 +259,7 @@ public static class ExtremeGhostRoleManager
             case AbilityType.WispSetTorch:
                 Wisp.SetTorch(reader.ReadByte());
                 break;
-            case AbilityType.IgniterLightOff:
+            case AbilityType.IgniterSwitchLight:
                 Igniter.SetVison(reader.ReadBoolean());
                 break;
             default:
