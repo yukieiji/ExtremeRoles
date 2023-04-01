@@ -210,7 +210,8 @@ public sealed class Shutter : GhostRoleBase
         CreateIntOption(
             ShutterOption.RightPlayerNameRate,
             50, 25, 100, 5,
-            parentOps);
+            parentOps,
+            format: OptionUnit.Percentage);
 
         CreateCountButtonOption(
             parentOps, 3, 10);
