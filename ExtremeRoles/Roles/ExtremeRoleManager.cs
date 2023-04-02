@@ -59,6 +59,7 @@ public enum ExtremeRoleId : int
     Photographer,
     Delusioner,
     Resurrecter,
+    Gambler,
 
     SpecialImpostor,
     Evolver,
@@ -217,6 +218,7 @@ public static class ExtremeRoleManager
             {(int)ExtremeRoleId.Photographer, new Photographer()},
             {(int)ExtremeRoleId.Delusioner  , new Delusioner()},
             {(int)ExtremeRoleId.Resurrecter , new Resurrecter()},
+            {(int)ExtremeRoleId.Gambler     , new Gambler()},
 
             {(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
             {(int)ExtremeRoleId.Evolver        , new Evolver()},
