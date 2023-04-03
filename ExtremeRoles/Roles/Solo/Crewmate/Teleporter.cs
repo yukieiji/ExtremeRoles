@@ -1,21 +1,160 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.AbilityBehavior;
+using ExtremeRoles.Module.AbilityBehavior.Interface;
+using ExtremeRoles.Module.ButtonAutoActivator;
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Performance.Il2Cpp;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
-public sealed class Teleporter : SingleRoleBase, IRoleAbility
+public sealed class Teleporter : 
+    SingleRoleBase, IRoleAbility, IRoleSpecialSetUp
 {
+    public sealed class TeleporterAbilityBehavior : 
+        AbilityBehaviorBase, ICountBehavior
+    {
+        public int AbilityCount { get; private set; }
+        public bool IsReduceAbilityCount { get; set; } = false;
+
+        private Func<bool> ability;
+        private Func<bool> canUse;
+        private bool isUpdate = false;
+        private Func<bool> canActivating;
+        private TMPro.TextMeshPro abilityCountText = null;
+        private string buttonTextFormat = ICountBehavior.DefaultButtonCountText;
+
+        public TeleporterAbilityBehavior(
+            string text, Sprite img,
+            Func<bool> canUse,
+            Func<bool> ability) : base(text, img)
+        {
+            this.ability = ability;
+            this.canUse = canUse;
+        }
+
+        public void SetCountText(string text)
+        {
+            this.buttonTextFormat = text;
+        }
+
+        public override void Initialize(ActionButton button)
+        {
+            var coolTimerText = button.cooldownTimerText;
+
+            this.abilityCountText = UnityEngine.Object.Instantiate(
+                coolTimerText, coolTimerText.transform.parent);
+            this.abilityCountText.enableWordWrapping = false;
+            this.abilityCountText.transform.localScale = Vector3.one * 0.5f;
+            this.abilityCountText.transform.localPosition += 
+                new Vector3(-0.05f, 0.65f, 0);
+            updateAbilityCountText();
+        }
+
+        public override void AbilityOff()
+        { }
+
+        public override void ForceAbilityOff()
+        { }
+
+        public override bool IsCanAbilityActiving() => this.canActivating.Invoke();
+
+        public override bool IsUse()
+            => this.canUse.Invoke() && this.AbilityCount > 0;
+
+        public override bool TryUseAbility(
+            float timer, AbilityState curState, out AbilityState newState)
+        {
+            newState = curState;
+
+            if (timer > 0 ||
+                curState != AbilityState.Ready ||
+                this.AbilityCount <= 0)
+            {
+                return false;
+            }
+
+            if (!this.ability.Invoke())
+            {
+                return false;
+            }
+
+            if (this.IsReduceAbilityCount)
+            {
+                this.reduceAbilityCount();
+                this.IsReduceAbilityCount = false;
+            }
+
+            newState = this.ActiveTime <= 0.0f ?
+                AbilityState.CoolDown : AbilityState.Activating;
+
+            return true;
+        }
+
+        public override AbilityState Update(AbilityState curState)
+        {
+            if (curState == AbilityState.Activating)
+            {
+                return curState;
+            }
+
+            if (this.isUpdate)
+            {
+                this.isUpdate = false;
+                return AbilityState.CoolDown;
+            }
+
+            return
+                this.AbilityCount > 0 ? curState : AbilityState.None;
+        }
+
+        public void SetAbilityCount(int newAbilityNum)
+        {
+            this.AbilityCount = newAbilityNum;
+            this.isUpdate = true;
+            updateAbilityCountText();
+        }
+
+        public void SetButtonTextFormat(string newTextFormat)
+        {
+            this.buttonTextFormat = newTextFormat;
+        }
+
+        private void reduceAbilityCount()
+        {
+            --this.AbilityCount;
+            if (this.abilityCountText != null)
+            {
+                updateAbilityCountText();
+            }
+        }
+
+        private void updateAbilityCountText()
+        {
+            this.abilityCountText.text = string.Format(
+                Translation.GetString(this.buttonTextFormat),
+                this.AbilityCount);
+        }
+    }
+
+    public enum TeleporterOption
+    {
+        CanUseOtherPlayer
+    }
+
     public ExtremeAbilityButton Button { get; set; }
 
+    private bool isSharePortal;
+    private TeleporterAbilityBehavior behavior;
     private PortalFirst portal;
+
+    private ButtonGraphic firstPortalGraphic;
+    private ButtonGraphic secondPortalGraphic;
 
     public Teleporter() : base(
         ExtremeRoleId.Maintainer,
@@ -51,12 +190,27 @@ public sealed class Teleporter : SingleRoleBase, IRoleAbility
         }
     }
 
+    public void IntroBeginSetUp()
+    {
+        return;
+    }
+
+    public void IntroEndSetUp()
+    {
+        // SetParts
+    }
+
     public void CreateAbility()
     {
-        this.CreateAbilityCountButton(
-            "maintenance",
-            Loader.CreateSpriteFromResources(
-                Path.MaintainerRepair));
+        this.behavior = new TeleporterAbilityBehavior(
+            Translation.GetString("assault"),
+                 FastDestroyableSingleton<HudManager>.Instance.KillButton.graphic.sprite,
+            IsAbilityUse, UseAbility);
+
+        this.Button = new ExtremeAbilityButton(
+                this.behavior,
+                new RoleButtonActivator(),
+                KeyCode.F);
         this.Button.SetLabelToCrewmate();
     }
 
@@ -64,7 +218,18 @@ public sealed class Teleporter : SingleRoleBase, IRoleAbility
     {
         PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
 
+        if (this.isSharePortal)
+        {
+            // RPCSetOps
+        }
         SetPortal(localPlayer.PlayerId, localPlayer.GetTruePosition());
+
+
+        this.behavior.IsReduceAbilityCount = this.portal != null;
+        this.behavior.SetGraphic(
+            this.behavior.IsReduceAbilityCount ? 
+            this.firstPortalGraphic : this.secondPortalGraphic);
+
         return true;
     }
 
@@ -83,12 +248,17 @@ public sealed class Teleporter : SingleRoleBase, IRoleAbility
     protected override void CreateSpecificOption(
         IOption parentOps)
     {
+        CreateBoolOption(
+            TeleporterOption.CanUseOtherPlayer,
+            false, parentOps);
         this.CreateAbilityCountOption(
-            parentOps, 2, 10);
+            parentOps, 1, 3);
     }
 
     protected override void RoleSpecificInit()
     {
+        this.isSharePortal = OptionHolder.AllOption[
+            GetRoleOptionId(TeleporterOption.CanUseOtherPlayer)].GetValue();   
         this.RoleAbilityInit();
     }
 }
