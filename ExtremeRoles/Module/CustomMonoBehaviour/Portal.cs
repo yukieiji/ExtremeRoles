@@ -27,7 +27,7 @@ public class PortalBase : MonoBehaviour
 	{
 		get
 		{
-			return 1.3f;
+			return 0.5f;
 		}
 	}
 
