@@ -345,7 +345,7 @@ public sealed class Teleporter :
             GameObject obj = new GameObject("portalPart");
             obj.transform.position = new Vector3(
                 (float)pos[0], (float)pos[1], (((float)pos[1]) / 1000.0f));
-            var part = obj.AddComponent<TeleporterPortalPart>();
+            obj.AddComponent<TeleporterPortalPart>();
         }
     }
 }
