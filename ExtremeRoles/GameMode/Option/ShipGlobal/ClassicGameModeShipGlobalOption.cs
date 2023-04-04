@@ -9,6 +9,7 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
     public int HeadOptionId => (int)GlobalOption.NumMeating; 
 
     public bool IsEnableImpostorVent => true;
+    public bool CanUseHorseMode => true;
 
     public bool IsRandomMap { get; private set; }
 
@@ -37,8 +38,6 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
     public bool IsAssignNeutralToVanillaCrewGhostRole { get; private set; }
     public bool IsRemoveAngleIcon { get; private set; }
     public bool IsBlockGAAbilityReport { get; private set; }
-
-    public bool EnableHorseMode { get; private set; }
 
     public void Load()
     {
@@ -113,9 +112,6 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
             GlobalOption.IsRemoveAngleIcon);
         IsBlockGAAbilityReport = IShipGlobalOption.GetCommonOptionValue(
             GlobalOption.IsBlockGAAbilityReport);
-
-        EnableHorseMode = IShipGlobalOption.GetCommonOptionValue(
-            GlobalOption.EnableHorseMode);
     }
 
     public void BuildHudString(ref StringBuilder builder)

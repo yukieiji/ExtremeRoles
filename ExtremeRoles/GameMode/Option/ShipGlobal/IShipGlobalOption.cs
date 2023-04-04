@@ -55,6 +55,8 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
         
         public int MaxMeetingCount { get; }
 
+        public bool CanUseHorseMode { get; }
+
         public bool IsChangeVoteAreaButtonSortArg { get; }
         public bool IsFixedVoteAreaPlayerLevel { get; }
         public bool IsBlockSkipInMeeting { get; }
@@ -78,8 +80,6 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
         public bool IsAssignNeutralToVanillaCrewGhostRole { get; }
         public bool IsRemoveAngleIcon { get; }
         public bool IsBlockGAAbilityReport { get; }
-
-        public bool EnableHorseMode { get; }
 
         public void Load();
 
