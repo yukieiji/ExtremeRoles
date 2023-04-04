@@ -347,6 +347,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             } while (true);
             this.oneSidePlayerName = this.OneSidedLover.Data.PlayerName;
+            this.isOneSidedLoverShare = false;
         }
 
         public void IntroEndSetUp()
