@@ -1,6 +1,13 @@
 ﻿using System;
+using System.Linq;
+
+using AmongUs.GameOptions;
 using UnityEngine;
 
+using Newtonsoft.Json.Linq;
+
+using ExtremeRoles.Compat.Mods;
+using ExtremeRoles.Extension.Json;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityBehavior;
@@ -150,11 +157,19 @@ public sealed class Teleporter :
     public ExtremeAbilityButton Button { get; set; }
 
     private bool isSharePortal;
+    private int partNum;
     private TeleporterAbilityBehavior behavior;
     private PortalFirst portal;
 
     private ButtonGraphic firstPortalGraphic;
     private ButtonGraphic secondPortalGraphic;
+
+    private const string postionJson = "";
+
+    private const string skeldKey = "Skeld";
+    private const string miraHqKey = "MiraHQ";
+    private const string polusKey = "Polus";
+    private const string airShipKey = "AirShip";
 
     public Teleporter() : base(
         ExtremeRoleId.Maintainer,
@@ -197,7 +212,35 @@ public sealed class Teleporter :
 
     public void IntroEndSetUp()
     {
-        // SetParts
+        string key = string.Empty;
+
+        if (ExtremeRolesPlugin.Compat.IsModMap)
+        {
+
+            if (ExtremeRolesPlugin.Compat.ModMap is SubmergedMap)
+            {
+                key = "Submerged";
+            }
+            else
+            {
+                return;
+            }
+        }
+        else
+        {
+            byte mapId = GameOptionsManager.Instance.CurrentGameOptions.GetByte(
+                ByteOptionNames.MapId);
+            key = mapId switch
+            {
+                0 => skeldKey,
+                1 => miraHqKey,
+                2 => polusKey,
+                4 => airShipKey,
+                _ => skeldKey,
+            };
+        }
+        var position = JsonParser.GetJObjectFromAssembly(postionJson);
+        setPartFromMapJsonInfo(position.Get<JArray>(key), this.partNum);
     }
 
     public void CreateAbility()
@@ -208,22 +251,30 @@ public sealed class Teleporter :
             IsAbilityUse, UseAbility);
 
         this.Button = new ExtremeAbilityButton(
-                this.behavior,
-                new RoleButtonActivator(),
-                KeyCode.F);
+            this.behavior,
+            new RoleButtonActivator(),
+            KeyCode.F);
         this.Button.SetLabelToCrewmate();
+        this.abilityInit();
     }
 
     public bool UseAbility()
     {
         PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
+        byte playerId = localPlayer.PlayerId;
+        Vector2 pos = localPlayer.GetTruePosition();
 
         if (this.isSharePortal)
         {
-            // RPCSetOps
+            using (var caller = RPCOperator.CreateCaller(
+                RPCOperator.Command.TeleporterSetPortal))
+            {
+                caller.WriteByte(playerId);
+                caller.WriteFloat(pos.x);
+                caller.WriteFloat(pos.y);
+            }
         }
-        SetPortal(localPlayer.PlayerId, localPlayer.GetTruePosition());
-
+        SetPortal(playerId, pos);
 
         this.behavior.IsReduceAbilityCount = this.portal != null;
         this.behavior.SetGraphic(
@@ -258,7 +309,36 @@ public sealed class Teleporter :
     protected override void RoleSpecificInit()
     {
         this.isSharePortal = OptionHolder.AllOption[
-            GetRoleOptionId(TeleporterOption.CanUseOtherPlayer)].GetValue();   
-        this.RoleAbilityInit();
+            GetRoleOptionId(TeleporterOption.CanUseOtherPlayer)].GetValue();
+        this.partNum = OptionHolder.AllOption[
+            GetRoleOptionId(RoleAbilityCommonOption.AbilityCount)].GetValue();
+        this.abilityInit();
+    }
+
+    private void abilityInit()
+    {
+        if (this.Button == null) { return; }
+
+        var allOpt = OptionHolder.AllOption;
+        this.Button.Behavior.SetCoolTime(
+            allOpt[this.GetRoleOptionId(
+                RoleAbilityCommonOption.AbilityCoolTime)].GetValue());
+        
+        this.behavior.SetAbilityCount(0);
+
+        this.Button.OnMeetingEnd();
+    }
+
+    private static void setPartFromMapJsonInfo(JArray json, int num)
+    {
+        int[] randomIndex = Enumerable.Range(0, json.Count).OrderBy(
+            x => RandomGenerator.Instance.Next()).ToArray();
+        for (int i = 0; i < num; ++i)
+        {
+            JArray pos = json[i].TryCast<JArray>();
+            GameObject obj = new GameObject("portalPart");
+            obj.transform.position = new Vector3(
+                (float)pos[0], (float)pos[1], (((float)pos[1]) / 1000.0f));
+        }
     }
 }

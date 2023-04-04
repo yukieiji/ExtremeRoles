@@ -61,6 +61,7 @@ public static class RPCOperator
         SurvivorDeadWin,
         CaptainAbility,
         ResurrecterRpc,
+        TeleporterSetPortal,
 
         // インポスター
         AssasinVoteFor,
@@ -576,6 +577,13 @@ public static class RPCOperator
     public static void ResurrecterRpc(ref MessageReader reader)
     {
         Roles.Solo.Crewmate.Resurrecter.RpcAbility(ref reader);
+    }
+
+    public static void TeleporterSetPortal(
+        byte teleporterId, float x, float y)
+    {
+        Roles.Solo.Crewmate.Teleporter.SetPortal(
+            teleporterId, new UnityEngine.Vector2(x, y));
     }
 
     public static void AssasinVoteFor(byte targetId)

@@ -602,6 +602,13 @@ public static class PlayerControlHandleRpcPatch
             case RPCOperator.Command.ResurrecterRpc:
                 RPCOperator.ResurrecterRpc(ref reader);
                 break;
+            case RPCOperator.Command.TeleporterSetPortal:
+                byte teleporterPlayerId = reader.ReadByte();
+                float portalX = reader.ReadSingle();
+                float portalY = reader.ReadSingle();
+                RPCOperator.TeleporterSetPortal(
+                    teleporterPlayerId, portalX, portalY);
+                break;
             case RPCOperator.Command.AssasinVoteFor:
                 byte voteTargetId = reader.ReadByte();
                 RPCOperator.AssasinVoteFor(voteTargetId);
