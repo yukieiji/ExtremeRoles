@@ -233,12 +233,10 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
                 GlobalOption.IsBlockGAAbilityReport.ToString(),
                 false);
 
-            // エイプリルフール用のやつ(まだ隠しておく)
             new BoolCustomOption(
                 (int)GlobalOption.EnableHorseMode,
                 GlobalOption.EnableHorseMode.ToString(),
-                false,
-                isHidden: !Patches.ConstantsShouldHorseAroundPatch.IsAprilFoolEnd);
+                false);
         }
 
         public static dynamic GetCommonOptionValue(GlobalOption optionKey)
