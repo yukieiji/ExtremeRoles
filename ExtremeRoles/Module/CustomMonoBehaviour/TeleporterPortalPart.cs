@@ -1,9 +1,8 @@
 ﻿using System;
 using UnityEngine;
 
-using ExtremeRoles.Helper;
+using ExtremeRoles.Roles;
 using ExtremeRoles.Resources;
-using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.Solo.Crewmate;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
@@ -40,10 +39,7 @@ public class TeleporterPortalPart : MonoBehaviour
 		}
 	}
 
-	private SpriteRenderer img;
-	private Teleporter teleporter;
-
-	public TeleporterPortalBase(IntPtr ptr) : base(ptr) { }
+	public TeleporterPortalPart(IntPtr ptr) : base(ptr) { }
 
 	public void Awake()
 	{
@@ -55,15 +51,16 @@ public class TeleporterPortalPart : MonoBehaviour
 			Path.TestButton);
     }
 
-	public void SetTeleporter(Teleporter teleporter)
-	{
-		this.teleporter = teleporter;
-	}
-
 	public float CanUse(
 		GameData.PlayerInfo pc, out bool canUse, out bool couldUse)
 	{
-		float num = Vector2.Distance(
+        if (!tryGetTeleporter(out var _))
+        {
+			canUse = couldUse = false;
+            return float.MaxValue;
+        }
+
+        float num = Vector2.Distance(
 			pc.Object.GetTruePosition(),
 			base.transform.position);
 		couldUse = pc.IsDead ? false : true;
@@ -76,6 +73,16 @@ public class TeleporterPortalPart : MonoBehaviour
 
 	public void Use()
 	{
-		this.teleporter.IncreaseAbilityCount();
+		if (!tryGetTeleporter(out Teleporter teleporter))
+		{
+			return;
+		}
+		teleporter.IncreaseAbilityCount();
     }
+	
+	private static bool tryGetTeleporter(out Teleporter teleporter)
+	{
+		teleporter = ExtremeRoleManager.GetSafeCastedLocalPlayerRole<Teleporter>();
+		return teleporter != null;
+	}
 }
