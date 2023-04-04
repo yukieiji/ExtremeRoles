@@ -109,9 +109,11 @@ public static class Player
             (Il2CppSystem.Predicate<PlayerTask>)(
                 (PlayerTask task) =>
                     task && task.TaskType == taskType));
+        
+        if (!playerTask) { return false; }
         task = playerTask.TryCast<NormalPlayerTask>();
 
-        return task != null && !task.IsComplete;
+        return task && !task.IsComplete;
     }
 
     public static List<PlayerControl> GetAllPlayerInRange(
