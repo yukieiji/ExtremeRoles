@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 
-using Hazel;
 
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
@@ -8,85 +7,91 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.Solo.Neutral;
 
 
-namespace ExtremeRoles.Module.SpecialWinChecker
+namespace ExtremeRoles.Module.SpecialWinChecker;
+
+internal sealed class YandereWinChecker : IWinChecker
 {
-    internal sealed class YandereWinChecker : IWinChecker
+    public RoleGameOverReason Reason => RoleGameOverReason.YandereShipJustForTwo;
+
+    private List<Yandere> aliveYandere = new List<Yandere>();
+
+    public YandereWinChecker()
     {
-        public RoleGameOverReason Reason => RoleGameOverReason.YandereShipJustForTwo;
+        aliveYandere.Clear();
+    }
 
-        private List<Yandere> aliveYandere = new List<Yandere>();
+    public void AddAliveRole(
+        byte playerId, SingleRoleBase role)
+    {
+        aliveYandere.Add((Yandere)role);
+    }
 
-        public YandereWinChecker()
+    public bool IsWin(
+        PlayerStatistics statistics)
+    {
+        List<PlayerControl> aliveOneSideLover = new List<PlayerControl>();
+
+        int oneSidedLoverImpNum = 0;
+        int oneSidedLoverNeutralNum = 0;
+
+        foreach (Yandere role in aliveYandere)
         {
-            aliveYandere.Clear();
-        }
+            if (role.OneSidedLover == null) { continue; }
 
-        public void AddAliveRole(
-            byte playerId, SingleRoleBase role)
-        {
-            aliveYandere.Add((Yandere)role);
-        }
+            var playerInfo = role.OneSidedLover.Data;
+            var oneSidedLoverRole = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
 
-        public bool IsWin(
-            PlayerStatistics statistics)
-        {
-            List<PlayerControl> aliveOneSideLover = new List<PlayerControl>();
-
-            int oneSidedLoverImpNum = 0;
-            int oneSidedLoverNeutralNum = 0;
-
-            foreach (Yandere role in aliveYandere)
+            if (playerInfo.IsDead || playerInfo.Disconnected)
             {
-                if (role.OneSidedLover == null) { continue; }
-
-                var playerInfo = role.OneSidedLover.Data;
-                var oneSidedLoverRole = ExtremeRoleManager.GameRole[playerInfo.PlayerId];
-
-                if (!playerInfo.IsDead && !playerInfo.Disconnected)
-                {
-                    aliveOneSideLover.Add(role.OneSidedLover);
-
-                    if (oneSidedLoverRole.IsImpostor())
-                    { 
-                        ++oneSidedLoverImpNum; 
-                    }
-                    else if (oneSidedLoverRole.IsNeutral())
-                    {
-                        switch (oneSidedLoverRole.Id)
-                        {
-                            case ExtremeRoleId.Alice:
-                            case ExtremeRoleId.Jackal:
-                            case ExtremeRoleId.Sidekick:
-                            case ExtremeRoleId.Lover:
-                            case ExtremeRoleId.Missionary:
-                                ++oneSidedLoverNeutralNum;
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                }
+                continue;
             }
 
-            int aliveNum = aliveYandere.Count + aliveOneSideLover.Count;
+            aliveOneSideLover.Add(role.OneSidedLover);
 
-            if (aliveOneSideLover.Count == 0 || aliveYandere.Count == 0) { return false; }
-            if (aliveNum < statistics.TotalAlive - aliveNum) { return false; }
-            if (statistics.TeamImpostorAlive - statistics.AssassinAlive - oneSidedLoverImpNum > 0) { return false; }
-            if (statistics.SeparatedNeutralAlive.Count - oneSidedLoverNeutralNum > 1) { return false; }
-
-            using (var caller = RPCOperator.CreateCaller(
-                RPCOperator.Command.SetWinPlayer))
+            if (oneSidedLoverRole.IsImpostor())
             {
-                caller.WriteInt(aliveOneSideLover.Count);
-                foreach (var player in aliveOneSideLover)
+                ++oneSidedLoverImpNum;
+            }
+            else if (oneSidedLoverRole.IsNeutral())
+            {
+                switch (oneSidedLoverRole.Id)
                 {
-                    caller.WriteByte(player.PlayerId);
-                    ExtremeRolesPlugin.ShipState.AddWinner(player);
+                    case ExtremeRoleId.Alice:
+                    case ExtremeRoleId.Jackal:
+                    case ExtremeRoleId.Sidekick:
+                    case ExtremeRoleId.Lover:
+                    case ExtremeRoleId.Missionary:
+                    case ExtremeRoleId.Miner:
+                    case ExtremeRoleId.Eater:
+                    case ExtremeRoleId.Traitor:
+                    case ExtremeRoleId.Queen:
+                    case ExtremeRoleId.Delinquent:
+                        ++oneSidedLoverNeutralNum;
+                        break;
+                    default:
+                        break;
                 }
             }
-
-            return true;
         }
+
+        int aliveNum = aliveYandere.Count + aliveOneSideLover.Count;
+
+        if (aliveOneSideLover.Count == 0 || aliveYandere.Count == 0) { return false; }
+        if (aliveNum < statistics.TotalAlive - aliveNum) { return false; }
+        if (statistics.TeamImpostorAlive - statistics.AssassinAlive - oneSidedLoverImpNum > 0) { return false; }
+        if (statistics.SeparatedNeutralAlive.Count - oneSidedLoverNeutralNum > 1) { return false; }
+
+        using (var caller = RPCOperator.CreateCaller(
+            RPCOperator.Command.SetWinPlayer))
+        {
+            caller.WriteInt(aliveOneSideLover.Count);
+            foreach (var player in aliveOneSideLover)
+            {
+                caller.WriteByte(player.PlayerId);
+                ExtremeRolesPlugin.ShipState.AddWinner(player);
+            }
+        }
+
+        return true;
     }
 }
