@@ -205,6 +205,12 @@ public sealed class Teleporter :
         }
     }
 
+    public void IncreaseAbilityCount()
+    {
+        this.behavior.SetAbilityCount(
+            this.behavior.AbilityCount + 1);
+    }
+
     public void IntroBeginSetUp()
     {
         return;
@@ -212,7 +218,7 @@ public sealed class Teleporter :
 
     public void IntroEndSetUp()
     {
-        string key = string.Empty;
+        string key;
 
         if (ExtremeRolesPlugin.Compat.IsModMap)
         {
@@ -240,7 +246,7 @@ public sealed class Teleporter :
             };
         }
         var position = JsonParser.GetJObjectFromAssembly(postionJson);
-        setPartFromMapJsonInfo(position.Get<JArray>(key), this.partNum);
+        setPartFromMapJsonInfo(this, position.Get<JArray>(key), this.partNum);
     }
 
     public void CreateAbility()
@@ -329,7 +335,8 @@ public sealed class Teleporter :
         this.Button.OnMeetingEnd();
     }
 
-    private static void setPartFromMapJsonInfo(JArray json, int num)
+    private static void setPartFromMapJsonInfo(
+        Teleporter teleporter, JArray json, int num)
     {
         int[] randomIndex = Enumerable.Range(0, json.Count).OrderBy(
             x => RandomGenerator.Instance.Next()).ToArray();
@@ -339,6 +346,8 @@ public sealed class Teleporter :
             GameObject obj = new GameObject("portalPart");
             obj.transform.position = new Vector3(
                 (float)pos[0], (float)pos[1], (((float)pos[1]) / 1000.0f));
+            var part = obj.AddComponent<TeleporterPortalPart>();
+            part.SetTeleporter(teleporter);
         }
     }
 }
