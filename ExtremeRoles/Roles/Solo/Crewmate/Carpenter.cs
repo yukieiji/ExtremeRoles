@@ -250,7 +250,10 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 
     private static void removeVent(int ventId)
     {
-        Vent vent = ShipStatus.Instance?.AllVents.FirstOrDefault((x) => x != null && x.Id == ventId);
+        if (!CachedShipStatus.Instance) { return; }
+
+        Vent vent = CachedShipStatus.Instance.AllVents.FirstOrDefault(
+            (x) => x != null && x.Id == ventId);
         if (vent == null) { return; }
 
         Vent rightVent = vent.Right;
@@ -271,7 +274,12 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 
         vent.EnterVentAnim = null;
         vent.ExitVentAnim = null;
-        vent.GetComponent<PowerTools.SpriteAnim>()?.Stop();
+
+        var anim = vent.GetComponent<PowerTools.SpriteAnim>();
+        if (anim)
+        {
+            anim.Stop();
+        }
 
         var ventRenderer = vent.GetComponent<SpriteRenderer>();
         ventRenderer.sprite = null;
@@ -450,15 +458,20 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
 
     private static void unlinkVent(Vent targetVent, Vent unlinkVent)
     {
-        if (targetVent.Right?.Id == unlinkVent.Id)
+        if (targetVent.Right &&
+            targetVent.Right.Id == unlinkVent.Id)
         {
             targetVent.Right = null;
         }
-        else if (targetVent.Center?.Id == unlinkVent.Id)
+        else if (
+            targetVent.Center &&
+            targetVent.Center.Id == unlinkVent.Id)
         {
             targetVent.Center = null;
         }
-        else if (targetVent.Left?.Id == unlinkVent.Id)
+        else if (
+            targetVent.Left &&
+            targetVent.Left.Id == unlinkVent.Id)
         {
             targetVent.Left = null;
         }

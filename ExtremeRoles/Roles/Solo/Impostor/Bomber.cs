@@ -82,7 +82,7 @@ public sealed class Bomber : SingleRoleBase, IRoleAbility, IRoleUpdate
 
     public void CleanUp()
     {
-        if (this.bombSettingPlayer is not null)
+        if (this.bombSettingPlayer != null)
         {
             this.bombPlayerId.Enqueue(this.bombSettingPlayer.PlayerId);
             this.bombSettingPlayer = null;

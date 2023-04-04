@@ -92,9 +92,14 @@ namespace ExtremeRoles.Compat.Mods
         public void Awake(ShipStatus map)
         {
             Patches.HudManagerUpdatePatchPostfixPatch.ButtonTriggerReset();
-            submarineStatus = map.GetComponent(
-                Il2CppType.From(submarineStatusType))?.TryCast(submarineStatusType) as MonoBehaviour;
-            
+
+            var component = map.GetComponent(Il2CppType.From(submarineStatusType));
+            if (component)
+            {
+                submarineStatus = component.TryCast(
+                    submarineStatusType) as MonoBehaviour;
+            }
+       
             // 毎回毎回取得すると重いのでキャッシュ化
             var curOption = GameOptionsManager.Instance.CurrentGameOptions;
             crewVision = curOption.GetFloat(FloatOptionNames.CrewLightMod);

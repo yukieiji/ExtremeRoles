@@ -105,13 +105,15 @@ public static class Player
             return false;
         }
 
-        bool isTaskType(PlayerTask p) => p.TaskType == taskType;
+        PlayerTask playerTask = player.myTasks.Find(
+            (Il2CppSystem.Predicate<PlayerTask>)(
+                (PlayerTask task) =>
+                    task && task.TaskType == taskType));
+        
+        if (!playerTask) { return false; }
+        task = playerTask.TryCast<NormalPlayerTask>();
 
-        task = player.myTasks.Find(
-            (Il2CppSystem.Predicate<PlayerTask>)isTaskType)?.TryCast<
-                NormalPlayerTask>();
-
-        return task is not null && !task.IsComplete;
+        return task && !task.IsComplete;
     }
 
     public static List<PlayerControl> GetAllPlayerInRange(

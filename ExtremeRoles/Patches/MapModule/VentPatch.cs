@@ -98,7 +98,7 @@ public static class VentCanUsePatch
                 )
                 ||
                 (
-                    !(task is not null && task.Data[0] == __instance.Id)
+                    !(task != null && task.Data[0] == __instance.Id)
                 )
                 || 
                 (

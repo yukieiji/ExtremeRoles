@@ -91,12 +91,12 @@ public static class KillButtonDoClickPatch
     {
         return
             AmongUsClient.Instance.IsGameOver ||
-            killer is null ||
-            killer.Data is null ||
+            killer == null ||
+            killer.Data == null ||
             killer.Data.IsDead ||
             killer.Data.Disconnected ||
-            target is null ||
-            target.Data is null ||
+            target == null ||
+            target.Data == null ||
             target.Data.IsDead ||
             target.Data.Disconnected ||
             target.MyPhysics.Animations.IsPlayingAnyLadderAnimation() ||

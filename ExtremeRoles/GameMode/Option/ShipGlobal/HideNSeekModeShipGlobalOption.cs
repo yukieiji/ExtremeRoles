@@ -8,6 +8,8 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 {
     public int HeadOptionId => (int)GlobalOption.DisableVent;
 
+    public bool CanUseHorseMode => true;
+
     public bool IsEnableImpostorVent => false;
 
     public bool IsRandomMap { get; private set; }
@@ -20,8 +22,6 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
     public AdminOption Admin { get; private set; }
     public SecurityOption Security { get; private set; }
     public VitalOption Vital { get; private set; }
-
-    public bool EnableHorseMode { get; private set; }
 
     public int MaxMeetingCount => 0;
 
@@ -108,9 +108,6 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
             GlobalOption.IsSameNeutralSameWin);
         DisableNeutralSpecialForceEnd = IShipGlobalOption.GetCommonOptionValue(
             GlobalOption.DisableNeutralSpecialForceEnd);
-
-        EnableHorseMode = IShipGlobalOption.GetCommonOptionValue(
-            GlobalOption.EnableHorseMode);
     }
 
     public void BuildHudString(ref StringBuilder builder)

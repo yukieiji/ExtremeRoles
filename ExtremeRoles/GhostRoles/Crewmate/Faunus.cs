@@ -152,8 +152,9 @@ namespace ExtremeRoles.GhostRoles.Crewmate
             foreach (PlayerTask task in 
                 CachedPlayerControl.LocalPlayer.PlayerControl.myTasks.GetFastEnumerator())
             {
+                if (!task) { continue; }
 
-                switch (task?.TaskType)
+                switch (task.TaskType)
                 {
                     case TaskTypes.FixLights:
                     case TaskTypes.RestoreOxy:

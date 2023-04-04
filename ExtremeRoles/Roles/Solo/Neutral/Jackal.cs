@@ -332,7 +332,7 @@ public sealed class Jackal : SingleRoleBase, IRoleAbility, IRoleSpecialReset
         {
             baseDesc = $"{baseDesc}\n{Translation.GetString("curSidekick")}:";
 
-            foreach (var playerId in SidekickPlayerId)
+            foreach (byte playerId in SidekickPlayerId)
             {
                 string playerName = Player.GetPlayerControlById(playerId).Data.PlayerName;
                 baseDesc += $"{playerName},";
@@ -433,7 +433,7 @@ public sealed class Jackal : SingleRoleBase, IRoleAbility, IRoleSpecialReset
             updateSideKick.Add(targetPlayerId);
 
         }
-        foreach (var playerId in updateSideKick)
+        foreach (byte playerId in updateSideKick)
         {
             Sidekick.BecomeToJackal(rolePlayer.PlayerId, playerId);
         }
@@ -638,10 +638,13 @@ public sealed class Sidekick : SingleRoleBase, IRoleUpdate, IRoleHasParent
 
     public override string GetFullDescription()
     {
+        var jackal = Player.GetPlayerControlById(this.jackalPlayerId);
+        string fullDesc = base.GetFullDescription();
+
+        if (!jackal) { return fullDesc; }
+
         return string.Format(
-            base.GetFullDescription(),
-            Player.GetPlayerControlById(
-                this.jackalPlayerId)?.Data.PlayerName);
+            fullDesc, jackal.Data?.PlayerName);
     }
 
     public static void BecomeToJackal(byte callerId, byte targetId)

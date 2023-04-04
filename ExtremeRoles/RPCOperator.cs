@@ -234,7 +234,7 @@ public static class RPCOperator
     }
     public static void FixLightOff()
     {
-        if (Minigame.Instance.TryCast<SwitchMinigame>() is not null)
+        if (Minigame.Instance.TryCast<SwitchMinigame>() != null)
         {
             Minigame.Instance.ForceClose();
         }
@@ -334,9 +334,11 @@ public static class RPCOperator
         Vent vent = CachedShipStatus.Instance.AllVents.FirstOrDefault(
             (x) => x.Id == ventId);
 
+        if (!vent) { return; }
+
         HudManager hudManager = FastDestroyableSingleton<HudManager>.Instance;
         ShipStatus ship = CachedShipStatus.Instance;
-
+        
         if (ship.IsCustomVent(ventId))
         {
             if (hudManager == null) { return; }
@@ -344,7 +346,7 @@ public static class RPCOperator
             hudManager.StartCoroutine(
                 Effects.Lerp(
                     0.6f, new System.Action<float>((p) => {
-                        if (vent != null && vent.myRend != null)
+                        if (vent.myRend != null)
                         {
                             vent.myRend.sprite = ship.GetCustomVentSprite(
                                 ventId, (int)(p * 17));
@@ -360,8 +362,10 @@ public static class RPCOperator
         }
         else
         {
-            vent?.GetComponent<PowerTools.SpriteAnim>()?.Play(
-                vent.ExitVentAnim, 1f);
+            var anim = vent.GetComponent<PowerTools.SpriteAnim>();
+            
+            if (!anim) { return; }
+            anim.Play(vent.ExitVentAnim, 1f);
         }
     }
 

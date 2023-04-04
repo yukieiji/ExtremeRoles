@@ -100,7 +100,10 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
         
         private void resetOnMeetingGlobalAction()
         {
-            this.union?.ResetTimer();
+            if (this.union)
+            {
+                this.union.ResetTimer();
+            }
         }
 
         private void resetGlobalAction()

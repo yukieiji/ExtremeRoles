@@ -168,7 +168,7 @@ public sealed class HideNSeekIntroRunner : IIntroRunner
         else
         {
             CachedShipStatus.Instance.HideCountdown = crewmateLeadTime;
-            if (impostor is not null)
+            if (impostor != null)
             {
                 if (enableHorse)
                 {

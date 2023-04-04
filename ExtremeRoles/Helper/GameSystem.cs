@@ -595,7 +595,7 @@ public static class GameSystem
     private static void destroyComponent<T>(GameObject obj) where T : Behaviour
     {
         T collider = obj.GetComponent<T>();
-        if (collider is not null)
+        if (collider != null)
         {
             UnityEngine.Object.Destroy(collider);
         }
