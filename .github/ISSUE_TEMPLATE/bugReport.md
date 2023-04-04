@@ -7,11 +7,14 @@ assignees: ''
 
 ---
 
-## バグの情報 / Info of bug
-<!-- バグに関する情報を以下の各項目に記載してください / 
-Please provide information about the bug in each of the following fields -->
+## バグの詳細 / Detail of bug
+<!-- バグに関する詳細な情報を以下の各項目にしたがって記載してください / 
+Please provide information about the bug in each of the following fields
+以下のURL等を参考に記載していただくととても助かります
+[伝わるバグ報告  |  さくらのナレッジ](https://knowledge.sakura.ad.jp/26627/)
+[Github issue との付き合い方 作成編](https://qiita.com/janus_wel/items/ba47259f107b161c5727) -->
 ### 期待される動作 / Your Expectation
-<!-- どのようなことをやろうとしたのか、そして何が起きたのか、必要であれば画像等を添付してください(その動作を元に再現を行います、これがないと色々と困ります) / What did you try to do, and what did you expect to happen? Attach screenshots if needed. -->
+<!-- どのようなこと(操作等)をやろうとしたのか、そして何が起きたのか、必要であれば画像等を添付してください(その動作を元に再現を行います、これがないと色々と困ります) / What did you try to do, and what did you expect to happen? Attach screenshots if needed. -->
 
 ### 実際の動作 / The Reality
 <!-- 期待する動作に対して、実際の動作はどうなのか。バグを再現しただけの動画(数分程度)のURLや画像があるとわかりやすいです / How does the actual behavior compare to the expected behavior? (A video URL or image would be helpful for clarification -->
@@ -33,6 +36,14 @@ Extreme Roles v
 
 ### リージョン/Region
 <!-- バグが発生したサーバーリージョン / The region where the bug occurred. -->
+<!--
+該当しているリージョンに「x」をつけて下さい
+例：アジア
+- [ ] :北アメリア/Noth America
+- [ ] :欧州/Europa
+- [x] :アジア/Asia
+- [ ] :カスタム/Custom
+ -->
 - [ ] :北アメリア/Noth America
 - [ ] :欧州/Europa
 - [ ] :アジア/Asia
