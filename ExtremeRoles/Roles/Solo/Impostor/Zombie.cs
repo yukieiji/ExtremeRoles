@@ -206,7 +206,7 @@ public sealed class Zombie :
 
         arrow.Clear();
         this.setRooms.Remove(this.targetRoom);
-        updateReviveState();
+        updateReviveState(true);
     }
 
     public void ResetOnMeetingStart()
@@ -307,7 +307,7 @@ public sealed class Zombie :
                 this.Button?.SetButtonShow(true);
             }
 
-            updateReviveState();
+            updateReviveState(false);
         }
         return true;
     }
@@ -564,12 +564,12 @@ public sealed class Zombie :
         }
     }
 
-    private void updateReviveState()
+    private void updateReviveState(bool isReduceAfter)
     {
         if (this.killCount >= this.resurrectKillCount &&
-                this.Button.Behavior is AbilityCountBehavior behavior &&
-                behavior.AbilityCount <= 0 &&
-                !this.canResurrect)
+            this.Button.Behavior is AbilityCountBehavior behavior &&
+            behavior.AbilityCount <= (isReduceAfter ? 1 : 0) &&
+            !this.canResurrect)
         {
             this.canResurrect = true;
             this.isResurrected = false;
