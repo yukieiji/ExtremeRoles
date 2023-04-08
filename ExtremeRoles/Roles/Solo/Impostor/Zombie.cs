@@ -417,7 +417,8 @@ public sealed class Zombie :
         CreateIntOption(
             ZombieOption.AwakeKillCount,
             1, 0, 3, 1,
-            parentOps);
+            parentOps,
+            format: OptionUnit.Shot);
 
         this.CreateAbilityCountOption(parentOps, 1, 3, 3f);
 
@@ -431,7 +432,7 @@ public sealed class Zombie :
             ZombieOption.ResurrectKillCount,
             2, 0, 3, 1,
             parentOps,
-            format: OptionUnit.Percentage);
+            format: OptionUnit.Shot);
 
         CreateFloatOption(
             ZombieOption.ResurrectDelayTime,
