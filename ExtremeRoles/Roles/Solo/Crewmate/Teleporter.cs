@@ -164,7 +164,8 @@ public sealed class Teleporter :
     private ButtonGraphic firstPortalGraphic;
     private ButtonGraphic secondPortalGraphic;
 
-    private const string postionJson = "";
+    private const string postionJson =
+        "ExtremeRoles.Resources.JsonData.TeleporterTeleportPartPosition.json";
 
     private const string skeldKey = "Skeld";
     private const string miraHqKey = "MiraHQ";
@@ -190,7 +191,8 @@ public sealed class Teleporter :
         if (ExtremeRolesPlugin.Compat.IsModMap)
         {
             ExtremeRolesPlugin.Compat.ModMap.AddCustomComponent(
-                obj, Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
+                obj, 
+                Compat.Interface.CustomMonoBehaviourType.MovableFloorBehaviour);
         }
 
         if (teleporter.portal == null)
