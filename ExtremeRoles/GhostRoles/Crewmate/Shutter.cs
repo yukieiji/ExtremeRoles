@@ -59,7 +59,7 @@ public sealed class Shutter : GhostRoleBase
                 $"{Translation.GetString("photoName")} : {
                     Photo.GetRandomPhotoName()}");
             photoInfoBuilder.AppendLine("");
-            if (this.player.Count <= 1)
+            if (this.player.Count <= 0)
             {
                 return string.Empty;
             }
