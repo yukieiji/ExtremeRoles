@@ -3,7 +3,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>7.0.0.2</Version>
+    <Version>7.0.0.3</Version>
     <!--<VersionPrefix>7.0.0</VersionPrefix>-->
     <VersionSuffix>2023.3.28</VersionSuffix>
     <Description>Extreme Skins for Extreme Roles</Description>
