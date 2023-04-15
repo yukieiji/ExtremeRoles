@@ -345,7 +345,7 @@ public sealed class Teleporter :
             x => RandomGenerator.Instance.Next()).ToArray();
         for (int i = 0; i < num; ++i)
         {
-            JArray pos = json[i].TryCast<JArray>();
+            JArray pos = json[randomIndex[i]].TryCast<JArray>();
             GameObject obj = new GameObject("portalPart");
             obj.transform.position = new Vector3(
                 (float)pos[0], (float)pos[1], (((float)pos[1]) / 1000.0f));
