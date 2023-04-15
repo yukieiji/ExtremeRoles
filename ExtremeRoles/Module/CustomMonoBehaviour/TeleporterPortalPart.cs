@@ -45,8 +45,9 @@ public class TeleporterPortalPart : MonoBehaviour
 	{
 		var collider = base.gameObject.AddComponent<CircleCollider2D>();
         collider.radius = 0.001f;
-        
-		var img = base.gameObject.AddComponent<SpriteRenderer>();
+        collider.isTrigger = true;
+
+        var img = base.gameObject.AddComponent<SpriteRenderer>();
         img.sprite = Loader.CreateSpriteFromResources(
             Path.TeleporterPortalBase);
     }

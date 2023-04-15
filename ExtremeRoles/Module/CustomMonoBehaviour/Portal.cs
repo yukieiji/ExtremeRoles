@@ -35,24 +35,25 @@ public class PortalBase : MonoBehaviour
 	{
 		get
 		{
-			return 5.0f;
+			return 0.0f;
 		}
 	}
 
 	private SpriteRenderer img;
-	private CircleCollider2D collider;
 	private Vector3 pos;
-	private bool linked = false;
+	private PortalBase linkPortal = null;
 
 	public PortalBase(IntPtr ptr) : base(ptr) { }
 
 	public void Awake()
 	{
-		this.collider = base.gameObject.AddComponent<CircleCollider2D>();
-		this.img = base.gameObject.AddComponent<SpriteRenderer>();
-		this.linked = false;
+		var collider = base.gameObject.AddComponent<CircleCollider2D>();
+        collider.radius = 0.001f;
+        collider.isTrigger = true;
 
-		this.collider.radius = 0.001f;
+        this.img = base.gameObject.AddComponent<SpriteRenderer>();
+		this.linkPortal = null;
+
 		this.img.sprite = Loader.CreateSpriteFromResources(
             Path.TeleporterNoneActivatePortal);
     }
@@ -65,8 +66,8 @@ public class PortalBase : MonoBehaviour
 		a.img.sprite = a.GetSprite();
 		b.img.sprite = b.GetSprite();
 
-		a.linked = true;
-		b.linked = true;
+		a.linkPortal = b;
+		b.linkPortal = a;
     }
 
 	public void SetTarget(Vector3 pos)
@@ -77,10 +78,13 @@ public class PortalBase : MonoBehaviour
 	public float CanUse(
 		GameData.PlayerInfo pc, out bool canUse, out bool couldUse)
 	{
-		float num = Vector2.Distance(
-			pc.Object.GetTruePosition(),
-			base.transform.position);
-		couldUse = pc.IsDead && this.linked ? false : true;
+		float num = this.linkPortal ? 
+			Vector2.Distance(
+				pc.Object.GetTruePosition(),
+				base.transform.position) : 
+			float.MaxValue;
+
+		couldUse = pc.IsDead ? false : true;
 		canUse = (couldUse && num <= this.UsableDistance);
 		return num;
 	}
