@@ -78,6 +78,7 @@ public class TeleporterPortalPart : MonoBehaviour
 			return;
 		}
 		teleporter.IncreaseAbilityCount();
+        Destroy(base.gameObject);
     }
 	
 	private static bool tryGetTeleporter(out Teleporter teleporter)

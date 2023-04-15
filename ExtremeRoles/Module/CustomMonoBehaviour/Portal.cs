@@ -42,6 +42,7 @@ public class PortalBase : MonoBehaviour
 	private SpriteRenderer img;
 	private CircleCollider2D collider;
 	private Vector3 pos;
+	private bool linked = false;
 
 	public PortalBase(IntPtr ptr) : base(ptr) { }
 
@@ -49,6 +50,7 @@ public class PortalBase : MonoBehaviour
 	{
 		this.collider = base.gameObject.AddComponent<CircleCollider2D>();
 		this.img = base.gameObject.AddComponent<SpriteRenderer>();
+		this.linked = false;
 
 		this.collider.radius = 0.001f;
 		this.img.sprite = Loader.CreateSpriteFromResources(
@@ -62,6 +64,9 @@ public class PortalBase : MonoBehaviour
 
 		a.img.sprite = a.GetSprite();
 		b.img.sprite = b.GetSprite();
+
+		a.linked = true;
+		b.linked = true;
     }
 
 	public void SetTarget(Vector3 pos)
@@ -75,7 +80,7 @@ public class PortalBase : MonoBehaviour
 		float num = Vector2.Distance(
 			pc.Object.GetTruePosition(),
 			base.transform.position);
-		couldUse = pc.IsDead ? false : true;
+		couldUse = pc.IsDead && this.linked ? false : true;
 		canUse = (couldUse && num <= this.UsableDistance);
 		return num;
 	}

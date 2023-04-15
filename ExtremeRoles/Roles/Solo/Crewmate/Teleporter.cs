@@ -273,6 +273,8 @@ public sealed class Teleporter :
         byte playerId = localPlayer.PlayerId;
         Vector2 pos = localPlayer.GetTruePosition();
 
+        this.behavior.IsReduceAbilityCount = this.portal != null;
+
         if (this.isSharePortal)
         {
             using (var caller = RPCOperator.CreateCaller(
@@ -285,7 +287,6 @@ public sealed class Teleporter :
         }
         SetPortal(playerId, pos);
 
-        this.behavior.IsReduceAbilityCount = this.portal != null;
         this.behavior.SetButtonImage(
             this.behavior.IsReduceAbilityCount ?
             this.firstPortalImg : this.secondPortalImg);
