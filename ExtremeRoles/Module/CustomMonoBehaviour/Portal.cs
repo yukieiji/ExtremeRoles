@@ -42,6 +42,8 @@ public class PortalBase : MonoBehaviour
 	private SpriteRenderer img;
 	private Vector3 pos;
 	private PortalBase linkPortal = null;
+	private float timer = 0.0f;
+	private const float NoneUsePortalTime = 5.0f;
 
 	public PortalBase(IntPtr ptr) : base(ptr) { }
 
@@ -78,7 +80,7 @@ public class PortalBase : MonoBehaviour
 	public float CanUse(
 		GameData.PlayerInfo pc, out bool canUse, out bool couldUse)
 	{
-		float num = this.linkPortal ? 
+		float num = this.linkPortal && this.timer <= 0.0f ? 
 			Vector2.Distance(
 				pc.Object.GetTruePosition(),
 				base.transform.position) : 
@@ -96,6 +98,16 @@ public class PortalBase : MonoBehaviour
 	{
         Player.RpcUncheckSnap(
 			CachedPlayerControl.LocalPlayer.PlayerId, this.pos);
+
+		this.timer = NoneUsePortalTime;
+		this.linkPortal.timer = NoneUsePortalTime;
+    }
+
+	public void FixedUpdate()
+	{
+		if (this.timer <= 0.0f) { return; }
+
+        this.timer -= Time.fixedDeltaTime;
     }
 
 	protected virtual Sprite GetSprite() => Loader.CreateSpriteFromResources(
