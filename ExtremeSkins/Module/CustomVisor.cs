@@ -3,6 +3,7 @@ using System.Text;
 
 using UnityEngine;
 
+using ExtremeSkins.Core.ExtremeVisor;
 using ExtremeSkins.Module.Interface;
 using ExtremeRoles.Performance;
 
@@ -11,9 +12,6 @@ namespace ExtremeSkins.Module;
 #if WITHVISOR
 public sealed class CustomVisor : ICustomCosmicData<VisorData>
 {
-    public const string IdleName = "idle.png";
-    public const string FlipIdleName = "flip_idle.png";
-
     public VisorData Data
     {
         get => this.visor;
@@ -45,19 +43,15 @@ public sealed class CustomVisor : ICustomCosmicData<VisorData>
 
     public CustomVisor(
         string folderPath,
-        string author,
-        string name,
-        bool hasLeftImg,
-        bool hasShader,
-        bool isBehindHat)
+        VisorInfo info)
     {
         this.folderPath = folderPath;
-        this.author = author;
-        this.name = name;
+        this.author = info.Author;
+        this.name = info.Name;
 
-        this.isBehindHat = isBehindHat;
-        this.hasLeftImg = hasLeftImg;
-        this.hasShader = hasShader;
+        this.isBehindHat = info.BehindHat;
+        this.hasLeftImg = info.LeftIdle;
+        this.hasShader = info.Shader;
     }
 
     public override string ToString()
@@ -87,12 +81,12 @@ public sealed class CustomVisor : ICustomCosmicData<VisorData>
         // 256×144の画像
         this.visor.viewData.viewData = ScriptableObject.CreateInstance<VisorViewData>();
         this.visor.viewData.viewData.IdleFrame = loadVisorSprite(
-            string.Concat(this.folderPath, @"\", IdleName));
+            Path.Combine(this.folderPath, DataStructure.IdleImageName));
 
         if (this.hasLeftImg)
         {
             this.visor.viewData.viewData.LeftIdleFrame = loadVisorSprite(
-                string.Concat(this.folderPath, @"\", FlipIdleName));
+                Path.Combine(this.folderPath, DataStructure.FlipIdleImageName));
         }
         if (this.hasShader)
         {
