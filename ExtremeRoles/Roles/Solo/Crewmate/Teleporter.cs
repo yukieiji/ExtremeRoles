@@ -16,6 +16,7 @@ using ExtremeRoles.Module.ButtonAutoActivator;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
+using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
@@ -32,7 +33,6 @@ public sealed class Teleporter :
         private Func<bool> ability;
         private Func<bool> canUse;
         private bool isUpdate = false;
-        private Func<bool> canActivating;
         private TMPro.TextMeshPro abilityCountText = null;
         private string buttonTextFormat = ICountBehavior.DefaultButtonCountText;
 
@@ -69,7 +69,7 @@ public sealed class Teleporter :
         public override void ForceAbilityOff()
         { }
 
-        public override bool IsCanAbilityActiving() => this.canActivating.Invoke();
+        public override bool IsCanAbilityActiving() => true;
 
         public override bool IsUse()
             => this.canUse.Invoke() && this.AbilityCount > 0;
@@ -161,8 +161,8 @@ public sealed class Teleporter :
     private TeleporterAbilityBehavior behavior;
     private PortalFirst portal;
 
-    private ButtonGraphic firstPortalGraphic;
-    private ButtonGraphic secondPortalGraphic;
+    private Sprite firstPortalImg;
+    private Sprite secondPortalImg;
 
     private const string postionJson =
         "ExtremeRoles.Resources.JsonData.TeleporterTeleportPartPosition.json";
@@ -173,9 +173,9 @@ public sealed class Teleporter :
     private const string airShipKey = "AirShip";
 
     public Teleporter() : base(
-        ExtremeRoleId.Maintainer,
+        ExtremeRoleId.Teleporter,
         ExtremeRoleType.Crewmate,
-        ExtremeRoleId.Maintainer.ToString(),
+        ExtremeRoleId.Teleporter.ToString(),
         ColorPalette.MaintainerBlue,
         false, true, false, false)
     { }
@@ -220,7 +220,7 @@ public sealed class Teleporter :
 
     public void IntroEndSetUp()
     {
-        string key;
+        string key = skeldKey;
 
         if (ExtremeRolesPlugin.Compat.IsModMap)
         {
@@ -228,10 +228,6 @@ public sealed class Teleporter :
             if (ExtremeRolesPlugin.Compat.ModMap is SubmergedMap)
             {
                 key = "Submerged";
-            }
-            else
-            {
-                return;
             }
         }
         else
@@ -253,9 +249,14 @@ public sealed class Teleporter :
 
     public void CreateAbility()
     {
+        this.firstPortalImg = Loader.CreateSpriteFromResources(
+            Path.TeleporterFirstPortal);
+        this.secondPortalImg = Loader.CreateSpriteFromResources(
+            Path.TeleporterSecondPortal);
+
         this.behavior = new TeleporterAbilityBehavior(
-            Translation.GetString("assault"),
-                 FastDestroyableSingleton<HudManager>.Instance.KillButton.graphic.sprite,
+            Translation.GetString("SetPortal"),
+            this.firstPortalImg,
             IsAbilityUse, UseAbility);
 
         this.Button = new ExtremeAbilityButton(
@@ -285,9 +286,9 @@ public sealed class Teleporter :
         SetPortal(playerId, pos);
 
         this.behavior.IsReduceAbilityCount = this.portal != null;
-        this.behavior.SetGraphic(
-            this.behavior.IsReduceAbilityCount ? 
-            this.firstPortalGraphic : this.secondPortalGraphic);
+        this.behavior.SetButtonImage(
+            this.behavior.IsReduceAbilityCount ?
+            this.firstPortalImg : this.secondPortalImg);
 
         return true;
     }

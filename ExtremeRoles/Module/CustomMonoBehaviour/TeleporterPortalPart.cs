@@ -48,7 +48,7 @@ public class TeleporterPortalPart : MonoBehaviour
         
 		var img = base.gameObject.AddComponent<SpriteRenderer>();
         img.sprite = Loader.CreateSpriteFromResources(
-			Path.TestButton);
+            Path.TeleporterPortalBase);
     }
 
 	public float CanUse(

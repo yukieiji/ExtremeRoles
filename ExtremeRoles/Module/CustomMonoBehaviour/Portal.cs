@@ -52,7 +52,7 @@ public class PortalBase : MonoBehaviour
 
 		this.collider.radius = 0.001f;
 		this.img.sprite = Loader.CreateSpriteFromResources(
-			Path.TestButton);
+            Path.TeleporterNoneActivatePortal);
     }
 
 	public static void Link(PortalBase a, PortalBase b)
@@ -98,7 +98,7 @@ public sealed class PortalFirst : PortalBase
 	public PortalFirst(IntPtr ptr) : base(ptr) { }
 
 	protected override Sprite GetSprite() => Loader.CreateSpriteFromResources(
-		Path.HypnotistRedAbilityPart);
+		Path.TeleporterFirstPortal);
 }
 
 public sealed class PortalSecond : PortalBase
@@ -106,5 +106,5 @@ public sealed class PortalSecond : PortalBase
 	public PortalSecond(IntPtr ptr) : base(ptr) { }
 
 	protected override Sprite GetSprite() => Loader.CreateSpriteFromResources(
-		Path.HypnotistBlueAbilityPart);
+		Path.TeleporterSecondPortal);
 }

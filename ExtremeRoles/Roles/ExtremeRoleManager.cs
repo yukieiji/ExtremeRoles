@@ -60,6 +60,7 @@ public enum ExtremeRoleId : int
     Delusioner,
     Resurrecter,
     Gambler,
+    Teleporter,
 
     SpecialImpostor,
     Evolver,
@@ -219,6 +220,7 @@ public static class ExtremeRoleManager
             {(int)ExtremeRoleId.Delusioner  , new Delusioner()},
             {(int)ExtremeRoleId.Resurrecter , new Resurrecter()},
             {(int)ExtremeRoleId.Gambler     , new Gambler()},
+            {(int)ExtremeRoleId.Teleporter  , new Teleporter()},
 
             {(int)ExtremeRoleId.SpecialImpostor, new SpecialImpostor()},
             {(int)ExtremeRoleId.Evolver        , new Evolver()},
@@ -354,7 +356,7 @@ public static class ExtremeRoleManager
 
     public static bool IsDisableWinCheckRole(SingleRoleBase role)
     {
-        var mainRoleCheckResult = WinCheckDisableRole.Contains(role.Id);
+        bool mainRoleCheckResult = WinCheckDisableRole.Contains(role.Id);
         var multiAssignRole = role as MultiAssignRoleBase;
         if (multiAssignRole == null)
         {

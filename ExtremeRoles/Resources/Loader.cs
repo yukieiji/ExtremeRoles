@@ -51,6 +51,14 @@ public static class Path
         "ExtremeRoles.Resources.SpecialVoteCheck.png";
     public const string PhotographerPhotoCamera = "ExtremeRoles.Resources.PhotoCamera.png";
     public const string DelusionerDeflectDamage = "ExtremeRoles.Resources.DeflectDamage.png";
+    public const string TeleporterPortalBase =
+        "ExtremeRoles.Resources.TeleporterPortalBase.png";
+    public const string TeleporterNoneActivatePortal = 
+        "ExtremeRoles.Resources.TeleportNoneActivatePortal.png";
+    public const string TeleporterFirstPortal =
+        "ExtremeRoles.Resources.TeleporterFirstPortal.png";
+    public const string TeleporterSecondPortal = 
+        "ExtremeRoles.Resources.TeleporterSecondPortal.png";
 
     public const string EvolverEvolved = "ExtremeRoles.Resources.Evolved.png";
     public const string CarrierCarry = "ExtremeRoles.Resources.Carry.png";
