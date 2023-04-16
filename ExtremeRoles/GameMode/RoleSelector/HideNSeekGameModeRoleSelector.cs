@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using ExtremeRoles.GhostRoles;
-using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
@@ -65,7 +65,7 @@ public sealed class HideNSeekGameModeRoleSelector : IRoleSelector
             };
     }
 
-    public bool IsValidRoleOption(IOption option)
+    public bool IsValidRoleOption(IOptionInfo option)
     {
         while (option.Parent != null)
         {

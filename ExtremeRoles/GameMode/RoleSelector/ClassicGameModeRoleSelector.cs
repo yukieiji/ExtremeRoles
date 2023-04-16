@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using ExtremeRoles.GhostRoles;
-using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
@@ -75,8 +75,8 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
 
     public void Load()
     {
-        EnableXion = OptionHolder.AllOption[
-            (int)RoleGlobalOption.UseXion].GetValue();
+        EnableXion = AllOptionHolder.Instance.GetValue<bool>(
+            (int)RoleGlobalOption.UseXion);
     }
 
     public bool IsValidGlobalRoleOptionId(RoleGlobalOption optionId)
@@ -84,7 +84,7 @@ public sealed class ClassicGameModeRoleSelector : IRoleSelector
         return System.Enum.IsDefined(typeof(RoleGlobalOption), optionId);
     }
 
-    public bool IsValidRoleOption(IOption option)
+    public bool IsValidRoleOption(IOptionInfo option)
     {
         while (option.Parent != null)
         {
