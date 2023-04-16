@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+
+using Hazel;
+using UnityEngine;
 
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityFactory;
+using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -13,12 +18,18 @@ namespace ExtremeRoles.GhostRoles.Neutal;
 
 public sealed class Foras : GhostRoleBase
 {
-    private Arrow arrow;
+    private ArrowControler arrowControler;
+    private PlayerControl targetPlayer;
+
+    private float range;
+    private float delayTime;
+    private int rate;
 
     public enum ForasOption
     {
-        IsEffectImpostor,
-        IsEffectNeutral
+        Range,
+        DelayTime,
+        MissingTargetRate,
     }
 
     public Foras() : base(
@@ -29,11 +40,14 @@ public sealed class Foras : GhostRoleBase
         Palette.ImpostorRed)
     { }
 
-    public static void SwitchArrow(byte forasPlayerId, byte showTarget, bool show)
+    public static void SwitchArrow(ref MessageReader reader)
     {
-        if (show)
+        bool isShow = reader.ReadBoolean();
+        byte forasPlayerId = reader.ReadByte();
+
+        if (isShow)
         {
-            showArrow(forasPlayerId, showTarget);
+            showArrow(forasPlayerId, reader.ReadByte());
         }
         else
         {
@@ -41,17 +55,17 @@ public sealed class Foras : GhostRoleBase
         }
     }
 
-    private static void showArrow(byte forasPlayerId, byte showTarget)
+    private static void showArrow(byte forasPlayerId, byte arrowTargetPlayerId)
     {
         var forasPlayer = Helper.Player.GetPlayerControlById(forasPlayerId);
-        var showTargetPlayer = Helper.Player.GetPlayerControlById(forasPlayerId);
+        var arrowTargetPlayer = Helper.Player.GetPlayerControlById(arrowTargetPlayerId);
 
-        if (!forasPlayer || !showTargetPlayer) { return; }
-
+        if (!forasPlayer || !arrowTargetPlayer) { return; }
+        Foras foras = ExtremeGhostRoleManager.GetSafeCastedGhostRole<Foras>(forasPlayerId);
         var (role, anotherRole) = ExtremeRoleManager.GetInterfaceCastedRole<IRoleHasParent>(
             forasPlayerId);
 
-        if (role is null && anotherRole is null) { return; }
+        if (foras is null || (role is null && anotherRole is null)) { return; }
 
         byte localPlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
 
@@ -59,13 +73,27 @@ public sealed class Foras : GhostRoleBase
             localPlayerId == role?.Parent ||
             localPlayerId == anotherRole?.Parent)
         {
-            // showArrow logic
+            if (!foras.arrowControler)
+            {
+                GameObject obj = new GameObject("Foras Arrow");
+                foras.arrowControler = obj.AddComponent<ArrowControler>();
+                foras.arrowControler.SetColor(foras.NameColor);
+            }
+            foras.arrowControler.SetTarget(arrowTargetPlayer.gameObject);
+            foras.arrowControler.SetDelayActiveTimer(foras.delayTime);
+            foras.arrowControler.SetHideTimer(
+                OptionHolder.AllOption[foras.GetRoleOptionId(
+                    RoleAbilityCommonOption.AbilityActiveTime)].GetValue());
+            foras.arrowControler.gameObject.SetActive(true);
         }
     }
     private static void hideArrow(byte forasPlayerId)
     {
         Foras foras = ExtremeGhostRoleManager.GetSafeCastedGhostRole<Foras>(forasPlayerId);
-        foras.arrow?.SetActive(false);
+        if (foras.arrowControler)
+        {
+            foras.arrowControler.Hide();
+        }
     }
 
     public override void CreateAbility()
@@ -81,6 +109,8 @@ public sealed class Foras : GhostRoleBase
             abilityCall, true,
             null, cleanUp);
         this.ButtonInit();
+        this.Button.Behavior.SetActiveTime(
+            this.Button.Behavior.ActiveTime + this.delayTime);
     }
 
     public override HashSet<ExtremeRoleId> GetRoleFilter() => new HashSet<ExtremeRoleId>()
@@ -91,7 +121,12 @@ public sealed class Foras : GhostRoleBase
 
     public override void Initialize()
     {
-        
+        this.delayTime = OptionHolder.AllOption[
+            GetRoleOptionId(ForasOption.DelayTime)].GetValue();
+        this.range = OptionHolder.AllOption[
+            GetRoleOptionId(ForasOption.Range)].GetValue();
+        this.rate = OptionHolder.AllOption[
+            GetRoleOptionId(ForasOption.MissingTargetRate)].GetValue();
     }
 
     protected override void OnMeetingEndHook()
@@ -107,24 +142,69 @@ public sealed class Foras : GhostRoleBase
     protected override void CreateSpecificOption(
         IOption parentOps)
     {
+        CreateFloatOption(
+            ForasOption.Range,
+            1.0f, 0.1f, 3.6f, 0.1f, parentOps);
+        CreateIntOption(
+            ForasOption.MissingTargetRate,
+            10, 0, 90, 5, parentOps);
+        CreateFloatOption(
+            ForasOption.DelayTime,
+            3.0f, 0.0f, 10.0f, 0.5f, parentOps);
         CreateCountButtonOption(
             parentOps, 3, 10, 25.0f);
     }
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)
     {
+        byte rolePlayerId = CachedPlayerControl.LocalPlayer.PlayerId;
 
+        if (this.rate > RandomGenerator.Instance.Next(101))
+        {
+            this.targetPlayer = CachedPlayerControl.AllPlayerControls
+                .Where(x =>
+                x.PlayerId != rolePlayerId &&
+                x.PlayerId != this.targetPlayer.PlayerId)
+                .OrderBy(x => RandomGenerator.Instance.Next())
+                .First();
+        }
+        caller.WriteBoolean(true);
+        caller.WriteByte(rolePlayerId);
+        caller.WriteByte(this.targetPlayer.PlayerId);
     }
 
-    private bool isAbilityUse() => this.IsCommonUse();
+    private bool isAbilityUse()
+    {
+        if (CachedShipStatus.Instance == null ||
+            !CachedShipStatus.Instance.enabled) { return false; }
+
+
+        this.targetPlayer = Helper.Player.GetClosestPlayerInRange(
+            CachedPlayerControl.LocalPlayer,
+            ExtremeRoleManager.GetLocalPlayerRole(),
+            this.range);
+
+        return this.IsCommonUse() && this.targetPlayer != null;
+    }
 
     private void abilityCall()
     {
-
+        showArrow(CachedPlayerControl.LocalPlayer.PlayerId, this.targetPlayer.PlayerId);
+        this.targetPlayer = null;
     }
 
     private void cleanUp()
     {
+        PlayerControl player = CachedPlayerControl.LocalPlayer;
 
+        using (var caller = RPCOperator.CreateCaller(
+            RPCOperator.Command.UseGhostRoleAbility))
+        {
+            caller.WriteByte((byte)AbilityType.ForasShowArrow); // アビリティタイプ
+            caller.WriteBoolean(false); // 報告できるかどうか
+            caller.WriteBoolean(false);
+            caller.WriteByte(player.PlayerId);
+        }
+        hideArrow(player.PlayerId);
     }
 }

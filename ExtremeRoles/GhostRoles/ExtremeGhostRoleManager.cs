@@ -9,6 +9,7 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GhostRoles.Crewmate;
 using ExtremeRoles.GhostRoles.Impostor;
+using ExtremeRoles.GhostRoles.Neutal;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.Combination;
 using ExtremeRoles.Module;
@@ -65,6 +66,8 @@ public static class ExtremeGhostRoleManager
             { ExtremeGhostRoleId.Ventgeist, new Ventgeist() },
             { ExtremeGhostRoleId.SaboEvil , new SaboEvil()  },
             { ExtremeGhostRoleId.Igniter  , new Igniter()   },
+
+            { ExtremeGhostRoleId.Foras    , new Foras()   },
         };
 
     private static readonly HashSet<RoleTypes> vanillaGhostRole = new HashSet<RoleTypes>()
@@ -246,6 +249,9 @@ public static class ExtremeGhostRoleManager
 
         switch (callAbility)
         {
+            case AbilityType.WispSetTorch:
+                Wisp.SetTorch(reader.ReadByte());
+                break;
             case AbilityType.VentgeistVentAnime:
                 int ventId = reader.ReadInt32();
                 Ventgeist.VentAnime(ventId);
@@ -264,11 +270,11 @@ public static class ExtremeGhostRoleManager
             case AbilityType.SaboEvilResetSabotageCool:
                 SaboEvil.ResetCool();
                 break;
-            case AbilityType.WispSetTorch:
-                Wisp.SetTorch(reader.ReadByte());
-                break;
             case AbilityType.IgniterSwitchLight:
                 Igniter.SetVison(reader.ReadBoolean());
+                break;
+            case AbilityType.ForasShowArrow:
+                Foras.SwitchArrow(ref reader);
                 break;
             default:
                 break;
