@@ -4,6 +4,7 @@ using UnityEngine;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityFactory;
 using ExtremeRoles.Module.AbilityBehavior.Interface;
+using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.Roles.API.Interface;
 
@@ -176,7 +177,7 @@ public static class IRoleAbilityMixin
 
     public static void CreateCommonAbilityOption(
         this IRoleAbility self,
-        IOption parentOps,
+        IOptionInfo parentOps,
         float defaultActiveTime = float.MaxValue)
     {
 
@@ -210,7 +211,7 @@ public static class IRoleAbilityMixin
 
     public static void CreateAbilityCountOption(
         this IRoleAbility self,
-        IOption parentOps,
+        IOptionInfo parentOps,
         int defaultAbilityCount,
         int maxAbilityCount,
         float defaultActiveTime = float.MaxValue)
@@ -248,23 +249,23 @@ public static class IRoleAbilityMixin
 
         if (self.Button == null) { return; }
 
-        var allOpt = OptionHolder.AllOption;
+        var allOpt = AllOptionHolder.Instance;
         self.Button.Behavior.SetCoolTime(
-            allOpt[self.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)].GetValue());
+            allOpt.GetValue<float>(
+                self.GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)));
 
-        int checkOptionId = self.GetRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime);
-
-        if (allOpt.ContainsKey(checkOptionId))
+        if (allOpt.TryGet<float>(
+                self.GetRoleOptionId(RoleAbilityCommonOption.AbilityActiveTime),
+                out var activeTimeOption))
         {
-            self.Button.Behavior.SetActiveTime(
-                allOpt[checkOptionId].GetValue());
+            self.Button.Behavior.SetActiveTime(activeTimeOption.GetValue());
         }
 
         if (self.Button.Behavior is ICountBehavior countBehavior)
         {
             countBehavior.SetAbilityCount(
-                allOpt[self.GetRoleOptionId(
-                    RoleAbilityCommonOption.AbilityCount)].GetValue());
+                allOpt.GetValue<int>(self.GetRoleOptionId(
+                    RoleAbilityCommonOption.AbilityCount)));
         }
 
         self.Button.OnMeetingEnd();

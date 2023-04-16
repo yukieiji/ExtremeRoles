@@ -24,30 +24,17 @@ public enum OptionTab : byte
     GhostNeutral,
 }
 
-public enum OptionUnit : byte
-{
-    None,
-    Preset,
-    Second,
-    Minute,
-    Shot,
-    Multiplier,
-    Percentage,
-    ScrewNum,
-    VoteNum
-}
-
-public interface IOption
-{
-    public int CurSelection { get; }
-    public bool Enabled { get; }
-    public int Id { get; }
-    public string Name { get; }
-    public bool IsHidden { get; }
-    public bool IsHeader { get; }
-    public int ValueCount { get; }
-    public OptionTab Tab { get; }
-    public IOption Parent { get; }
+    public interface IOption
+    {
+        public int CurSelection { get; }
+        public bool Enabled { get; }
+        public int Id { get; }
+        public string Name { get; }
+        public bool IsHidden { get; }
+        public bool IsHeader { get; }
+        public int ValueCount { get; }
+        public OptionTab Tab { get; }
+        public IOption Parent { get; }
 
     // インターフェースとして要らなくなった奴ら
     // TODO:こいつらも消す
