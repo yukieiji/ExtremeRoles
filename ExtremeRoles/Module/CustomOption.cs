@@ -7,23 +7,12 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 
 using BepInEx.Configuration;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 
-namespace ExtremeRoles.Module;
-
-public enum OptionTab : byte
+namespace ExtremeRoles.Module
 {
-    General,
-    Crewmate,
-    Impostor,
-    Neutral,
-    Combination,
-    GhostCrewmate,
-    GhostImpostor,
-    GhostNeutral,
-}
-
     public interface IOption
     {
         public int CurSelection { get; }
