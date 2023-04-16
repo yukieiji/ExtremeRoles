@@ -13,6 +13,31 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Module.CustomOption;
 
+public enum OptionTab : byte
+{
+    General,
+    Crewmate,
+    Impostor,
+    Neutral,
+    Combination,
+    GhostCrewmate,
+    GhostImpostor,
+    GhostNeutral,
+}
+
+public enum OptionUnit : byte
+{
+    None,
+    Preset,
+    Second,
+    Minute,
+    Shot,
+    Multiplier,
+    Percentage,
+    ScrewNum,
+    VoteNum
+}
+
 public interface IOptionInfo
 {
     public int CurSelection { get; }
