@@ -74,6 +74,19 @@ public sealed class AllOptionHolder
             _ => null
         };
 
+    public string GetHudString(int id)
+    {
+        ValueType type = this.allOptionId[id];
+
+        return type switch
+        {
+            ValueType.Int => this.intOption.Get(id).ToHudString(),
+            ValueType.Float => this.floatOption.Get(id).ToHudString(),
+            ValueType.Bool => this.boolOption.Get(id).ToHudString(),
+            _ => string.Empty,
+        };
+    }
+
     public T GetValue<T>(int id)
     {
         ValueType type = this.allOptionId[id];

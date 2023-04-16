@@ -1,5 +1,7 @@
 ﻿using System.Text;
 using System.Collections.Generic;
+
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.GameMode.Option.MapModule;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal;
@@ -71,45 +73,45 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
 
     public void Load()
     {
-        DisableVent = IShipGlobalOption.GetCommonOptionValue(
+        DisableVent = IShipGlobalOption.GetCommonOptionValue<bool>(
             GlobalOption.DisableVent);
 
-        IsRandomMap = IShipGlobalOption.GetCommonOptionValue(
+        IsRandomMap = IShipGlobalOption.GetCommonOptionValue<bool>(
             GlobalOption.RandomMap);
 
         Admin = new AdminOption()
         {
-            DisableAdmin = IShipGlobalOption.GetCommonOptionValue(
+            DisableAdmin = IShipGlobalOption.GetCommonOptionValue<bool>(
                 GlobalOption.IsRemoveAdmin),
-            AirShipEnable = (AirShipAdminMode)IShipGlobalOption.GetCommonOptionValue(
+            AirShipEnable = (AirShipAdminMode)IShipGlobalOption.GetCommonOptionValue<int>(
                 GlobalOption.AirShipEnableAdmin),
-            EnableAdminLimit = IShipGlobalOption.GetCommonOptionValue(
+            EnableAdminLimit = IShipGlobalOption.GetCommonOptionValue<bool>(
                 GlobalOption.EnableAdminLimit),
-            AdminLimitTime = IShipGlobalOption.GetCommonOptionValue(
+            AdminLimitTime = IShipGlobalOption.GetCommonOptionValue<float>(
                 GlobalOption.AdminLimitTime),
         };
         Vital = new VitalOption()
         {
-            DisableVital = IShipGlobalOption.GetCommonOptionValue(
+            DisableVital = IShipGlobalOption.GetCommonOptionValue<bool>(
                 GlobalOption.IsRemoveVital),
-            EnableVitalLimit = IShipGlobalOption.GetCommonOptionValue(
+            EnableVitalLimit = IShipGlobalOption.GetCommonOptionValue<bool>(
                 GlobalOption.EnableVitalLimit),
-            VitalLimitTime = IShipGlobalOption.GetCommonOptionValue(
+            VitalLimitTime = IShipGlobalOption.GetCommonOptionValue<float>(
                 GlobalOption.VitalLimitTime),
         };
         Security = new SecurityOption()
         {
-            DisableSecurity = IShipGlobalOption.GetCommonOptionValue(
+            DisableSecurity = IShipGlobalOption.GetCommonOptionValue<bool>(
                 GlobalOption.IsRemoveSecurity),
-            EnableSecurityLimit = IShipGlobalOption.GetCommonOptionValue(
+            EnableSecurityLimit = IShipGlobalOption.GetCommonOptionValue<bool>(
                 GlobalOption.EnableSecurityLimit),
-            SecurityLimitTime = IShipGlobalOption.GetCommonOptionValue(
+            SecurityLimitTime = IShipGlobalOption.GetCommonOptionValue<float>(
                 GlobalOption.SecurityLimitTime),
         };
 
-        IsSameNeutralSameWin = IShipGlobalOption.GetCommonOptionValue(
+        IsSameNeutralSameWin = IShipGlobalOption.GetCommonOptionValue<bool>(
             GlobalOption.IsSameNeutralSameWin);
-        DisableNeutralSpecialForceEnd = IShipGlobalOption.GetCommonOptionValue(
+        DisableNeutralSpecialForceEnd = IShipGlobalOption.GetCommonOptionValue<bool>(
             GlobalOption.DisableNeutralSpecialForceEnd);
     }
 
@@ -117,7 +119,7 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
     {
         foreach (GlobalOption id in this.useOption)
         {
-            string optionStr = OptionHolder.AllOption[(int)id].ToHudString();
+            string optionStr = AllOptionHolder.Instance.GetHudString((int)id);
             if (optionStr != string.Empty)
             {
                 builder.AppendLine(optionStr);

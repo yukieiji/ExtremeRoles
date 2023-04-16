@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.GameMode.Option.MapModule;
 
 namespace ExtremeRoles.GameMode.Option.ShipGlobal;
@@ -257,8 +257,8 @@ public interface IShipGlobalOption
             false);
     }
 
-    public static dynamic GetCommonOptionValue(GlobalOption optionKey)
+    public static T GetCommonOptionValue<T>(GlobalOption optionKey)
     {
-        return OptionHolder.AllOption[(int)optionKey].GetValue();
+        return AllOptionHolder.Instance.GetValue<T>((int)optionKey);
     }
 }
