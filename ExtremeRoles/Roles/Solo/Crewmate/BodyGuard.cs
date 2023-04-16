@@ -11,6 +11,7 @@ using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Module.AbilityBehavior.Interface;
 using ExtremeRoles.Module.AbilityModeSwitcher;
 using ExtremeRoles.Module.ButtonAutoActivator;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -746,7 +747,7 @@ public sealed class BodyGuard :
     }
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
 
         CreateFloatOption(
@@ -786,25 +787,25 @@ public sealed class BodyGuard :
     protected override void RoleSpecificInit()
     {
 
-        var allOpt = OptionHolder.AllOption;
+        var allOpt = AllOptionHolder.Instance;
 
         this.reportStr = string.Empty;
 
-        IsBlockMeetingKill = allOpt[
+        IsBlockMeetingKill = allOpt.GetValue<float>(
             GetRoleOptionId(BodyGuardOption.IsBlockMeetingKill)].GetValue();
 
-        this.shieldRange = allOpt[
-            GetRoleOptionId(BodyGuardOption.ShieldRange)].GetValue();
+        this.shieldRange = allOpt.GetValue<float>(
+            GetRoleOptionId(BodyGuardOption.ShieldRange));
 
-        this.meetingAbilityTaskGage = (float)allOpt[
-            GetRoleOptionId(BodyGuardOption.FeatMeetingAbilityTaskGage)].GetValue() / 100.0f;
-        this.meetingReportTaskGage = (float)allOpt[
-            GetRoleOptionId(BodyGuardOption.FeatMeetingReportTaskGage)].GetValue() / 100.0f;
+        this.meetingAbilityTaskGage = allOpt.GetValue<int>(
+            GetRoleOptionId(BodyGuardOption.FeatMeetingAbilityTaskGage)) / 100.0f;
+        this.meetingReportTaskGage = allOpt.GetValue<int>(
+            GetRoleOptionId(BodyGuardOption.FeatMeetingReportTaskGage)) / 100.0f;
 
-        this.isReportWithPlayerName = allOpt[
-            GetRoleOptionId(BodyGuardOption.IsReportPlayerName)].GetValue();
-        this.reportMode = (BodyGuardReportPlayerNameMode)allOpt[
-            GetRoleOptionId(BodyGuardOption.ReportPlayerMode)].GetValue();
+        this.isReportWithPlayerName = allOpt.GetValue<bool>(
+            GetRoleOptionId(BodyGuardOption.IsReportPlayerName));
+        this.reportMode = (BodyGuardReportPlayerNameMode)allOpt.GetValue<int>(
+            GetRoleOptionId(BodyGuardOption.ReportPlayerMode));
 
         this.awakeMeetingAbility = this.meetingAbilityTaskGage <= 0.0f;
         this.awakeMeetingReport = this.meetingReportTaskGage <= 0.0f;
@@ -814,8 +815,8 @@ public sealed class BodyGuard :
         {
             this.shildNum = behavior.AbilityCount;
             behavior.SetAbilityCount(
-                allOpt[GetRoleOptionId(
-                    RoleAbilityCommonOption.AbilityCount)].GetValue());
+                allOpt.GetValue<int>(GetRoleOptionId(
+                    RoleAbilityCommonOption.AbilityCount)));
         }
     }
 }
