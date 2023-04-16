@@ -9,6 +9,7 @@ using BepInEx.Configuration;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
