@@ -13,6 +13,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
 using ExtremeRoles.Extension.Ship;
+using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -301,7 +302,7 @@ public sealed class Mery : SingleRoleBase, IRoleAbility
     }
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
         this.CreateAbilityCountOption(
             parentOps, 3, 5);
@@ -319,12 +320,12 @@ public sealed class Mery : SingleRoleBase, IRoleAbility
 
         this.RoleAbilityInit();
 
-        var allOption = OptionHolder.AllOption;
+        var allOption = AllOptionHolder.Instance;
 
-        this.ActiveNum = allOption[
-            GetRoleOptionId(MeryOption.ActiveNum)].GetValue();
-        this.ActiveRange = allOption[
-            GetRoleOptionId(MeryOption.ActiveRange)].GetValue();
+        this.ActiveNum = allOption.GetValue<int>(
+            GetRoleOptionId(MeryOption.ActiveNum));
+        this.ActiveRange = allOption.GetValue<float>(
+            GetRoleOptionId(MeryOption.ActiveRange));
 
     }
 
