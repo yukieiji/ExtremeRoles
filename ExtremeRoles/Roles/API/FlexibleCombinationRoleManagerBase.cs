@@ -1,7 +1,7 @@
 ﻿using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.Roles.API;
 
@@ -111,7 +111,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
 
     }
 
-    protected override IOption CreateSpawnOption()
+    protected override IOptionInfo CreateSpawnOption()
     {
         // ExtremeRolesPlugin.Instance.Log.LogInfo($"Color: {this.optionColor}");
         var roleSetOption = new SelectionCustomOption(
@@ -186,7 +186,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
     }
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
 
         int optionOffset = this.OptionIdOffset + ExtremeRoleManager.OptionOffsetPerRole;
@@ -202,12 +202,12 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
         int roleAssignNum = 1;
         var allOptions = OptionHolder.AllOption;
 
-        this.BaseRole.CanHasAnotherRole = allOptions[
-            GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign)].GetValue();
+        this.BaseRole.CanHasAnotherRole = allOptions.GetValue<bool>(
+            GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign));
 
-        if (allOptions.TryGetValue(
+        if (allOptions.TryGet<int>(
                 GetRoleOptionId(CombinationRoleCommonOption.AssignsNum),
-                out IOption opt))
+                out var opt))
         {
             roleAssignNum = opt.GetValue();
         }

@@ -3,9 +3,10 @@
 using UnityEngine;
 using AmongUs.GameOptions;
 
-using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.Roles.API;
+
 
 public enum CombinationRoleCommonOption
 {
@@ -36,14 +37,14 @@ public abstract class CombinationRoleManagerBase : RoleOptionBase
         int roleId, RoleTypes playerRoleType);
 
     protected override void CreateKillerOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
         // 複数ロールの中に殺戮者がいる可能性がため、管理ロールで殺戮者の設定はしない
         return;
     }
 
     protected override void CreateVisionOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
         // 複数のロールがまとまっているため、管理ロールで視界の設定はしない
         return;
