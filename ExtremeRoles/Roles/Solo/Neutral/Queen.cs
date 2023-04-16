@@ -262,15 +262,11 @@ public sealed class Queen :
 
     public void Update(PlayerControl rolePlayer)
     {
-        if (!GameData.Instance ||
+        if (!rolePlayer ||
+            rolePlayer.Data.Tasks.Count == 0 ||
+            !GameData.Instance ||
             !CachedShipStatus.Instance ||
-            !CachedShipStatus.Instance.enabled ||
-            MeetingHud.Instance ||
-            ExileController.Instance) { return; }
-
-        float killcool = CachedPlayerControl.LocalPlayer.PlayerControl.killTimer;
-        
-        if (killcool <= 0.0f) { return; }
+            !CachedShipStatus.Instance.enabled) { return; }
 
         foreach (byte playerId in this.servantPlayerId)
         {
@@ -278,17 +274,18 @@ public sealed class Queen :
             if (!player) { continue; }
 
             float gage = Player.GetPlayerTaskGage(player);
-
             if (!this.servantTaskGage.ContainsKey(playerId))
             {
-                this.servantTaskGage.Add(playerId, gage);
+                this.servantTaskGage.Add(playerId, 0.0f);
             }
             float prevGage = this.servantTaskGage[playerId];
-            if (gage > prevGage)
+            this.servantTaskGage[playerId] = gage;
+
+            float killcool = CachedPlayerControl.LocalPlayer.PlayerControl.killTimer;
+            if (gage > prevGage && killcool > 0.0f)
             {
                 CachedPlayerControl.LocalPlayer.PlayerControl.killTimer = killcool * this.taskKillCoolReduceRate;
             }
-            this.servantTaskGage[playerId] = gage;
             if (gage >= 1.0f && !this.taskCompServant.Contains(playerId))
             {
                 this.taskCompServant.Add(playerId);
