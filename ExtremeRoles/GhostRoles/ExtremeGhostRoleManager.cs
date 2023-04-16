@@ -20,6 +20,8 @@ public enum ExtremeGhostRoleId : byte
 {
     VanillaRole = 0,
 
+    Wisp,
+
     Poltergeist,
     Faunus,
     Shutter,
@@ -28,7 +30,7 @@ public enum ExtremeGhostRoleId : byte
     SaboEvil,
     Igniter,
 
-    Wisp
+    Foras,
 }
 
 public enum AbilityType : byte
@@ -41,7 +43,9 @@ public enum AbilityType : byte
 
     VentgeistVentAnime,
     SaboEvilResetSabotageCool,
-    IgniterSwitchLight
+    IgniterSwitchLight,
+
+    ForasShowArrow
 }
 
 public static class ExtremeGhostRoleManager
