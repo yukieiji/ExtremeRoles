@@ -7,6 +7,7 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -174,7 +175,7 @@ public sealed class Magician : SingleRoleBase, IRoleAbility
         return true;
     }
 
-    protected override void CreateSpecificOption(IOption parentOps)
+    protected override void CreateSpecificOption(IOptionInfo parentOps)
     {
         this.CreateAbilityCountOption(parentOps, 1, 10);
 
@@ -195,15 +196,15 @@ public sealed class Magician : SingleRoleBase, IRoleAbility
 
     protected override void RoleSpecificInit()
     {
-        var allOption = OptionHolder.AllOption;
-        this.teleportRate = allOption[
-            GetRoleOptionId(MagicianOption.TeleportTargetRate)].GetValue();
-        this.dupeTeleportTarget = allOption[
-            GetRoleOptionId(MagicianOption.DupeTeleportTargetTo)].GetValue();
-        this.includeRolePlayer = allOption[
-            GetRoleOptionId(MagicianOption.IncludeSpawnPoint)].GetValue();
-        this.includeSpawnPoint = allOption[
-            GetRoleOptionId(MagicianOption.IncludeRolePlayer)].GetValue();
+        var allOption = AllOptionHolder.Instance;
+        this.teleportRate = allOption.GetValue<float>(
+            GetRoleOptionId(MagicianOption.TeleportTargetRate));
+        this.dupeTeleportTarget = allOption.GetValue<bool>(
+            GetRoleOptionId(MagicianOption.DupeTeleportTargetTo));
+        this.includeRolePlayer = allOption.GetValue<bool>(
+            GetRoleOptionId(MagicianOption.IncludeSpawnPoint));
+        this.includeSpawnPoint = allOption.GetValue<bool>(
+            GetRoleOptionId(MagicianOption.IncludeRolePlayer));
 
         this.RoleAbilityInit();
     }
