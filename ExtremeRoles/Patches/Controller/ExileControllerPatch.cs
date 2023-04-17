@@ -285,7 +285,6 @@ public static class ExileControllerBeginePatch
                 string.Format(
                     Helper.Translation.GetString($"{transKey}WithRole"),
                     playerName,
-                    Helper.Translation.GetString(exiledPlayerRole.Team.ToString()),
                     exiledPlayerRole.GetColoredRoleName()
                 ) :
                 string.Format(
