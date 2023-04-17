@@ -601,6 +601,12 @@ public static class MeetingHudUpdatePatch
             __instance.SkipVoteButton.gameObject.SetActive(false);
         }
 
+        if (MeetingReporter.IsExist &&
+            MeetingReporter.Instance.HasChatReport)
+        {
+            MeetingReporter.Instance.ReportMeetingChat();
+        }
+
         if (ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
         {
             __instance.TitleText.text = Helper.Translation.GetString(
@@ -615,12 +621,6 @@ public static class MeetingHudUpdatePatch
             else
             {
                 FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
-            }
-
-            if (MeetingReporter.IsExist &&
-                MeetingReporter.Instance.HasChatReport)
-            {
-                MeetingReporter.Instance.ReportMeetingChat();
             }
         }
     }
