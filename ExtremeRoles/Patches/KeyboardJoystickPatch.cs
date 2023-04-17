@@ -33,6 +33,15 @@ namespace ExtremeRoles.Patches
                 PlayerControl.LocalPlayer == null) { return; }
             if (!AmongUsClient.Instance.AmHost) { return; }
 
+            if (Input.GetKeyDown(KeyCode.F7))
+            {
+                foreach (var (key, value) in TranslationController.Instance.currentLanguage.AllStrings)
+                {
+                    Helper.Logging.Debug(
+                        $"TransKey:{key}    Value:{value}");
+                }
+            }
+
             // Spawn dummys
             if ((Input.GetKeyDown(KeyCode.F)) && GameSystem.IsLobby)
             {
@@ -92,7 +101,7 @@ namespace ExtremeRoles.Patches
                     var (_, totalTask) = GameSystem.GetTaskInfo(playerInfo);
                     if (totalTask == 0)
                     {
-                        var taskId = GameSystem.GetRandomCommonTaskId();
+                        int taskId = GameSystem.GetRandomCommonTaskId();
                         Logging.Debug($"PlayerName:{playerInfo.PlayerName}  AddTask:{taskId}");
                         GameSystem.SetTask(
                             playerInfo, taskId);
@@ -107,7 +116,6 @@ namespace ExtremeRoles.Patches
                 GameSystem.CreateNoneReportableDeadbody(
                     player, player.transform.position + new Vector3(0.75f, 0.75f));
             }
-
         }
     }
 #endif
