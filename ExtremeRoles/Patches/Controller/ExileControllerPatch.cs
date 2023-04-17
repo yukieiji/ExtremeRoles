@@ -21,6 +21,8 @@ namespace ExtremeRoles.Patches.Controller;
 [HarmonyPatch(typeof(ExileController), nameof(ExileController.Begin))]
 public static class ExileControllerBeginePatch
 {
+    private const string TransKeyBase = "ExileText";
+
     public static bool Prefix(
         ExileController __instance,
         [HarmonyArgument(0)] GameData.PlayerInfo exiled,
@@ -132,85 +134,19 @@ public static class ExileControllerBeginePatch
             var exiledPlayerRole = allRoles[exiled.PlayerId];
             switch (mode)
             {
-                case ConfirmExilMode.Impostor:
-                    int allImpNum = Enumerable.Count(
-                        allPlayer, (GameData.PlayerInfo p) => allRoles[p.PlayerId].IsImpostor());
-                    bool isExiledIsImp = exiledPlayerRole.IsImpostor();
-                    StringNames stringKey;
-                    if (isExiledIsImp && allImpNum > 1)
-                    {
-                        stringKey = StringNames.ExileTextPP;
-                    }
-                    else if (isExiledIsImp)
-                    {
-                        stringKey = StringNames.ExileTextSP;
-                    }
-                    else if (allImpNum > 1)
-                    {
-                        stringKey = StringNames.ExileTextPN;
-                    }
-                    else
-                    {
-                        stringKey = StringNames.ExileTextSN;
-                    }
-                    completeString = transController.GetString(
-                        stringKey, new Il2CppObject[] { playerName });
-                    break;
-                case ConfirmExilMode.Crewmate:
-                    int allCrewNum = Enumerable.Count(
-                        allPlayer, (GameData.PlayerInfo p) => allRoles[p.PlayerId].IsCrewmate());
-                    bool isExiledIsCrew = exiledPlayerRole.IsCrewmate();
-                    string transCrewStringKey;
-                    if (isExiledIsCrew && allCrewNum > 1)
-                    {
-                        transCrewStringKey = "ExileTextPPCrew";
-                    }
-                    else if (isExiledIsCrew)
-                    {
-                        transCrewStringKey = "ExileTextSPCrew";
-                    }
-                    else if (allCrewNum > 1)
-                    {
-                        transCrewStringKey = "ExileTextPNCrew";
-                    }
-                    else
-                    {
-                        transCrewStringKey = "ExileTextSNCrew";
-                    }
-                    completeString = string.Format(
-                        Helper.Translation.GetString(transCrewStringKey), playerName);
-                    break;
-                case ConfirmExilMode.Neutral:
-                    int allNeutNum = Enumerable.Count(
-                        allPlayer, (GameData.PlayerInfo p) => allRoles[p.PlayerId].IsCrewmate());
-                    bool isExiledIsNeut = exiledPlayerRole.IsCrewmate();
-                    string transNeutStringKey;
-                    if (isExiledIsNeut && allNeutNum > 1)
-                    {
-                        transNeutStringKey = "ExileTextPPNeut";
-                    }
-                    else if (isExiledIsNeut)
-                    {
-                        transNeutStringKey = "ExileTextSPNeut";
-                    }
-                    else if (allNeutNum > 1)
-                    {
-                        transNeutStringKey = "ExileTextPNNeut";
-                    }
-                    else
-                    {
-                        transNeutStringKey = "ExileTextSNNeut";
-                    }
-                    completeString = string.Format(
-                        Helper.Translation.GetString(transNeutStringKey), playerName);
-                    break;
                 case ConfirmExilMode.AllTeam:
-                    completeString = string.Format(
-                        Helper.Translation.GetString("ExileTextAllTeam"),
-                        exiledPlayerRole.Team,
-                        playerName);
+                    string team = Helper.Translation.GetString(exiledPlayerRole.Team.ToString());
+                    completeString = isShowRole ?
+                        string.Format(
+                            Helper.Translation.GetString("ExileTextAllTeamWithRole"),
+                            playerName, team, exiledPlayerRole.GetColoredRoleName()) : 
+                        string.Format(
+                            Helper.Translation.GetString("ExileTextAllTeam"),
+                            playerName, team);
                     break;
                 default:
+                    completeString = getCompleteString(
+                        playerName, exiledPlayerRole, mode, isShowRole);
                     break;
             }
 
@@ -257,6 +193,94 @@ public static class ExileControllerBeginePatch
 
             _ => string.Empty
         };
+    }
+
+    private static string getSuffix(
+        bool isExiledSameMode,
+        bool isModeTeamContain)
+    {
+        string modeTeamSuffix;
+
+        if (isExiledSameMode && isModeTeamContain)
+        {
+            modeTeamSuffix = "PP";
+        }
+        else if (isExiledSameMode)
+        {
+            modeTeamSuffix = "SP";
+        }
+        else if (isModeTeamContain)
+        {
+            modeTeamSuffix = "PN";
+        }
+        else
+        {
+            modeTeamSuffix = "SN";
+        }
+
+        return modeTeamSuffix;
+    }
+
+    private static string getCompleteString(
+        string playerName,
+        SingleRoleBase exiledPlayerRole,
+        ConfirmExilMode mode, bool isShowRole)
+    {
+        string teamSuffix = mode switch
+        {
+            ConfirmExilMode.Crewmate => "Crew",
+            ConfirmExilMode.Neutral => "Neut",
+            _ => string.Empty,
+        };
+
+        var allPlayer = GameData.Instance.AllPlayers.ToArray();
+        var allRoles = ExtremeRoleManager.GameRole;
+
+        bool isExiledSameMode = false;
+        int modeTeamAlive = 0;
+        switch (mode)
+        {
+            case ConfirmExilMode.Impostor:
+                modeTeamAlive = Enumerable.Count(
+                    allPlayer, (GameData.PlayerInfo p) => allRoles[p.PlayerId].IsImpostor());
+                isExiledSameMode = exiledPlayerRole.IsImpostor();
+                break;
+            case ConfirmExilMode.Crewmate:
+                modeTeamAlive = Enumerable.Count(
+                    allPlayer, (GameData.PlayerInfo p) => allRoles[p.PlayerId].IsCrewmate());
+                isExiledSameMode = exiledPlayerRole.IsCrewmate();
+                break;
+            case ConfirmExilMode.Neutral:
+                modeTeamAlive = Enumerable.Count(
+                    allPlayer, (GameData.PlayerInfo p) => allRoles[p.PlayerId].IsNeutral());
+                isExiledSameMode = exiledPlayerRole.IsNeutral();
+                break;
+            default:
+                break;
+        };
+        string suffix = getSuffix(isExiledSameMode, modeTeamAlive > 1);
+        string transKey = $"{TransKeyBase}{suffix}{teamSuffix}";
+        
+        if (Enum.TryParse(transKey, out StringNames sn))
+        {
+            return FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                sn, new Il2CppObject[] { playerName });
+        }
+        else
+        {
+            return
+                isShowRole ?
+                string.Format(
+                    Helper.Translation.GetString($"{transKey}WithRole"),
+                    playerName,
+                    Helper.Translation.GetString(exiledPlayerRole.Team.ToString()),
+                    exiledPlayerRole.GetColoredRoleName()
+                ) :
+                string.Format(
+                    Helper.Translation.GetString(transKey),
+                    playerName
+                );
+        }
     }
 
     private static void setExiledTarget(
