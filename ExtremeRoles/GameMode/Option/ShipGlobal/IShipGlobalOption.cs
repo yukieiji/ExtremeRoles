@@ -12,6 +12,7 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
         FixedMeetingPlayerLevel,
         DisableSkipInEmergencyMeeting,
         DisableSelfVote,
+        ExilCheckMode,
         DisableVent,
         EngineerUseImpostorVent,
         CanKillVentInPlayer,
@@ -115,6 +116,11 @@ namespace ExtremeRoles.GameMode.Option.ShipGlobal
                 (int)GlobalOption.DisableSelfVote,
                 GlobalOption.DisableSelfVote.ToString(),
                 false);
+            var testOption = new BoolCustomOption(
+                (int)GlobalOption.ExilCheckMode,
+                GlobalOption.ExilCheckMode.ToString(),
+                false);
+            testOption.AddToggleOptionCheckHook(StringNames.GameConfirmImpostor);
 
             var ventOption = new BoolCustomOption(
                 (int)GlobalOption.DisableVent,

@@ -178,11 +178,10 @@ public abstract class CustomOptionBase<OutType, SelectionType> : IOption, IWithU
         OptionHolder.AllOption.Add(this.Id, this);
     }
 
-    public static void AddToggleOptionCheckHook(
-        StringNames targetOption, CustomOptionBase<OutType, SelectionType> option)
+    public void AddToggleOptionCheckHook(StringNames targetOption)
     {
         Patches.Option.GameOptionsMenuStartPatch.AddHook(
-            targetOption, x => option.isHidden = !x.GetBool());
+            targetOption, x => this.isHidden = !x.GetBool());
     }
 
     public virtual void Update(OutType newValue)

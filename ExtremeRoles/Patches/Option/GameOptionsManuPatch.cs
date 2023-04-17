@@ -35,6 +35,8 @@ public static class GameOptionsMenuStartPatch
 
         // Adapt task count for main options
         modifiedDefaultGameOptions(__instance);
+        // AddHook
+        addHookOptionValueChange(__instance.Children);
 
         playerOptMenuObj.AddComponent<ExtremeOptionMenu>();
     }
