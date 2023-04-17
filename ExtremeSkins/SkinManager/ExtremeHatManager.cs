@@ -171,8 +171,7 @@ public static class ExtremeHatManager
 
             if (HatData.TryAdd(customHat.Id, customHat))
             {
-                ExtremeSkinsPlugin.Logger.LogInfo(
-                    $"Hat Loaded :\n{customHat}");
+                ExtremeSkinsPlugin.Logger.LogInfo($"Hat Loaded :\n{customHat}");
             }
         }
 

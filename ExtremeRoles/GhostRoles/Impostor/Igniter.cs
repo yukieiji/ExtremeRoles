@@ -112,7 +112,7 @@ public sealed class Igniter : GhostRoleBase
         IOption parentOps)
     {
         CreateCountButtonOption(
-            parentOps, 3, 10, 25.0f);
+            parentOps, 3, 10, 15.0f);
         CreateBoolOption(
             IgniterOption.IsEffectImpostor,
             false, parent: parentOps);

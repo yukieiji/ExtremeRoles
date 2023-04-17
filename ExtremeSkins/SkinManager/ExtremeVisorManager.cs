@@ -153,8 +153,7 @@ public static class ExtremeVisorManager
 
             if (VisorData.TryAdd(customVisor.Id, customVisor))
             {
-                ExtremeSkinsPlugin.Logger.LogInfo(
-                    $"Visor Loaded:{customVisor.Name}, from:{visor}");
+                ExtremeSkinsPlugin.Logger.LogInfo($"Visor Loaded :\n{customVisor}");
             }
         }
 
