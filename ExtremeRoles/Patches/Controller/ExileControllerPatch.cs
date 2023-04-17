@@ -70,7 +70,10 @@ public static class ExileControllerBeginePatch
         if (GameOptionsManager.Instance.CurrentGameOptions.GetBool(
                 BoolOptionNames.ConfirmImpostor))
         {
-            infoText.transform.localPosition += new UnityEngine.Vector3(0f, -0.4f, 0f);
+            infoText.transform.localPosition += new UnityEngine.Vector3(
+                0f,
+               ExtremeGameModeManager.Instance.ShipOption.ExilMode == ConfirmExilMode.AllTeam ?
+               -0.8f : -0.4f, 0f);
         }
         else
         {
@@ -115,7 +118,13 @@ public static class ExileControllerBeginePatch
 
         var allPlayer = GameData.Instance.AllPlayers.ToArray();
         var alivePlayers = allPlayer.Where(
-            x => x.PlayerId != exiled.PlayerId && x.IsDead && x.Disconnected);
+            x =>
+            {
+                return
+                    (
+                        (exiled != null && x.PlayerId != exiled.PlayerId) || (exiled == null)
+                    ) && x.IsDead && x.Disconnected;
+            });
         var allRoles = ExtremeRoleManager.GameRole;
 
         int aliveImpNum = Enumerable.Count(
