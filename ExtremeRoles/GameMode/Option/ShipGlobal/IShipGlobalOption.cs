@@ -72,6 +72,9 @@ public interface IShipGlobalOption
     public bool IsBlockSkipInMeeting { get; }
     public bool DisableSelfVote { get; }
 
+    public ConfirmExilMode ExilMode { get; }
+    public bool IsConfirmRole { get; }
+
     public bool DisableVent { get; }
     public bool EngineerUseImpostorVent { get; }
     public bool CanKillVentInPlayer { get; }
