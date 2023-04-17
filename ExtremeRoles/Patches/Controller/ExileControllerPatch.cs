@@ -23,6 +23,18 @@ public static class ExileControllerBeginePatch
 {
     private const string TransKeyBase = "ExileText";
 
+/* JAJPs
+[Info   :Extreme Roles] TransKey:ExileTextSP    Value:{0}がインポスターだった。
+[Info   :Extreme Roles] TransKey:ExileTextSN    Value:{0}はインポスターではなかった。
+[Info   :Extreme Roles] TransKey:ExileTextPP    Value:{0}はインポスターだった。
+[Info   :Extreme Roles] TransKey:ExileTextPN    Value:{0}はインポスターではなかった。
+[Info   :Extreme Roles] TransKey:NoExileSkip    Value:誰も追放されなかった。（投票スキップ）
+[Info   :Extreme Roles] TransKey:NoExileTie    Value:誰も追放されなかった。（同数投票）
+[Info   :Extreme Roles] TransKey:ExileTextNonConfirm    Value:{0}が追放された。
+[Info   :Extreme Roles] TransKey:ImpostorsRemainS    Value:インポスターが{0}人残っている。
+[Info   :Extreme Roles] TransKey:ImpostorsRemainP    Value:インポスターが{0}人残っている。
+*/
+
     public static bool Prefix(
         ExileController __instance,
         [HarmonyArgument(0)] GameData.PlayerInfo exiled,
@@ -30,9 +42,7 @@ public static class ExileControllerBeginePatch
     {
 
         var state = ExtremeRolesPlugin.ShipState;
-        bool confirmImp = GameManager.Instance.LogicOptions.GetConfirmImpostor();
-        var shipOption = ExtremeGameModeManager.Instance.ShipOption;
-
+        
         if (state.AssassinMeetingTrigger)
         {
             assassinMeetingEndBegin(__instance, state);
@@ -40,8 +50,9 @@ public static class ExileControllerBeginePatch
         }
         else if (GameManager.Instance.LogicOptions.GetConfirmImpostor())
         {
-
-            __instance.StartCoroutine(__instance.Animate());
+            var shipOption = ExtremeGameModeManager.Instance.ShipOption;
+            confirmExil(
+                __instance, exiled, shipOption.ExilMode, shipOption.IsConfirmRole, tie);
             return false;
         }
         return false;
@@ -193,6 +204,7 @@ public static class ExileControllerBeginePatch
 
             _ => string.Empty
         };
+        instance.StartCoroutine(instance.Animate());
     }
 
     private static string getSuffix(
