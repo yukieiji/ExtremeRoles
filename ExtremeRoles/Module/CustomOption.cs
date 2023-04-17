@@ -659,5 +659,29 @@ public sealed class SelectionCustomOption : CustomOptionBase<int, string>
             format, invert, enableCheckOption)
     { }
 
+    public SelectionCustomOption(
+        int id, string name,
+        Type selectionType,
+        IOption parent = null,
+        bool isHeader = false,
+        bool isHidden = false,
+        OptionUnit format = OptionUnit.None,
+        bool invert = false,
+        IOption enableCheckOption = null) : this(
+            id, name, getEnumString(selectionType).ToArray(),
+            parent, isHeader, isHidden,
+            format, invert, enableCheckOption)
+    { }
+
     public override dynamic GetValue() => CurSelection;
+
+    private static List<string> getEnumString(Type enumType)
+    {
+        var list = new List<string>();
+        foreach (object enumValue in Enum.GetValues(enumType))
+        {
+            list.Add(enumValue.ToString());
+        }
+        return list;
+    }
 }
