@@ -62,6 +62,7 @@ public sealed class PassiveAbilityBehavior : AbilityBehaviorBase
         this.isActive = false;
         this.abilityOff?.Invoke();
         this.SetGraphic(this.activeGraphic);
+        base.SetCoolTime(this.baseCoolTime);
     }
 
     public override bool IsCanAbilityActiving() => this.canActivating.Invoke();
