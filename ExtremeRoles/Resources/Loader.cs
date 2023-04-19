@@ -21,8 +21,8 @@ public static class Path
 
     public const string LangData = "ExtremeRoles.Resources.LangData.stringData.json";
 
-        public const string HelpImage = "ExtremeRoles.Resources.Help.png";
-        public const string CompatModMenuImage = "ExtremeRoles.Resources.CompatModMenu.png";
+    public const string HelpImage = "ExtremeRoles.Resources.Help.png";
+    public const string CompatModMenuImage = "ExtremeRoles.Resources.CompatModMenu.png";
 
     public const string TitleBurner = "ExtremeRoles.Resources.TitleBurner.png";
 
@@ -30,9 +30,12 @@ public static class Path
 
     public const string HiroAcaSearch = "ExtremeRoles.Resources.Search.png";
     public const string GuesserGuess = "ExtremeRoles.Resources.GuesserGuess.png";
+    public const string GusserUiResources = "ExtremeRoles.Resources.Asset.guesserui.asset";
+    public const string GusserUiPrefab = "assets/roles/guesserui.prefab";
     public const string DelinquentScribe =
         "ExtremeRoles.Resources.DelinquentScribe.{0}.png";
     public const string WispTorch = "ExtremeRoles.Resources.torch.png";
+    public const string MoverMove = "ExtremeRoles.Resources.MoverMoving.png";
 
     public const string MaintainerRepair = "ExtremeRoles.Resources.Repair.png";
     public const string BodyGuardShield = "ExtremeRoles.Resources.Shield.png";
@@ -87,7 +90,10 @@ public static class Path
         "ExtremeRoles.Resources.GrayAbilityPart.png";
     public const string MagicianJuggling = "ExtremeRoles.Resources.MagicianJuggling.png";
     public const string ZombieMagicCircle = "ExtremeRoles.Resources.ZombieMagicCircle.png";
+    public const string ZombieMagicCircleButton = 
+        "ExtremeRoles.Resources.ZombieMagicCircleButton.png";
     public const string ZombieMagicCircleVideo = "zombiemagiccircle";
+    public const string SlimeMorph = "ExtremeRoles.Resources.SlimeMorph.png";
 
     public const string VigilanteEmergencyCall = 
         "ExtremeRoles.Resources.EmergencyCall.png";
@@ -104,13 +110,12 @@ public static class Path
     public const string UmbrerFeatVirus = "ExtremeRoles.Resources.FeatVirus.png";
     public const string UmbrerUpgradeVirus = "ExtremeRoles.Resources.UpgradeVirus.png";
 
+    public const string ForasShowArrow = "ExtremeRoles.Resources.ForasArrow.png";
+
     public const string XionMapZoomIn = "ExtremeRoles.Resources.ZoomIn.png";
     public const string XionMapZoomOut = "ExtremeRoles.Resources.ZoomOut.png";
     public const string XionSpeedUp = "ExtremeRoles.Resources.SpeedUp.png";
     public const string XionSpeedDown = "ExtremeRoles.Resources.SpeedDown.png";
-
-    public const string GusserUiResources = "ExtremeRoles.Resources.Asset.guesserui.asset";
-    public const string GusserUiPrefab = "assets/roles/guesserui.prefab";
 
     public const string SoundEffect = "ExtremeRoles.Resources.Asset.soundeffect.asset";
 

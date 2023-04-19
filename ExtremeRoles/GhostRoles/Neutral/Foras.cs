@@ -101,7 +101,7 @@ public sealed class Foras : GhostRoleBase
         this.Button = GhostRoleAbilityFactory.CreateCountAbility(
             AbilityType.ForasShowArrow,
             Resources.Loader.CreateSpriteFromResources(
-                Resources.Path.LastWolfLightOff),
+                Resources.Path.ForasShowArrow),
             this.isReportAbility(),
             () => true,
             this.isAbilityUse,

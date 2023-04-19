@@ -155,9 +155,9 @@ public sealed class Mover :
     public void CreateAbility()
     {
         this.CreateReclickableCountAbilityButton(
-            "carry",
+            Translation.GetString("moving"),
             Loader.CreateSpriteFromResources(
-               Path.CarrierCarry),
+               Path.MoverMove),
             checkAbility: IsAbilityActive,
             abilityOff: this.CleanUp);
     }

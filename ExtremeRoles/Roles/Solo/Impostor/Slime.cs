@@ -94,9 +94,9 @@ public sealed class Slime :
     public void CreateAbility()
     {
         this.CreateReclickableAbilityButton(
-            "carry",
+            Translation.GetString("morph"),
             Loader.CreateSpriteFromResources(
-               Path.CarrierCarry),
+               Path.SlimeMorph),
             checkAbility: IsAbilityActive,
             abilityOff: this.CleanUp);
     }
