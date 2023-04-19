@@ -94,7 +94,7 @@ public sealed class Slime :
     public void CreateAbility()
     {
         this.CreateReclickableAbilityButton(
-            Translation.GetString("morph"),
+            Translation.GetString("SlimeMorph"),
             Loader.CreateSpriteFromResources(
                Path.SlimeMorph),
             checkAbility: IsAbilityActive,

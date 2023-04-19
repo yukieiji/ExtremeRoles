@@ -31,6 +31,9 @@ public sealed class Mover :
         Reset,
     }
 
+    public override string RoleName =>
+        string.Concat(this.roleNamePrefix, this.RawRoleName);
+
     public ExtremeAbilityButton Button { get; set; }
 
     public bool EnableUseButton { get; private set; } = true;
@@ -77,6 +80,8 @@ public sealed class Mover :
     private Console targetConsole;
     
     private ConsoleData hasConsole;
+
+    private string roleNamePrefix;
 
     public Mover() : base(
         ExtremeRoleId.Mover,
@@ -238,6 +243,11 @@ public sealed class Mover :
     protected override void CreateSpecificOption(
         IOption parentOps)
     {
+        var imposterSetting = OptionHolder.AllOption[
+            GetManagerOptionId(CombinationRoleCommonOption.IsAssignImposter)];
+
+        CreateKillerOption(imposterSetting);
+
         this.CreateAbilityCountOption(
             parentOps, 3, 10, 30.0f);
     }
@@ -245,6 +255,8 @@ public sealed class Mover :
     protected override void RoleSpecificInit()
     {
         this.RoleAbilityInit();
+
+        this.roleNamePrefix = this.CreateImpCrewPrefix();
 
         this.hasConsole = new ConsoleData();
         

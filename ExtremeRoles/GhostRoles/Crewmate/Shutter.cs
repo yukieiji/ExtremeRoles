@@ -197,7 +197,9 @@ public sealed class Shutter : GhostRoleBase
         if (string.IsNullOrEmpty(photoInfo)) { return; }
 
         MeetingReporter.RpcAddMeetingChatReport(
-            string.Format("置かれていた写真の詳細:{0}", photoInfo));
+            string.Format(
+                Translation.GetString("ShutterTakePhotoReport"),
+                photoInfo));
     }
 
     protected override void CreateSpecificOption(
