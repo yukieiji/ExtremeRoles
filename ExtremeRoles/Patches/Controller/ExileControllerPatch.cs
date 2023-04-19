@@ -123,7 +123,7 @@ public static class ExileControllerBeginePatch
                 return
                     (
                         (exiled != null && x.PlayerId != exiled.PlayerId) || (exiled == null)
-                    ) && x.IsDead && x.Disconnected;
+                    ) && !x.IsDead && !x.Disconnected;
             });
         var allRoles = ExtremeRoleManager.GameRole;
 
