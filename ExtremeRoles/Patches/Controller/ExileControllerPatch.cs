@@ -55,7 +55,7 @@ public static class ExileControllerBeginePatch
                 __instance, exiled, shipOption.ExilMode, shipOption.IsConfirmRole, tie);
             return false;
         }
-        return false;
+        return true;
     }
 
     public static void Postfix(
