@@ -37,7 +37,7 @@ public sealed class Foras : GhostRoleBase
         ExtremeRoleType.Neutral,
         ExtremeGhostRoleId.Foras,
         ExtremeGhostRoleId.Foras.ToString(),
-        Palette.ImpostorRed)
+        ColorPalette.ForasSeeSyuTin)
     { }
 
     public static void SwitchArrow(ref MessageReader reader)

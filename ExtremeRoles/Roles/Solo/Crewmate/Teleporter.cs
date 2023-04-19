@@ -176,7 +176,7 @@ public sealed class Teleporter :
         ExtremeRoleId.Teleporter,
         ExtremeRoleType.Crewmate,
         ExtremeRoleId.Teleporter.ToString(),
-        ColorPalette.MaintainerBlue,
+        ColorPalette.TeleporterCherry,
         false, true, false, false)
     { }
 

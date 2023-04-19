@@ -23,7 +23,7 @@ public sealed class Gambler :
         ExtremeRoleId.Gambler,
         ExtremeRoleType.Crewmate,
         ExtremeRoleId.Gambler.ToString(),
-        ColorPalette.CaptainLightKonjou,
+        ColorPalette.GamblerYellowGold,
         false, true, false, false)
     { }
 

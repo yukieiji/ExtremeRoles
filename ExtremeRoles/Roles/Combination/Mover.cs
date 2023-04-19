@@ -87,7 +87,7 @@ public sealed class Mover :
         ExtremeRoleId.Mover,
         ExtremeRoleType.Crewmate,
         ExtremeRoleId.Mover.ToString(),
-        Palette.CrewmateBlue,
+        ColorPalette.MoverSafeColor,
         false, true, false, false,
         tab: OptionTab.Combination)
     { }
