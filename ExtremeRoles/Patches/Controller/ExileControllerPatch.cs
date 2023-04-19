@@ -197,15 +197,13 @@ public static class ExileControllerBeginePatch
 
             ConfirmExilMode.Crewmate => string.Format(
                 Helper.Translation.GetString(
-                    aliveCrewNum == 1 ?
-                        "CrewmateRemainS" :
-                        "CrewmateRemainP"), aliveCrewNum),
+                    aliveCrewNum == 1 ? "CrewmateRemainS" : "CrewmateRemainP"),
+                aliveCrewNum),
 
             ConfirmExilMode.Neutral => string.Format(
                 Helper.Translation.GetString(
-                    aliveNeutNum == 1 ?
-                        "NeutralRemainS" :
-                        "NeutralRemainP"), aliveNeutNum),
+                    aliveNeutNum == 1 ?  "NeutralRemainS" : "NeutralRemainP"),
+                aliveNeutNum),
 
             ConfirmExilMode.AllTeam => string.Format(
                 Helper.Translation.GetString("AllTeamAlive"),
