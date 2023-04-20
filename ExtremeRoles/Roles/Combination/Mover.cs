@@ -160,11 +160,15 @@ public sealed class Mover :
     public void CreateAbility()
     {
         this.CreateReclickableCountAbilityButton(
-            Translation.GetString("moving"),
+            Translation.GetString("Moving"),
             Loader.CreateSpriteFromResources(
                Path.MoverMove),
             checkAbility: IsAbilityActive,
             abilityOff: this.CleanUp);
+        if (this.IsCrewmate())
+        {
+            this.Button.SetLabelToCrewmate();
+        }
     }
 
     public bool IsAbilityActive() =>
