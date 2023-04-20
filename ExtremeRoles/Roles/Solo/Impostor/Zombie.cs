@@ -6,6 +6,8 @@ using UnityEngine.Video;
 using Hazel;
 using AmongUs.GameOptions;
 
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityBehavior;
@@ -14,7 +16,9 @@ using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Module.CustomMonoBehaviour;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
+
+using Il2CppObject = Il2CppSystem.Object;
+using SystemArray = System.Array;
 
 namespace ExtremeRoles.Roles.Solo.Impostor;
 
@@ -321,7 +325,7 @@ public sealed class Zombie :
         else
         {
             return Design.ColoedString(
-                Palette.White, Translation.GetString(RoleTypes.Crewmate.ToString()));
+                Palette.ImpostorRed, Translation.GetString(RoleTypes.Impostor.ToString()));
         }
     }
     public override string GetFullDescription()
@@ -334,7 +338,7 @@ public sealed class Zombie :
         else
         {
             return Translation.GetString(
-                $"{RoleTypes.Crewmate}FullDescription");
+                $"{RoleTypes.Impostor}FullDescription");
         }
     }
 
@@ -347,9 +351,18 @@ public sealed class Zombie :
         }
         else
         {
-            return Design.ColoedString(
-                Palette.White,
-                $"{this.GetColoredRoleName()}: {Translation.GetString("crewImportantText")}");
+            return string.Concat(new string[]
+            {
+                FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                   StringNames.ImpostorTask,
+                   SystemArray.Empty<Il2CppObject>()),
+                "\r\n",
+                Palette.ImpostorRed.ToTextColor(),
+                FastDestroyableSingleton<TranslationController>.Instance.GetString(
+                    StringNames.FakeTasks,
+                    SystemArray.Empty<Il2CppObject>()),
+                "</color>"
+            });
         }
     }
 
@@ -375,7 +388,7 @@ public sealed class Zombie :
         }
         else
         {
-            return Palette.White;
+            return Palette.ImpostorRed;
         }
     }
 
