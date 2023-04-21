@@ -27,7 +27,7 @@ public static class AllOptionCreator
 
     private static IRegionInfo[] defaultRegion;
 
-    private static Color defaultOptionColor => new Color(204f / 255f, 204f / 255f, 0, 1f);
+    private static Color defaultOptionColor = new Color(204f / 255f, 204f / 255f, 0, 1f);
 
     public enum CommonOptionKey : int
     {
