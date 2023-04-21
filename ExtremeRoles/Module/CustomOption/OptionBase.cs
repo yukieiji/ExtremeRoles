@@ -118,6 +118,7 @@ public abstract class CustomOptionBase<OutType, SelectionType> : IValueOption<Ou
         this.Tab = tab;
         this.Parent = parent;
 
+        this.Option = selections;
         int index = Array.IndexOf(selections, defaultValue);
 
         this.Id = id;
