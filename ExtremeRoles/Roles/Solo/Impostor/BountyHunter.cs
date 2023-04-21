@@ -145,20 +145,20 @@ public sealed class BountyHunter : SingleRoleBase, IRoleUpdate, IRoleSpecialSetU
 
         this.defaultKillCool = this.KillCoolTime;
 
-        var allOption = OptionHolder.AllOption;
+        var allOption = AllOptionHolder.Instance;
 
-        this.changeTargetTime = allOption[
-            GetRoleOptionId(BountyHunterOption.TargetUpdateTime)].GetValue();
-        this.targetKillCool = allOption[
-            GetRoleOptionId(BountyHunterOption.TargetKillCoolTime)].GetValue();
-        this.noneTargetKillCool = allOption[
-            GetRoleOptionId(BountyHunterOption.NoneTargetKillCoolTime)].GetValue();
-        this.isShowArrow = allOption[
-            GetRoleOptionId(BountyHunterOption.IsShowArrow)].GetValue();
+        this.changeTargetTime = allOption.GetValue<float>(
+            GetRoleOptionId(BountyHunterOption.TargetUpdateTime));
+        this.targetKillCool = allOption.GetValue<float>(
+            GetRoleOptionId(BountyHunterOption.TargetKillCoolTime));
+        this.noneTargetKillCool = allOption.GetValue<float>(
+            GetRoleOptionId(BountyHunterOption.NoneTargetKillCoolTime));
+        this.isShowArrow = allOption.GetValue<bool>(
+            GetRoleOptionId(BountyHunterOption.IsShowArrow));
         if (this.isShowArrow)
         {
-            this.targetArrowUpdateTime = allOption[
-                GetRoleOptionId(BountyHunterOption.ArrowUpdateCycle)].GetValue();
+            this.targetArrowUpdateTime = allOption.GetValue<float>(
+                GetRoleOptionId(BountyHunterOption.ArrowUpdateCycle));
         }
         this.targetArrowUpdateTimer = 0;
         this.targetTimer = 0;
