@@ -7,16 +7,16 @@ using TMPro;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Module.AbilityModeSwitcher;
 using ExtremeRoles.Module.ButtonAutoActivator;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Extension.Ship;
-using ExtremeRoles.Module.AbilityBehavior;
-using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -499,7 +499,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
     public void CreateAbility()
     {
 
-        var allOpt = OptionHolder.AllOption;
+        var allOpt = AllOptionHolder.Instance;
 
         this.Button = new ExtremeAbilityButton(
             new CarpenterAbilityBehavior(
@@ -509,8 +509,8 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
                         Translation.GetString("ventSeal"),
                         Loader.CreateSpriteFromResources(
                             Path.CarpenterVentSeal)),
-                    Time = (float)allOpt[
-                        GetRoleOptionId(CarpenterOption.RemoveVentStopTime)].GetValue()
+                    Time = allOpt.GetValue<float>(
+                        GetRoleOptionId(CarpenterOption.RemoveVentStopTime))
                 },
                 cameraMode: new GraphicAndActiveTimeMode()
                 {
@@ -518,13 +518,13 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
                         Translation.GetString("cameraSet"),
                         Loader.CreateSpriteFromResources(
                             Path.CarpenterSetCamera)),
-                    Time = (float)allOpt[
-                        GetRoleOptionId(CarpenterOption.SetCameraStopTime)].GetValue()
+                    Time = allOpt.GetValue<float>(
+                        GetRoleOptionId(CarpenterOption.SetCameraStopTime))
                 },
-                ventRemoveScrewNum: (int)allOpt[
-                    GetRoleOptionId(CarpenterOption.RemoveVentScrew)].GetValue(),
-                cameraSetScrewNum: (int)allOpt[
-                    GetRoleOptionId(CarpenterOption.SetCameraScrew)].GetValue(),
+                ventRemoveScrewNum: allOpt.GetValue<int>(
+                    GetRoleOptionId(CarpenterOption.RemoveVentScrew)),
+                cameraSetScrewNum: allOpt.GetValue<int>(
+                    GetRoleOptionId(CarpenterOption.SetCameraScrew)),
                 setCountStart: UseAbility,
                 canUse: IsAbilityUse,
                 abilityCheck: IsAbilityCheck,
