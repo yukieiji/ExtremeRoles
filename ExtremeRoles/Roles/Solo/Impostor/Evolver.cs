@@ -3,6 +3,7 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -144,7 +145,7 @@ public sealed class Evolver : SingleRoleBase, IRoleAbility
     }
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
         CreateBoolOption(
             EvolverOption.IsEvolvedAnimation,
@@ -186,18 +187,18 @@ public sealed class Evolver : SingleRoleBase, IRoleAbility
 
         this.defaultKillCoolTime = this.KillCoolTime;
         
-        var allOption = OptionHolder.AllOption;
+        var allOption = AllOptionHolder.Instance;
 
-        this.isEvolvdAnimation = allOption[
-            GetRoleOptionId(EvolverOption.IsEvolvedAnimation)].GetValue();
-        this.isEatingEndCleanBody = allOption[
-            GetRoleOptionId(EvolverOption.IsEatingEndCleanBody)].GetValue();
-        this.eatingRange = allOption[
-            GetRoleOptionId(EvolverOption.EatingRange)].GetValue();
-        this.reduceRate = allOption[
-            GetRoleOptionId(EvolverOption.KillCoolReduceRate)].GetValue();
-        this.reruceMulti = (float)allOption[
-            GetRoleOptionId(EvolverOption.KillCoolResuceRateMulti)].GetValue();
+        this.isEvolvdAnimation = allOption.GetValue<bool>(
+            GetRoleOptionId(EvolverOption.IsEvolvedAnimation));
+        this.isEatingEndCleanBody = allOption.GetValue <bool>(
+            GetRoleOptionId(EvolverOption.IsEatingEndCleanBody));
+        this.eatingRange = allOption.GetValue<float>(
+            GetRoleOptionId(EvolverOption.EatingRange));
+        this.reduceRate = allOption.GetValue<float>(
+            GetRoleOptionId(EvolverOption.KillCoolReduceRate));
+        this.reruceMulti = allOption.GetValue<float>(
+            GetRoleOptionId(EvolverOption.KillCoolResuceRateMulti));
 
         this.eatingText = Translation.GetString("eating");
 
