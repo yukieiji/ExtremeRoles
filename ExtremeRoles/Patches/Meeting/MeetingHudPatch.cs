@@ -13,6 +13,7 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -58,7 +59,7 @@ public static class MeetingHudBloopAVoteIconPatch
             canSeeVote ||
             (
                 CachedPlayerControl.LocalPlayer.Data.IsDead && 
-                OptionHolder.Client.GhostsSeeVote &&
+                ClientOption.Instance.GhostsSeeRole.Value &&
                 !isVoteSeeBlock(role)
             ))
         {

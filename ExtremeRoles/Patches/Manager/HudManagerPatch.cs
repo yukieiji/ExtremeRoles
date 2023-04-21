@@ -8,6 +8,7 @@ using TMPro;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.GhostRoles.API;
@@ -240,7 +241,7 @@ public static class HudManagerUpdatePatch
         bool blockCondition,
         bool playeringInfoBlock)
     {
-        var localPlayerId = localPlayer.PlayerId;
+        byte localPlayerId = localPlayer.PlayerId;
 
         // Modules.Helpers.DebugLog($"Player Name:{role.NameColor}");
 
@@ -265,8 +266,7 @@ public static class HudManagerUpdatePatch
 
             ExtremeGhostRoleManager.GameRole.TryGetValue(targetPlayerId, out targetGhostRole);
 
-
-            if (!OptionHolder.Client.GhostsSeeRole ||
+            if (!ClientOption.Instance.GhostsSeeRole.Value ||
                 !localPlayer.Data.IsDead ||
                 blockCondition)
             {
@@ -399,10 +399,14 @@ public static class HudManagerUpdatePatch
             roleNames = $"{ghostRoleName}({roleNames})";
         }
 
-        var completedStr = commonActive ? "?" : tasksCompleted.ToString();
+        string completedStr = commonActive ? "?" : tasksCompleted.ToString();
         string taskInfo = tasksTotal > 0 ? $"<color=#FAD934FF>({completedStr}/{tasksTotal})</color>" : "";
 
         string playerInfoText = "";
+
+        var clientOption = ClientOption.Instance;
+        bool isGhostSeeRole = clientOption.GhostsSeeRole.Value;
+        bool isGhostSeeTask = clientOption.GhostsSeeTask.Value;
 
         if (targetPlayer.PlayerId == localPlayer.PlayerId)
         {
@@ -419,15 +423,15 @@ public static class HudManagerUpdatePatch
                     $"{FastDestroyableSingleton<TranslationController>.Instance.GetString(StringNames.Tasks)} {taskInfo}");
             }
         }
-        else if (OptionHolder.Client.GhostsSeeRole && OptionHolder.Client.GhostsSeeTask)
+        else if (isGhostSeeRole && isGhostSeeTask)
         {
             playerInfoText = $"{roleNames} {taskInfo}".Trim();
         }
-        else if (OptionHolder.Client.GhostsSeeTask)
+        else if (isGhostSeeTask)
         {
             playerInfoText = $"{taskInfo}".Trim();
         }
-        else if (OptionHolder.Client.GhostsSeeRole)
+        else if (isGhostSeeRole)
         {
             playerInfoText = $"{roleNames}";
         }
