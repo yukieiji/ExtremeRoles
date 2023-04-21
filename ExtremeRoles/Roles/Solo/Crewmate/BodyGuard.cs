@@ -529,8 +529,8 @@ public sealed class BodyGuard :
         if (this.shieldButton.Behavior is BodyGuardAbilityBehavior behavior)
         {
             behavior.SetAbilityCount(
-                OptionHolder.AllOption[GetRoleOptionId(
-                    RoleAbilityCommonOption.AbilityCount)].GetValue());
+                AllOptionHolder.Instance.GetValue<int>(GetRoleOptionId(
+                    RoleAbilityCommonOption.AbilityCount)));
         }
         this.Button.SetLabelToCrewmate();
     }
