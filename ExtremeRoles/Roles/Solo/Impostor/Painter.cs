@@ -2,6 +2,7 @@
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -135,7 +136,7 @@ public sealed class Painter : SingleRoleBase, IRoleAbility
     }
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
         this.CreateCommonAbilityOption(
             parentOps);
@@ -148,8 +149,8 @@ public sealed class Painter : SingleRoleBase, IRoleAbility
 
     protected override void RoleSpecificInit()
     {
-        this.paintDistance = OptionHolder.AllOption[
-            GetRoleOptionId(PainterOption.CanPaintDistance)].GetValue();
+        this.paintDistance = AllOptionHolder.Instance.GetValue<float>(
+            GetRoleOptionId(PainterOption.CanPaintDistance));
         this.RoleAbilityInit();
     }
 }
