@@ -5,6 +5,7 @@ using UnityEngine;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -208,7 +209,7 @@ public sealed class Carrier : SingleRoleBase, IRoleAbility, IRoleSpecialReset
     }
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
         this.CreateCommonAbilityOption(
             parentOps, 5.0f);
@@ -225,10 +226,10 @@ public sealed class Carrier : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 
     protected override void RoleSpecificInit()
     {
-        this.carryDistance = OptionHolder.AllOption[
-            GetRoleOptionId(CarrierOption.CarryDistance)].GetValue();
-        this.canReportOnCarry = OptionHolder.AllOption[
-            GetRoleOptionId(CarrierOption.CanReportOnCarry)].GetValue();
+        this.carryDistance = AllOptionHolder.Instance.GetValue<float>(
+            GetRoleOptionId(CarrierOption.CarryDistance));
+        this.canReportOnCarry = AllOptionHolder.Instance.GetValue<bool>(
+            GetRoleOptionId(CarrierOption.CanReportOnCarry));
         this.RoleAbilityInit();
     }
 

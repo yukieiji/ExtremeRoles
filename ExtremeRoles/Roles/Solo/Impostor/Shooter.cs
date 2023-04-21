@@ -4,7 +4,7 @@ using UnityEngine;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo.Crewmate;
@@ -371,7 +371,7 @@ public sealed class Shooter :
     }
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
         CreateBoolOption(
             ShooterOption.IsInitAwake,
@@ -438,36 +438,36 @@ public sealed class Shooter :
     
     protected override void RoleSpecificInit()
     {
-        var allOps = OptionHolder.AllOption;
+        var allOps = AllOptionHolder.Instance;
 
-        this.isAwake = allOps[
-            GetRoleOptionId(ShooterOption.IsInitAwake)].GetValue();
+        this.isAwake = allOps.GetValue<bool>(
+            GetRoleOptionId(ShooterOption.IsInitAwake));
 
-        this.awakeKillCount = allOps[
-            GetRoleOptionId(ShooterOption.AwakeKillNum)].GetValue();
-        this.awakeImpNum = allOps[
-            GetRoleOptionId(ShooterOption.AwakeImpNum)].GetValue();
+        this.awakeKillCount = allOps.GetValue<int>(
+            GetRoleOptionId(ShooterOption.AwakeKillNum));
+        this.awakeImpNum = allOps.GetValue<int>(
+            GetRoleOptionId(ShooterOption.AwakeImpNum));
 
-        this.isNoneAwakeWhenShoot = allOps[
-            GetRoleOptionId(ShooterOption.NoneAwakeWhenShoot)].GetValue();
+        this.isNoneAwakeWhenShoot = allOps.GetValue<bool>(
+            GetRoleOptionId(ShooterOption.NoneAwakeWhenShoot));
 
-        this.awakedCallMeeting = allOps[
-            GetRoleOptionId(ShooterOption.CanCallMeeting)].GetValue();
-        this.canShootSelfCallMeeting = allOps[
-            GetRoleOptionId(ShooterOption.CanShootSelfCallMeeting)].GetValue();
+        this.awakedCallMeeting = allOps.GetValue<bool>(
+            GetRoleOptionId(ShooterOption.CanCallMeeting));
+        this.canShootSelfCallMeeting = allOps.GetValue<bool>(
+            GetRoleOptionId(ShooterOption.CanShootSelfCallMeeting));
 
-        this.maxShootNum = allOps[
-            GetRoleOptionId(ShooterOption.MaxShootNum)].GetValue();
-        this.curShootNum = allOps[
-            GetRoleOptionId(ShooterOption.InitShootNum)].GetValue();
-        this.maxMeetingShootNum = allOps[
-            GetRoleOptionId(ShooterOption.MaxMeetingShootNum)].GetValue();
-        this.chargeTime = allOps[
-            GetRoleOptionId(ShooterOption.ShootChargeTime)].GetValue();
-        this.chargeKillNum = allOps[
-            GetRoleOptionId(ShooterOption.ShootKillNum)].GetValue();
-        this.killCoolPenalty = allOps[
-            GetRoleOptionId(ShooterOption.ShootKillCoolPenalty)].GetValue();
+        this.maxShootNum = allOps.GetValue<int>(
+            GetRoleOptionId(ShooterOption.MaxShootNum));
+        this.curShootNum = allOps.GetValue<int>(
+            GetRoleOptionId(ShooterOption.InitShootNum));
+        this.maxMeetingShootNum = allOps.GetValue<int>(
+            GetRoleOptionId(ShooterOption.MaxMeetingShootNum));
+        this.chargeTime = allOps.GetValue<float>(
+            GetRoleOptionId(ShooterOption.ShootChargeTime));
+        this.chargeKillNum = allOps.GetValue<int>(
+            GetRoleOptionId(ShooterOption.ShootKillNum));
+        this.killCoolPenalty = allOps.GetValue<float>(
+            GetRoleOptionId(ShooterOption.ShootKillCoolPenalty));
 
         this.isNoneAwakeWhenShoot = 
 

@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
-
-using Hazel;
 using BepInEx.Configuration;
 
 using ExtremeRoles.Helper;
-using ExtremeRoles.Module;
 using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
@@ -23,7 +19,6 @@ public static class OptionHolder
     private const int singleRoleOptionStartOffset = 256;
     private const int combRoleOptionStartOffset = 5000;
     private const int ghostRoleOptionStartOffset = 10000;
-    private const int chunkSize = 50;
     private const int maxPresetNum = 20;
 
     public static readonly string[] SpawnRate = new string[] {
@@ -31,19 +26,6 @@ public static class OptionHolder
         "50%", "60%", "70%", "80%", "90%", "100%" };
 
     public static readonly string[] Range = new string[] { "short", "middle", "long" };
-
-    public static string ConfigPreset
-    {
-        get => $"Preset:{selectedPreset}";
-    }
-
-    public static int OptionsPage = 1;
-
-    public static Dictionary<int, IOption> AllOption = new Dictionary<int, IOption>();
-    
-
-    private static int selectedPreset = 0;
-    private static bool isBlockShare = false;
 
     private static IRegionInfo[] defaultRegion;
 
@@ -57,20 +39,6 @@ public static class OptionHolder
         UsePrngAlgorithm,
     }
 
-    public static void ExecuteWithBlockOptionShare(Action func)
-    {
-        isBlockShare = true;
-        try
-        {
-            func();
-        }
-        catch (Exception e)
-        {
-            ExtremeRolesPlugin.Logger.LogInfo($"BlockShareExcuteFailed!!:{e}");
-        }
-        isBlockShare = false;
-    }
-
     public static void Create()
     {
 
@@ -79,7 +47,6 @@ public static class OptionHolder
         createConfigOption();
 
         Roles.ExtremeRoleManager.GameRole.Clear();
-        AllOption.Clear();
 
         new IntCustomOption(
             (int)CommonOptionKey.PresetSelection, Design.ColoedString(
@@ -147,75 +114,6 @@ public static class OptionHolder
         Client.GhostsSeeVote = ConfigParser.GhostsSeeVotes.Value;
         Client.ShowRoleSummary = ConfigParser.ShowRoleSummary.Value;
         Client.HideNamePlate = ConfigParser.HideNamePlate.Value;
-    }
-
-
-    public static void SwitchPreset(int newPreset)
-    {
-        selectedPreset = newPreset;
-
-        // オプションの共有でネットワーク帯域とサーバーに負荷をかけて人が落ちたりするので共有を一時的に無効化して実行
-        ExecuteWithBlockOptionShare(
-            () =>
-            {
-                foreach (IOption option in AllOption.Values)
-                {
-                    if (option.Id == 0) { continue; }
-                    option.SwitchPreset();
-                }
-            });
-        if (RoleAssignFilter.IsExist)
-        {
-            RoleAssignFilter.Instance.SwitchPreset();
-        }
-    }
-
-    public static void ShareOptionSelections()
-    {
-        if (isBlockShare) { return; }
-
-        if (PlayerControl.AllPlayerControls.Count <= 1 || 
-            !AmongUsClient.Instance ||
-            !AmongUsClient.Instance.AmHost ||
-            !PlayerControl.LocalPlayer) { return; }
-
-        var splitOption = AllOption.Select((x, i) =>
-            new { data = x, indexgroup = i / chunkSize })
-            .GroupBy(x => x.indexgroup, x => x.data)
-            .Select(y => y.Select(x => x));
-
-        foreach (var chunkedOption in splitOption)
-        {
-            using (var caller = RPCOperator.CreateCaller(
-                RPCOperator.Command.ShareOption))
-            {
-                caller.WriteByte((byte)chunkedOption.Count());
-                foreach (var (id, option) in chunkedOption)
-                {
-                    caller.WritePackedInt(id);
-                    caller.WritePackedInt(option.CurSelection);
-                }
-            }
-        }
-    }
-    public static void ShareOption(int numberOfOptions, MessageReader reader)
-    {
-        try
-        {
-            for (int i = 0; i < numberOfOptions; i++)
-            {
-                int optionId = reader.ReadPackedInt32();
-                int selection = reader.ReadPackedInt32();
-                lock (AllOption)
-                {
-                    AllOption[optionId].UpdateSelection(selection);
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            Logging.Error($"Error while deserializing options:{e.Message}");
-        }
     }
 
     public static void UpdateRegion()

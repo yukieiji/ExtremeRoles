@@ -5,6 +5,7 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
@@ -253,7 +254,7 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
         return base.GetRolePlayerNameTag(targetRole, targetPlayerId);
     }
 
-    protected override void CreateSpecificOption(IOption parentOps)
+    protected override void CreateSpecificOption(IOptionInfo parentOps)
     {
         CreateIntOption(
             BuddyOption.AwakeTaskGage,
@@ -264,8 +265,8 @@ public sealed class Buddy : MultiAssignRoleBase, IRoleAwake<RoleTypes>, IRoleSpe
 
     protected override void RoleSpecificInit()
     {
-        this.awakeTaskGage = (float)OptionHolder.AllOption[
-           GetRoleOptionId(BuddyOption.AwakeTaskGage)].GetValue() / 100.0f;
+        this.awakeTaskGage = AllOptionHolder.Instance.GetValue<int>(
+           GetRoleOptionId(BuddyOption.AwakeTaskGage)) / 100.0f;
 
         this.awakeHasOtherVision = this.HasOtherVision;
 

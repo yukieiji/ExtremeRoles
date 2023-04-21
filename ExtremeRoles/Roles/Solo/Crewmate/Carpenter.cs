@@ -16,6 +16,7 @@ using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Extension.Ship;
 using ExtremeRoles.Module.AbilityBehavior;
+using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.Roles.Solo.Crewmate;
 
@@ -711,7 +712,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
     }
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
         CreateIntOption(
             CarpenterOption.AwakeTaskGage,
@@ -724,8 +725,8 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
     protected override void RoleSpecificInit()
     {
         this.targetVent = null;
-        this.awakeTaskGage = (float)OptionHolder.AllOption[
-            GetRoleOptionId(CarpenterOption.AwakeTaskGage)].GetValue() / 100.0f;
+        this.awakeTaskGage = AllOptionHolder.Instance.GetValue<int>(
+            GetRoleOptionId(CarpenterOption.AwakeTaskGage)) / 100.0f;
         
         this.awakeHasOtherVision = this.HasOtherVision;
         
@@ -742,7 +743,7 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
         abilityInit();
     }
 
-    private void createAbilityOption(IOption parentOps)
+    private void createAbilityOption(IOptionInfo parentOps)
     {
         CreateFloatOption(
             RoleAbilityCommonOption.AbilityCoolTime,
@@ -768,23 +769,24 @@ public sealed class Carpenter : SingleRoleBase, IRoleAbility, IRoleAwake<RoleTyp
             CarpenterOption.SetCameraStopTime,
             2.5f, 1.0f, 5.0f, 0.5f,
             parentOps, format: OptionUnit.Second);
-        ((IntCustomOption)OptionHolder.AllOption[
+        ((IntCustomOption)AllOptionHolder.Instance.Get<int>( 
             GetRoleOptionId(
-                RoleAbilityCommonOption.AbilityCount)]).SetOptionUnit(OptionUnit.ScrewNum);
+                RoleAbilityCommonOption.AbilityCount),
+            AllOptionHolder.ValueType.Int)).SetOptionUnit(OptionUnit.ScrewNum);
     }
 
     private void abilityInit()
     {
         if (this.Button == null) { return; }
 
-        var allOps = OptionHolder.AllOption;
+        var allOps = AllOptionHolder.Instance;
         this.Button.Behavior.SetCoolTime(
-            allOps[GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)].GetValue());
+            allOps.GetValue<float>(GetRoleOptionId(RoleAbilityCommonOption.AbilityCoolTime)));
 
         if (this.Button.Behavior is CarpenterAbilityBehavior behavior)
         {
             behavior.SetAbilityCount(
-                allOps[GetRoleOptionId(RoleAbilityCommonOption.AbilityCount)].GetValue()); ;
+                allOps.GetValue<int>(GetRoleOptionId(RoleAbilityCommonOption.AbilityCount)));
         }
         this.Button.OnMeetingEnd();
     }

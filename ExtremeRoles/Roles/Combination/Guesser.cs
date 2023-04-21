@@ -15,6 +15,7 @@ using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.Solo;
 using ExtremeRoles.Roles.Solo.Crewmate;
 using ExtremeRoles.Performance;
+using ExtremeRoles.Module.CustomOption;
 
 namespace ExtremeRoles.Roles.Combination;
 
@@ -552,10 +553,11 @@ public sealed class Guesser :
     }
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
-        var imposterSetting = OptionHolder.AllOption[
-            GetManagerOptionId(CombinationRoleCommonOption.IsAssignImposter)];
+        var imposterSetting = AllOptionHolder.Instance.Get<bool>(
+            GetManagerOptionId(CombinationRoleCommonOption.IsAssignImposter),
+            AllOptionHolder.ValueType.Bool);
         CreateKillerOption(imposterSetting);
 
         CreateBoolOption(
@@ -588,15 +590,15 @@ public sealed class Guesser :
     {
         this.uiPrefab = null;
         this.guesserUi = null;
-        var allOption = OptionHolder.AllOption;
+        var allOption = AllOptionHolder.Instance;
 
-        this.CanCallMeeting = allOption[
-            GetRoleOptionId(GuesserOption.CanCallMeeting)].GetValue();
+        this.CanCallMeeting = allOption.GetValue<bool>(
+            GetRoleOptionId(GuesserOption.CanCallMeeting));
 
-        bool canGuessNoneRole = allOption[
-            GetRoleOptionId(GuesserOption.CanGuessNoneRole)].GetValue();
-        GuessMode guessMode = (GuessMode)allOption[
-            GetRoleOptionId(GuesserOption.GuessNoneRoleMode)].GetValue();
+        bool canGuessNoneRole = allOption.GetValue<bool>(
+            GetRoleOptionId(GuesserOption.CanGuessNoneRole));
+        GuessMode guessMode = (GuessMode)allOption.GetValue<int>(
+            GetRoleOptionId(GuesserOption.GuessNoneRoleMode));
 
         this.canGuessNoneRole = canGuessNoneRole &&
             ((
@@ -611,10 +613,10 @@ public sealed class Guesser :
                 guessMode == GuessMode.EvilGuesserOnly && this.IsImpostor()
             ));
 
-        this.bulletNum = allOption[
-            GetRoleOptionId(GuesserOption.GuessNum)].GetValue();
-        this.maxGuessNum = allOption[
-            GetRoleOptionId(GuesserOption.MaxGuessNumWhenMeeting)].GetValue();
+        this.bulletNum = allOption.GetValue<int>(
+            GetRoleOptionId(GuesserOption.GuessNum));
+        this.maxGuessNum = allOption.GetValue<int>(
+            GetRoleOptionId(GuesserOption.MaxGuessNumWhenMeeting));
 
         this.curGuessNum = 0;
         this.roleNamePrefix = this.CreateImpCrewPrefix();

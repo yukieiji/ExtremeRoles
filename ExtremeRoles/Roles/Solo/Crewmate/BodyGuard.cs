@@ -791,8 +791,8 @@ public sealed class BodyGuard :
 
         this.reportStr = string.Empty;
 
-        IsBlockMeetingKill = allOpt.GetValue<float>(
-            GetRoleOptionId(BodyGuardOption.IsBlockMeetingKill)].GetValue();
+        IsBlockMeetingKill = allOpt.GetValue<bool>(
+            GetRoleOptionId(BodyGuardOption.IsBlockMeetingKill));
 
         this.shieldRange = allOpt.GetValue<float>(
             GetRoleOptionId(BodyGuardOption.ShieldRange));
