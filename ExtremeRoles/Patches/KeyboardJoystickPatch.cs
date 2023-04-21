@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using UnityEngine;
 
@@ -8,12 +7,13 @@ using AmongUs.GameOptions;
 
 
 using ExtremeRoles.GameMode;
+using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Helper;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Extension.State;
 using ExtremeRoles.Performance;
-using ExtremeRoles.GameMode.RoleSelector;
 
 namespace ExtremeRoles.Patches;
 
@@ -135,7 +135,7 @@ public static class KeyboardJoystickPatch
         { return; }
 
         if (ExtremeGameModeManager.Instance.RoleSelector.CanUseXion &&
-            OptionHolder.AllOption[(int)RoleGlobalOption.UseXion].GetValue() &&
+            AllOptionHolder.Instance.GetValue<bool>((int)RoleGlobalOption.UseXion) &&
             !ExtremeRolesPlugin.DebugMode.Value)
         {
             Roles.Solo.Host.Xion.SpecialKeyShortCut();
