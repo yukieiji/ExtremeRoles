@@ -372,8 +372,8 @@ public sealed class CurseMaker :
             GetRoleOptionId(CurseMakerOption.SearchDeadBodyTime));
 
         this.isDeadBodySearchUsed = false;
-        this.isReduceSearchByTask = allOption.GetValue<int>(
-            GetRoleOptionId(CurseMakerOption.IsReduceSearchForTask)].GetValue();
+        this.isReduceSearchByTask = allOption.GetValue<bool>(
+            GetRoleOptionId(CurseMakerOption.IsReduceSearchForTask));
         this.reduceSearchtaskGage = allOption.GetValue<int>(
             GetRoleOptionId(CurseMakerOption.ReduceSearchTaskGage)) / 100.0f;
         this.reduceTime = allOption.GetValue<float>(
@@ -487,7 +487,7 @@ public sealed class CurseMaker :
             }
         }
 
-        foreach (var deadBodyInfo in removeData)
+        foreach (byte deadBodyInfo in removeData)
         {
             this.deadBodyData.Remove(deadBodyInfo);
         }

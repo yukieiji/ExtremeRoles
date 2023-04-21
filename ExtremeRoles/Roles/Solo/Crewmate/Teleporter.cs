@@ -332,8 +332,8 @@ public sealed class Teleporter :
 
         var allOpt = AllOptionHolder.Instance;
         this.Button.Behavior.SetCoolTime(
-            allOpt.GetValue(this.GetRoleOptionId(
-                RoleAbilityCommonOption.AbilityCoolTime)].GetValue());
+            allOpt.GetValue<float>(this.GetRoleOptionId(
+                RoleAbilityCommonOption.AbilityCoolTime)));
         
         this.behavior.SetAbilityCount(0);
 

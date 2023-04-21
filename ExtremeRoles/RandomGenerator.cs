@@ -27,8 +27,8 @@ public static class RandomGenerator
 
     public static void Initialize()
     {
-        bool useStrongGen = AllOptionHolder.Instance.GetValue(
-            (int)OptionHolder.CommonOptionKey.UseStrongRandomGen].GetValue();
+        bool useStrongGen = AllOptionHolder.Instance.GetValue<bool>(
+            (int)OptionHolder.CommonOptionKey.UseStrongRandomGen);
         if (instance != null)
         {
             if (useStrongGen != prevValue)
@@ -80,8 +80,8 @@ public static class RandomGenerator
 
     public static Random GetTempGenerator()
     {
-        bool useStrongGen = AllOptionHolder.Instance.GetValue(
-            (int)OptionHolder.CommonOptionKey.UseStrongRandomGen].GetValue();
+        bool useStrongGen = AllOptionHolder.Instance.GetValue<bool>(
+            (int)OptionHolder.CommonOptionKey.UseStrongRandomGen);
 
         if (useStrongGen)
         {

@@ -349,8 +349,8 @@ public sealed class Eater : SingleRoleBase, IRoleAbility, IRoleMurderPlayerHook,
 
         if (this.Button?.Behavior is AbilityCountBehavior behaviour)
         {
-            int abilityNum = (int)allOpt.GetValue<>(GetRoleOptionId(
-                RoleAbilityCommonOption.AbilityCount)].GetValue();
+            int abilityNum = allOpt.GetValue<int>(GetRoleOptionId(
+                RoleAbilityCommonOption.AbilityCount));
             int halfPlayerNum = GameData.Instance.PlayerCount / 2;
 
             behaviour.SetCountText("eaterWinNum");

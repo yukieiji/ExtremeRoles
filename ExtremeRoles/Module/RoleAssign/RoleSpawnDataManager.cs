@@ -79,7 +79,7 @@ public sealed class RoleSpawnDataManager : ISpawnDataManager
             int roleSet = allOption.GetValue<int>(
                 role.GetRoleOptionId(RoleCommonOption.RoleNum));
             bool isMultiAssign = allOption.GetValue<bool>(
-                role.GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign)\);
+                role.GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign));
 
             Logging.Debug($"Role:{role}    SpawnRate:{spawnRate}   RoleSet:{roleSet}");
 
