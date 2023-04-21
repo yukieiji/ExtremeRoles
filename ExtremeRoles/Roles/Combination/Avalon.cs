@@ -322,18 +322,18 @@ public sealed class Marlin : MultiAssignRoleBase, IRoleSpecialSetUp, IRoleResetM
     {
         this.IsAssassinate = false;
 
-        var allOption = OptionHolder.AllOption;
+        var allOption = AllOptionHolder.Instance;
 
-        this.HasTask = allOption[
-            GetRoleOptionId(MarlinOption.HasTask)].GetValue();
-        this.canSeeAssassin = allOption[
-            GetRoleOptionId(MarlinOption.CanSeeAssassin)].GetValue();
-        this.CanSeeVote = allOption[
-            GetRoleOptionId(MarlinOption.CanSeeVote)].GetValue();
-        this.CanSeeNeutral = allOption[
-            GetRoleOptionId(MarlinOption.CanSeeNeutral)].GetValue();
-        this.UseVent = allOption[
-            GetRoleOptionId(MarlinOption.CanUseVent)].GetValue();
+        this.HasTask = allOption.GetValue<bool>(
+            GetRoleOptionId(MarlinOption.HasTask));
+        this.canSeeAssassin = allOption.GetValue<bool>(
+            GetRoleOptionId(MarlinOption.CanSeeAssassin));
+        this.CanSeeVote = allOption.GetValue<bool>(
+            GetRoleOptionId(MarlinOption.CanSeeVote));
+        this.CanSeeNeutral = allOption.GetValue<bool>(
+            GetRoleOptionId(MarlinOption.CanSeeNeutral));
+        this.UseVent = allOption.GetValue<bool>(
+            GetRoleOptionId(MarlinOption.CanUseVent));
         this.PlayerIcon = new Dictionary<byte, PoolablePlayer>();
     }
 
