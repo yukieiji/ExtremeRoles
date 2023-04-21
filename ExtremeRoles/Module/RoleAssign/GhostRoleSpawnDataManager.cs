@@ -4,6 +4,7 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module.Interface;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
@@ -70,9 +71,11 @@ public sealed class GhostRoleSpawnDataManager :
             var role = ExtremeGhostRoleManager.AllGhostRole[roleId];
 
             int spawnRate = ISpawnDataManager.ComputePercentage(
-                allOption[role.GetRoleOptionId(RoleCommonOption.SpawnRate)]);
-            int roleNum = allOption[
-                role.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue();
+                allOption.Get<int>(
+                    role.GetRoleOptionId(RoleCommonOption.SpawnRate), 
+                    AllOptionHolder.ValueType.Int));
+            int roleNum = allOption.GetValue<int>(
+                role.GetRoleOptionId(RoleCommonOption.RoleNum));
 
             Helper.Logging.Debug(
                 $"GhostRole Name:{role.Name}  SpawnRate:{spawnRate}   RoleNum:{roleNum}");

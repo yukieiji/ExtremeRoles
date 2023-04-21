@@ -22,6 +22,6 @@ public interface ISpawnDataManager
         return RandomGenerator.Instance.Next(minSpawnNum, maxSpawnNum + 1);
     }
 
-    protected static int ComputePercentage(IOption self)
+    protected static int ComputePercentage(IValueOption<int> self)
         => (int)decimal.Multiply(self.GetValue(), self.ValueCount);
 }
