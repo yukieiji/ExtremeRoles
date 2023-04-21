@@ -49,6 +49,8 @@ public sealed class AllOptionHolder
         this.allOptionId.Add(id, ValueType.Bool);
     }
 
+    public bool Contains(int id) => this.allOptionId.ContainsKey(id);
+
     public bool TryGet<T>(int id, out IValueOption<T> option)
     {
         bool result = this.allOptionId.TryGetValue(id, out ValueType type);
@@ -75,6 +77,19 @@ public sealed class AllOptionHolder
         };
 
     public string GetHudString(int id)
+    {
+        ValueType type = this.allOptionId[id];
+
+        return type switch
+        {
+            ValueType.Int => this.intOption.Get(id).ToHudString(),
+            ValueType.Float => this.floatOption.Get(id).ToHudString(),
+            ValueType.Bool => this.boolOption.Get(id).ToHudString(),
+            _ => string.Empty,
+        };
+    }
+
+    public string GetHudStringWithChildren(int id)
     {
         ValueType type = this.allOptionId[id];
 
