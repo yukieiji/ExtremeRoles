@@ -11,6 +11,7 @@ using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityBehavior;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
@@ -425,7 +426,7 @@ public sealed class Zombie :
          
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
         CreateIntOption(
             ZombieOption.AwakeKillCount,
@@ -458,21 +459,21 @@ public sealed class Zombie :
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = OptionHolder.AllOption;
+        var allOpt = AllOptionHolder.Instance;
 
         this.killCount = 0;
 
-        this.awakeKillCount = allOpt[
-            GetRoleOptionId(ZombieOption.AwakeKillCount)].GetValue();
-        this.resurrectKillCount = allOpt[
-            GetRoleOptionId(ZombieOption.ResurrectKillCount)].GetValue();
+        this.awakeKillCount = allOpt.GetValue<int>(
+            GetRoleOptionId(ZombieOption.AwakeKillCount));
+        this.resurrectKillCount = allOpt.GetValue<int>(
+            GetRoleOptionId(ZombieOption.ResurrectKillCount));
 
-        this.showMagicCircleTime = allOpt[
-            GetRoleOptionId(ZombieOption.ShowMagicCircleTime)].GetValue();
-        this.resurrectTimer = allOpt[
-            GetRoleOptionId(ZombieOption.ResurrectDelayTime)].GetValue();
-        this.canResurrectOnExil = allOpt[
-            GetRoleOptionId(ZombieOption.CanResurrectOnExil)].GetValue();
+        this.showMagicCircleTime = allOpt.GetValue<float>(
+            GetRoleOptionId(ZombieOption.ShowMagicCircleTime));
+        this.resurrectTimer = allOpt.GetValue<float>(
+            GetRoleOptionId(ZombieOption.ResurrectDelayTime));
+        this.canResurrectOnExil = allOpt.GetValue<bool>(
+            GetRoleOptionId(ZombieOption.CanResurrectOnExil));
 
         this.awakeHasOtherVision = this.HasOtherVision;
         this.canResurrect = false;
