@@ -267,8 +267,8 @@ public abstract class GhostRoleBase
         this.Button.OnMeetingEnd();
     }
 
-    protected bool isReportAbility() => OptionHolder.AllOption[
-        this.GetRoleOptionId(GhostRoleOption.IsReportAbility)].GetValue();
+    protected bool isReportAbility() => AllOptionHolder.Instance.GetValue<bool>(
+        this.GetRoleOptionId(GhostRoleOption.IsReportAbility));
 
     protected bool IsCommonUse() => 
         PlayerControl.LocalPlayer && 
