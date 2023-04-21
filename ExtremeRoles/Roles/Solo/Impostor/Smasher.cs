@@ -1,163 +1,163 @@
 ﻿using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Performance;
 
 
-namespace ExtremeRoles.Roles.Solo.Impostor
+namespace ExtremeRoles.Roles.Solo.Impostor;
+
+public sealed class Smasher : SingleRoleBase, IRoleAbility
 {
-    public sealed class Smasher : SingleRoleBase, IRoleAbility
+    public enum SmasherOption
     {
-        public enum SmasherOption
+        SmashPenaltyKillCool,
+    }
+
+    public ExtremeAbilityButton Button
+    {
+        get => this.smashButton;
+        set
         {
-            SmashPenaltyKillCool,
+            this.smashButton = value;
+        }
+    }
+
+    private ExtremeAbilityButton smashButton;
+    private byte targetPlayerId;
+    private float prevKillCool;
+    private float penaltyKillCool;
+
+    public Smasher() : base(
+        ExtremeRoleId.Smasher,
+        ExtremeRoleType.Impostor,
+        ExtremeRoleId.Smasher.ToString(),
+        Palette.ImpostorRed,
+        true, false, true, true)
+    { }
+
+    public void CreateAbility()
+    {
+        this.CreateAbilityCountButton(
+            "smash", FastDestroyableSingleton<HudManager>.Instance.KillButton.graphic.sprite);
+    }
+
+    public bool IsAbilityUse()
+    {
+        this.targetPlayerId = byte.MaxValue;
+        var player = Player.GetClosestPlayerInKillRange();
+        if (player != null)
+        {
+            this.targetPlayerId = player.PlayerId;
+        }
+        return this.IsCommonUse() && this.targetPlayerId != byte.MaxValue;
+    }
+
+    public bool UseAbility()
+    {
+        PlayerControl killer = CachedPlayerControl.LocalPlayer;
+        if (killer.Data.IsDead || !killer.CanMove) { return false; }
+
+        var role = ExtremeRoleManager.GetLocalPlayerRole();
+        var targetPlayerRole = ExtremeRoleManager.GameRole[this.targetPlayerId];
+        var target = Player.GetPlayerControlById(this.targetPlayerId);
+
+        if (target == null) { return false; }
+
+        bool canKill = role.TryRolePlayerKillTo(
+            killer, target);
+        if (!canKill) { return false; }
+
+        canKill = targetPlayerRole.TryRolePlayerKilledFrom(
+            target, killer);
+        if (!canKill) { return false; }
+
+        var multiAssignRole = role as MultiAssignRoleBase;
+        if (multiAssignRole != null)
+        {
+            if (multiAssignRole.AnotherRole != null)
+            {
+                canKill = multiAssignRole.AnotherRole.TryRolePlayerKillTo(
+                    killer, target);
+                if (!canKill) { return false; }
+            }
         }
 
-        public ExtremeAbilityButton Button
+        multiAssignRole = targetPlayerRole as MultiAssignRoleBase;
+        if (multiAssignRole != null)
         {
-            get => this.smashButton;
-            set
+            if (multiAssignRole.AnotherRole != null)
             {
-                this.smashButton = value;
+                canKill = multiAssignRole.AnotherRole.TryRolePlayerKilledFrom(
+                    target, killer);
+                if (!canKill) { return false; }
             }
         }
 
-        private ExtremeAbilityButton smashButton;
-        private byte targetPlayerId;
-        private float prevKillCool;
-        private float penaltyKillCool;
-
-        public Smasher() : base(
-            ExtremeRoleId.Smasher,
-            ExtremeRoleType.Impostor,
-            ExtremeRoleId.Smasher.ToString(),
-            Palette.ImpostorRed,
-            true, false, true, true)
-        { }
-
-        public void CreateAbility()
+        if (Crewmate.BodyGuard.TryRpcKillGuardedBodyGuard(
+                killer.PlayerId, target.PlayerId))
         {
-            this.CreateAbilityCountButton(
-                "smash", FastDestroyableSingleton<HudManager>.Instance.KillButton.graphic.sprite);
-        }
-
-        public bool IsAbilityUse()
-        {
-            this.targetPlayerId = byte.MaxValue;
-            var player = Player.GetClosestPlayerInKillRange();
-            if (player != null)
-            {
-                this.targetPlayerId = player.PlayerId;
-            }
-            return this.IsCommonUse() && this.targetPlayerId != byte.MaxValue;
-        }
-
-        public bool UseAbility()
-        {
-            PlayerControl killer = CachedPlayerControl.LocalPlayer;
-            if (killer.Data.IsDead || !killer.CanMove) { return false; }
-
-            var role = ExtremeRoleManager.GetLocalPlayerRole();
-            var targetPlayerRole = ExtremeRoleManager.GameRole[this.targetPlayerId];
-            var target = Player.GetPlayerControlById(this.targetPlayerId);
-
-            if (target == null) { return false; }
-
-            bool canKill = role.TryRolePlayerKillTo(
-                killer, target);
-            if (!canKill) { return false; }
-
-            canKill = targetPlayerRole.TryRolePlayerKilledFrom(
-                target, killer);
-            if (!canKill) { return false; }
-
-            var multiAssignRole = role as MultiAssignRoleBase;
-            if (multiAssignRole != null)
-            {
-                if (multiAssignRole.AnotherRole != null)
-                {
-                    canKill = multiAssignRole.AnotherRole.TryRolePlayerKillTo(
-                        killer, target);
-                    if (!canKill) { return false; }
-                }
-            }
-
-            multiAssignRole = targetPlayerRole as MultiAssignRoleBase;
-            if (multiAssignRole != null)
-            {
-                if (multiAssignRole.AnotherRole != null)
-                {
-                    canKill = multiAssignRole.AnotherRole.TryRolePlayerKilledFrom(
-                        target, killer);
-                    if (!canKill) { return false; }
-                }
-            }
-
-            if (Crewmate.BodyGuard.TryRpcKillGuardedBodyGuard(
-                    killer.PlayerId, target.PlayerId))
-            {
-                featKillPenalty(killer);
-                return true;
-            }
-            else if (Patches.Button.KillButtonDoClickPatch.IsMissMuderKill(
-                killer, target))
-            {
-                return false;
-            }
-
-            this.prevKillCool = PlayerControl.LocalPlayer.killTimer;
-
-            Player.RpcUncheckMurderPlayer(
-                killer.PlayerId,
-                target.PlayerId,
-                byte.MaxValue);
-
             featKillPenalty(killer);
             return true;
         }
-
-        private void featKillPenalty(PlayerControl killer)
+        else if (Patches.Button.KillButtonDoClickPatch.IsMissMuderKill(
+            killer, target))
         {
-            if (this.penaltyKillCool > 0.0f)
-            {
-
-                this.HasOtherKillCool = true;
-                API.Extension.State.RoleState.AddKillCoolOffset(
-                    this.penaltyKillCool);
-            }
-
-            killer.killTimer = this.prevKillCool;
+            return false;
         }
 
-        protected override void CreateSpecificOption(
-            IOption parentOps)
+        this.prevKillCool = PlayerControl.LocalPlayer.killTimer;
+
+        Player.RpcUncheckMurderPlayer(
+            killer.PlayerId,
+            target.PlayerId,
+            byte.MaxValue);
+
+        featKillPenalty(killer);
+        return true;
+    }
+
+    private void featKillPenalty(PlayerControl killer)
+    {
+        if (this.penaltyKillCool > 0.0f)
         {
-            this.CreateAbilityCountOption(
-                parentOps, 1, 14);
 
-            CreateFloatOption(
-                SmasherOption.SmashPenaltyKillCool,
-                4.0f, 0.0f, 30f, 0.5f, parentOps,
-                format: OptionUnit.Second);
-
+            this.HasOtherKillCool = true;
+            API.Extension.State.RoleState.AddKillCoolOffset(
+                this.penaltyKillCool);
         }
 
-        protected override void RoleSpecificInit()
-        {
-            this.RoleAbilityInit();
-            this.penaltyKillCool = OptionHolder.AllOption[
-                GetRoleOptionId(SmasherOption.SmashPenaltyKillCool)].GetValue();
-        }
+        killer.killTimer = this.prevKillCool;
+    }
 
-        public void ResetOnMeetingStart()
-        {
-            return;
-        }
+    protected override void CreateSpecificOption(
+        IOptionInfo parentOps)
+    {
+        this.CreateAbilityCountOption(
+            parentOps, 1, 14);
 
-        public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
-        {
-            return;
-        }
+        CreateFloatOption(
+            SmasherOption.SmashPenaltyKillCool,
+            4.0f, 0.0f, 30f, 0.5f, parentOps,
+            format: OptionUnit.Second);
+
+    }
+
+    protected override void RoleSpecificInit()
+    {
+        this.RoleAbilityInit();
+        this.penaltyKillCool = AllOptionHolder.Instance.GetValue<float>(
+            GetRoleOptionId(SmasherOption.SmashPenaltyKillCool));
+    }
+
+    public void ResetOnMeetingStart()
+    {
+        return;
+    }
+
+    public void ResetOnMeetingEnd(GameData.PlayerInfo exiledPlayer = null)
+    {
+        return;
     }
 }
