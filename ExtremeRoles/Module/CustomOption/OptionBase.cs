@@ -50,6 +50,7 @@ public interface IOptionInfo
     public OptionTab Tab { get; }
     public IOptionInfo Parent { get; }
     public List<IOptionInfo> Children { get; }
+    public OptionBehaviour Body { get; }
 
     public bool IsActive();
     public void SetHeaderTo(bool enable);
@@ -72,11 +73,12 @@ public interface IValueOption<Value> : IOptionInfo
 
 public abstract class CustomOptionBase<OutType, SelectionType> : IValueOption<OutType>
 {
-    
+
     public int CurSelection { get; private set; }
     public bool IsHidden { get; private set; }
     public bool IsHeader { get; private set; }
     public List<IOptionInfo> Children { get; private set; }
+    public OptionBehaviour Body { get; private set; }
 
     public OptionTab Tab { get; init; }
     public IOptionInfo Parent { get; init; }
@@ -93,7 +95,6 @@ public abstract class CustomOptionBase<OutType, SelectionType> : IValueOption<Ou
     private int defaultSelection = 0;
 
     private ConfigEntry<int> entry = null;
-    private OptionBehaviour behaviour = null;
     private List<IValueOption<OutType>> withUpdateOption = new List<IValueOption<OutType>>();
     private IOptionInfo forceEnableCheckOption = null;
     private OptionUnit format = OptionUnit.None;
@@ -229,7 +230,7 @@ public abstract class CustomOptionBase<OutType, SelectionType> : IValueOption<Ou
             (newSelection + length) % length,
             0, length - 1);
 
-        if (this.behaviour is StringOption stringOption)
+        if (this.Body is StringOption stringOption)
         {
             stringOption.oldValue = stringOption.Value = this.CurSelection;
             stringOption.ValueText.text = this.GetTranslatedValue();
@@ -279,7 +280,7 @@ public abstract class CustomOptionBase<OutType, SelectionType> : IValueOption<Ou
 
     public void SetOptionBehaviour(OptionBehaviour newBehaviour)
     {
-        this.behaviour = newBehaviour;
+        this.Body = newBehaviour;
     }
 
     public void SetOptionUnit(OptionUnit unit)

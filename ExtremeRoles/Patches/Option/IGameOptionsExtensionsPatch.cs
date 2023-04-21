@@ -69,7 +69,7 @@ public static class IGameOptionsExtensionsToHudStringPatch
 
         allOptionStr.Add(egmm.ShipOption.ToHudString());
 
-        foreach (IOptionInfo option in AllOptionHolder.Instance.GetIOptions())
+        foreach (IOptionInfo option in AllOptionHolder.Instance.GetAllIOption())
         {
             int optionId = option.Id;
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using ExtremeRoles.Helper;
+using Epic.OnlineServices.Presence;
 
 namespace ExtremeRoles.Module.CustomOption;
 
@@ -49,6 +50,22 @@ public sealed class AllOptionHolder
         this.allOptionId.Add(id, ValueType.Bool);
     }
 
+    public void Add<SelectionType>(int id, IValueOption<SelectionType> option)
+    {
+        if (option is IValueOption<int> intOption)
+        {
+            Add(id, intOption);
+        }
+        else if (option is IValueOption<bool> boolOption)
+        {
+            Add(id, boolOption);
+        }
+        else if (option is IValueOption<float> floatOption)
+        {
+            Add(id, floatOption);
+        }
+    }
+
     public bool Contains(int id) => this.allOptionId.ContainsKey(id);
 
     public bool TryGet<T>(int id, out IValueOption<T> option)
@@ -67,12 +84,68 @@ public sealed class AllOptionHolder
         };
     }
 
+    public bool TryGetIOption(int id, out IOptionInfo option)
+    {
+        bool result = this.allOptionId.TryGetValue(id, out ValueType type);
+        option = null;
+
+        if (!result) { return false; }
+
+        option = type switch
+        {
+            ValueType.Int => this.intOption.Get(id),
+            ValueType.Float => this.floatOption.Get(id),
+            ValueType.Bool => this.boolOption.Get(id),
+            _ => null
+        };
+        return true;
+    }
+
     public IValueOption<T> Get<T>(int id, ValueType type)
         => type switch
         {
             ValueType.Int   => this.intOption.Get(id) as IValueOption<T>,
             ValueType.Float => this.floatOption.Get(id) as IValueOption<T>,
             ValueType.Bool  => this.boolOption.Get(id) as IValueOption<T>,
+            _ => null
+        };
+
+    public IEnumerable<KeyValuePair<int, IOptionInfo>> GetKeyValueAllIOptions()
+    {
+        foreach (var (id, key) in this.allOptionId)
+        {
+
+            IOptionInfo info = key switch
+            {
+                ValueType.Int => this.intOption.Get(id),
+                ValueType.Float => this.floatOption.Get(id),
+                ValueType.Bool => this.boolOption.Get(id),
+                _ => null
+            };
+            yield return new KeyValuePair<int, IOptionInfo>(id, info);
+        }
+    }
+
+    public IEnumerable<IOptionInfo> GetAllIOption()
+    {
+        foreach (var (id, key) in this.allOptionId)
+        {
+            yield return  key switch
+            {
+                ValueType.Int => this.intOption.Get(id),
+                ValueType.Float => this.floatOption.Get(id),
+                ValueType.Bool => this.boolOption.Get(id),
+                _ => null
+            };
+        }
+    }
+
+    public IOptionInfo GetIOption(int id)
+        => this.allOptionId[id] switch
+        {
+            ValueType.Int => this.intOption.Get(id),
+            ValueType.Float => this.floatOption.Get(id),
+            ValueType.Bool => this.boolOption.Get(id),
             _ => null
         };
 
@@ -119,22 +192,6 @@ public sealed class AllOptionHolder
                 return boolOption.GetValue();
             default:
                 return default(T);
-        }
-    }
-
-    public void Add<SelectionType>(int id, IValueOption<SelectionType> option)
-    {
-        if (option is IValueOption<int> intOption)
-        {
-            Add(id, intOption);
-        }
-        else if (option is IValueOption<bool> boolOption)
-        {
-            Add(id, boolOption);
-        }
-        else if (option is IValueOption<float> floatOption)
-        {
-            Add(id, floatOption);
         }
     }
 
