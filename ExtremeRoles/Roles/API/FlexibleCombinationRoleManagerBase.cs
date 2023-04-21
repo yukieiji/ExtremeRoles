@@ -36,22 +36,23 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
     public override void AssignSetUpInit(int curImpNum)
     {
 
-        var allOptions = OptionHolder.AllOption;
+        var allOption = AllOptionHolder.Instance;
 
         foreach (var role in this.Roles)
         {
-            role.CanHasAnotherRole = allOptions[
-                GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign)].GetValue();
+            role.CanHasAnotherRole = allOption.GetValue<bool>(
+                GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign));
 
-            if (!allOptions.ContainsKey(
+            if (!allOption.Contains(
                     GetRoleOptionId(
                         CombinationRoleCommonOption.IsAssignImposter))) { continue; }
 
-            bool isEvil = allOptions[
-                GetRoleOptionId(CombinationRoleCommonOption.IsAssignImposter)].GetValue();
+            bool isEvil = allOption.GetValue<bool>(
+                GetRoleOptionId(CombinationRoleCommonOption.IsAssignImposter));
 
-            var spawnOption = allOptions[
-                    GetRoleOptionId(CombinationRoleCommonOption.ImposterSelectedRate)];
+            var spawnOption = allOption.Get<int>(
+                GetRoleOptionId(CombinationRoleCommonOption.ImposterSelectedRate),
+                AllOptionHolder.ValueType.Int);
             isEvil = isEvil && 
                 (UnityEngine.Random.RandomRange(0, 110) < (int)decimal.Multiply(
                     spawnOption.GetValue(), spawnOption.ValueCount)) &&
@@ -88,8 +89,8 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
         
         if (this.BaseRole.Id != (ExtremeRoleId)roleId) { return role; }
 
-        this.BaseRole.CanHasAnotherRole = OptionHolder.AllOption[
-            GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign)].GetValue();
+        this.BaseRole.CanHasAnotherRole = AllOptionHolder.Instance.GetValue<bool>(
+            GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign));
 
         role = (MultiAssignRoleBase)this.BaseRole.Clone();
 
