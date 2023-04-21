@@ -89,9 +89,6 @@ public static class OptionHolder
 
     public static void Load()
     {
-        // 不具合等が発生しないようにブロック機能を有効化する
-        isBlockShare = false;
-        
         // ランダム生成機を設定を読み込んで作成
         RandomGenerator.Initialize();
 
