@@ -5,6 +5,8 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
+using ExtremeRoles.Module.CustomOption;
+
 using AmongUs.GameOptions;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Performance;
@@ -42,8 +44,8 @@ public static class CustomOptionCsvProcessor
                     comma, "Name", "OptionValue", "CustomOptionName", "SelectedIndex")); //ヘッダー
 
 
-            foreach (IOption option in OptionHolder.AllOption.Values)
-            {
+                foreach (IOptionInfo option in AllOptionHolder.Instance.GetIOptions())
+                {
 
                 if (option.Id == 0) { continue; }
 
@@ -186,12 +188,14 @@ public static class CustomOptionCsvProcessor
             }
 
             // オプションのインポートデモでネットワーク帯域とサーバーに負荷をかけて人が落ちたりするので共有を一時的に無効化して実行
-            OptionHolder.ExecuteWithBlockOptionShare(
+
+            var options = AllOptionHolder.Instance;
+
+            options.ExecuteWithBlockOptionShare(
                 () =>
                 {
-                    foreach (IOption option in OptionHolder.AllOption.Values)
+                    foreach (IOptionInfo option in options.GetIOptions())
                     {
-
                         if (option.Id == 0) { continue; }
 
                         if (importedOption.TryGetValue(
@@ -210,7 +214,7 @@ public static class CustomOptionCsvProcessor
                 AmongUsClient.Instance.AmHost && 
                 CachedPlayerControl.LocalPlayer)
             {
-                OptionHolder.ShareOptionSelections();// Share all selections
+                options.ShareOptionSelections();// Share all selections
             }
 
             ExtremeRolesPlugin.Logger.LogInfo("---------- Option Import Complete ----------");
