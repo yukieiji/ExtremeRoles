@@ -125,7 +125,7 @@ public abstract class CustomOptionBase<OutType, SelectionType> : IValueOption<Ou
         this.Name = name;
 
         this.format = format;
-        this.defaultSelection = index;
+        this.defaultSelection = Mathf.Clamp(index, 0, index);
 
         this.IsHeader = isHeader;
         this.IsHidden = isHidden;
