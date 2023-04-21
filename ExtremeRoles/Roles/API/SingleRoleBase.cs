@@ -120,7 +120,7 @@ public abstract partial class SingleRoleBase : RoleOptionBase
     protected override void CommonInit()
     {
         var baseOption = GameOptionsManager.Instance.CurrentGameOptions;
-        var allOption = OptionHolder.AllOption;
+        var allOption = AllOptionHolder.Instance;
 
         this.Vision = this.IsImpostor() ? 
             baseOption.GetFloat(FloatOptionNames.ImpostorLightMod) : 
@@ -132,33 +132,33 @@ public abstract partial class SingleRoleBase : RoleOptionBase
         this.IsApplyEnvironmentVision = !this.IsImpostor();
 
 
-        this.HasOtherVision = allOption[
-            GetRoleOptionId(RoleCommonOption.HasOtherVision)].GetValue();
+        this.HasOtherVision = allOption.GetValue<bool>(
+            GetRoleOptionId(RoleCommonOption.HasOtherVision));
         if (this.HasOtherVision)
         {
-            this.Vision = allOption[
-                GetRoleOptionId(RoleCommonOption.Vision)].GetValue();
-            this.IsApplyEnvironmentVision = allOption[
-                GetRoleOptionId(RoleCommonOption.ApplyEnvironmentVisionEffect)].GetValue();
+            this.Vision = allOption.GetValue<float>(
+                GetRoleOptionId(RoleCommonOption.Vision));
+            this.IsApplyEnvironmentVision = allOption.GetValue<bool>(
+                GetRoleOptionId(RoleCommonOption.ApplyEnvironmentVisionEffect));
         }
 
         if (this.CanKill)
         {
-            this.HasOtherKillCool = allOption[
-                GetRoleOptionId(KillerCommonOption.HasOtherKillCool)].GetValue();
+            this.HasOtherKillCool = allOption.GetValue<bool>(
+                GetRoleOptionId(KillerCommonOption.HasOtherKillCool));
             if (this.HasOtherKillCool)
             {
-                this.KillCoolTime = allOption[
-                    GetRoleOptionId(KillerCommonOption.KillCoolDown)].GetValue();
+                this.KillCoolTime = allOption.GetValue<float>(
+                    GetRoleOptionId(KillerCommonOption.KillCoolDown));
             }
 
-            this.HasOtherKillRange = allOption[
-                GetRoleOptionId(KillerCommonOption.HasOtherKillRange)].GetValue();
+            this.HasOtherKillRange = allOption.GetValue<bool>(
+                GetRoleOptionId(KillerCommonOption.HasOtherKillRange));
 
             if (this.HasOtherKillRange)
             {
-                this.KillRange = allOption[
-                    GetRoleOptionId(KillerCommonOption.KillRange)].GetValue();
+                this.KillRange = allOption.GetValue<float>(
+                    GetRoleOptionId(KillerCommonOption.KillRange));
             }
         }
     }
