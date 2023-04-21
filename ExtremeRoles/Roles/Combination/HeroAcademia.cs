@@ -6,6 +6,7 @@ using Hazel;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 using ExtremeRoles.Roles.API.Extension.Neutral;
@@ -659,7 +660,7 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRole
     }
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
         this.CreateCommonAbilityOption(
             parentOps, 5.0f);
@@ -677,10 +678,10 @@ public sealed class Hero : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IRole
     {
         this.RoleAbilityInit();
 
-        this.featKillPer = (float)OptionHolder.AllOption[
-            GetRoleOptionId(HeroOption.FeatKillPercentage)].GetValue() / 100.0f;
-        this.featButtonAbilityPer = (float)OptionHolder.AllOption[
-            GetRoleOptionId(HeroOption.FeatButtonAbilityPercentage)].GetValue() / 100.0f;
+        this.featKillPer = AllOptionHolder.Instance.GetValue<int>(
+            GetRoleOptionId(HeroOption.FeatKillPercentage)) / 100.0f;
+        this.featButtonAbilityPer = AllOptionHolder.Instance.GetValue<int>(
+            GetRoleOptionId(HeroOption.FeatButtonAbilityPercentage)) / 100.0f;
 
     }
     private void setButtonActive(bool active)
@@ -849,7 +850,7 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IR
     }
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
         this.CreateCommonAbilityOption(
             parentOps, 5.0f);
@@ -862,8 +863,8 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IR
     protected override void RoleSpecificInit()
     {
         this.RoleAbilityInit();
-        this.vigilanteArrowTime = OptionHolder.AllOption[
-            GetRoleOptionId(VillanOption.VigilanteSeeTime)].GetValue();
+        this.vigilanteArrowTime = AllOptionHolder.Instance.GetValue<float>(
+            GetRoleOptionId(VillanOption.VigilanteSeeTime));
         this.vigilanteArrowTimer = 0.0f;
     }
 
@@ -1063,7 +1064,7 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, 
     }
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
         this.CreateAbilityCountOption(
             parentOps, 2, 10, 5.0f);
@@ -1075,8 +1076,8 @@ public sealed class Vigilante : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, 
     protected override void RoleSpecificInit()
     {
         this.RoleAbilityInit();
-        this.range = OptionHolder.AllOption[
-            GetRoleOptionId(VigilanteOption.Range)].GetValue();
+        this.range = AllOptionHolder.Instance.GetValue<float>(
+            GetRoleOptionId(VigilanteOption.Range));
     }
 
     public void Update(PlayerControl rolePlayer)
