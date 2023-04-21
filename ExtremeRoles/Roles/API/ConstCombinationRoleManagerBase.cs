@@ -47,9 +47,8 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
 
             if (checkRole.Id != (ExtremeRoleId)roleId) { continue; }
 
-            checkRole.CanHasAnotherRole = OptionHolder.AllOption[
-                GetRoleOptionId(
-                    CombinationRoleCommonOption.IsMultiAssign)].GetValue();
+            checkRole.CanHasAnotherRole = AllOptionHolder.Instance.GetValue<bool>(
+                GetRoleOptionId(CombinationRoleCommonOption.IsMultiAssign));
 
             switch (checkRole.Team)
             {
