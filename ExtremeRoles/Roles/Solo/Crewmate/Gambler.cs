@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
 
@@ -60,7 +61,7 @@ public sealed class Gambler :
     public void ResetModifier()
     { }
 
-    protected override void CreateSpecificOption(IOption parentOps)
+    protected override void CreateSpecificOption(IOptionInfo parentOps)
     {
         CreateIntOption(
             GamblerOption.NormalVoteRate,
@@ -70,7 +71,7 @@ public sealed class Gambler :
 
     protected override void RoleSpecificInit()
     {
-        this.normalVoteRate = OptionHolder.AllOption[
-            GetRoleOptionId(GamblerOption.NormalVoteRate)].GetValue();
+        this.normalVoteRate = AllOptionHolder.Instance.GetValue<int>(
+            GetRoleOptionId(GamblerOption.NormalVoteRate));
     }
 }
