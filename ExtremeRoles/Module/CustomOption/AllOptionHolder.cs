@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using ExtremeRoles.Helper;
-using Epic.OnlineServices.Presence;
 
 namespace ExtremeRoles.Module.CustomOption;
 
@@ -21,6 +20,8 @@ public sealed class AllOptionHolder
     {
         get => $"Preset:{selectedPreset}";
     }
+
+    public int OptionPage { get; set; } = 0;
 
     public readonly static AllOptionHolder Instance = new AllOptionHolder();
 

@@ -145,7 +145,7 @@ public static class KeyboardJoystickPatch
         {
             if (Input.GetKeyDown(KeyCode.Tab))
             {
-                OptionHolder.OptionsPage = OptionHolder.OptionsPage + 1;
+                AllOptionHolder.Instance.OptionPage = AllOptionHolder.Instance.OptionPage + 1;
             }
         }
         else

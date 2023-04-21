@@ -69,7 +69,9 @@ public static class IGameOptionsExtensionsToHudStringPatch
 
         allOptionStr.Add(egmm.ShipOption.ToHudString());
 
-        foreach (IOptionInfo option in AllOptionHolder.Instance.GetAllIOption())
+        var allOption = AllOptionHolder.Instance;
+
+        foreach (IOptionInfo option in allOption.GetAllIOption())
         {
             int optionId = option.Id;
 
@@ -117,7 +119,7 @@ public static class IGameOptionsExtensionsToHudStringPatch
         }
 
         int numPages = hudOptionPage.Count;
-        int counter = OptionHolder.OptionsPage = OptionHolder.OptionsPage % numPages;
+        int counter = allOption.OptionPage = allOption.OptionPage % numPages;
 
         __result = string.Concat(
             hudOptionPage[counter].Trim('\r', '\n'),

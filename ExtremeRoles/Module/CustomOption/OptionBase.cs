@@ -247,13 +247,13 @@ public abstract class CustomOptionBase<OutType, SelectionType> : IValueOption<Ou
         {
             if (this.Id == 0)
             {
-                OptionHolder.SwitchPreset(this.CurSelection); // Switch presets
+                AllOptionHolder.Instance.SwitchPreset(this.CurSelection); // Switch presets
             }
             else if (this.entry != null)
             {
                 this.entry.Value = this.CurSelection; // Save selection to config
             }
-            OptionHolder.ShareOptionSelections();// Share all selections
+            AllOptionHolder.Instance.ShareOptionSelections();// Share all selections
         }
     }
 
@@ -308,7 +308,7 @@ public abstract class CustomOptionBase<OutType, SelectionType> : IValueOption<Ou
     private void bindConfig()
     {
         this.entry = ExtremeRolesPlugin.Instance.Config.Bind(
-            OptionHolder.ConfigPreset,
+            AllOptionHolder.Instance.ConfigPreset,
             this.cleanName(),
             this.defaultSelection);
     }

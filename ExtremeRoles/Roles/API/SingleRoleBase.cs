@@ -157,7 +157,7 @@ public abstract partial class SingleRoleBase : RoleOptionBase
 
             if (this.HasOtherKillRange)
             {
-                this.KillRange = allOption.GetValue<float>(
+                this.KillRange = allOption.GetValue<int>(
                     GetRoleOptionId(KillerCommonOption.KillRange));
             }
         }
