@@ -7,6 +7,7 @@ using AmongUs.GameOptions;
 using UnityEngine;
 using UnityEngine.Events;
 
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Extension.UnityEvent;
 using ExtremeRoles.Resources;
@@ -210,7 +211,7 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
         var shipOption = exGmM.ShipOption;
         var roleSelector = exGmM.RoleSelector;
 
-        foreach (var (id, option) in OptionHolder.AllOption)
+        foreach (var (id, option) in AllOptionHolder.Instance.GetKeyValueAllIOptions())
         {
             OptionTab tab = option.Tab;
 
