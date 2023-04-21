@@ -291,18 +291,6 @@ public static class ExtremeGhostRoleManager
         }
     }
 
-    private static bool isRoleSpawn(
-        int roleNum, int spawnRate)
-    {
-        if (roleNum <= 0) { return false; }
-        if (spawnRate < UnityEngine.Random.RandomRange(0, 110)) { return false; }
-
-        return true;
-    }
-
-    private static int computePercentage(Module.IOption self)
-        => (int)decimal.Multiply(self.GetValue(), self.ValueCount);
-
     private static void rpcSetSingleGhostRoleToPlayerId(
         PlayerControl player,
         int gameControlId,
