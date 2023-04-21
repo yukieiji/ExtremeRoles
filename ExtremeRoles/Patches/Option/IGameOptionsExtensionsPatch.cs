@@ -54,7 +54,7 @@ public static class IGameOptionsExtensionsToHudStringPatch
 
         List<string> allOptionStr = new List<string>()
         {
-            getHudString(OptionHolder.CommonOptionKey.PresetSelection),
+            getHudString(AllOptionCreator.CommonOptionKey.PresetSelection),
             createRNGSetting(),
             createRoleSpawnNumOptions()
         };
@@ -75,7 +75,7 @@ public static class IGameOptionsExtensionsToHudStringPatch
         {
             int optionId = option.Id;
 
-            if (Enum.IsDefined(typeof(OptionHolder.CommonOptionKey), optionId) ||
+            if (Enum.IsDefined(typeof(AllOptionCreator.CommonOptionKey), optionId) ||
                 Enum.IsDefined(typeof(RoleGlobalOption), optionId) ||
                 Enum.IsDefined(typeof(GlobalOption), optionId))
             {
@@ -200,9 +200,9 @@ public static class IGameOptionsExtensionsToHudStringPatch
     {
         StringBuilder rngOptBuilder = new StringBuilder();
         rngOptBuilder.AppendLine(
-            getHudString(OptionHolder.CommonOptionKey.UseStrongRandomGen));
+            getHudString(AllOptionCreator.CommonOptionKey.UseStrongRandomGen));
         rngOptBuilder.AppendLine(
-            getHudString(OptionHolder.CommonOptionKey.UsePrngAlgorithm));
+            getHudString(AllOptionCreator.CommonOptionKey.UsePrngAlgorithm));
 
         return rngOptBuilder.ToString().Trim('\r', '\n');
     }

@@ -12,10 +12,10 @@ public static class CommonOption
     {
         StringBuilder printOption = new StringBuilder();
 
-        foreach (OptionHolder.CommonOptionKey key in Enum.GetValues(
-            typeof(OptionHolder.CommonOptionKey)))
+        foreach (AllOptionCreator.CommonOptionKey key in Enum.GetValues(
+            typeof(AllOptionCreator.CommonOptionKey)))
         {
-            if (key == OptionHolder.CommonOptionKey.PresetSelection) { continue; }
+            if (key == AllOptionCreator.CommonOptionKey.PresetSelection) { continue; }
 
             addOptionString(ref printOption, key);
         }

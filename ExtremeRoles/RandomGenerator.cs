@@ -15,7 +15,7 @@ public static class RandomGenerator
             if (instance == null)
             {
                 createGlobalRandomGenerator(AllOptionHolder.Instance.GetValue<bool>(
-                    (int)OptionHolder.CommonOptionKey.UseStrongRandomGen));
+                    (int)AllOptionCreator.CommonOptionKey.UseStrongRandomGen));
             }
             return instance;
         }
@@ -28,7 +28,7 @@ public static class RandomGenerator
     public static void Initialize()
     {
         bool useStrongGen = AllOptionHolder.Instance.GetValue<bool>(
-            (int)OptionHolder.CommonOptionKey.UseStrongRandomGen);
+            (int)AllOptionCreator.CommonOptionKey.UseStrongRandomGen);
         if (instance != null)
         {
             if (useStrongGen != prevValue)
@@ -38,7 +38,7 @@ public static class RandomGenerator
             else
             {
                 int selection = AllOptionHolder.Instance.GetValue<int>(
-                    (int)OptionHolder.CommonOptionKey.UsePrngAlgorithm);
+                    (int)AllOptionCreator.CommonOptionKey.UsePrngAlgorithm);
                 if (prevSelection != selection)
                 {
                     instance = getAditionalPrng(selection);
@@ -64,7 +64,7 @@ public static class RandomGenerator
         if (isStrong)
         {
             int selection = AllOptionHolder.Instance.GetValue<int>(
-                (int)OptionHolder.CommonOptionKey.UsePrngAlgorithm);
+                (int)AllOptionCreator.CommonOptionKey.UsePrngAlgorithm);
             instance = getAditionalPrng(selection);
             UnityEngine.Random.InitState(CreateStrongRandomSeed());
             prevSelection = selection;
@@ -81,7 +81,7 @@ public static class RandomGenerator
     public static Random GetTempGenerator()
     {
         bool useStrongGen = AllOptionHolder.Instance.GetValue<bool>(
-            (int)OptionHolder.CommonOptionKey.UseStrongRandomGen);
+            (int)AllOptionCreator.CommonOptionKey.UseStrongRandomGen);
 
         if (useStrongGen)
         {

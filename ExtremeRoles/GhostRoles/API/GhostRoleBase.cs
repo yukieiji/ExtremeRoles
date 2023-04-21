@@ -445,7 +445,7 @@ public abstract class GhostRoleBase
     {
         var roleSetOption = CreateSelectionOption(
             RoleCommonOption.SpawnRate,
-            OptionHolder.SpawnRate, null, true,
+            AllOptionCreator.SpawnRate, null, true,
             colored: true);
 
         int spawnNum = this.IsImpostor() ? GameSystem.MaxImposterNum : GameSystem.VanillaMaxPlayerNum - 1;

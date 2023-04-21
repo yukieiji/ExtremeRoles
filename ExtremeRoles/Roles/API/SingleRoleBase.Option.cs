@@ -24,14 +24,14 @@ public abstract partial class SingleRoleBase
             false, parentOps);
         CreateSelectionOption(
             KillerCommonOption.KillRange,
-            OptionHolder.Range,
+            AllOptionCreator.Range,
             killRangeOption);
     }
     protected sealed override IOptionInfo CreateSpawnOption()
     {
         var roleSetOption = CreateSelectionOption(
             RoleCommonOption.SpawnRate,
-            OptionHolder.SpawnRate, null, true,
+            AllOptionCreator.SpawnRate, null, true,
             colored: true);
 
         int spawnNum = this.IsImpostor() ? 

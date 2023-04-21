@@ -13,7 +13,7 @@ public static class HashRandomFastNextPatch
         [HarmonyArgument(0)] int maxInt)
     {
         if (AllOptionHolder.Instance.GetValue<bool>(
-            (int)OptionHolder.CommonOptionKey.UseStrongRandomGen))
+            (int)AllOptionCreator.CommonOptionKey.UseStrongRandomGen))
         {
             __result = RandomGenerator.Instance.Next(maxInt);
             return false;
@@ -33,7 +33,7 @@ public static class HashRandomNextPatch
         [HarmonyArgument(0)] int maxInt)
     {
         if (AllOptionHolder.Instance.GetValue<bool>(
-            (int)OptionHolder.CommonOptionKey.UseStrongRandomGen))
+            (int)AllOptionCreator.CommonOptionKey.UseStrongRandomGen))
         {
             __result = RandomGenerator.Instance.Next(maxInt);
             return false;

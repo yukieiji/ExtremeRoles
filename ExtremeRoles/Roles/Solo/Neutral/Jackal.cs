@@ -155,7 +155,7 @@ public sealed class Jackal : SingleRoleBase, IRoleAbility, IRoleSpecialReset
                 string.Concat(
                     roleName,
                     SidekickOption.KillRange.ToString()),
-                OptionHolder.Range,
+                AllOptionCreator.Range,
                 killRangeOption,
                 tab: tab);
 
@@ -499,7 +499,7 @@ public sealed class Jackal : SingleRoleBase, IRoleAbility, IRoleSpecialReset
 
         CreateSelectionOption(
             JackalOption.RangeSidekickTarget,
-            OptionHolder.Range,
+            AllOptionCreator.Range,
             parentOps);
 
         var loverSkOpt = CreateBoolOption(

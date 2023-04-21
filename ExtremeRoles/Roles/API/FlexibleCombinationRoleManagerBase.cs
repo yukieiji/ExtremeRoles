@@ -122,7 +122,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
                 string.Concat(
                     this.RoleName,
                     RoleCommonOption.SpawnRate.ToString())),
-            OptionHolder.SpawnRate, null, true,
+            AllOptionCreator.SpawnRate, null, true,
             tab: OptionTab.Combination);
 
         int roleAssignNum = this.BaseRole.IsImpostor() ? 
@@ -170,7 +170,7 @@ public abstract class FlexibleCombinationRoleManagerBase : CombinationRoleManage
                 string.Concat(
                     this.RoleName,
                     CombinationRoleCommonOption.ImposterSelectedRate.ToString()),
-                OptionHolder.SpawnRate, isImposterAssignOps,
+                AllOptionCreator.SpawnRate, isImposterAssignOps,
             tab: OptionTab.Combination);
         }
 

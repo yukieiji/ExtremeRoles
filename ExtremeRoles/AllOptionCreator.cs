@@ -1,12 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 using UnityEngine;
-using BepInEx.Configuration;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomOption;
-using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Module;
@@ -15,7 +12,7 @@ using ExtremeRoles.Extension.Manager;
 
 namespace ExtremeRoles;
 
-public static class OptionHolder
+public static class AllOptionCreator
 {
     private const int singleRoleOptionStartOffset = 256;
     private const int combRoleOptionStartOffset = 5000;
@@ -42,7 +39,6 @@ public static class OptionHolder
 
     public static void Create()
     {
-
         defaultRegion = ServerManager.DefaultRegions;
 
         ClientOption.Create();
@@ -86,26 +82,6 @@ public static class OptionHolder
 
         GhostRoles.ExtremeGhostRoleManager.CreateGhostRoleOption(
             ghostRoleOptionStartOffset);
-    }
-
-    public static void Load()
-    {
-        // ランダム生成機を設定を読み込んで作成
-        RandomGenerator.Initialize();
-
-        // ゲームモードのオプションロード
-        ExtremeGameModeManager.Instance.Load();
-
-        // 各役職を設定を読み込んで初期化する
-        Roles.ExtremeRoleManager.Initialize();
-        GhostRoles.ExtremeGhostRoleManager.Initialize();
-
-        // 各種マップモジュール等のオプション値を読み込む
-        Patches.MiniGame.VitalsMinigameUpdatePatch.LoadOptionValue();
-        Patches.MiniGame.SecurityHelper.LoadOptionValue();
-        Patches.MapOverlay.MapCountOverlayUpdatePatch.LoadOptionValue();
-
-        MeetingReporter.Reset();
     }
 
     public static void UpdateRegion()

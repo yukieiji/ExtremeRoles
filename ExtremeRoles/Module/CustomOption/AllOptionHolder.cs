@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using ExtremeRoles.Helper;
+using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.Module.CustomOption;
 
@@ -266,6 +267,26 @@ public sealed class AllOptionHolder
             default:
                 break;
         };
+    }
+
+    public static void Load()
+    {
+        // ランダム生成機を設定を読み込んで作成
+        RandomGenerator.Initialize();
+
+        // ゲームモードのオプションロード
+        ExtremeGameModeManager.Instance.Load();
+
+        // 各役職を設定を読み込んで初期化する
+        Roles.ExtremeRoleManager.Initialize();
+        GhostRoles.ExtremeGhostRoleManager.Initialize();
+
+        // 各種マップモジュール等のオプション値を読み込む
+        Patches.MiniGame.VitalsMinigameUpdatePatch.LoadOptionValue();
+        Patches.MiniGame.SecurityHelper.LoadOptionValue();
+        Patches.MapOverlay.MapCountOverlayUpdatePatch.LoadOptionValue();
+
+        MeetingReporter.Reset();
     }
 
     public static void ShareOption(int numberOfOptions, MessageReader reader)

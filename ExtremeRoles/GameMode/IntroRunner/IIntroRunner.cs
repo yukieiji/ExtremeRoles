@@ -55,7 +55,7 @@ namespace ExtremeRoles.GameMode.IntroRunner
             else
             {
                 // クライアントはここでオプション値を読み込むことで待ち時間を短く見せるトリック
-                OptionHolder.Load();
+                Module.CustomOption.AllOptionHolder.Load();
 
                 // ラグも有るかもしれないで1フレーム待機
                 yield return null;

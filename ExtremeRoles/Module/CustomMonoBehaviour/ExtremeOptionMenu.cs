@@ -221,7 +221,7 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
                 option.SetHeaderTo(id == shipOption.HeadOptionId);
             }
 
-            if (Enum.IsDefined(typeof(OptionHolder.CommonOptionKey), id) ||
+            if (Enum.IsDefined(typeof(AllOptionCreator.CommonOptionKey), id) ||
                 roleSelector.IsValidGlobalRoleOptionId((RoleGlobalOption)id) ||
                 tab switch
                 {
