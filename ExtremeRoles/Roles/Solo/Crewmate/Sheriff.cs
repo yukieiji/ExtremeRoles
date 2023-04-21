@@ -4,6 +4,7 @@ using AmongUs.GameOptions;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityBehavior.Interface;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Module.ExtremeShipStatus;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -178,7 +179,7 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
 
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
 
         CreateBoolOption(
@@ -220,26 +221,26 @@ public sealed class Sheriff : SingleRoleBase, IRoleUpdate, IRoleResetMeeting
     protected override void RoleSpecificInit()
     {
 
-        var allOpt = OptionHolder.AllOption;
+        var allOpt = AllOptionHolder.Instance;
 
-        this.shootNum = allOpt[
-            GetRoleOptionId(SheriffOption.ShootNum)].GetValue();
-        this.canShootNeutral = allOpt[
-            GetRoleOptionId(SheriffOption.CanShootNeutral)].GetValue();
-        this.canShootAssassin = allOpt[
-            GetRoleOptionId(SheriffOption.CanShootAssassin)].GetValue();
+        this.shootNum = allOpt.GetValue<int>(
+            GetRoleOptionId(SheriffOption.ShootNum));
+        this.canShootNeutral = allOpt.GetValue<bool>(
+            GetRoleOptionId(SheriffOption.CanShootNeutral));
+        this.canShootAssassin = allOpt.GetValue<bool>(
+            GetRoleOptionId(SheriffOption.CanShootAssassin));
         this.killCountText = null;
 
-        this.enableTaskRelatedSetting = allOpt[
-            GetRoleOptionId(SheriffOption.EnableTaskRelated)].GetValue();
-        this.reduceKillCool = allOpt[
-            GetRoleOptionId(SheriffOption.ReduceCurKillCool)].GetValue();
-        this.isPerm = allOpt[
-            GetRoleOptionId(SheriffOption.IsPerm)].GetValue();
-        this.isSyncTaskShootNum = allOpt[
-            GetRoleOptionId(SheriffOption.IsSyncTaskAndShootNum)].GetValue();
-        this.syncShootTaskGage = ((float)allOpt[
-            GetRoleOptionId(SheriffOption.SyncShootTaskGage)].GetValue()) / 100.0f;
+        this.enableTaskRelatedSetting = allOpt.GetValue<bool>(
+            GetRoleOptionId(SheriffOption.EnableTaskRelated));
+        this.reduceKillCool = allOpt.GetValue<float>(
+            GetRoleOptionId(SheriffOption.ReduceCurKillCool));
+        this.isPerm = allOpt.GetValue<bool>(
+            GetRoleOptionId(SheriffOption.IsPerm));
+        this.isSyncTaskShootNum = allOpt.GetValue<bool>(
+            GetRoleOptionId(SheriffOption.IsSyncTaskAndShootNum));
+        this.syncShootTaskGage = allOpt.GetValue<int>(
+            GetRoleOptionId(SheriffOption.SyncShootTaskGage)) / 100.0f;
 
         this.prevGage = 0.0f;
         
