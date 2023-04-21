@@ -9,6 +9,7 @@ using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
+using ExtremeRoles.Module;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Extension.Manager;
 
@@ -44,7 +45,7 @@ public static class OptionHolder
 
         defaultRegion = ServerManager.DefaultRegions;
 
-        createConfigOption();
+        ClientOption.Create();
 
         Roles.ExtremeRoleManager.GameRole.Clear();
 
@@ -103,14 +104,8 @@ public static class OptionHolder
         Patches.MiniGame.VitalsMinigameUpdatePatch.LoadOptionValue();
         Patches.MiniGame.SecurityHelper.LoadOptionValue();
         Patches.MapOverlay.MapCountOverlayUpdatePatch.LoadOptionValue();
-        
-        MeetingReporter.Reset();
 
-        Client.GhostsSeeRole = ConfigParser.GhostsSeeRoles.Value;
-        Client.GhostsSeeTask = ConfigParser.GhostsSeeTasks.Value;
-        Client.GhostsSeeVote = ConfigParser.GhostsSeeVotes.Value;
-        Client.ShowRoleSummary = ConfigParser.ShowRoleSummary.Value;
-        Client.HideNamePlate = ConfigParser.HideNamePlate.Value;
+        MeetingReporter.Reset();
     }
 
     public static void UpdateRegion()
@@ -127,12 +122,14 @@ public static class OptionHolder
             22023,
             false);
 
+        var opt = ClientOption.Instance;
+
         var customRegion = new DnsRegionInfo(
-            ConfigParser.Ip.Value,
+            opt.Ip.Value,
             ServerManagerExtension.FullCustomServerName,
             StringNames.NoTranslation,
-            ConfigParser.Ip.Value,
-            ConfigParser.Port.Value,
+            opt.Ip.Value,
+            opt.Port.Value,
             false);
 
         regions = regions.Concat(
@@ -144,52 +141,5 @@ public static class OptionHolder
 
         ServerManager.DefaultRegions = regions;
         serverManager.AvailableRegions = regions;
-    }
-
-    private static void createConfigOption()
-    {
-        var config = ExtremeRolesPlugin.Instance.Config;
-
-        ConfigParser.GhostsSeeTasks = config.Bind(
-            "ClientOption", "GhostCanSeeRemainingTasks", true);
-        ConfigParser.GhostsSeeRoles = config.Bind(
-            "ClientOption", "GhostCanSeeRoles", true);
-        ConfigParser.GhostsSeeVotes = config.Bind(
-            "ClientOption", "GhostCanSeeVotes", true);
-        ConfigParser.ShowRoleSummary = config.Bind(
-            "ClientOption", "IsShowRoleSummary", true);
-        ConfigParser.HideNamePlate = config.Bind(
-            "ClientOption", "IsHideNamePlate", false);
-
-        ConfigParser.StreamerModeReplacementText = config.Bind(
-            "ClientOption",
-            "ReplacementRoomCodeText",
-            "Playing with Extreme Roles");
-
-        ConfigParser.Ip = config.Bind(
-            "ClientOption", "CustomServerIP", "127.0.0.1");
-        ConfigParser.Port = config.Bind(
-            "ClientOption", "CustomServerPort", (ushort)22023);
-    }
-
-    public static class ConfigParser
-    {
-        public static ConfigEntry<string> StreamerModeReplacementText { get; set; }
-        public static ConfigEntry<bool> GhostsSeeTasks { get; set; }
-        public static ConfigEntry<bool> GhostsSeeRoles { get; set; }
-        public static ConfigEntry<bool> GhostsSeeVotes { get; set; }
-        public static ConfigEntry<bool> ShowRoleSummary { get; set; }
-        public static ConfigEntry<bool> HideNamePlate { get; set; }
-        public static ConfigEntry<string> Ip { get; set; }
-        public static ConfigEntry<ushort> Port { get; set; }
-    }
-
-    public static class Client
-    {
-        public static bool GhostsSeeRole = true;
-        public static bool GhostsSeeTask = true;
-        public static bool GhostsSeeVote = true;
-        public static bool ShowRoleSummary = true;
-        public static bool HideNamePlate = false;
     }
 }

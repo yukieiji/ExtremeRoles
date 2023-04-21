@@ -10,10 +10,11 @@ using UnityEngine;
 using UnityEngine.Events;
 using AmongUs.Data;
 
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Extension.UnityEvent;
 
-using static ExtremeRoles.OptionHolder;
+using static UnityEngine.UI.Button;
 using Object = UnityEngine.Object;
 
 
@@ -25,31 +26,50 @@ namespace ExtremeRoles.Patches.Option;
 public static class OptionsMenuBehaviourStartPatch
 {
 
+    private static ClientOption clientOpt => ClientOption.Instance;
+
     private static SelectionBehaviour[] modOption = {
         new SelectionBehaviour(
             "ghostsSeeTasksButton",
-            () => Client.GhostsSeeTask = ConfigParser.GhostsSeeTasks.Value = !ConfigParser.GhostsSeeTasks.Value,
-            ConfigParser.GhostsSeeTasks.Value),
+            () =>
+            {
+                bool newValue = !clientOpt.GhostsSeeTask.Value;
+                clientOpt.GhostsSeeTask.Value = newValue;
+                return newValue;
+            }, clientOpt.GhostsSeeTask.Value),
         new SelectionBehaviour(
             "ghostsSeeVotesButton",
-            () => Client.GhostsSeeVote = ConfigParser.GhostsSeeVotes.Value = !ConfigParser.GhostsSeeVotes.Value,
-            ConfigParser.GhostsSeeVotes.Value),
+            () =>
+            {
+                bool newValue = !clientOpt.GhostsSeeVote.Value;
+                clientOpt.GhostsSeeVote.Value = newValue;
+                return newValue;
+            }, clientOpt.GhostsSeeVote.Value),
         new SelectionBehaviour(
             "ghostsSeeRolesButton",
-            () => Client.GhostsSeeRole = ConfigParser.GhostsSeeRoles.Value = !ConfigParser.GhostsSeeRoles.Value,
-            ConfigParser.GhostsSeeRoles.Value),
+            () =>
+            {
+                bool newValue = !clientOpt.GhostsSeeRole.Value;
+                clientOpt.GhostsSeeRole.Value = newValue;
+                return newValue;
+            }, clientOpt.GhostsSeeRole.Value),
         new SelectionBehaviour(
             "showRoleSummaryButton",
-            () => Client.ShowRoleSummary = ConfigParser.ShowRoleSummary.Value = !ConfigParser.ShowRoleSummary.Value,
-            ConfigParser.ShowRoleSummary.Value),
+            () =>
+            {
+                bool newValue = !clientOpt.ShowRoleSummary.Value;
+                clientOpt.ShowRoleSummary.Value = newValue;
+                return newValue;
+            }, clientOpt.ShowRoleSummary.Value),
         new SelectionBehaviour(
             "hideNamePlateButton",
             () =>
             {
-                Client.HideNamePlate = ConfigParser.HideNamePlate.Value = !ConfigParser.HideNamePlate.Value;
+                bool newValue = !clientOpt.HideNamePlate.Value;
+                clientOpt.HideNamePlate.Value = newValue;
                 Meeting.NamePlateHelper.NameplateChange = true;
-                return Client.HideNamePlate;
-            }, ConfigParser.HideNamePlate.Value)
+                return newValue;
+            }, clientOpt.HideNamePlate.Value)
     };
 
     private static GameObject popUp;
