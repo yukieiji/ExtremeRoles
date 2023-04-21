@@ -9,6 +9,7 @@ using AmongUs.GameOptions;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Roles.API;
 using ExtremeRoles.Roles.API.Interface;
@@ -468,7 +469,7 @@ public sealed class Photographer :
     }
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
         CreateIntOption(
             PhotographerOption.AwakeTaskGage,
@@ -503,16 +504,16 @@ public sealed class Photographer :
 
     protected override void RoleSpecificInit()
     {
-        var allOpt = OptionHolder.AllOption;
+        var allOpt = AllOptionHolder.Instance;
 
-        this.awakeTaskGage = allOpt[
-            GetRoleOptionId(PhotographerOption.AwakeTaskGage)].GetValue() / 100.0f;
-        this.upgradePhotoTaskGage = allOpt[
-            GetRoleOptionId(PhotographerOption.UpgradePhotoTaskGage)].GetValue() / 100.0f;
-        this.enableAllSend = allOpt[
-            GetRoleOptionId(PhotographerOption.EnableAllSendChat)].GetValue();
-        this.upgradeAllSendChatTaskGage = allOpt[
-            GetRoleOptionId(PhotographerOption.UpgradeAllSendChatTaskGage)].GetValue() / 100.0f;
+        this.awakeTaskGage = allOpt.GetValue<int>(
+            GetRoleOptionId(PhotographerOption.AwakeTaskGage)) / 100.0f;
+        this.upgradePhotoTaskGage = allOpt.GetValue<int>(
+            GetRoleOptionId(PhotographerOption.UpgradePhotoTaskGage)) / 100.0f;
+        this.enableAllSend = allOpt.GetValue<bool>(
+            GetRoleOptionId(PhotographerOption.EnableAllSendChat));
+        this.upgradeAllSendChatTaskGage = allOpt.GetValue<int>(
+            GetRoleOptionId(PhotographerOption.UpgradeAllSendChatTaskGage)) / 100.0f;
 
         this.awakeHasOtherVision = this.HasOtherVision;
 
@@ -531,8 +532,8 @@ public sealed class Photographer :
             this.upgradeAllSendChatTaskGage <= 0.0f;
 
         this.photoCreater = new PhotoCamera(
-            (float)OptionHolder.AllOption[
-                GetRoleOptionId(PhotographerOption.PhotoRange)].GetValue());
+            AllOptionHolder.Instance.GetValue<float>(
+                GetRoleOptionId(PhotographerOption.PhotoRange)));
 
         this.photoCreater.IsUpgraded = this.upgradePhotoTaskGage <= 0.0f;
 
