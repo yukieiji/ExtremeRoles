@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 using UnityEngine;
@@ -8,6 +7,7 @@ using UnityEngine;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityFactory;
+using ExtremeRoles.Module.CustomOption;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
@@ -179,10 +179,10 @@ public sealed class Shutter : GhostRoleBase
     public override void Initialize()
     {
         this.photoCreater = new GhostPhotoCamera(
-            (float)OptionHolder.AllOption[
-                GetRoleOptionId(ShutterOption.PhotoRange)].GetValue(),
-            (int)OptionHolder.AllOption[
-                GetRoleOptionId(ShutterOption.RightPlayerNameRate)].GetValue());
+            AllOptionHolder.Instance.GetValue<float>(
+                GetRoleOptionId(ShutterOption.PhotoRange)),
+            AllOptionHolder.Instance.GetValue<int>(
+                GetRoleOptionId(ShutterOption.RightPlayerNameRate)));
     }
 
     protected override void OnMeetingEndHook()
@@ -204,7 +204,7 @@ public sealed class Shutter : GhostRoleBase
     }
 
     protected override void CreateSpecificOption(
-        IOption parentOps)
+        IOptionInfo parentOps)
     {
         CreateCountButtonOption(
             parentOps, 3, 10);
