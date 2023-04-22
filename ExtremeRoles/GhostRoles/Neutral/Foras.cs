@@ -149,10 +149,12 @@ public sealed class Foras : GhostRoleBase
             1.0f, 0.1f, 3.6f, 0.1f, parentOps);
         CreateFloatOption(
             ForasOption.DelayTime,
-            3.0f, 0.0f, 10.0f, 0.5f, parentOps);
+            3.0f, 0.0f, 10.0f, 0.5f, parentOps,
+            format: OptionUnit.Second);
         CreateIntOption(
             ForasOption.MissingTargetRate,
-            10, 0, 90, 5, parentOps);
+            10, 0, 90, 5, parentOps,
+            format: OptionUnit.Percentage);
     }
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)
@@ -163,8 +165,14 @@ public sealed class Foras : GhostRoleBase
         {
             this.targetPlayer = CachedPlayerControl.AllPlayerControls
                 .Where(x =>
-                x.PlayerId != rolePlayerId &&
-                x.PlayerId != this.targetPlayer.PlayerId)
+                {
+                    return 
+                        x != null &&
+                        !x.Data.IsDead &&
+                        !x.Data.Disconnected &&
+                        x.PlayerId != rolePlayerId &&
+                        x.PlayerId != this.targetPlayer.PlayerId;
+                })
                 .OrderBy(x => RandomGenerator.Instance.Next())
                 .First();
         }
