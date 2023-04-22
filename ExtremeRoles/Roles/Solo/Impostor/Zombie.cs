@@ -435,17 +435,17 @@ public sealed class Zombie :
 
         this.CreateAbilityCountOption(parentOps, 1, 3, 3f);
 
-        CreateFloatOption(
-            ZombieOption.ShowMagicCircleTime,
-            10.0f, 0.0f, 30.0f, 0.5f,
-            parentOps,
-            format: OptionUnit.Second);
-
         CreateIntOption(
             ZombieOption.ResurrectKillCount,
             2, 0, 3, 1,
             parentOps,
             format: OptionUnit.Shot);
+
+        CreateFloatOption(
+            ZombieOption.ShowMagicCircleTime,
+            10.0f, 0.0f, 30.0f, 0.5f,
+            parentOps,
+            format: OptionUnit.Second);
 
         CreateFloatOption(
             ZombieOption.ResurrectDelayTime,
