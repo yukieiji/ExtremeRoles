@@ -142,17 +142,17 @@ public sealed class Foras : GhostRoleBase
     protected override void CreateSpecificOption(
         IOption parentOps)
     {
+        CreateCountButtonOption(
+            parentOps, 3, 10, 25.0f);
         CreateFloatOption(
             ForasOption.Range,
             1.0f, 0.1f, 3.6f, 0.1f, parentOps);
-        CreateIntOption(
-            ForasOption.MissingTargetRate,
-            10, 0, 90, 5, parentOps);
         CreateFloatOption(
             ForasOption.DelayTime,
             3.0f, 0.0f, 10.0f, 0.5f, parentOps);
-        CreateCountButtonOption(
-            parentOps, 3, 10, 25.0f);
+        CreateIntOption(
+            ForasOption.MissingTargetRate,
+            10, 0, 90, 5, parentOps);
     }
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)

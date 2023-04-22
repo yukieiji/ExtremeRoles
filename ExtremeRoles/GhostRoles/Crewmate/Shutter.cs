@@ -205,6 +205,8 @@ public sealed class Shutter : GhostRoleBase
     protected override void CreateSpecificOption(
         IOption parentOps)
     {
+        CreateCountButtonOption(
+            parentOps, 3, 10);
         CreateFloatOption(
             ShutterOption.PhotoRange,
             5.0f, 2.5f, 25f, 0.5f,
@@ -214,9 +216,6 @@ public sealed class Shutter : GhostRoleBase
             50, 25, 100, 5,
             parentOps,
             format: OptionUnit.Percentage);
-
-        CreateCountButtonOption(
-            parentOps, 3, 10);
     }
 
     protected override void UseAbility(RPCOperator.RpcCaller caller)
