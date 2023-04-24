@@ -63,24 +63,17 @@ public static class ExileControllerBeginePatch
         [HarmonyArgument(0)] GameData.PlayerInfo exiled,
         [HarmonyArgument(1)] bool tie)
     {
-        if (!ExtremeRolesPlugin.ShipState.IsShowAditionalInfo()) { return; }
+        if (!ExtremeRolesPlugin.ShipState.IsShowAditionalInfo() ||
+            ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
         TMPro.TextMeshPro infoText = UnityEngine.Object.Instantiate(
             __instance.ImpostorText,
             __instance.Text.transform);
-        if (GameOptionsManager.Instance.CurrentGameOptions.GetBool(
-                BoolOptionNames.ConfirmImpostor))
-        {
-            infoText.transform.localPosition += new UnityEngine.Vector3(
-                0f,
-               ExtremeGameModeManager.Instance.ShipOption.ExilMode == ConfirmExilMode.AllTeam ?
-               -0.8f : -0.4f, 0f);
-        }
-        else
-        {
-            infoText.transform.localPosition += new UnityEngine.Vector3(0f, -0.2f, 0f);
-        }
-        infoText.gameObject.SetActive(true);
 
+        float textOffset = GameOptionsManager.Instance.CurrentGameOptions.GetBool(
+            BoolOptionNames.ConfirmImpostor) ? -0.4f : -0.2f;
+
+        infoText.transform.localPosition += new UnityEngine.Vector3(0f, textOffset, 0f);
+        infoText.gameObject.SetActive(true);
         infoText.text = ExtremeRolesPlugin.ShipState.GetAditionalInfo();
 
         __instance.StartCoroutine(
