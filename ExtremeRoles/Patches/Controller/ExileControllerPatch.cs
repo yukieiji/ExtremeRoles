@@ -65,6 +65,7 @@ public static class ExileControllerBeginePatch
     {
         if (!ExtremeRolesPlugin.ShipState.IsShowAditionalInfo() ||
             ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger) { return; }
+        
         TMPro.TextMeshPro infoText = UnityEngine.Object.Instantiate(
             __instance.ImpostorText,
             __instance.Text.transform);
