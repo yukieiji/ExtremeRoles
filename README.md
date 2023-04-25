@@ -1,13 +1,19 @@
+
+<div><img src="./doc/img/burner.png" /></div>
+
+<div align="center"><h1>Extreme Roles and Extreme Skins</h1></div>
+
 Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携しておらず、含まれるコンテンツはAmong UsやInnersloth LLCから支援、援助されているものではありません。
 ここに含まれる素材の一部は、Innersloth LLCの所有物です。©Innersloth LLC.
+
+---
 
 ### 各種リンク
 [![Twitter URL](https://img.shields.io/twitter/url?label=Twitter&style=social&url=https%3A%2F%2Ftwitter.com%2Fyukieiji)](https://twitter.com/yukieiji)
 [![Discord](https://img.shields.io/discord/994790791304200252?label=Discord)](https://t.co/czLmgXLUBU)
 
-
-# Extreme Roles
-AmongUsの上級者(初心者)向けのロール追加MOD、主な特徴として以下があります<br>
+## Extreme Roles
+主な特徴として以下があります<br>
 * 第三陣営「ニュートラル」と幽霊役職の追加
 * AmongUs公式役職とMODの役職の併用可能(HideNSeekにも完全対応)
 * すべてのMOD役職が複数人アサイン可能
@@ -18,7 +24,7 @@ AmongUsの上級者(初心者)向けのロール追加MOD、主な特徴とし�
 * 互換性のあるMODのインストール/アップデートチェック/アンインストール機能
 * 多言語対応(現在は英語と日本語、简体中文のみ/only English and Japanese, SChinese now!!)
 
-## 追加役職一覧(Extreme Roles v7.1.0.0時点、今後も追加予定)
+### 追加役職一覧(Extreme Roles v7.1.0.0時点、今後も追加予定)
 #### ホスト役職
 - シオン
 #### 通常役職
@@ -70,7 +76,7 @@ AmongUsの上級者(初心者)向けのロール追加MOD、主な特徴とし�
 * 「マーリン」と「アサシン」、「ヒーロー」と「ヴィラン」と「ヴィジランテ」、「探偵」と「助手」、「ワルガキ」と「ウィスプ」は一対の関係です
 * 詳しくは[Wiki](https://github.com/yukieiji/ExtremeRoles/wiki/%E3%83%AD%E3%83%BC%E3%83%AB)を参照
 
-# Extreme Skins
+## Extreme Skins
 Extreme Rolesのスキン追加用アドオン、主な特徴として以下があります<br>
 * MODの更新/バージョンチェック機能
 * 誰でも簡単にハットを追加、テスト可能
