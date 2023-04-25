@@ -12,10 +12,10 @@ namespace ExtremeRoles.Module
             get => this.body;
         }
 
+        public Vector3 Target { get; private set; }
+
         private const float xzMaxSize = 0.4f;
         private const float yMaxSize = 0.525f;
-
-        private Vector3 target;
 
         private GameObject body;
         private SpriteRenderer image;
@@ -39,7 +39,7 @@ namespace ExtremeRoles.Module
 
             Resizeer resizer = this.body.AddComponent<Resizeer>();
             resizer.SetScale(xzMaxSize, yMaxSize, xzMaxSize);
-            this.target = defaultPos;
+            this.Target = defaultPos;
         }
 
         public void Update()
@@ -48,9 +48,9 @@ namespace ExtremeRoles.Module
             {
                 this.image.sprite = Prefab.Arrow;
             }
-            if (this.target == defaultPos)
+            if (this.Target == defaultPos)
             { 
-                this.target = Vector3.zero;
+                this.Target = Vector3.zero;
             }
             UpdateTarget();
         }
@@ -66,10 +66,10 @@ namespace ExtremeRoles.Module
             
             if (target.HasValue)
             {
-                this.target = target.Value;
+                this.Target = target.Value;
             }
 
-            this.arrowBehaviour.target = this.target;
+            this.arrowBehaviour.target = this.Target;
             this.arrowBehaviour.Update();
         }
 

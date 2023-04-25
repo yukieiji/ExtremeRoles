@@ -20,6 +20,9 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
     public bool IsBlockSkipInMeeting { get; private set; }
     public bool DisableSelfVote { get; private set; }
 
+    public ConfirmExilMode ExilMode { get; private set; }
+    public bool IsConfirmRole { get; private set; }
+
     public bool DisableVent { get; private set; }
     public bool EngineerUseImpostorVent { get; private set; }
     public bool CanKillVentInPlayer { get; private set; }
@@ -55,6 +58,10 @@ public sealed class ClassicGameModeShipGlobalOption : IShipGlobalOption
             GlobalOption.DisableSkipInEmergencyMeeting);
         DisableSelfVote = IShipGlobalOption.GetCommonOptionValue(
             GlobalOption.DisableSelfVote);
+        ExilMode = (ConfirmExilMode)IShipGlobalOption.GetCommonOptionValue(
+            GlobalOption.ConfirmExilMode);
+        IsConfirmRole = IShipGlobalOption.GetCommonOptionValue(
+            GlobalOption.IsConfirmRole);
 
         DisableVent = IShipGlobalOption.GetCommonOptionValue(
             GlobalOption.DisableVent);

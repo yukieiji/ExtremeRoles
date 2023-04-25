@@ -1,3 +1,6 @@
 [submodule "UnityAsset"]
 	path = UnityAsset
 	url = https://github.com/yukieiji/UnityAsset.git
+[submodule "ExtremeSkins.Core"]
+	path = ExtremeSkins.Core
+	url = https://github.com/yukieiji/ExtremeSkins.Core

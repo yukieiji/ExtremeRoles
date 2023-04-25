@@ -108,7 +108,8 @@ namespace ExtremeRoles.Module.AbilityFactory
 
                 if (isReportAbility)
                 {
-                    ExtremeRolesPlugin.ShipState.AddGhostRoleAbilityReport(type);
+                    MeetingReporter.Instance.AddMeetingStartReport(
+                        Helper.Translation.GetString(type.ToString()));
                 }
 
                 return true;

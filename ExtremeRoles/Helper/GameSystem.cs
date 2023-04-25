@@ -22,6 +22,8 @@ public static class GameSystem
     public const int VanillaMaxPlayerNum = 15;
     public const int MaxImposterNum = 14;
 
+    public const string BottomRightButtonGroupObjectName = "BottomRight";
+
     public const string SkeldAdmin = "SkeldShip(Clone)/Admin/Ground/admin_bridge/MapRoomConsole";
     public const string SkeldSecurity = "SkeldShip(Clone)/Security/Ground/map_surveillance/SurvConsole";
 
@@ -127,11 +129,16 @@ public static class GameSystem
         GameObject obj = GameObject.Find(mapModuleName);
         if (obj != null)
         {
-            disableCollider<Collider2D>(obj);
-            disableCollider<PolygonCollider2D>(obj);
-            disableCollider<BoxCollider2D>(obj);
-            disableCollider<CircleCollider2D>(obj);
+            SetColliderActive(obj, false);
         }
+    }
+
+    public static void SetColliderActive(GameObject obj, bool active)
+    {
+        setColliderEnable<Collider2D>(obj, active);
+        setColliderEnable<PolygonCollider2D>(obj, active);
+        setColliderEnable<BoxCollider2D>(obj, active);
+        setColliderEnable<CircleCollider2D>(obj, active);
     }
 
     public static (int, int) GetTaskInfo(
@@ -267,6 +274,27 @@ public static class GameSystem
     {
         RPCOperator.Call(RPCOperator.Command.ForceEnd);
         RPCOperator.ForceEnd();
+    }
+
+    public static bool IsValidConsole(PlayerControl player, Console console)
+    {
+        if (player == null || console == null) { return false; }
+
+        Vector2 playerPos = player.GetTruePosition();
+        Vector2 consolePos = console.transform.position;
+
+        bool isCheckWall = console.checkWalls;
+
+        return
+            player.CanMove &&
+            (!console.onlySameRoom || console.InRoom(playerPos)) &&
+            (!console.onlyFromBelow || playerPos.y < consolePos.y) &&
+            Vector2.Distance(playerPos, consolePos) <= console.UsableDistance &&
+            (
+                !isCheckWall ||
+                !PhysicsHelpers.AnythingBetween(
+                        playerPos, consolePos, Constants.ShadowMask, false)
+            );
     }
 
     public static Minigame OpenMinigame(
@@ -515,12 +543,12 @@ public static class GameSystem
     }
 
 
-    private static void disableCollider<T>(GameObject obj) where T : Collider2D
+    private static void setColliderEnable<T>(GameObject obj, bool active) where T : Collider2D
     {
         T comp = obj.GetComponent<T>();
         if (comp != null)
         {
-            comp.enabled = false;
+            comp.enabled = active;
         }
     }
 

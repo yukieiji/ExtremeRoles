@@ -125,9 +125,14 @@ public sealed class Mery : SingleRoleBase, IRoleAbility
             }
             vent.Id = CachedShipStatus.Instance.AllVents.Select(x => x.Id).Max() + 1;
 
+            var console = vent.GetComponent<Console>();
+            if (console != null)
+            {
+                Object.Destroy(console);
+            }
             var ventRenderer = vent.GetComponent<SpriteRenderer>();
             ventRenderer.sprite = Loader.CreateSpriteFromResources(
-               string.Format(Path.MeryCustomVentAnime, "0"), 125f);
+                string.Format(Path.MeryCustomVentAnime, "0"), 125f);
             vent.myRend = ventRenderer;           
             vent.name = "MaryVent_" + vent.Id;
             vent.gameObject.SetActive(this.body.gameObject.active);

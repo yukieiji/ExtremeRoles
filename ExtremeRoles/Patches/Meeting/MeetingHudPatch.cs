@@ -10,6 +10,7 @@ using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using AmongUs.GameOptions;
 
 using ExtremeRoles.GameMode;
+using ExtremeRoles.Module;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.CustomMonoBehaviour;
 using ExtremeRoles.GhostRoles;
@@ -600,6 +601,12 @@ public static class MeetingHudUpdatePatch
             __instance.SkipVoteButton.gameObject.SetActive(false);
         }
 
+        if (MeetingReporter.IsExist &&
+            MeetingReporter.Instance.HasChatReport)
+        {
+            MeetingReporter.Instance.ReportMeetingChat();
+        }
+
         if (ExtremeRolesPlugin.ShipState.AssassinMeetingTrigger)
         {
             __instance.TitleText.text = Helper.Translation.GetString(
@@ -615,11 +622,10 @@ public static class MeetingHudUpdatePatch
             {
                 FastDestroyableSingleton<HudManager>.Instance.Chat.gameObject.SetActive(false);
             }
-
-            return;
         }
     }
 }
+
 [HarmonyPatch(typeof(MeetingHud), nameof(MeetingHud.SortButtons))]
 public static class MeetingHudSortButtonsPatch
 {

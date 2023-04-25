@@ -3,6 +3,7 @@ using System.Text;
 
 using UnityEngine;
 
+using ExtremeSkins.Core.ExtremeHats;
 using ExtremeSkins.Module.Interface;
 
 using ExtremeRoles.Performance;
@@ -13,12 +14,6 @@ namespace ExtremeSkins.Module;
 #if WITHHAT
 public sealed class CustomHat : ICustomCosmicData<HatData>
 {
-    public const string FrontImageName = "front.png";
-    public const string FrontFlipImageName = "front_flip.png";
-    public const string BackImageName = "back.png";
-    public const string BackFlipImageName = "back_flip.png";
-    public const string ClimbImageName = "climb.png";
-
     public HatData Data
     { 
         get => this.hat; 
@@ -53,28 +48,19 @@ public sealed class CustomHat : ICustomCosmicData<HatData>
 
     private HatData hat;
 
-    public CustomHat(
-        string folderPath,
-        string author,
-        string name,
-        bool hasFrontFlip,
-        bool hasBack,
-        bool hasBackFlip,
-        bool hasClimb,
-        bool isBounce,
-        bool hasShader)
+    public CustomHat(string folderPath, HatInfo info)
     {
         this.folderPath = folderPath;
-        this.author = author;
-        this.name = name;
+        this.author = info.Author;
+        this.name = info.Name;
         
-        this.hasFrontFlip = hasFrontFlip;
-        this.hasBack = hasBack;
-        this.hasBackFlip = hasBackFlip;
-        this.hasClimb = hasClimb;
-        this.hasShader = hasShader;
+        this.hasFrontFlip = info.FrontFlip;
+        this.hasBack = info.Back;
+        this.hasBackFlip = info.BackFlip;
+        this.hasClimb = info.Climb;
+        this.hasShader = info.Shader;
 
-        this.isBounce = isBounce;
+        this.isBounce = info.Bound;
     }
 
     public override string ToString()
@@ -107,29 +93,29 @@ public sealed class CustomHat : ICustomCosmicData<HatData>
         this.hat.hatViewData.viewData = ScriptableObject.CreateInstance<HatViewData>();
 
         this.hat.hatViewData.viewData.MainImage = loadHatSprite(
-            string.Concat(this.folderPath, @"\", FrontImageName));
+            Path.Combine(this.folderPath, DataStructure.FrontImageName));
         
         if (this.hasFrontFlip)
         {
             this.hat.hatViewData.viewData.LeftMainImage = loadHatSprite(
-                string.Concat(this.folderPath, @"\", FrontFlipImageName));
+                Path.Combine(this.folderPath, DataStructure.FrontFlipImageName));
         }
 
         if (this.hasBack)
         {
             this.hat.hatViewData.viewData.BackImage = loadHatSprite(
-                string.Concat(this.folderPath, @"\", BackImageName));
+                Path.Combine(this.folderPath, DataStructure.BackImageName));
         }
         if (this.hasBackFlip)
         {
             this.hat.hatViewData.viewData.LeftBackImage = loadHatSprite(
-                string.Concat(this.folderPath, @"\", BackFlipImageName));
+                Path.Combine(this.folderPath, DataStructure.BackFlipImageName));
         }
 
         if (this.hasClimb)
         {
             this.hat.hatViewData.viewData.ClimbImage = loadHatSprite(
-                string.Concat(this.folderPath, @"\", ClimbImageName));
+                Path.Combine(this.folderPath, DataStructure.ClimbImageName));
         }
 
         if (this.hasShader)
