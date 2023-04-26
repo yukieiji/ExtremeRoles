@@ -7,8 +7,8 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 ここに含まれる素材の一部は、Innersloth LLCの所有物です。©Innersloth LLC.
 
 ![AmongUs](https://img.shields.io/badge/AmongUs-v2021.12.15～v2023.3.28-green)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/yukieiji/ExtremeRoles)
-![GitHub](https://img.shields.io/github/license/yukieiji/ExtremeRoles)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/yukieiji/ExtremeRoles)](https://github.com/yukieiji/ExtremeRoles/releases/latest)
+[![GitHub](https://img.shields.io/github/license/yukieiji/ExtremeRoles)](https://github.com/yukieiji/ExtremeRoles/blob/master/LICENSE.md)
 [![Twitter URL](https://img.shields.io/twitter/url?label=Twitter&style=social&url=https%3A%2F%2Ftwitter.com%2Fyukieiji)](https://twitter.com/yukieiji)
 [![Discord](https://img.shields.io/discord/994790791304200252?label=Discord)](https://t.co/czLmgXLUBU)
 
