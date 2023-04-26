@@ -17,6 +17,7 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 ## Extreme Roles
 主な特徴として以下があります<br>
 * 第三陣営「ニュートラル」と幽霊役職の追加
+* 80を超えるユニークな役職の追加
 * AmongUs公式役職とMODの役職の併用可能(HideNSeekにも完全対応)
 * すべてのMOD役職が複数人アサイン可能
 * すべての役職に対して、細かい設定(視界、視界効果、キルクールなど)が可能
