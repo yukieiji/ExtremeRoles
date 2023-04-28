@@ -40,9 +40,14 @@ public sealed class Gambler :
         Array.Fill(voteArray, 0, this.normalVoteRate, zeroVoteRate);
         Array.Fill(voteArray, 2, this.normalVoteRate + zeroVoteRate, dualVoteRate);
 
-        int usingIndex = RandomGenerator.Instance.Next(100);
+        int playerVoteNum = voteArray[RandomGenerator.Instance.Next(100)];
+        
+        if (playerVoteNum == 1) { return; }
+        
+        int curVotedNum = voteResult[rolePlayerId];
+        int newVotedNum = playerVoteNum == 0 ? curVotedNum - 1 : curVotedNum + 1;
 
-        voteResult[rolePlayerId] = voteArray[usingIndex];   
+        voteResult[rolePlayerId] = newVotedNum;
     }
 
     public void ModifiedVoteAnime(
