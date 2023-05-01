@@ -196,6 +196,6 @@ EXRole can support multiple languages, but only Japanese is implemented because 
 
 |  言語名/Languages  |  対応状況/Status |
 | ---- | ---- |
-|  英語/English  |  完全翻訳済み/Fully Translated  |
+|  英語/English  |  部分的に翻訳済み/Fully Translated  |
 |  日本語/Japanese  |  完全翻訳済み/Fully Translated  |
 |  简体中文/SChinese  |  完全翻訳済み/Mostly Translated  |
