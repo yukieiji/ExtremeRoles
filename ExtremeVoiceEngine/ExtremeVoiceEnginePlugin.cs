@@ -1,6 +1,5 @@
 ﻿using BepInEx;
 using BepInEx.Unity.IL2CPP;
-
 using HarmonyLib;
 
 namespace ExtremeVoiceEngine;
@@ -16,5 +15,6 @@ public partial class ExtremeVoiceEnginePlugin : BasePlugin
 
     public override void Load()
     {
+        AddComponent<VoiceEngine>();
     }
 }

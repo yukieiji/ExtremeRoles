@@ -14,6 +14,8 @@ namespace ExtremeVoiceEngine;
 [Il2CppRegister]
 public sealed class VoiceEngine : MonoBehaviour
 {
+    public static VoiceEngine? Instance { get; private set; }
+
     public ISpeaker? Speaker { get; set; }
 
     private bool running = false;
@@ -21,32 +23,42 @@ public sealed class VoiceEngine : MonoBehaviour
 
     public VoiceEngine(IntPtr ptr) : base(ptr) { }
 
+    public void Awake()
+    {
+        Instance = this;
+    }
+
+    public void AddQueue(string text)
+    {
+        textQueue.Enqueue(text);
+    }
+
     public void Destroy()
     {
         StopAllCoroutines();
-        this.Speaker?.Cancel();
+        Speaker?.Cancel();
     }
 
     public void FixedUpdate()
     {
-        if (this.Speaker is null || 
-            this.running || 
-            this.textQueue.Count == 0) { return; }
-        
-        string text = this.textQueue.Dequeue();
-        StartCoroutine(this.coSpeek(text).WrapToIl2Cpp());
+        if (Speaker is null ||
+            running ||
+            textQueue.Count == 0) { return; }
+
+        string text = textQueue.Dequeue();
+        StartCoroutine(coSpeek(text).WrapToIl2Cpp());
     }
 
     private IEnumerator coSpeek(string text)
     {
-        if (this.Speaker is null) { yield break; }
+        if (Speaker is null) { yield break; }
 
-        this.running = true;
+        running = true;
 
-        yield return this.Speaker.Speek(text);
-        yield return new WaitForSeconds(this.Speaker.Wait);
+        yield return Speaker.Speek(text);
+        yield return new WaitForSeconds(Speaker.Wait);
 
-        this.running = false;
+        running = false;
 
         yield break;
     }
