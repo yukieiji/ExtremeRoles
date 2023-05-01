@@ -9,7 +9,8 @@ namespace ExtremeRoles.Roles.API
     {
         public virtual bool IsAssignGhostRole => true;
 
-        public OptionTab Tab => this.tab;
+        public OptionTab Tab { get; } = OptionTab.General;
+        public virtual string RoleName => this.RawRoleName;
 
         public bool CanCallMeeting = true;
         public bool CanRepairSabotage = true;
@@ -35,14 +36,10 @@ namespace ExtremeRoles.Roles.API
         public float KillCoolTime = 0f;
         public int KillRange = 1;
 
-        public virtual string RoleName => this.RawRoleName;
-
         public ExtremeRoleId Id;
         public ExtremeRoleType Team;
 
         protected Color NameColor;
-
-        private OptionTab tab = OptionTab.General;
 
         protected string RawRoleName;
 
@@ -85,22 +82,22 @@ namespace ExtremeRoles.Roles.API
                 switch (this.Team)
                 {
                     case ExtremeRoleType.Crewmate:
-                        this.tab = OptionTab.Crewmate;
+                        this.Tab = OptionTab.Crewmate;
                         break;
                     case ExtremeRoleType.Impostor:
-                        this.tab = OptionTab.Impostor;
+                        this.Tab = OptionTab.Impostor;
                         break;
                     case ExtremeRoleType.Neutral:
-                        this.tab = OptionTab.Neutral;
+                        this.Tab = OptionTab.Neutral;
                         break;
                     default:
-                        this.tab = OptionTab.General;
+                        this.Tab = OptionTab.General;
                         break;
                 }
             }
             else
             {
-                this.tab = tab;
+                this.Tab = tab;
             }
         }
 

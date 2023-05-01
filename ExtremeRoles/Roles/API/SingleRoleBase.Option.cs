@@ -80,7 +80,7 @@ namespace ExtremeRoles.Roles.API
                 defaultValue,
                 min, max, step,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption, this.tab);
+                format, invert, enableCheckOption, this.Tab);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -106,7 +106,7 @@ namespace ExtremeRoles.Roles.API
                 min, step,
                 parent, isHeader, isHidden,
                 format, invert, enableCheckOption,
-                this.tab, tempMaxValue);
+                this.Tab, tempMaxValue);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -130,7 +130,7 @@ namespace ExtremeRoles.Roles.API
                 defaultValue,
                 min, max, step,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption, this.tab);
+                format, invert, enableCheckOption, this.Tab);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -156,7 +156,7 @@ namespace ExtremeRoles.Roles.API
                 min, step,
                 parent, isHeader, isHidden,
                 format, invert, enableCheckOption,
-                this.tab, tempMaxValue);
+                this.Tab, tempMaxValue);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -178,7 +178,7 @@ namespace ExtremeRoles.Roles.API
                 createAutoOptionString(option, colored),
                 defaultValue,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption, this.tab);
+                format, invert, enableCheckOption, this.Tab);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -200,7 +200,7 @@ namespace ExtremeRoles.Roles.API
                 createAutoOptionString(option, colored),
                 selections,
                 parent, isHeader, isHidden,
-                format, invert, enableCheckOption, this.tab);
+                format, invert, enableCheckOption, this.Tab);
         }
 
         private string createAutoOptionString<T>(

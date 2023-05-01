@@ -44,6 +44,8 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         private SpriteRenderer img;
         private Arrow arrow;
 
+        public TorchBehavior(IntPtr ptr) : base(ptr) { }
+
         public void Awake()
         {
             this.collider = base.gameObject.AddComponent<CircleCollider2D>();

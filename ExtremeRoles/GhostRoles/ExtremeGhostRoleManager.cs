@@ -9,10 +9,11 @@ using ExtremeRoles.Roles.API;
 using ExtremeRoles.GhostRoles.API;
 using ExtremeRoles.GhostRoles.Crewmate;
 using ExtremeRoles.GhostRoles.Impostor;
+using ExtremeRoles.GhostRoles.Neutal;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Roles.Combination;
+using ExtremeRoles.Module;
 using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.GameMode;
 
 namespace ExtremeRoles.GhostRoles;
 
@@ -20,13 +21,17 @@ public enum ExtremeGhostRoleId : byte
 {
     VanillaRole = 0,
 
+    Wisp,
+
     Poltergeist,
     Faunus,
+    Shutter,
 
     Ventgeist,
     SaboEvil,
+    Igniter,
 
-    Wisp
+    Foras,
 }
 
 public enum AbilityType : byte
@@ -35,9 +40,13 @@ public enum AbilityType : byte
 
     PoltergeistMoveDeadbody,
     FaunusOpenSaboConsole,
+    ShutterTakePhoto,
 
     VentgeistVentAnime,
-    SaboEvilResetSabotageCool
+    SaboEvilResetSabotageCool,
+    IgniterSwitchLight,
+
+    ForasShowArrow
 }
 
 public static class ExtremeGhostRoleManager
@@ -52,9 +61,13 @@ public static class ExtremeGhostRoleManager
         {
             { ExtremeGhostRoleId.Poltergeist, new Poltergeist() },
             { ExtremeGhostRoleId.Faunus,      new Faunus()      },
+            { ExtremeGhostRoleId.Shutter,     new Shutter()     },
 
             { ExtremeGhostRoleId.Ventgeist, new Ventgeist() },
-            { ExtremeGhostRoleId.SaboEvil,  new SaboEvil()  },
+            { ExtremeGhostRoleId.SaboEvil , new SaboEvil()  },
+            { ExtremeGhostRoleId.Igniter  , new Igniter()   },
+
+            { ExtremeGhostRoleId.Foras    , new Foras()   },
         };
 
     private static readonly HashSet<RoleTypes> vanillaGhostRole = new HashSet<RoleTypes>()
@@ -110,7 +123,7 @@ public static class ExtremeGhostRoleManager
 
         foreach (var spawnData in sameTeamRoleAssignData)
         {
-            if (spawnData.IsBlockAliveRole(roleId) || 
+            if (!spawnData.IsFiltedRole(baseRole) || 
                 !spawnData.IsSpawn()) { continue; }
             
             rpcSetSingleGhostRoleToPlayerId(
@@ -236,6 +249,9 @@ public static class ExtremeGhostRoleManager
 
         switch (callAbility)
         {
+            case AbilityType.WispSetTorch:
+                Wisp.SetTorch(reader.ReadByte());
+                break;
             case AbilityType.VentgeistVentAnime:
                 int ventId = reader.ReadInt32();
                 Ventgeist.VentAnime(ventId);
@@ -254,8 +270,11 @@ public static class ExtremeGhostRoleManager
             case AbilityType.SaboEvilResetSabotageCool:
                 SaboEvil.ResetCool();
                 break;
-            case AbilityType.WispSetTorch:
-                Wisp.SetTorch(reader.ReadByte());
+            case AbilityType.IgniterSwitchLight:
+                Igniter.SetVison(reader.ReadBoolean());
+                break;
+            case AbilityType.ForasShowArrow:
+                Foras.SwitchArrow(ref reader);
                 break;
             default:
                 break;
@@ -263,8 +282,8 @@ public static class ExtremeGhostRoleManager
 
         if (isReport)
         {
-            ExtremeRolesPlugin.ShipState.AddGhostRoleAbilityReport(
-                callAbility);
+            MeetingReporter.Instance.AddMeetingStartReport(
+                Helper.Translation.GetString(callAbility.ToString()));
         }
     }
 

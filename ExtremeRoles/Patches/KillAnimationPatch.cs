@@ -1,21 +1,20 @@
 ﻿using HarmonyLib;
 
-namespace ExtremeRoles.Patches
+namespace ExtremeRoles.Patches;
+
+[HarmonyPatch(typeof(KillAnimation), nameof(KillAnimation.CoPerformKill))]
+public static class KillAnimationCoPerformKillPatch
 {
-    [HarmonyPatch(typeof(KillAnimation), nameof(KillAnimation.CoPerformKill))]
-    public static class KillAnimationCoPerformKillPatch
+    public static bool HideNextAnimation = false;
+    public static void Prefix(
+        KillAnimation __instance,
+        [HarmonyArgument(0)] ref PlayerControl source,
+        [HarmonyArgument(1)] ref PlayerControl target)
     {
-        public static bool HideNextAnimation = false;
-        public static void Prefix(
-            KillAnimation __instance,
-            [HarmonyArgument(0)] ref PlayerControl source,
-            [HarmonyArgument(1)] ref PlayerControl target)
+        if (HideNextAnimation)
         {
-            if (HideNextAnimation)
-            {
-                source = target;
-            }
-            HideNextAnimation = false;
+            source = target;
         }
+        HideNextAnimation = false;
     }
 }

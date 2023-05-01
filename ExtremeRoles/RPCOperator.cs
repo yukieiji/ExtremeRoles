@@ -40,6 +40,7 @@ public static class RPCOperator
         ReplaceTask,
         IntegrateModCall,
         CloseMeetingVoteButton,
+        MeetingReporterRpc,
 
         // 役職関連
         // 役職メインコントール
@@ -48,6 +49,7 @@ public static class RPCOperator
         // コンビロール全般
         HeroHeroAcademia,
         KidsAbility,
+        MoverAbility,
 
         // クルーメイト
         BodyGuardAbility,
@@ -59,6 +61,7 @@ public static class RPCOperator
         SurvivorDeadWin,
         CaptainAbility,
         ResurrecterRpc,
+        TeleporterSetPortal,
 
         // インポスター
         AssasinVoteFor,
@@ -72,6 +75,8 @@ public static class RPCOperator
         CommanderAttackCommand,
         HypnotistAbility,
         UnderWarperUseVentWithNoAnime,
+        SlimeAbility,
+        ZombieRpc,
 
         // ニュートラル
         AliceShipBroken,
@@ -502,6 +507,11 @@ public static class RPCOperator
             (Roles.ExtremeRoleManager.ReplaceOperation)operation);
     }
 
+    public static void MeetingReporterRpcOp(ref MessageReader reader)
+    {
+        Module.MeetingReporter.RpcOp(ref reader);
+    }
+
     public static void HeroHeroAcademiaCommand(
         ref MessageReader reader)
     {
@@ -514,6 +524,11 @@ public static class RPCOperator
     {
         Roles.Combination.Kids.Ability(
             ref reader);
+    }
+
+    public static void MoverAbility(ref MessageReader reader)
+    {
+        Roles.Combination.Mover.Ability(ref reader);
     }
 
     public static void BodyGuardAbility(ref MessageReader reader)
@@ -562,6 +577,13 @@ public static class RPCOperator
     public static void ResurrecterRpc(ref MessageReader reader)
     {
         Roles.Solo.Crewmate.Resurrecter.RpcAbility(ref reader);
+    }
+
+    public static void TeleporterSetPortal(
+        byte teleporterId, float x, float y)
+    {
+        Roles.Solo.Crewmate.Teleporter.SetPortal(
+            teleporterId, new UnityEngine.Vector2(x, y));
     }
 
     public static void AssasinVoteFor(byte targetId)
@@ -627,6 +649,16 @@ public static class RPCOperator
     {
         Roles.Solo.Impostor.UnderWarper.UseVentWithNoAnimation(
             playerId, ventId, isEnter);
+    }
+
+    public static void SlimeAbility(ref MessageReader reader)
+    {
+        Roles.Solo.Impostor.Slime.Ability(ref reader);
+    }
+
+    public static void ZombieRpc(ref MessageReader reader)
+    {
+        Roles.Solo.Impostor.Zombie.RpcAbility(ref reader);
     }
 
     public static void AliceShipBroken(

@@ -42,7 +42,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public static void OutburstKill(
             byte outburstTargetPlayerId, byte killTargetPlayerId)
         {
-            if (outburstTargetPlayerId != PlayerControl.LocalPlayer.PlayerId) { return; }
+            if (outburstTargetPlayerId != CachedPlayerControl.LocalPlayer.PlayerId) { return; }
 
             PlayerControl killer = Helper.Player.GetPlayerControlById(outburstTargetPlayerId);
             PlayerControl target = Helper.Player.GetPlayerControlById(killTargetPlayerId);
@@ -58,7 +58,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
             if (!killer.CanMove) { return; }
 
             bool canKill = killerRole.TryRolePlayerKillTo(
-                    killer, target);
+                killer, target);
             if (!canKill) { return; }
 
             canKill = targetRole.TryRolePlayerKilledFrom(
@@ -116,7 +116,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
         public bool IsAbilityUse()
         {
             this.tmpTarget = Helper.Player.GetClosestPlayerInRange(
-                PlayerControl.LocalPlayer, this,
+                CachedPlayerControl.LocalPlayer, this,
                 this.outburstDistance);
             return this.IsCommonUse() && this.tmpTarget != null;
         }

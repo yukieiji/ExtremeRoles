@@ -15,6 +15,7 @@ using ExtremeRoles.Performance;
 using static ExtremeRoles.OptionHolder;
 using static UnityEngine.UI.Button;
 using Object = UnityEngine.Object;
+using ExtremeRoles.Module.Interface;
 
 
 namespace ExtremeRoles.Patches.Option;
@@ -220,9 +221,11 @@ public static class OptionsMenuBehaviourStartPatch
         showTextBuilder.AppendLine(
             $"<align=left>{Helper.Translation.GetString("developer")}yukieiji");
         showTextBuilder.AppendLine(
-            $"<align=left>{Helper.Translation.GetString("debugThunk")}stou59，Tyoubi，mamePi");
+            $"<align=left>{Helper.Translation.GetString("debugThunk")}stou59，Tyoubi，mamePi,");
+        showTextBuilder.AppendLine(
+            $"<align=left>　アンハッピーセット");
 
-        creditText.fontSizeMin = creditText.fontSizeMax = 2.25f;
+        creditText.fontSize = creditText.fontSizeMin = creditText.fontSizeMax = 2.0f;
         creditText.font = Object.Instantiate(moreOptionText.font);
         creditText.GetComponent<RectTransform>().sizeDelta = new Vector2(5.0f, 5.5f);
         creditText.gameObject.SetActive(true);
@@ -246,7 +249,7 @@ public static class OptionsMenuBehaviourStartPatch
     {
         modOptionButton = new List<ToggleButtonBehaviour>();
 
-        for (var i = 0; i < modOption.Length; i++)
+        for (int i = 0; i < modOption.Length; i++)
         {
             var info = modOption[i];
 
@@ -350,7 +353,7 @@ public static class OptionsMenuBehaviourStartPatch
 
     private static IEnumerable<GameObject> getAllChilds(this GameObject Go)
     {
-        for (var i = 0; i < Go.transform.childCount; ++i)
+        for (int i = 0; i < Go.transform.childCount; ++i)
         {
             yield return Go.transform.GetChild(i).gameObject;
         }

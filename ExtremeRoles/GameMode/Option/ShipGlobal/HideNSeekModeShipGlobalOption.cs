@@ -29,7 +29,10 @@ public sealed class HideNSeekModeShipGlobalOption : IShipGlobalOption
     public bool IsFixedVoteAreaPlayerLevel => false;
     public bool IsBlockSkipInMeeting  => false;
     public bool DisableSelfVote => false;
-    
+
+    public ConfirmExilMode ExilMode => ConfirmExilMode.Impostor;
+    public bool IsConfirmRole => false;
+
     public bool EngineerUseImpostorVent => false;
     public bool CanKillVentInPlayer => false;
     public bool IsAutoSelectRandomSpawn => false;

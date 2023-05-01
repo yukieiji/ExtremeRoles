@@ -109,6 +109,8 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
             if (itemLength == 0 || this.blockTimer < 0.1f) { return; }
 
+            this.blockTimer = 0.0f;
+
             float itemOffset = (float)itemLength;
             float posOffset = posOffsetInit;
 

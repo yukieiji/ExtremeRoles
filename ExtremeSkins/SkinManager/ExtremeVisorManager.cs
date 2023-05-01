@@ -6,6 +6,8 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.Text;
+using System.Text.Json;
 
 using BepInEx.Configuration;
 
@@ -13,319 +15,314 @@ using UnityEngine;
 
 using Newtonsoft.Json.Linq;
 
+using ExtremeSkins.Core;
+using ExtremeSkins.Core.ExtremeVisor;
 using ExtremeSkins.Module;
 
-namespace ExtremeSkins.SkinManager
-{
+namespace ExtremeSkins.SkinManager;
+
 #if WITHVISOR
-    public static class ExtremeVisorManager
+public static class ExtremeVisorManager
+{
+    public static readonly Dictionary<string, CustomVisor> VisorData = new Dictionary<string, CustomVisor>();
+    public static bool IsLoaded = false;
+
+    private const string repo = "https://raw.githubusercontent.com/yukieiji/ExtremeVisor/main"; // When using this repository with Fork, please follow the license of each hat
+    private const string skinDlUrl = "https://github.com/yukieiji/ExtremeVisor/archive/refs/heads/main.zip";
+
+    private const string workingFolder = "ExVWorking";
+    private const string dlZipName = "ExtremeVisor-main.zip";
+    private const string visorDataPath = "ExtremeVisor-main";
+    private const string visorDataFolderPath = "new_visor";
+
+    private const string visorRepoData = "visorData.json";
+    private const string visorTransData = "visorTransData.json";
+
+    private static ConfigEntry<string> curUpdateHash;
+    private const string updateComitKey = "ExVUpdateComitHash";
+    private const string jsonUpdateComitKey = "updateComitHash";
+
+    public static void Initialize()
     {
-        public static readonly Dictionary<string, CustomVisor> VisorData = new Dictionary<string, CustomVisor>();
-        public static bool IsLoaded = false;
+        curUpdateHash = ExtremeSkinsPlugin.Instance.Config.Bind(
+            ExtremeSkinsPlugin.SkinComitCategory,
+            updateComitKey, "NoHashData");
+        VisorData.Clear();
+        IsLoaded = false;
+    }
 
-        public const string FolderPath = @"\ExtremeVisor\";
-        public const string LicenseFileName = "LICENSE.md";
-        public const string InfoFileName = "info.json";
+    public static bool IsUpdate()
+    {
 
-        private const string repo = "https://raw.githubusercontent.com/yukieiji/ExtremeVisor/main"; // When using this repository with Fork, please follow the license of each hat
-        private const string skinDlUrl = "https://github.com/yukieiji/ExtremeVisor/archive/refs/heads/main.zip";
+        ExtremeSkinsPlugin.Logger.LogInfo(
+            "Extreme Visor Manager : Checking Update....");
 
-        private const string workingFolder = @"\ExVWorking\";
-        private const string dlZipName = "ExtremeVisor-main.zip";
-        private const string visorDataPath = @"\ExtremeVisor-main\new_visor\";
+        string exvFolder = Path.Combine(
+            Path.GetDirectoryName(Application.dataPath), DataStructure.FolderName);
 
-        private const string visorRepoData = "visorData.json";
-        private const string visorTransData = "visorTransData.json";
+        if (!Directory.Exists(exvFolder)) { return true; }
 
-        private static ConfigEntry<string> curUpdateHash;
-        private const string updateComitKey = "ExVUpdateComitHash";
-        private const string jsonUpdateComitKey = "updateComitHash";
+        getJsonData(visorRepoData).GetAwaiter().GetResult();
 
-        private const string leftIdleKey = "LeftIdle";
+        byte[] byteVisorArray = File.ReadAllBytes(
+            Path.Combine(exvFolder, visorRepoData));
+        string visorJsonString = Encoding.UTF8.GetString(byteVisorArray);
+        JObject visorJObject = JObject.Parse(visorJsonString);
 
-        public static void Initialize()
+        JToken visorFolder = visorJObject["data"];
+        JToken newHash = visorJObject[jsonUpdateComitKey];
+
+        if ((string)newHash != curUpdateHash.Value) { return true; }
+
+        JArray visorArray = visorFolder.TryCast<JArray>();
+
+        for (int i = 0; i < visorArray.Count; ++i)
         {
-            curUpdateHash = ExtremeSkinsPlugin.Instance.Config.Bind(
-                ExtremeSkinsPlugin.SkinComitCategory,
-                updateComitKey, "NoHashData");
-            VisorData.Clear();
-            IsLoaded = false;
-        }
+            string visorData = visorArray[i].ToString();
 
-        public static bool IsUpdate()
-        {
+            if (visorData == visorRepoData || 
+                visorData == visorTransData) { continue; }
 
-            ExtremeSkinsPlugin.Logger.LogInfo("Extreme Visor Manager : Checking Update....");
-
-            if (!Directory.Exists(string.Concat(
-                Path.GetDirectoryName(Application.dataPath), FolderPath))) { return true; }
-
-            getJsonData(visorRepoData).GetAwaiter().GetResult();
-            
-            byte[] byteVisorArray = File.ReadAllBytes(
-                string.Concat(
-                    Path.GetDirectoryName(Application.dataPath),
-                    FolderPath, visorRepoData));
-            string visorJsonString = System.Text.Encoding.UTF8.GetString(byteVisorArray);
-            JObject visorJObject = JObject.Parse(visorJsonString);
-
-            JToken visorFolder = visorJObject["data"];
-            JToken newHash = visorJObject[jsonUpdateComitKey];
-
-            if ((string)newHash != curUpdateHash.Value) { return true; }
-
-            JArray visorArray = visorFolder.TryCast<JArray>();
-
-            for (int i = 0; i < visorArray.Count; ++i)
-            {
-                string visorData = visorArray[i].ToString();
-
-                if (visorData == visorRepoData || visorData == visorTransData) { continue; }
-
-                string checkVisorFolder = string.Concat(
-                    Path.GetDirectoryName(Application.dataPath),
-                    FolderPath, @"\", visorData);
-
-                if (!Directory.Exists(checkVisorFolder)) { return true; }
-
-                if (!File.Exists(string.Concat(
-                        checkVisorFolder, @"\", LicenseFileName))) { return true; }
-
-                if (!File.Exists(string.Concat(
-                        checkVisorFolder, @"\", InfoFileName))) { return true; }
-                if (!File.Exists(string.Concat(
-                        checkVisorFolder, @"\", CustomVisor.IdleName))) { return true; }
-
-                byte[] byteArray = File.ReadAllBytes(
-                   string.Concat(checkVisorFolder, @"\", InfoFileName));
-                string json = System.Text.Encoding.UTF8.GetString(byteArray);
-                JObject parseJson = JObject.Parse(json);
-
-                if (((bool)parseJson[leftIdleKey]) &&
-                    !File.Exists(string.Concat(
-                        checkVisorFolder, @"\", CustomVisor.FlipIdleName)))
-                {
-                    return true;
-                }
-
-            }
-            return false;
-        }
-
-        public static void Load()
-        {
-
-            ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Visor Manager : Visor Loading Start!! ----------");
-
-            getJsonData(visorTransData).GetAwaiter().GetResult();
-            Helper.Translation.UpdateHatsTransData(
-                string.Concat(
-                    Path.GetDirectoryName(Application.dataPath),
-                    FolderPath, visorTransData));
-
-            // UpdateComitHash
-            byte[] byteVisorArray = File.ReadAllBytes(
-                string.Concat(
-                    Path.GetDirectoryName(Application.dataPath),
-                    FolderPath, visorRepoData));
-            curUpdateHash.Value = (string)(JObject.Parse(
-                System.Text.Encoding.UTF8.GetString(byteVisorArray))[jsonUpdateComitKey]);
-
-            string[] visorFolder = Directory.GetDirectories(
-                string.Concat(Path.GetDirectoryName(Application.dataPath), FolderPath));
-
-
-            foreach (string visor in visorFolder)
-            {
-                if (string.IsNullOrEmpty(visor)) { continue; }
-
-                string infoJsonFile = string.Concat(visor, @"\", InfoFileName);
-
-                if (!File.Exists(infoJsonFile))
-                {
-                    ExtremeSkinsPlugin.Logger.LogInfo(
-                        $"Error Detected!!:Can't load info.json for:{infoJsonFile}");
-                    continue;
-                }
-
-                byte[] byteArray = File.ReadAllBytes(infoJsonFile);
-                string json = System.Text.Encoding.UTF8.GetString(byteArray);
-                JObject parseJson = JObject.Parse(json);
-
-                CustomVisor customVisor = new CustomVisor(
-                    visor,
-                    parseJson["Author"].ToString(),  // Author
-                    parseJson["Name"].ToString(),  // Name
-                    (bool)parseJson[leftIdleKey],
-                    (bool)parseJson["Shader"], // Shader
-                    (bool)parseJson["BehindHat"]); // BehindHat
-
-                if (VisorData.TryAdd(customVisor.Id, customVisor))
-                {
-                    ExtremeSkinsPlugin.Logger.LogInfo(
-                        $"Visor Loaded :\n{customVisor}");
-                }
+            string checkVisorFolder = Path.Combine(exvFolder, visorData);
+            string jsonPath = Path.Combine(checkVisorFolder, InfoBase.JsonName);
+            if (!Directory.Exists(checkVisorFolder) ||
+                !File.Exists(Path.Combine(
+                    checkVisorFolder, License.FileName)) ||
+                !File.Exists(jsonPath) ||
+                !File.Exists(Path.Combine(
+                    checkVisorFolder, DataStructure.IdleImageName)))
+            { 
+                return true; 
             }
 
-            IsLoaded = true;
+            using var jsonReader = new StreamReader(jsonPath);
+            VisorInfo info = JsonSerializer.Deserialize<VisorInfo>(
+                jsonReader.ReadToEnd());
 
-            ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Visor Manager : Visor Loading Complete!! ----------");
-
-        }
-
-        public static IEnumerator InstallData()
-        {
-
-            ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Visor Manager : VisorData Download Start!! ---------- ");
-
-            string ausFolder = Path.GetDirectoryName(Application.dataPath);
-            string dataSaveFolder = string.Concat(ausFolder, FolderPath);
-
-            cleanUpCurSkinData(dataSaveFolder);
-
-            string dlFolder = string.Concat(ausFolder, workingFolder);
-
-            Helper.FileUtility.DeleteDir(dlFolder);
-            Directory.CreateDirectory(dlFolder);
-
-            string zipPath = string.Concat(dlFolder, dlZipName);
-
-            yield return Helper.FileUtility.DlToZip(skinDlUrl, zipPath);
-
-            ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Visor Manager : VisorData Download Complete!! ---------- ");
-
-            ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Visor Manager : VisorData Install Start!! ---------- ");
-
-            installVisorData(dlFolder, zipPath, dataSaveFolder);
-
-            ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Visor Manager : VisorData Install Complete!! ---------- ");
-#if RELEASE
-            Helper.FileUtility.DeleteDir(dlFolder);
-# endif
-        }
-
-        public static void UpdateTranslation()
-        {
-            foreach (var vi in VisorData.Values)
+            if (info.LeftIdle &&
+                !File.Exists(Path.Combine(
+                    checkVisorFolder, DataStructure.FlipIdleImageName)))
             {
-               if (vi.Data != null)
-               {
-                    vi.Data.name = Helper.Translation.GetString(
-                        vi.Name);
-               }
+                return true;
             }
+
         }
+        return false;
+    }
 
-        private static async Task getJsonData(string fileName)
+    public static void Load()
+    {
+
+        ExtremeSkinsPlugin.Logger.LogInfo(
+            "---------- Extreme Visor Manager : Visor Loading Start!! ----------");
+
+        getJsonData(visorTransData).GetAwaiter().GetResult();
+
+        string exvFolder = Path.Combine(
+            Path.GetDirectoryName(Application.dataPath), DataStructure.FolderName);
+
+        Helper.Translation.UpdateHatsTransData(
+            Path.Combine(exvFolder, visorTransData));
+
+        // UpdateComitHash
+        byte[] byteVisorArray = File.ReadAllBytes(
+            Path.Combine(exvFolder, visorRepoData));
+        curUpdateHash.Value = (string)(JObject.Parse(
+            Encoding.UTF8.GetString(byteVisorArray))[jsonUpdateComitKey]);
+
+        string[] visorFolder = Directory.GetDirectories(exvFolder);
+
+        foreach (string visor in visorFolder)
         {
-            try
-            {
-                HttpClient http = new HttpClient();
-                http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true };
-                var response = await http.GetAsync(
-                    new System.Uri($"{repo}/new_visor/{fileName}"),
-                    HttpCompletionOption.ResponseContentRead);
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    ExtremeSkinsPlugin.Logger.LogInfo($"Can't load json");
-                }
-                if (response.Content == null)
-                {
-                    ExtremeSkinsPlugin.Logger.LogInfo(
-                        $"Server returned no data: {response.StatusCode}");
-                }
+            if (string.IsNullOrEmpty(visor)) { continue; }
 
-                using (var responseStream = await response.Content.ReadAsStreamAsync())
-                {
-                    using (var fileStream = File.Create(string.Concat(
-                        Path.GetDirectoryName(Application.dataPath), FolderPath, fileName)))
-                    {
-                        responseStream.CopyTo(fileStream);
-                    }
-                }
-            }
-            catch (System.Exception e)
+            string infoJsonFile = Path.Combine(visor, InfoBase.JsonName);
+
+            if (!File.Exists(infoJsonFile))
             {
                 ExtremeSkinsPlugin.Logger.LogInfo(
-                    $"Unable to fetch hats from repo: {repo}\n{e.Message}");
+                    $"Error Detected!!:Can't load info.json for:{infoJsonFile}");
+                continue;
+            }
+
+            using var jsonReader = new StreamReader(infoJsonFile);
+            VisorInfo info = JsonSerializer.Deserialize<VisorInfo>(
+                jsonReader.ReadToEnd());
+
+            CustomVisor customVisor = new CustomVisor(visor, info);
+
+            if (VisorData.TryAdd(customVisor.Id, customVisor))
+            {
+                ExtremeSkinsPlugin.Logger.LogInfo($"Visor Loaded :\n{customVisor}");
             }
         }
 
-        private static void cleanUpCurSkinData(
-            string dataSaveFolder)
+        IsLoaded = true;
+
+        ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Visor Manager : Visor Loading Complete!! ----------");
+
+    }
+
+    public static IEnumerator InstallData()
+    {
+
+        ExtremeSkinsPlugin.Logger.LogInfo(
+            "---------- Extreme Visor Manager : VisorData Download Start!! ---------- ");
+
+        string ausFolder = Path.GetDirectoryName(Application.dataPath);
+        string dataSaveFolder = Path.Combine(ausFolder, DataStructure.FolderName);
+
+        cleanUpCurSkinData(dataSaveFolder);
+
+        string dlFolder = Path.Combine(ausFolder, workingFolder);
+
+        Helper.FileUtility.DeleteDir(dlFolder);
+        Directory.CreateDirectory(dlFolder);
+
+        string zipPath = Path.Combine(dlFolder, dlZipName);
+
+        yield return Helper.FileUtility.DlToZip(skinDlUrl, zipPath);
+
+        ExtremeSkinsPlugin.Logger.LogInfo(
+            "---------- Extreme Visor Manager : VisorData Download Complete!! ---------- ");
+
+        ExtremeSkinsPlugin.Logger.LogInfo("---------- Extreme Visor Manager : VisorData Install Start!! ---------- ");
+
+        installVisorData(dlFolder, zipPath, dataSaveFolder);
+
+        ExtremeSkinsPlugin.Logger.LogInfo(
+            "---------- Extreme Visor Manager : VisorData Install Complete!! ---------- ");
+#if RELEASE
+        Helper.FileUtility.DeleteDir(dlFolder);
+# endif
+    }
+
+    public static void UpdateTranslation()
+    {
+        foreach (var vi in VisorData.Values)
         {
-
-            Helper.FileUtility.DeleteDir(dataSaveFolder);
-            Directory.CreateDirectory(dataSaveFolder);
-
-            getJsonData(visorRepoData).GetAwaiter().GetResult();
-
-            byte[] byteVisorArray = File.ReadAllBytes(
-                string.Concat(
-                    dataSaveFolder, visorRepoData));
-            string visorJsonString = System.Text.Encoding.UTF8.GetString(byteVisorArray);
-
-            JObject visorFolder = JObject.Parse(visorJsonString);
-
-            for (int i = 0; i < visorFolder.Count; ++i)
+            if (vi.Data != null)
             {
-                JProperty token = visorFolder.ChildrenTokens[i].TryCast<JProperty>();
-                if (token == null) { continue; }
+                vi.Data.name = Helper.Translation.GetString(
+                    vi.Name);
+            }
+        }
+    }
 
-                string author = token.Name;
+    private static async Task getJsonData(string fileName)
+    {
+        try
+        {
+            HttpClient http = new HttpClient();
+            http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue 
+            { 
+                NoCache = true 
+            };
+            var response = await http.GetAsync(
+                new System.Uri($"{repo}/{visorDataFolderPath}/{fileName}"),
+                HttpCompletionOption.ResponseContentRead);
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                ExtremeSkinsPlugin.Logger.LogInfo($"Can't load json");
+            }
+            if (response.Content == null)
+            {
+                ExtremeSkinsPlugin.Logger.LogInfo(
+                    $"Server returned no data: {response.StatusCode}");
+            }
 
-                if (author == jsonUpdateComitKey) { continue; }
-
-                string checkVisorFolder = string.Concat(dataSaveFolder, author);
-
-                // まずはフォルダとファイルを消す
-                if (Directory.Exists(checkVisorFolder))
+            using (var responseStream = await response.Content.ReadAsStreamAsync())
+            {
+                using (var fileStream = File.Create(
+                    Path.Combine(
+                        Path.GetDirectoryName(Application.dataPath),
+                        DataStructure.FolderName, fileName)))
                 {
-                    string[] filePaths = Directory.GetFiles(checkVisorFolder);
-                    foreach (string filePath in filePaths)
-                    {
-                        File.SetAttributes(filePath, FileAttributes.Normal);
-                        File.Delete(filePath);
-                    }
-                    Directory.Delete(checkVisorFolder, false); ;
+                    responseStream.CopyTo(fileStream);
                 }
             }
         }
-
-        private static void installVisorData(
-            string workingDir,
-            string zipPath,
-            string installFolder)
+        catch (System.Exception e)
         {
-            string extractPath = string.Concat(workingDir, "new_visor");
-            ZipFile.ExtractToDirectory(zipPath, extractPath);
+            ExtremeSkinsPlugin.Logger.LogInfo(
+                $"Unable to fetch hats from repo: {repo}\n{e.Message}");
+        }
+    }
 
-            byte[] byteVisorArray = File.ReadAllBytes(
-                string.Concat(
-                    Path.GetDirectoryName(Application.dataPath),
-                    FolderPath, visorRepoData));
-            string visorJsonString = System.Text.Encoding.UTF8.GetString(byteVisorArray);
+    private static void cleanUpCurSkinData(
+        string dataSaveFolder)
+    {
 
-            JToken visorFolder = JObject.Parse(visorJsonString)["data"];
-            JArray visorArray = visorFolder.TryCast<JArray>();
+        Helper.FileUtility.DeleteDir(dataSaveFolder);
+        Directory.CreateDirectory(dataSaveFolder);
 
-            for (int i = 0; i < visorArray.Count; ++i)
+        getJsonData(visorRepoData).GetAwaiter().GetResult();
+
+        byte[] byteVisorArray = File.ReadAllBytes(
+            Path.Combine(dataSaveFolder, visorRepoData));
+        string visorJsonString = Encoding.UTF8.GetString(byteVisorArray);
+
+        JObject visorFolder = JObject.Parse(visorJsonString);
+
+        for (int i = 0; i < visorFolder.Count; ++i)
+        {
+            JProperty token = visorFolder.ChildrenTokens[i].TryCast<JProperty>();
+            if (token == null) { continue; }
+
+            string author = token.Name;
+
+            if (author == jsonUpdateComitKey) { continue; }
+
+            string checkVisorFolder = Path.Combine(dataSaveFolder, author);
+
+            // まずはフォルダとファイルを消す
+            if (Directory.Exists(checkVisorFolder))
             {
-                string visorData = visorArray[i].ToString();
-
-                if (visorData == visorRepoData || visorData == visorTransData) { continue; }
-
-                string visorMoveToFolder = string.Concat(
-                    installFolder, @"\", visorData);
-                string visorSourceFolder = string.Concat(
-                    extractPath, visorDataPath, visorData);
-
-                ExtremeSkinsPlugin.Logger.LogInfo($"Installing Visor:{visorData}");
-
-                Directory.Move(visorSourceFolder, visorMoveToFolder);
+                string[] filePaths = Directory.GetFiles(checkVisorFolder);
+                foreach (string filePath in filePaths)
+                {
+                    File.SetAttributes(filePath, FileAttributes.Normal);
+                    File.Delete(filePath);
+                }
+                Directory.Delete(checkVisorFolder, false); ;
             }
         }
-
     }
-#endif
+
+    private static void installVisorData(
+        string workingDir,
+        string zipPath,
+        string installFolder)
+    {
+        string extractPath = Path.Combine(workingDir, visorDataFolderPath);
+        ZipFile.ExtractToDirectory(zipPath, extractPath);
+
+        byte[] byteVisorArray = File.ReadAllBytes(
+            Path.Combine(installFolder, visorRepoData));
+        string visorJsonString = Encoding.UTF8.GetString(byteVisorArray);
+
+        JToken visorFolder = JObject.Parse(visorJsonString)["data"];
+        JArray visorArray = visorFolder.TryCast<JArray>();
+
+        for (int i = 0; i < visorArray.Count; ++i)
+        {
+            string visorData = visorArray[i].ToString();
+
+            if (visorData == visorRepoData || visorData == visorTransData) 
+            { 
+                continue; 
+            }
+
+            string visorMoveToFolder = Path.Combine(
+                installFolder, visorData);
+            string visorSourceFolder = Path.Combine(
+                extractPath, visorDataPath, visorDataFolderPath, visorData);
+
+            ExtremeSkinsPlugin.Logger.LogInfo($"Installing Visor:{visorData}");
+
+            Directory.Move(visorSourceFolder, visorMoveToFolder);
+        }
+    }
+
 }
+#endif

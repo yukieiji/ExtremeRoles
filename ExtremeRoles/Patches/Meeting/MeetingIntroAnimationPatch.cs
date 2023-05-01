@@ -2,6 +2,7 @@
 
 using TMPro;
 
+using ExtremeRoles.Module;
 using ExtremeRoles.Performance;
 using ExtremeRoles.GameMode;
 
@@ -46,9 +47,11 @@ public static class MeetingIntroAnimationInitPatch
 			gaProtectText = text.text;
 		}
 
-		string exrAbiltyText = ExtremeRolesPlugin.ShipState.GetGhostAbilityReport();
+		string exrAbiltyText =
+			MeetingReporter.IsExist ?
+			MeetingReporter.Instance.GetMeetingStartReport() : string.Empty;
 
-		bool isGaAbilityTextEmpty = string.IsNullOrEmpty(gaProtectText);
+        bool isGaAbilityTextEmpty = string.IsNullOrEmpty(gaProtectText);
 		bool isExrAbilityTextEmpty = string.IsNullOrEmpty(exrAbiltyText);
 
 		if (isGaAbilityTextEmpty && isExrAbilityTextEmpty)

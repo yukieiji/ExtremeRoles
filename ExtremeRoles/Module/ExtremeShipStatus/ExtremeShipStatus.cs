@@ -20,7 +20,6 @@ namespace ExtremeRoles.Module.ExtremeShipStatus
             // 以下リファクタ済み
             
             this.resetDeadPlayerInfo();
-            this.resetGhostAbilityReport();
             this.resetGlobalAction();
             // this.resetPlayerSummary();
             this.resetMeetingCount();

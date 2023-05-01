@@ -8,6 +8,7 @@ using TMPro;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module;
 using ExtremeRoles.Module.AbilityBehavior;
+using ExtremeRoles.Module.AbilityBehavior.Interface;
 using ExtremeRoles.Module.AbilityModeSwitcher;
 using ExtremeRoles.Module.ButtonAutoActivator;
 using ExtremeRoles.Module.ExtremeShipStatus;
@@ -145,7 +146,7 @@ public sealed class BodyGuard :
         private void updateAbilityCountText()
         {
             this.abilityCountText.text = string.Format(
-                Translation.GetString(AbilityCountBehavior.DefaultButtonCountText),
+                Translation.GetString(ICountBehavior.DefaultButtonCountText),
                 this.AbilityCount);
         }
 
@@ -175,8 +176,7 @@ public sealed class BodyGuard :
         FeatShield,
         ResetShield,
         CoverDead,
-        AwakeMeetingReport,
-        ReportMeeting
+        AwakeMeetingReport
     }
 
     public enum BodyGuardReportPlayerNameMode
@@ -318,9 +318,6 @@ public sealed class BodyGuard :
             case BodyGuardRpcOps.AwakeMeetingReport:
                 awakeReportMeeting(reader.ReadByte());
                 break;
-            case BodyGuardRpcOps.ReportMeeting:
-                reportMeeting(reader.ReadString());
-                break;
             default:
                 break;
         }
@@ -389,8 +386,7 @@ public sealed class BodyGuard :
         RPCOperator.UncheckedMurderPlayer(
             killerPlayerId, targetBodyGuard, byte.MinValue);
         
-        PlayerControl bodyGuardPlayer = Player.GetPlayerControlById(
-            targetBodyGuard);
+        PlayerControl bodyGuardPlayer = Player.GetPlayerControlById(targetBodyGuard);
         
         if (bodyGuardPlayer == null ||
             bodyGuardPlayer.Data == null ||
@@ -419,7 +415,7 @@ public sealed class BodyGuard :
 
         if (MeetingHud.Instance)
         {
-            reportMeeting(reportStr);
+            MeetingReporter.Instance.AddMeetingChatReport(reportStr);
         }
         else
         {
@@ -611,13 +607,7 @@ public sealed class BodyGuard :
     {
         if (!string.IsNullOrEmpty(this.reportStr))
         {
-            using (var caller = RPCOperator.CreateCaller(
-                RPCOperator.Command.BodyGuardAbility))
-            {
-                caller.WriteByte((byte)BodyGuardRpcOps.ReportMeeting);
-                caller.WriteStr(this.reportStr);
-            }
-            reportMeeting(this.reportStr);
+            MeetingReporter.RpcAddMeetingChatReport(this.reportStr);
         }
         this.reportStr = string.Empty;
     }
