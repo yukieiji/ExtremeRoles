@@ -1,5 +1,4 @@
 ﻿using BepInEx;
-using BepInEx.Configuration;
 using BepInEx.Unity.IL2CPP;
 
 using HarmonyLib;
