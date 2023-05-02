@@ -56,6 +56,7 @@ public sealed class Mover :
         {
             this.Console = console;
             this.parent = this.Console.transform.parent;
+            disableBehavioures(this.parent.gameObject);
         }
         public void PickUp(Transform trans)
         {
@@ -130,6 +131,7 @@ public sealed class Mover :
 
         GameSystem.SetColliderActive(console.gameObject, false);
         setColliderTriggerOn(console.gameObject);
+        disableBehavioures(console.gameObject);
 
         mover.hasConsole = new ConsoleData(console);
 
@@ -287,6 +289,20 @@ public sealed class Mover :
         if (comp != null)
         {
             comp.isTrigger = true;
+        }
+    }
+
+    private static void disableBehavioures(GameObject obj)
+    {
+        disableBehaviour<HoverAnimBehaviour>(obj);
+    }
+
+    private static void disableBehaviour<T>(GameObject obj) where T : MonoBehaviour
+    {
+        T comp = obj.GetComponent<T>();
+        if (comp != null )
+        {
+            comp.enabled = false;
         }
     }
 }
