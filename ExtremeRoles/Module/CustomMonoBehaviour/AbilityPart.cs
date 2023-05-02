@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -14,13 +13,13 @@ using Il2CppInterop.Runtime.Attributes;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
-    [Il2CppRegister(
-   new Type[]
-   {
-		typeof(IUsable)
-   })]
-    public class AbilityPartBase : MonoBehaviour
-    {
+[Il2CppRegister(
+new Type[]
+{
+	typeof(IUsable)
+})]
+public class AbilityPartBase : MonoBehaviour
+{
 
 	public ImageNames UseIcon
 	{
@@ -55,22 +54,22 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 	public void Awake()
 	{
 		var collider = base.gameObject.AddComponent<CircleCollider2D>();
-            collider.isTrigger = true;
-            collider.radius = 0.001f;
+		collider.isTrigger = true;
+		collider.radius = 0.1f;
 
-            this.img = base.gameObject.AddComponent<SpriteRenderer>();
-            this.img.sprite = GetSprite();
+		this.img = base.gameObject.AddComponent<SpriteRenderer>();
+		this.img.sprite = GetSprite();
 
-            this.arrow = new Arrow(GetColor());
+		this.arrow = new Arrow(GetColor());
 		this.arrow.SetActive(false);
 		this.arrow.UpdateTarget(
 			this.gameObject.transform.position);
 	}
 
 	public void SetHideArrowDistance(float newDistance)
-        {
+	{
 		this.hideDistance = newDistance;
-        }
+	}
 
 	public float CanUse(
 		GameData.PlayerInfo pc, out bool canUse, out bool couldUse)
@@ -97,7 +96,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 	}
 
 	public void FixedUpdate()
-        {
+	{
 		PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
 		float distance = Vector2.Distance(
 			localPlayer.GetTruePosition(),
@@ -114,9 +113,9 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 	
 	[HideFromIl2Cpp]
 	protected virtual void Pickup(Hypnotist role)
-        {
+	{
 
-        }
+	}
 
 	protected virtual Color GetColor() => Palette.ImpostorRed;
 
@@ -125,14 +124,14 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 }
 
 public sealed class RedAbilityPart : AbilityPartBase
-    {
+{
 	private const AbilityModuleType partType = AbilityModuleType.Red;
 
 	public RedAbilityPart(IntPtr ptr) : base(ptr) { }
 
 	[HideFromIl2Cpp]
 	protected override void Pickup(Hypnotist hypnotist)
-        {
+    {
 		Helper.Logging.Debug("pickUp:RedPart");
 
 		using (var caller = RPCOperator.CreateCaller(
@@ -192,9 +191,9 @@ public sealed class GrayAbilityPart : AbilityPartBase
 	public GrayAbilityPart(IntPtr ptr) : base(ptr) { }
 
 	public void SetConsoleType(SystemConsoleType console)
-        {
+    {
 		this.console = console;
-        }
+    }
 
 	[HideFromIl2Cpp]
 	protected override void Pickup(Hypnotist hypnotist)

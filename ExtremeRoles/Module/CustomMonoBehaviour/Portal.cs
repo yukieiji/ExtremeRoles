@@ -50,7 +50,7 @@ public class PortalBase : MonoBehaviour
 	public void Awake()
 	{
 		var collider = base.gameObject.AddComponent<CircleCollider2D>();
-        collider.radius = 0.001f;
+        collider.radius = 0.1f;
         collider.isTrigger = true;
 
         this.img = base.gameObject.AddComponent<SpriteRenderer>();

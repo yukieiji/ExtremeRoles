@@ -58,7 +58,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             this.arrow.UpdateTarget(
                 this.gameObject.transform.position);
 
-            this.collider.radius = 0.01f;
+            this.collider.radius = 0.1f;
         }
 
         public void FixedUpdate()
