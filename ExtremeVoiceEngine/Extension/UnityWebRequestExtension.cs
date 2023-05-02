@@ -28,7 +28,7 @@ public class UnityWebRequestAwaiter : INotifyCompletion
 
     private void OnRequestCompleted(AsyncOperation obj)
     {
-        continuation?.Invoke();
+        this.continuation?.Invoke();
     }
 }
 
