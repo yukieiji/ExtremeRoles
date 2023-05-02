@@ -16,7 +16,7 @@ public sealed class VoiceEngine : MonoBehaviour
 {
     public static VoiceEngine? Instance { get; private set; }
 
-    public ISpeaker? Speaker { get; set; }
+    public ISpeakEngine? Engine { get; set; }
 
     private bool running = false;
     private Queue<string> textQueue = new Queue<string>();
@@ -36,12 +36,12 @@ public sealed class VoiceEngine : MonoBehaviour
     public void Destroy()
     {
         StopAllCoroutines();
-        Speaker?.Cancel();
+        Engine?.Cancel();
     }
 
     public void FixedUpdate()
     {
-        if (Speaker is null ||
+        if (Engine is null ||
             running ||
             textQueue.Count == 0) { return; }
 
@@ -51,11 +51,11 @@ public sealed class VoiceEngine : MonoBehaviour
 
     private IEnumerator coSpeek(string text)
     {
-        if (Speaker is null) { yield break; }
+        if (Engine is null) { yield break; }
 
         running = true;
 
-        yield return Speaker.Speek(text);
+        yield return Engine.Speek(text);
         yield return new WaitForSeconds(Speaker.Wait);
 
         running = false;

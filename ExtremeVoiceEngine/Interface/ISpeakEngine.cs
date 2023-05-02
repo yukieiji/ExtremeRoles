@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections;
 
 namespace ExtremeVoiceEngine.Interface;
 
-public interface ISpeaker
+public interface ISpeakEngine
 {
     public float Wait { get; set; }
 
