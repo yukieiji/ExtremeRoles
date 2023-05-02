@@ -32,6 +32,9 @@ public sealed class Gambler :
         ref Dictionary<byte, byte> voteTarget,
         ref Dictionary<byte, int> voteResult)
     {
+        if (!voteTarget.TryGetValue(rolePlayerId, out byte voteTo) ||
+            !voteResult.TryGetValue(voteTo, out int curVoteNum)) { return; }
+
         int[] voteArray = new int[100];
         int dualVoteRate = (int)Math.Floor((100 - this.normalVoteRate) / 2.0d);
         int zeroVoteRate = 100 - dualVoteRate - this.normalVoteRate;
@@ -43,11 +46,9 @@ public sealed class Gambler :
         int playerVoteNum = voteArray[RandomGenerator.Instance.Next(100)];
         
         if (playerVoteNum == 1) { return; }
-        
-        int curVotedNum = voteResult[rolePlayerId];
-        int newVotedNum = playerVoteNum == 0 ? curVotedNum - 1 : curVotedNum + 1;
-
-        voteResult[rolePlayerId] = newVotedNum;
+     
+        int newVotedNum = playerVoteNum == 0 ? curVoteNum - 1 : curVoteNum + 1;
+        voteResult[voteTo] = newVotedNum;
     }
 
     public void ModifiedVoteAnime(
