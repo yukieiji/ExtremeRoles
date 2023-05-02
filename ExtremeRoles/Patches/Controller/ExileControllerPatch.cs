@@ -325,10 +325,7 @@ class ExileControllerReEnableGameplayPatch
     {
         if (ExtremeRoleManager.GameRole.Count == 0) { return; }
 
-        if (MeetingReporter.IsExist)
-        {
-            MeetingReporter.Instance.Destroy();
-        }
+        MeetingReporter.Reset();
 
         var role = ExtremeRoleManager.GetLocalPlayerRole();
 

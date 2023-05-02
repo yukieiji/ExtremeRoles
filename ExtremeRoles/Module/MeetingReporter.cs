@@ -30,6 +30,14 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
         this.exilReporter.Clear();
     }
 
+    public static void Reset()
+    {
+        if (IsExist)
+        {
+            Instance.Destroy();
+        }
+    }
+
     public static void RpcAddMeetingChatReport(string report)
     {
         using (var caller = RPCOperator.CreateCaller(
