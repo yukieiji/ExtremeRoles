@@ -56,7 +56,7 @@ public sealed class VoiceEngine : MonoBehaviour
         running = true;
 
         yield return Engine.Speek(text);
-        yield return new WaitForSeconds(Speaker.Wait);
+        yield return new WaitForSeconds(Engine.Wait);
 
         running = false;
 

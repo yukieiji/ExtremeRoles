@@ -17,7 +17,7 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
     public float Wait { get; set; }
     public AudioSource? Source { get; set; }
     
-    private VoiceVoxParameter? param;
+    private VoiceVoxParameter? param = null;
     private CancellationTokenSource cts = new CancellationTokenSource();
     private int speakerId = 0;
 
@@ -38,18 +38,24 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
         var linkedToken = CancellationTokenSource.CreateLinkedTokenSource(cts.Token, cancellationToken).Token;
         
         string jsonStr = VoiceVoxBridge.GetVoice(linkedToken).GetAwaiter().GetResult();
-        JObject json = JObject.Parse(jsonStr);
+        string cleanedStr = @"{""Result"":" + jsonStr + @"}";
+        
+        JObject resultJson = JObject.Parse(cleanedStr);
+        JArray? json = resultJson.Get<JArray>("Result");
+
+        ExtremeVoiceEnginePlugin.Instance.Log.LogInfo($"Is Null?:{json == null}");
+        if (json == null) { return; }
 
         for (int i = 0; i < json.Count; ++i)
         {
             JObject? speakerInfo = json.ChildrenTokens[i].TryCast<JObject>();
-            
             if (speakerInfo == null) { continue; }
 
-            JProperty? nameProp = speakerInfo.Get<JProperty>("name");
-            if (nameProp == null) { continue; }
+            JToken? nameToken = speakerInfo["name"];
+            if (nameToken == null) { continue; }
 
-            string name = nameProp.ToString();
+            string name = nameToken.ToString();
+            ExtremeVoiceEnginePlugin.Instance.Log.LogInfo($"Find Speaker:{name}");
             if (name != param.Speaker) { continue; }
 
             JArray? styles = speakerInfo.Get<JArray>("styles");
@@ -58,16 +64,14 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
             for (int j = 0; j < styles.Count; ++j)
             {
                 JObject? styleData = styles.ChildrenTokens[i].TryCast<JObject>();
-                JProperty? styleNameProp = styleData.Get<JProperty>("name");
-                if (styleNameProp == null) { continue; }
+                if (styleData == null) { continue; }
 
-                string styleName = styleNameProp.ToString();
+                JToken styleNameToken = styleData["name"];
+                string styleName = styleNameToken.ToString();
                 if (styleName != param.Style) { continue; }
 
-                JProperty? idProp = styleData.Get<JProperty>("id");
-                if (idProp == null) { continue; }
-
-                this.speakerId = (int)idProp;
+                this.speakerId = (int)styleData["id"];
+                this.param = param;
                 return;
             }
         }

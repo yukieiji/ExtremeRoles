@@ -104,7 +104,7 @@ public static class VoiceVoxBridge
 
         try
         {
-            using var response = await client.PostAsync(url, null, cancellationToken);
+            using var response = await client.GetAsync(url, cancellationToken);
             if (response.IsSuccessStatusCode)
             {
                 string jsonString = await response.Content.ReadAsStringAsync();
