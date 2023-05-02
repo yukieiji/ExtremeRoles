@@ -104,9 +104,7 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
         var audioClipTask = AudioClipHelper.CreateFromStreamAsync(stream, linkedToken);
         yield return TaskHelper.CoRunWaitAsync(audioClipTask);
 
-        Source.volume = param.MasterVolume;
-        Source.clip = audioClipTask.Result;
-        Source.Play();
+        Source.PlayOneShot(audioClipTask.Result, param.MasterVolume);
         
         while (Source.isPlaying)
         {
