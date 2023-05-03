@@ -38,6 +38,9 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
         var linkedToken = CancellationTokenSource.CreateLinkedTokenSource(cts.Token, cancellationToken).Token;
         
         string jsonStr = VoiceVoxBridge.GetVoice(linkedToken).GetAwaiter().GetResult();
+
+        if (string.IsNullOrEmpty(jsonStr)) { return; }
+
         string cleanedStr = @"{""Result"":" + jsonStr + @"}";
         
         JObject resultJson = JObject.Parse(cleanedStr);

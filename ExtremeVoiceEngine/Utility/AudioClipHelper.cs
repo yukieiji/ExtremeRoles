@@ -21,12 +21,16 @@ internal class AudioClipHelper
 
         if (channels != 1)
         {
-            throw new NotSupportedException("AudioClipUtil supports only single channel.");
+            ExtremeVoiceEnginePlugin.Logger.LogError(
+                "NotSupportedException: AudioClipUtil supports only single channel.");
+            return null;
         }
 
         if (bitPerSample != 16)
         {
-            throw new NotSupportedException("AudioClipUtil supports only 16-bit quantization.");
+            ExtremeVoiceEnginePlugin.Logger.LogError(
+                "NotSupportedException: AudioClipUtil supports only 16-bit quantization.");
+            return null;
         }
 
         int bytePerSample = bitPerSample / 8;
@@ -80,11 +84,12 @@ internal class AudioClipHelper
             {
                 UnityEngine.Object.Destroy(audioClip);
             }
-
-            if (!(e is OperationCanceledException))
-            {
-                throw new IOException("AudioClipUtil: WAV data decode failed.", e);
-            }
+            string exceptionMessage = e.Message;
+            string message = e is OperationCanceledException ?
+                exceptionMessage : 
+                $"IOException : AudioClipUtil: WAV data decode failed.  {exceptionMessage}";
+            ExtremeVoiceEnginePlugin.Logger.LogError(message);
+            return null;
         }
 
         return audioClip;

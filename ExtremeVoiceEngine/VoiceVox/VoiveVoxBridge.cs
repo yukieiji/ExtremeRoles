@@ -46,13 +46,17 @@ public static class VoiceVoxBridge
             {
                 string message = await response.Content.ReadAsStringAsync();
                 cancellationToken.ThrowIfCancellationRequested();
-                throw new WebException(
-                    $"AudioQuery request failed. : {(int)response.StatusCode} {response.StatusCode}\n{message}");
+                ExtremeVoiceEnginePlugin.Logger.LogError(
+                    $"WebException: AudioQuery request failed. : {
+                        (int)response.StatusCode}{ response.StatusCode}\n{message}");
+                return string.Empty;
             }
         }
         catch (OperationCanceledException e)
         {
-            throw new OperationCanceledException("AudioQuery request is canceled. ", e);
+            ExtremeVoiceEnginePlugin.Logger.LogError(
+                $"OperationCanceledException: AudioQuery request is canceled. {e.Message}");
+            return string.Empty;
         }
     }
 
@@ -80,20 +84,20 @@ public static class VoiceVoxBridge
             {
                 string message = await response.Content.ReadAsStringAsync();
                 cancellationToken.ThrowIfCancellationRequested();
-                throw new WebException(
-                    $"Synthesis request failed. : {
-                        (int)response.StatusCode} {response.StatusCode}\n{message}");
+                ExtremeVoiceEnginePlugin.Logger.LogError(
+                    $"WebException: Synthesis request failed. : {(int)response.StatusCode}{response.StatusCode}\n{message}");
+                return null;
             }
         }
         catch (Exception e)
         {
             response?.Dispose();
-
-            if (e is OperationCanceledException)
-            {
-                throw new OperationCanceledException("Synthesis request canceled.", e);
-            }
-            throw;
+            string exceptionMessage = e.Message;
+            string message = e is OperationCanceledException ?
+                $"OperationCanceledException : Synthesis request canceled.  {exceptionMessage}" :
+                exceptionMessage;
+            ExtremeVoiceEnginePlugin.Logger.LogError(message);
+            return null;
         }
     }
 
@@ -115,14 +119,16 @@ public static class VoiceVoxBridge
             {
                 string message = await response.Content.ReadAsStringAsync();
                 cancellationToken.ThrowIfCancellationRequested();
-                throw new WebException(
-                    $"Get voice request failed. : {
-                        (int)response.StatusCode} {response.StatusCode}\n{message}");
+                ExtremeVoiceEnginePlugin.Logger.LogError(
+                    $"WebException: Get voice request failed. : {(int)response.StatusCode}{response.StatusCode}\n{message}");
+                return string.Empty;
             }
         }
         catch (OperationCanceledException e)
         {
-            throw new OperationCanceledException("Get voice request is canceled. ", e);
+            ExtremeVoiceEnginePlugin.Logger.LogError(
+                $"OperationCanceledException: Get voice request is canceled. {e.Message}");
+            return string.Empty;
         }
     }
 }
