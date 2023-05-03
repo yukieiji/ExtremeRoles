@@ -40,7 +40,7 @@ public class PortalBase : MonoBehaviour
 	}
 
 	private SpriteRenderer img;
-	private Vector3 pos;
+	private Vector2 pos;
 	private PortalBase linkPortal = null;
 	private float timer = 0.0f;
 	private const float NoneUsePortalTime = 5.0f;
@@ -50,7 +50,7 @@ public class PortalBase : MonoBehaviour
 	public void Awake()
 	{
 		var collider = base.gameObject.AddComponent<CircleCollider2D>();
-        collider.radius = 0.001f;
+        collider.radius = 0.1f;
         collider.isTrigger = true;
 
         this.img = base.gameObject.AddComponent<SpriteRenderer>();
@@ -72,7 +72,7 @@ public class PortalBase : MonoBehaviour
 		b.linkPortal = a;
     }
 
-	public void SetTarget(Vector3 pos)
+	public void SetTarget(Vector2 pos)
 	{
 		this.pos = pos;
 	}
@@ -96,8 +96,10 @@ public class PortalBase : MonoBehaviour
 
 	public void Use()
 	{
+		PlayerControl player = CachedPlayerControl.LocalPlayer;
+
         Player.RpcUncheckSnap(
-			CachedPlayerControl.LocalPlayer.PlayerId, this.pos);
+            player.PlayerId, this.pos - player.Collider.offset);
 
 		this.timer = NoneUsePortalTime;
 		this.linkPortal.timer = NoneUsePortalTime;

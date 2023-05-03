@@ -11,6 +11,7 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 {
     public bool HasChatReport => this.chatReport.Count > 0;
 
+    private HashSet<string> addedReport = new HashSet<string>();
     private StringBuilder exilReporter = new StringBuilder();
     private StringBuilder startReporter = new StringBuilder();
 
@@ -23,9 +24,18 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 
     public MeetingReporter()
     {
+        this.addedReport.Clear();
         this.startReporter.Clear();
         this.chatReport.Clear();
         this.exilReporter.Clear();
+    }
+
+    public static void Reset()
+    {
+        if (IsExist)
+        {
+            Instance.Destroy();
+        }
     }
 
     public static void RpcAddMeetingChatReport(string report)
@@ -54,7 +64,10 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 
     public void AddMeetingStartReport(string report)
     {
-        this.startReporter.AppendLine(report);
+        if (this.addedReport.Add(report))
+        {
+            this.startReporter.AppendLine(report);
+        }
     }
 
     public void AddMeetingChatReport(string report, bool isRpc = false)
@@ -73,7 +86,6 @@ public sealed class MeetingReporter : NullableSingleton<MeetingReporter>
 
     public void ReportMeetingChat()
     {
-
         PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
 
         foreach (var (report, isRpc) in this.chatReport)

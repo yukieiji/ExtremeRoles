@@ -44,7 +44,7 @@ public class TeleporterPortalPart : MonoBehaviour
 	public void Awake()
 	{
 		var collider = base.gameObject.AddComponent<CircleCollider2D>();
-        collider.radius = 0.001f;
+        collider.radius = 0.01f;
         collider.isTrigger = true;
 
         var img = base.gameObject.AddComponent<SpriteRenderer>();

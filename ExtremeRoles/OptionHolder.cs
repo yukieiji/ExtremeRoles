@@ -136,6 +136,8 @@ public static class OptionHolder
         Patches.MiniGame.VitalsMinigameUpdatePatch.LoadOptionValue();
         Patches.MiniGame.SecurityHelper.LoadOptionValue();
         Patches.MapOverlay.MapCountOverlayUpdatePatch.LoadOptionValue();
+        
+        MeetingReporter.Reset();
 
         Client.GhostsSeeRole = ConfigParser.GhostsSeeRoles.Value;
         Client.GhostsSeeTask = ConfigParser.GhostsSeeTasks.Value;
