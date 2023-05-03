@@ -2,6 +2,8 @@
 
 namespace ExtremeVoiceEngine.VoiceVox;
 
+
+// デフォルトで設定している「ずんだもん」は[VoiceVox](https://voicevox.hiroshiba.jp/)によって提供されている合成音声です
 public sealed class VoiceVoxParameter : IEngineParameter
 {
     public string Speaker { get; set; }     = "ずんだもん";

@@ -76,7 +76,10 @@ internal class AudioClipHelper
         }
         catch (Exception e)
         {
-            if (audioClip != null) UnityEngine.Object.Destroy(audioClip);
+            if (audioClip != null)
+            {
+                UnityEngine.Object.Destroy(audioClip);
+            }
 
             if (!(e is OperationCanceledException))
             {

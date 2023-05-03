@@ -56,13 +56,13 @@ public static class VoiceVoxBridge
         }
     }
 
-    public static async Task<Stream> PostSynthesisAsync(
+    public static async Task<Stream?> PostSynthesisAsync(
         int speaker, string jsonQuery, CancellationToken cancellationToken = default)
     {
         string url = $"{serverUrl}synthesis?speaker={speaker}";
 
         using var request = new HttpRequestMessage(HttpMethod.Post, url);
-        request.Content = new StringContent(jsonQuery, Encoding.UTF8, "application/json");
+        request.Content = new StringContent(jsonQuery, Encoding.UTF8, jsonType);
         HttpResponseMessage? response = null;
 
         try

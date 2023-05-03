@@ -96,10 +96,21 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
         var jsonQueryTask = VoiceVoxBridge.PostAudioQueryAsync(this.speakerId, text, linkedToken);
         yield return TaskHelper.CoRunWaitAsync(jsonQueryTask);
 
-        var streamTask = VoiceVoxBridge.PostSynthesisAsync(this.speakerId, jsonQueryTask.Result, linkedToken);
+        string jsonQuery = jsonQueryTask.Result;
+        if (string.IsNullOrEmpty(jsonQuery))
+        {
+            yield break;
+        }
+
+        var streamTask = VoiceVoxBridge.PostSynthesisAsync(this.speakerId, jsonQuery, linkedToken);
         yield return TaskHelper.CoRunWaitAsync(streamTask);
 
         using var stream = streamTask.Result;
+
+        if (stream is null)
+        {
+            yield break;
+        }
 
         var audioClipTask = AudioClipHelper.CreateFromStreamAsync(stream, linkedToken);
         yield return TaskHelper.CoRunWaitAsync(audioClipTask);
@@ -112,4 +123,5 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
         }
         yield break;
     }
+
 }
