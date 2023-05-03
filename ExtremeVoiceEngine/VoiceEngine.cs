@@ -30,6 +30,7 @@ public sealed class VoiceEngine : MonoBehaviour
 
     public void AddQueue(string text)
     {
+        ExtremeVoiceEnginePlugin.Logger.LogInfo($"Add TextToVoice Queue \nText:{text}");
         textQueue.Enqueue(text);
     }
 

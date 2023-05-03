@@ -2,4 +2,5 @@
 
 public interface IEngineParameter
 {
+    public string ToString();
 }

@@ -45,8 +45,6 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
         
         JObject resultJson = JObject.Parse(cleanedStr);
         JArray? json = resultJson.Get<JArray>("Result");
-
-        ExtremeVoiceEnginePlugin.Instance.Log.LogInfo($"Is Null?:{json == null}");
         if (json == null) { return; }
 
         for (int i = 0; i < json.Count; ++i)
@@ -75,6 +73,7 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
 
                 this.speakerId = (int)styleData["id"];
                 this.param = param;
+                ExtremeVoiceEnginePlugin.Logger.LogInfo($"Parameter Setted:{this.param}");
                 return;
             }
         }
