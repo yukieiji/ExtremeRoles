@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using BepInEx.Logging;
 using BepInEx.Unity.IL2CPP;
 using HarmonyLib;
 
@@ -15,11 +16,13 @@ public partial class ExtremeVoiceEnginePlugin : BasePlugin
 
 #pragma warning disable CS8618
     public static ExtremeVoiceEnginePlugin Instance { get; private set; }
+    public static ManualLogSource Logger { get; private set; }
 #pragma warning restore CS8618
 
     public override void Load()
     {
         Instance = this;
+        Logger = Log;
 
         Harmony.PatchAll();
 
