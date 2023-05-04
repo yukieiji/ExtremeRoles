@@ -116,9 +116,9 @@ public sealed class CommandManager : NullableSingleton<CommandManager>
     private string cleanedArg(string arg)
     {
         arg = arg.ToLower();
-        if (this.alias.TryGetValue(arg, out string? newalias))
+        if (this.alias.TryGetValue(arg, out string? newAlias))
         {
-            return newalias;
+            return newAlias;
         }
         return arg;
     }

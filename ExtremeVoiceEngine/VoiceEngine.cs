@@ -44,6 +44,7 @@ public sealed class VoiceEngine : MonoBehaviour
         {
             case "vv":
             case "VV":
+            case "VOICEVOX":
             case "Voicevox":
             case "VoiceVox":
             case "voiceVox":

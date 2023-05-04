@@ -38,6 +38,8 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
                new Option(CharacterNameCmd , "CharacterName"  , Option.Kind.Optional, 'c'),
                new Option(CharacterStyleCmd, "CharacterStyle" , Option.Kind.Optional, 's'),
                new Option(VolumeCmd        , "CharacterVolume", Option.Kind.Optional, 'v')), Parse));
+        cmd.AddAlias("voicevox",
+            "vv", "VV", "VOICEVOX", "Voicevox", "VoiceVox", "voiceVox", "voicevox");
     }
 
     public void Parse(Result? result)
