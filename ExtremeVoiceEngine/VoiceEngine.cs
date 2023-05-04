@@ -24,20 +24,40 @@ public sealed class VoiceEngine : MonoBehaviour
     private bool running = false;
     private Queue<string> textQueue = new Queue<string>();
 
+    private const string cmd = "extremevoiceengine";
+
     public VoiceEngine(IntPtr ptr) : base(ptr) { }
 
     internal static void CreateCommand()
     {
         CommandManager.Instance.AddCommand(
-            "extremevoiceengine",
+            cmd,
             new(new Parser(new Option("init", "EngineName", Option.Kind.Need, 'i')), Parse));
         CommandManager.Instance.AddAlias(
-            "extremevoiceengine", "eve", "exve");
+            cmd, "eve", "exve");
     }
 
     public static void Parse(Result? result)
     {
-        if (Instance == null) { return; }
+        if (Instance == null || result is null) { return; }
+
+        string value =  result.GetOptionValue("init");
+        switch (value)
+        {
+            case "vv":
+            case "VV":
+            case "VoiceVox":
+            case "voicevox":
+                var engine = new VoiceVox.VoiceVoxEngine();
+                var parm = new VoiceVox.VoiceVoxParameter();
+                engine.SetParameter(parm);
+                engine.Wait = 2.0f;
+                Instance.Engine = engine;
+                break;
+            default:
+                break;
+        }
+
     }
 
     public void Awake()

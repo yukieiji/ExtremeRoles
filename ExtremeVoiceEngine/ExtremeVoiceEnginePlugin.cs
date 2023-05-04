@@ -31,12 +31,6 @@ public partial class ExtremeVoiceEnginePlugin : BasePlugin
         if (VoiceEngine.Instance != null)
         {
             VoiceEngine.CreateCommand();
-
-            var engine = new VoiceVox.VoiceVoxEngine();
-            engine.SetParameter(new VoiceVox.VoiceVoxParameter());
-            engine.Wait = 2.0f;
-
-            VoiceEngine.Instance.Engine = engine;
         }
     }
 }

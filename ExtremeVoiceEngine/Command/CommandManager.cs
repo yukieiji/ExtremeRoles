@@ -60,7 +60,6 @@ public sealed class CommandManager : NullableSingleton<CommandManager>
         string[] args = cleanedText.Split(' ');
 
         string masterArgs = cleanedArg(args[0]);
-        ExtremeVoiceEnginePlugin.Logger.LogInfo(masterArgs);
         if (!this.masterCmd.TryGetValue(masterArgs, out ParseActions? masterParser))
         {
             hud.Chat.AddChat(localPlayer, "Can't Find cmd");
@@ -85,7 +84,7 @@ public sealed class CommandManager : NullableSingleton<CommandManager>
             subCmdParser.ParseAndAction(args[2..~0]);
         }
 
-        masterParser.ParseAndAction(args[1..~0]);
+        masterParser.ParseAndAction(args[1..]);
     }
 
     public void AddCommand(string cmd, ParseActions cmdParser)
