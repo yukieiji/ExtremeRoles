@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using ExtremeRoles.GameMode;
+using HarmonyLib;
 
 namespace ExtremeVoiceEngine.Patches;
 
@@ -10,8 +11,21 @@ public static class ChatControllerAddChatPatch
         [HarmonyArgument(0)] PlayerControl sourcePlayer,
         [HarmonyArgument(1)] string chatText)
     {
-        if (VoiceEngine.Instance == null) { return; }
+        if (VoiceEngine.Instance == null ||
+            chatText.StartsWith(Command.CommandManager.CmdChar)) { return; }
 
         VoiceEngine.Instance.AddQueue(chatText);
+    }
+}
+
+[HarmonyPatch(typeof(ChatController), nameof(ChatController.SendChat))]
+public static class ChatControllerSendChatPatch
+{
+    public static void Prefix(ChatController __instance)
+    {
+        if (VoiceEngine.Instance == null) { return; }
+        
+        VoiceEngine.Instance.WaitExecute(
+            () => Command.CommandManager.Instance.ExcuteCmd(__instance.TextArea.text));
     }
 }

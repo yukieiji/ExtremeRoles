@@ -7,6 +7,7 @@ using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 using ExtremeRoles.Module;
 
+using ExtremeVoiceEngine.Command;
 using ExtremeVoiceEngine.Interface;
 
 namespace ExtremeVoiceEngine;
@@ -14,6 +15,8 @@ namespace ExtremeVoiceEngine;
 [Il2CppRegister]
 public sealed class VoiceEngine : MonoBehaviour
 {
+    public bool IsWait { get; set; } = false;
+
     public static VoiceEngine? Instance { get; private set; }
 
     public ISpeakEngine? Engine { get; set; }
@@ -23,13 +26,36 @@ public sealed class VoiceEngine : MonoBehaviour
 
     public VoiceEngine(IntPtr ptr) : base(ptr) { }
 
+    internal static void CreateCommand()
+    {
+        CommandManager.Instance.AddCommand(
+            "extremevoiceengine",
+            new(new Parser(new Option("init", "EngineName", Option.Kind.Need, 'i')), Parse));
+        CommandManager.Instance.AddAlias(
+            "extremevoiceengine", "eve", "exve");
+    }
+
+    public static void Parse(Result? result)
+    {
+        if (Instance == null) { return; }
+    }
+
     public void Awake()
     {
         Instance = this;
     }
 
+    public void WaitExecute(Action act)
+    {
+        this.IsWait = true;
+        act.Invoke();
+        this.IsWait = false;
+    }
+
+
     public void AddQueue(string text)
     {
+        if (this.IsWait) { return; }
         ExtremeVoiceEnginePlugin.Logger.LogInfo($"Add TextToVoice Queue \nText:{text}");
         textQueue.Enqueue(text);
     }

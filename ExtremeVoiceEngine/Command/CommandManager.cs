@@ -32,7 +32,7 @@ public sealed class CommandManager : NullableSingleton<CommandManager>
 
     private Dictionary<string, string> alias = new Dictionary<string, string>();
 
-    private const char cmdChar = '/';
+    public const char CmdChar = '/';
 
     public CommandManager()
     {
@@ -51,7 +51,7 @@ public sealed class CommandManager : NullableSingleton<CommandManager>
 
     public void ExcuteCmd(string text)
     {
-        if (!text.StartsWith(cmdChar) ||
+        if (!text.StartsWith(CmdChar) ||
             !DestroyableSingleton<HudManager>.InstanceExists) { return; }
 
         string cleanedText = text.Substring(1);
@@ -60,6 +60,7 @@ public sealed class CommandManager : NullableSingleton<CommandManager>
         string[] args = cleanedText.Split(' ');
 
         string masterArgs = cleanedArg(args[0]);
+        ExtremeVoiceEnginePlugin.Logger.LogInfo(masterArgs);
         if (!this.masterCmd.TryGetValue(masterArgs, out ParseActions? masterParser))
         {
             hud.Chat.AddChat(localPlayer, "Can't Find cmd");
