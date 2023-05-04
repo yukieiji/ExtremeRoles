@@ -176,6 +176,9 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 - [Goose-Goose-Duck](https://store.steampowered.com/app/1568590/Goose_Goose_Duck) - **Slushygoose**氏によって作成されたMOD、イーターのアイディア元
 - [PropHunt](https://github.com/ugackMiner53/PropHunt) - **ugackMiner53**氏によって作成されたMOD、スライムとムーバーのコード参考に使用
 
+- [Unity VOICEVOX Bridge](https://github.com/mikito/unity-voicevox-bridge) - **mikito**氏作成のUnityからボイボを呼び出すライブラリ、EVEのボイボ周りの参考に使用
+- [CuiCommandParser](https://github.com/oika/CuiCommandParser) - **oika**氏作成のCUIのオプションパーサーライブラリ、EVEのコマンドライン解析の参考に使用
+
 - レジスタンス:アヴァロン - マーリン、アサシンのアイディア元
 - シャドウハンターズ - アリス、オーバーローダーのアイディア元
 
