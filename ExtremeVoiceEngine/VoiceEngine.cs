@@ -6,10 +6,10 @@ using UnityEngine;
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 
 using ExtremeRoles.Module;
+using ExtremeRoles.Performance;
 
 using ExtremeVoiceEngine.Command;
 using ExtremeVoiceEngine.Interface;
-using Sentry.Unity.NativeUtils;
 
 namespace ExtremeVoiceEngine;
 
@@ -39,6 +39,9 @@ public sealed class VoiceEngine : MonoBehaviour
     {
         if (Instance == null || result is null) { return; }
 
+        var chat = FastDestroyableSingleton<HudManager>.Instance.Chat;
+        var player = CachedPlayerControl.LocalPlayer;
+
         string value =  result.GetOptionValue("init");
         switch (value)
         {
@@ -52,9 +55,14 @@ public sealed class VoiceEngine : MonoBehaviour
                 Instance.Engine = Instance.engines[EngineType.VoiceVox];
                 break;
             default:
-                break;
+                chat.AddChat(player, "Invalided Engine");
+                return;
         }
 
+        string message = Instance.Engine.IsValid() ?
+            $"Engine set to:{value}" : "Can't start Engine";
+
+        chat.AddChat(player, message);
     }
 
     public void Awake()

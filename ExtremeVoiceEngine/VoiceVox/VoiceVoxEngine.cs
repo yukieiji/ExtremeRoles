@@ -6,10 +6,12 @@ using UnityEngine;
 using Newtonsoft.Json.Linq;
 
 using ExtremeRoles.Extension.Json;
+using ExtremeRoles.Performance;
 
+using ExtremeVoiceEngine.Command;
 using ExtremeVoiceEngine.Interface;
 using ExtremeVoiceEngine.Utility;
-using ExtremeVoiceEngine.Command;
+
 
 namespace ExtremeVoiceEngine.VoiceVox;
 
@@ -28,6 +30,9 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
     private const string CharacterStyleCmd = "style";
     private const string VolumeCmd = "volume";
 
+    public bool IsValid()
+        => VoiceVoxBridge.IsEstablishServer();
+
     public void CreateCommand()
     {
         var cmd = CommandManager.Instance;
@@ -38,8 +43,7 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
                new Option(CharacterNameCmd , "CharacterName"  , Option.Kind.Optional, 'c'),
                new Option(CharacterStyleCmd, "CharacterStyle" , Option.Kind.Optional, 's'),
                new Option(VolumeCmd        , "CharacterVolume", Option.Kind.Optional, 'v')), Parse));
-        cmd.AddAlias("voicevox",
-            "vv", "VV", "VOICEVOX", "Voicevox", "VoiceVox", "voiceVox", "voicevox");
+        cmd.AddAlias("voicevox", "vv");
     }
 
     public void Parse(Result? result)
@@ -113,7 +117,14 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
 
                 this.speakerId = (int)styleData["id"];
                 this.param = param;
-                ExtremeVoiceEnginePlugin.Logger.LogInfo($"Parameter Setted:{this.param}");
+
+                string log = $"VOICEVOX:Parameter Setted:{this.param}";
+                ExtremeVoiceEnginePlugin.Logger.LogInfo(log);
+                if (FastDestroyableSingleton<HudManager>.Instance != null)
+                {
+                    FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(
+                        CachedPlayerControl.LocalPlayer, log);
+                }
                 return;
             }
         }

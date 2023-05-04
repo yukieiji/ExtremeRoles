@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,6 +26,19 @@ public static class VoiceVoxBridge
 
     private const string serverUrl = "http://127.0.0.1:50021/";
     private const string jsonType = "application/json";
+
+    public static bool IsEstablishServer()
+    {
+        try
+        {
+            client.GetStringAsync(serverUrl).GetAwaiter().GetResult();
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 
     public static async Task<string> PostAudioQueryAsync(
         int speaker, string text, CancellationToken cancellationToken = default)

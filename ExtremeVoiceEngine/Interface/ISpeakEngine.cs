@@ -14,6 +14,8 @@ public interface ISpeakEngine
     public IEnumerator Speek(string text);
     public void Cancel();
 
+    public bool IsValid();
+
     protected static AudioSource? CreateAudioMixer()
     {
         SoundManager soundManager = SoundManager.Instance;
