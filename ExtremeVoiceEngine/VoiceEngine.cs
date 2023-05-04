@@ -9,6 +9,7 @@ using ExtremeRoles.Module;
 
 using ExtremeVoiceEngine.Command;
 using ExtremeVoiceEngine.Interface;
+using Sentry.Unity.NativeUtils;
 
 namespace ExtremeVoiceEngine;
 
@@ -21,21 +22,18 @@ public sealed class VoiceEngine : MonoBehaviour
 
     public ISpeakEngine? Engine { get; set; }
 
+    public enum EngineType : byte
+    {
+        VoiceVox
+    }
+
     private bool running = false;
     private Queue<string> textQueue = new Queue<string>();
+    private Dictionary<EngineType, ISpeakEngine> engines = new Dictionary<EngineType, ISpeakEngine>();
 
-    private const string cmd = "extremevoiceengine";
+    public const string Cmd = "extremevoiceengine";
 
     public VoiceEngine(IntPtr ptr) : base(ptr) { }
-
-    internal static void CreateCommand()
-    {
-        CommandManager.Instance.AddCommand(
-            cmd,
-            new(new Parser(new Option("init", "EngineName", Option.Kind.Need, 'i')), Parse));
-        CommandManager.Instance.AddAlias(
-            cmd, "eve", "exve");
-    }
 
     public static void Parse(Result? result)
     {
@@ -46,13 +44,11 @@ public sealed class VoiceEngine : MonoBehaviour
         {
             case "vv":
             case "VV":
+            case "Voicevox":
             case "VoiceVox":
+            case "voiceVox":
             case "voicevox":
-                var engine = new VoiceVox.VoiceVoxEngine();
-                var parm = new VoiceVox.VoiceVoxParameter();
-                engine.SetParameter(parm);
-                engine.Wait = 2.0f;
-                Instance.Engine = engine;
+                Instance.Engine = Instance.engines[EngineType.VoiceVox];
                 break;
             default:
                 break;
@@ -63,6 +59,13 @@ public sealed class VoiceEngine : MonoBehaviour
     public void Awake()
     {
         Instance = this;
+        CommandManager.Instance.AddCommand(
+            Cmd,
+            new(new Parser(new Option("init", "EngineName", Option.Kind.Need, 'i')), Parse));
+        CommandManager.Instance.AddAlias(
+            Cmd, "eve", "exve");
+
+        setUpEngine<VoiceVox.VoiceVoxEngine, VoiceVox.VoiceVoxParameter>(EngineType.VoiceVox);
     }
 
     public void WaitExecute(Action act)
@@ -75,7 +78,7 @@ public sealed class VoiceEngine : MonoBehaviour
 
     public void AddQueue(string text)
     {
-        if (this.IsWait) { return; }
+        if (Engine is null || this.IsWait) { return; }
         ExtremeVoiceEnginePlugin.Logger.LogInfo($"Add TextToVoice Queue \nText:{text}");
         textQueue.Enqueue(text);
     }
@@ -108,5 +111,14 @@ public sealed class VoiceEngine : MonoBehaviour
         running = false;
 
         yield break;
+    }
+
+    private void setUpEngine<T, W>(EngineType type)
+        where W : IEngineParameter
+        where T : IParametableEngine<W>, new()
+    {
+        T engine = new T();
+        engine.CreateCommand();
+        this.engines.Add(type, engine);
     }
 }

@@ -9,6 +9,7 @@ using ExtremeRoles.Extension.Json;
 
 using ExtremeVoiceEngine.Interface;
 using ExtremeVoiceEngine.Utility;
+using ExtremeVoiceEngine.Command;
 
 namespace ExtremeVoiceEngine.VoiceVox;
 
@@ -22,6 +23,43 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
     private int speakerId = 0;
 
     private static CancellationToken cancellationToken => default(CancellationToken);
+
+    private const string CharacterNameCmd = "char";
+    private const string CharacterStyleCmd = "style";
+    private const string VolumeCmd = "volume";
+
+    public void CreateCommand()
+    {
+        var cmd = CommandManager.Instance;
+
+        cmd.AddSubCommand(
+           VoiceEngine.Cmd, "voicevox",
+           new(new Parser(
+               new Option(CharacterNameCmd , "CharacterName"  , Option.Kind.Optional, 'c'),
+               new Option(CharacterStyleCmd, "CharacterStyle" , Option.Kind.Optional, 's'),
+               new Option(VolumeCmd        , "CharacterVolume", Option.Kind.Optional, 'v')), Parse));
+    }
+
+    public void Parse(Result? result)
+    {
+        if (result is null) { return; }
+
+        var newParam = new VoiceVoxParameter();
+        if (result.TryGetOptionValue(CharacterNameCmd, out string charName))
+        {
+            newParam.Speaker = charName;
+        }
+        if (result.TryGetOptionValue(CharacterStyleCmd, out string stypeName))
+        {
+            newParam.Style = stypeName;
+        }
+        if (result.TryGetOptionValue(VolumeCmd, out string volume) &&
+            float.TryParse(volume, out float value))
+        {
+            newParam.MasterVolume = value;
+        }
+        SetParameter(newParam);
+    }
 
     public void Cancel()
     {

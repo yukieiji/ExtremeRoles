@@ -27,10 +27,5 @@ public partial class ExtremeVoiceEnginePlugin : BasePlugin
         Harmony.PatchAll();
 
         AddComponent<VoiceEngine>();
-
-        if (VoiceEngine.Instance != null)
-        {
-            VoiceEngine.CreateCommand();
-        }
     }
 }

@@ -86,6 +86,32 @@ public sealed class Result
         return this.optionDic[new OptionKey(option)];
     }
 
+    public bool TryGetOptionValue(string longName, out string value)
+    {
+        value = string.Empty;
+        
+        if (string.IsNullOrEmpty(longName)) { return false; }
+
+        bool result = HasOption(longName);
+        if (result)
+        {
+            value = GetOptionValue(longName);
+        }
+        return result;
+    }
+
+    public bool TryGetOptionValue(char shortcutName, out string value)
+    {
+        value = string.Empty;
+
+        bool result = HasOption(shortcutName);
+        if (result)
+        {
+            value = GetOptionValue(shortcutName);
+        }
+        return result;
+    }
+
     /// <summary>
     /// プロテクトコンストラクタです。
     /// </summary>

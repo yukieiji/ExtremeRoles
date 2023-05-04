@@ -75,13 +75,16 @@ public sealed class CommandManager : NullableSingleton<CommandManager>
             subCmds is not null && subCmds.Contains(subCmd))
         {
 
-            ParseActions subCmdParser = this.subCmd[subCmd];
+            ParseActions subCmdParser = this.subCmd[$"{masterArgs} {subCmd}"];
             if (args.Length == 2)
             {
                 hud.Chat.AddChat(localPlayer, subCmdParser.Parser.ToString($"{masterArgs}{subCmd}"));
-                return;
             }
-            subCmdParser.ParseAndAction(args[2..~0]);
+            else
+            {
+                subCmdParser.ParseAndAction(args[2..]);
+            }
+            return;
         }
 
         masterParser.ParseAndAction(args[1..]);
@@ -89,16 +92,24 @@ public sealed class CommandManager : NullableSingleton<CommandManager>
 
     public void AddCommand(string cmd, ParseActions cmdParser)
     {
-        this.masterCmd.Add(cmd, cmdParser);
+        this.masterCmd.Add(cleanedArg(cmd), cmdParser);
     }
 
     public void AddSubCommand(string masterCmd, string subCommand, ParseActions parser)
     {
+        masterCmd = cleanedArg(masterCmd);
+        subCommand = cleanedArg(subCommand);
         if (!this.masterCmd.ContainsKey(masterCmd))
         {
             throw new ArgumentException("master cmmand can't find");
         }
-        this.subCmdLink[masterCmd].Add(subCommand);
+        if (!this.subCmdLink.TryGetValue(masterCmd, out HashSet<string>? subCmds) ||
+            subCmds is null)
+        {
+            subCmds = new HashSet<string>();
+            this.subCmdLink[masterCmd] = subCmds;
+        }
+        subCmds.Add(subCommand);
         this.subCmd.Add($"{masterCmd} {subCommand}", parser);
     }
 
