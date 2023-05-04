@@ -22,13 +22,29 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
     
     private VoiceVoxParameter? param = null;
     private CancellationTokenSource cts = new CancellationTokenSource();
-    private int speakerId = 0;
+    private int speakerId
+    {
+        get => this.speakerIdEntry.Value;
+        set
+        {
+            this.speakerIdEntry.Value = value;
+        }
+    }
 
+    private BepInEx.Configuration.ConfigEntry<int> speakerIdEntry;
     private static CancellationToken cancellationToken => default(CancellationToken);
 
     private const string CharacterNameCmd = "char";
     private const string CharacterStyleCmd = "style";
     private const string VolumeCmd = "volume";
+
+    public VoiceVoxEngine()
+    {
+        this.speakerIdEntry = ExtremeVoiceEnginePlugin.Instance.Config.Bind(
+            "VoiceEngine", "speakerId", 0);
+        this.param = new VoiceVoxParameter();
+        this.param.LoadConfig();
+    }
 
     public bool IsValid()
         => VoiceVoxBridge.IsEstablishServer();
@@ -117,6 +133,7 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
 
                 this.speakerId = (int)styleData["id"];
                 this.param = param;
+                this.param.SaveConfig();
 
                 string log = $"VOICEVOX:Parameter Setted:{this.param}";
                 ExtremeVoiceEnginePlugin.Logger.LogInfo(log);
@@ -146,7 +163,9 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
 
         var linkedToken = CancellationTokenSource.CreateLinkedTokenSource(cts.Token, cancellationToken).Token;
 
-        var jsonQueryTask = VoiceVoxBridge.PostAudioQueryAsync(this.speakerId, text, linkedToken);
+        int speakerId = this.speakerId;
+
+        var jsonQueryTask = VoiceVoxBridge.PostAudioQueryAsync(speakerId, text, linkedToken);
         yield return TaskHelper.CoRunWaitAsync(jsonQueryTask);
 
         string jsonQuery = jsonQueryTask.Result;
@@ -155,7 +174,7 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
             yield break;
         }
 
-        var streamTask = VoiceVoxBridge.PostSynthesisAsync(this.speakerId, jsonQuery, linkedToken);
+        var streamTask = VoiceVoxBridge.PostSynthesisAsync(speakerId, jsonQuery, linkedToken);
         yield return TaskHelper.CoRunWaitAsync(streamTask);
 
         using var stream = streamTask.Result;

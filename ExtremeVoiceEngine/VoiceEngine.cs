@@ -22,18 +22,23 @@ public sealed class VoiceEngine : MonoBehaviour
 
     public ISpeakEngine? Engine { get; set; }
 
-    public enum EngineType : byte
+    public enum EngineType : int
     {
+        None = -1,
         VoiceVox
     }
+
+#pragma warning disable CS8618
+    private BepInEx.Configuration.ConfigEntry<int> curEngine;
+    public VoiceEngine(IntPtr ptr) : base(ptr) { }
+#pragma warning restore CS8618
+
 
     private bool running = false;
     private Queue<string> textQueue = new Queue<string>();
     private Dictionary<EngineType, ISpeakEngine> engines = new Dictionary<EngineType, ISpeakEngine>();
 
     public const string Cmd = "extremevoiceengine";
-
-    public VoiceEngine(IntPtr ptr) : base(ptr) { }
 
     public static void Parse(Result? result)
     {
@@ -43,6 +48,7 @@ public sealed class VoiceEngine : MonoBehaviour
         var player = CachedPlayerControl.LocalPlayer;
 
         string value =  result.GetOptionValue("init");
+        EngineType engine;
         switch (value)
         {
             case "vv":
@@ -52,12 +58,15 @@ public sealed class VoiceEngine : MonoBehaviour
             case "VoiceVox":
             case "voiceVox":
             case "voicevox":
-                Instance.Engine = Instance.engines[EngineType.VoiceVox];
+                engine = EngineType.VoiceVox;
                 break;
             default:
                 chat.AddChat(player, "Invalided Engine");
                 return;
         }
+
+        Instance.Engine = Instance.engines[engine];
+        Instance.curEngine.Value = (byte)engine;
 
         string message = Instance.Engine.IsValid() ?
             $"Engine set to:{value}" : "Can't start Engine";
@@ -74,7 +83,17 @@ public sealed class VoiceEngine : MonoBehaviour
         CommandManager.Instance.AddAlias(
             Cmd, "eve", "exve");
 
+        this.curEngine = ExtremeVoiceEnginePlugin.Instance.Config.Bind(
+            "VoiceEngine", "EngineType", -1);
+
         setUpEngine<VoiceVox.VoiceVoxEngine, VoiceVox.VoiceVoxParameter>(EngineType.VoiceVox);
+
+        EngineType engineType = (EngineType)this.curEngine.Value;
+        if (engineType != EngineType.None)
+        {
+            this.Engine = this.engines[engineType];
+        }
+        
     }
 
     public void WaitExecute(Action act)
