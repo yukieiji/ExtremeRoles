@@ -38,7 +38,7 @@ public sealed class CommandManager : NullableSingleton<CommandManager>
         }
         if (args.Length == 1)
         {
-            hud.Chat.AddChat(localPlayer, masterParser.ToString());
+            hud.Chat.AddChat(localPlayer, masterParser.ToString(masterArgs));
             return null;
         }
         string subCmd = args[1];
@@ -49,7 +49,7 @@ public sealed class CommandManager : NullableSingleton<CommandManager>
             Parser subCmdParser = this.subCmd[subCmd];
             if (args.Length == 2)
             {
-                hud.Chat.AddChat(localPlayer, subCmdParser.ToString());
+                hud.Chat.AddChat(localPlayer, subCmdParser.ToString($"{masterArgs}{subCmd}"));
                 return null;
             }
             return subCmdParser.Parse(args[2..~0]);
@@ -78,6 +78,6 @@ public sealed class CommandManager : NullableSingleton<CommandManager>
             throw new ArgumentException("master cmmand can't find");
         }
         this.subCmdLink.Add(masterCmd, subCommand);
-        this.subCmd.Add(subCmd, parser);
+        this.subCmd.Add(subCommand, parser);
     }
 }

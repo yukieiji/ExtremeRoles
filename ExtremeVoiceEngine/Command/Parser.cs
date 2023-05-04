@@ -228,6 +228,22 @@ public class Parser
             return false;
         }
     }
+
+    public string ToString(string cmd)
+
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine(cmd);
+
+        sb.AppendLine("Arguments:");
+
+        foreach (var opt in this.optionDic.Values)
+        {
+            sb.AppendLine(opt.ToString('[', 10));
+        }
+
+        return sb.ToString();
+    }
 }
 
 /// <summary>
