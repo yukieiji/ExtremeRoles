@@ -92,6 +92,8 @@ public sealed class VoiceEngine : MonoBehaviour
         if (engineType != EngineType.None)
         {
             this.Engine = this.engines[engineType];
+            string engineState = this.Engine.IsValid() ? "active" : "diactive";
+            ExtremeVoiceEnginePlugin.Logger.LogInfo($"InitTo:{engineType}, status:{engineState}");
         }
         
     }

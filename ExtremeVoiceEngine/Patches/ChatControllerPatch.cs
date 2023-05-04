@@ -21,11 +21,18 @@ public static class ChatControllerAddChatPatch
 [HarmonyPatch(typeof(ChatController), nameof(ChatController.SendChat))]
 public static class ChatControllerSendChatPatch
 {
-    public static void Prefix(ChatController __instance)
+    public static bool Prefix(ChatController __instance)
     {
-        if (VoiceEngine.Instance == null) { return; }
-        
+        if (VoiceEngine.Instance == null) { return true; }
+
+        bool isRpcSend = true;
         VoiceEngine.Instance.WaitExecute(
-            () => Command.CommandManager.Instance.ExcuteCmd(__instance.TextArea.text));
+            () => isRpcSend = !Command.CommandManager.Instance.ExcuteCmd(__instance.TextArea.text));
+        if (isRpcSend)
+        {
+            return true;
+        }
+        __instance.TextArea.text = string.Empty;
+        return false;
     }
 }

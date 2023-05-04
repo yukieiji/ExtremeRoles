@@ -49,26 +49,27 @@ public sealed class CommandManager : NullableSingleton<CommandManager>
         }
     }
 
-    public void ExcuteCmd(string text)
+    public bool ExcuteCmd(string text)
     {
         if (!text.StartsWith(CmdChar) ||
-            !DestroyableSingleton<HudManager>.InstanceExists) { return; }
+            !DestroyableSingleton<HudManager>.InstanceExists) { return false; }
 
         string cleanedText = text.Substring(1);
         HudManager hud = FastDestroyableSingleton<HudManager>.Instance;
         PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
         string[] args = cleanedText.Split(' ');
 
+        hud.Chat.AddChat(localPlayer, text);
         string masterArgs = cleanedArg(args[0]);
         if (!this.masterCmd.TryGetValue(masterArgs, out ParseActions? masterParser))
         {
             hud.Chat.AddChat(localPlayer, "Can't Find cmd");
-            return;
+            return true;
         }
         if (args.Length == 1)
         {
             hud.Chat.AddChat(localPlayer, masterParser.Parser.ToString(masterArgs));
-            return;
+            return true;
         }
         string subCmd = cleanedArg(args[1]);
         if (this.subCmdLink.TryGetValue(masterArgs, out HashSet<string>? subCmds) &&
@@ -84,10 +85,11 @@ public sealed class CommandManager : NullableSingleton<CommandManager>
             {
                 subCmdParser.ParseAndAction(args[2..]);
             }
-            return;
+            return true;
         }
 
         masterParser.ParseAndAction(args[1..]);
+        return true;
     }
 
     public void AddCommand(string cmd, ParseActions cmdParser)
