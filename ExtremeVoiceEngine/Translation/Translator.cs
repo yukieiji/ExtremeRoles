@@ -26,7 +26,9 @@ public sealed class Translator
         while ((transInfoLine = transCsv.ReadLine()) != null)
         {
             string[] transInfo = transInfoLine.Split(',');
-            transData.Add(transInfo[0], transInfo[1]);
+            string key = transInfo[0];
+            string value = transInfo[1].Replace("<br>", System.Environment.NewLine);
+            transData.Add(key, value);
         }
         return transData;
     }
