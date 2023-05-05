@@ -41,11 +41,6 @@ public sealed class Option
     /// オプション種別を取得します。
     /// </summary>
     public Kind OptionKind { get; private set; }
-    /// <summary>
-    /// このオプション情報をUsageに表示するかどうかを取得または設定します。
-    /// 既定値はTrueです。
-    /// </summary>
-    public bool ShowsInUsage { get; set; } = true;
 
     /// <summary>
     /// コンストラクタです。
@@ -101,11 +96,11 @@ public sealed class Option
         switch (this.OptionKind)
         {
             case Kind.NoValue:
-                sb.Append(Expression);
+                sb.Append($" {this.Expression}");
                 break;
             case Kind.Need:
             case Kind.Optional:
-                sb.Append(" [").Append($"{this.LongName}Value").Append("]").Append(this.Expression);
+                sb.Append(" [").Append($"{this.LongName}Value").Append("] ").Append(this.Expression);
                 break;
         }
 

@@ -138,19 +138,19 @@ public class Parser
     private bool tryGetOptionKey(string arg, out OptionKey? key)
     {
         key = null;
-        if (arg.StartsWith(LongNameOptionSymbol))
+        if (arg.StartsWith(this.LongNameOptionSymbol))
         {
-            string rmLongSym = arg.Substring(LongNameOptionSymbol.Length);
-            string[] longNamePrms = rmLongSym.Split(OptionKeyValueSeparators.ToArray());
+            string rmLongSym = arg.Substring(this.LongNameOptionSymbol.Length);
+            string[] longNamePrms = rmLongSym.Split(this.OptionKeyValueSeparators.ToArray());
             string optionName = longNamePrms[0];
             (key, Option _) = this.optionDic.FirstOrDefault(
                 p => p.Key.MatchesWithLongName(optionName));
             return key != null;
         }
-        else if (arg.StartsWith(ShortNameOptionSymbol))
+        else if (arg.StartsWith(this.ShortNameOptionSymbol))
         {
-            string rmShotSym = arg.Substring(ShortNameOptionSymbol.Length);
-            string[] shortNameParms = rmShotSym.Split(OptionKeyValueSeparators.ToArray());
+            string rmShotSym = arg.Substring(this.ShortNameOptionSymbol.Length);
+            string[] shortNameParms = rmShotSym.Split(this.OptionKeyValueSeparators.ToArray());
             string optionName = shortNameParms[0];
             if (optionName.Length > 2)
             {
@@ -172,10 +172,10 @@ public class Parser
         value = string.Empty;
 
         //longname
-        if (arg.StartsWith(LongNameOptionSymbol))
+        if (arg.StartsWith(this.LongNameOptionSymbol))
         {
-            string rmSym = arg.Substring(LongNameOptionSymbol.Length);
-            string[] longNamePrms = rmSym.Split(OptionKeyValueSeparators.ToArray());
+            string rmSym = arg.Substring(this.LongNameOptionSymbol.Length);
+            string[] longNamePrms = rmSym.Split(this.OptionKeyValueSeparators.ToArray());
             if (longNamePrms.Length > 2)
             {
                 //※"--hoge=huga=piyo" みたいな形は許可しないものとする
@@ -193,10 +193,10 @@ public class Parser
         }
 
         //shortname
-        if (arg.StartsWith(ShortNameOptionSymbol))
+        if (arg.StartsWith(this.ShortNameOptionSymbol))
         {
-            string rmSym = arg.Substring(ShortNameOptionSymbol.Length);
-            string[] shortNamePrms = rmSym.Split(OptionKeyValueSeparators.ToArray());
+            string rmSym = arg.Substring(this.ShortNameOptionSymbol.Length);
+            string[] shortNamePrms = rmSym.Split(this.OptionKeyValueSeparators.ToArray());
             if (shortNamePrms.Length > 2)
             {
                 throw new ArgumentException("Shortcut options to one");
@@ -218,7 +218,6 @@ public class Parser
     }
 
     public string ToString(string cmd)
-
     {
         var sb = new StringBuilder();
         sb.AppendLine(cmd);

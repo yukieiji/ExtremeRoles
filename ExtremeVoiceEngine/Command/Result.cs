@@ -115,10 +115,8 @@ public sealed class Result
     /// <summary>
     /// プロテクトコンストラクタです。
     /// </summary>
-    /// <param name="ignoresCase"></param>
     /// <param name="commandParams"></param>
     /// <param name="optionDic"></param>
-    /// <exception cref="ArgumentNullException"></exception>
     internal Result(
         IReadOnlyList<string> commandParams,
         Dictionary<OptionKey, string> optionDic)
