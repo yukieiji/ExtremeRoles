@@ -16,10 +16,9 @@ public sealed class Translator
         Dictionary<string, string> transData = new Dictionary<string, string>();
 
         var assembly = System.Reflection.Assembly.GetExecutingAssembly();
-        using var stream = assembly.GetManifestResourceStream(
+        using Stream? stream = assembly.GetManifestResourceStream(
             $"ExtremeVoiceEngine.Resources.{languageId}.csv");
         if (stream is null) { return transData; }
-        
         using StreamReader transCsv = new StreamReader(stream, Encoding.UTF8);
         if (transCsv is null) { return transData; }
 
@@ -27,7 +26,6 @@ public sealed class Translator
         while ((transInfoLine = transCsv.ReadLine()) != null)
         {
             string[] transInfo = transInfoLine.Split(',');
-            ExtremeVoiceEnginePlugin.Logger.LogInfo($"{transInfo[0]}  :  {transInfo[1]}");
             transData.Add(transInfo[0], transInfo[1]);
         }
         return transData;
