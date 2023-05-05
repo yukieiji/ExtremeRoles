@@ -155,7 +155,7 @@ public sealed class Updater
 
     public async Task<bool> CheckAndUpdate()
     {
-        // アプデ確認中
+        // TODO: 二重アプデを防ぐ
         if (this.InfoPopup == null) { return false; }
 
         this.InfoPopup.Show(Translation.GetString("chekUpdateWait"));
