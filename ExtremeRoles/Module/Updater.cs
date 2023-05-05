@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using System.Linq;
 
 namespace ExtremeRoles.Module;
 
@@ -14,14 +15,23 @@ public sealed class Updater
 {
     public record ModUpdateData(string DownloadUrl, string DllName);
 
+    public interface IRepositoryInfo
+    {
+        protected const string contentType = "content_type";
+
+        public string URL { get; }
+
+        public List<string> DllName { get; }
+
+        public Task<List<ModUpdateData>> GetModUpdateData(HttpClient client);
+
+        public Task<bool> HasUpdate(HttpClient client);
+    }
+
     public static Updater Instance = new Updater();
 
     private HttpClient client = new HttpClient();
-
-    private List<string> updateUrl = new List<string>();
-    private List<string> downloadUrls = new List<string>();
-
-    private const string contentType = "content_type";
+    private ServiceLocator<IRepositoryInfo> repoData = new ServiceLocator<IRepositoryInfo>();
 
     private static string pluginFolder
     {
@@ -40,18 +50,55 @@ public sealed class Updater
         client.DefaultRequestHeaders.Add("User-Agent", "ExtremeRoles Updater");
     }
 
+    public void AddRepository<T>(T repository) where T : class, IRepositoryInfo, new()
+    {
+        this.repoData.Register(repository);
+    }
+
+    public void AddMod<TRepoType>(string dllName) where TRepoType : class, IRepositoryInfo, new()
+    {
+        IRepositoryInfo repo = this.repoData.Resolve<TRepoType>();
+        repo.DllName.Add(dllName);
+    }
+
     public async void CheckAndUpdate()
     {
-        // GetModUpdateDataメソッドで取得する
-        List<ModUpdateData> updateData = new List<ModUpdateData>();
-
-        foreach (ModUpdateData data in updateData)
+        // アプデ確認中
+        try
         {
-            using (var stream = await getStreamFromUrl(data.DownloadUrl))
+            List<ModUpdateData> updatingData = new List<ModUpdateData>();
+
+            foreach (var repo in this.repoData.GetAllService())
             {
-                if (stream is null) { continue; }
-                installModFromStream(stream, data.DllName);
+                bool hasUpdate = await repo.HasUpdate(this.client);
+                if (!hasUpdate) { continue; }
+
+                List<ModUpdateData> updateData = await repo.GetModUpdateData(this.client);
+                updatingData.AddRange(updateData);
             }
+
+            clearOldVersions();
+
+            if (updatingData.Count == 0)
+            {
+                //アプデなし通知
+                return;
+            }
+
+            // アプデあり通知、更新処理
+            foreach (ModUpdateData data in updatingData)
+            {
+                using (var stream = await getStreamFromUrl(data.DownloadUrl))
+                {
+                    if (stream is null) { continue; }
+                    installModFromStream(stream, data.DllName);
+                }
+            }
+            // 終了処置
+        }
+        catch (Exception ex)
+        {
+            // エラー通知
         }
     }
 
@@ -89,4 +136,23 @@ public sealed class Updater
         return responseStream;
     }
 
+    private static void clearOldVersions()
+    {
+        try
+        {
+            string installDir = pluginFolder;
+            if (string.IsNullOrEmpty(installDir)) { return; }
+
+            DirectoryInfo d = new DirectoryInfo(installDir);
+            var files = d.GetFiles("*.old").Select(x => x.FullName); // Getting old versions
+            foreach (string f in files)
+            {
+                File.Delete(f);
+            }
+        }
+        catch (Exception e)
+        {
+            ExtremeRolesPlugin.Logger.LogError("Exception occured when clearing old versions:\n" + e);
+        }
+    }
 }
