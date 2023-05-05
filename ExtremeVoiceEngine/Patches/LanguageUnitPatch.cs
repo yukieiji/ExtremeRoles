@@ -1,6 +1,8 @@
 ﻿using Il2CppSystem.Collections.Generic;
 using HarmonyLib;
 
+using AmongUs.Data;
+
 using ExtremeVoiceEngine.Translation;
 
 namespace ExtremeVoiceEngine.Patches;
@@ -14,6 +16,7 @@ public static class LanguageUnitParseTSVPatch
         [HarmonyArgument(1)] ref Dictionary<string, string> allStrings,
         [HarmonyArgument(2)] ref Dictionary<StringNames, QuickChatSentenceVariantSet> allQuickChatVariantSets)
     {
-        TranslatorManager.AddTranslationData(__instance.languageID, allStrings);
+        TranslatorManager.AddTranslationData(
+            DataManager.Settings.Language.CurrentLanguage, allStrings);
     }
 }
