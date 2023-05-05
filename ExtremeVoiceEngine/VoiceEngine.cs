@@ -69,7 +69,7 @@ public sealed class VoiceEngine : MonoBehaviour
         Instance.curEngine.Value = (int)engine;
 
         string message = Instance.Engine.IsValid() ?
-            trans.GetString("EngineSetTo", engine) : trans.GetString("InvalidedEngine");
+            trans.GetString("EngineSetTo", parts: engine.ToString()) : trans.GetString("InvalidedEngine");
 
         chat.AddLocalChat(message);
     }

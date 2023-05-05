@@ -46,5 +46,5 @@ public sealed class VoiceVoxParameter : IEngineParameter
 
     public override string ToString()
         => TranslationController.Instance.GetString(
-            "voicevoxParam", Speaker, Style, MasterVolume);
+            "voicevoxParam", string.Empty, Speaker, Style, MasterVolume);
 }

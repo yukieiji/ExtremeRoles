@@ -31,8 +31,8 @@ public static class VoiceVoxBridge
     {
         try
         {
-            client.GetStringAsync(serverUrl).GetAwaiter().GetResult();
-            return true;
+            string json = GetVoice().GetAwaiter().GetResult();
+            return !string.IsNullOrEmpty(json);
         }
         catch
         {
