@@ -1,15 +1,106 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
+
 using UnityEngine;
-using System.Linq;
+using Newtonsoft.Json.Linq;
+
+
+using ExtremeRoles.Helper;
 
 namespace ExtremeRoles.Module;
 
 #nullable enable
+
+public sealed class ExRRepositoryInfo : Updater.IRepositoryInfo
+{
+    public string Url => "https://api.github.com/repos/yukieiji/ExtremeRoles/releases/latest";
+
+    public List<string> DllName { private set; get; } = new List<string>()
+    {
+        "ExtremeRoles"
+    };
+
+    public async Task<List<Updater.ModUpdateData>> GetModUpdateData(HttpClient client)
+    {
+
+        var result = new List<Updater.ModUpdateData>();
+
+        var response = await client.GetAsync(
+            new Uri(Url), HttpCompletionOption.ResponseContentRead);
+        if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
+        {
+            ExtremeRolesPlugin.Logger.LogError(
+                $"Server returned no data: {response.StatusCode.ToString()}");
+            return result;
+        }
+        string json = await response.Content.ReadAsStringAsync();
+        JObject data = JObject.Parse(json);
+
+        string? tagname = data["tag_name"]?.ToString();
+        if (tagname == null)
+        {
+            return result; // Something went wrong
+        }
+
+        JToken assets = data["assets"];
+        if (!assets.HasValues)
+        {
+            return result;
+        }
+        for (JToken current = assets.First; current != null; current = current.Next)
+        {
+            string? browser_download_url = current["browser_download_url"]?.ToString();
+            if (browser_download_url != null &&
+                current[Updater.IRepositoryInfo.ContentType] != null)
+            {
+                string content = current[Updater.IRepositoryInfo.ContentType].ToString();
+
+                if (content.Equals("application/x-zip-compressed")) { continue; }
+
+                foreach (string dll in this.DllName)
+                {
+                    string fullDllName = $"{dll}.dll";
+                    if (browser_download_url.EndsWith(fullDllName))
+                    {
+                        result.Add(new(browser_download_url, fullDllName));
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    public async Task<bool> HasUpdate(HttpClient client)
+    {
+        var response = await client.GetAsync(
+            new Uri(Url),
+            HttpCompletionOption.ResponseContentRead);
+        if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
+        {
+            Logging.Error("Server returned no data: " + response.StatusCode.ToString());
+            return false;
+        }
+        string json = await response.Content.ReadAsStringAsync();
+        JObject data = JObject.Parse(json);
+
+        string? tagname = data["tag_name"]?.ToString();
+        if (tagname == null)
+        {
+            return false; // Something went wrong
+        }
+        // check version
+        Version ver = Version.Parse(tagname.Replace("v", ""));
+        int? diff = Assembly.GetExecutingAssembly().GetName().Version?.CompareTo(ver);
+        return diff < 0;
+    }
+}
+
 
 public sealed class Updater
 {
@@ -17,9 +108,9 @@ public sealed class Updater
 
     public interface IRepositoryInfo
     {
-        protected const string contentType = "content_type";
+        protected const string ContentType = "content_type";
 
-        public string URL { get; }
+        public string Url { get; }
 
         public List<string> DllName { get; }
 
@@ -30,6 +121,7 @@ public sealed class Updater
 
     public static Updater Instance = new Updater();
 
+    public GenericPopup? InfoPopup { private get; set; }
     private HttpClient client = new HttpClient();
     private ServiceLocator<IRepositoryInfo> repoData = new ServiceLocator<IRepositoryInfo>();
 
@@ -48,6 +140,8 @@ public sealed class Updater
     {
         HttpClient client = new HttpClient();
         client.DefaultRequestHeaders.Add("User-Agent", "ExtremeRoles Updater");
+
+        this.AddRepository(new ExRRepositoryInfo());
     }
 
     public void AddRepository<T>(T repository) where T : class, IRepositoryInfo, new()
@@ -64,6 +158,10 @@ public sealed class Updater
     public async void CheckAndUpdate()
     {
         // アプデ確認中
+        if (this.InfoPopup == null) { return; }
+
+        this.InfoPopup.Show(Translation.GetString("chekUpdateWait"));
+
         try
         {
             List<ModUpdateData> updatingData = new List<ModUpdateData>();
@@ -77,15 +175,21 @@ public sealed class Updater
                 updatingData.AddRange(updateData);
             }
 
-            clearOldVersions();
+            
 
             if (updatingData.Count == 0)
             {
-                //アプデなし通知
+                setPopupText(Translation.GetString("latestNow"));
                 return;
             }
 
-            // アプデあり通知、更新処理
+            setPopupText(Translation.GetString("updateNow"));
+            clearOldVersions();
+
+            this.InfoPopup.StartCoroutine(
+                Effects.Lerp(0.01f, new Action<float>(
+                    (p) => { setPopupText(Translation.GetString("updateInProgress")); })));
+
             foreach (ModUpdateData data in updatingData)
             {
                 using (var stream = await getStreamFromUrl(data.DownloadUrl))
@@ -94,11 +198,13 @@ public sealed class Updater
                     installModFromStream(stream, data.DllName);
                 }
             }
-            // 終了処置
+
+            this.showPopup(Translation.GetString("updateRestart"));
         }
         catch (Exception ex)
         {
-            // エラー通知
+            Logging.Error(ex.ToString());
+            this.showPopup(Translation.GetString("updateManually"));
         }
     }
 
@@ -134,6 +240,28 @@ public sealed class Updater
         var responseStream = await response.Content.ReadAsStreamAsync();
 
         return responseStream;
+    }
+
+    private void showPopup(string message)
+    {
+        setPopupText(message);
+        if (this.InfoPopup != null)
+        {
+            this.InfoPopup.gameObject.SetActive(true);
+        }
+    }
+
+    private void setPopupText(string message)
+    {
+        if (this.InfoPopup == null)
+        {
+            return;
+        }
+
+        if (this.InfoPopup.TextAreaTMP != null)
+        {
+            this.InfoPopup.TextAreaTMP.text = message;
+        }
     }
 
     private static void clearOldVersions()
