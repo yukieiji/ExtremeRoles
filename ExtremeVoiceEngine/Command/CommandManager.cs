@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using ExtremeRoles.Module;
 using ExtremeRoles.Performance;
 
+using ExtremeVoiceEngine.Extension;
+
 namespace ExtremeVoiceEngine.Command;
 
 public record class ParseActions(Parser Parser, Action<Result?> ParseAction)
@@ -17,8 +19,7 @@ public record class ParseActions(Parser Parser, Action<Result?> ParseAction)
         }
         catch
         {
-            FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(
-                CachedPlayerControl.LocalPlayer, "Can't parse");
+            FastDestroyableSingleton<HudManager>.Instance.Chat.AddLocalChat("Can't parse");
         }
         this.ParseAction.Invoke(result);
     }
@@ -55,20 +56,20 @@ public sealed class CommandManager : NullableSingleton<CommandManager>
             !DestroyableSingleton<HudManager>.InstanceExists) { return false; }
 
         string cleanedText = text.Substring(1);
-        HudManager hud = FastDestroyableSingleton<HudManager>.Instance;
+        ChatController chat = FastDestroyableSingleton<HudManager>.Instance.Chat;
         PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
         string[] args = cleanedText.Split(' ');
 
-        hud.Chat.AddChat(localPlayer, text);
+        chat.AddLocalChat(text);
         string masterArgs = cleanedArg(args[0]);
         if (!this.masterCmd.TryGetValue(masterArgs, out ParseActions? masterParser))
         {
-            hud.Chat.AddChat(localPlayer, "Can't Find cmd");
+            chat.AddLocalChat("Can't Find cmd");
             return true;
         }
         if (args.Length == 1)
         {
-            hud.Chat.AddChat(localPlayer, masterParser.Parser.ToString(masterArgs));
+            chat.AddLocalChat(masterParser.Parser.ToString(masterArgs));
             return true;
         }
         string subCmd = cleanedArg(args[1]);
@@ -79,7 +80,7 @@ public sealed class CommandManager : NullableSingleton<CommandManager>
             ParseActions subCmdParser = this.subCmd[$"{masterArgs} {subCmd}"];
             if (args.Length == 2)
             {
-                hud.Chat.AddChat(localPlayer, subCmdParser.Parser.ToString($"{masterArgs}{subCmd}"));
+                chat.AddLocalChat(subCmdParser.Parser.ToString($"{masterArgs}{subCmd}"));
             }
             else
             {

@@ -9,6 +9,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.Performance;
 
 using ExtremeVoiceEngine.Command;
+using ExtremeVoiceEngine.Extension;
 using ExtremeVoiceEngine.Interface;
 
 namespace ExtremeVoiceEngine;
@@ -45,7 +46,6 @@ public sealed class VoiceEngine : MonoBehaviour
         if (Instance == null || result is null) { return; }
 
         var chat = FastDestroyableSingleton<HudManager>.Instance.Chat;
-        var player = CachedPlayerControl.LocalPlayer;
 
         string value =  result.GetOptionValue("init");
         EngineType engine;
@@ -61,7 +61,7 @@ public sealed class VoiceEngine : MonoBehaviour
                 engine = EngineType.VoiceVox;
                 break;
             default:
-                chat.AddChat(player, "Invalided Engine");
+                chat.AddLocalChat("Invalided Engine");
                 return;
         }
 
@@ -71,7 +71,7 @@ public sealed class VoiceEngine : MonoBehaviour
         string message = Instance.Engine.IsValid() ?
             $"Engine set to:{value}" : "Can't start Engine";
 
-        chat.AddChat(player, message);
+        chat.AddLocalChat(message);
     }
 
     public void Awake()

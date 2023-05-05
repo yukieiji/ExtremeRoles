@@ -9,9 +9,9 @@ using ExtremeRoles.Extension.Json;
 using ExtremeRoles.Performance;
 
 using ExtremeVoiceEngine.Command;
+using ExtremeVoiceEngine.Extension;
 using ExtremeVoiceEngine.Interface;
 using ExtremeVoiceEngine.Utility;
-
 
 namespace ExtremeVoiceEngine.VoiceVox;
 
@@ -139,8 +139,7 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
                 ExtremeVoiceEnginePlugin.Logger.LogInfo(log);
                 if (FastDestroyableSingleton<HudManager>.Instance != null)
                 {
-                    FastDestroyableSingleton<HudManager>.Instance.Chat.AddChat(
-                        CachedPlayerControl.LocalPlayer, log);
+                    FastDestroyableSingleton<HudManager>.Instance.Chat.AddLocalChat(log);
                 }
                 return;
             }
