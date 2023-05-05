@@ -223,7 +223,7 @@ public class Parser
         var sb = new StringBuilder();
         sb.AppendLine(cmd);
 
-        sb.AppendLine("Arguments:");
+        sb.AppendLine("Arguments:     ");
 
         foreach (var opt in this.optionDic.Values)
         {
