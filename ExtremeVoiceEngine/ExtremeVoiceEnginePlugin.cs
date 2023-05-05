@@ -1,7 +1,10 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
 using BepInEx.Unity.IL2CPP;
+
 using HarmonyLib;
+
+using ExtremeRoles.Module;
 
 namespace ExtremeVoiceEngine;
 
@@ -27,5 +30,9 @@ public partial class ExtremeVoiceEnginePlugin : BasePlugin
         Harmony.PatchAll();
 
         AddComponent<VoiceEngine>();
+
+        var assembly = System.Reflection.Assembly.GetAssembly(this.GetType());
+        Updater.Instance.AddMod<ExRRepositoryInfo>($"{assembly?.GetName().Name}.dll");
+        Il2CppRegisterAttribute.Registration(assembly);
     }
 }

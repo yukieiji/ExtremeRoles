@@ -51,10 +51,10 @@ namespace ExtremeSkins
 
             Harmony.PatchAll();
 
-            Updater.Instance.AddMod<ExRRepositoryInfo>("ExtremeSkins.dll");
+            var assembly = System.Reflection.Assembly.GetAssembly(this.GetType());
 
-            Il2CppRegisterAttribute.Registration(
-                System.Reflection.Assembly.GetAssembly(this.GetType()));
+            Updater.Instance.AddMod<ExRRepositoryInfo>($"{assembly.GetName().Name}.dll");
+            Il2CppRegisterAttribute.Registration(assembly);
         }
     }
 }
