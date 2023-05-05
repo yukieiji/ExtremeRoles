@@ -32,7 +32,7 @@ public static class ChatControllerSendChatPatch
         {
             return true;
         }
-        __instance.TextArea.text = string.Empty;
+        __instance.TextArea.Clear();
         return false;
     }
 }
