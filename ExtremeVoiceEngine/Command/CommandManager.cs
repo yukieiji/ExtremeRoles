@@ -57,14 +57,13 @@ public sealed class CommandManager : NullableSingleton<CommandManager>
 
         string cleanedText = text.Substring(1);
         ChatController chat = FastDestroyableSingleton<HudManager>.Instance.Chat;
-        PlayerControl localPlayer = CachedPlayerControl.LocalPlayer;
         string[] args = cleanedText.Split(' ');
 
         chat.AddLocalChat(text);
         string masterArgs = cleanedArg(args[0]);
         if (!this.masterCmd.TryGetValue(masterArgs, out ParseActions? masterParser))
         {
-            chat.AddLocalChat("Can't Find cmd");
+            chat.AddLocalChat(TranslationController.Instance.GetString("CannotFindCmd"));
             return true;
         }
         if (args.Length == 1)

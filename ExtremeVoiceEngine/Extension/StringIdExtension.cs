@@ -3,7 +3,7 @@ using Il2CppInterop.Runtime.InteropTypes.Arrays;
 
 using Il2CppObject = Il2CppSystem.Object;
 
-namespace ExtremeVoiceEngine.Patches;
+namespace ExtremeVoiceEngine.Extension;
 
 public static class StringIdExtension
 {
