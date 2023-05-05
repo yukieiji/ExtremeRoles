@@ -16,6 +16,8 @@ public interface ISpeakEngine
 
     public bool IsValid();
 
+    public string ToString();
+
     protected static AudioSource? CreateAudioMixer()
     {
         SoundManager soundManager = SoundManager.Instance;

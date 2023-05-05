@@ -8,6 +8,12 @@ initExpression,読み上げに使用するエンジンを「エンジン名」�
 CannotStartEngine,エンジンと接続することが出来ませんでした。設定を確認してください
 InvalidedEngine,無効なエンジンです
 EngineSetTo,読み上げのエンジンを{0}に設定しました
+pringCurState,現在のExtremeVoiceEngineの設定\n{0}
+engineActive,有効
+engineDeactive,無効
+disableEngine,読み上げエンジンを無効にしました
+noEngine,読み上げエンジンは現状無効になっています
+eveEngineState,エンジンの状況:{0}\n{1}
 cmd_extremevoiceenginevoicevox,VOICEVOXのエンジン設定コマンド(/ExtremeVoiceEngine VoiceVox、/Eve vv)のヘルプ
 charValue,キャラクター名
 charExpression,読み上げのキャラを「キャラクター名」で指定します
@@ -16,5 +22,5 @@ styleExpression,読み上げのキャラのスタイルを「スタイル名」�
 volumeValue,音量(数値)
 volumeExpression,読み上げのボリュームを設定します
 voicevoxParam,キャラ：{0}  スタイル:{1}  ボリューム:{2}
-voicevoxParamSetLog,"VOICEVOXのエンジンを以下の設定に変更しました
-{0}"
+voicevoxParamSetLog,VOICEVOXのエンジンを以下の設定に変更しました\n{0}
+voicevoxEngineToString,エンジン名:VOICEVOX\nパラメータ:{0}

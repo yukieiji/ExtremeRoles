@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 using BepInEx.Unity.IL2CPP.Utils.Collections;
+using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Module;
 using ExtremeRoles.Performance;
@@ -20,7 +21,8 @@ public sealed class VoiceEngine : MonoBehaviour
     public bool IsWait { get; set; } = false;
 
     public static VoiceEngine? Instance { get; private set; }
-
+    
+    [HideFromIl2Cpp]
     public ISpeakEngine? Engine { get; set; }
 
     public enum EngineType : int
@@ -60,6 +62,13 @@ public sealed class VoiceEngine : MonoBehaviour
             case "voicevox":
                 engine = EngineType.VoiceVox;
                 break;
+            case "none":
+            case "NONE":
+            case "None":
+                Instance.Engine = null;
+                Instance.curEngine.Value = (int)EngineType.None;
+                chat.AddLocalChat(trans.GetString("disableEngine"));
+                return;
             default:
                 chat.AddLocalChat(trans.GetString("InvalidedEngine"));
                 return;
@@ -98,13 +107,13 @@ public sealed class VoiceEngine : MonoBehaviour
         
     }
 
+    [HideFromIl2Cpp]
     public void WaitExecute(Action act)
     {
         this.IsWait = true;
         act.Invoke();
         this.IsWait = false;
     }
-
 
     public void AddQueue(string text)
     {
@@ -129,6 +138,23 @@ public sealed class VoiceEngine : MonoBehaviour
         StartCoroutine(coSpeek(text).WrapToIl2Cpp());
     }
 
+
+    public override string ToString()
+    {
+        if (this.Engine is null)
+        {
+            return TranslationControllerExtension.GetString("noEngine");
+        }
+
+        string activeStr = this.Engine.IsValid() ?　"engineActive" : "engineDeactive";
+
+        return TranslationControllerExtension.GetString(
+            "eveEngineState",
+            TranslationControllerExtension.GetString(activeStr),
+            this.Engine?.ToString());
+    }
+
+    [HideFromIl2Cpp]
     private IEnumerator coSpeek(string text)
     {
         if (Engine is null) { yield break; }
@@ -143,6 +169,7 @@ public sealed class VoiceEngine : MonoBehaviour
         yield break;
     }
 
+    [HideFromIl2Cpp]
     private void setUpEngine<T, W>(EngineType type)
         where W : IEngineParameter
         where T : IParametableEngine<W>, new()

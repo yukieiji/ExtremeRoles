@@ -20,7 +20,7 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
     public float Wait { get; set; }
     public AudioSource? Source { get; set; }
     
-    private VoiceVoxParameter? param = null;
+    private VoiceVoxParameter param;
     private CancellationTokenSource cts = new CancellationTokenSource();
     private int speakerId
     {
@@ -145,8 +145,10 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
                 return;
             }
         }
-
     }
+
+    public override string ToString()
+        => TranslationControllerExtension.GetString("voicevoxEngineToString", this.param.ToString());
 
     public IEnumerator Speek(string text)
     {
