@@ -50,10 +50,12 @@ public static class MainMenuManagerStartPatch
         PassiveButton passiveUpdateButton = updateButton.GetComponent<PassiveButton>();
         passiveUpdateButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
         passiveUpdateButton.OnClick.AddListener(
-            (UnityEngine.Events.UnityAction)(() => Updater.ExecuteCheckUpdate()));
+            (UnityEngine.Events.UnityAction)(
+                async () => await Module.Updater.Instance.CheckAndUpdate()));
 
         TMP_Text textUpdate = updateButton.transform.GetChild(0).GetComponent<TMP_Text>();
-        __instance.StartCoroutine(Effects.Lerp(0.1f, new Action<float>((p) => {
+        __instance.StartCoroutine(Effects.Lerp(0.1f, new Action<float>((p) =>
+        {
             textUpdate.SetText(Translation.GetString("UpdateButton"));
         })));
 
@@ -68,7 +70,8 @@ public static class MainMenuManagerStartPatch
             (UnityEngine.Events.UnityAction)(() => Application.OpenURL("https://discord.gg/UzJcfBYcyS")));
 
         TMP_Text textDiscord = discordButton.transform.GetChild(0).GetComponent<TMP_Text>();
-        __instance.StartCoroutine(Effects.Lerp(0.1f, new Action<float>((p) => {
+        __instance.StartCoroutine(Effects.Lerp(0.1f, new Action<float>((p) =>
+        {
             textDiscord.SetText("Discord");
         })));
 
@@ -80,12 +83,13 @@ public static class MainMenuManagerStartPatch
         });
 
 
-        if (Updater.InfoPopup == null)
+        if (!Module.Updater.Instance.IsInit)
         {
             TwitchManager man = FastDestroyableSingleton<TwitchManager>.Instance;
-            Updater.InfoPopup = UnityEngine.Object.Instantiate<GenericPopup>(man.TwitchPopup);
-            Updater.InfoPopup.TextAreaTMP.fontSize *= 0.7f;
-            Updater.InfoPopup.TextAreaTMP.enableAutoSizing = false;
+            var infoPop = UnityEngine.Object.Instantiate(man.TwitchPopup);
+            infoPop.TextAreaTMP.fontSize *= 0.7f;
+            infoPop.TextAreaTMP.enableAutoSizing = false;
+            Module.Updater.Instance.InfoPopup = infoPop;
         }
     }
 
@@ -124,7 +128,7 @@ public static class MainMenuManagerStartPatch
                 Module.Prefab.Prop);
             Module.Prefab.Prop.name = "propForInEx";
             Module.Prefab.Prop.gameObject.SetActive(false);
-            
+
             Module.Prefab.Text = UnityEngine.Object.Instantiate(
                 man.TwitchPopup.TextAreaTMP);
             Module.Prefab.Text.fontSize =
@@ -140,191 +144,4 @@ public static class MainMenuManagerStartPatch
         }
         Compat.CompatModMenu.CreateMenuButton();
     }
-
-    public static class Updater
-    {
-        public static GenericPopup InfoPopup;
-        
-        public const string CheckUrl = "https://api.github.com/repos/yukieiji/ExtremeRoles/releases/latest";
-
-        public static string UpdateUri = null;
-        public static bool HasUpdate = false;
-        public static Task UpdateTask = null;
-
-        private const string contentType = "content_type";
-
-        public static void ExecuteCheckUpdate()
-        {
-            string info = Translation.GetString("chekUpdateWait");
-            InfoPopup.Show(info); // Show originally
-            
-            CheckForUpdate().GetAwaiter().GetResult();
-            if (HasUpdate)
-            {
-                SetPopupText(Translation.GetString("updateNow"));
-                ClearOldVersions();
-
-                if (UpdateTask == null)
-                {
-                    if (UpdateUri != null)
-                    {
-                        UpdateTask = DownloadUpdate();
-                    }
-                    else
-                    {
-                        info = Translation.GetString("updateManually");
-                    }
-                }
-                else
-                {
-                    info = Translation.GetString("updateInProgress");
-                }
-
-                InfoPopup.StartCoroutine(
-                    Effects.Lerp(0.01f, new Action<float>((p) => { SetPopupText(info); })));
-
-            }
-            else
-            {
-                SetPopupText(Translation.GetString("latestNow"));
-            }
-
-        }
-        public static void ClearOldVersions()
-        {
-            try
-            {
-                DirectoryInfo d = new DirectoryInfo(
-                    System.IO.Path.GetDirectoryName(
-                        Application.dataPath) + @"\BepInEx\plugins");
-                string[] files = d.GetFiles("*.old").Select(x => x.FullName).ToArray(); // Getting old versions
-                foreach (string f in files)
-                {
-                    File.Delete(f);
-                }
-            }
-            catch (Exception e)
-            {
-                Logging.Error("Exception occured when clearing old versions:\n" + e);
-            }
-        }
-
-
-        public static async Task<bool> CheckForUpdate()
-        {
-            try
-            {
-                HttpClient http = new HttpClient();
-                http.DefaultRequestHeaders.Add("User-Agent", "ExtremeRoles Updater");
-                var response = await http.GetAsync(
-                    new Uri(CheckUrl),
-                    HttpCompletionOption.ResponseContentRead);
-                if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
-                {
-                    Logging.Error("Server returned no data: " + response.StatusCode.ToString());
-                    return false;
-                }
-                string json = await response.Content.ReadAsStringAsync();
-                JObject data = JObject.Parse(json);
-
-                string tagname = data["tag_name"]?.ToString();
-                if (tagname == null)
-                {
-                    return false; // Something went wrong
-                }
-                // check version
-                Version ver = Version.Parse(tagname.Replace("v", ""));
-                int diff = Assembly.GetExecutingAssembly().GetName().Version.CompareTo(ver);
-                if (diff < 0)
-                { // Update required
-                    HasUpdate = true;
-                    JToken assets = data["assets"];
-                    if (!assets.HasValues)
-                    {
-                        return false;
-                    }
-                    for (JToken current = assets.First; current != null; current = current.Next)
-                    {
-                        string browser_download_url = current["browser_download_url"]?.ToString();
-                        if (browser_download_url != null && current[contentType] != null)
-                        {
-                            string content = current[contentType].ToString();
-
-                            if (!content.Equals("application/x-zip-compressed")
-                                && browser_download_url.EndsWith("ExtremeRoles.dll"))
-                            {
-                                UpdateUri = browser_download_url;
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Logging.Error(ex.ToString());
-            }
-            return false;
-        }
-
-        public static async Task<bool> DownloadUpdate()
-        {
-            try
-            {
-                HttpClient http = new HttpClient();
-                http.DefaultRequestHeaders.Add("User-Agent", "ExtremeRoles Updater");
-                var response = await http.GetAsync(
-                    new Uri(UpdateUri),
-                    HttpCompletionOption.ResponseContentRead);
-                if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
-                {
-                    Logging.Error("Server returned no data: " + response.StatusCode.ToString());
-                    return false;
-                }
-                string codeBase = Assembly.GetExecutingAssembly().Location;
-                UriBuilder uri = new UriBuilder(codeBase);
-                string fullname = Uri.UnescapeDataString(uri.Path);
-                if (File.Exists(fullname + ".old")) // Clear old file in case it wasnt;
-                    File.Delete(fullname + ".old");
-
-                File.Move(fullname, fullname + ".old"); // rename current executable to old
-
-                using (var responseStream = await response.Content.ReadAsStreamAsync())
-                {
-                    using (var fileStream = File.Create(fullname))
-                    { // probably want to have proper name here
-                        responseStream.CopyTo(fileStream);
-                    }
-                }
-                ShowPopup(Translation.GetString("updateRestart"));
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logging.Error(ex.ToString());
-                ShowPopup(Translation.GetString("updateManually"));
-            }
-            return false;
-        }
-
-        public static void ShowPopup(string message)
-        {
-            SetPopupText(message);
-            InfoPopup.gameObject.SetActive(true);
-        }
-
-        public static void SetPopupText(string message)
-        {
-            if (InfoPopup == null)
-            {
-                return;
-            }
-            
-            if (InfoPopup.TextAreaTMP != null)
-            {
-                InfoPopup.TextAreaTMP.text = message;
-            }
-        }
-    }
-
 }

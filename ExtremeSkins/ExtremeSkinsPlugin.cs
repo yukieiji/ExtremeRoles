@@ -51,6 +51,8 @@ namespace ExtremeSkins
 
             Harmony.PatchAll();
 
+            Updater.Instance.AddMod<ExRRepositoryInfo>("ExtremeSkins.dll");
+
             Il2CppRegisterAttribute.Registration(
                 System.Reflection.Assembly.GetAssembly(this.GetType()));
         }

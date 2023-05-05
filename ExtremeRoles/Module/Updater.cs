@@ -23,20 +23,19 @@ public sealed class ExRRepositoryInfo : Updater.IRepositoryInfo
 
     public List<string> DllName { private set; get; } = new List<string>()
     {
-        "ExtremeRoles"
+        "ExtremeRoles.dll"
     };
 
     public async Task<List<Updater.ModUpdateData>> GetModUpdateData(HttpClient client)
     {
-
         var result = new List<Updater.ModUpdateData>();
 
         var response = await client.GetAsync(
-            new Uri(Url), HttpCompletionOption.ResponseContentRead);
+            Url, HttpCompletionOption.ResponseContentRead);
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
         {
-            ExtremeRolesPlugin.Logger.LogError(
-                $"Server returned no data: {response.StatusCode.ToString()}");
+            Logging.Error(
+                $"Server returned no data: {response.StatusCode}");
             return result;
         }
         string json = await response.Content.ReadAsStringAsync();
@@ -65,10 +64,9 @@ public sealed class ExRRepositoryInfo : Updater.IRepositoryInfo
 
                 foreach (string dll in this.DllName)
                 {
-                    string fullDllName = $"{dll}.dll";
-                    if (browser_download_url.EndsWith(fullDllName))
+                    if (browser_download_url.EndsWith(dll))
                     {
-                        result.Add(new(browser_download_url, fullDllName));
+                        result.Add(new(browser_download_url, dll));
                     }
                 }
             }
@@ -79,11 +77,10 @@ public sealed class ExRRepositoryInfo : Updater.IRepositoryInfo
     public async Task<bool> HasUpdate(HttpClient client)
     {
         var response = await client.GetAsync(
-            new Uri(Url),
-            HttpCompletionOption.ResponseContentRead);
+            Url, HttpCompletionOption.ResponseContentRead);
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
         {
-            Logging.Error("Server returned no data: " + response.StatusCode.ToString());
+            Logging.Error($"Server returned no data: {response.StatusCode}");
             return false;
         }
         string json = await response.Content.ReadAsStringAsync();
@@ -121,6 +118,7 @@ public sealed class Updater
 
     public static Updater Instance = new Updater();
 
+    public bool IsInit => InfoPopup != null;
     public GenericPopup? InfoPopup { private get; set; }
     private HttpClient client = new HttpClient();
     private ServiceLocator<IRepositoryInfo> repoData = new ServiceLocator<IRepositoryInfo>();
@@ -138,8 +136,8 @@ public sealed class Updater
 
     public Updater()
     {
-        HttpClient client = new HttpClient();
-        client.DefaultRequestHeaders.Add("User-Agent", "ExtremeRoles Updater");
+        this.client = new HttpClient();
+        this.client.DefaultRequestHeaders.Add("User-Agent", "ExtremeRoles Updater");
 
         this.AddRepository(new ExRRepositoryInfo());
     }
@@ -155,10 +153,10 @@ public sealed class Updater
         repo.DllName.Add(dllName);
     }
 
-    public async void CheckAndUpdate()
+    public async Task<bool> CheckAndUpdate()
     {
         // アプデ確認中
-        if (this.InfoPopup == null) { return; }
+        if (this.InfoPopup == null) { return false; }
 
         this.InfoPopup.Show(Translation.GetString("chekUpdateWait"));
 
@@ -175,12 +173,10 @@ public sealed class Updater
                 updatingData.AddRange(updateData);
             }
 
-            
-
             if (updatingData.Count == 0)
             {
                 setPopupText(Translation.GetString("latestNow"));
-                return;
+                return false;
             }
 
             setPopupText(Translation.GetString("updateNow"));
@@ -198,13 +194,16 @@ public sealed class Updater
                     installModFromStream(stream, data.DllName);
                 }
             }
-
-            this.showPopup(Translation.GetString("updateRestart"));
+            this.InfoPopup.StartCoroutine(
+                Effects.Lerp(0.01f, new Action<float>(
+                    (p) => { this.showPopup(Translation.GetString("updateRestart")); })));
+            return true;
         }
         catch (Exception ex)
         {
             Logging.Error(ex.ToString());
             this.showPopup(Translation.GetString("updateManually"));
+            return false;
         }
     }
 
@@ -213,7 +212,7 @@ public sealed class Updater
         string installDir = pluginFolder;
         if (string.IsNullOrEmpty(installDir)) { return; }
 
-        string installModPath = Path.Combine(installDir, $"{dllName}.dll");
+        string installModPath = Path.Combine(installDir, dllName);
         string oldModPath = $"{installModPath}.old";
         if (File.Exists(oldModPath))
         {
@@ -222,8 +221,10 @@ public sealed class Updater
 
         File.Move(installModPath, oldModPath);
 
-        using var fileStream = File.Create(installModPath);
-        stream.CopyTo(fileStream);
+        using (var fileStream = File.Create(installModPath))
+        {
+            stream.CopyTo(fileStream);
+        }
     }
 
     private async Task<Stream?> getStreamFromUrl(string url)
@@ -233,7 +234,7 @@ public sealed class Updater
             HttpCompletionOption.ResponseContentRead);
         if (response.StatusCode != HttpStatusCode.OK || response.Content == null)
         {
-            ExtremeRolesPlugin.Logger.LogError("Server returned no data: " + response.StatusCode.ToString());
+            Logging.Error("Server returned no data: " + response.StatusCode.ToString());
             return null;
         }
 
@@ -280,7 +281,7 @@ public sealed class Updater
         }
         catch (Exception e)
         {
-            ExtremeRolesPlugin.Logger.LogError("Exception occured when clearing old versions:\n" + e);
+            Logging.Error("Exception occured when clearing old versions:\n" + e);
         }
     }
 }
