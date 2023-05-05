@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ExtremeVoiceEngine.Command;
 
@@ -49,17 +48,6 @@ public class Parser
         this.optionDic.Add(new OptionKey(option), option);
     }
 
-    /*
-    /// <summary>
-    /// Usage文字列を生成するためのインスタンスを生成します。
-    /// </summary>
-    /// <param name="command"></param>
-    /// <returns></returns>
-    public CommandUsageBuilder NewUsageBuilder(string command)
-    {
-        return new CommandUsageBuilder(command, this.optionDic.Values.ToArray());
-    }
-    */
     /// <summary>
     /// 指定したコマンドライン引数を解析します。
     /// 解析不能な場合はnullを返します。
@@ -239,7 +227,7 @@ public class Parser
 
         foreach (var opt in this.optionDic.Values)
         {
-            sb.AppendLine(opt.ToString('[', 10));
+            sb.AppendLine(opt.ToString(this));
         }
 
         return sb.ToString();
@@ -307,8 +295,7 @@ public sealed class OptionKey
     /// <returns></returns>
     public override bool Equals(object? obj)
     {
-        var other = obj as OptionKey;
-        if (other == null)
+        if (obj is not OptionKey other)
         {
             return false;
         }

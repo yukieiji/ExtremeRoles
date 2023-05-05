@@ -79,7 +79,7 @@ public sealed class VoiceEngine : MonoBehaviour
         Instance = this;
         CommandManager.Instance.AddCommand(
             Cmd,
-            new(new Parser(new Option("init", "EngineName", Option.Kind.Need, 'i')), Parse));
+            new(new Parser(new Option("init", 'i', Option.Kind.Need)), Parse));
         CommandManager.Instance.AddAlias(
             Cmd, "eve", "exve");
 

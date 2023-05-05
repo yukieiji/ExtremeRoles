@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ExtremeVoiceEngine.Utility;
 
-internal class AudioClipHelper
+public static class AudioClipHelper
 {
     public const int BufferSize = 1024 * 32;
 

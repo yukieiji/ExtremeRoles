@@ -34,10 +34,6 @@ public sealed class Option
     /// </summary>
     public string LongName { get; private set; }
     /// <summary>
-    /// 値をとるオプションであれば、その値の名称を取得します。
-    /// </summary>
-    public string ValueName { get; private set; }
-    /// <summary>
     /// このオプションの説明文を取得します。
     /// </summary>
     public string Expression { get; private set; }
@@ -57,13 +53,12 @@ public sealed class Option
     /// <param name="longName">長いオプション識別子を指定します。</param>
     /// <param name="valueName">値をとるオプションであれば、その値の名称を指定します。</param>
     /// <param name="kind">オプション種別を指定します。</param>
-    /// <param name="shortName">短いオプション識別子を指定します。</param>
+    /// <param name="shortCut">短いオプション識別子を指定します。</param>
     /// <param name="expression">このオプションの説明文を指定します。</param>
     /// <exception cref="ArgumentOutOfRangeException">kindに未定義の値が指定された場合にスローされます。</exception>
     /// <exception cref="ArgumentException">longNameが指定されていない場合にスローされます。</exception>
     public Option(
-        string longName, string valueName, Kind kind,
-        char shortCut = ' ', string expression = "")
+        string longName, char shortCut = ' ', Kind kind = Kind.NoValue, string expression = "")
     {
         if (!Enum.IsDefined(typeof(Kind), kind))
         {
@@ -77,37 +72,8 @@ public sealed class Option
 
         this.ShortName = char.ToLower(shortCut);
         this.LongName = longName.ToLower();
-        this.ValueName = valueName;
         this.Expression = expression;
         this.OptionKind = kind;
-    }
-
-    /// <summary>
-    /// Usage出力時に必要となる、コマンド部の半角文字数を取得します。
-    /// </summary>
-    internal int NeededLeftColumnLength
-    {
-        get
-        {
-            int rtn = "-x".Length;
-
-            if (!string.IsNullOrEmpty(this.LongName))
-            {
-                rtn += ", ".Length;
-                rtn += ("--" + this.LongName).Length;
-            }
-
-            if (!string.IsNullOrEmpty(this.ValueName))
-            {
-                rtn += (' ' + this.ValueName).Length;
-                if (this.OptionKind == Kind.Optional)
-                {
-                    rtn += ("[]").Length;
-                }
-            }
-
-            return rtn;
-        }
     }
 
     /// <summary>
@@ -116,51 +82,33 @@ public sealed class Option
     /// <param name="keyValSeparator"></param>
     /// <param name="leftColumnWidth"></param>
     /// <returns></returns>
-    internal string ToString(char keyValSeparator, int leftColumnWidth)
+    public string ToString(Parser parser)
     {
         var sb = new StringBuilder();
 
-        sb.Append("--").Append(this.LongName);
+        if (this.OptionKind == Kind.Optional)
+        {
+            sb.Append($"{Kind.Optional} ");
+        }
+
+        sb.Append(parser.LongNameOptionSymbol).Append(this.LongName);
 
         if (!char.IsWhiteSpace(this.ShortName))
         {
-            sb.Append(", ").Append("-").Append(this.ShortName);
+            sb.Append(", ").Append(parser.ShortNameOptionSymbol).Append(this.ShortName);
         }
         
-        if (!string.IsNullOrEmpty(this.ValueName))
+        switch (this.OptionKind)
         {
-            if (char.IsWhiteSpace(keyValSeparator))
-            {
-                // "KEY [VAL]" となるように
-                sb.Append(keyValSeparator);
-                if (this.OptionKind == Kind.Optional)
-                {
-                    sb.Append("[");
-                }
-            }
-            else
-            {
-                // "KEY[=VAL]" となるように
-                if (this.OptionKind == Kind.Optional)
-                {
-                    sb.Append("[");
-                }
-
-                sb.Append(keyValSeparator);
-            }
-            sb.Append(this.ValueName);
-            if (OptionKind == Kind.Optional)
-            {
-                sb.Append("]");
-            }
+            case Kind.NoValue:
+                sb.Append(Expression);
+                break;
+            case Kind.Need:
+            case Kind.Optional:
+                sb.Append(" [").Append($"{this.LongName}Value").Append("]").Append(this.Expression);
+                break;
         }
 
-        int restLeft = leftColumnWidth - sb.Length;
-        if (0 < restLeft)
-        {
-            sb.Append(Enumerable.Repeat(' ', restLeft).ToArray());
-        }
-
-        return string.Format("  {0}  {1}", sb.ToString(), Expression);
+        return sb.ToString();
     }
 }

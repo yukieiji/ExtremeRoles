@@ -56,9 +56,9 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
         cmd.AddSubCommand(
            VoiceEngine.Cmd, "voicevox",
            new(new Parser(
-               new Option(CharacterNameCmd , "CharacterName"  , Option.Kind.Optional, 'c'),
-               new Option(CharacterStyleCmd, "CharacterStyle" , Option.Kind.Optional, 's'),
-               new Option(VolumeCmd        , "CharacterVolume", Option.Kind.Optional, 'v')), Parse));
+               new Option(CharacterNameCmd , 'c', Option.Kind.Optional),
+               new Option(CharacterStyleCmd, 's', Option.Kind.Optional),
+               new Option(VolumeCmd        , 'v', Option.Kind.Optional)), Parse));
         cmd.AddAlias("voicevox", "vv");
     }
 
