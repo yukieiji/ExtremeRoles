@@ -2,6 +2,7 @@
 
 using ExtremeVoiceEngine.Interface;
 
+using ExtremeVoiceEngine.Extension;
 
 
 namespace ExtremeVoiceEngine.VoiceVox;
@@ -44,5 +45,6 @@ public sealed class VoiceVoxParameter : IEngineParameter
     }
 
     public override string ToString()
-        => $"Speaker:{Speaker}   Style:{Style}  Volume:{MasterVolume}";
+        => TranslationController.Instance.GetString(
+            "voicevoxParam", Speaker, Style, MasterVolume);
 }

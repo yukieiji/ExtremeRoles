@@ -46,7 +46,7 @@ public sealed class VoiceEngine : MonoBehaviour
         if (Instance == null || result is null) { return; }
 
         var chat = FastDestroyableSingleton<HudManager>.Instance.Chat;
-
+        var trans = TranslationController.Instance;
         string value =  result.GetOptionValue("init");
         EngineType engine;
         switch (value)
@@ -61,15 +61,15 @@ public sealed class VoiceEngine : MonoBehaviour
                 engine = EngineType.VoiceVox;
                 break;
             default:
-                chat.AddLocalChat("Invalided Engine");
+                chat.AddLocalChat(trans.GetString("InvalidedEngine"));
                 return;
         }
 
         Instance.Engine = Instance.engines[engine];
-        Instance.curEngine.Value = (byte)engine;
+        Instance.curEngine.Value = (int)engine;
 
         string message = Instance.Engine.IsValid() ?
-            $"Engine set to:{value}" : "Can't start Engine";
+            trans.GetString("EngineSetTo", engine) : trans.GetString("InvalidedEngine");
 
         chat.AddLocalChat(message);
     }

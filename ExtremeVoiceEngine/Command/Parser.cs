@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using ExtremeVoiceEngine.Extension;
+
 namespace ExtremeVoiceEngine.Command;
 
 public class Parser
@@ -219,10 +221,11 @@ public class Parser
 
     public string ToString(string cmd)
     {
+        var trans = TranslationController.Instance;
         var sb = new StringBuilder();
-        sb.AppendLine(cmd);
-
-        sb.AppendLine("Arguments:     ");
+        sb.AppendLine(trans.GetString(cmd));
+        sb.AppendLine();
+        sb.AppendLine($"{trans.GetString("Arguments")}:     ");
 
         foreach (var opt in this.optionDic.Values)
         {

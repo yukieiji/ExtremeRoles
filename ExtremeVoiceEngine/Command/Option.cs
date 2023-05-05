@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExtremeVoiceEngine.Extension;
+using System;
 using System.Linq;
 using System.Text;
 
@@ -49,11 +50,10 @@ public sealed class Option
     /// <param name="valueName">値をとるオプションであれば、その値の名称を指定します。</param>
     /// <param name="kind">オプション種別を指定します。</param>
     /// <param name="shortCut">短いオプション識別子を指定します。</param>
-    /// <param name="expression">このオプションの説明文を指定します。</param>
     /// <exception cref="ArgumentOutOfRangeException">kindに未定義の値が指定された場合にスローされます。</exception>
     /// <exception cref="ArgumentException">longNameが指定されていない場合にスローされます。</exception>
     public Option(
-        string longName, char shortCut = ' ', Kind kind = Kind.NoValue, string expression = "")
+        string longName, char shortCut = ' ', Kind kind = Kind.NoValue)
     {
         if (!Enum.IsDefined(typeof(Kind), kind))
         {
@@ -67,7 +67,7 @@ public sealed class Option
 
         this.ShortName = char.ToLower(shortCut);
         this.LongName = longName.ToLower();
-        this.Expression = expression;
+        this.Expression = $"{longName}Expression";
         this.OptionKind = kind;
     }
 
@@ -80,10 +80,10 @@ public sealed class Option
     public string ToString(Parser parser)
     {
         var sb = new StringBuilder();
-
+        var trans = TranslationController.Instance;
         if (this.OptionKind == Kind.Optional)
         {
-            sb.Append($"{Kind.Optional} ");
+            sb.Append($"{trans.GetString("cmd_optional")} ");
         }
 
         sb.Append(parser.LongNameOptionSymbol).Append(this.LongName);
@@ -93,14 +93,20 @@ public sealed class Option
             sb.Append(", ").Append(parser.ShortNameOptionSymbol).Append(this.ShortName);
         }
         
+        string expression = trans.GetString(this.Expression);
+        if (expression == "STRMISS")
+        {
+            expression = string.Empty;
+        }
+
         switch (this.OptionKind)
         {
             case Kind.NoValue:
-                sb.Append($" {this.Expression}");
+                sb.Append($" {expression}");
                 break;
             case Kind.Need:
             case Kind.Optional:
-                sb.Append(" [").Append($"{this.LongName}Value").Append("] ").Append(this.Expression);
+                sb.Append($" [{trans.GetString($"{this.LongName}Value")}] {expression}");
                 break;
         }
 

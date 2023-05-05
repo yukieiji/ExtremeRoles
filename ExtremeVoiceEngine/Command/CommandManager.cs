@@ -19,7 +19,8 @@ public record class ParseActions(Parser Parser, Action<Result?> ParseAction)
         }
         catch
         {
-            FastDestroyableSingleton<HudManager>.Instance.Chat.AddLocalChat("Can't parse");
+            FastDestroyableSingleton<HudManager>.Instance.Chat.AddLocalChat(
+                TranslationController.Instance.GetString("CannotParse"));
         }
         this.ParseAction.Invoke(result);
     }
@@ -68,7 +69,7 @@ public sealed class CommandManager : NullableSingleton<CommandManager>
         }
         if (args.Length == 1)
         {
-            chat.AddLocalChat(masterParser.Parser.ToString(masterArgs));
+            chat.AddLocalChat(masterParser.Parser.ToString($"cmd_{masterArgs}"));
             return true;
         }
         string subCmd = cleanedArg(args[1]);
@@ -79,7 +80,7 @@ public sealed class CommandManager : NullableSingleton<CommandManager>
             ParseActions subCmdParser = this.subCmd[$"{masterArgs} {subCmd}"];
             if (args.Length == 2)
             {
-                chat.AddLocalChat(subCmdParser.Parser.ToString($"{masterArgs}{subCmd}"));
+                chat.AddLocalChat(subCmdParser.Parser.ToString($"cmd_{masterArgs}{subCmd}"));
             }
             else
             {

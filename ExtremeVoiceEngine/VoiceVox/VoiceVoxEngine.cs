@@ -135,7 +135,8 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
                 this.param = param;
                 this.param.SaveConfig();
 
-                string log = $"VOICEVOX:Parameter Setted:{this.param}";
+                string log = TranslationController.Instance.GetString(
+                    "voicevoxParamSetLog", this.param.ToString());
                 ExtremeVoiceEnginePlugin.Logger.LogInfo(log);
                 if (FastDestroyableSingleton<HudManager>.Instance != null)
                 {
