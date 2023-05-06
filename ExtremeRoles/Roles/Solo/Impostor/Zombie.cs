@@ -166,7 +166,7 @@ public sealed class Zombie :
         foreach (var(roomId, room) in useRoom)
         {
             var arrow = new Arrow(Palette.ImpostorRed * 0.5f);
-            arrow.UpdateTarget(room.transform.position);
+            arrow.UpdateTarget(room.roomArea.bounds.center);
             this.setRooms.Add(roomId, arrow);
         }
 
@@ -600,7 +600,7 @@ public sealed class Zombie :
         }
         if (this.buffer == null)
         {
-            this.buffer = new Il2CppReferenceArray<Collider2D>(10);
+            this.buffer = new Il2CppReferenceArray<Collider2D>(20);
         }
 
         foreach (PlainShipRoom room in CachedShipStatus.Instance.AllRooms)
