@@ -95,6 +95,9 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 ## リリーススケジュール
 - Extreme Roles v7.1.1.0
   - 春の超大型アップデートPart2「Spring Jamp Update」
+  - 専用アドオン「ExtremeVoiceEngine」(通称：イヴ)のリリース
+- Extreme Roles v7.1.2.0
+  - 春の超大型アップデートPart3「Spring Next Update」
 
 ## 現在実装検討中の役職及び機能
 - 死亡時役職が持つ固有の情報を表示出来るようにする
