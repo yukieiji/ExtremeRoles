@@ -169,7 +169,8 @@ public sealed class Updater
                 bool hasUpdate = await repo.HasUpdate(this.client);
                 if (!hasUpdate) { continue; }
 
-                List<ModUpdateData> updateData = await repo.GetModUpdateData(this.client);
+                List<ModUpdateData> updateData = repo.GetModUpdateData(
+                    this.client).GetAwaiter().GetResult();
                 updatingData.AddRange(updateData);
             }
 
@@ -188,7 +189,7 @@ public sealed class Updater
 
             foreach (ModUpdateData data in updatingData)
             {
-                using (var stream = await getStreamFromUrl(data.DownloadUrl))
+                using (var stream = getStreamFromUrl(data.DownloadUrl).GetAwaiter().GetResult())
                 {
                     if (stream is null) { continue; }
                     installModFromStream(stream, data.DllName);

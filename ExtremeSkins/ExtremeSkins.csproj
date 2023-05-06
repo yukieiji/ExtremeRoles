@@ -3,8 +3,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <!--<Version>7.1.1.0</Version>-->
-    <VersionPrefix>7.1.1</VersionPrefix>
+    <Version>7.1.1.1</Version>
+    <!--<VersionPrefix>7.1.1</VersionPrefix>-->
     <VersionSuffix>SpringJump</VersionSuffix>
     <Description>Extreme Skins for Extreme Roles</Description>
     <Authors>yukieiji</Authors>
