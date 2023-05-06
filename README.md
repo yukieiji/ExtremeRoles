@@ -1,7 +1,7 @@
 
 <div><img src="./doc/img/burner.png" /></div>
 
-<div align="center"><h1>Extreme Roles, Extreme Skins and EngineVoiceEngine</h1></div>
+<div align="center"><h1>Extreme Roles, Extreme Skins and Engine Voice Engine</h1></div>
 
 Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携しておらず、含まれるコンテンツはAmong UsやInnersloth LLCから支援、援助されているものではありません。
 ここに含まれる素材の一部は、Innersloth LLCの所有物です。©Innersloth LLC.
