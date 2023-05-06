@@ -22,6 +22,9 @@ public partial class ExtremeVoiceEnginePlugin : BasePlugin
     public static ManualLogSource Logger { get; private set; }
 #pragma warning restore CS8618
 
+    private string? assemblyName = string.Empty;
+    private System.Version? version = null;
+
     public override void Load()
     {
         Instance = this;
@@ -32,7 +35,12 @@ public partial class ExtremeVoiceEnginePlugin : BasePlugin
         AddComponent<VoiceEngine>();
 
         var assembly = System.Reflection.Assembly.GetAssembly(this.GetType());
-        Updater.Instance.AddMod<ExRRepositoryInfo>($"{assembly?.GetName().Name}.dll");
+        this.assemblyName = assembly?.GetName().Name;
+        this.version = assembly?.GetName().Version;
+        Updater.Instance.AddMod<ExRRepositoryInfo>($"{assemblyName}.dll");
         Il2CppRegisterAttribute.Registration(assembly);
     }
+
+    public override string ToString()
+        => $"{this.assemblyName} - v{this.version}";
 }
