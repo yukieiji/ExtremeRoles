@@ -1,7 +1,7 @@
 
 <div><img src="./doc/img/burner.png" /></div>
 
-<div align="center"><h1>Extreme Roles and Extreme Skins</h1></div>
+<div align="center"><h1>Extreme Roles, Extreme Skins and EngineVoiceEngine</h1></div>
 
 Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携しておらず、含まれるコンテンツはAmong UsやInnersloth LLCから支援、援助されているものではありません。
 ここに含まれる素材の一部は、Innersloth LLCの所有物です。©Innersloth LLC.
@@ -27,7 +27,7 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 * 互換性のあるMODのインストール/アップデートチェック/アンインストール機能
 * 多言語対応(現在は英語と日本語、简体中文のみ/only English and Japanese, SChinese now!!)
 
-### 追加役職一覧(Extreme Roles v7.1.0.0時点、今後も追加予定)
+### 追加役職一覧(Extreme Roles v7.1.1.0時点、今後も追加予定)
 #### ホスト役職
 - シオン
 #### 通常役職
@@ -80,7 +80,7 @@ Extreme Roles及びExtreme SkinsはAmong UsまたはInnersloth LLCとは提携�
 * 詳しくは[Wiki](https://github.com/yukieiji/ExtremeRoles/wiki/%E3%83%AD%E3%83%BC%E3%83%AB)を参照
 
 ## Extreme Skins
-Extreme Rolesのスキン追加用アドオン、主な特徴として以下があります<br>
+Extreme Rolesのコズミック追加用アドオン、主な特徴として以下があります<br>
 * MODの更新/バージョンチェック機能
 * 誰でも簡単にハットを追加、テスト可能
 * 誰でも簡単にバイザーを追加、テスト可能
@@ -89,12 +89,23 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 
 #### 自分のハットやバイザーを作りたい、作ったハットやバイザーを公開したいという方はTwitter等に連絡下さい！！
 
+## Extreme Voice Engine
+Extreme Rolesに読み上げ機能を追加するクライアントアドオン、主な特徴として以下があります<br>
+- 使いたい人だけインストールすれば動作するクライアントアドオン
+- 合成音声ソフトを使用した会議チャット等の読み上げ
+- 各種音声合成ソフトに対応(各個人でインストールが必要になります。現在はVOICEVOXのみ対応)
+   - VOICEVOXの利用規約及び構成等は[公式サイト](https://voicevox.hiroshiba.jp/)等を確認してください
+- 各種コマンドによる簡単な操作
+   - 詳細はWikiを確認してください
+
+
 ## 現在確認されている不具合
-- 特になし
+- ExtremeVoiceEngineをインストールし、シオンを使用している状態でシオンのコマンドを使用すると動作しているのに「不正なコマンドである」と表示されてしまう問題
+  - この不具合はExtremeVoiceEngineとExtremeRolesで別々のコマンド処理を実装した関係で発生している表示上の問題であるため動作に一切の影響はありません
 
 ## リリーススケジュール
-- Extreme Roles v7.1.1.0
-  - 春の超大型アップデートPart2「Spring Jamp Update」
+- Extreme Roles v7.1.2.0
+  - 春の超大型アップデートPart2「Spring Next Update」
 
 ## 現在実装検討中の役職及び機能
 - 死亡時役職が持つ固有の情報を表示出来るようにする
@@ -176,6 +187,9 @@ Extreme Rolesのスキン追加用アドオン、主な特徴として以下が�
 - [Goose-Goose-Duck](https://store.steampowered.com/app/1568590/Goose_Goose_Duck) - **Slushygoose**氏によって作成されたMOD、イーターのアイディア元
 - [PropHunt](https://github.com/ugackMiner53/PropHunt) - **ugackMiner53**氏によって作成されたMOD、スライムとムーバーのコード参考に使用
 
+- [Unity VOICEVOX Bridge](https://github.com/mikito/unity-voicevox-bridge) - **mikito**氏作成のUnityからボイボを呼び出すライブラリ、EVEのボイボ周りの参考に使用
+- [CuiCommandParser](https://github.com/oika/CuiCommandParser) - **oika**氏作成のCUIのオプションパーサーライブラリ、EVEのコマンドライン解析の参考に使用
+
 - レジスタンス:アヴァロン - マーリン、アサシンのアイディア元
 - シャドウハンターズ - アリス、オーバーローダーのアイディア元
 
@@ -198,4 +212,4 @@ EXRole can support multiple languages, but only Japanese is implemented because 
 | ---- | ---- |
 |  英語/English  |  部分的に翻訳済み/Mostly Translated  |
 |  日本語/Japanese  |  完全翻訳済み/Fully Translated  |
-|  简体中文/SChinese  |  部分的に翻訳済み/Mostly Translated  |
+|  简体中文/SChinese  |   完全翻訳済み/Mostly Translated  |
