@@ -83,7 +83,7 @@ namespace ExtremeRoles.Compat.Excuter
                 return null;
             }
 
-            var dataString = await req.Content.ReadAsStringAsync();
+            string dataString = await req.Content.ReadAsStringAsync();
             JObject data = JObject.Parse(dataString);
             return new RepoData(data);
         }

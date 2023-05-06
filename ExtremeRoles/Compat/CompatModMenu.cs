@@ -107,7 +107,8 @@ internal static class CompatModMenu
         {
             string modName = mod.ToString();
 
-            if (mod == CompatModType.ExtremeSkins)
+            if (mod == CompatModType.ExtremeSkins || 
+                mod == CompatModType.ExtremeVoiceEngine)
             {
                 createAddonButtons(index, pluginPath, mod, buttonTemplate);
                 ++index;
