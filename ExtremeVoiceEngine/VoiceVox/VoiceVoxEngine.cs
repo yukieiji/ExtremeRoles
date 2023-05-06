@@ -66,7 +66,7 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
     {
         if (result is null) { return; }
 
-        var newParam = new VoiceVoxParameter();
+        var newParam = this.param;
         if (result.TryGetOptionValue(CharacterNameCmd, out string charName))
         {
             newParam.Speaker = charName;
@@ -175,8 +175,11 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
         {
             yield break;
         }
+        JObject json = JObject.Parse(jsonQuery);
+        JValue volume = new JValue(param.MasterVolume);
+        json["volumeScale"] = volume;
 
-        var streamTask = VoiceVoxBridge.PostSynthesisAsync(speakerId, jsonQuery, linkedToken);
+        var streamTask = VoiceVoxBridge.PostSynthesisAsync(speakerId, json.ToString(), linkedToken);
         yield return TaskHelper.CoRunWaitAsync(streamTask);
 
         using var stream = streamTask.Result;
@@ -189,7 +192,7 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
         var audioClipTask = AudioClipHelper.CreateFromStreamAsync(stream, linkedToken);
         yield return TaskHelper.CoRunWaitAsync(audioClipTask);
 
-        Source.PlayOneShot(audioClipTask.Result, param.MasterVolume);
+        Source.PlayOneShot(audioClipTask.Result, 1.0f);
         
         while (Source.isPlaying)
         {

@@ -13,7 +13,7 @@ public sealed class VoiceVoxParameter : IEngineParameter
 {
     public string Speaker { get; set; }     = "ずんだもん";
     public string Style { get; set; }       = "あまあま";
-    public float MasterVolume { get; set; } = 10.0f;
+    public float MasterVolume { get; set; } = 2.5f;
 
     private ConfigEntry<string> speakerEntry;
     private ConfigEntry<string> styleEntry;
