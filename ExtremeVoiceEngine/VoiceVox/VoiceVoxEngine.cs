@@ -37,6 +37,7 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
     private const string CharacterNameCmd = "char";
     private const string CharacterStyleCmd = "style";
     private const string VolumeCmd = "volume";
+    private const string speedCmd  = "speed";
 
     public VoiceVoxEngine()
     {
@@ -58,7 +59,8 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
            new(new Parser(
                new Option(CharacterNameCmd , 'c', Option.Kind.Optional),
                new Option(CharacterStyleCmd, 's', Option.Kind.Optional),
-               new Option(VolumeCmd        , 'v', Option.Kind.Optional)), Parse));
+               new Option(VolumeCmd        , 'v', Option.Kind.Optional),
+               new Option(speedCmd, kind:Option.Kind.Optional)), Parse));
         cmd.AddAlias("voicevox", "vv");
     }
 
@@ -76,9 +78,14 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
             newParam.Style = stypeName;
         }
         if (result.TryGetOptionValue(VolumeCmd, out string volume) &&
-            float.TryParse(volume, out float value))
+            float.TryParse(volume, out float volumeValue))
         {
-            newParam.MasterVolume = value;
+            newParam.MasterVolume = volumeValue;
+        }
+        if (result.TryGetOptionValue(speedCmd, out string speed) &&
+            float.TryParse(speed, out float speedValue))
+        {
+            newParam.Speed = speedValue;
         }
         SetParameter(newParam);
     }
@@ -176,8 +183,8 @@ public sealed class VoiceVoxEngine : IParametableEngine<VoiceVoxParameter>
             yield break;
         }
         JObject json = JObject.Parse(jsonQuery);
-        JValue volume = new JValue(param.MasterVolume);
-        json["volumeScale"] = volume;
+        json["volumeScale"] = new JValue(param.MasterVolume);
+        json["speedScale"] = new JValue(param.Speed);
 
         var streamTask = VoiceVoxBridge.PostSynthesisAsync(speakerId, json.ToString(), linkedToken);
         yield return TaskHelper.CoRunWaitAsync(streamTask);
