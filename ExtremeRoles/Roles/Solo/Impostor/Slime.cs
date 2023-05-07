@@ -194,6 +194,7 @@ public sealed class Slime :
     protected override void RoleSpecificInit()
     {
         this.RoleAbilityInit();
+        this.isKilling = false;
     }
 
     public void AllReset(PlayerControl rolePlayer)
