@@ -16,7 +16,8 @@ namespace ExtremeRoles.Roles.Solo.Impostor;
 public sealed class Slime : 
     SingleRoleBase,
     IRoleAbility,
-    IRoleSpecialReset
+    IRoleSpecialReset,
+    IRolePerformKillHook
 {
     public enum SlimeRpc : byte
     {
@@ -28,6 +29,7 @@ public sealed class Slime :
 
     private Console targetConsole;
     private GameObject consoleObj;
+    private bool isKilling = false;
 
     public Slime() : base(
         ExtremeRoleId.Slime,
@@ -91,6 +93,16 @@ public sealed class Slime :
         player.cosmetics.Visible = true;
     }
 
+    public void OnStartKill()
+    {
+        this.isKilling = true;
+    }
+
+    public void OnEndKill()
+    {
+        this.isKilling = false;
+    }
+
     public void CreateAbility()
     {
         this.CreateReclickableAbilityButton(
@@ -102,7 +114,7 @@ public sealed class Slime :
     }
 
     public bool IsAbilityActive() => 
-        CachedPlayerControl.LocalPlayer.PlayerControl.moveable;
+        CachedPlayerControl.LocalPlayer.PlayerControl.moveable || this.isKilling;
 
     public bool IsAbilityUse()
     {
@@ -163,6 +175,7 @@ public sealed class Slime :
             caller.WriteByte(player.PlayerId);
         }
         removeMorphConsole(this, player);
+        this.isKilling = false;
     }
 
     public override void RolePlayerKilledAction(
