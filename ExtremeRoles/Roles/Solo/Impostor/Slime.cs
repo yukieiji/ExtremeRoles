@@ -91,6 +91,7 @@ public sealed class Slime :
 
         player.cosmetics.lockVisible = false;
         player.cosmetics.Visible = true;
+        slime.isKilling = false;
     }
 
     public void OnStartKill()
@@ -175,7 +176,6 @@ public sealed class Slime :
             caller.WriteByte(player.PlayerId);
         }
         removeMorphConsole(this, player);
-        this.isKilling = false;
     }
 
     public override void RolePlayerKilledAction(
