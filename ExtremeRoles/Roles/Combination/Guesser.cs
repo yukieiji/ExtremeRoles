@@ -69,13 +69,13 @@ public sealed class Guesser :
         ExtremeRoleId.Villain
     };
 
-    private class GuesserRoleInfoCreater
+    private sealed class GuesserRoleInfoCreater
     {
         public List<GuessBehaviour.RoleInfo> Result { get; } = new List<GuessBehaviour.RoleInfo>();
 
         Dictionary<ExtremeRoleType, List<ExtremeRoleId>> separetedRoleId;
 
-        private class NormalExRAssignState
+        private sealed class NormalExRAssignState
         {
             public bool IsJackalOn { get; set; } = false;
             public bool IsJackalForceReplaceLover { get; set; } = false;

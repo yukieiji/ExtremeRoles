@@ -366,7 +366,7 @@ public static class OptionsMenuBehaviourStartPatch
         leaveGameButton.transform.localPosition += (Vector3.right * 1.3f);
     }
 
-    private class SelectionBehaviour
+    private sealed class SelectionBehaviour
     {
         public string Title;
         public Func<bool> OnClick;
@@ -380,7 +380,7 @@ public static class OptionsMenuBehaviourStartPatch
         }
     }
 
-    private class ClickBehavior
+    private sealed class ClickBehavior
     {
         public string Title;
         public Action OnClick;
@@ -392,7 +392,7 @@ public static class OptionsMenuBehaviourStartPatch
         }
     }
 
-    private class CsvImport
+    private sealed class CsvImport
     {
         public static GenericPopup InfoPopup;
 

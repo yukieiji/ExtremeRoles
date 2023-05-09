@@ -312,7 +312,7 @@ public static class ExileControllerBeginePatch
 }
 
 [HarmonyPatch(typeof(ExileController), nameof(ExileController.ReEnableGameplay))]
-class ExileControllerReEnableGameplayPatch
+public static class ExileControllerReEnableGameplayPatch
 {
     public static void Postfix(
         ExileController __instance)
@@ -355,7 +355,7 @@ public static class ExileControllerWrapUpPatch
     }
 
     [HarmonyPatch(typeof(AirshipExileController), nameof(AirshipExileController.WrapUpAndSpawn))]
-    class AirshipExileControllerPatch
+    public static class AirshipExileControllerPatch
     {
         public static void Prefix(AirshipExileController __instance)
         {
