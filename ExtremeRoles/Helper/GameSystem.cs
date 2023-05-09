@@ -180,7 +180,7 @@ public static class GameSystem
 
         int index = RandomGenerator.Instance.Next(taskIndex.Count);
 
-        return (byte)taskIndex[index];
+        return taskIndex[index];
     }
 
     public static int GetRandomLongTask()
