@@ -283,7 +283,7 @@ public sealed class Zombie :
             }
 
             this.resurrectText.gameObject.SetActive(true);
-            this.resurrectTimer -= Time.fixedDeltaTime;
+            this.resurrectTimer -= Time.deltaTime;
             this.resurrectText.text = string.Format(
                 Translation.GetString("resurrectText"),
                 Mathf.CeilToInt(this.resurrectTimer));

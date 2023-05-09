@@ -163,7 +163,7 @@ public sealed class Fencer : SingleRoleBase, IRoleAbility, IRoleUpdate
             return;
         }
 
-        this.Timer -= Time.fixedDeltaTime;
+        this.Timer -= Time.deltaTime;
 
     }
 

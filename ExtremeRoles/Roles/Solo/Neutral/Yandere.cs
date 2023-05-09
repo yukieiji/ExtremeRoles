@@ -495,7 +495,7 @@ public sealed class Yandere :
 
         if (this.target.Count() == 0)
         {
-            this.timer += Time.fixedDeltaTime;
+            this.timer += Time.deltaTime;
             if (this.timer >= this.timeLimit)
             {
                 this.isRunawayNextMeetingEnd = true;
@@ -536,7 +536,7 @@ public sealed class Yandere :
                             pos, vector.normalized,
                             magnitude, Constants.ShipAndObjectsMask))
                     {
-                        playerProgress += Time.fixedDeltaTime;
+                        playerProgress += Time.deltaTime;
                     }
                     else
                     {

@@ -111,7 +111,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             if (this.timer > 0.0f)
             {
-                this.timer -= Time.fixedDeltaTime;
+                this.timer -= Time.deltaTime;
                 return;
             }
             
