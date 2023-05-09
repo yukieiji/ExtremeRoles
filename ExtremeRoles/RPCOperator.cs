@@ -239,9 +239,11 @@ public static class RPCOperator
     }
     public static void FixLightOff()
     {
-        if (Minigame.Instance.TryCast<SwitchMinigame>() != null)
+        var minigame = Minigame.Instance;
+
+        if (minigame != null && minigame.TryCast<SwitchMinigame>() != null)
         {
-            Minigame.Instance.ForceClose();
+            minigame.ForceClose();
         }
 
         SwitchSystem switchSystem = CachedShipStatus.Systems[
