@@ -36,35 +36,20 @@ public static class MainMenuManagerStartPatch
         passiveExitButton.OnClick.AddListener(
             (UnityEngine.Events.UnityAction)(() => Logging.BackupCurrentLog()));
 
-        if (Module.Prefab.ButtonTemplate == null)
-        {
-            // Create Button Template
-            GameObject buttonTemplate = UnityObject.Instantiate(template);
-            UnityObject.Destroy(buttonTemplate.GetComponent<AspectPosition>());
-            UnityObject.Destroy(buttonTemplate.GetComponent<ConditionalHide>());
-            UnityObject.DontDestroyOnLoad(buttonTemplate);
-            buttonTemplate.transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
-            MenuButton button = buttonTemplate.AddComponent<MenuButton>();
-            button.Awake();
-            button.gameObject.SetActive(false);
-            Module.Prefab.ButtonTemplate = button;
-        }
-
         // UpdateButton
-        MenuButton updateButton = UnityObject.Instantiate(
-            Module.Prefab.ButtonTemplate, template.transform);
+        GameObject updateButtonObj = UnityObject.Instantiate(template, template.transform);
+        UnityObject.Destroy(updateButtonObj.GetComponent<AspectPosition>());
+        UnityObject.Destroy(updateButtonObj.GetComponent<ConditionalHide>());
+        MenuButton updateButton = updateButtonObj.AddComponent<MenuButton>();
         updateButton.name = "ExtremeRolesUpdateButton";
         updateButton.transform.localPosition = new Vector3(0.0f, 0.6f, 0.0f);
-        updateButton.gameObject.SetActive(true);
         updateButton.AddAction(async () => await Module.Updater.Instance.CheckAndUpdate());
         updateButton.SetText(Translation.GetString("UpdateButton"));
 
         // DiscordButton
-        MenuButton discordButton = UnityObject.Instantiate(
-            Module.Prefab.ButtonTemplate, template.transform);
+        MenuButton discordButton = UnityObject.Instantiate(updateButton, template.transform);
         discordButton.name = "ExtremeRolesDiscordButton";
         discordButton.transform.localPosition = new Vector3(0.0f, 1.2f, 0.0f);
-        discordButton.gameObject.SetActive(true);
         discordButton.AddAction(() => Application.OpenURL("https://discord.gg/UzJcfBYcyS"));
         discordButton.SetText("Discord");
 
@@ -75,11 +60,10 @@ public static class MainMenuManagerStartPatch
             buttonSpriteDiscord.color = discordButton.Text.color = discordColor;
         });
 
-
         if (!Module.Updater.Instance.IsInit)
         {
             TwitchManager man = FastDestroyableSingleton<TwitchManager>.Instance;
-            var infoPop = UnityEngine.Object.Instantiate(man.TwitchPopup);
+            var infoPop = UnityObject.Instantiate(man.TwitchPopup);
             infoPop.TextAreaTMP.fontSize *= 0.7f;
             infoPop.TextAreaTMP.enableAutoSizing = false;
             Module.Updater.Instance.InfoPopup = infoPop;
@@ -116,23 +100,20 @@ public static class MainMenuManagerStartPatch
         if (Module.Prefab.Prop == null || Module.Prefab.Text == null)
         {
             TwitchManager man = DestroyableSingleton<TwitchManager>.Instance;
-            Module.Prefab.Prop = UnityEngine.Object.Instantiate(man.TwitchPopup);
-            UnityEngine.Object.DontDestroyOnLoad(
-                Module.Prefab.Prop);
+            Module.Prefab.Prop = UnityObject.Instantiate(man.TwitchPopup);
+            UnityObject.DontDestroyOnLoad(Module.Prefab.Prop);
             Module.Prefab.Prop.name = "propForInEx";
             Module.Prefab.Prop.gameObject.SetActive(false);
 
-            Module.Prefab.Text = UnityEngine.Object.Instantiate(
-                man.TwitchPopup.TextAreaTMP);
+            Module.Prefab.Text = UnityObject.Instantiate(man.TwitchPopup.TextAreaTMP);
             Module.Prefab.Text.fontSize =
                 Module.Prefab.Text.fontSizeMax =
                 Module.Prefab.Text.fontSizeMin = 2.25f;
             Module.Prefab.Text.alignment = TextAlignmentOptions.Center;
-            UnityEngine.Object.DontDestroyOnLoad(Module.Prefab.Text);
-            UnityEngine.Object.Destroy(Module.Prefab.Text.GetComponent<
-                TextTranslatorTMP>());
+            UnityObject.DontDestroyOnLoad(Module.Prefab.Text);
+            UnityObject.Destroy(Module.Prefab.Text.GetComponent<TextTranslatorTMP>());
             Module.Prefab.Text.gameObject.SetActive(false);
-            UnityEngine.Object.DontDestroyOnLoad(Module.Prefab.Text);
+            UnityObject.DontDestroyOnLoad(Module.Prefab.Text);
 
         }
         Compat.CompatModMenu.CreateMenuButton();
