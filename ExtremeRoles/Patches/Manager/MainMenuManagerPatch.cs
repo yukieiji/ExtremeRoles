@@ -15,14 +15,15 @@ using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
 
+using MenuButton = ExtremeRoles.Module.CustomMonoBehaviour.MenuButton;
+using UnityObject = UnityEngine.Object;
 
 namespace ExtremeRoles.Patches.Manager;
 
 [HarmonyPatch(typeof(MainMenuManager), nameof(MainMenuManager.Start))]
 public static class MainMenuManagerStartPatch
 {
-
-    private static Color discordColor = new Color32(88, 101, 242, byte.MaxValue);
+    private static Color discordColor => new Color32(88, 101, 242, byte.MaxValue);
 
     public static void Prefix(MainMenuManager __instance)
     {
@@ -35,46 +36,43 @@ public static class MainMenuManagerStartPatch
         passiveExitButton.OnClick.AddListener(
             (UnityEngine.Events.UnityAction)(() => Logging.BackupCurrentLog()));
 
-        // UpdateButton
-        GameObject updateButton = UnityEngine.Object.Instantiate(template, template.transform);
-        updateButton.name = "ExtremeRolesUpdateButton";
-        UnityEngine.Object.Destroy(updateButton.GetComponent<AspectPosition>());
-        UnityEngine.Object.Destroy(updateButton.GetComponent<ConditionalHide>());
-        updateButton.transform.localPosition = new Vector3(0.0f, 0.6f, 0.0f);
-
-        PassiveButton passiveUpdateButton = updateButton.GetComponent<PassiveButton>();
-        passiveUpdateButton.OnClick.RemoveAllPersistentAndListeners();
-        passiveUpdateButton.OnClick.AddListener(
-            (UnityEngine.Events.UnityAction)(
-                async () => await Module.Updater.Instance.CheckAndUpdate()));
-
-        TMP_Text textUpdate = updateButton.transform.GetChild(0).GetComponent<TMP_Text>();
-        __instance.StartCoroutine(Effects.Lerp(0.1f, new Action<float>((p) =>
+        if (Module.Prefab.ButtonTemplate == null)
         {
-            textUpdate.SetText(Translation.GetString("UpdateButton"));
-        })));
+            // Create Button Template
+            GameObject buttonTemplate = UnityObject.Instantiate(template);
+            UnityObject.Destroy(buttonTemplate.GetComponent<AspectPosition>());
+            UnityObject.Destroy(buttonTemplate.GetComponent<ConditionalHide>());
+            UnityObject.DontDestroyOnLoad(buttonTemplate);
+            buttonTemplate.transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
+            MenuButton button = buttonTemplate.AddComponent<MenuButton>();
+            button.Awake();
+            button.gameObject.SetActive(false);
+            Module.Prefab.ButtonTemplate = button;
+        }
+
+        // UpdateButton
+        MenuButton updateButton = UnityObject.Instantiate(
+            Module.Prefab.ButtonTemplate, template.transform);
+        updateButton.name = "ExtremeRolesUpdateButton";
+        updateButton.transform.localPosition = new Vector3(0.0f, 0.6f, 0.0f);
+        updateButton.gameObject.SetActive(true);
+        updateButton.AddAction(async () => await Module.Updater.Instance.CheckAndUpdate());
+        updateButton.SetText(Translation.GetString("UpdateButton"));
 
         // DiscordButton
-        GameObject discordButton = UnityEngine.Object.Instantiate(updateButton, template.transform);
+        MenuButton discordButton = UnityObject.Instantiate(
+            Module.Prefab.ButtonTemplate, template.transform);
         discordButton.name = "ExtremeRolesDiscordButton";
         discordButton.transform.localPosition = new Vector3(0.0f, 1.2f, 0.0f);
-
-        PassiveButton passiveDiscordButton = discordButton.GetComponent<PassiveButton>();
-        passiveDiscordButton.OnClick.RemoveAllPersistentAndListeners();
-        passiveDiscordButton.OnClick.AddListener(
-            (UnityEngine.Events.UnityAction)(() => Application.OpenURL("https://discord.gg/UzJcfBYcyS")));
-
-        TMP_Text textDiscord = discordButton.transform.GetChild(0).GetComponent<TMP_Text>();
-        __instance.StartCoroutine(Effects.Lerp(0.1f, new Action<float>((p) =>
-        {
-            textDiscord.SetText("Discord");
-        })));
+        discordButton.gameObject.SetActive(true);
+        discordButton.AddAction(() => Application.OpenURL("https://discord.gg/UzJcfBYcyS"));
+        discordButton.SetText("Discord");
 
         SpriteRenderer buttonSpriteDiscord = discordButton.GetComponent<SpriteRenderer>();
-        buttonSpriteDiscord.color = textDiscord.color = discordColor;
-        passiveDiscordButton.OnMouseOut.AddListener((Action)delegate
+        buttonSpriteDiscord.color = discordButton.Text.color = discordColor;
+        discordButton.Button.OnMouseOut.AddListener((Action)delegate
         {
-            buttonSpriteDiscord.color = textDiscord.color = discordColor;
+            buttonSpriteDiscord.color = discordButton.Text.color = discordColor;
         });
 
 
