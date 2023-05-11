@@ -1,5 +1,8 @@
 ﻿using System;
 
+#if RELEASE
+using BepInEx;
+#endif
 using HarmonyLib;
 
 using TMPro;
