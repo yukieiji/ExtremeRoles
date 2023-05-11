@@ -125,6 +125,8 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
         {
             AspectSpacer spacer = this.menu.Tabs.GetComponent<AspectSpacer>();
             spacer.xSpacing = 0.77f;
+            // ワイドアスペクト解像度対応処理(なんでここ無効になってんだ・・・・)
+            spacer.spaceWiderAspectRatios = true;
             spacer.OnEnable();
 
             this.menu.Tabs.transform.localPosition = new Vector3(-0.465f, 0.0f, 0.0f);
