@@ -114,7 +114,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
 
             HashSet<byte> updatedBakary = new HashSet<byte>();
 
-            foreach (var playerId in aliveBakary)
+            foreach (byte playerId in aliveBakary)
             {
                 PlayerControl player = Player.GetPlayerControlById(playerId);
                 if (!player.Data.IsDead && !player.Data.Disconnected)

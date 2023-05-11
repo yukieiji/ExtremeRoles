@@ -406,7 +406,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             if (this.isActiveTimer)
             {
-                this.timer -= Time.fixedDeltaTime;
+                this.timer -= Time.deltaTime;
                 if (this.timer <= 0.0f)
                 {
                     Logging.Debug("ResetKillButton");

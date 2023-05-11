@@ -759,7 +759,7 @@ public sealed class Villain : MultiAssignRoleBase, IRoleAbility, IRoleUpdate, IR
         {
             if (this.vigilanteArrowTimer > 0f)
             {
-                this.vigilanteArrowTimer -= Time.fixedDeltaTime;
+                this.vigilanteArrowTimer -= Time.deltaTime;
             }
             if (this.vigilanteArrowTimer <= 0f)
             {

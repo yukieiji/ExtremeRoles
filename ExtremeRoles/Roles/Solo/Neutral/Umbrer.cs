@@ -292,7 +292,7 @@ namespace ExtremeRoles.Roles.Solo.Neutral
 
             foreach (byte playerId in this.container.FinalStage)
             {
-                this.timer[playerId] = this.timer[playerId] - Time.fixedDeltaTime;
+                this.timer[playerId] = this.timer[playerId] - Time.deltaTime;
                 if (this.timer[playerId] <= 0.0f ||
                     isInfectOtherPlayer(
                         Helper.Player.GetPlayerControlById(playerId)))

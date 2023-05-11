@@ -5,7 +5,7 @@ using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Host.Button;
 
-internal class XionActionButton : NoneCoolButtonBase
+internal sealed class XionActionButton : NoneCoolButtonBase
 {
     private string buttonText;
 

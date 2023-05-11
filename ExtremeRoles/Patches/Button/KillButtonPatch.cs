@@ -104,7 +104,8 @@ public static class KillButtonDoClickPatch
                 target.MyPhysics.Animations.IsPlayingEnterVentAnimation() &&
                 ExtremeGameModeManager.Instance.ShipOption.CanKillVentInPlayer
             ) ||
-            target.inMovingPlat;
+            target.inMovingPlat ||
+            MeetingHud.Instance;
     }
 
     private static void villainSpecialKill(

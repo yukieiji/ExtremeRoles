@@ -291,7 +291,7 @@ namespace ExtremeRoles.Roles.Solo.Impostor
 
             if (MeetingHud.Instance == null && this.timer < this.aliveCheckTime)
             {
-                this.timer += Time.fixedDeltaTime;
+                this.timer += Time.deltaTime;
             }
 
             if (this.specialAttackResult.Count == 0) { return; }

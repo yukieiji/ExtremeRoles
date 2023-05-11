@@ -224,7 +224,7 @@ public sealed class BodyGuard :
 
     private static ShildFeatedPlayer shilded = new ShildFeatedPlayer();
 
-    private class ShildFeatedPlayer
+    private sealed class ShildFeatedPlayer
     {
         private List<(byte, byte)> shield = new List<(byte, byte)>();
 
