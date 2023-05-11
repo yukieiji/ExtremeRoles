@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 
+using ExtremeRoles.Extension.UnityEvent;
+using ExtremeRoles.Module.AbilityBehavior;
 using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Performance;
-using ExtremeRoles.Module.AbilityBehavior;
 
 namespace ExtremeRoles.Module;
 
@@ -55,7 +56,7 @@ public sealed class ExtremeAbilityButton
         this.button = Object.Instantiate(
             killButton, killButton.transform.parent);
         PassiveButton passiveButton = button.GetComponent<PassiveButton>();
-        passiveButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
+        passiveButton.OnClick.RemoveAllPersistentAndListeners();
         passiveButton.OnClick.AddListener(
             (UnityEngine.Events.UnityAction)onClick);
         passiveButton.name = Name;

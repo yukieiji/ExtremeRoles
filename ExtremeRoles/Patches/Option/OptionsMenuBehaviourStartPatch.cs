@@ -11,11 +11,10 @@ using UnityEngine.Events;
 using AmongUs.Data;
 
 using ExtremeRoles.Performance;
+using ExtremeRoles.Extension.UnityEvent;
 
 using static ExtremeRoles.OptionHolder;
-using static UnityEngine.UI.Button;
 using Object = UnityEngine.Object;
-using ExtremeRoles.Module.Interface;
 
 
 namespace ExtremeRoles.Patches.Option;
@@ -156,7 +155,7 @@ public static class OptionsMenuBehaviourStartPatch
         moreOptionButton.gameObject.SetActive(true);
         moreOptionButton.Text.text = Helper.Translation.GetString("modOptionText");
         var moreOptionsButton = moreOptionButton.GetComponent<PassiveButton>();
-        moreOptionsButton.OnClick = new ButtonClickedEvent();
+        moreOptionsButton.OnClick.RemoveAllPersistentAndListeners();
         moreOptionsButton.OnClick.AddListener((Action)(() =>
         {
             if (!popUp) { return; }
@@ -276,9 +275,9 @@ public static class OptionsMenuBehaviourStartPatch
 
             colliderButton.size = new Vector2(2.2f, .7f);
 
-            passiveButton.OnClick = new ButtonClickedEvent();
-            passiveButton.OnMouseOut = new UnityEvent();
-            passiveButton.OnMouseOver = new UnityEvent();
+            passiveButton.OnClick.RemoveAllPersistentAndListeners();
+            passiveButton.OnMouseOut.RemoveAllPersistentAndListeners();
+            passiveButton.OnMouseOver.RemoveAllPersistentAndListeners();
 
             passiveButton.OnClick.AddListener((Action)(() =>
             {
@@ -322,12 +321,12 @@ public static class OptionsMenuBehaviourStartPatch
         exportButton.Text.fontSizeMin = exportButton.Text.fontSizeMax = 2.2f;
 
         var passiveImportButton = importButton.GetComponent<PassiveButton>();
-        passiveImportButton.OnClick = new ButtonClickedEvent();
+        passiveImportButton.OnClick.RemoveAllPersistentAndListeners();
         passiveImportButton.OnClick.AddListener(
             (UnityAction)CsvImport.Excute);
 
         var passiveExportButton = exportButton.GetComponent<PassiveButton>();
-        passiveExportButton.OnClick = new ButtonClickedEvent();
+        passiveExportButton.OnClick.RemoveAllPersistentAndListeners();
         passiveExportButton.OnClick.AddListener(
             (UnityAction)CsvExport.Excute);
 

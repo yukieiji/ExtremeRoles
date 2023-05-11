@@ -8,6 +8,7 @@ using AmongUs.GameOptions;
 using UnityEngine;
 using UnityEngine.Events;
 
+using ExtremeRoles.Extension.UnityEvent;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 
@@ -56,7 +57,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour
             GameObject tabButtonObject, UnityAction newAction)
         {
             PassiveButton button = tabButtonObject.GetComponentInChildren<PassiveButton>();
-            button.OnClick.RemoveAllListeners();
+            button.OnClick.RemoveAllPersistentAndListeners();
             button.OnClick.AddListener(
                 (UnityAction)(() => {
 

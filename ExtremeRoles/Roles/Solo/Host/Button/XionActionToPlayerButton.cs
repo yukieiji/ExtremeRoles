@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+using ExtremeRoles.Extension.UnityEvent;
 using ExtremeRoles.Performance;
 
 namespace ExtremeRoles.Roles.Solo.Host.Button;
@@ -15,10 +16,10 @@ internal sealed class XionActionToPlayerButton
 
             this.ButtonAction = Xion.GetPlayerButtonAction(playerId);
 
-            this.Body = UnityEngine.Object.Instantiate(
+            this.Body = Object.Instantiate(
                 hudManager.KillButton, parent);
             PassiveButton button = Body.GetComponent<PassiveButton>();
-            button.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
+            button.OnClick.RemoveAllPersistentAndListeners();
             button.OnClick.AddListener((UnityEngine.Events.UnityAction)OnClickEvent);
             SetActive(false);
 

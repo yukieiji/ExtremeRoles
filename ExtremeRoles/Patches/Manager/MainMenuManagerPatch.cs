@@ -1,21 +1,13 @@
 ﻿using System;
-using System.IO;
-using System.Reflection;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Net;
-using System.Net.Http;
-
-using Newtonsoft.Json.Linq;
 
 using HarmonyLib;
-using BepInEx;
 
 using TMPro;
 using Twitch;
 
 using UnityEngine;
 
+using ExtremeRoles.Extension.UnityEvent;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Resources;
 using ExtremeRoles.Performance;
@@ -48,7 +40,7 @@ public static class MainMenuManagerStartPatch
         updateButton.transform.localPosition = new Vector3(0.0f, 0.6f, 0.0f);
 
         PassiveButton passiveUpdateButton = updateButton.GetComponent<PassiveButton>();
-        passiveUpdateButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
+        passiveUpdateButton.OnClick.RemoveAllPersistentAndListeners();
         passiveUpdateButton.OnClick.AddListener(
             (UnityEngine.Events.UnityAction)(
                 async () => await Module.Updater.Instance.CheckAndUpdate()));
@@ -65,7 +57,7 @@ public static class MainMenuManagerStartPatch
         discordButton.transform.localPosition = new Vector3(0.0f, 1.2f, 0.0f);
 
         PassiveButton passiveDiscordButton = discordButton.GetComponent<PassiveButton>();
-        passiveDiscordButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
+        passiveDiscordButton.OnClick.RemoveAllPersistentAndListeners();
         passiveDiscordButton.OnClick.AddListener(
             (UnityEngine.Events.UnityAction)(() => Application.OpenURL("https://discord.gg/UzJcfBYcyS")));
 
