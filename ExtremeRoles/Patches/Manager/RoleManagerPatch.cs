@@ -315,6 +315,7 @@ public static class RoleManagerSelectRolesPatch
                 Logging.Debug($"---AssignRole:{vanillaRoleId}---");
             }
 
+            // TODO:ここにロールアサインフィルターによるアサインチェックを入れる
             if (spawnData.IsCanSpawnTeam(team) &&
                 shuffledSpawnCheckRoleId.Any() &&
                 removePlayer == null)
@@ -387,6 +388,7 @@ public static class RoleManagerSelectRolesPatch
                     }
                 }
 
+                // TODO:ここにロールアサインフィルターによるアサインチェックを入れる
                 isSpawn = isSpawn && isCombinationLimit(
                     notAssignPlayer, spawnData, maxImpNum,
                     curCrewNum, curImpNum,
