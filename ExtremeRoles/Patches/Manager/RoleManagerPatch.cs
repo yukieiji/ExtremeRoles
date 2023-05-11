@@ -224,7 +224,6 @@ public static class RoleManagerSelectRolesPatch
 
         foreach (PlayerControl player in assignData.GetCanCrewmateAssignPlayer())
         {
-
             RoleTypes vanillaRoleId = player.Data.Role.Role;
 
             if ((
@@ -285,7 +284,8 @@ public static class RoleManagerSelectRolesPatch
 
         if (!spawnCheckRoleId.Any()) { return; }
 
-        var shuffledSpawnCheckRoleId = spawnCheckRoleId.OrderBy(x => RandomGenerator.Instance.Next()).ToList();
+        var shuffledSpawnCheckRoleId = spawnCheckRoleId.OrderBy(
+            x => RandomGenerator.Instance.Next()).ToList();
         var shuffledTargetPlayer = targetPlayer.OrderBy(x => RandomGenerator.Instance.Next());
 
         foreach (PlayerControl player in shuffledTargetPlayer)
@@ -351,8 +351,9 @@ public static class RoleManagerSelectRolesPatch
             Int32OptionNames.NumImpostors);
         
         NotAssignPlayerData notAssignPlayer = new NotAssignPlayerData();
-
-        foreach (var (combType, combSpawnData) in spawnData.CurrentCombRoleSpawnData)
+        var shuffleCombRole = spawnData.CurrentCombRoleSpawnData.OrderBy(
+            x => RandomGenerator.Instance.Next());
+        foreach (var (combType, combSpawnData) in shuffleCombRole)
         {
             var roleManager = combSpawnData.Role;
 
