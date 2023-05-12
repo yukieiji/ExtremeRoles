@@ -2,9 +2,12 @@
 using System.Linq;
 
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Events;
 
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.RoleAssign.Model;
+using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 #nullable enable
 
@@ -14,10 +17,35 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 {
     public static RoleAssignFilterModel? Model { get; private set; }
 
-    public RoleAssignFilterView(IntPtr ptr) : base(ptr) { }
+#pragma warning disable CS8618
+    private ButtonWrapper addFilterButton;
+    private RoleFilterSetBehaviour filterSetPrefab;
 
+    private HorizontalLayoutGroup layout;
+
+    public RoleAssignFilterView(IntPtr ptr) : base(ptr) { }
+#pragma warning restore CS8618
     public void Awake()
     {
+        Transform trans = base.transform;
+
+        this.addFilterButton = trans.Find(
+            "Body/AddFilterButton").gameObject.GetComponent<ButtonWrapper>();
+        this.layout = trans.Find(
+            "Body/Scroll/Viewport/Content").gameObject.GetComponent<HorizontalLayoutGroup>();
+        this.filterSetPrefab = trans.Find(
+            "Body/Scroll/Viewport/Content/FillterSet").gameObject.GetComponent<RoleFilterSetBehaviour>();
+
+        // Create Actions
+        this.addFilterButton.SetButtonClickAction(
+            (UnityAction)(() =>
+            {
+                var filter = Instantiate(this.filterSetPrefab, this.layout.transform);
+                filter.gameObject.SetActive(true);
+            }));
+
+
+
         if (!Model.HasValue)
         {
             Model = new RoleAssignFilterModel()
@@ -27,12 +55,14 @@ public sealed class RoleAssignFilterView : MonoBehaviour
             };
         }
 
+        /*
         var model = Model.Value;
         var addFilterFunction = () =>
         {
             RoleAssignFilterModelUpdater.AddFilter(model);
             createFilter(model.CurCount);
         };
+        */
     }
 
     private void createFilter(int id)
