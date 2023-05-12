@@ -123,17 +123,21 @@ public static class ExtremeGhostRoleManager
 
         foreach (var spawnData in sameTeamRoleAssignData)
         {
+            var ghostRoleId = spawnData.Id;
             if (!spawnData.IsFilterContain(baseRole) || 
-                !spawnData.IsSpawn()) { continue; }
+                !spawnData.IsSpawn() ||
+                RoleAssignFilter.Instance.IsBlock(ghostRoleId)) { continue; }
             
             rpcSetSingleGhostRoleToPlayerId(
-                player, controlId, roleType, spawnData.Id);
+                player, controlId, roleType, ghostRoleId);
 
             // その役職のスポーン数をへらす処理
             spawnData.ReduceSpawnNum();
             // 全体の役職減少処理
             spawnDataMng.ReduceGlobalSpawnLimit(team);
- 
+
+            RoleAssignFilter.Instance.IsBlock(ghostRoleId);
+            
             return;
         }
     }

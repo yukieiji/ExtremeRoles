@@ -315,10 +315,10 @@ public static class RoleManagerSelectRolesPatch
                 Logging.Debug($"---AssignRole:{vanillaRoleId}---");
             }
 
-            // TODO:ここにロールアサインフィルターによるアサインチェックを入れる
             if (spawnData.IsCanSpawnTeam(team) &&
                 shuffledSpawnCheckRoleId.Any() &&
-                removePlayer == null)
+                removePlayer == null &&
+                !RoleAssignFilter.Instance.IsBlock(shuffledSpawnCheckRoleId[0]))
             {
                 removePlayer = player;
                 int intedRoleId = shuffledSpawnCheckRoleId[0];
@@ -330,6 +330,8 @@ public static class RoleManagerSelectRolesPatch
                 assignData.AddAssignData(
                     new PlayerToSingleRoleAssignData(
                         player.PlayerId, intedRoleId, assignData.GetControlId()));
+
+                RoleAssignFilter.Instance.Update(intedRoleId);
             }
 
             Logging.Debug($"-------------------AssignEnd-------------------");
@@ -388,14 +390,16 @@ public static class RoleManagerSelectRolesPatch
                     }
                 }
 
-                // TODO:ここにロールアサインフィルターによるアサインチェックを入れる
-                isSpawn = isSpawn && isCombinationLimit(
-                    notAssignPlayer, spawnData, maxImpNum,
-                    curCrewNum, curImpNum,
-                    reduceCrewmateRole,
-                    reduceImpostorRole,
-                    reduceNeutralRole,
-                    combSpawnData.IsMultiAssign);
+                isSpawn = (
+                    isSpawn &&
+                    isCombinationLimit(
+                        notAssignPlayer, spawnData, maxImpNum,
+                        curCrewNum, curImpNum,
+                        reduceCrewmateRole,
+                        reduceImpostorRole,
+                        reduceNeutralRole,
+                        combSpawnData.IsMultiAssign) &&
+                    !RoleAssignFilter.Instance.IsBlock(combType));
 
                 if (!isSpawn) { continue; }
 
@@ -411,12 +415,14 @@ public static class RoleManagerSelectRolesPatch
                 {
                     spawnRoles.Add((MultiAssignRoleBase)role.Clone());
                 }
-
+                
                 notAssignPlayer.ReduceImpostorAssignNum(reduceImpostorRole);
                 roleListData.Add(
                     new CombinationRoleAssignData(
                         assignData.GetControlId(),
                         combType, spawnRoles));
+
+                RoleAssignFilter.Instance.Update(combType);
             }
         }
 

@@ -12,6 +12,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
+using ExtremeRoles.Module.RoleAssign;
 
 namespace ExtremeRoles;
 
@@ -138,6 +139,10 @@ public static class OptionHolder
         Patches.MapOverlay.MapCountOverlayUpdatePatch.LoadOptionValue();
         
         MeetingReporter.Reset();
+        if (RoleAssignFilter.IsExist)
+        {
+            RoleAssignFilter.Instance.Destroy();
+        }
 
         Client.GhostsSeeRole = ConfigParser.GhostsSeeRoles.Value;
         Client.GhostsSeeTask = ConfigParser.GhostsSeeTasks.Value;
