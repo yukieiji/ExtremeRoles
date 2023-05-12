@@ -33,7 +33,6 @@ public sealed class RoleFilterSetBehaviour : MonoBehaviour
             "Buttons/RemoveAllButton").gameObject.GetComponent<ButtonWrapper>();
         this.DeleteThisButton = trans.Find(
             "Buttons/DeleteThisButton").gameObject.GetComponent<ButtonWrapper>();
-        this.Layout = trans.Find(
-            "FillterBody").gameObject.GetComponent<GridLayoutGroup>();
+        this.Layout = trans.Find("FillterBody").gameObject.GetComponent<GridLayoutGroup>();
     }
 }
