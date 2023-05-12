@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using ExtremeRoles.GhostRoles;
+using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Module.RoleAssign;
 
@@ -19,6 +20,18 @@ public sealed class RoleFilterSet
         this.ghostRoleFilter.Clear();
 
         this.isBlock = false;
+    }
+    public void Add(ExtremeRoleId roleId)
+    {
+        this.normalRoleFilter.Add((int)roleId);
+    }
+    public void Add(CombinationRoleType roleId)
+    {
+        this.combRoleFilter.Contains((byte)roleId);
+    }
+    public void Add(ExtremeGhostRoleId roleId)
+    {
+        this.ghostRoleFilter.Add(roleId);
     }
 
     public void Update(int intedRoleId)

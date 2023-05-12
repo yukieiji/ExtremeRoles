@@ -11,7 +11,16 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
     public RoleAssignFilter()
     {
         this.filter.Clear();
+        
+        // GUI完成後ここに突っ込む
+        // RoleAssignFilterModelUpdater.ConvertModelToAssignFilter(this);
     }
+    
+    public void AddRoleFilterSet(RoleFilterSet filter)
+    {
+        this.filter.Add(filter);
+    }
+
     public void Update(int intedRoleId)
     {
         foreach (var fil in this.filter)
