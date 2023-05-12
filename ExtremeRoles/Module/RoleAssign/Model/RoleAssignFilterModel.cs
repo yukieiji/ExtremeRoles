@@ -3,6 +3,6 @@
 namespace ExtremeRoles.Module.RoleAssign.Model;
 public struct RoleAssignFilterModel
 {
-    public int CurCount { get; set; }
-    public List<RoleFilterSetModel> FilterSet { get; set; }
+    public int FilterId { get; set; }
+    public Dictionary<int, RoleFilterSetModel> FilterSet { get; set; }
 }

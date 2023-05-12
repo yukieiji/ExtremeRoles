@@ -35,67 +35,52 @@ public sealed class RoleAssignFilterView : MonoBehaviour
         this.layout = trans.Find(
             "Body/Scroll/Viewport/Content").gameObject.GetComponent<VerticalLayoutGroup>();
         this.filterSetPrefab = trans.Find(
-            "Body/Scroll/Viewport/Content/FillterSet").gameObject.GetComponent<RoleFilterSetBehaviour>();
-
-        // Create Actions
-        this.addFilterButton.Awake();
-        this.addFilterButton.SetButtonClickAction(
-            (UnityAction)(() =>
-            {
-                var filter = Instantiate(this.filterSetPrefab, this.layout.transform);
-                filter.gameObject.SetActive(true);
-            }));
-
-
+            "Body/FillterSet").gameObject.GetComponent<RoleFilterSetBehaviour>();
 
         if (!Model.HasValue)
         {
             Model = new RoleAssignFilterModel()
             {
-                CurCount = 0,
+                FilterId = 0,
                 FilterSet = new()
             };
         }
 
-        /*
         var model = Model.Value;
-        var addFilterFunction = () =>
-        {
-            RoleAssignFilterModelUpdater.AddFilter(model);
-            createFilter(model.CurCount);
-        };
-        */
+
+        // Create Actions
+        this.addFilterButton.Awake();
+        this.addFilterButton.SetButtonClickAction((UnityAction)AddNewFilterSet);
     }
 
-    private void createFilter(int id)
+    private void AddNewFilterSet()
     {
         if (!Model.HasValue) { return; }
 
         var model = Model.Value;
 
-        var addRoleFunction = () =>
-        {
-            RoleAssignFilterModelUpdater.AddFilter(model);
-            updateFilter(model.FilterSet[id]);
-        };
-        var deleteRoleFunction = () =>
-        {
-            RoleAssignFilterModelUpdater.AddFilter(model);
-            updateFilter(model.FilterSet[id]);
-        };
-        var removeAllRoleFunction = () =>
-        {
-            RoleAssignFilterModelUpdater.ResetFilter(model, id);
-            updateFilter(model.FilterSet[id]);
-        };
-        var removeThisFunction = () =>
-        {
-            RoleAssignFilterModelUpdater.RemoveFilter(model, id);
-            // updateAllView
-        };
-    }
-    private void updateFilter(RoleFilterSetModel model)
-    {
+        int id = model.FilterId;
 
+        // Update model
+        RoleAssignFilterModelUpdater.AddFilter(model);
+
+        var filterSet = Instantiate(this.filterSetPrefab, this.layout.transform);
+        filterSet.gameObject.SetActive(true);
+
+        filterSet.DeleteThisButton.SetButtonClickAction(
+            (UnityAction)(() =>
+            {
+                RoleAssignFilterModelUpdater.RemoveFilter(model, id);
+                Destroy(filterSet.gameObject);
+            }));
+        filterSet.DeleteAllRoleButton.SetButtonClickAction(
+            (UnityAction)(() =>
+            {
+                RoleAssignFilterModelUpdater.ResetFilter(model, id);
+                foreach (var child in filterSet.Layout.rectChildren)
+                {
+                    Destroy(child.gameObject);
+                }
+            }));
     }
 }

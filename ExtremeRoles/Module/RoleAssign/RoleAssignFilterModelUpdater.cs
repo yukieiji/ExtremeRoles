@@ -8,8 +8,8 @@ public static class RoleAssignFilterModelUpdater
 {
 	public static void AddFilter(RoleAssignFilterModel model)
 	{
-		model.CurCount += 1;
 		model.FilterSet.Add(
+            model.FilterId,
 			new RoleFilterSetModel()
 			{
 				Id = 0,
@@ -17,7 +17,8 @@ public static class RoleAssignFilterModelUpdater
 				FilterGhostRole = new(),
 				FilterNormalId = new(),
 			});
-	}
+        model.FilterId += 1;
+    }
 
     public static void AddRoleData(
 		RoleAssignFilterModel model, int targetFilter, ExtremeRoleId roleId)
@@ -52,7 +53,7 @@ public static class RoleAssignFilterModelUpdater
     public static void ConvertModelToAssignFilter(
         RoleAssignFilterModel model, RoleAssignFilter filter)
     {
-        foreach (var filterModel in model.FilterSet)
+        foreach (var filterModel in model.FilterSet.Values)
         {
             var filterSet = new RoleFilterSet();
 
@@ -75,8 +76,7 @@ public static class RoleAssignFilterModelUpdater
 
     public static void RemoveFilter(RoleAssignFilterModel model, int targetFilter)
     {
-        model.CurCount -= 1;
-        model.FilterSet.RemoveAt(targetFilter);
+        model.FilterSet.Remove(targetFilter);
     }
 
     public static void RemoveFilterRole(
