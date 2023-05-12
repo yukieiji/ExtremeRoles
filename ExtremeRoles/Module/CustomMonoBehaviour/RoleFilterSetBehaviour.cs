@@ -6,6 +6,7 @@ using UnityEngine;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Module.RoleAssign.Model;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
+using UnityEngine.UI;
 
 #nullable enable
 
@@ -15,9 +16,10 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour;
 public sealed class RoleFilterSetBehaviour : MonoBehaviour
 {
 #pragma warning disable CS8618
-    private ButtonWrapper addRoleButton;
-    private ButtonWrapper deleteAllRoleButton;
-    private ButtonWrapper deleteThisButton;
+    public ButtonWrapper AddRoleButton { get; private set; }
+    public ButtonWrapper DeleteAllRoleButton { get; private set; }
+    public ButtonWrapper DeleteThisButton { get; private set; }
+    public GridLayoutGroup Layout { get; private set; }
 
     public RoleFilterSetBehaviour(IntPtr ptr) : base(ptr) { }
 #pragma warning restore CS8618
@@ -25,11 +27,13 @@ public sealed class RoleFilterSetBehaviour : MonoBehaviour
     {
         Transform trans = base.transform;
 
-        this.addRoleButton = trans.Find(
+        this.AddRoleButton = trans.Find(
             "Buttons/AddRoleButton").gameObject.GetComponent<ButtonWrapper>();
-        this.deleteAllRoleButton = trans.Find(
+        this.DeleteAllRoleButton = trans.Find(
             "Buttons/RemoveAllButton").gameObject.GetComponent<ButtonWrapper>();
-        this.deleteThisButton = trans.Find(
+        this.DeleteThisButton = trans.Find(
             "Buttons/DeleteThisButton").gameObject.GetComponent<ButtonWrapper>();
+        this.Layout = trans.Find(
+            "FillterBody").gameObject.GetComponent<GridLayoutGroup>();
     }
 }

@@ -22,7 +22,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
     private ButtonWrapper addFilterButton;
     private RoleFilterSetBehaviour filterSetPrefab;
 
-    private HorizontalLayoutGroup layout;
+    private VerticalLayoutGroup layout;
 
     public RoleAssignFilterView(IntPtr ptr) : base(ptr) { }
 #pragma warning restore CS8618
@@ -33,11 +33,12 @@ public sealed class RoleAssignFilterView : MonoBehaviour
         this.addFilterButton = trans.Find(
             "Body/AddFilterButton").gameObject.GetComponent<ButtonWrapper>();
         this.layout = trans.Find(
-            "Body/Scroll/Viewport/Content").gameObject.GetComponent<HorizontalLayoutGroup>();
+            "Body/Scroll/Viewport/Content").gameObject.GetComponent<VerticalLayoutGroup>();
         this.filterSetPrefab = trans.Find(
             "Body/Scroll/Viewport/Content/FillterSet").gameObject.GetComponent<RoleFilterSetBehaviour>();
 
         // Create Actions
+        this.addFilterButton.Awake();
         this.addFilterButton.SetButtonClickAction(
             (UnityAction)(() =>
             {
