@@ -11,6 +11,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
+[Il2CppRegister]
 public sealed class RoleFilterSetBehaviour : MonoBehaviour
 {
 #pragma warning disable CS8618

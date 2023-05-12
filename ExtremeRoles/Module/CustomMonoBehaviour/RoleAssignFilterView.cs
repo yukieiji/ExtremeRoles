@@ -13,6 +13,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
+[Il2CppRegister]
 public sealed class RoleAssignFilterView : MonoBehaviour
 {
     public static RoleAssignFilterModel? Model { get; private set; }
