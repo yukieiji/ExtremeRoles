@@ -37,7 +37,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
         this.filterSetPrefab = trans.Find(
             "Body/FillterSet").gameObject.GetComponent<RoleFilterSetBehaviour>();
 
-        if (!Model.HasValue)
+        if (Model == null)
         {
             Model = new RoleAssignFilterModel()
             {
@@ -46,8 +46,6 @@ public sealed class RoleAssignFilterView : MonoBehaviour
             };
         }
 
-        var model = Model.Value;
-
         // Create Actions
         this.addFilterButton.Awake();
         this.addFilterButton.SetButtonClickAction((UnityAction)AddNewFilterSet);
@@ -55,14 +53,12 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 
     private void AddNewFilterSet()
     {
-        if (!Model.HasValue) { return; }
+        if (Model == null) { return; }
 
-        var model = Model.Value;
-
-        int id = model.FilterId;
+        int id = Model.FilterId;
 
         // Update model
-        RoleAssignFilterModelUpdater.AddFilter(model);
+        RoleAssignFilterModelUpdater.AddFilter(Model);
 
         var filterSet = Instantiate(this.filterSetPrefab, this.layout.transform);
         filterSet.gameObject.SetActive(true);
@@ -70,13 +66,13 @@ public sealed class RoleAssignFilterView : MonoBehaviour
         filterSet.DeleteThisButton.SetButtonClickAction(
             (UnityAction)(() =>
             {
-                RoleAssignFilterModelUpdater.RemoveFilter(model, id);
+                RoleAssignFilterModelUpdater.RemoveFilter(Model, id);
                 Destroy(filterSet.gameObject);
             }));
         filterSet.DeleteAllRoleButton.SetButtonClickAction(
             (UnityAction)(() =>
             {
-                RoleAssignFilterModelUpdater.ResetFilter(model, id);
+                RoleAssignFilterModelUpdater.ResetFilter(Model, id);
                 foreach (var child in filterSet.Layout.rectChildren)
                 {
                     Destroy(child.gameObject);

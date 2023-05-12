@@ -5,7 +5,7 @@ using ExtremeRoles.Roles;
 
 namespace ExtremeRoles.Module.RoleAssign.Model;
 
-public struct RoleFilterSetModel
+public sealed class RoleFilterSetModel
 {
     public int Id { get; set; }
     public Dictionary<int, ExtremeRoleId> FilterNormalId { get; set; }
