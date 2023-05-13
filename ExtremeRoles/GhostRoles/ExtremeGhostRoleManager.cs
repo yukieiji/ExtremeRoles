@@ -136,7 +136,7 @@ public static class ExtremeGhostRoleManager
             // 全体の役職減少処理
             spawnDataMng.ReduceGlobalSpawnLimit(team);
 
-            RoleAssignFilter.Instance.IsBlock(ghostRoleId);
+            RoleAssignFilter.Instance.Update(ghostRoleId);
             
             return;
         }
