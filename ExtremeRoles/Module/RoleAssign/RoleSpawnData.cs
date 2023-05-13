@@ -64,7 +64,7 @@ public sealed class GhostRoleSpawnData : SpawnData
         this.filter = filter;
     }
 
-    public bool IsFiltedRole(SingleRoleBase role)
+    public bool IsBlock(SingleRoleBase role)
     {
         if (this.filter.Count == 0)
         {
