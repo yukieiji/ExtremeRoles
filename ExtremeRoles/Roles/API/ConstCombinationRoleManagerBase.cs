@@ -14,6 +14,11 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
 {
     private int setPlayerNum = 0;
     private int maxSetNum = int.MaxValue;
+    private string optionKey => Design.ColoedString(
+        this.OptionColor,
+        string.Concat(
+            this.RoleName,
+            RoleCommonOption.SpawnRate.ToString()));
 
     public ConstCombinationRoleManagerBase(
         string roleName,
@@ -26,11 +31,7 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
     }
 
     public sealed override string GetOptionName()
-        => Design.ColoedString(
-            this.OptionColor,
-            string.Concat(
-                this.RoleName,
-                RoleCommonOption.SpawnRate.ToString()));
+        => Translation.GetString(this.optionKey);
 
     public override void AssignSetUpInit(int curImpNum)
     {
@@ -80,7 +81,7 @@ public abstract class ConstCombinationRoleManagerBase : CombinationRoleManagerBa
         // ExtremeRolesPlugin.Instance.Log.LogInfo($"Color: {this.optionColor}");
         var roleSetOption = new SelectionCustomOption(
             GetRoleOptionId(RoleCommonOption.SpawnRate),
-            GetOptionName(),
+            this.optionKey,
             OptionHolder.SpawnRate, null, true,
             tab: OptionTab.Combination);
 
