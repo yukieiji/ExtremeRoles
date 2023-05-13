@@ -65,6 +65,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
         if (Model == null) { return; }
         var menu = Model.AddRoleMenu;
         
+        menu.Id.Clear();
         menu.NormalRole.Clear();
         menu.CombRole.Clear();
         menu.GhostRole.Clear();
@@ -73,16 +74,19 @@ public sealed class RoleAssignFilterView : MonoBehaviour
         int id = 0;
         foreach (var roleId in roleSelector.UseNormalRoleId)
         {
+            menu.Id.Add(id);
             menu.NormalRole.Add(id, roleId);
             id++;
         }
         foreach (var roleId in roleSelector.UseCombRoleType)
         {
+            menu.Id.Add(id);
             menu.CombRole.Add(id, roleId);
             id++;
         }
         foreach (var roleId in roleSelector.UseGhostRoleId)
         {
+            menu.Id.Add(id);
             menu.GhostRole.Add(id, roleId);
             id++;
         }
@@ -118,6 +122,10 @@ public sealed class RoleAssignFilterView : MonoBehaviour
         filterSet.AddRoleButton.SetButtonClickAction(
             (UnityAction)(() =>
             {
+                var menuModel = Model.AddRoleMenu;
+                menuModel.Property = filterSet;
+                menuModel.Filter = Model.FilterSet[id];
+
                 this.addRoleMenu.gameObject.SetActive(true);
                 this.addRoleMenu.UpdateView(Model.AddRoleMenu);
             }));
