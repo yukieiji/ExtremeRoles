@@ -42,15 +42,23 @@ public sealed class RoleAssignFilterView : MonoBehaviour
         
         this.addRoleMenu = trans.Find(
             "Body/AddRoleMenu").gameObject.GetComponent<AddRoleMenuView>();
-        var closeButton = trans.Find("CloseButton").gameObject.GetComponent<
-            Button>();
+        var closeButton = trans.Find(
+            "Body/CloseButton").gameObject.GetComponent<Button>();
+        closeButton.onClick.AddListener(
+            (UnityAction)(() => base.gameObject.SetActive(false)));
 
         if (Model == null)
         {
             Model = new RoleAssignFilterModel()
             {
                 FilterId = 0,
-                AddRoleMenu = new(),
+                AddRoleMenu = new()
+                {
+                    Id         = new(),
+                    NormalRole = new(),
+                    CombRole   = new(),
+                    GhostRole  = new()
+                },
                 FilterSet = new()
             };
         }
@@ -58,6 +66,14 @@ public sealed class RoleAssignFilterView : MonoBehaviour
         // Create Actions
         this.addFilterButton.Awake();
         this.addFilterButton.SetButtonClickAction((UnityAction)AddNewFilterSet);
+    }
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            base.gameObject.SetActive(false);
+        }
     }
 
     public void OnEnable()
@@ -90,6 +106,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
             menu.GhostRole.Add(id, roleId);
             id++;
         }
+        this.addRoleMenu.gameObject.SetActive(false);
     }
 
     private void AddNewFilterSet()

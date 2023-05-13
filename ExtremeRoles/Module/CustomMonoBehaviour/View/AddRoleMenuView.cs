@@ -42,8 +42,9 @@ public sealed class AddRoleMenuView : MonoBehaviour
         this.buttonPrefab = trans.Find("Button").gameObject.GetComponent<ButtonWrapper>();
         this.layout = trans.Find("Scroll/Viewport/Content").gameObject.GetComponent<GridLayoutGroup>();
 
-        var closeButton = trans.Find("CloseButton").gameObject.AddComponent<CloseButtonBehaviour>();
-        closeButton.SetHideObject(gameObject);
+        var closeButton = trans.Find("CloseButton").gameObject.GetComponent<Button>();
+        closeButton.onClick.AddListener(
+            (UnityAction)(() => base.gameObject.SetActive(false)));
     }
 
     public void Update()
@@ -68,6 +69,7 @@ public sealed class AddRoleMenuView : MonoBehaviour
 
         foreach (var (id, button) in allButton)
         {
+            button.gameObject.SetActive(true);
             button.ResetButtonAction();
             button.SetButtonClickAction(createButton(button, model, id));
         }
@@ -86,12 +88,7 @@ public sealed class AddRoleMenuView : MonoBehaviour
                 AddRoleMenuModelUpdater.AddRoleData(model, id, normalRoleId);
                 
                 base.gameObject.SetActive(false);
-                
-                FilterItemProperty item = Instantiate(
-                    this.filterItemPrefab,
-                    model.Property.Layout.transform);
-                item.Text.text = roleName;
-                crateItemAction(item, model, id);
+                createFilterItem(model, roleName, id);
             });
         }
         else if (model.CombRole.TryGetValue(id, out var combRoleId))
@@ -104,12 +101,7 @@ public sealed class AddRoleMenuView : MonoBehaviour
                 AddRoleMenuModelUpdater.AddRoleData(model, id, combRoleId);
                 
                 base.gameObject.SetActive(false);
-                
-                FilterItemProperty item = Instantiate(
-                    this.filterItemPrefab,
-                    model.Property.Layout.transform);
-                item.Text.text = combRoleName;
-                crateItemAction(item, model, id);
+                createFilterItem(model, combRoleName, id);
             });
         }
         else if (model.GhostRole.TryGetValue(id, out var ghostRoleId))
@@ -122,12 +114,7 @@ public sealed class AddRoleMenuView : MonoBehaviour
                 AddRoleMenuModelUpdater.AddRoleData(model, id, ghostRoleId);
                 
                 base.gameObject.SetActive(false);
-                
-                FilterItemProperty item = Instantiate(
-                    this.filterItemPrefab,
-                    model.Property.Layout.transform);
-                item.Text.text = ghostRoleName;
-                crateItemAction(item, model, id);
+                createFilterItem(model, ghostRoleName, id);
             });
         }
         else
@@ -136,9 +123,13 @@ public sealed class AddRoleMenuView : MonoBehaviour
         }
     }
 
-    private static void crateItemAction(
-        FilterItemProperty item, AddRoleMenuModel model, int id)
+    private void createFilterItem(AddRoleMenuModel model, string name, int id)
     {
+        FilterItemProperty item = Instantiate(
+            this.filterItemPrefab,
+            model.Property.Layout.transform);
+        item.gameObject.SetActive(true);
+        item.Text.text = name;
         item.RemoveButton.onClick.AddListener(
             (UnityAction)(() =>
             {
