@@ -104,6 +104,7 @@ public sealed class GhostRoleSpawnDataManager :
 
         foreach (var (team, spawnDataList) in tmpUseData)
         {
+            Helper.Logging.Debug($"Add {team} ghost role spawn data");
             this.useGhostRole[team] = spawnDataList.OrderBy(
                 x => RandomGenerator.Instance.Next()).ToList();
         }
