@@ -14,14 +14,14 @@ using TMPro;
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
 [Il2CppRegister]
-public sealed class AddRoleMenuProperty : MonoBehaviour
+public sealed class AddRoleMenuView : MonoBehaviour
 {
 #pragma warning disable CS8618
     public ButtonWrapper ButtonPrefab { get; private set; }
     public TextMeshProUGUI Title { get; private set; }
     public GridLayoutGroup Layout { get; private set; }
 
-    public AddRoleMenuProperty(IntPtr ptr) : base(ptr) { }
+    public AddRoleMenuView(IntPtr ptr) : base(ptr) { }
 #pragma warning restore CS8618
     public void Awake()
     {
@@ -33,5 +33,10 @@ public sealed class AddRoleMenuProperty : MonoBehaviour
 
         var closeButton = trans.Find("CloseButton").gameObject.AddComponent<CloseButtonBehaviour>();
         closeButton.SetHideObject(base.gameObject);
+    }
+
+    public void UpdateView(AddRoleMenuModel model)
+    {
+
     }
 }

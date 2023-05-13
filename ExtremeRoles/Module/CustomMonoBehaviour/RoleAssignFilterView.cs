@@ -26,7 +26,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 
     private VerticalLayoutGroup layout;
 
-    private AddRoleMenuProperty addRoleMenu;
+    private AddRoleMenuView addRoleMenu;
 
     public RoleAssignFilterView(IntPtr ptr) : base(ptr) { }
 #pragma warning restore CS8618
@@ -43,7 +43,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
         this.filterItemPrefab = trans.Find(
             "Body/FilterItem").gameObject.GetComponent<FilterItemProperty>();
         this.addRoleMenu = trans.Find(
-            "Body/AddRoleMenu").gameObject.GetComponent<AddRoleMenuProperty>();
+            "Body/AddRoleMenu").gameObject.GetComponent<AddRoleMenuView>();
         var closeButton = trans.Find("CloseButton").gameObject.GetComponent<
             Button>();
 
