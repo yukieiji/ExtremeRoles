@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Linq;
 
 using UnityEngine;
 
-using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Module.RoleAssign.Model;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using UnityEngine.UI;
 
@@ -13,7 +10,7 @@ using UnityEngine.UI;
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
 [Il2CppRegister]
-public sealed class RoleFilterSetBehaviour : MonoBehaviour
+public sealed class RoleFilterSetProperty : MonoBehaviour
 {
 #pragma warning disable CS8618
     public ButtonWrapper AddRoleButton { get; private set; }
@@ -21,7 +18,7 @@ public sealed class RoleFilterSetBehaviour : MonoBehaviour
     public ButtonWrapper DeleteThisButton { get; private set; }
     public GridLayoutGroup Layout { get; private set; }
 
-    public RoleFilterSetBehaviour(IntPtr ptr) : base(ptr) { }
+    public RoleFilterSetProperty(IntPtr ptr) : base(ptr) { }
 #pragma warning restore CS8618
     public void Awake()
     {
