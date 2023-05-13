@@ -8,6 +8,7 @@ using UnityEngine;
 
 using BepInEx.Unity.IL2CPP.Utils.Collections;
 
+using ExtremeRoles.Extension.UnityEvent;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Performance;
@@ -234,8 +235,8 @@ public static class PlayerVoteAreaSelectPatch
 				UiElement newAbilitybutton = GameObject.Instantiate(
 					instance.CancelButton, instance.ConfirmButton.transform.parent);
 				var passiveButton = newAbilitybutton.GetComponent<PassiveButton>();
-				passiveButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
-				passiveButton.OnClick.AddListener(
+				passiveButton.OnClick.RemoveAllPersistentAndListeners();
+                passiveButton.OnClick.AddListener(
 					(UnityEngine.Events.UnityAction)role.CreateAbilityAction(instance));
 				passiveButton.OnClick.AddListener(
 					(UnityEngine.Events.UnityAction)instance.Cancel);

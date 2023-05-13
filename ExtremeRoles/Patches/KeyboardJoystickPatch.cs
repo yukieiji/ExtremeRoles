@@ -42,6 +42,12 @@ public static class DebugTool
             }
         }
 
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.F2))
+        {
+            Logging.Debug("Set Wide Resolution");
+            ResolutionManager.SetResolution(1680, 720, false);
+        }
+
         // Spawn dummys
         if ((Input.GetKeyDown(KeyCode.F)) && GameSystem.IsLobby)
         {

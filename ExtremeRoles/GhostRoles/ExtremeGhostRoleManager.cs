@@ -123,7 +123,7 @@ public static class ExtremeGhostRoleManager
 
         foreach (var spawnData in sameTeamRoleAssignData)
         {
-            if (!spawnData.IsFiltedRole(baseRole) || 
+            if (spawnData.IsBlock(baseRole) || 
                 !spawnData.IsSpawn()) { continue; }
             
             rpcSetSingleGhostRoleToPlayerId(

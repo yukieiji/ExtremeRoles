@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using System.Linq;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.GhostRoles;
@@ -7,144 +7,150 @@ using ExtremeRoles.Module.Interface;
 using ExtremeRoles.Roles;
 using ExtremeRoles.Roles.API;
 
-namespace ExtremeRoles.Module.RoleAssign
+namespace ExtremeRoles.Module.RoleAssign;
+
+public sealed class GhostRoleSpawnDataManager : 
+    NullableSingleton<GhostRoleSpawnDataManager>,
+    ISpawnDataManager
 {
-    public sealed class GhostRoleSpawnDataManager : 
-        NullableSingleton<GhostRoleSpawnDataManager>,
-        ISpawnDataManager
+    private Dictionary<ExtremeRoleType, int> globalSpawnLimit = new Dictionary<ExtremeRoleType, int>();
+
+    private Dictionary<ExtremeRoleId, CombinationRoleType> combRole = new Dictionary<
+        ExtremeRoleId, CombinationRoleType>();
+
+    private Dictionary<ExtremeRoleType, List<GhostRoleSpawnData>> useGhostRole = new Dictionary<
+        ExtremeRoleType, List<GhostRoleSpawnData>>();
+
+    public GhostRoleSpawnDataManager()
     {
-        private Dictionary<ExtremeRoleType, int> globalSpawnLimit = new Dictionary<ExtremeRoleType, int>();
+        this.clear();
+    }
 
-        private Dictionary<ExtremeRoleId, CombinationRoleType> combRole = new Dictionary<
-            ExtremeRoleId, CombinationRoleType>();
+    public void Create(
+        List<(CombinationRoleType, GhostAndAliveCombinationRoleManagerBase)> useGhostCombRole)
+    {
+        this.clear();
 
-        private Dictionary<ExtremeRoleType, List<GhostRoleSpawnData>> useGhostRole = new Dictionary<
-            ExtremeRoleType, List<GhostRoleSpawnData>>();
-
-        public GhostRoleSpawnDataManager()
+        foreach (var (combRoleId, mng) in useGhostCombRole)
         {
-            this.clear();
+            foreach (ExtremeRoleId roleId in mng.CombGhostRole.Keys)
+            {
+                this.combRole.Add(roleId, combRoleId);
+            }
         }
 
-        public void Create(
-            List<(CombinationRoleType, GhostAndAliveCombinationRoleManagerBase)> useGhostCombRole)
+        this.globalSpawnLimit = new Dictionary<ExtremeRoleType, int>
         {
-            this.clear();
-
-            foreach (var (combRoleId, mng) in useGhostCombRole)
             {
-                foreach (ExtremeRoleId roleId in mng.CombGhostRole.Keys)
-                {
-                    this.combRole.Add(roleId, combRoleId);
-                }
+                ExtremeRoleType.Crewmate,
+                ISpawnDataManager.ComputeSpawnNum(
+                    RoleGlobalOption.MinCrewmateGhostRoles,
+                    RoleGlobalOption.MaxCrewmateGhostRoles)
+            },
+            {
+                ExtremeRoleType.Neutral,
+                ISpawnDataManager.ComputeSpawnNum(
+                    RoleGlobalOption.MinNeutralGhostRoles,
+                    RoleGlobalOption.MaxNeutralGhostRoles)
+            },
+            {
+                ExtremeRoleType.Impostor,
+                ISpawnDataManager.ComputeSpawnNum(
+                    RoleGlobalOption.MinImpostorGhostRoles,
+                    RoleGlobalOption.MaxImpostorGhostRoles)
+            },
+        };
+
+        var allOption = OptionHolder.AllOption;
+        var tmpUseData = new Dictionary<ExtremeRoleType, List<GhostRoleSpawnData>>();
+
+        foreach (ExtremeGhostRoleId roleId in 
+            ExtremeGameModeManager.Instance.RoleSelector.UseGhostRoleId)
+        {
+            var role = ExtremeGhostRoleManager.AllGhostRole[roleId];
+
+            int spawnRate = ISpawnDataManager.ComputePercentage(
+                allOption[role.GetRoleOptionId(RoleCommonOption.SpawnRate)]);
+            int roleNum = allOption[
+                role.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue();
+
+            Helper.Logging.Debug(
+                $"GhostRole Name:{role.Name}  SpawnRate:{spawnRate}   RoleNum:{roleNum}");
+
+            if (roleNum <= 0 || spawnRate <= 0.0)
+            {
+                continue;
             }
 
-            this.globalSpawnLimit = new Dictionary<ExtremeRoleType, int>
+            var addData = new GhostRoleSpawnData(
+                roleId, roleNum, spawnRate, role.GetRoleFilter());
+
+            ExtremeRoleType team = role.Team;
+
+            if (!tmpUseData.ContainsKey(team))
             {
+                List<GhostRoleSpawnData> teamGhostRole = new List<GhostRoleSpawnData>()
                 {
-                    ExtremeRoleType.Crewmate,
-                    ISpawnDataManager.ComputeSpawnNum(
-                        RoleGlobalOption.MinCrewmateGhostRoles,
-                        RoleGlobalOption.MaxCrewmateGhostRoles)
-                },
-                {
-                    ExtremeRoleType.Neutral,
-                    ISpawnDataManager.ComputeSpawnNum(
-                        RoleGlobalOption.MinNeutralGhostRoles,
-                        RoleGlobalOption.MaxNeutralGhostRoles)
-                },
-                {
-                    ExtremeRoleType.Impostor,
-                    ISpawnDataManager.ComputeSpawnNum(
-                        RoleGlobalOption.MinImpostorGhostRoles,
-                        RoleGlobalOption.MaxImpostorGhostRoles)
-                },
-            };
+                    addData,
+                };
 
-            var allOption = OptionHolder.AllOption;
-
-            foreach (ExtremeGhostRoleId roleId in 
-                ExtremeGameModeManager.Instance.RoleSelector.UseGhostRoleId)
-            {
-                var role = ExtremeGhostRoleManager.AllGhostRole[roleId];
-
-                int spawnRate = ISpawnDataManager.ComputePercentage(
-                    allOption[role.GetRoleOptionId(RoleCommonOption.SpawnRate)]);
-                int roleNum = allOption[
-                    role.GetRoleOptionId(RoleCommonOption.RoleNum)].GetValue();
-
-                Helper.Logging.Debug(
-                    $"GhostRole Name:{role.Name}  SpawnRate:{spawnRate}   RoleNum:{roleNum}");
-
-                if (roleNum <= 0 || spawnRate <= 0.0)
-                {
-                    continue;
-                }
-
-                var addData = new GhostRoleSpawnData(
-                    roleId, roleNum, spawnRate, role.GetRoleFilter());
-
-                ExtremeRoleType team = role.Team;
-
-                if (!this.useGhostRole.ContainsKey(team))
-                {
-                    List<GhostRoleSpawnData> teamGhostRole = new List<GhostRoleSpawnData>()
-                    {
-                        addData,
-                    };
-
-                    this.useGhostRole.Add(team, teamGhostRole);
-                }
-                else
-                {
-                    this.useGhostRole[team].Add(addData);
-                }
-            }
-
-        }
-
-        public CombinationRoleType GetCombRoleType(ExtremeRoleId roleId) => 
-            this.combRole[roleId];
-
-        public int GetGlobalSpawnLimit(ExtremeRoleType team)
-        {
-            if (this.globalSpawnLimit.TryGetValue(team, out int limit))
-            {
-                return limit;
+                tmpUseData.Add(team, teamGhostRole);
             }
             else
             {
-                return int.MinValue;
+                tmpUseData[team].Add(addData);
             }
         }
 
-        public List<GhostRoleSpawnData> GetUseGhostRole(
-            ExtremeRoleType team)
+        foreach (var (team, spawnDataList) in tmpUseData)
         {
-            this.useGhostRole.TryGetValue(team, out List<GhostRoleSpawnData> data);
-            return data;
+            Helper.Logging.Debug($"Add {team} ghost role spawn data");
+            this.useGhostRole[team] = spawnDataList.OrderBy(
+                x => RandomGenerator.Instance.Next()).ToList();
         }
+    }
 
-        public bool IsCombRole(ExtremeRoleId roleId) => this.combRole.ContainsKey(roleId);
+    public CombinationRoleType GetCombRoleType(ExtremeRoleId roleId) => 
+        this.combRole[roleId];
 
-        public bool IsGlobalSpawnLimit(ExtremeRoleType team)
+    public int GetGlobalSpawnLimit(ExtremeRoleType team)
+    {
+        if (this.globalSpawnLimit.TryGetValue(team, out int limit))
         {
-            bool isGhostRoleArrive = this.globalSpawnLimit.TryGetValue(
-                team, out int globalSpawnLimit);
-
-            return isGhostRoleArrive && globalSpawnLimit <= 0;
+            return limit;
         }
-
-        public void ReduceGlobalSpawnLimit(ExtremeRoleType team)
+        else
         {
-            this.globalSpawnLimit[team] = this.globalSpawnLimit[team] - 1;
+            return int.MinValue;
         }
+    }
 
-        private void clear()
-        {
-            this.globalSpawnLimit.Clear();
-            this.useGhostRole.Clear();
-            this.combRole.Clear();
-        }
+    public List<GhostRoleSpawnData> GetUseGhostRole(
+        ExtremeRoleType team)
+    {
+        this.useGhostRole.TryGetValue(team, out List<GhostRoleSpawnData> data);
+        return data;
+    }
+
+    public bool IsCombRole(ExtremeRoleId roleId) => this.combRole.ContainsKey(roleId);
+
+    public bool IsGlobalSpawnLimit(ExtremeRoleType team)
+    {
+        bool isGhostRoleArrive = this.globalSpawnLimit.TryGetValue(
+            team, out int globalSpawnLimit);
+
+        return isGhostRoleArrive && globalSpawnLimit <= 0;
+    }
+
+    public void ReduceGlobalSpawnLimit(ExtremeRoleType team)
+    {
+        this.globalSpawnLimit[team] = this.globalSpawnLimit[team] - 1;
+    }
+
+    private void clear()
+    {
+        this.globalSpawnLimit.Clear();
+        this.useGhostRole.Clear();
+        this.combRole.Clear();
     }
 }

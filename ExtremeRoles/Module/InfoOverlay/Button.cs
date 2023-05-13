@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 
+using ExtremeRoles.Extension.UnityEvent;
 using ExtremeRoles.Module.RoleAssign;
 using ExtremeRoles.Resources;
 
@@ -26,7 +27,7 @@ namespace ExtremeRoles.Module.InfoOverlay
             SetInfoButtonToGameStartShipPositon();
 
             var passiveButton = Body.GetComponent<PassiveButton>();
-            passiveButton.OnClick = new UnityEngine.UI.Button.ButtonClickedEvent();
+            passiveButton.OnClick.RemoveAllPersistentAndListeners();
             passiveButton.OnClick.AddListener(
                 (UnityAction)toggleInfoOverlay);
 

@@ -64,10 +64,10 @@ public static class VoiceVoxBridge
                 return string.Empty;
             }
         }
-        catch (OperationCanceledException e)
+        catch (Exception e)
         {
             ExtremeVoiceEnginePlugin.Logger.LogError(
-                $"OperationCanceledException: AudioQuery request is canceled. {e.Message}");
+                $"Exception: AudioQuery request raised error. {e.Message}");
             return string.Empty;
         }
     }
@@ -103,12 +103,8 @@ public static class VoiceVoxBridge
         }
         catch (Exception e)
         {
-            response?.Dispose();
-            string exceptionMessage = e.Message;
-            string message = e is OperationCanceledException ?
-                $"OperationCanceledException : Synthesis request canceled.  {exceptionMessage}" :
-                exceptionMessage;
-            ExtremeVoiceEnginePlugin.Logger.LogError(message);
+            ExtremeVoiceEnginePlugin.Logger.LogError(
+                $"Exception: Synthesis request raised error. {e.Message}");
             return null;
         }
     }
@@ -136,10 +132,10 @@ public static class VoiceVoxBridge
                 return string.Empty;
             }
         }
-        catch (OperationCanceledException e)
+        catch (Exception e)
         {
             ExtremeVoiceEnginePlugin.Logger.LogError(
-                $"OperationCanceledException: Get voice request is canceled. {e.Message}");
+                $"Exception: Get voice request raised error. {e.Message}");
             return string.Empty;
         }
     }

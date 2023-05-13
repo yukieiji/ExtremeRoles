@@ -31,8 +31,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
+using ExtremeRoles.Extension.UnityEvent;
+
 using UnityObject = UnityEngine.Object;
-using UIButton = UnityEngine.UI.Button;
 using Config = ExtremeRoles.OptionHolder.ConfigParser;
 
 namespace ExtremeRoles.Patches.Region;
@@ -95,8 +96,10 @@ public static class RegionMenuOpenPatch
 
             ipTextBox.ClearOnFocus = false;
 
-            ipTextBox.OnEnter = ipTextBox.OnChange = ipTextBox.OnFocusLost = 
-                new UIButton.ButtonClickedEvent();
+            ipTextBox.OnEnter.RemoveAllPersistentAndListeners();
+            ipTextBox.OnChange.RemoveAllPersistentAndListeners();
+            ipTextBox.OnFocusLost.RemoveAllPersistentAndListeners();
+
             ipTextBox.OnChange.AddListener((UnityAction)onEnterOrIpChange);
             ipTextBox.OnFocusLost.AddListener((UnityAction)onFocusLost);
 
@@ -139,8 +142,11 @@ public static class RegionMenuOpenPatch
 
 
             portTextBox.ClearOnFocus = false;
-            portTextBox.OnEnter = portTextBox.OnChange = portTextBox.OnFocusLost = 
-                new UIButton.ButtonClickedEvent();
+
+            portTextBox.OnEnter.RemoveAllPersistentAndListeners();
+            portTextBox.OnChange.RemoveAllPersistentAndListeners();
+            portTextBox.OnFocusLost.RemoveAllPersistentAndListeners();
+
             portTextBox.OnChange.AddListener((UnityAction)onEnterOrPortFieldChange);
             portTextBox.OnFocusLost.AddListener((UnityAction)onFocusLost);
 
