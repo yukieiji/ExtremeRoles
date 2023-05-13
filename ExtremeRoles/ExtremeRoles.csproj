@@ -3,7 +3,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>7.1.1.4</Version>
+    <Version>7.1.1.5</Version>
     <!--<VersionPrefix>7.1.1</VersionPrefix>-->
     <VersionSuffix>SpringJump</VersionSuffix> 
     <Description>Extreme Roles for Advanced user</Description>
