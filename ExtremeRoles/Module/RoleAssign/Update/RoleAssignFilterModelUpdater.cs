@@ -19,30 +19,6 @@ public static class RoleAssignFilterModelUpdater
         model.FilterId += 1;
     }
 
-    public static void ConvertModelToAssignFilter(
-        RoleAssignFilterModel model, RoleAssignFilter filter)
-    {
-        foreach (var filterModel in model.FilterSet.Values)
-        {
-            var filterSet = new RoleFilterSet();
-
-            foreach (var extremeRoleId in filterModel.FilterNormalId.Values)
-            {
-                filterSet.Add(extremeRoleId);
-            }
-            foreach (var extremeRoleId in filterModel.FilterCombinationId.Values)
-            {
-                filterSet.Add(extremeRoleId);
-            }
-            foreach (var extremeRoleId in filterModel.FilterGhostRole.Values)
-            {
-                filterSet.Add(extremeRoleId);
-            }
-
-            filter.AddRoleFilterSet(filterSet);
-        }
-    }
-
     public static void RemoveFilter(RoleAssignFilterModel model, int targetFilter)
     {
         model.FilterSet.Remove(targetFilter);

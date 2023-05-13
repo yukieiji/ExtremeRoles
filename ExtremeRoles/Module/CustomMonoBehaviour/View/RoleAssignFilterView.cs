@@ -17,7 +17,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour.View;
 [Il2CppRegister]
 public sealed class RoleAssignFilterView : MonoBehaviour
 {
-    public static RoleAssignFilterModel? Model { get; private set; }
+    public RoleAssignFilterModel Model { private get; set; }
 
 #pragma warning disable CS8618
     private ButtonWrapper addFilterButton;
@@ -46,22 +46,6 @@ public sealed class RoleAssignFilterView : MonoBehaviour
             "Body/CloseButton").gameObject.GetComponent<Button>();
         closeButton.onClick.AddListener(
             (UnityAction)(() => base.gameObject.SetActive(false)));
-
-        if (Model == null)
-        {
-            Model = new RoleAssignFilterModel()
-            {
-                FilterId = 0,
-                AddRoleMenu = new()
-                {
-                    Id         = new(),
-                    NormalRole = new(),
-                    CombRole   = new(),
-                    GhostRole  = new()
-                },
-                FilterSet = new()
-            };
-        }
 
         // Create Actions
         this.addFilterButton.Awake();
