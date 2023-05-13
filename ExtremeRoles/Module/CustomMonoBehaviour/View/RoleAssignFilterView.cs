@@ -57,8 +57,8 @@ public sealed class RoleAssignFilterView : MonoBehaviour
         }
 
         // Create Actions
-        addFilterButton.Awake();
-        addFilterButton.SetButtonClickAction((UnityAction)AddNewFilterSet);
+        this.addFilterButton.Awake();
+        this.addFilterButton.SetButtonClickAction((UnityAction)AddNewFilterSet);
     }
 
     public void OnEnable()
