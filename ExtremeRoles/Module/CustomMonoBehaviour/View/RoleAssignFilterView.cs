@@ -22,7 +22,6 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 #pragma warning disable CS8618
     private ButtonWrapper addFilterButton;
     private RoleFilterSetProperty filterSetPrefab;
-    private FilterItemProperty filterItemPrefab;
 
     private VerticalLayoutGroup layout;
 
@@ -34,15 +33,14 @@ public sealed class RoleAssignFilterView : MonoBehaviour
     {
         Transform trans = transform;
 
-        addFilterButton = trans.Find(
+        this.addFilterButton = trans.Find(
             "Body/AddFilterButton").gameObject.GetComponent<ButtonWrapper>();
-        layout = trans.Find(
+        this.layout = trans.Find(
             "Body/Scroll/Viewport/Content").gameObject.GetComponent<VerticalLayoutGroup>();
-        filterSetPrefab = trans.Find(
+        this.filterSetPrefab = trans.Find(
             "Body/FillterSet").gameObject.GetComponent<RoleFilterSetProperty>();
-        filterItemPrefab = trans.Find(
-            "Body/FilterItem").gameObject.GetComponent<FilterItemProperty>();
-        addRoleMenu = trans.Find(
+        
+        this.addRoleMenu = trans.Find(
             "Body/AddRoleMenu").gameObject.GetComponent<AddRoleMenuView>();
         var closeButton = trans.Find("CloseButton").gameObject.GetComponent<
             Button>();
@@ -52,6 +50,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
             Model = new RoleAssignFilterModel()
             {
                 FilterId = 0,
+                AddRoleMenu = new(),
                 FilterSet = new()
             };
         }
@@ -63,10 +62,29 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 
     public void OnEnable()
     {
+        if (Model == null) { return; }
+        var menu = Model.AddRoleMenu;
+        
+        menu.NormalRole.Clear();
+        menu.CombRole.Clear();
+        menu.GhostRole.Clear();
+
         var roleSelector = ExtremeGameModeManager.Instance.RoleSelector;
+        int id = 0;
         foreach (var roleId in roleSelector.UseNormalRoleId)
         {
-
+            menu.NormalRole.Add(id, roleId);
+            id++;
+        }
+        foreach (var roleId in roleSelector.UseCombRoleType)
+        {
+            menu.CombRole.Add(id, roleId);
+            id++;
+        }
+        foreach (var roleId in roleSelector.UseGhostRoleId)
+        {
+            menu.GhostRole.Add(id, roleId);
+            id++;
         }
     }
 
@@ -96,6 +114,12 @@ public sealed class RoleAssignFilterView : MonoBehaviour
                 {
                     Destroy(child.gameObject);
                 }
+            }));
+        filterSet.AddRoleButton.SetButtonClickAction(
+            (UnityAction)(() =>
+            {
+                this.addRoleMenu.gameObject.SetActive(true);
+                this.addRoleMenu.UpdateView(Model.AddRoleMenu);
             }));
     }
 }

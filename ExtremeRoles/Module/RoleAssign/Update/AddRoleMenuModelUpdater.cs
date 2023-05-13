@@ -7,32 +7,32 @@ namespace ExtremeRoles.Module.RoleAssign.Update;
 public static class AddRoleMenuModelUpdater
 {
     public static void AddRoleData(
-        AddRoleMenuModel model, ExtremeRoleId roleId)
+        AddRoleMenuModel model, int id, ExtremeRoleId roleId)
     {
         var filter = model.Filter;
-        int id = filter.Id;
-
-        filter.Id += 1;
         filter.FilterNormalId.Add(id, roleId);
     }
 
     public static void AddRoleData(
-        AddRoleMenuModel model, CombinationRoleType roleId)
+        AddRoleMenuModel model, int id, CombinationRoleType roleId)
     {
         var filter = model.Filter;
-        int id = filter.Id;
-
-        filter.Id += 1;
         filter.FilterCombinationId.Add(id, roleId);
     }
 
     public static void AddRoleData(
-        AddRoleMenuModel model, ExtremeGhostRoleId roleId)
+        AddRoleMenuModel model, int id, ExtremeGhostRoleId roleId)
     {
         var filter = model.Filter;
-        int id = filter.Id;
-
-        filter.Id += 1;
         filter.FilterGhostRole.Add(id, roleId);
+    }
+
+    public static void RemoveFilterRole(
+        AddRoleMenuModel model, int targetId)
+    {
+        var filter = model.Filter;
+        filter.FilterNormalId.Remove(targetId);
+        filter.FilterCombinationId.Remove(targetId);
+        filter.FilterGhostRole.Remove(targetId);
     }
 }

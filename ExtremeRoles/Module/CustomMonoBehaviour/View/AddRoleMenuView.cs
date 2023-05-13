@@ -24,7 +24,9 @@ public sealed class AddRoleMenuView : MonoBehaviour
     public TextMeshProUGUI Title { get; private set; }
 
     private ButtonWrapper buttonPrefab;
+    private FilterItemProperty filterItemPrefab;
     private GridLayoutGroup layout;
+
     private Dictionary<int, ButtonWrapper> allButton;
 
     public AddRoleMenuView(IntPtr ptr) : base(ptr) { }
@@ -35,11 +37,21 @@ public sealed class AddRoleMenuView : MonoBehaviour
 
         this.Title = trans.Find("Title").GetComponent<TextMeshProUGUI>();
 
+        this.filterItemPrefab = trans.Find(
+            "FilterItem").gameObject.GetComponent<FilterItemProperty>();
         this.buttonPrefab = trans.Find("Button").gameObject.GetComponent<ButtonWrapper>();
         this.layout = trans.Find("Scroll/Viewport/Content").gameObject.GetComponent<GridLayoutGroup>();
 
         var closeButton = trans.Find("CloseButton").gameObject.AddComponent<CloseButtonBehaviour>();
         closeButton.SetHideObject(gameObject);
+    }
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            base.gameObject.SetActive(false);
+        }
     }
 
     public void UpdateView(AddRoleMenuModel model)
@@ -61,39 +73,77 @@ public sealed class AddRoleMenuView : MonoBehaviour
         }
     }
 
-    private static UnityAction createButton(
+    private UnityAction createButton(
         ButtonWrapper button, AddRoleMenuModel model, int id)
     {
         if (model.NormalRole.TryGetValue(id, out var normalRoleId))
         {
-            button.SetButtonText(ExtremeRoleManager.NormalRole[
-                (int)normalRoleId].GetColoredRoleName(true));
+            string roleName = ExtremeRoleManager.NormalRole[
+                (int)normalRoleId].GetColoredRoleName(true);
+            button.SetButtonText(roleName);
             return (UnityAction)(() =>
             {
-                AddRoleMenuModelUpdater.AddRoleData(model, normalRoleId);
+                AddRoleMenuModelUpdater.AddRoleData(model, id, normalRoleId);
+                
+                base.gameObject.SetActive(false);
+                
+                FilterItemProperty item = Instantiate(
+                    this.filterItemPrefab,
+                    model.Property.Layout.transform);
+                item.Text.text = roleName;
+                crateItemAction(item, model, id);
             });
         }
         else if (model.CombRole.TryGetValue(id, out var combRoleId))
         {
-            button.SetButtonText(ExtremeRoleManager.CombRole[
-                (byte)combRoleId].GetOptionName());
+            string combRoleName = ExtremeRoleManager.CombRole[
+                (byte)combRoleId].GetOptionName();
+            button.SetButtonText(combRoleName);
             return (UnityAction)(() =>
             {
-                AddRoleMenuModelUpdater.AddRoleData(model, combRoleId);
+                AddRoleMenuModelUpdater.AddRoleData(model, id, combRoleId);
+                
+                base.gameObject.SetActive(false);
+                
+                FilterItemProperty item = Instantiate(
+                    this.filterItemPrefab,
+                    model.Property.Layout.transform);
+                item.Text.text = combRoleName;
+                crateItemAction(item, model, id);
             });
         }
         else if (model.GhostRole.TryGetValue(id, out var ghostRoleId))
         {
-            button.SetButtonText(ExtremeGhostRoleManager.AllGhostRole[
-                ghostRoleId].GetColoredRoleName());
+            string ghostRoleName = ExtremeGhostRoleManager.AllGhostRole[
+                ghostRoleId].GetColoredRoleName();
+            button.SetButtonText(ghostRoleName);
             return (UnityAction)(() =>
             {
-                AddRoleMenuModelUpdater.AddRoleData(model, ghostRoleId);
+                AddRoleMenuModelUpdater.AddRoleData(model, id, ghostRoleId);
+                
+                base.gameObject.SetActive(false);
+                
+                FilterItemProperty item = Instantiate(
+                    this.filterItemPrefab,
+                    model.Property.Layout.transform);
+                item.Text.text = ghostRoleName;
+                crateItemAction(item, model, id);
             });
         }
         else
         {
             return (UnityAction)(() => { });
         }
+    }
+
+    private static void crateItemAction(
+        FilterItemProperty item, AddRoleMenuModel model, int id)
+    {
+        item.RemoveButton.onClick.AddListener(
+            (UnityAction)(() =>
+            {
+                AddRoleMenuModelUpdater.RemoveFilterRole(model, id);
+                Destroy(item.gameObject);
+            }));
     }
 }

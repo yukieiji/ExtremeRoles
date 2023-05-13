@@ -12,42 +12,11 @@ public static class RoleAssignFilterModelUpdater
             model.FilterId,
             new RoleFilterSetModel()
             {
-                Id = 0,
                 FilterCombinationId = new(),
                 FilterGhostRole = new(),
                 FilterNormalId = new(),
             });
         model.FilterId += 1;
-    }
-
-    public static void AddRoleData(
-        RoleAssignFilterModel model, int targetFilter, ExtremeRoleId roleId)
-    {
-        var filter = model.FilterSet[targetFilter];
-        int id = filter.Id;
-
-        filter.Id += 1;
-        filter.FilterNormalId.Add(id, roleId);
-    }
-
-    public static void AddRoleData(
-        RoleAssignFilterModel model, int targetFilter, CombinationRoleType roleId)
-    {
-        var filter = model.FilterSet[targetFilter];
-        int id = filter.Id;
-
-        filter.Id += 1;
-        filter.FilterCombinationId.Add(id, roleId);
-    }
-
-    public static void AddRoleData(
-        RoleAssignFilterModel model, int targetFilter, ExtremeGhostRoleId roleId)
-    {
-        var filter = model.FilterSet[targetFilter];
-        int id = filter.Id;
-
-        filter.Id += 1;
-        filter.FilterGhostRole.Add(id, roleId);
     }
 
     public static void ConvertModelToAssignFilter(
@@ -79,19 +48,9 @@ public static class RoleAssignFilterModelUpdater
         model.FilterSet.Remove(targetFilter);
     }
 
-    public static void RemoveFilterRole(
-        RoleAssignFilterModel model, int targetFilter, int targetId)
-    {
-        var filter = model.FilterSet[targetFilter];
-        filter.FilterNormalId.Remove(targetId);
-        filter.FilterCombinationId.Remove(targetId);
-        filter.FilterGhostRole.Remove(targetId);
-    }
-
     public static void ResetFilter(RoleAssignFilterModel model, int targetFilter)
     {
         var filter = model.FilterSet[targetFilter];
-        filter.Id = 0;
         filter.FilterNormalId.Clear();
         filter.FilterCombinationId.Clear();
         filter.FilterGhostRole.Clear();
