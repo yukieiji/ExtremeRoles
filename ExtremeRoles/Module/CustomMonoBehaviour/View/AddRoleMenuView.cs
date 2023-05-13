@@ -6,10 +6,12 @@ using UnityEngine.Events;
 using UnityEngine;
 using UnityEngine.UI;
 
+using ExtremeRoles.GhostRoles;
+using ExtremeRoles.Roles;
+
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.RoleAssign.Model;
 using ExtremeRoles.Module.RoleAssign.Update;
-using ExtremeRoles.Roles;
 
 #nullable enable
 
@@ -74,7 +76,7 @@ public sealed class AddRoleMenuView : MonoBehaviour
         else if (model.CombRole.TryGetValue(id, out var combRoleId))
         {
             button.SetButtonText(ExtremeRoleManager.CombRole[
-                (byte)combRoleId]);
+                (byte)combRoleId].GetOptionName());
             return (UnityAction)(() =>
             {
                 AddRoleMenuModelUpdater.AddRoleData(model, combRoleId);
@@ -82,6 +84,8 @@ public sealed class AddRoleMenuView : MonoBehaviour
         }
         else if (model.GhostRole.TryGetValue(id, out var ghostRoleId))
         {
+            button.SetButtonText(ExtremeGhostRoleManager.AllGhostRole[
+                ghostRoleId].GetColoredRoleName());
             return (UnityAction)(() =>
             {
                 AddRoleMenuModelUpdater.AddRoleData(model, ghostRoleId);

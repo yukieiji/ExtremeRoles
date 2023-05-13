@@ -13,7 +13,7 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
     {
         this.filter.Clear();
 
-        var model = CustomMonoBehaviour.FilterItemProperty.Model;
+        var model = CustomMonoBehaviour.View.RoleAssignFilterView.Model;
         if (model == null) { return; }
         RoleAssignFilterModelUpdater.ConvertModelToAssignFilter(model, this);
     }

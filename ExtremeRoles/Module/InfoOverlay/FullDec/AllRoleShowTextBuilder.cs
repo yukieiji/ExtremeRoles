@@ -74,7 +74,7 @@ namespace ExtremeRoles.Module.InfoOverlay.FullDec
                 else if (combRole is FlexibleCombinationRoleManagerBase flexCombRole)
                 {
                     optionId = flexCombRole.GetOptionIdOffset();
-                    colorRoleName = flexCombRole.GetColoredBaseRoleName();
+                    colorRoleName = flexCombRole.GetOptionName();
 
                     roleFullDesc = flexCombRole.GetBaseRoleFullDescription();
                     roleFullDesc = Design.CleanPlaceHolder(roleFullDesc);

@@ -64,11 +64,6 @@ public sealed class RoleAssignFilterView : MonoBehaviour
     public void OnEnable()
     {
         var roleSelector = ExtremeGameModeManager.Instance.RoleSelector;
-        foreach (var child in addRoleMenu.Layout.rectChildren)
-        {
-            Destroy(child.gameObject);
-        }
-
         foreach (var roleId in roleSelector.UseNormalRoleId)
         {
 
