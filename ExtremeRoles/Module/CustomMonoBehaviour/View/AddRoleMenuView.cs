@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine.Events;
 using UnityEngine;
 using UnityEngine.UI;
+using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
@@ -55,6 +56,7 @@ public sealed class AddRoleMenuView : MonoBehaviour
         }
     }
 
+    [HideFromIl2Cpp]
     public void UpdateView(AddRoleMenuModel model)
     {
         if (this.layout.rectChildren.Count == 0)
@@ -75,6 +77,7 @@ public sealed class AddRoleMenuView : MonoBehaviour
         }
     }
 
+    [HideFromIl2Cpp]
     private UnityAction createButton(
         ButtonWrapper button, AddRoleMenuModel model, int id)
     {
@@ -123,6 +126,7 @@ public sealed class AddRoleMenuView : MonoBehaviour
         }
     }
 
+    [HideFromIl2Cpp]
     private void createFilterItem(AddRoleMenuModel model, string name, int id)
     {
         FilterItemProperty item = Instantiate(

@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Linq;
 
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using Il2CppInterop.Runtime.Attributes;
 
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.RoleAssign.Model;
@@ -109,6 +109,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
         this.addRoleMenu.gameObject.SetActive(false);
     }
 
+    [HideFromIl2Cpp]
     private void AddNewFilterSet()
     {
         if (Model == null) { return; }
