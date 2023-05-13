@@ -2,37 +2,37 @@
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module.RoleAssign.Model;
 
-namespace ExtremeRoles.Module.RoleAssign;
+namespace ExtremeRoles.Module.RoleAssign.Update;
 
 public static class RoleAssignFilterModelUpdater
 {
-	public static void AddFilter(RoleAssignFilterModel model)
-	{
-		model.FilterSet.Add(
+    public static void AddFilter(RoleAssignFilterModel model)
+    {
+        model.FilterSet.Add(
             model.FilterId,
-			new RoleFilterSetModel()
-			{
-				Id = 0,
-				FilterCombinationId = new(),
-				FilterGhostRole = new(),
-				FilterNormalId = new(),
-			});
+            new RoleFilterSetModel()
+            {
+                Id = 0,
+                FilterCombinationId = new(),
+                FilterGhostRole = new(),
+                FilterNormalId = new(),
+            });
         model.FilterId += 1;
     }
 
     public static void AddRoleData(
-		RoleAssignFilterModel model, int targetFilter, ExtremeRoleId roleId)
-	{
-		var filter = model.FilterSet[targetFilter];
+        RoleAssignFilterModel model, int targetFilter, ExtremeRoleId roleId)
+    {
+        var filter = model.FilterSet[targetFilter];
         int id = filter.Id;
 
         filter.Id += 1;
         filter.FilterNormalId.Add(id, roleId);
-	}
+    }
 
-	public static void AddRoleData(
-		RoleAssignFilterModel model, int targetFilter, CombinationRoleType roleId)
-	{
+    public static void AddRoleData(
+        RoleAssignFilterModel model, int targetFilter, CombinationRoleType roleId)
+    {
         var filter = model.FilterSet[targetFilter];
         int id = filter.Id;
 
@@ -40,9 +40,9 @@ public static class RoleAssignFilterModelUpdater
         filter.FilterCombinationId.Add(id, roleId);
     }
 
-	public static void AddRoleData(
-		RoleAssignFilterModel model, int targetFilter, ExtremeGhostRoleId roleId)
-	{
+    public static void AddRoleData(
+        RoleAssignFilterModel model, int targetFilter, ExtremeGhostRoleId roleId)
+    {
         var filter = model.FilterSet[targetFilter];
         int id = filter.Id;
 
@@ -80,10 +80,10 @@ public static class RoleAssignFilterModelUpdater
     }
 
     public static void RemoveFilterRole(
-		RoleAssignFilterModel model, int targetFilter, int targetId)
-	{
+        RoleAssignFilterModel model, int targetFilter, int targetId)
+    {
         var filter = model.FilterSet[targetFilter];
-		filter.FilterNormalId.Remove(targetId);
+        filter.FilterNormalId.Remove(targetId);
         filter.FilterCombinationId.Remove(targetId);
         filter.FilterGhostRole.Remove(targetId);
     }

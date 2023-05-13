@@ -5,14 +5,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-using ExtremeRoles.Module.RoleAssign;
-using ExtremeRoles.Module.RoleAssign.Model;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
+using ExtremeRoles.Module.RoleAssign.Model;
+using ExtremeRoles.Module.RoleAssign.Update;
 using ExtremeRoles.GameMode;
 
 #nullable enable
 
-namespace ExtremeRoles.Module.CustomMonoBehaviour;
+namespace ExtremeRoles.Module.CustomMonoBehaviour.View;
 
 [Il2CppRegister]
 public sealed class RoleAssignFilterView : MonoBehaviour
@@ -32,17 +32,17 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 #pragma warning restore CS8618
     public void Awake()
     {
-        Transform trans = base.transform;
+        Transform trans = transform;
 
-        this.addFilterButton = trans.Find(
+        addFilterButton = trans.Find(
             "Body/AddFilterButton").gameObject.GetComponent<ButtonWrapper>();
-        this.layout = trans.Find(
+        layout = trans.Find(
             "Body/Scroll/Viewport/Content").gameObject.GetComponent<VerticalLayoutGroup>();
-        this.filterSetPrefab = trans.Find(
+        filterSetPrefab = trans.Find(
             "Body/FillterSet").gameObject.GetComponent<RoleFilterSetProperty>();
-        this.filterItemPrefab = trans.Find(
+        filterItemPrefab = trans.Find(
             "Body/FilterItem").gameObject.GetComponent<FilterItemProperty>();
-        this.addRoleMenu = trans.Find(
+        addRoleMenu = trans.Find(
             "Body/AddRoleMenu").gameObject.GetComponent<AddRoleMenuView>();
         var closeButton = trans.Find("CloseButton").gameObject.GetComponent<
             Button>();
@@ -57,14 +57,14 @@ public sealed class RoleAssignFilterView : MonoBehaviour
         }
 
         // Create Actions
-        this.addFilterButton.Awake();
-        this.addFilterButton.SetButtonClickAction((UnityAction)AddNewFilterSet);
+        addFilterButton.Awake();
+        addFilterButton.SetButtonClickAction((UnityAction)AddNewFilterSet);
     }
 
     public void OnEnable()
     {
         var roleSelector = ExtremeGameModeManager.Instance.RoleSelector;
-        foreach (var child in this.addRoleMenu.Layout.rectChildren)
+        foreach (var child in addRoleMenu.Layout.rectChildren)
         {
             Destroy(child.gameObject);
         }
@@ -84,7 +84,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
         // Update model
         RoleAssignFilterModelUpdater.AddFilter(Model);
 
-        var filterSet = Instantiate(this.filterSetPrefab, this.layout.transform);
+        var filterSet = Instantiate(filterSetPrefab, layout.transform);
         filterSet.gameObject.SetActive(true);
 
         filterSet.DeleteThisButton.SetButtonClickAction(

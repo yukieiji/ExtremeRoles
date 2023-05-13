@@ -2,6 +2,7 @@
 using System.Linq;
 
 using ExtremeRoles.GhostRoles;
+using ExtremeRoles.Module.RoleAssign.Update;
 
 namespace ExtremeRoles.Module.RoleAssign;
 
