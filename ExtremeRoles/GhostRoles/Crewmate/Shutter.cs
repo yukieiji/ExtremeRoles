@@ -193,7 +193,8 @@ public sealed class Shutter : GhostRoleBase
     protected override void OnMeetingStartHook()
     {
         string photoInfo = this.photoCreater.ToString();
-
+        this.photoCreater.Reset();
+        
         if (string.IsNullOrEmpty(photoInfo)) { return; }
 
         MeetingReporter.RpcAddMeetingChatReport(
