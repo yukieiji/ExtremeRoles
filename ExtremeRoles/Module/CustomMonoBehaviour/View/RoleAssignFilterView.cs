@@ -112,14 +112,14 @@ public sealed class RoleAssignFilterView : MonoBehaviour
     {
         if (this.Model == null) { return; }
 
-        int id = this.Model.FilterId;
+        Guid id = Guid.NewGuid();
 
         // Update model
-        RoleAssignFilterModelUpdater.AddFilter(this.Model);
+        RoleAssignFilterModelUpdater.AddFilter(this.Model, id);
         this.createFilterSet(id);
     }
 
-    private RoleFilterSetProperty createFilterSet(int id)
+    private RoleFilterSetProperty createFilterSet(Guid id)
     {
         var filterSet = Instantiate(this.filterSetPrefab, this.layout.transform);
         filterSet.gameObject.SetActive(true);
@@ -176,7 +176,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
             {
                 string combRoleName = ExtremeRoleManager.CombRole[
                     (byte)roleId].GetOptionName();
-                createFilterItem(parent, combRoleName, id);
+                createFilterItem(parent, combRoleName, filterId);
             }
             foreach (var (filterId, roleId) in filter.FilterGhostRole)
             {

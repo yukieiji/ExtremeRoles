@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -23,7 +24,6 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
 
         this.model = new RoleAssignFilterModel()
         {
-            FilterId = 0,
             AddRoleMenu = new()
             {
                 Id = new(),
