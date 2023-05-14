@@ -90,6 +90,7 @@ public static class RoleManagerSelectRolesPatch
         // スポーンデータ作成
         RoleSpawnDataManager spawnData = new RoleSpawnDataManager();
         GhostRoleSpawnDataManager.Instance.Create(spawnData.UseGhostCombRole);
+        RoleAssignFilter.Instance.Initialize();
 
         PlayerRoleAssignData assignData = PlayerRoleAssignData.Instance;
 

@@ -139,10 +139,6 @@ public static class OptionHolder
         Patches.MapOverlay.MapCountOverlayUpdatePatch.LoadOptionValue();
         
         MeetingReporter.Reset();
-        if (RoleAssignFilter.IsExist)
-        {
-            RoleAssignFilter.Instance.Destroy();
-        }
 
         Client.GhostsSeeRole = ConfigParser.GhostsSeeRoles.Value;
         Client.GhostsSeeTask = ConfigParser.GhostsSeeTasks.Value;
