@@ -23,9 +23,9 @@ public sealed class AddRoleMenuView : MonoBehaviour
 {
 #pragma warning disable CS8618
     public TextMeshProUGUI Title { get; private set; }
+    public FilterItemProperty FilterItemPrefab { get; private set; }
 
     private ButtonWrapper buttonPrefab;
-    private FilterItemProperty filterItemPrefab;
     private GridLayoutGroup layout;
 
     private Dictionary<int, ButtonWrapper> allButton;
@@ -38,7 +38,7 @@ public sealed class AddRoleMenuView : MonoBehaviour
 
         this.Title = trans.Find("Title").GetComponent<TextMeshProUGUI>();
 
-        this.filterItemPrefab = trans.Find(
+        this.FilterItemPrefab = trans.Find(
             "FilterItem").gameObject.GetComponent<FilterItemProperty>();
         this.buttonPrefab = trans.Find("Button").gameObject.GetComponent<ButtonWrapper>();
         this.layout = trans.Find("Scroll/Viewport/Content").gameObject.GetComponent<GridLayoutGroup>();
@@ -69,7 +69,7 @@ public sealed class AddRoleMenuView : MonoBehaviour
             }
         }
 
-        foreach (var (id, button) in allButton)
+        foreach (var (id, button) in this.allButton)
         {
             button.gameObject.SetActive(true);
             button.ResetButtonAction();
@@ -130,7 +130,7 @@ public sealed class AddRoleMenuView : MonoBehaviour
     private void createFilterItem(AddRoleMenuModel model, string name, int id)
     {
         FilterItemProperty item = Instantiate(
-            this.filterItemPrefab,
+            this.FilterItemPrefab,
             model.Property.Layout.transform);
         item.gameObject.SetActive(true);
         item.Text.text = name;

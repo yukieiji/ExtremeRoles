@@ -43,8 +43,9 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
             // アセットバンドルからロード
             GameObject viewObj = new GameObject("view");
             this.view = viewObj.GetComponent<RoleAssignFilterView>();
+            this.view.Awake();
+            this.view.Model = model;
         }
-        this.view.Model = model;
         this.view.gameObject.SetActive(true);
     }
 
