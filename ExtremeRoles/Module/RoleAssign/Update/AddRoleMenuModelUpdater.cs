@@ -1,6 +1,4 @@
-﻿using System;
-
-using ExtremeRoles.Roles;
+﻿using ExtremeRoles.Roles;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module.RoleAssign.Model;
 
