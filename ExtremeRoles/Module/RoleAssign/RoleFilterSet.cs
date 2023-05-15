@@ -7,6 +7,9 @@ namespace ExtremeRoles.Module.RoleAssign;
 
 public sealed class RoleFilterSet
 {
+    public int AssignNum { private get; set; } = 1;
+
+    private int curAssignNum = 0;
     private bool isBlock = false;
 
     private HashSet<int>  normalRoleFilter = new HashSet<int>();
@@ -19,6 +22,8 @@ public sealed class RoleFilterSet
         this.combRoleFilter.Clear();
         this.ghostRoleFilter.Clear();
 
+        this.curAssignNum = 0;
+        
         this.isBlock = false;
     }
     public void Add(ExtremeRoleId roleId)
@@ -36,18 +41,27 @@ public sealed class RoleFilterSet
 
     public void Update(int intedRoleId)
     {
-        if (this.isBlock) { return; }
-        this.isBlock = this.normalRoleFilter.Contains(intedRoleId);
+        if (this.isBlock || !this.normalRoleFilter.Contains(intedRoleId))
+        { 
+            return; 
+        }
+        this.updateState();
     }
     public void Update(byte bytedRoleId)
     {
-        if (this.isBlock) { return; }
-        this.isBlock = this.combRoleFilter.Contains(bytedRoleId);
+        if (this.isBlock || !this.normalRoleFilter.Contains(bytedRoleId))
+        {
+            return;
+        }
+        this.updateState();
     }
     public void Update(ExtremeGhostRoleId roleId)
     {
-        if (this.isBlock) { return; }
-        this.isBlock = this.ghostRoleFilter.Contains(roleId);
+        if (this.isBlock || this.ghostRoleFilter.Contains(roleId))
+        { 
+            return; 
+        }
+        this.updateState();
     }
 
     public bool IsBlock(int intedRoleId)
@@ -58,4 +72,10 @@ public sealed class RoleFilterSet
 
     public bool IsBlock(ExtremeGhostRoleId roleId)
         => this.ghostRoleFilter.Contains(roleId) ? this.isBlock : false;
+
+    private void updateState()
+    {
+        ++this.curAssignNum;
+        this.isBlock = this.curAssignNum >= this.AssignNum;
+    }
 }
