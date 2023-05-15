@@ -53,6 +53,9 @@ public sealed class SimpleButton : MonoBehaviour
 
     public void OnMouseDown()
     {
+        this.Image.color = defaultImgColor;
+        this.Text.color = defaultTextColor;
+
         if (this.ClickedEvent != null)
         {
             this.ClickedEvent.Invoke();
