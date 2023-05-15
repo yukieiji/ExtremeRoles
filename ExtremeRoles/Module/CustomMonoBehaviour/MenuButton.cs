@@ -38,10 +38,6 @@ public sealed class MenuButton : MonoBehaviour
     public void SetText(string text)
     {
         if (this.Text == null) { return; }
-
-        StartCoroutine(Effects.Lerp(0.1f, new Action<float>((p) =>
-        {
-            this.Text.SetText(text);
-        })));
+        this.Text.SetText(text);
     }
 }

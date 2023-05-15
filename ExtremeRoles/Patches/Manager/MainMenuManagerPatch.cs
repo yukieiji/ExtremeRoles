@@ -51,8 +51,11 @@ public static class MainMenuManagerStartPatch
         }
 
         // UpdateButton
-        MenuButton updateButton = UnityObject.Instantiate(
-            Module.Prefab.ButtonTemplate, template.transform);
+        GameObject updateButtonObj = UnityObject.Instantiate(template, template.transform);
+        UnityObject.Destroy(updateButtonObj.GetComponent<AspectPosition>());
+        UnityObject.Destroy(updateButtonObj.GetComponent<ConditionalHide>());
+        UnityObject.Destroy(updateButtonObj.GetComponentInChildren<TextTranslatorTMP>());
+        MenuButton updateButton = updateButtonObj.AddComponent<MenuButton>();
         updateButton.name = "ExtremeRolesUpdateButton";
         updateButton.transform.localPosition = new Vector3(0.0f, 0.6f, 0.0f);
         updateButton.gameObject.SetActive(true);
