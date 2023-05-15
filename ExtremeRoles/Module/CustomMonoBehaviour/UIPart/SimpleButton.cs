@@ -34,7 +34,7 @@ public sealed class SimpleButton : MonoBehaviour
 
     public SpriteRenderer Image { get; private set; }
     public TextMeshPro Text { get; private set; }
-    public Button.ButtonClickedEvent ClickedEvent { get; private set; }
+    public Button.ButtonClickedEvent ClickedEvent { get; set; }
 
     private Color defaultImgColor;
     private Color defaultTextColor;

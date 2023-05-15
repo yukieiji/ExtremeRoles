@@ -13,6 +13,7 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
+using ExtremeRoles.Module.RoleAssign;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
@@ -64,6 +65,11 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
         this.button.Text.fontSize =
             this.button.Text.fontSizeMax =
             this.button.Text.fontSizeMin = 1.9f;
+        this.button.ClickedEvent.AddListener(
+            (UnityAction)(() =>
+            {
+                RoleAssignFilter.Instance.OpenEditor();
+            }));
     }
 
     private OptionMenuTab createMenu(OptionTab tab, StringOption optionTemplate)

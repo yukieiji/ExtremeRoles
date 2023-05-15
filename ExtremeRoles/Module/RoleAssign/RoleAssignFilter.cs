@@ -8,6 +8,7 @@ using UnityEngine;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module.RoleAssign.Model;
 using ExtremeRoles.Module.CustomMonoBehaviour.View;
+using ExtremeRoles.Resources;
 
 #nullable enable
 
@@ -36,12 +37,15 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
     }
 
     // UIを見せる
-    public void OpenEditor(Transform? parent = null)
+    public void OpenEditor()
     {
         if (this.view == null)
         {
             // アセットバンドルからロード
-            GameObject viewObj = new GameObject("view");
+            GameObject viewObj = UnityEngine.Object.Instantiate(
+                Loader.GetUnityObjectFromResources<GameObject>(
+                    "ExtremeRoles.Resources.Asset.roleassignfilter.asset",
+                    "assets/roles/roleassignfilter.prefab"));
             this.view = viewObj.GetComponent<RoleAssignFilterView>();
             this.view.Awake();
             this.view.Model = model;

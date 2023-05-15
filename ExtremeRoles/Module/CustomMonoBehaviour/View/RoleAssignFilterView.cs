@@ -11,6 +11,7 @@ using ExtremeRoles.Roles;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.RoleAssign.Model;
 using ExtremeRoles.Module.RoleAssign.Update;
+using ExtremeRoles.Performance;
 
 #nullable enable
 
@@ -77,6 +78,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 
     public void OnEnable()
     {
+        FastDestroyableSingleton<HudManager>.Instance.gameObject.SetActive(false);
         if (this.Model == null) { return; }
         var menu = this.Model.AddRoleMenu;
         
@@ -106,6 +108,11 @@ public sealed class RoleAssignFilterView : MonoBehaviour
             id++;
         }
         this.addRoleMenu.gameObject.SetActive(false);
+    }
+
+    public void OnDisable()
+    {
+        FastDestroyableSingleton<HudManager>.Instance.gameObject.SetActive(true);
     }
 
     [HideFromIl2Cpp]
