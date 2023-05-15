@@ -37,18 +37,21 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
     }
 
     // UIを見せる
-    public void OpenEditor()
+    public void OpenEditor(GameObject hideObj)
     {
         if (this.view == null)
         {
+            hideObj.SetActive(false);
+
             // アセットバンドルからロード
             GameObject viewObj = UnityEngine.Object.Instantiate(
                 Loader.GetUnityObjectFromResources<GameObject>(
                     "ExtremeRoles.Resources.Asset.roleassignfilter.asset",
                     "assets/roles/roleassignfilter.prefab"));
             this.view = viewObj.GetComponent<RoleAssignFilterView>();
-            this.view.Awake();
+            this.view.HideObject = hideObj;
             this.view.Model = model;
+            this.view.Awake();
         }
         this.view.gameObject.SetActive(true);
     }

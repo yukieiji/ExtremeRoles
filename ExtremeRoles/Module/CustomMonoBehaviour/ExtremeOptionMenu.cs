@@ -68,7 +68,7 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
         this.button.ClickedEvent.AddListener(
             (UnityAction)(() =>
             {
-                RoleAssignFilter.Instance.OpenEditor();
+                RoleAssignFilter.Instance.OpenEditor(base.gameObject);
             }));
     }
 

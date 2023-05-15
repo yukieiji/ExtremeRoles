@@ -10,21 +10,33 @@ public static class AddRoleMenuModelUpdater
         AddRoleMenuModel model, int id, ExtremeRoleId roleId)
     {
         var filter = model.Filter;
-        filter.FilterNormalId.Add(id, roleId);
+        bool result = filter.FilterNormalId.TryAdd(id, roleId);
+        if (!result)
+        {
+            Helper.Logging.Error("Cant Add Role");
+        }
     }
 
     public static void AddRoleData(
         AddRoleMenuModel model, int id, CombinationRoleType roleId)
     {
         var filter = model.Filter;
-        filter.FilterCombinationId.Add(id, roleId);
+        bool result = filter.FilterCombinationId.TryAdd(id, roleId);
+        if (!result)
+        {
+            Helper.Logging.Error("Cant Add Role");
+        }
     }
 
     public static void AddRoleData(
         AddRoleMenuModel model, int id, ExtremeGhostRoleId roleId)
     {
         var filter = model.Filter;
-        filter.FilterGhostRole.Add(id, roleId);
+        bool result = filter.FilterGhostRole.TryAdd(id, roleId);
+        if (!result)
+        {
+            Helper.Logging.Error("Cant Add Role");
+        }
     }
 
     public static void RemoveFilterRole(

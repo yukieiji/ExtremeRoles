@@ -30,6 +30,8 @@ public sealed class RoleAssignFilterView : MonoBehaviour
             this.model = value;
         }
     }
+    [HideFromIl2Cpp]
+    public GameObject HideObject { private get; set; }
 
 #pragma warning disable CS8618
     private ButtonWrapper addFilterButton;
@@ -65,6 +67,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 
         // Create Actions
         this.addFilterButton.Awake();
+        this.addFilterButton.ResetButtonAction();
         this.addFilterButton.SetButtonClickAction((UnityAction)addNewFilterSet);
     }
 
@@ -79,6 +82,10 @@ public sealed class RoleAssignFilterView : MonoBehaviour
     public void OnEnable()
     {
         FastDestroyableSingleton<HudManager>.Instance.gameObject.SetActive(false);
+        if (this.HideObject != null)
+        {
+            this.HideObject.SetActive(false);
+        }
         if (this.Model == null) { return; }
         var menu = this.Model.AddRoleMenu;
         
@@ -112,6 +119,10 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 
     public void OnDisable()
     {
+        if (this.HideObject != null)
+        {
+            this.HideObject.SetActive(true);
+        }
         FastDestroyableSingleton<HudManager>.Instance.gameObject.SetActive(true);
     }
 
