@@ -61,6 +61,7 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
         foreach (var filterModel in model.FilterSet.Values)
         {
             var filterSet = new RoleFilterSet();
+            filterSet.AssignNum = filterModel.AssignNum;
 
             foreach (var extremeRoleId in filterModel.FilterNormalId.Values)
             {
