@@ -4,6 +4,7 @@ using TMPro;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 
+[Il2CppRegister]
 public sealed class SimpleButton : MonoBehaviour
 {
     public SpriteRenderer Image { get; private set; }
