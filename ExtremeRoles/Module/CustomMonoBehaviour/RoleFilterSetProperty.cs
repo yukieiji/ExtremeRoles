@@ -1,9 +1,10 @@
 ﻿using System;
 
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
-using UnityEngine.UI;
 
 #nullable enable
 
@@ -17,6 +18,11 @@ public sealed class RoleFilterSetProperty : MonoBehaviour
     public ButtonWrapper DeleteAllRoleButton { get; private set; }
     public ButtonWrapper DeleteThisButton { get; private set; }
     public GridLayoutGroup Layout { get; private set; }
+    
+    public TextMeshProUGUI AssignText { get; private set; }
+    public TextMeshProUGUI AssignNumText { get; private set; }
+    public Button IncreseButton { get; private set; }
+    public Button DecreseButton { get; private set; }
 
     public RoleFilterSetProperty(IntPtr ptr) : base(ptr) { }
 #pragma warning restore CS8618
@@ -25,11 +31,21 @@ public sealed class RoleFilterSetProperty : MonoBehaviour
         Transform trans = base.transform;
 
         this.AddRoleButton = trans.Find(
-            "Buttons/AddRoleButton").gameObject.GetComponent<ButtonWrapper>();
+            "Menu/Buttons/AddRoleButton").gameObject.GetComponent<ButtonWrapper>();
         this.DeleteAllRoleButton = trans.Find(
-            "Buttons/RemoveAllButton").gameObject.GetComponent<ButtonWrapper>();
+            "Menu/Buttons/RemoveAllButton").gameObject.GetComponent<ButtonWrapper>();
         this.DeleteThisButton = trans.Find(
-            "Buttons/DeleteThisButton").gameObject.GetComponent<ButtonWrapper>();
+            "Menu/Buttons/DeleteThisButton").gameObject.GetComponent<ButtonWrapper>();
+
+        this.AssignText = trans.Find(
+            "Menu/Assign/Text").gameObject.GetComponent<TextMeshProUGUI>();
+        this.AssignNumText = trans.Find(
+            "Menu/Assign/Group/Num").gameObject.GetComponent<TextMeshProUGUI>();
+        this.DecreseButton = trans.Find(
+            "Menu/Assign/Group/Decrese").gameObject.GetComponent<Button>();
+        this.IncreseButton = trans.Find(
+            "Menu/Assign/Group/Increse").gameObject.GetComponent<Button>();
+
         this.Layout = trans.Find("FillterBody").gameObject.GetComponent<GridLayoutGroup>();
     }
 }
