@@ -19,6 +19,7 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour.View;
 [Il2CppRegister]
 public sealed class RoleAssignFilterView : MonoBehaviour
 {
+    [HideFromIl2Cpp]
     public RoleAssignFilterModel Model
     {
         private get => this.model;
