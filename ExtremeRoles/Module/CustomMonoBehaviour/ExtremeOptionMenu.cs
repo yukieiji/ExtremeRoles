@@ -49,6 +49,21 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
         retransformTabButton();
     }
 
+    public void OnDisable()
+    {
+        this.menu.RegularGameSettings.SetActive(false);
+        this.menu.RolesSettings.gameObject.SetActive(false);
+        this.menu.HideNSeekSettings.SetActive(false);
+
+        this.menu.GameSettingsHightlight.enabled = false;
+        this.menu.RolesSettingsHightlight.enabled = false;
+
+        foreach (OptionMenuTab menu in this.allMenu.Values)
+        {
+            menu.SetActive(false);
+        }
+    }
+
     private void createRoleAssignFilterButton()
     {
         GameObject obj = Instantiate(
