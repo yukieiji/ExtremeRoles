@@ -74,8 +74,8 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
         this.button = obj.GetComponent<SimpleButton>();
 
         this.button.Layer = this.menu.gameObject.layer;
-        this.button.Scale = new Vector3(0.65f, 0.3f, 1.0f);
-        this.button.gameObject.transform.localPosition = new Vector3(2.0f, 1.75f);
+        this.button.Scale = new Vector3(0.625f, 0.3f, 1.0f);
+        this.button.gameObject.transform.localPosition = new Vector3(2.25f, 1.75f);
         this.button.Text.text = "ロールアサインフィルター";
         this.button.Text.fontSize =
             this.button.Text.fontSizeMax =
@@ -97,12 +97,14 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
     }
 
     private void reconstructButton(
-        GameObject tabButtonObject, UnityAction newAction)
+        GameObject tabButtonObject, Action newAction)
     {
         PassiveButton button = tabButtonObject.GetComponentInChildren<PassiveButton>();
         button.OnClick.RemoveAllPersistentAndListeners();
         button.OnClick.AddListener(
             (UnityAction)(() => {
+
+                this.button.gameObject.SetActive(true);
 
                 this.menu.RegularGameSettings.SetActive(false);
                 this.menu.RolesSettings.gameObject.SetActive(false);
@@ -116,7 +118,7 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
                     menu.SetActive(false);
                 }
             }));
-        button.OnClick.AddListener(newAction);
+        button.OnClick.AddListener((UnityAction)newAction);
     }
 
     public void recreateTabButtonFunction()
@@ -127,28 +129,29 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
             case GameModes.Normal:
                 reconstructButton(
                     this.tabTemplate,
-                    (UnityAction)(() =>
+                    () =>
                     {
                         this.menu.RegularGameSettings.SetActive(true);
                         this.menu.GameSettingsHightlight.enabled = true;
-                    }));
+                    });
 
                 reconstructButton(
                     this.menu.Tabs.transform.FindChild("RoleTab").gameObject,
-                    (UnityAction)(() =>
+                    () =>
                     {
+                        this.button.gameObject.SetActive(false);
                         this.menu.RolesSettings.gameObject.SetActive(true);
                         this.menu.RolesSettingsHightlight.enabled = true;
-                    }));
+                    });
                 break;
             case GameModes.HideNSeek:
                 reconstructButton(
                     this.tabTemplate,
-                    (UnityAction)(() =>
+                    () =>
                     {
                         this.menu.HideNSeekSettings.SetActive(true);
                         this.menu.GameSettingsHightlight.enabled = true;
-                    }));
+                    });
                 this.menu.Tabs.transform.FindChild("RoleTab").gameObject.SetActive(false);
                 break;
             default:
@@ -159,9 +162,9 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
         {
             reconstructButton(
                 menu.Tab,
-                (UnityAction)(() => {
+                () => {
                     menu.SetActive(true);
-                }));
+                });
         }
     }
     private void retransformTabButton()
