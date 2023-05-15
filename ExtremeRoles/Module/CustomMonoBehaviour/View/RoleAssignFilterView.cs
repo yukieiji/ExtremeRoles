@@ -79,16 +79,11 @@ public sealed class RoleAssignFilterView : MonoBehaviour
         }
     }
 
-    public void OnEnable()
+    public void Start()
     {
-        FastDestroyableSingleton<HudManager>.Instance.gameObject.SetActive(false);
-        if (this.HideObject != null)
-        {
-            this.HideObject.SetActive(false);
-        }
         if (this.Model == null) { return; }
         var menu = this.Model.AddRoleMenu;
-        
+
         menu.Id.Clear();
         menu.NormalRole.Clear();
         menu.CombRole.Clear();
@@ -113,6 +108,15 @@ public sealed class RoleAssignFilterView : MonoBehaviour
             menu.Id.Add(id);
             menu.GhostRole.Add(id, roleId);
             id++;
+        }
+    }
+
+    public void OnEnable()
+    {
+        FastDestroyableSingleton<HudManager>.Instance.gameObject.SetActive(false);
+        if (this.HideObject != null)
+        {
+            this.HideObject.SetActive(false);
         }
         this.addRoleMenu.gameObject.SetActive(false);
     }
