@@ -168,6 +168,18 @@ public sealed class RoleAssignFilterView : MonoBehaviour
                 this.addRoleMenu.gameObject.SetActive(true);
                 this.addRoleMenu.UpdateView(this.Model.AddRoleMenu);
             }));
+        filterSet.IncreseButton.onClick.AddListener(
+            (UnityAction)(() =>
+            {
+                RoleAssignFilterModelUpdater.IncreseFilterAssignNum(this.Model, id);
+                filterSet.AssignNumText.text = $"{this.Model.FilterSet[id].AssignNum}";
+            }));
+        filterSet.DecreseButton.onClick.AddListener(
+            (UnityAction)(() =>
+            {
+                RoleAssignFilterModelUpdater.DecreseFilterAssignNum(this.Model, id);
+                filterSet.AssignNumText.text = $"{this.Model.FilterSet[id].AssignNum}";
+            }));
         return filterSet;
     }
 
@@ -184,6 +196,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
         {
             var filterProp = this.createFilterSet(id);
             var parent = filterProp.Layout.transform;
+            filterProp.AssignNumText.text = $"{filter.AssignNum}";
 
             foreach (var (filterId, roleId) in filter.FilterNormalId)
             {
