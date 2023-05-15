@@ -7,6 +7,31 @@ namespace ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 [Il2CppRegister]
 public sealed class SimpleButton : MonoBehaviour
 {
+    public int Layer
+    {
+        get => base.gameObject.layer;
+        set
+        {
+            base.gameObject.layer = value;
+            this.Text.gameObject.layer = value;
+        }
+    }
+
+    public Vector3 Scale
+    {
+        get => base.transform.localScale;
+        set
+        {
+            Vector3 prevTextScale = this.Text.transform.localScale;
+            base.transform.localScale = value;
+            this.Text.transform.localScale =
+                new Vector3(
+                    prevTextScale.x / value.x,
+                    prevTextScale.y / value.y,
+                    prevTextScale.z / value.z);
+        }
+    }
+
     public SpriteRenderer Image { get; private set; }
     public TextMeshPro Text { get; private set; }
     public Button.ButtonClickedEvent ClickedEvent { get; private set; }

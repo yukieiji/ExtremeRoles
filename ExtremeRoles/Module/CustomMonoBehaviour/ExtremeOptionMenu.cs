@@ -36,20 +36,34 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
 
         this.menu = base.gameObject.GetComponent<GameSettingMenu>();
 
-        GameObject obj = Instantiate(
-            Loader.GetUnityObjectFromResources<GameObject>(
-                "ExtremeRoles.Resources.Asset.simplebutton.asset",
-                "assets/common/simplebutton.prefab"),
-            this.menu.transform.FindChild("Header"));
-
         // ForceEnable Tabs for fixing HideNSeekOptions turnoff tabs
         this.menu.Tabs.gameObject.SetActive(true);
+
+        createRoleAssignFilterButton();
 
         setupTemplate();
         setupOptionMenu();
 
         recreateTabButtonFunction();
         retransformTabButton();
+    }
+
+    private void createRoleAssignFilterButton()
+    {
+        GameObject obj = Instantiate(
+           Loader.GetUnityObjectFromResources<GameObject>(
+               "ExtremeRoles.Resources.Asset.simplebutton.asset",
+               "assets/common/simplebutton.prefab"),
+           this.menu.transform);
+        this.button = obj.GetComponent<SimpleButton>();
+
+        this.button.Layer = this.menu.gameObject.layer;
+        this.button.Scale = new Vector3(0.625f, 0.3f, 1.0f);
+        this.button.gameObject.transform.localPosition = new Vector3(2.0f, 1.75f);
+        this.button.Text.text = "ロールアサインフィルター";
+        this.button.Text.fontSize =
+            this.button.Text.fontSizeMax =
+            this.button.Text.fontSizeMin = 1.9f;
     }
 
     private OptionMenuTab createMenu(OptionTab tab, StringOption optionTemplate)
