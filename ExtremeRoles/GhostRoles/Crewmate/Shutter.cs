@@ -193,7 +193,8 @@ public sealed class Shutter : GhostRoleBase
     protected override void OnMeetingStartHook()
     {
         string photoInfo = this.photoCreater.ToString();
-
+        this.photoCreater.Reset();
+        
         if (string.IsNullOrEmpty(photoInfo)) { return; }
 
         MeetingReporter.RpcAddMeetingChatReport(
@@ -209,7 +210,7 @@ public sealed class Shutter : GhostRoleBase
             parentOps, 3, 10);
         CreateFloatOption(
             ShutterOption.PhotoRange,
-            5.0f, 2.5f, 25f, 0.5f,
+            7.5f, 0.5f, 25f, 0.5f,
             parentOps);
         CreateIntOption(
             ShutterOption.RightPlayerNameRate,

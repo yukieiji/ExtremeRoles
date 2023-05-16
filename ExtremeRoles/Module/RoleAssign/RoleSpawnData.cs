@@ -64,11 +64,11 @@ public sealed class GhostRoleSpawnData : SpawnData
         this.filter = filter;
     }
 
-    public bool IsBlock(SingleRoleBase role)
+    public bool IsFilterContain(SingleRoleBase role)
     {
         if (this.filter.Count == 0)
         {
-            return false;
+            return true;
         }
 
         var id = role.Id;
@@ -82,7 +82,7 @@ public sealed class GhostRoleSpawnData : SpawnData
         }
         else
         {
-            return this.filter.Contains(role.Id);
+            return this.filter.Contains(id);
         }
     }
         
