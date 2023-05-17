@@ -79,8 +79,15 @@ public sealed class RoleAssignFilterView : MonoBehaviour
         }
     }
 
-    public void Start()
+    public void OnEnable()
     {
+        FastDestroyableSingleton<HudManager>.Instance.gameObject.SetActive(false);
+        if (this.HideObject != null)
+        {
+            this.HideObject.SetActive(false);
+        }
+        this.addRoleMenu.gameObject.SetActive(false);
+
         if (this.Model == null) { return; }
 
         this.Model.Id.Clear();
@@ -108,16 +115,6 @@ public sealed class RoleAssignFilterView : MonoBehaviour
             this.Model.GhostRole.Add(id, roleId);
             id++;
         }
-    }
-
-    public void OnEnable()
-    {
-        FastDestroyableSingleton<HudManager>.Instance.gameObject.SetActive(false);
-        if (this.HideObject != null)
-        {
-            this.HideObject.SetActive(false);
-        }
-        this.addRoleMenu.gameObject.SetActive(false);
     }
 
     public void OnDisable()
@@ -188,10 +185,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
     [HideFromIl2Cpp]
     private void initialize(RoleAssignFilterModel model)
     {
-        foreach (var child in this.layout.rectChildren)
-        {
-            Destroy(child.gameObject);
-        }
+        this.layout.DestroyChildren();
 
         foreach (var (filterId, filter) in model.FilterSet)
         {
