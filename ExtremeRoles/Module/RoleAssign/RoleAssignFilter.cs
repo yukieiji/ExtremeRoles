@@ -20,34 +20,30 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
     private RoleAssignFilterView? view;
     private RoleAssignFilterModel model;
 
-    private const string defaultValue = "EMPTY";
+    private const string defaultValue = "";
 
     public RoleAssignFilter()
     {
         this.filter.Clear();
-        this.model = new RoleAssignFilterModel()
+        this.model = getNewModel();
+        if (this.model.Config.Value != defaultValue)
         {
-            Id = new(),
-            NormalRole = new(),
-            CombRole = new(),
-            GhostRole = new(),
-            FilterSet = new()
-        };
-        this.SwitchPreset();
+            this.model.DeserializeFromString(this.model.Config.Value);
+        }
     }
 
     public void SwitchPreset()
     {
-        this.model.Config = ExtremeRolesPlugin.Instance.Config.Bind(
-            "RoleAssignFilter", OptionHolder.ConfigPreset, defaultValue);
-
-        string value = this.model.Config.Value;
+        var newModel = getNewModel();
+        string value = newModel.Config.Value;
 
         if (value != defaultValue)
         {
-            this.DeserializeModel(value);
+            newModel.DeserializeFromString(value);
         }
-        else if (this.view != null)
+
+        this.model = newModel;
+        if (this.view != null)
         {
             this.view.Model = this.model;
         }
@@ -78,9 +74,12 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
                 Loader.GetUnityObjectFromResources<GameObject>(
                     "ExtremeRoles.Resources.Asset.roleassignfilter.asset",
                     "assets/roles/roleassignfilter.prefab"));
+            
+            viewObj.SetActive(false);
+            
             this.view = viewObj.GetComponent<RoleAssignFilterView>();
             this.view.HideObject = hideObj;
-            this.view.Model = model;
+            this.view.Model = this.model;
             this.view.Awake();
         }
         this.view.gameObject.SetActive(true);
@@ -135,4 +134,16 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
     public bool IsBlock(byte bytedCombRoleId) => this.filter.Any(x => x.IsBlock(bytedCombRoleId));
     public bool IsBlock(ExtremeGhostRoleId roleId) => this.filter.Any(x => x.IsBlock(roleId));
 
+
+    private static RoleAssignFilterModel getNewModel()
+        => new RoleAssignFilterModel()
+        {
+            Config = ExtremeRolesPlugin.Instance.Config.Bind(
+                "RoleAssignFilter", OptionHolder.ConfigPreset, defaultValue),
+            Id = new(),
+            NormalRole = new(),
+            CombRole = new(),
+            GhostRole = new(),
+            FilterSet = new()
+        };
 }
