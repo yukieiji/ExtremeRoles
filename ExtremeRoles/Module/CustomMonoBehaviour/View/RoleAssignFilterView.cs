@@ -165,12 +165,9 @@ public sealed class RoleAssignFilterView : MonoBehaviour
         filterSet.AddRoleButton.SetButtonClickAction(
             (UnityAction)(() =>
             {
-                var menuModel = this.Model.AddRoleMenu;
-                menuModel.Property = filterSet;
-                menuModel.Filter = this.Model.FilterSet[id];
-
                 this.addRoleMenu.gameObject.SetActive(true);
-                this.addRoleMenu.UpdateView(this.Model.AddRoleMenu);
+                this.addRoleMenu.UpdateView(
+                    this.Model, id, filterSet.Layout.transform);
             }));
         filterSet.IncreseButton.onClick.AddListener(
             (UnityAction)(() =>
@@ -195,36 +192,36 @@ public sealed class RoleAssignFilterView : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-
-        foreach (var (id, filter) in model.FilterSet)
+        foreach (var (filterId, filter) in model.FilterSet)
         {
-            var filterProp = this.createFilterSet(id);
+            var filterProp = this.createFilterSet(filterId);
             var parent = filterProp.Layout.transform;
             filterProp.AssignNumText.text = $"{filter.AssignNum}";
 
-            foreach (var (filterId, roleId) in filter.FilterNormalId)
+            foreach (var (id, roleId) in filter.FilterNormalId)
             {
                 string roleName = ExtremeRoleManager.NormalRole[
                     (int)roleId].GetColoredRoleName(true);
-                createFilterItem(parent, roleName, filterId);
+                createFilterItem(parent, roleName, filterId, id);
             }
-            foreach (var (filterId, roleId) in filter.FilterCombinationId)
+            foreach (var (id, roleId) in filter.FilterCombinationId)
             {
                 string combRoleName = ExtremeRoleManager.CombRole[
                     (byte)roleId].GetOptionName();
-                createFilterItem(parent, combRoleName, filterId);
+                createFilterItem(parent, combRoleName, filterId, id);
             }
-            foreach (var (filterId, roleId) in filter.FilterGhostRole)
+            foreach (var (id, roleId) in filter.FilterGhostRole)
             {
                 string ghostRoleName = ExtremeGhostRoleManager.AllGhostRole[
                     roleId].GetColoredRoleName();
-                createFilterItem(parent, ghostRoleName, filterId);
+                createFilterItem(parent, ghostRoleName, filterId, id);
             }
         }
     }
 
     [HideFromIl2Cpp]
-    private void createFilterItem(Transform parent, string name, int id)
+    private void createFilterItem(
+        Transform parent, string name, Guid filterId, int id)
     {
         FilterItemProperty item = Instantiate(
             this.addRoleMenu.FilterItemPrefab, parent);
@@ -234,7 +231,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
         item.RemoveButton.onClick.AddListener(
             (UnityAction)(() =>
             {
-                AddRoleMenuModelUpdater.RemoveFilterRole(this.Model.AddRoleMenu, id);
+                RoleAssignFilterModelUpdater.RemoveFilterRole(this.Model, filterId, id);
                 Destroy(item.gameObject);
             }));
     }

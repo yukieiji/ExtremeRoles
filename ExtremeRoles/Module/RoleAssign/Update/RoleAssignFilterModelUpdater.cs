@@ -2,8 +2,9 @@
 
 using UnityEngine;
 
+using ExtremeRoles.Roles;
+using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module.RoleAssign.Model;
-
 
 namespace ExtremeRoles.Module.RoleAssign.Update;
 
@@ -19,6 +20,65 @@ public static class RoleAssignFilterModelUpdater
                 FilterGhostRole = new(),
                 FilterNormalId = new(),
             });
+    }
+
+    public static void AddRoleData(
+        RoleAssignFilterModel model, Guid targetFilter, int id, ExtremeRoleId roleId)
+    {
+        var filter = model.FilterSet[targetFilter];
+        bool result = filter.FilterNormalId.TryAdd(id, roleId);
+        
+        if (result)
+        {
+            updateConfigValue(model);
+        }
+        else
+        {
+            Helper.Logging.Error("Cant Add Role");
+        }
+    }
+
+    public static void AddRoleData(
+        RoleAssignFilterModel model, Guid targetFilter, int id, CombinationRoleType roleId)
+    {
+        var filter = model.FilterSet[targetFilter];
+        bool result = filter.FilterCombinationId.TryAdd(id, roleId);
+        
+        if (result)
+        {
+            updateConfigValue(model);
+        }
+        else
+        {
+            Helper.Logging.Error("Cant Add Role");
+        }
+    }
+
+    public static void AddRoleData(
+        RoleAssignFilterModel model, Guid targetFilter, int id, ExtremeGhostRoleId roleId)
+    {
+        var filter = model.FilterSet[targetFilter];
+        bool result = filter.FilterGhostRole.TryAdd(id, roleId);
+        
+        if (result)
+        {
+            updateConfigValue(model);
+        }
+        else
+        {
+            Helper.Logging.Error("Cant Add Role");
+        }
+    }
+
+    public static void RemoveFilterRole(
+        RoleAssignFilterModel model, Guid targetFilter, int targetId)
+    {
+        var filter = model.FilterSet[targetFilter];
+        filter.FilterNormalId.Remove(targetId);
+        filter.FilterCombinationId.Remove(targetId);
+        filter.FilterGhostRole.Remove(targetId);
+
+        updateConfigValue(model);
     }
 
     public static void IncreseFilterAssignNum(RoleAssignFilterModel model, Guid targetFilter)

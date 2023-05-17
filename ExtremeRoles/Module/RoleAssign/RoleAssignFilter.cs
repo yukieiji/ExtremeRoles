@@ -25,13 +25,10 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
 
         this.model = new RoleAssignFilterModel()
         {
-            AddRoleMenu = new()
-            {
-                Id = new(),
-                NormalRole = new(),
-                CombRole = new(),
-                GhostRole = new()
-            },
+            Id = new(),
+            NormalRole = new(),
+            CombRole = new(),
+            GhostRole = new(),
             FilterSet = new()
         };
     }
@@ -42,14 +39,11 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
     {
         var newModel = new RoleAssignFilterModel()
         {
-            AddRoleMenu = new()
-            {
-                Id = new(),
-                NormalRole = new(),
-                CombRole = new(),
-                GhostRole = new()
-            },
-            FilterSet = new()
+            Id = new(),
+            NormalRole = new(),
+            CombRole = new(),
+            GhostRole = new(),
+            FilterSet = new(),
         };
 
         newModel.DeserializeFromString(value);

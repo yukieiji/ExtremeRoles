@@ -57,7 +57,9 @@ public sealed class AddRoleMenuView : MonoBehaviour
     }
 
     [HideFromIl2Cpp]
-    public void UpdateView(RoleAssignFilterModel model)
+    public void UpdateView(
+        RoleAssignFilterModel model, Guid filterId,
+        Transform targetFilterTransform)
     {
         if (this.layout.rectChildren.Count == 0)
         {
@@ -73,13 +75,17 @@ public sealed class AddRoleMenuView : MonoBehaviour
         {
             button.gameObject.SetActive(true);
             button.ResetButtonAction();
-            button.SetButtonClickAction(createButton(button, model, id));
+            button.SetButtonClickAction(
+                createButton(
+                    button, model, filterId,
+                    id, targetFilterTransform));
         }
     }
 
     [HideFromIl2Cpp]
     private UnityAction createButton(
-        ButtonWrapper button, RoleAssignFilterModel model, int id)
+        ButtonWrapper button, RoleAssignFilterModel model,
+        Guid filterId, int id, Transform targetFilterTransform)
     {
         if (model.NormalRole.TryGetValue(id, out var normalRoleId))
         {
@@ -91,7 +97,7 @@ public sealed class AddRoleMenuView : MonoBehaviour
                 base.gameObject.SetActive(false);
                 if (AddRoleMenuModelUpdater.AddRoleData(model, id, normalRoleId))
                 {
-                    createFilterItem(model, roleName, id);
+                    createFilterItem(model, roleName, filterId, id, targetFilterTransform);
                 }
             });
         }
@@ -105,7 +111,7 @@ public sealed class AddRoleMenuView : MonoBehaviour
                 base.gameObject.SetActive(false);
                 if (AddRoleMenuModelUpdater.AddRoleData(model, id, combRoleId))
                 {
-                    createFilterItem(model, combRoleName, id);
+                    createFilterItem(model, roleName, filterId, id, targetFilterTransform);
                 }
             });
         }
@@ -119,7 +125,7 @@ public sealed class AddRoleMenuView : MonoBehaviour
                 base.gameObject.SetActive(false); 
                 if (AddRoleMenuModelUpdater.AddRoleData(model, id, ghostRoleId))
                 {
-                    createFilterItem(model, ghostRoleName, id);
+                    createFilterItem(model, roleName, filterId, id, targetFilterTransform);
                 }
             });
         }
@@ -130,17 +136,18 @@ public sealed class AddRoleMenuView : MonoBehaviour
     }
 
     [HideFromIl2Cpp]
-    private void createFilterItem(AddRoleMenuModel model, string name, int id)
+    private void createFilterItem(
+        RoleAssignFilterModel model, string name,
+        Guid targetFilter, int id, Transform parent)
     {
         FilterItemProperty item = Instantiate(
-            this.FilterItemPrefab,
-            model.Property.Layout.transform);
+            this.FilterItemPrefab, parent);
         item.gameObject.SetActive(true);
         item.Text.text = name;
         item.RemoveButton.onClick.AddListener(
             (UnityAction)(() =>
             {
-                AddRoleMenuModelUpdater.RemoveFilterRole(model, id);
+                RoleAssignFilterModelUpdater.RemoveFilterRole(model, targetFilter, id);
                 Destroy(item.gameObject);
             }));
     }
