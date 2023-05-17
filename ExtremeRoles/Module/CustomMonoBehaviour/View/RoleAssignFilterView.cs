@@ -82,31 +82,30 @@ public sealed class RoleAssignFilterView : MonoBehaviour
     public void Start()
     {
         if (this.Model == null) { return; }
-        var menu = this.Model.AddRoleMenu;
 
-        menu.Id.Clear();
-        menu.NormalRole.Clear();
-        menu.CombRole.Clear();
-        menu.GhostRole.Clear();
+        this.Model.Id.Clear();
+        this.Model.NormalRole.Clear();
+        this.Model.CombRole.Clear();
+        this.Model.GhostRole.Clear();
 
         var roleSelector = ExtremeGameModeManager.Instance.RoleSelector;
         int id = 0;
         foreach (var roleId in roleSelector.UseNormalRoleId)
         {
-            menu.Id.Add(id);
-            menu.NormalRole.Add(id, roleId);
+            this.Model.Id.Add(id);
+            this.Model.NormalRole.Add(id, roleId);
             id++;
         }
         foreach (var roleId in roleSelector.UseCombRoleType)
         {
-            menu.Id.Add(id);
-            menu.CombRole.Add(id, roleId);
+            this.Model.Id.Add(id);
+            this.Model.CombRole.Add(id, roleId);
             id++;
         }
         foreach (var roleId in roleSelector.UseGhostRoleId)
         {
-            menu.Id.Add(id);
-            menu.GhostRole.Add(id, roleId);
+            this.Model.Id.Add(id);
+            this.Model.GhostRole.Add(id, roleId);
             id++;
         }
     }

@@ -12,7 +12,7 @@ public static class RoleAssignFilterModelUpdater
     {
         model.FilterSet.Add(
             id,
-            new RoleFilterSetModel()
+            new RoleFilterData()
             {
                 FilterCombinationId = new(),
                 FilterGhostRole = new(),

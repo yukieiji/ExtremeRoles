@@ -57,7 +57,7 @@ public sealed class AddRoleMenuView : MonoBehaviour
     }
 
     [HideFromIl2Cpp]
-    public void UpdateView(AddRoleMenuModel model)
+    public void UpdateView(RoleAssignFilterModel model)
     {
         if (this.layout.rectChildren.Count == 0)
         {
@@ -79,7 +79,7 @@ public sealed class AddRoleMenuView : MonoBehaviour
 
     [HideFromIl2Cpp]
     private UnityAction createButton(
-        ButtonWrapper button, AddRoleMenuModel model, int id)
+        ButtonWrapper button, RoleAssignFilterModel model, int id)
     {
         if (model.NormalRole.TryGetValue(id, out var normalRoleId))
         {

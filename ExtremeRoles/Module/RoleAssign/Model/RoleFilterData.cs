@@ -7,7 +7,7 @@ using ExtremeRoles.Roles;
 namespace ExtremeRoles.Module.RoleAssign.Model;
 
 [DataContract]
-public sealed class RoleFilterSetModel
+public sealed class RoleFilterData
 {
     [DataMember]
     public int AssignNum { get; set; } = 1;
