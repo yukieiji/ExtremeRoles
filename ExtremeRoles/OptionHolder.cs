@@ -162,6 +162,10 @@ public static class OptionHolder
                     option.SwitchPreset();
                 }
             });
+        if (RoleAssignFilter.IsExist)
+        {
+            RoleAssignFilter.Instance.SwitchPreset();
+        }
     }
 
     public static void ShareOptionSelections()

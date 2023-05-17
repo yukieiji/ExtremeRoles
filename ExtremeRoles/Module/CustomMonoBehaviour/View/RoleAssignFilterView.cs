@@ -141,6 +141,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
         this.createFilterSet(id);
     }
 
+    [HideFromIl2Cpp]
     private RoleFilterSetProperty createFilterSet(Guid id)
     {
         var filterSet = Instantiate(this.filterSetPrefab, this.layout.transform);

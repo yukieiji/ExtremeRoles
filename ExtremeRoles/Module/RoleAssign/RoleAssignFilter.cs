@@ -19,10 +19,12 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
     private List<RoleFilterSet> filter = new List<RoleFilterSet>();
     private RoleAssignFilterView? view;
     private RoleAssignFilterModel model;
+
+    private const string defaultValue = "EMPTY";
+
     public RoleAssignFilter()
     {
         this.filter.Clear();
-
         this.model = new RoleAssignFilterModel()
         {
             Id = new(),
@@ -31,27 +33,36 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
             GhostRole = new(),
             FilterSet = new()
         };
+        this.SwitchPreset();
+    }
+
+    public void SwitchPreset()
+    {
+        this.model.Config = ExtremeRolesPlugin.Instance.Config.Bind(
+            "RoleAssignFilter", OptionHolder.ConfigPreset, defaultValue);
+
+        string value = this.model.Config.Value;
+
+        if (value != defaultValue)
+        {
+            this.DeserializeModel(value);
+        }
+        else if (this.view != null)
+        {
+            this.view.Model = this.model;
+        }
     }
 
     public string SerializeModel() => this.model.SerializeToString();
 
     public void DeserializeModel(string value)
     {
-        var newModel = new RoleAssignFilterModel()
-        {
-            Id = new(),
-            NormalRole = new(),
-            CombRole = new(),
-            GhostRole = new(),
-            FilterSet = new(),
-        };
+        if (value == defaultValue) { return; }
 
-        newModel.DeserializeFromString(value);
-        this.model = newModel;
-
+        this.model.DeserializeFromString(value);
         if (this.view != null)
         {
-            this.view.Model = newModel;
+            this.view.Model = this.model;
         }
     }
 

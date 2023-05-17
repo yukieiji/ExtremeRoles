@@ -50,7 +50,6 @@ public sealed class RoleAssignFilterModel
     {
         string[] splitedSerializedStr = serializedStr.Split(splitChar);
 
-
         foreach (string encodingFilter in splitedSerializedStr)
         {
             byte[] deserializedBytes = Convert.FromBase64String(encodingFilter);
