@@ -4,13 +4,16 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Text;
 
+using BepInEx.Configuration;
+
 namespace ExtremeRoles.Module.RoleAssign.Model;
 
 public sealed class RoleAssignFilterModel
 {
+    public ConfigEntry<string> Config { get; set; }
+
     public AddRoleMenuModel AddRoleMenu { get; set; }
     public Dictionary<Guid, RoleFilterSetModel> FilterSet { get; set; }
-
 
     private const char splitChar = '|';
 
