@@ -88,10 +88,11 @@ public sealed class AddRoleMenuView : MonoBehaviour
             button.SetButtonText(roleName);
             return (UnityAction)(() =>
             {
-                AddRoleMenuModelUpdater.AddRoleData(model, id, normalRoleId);
-                
                 base.gameObject.SetActive(false);
-                createFilterItem(model, roleName, id);
+                if (AddRoleMenuModelUpdater.AddRoleData(model, id, normalRoleId))
+                {
+                    createFilterItem(model, roleName, id);
+                }
             });
         }
         else if (model.CombRole.TryGetValue(id, out var combRoleId))
@@ -101,10 +102,11 @@ public sealed class AddRoleMenuView : MonoBehaviour
             button.SetButtonText(combRoleName);
             return (UnityAction)(() =>
             {
-                AddRoleMenuModelUpdater.AddRoleData(model, id, combRoleId);
-                
                 base.gameObject.SetActive(false);
-                createFilterItem(model, combRoleName, id);
+                if (AddRoleMenuModelUpdater.AddRoleData(model, id, combRoleId))
+                {
+                    createFilterItem(model, combRoleName, id);
+                }
             });
         }
         else if (model.GhostRole.TryGetValue(id, out var ghostRoleId))
@@ -114,10 +116,11 @@ public sealed class AddRoleMenuView : MonoBehaviour
             button.SetButtonText(ghostRoleName);
             return (UnityAction)(() =>
             {
-                AddRoleMenuModelUpdater.AddRoleData(model, id, ghostRoleId);
-                
-                base.gameObject.SetActive(false);
-                createFilterItem(model, ghostRoleName, id);
+                base.gameObject.SetActive(false); 
+                if (AddRoleMenuModelUpdater.AddRoleData(model, id, ghostRoleId))
+                {
+                    createFilterItem(model, ghostRoleName, id);
+                }
             });
         }
         else

@@ -6,7 +6,7 @@ namespace ExtremeRoles.Module.RoleAssign.Update;
 
 public static class AddRoleMenuModelUpdater
 {
-    public static void AddRoleData(
+    public static bool AddRoleData(
         AddRoleMenuModel model, int id, ExtremeRoleId roleId)
     {
         var filter = model.Filter;
@@ -15,9 +15,10 @@ public static class AddRoleMenuModelUpdater
         {
             Helper.Logging.Error("Cant Add Role");
         }
+        return result;
     }
 
-    public static void AddRoleData(
+    public static bool AddRoleData(
         AddRoleMenuModel model, int id, CombinationRoleType roleId)
     {
         var filter = model.Filter;
@@ -26,9 +27,10 @@ public static class AddRoleMenuModelUpdater
         {
             Helper.Logging.Error("Cant Add Role");
         }
+        return result;
     }
 
-    public static void AddRoleData(
+    public static bool AddRoleData(
         AddRoleMenuModel model, int id, ExtremeGhostRoleId roleId)
     {
         var filter = model.Filter;
@@ -37,6 +39,7 @@ public static class AddRoleMenuModelUpdater
         {
             Helper.Logging.Error("Cant Add Role");
         }
+        return result;
     }
 
     public static void RemoveFilterRole(
