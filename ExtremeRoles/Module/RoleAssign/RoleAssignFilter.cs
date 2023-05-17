@@ -36,6 +36,31 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
         };
     }
 
+    public string SerializeModel() => this.model.SerializeToString();
+
+    public void DeserializeModel(string value)
+    {
+        var newModel = new RoleAssignFilterModel()
+        {
+            AddRoleMenu = new()
+            {
+                Id = new(),
+                NormalRole = new(),
+                CombRole = new(),
+                GhostRole = new()
+            },
+            FilterSet = new()
+        };
+
+        newModel.DeserializeFromString(value);
+        this.model = newModel;
+
+        if (this.view != null)
+        {
+            this.view.Model = newModel;
+        }
+    }
+
     // UIを見せる
     public void OpenEditor(GameObject hideObj)
     {

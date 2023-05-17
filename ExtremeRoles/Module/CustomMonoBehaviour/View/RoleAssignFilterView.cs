@@ -145,6 +145,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
     private RoleFilterSetProperty createFilterSet(Guid id)
     {
         var filterSet = Instantiate(this.filterSetPrefab, this.layout.transform);
+        filterSet.Awake();
         filterSet.gameObject.SetActive(true);
 
         filterSet.DeleteThisButton.SetButtonClickAction(
@@ -228,6 +229,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
     {
         FilterItemProperty item = Instantiate(
             this.addRoleMenu.FilterItemPrefab, parent);
+        item.Awake();
         item.gameObject.SetActive(true);
         item.Text.text = name;
         item.RemoveButton.onClick.AddListener(

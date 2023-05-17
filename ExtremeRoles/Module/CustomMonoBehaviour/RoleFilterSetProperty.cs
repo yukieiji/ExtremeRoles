@@ -36,6 +36,9 @@ public sealed class RoleFilterSetProperty : MonoBehaviour
             "Menu/Buttons/RemoveAllButton").gameObject.GetComponent<ButtonWrapper>();
         this.DeleteThisButton = trans.Find(
             "Menu/Buttons/DeleteThisButton").gameObject.GetComponent<ButtonWrapper>();
+        this.AddRoleButton.Awake();
+        this.DeleteAllRoleButton.Awake();
+        this.DeleteThisButton.Awake();
 
         this.AssignText = trans.Find(
             "Menu/Assign/Text").gameObject.GetComponent<TextMeshProUGUI>();

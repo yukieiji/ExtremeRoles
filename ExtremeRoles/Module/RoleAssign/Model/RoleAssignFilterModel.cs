@@ -11,6 +11,9 @@ public sealed class RoleAssignFilterModel
     public AddRoleMenuModel AddRoleMenu { get; set; }
     public Dictionary<Guid, RoleFilterSetModel> FilterSet { get; set; }
 
+
+    private const char splitChar = '|';
+
     public string SerializeToString()
     {
         StringBuilder builder = new StringBuilder();
@@ -23,11 +26,11 @@ public sealed class RoleAssignFilterModel
                 serializer.WriteObject(stream, filter);
                 byte[] serializedBytes = stream.ToArray();
                 string base64String = Convert.ToBase64String(serializedBytes);
-                builder.Append(base64String).Append(',');
+                builder.Append(base64String).Append(splitChar);
             }
         }
         string serializeStr = builder.ToString();
-        if (serializeStr.EndsWith(','))
+        if (serializeStr.EndsWith(splitChar))
         {
             serializeStr = serializeStr.Remove(serializeStr.Length - 1);
         }
@@ -36,7 +39,7 @@ public sealed class RoleAssignFilterModel
 
     public void DeserializeFromString(string serializedStr)
     {
-        string[] splitedSerializedStr = serializedStr.Split(',');
+        string[] splitedSerializedStr = serializedStr.Split(splitChar);
 
 
         foreach (string encodingFilter in splitedSerializedStr)
