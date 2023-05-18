@@ -22,7 +22,7 @@ public static class RoleAssignFilterModelUpdater
             });
     }
 
-    public static void AddRoleData(
+    public static bool AddRoleData(
         RoleAssignFilterModel model, Guid targetFilter, int id, ExtremeRoleId roleId)
     {
         var filter = model.FilterSet[targetFilter];
@@ -36,9 +36,10 @@ public static class RoleAssignFilterModelUpdater
         {
             Helper.Logging.Error("Cant Add Role");
         }
+        return result;
     }
 
-    public static void AddRoleData(
+    public static bool AddRoleData(
         RoleAssignFilterModel model, Guid targetFilter, int id, CombinationRoleType roleId)
     {
         var filter = model.FilterSet[targetFilter];
@@ -52,9 +53,11 @@ public static class RoleAssignFilterModelUpdater
         {
             Helper.Logging.Error("Cant Add Role");
         }
+
+        return result;
     }
 
-    public static void AddRoleData(
+    public static bool AddRoleData(
         RoleAssignFilterModel model, Guid targetFilter, int id, ExtremeGhostRoleId roleId)
     {
         var filter = model.FilterSet[targetFilter];
@@ -68,6 +71,8 @@ public static class RoleAssignFilterModelUpdater
         {
             Helper.Logging.Error("Cant Add Role");
         }
+
+        return result;
     }
 
     public static void RemoveFilterRole(

@@ -176,15 +176,6 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
         spacer.OnEnable();
 
         this.menu.Tabs.transform.localPosition = new Vector3(-0.465f, 0.0f, 0.0f);
-
-        foreach (OptionMenuTab menu in this.allMenu.Values)
-        {
-            reconstructButton(
-                menu.Tab,
-                (UnityAction)(() => {
-                    menu.SetActive(true);
-                }));
-        }
     }
 
     private void setupTemplate()

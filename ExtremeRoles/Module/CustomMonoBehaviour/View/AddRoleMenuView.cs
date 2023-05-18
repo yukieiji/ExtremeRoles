@@ -76,14 +76,14 @@ public sealed class AddRoleMenuView : MonoBehaviour
             button.gameObject.SetActive(true);
             button.ResetButtonAction();
             button.SetButtonClickAction(
-                createButton(
+                (UnityAction)createButton(
                     button, model, filterId,
                     id, targetFilterTransform));
         }
     }
 
     [HideFromIl2Cpp]
-    private UnityAction createButton(
+    private Action createButton(
         ButtonWrapper button, RoleAssignFilterModel model,
         Guid filterId, int id, Transform targetFilterTransform)
     {
@@ -92,46 +92,46 @@ public sealed class AddRoleMenuView : MonoBehaviour
             string roleName = ExtremeRoleManager.NormalRole[
                 (int)normalRoleId].GetColoredRoleName(true);
             button.SetButtonText(roleName);
-            return (UnityAction)(() =>
+            return () =>
             {
                 base.gameObject.SetActive(false);
-                if (AddRoleMenuModelUpdater.AddRoleData(model, id, normalRoleId))
+                if (RoleAssignFilterModelUpdater.AddRoleData(model, filterId, id, normalRoleId))
                 {
                     createFilterItem(model, roleName, filterId, id, targetFilterTransform);
                 }
-            });
+            };
         }
         else if (model.CombRole.TryGetValue(id, out var combRoleId))
         {
             string combRoleName = ExtremeRoleManager.CombRole[
                 (byte)combRoleId].GetOptionName();
             button.SetButtonText(combRoleName);
-            return (UnityAction)(() =>
+            return () =>
             {
                 base.gameObject.SetActive(false);
-                if (AddRoleMenuModelUpdater.AddRoleData(model, id, combRoleId))
+                if (RoleAssignFilterModelUpdater.AddRoleData(model, filterId, id, combRoleId))
                 {
-                    createFilterItem(model, roleName, filterId, id, targetFilterTransform);
+                    createFilterItem(model, combRoleName, filterId, id, targetFilterTransform);
                 }
-            });
+            };
         }
         else if (model.GhostRole.TryGetValue(id, out var ghostRoleId))
         {
             string ghostRoleName = ExtremeGhostRoleManager.AllGhostRole[
                 ghostRoleId].GetColoredRoleName();
             button.SetButtonText(ghostRoleName);
-            return (UnityAction)(() =>
+            return () =>
             {
                 base.gameObject.SetActive(false); 
-                if (AddRoleMenuModelUpdater.AddRoleData(model, id, ghostRoleId))
+                if (RoleAssignFilterModelUpdater.AddRoleData(model, filterId, id, ghostRoleId))
                 {
-                    createFilterItem(model, roleName, filterId, id, targetFilterTransform);
+                    createFilterItem(model, ghostRoleName, filterId, id, targetFilterTransform);
                 }
-            });
+            };
         }
         else
         {
-            return (UnityAction)(() => { });
+            return () => { };
         }
     }
 

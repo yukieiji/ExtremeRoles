@@ -36,25 +36,12 @@ public static class MainMenuManagerStartPatch
         passiveExitButton.OnClick.AddListener(
             (UnityEngine.Events.UnityAction)(() => Logging.BackupCurrentLog()));
 
-        if (Module.Prefab.ButtonTemplate == null)
-        {
-            // Create Button Template
-            GameObject buttonTemplate = UnityObject.Instantiate(template);
-            UnityObject.Destroy(buttonTemplate.GetComponent<AspectPosition>());
-            UnityObject.Destroy(buttonTemplate.GetComponent<ConditionalHide>());
-            UnityObject.DontDestroyOnLoad(buttonTemplate);
-            buttonTemplate.transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
-            MenuButton button = buttonTemplate.AddComponent<MenuButton>();
-            button.Awake();
-            button.gameObject.SetActive(false);
-            Module.Prefab.ButtonTemplate = button;
-        }
-
         // UpdateButton
         GameObject updateButtonObj = UnityObject.Instantiate(template, template.transform);
         UnityObject.Destroy(updateButtonObj.GetComponent<AspectPosition>());
         UnityObject.Destroy(updateButtonObj.GetComponent<ConditionalHide>());
         UnityObject.Destroy(updateButtonObj.GetComponentInChildren<TextTranslatorTMP>());
+
         MenuButton updateButton = updateButtonObj.AddComponent<MenuButton>();
         updateButton.name = "ExtremeRolesUpdateButton";
         updateButton.transform.localPosition = new Vector3(0.0f, 0.6f, 0.0f);
@@ -64,7 +51,7 @@ public static class MainMenuManagerStartPatch
 
         // DiscordButton
         MenuButton discordButton = UnityObject.Instantiate(
-            Module.Prefab.ButtonTemplate, template.transform);
+            updateButton, template.transform);
         discordButton.name = "ExtremeRolesDiscordButton";
         discordButton.transform.localPosition = new Vector3(0.0f, 1.2f, 0.0f);
         discordButton.gameObject.SetActive(true);
