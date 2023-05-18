@@ -26,42 +26,20 @@ public sealed class RoleFilterSet
         
         this.isBlock = false;
     }
+
     public void Add(ExtremeRoleId roleId)
     {
         this.normalRoleFilter.Add((int)roleId);
     }
+
     public void Add(CombinationRoleType roleId)
     {
         this.combRoleFilter.Contains((byte)roleId);
     }
+    
     public void Add(ExtremeGhostRoleId roleId)
     {
         this.ghostRoleFilter.Add(roleId);
-    }
-
-    public void Update(int intedRoleId)
-    {
-        if (this.isBlock || !this.normalRoleFilter.Contains(intedRoleId))
-        { 
-            return; 
-        }
-        this.updateState();
-    }
-    public void Update(byte bytedRoleId)
-    {
-        if (this.isBlock || !this.normalRoleFilter.Contains(bytedRoleId))
-        {
-            return;
-        }
-        this.updateState();
-    }
-    public void Update(ExtremeGhostRoleId roleId)
-    {
-        if (this.isBlock || this.ghostRoleFilter.Contains(roleId))
-        { 
-            return; 
-        }
-        this.updateState();
     }
 
     public bool IsBlock(int intedRoleId)
@@ -72,6 +50,33 @@ public sealed class RoleFilterSet
 
     public bool IsBlock(ExtremeGhostRoleId roleId)
         => this.ghostRoleFilter.Contains(roleId) ? this.isBlock : false;
+
+    public void Update(int intedRoleId)
+    {
+        if (this.isBlock || !this.normalRoleFilter.Contains(intedRoleId))
+        { 
+            return; 
+        }
+        this.updateState();
+    }
+
+    public void Update(byte bytedRoleId)
+    {
+        if (this.isBlock || !this.normalRoleFilter.Contains(bytedRoleId))
+        {
+            return;
+        }
+        this.updateState();
+    }
+
+    public void Update(ExtremeGhostRoleId roleId)
+    {
+        if (this.isBlock || this.ghostRoleFilter.Contains(roleId))
+        { 
+            return; 
+        }
+        this.updateState();
+    }
 
     private void updateState()
     {

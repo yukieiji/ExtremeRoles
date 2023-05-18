@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
 
-
+using ExtremeRoles.Helper;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Module.RoleAssign.Model;
 using ExtremeRoles.Module.CustomMonoBehaviour.View;
@@ -32,25 +31,6 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
         }
     }
 
-    public void SwitchPreset()
-    {
-        var newModel = getNewModel();
-        string value = newModel.Config.Value;
-
-        if (value != defaultValue)
-        {
-            newModel.DeserializeFromString(value);
-        }
-
-        this.model = newModel;
-        if (this.view != null)
-        {
-            this.view.Model = this.model;
-        }
-    }
-
-    public string SerializeModel() => this.model.SerializeToString();
-
     public void DeserializeModel(string value)
     {
         if (value == defaultValue) { return; }
@@ -61,6 +41,47 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
             this.view.Model = this.model;
         }
     }
+
+    public void Initialize()
+    {
+        Logging.Debug($" -------- Initialize RoleAssignFilter -------- ");
+
+        foreach (var (guid, filterModel) in model.FilterSet)
+        {
+            Logging.Debug($" ---- Filter:{guid} ---- ");
+
+            int assignNum = filterModel.AssignNum;
+
+            Logging.Debug($"AssignNum:{assignNum}");
+
+            var filterSet = new RoleFilterSet();
+            filterSet.AssignNum = assignNum;
+
+            foreach (var extremeRoleId in filterModel.FilterNormalId.Values)
+            {
+                Logging.Debug($"NormalRoleId:{extremeRoleId}");
+                filterSet.Add(extremeRoleId);
+            }
+            foreach (var extremeRoleId in filterModel.FilterCombinationId.Values)
+            {
+                Logging.Debug($"CombinationRoleId:{extremeRoleId}");
+                filterSet.Add(extremeRoleId);
+            }
+            foreach (var extremeRoleId in filterModel.FilterGhostRole.Values)
+            {
+                Logging.Debug($"GhostRoleId:{extremeRoleId}");
+                filterSet.Add(extremeRoleId);
+            }
+
+            this.filter.Add(filterSet);
+        }
+        Logging.Debug($" -------- Initialize Complete!! -------- ");
+    }
+
+    public bool IsBlock(int intedRoleId) => this.filter.Any(x => x.IsBlock(intedRoleId));
+    public bool IsBlock(byte bytedCombRoleId) => this.filter.Any(
+        x => x.IsBlock(bytedCombRoleId));
+    public bool IsBlock(ExtremeGhostRoleId roleId) => this.filter.Any(x => x.IsBlock(roleId));
 
     // UIを見せる
     public void OpenEditor(GameObject hideObj)
@@ -85,29 +106,24 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
         this.view.gameObject.SetActive(true);
     }
 
-    public void Initialize()
+    public void SwitchPreset()
     {
-        foreach (var filterModel in model.FilterSet.Values)
+        var newModel = getNewModel();
+        string value = newModel.Config.Value;
+
+        if (value != defaultValue)
         {
-            var filterSet = new RoleFilterSet();
-            filterSet.AssignNum = filterModel.AssignNum;
+            newModel.DeserializeFromString(value);
+        }
 
-            foreach (var extremeRoleId in filterModel.FilterNormalId.Values)
-            {
-                filterSet.Add(extremeRoleId);
-            }
-            foreach (var extremeRoleId in filterModel.FilterCombinationId.Values)
-            {
-                filterSet.Add(extremeRoleId);
-            }
-            foreach (var extremeRoleId in filterModel.FilterGhostRole.Values)
-            {
-                filterSet.Add(extremeRoleId);
-            }
-
-            this.filter.Add(filterSet);
+        this.model = newModel;
+        if (this.view != null)
+        {
+            this.view.Model = this.model;
         }
     }
+
+    public string SerializeModel() => this.model.SerializeToString();
 
     public void Update(int intedRoleId)
     {
@@ -130,10 +146,6 @@ public sealed class RoleAssignFilter : NullableSingleton<RoleAssignFilter>
             fil.Update(roleId);
         }
     }
-    public bool IsBlock(int intedRoleId) => this.filter.Any(x => x.IsBlock(intedRoleId));
-    public bool IsBlock(byte bytedCombRoleId) => this.filter.Any(x => x.IsBlock(bytedCombRoleId));
-    public bool IsBlock(ExtremeGhostRoleId roleId) => this.filter.Any(x => x.IsBlock(roleId));
-
 
     private static RoleAssignFilterModel getNewModel()
         => new RoleAssignFilterModel()
