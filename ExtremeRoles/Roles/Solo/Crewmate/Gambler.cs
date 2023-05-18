@@ -17,11 +17,15 @@ public sealed class Gambler :
 {
     public enum GamblerOption
     {
-        NormalVoteRate
+        NormalVoteRate,
+        MaxVoteNum,
+        MinVoteNum
     }
 
     public int Order => (int)IRoleVoteModifier.ModOrder.GamblerAddVote;
     private int normalVoteRate;
+    private int minVoteNum;
+    private int maxVoteNum;
 
     public Gambler() : base(
         ExtremeRoleId.Gambler,
@@ -44,15 +48,15 @@ public sealed class Gambler :
         int zeroVoteRate = 100 - dualVoteRate - this.normalVoteRate;
 
         Array.Fill(voteArray, 1, 0, this.normalVoteRate);
-        Array.Fill(voteArray, 0, this.normalVoteRate, zeroVoteRate);
-        Array.Fill(voteArray, 2, this.normalVoteRate + zeroVoteRate, dualVoteRate);
+        Array.Fill(voteArray, this.minVoteNum, this.normalVoteRate, zeroVoteRate);
+        Array.Fill(voteArray, this.maxVoteNum, this.normalVoteRate + zeroVoteRate, dualVoteRate);
 
         int playerVoteNum = voteArray[RandomGenerator.Instance.Next(100)];
 
         if (playerVoteNum == 1) { return; }
 
-        int newVotedNum = playerVoteNum == 0 ? curVoteNum - 1 : curVoteNum + 1;
-        voteResult[voteTo] = newVotedNum;
+        int newVotedNum = curVoteNum + playerVoteNum - 1;
+        voteResult[voteTo] = UnityEngine.Mathf.Clamp(newVotedNum, 0, int.MaxValue);
     }
 
     public void ModifiedVoteAnime(
@@ -70,11 +74,23 @@ public sealed class Gambler :
             GamblerOption.NormalVoteRate,
             50, 0, 90, 5,
             format: OptionUnit.Percentage);
+        CreateIntOption(
+            GamblerOption.MinVoteNum,
+            0, -100, 0, 1, parentOps,
+            format: OptionUnit.Percentage);
+        CreateIntOption(
+            GamblerOption.MaxVoteNum,
+            2, 2, 100, 1, parentOps,
+            format: OptionUnit.Percentage);
     }
 
     protected override void RoleSpecificInit()
     {
-        this.normalVoteRate = this.Loader.GetValue<GamblerOption, int>(
-            GamblerOption.NormalVoteRate);
+        this.normalVoteRate = OptionManager.Instance.GetValue<int>(
+            GetRoleOptionId(GamblerOption.NormalVoteRate));
+        this.minVoteNum = OptionHolder.AllOption[
+            GetRoleOptionId(GamblerOption.MinVoteNum)].GetValue() - 1;
+        this.maxVoteNum = OptionHolder.AllOption[
+            GetRoleOptionId(GamblerOption.MaxVoteNum)].GetValue() - 1;
     }
 }
