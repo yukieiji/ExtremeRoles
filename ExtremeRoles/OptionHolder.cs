@@ -216,14 +216,30 @@ public static class OptionHolder
         ServerManager serverManager = DestroyableSingleton<ServerManager>.Instance;
         IRegionInfo[] regions = defaultRegion;
 
-        var CustomRegion = new DnsRegionInfo(
+        // Only ExtremeRoles!!
+        var exrOfficialTokyo = new DnsRegionInfo(
+            "168.138.196.31",
+            "ExROfficialTokyo",
+            StringNames.NoTranslation,
+            "168.138.196.31",
+            22023,
+            false);
+
+        var customRegion = new DnsRegionInfo(
             ConfigParser.Ip.Value,
             "custom",
             StringNames.NoTranslation,
             ConfigParser.Ip.Value,
             ConfigParser.Port.Value,
             false);
-        regions = regions.Concat(new IRegionInfo[] { CustomRegion.Cast<IRegionInfo>() }).ToArray();
+
+        regions = regions.Concat(
+            new IRegionInfo[]
+            {
+                exrOfficialTokyo.Cast<IRegionInfo>(),
+                customRegion.Cast<IRegionInfo>()
+            }).ToArray();
+
         ServerManager.DefaultRegions = regions;
         serverManager.AvailableRegions = regions;
     }
