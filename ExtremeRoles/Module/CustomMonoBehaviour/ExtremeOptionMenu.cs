@@ -15,6 +15,7 @@ using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.RoleAssign;
+using Il2CppInterop.Runtime.Attributes;
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
 
@@ -97,6 +98,7 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
         return menu;
     }
 
+    [HideFromIl2Cpp]
     private void reconstructButton(
         GameObject tabButtonObject, Action newAction)
     {
@@ -168,6 +170,7 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
                 });
         }
     }
+
     private void retransformTabButton()
     {
         AspectSpacer spacer = this.menu.Tabs.GetComponent<AspectSpacer>();
