@@ -201,7 +201,10 @@ public sealed class RoleAssignFilterView : MonoBehaviour
     [HideFromIl2Cpp]
     private void initialize(RoleAssignFilterModel model)
     {
-        this.layout.DestroyChildren();
+        if (this.layout != null)
+        {
+            this.layout.DestroyChildren();
+        }
 
         foreach (var (filterId, filter) in model.FilterSet)
         {
