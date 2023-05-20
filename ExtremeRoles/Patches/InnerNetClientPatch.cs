@@ -19,7 +19,7 @@ public static class InnerNetClientGetConnectionDataPatch
     {
         var serverMng = FastDestroyableSingleton<ServerManager>.Instance;
 
-        if (serverMng == null || !serverMng.IsExROnlyServer())
+        if (serverMng == null || !serverMng.IsCustomServer())
         {
             return;
         }
@@ -33,8 +33,8 @@ public static class InnerNetClientGetConnectionDataPatch
         handshake.Write(name);
         handshake.Write(ver.Major);
         handshake.Write(ver.Minor);
-        handshake.Write(ver.Revision);
         handshake.Write(ver.Build);
+        handshake.Write(ver.Revision);
 
         __result = handshake.ToByteArray(true);
         handshake.Recycle();
