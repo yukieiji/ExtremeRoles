@@ -20,7 +20,7 @@ public static class InnerNetClientGetConnectionDataPatch
     {
         var serverMng = FastDestroyableSingleton<ServerManager>.Instance;
 
-        if (serverMng == null || !serverMng.IsCustomServer())
+        if (serverMng == null || !serverMng.IsExROnlyServer())
         {
             return;
         }
