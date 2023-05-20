@@ -9,7 +9,6 @@ using ExtremeRoles.Roles.API;
 namespace ExtremeRoles.Module.RoleAssign;
 
 
-// TODO: このクラスでロールアサイン上限を設定する
 public sealed class PlayerRoleAssignData : NullableSingleton<PlayerRoleAssignData>
 {
     public List<PlayerControl> NeedRoleAssignPlayer { get; private set; }

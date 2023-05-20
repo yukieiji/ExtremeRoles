@@ -3,9 +3,9 @@
     <TargetFramework>net6.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <WarningLevel>7</WarningLevel>
-    <Version>7.1.1.5</Version>
-    <!--<VersionPrefix>7.1.1</VersionPrefix>-->
-    <VersionSuffix>SpringJump</VersionSuffix> 
+    <!--<Version>7.1.2.0</Version>-->
+    <VersionPrefix>7.1.2</VersionPrefix>
+    <VersionSuffix>SpringNext</VersionSuffix> 
     <Description>Extreme Roles for Advanced user</Description>
     <Authors>yukieiji</Authors>
     <Configurations>Debug;Release</Configurations>
