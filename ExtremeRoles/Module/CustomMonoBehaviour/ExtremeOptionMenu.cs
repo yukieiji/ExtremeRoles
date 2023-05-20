@@ -7,6 +7,7 @@ using AmongUs.GameOptions;
 using UnityEngine;
 using UnityEngine.Events;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.Extension.UnityEvent;
 using ExtremeRoles.Resources;
 using ExtremeRoles.GameMode;
@@ -76,7 +77,7 @@ public sealed class ExtremeOptionMenu : MonoBehaviour
         this.button.Layer = this.menu.gameObject.layer;
         this.button.Scale = new Vector3(0.625f, 0.3f, 1.0f);
         this.button.gameObject.transform.localPosition = new Vector3(2.25f, 1.775f);
-        this.button.Text.text = "ロールアサインフィルター";
+        this.button.Text.text = Translation.GetString("RoleAssignFilter");
         this.button.Text.fontSize =
             this.button.Text.fontSizeMax =
             this.button.Text.fontSizeMin = 1.9f;
