@@ -7,6 +7,7 @@ using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using InnerNet;
 
 using ExtremeRoles.Performance;
+using ExtremeRoles.Extension.Manager;
 
 
 namespace ExtremeRoles.Patches;
@@ -18,9 +19,7 @@ public static class InnerNetClientGetConnectionDataPatch
     {
         var serverMng = FastDestroyableSingleton<ServerManager>.Instance;
 
-        if (serverMng == null ||
-            serverMng.CurrentRegion == null ||
-            !(serverMng.CurrentRegion.Name is "ExROfficialTokyo" or "custom"))
+        if (serverMng == null || !serverMng.IsExROnlyServer())
         {
             return;
         }

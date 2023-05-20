@@ -13,6 +13,7 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
 using ExtremeRoles.Module.RoleAssign;
+using ExtremeRoles.Extension.Manager;
 
 namespace ExtremeRoles;
 
@@ -224,7 +225,7 @@ public static class OptionHolder
         // Only ExtremeRoles!!
         var exrOfficialTokyo = new DnsRegionInfo(
             "168.138.196.31",
-            "ExROfficialTokyo",
+            ServerManagerExtension.ExROfficialServerTokyoManinName,
             StringNames.NoTranslation,
             "168.138.196.31",
             22023,
@@ -232,7 +233,7 @@ public static class OptionHolder
 
         var customRegion = new DnsRegionInfo(
             ConfigParser.Ip.Value,
-            "custom",
+            ServerManagerExtension.FullCustomServerName,
             StringNames.NoTranslation,
             ConfigParser.Ip.Value,
             ConfigParser.Port.Value,

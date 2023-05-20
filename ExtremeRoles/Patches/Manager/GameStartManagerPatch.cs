@@ -11,6 +11,7 @@ using ExtremeRoles.GameMode;
 using ExtremeRoles.Helper;
 using ExtremeRoles.Performance;
 using ExtremeRoles.Performance.Il2Cpp;
+using ExtremeRoles.Extension.Manager;
 
 namespace ExtremeRoles.Patches.Manager
 {
@@ -107,7 +108,7 @@ namespace ExtremeRoles.Patches.Manager
             isVersionSent = false;
             timer = timerMaxValue;
             kickingTimer = 0f;
-            isCustomServer = FastDestroyableSingleton<ServerManager>.Instance.CurrentRegion.Name == "custom";
+            isCustomServer = FastDestroyableSingleton<ServerManager>.Instance.IsCustomServer();
 
             prevOptionValue = DataManager.Settings.Gameplay.StreamerMode;
 

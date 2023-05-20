@@ -10,6 +10,7 @@ using HarmonyLib;
 
 using ExtremeRoles.Helper;
 using ExtremeRoles.Module.CustomMonoBehaviour;
+using ExtremeRoles.Extension.Manager;
 using ExtremeRoles.Performance;
 
 
@@ -72,7 +73,7 @@ public static class GameOptionsMenuStartPatch
         Il2CppReferenceArray<OptionBehaviour> child = instance.Children;
 
         if (AmongUsClient.Instance.NetworkMode == NetworkModes.LocalGame ||
-            FastDestroyableSingleton<ServerManager>.Instance.CurrentRegion.Name == "custom")
+            FastDestroyableSingleton<ServerManager>.Instance.IsCustomServer())
         {
             changeValueRange(child, StringNames.GameNumImpostors, 0f, GameSystem.MaxImposterNum);
         }
