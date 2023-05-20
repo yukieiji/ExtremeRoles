@@ -54,7 +54,8 @@ public sealed class RoleAssignFilterView : MonoBehaviour
         this.addFilterButton = trans.Find(
             "Body/AddFilterButton").gameObject.GetComponent<ButtonWrapper>();
         this.addFilterButton.Awake();
-        this.addFilterButton.SetButtonText("RoleAssignFilterAddFilter");
+        this.addFilterButton.SetButtonText(
+            Translation.GetString("RoleAssignFilterAddFilter"));
 
         this.layout = trans.Find(
             "Body/Scroll/Viewport/Content").gameObject.GetComponent<VerticalLayoutGroup>();
@@ -67,7 +68,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
         this.addRoleMenu.Title.text = Translation.GetString("RoleAssignFilterAddRoleMenuTitle");
 
         var title = trans.Find("Body/Title").gameObject.GetComponent<TextMeshProUGUI>();
-        title.text = Translation.GetString("RoleAssignFilterTitle");
+        title.text = Translation.GetString("RoleAssignFilter");
 
         var closeButton = trans.Find(
             "Body/CloseButton").gameObject.GetComponent<Button>();
