@@ -53,6 +53,7 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 
         this.addFilterButton = trans.Find(
             "Body/AddFilterButton").gameObject.GetComponent<ButtonWrapper>();
+        this.addFilterButton.Awake();
         this.addFilterButton.SetButtonText("RoleAssignFilterAddFilter");
 
         this.layout = trans.Find(
@@ -74,7 +75,6 @@ public sealed class RoleAssignFilterView : MonoBehaviour
             (UnityAction)(() => base.gameObject.SetActive(false)));
 
         // Create Actions
-        this.addFilterButton.Awake();
         this.addFilterButton.ResetButtonAction();
         this.addFilterButton.SetButtonClickAction((UnityAction)addNewFilterSet);
     }
