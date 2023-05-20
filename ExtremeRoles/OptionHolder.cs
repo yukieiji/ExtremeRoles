@@ -12,6 +12,7 @@ using ExtremeRoles.Module;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GameMode.Option.ShipGlobal;
 using ExtremeRoles.GameMode.RoleSelector;
+using ExtremeRoles.Module.RoleAssign;
 
 namespace ExtremeRoles;
 
@@ -161,6 +162,10 @@ public static class OptionHolder
                     option.SwitchPreset();
                 }
             });
+        if (RoleAssignFilter.IsExist)
+        {
+            RoleAssignFilter.Instance.SwitchPreset();
+        }
     }
 
     public static void ShareOptionSelections()

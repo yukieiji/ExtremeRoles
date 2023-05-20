@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
+using Il2CppInterop.Runtime.Attributes;
+
 #nullable enable
 
 namespace ExtremeRoles.Module.CustomMonoBehaviour;
@@ -24,12 +26,14 @@ public sealed class MenuButton : MonoBehaviour
 
         this.Text = base.transform.GetChild(0).GetComponent<TMP_Text>();
     }
+
     public void AddAction(UnityAction action)
     {
         if (this.Button == null) { return; }
         this.Button.OnClick.AddListener(action);
     }
 
+    [HideFromIl2Cpp]
     public void AddAction(Action action)
     {
         AddAction((UnityAction)action);
@@ -38,10 +42,6 @@ public sealed class MenuButton : MonoBehaviour
     public void SetText(string text)
     {
         if (this.Text == null) { return; }
-
-        StartCoroutine(Effects.Lerp(0.1f, new Action<float>((p) =>
-        {
-            this.Text.SetText(text);
-        })));
+        this.Text.SetText(text);
     }
 }

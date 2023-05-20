@@ -40,16 +40,21 @@ public static class MainMenuManagerStartPatch
         GameObject updateButtonObj = UnityObject.Instantiate(template, template.transform);
         UnityObject.Destroy(updateButtonObj.GetComponent<AspectPosition>());
         UnityObject.Destroy(updateButtonObj.GetComponent<ConditionalHide>());
+        UnityObject.Destroy(updateButtonObj.GetComponentInChildren<TextTranslatorTMP>());
+
         MenuButton updateButton = updateButtonObj.AddComponent<MenuButton>();
         updateButton.name = "ExtremeRolesUpdateButton";
         updateButton.transform.localPosition = new Vector3(0.0f, 0.6f, 0.0f);
+        updateButton.gameObject.SetActive(true);
         updateButton.AddAction(async () => await Module.Updater.Instance.CheckAndUpdate());
         updateButton.SetText(Translation.GetString("UpdateButton"));
 
         // DiscordButton
-        MenuButton discordButton = UnityObject.Instantiate(updateButton, template.transform);
+        MenuButton discordButton = UnityObject.Instantiate(
+            updateButton, template.transform);
         discordButton.name = "ExtremeRolesDiscordButton";
         discordButton.transform.localPosition = new Vector3(0.0f, 1.2f, 0.0f);
+        discordButton.gameObject.SetActive(true);
         discordButton.AddAction(() => Application.OpenURL("https://discord.gg/UzJcfBYcyS"));
         discordButton.SetText("Discord");
 
