@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using Il2CppInterop.Runtime.Attributes;
 
+using ExtremeRoles.Helper;
 using ExtremeRoles.GameMode;
 using ExtremeRoles.GhostRoles;
 using ExtremeRoles.Roles;
@@ -12,6 +13,7 @@ using ExtremeRoles.Module.CustomMonoBehaviour.UIPart;
 using ExtremeRoles.Module.RoleAssign.Model;
 using ExtremeRoles.Module.RoleAssign.Update;
 using ExtremeRoles.Performance;
+using TMPro;
 
 #nullable enable
 
@@ -51,6 +53,8 @@ public sealed class RoleAssignFilterView : MonoBehaviour
 
         this.addFilterButton = trans.Find(
             "Body/AddFilterButton").gameObject.GetComponent<ButtonWrapper>();
+        this.addFilterButton.SetButtonText("RoleAssignFilterAddFilter");
+
         this.layout = trans.Find(
             "Body/Scroll/Viewport/Content").gameObject.GetComponent<VerticalLayoutGroup>();
         this.filterSetPrefab = trans.Find(
@@ -59,6 +63,10 @@ public sealed class RoleAssignFilterView : MonoBehaviour
         this.addRoleMenu = trans.Find(
             "Body/AddRoleMenu").gameObject.GetComponent<AddRoleMenuView>();
         this.addRoleMenu.Awake();
+        this.addRoleMenu.Title.text = Translation.GetString("RoleAssignFilterAddRoleMenuTitle");
+
+        var title = trans.Find("Body/Title").gameObject.GetComponent<TextMeshProUGUI>();
+        title.text = Translation.GetString("RoleAssignFilterTitle");
 
         var closeButton = trans.Find(
             "Body/CloseButton").gameObject.GetComponent<Button>();
@@ -144,6 +152,14 @@ public sealed class RoleAssignFilterView : MonoBehaviour
         var filterSet = Instantiate(this.filterSetPrefab, this.layout.transform);
         filterSet.Awake();
         filterSet.gameObject.SetActive(true);
+
+        filterSet.AssignText.text = Translation.GetString("RoleAssignFilterAssignNum");
+        filterSet.DeleteThisButton.SetButtonText(
+            Translation.GetString("RoleAssignFilterDeleteThis"));
+        filterSet.DeleteAllRoleButton.SetButtonText(
+            Translation.GetString("RoleAssignFilterDeleteAllRole"));
+        filterSet.AddRoleButton.SetButtonText(
+            Translation.GetString("RoleAssignFilterAddRole"));
 
         filterSet.DeleteThisButton.SetButtonClickAction(
             (UnityAction)(() =>
