@@ -15,6 +15,7 @@ namespace ExtremeRoles.Patches;
 [HarmonyPatch(typeof(InnerNetClient), nameof(InnerNetClient.GetConnectionData))]
 public static class InnerNetClientGetConnectionDataPatch
 {
+    [HarmonyPostfix, HarmonyPriority(Priority.First)]
     public static void Postfix(ref Il2CppStructArray<byte> __result)
     {
         var serverMng = FastDestroyableSingleton<ServerManager>.Instance;
